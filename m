@@ -2,151 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8980A536D27
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 15:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B6A536D25
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 15:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236039AbiE1Nlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 09:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
+        id S236109AbiE1Nml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 09:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235945AbiE1Nll (ORCPT
+        with ESMTP id S235945AbiE1Nmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 09:41:41 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3246DECA
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 06:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653745300; x=1685281300;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=msNSCCMmakOCPThvjj3sP07AO+iN2SqL77cXRWsmt00=;
-  b=Fe7MAvsxc2fcJQ4PobHf3l5cuFhiPkx9cu7gCvHcKKHZ4WbqpALqYjku
-   QAa4JiKVheAkA/ip+cN9XlWQNg3L/tp95CB3/v6j88DC6qyfq5Yj09RPH
-   vPN2qsPQcPAPgzvCaCXy4rDMIGPgvXL8A8+OKvyYh0WENTO4G53dbzR9V
-   uOnde760IXjpM8L0IQhYw2r0Xwf3vT3dymNneJntqdHtkicFzQcl5LVPW
-   5SnJCbz2pPhHAG3Gdw9x5XzYJ59j7CGZjZB3Bk+8L6/gAIxseAH+yASgx
-   9TAiuoK/2eVorMs/iJUl58r9VEKOMOKL3HpyvMNLvzToptpUWkwH2HfBT
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="255167748"
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="255167748"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 06:41:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="705554276"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 May 2022 06:41:38 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuwhG-0000Ee-4P;
-        Sat, 28 May 2022 13:41:38 +0000
-Date:   Sat, 28 May 2022 21:40:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: lib/crypto/blake2s-selftest.c:548:13: warning: stack frame size
- (1128) exceeds limit (1024) in 'blake2s_selftest'
-Message-ID: <202205282100.bU9SnP9m-lkp@intel.com>
+        Sat, 28 May 2022 09:42:39 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB6E5FD5
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 06:42:38 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id h188so2422045oia.2
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 06:42:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dKpNSqmJyc1shBqMlT5prVldbUvob7Rd4vFWEPuuWto=;
+        b=fjVmfPSNYRpqwphaGhURNuDnDdgHyg/WoDK1VtYpkAMM18CoBqGxan49lp6lT/2Kih
+         EmlLReFpHH94QEjOjNK4R0/3XY5ds77+tEx5EREvT8FhaJU1clSFYe00oZalvmd8E2Xl
+         tarFK9WQKu62Xbx6/fB0g6NYFSqh4Aab3DSdF6+HMzOCq0C9AT9GNhzOFrOtbPT73Rr4
+         mjxvizPCqNdPqTm+m2VHWr1B3M4JLwlMstZDWi8s1ugy8Ua1aU+yDTnjbGp7MvQHss+a
+         GEe3Xb84p5yKgxzF6Nrtm8IgAJ/IWKLo0eVPIlWgHHT8UKBZILMzTfOYElB+MyWHEBlA
+         idJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dKpNSqmJyc1shBqMlT5prVldbUvob7Rd4vFWEPuuWto=;
+        b=Dj6RcDVEn8nMxgZr809WjAZl7BQC5cPOT09+Cy6RICrYVfBrfEJkh3qv5N3AxzgDoN
+         Hiztqzgg8EVdGHYkzylUBk1eo3hz9cAPG7U/zovuU82twjszNWJaWSCGhWNn/yWUSrlu
+         yP9gGhFoNNP3jYyVro+nZDC1kXIYbidHZBwcT6BjCM/5n67xB1eqqaKigBiiPL+llFxG
+         qmDwxRww1BqsbHBs8aKAmE4Fn5vRrkKxScB2TtJjzcf56iZ6zOdg6y7NB2Go9VJW4Y7D
+         /ICNt+0zzmzb3vH5+nzqGF/d6Mf9Ik/0KkMp1r+4tDCAEVry/8OT44wPJaAxAC3OiQkF
+         ekbQ==
+X-Gm-Message-State: AOAM532anX9pFUS2CY8KETRgF3rZIEDwXnRyTcjh2jGkBFz2OUjGIX1T
+        QcvfwciLIQwy4y6R+n5XxOT4wDSvIM4ctOQv0rebjVbT/EgDCw==
+X-Google-Smtp-Source: ABdhPJwtKUwt73stNMVhFtfOqxAg5fXTLoVWI6r4XBXkcNoRYm8rnSm/ghiol73l5Ix4xXqD10j9UyHI8So3OAUJN9Q=
+X-Received: by 2002:a05:6808:20a5:b0:32b:2825:acba with SMTP id
+ s37-20020a05680820a500b0032b2825acbamr6206816oiw.283.1653745358037; Sat, 28
+ May 2022 06:42:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220506034656.50038-1-jjm2473@gmail.com> <14b2ae23-2f7b-401a-dcee-cc6114849022@paragon-software.com>
+In-Reply-To: <14b2ae23-2f7b-401a-dcee-cc6114849022@paragon-software.com>
+From:   =?UTF-8?B?57uD5Lqu5paM?= <jjm2473@gmail.com>
+Date:   Sat, 28 May 2022 21:42:26 +0800
+Message-ID: <CAP_9mL7O7YyW56HBorZ7727m22NjbQcfcu_J4_XOBoXigQvGCg@mail.gmail.com>
+Subject: Re: [PATCH] fs/ntfs3: fix null pointer dereference in d_flags_for_inode
+To:     Almaz Alexandrovich <almaz.alexandrovich@paragon-software.com>
+Cc:     ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220528-180939/Jason-A-Donenfeld/crypto-blake2s-remove-shash-module/20220526-172214
-head:   54e31fb223170c2e7f3a6c3b1f3b438e32788f43
-commit: 54e31fb223170c2e7f3a6c3b1f3b438e32788f43 crypto: blake2s - remove shash module
-date:   3 hours ago
-config: hexagon-randconfig-r041-20220527 (https://download.01.org/0day-ci/archive/20220528/202205282100.bU9SnP9m-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0fbe3f3f486e01448121f7931a4ca29fac1504ab)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/54e31fb223170c2e7f3a6c3b1f3b438e32788f43
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220528-180939/Jason-A-Donenfeld/crypto-blake2s-remove-shash-module/20220526-172214
-        git checkout 54e31fb223170c2e7f3a6c3b1f3b438e32788f43
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/crypto/
+Hello.
+`inode->i_op` already initialized when inode alloc, this bug was
+introduced by `inode->i_op = NULL;`, just delete this line.
+Please check my patch, maybe it's a better one, I have tested it on my project.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> lib/crypto/blake2s-selftest.c:548:13: warning: stack frame size (1128) exceeds limit (1024) in 'blake2s_selftest' [-Wframe-larger-than]
-   bool __init blake2s_selftest(void)
-               ^
-   1 warning generated.
-
-
-vim +/blake2s_selftest +548 lib/crypto/blake2s-selftest.c
-
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  547  
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08 @548  bool __init blake2s_selftest(void)
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  549  {
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  550  	u8 key[BLAKE2S_KEY_SIZE];
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  551  	u8 buf[ARRAY_SIZE(blake2s_testvecs)];
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  552  	u8 hash[BLAKE2S_HASH_SIZE];
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  553  	struct blake2s_state state;
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  554  	bool success = true;
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  555  	int i, l;
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  556  
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  557  	key[0] = key[1] = 1;
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  558  	for (i = 2; i < sizeof(key); ++i)
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  559  		key[i] = key[i - 2] + key[i - 1];
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  560  
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  561  	for (i = 0; i < sizeof(buf); ++i)
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  562  		buf[i] = (u8)i;
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  563  
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  564  	for (i = l = 0; i < ARRAY_SIZE(blake2s_testvecs); l = (l + 37) % ++i) {
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  565  		int outlen = 1 + i % BLAKE2S_HASH_SIZE;
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  566  		int keylen = (13 * i) % (BLAKE2S_KEY_SIZE + 1);
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  567  
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  568  		blake2s(hash, buf, key + BLAKE2S_KEY_SIZE - keylen, outlen, i,
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  569  			keylen);
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  570  		if (memcmp(hash, blake2s_testvecs[i], outlen)) {
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  571  			pr_err("blake2s self-test %d: FAIL\n", i + 1);
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  572  			success = false;
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  573  		}
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  574  
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  575  		if (!keylen)
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  576  			blake2s_init(&state, outlen);
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  577  		else
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  578  			blake2s_init_key(&state, outlen,
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  579  					 key + BLAKE2S_KEY_SIZE - keylen,
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  580  					 keylen);
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  581  
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  582  		blake2s_update(&state, buf, l);
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  583  		blake2s_update(&state, buf + l, i - l);
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  584  		blake2s_final(&state, hash);
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  585  		if (memcmp(hash, blake2s_testvecs[i], outlen)) {
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  586  			pr_err("blake2s init/update/final self-test %d: FAIL\n",
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  587  			       i + 1);
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  588  			success = false;
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  589  		}
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  590  	}
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  591  
-54e31fb223170c Jason A. Donenfeld 2022-05-28  592  	for (i = 0; i < 100; ++i) {
-54e31fb223170c Jason A. Donenfeld 2022-05-28  593  		u8 unaligned_block[BLAKE2S_BLOCK_SIZE + sizeof(long) - 1]
-54e31fb223170c Jason A. Donenfeld 2022-05-28  594  					__aligned(sizeof(long));
-54e31fb223170c Jason A. Donenfeld 2022-05-28  595  		u8 blocks[BLAKE2S_BLOCK_SIZE * 4];
-54e31fb223170c Jason A. Donenfeld 2022-05-28  596  		struct blake2s_state state1, state2;
-54e31fb223170c Jason A. Donenfeld 2022-05-28  597  
-54e31fb223170c Jason A. Donenfeld 2022-05-28  598  		get_random_bytes(blocks, sizeof(blocks));
-54e31fb223170c Jason A. Donenfeld 2022-05-28  599  		get_random_bytes(&state, sizeof(state));
-54e31fb223170c Jason A. Donenfeld 2022-05-28  600  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On 5/26/22 18:23, Almaz Alexandrovich wrote:
+>
+> Hello.
+>
+> Thank you for reporting this bug.
+> The bug happens because we don't initialize i_op for records in $Extend.
+> We tested patch on our side, let me know if patch helps you too.
+>
+>      fs/ntfs3: Fix missing i_op in ntfs_read_mft
+>
+>      There is null pointer dereference because i_op == NULL.
+>      The bug happens because we don't initialize i_op for records in $Extend.
+>      Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
+>
+>      Reported-by: Liangbin Lian <jjm2473@gmail.com>
+>      Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+>
+> diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+> index 879952254071..b2cc1191be69 100644
+> --- a/fs/ntfs3/inode.c
+> +++ b/fs/ntfs3/inode.c
+> @@ -430,6 +430,7 @@ static struct inode *ntfs_read_mft(struct inode *inode,
+>          } else if (fname && fname->home.low == cpu_to_le32(MFT_REC_EXTEND) &&
+>                     fname->home.seq == cpu_to_le16(MFT_REC_EXTEND)) {
+>                  /* Records in $Extend are not a files or general directories. */
+> +               inode->i_op = &ntfs_file_inode_operations;
+>          } else {
+>                  err = -EINVAL;
+>                  goto out;
+>
+>
+> On 5/6/22 06:46, Liangbin Lian wrote:
+> > ntfs_read_mft may return inode with null i_op, cause null pointer dereference in d_flags_for_inode (inode->i_op->get_link).
+> > Reproduce:
+> >   - sudo mount -t ntfs3 -o loop ntfs.img ntfs
+> >   - ls ntfs/'$Extend/$Quota'
+> >
+> > The call trace is shown below (striped):
+> >   BUG: kernel NULL pointer dereference, address: 0000000000000008
+> >   CPU: 0 PID: 577 Comm: ls Tainted: G           OE     5.16.0-0.bpo.4-amd64 #1  Debian 5.16.12-1~bpo11+1
+> >   RIP: 0010:d_flags_for_inode+0x65/0x90
+> >   Call Trace:
+> >   ntfs_lookup
+> >   +--- dir_search_u
+> >   |    +--- ntfs_iget5
+> >   |         +--- ntfs_read_mft
+> >   +--- d_splice_alias
+> >        +--- __d_add
+> >             +--- d_flags_for_inode
+> >
+> > Signed-off-by: Liangbin Lian <jjm2473@gmail.com>
+> > ---
+> >   fs/ntfs3/inode.c | 1 -
+> >   1 file changed, 1 deletion(-)
+> >
+> > diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+> > index 9eab11e3b..b68d26fa8 100644
+> > --- a/fs/ntfs3/inode.c
+> > +++ b/fs/ntfs3/inode.c
+> > @@ -45,7 +45,6 @@ static struct inode *ntfs_read_mft(struct inode *inode,
+> >       struct MFT_REC *rec;
+> >       struct runs_tree *run;
+> >
+> > -     inode->i_op = NULL;
+> >       /* Setup 'uid' and 'gid' */
+> >       inode->i_uid = sbi->options->fs_uid;
+> >       inode->i_gid = sbi->options->fs_gid;

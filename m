@@ -2,106 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 838E2536CDF
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 14:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9222536CE0
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 14:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355849AbiE1M0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 08:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
+        id S1355874AbiE1M1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 08:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235352AbiE1M0i (ORCPT
+        with ESMTP id S1355826AbiE1M1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 08:26:38 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B6E614E
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 05:26:35 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id g18so321125ljd.0
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 05:26:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=G9Q6psb88NqsE/S/Fz8mCADYqgWwagXV/KHNWgqOKj4=;
-        b=RxALeLjf7aIJ3FT6Qmtsh/x4UoCU7HeGSBGSMxjOrOskhnJSs/Q86FqQyESpM+ctaF
-         L1UhhTYiGmB0kY/Nzyd4AobytscQEi/v2pISGjQmL56LZ77TkA2AGgOzd4lARMhBZJ+j
-         CqesulRoL4UVNCk60Sag7DHeNZsinoOAKh2QfZ+yEBRHps6MfXx2InJ3qNmflbBIt8gY
-         /zNtDiN4zldWzxB13USMQSr7dR8ydyzhc7Va7CT4mbXqDkozOjlI9jIcAaztEaYp7XX5
-         yH7b8YRLTkva2/vd8OlxTpOI3rL07HsP7AFiKqbFHOmDmbfjShoweo4HnxYl1+6a4HR+
-         /Wsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=G9Q6psb88NqsE/S/Fz8mCADYqgWwagXV/KHNWgqOKj4=;
-        b=qSVOQPFJhuMhfwk04fN99FVpTnl75RiEAXhTIoqNCyKx7677NcCbD1VyRGFnLbLRvp
-         Chd0CrLAml8vjlEv+MGKtdpCbiQ/FyyGDwDosc6UoxOjOeRwFUMppTJBpBk7B3aXgv3I
-         2zYJvnv4l+OPPgtDssF9fdbsRj8jJTLH2JPI6wfUJx67D8VKfj+2e89MmoYfkVBKZdUC
-         2VSVyge4ZVzaeCidDDycrTzJvftf2jku7FU6IGg3pJAOzg6sXi5sCrCHwCoSoO2Xefps
-         xcQAKFd6CHakMa5VjWez5CRIBwM++PSPo16ZcFJ+DXtMKzjyYWl35T+N59aHTTYx91VE
-         aBvw==
-X-Gm-Message-State: AOAM532BuT95jv3z8E39G5TveCaiKOeLB0R14nK4HLRiDq3Meyg2xT3i
-        P8uTcBodaMp8NbpSeW7n0QKnCnhvAfFQMMMW96I=
-X-Google-Smtp-Source: ABdhPJwPDX4x3jMX/Rt8/h1JS4QPzLcFtUCzpuB5FVnhn7aFq406VNc7J8ggfeJgMgQNAOmGoZFEkL/RszSY4f5I+M4=
-X-Received: by 2002:a2e:a364:0:b0:255:458c:797d with SMTP id
- i4-20020a2ea364000000b00255458c797dmr2006110ljn.529.1653740794065; Sat, 28
- May 2022 05:26:34 -0700 (PDT)
+        Sat, 28 May 2022 08:27:40 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF71F1B7BF
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 05:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653740859; x=1685276859;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OUTmfqIVpj+C34M+/IQGpHwTDrfF1IhtKteO00gm0es=;
+  b=FR7NqXV9LMnCLH/MS03iuY+RrJJJ0dHOyk1d9OreuaS/VkCZ3LlEjl6G
+   R02maOr5IcLaivHy1yG+/Pv3mzb3wV0uQyr1fYhqRZXelhVbodjXLnb6O
+   487SsVwcHvYMosOTrKzP5tiqEdK53KXIV6AjEdjDAkOgdmj9jWKvZ/d/d
+   NzFb0HvDa4vAuV8bR1+OIzN1WlJzkF5eeXETyFyuXbG+u6iqjiX31oDW5
+   S1U6+Pdi29Smi4r3r9ZqneEoVYcYB4cZxMouKvPba8ZY/Q0cSR762O2h8
+   4+Qk/sVuz/bQsQv7qSxUcSX+DiymoS8Z92xRdz+qUlxTTJ/a/kCxVXZvJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="255159381"
+X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
+   d="scan'208";a="255159381"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 05:27:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
+   d="scan'208";a="902926279"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 May 2022 05:27:37 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nuvXc-0000CK-CG;
+        Sat, 28 May 2022 12:27:36 +0000
+Date:   Sat, 28 May 2022 20:26:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yue Zou <zouyue3@huawei.com>, sfr@canb.auug.org.au,
+        akpm@linux-foundation.org, mhiramat@kernel.org,
+        rostedt@goodmis.org, ahalaney@redhat.com, vbabka@suse.cz,
+        Jason@zx2c4.com, mark-pk.tsai@mediatek.com,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org
+Subject: Re: [PATCH -next] smp: Move stub from main.c into smp.h
+Message-ID: <202205282032.H8Urbl9N-lkp@intel.com>
+References: <20220528111122.1888581-1-zouyue3@huawei.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6520:4ed:b0:1b9:ca22:a6c4 with HTTP; Sat, 28 May 2022
- 05:26:33 -0700 (PDT)
-Reply-To: jameskibesa@gmail.com
-From:   James Kibesa <lambertjeffery86@gmail.com>
-Date:   Sat, 28 May 2022 05:26:33 -0700
-Message-ID: <CANiUo+9fhrP+jmC+-QiR6sRyDS_xyJHtb+WG-RYOcGMJ9SgyqQ@mail.gmail.com>
-Subject: GPE COVID-19 relieve funds.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220528111122.1888581-1-zouyue3@huawei.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:232 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [lambertjeffery86[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [lambertjeffery86[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Yue,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on next-20220527]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yue-Zou/smp-Move-stub-from-main-c-into-smp-h/20220528-185146
+base:    d3fde8ff50ab265749704bd7fbcf70d35235421f
+config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220528/202205282032.H8Urbl9N-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/2efe286bd89edfa5448d29a5be89fd54df424c46
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yue-Zou/smp-Move-stub-from-main-c-into-smp-h/20220528-185146
+        git checkout 2efe286bd89edfa5448d29a5be89fd54df424c46
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 prepare
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:62,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/slab.h:15,
+                    from include/linux/crypto.h:20,
+                    from arch/x86/kernel/asm-offsets.c:9:
+>> include/linux/smp.h:186:27: warning: 'setup_max_cpus' defined but not used [-Wunused-const-variable=]
+     186 | static const unsigned int setup_max_cpus = NR_CPUS;
+         |                           ^~~~~~~~~~~~~~
+--
+   fs/d_path.c:318:7: warning: no previous prototype for 'simple_dname' [-Wmissing-prototypes]
+     318 | char *simple_dname(struct dentry *dentry, char *buffer, int buflen)
+         |       ^~~~~~~~~~~~
+   In file included from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:62,
+                    from include/linux/wait.h:9,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from include/uapi/linux/aio_abi.h:31,
+                    from include/linux/syscalls.h:77,
+                    from fs/d_path.c:2:
+>> include/linux/smp.h:186:27: warning: 'setup_max_cpus' defined but not used [-Wunused-const-variable=]
+     186 | static const unsigned int setup_max_cpus = NR_CPUS;
+         |                           ^~~~~~~~~~~~~~
+--
+   fs/io_uring.c: In function '__io_submit_flush_completions':
+   fs/io_uring.c:3152:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+    3152 |         struct io_wq_work_node *node, *prev;
+         |                                        ^~~~
+   In file included from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:62,
+                    from include/linux/wait.h:9,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from include/uapi/linux/aio_abi.h:31,
+                    from include/linux/syscalls.h:77,
+                    from fs/io_uring.c:45:
+   At top level:
+>> include/linux/smp.h:186:27: warning: 'setup_max_cpus' defined but not used [-Wunused-const-variable=]
+     186 | static const unsigned int setup_max_cpus = NR_CPUS;
+         |                           ^~~~~~~~~~~~~~
+--
+   In file included from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:62,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/slab.h:15,
+                    from include/linux/crypto.h:20,
+                    from arch/x86/kernel/asm-offsets.c:9:
+>> include/linux/smp.h:186:27: warning: 'setup_max_cpus' defined but not used [-Wunused-const-variable=]
+     186 | static const unsigned int setup_max_cpus = NR_CPUS;
+         |                           ^~~~~~~~~~~~~~
+
+
+vim +/setup_max_cpus +186 include/linux/smp.h
+
+   185	
+ > 186	static const unsigned int setup_max_cpus = NR_CPUS;
+   187	static inline void setup_nr_cpu_ids(void) { }
+   188	static inline void smp_prepare_cpus(unsigned int maxcpus) { }
+   189	
+
 -- 
-Hello,
-
-You have been approved to received GPE COVID-19 relief funds. Reply to
-this email (jameskibesa@gmail.com) for claim procedure.
-
-James Kibesa
-
-
-Chief Financial Officer
-
-Global Partnership Pandemic Relief Consortium
-
-www.globalpartnership.org.pl
+0-DAY CI Kernel Test Service
+https://01.org/lkp

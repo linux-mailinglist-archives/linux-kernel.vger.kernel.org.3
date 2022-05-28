@@ -2,331 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E3F536A76
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 05:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E08536A79
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 05:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353529AbiE1DkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 23:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
+        id S1353752AbiE1DvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 23:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiE1DkL (ORCPT
+        with ESMTP id S229683AbiE1DvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 23:40:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03C711CA03;
-        Fri, 27 May 2022 20:40:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2945BB8268D;
-        Sat, 28 May 2022 03:40:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DDDFC34100;
-        Sat, 28 May 2022 03:40:05 +0000 (UTC)
-Date:   Fri, 27 May 2022 23:40:03 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
-Subject: [PATCH v6] ftrace: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding
- weak function
-Message-ID: <20220527234003.2719e6c6@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 27 May 2022 23:51:16 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C542384;
+        Fri, 27 May 2022 20:51:15 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id o80so10897821ybg.1;
+        Fri, 27 May 2022 20:51:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=orLkwKBDXLhrzD4BMFuH9kb4hQtpnaRtRA74RMpv3ig=;
+        b=ThcmND6RFj2HLB5DknQBN270ZC7q5ZBSbUhnpvjSSxPkpgWeN8xWuH7kxfUlGvDX4U
+         RLbW71kg8ym/EFwAXdAVnbEK2sShyDaVJEw/XQXd7oTnGyIO4zbqhx+C6w/UnhiqyK+r
+         gWgK9LgL9tEM0fDqCJxUaOW8uk2meXg0Ih7leP537y4W0wTOnRSUNy2/nLq2ToQ7w2ew
+         xQOCfHwwIkzPbZddQlJUC3Y92S+W6XtrKusrrHiZkTX/puTeHq/skzPAHerq0aSYI9XN
+         FEyld4ttK60iVF0N/LStp5gDIbc+PG/spteC7pGozY3QlmlEu0CxD9rk1TlZyEknnBnI
+         sBgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=orLkwKBDXLhrzD4BMFuH9kb4hQtpnaRtRA74RMpv3ig=;
+        b=wFBRb2OC16Z7H+dJiqN8vUxUTQi0VayXtRKeaTamGHMC0coULp9+Rwox9D2fx6GQ4y
+         ZPE60zj0aWwRE8RvGPeubk4I44CG7nH1ddxZ/vKQONrlfnkYlepQIhvAbaj87DR8y1W9
+         EKYBVGYRZMQ5DfbgaSPF2rcBmJwzQrdLnWFeeWQHW2+9GIPyhKr2WvY9KE8sV6CCPwPB
+         u53lZjuuepfGSylP/m6BjiL8IJjspLTsKwqgVO6n2ZjHcK1zs5BKGZN/YKW6mfuKvTjY
+         Wf8OP9psr5fKkqKohgL3WrvTwwX0xJIX7s1RQaDXuoXJ2AGDyHTYzgpy4YD9PVy+fg74
+         XcxA==
+X-Gm-Message-State: AOAM531ZNmfdgs4mJ7OdEWILV7OR7ktHAFa/A9tJ0XLNrE46sc1zj7Il
+        HZeuSfT+NrpC2FzRwLnWDuwADRDHDLbpQaeAUqXLfB6L/dk=
+X-Google-Smtp-Source: ABdhPJxxrYOkGAyX4e1QCYM6a1+xjZEfex+Ht0UhrC0tGLmf7QERIkMp3OjP4TmXl+gdHOj7c3+u9HT6TM4EjppppOI=
+X-Received: by 2002:a05:6902:14e:b0:64f:d2eb:2df0 with SMTP id
+ p14-20020a056902014e00b0064fd2eb2df0mr27601593ybh.557.1653709874725; Fri, 27
+ May 2022 20:51:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAOuPNLjGWp4+Ub_Ccaw+tx1NQrNcqyjUG5K30uPH3uYTF_wxfw@mail.gmail.com>
+ <CAOuPNLgzBA2Sbn6vS4856LwYyBo67OYKQp49+xpwX=Bi+KpLZg@mail.gmail.com>
+ <65f1b675-84ac-b5da-6075-2a9f0353ab37@quicinc.com> <CAOuPNLh-NJ=GK63+iHFE-th9J8yfWZg_S3xmLgHGM_-nCFexvg@mail.gmail.com>
+ <CAOuPNLgk8zRHwq7PP56NYpFagjnf_+1j1c_TYvdo6kmWQBwwuQ@mail.gmail.com>
+In-Reply-To: <CAOuPNLgk8zRHwq7PP56NYpFagjnf_+1j1c_TYvdo6kmWQBwwuQ@mail.gmail.com>
+From:   Pintu Agarwal <pintu.ping@gmail.com>
+Date:   Sat, 28 May 2022 09:21:03 +0530
+Message-ID: <CAOuPNLhN0rFVRx_ur7isKHO2GcZxefs-A=9wqJxBtMHgy3M0GQ@mail.gmail.com>
+Subject: Re: Queries: Using ifdef CONFIG condition in dts files
+To:     "T.Michael Turney" <quic_mturney@quicinc.com>
+Cc:     open list <linux-kernel@vger.kernel.org>, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, frowand.list@gmail.com,
+        linux-mm <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Sorry, a small correction.
 
-If an unused weak function was traced, it's call to fentry will still
-exist, which gets added into the __mcount_loc table. Ftrace will use
-kallsyms to retrieve the name for each location in __mcount_loc to display
-it in the available_filter_functions and used to enable functions via the
-name matching in set_ftrace_filter/notrace. Enabling these functions do
-nothing but enable an unused call to ftrace_caller. If a traced weak
-function is overridden, the symbol of the function would be used for it,
-which will either created duplicate names, or if the previous function was
-not traced, it would be incorrectly be listed in available_filter_functions
-as a function that can be traced.
+On Fri, 27 May 2022 at 17:06, Pintu Agarwal <pintu.ping@gmail.com> wrote:
+>
+> On Fri, 27 May 2022 at 15:34, Pintu Agarwal <pintu.ping@gmail.com> wrote:
+> >
+> > Hi,
+> >
+> > On Thu, 26 May 2022 at 19:53, T.Michael Turney <quic_mturney@quicinc.com> wrote:
+> > >
+> > > Kernel developers correct me where I go astray, but this seems like the
+> > > CONFIG_XYZ value is not available in this file.  This would explain why
+> > > the disable case works.
+> > >
+> > > At top of dtsi file are you #include <config.h> or whatever the correct
+> > > syntax is to see the CONFIG values?
+> >
+> > Thanks for your comments.
+> > No, I could not find any specific config,h to be included to make the
+> > CONFIG values visible to dts.
+> >
+>
+> BTW, I tried another approach but this also doesn't work when CONFIG is enabled.
+> a) I have created a new header file such as myxyz.h and defined a new
+> macro with config check.
+> => myxyz.h
+> +#ifdef CONFIG_XYZ
+> +#define XYZ_CMA
+> +#endif
+>
+> b) Then I included the header file in my dtsi file and used ifdef with
+> the new macro.
+>
+> #include "myxyz.h"
+>
+> #ifdef CONFIG_XYZ
 
-This became an issue with BPF[1] as there are tooling that enables the
-direct callers via ftrace but then checks to see if the functions were
-actually enabled. The case of one function that was marked notrace, but
-was followed by an unused weak function that was traced. The unused
-function's call to fentry was added to the __mcount_loc section, and
-kallsyms retrieved the untraced function's symbol as the weak function was
-overridden. Since the untraced function would not get traced, the BPF
-check would detect this and fail.
+#ifdef XYZ_CMA
 
-The real fix would be to fix kallsyms to not show addresses of weak
-functions as the function before it. But that would require adding code in
-the build to add function size to kallsyms so that it can know when the
-function ends instead of just using the start of the next known symbol.
-
-In the mean time, this is a work around. Add a FTRACE_MCOUNT_MAX_OFFSET
-macro that if defined, ftrace will ignore any function that has its call
-to fentry/mcount that has an offset from the symbol that is greater than
-FTRACE_MCOUNT_MAX_OFFSET.
-
-If CONFIG_HAVE_FENTRY is defined for x86, define FTRACE_MCOUNT_MAX_OFFSET
-to zero (unless IBT is enabled), which will have ftrace ignore all locations
-that are not at the start of the function (or one after the ENDBR
-instruction).
-
-A worker thread is added at boot up to scan all the ftrace record entries,
-and will mark any that fail the FTRACE_MCOUNT_MAX_OFFSET test as disabled.
-They will still appear in the available_filter_functions file as:
-
-  __ftrace_invalid_address___<invalid-offset>
-
-(showing the offset that caused it to be invalid).
-
-This is required for tools that use libtracefs (like trace-cmd does) that
-scan the available_filter_functions and enable set_ftrace_filter and
-set_ftrace_notrace using indexes of the function listed in the file (this
-is a speedup, as enabling thousands of files via names is an O(n^2)
-operation and can take minutes to complete, where the indexing takes less
-than a second).
-
-The invalid functions cannot be removed from available_filter_functions as
-the names there correspond to the ftrace records in the array that manages
-them (and the indexing depends on this).
-
-[1] https://lore.kernel.org/all/20220412094923.0abe90955e5db486b7bca279@kernel.org/
-
-Link: https://lkml.kernel.org/r/20220526141912.794c2786@gandalf.local.home
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-Changes since v5: https://lkml.kernel.org/r/20220526141912.794c2786@gandalf.local.home
- - Do not WARN_ON in ftrace_match_record() if the lookup_ip fails
-   offset not being within range and the max and the record is not
-   yet set to DISABLED. Only WARN_ON() if the system is running.
-
- arch/x86/include/asm/ftrace.h |   7 ++
- kernel/trace/ftrace.c         | 138 +++++++++++++++++++++++++++++++++-
- 2 files changed, 143 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
-index 024d9797646e..b5ef474be858 100644
---- a/arch/x86/include/asm/ftrace.h
-+++ b/arch/x86/include/asm/ftrace.h
-@@ -9,6 +9,13 @@
- # define MCOUNT_ADDR		((unsigned long)(__fentry__))
- #define MCOUNT_INSN_SIZE	5 /* sizeof mcount call */
- 
-+/* Ignore unused weak functions which will have non zero offsets */
-+#ifdef CONFIG_HAVE_FENTRY
-+# include <asm/ibt.h>
-+/* Add offset for endbr64 if IBT enabled */
-+# define FTRACE_MCOUNT_MAX_OFFSET	ENDBR_INSN_SIZE
-+#endif
-+
- #ifdef CONFIG_DYNAMIC_FTRACE
- #define ARCH_SUPPORTS_FTRACE_OPS 1
- #endif
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index d653ef4febc5..fb58d18d4f78 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -45,6 +45,8 @@
- #include "trace_output.h"
- #include "trace_stat.h"
- 
-+#define FTRACE_INVALID_FUNCTION		"__ftrace_invalid_address__"
-+
- #define FTRACE_WARN_ON(cond)			\
- 	({					\
- 		int ___r = cond;		\
-@@ -3654,6 +3656,105 @@ static void add_trampoline_func(struct seq_file *m, struct ftrace_ops *ops,
- 		seq_printf(m, " ->%pS", ptr);
- }
- 
-+#ifdef FTRACE_MCOUNT_MAX_OFFSET
-+/*
-+ * Weak functions can still have an mcount/fentry that is saved in
-+ * the __mcount_loc section. These can be detected by having a
-+ * symbol offset of greater than FTRACE_MCOUNT_MAX_OFFSET, as the
-+ * symbol found by kallsyms is not the function that the mcount/fentry
-+ * is part of. The offset is much greater in these cases.
-+ *
-+ * Test the record to make sure that the ip points to a valid kallsyms
-+ * and if not, mark it disabled.
-+ */
-+static int test_for_valid_rec(struct dyn_ftrace *rec)
-+{
-+	char str[KSYM_SYMBOL_LEN];
-+	unsigned long offset;
-+	const char *ret;
-+
-+	ret = kallsyms_lookup(rec->ip, NULL, &offset, NULL, str);
-+
-+	/* Weak functions can cause invalid addresses */
-+	if (!ret || offset > FTRACE_MCOUNT_MAX_OFFSET) {
-+		rec->flags |= FTRACE_FL_DISABLED;
-+		return 0;
-+	}
-+	return 1;
-+}
-+
-+static struct workqueue_struct *ftrace_check_wq __initdata;
-+static struct work_struct ftrace_check_work __initdata;
-+
-+/*
-+ * Scan all the mcount/fentry entries to make sure they are valid.
-+ */
-+static __init void ftrace_check_work_func(struct work_struct *work)
-+{
-+	struct ftrace_page *pg;
-+	struct dyn_ftrace *rec;
-+
-+	mutex_lock(&ftrace_lock);
-+	do_for_each_ftrace_rec(pg, rec) {
-+		test_for_valid_rec(rec);
-+	} while_for_each_ftrace_rec();
-+	mutex_unlock(&ftrace_lock);
-+}
-+
-+static int __init ftrace_check_for_weak_functions(void)
-+{
-+	INIT_WORK(&ftrace_check_work, ftrace_check_work_func);
-+
-+	ftrace_check_wq = alloc_workqueue("ftrace_check_wq", WQ_UNBOUND, 0);
-+
-+	queue_work(ftrace_check_wq, &ftrace_check_work);
-+	return 0;
-+}
-+
-+static int __init ftrace_check_sync(void)
-+{
-+	/* Make sure the ftrace_check updates are finished */
-+	if (ftrace_check_wq)
-+		destroy_workqueue(ftrace_check_wq);
-+	return 0;
-+}
-+
-+late_initcall_sync(ftrace_check_sync);
-+subsys_initcall(ftrace_check_for_weak_functions);
-+
-+static int print_rec(struct seq_file *m, unsigned long ip)
-+{
-+	unsigned long offset;
-+	char str[KSYM_SYMBOL_LEN];
-+	char *modname;
-+	const char *ret;
-+
-+	ret = kallsyms_lookup(ip, NULL, &offset, &modname, str);
-+	/* Weak functions can cause invalid addresses */
-+	if (!ret || offset > FTRACE_MCOUNT_MAX_OFFSET) {
-+		snprintf(str, KSYM_SYMBOL_LEN, "%s_%ld",
-+			 FTRACE_INVALID_FUNCTION, offset);
-+		ret = NULL;
-+	}
-+
-+	seq_puts(m, str);
-+	if (modname)
-+		seq_printf(m, " [%s]", modname);
-+	return ret == NULL ? -1 : 0;
-+}
-+#else
-+static inline int test_for_valid_rec(struct dyn_ftrace *rec)
-+{
-+	return 1;
-+}
-+
-+static inline int print_rec(struct seq_file *m, unsigned long ip)
-+{
-+	seq_printf(m, "%ps", (void *)ip);
-+	return 0;
-+}
-+#endif
-+
- static int t_show(struct seq_file *m, void *v)
- {
- 	struct ftrace_iterator *iter = m->private;
-@@ -3678,7 +3779,13 @@ static int t_show(struct seq_file *m, void *v)
- 	if (!rec)
- 		return 0;
- 
--	seq_printf(m, "%ps", (void *)rec->ip);
-+	if (print_rec(m, rec->ip)) {
-+		/* This should only happen when a rec is disabled */
-+		WARN_ON_ONCE(!(rec->flags & FTRACE_FL_DISABLED));
-+		seq_putc(m, '\n');
-+		return 0;
-+	}
-+
- 	if (iter->flags & FTRACE_ITER_ENABLED) {
- 		struct ftrace_ops *ops;
- 
-@@ -3996,6 +4103,24 @@ add_rec_by_index(struct ftrace_hash *hash, struct ftrace_glob *func_g,
- 	return 0;
- }
- 
-+#ifdef FTRACE_MCOUNT_MAX_OFFSET
-+static int lookup_ip(unsigned long ip, char **modname, char *str)
-+{
-+	unsigned long offset;
-+
-+	kallsyms_lookup(ip, NULL, &offset, modname, str);
-+	if (offset > FTRACE_MCOUNT_MAX_OFFSET)
-+		return -1;
-+	return 0;
-+}
-+#else
-+static int lookup_ip(unsigned long ip, char **modname, char *str)
-+{
-+	kallsyms_lookup(ip, NULL, NULL, modname, str);
-+	return 0;
-+}
-+#endif
-+
- static int
- ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
- 		struct ftrace_glob *mod_g, int exclude_mod)
-@@ -4003,7 +4128,12 @@ ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
- 	char str[KSYM_SYMBOL_LEN];
- 	char *modname;
- 
--	kallsyms_lookup(rec->ip, NULL, NULL, &modname, str);
-+	if (lookup_ip(rec->ip, &modname, str)) {
-+		/* This should only happen when a rec is disabled */
-+		WARN_ON_ONCE(system_state == SYSTEM_RUNNING &&
-+			     !(rec->flags & FTRACE_FL_DISABLED));
-+		return 0;
-+	}
- 
- 	if (mod_g) {
- 		int mod_matches = (modname) ? ftrace_match(modname, mod_g) : 0;
-@@ -6830,6 +6960,10 @@ void ftrace_module_enable(struct module *mod)
- 		if (ftrace_start_up)
- 			cnt += referenced_filters(rec);
- 
-+		/* Weak functions should still be ignored */
-+		if (!test_for_valid_rec(rec))
-+			continue;
-+
- 		rec->flags &= ~FTRACE_FL_DISABLED;
- 		rec->flags += cnt;
- 
--- 
-2.35.1
-
+> &reserved_mem {
+>         xyz_region: xyz_region {
+>                 compatible = "shared-dma-pool";
+>                 reusable;
+>                 size = <0x600000>;
+>         };
+> };
+> #endif
+>
+> But unfortunately this approach also did not work when CONFIG is
+> enabled. So, when config enable/disable its same behavior.
+> However, if I put the #define in the dtsi file itself then it works as expected.
+>
+>
+> Thanks,
+> Pintu

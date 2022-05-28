@@ -2,141 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CE8536DF6
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 19:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AE6536DF3
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 19:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239158AbiE1R2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 13:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
+        id S239117AbiE1RZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 13:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbiE1R2g (ORCPT
+        with ESMTP id S231777AbiE1RZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 13:28:36 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225F12662;
-        Sat, 28 May 2022 10:28:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1653758903;
-        bh=lR1SmAw3TFZ2GVQGx6Xrltu1975YzeKIyfCgmu3IbmI=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=TwY7VeAEA96tsQkihp6Y53kt7fF5IFdDfZK0kJxOBVZ3BN2JoTOn2gxG+EPBXayd0
-         1TwauGiZ+ZSWnFHxazRzYiuBm8Wp4/7b3LubTm90l5WpGZl8Em0bmA6eslfp46oUzy
-         YonBZifAugCbrq9EgfOvRT9SQtNkdIyKqODPRRa0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.176.6]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MryXN-1nRjkI0V9B-00nyNC; Sat, 28
- May 2022 19:28:23 +0200
-Message-ID: <90a293d4-698f-5c9a-9435-3a26ea0ae97f@gmx.de>
-Date:   Sat, 28 May 2022 19:28:08 +0200
+        Sat, 28 May 2022 13:25:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B8111A32;
+        Sat, 28 May 2022 10:25:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3998B807ED;
+        Sat, 28 May 2022 17:25:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7C3BC34100;
+        Sat, 28 May 2022 17:25:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653758711;
+        bh=GdCxg+Hoqs4A5uVj70itM0dbHtrrCFfc1B7A5Kv46nA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FB63uImwGdFeA5/Z9TrQifFVx/+xCf8Ko2Rs/y5W1IGoJgSyHuusfcef+E3g5pzy0
+         Km4W1kx70qfQf5Pcq85PNL1yqX+IoErx9DlI6pXZhgBS4CUkEm5Pr+ewB7aF7BDcJ6
+         oF+VyBFJdXZEu/JQiZguzZt6E3DTAlA5QLOKTo6J1jlB1qzFlNbrvuqFJLUCAJWIZk
+         FDN6Pf+SOodovwP2l9MG9/ltlvjKAR21XFLRERbzwHpepBiU94sx2rSdFlbtVe5bOD
+         +TvKE9R46jwb9jmG6LvZw7mikGNzOrZjLYwC51QtBSLmAX9n+/tKgjN8Ol0EkwM9d+
+         8bmRuMnT0/PqQ==
+Date:   Sat, 28 May 2022 18:34:05 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Joe Simmons-Talbott <joetalbott@gmail.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] iio: Prefer octal over symbolic permissions.
+Message-ID: <20220528183405.22b55033@jic23-huawei>
+In-Reply-To: <20220527185651.465204-1-joetalbott@gmail.com>
+References: <20220527185651.465204-1-joetalbott@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] fbdev: vesafb: Fix a use-after-free due early fb_info
- cleanup
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Pascal Ernster <dri-devel@hardfalcon.net>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-References: <20220526194752.307192-1-javierm@redhat.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220526194752.307192-1-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Q/afMmrV6TEcA8Ald4h2sa2uBYvXhgfWAKP3dhZtZKDXuX7L5bR
- 7U8+ZHdeYUwdMiakb0VwOYuClbKKl+haWFBSOYmF+SHHED0qpI0GIqLlrUB0RXSFWtrqhTb
- AkERe7Q+TtAfR5JiIGY4CIOfm1wpUd4Ipilwn4bw331ESA1gn2Hyv3EYZgRMgmYDnN0B/kz
- dL+IkvX24bMKe5Hhl+kdQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:XqlM8cU89UE=:eTOTT44CHSOooba+fOdkyo
- y1MrLZk9ZF2hFIn2zAV64IipZRcch4TDAmcOQt1UnVDoWfg8AlPW7kQyvq5Mb0gcIb7YTmMb+
- Ln6ECUlnPq6IjylwUES9rrADlRUQrT8TxSUSTLlfppRpi/I1tEWt1UIgPkQj3qKiyBDp0T2cW
- pVPFSD+DWm3PhsvpO1MKsvFNuQyNzj5SE9NYvrhnZMTSXCWEREmugIRmXUXV5N8HXsgFx+1by
- 0vLeeaxz1f9yPwz8CNloOIkA8JGoGYDg0nc3ih94KY2nQqw99TwbRy5Qv8iL6wqu6C2gRFaqg
- g5U3IMGg/uDbjSmr+IMTOU6PB22HmuyLFAjMPTfCNKOYfXUjX7Iq50hAN+LYQhPunEIwxK+qr
- fmqigX0CR00JfCnzuQYt+EFZo7Kt00ocWT2prVauDK4heXV4gwJtzcSVkyy4tKIwYs1LXTIHy
- NBMByrSq6ZBIYXVmCyvzobNlk8yQ8Edznm5TG19y+B7C3W/mogQAdbSvpl2rWLhuaZMIvnzZQ
- d90hIfQeIHW3iU4UUwfQxkTvmKBQSaHgIeAfYG9fqWPL3qC1pHnNNIdc0QQ/EWXTdoxz2O/cA
- vwJHUPPsHbBHNbZ14vv1OAOPZEoSHnawhbLrQDkbAEL43nM0ZWeoSd7MjsgSbxe33DhVDPfcA
- FVwFhff+sw0KW9pyjcLj2n2bssGVitMJ/8PnASUnAaS4uW6DPyLCBBziIRhexGjAx6+r90zfJ
- BPW1qpm6QsDSDLMA5k7eZ30AWoWbJAPFPnZW/Z84HZ5TKNN2LvsF48abqc7EdxxFlbo2v1psQ
- qLU8Pv+vleI3K0geCzXBa33Y/nQK1T8UmMfPLpun4LWaH9J66oMwuSMOO1JmUrLp5+5u7lAY5
- dszI+2Z36wvyMgor8SOD2QfU2JvAh3jYYFkdDNtjy/RMFuaGcDCEkJQaQxVvMl26N3jMBGAyn
- xAI7dWt09WCE7bmZPWqmXRjZ4RGnBPKrTjIMSpIgk40wdhpLe9Z3fr32/HAsOs9q8X9Ga7siv
- NNUnlntJml8yv33RX450oCMkteJrBGzYkUvSqFnKSllLwHNuPpGc1JF8Ahn1iw1HXDlB6jkQe
- dk+elHRX383UtQQk6OeBRavSUqvawhcFUufJ7Htlgz07/c9V6b5L258Zw==
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/22 21:47, Javier Martinez Canillas wrote:
-> Commit b3c9a924aab6 ("fbdev: vesafb: Cleanup fb_info in .fb_destroy rath=
-er
-> than .remove") fixed a use-after-free error due the vesafb driver freein=
-g
-> the fb_info in the .remove handler instead of doing it in .fb_destroy.
->
-> This can happen if the .fb_destroy callback is executed after the .remov=
-e
-> callback, since the former tries to access a pointer freed by the latter=
-.
->
-> But that change didn't take into account that another possible scenario =
-is
-> that .fb_destroy is called before the .remove callback. For example, if =
-no
-> process has the fbdev chardev opened by the time the driver is removed.
->
-> If that's the case, fb_info will be freed when unregister_framebuffer() =
-is
-> called, making the fb_info pointer accessed in vesafb_remove() after tha=
-t
-> to no longer be valid.
->
-> To prevent that, move the expression containing the info->par to happen
-> before the unregister_framebuffer() function call.
->
-> Fixes: b3c9a924aab6 ("fbdev: vesafb: Cleanup fb_info in .fb_destroy rath=
-er than .remove")
-> Reported-by: Pascal Ernster <dri-devel@hardfalcon.net>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+On Fri, 27 May 2022 14:56:52 -0400
+Joe Simmons-Talbott <joetalbott@gmail.com> wrote:
 
-applied to the fbdev git tree.
+> As reported by checkpatch.pl use ocatl permissions rather than symbolic
+> permissions.
+> 
+> Signed-off-by: Joe Simmons-Talbott <joetalbott@gmail.com>
 
-Thanks!
-Helge
+Hi Joe,
 
+Why the resend?  Given change of description, I'm guessing this is v2
+because of feedback on a similar patch elsewhere. If so, please
+put the version number in the patch log and provide a changelog
+below the ---
+
+Hmm. I guess I don't really mind cleaning this up though it is
+some churn in core code which is usually something we try to avoid
+for fairly trivial style reasons.
+
+One request inline (though I suspect it applies in several places,
+I just haven't checked ;)
+
+Thanks,
+
+Jonathan
 
 > ---
->
->  drivers/video/fbdev/vesafb.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/video/fbdev/vesafb.c b/drivers/video/fbdev/vesafb.c
-> index e25e8de5ff67..929d4775cb4b 100644
-> --- a/drivers/video/fbdev/vesafb.c
-> +++ b/drivers/video/fbdev/vesafb.c
-> @@ -490,11 +490,12 @@ static int vesafb_remove(struct platform_device *p=
-dev)
->  {
->  	struct fb_info *info =3D platform_get_drvdata(pdev);
->
-> -	/* vesafb_destroy takes care of info cleanup */
-> -	unregister_framebuffer(info);
->  	if (((struct vesafb_par *)(info->par))->region)
->  		release_region(0x3c0, 32);
->
-> +	/* vesafb_destroy takes care of info cleanup */
-> +	unregister_framebuffer(info);
-> +
+>  drivers/iio/industrialio-buffer.c  | 12 ++++++------
+>  drivers/iio/industrialio-core.c    | 10 +++++-----
+>  drivers/iio/industrialio-trigger.c |  4 ++--
+>  3 files changed, 13 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
+> index b078eb2f3c9d..c27f74a3c0f3 100644
+> --- a/drivers/iio/industrialio-buffer.c
+> +++ b/drivers/iio/industrialio-buffer.c
+> @@ -1391,17 +1391,17 @@ static ssize_t direction_show(struct device *dev,
+>  	}
+>  }
+>  
+> -static DEVICE_ATTR(length, S_IRUGO | S_IWUSR, iio_buffer_read_length,
+> +static DEVICE_ATTR(length, 0644, iio_buffer_read_length,
+>  		   iio_buffer_write_length);
+>  static struct device_attribute dev_attr_length_ro = __ATTR(length,
+> -	S_IRUGO, iio_buffer_read_length, NULL);
+> -static DEVICE_ATTR(enable, S_IRUGO | S_IWUSR,
+> +	0444, iio_buffer_read_length, NULL);
+> +static DEVICE_ATTR(enable, 0644,
+>  		   iio_buffer_show_enable, iio_buffer_store_enable);
+> -static DEVICE_ATTR(watermark, S_IRUGO | S_IWUSR,
+> +static DEVICE_ATTR(watermark, 0644,
+>  		   iio_buffer_show_watermark, iio_buffer_store_watermark);
+>  static struct device_attribute dev_attr_watermark_ro = __ATTR(watermark,
+> -	S_IRUGO, iio_buffer_show_watermark, NULL);
+> -static DEVICE_ATTR(data_available, S_IRUGO,
+> +	0444, iio_buffer_show_watermark, NULL);
+> +static DEVICE_ATTR(data_available, 0444,
+>  		iio_dma_show_data_available, NULL);
+
+a side effect of this change a slight shortening of how long the above
+two lines will be if combined into one.  It's now sub 80 chars
+I think, so please make them a single line.  Also check for similar
+cases elsewhere.
+
+
+>  static DEVICE_ATTR_RO(direction);
+>  
+> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+> index e1ed44dec2ab..35de348d686e 100644
+> --- a/drivers/iio/industrialio-core.c
+> +++ b/drivers/iio/industrialio-core.c
+> @@ -1114,12 +1114,12 @@ int __iio_device_attr_init(struct device_attribute *dev_attr,
+>  	dev_attr->attr.name = name;
+>  
+>  	if (readfunc) {
+> -		dev_attr->attr.mode |= S_IRUGO;
+> +		dev_attr->attr.mode |= 0444;
+>  		dev_attr->show = readfunc;
+>  	}
+>  
+>  	if (writefunc) {
+> -		dev_attr->attr.mode |= S_IWUSR;
+> +		dev_attr->attr.mode |= 0200;
+>  		dev_attr->store = writefunc;
+>  	}
+>  
+> @@ -1401,7 +1401,7 @@ static ssize_t iio_show_dev_name(struct device *dev,
+>  	return sysfs_emit(buf, "%s\n", indio_dev->name);
+>  }
+>  
+> -static DEVICE_ATTR(name, S_IRUGO, iio_show_dev_name, NULL);
+> +static DEVICE_ATTR(name, 0444, iio_show_dev_name, NULL);
+>  
+>  static ssize_t iio_show_dev_label(struct device *dev,
+>  				 struct device_attribute *attr,
+> @@ -1411,7 +1411,7 @@ static ssize_t iio_show_dev_label(struct device *dev,
+>  	return sysfs_emit(buf, "%s\n", indio_dev->label);
+>  }
+>  
+> -static DEVICE_ATTR(label, S_IRUGO, iio_show_dev_label, NULL);
+> +static DEVICE_ATTR(label, 0444, iio_show_dev_label, NULL);
+>  
+>  static ssize_t iio_show_timestamp_clock(struct device *dev,
+>  					struct device_attribute *attr,
+> @@ -1509,7 +1509,7 @@ int iio_device_register_sysfs_group(struct iio_dev *indio_dev,
 >  	return 0;
 >  }
->
+>  
+> -static DEVICE_ATTR(current_timestamp_clock, S_IRUGO | S_IWUSR,
+> +static DEVICE_ATTR(current_timestamp_clock, 0644,
+>  		   iio_show_timestamp_clock, iio_store_timestamp_clock);
+>  
+>  static int iio_device_register_sysfs(struct iio_dev *indio_dev)
+> diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
+> index f504ed351b3e..e22a35634f2c 100644
+> --- a/drivers/iio/industrialio-trigger.c
+> +++ b/drivers/iio/industrialio-trigger.c
+> @@ -54,7 +54,7 @@ static ssize_t iio_trigger_read_name(struct device *dev,
+>  	return sysfs_emit(buf, "%s\n", trig->name);
+>  }
+>  
+> -static DEVICE_ATTR(name, S_IRUGO, iio_trigger_read_name, NULL);
+> +static DEVICE_ATTR(name, 0444, iio_trigger_read_name, NULL);
+>  
+>  static struct attribute *iio_trig_dev_attrs[] = {
+>  	&dev_attr_name.attr,
+> @@ -494,7 +494,7 @@ static ssize_t iio_trigger_write_current(struct device *dev,
+>  	return ret;
+>  }
+>  
+> -static DEVICE_ATTR(current_trigger, S_IRUGO | S_IWUSR,
+> +static DEVICE_ATTR(current_trigger, 0644,
+>  		   iio_trigger_read_current,
+>  		   iio_trigger_write_current);
+>  
 

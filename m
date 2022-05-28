@@ -2,66 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2446536CCF
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 14:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8B1536CD3
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 14:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235339AbiE1MUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 08:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58804 "EHLO
+        id S1344856AbiE1MV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 08:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbiE1MUw (ORCPT
+        with ESMTP id S235398AbiE1MVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 08:20:52 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C181DA53
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 05:20:51 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id i18so6535089pfk.7
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 05:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=xVmGe1pvb1NKRaxS08eK6LDkM0yzbPm06yZ8alaEbGk=;
-        b=Ex2RVVuwUDGAbS1eIGz9BZZiDjRCWA6n5ETkHu9T74L+YmnqBwOzmRt0D50GLnOcne
-         89Im+fxHAz6j3hRxEvc8R4BVZn4FSXO/VmBuoQawOEDggIitflk67OQOvDVNZ0/CFlxL
-         DK8iYRkwrJfQOYB7KE1Q72sHW12gjrecYlfNM4GbZ67ycf0lgrsh1iw5G+T+/XUW1UTH
-         98Mx/5kNsKY9Yga4YT0rjk66vV9ftOeY2xm0J/LQIth9jUKj7qNXixfOBK3OEXNoJZtN
-         2ylGELGbC9BcWPNGMtvGXG6lyoi17gatTcDV66SCDagwsM3ThUEDzl3qfMJqmoYBb9HI
-         LNbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=xVmGe1pvb1NKRaxS08eK6LDkM0yzbPm06yZ8alaEbGk=;
-        b=KAKxAqLNkDVFK8v1exinXjeYcVc+XypGsL/YoP1pyd5cUs+d81keWUbuZ48aqpjQrB
-         SvNJvBXdN6qD6maBSpI61WLA3+Q0ihY6xkYfMg8lKQ+CbpEwoOQlKPDdjqwQD/4BV/pn
-         qvsvbwXIs7TYCsjT4NuikykqnJqMD5TN9DJptjQL8Ayp9Ri5Ecb83gkQ47h0DZKZRQ+4
-         OY2w5cJGQ/qM/FnDHrh2NmLFtvbcyWkA4nRNGJaWy3KnlVYUwaWLqQY9Zx6JJOeb+Lle
-         DojV14fKzr0GiRAHVWMl73VID7cEt0DwizmzXKVrGt2CpABfM3sk2YZTMrGysEtotin4
-         3VWw==
-X-Gm-Message-State: AOAM5331RTJHc0SRA/iDO554fJ9ySDcuzmGcH0UDXRwOUtgzZgoF3/0J
-        0qhII62QZv6v7nh323+77E3grg==
-X-Google-Smtp-Source: ABdhPJw2JoXBOtEAH4o4PFJ8GxYYTMxM+Pl16lVdghppJx0YDlQ4ug4s8djl3xsFNogW6/uma3Fgjg==
-X-Received: by 2002:a05:6a00:2386:b0:519:1ff1:d723 with SMTP id f6-20020a056a00238600b005191ff1d723mr11292271pfc.21.1653740450875;
-        Sat, 28 May 2022 05:20:50 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id gb8-20020a17090b060800b001df51e34036sm3203230pjb.0.2022.05.28.05.20.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 May 2022 05:20:50 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     yukuai3@huawei.com, ming.lei@redhat.com, josef@toxicpanda.com
-Cc:     linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-In-Reply-To: <20220521073749.3146892-1-yukuai3@huawei.com>
-References: <20220521073749.3146892-1-yukuai3@huawei.com>
-Subject: Re: [PATCH -next v3 0/6] nbd: bugfix and cleanup patches
-Message-Id: <165374044976.753929.3131835512531137863.b4-ty@kernel.dk>
-Date:   Sat, 28 May 2022 06:20:49 -0600
+        Sat, 28 May 2022 08:21:25 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F0F270;
+        Sat, 28 May 2022 05:21:21 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L9LPQ2zZlz4xZ0;
+        Sat, 28 May 2022 22:21:14 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1653740476;
+        bh=lBeVRIYEnBpfoa1y+dfWc2rNHDYGOWp54VP9xu/zsIc=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=kqdN3e2/bjmY0NgH8hlqCZXlQKLXstvIp/Ecl2cJzEWCE8IrnvoulltgeTj0TLBfH
+         DNhpYzOFJ3xIzJQyEjkqEzjnD059iaSweauuPRuK2kG8upubtvXPhnpxqgvFwpFnBa
+         AxUmgW2L8Tpr0tHdNDImNEW+09IBNCws/4ob7cY424GLxEPEQB0/mfGFInXiVoiLWr
+         ZNTeeJStO5Ca1UlqO7wPv4GlgV53YcjFdT2DGvNLbELWzgpGXr5mxVX+jFJ72LZou5
+         tq5kFSkAp6rWyOEtTVDP3s/g8pJcWwKg/ZBlSoQgOpP2y5QcnPzhEEH1IoiVzbWbT3
+         gDMQfJGgqDCzQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     xiujianfeng <xiujianfeng@huawei.com>, benh@kernel.crashing.org,
+        paulus@samba.org, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        tglx@linutronix.de, mark.rutland@arm.com
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH -next, v2] powerpc: add support for syscall stack
+ randomization
+In-Reply-To: <e7b0d68b-914d-7283-827c-101988923929@huawei.com>
+References: <20220516073225.112875-1-xiujianfeng@huawei.com>
+ <e7b0d68b-914d-7283-827c-101988923929@huawei.com>
+Date:   Sat, 28 May 2022 22:21:13 +1000
+Message-ID: <87sfotlufa.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,38 +56,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022 15:37:43 +0800, Yu Kuai wrote:
-> Changes in v3:
->  - rewrap to 80 columns where possible in patch 6
-> Changes in v2:
->  - in patch 3, instead of clear and then reset the flag if rq is not
->  completed, test first and clear if rq is going to complete.
-> 
-> path 1-2 fix races between nbd setup and module removal.
-> patch 3 fix io can't be completed in some error path.
-> patch 4 fix io hung when disconnecting failed.
-> patch 5 fix sysfs warning about duplicate creation.
-> patch 6 use pr_err to output error message.
-> 
-> [...]
+xiujianfeng <xiujianfeng@huawei.com> writes:
+> friendly ping....
 
-Applied, thanks!
+I will consider this for v5.20 once the merge window has closed (after
+v5.19-rc1 is release).
 
-[1/6] nbd: call genl_unregister_family() first in nbd_cleanup()
-      commit: 06c4da89c24e7023ea448cadf8e9daf06a0aae6e
-[2/6] nbd: fix race between nbd_alloc_config() and module removal
-      commit: c55b2b983b0fa012942c3eb16384b2b722caa810
-[3/6] nbd: don't clear 'NBD_CMD_INFLIGHT' flag if request is not completed
-      commit: 2895f1831e911ca87d4efdf43e35eb72a0c7e66e
-[4/6] nbd: fix io hung while disconnecting device
-      commit: 09dadb5985023e27d4740ebd17e6fea4640110e5
-[5/6] nbd: fix possible overflow on 'first_minor' in nbd_dev_add()
-      commit: 858f1bf65d3d9c00b5e2d8ca87dc79ed88267c98
-[6/6] nbd: use pr_err to output error message
-      commit: 1243172d5894e2d8f277ee3c278180792de5c521
+cheers
 
-Best regards,
--- 
-Jens Axboe
-
-
+> =E5=9C=A8 2022/5/16 15:32, Xiu Jianfeng =E5=86=99=E9=81=93:
+>> Add support for adding a random offset to the stack while handling
+>> syscalls. This patch uses mftb() instead of get_random_int() for better
+>> performance.
+>>
+>> In order to avoid unconditional stack canaries on syscall entry (due to
+>> the use of alloca()), also disable stack protector to avoid triggering
+>> needless checks and slowing down the entry path. As there is no general
+>> way to control stack protector coverage with a function attribute, this
+>> must be disabled at the compilation unit level.
+>>
+>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>>
+>> ---
+>> Changes in v2:
+>>    -move choose choose_random_kstack_offset() to the end of system_call_=
+exception
+>>    -allow full 6 (10) bits of entropy
+>>    -disable stack-protector for interrupt.c
+>> ---
+>>   arch/powerpc/Kconfig            |  1 +
+>>   arch/powerpc/kernel/Makefile    |  7 +++++++
+>>   arch/powerpc/kernel/interrupt.c | 19 ++++++++++++++++++-
+>>   3 files changed, 26 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+>> index 98309eeae09c..2f0019a0054e 100644
+>> --- a/arch/powerpc/Kconfig
+>> +++ b/arch/powerpc/Kconfig
+>> @@ -192,6 +192,7 @@ config PPC
+>>   	select HAVE_ARCH_KASAN			if PPC32 && PPC_PAGE_SHIFT <=3D 14
+>>   	select HAVE_ARCH_KASAN_VMALLOC		if PPC32 && PPC_PAGE_SHIFT <=3D 14
+>>   	select HAVE_ARCH_KFENCE			if PPC_BOOK3S_32 || PPC_8xx || 40x
+>> +	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+>>   	select HAVE_ARCH_KGDB
+>>   	select HAVE_ARCH_MMAP_RND_BITS
+>>   	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if COMPAT
+>> diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
+>> index 4ddd161aef32..5c5e85b8229b 100644
+>> --- a/arch/powerpc/kernel/Makefile
+>> +++ b/arch/powerpc/kernel/Makefile
+>> @@ -40,6 +40,13 @@ CFLAGS_cputable.o +=3D -DDISABLE_BRANCH_PROFILING
+>>   CFLAGS_btext.o +=3D -DDISABLE_BRANCH_PROFILING
+>>   endif
+>>=20=20=20
+>> +#ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
+>> +# Remove stack protector to avoid triggering unneeded stack canary
+>> +# checks due to randomize_kstack_offset.
+>> +CFLAGS_REMOVE_interrupt.o =3D -fstack-protector -fstack-protector-strong
+>> +CFLAGS_interrupt.o +=3D -fno-stack-protector
+>> +#endif
+>> +
+>>   obj-y				:=3D cputable.o syscalls.o \
+>>   				   irq.o align.o signal_$(BITS).o pmc.o vdso.o \
+>>   				   process.o systbl.o idle.o \
+>> diff --git a/arch/powerpc/kernel/interrupt.c b/arch/powerpc/kernel/inter=
+rupt.c
+>> index 784ea3289c84..d7cdcb6fc336 100644
+>> --- a/arch/powerpc/kernel/interrupt.c
+>> +++ b/arch/powerpc/kernel/interrupt.c
+>> @@ -4,6 +4,7 @@
+>>   #include <linux/err.h>
+>>   #include <linux/compat.h>
+>>   #include <linux/sched/debug.h> /* for show_regs */
+>> +#include <linux/randomize_kstack.h>
+>>=20=20=20
+>>   #include <asm/kup.h>
+>>   #include <asm/cputime.h>
+>> @@ -78,10 +79,12 @@ notrace long system_call_exception(long r3, long r4,=
+ long r5,
+>>   				   long r6, long r7, long r8,
+>>   				   unsigned long r0, struct pt_regs *regs)
+>>   {
+>> +	long ret;
+>>   	syscall_fn f;
+>>=20=20=20
+>>   	kuap_lock();
+>>=20=20=20
+>> +	add_random_kstack_offset();
+>>   	regs->orig_gpr3 =3D r3;
+>>=20=20=20
+>>   	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
+>> @@ -229,7 +232,21 @@ notrace long system_call_exception(long r3, long r4=
+, long r5,
+>>   		f =3D (void *)sys_call_table[r0];
+>>   	}
+>>=20=20=20
+>> -	return f(r3, r4, r5, r6, r7, r8);
+>> +	ret =3D f(r3, r4, r5, r6, r7, r8);
+>> +	/*
+>> +	 * Ultimately, this value will get limited by KSTACK_OFFSET_MAX(),
+>> +	 * so the maximum stack offset is 1k bytes(10 bits).
+>> +	 *
+>> +	 * The actual entropy will be further reduced by the compiler when
+>> +	 * applying stack alignment constraints: the powerpc architecture
+>> +	 * may have two kinds of stack alignment(16-bytes and 8-bytes).
+>> +	 *
+>> +	 * So the resulting 6 or 7 bits of entropy is seen in SP[9:4] or SP[9:=
+3].
+>> +	 *
+>> +	 */
+>> +	choose_random_kstack_offset(mftb());
+>> +
+>> +	return ret;
+>>   }
+>>=20=20=20
+>>   static notrace void booke_load_dbcr0(void)

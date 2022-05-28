@@ -2,72 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF46A536B7B
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 09:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22899536B86
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 09:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbiE1HxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 03:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S230284AbiE1H7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 03:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiE1HxP (ORCPT
+        with ESMTP id S229998AbiE1H7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 03:53:15 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADE6B13
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 00:53:14 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id l67-20020a6b3e46000000b00660b8c61a31so3919353ioa.0
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 00:53:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=k12H14fTkAkalc/6+WsNOIirEfbstqXEz7Gz+8J7vBo=;
-        b=UyNEwiqlzMjGy2t3TUK2k5b1dPHowjKhgk+RSk9F8vNNWIyrwJ25EjBf6pZfjKp8iL
-         Au+uj7R58KtNCjeXaZVV/UK9a+kw+H/xGe6EQVBGoXSB/4FrL8tGBtBp5kzHGnfuhwZ7
-         6VYSm1HjB6jIv9BLUfKD+99wfRmnB1zJ6CqxXuv/eNWZXjDa7UrLy05oAJOhvdkNvtBz
-         Mzku4jBlfVipU/MU5DjJVRJTHDyVhui2NRkcwZyX2Az5IuXmn7MFFPUfjI3LjLHzOMAG
-         JGLmufypEjyAC8lasu9yr/XqfmdkuUtx/hAshw+1sYXbvE+QyDgRaZumezAmdH2FUEPH
-         /U6A==
-X-Gm-Message-State: AOAM53038HU9+Rrku+Vgj7pAFZyAzm5WZ+AUU0XeB7+hX06Uab8u9Sop
-        5aB3FF4a8bbETObZf8GFBJ+U2co+vlJDeXmirLcQS+slLfWU
-X-Google-Smtp-Source: ABdhPJzS8ehE/Ax2cl2JoQjhoN+vaRL4D9wedTWlpmvpcddnfmR1U4l5atscQjeeuhzRxTyRpJaPVDcGDP5hA+/T3sPgIebpmW0J
+        Sat, 28 May 2022 03:59:37 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFED3D7A
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 00:59:35 -0700 (PDT)
+Received: from pop-os.home ([90.11.191.102])
+        by smtp.orange.fr with ESMTPA
+        id urMBnT8ApIaWOurMCnw1Bl; Sat, 28 May 2022 09:59:33 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 28 May 2022 09:59:33 +0200
+X-ME-IP: 90.11.191.102
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     tglx@linutronix.de, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        alsa-devel@alsa-project.org
+Subject: [PATCH] ASoC: ux500: Remove some leftover from the "Replace GPLv2 boilerplate/reference with SPDX" rules
+Date:   Sat, 28 May 2022 09:59:22 +0200
+Message-Id: <84d94977c57deee9e85249f18394ebf8d72497bc.1653724723.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:329b:b0:32e:d7c1:c30 with SMTP id
- f27-20020a056638329b00b0032ed7c10c30mr12944168jav.19.1653724394035; Sat, 28
- May 2022 00:53:14 -0700 (PDT)
-Date:   Sat, 28 May 2022 00:53:14 -0700
-In-Reply-To: <20220528073417.3900-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000010219805e00db787@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Write in udf_close_lvid
-From:   syzbot <syzbot+60864ed35b1073540d57@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The "Replace GPLv2 boilerplate/reference with SPDX" has left some empty
+"License terms" paragraphs.
+Remove them as well.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ sound/soc/ux500/mop500.c        | 2 --
+ sound/soc/ux500/mop500_ab8500.c | 2 --
+ sound/soc/ux500/mop500_ab8500.h | 2 --
+ sound/soc/ux500/ux500_msp_dai.c | 2 --
+ sound/soc/ux500/ux500_msp_dai.h | 2 --
+ sound/soc/ux500/ux500_msp_i2s.c | 2 --
+ sound/soc/ux500/ux500_msp_i2s.h | 2 --
+ sound/soc/ux500/ux500_pcm.c     | 2 --
+ sound/soc/ux500/ux500_pcm.h     | 2 --
+ 9 files changed, 18 deletions(-)
 
-Reported-and-tested-by: syzbot+60864ed35b1073540d57@syzkaller.appspotmail.com
+diff --git a/sound/soc/ux500/mop500.c b/sound/soc/ux500/mop500.c
+index 4f41bb0ab2b0..fdd55d772b8e 100644
+--- a/sound/soc/ux500/mop500.c
++++ b/sound/soc/ux500/mop500.c
+@@ -4,8 +4,6 @@
+  *
+  * Author: Ola Lilja (ola.o.lilja@stericsson.com)
+  *         for ST-Ericsson.
+- *
+- * License terms:
+  */
+ 
+ #include <asm/mach-types.h>
+diff --git a/sound/soc/ux500/mop500_ab8500.c b/sound/soc/ux500/mop500_ab8500.c
+index 1ea1729984a9..e5e73a2bd9fe 100644
+--- a/sound/soc/ux500/mop500_ab8500.c
++++ b/sound/soc/ux500/mop500_ab8500.c
+@@ -5,8 +5,6 @@
+  * Author: Ola Lilja <ola.o.lilja@stericsson.com>,
+  *         Kristoffer Karlsson <kristoffer.karlsson@stericsson.com>
+  *         for ST-Ericsson.
+- *
+- * License terms:
+  */
+ 
+ #include <linux/module.h>
+diff --git a/sound/soc/ux500/mop500_ab8500.h b/sound/soc/ux500/mop500_ab8500.h
+index 087ef246d87d..98de80a9cc4f 100644
+--- a/sound/soc/ux500/mop500_ab8500.h
++++ b/sound/soc/ux500/mop500_ab8500.h
+@@ -4,8 +4,6 @@
+  *
+  * Author: Ola Lilja <ola.o.lilja@stericsson.com>
+  *         for ST-Ericsson.
+- *
+- * License terms:
+  */
+ 
+ #ifndef MOP500_AB8500_H
+diff --git a/sound/soc/ux500/ux500_msp_dai.c b/sound/soc/ux500/ux500_msp_dai.c
+index 21052378a32e..56532b62faf3 100644
+--- a/sound/soc/ux500/ux500_msp_dai.c
++++ b/sound/soc/ux500/ux500_msp_dai.c
+@@ -5,8 +5,6 @@
+  * Author: Ola Lilja <ola.o.lilja@stericsson.com>,
+  *         Roger Nilsson <roger.xr.nilsson@stericsson.com>
+  *         for ST-Ericsson.
+- *
+- * License terms:
+  */
+ 
+ #include <linux/module.h>
+diff --git a/sound/soc/ux500/ux500_msp_dai.h b/sound/soc/ux500/ux500_msp_dai.h
+index fcd4b26f5d2d..30bf70838196 100644
+--- a/sound/soc/ux500/ux500_msp_dai.h
++++ b/sound/soc/ux500/ux500_msp_dai.h
+@@ -5,8 +5,6 @@
+  * Author: Ola Lilja <ola.o.lilja@stericsson.com>,
+  *         Roger Nilsson <roger.xr.nilsson@stericsson.com>
+  *         for ST-Ericsson.
+- *
+- * License terms:
+  */
+ 
+ #ifndef UX500_msp_dai_H
+diff --git a/sound/soc/ux500/ux500_msp_i2s.c b/sound/soc/ux500/ux500_msp_i2s.c
+index fd0b88bb7921..d113411a19f8 100644
+--- a/sound/soc/ux500/ux500_msp_i2s.c
++++ b/sound/soc/ux500/ux500_msp_i2s.c
+@@ -6,8 +6,6 @@
+  *         Roger Nilsson <roger.xr.nilsson@stericsson.com>,
+  *         Sandeep Kaushik <sandeep.kaushik@st.com>
+  *         for ST-Ericsson.
+- *
+- * License terms:
+  */
+ 
+ #include <linux/module.h>
+diff --git a/sound/soc/ux500/ux500_msp_i2s.h b/sound/soc/ux500/ux500_msp_i2s.h
+index 756b3973af9a..d45b5e2831cc 100644
+--- a/sound/soc/ux500/ux500_msp_i2s.h
++++ b/sound/soc/ux500/ux500_msp_i2s.h
+@@ -4,8 +4,6 @@
+  *
+  * Author: Ola Lilja <ola.o.lilja@stericsson.com>,
+  *         for ST-Ericsson.
+- *
+- * License terms:
+  */
+ 
+ 
+diff --git a/sound/soc/ux500/ux500_pcm.c b/sound/soc/ux500/ux500_pcm.c
+index 18191084b8b8..d3802e5ef196 100644
+--- a/sound/soc/ux500/ux500_pcm.c
++++ b/sound/soc/ux500/ux500_pcm.c
+@@ -5,8 +5,6 @@
+  * Author: Ola Lilja <ola.o.lilja@stericsson.com>,
+  *         Roger Nilsson <roger.xr.nilsson@stericsson.com>
+  *         for ST-Ericsson.
+- *
+- * License terms:
+  */
+ 
+ #include <asm/page.h>
+diff --git a/sound/soc/ux500/ux500_pcm.h b/sound/soc/ux500/ux500_pcm.h
+index ff3ef7223db6..bd4348ebf9a1 100644
+--- a/sound/soc/ux500/ux500_pcm.h
++++ b/sound/soc/ux500/ux500_pcm.h
+@@ -5,8 +5,6 @@
+  * Author: Ola Lilja <ola.o.lilja@stericsson.com>,
+  *         Roger Nilsson <roger.xr.nilsson@stericsson.com>
+  *         for ST-Ericsson.
+- *
+- * License terms:
+  */
+ #ifndef UX500_PCM_H
+ #define UX500_PCM_H
+-- 
+2.34.1
 
-Tested on:
-
-commit:         97fa5887 USB: new quirk for Dell Gen 2 devices
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cacd11c8fed2980d
-dashboard link: https://syzkaller.appspot.com/bug?extid=60864ed35b1073540d57
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1373055bf00000
-
-Note: testing is done by a robot and is best-effort only.

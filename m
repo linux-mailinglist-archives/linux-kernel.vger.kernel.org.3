@@ -2,156 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F3E536967
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 02:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6A2536969
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 02:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355268AbiE1A1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 20:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        id S1355277AbiE1A35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 20:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245666AbiE1A1n (ORCPT
+        with ESMTP id S239382AbiE1A3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 20:27:43 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75723101FE;
-        Fri, 27 May 2022 17:27:42 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24RJPT3O013619;
-        Fri, 27 May 2022 17:27:31 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : in-reply-to : message-id : references : mime-version :
- content-type : content-id; s=pfpt0220;
- bh=Vb1GuDgqYbAUPSENMyVLcjQ2bVoYMKH0ZvazQCEsd5I=;
- b=lHiA0zpE4yK3ng0SPXGyNqiu77Yjxyz7p9ke4GAwbMyJVYTqG1xZXRr49v+xQLcAWtZ8
- yZ9cWzGepwBWiqv5FF//R0aY2h8G/NgGejvl3JiU50a08B5ER41ghRxR/TJthg0oTFc/
- EExG/NjMiqu2xB7mzZSLERy2+5ckN4ULhfq5WnfsSf3OAqlV4sq7mstKQNdNBwmz12Td
- S9RGGNBeHrwCMvoat7BrEnlpBD6x2Y6xdYYGtkOXFY14S03dVXccPFiqvsr3eKIl6VVm
- p7+08mIf/nWcWyJKaZ5B5tXpVwGxv5Tg+WrsxmbNYT/7d5z9c8Y9qqOnuxxT/ywjUPaq Pg== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3gaf2rwhrc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 27 May 2022 17:27:31 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 27 May
- 2022 17:27:29 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Fri, 27 May 2022 17:27:29 -0700
-Received: from mvluser05.qlc.com (unknown [10.112.10.135])
-        by maili.marvell.com (Postfix) with ESMTP id 9B3655B6936;
-        Fri, 27 May 2022 17:27:29 -0700 (PDT)
-Received: from localhost (aeasi@localhost)
-        by mvluser05.qlc.com (8.14.4/8.14.4/Submit) with ESMTP id 24S0RRxv008651;
-        Fri, 27 May 2022 17:27:29 -0700
-X-Authentication-Warning: mvluser05.qlc.com: aeasi owned process doing -bs
-Date:   Fri, 27 May 2022 17:27:27 -0700
-From:   Arun Easi <aeasi@marvell.com>
-X-X-Sender: aeasi@mvluser05.qlc.com
-To:     Tony Battersby <tonyb@cybernetics.com>
-CC:     Saurav Kashyap <skashyap@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <regressions@lists.linux.dev>
-Subject: Re: [REGRESSION] qla2xxx: tape drive not removed after unplug FC
- cable
-In-Reply-To: <baef87c3-5dad-3b47-44c1-6914bfc90108@cybernetics.com>
-Message-ID: <alpine.LRH.2.21.9999.2205271524460.4730@mvluser05.qlc.com>
-References: <baef87c3-5dad-3b47-44c1-6914bfc90108@cybernetics.com>
-User-Agent: Alpine 2.21.9999 (LRH 334 2019-03-29)
+        Fri, 27 May 2022 20:29:52 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAB02657D;
+        Fri, 27 May 2022 17:29:51 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L92cX2tLZz4xYY;
+        Sat, 28 May 2022 10:29:48 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653697790;
+        bh=pRpgD/4/6Dx9KRI+YBfBGGJDpPSQXh8RoL5F36a6M4g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=X6GZgudst7usRBgSMLQrPXpN4xdCxRS43v/euK55KzTUU/fnFJ8c4K5Nw1hHCps+O
+         xs1DX+f5wL2qONYtyu/7zCXLaeZTVyquBOwpSV4Maky5yoYaD3dthSMPUHhJ84WV7D
+         IB4o5lxG8rS4MTOn5qllgMB102bPXgNiydFyGsOmp7vNYHI5+M7EREiERE+S7ZK/eT
+         aWQ+iCI8r650/xYwLbLNLF0KDldsB8ra54jxTBnwXRq/liFV3Ukceafo3espJBWLzX
+         UOiDBB58NwLzff8xu+ZKaFO043Bt85rxFopv2Xsz+uELPmYMpNIR7uaN7kP7EJScXm
+         ct2CkPVdE8+gw==
+Date:   Sat, 28 May 2022 10:29:46 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Laurent Vivier <laurent@vivier.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the arm-soc tree with Linus' tree
+Message-ID: <20220528102946.341c3bbb@canb.auug.org.au>
+In-Reply-To: <DM4PR84MB19271EE54D445DD8F1DB047988D89@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20220527103916.52768f74@canb.auug.org.au>
+        <DM4PR84MB19271EE54D445DD8F1DB047988D89@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-        boundary="1879738122-1443816806-1653693424=:4730"
-Content-ID: <alpine.LRH.2.21.9999.2205271720570.4730@mvluser05.qlc.com>
-X-Proofpoint-ORIG-GUID: NKPAGJdVIFsyfuMHkYbCs7mr2U1irP6P
-X-Proofpoint-GUID: NKPAGJdVIFsyfuMHkYbCs7mr2U1irP6P
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-27_07,2022-05-27_01,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/r.w0xiWy.JxodZayFIJuOyq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---1879738122-1443816806-1653693424=:4730
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: 8BIT
-Content-ID: <alpine.LRH.2.21.9999.2205271720571.4730@mvluser05.qlc.com>
+--Sig_/r.w0xiWy.JxodZayFIJuOyq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Tony,
+Hi Nick,
 
-Thanks for reporting the issue. We are trying to recreate this issue in 
-house. I will reach out to you for logs, if we cannot repro. Typically, we 
-get sufficient context to the issue when the problem is reproduced with 
-module parameter "ql2xextended_error_logging=1".
+On Fri, 27 May 2022 15:38:56 +0000 "Hawkins, Nick" <nick.hawkins@hpe.com> w=
+rote:
+>
+> > Today's linux-next merge of the arm-soc tree got a conflict in: =20
+> >
+> >   drivers/clocksource/Makefile =20
+> >
+> > between commit: =20
+> >
+> >   c92e7ef16400 ("clocksource/drivers: Add a goldfish-timer clocksource"=
+) =20
+> >
+> > from Linus' tree and commit: =20
+> >
+> >   5184f4bf151b ("clocksource/drivers/timer-gxp: Add HPE GXP Timer") =20
+> >
+> > from the arm-soc tree. =20
+> >
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your
+> > tree is submitted for merging.  You may also want to consider
+> > cooperating with the maintainer of the conflicting tree to minimise
+> > any particularly complex conflicts. =20
+>=20
+> Hi Stephen,
+>=20
+> Thank you for resolving the merge issue. I am relatively new to this
+> process.. Can you provide a link to where you were notified of the
+> merge conflict?
 
-Anyway, I will let you know the status.
+The purpose of linux-next (which is my project) is integration testing,
+so I spend all day merging the branches that Linus will merge during
+the merge window. The conflict appeared when I merged the arm-soc tree
+yesterday.
 
-Regards,
--Arun
+--=20
+Cheers,
+Stephen Rothwell
 
-On Wed, 25 May 2022, 3:03pm, Tony Battersby wrote:
+--Sig_/r.w0xiWy.JxodZayFIJuOyq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-> #regzbot introduced: 44c57f205876
-> 
-> I have several different QLogic FC HBAs (8, 16, 32 Gbps) and several
-> different FC LTO tape drives (IBM Ultrium 8 & 9).  When I plug in the FC
-> cable, the tape drive shows up as a SCSI device as expected.  With older
-> kernels, when I unplug the FC cable, the tape drive SCSI device would
-> disappear after about 30 seconds.  But with newer kernels (including
-> 5.18), when I unplug the FC cable, the tape drive SCSI device never
-> disappears.  I have bisected the change in behavior to the following
-> commit in kernel 5.15:
-> 
-> 44c57f205876 ("scsi: qla2xxx: Changes to support FCP2 Target")
-> 
-> This commit has been backported to various -stable kernels, so they are
-> also affected.
-> 
-> When testing with two different tape drives:
-> 1) Plug FC cable into tape drive A.  Tape drive A shows up as a SCSI device.
-> 2) Unplug FC cable; wait 60 seconds.  Tape drive A does not disappear.
-> 3) Plug FC cable into tape drive B.  Tape drive A disappears 30 seconds
-> later, but tape drive B does not show up.
-> 4) Unplug FC cable and plug it back into tape drive B.  Tape drive B
-> shows up as a SCSI device.
-> 
-> So I can actually make a tape drive disappear by plugging the cable into
-> a different tape drive, but then I have to reseat the cable again to
-> make the new tape drive show up.
-> 
-> lspci -n
-> 83:00.0 0c04: 1077:2031 (rev 02)
-> 83:00.1 0c04: 1077:2031 (rev 02)
-> 
-> When plugging in cable:
-> qla2xxx [0000:83:00.1]-500a:7: LOOP UP detected (8 Gbps).
-> 
-> When unplugging cable with old kernel:
-> qla2xxx [0000:83:00.1]-500b:7: LOOP DOWN detected (2 7 0 0).
-> rport-7:0-2: blocked FC remote port time out: removing target and saving binding
-> 
-> When unplugging cable with new kernel:
-> qla2xxx [0000:83:00.1]-500b:7: LOOP DOWN detected (2 7 0 0).
-> 
-> /sys/class/fc_remote_ports/rport-*/
-> dev_loss_tmo: 30
-> supported_classes: Class 3
-> port_state: Online
-> (port_state remains Online even when FC cable unplugged)
-> 
-> /proc/scsi/scsi
-> Host: scsi7 Channel: 00 Id: 01 Lun: 00
->   Vendor: IBM      Model: ULTRIUM-HH8      Rev: K4K1
->   Type:   Sequential-Access                ANSI  SCSI revision: 06
-> 
-> Tony Battersby
-> Cybernetics
-> 
-> 
---1879738122-1443816806-1653693424=:4730--
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKRbPoACgkQAVBC80lX
+0GztrQf9EHJ6V/17kpTTtWpsyupFbpYQUIwepSgR2WwG9yYJn7c1c2QeNVG9sDDj
+Cv+BPS2fDeWzARwjwkyAs6NzgF6OvYWYxwqGipMmrtCpXOlL51+6oEt+BA3v+qhI
+mmf2tUlMj+1TGyetv0OpHSvtn/AkoEFb05L4pBQMG5jipn9VBg9T3UBtQJiWwZaV
+D5ytgeHstGHdvcek2ipxFjcSOzeu3CWbTuYv2FfK4UY5c8X9ouDU8XV6c4ziatX6
+WMs313CbJmXQJTbxERF7xIdsEu92rSEnR3Ub2xOUmAhFgRnSbx/gDoVGFEqD0VDL
+ufPgp530f7DkFWuLd9imgJPfrsWaWQ==
+=b5kA
+-----END PGP SIGNATURE-----
+
+--Sig_/r.w0xiWy.JxodZayFIJuOyq--

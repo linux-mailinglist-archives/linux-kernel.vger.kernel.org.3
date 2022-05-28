@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0926536A4C
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 04:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B750C536A4E
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 04:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355565AbiE1Cwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 22:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S1355631AbiE1CxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 22:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbiE1Cww (ORCPT
+        with ESMTP id S1352917AbiE1Cwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 22:52:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08193880C6;
-        Fri, 27 May 2022 19:52:51 -0700 (PDT)
+        Fri, 27 May 2022 22:52:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E6212B03D
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 19:52:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98A9B61D29;
-        Sat, 28 May 2022 02:52:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10E88C34114;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC42860FBD
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 02:52:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C8BAC34118;
         Sat, 28 May 2022 02:52:50 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1numZN-000LKR-0j;
+        id 1numZN-000LKz-6e;
         Fri, 27 May 2022 22:52:49 -0400
-Message-ID: <20220528025248.861126787@goodmis.org>
+Message-ID: <20220528025249.038653861@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 27 May 2022 22:50:29 -0400
+Date:   Fri, 27 May 2022 22:50:30 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [for-next][PATCH 01/23] tracing: Have event format check not flag %p* on
- __get_dynamic_array()
+        Li Huafei <lihuafei1@huawei.com>
+Subject: [for-next][PATCH 02/23] tracing: Reset the function filter after completing trampoline/graph
+ selftest
 References: <20220528025028.850906216@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,55 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+From: Li Huafei <lihuafei1@huawei.com>
 
-The print fmt check against trace events to make sure that the format does
-not use pointers that may be freed from the time of the trace to the time
-the event is read, gives a false positive on %pISpc when reading data that
-was saved in __get_dynamic_array() when it is perfectly fine to do so, as
-the data being read is on the ring buffer.
+The direct trampoline and graph coexistence test sets global_ops to
+trace only 'trace_selftest_dynamic_test_func', but does not reset it
+after the test is completed, resulting in the function filter being set
+already after the system starts. Although it can be reset through the
+tracefs interface, it is more or less confusing to the user, and we
+should reset it to trace all functions after the trampoline/graph test
+completes.
 
-Link: https://lore.kernel.org/all/20220407144524.2a592ed6@canb.auug.org.au/
+Link: https://lkml.kernel.org/r/20220427034119.24668-1-lihuafei1@huawei.com
+Link: https://lore.kernel.org/all/20220418073958.104029-1-lihuafei1@huawei.com/
 
-Cc: stable@vger.kernel.org
-Fixes: 5013f454a352c ("tracing: Add check of trace event print fmts for dereferencing pointers")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: 130c08065848 ("tracing: Add trampoline/graph selftest")
+Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_events.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ kernel/trace/trace_selftest.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 78f313b7b315..d5913487821a 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -392,12 +392,6 @@ static void test_event_printk(struct trace_event_call *call)
- 			if (!(dereference_flags & (1ULL << arg)))
- 				goto next_arg;
- 
--			/* Check for __get_sockaddr */;
--			if (str_has_prefix(fmt + i, "__get_sockaddr(")) {
--				dereference_flags &= ~(1ULL << arg);
--				goto next_arg;
--			}
--
- 			/* Find the REC-> in the argument */
- 			c = strchr(fmt + i, ',');
- 			r = strstr(fmt + i, "REC->");
-@@ -413,7 +407,14 @@ static void test_event_printk(struct trace_event_call *call)
- 				a = strchr(fmt + i, '&');
- 				if ((a && (a < r)) || test_field(r, call))
- 					dereference_flags &= ~(1ULL << arg);
-+			} else if ((r = strstr(fmt + i, "__get_dynamic_array(")) &&
-+				   (!c || r < c)) {
-+				dereference_flags &= ~(1ULL << arg);
-+			} else if ((r = strstr(fmt + i, "__get_sockaddr(")) &&
-+				   (!c || r < c)) {
-+				dereference_flags &= ~(1ULL << arg);
- 			}
+diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
+index abcadbe933bb..a2d301f58ced 100644
+--- a/kernel/trace/trace_selftest.c
++++ b/kernel/trace/trace_selftest.c
+@@ -895,6 +895,9 @@ trace_selftest_startup_function_graph(struct tracer *trace,
+ 		ret = -1;
+ 		goto out;
+ 	}
 +
- 		next_arg:
- 			i--;
- 			arg++;
++	/* Enable tracing on all functions again */
++	ftrace_set_global_filter(NULL, 0, 1);
+ #endif
+ 
+ 	/* Don't test dynamic tracing, the function tracer already did */
 -- 
 2.35.1

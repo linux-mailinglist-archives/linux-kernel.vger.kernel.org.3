@@ -2,123 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5F3536E7E
+	by mail.lfdr.de (Postfix) with ESMTP id 53DBF536E7C
 	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 23:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiE1Uqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 16:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
+        id S229520AbiE1Uqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 16:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiE1Uqb (ORCPT
+        with ESMTP id S229977AbiE1Uqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 16:46:31 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3674A2184
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 13:46:30 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id q6-20020a056e0215c600b002c2c4091914so5248807ilu.14
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 13:46:30 -0700 (PDT)
+        Sat, 28 May 2022 16:46:35 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7226330;
+        Sat, 28 May 2022 13:46:34 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id d20so3423165pjr.0;
+        Sat, 28 May 2022 13:46:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zo/NP9nLCCBCpvU9H4FnFXRxxYji1PHEJV6zeEuPq/E=;
+        b=Z7DskZIASyFVLxshlZ7FE1SaMyHK9HR64tp7iqYXmeRbuDozD4OGUe2v3mHim2kphP
+         etvsjs3Tbc3q7JemzKsx9ECC8S8m2/eNCb7jlG76+L/7Huhk0hUwf5abZGNA4PFqCXRT
+         E84UmXfGPYhhGEHgB2CqjrQApDoATeUJFjRgqyGuHQ/V+7NqoVqsq84/IJSq8wNZ8aAf
+         44Evg8WsW/EL4NuZB33HxSGqLcf3LmphF6BWvK4eWELjyAuPdLrw7mICyTVqItekg0mQ
+         oNA7HUbJ8QZbN1rDqpCioMg+0B4ixRrPoSX+jkp5zYgFxi98BlwEKcja7aV2/vWxCC09
+         K7Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=plwxnWiwuDRda2tElF8zSuOr/unxfzwclNr7d4wq3r4=;
-        b=OCug+SFNzEuNRLm4JX/UT0wzXo4r8onDh69EsJSRWphU+wlgtcblBg/sDrbOlezOMP
-         ka/h1kOH4/vg94F77WS+FxPVqQvwZ4Y6VPkd3BZ3TmIcaGvcbrKGpeTHsucueCc2n62U
-         YYBn0nhuCDOUzgXIaow02ckpQIYZJQUMnkZtkT1ni0qsXfGKgFlQLUlHEVW/76BSPPSM
-         3syakPqzkhvAEuGb9xjRpdEPXz+NkSEsyR4TEIqO3P3vWzHQyGJlswb4VYLaOo0kN6kY
-         MForkCfklOBc+u3Jb3qxmBSW51MIxwPzlvdPWroKDI/zpVWePXSj6wqstJICwklorSX6
-         is1A==
-X-Gm-Message-State: AOAM533hX6/ICyThDTeH7vlrWY4to5V1HKS+A5KgnhpNCN6FOOoHLsfK
-        h81eaSGs6126THEDGVaZcmzDvuCIb723S5IQMdkwyqNNKK3G
-X-Google-Smtp-Source: ABdhPJxhApFxnQvi8joZ/AIBhnEksxTRD5blkJIkEhELyl/h2FnMLg3S8WfDCj/hv9TWnBdAXRKXwFqYloC4ZQzyIdpx9QAQVcmv
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zo/NP9nLCCBCpvU9H4FnFXRxxYji1PHEJV6zeEuPq/E=;
+        b=L/hhR2YyyXFEKwnUU5zJcX+61T8ZdsZuBFTRbOQ5oN8JszEmXjkTnnLiIofhHosjcp
+         i5ADg+wQeanpR6cZg/AUhhWx+rEyiuE1IDNaGbB9KAWAQncTNe1/GnyQIfKQDM2lTRnE
+         XX2PPNr2/v0OhMx+yqcX2IiMwalN2SAcf7ElnIseF8usWHHKkmvhShgdfirrLWxOsMUk
+         /fpNQV9HzxgzD87posN0NpN+nMPs0GNyY1a1w2uNp929IIhKDexs1uHpREBJG6nDkwOh
+         xk6HMuTHyX8MAU708DGHBqFPkvlE6jk0eNzKRPNEfvaU1vFQySQ2EAgmWVAHUb2BA4Ii
+         0vXA==
+X-Gm-Message-State: AOAM531JxqmmrTftSJJB85Nkkp6pmWuygDIXmzMTNUkogktHt5iTia1q
+        mS+fYYBf6CwbaLSVBAPV1T8=
+X-Google-Smtp-Source: ABdhPJzBsiPuFL8Xgu4lDCpLdDUKRC5ZMlYOP1IX6qFEKxn2MKzR55i7mtvaTsqAQzZnsw65bx+2gQ==
+X-Received: by 2002:a17:902:d4ce:b0:162:42bd:72e with SMTP id o14-20020a170902d4ce00b0016242bd072emr25139399plg.129.1653770793573;
+        Sat, 28 May 2022 13:46:33 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:781a:4ab0:a93b:176b])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902988700b0015e8d4eb267sm6214318plp.177.2022.05.28.13.46.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 May 2022 13:46:32 -0700 (PDT)
+Date:   Sat, 28 May 2022 13:46:30 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     linux-input@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v2] Input: gpio-keys - Cancel delayed work only in case
+ of GPIO
+Message-ID: <YpKKJrn9AzgLiRxI@google.com>
+References: <20220524135822.14764-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3388:b0:330:a236:163f with SMTP id
- h8-20020a056638338800b00330a236163fmr10460245jav.93.1653770789598; Sat, 28
- May 2022 13:46:29 -0700 (PDT)
-Date:   Sat, 28 May 2022 13:46:29 -0700
-In-Reply-To: <000000000000361f9005dd7fea88@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000743f8505e0188496@google.com>
-Subject: Re: [syzbot] WARNING in wait_til_done
-From:   syzbot <syzbot+3562be49b8e09d424a6f@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, efremov@linux.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524135822.14764-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Tue, May 24, 2022 at 02:58:22PM +0100, Lad Prabhakar wrote:
+> gpio_keys module can either accept gpios or interrupts. The module
+> initializes delayed work in case of gpios only and is only used if
+> debounce timer is not used, so make sure cancel_delayed_work_sync()
+> is called only when its gpio-backed and debounce_use_hrtimer is false.
+> 
+> This fixes the issue seen below when the gpio_keys module is unloaded and
+> an interrupt pin is used instead of GPIO:
+> 
+> [  360.297569] ------------[ cut here ]------------
+> [  360.302303] WARNING: CPU: 0 PID: 237 at kernel/workqueue.c:3066 __flush_work+0x414/0x470
+> [  360.310531] Modules linked in: gpio_keys(-)
+> [  360.314797] CPU: 0 PID: 237 Comm: rmmod Not tainted 5.18.0-rc5-arm64-renesas-00116-g73636105874d-dirty #166
+> [  360.324662] Hardware name: Renesas SMARC EVK based on r9a07g054l2 (DT)
+> [  360.331270] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [  360.338318] pc : __flush_work+0x414/0x470
+> [  360.342385] lr : __cancel_work_timer+0x140/0x1b0
+> [  360.347065] sp : ffff80000a7fba00
+> [  360.350423] x29: ffff80000a7fba00 x28: ffff000012b9c5c0 x27: 0000000000000000
+> [  360.357664] x26: ffff80000a7fbb80 x25: ffff80000954d0a8 x24: 0000000000000001
+> [  360.364904] x23: ffff800009757000 x22: 0000000000000000 x21: ffff80000919b000
+> [  360.372143] x20: ffff00000f5974e0 x19: ffff00000f5974e0 x18: ffff8000097fcf48
+> [  360.379382] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000053f40
+> [  360.386622] x14: ffff800009850e88 x13: 0000000000000002 x12: 000000000000a60c
+> [  360.393861] x11: 000000000000a610 x10: 0000000000000000 x9 : 0000000000000008
+> [  360.401100] x8 : 0101010101010101 x7 : 00000000a473c394 x6 : 0080808080808080
+> [  360.408339] x5 : 0000000000000001 x4 : 0000000000000000 x3 : ffff80000919b458
+> [  360.415578] x2 : ffff8000097577f0 x1 : 0000000000000001 x0 : 0000000000000000
+> [  360.422818] Call trace:
+> [  360.425299]  __flush_work+0x414/0x470
+> [  360.429012]  __cancel_work_timer+0x140/0x1b0
+> [  360.433340]  cancel_delayed_work_sync+0x10/0x18
+> [  360.437931]  gpio_keys_quiesce_key+0x28/0x58 [gpio_keys]
+> [  360.443327]  devm_action_release+0x10/0x18
+> [  360.447481]  release_nodes+0x8c/0x1a0
+> [  360.451194]  devres_release_all+0x90/0x100
+> [  360.455346]  device_unbind_cleanup+0x14/0x60
+> [  360.459677]  device_release_driver_internal+0xe8/0x168
+> [  360.464883]  driver_detach+0x4c/0x90
+> [  360.468509]  bus_remove_driver+0x54/0xb0
+> [  360.472485]  driver_unregister+0x2c/0x58
+> [  360.476462]  platform_driver_unregister+0x10/0x18
+> [  360.481230]  gpio_keys_exit+0x14/0x828 [gpio_keys]
+> [  360.486088]  __arm64_sys_delete_module+0x1e0/0x270
+> [  360.490945]  invoke_syscall+0x40/0xf8
+> [  360.494661]  el0_svc_common.constprop.3+0xf0/0x110
+> [  360.499515]  do_el0_svc+0x20/0x78
+> [  360.502877]  el0_svc+0x48/0xf8
+> [  360.505977]  el0t_64_sync_handler+0x88/0xb0
+> [  360.510216]  el0t_64_sync+0x148/0x14c
+> [  360.513930] irq event stamp: 4306
+> [  360.517288] hardirqs last  enabled at (4305): [<ffff8000080b0300>] __cancel_work_timer+0x130/0x1b0
+> [  360.526359] hardirqs last disabled at (4306): [<ffff800008d194fc>] el1_dbg+0x24/0x88
+> [  360.534204] softirqs last  enabled at (4278): [<ffff8000080104a0>] _stext+0x4a0/0x5e0
+> [  360.542133] softirqs last disabled at (4267): [<ffff8000080932ac>] irq_exit_rcu+0x18c/0x1b0
+> [  360.550591] ---[ end trace 0000000000000000 ]---
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-HEAD commit:    9d004b2f4fea Merge tag 'cxl-for-5.19' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=118576f3f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=34d5ab77e4ca65e1
-dashboard link: https://syzkaller.appspot.com/bug?extid=3562be49b8e09d424a6f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10f15913f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=157ad36bf00000
+Applied, thank you.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3562be49b8e09d424a6f@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3690 at drivers/block/floppy.c:999 schedule_bh drivers/block/floppy.c:999 [inline]
-WARNING: CPU: 0 PID: 3690 at drivers/block/floppy.c:999 wait_til_done+0x350/0x3c0 drivers/block/floppy.c:2018
-Modules linked in:
-CPU: 0 PID: 3690 Comm: syz-executor202 Not tainted 5.18.0-syzkaller-10643-g9d004b2f4fea #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:schedule_bh drivers/block/floppy.c:999 [inline]
-RIP: 0010:wait_til_done+0x350/0x3c0 drivers/block/floppy.c:2018
-Code: fc 41 83 fd 01 7e ac e8 8e 1e e0 fc 4c 89 e6 48 c7 c7 20 7b 8e 8c e8 8f b4 c0 fc e8 7a 1e e0 fc e9 c3 fd ff ff e8 70 1e e0 fc <0f> 0b e9 4b fd ff ff e8 54 38 2c fd e9 0f fe ff ff e8 5a 1e e0 fc
-RSP: 0018:ffffc90002f8f718 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 1ffff920005f1ee3 RCX: 0000000000000000
-RDX: ffff88801430c140 RSI: ffffffff84998450 RDI: 0000000000000007
-RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000001
-R13: ffffffff84995460 R14: 0000000000000000 R15: 0000000000000003
-FS:  0000555556c30300(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000088 CR3: 000000002457a000 CR4: 0000000000150ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- floppy_check_events+0x3d0/0x560 drivers/block/floppy.c:4098
- disk_check_events+0xc2/0x420 block/disk-events.c:193
- disk_clear_events block/disk-events.c:248 [inline]
- bdev_check_media_change+0x12c/0x310 block/disk-events.c:279
- floppy_open+0x75d/0xd70 drivers/block/floppy.c:4057
- blkdev_get_whole+0x99/0x2d0 block/bdev.c:673
- blkdev_get_by_dev.part.0+0x5ec/0xb90 block/bdev.c:823
- blkdev_get_by_dev+0x6b/0x80 block/bdev.c:857
- blkdev_open+0x13c/0x2c0 block/fops.c:481
- do_dentry_open+0x4a1/0x11f0 fs/open.c:824
- do_open fs/namei.c:3477 [inline]
- path_openat+0x1c71/0x2910 fs/namei.c:3610
- do_filp_open+0x1aa/0x400 fs/namei.c:3637
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1254
- do_sys_open fs/open.c:1270 [inline]
- __do_sys_openat fs/open.c:1286 [inline]
- __se_sys_openat fs/open.c:1281 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1281
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f936c227597
-Code: 25 00 00 41 00 3d 00 00 41 00 74 47 64 8b 04 25 18 00 00 00 85 c0 75 6b 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 95 00 00 00 48 8b 4c 24 28 64 48 2b 0c 25
-RSP: 002b:00007ffc43d5dfb0 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f936c227597
-RDX: 0000000000000000 RSI: 00007ffc43d5e030 RDI: 00000000ffffff9c
-RBP: 00007ffc43d5e030 R08: 000000000000ffff R09: 00007ffc43d5dec0
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
+-- 
+Dmitry

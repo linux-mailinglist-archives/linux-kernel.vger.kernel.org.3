@@ -2,225 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075CC536D55
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 16:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78737536D57
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 16:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236734AbiE1Op1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 10:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
+        id S236774AbiE1Ota (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 10:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiE1OpZ (ORCPT
+        with ESMTP id S229699AbiE1Ot3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 10:45:25 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 20F0517A98
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 07:45:24 -0700 (PDT)
-Received: (qmail 126954 invoked by uid 1000); 28 May 2022 10:45:23 -0400
-Date:   Sat, 28 May 2022 10:45:23 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     syzbot <syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com>,
-        andreyknvl@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in driver_unregister
-Message-ID: <YpI1g7/sZVYKz5Hn@rowland.harvard.edu>
-References: <YpEi/sbT/R/0yKzo@rowland.harvard.edu>
- <000000000000f9e65705e003513a@google.com>
- <YpFEc5zeFK0AXa2q@rowland.harvard.edu>
- <YpIQzJQzd93cWq4M@kroah.com>
+        Sat, 28 May 2022 10:49:29 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158FB19033
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 07:49:28 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id p5-20020a1c2905000000b003970dd5404dso4181859wmp.0
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 07:49:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DtIUUQgNQnlpKr+iJ/L5eRAgxDOGw8+U/orkSdFrre0=;
+        b=L9GSkiKwTuc89mS42WiwEz6LhbkCvSZTA3ZmE9mUwBOJiY1jMMVgEVWQgeXdDybN39
+         MdM6zhTguGCt+DnSmUkrWKLduYpHEQiT63Fz0lO+ZE34meNmPydwlZkYS1T8Q3W0jKUr
+         sIwUZCBUyX8tjsmMSmV2e/WWzl6G3Idqj6QbnsVlgnIjrHKItzMnTItmPF97uAnrS05A
+         oUfso78oJB1/x/9J4ZkyMwRiZtzBH2VZ5OvfLTcsc1b/cpuC07GO6J9KSTQFskktBpT6
+         /XpPflPvfhclsLmeejCd2E3jVx0J5hihv8BV9JWb5kC47XDKX6RvULWw0yNA/ypTMkoq
+         vU5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DtIUUQgNQnlpKr+iJ/L5eRAgxDOGw8+U/orkSdFrre0=;
+        b=Scyzqg7u5xTmE77z5cnxsZG1EhWHPrba3Iv410uk7kZdFrI0YlI0ZFqApOFyZOjtcO
+         fonFpPx1/AYw6sJ5v7OEru9jf4+dzkHgoRvk1okZUOshv+5lI7UW3rCQjLIwhhg1oYx5
+         bAjNLu/2JIT34bSAx7FwdOVtCwRMGQD6veaDCbSGHIPQ+BxGx6IiMr/M+ut08mko6Baq
+         BpGVF+uSLpaYhU5ov++O0VlZlvlgxKAnUucQXWxnMQV01umYx+F8JgwOFbjGD6MSRxQa
+         vbE0wxtSkcwv04GvgaFDVK2hapNnGULYBJPkpUHdEY7BL/OsyphoCd8iUxTmx2ZNQmK4
+         p9/w==
+X-Gm-Message-State: AOAM532Q1z8nLbhH/MQMYzGMH0D3J0EvDBvKzcdqdn/gn00CFZQvviz2
+        3XqdWt2FWBhHGBU45eHgpDGCBqcFM0hvd6IwgAUEmg==
+X-Google-Smtp-Source: ABdhPJyH/bw6uwLTMRfOIc15vvgx3Tvt24IEQk7keHoxTGOT7QQda8SsNpO6HKcMSEtYWcm+kB5T3b12L1g4v/9jDWs=
+X-Received: by 2002:a05:600c:2305:b0:397:44a4:d3cb with SMTP id
+ 5-20020a05600c230500b0039744a4d3cbmr11320407wmo.115.1653749366349; Sat, 28
+ May 2022 07:49:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YpIQzJQzd93cWq4M@kroah.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220527182039.673248-1-maskray@google.com> <YpIQWdwtHqAdjLoC@krava>
+In-Reply-To: <YpIQWdwtHqAdjLoC@krava>
+From:   Ian Rogers <irogers@google.com>
+Date:   Sat, 28 May 2022 07:49:13 -0700
+Message-ID: <CAP-5=fW042ozhWxV4aMF9FFbg1APPqy1Hs5e9-OZ4iaZNnO8qA@mail.gmail.com>
+Subject: Re: [PATCH v2] perf: Fix segbase for ld.lld linked objects
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Fangrui Song <maskray@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Sebastian Ullrich <sebasti@nullri.ch>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 02:08:44PM +0200, Greg KH wrote:
-> On Fri, May 27, 2022 at 05:36:51PM -0400, Alan Stern wrote:
-> > On Fri, May 27, 2022 at 12:29:08PM -0700, syzbot wrote:
-> > > Hello,
-> > > 
-> > > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> > > WARNING in sysfs_create_file_ns
-> > > 
-> > > really_probe: driver_sysfs_add(gadget.0) failed
-> > > ------------[ cut here ]------------
-> > > WARNING: CPU: 0 PID: 2361 at fs/sysfs/file.c:351 sysfs_create_file_ns+0x131/0x1c0 fs/sysfs/file.c:351
-> > > Modules linked in:
-> > > CPU: 0 PID: 2361 Comm: syz-executor.0 Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28-dirty #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > > RIP: 0010:sysfs_create_file_ns+0x131/0x1c0 fs/sysfs/file.c:351
-> > > Code: e9 03 80 3c 01 00 75 7f 8b 4c 24 38 4d 89 e9 48 89 ee 48 8b 7b 30 44 8b 44 24 48 e8 e9 fa ff ff 41 89 c5 eb 0d e8 cf 7c 9d ff <0f> 0b 41 bd ea ff ff ff e8 c2 7c 9d ff 48 b8 00 00 00 00 00 fc ff
-> > > RSP: 0018:ffffc900028ffca0 EFLAGS: 00010293
-> > 
-> > Here's some extra detail, taken from the console log:
-> > 
-> > [   98.336685][ T2361] really_probe: driver_sysfs_add(gadget.0) failed
-> > [   98.336836][ T2360] sysfs: cannot create duplicate filename '/bus/gadget/drivers/dummy_udc'
-> > [   98.343498][ T2361] ------------[ cut here ]------------
-> > [   98.352154][ T2360] CPU: 1 PID: 2360 Comm: syz-executor.0 Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28-dirty #0
-> > [   98.357802][ T2361] WARNING: CPU: 0 PID: 2361 at fs/sysfs/file.c:351 sysfs_create_file_ns+0x131/0x1c0
-> > 
-> > Simultaneous splats from two different threads trying to add drivers with 
-> > the same name suggests there might be a concurrency bug in the sysfs 
-> > filesystem.  This sort of thing should be an error but it shouldn't bring 
-> > the kernel to its knees.
-> 
-> It's not bringing anything down, it's just giving you a big fat warning
-> that the developer did something wrong and it should be fixed.  The
-> kernel should keep working just fine after this.
-> 
-> > Greg, do you know anyone who could take a look at this?  I don't know much 
-> > about sysfs.
-> 
-> It's not a sysfs thing, it's a "we should not register the same driver
-> name multiple times" thing, so that subsystem needs to be fixed to make
-> this always a unique name.
+On Sat, May 28, 2022 at 5:06 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Fri, May 27, 2022 at 11:20:39AM -0700, Fangrui Song wrote:
+> > segbase is the address of .eh_frame_hdr and table_data is segbase plus
+> > the header size. find_proc_info computes segbase as `map->start +
+> > segbase - map->pgoff` which is wrong when
+> >
+> > * .eh_frame_hdr and .text are in different PT_LOAD program headers
+> > * and their p_vaddr difference does not equal their p_offset difference
+> >
+> > Since 10.0, ld.lld's default --rosegment -z noseparate-code layout has
+> > such R and RX PT_LOAD program headers.
+> >
+> >     ld.lld (default) => perf report fails to unwind `perf record
+> >     --call-graph dwarf` recorded data
+> >     ld.lld --no-rosegment => ok (trivial, no R PT_LOAD)
+> >     ld.lld -z separate-code => ok but by luck: there are two PT_LOAD but
+> >     their p_vaddr difference equals p_offset difference
+> >
+> >     ld.bfd -z noseparate-code => ok (trivial, no R PT_LOAD)
+> >     ld.bfd -z separate-code (default for Linux/x86) => ok but by luck:
+> >     there are two PT_LOAD but their p_vaddr difference equals p_offset
+> >     difference
+> >
+> > To fix the issue, compute segbase as dso's base address plus
+> > PT_GNU_EH_FRAME's p_vaddr. The base address is computed by iterating
+> > over all dso-associated maps and then subtract the first PT_LOAD p_vaddr
+> > (the minimum guaranteed by generic ABI) from the minimum address.
+> >
+> > In libunwind, find_proc_info transitively called by unw_step is cached,
+> > so the iteration overhead is acceptable.
+> >
+> > Reported-by: Sebastian Ullrich <sebasti@nullri.ch>
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1646
+> > Signed-off-by: Fangrui Song <maskray@google.com>
+> > Cc: Ian Rogers <irogers@google.com>
+>
+> nice, is this a problem for libdw dwarf unwind as well?
 
-Okay, here's an attempt at a real fix.
+libdw also is broken with lld but not bfd. When I switch on verbose
+output (-vv) with perf report I see:
 
-Alan Stern
+overlapping maps:
+202000-203000 0 a.out
+202000-203000 0 a.out
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 97fa5887cf28
+and:
 
-Index: usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/legacy/raw_gadget.c
-+++ usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -11,6 +11,7 @@
- #include <linux/ctype.h>
- #include <linux/debugfs.h>
- #include <linux/delay.h>
-+#include <linux/idr.h>
- #include <linux/kref.h>
- #include <linux/miscdevice.h>
- #include <linux/module.h>
-@@ -36,6 +37,9 @@ MODULE_LICENSE("GPL");
- 
- /*----------------------------------------------------------------------*/
- 
-+static DEFINE_IDA(driver_id_numbers);
-+#define DRIVER_DRIVER_NAME_LENGTH_MAX	32
-+
- #define RAW_EVENT_QUEUE_SIZE	16
- 
- struct raw_event_queue {
-@@ -160,6 +164,9 @@ struct raw_dev {
- 	/* Reference to misc device: */
- 	struct device			*dev;
- 
-+	/* Make driver names unique */
-+	int				driver_id_number;
-+
- 	/* Protected by lock: */
- 	enum dev_state			state;
- 	bool				gadget_registered;
-@@ -198,6 +205,8 @@ static void dev_free(struct kref *kref)
- 
- 	kfree(dev->udc_name);
- 	kfree(dev->driver.udc_name);
-+	kfree(dev->driver.driver.name);
-+	ida_free(&driver_id_numbers, dev->driver_id_number);
- 	if (dev->req) {
- 		if (dev->ep0_urb_queued)
- 			usb_ep_dequeue(dev->gadget->ep0, dev->req);
-@@ -421,6 +430,7 @@ static int raw_ioctl_init(struct raw_dev
- 	struct usb_raw_init arg;
- 	char *udc_driver_name;
- 	char *udc_device_name;
-+	char *driver_driver_name;
- 	unsigned long flags;
- 
- 	if (copy_from_user(&arg, (void __user *)value, sizeof(arg)))
-@@ -439,36 +449,44 @@ static int raw_ioctl_init(struct raw_dev
- 		return -EINVAL;
- 	}
- 
-+	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
-+	if (ret < 0)
-+		return ret;
-+	dev->driver_id_number = ret;
-+
-+	driver_driver_name = kmalloc(DRIVER_DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
-+	if (!driver_driver_name) {
-+		ret = -ENOMEM;
-+		goto out_free_driver_id_number;
-+	}
-+	snprintf(driver_driver_name, DRIVER_DRIVER_NAME_LENGTH_MAX,
-+				DRIVER_NAME ".%d", dev->driver_id_number);
-+
- 	udc_driver_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
--	if (!udc_driver_name)
--		return -ENOMEM;
-+	if (!udc_driver_name) {
-+		ret = -ENOMEM;
-+		goto out_free_driver_driver_name;
-+	}
- 	ret = strscpy(udc_driver_name, &arg.driver_name[0],
- 				UDC_NAME_LENGTH_MAX);
--	if (ret < 0) {
--		kfree(udc_driver_name);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto out_free_udc_driver_name;
- 	ret = 0;
- 
- 	udc_device_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
- 	if (!udc_device_name) {
--		kfree(udc_driver_name);
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto out_free_udc_driver_name;
- 	}
- 	ret = strscpy(udc_device_name, &arg.device_name[0],
- 				UDC_NAME_LENGTH_MAX);
--	if (ret < 0) {
--		kfree(udc_driver_name);
--		kfree(udc_device_name);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto out_free_udc_device_name;
- 	ret = 0;
- 
- 	spin_lock_irqsave(&dev->lock, flags);
- 	if (dev->state != STATE_DEV_OPENED) {
- 		dev_dbg(dev->dev, "fail, device is not opened\n");
--		kfree(udc_driver_name);
--		kfree(udc_device_name);
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
-@@ -483,14 +501,24 @@ static int raw_ioctl_init(struct raw_dev
- 	dev->driver.suspend = gadget_suspend;
- 	dev->driver.resume = gadget_resume;
- 	dev->driver.reset = gadget_reset;
--	dev->driver.driver.name = DRIVER_NAME;
-+	dev->driver.driver.name = driver_driver_name;
- 	dev->driver.udc_name = udc_device_name;
- 	dev->driver.match_existing_only = 1;
- 
- 	dev->state = STATE_DEV_INITIALIZED;
-+	spin_unlock_irqrestore(&dev->lock, flags);
-+	return ret;
- 
- out_unlock:
- 	spin_unlock_irqrestore(&dev->lock, flags);
-+out_free_udc_device_name:
-+	kfree(udc_device_name);
-+out_free_udc_driver_name:
-+	kfree(udc_driver_name);
-+out_free_driver_driver_name:
-+	kfree(driver_driver_name);
-+out_free_driver_id_number:
-+	ida_free(&driver_id_numbers, dev->driver_id_number);
- 	return ret;
- }
- 
+unwind: failed with 'address range overlaps an existing module'
+
+The sense I get from this is libdw is rejecting the file before
+anything we can do in perf.
+
+Thanks,
+Ian
+
+> you should be able to build it with:
+>
+>   $ make NO_LIBUNWIND=1
+>
+> thanks,
+> jirka
+>
+> >
+> > --
+> > Changes from v1:
+> > * Fix elf_base_address to use the first PT_LOAD
+> > * Use dso::elf_base_addr which is a constant even if the dso is loaded into multiple processes
+> > ---
+> >  tools/perf/util/dso.h                    |   2 +
+> >  tools/perf/util/unwind-libunwind-local.c | 107 ++++++++++++++++-------
+> >  2 files changed, 78 insertions(+), 31 deletions(-)
+> >
+> > diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+> > index 3a9fd4d389b5..97047a11282b 100644
+> > --- a/tools/perf/util/dso.h
+> > +++ b/tools/perf/util/dso.h
+> > @@ -196,7 +196,9 @@ struct dso {
+> >               u32              status_seen;
+> >               u64              file_size;
+> >               struct list_head open_entry;
+> > +             u64              elf_base_addr;
+> >               u64              debug_frame_offset;
+> > +             u64              eh_frame_hdr_addr;
+> >               u64              eh_frame_hdr_offset;
+> >       } data;
+> >       /* bpf prog information */
+> > diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
+> > index 41e29fc7648a..37622699c91a 100644
+> > --- a/tools/perf/util/unwind-libunwind-local.c
+> > +++ b/tools/perf/util/unwind-libunwind-local.c
+> > @@ -169,30 +169,64 @@ static int __dw_read_encoded_value(u8 **p, u8 *end, u64 *val,
+> >       __v;                                                    \
+> >       })
+> >
+> > -static u64 elf_section_offset(int fd, const char *name)
+> > +static int elf_section_address_and_offset(int fd, const char *name, u64 *address, u64 *offset)
+> >  {
+> >       Elf *elf;
+> >       GElf_Ehdr ehdr;
+> >       GElf_Shdr shdr;
+> > -     u64 offset = 0;
+> > +     int ret;
+> >
+> >       elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
+> >       if (elf == NULL)
+> > -             return 0;
+> > +             return -1;
+> >
+> > -     do {
+> > -             if (gelf_getehdr(elf, &ehdr) == NULL)
+> > -                     break;
+> > +     if (gelf_getehdr(elf, &ehdr) == NULL)
+> > +             goto out_err;
+> >
+> > -             if (!elf_section_by_name(elf, &ehdr, &shdr, name, NULL))
+> > -                     break;
+> > -
+> > -             offset = shdr.sh_offset;
+> > -     } while (0);
+> > +     if (!elf_section_by_name(elf, &ehdr, &shdr, name, NULL))
+> > +             goto out_err;
+> >
+> > +     *address = shdr.sh_addr;
+> > +     *offset = shdr.sh_offset;
+> > +     ret = 0;
+> > +out_err:
+> >       elf_end(elf);
+> > +     return ret;
+> > +}
+> > +
+> > +#ifndef NO_LIBUNWIND_DEBUG_FRAME
+> > +static u64 elf_section_offset(int fd, const char *name)
+> > +{
+> > +     u64 address, offset;
+> > +
+> > +     if (elf_section_address_and_offset(fd, name, &address, &offset))
+> > +             return 0;
+> > +
+> >       return offset;
+> >  }
+> > +#endif
+> > +
+> > +static u64 elf_base_address(int fd)
+> > +{
+> > +     Elf *elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
+> > +     GElf_Phdr phdr;
+> > +     u64 retval = 0;
+> > +     size_t i, phdrnum = 0;
+> > +
+> > +     if (elf == NULL)
+> > +             return 0;
+> > +     (void)elf_getphdrnum(elf, &phdrnum);
+> > +     /* PT_LOAD segments are sorted by p_vaddr, so the first has the minimum p_vaddr. */
+> > +     for (i = 0; i < phdrnum; i++) {
+> > +             if (gelf_getphdr(elf, i, &phdr) && phdr.p_type == PT_LOAD) {
+> > +                     retval = phdr.p_vaddr & -getpagesize();
+> > +                     break;
+> > +             }
+> > +     }
+> > +
+> > +     elf_end(elf);
+> > +     return retval;
+> > +}
+> >
+> >  #ifndef NO_LIBUNWIND_DEBUG_FRAME
+> >  static int elf_is_exec(int fd, const char *name)
+> > @@ -248,8 +282,7 @@ struct eh_frame_hdr {
+> >  } __packed;
+> >
+> >  static int unwind_spec_ehframe(struct dso *dso, struct machine *machine,
+> > -                            u64 offset, u64 *table_data, u64 *segbase,
+> > -                            u64 *fde_count)
+> > +                            u64 offset, u64 *table_data_offset, u64 *fde_count)
+> >  {
+> >       struct eh_frame_hdr hdr;
+> >       u8 *enc = (u8 *) &hdr.enc;
+> > @@ -265,35 +298,47 @@ static int unwind_spec_ehframe(struct dso *dso, struct machine *machine,
+> >       dw_read_encoded_value(enc, end, hdr.eh_frame_ptr_enc);
+> >
+> >       *fde_count  = dw_read_encoded_value(enc, end, hdr.fde_count_enc);
+> > -     *segbase    = offset;
+> > -     *table_data = (enc - (u8 *) &hdr) + offset;
+> > +     *table_data_offset = enc - (u8 *) &hdr;
+> >       return 0;
+> >  }
+> >
+> > -static int read_unwind_spec_eh_frame(struct dso *dso, struct machine *machine,
+> > +static int read_unwind_spec_eh_frame(struct dso *dso, struct unwind_info *ui,
+> >                                    u64 *table_data, u64 *segbase,
+> >                                    u64 *fde_count)
+> >  {
+> > -     int ret = -EINVAL, fd;
+> > -     u64 offset = dso->data.eh_frame_hdr_offset;
+> > +     struct map *map;
+> > +     u64 base_addr = UINT64_MAX;
+> > +     int ret, fd;
+> >
+> > -     if (offset == 0) {
+> > -             fd = dso__data_get_fd(dso, machine);
+> > +     if (dso->data.eh_frame_hdr_offset == 0) {
+> > +             fd = dso__data_get_fd(dso, ui->machine);
+> >               if (fd < 0)
+> >                       return -EINVAL;
+> >
+> >               /* Check the .eh_frame section for unwinding info */
+> > -             offset = elf_section_offset(fd, ".eh_frame_hdr");
+> > -             dso->data.eh_frame_hdr_offset = offset;
+> > +             ret = elf_section_address_and_offset(fd, ".eh_frame_hdr",
+> > +                                                  &dso->data.eh_frame_hdr_addr,
+> > +                                                  &dso->data.eh_frame_hdr_offset);
+> > +             dso->data.elf_base_addr = elf_base_address(fd);
+> >               dso__data_put_fd(dso);
+> > +             if (ret || dso->data.eh_frame_hdr_offset == 0)
+> > +                     return -EINVAL;
+> >       }
+> >
+> > -     if (offset)
+> > -             ret = unwind_spec_ehframe(dso, machine, offset,
+> > -                                       table_data, segbase,
+> > -                                       fde_count);
+> > -
+> > -     return ret;
+> > +     maps__for_each_entry(ui->thread->maps, map) {
+> > +             if (map->dso == dso && map->start < base_addr)
+> > +                     base_addr = map->start;
+> > +     }
+> > +     base_addr -= dso->data.elf_base_addr;
+> > +     /* Address of .eh_frame_hdr */
+> > +     *segbase = base_addr + dso->data.eh_frame_hdr_addr;
+> > +     ret = unwind_spec_ehframe(dso, ui->machine, dso->data.eh_frame_hdr_offset,
+> > +                                table_data, fde_count);
+> > +     if (ret)
+> > +             return ret;
+> > +     /* binary_search_table offset plus .eh_frame_hdr address */
+> > +     *table_data += *segbase;
+> > +     return 0;
+> >  }
+> >
+> >  #ifndef NO_LIBUNWIND_DEBUG_FRAME
+> > @@ -388,14 +433,14 @@ find_proc_info(unw_addr_space_t as, unw_word_t ip, unw_proc_info_t *pi,
+> >       pr_debug("unwind: find_proc_info dso %s\n", map->dso->name);
+> >
+> >       /* Check the .eh_frame section for unwinding info */
+> > -     if (!read_unwind_spec_eh_frame(map->dso, ui->machine,
+> > +     if (!read_unwind_spec_eh_frame(map->dso, ui,
+> >                                      &table_data, &segbase, &fde_count)) {
+> >               memset(&di, 0, sizeof(di));
+> >               di.format   = UNW_INFO_FORMAT_REMOTE_TABLE;
+> >               di.start_ip = map->start;
+> >               di.end_ip   = map->end;
+> > -             di.u.rti.segbase    = map->start + segbase - map->pgoff;
+> > -             di.u.rti.table_data = map->start + table_data - map->pgoff;
+> > +             di.u.rti.segbase    = segbase;
+> > +             di.u.rti.table_data = table_data;
+> >               di.u.rti.table_len  = fde_count * sizeof(struct table_entry)
+> >                                     / sizeof(unw_word_t);
+> >               ret = dwarf_search_unwind_table(as, ip, &di, pi,
+> > --
+> > 2.36.1.124.g0e6072fb45-goog
+> >

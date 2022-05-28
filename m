@@ -2,96 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC59536DC3
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 18:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE51536DC5
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 18:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238457AbiE1Q3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 12:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
+        id S238514AbiE1QaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 12:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238385AbiE1Q3A (ORCPT
+        with ESMTP id S238385AbiE1QaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 12:29:00 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFD612AAC
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 09:28:59 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ec42eae76bso74155277b3.10
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 09:28:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=bxqM7UDjEo2Oo2VoBTkzidoEthbn8OzzAhqUINKskM6Pz3vRjPw7MCUoxXQm14vSbb
-         peQuJBRWA2NOwYqdowtgRHplmN7z+ZNEioGgyDd6OUlLefn5bav0q45lG3sgzbZPYgjR
-         1FUumzDsR/puwcZ4edGvbQYKD/oO1tYgxq53ViId0988KN+2VRn2FTrqPAIO9tldDgMZ
-         K48Lw21c5Yx8Q4ppS1ThpqVebCtsdBS6PZVVOfRDMklzZhNpKVfOr29CDv19SNwPkzUJ
-         USXuyEHE4iAqBuDF1cfcgHdCzBbEZRemSvpAPuFtOUpC2J7W2waP4SJsJgn12QpEaHWx
-         xSog==
+        Sat, 28 May 2022 12:30:06 -0400
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE20A12AAC;
+        Sat, 28 May 2022 09:30:04 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id l188-20020a1c25c5000000b003978df8a1e2so2173948wml.1;
+        Sat, 28 May 2022 09:30:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=2v8GSRG1t0H4FF1z+vNh/3NU+okOTbDiclqki1MCQTVQoGMdIHDyN8yGhBX/gbrRWU
-         ONSu0AcZ1n3yYY0jTfq59l5NCpDARD/2hiVlvG6dbLjOlcxRbF6P3qZ7fE0qg6QBQ+Oj
-         OE2OuKaUFz19HLmqIg91uPBC6PROgNMHOUeolVDa+lvH5Pq5FxncGeamFXM0+wBb6MQN
-         Q4zbwLkzXIkw3kSF2Jo358aVGPt8ntFgEBXssPM5FhaBogE2g8XicsJhBnyx03yZhA8L
-         tl1MUeCyoRHXWkS6/v7Pt1ROT7MGPh/KG0+HadRvihLX3er78JlsuPr+8vNzO2Qpgzc3
-         T9zw==
-X-Gm-Message-State: AOAM531wPTqa3qRhLCTgeSmIrVfUGy81U6uU+mxjVixM22sQLwMPzSrU
-        0F0gfvFpJGu9x2aWsVA8NP+zioPxqXeNNguW3og=
-X-Google-Smtp-Source: ABdhPJzDD3hZLzQuQxzFPjD43gFjQU/bJZOqLvH7eF3JxsecItU7lUOyMxZuW+qZ6k0GKK/e1dZEVuxzdRhBBe9lqgo=
-X-Received: by 2002:a81:7507:0:b0:304:c651:8a88 with SMTP id
- q7-20020a817507000000b00304c6518a88mr11769714ywc.448.1653755338753; Sat, 28
- May 2022 09:28:58 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=n2j0NQuXTr3/UzYzmLJXJBWH2KDlRsWiyk09n6SroQA=;
+        b=KnLKNM15j+kSLGUS5/imiesbqLM4hbfhsUTwZasPrIjIpKmnobLt7MdaZZSIqnsf+5
+         4sSWKOaP5YK7TwRp43I8gEa1foSvzpX6VNmrigTcqvoZsYehprSaHl8oy/YvesIDV4VV
+         VpK0Re7Pe323Xab//WIsWfiVwwxIj7TYaVusBhEbS1zSf3Vj26F4jgigYbZ5ZZCJ6+bd
+         6UzrJ52oBFOfOMt/rgMg5jb27nN2mFgrV2+8TeweYm8C19rqgjE+CGuaXlSSKPulnd6l
+         0hkpR+D1yA4b43eG/xOby1i26gCEu0cLv3qn8Qhni+D6FPTLHcjlkPu7PoVMCDrGIuvl
+         9T6g==
+X-Gm-Message-State: AOAM530YMf8qJynpOV+ENyFmm6/QAdikGePxT4N637Avoer67Dpf5egY
+        m8pfCLH3SlwR6lngZr9TWWE=
+X-Google-Smtp-Source: ABdhPJyYAoJtuZ6Vyark2oPrPA4ZOu3ScR68ym2u8fGkiyptAKT2OAYB4ZLztN/uvm19nlXeZ84P2w==
+X-Received: by 2002:a05:600c:154d:b0:394:8582:58f3 with SMTP id f13-20020a05600c154d00b00394858258f3mr11864933wmg.90.1653755403230;
+        Sat, 28 May 2022 09:30:03 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id k7-20020a1ca107000000b00394708a3d7dsm5371820wme.15.2022.05.28.09.30.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 May 2022 09:30:02 -0700 (PDT)
+Date:   Sat, 28 May 2022 16:30:01 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
+        sthemmin@microsoft.com, Michael Kelley <mikelley@microsoft.com>
+Subject: [GIT PULL] Hyper-V next for 5.19
+Message-ID: <20220528163001.43ripr5agsesyq7o@liuwe-devbox-debian-v2>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:2b07:0:0:0:0 with HTTP; Sat, 28 May 2022 09:28:58
- -0700 (PDT)
-Reply-To: davidnelson7702626@gmail.com
-From:   raouda yaye <raoudayaye@gmail.com>
-Date:   Sat, 28 May 2022 17:28:58 +0100
-Message-ID: <CACysfhe5Sr7Bv9q18Ndqk10s30mK3U97fdE1t+DhDYQ71fAwEQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1135 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5010]
-        *  1.0 HK_RANDOM_FROM From username looks random
-        *  1.0 HK_RANDOM_ENVFROM Envelope sender username looks random
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [raoudayaye[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [davidnelson7702626[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello friend, I want to send money to you to enable me invest in your
-country get back to me if you are interested.
+Hi Linus,
+
+The following changes since commit af2d861d4cd2a4da5137f795ee3509e6f944a25b:
+
+  Linux 5.18-rc4 (2022-04-24 14:51:22 -0700)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-next-signed-20220528
+
+for you to fetch changes up to d27423bf048dcb5e15f04286d001c66685e30c29:
+
+  hv_balloon: Fix balloon_probe() and balloon_remove() error handling (2022-05-26 10:04:57 +0000)
+
+----------------------------------------------------------------
+hyperv-next for 5.19
+ - Harden hv_sock driver (Andrea Parri)
+ - Harden Hyper-V PCI driver (Andrea Parri)
+ - Fix multi-MSI for Hyper-V PCI driver (Jeffrey Hugo)
+ - Fix Hyper-V PCI to reduce boot time (Dexuan Cui)
+ - Remove code for long EOL'ed Hyper-V versions (Michael Kelley, Saurabh Sengar)
+ - Fix balloon driver error handling (Shradha Gupta)
+ - Fix a typo in vmbus driver (Julia Lawall)
+ - Ignore vmbus IMC device (Michael Kelley)
+ - Add a new error message to Hyper-V DRM driver (Saurabh Sengar)
+
+----------------------------------------------------------------
+Andrea Parri (Microsoft) (13):
+      Drivers: hv: vmbus: Fix handling of messages with transaction ID of zero
+      PCI: hv: Use vmbus_requestor to generate transaction IDs for VMbus hardening
+      Drivers: hv: vmbus: Introduce vmbus_sendpacket_getid()
+      Drivers: hv: vmbus: Introduce vmbus_request_addr_match()
+      Drivers: hv: vmbus: Introduce {lock,unlock}_requestor()
+      PCI: hv: Fix synchronization between channel callback and hv_compose_msi_msg()
+      hv_sock: Check hv_pkt_iter_first_raw()'s return value
+      hv_sock: Copy packets sent by Hyper-V out of the ring buffer
+      hv_sock: Add validation for untrusted Hyper-V values
+      Drivers: hv: vmbus: Accept hv_sock offers in isolated guests
+      Drivers: hv: vmbus: Refactor the ring-buffer iterator functions
+      PCI: hv: Add validation for untrusted Hyper-V values
+      PCI: hv: Fix synchronization between channel callback and hv_pci_bus_exit()
+
+Dexuan Cui (1):
+      PCI: hv: Do not set PCI_COMMAND_MEMORY to reduce VM boot time
+
+Jeffrey Hugo (4):
+      PCI: hv: Fix multi-MSI to allow more than one MSI vector
+      PCI: hv: Fix hv_arch_irq_unmask() for multi-MSI
+      PCI: hv: Reuse existing IRTE allocation in compose_msi_msg()
+      PCI: hv: Fix interrupt mapping for multi-MSI
+
+Julia Lawall (1):
+      Drivers: hv: vmbus: fix typo in comment
+
+Michael Kelley (6):
+      Drivers: hv: vmbus: Add VMbus IMC device to unsupported list
+      x86/hyperv: Disable hardlockup detector by default in Hyper-V guests
+      Drivers: hv: vmbus: Remove support for Hyper-V 2008 and Hyper-V 2008R2/Win7
+      scsi: storvsc: Remove support for Hyper-V 2008 and 2008R2/Win7
+      video: hyperv_fb: Remove support for Hyper-V 2008 and 2008R2/Win7
+      drm/hyperv: Remove support for Hyper-V 2008 and 2008R2/Win7
+
+Saurabh Sengar (2):
+      drm/hyperv: Add error message for fb size greater than allocated
+      scsi: storvsc: Removing Pre Win8 related logic
+
+Shradha Gupta (1):
+      hv_balloon: Fix balloon_probe() and balloon_remove() error handling
+
+ arch/x86/kernel/cpu/mshyperv.c              |   2 +
+ drivers/gpu/drm/hyperv/hyperv_drm_modeset.c |   5 +-
+ drivers/gpu/drm/hyperv/hyperv_drm_proto.c   |  23 +--
+ drivers/hv/channel.c                        | 116 +++++++++----
+ drivers/hv/channel_mgmt.c                   |  40 +++--
+ drivers/hv/connection.c                     |   6 +-
+ drivers/hv/hv_balloon.c                     |  21 ++-
+ drivers/hv/hyperv_vmbus.h                   |   2 +-
+ drivers/hv/ring_buffer.c                    |  46 +++---
+ drivers/hv/vmbus_drv.c                      |  60 ++-----
+ drivers/pci/controller/pci-hyperv.c         | 243 +++++++++++++++++++++-------
+ drivers/scsi/storvsc_drv.c                  | 191 ++++++----------------
+ drivers/video/fbdev/hyperv_fb.c             |  23 +--
+ include/linux/hyperv.h                      |  97 ++++++-----
+ net/vmw_vsock/hyperv_transport.c            |  21 ++-
+ 15 files changed, 477 insertions(+), 419 deletions(-)

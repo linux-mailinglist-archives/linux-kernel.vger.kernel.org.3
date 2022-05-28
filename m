@@ -2,245 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F97536A73
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 05:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E3F536A76
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 05:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240555AbiE1Dgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 23:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
+        id S1353529AbiE1DkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 23:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiE1Dgj (ORCPT
+        with ESMTP id S229683AbiE1DkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 23:36:39 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D291511A28
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 20:36:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653708997; x=1685244997;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JXJb4Sb6zAjxoHyneonrl0atdJFhOhJQ/INRGlHqsJ8=;
-  b=QkIhaXD1Wwhs+JDP9+zF5YhvktYCaw3/6cvWbVVpZFib5EZurca8qIkS
-   TzMDZuq409a+jM/7hbQD+85TphK/jrR5qRQKnnpSr0526wl2JmYFHmukp
-   /JCDztlhkX+72qqpP9gV1NfZ9HYIaS5SqdcKxkX20GHRc4/IR9PUpfDuD
-   4wJMBkXQkV/yZC4YKHZMwyxMlZaWkH7I6TFZnRwrwkQxbgqLISQy3A/Kf
-   qOfbbvVKVRqqE8zQ4/LFWHNSi3DLQZGViXCItFfHzCY+EiFPYB4JYel9Y
-   KgXtCgiyE/MtdPnIStzORodxslt+ACVb6KSXlt4U+WUTlZaEYO4MXxXD3
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="337667635"
-X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
-   d="scan'208";a="337667635"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 20:36:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
-   d="scan'208";a="747347549"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 May 2022 20:36:35 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nunFi-0005PZ-Tm;
-        Sat, 28 May 2022 03:36:34 +0000
-Date:   Sat, 28 May 2022 11:36:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>
-Subject: fs/io_uring.c:6212:38: sparse: sparse: incorrect type in assignment
- (different base types)
-Message-ID: <202205281143.T47kfDb1-lkp@intel.com>
+        Fri, 27 May 2022 23:40:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03C711CA03;
+        Fri, 27 May 2022 20:40:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2945BB8268D;
+        Sat, 28 May 2022 03:40:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DDDFC34100;
+        Sat, 28 May 2022 03:40:05 +0000 (UTC)
+Date:   Fri, 27 May 2022 23:40:03 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
+Subject: [PATCH v6] ftrace: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding
+ weak function
+Message-ID: <20220527234003.2719e6c6@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a9f94826e4bb6402e67f3eb849dee0811f1de6da
-commit: 58f5c8d39e0ea07fdaaea6a85c49000da83dc0cc io_uring: make apoll_events a __poll_t
-date:   10 days ago
-config: arc-randconfig-s031-20220527 (https://download.01.org/0day-ci/archive/20220528/202205281143.T47kfDb1-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-14-g5a0004b5-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=58f5c8d39e0ea07fdaaea6a85c49000da83dc0cc
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 58f5c8d39e0ea07fdaaea6a85c49000da83dc0cc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+If an unused weak function was traced, it's call to fentry will still
+exist, which gets added into the __mcount_loc table. Ftrace will use
+kallsyms to retrieve the name for each location in __mcount_loc to display
+it in the available_filter_functions and used to enable functions via the
+name matching in set_ftrace_filter/notrace. Enabling these functions do
+nothing but enable an unused call to ftrace_caller. If a traced weak
+function is overridden, the symbol of the function would be used for it,
+which will either created duplicate names, or if the previous function was
+not traced, it would be incorrectly be listed in available_filter_functions
+as a function that can be traced.
 
+This became an issue with BPF[1] as there are tooling that enables the
+direct callers via ftrace but then checks to see if the functions were
+actually enabled. The case of one function that was marked notrace, but
+was followed by an unused weak function that was traced. The unused
+function's call to fentry was added to the __mcount_loc section, and
+kallsyms retrieved the untraced function's symbol as the weak function was
+overridden. Since the untraced function would not get traced, the BPF
+check would detect this and fail.
 
-sparse warnings: (new ones prefixed by >>)
-   fs/io_uring.c:5375:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/io_uring.c:5375:14: sparse:     expected struct file *file
-   fs/io_uring.c:5375:14: sparse:     got struct file [noderef] __rcu *
->> fs/io_uring.c:6212:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected signed int [usertype] res @@     got restricted __poll_t @@
-   fs/io_uring.c:6212:38: sparse:     expected signed int [usertype] res
-   fs/io_uring.c:6212:38: sparse:     got restricted __poll_t
-   fs/io_uring.c:6223:56: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6222:66: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __poll_t [usertype] val @@     got unsigned int @@
-   fs/io_uring.c:6222:66: sparse:     expected restricted __poll_t [usertype] val
-   fs/io_uring.c:6222:66: sparse:     got unsigned int
-   fs/io_uring.c:6222:52: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __poll_t [usertype] mask @@     got unsigned short @@
-   fs/io_uring.c:6222:52: sparse:     expected restricted __poll_t [usertype] mask
-   fs/io_uring.c:6222:52: sparse:     got unsigned short
-   fs/io_uring.c:6228:50: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected signed int [usertype] res @@     got restricted __poll_t [usertype] mask @@
-   fs/io_uring.c:6228:50: sparse:     expected signed int [usertype] res
-   fs/io_uring.c:6228:50: sparse:     got restricted __poll_t [usertype] mask
-   fs/io_uring.c:6265:68: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6265:57: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __poll_t [usertype] val @@     got unsigned int @@
-   fs/io_uring.c:6265:57: sparse:     expected restricted __poll_t [usertype] val
-   fs/io_uring.c:6265:57: sparse:     got unsigned int
-   fs/io_uring.c:6370:47: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6370:35: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6370:23: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6383:40: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int mask @@     got restricted __poll_t [usertype] mask @@
-   fs/io_uring.c:6383:40: sparse:     expected int mask
-   fs/io_uring.c:6383:40: sparse:     got restricted __poll_t [usertype] mask
-   fs/io_uring.c:6475:24: sparse: sparse: incorrect type in return expression (different base types) @@     expected int @@     got restricted __poll_t [assigned] [usertype] mask @@
-   fs/io_uring.c:6475:24: sparse:     expected int
-   fs/io_uring.c:6475:24: sparse:     got restricted __poll_t [assigned] [usertype] mask
-   fs/io_uring.c:6492:40: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int mask @@     got restricted __poll_t [assigned] [usertype] mask @@
-   fs/io_uring.c:6492:40: sparse:     expected int mask
-   fs/io_uring.c:6492:40: sparse:     got restricted __poll_t [assigned] [usertype] mask
-   fs/io_uring.c:6527:33: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __poll_t [usertype] mask @@     got int @@
-   fs/io_uring.c:6527:33: sparse:     expected restricted __poll_t [usertype] mask
-   fs/io_uring.c:6527:33: sparse:     got int
-   fs/io_uring.c:6540:22: sparse: sparse: invalid assignment: |=
-   fs/io_uring.c:6540:22: sparse:    left side has type restricted __poll_t
-   fs/io_uring.c:6540:22: sparse:    right side has type int
-   fs/io_uring.c:6545:30: sparse: sparse: invalid assignment: &=
-   fs/io_uring.c:6545:30: sparse:    left side has type restricted __poll_t
-   fs/io_uring.c:6545:30: sparse:    right side has type int
-   fs/io_uring.c:6547:22: sparse: sparse: invalid assignment: |=
-   fs/io_uring.c:6547:22: sparse:    left side has type restricted __poll_t
-   fs/io_uring.c:6547:22: sparse:    right side has type int
-   fs/io_uring.c:6575:33: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected int mask @@     got restricted __poll_t [assigned] [usertype] mask @@
-   fs/io_uring.c:6575:33: sparse:     expected int mask
-   fs/io_uring.c:6575:33: sparse:     got restricted __poll_t [assigned] [usertype] mask
-   fs/io_uring.c:6575:50: sparse: sparse: incorrect type in argument 6 (different base types) @@     expected int events @@     got restricted __poll_t [usertype] events @@
-   fs/io_uring.c:6575:50: sparse:     expected int events
-   fs/io_uring.c:6575:50: sparse:     got restricted __poll_t [usertype] events
-   fs/io_uring.c:6689:24: sparse: sparse: invalid assignment: |=
-   fs/io_uring.c:6689:24: sparse:    left side has type unsigned int
-   fs/io_uring.c:6689:24: sparse:    right side has type restricted __poll_t
-   fs/io_uring.c:6690:65: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6690:29: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6690:38: sparse: sparse: incorrect type in return expression (different base types) @@     expected restricted __poll_t @@     got unsigned int @@
-   fs/io_uring.c:6690:38: sparse:     expected restricted __poll_t
-   fs/io_uring.c:6690:38: sparse:     got unsigned int
-   fs/io_uring.c:6777:43: sparse: sparse: invalid assignment: &=
-   fs/io_uring.c:6777:43: sparse:    left side has type restricted __poll_t
-   fs/io_uring.c:6777:43: sparse:    right side has type int
-   fs/io_uring.c:6778:62: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6778:43: sparse: sparse: invalid assignment: |=
-   fs/io_uring.c:6778:43: sparse:    left side has type restricted __poll_t
-   fs/io_uring.c:6778:43: sparse:    right side has type unsigned int
-   fs/io_uring.c:2610:17: sparse: sparse: context imbalance in 'handle_prev_tw_list' - different lock contexts for basic block
-   fs/io_uring.c:8980:9: sparse: sparse: context imbalance in 'io_sq_thread_unpark' - wrong count at exit
-   fs/io_uring.c:8991:9: sparse: sparse: context imbalance in 'io_sq_thread_park' - wrong count at exit
+The real fix would be to fix kallsyms to not show addresses of weak
+functions as the function before it. But that would require adding code in
+the build to add function size to kallsyms so that it can know when the
+function ends instead of just using the start of the next known symbol.
 
-vim +6212 fs/io_uring.c
+In the mean time, this is a work around. Add a FTRACE_MCOUNT_MAX_OFFSET
+macro that if defined, ftrace will ignore any function that has its call
+to fentry/mcount that has an offset from the symbol that is greater than
+FTRACE_MCOUNT_MAX_OFFSET.
 
-18bceab101adde Jens Axboe     2020-05-15  6178  
-dbc2564cfe0faf Hao Xu         2022-05-14  6179  static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags);
-aa43477b040251 Pavel Begunkov 2021-12-15  6180  /*
-aa43477b040251 Pavel Begunkov 2021-12-15  6181   * All poll tw should go through this. Checks for poll events, manages
-aa43477b040251 Pavel Begunkov 2021-12-15  6182   * references, does rewait, etc.
-aa43477b040251 Pavel Begunkov 2021-12-15  6183   *
-aa43477b040251 Pavel Begunkov 2021-12-15  6184   * Returns a negative error on failure. >0 when no action require, which is
-aa43477b040251 Pavel Begunkov 2021-12-15  6185   * either spurious wakeup or multishot CQE is served. 0 when it's done with
-cef216fc32d762 Pavel Begunkov 2022-04-12  6186   * the request, then the mask is stored in req->cqe.res.
-aa43477b040251 Pavel Begunkov 2021-12-15  6187   */
-dbc2564cfe0faf Hao Xu         2022-05-14  6188  static int io_poll_check_events(struct io_kiocb *req, bool *locked)
-18bceab101adde Jens Axboe     2020-05-15  6189  {
-18bceab101adde Jens Axboe     2020-05-15  6190  	struct io_ring_ctx *ctx = req->ctx;
-dbc2564cfe0faf Hao Xu         2022-05-14  6191  	int v, ret;
-18bceab101adde Jens Axboe     2020-05-15  6192  
-316319e82f7342 Jens Axboe     2021-08-19  6193  	/* req->task == current here, checking PF_EXITING is safe */
-e09ee510600b94 Pavel Begunkov 2021-07-01  6194  	if (unlikely(req->task->flags & PF_EXITING))
-f22190570b213d Pavel Begunkov 2022-04-15  6195  		return -ECANCELED;
-e09ee510600b94 Pavel Begunkov 2021-07-01  6196  
-aa43477b040251 Pavel Begunkov 2021-12-15  6197  	do {
-aa43477b040251 Pavel Begunkov 2021-12-15  6198  		v = atomic_read(&req->poll_refs);
-aa43477b040251 Pavel Begunkov 2021-12-15  6199  
-aa43477b040251 Pavel Begunkov 2021-12-15  6200  		/* tw handler should be the owner, and so have some references */
-aa43477b040251 Pavel Begunkov 2021-12-15  6201  		if (WARN_ON_ONCE(!(v & IO_POLL_REF_MASK)))
-aa43477b040251 Pavel Begunkov 2021-12-15  6202  			return 0;
-aa43477b040251 Pavel Begunkov 2021-12-15  6203  		if (v & IO_POLL_CANCEL_FLAG)
-aa43477b040251 Pavel Begunkov 2021-12-15  6204  			return -ECANCELED;
-aa43477b040251 Pavel Begunkov 2021-12-15  6205  
-cef216fc32d762 Pavel Begunkov 2022-04-12  6206  		if (!req->cqe.res) {
-2804ecd8d3e373 Jens Axboe     2022-04-11  6207  			struct poll_table_struct pt = { ._key = req->apoll_events };
-cce64ef01308b6 Pavel Begunkov 2022-04-13  6208  			unsigned flags = locked ? 0 : IO_URING_F_UNLOCKED;
-74ce6ce43d4fc6 Jens Axboe     2020-04-13  6209  
-cce64ef01308b6 Pavel Begunkov 2022-04-13  6210  			if (unlikely(!io_assign_file(req, flags)))
-7179c3ce3dbff6 Pavel Begunkov 2022-04-13  6211  				return -EBADF;
-cef216fc32d762 Pavel Begunkov 2022-04-12 @6212  			req->cqe.res = vfs_poll(req->file, &pt) & req->apoll_events;
-e27414bef7b4f2 Pavel Begunkov 2021-04-09  6213  		}
-74ce6ce43d4fc6 Jens Axboe     2020-04-13  6214  
-dbc2564cfe0faf Hao Xu         2022-05-14  6215  		if ((unlikely(!req->cqe.res)))
-dbc2564cfe0faf Hao Xu         2022-05-14  6216  			continue;
-dbc2564cfe0faf Hao Xu         2022-05-14  6217  		if (req->apoll_events & EPOLLONESHOT)
-dbc2564cfe0faf Hao Xu         2022-05-14  6218  			return 0;
-dbc2564cfe0faf Hao Xu         2022-05-14  6219  
-dbc2564cfe0faf Hao Xu         2022-05-14  6220  		/* multishot, just fill a CQE and proceed */
-dbc2564cfe0faf Hao Xu         2022-05-14  6221  		if (!(req->flags & REQ_F_APOLL_MULTISHOT)) {
-dbc2564cfe0faf Hao Xu         2022-05-14  6222  			__poll_t mask = mangle_poll(req->cqe.res &
-dbc2564cfe0faf Hao Xu         2022-05-14  6223  						    req->apoll_events);
-aa43477b040251 Pavel Begunkov 2021-12-15  6224  			bool filled;
-74ce6ce43d4fc6 Jens Axboe     2020-04-13  6225  
-aa43477b040251 Pavel Begunkov 2021-12-15  6226  			spin_lock(&ctx->completion_lock);
-dbc2564cfe0faf Hao Xu         2022-05-14  6227  			filled = io_fill_cqe_aux(ctx, req->cqe.user_data,
-dbc2564cfe0faf Hao Xu         2022-05-14  6228  						 mask, IORING_CQE_F_MORE);
-aa43477b040251 Pavel Begunkov 2021-12-15  6229  			io_commit_cqring(ctx);
-aa43477b040251 Pavel Begunkov 2021-12-15  6230  			spin_unlock(&ctx->completion_lock);
-dbc2564cfe0faf Hao Xu         2022-05-14  6231  			if (filled) {
-aa43477b040251 Pavel Begunkov 2021-12-15  6232  				io_cqring_ev_posted(ctx);
-dbc2564cfe0faf Hao Xu         2022-05-14  6233  				continue;
-a62682f92eedb4 Hao Xu         2021-09-22  6234  			}
-dbc2564cfe0faf Hao Xu         2022-05-14  6235  			return -ECANCELED;
-dbc2564cfe0faf Hao Xu         2022-05-14  6236  		}
-dbc2564cfe0faf Hao Xu         2022-05-14  6237  
-dbc2564cfe0faf Hao Xu         2022-05-14  6238  		io_tw_lock(req->ctx, locked);
-dbc2564cfe0faf Hao Xu         2022-05-14  6239  		if (unlikely(req->task->flags & PF_EXITING))
-dbc2564cfe0faf Hao Xu         2022-05-14  6240  			return -EFAULT;
-dbc2564cfe0faf Hao Xu         2022-05-14  6241  		ret = io_issue_sqe(req,
-dbc2564cfe0faf Hao Xu         2022-05-14  6242  				   IO_URING_F_NONBLOCK|IO_URING_F_COMPLETE_DEFER);
-dbc2564cfe0faf Hao Xu         2022-05-14  6243  		if (ret)
-dbc2564cfe0faf Hao Xu         2022-05-14  6244  			return ret;
-7b289c38335ec7 Hao Xu         2021-04-13  6245  
-aa43477b040251 Pavel Begunkov 2021-12-15  6246  		/*
-aa43477b040251 Pavel Begunkov 2021-12-15  6247  		 * Release all references, retry if someone tried to restart
-aa43477b040251 Pavel Begunkov 2021-12-15  6248  		 * task_work while we were executing it.
-aa43477b040251 Pavel Begunkov 2021-12-15  6249  		 */
-aa43477b040251 Pavel Begunkov 2021-12-15  6250  	} while (atomic_sub_return(v & IO_POLL_REF_MASK, &req->poll_refs));
-18bceab101adde Jens Axboe     2020-05-15  6251  
-aa43477b040251 Pavel Begunkov 2021-12-15  6252  	return 1;
-18bceab101adde Jens Axboe     2020-05-15  6253  }
-18bceab101adde Jens Axboe     2020-05-15  6254  
+If CONFIG_HAVE_FENTRY is defined for x86, define FTRACE_MCOUNT_MAX_OFFSET
+to zero (unless IBT is enabled), which will have ftrace ignore all locations
+that are not at the start of the function (or one after the ENDBR
+instruction).
 
-:::::: The code at line 6212 was first introduced by commit
-:::::: cef216fc32d7628206c523994e7e267e7a8dda59 io_uring: explicitly keep a CQE in io_kiocb
+A worker thread is added at boot up to scan all the ftrace record entries,
+and will mark any that fail the FTRACE_MCOUNT_MAX_OFFSET test as disabled.
+They will still appear in the available_filter_functions file as:
 
-:::::: TO: Pavel Begunkov <asml.silence@gmail.com>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
+  __ftrace_invalid_address___<invalid-offset>
 
+(showing the offset that caused it to be invalid).
+
+This is required for tools that use libtracefs (like trace-cmd does) that
+scan the available_filter_functions and enable set_ftrace_filter and
+set_ftrace_notrace using indexes of the function listed in the file (this
+is a speedup, as enabling thousands of files via names is an O(n^2)
+operation and can take minutes to complete, where the indexing takes less
+than a second).
+
+The invalid functions cannot be removed from available_filter_functions as
+the names there correspond to the ftrace records in the array that manages
+them (and the indexing depends on this).
+
+[1] https://lore.kernel.org/all/20220412094923.0abe90955e5db486b7bca279@kernel.org/
+
+Link: https://lkml.kernel.org/r/20220526141912.794c2786@gandalf.local.home
+
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+Changes since v5: https://lkml.kernel.org/r/20220526141912.794c2786@gandalf.local.home
+ - Do not WARN_ON in ftrace_match_record() if the lookup_ip fails
+   offset not being within range and the max and the record is not
+   yet set to DISABLED. Only WARN_ON() if the system is running.
+
+ arch/x86/include/asm/ftrace.h |   7 ++
+ kernel/trace/ftrace.c         | 138 +++++++++++++++++++++++++++++++++-
+ 2 files changed, 143 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+index 024d9797646e..b5ef474be858 100644
+--- a/arch/x86/include/asm/ftrace.h
++++ b/arch/x86/include/asm/ftrace.h
+@@ -9,6 +9,13 @@
+ # define MCOUNT_ADDR		((unsigned long)(__fentry__))
+ #define MCOUNT_INSN_SIZE	5 /* sizeof mcount call */
+ 
++/* Ignore unused weak functions which will have non zero offsets */
++#ifdef CONFIG_HAVE_FENTRY
++# include <asm/ibt.h>
++/* Add offset for endbr64 if IBT enabled */
++# define FTRACE_MCOUNT_MAX_OFFSET	ENDBR_INSN_SIZE
++#endif
++
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ #define ARCH_SUPPORTS_FTRACE_OPS 1
+ #endif
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index d653ef4febc5..fb58d18d4f78 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -45,6 +45,8 @@
+ #include "trace_output.h"
+ #include "trace_stat.h"
+ 
++#define FTRACE_INVALID_FUNCTION		"__ftrace_invalid_address__"
++
+ #define FTRACE_WARN_ON(cond)			\
+ 	({					\
+ 		int ___r = cond;		\
+@@ -3654,6 +3656,105 @@ static void add_trampoline_func(struct seq_file *m, struct ftrace_ops *ops,
+ 		seq_printf(m, " ->%pS", ptr);
+ }
+ 
++#ifdef FTRACE_MCOUNT_MAX_OFFSET
++/*
++ * Weak functions can still have an mcount/fentry that is saved in
++ * the __mcount_loc section. These can be detected by having a
++ * symbol offset of greater than FTRACE_MCOUNT_MAX_OFFSET, as the
++ * symbol found by kallsyms is not the function that the mcount/fentry
++ * is part of. The offset is much greater in these cases.
++ *
++ * Test the record to make sure that the ip points to a valid kallsyms
++ * and if not, mark it disabled.
++ */
++static int test_for_valid_rec(struct dyn_ftrace *rec)
++{
++	char str[KSYM_SYMBOL_LEN];
++	unsigned long offset;
++	const char *ret;
++
++	ret = kallsyms_lookup(rec->ip, NULL, &offset, NULL, str);
++
++	/* Weak functions can cause invalid addresses */
++	if (!ret || offset > FTRACE_MCOUNT_MAX_OFFSET) {
++		rec->flags |= FTRACE_FL_DISABLED;
++		return 0;
++	}
++	return 1;
++}
++
++static struct workqueue_struct *ftrace_check_wq __initdata;
++static struct work_struct ftrace_check_work __initdata;
++
++/*
++ * Scan all the mcount/fentry entries to make sure they are valid.
++ */
++static __init void ftrace_check_work_func(struct work_struct *work)
++{
++	struct ftrace_page *pg;
++	struct dyn_ftrace *rec;
++
++	mutex_lock(&ftrace_lock);
++	do_for_each_ftrace_rec(pg, rec) {
++		test_for_valid_rec(rec);
++	} while_for_each_ftrace_rec();
++	mutex_unlock(&ftrace_lock);
++}
++
++static int __init ftrace_check_for_weak_functions(void)
++{
++	INIT_WORK(&ftrace_check_work, ftrace_check_work_func);
++
++	ftrace_check_wq = alloc_workqueue("ftrace_check_wq", WQ_UNBOUND, 0);
++
++	queue_work(ftrace_check_wq, &ftrace_check_work);
++	return 0;
++}
++
++static int __init ftrace_check_sync(void)
++{
++	/* Make sure the ftrace_check updates are finished */
++	if (ftrace_check_wq)
++		destroy_workqueue(ftrace_check_wq);
++	return 0;
++}
++
++late_initcall_sync(ftrace_check_sync);
++subsys_initcall(ftrace_check_for_weak_functions);
++
++static int print_rec(struct seq_file *m, unsigned long ip)
++{
++	unsigned long offset;
++	char str[KSYM_SYMBOL_LEN];
++	char *modname;
++	const char *ret;
++
++	ret = kallsyms_lookup(ip, NULL, &offset, &modname, str);
++	/* Weak functions can cause invalid addresses */
++	if (!ret || offset > FTRACE_MCOUNT_MAX_OFFSET) {
++		snprintf(str, KSYM_SYMBOL_LEN, "%s_%ld",
++			 FTRACE_INVALID_FUNCTION, offset);
++		ret = NULL;
++	}
++
++	seq_puts(m, str);
++	if (modname)
++		seq_printf(m, " [%s]", modname);
++	return ret == NULL ? -1 : 0;
++}
++#else
++static inline int test_for_valid_rec(struct dyn_ftrace *rec)
++{
++	return 1;
++}
++
++static inline int print_rec(struct seq_file *m, unsigned long ip)
++{
++	seq_printf(m, "%ps", (void *)ip);
++	return 0;
++}
++#endif
++
+ static int t_show(struct seq_file *m, void *v)
+ {
+ 	struct ftrace_iterator *iter = m->private;
+@@ -3678,7 +3779,13 @@ static int t_show(struct seq_file *m, void *v)
+ 	if (!rec)
+ 		return 0;
+ 
+-	seq_printf(m, "%ps", (void *)rec->ip);
++	if (print_rec(m, rec->ip)) {
++		/* This should only happen when a rec is disabled */
++		WARN_ON_ONCE(!(rec->flags & FTRACE_FL_DISABLED));
++		seq_putc(m, '\n');
++		return 0;
++	}
++
+ 	if (iter->flags & FTRACE_ITER_ENABLED) {
+ 		struct ftrace_ops *ops;
+ 
+@@ -3996,6 +4103,24 @@ add_rec_by_index(struct ftrace_hash *hash, struct ftrace_glob *func_g,
+ 	return 0;
+ }
+ 
++#ifdef FTRACE_MCOUNT_MAX_OFFSET
++static int lookup_ip(unsigned long ip, char **modname, char *str)
++{
++	unsigned long offset;
++
++	kallsyms_lookup(ip, NULL, &offset, modname, str);
++	if (offset > FTRACE_MCOUNT_MAX_OFFSET)
++		return -1;
++	return 0;
++}
++#else
++static int lookup_ip(unsigned long ip, char **modname, char *str)
++{
++	kallsyms_lookup(ip, NULL, NULL, modname, str);
++	return 0;
++}
++#endif
++
+ static int
+ ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
+ 		struct ftrace_glob *mod_g, int exclude_mod)
+@@ -4003,7 +4128,12 @@ ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
+ 	char str[KSYM_SYMBOL_LEN];
+ 	char *modname;
+ 
+-	kallsyms_lookup(rec->ip, NULL, NULL, &modname, str);
++	if (lookup_ip(rec->ip, &modname, str)) {
++		/* This should only happen when a rec is disabled */
++		WARN_ON_ONCE(system_state == SYSTEM_RUNNING &&
++			     !(rec->flags & FTRACE_FL_DISABLED));
++		return 0;
++	}
+ 
+ 	if (mod_g) {
+ 		int mod_matches = (modname) ? ftrace_match(modname, mod_g) : 0;
+@@ -6830,6 +6960,10 @@ void ftrace_module_enable(struct module *mod)
+ 		if (ftrace_start_up)
+ 			cnt += referenced_filters(rec);
+ 
++		/* Weak functions should still be ignored */
++		if (!test_for_valid_rec(rec))
++			continue;
++
+ 		rec->flags &= ~FTRACE_FL_DISABLED;
+ 		rec->flags += cnt;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

@@ -2,64 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A7C536C71
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 13:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9C2536C75
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 13:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235738AbiE1LBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 07:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39098 "EHLO
+        id S234489AbiE1LGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 07:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233926AbiE1LBj (ORCPT
+        with ESMTP id S233926AbiE1LGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 07:01:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCB21EADA
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 04:01:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED0BB60DDE
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 11:01:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12D38C34100
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 11:01:36 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hGmhkDsz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1653735695;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ebxb2yEET8cq5O+L+DGLBATjTjCW37wGjozGgZgVV2s=;
-        b=hGmhkDszfsTx7fDSH9zSVvZMr7Qelpz+SAiCTluQCf/HK9raU1ZqN7CaO+hgZbe3iFqHyH
-        C9z0nxCjqyrAsIYU7oi+OzBpp/YivLi/Ueq7RRQHdwB0oPt6SOFYwsVu/VE48zbrguXly3
-        yh2fQuromdWGzaYaalNgTmnK54OOyz8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5fb93a62 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Sat, 28 May 2022 11:01:35 +0000 (UTC)
-Received: by mail-yb1-f179.google.com with SMTP id v26so11823992ybd.2
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 04:01:34 -0700 (PDT)
-X-Gm-Message-State: AOAM532wZZBMiJPT8fqquCu1WRL/X21thBtlJtMJeMba1brz33MewOYW
-        MLiNyOW78OJP3x/yLkn5okXgsNeu8i5OMsCxf+4=
-X-Google-Smtp-Source: ABdhPJzzGNIu2iCowK1yezOBdMlT4bN30byRAHpUpg3bigIt/zt62Jilq3fIdxa6dkm7WUvoVZvyC4lD1V8IjqH8Od0=
-X-Received: by 2002:a5b:dcf:0:b0:64a:6923:bbba with SMTP id
- t15-20020a5b0dcf000000b0064a6923bbbamr45441492ybr.398.1653735694311; Sat, 28
- May 2022 04:01:34 -0700 (PDT)
+        Sat, 28 May 2022 07:06:54 -0400
+Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414C81E3FA
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 04:06:51 -0700 (PDT)
+Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 5C4A71003FECB
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 11:06:51 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id uuHTnXt3xj8kTuuHTnajek; Sat, 28 May 2022 11:06:51 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=MbSpB7zf c=1 sm=1 tr=0 ts=6292024b
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=oZkIemNP1mAA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=WH8nLBFJLALsKWqZLP8zYQEAiZOC6JrV7HWdJa2Dy5M=; b=oHwmHvNuZ3y0C38WR05V04l6vA
+        gS+b4Bex1Rpx0VWWD3/V6t4kTIpI0ZHRozyq04SkagVoUV+YVlGVdJTBli+1qXCGyPrzSnDmPJNso
+        5dENlj5iEWwvP8xm1ZMmMSllM5Y7QJ87X08S6efxVjIVlDWM/QDZ7UlQH4wtvFGYLfa7osAIymxe/
+        usU4rbcu1fIROsW221YwkMZL+hHEFCNyQ7ZpMGLgwRug+L0gYJCEIHdzFBZw+IYud48LvXNlUU+0J
+        NMxZ24hYVlpOTv5lbQJAlU1kLD0wjI1ESC+cJG6RqqcZFHjKZ7b3ko5sLzJ2F1fN+eYOcIJ0Y6ZeI
+        PB0rAePQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:52592 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nuuHS-0039aJ-2m; Sat, 28 May 2022 05:06:50 -0600
+Subject: Re: [PATCH 5.17 000/111] 5.17.12-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220527084819.133490171@linuxfoundation.org>
+In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <2ce0c8dd-e334-06fa-cfab-2999f30297eb@w6rz.net>
+Date:   Sat, 28 May 2022 04:06:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <YpH84wrg4ZxIkkie@debian> <CAHmME9qHRd-t8mupAG1w0jV-uE5UNrMeRO+8-0b_4N1cCPyM+w@mail.gmail.com>
-In-Reply-To: <CAHmME9qHRd-t8mupAG1w0jV-uE5UNrMeRO+8-0b_4N1cCPyM+w@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sat, 28 May 2022 13:01:23 +0200
-X-Gmail-Original-Message-ID: <CAHmME9pS1ODLqJ8rw0hzH5+ZrUW8pwC2nkeD4mLVG4swp8BnQQ@mail.gmail.com>
-Message-ID: <CAHmME9pS1ODLqJ8rw0hzH5+ZrUW8pwC2nkeD4mLVG4swp8BnQQ@mail.gmail.com>
-Subject: Re: mainline build failure due to 8bdc2a190105 ("crypto: poly1305 -
- cleanup stray CRYPTO_LIB_POLY1305_RSIZE")
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nuuHS-0039aJ-2m
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:52592
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,17 +92,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi again,
+On 5/27/22 1:48 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.12 release.
+> There are 111 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 29 May 2022 08:46:36 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.12-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Actually, I think 8bdc2a190105 should just be reverted wholesale.
-There are too many headers that depend on it (e.g. caam) even if
-there's no .o that winds up using it. I could try to enumerate them
-all in kconfig language, but that doesn't seem much cleaner.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-[Aside: note that none of this was a problem with my proposed "zinc"
-patchset from a few years ago, which cleaned up all this crypto layer
-stuff. The frankenstein that landed instead is just a never ending
-source of annoying bugs like this one. Until there are larger changes,
-I think a lot of the woes of crypto/ are terminally hopeless. :-\]
+Tested-by: Ron Economos <re@w6rz.net>
 
-Jason

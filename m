@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECD6536DFC
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 19:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED6E536DFE
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 19:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239331AbiE1RhO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 28 May 2022 13:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S239270AbiE1RlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 13:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236088AbiE1RhL (ORCPT
+        with ESMTP id S236088AbiE1RlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 13:37:11 -0400
-Received: from relay5.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA39E93;
-        Sat, 28 May 2022 10:37:10 -0700 (PDT)
-Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay01.hostedemail.com (Postfix) with ESMTP id 15D0160F8D;
-        Sat, 28 May 2022 17:37:09 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf19.hostedemail.com (Postfix) with ESMTPA id F17FB2002B;
-        Sat, 28 May 2022 17:36:58 +0000 (UTC)
-Message-ID: <083c936b74c2a2aef678e7b89be22e00c596144f.camel@perches.com>
-Subject: Re: [PATCH 1/1] iio: Prefer octal over symbolic permissions.
-From:   Joe Perches <joe@perches.com>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Joe Simmons-Talbott <joetalbott@gmail.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sat, 28 May 2022 10:36:57 -0700
-In-Reply-To: <20220528183405.22b55033@jic23-huawei>
-References: <20220527185651.465204-1-joetalbott@gmail.com>
-         <20220528183405.22b55033@jic23-huawei>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Sat, 28 May 2022 13:41:20 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB16E2
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 10:41:19 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id t5so8864982edc.2
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 10:41:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pP5sQR3QwXNtypqdUBNCTZlpu49d035rXCG+jxDoA2s=;
+        b=Z70GBvzBscFi3wczPp/1gBU54OJpVhVtHdRLTSfj2K/6zYlVoev9uCuNVqs5HUSD6f
+         AxHO+J2LAuG3MqxfhY3/pQ1sdLe7lXw7Q1xxXU6eXyGm/7Xyqf/1CmirEGCn6tq8hsj1
+         FuIAAeHZ2rF1M229MhVKggd35Tg9CBjRlQDRo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pP5sQR3QwXNtypqdUBNCTZlpu49d035rXCG+jxDoA2s=;
+        b=D6E9odeooxvxE3srZAOCb64CEBtlY/c4u2X1ZLwxTvXA3GcilImSTfbOVnd2gsJIt1
+         v6h9RZzullZ2UXrpGnwFHjEsgKaZkaiuMVMqhv4qbUdP15xxSPE5KvjjfgMPaUdYzPo1
+         e8pXWGDAQQEspwB3alIBBO82mLwfWiFjSgVm+N3u9YC8H+XjmUmsgTBiQfynhy5B22vT
+         mI1eAW4lOFSNO+nU/XlgxIB3VquVTJw5NzhztjIEZ7cHfSmChOhu4bLuGOfdUDYB4TBn
+         AQfZf2zwlO84je8OC2N0imEOzU9AcLZzTIF9ejRZgavtTHuCFOuaaRrO/ZnoJQn60XVn
+         r7KQ==
+X-Gm-Message-State: AOAM533SJmYimIwUKQ9l3cDSYBVYRxPsYJBieDqmR6DRTPGbbzfYgt9k
+        5IiWGYwNUMlFIyng09agHXXlUMSEv5/+dYZY
+X-Google-Smtp-Source: ABdhPJwJzGMD+Me5AgUkGzc3LSd1Rt0x0OGscCQfIqdo/57cS2Ls0ZxS1zocQOMmbuJzoE0Q/GeRVQ==
+X-Received: by 2002:aa7:dc09:0:b0:42a:aadd:8e71 with SMTP id b9-20020aa7dc09000000b0042aaadd8e71mr50558464edu.41.1653759677531;
+        Sat, 28 May 2022 10:41:17 -0700 (PDT)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
+        by smtp.gmail.com with ESMTPSA id c23-20020a50f617000000b0042b765c2448sm3718820edn.80.2022.05.28.10.41.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 May 2022 10:41:16 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id t6so9653167wra.4
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 10:41:16 -0700 (PDT)
+X-Received: by 2002:adf:dcc5:0:b0:210:1f95:c5d0 with SMTP id
+ x5-20020adfdcc5000000b002101f95c5d0mr5490672wrm.97.1653759675983; Sat, 28 May
+ 2022 10:41:15 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: F17FB2002B
-X-Stat-Signature: efa8a1fko9joascwid7grn1mu5qj3w7e
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/npUr6jS/AkRCw99c0tVLfC7u6v3NQBKs=
-X-HE-Tag: 1653759418-698807
+References: <YpCUzStDnSgQLNFN@debian> <CAHk-=wg0uGAX5DYZq+tY2KeUAR8DtR91YE1y9CkPMKkKOyE4jg@mail.gmail.com>
+ <CADVatmNGPbSdRNQuwJEWAaPtqb3vBYRjvsuBpoRUnhEHj=X5GQ@mail.gmail.com>
+ <CAHk-=wisQd8yiPX=SsK3eFiakKo713hq4SyqPWsJ-oyAmLFefQ@mail.gmail.com> <YpIR67FMtTGCwARZ@debian>
+In-Reply-To: <YpIR67FMtTGCwARZ@debian>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 28 May 2022 10:40:59 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
+Message-ID: <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
+Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
+ block count and size helpers")
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Jani Nikula <jani.nikula@intel.com>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-05-28 at 18:34 +0100, Jonathan Cameron wrote:
-> On Fri, 27 May 2022 14:56:52 -0400
-> Joe Simmons-Talbott <joetalbott@gmail.com> wrote:
-> > As reported by checkpatch.pl use ocatl permissions rather than symbolic
-> > permissions.
-[]
-> Why the resend?  Given change of description, I'm guessing this is v2
-> because of feedback on a similar patch elsewhere. If so, please
-> put the version number in the patch log and provide a changelog
-> below the ---
-> 
-> Hmm. I guess I don't really mind cleaning this up though it is
-> some churn in core code which is usually something we try to avoid
-> for fairly trivial style reasons.
-> 
-> One request inline (though I suspect it applies in several places,
-> I just haven't checked ;)
-[]
-> > diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
-[]
-> > @@ -1391,17 +1391,17 @@ static ssize_t direction_show(struct device *dev,
-> >  	}
-> >  }
-> >  
-> > -static DEVICE_ATTR(length, S_IRUGO | S_IWUSR, iio_buffer_read_length,
-> > +static DEVICE_ATTR(length, 0644, iio_buffer_read_length,
-> >  		   iio_buffer_write_length);
-> >  static struct device_attribute dev_attr_length_ro = __ATTR(length,
-> > -	S_IRUGO, iio_buffer_read_length, NULL);
-> > -static DEVICE_ATTR(enable, S_IRUGO | S_IWUSR,
-> > +	0444, iio_buffer_read_length, NULL);
-> > +static DEVICE_ATTR(enable, 0644,
-> >  		   iio_buffer_show_enable, iio_buffer_store_enable);
-> > -static DEVICE_ATTR(watermark, S_IRUGO | S_IWUSR,
-> > +static DEVICE_ATTR(watermark, 0644,
-> >  		   iio_buffer_show_watermark, iio_buffer_store_watermark);
-> >  static struct device_attribute dev_attr_watermark_ro = __ATTR(watermark,
-> > -	S_IRUGO, iio_buffer_show_watermark, NULL);
-> > -static DEVICE_ATTR(data_available, S_IRUGO,
-> > +	0444, iio_buffer_show_watermark, NULL);
-> > +static DEVICE_ATTR(data_available, 0444,
-> >  		iio_dma_show_data_available, NULL);
-> 
-> a side effect of this change a slight shortening of how long the above
-> two lines will be if combined into one.  It's now sub 80 chars
-> I think, so please make them a single line.  Also check for similar
-> cases elsewhere.
+On Sat, May 28, 2022 at 5:13 AM Sudip Mukherjee
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> just tried this with
+> make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- drivers/gpu/drm/drm_edid.s
+>
+> size_of_edid:
+>         mov     r0, #144        @,
+>         ldmfd   sp, {fp, sp, pc}        @
 
-another possibility it to rename the function to <var>_show and change
+So digging a bit deeper - since I have am arm compiler after all - I
+note that 'sizeof(detailed_timings)' is 88.
 
-	static DEVICE_ATTR(foo, 0444, <var>, NULL)
-to
-	static DEVICE_ATTR_RO(<var>)
+Which is completely wrong. It should be 72 bytes (an array of 4
+structures, each 18 bytes in size).
 
-and also use
+I have not dug deeper, but that is clearly the issue.
 
-DEVICE_ATTR_RW
+Now, why that only happens on that spear3xx_defconfig, I have no idea.
 
-with appropriate function renaming where feasible.
+             Linus

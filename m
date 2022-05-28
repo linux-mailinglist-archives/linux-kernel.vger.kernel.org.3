@@ -2,99 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98ADB536AB7
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 06:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495F9536AB8
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 06:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355605AbiE1E3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 00:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
+        id S1355663AbiE1Ecn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 00:32:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238534AbiE1E3m (ORCPT
+        with ESMTP id S238534AbiE1Ecl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 00:29:42 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A675BE56
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 21:29:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653712181; x=1685248181;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LBj68ZipfQDG93/AYhFLpML4p/fOJtG/9iR7B+y6gEg=;
-  b=ISNXLcLyt2uBepGO8F/e/gVyJU5Y23EDgSM3ANJaocMGvBLY7TUG1Q96
-   dMgScj7iloU1Y6m8zg8fF8+X11P0RgbODmbxt2cK8pPAbP08l9Ih2Zo11
-   9SLfoDz2IlxY+TMXsvB2xO0tvQSf3RN21wP34rndfyALOOYUGIIS3Aqh2
-   P6hixNrYevbwHT0wFv79p0vMgSvgtF8hFc/Ojb6+1R8I7uke/Fieosnmc
-   AwtJOKx8ZCINpqbrJQAb3q98jJx8VP/rTfvZzHGhnc7G1vBpcDWcrQxMo
-   OBNCYkGY9d6HquKvNXkR9UIHN+Xo95Z1SIbl1iAH1KGuCDkZTq/e+oHSP
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="254501326"
-X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
-   d="scan'208";a="254501326"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 21:29:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
-   d="scan'208";a="747360059"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 May 2022 21:29:39 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuo54-0005RZ-PR;
-        Sat, 28 May 2022 04:29:38 +0000
-Date:   Sat, 28 May 2022 12:29:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/video/fbdev/core/fbcon.c:106:16: sparse: sparse: symbol
- 'fbcon_registered_fb' was not declared. Should it be static?
-Message-ID: <202205281235.rdumodzg-lkp@intel.com>
+        Sat, 28 May 2022 00:32:41 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBB05D5D9;
+        Fri, 27 May 2022 21:32:38 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id jx22so11888512ejb.12;
+        Fri, 27 May 2022 21:32:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K5qfxYBTG9WQi+JmHupiyYmCa2ZO/Sp/SWpnNg7xgFg=;
+        b=TBfD3xnunIhS2XmLVzvPpgX+ylxEweyl7z8zgWPrkVF69pvMB9/eSJkDKqh9BBnMzn
+         DxSMSIRlyEWfQSqJzYGJ+4PidF+PFfVRs8PjCetH+KFQqKIyUcN5VFJb32LfUrkNCGjt
+         xAsLSE9W9Tnk9GSNwYn7AB6HDTklA/laxHZG7OV57SvVFBc642y7Tjda9BeAJGcC1Jyo
+         kf3KFdT+zdMIwYNqkHoWBeZceiKPnzLzL1NMeTtBnZwUceGN1ASq5M/qGK2z185prIM8
+         3rh2/x93gFKQkLBtLApJxFr1zFw7T9MBL1U0coABCiBThTzzEPsCNQpCnS0yQGwtF3IY
+         s4sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K5qfxYBTG9WQi+JmHupiyYmCa2ZO/Sp/SWpnNg7xgFg=;
+        b=C18noDWvi+Arjy31dhLAyFVSi4KHLumUSRU1XRAI5bRKy7yTZeJ6kPpBb5TDsQlsuo
+         NKWaUoq4c6NNMUMoT6lEhjjtamQZAN6iDpjSvd3sXk8zxU6EWkFZo8uNYQR/niZNNsrN
+         jPtIPIaqnNOzf5ArkLm8KviWLVFtTC/65Y3xg5ZJDI4l2pfRONPOinDmTSpHQPYa37Zy
+         2KIqzXeILogshPO2HHXMOufs08D2LWHuTcexzeiuE9Ag7HvRFajdOVPbXucQbS0xNwTM
+         XA2o0yEAG+R14zbODLQTUWSLyHAXeUq52pUwEQVy4eG0p+YDpnlEe53aoWymzRqV8R/x
+         y5Hw==
+X-Gm-Message-State: AOAM533FM13ZCyyUrtPppZc/ESZA6ZEsYk4igIguuTx9qO3PcUGHRA6N
+        6JizEe8zh7qzGUOvksAHCdRRTyqT4rQAW0fFfmQ=
+X-Google-Smtp-Source: ABdhPJyc+e4+b4oc4I1w5A7pZswiReAC3+xRq+obk6xVXM2JA2WQpdxl/8he3EORjKO/k1h9+ZcgJqtGvdCaSxf51ek=
+X-Received: by 2002:a17:906:6a07:b0:6fe:ec47:b64d with SMTP id
+ qw7-20020a1709066a0700b006feec47b64dmr23985856ejc.765.1653712357408; Fri, 27
+ May 2022 21:32:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220527071522.116422-1-imagedong@tencent.com>
+ <20220527071522.116422-4-imagedong@tencent.com> <20220527181915.6e776577@kernel.org>
+In-Reply-To: <20220527181915.6e776577@kernel.org>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Sat, 28 May 2022 12:32:26 +0800
+Message-ID: <CADxym3ZM=eW3hNLsUuCYDfZe2F+=c_Q69YxVi9VQ_65GY2DbAQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 3/3] net: dropreason: reformat the comment fo skb
+ drop reasons
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        David Ahern <dsahern@kernel.org>,
+        Talal Ahmad <talalahmad@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a9f94826e4bb6402e67f3eb849dee0811f1de6da
-commit: efc3acbc105af79bce2ccf97a6159255b7cf6b38 fbcon: Maintain a private array of fb_info
-date:   7 weeks ago
-config: ia64-randconfig-s031-20220524 (https://download.01.org/0day-ci/archive/20220528/202205281235.rdumodzg-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-14-g5a0004b5-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=efc3acbc105af79bce2ccf97a6159255b7cf6b38
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout efc3acbc105af79bce2ccf97a6159255b7cf6b38
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/video/fbdev/core/
+On Sat, May 28, 2022 at 9:19 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Fri, 27 May 2022 15:15:22 +0800 menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > To make the code clear, reformat the comment in dropreason.h to k-doc
+> > style.
+> >
+> > Now, the comment can pass the check of kernel-doc without warnning:
+> >
+> > $ ./scripts/kernel-doc -v -none include/linux/dropreason.h
+> > include/linux/dropreason.h:7: info: Scanning doc for enum skb_drop_reason
+> >
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+>
+> I feel bad for suggesting this after you reformatted all the values
+> but could we use inline notation here? With a huge enum like this
+> there's a lot of scrolling between documentation and the value.
+>
+> /**
+>  * enum skb_drop_reason - the reasons of skb drops
+>  *
+>  * The reason of skb drop, which is used in kfree_skb_reason().
+>  * en...maybe they should be splited by group?
+>  */
+>  enum skb_drop_reason {
+>         /**
+>          * @SKB_NOT_DROPPED_YET: skb is not dropped yet (used for no-drop case)
+>          */
+>         SKB_NOT_DROPPED_YET = 0,
+>         /** @SKB_DROP_REASON_NOT_SPECIFIED: drop reason is not specified */
+>         SKB_DROP_REASON_NOT_SPECIFIED,
+>         /** @SKB_DROP_REASON_NO_SOCKET: socket not found */
+>         SKB_DROP_REASON_NO_SOCKET,
+> ...
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The inline comment is an option, which I thought of. But I found it
+makes the code a little not tidy. Of course, inline comments are
+easier to read. Anyway, I'll have a try and make them inline.
 
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/video/fbdev/core/fbcon.c:106:16: sparse: sparse: symbol 'fbcon_registered_fb' was not declared. Should it be static?
->> drivers/video/fbdev/core/fbcon.c:107:5: sparse: sparse: symbol 'fbcon_num_registered_fb' was not declared. Should it be static?
-
-vim +/fbcon_registered_fb +106 drivers/video/fbdev/core/fbcon.c
-
-   105	
- > 106	struct fb_info *fbcon_registered_fb[FB_MAX];
- > 107	int fbcon_num_registered_fb;
-   108	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks!
+Menglong Dong

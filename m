@@ -2,163 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3523536E06
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 20:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF75536E0C
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 20:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239335AbiE1SJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 14:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
+        id S230361AbiE1SUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 14:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236088AbiE1SJJ (ORCPT
+        with ESMTP id S230304AbiE1SUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 14:09:09 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F743DF1B
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 11:09:08 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id m20so13983173ejj.10
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 11:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iGqp3sqIQ6D1oqU2b3UQ+JQ14av/DX22LG0p5NM1mUo=;
-        b=Px8PhLWYRiqNg8y87VlDUDsLJH2RoVnLN8Jl2LVu1LymXQyB5v2VGxblVmbq7n6ao8
-         VU3hqglYO5WBsoT19tAqis2S52THyYxULaMlPuhCVc+o+wPTrAjTjNWJDkwjJ3dtGVFj
-         8QZXFAV7pfp7xwqlA1vAGNq2rUWHaa1b3lzak=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iGqp3sqIQ6D1oqU2b3UQ+JQ14av/DX22LG0p5NM1mUo=;
-        b=dgmGnvXp8UKEUqFgvXP9OLpaFTiv9KySwhe+IQydHT7qClowgumW8tSGgZxZeIDw58
-         eQSRk7XFn6+1ltWXHxgjWy8pPD28WHanObi+85yxsTaw3WfsFAc0Zow5Rw2BF+HTNboZ
-         I0lB4UeazDkiSOoieTxbYT98wXWMxaYqRWPpRGn3sV2anNoNZjImGdLFsYU9rvvD6l7f
-         v8gq7G2pLeiLjQNCZpI0fPspNZKMcNlSyb0onT82+vljoazsLPSptLtaeM3qG2XS0ZdB
-         2RgF0E/bz4N0RXQEjZHe3eMfZN5G+SQy+IqzSSrLXPLQWDsBzQ+0yzN6dJsp/FDmcOJG
-         v+0A==
-X-Gm-Message-State: AOAM5338XyabSYcJPYYEwlj/otcWAjgmeC1pfZ0b188nsAL6Whqih3jr
-        7FP6FfU/0Q3BFVDmgyqlMt0u3qoRCLhZPVbg
-X-Google-Smtp-Source: ABdhPJzeIkUdjftI/xLAEArhN6iWXE8iqufD24H+DW7vCtRBC6Im/7Ijuv83TeX8apYnYYuHTOouPg==
-X-Received: by 2002:a17:907:a426:b0:6ff:6c9f:7a3a with SMTP id sg38-20020a170907a42600b006ff6c9f7a3amr69120ejc.316.1653761346692;
-        Sat, 28 May 2022 11:09:06 -0700 (PDT)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id q9-20020a50cc89000000b0042ac2705444sm3809080edi.58.2022.05.28.11.09.05
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 28 May 2022 11:09:05 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id u3so9714289wrg.3
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 11:09:05 -0700 (PDT)
-X-Received: by 2002:a05:6000:16c4:b0:20f:cd5d:4797 with SMTP id
- h4-20020a05600016c400b0020fcd5d4797mr28588153wrf.193.1653761344659; Sat, 28
- May 2022 11:09:04 -0700 (PDT)
+        Sat, 28 May 2022 14:20:46 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1AF14D32;
+        Sat, 28 May 2022 11:20:45 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id B53455C00EE;
+        Sat, 28 May 2022 14:20:41 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 28 May 2022 14:20:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1653762041; x=
+        1653848441; bh=luRhvMmkAZ3heLTKp44XjFRoRWvALbzVkpsaVWW0WBc=; b=E
+        5iDtypbKtVDe5r3eWckch83M57aK+Y0XRWBzdLcsP2ZiCxy/X9w3Ps2rZndODFDN
+        KUbTYbHU1L0ZRy3D3hwXwxwz10eNuG8gc7u7qKI7EgWef71YwtZePgihLfzcUvWK
+        9kkTqsM9sopM5uMY/YSQdcF40i/esBc/OEyW72PoQKpyEqvJQe7QWboUV/2L6mcp
+        8ILa8wrQIdHX0jIz4HTN35GsFGfHBxEebCyizCjPRiB2vQbvY+wBugRgwzwmlVrJ
+        fiBVPSAKRvG3C+1dFbc5eNDxw9WYXokDfdCBgS7vPYNpg+p72ZX0/YmPciLbQKHH
+        Na5mVZUPHmZIiPocLC06A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1653762041; x=
+        1653848441; bh=luRhvMmkAZ3heLTKp44XjFRoRWvALbzVkpsaVWW0WBc=; b=m
+        0gce0H/6QsFcIrVi+wcXSbQJaZlN25jZmnfConeEKvrOYMpHv182lvI0UVjJLiyr
+        IV6oO5cqB208z8e2VW8rmCf5XZkQGrgSqnHTY72HtyvLdch6iKlAM6z47l9pzLzv
+        wteSRmD7E5N5dapoEzIrrtVnO0rqSnsdgfAqzvBxg5DYNQmLT/xCRKxopCswKFW1
+        i3mycFDTmhDc23v0PfduPJkjM/ol2vIOm9EO5S+IbqorfFgUlxTprQ2cSaPYYPYa
+        In2q4G/FsQ8fPk3kmozxPVT/HjRG1chtYPjPDXxT6CCZV4GeWP/TEV5rG0y4sZve
+        SsMv+fRCi/TYy/TmPTkOA==
+X-ME-Sender: <xms:-WeSYudHxMpB-OWYfo4m7pzjTjSGkzm7ZYqHQCHJWOFJXf5TmYrN-w>
+    <xme:-WeSYoNDFpGeETBn-EMrYeOKPF6bd90ZiNfzTrA-981wajDBx0oDpexkI_j8LSJ6x
+    J0YNpYMFqPsjBzAUA>
+X-ME-Received: <xmr:-WeSYvjIRpX6wzNDD9gyPpuHwaGSFAQxsjJvUewbRXI9ghCklPVNHc5DuNYfbzjFlThkMDJx8A7hk2V88CS3e2CZeCdn-kF1NF1CD9NkufVIK1A3NSe7mRcZNg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkedugdduvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeelteejffdvgeehkedtkeevueeuteffteffhedufeeujedvudef
+    udetieeijeevleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhl
+    rghnugdrohhrgh
+X-ME-Proxy: <xmx:-WeSYr_NNcF-Ouyk19IQgaGr-4r_7ZhRPLnldMbxSQig8LKtHGFNyQ>
+    <xmx:-WeSYqv4GSXQs4zMODgTX12YYAH4JPPRW3ffmt22DPWgoHZEJLi2gQ>
+    <xmx:-WeSYiEfAyo4abKr3Jwa3hw1Vl3efBLZ_wj0TNFLM2VU9ucgDs5QeQ>
+    <xmx:-WeSYllbt7-Ty2lckJi7VgEHsQlre8vxsEC20_KEUjITkR2t9LesUA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 28 May 2022 14:20:40 -0400 (EDT)
+Subject: Re: [PATCH v21 4/4] ARM: dts: imx7d-remarkable2: Enable lcdif
+To:     Alistair Francis <alistair@alistair23.me>, lgirdwood@gmail.com,
+        lee.jones@linaro.org, broonie@kernel.org, robh+dt@kernel.org,
+        kernel@pengutronix.de
+Cc:     s.hauer@pengutronix.de, alistair23@gmail.com,
+        linux-arm-kernel@lists.infradead.org, andreas@kemnade.info,
+        amitk@kernel.org, shawnguo@kernel.org,
+        linux-kernel@vger.kernel.org, geert@linux-m68k.org,
+        linux-hwmon@vger.kernel.org, linux-imx@nxp.com, linux@roeck-us.net,
+        rui.zhang@intel.com, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220525115554.430971-1-alistair@alistair23.me>
+ <20220525115554.430971-5-alistair@alistair23.me>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <ea5e1659-5842-6685-52eb-f77ac4247a2d@sholland.org>
+Date:   Sat, 28 May 2022 13:20:39 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-References: <YpCUzStDnSgQLNFN@debian> <CAHk-=wg0uGAX5DYZq+tY2KeUAR8DtR91YE1y9CkPMKkKOyE4jg@mail.gmail.com>
- <CADVatmNGPbSdRNQuwJEWAaPtqb3vBYRjvsuBpoRUnhEHj=X5GQ@mail.gmail.com>
- <CAHk-=wisQd8yiPX=SsK3eFiakKo713hq4SyqPWsJ-oyAmLFefQ@mail.gmail.com>
- <YpIR67FMtTGCwARZ@debian> <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
-In-Reply-To: <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 28 May 2022 11:08:48 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com>
-Message-ID: <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com>
-Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
- block count and size helpers")
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>
-Cc:     Jani Nikula <jani.nikula@intel.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        SoC Team <soc@kernel.org>
-Content-Type: multipart/mixed; boundary="0000000000007e28af05e01651d2"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220525115554.430971-5-alistair@alistair23.me>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000007e28af05e01651d2
-Content-Type: text/plain; charset="UTF-8"
+Hi Alistair,
 
-On Sat, May 28, 2022 at 10:40 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> So digging a bit deeper - since I have am arm compiler after all - I
-> note that 'sizeof(detailed_timings)' is 88.
+On 5/25/22 6:55 AM, Alistair Francis wrote:
+> Connect the dispaly on the reMarkable2.
+> 
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> ---
+>  arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> index 99ac0d242936..03a4029e1e57 100644
+> --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
+> +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> @@ -68,6 +68,16 @@ reg_digitizer: regulator-digitizer {
+>  		startup-delay-us = <100000>; /* 100 ms */
+>  	};
+>  
+> +	reg_sdoe: regulator-sdoe {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "SDOE";
+> +		pinctrl-names = "default", "sleep";
+> +		pinctrl-0 = <&pinctrl_sdoe_reg>;
+> +		pinctrl-1 = <&pinctrl_sdoe_reg>;
+> +		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +	};
+> +
+>  	wifi_pwrseq: wifi_pwrseq {
+>  		compatible = "mmc-pwrseq-simple";
+>  		pinctrl-names = "default";
+> @@ -76,6 +86,16 @@ wifi_pwrseq: wifi_pwrseq {
+>  		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
+>  		clock-names = "ext_clock";
+>  	};
+> +
+> +	panel {
+> +		compatible = "eink,vb3300-kca";
+> +
+> +		port {
+> +			panel_in: endpoint {
+> +				remote-endpoint = <&display_out>;
+> +			};
+> +		};
+> +	};
 
-Hmm.
+From the discussion at [1], this is not safe to merge. It exposes an
+electrophoretic display to fbcon/userspace as if it was an LCD, which it very
+much is not. Trying to write RGB pixel data to the panel could damage it.
 
-sizeof() both
+So at the very least before hooking this up, the LCD controller has to know that
+the EPD needs special handling and that it cannot accept RGB.
 
-    detailed_timings[0].data.other_data.data.range.formula.gtf2
+That doesn't necessarily mean there is a problem with the content of this patch
+-- the special handling may all be taken care of based on the compatible string
+-- but I think it's a really bad idea to merge this with how "eink,vb3300-kca"
+is currently represented in panel-simple.
 
-and
+Regards,
+Samuel
 
-    detailed_timings[0].data.other_data.data.range.formula.cvt
+[1]: https://lore.kernel.org/lkml/Yo5kz%2F9cSd6ewC5f@phenom.ffwll.local/
 
-is 7.
+>  };
+>  
+>  &clks {
+> @@ -132,6 +152,20 @@ reg_epdpmic: vcom {
+>  	};
+>  };
+>  
+> +&lcdif {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_lcdif>;
+> +	lcd-supply = <&reg_epdpmic>;
+> +	lcd2-supply = <&reg_sdoe>;
+> +	status = "okay";
+> +
+> +	port {
+> +		display_out: endpoint {
+> +			remote-endpoint = <&panel_in>;
+> +		};
+> +	};
+> +};
+> +
+>  &snvs_pwrkey {
+>  	status = "okay";
+>  };
+> @@ -246,6 +280,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
+>  		>;
+>  	};
+>  
+> +	pinctrl_lcdif: lcdifgrp {
+> +		fsl,pins = <
+> +			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
+> +			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
+> +			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
+> +			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
+> +			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
+> +			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
+> +			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
+> +			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
+> +			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
+> +			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
+> +			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
+> +			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
+> +			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
+> +			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
+> +			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
+> +			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
+> +
+> +			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
+> +			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
+> +			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
+> +			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
+> +			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
+> +
+> +			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
+> +			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
+> +			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
+> +			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
+> +			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
+> +			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
+> +		>;
+> +	};
+> +
+> +	pinctrl_sdoe_reg: sdoereggrp {
+> +		fsl,pins = <
+> +			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
+> +		>;
+> +	};
+> +
+>  	pinctrl_uart1: uart1grp {
+>  		fsl,pins = <
+>  			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
+> 
 
-But the *union* of those things is
-
-    detailed_timings[0].data.other_data.data.range.formula
-
-and its size is 8 (despite having an alignment of just 1).
-
-The attached patch would seem to fix it for me.
-
-Not very much tested, and I have no idea what it is that triggers this
-only on spear3xx_defconfig.
-
-Some ARM ABI issue that is triggered by some very particular ARM
-compiler flag enabled by that config?
-
-Adding some ARM (and SPEAR, and SoC) people in case they have any idea.
-
-This smells like a compiler bug triggered by "there's a 16-bit member
-field in that gtf2 structure, and despite it being packed and aligned
-to 1, we somehow still align the size to 2".
-
-I dunno. But marking those unions packed too doesn't seem wrong, and
-does seem to fix it.
-
-                  Linus
-
---0000000000007e28af05e01651d2
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l3q6oh0p0>
-X-Attachment-Id: f_l3q6oh0p0
-
-IGluY2x1ZGUvZHJtL2RybV9lZGlkLmggfCA2ICsrKy0tLQogMSBmaWxlIGNoYW5nZWQsIDMgaW5z
-ZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9pbmNsdWRlL2RybS9kcm1f
-ZWRpZC5oIGIvaW5jbHVkZS9kcm0vZHJtX2VkaWQuaAppbmRleCBjMzIwNGE1OGZiMDkuLmIyNzU2
-NzUzMzcwYiAxMDA2NDQKLS0tIGEvaW5jbHVkZS9kcm0vZHJtX2VkaWQuaAorKysgYi9pbmNsdWRl
-L2RybS9kcm1fZWRpZC5oCkBAIC0xMjEsNyArMTIxLDcgQEAgc3RydWN0IGRldGFpbGVkX2RhdGFf
-bW9uaXRvcl9yYW5nZSB7CiAJCQl1OCBzdXBwb3J0ZWRfc2NhbGluZ3M7CiAJCQl1OCBwcmVmZXJy
-ZWRfcmVmcmVzaDsKIAkJfSBfX2F0dHJpYnV0ZV9fKChwYWNrZWQpKSBjdnQ7Ci0JfSBmb3JtdWxh
-OworCX0gX19hdHRyaWJ1dGVfXygocGFja2VkKSkgZm9ybXVsYTsKIH0gX19hdHRyaWJ1dGVfXygo
-cGFja2VkKSk7CiAKIHN0cnVjdCBkZXRhaWxlZF9kYXRhX3dwaW5kZXggewpAQCAtMTU0LDcgKzE1
-NCw3IEBAIHN0cnVjdCBkZXRhaWxlZF9ub25fcGl4ZWwgewogCQlzdHJ1Y3QgZGV0YWlsZWRfZGF0
-YV93cGluZGV4IGNvbG9yOwogCQlzdHJ1Y3Qgc3RkX3RpbWluZyB0aW1pbmdzWzZdOwogCQlzdHJ1
-Y3QgY3Z0X3RpbWluZyBjdnRbNF07Ci0JfSBkYXRhOworCX0gX19hdHRyaWJ1dGVfXygocGFja2Vk
-KSkgZGF0YTsKIH0gX19hdHRyaWJ1dGVfXygocGFja2VkKSk7CiAKICNkZWZpbmUgRURJRF9ERVRB
-SUxfRVNUX1RJTUlOR1MgMHhmNwpAQCAtMTcyLDcgKzE3Miw3IEBAIHN0cnVjdCBkZXRhaWxlZF90
-aW1pbmcgewogCXVuaW9uIHsKIAkJc3RydWN0IGRldGFpbGVkX3BpeGVsX3RpbWluZyBwaXhlbF9k
-YXRhOwogCQlzdHJ1Y3QgZGV0YWlsZWRfbm9uX3BpeGVsIG90aGVyX2RhdGE7Ci0JfSBkYXRhOwor
-CX0gX19hdHRyaWJ1dGVfXygocGFja2VkKSkgZGF0YTsKIH0gX19hdHRyaWJ1dGVfXygocGFja2Vk
-KSk7CiAKICNkZWZpbmUgRFJNX0VESURfSU5QVVRfU0VSUkFUSU9OX1ZTWU5DICgxIDw8IDApCg==
---0000000000007e28af05e01651d2--

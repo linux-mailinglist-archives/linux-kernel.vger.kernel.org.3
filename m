@@ -2,155 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9D4536C42
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 12:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165AF536C39
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 12:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353702AbiE1KK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 06:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35534 "EHLO
+        id S233665AbiE1KGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 06:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbiE1KK4 (ORCPT
+        with ESMTP id S233631AbiE1KG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 06:10:56 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE624FF3;
-        Sat, 28 May 2022 03:10:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653732654; x=1685268654;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=rvv/1ikIsTltk1vVwBcc2RZ1C1BbsqEGEPXUWzW4f3w=;
-  b=Z0J9HqPhH17NjYRyv8t+Mw5R9zw/0ufAtpQ3VNlZIjli7tQWNgYgW2Bd
-   enL5cSu+X9C/PFS0n4tXa9LSsG49gH6FTziRUmIZMEwKcX7ZmtYHc4Hce
-   N5A82LCJLXINXmryXD7A6/3U1cbbJveAYrvIScp+VWWXMulf+uC3YmQh+
-   xclAwdhYLl2bxIUcmWemv1tGffN8f3Z9LEkv15+ryyXCoAPgSx2XDKYQY
-   0i9CnpBRpl04Pma7tc9Q4qtJh5EuiUR+sFjL8zWLgpzAt5XDbjGdEy06M
-   o2o4bBQ3NO8hv3lTJ/O4mQfGCDd+QGptgv4itWMOektU9cq0XXbPLbj6c
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="300005768"
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="300005768"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 03:10:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="719230172"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by fmsmga001.fm.intel.com with ESMTP; 28 May 2022 03:10:52 -0700
-Date:   Sat, 28 May 2022 18:03:09 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     tien.sung.ang@intel.com, mdf@kernel.org, hao.wu@intel.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: altera-cvp: Truncated bitstream error support
-Message-ID: <20220528100309.GD175008@yilunxu-OptiPlex-7050>
-References: <20220518064844.2694651-1-tien.sung.ang@intel.com>
- <3911c8c7-da6d-e6f2-c747-3b601d9cdacc@redhat.com>
+        Sat, 28 May 2022 06:06:28 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC40338AB
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 03:06:25 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.191.102])
+        by smtp.orange.fr with ESMTPA
+        id utKwngSjFZDzUutKwnSoQU; Sat, 28 May 2022 12:06:23 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 28 May 2022 12:06:23 +0200
+X-ME-IP: 90.11.191.102
+Message-ID: <ef7cd76e-b4bf-359d-08eb-848764de75f7@wanadoo.fr>
+Date:   Sat, 28 May 2022 12:06:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] dmaengine: ti: Fix a potential under memory allocation
+ issue in edma_setup_from_hw()
+Content-Language: en-US
+To:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>,
+        dan.carpenter@oracle.com, Vinod Koul <vkoul@kernel.org>,
+        Joel Fernandes <joelf@ti.com>, Sekhar Nori <nsekhar@ti.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        dmaengine@vger.kernel.org
+References: <8c95c485be294e64457606089a2a56e68e2ebd1a.1653153959.git.christophe.jaillet@wanadoo.fr>
+ <6e750770-fcda-d157-21d1-872a611c3bf2@gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <6e750770-fcda-d157-21d1-872a611c3bf2@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3911c8c7-da6d-e6f2-c747-3b601d9cdacc@redhat.com>
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 01:08:31PM -0700, Tom Rix wrote:
+Le 28/05/2022 à 11:33, Péter Ujfalusi a écrit :
 > 
-> On 5/17/22 11:48 PM, tien.sung.ang@intel.com wrote:
-> > From: Ang Tien Sung <tien.sung.ang@intel.com>
-> > 
-> > To support the error handling of a truncated bitstream sent.
-> > The current AIB CvP firmware is not capable of handling a
-> > data stream smaller than 4096bytes. The firmware's limitation
-> > causes a hung-up as it's DMA engine waits forever for the
-> > completion of the instructed 4096bytes.
-> > To resolve this design limitation, both firmware and CvP
-> > driver made several changes. At the CvP driver, we just
-> > have to ensure that anything lesser than 4096bytes are
-> > padded with extra bytes. The CvP will then, initiate the
-> > tear-down by clearing the START_XFER and CVP_CONFIG bits.
-> > We should also check for CVP_ERROR during the CvP completion.
-> > A send_buf which is always 4096bytes is used to copy the
-> > data during every transaction.
-> > 
-> > Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
-> > ---
-> >   drivers/fpga/altera-cvp.c | 24 +++++++++++++++++++-----
-> >   1 file changed, 19 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-> > index 4ffb9da537d8..80edcfb5e5fc 100644
-> > --- a/drivers/fpga/altera-cvp.c
-> > +++ b/drivers/fpga/altera-cvp.c
-> > @@ -81,6 +81,7 @@ struct altera_cvp_conf {
-> >   	u8			numclks;
-> >   	u32			sent_packets;
-> >   	u32			vsec_offset;
-> > +	u8			*send_buf;
 > 
-> Why is it necessary to hold� the send_buf in this structure ?
+> On 21/05/2022 20:26, Christophe JAILLET wrote:
+>> If the 'queue_priority_mapping' is not provided, we need to allocate the
+>> correct amount of memory. Each entry takes 2 s8, so actually less memory
+>> than needed is allocated.
+>>
+>> Update the size of each entry when the memory is devm_kcalloc'ed.
+>>
+>> Fixes: 6d10c3950bf4 ("ARM: edma: Get IP configuration from HW (number of channels, tc, etc)")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> Note that the devm_kcalloc() in edma_xbar_event_map() looks also spurious.
+>> However, this looks fine to me because of the 'nelm >>= 1;' before the
+>> 'for' loop.
 > 
-> If it is used only in *_write, could it alloc/freed there ?
-> 
-> Because the write happens rarely, my preference is to alloc/free in
-> *_write().
+> This has been deprecated ever since we have moved to dma router to
+> handle the xbar for various TI platforms, but by the looks it kida looks
+> bogus in a same way.
 
-Is it better alloc in write_init()?
+This one is correct, IIUC.
 
-Thanks,
-Yilun
+There is an extra ">> 1" before the loop. (see [1]).
+
+CJ
+
+[1]: 
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/dma/ti/edma.c#n2173
 
 > 
-> >   	const struct cvp_priv	*priv;
-> >   };
-> > @@ -453,7 +454,11 @@ static int altera_cvp_write(struct fpga_manager *mgr, const char *buf,
-> >   		}
-> >   		len = min(conf->priv->block_size, remaining);
-> > -		altera_cvp_send_block(conf, data, len);
-> > +		/* Copy the requested host data into the transmit buffer */
-> > +
-> > +		memcpy(conf->send_buf, data, len);
-> Is a memset needed for a short buffer ?
-> > +		altera_cvp_send_block(conf, (const u32 *)conf->send_buf,
-> > +		conf->priv->block_size);
-> >   		data += len / sizeof(u32);
-> >   		done += len;
-> >   		remaining -= len;
-> > @@ -492,10 +497,13 @@ static int altera_cvp_write_complete(struct fpga_manager *mgr,
-> >   	if (ret)
-> >   		return ret;
-> > -	/* STEP 16 - check CVP_CONFIG_ERROR_LATCHED bit */
-> > -	altera_read_config_dword(conf, VSE_UNCOR_ERR_STATUS, &val);
-> > -	if (val & VSE_UNCOR_ERR_CVP_CFG_ERR) {
-> > -		dev_err(&mgr->dev, "detected CVP_CONFIG_ERROR_LATCHED!\n");
-> > +	/*
-> > +	 * STEP 16 - If bitstream error (truncated/miss-matched),
-> > +	 * we shall exit here.
-> > +	 */
-> > +	ret = altera_read_config_dword(conf, VSE_CVP_STATUS, &val);
-> Should this be STEP 17 ? the old 16 checked something else.
+>> ---
+>>   drivers/dma/ti/edma.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
+>> index 3ea8ef7f57df..f313e2cf542c 100644
+>> --- a/drivers/dma/ti/edma.c
+>> +++ b/drivers/dma/ti/edma.c
+>> @@ -2121,7 +2121,7 @@ static int edma_setup_from_hw(struct device *dev, struct edma_soc_info *pdata,
+>>   	 * priority. So Q0 is the highest priority queue and the last queue has
+>>   	 * the lowest priority.
+>>   	 */
+>> -	queue_priority_map = devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8),
+>> +	queue_priority_map = devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8) * 2,
+>>   					  GFP_KERNEL);
+>>   	if (!queue_priority_map)
+>>   		return -ENOMEM;
 > 
-> Tom
-> 
-> > +	if (ret || (val & VSE_CVP_STATUS_CFG_ERR)) {
-> > +		dev_err(&mgr->dev, "CVP_CONFIG_ERROR!\n");
-> >   		return -EPROTO;
-> >   	}
-> > @@ -661,6 +669,12 @@ static int altera_cvp_probe(struct pci_dev *pdev,
-> >   	pci_set_drvdata(pdev, mgr);
-> > +	/* Allocate the 4096 block size transmit buffer */
-> > +	conf->send_buf = devm_kzalloc(&pdev->dev, conf->priv->block_size, GFP_KERNEL);
-> > +	if (!conf->send_buf) {
-> > +		ret = -ENOMEM;
-> > +		goto err_unmap;
-> > +	}
-> >   	return 0;
-> >   err_unmap:
+

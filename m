@@ -2,54 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605E0536A1D
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 04:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5047536A06
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 04:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352310AbiE1CJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 22:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S1354799AbiE1B7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 21:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiE1CJm (ORCPT
+        with ESMTP id S1352313AbiE1B7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 22:09:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B24662BD4;
-        Fri, 27 May 2022 19:09:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2F1661D05;
-        Sat, 28 May 2022 02:09:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05063C385A9;
-        Sat, 28 May 2022 02:09:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653703781;
-        bh=QFhKffhE6zS5J/TspsJzWYbTcRtl1hy3XISW5o2FiVc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YqEVxIhyg+6+nJ4AWM8iYyXRrEHDWkkdt8Mul5bsR6uJMVt0WQrC1FlyWtfKphO8X
-         7GRq1DtnCdl3ePZOsYlQHNS4xbWBs5hKyZ8DCZm/aY6sT2TTvZURpvA+Sz/3f0xkgs
-         ilKTbv/48dchq0D7rMzGi9Bifu7jsgi64pVvnXpEmg1G0bkdnKRS0f3eysvBe0OdzL
-         eyer0j9DMFhuVU2ABLE5pfi5tJTY4/tEZ5a7nH0wiiJK5dcy9QC3bGYVBiOES0qojH
-         hfybmw7C+89yFjRZS/3DHJeYt0Dtri9uEHzCX7aUJ4nG1IXnFT8avKmyEjl8XGwahP
-         n54wkLl/rmJ5g==
-Date:   Fri, 27 May 2022 19:09:39 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Ronak Doshi <doshir@vmware.com>
-Cc:     <netdev@vger.kernel.org>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 0/8] vmxnet3: upgrade to version 7
-Message-ID: <20220527190939.1b85a131@kernel.org>
-In-Reply-To: <20220528011758.7024-1-doshir@vmware.com>
-References: <20220528011758.7024-1-doshir@vmware.com>
+        Fri, 27 May 2022 21:59:09 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF35C5B3CA;
+        Fri, 27 May 2022 18:59:07 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L94Yl6WH3z1JCBP;
+        Sat, 28 May 2022 09:57:31 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 28 May 2022 09:59:05 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 28 May
+ 2022 09:59:04 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <josef@toxicpanda.com>, <axboe@kernel.dk>, <ming.lei@redhat.com>,
+        <yukuai3@huawei.com>
+CC:     <linux-block@vger.kernel.org>, <nbd@other.debian.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+Subject: [PATCH -next v4 0/6] nbd: bugfix and cleanup patches
+Date:   Sat, 28 May 2022 10:12:29 +0800
+Message-ID: <20220528021235.2120995-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,19 +51,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 May 2022 18:17:50 -0700 Ronak Doshi wrote:
-> vmxnet3 emulation has recently added several new features including
-> support for uniform passthrough(UPT). To make UPT work vmxnet3 has
-> to be enhanced as per the new specification. This patch series
-> extends the vmxnet3 driver to leverage these new features.
+Changes in v4
+ - in patch 3, return from nbd_handle_reply() with flag cleared if
+ request is ready to complete.
+ - add reviewed-by tag for patch 1-2, 4-6.
+Changes in v3:
+ - rewrap to 80 columns where possible in patch 6
+Changes in v2:
+ - in patch 3, instead of clear and then reset the flag if rq is not
+ completed, test first and clear if rq is going to complete.
 
-# Form letter - net-next is closed
+path 1-2 fix races between nbd setup and module removal.
+patch 3 fix io can't be completed in some error path.
+patch 4 fix io hung when disconnecting failed.
+patch 5 fix sysfs warning about duplicate creation.
+patch 6 use pr_err to output error message.
 
-We have already sent the networking pull request for 5.19
-and therefore net-next is closed for new drivers, features,
-code refactoring and optimizations. We are currently accepting
-bug fixes only.
+Previous versions:
+v1: https://lore.kernel.org/all/20220426130746.885140-1-yukuai3@huawei.com/
+v2: https://lore.kernel.org/all/20220518122618.1702997-1-yukuai3@huawei.com/
+v3: https://lore.kernel.org/all/20220521073749.3146892-1-yukuai3@huawei.com/
 
-Please repost when net-next reopens after 5.19-rc1 is cut.
+Yu Kuai (5):
+  nbd: call genl_unregister_family() first in nbd_cleanup()
+  nbd: fix race between nbd_alloc_config() and module removal
+  nbd: don't clear 'NBD_CMD_INFLIGHT' flag if request is not completed
+  nbd: fix io hung while disconnecting device
+  nbd: use pr_err to output error message
 
-RFC patches sent for review only are obviously welcome at any time.
+Zhang Wensheng (1):
+  nbd: fix possible overflow on 'first_minor' in nbd_dev_add()
+
+ drivers/block/nbd.c | 109 +++++++++++++++++++++++++-------------------
+ 1 file changed, 63 insertions(+), 46 deletions(-)
+
+-- 
+2.31.1
+

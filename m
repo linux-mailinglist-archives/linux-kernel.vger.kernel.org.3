@@ -2,121 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E0853698E
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 03:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D12536993
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 03:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351761AbiE1BEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 21:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
+        id S1355328AbiE1BGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 21:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241664AbiE1BEi (ORCPT
+        with ESMTP id S232804AbiE1BGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 21:04:38 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D62764BCB
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 18:04:35 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id m20so11447708ejj.10
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 18:04:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/a8ecIYHg7QlH35fGGSVeTBLl6RR/RV9nck1HQAe+N8=;
-        b=SsVTwOnhWJT6nMnX54zeDkwThE54QCBhjL5oOAtESV+ElK1rhuZi4yfjiIkJid5QVn
-         oPRMlhPY9Ha+TivafeKHuoBSIFj52kqDM9s2LYRerxU1+rtPdhzC1Z11bpZ1PJ4rVfpk
-         f8tVQQp7rCAJPhDmpX2a9i4lP3pbTSoBarH80=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/a8ecIYHg7QlH35fGGSVeTBLl6RR/RV9nck1HQAe+N8=;
-        b=AV3RG8zNCUPBOT8vVnO32q6SsRLuGzJ5RykqK6QVxwKKiOvpBQ0gYWbQk8KIUdMehx
-         U5/c1+W+ueQDR53ifcpPEiOnxedpbLk2mFGfi/yKznFzIXr+jKGCbzK/YJoNMTiUCTe7
-         kaaSFC2hUJqjBQ4RwZWYy0DgALfWkeqkQFbYrkX/1uNyyguq1iwaRiF71KnebiM+fLLe
-         TNGqcI4PdZPzAs4wqDYESN3YMzomXT1uxOTNjLXqlqL3CW4J+P20tSeqZLev38lnvMUE
-         zeAzlmD991OBjjYKWW5tJ4SSsrg6nHNSX3iHAJIDLXTSf41lp2f10DopTC2g1cfACw6Q
-         4H/g==
-X-Gm-Message-State: AOAM532j18ZhtVrhxjN4/DJn1RPI0hWlWdskNMZ75nOaO0ArKon53A4T
-        QbkAG5t7hHknd7eLojneV74z0Wxk/bdGw++C
-X-Google-Smtp-Source: ABdhPJzBuhjq6j2tWA8FK4FE16qnmlKtI+rE1rpS1qD0MUavrSL6cyjaLu769fhtYamicaE6uUAZDA==
-X-Received: by 2002:a17:906:5d04:b0:6db:7262:570e with SMTP id g4-20020a1709065d0400b006db7262570emr39971194ejt.8.1653699872848;
-        Fri, 27 May 2022 18:04:32 -0700 (PDT)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
-        by smtp.gmail.com with ESMTPSA id j12-20020a1709062a0c00b006fee28d459csm1910905eje.224.2022.05.27.18.04.31
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 May 2022 18:04:31 -0700 (PDT)
-Received: by mail-wm1-f44.google.com with SMTP id o29-20020a05600c511d00b00397697f172dso4263462wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 18:04:31 -0700 (PDT)
-X-Received: by 2002:a7b:c4ca:0:b0:397:3bac:9b2a with SMTP id
- g10-20020a7bc4ca000000b003973bac9b2amr9089329wmk.154.1653699870656; Fri, 27
- May 2022 18:04:30 -0700 (PDT)
+        Fri, 27 May 2022 21:06:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6826AA64;
+        Fri, 27 May 2022 18:06:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 931BBB82649;
+        Sat, 28 May 2022 01:06:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7031C385A9;
+        Sat, 28 May 2022 01:06:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653699970;
+        bh=18BQtAI7UY3dFMkftgBm1ccQswI/KXvPUHOikSPmrb4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o59FWhTB5aBKGyxxA4jC5+5FM/l7Wa+LG5ROq7ni3XzpOQv4CAYmYgaJUBgR76roS
+         Mn6wgCjB1l7mUM2Y4f8gsxwspMHJfvbF4DeWAPSzU2oeSKHIjwW9aPuY6BsqxGpkxB
+         SKgEqBPgY9ZR6lByCGvf9BlO8Bym4BQGaIAm2DUXqvyrw/GjXR9NEKA6v3R+PM+OW0
+         tG+vg4bsYOvmnE7ZrRlYNNOr1g4RILeHwGqr98U/xuJ8UwyT91o1gev6PNVtKgmX+L
+         PQYUxInaZiIguhACZBoJtudnzRZUzYCCpSAsBo0SLhv0OWCz6e3Vm33wBkq3L/ZixK
+         rGTyihN4QnT9A==
+Date:   Fri, 27 May 2022 18:06:08 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [PATCH] f2fs: add sysfs entry to avoid FUA
+Message-ID: <YpF1gPrQY3UFsgwC@google.com>
+References: <20220527205955.3251982-1-jaegeuk@kernel.org>
+ <YpFDw3mQjN1LBd2j@gmail.com>
 MIME-Version: 1.0
-References: <YpCUzStDnSgQLNFN@debian> <CAHk-=wg0uGAX5DYZq+tY2KeUAR8DtR91YE1y9CkPMKkKOyE4jg@mail.gmail.com>
- <CADVatmNGPbSdRNQuwJEWAaPtqb3vBYRjvsuBpoRUnhEHj=X5GQ@mail.gmail.com>
-In-Reply-To: <CADVatmNGPbSdRNQuwJEWAaPtqb3vBYRjvsuBpoRUnhEHj=X5GQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 27 May 2022 18:04:14 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wisQd8yiPX=SsK3eFiakKo713hq4SyqPWsJ-oyAmLFefQ@mail.gmail.com>
-Message-ID: <CAHk-=wisQd8yiPX=SsK3eFiakKo713hq4SyqPWsJ-oyAmLFefQ@mail.gmail.com>
-Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
- block count and size helpers")
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Jani Nikula <jani.nikula@intel.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YpFDw3mQjN1LBd2j@gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 4:41 PM Sudip Mukherjee
-<sudipm.mukherjee@gmail.com> wrote:
->
-> I just tested with various values, sizeof(*edid) is 144 bytes at that place.
+On 05/27, Eric Biggers wrote:
+> [+Cc linux-block for FUA, and linux-xfs for iomap]
+> 
+> On Fri, May 27, 2022 at 01:59:55PM -0700, Jaegeuk Kim wrote:
+> > Some UFS storage gives slower performance on FUA than write+cache_flush.
+> > Let's give a way to manage it.
+> > 
+> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> 
+> Should the driver even be saying that it has FUA support in this case?  If the
+> driver didn't claim FUA support, that would also solve this problem.
 
-Hmm. What compiler do you have? Because it seems very broken.
+I think there's still some benefit to use FUA such as small chunk writes
+for checkpoint.
 
-You don't actually have to try with various sizes, you could have just
-done something like
+> 
+> > ---
+> >  Documentation/ABI/testing/sysfs-fs-f2fs | 7 +++++++
+> >  fs/f2fs/data.c                          | 2 ++
+> >  fs/f2fs/f2fs.h                          | 1 +
+> >  fs/f2fs/sysfs.c                         | 2 ++
+> >  4 files changed, 12 insertions(+)
+> > 
+> > diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
+> > index 9b583dd0298b..cd96b09d7182 100644
+> > --- a/Documentation/ABI/testing/sysfs-fs-f2fs
+> > +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
+> > @@ -434,6 +434,7 @@ Date:		April 2020
+> >  Contact:	"Daeho Jeong" <daehojeong@google.com>
+> >  Description:	Give a way to change iostat_period time. 3secs by default.
+> >  		The new iostat trace gives stats gap given the period.
+> > +
+> >  What:		/sys/fs/f2fs/<disk>/max_io_bytes
+> >  Date:		December 2020
+> >  Contact:	"Jaegeuk Kim" <jaegeuk@kernel.org>
+> > @@ -442,6 +443,12 @@ Description:	This gives a control to limit the bio size in f2fs.
+> >  		whereas, if it has a certain bytes value, f2fs won't submit a
+> >  		bio larger than that size.
+> >  
+> > +What:		/sys/fs/f2fs/<disk>/no_fua_dio
+> > +Date:		May 2022
+> > +Contact:	"Jaegeuk Kim" <jaegeuk@kernel.org>
+> > +Description:	This gives a signal to iomap, which should not use FUA for
+> > +		direct IOs. Default: 0.
+> 
+> iomap is an implementation detail, so it shouldn't be mentioned in UAPI
+> documentation.  UAPI documentation should describe user-visible behavior only.
 
- int size_of_edid(const struct edid *edid)
- {
-        return sizeof(*edid);
- }
+Ok.
 
-and then "make drivers/gpu/drm/drm_edid.s" to generate assembly and
-see what it looks like (obviously removing the BUG_ON() in order to
-build).
+> 
+> > +
+> >  What:		/sys/fs/f2fs/<disk>/stat/sb_status
+> >  Date:		December 2020
+> >  Contact:	"Chao Yu" <yuchao0@huawei.com>
+> > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> > index f5f2b7233982..23486486eab2 100644
+> > --- a/fs/f2fs/data.c
+> > +++ b/fs/f2fs/data.c
+> > @@ -4153,6 +4153,8 @@ static int f2fs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
+> >  	if ((inode->i_state & I_DIRTY_DATASYNC) ||
+> >  	    offset + length > i_size_read(inode))
+> >  		iomap->flags |= IOMAP_F_DIRTY;
+> > +	if (F2FS_I_SB(inode)->no_fua_dio)
+> > +		iomap->flags |= IOMAP_F_DIRTY;
+> 
+> This is overloading the IOMAP_F_DIRTY flag to mean something other than dirty.
+> Perhaps this flag needs to be renamed, or a new flag should be added?
 
-That obviously generates code like
+I'm not sure it's acceptable to add another flag for f2fs only.
 
-        movl    $128, %eax
-        ret
+> 
+> > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> > index e10838879538..c2400ea0080b 100644
+> > --- a/fs/f2fs/f2fs.h
+> > +++ b/fs/f2fs/f2fs.h
+> > @@ -1671,6 +1671,7 @@ struct f2fs_sb_info {
+> >  	int dir_level;				/* directory level */
+> >  	int readdir_ra;				/* readahead inode in readdir */
+> >  	u64 max_io_bytes;			/* max io bytes to merge IOs */
+> > +	int no_fua_dio;				/* avoid FUA in DIO */
+> 
+> Make this a bool?
 
-for me, and looking at the definition of that type I really can't see
-how it would ever generate anything else. But it's apparently not even
-close for you.
+Done.
 
-I suspect some of the structs inside of that 'struct edid' end up
-getting aligned, despite the '__attribute__((packed))'. For example,
-'struct est_timings' is supposed to be just 3 bytes, and it's at an
-odd offset too (byte offset 35 in the 'struct edid' if I did the math
-correctly).
+> 
+> > diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+> > index 4c50aedd5144..24d628ca92cc 100644
+> > --- a/fs/f2fs/sysfs.c
+> > +++ b/fs/f2fs/sysfs.c
+> > @@ -771,6 +771,7 @@ F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, iostat_period_ms, iostat_period_ms);
+> >  #endif
+> >  F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, readdir_ra, readdir_ra);
+> >  F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_io_bytes, max_io_bytes);
+> > +F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, no_fua_dio, no_fua_dio);
+> >  F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_pin_file_thresh, gc_pin_file_threshold);
+> >  F2FS_RW_ATTR(F2FS_SBI, f2fs_super_block, extension_list, extension_list);
+> >  #ifdef CONFIG_F2FS_FAULT_INJECTION
+> > @@ -890,6 +891,7 @@ static struct attribute *f2fs_attrs[] = {
+> >  #endif
+> >  	ATTR_LIST(readdir_ra),
+> >  	ATTR_LIST(max_io_bytes),
+> > +	ATTR_LIST(no_fua_dio),
+> 
+> Where is it validated that only valid values (0 or 1) can be written to this
+> file?
 
-But it obviously doesn't happen for me or for most other people, so
-it's something in your setup. Unusual compiler?
+Added.
 
-                  Linus
+> 
+> - Eric

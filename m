@@ -2,172 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8B1536CD3
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 14:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4894F536CD8
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 14:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344856AbiE1MV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 08:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
+        id S1353172AbiE1MXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 08:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235398AbiE1MVZ (ORCPT
+        with ESMTP id S1349860AbiE1MXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 08:21:25 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F0F270;
-        Sat, 28 May 2022 05:21:21 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L9LPQ2zZlz4xZ0;
-        Sat, 28 May 2022 22:21:14 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1653740476;
-        bh=lBeVRIYEnBpfoa1y+dfWc2rNHDYGOWp54VP9xu/zsIc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=kqdN3e2/bjmY0NgH8hlqCZXlQKLXstvIp/Ecl2cJzEWCE8IrnvoulltgeTj0TLBfH
-         DNhpYzOFJ3xIzJQyEjkqEzjnD059iaSweauuPRuK2kG8upubtvXPhnpxqgvFwpFnBa
-         AxUmgW2L8Tpr0tHdNDImNEW+09IBNCws/4ob7cY424GLxEPEQB0/mfGFInXiVoiLWr
-         ZNTeeJStO5Ca1UlqO7wPv4GlgV53YcjFdT2DGvNLbELWzgpGXr5mxVX+jFJ72LZou5
-         tq5kFSkAp6rWyOEtTVDP3s/g8pJcWwKg/ZBlSoQgOpP2y5QcnPzhEEH1IoiVzbWbT3
-         gDMQfJGgqDCzQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     xiujianfeng <xiujianfeng@huawei.com>, benh@kernel.crashing.org,
-        paulus@samba.org, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        tglx@linutronix.de, mark.rutland@arm.com
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH -next, v2] powerpc: add support for syscall stack
- randomization
-In-Reply-To: <e7b0d68b-914d-7283-827c-101988923929@huawei.com>
-References: <20220516073225.112875-1-xiujianfeng@huawei.com>
- <e7b0d68b-914d-7283-827c-101988923929@huawei.com>
-Date:   Sat, 28 May 2022 22:21:13 +1000
-Message-ID: <87sfotlufa.fsf@mpe.ellerman.id.au>
+        Sat, 28 May 2022 08:23:02 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A3018397
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 05:23:01 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id m11so7404443ljc.1
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 05:23:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=aFN3fWTsssRLAu0B0TkS6hjXNu70wXcTJCfGgCdxMfI=;
+        b=gk/aPaJjgEvK8XHbT3hh6AwIpxTr9WgV0T34MOy42+upuAsRukB/Cq3oVkCFvBqST1
+         u8DukBs6oSrNzNbQxSRjI77qDnSlShFp1pJ8xSgsCEMjJjWXALclastAPsh836ysHv0F
+         eUlsze2351aeJOZ10ve7LGIT+e/aRxbx3AxeF2vmzWAKdCc2KyrNtFUBFAqqqRtABtfF
+         adyyQx6e7FXWpPtquA865OyGjy8lqlEmflj14jYlPbi+7dihBaL87Rlz52nGB4qQWpzL
+         rzsstcforL/F/p7eK7bFhkiUzI3Ck2MNM0Af/WxsRVYywwX8bPiKSHe+fPO0d8Vl/66b
+         v3Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=aFN3fWTsssRLAu0B0TkS6hjXNu70wXcTJCfGgCdxMfI=;
+        b=PFrITPr+9L7dDbf4pZaGZqnPIz0myGysp7gsCA8Gd6S4w8z+S+04QQEU6xsqhVz06v
+         rv+Zmv67GwOTmdETQgQEAUIKasZGKJzoqYIsMNZGsdguhSmHUuy8+WiYmvaDBR40r8VE
+         WqkPxqZ57YnuX5RERr9wwfUzzpddMqWT/3hUGMbx7IS3Ha1p0LBZw4RAsnGLTcXCqGKa
+         R6AwynkCIU66jpJfNe4uAj5tFaigZZIu5q/aFmYJs/olRca3oaRuI5o60QOaD69goBba
+         M6fXUdHm9QINBV18aYgx25IXeYOHDHYJNHpN82exjpFeHl5vi/2Gf2fdjbYdTLlLzpQM
+         Pzgg==
+X-Gm-Message-State: AOAM533JGWfgYUM81+d5zIL8q3PTXd/EedEPcxF7nnrEYJ09pq4G0kBY
+        MqKM+rbHMHtOIpGrDab8pZiFwHunk51FHri0wB4=
+X-Google-Smtp-Source: ABdhPJwjRHdffWQI4ZpJsucp14MmT6LBnm+lvU9xEz6mU7abdDqkfrNlcMl0M48w2E0/mu2LNIBt3Fgx9DbkxofbcUA=
+X-Received: by 2002:a05:651c:160b:b0:255:3884:7940 with SMTP id
+ f11-20020a05651c160b00b0025538847940mr4681694ljq.379.1653740579270; Sat, 28
+ May 2022 05:22:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6520:6cc:b0:1e5:54f2:d513 with HTTP; Sat, 28 May 2022
+ 05:22:58 -0700 (PDT)
+From:   "Mrs. Claire Chen" <ezennapaul7@gmail.com>
+Date:   Sat, 28 May 2022 05:22:58 -0700
+Message-ID: <CAD9ikXhHcwH58TX62KE=9-EWasMZtnm2gyiTqA0HY=v-aW0q8Q@mail.gmail.com>
+Subject: You`re Qualified To Receive Apex Bank Compensation Fund of $750,000.00
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.3 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
+        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
+        HK_SCAM,LOTS_OF_MONEY,MONEY_FRAUD_3,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:234 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5040]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ezennapaul7[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ezennapaul7[at]gmail.com]
+        *  0.0 DEAR_BENEFICIARY BODY: Dear Beneficiary:
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  1.1 HK_SCAM No description available.
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  1.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.4 MONEY_FRAUD_3 Lots of money and several fraud phrases
+        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xiujianfeng <xiujianfeng@huawei.com> writes:
-> friendly ping....
-
-I will consider this for v5.20 once the merge window has closed (after
-v5.19-rc1 is release).
-
-cheers
-
-> =E5=9C=A8 2022/5/16 15:32, Xiu Jianfeng =E5=86=99=E9=81=93:
->> Add support for adding a random offset to the stack while handling
->> syscalls. This patch uses mftb() instead of get_random_int() for better
->> performance.
->>
->> In order to avoid unconditional stack canaries on syscall entry (due to
->> the use of alloca()), also disable stack protector to avoid triggering
->> needless checks and slowing down the entry path. As there is no general
->> way to control stack protector coverage with a function attribute, this
->> must be disabled at the compilation unit level.
->>
->> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
->>
->> ---
->> Changes in v2:
->>    -move choose choose_random_kstack_offset() to the end of system_call_=
-exception
->>    -allow full 6 (10) bits of entropy
->>    -disable stack-protector for interrupt.c
->> ---
->>   arch/powerpc/Kconfig            |  1 +
->>   arch/powerpc/kernel/Makefile    |  7 +++++++
->>   arch/powerpc/kernel/interrupt.c | 19 ++++++++++++++++++-
->>   3 files changed, 26 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
->> index 98309eeae09c..2f0019a0054e 100644
->> --- a/arch/powerpc/Kconfig
->> +++ b/arch/powerpc/Kconfig
->> @@ -192,6 +192,7 @@ config PPC
->>   	select HAVE_ARCH_KASAN			if PPC32 && PPC_PAGE_SHIFT <=3D 14
->>   	select HAVE_ARCH_KASAN_VMALLOC		if PPC32 && PPC_PAGE_SHIFT <=3D 14
->>   	select HAVE_ARCH_KFENCE			if PPC_BOOK3S_32 || PPC_8xx || 40x
->> +	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
->>   	select HAVE_ARCH_KGDB
->>   	select HAVE_ARCH_MMAP_RND_BITS
->>   	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if COMPAT
->> diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
->> index 4ddd161aef32..5c5e85b8229b 100644
->> --- a/arch/powerpc/kernel/Makefile
->> +++ b/arch/powerpc/kernel/Makefile
->> @@ -40,6 +40,13 @@ CFLAGS_cputable.o +=3D -DDISABLE_BRANCH_PROFILING
->>   CFLAGS_btext.o +=3D -DDISABLE_BRANCH_PROFILING
->>   endif
->>=20=20=20
->> +#ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
->> +# Remove stack protector to avoid triggering unneeded stack canary
->> +# checks due to randomize_kstack_offset.
->> +CFLAGS_REMOVE_interrupt.o =3D -fstack-protector -fstack-protector-strong
->> +CFLAGS_interrupt.o +=3D -fno-stack-protector
->> +#endif
->> +
->>   obj-y				:=3D cputable.o syscalls.o \
->>   				   irq.o align.o signal_$(BITS).o pmc.o vdso.o \
->>   				   process.o systbl.o idle.o \
->> diff --git a/arch/powerpc/kernel/interrupt.c b/arch/powerpc/kernel/inter=
-rupt.c
->> index 784ea3289c84..d7cdcb6fc336 100644
->> --- a/arch/powerpc/kernel/interrupt.c
->> +++ b/arch/powerpc/kernel/interrupt.c
->> @@ -4,6 +4,7 @@
->>   #include <linux/err.h>
->>   #include <linux/compat.h>
->>   #include <linux/sched/debug.h> /* for show_regs */
->> +#include <linux/randomize_kstack.h>
->>=20=20=20
->>   #include <asm/kup.h>
->>   #include <asm/cputime.h>
->> @@ -78,10 +79,12 @@ notrace long system_call_exception(long r3, long r4,=
- long r5,
->>   				   long r6, long r7, long r8,
->>   				   unsigned long r0, struct pt_regs *regs)
->>   {
->> +	long ret;
->>   	syscall_fn f;
->>=20=20=20
->>   	kuap_lock();
->>=20=20=20
->> +	add_random_kstack_offset();
->>   	regs->orig_gpr3 =3D r3;
->>=20=20=20
->>   	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
->> @@ -229,7 +232,21 @@ notrace long system_call_exception(long r3, long r4=
-, long r5,
->>   		f =3D (void *)sys_call_table[r0];
->>   	}
->>=20=20=20
->> -	return f(r3, r4, r5, r6, r7, r8);
->> +	ret =3D f(r3, r4, r5, r6, r7, r8);
->> +	/*
->> +	 * Ultimately, this value will get limited by KSTACK_OFFSET_MAX(),
->> +	 * so the maximum stack offset is 1k bytes(10 bits).
->> +	 *
->> +	 * The actual entropy will be further reduced by the compiler when
->> +	 * applying stack alignment constraints: the powerpc architecture
->> +	 * may have two kinds of stack alignment(16-bytes and 8-bytes).
->> +	 *
->> +	 * So the resulting 6 or 7 bits of entropy is seen in SP[9:4] or SP[9:=
-3].
->> +	 *
->> +	 */
->> +	choose_random_kstack_offset(mftb());
->> +
->> +	return ret;
->>   }
->>=20=20=20
->>   static notrace void booke_load_dbcr0(void)
+Dear Beneficiary, You`re Qualified To Receive Compensation Fund of
+$750,000.00. You`re further advised to contact Mrs. Hennie
+VERBEEK-KUSTERS to enable you receive your compensation fund. Her
+E-mail: (mrshennie24@hotmail.com)

@@ -2,95 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF0B536D20
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 15:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2F1536D24
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 15:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235941AbiE1Naj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 09:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
+        id S236017AbiE1NkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 09:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235803AbiE1Nah (ORCPT
+        with ESMTP id S235803AbiE1NkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 09:30:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A513E1A80A;
-        Sat, 28 May 2022 06:30:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AAFA60EE3;
-        Sat, 28 May 2022 13:30:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C38DBC34100;
-        Sat, 28 May 2022 13:30:33 +0000 (UTC)
-Date:   Sat, 28 May 2022 09:30:32 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
-Subject: Re: [PATCH v6] ftrace: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding
- weak function
-Message-ID: <20220528093032.6d2f4147@gandalf.local.home>
-In-Reply-To: <20220527234003.2719e6c6@gandalf.local.home>
-References: <20220527234003.2719e6c6@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sat, 28 May 2022 09:40:14 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34DD1B7BA
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 06:40:11 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id h13so6654898pfq.5
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 06:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Z2I36pyp++iUoQJD2HpewB2s7uOVl72Sx1DqRb0ncTk=;
+        b=OfseZkluPcyA+BVHqm0h4MzykAffJQ4o7ZPKfc/Vvo9CKo3b/3WnL72fHpFYRR+zPW
+         DT5h9w3RQ3AFY1t0svQuat9CGpTEjt1W+lKMUzv2gqcaJ9sieibyDf16f/+cjSiFAehF
+         gLarLObBGvfCqscA/MmaljiKS3Ebo1ApaHxBQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Z2I36pyp++iUoQJD2HpewB2s7uOVl72Sx1DqRb0ncTk=;
+        b=FO76d/5lgAt2mkn+Rh1rE81ie4zLRPR//9XPHWa24h05ImTKGInn43c/0PxFw57Nyr
+         yThUYdat94ROvY+wxjfWuw5CKVpkIQo4r6r02HqGKpqs2wfStPe1UGpM5y/AipQlfOQ3
+         W6CjPMy+AczCjfZFKyXCYqe6Jz8PPvF/KBTSfDWQUdX73CQ8imWoqHE2gKgBkoPPaajC
+         gJOhnn7ZSuhTnrejGbd8yzg6GLwwKa0r8D7zLGzpPnAjusJjKCJjY9Fo8RcD871L2t8w
+         hpnl1VWgaqvZCfrY9lf9V6K/pklljynCATAC0gFbuTjreawCVt241bRXFhNknA3m5F75
+         W3ow==
+X-Gm-Message-State: AOAM5336tzAs50S1NaYCte19IfWdlEGXJSAGVI2qvp9kKawttV3WK8+9
+        U+buNdrxCCBJslzFMTcK8woqoQ==
+X-Google-Smtp-Source: ABdhPJxT71J2Zq5JEU7xtqhuQgLhJHZr6ylalmDn9SoR75LV5hcc4qNsuxWYHyRRggdyH/HM37FP1Q==
+X-Received: by 2002:a62:8184:0:b0:519:b75:acfc with SMTP id t126-20020a628184000000b005190b75acfcmr14727422pfd.37.1653745211059;
+        Sat, 28 May 2022 06:40:11 -0700 (PDT)
+Received: from 6441609f1b18 (194-193-162-175.tpgi.com.au. [194.193.162.175])
+        by smtp.gmail.com with ESMTPSA id z1-20020aa79481000000b0051812f8faa3sm5381351pfk.184.2022.05.28.06.40.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 May 2022 06:40:10 -0700 (PDT)
+Date:   Sat, 28 May 2022 13:39:59 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 00/47] 5.18.1-rc1 review
+Message-ID: <20220528133958.GA8@6441609f1b18>
+References: <20220527084801.223648383@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 May 2022 23:40:03 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, May 27, 2022 at 10:49:40AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.1 release.
+> There are 47 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-> @@ -6830,6 +6960,10 @@ void ftrace_module_enable(struct module *mod)
->  		if (ftrace_start_up)
->  			cnt += referenced_filters(rec);
->  
-> +		/* Weak functions should still be ignored */
-> +		if (!test_for_valid_rec(rec))
-> +			continue;
+Hi Greg,
 
-This also needs to clear the other flags.
+5.18.1-rc1 tested.
 
-As this is for module load, it does a two stage setup. That is to make the
-correct state of the ftrace locations in the module. As the updates to NOP
-is done before the text is set to RO, and if tracing is enabled/disabled
-during this time, it will trigger a BUG as it detects executable code
-running in RW text. To solve that, the initial setting of the records of
-the module is done with the DISABLE flag set, so they are ignored by the
-enabling and disabling of ftrace. All the module ftrace locations are set to
-NOP.
+Run tested on:
+- Allwinner H6 (Tanix TX6)
+- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
 
-This function is called after the text is set to ro and we enable the
-module functions based on the flags set. But if we are ignoring the record
-(as kvm has weak functions), we need to not only skip the setting of the
-code, but need to clear the flags to state they are not set. Otherwise it
-screws up the accounting of ftrace, and ftrace will WARN and disable itself.
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
--- Steve
-
-
-
-
-> +
->  		rec->flags &= ~FTRACE_FL_DISABLED;
->  		rec->flags += cnt;
->  
-
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi

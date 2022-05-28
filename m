@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29142536B31
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 08:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC66536B2B
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 08:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355817AbiE1GaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 02:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42910 "EHLO
+        id S1355851AbiE1G3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 02:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355831AbiE1G3u (ORCPT
+        with ESMTP id S1355637AbiE1G3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 02:29:50 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE66377D3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 23:29:38 -0700 (PDT)
-Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L9BZj5tX3zjX8d;
-        Sat, 28 May 2022 14:28:45 +0800 (CST)
+        Sat, 28 May 2022 02:29:38 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0013152C
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 23:29:35 -0700 (PDT)
+Received: from kwepemi500003.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L9BZP2g1YzjWx4;
+        Sat, 28 May 2022 14:28:29 +0800 (CST)
 Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500006.china.huawei.com (7.221.188.68) with Microsoft SMTP Server
+ kwepemi500003.china.huawei.com (7.221.188.51) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 28 May 2022 14:29:31 +0800
+ 15.1.2375.24; Sat, 28 May 2022 14:29:33 +0800
 Received: from localhost.localdomain (10.175.112.125) by
  kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 28 May 2022 14:29:30 +0800
+ 15.1.2375.24; Sat, 28 May 2022 14:29:31 +0800
 From:   Tong Tiangen <tongtiangen@huawei.com>
 To:     Mark Rutland <mark.rutland@arm.com>,
         James Morse <james.morse@arm.com>,
@@ -48,9 +48,9 @@ CC:     <linuxppc-dev@lists.ozlabs.org>,
         Xie XiuQi <xiexiuqi@huawei.com>,
         Guohanjun <guohanjun@huawei.com>,
         Tong Tiangen <tongtiangen@huawei.com>
-Subject: [PATCH -next v5 4/8] arm64: extable: cleanup redundant extable type EX_TYPE_FIXUP
-Date:   Sat, 28 May 2022 06:50:52 +0000
-Message-ID: <20220528065056.1034168-5-tongtiangen@huawei.com>
+Subject: [PATCH -next v5 5/8] Add generic fallback version of copy_mc_to_user()
+Date:   Sat, 28 May 2022 06:50:53 +0000
+Message-ID: <20220528065056.1034168-6-tongtiangen@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220528065056.1034168-1-tongtiangen@huawei.com>
 References: <20220528065056.1034168-1-tongtiangen@huawei.com>
@@ -70,88 +70,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, extable type EX_TYPE_FIXUP is no place to use, We can safely
-remove it.
+x86/powerpc has it's implementation of copy_mc_to_user(), we add generic
+fallback in include/linux/uaccess.h prepare for other architechures to
+enable CONFIG_ARCH_HAS_COPY_MC.
 
-Suggested-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+Acked-by: Michael Ellerman <mpe@ellerman.id.au>
 ---
- arch/arm64/include/asm/asm-extable.h | 20 ++++----------------
- arch/arm64/mm/extable.c              |  9 ---------
- 2 files changed, 4 insertions(+), 25 deletions(-)
+ arch/powerpc/include/asm/uaccess.h | 1 +
+ arch/x86/include/asm/uaccess.h     | 1 +
+ include/linux/uaccess.h            | 9 +++++++++
+ 3 files changed, 11 insertions(+)
 
-diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
-index d01bd94cc4c2..1f2974467273 100644
---- a/arch/arm64/include/asm/asm-extable.h
-+++ b/arch/arm64/include/asm/asm-extable.h
-@@ -3,11 +3,10 @@
- #define __ASM_ASM_EXTABLE_H
+diff --git a/arch/powerpc/include/asm/uaccess.h b/arch/powerpc/include/asm/uaccess.h
+index 9b82b38ff867..58dbe8e2e318 100644
+--- a/arch/powerpc/include/asm/uaccess.h
++++ b/arch/powerpc/include/asm/uaccess.h
+@@ -358,6 +358,7 @@ copy_mc_to_user(void __user *to, const void *from, unsigned long n)
  
- #define EX_TYPE_NONE			0
--#define EX_TYPE_FIXUP			1
--#define EX_TYPE_BPF			2
--#define EX_TYPE_UACCESS_ERR_ZERO	3
--#define EX_TYPE_LOAD_UNALIGNED_ZEROPAD	4
--#define EX_TYPE_KACCESS_ERR_ZERO	5
-+#define EX_TYPE_BPF			1
-+#define EX_TYPE_UACCESS_ERR_ZERO	2
-+#define EX_TYPE_LOAD_UNALIGNED_ZEROPAD	3
-+#define EX_TYPE_KACCESS_ERR_ZERO	4
- 
- #ifdef __ASSEMBLY__
- 
-@@ -20,14 +19,6 @@
- 	.short		(data);				\
- 	.popsection;
- 
--/*
-- * Create an exception table entry for `insn`, which will branch to `fixup`
-- * when an unhandled fault is taken.
-- */
--	.macro		_asm_extable, insn, fixup
--	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_FIXUP, 0)
--	.endm
--
- /*
-  * Create an exception table entry for uaccess `insn`, which will branch to `fixup`
-  * when an unhandled fault is taken.
-@@ -62,9 +53,6 @@
- 	".short		(" data ")\n"			\
- 	".popsection\n"
- 
--#define _ASM_EXTABLE(insn, fixup) \
--	__ASM_EXTABLE_RAW(#insn, #fixup, __stringify(EX_TYPE_FIXUP), "0")
--
- #define EX_DATA_REG_ERR_SHIFT	0
- #define EX_DATA_REG_ERR		GENMASK(4, 0)
- #define EX_DATA_REG_ZERO_SHIFT	5
-diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
-index 056591e5ca80..228d681a8715 100644
---- a/arch/arm64/mm/extable.c
-+++ b/arch/arm64/mm/extable.c
-@@ -16,13 +16,6 @@ get_ex_fixup(const struct exception_table_entry *ex)
- 	return ((unsigned long)&ex->fixup + ex->fixup);
+ 	return n;
  }
++#define copy_mc_to_user copy_mc_to_user
+ #endif
  
--static bool ex_handler_fixup(const struct exception_table_entry *ex,
--			     struct pt_regs *regs)
--{
--	regs->pc = get_ex_fixup(ex);
--	return true;
--}
--
- static bool ex_handler_uaccess_err_zero(const struct exception_table_entry *ex,
- 					struct pt_regs *regs)
+ extern long __copy_from_user_flushcache(void *dst, const void __user *src,
+diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+index 35f222aa66bf..b7b1aca5d6cd 100644
+--- a/arch/x86/include/asm/uaccess.h
++++ b/arch/x86/include/asm/uaccess.h
+@@ -512,6 +512,7 @@ copy_mc_to_kernel(void *to, const void *from, unsigned len);
+ 
+ unsigned long __must_check
+ copy_mc_to_user(void *to, const void *from, unsigned len);
++#define copy_mc_to_user copy_mc_to_user
+ #endif
+ 
+ /*
+diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+index 5a328cf02b75..07e9faeb14b5 100644
+--- a/include/linux/uaccess.h
++++ b/include/linux/uaccess.h
+@@ -174,6 +174,15 @@ copy_mc_to_kernel(void *dst, const void *src, size_t cnt)
+ }
+ #endif
+ 
++#ifndef copy_mc_to_user
++static inline unsigned long __must_check
++copy_mc_to_user(void *dst, const void *src, size_t cnt)
++{
++	check_object_size(src, cnt, true);
++	return raw_copy_to_user(dst, src, cnt);
++}
++#endif
++
+ static __always_inline void pagefault_disabled_inc(void)
  {
-@@ -72,8 +65,6 @@ bool fixup_exception(struct pt_regs *regs)
- 		return false;
- 
- 	switch (ex->type) {
--	case EX_TYPE_FIXUP:
--		return ex_handler_fixup(ex, regs);
- 	case EX_TYPE_BPF:
- 		return ex_handler_bpf(ex, regs);
- 	case EX_TYPE_UACCESS_ERR_ZERO:
+ 	current->pagefault_disabled++;
 -- 
 2.25.1
 

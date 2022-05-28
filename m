@@ -2,112 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CED5536BCE
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 11:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C79A536BDE
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 11:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232509AbiE1JOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 05:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
+        id S240401AbiE1JTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 05:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232350AbiE1JOn (ORCPT
+        with ESMTP id S1348569AbiE1JTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 05:14:43 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084365FB0;
-        Sat, 28 May 2022 02:14:41 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id y1so6306188pfr.6;
-        Sat, 28 May 2022 02:14:41 -0700 (PDT)
+        Sat, 28 May 2022 05:19:47 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41101DA5B;
+        Sat, 28 May 2022 02:19:44 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso6373899pjg.0;
+        Sat, 28 May 2022 02:19:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2cmreXVkKeTuS3iLda3uDJCEUdvooYyM7QNARThfArQ=;
-        b=VTRt1uLhMTgIvoICyNK1K4DvISkrJto6QUdz42wHaQhFckzhegvbpDenZo1DkDOsuP
-         lECoEOynKmg/Ze93ddslExgRDFXN9ZEbbT1sN8I3ZE3dxVWd4hlEJojzEDtVC5S2ybDx
-         O3M+kDI7BSFLOBRuRtDow343Wthn0enWane8a0D/6JK/s/DByaq1I/aGT/qZjQ7apeCh
-         Ha8lnoT/XUfmfTN1KsCGh6lhI7O9pEP+07R/QL6uVc0mJWjbA7+kJsDHxnynuIKyVGN2
-         THFWA0HQz1gfwdpeePJEmsooJz2NNv2A39aBeDwiGXjIAuwoq8++Fuw5S7FjQsgxaBM2
-         fLCA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qyK+J/hMtuTUruA03PI6DqGG/StA1icCX4LUIGhocgc=;
+        b=qH8W6PWPfinC6W1dsB4Sh5n9Avx4kcrU4u9XphkM2vutqAIZIZfuxvSgEku6RuyGUH
+         xOsWr5B0fZM8kd/Eyvujie2EKIuzLNSvPL4su90pOnHxFOjEO2H+GvM31W5sps0oh+6n
+         d7iDS3eoURZkBgQy/jIwy6CmdOQzQ8cy4jM50sBNNrO94vuz9img9JYhu3hlHHYe7In7
+         9QanKQQDiRaZme05dowaMoHM/gXt1IbuU/YCXEfGGndC17K6Cs4tH14v6H0IyslLkThB
+         BFH6/y/UyDRBfFU98RUxJy9LYGwIWObnh7sErMYOv+x48u8/U83Vf557WibMsF6K5g0M
+         EU1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2cmreXVkKeTuS3iLda3uDJCEUdvooYyM7QNARThfArQ=;
-        b=I3zhliva6ngHBRPLd07FeJIx0YSD5BNEHZYkg16Y0IVNthuQlXrckA40YGWDy21CtI
-         tGJ0UCAXkvsj1r1BHsMSEn54QPjdarr7makFXtI6Z5ZbokxIOWSIAYVxmT/0Ss2vX10X
-         gzLo6l60K7YDramKWhGu9wQOCZyKjzCwRu9XGKiodYfmO2YpKqY0AMFy7w+5NH832gjH
-         PxNxWGuW9oXFZSQ7taKN/JlGG1I/hKiPevA2LEkyC/LoWoGBCJgppYiTIYd6ipxe8AkC
-         oR0JhxwWcI3ILk34XAVbN/q+WPFxQfd5Ux0fTXCOvOsUcCvy9US7vzMNsefHKJoOEbM5
-         bdZg==
-X-Gm-Message-State: AOAM533F6jXlcsiJZjCRJ8x5XB0nI9TyxkfC1xwQqIgltKwM2m3aDz8X
-        UY9L3QHegzQYMvGNNeVUTtykz0iu+OzkSjbh
-X-Google-Smtp-Source: ABdhPJxTZ3//L0+n/S1b5h79f4IEubXD+U1hWPngiQJyYJKXN7Cu3aGrFpYqFoZGccOa0dTRsa6SPA==
-X-Received: by 2002:a05:6a00:15c5:b0:518:9848:4915 with SMTP id o5-20020a056a0015c500b0051898484915mr30768636pfu.62.1653729280076;
-        Sat, 28 May 2022 02:14:40 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-83.three.co.id. [180.214.232.83])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170902f68c00b0016198062800sm5320179plg.161.2022.05.28.02.14.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 May 2022 02:14:39 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Nikolai Kondrashov <spbnick@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        llvm@lists.linux.dev, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] HID: uclogic: add missing function name in uclogic_params_hid_dbg() kernel-doc comment
-Date:   Sat, 28 May 2022 16:14:03 +0700
-Message-Id: <20220528091403.160169-3-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220528091403.160169-1-bagasdotme@gmail.com>
-References: <20220528091403.160169-1-bagasdotme@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qyK+J/hMtuTUruA03PI6DqGG/StA1icCX4LUIGhocgc=;
+        b=aBlNhVg/6GXQ0lXUpFSoiN4T1zeuMxuFQi4cyDDHeCHOjgoDz304r6qh4yvEIeCNIO
+         8n5M69oHBsa3+YNN241K9FX1f5KbMwOtdcB480UaotBMGcA66txrkh5HM4RWh5ryKeGK
+         WbxwxgbZ7pUkEgeLmrgXFxt7ALifftSta++HzDeHt6mNbze0BQwzVfQMMRz53qBlYYNy
+         r0WpTtk13ud2uZa9ZlmFhL3MaWg8+49UoBBFVGzioNNgzCmxlZbVoQPZra1yO8/XkkHv
+         y63D94UWaYcXljPicVQyMtGDWvKUj3oPyQG+u1ixRysfB5f549GSZqlSbk7uu0NMhnIF
+         KBRw==
+X-Gm-Message-State: AOAM531uAiCkSzo7MfbcA9IkBw4QPS10K6O9r9Lu9iDZvYQeVBPgvWsc
+        cpvyvoh0B3sveGd5y40p9oU=
+X-Google-Smtp-Source: ABdhPJz8YrzZDOOQcB3GYgrLZBT1lADYS4fKl4Nj0eDpS1sI6mRcXpUiCWa3V+ND/KF5ciK8FwKHEA==
+X-Received: by 2002:a17:90b:314b:b0:1e0:5517:1730 with SMTP id ip11-20020a17090b314b00b001e055171730mr12521555pjb.57.1653729584100;
+        Sat, 28 May 2022 02:19:44 -0700 (PDT)
+Received: from [172.16.4.4] ([219.142.146.208])
+        by smtp.gmail.com with ESMTPSA id b8-20020a170903228800b001639e80eb55sm2742984plh.139.2022.05.28.02.19.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 May 2022 02:19:43 -0700 (PDT)
+Message-ID: <bd03ca71-1875-2e94-8040-533034f76ee5@gmail.com>
+Date:   Sat, 28 May 2022 17:19:38 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] PCI: mediatek-gen3: Fix refcount leak in
+ mtk_pcie_init_irq_domains
+Content-Language: en-US
+To:     Miles Chen <miles.chen@mediatek.com>
+Cc:     bhelgaas@google.com, jianjun.wang@mediatek.com, kw@linux.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pci@vger.kernel.org,
+        lorenzo.pieralisi@arm.com, matthias.bgg@gmail.com, maz@kernel.org,
+        robh@kernel.org, ryder.lee@mediatek.com
+References: <20220526110246.53502-1-linmq006@gmail.com>
+ <20220527084525.7170-1-miles.chen@mediatek.com>
+From:   Miaoqian Lin <linmq006@gmail.com>
+In-Reply-To: <20220527084525.7170-1-miles.chen@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-uclogic_params_hid_dbg() is public void function. The comment for
-kernel-doc, however, lack its function name on short description, thus
-triggers "missing initial short description" warning.
+Hi Miles,
 
-Add the function name to fix the warning.
+On 2022/5/27 16:45, Miles Chen wrote:
+> Hi Miaoqian,
+>
+>> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+>> ---
+>> drivers/pci/controller/pcie-mediatek-gen3.c | 1 +
+>> 1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
+>> index 3e8d70bfabc6..da8e9db0abdf 100644
+>> --- a/drivers/pci/controller/pcie-mediatek-gen3.c
+>> +++ b/drivers/pci/controller/pcie-mediatek-gen3.c
+>> @@ -600,6 +600,7 @@ static int mtk_pcie_init_irq_domains(struct mtk_gen3_pcie *pcie)
+>> 						  &intx_domain_ops, pcie);
+>> 	if (!pcie->intx_domain) {
+>> 		dev_err(dev, "failed to create INTx IRQ domain\n");
+>> +		of_node_put(intc_node);
+>> 		return -ENODEV;
+>> 	}
+> Thanks for doing this.
+>
+> I checked mtk_pcie_init_irq_domains() and there are multiple exit paths like
+> err_msi_domain and err_msi_bottom_domain and the normal path which also
+> need of_node_put(intc_node).
 
-Fixes: a228809fa6f39c ("HID: uclogic: Move param printing to a function")
-Cc: Nikolai Kondrashov <spbnick@gmail.com>
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: "José Expósito" <jose.exposito89@gmail.com>
-Cc: llvm@lists.linux.dev
-Cc: linux-input@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- drivers/hid/hid-uclogic-params.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for your reply,
 
-diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
-index 71501453de12e4..0319e3f1527f1d 100644
---- a/drivers/hid/hid-uclogic-params.c
-+++ b/drivers/hid/hid-uclogic-params.c
-@@ -102,7 +102,7 @@ static void uclogic_params_frame_hid_dbg(
- }
- 
- /**
-- * Dump tablet interface parameters with hid_dbg().
-+ * uclogic_params_hid_dbg - Dump tablet interface parameters with hid_dbg().
-  *
-  * @hdev:	The HID device the parameters describe.
-  * @params:	The parameters to dump.
--- 
-An old man doll... just what I always wanted! - Clara
+I didn't add of_node_put() in other paths because I am not sure if the reference passed through irq_domain_add_linear(), since intc_node is passed to irq_domain_add_linear().
 
+__irq_domain_add() keeps &node->fwnode in the irq_domain structure.
+
+and use fwnode_handle_get() to get the reference of fwnode, but I still uncertain.
+
+If the reference don't needed anymore after irq_domain_add_linear(),
+
+your suggestion looks fine, and I will submit v2.
+
+> Maybe we can move the of_node_put(intc_node) to #54 below and cover
+> all possible paths?
+>
+>
+> cheers,
+> Miles
+>
+> e.g.,
+>
+> static int mtk_pcie_init_irq_domains(struct mtk_gen3_pcie *pcie)
+> {
+> 	struct device *dev = pcie->dev;
+> 	struct device_node *intc_node, *node = dev->of_node;
+> 	int ret;
+>
+> 	raw_spin_lock_init(&pcie->irq_lock);
+>
+> 	/* Setup INTx */
+> 	intc_node = of_get_child_by_name(node, "interrupt-controller");
+> 	if (!intc_node) {
+> 		dev_err(dev, "missing interrupt-controller node\n");
+> 		return -ENODEV;
+> 	}
+>
+> 	pcie->intx_domain = irq_domain_add_linear(intc_node, PCI_NUM_INTX,
+> 						  &intx_domain_ops, pcie);
+> 	of_node_put(intc_node);
+> 	if (!pcie->intx_domain) {
+> 		dev_err(dev, "failed to create INTx IRQ domain\n");
+> 		return -ENODEV;
+> 	}
+>
+> 	/* Setup MSI */
+> 	mutex_init(&pcie->lock);
+>
+> 	pcie->msi_bottom_domain = irq_domain_add_linear(node, PCIE_MSI_IRQS_NUM,
+> 				  &mtk_msi_bottom_domain_ops, pcie);
+> 	if (!pcie->msi_bottom_domain) {
+> 		dev_err(dev, "failed to create MSI bottom domain\n");
+> 		ret = -ENODEV;
+> 		goto err_msi_bottom_domain;
+> 	}
+>
+> 	pcie->msi_domain = pci_msi_create_irq_domain(dev->fwnode,
+> 						     &mtk_msi_domain_info,
+> 						     pcie->msi_bottom_domain);
+> 	if (!pcie->msi_domain) {
+> 		dev_err(dev, "failed to create MSI domain\n");
+> 		ret = -ENODEV;
+> 		goto err_msi_domain;
+> 	}
+>
+> 	return 0;
+>
+> err_msi_domain:
+> 	irq_domain_remove(pcie->msi_bottom_domain);
+> err_msi_bottom_domain:
+> 	irq_domain_remove(pcie->intx_domain);
+>
+> 	return ret;
+> }
+>> -- 
+>> 2.25.1
+>

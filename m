@@ -2,205 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F5C5370CA
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 13:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9635370CE
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 13:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiE2LhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 07:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
+        id S230081AbiE2LiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 07:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiE2LhK (ORCPT
+        with ESMTP id S229687AbiE2LiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 07:37:10 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731893BA58
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 04:37:09 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id a15so5946928ilq.12
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 04:37:09 -0700 (PDT)
+        Sun, 29 May 2022 07:38:03 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812AB532E7
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 04:38:01 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id y13so16199462eje.2
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 04:38:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=f2p+RNA3uW2ooZwCskBW9DfWGMzM7OSZpW6uiTppzOI=;
-        b=e4ZYCc9oVK8MNkLyNA//UfF8oFEpedvj0IZa3bUuNrV66HOKChkPNWU47pOOOjxemh
-         1dGyXx3X3bH8oBJiaW0F9T0guH902+CB2ax0JxTsTmrd+LSCS12iCZPf8+mkknanlBma
-         sORCIdoBoEr8lCK8+yn7eJnzUENIntoUD/uuqFhq0r9lpV+eL7W9cJliXgw5EA03Shoz
-         tUTTHkeXyvsKQ9OzNUiYuBMtsFDKinbtLFLuHhrajlR0wuwTqTvpS3iID6DVWMKbHUxE
-         ndRb9q4+Yfd29FMEakiw8+dZoclAHSDdIdAVXkazY5CfmJU5nnlwzvwctPpi7DsiC7/Z
-         cCCg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=RwKdhYbd7Up094DfFkqVUFbN5sVvLVP8wB5zTMbiHtg=;
+        b=qLhQwI7eVUSTCEREfwjTcC3WtB+jsRCl3F/107SfXKkvRAjV5DopBZy2icKLDiv0/P
+         kzDLQvG7oHG8aLiZqzN+XkT01OXEnF7V9UfZniD4O9few1SMOf7zYtN9xsJT2U1+UP7n
+         FJdQCn8afb7E4+t1vqvb5d2dVYMmKICLnqSeAQBMcvfG5Frv0uCDeO60d4uF5XKikuga
+         OzakFqEVWOZcyHjvzGZW/jXCe2FVmoBVEZm6lHPmL8bQKcxiSZYgCcWzSAtOa5DlbA/D
+         OptHo7mv3k+IfLJHTXpHYEGGSZTLmPr/MBknAX4inApcVmpLzAJpMjCb25uFfrbs17+y
+         efrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f2p+RNA3uW2ooZwCskBW9DfWGMzM7OSZpW6uiTppzOI=;
-        b=SxwvkzIpB8MNVqmyuV5uQFCqWbNHZN86aC70QGcR19AamfxCCq9G0kaSDF5NXbYt9r
-         0Zb6r2hd3w/P0Vy8qiy8j0+/pjXkkLobbocC7wKFQbDqeP8ifzPrG20HUQZAOMftQaP8
-         ig5RvaAr8UMuPI27guSTiYxrlsj7nWEMwh4JBhgJvRkC9NN71OCermXEpoti9AZiUtr9
-         MGRDugLRoUJoog+WLzDN73Pg0j1ZPHlgxLppZMPHhQmXpuSKH2srd/YM9SHK1PtD0Ufi
-         jSM6ZUzKRX8TpgvJDLdzKlhIm1fEAysEDCfapVprO8KO+cUsBrDlF2QjXIVrsi517Wp8
-         pzDQ==
-X-Gm-Message-State: AOAM5303ek+GnyT4UgWbA+fU3LNASciB0a8cQsnKsgZk0FecwvzCEiJC
-        aZBx2bzbJ16AdEs+uFmR9f8=
-X-Google-Smtp-Source: ABdhPJxwX7tSauAwoz+2wEumjBcwtWDJqcKW8H5Ix2Y54w0yVWgPxtM0QNROKlhQaKw35RdTe7TqPw==
-X-Received: by 2002:a05:6e02:5ab:b0:2d1:9303:1332 with SMTP id k11-20020a056e0205ab00b002d193031332mr18560323ils.168.1653824228821;
-        Sun, 29 May 2022 04:37:08 -0700 (PDT)
-Received: from n2.us-central1-a.c.spheric-algebra-350919.internal (151.16.70.34.bc.googleusercontent.com. [34.70.16.151])
-        by smtp.gmail.com with ESMTPSA id q22-20020a0566380d1600b0032eec10773esm1954886jaj.16.2022.05.29.04.37.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 04:37:07 -0700 (PDT)
-Date:   Sun, 29 May 2022 11:37:06 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, vbabka@suse.cz,
-        roman.gushchin@linux.dev, iamjoonsoo.kim@lge.com,
-        rientjes@google.com, penberg@kernel.org, cl@linux.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] mm/slub: fix the race between validate_slab and
- slab_free
-Message-ID: <YpNa4tB/jfW3MDyi@n2.us-central1-a.c.spheric-algebra-350919.internal>
-References: <20220529081535.69275-1-rongwei.wang@linux.alibaba.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RwKdhYbd7Up094DfFkqVUFbN5sVvLVP8wB5zTMbiHtg=;
+        b=TyrkYHtvXcBfSfhRvUJA2S8N6lvGgyXwcxKGmc54Xq7gcB7ggbTbDEypbjrBXnU8OV
+         gQJWh8ja+Awt9r3OvrdPIxy4AOA5aVVWS/j5ftQ+8auSnaV2FoAyNxJbcYUcnSed+rNw
+         Dvgpqj6p1RUCHAc3gQu/0TNhTW6W8soALRf9Da9LbZdHLot3nszpvcGh1T+yZZLpC26j
+         7Zbq/7zmHVCzyqjYh4EZlWmgE905nRwlxubg8YRyVP8IwDn7XO3dcLWS54yPgJGU98uS
+         X6mEBwmvVWRV1DPEfrg4+ZdCy9e5QRKquZBX0hN7eVN2xlJhvi+HPM8vlWe1XBI6j1tU
+         6fGg==
+X-Gm-Message-State: AOAM533i6Nj0b1pURcx1zZdTQ807tKlgmGhVoH2q7WyV9cJWEfvfgGPh
+        vO1GDMW0gOE8UXJXN87NiXQd/w==
+X-Google-Smtp-Source: ABdhPJw7UadcB4edQgPLez21i29gjHElx2z0mV3AENt0nrJMrcxU+BQLUgDW9fXMttdkXW+On4OpOw==
+X-Received: by 2002:a17:906:4fd1:b0:6f3:be23:7ad5 with SMTP id i17-20020a1709064fd100b006f3be237ad5mr45065389ejw.264.1653824280073;
+        Sun, 29 May 2022 04:38:00 -0700 (PDT)
+Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id e6-20020a170906844600b006fee13caaeasm3060837ejy.190.2022.05.29.04.37.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 May 2022 04:37:59 -0700 (PDT)
+Message-ID: <8878f52b-7527-ece2-47d6-5b567ce301ad@linaro.org>
+Date:   Sun, 29 May 2022 13:37:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220529081535.69275-1-rongwei.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 1/3] dt-bindings: uwb: Device tree information for Nxp
+ SR1XX SOCs
+Content-Language: en-US
+To:     Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        will@kernel.org, axboe@kernel.dk, robh+dt@kernel.org
+Cc:     mb@lightnvm.io, ckeepax@opensource.cirrus.com, arnd@arndb.d,
+        mst@redhat.com, javier@javigon.com, mikelley@microsoft.com,
+        jasowang@redhat.com, sunilmut@microsoft.com,
+        bjorn.andersson@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, ashish.deshpande@nxp.com,
+        rvmanjumce@gmail.com
+References: <20220527184351.3829543-1-manjunatha.venkatesh@nxp.com>
+ <20220527184351.3829543-2-manjunatha.venkatesh@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220527184351.3829543-2-manjunatha.venkatesh@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 29, 2022 at 04:15:33PM +0800, Rongwei Wang wrote:
-> In use cases where allocating and freeing slab frequently, some
-> error messages, such as "Left Redzone overwritten", "First byte
-> 0xbb instead of 0xcc" would be printed when validating slabs.
-> That's because an object has been filled with SLAB_RED_INACTIVE,
-> but has not been added to slab's freelist. And between these
-> two states, the behaviour of validating slab is likely to occur.
+On 27/05/2022 20:43, Manjunatha Venkatesh wrote:
+> Ultra-wideband (UWB) is a short-range wireless communication protocol.
 > 
-> Actually, it doesn't mean the slab can not work stably. But, these
-> confusing messages will disturb slab debugging more or less.
+> NXP has SR1XX family of UWB Subsystems (UWBS) devices. SR1XX SOCs
+> are FiRa Compliant. SR1XX SOCs are flash less devices and they need
+> Firmware Download on every device boot. More details on the SR1XX Family
+> can be found at https://www.nxp.com/products/:UWB-TRIMENSION
 > 
-> Signed-off-by: Rongwei Wang <rongwei.wang@linux.alibaba.com>
+> The sr1xx driver work the SR1XX Family of UWBS, and uses UWB Controller
+> Interface (UCI).  The corresponding details are available in the FiRa
+> Consortium Website (https://www.firaconsortium.org/).
+> 
+> Message-ID: <20220504171337.3416983-1-manjunatha.venkatesh@nxp.com>
 
-Have you observed it or it's from code inspection?
+This is a confusing tag... Why do you need it and what does it mean in
+Linux kernel process?
 
+> Signed-off-by: Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
 > ---
->  mm/slub.c | 40 +++++++++++++++++-----------------------
->  1 file changed, 17 insertions(+), 23 deletions(-)
+>  .../bindings/uwb/nxp,uwb-sr1xx.yaml           | 67 +++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/uwb/nxp,uwb-sr1xx.yaml
 > 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index ed5c2c03a47a..310e56d99116 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -1374,15 +1374,12 @@ static noinline int free_debug_processing(
->  	void *head, void *tail, int bulk_cnt,
->  	unsigned long addr)
->  {
-> -	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
->  	void *object = head;
->  	int cnt = 0;
-> -	unsigned long flags, flags2;
-> +	unsigned long flags;
->  	int ret = 0;
->  
-> -	spin_lock_irqsave(&n->list_lock, flags);
-> -	slab_lock(slab, &flags2);
-> -
-> +	slab_lock(slab, &flags);
->  	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
->  		if (!check_slab(s, slab))
->  			goto out;
-> @@ -1414,8 +1411,7 @@ static noinline int free_debug_processing(
->  		slab_err(s, slab, "Bulk freelist count(%d) invalid(%d)\n",
->  			 bulk_cnt, cnt);
->  
-> -	slab_unlock(slab, &flags2);
-> -	spin_unlock_irqrestore(&n->list_lock, flags);
-> +	slab_unlock(slab, &flags);
->  	if (!ret)
->  		slab_fix(s, "Object at 0x%p not freed", object);
->  	return ret;
-> @@ -3304,7 +3300,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
->  
->  {
->  	void *prior;
-> -	int was_frozen;
-> +	int was_frozen, to_take_off = 0;
->  	struct slab new;
->  	unsigned long counters;
->  	struct kmem_cache_node *n = NULL;
-> @@ -3315,15 +3311,19 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
->  	if (kfence_free(head))
->  		return;
->  
-> +	n = get_node(s, slab_nid(slab));
-> +	spin_lock_irqsave(&n->list_lock, flags);
+> diff --git a/Documentation/devicetree/bindings/uwb/nxp,uwb-sr1xx.yaml b/Documentation/devicetree/bindings/uwb/nxp,uwb-sr1xx.yaml
+> new file mode 100644
+> index 000000000000..226fec908968
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/uwb/nxp,uwb-sr1xx.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 > +
-
-Oh please don't do this.
-
-SLUB free slowpath can be hit a lot depending on workload.
-
-__slab_free() try its best not to take n->list_lock. currently takes n->list_lock
-only when the slab need to be taken from list.
-
-Unconditionally taking n->list_lock will degrade performance.
-
->  	if (kmem_cache_debug(s) &&
-> -	    !free_debug_processing(s, slab, head, tail, cnt, addr))
-> +	    !free_debug_processing(s, slab, head, tail, cnt, addr)) {
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/uwb/nxp,uwb-sr1xx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +		spin_unlock_irqrestore(&n->list_lock, flags);
->  		return;
-> +	}
->  
->  	do {
-> -		if (unlikely(n)) {
-> -			spin_unlock_irqrestore(&n->list_lock, flags);
-> -			n = NULL;
-> -		}
-> +		if (unlikely(to_take_off))
-> +			to_take_off = 0;
->  		prior = slab->freelist;
->  		counters = slab->counters;
->  		set_freepointer(s, tail, prior);
-> @@ -3343,18 +3343,11 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
->  				new.frozen = 1;
->  
->  			} else { /* Needs to be taken off a list */
-> -
-> -				n = get_node(s, slab_nid(slab));
->  				/*
-> -				 * Speculatively acquire the list_lock.
->  				 * If the cmpxchg does not succeed then we may
-> -				 * drop the list_lock without any processing.
-> -				 *
-> -				 * Otherwise the list_lock will synchronize with
-> -				 * other processors updating the list of slabs.
-> +				 * drop this behavior without any processing.
->  				 */
-> -				spin_lock_irqsave(&n->list_lock, flags);
-> -
-> +				to_take_off = 1;
->  			}
->  		}
->  
-> @@ -3363,8 +3356,9 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
->  		head, new.counters,
->  		"__slab_free"));
->  
-> -	if (likely(!n)) {
-> +	if (likely(!to_take_off)) {
->  
-> +		spin_unlock_irqrestore(&n->list_lock, flags);
->  		if (likely(was_frozen)) {
->  			/*
->  			 * The list lock was not taken therefore no list
-> 
-> -- 
-> 2.27.0
-> 
+> +title: Ultra Wide Band(UWB)driver support for NXP SR1XX SOCs family
+
+No references to driver. Please describe here the title of the hardware.
+
+> +
+> +maintainers:
+> +  - Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
+> +
+> +description: The sr1xx driver work for the NXP SR1XX Family of Ultra Wide
+> +    Band Subsystem(UWBS), and uses UWB Controller Interface(UCI).
+> +    The corresponding details are available in the FiRa Consortium Website
+> +    (https://www.firaconsortium.org/).More details on the SR1XX Family can be
+> +    found at https://www.nxp.com/products/:UWB-TRIMENSION
+
+The same. Additionally use proper white-spaces. Before every '('. After
+every '.'.
+
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - nxp,sr1xx
+> +
+> +      - const: nxp,sr1xx
+
+This is wrong and does not make any sense. You also did not test the
+bindings.
+
+Please test them before submitting. No need to waste reviewers time for
+basic automation tasks.
+
+Also do not include any wildcards (1xx) but specific model name.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clock-names
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    spi2: spi@ffd68000 {
+
+No need for alias.
+
+> +		compatible = "arm,pl022", "arm,primecell";
+> +		reg = <0x0 0xffd68000 0x0 0x1000>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		interrupts = <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>;
+> +		clocks = <&crg_ctrl HI3660_CLK_GATE_SPI2>;
+> +		clock-names = "apb_pclk";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&spi2_pmx_func &spi2_cfg_func>;
+> +		num-cs = <1>;
+> +		cs-gpios = <&gpio27 2 0>;
+> +		status = "ok";
+
+No point of enabling this.
+
+> +	sr1xx@0 {
+
+The indentation and look of it is unacceptable...
+
+> +	 compatible = "nxp,sr1xx";
+> +	 reg = <0>;
+> +	 nxp,sr1xx-irq = <&gpio26 1 0>;
+> +	 nxp,sr1xx-ce = <&gpio2 5 0>;
+> +	 nxp,sr1xx-ri = <&gpio24 1 0>;
+> +	 spi-max-frequency = <20000000>;
+> +	};
+> +    };
+> +
+> +...
+
+
+Best regards,
+Krzysztof

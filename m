@@ -2,66 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A6F5371CB
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 18:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2C55371CD
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 18:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbiE2Qqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 12:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
+        id S231320AbiE2Qwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 12:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiE2Qqb (ORCPT
+        with ESMTP id S229533AbiE2Qw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 12:46:31 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9189AC00
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 09:46:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 57253CE0DB5
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 16:46:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC053C385A9;
-        Sun, 29 May 2022 16:46:15 +0000 (UTC)
-Date:   Sun, 29 May 2022 12:46:10 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Congyu Liu <liu3101@purdue.edu>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Jeff Xie <xiehuan09@gmail.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Jun Miao <jun.miao@intel.com>,
-        Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Li Huafei <lihuafei1@huawei.com>,
-        Li kunyu <kunyu@nfschina.com>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Oscar Shiang <oscar0225@livemail.tw>,
-        Song Liu <song@kernel.org>, Tom Rix <trix@redhat.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Wonhyuk Yang <vvghjk1234@gmail.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Yuntao Wang <ytcoode@gmail.com>,
-        liqiong <liqiong@nfschina.com>,
-        sunliming <kelulanainsley@gmail.com>,
-        sunliming <sunliming@kylinos.cn>
-Subject: [GIT PULL] tracing: Updates for 5.19
-Message-ID: <20220529124610.0c2b652e@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sun, 29 May 2022 12:52:27 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977506128D;
+        Sun, 29 May 2022 09:52:26 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-f314077115so4351396fac.1;
+        Sun, 29 May 2022 09:52:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OcZ1DaHw5AgDwn1rt/1/DpSSQI/ATbdMoEOFrgRgoaU=;
+        b=j8lpnedgMvxQJPzPVvk5GPf7XdZKuiL5ICo4yMUHb0g37ee0X9cLzTAa50b4eMyfZ/
+         7aPe4TsSZTebdbDdcGmVdR88wO1xlEl+rl3y5EXUPWRQq/yqGpWVxlcfFX/+DmyP9CZI
+         QWeXK4e9f2mdgRLI8PqLmzT4si5+O2LhfL+kLQyH5WbC+Yt9purRJPWzxR4bahUGdGw2
+         o/n8u5MZlcbKd/d1Fnd3Az9+2FoZrqqhGDgV4EUp+e4th2cvuMsHFiPkeF6oRNgFzmQ3
+         fCzgEmtRZ48f3VGWsYCLZOSgMja8+6XXerLPmmugRD01TUQxCYECUbAVJhN7rhIuC6aN
+         ymwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OcZ1DaHw5AgDwn1rt/1/DpSSQI/ATbdMoEOFrgRgoaU=;
+        b=ZuJFUjGjBw4e+xiWYIqzk0TGjX+RS6UrIkhO+v//epaSDxjUT+rfsaaVEc6qjQFy3k
+         k+f6v0e1o688ag9R50OTaN7dEUf3BqJQh2SUcsxYpNeWLQw7WVgQ963jtYFds8wSgaKD
+         8L/+f48evVdyWv8NxumioJB0nvzssosXDw4Nb8HNgMEIoHA0k2BmnwJdXzuy0l9v6J+G
+         HKqzpkp4I9MDGRMGslK/x1WeGH6TWhK9JgkDXzm/TttbFmMdlkGJcBQ8tWQ4b5FkV762
+         6i4FHinkXjuktOBL93VbHr5CfhYGu25/i3UrrKFvp+OiqNxACVD26rBxG6J/yzv09XOZ
+         c8Ug==
+X-Gm-Message-State: AOAM533BdgwLpW/EVd4bbOQNvboP+zliCtOKA+MOJ8MmY2vvNxDMzukF
+        QAEWZ5VYoW1WHR/M3NastRIymrZgphyWI2MRhts1CcyU6R4akw==
+X-Google-Smtp-Source: ABdhPJxK3ApzYqMhWjZh7OLNc7qcqZFDnaW4m84M+3lVkYQ0E0h7XltyYoovkmKYronKjgiM4i3FZZiD9ydBLb3YWu4=
+X-Received: by 2002:a05:6870:b3a4:b0:e9:2370:5e9 with SMTP id
+ w36-20020a056870b3a400b000e9237005e9mr8465718oap.73.1653843145680; Sun, 29
+ May 2022 09:52:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+References: <20220528224423.7017-1-jim2101024@gmail.com> <20220528224423.7017-2-jim2101024@gmail.com>
+In-Reply-To: <20220528224423.7017-2-jim2101024@gmail.com>
+From:   Jim Quinlan <jim2101024@gmail.com>
+Date:   Sun, 29 May 2022 12:52:14 -0400
+Message-ID: <CANCKTBvyUOHJgh1=kFdyRFxWX5D4POnn0wmHYj-eNUQEP6esvA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] PCI: brcmstb: Fix regression regarding missing
+ PCIe linkup
+To:     linux-pci <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        James Dutton <james.dutton@gmail.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Jim Quinlan <jim2101024@gmail.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,204 +82,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, May 28, 2022 at 6:44 PM Jim Quinlan <jim2101024@gmail.com> wrote:
+>
+> commit 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
 
-Linus,
+> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> introduced a regression on the PCIe RPi4 Compute Module.  If the PCIe
+> root port DT node described in [2] was missing, no linkup would be attempted,
+> and subsequent accesses would cause a panic because this particular PCIe HW
+> causes a CPU abort on illegal accesses (instead of returning 0xffffffff).
+>
+> We fix this by allowing the DT root port node to be missing, as it behaved
+> before the original patchset messed things up.
+>
+> In addition, two small changes are made:
+>
+>   1. Having pci_subdev_regulators_remove_bus() call
+>      regulator_bulk_free() in addtion to regulator_bulk_disable().
+>   2. Having brcm_pcie_add_bus() return 0 if there is an
+>      error in calling pci_subdev_regulators_add_bus().
+>      Instead, we dev_err() and turn on our refusal mode instead.
+>
+> It would be best if this commit were tested by someone with a Rpi CM4
+> platform, as that is how the regression was found.  I have only emulated
+> the problem and fix on different platform.
+>
+> Note that a bisection identified
+>
+> commit 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
+>
+> as the first failing commit.  This commit is a regression, but is unrelated
+> and was fixed by a subsequent commit in the original patchset.
+>
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=215925
+> [2] Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+>
+> Fixes: 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
+> Fixes: 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215925
+Thorston -- I forgot to replace the bugzilla link; I'll get it on V3.  -- Jim
 
-Note, this series is based off of one of Thomas's tip branches that
-added the TAI clock. I have patches that depended on it.
-
-Also, I apologize for being late. My day job got in the way of my
-upstream work, and I pulled in a lot of patches just at the start of
-the merge window and wanted to let it sit in linux-next for a few days.
-But there's not much in this pull request that is concerning. The bulk
-of it is clean ups and various fixes. And the other stuff isn't too invasive.
-
-And to make matters worse, I'm doing this from Paris
- (Embedded / Kernel Recipes start tomorrow).
-
-tracing updates for 5.19:
-
-- The majority of the changes are for fixes and clean ups.
-
-Noticeable changes:
-
-- Rework trace event triggers code to be easier to interact with.
-
-- Support for embedding bootconfig with the kernel (as suppose to having it
-  embedded in initram). This is useful for embedded boards without initram
-  disks.
-
-- Speed up boot by parallelizing the creation of tracefs files.
-
-- Allow absolute ring buffer timestamps handle timestamps that use more than
-  59 bits.
-
-- Added new tracing clock "TAI" (International Atomic Time)
-
-- Have weak functions show up in available_filter_function list as:
-   __ftrace_invalid_address___<invalid-offset>
-  instead of using the name of the function before it.
-
-
-Please pull the latest trace-v5.19 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-trace-v5.19
-
-Tag SHA1: b66c571025d06f10c948ea09ca7fbfb8a95c29fe
-Head SHA1: b39181f7c6907dc66ff937b74758671fa6ba430c
-
-
-Ammar Faizi (2):
-      tracing: Return -EINVAL if WARN_ON(!glob) triggered in event_hist_trigger_parse()
-      tracing: Change `if (strlen(glob))` to `if (glob[0])`
-
-Christophe Leroy (1):
-      MAINTAINERS: Enlarge coverage of TRACING inside architectures
-
-Congyu Liu (1):
-      tracing: Disable kcov on trace_preemptirq.c
-
-Daniel Bristot de Oliveira (3):
-      tracing/timerlat: Notify IRQ new max latency only if stop tracing is set
-      tracing/timerlat: Print stacktrace in the IRQ handler if needed
-      tracing/timerlat: Do not wakeup the thread if the trace stops at the IRQ
-
-Gautam Menghani (1):
-      tracing: Initialize integer variable to prevent garbage return value
-
-Guo Zhengkui (1):
-      tracing: Use WARN instead of printk and WARN_ON
-
-Jakob Koschel (4):
-      tracing: Remove usage of list iterator after the loop body
-      tracing: Remove usage of list iterator variable after the loop
-      tracing: Replace usage of found with dedicated list iterator variable
-      tracing: Remove check of list iterator against head past the loop body
-
-Jeff Xie (1):
-      tracing: Make tp_printk work on syscall tracepoints
-
-Jiapeng Chong (1):
-      tracing: Fix kernel-doc
-
-Julia Lawall (1):
-      ftrace: Fix typo in comment
-
-Jun Miao (1):
-      tracing: Fix sleeping function called from invalid context on RT kernel
-
-Keita Suzuki (1):
-      tracing: Fix potential double free in create_var_ref()
-
-Kurt Kanzenbach (2):
-      tracing: Introduce trace clock tai
-      tracing: Add documentation for trace clock tai
-
-Li Huafei (1):
-      tracing: Reset the function filter after completing trampoline/graph selftest
-
-Li kunyu (1):
-      ftrace: Remove return value of ftrace_arch_modify_*()
-
-Mark-PK Tsai (2):
-      tracing: Avoid adding tracer option before update_tracer_options
-      tracing: make tracer_init_tracefs initcall asynchronous
-
-Masami Hiramatsu (5):
-      bootconfig: Make the bootconfig.o as a normal object file
-      bootconfig: Check the checksum before removing the bootconfig from initrd
-      bootconfig: Support embedding a bootconfig file in kernel
-      docs: bootconfig: Add how to embed the bootconfig into kernel
-      kprobes: Fix build errors with CONFIG_KRETPROBES=n
-
-Oscar Shiang (1):
-      tracing: Fix inconsistent style of mini-HOWTO
-
-Song Liu (1):
-      ftrace: Clean up hash direct_functions on register failures
-
-Steven Rostedt (Google) (4):
-      ring-buffer: Have absolute time stamps handle large numbers
-      ring-buffer: Have 32 bit time stamps use all 64 bits
-      tracing: Have event format check not flag %p* on __get_dynamic_array()
-      ftrace: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding weak function
-
-Tom Rix (1):
-      tracing: Cleanup double word in comment
-
-Tom Zanussi (4):
-      tracing: Remove logic for registering multiple event triggers at a time
-      tracing: Remove redundant trigger_ops params
-      tracing: Have existing event_command.parse() implementations use helpers
-      tracing: Separate hist state updates from hist registration
-
-Wan Jiabing (1):
-      ring-buffer: Simplify if-if to if-else
-
-Wonhyuk Yang (1):
-      tracing: Fix return value of trace_pid_write()
-
-Yang Li (1):
-      tracing: Fix tracing_map_sort_entries() kernel-doc comment
-
-Yuntao Wang (3):
-      tracing: Use trace_create_file() to simplify creation of tracefs entries
-      ftrace: Deal with error return code of the ftrace_process_locs() function
-      tracing: Use strim() to remove whitespace instead of doing it manually
-
-liqiong (2):
-      tracing: Change "char *" string form to "char []"
-      tracing: Cleanup code by removing init "char *name"
-
-sunliming (4):
-      tracing: Fix comments of create_filter()
-      x86,tracing: Remove unused headers
-      x86/traceponit: Fix comment about irq vector tracepoints
-      tracing: Fix comments for event_trigger_separate_filter()
-
-----
- Documentation/admin-guide/bootconfig.rst |  31 ++-
- Documentation/trace/ftrace.rst           |  12 ++
- Documentation/trace/timerlat-tracer.rst  |   5 +-
- MAINTAINERS                              |   5 +-
- arch/arm/kernel/ftrace.c                 |   6 +-
- arch/riscv/kernel/ftrace.c               |   6 +-
- arch/s390/kernel/ftrace.c                |   3 +-
- arch/x86/include/asm/ftrace.h            |   7 +
- arch/x86/kernel/ftrace.c                 |   6 +-
- arch/x86/kernel/tracepoint.c             |   6 -
- include/linux/bootconfig.h               |  10 +
- include/linux/ftrace.h                   |   4 +-
- include/linux/kprobes.h                  |   2 +-
- init/Kconfig                             |  21 +-
- init/main.c                              |  38 ++--
- kernel/kprobes.c                         | 144 +++++++-------
- kernel/trace/Makefile                    |   4 +
- kernel/trace/ftrace.c                    | 210 ++++++++++++++++----
- kernel/trace/pid_list.c                  |   4 +-
- kernel/trace/ring_buffer.c               |  81 ++++++--
- kernel/trace/trace.c                     |  72 ++++---
- kernel/trace/trace.h                     |  26 ++-
- kernel/trace/trace_boot.c                |   2 +-
- kernel/trace/trace_dynevent.c            |   9 +-
- kernel/trace/trace_eprobe.c              |  24 +--
- kernel/trace/trace_events.c              |  69 +++----
- kernel/trace/trace_events_filter.c       |   2 +-
- kernel/trace/trace_events_hist.c         | 191 +++++++++---------
- kernel/trace/trace_events_trigger.c      | 324 +++++++++++--------------------
- kernel/trace/trace_kprobe.c              |  15 +-
- kernel/trace/trace_osnoise.c             |  22 ++-
- kernel/trace/trace_output.c              |  25 ++-
- kernel/trace/trace_recursion_record.c    |   7 +-
- kernel/trace/trace_selftest.c            |   3 +
- kernel/trace/trace_syscalls.c            |  35 ++--
- kernel/trace/tracing_map.c               |   3 +-
- lib/.gitignore                           |   1 +
- lib/Makefile                             |  10 +-
- lib/bootconfig-data.S                    |  10 +
- lib/bootconfig.c                         |  13 ++
- 40 files changed, 822 insertions(+), 646 deletions(-)
- create mode 100644 lib/bootconfig-data.S
----------------------------
+> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> ---
+>  drivers/pci/controller/pcie-brcmstb.c | 43 +++++++++++++++++++--------
+>  1 file changed, 30 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
+> index ba5c120816b2..0839325f79ab 100644
+> --- a/drivers/pci/controller/pcie-brcmstb.c
+> +++ b/drivers/pci/controller/pcie-brcmstb.c
+> @@ -540,29 +540,42 @@ static int pci_subdev_regulators_add_bus(struct pci_bus *bus)
+>
+>  static int brcm_pcie_add_bus(struct pci_bus *bus)
+>  {
+> -       struct device *dev = &bus->dev;
+> -       struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
+> +       struct brcm_pcie *pcie;
+>         int ret;
+>
+> -       if (!dev->of_node || !bus->parent || !pci_is_root_bus(bus->parent))
+> +       /*
+> +        * Right now we only alloc/enable regulators and initiate pcie link
+> +        * when under the root port bus of the current domain.  In the
+> +        * future we may want to alloc/enable regulators under any port
+> +        * device (e.g. a switch).
+> +        */
+> +       if (!bus->parent || !pci_is_root_bus(bus->parent))
+>                 return 0;
+>
+>         ret = pci_subdev_regulators_add_bus(bus);
+> -       if (ret)
+> -               return ret;
+> +       if (ret) {
+> +               dev_err(pcie->dev, "failed to alloc/enable regulators\n");
+> +               goto err;
+> +       }
+>
+> -       /* Grab the regulators for suspend/resume */
+> +       /* Save the regulators for RC suspend/resume */
+> +       pcie = (struct brcm_pcie *) bus->sysdata;
+>         pcie->sr = bus->dev.driver_data;
+>
+> +       /* Attempt PCIe link-up */
+> +       if (brcm_pcie_linkup(pcie) == 0)
+> +               return 0;
+> +err:
+>         /*
+> -        * If we have failed linkup there is no point to return an error as
+> -        * currently it will cause a WARNING() from pci_alloc_child_bus().
+> -        * We return 0 and turn on the "refusal_mode" so that any further
+> -        * accesses to the pci_dev just get 0xffffffff
+> +        * If we have failed linkup or have an error when turning on
+> +        * regulators, there is no point to return an error value to the
+> +        * caller (pci_alloc_child_bus()) as it will summarily execute a
+> +        * WARNING().  Instead, we turn on our "refusal_mode" and return 0
+> +        * so that any further PCIe accesses succeed but do nothing (reads
+> +        * return 0xffffffff).  If we do not turn on refusal mode, our
+> +        * unforgiving PCIe HW will signal a CPU abort.
+>          */
+> -       if (brcm_pcie_linkup(pcie) != 0)
+> -               pcie->refusal_mode = true;
+> -
+> +       pcie->refusal_mode = true;
+>         return 0;
+>  }
+>
+> @@ -570,13 +583,17 @@ static void pci_subdev_regulators_remove_bus(struct pci_bus *bus)
+>  {
+>         struct device *dev = &bus->dev;
+>         struct subdev_regulators *sr = dev->driver_data;
+> +       struct brcm_pcie *pcie;
+>
+>         if (!sr || !bus->parent || !pci_is_root_bus(bus->parent))
+>                 return;
+>
+>         if (regulator_bulk_disable(sr->num_supplies, sr->supplies))
+>                 dev_err(dev, "failed to disable regulators for downstream device\n");
+> +       regulator_bulk_free(sr->num_supplies, sr->supplies);
+>         dev->driver_data = NULL;
+> +       pcie = (struct brcm_pcie *) bus->sysdata;
+> +       pcie->sr = NULL;
+>  }
+>
+>  /* Limits operation to a specific generation (1, 2, or 3) */
+> --
+> 2.17.1
+>

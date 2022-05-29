@@ -2,375 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652C0537157
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8553A537159
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbiE2OZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 10:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36280 "EHLO
+        id S230426AbiE2O0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 10:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiE2OZd (ORCPT
+        with ESMTP id S230408AbiE2O0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 10:25:33 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7955E151;
-        Sun, 29 May 2022 07:25:31 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id p13so3738942ybm.1;
-        Sun, 29 May 2022 07:25:31 -0700 (PDT)
+        Sun, 29 May 2022 10:26:13 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C965E156
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 07:26:11 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id y13so16591693eje.2
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 07:26:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+0zPRYJnufvVPkTixT+aSSdJu8NMBjIecozVwXO0Nko=;
-        b=LqdjDaXotHC/DSVIXU8KG9WyTe3pAhOq0KOMWQ1stlTUK2qbRsT6lbKLNKLFgksH5T
-         sfmSavGPerQYxhzJETb/O9SerasmLDNr5OekWLv3iHR9ZAJDdIcjSy22+5gawPV4dolD
-         kxFBR/8dJ87BkHPcsGkDvQCHy3qeon2Az640yUvS5oj081UliQpd+vDBYvp8Q7l6diDH
-         0zdl/J+PfNeHc1zuu1bA9gyAGWu0lNllRowBWzK9ys9w4vyhaWHiYkkbPAn7+nPvBSZP
-         irOZBTYIX1jaktNgcNuoAGdZAFziRSIg0fvE1E9ZQ43ylFKicLpwys8+PzRVFLNXcbRV
-         w/WQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=3JaAWKa1bZRwQXdiutq3KI0xLzzTpwZUulcAkJ3MYjM=;
+        b=KRMv70BYNXO5K4g2IQQvfaI/pcabvXgzAfht622ys8tKYzwvf3ofKMlRf6PdjuwS/9
+         X5abjnqdqyAcufM080Z4QbIOUIoWwMYVWdWsNwIRmj+tL5LFL+ntX9DgRCQrOs109ovN
+         E35I9HBfy6NOdqQFKyX8T7zNFQMUqWGueuOQkQtZE3pEsyVxwFA2ahAmDZReu0fcIqms
+         fiu0eK/aDeoFamLT1/pdTcYrp07T+7/9Vv3JtgDsVqMgoMlU9REYuKcL4lsteUnfbh61
+         cPqJcPG81LCrK7PoY1jke+x7BjpcoVgO7f9PxmNYBdMewrjn8eBEPidomKsHpNEVoEmn
+         bU/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+0zPRYJnufvVPkTixT+aSSdJu8NMBjIecozVwXO0Nko=;
-        b=DWl1toFPNAmiTM+2frl+/rGe19J02J34WuBRUPcmpatlwxuSZMIjJPpI+nxApQPfJS
-         3cqw/aaXk8jrGGFDc4T0FemQ6Xm8keL0lBSI85sKxy91FTu/yiUIbzjdFIDv6xtmtl9q
-         il+pZ6QICOHAaHvac5bFlizRJgpgHfjL6Obo1HVLuKocAwHhFLB1lOVgeIP0xEBdDvWq
-         fnLt1yLAJBbN2dAXll3t0KvPZV6snOpQHA3qndcil+k9zMep6+DiVC2ZRbWXfBVvzSi8
-         OuhzdiBxxlfixA1kh30ubYXIBHEKiRANPpZVKn1YFEnWbsN2RCgaHyefH7C3spnJyg7E
-         +fSQ==
-X-Gm-Message-State: AOAM5339WkMRGgY5Le14mdYHp2mUIVQXinpc7qkiK9ienWviY0rT0Rkp
-        y2jzIxaE+12GPDDYa/pgHBSE5Wbv6vWiSHimXWcakDoacZd0Pg==
-X-Google-Smtp-Source: ABdhPJwtNSjqYTLL1SW8UvN5n72R4plMC2o/nSbnPtkZ2xGV4T5mxk3wZ9RBBltR4yaQKbgIyL2o7sqHgaBLCOh9XbM=
-X-Received: by 2002:a5b:1d0:0:b0:65c:ce2b:594f with SMTP id
- f16-20020a5b01d0000000b0065cce2b594fmr1574128ybp.500.1653834331020; Sun, 29
- May 2022 07:25:31 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3JaAWKa1bZRwQXdiutq3KI0xLzzTpwZUulcAkJ3MYjM=;
+        b=gIB3ri+W+Z8H+tZlS46Ni77rNOcUC4Yin9Rr7F+QmIo1bCvpniSRHNawsrNrfEB5Jj
+         2DUuMgXjTMZsVkDXxJcTbV3BkAyQZrgXS3gU/lhFp0abfyiVV2NX2/3zt4Sq9j2o3tu/
+         iSNJTNJabZw6fvljrwzxVSfUYUxpepf0hzAEFZUMCeWPfanPynp+TjhIDPwvt//RFv3T
+         BYaJh4Zw9kLZ9vY+djtc8R358wc1xjoq9ZbzMg2DuZNcWyUQzMXXaBTwYGOhMgS5ILkd
+         FibXGXdQ1R4syQauj7l2vzK998qCDvoPg3fDc2qEjxzJQAsPDkfwQ0ImRzxSKxmowkA1
+         DkAw==
+X-Gm-Message-State: AOAM5307/oamJbjJnHO2L5s/1wiUJGs0vAcUb5CnoA/MwlweJSEucnLT
+        tPOYiiubOL7rreR69H6FMtPQQg==
+X-Google-Smtp-Source: ABdhPJySVlVvENmtWvnwL1k/sepyDlzyv6YTdAOFbHANvVoWjCkbv8v/KqvZg0t+m68ewWBbun5GaQ==
+X-Received: by 2002:a17:907:7256:b0:6ff:2ed0:95d with SMTP id ds22-20020a170907725600b006ff2ed0095dmr12654168ejc.452.1653834369795;
+        Sun, 29 May 2022 07:26:09 -0700 (PDT)
+Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id a92-20020a509ee5000000b0042dbc55f6e4sm2231061edf.7.2022.05.29.07.26.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 May 2022 07:26:09 -0700 (PDT)
+Message-ID: <8123f029-8d0b-be52-ba8d-8458f424ee32@linaro.org>
+Date:   Sun, 29 May 2022 16:26:08 +0200
 MIME-Version: 1.0
-References: <20220512135901.1377087-1-srinivas.neeli@xilinx.com>
- <CAMZ6Rq+z69CTY6Ec0n9d0-ri6pcyHtKH917M1eTD6hgkmyvGDQ@mail.gmail.com>
- <DM6PR02MB53868E201FAB1F01D01AAB25AFD99@DM6PR02MB5386.namprd02.prod.outlook.com>
- <CAMZ6RqLKQ-jmQfF7yq5dObpbzky6FcjEFw9acHmfLLhp2v4eXg@mail.gmail.com> <DM6PR02MB5386DCD8D96FEC639D967A42AFDB9@DM6PR02MB5386.namprd02.prod.outlook.com>
-In-Reply-To: <DM6PR02MB5386DCD8D96FEC639D967A42AFDB9@DM6PR02MB5386.namprd02.prod.outlook.com>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Sun, 29 May 2022 23:25:19 +0900
-Message-ID: <CAMZ6RqJ2JHJYRu-pSpbpV6SOBqs5w7RNt5R3xeuRyD++NiNWPw@mail.gmail.com>
-Subject: Re: [PATCH] can: xilinx_can: Add Transmitter delay compensation (TDC)
- feature support
-To:     Srinivas Neeli <sneeli@xilinx.com>
-Cc:     "wg@grandegger.com" <wg@grandegger.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Appana Durga Kedareswara Rao <appanad@xilinx.com>,
-        Srinivas Goud <sgoud@xilinx.com>,
-        Michal Simek <michals@xilinx.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        git <git@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/2] arm64: dts: rockchip: Add initial support for Pine64
+ PinePhone Pro
+Content-Language: en-US
+To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        Ondrej Jirman <x@xff.cz>, Martijn Braam <martijn@brixit.nl>,
+        Ondrej Jirman <megous@megous.com>
+References: <20220529031705.278631-1-tom@tom-fitzhenry.me.uk>
+ <20220529031705.278631-3-tom@tom-fitzhenry.me.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220529031705.278631-3-tom@tom-fitzhenry.me.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat. 28 May 2022 at 09:46, Srinivas Neeli <sneeli@xilinx.com> wrote:
-> Hi Vincent,
->
-> > -----Original Message-----
-> > From: Vincent Mailhol <vincent.mailhol@gmail.com>
-> > Sent: Friday, May 27, 2022 6:01 AM
-> > To: Srinivas Neeli <sneeli@xilinx.com>
-> > Cc: wg@grandegger.com; mkl@pengutronix.de; davem@davemloft.net;
-> > edumazet@google.com; Appana Durga Kedareswara Rao
-> > <appanad@xilinx.com>; Srinivas Goud <sgoud@xilinx.com>; Michal Simek
-> > <michals@xilinx.com>; kuba@kernel.org; pabeni@redhat.com; linux-
-> > can@vger.kernel.org; netdev@vger.kernel.org; linux-arm-
-> > kernel@lists.infradead.org; linux-kernel@vger.kernel.org; git
-> > <git@xilinx.com>
-> > Subject: Re: [PATCH] can: xilinx_can: Add Transmitter delay compensation
-> > (TDC) feature support
-> >
-> > On Fri. 27 May 2022 at 00:51, Srinivas Neeli <sneeli@xilinx.com> wrote:
-> > > Hi Vincent,
-> > >
-> > > > -----Original Message-----
-> > > > From: Vincent Mailhol <vincent.mailhol@gmail.com>
-> > > > Sent: Friday, May 13, 2022 6:54 AM
-> > > > To: Srinivas Neeli <sneeli@xilinx.com>
-> > > > Cc: wg@grandegger.com; mkl@pengutronix.de; davem@davemloft.net;
-> > > > edumazet@google.com; Appana Durga Kedareswara Rao
-> > > > <appanad@xilinx.com>; Srinivas Goud <sgoud@xilinx.com>; Michal
-> > Simek
-> > > > <michals@xilinx.com>; kuba@kernel.org; pabeni@redhat.com; linux-
-> > > > can@vger.kernel.org; netdev@vger.kernel.org; linux-arm-
-> > > > kernel@lists.infradead.org; linux-kernel@vger.kernel.org; git
-> > > > <git@xilinx.com>
-> > > > Subject: Re: [PATCH] can: xilinx_can: Add Transmitter delay
-> > > > compensation
-> > > > (TDC) feature support
-> > > >
-> > > > On Fri. 13 May 2022 at 07:30, Srinivas Neeli
-> > > > <srinivas.neeli@xilinx.com>
-> > > > wrote:
-> > > > > Added Transmitter delay compensation (TDC) feature support.
-> > > > > In the case of higher measured loop delay with higher baud rates,
-> > > > > observed bit stuff errors.
-> > > > > By enabling the TDC feature in a controller, will compensate for
-> > > > > the measure loop delay in the receive path.
-> > > > > TDC feature requires BRP values can be 1 or 2.
-> > > > > The current CAN framework does not limit the brp so while using
-> > > > > TDC, have to restrict BRP values.
-> > > > > Ex:
-> > > > > ip link set can0 type can tq 12 prop-seg 39 phase-seg1 20
-> > > > > phase-seg2
-> > > > > 20 sjw 20 dtq 12 dprop-seg 5 dphase-seg1 6 dphase-seg2 4 dsjw 4 fd
-> > > > > on loopback on tdco 12 tdc-mode auto
-> > > >
-> > > > Did you experience some cases in which you had BRP > 2 and saw
-> > > > transmission errors due to the absence of delay compensation? Could
-> > > > you show the calculated values?
-> > > > Usually, you start to observe but stuff error at high bitrates (e.g.
-> > > > ~5MBPS), and for such bitrates, time quanta has to be small which
-> > > > then results in a small BRP.
-> > >
-> > > yes, we observed errors with higher baud rates(4 and 5 MBPS).
-> > > Observation:
-> > > BRPA 1Mbps Sampling 75%
-> > > BRPD 5MBPS Sampling 75%
-> > > On NXP PHY observed a delay of 160 ns. so observing the failure.
-> > > After enabling the TDC feature to work fine.
-> >
-> > Can you also share the results of:
-> >
-> > | ip --details link show can0
-> >
-> > for both the automatic calculation by the CAN framework and for your hand
-> > calculated values?
->
-> ip --details link show can6
-> root@xilinx-vck190-2021_1:~# ip --details link show can6
-> 9: can6: <NOARP,UP,LOWER_UP,ECHO> mtu 72 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
->     link/can  promiscuity 0 minmtu 0 maxmtu 0
->     can <FD> state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
->           bitrate 999999 sample-point 0.750
->           tq 250 prop-seg 1 phase-seg1 1 phase-seg2 1 sjw 1
->           xilinx_can: tseg1 1..256 tseg2 1..128 sjw 1..128 brp 2..256 brp-inc 1
->           dbitrate 4999999 dsample-point 0.750
->           dtq 50 dprop-seg 1 dphase-seg1 1 dphase-seg2 1 dsjw 1
->           xilinx_can: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 2..256 dbrp-inc 1
->           clock 79999999 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535
-> root@xilinx-vck190-2021_1:~#
+On 29/05/2022 05:17, Tom Fitzhenry wrote:
+> This is a basic DT that includes only features that are already
+> supported by mainline drivers.
+> 
+> Tested to work: booting from eMMC, WiFi, charging.
+> 
+> Future patches will flesh out the DT. Some components, e.g. the panel,
+> are awaiting driver mainlining.
+> 
+> This is derived from a combination of https://gitlab.com/pine64-org/linux
+> and https://megous.com/git/linux.
+> 
+> https://wiki.pine64.org/wiki/PinePhone_Pro
+> 
+> Co-developed-by: Ondrej Jirman <megous@megous.com>
+> Co-developed-by: Martijn Braam <martijn@brixit.nl>
+> Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+> ---
+>  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+>  .../dts/rockchip/rk3399-pinephone-pro.dts     | 939 ++++++++++++++++++
+>  2 files changed, 940 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+> index 4ae9f35434b8..c00e7922d974 100644
+> --- a/arch/arm64/boot/dts/rockchip/Makefile
+> +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> @@ -41,6 +41,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopi-neo4.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopi-r4s.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-orangepi.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-pinebook-pro.dtb
+> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-pinephone-pro.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-puma-haikou.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-roc-pc.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-roc-pc-mezzanine.dtb
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+> new file mode 100644
+> index 000000000000..b1a486db1dfe
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+> @@ -0,0 +1,939 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2020 Martijn Braam <martijn@brixit.nl>
+> + * Copyright (c) 2021 Kamil Trzciński <ayufan@ayufan.eu>
+> + */
+> +
+> +// PinePhone Pro datasheet: https://files.pine64.org/doc/PinePhonePro/PinephonePro-Schematic-V1.0-20211127.pdf
+> +
+> +/dts-v1/;
+> +#include <dt-bindings/input/gpio-keys.h>
+> +#include <dt-bindings/input/linux-event-codes.h>
+> +#include <dt-bindings/usb/pd.h>
+> +#include <dt-bindings/leds/common.h>
+> +#include "rk3399.dtsi"
+> +#include "rk3399-opp.dtsi"
+> +
+> +/ {
+> +	model = "Pine64 PinePhonePro";
+> +	compatible = "pine64,pinephone-pro", "rockchip,rk3399";
+> +
+> +	chosen {
+> +		bootargs = "earlycon=uart8250,mmio32,0xff1a0000";
 
-So the CAN framework calculated a DBRP of 4.
+earlycon is debugging piece so it should not be in generic DTS.
 
-Did you apply this patch from Marc?
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=85d4eb2a3dfe939dda5304d61e406cb8e0852d60
-
-It is supposed to solve those "too high BRP" issues.
-
-> Hand calculated values:
-> ip link set can0 type can tq 12 prop-seg 39 phase-seg1 20 phase-seg2 20 sjw 20 dtq 12 dprop-seg 5 dphase-seg1 6 dphase-seg2 4 dsjw 4 fd on
-
-With tq = 12 you are off by 4%, right?
-I get:
-
-dbrp = dtq * clock / 1000000000
-     = 12 * 80000000 / 1000000000
-     = 0.96
-
-instead of brp = 1.
-
-Wouldn't dtq = 25 and dbrp = 2 be the best here?
-
-> Observations:
-> ---------------
-> Board VCK190 +NXP phy.
-> Observed TDCV value generated by IP is 9clock cycles(112ns)[Choosing Falling edge of bit].
-> But Bit starts on rx line after 160 ns observed with scope.
->
-> Exp1:
-> BRPA 1Mbps Sampling 75%
-> BRPD 5MBPS Sampling 75%
->
-> Without TDC feature:
-> Bit length 200ns, Sampling point 75% means 150ns.
-> IP tries to sample at 150ns , but Bit starting at 160ns,so observed failure.
->
-> With TDC feature:
-> Bit length 200ns, Sampling point 75%, TDCO =12clock cycles(150ns).
-> Ip tries after 112+150 = 262ns,able to sample the bit.
-
-That seems correct.
-My worries is why the framework calculates a DBRP of 4. Please check
-that Mark's patch was correctly applied. If not, try it and,
-hopefully, this will fix your issue and you will not have to enter
-manually calculated parameters again.
-
-> Thank you!
-> >
-> >
-> > Thank you!
-> >
-> > > > > Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
-> > > > > ---
-> > > > >  drivers/net/can/xilinx_can.c | 30 +++++++++++++++++++++++++-----
-> > > > >  1 file changed, 25 insertions(+), 5 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/net/can/xilinx_can.c
-> > > > > b/drivers/net/can/xilinx_can.c index e2b15d29d15e..7af518fbed02
-> > > > > 100644
-> > > > > --- a/drivers/net/can/xilinx_can.c
-> > > > > +++ b/drivers/net/can/xilinx_can.c
-> > > > > @@ -1,7 +1,7 @@
-> > > > >  // SPDX-License-Identifier: GPL-2.0-or-later
-> > > > >  /* Xilinx CAN device driver
-> > > > >   *
-> > > > > - * Copyright (C) 2012 - 2014 Xilinx, Inc.
-> > > > > + * Copyright (C) 2012 - 2022 Xilinx, Inc.
-> > > > >   * Copyright (C) 2009 PetaLogix. All rights reserved.
-> > > > >   * Copyright (C) 2017 - 2018 Sandvik Mining and Construction Oy
-> > > > >   *
-> > > > > @@ -133,6 +133,8 @@ enum xcan_reg {
-> > > > >  #define XCAN_DLCR_BRS_MASK             0x04000000 /* BRS Mask in DLC
-> > */
-> > > > >
-> > > > >  /* CAN register bit shift - XCAN_<REG>_<BIT>_SHIFT */
-> > > > > +#define XCAN_BRPR_TDCO_SHIFT_CANFD     8  /* Transmitter Delay
-> > > > Compensation Offset */
-> > > >
-> > > > Having CANFD in the name is redundant (TDC implies CANFD).
-> > > > #define XCAN_BRPR_TDCO_SHIFT 8
-> > > update in V2.
-> > >
-> > > >
-> > > > > +#define XCAN_BRPR_TDCE_SHIFT_CANFD     16 /* Transmitter Delay
-> > > > Compensation (TDC) Enable */
-> > > >
-> > > > Why not:
-> > > > #define XCAN_BRPR_TDC_ENABLE BIT(16)
-> > > update in V2.
-> > >
-> > > >
-> > > > >  #define XCAN_BTR_SJW_SHIFT             7  /* Synchronous jump width */
-> > > > >  #define XCAN_BTR_TS2_SHIFT             4  /* Time segment 2 */
-> > > > >  #define XCAN_BTR_SJW_SHIFT_CANFD       16 /* Synchronous jump
-> > width
-> > > > */
-> > > > > @@ -259,7 +261,7 @@ static const struct can_bittiming_const
-> > > > xcan_bittiming_const_canfd2 = {
-> > > > >         .tseg2_min = 1,
-> > > > >         .tseg2_max = 128,
-> > > > >         .sjw_max = 128,
-> > > > > -       .brp_min = 2,
-> > > > > +       .brp_min = 1,
-> > > >
-> > > > Was there any reason to have brp_min = 2 in the first place?
-> > > > I think this change  should be a different patch. If the brp_min = 2
-> > > > is just a typo, you might also want to backport it to stable branches.
-> > >
-> > > On early silicon engineering samples we observed bit shrinking issue when
-> > we use brp =1 , hence we updated brp_min =2.
-> > > As in production silicon this issue is fixed we are planning to revert the
-> > patch.
-> >
-> > Great!
-> >
-> > > > >         .brp_max = 256,
-> > > > >         .brp_inc = 1,
-> > > > >  };
-> > > > > @@ -272,11 +274,21 @@ static struct can_bittiming_const
-> > > > xcan_data_bittiming_const_canfd2 = {
-> > > > >         .tseg2_min = 1,
-> > > > >         .tseg2_max = 16,
-> > > > >         .sjw_max = 16,
-> > > > > -       .brp_min = 2,
-> > > > > +       .brp_min = 1,
-> > > > >         .brp_max = 256,
-> > > > >         .brp_inc = 1,
-> > > > >  };
-> > > > >
-> > > > > +/* Transmission Delay Compensation constants for CANFD2.0 and
-> > > > > +Versal */ static const struct can_tdc_const xcan_tdc_const = {
-> > > > > +       .tdcv_min = 0,
-> > > > > +       .tdcv_max = 0, /* Manual mode not supported. */
-> > > >
-> > > > Right, had a look at the datasheet and xilinx indeed does not
-> > > > support setting TDCV.
-> > > > However, xilinx still has a TDCV register to report the measured
-> > > > transmission delay.
-> > > >
-> > > > Socket CAN's TDC framework provides can_priv::do_get_auto_tdcv() to
-> > > > report the measured value through the netlink interface:
-> > > > https://elixir.bootlin.com/linux/v5.17/source/include/linux/can/dev.
-> > > > h#L87
-> > > >
-> > > > Can you implement this call back function?
-> > > Will implement in V2.
-> > >
-> > > >
-> > > > > +       .tdco_min = 0,
-> > > > > +       .tdco_max = 64,
-> > > > > +       .tdcf_min = 0, /* Filter window not supported */
-> > > > > +       .tdcf_max = 0,
-> > > > > +};
-> > > > > +
-> > > > >  /**
-> > > > >   * xcan_write_reg_le - Write a value to the device register little endian
-> > > > >   * @priv:      Driver private data structure
-> > > > > @@ -425,6 +437,11 @@ static int xcan_set_bittiming(struct
-> > > > > net_device
-> > > > *ndev)
-> > > > >             priv->devtype.cantype == XAXI_CANFD_2_0) {
-> > > > >                 /* Setting Baud Rate prescalar value in F_BRPR Register */
-> > > > >                 btr0 = dbt->brp - 1;
-> > > > > +               if (can_tdc_is_enabled(&priv->can)) {
-> > > > > +                       btr0 = btr0 |
-> > > > > +                       (priv->can.tdc.tdco) << XCAN_BRPR_TDCO_SHIFT_CANFD
-> > |
-> > > > > +                       1 << XCAN_BRPR_TDCE_SHIFT_CANFD;
-> > > >
-> > > > I don't think the parenthesis around (priv->can.tdc.tdco) are needed.
-> > > Yes, will update.
-> > > >
-> > > >                        btr0 = btr0 |
-> > > >                        priv->can.tdc.tdco << XCAN_BRPR_TDCO_SHIFT |
-> > > >                       XCAN_BRPR_TDC_ENABLE
-> > > >
-> > > > (c.f. above for macro names)
-> > > >
-> > > > > +               }
-> > > > >
-> > > > >                 /* Setting Time Segment 1 in BTR Register */
-> > > > >                 btr1 = dbt->prop_seg + dbt->phase_seg1 - 1; @@
-> > > > > -1747,13 +1764,16 @@ static int xcan_probe(struct platform_device
-> > *pdev)
-> > > > >                 priv->can.data_bittiming_const =
-> > > > >                         &xcan_data_bittiming_const_canfd;
-> > > > >
-> > > > > -       if (devtype->cantype == XAXI_CANFD_2_0)
-> > > > > +       if (devtype->cantype == XAXI_CANFD_2_0) {
-> > > > >                 priv->can.data_bittiming_const =
-> > > > >                         &xcan_data_bittiming_const_canfd2;
-> > > > > +               priv->can.tdc_const = &xcan_tdc_const;
-> > > > > +       }
-> > > > >
-> > > > >         if (devtype->cantype == XAXI_CANFD ||
-> > > > >             devtype->cantype == XAXI_CANFD_2_0)
-> > > > > -               priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
-> > > > > +               priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD |
-> > > > > +
-> > > > > + CAN_CTRLMODE_TDC_AUTO;
-> > > > >
-> > > > >         priv->reg_base = addr;
-> > > > >         priv->tx_max = tx_max;
+Best regards,
+Krzysztof

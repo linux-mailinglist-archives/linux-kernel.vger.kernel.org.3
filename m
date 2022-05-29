@@ -2,94 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0863536F2F
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 05:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E15536F37
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 05:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiE2DVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 23:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
+        id S230288AbiE2Dbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 23:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbiE2DVP (ORCPT
+        with ESMTP id S230273AbiE2Dba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 23:21:15 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE96BA57A
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 20:21:14 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 8EEAB320029B;
-        Sat, 28 May 2022 23:21:13 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sat, 28 May 2022 23:21:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        tom-fitzhenry.me.uk; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1653794473; x=1653880873; bh=uclbEBUpCx
-        RExA33Ae2eWgh6Stc1AgnMH8FnX2UkQ5Q=; b=WiBqo/7KQYB/fnqA6xRFZz//Cd
-        4xG9k9z+H5OyXxB4CMppo7uUw8K1mlw+I1KUZbt1w0iA8RAnboXrtBRJPW2KbSEJ
-        ly02ftNRYP+VGZKU5oofI3zZ7UB0PfISB0MSuE7vWiZX04MGlCU1tLnz8LNfPFMy
-        g1fkDX9W9g+Dz/rJp0fWby+c4oJdLTKA5yEjquxNUNP+it2FVl++S99IaCmAQm9V
-        3R+JWkIqjK5cDxkXujbDwu0IdqxRV1/lSzMMqPq/jtjNiiG+VpShSYubXOWCOf6H
-        +dGK/LitYzmh8ghDjER0d0rNwFRo6IH6EDl4Ry9fO51gYIivuPeHIrMyV5/g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1653794473; x=
-        1653880873; bh=uclbEBUpCxRExA33Ae2eWgh6Stc1AgnMH8FnX2UkQ5Q=; b=E
-        QmIaBSoma8dv3+UEj2OlkmAFs//4KIUVCm5euDCG1YQtGp1+9wpKRMlmT2MqT9rB
-        WW5YxeaPNh7UN7d2NyCZVO1AUVeNXP+ZS6sXmLeOufutaEzGch0Us/IQbqy5AdtK
-        tM6qDGO+kKKeGlH4B3bHp8oTYGNBvwoHFIw3z29lJJ3F4oaFYodrhdvUq+5k4bfM
-        n3itvGLx1VgTcy0j7BeIVP7V7g4bVN8BzqDSmXcJ7147vESEbQ0NspQgneqmLeua
-        leeU7lQ2o4u4ngqTVkAkHFQf9OFQyxiKYJ77YR24pUrBOqO/SOPiu6i08Ty1JleJ
-        0JuzWoZdDbB0EfySAbH2g==
-X-ME-Sender: <xms:qOaSYlk1RW8DqMuTfaCx8fe-Q3a3N2uG99ztwMrRcfFmkrYo9g6llQ>
-    <xme:qOaSYg3JZzIGGda2GHATZ86Ko_cvK-ewqPB_omjTjI5Zg5Rx9HByWFIUxmVqpGv9q
-    VGQMqksMQIRCi24CQ>
-X-ME-Received: <xmr:qOaSYrqgLkr-NWg1lvpzVdlIyeF-Z6FiJS5LFdP1FXiOKfzTFHK08tsCC2RurYszXf2ftAxEQvHpKTQYeVqu7spU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkedvgdeilecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfhuffvvehfjggtgfesthejredttdefjeenucfhrhhomhepvfhomhcu
-    hfhithiihhgvnhhrhicuoehtohhmsehtohhmqdhfihhtiihhvghnrhihrdhmvgdruhhkqe
-    enucggtffrrghtthgvrhhnpedtjeeltdevgedthedvhfekheeutdethefhledvheelledt
-    tddvjeefffeludelhfenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepthhomhesthhomhdqfhhi
-    thiihhgvnhhrhidrmhgvrdhukh
-X-ME-Proxy: <xmx:qOaSYln3nDYvRrhCw2v6CzYdJddPwOLwvCkmNW-ckWEShyeMvo3iWA>
-    <xmx:qOaSYj0LX7eGqbWO_NKFyYgyU0wyVYgeC6RnySuNNJn1EsuG8TXk3A>
-    <xmx:qOaSYkszszqoacblbk_CzbS7bdQEVgW5ocV4s3y5tE8pZO-X2wx8sQ>
-    <xmx:qeaSYsuueOpERZ1Kj62jaPVzvq2bwqL0nKobZyQmBSGi1GZ2tpaF5w>
-Feedback-ID: iefc945ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 28 May 2022 23:21:09 -0400 (EDT)
-Message-ID: <23811367-3180-32aa-56d6-355e679a304e@tom-fitzhenry.me.uk>
-Date:   Sun, 29 May 2022 13:21:07 +1000
+        Sat, 28 May 2022 23:31:30 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E83A207
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 20:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qyOue3vhI9r64/cB5hJYFTVsL61v9tYIZ/ebY1l6Usk=; b=Ptypr/RmNCnkuOvkKpm4oFUly8
+        7rRrFWo0GsMzRV5Z+J7L1JCyAeqB5ATCDQg1+WvGM/JZx7m5IYRwiMNYlQqcoBr5CTJWnlsAI3zPN
+        dZ++yUw2Aj3yYCYk5yd7FRuQPYNIkUtxFucRzg1wxbL+GSgxwyDGwDJz+LeBUObZRPwavmW8dXbOM
+        oxey5EfzRfR5Md56svvfw12ouZh44fI2tuWwJiem8uF1CUuei3zea43okhgGukFuSrki5m7/IO5gD
+        YxNATO2aCmtvHrwAsroAzUP6PxBtYPtQzkVGL1mSbkWkGVBU7sV0KTrlc1DRwnitVfukgT+l31Edv
+        EDfCDE2w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nv9dz-003M3H-Mw; Sun, 29 May 2022 03:31:07 +0000
+Date:   Sun, 29 May 2022 04:31:07 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     bh1scw@gmail.com, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/slub: replace alloc_pages with folio_alloc
+Message-ID: <YpLo+4U8k+OLTmz9@casper.infradead.org>
+References: <20220528161157.3934825-1-bh1scw@gmail.com>
+ <YpJNX7PN8hAFgVwj@casper.infradead.org>
+ <YpLhSokkrPrXjNXP@FVFYT0MHHV2J.googleapis.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
-Subject: ...
-To:     Michael Walle <michael@walle.cc>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Martijn Braam <martijn@brixit.nl>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220523055541.724422-1-tom@tom-fitzhenry.me.uk>
- <65339d49135ffb578b5cd5ae459cea8a@walle.cc>
- <28d3925a-983a-fcb8-19af-6e6baf892d53@tom-fitzhenry.me.uk>
- <10c2bc96821e9a907e54ef1675dc4c60@walle.cc>
-Content-Language: en-US
-In-Reply-To: <10c2bc96821e9a907e54ef1675dc4c60@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YpLhSokkrPrXjNXP@FVFYT0MHHV2J.googleapis.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,26 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/5/22 08:30, Michael Walle wrote:
-> Yes that would be great. Could also be one of the other
-> 25h vendors, usually the continuation code is just ignored.
-> I'd bet it some china SPI flash.
+On Sun, May 29, 2022 at 10:58:18AM +0800, Muchun Song wrote:
+> On Sat, May 28, 2022 at 05:27:11PM +0100, Matthew Wilcox wrote:
+> > On Sun, May 29, 2022 at 12:11:58AM +0800, bh1scw@gmail.com wrote:
+> > > From: Fanjun Kong <bh1scw@gmail.com>
+> > > 
+> > > This patch will use folio allocation functions for allocating pages.
+> > 
+> > That's not actually a good idea.  folio_alloc() will do the
+> > prep_transhuge_page() step which isn't needed for slab.
+> 
+> You mean folio_alloc() is dedicated for THP allocation?  It is a little
+> surprise to me.  I thought folio_alloc() is just a variant of alloc_page(),
+> which returns a folio struct instead of a page.  Seems like I was wrong.
+> May I ask what made us decide to do this?
 
-Physical inspection of the SPI NOR chip shows the chip is a 
-"SiliconKaiser SK25LP128" on it. Thanks to biktorgj[0] for finding that.
+Yeah, the naming isn't great here.  The problem didn't really occur
+to me until I saw this patch, and I don't have a good solution yet.
+We're in the middle of a transition, but the transition is likely to
+take years and I don't think we necessarily have the final form of the
+transition fully agreed to or understood, so we should come up with
+something better for the transition.
 
-Per 
-https://github.com/Yatekii/jep106/commit/caa92b6f811609d49b46777fce0d1f84a3550c31, 
-SiliconKaiser is a vendor rename from Chingis introduced in JEP106BD, at 
-0x25 in bank/continuation 8.
+Ignoring the naming here, memory allocated to filesystems can be split,
+but the split can fail, so they need the page-deferred-list and the
+DTOR.  Memory allocated to slab cannot be split, so initialising the
+page-deferred-list is a waste of time.
 
-Unfortunately I have been unable to find a datasheet for this chip.
+The end-goal is to split apart allocating the memory from allocating
+its memory descriptor (which I like to call memdesc).  So for filesystem
+folios, we'd call slab to allocate a struct folio and then tell the
+buddy allocator "here is the memdesc of type folio, allocate
+me 2^n pages and make pfn_to_memdesc return this memdesc for each of
+the 2^n pages in it".
 
-I will add a siliconkaiser.c file with this chip "sk25lp128" using the 
-SNOR_ID3 API, and submit a patch once I have tested this.
+In this end-goal, slab would also allocate a struct slab (... there's
+a recursion problem here which has a solution ...), and then allocate
+2^n pages.  But until we're ready to shrink struct page down to one
+or two words, doing this is just a waste of memory and time.
 
-It's confusing that the chip's returned JEDEC ID has no continuation 
-codes to reflect being in bank 8. Does this risk collisions if another 
-25h vendor uses the same JEDEC ID?
+So I still don't have a good solution to receiving patches like this
+other than maybe adding a comment like
 
-0. https://github.com/Biktorgj
+	/* Do not change this to allocate a folio */
+
+which will be ignored.

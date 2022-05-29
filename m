@@ -2,170 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576C2537148
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9FC53714B
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbiE2ON5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 10:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
+        id S230376AbiE2OOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 10:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiE2ONz (ORCPT
+        with ESMTP id S230364AbiE2OOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 10:13:55 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC99741980
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 07:13:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653833634; x=1685369634;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=v/ebwrVLFzJhynLx4/TGkQgVlAg48YwERRA1prVq7P4=;
-  b=jLXriZltF1KnRPuJPPFGgtGrd2Xg5FkY7SUvki1zASwueuT7okn37MwT
-   jSp2p9seoBvPxGVuu/HHZCnW/dwpMUF5yu/gbVqe5HOo2F/HBiLIAH8/a
-   HlKto4baQ4vOT4mN2H8iCOIzwa2gljW73sZucT1fU2HOS0wQHx2SfpIb5
-   mfS5FwYEbGBzlI8y0qiDRaAtpiZhUjausanG2+0E+orrbi8rb0FJBgh/x
-   emw7PhSkwID9x+8pRgnM4wKq2GoRuYAY0QsUfwXRFTQ0MIyxLz+jXwScn
-   FnvnQ9cYXVM+rm8ppKro4DtEt6hkbaik0FoXCyRdONepIX+qhipfJra0D
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10361"; a="256866979"
-X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
-   d="scan'208";a="256866979"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2022 07:13:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
-   d="scan'208";a="550989252"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 May 2022 07:13:44 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nvJfs-000148-55;
-        Sun, 29 May 2022 14:13:44 +0000
-Date:   Sun, 29 May 2022 22:13:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c:413 amdgpu_get_xgmi_hive()
- warn: inconsistent indenting
-Message-ID: <202205292210.BD83pOan-lkp@intel.com>
+        Sun, 29 May 2022 10:14:07 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B3341FB7
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 07:14:05 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id x17so2497653wrg.6
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 07:14:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mEuzltOk2SmlGSQoqUcCT04p3+aPKT7KL50TqW1hRU4=;
+        b=UrnO8f1QXH1qGHpCRUSKoFvu/FvQ8QlP10lVWoqZUsLito8SIDvlVhINjkqKDA5P5E
+         u5vdr414ln4wHUmBBWmb8ebNEwKujcycoBAcIisho7ngUdTAaBCVxqMR3MAD/o3mxQlg
+         YNI28n5tVbNcgooN6FgXd8pPqHwQmnjrLE/Ou14ESY9Kf6lfmJW/MnhnBzlDI1x9cNfg
+         xH8EfULSEoWoK8EMuaQlO7Ruu+h/ilK2G/ItdkcFZd4R9Y2ImijelxU44UMRqeUGTLSa
+         xl6Uzks02RdwsTl3JK3z8O+/v+SvUgR65VqnSEnGBcoIH2hk6glLwGyPp/rCFMyIteLb
+         VjrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mEuzltOk2SmlGSQoqUcCT04p3+aPKT7KL50TqW1hRU4=;
+        b=yTgw6FyhUXEHuOxJxZEDw+f9/5fa59NXhfwJc5cd6wcwveNrUzpNv72YSU+qzvtdfk
+         XiF1REGvRv3emDTgCcAHEWTq+uK43s+cb6KcTjBfng+vJp9FYvJyl7Gi/AOR4gPTZMJI
+         xcLpVntKJ0cAcpG1Y5ej59Qv4qAqUkZmhYoYBUwQlporoOu+fTAPtd+I9B0W3z7ned87
+         W5LMahpXhwQkvT83lH9WpIIg/m1unD6RIrkQ5enOQz2Fyv0HDGkJbpaFjqguoD1gXwBB
+         QQmXuFY8E+4ddGWJXDYWpKR/Vx1tYZ6fPhN5GsxLHomgmBOgGy5fzYh9EmXz7aX8gUcH
+         +8jQ==
+X-Gm-Message-State: AOAM532Os7t8T113drSEZsJhqjiMUdnL0lZChYEjc3LTZ93AHf6FtYhi
+        EccgdYh70RL5NcLU/G5WBFHzT4F3pcJk+26O
+X-Google-Smtp-Source: ABdhPJwYOdrRmjwrty8tNcdSD6hDUv6WqLcalA3F1RhO5KCZKjsFICiDObrIV2x5hSlBPgeIYNg1mg==
+X-Received: by 2002:a5d:47a8:0:b0:20f:c57e:3e0b with SMTP id 8-20020a5d47a8000000b0020fc57e3e0bmr34977878wrb.305.1653833644120;
+        Sun, 29 May 2022 07:14:04 -0700 (PDT)
+Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id bi27-20020a05600c3d9b00b00397122e63b6sm7457298wmb.29.2022.05.29.07.14.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 May 2022 07:14:03 -0700 (PDT)
+Message-ID: <0b561964-5718-ab1e-34c3-07eadae5b04e@linaro.org>
+Date:   Sun, 29 May 2022 16:14:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/3] dt-bindings: mfd: ti,j721e-system-controller: Add
+ clock property
+Content-Language: en-US
+To:     Rahul T R <r-ravikumar@ti.com>, robh+dt@kernel.org, nm@ti.com,
+        vigneshr@ti.com, kishon@ti.com, krzysztof.kozlowski+dt@linaro.org
+Cc:     lee.jones@linaro.org, rogerq@kernel.org,
+        devicetree@vger.kernel.org, kristo@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        s-anna@ti.com
+References: <20220527083556.18864-1-r-ravikumar@ti.com>
+ <20220527083556.18864-2-r-ravikumar@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220527083556.18864-2-r-ravikumar@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   664a393a2663a0f62fc1b18157ccae33dcdbb8c8
-commit: cfbb6b0047448e2d986160d9f30d60f604d9ad0f drm/amdgpu: Rework reset domain to be refcounted.
-date:   4 months ago
-config: arc-randconfig-m031-20220524 (https://download.01.org/0day-ci/archive/20220529/202205292210.BD83pOan-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
+On 27/05/2022 10:35, Rahul T R wrote:
+> Add a pattern property for clock, also update the example with
+> a clock node
+> 
+> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> ---
+>  .../bindings/mfd/ti,j721e-system-controller.yaml     | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+> index fa86691ebf16..e774a7f0bb08 100644
+> --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+> @@ -48,6 +48,12 @@ patternProperties:
+>      description:
+>        This is the SERDES lane control mux.
+>  
+> +  "^clock@[0-9a-f]+$":
+> +    type: object
+> +    $ref: ../clock/ti,am654-ehrpwm-tbclk.yaml#
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Full path please, so /schemas/clock/.......
 
-New smatch warnings:
-drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c:413 amdgpu_get_xgmi_hive() warn: inconsistent indenting
+> +    description:
+> +      This is TI syscon gate clk.
 
-Old smatch warnings:
-drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c:473 amdgpu_xgmi_set_pstate() warn: ignoring unreachable code.
+Don't use "This is". Just describe it without need of full sentence.
+"syscon gate clock" is a bit unspecific and actually looks like you
+describe "clocks" property...
 
-vim +413 drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -79,5 +85,11 @@ examples:
+>                  <0x40c0 0x3>, <0x40c4 0x3>, <0x40c8 0x3>, <0x40cc 0x3>;
+>                  /* SERDES4 lane0/1/2/3 select */
+>          };
+> +
+> +        ehrpwm_tbclk: clock@4140 {
 
-   363	
-   364	
-   365	
-   366	struct amdgpu_hive_info *amdgpu_get_xgmi_hive(struct amdgpu_device *adev)
-   367	{
-   368		struct amdgpu_hive_info *hive = NULL;
-   369		int ret;
-   370	
-   371		if (!adev->gmc.xgmi.hive_id)
-   372			return NULL;
-   373	
-   374		if (adev->hive) {
-   375			kobject_get(&adev->hive->kobj);
-   376			return adev->hive;
-   377		}
-   378	
-   379		mutex_lock(&xgmi_mutex);
-   380	
-   381		list_for_each_entry(hive, &xgmi_hive_list, node)  {
-   382			if (hive->hive_id == adev->gmc.xgmi.hive_id)
-   383				goto pro_end;
-   384		}
-   385	
-   386		hive = kzalloc(sizeof(*hive), GFP_KERNEL);
-   387		if (!hive) {
-   388			dev_err(adev->dev, "XGMI: allocation failed\n");
-   389			hive = NULL;
-   390			goto pro_end;
-   391		}
-   392	
-   393		/* initialize new hive if not exist */
-   394		ret = kobject_init_and_add(&hive->kobj,
-   395				&amdgpu_xgmi_hive_type,
-   396				&adev->dev->kobj,
-   397				"%s", "xgmi_hive_info");
-   398		if (ret) {
-   399			dev_err(adev->dev, "XGMI: failed initializing kobject for xgmi hive\n");
-   400			kobject_put(&hive->kobj);
-   401			kfree(hive);
-   402			hive = NULL;
-   403			goto pro_end;
-   404		}
-   405	
-   406		/**
-   407		 * Avoid recreating reset domain when hive is reconstructed for the case
-   408		 * of reset the devices in the XGMI hive during probe for SRIOV
-   409		 * See https://www.spinics.net/lists/amd-gfx/msg58836.html
-   410		 */
-   411		if (adev->reset_domain->type != XGMI_HIVE) {
-   412			hive->reset_domain = amdgpu_reset_create_reset_domain(XGMI_HIVE, "amdgpu-reset-hive");
- > 413				if (!hive->reset_domain) {
-   414					dev_err(adev->dev, "XGMI: failed initializing reset domain for xgmi hive\n");
-   415					ret = -ENOMEM;
-   416					kobject_put(&hive->kobj);
-   417					kfree(hive);
-   418					hive = NULL;
-   419					goto pro_end;
-   420				}
-   421		} else {
-   422			amdgpu_reset_get_reset_domain(adev->reset_domain);
-   423			hive->reset_domain = adev->reset_domain;
-   424		}
-   425	
-   426		hive->hive_id = adev->gmc.xgmi.hive_id;
-   427		INIT_LIST_HEAD(&hive->device_list);
-   428		INIT_LIST_HEAD(&hive->node);
-   429		mutex_init(&hive->hive_lock);
-   430		atomic_set(&hive->number_devices, 0);
-   431		task_barrier_init(&hive->tb);
-   432		hive->pstate = AMDGPU_XGMI_PSTATE_UNKNOWN;
-   433		hive->hi_req_gpu = NULL;
-   434	
-   435		/*
-   436		 * hive pstate on boot is high in vega20 so we have to go to low
-   437		 * pstate on after boot.
-   438		 */
-   439		hive->hi_req_count = AMDGPU_MAX_XGMI_DEVICE_PER_HIVE;
-   440		list_add_tail(&hive->node, &xgmi_hive_list);
-   441	
-   442	pro_end:
-   443		if (hive)
-   444			kobject_get(&hive->kobj);
-   445		mutex_unlock(&xgmi_mutex);
-   446		return hive;
-   447	}
-   448	
+No need for label.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +                compatible = "ti,am654-ehrpwm-tbclk", "syscon";
+
+Messed up indentation.
+
+> +                reg = <0x4140 0x18>;
+> +                #clock-cells = <1>;
+> +        };
+>      };
+>  ...
+
+
+Best regards,
+Krzysztof

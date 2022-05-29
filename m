@@ -2,178 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9A7537140
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99898537143
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiE2OHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 10:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
+        id S230339AbiE2OIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 10:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbiE2OHV (ORCPT
+        with ESMTP id S230281AbiE2OIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 10:07:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A5D3D1F1
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 07:07:19 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvJZU-0006Ii-Jf; Sun, 29 May 2022 16:07:08 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvJZO-005H9k-2S; Sun, 29 May 2022 16:07:00 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvJZL-00Ct7w-OW; Sun, 29 May 2022 16:06:59 +0200
-Date:   Sun, 29 May 2022 16:06:55 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Li Zhengyu <lizhengyu3@huawei.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v2] kexec_file: Drop weak attribute from
- arch_kexec_apply_relocations[_add]
-Message-ID: <20220529140655.bnd4fgggccrorj4t@pengutronix.de>
-References: <20220519091237.676736-1-naveen.n.rao@linux.vnet.ibm.com>
- <20220529065637.xgapqjp2342flbuj@pengutronix.de>
- <264786d9-7756-19e0-2742-8b8d17f5ace5@csgroup.eu>
+        Sun, 29 May 2022 10:08:34 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF663D1F1;
+        Sun, 29 May 2022 07:08:32 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id c15-20020a9d684f000000b0060b097c71ecso6128008oto.10;
+        Sun, 29 May 2022 07:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sYWhm9xB1LTG5O3MGX/4oGQAwJ+vLe8Swt2u52JO6fY=;
+        b=g5p4aiYLtIujwQU6dC5+FS2anDm07L0CRSLU3ywaBNMRV48E5JGkEtQn3mryu5K21o
+         BVKqyH8aRyaFiwNiO9PLAyJgDqZB2rk0eqRRXZuvbjhip2lLjnfUkuEKTfp9RbW6GUwz
+         k2iB3C/z0lYY4rUTRKjXDaOQW3NiskdalGLoH6OvTNKchM9/kq3rZTPkZFqdvNg//gCQ
+         FbT2T96RKftANTuhXKTDbt6svapLq4xpfCEPIR18gLeOkSohZmli6bMuHefJg6+OeUWL
+         w7mha0yKKMY15gSw1R3vDAzcD2wrWmiZXJvMO45qSmVbVhBAFtXHgFZ8X+Crs/0beUIN
+         sVgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sYWhm9xB1LTG5O3MGX/4oGQAwJ+vLe8Swt2u52JO6fY=;
+        b=rvlniT+26Lk1HeKrhMmfx/gZ23cqdECSJNpKl551CkyYKHq3ZrHp5S+RhLnEoKrscV
+         I7NtuZJXhZFg2gZPz+x9dPH3zlXQbqVFyC3K/ymT5Xt4tofNzsYpZs8YNWhXIEk7s9Em
+         jm1KkDhltSodrl/WCbqDY0dRjN9uzwubIdfYeQRkp9sjFSFLsUG1tJkGYxubkrh68Lo9
+         Suvq4pFkuHSqr8431LS3WfZEzAfpIIgLvtKyteDEDiVdU2Rlj0iEI0pjJYCK8CRpkzYL
+         rKxZoyxPV0dxeyx3e2BL+2Wj4we+0C8TS4IPE3k6aqyQo9eyM7ItF0Vg7XUl+Lsb/K5T
+         ehUg==
+X-Gm-Message-State: AOAM532uQ4+hJLnlgBRGlSgmdbTCbX+pjzDPeyNRzNhg97vgYxYIO8QL
+        iuKlcwG4T6wZDNA/VYD2Z8IuNedx6PJC/8ng1xgc0D2b
+X-Google-Smtp-Source: ABdhPJyjzze8Wf0gYOmwQEta012XFihGRxjELTJ9dGxX9MO9ig69OQqulOBrVoU0GVNd5zTBdSSp5NA4KLfqEXv9hSc=
+X-Received: by 2002:a9d:c4a:0:b0:60a:e6e7:796 with SMTP id 68-20020a9d0c4a000000b0060ae6e70796mr18010907otr.266.1653833311843;
+ Sun, 29 May 2022 07:08:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qvv5wvvttflg77jh"
-Content-Disposition: inline
-In-Reply-To: <264786d9-7756-19e0-2742-8b8d17f5ace5@csgroup.eu>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220527185651.465204-1-joetalbott@gmail.com> <20220528183405.22b55033@jic23-huawei>
+In-Reply-To: <20220528183405.22b55033@jic23-huawei>
+From:   Joe Talbott <joetalbott@gmail.com>
+Date:   Sun, 29 May 2022 10:08:21 -0400
+Message-ID: <CAL7gdfeoRM8APfLL77bbGiWWBa0qOF8g0rza+=7hCdo+jaYNLQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] iio: Prefer octal over symbolic permissions.
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, May 28, 2022 at 1:25 PM Jonathan Cameron <jic23@kernel.org> wrote:
+>
+> On Fri, 27 May 2022 14:56:52 -0400
+> Joe Simmons-Talbott <joetalbott@gmail.com> wrote:
+>
+> > As reported by checkpatch.pl use ocatl permissions rather than symbolic
+> > permissions.
+> >
+> > Signed-off-by: Joe Simmons-Talbott <joetalbott@gmail.com>
+>
+> Hi Joe,
+>
+> Why the resend?  Given change of description, I'm guessing this is v2
+> because of feedback on a similar patch elsewhere. If so, please
+> put the version number in the patch log and provide a changelog
+> below the ---
 
---qvv5wvvttflg77jh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello,
+I sent the patch again because I neglected to include linux-kernel and
+you in the
+original patch's recipients.  I wasn't sure if I should include the v2
+but will in the future.
+Should I use v3 for my updated patch?
 
-On Sun, May 29, 2022 at 09:46:47AM +0000, Christophe Leroy wrote:
-> Le 29/05/2022 =C3=A0 08:56, Uwe Kleine-K=C3=B6nig a =C3=A9crit=C2=A0:
-> > Hello,
-> >=20
-> > on current linux-next ARCH=3Driscv allmodconfig breaks with:
-> >=20
-> >    CC      arch/riscv/kernel/elf_kexec.o
-> > arch/riscv/kernel/elf_kexec.c:345:5: error: redefinition of =E2=80=98ar=
-ch_kexec_apply_relocations_add=E2=80=99
-> >    345 | int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
-> >        |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > In file included from arch/riscv/kernel/elf_kexec.c:16:
-> > include/linux/kexec.h:236:1: note: previous definition of =E2=80=98arch=
-_kexec_apply_relocations_add=E2=80=99 with type =E2=80=98int(struct purgato=
-ry_info *, Elf64_Shdr *, const Elf64_Shdr *, const Elf64_Shdr *)=E2=80=99 {=
-aka =E2=80=98int(struct purgatory_info *, struct elf64_shdr *, const struct=
- elf64_shdr *, const struct elf64_shdr *)=E2=80=99}
-> >    236 | arch_kexec_apply_relocations_add(struct purgatory_info *pi, El=
-f_Shdr *section,
-> >        | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >=20
-> > (I think) because there is a conflict between the two commits:
-> >=20
-> > 233c1e6c319c kexec_file: drop weak attribute from arch_kexec_apply_relo=
-cations[_add]
-> > 838b3e28488f RISC-V: Load purgatory in kexec_file
-> >=20
-> > And so next is broken starting from
-> > 164a9037b1d33f28ba27671c16ec1c23d4a11acf which merges the riscv tree.
-> >=20
->=20
-> In arch/riscv/include/asm/kexec.h, do the same as s390 did in commit=20
-> 233c1e6c319c:
->=20
-> diff --git a/arch/s390/include/asm/kexec.h b/arch/s390/include/asm/kexec.h
-> index 7f3c9ac34bd8..540dd469b088 100644
-> --- a/arch/s390/include/asm/kexec.h
-> +++ b/arch/s390/include/asm/kexec.h
-> @@ -83,4 +83,12 @@ struct kimage_arch {
->   extern const struct kexec_file_ops s390_kexec_image_ops;
->   extern const struct kexec_file_ops s390_kexec_elf_ops;
->=20
-> +#ifdef CONFIG_KEXEC_FILE
-> +struct purgatory_info;
-> +int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
-> +				     Elf_Shdr *section,
-> +				     const Elf_Shdr *relsec,
-> +				     const Elf_Shdr *symtab);
-> +#define arch_kexec_apply_relocations_add arch_kexec_apply_relocations_add
-> +#endif
->   #endif /*_S390_KEXEC_H */
+Thanks,
+Joe
 
-I can confirm that doing
-
-diff --git a/arch/riscv/include/asm/kexec.h b/arch/riscv/include/asm/kexec.h
-index 206217b23301..eee260e8ab30 100644
---- a/arch/riscv/include/asm/kexec.h
-+++ b/arch/riscv/include/asm/kexec.h
-@@ -55,6 +55,13 @@ extern riscv_kexec_method riscv_kexec_norelocate;
-=20
- #ifdef CONFIG_KEXEC_FILE
- extern const struct kexec_file_ops elf_kexec_ops;
-+
-+struct purgatory_info;
-+int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
-+				     Elf_Shdr *section,
-+				     const Elf_Shdr *relsec,
-+				     const Elf_Shdr *symtab);
-+#define arch_kexec_apply_relocations_add arch_kexec_apply_relocations_add
- #endif
-=20
- #endif
-
-on top of 838b3e28488f results in a compilable tree. And when merging
-233c1e6c319c into this, it is still building.
-
-I'm not enough into kexec (and riscv) to judge if this is sensible, or
-create a useful commit log but the obvious way forward is to apply the
-above patch to the riscv tree before it hits Linus' tree.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---qvv5wvvttflg77jh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKTffwACgkQwfwUeK3K
-7Ak9FQf/SQrMKKxpQ8gVUDFht3yFkQLOJJe/adkmkFoMpxOZklvcq5hSdJP2Y1NL
-I3Y35bb9SR1VPi6fFHHGuBqB0BiK9mKo1KLb9ZY7/7udpfI1e6tPW4ea2QuscqZt
-i7IQb1Gff1YzWYfW7/Y8ZugIJTDFvuTiHTFxrOlwiQVkQnywWACEMsCBjb0Aj9XE
-9yKOSWeqmnvhvS2+2U9v8FWLJOPTSaeQ3hSjJ3xXjEkoJz3L0pHcnqyIz8UAmQhl
-DRO6UpPbq6hLtMkKF8AmIFLstoEaEt636vw7pl+9MrM3zJX7DMYiIpwGZ/431+YB
-6ERUkRrVesGri6hOFffuYrCwXZHfdw==
-=Cu9X
------END PGP SIGNATURE-----
-
---qvv5wvvttflg77jh--
+>
+>
+> Hmm. I guess I don't really mind cleaning this up though it is
+> some churn in core code which is usually something we try to avoid
+> for fairly trivial style reasons.
+>
+> One request inline (though I suspect it applies in several places,
+> I just haven't checked ;)
+>
+> Thanks,
+>
+> Jonathan
+>
+> > ---
+> >  drivers/iio/industrialio-buffer.c  | 12 ++++++------
+> >  drivers/iio/industrialio-core.c    | 10 +++++-----
+> >  drivers/iio/industrialio-trigger.c |  4 ++--
+> >  3 files changed, 13 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
+> > index b078eb2f3c9d..c27f74a3c0f3 100644
+> > --- a/drivers/iio/industrialio-buffer.c
+> > +++ b/drivers/iio/industrialio-buffer.c
+> > @@ -1391,17 +1391,17 @@ static ssize_t direction_show(struct device *dev,
+> >       }
+> >  }
+> >
+> > -static DEVICE_ATTR(length, S_IRUGO | S_IWUSR, iio_buffer_read_length,
+> > +static DEVICE_ATTR(length, 0644, iio_buffer_read_length,
+> >                  iio_buffer_write_length);
+> >  static struct device_attribute dev_attr_length_ro = __ATTR(length,
+> > -     S_IRUGO, iio_buffer_read_length, NULL);
+> > -static DEVICE_ATTR(enable, S_IRUGO | S_IWUSR,
+> > +     0444, iio_buffer_read_length, NULL);
+> > +static DEVICE_ATTR(enable, 0644,
+> >                  iio_buffer_show_enable, iio_buffer_store_enable);
+> > -static DEVICE_ATTR(watermark, S_IRUGO | S_IWUSR,
+> > +static DEVICE_ATTR(watermark, 0644,
+> >                  iio_buffer_show_watermark, iio_buffer_store_watermark);
+> >  static struct device_attribute dev_attr_watermark_ro = __ATTR(watermark,
+> > -     S_IRUGO, iio_buffer_show_watermark, NULL);
+> > -static DEVICE_ATTR(data_available, S_IRUGO,
+> > +     0444, iio_buffer_show_watermark, NULL);
+> > +static DEVICE_ATTR(data_available, 0444,
+> >               iio_dma_show_data_available, NULL);
+>
+> a side effect of this change a slight shortening of how long the above
+> two lines will be if combined into one.  It's now sub 80 chars
+> I think, so please make them a single line.  Also check for similar
+> cases elsewhere.
+>
+>
+> >  static DEVICE_ATTR_RO(direction);
+> >
+> > diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+> > index e1ed44dec2ab..35de348d686e 100644
+> > --- a/drivers/iio/industrialio-core.c
+> > +++ b/drivers/iio/industrialio-core.c
+> > @@ -1114,12 +1114,12 @@ int __iio_device_attr_init(struct device_attribute *dev_attr,
+> >       dev_attr->attr.name = name;
+> >
+> >       if (readfunc) {
+> > -             dev_attr->attr.mode |= S_IRUGO;
+> > +             dev_attr->attr.mode |= 0444;
+> >               dev_attr->show = readfunc;
+> >       }
+> >
+> >       if (writefunc) {
+> > -             dev_attr->attr.mode |= S_IWUSR;
+> > +             dev_attr->attr.mode |= 0200;
+> >               dev_attr->store = writefunc;
+> >       }
+> >
+> > @@ -1401,7 +1401,7 @@ static ssize_t iio_show_dev_name(struct device *dev,
+> >       return sysfs_emit(buf, "%s\n", indio_dev->name);
+> >  }
+> >
+> > -static DEVICE_ATTR(name, S_IRUGO, iio_show_dev_name, NULL);
+> > +static DEVICE_ATTR(name, 0444, iio_show_dev_name, NULL);
+> >
+> >  static ssize_t iio_show_dev_label(struct device *dev,
+> >                                struct device_attribute *attr,
+> > @@ -1411,7 +1411,7 @@ static ssize_t iio_show_dev_label(struct device *dev,
+> >       return sysfs_emit(buf, "%s\n", indio_dev->label);
+> >  }
+> >
+> > -static DEVICE_ATTR(label, S_IRUGO, iio_show_dev_label, NULL);
+> > +static DEVICE_ATTR(label, 0444, iio_show_dev_label, NULL);
+> >
+> >  static ssize_t iio_show_timestamp_clock(struct device *dev,
+> >                                       struct device_attribute *attr,
+> > @@ -1509,7 +1509,7 @@ int iio_device_register_sysfs_group(struct iio_dev *indio_dev,
+> >       return 0;
+> >  }
+> >
+> > -static DEVICE_ATTR(current_timestamp_clock, S_IRUGO | S_IWUSR,
+> > +static DEVICE_ATTR(current_timestamp_clock, 0644,
+> >                  iio_show_timestamp_clock, iio_store_timestamp_clock);
+> >
+> >  static int iio_device_register_sysfs(struct iio_dev *indio_dev)
+> > diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
+> > index f504ed351b3e..e22a35634f2c 100644
+> > --- a/drivers/iio/industrialio-trigger.c
+> > +++ b/drivers/iio/industrialio-trigger.c
+> > @@ -54,7 +54,7 @@ static ssize_t iio_trigger_read_name(struct device *dev,
+> >       return sysfs_emit(buf, "%s\n", trig->name);
+> >  }
+> >
+> > -static DEVICE_ATTR(name, S_IRUGO, iio_trigger_read_name, NULL);
+> > +static DEVICE_ATTR(name, 0444, iio_trigger_read_name, NULL);
+> >
+> >  static struct attribute *iio_trig_dev_attrs[] = {
+> >       &dev_attr_name.attr,
+> > @@ -494,7 +494,7 @@ static ssize_t iio_trigger_write_current(struct device *dev,
+> >       return ret;
+> >  }
+> >
+> > -static DEVICE_ATTR(current_trigger, S_IRUGO | S_IWUSR,
+> > +static DEVICE_ATTR(current_trigger, 0644,
+> >                  iio_trigger_read_current,
+> >                  iio_trigger_write_current);
+> >
+>

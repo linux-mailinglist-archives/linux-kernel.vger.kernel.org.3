@@ -2,200 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7960537166
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF71537168
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiE2Oot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 10:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
+        id S230468AbiE2OrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 10:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiE2Oos (ORCPT
+        with ESMTP id S229934AbiE2OrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 10:44:48 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37298E190
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 07:44:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653835487; x=1685371487;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MixufXRvEwcNgvnEmlQ9DDLtV4e15ATVODNSDNCfh5I=;
-  b=ON8+dW7U8rSBnKUpFpnBQ1XVVozcUse01lGd1P3aSQq6v2jaTS2ffWBc
-   y8ywHedjJC0s+0Vcj5V/fIgtTwimMaWdN692Mt+T0GTHrK5fpnV4jthUH
-   zPCHwEB/ZU7uOGukqvKvyo4qK6Rv7QVZndhv0WYRuMZ0KaPin7ws4mmY+
-   c21K77Y3FbjU7/IGB/5M8bTvNM7fw2gBt7ccgoH1aMsz7oXnYBYuh4BjG
-   g/SllFv+XnAUCI/t8WgyTIYqNQKGYWJo4dlZysAUTC91p4NdNqmZ3tA5G
-   P6CReBFo4FNBQXyTkUfh74JSdrbN2MPx4th0N/gm+jmeUVqeZrCK3z37G
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10361"; a="300155979"
-X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
-   d="scan'208";a="300155979"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2022 07:44:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
-   d="scan'208";a="632299506"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 29 May 2022 07:44:45 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nvK9s-00014m-Pv;
-        Sun, 29 May 2022 14:44:44 +0000
-Date:   Sun, 29 May 2022 22:44:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sven Schnelle <svens@stackframe.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Helge Deller <deller@gmx.de>
-Subject: [deller-fbdev:hp-visualize-fx-drm 1/1]
- drivers/gpu/drm/visualizefx/visfx_drv.c:222:25: error: invalid use of
- undefined type 'const struct dma_buf_map'
-Message-ID: <202205292236.7katQfFE-lkp@intel.com>
+        Sun, 29 May 2022 10:47:08 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD726432;
+        Sun, 29 May 2022 07:47:07 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id 3so6113367ily.2;
+        Sun, 29 May 2022 07:47:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=hhqrhJhsaClgvvck9Sdle86jJdiS7n38zO76P0oYBJk=;
+        b=G5zCZeQjgij/x9j+WIEMt67AuFY8XBSL6bkzbHpXJcF7jcxgjeGc5S5nmoXWEBcgeQ
+         x7UVDeXO0X1nMJegFqr/sLhx1ImhEERzOTXszsleVdmENixOzSm9BoN9ocCgr/3LcQ8j
+         xFr5jAGPCKjZJCKinWKTWf79oa3ZtQLwJXy8NsZoz/FvKn6HsSebjqjmAI4moT7OafZy
+         zIZ0yabpPPGSEokaMEydo0Y1fvAByU3cmcqyD2FPJ8sxBYMvR/D4cXLztnLrhJWqbvak
+         uslyq7FC4ykHEjiVZ3GF8TnmkEpTD4zVE9nl0LGaRYKBBrS3EKheTm93rK4awIzPTT8r
+         nFbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=hhqrhJhsaClgvvck9Sdle86jJdiS7n38zO76P0oYBJk=;
+        b=U3l6LlWMkkbXwsXXJv7wVGeqCk3BZMXKn34pdu6S2vpOdbGlalC10phf0ZQ7KzpPMu
+         dUNZT9ozTQOIC3wra4hKDREsl6wUUdExSx3+ncKVDdrfanYZ+Vam4F3OhHRAXpM+duQu
+         IhxUbBzZyFurFySWkw5X32RffyxWJ8Gbff608GXxWBHgkCcZk8UyEdzzOJacx7zx46fJ
+         TiGOeMspSq6XNXNQO1O7YlG0k2zKzQv3+fhXE65wPLXXWM7yx/tmaAY5pMnZ9OiqUSAq
+         udghgu55E0TqvfFnPIz8W3To3rI4SM6EXAc88c2H1nVACtcSG92PQXcO+rpOzI7Jnpkz
+         kI4Q==
+X-Gm-Message-State: AOAM530YjSFw0D/aCXjlbycqE3ca6T1r8RUeDlrGEdZoARndjMto/yWB
+        j83wNMtoJwe2Ljm6A/wHqcv4RQjjx+ZJowgYb9U=
+X-Google-Smtp-Source: ABdhPJxruu+kkXLX0MVi2Fmhp97UmKzyHBwfBvsCZ7Xm5BaC7ya2im7SAGOqXf+AQZfsQzi0FgTUxrcT9Qhs+y1VqVA=
+X-Received: by 2002:a05:6e02:1aa8:b0:2d1:7099:67ba with SMTP id
+ l8-20020a056e021aa800b002d1709967bamr24297718ilv.1.1653835626507; Sun, 29 May
+ 2022 07:47:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220528154704.2576290-1-masahiroy@kernel.org> <20220528154704.2576290-4-masahiroy@kernel.org>
+In-Reply-To: <20220528154704.2576290-4-masahiroy@kernel.org>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 29 May 2022 16:46:30 +0200
+Message-ID: <CA+icZUWkOrWYSY3ixxfF=vsuq1xw3mU+p3NMqBpY0OpM02916g@mail.gmail.com>
+Subject: Re: [PATCH 4/4] kbuild: factor out the common objtool arguments
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git hp-visualize-fx-drm
-head:   c2d0f767c19314c3d3a1a2d304be3c871b729523
-commit: c2d0f767c19314c3d3a1a2d304be3c871b729523 [1/1] drm: add HP Visualize FX driver
-config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/20220529/202205292236.7katQfFE-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/commit/?id=c2d0f767c19314c3d3a1a2d304be3c871b729523
-        git remote add deller-fbdev git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git
-        git fetch --no-tags deller-fbdev hp-visualize-fx-drm
-        git checkout c2d0f767c19314c3d3a1a2d304be3c871b729523
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
+On Sat, May 28, 2022 at 9:45 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> scripts/Makefile.build and scripts/link-vmlinux.sh have similar setups
+> for the objtool arguments.
+>
+> It is difficult to factor out them because the vmlinux build rule is
+> written in a shell script. It is somewhat tedious to touch the two
+> files every time a new objtool option is supported.
+>
+> To reduce the code duplication, implement everything about objtool in
+> Makefile.
+>
+> Move the objtool for vmlinux.o into scripts/Makefile.vmlinux_o.
+>
+> Move the common macros to Makefile.lib so they are shared by
+> Makefile.build and Makefile.vmlinux_o.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+With some comments (see below).
 
-All errors (new ones prefixed by >>):
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
 
-   drivers/gpu/drm/visualizefx/visfx_drv.c:218:45: warning: 'struct dma_buf_map' declared inside parameter list will not be visible outside of this definition or declaration
-     218 |                                const struct dma_buf_map *map,
-         |                                             ^~~~~~~~~~~
-   drivers/gpu/drm/visualizefx/visfx_drv.c: In function 'visfx_fb_blit_rect':
->> drivers/gpu/drm/visualizefx/visfx_drv.c:222:25: error: invalid use of undefined type 'const struct dma_buf_map'
-     222 |         void *vmap = map->vaddr; /* TODO: Use mapping abstraction properly */
-         |                         ^~
-   drivers/gpu/drm/visualizefx/visfx_drv.c: At top level:
-   drivers/gpu/drm/visualizefx/visfx_drv.c:236:78: warning: 'struct dma_buf_map' declared inside parameter list will not be visible outside of this definition or declaration
-     236 | static int visfx_fb_blit_fullscreen(struct drm_framebuffer *fb, const struct dma_buf_map *map)
-         |                                                                              ^~~~~~~~~~~
-   drivers/gpu/drm/visualizefx/visfx_drv.c: In function 'visfx_fb_blit_fullscreen':
->> drivers/gpu/drm/visualizefx/visfx_drv.c:244:39: error: passing argument 2 of 'visfx_fb_blit_rect' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     244 |         return visfx_fb_blit_rect(fb, map, &fullscreen);
-         |                                       ^~~
-         |                                       |
-         |                                       const struct dma_buf_map *
-   drivers/gpu/drm/visualizefx/visfx_drv.c:218:58: note: expected 'const struct dma_buf_map *' but argument is of type 'const struct dma_buf_map *'
-     218 |                                const struct dma_buf_map *map,
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
-   drivers/gpu/drm/visualizefx/visfx_drv.c: In function 'visfx_pipe_enable':
->> drivers/gpu/drm/visualizefx/visfx_drv.c:281:51: error: passing argument 2 of 'visfx_fb_blit_fullscreen' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     281 |         visfx_fb_blit_fullscreen(plane_state->fb, &shadow_plane_state->data[0]);
-         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                                   |
-         |                                                   struct iosys_map *
-   drivers/gpu/drm/visualizefx/visfx_drv.c:236:91: note: expected 'const struct dma_buf_map *' but argument is of type 'struct iosys_map *'
-     236 | static int visfx_fb_blit_fullscreen(struct drm_framebuffer *fb, const struct dma_buf_map *map)
-         |                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
-   drivers/gpu/drm/visualizefx/visfx_drv.c: In function 'visfx_pipe_update':
-   drivers/gpu/drm/visualizefx/visfx_drv.c:321:47: error: passing argument 2 of 'visfx_fb_blit_rect' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     321 |                 visfx_fb_blit_rect(state->fb, &shadow_plane_state->data[0], &rect);
-         |                                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                               |
-         |                                               struct iosys_map *
-   drivers/gpu/drm/visualizefx/visfx_drv.c:218:58: note: expected 'const struct dma_buf_map *' but argument is of type 'struct iosys_map *'
-     218 |                                const struct dma_buf_map *map,
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
-   cc1: some warnings being treated as errors
+-Sedat-
 
+> ---
+>
+>  scripts/Makefile.build     | 26 --------------
+>  scripts/Makefile.lib       | 26 ++++++++++++++
+>  scripts/Makefile.vmlinux_o | 26 ++++++++++++++
+>  scripts/link-vmlinux.sh    | 71 --------------------------------------
+>  4 files changed, 52 insertions(+), 97 deletions(-)
+>
+> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> index 4cb7145071b9..1f01ac65c0cd 100644
+> --- a/scripts/Makefile.build
+> +++ b/scripts/Makefile.build
+> @@ -210,38 +210,12 @@ cmd_record_mcount = $(if $(findstring $(strip $(CC_FLAGS_FTRACE)),$(_c_flags)),
+>         $(sub_cmd_record_mcount))
+>  endif # CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
+>
+> -ifdef CONFIG_OBJTOOL
+> -
+> -objtool := $(objtree)/tools/objtool/objtool
+> -
+> -objtool_args =                                                         \
+> -       $(if $(CONFIG_HAVE_JUMP_LABEL_HACK), --hacks=jump_label)        \
+> -       $(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=noinstr)              \
+> -       $(if $(CONFIG_X86_KERNEL_IBT), --ibt)                           \
+> -       $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)             \
+> -       $(if $(CONFIG_UNWINDER_ORC), --orc)                             \
+> -       $(if $(CONFIG_RETPOLINE), --retpoline)                          \
+> -       $(if $(CONFIG_SLS), --sls)                                      \
+> -       $(if $(CONFIG_STACK_VALIDATION), --stackval)                    \
+> -       $(if $(CONFIG_HAVE_STATIC_CALL_INLINE), --static-call)          \
+> -       --uaccess                                                       \
+> -       $(if $(delay-objtool), --link)                                  \
+> -       $(if $(part-of-module), --module)                               \
+> -       $(if $(CONFIG_GCOV_KERNEL), --no-unreachable)
+> -
+> -cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
+> -cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+> -
+> -endif # CONFIG_OBJTOOL
+> -
+>  # 'OBJECT_FILES_NON_STANDARD := y': skip objtool checking for a directory
+>  # 'OBJECT_FILES_NON_STANDARD_foo.o := 'y': skip objtool checking for a file
+>  # 'OBJECT_FILES_NON_STANDARD_foo.o := 'n': override directory skip for a file
+>
 
-vim +222 drivers/gpu/drm/visualizefx/visfx_drv.c
+^^ What is with this block?
+If this belongs together with objtool - shall this be moved, too?
 
-   216	
-   217	static int visfx_fb_blit_rect(struct drm_framebuffer *fb,
-   218				       const struct dma_buf_map *map,
-   219				       struct drm_rect *rect)
-   220	{
-   221		struct visfx_device *visfx = to_visfx(fb->dev);
- > 222		void *vmap = map->vaddr; /* TODO: Use mapping abstraction properly */
-   223		uint8_t *dst;
-   224		int idx;
-   225	
-   226		if (!drm_dev_enter(&visfx->dev, &idx))
-   227			return -ENODEV;
-   228		visfx_writel(visfx, VISFX_VRAM_WRITE_MODE, VISFX_VRAM_WRITE_MODE_BITMAP);
-   229		dst = visfx->mmio + 0x01000000;
-   230		dst += drm_fb_clip_offset(fb->pitches[0], fb->format, rect);
-   231		drm_fb_memcpy_toio(dst, fb->pitches[0], vmap, fb, rect);
-   232		drm_dev_exit(idx);
-   233		return 0;
-   234	}
-   235	
-   236	static int visfx_fb_blit_fullscreen(struct drm_framebuffer *fb, const struct dma_buf_map *map)
-   237	{
-   238		struct drm_rect fullscreen = {
-   239			.x1 = 0,
-   240			.x2 = fb->width,
-   241			.y1 = 0,
-   242			.y2 = fb->height,
-   243		};
- > 244		return visfx_fb_blit_rect(fb, map, &fullscreen);
-   245	}
-   246	
-   247	static int visfx_check_size(int width, int height, struct drm_framebuffer *fb)
-   248	{
-   249		if (width > 2048 || height > 2048)
-   250			return -EINVAL;
-   251		return 0;
-   252	}
-   253	
-   254	static enum drm_mode_status visfx_pipe_mode_valid(struct drm_simple_display_pipe *pipe,
-   255							   const struct drm_display_mode *mode)
-   256	{
-   257		if (visfx_check_size(mode->hdisplay, mode->vdisplay, NULL) < 0)
-   258			return MODE_BAD;
-   259		return MODE_OK;
-   260	}
-   261	
-   262	static int visfx_pipe_check(struct drm_simple_display_pipe *pipe,
-   263				     struct drm_plane_state *plane_state,
-   264				     struct drm_crtc_state *crtc_state)
-   265	{
-   266		struct drm_framebuffer *fb = plane_state->fb;
-   267	
-   268		if (!fb)
-   269			return 0;
-   270		return visfx_check_size(fb->width, fb->height, fb);
-   271	}
-   272	
-   273	static void visfx_pipe_enable(struct drm_simple_display_pipe *pipe,
-   274				      struct drm_crtc_state *crtc_state,
-   275				      struct drm_plane_state *plane_state)
-   276	{
-   277		struct visfx_device *visfx = to_visfx(pipe->crtc.dev);
-   278		struct drm_shadow_plane_state *shadow_plane_state = to_drm_shadow_plane_state(plane_state);
-   279	
-   280		visfx_mode_set(visfx, &crtc_state->mode, plane_state->fb);
- > 281		visfx_fb_blit_fullscreen(plane_state->fb, &shadow_plane_state->data[0]);
-   282	}
-   283	
+>  is-standard-object = $(if $(filter-out y%, $(OBJECT_FILES_NON_STANDARD_$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)n),y)
+>
+> -delay-objtool := $(or $(CONFIG_LTO_CLANG),$(CONFIG_X86_KERNEL_IBT))
+> -
+>  $(obj)/%.o: objtool-enabled = $(if $(is-standard-object),$(if $(delay-objtool),$(is-single-obj-m),y))
+>
+>  ifdef CONFIG_TRIM_UNUSED_KSYMS
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index f75138385449..f691fb231ce5 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -225,6 +225,32 @@ dtc_cpp_flags  = -Wp,-MMD,$(depfile).pre.tmp -nostdinc                    \
+>                  $(addprefix -I,$(DTC_INCLUDE))                          \
+>                  -undef -D__DTS__
+>
+> +ifdef CONFIG_OBJTOOL
+> +
+> +objtool := $(objtree)/tools/objtool/objtool
+> +
+> +objtool_args =                                                         \
+> +       $(if $(CONFIG_HAVE_JUMP_LABEL_HACK), --hacks=jump_label)        \
+> +       $(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=noinstr)              \
+> +       $(if $(CONFIG_X86_KERNEL_IBT), --ibt)                           \
+> +       $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)             \
+> +       $(if $(CONFIG_UNWINDER_ORC), --orc)                             \
+> +       $(if $(CONFIG_RETPOLINE), --retpoline)                          \
+> +       $(if $(CONFIG_SLS), --sls)                                      \
+> +       $(if $(CONFIG_STACK_VALIDATION), --stackval)                    \
+> +       $(if $(CONFIG_HAVE_STATIC_CALL_INLINE), --static-call)          \
+> +       --uaccess                                                       \
+> +       $(if $(delay-objtool), --link)                                  \
+> +       $(if $(part-of-module), --module)                               \
+> +       $(if $(CONFIG_GCOV_KERNEL), --no-unreachable)
+> +
+> +delay-objtool := $(or $(CONFIG_LTO_CLANG),$(CONFIG_X86_KERNEL_IBT))
+> +
+> +cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
+> +cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+> +
+> +endif # CONFIG_OBJTOOL
+> +
+>  # Useful for describing the dependency of composite objects
+>  # Usage:
+>  #   $(call multi_depend, multi_used_targets, suffix_to_remove, suffix_to_add)
+> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
+> index a9b375ca86d5..3c97a1564947 100644
+> --- a/scripts/Makefile.vmlinux_o
+> +++ b/scripts/Makefile.vmlinux_o
+> @@ -6,6 +6,9 @@ __default: vmlinux.o
+>  include include/config/auto.conf
+>  include $(srctree)/scripts/Kbuild.include
+>
+> +# for objtool
+> +include $(srctree)/scripts/Makefile.lib
+> +
+>  # Generate a linker script to ensure correct ordering of initcalls for Clang LTO
+>  # ---------------------------------------------------------------------------
+>
+> @@ -24,6 +27,27 @@ ifdef CONFIG_LTO_CLANG
+>  initcalls-lds := .tmp_initcalls.lds
+>  endif
+>
+> +# objtool for vmlinux.o
+> +# ---------------------------------------------------------------------------
+> +#
+> +# For LTO and IBT, objtool doesn't run on individual translation units.
+> +# Run everything on vmlinux instead.
+> +
+> +objtool-enabled := $(or $(delay-objtool),$(CONFIG_NOINSTR_VALIDATION))
+> +
+> +# Reuse objtool_args defined in scripts/Makefile.lib if LTO or IBT is enabled.
+> +#
+> +# Add some more flags as needed.
+> +# --no-unreachable and --link might be added twice, but it is fine.
+> +#
+> +# Expand objtool_args to a simple variable to avoid circular reference.
+> +
+> +objtool_args := \
+> +       $(if $(delay-objtool),$(objtool_args)) \
+> +       $(if $(CONFIG_NOINSTR_VALIDATION), --noinstr) \
+> +       $(if $(CONFIG_GCOV_KERNEL), --no-unreachable) \
+> +       --link
+> +
+>  # Link of vmlinux.o used for section mismatch analysis
+>  # ---------------------------------------------------------------------------
+>
+> @@ -33,9 +57,11 @@ quiet_cmd_ld_vmlinux.o = LD      $@
+>         $(addprefix -T , $(initcalls-lds)) \
+>         --whole-archive $(KBUILD_VMLINUX_OBJS) --no-whole-archive \
+>         --start-group $(KBUILD_VMLINUX_LIBS) --end-group \
+> +       $(cmd_objtool)
+>
+>  define rule_ld_vmlinux.o
+>         $(call cmd_and_savecmd,ld_vmlinux.o)
+> +       $(call cmd,gen_objtooldep)
+>  endef
+>
+>  vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
+> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> index 90680b6bd710..1ac4e180fa3f 100755
+> --- a/scripts/link-vmlinux.sh
+> +++ b/scripts/link-vmlinux.sh
+> @@ -45,76 +45,6 @@ info()
+>         printf "  %-7s %s\n" "${1}" "${2}"
+>  }
+>
+> -objtool_link()
+> -{
+> -       local objtoolcmd;
+> -       local objtoolopt;
+> -
+> -       if ! is_enabled CONFIG_OBJTOOL; then
+> -               return;
+> -       fi
+> -
+> -       if is_enabled CONFIG_LTO_CLANG || is_enabled CONFIG_X86_KERNEL_IBT; then
+> -
+> -               # For LTO and IBT, objtool doesn't run on individual
+> -               # translation units.  Run everything on vmlinux instead.
+> -
+> -               if is_enabled CONFIG_HAVE_JUMP_LABEL_HACK; then
+> -                       objtoolopt="${objtoolopt} --hacks=jump_label"
+> -               fi
+> -
+> -               if is_enabled CONFIG_HAVE_NOINSTR_HACK; then
+> -                       objtoolopt="${objtoolopt} --hacks=noinstr"
+> -               fi
+> -
+> -               if is_enabled CONFIG_X86_KERNEL_IBT; then
+> -                       objtoolopt="${objtoolopt} --ibt"
+> -               fi
+> -
+> -               if is_enabled CONFIG_FTRACE_MCOUNT_USE_OBJTOOL; then
+> -                       objtoolopt="${objtoolopt} --mcount"
+> -               fi
+> -
+> -               if is_enabled CONFIG_UNWINDER_ORC; then
+> -                       objtoolopt="${objtoolopt} --orc"
+> -               fi
+> -
+> -               if is_enabled CONFIG_RETPOLINE; then
+> -                       objtoolopt="${objtoolopt} --retpoline"
+> -               fi
+> -
+> -               if is_enabled CONFIG_SLS; then
+> -                       objtoolopt="${objtoolopt} --sls"
+> -               fi
+> -
+> -               if is_enabled CONFIG_STACK_VALIDATION; then
+> -                       objtoolopt="${objtoolopt} --stackval"
+> -               fi
+> -
+> -               if is_enabled CONFIG_HAVE_STATIC_CALL_INLINE; then
+> -                       objtoolopt="${objtoolopt} --static-call"
+> -               fi
+> -
+> -               objtoolopt="${objtoolopt} --uaccess"
+> -       fi
+> -
+> -       if is_enabled CONFIG_NOINSTR_VALIDATION; then
+> -               objtoolopt="${objtoolopt} --noinstr"
+> -       fi
+> -
+> -       if [ -n "${objtoolopt}" ]; then
+> -
+> -               if is_enabled CONFIG_GCOV_KERNEL; then
+> -                       objtoolopt="${objtoolopt} --no-unreachable"
+> -               fi
+> -
+> -               objtoolopt="${objtoolopt} --link"
+> -
+> -               info OBJTOOL ${1}
+> -               tools/objtool/objtool ${objtoolopt} ${1}
+> -       fi
+> -}
+> -
+>  # Link of vmlinux
+>  # ${1} - output file
+>  # ${2}, ${3}, ... - optional extra .o files
+> @@ -298,7 +228,6 @@ ${MAKE} -f "${srctree}/scripts/Makefile.build" obj=init need-builtin=1
+>
+>  #link vmlinux.o
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+^^ While you are at it, change the comment to "# Link of vmlinux.o".
+
+>  ${MAKE} -f "${srctree}/scripts/Makefile.vmlinux_o"
+> -objtool_link vmlinux.o
+>
+>  # Generate the list of objects in vmlinux
+>  for f in ${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}; do
+> --
+> 2.32.0
+>

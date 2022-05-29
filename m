@@ -2,96 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A705371BB
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 18:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C7A5371C1
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 18:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbiE2QCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 12:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
+        id S231298AbiE2QTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 12:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiE2QCQ (ORCPT
+        with ESMTP id S230190AbiE2QTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 12:02:16 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BD736B75
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 09:02:14 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id h11so10743913eda.8
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 09:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=Y3B4JZc0tJVQibu4pURKDCtGwMrc3nd8jQV/wUq90Zw=;
-        b=em1w4StfSos19j40lyb+/be22kzVxn7G/I3W4JwuNHOvN4iGIa2ef3tWsPiUVMxHNg
-         85jnlzkOXrISYDMWAU6tWjuqU1HURAfeQ6ph1Xg2oAUo5sW9DsUK6GdojH/GS0s+yAUN
-         iEgei2zhZq3cXN3kYvK2LkAckxMH5x5EInZl6dd7hwhq1aKvOa0wLNUU7f6ssm3z9cQ2
-         R2j0nEpTrRsv+sArXatLNWurpVRibi3lOiCkYw8eelmaM72+A5EFpmTc3xMXGVGENr6l
-         NCsOI7iadbIP5X7z4sA78Cpw4ccSm/iGPpC6Xz18dpQFMb7fhU4YjsITzPipVuqLE/Je
-         0pOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=Y3B4JZc0tJVQibu4pURKDCtGwMrc3nd8jQV/wUq90Zw=;
-        b=u/7UnLxF2h705mLBFrDzDAZSDBaotzYMnk+mPQShEGmsr+3tLEGWr/y+4SyKO7pqZu
-         ta94gWJLwuTIAQrL/XM4uM7pwl9OKK9OXVwhPYw89otkL7Mxqwoh0qm4866seVV6y6fc
-         5+X+sxR/6cmYgInNABu/Axg3PFv775VDycm14c+jOUHFxZbyu9680eSZlgjeczNX95jD
-         08zkPP9GHN0CZG+rfUE6MPqF4qc6i5iPkFpA0njsyX0FOJf528/a4UZi8zgL2vefFnyP
-         KhxMtiEvH8BIt4XLvQLMXBxFTvF/WCmqUfcdv2b+XFjxfeY+oderqGtTfohT7Bj8ZUNp
-         6Sew==
-X-Gm-Message-State: AOAM533MMxxefX+Y7+Zl0qYcGXi9h/xhSsIeo/317/v1i+P53NoF+ZTV
-        Ptgk7FMloowD5dbky3BRE7Gs6B7UmQo=
-X-Google-Smtp-Source: ABdhPJwSgAn+H/JeFL/UFPK5bvm3iusctA/PYX326/2Rtqnj9KlxEiBdKsznOjfanIFSqRPagc84/A==
-X-Received: by 2002:aa7:c444:0:b0:42d:d1d9:e4d8 with SMTP id n4-20020aa7c444000000b0042dd1d9e4d8mr855508edr.145.1653840132941;
-        Sun, 29 May 2022 09:02:12 -0700 (PDT)
-Received: from nam-dell ([2a02:8109:afbf:ed88:435:610d:d1eb:dc05])
-        by smtp.gmail.com with ESMTPSA id mp33-20020a1709071b2100b006fecf62536asm3208151ejc.188.2022.05.29.09.02.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 09:02:12 -0700 (PDT)
-Date:   Sun, 29 May 2022 18:02:11 +0200
-From:   Nam Cao <namcaov@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     forest@alittletooquiet.net, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH] staging: vt6655: Update function description
-Message-ID: <20220529160211.GA5805@nam-dell>
+        Sun, 29 May 2022 12:19:30 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EB7522F4;
+        Sun, 29 May 2022 09:19:28 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id CF4FE1F425DC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653841166;
+        bh=9CTrQDgqxEHtWS8xx4NJ+2bx1b2qoRlEGrZziKFdKbw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ANb5jUtNOy9iFNOez1Gig/+CTOoRldVhAuinlkRe+HhgDMj8Z28vNX3PaJ+9n/9T/
+         6lSBaePrhllsdkpvfjarXyMyDAczBaz+l11zJY4GhOjAsOeftqd6xzHIo6Ws822kZM
+         BJ6Am5mPm6c0/KaYZIUOeEm3rTJnymLcJEkdfqFOMUUMyMG/qn+FBgsWGwkrEph5pJ
+         D9AQXdKdE2wEj++SCA47qqOUwnG+L+fuuAfaNUMeDMNVquVmv0N6XLD3QkrHm3SHNd
+         8PVS9QpqkKS8ZdIT1EueqL6gaa0q3ez0/yI0Dqn83b8T3Wc2ZaA7ZGzRLZ2zD+fWUB
+         w/SEeXtPzqZjQ==
+Message-ID: <793e49ea-aeb0-a47a-9fe8-742a6397bb35@collabora.com>
+Date:   Sun, 29 May 2022 19:19:22 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 08/31] cpufreq: tegra20: Migrate to
+ dev_pm_opp_set_config()
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <4b38ceed657bfcf87ff9ab0dd69dd1f2f5658b24.1653564321.git.viresh.kumar@linaro.org>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <4b38ceed657bfcf87ff9ab0dd69dd1f2f5658b24.1653564321.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function vt6655_get_current_tsf has been updated while its
-description has not. Update the description to correctly reflect
-what it does.
+On 5/26/22 14:42, Viresh Kumar wrote:
+> The OPP core now provides a unified API for setting all configuration
+> types, i.e. dev_pm_opp_set_config().
+> 
+> Lets start using it.
+> 
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/tegra20-cpufreq.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/tegra20-cpufreq.c b/drivers/cpufreq/tegra20-cpufreq.c
+> index e8db3d75be25..2c73623e3abb 100644
+> --- a/drivers/cpufreq/tegra20-cpufreq.c
+> +++ b/drivers/cpufreq/tegra20-cpufreq.c
+> @@ -34,7 +34,7 @@ static bool cpu0_node_has_opp_v2_prop(void)
+>  
+>  static void tegra20_cpufreq_put_supported_hw(void *opp_table)
+>  {
+> -	dev_pm_opp_put_supported_hw(opp_table);
+> +	dev_pm_opp_clear_config(opp_table);
+>  }
+>  
+>  static void tegra20_cpufreq_dt_unregister(void *cpufreq_dt)
+> @@ -49,6 +49,10 @@ static int tegra20_cpufreq_probe(struct platform_device *pdev)
+>  	struct device *cpu_dev;
+>  	u32 versions[2];
+>  	int err;
+> +	struct dev_pm_opp_config config = {
+> +		.supported_hw = versions,
+> +		.supported_hw_count = ARRAY_SIZE(versions),
+> +	};
+>  
+>  	if (!cpu0_node_has_opp_v2_prop()) {
+>  		dev_err(&pdev->dev, "operating points not found\n");
+> @@ -71,10 +75,10 @@ static int tegra20_cpufreq_probe(struct platform_device *pdev)
+>  	if (WARN_ON(!cpu_dev))
+>  		return -ENODEV;
+>  
+> -	opp_table = dev_pm_opp_set_supported_hw(cpu_dev, versions, 2);
+> -	err = PTR_ERR_OR_ZERO(opp_table);
+> +	opp_table = dev_pm_opp_set_config(cpu_dev, &config);
+> +	err = PTR_ERR(opp_table);
 
-Signed-off-by: Nam Cao <namcaov@gmail.com>
----
- drivers/staging/vt6655/card.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Please keep the PTR_ERR_OR_ZERO.
 
-diff --git a/drivers/staging/vt6655/card.c b/drivers/staging/vt6655/card.c
-index 2cde0082fc03..ce9b2f0dbd58 100644
---- a/drivers/staging/vt6655/card.c
-+++ b/drivers/staging/vt6655/card.c
-@@ -734,9 +734,9 @@ u64 CARDqGetTSFOffset(unsigned char byRxRate, u64 qwTSF1, u64 qwTSF2)
-  *  In:
-  *      priv         - The adapter to be read
-  *  Out:
-- *      qwCurrTSF       - Current TSF counter
-+ *      none
-  *
-- * Return Value: true if success; otherwise false
-+ * Return Value: Current TSF counter
-  */
- u64 vt6655_get_current_tsf(struct vnt_private *priv)
- {
+tegra20-cpufreq tegra20-cpufreq: failed to set OPP config: -1042688000
+
 -- 
-2.25.1
-
+Best regards,
+Dmitry

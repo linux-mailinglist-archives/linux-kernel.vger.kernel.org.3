@@ -2,137 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4CB537172
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 17:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F174F537177
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 17:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiE2PCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 11:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
+        id S230507AbiE2PMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 11:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiE2PCx (ORCPT
+        with ESMTP id S229741AbiE2PMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 11:02:53 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406CA939A7;
-        Sun, 29 May 2022 08:02:51 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id A1F9E4B7;
-        Sun, 29 May 2022 15:02:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A1F9E4B7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1653836570; bh=prfaPouyOR+h3OLn6aM3uj1MK/ywudByeFsbG2uZEBk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=jDwL7ar7WO12Ocu9dHfPV7mvCf3la5OQj0lH43MGiZAU5r+c+kGhOr3Vv/paus2RG
-         jwdHU2GrkIIaOTUdsV4lg19YqsUa2AWM8nV99048dXHQll20XJ0z6XXYyXHHa7ykXj
-         5v/FCGN80wEBco05UGVKz9VP+VkJ+0CE3+lpUOPD9b/taubZcgc4/z+11lkoHx4jln
-         rpHCeGzwhRJGoQJMwBENyeUe3azTumzr4DKbAZoC9rXrh64Em0/3e853XBBWZ4iEP9
-         XlXdUe8kGBt4Ut9xeuvHUyccFQDTaZDD3pLb8J+u5EqIpcl/pVluGS2oZZbiNInR9p
-         d0k3HIEtAoAuA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Nikolai Kondrashov <spbnick@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        =?utf-8?Q?Jos=C3=A9?= =?utf-8?Q?_Exp=C3=B3sito?= 
-        <jose.exposito89@gmail.com>, llvm@lists.linux.dev,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] HID: uclogic: remove extraneous asterisk on
- uclogic_params_* static functions comments
-In-Reply-To: <20220528091403.160169-2-bagasdotme@gmail.com>
-References: <20220528091403.160169-1-bagasdotme@gmail.com>
- <20220528091403.160169-2-bagasdotme@gmail.com>
-Date:   Sun, 29 May 2022 09:02:56 -0600
-Message-ID: <87tu988jq7.fsf@meer.lwn.net>
+        Sun, 29 May 2022 11:12:18 -0400
+Received: from jari.cn (unknown [218.92.28.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4900413E04
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 08:12:15 -0700 (PDT)
+Received: by ajax-webmail-localhost.localdomain (Coremail) ; Sun, 29 May
+ 2022 23:06:53 +0800 (GMT+08:00)
+X-Originating-IP: [182.148.15.20]
+Date:   Sun, 29 May 2022 23:06:53 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   "XueBing Chen" <chenxuebing@jari.cn>
+To:     billm@melbpc.org.au, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org
+Cc:     hpa@zytor.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] x86: clean up warnings found by checkpatch
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <6f4b4fa8.a91.181105b1395.Coremail.chenxuebing@jari.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAfwA3QnANjJNigCY6AA--.694W
+X-CM-SenderInfo: hfkh05pxhex0nj6mt2flof0/1tbiAQARCmFEYxslrwAFsI
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bagas Sanjaya <bagasdotme@gmail.com> writes:
-
-> *uclogic_params_pen_inrange_to_str(), uclogic_params_pen_hid_dbg(), and
-> uclogic_params_frame_hid_dbg() are static functions but contain
-> double-asterisk (/** */) comment, which confuses kernel-doc as public
-> function for generating documentation.
->
-> Remove the extraneous asterisk from these comments.
-
-So there is nothing wrong with making kerneldoc comments for static
-functions, that is not where the problem lies.
-
-> Link: https://lore.kernel.org/linux-doc/202205272033.XFYlYj8k-lkp@intel.c=
-om/
-> Fixes: a228809fa6f39c ("HID: uclogic: Move param printing to a function")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Nikolai Kondrashov <spbnick@gmail.com>
-> Cc: Jiri Kosina <jikos@kernel.org>
-> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> Cc: "Jos=C3=A9 Exp=C3=B3sito" <jose.exposito89@gmail.com>
-> Cc: llvm@lists.linux.dev
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  drivers/hid/hid-uclogic-params.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-p=
-arams.c
-> index db838f16282d64..71501453de12e4 100644
-> --- a/drivers/hid/hid-uclogic-params.c
-> +++ b/drivers/hid/hid-uclogic-params.c
-> @@ -20,7 +20,7 @@
->  #include <linux/ctype.h>
->  #include <asm/unaligned.h>
->=20=20
-> -/**
-> +/*
->   * uclogic_params_pen_inrange_to_str() - Convert a pen in-range reportin=
-g type
->   *                                       to a string.
->   *
-
-A more likely problem here is the blank between the function intro and
-the parameter description.
-
-> @@ -44,7 +44,7 @@ static const char *uclogic_params_pen_inrange_to_str(
->  	}
->  }
->=20=20
-> -/**
-> +/*
->   * Dump tablet interface pen parameters with hid_dbg(), indented with on=
-e tab.
->   *
-
-Here too
-
->   * @hdev:	The HID device the pen parameters describe.
-> @@ -76,7 +76,7 @@ static void uclogic_params_pen_hid_dbg(const struct hid=
-_device *hdev,
->  		(pen->tilt_y_flipped ? "true" : "false"));
->  }
->=20=20
-> -/**
-> +/*
->   * Dump tablet interface frame parameters with hid_dbg(), indented with =
-two
->   * tabs.
->   *
-
-Here, instead, this needs to be formatted as a proper kerneldoc comment
-with the function name.
-
-jon
+CkNsZWFuIHVwIGEgaGFuZGZ1bCBvZiBjaGVja3BhdGNoIHdhcm5pbmdzOgotIFdBUk5JTkc6IFBy
+ZWZlciAnbG9uZycgb3ZlciAnbG9uZyBpbnQnIGFzIHRoZSBpbnQgaXMgdW5uZWNlc3NhcnkKLSBF
+UlJPUjogImZvbyAqIGJhciIgc2hvdWxkIGJlICJmb28gKmJhciIKLSBXQVJOSU5HOiBVbm5lY2Vz
+c2FyeSB0eXBlY2FzdCBvZiBjOTAgaW50IGNvbnN0YW50Ci0gJyh1bnNpZ25lZCBpbnQpMHhiNTA0
+ZjMzNCcgY291bGQgYmUgJzB4YjUwNGYzMzRVJwotIFdBUk5JTkc6IFVubmVjZXNzYXJ5IHR5cGVj
+YXN0IG9mIGM5MCBpbnQgY29uc3RhbnQKLSAnKHVuc2lnbmVkIGludCkweGFmYjBjY2MwJyBjb3Vs
+ZCBiZSAnMHhhZmIwY2NjMFUnCgpTaWduZWQtb2ZmLWJ5OiBYdWVCaW5nIENoZW4gPGNoZW54dWVi
+aW5nQGphcmkuY24+Ci0tLQogYXJjaC94ODYvbWF0aC1lbXUvcG9seV9sMi5jIHwgMTYgKysrKysr
+KystLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgOCBkZWxldGlvbnMo
+LSkKCmRpZmYgLS1naXQgYS9hcmNoL3g4Ni9tYXRoLWVtdS9wb2x5X2wyLmMgYi9hcmNoL3g4Ni9t
+YXRoLWVtdS9wb2x5X2wyLmMKaW5kZXggOThiNjk0OWJiODU0Li5mZmI1ZDg0NDY3ZDYgMTAwNjQ0
+Ci0tLSBhL2FyY2gveDg2L21hdGgtZW11L3BvbHlfbDIuYworKysgYi9hcmNoL3g4Ni9tYXRoLWVt
+dS9wb2x5X2wyLmMKQEAgLTE5LDE0ICsxOSwxNCBAQAogI2luY2x1ZGUgInBvbHkuaCIKIAogc3Rh
+dGljIHZvaWQgbG9nMl9rZXJuZWwoRlBVX1JFRyBjb25zdCAqYXJnLCB1X2NoYXIgYXJnc2lnbiwK
+LQkJCVhzaWcgKiBhY2N1bV9yZXN1bHQsIGxvbmcgaW50ICpleHBvbik7CisJCQlYc2lnICogYWNj
+dW1fcmVzdWx0LCBsb25nICpleHBvbik7CiAKIC8qLS0tIHBvbHlfbDIoKSAtLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKwogIHwgICBC
+YXNlIDIgbG9nYXJpdGhtIGJ5IGEgcG9seW5vbWlhbCBhcHByb3hpbWF0aW9uLiAgICAgICAgICAg
+ICAgICAgICAgICAgICB8CiAgKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSovCiB2b2lkIHBvbHlfbDIoRlBV
+X1JFRyAqc3QwX3B0ciwgRlBVX1JFRyAqc3QxX3B0ciwgdV9jaGFyIHN0MV9zaWduKQogewotCWxv
+bmcgaW50IGV4cG9uZW50LCBleHBvbiwgZXhwb25fZXhwb247CisJbG9uZyBleHBvbmVudCwgZXhw
+b24sIGV4cG9uX2V4cG9uOwogCVhzaWcgYWNjdW11bGF0b3IsIGV4cG9uX2FjY3VtLCB5YWNjdW07
+CiAJdV9jaGFyIHNpZ24sIGFyZ3NpZ247CiAJRlBVX1JFRyB4OwpAQCAtMzUsNyArMzUsNyBAQCB2
+b2lkIHBvbHlfbDIoRlBVX1JFRyAqc3QwX3B0ciwgRlBVX1JFRyAqc3QxX3B0ciwgdV9jaGFyIHN0
+MV9zaWduKQogCWV4cG9uZW50ID0gZXhwb25lbnQxNihzdDBfcHRyKTsKIAogCS8qIEZyb20gc3Qw
+X3B0ciwgbWFrZSBhIG51bWJlciA+IHNxcnQoMikvMiBhbmQgPCBzcXJ0KDIpICovCi0JaWYgKHN0
+MF9wdHItPnNpZ2ggPiAodW5zaWduZWQpMHhiNTA0ZjMzNCkgeworCWlmIChzdDBfcHRyLT5zaWdo
+ID4gMHhiNTA0ZjMzNFUpIHsKIAkJLyogVHJlYXQgYXMgIHNxcnQoMikvMiA8IHN0MF9wdHIgPCAx
+ICovCiAJCXNpZ25pZmljYW5kKCZ4KSA9IC1zaWduaWZpY2FuZChzdDBfcHRyKTsKIAkJc2V0ZXhw
+b25lbnQxNigmeCwgLTEpOwpAQCAtMTA0LDEwICsxMDQsMTAgQEAgdm9pZCBwb2x5X2wyKEZQVV9S
+RUcgKnN0MF9wdHIsIEZQVV9SRUcgKnN0MV9wdHIsIHVfY2hhciBzdDFfc2lnbikKICB8ICAgbG9n
+Mih4KzEpICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgfAogICstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0qLwogaW50IHBvbHlfbDJwMSh1X2No
+YXIgc2lnbjAsIHVfY2hhciBzaWduMSwKLQkgICAgICBGUFVfUkVHICogc3QwX3B0ciwgRlBVX1JF
+RyAqIHN0MV9wdHIsIEZQVV9SRUcgKiBkZXN0KQorCSAgICAgIEZQVV9SRUcgKnN0MF9wdHIsIEZQ
+VV9SRUcgKnN0MV9wdHIsIEZQVV9SRUcgKmRlc3QpCiB7CiAJdV9jaGFyIHRhZzsKLQlsb25nIGlu
+dCBleHBvbmVudDsKKwlsb25nIGV4cG9uZW50OwogCVhzaWcgYWNjdW11bGF0b3IsIHlhY2N1bTsK
+IAogCWlmIChleHBvbmVudDE2KHN0MF9wdHIpIDwgMCkgewpAQCAtMTgwLDkgKzE4MCw5IEBAIHN0
+YXRpYyBjb25zdCB1bnNpZ25lZCBsb25nIGxlYWR0ZXJtID0gMHhiODAwMDAwMDsKICB8ICAgbG9n
+Mih4KzEpICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgfAogICstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0qLwogc3RhdGljIHZvaWQgbG9nMl9r
+ZXJuZWwoRlBVX1JFRyBjb25zdCAqYXJnLCB1X2NoYXIgYXJnc2lnbiwgWHNpZyAqYWNjdW1fcmVz
+dWx0LAotCQkJbG9uZyBpbnQgKmV4cG9uKQorCQkJbG9uZyAqZXhwb24pCiB7Ci0JbG9uZyBpbnQg
+ZXhwb25lbnQsIGFkajsKKwlsb25nIGV4cG9uZW50LCBhZGo7CiAJdW5zaWduZWQgbG9uZyBsb25n
+IFhzcTsKIAlYc2lnIGFjY3VtdWxhdG9yLCBOdW1lciwgRGVub20sIGFyZ1NpZ25pZiwgYXJnX3Np
+Z25pZjsKIApAQCAtMjEwLDcgKzIxMCw3IEBAIHN0YXRpYyB2b2lkIGxvZzJfa2VybmVsKEZQVV9S
+RUcgY29uc3QgKmFyZywgdV9jaGFyIGFyZ3NpZ24sIFhzaWcgKmFjY3VtX3Jlc3VsdCwKICNpZm5k
+ZWYgUEVDVUxJQVJfNDg2CiAJLyogU2hvdWxkIGNoZWNrIGhlcmUgdGhhdCAgfGxvY2FsX2FyZ3wg
+IGlzIHdpdGhpbiB0aGUgdmFsaWQgcmFuZ2UgKi8KIAlpZiAoZXhwb25lbnQgPj0gLTIpIHsKLQkJ
+aWYgKChleHBvbmVudCA+IC0yKSB8fCAoYXJnU2lnbmlmLm1zdyA+ICh1bnNpZ25lZCkweGFmYjBj
+Y2MwKSkgeworCQlpZiAoKGV4cG9uZW50ID4gLTIpIHx8IChhcmdTaWduaWYubXN3ID4gMHhhZmIw
+Y2NjMFUpKSB7CiAJCQkvKiBUaGUgYXJndW1lbnQgaXMgdG9vIGxhcmdlICovCiAJCX0KIAl9Ci0t
+IAoyLjM2LjEK

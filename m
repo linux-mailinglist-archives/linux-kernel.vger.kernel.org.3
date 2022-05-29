@@ -2,119 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FB353701C
+	by mail.lfdr.de (Postfix) with ESMTP id 6892B53701B
 	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 09:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiE2G5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 02:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35304 "EHLO
+        id S229631AbiE2G65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 02:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiE2G5b (ORCPT
+        with ESMTP id S229498AbiE2G6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 02:57:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBBC3FBD6
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 23:57:30 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvCrD-0001Nl-TF; Sun, 29 May 2022 08:56:59 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvCr5-005D0y-Nd; Sun, 29 May 2022 08:56:50 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvCr3-00Cp8z-H3; Sun, 29 May 2022 08:56:49 +0200
-Date:   Sun, 29 May 2022 08:56:37 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Li Zhengyu <lizhengyu3@huawei.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        kexec@lists.infradead.org, linux-riscv@lists.infradead.org,
-        kernel@pengutronix.de, Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH v2] kexec_file: Drop weak attribute from
- arch_kexec_apply_relocations[_add]
-Message-ID: <20220529065637.xgapqjp2342flbuj@pengutronix.de>
-References: <20220519091237.676736-1-naveen.n.rao@linux.vnet.ibm.com>
+        Sun, 29 May 2022 02:58:54 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83D059339
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 23:58:53 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id y1so7917424pfr.6
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 23:58:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=58kX1OOtY+k2geYRZBJ22SUrbP3xr0N5heiBB7ymisg=;
+        b=QQMkfSRbOmYduM5Gj4biKbbn7LR7LhEhyEBloajkNlmMzNs06FSxUARL6CIT97KyZi
+         RI2jZOLuIPhRgdON7TtfzmTPVVdvH4AcFsRR4W8WI0gqsPE0CkZe74ZtuIA7v0nTELfV
+         IUcPfhGyfQ2O/+mYEVsFLDuuhwr4XrwCvAlh1gj8gPi7t34VwMjGSAnxtXPoZgvndlwT
+         sMw68riKbsqm/8kXgjrORiEQM3jpyxYHp5hfnVq/leWVXIg61LgFRzej10WDwxCwyYTw
+         2DtetQY6/8VBzUqOj9FU5ShRECIiGN3kNRA2fZemvd0EmJjGvP8Vb2CaG8x2JdZmnG2x
+         dEJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=58kX1OOtY+k2geYRZBJ22SUrbP3xr0N5heiBB7ymisg=;
+        b=Tkt/XwsYbuye+O+ZxXGKRRkdiUw61LRhXuOmHcHwc8CtyDmym4GWYtaYmEoz8g1jv3
+         iow43577WSA8z1YNGEjYJh1NISdClS08XwuDYwrSiGGsM3S2yHVuQ3CCKJZpz+whmpDH
+         1KVcfTjY7ICQQAQGKD5ck4+sekbv4CJrkZjwCcmCh9Hv9TLzUy7jz+3XdhQh1uDmG1Lv
+         yRFN/9QpWBipdWVnTKCqV6nW8ybNAH8HhsCrfU4uAK/jJ65RktCIsNTS2w98/FNDcU+n
+         tI+fuXY36y2eXqIV5YpVUbtbWz7bZzl86wIqzn8paDdu5qCrsdMODmQXNlr0rq4QK4/c
+         pjMA==
+X-Gm-Message-State: AOAM532GHodbFjPaDEDwmX0ilzhVNVa+gBKl292HBZ6bqfJmoaKfnutB
+        5jLxM2LJhqKUmkDalWlfTA==
+X-Google-Smtp-Source: ABdhPJxEGR3dDy2jUScZ+pD2yimGgBZwPIYEaPeorkhSpd3ydXIIrp/EPekmnQ/VkNNClaX5+xrMUA==
+X-Received: by 2002:a63:f518:0:b0:3fa:6f09:aac5 with SMTP id w24-20020a63f518000000b003fa6f09aac5mr26652616pgh.515.1653807532273;
+        Sat, 28 May 2022 23:58:52 -0700 (PDT)
+Received: from localhost.localdomain ([144.202.91.207])
+        by smtp.gmail.com with ESMTPSA id y12-20020aa7804c000000b00512d13016d0sm6353062pfm.159.2022.05.28.23.58.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 May 2022 23:58:51 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     eli.billauer@gmail.com, arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH v3] char: xillybus: Check endpoint type at probe time
+Date:   Sun, 29 May 2022 14:58:39 +0800
+Message-Id: <20220529065839.3817434-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kx2r5dh4j5uektvu"
-Content-Disposition: inline
-In-Reply-To: <20220519091237.676736-1-naveen.n.rao@linux.vnet.ibm.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The driver submits bulk urb without checking the endpoint type is
+actually bulk.
 
---kx2r5dh4j5uektvu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[    3.108690] usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+[    3.108983] WARNING: CPU: 0 PID: 211 at drivers/usb/core/urb.c:503 usb_submit_urb+0xcd9/0x18b0
+[    3.110976] RIP: 0010:usb_submit_urb+0xcd9/0x18b0
+[    3.115318] Call Trace:
+[    3.115452]  <TASK>
+[    3.115570]  try_queue_bulk_in+0x43c/0x6e0 [xillyusb]
+[    3.115838]  xillyusb_probe+0x488/0x1230 [xillyusb]
 
-Hello,
+Add a check at probe time to fix the bug.
 
-on current linux-next ARCH=3Driscv allmodconfig breaks with:
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+Changes in v3:
+    - Check the endpoint type more earlier
+Changes in v2:
+    - Check the endpoint type at probe time
+---
+ drivers/char/xillybus/xillyusb.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-  CC      arch/riscv/kernel/elf_kexec.o
-arch/riscv/kernel/elf_kexec.c:345:5: error: redefinition of =E2=80=98arch_k=
-exec_apply_relocations_add=E2=80=99
-  345 | int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from arch/riscv/kernel/elf_kexec.c:16:
-include/linux/kexec.h:236:1: note: previous definition of =E2=80=98arch_kex=
-ec_apply_relocations_add=E2=80=99 with type =E2=80=98int(struct purgatory_i=
-nfo *, Elf64_Shdr *, const Elf64_Shdr *, const Elf64_Shdr *)=E2=80=99 {aka =
-=E2=80=98int(struct purgatory_info *, struct elf64_shdr *, const struct elf=
-64_shdr *, const struct elf64_shdr *)=E2=80=99}
-  236 | arch_kexec_apply_relocations_add(struct purgatory_info *pi, Elf_Shd=
-r *section,
-      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+diff --git a/drivers/char/xillybus/xillyusb.c b/drivers/char/xillybus/xillyusb.c
+index dc3551796e5e..4ed19a2a04e3 100644
+--- a/drivers/char/xillybus/xillyusb.c
++++ b/drivers/char/xillybus/xillyusb.c
+@@ -167,6 +167,7 @@ struct xillyusb_dev {
+ 	struct device		*dev; /* For dev_err() and such */
+ 	struct kref		kref;
+ 	struct workqueue_struct	*workq;
++	struct usb_interface *intf;
+ 
+ 	int error;
+ 	spinlock_t error_lock; /* protect @error */
+@@ -1891,6 +1892,17 @@ static const struct file_operations xillyusb_fops = {
+ 
+ static int xillyusb_setup_base_eps(struct xillyusb_dev *xdev)
+ {
++	int ret;
++	struct usb_endpoint_descriptor *in, *out;
++
++	ret = usb_find_common_endpoints(xdev->intf->cur_altsetting, &in, &out, NULL, NULL);
++	if (ret)
++		return ret;
++
++	if (in->bEndpointAddress != (IN_EP_NUM | USB_DIR_IN) ||
++		out->bEndpointAddress != (MSG_EP_NUM | USB_DIR_OUT))
++		return -EINVAL;
++
+ 	xdev->msg_ep = endpoint_alloc(xdev, MSG_EP_NUM | USB_DIR_OUT,
+ 				      bulk_out_work, 1, 2);
+ 	if (!xdev->msg_ep)
+@@ -1916,6 +1928,21 @@ static int xillyusb_setup_base_eps(struct xillyusb_dev *xdev)
+ 	return -ENOMEM;
+ }
+ 
++static int xillyusb_check_endpoint(struct xillyusb_dev *xdev, u8 addr)
++{
++	int i;
++	struct usb_host_interface *if_desc = xdev->intf->altsetting;
++
++	for (i = 0; i < if_desc->desc.bNumEndpoints; i++) {
++		struct usb_endpoint_descriptor *ep = &if_desc->endpoint[i].desc;
++
++		if (ep->bEndpointAddress == addr && usb_endpoint_is_bulk_out(ep))
++			return 0;
++	}
++
++	return -EINVAL;
++}
++
+ static int setup_channels(struct xillyusb_dev *xdev,
+ 			  __le16 *chandesc,
+ 			  int num_channels)
+@@ -1962,6 +1989,10 @@ static int setup_channels(struct xillyusb_dev *xdev,
+ 			chan->out_log2_element_size = out_desc & 0x0f;
+ 			chan->out_log2_fifo_size =
+ 				((out_desc >> 8) & 0x1f) + 16;
++			if (xillyusb_check_endpoint(xdev, (i+2) | USB_DIR_OUT)) {
++				kfree(xdev->channels);
++				return -EINVAL;
++			}
+ 		}
+ 	}
+ 
+@@ -2125,6 +2156,7 @@ static int xillyusb_probe(struct usb_interface *interface,
+ 	mutex_init(&xdev->process_in_mutex);
+ 	mutex_init(&xdev->msg_mutex);
+ 
++	xdev->intf = interface;
+ 	xdev->udev = usb_get_dev(interface_to_usbdev(interface));
+ 	xdev->dev = &interface->dev;
+ 	xdev->error = 0;
+-- 
+2.25.1
 
-(I think) because there is a conflict between the two commits:
-
-233c1e6c319c kexec_file: drop weak attribute from arch_kexec_apply_relocati=
-ons[_add]
-838b3e28488f RISC-V: Load purgatory in kexec_file
-
-And so next is broken starting from
-164a9037b1d33f28ba27671c16ec1c23d4a11acf which merges the riscv tree.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---kx2r5dh4j5uektvu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKTGRsACgkQwfwUeK3K
-7AmDxAf9Ggb6UqEX3OJcHfUAj6XII7Pgm7ANdk/sgjvS9u4KABETUJ4Dub8m44b7
-YzTKjAz6Aoat5x0aX/BoeMEGOLKrO10yBqljertv1U3F28A0fvUejuJJoBHnmQHO
-A2rACjr5HuulnTTeF3vSwtxdKVzyR5bT4ys1ELO0drRWIdeds63oFpM3vg/7Dhkm
-6DGR26o5+bBCUsDlpnNlSTy4bqMaXAtqnImET8yrafbTbDhSXbwO57dOlfT0QmTC
-p2LoUfw5d64itPHNimGmnAJxtoJEET/gGLFzTbZIJk84CEydkc+3/2DyFU3rwHTZ
-DBh5qrnvrwgxqtYd5zu0HPAfvgDQMA==
-=tj8R
------END PGP SIGNATURE-----
-
---kx2r5dh4j5uektvu--

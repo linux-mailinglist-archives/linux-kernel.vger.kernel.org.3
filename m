@@ -2,76 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30355372B4
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 23:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 102D85372B6
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 23:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbiE2VUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 17:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
+        id S231857AbiE2VcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 17:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbiE2VUo (ORCPT
+        with ESMTP id S230326AbiE2VcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 17:20:44 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7392CDF4;
-        Sun, 29 May 2022 14:20:43 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id l1so8805096qvh.1;
-        Sun, 29 May 2022 14:20:43 -0700 (PDT)
+        Sun, 29 May 2022 17:32:09 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B255C64A;
+        Sun, 29 May 2022 14:32:05 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 129-20020a1c0287000000b003974edd7c56so4023987wmc.2;
+        Sun, 29 May 2022 14:32:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Jx+weakhReTpBiyhpJMmr0fal0LRVyBY1kBAbquoL8I=;
-        b=NR2lcqPICYi6a/ghlAaeu7f+fJNQildSlq6WQjlH0j2zdtMWIgvQDiZgwIG6ykc6Ro
-         tktJh8E9RJM9iIizWnKbuwoIuZCFelc9PwFBPWc2Vg25Z+l7J0F0eUaR1Tw0Yd4kxFJp
-         5n+F/jXm8PP98dxIte+YXGKT5eFyeBhdjnYIFiB6gezIYt7f2GMAZxZ0HRm+hT985zEK
-         wEuMnxLH/f+T+zzlGXUumcv57fcU5frdOND3VctNAyLL6Oanx9aOKpHB43yOTAd91w48
-         gCsE9jwX1ZhlKC5G+f0wuxqVzmPvPOF1HTXYWXk5OEi8VaXv29uhX50Tpt6ocf64QeKc
-         KhUg==
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=oJ572TpBm9RagWIq56C/Rz68Y52rsZa/Rz1BRlAz3Z4=;
+        b=V6/vHNi0LJfRJiFJkxiZv/UN66K34iqJ4xTitJlV79aMJFj41HBsaPBbAOenoYALkz
+         tkTDI/vK2IF4tVrJfgjAaxky0DBzu5mmrrvXHToi+nkLxIX3I0jNRenQJoHuJQ662FGS
+         auFaJ3sJZxmJx+jXD/TOkTvjnksLnzIMSq2/ub/HniJdbYRbSaMXqjo9jnhwflUn4oNK
+         SNznilQSkcMexQZZIYMGOGgAdGxKrW2S0f8gJkQZAWG+0p9Sjl39XEpqtYlpxoNabRN/
+         JRAVEO2bN30HMPD+EMAzy+5jM6f3jYWMOHfdna0DOEWfGwXAUTI5NXtY9WadNV+QS9wg
+         HxwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Jx+weakhReTpBiyhpJMmr0fal0LRVyBY1kBAbquoL8I=;
-        b=mVG8E4bWS2MqwYcgw3572XpSPMQ4fz0VBlrcgJK2oIKmwXXe2h4w3XfjPBaf8BzbhM
-         gs2LocPaVjGa8VXb8rwx4iSlDUh0BHlH4ob1s1uevpTaqgEQu0D7Wt/FigJTyw8PMtK3
-         86P+Amj0Mom0J7Wh1jmR5urRrw2g2siLoTZ70vh0uw3QkLbGb/kyZe+UXo9AYcUG8bS7
-         H4n7k77yeaCEw2b34VFOvUfa81bwci7n+RlVpZQLZbe12GKd/dpI6uviyzu+YWjR4l6u
-         HthO/n06YoDZqtFD5jIt53ciNE5ao58VQ+Kv5ZWZvs3nAhtHV+4bTOqrhzyJ65Czkzdn
-         ZWrQ==
-X-Gm-Message-State: AOAM530SfT2o4BF+aLThanqCX3lmSDjAM5jMs0lg36qljW5VQiLw9utx
-        9+hw2MeqVvkz6AddBcfPgd0=
-X-Google-Smtp-Source: ABdhPJwZJreQ+7Cv5dNnc7fZVvv4kOWOtmfezRij1nv08ZXpS6fqq7AHopyxCMblzo2uex6BwPdh/Q==
-X-Received: by 2002:a05:6214:627:b0:461:f1be:50d9 with SMTP id a7-20020a056214062700b00461f1be50d9mr42790694qvx.40.1653859242613;
-        Sun, 29 May 2022 14:20:42 -0700 (PDT)
-Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
-        by smtp.gmail.com with ESMTPSA id u126-20020ae9d884000000b006a35ac236c4sm6615470qkf.113.2022.05.29.14.20.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 14:20:42 -0700 (PDT)
-Date:   Sun, 29 May 2022 17:20:40 -0400
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-iio@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Subject: Re: kbuild problem: ERROR: modpost: missing MODULE_LICENSE() in
- drivers/iio/afe/iio-rescale.o
-Message-ID: <YpPjqC+kVLIBpNlq@shaak>
-References: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
- <3ae306e0-c6c7-ed12-cacd-62b1c26dba3c@infradead.org>
- <6671de03-c09c-bfaf-e06c-e45af70d4354@infradead.org>
- <6601a387-de9a-a0d0-11b5-01e0cfa75657@infradead.org>
- <7a97bac3-6ade-8e1b-cf0c-4a05c83163a3@infradead.org>
- <Yo+lHSmeIsx144cv@shaak>
- <3b7ec693-f4a5-e1aa-3e07-b22a4008d4c9@infradead.org>
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=oJ572TpBm9RagWIq56C/Rz68Y52rsZa/Rz1BRlAz3Z4=;
+        b=Q4nVB7uoR0HH0whBeH0Z1pDrY9kNgLDg/zNqbOXwioTiJ0R56LGtpHIC3AC9jg9Dde
+         QlyJMTFTZ/XXGljyc59qunFCPQOASBI8HophB5Cjsu3nl2QQMkBLai4IZ7K5P6esjmBX
+         YJ1CsWX+80tygnOafKJ1MXSTRrcKSYWSFR6vRIowK5HaI1u/JMakgtu5HeC9Tv9/Cxj5
+         3Tck727+5kfoH//vEVnzcnH0yeO6Af64jnrd1id+krGAp0eJu1XJ9FVw4RWMEcggm1PM
+         mX8YXPG0h4bD7CwN6iuF18Pd+VW7KSTTLXE6GMarAeV+UfZYwK9hKCN/Of+bIl9Kg6Rq
+         pIpg==
+X-Gm-Message-State: AOAM530ldEHh9/d86kRmbkr3O/KFYvTXVdQJThA8jcjaGCNVsey7IuRv
+        tja56tqnyVtUAPX8BKPLM5A=
+X-Google-Smtp-Source: ABdhPJzwOEjcLGispLy8yFMaSA1SFN4YyPfdYdp2ytg6WLndjv3z8CX/jVk/4sFM4jZjXCztpMud1Q==
+X-Received: by 2002:a05:600c:26c5:b0:397:49d9:e038 with SMTP id 5-20020a05600c26c500b0039749d9e038mr16434873wmv.25.1653859924102;
+        Sun, 29 May 2022 14:32:04 -0700 (PDT)
+Received: from [127.0.0.1] (lfbn-idf2-1-238-156.w83-202.abo.wanadoo.fr. [83.202.82.156])
+        by smtp.gmail.com with ESMTPSA id t4-20020adfdc04000000b0021024f82e01sm4547816wri.16.2022.05.29.14.32.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 May 2022 14:32:03 -0700 (PDT)
+Date:   Sun, 29 May 2022 23:32:00 +0200
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Carsten Haitzler <carsten.haitzler@arm.com>,
+        Claire Jensen <cjense@google.com>,
+        Dmitriy Vyukov <dvyukov@google.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Eric Lin <eric.lin@sifive.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        German Gomez <german.gomez@arm.com>,
+        Ian Rogers <irogers@google.com>,
+        James Clark <james.clark@arm.com>,
+        Joe Mario <jmario@redhat.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        anicolas@hupstream.com
+Subject: Re: [GIT PULL] perf tools changes for v5.19: 2nd batch
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAHk-=wj1+W6VXeRG7XXO7zSsTe3mACdrPY4PccMNPhC3seLELg@mail.gmail.com>
+References: <20220529154535.371758-1-acme@kernel.org> <CAHk-=wj1+W6VXeRG7XXO7zSsTe3mACdrPY4PccMNPhC3seLELg@mail.gmail.com>
+Message-ID: <32B2C52F-F697-45D5-9192-BDA70D838F96@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3b7ec693-f4a5-e1aa-3e07-b22a4008d4c9@infradead.org>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -82,143 +98,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
 
-On Thu, May 26, 2022 at 01:04:41PM -0700, Randy Dunlap wrote:
-> 
-> 
-> On 5/26/22 09:04, Liam Beguin wrote:
-> > Hi Randy,
-> > 
-> > On Thu, May 26, 2022 at 08:36:34AM -0700, Randy Dunlap wrote:
-> >> Liam:
-> >>
-> >> Any comment on this?
-> >> Otherwise I'll just send a formal patch like this (below).
-> > 
-> > Apologies for not answering earlier.
-> > 
-> > I wanted to look more into Masahiro's comment and try to fix the
-> > Makefile, but that can be done after.
-> > 
-> > IMO your patch improves the current Kconfig, so I'd recommend sending
-> > the patch. If it can wait a bit, I can look at the Makefile over the
-> > weekend.
-> > 
-> 
-> Liam,
-> 
-> I'll wait until next week to see if you come up with anything.
-> 
 
-The following patch fixes the issue while addressing Masahiro's comment.
-I also considered `select IIO_RESCALE`, but I'm not sure what's usually
-preferred.
+On May 29, 2022 7:28:26 PM GMT+02:00, Linus Torvalds <torvalds@linux-found=
+ation=2Eorg> wrote:
+>On Sun, May 29, 2022 at 8:45 AM Arnaldo Carvalho de Melo
+><acme@kernel=2Eorg> wrote:
+>>
+>> - Add BPF based off-CPU profiling=2E
+>
+>I suspect this could have come with a bit more explanation of what
+>"off-CPU profiling" means=2E
 
-diff --git a/drivers/iio/test/Kconfig b/drivers/iio/test/Kconfig
-index 56ca0ad7e77a..4c66c3f18c34 100644
---- a/drivers/iio/test/Kconfig
-+++ b/drivers/iio/test/Kconfig
-@@ -6,7 +6,7 @@
- # Keep in alphabetical order
- config IIO_RESCALE_KUNIT_TEST
- 	bool "Test IIO rescale conversion functions"
--	depends on KUNIT=y && !IIO_RESCALE
-+	depends on KUNIT=y && IIO_RESCALE=y
- 	default KUNIT_ALL_TESTS
- 	help
- 	  If you want to run tests on the iio-rescale code say Y here.
-diff --git a/drivers/iio/test/Makefile b/drivers/iio/test/Makefile
-index f15ae0a6394f..880360f8d02c 100644
---- a/drivers/iio/test/Makefile
-+++ b/drivers/iio/test/Makefile
-@@ -4,6 +4,6 @@
- #
- 
- # Keep in alphabetical order
--obj-$(CONFIG_IIO_RESCALE_KUNIT_TEST) += iio-test-rescale.o ../afe/iio-rescale.o
-+obj-$(CONFIG_IIO_RESCALE_KUNIT_TEST) += iio-test-rescale.o
- obj-$(CONFIG_IIO_TEST_FORMAT) += iio-test-format.o
- CFLAGS_iio-test-format.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+Sorry about that, I was in a hurry, traveling to Paris for Kernel Recipes[=
+1], afraid to miss the merge window=2E
 
-I'll send a patch as soon as you confirm this works for you too.
+>It seems to be "account time when process was scheduled away to
+>caller", but I had to go look at the commits to figure that out=2E
 
-Cheers,
-Liam
+Thanks for merging!
 
-> 
-> > 
-> >>
-> >> Thanks.
-> >>
-> >> On 5/20/22 20:51, Randy Dunlap wrote:
-> >>> Ok, one more.
-> >>> [also adding Liam here]
-> >>>
-> >>> On 5/20/22 20:17, Randy Dunlap wrote:
-> >>>>
-> >>>>
-> >>>> On 5/20/22 20:08, Randy Dunlap wrote:
-> >>>>>
-> >>>>>
-> >>>>> On 5/20/22 19:40, Randy Dunlap wrote:
-> >>>>>> Hi,
-> >>>>>>
-> >>>>>> In March I reported that a randconfig build complained:
-> >>>>>>
-> >>>>>> ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
-> >>>>>>
-> >>>>>> (https://lore.kernel.org/all/16509fb6-e40c-e31b-2c80-264c44b0beb9@infradead.org/)
-> >>>>>>
-> >>>>>> I am still seeing this problem so I tried to dig into it a bit.
-> >>>>>> However, I don't see why get_next_modinfo() and friends don't find the
-> >>>>>> MODULE_LICENSE() since it is in the iio-rescale.o file.
-> >>>>>>
-> >>>>>> (BTW, I see this build error on many different $ARCH [around 15 tested]
-> >>>>>> and with 2 different versions of GCC.)
-> >>>>>>
-> >>>>>> Q1: Is modpost checking both vmlinux and iio-rescale.o for modinfo license
-> >>>>>> strings?
-> >>>>>>
-> >>>>>> It looks like it is, because it appears (?) that modpost is looking at
-> >>>>>> drivers/iio/test/iio-test-rescale.o (<<<<< a kunit test, which is builtin
-> >>>>>> in my .config) and at drivers/iio/afe/iio-rescale.o (which is built as a
-> >>>>>> loadable module).
-> >>>>>>
-> >>>>>> Is this confusing modpost?
-> >>>>>> I renamed drivers/iio/afe/iio-rescale.c to afe-rescale.c and changed its
-> >>>>>> Makefile entry accordingly and the MODULE_LICENSE error goes away.
-> >>>>>
-> >>>>> Oh well. This rename causes drivers/iio/test/iio-test-rescale.c to have
-> >>>>> build errors, so that's not a solution, just some info...
-> >>>>
-> >>>> and that was due to not updating drivers/iio/test/Makefile.
-> >>>> When that is done, the missing MODULE_LICENSE() is back in afe-rescale.o.
-> >>>>
-> >>>>>
-> >>>>>> Is this a modpost error or is kunit messing things up?
-> >>>>>>
-> >>>>>> thanks for looking.
-> >>>
-> >>> Does this look OK? It allows afe/iio-rescale.o to build XOR
-> >>> test/iio-rescale.o (not both of them).
-> >>>
-> >>> --- a/drivers/iio/test/Kconfig
-> >>> +++ b/drivers/iio/test/Kconfig
-> >>> @@ -6,7 +6,7 @@
-> >>>  # Keep in alphabetical order
-> >>>  config IIO_RESCALE_KUNIT_TEST
-> >>>         bool "Test IIO rescale conversion functions"
-> >>> -       depends on KUNIT=y && !IIO_RESCALE
-> >>> +       depends on KUNIT=y && IIO_RESCALE=n
-> >>>         default KUNIT_ALL_TESTS
-> >>>         help
-> >>>           If you want to run tests on the iio-rescale code say Y here.
-> >>>
-> >>>
-> >>
-> >> -- 
-> >> ~Randy
-> 
-> -- 
-> ~Randy
+>Partly unrelated side note: I've occasionally looked for "useful perf
+>recipes"=2E Not from kernel developers, but from people who solved real
+>performance problems using perf, giving useful examples=2E
+
+Yeah, collecting such experiences somewhere and trying to reduce boilerpla=
+te to achieve the results sometimes ends up creating new tools or making th=
+e existing ones now actionable=2E
+
+When people ask me about such recipes I usually point them to:
+
+https://www=2Ebrendangregg=2Ecom/perf=2Ehtml
+
+Lots of features in perf came from trying to address comments, complaints =
+from you, Ingo, Peter, Thomas, Milian Wolff, Brendan, Stephane and lots of =
+others, thanks!
+
+Back to this off-CPU thing, I'm talking with Namhyung on how to streamline=
+ it, this one and the growing number of BPF based perf tools,
+
+- Arnaldo
+
+[1] https://kernel-recipes=2Eorg/en/2022/

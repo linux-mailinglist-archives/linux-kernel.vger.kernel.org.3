@@ -2,79 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3BB5370C7
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 13:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F5C5370CA
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 13:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiE2Lf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 07:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
+        id S230071AbiE2LhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 07:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiE2Lf2 (ORCPT
+        with ESMTP id S229862AbiE2LhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 07:35:28 -0400
-Received: from sonic306-22.consmr.mail.gq1.yahoo.com (sonic306-22.consmr.mail.gq1.yahoo.com [98.137.68.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB64C9A9A7
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 04:35:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1653824127; bh=RRgJoG/L4BQHnc1cT7FRAwecnMXwJlauasCSmqnyPAM=; h=Date:To:From:Subject:References:From:Subject:Reply-To; b=Fboj+JvTxf0ky+/oYaQqkzG43VBGoM7l+ewOJEENxaaomc5ITi9CS1vv1Im/X3+yfvXmM/Fd5ma+N+7TD5xUYemXYodC5IRIV/DlRc8gAaqhE1l6Xs9kbDAGiwUuzUjyRv4IbkkSEcjBLVUTh3osjLLImZQ06+SvopbvY9xGNec=
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1653824127; bh=nMBxSXruymYMWIVmmEPjdIlj2p/vMnVg3Uy6ZcpoO/F=; h=X-Sonic-MF:Date:To:From:Subject:From:Subject; b=jhRLL11SWLe7XzfH4wFjmae1+JL/G9ZfLL2L/3JILw3fM3auCyzKKEUTzK3dic5naJ/Pn9tvOG6H8R1+duwRsJNalyISb/Tped8BVZ8wpUJsEbV2azkpluSeNjj5tQry7/+F6kaZaV3BOVzO4HVmljHycL/q3ntEUsnmNDZB//khotyXc2Jn5n2mMcKkEd1EaP8jzJCeaXiIfwgB9T/DxLPjL47zU5Z3aj5s9GghAmww7xiPwdPbNLiBnB5WJArMlZPwYqBZfFgfWFMva115Dr0UXS2wP1yfHMeORqd66rEXZTmI2Kym+/yzRi7vo15HlZaKEMJcqWaGUEj7q36AHg==
-X-YMail-OSG: qsc4N60VM1lT.voDuqyBRRP1chLws0RRccxiCoSARPQR1NQGe7vq.V2jOKl8.yu
- CnNuzfZiFb.j.oflBgIkldvk25vQpTQkccHOR9ipOybHRZz3mOkM8lfqdu18TmOPXY8OryY8_SQn
- myMSq1sTgjxweLf13f.6.a2iLbPyvwSeIR3nz2yrVZ0F8Pdqqo74HKTJ_AJNMnOpPlZ4DYYEqFf9
- 0SESFHFRHhxrQJEmUjnOLMfKGmxiOhBJI.mPqOkkxwsRkAvAXfsky3M7h67VxpN8nHFp8lDGrEbP
- bRTrKhEFALMU6b5rVIzJCScJPmCpTt1EpYINCYHOQZQw4M2SG8b4yx6AEoamHDNPCOisvgNsh_Q5
- 4dM3gfIrLuYSs2yyS1izDvAn7a1qNTxYWYymtc0ElZIMyN8Gg0Rq7g5BzJBdF0BQhY5uNCG7.RUM
- 05ZxbjzPUplSf6v.QPf2e4EPCejx4IjMD0QI_qbOmeAkUgkjj45ZNV0pjoSrd6fivd3iA0rdloOZ
- X6BNiIz6sMjrXe_NqnFxTljFXZeIVkimDQprrdkt6jc.ZDglI.fwWO6Td8T1HyhBvkdHDY5kztMP
- YMufZrX1nZKp7hEfXf6KKrdL5mnsRjZPUVvgSj25XhILDkiy14veaTK16VQ.p6lAxIZG9aonBKyl
- wOqAkRLFajyR0D0RcQOSVZ5Egpqe8epMGlQ4o1Hk_r0LMMZZZJ4G6sJAUr.agrAvPfr_GvkYmYSc
- GxPe5nr0oaVRflgRvfN2RrYVvG_QgJxKDZ5hp8IPyLO5q0GQojq5z5zzJC6npcC1vOaocoWBSzUb
- 7MzmdMiRiDD2GjwKIJ2UUs78YrS1ho1GXCm9D27_9HzmlbVs5hJMdsHKP9m5hsweK3Hmc6NT.Qh8
- JlWd8nSeNVDpriSo5z.GdGvxVYOHTIg3hIpRCmMBCUNKj5C_4GNSf.uKabEj7lTGSVvgYngrS1Fj
- PJ8xhZzFGmX6fbSbbX1hNwNUmspK1OifXFLSB8vFluy3In_m40gDWlXHIK1MlwKdbKVAPE8bn5A_
- 1secPW6u_hnH7ywV9UV_VQZ2so000eehSE68aCdlO_4Y71uG6PRU4Q5ZKoWo0nGijrJEwPVSUDgk
- 5brDVqn4y9fhQUWSCJ9j3MuN9rsbRNN01KwlkUeSkp2ncC8Sm_qvtzU1AfctQ3Kj_TtoTctTisrI
- rOVahfHY9v5r.lGTyFgM1w_op3SWCYeZ7RfzQAhAWsIPMEiN7_pHH_XFfY0gDhWmqoKPI9JdrBpv
- cEEMvqIvKboqAoQAbvqbMHj28s35eze7MoogFSGkrZ5jklJ..6p7KEEHnelNe6eR2GkuIc9snUhb
- 3gCC_QA2v1DSizYgz973WpV2tSae6d.cHh1A2eLB5vfn02IIGX4C73I05K81gJY.zpG_dz4ndptO
- .D3KaopOPctIJd0BUJVXWtF7IDt3pYEFeX8Oicm3X7poGcMVLW2KpspRmUPzB.kGB1SeKznw0o.V
- HLyeTMf9On8jEFzgm1DWSGGUjEFcpzIDdBfINwz5r3cEgEaQrLHi4cXU9vn4GGmmcgsWtA3pZlI0
- 7oyr3PKJR1bSGhGD6DYam3RI2a3Z7CvBAorlOcO4RWnkaZiUFLC8a_yDoxTJkkl3PMx.vVccotvk
- EZa1fMz1Eh0YIQvPZHBLGOg7nMVBR5i9JAImVmfRCzNLJGH3gDRoIoiIN0gFCfWd6DlLrmCuZvxo
- B3BEKJTUEqgpVkh2BUXnMyUWV1FGxMMevDPXkemBa4R6TisAwzZX_ki4B2TpDS_88OxFyynH87oq
- zcQZ49eVsowX_xeZ1lXvru7HtgbmTLcUK.TkW0_Fi_pQt8qgDWoAMDfyUGnUNGr6dVWV4iu3TJy3
- c4GgkfKyn6UUepqNvpDEgxZqW.Hk6oMkPrTeGmEnEnjmJwH7xybxFUdbt_DANMIqFSM3BmqD9Hab
- Dh30NF4.OtS8aFQ.8A6ucQ3ns0j98WDxzZMd7YHgeCr5TtaWt4k41GI6UrGlS1g6x9DRMR8.H0dE
- 5673l1bkBFU9vLWjzmHX7o5SR6u2xXqjp1p9.bCZkYT8eADE8ZKmqwYjw8B0RiBFEVwaXGit2NMt
- yo4ZzL04wfQqpJg5F3NMbF2Jp7O4GMAHcv8Aa0mLlAKthMQtsi6r5Xx2Jt8QrlvYWHZnwI2nhrii
- E8uFmfeRUunCBlwEHMTb3Y7RP1UK0nNh3hQyz3g0FlY.judvSwpeC6UIczaGFxzF7ReSZ1wpT65G
- Er1F2CTBLO9jKhA--
-X-Sonic-MF: <lesrhorer@att.net>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.gq1.yahoo.com with HTTP; Sun, 29 May 2022 11:35:27 +0000
-Received: by hermes--canary-production-ne1-799d7bd497-7z8w4 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 45c10ca29e34986f6be115ab68704028;
-          Sun, 29 May 2022 11:35:25 +0000 (UTC)
-Message-ID: <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0@att.net>
-Date:   Sun, 29 May 2022 06:35:19 -0500
+        Sun, 29 May 2022 07:37:10 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731893BA58
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 04:37:09 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id a15so5946928ilq.12
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 04:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f2p+RNA3uW2ooZwCskBW9DfWGMzM7OSZpW6uiTppzOI=;
+        b=e4ZYCc9oVK8MNkLyNA//UfF8oFEpedvj0IZa3bUuNrV66HOKChkPNWU47pOOOjxemh
+         1dGyXx3X3bH8oBJiaW0F9T0guH902+CB2ax0JxTsTmrd+LSCS12iCZPf8+mkknanlBma
+         sORCIdoBoEr8lCK8+yn7eJnzUENIntoUD/uuqFhq0r9lpV+eL7W9cJliXgw5EA03Shoz
+         tUTTHkeXyvsKQ9OzNUiYuBMtsFDKinbtLFLuHhrajlR0wuwTqTvpS3iID6DVWMKbHUxE
+         ndRb9q4+Yfd29FMEakiw8+dZoclAHSDdIdAVXkazY5CfmJU5nnlwzvwctPpi7DsiC7/Z
+         cCCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f2p+RNA3uW2ooZwCskBW9DfWGMzM7OSZpW6uiTppzOI=;
+        b=SxwvkzIpB8MNVqmyuV5uQFCqWbNHZN86aC70QGcR19AamfxCCq9G0kaSDF5NXbYt9r
+         0Zb6r2hd3w/P0Vy8qiy8j0+/pjXkkLobbocC7wKFQbDqeP8ifzPrG20HUQZAOMftQaP8
+         ig5RvaAr8UMuPI27guSTiYxrlsj7nWEMwh4JBhgJvRkC9NN71OCermXEpoti9AZiUtr9
+         MGRDugLRoUJoog+WLzDN73Pg0j1ZPHlgxLppZMPHhQmXpuSKH2srd/YM9SHK1PtD0Ufi
+         jSM6ZUzKRX8TpgvJDLdzKlhIm1fEAysEDCfapVprO8KO+cUsBrDlF2QjXIVrsi517Wp8
+         pzDQ==
+X-Gm-Message-State: AOAM5303ek+GnyT4UgWbA+fU3LNASciB0a8cQsnKsgZk0FecwvzCEiJC
+        aZBx2bzbJ16AdEs+uFmR9f8=
+X-Google-Smtp-Source: ABdhPJxwX7tSauAwoz+2wEumjBcwtWDJqcKW8H5Ix2Y54w0yVWgPxtM0QNROKlhQaKw35RdTe7TqPw==
+X-Received: by 2002:a05:6e02:5ab:b0:2d1:9303:1332 with SMTP id k11-20020a056e0205ab00b002d193031332mr18560323ils.168.1653824228821;
+        Sun, 29 May 2022 04:37:08 -0700 (PDT)
+Received: from n2.us-central1-a.c.spheric-algebra-350919.internal (151.16.70.34.bc.googleusercontent.com. [34.70.16.151])
+        by smtp.gmail.com with ESMTPSA id q22-20020a0566380d1600b0032eec10773esm1954886jaj.16.2022.05.29.04.37.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 May 2022 04:37:07 -0700 (PDT)
+Date:   Sun, 29 May 2022 11:37:06 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev, iamjoonsoo.kim@lge.com,
+        rientjes@google.com, penberg@kernel.org, cl@linux.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] mm/slub: fix the race between validate_slab and
+ slab_free
+Message-ID: <YpNa4tB/jfW3MDyi@n2.us-central1-a.c.spheric-algebra-350919.internal>
+References: <20220529081535.69275-1-rongwei.wang@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-From:   Leslie Rhorer <lesrhorer@att.net>
-Subject: Modules list
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-References: <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0.ref@att.net>
-X-Mailer: WebService/1.1.20225 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220529081535.69275-1-rongwei.wang@linux.alibaba.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	I sent a subscription to the linux-modules list which seemed to be 
-successful, but when I sent a message, it bounced.  I sent the message 
-to linux-modules@vger.kernel.org.  Did I do something wrong?
+On Sun, May 29, 2022 at 04:15:33PM +0800, Rongwei Wang wrote:
+> In use cases where allocating and freeing slab frequently, some
+> error messages, such as "Left Redzone overwritten", "First byte
+> 0xbb instead of 0xcc" would be printed when validating slabs.
+> That's because an object has been filled with SLAB_RED_INACTIVE,
+> but has not been added to slab's freelist. And between these
+> two states, the behaviour of validating slab is likely to occur.
+> 
+> Actually, it doesn't mean the slab can not work stably. But, these
+> confusing messages will disturb slab debugging more or less.
+> 
+> Signed-off-by: Rongwei Wang <rongwei.wang@linux.alibaba.com>
+
+Have you observed it or it's from code inspection?
+
+> ---
+>  mm/slub.c | 40 +++++++++++++++++-----------------------
+>  1 file changed, 17 insertions(+), 23 deletions(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index ed5c2c03a47a..310e56d99116 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -1374,15 +1374,12 @@ static noinline int free_debug_processing(
+>  	void *head, void *tail, int bulk_cnt,
+>  	unsigned long addr)
+>  {
+> -	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+>  	void *object = head;
+>  	int cnt = 0;
+> -	unsigned long flags, flags2;
+> +	unsigned long flags;
+>  	int ret = 0;
+>  
+> -	spin_lock_irqsave(&n->list_lock, flags);
+> -	slab_lock(slab, &flags2);
+> -
+> +	slab_lock(slab, &flags);
+>  	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
+>  		if (!check_slab(s, slab))
+>  			goto out;
+> @@ -1414,8 +1411,7 @@ static noinline int free_debug_processing(
+>  		slab_err(s, slab, "Bulk freelist count(%d) invalid(%d)\n",
+>  			 bulk_cnt, cnt);
+>  
+> -	slab_unlock(slab, &flags2);
+> -	spin_unlock_irqrestore(&n->list_lock, flags);
+> +	slab_unlock(slab, &flags);
+>  	if (!ret)
+>  		slab_fix(s, "Object at 0x%p not freed", object);
+>  	return ret;
+> @@ -3304,7 +3300,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>  
+>  {
+>  	void *prior;
+> -	int was_frozen;
+> +	int was_frozen, to_take_off = 0;
+>  	struct slab new;
+>  	unsigned long counters;
+>  	struct kmem_cache_node *n = NULL;
+> @@ -3315,15 +3311,19 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>  	if (kfence_free(head))
+>  		return;
+>  
+> +	n = get_node(s, slab_nid(slab));
+> +	spin_lock_irqsave(&n->list_lock, flags);
+> +
+
+Oh please don't do this.
+
+SLUB free slowpath can be hit a lot depending on workload.
+
+__slab_free() try its best not to take n->list_lock. currently takes n->list_lock
+only when the slab need to be taken from list.
+
+Unconditionally taking n->list_lock will degrade performance.
+
+>  	if (kmem_cache_debug(s) &&
+> -	    !free_debug_processing(s, slab, head, tail, cnt, addr))
+> +	    !free_debug_processing(s, slab, head, tail, cnt, addr)) {
+> +
+> +		spin_unlock_irqrestore(&n->list_lock, flags);
+>  		return;
+> +	}
+>  
+>  	do {
+> -		if (unlikely(n)) {
+> -			spin_unlock_irqrestore(&n->list_lock, flags);
+> -			n = NULL;
+> -		}
+> +		if (unlikely(to_take_off))
+> +			to_take_off = 0;
+>  		prior = slab->freelist;
+>  		counters = slab->counters;
+>  		set_freepointer(s, tail, prior);
+> @@ -3343,18 +3343,11 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>  				new.frozen = 1;
+>  
+>  			} else { /* Needs to be taken off a list */
+> -
+> -				n = get_node(s, slab_nid(slab));
+>  				/*
+> -				 * Speculatively acquire the list_lock.
+>  				 * If the cmpxchg does not succeed then we may
+> -				 * drop the list_lock without any processing.
+> -				 *
+> -				 * Otherwise the list_lock will synchronize with
+> -				 * other processors updating the list of slabs.
+> +				 * drop this behavior without any processing.
+>  				 */
+> -				spin_lock_irqsave(&n->list_lock, flags);
+> -
+> +				to_take_off = 1;
+>  			}
+>  		}
+>  
+> @@ -3363,8 +3356,9 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>  		head, new.counters,
+>  		"__slab_free"));
+>  
+> -	if (likely(!n)) {
+> +	if (likely(!to_take_off)) {
+>  
+> +		spin_unlock_irqrestore(&n->list_lock, flags);
+>  		if (likely(was_frozen)) {
+>  			/*
+>  			 * The list lock was not taken therefore no list
+> 
+> -- 
+> 2.27.0
+> 

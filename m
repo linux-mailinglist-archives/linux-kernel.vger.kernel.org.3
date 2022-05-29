@@ -2,161 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDC753706C
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 11:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7BD537071
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 11:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiE2JTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 05:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
+        id S229802AbiE2Jf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 05:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiE2JTR (ORCPT
+        with ESMTP id S229622AbiE2Jfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 05:19:17 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41A157B0F;
-        Sun, 29 May 2022 02:19:15 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id c2so584931edf.5;
-        Sun, 29 May 2022 02:19:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+HEGRO1E10+wWKc//c336BxlasIWsJvKYVSCospJ4F4=;
-        b=NFeH/wB/eb/HtoJC39Dm3B4prjToxAjJdwTsNJOe9dWWJ+fo6g8h9TELQSfd66nLHl
-         PK6uoBPvMmgT03AEyKlRoCK+E9JAlvOlH9XXAF8+OYy1kXhwunmatNPnhK2iWoinreHQ
-         C/2ZsUkeWV2x9df7bi89T5d/XPoVuHTH+iCgIhyLBKg8IcDdn/sPf7PhT7kpA68vCYXb
-         XR/zPVFl7OKfTKnrPDbhdBb/icTC5fwU8yRkI8/SfnvEcXPe3GlPaQv86ZxDJOeLoMe9
-         BH1fRW7FQbSQqTj+I/bPW+Oev5Ja8j6M6L1FAz66AEYWtsiIc/0BbzkNL5zTk8QZ/rbz
-         taOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+HEGRO1E10+wWKc//c336BxlasIWsJvKYVSCospJ4F4=;
-        b=IIZkrXf14pzt3uGjX1t9PDkEaWq0pC5MegdLUNbz0fz6Ku1aY8gVcz3G/KR5sugw8b
-         H11Oxrh2OGcEwdwk0R5tQZjqObRNSvrRlR0rWURmu+mDUj332DQxdbUZbzqQmZ2TtR9H
-         zNOB4kxAmKudoVp2769bXYQEKG6gUtN8PX6kVo3PWhvmRxPT4ZDaVXe3yK63ooltuU5C
-         fOSOkZ6Kr9Q2hM6EHqh+N0XW6vvOasRtiyM+ex2P9Qb0WFSjC/dmXkx+Sy+jImS7bPkY
-         ZFVvBeZtgzbg0k3iQSjXZk4HArZhSh5KD9HDur/35yyYa53mlo+hMKbDrpVx0Qr+g3gq
-         eHlQ==
-X-Gm-Message-State: AOAM533ubWU8wNoZ0TMDldBaULn8YQPqhz4+kSSDvQIQlktCscRDaGnI
-        0Dh+0GH6AkMO3g8fcdFpdxk=
-X-Google-Smtp-Source: ABdhPJwr0AWqiMQ6Aco3OPjNeh8dOemUUp8N4NNr09EViJuMk78MqqxeUlqxu45lAQX8V3ZnKtB1Ow==
-X-Received: by 2002:a50:fc06:0:b0:42b:c6d3:6ff0 with SMTP id i6-20020a50fc06000000b0042bc6d36ff0mr22105455edr.213.1653815954354;
-        Sun, 29 May 2022 02:19:14 -0700 (PDT)
-Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id z20-20020a05640240d400b0042aad9edc9bsm4829999edb.71.2022.05.29.02.19.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 02:19:13 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: Re: [PATCH v6 09/17] media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a dynamic array
-Date:   Sun, 29 May 2022 11:19:12 +0200
-Message-ID: <2630478.mvXUDI8C0e@kista>
-In-Reply-To: <20220527143134.3360174-10-benjamin.gaignard@collabora.com>
-References: <20220527143134.3360174-1-benjamin.gaignard@collabora.com> <20220527143134.3360174-10-benjamin.gaignard@collabora.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 29 May 2022 05:35:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123EE522E5
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 02:35:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 079DE1F8C8;
+        Sun, 29 May 2022 09:35:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653816952; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8Rtujg9sB4Pj/rXWhXsT0WvzqNzEXC5UHMpDPH16RR8=;
+        b=Uf6KFYhjpNC13uxQMka7vtllz02yDMYsrnmgrOrhcOF72oWPEx2vhNrbuyNsFyDVRfTFlT
+        pEkZM6BoyZ8rhnRPLUZlcUq4qcHNGExr8lQai0XQ9FSv2J9QYpu52ZzPU1I1ful5VPFXUq
+        ywcjBIqLz0QR4t6RFBW2QDssofSsX/I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653816952;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8Rtujg9sB4Pj/rXWhXsT0WvzqNzEXC5UHMpDPH16RR8=;
+        b=1Jeo79TBT8g7wWOXnTBqYm2p+8E/cKpbiRi6+HIp0zg5tb6WxOVwA/JW6toV7BzwWcO9tE
+        QJEeVK6zLFjk3fBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ADD92139EC;
+        Sun, 29 May 2022 09:35:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id v/TWJXc+k2KwfwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sun, 29 May 2022 09:35:51 +0000
+Date:   Sun, 29 May 2022 11:35:50 +0200
+Message-ID: <8735gsznnt.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Raghu Bankapur <quic_rbankapu@quicinc.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Krishna Jha <quic_kkishorj@quicinc.com>
+Subject: Re: [PATCH V0 1/1] asoc: msm: use hashtable to check kcontrol
+In-Reply-To: <ad55bbd41cc253acb9af6ac068c15dd1545ecd81.1653813866.git.quic_rbankapu@quicinc.com>
+References: <cover.1653813866.git.quic_rbankapu@quicinc.com>
+        <ad55bbd41cc253acb9af6ac068c15dd1545ecd81.1653813866.git.quic_rbankapu@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 27. maj 2022 ob 16:31:26 CEST je Benjamin Gaignard napisal(a):
-> Make explicit that V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control is
-> a dynamic array control type.
-> Some drivers may be able to receive multiple slices in one control
-> to improve decoding performance.
+On Sun, 29 May 2022 10:50:09 +0200,
+Raghu Bankapur wrote:
 > 
-> Define the max size of the dynamic that can driver can set in .dims = {}.
+> use hashtabe instead of linear list to check kcontrol before
+> adding them for improving early audio KPI.
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Change-Id: I7134816736e08e338c0f22a8ae283a0520aa847a
+> Signed-off-by: Raghu Bankapur <quic_rbankapu@quicinc.com>
+
+Aha, interesting, a faster lookup is indeed measurable and needed.
+
+One point with your patch is whether it works when a control element
+gets removed dynamically.  It's often the case with the user-space
+kctls.  Also, multiple ctl elements may have the same name string but
+with different index or device number.  Comparing only the string
+isn't enough.  (And I wonder how about the hash key collision.)
+
+FWIW, I posted an RFC patch faster lookup with Xarray some time ago:
+  https://lore.kernel.org/all/20211028130027.18764-1-tiwai@suse.de/T/
+
+
+thanks,
+
+Takashi
+
+
 > ---
-> version 6:
-> - Set V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag automatically when using
->   V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control.
-> - Add a define for max slices count
+>  include/sound/control.h |  4 ++
+>  include/sound/core.h    | 12 +++++-
+>  sound/core/control.c    | 92 +++++++++++++++++++++++++++++++++--------
+>  sound/core/init.c       |  3 ++
+>  sound/soc/Kconfig       |  9 ++++
+>  5 files changed, 101 insertions(+), 19 deletions(-)
 > 
->  Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 2 ++
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c                 | 1 +
->  include/media/hevc-ctrls.h                                | 5 +++++
->  3 files changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/
-Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index 06b967de140c..0796b1563daa 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -2986,6 +2986,8 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->      These bitstream parameters are defined according to :ref:`hevc`.
->      They are described in section 7.4.7 "General slice segment header
->      semantics" of the specification.
-> +    This control is a dynamically sized 1-dimensional array,
-> +    V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
+> diff --git a/include/sound/control.h b/include/sound/control.h
+> index 985c51a8fb74..1b85d36c2066 100644
+> --- a/include/sound/control.h
+> +++ b/include/sound/control.h
+> @@ -70,6 +70,10 @@ struct snd_kcontrol_volatile {
+>  struct snd_kcontrol {
+>  	struct list_head list;		/* list of controls */
+>  	struct snd_ctl_elem_id id;
+> +#ifdef CONFIG_SND_CTL_HASHTABLE
+> +	struct hlist_node hnode;
+> +	unsigned int knametoint;		/* kctl name to uint, hash key value */
+> +#endif
+>  	unsigned int count;		/* count of same elements */
+>  	snd_kcontrol_info_t *info;
+>  	snd_kcontrol_get_t *get;
+> diff --git a/include/sound/core.h b/include/sound/core.h
+> index b7e9b58d3c78..dd6714fc43ff 100644
+> --- a/include/sound/core.h
+> +++ b/include/sound/core.h
+> @@ -14,7 +14,9 @@
+>  #include <linux/pm.h>			/* pm_message_t */
+>  #include <linux/stringify.h>
+>  #include <linux/printk.h>
+> -
+> +#ifdef CONFIG_SND_CTL_HASHTABLE
+> +#include <linux/hashtable.h>
+> +#endif
+>  /* number of supported soundcards */
+>  #ifdef CONFIG_SND_DYNAMIC_MINORS
+>  #define SNDRV_CARDS CONFIG_SND_MAX_CARDS
+> @@ -24,6 +26,10 @@
 >  
->  .. c:type:: v4l2_ctrl_hevc_slice_params
+>  #define CONFIG_SND_MAJOR	116	/* standard configuration */
 >  
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-
-core/v4l2-ctrls-defs.c
-> index 9f55503cd3d6..d594efbcbb93 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> @@ -1510,6 +1510,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum 
-v4l2_ctrl_type *type,
->  		break;
->  	case V4L2_CID_STATELESS_HEVC_SLICE_PARAMS:
->  		*type = V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS;
-> +		*flags |= V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
-
-This change breaks Cedrus. I'll check what needs to be changed.
-
-Best regards,
-Jernej
-
->  		break;
->  	case V4L2_CID_STATELESS_HEVC_SCALING_MATRIX:
->  		*type = V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX;
-> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-> index 0dbd5d681c28..140151609c96 100644
-> --- a/include/media/hevc-ctrls.h
-> +++ b/include/media/hevc-ctrls.h
-> @@ -311,9 +311,14 @@ struct v4l2_hevc_pred_weight_table {
->  #define V4L2_HEVC_SLICE_PARAMS_FLAG_SLICE_LOOP_FILTER_ACROSS_SLICES_ENABLED 
-(1ULL << 8)
->  #define V4L2_HEVC_SLICE_PARAMS_FLAG_DEPENDENT_SLICE_SEGMENT	(1ULL << 
-9)
->  
-> +#define V4L2_HEVC_SLICE_MAX_COUNT	600
+> +#ifdef CONFIG_SND_CTL_HASHTABLE
+> +#define SND_CTL_HASH_TABLE_BITS 14	/* buckets numbers: 1 << 14 */
+> +#endif
 > +
->  /**
->   * v4l2_ctrl_hevc_slice_params - HEVC slice parameters
->   *
-> + * This control is a dynamically sized 1-dimensional array,
-> + * V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
+>  /* forward declarations */
+>  struct pci_dev;
+>  struct module;
+> @@ -103,7 +109,9 @@ struct snd_card {
+>  	size_t user_ctl_alloc_size;	// current memory allocation by user controls.
+>  	struct list_head controls;	/* all controls for this card */
+>  	struct list_head ctl_files;	/* active control files */
+> -
+> +#ifdef CONFIG_SND_CTL_HASHTABLE
+> +	DECLARE_HASHTABLE(ctl_htable, SND_CTL_HASH_TABLE_BITS);
+> +#endif
+>  	struct snd_info_entry *proc_root;	/* root for soundcard specific files */
+>  	struct proc_dir_entry *proc_root_link;	/* number link to real id */
+>  
+> diff --git a/sound/core/control.c b/sound/core/control.c
+> index a25c0d64d104..914d05647497 100644
+> --- a/sound/core/control.c
+> +++ b/sound/core/control.c
+> @@ -368,6 +368,47 @@ enum snd_ctl_add_mode {
+>  	CTL_ADD_EXCLUSIVE, CTL_REPLACE, CTL_ADD_ON_REPLACE,
+>  };
+>  
+> +#ifdef CONFIG_SND_CTL_HASHTABLE
+> +char snd_ctl_string[50] = { '\0' };
+> +
+> +/* Used to convert the string into int value -- BKDRHash */
+> +unsigned int snd_ctl_strtoint(const char *s)
+> +{
+> +	unsigned int res = 0;
+> +
+> +	while (*s)
+> +		res = (res << 5) - res + (*s++);
+> +
+> +	return (res & 0x7FFFFFFF);
+> +}
+> +
+> +/**
+> + * snd_ctl_hash_check - Check the duplicate enrty on snd hashtable
+> + * @card: the card instance
+> + * @nametoint: kctl name to uint
 > + *
->   * @bit_size: size (in bits) of the current slice data
->   * @data_bit_offset: offset (in bits) to the video data in the current slice 
-data
->   * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+> + * Finds the control instance with the given nametoint from the card.
+> + *
+> + * Return: The pointer of the instance if found, or %NULL if not.
+> + *
+> + */
+> +static struct snd_kcontrol *snd_ctl_hash_check(struct snd_card *card,
+> +				 unsigned int nametoint)
+> +{
+> +	struct snd_kcontrol *kctl = NULL;
+> +
+> +	if (snd_BUG_ON(!card))
+> +		return NULL;
+> +
+> +	hash_for_each_possible(card->ctl_htable, kctl, hnode, nametoint) {
+> +		if (kctl->knametoint != nametoint)
+> +			continue;
+> +		return kctl;
+> +	}
+> +	return NULL;
+> +}
+> +#endif
+> +
+>  /* add/replace a new kcontrol object; call with card->controls_rwsem locked */
+>  static int __snd_ctl_add_replace(struct snd_card *card,
+>  				 struct snd_kcontrol *kcontrol,
+> @@ -382,24 +423,38 @@ static int __snd_ctl_add_replace(struct snd_card *card,
+>  	if (id.index > UINT_MAX - kcontrol->count)
+>  		return -EINVAL;
+>  
+> -	old = snd_ctl_find_id(card, &id);
+> -	if (!old) {
+> -		if (mode == CTL_REPLACE)
+> -			return -EINVAL;
+> -	} else {
+> -		if (mode == CTL_ADD_EXCLUSIVE) {
+> -			dev_err(card->dev,
+> -				"control %i:%i:%i:%s:%i is already present\n",
+> -				id.iface, id.device, id.subdevice, id.name,
+> -				id.index);
+> -			return -EBUSY;
+> -		}
+> +#ifdef CONFIG_SND_CTL_HASHTABLE
+> +	snprintf(snd_ctl_string, strlen(kcontrol->id.name) + 6, "%s%d%d%d",
+> +		kcontrol->id.name, kcontrol->id.iface, kcontrol->id.device,
+> +		kcontrol->id.subdevice);
+>  
+> -		err = snd_ctl_remove(card, old);
+> -		if (err < 0)
+> -			return err;
+> -	}
+> +	kcontrol->knametoint = snd_ctl_strtoint(snd_ctl_string);
+> +	if (kcontrol->knametoint < 0)
+> +		return -EINVAL;
+> +
+> +	old = snd_ctl_hash_check(card, kcontrol->knametoint);
+> +	if (old) {
+> +#endif
+> +		old = snd_ctl_find_id(card, &id);
+> +		if (!old) {
+> +			if (mode == CTL_REPLACE)
+> +				return -EINVAL;
+> +		} else {
+> +			if (mode == CTL_ADD_EXCLUSIVE) {
+> +				dev_err(card->dev,
+> +					"control %i:%i:%i:%s:%i is already present\n",
+> +					id.iface, id.device, id.subdevice, id.name,
+> +					id.index);
+> +				return -EBUSY;
+> +			}
+>  
+> +			err = snd_ctl_remove(card, old);
+> +			if (err < 0)
+> +				return err;
+> +		}
+> +#ifdef CONFIG_SND_CTL_HASHTABLE
+> +	}
+> +#endif
+>  	if (snd_ctl_find_hole(card, kcontrol->count) < 0)
+>  		return -ENOMEM;
+>  
+> @@ -410,7 +465,10 @@ static int __snd_ctl_add_replace(struct snd_card *card,
+>  
+>  	for (idx = 0; idx < kcontrol->count; idx++)
+>  		snd_ctl_notify_one(card, SNDRV_CTL_EVENT_MASK_ADD, kcontrol, idx);
+> -
+> +		
+> +#ifdef CONFIG_SND_CTL_HASHTABLE
+> +	hash_add(card->ctl_htable, &kcontrol->hnode, kcontrol->knametoint);
+> +#endif
+>  	return 0;
+>  }
+>  
+> diff --git a/sound/core/init.c b/sound/core/init.c
+> index 31ba7024e3ad..fda38b2137ee 100644
+> --- a/sound/core/init.c
+> +++ b/sound/core/init.c
+> @@ -284,6 +284,9 @@ static int snd_card_init(struct snd_card *card, struct device *parent,
+>  	INIT_LIST_HEAD(&card->ctl_files);
+>  	spin_lock_init(&card->files_lock);
+>  	INIT_LIST_HEAD(&card->files_list);
+> +#ifdef CONFIG_SND_CTL_HASHTABLE
+> +	hash_init(card->ctl_htable);
+> +#endif
+>  	mutex_init(&card->memory_mutex);
+>  #ifdef CONFIG_PM
+>  	init_waitqueue_head(&card->power_sleep);
+> diff --git a/sound/soc/Kconfig b/sound/soc/Kconfig
+> index 5dcf77af07af..0eb18f8ee6fd 100644
+> --- a/sound/soc/Kconfig
+> +++ b/sound/soc/Kconfig
+> @@ -58,6 +58,15 @@ config SND_SOC_TOPOLOGY_KUNIT_TEST
+>  config SND_SOC_ACPI
+>  	tristate
+>  
+> +config SND_CTL_HASHTABLE
+> +	bool "Add SND CTL hashtable"
+> +	help
+> +	  This enables hash table in sound card for kcontrols. The traditional way is
+> +	  traversing the linked list of controls and compare each exsiting control with
+> +	  the new kcontrol to find out whether there are duplicate kcontrols, which will
+> +	  consumes much time during bootup. Enable this will use hash table instead of
+> +	  linked list to check new kcontrol and reduce much time for sound card registration.
+> +
+>  # All the supported SoCs
+>  source "sound/soc/adi/Kconfig"
+>  source "sound/soc/amd/Kconfig"
 > -- 
-> 2.32.0
+> 2.17.1
 > 
-> 
-
-

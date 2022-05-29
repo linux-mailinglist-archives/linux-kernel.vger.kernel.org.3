@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F325372D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 00:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF2F5372CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 00:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbiE2WnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 18:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
+        id S230414AbiE2WgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 18:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiE2WnS (ORCPT
+        with ESMTP id S229515AbiE2Wf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 18:43:18 -0400
-X-Greylist: delayed 1560 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 29 May 2022 15:43:16 PDT
-Received: from rome.phoronix.com (rome.phoronix.com [192.211.48.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3037C5F8F9
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 15:43:15 -0700 (PDT)
-Received: from c-73-176-63-28.hsd1.il.comcast.net ([73.176.63.28]:44530 helo=[192.168.1.42])
-        by rome.phoronix.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <Michael@phoronix.com>)
-        id 1nvRDf-0005u2-QN;
-        Sun, 29 May 2022 18:17:07 -0400
-Message-ID: <6a5b80e8-a614-5452-4cf0-b636fa9b23cc@phoronix.com>
-Date:   Sun, 29 May 2022 17:16:59 -0500
+        Sun, 29 May 2022 18:35:59 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770C650B2E
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 15:35:57 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id b8so3432078edf.11
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 15:35:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=28grDNGVVwgvkgCPe3HFvEYkJipC2Cb3fnAVX4fq0Lg=;
+        b=J5pOk7YAN5RiRnaTEd5KNJyjKchIaoV/9ff0ljMqAgtajGMDjG8KcERrFloK1EIMkR
+         SyIl5qdg/OzIYTqNk/DmY3FDbsJh+pAUJu2h7kHYD2qMC17GDJkAMIzq+MuB7ACiRJdy
+         KYUwNGYiXTLtVsT5NBGsJdqE4fUMIR19VQOn3XrZ8N0hT9V5gzA4ekE4rzsvJVWsRORy
+         KqVhhqLLCLxlKBPf8xHkt5J/ya+Vr24XCrNHnJuaDLMF9QsPeMGrihSe990IOanm5c1Y
+         KPdFo/Wer5nAb1eDbCwilyzjUljbMNwdiVIj0L5+FcVv3OECj4LPkBUYZPFoqsXtGycA
+         IfcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=28grDNGVVwgvkgCPe3HFvEYkJipC2Cb3fnAVX4fq0Lg=;
+        b=shRHgrv8XgToEEQcLcDeD585GtTT3IoaqUHCxF2VcjX/RND6h9T9yKDc58cnQMKmEl
+         k2c6RS9RcWkcSsxE8j5TJe89Ow5buCk3adsdQmoND71l8lkooP5rNlYoN862sI0fbY2r
+         9PHUJ+BWpM1gwaFMz4LxlvmIbv0iQiDwlSORgbBphAFig708YXw5KwI3+nYixLMrzIYP
+         Wab8WRHtpu+DXkR7MuTxcQGmFQuTi//D90eSlrivKdjO8K4iudS8XQCHe6sfZoVS094L
+         sYkwJnpCcdSaNfMFDZkihvfTDMIfR5jv5plZcYeqSxFBlmcQWqYHMOd+Ph8/lscCRFvD
+         JrbA==
+X-Gm-Message-State: AOAM531+r4w7LuwxYE1CSMwR9egPTPYZDG/yNfGmEpqCegMYO4Ss1El9
+        5n10dytwUTWTRa1KD3p/IWw=
+X-Google-Smtp-Source: ABdhPJy36gFtvxZXqd/ef4i7J/Vur7da2Ugd78lWMuv8NEHUzvMn6fT0GPLCrZE9jkhNYCiNYTZePA==
+X-Received: by 2002:a05:6402:a42:b0:42b:c5e9:1495 with SMTP id bt2-20020a0564020a4200b0042bc5e91495mr25576734edb.323.1653863756112;
+        Sun, 29 May 2022 15:35:56 -0700 (PDT)
+Received: from marios-pc.home.mlevogiannis.gr (194.219.107.43.dsl.dyn.forthnet.gr. [194.219.107.43])
+        by smtp.gmail.com with ESMTPSA id u28-20020a50c05c000000b0042dc882c823sm697456edd.70.2022.05.29.15.35.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 May 2022 15:35:55 -0700 (PDT)
+From:   Marios Levogiannis <marios.levogiannis@gmail.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     Marios Levogiannis <marios.levogiannis@gmail.com>
+Subject: [PATCH] ALSA: hda/realtek - Fix microphone noise on ASUS TUF B550M-PLUS
+Date:   Mon, 30 May 2022 01:35:24 +0300
+Message-Id: <20220529223524.9057-1-marios.levogiannis@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] clocksource: Make clocksource watchdog check with
- WATCHDOG_INTERVAL period
-Content-Language: en-CA
-To:     Waiman Long <longman@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Feng Tang <feng.tang@intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        John Stultz <jstultz@google.com>
-Cc:     linux-kernel@vger.kernel.org, Joe Mario <jmario@redhat.com>,
-        Michey Mehta <mimehta@redhat.com>
-References: <20220528015714.109442-1-longman@redhat.com>
- <fa2d516e-70b5-3012-9134-5ca325282bc4@redhat.com>
-From:   Michael Larabel <Michael@phoronix.com>
-In-Reply-To: <fa2d516e-70b5-3012-9134-5ca325282bc4@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - rome.phoronix.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - phoronix.com
-X-Get-Message-Sender-Via: rome.phoronix.com: authenticated_id: michael@phoronix.com
-X-Authenticated-Sender: rome.phoronix.com: michael@phoronix.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,130 +68,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/27/22 21:07, Waiman Long wrote:
-> On 5/27/22 21:57, Waiman Long wrote:
->> Since commit c86ff8c55b8a ("clocksource: Avoid accidental unstable
->> marking of clocksource"), a new WD_READ_SKIP value was introduced
->> as a possible return value of cs_watchdog_read() to skip the current
->> check. However, this has an undesriable side effect of extending the
->> time gap between csnow and cs_last to more than one WATCHDOG_INTERVAL
->> (0.5s) in case of intermittent WD_READ_SKIP's.
->>
->> There was an instance of reported clocksource watchdog failure with
->> the time skew of 485us where the uncertainly threshold is 400us. In
->> that particular case, the (now - last) gap was about 2s. Looking at
->> the dmesg log, it was clear there was a successful cs_watchdog_read()
->> followed by 3 skips and then another successful cs_watchdog_read().
->>
->> If there is an existing skew between the hpet (watchdog) and tsc
->> clocksource, enlarging the period by 4x will certainly increase the
->> measured skew causing it to exceed the threshold in this case. Fix
->> this variable period problem by resetting the CLOCK_SOURCE_WATCHDOG bit
->> after each WD_READ_SKIP to force the reloading of wd_last and cs_last
->> in the next round. This ensures that we have two consecutive successful
->> cs_watchdog_read()'s before checking the clock skew.
->>
->> Fixes: c86ff8c55b8a ("clocksource: Avoid accidental unstable marking 
->> of clocksource")
->> Reported-by: Michael Larabel <Michael@phoronix.com>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   kernel/time/clocksource.c | 11 ++++++++++-
->>   1 file changed, 10 insertions(+), 1 deletion(-)
->>
->> diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
->> index cee5da1e54c4..173e052c12b6 100644
->> --- a/kernel/time/clocksource.c
->> +++ b/kernel/time/clocksource.c
->> @@ -411,9 +411,18 @@ static void clocksource_watchdog(struct 
->> timer_list *unused)
->>           read_ret = cs_watchdog_read(cs, &csnow, &wdnow);
->>             if (read_ret != WD_READ_SUCCESS) {
->> -            if (read_ret == WD_READ_UNSTABLE)
->> +            if (read_ret == WD_READ_UNSTABLE) {
->>                   /* Clock readout unreliable, so give it up. */
->>                   __clocksource_unstable(cs);
->> +            } else { /* WD_READ_SKIP */
->> +                /*
->> +                 * Watchdog clock unstable at the moment,
->> +                 * discard the stored wd_last and cs_last to
->> +                 * make sure the gap between now and last
->> +                 * is always one WATCHDOG_INTERVAL.
->> +                 */
->> +                cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
->> +            }
->>               continue;
->>           }
->
-> Sorry, I accidentally use the old email address for John.
->
-> Cheers,
-> Longman
+Set microphone pins 0x18 (rear) and 0x19 (front) to VREF_50 to fix the
+microphone noise on ASUS TUF B550M-PLUS which uses the ALCS1200A codec.
+The initial value was VREF_80.
 
+The same issue is also present on Windows using both the default Windows
+driver and all tested Realtek drivers before version 6.0.9049.1. Comparing
+Realtek driver 6.0.9049.1 (the first one without the microphone noise) to
+Realtek driver 6.0.9047.1 (the last one with the microphone noise)
+revealed that the fix is the result of setting pins 0x18 and 0x19 to
+VREF_50.
 
-I've tested this patch on the affected Daytona + Milan-X system and can 
-confirm it does fix the performance problem that led to this issue. 
-Though it is spamming the kernel log now every half-second with 
-clocksource messages,  not sure if that is intended/desirable behavior?
+This fix may also work for other boards that have been reported to have
+the same microphone issue and use the ALC1150 and ALCS1200A codecs, since
+these codecs are similar and the fix in the Realtek driver on Windows is
+common for both. However, it is currently enabled only for ASUS TUF
+B550M-PLUS as this is the only board that could be tested.
+---
+ sound/pci/hda/patch_realtek.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-
-[    0.000000] tsc: Fast TSC calibration using PIT
-[    0.000000] tsc: Detected 2195.990 MHz processor
-[    1.238759] clocksource: tsc-early: mask: 0xffffffffffffffff 
-max_cycles: 0x1fa766bc6ba, max_idle_ns: 440795275714 ns
-[    2.769608] clocksource: Switched to clocksource tsc-early
-[    3.263925] clocksource: wd-tsc-early-wd read-back delay of 292215ns, 
-clock-skew test skipped!
-[    3.743804] clocksource: wd-tsc-early-wd read-back delay of 268469ns, 
-clock-skew test skipped!
-[    3.935663] tsc: Refined TSC clocksource calibration: 2195.274 MHz
-[    3.935844] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 
-0x1fa4c255513, max_idle_ns: 440795289702 ns
-[    3.936449] clocksource: Switched to clocksource tsc
-[    4.255932] clocksource: wd-tsc-wd read-back delay of 260228ns, 
-clock-skew test skipped!
-[    4.767892] clocksource: wd-tsc-wd read-back delay of 272520ns, 
-clock-skew test skipped!
-[    5.247581] clocksource: wd-tsc-wd read-back delay of 200444ns, 
-clock-skew test skipped!
-[    5.759560] clocksource: wd-tsc-wd read-back delay of 165942ns, 
-clock-skew test skipped!
-[    6.239687] clocksource: wd-tsc-wd read-back delay of 232222ns, 
-clock-skew test skipped!
-[    7.264014] clocksource: wd-tsc-wd read-back delay of 282927ns, 
-clock-skew test skipped!
-[    7.743864] clocksource: wd-tsc-wd read-back delay of 288374ns, 
-clock-skew test skipped!
-[    8.255590] clocksource: wd-tsc-wd read-back delay of 206730ns, 
-clock-skew test skipped!
-[    8.767778] clocksource: wd-tsc-wd read-back delay of 267771ns, 
-clock-skew test skipped!
-[    9.247870] clocksource: wd-tsc-wd read-back delay of 224469ns, 
-clock-skew test skipped!
-[   10.239340] clocksource: wd-tsc-wd read-back delay of 109720ns, 
-clock-skew test skipped!
-[   12.255276] clocksource: wd-tsc-wd read-back delay of 104692ns, 
-clock-skew test skipped!
-[   16.255362] clocksource: wd-tsc-wd read-back delay of 122780ns, 
-clock-skew test skipped!
-[   17.759335] clocksource: wd-tsc-wd read-back delay of 155885ns, 
-clock-skew test skipped!
-[   18.239500] clocksource: wd-tsc-wd read-back delay of 176558ns, 
-clock-skew test skipped!
-[   18.751341] clocksource: wd-tsc-wd read-back delay of 157352ns, 
-clock-skew test skipped!
-[   19.263618] clocksource: wd-tsc-wd read-back delay of 177606ns, 
-clock-skew test skipped!
-[   19.743487] clocksource: wd-tsc-wd read-back delay of 157841ns, 
-clock-skew test skipped!
-[   20.255482] clocksource: wd-tsc-wd read-back delay of 157701ns, 
-clock-skew test skipped!
-[   20.767634] clocksource: wd-tsc-wd read-back delay of 173136ns, 
-clock-skew test skipped!
-[   21.247405] clocksource: wd-tsc-wd read-back delay of 175441ns, 
-clock-skew test skipped!
-...
-
-Thanks,
-Michael
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 89d610afa..f3ad454b3 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -1981,6 +1981,7 @@ enum {
+ 	ALC1220_FIXUP_CLEVO_PB51ED_PINS,
+ 	ALC887_FIXUP_ASUS_AUDIO,
+ 	ALC887_FIXUP_ASUS_HMIC,
++	ALCS1200A_FIXUP_MIC_VREF,
+ };
+ 
+ static void alc889_fixup_coef(struct hda_codec *codec,
+@@ -2526,6 +2527,14 @@ static const struct hda_fixup alc882_fixups[] = {
+ 		.chained = true,
+ 		.chain_id = ALC887_FIXUP_ASUS_AUDIO,
+ 	},
++	[ALCS1200A_FIXUP_MIC_VREF] = {
++		.type = HDA_FIXUP_PINCTLS,
++		.v.pins = (const struct hda_pintbl[]) {
++			{ 0x18, PIN_VREF50 }, /* rear mic */
++			{ 0x19, PIN_VREF50 }, /* front mic */
++			{}
++		}
++	},
+ };
+ 
+ static const struct snd_pci_quirk alc882_fixup_tbl[] = {
+@@ -2563,6 +2572,7 @@ static const struct snd_pci_quirk alc882_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1043, 0x835f, "Asus Eee 1601", ALC888_FIXUP_EEE1601),
+ 	SND_PCI_QUIRK(0x1043, 0x84bc, "ASUS ET2700", ALC887_FIXUP_ASUS_BASS),
+ 	SND_PCI_QUIRK(0x1043, 0x8691, "ASUS ROG Ranger VIII", ALC882_FIXUP_GPIO3),
++	SND_PCI_QUIRK(0x1043, 0x8797, "ASUS TUF B550M-PLUS", ALCS1200A_FIXUP_MIC_VREF),
+ 	SND_PCI_QUIRK(0x104d, 0x9043, "Sony Vaio VGC-LN51JGB", ALC882_FIXUP_NO_PRIMARY_HP),
+ 	SND_PCI_QUIRK(0x104d, 0x9044, "Sony VAIO AiO", ALC882_FIXUP_NO_PRIMARY_HP),
+ 	SND_PCI_QUIRK(0x104d, 0x9047, "Sony Vaio TT", ALC889_FIXUP_VAIO_TT),
+-- 
+2.36.1
 

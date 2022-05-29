@@ -2,93 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4715371E5
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 19:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F0B5371EC
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 19:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbiE2RZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 13:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
+        id S231393AbiE2RgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 13:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiE2RZ6 (ORCPT
+        with ESMTP id S231364AbiE2RgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 13:25:58 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A2C8B0BB;
-        Sun, 29 May 2022 10:25:57 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id ck4so16915246ejb.8;
-        Sun, 29 May 2022 10:25:57 -0700 (PDT)
+        Sun, 29 May 2022 13:36:15 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF4B13D18
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 10:36:14 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id rs12so16917559ejb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 10:36:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=c26ugHmy9ja09gODy1exjCAJZkRaLqeGGMgK0d4WQcg=;
-        b=ZFJmfeQvAhPOCjatFFKnRUGMp8iCahLd6WSdmD5FUTjXGN7tkiFEZdcqVIA4GJUaqA
-         jHfAbrr2UUw3Q+q2LOhcox4xgpmPmrJS7iuyZTXCCPu8QGto0dNbwV9Fm95owLLAWtsP
-         UHuzSP30aaWhX189vTU9t885tQQ7GfnGCJmIqWuf4pfE9RXPjkYffkZL2FlZiunJHwri
-         RGX2pEJGFy93CeumJNQ69bgJ8WtZgLv/C9JO2AXkSprPxPf/DqsBHrsUWyDPcql3KRyd
-         v09P25eV7hIlfPUxFeSAyQVRNS/BL0Z5XM9Rs6yoy3Nc53mE7O4HTLQ+qZy4T4ghqXQu
-         cQDg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RVcAJe5XVONjb8dc+ZXXSeKNhHu55YRYBkoQBm1t6ho=;
+        b=fKu1bXFx8iKiBoFGT/CRrwehq4ecxQRl35kagL7wTgZp4/TNJJt30w7ChV4K5RzaKN
+         fwEniKrOL1xkwMWf18Qkbjo7wi4P1DYO6QH0UTpXDrSBzpL2/jyMq5ltVo+zS70YoFfk
+         8isqt1hzaQ9ByI7itzLo6Jb4W0NvYlf9D8+E0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=c26ugHmy9ja09gODy1exjCAJZkRaLqeGGMgK0d4WQcg=;
-        b=DfH8BTAx4zy2tauYWkGnbxd4TngB1kEwWeWBJgbZQcOKOu7r/TFn+C+9lTmRVTbfGl
-         5Q66QX8vIsgE8a+zOu7ueMyw/mjC5XT8LfL44EVMx8IFHz5XYH7NOsdLUTMQaryRw8wT
-         RBYbD64MKtrmRYjPx9HbihmZIKhqY83HWcbZ1YiwF20udVYb5CL+gTIPq6L1+jXy/Y5C
-         7++baOIlPXMDNzozoz5PIRf1O6o6YCRRlN0hwK4uEQk/deb3UEeLhOcnAvwADgpFem/n
-         rY64VErTruzhxgkNyTpzUKrjU4eLSKZRDHhXCo6Vdsxw0QoYwWZiyV7ykYOUkTPbYBJ5
-         iOuQ==
-X-Gm-Message-State: AOAM53317fXKMIxX90KjxYV6gGjR9m1r+qquyzJ0Ki+GA+s+Sks6AlfF
-        AFclQhUeLfr0lvPKXFEIHWn2ovYtZ+k=
-X-Google-Smtp-Source: ABdhPJzfJaUCG0pdd92/vCJJjNTP1hoYXzeY00nShQGNz6yTDcl4DPVLmAW45Wwxv2UrpbYm9H7Yow==
-X-Received: by 2002:a17:907:7d86:b0:6ff:1598:b049 with SMTP id oz6-20020a1709077d8600b006ff1598b049mr19001426ejc.637.1653845156089;
-        Sun, 29 May 2022 10:25:56 -0700 (PDT)
-Received: from nam-dell ([2a02:8109:afbf:ed88:435:610d:d1eb:dc05])
-        by smtp.gmail.com with ESMTPSA id x12-20020a50d60c000000b0042bced44061sm5141339edi.10.2022.05.29.10.25.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 10:25:55 -0700 (PDT)
-Date:   Sun, 29 May 2022 19:25:54 +0200
-From:   Nam Cao <namcaov@gmail.com>
-To:     olivier.dautricourt@orolia.com, vkoul@kernel.org, sr@denx.de
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dmaengine: altera-msgdma: correct mutex locking order
-Message-ID: <20220529172554.GA22554@nam-dell>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RVcAJe5XVONjb8dc+ZXXSeKNhHu55YRYBkoQBm1t6ho=;
+        b=zeKpp9RuFkSBI2lg1NXnK94y+FEtBb93dPyMUNENFOnnf0MsK/mPtCiXtgRoHIzPIx
+         Z5wQX/S2U0fasCghfvbnxxIrAyaGzR8THCXCnIpX09SexnUDLtlL+lTrSmi6KZ5RdyCT
+         0R/ryWGtCb62B1kpObHF7dpA2kngkIKLBRS8mknD0apSt8ALHDkSSMIQqNbiOtkiB7AQ
+         KXK7GssA4+jmCIl3hlcogAZ9v2BYjnEC0oreACMWQGVacdSs7Ktob4RKS95ZQG9nhsvU
+         U9j5TEPQi0vK7KiLhj8tg6skrDQzWsHKDdIpwg1PeXaD3MKt4PFQNt/6JHewz+Q05RoS
+         WfvA==
+X-Gm-Message-State: AOAM532U9aFFderU1c/yNwrQwLaLzjduaQFmXBlkaokWLs/5/vbv6YOs
+        VxSvCW6Xt0h9rsTREunaLrOJyp1EKlGwe+i2hdI=
+X-Google-Smtp-Source: ABdhPJwuCUB08FKqIqeV2OFD49RGivhS9xB6kxX8kcnvBCHcGx94d97vdv6gwzyEM7FH7AeIW/tInQ==
+X-Received: by 2002:a17:906:5d16:b0:6fe:b420:5e9d with SMTP id g22-20020a1709065d1600b006feb4205e9dmr38478119ejt.254.1653845772688;
+        Sun, 29 May 2022 10:36:12 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id rh28-20020a17090720fc00b006f3ef214ddesm3274151ejb.68.2022.05.29.10.36.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 May 2022 10:36:12 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id e25so1300189wra.11
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 10:36:12 -0700 (PDT)
+X-Received: by 2002:a05:6000:1b0f:b0:210:313a:ef2a with SMTP id
+ f15-20020a0560001b0f00b00210313aef2amr2361937wrz.281.1653845322509; Sun, 29
+ May 2022 10:28:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+References: <20220529154535.371758-1-acme@kernel.org>
+In-Reply-To: <20220529154535.371758-1-acme@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 29 May 2022 10:28:26 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj1+W6VXeRG7XXO7zSsTe3mACdrPY4PccMNPhC3seLELg@mail.gmail.com>
+Message-ID: <CAHk-=wj1+W6VXeRG7XXO7zSsTe3mACdrPY4PccMNPhC3seLELg@mail.gmail.com>
+Subject: Re: [GIT PULL] perf tools changes for v5.19: 2nd batch
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Carsten Haitzler <carsten.haitzler@arm.com>,
+        Claire Jensen <cjense@google.com>,
+        Dmitriy Vyukov <dvyukov@google.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Eric Lin <eric.lin@sifive.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        German Gomez <german.gomez@arm.com>,
+        Ian Rogers <irogers@google.com>,
+        James Clark <james.clark@arm.com>,
+        Joe Mario <jmario@redhat.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The order of spin_unlock and spin_lock seems wrong. Correct it.
+On Sun, May 29, 2022 at 8:45 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> - Add BPF based off-CPU profiling.
 
-Signed-off-by: Nam Cao <namcaov@gmail.com>
----
- drivers/dma/altera-msgdma.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I suspect this could have come with a bit more explanation of what
+"off-CPU profiling" means.
 
-diff --git a/drivers/dma/altera-msgdma.c b/drivers/dma/altera-msgdma.c
-index 6f56dfd375e3..e35096c12abc 100644
---- a/drivers/dma/altera-msgdma.c
-+++ b/drivers/dma/altera-msgdma.c
-@@ -591,9 +591,9 @@ static void msgdma_chan_desc_cleanup(struct msgdma_device *mdev)
- 
- 		dmaengine_desc_get_callback(&desc->async_tx, &cb);
- 		if (dmaengine_desc_callback_valid(&cb)) {
--			spin_unlock(&mdev->lock);
--			dmaengine_desc_callback_invoke(&cb, NULL);
- 			spin_lock(&mdev->lock);
-+			dmaengine_desc_callback_invoke(&cb, NULL);
-+			spin_unlock(&mdev->lock);
- 		}
- 
- 		/* Run any dependencies, then free the descriptor */
--- 
-2.25.1
+It seems to be "account time when process was scheduled away to
+caller", but I had to go look at the commits to figure that out.
 
+Partly unrelated side note: I've occasionally looked for "useful perf
+recipes". Not from kernel developers, but from people who solved real
+performance problems using perf, giving useful examples.
+
+                  Linus

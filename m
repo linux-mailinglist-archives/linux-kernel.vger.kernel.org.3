@@ -2,77 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B41537110
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 15:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5F7537111
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 15:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbiE2NMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 09:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
+        id S230209AbiE2NMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 09:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbiE2NMU (ORCPT
+        with ESMTP id S230196AbiE2NMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 09:12:20 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A9656C0D
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 06:12:19 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id gh17so16380822ejc.6
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 06:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Cr4jqiwCZqgvtQ1mPAG6hA/aEXX0FhXJr8HGvR+MOF4=;
-        b=Nt/mJnuBUQbVpYLEEcS8otgx+Y6B8DKZrFDbQOxKREC+NxFxhYnjNOCyG9P1ThZC5j
-         dRdosrZPxn8CBggfVYZrDVQGOuwYvg2f1bVYyV1ABUKNPqapJRAOKY27FfYNwVhsKems
-         kBL1U5aqQucKblCqHOg2MiR8h0OyZjPOYEadeYbNmdSTq5ET3WTkA+dxXloM7z048TPk
-         2E4GYQj9mHqmwOYJ7R1bOljpAU7mdwgKRiZceqOGCyxgAa0rc63usjkUe1r7AjhQebxh
-         kwBfE+343C5/kDVGvC3KLDjn53nWmOykR6WztIRH21rP6wRwRNqkv1W3/NI1Dz+NRvtf
-         tLtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Cr4jqiwCZqgvtQ1mPAG6hA/aEXX0FhXJr8HGvR+MOF4=;
-        b=AvBQndGGmWFmeStMJ6HlyYdF18Q98wOmMnjMaz0V4v2pZAAUBPs5ChJl60E/A41S0k
-         ZCEjYfEumghhReEGomXdTNDsMEgKWucdZa9vVd/WerDxcKZN6fSA4DD8QTSic8PEGsKR
-         Z94RpYQguO2kUDy8C+yONReBBloq82gOiMcvAc9T3lPmzERKB8iocO3DCcJymmO7dSaz
-         aJh7B4CwBNwt3OZh3UI5EG5ZoMq7RxEcVFF/VfNWDg4+1sbtvfUp3QipJ7NuarUaPhIn
-         HBxtpSGxIeYuH4jA8jPgbRqnr91cH0dARNma5iQPverB5JFtQnBb7ULmJLGWQxVxp+xA
-         deCQ==
-X-Gm-Message-State: AOAM5332FbqETucNpKU9Xb2cvcDUnbbSUaz3d0crhKtSIwpxvsRR0lJg
-        kJ8ZOPB8b5rbb16N+C8PRsvqFYSvoblnZRE5CPc=
-X-Google-Smtp-Source: ABdhPJyRKi6iTQJpd2Fj1KOfeu+hCzkIoM3Qic3Pw8122XBumQ5LbFOoN/birEIsSd+xhoERiWPbAHB2hTxwzFaXhCs=
-X-Received: by 2002:a17:906:7952:b0:6fe:1e0b:6343 with SMTP id
- l18-20020a170906795200b006fe1e0b6343mr46150509ejo.337.1653829938115; Sun, 29
- May 2022 06:12:18 -0700 (PDT)
+        Sun, 29 May 2022 09:12:45 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B0656C10
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 06:12:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653829964; x=1685365964;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=W7uDE1nH6I0F8tHPG+SKtwd2XkD1BMJpkEK4J4jTHCs=;
+  b=dNxsrYOlanTq424IhiD4K5Ez8UZ+hN1/B/2k8LbR1tAmgtSKMY2WvJZ5
+   fTRkRoQu8S6M3YDAYSgES4YADTWt/B7PsCi383dwj74kN76kpiC4YttB0
+   //Sg1A/PjH2/NHj+qCQrBU1CML5F9T9DOjUPjh3ChRHNNQZQmS03vbHwY
+   vjAgryF4mmLgafqJtJpMq7qeTbid2t6NAWzh5G3yDSDXADLQLpkqp8zty
+   vY5t3GlHigJkUtqjI22Hkw6nPKth5auJr+koKWSIdVDvn0W7zkGLn1cMf
+   9wkLjIReJfrn2yJBgvT6O+btj9ot5Bh7WDlP0O2zvSiClLv3qfr+AzJzY
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10361"; a="262413261"
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="262413261"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2022 06:12:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="632274977"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 29 May 2022 06:12:42 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nvIin-00012K-Ff;
+        Sun, 29 May 2022 13:12:41 +0000
+Date:   Sun, 29 May 2022 21:12:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sven Schnelle <svens@stackframe.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Helge Deller <deller@gmx.de>
+Subject: [deller-fbdev:hp-visualize-fx-drm 1/1]
+ drivers/gpu/drm/visualizefx/visfx_drv.c:218:45: warning: 'struct
+ dma_buf_map' declared inside parameter list will not be visible outside of
+ this definition or declaration
+Message-ID: <202205292129.uedWYGfX-lkp@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6400:789:0:0:0:0 with HTTP; Sun, 29 May 2022 06:12:17
- -0700 (PDT)
-Reply-To: wijh555@gmail.com
-From:   "Mr. David Kabore" <dkabore16@gmail.com>
-Date:   Sun, 29 May 2022 06:12:17 -0700
-Message-ID: <CANLKR0ux+1e3gPWaeruutBfyR4A2Dhj=7So=Grxb82uS2e8Mow@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
-I'm Mr. David Kabore, how are you doing hope you are in good health,
-the Board irector try to reach you on phone several times Meanwhile,
-your number was not connecting. before he ask me to send you an email
-to hear from you if you are fine. hope to hear you are in good Health.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git hp-visualize-fx-drm
+head:   c2d0f767c19314c3d3a1a2d304be3c871b729523
+commit: c2d0f767c19314c3d3a1a2d304be3c871b729523 [1/1] drm: add HP Visualize FX driver
+config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/20220529/202205292129.uedWYGfX-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/commit/?id=c2d0f767c19314c3d3a1a2d304be3c871b729523
+        git remote add deller-fbdev git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git
+        git fetch --no-tags deller-fbdev hp-visualize-fx-drm
+        git checkout c2d0f767c19314c3d3a1a2d304be3c871b729523
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/gpu/drm/visualizefx/
 
-Thanks,
-Mr. David Kabore.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/visualizefx/visfx_drv.c:218:45: warning: 'struct dma_buf_map' declared inside parameter list will not be visible outside of this definition or declaration
+     218 |                                const struct dma_buf_map *map,
+         |                                             ^~~~~~~~~~~
+   drivers/gpu/drm/visualizefx/visfx_drv.c: In function 'visfx_fb_blit_rect':
+   drivers/gpu/drm/visualizefx/visfx_drv.c:222:25: error: invalid use of undefined type 'const struct dma_buf_map'
+     222 |         void *vmap = map->vaddr; /* TODO: Use mapping abstraction properly */
+         |                         ^~
+   drivers/gpu/drm/visualizefx/visfx_drv.c: At top level:
+   drivers/gpu/drm/visualizefx/visfx_drv.c:236:78: warning: 'struct dma_buf_map' declared inside parameter list will not be visible outside of this definition or declaration
+     236 | static int visfx_fb_blit_fullscreen(struct drm_framebuffer *fb, const struct dma_buf_map *map)
+         |                                                                              ^~~~~~~~~~~
+   drivers/gpu/drm/visualizefx/visfx_drv.c: In function 'visfx_fb_blit_fullscreen':
+   drivers/gpu/drm/visualizefx/visfx_drv.c:244:39: error: passing argument 2 of 'visfx_fb_blit_rect' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     244 |         return visfx_fb_blit_rect(fb, map, &fullscreen);
+         |                                       ^~~
+         |                                       |
+         |                                       const struct dma_buf_map *
+   drivers/gpu/drm/visualizefx/visfx_drv.c:218:58: note: expected 'const struct dma_buf_map *' but argument is of type 'const struct dma_buf_map *'
+     218 |                                const struct dma_buf_map *map,
+         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   drivers/gpu/drm/visualizefx/visfx_drv.c: In function 'visfx_pipe_enable':
+   drivers/gpu/drm/visualizefx/visfx_drv.c:281:51: error: passing argument 2 of 'visfx_fb_blit_fullscreen' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     281 |         visfx_fb_blit_fullscreen(plane_state->fb, &shadow_plane_state->data[0]);
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                   |
+         |                                                   struct iosys_map *
+   drivers/gpu/drm/visualizefx/visfx_drv.c:236:91: note: expected 'const struct dma_buf_map *' but argument is of type 'struct iosys_map *'
+     236 | static int visfx_fb_blit_fullscreen(struct drm_framebuffer *fb, const struct dma_buf_map *map)
+         |                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   drivers/gpu/drm/visualizefx/visfx_drv.c: In function 'visfx_pipe_update':
+   drivers/gpu/drm/visualizefx/visfx_drv.c:321:47: error: passing argument 2 of 'visfx_fb_blit_rect' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     321 |                 visfx_fb_blit_rect(state->fb, &shadow_plane_state->data[0], &rect);
+         |                                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                               |
+         |                                               struct iosys_map *
+   drivers/gpu/drm/visualizefx/visfx_drv.c:218:58: note: expected 'const struct dma_buf_map *' but argument is of type 'struct iosys_map *'
+     218 |                                const struct dma_buf_map *map,
+         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   cc1: some warnings being treated as errors
+
+
+vim +218 drivers/gpu/drm/visualizefx/visfx_drv.c
+
+   216	
+   217	static int visfx_fb_blit_rect(struct drm_framebuffer *fb,
+ > 218				       const struct dma_buf_map *map,
+   219				       struct drm_rect *rect)
+   220	{
+   221		struct visfx_device *visfx = to_visfx(fb->dev);
+   222		void *vmap = map->vaddr; /* TODO: Use mapping abstraction properly */
+   223		uint8_t *dst;
+   224		int idx;
+   225	
+   226		if (!drm_dev_enter(&visfx->dev, &idx))
+   227			return -ENODEV;
+   228		visfx_writel(visfx, VISFX_VRAM_WRITE_MODE, VISFX_VRAM_WRITE_MODE_BITMAP);
+   229		dst = visfx->mmio + 0x01000000;
+   230		dst += drm_fb_clip_offset(fb->pitches[0], fb->format, rect);
+   231		drm_fb_memcpy_toio(dst, fb->pitches[0], vmap, fb, rect);
+   232		drm_dev_exit(idx);
+   233		return 0;
+   234	}
+   235	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,173 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E482537223
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 20:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F4A537226
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 20:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiE2SQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 14:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
+        id S231623AbiE2SUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 14:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbiE2SQD (ORCPT
+        with ESMTP id S229839AbiE2SUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 14:16:03 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5DD85EEB;
-        Sun, 29 May 2022 11:16:02 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id el14so1630992qvb.7;
-        Sun, 29 May 2022 11:16:02 -0700 (PDT)
+        Sun, 29 May 2022 14:20:44 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F7987A1B;
+        Sun, 29 May 2022 11:20:43 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id t13so11992045wrg.9;
+        Sun, 29 May 2022 11:20:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hhle5SlXF7GWN568wF6/BUIAe2M7L4YD+7P2ydMa3hs=;
-        b=SoSsqXPDwzFkBVjevXcjgnDb+ttHq9Qz+lZxLMadexERcKkRn+NpxTmC8oQqL31bV1
-         yGcP1fBAo+bzD/mkhuRwuiex9VLk8y+Y7xejGE+PG8emXR5YxLXGEIZwTTw0wKsM3AL5
-         HRljSlSq6mCoQvwVB16fZtYnkSd0mwJKf6+gZfq9mUGjMhZV7FvahuSnTb7XIArzE0iQ
-         VjXu8cda7Jgq8nNG9+tEFsu+vHyeufGP95uVhC0j2rP53YxcEdFadBXi9aogEs3GPQPl
-         JCgGkEcM0Ft7yQSDJWxuBdh3g05QHQcJSQ7KcirfMya3n0dZCUkO0x1uamZqgALnW9AT
-         udOw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dETdSOArCU+5FN9i/BrakKPTVrpDILWrp20SIYBDv9E=;
+        b=TbwUQTPzAb3Lr0IWqpvEJ5+Mt+akHr5pndIvEbNihpWf7LqfQYTy/x6nzVlTpLK/Of
+         Iu4MtNoJiM2yMn2q86Sx9RCH1XO10AvkOq+hZu7FXzEQBLC5XGljHaxlNFuVLWANygdZ
+         Iw0qKy4ndmxE3omfr7B+tsiXUcnk/yl4+pH79DL3N5QynhQEzvmt2VZmj368l7gSz2uK
+         Zj1UOYCImpeEUtadw+EpEgMM8Dfc2MvoiU8oFLMttbOvdMsHV0SdPPw69nfxmN6vLEPx
+         GBUBrCJXmhpstzpxLqQXkDPjxqIhgDA2OSmOcfTOHbIjp1dzysharcBZqn1X5DWHx/Gq
+         Y0Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hhle5SlXF7GWN568wF6/BUIAe2M7L4YD+7P2ydMa3hs=;
-        b=3F78zzw+Ak/znYRbGOyMhxV37Cikb4Mly4hhasgonJnpdTSS6eK4ynRJq47b1WfHFq
-         Q/edcSNJh3UbGqW2OaqPPPQWnJhdTqE20wpdDQDZ+FvegxPMkBBI5NaOjjw8MLYmQpYA
-         Pv1HOv0NKH1lRdrz+wU56cquQdduhGUO1QOlaZsstKVwhjCBy0vNYXyCi0cR7YqBlG0B
-         FZedGEIJNiB+7VDyQuXBFAwBpd73c1T0McxHVBXAxFaW+PuHFMJM0pRXxxg+TeySUgYx
-         RcOmpRHV8geA3JeUQtfv9eKWi5lClLUc8a2tlFe5tDTP7Gb/i5/lIgduR8W5hL79zZL9
-         GH9g==
-X-Gm-Message-State: AOAM5337K+NHjmoTDvJFxJdUjcwDKUQ7gG1fILZ0xUBwTk/tNILa2o+s
-        mrhdV4AkR/0txQmev4VPxOpIXqIMog==
-X-Google-Smtp-Source: ABdhPJxZ83y8KdlQCucXKyyYQj8mKyCi2GBon2ZAjLxwEAIshsWpoTFETjASvaB9izGNJ12YWIsjqw==
-X-Received: by 2002:a05:6214:27ce:b0:461:dec4:1bb6 with SMTP id ge14-20020a05621427ce00b00461dec41bb6mr42794790qvb.46.1653848161324;
-        Sun, 29 May 2022 11:16:01 -0700 (PDT)
-Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id y9-20020ac87089000000b002f9114d2ebcsm6086613qto.17.2022.05.29.11.15.59
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dETdSOArCU+5FN9i/BrakKPTVrpDILWrp20SIYBDv9E=;
+        b=4kLmvq/SlU/ct1E074OOE+CsioIo09Lwt7xfv5IirXWUDaQL4P4K9//kM0XBX12IUo
+         oUfYXOf2y1tV6sKnTQzPOn1E+C0eBOGtopEzcW/KtKWkXIOmb1Mw9QLPpZ9UsW7OrcjR
+         5b3+o166CswKG5GRqxrQxqr5AMmH0q+1jzLdnZPrr4RU4aiS4RHoEy2jeYe8+0KEVArd
+         DwD+X0OoPDLGOENdNm50ql1/pXx16eTK1ZoYSMercM9vSdWxO6+3AEa68h0wKHOcjsLN
+         jtmL4dhdnuOT4Hm73H4pnqFBdZP0HaCe6s+tn8uTTb5TcVpfyFzCFVSx7UlfrHwXgfPa
+         ZS9w==
+X-Gm-Message-State: AOAM533BAe1t9wQwgdNAJQYrWHfybRXHNezXg56nL1MKjgo4oGLoPxGx
+        e63OxhXWE6sAa4caIJOI6RY=
+X-Google-Smtp-Source: ABdhPJxPBVUIlXtbCps8h1CCo+Oe/o8oSeH0MKpapqQoGZLd9CgYKy9lRSsm/k7wbMfH9wYH9I0gDQ==
+X-Received: by 2002:a05:6000:1815:b0:210:dd9:a9c2 with SMTP id m21-20020a056000181500b002100dd9a9c2mr13761145wrh.385.1653848441505;
+        Sun, 29 May 2022 11:20:41 -0700 (PDT)
+Received: from localhost.localdomain ([94.73.36.128])
+        by smtp.gmail.com with ESMTPSA id o12-20020a05600c4fcc00b003942a244f2esm8650415wmq.7.2022.05.29.11.20.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 11:16:00 -0700 (PDT)
-Date:   Sun, 29 May 2022 14:15:58 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
-        rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, willy@infradead.org
-Subject: Re: [PATCH v2 01/28] lib/printbuf: New data structure for printing
- strings
-Message-ID: <20220529181558.pg4knymlixphra5i@moria.home.lan>
-References: <20220519172421.162394-1-kent.overstreet@gmail.com>
- <20220519172421.162394-2-kent.overstreet@gmail.com>
- <Yo+XZ4YtU9fN/sGE@alley>
- <20220526152127.gw7gb4jnoikop4hl@moria.home.lan>
- <YpCoADIEWi9flgSf@alley>
+        Sun, 29 May 2022 11:20:41 -0700 (PDT)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     hako@ultrarare.space
+Cc:     bryancain3@gmail.com, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: apple: Reset quirks when Fn key is not found
+Date:   Sun, 29 May 2022 20:20:36 +0200
+Message-Id: <20220529182036.10226-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220529180230.17e9a0f9@ultrarare.space>
+References: <20220529180230.17e9a0f9@ultrarare.space>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YpCoADIEWi9flgSf@alley>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 12:29:20PM +0200, Petr Mladek wrote:
-> I would really like to keep the three APIs separated and easy to
-> distinguish. They are principally different:
-> 
-> 1. pr_*() API:
-> 
->        + wrapper to printk(). They makes the messages available on
-> 	 console and for user-space log daemons while printf()
-> 
->       + the various pr_*() variants are used to define kernel
-> 	specific features and behavior, for example:
-> 	loglevel, ratelimit, only once. deferred console handling.
-> 
->        + uses implicit (system) buffer
-> 
->        + The message format is defined by the 1st parameter. It
-> 	 is the same way as printf() in user-space.
-> 
->        + It is inspired by printf() from user-space that prints
-> 	 the messages to the standard output.
-> 
-> 
-> 2. *s*printf() APIs:
-> 
->        + basically duplicate the same user-space API. It supports
-> 	 some extra %p modifiers. There might be few more
-> 	 incompatibilities.
-> 
->        + use simple "char *" buffer provided as the 1st parameter
-> 
->        + the messages format is defined the same way as in
-> 	 the user-space counterparts.
+Hi Hilton,
 
-After printbufs are merged, I think we should consider formally deprecating
-sprintf/snprintf, certainly for new code. As you saw from the vsprintf.c
-cleanup, printbufs are _much_ nicer than passing around char */length - it's
-2022, we shouldn't be doing that anymore!
+> Commit a5fe7864d8ad ("HID: apple: Do not reset quirks when the Fn key
+> is not found") re-involves the fnmode issue fixed in commit
+> a5d81646fa29 ("HID: apple: Disable Fn-key key-re-mapping on clone
+> keyboards"), as linked below.
 
-> 
-> 
-> 3. printbuf API:
-> 
->        + append messages into the given printbuf by small pieces
-> 
->        + format defined by the suffix, for example, _char(),
-> 	 bytes(), units_64(), _tab(), indent()
-> 
->        + allows to do special operations on the buffer,
-> 	 for example, _reset(), make_room(), atomic_inc()
+Reverting that commit will break battery reporting on the Magic
+Keyboards 2015 and 2021.
 
-atomic_inc() should not exist in the long term - we _really_ need
-memalloc_nowait_(save|restore), that's the correct way to do this.
+When a keyboard has the APPLE_HAS_FN and another valid quirk, in this
+case APPLE_RDESC_BATTERY, setting asc->quirks = 0 (i.e., removing all
+quirks) also removes the valid ones.
 
->        + it will be used as low-level API for vscnprinf()
-> 	 implementation, pretty printing API, or
-> 	 stand alone uses.
-> 
->        + I wonder if there will be variant that will allow
-> 	 to pass the format in the printf() way, e.g.
-> 	 int pb_printf(printbuf *buf, const char *fmt, ...);
+> To make things work again, this commit reverts a5fe7864d8ad ("HID: apple:
+> Do not reset quirks when the Fn key is not found")  and the recent
+> workaround fa33382c7f74 ("HID: apple: Properly handle function keys on
+> Keychron keyboards")
 
-That's pr_buf()/vpr_buf(), and I heavily use pr_buf() in my own code.
+My understanding of Bryan's patch (in cc) was that the new config option
+worked out of the box for Keychron and Apple keyboards and allowed for
+manual configuration where required.
 
-snprintf() is just a wrapper around pr_buf() now.
+Could you explain a bit which bug is fixed by reverting these 2
+commits, please? I don't own a Keychron keyboard for testing, so it is
+not obvious to me why this change is required.
 
->        + is there any user space counter part?
+Thanks,Jose
 
-I've been using the previous version of this code in userspace that was part of
-bcachefs, and my intention is very much for this code to also be used in
-userspace as well.
+> Link: https://lore.kernel.org/linux-input/f82dd7a1-a5c6-b651-846c-29f6df9436af@redhat.com/
+> Fixes: a5fe7864d8ad ("HID: apple: Do not reset quirks when the Fn key is not found")
+> Signed-off-by: Hilton Chain <hako@ultrarare.space>
 
-Bringing the base printbuf API to userspace is trivial - i.e. doing it as a
-wrapper around snprintf(), which is how printbufs started. However, the %(%p)
-format string extension for calling pretty-printers directly - which I badly
-want and think is far superior to what glibc has [1], will also require patching
-glibc (and gcc, to get the format string that we want).
-
-So that'll be a little ways off.
-
-> Now, it is clear that printfbuf API must be distinguished by another
-> prefix:
-> 
->        + it must be clear that it stores the output into printbuf.
-> 	 It is similar to dprintf(), fprintf(), sprintf().
-> 
->        + It can't be done by the suffix because it is already used
-> 	 to define format of the appended string or extra operation.
-> 
->        + It must be clear what is low-level API used to implement
-> 	 vsprintf() and high-level API that uses vsprintf().
-> 	 I mean pb_char() vs. pb_printf().
-
-I'm coming around to the pb_* naming idea. pbprintf() doesn't roll off the
-tongue in the same way that pr_buf() does, but I guess I can live with that.
-
-1: https://www.gnu.org/software/libc/manual/html_node/Printf-Extension-Example.html

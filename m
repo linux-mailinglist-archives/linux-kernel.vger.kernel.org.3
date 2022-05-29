@@ -2,98 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BE0536F24
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 04:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07118536F2A
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 05:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiE2Cs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 22:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
+        id S230247AbiE2C60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 22:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiE2CsY (ORCPT
+        with ESMTP id S229820AbiE2C6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 22:48:24 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98017092F;
-        Sat, 28 May 2022 19:48:20 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id b135so7641127pfb.12;
-        Sat, 28 May 2022 19:48:20 -0700 (PDT)
+        Sat, 28 May 2022 22:58:24 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C549CC87
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 19:58:23 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id w2-20020a17090ac98200b001e0519fe5a8so7640996pjt.4
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 19:58:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=+iiDE9gQ82NeNczZtMEx7dCNxOmpnVmfRlZ0PqhI1MQ=;
-        b=csXPrfumova6aI5QVPgrAOFrsewGzt/nUzF01j9D98JcE84xNoSAsnUrPBrmVqT07l
-         F4ja7JK1hlJuP3lZykIuOKK5uCPDLEozMgC1f7bwEZay8qFGkuTVPsVS0HBsC+EPgsVR
-         mvrx8a4Glsgpq1H/clVV18IkBWxgH+Yr/fGHaARB4gAPGqg1MAX9tyMgckakk5uPuNmZ
-         NyBjbLtBfSXlIp+CDdJzgH8+D77q1B8BxGtFievUCJevWoqlcRf69cOblDdkfon0i8gx
-         UK7366cM4T0MORkPNHSU0bnU+nUzoDqSnB8a10ra3q72F7xvZzXsVgRun6lLh8yICME1
-         WQnA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xqZyFR77LZa5HhEYDYSFVBgW+mJdeOilKX5Bk1mPIAU=;
+        b=c8lMNY/sSIphdNiJshAYMu1CqUjbD5PanBJG75iQdDbbSaL+tBEsMNufhxMbyMmLq9
+         S6I3H22KxlNT+gAJkNrkj6Bz0b16LryVW0uLjqQqQTSnundCo/WIqxpvHttLS/ACJfLJ
+         HVLY3NDiSnjjB5erjgkc8B3XunjQa7waGRcwPiLNAXldXON1Fk1mbG1Dp3dymRnZ6tjn
+         8zVpsbRj7VGyqBKb7jNxV70lfvZxznUS0G8RwR8IzMrj0uV+qiiJQepoHH0r2Xm03TSU
+         J2H/kBaD+5EmHU0V97btF9mL0slO+zMalJunTAkzK7WsPs+AjvE1QDElNKacsjg+omgK
+         P1Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=+iiDE9gQ82NeNczZtMEx7dCNxOmpnVmfRlZ0PqhI1MQ=;
-        b=G4P94ssssastt1H3ROBlJvFZUZDlqJgffJxcaIFHAPBHMk24AJa7cr4ES/xjlVnHm9
-         29J9z4FjE2aGBEtdIv9vH5kylJG/ySfA3QmzpFXkwO42TNh4wbP22joyCH8luw9eOxyZ
-         5o4Vam+E6C49/ti4rTFubOwLpLwUojaOSsJwDsxLDm1fpB3LnN2QGfamOsXGjPYa/KqI
-         hychUW5qUsTFlWThN7uFkFUJigwHC1Kk38fNt2jRdotXhflgl9Z9tNZcoRJBEUVsnqH/
-         s1HJ9uYfUNraBpDJBUuiY/IR5mUK0ptaD+6VHXbhr5sd16cxzNagN1kCqShtq+ZLW7/U
-         VdvQ==
-X-Gm-Message-State: AOAM531db32XBMyuKzbwoVbHzrboV7niaPKP758Nfu48HYmfQOIoqpMc
-        srmg42+S/Uq39S86ki0M33C8PY6z1dF0fYar
-X-Google-Smtp-Source: ABdhPJyoVwBUAaaDaBjwGi0RGics4YQOvibKH1ELzFRjR/u0UDK7WCeEaADobAyj4vcJ0jyTiO2vyA==
-X-Received: by 2002:a63:f108:0:b0:3fa:34e0:52c7 with SMTP id f8-20020a63f108000000b003fa34e052c7mr29541655pgi.302.1653792499915;
-        Sat, 28 May 2022 19:48:19 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [71.19.144.195])
-        by smtp.gmail.com with ESMTPSA id lj12-20020a17090b344c00b001e2da6766ecsm319544pjb.31.2022.05.28.19.48.14
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xqZyFR77LZa5HhEYDYSFVBgW+mJdeOilKX5Bk1mPIAU=;
+        b=z+RsfuGDPyX0qfhl/0GmbbkHFf6ywOm3Qxq0NXmCUGQ9DdX/k4D3pbt7NydX4XowNo
+         Kc4ooszDJN3U8174ovsxuWGPPmxY+78kJIuiXVEYbs+vRf/zeT46skI311n+Rh1gdNyP
+         iOjEqTDvr8w07nWhZEbU2+XUuUtZuESa1lGlNdGfcYXjJGOUAhxNEDe7o774076wj1Ah
+         +ShFCyrThtrKhZOQkIbMQ79eLDDnPQoSDguFub9NJ9IQJyvCCnP2desNvp/hBCfN088r
+         6mNFtLQOUuZpFcKKw+v99TqDkICzp1PJvbG8ebG6AO1swkXZ+yvIAVsnarpkmDVuXiAg
+         ndeA==
+X-Gm-Message-State: AOAM5335P3lxueOKe2fafC8C5JB/k2lOuj5a1cvpkgOhnr2M/YHfa33V
+        fO3m5fwGlo8MPMlVQVf++4jwpw==
+X-Google-Smtp-Source: ABdhPJxWGC7LKAf8hQu669+YBA7+lPsqdEug+mNQnYOi/nQ9+B3jLHYf5/agGPl5H68pJ9yL/Vvvrg==
+X-Received: by 2002:a17:903:209:b0:161:7f66:b9e0 with SMTP id r9-20020a170903020900b001617f66b9e0mr33873163plh.73.1653793103197;
+        Sat, 28 May 2022 19:58:23 -0700 (PDT)
+Received: from localhost ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id c20-20020a170902c2d400b001637704269fsm1974580pla.223.2022.05.28.19.58.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 May 2022 19:48:19 -0700 (PDT)
-Message-ID: <6292def3.1c69fb81.90237.0f8d@mx.google.com>
-Date:   Sat, 28 May 2022 19:48:19 -0700 (PDT)
-X-Google-Original-Date: Sun, 29 May 2022 02:48:12 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
-Subject: RE: [PATCH 5.18 00/47] 5.18.1-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 28 May 2022 19:58:22 -0700 (PDT)
+Date:   Sun, 29 May 2022 10:58:18 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     bh1scw@gmail.com, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/slub: replace alloc_pages with folio_alloc
+Message-ID: <YpLhSokkrPrXjNXP@FVFYT0MHHV2J.googleapis.com>
+References: <20220528161157.3934825-1-bh1scw@gmail.com>
+ <YpJNX7PN8hAFgVwj@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YpJNX7PN8hAFgVwj@casper.infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 May 2022 10:49:40 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.18.1 release.
-> There are 47 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sat, May 28, 2022 at 05:27:11PM +0100, Matthew Wilcox wrote:
+> On Sun, May 29, 2022 at 12:11:58AM +0800, bh1scw@gmail.com wrote:
+> > From: Fanjun Kong <bh1scw@gmail.com>
+> > 
+> > This patch will use folio allocation functions for allocating pages.
 > 
-> Responses should be made by Sun, 29 May 2022 08:46:45 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.1-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> That's not actually a good idea.  folio_alloc() will do the
+> prep_transhuge_page() step which isn't needed for slab.
+>
 
-5.18.1-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+You mean folio_alloc() is dedicated for THP allocation?  It is a little
+surprise to me.  I thought folio_alloc() is just a variant of alloc_page(),
+which returns a folio struct instead of a page.  Seems like I was wrong.
+May I ask what made us decide to do this?
+
+Thanks.
 

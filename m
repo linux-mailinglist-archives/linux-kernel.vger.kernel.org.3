@@ -2,104 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 090C85372AA
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 23:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A30355372B4
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 23:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbiE2VLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 17:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
+        id S231846AbiE2VUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 17:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbiE2VLf (ORCPT
+        with ESMTP id S230326AbiE2VUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 17:11:35 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E45613E9E
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 14:11:34 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id u140so9542323oie.3
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 14:11:34 -0700 (PDT)
+        Sun, 29 May 2022 17:20:44 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7392CDF4;
+        Sun, 29 May 2022 14:20:43 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id l1so8805096qvh.1;
+        Sun, 29 May 2022 14:20:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=JwNP4rOC9kEntm8T2Rqo0JxTSnzOqMZp+/5DaHi4PykmltLbciXisgALucIlde8iqI
-         abP97YuKi+/V/ojwyxtkjhm/zgwj1p69BD3KfT0hTT4B2RyxxAnGP9GorhhUPoyuc0gG
-         djUBSoLo04xFocONhVFIZKJBkLmiTMMjkhGy1n+cAHgX8LtbNr7hBD7NVCwNmFjndfW8
-         fYgQQPheQBfoJoHZQI3RJ/m4VUAeTEAuYvvvdQHkd60sIKyHwlLDqvBqXL5A0Kcxyxgi
-         JNmIqBiop+u1geFPkJ/4/WiNJPpfGdDj7bfj2yAm9oemB9R0wWw5oTImnF5MvaGzwFNs
-         Z4dA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Jx+weakhReTpBiyhpJMmr0fal0LRVyBY1kBAbquoL8I=;
+        b=NR2lcqPICYi6a/ghlAaeu7f+fJNQildSlq6WQjlH0j2zdtMWIgvQDiZgwIG6ykc6Ro
+         tktJh8E9RJM9iIizWnKbuwoIuZCFelc9PwFBPWc2Vg25Z+l7J0F0eUaR1Tw0Yd4kxFJp
+         5n+F/jXm8PP98dxIte+YXGKT5eFyeBhdjnYIFiB6gezIYt7f2GMAZxZ0HRm+hT985zEK
+         wEuMnxLH/f+T+zzlGXUumcv57fcU5frdOND3VctNAyLL6Oanx9aOKpHB43yOTAd91w48
+         gCsE9jwX1ZhlKC5G+f0wuxqVzmPvPOF1HTXYWXk5OEi8VaXv29uhX50Tpt6ocf64QeKc
+         KhUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=mFuhHg+u2cNhbIYQO9cR5VQRobtJ5A5Bmp7KIR5o6sRr4Wm5ecaJZW5gBBIzFQa3dA
-         d3DO2NoHKUCdgi3DvGzWx1EOV5zxV0p0DXXif51aHaNW9RqXULFu2aDpRoymt5/hmbEl
-         0r9JJiC/XYrRaguuhU+w0OnfmVkLGF7aR0q2ZV9VJJqh2Qmdv+0dzyDTDvQZT66RmVcA
-         /2SyOPSbPVBjwEvgiL781v69rBcKoteCAQEJWghd5N51Kqzg5ChgS5Ue3qT+GNf5R4Jh
-         itoZdzUJDYH6FQ44cIOlu/3q8WzijSKnHlKsOtLJfE8ydsecSZ1915JyaecZVECy/Hij
-         nV6Q==
-X-Gm-Message-State: AOAM532Rnoax8JNo4mfrXlDGo0hZjsHt9Rdviqg/6tXuw3SVwrRN62k+
-        5EUpD1GninUmHfoAr6TJUwUbMPvdlIDTavat+SU=
-X-Google-Smtp-Source: ABdhPJx7D39/ZFGvCsfkH+QfED8kLGxHDqCG+bwaESF71cRbxN5KDi/0kWnb7oQNbRbBY053gSU7PfRKxuJ1DOP1fHw=
-X-Received: by 2002:a05:6808:1719:b0:2f9:ab58:73db with SMTP id
- bc25-20020a056808171900b002f9ab5873dbmr8762092oib.201.1653858693378; Sun, 29
- May 2022 14:11:33 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Jx+weakhReTpBiyhpJMmr0fal0LRVyBY1kBAbquoL8I=;
+        b=mVG8E4bWS2MqwYcgw3572XpSPMQ4fz0VBlrcgJK2oIKmwXXe2h4w3XfjPBaf8BzbhM
+         gs2LocPaVjGa8VXb8rwx4iSlDUh0BHlH4ob1s1uevpTaqgEQu0D7Wt/FigJTyw8PMtK3
+         86P+Amj0Mom0J7Wh1jmR5urRrw2g2siLoTZ70vh0uw3QkLbGb/kyZe+UXo9AYcUG8bS7
+         H4n7k77yeaCEw2b34VFOvUfa81bwci7n+RlVpZQLZbe12GKd/dpI6uviyzu+YWjR4l6u
+         HthO/n06YoDZqtFD5jIt53ciNE5ao58VQ+Kv5ZWZvs3nAhtHV+4bTOqrhzyJ65Czkzdn
+         ZWrQ==
+X-Gm-Message-State: AOAM530SfT2o4BF+aLThanqCX3lmSDjAM5jMs0lg36qljW5VQiLw9utx
+        9+hw2MeqVvkz6AddBcfPgd0=
+X-Google-Smtp-Source: ABdhPJwZJreQ+7Cv5dNnc7fZVvv4kOWOtmfezRij1nv08ZXpS6fqq7AHopyxCMblzo2uex6BwPdh/Q==
+X-Received: by 2002:a05:6214:627:b0:461:f1be:50d9 with SMTP id a7-20020a056214062700b00461f1be50d9mr42790694qvx.40.1653859242613;
+        Sun, 29 May 2022 14:20:42 -0700 (PDT)
+Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
+        by smtp.gmail.com with ESMTPSA id u126-20020ae9d884000000b006a35ac236c4sm6615470qkf.113.2022.05.29.14.20.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 May 2022 14:20:42 -0700 (PDT)
+Date:   Sun, 29 May 2022 17:20:40 -0400
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Subject: Re: kbuild problem: ERROR: modpost: missing MODULE_LICENSE() in
+ drivers/iio/afe/iio-rescale.o
+Message-ID: <YpPjqC+kVLIBpNlq@shaak>
+References: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
+ <3ae306e0-c6c7-ed12-cacd-62b1c26dba3c@infradead.org>
+ <6671de03-c09c-bfaf-e06c-e45af70d4354@infradead.org>
+ <6601a387-de9a-a0d0-11b5-01e0cfa75657@infradead.org>
+ <7a97bac3-6ade-8e1b-cf0c-4a05c83163a3@infradead.org>
+ <Yo+lHSmeIsx144cv@shaak>
+ <3b7ec693-f4a5-e1aa-3e07-b22a4008d4c9@infradead.org>
 MIME-Version: 1.0
-Received: by 2002:ac9:6a67:0:0:0:0:0 with HTTP; Sun, 29 May 2022 14:11:32
- -0700 (PDT)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <harikunda1116@gmail.com>
-Date:   Sun, 29 May 2022 14:11:32 -0700
-Message-ID: <CAGEpkWqovQCi2kX0iDXno_rUrkHV0su1h1fmCn897SpbyKLqwg@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [harikunda1116[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [harikunda1116[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:233 listed in]
-        [list.dnswl.org]
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3b7ec693-f4a5-e1aa-3e07-b22a4008d4c9@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+Hi Randy,
+
+On Thu, May 26, 2022 at 01:04:41PM -0700, Randy Dunlap wrote:
+> 
+> 
+> On 5/26/22 09:04, Liam Beguin wrote:
+> > Hi Randy,
+> > 
+> > On Thu, May 26, 2022 at 08:36:34AM -0700, Randy Dunlap wrote:
+> >> Liam:
+> >>
+> >> Any comment on this?
+> >> Otherwise I'll just send a formal patch like this (below).
+> > 
+> > Apologies for not answering earlier.
+> > 
+> > I wanted to look more into Masahiro's comment and try to fix the
+> > Makefile, but that can be done after.
+> > 
+> > IMO your patch improves the current Kconfig, so I'd recommend sending
+> > the patch. If it can wait a bit, I can look at the Makefile over the
+> > weekend.
+> > 
+> 
+> Liam,
+> 
+> I'll wait until next week to see if you come up with anything.
+> 
+
+The following patch fixes the issue while addressing Masahiro's comment.
+I also considered `select IIO_RESCALE`, but I'm not sure what's usually
+preferred.
+
+diff --git a/drivers/iio/test/Kconfig b/drivers/iio/test/Kconfig
+index 56ca0ad7e77a..4c66c3f18c34 100644
+--- a/drivers/iio/test/Kconfig
++++ b/drivers/iio/test/Kconfig
+@@ -6,7 +6,7 @@
+ # Keep in alphabetical order
+ config IIO_RESCALE_KUNIT_TEST
+ 	bool "Test IIO rescale conversion functions"
+-	depends on KUNIT=y && !IIO_RESCALE
++	depends on KUNIT=y && IIO_RESCALE=y
+ 	default KUNIT_ALL_TESTS
+ 	help
+ 	  If you want to run tests on the iio-rescale code say Y here.
+diff --git a/drivers/iio/test/Makefile b/drivers/iio/test/Makefile
+index f15ae0a6394f..880360f8d02c 100644
+--- a/drivers/iio/test/Makefile
++++ b/drivers/iio/test/Makefile
+@@ -4,6 +4,6 @@
+ #
+ 
+ # Keep in alphabetical order
+-obj-$(CONFIG_IIO_RESCALE_KUNIT_TEST) += iio-test-rescale.o ../afe/iio-rescale.o
++obj-$(CONFIG_IIO_RESCALE_KUNIT_TEST) += iio-test-rescale.o
+ obj-$(CONFIG_IIO_TEST_FORMAT) += iio-test-format.o
+ CFLAGS_iio-test-format.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+
+I'll send a patch as soon as you confirm this works for you too.
+
+Cheers,
+Liam
+
+> 
+> > 
+> >>
+> >> Thanks.
+> >>
+> >> On 5/20/22 20:51, Randy Dunlap wrote:
+> >>> Ok, one more.
+> >>> [also adding Liam here]
+> >>>
+> >>> On 5/20/22 20:17, Randy Dunlap wrote:
+> >>>>
+> >>>>
+> >>>> On 5/20/22 20:08, Randy Dunlap wrote:
+> >>>>>
+> >>>>>
+> >>>>> On 5/20/22 19:40, Randy Dunlap wrote:
+> >>>>>> Hi,
+> >>>>>>
+> >>>>>> In March I reported that a randconfig build complained:
+> >>>>>>
+> >>>>>> ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
+> >>>>>>
+> >>>>>> (https://lore.kernel.org/all/16509fb6-e40c-e31b-2c80-264c44b0beb9@infradead.org/)
+> >>>>>>
+> >>>>>> I am still seeing this problem so I tried to dig into it a bit.
+> >>>>>> However, I don't see why get_next_modinfo() and friends don't find the
+> >>>>>> MODULE_LICENSE() since it is in the iio-rescale.o file.
+> >>>>>>
+> >>>>>> (BTW, I see this build error on many different $ARCH [around 15 tested]
+> >>>>>> and with 2 different versions of GCC.)
+> >>>>>>
+> >>>>>> Q1: Is modpost checking both vmlinux and iio-rescale.o for modinfo license
+> >>>>>> strings?
+> >>>>>>
+> >>>>>> It looks like it is, because it appears (?) that modpost is looking at
+> >>>>>> drivers/iio/test/iio-test-rescale.o (<<<<< a kunit test, which is builtin
+> >>>>>> in my .config) and at drivers/iio/afe/iio-rescale.o (which is built as a
+> >>>>>> loadable module).
+> >>>>>>
+> >>>>>> Is this confusing modpost?
+> >>>>>> I renamed drivers/iio/afe/iio-rescale.c to afe-rescale.c and changed its
+> >>>>>> Makefile entry accordingly and the MODULE_LICENSE error goes away.
+> >>>>>
+> >>>>> Oh well. This rename causes drivers/iio/test/iio-test-rescale.c to have
+> >>>>> build errors, so that's not a solution, just some info...
+> >>>>
+> >>>> and that was due to not updating drivers/iio/test/Makefile.
+> >>>> When that is done, the missing MODULE_LICENSE() is back in afe-rescale.o.
+> >>>>
+> >>>>>
+> >>>>>> Is this a modpost error or is kunit messing things up?
+> >>>>>>
+> >>>>>> thanks for looking.
+> >>>
+> >>> Does this look OK? It allows afe/iio-rescale.o to build XOR
+> >>> test/iio-rescale.o (not both of them).
+> >>>
+> >>> --- a/drivers/iio/test/Kconfig
+> >>> +++ b/drivers/iio/test/Kconfig
+> >>> @@ -6,7 +6,7 @@
+> >>>  # Keep in alphabetical order
+> >>>  config IIO_RESCALE_KUNIT_TEST
+> >>>         bool "Test IIO rescale conversion functions"
+> >>> -       depends on KUNIT=y && !IIO_RESCALE
+> >>> +       depends on KUNIT=y && IIO_RESCALE=n
+> >>>         default KUNIT_ALL_TESTS
+> >>>         help
+> >>>           If you want to run tests on the iio-rescale code say Y here.
+> >>>
+> >>>
+> >>
+> >> -- 
+> >> ~Randy
+> 
+> -- 
+> ~Randy

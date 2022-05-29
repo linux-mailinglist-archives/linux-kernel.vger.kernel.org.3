@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C005371FC
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 20:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B6C53720A
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 20:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbiE2SCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 14:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
+        id S231235AbiE2SEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 14:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiE2SCf (ORCPT
+        with ESMTP id S231336AbiE2SEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 14:02:35 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716D0606E4;
-        Sun, 29 May 2022 11:02:33 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so8653278pjf.5;
-        Sun, 29 May 2022 11:02:33 -0700 (PDT)
+        Sun, 29 May 2022 14:04:23 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9694B64BDE;
+        Sun, 29 May 2022 11:04:22 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso8699854pjg.0;
+        Sun, 29 May 2022 11:04:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=zzGOFoijegI6bs3FEJJIbalqohkJ7YI9mVcD9clwKWU=;
-        b=nOnixLnoLQGUvPL5RyUQZOlPY6YE6sNEMHjYjB2IaYUrtzPoYguiyrl1YUq+Lsm927
-         3EBZmxu4bAYfcWvSMuAlCYHftz433enDWNht0945TEX570r/w4uGZcaiKfU4ftm/cC4k
-         X4xk50R+bxzTE6Hw7drKMu4JMci4MbvUyZL0dDer18d+WLPO7wxvuMM8IU5jraCPSOXH
-         AWrwrCnl8DAxkxXrJc/+e+G8suJ5PFdL9F4Mks90Gbxs0MFal9IIERTRNIkjirUSgl/l
-         qti86avstvKCwFK9ZxRE9FhIx/81oGc9m+klckALxDY553SU3F83RRqgoggrrzi4OAdj
-         nQgA==
+        bh=b5qx+pVGY2AgizlZabnmHPGmRzUWPgfS4YN8x6bBJwA=;
+        b=jRdc7r1EDXy1ZDU+swfWq3BXpeFni65EXnItTebIJe2K4+KmFReH97TIyPkztBm7JH
+         C+yOUq+DOISNXM7fhRFYunW3IFHhvrg86yV9VVaMyCEcz7Cen5Ws6G0SeHkGVQUGJGl+
+         9obKy7fvwx8SfkwgJkkuay+3so8vVVAiOLh/0YtkhzBday8panVIf0ESXAtbLX1D8OTg
+         wZABfKBA6y1FGkOLlisEAIU3Tve3Y9/OYuPVWPfjDm+sQUE357Hy0pC2ZSNb6FCXELxE
+         TJ+pQRRZGslxsH0rLmekKr513xUXesULnKZXSNlTCJcV2QrHhuo+R7z+mcNeSqc2IF1R
+         LKWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=zzGOFoijegI6bs3FEJJIbalqohkJ7YI9mVcD9clwKWU=;
-        b=EOF4j/IvRDGTsb6zrs0aSL8DDutBEYVM1GGaUnZiSFt5yL54Rdzez/jZOM3Ajql3nY
-         JwWhON6qgkLh12/tN2AhAi/nHxc5TY8Hy2J8agjUqyH2PDZKmDf8L9IAvns3L2vLYVRm
-         DRBrSuHCejEpdo2I3iDO6kGk+Y9vNqu9ogTIpP/SeEM4gcEyZi/3s1zS1JvhZs3PToHA
-         yqwP74GaKySShSZXvhS+HnyzZT/HOKAOkyiKZIbdX/Mykr0yCksQxU34L+sWE8SBEowb
-         FUnC6AS2AHKKFkSSNJ8H1we3tewZnQEJvk8i8j5lLlEGFNnW3NG3mE+uzgKXn50clODq
-         HbyQ==
-X-Gm-Message-State: AOAM5332SfRscCFXEVnrWtzLFZIIEyDjeAMqwSw4X+L4Av1hPM5Dx0m4
-        9nqGocyXD0wTnaqSHauG7gc=
-X-Google-Smtp-Source: ABdhPJwbxNlyttp4stVGRr/0qeiqK75I0bN48Jv5EpwxMjf2d4saFqSUqUJ4ZWtAGhl4CfHyPk5ouQ==
-X-Received: by 2002:a17:902:b413:b0:15e:e6a8:b3e with SMTP id x19-20020a170902b41300b0015ee6a80b3emr52707916plr.24.1653847352869;
-        Sun, 29 May 2022 11:02:32 -0700 (PDT)
+        bh=b5qx+pVGY2AgizlZabnmHPGmRzUWPgfS4YN8x6bBJwA=;
+        b=3CLBwOqndWaBebYkrXzijHNIy8b2AxctVq3/mEfBCd83iI3vklBeHkYEWfzqkN/a9u
+         qil61zPrsiDMtHV8BTURilOadB7hoE4Bdq7qGSyS8N74ktvXIkAQs8qSxWMchQ04X+HJ
+         A22EpLzQtE7grzM9uVaXPJ2jCyZ7WRJjrrtbq83pFw7pu9iogx34cLVyMVeealFV9Ihx
+         C/Esi/YktHbuJJyQzu0ijIn9HauHRAq6mrzaLgVUz8wWxgL9fHTk2Cket3+RHJ6gYir4
+         66Lfc0pImhdckxzj2/CPcZKzzKilfLJp0MiXAAdl/SCEep3gclqzSGdNpqkpUAkDerAI
+         5x2w==
+X-Gm-Message-State: AOAM532UE2a2y2Vg/hh6IkaxRZMxxOK7rqQ7l5N+9btO0ueNYCaVjgLA
+        v397zRRNR910puYBNgRweL8=
+X-Google-Smtp-Source: ABdhPJxx8AwOCgmabpZSFVPzG7ycEcpG3xkuaN7+b45R+BYVaVarA8IwDTIISC4yM0SeICK1uHuA7g==
+X-Received: by 2002:a17:902:b90b:b0:15f:bd0:18b5 with SMTP id bf11-20020a170902b90b00b0015f0bd018b5mr54152190plb.97.1653847462045;
+        Sun, 29 May 2022 11:04:22 -0700 (PDT)
 Received: from localhost (c-73-25-156-94.hsd1.or.comcast.net. [73.25.156.94])
-        by smtp.gmail.com with ESMTPSA id e16-20020a17090301d000b0016370e1af6bsm7622714plh.128.2022.05.29.11.02.31
+        by smtp.gmail.com with ESMTPSA id z9-20020a1709028f8900b0015e8d4eb2casm7439442plo.276.2022.05.29.11.04.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 11:02:31 -0700 (PDT)
+        Sun, 29 May 2022 11:04:20 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
@@ -67,12 +67,11 @@ Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         <angelogioacchino.delregno@collabora.com>,
         Vladimir Lypak <vladimir.lypak@gmail.com>,
         Emma Anholt <emma@anholt.net>,
-        Dmitry Osipenko <digetx@gmail.com>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm/adreno: Allow larger address space size
-Date:   Sun, 29 May 2022 11:02:25 -0700
-Message-Id: <20220529180232.2576720-1-robdclark@gmail.com>
+Subject: [PATCH v2] drm/msm/adreno: Allow larger address space size
+Date:   Sun, 29 May 2022 11:04:23 -0700
+Message-Id: <20220529180428.2577832-1-robdclark@gmail.com>
 X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -93,6 +92,9 @@ versions of SQE firmware.  This appears to be fixed in a650+ SQE fw, so
 allow a larger address space size on these devices.
 
 Also, add a modparam override for debugging and igt.
+
+v2: Send the right version of the patch (ie. the one that actually
+    compiles)
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
@@ -145,7 +147,7 @@ index 89cfd84760d7..f3685130ce9b 100644
  		.rev = ADRENO_REV(6, 8, 0, ANY_ID),
  		.revn = 680,
 diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-index 4e665c806a14..7bc96cbe6e95 100644
+index 4e665c806a14..7b5f30881eee 100644
 --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
 +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
 @@ -21,6 +21,10 @@
@@ -154,7 +156,7 @@ index 4e665c806a14..7bc96cbe6e95 100644
  
 +static u64 address_space_size = 0;
 +MODULE_PARM_DESC(address_space_size, "Override for size of processes private GPU address space");
-+module_param(address_space_size, u64, 0600);
++module_param(address_space_size, ullong, 0600);
 +
  static bool zap_available = true;
  

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A74537215
+	by mail.lfdr.de (Postfix) with ESMTP id 95F96537214
 	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 20:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbiE2SGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 14:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S231601AbiE2SG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 14:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbiE2SGN (ORCPT
+        with ESMTP id S231579AbiE2SGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 14:06:13 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B488A64BD6;
-        Sun, 29 May 2022 11:06:12 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so5320285wms.3;
-        Sun, 29 May 2022 11:06:12 -0700 (PDT)
+        Sun, 29 May 2022 14:06:15 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFCD64BDE;
+        Sun, 29 May 2022 11:06:13 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id o9so5273468wmd.0;
+        Sun, 29 May 2022 11:06:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=EO26AUWJ/HH6ekAIEmzU6J8VaDRoPc2hBu7v7f55oYw=;
-        b=Ut/3o/vjop+XvvOsl44WCqPBHIteAXJjKksKyEGNHkRYViEh/0H+iWhEPDIvMjoBue
-         ypKg/NsWPyKUstGLXb4S4J8oeVoFoPGH/LCi0jjXmEyVnTEwBQ+g/UnUDgS8/aRjSoNX
-         8rq5KJVU4QFnAjdkf9l9xRFpXS1Uz2SWpwA1p4jW442nZT8dU2ZTfOBZL2L8Txp00BOl
-         t8UxcfmEt+MgEWVTZfAOKamX7eABZ6ZqeWtytVrMfnKbd7EQsWTEbvkcoxInvYIPY00w
-         eABRyy1twDuA+Eopf7svMdNh+zWooXxqjwd78M8L7/lA3ZIpTAL1RAihitqIqmsjQBiz
-         71aA==
+        bh=sLHIukUkBNLikfr8LE6F72H0XZdEF3+8TPuvOmboOcI=;
+        b=q6YRGtUng7jTkgFIREYfFdNMXaXc3P/uwUc9qSBoZKxuyCw7l9jTzi5W2AAcOvD6nn
+         /T6j5Bq7P/HYp6ji4bNfI5vzhNnbfHvau154Xm+d2uxrYH9FTex5S/wAoLIcJUz18mW8
+         nWjIxJpWln62W+4JDsScVJKb4oR/jvGGZnLQA5Yk6Cam0YNn/EwPcA/A04rjuvwTcwaB
+         tpoSyjwvbi3hFwYbRI1HAL/AjrFFBcLfI85nltNYcPWYEHUggzfswV2ZxJF9JIO2yzx4
+         UH0x5VayizSceebBExn13LXAXZWEqrzzXdfO55E5kmD+ncZeNz8LXJOJ4gqtm6yIWaBb
+         1icw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EO26AUWJ/HH6ekAIEmzU6J8VaDRoPc2hBu7v7f55oYw=;
-        b=7upqovA541p9Uy/23xhLjsn0Wqz/9yQ89RDBzG3O683PoyviwOI0Lf2wqnWiy5m/2m
-         nIYGkbMbv4wx9BAGT10l7HX2gKx1E6oUquURGdFLvbYEID8vC90klQGGgpq8EsnATwfH
-         tDBEAAm84kCEmF4O6sadedy7OagfsdhPPYMzQMqd3oB2diTcApNwtOmvBav5DCrAIDqp
-         NyNvx/liLKWgC+vSmHmMp52phw+mw0daD8GeQ2Nyfk0JHkKvpTqPZwBxhnkXXqeyPG+l
-         MppqvmBw2jJncExIsuTnbmowhE8aFBiQmi8TEYoXqPI4R4briCBuSGs64KOswZSJBHy9
-         XOJQ==
-X-Gm-Message-State: AOAM533MV7A8QlYBMbuPS75SQoUU9G8Jjxx4CX3PQxoJuOEbZFoArsVu
-        Wn3EEXBOUfzNHxDpO6CJt70=
-X-Google-Smtp-Source: ABdhPJxlYG8SM67NDb5Fbhbvwq3vk+QYOPmUHuzle9cj8mRUUh4U2pI0i/8Bz6YPyXdLUwaVR2YQ3Q==
-X-Received: by 2002:a7b:ce07:0:b0:394:890e:9193 with SMTP id m7-20020a7bce07000000b00394890e9193mr16240825wmc.117.1653847571313;
-        Sun, 29 May 2022 11:06:11 -0700 (PDT)
+        bh=sLHIukUkBNLikfr8LE6F72H0XZdEF3+8TPuvOmboOcI=;
+        b=hwQzXpbuYqRnN9GVKf0y5urgi6aGFV1HfQ6FkKzYHzDqQYM0y93VBv3pJW4aI8n+KT
+         bLanUX2GMI8IujdruOcCHuE10Lgx7Y672XIaK7BGjpbTTMkoEqCO17b2gF+G9QLmz1kW
+         UPljTdmYg0kMjtzl/DCZiKUGlv7+4oc7b8f0OnMfkLD9tG66Krt/KYDlKrKYugl52Bc7
+         5uc+iT4rUYYrio9ZoyRpBTIgluuY5u9+xwKHUljHiHh2NNP0F2iNusjMPU0kH8jx7j+z
+         n/IYyFUnRpM32c1+wAY/rVk0QcCwqDMZnlyWaUxhqAkPvgz6jv3N00au7zyMTp8MF2XD
+         Z0+A==
+X-Gm-Message-State: AOAM531WCWTKYmeK3xP8HiVTJg2ccGwzYASIg/C7V3aXJGuiCKVRpyZc
+        mMA+jMBwpQj9NybmYjwo5Dc=
+X-Google-Smtp-Source: ABdhPJyb8iSO3fSTkbzE+IIpm38NksmGKQfy6w3HWePmJnmCZHhAX1WitMykwPHY4y48ln0tkpZdKw==
+X-Received: by 2002:a05:600c:4f09:b0:397:788b:33af with SMTP id l9-20020a05600c4f0900b00397788b33afmr15812702wmq.94.1653847572455;
+        Sun, 29 May 2022 11:06:12 -0700 (PDT)
 Received: from localhost.localdomain ([188.163.112.60])
-        by smtp.gmail.com with ESMTPSA id q7-20020a056000136700b002100f2e6a7dsm7008516wrz.93.2022.05.29.11.06.10
+        by smtp.gmail.com with ESMTPSA id q7-20020a056000136700b002100f2e6a7dsm7008516wrz.93.2022.05.29.11.06.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 11:06:11 -0700 (PDT)
+        Sun, 29 May 2022 11:06:12 -0700 (PDT)
 From:   Svyatoslav Ryhel <clamor95@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Sam Ravnborg <sam@ravnborg.org>,
@@ -60,9 +60,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Anton Bambura <jenneron@protonmail.com>
 Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/3] dt-bindings: display: simple: Add HannStar HSD101PWW2
-Date:   Sun, 29 May 2022 21:05:47 +0300
-Message-Id: <20220529180548.9942-3-clamor95@gmail.com>
+Subject: [PATCH v5 3/3] drm/panel: simple: Add support for HannStar HSD101PWW2 panel
+Date:   Sun, 29 May 2022 21:05:48 +0300
+Message-Id: <20220529180548.9942-4-clamor95@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220529180548.9942-1-clamor95@gmail.com>
 References: <20220529180548.9942-1-clamor95@gmail.com>
@@ -78,29 +78,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add HannStar HSD101PWW2 10.1" WXGA (1280x800) TFT-LCD LVDS panel
-to the list of compatibles.
+Add definition of the HannStar HSD101PWW2 Rev0-A00/A01 LCD
+SuperIPS+ HD panel.
 
-Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- .../devicetree/bindings/display/panel/panel-simple.yaml         | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/panel/panel-simple.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-index 1eb9dd4f8f58..0d6f3973b12d 100644
---- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-@@ -156,6 +156,8 @@ properties:
-       - hannstar,hsd070pww1
-         # HannStar Display Corp. HSD100PXN1 10.1" XGA LVDS panel
-       - hannstar,hsd100pxn1
-+        # HannStar Display Corp. HSD101PWW2 10.1" WXGA (1280x800) LVDS panel
-+      - hannstar,hsd101pww2
-         # Hitachi Ltd. Corporation 9" WVGA (800x480) TFT LCD panel
-       - hit,tx23d38vm0caa
-         # InfoVision Optoelectronics M133NWF4 R0 13.3" FHD (1920x1080) TFT LCD panel
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index a34f4198a534..915b7cecf451 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -1928,6 +1928,31 @@ static const struct panel_desc hannstar_hsd100pxn1 = {
+ 	.connector_type = DRM_MODE_CONNECTOR_LVDS,
+ };
+ 
++static const struct display_timing hannstar_hsd101pww2_timing = {
++	.pixelclock = { 64300000, 71100000, 82000000 },
++	.hactive = { 1280, 1280, 1280 },
++	.hfront_porch = { 1, 1, 10 },
++	.hback_porch = { 1, 1, 10 },
++	.hsync_len = { 58, 158, 661 },
++	.vactive = { 800, 800, 800 },
++	.vfront_porch = { 1, 1, 10 },
++	.vback_porch = { 1, 1, 10 },
++	.vsync_len = { 1, 21, 203 },
++	.flags = DISPLAY_FLAGS_DE_HIGH,
++};
++
++static const struct panel_desc hannstar_hsd101pww2 = {
++	.timings = &hannstar_hsd101pww2_timing,
++	.num_timings = 1,
++	.bpc = 8,
++	.size = {
++		.width = 217,
++		.height = 136,
++	},
++	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
++	.connector_type = DRM_MODE_CONNECTOR_LVDS,
++};
++
+ static const struct drm_display_mode hitachi_tx23d38vm0caa_mode = {
+ 	.clock = 33333,
+ 	.hdisplay = 800,
+@@ -3834,6 +3859,9 @@ static const struct of_device_id platform_of_match[] = {
+ 	}, {
+ 		.compatible = "hannstar,hsd100pxn1",
+ 		.data = &hannstar_hsd100pxn1,
++	}, {
++		.compatible = "hannstar,hsd101pww2",
++		.data = &hannstar_hsd101pww2,
+ 	}, {
+ 		.compatible = "hit,tx23d38vm0caa",
+ 		.data = &hitachi_tx23d38vm0caa
 -- 
 2.25.1
 

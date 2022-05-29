@@ -2,114 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F0B5371EC
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 19:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E725371E7
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 19:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiE2RgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 13:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
+        id S231373AbiE2Rcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 13:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbiE2RgP (ORCPT
+        with ESMTP id S231364AbiE2Rca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 13:36:15 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF4B13D18
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 10:36:14 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id rs12so16917559ejb.13
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 10:36:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RVcAJe5XVONjb8dc+ZXXSeKNhHu55YRYBkoQBm1t6ho=;
-        b=fKu1bXFx8iKiBoFGT/CRrwehq4ecxQRl35kagL7wTgZp4/TNJJt30w7ChV4K5RzaKN
-         fwEniKrOL1xkwMWf18Qkbjo7wi4P1DYO6QH0UTpXDrSBzpL2/jyMq5ltVo+zS70YoFfk
-         8isqt1hzaQ9ByI7itzLo6Jb4W0NvYlf9D8+E0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RVcAJe5XVONjb8dc+ZXXSeKNhHu55YRYBkoQBm1t6ho=;
-        b=zeKpp9RuFkSBI2lg1NXnK94y+FEtBb93dPyMUNENFOnnf0MsK/mPtCiXtgRoHIzPIx
-         Z5wQX/S2U0fasCghfvbnxxIrAyaGzR8THCXCnIpX09SexnUDLtlL+lTrSmi6KZ5RdyCT
-         0R/ryWGtCb62B1kpObHF7dpA2kngkIKLBRS8mknD0apSt8ALHDkSSMIQqNbiOtkiB7AQ
-         KXK7GssA4+jmCIl3hlcogAZ9v2BYjnEC0oreACMWQGVacdSs7Ktob4RKS95ZQG9nhsvU
-         U9j5TEPQi0vK7KiLhj8tg6skrDQzWsHKDdIpwg1PeXaD3MKt4PFQNt/6JHewz+Q05RoS
-         WfvA==
-X-Gm-Message-State: AOAM532U9aFFderU1c/yNwrQwLaLzjduaQFmXBlkaokWLs/5/vbv6YOs
-        VxSvCW6Xt0h9rsTREunaLrOJyp1EKlGwe+i2hdI=
-X-Google-Smtp-Source: ABdhPJwuCUB08FKqIqeV2OFD49RGivhS9xB6kxX8kcnvBCHcGx94d97vdv6gwzyEM7FH7AeIW/tInQ==
-X-Received: by 2002:a17:906:5d16:b0:6fe:b420:5e9d with SMTP id g22-20020a1709065d1600b006feb4205e9dmr38478119ejt.254.1653845772688;
-        Sun, 29 May 2022 10:36:12 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id rh28-20020a17090720fc00b006f3ef214ddesm3274151ejb.68.2022.05.29.10.36.12
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 May 2022 10:36:12 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id e25so1300189wra.11
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 10:36:12 -0700 (PDT)
-X-Received: by 2002:a05:6000:1b0f:b0:210:313a:ef2a with SMTP id
- f15-20020a0560001b0f00b00210313aef2amr2361937wrz.281.1653845322509; Sun, 29
- May 2022 10:28:42 -0700 (PDT)
+        Sun, 29 May 2022 13:32:30 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BE4E00C;
+        Sun, 29 May 2022 10:32:28 -0700 (PDT)
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 24THW0Ph026763;
+        Mon, 30 May 2022 02:32:00 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 24THW0Ph026763
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653845521;
+        bh=PJmvZYGDP63aMnL4Yd3Xe0U7Djvz59KZkG+0G/8W6lI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tY4KV1xAR5/Zpm6597aHezsFqX4emA6FElnJ7lPEGUH+99C3D0mZlEdfD2guuixGt
+         NBnKkOZFs5vMmUWJ8/7CNU8qgg+bjgNdELEzI4FWa8geBTIUx02K3UN6nXe/FZQt1s
+         omw1lBMUc9gDF85BOdF1ftd6XSEtSNg3W8Fb3OLA+x4KILxyzyxUcrN3T41oakn4b6
+         kn0BTgKejUJkPElOvOaPCFIWvk/RbpNFukN8U1W+sCWGs1BBOZAk5LmdQB7hspMdm5
+         t8Wm6jHDQul6aEZu7KWDyZpwwyM24nOIJlWnK+58UykmA8EfbVKx5qdl1Ev06CGa9d
+         CrHjO8NiH2Kyw==
+X-Nifty-SrcIP: [209.85.210.182]
+Received: by mail-pf1-f182.google.com with SMTP id f21so8662645pfa.3;
+        Sun, 29 May 2022 10:32:00 -0700 (PDT)
+X-Gm-Message-State: AOAM530tlS0bv0vc8cS9sHyq+yGn/9jixCMiqOj09fIp4MxYvrHwJt1g
+        hIwDlDrA36Ts9Q/HOfBQ3ijpSEeWc6QD1koEJxY=
+X-Google-Smtp-Source: ABdhPJzZIrreolgyafL3/q0hGVRVntHJqsJIF/RwU2GjXBIoTcXZL2NWm5F+NsN7BtzDOw1Ku1Rm/1vu7PXASoJHXjE=
+X-Received: by 2002:a05:6a00:234b:b0:519:c7c:e58b with SMTP id
+ j11-20020a056a00234b00b005190c7ce58bmr19449243pfj.32.1653845519928; Sun, 29
+ May 2022 10:31:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220529154535.371758-1-acme@kernel.org>
-In-Reply-To: <20220529154535.371758-1-acme@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 29 May 2022 10:28:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj1+W6VXeRG7XXO7zSsTe3mACdrPY4PccMNPhC3seLELg@mail.gmail.com>
-Message-ID: <CAHk-=wj1+W6VXeRG7XXO7zSsTe3mACdrPY4PccMNPhC3seLELg@mail.gmail.com>
-Subject: Re: [GIT PULL] perf tools changes for v5.19: 2nd batch
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>,
+References: <20220528154704.2576290-1-masahiroy@kernel.org> <CA+icZUU7zUCD=xrrYLQyKkDMC-Fj-PFcmHbTiPU8ytOpYq8ZDw@mail.gmail.com>
+In-Reply-To: <CA+icZUU7zUCD=xrrYLQyKkDMC-Fj-PFcmHbTiPU8ytOpYq8ZDw@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 30 May 2022 02:30:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQZE-JE67HGTzy7r7mRv_2Gzv0LWUOoVr82V9iNx4q-4g@mail.gmail.com>
+Message-ID: <CAK7LNAQZE-JE67HGTzy7r7mRv_2Gzv0LWUOoVr82V9iNx4q-4g@mail.gmail.com>
+Subject: Re: [PATCH 1/4] kbuild: remove redundant cleanups in scripts/link-vmlinux.sh
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Carsten Haitzler <carsten.haitzler@arm.com>,
-        Claire Jensen <cjense@google.com>,
-        Dmitriy Vyukov <dvyukov@google.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Eric Lin <eric.lin@sifive.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        German Gomez <german.gomez@arm.com>,
-        Ian Rogers <irogers@google.com>,
-        James Clark <james.clark@arm.com>,
-        Joe Mario <jmario@redhat.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Michal Marek <michal.lkml@markovi.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 29, 2022 at 8:45 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
+On Sun, May 29, 2022 at 11:38 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
 >
-> - Add BPF based off-CPU profiling.
+> On Sat, May 28, 2022 at 10:20 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > These are cleaned by the top Makefile.
+> >
+> > vmlinux.o and .vmlinux.d matches the '*.[aios]' and '.*.d' patterns
+> > respectively.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> I applied this patchset on top of yesterday's kbuild.git#for-next
+> (today's did not fit due to "kbuild: do not try to parse *.cmd files
+> for objects provided by compiler").
+>
+> Might be related to this patchset or not:
+>
+> $ LC_ALL=C ll .*vmlinux*export*
+> -rw-r--r-- 1 dileks dileks 4.2K May 29 15:11 ..vmlinux.export.o.cmd
+> -rw-r--r-- 1 dileks dileks 508K May 29 15:11 .vmlinux.export.c
+> -rw-r--r-- 1 dileks dileks 2.6M May 29 15:11 .vmlinux.export.o
+>
+> You see the leading double-dot for ..vmlinux.export.o.cmd - intended or not?
 
-I suspect this could have come with a bit more explanation of what
-"off-CPU profiling" means.
+This is intended.
 
-It seems to be "account time when process was scheduled away to
-caller", but I had to go look at the commits to figure that out.
+The source file (.vmlinux.export.c) is a dot file.
 
-Partly unrelated side note: I've occasionally looked for "useful perf
-recipes". Not from kernel developers, but from people who solved real
-performance problems using perf, giving useful examples.
+.*.cmd prepends one more dot.
 
-                  Linus
+
+
+>
+> Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
+>
+> -Sedat-
+>
+> > ---
+> >
+> >  scripts/link-vmlinux.sh | 2 --
+> >  1 file changed, 2 deletions(-)
+> >
+> > diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> > index a7f6196c7e41..844fc0125d72 100755
+> > --- a/scripts/link-vmlinux.sh
+> > +++ b/scripts/link-vmlinux.sh
+> > @@ -309,8 +309,6 @@ cleanup()
+> >         rm -f System.map
+> >         rm -f vmlinux
+> >         rm -f vmlinux.map
+> > -       rm -f vmlinux.o
+> > -       rm -f .vmlinux.d
+> >         rm -f .vmlinux.objs
+> >         rm -f .vmlinux.export.c
+> >  }
+> > --
+> > 2.32.0
+> >
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

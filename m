@@ -2,167 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB88537084
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 12:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C096E537087
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 12:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbiE2KMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 06:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
+        id S229832AbiE2KNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 06:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiE2KMG (ORCPT
+        with ESMTP id S229529AbiE2KNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 06:12:06 -0400
-X-Greylist: delayed 533 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 29 May 2022 03:12:02 PDT
-Received: from mail.boiledscript.com (unknown [192.151.158.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0938425C47;
-        Sun, 29 May 2022 03:12:02 -0700 (PDT)
-Date:   Sun, 29 May 2022 18:02:30 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ultrarare.space;
-        s=dkim; t=1653818579;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jjq1DAlPmCj+12oFmUYPRHLaYrupTtjphtRxoBdBCnw=;
-        b=sKl9nspg5/4kfLQj7l2aFAAkdPdc7wlvjLRpsOr0mfO1F5G0hSdMUvZdpz0uxYNR7dYRcO
-        /Sb0OldzsAHdEwZLD8amFjSjEph4L6PPE5E1lz7rU6bnN/Ywv1zwyOIqBC2Lu7Qq9reeEv
-        54M/bSEqRngT4A7MtoUDehlPY5vgEFckWSJ9VTckmOp539a4mVtVCc7J9U9PEC+eFUy5m4
-        fAwYLY5Gbn4ib2epSWk3CC7EUpDs6uJ+vnxdNLyEP9mpNU+FTxF0Bm2aWFdGIBjGLEcNG8
-        CTmBbuEG57CjsSBVP+XXP15vKNlbSl95xygJ7R2fZdipA8jZBotbQ2T7H4J5hQ==
-From:   Hilton Chain <hako@ultrarare.space>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] HID: apple: Reset quirks when Fn key is not found
-Message-ID: <20220529180230.17e9a0f9@ultrarare.space>
+        Sun, 29 May 2022 06:13:08 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467361CB01
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 03:13:06 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id jx22so15876101ejb.12
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 03:13:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bUy1BLSfINnv6ERfgwnR9eRuDhaZE3UpSRaIiNc0rCk=;
+        b=fOCVaeWekIDBF1ZTj+ZMJy83A6Ex7xJs/MN5E3AF/v8o5zvs2ENqHEpThyFQUumh+d
+         VTifvXiSxPk5W/+dDVbHcSm5nTN5ozMBfO9Xr2FdVvVMuF7/tscs3txTgA6KQDGAvteR
+         R8vvvIKMs07CwMPbo+dU74xrLJqj+jG2KEWkS5XBl5zzOi46h2eqERFGuaD0JLzwjFZq
+         9pqqEmsGVdEumazbZKkSsonZV/jyU4DZRO5FA7hpOZlKR6ET6NlcMfI/cN3WlBxTIcWW
+         m2dopHfGh1WUkzNIKBbPOgtZwYrEdO/nOHnZUVwUP1vi18jBhR2wgfhCwGWyMO9HSjhj
+         ktSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bUy1BLSfINnv6ERfgwnR9eRuDhaZE3UpSRaIiNc0rCk=;
+        b=2yHISUpL8+Si0tE2TlSYwdsZDMiYQ0gE+/AKQMbbgKhwKxOuCJk3HpJDTHNfVmc4AC
+         IebvWYPBSlgidy0ET8ZMutdRwoNRZwFoHXM5bsq+mwrvWIB1qP472Az9B73GgQA7Ugbx
+         RaTePtbgw175dkk4Lx5m8kUQpoAuaqWUXAyVItKgO69fQmgUOHub02Lk1oX3iplbYP18
+         N84jq660VMnk1GY7Fe9eKISH4Nuy0vVZUspBpWCfa6ZgzGSC0pc6b7NHW+hQpPCKdYud
+         6oukpNjHUC8SiPb9saGpV86CJT40QguTbnvxG23UzmMyP5G1sA1+9NRUny5OxkMusBLX
+         6ZzQ==
+X-Gm-Message-State: AOAM532Ub1YJtTehBMj9jRUACLOlFUlX/w5lucSuaMM0flyzmqtIpi7e
+        IfXV+/U5wLEU+By5eHw+N/Vwzw==
+X-Google-Smtp-Source: ABdhPJwRnn73I0h92HQD0I7VsbBaBGvIs+5l+glq3XnZt5443BhXX1yMDrfdu0PUF5ljjdSKKrk0/w==
+X-Received: by 2002:a17:907:7f0f:b0:6fe:b18c:72cf with SMTP id qf15-20020a1709077f0f00b006feb18c72cfmr38239293ejc.203.1653819184771;
+        Sun, 29 May 2022 03:13:04 -0700 (PDT)
+Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id 12-20020a50874c000000b0042bc5a536edsm4760532edv.28.2022.05.29.03.13.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 May 2022 03:13:04 -0700 (PDT)
+Message-ID: <09803412-640a-6c9a-fe5a-b0af8cd10f0f@linaro.org>
+Date:   Sun, 29 May 2022 12:13:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-Authentication-Results: mail.boiledscript.com;
-        auth=pass smtp.mailfrom=hako@ultrarare.space
-X-Spamd-Bar: /
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4] ARM: dts: aspeed: Adding Jabil Rubypass BMC
+Content-Language: en-US
+To:     David Wang <David_Wang6097@jabil.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     edward_chen@jabil.com, ben_pai@jabil.com
+References: <20220527042708.805444-1-David_Wang6097@jabil.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220527042708.805444-1-David_Wang6097@jabil.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=46rom 6813a0a2c0f1a965f650abba3e1e4a8e79b40c26 Mon Sep 17 00:00:00 2001
-From: Hilton Chain <hako@ultrarare.space>
-Date: Sun, 29 May 2022 16:25:57 +0800
-Subject: [PATCH] HID: apple: Reset quirks when Fn key is not found
+On 27/05/2022 06:27, David Wang wrote:
+> The initial introduction of the jabil server with AST2600 BMC SoC.
+> 
+> ---
+> 
+> v4
+> - Add document the new compatible.
+> - Delete redundant blank lines.
+> - Add a new line at end of file.
 
-Commit a5fe7864d8ad ("HID: apple: Do not reset quirks when the Fn key is
-not found") re-involves the fnmode issue fixed in commit a5d81646fa29
-("HID: apple: Disable Fn-key key-re-mapping on clone keyboards"), as linked
-below.
+Thanks for the changes but several fixes are still needed. If some of my
+comments are a bit unspecific, you can always ask for clarification.
 
-To make things work again, this commit reverts a5fe7864d8ad ("HID: apple:
-Do not reset quirks when the Fn key is not found")  and the recent
-workaround fa33382c7f74 ("HID: apple: Properly handle function keys on
-Keychron keyboards")
+> 
+> v3
+> - Adjustment entries are ordered by name.
+> - Remove the bootargs property and modify the stdout-path property.
+> - Group multiple LED devices into a group.
+> - Modify the "gpio3_71" node name format.
+> - Delete unneeded blank line at the end.
+> 
+> v2
+> - Disable empty i2c bus.
+> - Remove gfx node because aspeed-g6.dtsi isn't supported.
+> - Modify the led format and add some properties.
+> - Fix wrong indentation.
+> - Add stdout property in chosen node.
+> - Rename temp to temperature-sensor in i2c bus 0.
+> 
+> ---
+> 
+> Signed-off-by: David Wang <David_Wang6097@jabil.com>
+> ---
+>  .../bindings/arm/jabil/jabil-boards.yaml      |  24 +
+>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>  arch/arm/boot/dts/Makefile                    |   1 +
+>  .../boot/dts/aspeed-bmc-jabil-rubypass.dts    | 442 ++++++++++++++++++
+>  4 files changed, 469 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/jabil/jabil-boards.yaml
+>  create mode 100644 arch/arm/boot/dts/aspeed-bmc-jabil-rubypass.dts
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/jabil/jabil-boards.yaml b/Documentation/devicetree/bindings/arm/jabil/jabil-boards.yaml
+> new file mode 100644
+> index 000000000000..dde7791aa8bc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/jabil/jabil-boards.yaml
+> @@ -0,0 +1,24 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/jabil/jabil-boards.yaml#
 
-Link: https://lore.kernel.org/linux-input/f82dd7a1-a5c6-b651-846c-29f6df943=
-6af@redhat.com/
-Fixes: a5fe7864d8ad ("HID: apple: Do not reset quirks when the Fn key is no=
-t found")
-Signed-off-by: Hilton Chain <hako@ultrarare.space>
----
- drivers/hid/hid-apple.c | 25 ++++++-------------------
- 1 file changed, 6 insertions(+), 19 deletions(-)
+This should be aspeed. Let me send a send a base patch for all Aspeed
+boards.
 
-diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
-index 42a568902f49..3b666dcb63f0 100644
---- a/drivers/hid/hid-apple.c
-+++ b/drivers/hid/hid-apple.c
-@@ -21,7 +21,6 @@
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/timer.h>
--#include <linux/string.h>
-=20
- #include "hid-ids.h"
-=20
-@@ -36,17 +35,16 @@
- #define APPLE_NUMLOCK_EMULATION	BIT(8)
- #define APPLE_RDESC_BATTERY	BIT(9)
- #define APPLE_BACKLIGHT_CTL	BIT(10)
--#define APPLE_IS_KEYCHRON	BIT(11)
-=20
- #define APPLE_FLAG_FKEY		0x01
-=20
- #define HID_COUNTRY_INTERNATIONAL_ISO	13
- #define APPLE_BATTERY_TIMEOUT_MS	60000
-=20
--static unsigned int fnmode =3D 3;
-+static unsigned int fnmode =3D 1;
- module_param(fnmode, uint, 0644);
- MODULE_PARM_DESC(fnmode, "Mode of fn key on Apple keyboards (0 =3D disable=
-d, "
--		"1 =3D fkeyslast, 2 =3D fkeysfirst, [3] =3D auto)");
-+		"[1] =3D fkeyslast, 2 =3D fkeysfirst)");
-=20
- static int iso_layout =3D -1;
- module_param(iso_layout, int, 0644);
-@@ -351,7 +349,6 @@ static int hidinput_apple_event(struct hid_device *hid,=
- struct input_dev *input,
- 	const struct apple_key_translation *trans, *table;
- 	bool do_translate;
- 	u16 code =3D 0;
--	unsigned int real_fnmode;
-=20
- 	u16 fn_keycode =3D (swap_fn_leftctrl) ? (KEY_LEFTCTRL) : (KEY_FN);
-=20
-@@ -362,13 +359,7 @@ static int hidinput_apple_event(struct hid_device *hid=
-, struct input_dev *input,
- 		return 1;
- 	}
-=20
--	if (fnmode =3D=3D 3) {
--		real_fnmode =3D (asc->quirks & APPLE_IS_KEYCHRON) ? 2 : 1;
--	} else {
--		real_fnmode =3D fnmode;
--	}
--
--	if (real_fnmode) {
-+	if (fnmode) {
- 		if (hid->product =3D=3D USB_DEVICE_ID_APPLE_ALU_WIRELESS_ANSI ||
- 		    hid->product =3D=3D USB_DEVICE_ID_APPLE_ALU_WIRELESS_ISO ||
- 		    hid->product =3D=3D USB_DEVICE_ID_APPLE_ALU_WIRELESS_JIS ||
-@@ -415,7 +406,7 @@ static int hidinput_apple_event(struct hid_device *hid,=
- struct input_dev *input,
-=20
- 			if (!code) {
- 				if (trans->flags & APPLE_FLAG_FKEY) {
--					switch (real_fnmode) {
-+					switch (fnmode) {
- 					case 1:
- 						do_translate =3D !asc->fn_on;
- 						break;
-@@ -664,14 +655,10 @@ static int apple_input_configured(struct hid_device *=
-hdev,
- {
- 	struct apple_sc *asc =3D hid_get_drvdata(hdev);
-=20
-+	/* Handling some non-Apple keyboards which use Apple's vendor ID */
- 	if ((asc->quirks & APPLE_HAS_FN) && !asc->fn_found) {
- 		hid_info(hdev, "Fn key not found (Apple Wireless Keyboard clone?), disab=
-ling Fn key handling\n");
--		asc->quirks &=3D ~APPLE_HAS_FN;
--	}
--
--	if (strncmp(hdev->name, "Keychron", 8) =3D=3D 0) {
--		hid_info(hdev, "Keychron keyboard detected; function keys will default t=
-o fnmode=3D2 behavior\n");
--		asc->quirks |=3D APPLE_IS_KEYCHRON;
-+		asc->quirks =3D 0;
- 	}
-=20
- 	return 0;
 
-base-commit: fdaf9a5840acaab18694a19e0eb0aa51162eeeed
---=20
-2.36.1
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Jabil Bmc and Aspeed SoC based boards
+> +
+> +maintainers:
+> +  - David Wang <David_wang6097@jabil.com>
+> +
+> +properties:
+> +  $nodename:
+> +    const: '/'
+> +  compatible:
+> +    oneOf:
+> +      - description: Aspeed ast2600 bmc boards
+> +        items:
+> +          - const: jabil,rbp                    # eaglestream platform
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index 01430973ecec..69738483c059 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -624,6 +624,8 @@ patternProperties:
+>      description: Jiandangjing Technology Co., Ltd.
+>    "^joz,.*":
+>      description: JOZ BV
+> +  "^jabil,.*":
+> +    description: Jabil Design Service Branch (Sanchong)
 
+The list is ordered alphabetically, so jabil goes before. This should be
+also separate patch.
+
+>    "^kam,.*":
+>      description: Kamstrup A/S
+>    "^karo,.*":
+Best regards,
+Krzysztof

@@ -2,329 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E336537145
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576C2537148
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiE2OJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 10:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S230360AbiE2ON5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 10:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiE2OJJ (ORCPT
+        with ESMTP id S230171AbiE2ONz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 10:09:09 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0B33D4AA
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 07:09:07 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id er5so10541599edb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 07:09:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZaM+BiSV1BrvEzxzlRp9jfUPykxbTVypzmZTbnaGAPs=;
-        b=wvaRWn4/+BJiy0S1h9v9tqqqfvBnNb63j77H7vTwyu76KnQvrCaDChidIgKmwU+Mpd
-         sytm01VKyDCCOOHyLi3woFvAeP13G+XMnJXaGuhk7oYpsrxfZCYnxBCzwQ6qBcxyTCkj
-         WjLFhAUBk2RJuXaA5BmEWDr7+NoNDnMsHfL3EAaVg9JH7+V+NiCV/quKhMg6/drIf6FY
-         XHfMXY+KT+GwyswUqlYwkNmPdeYospSZikWx9+H/vpvkZL1GQVVoAZCcBr1g8JukVTe6
-         ugPsuUQMnFCiQb04HYEeSuqMLqWFXFcd0lfGPCttomaT0A6LZrwFJuKeicFwCusx5lDy
-         a94g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZaM+BiSV1BrvEzxzlRp9jfUPykxbTVypzmZTbnaGAPs=;
-        b=IuZ2truoFcwueFeoK/ltU9btHdFt9gObWeumF89VK9tGCduNmWhW/9KLUPgW6BuXSn
-         5nY5AL4AJ18FvillJIPQDoPkWZEkUY1iU5ynnWOJht9wvlOAKPzs9HnPnbR/RE8orSGy
-         pINcD4pQm9+0u1Anwf6X55N7+m7RgIJhrJKs+sn9Evhry46OnPW77wVz3z/6KW0cAUjd
-         sTzzgRUUxeZ4QOJPOVN78cmJpCZru0rSjTKkJvTYP7KGA5dq9zQaA6rEz+1KLL+7X/GU
-         KlHXOFGoLtkdBiqd9V1mM2UPeONzJC7faqmOGPVOgualPJTBfIj69g7Xyi7ej31hZ0v2
-         geTw==
-X-Gm-Message-State: AOAM531fGKqSdd1qQ7BYKVZs5AFUw0YmvkTlc8MVJRuumV6ZqrDFQCod
-        6Ab2sPeSc6D4Sv5Sc/nWq+X9hg==
-X-Google-Smtp-Source: ABdhPJyg7TEdtrfo9pOsocT6Pzs1x2LEyPxKwNZrRr2zj2dLepyQzatLUc0TjBU/mgwGAASpiw6pXw==
-X-Received: by 2002:a05:6402:1713:b0:42d:cb5e:d799 with SMTP id y19-20020a056402171300b0042dcb5ed799mr3684983edu.34.1653833346210;
-        Sun, 29 May 2022 07:09:06 -0700 (PDT)
-Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id i2-20020a50d742000000b0042617ba63casm5028584edj.84.2022.05.29.07.09.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 May 2022 07:09:05 -0700 (PDT)
-Message-ID: <149fbcfe-b62c-63a9-6c38-100d493788c3@linaro.org>
-Date:   Sun, 29 May 2022 16:09:04 +0200
+        Sun, 29 May 2022 10:13:55 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC99741980
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 07:13:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653833634; x=1685369634;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=v/ebwrVLFzJhynLx4/TGkQgVlAg48YwERRA1prVq7P4=;
+  b=jLXriZltF1KnRPuJPPFGgtGrd2Xg5FkY7SUvki1zASwueuT7okn37MwT
+   jSp2p9seoBvPxGVuu/HHZCnW/dwpMUF5yu/gbVqe5HOo2F/HBiLIAH8/a
+   HlKto4baQ4vOT4mN2H8iCOIzwa2gljW73sZucT1fU2HOS0wQHx2SfpIb5
+   mfS5FwYEbGBzlI8y0qiDRaAtpiZhUjausanG2+0E+orrbi8rb0FJBgh/x
+   emw7PhSkwID9x+8pRgnM4wKq2GoRuYAY0QsUfwXRFTQ0MIyxLz+jXwScn
+   FnvnQ9cYXVM+rm8ppKro4DtEt6hkbaik0FoXCyRdONepIX+qhipfJra0D
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10361"; a="256866979"
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="256866979"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2022 07:13:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="550989252"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 29 May 2022 07:13:44 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nvJfs-000148-55;
+        Sun, 29 May 2022 14:13:44 +0000
+Date:   Sun, 29 May 2022 22:13:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c:413 amdgpu_get_xgmi_hive()
+ warn: inconsistent indenting
+Message-ID: <202205292210.BD83pOan-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/6] ASoC: tegra: Add binding doc for OPE module
-Content-Language: en-US
-To:     Sameer Pujar <spujar@nvidia.com>, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        thierry.reding@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        perex@perex.cz, tiwai@suse.com
-Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <1653647172-2569-1-git-send-email-spujar@nvidia.com>
- <1653647172-2569-2-git-send-email-spujar@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1653647172-2569-2-git-send-email-spujar@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/05/2022 12:26, Sameer Pujar wrote:
-> This patch adds YAML schema for DT bindings of Output Processing
-> Engine (OPE) module. It consists of Parametric Equalizer (PEQ)
-> and Multi Band Dynamic Range Compressor (MBDRC) sub blocks and
-> binding doc for these blocks are added as well. The OPE will be
-> registered as an ASoC component and can be plugged into an audio
-> path as per need via ALSA mixer controls. The DT bindings are
-> applicable on Tegra210 and later SoCs where OPE module is present.
-> 
-> Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-> ---
->  .../bindings/sound/nvidia,tegra210-ahub.yaml       |  4 +
->  .../bindings/sound/nvidia,tegra210-mbdrc.yaml      | 47 ++++++++++++
->  .../bindings/sound/nvidia,tegra210-ope.yaml        | 87 ++++++++++++++++++++++
->  .../bindings/sound/nvidia,tegra210-peq.yaml        | 48 ++++++++++++
->  4 files changed, 186 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/nvidia,tegra210-mbdrc.yaml
->  create mode 100644 Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml
->  create mode 100644 Documentation/devicetree/bindings/sound/nvidia,tegra210-peq.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra210-ahub.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra210-ahub.yaml
-> index 6df6f85..47b6e71 100644
-> --- a/Documentation/devicetree/bindings/sound/nvidia,tegra210-ahub.yaml
-> +++ b/Documentation/devicetree/bindings/sound/nvidia,tegra210-ahub.yaml
-> @@ -110,6 +110,10 @@ patternProperties:
->      type: object
->      $ref: nvidia,tegra186-asrc.yaml#
->  
-> +  '^processing-engine@[0-9a-f]+$':
-> +    type: object
-> +    $ref: nvidia,tegra210-ope.yaml#
-> +
->  required:
->    - compatible
->    - reg
-> diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra210-mbdrc.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra210-mbdrc.yaml
-> new file mode 100644
-> index 0000000..0d55328
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/nvidia,tegra210-mbdrc.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/nvidia,tegra210-mbdrc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Tegra210 MBDRC Device Tree Bindings
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   664a393a2663a0f62fc1b18157ccae33dcdbb8c8
+commit: cfbb6b0047448e2d986160d9f30d60f604d9ad0f drm/amdgpu: Rework reset domain to be refcounted.
+date:   4 months ago
+config: arc-randconfig-m031-20220524 (https://download.01.org/0day-ci/archive/20220529/202205292210.BD83pOan-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
 
-Previous comments - s/Device Tree Bindings//
- -  still applies. Please do not ignore it.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +
-> +description:
-> +  The Multi Band Dynamic Range Compressor (MBDRC) is part of Output
-> +  Processing Engine (OPE) which interfaces with Audio Hub (AHUB) via
-> +  Audio Client Interface (ACIF). MBDRC can be used as a traditional
-> +  single full band or a dual band or a multi band dynamic processor.
-> +
-> +maintainers:
-> +  - Jon Hunter <jonathanh@nvidia.com>
-> +  - Mohan Kumar <mkumard@nvidia.com>
-> +  - Sameer Pujar <spujar@nvidia.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: nvidia,tegra210-mbdrc
-> +      - items:
-> +          - enum:
-> +              - nvidia,tegra234-mbdrc
-> +              - nvidia,tegra194-mbdrc
-> +              - nvidia,tegra186-mbdrc
-> +          - const: nvidia,tegra210-mbdrc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    dynamic-range-compressor@702d8200 {
-> +        compatible = "nvidia,tegra210-mbdrc";
-> +        reg = <0x702d8200 0x200>;
-> +    };
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml
-> new file mode 100644
-> index 0000000..7cbc756
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/nvidia,tegra210-ope.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Tegra210 OPE Device Tree Bindings
+New smatch warnings:
+drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c:413 amdgpu_get_xgmi_hive() warn: inconsistent indenting
 
-Ditto.
+Old smatch warnings:
+drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c:473 amdgpu_xgmi_set_pstate() warn: ignoring unreachable code.
 
-> +
-> +description:
-> +  The Output Processing Engine (OPE) is one of the AHUB client. It has
-> +  PEQ (Parametric Equalizer) and MBDRC (Multi Band Dynamic Range Compressor)
-> +  sub blocks for data processing.
-> +
-> +maintainers:
-> +  - Jon Hunter <jonathanh@nvidia.com>
-> +  - Mohan Kumar <mkumard@nvidia.com>
-> +  - Sameer Pujar <spujar@nvidia.com>
-> +
-> +allOf:
-> +  - $ref: name-prefix.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: nvidia,tegra210-ope
-> +      - items:
-> +          - enum:
-> +              - nvidia,tegra234-ope
-> +              - nvidia,tegra194-ope
-> +              - nvidia,tegra186-ope
-> +          - const: nvidia,tegra210-ope
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 1
-> +
-> +  ranges: true
-> +
-> +  sound-name-prefix:
-> +    pattern: "^OPE[1-9]$"
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    properties:
-> +      port@0:
-> +        $ref: audio-graph-port.yaml#
-> +        unevaluatedProperties: false
-> +        description:
-> +          OPE ACIF (Audio Client Interface) input port. This is connected
-> +          to corresponding ACIF output port on AHUB (Audio Hub).
-> +
-> +      port@1:
-> +        $ref: audio-graph-port.yaml#
-> +        unevaluatedProperties: false
-> +        description:
-> +          OPE ACIF output port. This is connected to corresponding ACIF
-> +          input port on AHUB.
-> +
-> +patternProperties:
-> +  '^equalizer@[0-9a-f]+$':
-> +    type: object
-> +    $ref: nvidia,tegra210-peq.yaml#
-> +
-> +  '^dynamic-range-compressor@[0-9a-f]+$':
-> +    type: object
-> +    $ref: nvidia,tegra210-mbdrc.yaml#
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    processing-engine@702d8000 {
-> +        compatible = "nvidia,tegra210-ope";
-> +        reg = <0x702d8000 0x100>;
-> +        sound-name-prefix = "OPE1";
-> +    };
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra210-peq.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra210-peq.yaml
-> new file mode 100644
-> index 0000000..fea4c63
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/nvidia,tegra210-peq.yaml
-> @@ -0,0 +1,48 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/nvidia,tegra210-peq.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Tegra210 PEQ Device Tree Bindings
+vim +413 drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
 
-Ditto
+   363	
+   364	
+   365	
+   366	struct amdgpu_hive_info *amdgpu_get_xgmi_hive(struct amdgpu_device *adev)
+   367	{
+   368		struct amdgpu_hive_info *hive = NULL;
+   369		int ret;
+   370	
+   371		if (!adev->gmc.xgmi.hive_id)
+   372			return NULL;
+   373	
+   374		if (adev->hive) {
+   375			kobject_get(&adev->hive->kobj);
+   376			return adev->hive;
+   377		}
+   378	
+   379		mutex_lock(&xgmi_mutex);
+   380	
+   381		list_for_each_entry(hive, &xgmi_hive_list, node)  {
+   382			if (hive->hive_id == adev->gmc.xgmi.hive_id)
+   383				goto pro_end;
+   384		}
+   385	
+   386		hive = kzalloc(sizeof(*hive), GFP_KERNEL);
+   387		if (!hive) {
+   388			dev_err(adev->dev, "XGMI: allocation failed\n");
+   389			hive = NULL;
+   390			goto pro_end;
+   391		}
+   392	
+   393		/* initialize new hive if not exist */
+   394		ret = kobject_init_and_add(&hive->kobj,
+   395				&amdgpu_xgmi_hive_type,
+   396				&adev->dev->kobj,
+   397				"%s", "xgmi_hive_info");
+   398		if (ret) {
+   399			dev_err(adev->dev, "XGMI: failed initializing kobject for xgmi hive\n");
+   400			kobject_put(&hive->kobj);
+   401			kfree(hive);
+   402			hive = NULL;
+   403			goto pro_end;
+   404		}
+   405	
+   406		/**
+   407		 * Avoid recreating reset domain when hive is reconstructed for the case
+   408		 * of reset the devices in the XGMI hive during probe for SRIOV
+   409		 * See https://www.spinics.net/lists/amd-gfx/msg58836.html
+   410		 */
+   411		if (adev->reset_domain->type != XGMI_HIVE) {
+   412			hive->reset_domain = amdgpu_reset_create_reset_domain(XGMI_HIVE, "amdgpu-reset-hive");
+ > 413				if (!hive->reset_domain) {
+   414					dev_err(adev->dev, "XGMI: failed initializing reset domain for xgmi hive\n");
+   415					ret = -ENOMEM;
+   416					kobject_put(&hive->kobj);
+   417					kfree(hive);
+   418					hive = NULL;
+   419					goto pro_end;
+   420				}
+   421		} else {
+   422			amdgpu_reset_get_reset_domain(adev->reset_domain);
+   423			hive->reset_domain = adev->reset_domain;
+   424		}
+   425	
+   426		hive->hive_id = adev->gmc.xgmi.hive_id;
+   427		INIT_LIST_HEAD(&hive->device_list);
+   428		INIT_LIST_HEAD(&hive->node);
+   429		mutex_init(&hive->hive_lock);
+   430		atomic_set(&hive->number_devices, 0);
+   431		task_barrier_init(&hive->tb);
+   432		hive->pstate = AMDGPU_XGMI_PSTATE_UNKNOWN;
+   433		hive->hi_req_gpu = NULL;
+   434	
+   435		/*
+   436		 * hive pstate on boot is high in vega20 so we have to go to low
+   437		 * pstate on after boot.
+   438		 */
+   439		hive->hi_req_count = AMDGPU_MAX_XGMI_DEVICE_PER_HIVE;
+   440		list_add_tail(&hive->node, &xgmi_hive_list);
+   441	
+   442	pro_end:
+   443		if (hive)
+   444			kobject_get(&hive->kobj);
+   445		mutex_unlock(&xgmi_mutex);
+   446		return hive;
+   447	}
+   448	
 
-> +
-> +description:
-> +  The Parametric Equalizer (PEQ) is a cascade of biquad filters with
-> +  each filter tuned based on certain parameters. It can be used to
-> +  equalize the irregularities in the speaker frequency response.
-> +  PEQ sits inside Output Processing Engine (OPE) which interfaces
-> +  with Audio Hub (AHUB) via Audio Client Interface (ACIF).
-> +
-> +maintainers:
-> +  - Jon Hunter <jonathanh@nvidia.com>
-> +  - Mohan Kumar <mkumard@nvidia.com>
-> +  - Sameer Pujar <spujar@nvidia.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: nvidia,tegra210-peq
-> +      - items:
-> +          - enum:
-> +              - nvidia,tegra234-peq
-> +              - nvidia,tegra194-peq
-> +              - nvidia,tegra186-peq
-> +          - const: nvidia,tegra210-peq
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    equalizer@702d8100 {
-> +        compatible = "nvidia,tegra210-peq";
-> +        reg = <0x702d8100 0x100>;
-> +    };
-> +
-> +...
-
-
-Best regards,
-Krzysztof
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

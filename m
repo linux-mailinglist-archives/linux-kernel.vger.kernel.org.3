@@ -2,122 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E31536FFF
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 08:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC27537000
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 08:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiE2G0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 02:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        id S229525AbiE2G0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 02:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiE2G0S (ORCPT
+        with ESMTP id S229483AbiE2G0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 02:26:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C356793B4
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 23:26:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E872B80A07
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 06:26:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21C0CC385A9;
-        Sun, 29 May 2022 06:26:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653805573;
-        bh=UF+6G0/96AH95hL9450x59das5x8gxwXIY/JTdRDlwk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=u9zJW5inNplLlRKcX5fmLYWIkbJ6m3I8J5RY5q6YQfEV/AECd0wP6Is8IE2coQWvY
-         PCbV87akiusFFcooKNI3wTf8jKMGV7t80GsDQhO559YRGTwaagVkV1HBgshMd+aEE2
-         msOC+lnEok+LO8uTehCduUoZXO9pzf0o0l+euyS2GcfUjx9X15BezvIS1Tn2RIEsTX
-         AGju8X3aacSOAMzu7R3bMNIh2yGdjqzOOpQNA5wQVFKoS8gsx3zx3YN99JXYUBgyyL
-         ahg1drB3foK2/5gTLiTihu3ou9R8yQ9/Pu9sV2r+BJ6WYJvWOi4k9WIMpA8R929v+A
-         2Wf9l4Qj3ZWnw==
-Message-ID: <fbb1ba90-a9f7-cd83-3bb4-700eff3b2497@kernel.org>
-Date:   Sun, 29 May 2022 14:26:10 +0800
+        Sun, 29 May 2022 02:26:43 -0400
+Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995ED655F
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 23:26:41 -0700 (PDT)
+Received: by mail-pj1-f66.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso1457165pjl.3
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 23:26:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nAodg8IpCf1YlPCwEY/9oZB3Kk0d9gb9lVermXkWYgQ=;
+        b=Z4WxoEZlCnEh/y1SI1t01qmuDfJ5QYethtvW6jZZjfTqVHfJm6p6pZd2t6GDTF6t7V
+         hsAEgPrlO8rQttz8Gjrb1GST6pYYGoWWuvpFhEHR3/aqaIsSjyTCY5PK/d6r4TB1Rxkn
+         Wfca8ev68s4UE1eXsEmm6M8vWT5iisX/J67NwiEYx9v5bCCrT6FZ21LuuvkY0/NEFug7
+         GE8JXTQyisxLg7dXqhVRljTV+dqlro1ytpWERCnZXqMQV4B/pgr+sufMMI7MxvW+IAP1
+         S6XCz06QDfK3dNgtH1HQHg1Q7igdmz+MXTUpjvSxJ5wz1TTTGvu7rJYRsr5Xmep8B/PD
+         LxzQ==
+X-Gm-Message-State: AOAM532rSKYNMvGDJlsp/RwkQHlfqXoYmteZxMSa0HdfP0REhXIEkWqV
+        FlD/o3FV42sMyfHstY24gw==
+X-Google-Smtp-Source: ABdhPJzlemj8sWhGGFITlnMkOA8aFFrOc3HF39ff43T9ebwbkrJKKloZRH00669Xb65j2g2+PtbrOg==
+X-Received: by 2002:a17:903:2c7:b0:158:2f26:6016 with SMTP id s7-20020a17090302c700b001582f266016mr50903382plk.154.1653805601094;
+        Sat, 28 May 2022 23:26:41 -0700 (PDT)
+Received: from localhost.localdomain (ns1003916.ip-51-81-154.us. [51.81.154.37])
+        by smtp.gmail.com with ESMTPSA id x12-20020a170902ec8c00b00161955fe0d5sm6761554plg.274.2022.05.28.23.26.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 May 2022 23:26:40 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     alexander.deucher@amd.com, hristian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        Hawking.Zhang@amd.com, mike@fireburn.co.uk, Xiaojian.Du@amd.com,
+        evan.quan@amd.com
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, sunliming@kylinos.cn,
+        kelulanainsley@gmail.com, kernel test robot <lkp@intel.com>
+Subject: [PATCH] drm/amdgpu: make gfx_v11_0_rlc_stop static
+Date:   Sun, 29 May 2022 14:26:31 +0800
+Message-Id: <20220529062631.304316-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] erofs: update ctx->pos for every emitted dirent
-Content-Language: en-US
-To:     Hongnan Li <hongnan.li@linux.alibaba.com>,
-        linux-erofs@lists.ozlabs.org, xiang@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220527072536.68516-1-hongnan.li@linux.alibaba.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220527072536.68516-1-hongnan.li@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/27 15:25, Hongnan Li wrote:
-> erofs_readdir update ctx->pos after filling a batch of dentries
-> and it may cause dir/files duplication for NFS readdirplus which
-> depends on ctx->pos to fill dir correctly. So update ctx->pos for
-> every emitted dirent in erofs_fill_dentries to fix it.
-> 
-> Fixes: 3e917cc305c6 ("erofs: make filesystem exportable")
-> Signed-off-by: Hongnan Li <hongnan.li@linux.alibaba.com>
-> ---
->   fs/erofs/dir.c | 13 ++++++-------
->   1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/erofs/dir.c b/fs/erofs/dir.c
-> index 18e59821c597..3015974fe2ff 100644
-> --- a/fs/erofs/dir.c
-> +++ b/fs/erofs/dir.c
-> @@ -22,11 +22,12 @@ static void debug_one_dentry(unsigned char d_type, const char *de_name,
->   }
->   
->   static int erofs_fill_dentries(struct inode *dir, struct dir_context *ctx,
-> -			       void *dentry_blk, unsigned int *ofs,
-> +			       void *dentry_blk, void *dentry_begin,
->   			       unsigned int nameoff, unsigned int maxsize)
->   {
-> -	struct erofs_dirent *de = dentry_blk + *ofs;
-> +	struct erofs_dirent *de = dentry_begin;
->   	const struct erofs_dirent *end = dentry_blk + nameoff;
-> +	loff_t begin_pos = ctx->pos;
->   
->   	while (de < end) {
->   		const char *de_name;
-> @@ -59,9 +60,9 @@ static int erofs_fill_dentries(struct inode *dir, struct dir_context *ctx,
->   			/* stopped by some reason */
->   			return 1;
->   		++de;
-> -		*ofs += sizeof(struct erofs_dirent);
-> +		ctx->pos += sizeof(struct erofs_dirent);
->   	}
-> -	*ofs = maxsize;
-> +	ctx->pos = begin_pos + maxsize;
->   	return 0;
->   }
->   
-> @@ -110,11 +111,9 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
->   				goto skip_this;
->   		}
->   
-> -		err = erofs_fill_dentries(dir, ctx, de, &ofs,
-> +		err = erofs_fill_dentries(dir, ctx, de, de + ofs,
->   					  nameoff, maxsize);
->   skip_this:
+This symbol is not used outside of gfx_v11_0.c, so marks it static.
 
-I guess there are two paths may be affected in erofs_readdir():
-- for EFSCORRUPTED case, how about avoiding "goto skip_this" since we
-can just break there.
-- for initial case, do we need to update ctx->pos as well?
+Fixes the following w1 warning:
 
-Thanks,
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:1945:6: warning: no previous
+prototype for function 'gfx_v11_0_rlc_stop' [-Wmissing-prototypes].
 
-> -		ctx->pos = blknr_to_addr(i) + ofs;
-> -
->   		if (err)
->   			break;
->   		++i;
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: sunliming <sunliming@kylinos.cn>
+---
+ drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c
+index 8c0a3fc7aaa6..cb581cfc7464 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c
+@@ -1983,7 +1983,7 @@ static int gfx_v11_0_init_csb(struct amdgpu_device *adev)
+ 	return 0;
+ }
+ 
+-void gfx_v11_0_rlc_stop(struct amdgpu_device *adev)
++static void gfx_v11_0_rlc_stop(struct amdgpu_device *adev)
+ {
+ 	u32 tmp = RREG32_SOC15(GC, 0, regRLC_CNTL);
+ 
+-- 
+2.25.1
+

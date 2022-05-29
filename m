@@ -2,147 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF510536EFD
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 03:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 640D1536EFF
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 03:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbiE2BBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 21:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        id S230205AbiE2BKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 21:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiE2BBr (ORCPT
+        with ESMTP id S229987AbiE2BKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 21:01:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AFE6D945
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 18:01:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 472E860C36
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 01:01:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56345C34114;
-        Sun, 29 May 2022 01:01:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653786104;
-        bh=YhsbeucUoFLNuOAHY7NICLXdLi3u/TPueYompdYiLTQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iPYknZ/nV5gLUAfdLJf+b6PDj2FW0Uixlykc3vOmRA7tsel0cI741OgawsNlPLl7u
-         B6GATlpZayfqJu41GXy3e5VShJnGrvITbgiEXjPnrtBfEup5N0XegJuPiwzghe8+vZ
-         P2zfDioVqWDWqttTJbC+3m8egvH967X/fWt2kbvv1ZL6FElsylbFz6RwJ2oL6S1el/
-         Npx8YnfNlFXc61s8VCRIz+jPkw96nMH1CfUO7v2akBjv3yhJGjhwQncaB8x7ZhJnIf
-         jdhPaNTjweiqsiqPiqSCKJM+0G7Dc5yn5y7RqErd6qMwNjuWAACw5Fx+b7n3kNpZy7
-         nqEHMvz6sUbEg==
-Date:   Sat, 28 May 2022 18:01:42 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: warning: unused
- variable 'ssd130x_spi_table'
-Message-ID: <YpLF9jdqiub98Nl/@dev-arch.thelio-3990X>
-References: <202205290422.eoxGqDMR-lkp@intel.com>
- <607265eb-bfbf-4134-f2fe-d66cacd7bfbb@redhat.com>
+        Sat, 28 May 2022 21:10:51 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE645B8AF;
+        Sat, 28 May 2022 18:10:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653786650; x=1685322650;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=M1FBflrhPBegpxmSR33l7oZ4bUcLf85OUp0h8DXBHfQ=;
+  b=CB3IxajRPHJ/SCJ/z8JVrIq7Sm73FnQan7K+vnb/t41/VlOmo4zdMQr5
+   D9P1eUpMelnHpuEF4sFssVvmeIHzRHTS5wZN43FDVmRtgt2fPgwDc+NYe
+   ZhLWpuSKh4s/PI01aEckpm5VsLAl+NKg/WF9m6c9Q9yvIXAeKJH/OAnRZ
+   eL0l+0ahqc/uDyA6O/+eW3q+XJ9uhb0A68ERr2BNtu7Uv36hX0Ykmy33o
+   tGqRK/dRLwgPHSuYySAO0S5g8KHAefctTF3cM+ni/lYZY3dxvjhy+tVPS
+   sxw5XQrIA3CqKgxtFgF1RRzRCcG85zptf5RsSGYelgAEF7TD4X2L1VmO9
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10361"; a="262350465"
+X-IronPort-AV: E=Sophos;i="5.91,259,1647327600"; 
+   d="scan'208";a="262350465"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 18:10:49 -0700
+X-IronPort-AV: E=Sophos;i="5.91,259,1647327600"; 
+   d="scan'208";a="575408466"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.209.70.91]) ([10.209.70.91])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 18:10:49 -0700
+Message-ID: <ff750d43-fda1-7330-f9ec-3a03bb0e10da@linux.intel.com>
+Date:   Sat, 28 May 2022 18:10:48 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 0/2] x86: Optimize memchr() for x86-64
+Content-Language: en-US
+To:     Yu-Jen Chang <arthurchang09@gmail.com>, jdike@linux.intel.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        linux-um@lists.infradead.org, jserv@ccns.ncku.edu.tw
+References: <20220528081236.3020-1-arthurchang09@gmail.com>
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <20220528081236.3020-1-arthurchang09@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <607265eb-bfbf-4134-f2fe-d66cacd7bfbb@redhat.com>
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 11:23:04PM +0200, Javier Martinez Canillas wrote:
-> Hello,
-> 
-> On 5/28/22 22:58, kernel test robot wrote:
-> > Hi Javier,
-> > 
-> > FYI, the error/warning still remains.
-> >
-> 
-> Yes, but in my opinion is a false positive.
 
-I don't think it is a false positive for this particular configuration.
-MODULE_DEVICE_TABLE expands to nothing when the file it is included in
-is built into the kernel, as opposed to a module, so the variable truly
-is unused.
+On 5/28/2022 1:12 AM, Yu-Jen Chang wrote:
+> *** BLURB HERE ***
+> These patch series add an optimized "memchr()" for x86-64 and
+> USER-MODE LINUX (UML).
+>   
+> There exists an assemebly implementation for x86-32. However,
+> for x86-64, there isn't any optimized version. We implement word-wise
+> comparison so that 8 characters can be compared at the same time on
+> x86-64 CPU. The optimized “memchr()” is nearly 4x faster than the
+> orginal implementation for long strings.
+>
+> We test the optimized “memchr()” in UML and also recompile the 5.18
+> Kernel with the optimized “memchr()”. They run correctly.
+>
+> In this patch we add a new file "string_64.c", which only contains
+> "memchr()". We can add more optimized string functions in it in the
+> future.
 
-$ curl -LSs https://download.01.org/0day-ci/archive/20220529/202205290422.eoxGqDMR-lkp@intel.com/config | rg CONFIG_DRM_SSD130X_SPI
-CONFIG_DRM_SSD130X_SPI=y
+Are there any workloads that care? From a quick grep I don't see any 
+that look performance critical.
 
-You'll see the same warning with GCC and a similar configuration:
+It would be good to describe what you optimized it for. For example 
+optimization for small input strings is quite different than large 
+strings. I don't know what is more common in the kernel.
 
-drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: error: ‘ssd130x_spi_table’ defined but not used [-Werror=unused-const-variable=]
-  154 | static const struct spi_device_id ssd130x_spi_table[] = {
-      |                                   ^~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+I assume you ran it through some existing test suites for memchr (like 
+glibc etc.) for correctness testing?
 
-At the end of the day, this warning only shows up under W=1, so take it
-as you will. The kernel test robot is a sign, not a cop :)
+(bugs in optimized string functions are often subtle, it might be also 
+worth trying some randomized testing comparing against a known reference)
 
-Cheers,
-Nathan
+-Andi
 
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   9d004b2f4fea97cde123e7f1939b80e77bf2e695
-> > commit: 74373977d2ca26e5735377f8874be70bc2f030f5 drm/solomon: Add SSD130x OLED displays SPI support
-> > date:   5 weeks ago
-> > config: hexagon-randconfig-r033-20220529 (https://download.01.org/0day-ci/archive/20220529/202205290422.eoxGqDMR-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0fbe3f3f486e01448121f7931a4ca29fac1504ab)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=74373977d2ca26e5735377f8874be70bc2f030f5
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 74373977d2ca26e5735377f8874be70bc2f030f5
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/solomon/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> >>> drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: warning: unused variable 'ssd130x_spi_table' [-Wunused-const-variable]
-> >    static const struct spi_device_id ssd130x_spi_table[] = {
-> >                                      ^
-> >    1 warning generated.
-> > 
-> > 
-> > vim +/ssd130x_spi_table +154 drivers/gpu/drm/solomon/ssd130x-spi.c
-> > 
-> >    145	
-> >    146	/*
-> >    147	 * The SPI core always reports a MODALIAS uevent of the form "spi:<dev>", even
-> >    148	 * if the device was registered via OF. This means that the module will not be
-> >    149	 * auto loaded, unless it contains an alias that matches the MODALIAS reported.
-> >    150	 *
-> >    151	 * To workaround this issue, add a SPI device ID table. Even when this should
-> >    152	 * not be needed for this driver to match the registered SPI devices.
-> >    153	 */
-> >  > 154	static const struct spi_device_id ssd130x_spi_table[] = {
-> 
-> This comment is quite clear about it, the table only exists due a limitation in how
-> the SPI subsystem reports the module aliases. It always report a "spi:<device> even
-> if it was registered by OF, and that's the only reason why we need it.
-> 
-> Setting the struct spi_driver .id field just to make this warning go away would be
-> the wrong thing to do IMO, since always the struct of_device_id should be used.
-> 
-> -- 
-> Best regards,
-> 
-> Javier Martinez Canillas
-> Linux Engineering
-> Red Hat
-> 
-> 

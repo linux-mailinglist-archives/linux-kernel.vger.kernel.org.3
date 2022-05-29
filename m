@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B230E53717C
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 17:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D511537180
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 17:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiE2PSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 11:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57958 "EHLO
+        id S231130AbiE2PTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 11:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiE2PSD (ORCPT
+        with ESMTP id S230522AbiE2PTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 11:18:03 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60CD2377CB;
-        Sun, 29 May 2022 08:18:02 -0700 (PDT)
-Received: from [192.168.254.32] (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 24BF720BA5A0;
-        Sun, 29 May 2022 08:18:01 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 24BF720BA5A0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1653837481;
-        bh=OnqLwBgpiR5JuHmYgm/0FFiPa8iwxGxQscALfoSTbJY=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=jiZGA5qvjxvb7hGa09YO+1rAIIB788kBcH1T3L34EEZiLDK4Afx8tvyt1x5Z30aBE
-         knQYm0zWdTpNy8U/J096LrWzW48rZrXeltg8YCZ2SF6KTL9RXlVFNWUXBisz1WOfeI
-         dBTZu2QmkFON1gAAMJmO/yibDlcxS8zBfdJ651lA=
-Message-ID: <ad2368a3-17fd-ad7e-95e8-0b7fa9b59fec@linux.microsoft.com>
-Date:   Sun, 29 May 2022 10:18:00 -0500
+        Sun, 29 May 2022 11:19:12 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4223937A05
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 08:19:11 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id j5-20020a922005000000b002d1c2659644so6682321ile.8
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 08:19:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=SZmS5uKU15BCKA3xunshV88b8on4gSZULFNjwvNdemI=;
+        b=cEStK62L2FUNKzU8uI7RmsCK88D+dlsJ7r513N2gnPkQK/+Joo5wIorXhRaHAx8Oh1
+         o/LVtcN/Q71RIUD47SP4+2KH4cVW50xIedweI7m5ZMP5nZGm1SWruKe1hsPKgoqLe8ct
+         sSgGxpApAwBeu1hbrX2bWV3PqzrqHn4T7DHWgeO7SzG4qrbAObTt/z6xGNVLvZIDPFZD
+         4Q6QPVxmlH+T2WuG6WV+QULoF7IJ1MQpDiG2sfGs52sOE9CWE+aui1Epb1C7TUcgoA5/
+         g8CjVaepiIFGHlw79Kz2LOO2ncLYUYtDIG8dod51veicQV62xytghNfnHVbiS+mTuwv9
+         KpMA==
+X-Gm-Message-State: AOAM5332ixFqGzgf3xIjn8QLrO/f4X1xRTiHJZTaHCoYZZqF1NvRKyLX
+        x9bXTH/bpGR43RQ1lg52eu7T9jBpcWjVTc4sG7YfuugZtsE/
+X-Google-Smtp-Source: ABdhPJwlYN42ZL1pvPqEpBU1WbtFr0aNM3OMOKhi8hrqi7/cZGR/Q651zjP/5LyvBJoFvErgOOfHFuHrw0gzkMgRGqoIO3OJAl9G
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH v2 11/20] objtool: arm64: Walk instructions and
- compute CFI for each instruction
-Content-Language: en-US
-To:     Chen Zhongjin <chenzhongjin@huawei.com>, jpoimboe@redhat.com,
-        peterz@infradead.org, mark.rutland@arm.com, broonie@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <e81e773678f88f7c2ff7480e2eb096973ec198db>
- <20220524001637.1707472-1-madvenka@linux.microsoft.com>
- <20220524001637.1707472-12-madvenka@linux.microsoft.com>
- <767e814c-b3cc-73a1-d283-82dbc0287cde@huawei.com>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <767e814c-b3cc-73a1-d283-82dbc0287cde@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-21.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Received: by 2002:a05:6638:24cf:b0:32e:d03e:3185 with SMTP id
+ y15-20020a05663824cf00b0032ed03e3185mr17548073jat.99.1653837549180; Sun, 29
+ May 2022 08:19:09 -0700 (PDT)
+Date:   Sun, 29 May 2022 08:19:09 -0700
+In-Reply-To: <YpNrSABPtB5eDC+m@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a29e3905e0280faa@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in driver_register
+From:   syzbot <syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com>
+To:     Julia.Lawall@inria.fr, andreyknvl@gmail.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, jannh@google.com,
+        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rafael@kernel.org, sashal@kernel.org,
+        schspa@gmail.com, stable@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,101 +59,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-On 5/24/22 08:45, Chen Zhongjin wrote:
-> Hi,
-> 
-> On 2022/5/24 8:16, madvenka@linux.microsoft.com wrote:
->> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->>
->> Implement arch_initial_func_cfi_state() to initialize the CFI for a
->> function.
->>
->> Add code to fpv_decode() to walk the instructions in every function and
->> compute the CFI information for each instruction.
->>
->> Implement special handling for cases like jump tables.
->>
->> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
->> ---
->>  tools/objtool/arch/arm64/decode.c |  15 +++
->>  tools/objtool/fpv.c               | 204 ++++++++++++++++++++++++++++++
->>  2 files changed, 219 insertions(+)
-> ...
->> +static void update_cfi_state(struct cfi_state *cfi, struct stack_op *op)
->> +{
->> +	struct cfi_reg *cfa = &cfi->cfa;
->> +	struct cfi_reg *regs = cfi->regs;
->> +
->> +	if (op->src.reg == CFI_SP) {
->> +		if (op->dest.reg == CFI_SP)
->> +			cfa->offset -= op->src.offset;
->> +		else
->> +			regs[CFI_FP].offset = -cfa->offset + op->src.offset;
-> Seems wrong here, we don't have any op->src.offset for [mov x29, sp] so here we
-> get: fp->offset = -cfa->offset. The dumped info also proves this.
+Reported-and-tested-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
 
+Tested on:
 
-See the example below.
+commit:         97fa5887 USB: new quirk for Dell Gen 2 devices
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5a0efc262ca60947
+dashboard link: https://syzkaller.appspot.com/bug?extid=dc7c3ca638e773db07f6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1224de7bf00000
 
-> 
->> +	case UNWIND_HINT_TYPE_CALL:
->> +		/* Normal call */
->> +		frame->cfa += orc->sp_offset;
->> +		fp = frame->cfa + orc->fp_offset;
->> +		break;
-> Obviously this is not conform to the reliability check because we get
-> frame->cfa == fp here.
-> 
-
-See the example below:
-
-> IIUC your sp_offset equals to stack length, and fp_offset is offset from next
-> x29 to next CFA. So maybe here we should have
-> regs[CFI_FP].offset = regs[CFI_SP].offset for [mov x29, sp].
-> 
-> Anyway, in original objtool sp_offset and fp_offset both represents the offset
-> from CFA to REGs. I think it's better not spoiling their original meaning and
-> just extending.
-> 
-> 
-
-I am not spoiling anything.
-
-
-Let us take an example:
-
-ffff800008010000 <bcm2835_handle_irq>:
-ffff800008010000:       d503201f        nop
-ffff800008010004:       d503201f        nop
-ffff800008010008:       d503233f        paciasp
-ffff80000801000c:       a9be7bfd        stp     x29, x30, [sp, #-32]!
-ffff800008010010:       910003fd        mov     x29, sp
-ffff800008010014:       f9000bf3        str     x19, [sp, #16]
-
-
-The stack pointer is first moved by -32 and the FP and LR are stored there.
-At this point, SP is pointing to the frame. The CFA is:
-
-	CFA = SP + 32
-
-The frame pointer has been stored at the location pointed to by the SP.
-So, FP should be:
-
-	FP = CFA - 32
-
-Therefore, at instruction address ffff800008010014:
-
-	frame->cfa = SP + 32;
-	frame->fp = frame->cfa - 32 = SP;
-
-So, if a call/interrupt happens after this instruction, the frame pointer computed
-from the above data will match with the actual frame pointer.
-
-I have verified this using the DWARF data generated by the compiler. It is correct.
-I have also verified that the stack trace through such code passes the reliability
-check. That is, it computes the frame pointer correctly which matches with the
-actual frame pointer.
-
-Madhavan
+Note: testing is done by a robot and is best-effort only.

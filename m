@@ -2,115 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164725371AF
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 17:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A5F5371B2
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 17:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbiE2Prc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 11:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        id S231252AbiE2P4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 11:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiE2Pra (ORCPT
+        with ESMTP id S229782AbiE2P4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 11:47:30 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E09694B4
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 08:47:28 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id s24so4414468wrb.10
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 08:47:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qnKqeTPuz31MP8DkEz9vuj/dviTwiPnr2/Rmul7p7v0=;
-        b=8XjeiF9dLX/F73sAN7jeHWEZLMLKRNbLyw6jpLljeZcZg+OoGSjNTRc6ZoajO/5wvg
-         cad2nHEOy1MaqJdoPrdrV0nwtCyOIxLIJMCc8SB04mfmGu7B14Pn0+0HGHHV7dFaWm+H
-         ztfLfrmEp1V4sXew+sJJV1gaxM6VxIY50hh9+S70ElnUYq9zH1RQIPgF7/Otd0WiPBut
-         kCrGD4oOBJ6PdziomJL62cr31LuB/ObkkskAwpS9Nw28dYXEFgFwzaG0pAgjw6y+eRGv
-         i5nWKASomuOe+J7WB4t266/wylOzHuzdGPcRCe5CrGYIApp1x96Vc1gJaPVvkmg2NqNU
-         rgkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qnKqeTPuz31MP8DkEz9vuj/dviTwiPnr2/Rmul7p7v0=;
-        b=vVMF5PgX0D9c+X+g5fU7+fIiMUZr9Ac8wAHTLpR67nKZwTQJiArw5Evnd8qqKcIIxO
-         FBZg3FNX+VkkDT95dRXbwJ1gPytdwhIwlCPcDyYEFgduf2L0n/6Oyg+qmiGj29KkeFst
-         OJKFPdziD4f469m8F4Nb2PVCAvd9ZzNhnVvV4nu7S8OPz8F1c2GQ1/C8/eVTMVTcLqTP
-         qXzM8Q25gWvTeS4ZCb2UbBuEB27GpjYgK1evDWs1b28VbNayThuBeIFo7UekjvvHpMm9
-         Xu1R5uhPv2trQRIatzkuWmX36optXl3QY68Etmm8iuY+MyPcOuHwZ5Pt+WDeXWMoWe3o
-         gvKA==
-X-Gm-Message-State: AOAM531muUWtuiaiOSQvxzwkv264dy+3Ai+0bUAImpElXUIuTOt5PtCO
-        bXeCyEGOi72thKL53wTWvz/75Q==
-X-Google-Smtp-Source: ABdhPJyJU60U7IvzKvUdTZ/qiORiBeb9Mht2Jqd7Q6qxgDKpWe+tfKckKrUT+DlJwG1A/b6NnHsI3Q==
-X-Received: by 2002:a05:6000:2cc:b0:20d:e6c:e4f8 with SMTP id o12-20020a05600002cc00b0020d0e6ce4f8mr41592097wry.374.1653839245826;
-        Sun, 29 May 2022 08:47:25 -0700 (PDT)
-Received: from helium.lan ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id i2-20020a1c5402000000b003972dcfb614sm7549942wmb.14.2022.05.29.08.47.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 08:47:25 -0700 (PDT)
-From:   Fabien Parent <fparent@baylibre.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-Cc:     Fabien Parent <fparent@baylibre.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] dt-bindings: regulator: mt6315-regulator: fix invalid allowed mode
-Date:   Sun, 29 May 2022 17:46:13 +0200
-Message-Id: <20220529154613.337559-1-fparent@baylibre.com>
-X-Mailer: git-send-email 2.36.1
+        Sun, 29 May 2022 11:56:51 -0400
+Received: from imap3.hz.codethink.co.uk (imap3.hz.codethink.co.uk [176.9.8.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E426321
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 08:56:49 -0700 (PDT)
+Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.17])
+        by imap3.hz.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
+        id 1nvLHZ-0005f7-KS; Sun, 29 May 2022 16:56:45 +0100
+Message-ID: <ddc1462c-be74-420a-6809-c868fa056fa7@codethink.co.uk>
+Date:   Sun, 29 May 2022 16:56:44 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [V3] PCI: fu740: Drop to 2.5GT/s to fix initial device probing on
+ some boards
+Content-Language: en-GB
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Alexandre Ghiti <alex@ghiti.fr>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        David Abdurachmanov <david.abdurachmanov@sifive.com>,
+        Neill Whillans <neill.whillans@codethink.co.uk>
+References: <20220318152430.526320-1-ben.dooks@codethink.co.uk>
+ <2442936e-a53e-59bf-488f-95eac26d1252@ghiti.fr>
+ <85e864fd-762e-0780-f829-bfbb178ab24e@ghiti.fr>
+ <bded4b1e-3404-6bcd-3289-dc8d5b4d713a@codethink.co.uk>
+ <alpine.DEB.2.21.2204140048460.9383@angie.orcam.me.uk>
+ <3acd20b2-5882-7cc0-8a7b-7b406b768c1c@codethink.co.uk>
+ <alpine.DEB.2.21.2205020049130.9383@angie.orcam.me.uk>
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <alpine.DEB.2.21.2205020049130.9383@angie.orcam.me.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the binding example, the regulator mode 4 is shown as a valid mode,
-but the driver actually only support mode 0 to 2:
+On 02/05/2022 12:46, Maciej W. Rozycki wrote:
+> Hi Ben,
+> 
+>>>    Any idea what might be causing it?  I can't see it being explicitly set
+>>> or cleared anywhere, be it in U-Boot or Linux, so it must be done by the
+>>> device itself depending on something.  And the lack of this capability
+>>> seems to me like non-compliance for a multiple-lane, multiple-speed
+>>> device.
+>>
+>> I'll see if we can reproduce this
+> 
+>   Have you been able to look into it?
+> 
 
-This generates an error in dmesg when copy/pasting the binding example:
-[    0.306080] vbuck1: invalid regulator-allowed-modes element 4
-[    0.307290] vbuck2: invalid regulator-allowed-modes element 4
+I can't see anything obvious from the code, however my SD card image
+does not have lspci on it and I have not had time to make a new image
+to test.
 
-This commit fixes this error by removing the invalid mode from the
-examples.
+I wonder if anyone at SiFive can comment on this?
 
-Fixes: 977fb5b58469 ("regulator: document binding for MT6315 regulator")
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
----
- .../devicetree/bindings/regulator/mt6315-regulator.yaml       | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml b/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
-index 5d2d989de893..37402c370fbb 100644
---- a/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
-@@ -55,7 +55,7 @@ examples:
-           regulator-min-microvolt = <300000>;
-           regulator-max-microvolt = <1193750>;
-           regulator-enable-ramp-delay = <256>;
--          regulator-allowed-modes = <0 1 2 4>;
-+          regulator-allowed-modes = <0 1 2>;
-         };
- 
-         vbuck3 {
-@@ -63,7 +63,7 @@ examples:
-           regulator-min-microvolt = <300000>;
-           regulator-max-microvolt = <1193750>;
-           regulator-enable-ramp-delay = <256>;
--          regulator-allowed-modes = <0 1 2 4>;
-+          regulator-allowed-modes = <0 1 2>;
-         };
-       };
-     };
 -- 
-2.36.1
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
 
+https://www.codethink.co.uk/privacy.html

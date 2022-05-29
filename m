@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07118536F2A
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 05:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3FC536F31
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 05:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbiE2C60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 22:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
+        id S230255AbiE2DSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 23:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiE2C6Y (ORCPT
+        with ESMTP id S230233AbiE2DSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 22:58:24 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C549CC87
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 19:58:23 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id w2-20020a17090ac98200b001e0519fe5a8so7640996pjt.4
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 19:58:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xqZyFR77LZa5HhEYDYSFVBgW+mJdeOilKX5Bk1mPIAU=;
-        b=c8lMNY/sSIphdNiJshAYMu1CqUjbD5PanBJG75iQdDbbSaL+tBEsMNufhxMbyMmLq9
-         S6I3H22KxlNT+gAJkNrkj6Bz0b16LryVW0uLjqQqQTSnundCo/WIqxpvHttLS/ACJfLJ
-         HVLY3NDiSnjjB5erjgkc8B3XunjQa7waGRcwPiLNAXldXON1Fk1mbG1Dp3dymRnZ6tjn
-         8zVpsbRj7VGyqBKb7jNxV70lfvZxznUS0G8RwR8IzMrj0uV+qiiJQepoHH0r2Xm03TSU
-         J2H/kBaD+5EmHU0V97btF9mL0slO+zMalJunTAkzK7WsPs+AjvE1QDElNKacsjg+omgK
-         P1Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xqZyFR77LZa5HhEYDYSFVBgW+mJdeOilKX5Bk1mPIAU=;
-        b=z+RsfuGDPyX0qfhl/0GmbbkHFf6ywOm3Qxq0NXmCUGQ9DdX/k4D3pbt7NydX4XowNo
-         Kc4ooszDJN3U8174ovsxuWGPPmxY+78kJIuiXVEYbs+vRf/zeT46skI311n+Rh1gdNyP
-         iOjEqTDvr8w07nWhZEbU2+XUuUtZuESa1lGlNdGfcYXjJGOUAhxNEDe7o774076wj1Ah
-         +ShFCyrThtrKhZOQkIbMQ79eLDDnPQoSDguFub9NJ9IQJyvCCnP2desNvp/hBCfN088r
-         6mNFtLQOUuZpFcKKw+v99TqDkICzp1PJvbG8ebG6AO1swkXZ+yvIAVsnarpkmDVuXiAg
-         ndeA==
-X-Gm-Message-State: AOAM5335P3lxueOKe2fafC8C5JB/k2lOuj5a1cvpkgOhnr2M/YHfa33V
-        fO3m5fwGlo8MPMlVQVf++4jwpw==
-X-Google-Smtp-Source: ABdhPJxWGC7LKAf8hQu669+YBA7+lPsqdEug+mNQnYOi/nQ9+B3jLHYf5/agGPl5H68pJ9yL/Vvvrg==
-X-Received: by 2002:a17:903:209:b0:161:7f66:b9e0 with SMTP id r9-20020a170903020900b001617f66b9e0mr33873163plh.73.1653793103197;
-        Sat, 28 May 2022 19:58:23 -0700 (PDT)
-Received: from localhost ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id c20-20020a170902c2d400b001637704269fsm1974580pla.223.2022.05.28.19.58.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 May 2022 19:58:22 -0700 (PDT)
-Date:   Sun, 29 May 2022 10:58:18 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     bh1scw@gmail.com, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/slub: replace alloc_pages with folio_alloc
-Message-ID: <YpLhSokkrPrXjNXP@FVFYT0MHHV2J.googleapis.com>
-References: <20220528161157.3934825-1-bh1scw@gmail.com>
- <YpJNX7PN8hAFgVwj@casper.infradead.org>
+        Sat, 28 May 2022 23:18:24 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A6E5A5A3;
+        Sat, 28 May 2022 20:18:18 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 0141532007E8;
+        Sat, 28 May 2022 23:18:14 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Sat, 28 May 2022 23:18:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        tom-fitzhenry.me.uk; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1653794294; x=1653880694; bh=Ny
+        KxUSmKaqeyg9xhREFC8EzxSPndaULx7tx1zibykuo=; b=nXc9ARkCFE5fNObRs2
+        Mrwc1HMtw42AKrpMFHx3Eh0n1CBsNAyU0K1uF9aodnAVXX4ZUnPDS8IWSNcOvow/
+        cHQaVRMYHXB2PtZPBUHV/ubtz+zUarGlDIG7/sJWWzN5TqqgasXGhYNEXLtWP9mc
+        wUUVnpGylF9seoF1T1Q8CqBfreAxI6S4R+QBDQ0VAcCNI/S4KoxQ595Ee5lVwqeO
+        S13ReM8/lozx9zUDbVCWEhIgPVqqmVZZtY+ioy/NOSIfQwIqTeYW8C080/9MlSHe
+        7tbTCInDxHlc1fvAOSSbOngueXva3Uv0cnIcmP1CWtbjtl4/yBYLKqQis+NxsDtl
+        T1XA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1653794294; x=1653880694; bh=NyKxUSmKaqeyg9xhREFC8EzxSPndaULx7tx
+        1zibykuo=; b=DGKfAUMl/kgSq7mQr9inX79EZFwlwBfH5hNXO9O6hp5YVTbSnQF
+        g87AE2vXJA0kWIXthWmgxCwyF1136G4r+GIxRGy6TlPwsfup+x5YrpTgmAaLSoyz
+        zCNG5L/3XzjP7lDkbeVEE0GEDhV5K8Dytwrdyf77xC/cDf6CxCU+izbMxYJ6hrbq
+        9IOnqJsWMd6x8OyOiim3P1yuNQbQEKaI4njcfmX2rcr9gEVM6QzuuNZNyRCpWLw3
+        SnrlVm2sM8X9qjXHVsGSC5hi4FjLauRNdPFOgl1589Em6p8sIE82lEi1xOeAoyVN
+        veSnfEgmZNs/P9ArK+vvgnJWwTGVaa6lbqA==
+X-ME-Sender: <xms:9eWSYpxvhajMmkwMTlmRVAXFjI5CdlXBUmyJLproRMcC9HpAUH4a0g>
+    <xme:9eWSYpTJ3BYbOuM9VVmtCjqjLbRAgqs_YBMGgd2dbhWOmeA4WCJdbg1_kr5xlnFg0
+    wNsCYDGBgVl0YIUaA>
+X-ME-Received: <xmr:9eWSYjUk7TxqthXe96zFUmG2_VF74_TpD8k6n4DxHW6ifW3Xn_oj6d6UdCllBcO3ZH6-Le5w32RYLoEu6LRxi2RpB63W9oNlscc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkedvgdeikecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefvohhmucfhihht
+    iihhvghnrhihuceothhomhesthhomhdqfhhithiihhgvnhhrhidrmhgvrdhukheqnecugg
+    ftrfgrthhtvghrnhepfeeivdegffeftefhkeeugfdvudetfedtieejuddugfejueektddv
+    vdefueetgeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepthhomhesthhomhdqfhhithiihhgvnhhrhidrmhgvrdhukh
+X-ME-Proxy: <xmx:9eWSYrh0P5sqeiQFuKCgtSytXR0jOqaJ9O3lbNafQoSKFfPR0yKicA>
+    <xmx:9eWSYrDGxYLL499wkTJtzUS0xKOOilpn5y2CxoTDqb5mhi66LpnFAQ>
+    <xmx:9eWSYkJV3qk02QJlFfWJqH3_eyjjd6ehrBJXG-oEqz2CwFr-7oIaLg>
+    <xmx:9uWSYrzFQi9vWFjCAsC1CZ1tNymc-CtaX_YclSx2TH-nh4O_ol0wpg>
+Feedback-ID: iefc945ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 28 May 2022 23:18:10 -0400 (EDT)
+From:   Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        Ondrej Jirman <x@xff.cz>, Martijn Braam <martijn@brixit.nl>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+Subject: [PATCH 0/2] Add support for Pine64 PinePhonePro Linux phone
+Date:   Sun, 29 May 2022 13:17:03 +1000
+Message-Id: <20220529031705.278631-1-tom@tom-fitzhenry.me.uk>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YpJNX7PN8hAFgVwj@casper.infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 05:27:11PM +0100, Matthew Wilcox wrote:
-> On Sun, May 29, 2022 at 12:11:58AM +0800, bh1scw@gmail.com wrote:
-> > From: Fanjun Kong <bh1scw@gmail.com>
-> > 
-> > This patch will use folio allocation functions for allocating pages.
-> 
-> That's not actually a good idea.  folio_alloc() will do the
-> prep_transhuge_page() step which isn't needed for slab.
->
+This series adds initial support for Pine64 PinePhonePro.
 
-You mean folio_alloc() is dedicated for THP allocation?  It is a little
-surprise to me.  I thought folio_alloc() is just a variant of alloc_page(),
-which returns a folio struct instead of a page.  Seems like I was wrong.
-May I ask what made us decide to do this?
+Tom Fitzhenry (2):
+  dt-bindings: arm: rockchip: Add PinePhone Pro bindings
+  arm64: dts: rockchip: Add initial support for Pine64 PinePhone Pro
 
-Thanks.
+ .../devicetree/bindings/arm/rockchip.yaml     |   5 +
+ arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+ .../dts/rockchip/rk3399-pinephone-pro.dts     | 939 ++++++++++++++++++
+ 3 files changed, 945 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+
+-- 
+2.36.0
 

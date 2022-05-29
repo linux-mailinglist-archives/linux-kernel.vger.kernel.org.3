@@ -2,114 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C7A5371C1
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 18:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1B55371C9
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 18:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbiE2QTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 12:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
+        id S231305AbiE2Q3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 12:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbiE2QTa (ORCPT
+        with ESMTP id S229533AbiE2Q3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 12:19:30 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EB7522F4;
-        Sun, 29 May 2022 09:19:28 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id CF4FE1F425DC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653841166;
-        bh=9CTrQDgqxEHtWS8xx4NJ+2bx1b2qoRlEGrZziKFdKbw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ANb5jUtNOy9iFNOez1Gig/+CTOoRldVhAuinlkRe+HhgDMj8Z28vNX3PaJ+9n/9T/
-         6lSBaePrhllsdkpvfjarXyMyDAczBaz+l11zJY4GhOjAsOeftqd6xzHIo6Ws822kZM
-         BJ6Am5mPm6c0/KaYZIUOeEm3rTJnymLcJEkdfqFOMUUMyMG/qn+FBgsWGwkrEph5pJ
-         D9AQXdKdE2wEj++SCA47qqOUwnG+L+fuuAfaNUMeDMNVquVmv0N6XLD3QkrHm3SHNd
-         8PVS9QpqkKS8ZdIT1EueqL6gaa0q3ez0/yI0Dqn83b8T3Wc2ZaA7ZGzRLZ2zD+fWUB
-         w/SEeXtPzqZjQ==
-Message-ID: <793e49ea-aeb0-a47a-9fe8-742a6397bb35@collabora.com>
-Date:   Sun, 29 May 2022 19:19:22 +0300
+        Sun, 29 May 2022 12:29:42 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C81F2F013;
+        Sun, 29 May 2022 09:29:40 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id x143so8553821pfc.11;
+        Sun, 29 May 2022 09:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F0TmM8b9e274oJMvNvuPKJVM2spWHgnC/4XXZLIhTKc=;
+        b=S1Us7OAbBJgnJ7Qc5yA9DRJFHDniqPlIsZgDysPoU6nRKRxSYGGySsj1QcYZeRV31C
+         DjT6f51ghmir+RZJdqrAjQrWHq5AZ7TQWwqv2SL5tTkiIyy148ET+tgzqGxhJ+A7feEY
+         F31etkjkP4rhcTxNg8nzhl+VbIJicF/dG8DbESw0z/oqJqnnbE+/4YvI4kuNQcHHmMMH
+         x91V6YLrCvrBNzS0p98knuYHnVJZArBM9L22n7wBBTfEwRQxzTITCpEZdiEDXJ1W9DLR
+         D5iQKNHU6MrS8MjC8GplZjNVs0tZ+jXm/aWlkEzEZuar/rQJkUV+sjosCFs9cWIogPrv
+         2xWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F0TmM8b9e274oJMvNvuPKJVM2spWHgnC/4XXZLIhTKc=;
+        b=QYmAKmCBNidSStO8NbB2vfhpdIso0bu3FZq7yMLRFU+zd5139lKrjDDkiGUAEYvlBQ
+         +YBL1AF5xcgwxb/OMLVMmhL7C3pJKMbnIki/XIayVvwl61HBTWIW2cSO3mKGl4bmMIfE
+         8S3o7EioAP4uJxa2R5FbuGtGXN06fJQEUSEyTItTySF4TKBLblX8w9zmQGMcn7UH9C6d
+         Cy8g7bYcH7/bB/XNxKWkILszzRiqlVOEFdus1BeU0J/AJCPk2Rnxr+ejVkIWW0ezTUDn
+         4J+cVk7CtIwz8gbZxz42Bk0SjpSHf2HJvbrftgKbLsDUlAHLjbS1ksGbRGN/2kWoyHLo
+         DgfQ==
+X-Gm-Message-State: AOAM530S17dIwu0DoTT0N9wzGzsSX2Vme3e2TmQ5IxIRTI+jQ1vIsQ/g
+        8xi3mpnXqlGCbRQMS1rWoQY=
+X-Google-Smtp-Source: ABdhPJwiBkVL6vuI5goGhYdfMbEajG9cOJY8MXj2qEucMrXQYa65iBSazvTQHcgKUdnOCdriyfKu0g==
+X-Received: by 2002:a65:4c44:0:b0:39c:e0b5:cd2a with SMTP id l4-20020a654c44000000b0039ce0b5cd2amr45230821pgr.481.1653841780062;
+        Sun, 29 May 2022 09:29:40 -0700 (PDT)
+Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
+        by smtp.gmail.com with ESMTPSA id p1-20020a170902ebc100b00163ad74fe4esm1207781plg.70.2022.05.29.09.29.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 May 2022 09:29:38 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/prime: Ensure mmap offset is initialized
+Date:   Sun, 29 May 2022 09:29:36 -0700
+Message-Id: <20220529162936.2539901-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 08/31] cpufreq: tegra20: Migrate to
- dev_pm_opp_set_config()
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <4b38ceed657bfcf87ff9ab0dd69dd1f2f5658b24.1653564321.git.viresh.kumar@linaro.org>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <4b38ceed657bfcf87ff9ab0dd69dd1f2f5658b24.1653564321.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/22 14:42, Viresh Kumar wrote:
-> The OPP core now provides a unified API for setting all configuration
-> types, i.e. dev_pm_opp_set_config().
-> 
-> Lets start using it.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/tegra20-cpufreq.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/tegra20-cpufreq.c b/drivers/cpufreq/tegra20-cpufreq.c
-> index e8db3d75be25..2c73623e3abb 100644
-> --- a/drivers/cpufreq/tegra20-cpufreq.c
-> +++ b/drivers/cpufreq/tegra20-cpufreq.c
-> @@ -34,7 +34,7 @@ static bool cpu0_node_has_opp_v2_prop(void)
->  
->  static void tegra20_cpufreq_put_supported_hw(void *opp_table)
->  {
-> -	dev_pm_opp_put_supported_hw(opp_table);
-> +	dev_pm_opp_clear_config(opp_table);
->  }
->  
->  static void tegra20_cpufreq_dt_unregister(void *cpufreq_dt)
-> @@ -49,6 +49,10 @@ static int tegra20_cpufreq_probe(struct platform_device *pdev)
->  	struct device *cpu_dev;
->  	u32 versions[2];
->  	int err;
-> +	struct dev_pm_opp_config config = {
-> +		.supported_hw = versions,
-> +		.supported_hw_count = ARRAY_SIZE(versions),
-> +	};
->  
->  	if (!cpu0_node_has_opp_v2_prop()) {
->  		dev_err(&pdev->dev, "operating points not found\n");
-> @@ -71,10 +75,10 @@ static int tegra20_cpufreq_probe(struct platform_device *pdev)
->  	if (WARN_ON(!cpu_dev))
->  		return -ENODEV;
->  
-> -	opp_table = dev_pm_opp_set_supported_hw(cpu_dev, versions, 2);
-> -	err = PTR_ERR_OR_ZERO(opp_table);
-> +	opp_table = dev_pm_opp_set_config(cpu_dev, &config);
-> +	err = PTR_ERR(opp_table);
+From: Rob Clark <robdclark@chromium.org>
 
-Please keep the PTR_ERR_OR_ZERO.
+If a GEM object is allocated, and then exported as a dma-buf fd which is
+mmap'd before or without the GEM buffer being directly mmap'd, the
+vma_node could be unitialized.  This leads to a situation where the CPU
+mapping is not correctly torn down in drm_vma_node_unmap().
 
-tegra20-cpufreq tegra20-cpufreq: failed to set OPP config: -1042688000
+Fixes: e5516553999f ("drm: call drm_gem_object_funcs.mmap with fake offset")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+Note, it's possible the issue existed in some related form prior to the
+commit tagged with Fixes.
 
+ drivers/gpu/drm/drm_prime.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
+index e3f09f18110c..849eea154dfc 100644
+--- a/drivers/gpu/drm/drm_prime.c
++++ b/drivers/gpu/drm/drm_prime.c
+@@ -716,6 +716,11 @@ int drm_gem_prime_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma)
+ 	struct file *fil;
+ 	int ret;
+ 
++	/* Ensure that the vma_node is initialized: */
++	ret = drm_gem_create_mmap_offset(obj);
++	if (ret)
++		return ret;
++
+ 	/* Add the fake offset */
+ 	vma->vm_pgoff += drm_vma_node_start(&obj->vma_node);
+ 
 -- 
-Best regards,
-Dmitry
+2.35.3
+

@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF2F5372CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 00:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BC15372D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 00:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbiE2WgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 18:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S231737AbiE2WsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 18:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiE2Wf7 (ORCPT
+        with ESMTP id S230479AbiE2Wr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 18:35:59 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770C650B2E
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 15:35:57 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id b8so3432078edf.11
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 15:35:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=28grDNGVVwgvkgCPe3HFvEYkJipC2Cb3fnAVX4fq0Lg=;
-        b=J5pOk7YAN5RiRnaTEd5KNJyjKchIaoV/9ff0ljMqAgtajGMDjG8KcERrFloK1EIMkR
-         SyIl5qdg/OzIYTqNk/DmY3FDbsJh+pAUJu2h7kHYD2qMC17GDJkAMIzq+MuB7ACiRJdy
-         KYUwNGYiXTLtVsT5NBGsJdqE4fUMIR19VQOn3XrZ8N0hT9V5gzA4ekE4rzsvJVWsRORy
-         KqVhhqLLCLxlKBPf8xHkt5J/ya+Vr24XCrNHnJuaDLMF9QsPeMGrihSe990IOanm5c1Y
-         KPdFo/Wer5nAb1eDbCwilyzjUljbMNwdiVIj0L5+FcVv3OECj4LPkBUYZPFoqsXtGycA
-         IfcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=28grDNGVVwgvkgCPe3HFvEYkJipC2Cb3fnAVX4fq0Lg=;
-        b=shRHgrv8XgToEEQcLcDeD585GtTT3IoaqUHCxF2VcjX/RND6h9T9yKDc58cnQMKmEl
-         k2c6RS9RcWkcSsxE8j5TJe89Ow5buCk3adsdQmoND71l8lkooP5rNlYoN862sI0fbY2r
-         9PHUJ+BWpM1gwaFMz4LxlvmIbv0iQiDwlSORgbBphAFig708YXw5KwI3+nYixLMrzIYP
-         Wab8WRHtpu+DXkR7MuTxcQGmFQuTi//D90eSlrivKdjO8K4iudS8XQCHe6sfZoVS094L
-         sYkwJnpCcdSaNfMFDZkihvfTDMIfR5jv5plZcYeqSxFBlmcQWqYHMOd+Ph8/lscCRFvD
-         JrbA==
-X-Gm-Message-State: AOAM531+r4w7LuwxYE1CSMwR9egPTPYZDG/yNfGmEpqCegMYO4Ss1El9
-        5n10dytwUTWTRa1KD3p/IWw=
-X-Google-Smtp-Source: ABdhPJy36gFtvxZXqd/ef4i7J/Vur7da2Ugd78lWMuv8NEHUzvMn6fT0GPLCrZE9jkhNYCiNYTZePA==
-X-Received: by 2002:a05:6402:a42:b0:42b:c5e9:1495 with SMTP id bt2-20020a0564020a4200b0042bc5e91495mr25576734edb.323.1653863756112;
-        Sun, 29 May 2022 15:35:56 -0700 (PDT)
-Received: from marios-pc.home.mlevogiannis.gr (194.219.107.43.dsl.dyn.forthnet.gr. [194.219.107.43])
-        by smtp.gmail.com with ESMTPSA id u28-20020a50c05c000000b0042dc882c823sm697456edd.70.2022.05.29.15.35.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 15:35:55 -0700 (PDT)
-From:   Marios Levogiannis <marios.levogiannis@gmail.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     Marios Levogiannis <marios.levogiannis@gmail.com>
-Subject: [PATCH] ALSA: hda/realtek - Fix microphone noise on ASUS TUF B550M-PLUS
-Date:   Mon, 30 May 2022 01:35:24 +0300
-Message-Id: <20220529223524.9057-1-marios.levogiannis@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Sun, 29 May 2022 18:47:57 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B1A644E3
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 15:47:55 -0700 (PDT)
+Received: from [192.168.1.107] ([37.4.249.170]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MF2YC-1o20Bu1rMO-00FUaY; Mon, 30 May 2022 00:47:06 +0200
+Message-ID: <bd8d4306-293e-6755-2f43-c027533d1ff2@i2se.com>
+Date:   Mon, 30 May 2022 00:47:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: vchiq: Performance regression since 5.18-rc1
+Content-Language: en-US
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Minchan Kim <minchan@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Phil Elwell <phil@raspberrypi.com>, regressions@lists.linux.dev
+References: <77d6d498-7dd9-03eb-60f2-d7e682bb1b20@i2se.com>
+ <YoszE8lQ9VcofLtX@linutronix.de> <Yo41ggMvkI1B9TeM@fuller.cnet>
+ <e0402350-687e-14b6-2e30-4b459afa9afb@i2se.com>
+ <Yo5NQS470wTuDq/f@fuller.cnet>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <Yo5NQS470wTuDq/f@fuller.cnet>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:Q4/bnpQYeqTZyYV3rxCUCfh0mQig/0UfrYdXJ7wL/7l+YvbbS3Y
+ 57BojHvt+El4ipo4vGh+DT+flV0nRsZHN7p2etqR+eOlMtSq8lLZOO6HR2RC4WX6LvQ0h7g
+ g82AdyonYlGam+YlgSPwHk9cay4moHXj01AOIIy+hb5lg2AFOCAyOlDaLzZdZLjg1J0ssFq
+ G6SFcpG464ltDyCdw/XWA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oOt7M8ZsNGA=:MVLExm6p1USWJejZUx5ppd
+ Y3n8O/ac1PQFSa31Qq1/HPpVVjsh6SSXGH8e5hoaLTMJweIzKh8/Ac4EAG+Wsk5c+IR5phq3F
+ B35r8/d5vI5K7D112JJ/WV5QEJckNCNGCna9DOdFxjhIOK6xiRyXbYuADsoNpSVNqAQDraBTM
+ iLQYawGmYOGebrqmHCTiaTDqS+HIF6HTrNkLEYkSSiKDLvpsXr8urnv5ti6EPWHO59lj2OcwE
+ Soa3eaLdzZwc7+xbWb7WSggzOovKn1Nxwda8lyQWJe/G7W7qlvL58rgKTyGGpSzKMgiAGlDJG
+ hCOhXjWdjHPEHYQfvivo8hi/CXASyuqQBH6hjksCVpY69ejhJy9zDQeIsCrbQWxHmZGWuSx7A
+ xyQP1utQ6MVflzQrUjYAEHwEL2lRv5mu7F7cEPMCODKW6V5tVEMgQY6A4sy0OSSSBxOUNMAZJ
+ LzMo//TQWhvN0/ZfAgMmttBs1HMSS8e5nfIuV0wKwA9SctqKGlEqCufrNGG+OVuCbjPn4pL4V
+ MDXRtDFYQrT5uhEpdNrsZjYNiGysGsglpe/Z+Yr3ishglRjeCA7FjLsBDsRycKxl/OZlmJ1zg
+ GMkZZa1KNRGjkcfqZXapqgbvhp/t55zgckuYtkTKtAJOAnbPqbB4zW9Fe0TvWbKZ3McD11Xtr
+ JpOuEKIvnk9GWAWeh4jrdQhQP/0j6tUBrLtP5MJ8xwyBg4tq/v8+ShZY/y0xKjoy+gp7Z0jqp
+ /g9lEkJSDhkUoiPXxRNwrzpc3x7q1L+yZoOesT72BJoIOzX2s+TCypsZh5M=
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SCC_BODY_URI_ONLY,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set microphone pins 0x18 (rear) and 0x19 (front) to VREF_50 to fix the
-microphone noise on ASUS TUF B550M-PLUS which uses the ALCS1200A codec.
-The initial value was VREF_80.
-
-The same issue is also present on Windows using both the default Windows
-driver and all tested Realtek drivers before version 6.0.9049.1. Comparing
-Realtek driver 6.0.9049.1 (the first one without the microphone noise) to
-Realtek driver 6.0.9047.1 (the last one with the microphone noise)
-revealed that the fix is the result of setting pins 0x18 and 0x19 to
-VREF_50.
-
-This fix may also work for other boards that have been reported to have
-the same microphone issue and use the ALC1150 and ALCS1200A codecs, since
-these codecs are similar and the fix in the Realtek driver on Windows is
-common for both. However, it is currently enabled only for ASUS TUF
-B550M-PLUS as this is the only board that could be tested.
----
- sound/pci/hda/patch_realtek.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 89d610afa..f3ad454b3 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -1981,6 +1981,7 @@ enum {
- 	ALC1220_FIXUP_CLEVO_PB51ED_PINS,
- 	ALC887_FIXUP_ASUS_AUDIO,
- 	ALC887_FIXUP_ASUS_HMIC,
-+	ALCS1200A_FIXUP_MIC_VREF,
- };
- 
- static void alc889_fixup_coef(struct hda_codec *codec,
-@@ -2526,6 +2527,14 @@ static const struct hda_fixup alc882_fixups[] = {
- 		.chained = true,
- 		.chain_id = ALC887_FIXUP_ASUS_AUDIO,
- 	},
-+	[ALCS1200A_FIXUP_MIC_VREF] = {
-+		.type = HDA_FIXUP_PINCTLS,
-+		.v.pins = (const struct hda_pintbl[]) {
-+			{ 0x18, PIN_VREF50 }, /* rear mic */
-+			{ 0x19, PIN_VREF50 }, /* front mic */
-+			{}
-+		}
-+	},
- };
- 
- static const struct snd_pci_quirk alc882_fixup_tbl[] = {
-@@ -2563,6 +2572,7 @@ static const struct snd_pci_quirk alc882_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x1043, 0x835f, "Asus Eee 1601", ALC888_FIXUP_EEE1601),
- 	SND_PCI_QUIRK(0x1043, 0x84bc, "ASUS ET2700", ALC887_FIXUP_ASUS_BASS),
- 	SND_PCI_QUIRK(0x1043, 0x8691, "ASUS ROG Ranger VIII", ALC882_FIXUP_GPIO3),
-+	SND_PCI_QUIRK(0x1043, 0x8797, "ASUS TUF B550M-PLUS", ALCS1200A_FIXUP_MIC_VREF),
- 	SND_PCI_QUIRK(0x104d, 0x9043, "Sony Vaio VGC-LN51JGB", ALC882_FIXUP_NO_PRIMARY_HP),
- 	SND_PCI_QUIRK(0x104d, 0x9044, "Sony VAIO AiO", ALC882_FIXUP_NO_PRIMARY_HP),
- 	SND_PCI_QUIRK(0x104d, 0x9047, "Sony Vaio TT", ALC889_FIXUP_VAIO_TT),
--- 
-2.36.1
-
+Am 25.05.22 um 17:37 schrieb Marcelo Tosatti:
+> On Wed, May 25, 2022 at 04:07:47PM +0200, Stefan Wahren wrote:
+>> Hi Marcelo,
+>>
+>> Am 25.05.22 um 15:56 schrieb Marcelo Tosatti:
+>>> On Mon, May 23, 2022 at 09:09:07AM +0200, Sebastian Andrzej Siewior wrote:
+>>>> On 2022-05-22 01:22:00 [+0200], Stefan Wahren wrote:
+>>>>> Hi,
+>>>> Hi,
+>>>>
+>>>>> while testing the staging/vc04_services/interface/vchiq_arm driver with my
+>>>>> Raspberry Pi 3 B+ (multi_v7_defconfig) i noticed a huge performance
+>>>>> regression since [ff042f4a9b050895a42cae893cc01fa2ca81b95c] mm:
+>>>>> lru_cache_disable: replace work queue synchronization with synchronize_rcu
+>>>>>
+>>>>> Usually i run "vchiq_test -f 1" to see the driver is still working [1].
+>>>> What about
+>>>> 	https://lore.kernel.org/all/YmrWK%2FKoU1zrAxPI@fuller.cnet/
+>>>>
+>>>> Sebastian
+>>> Stefan,
+>>>
+>>> Can you please try the patch above ?
+>> this was the same as Paul send. I think i need more time for investigation,
+>> maybe there is an issue with the application.
+> To clarify: they are not the same patches.
+Thanks for pointing out. I will test it ASAP.
+>
+>> All i noticed so far is that in good case the CPU usage is around ~ 60 % and
+>> higher, while in bad case the CPU is almost idle. Also the issue is not
+>> reproducible with arm64/defconfig.
+>>
+>>>
+>>>
+>>> _______________________________________________
+>>> linux-arm-kernel mailing list
+>>> linux-arm-kernel@lists.infradead.org
+>>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>>

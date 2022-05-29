@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DC253715F
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECC1537162
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiE2Oi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 10:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
+        id S230439AbiE2OlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 10:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiE2Oi0 (ORCPT
+        with ESMTP id S229934AbiE2OlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 10:38:26 -0400
+        Sun, 29 May 2022 10:41:19 -0400
 Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2BE71D9B;
-        Sun, 29 May 2022 07:38:23 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id v7so427762ilo.3;
-        Sun, 29 May 2022 07:38:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E73C71D9C;
+        Sun, 29 May 2022 07:41:17 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id v7so430040ilo.3;
+        Sun, 29 May 2022 07:41:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:reply-to:from:date:message-id
          :subject:to:cc;
-        bh=ozCrCopKbo0DwEv7Yq/GTtQoqagjPnE8s0vgVexVARc=;
-        b=pddeSOe2cKDs8JAIM8Ezki/L3cd6b0YhLNXlDW7fde5co0nAIW8j2AWc1mFAA0q8H4
-         5BGrXeCFdEH3SXnWPFsrctil6SCAXRHwegINozXORJltcGeyFC51BvrZ6qSq751Yy+SJ
-         c1xyQTpMbCDUitzxOFVGppJK7bB2PvGGfGbSAeXDJL9GE9yiDfFdI6KZUSSNpDfWRy3S
-         ijhIeyLLDgpkxMRwZd1gRCa7CLxAANs4vbI2pEhOg/fCPpbGsgkvFV8wpCc2wqav40go
-         03DccMplDmjbGsXHMk8cMjwqnD0hhC4/KmEXS0onE5rPbwe6rqRwyFCEG8GNHfDNmB+b
-         AnpQ==
+        bh=F223AO/xfl4kYokCSpptIUPMuRsfYzoSF5Di0AhA78I=;
+        b=qCyAslsCLoNXmQpv04ECH4UJtAkuIlU8t1kCpJv9EmSZNN5PVlWPR+hRh5SU+3qW5c
+         JdNeziYReSwPGr2RHm0dSOZTk+aEjE35iNSn5AlOWllUwiluA3Tu+vOYv6O2kKUhJQnC
+         2eEB7J8yvo1MAHWS1PK8aUdQsly7miIrm0Bqk8ISfboPi/chVRKeLBuQ8Rfm9YgB4P9/
+         orqvoy5l8nqiYCOqNRbEwjvyrWK43Ms8JicstB4QfU7H4xkWkRqVcBAXq/QyZMd/Knoj
+         WrcRUrPHgZnapnEwBLJdhgi9hf5i7WpDaYlYGyVZ/Cz9PWSIdjNvqrv4Y9ih0F7CF8fS
+         nDHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc;
-        bh=ozCrCopKbo0DwEv7Yq/GTtQoqagjPnE8s0vgVexVARc=;
-        b=YK54j5OfS4B1HIQNbXWE5aRlt1LxC1XTfVO8Cpb90nZ9bjpNymn/scqe86PfUimC0l
-         v9yRq9IoGhBvXLtlQoPHhWDNL/xJpZIoyz7oJ5hDInNU/xI5TGTAt7MbjqpzDK+fTDpv
-         kTVEbu9RK9ubMKszrrdS4MfqQ4cNvpwTZUR2Nyu/EtoY9NFdvEpIBBcmy+F763HVKpbY
-         /OEKwNz8bExwzrH+yzjndfYP3+P+AWkfZ2Yz/4DEIMLu1VOhjE+fNRyt/3KjjN+AZ9hh
-         UR+H3odB5UogcdJxsFF65Si4CG/ue7QPIw6uRDF9jB4jrmfxSwsSI8nCOQBKXlMOIhzI
-         x3OQ==
-X-Gm-Message-State: AOAM531oCSLEVW8HcrqeKNA/jscLYagQgEoQ7M4iBT5Kot4elQYf86m4
-        0lG0pjzXWKisn6s3ka5S+6NtRP5Rubkq/aGEjeDzvBPZ6S3qTw==
-X-Google-Smtp-Source: ABdhPJymjW6pU80AWWjDWF5+oslAfWwSZYf/wRQde7Ls4AOkJRfjXGdjSx03QVYwpol3YBcnmV3kkS+Tt4mIYpKxzbg=
-X-Received: by 2002:a92:6811:0:b0:2cd:994d:7406 with SMTP id
- d17-20020a926811000000b002cd994d7406mr24939917ilc.245.1653835103129; Sun, 29
- May 2022 07:38:23 -0700 (PDT)
+        bh=F223AO/xfl4kYokCSpptIUPMuRsfYzoSF5Di0AhA78I=;
+        b=Fazgo57UzlEEieVJiHLSfI9rdOdizQY1AGkKeKp7Js/6tXBsxWeBrdyZNOr1hgXTyF
+         x0ZtGKHFlp4dXbHiHP8qX+A721DiQ1l9OufFKTP7sIw5y3SNsTPM1ZLnC6FOUZmOzeni
+         un1AVcB+jXKBJGvD+mrjYM4S8phI0RQonJJZfM4RFkFAK34pVYQ/VjuwUwT5cN4xcg1X
+         LWDBxvKfrhYmXx7SWDQNFwWXiMHFcNn5KwX8Z0U3qBZgYsuSgJDwM0j4NxkFXpc/JleC
+         5LzkTqTdKV013koz5qOHalqLfvRLwlWG/gMDHVZT1oLXK93FhWGa6V0qtJ1oFrdWqHa2
+         Tf0Q==
+X-Gm-Message-State: AOAM5309Lddbmpe67Mh1JFWi8l9g8E6gNMSmWZpszG4Q6gfWB0leJJiJ
+        CtYyjIBWFLbP5yorzMYUw+HpadQzBrCxii3N4g1zpscZiyUXhg==
+X-Google-Smtp-Source: ABdhPJzNAV07rZFb56SBd/LkA2xYnwwH3V0BXubaXVDWxZgVyyPEYz/Se+7w32XIitrt4Gx7/3ADNZAmlvXZD6+kD28=
+X-Received: by 2002:a05:6e02:174f:b0:2d1:3971:9348 with SMTP id
+ y15-20020a056e02174f00b002d139719348mr26825448ill.4.1653835276803; Sun, 29
+ May 2022 07:41:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220528154704.2576290-1-masahiroy@kernel.org>
-In-Reply-To: <20220528154704.2576290-1-masahiroy@kernel.org>
+References: <20220528154704.2576290-1-masahiroy@kernel.org> <20220528154704.2576290-2-masahiroy@kernel.org>
+In-Reply-To: <20220528154704.2576290-2-masahiroy@kernel.org>
 Reply-To: sedat.dilek@gmail.com
 From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sun, 29 May 2022 16:37:47 +0200
-Message-ID: <CA+icZUU7zUCD=xrrYLQyKkDMC-Fj-PFcmHbTiPU8ytOpYq8ZDw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] kbuild: remove redundant cleanups in scripts/link-vmlinux.sh
+Date:   Sun, 29 May 2022 16:40:41 +0200
+Message-ID: <CA+icZUX2k6eB_JfRJ3X3te44nV0CZycpWX5cT1YMPGR1_VrXjg@mail.gmail.com>
+Subject: Re: [PATCH 2/4] kbuild: clean .tmp_* pattern by make clean
 To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     linux-kbuild@vger.kernel.org,
         Nick Desaulniers <ndesaulniers@google.com>,
@@ -69,50 +69,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 10:20 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Sat, May 28, 2022 at 9:43 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> These are cleaned by the top Makefile.
+> Change the "make clean" rule to remove all the .tmp_* files.
 >
-> vmlinux.o and .vmlinux.d matches the '*.[aios]' and '.*.d' patterns
-> respectively.
+> .tmp_objdiff is the only exception, which should be removed by
+> "make mrproper".
+>
+> Rename the record directory of objdiff, .tmp_objdiff to .objdiff to
+> avoid the removal by "make clean".
 >
 > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-I applied this patchset on top of yesterday's kbuild.git#for-next
-(today's did not fit due to "kbuild: do not try to parse *.cmd files
-for objects provided by compiler").
-
-Might be related to this patchset or not:
-
-$ LC_ALL=C ll .*vmlinux*export*
--rw-r--r-- 1 dileks dileks 4.2K May 29 15:11 ..vmlinux.export.o.cmd
--rw-r--r-- 1 dileks dileks 508K May 29 15:11 .vmlinux.export.c
--rw-r--r-- 1 dileks dileks 2.6M May 29 15:11 .vmlinux.export.o
-
-You see the leading double-dot for ..vmlinux.export.o.cmd - intended or not?
+When does someone see .objdiff file(s)?
 
 Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
+( Never seen here. )
 
 -Sedat-
 
 > ---
 >
->  scripts/link-vmlinux.sh | 2 --
->  1 file changed, 2 deletions(-)
+>  Makefile                | 4 ++--
+>  scripts/link-vmlinux.sh | 3 ---
+>  scripts/objdiff         | 2 +-
+>  3 files changed, 3 insertions(+), 6 deletions(-)
 >
+> diff --git a/Makefile b/Makefile
+> index edc3f44cd96c..7011d43dff35 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1490,7 +1490,7 @@ CLEAN_FILES += include/ksym vmlinux.symvers modules-only.symvers \
+>
+>  # Directories & files removed with 'make mrproper'
+>  MRPROPER_FILES += include/config include/generated          \
+> -                 arch/$(SRCARCH)/include/generated .tmp_objdiff \
+> +                 arch/$(SRCARCH)/include/generated .objdiff \
+>                   debian snap tar-install \
+>                   .config .config.old .version \
+>                   Module.symvers \
+> @@ -1857,7 +1857,7 @@ clean: $(clean-dirs)
+>                 -o -name '*.lex.c' -o -name '*.tab.[ch]' \
+>                 -o -name '*.asn1.[ch]' \
+>                 -o -name '*.symtypes' -o -name 'modules.order' \
+> -               -o -name '.tmp_*.o.*' \
+> +               -o -name '.tmp_*' \
+>                 -o -name '*.c.[012]*.*' \
+>                 -o -name '*.ll' \
+>                 -o -name '*.gcno' \
 > diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index a7f6196c7e41..844fc0125d72 100755
+> index 844fc0125d72..b593cb1a8137 100755
 > --- a/scripts/link-vmlinux.sh
 > +++ b/scripts/link-vmlinux.sh
-> @@ -309,8 +309,6 @@ cleanup()
+> @@ -303,9 +303,6 @@ sorttable()
+>  cleanup()
+>  {
+>         rm -f .btf.*
+> -       rm -f .tmp_System.map
+> -       rm -f .tmp_initcalls.lds
+> -       rm -f .tmp_vmlinux*
 >         rm -f System.map
 >         rm -f vmlinux
 >         rm -f vmlinux.map
-> -       rm -f vmlinux.o
-> -       rm -f .vmlinux.d
->         rm -f .vmlinux.objs
->         rm -f .vmlinux.export.c
->  }
+> diff --git a/scripts/objdiff b/scripts/objdiff
+> index 72b0b63c3fe1..68b8d74e5c6f 100755
+> --- a/scripts/objdiff
+> +++ b/scripts/objdiff
+> @@ -32,7 +32,7 @@ if [ -z "$SRCTREE" ]; then
+>         exit 1
+>  fi
+>
+> -TMPD=$SRCTREE/.tmp_objdiff
+> +TMPD=$SRCTREE/.objdiff
+>
+>  usage() {
+>         echo >&2 "Usage: $0 <command> <args>"
 > --
 > 2.32.0
 >

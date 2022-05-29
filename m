@@ -2,77 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DCD53715B
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DC253715F
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbiE2O1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 10:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
+        id S230375AbiE2Oi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 10:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiE2O1q (ORCPT
+        with ESMTP id S229934AbiE2Oi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 10:27:46 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE0F5E156;
-        Sun, 29 May 2022 07:27:45 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 8852B49B;
-        Sun, 29 May 2022 14:27:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 8852B49B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1653834465; bh=50sOo+ZraqVyLzLvKXx59grImfKSYAwBnI+Uwy3gnPI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=H9rxojD+HWuaNLl5INayviDksw0eEMogvk7K3jIyadQ/KSbtAuwJAXZ9hXzwGoojz
-         veQO8xgbRREDNh+8eWFSlLZ9ujRCENMyn2b0tABwuDBvIGowUMQV9oYH2+CBRLtVLr
-         V+KNl8N0kV+zGc+9MbBWH2nHOmM/WG/DpWjkDDih2g0jD2aduzHs/dom5m7V3YY1Oy
-         tIuDgdJ/dF0j7+Ud48gq41onxs79zzX+r3/nPZMQF2TbAE0LSGbW0C+uaxOzoLK53d
-         jGnwglKizC5e/Lf7KC1vIWBOej38szkCm7L0/+2xkujwjJup9brrnPO9CZh9ML8ebC
-         f7v7/JL/Za0WQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>
-Cc:     Garrett LeSage <garrett@lesage.us>,
-        IFo Hancroft <contact@ifohancroft.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] docs: move Linux logo into a new `images` folder
-In-Reply-To: <135d2b02-a888-f3ae-ee16-ef30ab80e529@gmail.com>
-References: <20220528153132.8636-1-ojeda@kernel.org>
- <135d2b02-a888-f3ae-ee16-ef30ab80e529@gmail.com>
-Date:   Sun, 29 May 2022 08:27:51 -0600
-Message-ID: <8735gs9zx4.fsf@meer.lwn.net>
+        Sun, 29 May 2022 10:38:26 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2BE71D9B;
+        Sun, 29 May 2022 07:38:23 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id v7so427762ilo.3;
+        Sun, 29 May 2022 07:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=ozCrCopKbo0DwEv7Yq/GTtQoqagjPnE8s0vgVexVARc=;
+        b=pddeSOe2cKDs8JAIM8Ezki/L3cd6b0YhLNXlDW7fde5co0nAIW8j2AWc1mFAA0q8H4
+         5BGrXeCFdEH3SXnWPFsrctil6SCAXRHwegINozXORJltcGeyFC51BvrZ6qSq751Yy+SJ
+         c1xyQTpMbCDUitzxOFVGppJK7bB2PvGGfGbSAeXDJL9GE9yiDfFdI6KZUSSNpDfWRy3S
+         ijhIeyLLDgpkxMRwZd1gRCa7CLxAANs4vbI2pEhOg/fCPpbGsgkvFV8wpCc2wqav40go
+         03DccMplDmjbGsXHMk8cMjwqnD0hhC4/KmEXS0onE5rPbwe6rqRwyFCEG8GNHfDNmB+b
+         AnpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=ozCrCopKbo0DwEv7Yq/GTtQoqagjPnE8s0vgVexVARc=;
+        b=YK54j5OfS4B1HIQNbXWE5aRlt1LxC1XTfVO8Cpb90nZ9bjpNymn/scqe86PfUimC0l
+         v9yRq9IoGhBvXLtlQoPHhWDNL/xJpZIoyz7oJ5hDInNU/xI5TGTAt7MbjqpzDK+fTDpv
+         kTVEbu9RK9ubMKszrrdS4MfqQ4cNvpwTZUR2Nyu/EtoY9NFdvEpIBBcmy+F763HVKpbY
+         /OEKwNz8bExwzrH+yzjndfYP3+P+AWkfZ2Yz/4DEIMLu1VOhjE+fNRyt/3KjjN+AZ9hh
+         UR+H3odB5UogcdJxsFF65Si4CG/ue7QPIw6uRDF9jB4jrmfxSwsSI8nCOQBKXlMOIhzI
+         x3OQ==
+X-Gm-Message-State: AOAM531oCSLEVW8HcrqeKNA/jscLYagQgEoQ7M4iBT5Kot4elQYf86m4
+        0lG0pjzXWKisn6s3ka5S+6NtRP5Rubkq/aGEjeDzvBPZ6S3qTw==
+X-Google-Smtp-Source: ABdhPJymjW6pU80AWWjDWF5+oslAfWwSZYf/wRQde7Ls4AOkJRfjXGdjSx03QVYwpol3YBcnmV3kkS+Tt4mIYpKxzbg=
+X-Received: by 2002:a92:6811:0:b0:2cd:994d:7406 with SMTP id
+ d17-20020a926811000000b002cd994d7406mr24939917ilc.245.1653835103129; Sun, 29
+ May 2022 07:38:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220528154704.2576290-1-masahiroy@kernel.org>
+In-Reply-To: <20220528154704.2576290-1-masahiroy@kernel.org>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 29 May 2022 16:37:47 +0200
+Message-ID: <CA+icZUU7zUCD=xrrYLQyKkDMC-Fj-PFcmHbTiPU8ytOpYq8ZDw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] kbuild: remove redundant cleanups in scripts/link-vmlinux.sh
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bagas Sanjaya <bagasdotme@gmail.com> writes:
-
-> On 5/28/22 22:31, Miguel Ojeda wrote:
->> Having assets in the top-level `Documentation` directory can make
->> it harder to find the documents one needs, especially if we want
->> to add more of them later on.
->> 
->> Instead, create a new `images` folder inside it that is used
->> to hold assets such as logos.
->> 
+On Sat, May 28, 2022 at 10:20 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> Do assets include CSS and JS files?
+> These are cleaned by the top Makefile.
 >
-> And if we plan to add non-image assets to images/, that directory will
-> be misleading. I suggest to name the directory as assets/.
+> vmlinux.o and .vmlinux.d matches the '*.[aios]' and '.*.d' patterns
+> respectively.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Can you please point out any CSS or JavaScript files in the kernel tree,
-or any that we might expect to have there anytime soon?  I don't think
-this is a case we need to be worried about.
+I applied this patchset on top of yesterday's kbuild.git#for-next
+(today's did not fit due to "kbuild: do not try to parse *.cmd files
+for objects provided by compiler").
 
-Thanks,
+Might be related to this patchset or not:
 
-jon
+$ LC_ALL=C ll .*vmlinux*export*
+-rw-r--r-- 1 dileks dileks 4.2K May 29 15:11 ..vmlinux.export.o.cmd
+-rw-r--r-- 1 dileks dileks 508K May 29 15:11 .vmlinux.export.c
+-rw-r--r-- 1 dileks dileks 2.6M May 29 15:11 .vmlinux.export.o
+
+You see the leading double-dot for ..vmlinux.export.o.cmd - intended or not?
+
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
+
+-Sedat-
+
+> ---
+>
+>  scripts/link-vmlinux.sh | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> index a7f6196c7e41..844fc0125d72 100755
+> --- a/scripts/link-vmlinux.sh
+> +++ b/scripts/link-vmlinux.sh
+> @@ -309,8 +309,6 @@ cleanup()
+>         rm -f System.map
+>         rm -f vmlinux
+>         rm -f vmlinux.map
+> -       rm -f vmlinux.o
+> -       rm -f .vmlinux.d
+>         rm -f .vmlinux.objs
+>         rm -f .vmlinux.export.c
+>  }
+> --
+> 2.32.0
+>

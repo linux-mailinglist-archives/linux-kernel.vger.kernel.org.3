@@ -2,171 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C096E537087
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 12:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6D453708B
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 12:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiE2KNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 06:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
+        id S229847AbiE2Kcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 06:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiE2KNI (ORCPT
+        with ESMTP id S229529AbiE2Kco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 06:13:08 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467361CB01
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 03:13:06 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id jx22so15876101ejb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 03:13:06 -0700 (PDT)
+        Sun, 29 May 2022 06:32:44 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2019740E55
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 03:32:41 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id 2so8830840iou.5
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 03:32:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bUy1BLSfINnv6ERfgwnR9eRuDhaZE3UpSRaIiNc0rCk=;
-        b=fOCVaeWekIDBF1ZTj+ZMJy83A6Ex7xJs/MN5E3AF/v8o5zvs2ENqHEpThyFQUumh+d
-         VTifvXiSxPk5W/+dDVbHcSm5nTN5ozMBfO9Xr2FdVvVMuF7/tscs3txTgA6KQDGAvteR
-         R8vvvIKMs07CwMPbo+dU74xrLJqj+jG2KEWkS5XBl5zzOi46h2eqERFGuaD0JLzwjFZq
-         9pqqEmsGVdEumazbZKkSsonZV/jyU4DZRO5FA7hpOZlKR6ET6NlcMfI/cN3WlBxTIcWW
-         m2dopHfGh1WUkzNIKBbPOgtZwYrEdO/nOHnZUVwUP1vi18jBhR2wgfhCwGWyMO9HSjhj
-         ktSA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LwwoQYR2ORpRNhK4MoMYiNzHU8QyLU3W9ubNdWH2aeo=;
+        b=MVeQo4cZ/E0x6L7YEyK/+zDWpm10pgfLFBacjunWcD8PSlL2po4SV7xzR8nUnm2Rc3
+         h6Rm2PGjwh90MOQdyF1hzO+WKvAhOZTIAB9AaHiYiZX/VTMUnnvNRYv02nicDGgVRzA8
+         cwZXJkLTilVXb9401oQ1eT1bZswmIv8F/BySHzJsW+GGZD+nzqzN1pxMmSNoNlDfLB77
+         ZSSXEJfXwBWbu3NTsROTFq8OoDab3eI85PICiNyAesF4e3rWVYtcHf0oTmg5vR0aqQnw
+         pTYvD/aaIOmw5W13u+vg5VgEkMUCdAN3ogIbk+5GOxDjPEo6hPSBaFyOltb0AGbbnLR7
+         MCMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bUy1BLSfINnv6ERfgwnR9eRuDhaZE3UpSRaIiNc0rCk=;
-        b=2yHISUpL8+Si0tE2TlSYwdsZDMiYQ0gE+/AKQMbbgKhwKxOuCJk3HpJDTHNfVmc4AC
-         IebvWYPBSlgidy0ET8ZMutdRwoNRZwFoHXM5bsq+mwrvWIB1qP472Az9B73GgQA7Ugbx
-         RaTePtbgw175dkk4Lx5m8kUQpoAuaqWUXAyVItKgO69fQmgUOHub02Lk1oX3iplbYP18
-         N84jq660VMnk1GY7Fe9eKISH4Nuy0vVZUspBpWCfa6ZgzGSC0pc6b7NHW+hQpPCKdYud
-         6oukpNjHUC8SiPb9saGpV86CJT40QguTbnvxG23UzmMyP5G1sA1+9NRUny5OxkMusBLX
-         6ZzQ==
-X-Gm-Message-State: AOAM532Ub1YJtTehBMj9jRUACLOlFUlX/w5lucSuaMM0flyzmqtIpi7e
-        IfXV+/U5wLEU+By5eHw+N/Vwzw==
-X-Google-Smtp-Source: ABdhPJwRnn73I0h92HQD0I7VsbBaBGvIs+5l+glq3XnZt5443BhXX1yMDrfdu0PUF5ljjdSKKrk0/w==
-X-Received: by 2002:a17:907:7f0f:b0:6fe:b18c:72cf with SMTP id qf15-20020a1709077f0f00b006feb18c72cfmr38239293ejc.203.1653819184771;
-        Sun, 29 May 2022 03:13:04 -0700 (PDT)
-Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id 12-20020a50874c000000b0042bc5a536edsm4760532edv.28.2022.05.29.03.13.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 May 2022 03:13:04 -0700 (PDT)
-Message-ID: <09803412-640a-6c9a-fe5a-b0af8cd10f0f@linaro.org>
-Date:   Sun, 29 May 2022 12:13:03 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LwwoQYR2ORpRNhK4MoMYiNzHU8QyLU3W9ubNdWH2aeo=;
+        b=OdqFrqC6OPBhfS+F/aHEoSXQGzrQsGnQ55wjZF3MTUG7vjuHhQ4INAxZdmZShCX9rK
+         C4MXRnm5ZvF9Bt4gPKvpfX5BX7V2SsEyUPUODXtuHt3juHC5jkR2W2AmLWoDT3GPvrZM
+         z5EQTezcImKZnR01cwB/Kos5Hzophp1NoJEMdsNRyCEIdVP1LUosXgHE8Ti41xN/YwK/
+         N2qdmVISOgIxMHuyiL6gvUrtrcR05MP+zxe0TZQ1tUbRPzUJcU5rTQstIWOI51rUEO1F
+         1uKk0DyS9bPyKAfaPpPqMLWL0ZGJ1g/tEc09su6RUxxEaskDlgmWaBzk3Gszf0qeX5tI
+         w37g==
+X-Gm-Message-State: AOAM533M87VZ+gQZpJUv/FYJIOXs7MFzt9sypz55vJJkvDp/nLlaplLJ
+        zTDPS3Sq7/eITu7xARW7Zls=
+X-Google-Smtp-Source: ABdhPJwPhNG/9jG22wHXfc3SUixEmr9mAtpCKn02IlcEatGkfhRZMQCgqgap3G57mZ2FECfYJcOR4w==
+X-Received: by 2002:a05:6638:2601:b0:331:3a3:3bd8 with SMTP id m1-20020a056638260100b0033103a33bd8mr3546750jat.62.1653820360416;
+        Sun, 29 May 2022 03:32:40 -0700 (PDT)
+Received: from n2.us-central1-a.c.spheric-algebra-350919.internal (151.16.70.34.bc.googleusercontent.com. [34.70.16.151])
+        by smtp.gmail.com with ESMTPSA id x18-20020a927c12000000b002d149ec2606sm2794127ilc.65.2022.05.29.03.32.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 May 2022 03:32:39 -0700 (PDT)
+Date:   Sun, 29 May 2022 10:32:37 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, vbabka@suse.cz,
+        akpm@linux-foundation.org, willy@infradead.org
+Subject: Re: Is _PAGE_PROTNONE set only for user mappings?
+Message-ID: <YpNLxXvGFQpyPjRa@n2.us-central1-a.c.spheric-algebra-350919.internal>
+References: <20220506051940.156952-1-42.hyeyoo@gmail.com>
+ <56f89895-601e-44c9-bda4-5fae6782e27e@amd.com>
+ <YnpTHMvOO/pLJQ+l@hyeyoo>
+ <5fe161cb-6c55-6c4d-c208-16c77e115d3f@amd.com>
+ <8c2735ac-0335-6e2a-8341-8266d5d13c30@intel.com>
+ <YntHrTX12TGp35aF@hyeyoo>
+ <20220512103748.GH3441@techsingularity.net>
+ <Yn3tssUR8w8mC1DJ@hyeyoo>
+ <3f2f7c09-ddf3-6052-9860-8554a4ff2798@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4] ARM: dts: aspeed: Adding Jabil Rubypass BMC
-Content-Language: en-US
-To:     David Wang <David_Wang6097@jabil.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     edward_chen@jabil.com, ben_pai@jabil.com
-References: <20220527042708.805444-1-David_Wang6097@jabil.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220527042708.805444-1-David_Wang6097@jabil.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3f2f7c09-ddf3-6052-9860-8554a4ff2798@intel.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/05/2022 06:27, David Wang wrote:
-> The initial introduction of the jabil server with AST2600 BMC SoC.
+On Mon, May 16, 2022 at 07:04:32AM -0700, Dave Hansen wrote:
+> On 5/12/22 22:33, Hyeonggon Yoo wrote:
+> > Thanks Mel, and IIUC nor does do_kern_addr_fault() in arch/x86/mm/fault.c
+> > expect _PAGE_PROTNONE instead of _PAGE_GLOBAL. I want to make it clear
+> > in the code that _PAGE_PROTNONE is only used for user mappings.
+> > 
+> > How does below look?
+> > 
+> > diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
+> > index 40497a9020c6..f8d02b91a90c 100644
+> > --- a/arch/x86/include/asm/pgtable_types.h
+> > +++ b/arch/x86/include/asm/pgtable_types.h
+> > @@ -35,7 +35,10 @@
+> >  #define _PAGE_BIT_DEVMAP	_PAGE_BIT_SOFTW4
+> >  
+> >  /* If _PAGE_BIT_PRESENT is clear, we use these: */
+> > -/* - if the user mapped it with PROT_NONE; pte_present gives true */
+> > +/*
+> > + * if the user mapped it with PROT_NONE; pte_present gives true
+> > + * this is only used for user mappings (with _PAGE_BIT_USER)
+> > + */
+> >  #define _PAGE_BIT_PROTNONE	_PAGE_BIT_GLOBAL
+> >  
+> >  #define _PAGE_PRESENT	(_AT(pteval_t, 1) << _PAGE_BIT_PRESENT)
+> > @@ -115,7 +118,8 @@
+> >  #define _PAGE_DEVMAP	(_AT(pteval_t, 0))
+> >  #endif
+> >  
+> > -#define _PAGE_PROTNONE	(_AT(pteval_t, 1) << _PAGE_BIT_PROTNONE)
+> > +#define _PAGE_PROTNONE	((_AT(pteval_t, 1) << _PAGE_BIT_USER) | \
+> > +			 (_AT(pteval_t, 1) << _PAGE_BIT_PROTNONE))
+> >  
+> >  /*
+> >   * Set of bits not changed in pte_modify.  The pte's
 > 
-> ---
+> I don't like the idea of _PAGE_BIT_USER being so implicit.  It is
+> something kernel users should know explicitly that they are messing with.
 > 
-> v4
-> - Add document the new compatible.
-> - Delete redundant blank lines.
-> - Add a new line at end of file.
+> I was thinking of something more along the lines of taking the
+> set_memory.c code and ensuring that it never sets (or even observes)
+> _PAGE_BIT_GLOBAL on a _PAGE_USER mapping.  There was also a question of
+> if set_memory.c is ever used on userspace mappings.  It would be good to
+> validate whether it's possible in-tree today and if not, enforce that
+> _PAGE_USER PTEs should never even be observed with set_memory.c.
 
-Thanks for the changes but several fixes are still needed. If some of my
-comments are a bit unspecific, you can always ask for clarification.
+Writing code I'm a bit confused:
+commit d1440b23c922d8 ("x86/mm: Factor out pageattr
+_PAGE_GLOBAL setting") says:
 
-> 
-> v3
-> - Adjustment entries are ordered by name.
-> - Remove the bootargs property and modify the stdout-path property.
-> - Group multiple LED devices into a group.
-> - Modify the "gpio3_71" node name format.
-> - Delete unneeded blank line at the end.
-> 
-> v2
-> - Disable empty i2c bus.
-> - Remove gfx node because aspeed-g6.dtsi isn't supported.
-> - Modify the led format and add some properties.
-> - Fix wrong indentation.
-> - Add stdout property in chosen node.
-> - Rename temp to temperature-sensor in i2c bus 0.
-> 
-> ---
-> 
-> Signed-off-by: David Wang <David_Wang6097@jabil.com>
-> ---
->  .../bindings/arm/jabil/jabil-boards.yaml      |  24 +
->  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/aspeed-bmc-jabil-rubypass.dts    | 442 ++++++++++++++++++
->  4 files changed, 469 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/jabil/jabil-boards.yaml
->  create mode 100644 arch/arm/boot/dts/aspeed-bmc-jabil-rubypass.dts
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/jabil/jabil-boards.yaml b/Documentation/devicetree/bindings/arm/jabil/jabil-boards.yaml
-> new file mode 100644
-> index 000000000000..dde7791aa8bc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/jabil/jabil-boards.yaml
-> @@ -0,0 +1,24 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/jabil/jabil-boards.yaml#
+	"This unconditional setting of _PAGE_GLOBAL is a problem when we have
+	PTI and non-PTI and we want some areas to have _PAGE_GLOBAL and some
+	not." 
 
-This should be aspeed. Let me send a send a base patch for all Aspeed
-boards.
+Is this this sentence not valid anymore in PTI,
+and just unconditionally setting _PAGE_GLOBAL would be okay in kernel
+side regardless of PTI?
 
+I'm wondering it because previously I thought "Let's not clear
+_PAGE_GLOBAL in set_memory.c for kernel mappings and make pmd/pte_present() not
+confuse when _PAGE_USER is not set"
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Jabil Bmc and Aspeed SoC based boards
-> +
-> +maintainers:
-> +  - David Wang <David_wang6097@jabil.com>
-> +
-> +properties:
-> +  $nodename:
-> +    const: '/'
-> +  compatible:
-> +    oneOf:
-> +      - description: Aspeed ast2600 bmc boards
-> +        items:
-> +          - const: jabil,rbp                    # eaglestream platform
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: true
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index 01430973ecec..69738483c059 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -624,6 +624,8 @@ patternProperties:
->      description: Jiandangjing Technology Co., Ltd.
->    "^joz,.*":
->      description: JOZ BV
-> +  "^jabil,.*":
-> +    description: Jabil Design Service Branch (Sanchong)
+But you don't like it as it's a bit implicit.
+Then I wonder - how do we know when to set _PAGE_GLOBAL again?
 
-The list is ordered alphabetically, so jabil goes before. This should be
-also separate patch.
-
->    "^kam,.*":
->      description: Kamstrup A/S
->    "^karo,.*":
-Best regards,
-Krzysztof
+> The arch/x86/mm/dump_pagetables.c code is also a reasonable place to put
+> assumptions about the page tables since it walks *everything* when asked.

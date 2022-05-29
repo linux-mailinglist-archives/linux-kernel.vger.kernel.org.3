@@ -2,94 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24019537186
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 17:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16392537205
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 20:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbiE2PbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 11:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
+        id S231544AbiE2SEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 14:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiE2PbB (ORCPT
+        with ESMTP id S229876AbiE2SEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 11:31:01 -0400
-Received: from jari.cn (unknown [218.92.28.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB9F83FBC4
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 08:31:00 -0700 (PDT)
-Received: by ajax-webmail-localhost.localdomain (Coremail) ; Sun, 29 May
- 2022 23:25:54 +0800 (GMT+08:00)
-X-Originating-IP: [182.148.15.20]
-Date:   Sun, 29 May 2022 23:25:54 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "XueBing Chen" <chenxuebing@jari.cn>
-To:     dinguyen@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] nios2: clean up warnings found by checkpatch
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Sun, 29 May 2022 14:04:04 -0400
+X-Greylist: delayed 5241 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 29 May 2022 11:04:01 PDT
+Received: from mx.sb-roscoff.fr (mx.sb-roscoff.fr [193.52.39.203])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B61964BD6;
+        Sun, 29 May 2022 11:04:01 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mx.sb-roscoff.fr (Postfix) with ESMTP id 97F95225D65;
+        Sun, 29 May 2022 17:30:45 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mx.sb-roscoff.fr
+Received: from mx.sb-roscoff.fr ([127.0.0.1])
+        by localhost (mx.sb-roscoff.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id uzxxGK7uxwgL; Sun, 29 May 2022 17:30:43 +0200 (CEST)
+Received: from web11.sb-roscoff.fr (web11.sb-roscoff.fr [192.168.1.181])
+        by mx.sb-roscoff.fr (Postfix) with ESMTP id C5319225BF3;
+        Sun, 29 May 2022 17:28:23 +0200 (CEST)
+Received: from 141.11.28.159
+        (SquirrelMail authenticated user sgarric)
+        by web11.sb-roscoff.fr with HTTP;
+        Sun, 29 May 2022 17:28:24 +0200
+Message-ID: <1bface92207363f7077be37c71aa39a3.squirrel@web11.sb-roscoff.fr>
+Date:   Sun, 29 May 2022 17:28:24 +0200
+Subject: =?iso-8859-1?Q?Gesch=E4ft?=
+From:   "Dave Ramsden" <sgarric@sb-roscoff.fr>
+Reply-To: davrsd1@aol.com
+User-Agent: SquirrelMail/1.4.22
 MIME-Version: 1.0
-Message-ID: <3132c1c.a93.181106c7d36.Coremail.chenxuebing@jari.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAfwD3AG+CkJNisyc6AA--.685W
-X-CM-SenderInfo: hfkh05pxhex0nj6mt2flof0/1tbiAQABCmFEYxsmmAACsr
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR,T_SPF_PERMERROR autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain;charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+X-Priority: 3 (Normal)
+Importance: Normal
+To:     undisclosed-recipients:;
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CkNsZWFuIHVwIGEgaGFuZGZ1bCBvZiBjaGVja3BhdGNoIHdhcm5pbmdzOgotIFdBUk5JTkc6IFBy
-ZWZlciAndW5zaWduZWQgbG9uZycgb3ZlciAndW5zaWduZWQgbG9uZyBpbnQnCiAgYXMgdGhlIGlu
-dCBpcyB1bm5lY2Vzc2FyeQotIFdBUk5JTkc6IFByZWZlciAnbG9uZycgb3ZlciAnbG9uZyBpbnQn
-IGFzIHRoZSBpbnQgaXMgdW5uZWNlc3NhcnkKLSBXQVJOSU5HOiBQcmVmZXIgJ3Vuc2lnbmVkIGlu
-dCcgdG8gYmFyZSB1c2Ugb2YgJ3Vuc2lnbmVkJwoKU2lnbmVkLW9mZi1ieTogWHVlQmluZyBDaGVu
-IDxjaGVueHVlYmluZ0BqYXJpLmNuPgotLS0KIGFyY2gvbmlvczIvbGliL21lbWNweS5jIHwgMTYg
-KysrKysrKystLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgOCBkZWxl
-dGlvbnMoLSkKCmRpZmYgLS1naXQgYS9hcmNoL25pb3MyL2xpYi9tZW1jcHkuYyBiL2FyY2gvbmlv
-czIvbGliL21lbWNweS5jCmluZGV4IDE3MTVmNWQyOGIxMS4uMjVhNTQxYjYwOWJhIDEwMDY0NAot
-LS0gYS9hcmNoL25pb3MyL2xpYi9tZW1jcHkuYworKysgYi9hcmNoL25pb3MyL2xpYi9tZW1jcHku
-YwpAQCAtMjIsNyArMjIsNyBAQAogLyogVHlwZSB0byB1c2UgZm9yIGFsaWduZWQgbWVtb3J5IG9w
-ZXJhdGlvbnMuCiAgICBUaGlzIHNob3VsZCBub3JtYWxseSBiZSB0aGUgYmlnZ2VzdCB0eXBlIHN1
-cHBvcnRlZCBieSBhIHNpbmdsZSBsb2FkCiAgICBhbmQgc3RvcmUuICAqLwotI2RlZmluZQlvcF90
-CXVuc2lnbmVkIGxvbmcgaW50CisjZGVmaW5lCW9wX3QJdW5zaWduZWQgbG9uZwogI2RlZmluZSBP
-UFNJWgkoc2l6ZW9mKG9wX3QpKQogCiAvKiBPcHRpbWFsIHR5cGUgZm9yIHN0b3JpbmcgYnl0ZXMg
-aW4gcmVnaXN0ZXJzLiAgKi8KQEAgLTY5LDcgKzY5LDcgQEAgZG8gewkJCQkJCQkJCVwKICAgIGJs
-b2NrIGJlZ2lubmluZyBhdCBEU1RQIHdpdGggTEVOIGBvcF90JyB3b3JkcyAobm90IExFTiBieXRl
-cyEpLgogICAgQm90aCBTUkNQIGFuZCBEU1RQIHNob3VsZCBiZSBhbGlnbmVkIGZvciBtZW1vcnkg
-b3BlcmF0aW9ucyBvbiBgb3BfdCdzLiAgKi8KIC8qIHN0cmVhbS1saW5lZCAocmVhZCB4OCArIHdy
-aXRlIHg4KSAqLwotc3RhdGljIHZvaWQgX3dvcmRjb3B5X2Z3ZF9hbGlnbmVkKGxvbmcgaW50IGRz
-dHAsIGxvbmcgaW50IHNyY3AsIHNpemVfdCBsZW4pCitzdGF0aWMgdm9pZCBfd29yZGNvcHlfZndk
-X2FsaWduZWQobG9uZyBkc3RwLCBsb25nIHNyY3AsIHNpemVfdCBsZW4pCiB7CiAJd2hpbGUgKGxl
-biA+IDcpIHsKIAkJcmVnaXN0ZXIgb3BfdCBhMCwgYTEsIGEyLCBhMywgYTQsIGE1LCBhNiwgYTc7
-CkBAIC0xMDksNyArMTA5LDcgQEAgc3RhdGljIHZvaWQgX3dvcmRjb3B5X2Z3ZF9hbGlnbmVkKGxv
-bmcgaW50IGRzdHAsIGxvbmcgaW50IHNyY3AsIHNpemVfdCBsZW4pCiAgICBEU1RQIHNob3VsZCBi
-ZSBhbGlnbmVkIGZvciBtZW1vcnkgb3BlcmF0aW9ucyBvbiBgb3BfdCdzLCBidXQgU1JDUCBtdXN0
-CiAgICAqbm90KiBiZSBhbGlnbmVkLiAgKi8KIC8qIHN0cmVhbS1saW5lZCAocmVhZCB4NCArIHdy
-aXRlIHg0KSAqLwotc3RhdGljIHZvaWQgX3dvcmRjb3B5X2Z3ZF9kZXN0X2FsaWduZWQobG9uZyBp
-bnQgZHN0cCwgbG9uZyBpbnQgc3JjcCwKK3N0YXRpYyB2b2lkIF93b3JkY29weV9md2RfZGVzdF9h
-bGlnbmVkKGxvbmcgZHN0cCwgbG9uZyBzcmNwLAogCQkJCQlzaXplX3QgbGVuKQogewogCW9wX3Qg
-YXA7CkBAIC0xNTksOCArMTU5LDggQEAgc3RhdGljIHZvaWQgX3dvcmRjb3B5X2Z3ZF9kZXN0X2Fs
-aWduZWQobG9uZyBpbnQgZHN0cCwgbG9uZyBpbnQgc3JjcCwKIAogdm9pZCAqbWVtY3B5KHZvaWQg
-KmRzdHBwLCBjb25zdCB2b2lkICpzcmNwcCwgc2l6ZV90IGxlbikKIHsKLQl1bnNpZ25lZCBsb25n
-IGludCBkc3RwID0gKGxvbmcgaW50KSBkc3RwcDsKLQl1bnNpZ25lZCBsb25nIGludCBzcmNwID0g
-KGxvbmcgaW50KSBzcmNwcDsKKwl1bnNpZ25lZCBsb25nIGRzdHAgPSAobG9uZykgZHN0cHA7CisJ
-dW5zaWduZWQgbG9uZyBzcmNwID0gKGxvbmcpIHNyY3BwOwogCiAJLyogQ29weSBmcm9tIHRoZSBi
-ZWdpbm5pbmcgdG8gdGhlIGVuZC4gICovCiAKQEAgLTE5MSwxMCArMTkxLDEwIEBAIHZvaWQgKm1l
-bWNweSh2b2lkICpkc3RwcCwgY29uc3Qgdm9pZCAqc3JjcHAsIHNpemVfdCBsZW4pCiAJcmV0dXJu
-IGRzdHBwOwogfQogCi12b2lkICptZW1jcHliKHZvaWQgKmRzdHBwLCBjb25zdCB2b2lkICpzcmNw
-cCwgdW5zaWduZWQgbGVuKQordm9pZCAqbWVtY3B5Yih2b2lkICpkc3RwcCwgY29uc3Qgdm9pZCAq
-c3JjcHAsIHVuc2lnbmVkIGludCBsZW4pCiB7Ci0JdW5zaWduZWQgbG9uZyBpbnQgZHN0cCA9IChs
-b25nIGludCkgZHN0cHA7Ci0JdW5zaWduZWQgbG9uZyBpbnQgc3JjcCA9IChsb25nIGludCkgc3Jj
-cHA7CisJdW5zaWduZWQgbG9uZyBkc3RwID0gKGxvbmcpIGRzdHBwOworCXVuc2lnbmVkIGxvbmcg
-c3JjcCA9IChsb25nKSBzcmNwcDsKIAogCUJZVEVfQ09QWV9GV0QoZHN0cCwgc3JjcCwgbGVuKTsK
-IAotLSAKMi4zNi4xCg==
+
+
+
+Ich bin Herr. Dave Ramsden und ich arbeiten mit der Bank of England
+zusammen. Ich habe einen lukrativen Geschäftsvorschlag für Sie, den ich
+Ihnen als Antwort auf diese E-Mail mit Einzelheiten zur Prüfung zukommen
+lassen werde.
+
+Bitte senden Sie Ihre Antwort, wenn möglich, auf Englisch, um weitere
+Einzelheiten zu erhalten.
+
+Mit freundlichen Grüßen,
+David Ramsden
+_____________________________________
+Persönlicher Assistent: Sarah Garric
+

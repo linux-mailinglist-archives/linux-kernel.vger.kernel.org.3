@@ -2,84 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6DB537028
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 09:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D206253702B
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 09:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiE2HRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 03:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
+        id S229656AbiE2H0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 03:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiE2HRQ (ORCPT
+        with ESMTP id S229557AbiE2H0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 03:17:16 -0400
-Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198601704F
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 00:17:13 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.191.102])
-        by smtp.orange.fr with ESMTPA
-        id vDAjnJygkOXCyvDAjnpj0X; Sun, 29 May 2022 09:17:12 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 29 May 2022 09:17:12 +0200
-X-ME-IP: 90.11.191.102
-Message-ID: <097dca7f-12ba-ddbc-7380-05f3278fe40b@wanadoo.fr>
-Date:   Sun, 29 May 2022 09:17:09 +0200
+        Sun, 29 May 2022 03:26:45 -0400
+Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E2F4DF43
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 00:26:43 -0700 (PDT)
+Received: by mail-pj1-f68.google.com with SMTP id n10so8180714pjh.5
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 00:26:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vu4dWIGyiffGhwd6i2g4sM9fvK38UUljjdIsvD/ie+k=;
+        b=eOhqRbRWBq7b9snBmQahJtUCnF/Nw2p0M6yivnRg5IrIHT2xOad2YwEUQbfOON8rsG
+         okUtTiQMNuwPNl16oqN1PDlrW8FWCnGpt+kNFg2RuFszuelu37idlbxdOcQQ9KzkJgwg
+         Z9Eh/16k7t9OhlWvr3be6Bo0fEVyizGDRIPC4qPHRXgCONvUCkR/w29KDQZeKx2NlsHg
+         llHkDB0YXmVkzq3EfMChKUojnP/Fjr9D7VL2k8MkQuXYEJydiOf4IYxlYCFt0b1j9IvW
+         gIgr2QC5V6n5zzyecZDAVkzIWV+uFFCKrwmD6Dy6cupq0FSE7FOKBAN9WfYtJsaOjQxe
+         bd7Q==
+X-Gm-Message-State: AOAM530isYRqX+OHWd9lfLga6/kqpj/rLRvyKYZ3NlgrUBfbr6OWzEB8
+        XLleoMLFoYb27WiQc49psw==
+X-Google-Smtp-Source: ABdhPJzDFqMQ8MoMUp9uXAH6WqII1t+98/oFdCydP9hOJQWN8ccihKXmsmTEqRfLtPSlDiDi98wevg==
+X-Received: by 2002:a17:90b:224a:b0:1e2:7afb:3367 with SMTP id hk10-20020a17090b224a00b001e27afb3367mr11946655pjb.37.1653809203357;
+        Sun, 29 May 2022 00:26:43 -0700 (PDT)
+Received: from localhost.localdomain (ns1003916.ip-51-81-154.us. [51.81.154.37])
+        by smtp.gmail.com with ESMTPSA id h24-20020aa796d8000000b0050df474e4d2sm6448333pfq.218.2022.05.29.00.26.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 May 2022 00:26:42 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     alexander.deucher@amd.com, hristian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        Hawking.Zhang@amd.com, mike@fireburn.co.uk, Xiaojian.Du@amd.com,
+        evan.quan@amd.com
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, sunliming@kylinos.cn,
+        kelulanainsley@gmail.com, kernel test robot <lkp@intel.com>
+Subject: [PATCH] drm/amdgpu: fix a missing break in gfx_v11_0_handle_priv_fault
+Date:   Sun, 29 May 2022 15:26:31 +0800
+Message-Id: <20220529072631.307922-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] spi: rockchip: Fix a resource that is put twice in
- rockchip_spi_remove()
-Content-Language: fr
-To:     Mark Brown <broonie@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        addy ke <addy.ke@rock-chips.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Mark Brown <broonie@linaro.org>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-References: <df2f4ae902474574ccdb0a8696ce51db39fbd239.1653808056.git.christophe.jaillet@wanadoo.fr>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <df2f4ae902474574ccdb0a8696ce51db39fbd239.1653808056.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 29/05/2022 à 09:07, Christophe JAILLET a écrit :
-> spi_controller_put() is already called as part of
-> spi_unregister_controller(). The latter is called automatically because
-> the controller has been registered with the devm_ function.
-> 
-> Remove the duplicate call.
-> 
-> Fixes: 64e36824b32b ("spi/rockchip: add driver for Rockchip RK3xxx SoCs integrated SPI")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->   drivers/spi/spi-rockchip.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-> index a08215eb9e14..70777731b20e 100644
-> --- a/drivers/spi/spi-rockchip.c
-> +++ b/drivers/spi/spi-rockchip.c
-> @@ -963,8 +963,6 @@ static int rockchip_spi_remove(struct platform_device *pdev)
->   	if (ctlr->dma_rx)
->   		dma_release_channel(ctlr->dma_rx);
->   
-> -	spi_controller_put(ctlr);
-> -
->   	return 0;
->   }
->   
+Fixes the following w1 warning:
 
-NAK.
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:5873:2: warning: unannotated
+fall-through between switch labels [-Wimplicit-fallthrough].
 
-There is a spi_controller_get() call a few lines above, so this 
-additional spi_controller_put() is needed.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: sunliming <sunliming@kylinos.cn>
+---
+ drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-CJ
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c
+index cb581cfc7464..628d3536938e 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c
+@@ -6028,6 +6028,7 @@ static void gfx_v11_0_handle_priv_fault(struct amdgpu_device *adev,
+ 		break;
+ 	default:
+ 		BUG();
++		break;
+ 	}
+ }
+ 
+-- 
+2.25.1
+

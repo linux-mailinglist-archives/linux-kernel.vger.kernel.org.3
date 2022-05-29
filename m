@@ -2,102 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970DF536F3A
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 05:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB258536F3C
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 05:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiE2DfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 23:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
+        id S230325AbiE2DqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 23:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbiE2DfI (ORCPT
+        with ESMTP id S230316AbiE2DqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 23:35:08 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9048614E
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 20:35:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653795306; x=1685331306;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WGlVSOwfybXCFZgxHyal61TawoAb6vp6CRxsR8ZXmeE=;
-  b=jbILLlqfhWCqUhuPXl+ct0QqCnfCVL25z9TYcxv29TJm0S9uoFgtbZuc
-   i/VCKjLDCFBwl4hZMCd4HlztLvTAbhCzHlrrpaKTKa85kEM7BSxi2MPdt
-   3FU6r6NZZN/o8LPfq7uZ19Leddpt+UoP4kz/0STiK1S/g2LjvtOxyGKmj
-   o=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 28 May 2022 20:35:06 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 20:35:06 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sat, 28 May 2022 20:35:05 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sat, 28 May 2022 20:35:03 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v2 2/2] tracing: eprobe: remove duplicate is_good_name() operation
-Date:   Sun, 29 May 2022 11:34:54 +0800
-Message-ID: <1653795294-19764-3-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1653795294-19764-1-git-send-email-quic_linyyuan@quicinc.com>
-References: <1653795294-19764-1-git-send-email-quic_linyyuan@quicinc.com>
+        Sat, 28 May 2022 23:46:01 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530A85AA66;
+        Sat, 28 May 2022 20:45:59 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id C9B773200754;
+        Sat, 28 May 2022 23:45:57 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Sat, 28 May 2022 23:45:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        tom-fitzhenry.me.uk; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1653795957; x=1653882357; bh=WK6kA6QrCw
+        wKMLUCmNwj3NNYnGVd5SuQZRtDlGxvgIM=; b=jA656v1jz2FAxKtCWhmQrhi7cI
+        bAlr3xV+m4/yfpqH2MGwddW3OBcq73ObzFN1yfiGSZV3VzQ7vBOM3ZigPWoHo9Gm
+        UUyqsd/tjBYL9ql7Ft3qgWwAhu95z5JSE9M0DHniUYRm+mqcZ2vxiDgDWqe5AY4+
+        vHFJzEapzYMOifeE5mMuuvoy1SCebqWSSFbydpiFhD3IgsL8LVQp5lZXk+OF1w70
+        kswguQHn92Qm1oGHErimniOH/gmF/AMDnXofN7K8FBPFKtTbt4feFdw7MsMaYbAD
+        1XKn0/ezf+KVKRC7lCCiTEK23InyTkYK46GFtr35xD0ib+Az9x2ReSJX68DA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1653795957; x=
+        1653882357; bh=WK6kA6QrCwwKMLUCmNwj3NNYnGVd5SuQZRtDlGxvgIM=; b=f
+        G6PDdLVbb8/GJ/ni9Z2Z8luv6q+mzoh37dh3c4jdnB6OxqEqQSPlEoKiE9dp6qrG
+        7XnGdColZLVXKCpjAY83AXoFdHy08lC59RoyVbdSeIffbb/ALOoXvWayT6ntHjs5
+        PuZXN7oyyu9jclhrJaMaGhRDyQ2AkmHD0TeDKcTIlIVMvJxUD87Hnn8AxDrBj6ck
+        ksH+EEqNjxz0AIlYMzTt+ntf5mzUPh/ZCPYbaMUx9lYPwgvcKpoAuVHvGFZhPxlg
+        PpBQI8qrytH5y4+MwoJ7nGIdOl6bUiqFLpO61PgnkrM9YsvHtmeV7jUd6ItfItRO
+        Zqq7tzGm+uIlHEWxHEzLQ==
+X-ME-Sender: <xms:dOySYtl0mCRmdM0WmTyoNrt29PRajIQM_nFipWP75yeJp2SwNKQ8pA>
+    <xme:dOySYo3S5rsbohOnNa9UVpcIhId01TEi_P8HHfRBZUEU-jrIVNxHpI9Vew2druOXP
+    teCu9FKmQGgzsRtTw>
+X-ME-Received: <xmr:dOySYjqszrlqte656snlhzkuGbjNNh8uJPH9l7iWxt05A-x9ZWt4gbz15y1PYOekf3qNMjFjJKQKYpqguW4szH7m>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkedvgdejfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfvvehfhffujggtgfesthejredttdefjeenucfhrhhomhepvfhomhcu
+    hfhithiihhgvnhhrhicuoehtohhmsehtohhmqdhfihhtiihhvghnrhihrdhmvgdruhhkqe
+    enucggtffrrghtthgvrhhnpefgfeelleeuteefjefgkeeuhfehgedvleeiheegjeegveei
+    jedtudeludfggfefjeenucffohhmrghinhepghhithhlrggsrdgtohhmnecuvehluhhsth
+    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepthhomhesthhomhdqfhhi
+    thiihhgvnhhrhidrmhgvrdhukh
+X-ME-Proxy: <xmx:deySYtncFiIbHVeQ6_rYsnxQ3Q8FQLhRMRaK-0_dnYiW_hnzjAdqbA>
+    <xmx:deySYr3CdhAiP8E7_6AryfkhFhshgP5xdSDG7GjXvVgyW1Xx3qhc5Q>
+    <xmx:deySYstUqaKB0cMXk943KAAuXp90_HdBJU-8bqyxxnGHljFg9UHGyQ>
+    <xmx:deySYpN1GPpRSC7SiBBGLx6_eismD5RWA8h-tZhAH4CiXcIF9_VIDQ>
+Feedback-ID: iefc945ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 28 May 2022 23:45:53 -0400 (EDT)
+Message-ID: <b6500fe9-f7df-a7d1-09cb-9f772126128d@tom-fitzhenry.me.uk>
+Date:   Sun, 29 May 2022 13:45:52 +1000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        Ondrej Jirman <x@xff.cz>, Martijn Braam <martijn@brixit.nl>
+References: <20220529031705.278631-1-tom@tom-fitzhenry.me.uk>
+ <20220529031705.278631-3-tom@tom-fitzhenry.me.uk>
+From:   Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+Subject: Re: [PATCH 2/2] arm64: dts: rockchip: Add initial support for Pine64
+ PinePhone Pro
+In-Reply-To: <20220529031705.278631-3-tom@tom-fitzhenry.me.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-traceprobe_parse_event_name() already validate group and event name,
-there is no need to call is_good_name() after it.
+I've sent this DT for early feedback. I've commented below on the parts 
+I'm unsure about, and would appreciate any feedback.
 
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
-v2: drop v1 change as it is NACK.
-    add it to remove duplicate is_good_name().
+On 29/5/22 13:17, Tom Fitzhenry wrote:
+> +	cluster1_opp_ppp: opp-table1b {
 
- kernel/trace/trace_eprobe.c | 4 ----
- 1 file changed, 4 deletions(-)
+I don't know which OPP should be used.
 
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index 13cd7fc..2ee041d 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -883,15 +883,11 @@ static int __trace_eprobe_create(int argc, const char *argv[])
- 		sanitize_event_name(buf1);
- 		event = buf1;
- 	}
--	if (!is_good_name(event) || !is_good_name(group))
--		goto parse_error;
- 
- 	sys_event = argv[1];
- 	ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2, 0);
- 	if (ret != TP_ENAME_GROUP_EVENT)
- 		goto parse_error;
--	if (!is_good_name(sys_event) || !is_good_name(sys_name))
--		goto parse_error;
- 
- 	mutex_lock(&event_mutex);
- 	event_call = find_and_get_event(sys_name, sys_event);
--- 
-2.7.4
+Per 
+https://gitlab.com/pine64-org/linux/-/merge_requests/36/diffs?commit_id=dcf78ea8ad6f0b1c6e3279d8d752ca68d6d05756, 
+using the regular RK3399 OPP table exceeds operating conditions.
 
+Perhaps this should depend on an OPP for RK3399-T (which would need to 
+be added, as the linked merge request proposes).
+
+> +	// Per "TYPE-C", page 23.
+> +	fusb0: typec-portc@22 {
+> +		compatible = "fcs,fusb302";
+> +		reg = <0x22>;
+> +		interrupt-parent = <&gpio1>;
+> +		interrupts = <RK_PA2 IRQ_TYPE_LEVEL_LOW>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&fusb0_int>;
+> +		vbus-supply = <&vcc5v0_typec>;
+
+This is the node many PinePhone Pro users have been using for >1 month, 
+but I don't understand the USB subsystem well enough yet to understand 
+the node.

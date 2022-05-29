@@ -2,54 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E15536F37
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 05:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A01B536F39
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 05:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiE2Dbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 23:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
+        id S230282AbiE2DfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 23:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiE2Dba (ORCPT
+        with ESMTP id S230265AbiE2DfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 23:31:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E83A207
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 20:31:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qyOue3vhI9r64/cB5hJYFTVsL61v9tYIZ/ebY1l6Usk=; b=Ptypr/RmNCnkuOvkKpm4oFUly8
-        7rRrFWo0GsMzRV5Z+J7L1JCyAeqB5ATCDQg1+WvGM/JZx7m5IYRwiMNYlQqcoBr5CTJWnlsAI3zPN
-        dZ++yUw2Aj3yYCYk5yd7FRuQPYNIkUtxFucRzg1wxbL+GSgxwyDGwDJz+LeBUObZRPwavmW8dXbOM
-        oxey5EfzRfR5Md56svvfw12ouZh44fI2tuWwJiem8uF1CUuei3zea43okhgGukFuSrki5m7/IO5gD
-        YxNATO2aCmtvHrwAsroAzUP6PxBtYPtQzkVGL1mSbkWkGVBU7sV0KTrlc1DRwnitVfukgT+l31Edv
-        EDfCDE2w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nv9dz-003M3H-Mw; Sun, 29 May 2022 03:31:07 +0000
-Date:   Sun, 29 May 2022 04:31:07 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     bh1scw@gmail.com, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/slub: replace alloc_pages with folio_alloc
-Message-ID: <YpLo+4U8k+OLTmz9@casper.infradead.org>
-References: <20220528161157.3934825-1-bh1scw@gmail.com>
- <YpJNX7PN8hAFgVwj@casper.infradead.org>
- <YpLhSokkrPrXjNXP@FVFYT0MHHV2J.googleapis.com>
+        Sat, 28 May 2022 23:35:04 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78D8E94
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 20:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653795302; x=1685331302;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dTXXsL+kAGePyp6L3JcHTk8H+hDdvROXrEUyJWDGZ70=;
+  b=lPcD0yBVeJX+ZP6klUju2Rzhl3W4nJRmO3NCp+iaEm71a0aCIDvXxGfF
+   qODpwKVG1FwIApFpjsVsGOOAWsnRc2YGYipk7f128C8OVj6P98s67sSm2
+   30jDTmU2Z5qAhAIbhnQB289kSu6/K2o3Cx6njNs0QYt8eEisyLM5IaPaR
+   c=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 May 2022 20:35:02 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 20:35:02 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sat, 28 May 2022 20:35:01 -0700
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sat, 28 May 2022 20:34:59 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH v2 0/2] tracing/probes: allow no event name input when create group
+Date:   Sun, 29 May 2022 11:34:52 +0800
+Message-ID: <1653795294-19764-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YpLhSokkrPrXjNXP@FVFYT0MHHV2J.googleapis.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,48 +65,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 29, 2022 at 10:58:18AM +0800, Muchun Song wrote:
-> On Sat, May 28, 2022 at 05:27:11PM +0100, Matthew Wilcox wrote:
-> > On Sun, May 29, 2022 at 12:11:58AM +0800, bh1scw@gmail.com wrote:
-> > > From: Fanjun Kong <bh1scw@gmail.com>
-> > > 
-> > > This patch will use folio allocation functions for allocating pages.
-> > 
-> > That's not actually a good idea.  folio_alloc() will do the
-> > prep_transhuge_page() step which isn't needed for slab.
-> 
-> You mean folio_alloc() is dedicated for THP allocation?  It is a little
-> surprise to me.  I thought folio_alloc() is just a variant of alloc_page(),
-> which returns a folio struct instead of a page.  Seems like I was wrong.
-> May I ask what made us decide to do this?
+take kprobe event as example, when create a group of events,
+p[:[GRP/]EVENT] [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS],
+according to this format, we must input EVENT name,
 
-Yeah, the naming isn't great here.  The problem didn't really occur
-to me until I saw this patch, and I don't have a good solution yet.
-We're in the middle of a transition, but the transition is likely to
-take years and I don't think we necessarily have the final form of the
-transition fully agreed to or understood, so we should come up with
-something better for the transition.
+this change allow only GRP/ input, EVENT name auto generate from KSYM,
+p[:[GRP/][EVENT]] [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS]
 
-Ignoring the naming here, memory allocated to filesystems can be split,
-but the split can fail, so they need the page-deferred-list and the
-DTOR.  Memory allocated to slab cannot be split, so initialising the
-page-deferred-list is a waste of time.
+siliar change apply to eprobe and uprobe.
 
-The end-goal is to split apart allocating the memory from allocating
-its memory descriptor (which I like to call memdesc).  So for filesystem
-folios, we'd call slab to allocate a struct folio and then tell the
-buddy allocator "here is the memdesc of type folio, allocate
-me 2^n pages and make pfn_to_memdesc return this memdesc for each of
-the 2^n pages in it".
+V1: https://lore.kernel.org/lkml/1651397651-30454-1-git-send-email-quic_linyyuan@quicinc.com/T/#m33b0665941d9caeeb118afa84db4016321cea9a6
+V2: fix remove comment in V1 patch1,
+    remove v1 patch2 as it is NACK.
 
-In this end-goal, slab would also allocate a struct slab (... there's
-a recursion problem here which has a solution ...), and then allocate
-2^n pages.  But until we're ready to shrink struct page down to one
-or two words, doing this is just a waste of memory and time.
+Linyu Yuan (2):
+  tracing: auto generate event name when create a group of events
+  tracing: eprobe: remove duplicate is_good_name() operation
 
-So I still don't have a good solution to receiving patches like this
-other than maybe adding a comment like
+ Documentation/trace/kprobetrace.rst  |  8 ++++----
+ Documentation/trace/uprobetracer.rst |  8 ++++----
+ kernel/trace/trace_dynevent.c        |  2 +-
+ kernel/trace/trace_eprobe.c          | 24 ++++++++++++------------
+ kernel/trace/trace_kprobe.c          | 19 ++++++++++++-------
+ kernel/trace/trace_probe.c           |  9 ++++++++-
+ kernel/trace/trace_probe.h           |  4 ++++
+ kernel/trace/trace_uprobe.c          | 15 ++++++++++-----
+ 8 files changed, 55 insertions(+), 34 deletions(-)
 
-	/* Do not change this to allocate a folio */
+-- 
+2.7.4
 
-which will be ignored.

@@ -2,89 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0C6537121
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 15:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D99253711B
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 15:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiE2NdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 09:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
+        id S230221AbiE2N14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 09:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiE2NdU (ORCPT
+        with ESMTP id S229719AbiE2N1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 09:33:20 -0400
-X-Greylist: delayed 383 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 29 May 2022 06:33:18 PDT
-Received: from hs01.dk-develop.de (hs01.dk-develop.de [IPv6:2a02:c207:3002:6234::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A476B47043;
-        Sun, 29 May 2022 06:33:18 -0700 (PDT)
-From:   Danilo Krummrich <danilokrummrich@dk-develop.de>
-To:     krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+        Sun, 29 May 2022 09:27:53 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BCD70935;
+        Sun, 29 May 2022 06:27:51 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-f2cbceefb8so11220418fac.11;
+        Sun, 29 May 2022 06:27:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=0m7CcmaqJ3DybPkFOApxgNfU3rE4ON+v8lfBmfHIxgw=;
+        b=STfCkzz5CwOnYSWi3R9h955iKN34cuia4l+GPwXHSSKMHMV4bzNYBrDD0qhGFdYxcU
+         7fi1xQ/CFXk2VQM5Eh1YCLoFL5pkMBRObn3St8giTFu2jDVk4UdcrZ/spdtRyoGI/P/z
+         gxsRZ7236MUaRDvi7oGcR//N+s+mfZjkY0qth4+d/1Eu+crUCoKEMyNmEolBOeKR2WCS
+         V4tQ36As9FyOv2qjqxly6vDx9+JiHR0IWqciPIdkGL68V4v6BIsJFpFqbzDuTtXsy5dP
+         KpZDDomjzHd2j8ns1i8oensDBughRTSP22ngUC8a/GnvvA9dchJm+QwOxidWdZ/55aSJ
+         mWhA==
+X-Gm-Message-State: AOAM533wUn9IE+DIdo1Wg+MyPgQjlrHm9pG5+sim0r14JUWFz8Z6KHIb
+        L578SsQJuyZilO47hC2RiA==
+X-Google-Smtp-Source: ABdhPJyo6KCyr0YCpjBZPdNr7qIYTx3KfwPGCn+bI8DR4jxWy4KyJvi5IvHgrSN6x/6fuTj/WsqF+g==
+X-Received: by 2002:a05:6870:d5a3:b0:f2:c923:682f with SMTP id u35-20020a056870d5a300b000f2c923682fmr8678701oao.120.1653830870889;
+        Sun, 29 May 2022 06:27:50 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f9-20020a056830204900b00608b8e6fad5sm3926505otp.76.2022.05.29.06.27.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 May 2022 06:27:50 -0700 (PDT)
+Received: (nullmailer pid 1443081 invoked by uid 1000);
+        Sun, 29 May 2022 13:27:49 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
+Cc:     ashish.deshpande@nxp.com, arnd@arndb.d,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, bjorn.andersson@linaro.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        rvmanjumce@gmail.com, sunilmut@microsoft.com, javier@javigon.com,
+        jasowang@redhat.com, mb@lightnvm.io, ckeepax@opensource.cirrus.com,
+        will@kernel.org, mst@redhat.com, axboe@kernel.dk,
         linux-kernel@vger.kernel.org
-Cc:     linus.walleij@linaro.org,
-        Danilo Krummrich <danilokrummrich@dk-develop.de>
-Subject: [RESEND PATCH v3 2/2] dt-bindings: ps2-gpio: document bus signals open drain
-Date:   Sun, 29 May 2022 15:26:38 +0200
-Message-Id: <20220529132638.13420-2-danilokrummrich@dk-develop.de>
-In-Reply-To: <20220529132638.13420-1-danilokrummrich@dk-develop.de>
-References: <20220529132638.13420-1-danilokrummrich@dk-develop.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220527184351.3829543-2-manjunatha.venkatesh@nxp.com>
+References: <20220527184351.3829543-1-manjunatha.venkatesh@nxp.com> <20220527184351.3829543-2-manjunatha.venkatesh@nxp.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: uwb: Device tree information for Nxp SR1XX SOCs
+Date:   Sun, 29 May 2022 08:27:49 -0500
+Message-Id: <1653830869.379260.1443080.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PS/2 bus defines data and clock line to be open drain, this should
-be reflected in the gpio flags set in the binding.
+On Sat, 28 May 2022 00:13:49 +0530, Manjunatha Venkatesh wrote:
+> Ultra-wideband (UWB) is a short-range wireless communication protocol.
+> 
+> NXP has SR1XX family of UWB Subsystems (UWBS) devices. SR1XX SOCs
+> are FiRa Compliant. SR1XX SOCs are flash less devices and they need
+> Firmware Download on every device boot. More details on the SR1XX Family
+> can be found at https://www.nxp.com/products/:UWB-TRIMENSION
+> 
+> The sr1xx driver work the SR1XX Family of UWBS, and uses UWB Controller
+> Interface (UCI).  The corresponding details are available in the FiRa
+> Consortium Website (https://www.firaconsortium.org/).
+> 
+> Message-ID: <20220504171337.3416983-1-manjunatha.venkatesh@nxp.com>
+> Signed-off-by: Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
+> ---
+>  .../bindings/uwb/nxp,uwb-sr1xx.yaml           | 67 +++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/uwb/nxp,uwb-sr1xx.yaml
+> 
 
-Especially, this is important since the clock line sometimes is driven
-by the host while being used as interrupt source.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: Danilo Krummrich <danilokrummrich@dk-develop.de>
----
- .../devicetree/bindings/serio/ps2-gpio.yaml        | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/uwb/nxp,uwb-sr1xx.yaml:45:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
 
-diff --git a/Documentation/devicetree/bindings/serio/ps2-gpio.yaml b/Documentation/devicetree/bindings/serio/ps2-gpio.yaml
-index 304132fd30c5..a63d9172346f 100644
---- a/Documentation/devicetree/bindings/serio/ps2-gpio.yaml
-+++ b/Documentation/devicetree/bindings/serio/ps2-gpio.yaml
-@@ -15,12 +15,18 @@ properties:
- 
-   data-gpios:
-     description:
--      the gpio used for the data signal
-+      the gpio used for the data signal - this should be flagged as
-+      active high using open drain with (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)
-+      from <dt-bindings/gpio/gpio.h> since the signal is open drain by
-+      definition
-     maxItems: 1
- 
-   clk-gpios:
-     description:
--      the gpio used for the clock signal
-+      the gpio used for the clock signal - this should be flagged as
-+      active high using open drain with (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)
-+      from <dt-bindings/gpio/gpio.h> since the signal is open drain by
-+      definition
-     maxItems: 1
- 
-   interrupts:
-@@ -52,7 +58,7 @@ examples:
-         compatible = "ps2-gpio";
-         interrupt-parent = <&gpio>;
-         interrupts = <23 IRQ_TYPE_EDGE_FALLING>;
--        data-gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
--        clk-gpios = <&gpio 23 GPIO_ACTIVE_HIGH>;
-+        data-gpios = <&gpio 24 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+        clk-gpios = <&gpio 23 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-         write-enable;
-     };
--- 
-2.36.1
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/uwb/nxp,uwb-sr1xx.example.dts'
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-extract-example", line 52, in <module>
+    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
+  File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/main.py", line 434, in load
+    return constructor.get_single_data()
+  File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py", line 119, in get_single_data
+    node = self.composer.get_single_node()
+  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
+  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 773, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 848, in _ruamel_yaml.CParser._compose_sequence_node
+  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
+ruamel.yaml.scanner.ScannerError: while scanning a block scalar
+  in "<unicode string>", line 43, column 5
+found a tab character where an indentation space is expected
+  in "<unicode string>", line 45, column 1
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/uwb/nxp,uwb-sr1xx.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/uwb/nxp,uwb-sr1xx.yaml:  while scanning a block scalar
+  in "<unicode string>", line 43, column 5
+found a tab character where an indentation space is expected
+  in "<unicode string>", line 45, column 1
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/uwb/nxp,uwb-sr1xx.yaml: ignoring, error parsing file
+make: *** [Makefile:1401: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

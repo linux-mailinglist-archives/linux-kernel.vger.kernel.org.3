@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 631CA5372F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 01:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F925372F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 01:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbiE2Xgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 19:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
+        id S231902AbiE2Xjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 19:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiE2Xgh (ORCPT
+        with ESMTP id S230131AbiE2Xjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 19:36:37 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B55DB630A;
-        Sun, 29 May 2022 16:36:34 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 4C2A953458E;
-        Mon, 30 May 2022 09:36:31 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nvSST-000OUT-Eu; Mon, 30 May 2022 09:36:29 +1000
-Date:   Mon, 30 May 2022 09:36:29 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Eric Sandeen <sandeen@sandeen.net>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Subject: Re: [GIT PULL] xfs: new code for 5.19
-Message-ID: <20220529233629.GY1098723@dread.disaster.area>
-References: <20220526022053.GY2306852@dread.disaster.area>
- <CAHk-=wg8R2sYVKi7bgwVN8n-exN766PSJwYg+18SLbR=+vQtVA@mail.gmail.com>
- <20220526035317.GI1098723@dread.disaster.area>
- <CAOQ4uxg_O_dC2Le7RZDTaBqtA650jD6BLZE24rpZXx=xpEedkg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOQ4uxg_O_dC2Le7RZDTaBqtA650jD6BLZE24rpZXx=xpEedkg@mail.gmail.com>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=62940380
-        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
-        a=kj9zAlcOel0A:10 a=oZkIemNP1mAA:10 a=yPCof4ZbAAAA:8 a=VwQbUJbxAAAA:8
-        a=7-415B0cAAAA:8 a=wNBJl4j-QUBApV6RE_4A:9 a=CjuIK1q_8ugA:10
-        a=AjGcO6oz07-iQ99wixmX:22 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sun, 29 May 2022 19:39:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E655627158
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 16:39:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DA1B0CE0E16
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 23:39:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DED80C385A9;
+        Sun, 29 May 2022 23:39:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1653867576;
+        bh=ChvZGRzjNy/5pL6NQ06zFXWcMzXaPCwBkFBGIC5cEUQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nsLKOymprVfyiTw1eOGvvp0D7F+6ZaNwm1BQmiST2OzDxwDiJmi/Ikh4pebsQ8srw
+         1U0qVTOVVSkjOBMwA5+b3N4dWtKZCulaNb5CfQoRLdSRpDlHtOSSctpsGj3bM7MvIV
+         gxeNVRxsRKJ+SNbqF6152VekWME5SnzFH3551oN0=
+Date:   Sun, 29 May 2022 16:39:35 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+9e27a75a8c24f3fe75c1@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [syzbot] memory leak in xas_nomem
+Message-Id: <20220529163935.5118b4f91e2c5c3378ab326f@linux-foundation.org>
+In-Reply-To: <00000000000036af2005e009e7e6@google.com>
+References: <00000000000036af2005e009e7e6@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,89 +53,263 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 29, 2022 at 10:32:58AM +0300, Amir Goldstein wrote:
-> > > I might wish that your merge commit messages were a bit more
-> > > consistent about the merge details ("why and what"), but you are most
-> > > definitely not the only one with that, and a number of them are quite
-> > > nice (ie the merge of the large extent counters has a nice informative
-> > > commit message, as does the rmap speedup one).
-> >
-> > Those one came from pull requests with informative signed
-> > tags. We're trying to move more of our development processes to
-> > using signed pull reqs when eveything is done, so this hopefully
-> > will happen more often.
-> >
-> > > And then some of them are the uninformative one-lines that just say
-> > > "Merge branch X"
-> >
-> > Yeah, those are merges from local topic branches where I pulled in
-> > individual patches or entire series from the mailing list via 'b4 am
-> > -o - <msg_id> | git am -s'. AFAICT there is no way to have this
-> > retain the patch series cover letter, which generally contains what
-> > I would want to be putting into the merge commit message.
-> >
-> > I'll keep that in mind for future composes, though I do wish there
-> > was an easy way to just have b4/git manage cover letters as part of
-> > the topic branch so they can feed into local merge commits just as
-> > easily remote pulls do....
-> >
+On Fri, 27 May 2022 20:20:21 -0700 syzbot <syzbot+9e27a75a8c24f3fe75c1@syzkaller.appspotmail.com> wrote:
+
+> Hello,
 > 
-> There is.
-> I have been hacking on b4 and found many hidden features :)
+> syzbot found the following issue on:
 > 
-> b4 am 20220510202800.40339-1-catherine.hoang@oracle.com -n
-> xfs-5.19-quota-warn-remove.mbx
-> git am -s xfs-5.19-quota-warn-remove.mbx
-> git tag -F xfs-5.19-quota-warn-remove.cover xfs-5.19-quota-warn-remove
+> HEAD commit:    1e57930e9f40 Merge tag 'rcu.2022.05.19a' of git://git.kern..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=17afc423f00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5757003cb23a31a7
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9e27a75a8c24f3fe75c1
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16bc056ef00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116b7d9df00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+9e27a75a8c24f3fe75c1@syzkaller.appspotmail.com
+> 
+> BUG: memory leak
 
-That's a tag on a commit, not a persistent object associated with a
-branch. I've considered this, but if I append a new commit, rebase
-the branch, or do anything I normally do with topic branches, then
-that tag ends up pointing at the wrong commit or even a non-existent
-commit. It just adds another thing to forget/get wrong when managing
-topic branches for merge. i.e. it doesn't make things simpler.
+(hopefully cc's willy)
 
-As it is, I use guilt for managing the contents of all my git
-branches in all my git trees. I already have a local hack in guilt
-to use the first commit of a series as the series description/cover
-letter. I pass a special flag to 'guilt patchbomb' and it turns the
-first commit into the cover letter for editing and sending. With
-this, I have an object associated with the topic branch that follows
-all operations on the branch (including rebases) and so is always
-there in the same place.
-
-However, I can't use such topic branches for merges - the series
-description commit needs to be purged and the series rebased before
-I merge it. You can see this in this old branch here:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/dgc/linux-xfs.git/log/?h=xfs-iunlink-item
-
-In that branch there are actually two description commits:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/dgc/linux-xfs.git/commit/?h=xfs-iunlink-item&id=35d3b6ac52b5870484182d476cb253021e44acc5
-https://git.kernel.org/pub/scm/linux/kernel/git/dgc/linux-xfs.git/commit/?h=xfs-iunlink-item&id=a561cb0e09fa7886d034be0ae94f5f77d327014d
-
-because the second line of development (unlinked inode mods) was
-dependent on another set of patches (async inode reclaim).
-
-That's the text and changelog for the cover letter for that specific
-line of development. As a "here's a topic branch with all the
-changes in it" push, I didn't sanitise them.
-
-I think what I'm going to end up doing is add a 'guilt am' command
-that runs b4, extracts the cover letter as an internal guilt file
-(in .git/patches/<branch>/series-description) and add a `guilt
-series -d [-e]` command to print or edit it directly. Then that file
-exists, guilt patchbomb will just pick it up. If I add a `guilt
-merge` wrapper then it will get picked up as the merge description
-automatically, too...
-
-This way the cover letter follows the topic branch no matter what I
-do with the branch once I've downloaded it from the mailing list,
-and it doesn't show up in the commit history and hence I can merge
-the branches easily.
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+> unreferenced object 0xffff88810cb35d80 (size 576):
+>   comm "syz-executor883", pid 3623, jiffies 4294954631 (age 23.510s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     18 48 36 04 81 88 ff ff 98 5d b3 0c 81 88 ff ff  .H6......]......
+>   backtrace:
+>     [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
+>     [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
+>     [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
+>     [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
+>     [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
+>     [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
+>     [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
+>     [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
+>     [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
+>     [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
+>     [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
+>     [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
+>     [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
+>     [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
+>     [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
+>     [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
+>     [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
+>     [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> BUG: memory leak
+> unreferenced object 0xffff88810cb39d80 (size 576):
+>   comm "syz-executor883", pid 3622, jiffies 4294954659 (age 23.230s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     98 f8 cd 0d 81 88 ff ff 98 9d b3 0c 81 88 ff ff  ................
+>   backtrace:
+>     [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
+>     [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
+>     [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
+>     [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
+>     [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
+>     [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
+>     [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
+>     [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
+>     [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
+>     [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
+>     [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
+>     [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
+>     [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
+>     [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
+>     [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
+>     [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
+>     [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
+>     [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> BUG: memory leak
+> unreferenced object 0xffff88810cb35d80 (size 576):
+>   comm "syz-executor883", pid 3623, jiffies 4294954631 (age 29.410s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     18 48 36 04 81 88 ff ff 98 5d b3 0c 81 88 ff ff  .H6......]......
+>   backtrace:
+>     [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
+>     [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
+>     [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
+>     [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
+>     [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
+>     [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
+>     [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
+>     [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
+>     [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
+>     [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
+>     [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
+>     [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
+>     [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
+>     [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
+>     [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
+>     [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
+>     [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
+>     [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> BUG: memory leak
+> unreferenced object 0xffff88810cb39d80 (size 576):
+>   comm "syz-executor883", pid 3622, jiffies 4294954659 (age 29.130s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     98 f8 cd 0d 81 88 ff ff 98 9d b3 0c 81 88 ff ff  ................
+>   backtrace:
+>     [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
+>     [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
+>     [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
+>     [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
+>     [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
+>     [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
+>     [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
+>     [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
+>     [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
+>     [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
+>     [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
+>     [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
+>     [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
+>     [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
+>     [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
+>     [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
+>     [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
+>     [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> BUG: memory leak
+> unreferenced object 0xffff88810cb35d80 (size 576):
+>   comm "syz-executor883", pid 3623, jiffies 4294954631 (age 29.450s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     18 48 36 04 81 88 ff ff 98 5d b3 0c 81 88 ff ff  .H6......]......
+>   backtrace:
+>     [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
+>     [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
+>     [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
+>     [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
+>     [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
+>     [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
+>     [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
+>     [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
+>     [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
+>     [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
+>     [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
+>     [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
+>     [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
+>     [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
+>     [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
+>     [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
+>     [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
+>     [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> BUG: memory leak
+> unreferenced object 0xffff88810cb39d80 (size 576):
+>   comm "syz-executor883", pid 3622, jiffies 4294954659 (age 29.170s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     98 f8 cd 0d 81 88 ff ff 98 9d b3 0c 81 88 ff ff  ................
+>   backtrace:
+>     [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
+>     [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
+>     [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
+>     [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
+>     [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
+>     [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
+>     [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
+>     [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
+>     [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
+>     [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
+>     [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
+>     [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
+>     [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
+>     [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
+>     [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
+>     [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
+>     [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
+>     [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> BUG: memory leak
+> unreferenced object 0xffff88810cb35d80 (size 576):
+>   comm "syz-executor883", pid 3623, jiffies 4294954631 (age 29.490s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     18 48 36 04 81 88 ff ff 98 5d b3 0c 81 88 ff ff  .H6......]......
+>   backtrace:
+>     [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
+>     [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
+>     [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
+>     [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
+>     [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
+>     [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
+>     [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
+>     [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
+>     [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
+>     [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
+>     [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
+>     [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
+>     [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
+>     [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
+>     [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
+>     [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
+>     [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
+>     [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> BUG: memory leak
+> unreferenced object 0xffff88810cb39d80 (size 576):
+>   comm "syz-executor883", pid 3622, jiffies 4294954659 (age 29.210s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     98 f8 cd 0d 81 88 ff ff 98 9d b3 0c 81 88 ff ff  ................
+>   backtrace:
+>     [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
+>     [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
+>     [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
+>     [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
+>     [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
+>     [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
+>     [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
+>     [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
+>     [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
+>     [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
+>     [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
+>     [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
+>     [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
+>     [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
+>     [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
+>     [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
+>     [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
+>     [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> executing program
+> executing program
+> executing program
+> executing program
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches

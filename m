@@ -2,134 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBD4536F7A
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 06:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7EF1536F81
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 06:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiE2E3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 00:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
+        id S230347AbiE2Ebl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 00:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiE2E3i (ORCPT
+        with ESMTP id S230335AbiE2Ebk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 00:29:38 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7EEB2240
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 21:29:37 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id g13-20020a9d6b0d000000b0060b13026e0dso5636967otp.8
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 21:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4k7HEF/6PocZEKm7M5webn0NCvbC90OBpWbzVdzTlEE=;
-        b=D0CorQHwJZhfvMm0vJw6F018HAia8jKh4HAyazlslOhnDc6Zl7Y6505gqxX+pf7oLQ
-         R1E/BySSL4FCe2LneTpJ/ObOR2i5WasBCBrt0o3s3Q+7VFrYvBdMnlXlpasW73v9QCUT
-         k8qM/A6Tj0XoZekZx/kHZACgodywwz3eGPInQITDcdEozOD6tlESNXYdemxh7VEg8KpM
-         6tF15csMUDQMJq5a3G6xW4LJiPA0DClbnJZM0l9+2lnxmTnt2lBKnFV30a5lvLllThqC
-         CytY7tHb/LQRFJrfJgIVMrf1w/6i3Q0D82Yae3Ww1IL374icPEicHfMamTx9Bjw6fagn
-         X5YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4k7HEF/6PocZEKm7M5webn0NCvbC90OBpWbzVdzTlEE=;
-        b=sg7ffwzoWJNEHgoyzJG+3ZZAlqlQqR5YqIy3XOuQu8xWTGAvJXqSFYiuTdjqU6m2I1
-         xlr4CQGbIdx5Qx1tuLUqslPoQ8UhZH9e8fAtg2JZuvRd2ssl0yQqsycLY8OD5urGnQ6q
-         9nYZH4Jm6k3WCCcLQ/qaDpie7pr60ZNdrzdqoUsNLRNJO4iqFHZJf+mZJzUo2x5rwBX3
-         N2CZQ9hi2DE7URbFaRj9NiTsvWolaauUSX6f3BmPRpvEuW+FsHn+NXZsYjY/EB/LgCCj
-         RokLvYVIetTymfvNPf0XzutLBdxzXMIarXgsMkf7VyOMT8mXjw5TECqYH9XbGHMXf2Lo
-         KSlA==
-X-Gm-Message-State: AOAM530Xdctcdkz3C5WAeu59KBACEwemjjkiyhf1bdsFFl85yKXwngA3
-        KYA0O5LekXMrSkv+vBvxKpJ4ozAycXY=
-X-Google-Smtp-Source: ABdhPJyBDA3kjaypEpAcf+4WD4YCOChfMXCQE7sCnjZoIWGam+P//G/BDj2p2ho+XSMtQttVgRMVEw==
-X-Received: by 2002:a05:6830:1af0:b0:60b:2242:f266 with SMTP id c16-20020a0568301af000b0060b2242f266mr9946502otd.108.1653798576630;
-        Sat, 28 May 2022 21:29:36 -0700 (PDT)
-Received: from geday ([2804:7f2:8006:5ec0:8108:8ab5:1f16:73fe])
-        by smtp.gmail.com with ESMTPSA id t9-20020a056830082900b006060322124csm3621140ots.28.2022.05.28.21.29.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 May 2022 21:29:36 -0700 (PDT)
-Date:   Sun, 29 May 2022 01:29:32 -0300
-From:   Geraldo Nascimento <geraldogabriel@gmail.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] workqueue: missing NOT while checking if Workqueue is
- offline
-Message-ID: <YpL2rHUXd0vf8IML@geday>
-References: <YpKA5Bdk1Cm6KgKU@geday>
- <YpLLnx8/xpZIPMbi@geday>
+        Sun, 29 May 2022 00:31:40 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF570506D5
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 21:31:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653798698; x=1685334698;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=t3c/Rw6oHrKkRAWVQS+d6BYwqueqvTGSN0tvGDscmAY=;
+  b=C81V/xhQOfUN74cr3mOy2MsChnz0nsp+HXHFnsq5wSm4bn7nM+xuJ90c
+   f8QaXn7OiQV+8RzSOZetPMivwhkn0skuuBpMXjgz2PTXahu5C8AOC75Az
+   J0RbxkVVFMfGArSzsz3btUFk3nvRUPm8kLWdQVRXMeSWwyfasyPxI90j5
+   S6sm+xOdPpkZf5pJryirBqHg4ffsooQjHLnqFnOh9NggUuBnrkatAZV+I
+   LJMLiKTNrAqBHaPH35tlHfcw8YdB0hwLyu6l1pln5rm2UOgFTlXLTBSr6
+   eLp8DJGTTufVcnceRFbPg8Wskq+Qy+NcdO5iVdjyC9G5qTCB3V5aPPzsS
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10361"; a="254624049"
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="254624049"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 21:31:38 -0700
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="604627739"
+Received: from lli111-mobl.ccr.corp.intel.com ([10.254.214.246])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 21:31:33 -0700
+Message-ID: <1281d918c07b05ac82aee290018ad08d212e0aaa.camel@intel.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces (v3)
+From:   Ying Huang <ying.huang@intel.com>
+To:     Wei Xu <weixugc@google.com>,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>, Linux MM <linux-mm@kvack.org>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Sun, 29 May 2022 12:31:30 +0800
+In-Reply-To: <CAAPL-u_NwJuxWe7Wfn3A1sut+QwEmoZh2QUBQKNPq4bU=NjybA@mail.gmail.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+         <c453491b-6dc1-a008-d6f4-3c806eebd2ef@linux.ibm.com>
+         <CAAPL-u_NwJuxWe7Wfn3A1sut+QwEmoZh2QUBQKNPq4bU=NjybA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YpLLnx8/xpZIPMbi@geday>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 10:25:55PM -0300, Geraldo Nascimento wrote:
-> On Sat, May 28, 2022 at 05:07:08PM -0300, Geraldo Nascimento wrote:
-> > Greetings,
+On Fri, 2022-05-27 at 09:30 -0700, Wei Xu wrote:
+> On Fri, May 27, 2022 at 6:41 AM Aneesh Kumar K V
+> <aneesh.kumar@linux.ibm.com> wrote:
 > > 
-> 
-> Hi, again,
-> 
-
-And again, Hi!
-
-Doing my due dilligence, it seems.
-
-> > This is a one-character patch but very important as the kernel workqueue
-> > __cancel_work_timer will cancel active work
-
-It won't cancel important work, seems it's just a WARN_ON but it's very
-annoying. My understanding was the NOT was needed to call __flush_work()
-before kthreads are spawned. During early boot, as the comment says, before
-workqueue_init() fires.
-
-There's a bug report at https://gitlab.freedesktop.org/drm/amd/-/issues/1898
-and Felix Kuehling is right that this bug is only triggered when you try
-to use amdkfd ( and the Kconfigs that implies) without HSA_AMD_SVM
-configured.
-
-It makes sense to me that NOT operator is missing however, since in the warning
-I was coming from _cancel_work_timer() to __flush_work(), something that
-should not be done?
-
-I would like very much to hear the opinion of the maintainers!
-
-Thanks,
-Geraldo Nascimento
-
->> without the NOT operator
-> > added.
+> > On 5/27/22 2:52 AM, Wei Xu wrote:
 > > 
-> > During early boot wq_online is false so with the NOT added it will evaluate
-> > to true. Conversely, after boot is done, workqueue
-> 
-> I meant wq_online. After boot, wq_online will evaluate to true, current
-> code might as well have an if (true) there. I hurried up the patch
-> because if I'm right this is a major show stopper to drivers that make
-> use of cancel_work_timer(). I hit it through amdgpu in conjuction with amdkfd.
-> 
-> > is now true and we want
-> > it to evaluate to false because otherwise it will cancel important work.
+> > >    The order of memory tiers is determined by their rank values, not by
+> > >    their memtier device names.
+> > > 
+> > >    - /sys/devices/system/memtier/possible
+> > > 
+> > >      Format: ordered list of "memtier(rank)"
+> > >      Example: 0(64), 1(128), 2(192)
+> > > 
+> > >      Read-only.  When read, list all available memory tiers and their
+> > >      associated ranks, ordered by the rank values (from the highest
+> > >       tier to the lowest tier).
+> > > 
 > > 
-> > Signed-off-by: Geraldo Nascimento <geraldogabriel@gmail.com>
-> > 
-> > --- workqueue.c	2022-05-28 16:54:12.024176123 -0300
-> > +++ workqueue.c	2022-05-28 16:54:37.698176135 -0300
-> > @@ -3158,7 +3158,7 @@ static bool __cancel_work_timer(struct w
-> >  	 * This allows canceling during early boot.  We know that @work
-> >  	 * isn't executing.
-> >  	 */
-> > -	if (wq_online)
-> > +	if (!wq_online)
-> >  		__flush_work(work, true);
-> >  
-> >  	clear_work_data(work);
+> > Did we discuss the need for this? I haven't done this in the patch
+> > series I sent across.
+> 
+> The "possible" file is only needed if we decide to hide the
+> directories of memtiers that have no nodes.  We can remove this
+> interface and always show all memtier directories to keep things
+> simpler.
+
+When discussed offline, Tim Chen pointed out that with the proposed
+interface, it's unconvenient to know the position of a given memory tier
+in all memory tiers.  We must sort "rank" of all memory tiers to know
+that.  "possible" file can be used for that.  Although "possible" file
+can be generated with a shell script, it's more convenient to show it
+directly.
+
+Another way to address the issue is to add memtierN/pos for each memory
+tier as suggested by Tim.  It's readonly and will show position of
+"memtierN" in all memory tiers.  It's even better to show the relative
+postion to the default memory tier (DRAM with CPU). That is, the
+position of DRAM memory tier is 0.
+
+Unlike memory tier device ID or rank, the position is relative and
+dynamic.
+
+Best Regards,
+Huang, Ying
+
+

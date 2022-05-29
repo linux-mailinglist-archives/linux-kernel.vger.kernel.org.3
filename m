@@ -2,200 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67C05372C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 00:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F325372D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 00:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbiE2WGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 18:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S231653AbiE2WnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 18:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbiE2WG2 (ORCPT
+        with ESMTP id S230479AbiE2WnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 18:06:28 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79537980D;
-        Sun, 29 May 2022 15:06:26 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id CDFB45C00DF;
-        Sun, 29 May 2022 18:06:25 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 29 May 2022 18:06:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1653861985; x=1653948385; bh=o5
-        Io0TbLicI9bF16Sf8cW9EWMZ3JMY7fjlIo1Z3Xc7o=; b=SBDRcitWGQXvRvn+aO
-        Wrd50+ZmOERLrrs5kT5xhO7yukm6NrgDpKs2fvhNvuGDsZq2q9a1t8GcJuDP7exV
-        O12nPS9pjKTtZacs6aVEeJd5HLlsAZ4DZoLnibt2z08kw7Ca0jXjcub7lkPD1zvk
-        3W5QB+bC8t03gtTkxQaCRDdiwUeFt996+Og63uFjNpGjvZXWmYsAwc6UfGLO+OCA
-        WR1F/yK/UFMrVzWrS/7VNbaprMSy3hTten0cRF0F0zQj0cRSnG5eeFCag0wrkvkh
-        DJVSet7gYpj6IOm54B4r3R8lHk/A1oboIGHty/mtEjkDOfkGZZZxpsG4MLupqhil
-        T9dw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1653861985; x=1653948385; bh=o5Io0TbLicI9b
-        F16Sf8cW9EWMZ3JMY7fjlIo1Z3Xc7o=; b=jKBR/C6gzd+WaOh+plsLpqQ4IZX91
-        po4sRDtLHDVzPpWLUDypf26UcKO3eYhP2r5df6O1f/+y4zChNQRFWSoYVarQUkHd
-        9YyYoFu48wB1CSUGaH5GjRaZPUQaizidYxs/t1rKSwtoFPn2Gs8eBrmysLww573S
-        qlhFgjSfJpKbLX5dQQbpcUG8okeXYDVA1q32s6aIlLS0P+9AAeKUQJy+vwTPQTpw
-        ZVSqvu7d7CsrXqlDMT7dow6knq0+8VMXsmbWu6bMAH75/wnnI0ETZ1eq/FAMx3Zt
-        LZGiVMgbzt1dFA3ml3dqiF2YTqFWnd3lgNa0I1524DUku1jD5IoBHTWtQ==
-X-ME-Sender: <xms:Ye6TYqpSNXlAXoBi5FscljcWhdCj2rJU1B16jeOEoXXhu-xcZnLlig>
-    <xme:Ye6TYooKp2xHRVGkUbuzsbKaWdhVcXTzMsjsL8CVmlBEXJc1hxi7w6QkgNkcM4I4j
-    Qcj46rDBWkB-AzyKw>
-X-ME-Received: <xmr:Ye6TYvPQL7G52Rc4zVt8b7dw7f-KtCzCFsjy4jVLr1gp8wSEdLvB_jwjSay7Fb4K>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeehgddtgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephffvve
-    fufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
-    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgfefggeejhfduieekvd
-    euteffleeifeeuvdfhheejleejjeekgfffgefhtddtteenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:Ye6TYp61_QX39yfiYcoIAUXVRvrFDScWUR6A74xVo-1MGJVLkW69Pw>
-    <xmx:Ye6TYp4MHixciA3eVXTp9MET5f8Z8SfCdqGY_34LRIMr7aDGfzrgEw>
-    <xmx:Ye6TYpjvr-7f1zlA1iGoIMzUkrguSqVaHGWvPbLxm3w0HXMV2aMI4Q>
-    <xmx:Ye6TYs3dFnlPC6yHANyfVe6ujcmV1GphzdPWxgacQXTc4AydgI8f0Q>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 29 May 2022 18:06:25 -0400 (EDT)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add PROG_TEST_RUN selftest for BPF_PROG_TYPE_KPROBE
-Date:   Sun, 29 May 2022 17:06:06 -0500
-Message-Id: <a8f5faada9b96218d79beb7b7ddebe6a837a5536.1653861287.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1653861287.git.dxu@dxuuu.xyz>
-References: <cover.1653861287.git.dxu@dxuuu.xyz>
+        Sun, 29 May 2022 18:43:18 -0400
+X-Greylist: delayed 1560 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 29 May 2022 15:43:16 PDT
+Received: from rome.phoronix.com (rome.phoronix.com [192.211.48.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3037C5F8F9
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 15:43:15 -0700 (PDT)
+Received: from c-73-176-63-28.hsd1.il.comcast.net ([73.176.63.28]:44530 helo=[192.168.1.42])
+        by rome.phoronix.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <Michael@phoronix.com>)
+        id 1nvRDf-0005u2-QN;
+        Sun, 29 May 2022 18:17:07 -0400
+Message-ID: <6a5b80e8-a614-5452-4cf0-b636fa9b23cc@phoronix.com>
+Date:   Sun, 29 May 2022 17:16:59 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] clocksource: Make clocksource watchdog check with
+ WATCHDOG_INTERVAL period
+Content-Language: en-CA
+To:     Waiman Long <longman@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Feng Tang <feng.tang@intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        John Stultz <jstultz@google.com>
+Cc:     linux-kernel@vger.kernel.org, Joe Mario <jmario@redhat.com>,
+        Michey Mehta <mimehta@redhat.com>
+References: <20220528015714.109442-1-longman@redhat.com>
+ <fa2d516e-70b5-3012-9134-5ca325282bc4@redhat.com>
+From:   Michael Larabel <Michael@phoronix.com>
+In-Reply-To: <fa2d516e-70b5-3012-9134-5ca325282bc4@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - rome.phoronix.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - phoronix.com
+X-Get-Message-Sender-Via: rome.phoronix.com: authenticated_id: michael@phoronix.com
+X-Authenticated-Sender: rome.phoronix.com: michael@phoronix.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds a selftest to test that we can both PROG_TEST_RUN a
-kprobe prog and set its context.
+On 5/27/22 21:07, Waiman Long wrote:
+> On 5/27/22 21:57, Waiman Long wrote:
+>> Since commit c86ff8c55b8a ("clocksource: Avoid accidental unstable
+>> marking of clocksource"), a new WD_READ_SKIP value was introduced
+>> as a possible return value of cs_watchdog_read() to skip the current
+>> check. However, this has an undesriable side effect of extending the
+>> time gap between csnow and cs_last to more than one WATCHDOG_INTERVAL
+>> (0.5s) in case of intermittent WD_READ_SKIP's.
+>>
+>> There was an instance of reported clocksource watchdog failure with
+>> the time skew of 485us where the uncertainly threshold is 400us. In
+>> that particular case, the (now - last) gap was about 2s. Looking at
+>> the dmesg log, it was clear there was a successful cs_watchdog_read()
+>> followed by 3 skips and then another successful cs_watchdog_read().
+>>
+>> If there is an existing skew between the hpet (watchdog) and tsc
+>> clocksource, enlarging the period by 4x will certainly increase the
+>> measured skew causing it to exceed the threshold in this case. Fix
+>> this variable period problem by resetting the CLOCK_SOURCE_WATCHDOG bit
+>> after each WD_READ_SKIP to force the reloading of wd_last and cs_last
+>> in the next round. This ensures that we have two consecutive successful
+>> cs_watchdog_read()'s before checking the clock skew.
+>>
+>> Fixes: c86ff8c55b8a ("clocksource: Avoid accidental unstable marking 
+>> of clocksource")
+>> Reported-by: Michael Larabel <Michael@phoronix.com>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   kernel/time/clocksource.c | 11 ++++++++++-
+>>   1 file changed, 10 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
+>> index cee5da1e54c4..173e052c12b6 100644
+>> --- a/kernel/time/clocksource.c
+>> +++ b/kernel/time/clocksource.c
+>> @@ -411,9 +411,18 @@ static void clocksource_watchdog(struct 
+>> timer_list *unused)
+>>           read_ret = cs_watchdog_read(cs, &csnow, &wdnow);
+>>             if (read_ret != WD_READ_SUCCESS) {
+>> -            if (read_ret == WD_READ_UNSTABLE)
+>> +            if (read_ret == WD_READ_UNSTABLE) {
+>>                   /* Clock readout unreliable, so give it up. */
+>>                   __clocksource_unstable(cs);
+>> +            } else { /* WD_READ_SKIP */
+>> +                /*
+>> +                 * Watchdog clock unstable at the moment,
+>> +                 * discard the stored wd_last and cs_last to
+>> +                 * make sure the gap between now and last
+>> +                 * is always one WATCHDOG_INTERVAL.
+>> +                 */
+>> +                cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
+>> +            }
+>>               continue;
+>>           }
+>
+> Sorry, I accidentally use the old email address for John.
+>
+> Cheers,
+> Longman
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- .../selftests/bpf/prog_tests/kprobe_ctx.c     | 57 +++++++++++++++++++
- .../testing/selftests/bpf/progs/kprobe_ctx.c  | 33 +++++++++++
- 2 files changed, 90 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/kprobe_ctx.c
- create mode 100644 tools/testing/selftests/bpf/progs/kprobe_ctx.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_ctx.c b/tools/testing/selftests/bpf/prog_tests/kprobe_ctx.c
-new file mode 100644
-index 000000000000..260966fd4506
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_ctx.c
-@@ -0,0 +1,57 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <linux/ptrace.h>
-+#include "kprobe_ctx.skel.h"
-+
-+/*
-+ * x86_64 happens to be one of the architectures that exports the
-+ * kernel `struct pt_regs` to userspace ABI. For the architectures
-+ * that don't, users will have to extract `struct pt_regs` from vmlinux
-+ * BTF in order to use BPF_PROG_TYPE_KPROBE's BPF_PROG_RUN functionality.
-+ *
-+ * We choose to only test x86 here to keep the test simple.
-+ */
-+void test_kprobe_ctx(void)
-+{
-+#ifdef __x86_64__
-+	struct pt_regs regs = {
-+		.rdi = 1,
-+		.rsi = 2,
-+		.rdx = 3,
-+		.rcx = 4,
-+		.r8 = 5,
-+	};
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, tattr,
-+		.ctx_in = &regs,
-+		.ctx_size_in = sizeof(regs),
-+	);
-+
-+	struct kprobe_ctx *skel = NULL;
-+	int prog_fd;
-+	int err;
-+
-+	skel = kprobe_ctx__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	skel->bss->expected_p1 = (void *)1;
-+	skel->bss->expected_p2 = (void *)2;
-+	skel->bss->expected_p3 = (void *)3;
-+	skel->bss->expected_p4 = (void *)4;
-+	skel->bss->expected_p5 = (void *)5;
-+
-+	prog_fd = bpf_program__fd(skel->progs.prog);
-+	err = bpf_prog_test_run_opts(prog_fd, &tattr);
-+	if (!ASSERT_OK(err, "bpf_prog_test_run"))
-+		goto cleanup;
-+
-+	if (!ASSERT_TRUE(skel->bss->ret, "ret"))
-+		goto cleanup;
-+
-+	if (!ASSERT_GT(tattr.duration, 0, "duration"))
-+		goto cleanup;
-+cleanup:
-+	kprobe_ctx__destroy(skel);
-+#endif
-+}
-diff --git a/tools/testing/selftests/bpf/progs/kprobe_ctx.c b/tools/testing/selftests/bpf/progs/kprobe_ctx.c
-new file mode 100644
-index 000000000000..98063c549930
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kprobe_ctx.c
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+volatile void *expected_p1;
-+volatile void *expected_p2;
-+volatile void *expected_p3;
-+volatile void *expected_p4;
-+volatile void *expected_p5;
-+volatile bool ret = false;
-+
-+SEC("kprobe/this_function_does_not_exist")
-+int prog(struct pt_regs *ctx)
-+{
-+	void *p1, *p2, *p3, *p4, *p5;
-+
-+	p1 = (void *)PT_REGS_PARM1(ctx);
-+	p2 = (void *)PT_REGS_PARM2(ctx);
-+	p3 = (void *)PT_REGS_PARM3(ctx);
-+	p4 = (void *)PT_REGS_PARM4(ctx);
-+	p5 = (void *)PT_REGS_PARM5(ctx);
-+
-+	if (p1 != expected_p1 || p2 != expected_p2 || p3 != expected_p3 ||
-+	    p4 != expected_p4 || p5 != expected_p5)
-+		return 0;
-+
-+	ret = true;
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.36.1
+I've tested this patch on the affected Daytona + Milan-X system and can 
+confirm it does fix the performance problem that led to this issue. 
+Though it is spamming the kernel log now every half-second with 
+clocksource messages,  not sure if that is intended/desirable behavior?
+
+
+[    0.000000] tsc: Fast TSC calibration using PIT
+[    0.000000] tsc: Detected 2195.990 MHz processor
+[    1.238759] clocksource: tsc-early: mask: 0xffffffffffffffff 
+max_cycles: 0x1fa766bc6ba, max_idle_ns: 440795275714 ns
+[    2.769608] clocksource: Switched to clocksource tsc-early
+[    3.263925] clocksource: wd-tsc-early-wd read-back delay of 292215ns, 
+clock-skew test skipped!
+[    3.743804] clocksource: wd-tsc-early-wd read-back delay of 268469ns, 
+clock-skew test skipped!
+[    3.935663] tsc: Refined TSC clocksource calibration: 2195.274 MHz
+[    3.935844] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 
+0x1fa4c255513, max_idle_ns: 440795289702 ns
+[    3.936449] clocksource: Switched to clocksource tsc
+[    4.255932] clocksource: wd-tsc-wd read-back delay of 260228ns, 
+clock-skew test skipped!
+[    4.767892] clocksource: wd-tsc-wd read-back delay of 272520ns, 
+clock-skew test skipped!
+[    5.247581] clocksource: wd-tsc-wd read-back delay of 200444ns, 
+clock-skew test skipped!
+[    5.759560] clocksource: wd-tsc-wd read-back delay of 165942ns, 
+clock-skew test skipped!
+[    6.239687] clocksource: wd-tsc-wd read-back delay of 232222ns, 
+clock-skew test skipped!
+[    7.264014] clocksource: wd-tsc-wd read-back delay of 282927ns, 
+clock-skew test skipped!
+[    7.743864] clocksource: wd-tsc-wd read-back delay of 288374ns, 
+clock-skew test skipped!
+[    8.255590] clocksource: wd-tsc-wd read-back delay of 206730ns, 
+clock-skew test skipped!
+[    8.767778] clocksource: wd-tsc-wd read-back delay of 267771ns, 
+clock-skew test skipped!
+[    9.247870] clocksource: wd-tsc-wd read-back delay of 224469ns, 
+clock-skew test skipped!
+[   10.239340] clocksource: wd-tsc-wd read-back delay of 109720ns, 
+clock-skew test skipped!
+[   12.255276] clocksource: wd-tsc-wd read-back delay of 104692ns, 
+clock-skew test skipped!
+[   16.255362] clocksource: wd-tsc-wd read-back delay of 122780ns, 
+clock-skew test skipped!
+[   17.759335] clocksource: wd-tsc-wd read-back delay of 155885ns, 
+clock-skew test skipped!
+[   18.239500] clocksource: wd-tsc-wd read-back delay of 176558ns, 
+clock-skew test skipped!
+[   18.751341] clocksource: wd-tsc-wd read-back delay of 157352ns, 
+clock-skew test skipped!
+[   19.263618] clocksource: wd-tsc-wd read-back delay of 177606ns, 
+clock-skew test skipped!
+[   19.743487] clocksource: wd-tsc-wd read-back delay of 157841ns, 
+clock-skew test skipped!
+[   20.255482] clocksource: wd-tsc-wd read-back delay of 157701ns, 
+clock-skew test skipped!
+[   20.767634] clocksource: wd-tsc-wd read-back delay of 173136ns, 
+clock-skew test skipped!
+[   21.247405] clocksource: wd-tsc-wd read-back delay of 175441ns, 
+clock-skew test skipped!
+...
+
+Thanks,
+Michael
 

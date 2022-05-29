@@ -2,247 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA36F5370FC
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 14:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942FC537103
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 14:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbiE2MrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 08:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
+        id S230166AbiE2Mwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 08:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiE2MrH (ORCPT
+        with ESMTP id S229959AbiE2Mwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 08:47:07 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id BAD6E3B3F1
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 05:47:05 -0700 (PDT)
-Received: (qmail 146412 invoked by uid 1000); 29 May 2022 08:47:04 -0400
-Date:   Sun, 29 May 2022 08:47:04 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com>
-Cc:     Julia.Lawall@inria.fr, andreyknvl@gmail.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, jannh@google.com,
-        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rafael@kernel.org, sashal@kernel.org,
-        schspa@gmail.com, stable@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in driver_register
-Message-ID: <YpNrSABPtB5eDC+m@rowland.harvard.edu>
-References: <000000000000e66c2805de55b15a@google.com>
- <000000000000db349d05e01cffa8@google.com>
+        Sun, 29 May 2022 08:52:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C5B334B9D
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 05:52:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653828759;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1IDqdGLArfr4gn5KVVbwW1OeNRwMY+hK8QbzyH+wdCw=;
+        b=h9i5gHJsYkCgAyN11cy0M+mntLK8gFL9DWHgIFxG9+zwrOqJ2Qu6IXnPl9fBU5QGcznNKs
+        wJ9mE8Z+bQzfv6gDMo9JB3HF1ZYoAdCBdNkVVpDehbCPqPDwlW+qt2KGQMzeH+KfOeONbx
+        nPXUENQDAVFydbc6DbcPUK6jog31Lu4=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-Pz-JTfIkND6odW2glk0L9g-1; Sun, 29 May 2022 08:52:38 -0400
+X-MC-Unique: Pz-JTfIkND6odW2glk0L9g-1
+Received: by mail-oo1-f70.google.com with SMTP id l2-20020a4ab0c2000000b00334cb56f0a5so5064083oon.17
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 05:52:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=1IDqdGLArfr4gn5KVVbwW1OeNRwMY+hK8QbzyH+wdCw=;
+        b=HaSClpYgAZvrfe2bwaV+Bazz+2h1O1hDXafPujda28g9Vol2cQzmFZEQm6DBWUs807
+         SvCYTgDXhWXHSFdpqslRztm1hMKUmPP/jcZeYf06YkxIDcrWisnAeVxmmTvzz5P/0gNQ
+         OaBUNBHMMG2XirN1khjjpG9b6EbntJfwAAwTPqFB1JWc8HNz4WM27CkYEh3qUuTnW/vE
+         zIysH2JU8BH8acnVAVUIUTIHY0r9w3q/FrQkWCVkCs3kua6n012D4rUmlLYZ9dFDHVIE
+         DARx4RauIQWU14A9Om+v4DyGoVybfF3lZ1QoTb1vN1Tb00LaYueCkEHU1yTJu7OGCIGW
+         VnhA==
+X-Gm-Message-State: AOAM5324rVYdLpRrtDC1isojDZvKlRw6GpBAQkCEBa0AeGowdH0ITGTj
+        Bk8oDDpUnqwHl/w6ZHh6mpSrSKN6r75S0oM2hKFBV72rdwvTIoXI3jHqa72n+eKZW2oSQCDFU0p
+        m09lPxRVT30uTztrXfos6/PyW
+X-Received: by 2002:a05:6830:3492:b0:60b:1dda:c407 with SMTP id c18-20020a056830349200b0060b1ddac407mr11626805otu.17.1653828756734;
+        Sun, 29 May 2022 05:52:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwCrjXqLqBiMZ7iKG+Mpk3oYrazd+9A6Gf21KYZyX+2mnWUSmy3fnZV9nCvr1+yHWi5tQMvmg==
+X-Received: by 2002:a05:6830:3492:b0:60b:1dda:c407 with SMTP id c18-20020a056830349200b0060b1ddac407mr11626799otu.17.1653828756529;
+        Sun, 29 May 2022 05:52:36 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id ny8-20020a056870be0800b000f303e9538csm1834556oab.30.2022.05.29.05.52.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 May 2022 05:52:35 -0700 (PDT)
+Subject: Re: [PATCH] cifs: set length when cifs_copy_pages_to_iter is
+ successful
+To:     Steve French <smfrench@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Steve French <stfrench@microsoft.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        Steve French <sfrench@samba.org>
+References: <20220526140226.2648689-1-trix@redhat.com>
+ <CAKwvOdmPZXiMZRKyMfZVMmw-95XVocSZn3VVi3yJh0Bx1ONbJQ@mail.gmail.com>
+ <CAH2r5mumSyxP8XUJjKwv9exh__NkCtG2HSiO-USqGo_7ZTb0yQ@mail.gmail.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <3144155d-47c7-ccfd-ff52-e3fa4e0468ee@redhat.com>
+Date:   Sun, 29 May 2022 05:52:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000db349d05e01cffa8@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAH2r5mumSyxP8XUJjKwv9exh__NkCtG2HSiO-USqGo_7ZTb0yQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 07:07:19PM -0700, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    d3fde8ff50ab Add linux-next specific files for 20220527
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=154faf23f00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=ccb8d66fc9489ef
-> dashboard link: https://syzkaller.appspot.com/bug?extid=dc7c3ca638e773db07f6
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17315ad6f00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12087513f00000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: use-after-free in driver_find drivers/base/driver.c:293 [inline]
-> BUG: KASAN: use-after-free in driver_register+0x352/0x3a0 drivers/base/driver.c:233
-> Read of size 8 at addr ffff88807813bec8 by task syz-executor372/10628
-> 
-> CPU: 1 PID: 10628 Comm: syz-executor372 Not tainted 5.18.0-next-20220527-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
->  print_report mm/kasan/report.c:429 [inline]
->  kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
->  driver_find drivers/base/driver.c:293 [inline]
->  driver_register+0x352/0x3a0 drivers/base/driver.c:233
->  usb_gadget_register_driver_owner+0xfb/0x1e0 drivers/usb/gadget/udc/core.c:1558
->  raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:515 [inline]
->  raw_ioctl+0x188d/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1222
->  vfs_ioctl fs/ioctl.c:51 [inline]
 
-This sounds a lot like the "WARNING in driver_unregister" bug.  Let's see
-if the same fix works.
+On 5/28/22 4:31 PM, Steve French wrote:
+> Presumably this was in Dave Howell's patch set which we took out of
+> for-next to restructure in some of Al's feedback and some things found
+> during testing. So nothing to fix in current mainline or for-next ...
+> right?
 
-Alan Stern
+Yup. Nothing to fix.
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 97fa5887cf28
+So drop this patch.
 
-Index: usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/legacy/raw_gadget.c
-+++ usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -11,6 +11,7 @@
- #include <linux/ctype.h>
- #include <linux/debugfs.h>
- #include <linux/delay.h>
-+#include <linux/idr.h>
- #include <linux/kref.h>
- #include <linux/miscdevice.h>
- #include <linux/module.h>
-@@ -36,6 +37,9 @@ MODULE_LICENSE("GPL");
- 
- /*----------------------------------------------------------------------*/
- 
-+static DEFINE_IDA(driver_id_numbers);
-+#define DRIVER_DRIVER_NAME_LENGTH_MAX	32
-+
- #define RAW_EVENT_QUEUE_SIZE	16
- 
- struct raw_event_queue {
-@@ -145,6 +149,7 @@ enum dev_state {
- 	STATE_DEV_INVALID = 0,
- 	STATE_DEV_OPENED,
- 	STATE_DEV_INITIALIZED,
-+	STATE_DEV_REGISTERING,
- 	STATE_DEV_RUNNING,
- 	STATE_DEV_CLOSED,
- 	STATE_DEV_FAILED
-@@ -160,6 +165,9 @@ struct raw_dev {
- 	/* Reference to misc device: */
- 	struct device			*dev;
- 
-+	/* Make driver names unique */
-+	int				driver_id_number;
-+
- 	/* Protected by lock: */
- 	enum dev_state			state;
- 	bool				gadget_registered;
-@@ -188,6 +196,7 @@ static struct raw_dev *dev_new(void)
- 	spin_lock_init(&dev->lock);
- 	init_completion(&dev->ep0_done);
- 	raw_event_queue_init(&dev->queue);
-+	dev->driver_id_number = -1;
- 	return dev;
- }
- 
-@@ -198,6 +207,9 @@ static void dev_free(struct kref *kref)
- 
- 	kfree(dev->udc_name);
- 	kfree(dev->driver.udc_name);
-+	kfree(dev->driver.driver.name);
-+	if (dev->driver_id_number >= 0)
-+		ida_free(&driver_id_numbers, dev->driver_id_number);
- 	if (dev->req) {
- 		if (dev->ep0_urb_queued)
- 			usb_ep_dequeue(dev->gadget->ep0, dev->req);
-@@ -421,6 +433,7 @@ static int raw_ioctl_init(struct raw_dev
- 	struct usb_raw_init arg;
- 	char *udc_driver_name;
- 	char *udc_device_name;
-+	char *driver_driver_name;
- 	unsigned long flags;
- 
- 	if (copy_from_user(&arg, (void __user *)value, sizeof(arg)))
-@@ -439,36 +452,44 @@ static int raw_ioctl_init(struct raw_dev
- 		return -EINVAL;
- 	}
- 
-+	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
-+	if (ret < 0)
-+		return ret;
-+	dev->driver_id_number = ret;
-+
-+	driver_driver_name = kmalloc(DRIVER_DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
-+	if (!driver_driver_name) {
-+		ret = -ENOMEM;
-+		goto out_free_driver_id_number;
-+	}
-+	snprintf(driver_driver_name, DRIVER_DRIVER_NAME_LENGTH_MAX,
-+				DRIVER_NAME ".%d", dev->driver_id_number);
-+
- 	udc_driver_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
--	if (!udc_driver_name)
--		return -ENOMEM;
-+	if (!udc_driver_name) {
-+		ret = -ENOMEM;
-+		goto out_free_driver_driver_name;
-+	}
- 	ret = strscpy(udc_driver_name, &arg.driver_name[0],
- 				UDC_NAME_LENGTH_MAX);
--	if (ret < 0) {
--		kfree(udc_driver_name);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto out_free_udc_driver_name;
- 	ret = 0;
- 
- 	udc_device_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
- 	if (!udc_device_name) {
--		kfree(udc_driver_name);
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto out_free_udc_driver_name;
- 	}
- 	ret = strscpy(udc_device_name, &arg.device_name[0],
- 				UDC_NAME_LENGTH_MAX);
--	if (ret < 0) {
--		kfree(udc_driver_name);
--		kfree(udc_device_name);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto out_free_udc_device_name;
- 	ret = 0;
- 
- 	spin_lock_irqsave(&dev->lock, flags);
- 	if (dev->state != STATE_DEV_OPENED) {
- 		dev_dbg(dev->dev, "fail, device is not opened\n");
--		kfree(udc_driver_name);
--		kfree(udc_device_name);
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
-@@ -483,14 +504,24 @@ static int raw_ioctl_init(struct raw_dev
- 	dev->driver.suspend = gadget_suspend;
- 	dev->driver.resume = gadget_resume;
- 	dev->driver.reset = gadget_reset;
--	dev->driver.driver.name = DRIVER_NAME;
-+	dev->driver.driver.name = driver_driver_name;
- 	dev->driver.udc_name = udc_device_name;
- 	dev->driver.match_existing_only = 1;
- 
- 	dev->state = STATE_DEV_INITIALIZED;
-+	spin_unlock_irqrestore(&dev->lock, flags);
-+	return ret;
- 
- out_unlock:
- 	spin_unlock_irqrestore(&dev->lock, flags);
-+out_free_udc_device_name:
-+	kfree(udc_device_name);
-+out_free_udc_driver_name:
-+	kfree(udc_driver_name);
-+out_free_driver_driver_name:
-+	kfree(driver_driver_name);
-+out_free_driver_id_number:
-+	ida_free(&driver_id_numbers, dev->driver_id_number);
- 	return ret;
- }
- 
-@@ -508,6 +539,7 @@ static int raw_ioctl_run(struct raw_dev
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
-+	dev->state = STATE_DEV_REGISTERING;
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
- 	ret = usb_gadget_register_driver(&dev->driver);
+Tom
+
+>
+> On Sat, May 28, 2022 at 3:40 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+>> + Steve's @microsoft.com email addr.
+>>
+>> On Thu, May 26, 2022 at 7:02 AM Tom Rix <trix@redhat.com> wrote:
+>>> clang build fails with
+>>> fs/cifs/smb2ops.c:4984:7: error: variable 'length' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>>>    if (rdata->result != 0) {
+>>>        ^~~~~~~~~~~~~~~~~~
+>>>
+>>> handle_read_data() returns the number of bytes handled by setting the length variable.
+>>> This only happens in the copy_to_iter() branch, it needs to also happen in the
+>>> cifs_copy_pages_to_iter() branch.  When cifs_copy_pages_to_iter() is successful,
+>>> its parameter data_len is how many bytes were handled, so set length to data_len.
+>>>
+>>> Fixes: 67fd8cff2b0f ("cifs: Change the I/O paths to use an iterator rather than a page list")
+>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>> ---
+>>>   fs/cifs/smb2ops.c | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+>>> index 3630e132781f..bfad482ec186 100644
+>>> --- a/fs/cifs/smb2ops.c
+>>> +++ b/fs/cifs/smb2ops.c
+>>> @@ -4988,7 +4988,7 @@ handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
+>>>                                  dequeue_mid(mid, rdata->result);
+>>>                          return 0;
+>>>                  }
+>>> -               rdata->got_bytes = pages_len;
+>>> +               length = rdata->got_bytes = pages_len;
+>>>
+>>>          } else if (buf_len >= data_offset + data_len) {
+>>>                  /* read response payload is in buf */
+>>> --
+>>> 2.27.0
+>>>
+>>
+>> --
+>> Thanks,
+>> ~Nick Desaulniers
+>
+>
 

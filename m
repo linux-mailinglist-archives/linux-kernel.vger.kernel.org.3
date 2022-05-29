@@ -2,92 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC27537000
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 08:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCA4537003
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 08:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiE2G0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 02:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
+        id S229556AbiE2GcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 02:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiE2G0n (ORCPT
+        with ESMTP id S229531AbiE2GcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 02:26:43 -0400
-Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995ED655F
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 23:26:41 -0700 (PDT)
-Received: by mail-pj1-f66.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso1457165pjl.3
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 23:26:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nAodg8IpCf1YlPCwEY/9oZB3Kk0d9gb9lVermXkWYgQ=;
-        b=Z4WxoEZlCnEh/y1SI1t01qmuDfJ5QYethtvW6jZZjfTqVHfJm6p6pZd2t6GDTF6t7V
-         hsAEgPrlO8rQttz8Gjrb1GST6pYYGoWWuvpFhEHR3/aqaIsSjyTCY5PK/d6r4TB1Rxkn
-         Wfca8ev68s4UE1eXsEmm6M8vWT5iisX/J67NwiEYx9v5bCCrT6FZ21LuuvkY0/NEFug7
-         GE8JXTQyisxLg7dXqhVRljTV+dqlro1ytpWERCnZXqMQV4B/pgr+sufMMI7MxvW+IAP1
-         S6XCz06QDfK3dNgtH1HQHg1Q7igdmz+MXTUpjvSxJ5wz1TTTGvu7rJYRsr5Xmep8B/PD
-         LxzQ==
-X-Gm-Message-State: AOAM532rSKYNMvGDJlsp/RwkQHlfqXoYmteZxMSa0HdfP0REhXIEkWqV
-        FlD/o3FV42sMyfHstY24gw==
-X-Google-Smtp-Source: ABdhPJzlemj8sWhGGFITlnMkOA8aFFrOc3HF39ff43T9ebwbkrJKKloZRH00669Xb65j2g2+PtbrOg==
-X-Received: by 2002:a17:903:2c7:b0:158:2f26:6016 with SMTP id s7-20020a17090302c700b001582f266016mr50903382plk.154.1653805601094;
-        Sat, 28 May 2022 23:26:41 -0700 (PDT)
-Received: from localhost.localdomain (ns1003916.ip-51-81-154.us. [51.81.154.37])
-        by smtp.gmail.com with ESMTPSA id x12-20020a170902ec8c00b00161955fe0d5sm6761554plg.274.2022.05.28.23.26.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 May 2022 23:26:40 -0700 (PDT)
-From:   sunliming <sunliming@kylinos.cn>
-To:     alexander.deucher@amd.com, hristian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        Hawking.Zhang@amd.com, mike@fireburn.co.uk, Xiaojian.Du@amd.com,
-        evan.quan@amd.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, sunliming@kylinos.cn,
-        kelulanainsley@gmail.com, kernel test robot <lkp@intel.com>
-Subject: [PATCH] drm/amdgpu: make gfx_v11_0_rlc_stop static
-Date:   Sun, 29 May 2022 14:26:31 +0800
-Message-Id: <20220529062631.304316-1-sunliming@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 29 May 2022 02:32:04 -0400
+Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9B7186DB
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 23:32:01 -0700 (PDT)
+Received: from pop-os.home ([90.11.191.102])
+        by smtp.orange.fr with ESMTPA
+        id vCSxn3NPl3JPEvCSxnMxa6; Sun, 29 May 2022 08:31:59 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 29 May 2022 08:31:59 +0200
+X-ME-IP: 90.11.191.102
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Mark Brown <broonie@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH] spi: spi-altera-dfl: Fix an error handling path
+Date:   Sun, 29 May 2022 08:31:53 +0200
+Message-Id: <0607bb59f4073f86abe5c585d35245aef0b045c6.1653805901.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This symbol is not used outside of gfx_v11_0.c, so marks it static.
+The spi_alloc_master() call is not undone in all error handling paths.
+Moreover, there is no .remove function to release the allocated memory.
 
-Fixes the following w1 warning:
+In order to fix both this issues, switch to devm_spi_alloc_master().
 
-drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:1945:6: warning: no previous
-prototype for function 'gfx_v11_0_rlc_stop' [-Wmissing-prototypes].
+This allows further simplification of the probe.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: sunliming <sunliming@kylinos.cn>
+Fixes: ba2fc167e944 ("spi: altera: Add DFL bus driver for Altera API Controller")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-altera-dfl.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c
-index 8c0a3fc7aaa6..cb581cfc7464 100644
---- a/drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c
-@@ -1983,7 +1983,7 @@ static int gfx_v11_0_init_csb(struct amdgpu_device *adev)
+diff --git a/drivers/spi/spi-altera-dfl.c b/drivers/spi/spi-altera-dfl.c
+index ca40923258af..596e181ae136 100644
+--- a/drivers/spi/spi-altera-dfl.c
++++ b/drivers/spi/spi-altera-dfl.c
+@@ -128,9 +128,9 @@ static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
+ 	struct spi_master *master;
+ 	struct altera_spi *hw;
+ 	void __iomem *base;
+-	int err = -ENODEV;
++	int err;
+ 
+-	master = spi_alloc_master(dev, sizeof(struct altera_spi));
++	master = devm_spi_alloc_master(dev, sizeof(struct altera_spi));
+ 	if (!master)
+ 		return -ENOMEM;
+ 
+@@ -159,10 +159,9 @@ static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
+ 	altera_spi_init_master(master);
+ 
+ 	err = devm_spi_register_master(dev, master);
+-	if (err) {
+-		dev_err(dev, "%s failed to register spi master %d\n", __func__, err);
+-		goto exit;
+-	}
++	if (err)
++		return dev_err_probe(dev, err, "%s failed to register spi master\n",
++				     __func__);
+ 
+ 	if (dfl_dev->revision == FME_FEATURE_REV_MAX10_SPI_N5010)
+ 		strscpy(board_info.modalias, "m10-n5010", SPI_NAME_SIZE);
+@@ -179,9 +178,6 @@ static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
+ 	}
+ 
  	return 0;
+-exit:
+-	spi_master_put(master);
+-	return err;
  }
  
--void gfx_v11_0_rlc_stop(struct amdgpu_device *adev)
-+static void gfx_v11_0_rlc_stop(struct amdgpu_device *adev)
- {
- 	u32 tmp = RREG32_SOC15(GC, 0, regRLC_CNTL);
- 
+ static const struct dfl_device_id dfl_spi_altera_ids[] = {
 -- 
-2.25.1
+2.34.1
 

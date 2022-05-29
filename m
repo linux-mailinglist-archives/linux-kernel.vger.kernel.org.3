@@ -2,218 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C7C537164
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7960537166
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 16:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbiE2OnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 10:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
+        id S230457AbiE2Oot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 10:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiE2OnB (ORCPT
+        with ESMTP id S229934AbiE2Oos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 10:43:01 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42DFA4830A;
-        Sun, 29 May 2022 07:43:00 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id 2so9108297iou.5;
-        Sun, 29 May 2022 07:43:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=ivB3xZNPk/HRQcIpAvzMtgHzUzcDOyxmfIr4lBMkOpQ=;
-        b=Q9i4IqNrDLgnXT5ndv85GwM4ORcOaOyz1LX95hEfYldmLNCvDd14GYQPh4dF7BWY55
-         YQiNls5o7NmCUqVCeLTqkMeW1h0bsJJqV/Z44cD7mwuY0pntb84OIjmPaOdVyY0/PSnA
-         e3cnmqHf+DQ8zOt2nox0GRq0gK3RjIKaQ4jKee2mB+phOsArSwzZG0N/CL43H1Ae37wG
-         tyzB+JxRfrAaPgdaFUJddlz3FNyu0ICNVDdGiSrGMegxblozPD5zNlM5NILKOlR6ZDw4
-         R7UqlS64Mmv1g16tbG0VXLq2gK8puU/CT2TFk6va8OUjrYnm5gDtO2LobkDj+vQhjUOR
-         6Uuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=ivB3xZNPk/HRQcIpAvzMtgHzUzcDOyxmfIr4lBMkOpQ=;
-        b=lSLweiemosTEiCmCQQo/70GzDd479NQGQK2/+z4jWTW+mciHJWDJEPWX3ILTHoKYN4
-         ms4go8Rtnb1CLPSe5sbS3NHmQqJxINnJsdckNmlrArlKlzx7J/dtix4nKz8yPSptn8pv
-         n8ELnIdv/fZ0P9k6JMAfiWaTpLMad9vOacvh5LhDPIumqluHtWcJA0QECaPSwpixXpYb
-         pGqhq8fa1BXUWSijGdS0FWwOo8Ds22tflNMxtIdiJoMo350HGIW0KiCByBeVRnZ774CZ
-         QFV0dYd24XS7YDy1+aoyE3X/ioyD9l3ebuR0oyKoHk20NYu3X3m9wugsdsfOtZ5Uy3gP
-         S4qg==
-X-Gm-Message-State: AOAM530duCe+gd6G3dBUOiglpoGbRAotmw+z7kb8lelNk/R7JDb36iWy
-        AyI5/WVf7La+qe6Jirmlz7GlPXR6CGrjTIcuV0g=
-X-Google-Smtp-Source: ABdhPJz2GVGOebiROdNoFngR7SNu6Ex/e9wsBn0eouXGks4uJH2PI/3CJHWNZcWW8hDm2lD2oU+0NuyXHiFoa0y3D30=
-X-Received: by 2002:a05:6602:25d3:b0:65b:1d8a:a8ae with SMTP id
- d19-20020a05660225d300b0065b1d8aa8aemr22938278iop.131.1653835379597; Sun, 29
- May 2022 07:42:59 -0700 (PDT)
+        Sun, 29 May 2022 10:44:48 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37298E190
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 07:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653835487; x=1685371487;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MixufXRvEwcNgvnEmlQ9DDLtV4e15ATVODNSDNCfh5I=;
+  b=ON8+dW7U8rSBnKUpFpnBQ1XVVozcUse01lGd1P3aSQq6v2jaTS2ffWBc
+   y8ywHedjJC0s+0Vcj5V/fIgtTwimMaWdN692Mt+T0GTHrK5fpnV4jthUH
+   zPCHwEB/ZU7uOGukqvKvyo4qK6Rv7QVZndhv0WYRuMZ0KaPin7ws4mmY+
+   c21K77Y3FbjU7/IGB/5M8bTvNM7fw2gBt7ccgoH1aMsz7oXnYBYuh4BjG
+   g/SllFv+XnAUCI/t8WgyTIYqNQKGYWJo4dlZysAUTC91p4NdNqmZ3tA5G
+   P6CReBFo4FNBQXyTkUfh74JSdrbN2MPx4th0N/gm+jmeUVqeZrCK3z37G
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10361"; a="300155979"
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="300155979"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2022 07:44:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="632299506"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 29 May 2022 07:44:45 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nvK9s-00014m-Pv;
+        Sun, 29 May 2022 14:44:44 +0000
+Date:   Sun, 29 May 2022 22:44:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sven Schnelle <svens@stackframe.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Helge Deller <deller@gmx.de>
+Subject: [deller-fbdev:hp-visualize-fx-drm 1/1]
+ drivers/gpu/drm/visualizefx/visfx_drv.c:222:25: error: invalid use of
+ undefined type 'const struct dma_buf_map'
+Message-ID: <202205292236.7katQfFE-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220528154704.2576290-1-masahiroy@kernel.org> <20220528154704.2576290-3-masahiroy@kernel.org>
-In-Reply-To: <20220528154704.2576290-3-masahiroy@kernel.org>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sun, 29 May 2022 16:42:23 +0200
-Message-ID: <CA+icZUV1eoXkVXGEVD-8rMeh+6y7bwXC91R3EqaT5CKf_=D5fw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 8:25 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> This is a preparation for the objtool move in the next commit.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git hp-visualize-fx-drm
+head:   c2d0f767c19314c3d3a1a2d304be3c871b729523
+commit: c2d0f767c19314c3d3a1a2d304be3c871b729523 [1/1] drm: add HP Visualize FX driver
+config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/20220529/202205292236.7katQfFE-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/commit/?id=c2d0f767c19314c3d3a1a2d304be3c871b729523
+        git remote add deller-fbdev git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git
+        git fetch --no-tags deller-fbdev hp-visualize-fx-drm
+        git checkout c2d0f767c19314c3d3a1a2d304be3c871b729523
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
 
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
--Sedat-
+All errors (new ones prefixed by >>):
 
-> ---
->
->  scripts/Makefile.vmlinux_o | 61 ++++++++++++++++++++++++++++++++++++++
->  scripts/link-vmlinux.sh    | 41 +------------------------
->  2 files changed, 62 insertions(+), 40 deletions(-)
->  create mode 100644 scripts/Makefile.vmlinux_o
->
-> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-> new file mode 100644
-> index 000000000000..a9b375ca86d5
-> --- /dev/null
-> +++ b/scripts/Makefile.vmlinux_o
-> @@ -0,0 +1,61 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +PHONY := __default
-> +__default: vmlinux.o
-> +
-> +include include/config/auto.conf
-> +include $(srctree)/scripts/Kbuild.include
-> +
-> +# Generate a linker script to ensure correct ordering of initcalls for Clang LTO
-> +# ---------------------------------------------------------------------------
-> +
-> +quiet_cmd_gen_initcalls_lds = GEN     $@
-> +      cmd_gen_initcalls_lds = \
-> +       $(PYTHON3) $(srctree)/scripts/jobserver-exec \
-> +       $(PERL) $(real-prereqs) > $@
-> +
-> +.tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
-> +               $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
-> +       $(call if_changed,gen_initcalls_lds)
-> +
-> +targets := .tmp_initcalls.lds
-> +
-> +ifdef CONFIG_LTO_CLANG
-> +initcalls-lds := .tmp_initcalls.lds
-> +endif
-> +
-> +# Link of vmlinux.o used for section mismatch analysis
-> +# ---------------------------------------------------------------------------
-> +
-> +quiet_cmd_ld_vmlinux.o = LD      $@
-> +      cmd_ld_vmlinux.o = \
-> +       $(LD) ${KBUILD_LDFLAGS} -r -o $@ \
-> +       $(addprefix -T , $(initcalls-lds)) \
-> +       --whole-archive $(KBUILD_VMLINUX_OBJS) --no-whole-archive \
-> +       --start-group $(KBUILD_VMLINUX_LIBS) --end-group \
-> +
-> +define rule_ld_vmlinux.o
-> +       $(call cmd_and_savecmd,ld_vmlinux.o)
-> +endef
-> +
-> +vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
-> +       $(call if_changed_rule,ld_vmlinux.o)
-> +
-> +targets += vmlinux.o
-> +
-> +# Add FORCE to the prequisites of a target to force it to be always rebuilt.
-> +# ---------------------------------------------------------------------------
-> +
-> +PHONY += FORCE
-> +FORCE:
-> +
-> +# Read all saved command lines and dependencies for the $(targets) we
-> +# may be building above, using $(if_changed{,_dep}). As an
-> +# optimization, we don't need to read them if the target does not
-> +# exist, we will rebuild anyway in that case.
-> +
-> +existing-targets := $(wildcard $(sort $(targets)))
-> +
-> +-include $(foreach f,$(existing-targets),$(dir $(f)).$(notdir $(f)).cmd)
-> +
-> +.PHONY: $(PHONY)
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index b593cb1a8137..90680b6bd710 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -45,45 +45,6 @@ info()
->         printf "  %-7s %s\n" "${1}" "${2}"
->  }
->
-> -# Generate a linker script to ensure correct ordering of initcalls.
-> -gen_initcalls()
-> -{
-> -       info GEN .tmp_initcalls.lds
-> -
-> -       ${PYTHON3} ${srctree}/scripts/jobserver-exec            \
-> -       ${PERL} ${srctree}/scripts/generate_initcall_order.pl   \
-> -               ${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}   \
-> -               > .tmp_initcalls.lds
-> -}
-> -
-> -# Link of vmlinux.o used for section mismatch analysis
-> -# ${1} output file
-> -modpost_link()
-> -{
-> -       local objects
-> -       local lds=""
-> -
-> -       objects="--whole-archive                                \
-> -               ${KBUILD_VMLINUX_OBJS}                          \
-> -               --no-whole-archive                              \
-> -               --start-group                                   \
-> -               ${KBUILD_VMLINUX_LIBS}                          \
-> -               --end-group"
-> -
-> -       if is_enabled CONFIG_LTO_CLANG; then
-> -               gen_initcalls
-> -               lds="-T .tmp_initcalls.lds"
-> -
-> -               # This might take a while, so indicate that we're doing
-> -               # an LTO link
-> -               info LTO ${1}
-> -       else
-> -               info LD ${1}
-> -       fi
-> -
-> -       ${LD} ${KBUILD_LDFLAGS} -r -o ${1} ${lds} ${objects}
-> -}
-> -
->  objtool_link()
->  {
->         local objtoolcmd;
-> @@ -336,7 +297,7 @@ fi;
->  ${MAKE} -f "${srctree}/scripts/Makefile.build" obj=init need-builtin=1
->
->  #link vmlinux.o
-> -modpost_link vmlinux.o
-> +${MAKE} -f "${srctree}/scripts/Makefile.vmlinux_o"
->  objtool_link vmlinux.o
->
->  # Generate the list of objects in vmlinux
-> --
-> 2.32.0
->
+   drivers/gpu/drm/visualizefx/visfx_drv.c:218:45: warning: 'struct dma_buf_map' declared inside parameter list will not be visible outside of this definition or declaration
+     218 |                                const struct dma_buf_map *map,
+         |                                             ^~~~~~~~~~~
+   drivers/gpu/drm/visualizefx/visfx_drv.c: In function 'visfx_fb_blit_rect':
+>> drivers/gpu/drm/visualizefx/visfx_drv.c:222:25: error: invalid use of undefined type 'const struct dma_buf_map'
+     222 |         void *vmap = map->vaddr; /* TODO: Use mapping abstraction properly */
+         |                         ^~
+   drivers/gpu/drm/visualizefx/visfx_drv.c: At top level:
+   drivers/gpu/drm/visualizefx/visfx_drv.c:236:78: warning: 'struct dma_buf_map' declared inside parameter list will not be visible outside of this definition or declaration
+     236 | static int visfx_fb_blit_fullscreen(struct drm_framebuffer *fb, const struct dma_buf_map *map)
+         |                                                                              ^~~~~~~~~~~
+   drivers/gpu/drm/visualizefx/visfx_drv.c: In function 'visfx_fb_blit_fullscreen':
+>> drivers/gpu/drm/visualizefx/visfx_drv.c:244:39: error: passing argument 2 of 'visfx_fb_blit_rect' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     244 |         return visfx_fb_blit_rect(fb, map, &fullscreen);
+         |                                       ^~~
+         |                                       |
+         |                                       const struct dma_buf_map *
+   drivers/gpu/drm/visualizefx/visfx_drv.c:218:58: note: expected 'const struct dma_buf_map *' but argument is of type 'const struct dma_buf_map *'
+     218 |                                const struct dma_buf_map *map,
+         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   drivers/gpu/drm/visualizefx/visfx_drv.c: In function 'visfx_pipe_enable':
+>> drivers/gpu/drm/visualizefx/visfx_drv.c:281:51: error: passing argument 2 of 'visfx_fb_blit_fullscreen' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     281 |         visfx_fb_blit_fullscreen(plane_state->fb, &shadow_plane_state->data[0]);
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                   |
+         |                                                   struct iosys_map *
+   drivers/gpu/drm/visualizefx/visfx_drv.c:236:91: note: expected 'const struct dma_buf_map *' but argument is of type 'struct iosys_map *'
+     236 | static int visfx_fb_blit_fullscreen(struct drm_framebuffer *fb, const struct dma_buf_map *map)
+         |                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   drivers/gpu/drm/visualizefx/visfx_drv.c: In function 'visfx_pipe_update':
+   drivers/gpu/drm/visualizefx/visfx_drv.c:321:47: error: passing argument 2 of 'visfx_fb_blit_rect' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     321 |                 visfx_fb_blit_rect(state->fb, &shadow_plane_state->data[0], &rect);
+         |                                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                               |
+         |                                               struct iosys_map *
+   drivers/gpu/drm/visualizefx/visfx_drv.c:218:58: note: expected 'const struct dma_buf_map *' but argument is of type 'struct iosys_map *'
+     218 |                                const struct dma_buf_map *map,
+         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   cc1: some warnings being treated as errors
+
+
+vim +222 drivers/gpu/drm/visualizefx/visfx_drv.c
+
+   216	
+   217	static int visfx_fb_blit_rect(struct drm_framebuffer *fb,
+   218				       const struct dma_buf_map *map,
+   219				       struct drm_rect *rect)
+   220	{
+   221		struct visfx_device *visfx = to_visfx(fb->dev);
+ > 222		void *vmap = map->vaddr; /* TODO: Use mapping abstraction properly */
+   223		uint8_t *dst;
+   224		int idx;
+   225	
+   226		if (!drm_dev_enter(&visfx->dev, &idx))
+   227			return -ENODEV;
+   228		visfx_writel(visfx, VISFX_VRAM_WRITE_MODE, VISFX_VRAM_WRITE_MODE_BITMAP);
+   229		dst = visfx->mmio + 0x01000000;
+   230		dst += drm_fb_clip_offset(fb->pitches[0], fb->format, rect);
+   231		drm_fb_memcpy_toio(dst, fb->pitches[0], vmap, fb, rect);
+   232		drm_dev_exit(idx);
+   233		return 0;
+   234	}
+   235	
+   236	static int visfx_fb_blit_fullscreen(struct drm_framebuffer *fb, const struct dma_buf_map *map)
+   237	{
+   238		struct drm_rect fullscreen = {
+   239			.x1 = 0,
+   240			.x2 = fb->width,
+   241			.y1 = 0,
+   242			.y2 = fb->height,
+   243		};
+ > 244		return visfx_fb_blit_rect(fb, map, &fullscreen);
+   245	}
+   246	
+   247	static int visfx_check_size(int width, int height, struct drm_framebuffer *fb)
+   248	{
+   249		if (width > 2048 || height > 2048)
+   250			return -EINVAL;
+   251		return 0;
+   252	}
+   253	
+   254	static enum drm_mode_status visfx_pipe_mode_valid(struct drm_simple_display_pipe *pipe,
+   255							   const struct drm_display_mode *mode)
+   256	{
+   257		if (visfx_check_size(mode->hdisplay, mode->vdisplay, NULL) < 0)
+   258			return MODE_BAD;
+   259		return MODE_OK;
+   260	}
+   261	
+   262	static int visfx_pipe_check(struct drm_simple_display_pipe *pipe,
+   263				     struct drm_plane_state *plane_state,
+   264				     struct drm_crtc_state *crtc_state)
+   265	{
+   266		struct drm_framebuffer *fb = plane_state->fb;
+   267	
+   268		if (!fb)
+   269			return 0;
+   270		return visfx_check_size(fb->width, fb->height, fb);
+   271	}
+   272	
+   273	static void visfx_pipe_enable(struct drm_simple_display_pipe *pipe,
+   274				      struct drm_crtc_state *crtc_state,
+   275				      struct drm_plane_state *plane_state)
+   276	{
+   277		struct visfx_device *visfx = to_visfx(pipe->crtc.dev);
+   278		struct drm_shadow_plane_state *shadow_plane_state = to_drm_shadow_plane_state(plane_state);
+   279	
+   280		visfx_mode_set(visfx, &crtc_state->mode, plane_state->fb);
+ > 281		visfx_fb_blit_fullscreen(plane_state->fb, &shadow_plane_state->data[0]);
+   282	}
+   283	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

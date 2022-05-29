@@ -2,136 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05073536FE2
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 08:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3730E536FE5
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 08:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiE2GL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 02:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
+        id S229476AbiE2GOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 02:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiE2GL0 (ORCPT
+        with ESMTP id S229441AbiE2GO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 02:11:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA85CDCD
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 23:11:25 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvC93-0005yj-Rj; Sun, 29 May 2022 08:11:21 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvC91-005CYc-6N; Sun, 29 May 2022 08:11:17 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvC8z-00Cp2h-74; Sun, 29 May 2022 08:11:17 +0200
-Date:   Sun, 29 May 2022 08:11:15 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Michael Hennerich <michael.hennerich@analog.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] Input: adp5588-keys - switch to using managed
- resources
-Message-ID: <20220529061115.ew52jiknnebaofwd@pengutronix.de>
-References: <20220528045631.289821-1-dmitry.torokhov@gmail.com>
- <20220528045631.289821-3-dmitry.torokhov@gmail.com>
- <20220528193755.lncxrpgmyiy4hprm@pengutronix.de>
- <YpMC/90883D286nG@google.com>
+        Sun, 29 May 2022 02:14:29 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E42D66AEA
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 23:14:26 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id q92-20020a17090a17e500b001e0817e77f6so10573237pja.5
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 23:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xpJ6yYBlil0glg1sQLV8TUgNykHZU/Ss0pRhBIZ9kAc=;
+        b=ed4F6VrmT3ftKTADZTLo3NiPx5zKaGR64m7NlD6TC+bq3ejP6PTAiIUhsYWvDUr/Zr
+         Cneiyj69QWL3EC9WkddAqlvDlCYhuJ2OVypgccsOSQHvLG6lrJXBs73nk8J6t1u3HTiQ
+         +pic2xEr0zlbj5o9fOfsHblhfsmOQUKLPb4l0vgkzcvwPzM3MInjZqVP0DcPzVzHXGOb
+         gEPw9A00Lp5/EHOj8Qjxd43KMuhR5CvbjE8ViW8v6yYeQFslYbdqFiZAQ6mT7BnHw2Oh
+         ElJkmCRt9cpyt82gsGShMOn2C09XJFUCZImF+deJQplW+ilsb4eK1rSMo1s4c4BG4s1s
+         VTAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=xpJ6yYBlil0glg1sQLV8TUgNykHZU/Ss0pRhBIZ9kAc=;
+        b=m4dDv/ePwP2aXTdoc39AKLOFyu4ug+vLLYsmramWAEcx7T5XOo+rrAG0yPu36EfFWM
+         Dax214Pp83RFkgSubAHBPue416AygBrhOSVsV7nFYcF90P5JX23NI6L5fTFPS0Lk4CqA
+         C4T+NFMicaEldWF6mJeluIl1ktqGG8JJqTzolWnSgBq/WS5kuPmY9ZGkIzhmKTFiBlue
+         RzJ7JXLzHDsLun8ot6Uhuw6IcEWlKstEK6GrzT+RMqrIMhY0w6sWx32xbAfstGBN+wEF
+         0CCOjiiDThtBHVglOOLdH2TXm0zTqGZf704DkF1QUc6sCyQqPQ5SKK+iJbo9yAR/j5VF
+         S5NQ==
+X-Gm-Message-State: AOAM531iz+UWUwss7LnnPDXM9ayxUABmYBoq6VBcvHWpg0UZ0ifCmmFF
+        0gg+f5gHA/Mdt5bihOgPnM6QYTNkF5A=
+X-Google-Smtp-Source: ABdhPJwPd3dq0FDizzmM1CUUIWRIev0xbY3Znz67c9f1WsRygIpDNqMYKCsMXV3b0AZIYZlnkabfuA==
+X-Received: by 2002:a17:90b:4a49:b0:1df:d294:a13 with SMTP id lb9-20020a17090b4a4900b001dfd2940a13mr16719089pjb.6.1653804865700;
+        Sat, 28 May 2022 23:14:25 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id y12-20020aa7804c000000b00512d13016d0sm6282576pfm.159.2022.05.28.23.14.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 May 2022 23:14:24 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Sat, 28 May 2022 20:14:23 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Geraldo Nascimento <geraldogabriel@gmail.com>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] workqueue: missing NOT while checking if Workqueue is
+ offline
+Message-ID: <YpMPPyIZVlBwUrNe@slm.duckdns.org>
+References: <YpKA5Bdk1Cm6KgKU@geday>
+ <YpLLnx8/xpZIPMbi@geday>
+ <YpL2rHUXd0vf8IML@geday>
+ <YpMDmZZ7IpEhjywp@slm.duckdns.org>
+ <YpMKY88/2tTK319E@geday>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="frimy6xcganxv6jb"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YpMC/90883D286nG@google.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YpMKY88/2tTK319E@geday>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, May 29, 2022 at 02:53:39AM -0300, Geraldo Nascimento wrote:
+> On Sat, May 28, 2022 at 07:24:41PM -1000, Tejun Heo wrote:
+> > On Sun, May 29, 2022 at 01:29:32AM -0300, Geraldo Nascimento wrote:
+> > > I would like very much to hear the opinion of the maintainers!
+> > 
+> > I have a hard time understanding what you're trying to do. Can you please
+> > slow down and start from describing the problem itself?
+> 
+> Hi Tejun,
+> 
+> Sorry for the hurry.
+> 
+> The problem is best described in https://gitlab.freedesktop.org/drm/amd/-/issues/1898
+> 
+> From my understanding from the context of __cancel_work_timer() we should not
+> ever call __flush_work() but I may be wrong. In the present case as
 
---frimy6xcganxv6jb
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yeah, you're wrong.
 
-On Sat, May 28, 2022 at 10:22:07PM -0700, Dmitry Torokhov wrote:
-> On Sat, May 28, 2022 at 09:37:55PM +0200, Uwe Kleine-K=F6nig wrote:
-> > On Fri, May 27, 2022 at 09:56:30PM -0700, Dmitry Torokhov wrote:
-> > > This simplifies error handling in probe() and reduces amount of expli=
-cit
-> > > code in remove().
-> > >=20
-> > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > > ---
-> > >  drivers/input/keyboard/adp5588-keys.c | 111 +++++++++++-------------=
---
-> > >  1 file changed, 45 insertions(+), 66 deletions(-)
-> > >=20
-> > > diff --git a/drivers/input/keyboard/adp5588-keys.c b/drivers/input/ke=
-yboard/adp5588-keys.c
-> > > index ac21873ba1d7..df84a2998ed2 100644
-> > > --- a/drivers/input/keyboard/adp5588-keys.c
-> > > +++ b/drivers/input/keyboard/adp5588-keys.c
-> > > @@ -182,6 +182,21 @@ static int adp5588_build_gpiomap(struct adp5588_=
-kpad *kpad,
-> > >  	return n_unused;
-> > >  }
-> > > =20
-> > > +static void adp5588_gpio_do_teardown(void *_kpad)
-> > > +{
-> > > +	struct adp5588_kpad *kpad =3D _kpad;
-> > > +	struct device *dev =3D &kpad->client->dev;
-> > > +	const struct adp5588_kpad_platform_data *pdata =3D dev_get_platdata=
-(dev);
-> > > +	const struct adp5588_gpio_platform_data *gpio_data =3D pdata->gpio_=
-data;
-> > > +	int error;
-> > > +
-> > > +	error =3D gpio_data->teardown(kpad->client,
-> > > +				    kpad->gc.base, kpad->gc.ngpio,
-> > > +				    gpio_data->context);
-> > > +	if (error)
-> > > +		dev_warn(&kpad->client->dev, "teardown failed %d\n", error);
-> > > +}
-> >=20
-> > I think the more sensible approach is to drop support for setup and
-> > teardown. Maybe even rip all usage of adp5588_gpio_platform_data.
->=20
-> That will come with the transition to device tree/device properties. For
-> now wanted to keep existing functionality intact.
+> described in AMD's GitLab __cancel_work_timer() is being called by
+> cancel_delayed_work_sync() inside kfd_process_notifier_release()
+> from drivers/gpu/drm/amd/amdkfd/kfd_process.c:1157 (Linux 5.18).
 
-That's up to you. I wouldn't spend an effort to clean up a feature that
-is about to be removed.
+Have you confirmed that that actually is the warning which is triggering? I
+don't see how that condition would trigger that late during the boot and the
+warning line being reported doesn't match v5.16 source code, so I'm not sure
+but skimming the instructon sequence, that's the second UD2 sequence, so I'm
+gonna guess that's the second WARN_ON - the !work->func one and someone else
+on the gitlab bug report seems to agree too.
 
-Best regards
-Uwe
+It's usually a lot more helpful if the bug report is complete - include the
+full warning message with some context at least, make sure that the kernel
+you're using is an upstream one or something close enough. If not, point to
+the source tree. Also, try to clearly distinguish what you know and what you
+suspect. Both can help but mixing them up together tends to cause confusion
+for everyone involved.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+It just looks like the code is trying to cancel a work item which hasn't
+been initialized and what it prolly needs is an ifdef around that cancel
+call depending on the config option.
 
---frimy6xcganxv6jb
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKTDn8ACgkQwfwUeK3K
-7AnSsAf+Li4Te/1P7RLCFRukMaq/G/Nk0rAzAumXFSuwji793S+4vSZ9eyZ7Pnhe
-CJ/acu83ObTmrSgzZb4qLLdBRqKZnNOKzL8794Lhcqec8mp1nxAZEMTWu06s1m9U
-6Qp6Cs/oVkT9s4VK/enKhF45+mWFnFnKTGlYnOYXmrxNQBtbWODVtqfTvPkQX7Cb
-PfE2Hf1kswfBmdpBeH98FuhL7KcITV12qibOwPbacvMCNNkPoIV4C/QlVTAiZ2fM
-1ee15bDGhupbbrNvggB7p/lWI/HzJ5GTDLGLwB0PqKWGt1I0KqMcPntehSsl2TGm
-lbs1ykRMB892fVxkKQY6drmRKEi/nQ==
-=2t1U
------END PGP SIGNATURE-----
-
---frimy6xcganxv6jb--
+-- 
+tejun

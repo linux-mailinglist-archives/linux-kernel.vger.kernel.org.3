@@ -2,108 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A45538673
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 18:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C84538674
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 18:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242184AbiE3Q4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 12:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
+        id S242216AbiE3Q44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 12:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241161AbiE3Q4P (ORCPT
+        with ESMTP id S238922AbiE3Q4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 12:56:15 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E0FA777C
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 09:56:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=UykJ1IPICNFbfEo420X6Xx726q411APwSMuLoQTgdDo=; b=dMiLt0/Fv3cJXwMowD9p3ULFzI
-        yzsGHXFL2yUq6S8ZTXuMQ0q5JZbcQCSd0umLh+lXFdY+97OggxB2MlCPgF2OGicJDAlFkuKajONDY
-        7UabLE+JTBG7aSarulxeIHWW2YauCNc6f6OoUmSXPZ9O92BuzFPDy0TIlHKNeF4B8TXuTHhWhaIOa
-        C5Q6WtENs7aXBgbZ9GsEGMB8VcQFpRC2QTuoOiHATWKJ4YFeJYTdEJ8hFpCzcnhj1NgETylwtSF22
-        BO7HJuet5IcF7H3lHpcNaikDEhnof+/f0rcBweFI5o3ekb7Mhp24t9sAjod4cTd84zXRRX/Efe0GZ
-        rYesoOEA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60890)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nvigZ-00046W-AO; Mon, 30 May 2022 17:56:07 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nvigY-0001Ze-Lg; Mon, 30 May 2022 17:56:06 +0100
-Date:   Mon, 30 May 2022 17:56:06 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Jani Nikula <jani.nikula@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        SoC Team <soc@kernel.org>
-Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
- block count and size helpers")
-Message-ID: <YpT3JlLc7vEfFu8F@shell.armlinux.org.uk>
-References: <YpIR67FMtTGCwARZ@debian>
- <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
- <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com>
- <CAK8P3a0-QyOQiieEvM0yQb43XbCtPmeao8UvoAsdFnjCxYPz7Q@mail.gmail.com>
- <CAHk-=whfmwzjF4eBPYS6pHFqHVzJF3m=2h=gRWSRyHks8V=ABA@mail.gmail.com>
- <87a6aztli2.fsf@intel.com>
- <877d63tleq.fsf@intel.com>
- <CAK8P3a0-S77QLR1dK3NT6ot7JTAD5AdojAZJr-Xi112-v5EOdw@mail.gmail.com>
- <87czfvrwsv.fsf@intel.com>
- <CAK8P3a0HNOCOSx9UONw6gf1UUU8J4iAOmMFP8-DtJ3O7XAACsQ@mail.gmail.com>
+        Mon, 30 May 2022 12:56:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD414FC7C
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 09:56:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56D6E6119F
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 16:56:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 397C9C385B8;
+        Mon, 30 May 2022 16:56:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653929810;
+        bh=D0OLsrOL0CSZt0TW+pAzxo6uAd6kEtYLd7cEs1qfllU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RD4I0Tq4cVWE338ctzZB15LZHOxGr6Eoc1UIM6WFCB4/4s+yLSoQH2IWN/2XQICf5
+         2p6kX0/xkzZLIQc6WyVXmTyGypmRltZmBslh3LOWHLfKPieFA8OTLonvOfhSW1qNmk
+         ndC+WohUtRkBPt2VkyLvD5fH1IjPvJg1+KbWTPeheXTBtQOKt4O9glBI1FJqACtPVl
+         9zTKJcV9OZgH398Lsm7uaYBJup+LbVifWbaFK3IRKbMuw9eG8FjhR6WwOIZ7cB++8w
+         q9Z4zoVgsutKdZV90TjmsICUcniwPmoXtCMAxRvITQuvX/BgMD/RaX9XBRMy93ZOHI
+         oxdsiMSMG8TQg==
+From:   SeongJae Park <sj@kernel.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     sj@kernel.org, damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/damon: remove obsolete comments of kdamond_stop
+Date:   Mon, 30 May 2022 16:56:48 +0000
+Message-Id: <20220530165648.2921-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220530022016.11771-1-zhouchengming@bytedance.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0HNOCOSx9UONw6gf1UUU8J4iAOmMFP8-DtJ3O7XAACsQ@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 03:35:28PM +0200, Arnd Bergmann wrote:
-> The annotations for edid are completely correct and necessary. However
-> other driver authors just slap __packed annotations on any structure
-> even if the layout is not fixed at all like:
-> 
-> struct my_driver_priv {
->        struct device dev;
->        u8 causes_misalignment;
->        spinlock_t lock;
->        atomic_t counter;
-> } __packed; /* this annotation is harmful because it breaks the atomics */
-> 
-> or if the annotation does not change the layout like
-> 
-> struct my_dma_descriptor {
->      __le64 address;
->      __le64 length;
-> } __packed; /* does not change layout but makes access slow on some
-> architectures */
+Hi Chengming,
 
-Sounds like we need a howto document for people to ignore and continue
-doing their own thing. :P
+On Mon, 30 May 2022 10:20:16 +0800 Chengming Zhou <zhouchengming@bytedance.com> wrote:
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> Since commit 0f91d13366a4 ("mm/damon: simplify stop mechanism")
+> delete kdamond_stop and change to use kthread stop mechanism,
+> these obsolete comments should be removed accordingly.
+
+Good point, thank you!
+
+> 
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> ---
+>  include/linux/damon.h | 17 ++++++++---------
+>  1 file changed, 8 insertions(+), 9 deletions(-)
+> 
+> diff --git a/include/linux/damon.h b/include/linux/damon.h
+> index 7c62da31ce4b..fa1c2968b1dd 100644
+> --- a/include/linux/damon.h
+> +++ b/include/linux/damon.h
+> @@ -397,7 +397,6 @@ struct damon_callback {
+>   * detail.
+>   *
+>   * @kdamond:		Kernel thread who does the monitoring.
+> - * @kdamond_stop:	Notifies whether kdamond should stop.
+>   * @kdamond_lock:	Mutex for the synchronizations with @kdamond.
+>   *
+>   * For each monitoring context, one kernel thread for the monitoring is
+> @@ -406,14 +405,14 @@ struct damon_callback {
+>   * Once started, the monitoring thread runs until explicitly required to be
+>   * terminated or every monitoring target is invalid.  The validity of the
+>   * targets is checked via the &damon_operations.target_valid of @ops.  The
+> - * termination can also be explicitly requested by writing non-zero to
+> - * @kdamond_stop.  The thread sets @kdamond to NULL when it terminates.
+> - * Therefore, users can know whether the monitoring is ongoing or terminated by
+> - * reading @kdamond.  Reads and writes to @kdamond and @kdamond_stop from
+> - * outside of the monitoring thread must be protected by @kdamond_lock.
+> - *
+> - * Note that the monitoring thread protects only @kdamond and @kdamond_stop via
+> - * @kdamond_lock.  Accesses to other fields must be protected by themselves.
+> + * termination can also be explicitly requested by calling __damon_stop().
+
+'__damon_stop()' is a static function, so mentioning that here makes no sense.
+Let's mention its wrapper, 'damon_stop()' instead.
+
+After the change, you could add
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+
+Thanks,
+SJ
+
+> + * The thread sets @kdamond to NULL when it terminates. Therefore, users can
+> + * know whether the monitoring is ongoing or terminated by reading @kdamond.
+> + * Reads and writes to @kdamond from outside of the monitoring thread must
+> + * be protected by @kdamond_lock.
+> + *
+> + * Note that the monitoring thread protects only @kdamond via @kdamond_lock.
+> + * Accesses to other fields must be protected by themselves.
+>   *
+>   * @ops:	Set of monitoring operations for given use cases.
+>   * @callback:	Set of callbacks for monitoring events notifications.
+> -- 
+> 2.36.1

@@ -2,113 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDB95388F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 00:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4CE5388F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 00:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243313AbiE3Wax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 18:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
+        id S243316AbiE3Wdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 18:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237559AbiE3Wao (ORCPT
+        with ESMTP id S237559AbiE3Wdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 18:30:44 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4835443E4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 15:30:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653949843; x=1685485843;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3nJolqRYOmRaccpUtHkvEW2faQUqQoR8CTMpuMde1kI=;
-  b=ddiMvi83htyL20nPqzSb6FTYvIJjE+lH6hxYBHbmgKjK/n7QY2ZISEJp
-   Ju8A+eOddUH2u7AAw52e6S1M3cyZgBa6HD7Y+obtlenTjE1SMHGE7/YgY
-   Udwa0g57bGkwQ1dwWnMh/UkZ1UpXiM7MlBqZixBgZ/ayUifazMdfPWziO
-   ESHNGq/9p/TpfKrJZFE62+YVn5a35GZktVFMahNSvtJep3Dm/H91iQWgK
-   CR7mfWY89+mvnr1zakBBsORT/vkvs1ejGESrzSiRRdEQmhSnGPyBIYWdT
-   7objqv3dk6PU7xMfUyDW/ZkV89t7NtSG59wErYvvKZi/ooKuKtcsaYd0d
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="275088931"
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="275088931"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 15:30:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="823007202"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 30 May 2022 15:30:41 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nvnuK-00022o-Vs;
-        Mon, 30 May 2022 22:30:40 +0000
-Date:   Tue, 31 May 2022 06:30:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: vmlinux.o: warning: objtool: __fentry__+0x16: return with modified
- stack frame
-Message-ID: <202205310609.Rw55oP08-lkp@intel.com>
+        Mon, 30 May 2022 18:33:36 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75164FD2A;
+        Mon, 30 May 2022 15:33:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0B54A1F8AC;
+        Mon, 30 May 2022 22:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653950014; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LtUFZbsNyrL0zWig6EzpbLMXgFPtxPsoz+GCNlSTOSg=;
+        b=G3LPSB0MZohvr0dclthqDwDoe4VO89ZFUxIPx9s5DLYS+A3U1KNPUg/QsE4U2zROCuQE6J
+        NsFmaG4A27VWv1VIdlYuxCxoEgjoNpSA6d8mVEi0g4CsU51K22TPXpbpDZ+DC+VFPHXNBx
+        UWE31GILABixTBie6+WkAbSd8sbpEwQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653950014;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LtUFZbsNyrL0zWig6EzpbLMXgFPtxPsoz+GCNlSTOSg=;
+        b=OGj7fXfnm5S56SM3kfx6nvLkw/qpsnpj++QTA4Qm9iOWfzLBxNxqssZ6OBOIs7o8HtIX6O
+        iSdWL+k/q0G11/Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1F48813AFD;
+        Mon, 30 May 2022 22:33:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fzbQMzpGlWIdGwAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 30 May 2022 22:33:30 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     "Miklos Szeredi" <miklos@szeredi.hu>,
+        "Al Viro" <viro@zeniv.linux.org.uk>,
+        "ChenXiaoSong" <chenxiaosong2@huawei.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liuyongqiang13@huawei.com, "zhangyi (F)" <yi.zhang@huawei.com>,
+        zhangxiaoxu5@huawei.com, "Steve French" <smfrench@gmail.com>
+Subject: Re: [PATCH -next,v2] fuse: return the more nuanced writeback error on close()
+In-reply-to: <9915b7b556106d2a525941141755adcca9e50163.camel@kernel.org>
+References: <20220523014838.1647498-1-chenxiaosong2@huawei.com>,
+ <CAJfpegt-+6oSCxx1-LHet4qm4s7p0jSoP9Vg8PJka3=1dqBXng@mail.gmail.com>,
+ <9915b7b556106d2a525941141755adcca9e50163.camel@kernel.org>
+Date:   Tue, 31 May 2022 08:33:26 +1000
+Message-id: <165395000670.20289.6180005723599338606@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e11a93567d3f1e843300ed98ff049a4335db8015
-commit: 72064474964724c59ddff58a581a31b1ede75cf9 objtool: Make stack validation frame-pointer-specific
-date:   6 weeks ago
-config: x86_64-buildonly-randconfig-r006-20220530 (https://download.01.org/0day-ci/archive/20220531/202205310609.Rw55oP08-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=72064474964724c59ddff58a581a31b1ede75cf9
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 72064474964724c59ddff58a581a31b1ede75cf9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Tue, 31 May 2022, Jeff Layton wrote:
+> On Mon, 2022-05-30 at 14:13 +0200, Miklos Szeredi wrote:
+> > On Mon, 23 May 2022 at 03:35, ChenXiaoSong <chenxiaosong2@huawei.com> wro=
+te:
+> > >=20
+> > > As filemap_check_errors() only report -EIO or -ENOSPC, we return more n=
+uanced
+> > > writeback error -(file->f_mapping->wb_err & MAX_ERRNO).
+> > >=20
+> > >   filemap_write_and_wait
+> > >     filemap_write_and_wait_range
+> > >       filemap_check_errors
+> > >         -ENOSPC or -EIO
+> > >   filemap_check_wb_err
+> > >     errseq_check
+> > >       return -(file->f_mapping->wb_err & MAX_ERRNO)
+> > >=20
+> > > Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+> > > ---
+> > >  fs/fuse/file.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >=20
+> > > diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> > > index f18d14d5fea1..9917bc2795e6 100644
+> > > --- a/fs/fuse/file.c
+> > > +++ b/fs/fuse/file.c
+> > > @@ -488,10 +488,10 @@ static int fuse_flush(struct file *file, fl_owner=
+_t id)
+> > >         inode_unlock(inode);
+> > >=20
+> > >         err =3D filemap_check_errors(file->f_mapping);
+> > > +       /* return more nuanced writeback errors */
+> > >         if (err)
+> > > -               return err;
+> > > +               return filemap_check_wb_err(file->f_mapping, 0);
+> >=20
+> > I'm wondering if this should be file_check_and_advance_wb_err() instead.
+> >=20
+>=20
+> I think that it probably shouldn't be, actually. Reason below...
+>=20
+> > Is there a difference between ->flush() and ->fsync()?
+> >=20
+> > Jeff, can you please help?
+> >=20
+> >=20
+>=20
+> The main difference is that ->flush is called from filp_close, so it's
+> called when a file descriptor (or equivalent) is being torn down out,
+> whereas ->fsync is (obviously) called from the fsync codepath.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+->flush is for cache coherence. It is best-effort
+->fsync is for data safety. Obviously errors are important.
 
-All warnings (new ones prefixed by >>):
+>=20
+> We _must_ report writeback errors on fsync, but reporting them on the
+> close() syscall is less clear. The thing about close() is that it's
+> going be successful no matter what is returned. The file descriptor will
+> no longer work afterward regardless.
+>=20
+> fsync also must also initiate writeback of all the buffered data, but
+> it's not required for filesystems to do that on close() (and in fact,
+> there are good reasons not to if you can). A successful close() tells
+> you nothing about whether your data made it to the backing store. It
+> might just not have been synced out yet.
+>=20
+> Personally, I think it's probably best to _not_ return writeback errors
+> on close at all. The only "legitimate" error on close is -EBADF.
+> Arguably, we should make ->flush be void return. Note that most
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-   vmlinux.o: warning: objtool: ibt_selftest+0x11: sibling call from callable instruction with modified stack frame
->> vmlinux.o: warning: objtool: __fentry__+0x16: return with modified stack frame
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x7f: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_debug+0x45: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi+0x3a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: poke_int3_handler+0x49: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_check_crashing_cpu+0xc: call to __this_cpu_preempt_check.constprop.0() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_wrmsrl+0x12: call to __this_cpu_preempt_check.constprop.0() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_start+0x53: call to __this_cpu_preempt_check.constprop.0() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_rdmsrl+0x13: call to __this_cpu_preempt_check.constprop.0() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_machine_check+0x7b: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_machine_check+0x22: call to __this_cpu_preempt_check.constprop.0() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter+0x27: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit+0x28: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_exit.constprop.0+0x34: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_enter.constprop.0+0x43: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_nmi_enter+0x3a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x53: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x43: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x28: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ibt_selftest+0x1e: return with modified stack frame
+Excellent idea!
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+NeilBrown
+
+> filp_close callers ignore the error anyway, so it's not much of a
+> stretch.
+>=20
+> In any case, if you do decide to return errors in fuse_flush, then
+> advancing the cursor would also have the effect of masking writeback
+> errors on dup()'ed file descriptors, and I don't think you want to do
+> that.
+> --=20
+> Jeff Layton <jlayton@kernel.org>
+>=20

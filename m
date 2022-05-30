@@ -2,85 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB60537611
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC88537621
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234300AbiE3HyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
+        id S234226AbiE3H5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234302AbiE3HyD (ORCPT
+        with ESMTP id S234247AbiE3Hyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:54:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 243B99FC5
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653897214;
+        Mon, 30 May 2022 03:54:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C461874DCC;
+        Mon, 30 May 2022 00:54:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F5DCB80ABD;
+        Mon, 30 May 2022 07:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4E60C36AE5;
+        Mon, 30 May 2022 07:54:33 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="TRON//3W"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1653897270;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lW8fZRkPKfhJnNOw18gq2IWP/lJEsxr/x1aT3dj708I=;
-        b=SCujWkYkawSu5Ur9OUPTVS+UIXCRpPPQBM4ZPnGCeGu3Swpx9lYuJx7d5KmECJL1MOc7nw
-        iLdhVaePuXBn56v7KRnIeZzhlCJhWxKf6E/e2iB439uag+R4Sy0u4YB2g3Jac4UOge88qA
-        2uUw9EdOYwCF/BWEhZ3Y/c8dFpjMhl4=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-5-OO-sqtlgPfKHeFNi7UdIKA-1; Mon, 30 May 2022 03:53:33 -0400
-X-MC-Unique: OO-sqtlgPfKHeFNi7UdIKA-1
-Received: by mail-wr1-f69.google.com with SMTP id s16-20020adfeb10000000b0020cc4e5e683so1431201wrn.6
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:53:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=lW8fZRkPKfhJnNOw18gq2IWP/lJEsxr/x1aT3dj708I=;
-        b=6ehuOeasHe5cZu276li8I9zDmN4pOxawGFDkRSvo4IS0frvoQt1nwiduKcBmJ8+2Wm
-         1zvh62CvfcZmWqaFz+sLw5dPso8tQSFuJXsODjsxxwyvHgrfCJ6P8X/PnjtmhWBvQHba
-         J08f3CxShpxoLTHw8a/mQgECvQQwRXf8XDjwizqnttXf/GB+bXRBklJgI10bhSW+9h/L
-         xe3MMfeDD5MVBWq79887Pp0L20i7FHVNLMvC6uJBhmALsyuuDMz3tFQyKlOfQdzHiBi0
-         gDkd+hFE23TaYxJ/rgjcVH/KADKV8JMlvg2pNEK/BsXz8PnB1iB0VIo0Ffqvh/B2vlLz
-         PU5A==
-X-Gm-Message-State: AOAM532NVglr86nevDVEkVINNcY4vibWup2GAdhT+aZkUxVu8ZZMeAIo
-        +nJZIZWJDGBy4x+ncA78pr09RJV6velw0IiLwk8RafA32ZXF5KI00MiTkhsXp5Pa4H6u0iomQ8D
-        CVrPLPyVcjJ76EweSvEA9Cn36
-X-Received: by 2002:a05:600c:3543:b0:397:7565:ea4 with SMTP id i3-20020a05600c354300b0039775650ea4mr17556015wmq.86.1653897211918;
-        Mon, 30 May 2022 00:53:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxXMX0mVia1YfTVILgUPjxKu9Fq37hgGHboYr/arqWNq5GxPQTIQAE8Q8/KSnUDs6PSNUeh1A==
-X-Received: by 2002:a05:600c:3543:b0:397:7565:ea4 with SMTP id i3-20020a05600c354300b0039775650ea4mr17555999wmq.86.1653897211629;
-        Mon, 30 May 2022 00:53:31 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:7c00:aaa9:2ce5:5aa0:f736? (p200300cbc7047c00aaa92ce55aa0f736.dip0.t-ipconnect.de. [2003:cb:c704:7c00:aaa9:2ce5:5aa0:f736])
-        by smtp.gmail.com with ESMTPSA id l6-20020adff486000000b0020c5253d907sm8266521wro.83.2022.05.30.00.53.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 00:53:31 -0700 (PDT)
-Message-ID: <fdbdb249-8f8f-5ca9-509c-6b4a4b94236a@redhat.com>
-Date:   Mon, 30 May 2022 09:53:30 +0200
+        bh=kso+7cLff27bYNHkoanOeWCHCmy79ih2oiGLYCkUq1A=;
+        b=TRON//3WYVNzRGi9O+v50V2LzrLDkFOXaO2aXucmslWQUAUmPaeYD9ulhLS9+OMD86mTpI
+        QkqvLdVtN4IE9xN3jNd11y7CQSAK1wrPQLIUGlmeMbWE2VGXYKsqhEQATYXwYEaU67ua/J
+        YeW8q9hT9jKlAJdVNdRy3iNdSLV3yGQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 72c78cc4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 30 May 2022 07:54:30 +0000 (UTC)
+Received: by mail-yb1-f169.google.com with SMTP id g4so4084139ybf.12;
+        Mon, 30 May 2022 00:54:29 -0700 (PDT)
+X-Gm-Message-State: AOAM530shtdXQjCBGYsyBbRWFNGkysaEoXjiEfUf0qdrzIIUCrLwLd4b
+        T1aQMMhkqz1Jube2Dzvs0ONvaTsANuz4ckyYwTk=
+X-Google-Smtp-Source: ABdhPJx7dVUM5BfHRcDWsIIwQ9vGrnY4/N6aGErCyIIhdwLPMk7vMBOqprO+vcobxdnL24gg016zccie6oVkdhur//k=
+X-Received: by 2002:a25:890b:0:b0:659:b9d6:a134 with SMTP id
+ e11-20020a25890b000000b00659b9d6a134mr15609765ybl.235.1653897269362; Mon, 30
+ May 2022 00:54:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 3/3] virtio_balloon: Introduce memory recover
-Content-Language: en-US
-To:     zhenwei pi <pizhenwei@bytedance.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     akpm@linux-foundation.org, naoya.horiguchi@nec.com, mst@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        pbonzini@redhat.com, peterx@redhat.com, qemu-devel@nongnu.org
-References: <20220520070648.1794132-1-pizhenwei@bytedance.com>
- <20220520070648.1794132-4-pizhenwei@bytedance.com>
- <Yo0zmP28FqpivlxF@google.com>
- <79d17b10-3532-57d4-e70c-3ccf1ab0d87d@bytedance.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <79d17b10-3532-57d4-e70c-3ccf1ab0d87d@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Received: by 2002:a05:7110:6403:b0:17b:2ce3:1329 with HTTP; Mon, 30 May 2022
+ 00:54:28 -0700 (PDT)
+In-Reply-To: <7719057c0de047ebacea46ab9588da44@AcuMS.aculab.com>
+References: <YpCGQvpirQWaAiRF@zx2c4.com> <20220527081106.63227-1-Jason@zx2c4.com>
+ <YpGeIT1KHv9QwF4X@sol.localdomain> <YpHx7arH4lLaZuhm@zx2c4.com>
+ <YpJZqJd9j1gEOdTe@sol.localdomain> <7719057c0de047ebacea46ab9588da44@AcuMS.aculab.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 30 May 2022 09:54:28 +0200
+X-Gmail-Original-Message-ID: <CAHmME9r5Fr4Zm585tLjv562kzB58iHjNjnRH8+YJ-3cY6b4WZg@mail.gmail.com>
+Message-ID: <CAHmME9r5Fr4Zm585tLjv562kzB58iHjNjnRH8+YJ-3cY6b4WZg@mail.gmail.com>
+Subject: Re: [PATCH crypto v2] crypto: blake2s - remove shash module
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        gaochao <gaochao49@huawei.com>, Ard Biesheuvel <ardb@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,37 +73,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.05.22 01:32, zhenwei pi wrote:
-> 
-> 
-> On 5/25/22 03:35, Sean Christopherson wrote:
->> On Fri, May 20, 2022, zhenwei pi wrote:
->>> @@ -59,6 +60,12 @@ enum virtio_balloon_config_read {
->>>   	VIRTIO_BALLOON_CONFIG_READ_CMD_ID = 0,
->>>   };
->>>   
->>> +/* the request body to commucate with host side */
->>> +struct __virtio_balloon_recover {
->>> +	struct virtio_balloon_recover vbr;
->>> +	__virtio32 pfns[VIRTIO_BALLOON_PAGES_PER_PAGE];
+On 5/30/22, David Laight <David.Laight@aculab.com> wrote:
+> From: Eric Biggers
+>> Sent: 28 May 2022 18:20
 >>
->> I assume this is copied from virtio_balloon.pfns, which also uses __virtio32, but
->> isn't that horribly broken?  PFNs are 'unsigned long', i.e. 64 bits on 64-bit kernels.
->> x86-64 at least most definitely generates 64-bit PFNs.  Unless there's magic I'm
->> missing, page_to_balloon_pfn() will truncate PFNs and feed the host bad info.
+>> On Sat, May 28, 2022 at 11:57:01AM +0200, Jason A. Donenfeld wrote:
+>> > > Also, the wrong value is being passed for the 'inc' argument.
+>> >
+>> > Are you sure? Not sure I'm seeing what you are on first glance.
 >>
-> 
-> Yes, I also noticed this point, I suppose the balloon device can not 
-> work on a virtual machine which has physical address larger than 16T.
+>> Yes, 'inc' is the increment amount per block.  It needs to always be
+>> BLAKE2S_BLOCK_SIZE unless a partial block is being processed.
+>
+> IIRC it isn't used for partial blocks.
+> Which rather begs the question as to why it is a parameter at all.
 
-Yes, that's a historical artifact and we never ran into it in practice
--- because 16TB VMs are still rare, especially when paired with
-virtio-balloon inflation/deflation. Most probably the guest should just
-stop inflating when hitting such a big PFN. In the future, we might want
-a proper sg interface instead.
+Again, with blake2s, please send a patch if you think there's an
+improvement to be made.
 
--- 
-Thanks,
+In this case, I don't think you're right. See blake2s_final.
 
-David / dhildenb
-
+Jason

@@ -2,64 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39158537830
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CB65377FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234950AbiE3JwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 05:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
+        id S234960AbiE3Jww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 05:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbiE3JwC (ORCPT
+        with ESMTP id S233008AbiE3Jws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 05:52:02 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E34621AE
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:52:01 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-30c1b401711so40491427b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:52:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EX0ax3UT7PJIeloAWKv5nked7hhpfqw/bee64d20LuA=;
-        b=eSXVdzT8m8Ufl1gxGUxQ7XlXcmiancyi1bHbzkCbGJ87gz5CU31YlLtjB2afMJipCQ
-         YVurW9ABiyNRngaFhhpFlEolfbV1QJg3Il7+s0j4owrTg9oMh1Rqa6lFtbFoQdZqojub
-         v9jllTpA3O3nIl9fSNlXh02M1FM6JLVn7K+uMCl/EkgoJCUl8KvISgUR/mCwzcZ+6Jmc
-         bGEcTAu5L6Y0gMU59i3QR1hDP9+CEsj5mk3QOBuZPMdfO+UMO3LVesgAImZ1qmfvH2oY
-         DWJxs7YfmLmfbDc2bCfXC7AGj/sP+aLJN8EqQdsos6EHIDKOPWyQPT447+dfmx+jqjrJ
-         LHRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EX0ax3UT7PJIeloAWKv5nked7hhpfqw/bee64d20LuA=;
-        b=zaUp+4DBtZ9yGzos1lTWd0FaTV6pBCT4PIZ0uUkN37G4FY3AZK7b0jinYahsROykLq
-         EWO3OBLcbCS0VLlq3/aFUdkDNu7tFMLPkC5Cf/DZTy7pfk6YmQj5gQ5WYjXr7xxRe9aU
-         XJmgyutyElleRlqX/WpuCPxY7QQhWosTf7xmOuq/JaX31ewJSA+Zh8Q8NaOI8ju3qtEB
-         mMY6BvrzBxTySjCbirws6+uNh5Dqk837FJquygKehV2jzr8O+UZOPyLNQ0SWRp08ELrp
-         TZqidrBEkOsa33qdnPuaHcVqhcY3oYbtnaBMvZIIBJPu52jTU/cTKC8abQb+wD0ccMCE
-         1MCw==
-X-Gm-Message-State: AOAM530T8tbzZrXn5cDLubfz8UQEafw814reIuKNK4nzo0E8jd1eQMu8
-        jfMtPKChIA6VnAzD8Rm/frlMRbXM+8xNPh7KvrL7Nw==
-X-Google-Smtp-Source: ABdhPJzj/vk7+4CrG9HkIOqyFZFSBy4eBAyYq12vxxfIbUtBNKCDYTVmc/zuRP94xBVYyzQsZHaGDlTzo4DQhhAPa+E=
-X-Received: by 2002:a0d:ca84:0:b0:306:ef75:f6a with SMTP id
- m126-20020a0dca84000000b00306ef750f6amr15932423ywd.268.1653904320736; Mon, 30
- May 2022 02:52:00 -0700 (PDT)
+        Mon, 30 May 2022 05:52:48 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159B310FE5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:52:47 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nvc4g-0008P8-Vu; Mon, 30 May 2022 11:52:34 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nvc4e-0007Yd-Tf; Mon, 30 May 2022 11:52:32 +0200
+Date:   Mon, 30 May 2022 11:52:32 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     linux-wireless@vger.kernel.org, Neo Jou <neojou@gmail.com>,
+        Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        kernel@pengutronix.de, Johannes Berg <johannes@sipsolutions.net>
+Subject: Re: [PATCH 00/10] RTW88: Add support for USB variants
+Message-ID: <20220530095232.GI1615@pengutronix.de>
+References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
+ <87fskrv0cm.fsf@kernel.org>
 MIME-Version: 1.0
-References: <20220529132638.13420-1-danilokrummrich@dk-develop.de>
-In-Reply-To: <20220529132638.13420-1-danilokrummrich@dk-develop.de>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 30 May 2022 11:51:49 +0200
-Message-ID: <CACRpkdaQzSix+WzS2sg91wynZoMx8Qg=MVsionYEsZOvVaJjmA@mail.gmail.com>
-Subject: Re: [RESEND PATCH v3 1/2] dt-bindings: ps2-gpio: convert binding to json-schema
-To:     Danilo Krummrich <danilokrummrich@dk-develop.de>
-Cc:     krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87fskrv0cm.fsf@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,16 +59,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 29, 2022 at 3:26 PM Danilo Krummrich
-<danilokrummrich@dk-develop.de> wrote:
+On Mon, May 30, 2022 at 12:25:13PM +0300, Kalle Valo wrote:
+> Sascha Hauer <s.hauer@pengutronix.de> writes:
+> 
+> > Another problem to address is that the driver uses
+> > ieee80211_iterate_stations_atomic() and
+> > ieee80211_iterate_active_interfaces_atomic() and does register accesses
+> > in the iterator. This doesn't work with USB, so iteration is done in two
+> > steps now: The ieee80211_iterate_*_atomic() functions are only used to
+> > collect the stations/interfaces on a list which is then iterated over
+> > non-atomically in the second step. The implementation for this is
+> > basically the one suggested by Ping-Ke here:
+> >
+> > https://lore.kernel.org/lkml/423f474e15c948eda4db5bc9a50fd391@realtek.com/
+> 
+> Isn't this racy? What guarantees that vifs are not deleted after
+> ieee80211_iterate_active_interfaces_atomic() call?
 
-> Convert the ps2-gpio dt-binding documentation to DT schema format using
-> the json-schema.
->
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Signed-off-by: Danilo Krummrich <danilokrummrich@dk-develop.de>
+The driver mutex &rtwdev->mutex is acquired during the whole
+collection/iteration process. For deleting an interface
+ieee80211_ops::remove_interface would have to be called, right?
+That would acquire &rtwdev->mutex as well, so I think this should be
+safe.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Sascha
 
-Yours,
-Linus Walleij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

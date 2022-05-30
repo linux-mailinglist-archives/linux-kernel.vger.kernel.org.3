@@ -2,135 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B91B1537A57
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE31537AAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235725AbiE3MFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 08:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S236157AbiE3M3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 08:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiE3MFZ (ORCPT
+        with ESMTP id S231952AbiE3M3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 08:05:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F99251E71;
-        Mon, 30 May 2022 05:05:24 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24UBBn5W023475;
-        Mon, 30 May 2022 12:05:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=D6pExEEiOP01k4g5hzXLFiw9QdYkFueNgR/mF/w6Gp4=;
- b=jW5bfeff7IZQlczrzCE87EtjreggWePFyDkC0mPX8MM33ATDAfywXPYpW12K6Ul5XZiE
- nFrtlRsnzqCNkxtVY+zKjfl51RYqf4wqKfDFje4Nc27EPDwOj8ITtvw65/78o1NtGia4
- X4YvIkdbyP/9DpQYFQF6bG863OCOpZXNo9f6SiKCpeZxsnFk8fDRRJBGvcnlKrFyd1jo
- XdnZlt1Tol4TVXcY83kvsBFJezzBfyMXpvmZCBsfS9jSYh0u5kLWJ5hHxuQZuYjShEPi
- +AwCtr2XiDxHiMe7ae1fBFTAbLE4jUGX27+OWQWO5DgHJ8EGPd4WUw31Ood3tcEJkrDd Rw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcvua8wb0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 12:05:23 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24UBXCeW008700;
-        Mon, 30 May 2022 12:05:23 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcvua8wa1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 12:05:23 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24UC50qa016286;
-        Mon, 30 May 2022 12:05:20 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gbc7h2p34-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 12:05:20 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24UC5H7V28377588
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 May 2022 12:05:17 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A8686A4053;
-        Mon, 30 May 2022 12:05:17 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0E9C2A4040;
-        Mon, 30 May 2022 12:05:17 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.145.12.149])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 30 May 2022 12:05:16 +0000 (GMT)
-Date:   Mon, 30 May 2022 14:05:14 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Nico Boehr <nrb@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, borntraeger@de.ibm.com, frankja@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, david@redhat.com,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        scgl@linux.ibm.com, mimu@linux.ibm.com
-Subject: Re: [PATCH v10 13/19] KVM: s390: pv: destroy the configuration
- before its memory
-Message-ID: <20220530140514.74f6ea46@p-imbrenda>
-In-Reply-To: <96ee2d8c2c64b4968529b78bd7ad8a042542d353.camel@linux.ibm.com>
-References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
-        <20220414080311.1084834-14-imbrenda@linux.ibm.com>
-        <96ee2d8c2c64b4968529b78bd7ad8a042542d353.camel@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 0Ejm7-gaFFx-nbxjBNCBc8d3jX_4zNzs
-X-Proofpoint-GUID: X8Zaa9OTDvG1rN-58Fref4ZqLVp-mSKD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-30_03,2022-05-30_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- adultscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
- phishscore=0 spamscore=0 priorityscore=1501 mlxlogscore=999 clxscore=1015
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205300063
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        Mon, 30 May 2022 08:29:38 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D974F7CB6D;
+        Mon, 30 May 2022 05:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=JDKi/xJT1Mjieigmk3yCi+36SvkfibHsJeRVOyaZZwY=;
+        b=LCXDiTp34x63byV6GKPAe4R7U39FSVzFfEQYjYcXE6X6yNJx2kydBZJJpwvyxl5WoLSd8e4M/4cHs
+         xL7YAsIufpn/6wdHtK/olpvf6zxD+/CNpJ5E6v7gihDyBSZlP/GYaUvNmnUoJz4ViJvv4fKO929+vm
+         lcWvrj5MF/Ah+SX4vh2fZKJ2F/GmW8CAwC5innPeLWOVp6EmfO0sl1K468JKtsgH9wQil5qD0OG3+u
+         8mC/M8TZ/xQYdF/9phBK9eWM4K3oH1qdntcIT4JYZLMfyMwC+XJODu+rRXHkg+7IFp4MfBxggsKY7j
+         u1/3wFztAHKRWlJc/A5dxBl3VHrfA1g==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000010,0.009374)], BW: [Enabled, t: (0.000021,0.000001)], RTDA: [Enabled, t: (0.140348), Hit: No, Details: v2.39.0; Id: 15.52k38i.1g4af248r.a270; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([178.70.36.174])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Mon, 30 May 2022 15:29:09 +0300
+Date:   Mon, 30 May 2022 15:07:01 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Conor.Dooley@microchip.com
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru
+Subject: Re: [PATCH v13 2/3] fpga: microchip-spi: add Microchip MPF FPGA
+ manager
+Message-ID: <20220530120701.sedwn3qeohlnj52e@x260>
+References: <20220526181344.2088-1-i.bornyakov@metrotek.ru>
+ <20220526181344.2088-3-i.bornyakov@metrotek.ru>
+ <f655cf2f-555c-6480-a461-bcddb9e510f3@microchip.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f655cf2f-555c-6480-a461-bcddb9e510f3@microchip.com>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 May 2022 09:37:37 +0200
-Nico Boehr <nrb@linux.ibm.com> wrote:
+On Mon, May 30, 2022 at 11:22:26AM +0000, Conor.Dooley@microchip.com wrote:
+> On 26/05/2022 19:13, Ivan Bornyakov wrote:
+> > +static int mpf_read_status(struct spi_device *spi)
+> > +{
+> > +       u8 status = 0, status_command = MPF_SPI_READ_STATUS;
+> > +       /*
+> > +        * Two identical SPI transfers are used for status reading.
+> > +        * The reason is that the first one can be inadequate.
+> > +        * We ignore it completely and use the second one.
+> > +        */
+> > +       struct spi_transfer xfers[] = {
+> > +               [0 ... 1] = {
+> > +                       .tx_buf = &status_command,
+> > +                       .rx_buf = &status,
+> > +                       .len = 1,
+> > +                       .cs_change = 1,
+> > +               }
+> > +       };
+> 
+> Hmm, I don't think that this is correct, or at least it is not
+> correct from the polarfire /soc/ perspective. I was told that
+> there was nothing different other than the envm between the
+> programming for both devices - but this is another situation
+> where I start to question that.
+> 
+> When I run this code, ISC enable /never/ passes - failing due
+> to timing out. I see something like this picture here:
+> https://i.imgur.com/EKhd1S3.png
+> You can see the 0x0B ISC enable coming through & then a status
+> check after it.
+> 
+> With the current code, the value of the "status" variable will
+> be 0x0, given you are overwriting the first MISO value with the
+> second. According to the hw guys, the spi hw status *should*
+> only be returned on MISO in the first byte after SS goes low.
+> 
+> If this is not the case for a non -soc part, which, as I said
+> before, I don't have a board with the SPI programmer exposed
+> for & I have been told is not the case then my comments can
+> just be ignored entirely & I'll have some head scratching to
+> do...
+> 
+> Thanks,
+> Conor.
+> 
 
-> On Thu, 2022-04-14 at 10:03 +0200, Claudio Imbrenda wrote:
-> > Move the Destroy Secure Configuration UVC before the loop to destroy
-> > the memory. If the protected VM has memory, it will be cleaned up and
-> > made accessible by the Destroy Secure Configuraion UVC. The struct
-> > page for the relevant pages will still have the protected bit set, so
-> > the loop is still needed to clean that up.
-> >=20
-> > Switching the order of those two operations does not change the
-> > outcome, but it is significantly faster.
-> >=20
-> > Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com> =20
->=20
-> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
->=20
-> See one tiny thing below.
->=20
-> > diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
-> > index be3b467f8feb..bd850be08c86 100644
-> > --- a/arch/s390/kvm/pv.c
-> > +++ b/arch/s390/kvm/pv.c =20
-> [...]
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cc =3D uv_cmd_nodata(kvm_s39=
-0_pv_get_handle(kvm),
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 UVC_CMD_DESTROY_SEC_CONF, rc, rrc);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0WRITE_ONCE(kvm->arch.gm=
-ap->guest_handle, 0); =20
->=20
-> Maybe it makes sense to also move the WRITE_ONCE up.
+If I understood correctly, SS doesn't alter between two status reading
+transactions despite .cs_change = 1. May be adding some .cs_change_delay
+to spi_transfer struct can help with that?
 
-yes, I'll move it up, so that it is right after the UVC again
-
+> > +       int ret = spi_sync_transfer(spi, xfers, 2);
+> > +
+> > +       if ((status & MPF_STATUS_SPI_VIOLATION) ||
+> > +           (status & MPF_STATUS_SPI_ERROR))
+> > +               ret = -EIO;
+> > +
+> > +       return ret ? : status;
+> > +}
 

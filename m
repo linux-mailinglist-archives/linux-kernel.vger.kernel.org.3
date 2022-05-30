@@ -2,175 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D54C5374F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDF1537535
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233203AbiE3HAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
+        id S233210AbiE3HBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbiE3HAY (ORCPT
+        with ESMTP id S231432AbiE3HBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:00:24 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8CB62CFF
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:00:22 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1nvZNv-0000l3-KM; Mon, 30 May 2022 09:00:15 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1nvZNu-0003Xe-Hy; Mon, 30 May 2022 09:00:14 +0200
-Date:   Mon, 30 May 2022 09:00:14 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     p.zabel@pengutronix.de, robh+dt@kernel.org, krzk+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 2/2] reset: tps380x: Add TPS380x device driver supprt
-Message-ID: <20220530070014.rqpau7oranahd6jr@pengutronix.de>
-References: <20220525142019.3615253-1-m.felsch@pengutronix.de>
- <20220525142019.3615253-2-m.felsch@pengutronix.de>
- <597de13b-28c8-3341-be11-da51e22304c3@linaro.org>
+        Mon, 30 May 2022 03:01:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7A3071A23
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:01:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653894060;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U31K93Uq+Fvheeupr2NMZcwHmZ55uz0S5WD0bojawpY=;
+        b=d7dBPfELaloIskHkM//dUCtrdZ0EzJ0L49dRMnmIgLdAcotq9CoFPj2U4wXlRTyNE0j0/T
+        ZR32ujmrkvkS6vTsaoaywQfy2GUGdsKLl56fcgvSWiofFUYFfJqQx8XoRfqM/60a9YnLcD
+        TKBKLfsKgjmFDZmdygbpexsUhVZxkng=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-522-wOHure6VMNqkBE-0xDIlmQ-1; Mon, 30 May 2022 03:00:50 -0400
+X-MC-Unique: wOHure6VMNqkBE-0xDIlmQ-1
+Received: by mail-wm1-f69.google.com with SMTP id j40-20020a05600c1c2800b003972dbb1066so9239318wms.4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:00:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=U31K93Uq+Fvheeupr2NMZcwHmZ55uz0S5WD0bojawpY=;
+        b=QqDIyeHJTY4o/+Xx6wsXf3xpHKkhZ59kKNmeUZKxXAn86rvod33+ZAZPOT8XtR0G/n
+         9zjqA5x/bOcvR3q3zmQayhpr1PqMZ+S1Gi2Qi3PmGiAPFFTvtugGpRNNmUZ+V3ZWHx/4
+         gvifpCM9Js84C8DANzmjtxaEFmnQ/a8acKsDF8QEVeb9k+e2ZaF+aMp6PSPfMg4T1qC4
+         GEEsd3y2IiXRWFtxfQq9eO9jVowYIDQdxouipB5B4aVByOlBpInkX9bAq3OlwhhIzDAJ
+         AJNIrYxYH5Yr2NcMaJ2CU+hHMVKwBbUqcE3WSksWBEJmDRWuKXTaINOrWYRajbo+cAXr
+         o91A==
+X-Gm-Message-State: AOAM530yHajPZ5TWv5P5MLovs6KVpdD071gH5UvlKEp9BtRLON02SAwV
+        mE1iqhKcdB+iOUtaFXIN9NRSNJApCgK2KoaqQxKkuSLeTFfN1lS5hzMbSBUupV7VmNUIAoq1d91
+        HrXKE3o6V1QBiew+jmDizPJVs
+X-Received: by 2002:a5d:678d:0:b0:210:2f33:4399 with SMTP id v13-20020a5d678d000000b002102f334399mr4865031wru.599.1653894049325;
+        Mon, 30 May 2022 00:00:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzWbVjgbHJgDifYnjzVjmFGHKAJhvPFV/7EXQPi3xye3rM5BEYeXuoSqoi7mYy2rbSD+dcKpw==
+X-Received: by 2002:a5d:678d:0:b0:210:2f33:4399 with SMTP id v13-20020a5d678d000000b002102f334399mr4865010wru.599.1653894049074;
+        Mon, 30 May 2022 00:00:49 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:7c00:aaa9:2ce5:5aa0:f736? (p200300cbc7047c00aaa92ce55aa0f736.dip0.t-ipconnect.de. [2003:cb:c704:7c00:aaa9:2ce5:5aa0:f736])
+        by smtp.gmail.com with ESMTPSA id c18-20020a5d5292000000b0020ff3a2a925sm9714539wrv.63.2022.05.30.00.00.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 00:00:48 -0700 (PDT)
+Message-ID: <8ab86020-8e24-4004-d6b1-c122639e584b@redhat.com>
+Date:   Mon, 30 May 2022 09:00:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <597de13b-28c8-3341-be11-da51e22304c3@linaro.org>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] virtio_balloon: check virtqueue_add_outbuf() return value
+Content-Language: en-US
+To:     =?UTF-8?B?Qm8gTGl1ICjliJjms6IpLea1qua9ruS/oeaBrw==?= 
+        <liubo03@inspur.com>, "mst@redhat.com" <mst@redhat.com>
+Cc:     "jasowang@redhat.com" <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <7a413652a9a9469f948fbfa2eae5c401@inspur.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <7a413652a9a9469f948fbfa2eae5c401@inspur.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-05-26, Krzysztof Kozlowski wrote:
-> On 25/05/2022 16:20, Marco Felsch wrote:
-> > The TI TPS380x family [1] is a volatage supervisor with a dedicated
-> > manual reset (mr) line input and a reset output. The chip(s) have a
-> > build in reset delay, depending on the chip partnumber. This simple
-> > driver addresses this so the cosumer don't need to care about it.
-> > 
-> > [1] https://www.ti.com/product/TPS3801
-> > 
-> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > ---
-> >  drivers/reset/Kconfig         |   8 +++
-> >  drivers/reset/Makefile        |   1 +
-> >  drivers/reset/reset-tps380x.c | 130 ++++++++++++++++++++++++++++++++++
-> >  3 files changed, 139 insertions(+)
-> >  create mode 100644 drivers/reset/reset-tps380x.c
-> > 
-> > diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-> > index e0fc80e041ea..e2eb616af812 100644
-> > --- a/drivers/reset/Kconfig
-> > +++ b/drivers/reset/Kconfig
-> > @@ -256,6 +256,14 @@ config RESET_TI_SYSCON
-> >  	  you wish to use the reset framework for such memory-mapped devices,
-> >  	  say Y here. Otherwise, say N.
-> >  
-> > +config RESET_TI_TPS380X
-> > +	tristate "TI TPS380x Reset Driver"
-> > +	select GPIOLIB
-> > +	help
-> > +	  This enables the reset driver support for TI TPS380x devices. If
-> > +	  you wish to use the reset framework for such devices, say Y here.
-> > +	  Otherwise, say N.
-> > +
-> >  config RESET_TN48M_CPLD
-> >  	tristate "Delta Networks TN48M switch CPLD reset controller"
-> >  	depends on MFD_TN48M_CPLD || COMPILE_TEST
-> > diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-> > index a80a9c4008a7..66399b92b1bb 100644
-> > --- a/drivers/reset/Makefile
-> > +++ b/drivers/reset/Makefile
-> > @@ -33,6 +33,7 @@ obj-$(CONFIG_RESET_STARFIVE_JH7100) += reset-starfive-jh7100.o
-> >  obj-$(CONFIG_RESET_SUNXI) += reset-sunxi.o
-> >  obj-$(CONFIG_RESET_TI_SCI) += reset-ti-sci.o
-> >  obj-$(CONFIG_RESET_TI_SYSCON) += reset-ti-syscon.o
-> > +obj-$(CONFIG_RESET_TI_TPS380X) += reset-tps380x.o
-> >  obj-$(CONFIG_RESET_TN48M_CPLD) += reset-tn48m.o
-> >  obj-$(CONFIG_RESET_UNIPHIER) += reset-uniphier.o
-> >  obj-$(CONFIG_RESET_UNIPHIER_GLUE) += reset-uniphier-glue.o
-> > diff --git a/drivers/reset/reset-tps380x.c b/drivers/reset/reset-tps380x.c
-> > new file mode 100644
-> > index 000000000000..fd2c0929ae2d
-> > --- /dev/null
-> > +++ b/drivers/reset/reset-tps380x.c
-> > @@ -0,0 +1,130 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * TI TPS380x Supply Voltage Supervisor and Reset Controller Driver
-> > + *
-> > + * Copyright (C) 2022 Pengutronix, Marco Felsch <kernel@pengutronix.de>
-> > + *
-> > + * Based on Simple Reset Controller Driver
-> > + *
-> > + * Copyright (C) 2017 Pengutronix, Philipp Zabel <kernel@pengutronix.de>
-> > + */
-> > +
-> > +#include <linux/delay.h>
-> > +#include <linux/gpio/consumer.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/property.h>
-> > +#include <linux/reset-controller.h>
-> > +
-> > +struct tps380x_reset {
-> > +	struct reset_controller_dev	rcdev;
-> > +	struct gpio_desc		*reset_gpio;
-> > +	unsigned int			reset_ms;
-> > +};
-> > +
-> > +struct tps380x_reset_devdata {
-> > +	unsigned int min_reset_ms;
-> > +	unsigned int typ_reset_ms;
-> > +	unsigned int max_reset_ms;
-> > +};
-> > +
-> > +static inline
-> > +struct tps380x_reset *to_tps380x_reset(struct reset_controller_dev *rcdev)
-> > +{
-> > +	return container_of(rcdev, struct tps380x_reset, rcdev);
-> > +}
-> > +
-> > +static int
-> > +tps380x_reset_assert(struct reset_controller_dev *rcdev, unsigned long id)
-> > +{
-> > +	struct tps380x_reset *tps380x = to_tps380x_reset(rcdev);
-> > +
-> > +	gpiod_set_value_cansleep(tps380x->reset_gpio, 1);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int
-> > +tps380x_reset_deassert(struct reset_controller_dev *rcdev, unsigned long id)
-> > +{
-> > +	struct tps380x_reset *tps380x = to_tps380x_reset(rcdev);
-> > +
-> > +	gpiod_set_value_cansleep(tps380x->reset_gpio, 0);
-> > +	msleep(tps380x->reset_ms);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +const struct reset_control_ops reset_tps380x_ops = {
+On 30.05.22 04:16, Bo Liu (刘波)-浪潮信息 wrote:
+> Adding this patch can avoid unnecessary VM exits and reduce the number of VM exits
 > 
-> This looks static.
 
-Hi Krzysztof,
+... in corner cases where virtqueue_add_outbuf() fails? Why do we care
+about that corner case?
 
-Arg.. of course. I will change that. Thanks for the review.
+Looks like unnecessary code churn to me, unless I am missing something
+important.
 
-Regards,
-  Marco
+-- 
+Thanks,
+
+David / dhildenb
+

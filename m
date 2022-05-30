@@ -2,158 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828D3538509
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE175538507
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241840AbiE3PgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
+        id S238757AbiE3Pf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240809AbiE3Pey (ORCPT
+        with ESMTP id S242709AbiE3PfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:34:54 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA57D1F62D0;
-        Mon, 30 May 2022 07:39:48 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id z186so15087336ybz.3;
-        Mon, 30 May 2022 07:39:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PwYudAlsrV6L0E/1oct3kLnDMatMHOnVQrUxmfQHNp0=;
-        b=nJb/D6o7T7a8Mb297LS5itZxyr9hhXOWE4cI1CS2gGTaAQcWmDs6sgxITAckTcsbqO
-         aVjCnMiZTw+b4RHeeUOfs7ZZ8uhJu+9H3vrDwR8kDUeIJPmAAz+dNjR8nEL4TV+1QxDF
-         u49vwV3izHOZZjnCA/h3xEh2LMtiihGNrkHxPVvfRH9pZsq1jJB+cD3l2YcOrZE/FHV3
-         oO0LniQOktfpUCJyeRfpEKg9DDa8WBNFOctawAeqAkazISl11g4V/X/KrhW3BSqcXDpM
-         rHmuPxyGLKaHOFGx+URNH8GUTtkCZhF8UINV8Pv9mO9GCiQtRvv2jNcgvDl1QzaFiII6
-         59oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PwYudAlsrV6L0E/1oct3kLnDMatMHOnVQrUxmfQHNp0=;
-        b=aoPXoIOYdhP8cLmwgoLQBRKqKz87uOKGoGp2WRT8WCelpPCiyjAqqm/N/1Fyaqqj7i
-         9EpRd4LnnfG24ufFc0WoLojpisWHGN5149fJqESDyTwNiG2uwu0eQ55j3mn+s0vacKHh
-         eigz2zr5Yh8gEd1LwGqWYjOvMYznSQaoEXObuJsvU3G33SBEuRsEDun2bJWXjZFjL131
-         hIJRv0sz+Yij7YJggW9sTQp/ilq/QkJjE6BMnnmeDHUBVV74KO6hwbnRUMs+N4HpgDoG
-         98KW9XWstKZleeBhmwQz/E87cIcBmRfevhNteJjJZ+lPpJnys9C2zD5ls7ugGZlOY8hb
-         5rSw==
-X-Gm-Message-State: AOAM533KDGkmo1GnxSNfa5ZeMNdzyV3mJ/ced2T/4aotX++ACxFArTVa
-        d/zufvtSTrCnNvvCZYWlZwAvgApjqI6jyDTYe7o=
-X-Google-Smtp-Source: ABdhPJwrsgLQtAtWqwcrdq2e1TjIgoIDbrErxGbmJH2wa0Fkm6oxdLbvdkS+K4BYIuwE3er69f8iVYy5UEogxMtnFeI=
-X-Received: by 2002:a25:21c3:0:b0:64a:b29a:9b0d with SMTP id
- h186-20020a2521c3000000b0064ab29a9b0dmr54184246ybh.59.1653921585005; Mon, 30
- May 2022 07:39:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-8-tmaimon77@gmail.com>
- <20220526192412.8ECAAC385A9@smtp.kernel.org>
-In-Reply-To: <20220526192412.8ECAAC385A9@smtp.kernel.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Mon, 30 May 2022 17:39:34 +0300
-Message-ID: <CAP6Zq1gtB_kiEutV=uE30nev_S0rAjs=9BdMnqQbAbi-M1W6iQ@mail.gmail.com>
-Subject: Re: [PATCH v1 07/19] dt-binding: clk: npcm845: Add binding for
- Nuvoton NPCM8XX Clock
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Olof Johansson <olof@lixom.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Patrick Venture <venture@google.com>,
-        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Nancy Yuen <yuenn@google.com>, SoC Team <soc@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 30 May 2022 11:35:22 -0400
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 90983996B7;
+        Mon, 30 May 2022 07:41:40 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [106.117.80.109])
+        by mail-app2 (Coremail) with SMTP id by_KCgDHeAh415Rir1sMAQ--.3918S2;
+        Mon, 30 May 2022 22:41:08 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-hams@vger.kernel.org
+Cc:     jreuter@yaina.de, ralf@linux-mips.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas@osterried.de, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH v4] ax25: Fix ax25 session cleanup problems
+Date:   Mon, 30 May 2022 22:40:56 +0800
+Message-Id: <20220530144056.100002-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgDHeAh415Rir1sMAQ--.3918S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtF45ZFWxZry7XFWfXry7KFg_yoWxGw47pF
+        W7Ka1fJrZrXr4rCw4rWFWkWF18uw4qq3yUGr1UuFnakw13G3s8JF1ktFWjqFW3GFWfJF1D
+        Z34UWan8Ar4kuFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6ry5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUbkR65UUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg4GAVZdtZ9W2gAIsu
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+There are session cleanup problems in ax25_release() and
+ax25_disconnect(). If we setup a session and then disconnect,
+the disconnected session is still in "LISTENING" state that
+is shown below.
 
-Thanks for your comments.
+Active AX.25 sockets
+Dest       Source     Device  State        Vr/Vs    Send-Q  Recv-Q
+DL9SAU-4   DL9SAU-3   ???     LISTENING    000/000  0       0
+DL9SAU-3   DL9SAU-4   ???     LISTENING    000/000  0       0
 
-The patch will modify according to your comments and will be sent in
-the next kernel revision 5.19.rc1
+The first reason is caused by del_timer_sync() in ax25_release().
+The timers of ax25 are used for correct session cleanup. If we use
+ax25_release() to close ax25 sessions and ax25_dev is not null,
+the del_timer_sync() functions in ax25_release() will execute.
+As a result, the sessions could not be cleaned up correctly,
+because the timers have stopped.
 
-On Thu, 26 May 2022 at 22:24, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Tomer Maimon (2022-05-22 08:50:34)
-> > diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
-> > new file mode 100644
-> > index 000000000000..f305c7c7eaf0
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
-> > @@ -0,0 +1,68 @@
-> [...]
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - "#clock-cells"
->
-> Are clocks not required because sometimes the reference clk isn't
-> connected?
-require, will be fixed
->
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  # Clock Control Module node:
-> > +  - |
-> > +
-> > +    ahb {
->
-> drop ahb node please.
->
-> > +        #address-cells = <2>;
-> > +        #size-cells = <2>;
-> > +
-> > +        clk: clock-controller@f0801000 {
->
-> Drop label 'clk' as well please.
->
-> > +            compatible = "nuvoton,npcm845-clk";
-> > +            reg = <0x0 0xf0801000 0x0 0x1000>;
-> > +            #clock-cells = <1>;
-> > +        };
-> > +    };
-> > +
-> > +...
+In order to solve this problem, this patch adds a device_up flag
+in ax25_dev in order to judge whether the device is up. If there
+are sessions to be cleaned up, the del_timer_sync() in
+ax25_release() will not execute. What's more, we add ax25_cb_del()
+in ax25_kill_by_device(), because the timers have been stopped
+and there are no functions that could delete ax25_cb if we do not
+call ax25_release(). Finally, we reorder the position of
+ax25_list_lock in ax25_cb_del() in order to synchronize among
+different functions that call ax25_cb_del().
 
-Best regards,
+The second reason is caused by improper check in ax25_disconnect().
+The incoming ax25 sessions which ax25->sk is null will close
+heartbeat timer, because the check "if(!ax25->sk || ..)" is
+satisfied. As a result, the session could not be cleaned up properly.
 
-Tomer
+In order to solve this problem, this patch changes "||" to "&&"
+in ax25_disconnect().
+
+What`s more, the ax25_disconnect() may be called twice, which is
+not necessary. For example, ax25_kill_by_device() calls
+ax25_disconnect() and sets ax25->state to AX25_STATE_0, but
+ax25_release() calls ax25_disconnect() again.
+
+In order to solve this problem, this patch add a check in
+ax25_release(). If the flag of ax25->sk equals to SOCK_DEAD,
+the ax25_disconnect() in ax25_release() should not be executed.
+
+Fixes: 82e31755e55f ("ax25: Fix UAF bugs in ax25 timers")
+Fixes: 8a367e74c012 ("ax25: Fix segfault after sock connection timeout")
+Reported-and-tested-by: Thomas Osterried <thomas@osterried.de>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in v4:
+  - Fix session cleanup problem in ax25_disconnect().
+  - Fix ax25_disconnect() may be called twice problem.
+
+ include/net/ax25.h   |  1 +
+ net/ax25/af_ax25.c   | 27 +++++++++++++++++----------
+ net/ax25/ax25_dev.c  |  1 +
+ net/ax25/ax25_subr.c |  2 +-
+ 4 files changed, 20 insertions(+), 11 deletions(-)
+
+diff --git a/include/net/ax25.h b/include/net/ax25.h
+index 0f9790c455b..a427a05672e 100644
+--- a/include/net/ax25.h
++++ b/include/net/ax25.h
+@@ -228,6 +228,7 @@ typedef struct ax25_dev {
+ 	ax25_dama_info		dama;
+ #endif
+ 	refcount_t		refcount;
++	bool device_up;
+ } ax25_dev;
+ 
+ typedef struct ax25_cb {
+diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
+index 363d47f9453..289f355e185 100644
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -62,12 +62,12 @@ static void ax25_free_sock(struct sock *sk)
+  */
+ static void ax25_cb_del(ax25_cb *ax25)
+ {
++	spin_lock_bh(&ax25_list_lock);
+ 	if (!hlist_unhashed(&ax25->ax25_node)) {
+-		spin_lock_bh(&ax25_list_lock);
+ 		hlist_del_init(&ax25->ax25_node);
+-		spin_unlock_bh(&ax25_list_lock);
+ 		ax25_cb_put(ax25);
+ 	}
++	spin_unlock_bh(&ax25_list_lock);
+ }
+ 
+ /*
+@@ -81,6 +81,7 @@ static void ax25_kill_by_device(struct net_device *dev)
+ 
+ 	if ((ax25_dev = ax25_dev_ax25dev(dev)) == NULL)
+ 		return;
++	ax25_dev->device_up = false;
+ 
+ 	spin_lock_bh(&ax25_list_lock);
+ again:
+@@ -91,6 +92,7 @@ static void ax25_kill_by_device(struct net_device *dev)
+ 				spin_unlock_bh(&ax25_list_lock);
+ 				ax25_disconnect(s, ENETUNREACH);
+ 				s->ax25_dev = NULL;
++				ax25_cb_del(s);
+ 				spin_lock_bh(&ax25_list_lock);
+ 				goto again;
+ 			}
+@@ -103,6 +105,7 @@ static void ax25_kill_by_device(struct net_device *dev)
+ 				dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
+ 				ax25_dev_put(ax25_dev);
+ 			}
++			ax25_cb_del(s);
+ 			release_sock(sk);
+ 			spin_lock_bh(&ax25_list_lock);
+ 			sock_put(sk);
+@@ -995,9 +998,11 @@ static int ax25_release(struct socket *sock)
+ 	if (sk->sk_type == SOCK_SEQPACKET) {
+ 		switch (ax25->state) {
+ 		case AX25_STATE_0:
+-			release_sock(sk);
+-			ax25_disconnect(ax25, 0);
+-			lock_sock(sk);
++			if (!sock_flag(ax25->sk, SOCK_DEAD)) {
++				release_sock(sk);
++				ax25_disconnect(ax25, 0);
++				lock_sock(sk);
++			}
+ 			ax25_destroy_socket(ax25);
+ 			break;
+ 
+@@ -1053,11 +1058,13 @@ static int ax25_release(struct socket *sock)
+ 		ax25_destroy_socket(ax25);
+ 	}
+ 	if (ax25_dev) {
+-		del_timer_sync(&ax25->timer);
+-		del_timer_sync(&ax25->t1timer);
+-		del_timer_sync(&ax25->t2timer);
+-		del_timer_sync(&ax25->t3timer);
+-		del_timer_sync(&ax25->idletimer);
++		if (!ax25_dev->device_up) {
++			del_timer_sync(&ax25->timer);
++			del_timer_sync(&ax25->t1timer);
++			del_timer_sync(&ax25->t2timer);
++			del_timer_sync(&ax25->t3timer);
++			del_timer_sync(&ax25->idletimer);
++		}
+ 		dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
+ 		ax25_dev_put(ax25_dev);
+ 	}
+diff --git a/net/ax25/ax25_dev.c b/net/ax25/ax25_dev.c
+index d2a244e1c26..5451be15e07 100644
+--- a/net/ax25/ax25_dev.c
++++ b/net/ax25/ax25_dev.c
+@@ -62,6 +62,7 @@ void ax25_dev_device_up(struct net_device *dev)
+ 	ax25_dev->dev     = dev;
+ 	dev_hold_track(dev, &ax25_dev->dev_tracker, GFP_ATOMIC);
+ 	ax25_dev->forward = NULL;
++	ax25_dev->device_up = true;
+ 
+ 	ax25_dev->values[AX25_VALUES_IPDEFMODE] = AX25_DEF_IPDEFMODE;
+ 	ax25_dev->values[AX25_VALUES_AXDEFMODE] = AX25_DEF_AXDEFMODE;
+diff --git a/net/ax25/ax25_subr.c b/net/ax25/ax25_subr.c
+index 3a476e4f6cd..227c2b09c52 100644
+--- a/net/ax25/ax25_subr.c
++++ b/net/ax25/ax25_subr.c
+@@ -268,7 +268,7 @@ void ax25_disconnect(ax25_cb *ax25, int reason)
+ 		del_timer_sync(&ax25->t3timer);
+ 		del_timer_sync(&ax25->idletimer);
+ 	} else {
+-		if (!ax25->sk || !sock_flag(ax25->sk, SOCK_DESTROY))
++		if (!ax25->sk && !sock_flag(ax25->sk, SOCK_DESTROY))
+ 			ax25_stop_heartbeat(ax25);
+ 		ax25_stop_t1timer(ax25);
+ 		ax25_stop_t2timer(ax25);
+-- 
+2.17.1
+

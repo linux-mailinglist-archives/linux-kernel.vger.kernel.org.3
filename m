@@ -2,121 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E2D53884E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 22:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07EF538852
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 22:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239024AbiE3Utn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 16:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
+        id S240626AbiE3Uus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 16:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233225AbiE3Utj (ORCPT
+        with ESMTP id S232941AbiE3Uup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 16:49:39 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926B47A468
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 13:49:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653943778; x=1685479778;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yLgUrwmBvYJzRs/dmjYgtmUxC/OOMG1qe2Oil/gEllQ=;
-  b=mfnMuW8JOptCO1Vwg/7pFk0G8KLDvFdEMIKu1fro3q/V4k4IKHBUgii+
-   e322eitsNnmpHoDw4yBPZi3/oIoquOaGHda/Zmik/RBLx8M4AJC11w4JB
-   MImZm+HDhv9sN94nzwBIGoS5i7L9YZNk2RxZLU5xhvWqtmjcoh1+2QxH4
-   QMiVk7VuUIXQZ17Qe8lQcUAjmRaddCXZpCN1zm4i5inrMIQBnwUCAXUkA
-   pjBzk8DK0aSuvuu+3bjqZCuiIAiEsCBEQuWEMaqFwpBmDsn0/+egxBkkn
-   HfDjzPQX2KlKfvloOoe+6tpIIzc6/6xEiB1tKatqH1uA5s3oJuAPffZKQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="255561770"
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="255561770"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 13:49:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="611553038"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 30 May 2022 13:49:36 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nvmKV-0001yy-PD;
-        Mon, 30 May 2022 20:49:35 +0000
-Date:   Tue, 31 May 2022 04:48:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-netfs 32/41]
- fs/cifs/fscache.c:112:37: warning: incompatible integer to pointer
- conversion passing 'unsigned long' to parameter of type 'volatile unsigned
- long *'; take the address with &
-Message-ID: <202205310411.hGi2pWAu-lkp@intel.com>
+        Mon, 30 May 2022 16:50:45 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F1D7C15D
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 13:50:44 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id t13so16093321wrg.9
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 13:50:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1lLChvyS/A963A4FUBu+MX1MVuqX0L31WAxbAXk0Rco=;
+        b=TbWWfG3mwDAj3SlGK80UuCpJ+MU0f/6ckruWH7QPFPzJCTSVxTMObr+5jdPopbqJlc
+         m+Xe8iKMzLEPVeY40Ofg+nC0bMhyd3DI/UcEaV6u+W4DH1149GT2GUCTM5XiLrc5eDuZ
+         K3MODHqwWUmOH3IsgR2EzmAOPbAdDybF0HU+yL2d66R2Kzf8+KVLa2DYp6t8hiOZsyhI
+         oLc+YnVjoPtrWKRwVbTl456dj/Z/n0ZK80hy9nFJ1Ra2pkvzPxQAMZjee3tbPUWVwq+w
+         jWymAdqKP8tTerCgrRRNkWONCAkck0LqyJ+Qy7Xrj6E2jfyUteHh0EVy/vO+YFEk2CmB
+         PZ1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1lLChvyS/A963A4FUBu+MX1MVuqX0L31WAxbAXk0Rco=;
+        b=KSDldJ8EPfUNVvhduaeyrlHCCjoYOdKaoeK+1DoBekNC2KyTozmJU8KKIhTcPAprtO
+         Tq6+3pR96FFrzsb41cwgEgS1In95fJGVIQnkBLOTQ/NglsfixzYePlr4lFl2G2/1wiWw
+         dDTPMbhMtGvu2tii/ToKbXghdCac9zjmE1Gzu4S06W3JPpNrEhhxEcwGgLusNyOstUAA
+         I5VC4ebFRbuv0+3J0LrwI1SDUoiVglPPNkhVQSputf6H7R7xCpqmVY9Y1UToAZ0AMk6B
+         wlQzjAFL/67q/pZOOp6Qn63r1mx3lKo293I7/GoXKvA5e6Ap+BcKjFsVeqMPFkRA/Utr
+         Z9wQ==
+X-Gm-Message-State: AOAM531KAjZCB0eEGrGrTaNtz9IwLObWA6DytQoSVEtjfXBCBNUMDjwi
+        ucAYVh8E8dQUpWnAoH3EaRxC6w==
+X-Google-Smtp-Source: ABdhPJzI+EByJbFzqqyfHEexvTgYT9aG7LLERB46N3RzB/NvGbW2le+Yxe0x4SZCCWeuFEYWmA6dWQ==
+X-Received: by 2002:a5d:5955:0:b0:20d:4b4:9879 with SMTP id e21-20020a5d5955000000b0020d04b49879mr46283608wri.550.1653943842941;
+        Mon, 30 May 2022 13:50:42 -0700 (PDT)
+Received: from localhost.localdomain ([88.160.162.107])
+        by smtp.gmail.com with ESMTPSA id u7-20020a05600c19c700b003942a244f2bsm384976wmq.4.2022.05.30.13.50.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 13:50:42 -0700 (PDT)
+From:   Fabien Parent <fparent@baylibre.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Fabien Parent <fparent@baylibre.com>, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 1/2] dt-bindings: pwm: add MT8365 SoC binding
+Date:   Mon, 30 May 2022 22:50:37 +0200
+Message-Id: <20220530205038.917431-1-fparent@baylibre.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-netfs
-head:   1fc71b6b30f6d2a981c163b77c9aee0aecaecb29
-commit: ccc1acdfa787b5bf5c9c2b3f829b18f5a0bb0938 [32/41] mm, netfs, fscache: Stop read optimisation when folio removed from pagecache
-config: x86_64-randconfig-a015-20220530 (https://download.01.org/0day-ci/archive/20220531/202205310411.hGi2pWAu-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0776c48f9b7e69fa447bee57c7c0985caa856be9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/ccc1acdfa787b5bf5c9c2b3f829b18f5a0bb0938
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-netfs
-        git checkout ccc1acdfa787b5bf5c9c2b3f829b18f5a0bb0938
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/cifs/
+Add binding documentation for the MT8365 SoC.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+---
+v2: fix clock description (five -> three)
 
-All warnings (new ones prefixed by >>):
+ Documentation/devicetree/bindings/pwm/pwm-mediatek.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
->> fs/cifs/fscache.c:112:37: warning: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'volatile unsigned long *'; take the address with & [-Wint-conversion]
-                   set_bit(AS_NOTIFY_REMOVING_FOLIO, inode->i_mapping->flags);
-                                                     ^~~~~~~~~~~~~~~~~~~~~~~
-                                                     &
-   include/asm-generic/bitops/instrumented-atomic.h:26:70: note: passing argument to parameter 'addr' here
-   static __always_inline void set_bit(long nr, volatile unsigned long *addr)
-                                                                        ^
-   1 warning generated.
-
-
-vim +112 fs/cifs/fscache.c
-
-    96	
-    97	void cifs_fscache_get_inode_cookie(struct inode *inode)
-    98	{
-    99		struct cifs_fscache_inode_coherency_data cd;
-   100		struct cifsInodeInfo *cifsi = CIFS_I(inode);
-   101		struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
-   102		struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
-   103	
-   104		cifs_fscache_fill_coherency(&cifsi->vfs_inode, &cd);
-   105	
-   106		cifsi->netfs_ctx.cache =
-   107			fscache_acquire_cookie(tcon->fscache, 0,
-   108					       &cifsi->uniqueid, sizeof(cifsi->uniqueid),
-   109					       &cd, sizeof(cd),
-   110					       i_size_read(&cifsi->vfs_inode));
-   111		if (cifsi->netfs_ctx.cache)
- > 112			set_bit(AS_NOTIFY_REMOVING_FOLIO, inode->i_mapping->flags);
-   113	
-
+diff --git a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt b/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
+index 25ed214473d7..ff792512399b 100644
+--- a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
++++ b/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
+@@ -8,6 +8,7 @@ Required properties:
+    - "mediatek,mt7628-pwm": found on mt7628 SoC.
+    - "mediatek,mt7629-pwm": found on mt7629 SoC.
+    - "mediatek,mt8183-pwm": found on mt8183 SoC.
++   - "mediatek,mt8365-pwm": found on mt8365 SoC.
+    - "mediatek,mt8516-pwm": found on mt8516 SoC.
+  - reg: physical base address and length of the controller's registers.
+  - #pwm-cells: must be 2. See pwm.yaml in this directory for a description of
+@@ -17,6 +18,7 @@ Required properties:
+                 has no clocks
+    - "top": the top clock generator
+    - "main": clock used by the PWM core
++   - "pwm1-3": the three per PWM clocks for mt8365
+    - "pwm1-8": the eight per PWM clocks for mt2712
+    - "pwm1-6": the six per PWM clocks for mt7622
+    - "pwm1-5": the five per PWM clocks for mt7623
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+

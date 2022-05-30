@@ -2,115 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71D353764C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDDA537640
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbiE3IL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 04:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
+        id S233188AbiE3IMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 04:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233125AbiE3ILs (ORCPT
+        with ESMTP id S233169AbiE3IL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 04:11:48 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DB0F47;
-        Mon, 30 May 2022 01:11:43 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U6nVp1015905;
-        Mon, 30 May 2022 08:11:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=VIAjJqEzkS48zVmiLhW0Cuseh14NQVVk7EMZNm/V3kM=;
- b=CkXBUudzS/2KSjwKS9KW7kvdFWeZp+QPo9MhiRW4CdAEvPG1igc6/R51ukVSEnkgGi20
- Gubyj9BGU6xp7dQYDOUrLAufrAzhv3RfOhVsxHE+vdNXCoAnGRWaRzwxKbhHUp3xfUv6
- KCkuMsGR3NUqng6/hvUwRBUJtCK6gvPK3PDT/LDweWewMv3PiJOuoBWL2YfTc8DYiOmn
- /WAMwXE/QN3JPPKkANHfZT1tpcOzo2LRSI1EBMSHDADsAVwsILDgk6YrgWwFPr11Bb4X
- PKfLWQAcAmaPrRZx0wwNLxiWlJRUI/xcBgWYu72WxzvYYbGLIfHbmjV+CQx1CIedKHKv 9w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcs0e9j3q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 08:11:43 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24U7FssP018503;
-        Mon, 30 May 2022 08:11:42 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcs0e9j2t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 08:11:42 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24U85ssi011816;
-        Mon, 30 May 2022 08:11:40 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3gbc97srrj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 08:11:40 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24U8BcIn20775392
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 May 2022 08:11:38 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E80174203F;
-        Mon, 30 May 2022 08:11:37 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5F6D642045;
-        Mon, 30 May 2022 08:11:37 +0000 (GMT)
-Received: from li-ca45c2cc-336f-11b2-a85c-c6e71de567f1.ibm.com (unknown [9.171.70.209])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 30 May 2022 08:11:37 +0000 (GMT)
-Message-ID: <ff5f394db586169fe6dc16dc0e24d534e4825caa.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 14/19] KVM: s390: pv: cleanup leftover protected VMs
- if needed
-From:   Nico Boehr <nrb@linux.ibm.com>
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        mimu@linux.ibm.com
-Date:   Mon, 30 May 2022 10:11:37 +0200
-In-Reply-To: <20220414080311.1084834-15-imbrenda@linux.ibm.com>
-References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
-         <20220414080311.1084834-15-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+        Mon, 30 May 2022 04:11:56 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D0C2DD2;
+        Mon, 30 May 2022 01:11:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sasIzphq1eZBnQQmU0BcAocyi+BZTjrLXEHfOoMPumM=; b=b+Ks2J8SjZtMjYzBxr684T+0R7
+        m9CzQy5jUaP+gkNnLOMe+olKt80v6Icbc6jEHWj6J6PkQm1uN9BwINfM8KzzIv6ep2l5cnRZmm3WV
+        JE2d39AZuxqw5sLFWp21EVGz5ajLikXazvDXGkVmRmD7Rt91kW9djSFhE3MPSICZpDAmjh3BOZejI
+        QVUjtt8WMukq4B2ykF/0zGz+cnHrvhwiNUCosKlOGfFIze1Es6amOOl+NLFb+P9FlrmPTsEYmzxsX
+        aPwm+gq5LvsX//pfF9DICjI23d6KFXTd7PX3CeBZvuKAG63RZ8glYtaL3R27X1os76qQBJdeVzd6F
+        Smfc9x/g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nvaV3-004Ivm-Pe; Mon, 30 May 2022 08:11:41 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5A867980DE7; Mon, 30 May 2022 10:11:41 +0200 (CEST)
+Date:   Mon, 30 May 2022 10:11:41 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        rcu@vger.kernel.org
+Subject: Re: [RFC PATCH 4/4] cpuset: Support RCU-NOCB toggle on v2 root
+ partitions
+Message-ID: <YpR8PUlIraYE2+5L@worktop.programming.kicks-ass.net>
+References: <20220525221055.1152307-1-frederic@kernel.org>
+ <20220525221055.1152307-5-frederic@kernel.org>
+ <Yo/FGcG+uiBh88sT@slm.duckdns.org>
+ <20220526225141.GA1214445@lothringen>
+ <YpAHEt0j30vBw9au@slm.duckdns.org>
+ <9e44bb00-955a-dbc6-a863-be649e0c701f@redhat.com>
+ <YpAdSW8JXVPOoNJl@slm.duckdns.org>
+ <20220527083018.n43nc73vuuzm5ixo@localhost.localdomain>
+ <YpIwsiaY2IPK96WO@hirez.programming.kicks-ass.net>
+ <20220530004049.GA1251147@lothringen>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 3wkk6YIzroH11PyGEpAGH_HujTMraCg2
-X-Proofpoint-GUID: 2suuD96DNGc5t-uCPwgeAy7rbtuPnfb6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-30_02,2022-05-27_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- suspectscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501
- spamscore=0 adultscore=0 bulkscore=0 phishscore=0 mlxlogscore=999
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205300042
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220530004049.GA1251147@lothringen>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-14 at 10:03 +0200, Claudio Imbrenda wrote:
-[...]
-> diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
-> index bd850be08c86..b20f2cbd43d9 100644
-> --- a/arch/s390/kvm/pv.c
-> +++ b/arch/s390/kvm/pv.c
-> @@ -17,6 +17,19 @@
-[...]
-> +/**
-> + * @struct deferred_priv
-> + * Represents a "leftover" protected VM that is still registered
-> with the
-> + * Ultravisor, but which does not correspond any longer to an active
-> KVM VM.
-> + */
-> +struct deferred_priv {
+On Mon, May 30, 2022 at 02:40:49AM +0200, Frederic Weisbecker wrote:
+> On Sat, May 28, 2022 at 04:24:50PM +0200, Peter Zijlstra wrote:
+> > On Fri, May 27, 2022 at 10:30:18AM +0200, Juri Lelli wrote:
+> > > Hi,
+> > > 
+> > > On 26/05/22 14:37, Tejun Heo wrote:
+> > > > On Thu, May 26, 2022 at 08:28:43PM -0400, Waiman Long wrote:
+> > > > > I am thinking along the line that it will not be hierarchical. However,
+> > > > > cpuset can be useful if we want to have multiple isolated partitions
+> > > > > underneath the top cpuset with different isolation attributes, but no more
+> > > > > sub-isolated partition with sub-attributes underneath them. IOW, we can only
+> > > > > set them at the first level under top_cpuset. Will that be useful?
+> > > > 
+> > > > At that point, I'd just prefer to have it under /proc or /sys.
+> > > 
+> > > FWIW, I was under the impression that this would nicely fit along the
+> > > side of other feaures towards implenting dynamic isolation of CPUs (say
+> > > https://lore.kernel.org/lkml/20220510153413.400020-1-longman@redhat.com/
+> > > for example). Wouldn't be awkward to have to poke different places to
+> > > achieve isolation at runtime?
+> > 
+> > This, that's what I was thinking.
+> > 
+> > My main objection to the whole thing is that it's an RCU_NOCB specific
+> > interface. *That* I think is daft.
+> > 
+> > I was thinking a partition would be able to designate a house-keeping
+> > sub-partition/mask, but who cares about all the various different
+> > housekeeping parties.
+> 
+> It's time for the isolation users to step up here! I very rarely hear from them
+> and I just can't figure out by myself all the variants of uses for each of the
+> isolation features. May be some people are only interested in nocb for some
+> specific uses, or may be it never makes sense without nohz full and all the rest
+> of the isolation features. So for now I take the very cautious path to split the
+> interface.
 
-Why not just name this leftover_vm?
-
+This is ABI, you can't walk back on it. I would suggest starting with an
+'all feature' isolation. Only if there's real demand for something more
+fine-grained add that on top. Simple first etc.

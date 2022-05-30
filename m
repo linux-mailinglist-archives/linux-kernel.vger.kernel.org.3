@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CBF537358
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 03:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 417D953735B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 03:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232136AbiE3Bkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 21:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
+        id S232141AbiE3Bl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 21:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232113AbiE3Bkq (ORCPT
+        with ESMTP id S232127AbiE3Blq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 21:40:46 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2849F3EB9B
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 18:40:46 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id g184so8907471pgc.1
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 18:40:46 -0700 (PDT)
+        Sun, 29 May 2022 21:41:46 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31216C16
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 18:41:42 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id l204so6055272ybf.10
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 18:41:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=H7unC4ownPzSgIneOEus8VvlbiKaGr/5bsj+MLLARkw=;
-        b=F+jcLhmMa1fdNwt934xZxIvqAZrp3oqK6FasgDl2yEX4zP18/6i2Z/r029sARrDkqm
-         vzey0c9a2KdCguchIJnmk1FllnQMQgZosbAgpXnndjFotR0925XK3aMpsw3xKoLjdyut
-         7jE5WSGjBeFo7Fi4+ULEMHNBxbHfmj04GS9Bs=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BS0rBnqOnJwywVyggv6WLP51bLfritdDS+YaRb6g8Nc=;
+        b=aS+aaNRTQ+HPNZXIUQ1ZY9Z98ln0UL2QNqEGotUtIAi4tvJ/68702ZzyURBI1Wzv2W
+         VgPb5S1xvJIXqpCzD5yWXvdy6yFKaskDltTmKAhTTrFgTe9dd0gkeAiDaM2X35jZnxre
+         2KFRVXubZxahujg/CDEhPDZ2WherDnbm2TyEU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=H7unC4ownPzSgIneOEus8VvlbiKaGr/5bsj+MLLARkw=;
-        b=U1ajdoicqhbfqQAljqjNjQ3+JE1Kh0ICHpMqSpeL84CH6UmynmEAJZfJC3+1nH4ml7
-         bBzwAQT/rYR0skYMetgAhPWUPJbHEPXRNb08LH0HZavvdA68E09Bqf4hqCnOp2pwgucM
-         tdcWeSbKxpl0xtwY142C84OyMYyIA50Z8T93mQiauEamF675Xm5DcnM+vh+qoB2AmpQy
-         UqSYnu26Vky7ygeuK+E4GwlSxieh4tURQeXCC+JRJzfERnaYsrsgxxG6LU+SrcUHKUKL
-         o5UtKzEqJw7+5rOJ7GXPXM8ATx0A+H5dyFPCi11L2B3ZB80m0NwaA8ZKg8GiIePF8sq4
-         v8uA==
-X-Gm-Message-State: AOAM530B/AtUJUagJgwkhhhrWptDUkcQl6USqv5v7+f93+wAX0PpA6Q6
-        K1YvggpsYX7k1ez60Ojt9L0W3g==
-X-Google-Smtp-Source: ABdhPJwdJa+Pqh5Tbb+vDpYt+mvq0qnp6W55sOpBmdl0koBatfm81awmkOl+mUugzpDJBFnI8yAosw==
-X-Received: by 2002:a65:668b:0:b0:3f6:4026:97cd with SMTP id b11-20020a65668b000000b003f6402697cdmr44684419pgw.420.1653874845626;
-        Sun, 29 May 2022 18:40:45 -0700 (PDT)
-Received: from dlunevwfh.roam.corp.google.com (n122-107-196-14.sbr2.nsw.optusnet.com.au. [122.107.196.14])
-        by smtp.gmail.com with ESMTPSA id l9-20020a170902eb0900b0015f2d549b46sm662285plb.237.2022.05.29.18.40.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 18:40:45 -0700 (PDT)
-From:   Daniil Lunev <dlunev@chromium.org>
-To:     linux-fsdevel@vger.kernel.org, miklos@szeredi.hu,
-        viro@zeniv.linux.org.uk, hch@infradead.org, tytso@mit.edu
-Cc:     fuse-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Daniil Lunev <dlunev@chromium.org>
-Subject: [PATCH v3 2/2] FUSE: Retire superblock on force unmount
-Date:   Mon, 30 May 2022 11:39:58 +1000
-Message-Id: <20220530113953.v3.2.I692165059274c30b59bed56940b54a573ccb46e4@changeid>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220530013958.577941-1-dlunev@chromium.org>
-References: <20220530013958.577941-1-dlunev@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BS0rBnqOnJwywVyggv6WLP51bLfritdDS+YaRb6g8Nc=;
+        b=vfJAQpdkagd2v2Qy0n3HIt7VlyPvlS7FpUmG166RFiVgHLJ8VN9ymgTXDqDa5DDhsL
+         QyojgQVCvCJlRG/plEirZXD6oMkJq4gB9KWeoCrtYWvlq6bxGYXI2BZY/85k346pr1ug
+         JGzqcf0+H185oiXhuwqWyyh0vuzh2g4azkHm35bwfvQk6fmJ0oc5PnZmAISE3tY875Ve
+         seWxePiLT4U0D6UGWMfLLLoZkaGiOLI+LEk8E0K1gh1J+ELzjKoWgWPvFG2gIFFvfBhY
+         pv1djnVKor8SJkQFxhlYizBeTE7/95oRZs5HqK+w6Mya1kP356rQ895YBtA7HuTU6EfL
+         dWCw==
+X-Gm-Message-State: AOAM5307lvYSRHYyRhyfP8u1iF7jwhpiXgjAI0eSI3Bfv/E0kl8cTH1r
+        4l/AMwsE/AgyNJcIU/KvwvPCl5CrUerpsSZu94hA77ZiB0A=
+X-Google-Smtp-Source: ABdhPJxSxkOYJZAAfx/jQvadZj/iy531I7ErK03nLA+3xCq24960xPRCwn96ehAoYQmM8dl/cYhhXbDaqlMAp+SKm2A=
+X-Received: by 2002:a25:a4aa:0:b0:650:1a22:ffe1 with SMTP id
+ g39-20020a25a4aa000000b006501a22ffe1mr31292961ybi.573.1653874901359; Sun, 29
+ May 2022 18:41:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220511222910.635307-1-dlunev@chromium.org> <20220512082832.v2.2.I692165059274c30b59bed56940b54a573ccb46e4@changeid>
+ <YoQfls6hFcP3kCaH@zeniv-ca.linux.org.uk> <YoQihi4OMjJj2Mj0@zeniv-ca.linux.org.uk>
+ <CAJfpegtQUP045X5N8ib1rUTKzSj-giih0eL=jC5-MP7aVgyN_g@mail.gmail.com>
+ <CAONX=-do9yvxW2gTak0WGbFVPiLbkM2xH5LReMZkvC-upOUVxg@mail.gmail.com>
+ <CAONX=-ehh=uGYAi++oV_uS23mp2yZcrUC+7U5H0rRz8q0h6OeQ@mail.gmail.com>
+ <CAJfpegsPjFMCG-WHbvREZXzHPUd1R2Qa83maiTJbWSua9Kz=hg@mail.gmail.com> <CAONX=-d-6Bm9qGQyhmpkMQov+wjgH3+pAMHdSsifM6FpmHNPFg@mail.gmail.com>
+In-Reply-To: <CAONX=-d-6Bm9qGQyhmpkMQov+wjgH3+pAMHdSsifM6FpmHNPFg@mail.gmail.com>
+From:   Daniil Lunev <dlunev@chromium.org>
+Date:   Mon, 30 May 2022 11:41:30 +1000
+Message-ID: <CAONX=-cSHJX8Zqj9suXp+cwYf9FCxmCkWrDPKz+5Nttqf6Ewqg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] FUSE: Retire superblock on force unmount
+To:     Miklos Szeredi <miklos@szeredi.hu>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-fsdevel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,43 +71,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Force unmount of FUSE severes the connection with the user space, even
-if there are still open files. Subsequent remount tries to re-use the
-superblock held by the open files, which is meaningless in the FUSE case
-after disconnect - reused super block doesn't have userspace counterpart
-attached to it and is incapable of doing any IO.
+I have prepared the v3 patch as described in my previous email. PTAL.
 
-Signed-off-by: Daniil Lunev <dlunev@chromium.org>
+Thanks,
+Daniil
 
----
-
-Changes in v3:
-- No changes
-
-Changes in v2:
-- Use an exported function instead of directly modifying superblock
-
- fs/fuse/inode.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index 8c0665c5dff88..8875361544b2a 100644
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -476,8 +476,11 @@ static void fuse_umount_begin(struct super_block *sb)
- {
- 	struct fuse_conn *fc = get_fuse_conn_super(sb);
- 
--	if (!fc->no_force_umount)
--		fuse_abort_conn(fc);
-+	if (fc->no_force_umount)
-+		return;
-+
-+	fuse_abort_conn(fc);
-+	retire_super(sb);
- }
- 
- static void fuse_send_destroy(struct fuse_mount *fm)
--- 
-2.31.0
-
+On Wed, May 25, 2022 at 8:44 AM Daniil Lunev <dlunev@chromium.org> wrote:
+>
+> > Calling bdi_unregister() might be okay, and that should fix this.  I'm
+> > not familiar enough with that part to say for sure.
+> > But freeing sb->s_bdi while the superblock is active looks problematic.
+> Tracing the code, I see that, yes, in general that might not be safe to call
+> the "bdi_put" function for any FS - because it might have in-flight ops even
+> with force, where they will routinely access the members of the bdi struct
+> without locks. However, we do replace the struct with a no_op version,
+> and specifically for the FUSE case we sever the connection first, so no
+> in-flight ops can actually be there. And I am not sure if other FS may
+> need to do this retirement, given they don't have these
+> user-space/kernel split. It would make sense however to delay the actual
+> put till  the actual super block destruction, but that would require
+> introducing extra state tracking to see if the block is or is not registered
+> anymore. It can be piggybacked on the v1 patch where I have an explicit
+> state flag, but not on v2.
+> Miklos, Al, will the following work and be acceptable?
+> Get v1 patchset[1], in fuse_umount_begin do bdi_unregister and set
+> the flag, but do not do bdi_put or replacement with no_op. And then in
+> generic shutdown super if the bdi is not no_op and the 'defunct' flag is
+> set, skip unregister part.
+> Thanks,
+> Daniil
+>
+> [1]
+> https://lore.kernel.org/linux-fsdevel/20220511013057.245827-1-dlunev@chromium.org/T/#u

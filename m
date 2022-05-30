@@ -2,95 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6945378F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE95537901
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235066AbiE3KHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
+        id S235076AbiE3KH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiE3KHg (ORCPT
+        with ESMTP id S235067AbiE3KHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:07:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFC77A47D;
-        Mon, 30 May 2022 03:07:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51AD761007;
-        Mon, 30 May 2022 10:07:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D55AC34119;
-        Mon, 30 May 2022 10:07:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653905254;
-        bh=PM3fGM/2KDpEdmCfS2EzZkHoMTRHurmfq1JVpIRhyl4=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=gcjaWJIxyQ0Shw9VjDMl2x+xgL93iVYQcPMyIqC21JOU6t0UohtXEWj7emx0TXM7F
-         +cWJEoWHccJnCBXunuxdB5Brk/m01ESTi9PUPY5vTUz4pPfN0wqgEtsHNm/OP1ZCmX
-         DizS8MIt7SYgp2uv97xnyfBnHlo6jpKp2YbfPiCMecazgBo5WTgbWFICDidPkqmdod
-         7LA9T0O/HexhctDYfAOPq0XEAx4TufOpMrjCkKJ4QngJR3RpiQA205AW/sapDfN51J
-         P7HnYjdPTkFaoDctgl+FY2wrZZEE54svv2UGBMBriA+eITw5o9MRh2huk/DYW2He1q
-         jBXlnPPfcIVgA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-wireless@vger.kernel.org, Neo Jou <neojou@gmail.com>,
-        Hans Ulli Kroll <linux@ulli-kroll.de>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        kernel@pengutronix.de, Johannes Berg <johannes@sipsolutions.net>
-Subject: Re: [PATCH 00/10] RTW88: Add support for USB variants
-References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
-        <87fskrv0cm.fsf@kernel.org> <20220530095232.GI1615@pengutronix.de>
-Date:   Mon, 30 May 2022 13:07:25 +0300
-In-Reply-To: <20220530095232.GI1615@pengutronix.de> (Sascha Hauer's message of
-        "Mon, 30 May 2022 11:52:32 +0200")
-Message-ID: <87a6azpc4i.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Mon, 30 May 2022 06:07:54 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05167A827;
+        Mon, 30 May 2022 03:07:50 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U7gK1K005553;
+        Mon, 30 May 2022 10:07:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=TZ4znyQsI0lnl6cDL8B7n/cmWh+0o3s1W6OHXbUTjkk=;
+ b=qxG3IiUPd9Kj2RsFtR7luWgsMpUXLW5TD2VytfzTK2ArToHHptv2TAQKF5P6mMcd5JUS
+ YxkQw7Rxro11RHRfXtGesI/UI+/hKuTcEhGHjZKRDgkat6YY5WPZZLWcK5cVMg1/Jg6o
+ HKk15D0F9DRLvHG0uFYUZIvvd97XQ7VkyA4vtUZZYaodf/fHCwln6Rfq2/Luww33UW6b
+ HTQiXilKEbv1aX0aedajrl834xUO3bIYo2hSVLHmqOzzHplohp7rCcqTili+pTPWSpbj
+ yG3K+EKCHWOtRFI/W25Wpng9G9H/egxH2dcDHh96JPAg2ctBxpKhcS6o4H+E1MQW3WN6 uQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcsrw2tt5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 May 2022 10:07:50 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24U7k5fW019993;
+        Mon, 30 May 2022 10:07:49 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcsrw2tsk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 May 2022 10:07:49 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24U9ppJj014747;
+        Mon, 30 May 2022 10:07:47 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3gbcb7hvqv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 May 2022 10:07:46 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24UA7hmr31785312
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 May 2022 10:07:43 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AE38FAE053;
+        Mon, 30 May 2022 10:07:43 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4109FAE045;
+        Mon, 30 May 2022 10:07:43 +0000 (GMT)
+Received: from li-ca45c2cc-336f-11b2-a85c-c6e71de567f1.ibm.com (unknown [9.171.70.209])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 30 May 2022 10:07:43 +0000 (GMT)
+Message-ID: <d76e875c360c53d6bd03c3f2767c90dcc4ca6df9.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 18/19] KVM: s390: pv: avoid export before import if
+ possible
+From:   Nico Boehr <nrb@linux.ibm.com>
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        mimu@linux.ibm.com
+Date:   Mon, 30 May 2022 12:07:43 +0200
+In-Reply-To: <20220414080311.1084834-19-imbrenda@linux.ibm.com>
+References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
+         <20220414080311.1084834-19-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QBZTYuNQdcNsv58ETnhzrF-MCmnGoWsJ
+X-Proofpoint-ORIG-GUID: drjplrHCL46X1KlijVoGtLVuk9tfgMH4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-30_03,2022-05-30_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 mlxlogscore=999 spamscore=0 adultscore=0 malwarescore=0
+ phishscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205300050
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sascha Hauer <s.hauer@pengutronix.de> writes:
+On Thu, 2022-04-14 at 10:03 +0200, Claudio Imbrenda wrote:
 
-> On Mon, May 30, 2022 at 12:25:13PM +0300, Kalle Valo wrote:
->> Sascha Hauer <s.hauer@pengutronix.de> writes:
->> 
->> > Another problem to address is that the driver uses
->> > ieee80211_iterate_stations_atomic() and
->> > ieee80211_iterate_active_interfaces_atomic() and does register accesses
->> > in the iterator. This doesn't work with USB, so iteration is done in two
->> > steps now: The ieee80211_iterate_*_atomic() functions are only used to
->> > collect the stations/interfaces on a list which is then iterated over
->> > non-atomically in the second step. The implementation for this is
->> > basically the one suggested by Ping-Ke here:
->> >
->> > https://lore.kernel.org/lkml/423f474e15c948eda4db5bc9a50fd391@realtek.com/
->> 
->> Isn't this racy? What guarantees that vifs are not deleted after
->> ieee80211_iterate_active_interfaces_atomic() call?
->
-> The driver mutex &rtwdev->mutex is acquired during the whole
-> collection/iteration process. For deleting an interface
-> ieee80211_ops::remove_interface would have to be called, right?
-> That would acquire &rtwdev->mutex as well, so I think this should be
-> safe.
+> diff --git a/arch/s390/kernel/uv.c b/arch/s390/kernel/uv.c
+> index e358b8bd864b..43393568f844 100644
+> --- a/arch/s390/kernel/uv.c
+> +++ b/arch/s390/kernel/uv.c
+> @@ -236,7 +236,8 @@ static int make_secure_pte(pte_t *ptep, unsigned
+> long addr,
+> =C2=A0
+> =C2=A0static bool should_export_before_import(struct uv_cb_header *uvcb,
+> struct mm_struct *mm)
+> =C2=A0{
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return uvcb->cmd !=3D UVC_CMD_=
+UNPIN_PAGE_SHARED &&
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return !test_bit_inv(BIT_UV_FE=
+AT_MISC,
+> &uv_info.uv_feature_indications) &&
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0uvcb->cmd !=3D UVC_CMD_UNPIN_PAGE_SHARED &&
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0atomic_read(&mm->context.protected_count) > 1;
 
-Can you add a comment to the code explaining this? And
-lockdep_assert_held() is a good way to guarantee that the mutex is
-really held.
+This might be nicer to read like this:
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+if (test_bit_inv(BIT_UV_FEAT_MISC, &uv_info.uv_feature_indications))
+  return false;
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+if (uvcb->cmd =3D=3D UVC_CMD_UNPIN_PAGE_SHARED)
+  return false;
+
+return atomic_read(&mm->context.protected_count) > 1;
+

@@ -2,186 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FE55378C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF048537831
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234819AbiE3JhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 05:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
+        id S234829AbiE3Jhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 05:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbiE3JhH (ORCPT
+        with ESMTP id S234823AbiE3JhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 05:37:07 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623F37521E;
-        Mon, 30 May 2022 02:37:05 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U7eIp4014435;
-        Mon, 30 May 2022 09:35:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ZYzW3+GXOL8I0AfUdLsg5MVY8XGCNIfi5dgvNuU6uaU=;
- b=aJRxENPLxPxtJPLPMpZbZB6ZMNv3yb0g75x/iaJw7LwXznLfzcFFd+VhsSYa4DDin1Og
- h3EtEuduOMNJdyWcPGf8Bp6j8HIvSzuOxy/3v6U/k2EZA3ai81b28DfbzQAvyLegWbh1
- 6JeeHGepvOgSmc7L30MoUcRt75rv2HhxbCLI6q4veiPA68Sc+ilz6QI6uDVuislGDiwl
- YeuRHaNHYRJKefnUIzx1TjXR7BhIi0QNPJjTPVc/RjJeQKBVl5otsnG/aMJgufq14x+Q
- SfzDBggiNkH6uIogm1bEat+ek9Ln35Wju1AiyyoOtoSpZv9Lk89aLEZ/3hCHMI9fbtzG Eg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gc21gt23u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 09:35:22 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24U8YFtI001535;
-        Mon, 30 May 2022 09:35:21 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gc21gt22j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 09:35:21 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24U9ZEW5005489;
-        Mon, 30 May 2022 09:35:18 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma01fra.de.ibm.com with ESMTP id 3gbcakhu93-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 09:35:18 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24U9KsWE50921746
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 May 2022 09:20:54 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7A464A4054;
-        Mon, 30 May 2022 09:35:14 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 55577A405B;
-        Mon, 30 May 2022 09:35:11 +0000 (GMT)
-Received: from [9.171.2.176] (unknown [9.171.2.176])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 30 May 2022 09:35:11 +0000 (GMT)
-Message-ID: <33fd4731-9765-d78b-bdc3-f8243c98e81f@linux.ibm.com>
-Date:   Mon, 30 May 2022 11:35:10 +0200
+        Mon, 30 May 2022 05:37:15 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E53776291;
+        Mon, 30 May 2022 02:37:13 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id f7so771100ilr.5;
+        Mon, 30 May 2022 02:37:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=ueNItYj2IC9D3zs28drSgPYCsB+eIJFzInbZyJE4LMU=;
+        b=OX9h2LakIzHNEFy+NFyqg+Uw0oZwl5s13uAynIQOTJ376V6NocwwMgBQ5CEsGAbUD1
+         O6PylJkNGxOSZYQXlQ94OL8GwJM+Lhga4G2bmnTRPE71c3Z9P5DKnMeyfpxnQoc8lC86
+         IPeqLNdhvjBKMTqZKdhthnMCkhvAhqYa4Z78IjpN1r+/S7WI/FG91lxFxwkv996UF9Qx
+         RQMaMGZj4wE4X8Mzp7ReTrDBuBXobgEIuKe1BN5NPqYK9o6YglHvAvyTK87ASrrQqKB4
+         QNZyM8T0It2Ahf48FVDirSSocW72gvQvU343+oO1+Ch4szWbBEkyI2CBB2ryECc2ndW+
+         cdpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=ueNItYj2IC9D3zs28drSgPYCsB+eIJFzInbZyJE4LMU=;
+        b=nvlWDJ7UmFwOdLhk4q3kIPog5JylSMqadASw4N5rHpfQ02NXnJYljkf/f1z8w+eSHE
+         luiNnkcy4GoYtr5K/EJgapIPmlDXOnAXRrNDMzmU5LGKRCKcydT28NifHUpqtAyVksJx
+         ejnWdetBRYivCExuYR9HDk3pGJqUs0CTJvutXEkjY7n85lucdrpg3S/V4SCCRCcs6bbJ
+         6ALsjVr7PhPAozfiUF9tI9AtxFtnccaVvJUB4CoRw/+5Sst2zxOdxrpsM6SqmhxKhmpf
+         3W2wV6n0IBpYnNmec5OSSXaHdR59NpM0lcIQInrm/dSxmRJBPsVgoM4BJKi21TymITYq
+         GCnQ==
+X-Gm-Message-State: AOAM530tM/HHZwblfuaAsWIWxwgsGHI6Mzx49VYwceLjR/bqeO84rQni
+        uQ8A3ezfsMzO/MmFB2CS7BVw56Ox0DEBDLenSfaJyolgimg=
+X-Google-Smtp-Source: ABdhPJz2WGgpxh+JlCa9OHnmgdkBjviT93sy7Wzrg9qe5Wk5cd+NTvPp9Ppr0eScOYm6Tnp0vLs9kbTLflAXfG+PeJE=
+X-Received: by 2002:a92:6811:0:b0:2cd:994d:7406 with SMTP id
+ d17-20020a926811000000b002cd994d7406mr26590470ilc.245.1653903433181; Mon, 30
+ May 2022 02:37:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4] mm: Avoid unnecessary page fault retires on shared
- memory types
-Content-Language: en-US
-To:     Heiko Carstens <hca@linux.ibm.com>, Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Will Deacon <will@kernel.org>,
-        Matt Turner <mattst88@gmail.com>, linux-s390@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brian Cain <bcain@quicinc.com>, Borislav Petkov <bp@alien8.de>,
-        linux-alpha@vger.kernel.org, Alistair Popple <apopple@nvidia.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        linux-snps-arc@lists.infradead.org,
-        Vineet Gupta <vgupta@kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Rich Felker <dalias@libc.org>, sparclinux@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        David Hildenbrand <david@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-xtensa@linux-xtensa.org, linux-sh@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org,
-        Richard Henderson <rth@twiddle.net>,
-        Guo Ren <guoren@kernel.org>, linux-parisc@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Helge Deller <deller@gmx.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-um@lists.infradead.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        openrisc@lists.librecores.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-hexagon@vger.kernel.org, Andy Lutomirski <luto@kernel.org>,
-        Stafford Horne <shorne@gmail.com>, linux-csky@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-mips@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-riscv@lists.infradead.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Chris Zankel <chris@zankel.net>,
-        Michal Simek <monstr@monstr.eu>, x86@kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Ingo Molnar <mingo@kernel.org>
-References: <20220527193936.30678-1-peterx@redhat.com>
- <YpPYkzbrQmy4FjrI@osiris>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <YpPYkzbrQmy4FjrI@osiris>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 17H2zOn_Mc5hu2MUIDRxY-AXp5vXE9mJ
-X-Proofpoint-ORIG-GUID: M8apowNso6iR-DwO9jx-r0DSHd-NwVxB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-30_03,2022-05-27_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 adultscore=0 mlxscore=0 bulkscore=0 malwarescore=0
- spamscore=0 clxscore=1011 mlxlogscore=980 lowpriorityscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205300050
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220528154704.2576290-1-masahiroy@kernel.org>
+ <20220528154704.2576290-4-masahiroy@kernel.org> <CA+icZUWkOrWYSY3ixxfF=vsuq1xw3mU+p3NMqBpY0OpM02916g@mail.gmail.com>
+ <CAK7LNATwgT-FQ99Ex6MOc+rYEe7tc8ffoF-5e12jfbeaEM1vhw@mail.gmail.com>
+In-Reply-To: <CAK7LNATwgT-FQ99Ex6MOc+rYEe7tc8ffoF-5e12jfbeaEM1vhw@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Mon, 30 May 2022 11:36:37 +0200
+Message-ID: <CA+icZUX+KE6yrVJ5a2CHRvL7_kpK-zXbvJurtAjzgYmsDtSkCw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] kbuild: factor out the common objtool arguments
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, May 29, 2022 at 7:36 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+...
+> > >  # 'OBJECT_FILES_NON_STANDARD := y': skip objtool checking for a directory
+> > >  # 'OBJECT_FILES_NON_STANDARD_foo.o := 'y': skip objtool checking for a file
+> > >  # 'OBJECT_FILES_NON_STANDARD_foo.o := 'n': override directory skip for a file
+> > >
+> >
+> > ^^ What is with this block?
+> > If this belongs together with objtool - shall this be moved, too?
+>
+> No.
+> These are unneeded for vmlinux.o
+>
 
+OK.
 
-Am 29.05.22 um 22:33 schrieb Heiko Carstens:
-[...]
-> 
-> Guess the patch below on top of your patch is what we want.
-> Just for clarification: if gmap is not NULL then the process is a kvm
-> process. So, depending on the workload, this optimization makes sense.
-> 
-> diff --git a/arch/s390/mm/fault.c b/arch/s390/mm/fault.c
-> index 4608cc962ecf..e1d40ca341b7 100644
-> --- a/arch/s390/mm/fault.c
-> +++ b/arch/s390/mm/fault.c
-> @@ -436,12 +436,11 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
->   
->   	/* The fault is fully completed (including releasing mmap lock) */
->   	if (fault & VM_FAULT_COMPLETED) {
-> -		/*
-> -		 * Gmap will need the mmap lock again, so retake it.  TODO:
-> -		 * only conditionally take the lock when CONFIG_PGSTE set.
-> -		 */
-> -		mmap_read_lock(mm);
-> -		goto out_gmap;
-> +		if (gmap) {
-> +			mmap_read_lock(mm);
-> +			goto out_gmap;
-> +		}
-> +		goto out;
+> > >  #link vmlinux.o
+> >
+> > ^^ While you are at it, change the comment to "# Link of vmlinux.o".
+>
+>
+> In my plan, this code will be gone sooner or later.
+>
+> It would be a noise.
+>
 
-Yes, that makes sense. With that
-
-Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-
+Hope you have fruitful plans :-).
+-sed@-

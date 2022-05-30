@@ -2,101 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDF1537535
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA6F537494
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233210AbiE3HBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
+        id S233156AbiE3HDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231432AbiE3HBG (ORCPT
+        with ESMTP id S233132AbiE3HDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:01:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7A3071A23
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:01:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653894060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U31K93Uq+Fvheeupr2NMZcwHmZ55uz0S5WD0bojawpY=;
-        b=d7dBPfELaloIskHkM//dUCtrdZ0EzJ0L49dRMnmIgLdAcotq9CoFPj2U4wXlRTyNE0j0/T
-        ZR32ujmrkvkS6vTsaoaywQfy2GUGdsKLl56fcgvSWiofFUYFfJqQx8XoRfqM/60a9YnLcD
-        TKBKLfsKgjmFDZmdygbpexsUhVZxkng=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-522-wOHure6VMNqkBE-0xDIlmQ-1; Mon, 30 May 2022 03:00:50 -0400
-X-MC-Unique: wOHure6VMNqkBE-0xDIlmQ-1
-Received: by mail-wm1-f69.google.com with SMTP id j40-20020a05600c1c2800b003972dbb1066so9239318wms.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:00:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=U31K93Uq+Fvheeupr2NMZcwHmZ55uz0S5WD0bojawpY=;
-        b=QqDIyeHJTY4o/+Xx6wsXf3xpHKkhZ59kKNmeUZKxXAn86rvod33+ZAZPOT8XtR0G/n
-         9zjqA5x/bOcvR3q3zmQayhpr1PqMZ+S1Gi2Qi3PmGiAPFFTvtugGpRNNmUZ+V3ZWHx/4
-         gvifpCM9Js84C8DANzmjtxaEFmnQ/a8acKsDF8QEVeb9k+e2ZaF+aMp6PSPfMg4T1qC4
-         GEEsd3y2IiXRWFtxfQq9eO9jVowYIDQdxouipB5B4aVByOlBpInkX9bAq3OlwhhIzDAJ
-         AJNIrYxYH5Yr2NcMaJ2CU+hHMVKwBbUqcE3WSksWBEJmDRWuKXTaINOrWYRajbo+cAXr
-         o91A==
-X-Gm-Message-State: AOAM530yHajPZ5TWv5P5MLovs6KVpdD071gH5UvlKEp9BtRLON02SAwV
-        mE1iqhKcdB+iOUtaFXIN9NRSNJApCgK2KoaqQxKkuSLeTFfN1lS5hzMbSBUupV7VmNUIAoq1d91
-        HrXKE3o6V1QBiew+jmDizPJVs
-X-Received: by 2002:a5d:678d:0:b0:210:2f33:4399 with SMTP id v13-20020a5d678d000000b002102f334399mr4865031wru.599.1653894049325;
-        Mon, 30 May 2022 00:00:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzWbVjgbHJgDifYnjzVjmFGHKAJhvPFV/7EXQPi3xye3rM5BEYeXuoSqoi7mYy2rbSD+dcKpw==
-X-Received: by 2002:a5d:678d:0:b0:210:2f33:4399 with SMTP id v13-20020a5d678d000000b002102f334399mr4865010wru.599.1653894049074;
-        Mon, 30 May 2022 00:00:49 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:7c00:aaa9:2ce5:5aa0:f736? (p200300cbc7047c00aaa92ce55aa0f736.dip0.t-ipconnect.de. [2003:cb:c704:7c00:aaa9:2ce5:5aa0:f736])
-        by smtp.gmail.com with ESMTPSA id c18-20020a5d5292000000b0020ff3a2a925sm9714539wrv.63.2022.05.30.00.00.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 00:00:48 -0700 (PDT)
-Message-ID: <8ab86020-8e24-4004-d6b1-c122639e584b@redhat.com>
-Date:   Mon, 30 May 2022 09:00:47 +0200
+        Mon, 30 May 2022 03:03:34 -0400
+Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38129703F7
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:03:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1653894208;
+        bh=jESFkxCn1y9t+0yhV/nWIM43we5orHhIHFoWHUhDPwU=;
+        h=X-UI-Sender-Class:Date:Subject:From:To:References:In-Reply-To;
+        b=FnB41CnKRnJKeyXTwVEU5UOMNePiadt0tnkj7cSzkxZdv+bEwvzV6Y2fXGFWqTTvA
+         KPnMzZd50HCLB7xnlcmMWvOVikkCYpl0x1bnsZH6bLLryZi0lL8Ym3YRcqmiafdznT
+         d35yIEkO6vArTRcoW9DJeWcaFyWkFgoOl0YhE6lU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [100.120.193.22] ([84.17.52.175]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1Mr9G2-1nQLEU1cXe-00oD2L for
+ <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 09:03:28 +0200
+Message-ID: <dcff1b34-8cd0-9369-69a2-13fedd7e96fc@gmx.fr>
+Date:   Mon, 30 May 2022 09:03:28 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] virtio_balloon: check virtqueue_add_outbuf() return value
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: PROBLEM: with daemon.c after y2038 on 32-bits Kernel
 Content-Language: en-US
-To:     =?UTF-8?B?Qm8gTGl1ICjliJjms6IpLea1qua9ruS/oeaBrw==?= 
-        <liubo03@inspur.com>, "mst@redhat.com" <mst@redhat.com>
-Cc:     "jasowang@redhat.com" <jasowang@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <7a413652a9a9469f948fbfa2eae5c401@inspur.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <7a413652a9a9469f948fbfa2eae5c401@inspur.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   =?UTF-8?Q?Arnaud_Pana=c3=afotis?= <arnaud.panaiotis@gmx.fr>
+To:     linux-kernel@vger.kernel.org
+References: <trinity-3d43505a-735f-402f-8b14-90a32b289a0c-1652773898430@3c-app-mailcom-bs07>
+In-Reply-To: <trinity-3d43505a-735f-402f-8b14-90a32b289a0c-1652773898430@3c-app-mailcom-bs07>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Antivirus: Avast (VPS 220530-0, 30/5/2022), Outbound message
+X-Antivirus-Status: Clean
+X-Provags-ID: V03:K1:I4MD62Xj+QoAn+8/Rui4w0eBAMosP7q5KthNpuj27HRyx9fmN4N
+ y4ilEtWmoTfcM8ldvZBN2TzcaCwG0NsdDGNZizKFTWbofTEK7z/AuMrLSp9+4KC1KBgVixJ
+ foNMZ2+So6XC3PXU2ysMXf/EOrIbq6yeI1X8n8x4J4HFDCE2VVhl9EI3C+wT2uLiB9HqC7s
+ WkQGrhPo/0YPkqrg8SgKA==
+X-UI-Out-Filterresults: junk:10;V03:K0:mOfarJtH5zs=:eTrNp4+YbQZnbB4Gei+mSJb7
+ KV3ppse44jlan25xZxcoB41AynsGrICS805mIdhDScxJ3Ix8qtupEuPGVgMjVdgMtxQCuYvZc
+ lAi9aSXkrGTJqWbzL+948YqlEEQomE6aaq86WnuY6ruWgK/nzpRtAQpAZ0/TxlTbiiLYRDczb
+ rcB1sycvhn75xO8iX5tdEP3STRyq9BZDV2gkblWi6Zu1eXOSl1l2f2nw5QpoqEL6fiuTOHAr/
+ 20dpwbIFrc+LPzPV17YzY40t6jYmYCDg6WqUld38TrYzRYkUJp2VXXoDBd1D7X1VC2/I889Ht
+ WmAFIiF2gLTcezaIHUo3SYCKy/lzjMOqk1fbtcbQvCmEBT7wYuwokhSMO8QdF9L1hzZAU6tF5
+ pCpPO0aXHgRksAYqRhmxHNsSiJmwfHIgR0jmm1fXmPcXO86B48xyQRY/sbhwfXOuhHCmBs1Hj
+ drhftMvW1ke2Gi7Rv2vi+fEchIYTN5UFHLOV0kpLguz4iUOsIIRTuAO/t2/LYi51GuPyr29Ob
+ 4SieQ/zfV2SzN9TaDVqa4rIjeCZX4bVYdgomz+CsGtVzQw+4mofCySM07OhBt59ZLB+wH9tJ8
+ RpxMuPuv8cAEbiQiaYTZ2xpuAYOW0nZ4AzgeH/THxefIVa2SIv6ncP4fMqg9T2lJmmswiAWKx
+ U3alCbqpTvbecd30KVvCR2NeLXivnj5WCV7uwHu9N8AqZiLO7LWQSevPvp7EE6503BIjEb92j
+ 2mwxgcNH4Osyx5HfP4lmOyu/+VekgtHSb2C4QPJzw+KrrtVvOTNxy6ZvqKy3QaqJzuA69xb5X
+ wfwjCXBFMb8EivssgZznHYil/x+CwNr1waUo3aBpY4ah8xkRxqhs0b9Vhr/DnkTSj99yfsT9e
+ ypQn73w9XzZcZybDHvknxZ4hN4jqgDuwjLceDIq6y+X7t3pEsVfVovvLjA1P5129LKGjr7jFB
+ giaF2MImWQ1qoxWV+/zxvb5B7BxqTyWs/NY4I7KFH10Uy4WH8zR+3tNUerkn56UjVLmTRyi6m
+ 8CDF9OwgZO6pjcSlqhhkDOfcF/jW/K5hDN3CHUA/42VuLRAzDppMRKWOYji2CwSVWkd8nSOkS
+ Br2GZPVUJnapTz1DU0XVFSQvmxBYJIwXg9CbWi2wDdOneZiTUFitq4w/XdgZJlURbfpL0E3DI
+ /dI29tSzmyBqk3W+sejeK+Fj
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_CSS_A autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.05.22 04:16, Bo Liu (刘波)-浪潮信息 wrote:
-> Adding this patch can avoid unnecessary VM exits and reduce the number of VM exits
-> 
+Hello,
 
-... in corner cases where virtqueue_add_outbuf() fails? Why do we care
-about that corner case?
+I send a mail for this two weeks ago but didn't get any answer, I'm not
+sure you received it or if a ticket has been open.
 
-Looks like unnecessary code churn to me, unless I am missing something
-important.
+Could you provide me a feedback?
 
--- 
-Thanks,
+Let me know if you need more information.
 
-David / dhildenb
+Regards,
+
+On 17/05/2022 09:51, Arnaud Pana=C3=AFotis wrote:
+> Hello,
+>
+> I'm working for a client to generate embedded 32-bits Linux Kernel worki=
+ng after y2038 issue.
+>
+> I generated a 5.15 Kernel thought Buildroot with Coreutils 9.0, GCC 11.2=
+.0, Binutils 2.37, Glibc 2.34-9 and CFLAGS  -D_LARGEFILE_SOURCE -D_FILE_OF=
+FSET_BITS=3D64  -D_TIME_BITS=3D64.
+>
+> I encounter an issue while working with OpenSSH (I initially contacted t=
+hem before).
+>
+> After 2038, /usr/sbin/sshd does not create an error but it child does ge=
+nerate this one:
+> daemon() failed: Value too large for defined data type
+>
+> This happend here in sshd.c:
+>
+> 2019         /*
+> 2020          * If not in debugging mode, not started from inetd and not=
+ already
+> 2021          * daemonized (eg re-exec via SIGHUP), disconnect from the =
+controlling
+> 2022          * terminal, and fork.  The original process exits.
+> 2023          */
+> 2024         already_daemon =3D daemonized();
+> 2025         if (!(debug_flag || inetd_flag || no_daemon_flag || already=
+_daemon)) {
+> 2026
+> 2027                 if (daemon(0, 0) =3D=3D -1)
+> 2028                         fatal("daemon() failed: %.200s", strerror(e=
+rrno));
+>
+> To reproduce:
+>
+> # date -s "2040-05-12"
+> # hwclock --systohc
+> # reboot
+> # /usr/sbin/sshd
+>
+> Note this error occurs only after the reboot, and setting a date before =
+2038 also require a reboot to remove the error.
+>
+> strace and gdb trace linked.
+>
+> Let me know if you need additional information.
+>
+> Best regards,
+>
+> PS: I had a similar issue with binutils cp
+> Discussion : debbugs.gnu.org/cgi/bugreport.cgi?bug=3D55023
+> Fix : sourceware.org/bugzilla/show_bug.cgi?id=3D29097
+>
+> --
+> Arnaud PANA=C3=8FOTIS | Lead Developer Freelance
+> +33 6 34 82 12 62 | arnaud.panaiotis@gmx.fr
+>
+> 18 place Jean Moulin - 38000 Grenoble
+> APsudo - www.panaiotis.fr
+=2D-
+
+*Arnaud PANA=C3=8FOTIS* | Lead Developer Freelance
++33 6 34 82 12 62 | arnaud.panaiotis@gmx.fr <mailto:Arnaud Pana=C3=AFotis
+<arnaud.panaiotis@gmx.fr>>
+
+18 place Jean Moulin - 38000 Grenoble
+APsudo - www.panaiotis.fr <https://www.panaiotis.fr>
+
+=2D-
+L'absence de virus dans ce courrier =C3=A9lectronique a =C3=A9t=C3=A9 v=C3=
+=A9rifi=C3=A9e par le logiciel antivirus Avast.
+https://www.avast.com/antivirus
 

@@ -2,59 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AEB53879D
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 20:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB58D53879F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 20:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241370AbiE3S6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 14:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
+        id S241878AbiE3S63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 14:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239684AbiE3S6X (ORCPT
+        with ESMTP id S240443AbiE3S6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 30 May 2022 14:58:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB59C2D1DB;
-        Mon, 30 May 2022 11:58:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CD87B80ED4;
-        Mon, 30 May 2022 18:58:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3EC3AC34119;
-        Mon, 30 May 2022 18:58:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653937099;
-        bh=qe1Xrcz6TB2pIcatHkqZ/+MjP+/zP77KwcCZKP5Tht8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=OOlliKTWJi6hGsg85S/ba1Gy8MD7XRnoZ6qqvd5px5RuIJ6g55tPOiOSHW8kv8pvg
-         G8BhIXRN4z1yef6+P8QQJZCiJFAuFqWbwca3AT6ApbfrxthmdfAK56oN+ov3LG2SM5
-         C1GJRxWo8F3r/uwsp4hDmXi6EGVa7kH65eklekubT8pyLb5m/0vvSdn7sJi4Z0cYZn
-         ZLGVXPCsxwzgdjbkyaALRUyBLda5qR5bEd82ABatykqFErw7a57zp9xmr3RtZld09f
-         tdsONnPh/yn/gd7DTt8He7iMdx/54cWK1ghvijQM9ZyuUl57zXXLBAozg6g3qNJN78
-         rbQc6Jdn4SRPQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2A7D7EAC09C;
-        Mon, 30 May 2022 18:58:19 +0000 (UTC)
-Subject: Re: [GIT PULL] parisc architecture updates for v5.19-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YpUQWLSW4OPOc2wX@p100>
-References: <YpUQWLSW4OPOc2wX@p100>
-X-PR-Tracked-List-Id: <linux-parisc.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YpUQWLSW4OPOc2wX@p100>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/for-5.19/parisc-1
-X-PR-Tracked-Commit-Id: 72acadfeb378915a3c4990f4252ab33ce8225491
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e11a93567d3f1e843300ed98ff049a4335db8015
-Message-Id: <165393709916.18327.16740808652213032400.pr-tracker-bot@kernel.org>
-Date:   Mon, 30 May 2022 18:58:19 +0000
-To:     Helge Deller <deller@gmx.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        John David Anglin <dave.anglin@bell.net>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE076623D
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 11:58:21 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id gh17so22507439ejc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 11:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=aZ4hSZLty16XZtYDyN1iI3FQFX0xiK9Qd3Z5M2gZKCw=;
+        b=wM7WyZVXegXf3sHYj6hVYcw/P4aAaMlv3drBS/wJer6tcwr8R1qIAg3jY7R56/uLJg
+         AkL4lRXKVL+atJXRI1RwFtm5scfXzyPz4HyY8sQsjVcPPuE+gbnmz9tbOijbaY0wsPat
+         VVzNGtmHf0lgbCz1TkCONCrCNpok5C64WaRx+ieOXzsugLNAWuTh8WPpQqGOxqj3Pwc+
+         lrGiLArhPWW0Lo5gt/uJUyJVtgKc7QeaFUgTRk0WMiNzSz++hob/ExUe9G6w/1OufoFX
+         cgRJwS3fGl7Q3zjhcQWOWsN65HPQzv2gYTMMafViqZY+pSexHwyZce8rTbnesrdKWTm4
+         olaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=aZ4hSZLty16XZtYDyN1iI3FQFX0xiK9Qd3Z5M2gZKCw=;
+        b=R0j7owjFbJkT8x9CBau1bmMxDWlmmqYZCexAtoCFd4rGamkRa8Te+NZ2Wlm/0lb/6r
+         9geOIJOsdxjuJb1V8WiYraTFzTWqAs4YQK70B4Ic+zl9tEqQWoaxbVaIh8cWcGxw+Yyg
+         L4roPaeEDZX4AUQVEQn5QJw6TPJXiQPT5v+ioQIoltpiT7rW4OrTydZ5QQPgayND0zh7
+         /3aox5ToHSCExD0ZwEtbw+QI7rtR1aZq6jUmFnl4MI1eTOIMcAviO3eOtUsuDrUKB1rR
+         8TOJku0nAhB12OdQ3xk+4ZHb+5cbyzqscGU96zxSUDlk+zTGeWXFi/89zCSc0dj8IgpC
+         BAjQ==
+X-Gm-Message-State: AOAM532SZoU9IWkEcmkqlUA3mN11qfSJ4F1il3BKpvNIlAef6zVJXQib
+        HA8cG1GMVo3U13D3lQCqEZHHoQ==
+X-Google-Smtp-Source: ABdhPJz6VqYPIb7dFTIdH5KP/w/rMk6xgXoHqfYCoOM6vHY7XEp3TXC9rduj5i3qN1TaEaiRI1+kGQ==
+X-Received: by 2002:a17:906:fc20:b0:6fe:a5f6:379d with SMTP id ov32-20020a170906fc2000b006fea5f6379dmr44922645ejb.503.1653937100528;
+        Mon, 30 May 2022 11:58:20 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id v15-20020a17090606cf00b006feaa22e367sm4365712ejb.165.2022.05.30.11.58.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 11:58:20 -0700 (PDT)
+Message-ID: <615ac44b-fd9b-332c-5ea0-8775cda8cb00@linaro.org>
+Date:   Mon, 30 May 2022 20:58:19 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 3/3] dt-bindings: altera: Update Arria 10 boards
+Content-Language: en-US
+To:     =?UTF-8?Q?Pawe=c5=82_Anikiel?= <pan@semihalf.com>, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     arnd@arndb.de, olof@lixom.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org
+References: <20220530130839.120710-1-pan@semihalf.com>
+ <20220530130839.120710-4-pan@semihalf.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220530130839.120710-4-pan@semihalf.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,15 +77,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 30 May 2022 20:43:36 +0200:
+Subject is too generic, please describe what are you doing. Anything
+could be an "update".
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/for-5.19/parisc-1
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e11a93567d3f1e843300ed98ff049a4335db8015
+On 30/05/2022 15:08, Paweł Anikiel wrote:
+> The Mercury+ AA1 is not a standalone board, rather it's a module with
+> an Arria 10 SoC and some peripherals on it.
+> 
+> The Google Chameleon v3 is a base board for the Mercury+ AA1.
+> 
+> Signed-off-by: Paweł Anikiel <pan@semihalf.com>
+> ---
+>  Documentation/devicetree/bindings/arm/altera.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/altera.yaml b/Documentation/devicetree/bindings/arm/altera.yaml
+> index 5e2017c0a051..c6e198bb5b29 100644
+> --- a/Documentation/devicetree/bindings/arm/altera.yaml
+> +++ b/Documentation/devicetree/bindings/arm/altera.yaml
+> @@ -25,7 +25,7 @@ properties:
+>          items:
+>            - enum:
+>                - altr,socfpga-arria10-socdk
+> -              - enclustra,mercury-aa1
+> +              - google,chameleon-v3
 
-Thank you!
+As mentioned in patch 2, I would expect to have still enclustra
+compatible. It's a SoM, so as usual it goes with its own binding, even
+if not used standalone.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Best regards,
+Krzysztof

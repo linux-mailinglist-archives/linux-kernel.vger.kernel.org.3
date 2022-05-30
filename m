@@ -2,163 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8283537AB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 361E4537AB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236166AbiE3Mil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 08:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        id S236175AbiE3MjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 08:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbiE3Mij (ORCPT
+        with ESMTP id S232599AbiE3MjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 08:38:39 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD9A59944;
-        Mon, 30 May 2022 05:38:36 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id b8so5383355edf.11;
-        Mon, 30 May 2022 05:38:35 -0700 (PDT)
+        Mon, 30 May 2022 08:39:18 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A007DE09
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 05:39:17 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id r129so995624wmr.3
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 05:39:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8lA8kcruOzlM1c7pq+ZR6pniIlOpBIdn80j1dKVz8U4=;
-        b=PF63nDMGfTMDNFQqOUSr26c2ZuAP3I27IbQQ5eH6wyiYq/e5HPbg5K1rnwVKces/hh
-         X1LUk8zwDem0HF6wwQLUmTafQKoUBpcuKCcsGThsRnv2wiMe4fhpADbeL7PmFILNiDPQ
-         WYvtvW49OJWMvStYy2FsckmjahKDGFrCYtX7FsRsdIumRt+wnfzba6iXLZRFwadCzDBe
-         Y3QfXPOJwi+SHF27bMm2Xp7Y3ajLzsTja+TQmcxV5+A3NKJBEIj0jwai6cBzDjbC6prT
-         yH6/wnOosowaOcCX431XRSystdVTZJQUvzD2e9aoBdRzjfipLHfq5vbEBd5/VsqEBjxt
-         mTiQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iOg84BIL4xQRP3MO/aXO52buPBsvauauBaUk9MIZub8=;
+        b=tyRhSVq0ivqjvgv19Le2dDbG9CZp5EUZ/zREh2B9EqSFvQ0bEXEKG1+csR4Tpd7M/H
+         AHPyjbUVOaWUemrfWMJ9iOhH7XjqNLtKq1ynVTRMM+nKleZY+jmoMjBHMxH4gAq9fXrb
+         J41Tn7SunmiKvWbrDWG9UMD4X/pps9yTdP81ARlOHjFAQKMGWjyqZ1hUImkvqRpcWUXy
+         ZYJT5Oa8XawT5PyDKgZ9uoiGeYprUlV21rdPlbppNaVA4sSN0OXr/jpu7vpAfMJe/Y+3
+         EIge7ArubAowZVy8ugPDj6li08SrGSLwX+1vy3NPlzBzESQIoDLhKaNmE0eVofOyY6a+
+         3AzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8lA8kcruOzlM1c7pq+ZR6pniIlOpBIdn80j1dKVz8U4=;
-        b=xB44Dmuk8GW07GtWi49lK3QAub1cFH7C6L4PEnGIfu5SHWK6ksZk5cuqW84kV+SIEW
-         Z1GoBVaOvDAW35c/uXPn7HESwlzVaJ7wfE7DXTNEVD9+n5ZVADbM+sE7mmSVJcIpKZre
-         fUsuwTqizPDHPNQiiUu81qCEFfUMOuTwOKatSQQn8U77CxIvzbo5uMpEbGgPBXjNVVo/
-         zV0n/I8i7/3GIlQrEPqkhEdWqcU37W/SaV8frzm56vgIz/RzCiGbXSbJOkns10uwYbsr
-         W0vNL1uvrqrjh+ilCUw9597duNDi/4thIaWY543DcUMMWT5uUSCf2/kJlaOf612pGKt7
-         Hjaw==
-X-Gm-Message-State: AOAM530YFCMmJKRjc4vaK9gQyfXIRE5sGh0d8gVF80rwtfiNT/cy6tP8
-        jpalK6cIbGccYHk+3W86Jzs=
-X-Google-Smtp-Source: ABdhPJxKdWl/ROWX18VWp01sv/OfIJv7wTIvCxrSCUnduX3kc57+VKZy9ZxTlCVMVek5DgeF1wIvUQ==
-X-Received: by 2002:a05:6402:330:b0:42d:cd47:89f3 with SMTP id q16-20020a056402033000b0042dcd4789f3mr7282038edw.301.1653914314518;
-        Mon, 30 May 2022 05:38:34 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170906a40c00b006f3ef214e53sm3945015ejz.185.2022.05.30.05.38.32
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iOg84BIL4xQRP3MO/aXO52buPBsvauauBaUk9MIZub8=;
+        b=xE/EG1BefWZK/SWwbkZo8/UHWwPsT8Cy8OKC2FeOA6bCkWT5obXmFzZik5qRzatPgN
+         NVNYK9wsfcjdyfn6759Ogo08MzbCr8LJ0TTPJuvh04tB/cKIyFJwC+AgMopWDPHJeECZ
+         LmjDXAi2Ix+CWttX55nQuxNC6+N3EdlVvpalRiA/kAVr+IGCrkibbCBm4Y9hHC1iSe16
+         nDohuICWWm6JV5shvZv8BcaZ3DmwGtL+D7NigOVcyanMmD1OcR5iRRe7WvEZm9GuMc+x
+         vXxvxzU/JTDShjr3VVWYhQrlgQmfuV4O/YPyW8K2q+Z1Cb+3sP2mKigWz/vFFL9o8VF4
+         tbqg==
+X-Gm-Message-State: AOAM533pfVGxyOxgoXBVC2Dm64zBdILKprfyXCO0OQSMFFOMs3wyQrCK
+        xN8M3l2AOhPq/uWgcR43Rx3lZA==
+X-Google-Smtp-Source: ABdhPJxcmwC4nGeuFy/KRdJLKioMtzoK88H6jW8SYyE+vJtOjc5C4KCm5edQ5ur75NCG1V94Z2fwbA==
+X-Received: by 2002:a05:600c:2182:b0:397:58f5:c6cf with SMTP id e2-20020a05600c218200b0039758f5c6cfmr18471215wme.86.1653914356468;
+        Mon, 30 May 2022 05:39:16 -0700 (PDT)
+Received: from localhost.localdomain ([88.160.162.107])
+        by smtp.gmail.com with ESMTPSA id k7-20020a1ca107000000b00394708a3d7dsm10137222wme.15.2022.05.30.05.39.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 05:38:34 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 30 May 2022 14:38:31 +0200
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        cj.chengjian@huawei.com, huawei.libin@huawei.com,
-        xiexiuqi@huawei.com, liwei391@huawei.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com,
-        bpf@vger.kernel.org
-Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
- allocated trampolines
-Message-ID: <YpS6x0g8AimeaAw9@krava>
-References: <YnJUTuOIX9YoJq23@FVFF77S0Q05N>
- <20220505121538.04773ac98e2a8ba17f675d39@kernel.org>
- <20220509142203.6c4f2913@gandalf.local.home>
- <20220510181012.d5cba23a2547f14d14f016b9@kernel.org>
- <20220510104446.6d23b596@gandalf.local.home>
- <20220511233450.40136cdf6a53eb32cd825be8@kernel.org>
- <20220511111207.25d1a693@gandalf.local.home>
- <20220512210231.f9178a98f20a37981b1e89e3@kernel.org>
- <Yo4eWqHA/IjNElNN@FVFF77S0Q05N>
- <20220530100310.c22c36df4ea9324cb9cb3515@kernel.org>
+        Mon, 30 May 2022 05:39:15 -0700 (PDT)
+From:   Fabien Parent <fparent@baylibre.com>
+To:     Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Fabien Parent <fparent@baylibre.com>, linux-mmc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mmc: mtk-sd: fix typo
+Date:   Mon, 30 May 2022 14:38:56 +0200
+Message-Id: <20220530123857.692076-1-fparent@baylibre.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220530100310.c22c36df4ea9324cb9cb3515@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 10:03:10AM +0900, Masami Hiramatsu wrote:
-> (Cc: BPF ML)
-> 
-> On Wed, 25 May 2022 13:17:30 +0100
-> Mark Rutland <mark.rutland@arm.com> wrote:
-> 
-> > On Thu, May 12, 2022 at 09:02:31PM +0900, Masami Hiramatsu wrote:
-> > > On Wed, 11 May 2022 11:12:07 -0400
-> > > Steven Rostedt <rostedt@goodmis.org> wrote:
-> > > 
-> > > > On Wed, 11 May 2022 23:34:50 +0900
-> > > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > > 
-> > > > > OK, so fregs::regs will have a subset of pt_regs, and accessibility of
-> > > > > the registers depends on the architecture. If we can have a checker like
-> > > > > 
-> > > > > ftrace_regs_exist(fregs, reg_offset)
-> > > > 
-> > > > Or something. I'd have to see the use case.
-> > > > 
-> > > > > 
-> > > > > kprobe on ftrace or fprobe user (BPF) can filter user's requests.
-> > > > > I think I can introduce a flag for kprobes so that user can make a
-> > > > > kprobe handler only using a subset of registers. 
-> > > > > Maybe similar filter code is also needed for BPF 'user space' library
-> > > > > because this check must be done when compiling BPF.
-> > > > 
-> > > > Is there any other case without full regs that the user would want anything
-> > > > other than the args, stack pointer and instruction pointer?
-> > > 
-> > > For the kprobes APIs/events, yes, it needs to access to the registers
-> > > which is used for local variables when probing inside the function body.
-> > > However at the function entry, I think almost no use case. (BTW, pstate
-> > > is a bit special, that may show the actual processor-level status
-> > > (context), so for the debugging, user might want to read it.)
-> > 
-> > As before, if we really need PSTATE we *must* take an exception to get a
-> > reliable snapshot (or to alter the value). So I'd really like to split this
-> > into two cases:
-> > 
-> > * Where users *really* need PSTATE (or arbitrary GPRs), they use kprobes. That
-> >   always takes an exception and they can have a complete, real struct pt_regs.
-> > 
-> > * Where users just need to capture a function call boundary, they use ftrace.
-> >   That uses a trampoline without taking an exception, and they get the minimal
-> >   set of registers relevant to the function call boundary (which does not
-> >   include PSTATE or most GPRs).
-> 
-> I totally agree with this idea. The x86 is a special case, since the
-> -fentry option puts a call on the first instruction of the function entry,
-> I had to reuse the ftrace instead of swbp for kprobes.
-> But on arm64 (and other RISCs), we can use them properly.
-> 
-> My concern is that the eBPF depends on kprobe (pt_regs) interface, thus
-> I need to ask them that it is OK to not accessable to some part of
-> pt_regs (especially, PSTATE) if they puts probes on function entry
-> with ftrace (fprobe in this case.)
-> 
-> (Jiri and BPF developers)
-> Currently fprobe is only enabled on x86 for "multiple kprobes" BPF
-> interface, but in the future, it will be enabled on arm64. And at
-> that point, it will be only accessible to the regs for function
-> arguments. Is that OK for your use case? And will the BPF compiler
+Fix a typo: Fianl -> Final.
 
-I guess from practical POV registers for arguments and ip should be enough,
-but whole pt_regs was already exposed to programs, so people can already use
-any of them.. not sure it's good idea to restrict it
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+---
+ drivers/mmc/host/mtk-sd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> be able to restrict the user program to access only those registers
-> when using the "multiple kprobes"?
+diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+index 195dc897188b..c7d196f805ec 100644
+--- a/drivers/mmc/host/mtk-sd.c
++++ b/drivers/mmc/host/mtk-sd.c
+@@ -2318,7 +2318,7 @@ static int msdc_execute_hs400_tuning(struct mmc_host *mmc, struct mmc_card *card
+ 	else
+ 		val = readl(host->base + PAD_DS_TUNE);
+ 
+-	dev_info(host->dev, "Fianl PAD_DS_TUNE: 0x%x\n", val);
++	dev_info(host->dev, "Final PAD_DS_TUNE: 0x%x\n", val);
+ 
+ 	return 0;
+ 
+-- 
+2.36.1
 
-pt-regs pointer is provided to kprobe programs, I guess we could provide copy
-of that with just available values
-
-jirka

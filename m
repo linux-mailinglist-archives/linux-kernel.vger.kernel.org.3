@@ -2,109 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1C953757C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B742453758C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbiE3HgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
+        id S233602AbiE3Hhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233542AbiE3HgJ (ORCPT
+        with ESMTP id S233592AbiE3Hh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:36:09 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CA039B99;
-        Mon, 30 May 2022 00:36:03 -0700 (PDT)
-X-UUID: 33b064ae7da048188e2a565cc58ae238-20220530
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:57f8ed2e-6554-4fd0-bd82-9213fe71ea40,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:0e78bfb8-3c45-407b-8f66-25095432a27a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 33b064ae7da048188e2a565cc58ae238-20220530
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1687734413; Mon, 30 May 2022 15:35:57 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 30 May 2022 15:35:56 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 30 May 2022 15:35:55 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 30 May 2022 15:35:55 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <linmq006@gmail.com>
-CC:     <bhelgaas@google.com>, <jianjun.wang@mediatek.com>, <kw@linux.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-pci@vger.kernel.org>,
-        <lorenzo.pieralisi@arm.com>, <matthias.bgg@gmail.com>,
-        <maz@kernel.org>, <miles.chen@mediatek.com>, <robh@kernel.org>,
-        <ryder.lee@mediatek.com>
-Subject: Re: [PATCH] PCI: mediatek-gen3: Fix refcount leak in mtk_pcie_init_irq_domains
-Date:   Mon, 30 May 2022 15:35:56 +0800
-Message-ID: <20220530073556.1831-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <6cf820cf-a2e7-c93e-3c00-08bc366f2eb2@gmail.com>
-References: <6cf820cf-a2e7-c93e-3c00-08bc366f2eb2@gmail.com>
+        Mon, 30 May 2022 03:37:28 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247E91276A
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:37:17 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id e2so13448865wrc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:37:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nUCeNrlCxSw9uMUiAzjXL467HYJr9B+OzTQ7H3Yk3Cg=;
+        b=Who/+JNYbudXenChiXobKR5VodLsrJQ1DRvcOD3IeXxKAOJ7rgTSDLqTMs12k4DcXx
+         Tdeu55CeVrOrxX7mLNBZgSqsm2CIVje3nEgDa3mVEWDz9Mspd29lMgjlHTAD3iF8hWgw
+         06b4I9Zp8q2OEmfytjQpxaY3NktMoq/TP6n5Sw0nihwnoUE3XTdPWb9XcEAuz+Rr3jnK
+         bytsnn/JbGaRkKOJrd3+b9E/Y6cd3R02kv700XJVseZQpw0WPW1XCANFZL1Qyww1J5/m
+         WmfEKdKZGMyVEnbmefHVpY3hJnOKjQZnK1Ux+WjYOi4zLDAJNhXBBBfzd/KJkaz/PInC
+         9UYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nUCeNrlCxSw9uMUiAzjXL467HYJr9B+OzTQ7H3Yk3Cg=;
+        b=5CzFbeWtS0CsqSufZeQexiK+aqqZgWqyzOccF7kHSA433rhiBc1qPb6jOyFCa6kggF
+         /nrUpQw0ukOs2wyfwNjBYJ/MD1pLIMxxcG3G2to0pjTvF4zVGJbMiIMP7BZ09MFhXpPl
+         KLB7L5NuPPutCT7nqMipZeZu4W+jKU11Nhbgi+b0y10J7QdtFM698OGyG7hdz8wPkICW
+         MxQ6fprDrEi/Rg31svq8CUAOcIzuIw7TAMvoY/f5mzPqN784gGQ0y+utUXlyexPkvbES
+         1hpJzdOmpZI/ehFjTZd8EpB86o1XfJ+uqkjDZoT1ET9T4AMzM1BOuK8heBXTJxjOj2Tj
+         kcmg==
+X-Gm-Message-State: AOAM531i8qfY0gZOR2A9+KYotT/N4AsUcnQbIcXClZiwcLE3zZD/EaFa
+        xmQLMVx90M5+pbLADJuMn5ip5g==
+X-Google-Smtp-Source: ABdhPJxILpNe/ZRRBVDJ8C8RJouI8WbtUTtW//ambOyntu5ZBKk9QCkDy73ATfXhntOCidY6JNdB6A==
+X-Received: by 2002:a05:6000:1569:b0:20f:e429:d6d8 with SMTP id 9-20020a056000156900b0020fe429d6d8mr28684610wrz.663.1653896235732;
+        Mon, 30 May 2022 00:37:15 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id o2-20020a5d62c2000000b00210335f7aaesm2358423wrv.35.2022.05.30.00.37.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 00:37:15 -0700 (PDT)
+Message-ID: <6c14aa95-00c4-960b-d71a-3967096f19cb@linaro.org>
+Date:   Mon, 30 May 2022 09:37:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/3] dt-bindings: mfd: ti,j721e-system-controller: Add
+ clock property
+Content-Language: en-US
+To:     Rahul T R <r-ravikumar@ti.com>, robh+dt@kernel.org, nm@ti.com,
+        vigneshr@ti.com, kishon@ti.com, krzysztof.kozlowski+dt@linaro.org
+Cc:     lee.jones@linaro.org, rogerq@kernel.org,
+        devicetree@vger.kernel.org, kristo@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        s-anna@ti.com
+References: <20220530073429.17514-1-r-ravikumar@ti.com>
+ <20220530073429.17514-2-r-ravikumar@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220530073429.17514-2-r-ravikumar@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miaoqian,
+On 30/05/2022 09:34, Rahul T R wrote:
+> Add a pattern property for clock, also update the example with
+> a clock node
+> 
+> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> ---
+>  .../bindings/mfd/ti,j721e-system-controller.yaml       | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+> index fa86691ebf16..290b22cab52f 100644
+> --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+> @@ -48,6 +48,10 @@ patternProperties:
+>      description:
+>        This is the SERDES lane control mux.
+>  
+> +  "^clock@[0-9a-f]+$":
+> +    type: object
+> +    $ref: /schemas/clock/ti,am654-ehrpwm-tbclk.yaml#
+> +
 
->Hi, Miles
->
->On 2022/5/30 10:19, Miles Chen wrote:
->> Hi Miaoqian,
->>
->>>>> 						  &intx_domain_ops, pcie);
->>>>> 	if (!pcie->intx_domain) {
->>>>> 		dev_err(dev, "failed to create INTx IRQ domain\n");
->>>>> +		of_node_put(intc_node);
->>>>> 		return -ENODEV;
->>>>> 	}
->>>> Thanks for doing this.
->>>>
->>>> I checked mtk_pcie_init_irq_domains() and there are multiple exit paths like
->>>> err_msi_domain and err_msi_bottom_domain and the normal path which also
->>>> need of_node_put(intc_node).
->>> Thanks for your reply,
->>>
->>> I didn't add of_node_put() in other paths because I am not sure if the reference passed through irq_domain_add_linear(), since intc_node is passed to irq_domain_add_linear().
->>>
->>> __irq_domain_add() keeps &node->fwnode in the irq_domain structure.
->>>
->>> and use fwnode_handle_get() to get the reference of fwnode, but I still uncertain.
->>>
->>> If the reference don't needed anymore after irq_domain_add_linear(),
->>>
->>> your suggestion looks fine, and I will submit v2.
->>
->> Thanks for your reply, I think we can do similar things like
->> rtl8365mb_irq_setup() in drivers/net/dsa/realtek/rtl8365mb.c
->
->I checked rtl8365mb_irq_setup(), it calls of_node_put() by goto statement for error paths.
->
->and calls of_node_put() before return 0 in normal path. I didn't see the same problem.
+Thanks for the changes, but the question what is this remains. Clock
+consumers use "clocks" property. Is this a clock controller (provider)
+instead?
 
-Sorry for the confusing. I meant that we can do the same thing - 
-it calls of_node_put() by goto statement for error paths
-and calls of_node_put() before return 0 in normal path. :-)
-
-Thanks,
-Miles
+Best regards,
+Krzysztof

@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147A8538474
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E0853845E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241841AbiE3Op1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 10:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
+        id S240732AbiE3Onj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 10:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241519AbiE3OXR (ORCPT
+        with ESMTP id S241453AbiE3OXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 10:23:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CCF129EE2;
-        Mon, 30 May 2022 06:50:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C52A760EC3;
-        Mon, 30 May 2022 13:50:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60E8C3411C;
-        Mon, 30 May 2022 13:49:59 +0000 (UTC)
-Message-ID: <c47b3218-069b-790e-8781-7b6d195ac8a7@xs4all.nl>
-Date:   Mon, 30 May 2022 15:49:57 +0200
+        Mon, 30 May 2022 10:23:02 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553B6129EC4;
+        Mon, 30 May 2022 06:50:25 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nvfmh-0004dZ-Sd; Mon, 30 May 2022 15:50:15 +0200
+Message-ID: <2d9479bd-93bd-0cf1-9bc9-591ab3b2bdec@leemhuis.info>
+Date:   Mon, 30 May 2022 15:50:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v6 11/17] media: uapi: Add
- V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
+ Thunderbird/91.9.1
+Subject: Re: Intermittent performance regression related to ipset between 5.10
+ and 5.15
 Content-Language: en-US
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        samuel@sholland.org, nicolas.dufresne@collabora.com,
-        andrzej.p@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com
-References: <20220527143134.3360174-1-benjamin.gaignard@collabora.com>
- <20220527143134.3360174-12-benjamin.gaignard@collabora.com>
- <2102641.irdbgypaU6@kista> <c639efc2-2089-359d-44c6-e9d92e8fd22e@xs4all.nl>
-In-Reply-To: <c639efc2-2089-359d-44c6-e9d92e8fd22e@xs4all.nl>
+To:     "U'ren, Aaron" <Aaron.U'ren@sony.com>,
+        "McLean, Patrick" <Patrick.Mclean@sony.com>
+Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
+        "Brown, Russell" <Russell.Brown@sony.com>,
+        "Rueger, Manuel" <manuel.rueger@sony.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Florian Westphal <fw@strlen.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>
+References: <BY5PR13MB3604D24C813A042A114B639DEE109@BY5PR13MB3604.namprd13.prod.outlook.com>
+ <5e56c644-2311-c094-e099-cfe0d574703b@leemhuis.info>
+ <c28ed507-168e-e725-dddd-b81fadaf6aa5@leemhuis.info>
+ <b1bfbc2f-2a91-9d20-434d-395491994de@netfilter.org>
+ <96e12c14-eb6d-ae07-916b-7785f9558c67@leemhuis.info>
+ <DM6PR13MB3098E6B746264B4F96D9F743C8C39@DM6PR13MB3098.namprd13.prod.outlook.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <DM6PR13MB3098E6B746264B4F96D9F743C8C39@DM6PR13MB3098.namprd13.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1653918625;e581fa47;
+X-HE-SMSGID: 1nvfmh-0004dZ-Sd
+X-Spam-Status: No, score=-1.4 required=5.0 tests=APOSTROPHE_TOCC,BAYES_00,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,175 +58,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2022 11:18, Hans Verkuil wrote:
-> On 29/05/2022 08:40, Jernej Škrabec wrote:
->> Hi!
->>
->> This series looks very good and I plan to test it shortly on Cedrus, but I 
->> have one major concern below.
->>
->> Dne petek, 27. maj 2022 ob 16:31:28 CEST je Benjamin Gaignard napisal(a):
->>> The number of 'entry point offset' can be very variable.
->>> Instead of using a large static array define a v4l2 dynamic array
->>> of U32 (V4L2_CTRL_TYPE_U32).
->>> The number of entry point offsets is reported by the elems field
->>> and in struct v4l2_ctrl_hevc_slice_params.num_entry_point_offsets
->>> field.
->>
->> Slice control by itself is variable length array, so you would actually need 
->> 2D variable array for entry points which is not supported. However, easy 
->> workaround for that is to flatten 2D array to 1D and either have another slice 
->> control field which would tell first entry point index for convenience or let 
->> driver calculate it by adding up all num_entry_point_offsets of previous 
->> slices.
->>
->> Hans, what do you think?
-> 
-> If I would support 2D variable array sizes, wouldn't that be more elegant?
-> 
-> The current implementation doesn't support that, but as the commit log for
-> patch 1/17 says:
-> 
-> "Currently dynamically sized arrays are limited to one dimensional arrays,
-> but that might change in the future if there is a need for it."
-> 
-> Let me know if you agree, and I'll try to implement this. It's been a while
-> since I last looked at this, so I'm not sure how much work it is, but it is
-> probably worth a shot.
+On 04.05.22 21:37, U'ren, Aaron wrote:
+> Thanks for the reply Jozsef.
+>  
+> It’s good to have the confirmation about why iptables list/save perform so many getsockopt() calls.
+>  
+> In terms of providing more information to locate the source of the slowdown, do you have any recommendations on what information would be helpful?
+>  
+> The only thing that I was able to think of was doing a git bisect on it, but that’s a pretty large range, and the problem isn’t always 100% reproducible. It seems like something about the state of the system needs to trigger the issue. So that approach seemed non-optimal.
+>  
+> I’m reasonably certain that if we took enough of our machines back to 5.15.16 we could get some of them to evidence the problem again. If we reproduced the problem, what types of diagnostics or debug could we give you to help further track down this issue?
+>  
+> Thanks for your time and help!
 
-Digging more into this made me realize that this doesn't actually help for this
-particular case.
+Jozsef, I still have this issue on my list of tracked regressions and it
+looks like nothing happens since above mail (or did I miss it?). Could
+you maybe provide some guidance to Aaron to get us all closer to the
+root of the problem?
 
-I would lean towards your second suggestion of adding up all num_entry_point_offsets
-of previous slices.
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-Regards,
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
 
-	Hans
 
+> From: Thorsten Leemhuis <regressions@leemhuis.info>
+> Date: Wednesday, May 4, 2022 at 8:15 AM
+> To: McLean, Patrick <Patrick.Mclean@sony.com>
+> Cc: Pablo Neira Ayuso <pablo@netfilter.org>, netfilter-devel@vger.kernel.org <netfilter-devel@vger.kernel.org>, U'ren, Aaron <Aaron.U'ren@sony.com>, Brown, Russell <Russell.Brown@sony.com>, Rueger, Manuel <manuel.rueger@sony.com>, linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>, regressions@lists.linux.dev <regressions@lists.linux.dev>, Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org <netdev@vger.kernel.org>, Jozsef Kadlecsik <kadlec@netfilter.org>
+> Subject: Re: Intermittent performance regression related to ipset between 5.10 and 5.15
+> Hi, this is your Linux kernel regression tracker. Top-posting for once,
+> to make this easily accessible to everyone.
 > 
-> Regards,
+> Patrick, did you see the comment from Jozsef? Are you having trouble
+> providing additional data or what's the status here from your side? Or
+> is that something we can forget?
 > 
-> 	Hans
+> Ciao, Thorsten
 > 
+> #regzbot poke
+> 
+> On 11.04.22 13:47, Jozsef Kadlecsik wrote:
+>> Hi,
 >>
->> Note, it seems that H265 decoding on Cedrus still works without entry points, 
->> so this problem can be solved later. I'm not sure what we lose with that but 
->> it was suggested that this could influence speed or error resilience or both. 
->> However, I think we're close to solve it, so I'd like to do that now.
+>> On Mon, 11 Apr 2022, Thorsten Leemhuis wrote:
+>>
+>>> On 16.03.22 10:17, Thorsten Leemhuis wrote:
+>>>> [TLDR: I'm adding the regression report below to regzbot, the Linux
+>>>> kernel regression tracking bot; all text you find below is compiled from
+>>>> a few templates paragraphs you might have encountered already already
+>>>> from similar mails.]
+>>>>
+>>>> On 16.03.22 00:15, McLean, Patrick wrote:
+>>>
+>>>>> When we upgraded from the 5.10 (5.10.61) series to the 5.15 (5.15.16) 
+>>>>> series, we encountered an intermittent performance regression that 
+>>>>> appears to be related to iptables / ipset. This regression was 
+>>>>> noticed on Kubernetes hosts that run kube-router and experience a 
+>>>>> high amount of churn to both iptables and ipsets. Specifically, when 
+>>>>> we run the nftables (iptables-1.8.7 / nftables-1.0.0) iptables 
+>>>>> wrapper xtables-nft-multi on the 5.15 series kernel, we end up 
+>>>>> getting extremely laggy response times when iptables attempts to 
+>>>>> lookup information on the ipsets that are used in the iptables 
+>>>>> definition. This issue isn’t reproducible on all hosts. However, our 
+>>>>> experience has been that across a fleet of ~50 hosts we experienced 
+>>>>> this issue on ~40% of the hosts. When the problem evidences, the time 
+>>>>> that it takes to run unrestricted iptables list commands like 
+>>>>> iptables -L or iptables-save gradually increases over the course of 
+>>>>> about 1 - 2 hours. Growing from less than a second to run, to takin
+>>>   g sometimes over 2 minutes to run. After that 2 hour mark it seems to 
+>>>   plateau and not grow any longer. Flushing tables or ipsets doesn’t seem 
+>>>   to have any affect on the issue. However, rebooting the host does reset 
+>>>   the issue. Occasionally, a machine that was evidencing the problem may 
+>>>   no longer evidence it after being rebooted.
+>>>>>
+>>>>> We did try to debug this to find a root cause, but ultimately ran 
+>>>>> short on time. We were not able to perform a set of bisects to 
+>>>>> hopefully narrow down the issue as the problem isn’t consistently 
+>>>>> reproducible. We were able to get some straces where it appears that 
+>>>>> most of the time is spent on getsockopt() operations. It appears that 
+>>>>> during iptables operations, it attempts to do some work to resolve 
+>>>>> the ipsets that are linked to the iptables definitions (perhaps 
+>>>>> getting the names of the ipsets themselves?). Slowly that getsockopt 
+>>>>> request takes more and more time on affected hosts. Here is an 
+>>>>> example strace of the operation in question:
+>>
+>> Yes, iptables list/save have to get the names of the referenced sets and 
+>> that is performed via getsockopt() calls.
+>>
+>> I went through all of the ipset related patches between 5.10.6 (copy&paste 
+>> error but just the range is larger) and 5.15.16 and as far as I see none 
+>> of them can be responsible for the regression. More data is required to 
+>> locate the source of the slowdown.
 >>
 >> Best regards,
->> Jernej
+>> Jozsef
 >>
->>>
->>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->>> ---
->>>  .../userspace-api/media/v4l/ext-ctrls-codec.rst       | 11 +++++++++++
->>>  drivers/media/v4l2-core/v4l2-ctrls-defs.c             |  5 +++++
->>>  include/media/hevc-ctrls.h                            |  5 ++++-
->>>  3 files changed, 20 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/
->> Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>> index 0796b1563daa..05228e280f66 100644
->>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>> @@ -3010,6 +3010,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>      * - __u32
->>>        - ``data_bit_offset``
->>>        - Offset (in bits) to the video data in the current slice data.
->>> +    * - __u32
->>> +      - ``num_entry_point_offsets``
->>> +      - Specifies the number of entry point offset syntax elements in the 
->> slice header.
->>>      * - __u8
->>>        - ``nal_unit_type``
->>>        - Specifies the coding type of the slice (B, P or I).
->>> @@ -3150,6 +3153,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>  
->>>      \normalsize
->>>  
->>> +``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
->>> +    Specifies entry point offsets in bytes.
->>> +    This control is a dynamically sized array. The number of entry point
->>> +    offsets is reported by the ``elems`` field.
->>> +    This bitstream parameter is defined according to :ref:`hevc`.
->>> +    They are described in section 7.4.7.1 "General slice segment header
->>> +    semantics" of the specification.
->>> +
->>>  ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
->>>      Specifies the HEVC scaling matrix parameters used for the scaling 
->> process
->>>      for transform coefficients.
->>> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-
->> core/v4l2-ctrls-defs.c
->>> index d594efbcbb93..e22921e7ea61 100644
->>> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->>> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->>> @@ -1188,6 +1188,7 @@ const char *v4l2_ctrl_get_name(u32 id)
->>>  	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:		return 
->> "HEVC Decode Parameters";
->>>  	case V4L2_CID_STATELESS_HEVC_DECODE_MODE:		return 
->> "HEVC Decode Mode";
->>>  	case V4L2_CID_STATELESS_HEVC_START_CODE:		return 
->> "HEVC Start Code";
->>> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:	return 
->> "HEVC Entry Point Offsets";
->>>  
->>>  	/* Colorimetry controls */
->>>  	/* Keep the order of the 'case's the same as in v4l2-controls.h! 
->> */
->>> @@ -1518,6 +1519,10 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum 
->> v4l2_ctrl_type *type,
->>>  	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:
->>>  		*type = V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
->>>  		break;
->>> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:
->>> +		*type = V4L2_CTRL_TYPE_U32;
->>> +		*flags |= V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
->>> +		break;
->>>  	case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR:
->>>  		*type = V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR;
->>>  		break;
->>> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
->>> index a3c829ef531a..1319cb99ae3f 100644
->>> --- a/include/media/hevc-ctrls.h
->>> +++ b/include/media/hevc-ctrls.h
->>> @@ -20,6 +20,7 @@
->>>  #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS	(V4L2_CID_CODEC_BASE 
->> + 1012)
->>>  #define V4L2_CID_STATELESS_HEVC_DECODE_MODE	(V4L2_CID_CODEC_BASE + 1015)
->>>  #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 1016)
->>> +#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (V4L2_CID_CODEC_BASE + 
->> 1017)
->>>  
->>>  /* enum v4l2_ctrl_type type values */
->>>  #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
->>> @@ -318,6 +319,8 @@ struct v4l2_hevc_pred_weight_table {
->>>   *
->>>   * @bit_size: size (in bits) of the current slice data
->>>   * @data_bit_offset: offset (in bits) to the video data in the current slice 
->> data
->>> + * @num_entry_point_offsets: specifies the number of entry point offset syntax
->>> + *			     elements in the slice header.
->>>   * @nal_unit_type: specifies the coding type of the slice (B, P or I)
->>>   * @nuh_temporal_id_plus1: minus 1 specifies a temporal identifier for the 
->> NAL unit
->>>   * @slice_type: see V4L2_HEVC_SLICE_TYPE_{}
->>> @@ -360,7 +363,7 @@ struct v4l2_hevc_pred_weight_table {
->>>  struct v4l2_ctrl_hevc_slice_params {
->>>  	__u32	bit_size;
->>>  	__u32	data_bit_offset;
->>> -
->>> +	__u32	num_entry_point_offsets;
->>>  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
->>>  	__u8	nal_unit_type;
->>>  	__u8	nuh_temporal_id_plus1;
->>> -- 
->>> 2.32.0
->>>
+>>>>>
+>>>>> 0.000074 newfstatat(AT_FDCWD, "/etc/nsswitch.conf", {st_mode=S_IFREG|0644, st_size=539, ...}, 0) = 0 <0.000017>
+>>>>> 0.000064 openat(AT_FDCWD, "/var/db/protocols.db", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory) <0.000017>
+>>>>> 0.000057 openat(AT_FDCWD, "/etc/protocols", O_RDONLY|O_CLOEXEC) = 4 <0.000013>
+>>>>> 0.000034 newfstatat(4, "", {st_mode=S_IFREG|0644, st_size=6108, ...}, AT_EMPTY_PATH) = 0 <0.000009>
+>>>>> 0.000032 lseek(4, 0, SEEK_SET)     = 0 <0.000008>
+>>>>> 0.000025 read(4, "# /etc/protocols\n#\n# Internet (I"..., 4096) = 4096 <0.000010>
+>>>>> 0.000036 close(4)                  = 0 <0.000008>
+>>>>> 0.000028 write(1, "ANGME7BF25 - [0:0]\n:KUBE-POD-FW-"..., 4096) = 4096 <0.000028>
+>>>>> 0.000049 socket(AF_INET, SOCK_RAW, IPPROTO_RAW) = 4 <0.000015>
+>>>>> 0.000032 fcntl(4, F_SETFD, FD_CLOEXEC) = 0 <0.000008>
+>>>>> 0.000024 getsockopt(4, SOL_IP, 0x53 /* IP_??? */, "\0\1\0\0\7\0\0\0", [8]) = 0 <0.000024>
+>>>>> 0.000046 getsockopt(4, SOL_IP, 0x53 /* IP_??? */, "\7\0\0\0\7\0\0\0KUBE-DST-VBH27M7NWLDOZIE"..., [40]) = 0 <0.109384>
+>>>>> 0.109456 close(4)                  = 0 <0.000022>
+>>>>>
+>>>>> On a host that is not evidencing the performance regression we 
+>>>>> normally see that operation take ~ 0.00001 as opposed to 
+>>>>> 0.109384.Additionally, hosts that were evidencing the problem we also 
+>>>>> saw high lock times with `klockstat` (unfortunately at the time we 
+>>>>> did not know about or run echo "0" > /proc/sys/kernel/kptr_restrict 
+>>>>> to get the callers of the below commands).
+>>>>>
+>>>>> klockstat -i 5 -n 10 (on a host experiencing the problem)
+>>>>> Caller   Avg Hold  Count   Max hold Total hold
+>>>>> b'[unknown]'  118490772     83  179899470 9834734132
+>>>>> b'[unknown]'  118416941     83  179850047 9828606138
+>>>>> # or somewhere later while iptables -vnL was running:
+>>>>> Caller   Avg Hold  Count   Max hold Total hold
+>>>>> b'[unknown]'  496466236     46 17919955720 22837446860
+>>>>> b'[unknown]'  496391064     46 17919893843 22833988950
+>>>>>
+>>>>> klockstat -i 5 -n 10 (on a host not experiencing the problem)
+>>>>> Caller   Avg Hold  Count   Max hold Total hold
+>>>>> b'[unknown]'     120316   1510   85537797  181677885
+>>>>> b'[unknown]'    7119070     24   85527251  170857690
+>>>>
+>>>> Hi, this is your Linux kernel regression tracker.
+>>>>
+>>>> Thanks for the report.
+>>>>
+>>>> CCing the regression mailing list, as it should be in the loop for all
+>>>> regressions, as explained here:
+>>>> https://urldefense.com/v3/__https:/www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html__;!!JmoZiZGBv3RvKRSx!9uRzPn01pFuoHMQj2ZsxlSeY6NoNdYH6BxvEi_JHC4sZoqDTp8X2ZYrIRtIOhN7RM0PtxYLq4NIe9g0hJqZVpZdwVIY5$ 
+>>>>
+>>>> To be sure below issue doesn't fall through the cracks unnoticed, I'm
+>>>> adding it to regzbot, my Linux kernel regression tracking bot:
+>>>>
+>>>> #regzbot ^introduced v5.10..v5.15
+>>>> #regzbot title net: netfilter: Intermittent performance regression
+>>>> related to ipset
+>>>> #regzbot ignore-activity
+>>>>
+>>>> If it turns out this isn't a regression, free free to remove it from the
+>>>> tracking by sending a reply to this thread containing a paragraph like
+>>>> "#regzbot invalid: reason why this is invalid" (without the quotes).
+>>>>
+>>>> Reminder for developers: when fixing the issue, please add a 'Link:'
+>>>> tags pointing to the report (the mail quoted above) using
+>>>> lore.kernel.org/r/, as explained in
+>>>> 'Documentation/process/submitting-patches.rst' and
+>>>> 'Documentation/process/5.Posting.rst'. Regzbot needs them to
+>>>> automatically connect reports with fixes, but they are useful in
+>>>> general, too.
+>>>>
+>>>> I'm sending this to everyone that got the initial report, to make
+>>>> everyone aware of the tracking. I also hope that messages like this
+>>>> motivate people to directly get at least the regression mailing list and
+>>>> ideally even regzbot involved when dealing with regressions, as messages
+>>>> like this wouldn't be needed then. And don't worry, if I need to send
+>>>> other mails regarding this regression only relevant for regzbot I'll
+>>>> send them to the regressions lists only (with a tag in the subject so
+>>>> people can filter them away). With a bit of luck no such messages will
+>>>> be needed anyway.
+>>>>
+>>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>>>
+>>>> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+>>>> reports on my table. I can only look briefly into most of them and lack
+>>>> knowledge about most of the areas they concern. I thus unfortunately
+>>>> will sometimes get things wrong or miss something important. I hope
+>>>> that's not the case here; if you think it is, don't hesitate to tell me
+>>>> in a public reply, it's in everyone's interest to set the public record
+>>>> straight.
+>>>>
 >>>
 >>
->>
+>> -
+>> E-mail  : kadlec@blackhole.kfki.hu, kadlecsik.jozsef@wigner.hu
+>> PGP key : https://urldefense.com/v3/__https:/wigner.hu/*kadlec/pgp_public_key.txt__;fg!!JmoZiZGBv3RvKRSx!9uRzPn01pFuoHMQj2ZsxlSeY6NoNdYH6BxvEi_JHC4sZoqDTp8X2ZYrIRtIOhN7RM0PtxYLq4NIe9g0hJqZVpRHTvk29$ 
+>> Address : Wigner Research Centre for Physics
+>>            H-1525 Budapest 114, POB. 49, Hungary
 > 
-
+> 

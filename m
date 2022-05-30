@@ -2,104 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417D953735B
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 03:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F7553735D
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 03:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiE3Bl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 21:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        id S232127AbiE3Bma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 21:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiE3Blq (ORCPT
+        with ESMTP id S230337AbiE3Bm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 21:41:46 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31216C16
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 18:41:42 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id l204so6055272ybf.10
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 18:41:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BS0rBnqOnJwywVyggv6WLP51bLfritdDS+YaRb6g8Nc=;
-        b=aS+aaNRTQ+HPNZXIUQ1ZY9Z98ln0UL2QNqEGotUtIAi4tvJ/68702ZzyURBI1Wzv2W
-         VgPb5S1xvJIXqpCzD5yWXvdy6yFKaskDltTmKAhTTrFgTe9dd0gkeAiDaM2X35jZnxre
-         2KFRVXubZxahujg/CDEhPDZ2WherDnbm2TyEU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BS0rBnqOnJwywVyggv6WLP51bLfritdDS+YaRb6g8Nc=;
-        b=vfJAQpdkagd2v2Qy0n3HIt7VlyPvlS7FpUmG166RFiVgHLJ8VN9ymgTXDqDa5DDhsL
-         QyojgQVCvCJlRG/plEirZXD6oMkJq4gB9KWeoCrtYWvlq6bxGYXI2BZY/85k346pr1ug
-         JGzqcf0+H185oiXhuwqWyyh0vuzh2g4azkHm35bwfvQk6fmJ0oc5PnZmAISE3tY875Ve
-         seWxePiLT4U0D6UGWMfLLLoZkaGiOLI+LEk8E0K1gh1J+ELzjKoWgWPvFG2gIFFvfBhY
-         pv1djnVKor8SJkQFxhlYizBeTE7/95oRZs5HqK+w6Mya1kP356rQ895YBtA7HuTU6EfL
-         dWCw==
-X-Gm-Message-State: AOAM5307lvYSRHYyRhyfP8u1iF7jwhpiXgjAI0eSI3Bfv/E0kl8cTH1r
-        4l/AMwsE/AgyNJcIU/KvwvPCl5CrUerpsSZu94hA77ZiB0A=
-X-Google-Smtp-Source: ABdhPJxSxkOYJZAAfx/jQvadZj/iy531I7ErK03nLA+3xCq24960xPRCwn96ehAoYQmM8dl/cYhhXbDaqlMAp+SKm2A=
-X-Received: by 2002:a25:a4aa:0:b0:650:1a22:ffe1 with SMTP id
- g39-20020a25a4aa000000b006501a22ffe1mr31292961ybi.573.1653874901359; Sun, 29
- May 2022 18:41:41 -0700 (PDT)
+        Sun, 29 May 2022 21:42:28 -0400
+Received: from mail.boiledscript.com (unknown [192.151.158.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961FFD13E;
+        Sun, 29 May 2022 18:42:27 -0700 (PDT)
+Received: from localhost (unknown [192.168.203.1])
+        by mail.boiledscript.com (Postfix) with ESMTP id B13113007FD;
+        Mon, 30 May 2022 01:42:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ultrarare.space;
+        s=dkim; t=1653874946;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lbjr5jPtIZSbFT/L4XEbOX84sdmNhtUofdql/o6UFQ0=;
+        b=E6cE1dB2AdRfJGrHJgwwxdTw23Z8WYHbocs68f/xpOncS8ffoXaS/sOd4kn+Fvk0zjqWuK
+        zLqbBS7b+Q3f3tutpBNMbqUg3qvs6Rzyk1bcSj9bxRjTAAzrm+Z3jATaqNh9nVJ4nUpU4u
+        34BXvpP6Xou+9acQ4tkoLhmySqvodTZkw95QAJakjENkZU3oyutP5Fdyf+NutxTEOCmIHC
+        w8jz7itwL0U5z+syuEy4qY+hudV5LYbpjp8FDsarBoxuCak9FGpBlkLGIWTS4le3YM/9Nr
+        dxNQsgp7BEFILsMkfGd3PVvdWHu5QJkwuX3n0fp+QG44oFsLZnKovzHMYY0eYw==
+Date:   Mon, 30 May 2022 09:42:15 +0800
+From:   Hilton Chain <hako@ultrarare.space>
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     bryancain3@gmail.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: [PATCH] HID: apple: Properly handle function keys on misset
+ non-apple keyboards
+Message-ID: <20220530094215.646432cd@ultrarare.space>
+In-Reply-To: <20220530083752.1973a905@ultrarare.space>
+References: <20220529180230.17e9a0f9@ultrarare.space>
+        <20220529182036.10226-1-jose.exposito89@gmail.com>
+        <20220530083752.1973a905@ultrarare.space>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220511222910.635307-1-dlunev@chromium.org> <20220512082832.v2.2.I692165059274c30b59bed56940b54a573ccb46e4@changeid>
- <YoQfls6hFcP3kCaH@zeniv-ca.linux.org.uk> <YoQihi4OMjJj2Mj0@zeniv-ca.linux.org.uk>
- <CAJfpegtQUP045X5N8ib1rUTKzSj-giih0eL=jC5-MP7aVgyN_g@mail.gmail.com>
- <CAONX=-do9yvxW2gTak0WGbFVPiLbkM2xH5LReMZkvC-upOUVxg@mail.gmail.com>
- <CAONX=-ehh=uGYAi++oV_uS23mp2yZcrUC+7U5H0rRz8q0h6OeQ@mail.gmail.com>
- <CAJfpegsPjFMCG-WHbvREZXzHPUd1R2Qa83maiTJbWSua9Kz=hg@mail.gmail.com> <CAONX=-d-6Bm9qGQyhmpkMQov+wjgH3+pAMHdSsifM6FpmHNPFg@mail.gmail.com>
-In-Reply-To: <CAONX=-d-6Bm9qGQyhmpkMQov+wjgH3+pAMHdSsifM6FpmHNPFg@mail.gmail.com>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Mon, 30 May 2022 11:41:30 +1000
-Message-ID: <CAONX=-cSHJX8Zqj9suXp+cwYf9FCxmCkWrDPKz+5Nttqf6Ewqg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] FUSE: Retire superblock on force unmount
-To:     Miklos Szeredi <miklos@szeredi.hu>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-fsdevel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Bar: +
+Authentication-Results: mail.boiledscript.com;
+        none
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have prepared the v3 patch as described in my previous email. PTAL.
+This commit extends fa33382c7f74 ("HID: apple: Properly handle function
+keys on Keychron keyboards") to support all misset non-apple keyboards.
 
-Thanks,
-Daniil
+Signed-off-by: Hilton Chain <hako@ultrarare.space>
+---
 
-On Wed, May 25, 2022 at 8:44 AM Daniil Lunev <dlunev@chromium.org> wrote:
->
-> > Calling bdi_unregister() might be okay, and that should fix this.  I'm
-> > not familiar enough with that part to say for sure.
-> > But freeing sb->s_bdi while the superblock is active looks problematic.
-> Tracing the code, I see that, yes, in general that might not be safe to call
-> the "bdi_put" function for any FS - because it might have in-flight ops even
-> with force, where they will routinely access the members of the bdi struct
-> without locks. However, we do replace the struct with a no_op version,
-> and specifically for the FUSE case we sever the connection first, so no
-> in-flight ops can actually be there. And I am not sure if other FS may
-> need to do this retirement, given they don't have these
-> user-space/kernel split. It would make sense however to delay the actual
-> put till  the actual super block destruction, but that would require
-> introducing extra state tracking to see if the block is or is not registered
-> anymore. It can be piggybacked on the v1 patch where I have an explicit
-> state flag, but not on v2.
-> Miklos, Al, will the following work and be acceptable?
-> Get v1 patchset[1], in fuse_umount_begin do bdi_unregister and set
-> the flag, but do not do bdi_put or replacement with no_op. And then in
-> generic shutdown super if the bdi is not no_op and the 'defunct' flag is
-> set, skip unregister part.
-> Thanks,
-> Daniil
->
-> [1]
-> https://lore.kernel.org/linux-fsdevel/20220511013057.245827-1-dlunev@chromium.org/T/#u
+ drivers/hid/hid-apple.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+index 42a568902f49..3b15753be467 100644
+--- a/drivers/hid/hid-apple.c
++++ b/drivers/hid/hid-apple.c
+@@ -36,7 +36,7 @@
+ #define APPLE_NUMLOCK_EMULATION	BIT(8)
+ #define APPLE_RDESC_BATTERY	BIT(9)
+ #define APPLE_BACKLIGHT_CTL	BIT(10)
+-#define APPLE_IS_KEYCHRON	BIT(11)
++#define APPLE_IS_BAD_APPLE	BIT(11)
+
+ #define APPLE_FLAG_FKEY		0x01
+
+@@ -363,7 +363,7 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
+ 	}
+
+ 	if (fnmode == 3) {
+-		real_fnmode = (asc->quirks & APPLE_IS_KEYCHRON) ? 2 : 1;
++		real_fnmode = (asc->quirks & APPLE_IS_BAD_APPLE) ? 2 : 1;
+ 	} else {
+ 		real_fnmode = fnmode;
+ 	}
+@@ -669,9 +669,9 @@ static int apple_input_configured(struct hid_device *hdev,
+ 		asc->quirks &= ~APPLE_HAS_FN;
+ 	}
+
+-	if (strncmp(hdev->name, "Keychron", 8) == 0) {
+-		hid_info(hdev, "Keychron keyboard detected; function keys will default to fnmode=2 behavior\n");
+-		asc->quirks |= APPLE_IS_KEYCHRON;
++	if (strncmp(hdev->name, "Apple", 5)) {
++		hid_info(hdev, "Non-apple keyboard detected; function keys will default to fnmode=2 behavior\n");
++		asc->quirks |= APPLE_IS_BAD_APPLE;
+ 	}
+
+ 	return 0;
+
+base-commit: b00ed48bb0a7c295facf9036135a573a5cdbe7de
+--
+2.36.1

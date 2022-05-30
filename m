@@ -2,123 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1506E5386CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 19:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E11795386D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 19:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240076AbiE3Rdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 13:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S239272AbiE3Rgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 13:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237590AbiE3Rd3 (ORCPT
+        with ESMTP id S229790AbiE3Rgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 13:33:29 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E96C68FBF;
-        Mon, 30 May 2022 10:33:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653932008; x=1685468008;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vGd6TceShfTiRP/LCPoV/XqvXMkXKRaaG6E4ysLsdbU=;
-  b=jI7P05mz7WkxbhyuMAwqdY+NA2jCumLWTtqjFewgHD/A/y6wvOILrE8p
-   FJ5/4sjGG4p2n7jdLx1bbPpF115jGP4LG+9euoPJGEa42dUwEivWd7w/e
-   vPnKyeCiN1rInfuro2brtKgyOtfcwqZeTq/c5qQOF6oLC/3Li4yFLrHao
-   1ET/SBi5M019EoxIeKSxQh9VE8jKxmxhC2jiPf7W4lR2bkLR4G4rp9HOg
-   PuzynMxe0I3NK4Bq25s5RNAzyOYxNDbFhaXYS+5bjBUHWVvAQkYvvn7BE
-   vhdMP66GZlxNh3cUtyv1J71IPPoLhbsvrTjJLfcho3yGxwePVZ6lVZ4IR
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="274771055"
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="274771055"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 10:33:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="605280033"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 30 May 2022 10:33:24 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 10438147; Mon, 30 May 2022 20:33:26 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: [PATCH v1 1/1] iio: adc: mxs-lradc-adc: Get rid of OF specifics
-Date:   Mon, 30 May 2022 20:33:24 +0300
-Message-Id: <20220530173324.921-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 30 May 2022 13:36:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F07B6898D;
+        Mon, 30 May 2022 10:36:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 902A3B80DC0;
+        Mon, 30 May 2022 17:36:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DF5DC385B8;
+        Mon, 30 May 2022 17:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653932188;
+        bh=FoOGGS5HbF/zub9jWYSV2y47AxBkhodh4GDcvNJTV/E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k9XidlBjS90S1D3ozRaqkXwNoMLtXaaUSzgtU8f/9GuNDlh7sC/92xLJXDU4IZN6C
+         Hh6rFuhGvl1O8YDK+6xu7FAL4BXeW7+CqWwh8vyrLY0hVM4nNEdd5/Qv90zTJ4gjhs
+         2hwy8RLr1rKQghxP6wKv1cSRK1mrQKJZ+PtTsIQ9t6IHG/mSKietwUakM8Btp0U1us
+         teAMQzQ3QHhDj+D9C/6xe6ZX/8XxXUtN0zlx7hM3ApDk2WtCuw6VwFQliMwbeEDTVn
+         ICejKzj4wdYHo5lhN2BYhDTqq49SsHp/xDYTSB7+DmswshdDFlT1d8S39UDUuFy7x8
+         I1Gq9SLH0VtLA==
+Date:   Mon, 30 May 2022 10:36:26 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zheng Bin <zhengbin13@huawei.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH crypto] crypto: memneq - move into lib/
+Message-ID: <YpUAmiBSb6oEr1oc@sol.localdomain>
+References: <CAHmME9rWfUnUmHR5xo_+WdS0Wgv8yXQb+LqAo24XdoQQR4Wn8w@mail.gmail.com>
+ <20220528102429.189731-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220528102429.189731-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-First of all, the additional conversion from vIRQ, and this is exactly
-what is returned by platform_get_irq_byname(), to vIRQ is not needed.
-Hence, drop no-op call to irq_of_parse_and_map().
+On Sat, May 28, 2022 at 12:24:29PM +0200, Jason A. Donenfeld wrote:
+> This is used by code that doesn't need CONFIG_CRYPTO, so move this into
+> lib/ with a Kconfig option so that it can be selected by whatever needs
+> it.
+> 
+> This fixes a linker error Zheng pointed out when
+> CRYPTO_MANAGER_DISABLE_TESTS!=y and CRYPTO=m:
+> 
+>   lib/crypto/curve25519-selftest.o: In function `curve25519_selftest':
+>   curve25519-selftest.c:(.init.text+0x60): undefined reference to `__crypto_memneq'
+>   curve25519-selftest.c:(.init.text+0xec): undefined reference to `__crypto_memneq'
+>   curve25519-selftest.c:(.init.text+0x114): undefined reference to `__crypto_memneq'
+>   curve25519-selftest.c:(.init.text+0x154): undefined reference to `__crypto_memneq'
+> 
+> Reported-by: Zheng Bin <zhengbin13@huawei.com>
+> Cc: Eric Biggers <ebiggers@kernel.org>
+> Cc: stable@vger.kernel.org
+> Fixes: aa127963f1ca ("crypto: lib/curve25519 - re-add selftests")
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+> I'm traveling over the next week, and there are a few ways to skin this
+> cat, so if somebody here sees issue, feel free to pick this v1 up and
+> fashion a v2 out of it.
+> 
+>  crypto/Kconfig           | 1 +
+>  crypto/Makefile          | 2 +-
+>  lib/Kconfig              | 3 +++
+>  lib/Makefile             | 1 +
+>  lib/crypto/Kconfig       | 1 +
+>  {crypto => lib}/memneq.c | 0
+>  6 files changed, 7 insertions(+), 1 deletion(-)
+>  rename {crypto => lib}/memneq.c (100%)
 
-Second, assign the firmware node instead of of_node.
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/iio/adc/mxs-lradc-adc.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/iio/adc/mxs-lradc-adc.c b/drivers/iio/adc/mxs-lradc-adc.c
-index bca79a93cbe4..25292bb8a13f 100644
---- a/drivers/iio/adc/mxs-lradc-adc.c
-+++ b/drivers/iio/adc/mxs-lradc-adc.c
-@@ -17,7 +17,6 @@
- #include <linux/mfd/core.h>
- #include <linux/mfd/mxs-lradc.h>
- #include <linux/module.h>
--#include <linux/of_irq.h>
- #include <linux/platform_device.h>
- #include <linux/sysfs.h>
- 
-@@ -692,7 +691,7 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
- 	struct mxs_lradc_adc *adc;
- 	struct iio_dev *iio;
- 	struct resource *iores;
--	int ret, irq, virq, i, s, n;
-+	int ret, irq, i, s, n;
- 	u64 scale_uv;
- 	const char **irq_name;
- 
-@@ -721,7 +720,7 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, iio);
- 
- 	iio->name = pdev->name;
--	iio->dev.of_node = dev->parent->of_node;
-+	device_set_node(&iio->dev, dev_fwnode(dev->parent));
- 	iio->info = &mxs_lradc_adc_iio_info;
- 	iio->modes = INDIO_DIRECT_MODE;
- 	iio->masklength = LRADC_MAX_TOTAL_CHANS;
-@@ -747,9 +746,7 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
- 		if (irq < 0)
- 			return irq;
- 
--		virq = irq_of_parse_and_map(dev->parent->of_node, irq);
--
--		ret = devm_request_irq(dev, virq, mxs_lradc_adc_handle_irq,
-+		ret = devm_request_irq(dev, irq, mxs_lradc_adc_handle_irq,
- 				       0, irq_name[i], iio);
- 		if (ret)
- 			return ret;
--- 
-2.35.1
-
+- Eric

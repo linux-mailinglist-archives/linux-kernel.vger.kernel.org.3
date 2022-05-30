@@ -2,61 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463F3537536
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EC653752C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233039AbiE3Gmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 02:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
+        id S233045AbiE3Gn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 02:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbiE3Gms (ORCPT
+        with ESMTP id S231516AbiE3GnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 02:42:48 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478333B574;
-        Sun, 29 May 2022 23:42:47 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LBQnm1RFxzDqXl;
-        Mon, 30 May 2022 14:42:36 +0800 (CST)
-Received: from [10.67.77.175] (10.67.77.175) by dggpeml500023.china.huawei.com
- (7.185.36.114) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 30 May
- 2022 14:42:44 +0800
-From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
-Subject: Re: [PATCH v3 2/2] cpufreq: CPPC: Register EM based on efficiency
- class information
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     <Ionela.Voinescu@arm.com>, <Lukasz.Luba@arm.com>,
-        <Morten.Rasmussen@arm.com>, <Dietmar.Eggemann@arm.com>,
-        <maz@kernel.org>, <daniel.lezcano@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Fuad Tabba <tabba@google.com>, Phil Auld <pauld@redhat.com>,
-        Rob Herring <robh@kernel.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
-References: <20220425123819.137735-1-pierre.gondois@arm.com>
- <20220425123819.137735-3-pierre.gondois@arm.com>
-Message-ID: <626c99d3-edaf-4544-7e64-5b3653591086@hisilicon.com>
-Date:   Mon, 30 May 2022 14:42:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 30 May 2022 02:43:25 -0400
+Received: from sonic315-11.consmr.mail.gq1.yahoo.com (sonic315-11.consmr.mail.gq1.yahoo.com [98.137.65.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F473B574
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 23:43:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1653893003; bh=r8p9jyY6bxvUUXiFW5S1xmrxidOtb2OM7NRl1Xaq38A=; h=Date:Subject:To:References:From:In-Reply-To:From:Subject:Reply-To; b=1V/khW4PrJQZsk5BUuB3OZp1v1B269fmWIjzjbDNj1vflNy5fsO9j4cF6wZIxZZyAZt3GSW4kPVokpNRSlAWIhdbGkE/2xoVTB3LA/HivKVyuQqWS3+6Jt6rjOBaA686FsMP1Sk7VRMQISAvfHM8rOD0wwG1NP9AgYkxL4AaWGY=
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1653893003; bh=t4Kuoy6LcJPgGwhbGE6HcHBA46oTjMB6Cbn/qaTYeP0=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=fXyMl4Yd2Sap/AJBV99EQ3H110EUWtFu8x+XeY1XrqYXPv6ehd5aoyXJahrEmqbWwqfpdpRVibtMYxjgZppayR3gtevQOuQDOU3ImX5uTDs0yUbzz4C6FEr7qvefBe2BIZdEXFuw4Y872f6q6YqGXrOCBICQo+GZCSq35VLg3I98E4rOVzVNFerOzMzEAjsA4+KL+a4YuWkO7LgDAu7DQa/Necz2mHO5ZE3SKjjmxPKVItcPDj9nlM/uyp6QT6FPxhVCYENy33+vvtViQ9rnBpK8DoPh5qhu6gkzqQwZIOXCrhbg0M4BQ5EEVm3/V1dM/G7Uz/ohAQQGEHzvEABSyw==
+X-YMail-OSG: _JTbnocVM1mQniKyzDuKgNJ5PiByJB5MO7cLZXjKxr348of.5f30mFZyhUooBE1
+ 4KlMsXhvyiZR2TDBLeam5UshtPPkSgGqa87J3RJ8XCQdZIWWJrHV67GU0T0o5Kqqefu0ppr8MURe
+ vjVkufhjyPa5SniQdVtG1ZzWdFnQDmMzBJFlSsSALuHvp2G9lsUQaFSNn2yP.ouzeyx5tqzbN4Y6
+ IjbWwZosT8h9zXmPpKfAagW_yXwthUtBZ7fDRN.Tk.7Jornwvz9zeGkH2lnvmvmbatozWCpw_4CA
+ BhltcefBFnb71ry0QGoG2QPe8_TM3_2SPeZobOvJaJpFm67DmDE5DwbkTxcmKA523GRTbpD0w7qe
+ ax.xa5Im5.XMu3HSk8bbZl8CMygdtfatbab7vXMcGvPr_gbkkORe2vNObVohCSGpyPO4M10074KX
+ kFPO5SJkWFrHnu1F3rrA53KbUwKspVwmagDS6k2nVvZh8CyQLRlSwl3HzwNzQYZ0UxJnZ3uUhy5b
+ joYCXbKVfc7pALubWIi4D3R_liStAHJ5gmfs2kOHqopUmp3CC4K2c71Zz_teko._PfABtAX0Rfui
+ xxi_BZvn8Uv9NRB4FYu6v4XFLDjwoVJOlaVhDA3EYDvz3Ux5KblhSsjdi1Vm_WRunezL5vX6baKd
+ CJWCfef7PVoDRwdU5GUZY84Pskio52T8gpEh92xWN6nh95uWnigTYmgiC_Z9UZjjJvA7eYKjlvRE
+ ECK.5fddkMBX5tgyjVEWE4AeTYMrcx.xWSK_kSIx95IVcN2BnAjjVlcPfBBYpe35XbHDTuKs4Weo
+ GpNhdBRiuFCSrcjhnpZIIN.VQMH2GcunM05PnCrdWqozpU8TDxEKdmKuAig9CGhmGti25N4fJ9W9
+ 5hEOrj0UKaTZN4ifulLYARu7PSin8.70khsrquscluTsXbnfYo3JJ2j8nVZ_.BSa6uKi6vqdYgd2
+ z0_eOoekQ5wWjkVTyFzB6sJ5ruS8ZqF0WVTd5UFScvNUDbxJmuR4xYPFFVhvQSRgMbu.Va221r6s
+ MMGqH7AIAnz.QBYp4tuuvhWqSVGmjenkQXuafoAEcfefKg5TE9r9Rhkcy8ZkegL9XAHpYEYv7tbg
+ 3XA44mB56eBW7JC1Q9Z6UAEapK9mxdpelx0yvwRRNxVDg4EQWqImVX0q4CV.9KiwIkZfLQ3T.EFA
+ h7RsXelmLA5c3zevvvimwQye9K.hdOwsYQIjbBww8U2yuwdhPHMdtCkDKlfIc.8DwsojSPTLi5cj
+ s63.1xoPOI0J10554s4sfVvuUfSs7d_T5FlGZtgHqYDMLV.2alXrsa.rSWUwKAMpAp.5up3hcxfx
+ _PW5KMfkL_l34PXDlRiAWIOwLTfTa3a6cknzEhMEhLpJw3W8MaFyekm6dQ1Lvr5PpHzG7RIEzj_R
+ QcRIvxYCX8a_JqmHslHYssYqqz2kGBPA1zVUeB6MrP1V9DLn6E7FbuIsHT4GweybNz1r5MOOmN6T
+ JfGv8zrBmLX8HMu5rgAh3FvpblqKOkWz3EC7S1QB0537ykvlJRbQVgqTnjhLvlzt2j_P6an01703
+ HyvDHvJ76HuDLBNM5bazEDW_Z02JWyoFyH1AhlSUE3NDp_6x6SNXo1BE.pz_4sJg0xkU99pTsjOG
+ nO843HkeWIqsZNd4uE6gPocV4JyaI8ycT9OusccBpX5LrA6KP_0NlJFj9n0OJX4c5zgcMhxL6Tun
+ vOlD6k_SBcGCamxNUynN5wqxi5NUnyD5FPMyyUZBiXT5b1WCWdDeQSx3GHkyb606kZotyizUlB2O
+ zgHw.0BrnyI86MSts5XEaiuVC5HBAOQqWn_5q2jF70OGDyS.N2Cm4e60Yhu2z4VVksgpabnNk_SC
+ NId7Uvra9_PiJ8BjVpXOesuPkazdw7CEduaX5DTkWBu3bYAERdhMk1DtngPBnpPN5ntBA6X_KgAA
+ jYpEC5z0kC.9QLTGC5Dwr.fKKNZd4hiJlIT9Q7H9T2PlilSqwltFAheslC2y22NM_iA3aOtDHc.9
+ 4m9AshvqRTpIEUZzs_grCFx1hEDcLilMsjLdUbzy.eNhF0gJpMWl_uAcH1IowggCCUg3zIsY1ncM
+ TenI8iI0YQlhWUTVHfG8DsvEXwhSLtL0gpJ2JcboKcTsl4nstPPOdOUBVt8NJ4leSPWoYnltoHa0
+ xRJ6Tq.1rRpZK90f5QLOEMI0mPhqKZLX.6biAhW1n7Qhm_iRcmY9PJS_fKQ78ZL3jVPRV1Oj.dC3
+ mATcDQcp0SMwvK6AUErDNB2CtkE_fFr3oGthtzOed8Q4pRDCmpYnb7hdeH85q3J8Mn1f9vw--
+X-Sonic-MF: <lesrhorer@att.net>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.gq1.yahoo.com with HTTP; Mon, 30 May 2022 06:43:23 +0000
+Received: by hermes--canary-production-ne1-799d7bd497-rcgtf (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 5202819b1e19cf12b555ad4e1623d824;
+          Mon, 30 May 2022 06:43:20 +0000 (UTC)
+Message-ID: <5bf81aee-a518-5bc4-804c-e05db230b1c1@att.net>
+Date:   Mon, 30 May 2022 01:43:05 -0500
 MIME-Version: 1.0
-In-Reply-To: <20220425123819.137735-3-pierre.gondois@arm.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: Module failure on new install of Debian Bullseye
 Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+References: <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0.ref@att.net>
+ <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0@att.net>
+ <7999b7b4-3b58-a9c4-4756-445e54404f0f@csgroup.eu>
+ <ba2fb3ff-22dd-d68e-fa99-02de39240f20@infradead.org>
+ <3b8f2ed6-11fd-b5a7-5442-7cac90348514@att.net>
+ <8de4e4b7-f741-eb4d-9e11-9b23ba65c21a@att.net>
+ <13529cf4-a00d-5e59-2e1c-cb1daf24bf71@csgroup.eu>
+From:   Leslie Rhorer <lesrhorer@att.net>
+In-Reply-To: <13529cf4-a00d-5e59-2e1c-cb1daf24bf71@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.77.175]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Mailer: WebService/1.1.20225 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,235 +85,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-There is a warning on arm64 platform when CONFIG_ENERGY_MODEL is not set:
- drivers/cpufreq/cppc_cpufreq.c:550:12: error: ‘cppc_get_cpu_cost’ defined but not used
-[-Werror=unused-function]
-   550 | static int cppc_get_cpu_cost(struct device *cpu_dev, unsigned long KHz,
-       |            ^~~~~~~~~~~~~~~~~
- drivers/cpufreq/cppc_cpufreq.c:481:12: error: ‘cppc_get_cpu_power’ defined but not used
-[-Werror=unused-function]
-   481 | static int cppc_get_cpu_power(struct device *cpu_dev,
-       |            ^~~~~~~~~~~~~~~~~~
 
-Thanks,
-Shaokun
+On 5/30/2022 1:08 AM, Christophe Leroy wrote:
+> 
+> 
+> Le 30/05/2022 à 01:46, Leslie Rhorer a écrit :
+>>
+>>       Below is the output of dmesg after removing quite a few of what I
+>> am certain are unrelated lines:
+>>
+>> [    0.000000] Linux version 5.10.0-13-amd64
+>> (debian-kernel@lists.debian.org) (gcc-10 (Debian 10.2.1-6) 10.2.1
+>> 20210110, GNU ld (GNU Binutils for Debian) 2.35.2) #1 SMP Debian
+>> 5.10.106-1 (2022-03-17)
+> 
+>> [    1.465675] bnx2x: disagrees about version of symbol module_layout
+> 
+>> [   12.075903] bnx2x: disagrees about version of symbol module_layout
+> 
+> 
+> Those two messages means that you are trying to use modules that were
+> built for a different kernel version.
 
-On 2022/4/25 20:38, Pierre Gondois wrote:
-> From: Pierre Gondois <Pierre.Gondois@arm.com>
+	That is pretty clear
+
 > 
-> Performance states and energy consumption values are not advertised
-> in ACPI. In the GicC structure of the MADT table, the "Processor
-> Power Efficiency Class field" (called efficiency class from now)
-> allows to describe the relative energy efficiency of CPUs.
+> As far as I can see you are using kernel 5.10
 > 
-> To leverage the EM and EAS, the CPPC driver creates a set of
-> artificial performance states and registers them in the Energy Model
-> (EM), such as:
-> - Every 20 capacity unit, a performance state is created.
-> - The energy cost of each performance state gradually increases.
-> No power value is generated as only the cost is used in the EM.
-> 
-> During task placement, a task can raise the frequency of its whole
-> pd. This can make EAS place a task on a pd with CPUs that are
-> individually less energy efficient.
-> As cost values are artificial, and to place tasks on CPUs with the
-> lower efficiency class, a gap in cost values is generated for adjacent
-> efficiency classes.
-> E.g.:
-> - efficiency class = 0, capacity is in [0-1024], so cost values
->   are in [0: 51] (one performance state every 20 capacity unit)
-> - efficiency class = 1, capacity is in [0-1024], cost values
->   are in [1*gap+0: 1*gap+51].
-> 
-> The value of the cost gap is chosen to absorb a the energy of 4 CPUs
-> at their maximum capacity. This means that between:
-> 1- a pd of 4 CPUs, each of them being used at almost their full
->    capacity. Their efficiency class is N.
-> 2- a CPU using almost none of its capacity. Its efficiency class is
->    N+1
-> EAS will choose the first option.
-> 
-> This patch also populates the (struct cpufreq_driver).register_em
-> callback if the valid efficiency_class ACPI values are provided.
-> 
-> Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
-> ---
->  drivers/cpufreq/cppc_cpufreq.c | 144 +++++++++++++++++++++++++++++++++
->  1 file changed, 144 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 3cd05651707d..3eaa23d1aaf5 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -421,6 +421,134 @@ static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
->  }
->  
->  static DEFINE_PER_CPU(unsigned int, efficiency_class);
-> +static void cppc_cpufreq_register_em(struct cpufreq_policy *policy);
-> +
-> +/* Create an artificial performance state every CPPC_EM_CAP_STEP capacity unit. */
-> +#define CPPC_EM_CAP_STEP	(20)
-> +/* Increase the cost value by CPPC_EM_COST_STEP every performance state. */
-> +#define CPPC_EM_COST_STEP	(1)
-> +/* Add a cost gap correspnding to the energy of 4 CPUs. */
-> +#define CPPC_EM_COST_GAP	(4 * SCHED_CAPACITY_SCALE * CPPC_EM_COST_STEP \
-> +				/ CPPC_EM_CAP_STEP)
-> +
-> +static unsigned int get_perf_level_count(struct cpufreq_policy *policy)
-> +{
-> +	struct cppc_perf_caps *perf_caps;
-> +	unsigned int min_cap, max_cap;
-> +	struct cppc_cpudata *cpu_data;
-> +	int cpu = policy->cpu;
-> +
-> +	cpu_data = policy->driver_data;
-> +	perf_caps = &cpu_data->perf_caps;
-> +	max_cap = arch_scale_cpu_capacity(cpu);
-> +	min_cap = div_u64(max_cap * perf_caps->lowest_perf, perf_caps->highest_perf);
-> +	if ((min_cap == 0) || (max_cap < min_cap))
-> +		return 0;
-> +	return 1 + max_cap / CPPC_EM_CAP_STEP - min_cap / CPPC_EM_CAP_STEP;
-> +}
-> +
-> +/*
-> + * The cost is defined as:
-> + *   cost = power * max_frequency / frequency
-> + */
-> +static inline unsigned long compute_cost(int cpu, int step)
-> +{
-> +	return CPPC_EM_COST_GAP * per_cpu(efficiency_class, cpu) +
-> +			step * CPPC_EM_COST_STEP;
-> +}
-> +
-> +static int cppc_get_cpu_power(struct device *cpu_dev,
-> +		unsigned long *power, unsigned long *KHz)
-> +{
-> +	unsigned long perf_step, perf_prev, perf, perf_check;
-> +	unsigned int min_step, max_step, step, step_check;
-> +	unsigned long prev_freq = *KHz;
-> +	unsigned int min_cap, max_cap;
-> +	struct cpufreq_policy *policy;
-> +
-> +	struct cppc_perf_caps *perf_caps;
-> +	struct cppc_cpudata *cpu_data;
-> +
-> +	policy = cpufreq_cpu_get_raw(cpu_dev->id);
-> +	cpu_data = policy->driver_data;
-> +	perf_caps = &cpu_data->perf_caps;
-> +	max_cap = arch_scale_cpu_capacity(cpu_dev->id);
-> +	min_cap = div_u64(max_cap * perf_caps->lowest_perf,
-> +			perf_caps->highest_perf);
-> +
-> +	perf_step = CPPC_EM_CAP_STEP * perf_caps->highest_perf / max_cap;
-> +	min_step = min_cap / CPPC_EM_CAP_STEP;
-> +	max_step = max_cap / CPPC_EM_CAP_STEP;
-> +
-> +	perf_prev = cppc_cpufreq_khz_to_perf(cpu_data, *KHz);
-> +	step = perf_prev / perf_step;
-> +
-> +	if (step > max_step)
-> +		return -EINVAL;
-> +
-> +	if (min_step == max_step) {
-> +		step = max_step;
-> +		perf = perf_caps->highest_perf;
-> +	} else if (step < min_step) {
-> +		step = min_step;
-> +		perf = perf_caps->lowest_perf;
-> +	} else {
-> +		step++;
-> +		if (step == max_step)
-> +			perf = perf_caps->highest_perf;
-> +		else
-> +			perf = step * perf_step;
-> +	}
-> +
-> +	*KHz = cppc_cpufreq_perf_to_khz(cpu_data, perf);
-> +	perf_check = cppc_cpufreq_khz_to_perf(cpu_data, *KHz);
-> +	step_check = perf_check / perf_step;
-> +
-> +	/*
-> +	 * To avoid bad integer approximation, check that new frequency value
-> +	 * increased and that the new frequency will be converted to the
-> +	 * desired step value.
-> +	 */
-> +	while ((*KHz == prev_freq) || (step_check != step)) {
-> +		perf++;
-> +		*KHz = cppc_cpufreq_perf_to_khz(cpu_data, perf);
-> +		perf_check = cppc_cpufreq_khz_to_perf(cpu_data, *KHz);
-> +		step_check = perf_check / perf_step;
-> +	}
-> +
-> +	/*
-> +	 * With an artificial EM, only the cost value is used. Still the power
-> +	 * is populated such as 0 < power < EM_MAX_POWER. This allows to add
-> +	 * more sense to the artificial performance states.
-> +	 */
-> +	*power = compute_cost(cpu_dev->id, step);
-> +
-> +	return 0;
-> +}
-> +
-> +static int cppc_get_cpu_cost(struct device *cpu_dev, unsigned long KHz,
-> +		unsigned long *cost)
-> +{
-> +	unsigned long perf_step, perf_prev;
-> +	struct cppc_perf_caps *perf_caps;
-> +	struct cpufreq_policy *policy;
-> +	struct cppc_cpudata *cpu_data;
-> +	unsigned int max_cap;
-> +	int step;
-> +
-> +	policy = cpufreq_cpu_get_raw(cpu_dev->id);
-> +	cpu_data = policy->driver_data;
-> +	perf_caps = &cpu_data->perf_caps;
-> +	max_cap = arch_scale_cpu_capacity(cpu_dev->id);
-> +
-> +	perf_prev = cppc_cpufreq_khz_to_perf(cpu_data, KHz);
-> +	perf_step = CPPC_EM_CAP_STEP * perf_caps->highest_perf / max_cap;
-> +	step = perf_prev / perf_step;
-> +
-> +	*cost = compute_cost(cpu_dev->id, step);
-> +
-> +	return 0;
-> +}
->  
->  static int populate_efficiency_class(void)
->  {
-> @@ -453,10 +581,23 @@ static int populate_efficiency_class(void)
->  		}
->  		index++;
->  	}
-> +	cppc_cpufreq_driver.register_em = cppc_cpufreq_register_em;
->  
->  	return 0;
->  }
->  
-> +static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
-> +{
-> +	struct cppc_cpudata *cpu_data;
-> +	struct em_data_callback em_cb =
-> +		EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
-> +
-> +	cpu_data = policy->driver_data;
-> +	em_dev_register_perf_domain(get_cpu_device(policy->cpu),
-> +			get_perf_level_count(policy), &em_cb,
-> +			cpu_data->shared_cpu_map, 0);
-> +}
-> +
->  #else
->  
->  static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
-> @@ -467,6 +608,9 @@ static int populate_efficiency_class(void)
->  {
->  	return 0;
->  }
-> +static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
-> +{
-> +}
->  #endif
->  
->  
-> 
+> You have to use bnx2 modules for that exact kernel.
+
+	Right.  I thought of compiling them myself, but so far I have not been 
+successful in loading the kernel headers.  I have tried adding a line to 
+the sources.list file, but so far I haven't found a directory in the 
+installation drive that apt doesn't complain about.

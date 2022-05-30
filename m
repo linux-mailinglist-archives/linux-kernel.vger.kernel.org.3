@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC107538862
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 23:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E84538865
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 23:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243224AbiE3VAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 17:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
+        id S243242AbiE3VAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 17:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242725AbiE3VA0 (ORCPT
+        with ESMTP id S243222AbiE3VAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 17:00:26 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D06491561;
-        Mon, 30 May 2022 14:00:24 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id d12-20020a17090abf8c00b001e2eb431ce4so336959pjs.1;
-        Mon, 30 May 2022 14:00:24 -0700 (PDT)
+        Mon, 30 May 2022 17:00:32 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74EF915BB
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 14:00:29 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id t13so10323782ljd.6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 14:00:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YKNIi+JJNFpB5c8FibagFvimWDoQmqfc+PiXRkA6zQQ=;
-        b=cefTrwD1GeSTD+veHUXRFHwtqAc2OQ8kphS8ty2wwQqnS7d7mXTGZZIX3HHHP7USos
-         zb+I1WPj0E4D36xZcIj3NS/wAIbkTiylSqxCjpyuUl7ixS4H/KhHLV3hAT2xcQ5K+K+O
-         TSOqL3R2cJHNxZJ/iJjb6Wso+4PoD1yZSaWiIeJlzlxJPK4q63hRkcyMt+U+VmiXhYtM
-         i4bYvwDA+uam2Vf7TIaCMzB63kkaP+BH/vKUVB9nxjztUPOdugE+/ImUlFp3qlYCwiu8
-         uvW47WCjyq7UdRuyqjcoVwehLxjMdVpZLN5E5UvcTdZt93gM/S/EvbY1pTcRr/mOY82u
-         eb6Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=3gzHOM+c5HMloZ7sIBCpupu74wnaQ0zWHpxDMyFFqtQ=;
+        b=mGcUtPiCk4PHtAzNluJb0vuddgduTuyyBtyazANXcy5nD1Xf/KtR0S9gIx13RnyRds
+         8u3rO5oCXpCHS2mZHww++hLTinm0nlnfMeiYj9kthO3SthrbB6DbrlrStbvwNSsfHEGc
+         wiHH2K4htOWLf1r5a4hre0y3UKmZdHF8K/c7gXAcXUD3rs+GntblOimOOCeOWM6mZlDQ
+         huEslXMfOOdMOB+tThTkdTLjzZgql2u33u46YX03yaCDbnad6zTWS4UeCmckfztLnbor
+         BEJwJe277/EujUTG6ud3+fVt64QbT0GJeL0322CCZeAMk5nIuSga2OUr9HENmiul55pB
+         k7yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YKNIi+JJNFpB5c8FibagFvimWDoQmqfc+PiXRkA6zQQ=;
-        b=sJq4VaxW847iJ1uE+HQVgg7CA/lXERtpHhN1pKu4z2oATjVlN/QGlc+a6qs1tge0De
-         znIaWnaVny9fKhqVyXwR+ZvmnrBSa/qxOV5TiA84sgEY2R1n9D2HYJWWy2X6mMxQQxOa
-         nLRfYGJ4AinlMtD5FhlrV8vq4SjjCDrAigTX9oyUYQgNjpkLm8YeQrjp6CtMzeflbsrg
-         e6+Cbl670N4bgkdNAl1paK1bca9dEWR18teb4qnSXZYRewkHuDBxCsek6vtnafcqfebp
-         S5+giCBC1V3Oh7DmBDQuV8/qKAfIW22u1w53fp5scD2UZ/mPx+IA6oO/LVfCrR3wizW+
-         cecg==
-X-Gm-Message-State: AOAM531o3Nfi72LEM14AxdH2GCwcPREKX0QgSldQ/vpUq6QBr45zik9m
-        dFK5WaqYy2IQFsnyQaSog4bK6SITHBtwEBaqOPo=
-X-Google-Smtp-Source: ABdhPJw0fnfUQOiDOC5MmYOBhIyCDPX1DgFAVQOK0cadCxcV27QMqjJX/Yfe8UW+F4rFwiY4f+eLVe5qmOWycSWjjRY=
-X-Received: by 2002:a17:90b:3506:b0:1e0:51a1:a8ee with SMTP id
- ls6-20020a17090b350600b001e051a1a8eemr24551551pjb.112.1653944423477; Mon, 30
- May 2022 14:00:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220526112135.2486883-1-josephsih@chromium.org>
- <20220526192047.v6.2.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
- <CABBYNZLXzc2QDJ-8_XaoOSL+CXnrfHi-t8DPRTjO+wJjmCbV-w@mail.gmail.com> <CAHFy418Dfyio9ENfdJHfctWmHtmS7a2cOc2F2vyxi8pLESaQTw@mail.gmail.com>
-In-Reply-To: <CAHFy418Dfyio9ENfdJHfctWmHtmS7a2cOc2F2vyxi8pLESaQTw@mail.gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 30 May 2022 14:00:11 -0700
-Message-ID: <CABBYNZ+drWbXtyx9+eT7DCXjTmNNzeTYvUAsVf3MAvU2HhWK-g@mail.gmail.com>
-Subject: Re: [PATCH v6 2/5] Bluetooth: aosp: surface AOSP quality report
- through mgmt
-To:     Joseph Hwang <josephsih@google.com>
-Cc:     "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        ChromeOS Bluetooth Upstreaming 
-        <chromeos-bluetooth-upstreaming@chromium.org>,
-        kernel test robot <lkp@intel.com>,
-        Archie Pusaka <apusaka@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=3gzHOM+c5HMloZ7sIBCpupu74wnaQ0zWHpxDMyFFqtQ=;
+        b=t3TpgZxISo7MThQCmD0TwaW48eTO/4Xx+9Wsv+gtES1f/ZibJYeu83JsZq90Zp4GpW
+         VSoncF96FxyhgYJWXo4NjclW9N20hdxwIGpVnfhMzCxpLNIbE70piwtkV+C2H+GzcRrW
+         cMHeeilbctYszUOaD0HR249GaZl8MBifPiIDhwGgLmawf8hYIrqEkE2r1ygzJNEkkvzu
+         Y8LNbcJTYPmEDNkljh6jza1IyOxwdix0yPiJU4+X3SuzM/Sl7kWcEfZocLf2UeSQtZA6
+         LwCJmmRyRPDb8lhlfsOwWm9VyrARWomm6l8nUeRIcRdQZIf8weu2Z5KFK73PQJqEc/uW
+         IsVg==
+X-Gm-Message-State: AOAM530yPf3uMgQ5HaKtjaFXppOIq5rIQVOSSoMx+sZjzK6DRhyKq39X
+        gK1pLTKqMg8WlgClTooRBUU=
+X-Google-Smtp-Source: ABdhPJzpTG1IHR4PsqQEdQZUx9c91vwjmyp9o0CwooQn1XnsvHQd3A/2FTgg8PV1Fj5m7CxUzdqCUQ==
+X-Received: by 2002:a2e:7c15:0:b0:253:e242:1897 with SMTP id x21-20020a2e7c15000000b00253e2421897mr27412017ljc.72.1653944427560;
+        Mon, 30 May 2022 14:00:27 -0700 (PDT)
+Received: from otyshchenko.router ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id k21-20020a2ea275000000b0025550e2693asm581541ljm.38.2022.05.30.14.00.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 30 May 2022 14:00:27 -0700 (PDT)
+From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Julien Grall <julien@xen.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: [PATCH V3 2/8] xen/grants: support allocating consecutive grants
+Date:   Tue, 31 May 2022 00:00:11 +0300
+Message-Id: <1653944417-17168-3-git-send-email-olekstysh@gmail.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1653944417-17168-1-git-send-email-olekstysh@gmail.com>
+References: <1653944417-17168-1-git-send-email-olekstysh@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -82,541 +73,429 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joseph,
+From: Juergen Gross <jgross@suse.com>
 
-On Thu, May 26, 2022 at 9:37 PM Joseph Hwang <josephsih@google.com> wrote:
->
-> Hi Luiz:
->
-> Thanks for your review! The get_ext_vendor_prefix() in the table
-> provides a *unique* extended vendor prefix ( =3D vendor prefix + 1-octet
-> subcode) that can uniquely identify a vendor event. I am not aware of
-> any situation that might cause an event to be incorrectly matched with
-> an extended vendor prefix. Maybe I am missing something?
->
-> On the other hand, in your comment, to let a driver confirm whether it
-> is the vendor event structure it uses might be a bit risky. For
-> example, assume that we pass a vendor event to
-> msft.c:msft_vendor_evt() to determine whether it is a MSFT event. The
-> current implementation of msft_vendor_evt() is to call skb_pull_data()
-> to pull the event prefix for comparison with the dynamic MSFT event
-> prefix. No matter whether the event matches or not, the event skb has
-> been modified already and would cause bad behavior if we pass the
-> event skb to other vendor drivers/functions. How can we generally make
-> sure that every such vendor drivers/functions are implemented in a
-> read-only way that does not modify the skb when comparing the prefix?
-> In this patch, we propose to use get_ext_vendor_prefix() which is
-> guaranteed not to modify the skb in any possible way.
->
-> Please also note that the mechanism here also takes care of older
-> controllers that might not support some of the vendor specifications.
-> For example, if an older controller does not support the MSFT spec,
-> the msft_get_ext_prefix() would return NULL as its prefix. And hence a
-> vendor event would not accidentally match the MSFT spec on the older
-> controller. Similarly, in the following patch =E2=80=9Cbtintel: setup
-> vendor_get_prefix and vendor_evt=E2=80=9D, on an older Intel controller t=
-hat
-> does not support Intel telemetry events, the btintel driver would
-> *not* set up
->
->     hdev->vendor_get_ext_prefix =3D btintel_get_ext_prefix;
+For support of virtio via grant mappings in rare cases larger mappings
+using consecutive grants are needed. Support those by adding a bitmap
+of free grants.
 
-I see, while this does indeed prevent events to be misinterpreted,
-this locks us on only supporting vendor commands which use vendor
-prefixes, but perhaps that is fine since I assume there is probably no
-better way to create vendor opcodes in the first place.
+As consecutive grants will be needed only in very rare cases (e.g. when
+configuring a virtio device with a multi-page ring), optimize for the
+normal case of non-consecutive allocations.
 
-> such that an event would not match as an Intel vendor event in any way.
->
-> Please let me know if I have any misunderstanding.
->
-> Thanks and regards,
-> Joseph
->
->
-> On Fri, May 27, 2022 at 4:25 AM Luiz Augusto von Dentz
-> <luiz.dentz@gmail.com> wrote:
-> >
-> > Hi Joseph,
-> >
-> > On Thu, May 26, 2022 at 4:21 AM Joseph Hwang <josephsih@chromium.org> w=
-rote:
-> > >
-> > > When receiving a HCI vendor event, the kernel checks if it is an
-> > > AOSP bluetooth quality report. If yes, the event is sent to bluez
-> > > user space through the mgmt socket.
-> > >
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > >
-> > > Signed-off-by: Joseph Hwang <josephsih@chromium.org>
-> > > Reviewed-by: Archie Pusaka <apusaka@chromium.org>
-> > > ---
-> > >
-> > > Changes in v6:
-> > > - Fixed a sparse check warning about using static for evt_prefixes.
-> > >
-> > > Changes in v5:
-> > > - Define "struct ext_vendor_prefix" to replace "struct vendor_prefix"
-> > >   so that extended vendor prefix =3D prefix + 1-octet subcode
-> > > - Define aosp_ext_prefix to provide AOSP extended prefix which is
-> > >   returned by aosp_get_ext_prefix().
-> > > - Redefine struct ext_vendor_event_prefix such that
-> > >   . it uses get_ext_vendor_prefix to get prefix and subcodes where
-> > >     the prefix and the prefix length may be variable and are not
-> > >     unknown until run time;
-> > >   . it uses vendor_func to handle a vendor event
-> > >   This table handles vendor events in a generic way.
-> > > - Rewrite hci_vendor_evt() so that it compares both vendor prefix
-> > >   and subcode to match a vendor event.
-> > > - Define set_ext_prefix() to create MSFT extended vendor prefix
-> > >   which is returned by msft_get_ext_prefix().
-> > > - Do not EXPORT_SYMBOL(mgmt_quality_report).
-> > > - Keep msft_get_ext_prefix in msft instead of hci_dev since it is
-> > >   not used by any drivers.
-> > >
-> > > Changes in v3:
-> > > - Rebase to resolve the code conflict.
-> > > - Move aosp_quality_report_evt() from hci_event.c to aosp.c.
-> > > - A new patch (3/3) is added to enable the quality report feature.
-> > >
-> > > Changes in v2:
-> > > - Scrap the two structures defined in aosp.c and use constants for
-> > >   size check.
-> > > - Do a basic size check about the quality report event. Do not pull
-> > >   data from the event in which the kernel has no interest.
-> > > - Define vendor event prefixes with which vendor events of distinct
-> > >   vendor specifications can be clearly differentiated.
-> > > - Use mgmt helpers to add the header and data to a mgmt skb.
-> > >
-> > >  include/net/bluetooth/hci_core.h | 12 +++++++
-> > >  include/net/bluetooth/mgmt.h     |  7 +++++
-> > >  net/bluetooth/aosp.c             | 50 +++++++++++++++++++++++++++++
-> > >  net/bluetooth/aosp.h             | 18 +++++++++++
-> > >  net/bluetooth/hci_event.c        | 54 ++++++++++++++++++++++++++++++=
-+-
-> > >  net/bluetooth/mgmt.c             | 19 +++++++++++
-> > >  net/bluetooth/msft.c             | 28 ++++++++++++++++-
-> > >  net/bluetooth/msft.h             | 12 +++++--
-> > >  8 files changed, 195 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth=
-/hci_core.h
-> > > index 64d3a63759a8..f89738c6b973 100644
-> > > --- a/include/net/bluetooth/hci_core.h
-> > > +++ b/include/net/bluetooth/hci_core.h
-> > > @@ -328,6 +328,13 @@ struct amp_assoc {
-> > >
-> > >  #define HCI_MAX_PAGES  3
-> > >
-> > > +struct ext_vendor_prefix {
-> > > +       __u8 *prefix;
-> > > +       __u8 prefix_len;
-> > > +       __u8 *subcodes;
-> > > +       __u8 subcodes_len;
-> > > +};
-> > > +
-> > >  struct hci_dev {
-> > >         struct list_head list;
-> > >         struct mutex    lock;
-> > > @@ -1876,6 +1883,8 @@ int mgmt_add_adv_patterns_monitor_complete(stru=
-ct hci_dev *hdev, u8 status);
-> > >  int mgmt_remove_adv_monitor_complete(struct hci_dev *hdev, u8 status=
-);
-> > >  void mgmt_adv_monitor_device_lost(struct hci_dev *hdev, u16 handle,
-> > >                                   bdaddr_t *bdaddr, u8 addr_type);
-> > > +int mgmt_quality_report(struct hci_dev *hdev, void *data, u32 data_l=
-en,
-> > > +                       u8 quality_spec);
-> > >
-> > >  u8 hci_le_conn_update(struct hci_conn *conn, u16 min, u16 max, u16 l=
-atency,
-> > >                       u16 to_multiplier);
-> > > @@ -1894,4 +1903,7 @@ void hci_copy_identity_address(struct hci_dev *=
-hdev, bdaddr_t *bdaddr,
-> > >
-> > >  #define TRANSPORT_TYPE_MAX     0x04
-> > >
-> > > +#define QUALITY_SPEC_AOSP_BQR          0x0
-> > > +#define QUALITY_SPEC_INTEL_TELEMETRY   0x1
-> > > +
-> > >  #endif /* __HCI_CORE_H */
-> > > diff --git a/include/net/bluetooth/mgmt.h b/include/net/bluetooth/mgm=
-t.h
-> > > index c1c2fd72d9e3..6ccd0067c295 100644
-> > > --- a/include/net/bluetooth/mgmt.h
-> > > +++ b/include/net/bluetooth/mgmt.h
-> > > @@ -1127,3 +1127,10 @@ struct mgmt_ev_adv_monitor_device_lost {
-> > >         __le16 monitor_handle;
-> > >         struct mgmt_addr_info addr;
-> > >  } __packed;
-> > > +
-> > > +#define MGMT_EV_QUALITY_REPORT                 0x0031
-> > > +struct mgmt_ev_quality_report {
-> > > +       __u8    quality_spec;
-> > > +       __u32   data_len;
-> > > +       __u8    data[];
-> > > +} __packed;
-> > > diff --git a/net/bluetooth/aosp.c b/net/bluetooth/aosp.c
-> > > index 432ae3aac9e3..94faa15b1ea0 100644
-> > > --- a/net/bluetooth/aosp.c
-> > > +++ b/net/bluetooth/aosp.c
-> > > @@ -199,3 +199,53 @@ int aosp_set_quality_report(struct hci_dev *hdev=
-, bool enable)
-> > >         else
-> > >                 return disable_quality_report(hdev);
-> > >  }
-> > > +
-> > > +/* The following LEN =3D 1-byte Sub-event code + 48-byte Sub-event P=
-arameters */
-> > > +#define BLUETOOTH_QUALITY_REPORT_LEN 49
-> > > +
-> > > +bool aosp_check_quality_report_len(struct sk_buff *skb)
-> > > +{
-> > > +       /* skb->len is allowed to be larger than BLUETOOTH_QUALITY_RE=
-PORT_LEN
-> > > +        * to accommodate an additional Vendor Specific Parameter (vs=
-p) field.
-> > > +        */
-> > > +       if (skb->len < BLUETOOTH_QUALITY_REPORT_LEN) {
-> > > +               BT_ERR("AOSP evt data len %d too short (%u expected)"=
-,
-> > > +                      skb->len, BLUETOOTH_QUALITY_REPORT_LEN);
-> > > +               return false;
-> > > +       }
-> > > +
-> > > +       return true;
-> > > +}
-> > > +
-> > > +/* AOSP HCI Requirements use 0x54 and up as sub-event codes without
-> > > + * actually defining a vendor prefix. Refer to
-> > > + * https://source.android.com/devices/bluetooth/hci_requirements
-> > > + * Hence, the other vendor event prefixes should not use the same
-> > > + * space to avoid collision.
-> > > + * Since the AOSP does not define a prefix, its prefix is NULL
-> > > + * and prefix_len is 0.
-> > > + * While there are a number of subcodes in AOSP, only interested in
-> > > + * Bluetooth Quality Report (0x58) for now.
-> > > + */
-> > > +#define AOSP_EV_QUALITY_REPORT         0x58
-> > > +
-> > > +static unsigned char AOSP_SUBCODES[] =3D { AOSP_EV_QUALITY_REPORT };
-> > > +
-> > > +static struct ext_vendor_prefix aosp_ext_prefix =3D {
-> > > +       .prefix         =3D NULL,
-> > > +       .prefix_len     =3D 0,
-> > > +       .subcodes       =3D AOSP_SUBCODES,
-> > > +       .subcodes_len   =3D sizeof(AOSP_SUBCODES),
-> > > +};
-> > > +
-> > > +struct ext_vendor_prefix *aosp_get_ext_prefix(struct hci_dev *hdev)
-> > > +{
-> > > +       return &aosp_ext_prefix;
-> > > +}
-> > > +
-> > > +void aosp_vendor_evt(struct hci_dev *hdev, struct sk_buff *skb)
-> > > +{
-> > > +       if (aosp_has_quality_report(hdev) && aosp_check_quality_repor=
-t_len(skb))
-> > > +               mgmt_quality_report(hdev, skb->data, skb->len,
-> > > +                                   QUALITY_SPEC_AOSP_BQR);
-> > > +}
-> > > diff --git a/net/bluetooth/aosp.h b/net/bluetooth/aosp.h
-> > > index 2fd8886d51b2..8208e01fffed 100644
-> > > --- a/net/bluetooth/aosp.h
-> > > +++ b/net/bluetooth/aosp.h
-> > > @@ -10,6 +10,9 @@ void aosp_do_close(struct hci_dev *hdev);
-> > >
-> > >  bool aosp_has_quality_report(struct hci_dev *hdev);
-> > >  int aosp_set_quality_report(struct hci_dev *hdev, bool enable);
-> > > +bool aosp_check_quality_report_len(struct sk_buff *skb);
-> > > +struct ext_vendor_prefix *aosp_get_ext_prefix(struct hci_dev *hdev);
-> > > +void aosp_vendor_evt(struct hci_dev *hdev, struct sk_buff *skb);
-> > >
-> > >  #else
-> > >
-> > > @@ -26,4 +29,19 @@ static inline int aosp_set_quality_report(struct h=
-ci_dev *hdev, bool enable)
-> > >         return -EOPNOTSUPP;
-> > >  }
-> > >
-> > > +static inline bool aosp_check_quality_report_len(struct sk_buff *skb=
-)
-> > > +{
-> > > +       return false;
-> > > +}
-> > > +
-> > > +static inline struct ext_vendor_prefix *
-> > > +aosp_get_ext_prefix(struct hci_dev *hdev)
-> > > +{
-> > > +       return NULL;
-> > > +}
-> > > +
-> > > +static inline void aosp_vendor_evt(struct hci_dev *hdev, struct sk_b=
-uff *skb)
-> > > +{
-> > > +}
-> > > +
-> > >  #endif
-> > > diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-> > > index 0270e597c285..8398971eddf4 100644
-> > > --- a/net/bluetooth/hci_event.c
-> > > +++ b/net/bluetooth/hci_event.c
-> > > @@ -37,6 +37,7 @@
-> > >  #include "smp.h"
-> > >  #include "msft.h"
-> > >  #include "eir.h"
-> > > +#include "aosp.h"
-> > >
-> > >  #define ZERO_KEY "\x00\x00\x00\x00\x00\x00\x00\x00" \
-> > >                  "\x00\x00\x00\x00\x00\x00\x00\x00"
-> > > @@ -4259,6 +4260,57 @@ static void hci_num_comp_blocks_evt(struct hci=
-_dev *hdev, void *data,
-> > >         queue_work(hdev->workqueue, &hdev->tx_work);
-> > >  }
-> > >
-> > > +/* Every distinct vendor specification must have a well-defined vend=
-or
-> > > + * event prefix to determine if a vendor event meets the specificati=
-on.
-> > > + * Some vendor prefixes are fixed values while some other vendor pre=
-fixes
-> > > + * are only available at run time.
-> > > + */
-> > > +static struct ext_vendor_event_prefix {
-> > > +       /* Some vendor prefixes are variable length. For convenience,
-> > > +        * the prefix in struct ext_vendor_prefix is in little endian=
-.
-> > > +        */
-> > > +       struct ext_vendor_prefix *
-> > > +               (*get_ext_vendor_prefix)(struct hci_dev *hdev);
-> > > +       void (*vendor_func)(struct hci_dev *hdev, struct sk_buff *skb=
-);
-> > > +} evt_prefixes[] =3D {
-> > > +       { aosp_get_ext_prefix, aosp_vendor_evt },
-> > > +       { msft_get_ext_prefix, msft_vendor_evt },
-> > > +
-> > > +       /* end with a null entry */
-> > > +       {},
-> > > +};
-> > > +
-> > > +static void hci_vendor_evt(struct hci_dev *hdev, void *data,
-> > > +                          struct sk_buff *skb)
-> > > +{
-> > > +       int i, j;
-> > > +       struct ext_vendor_prefix *vnd;
-> > > +       __u8 subcode;
-> > > +
-> > > +       for (i =3D 0; evt_prefixes[i].get_ext_vendor_prefix; i++) {
-> > > +               vnd =3D evt_prefixes[i].get_ext_vendor_prefix(hdev);
-> > > +               if (!vnd)
-> > > +                       continue;
-> > > +
-> > > +               /* Compare the raw prefix data in little endian direc=
-tly. */
-> > > +               if (memcmp(vnd->prefix, skb->data, vnd->prefix_len))
-> > > +                       continue;
-> > > +
-> > > +               /* Make sure that there are more data after prefix. *=
-/
-> > > +               if (skb->len <=3D vnd->prefix_len)
-> > > +                       continue;
-> > > +
-> > > +               /* The subcode is the single octet following the pref=
-ix. */
-> > > +               subcode =3D skb->data[vnd->prefix_len];
-> > > +               for (j =3D 0; j < vnd->subcodes_len; j++) {
-> > > +                       if (vnd->subcodes[j] =3D=3D subcode) {
-> > > +                               evt_prefixes[i].vendor_func(hdev, skb=
-);
-> > > +                               break;
-> > > +                       }
-> > > +               }
-> > > +       }
-> > > +}
-> >
-> > I recall saying that having such matching logic applied without the
-> > driver confirming that is the structure it using to be a bad idea
-> > since it could actually cause an event to misinterpret and cause bad
-> > behavior, instead we probably need a callback that gets populated by
-> > the driver e.g.(hdev->vendor_evt) then the driver can either populate
-> > with hci_vendor_evt if it does use prefixes or its own specialized
-> > function or NULL if it doesn't use vendor events, specially for old
-> > controllers Id leave it as NULL.
-> >
-> > >  static void hci_mode_change_evt(struct hci_dev *hdev, void *data,
-> > >                                 struct sk_buff *skb)
-> > >  {
-> > > @@ -6879,7 +6931,7 @@ static const struct hci_ev {
-> > >         HCI_EV(HCI_EV_NUM_COMP_BLOCKS, hci_num_comp_blocks_evt,
-> > >                sizeof(struct hci_ev_num_comp_blocks)),
-> > >         /* [0xff =3D HCI_EV_VENDOR] */
-> > > -       HCI_EV_VL(HCI_EV_VENDOR, msft_vendor_evt, 0, HCI_MAX_EVENT_SI=
-ZE),
-> > > +       HCI_EV_VL(HCI_EV_VENDOR, hci_vendor_evt, 0, HCI_MAX_EVENT_SIZ=
-E),
-> > >  };
-> > >
-> > >  static void hci_event_func(struct hci_dev *hdev, u8 event, struct sk=
-_buff *skb,
-> > > diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-> > > index 1ad84f34097f..9d3666bdd07c 100644
-> > > --- a/net/bluetooth/mgmt.c
-> > > +++ b/net/bluetooth/mgmt.c
-> > > @@ -4332,6 +4332,25 @@ static int set_exp_feature(struct sock *sk, st=
-ruct hci_dev *hdev,
-> > >                                MGMT_STATUS_NOT_SUPPORTED);
-> > >  }
-> > >
-> > > +int mgmt_quality_report(struct hci_dev *hdev, void *data, u32 data_l=
-en,
-> > > +                       u8 quality_spec)
-> > > +{
-> > > +       struct mgmt_ev_quality_report *ev;
-> > > +       struct sk_buff *skb;
-> > > +
-> > > +       skb =3D mgmt_alloc_skb(hdev, MGMT_EV_QUALITY_REPORT,
-> > > +                            sizeof(*ev) + data_len);
-> > > +       if (!skb)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       ev =3D skb_put(skb, sizeof(*ev));
-> > > +       ev->quality_spec =3D quality_spec;
-> > > +       ev->data_len =3D data_len;
-> > > +       skb_put_data(skb, data, data_len);
-> > > +
-> > > +       return mgmt_event_skb(skb, NULL);
-> > > +}
-> > > +
-> > >  static int get_device_flags(struct sock *sk, struct hci_dev *hdev, v=
-oid *data,
-> > >                             u16 data_len)
-> > >  {
-> > > diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
-> > > index f43994523b1f..c003e94faccd 100644
-> > > --- a/net/bluetooth/msft.c
-> > > +++ b/net/bluetooth/msft.c
-> > > @@ -116,6 +116,20 @@ bool msft_monitor_supported(struct hci_dev *hdev=
-)
-> > >         return !!(msft_get_features(hdev) & MSFT_FEATURE_MASK_LE_ADV_=
-MONITOR);
-> > >  }
-> > >
-> > > +/* Add the MSFT vendor event subcodes into MSFT_SUBCODES which
-> > > + * msft_vendor_evt() is interested in handling.
-> > > + */
-> > > +static unsigned char MSFT_SUBCODES[] =3D { MSFT_EV_LE_MONITOR_DEVICE=
- };
-> > > +static struct ext_vendor_prefix msft_ext_prefix =3D { 0 };
-> > > +
-> > > +static void set_ext_prefix(struct msft_data *msft)
-> > > +{
-> > > +       msft_ext_prefix.prefix =3D msft->evt_prefix;
-> > > +       msft_ext_prefix.prefix_len =3D msft->evt_prefix_len;
-> > > +       msft_ext_prefix.subcodes =3D MSFT_SUBCODES;
-> > > +       msft_ext_prefix.subcodes_len =3D sizeof(MSFT_SUBCODES);
-> > > +}
-> > > +
-> > >  static bool read_supported_features(struct hci_dev *hdev,
-> > >                                     struct msft_data *msft)
-> > >  {
-> > > @@ -156,6 +170,8 @@ static bool read_supported_features(struct hci_de=
-v *hdev,
-> > >         if (msft->features & MSFT_FEATURE_MASK_CURVE_VALIDITY)
-> > >                 hdev->msft_curve_validity =3D true;
-> > >
-> > > +       set_ext_prefix(msft);
-> > > +
-> > >         kfree_skb(skb);
-> > >         return true;
-> > >
-> > > @@ -742,7 +758,17 @@ static void msft_monitor_device_evt(struct hci_d=
-ev *hdev, struct sk_buff *skb)
-> > >                                  handle_data->mgmt_handle);
-> > >  }
-> > >
-> > > -void msft_vendor_evt(struct hci_dev *hdev, void *data, struct sk_buf=
-f *skb)
-> > > +struct ext_vendor_prefix *msft_get_ext_prefix(struct hci_dev *hdev)
-> > > +{
-> > > +       struct msft_data *msft =3D hdev->msft_data;
-> > > +
-> > > +       if (!msft)
-> > > +               return NULL;
-> > > +
-> > > +       return &msft_ext_prefix;
-> > > +}
-> > > +
-> > > +void msft_vendor_evt(struct hci_dev *hdev, struct sk_buff *skb)
-> > >  {
-> > >         struct msft_data *msft =3D hdev->msft_data;
-> > >         u8 *evt_prefix;
-> > > diff --git a/net/bluetooth/msft.h b/net/bluetooth/msft.h
-> > > index afcaf7d3b1cb..1515ae06c628 100644
-> > > --- a/net/bluetooth/msft.h
-> > > +++ b/net/bluetooth/msft.h
-> > > @@ -17,7 +17,7 @@ void msft_register(struct hci_dev *hdev);
-> > >  void msft_unregister(struct hci_dev *hdev);
-> > >  void msft_do_open(struct hci_dev *hdev);
-> > >  void msft_do_close(struct hci_dev *hdev);
-> > > -void msft_vendor_evt(struct hci_dev *hdev, void *data, struct sk_buf=
-f *skb);
-> > > +void msft_vendor_evt(struct hci_dev *hdev, struct sk_buff *skb);
-> > >  __u64 msft_get_features(struct hci_dev *hdev);
-> > >  int msft_add_monitor_pattern(struct hci_dev *hdev, struct adv_monito=
-r *monitor);
-> > >  int msft_remove_monitor(struct hci_dev *hdev, struct adv_monitor *mo=
-nitor,
-> > > @@ -27,6 +27,7 @@ int msft_set_filter_enable(struct hci_dev *hdev, bo=
-ol enable);
-> > >  int msft_suspend_sync(struct hci_dev *hdev);
-> > >  int msft_resume_sync(struct hci_dev *hdev);
-> > >  bool msft_curve_validity(struct hci_dev *hdev);
-> > > +struct ext_vendor_prefix *msft_get_ext_prefix(struct hci_dev *hdev);
-> > >
-> > >  #else
-> > >
-> > > @@ -39,8 +40,7 @@ static inline void msft_register(struct hci_dev *hd=
-ev) {}
-> > >  static inline void msft_unregister(struct hci_dev *hdev) {}
-> > >  static inline void msft_do_open(struct hci_dev *hdev) {}
-> > >  static inline void msft_do_close(struct hci_dev *hdev) {}
-> > > -static inline void msft_vendor_evt(struct hci_dev *hdev, void *data,
-> > > -                                  struct sk_buff *skb) {}
-> > > +static inline void msft_vendor_evt(struct hci_dev *hdev, struct sk_b=
-uff *skb) {}
-> > >  static inline __u64 msft_get_features(struct hci_dev *hdev) { return=
- 0; }
-> > >  static inline int msft_add_monitor_pattern(struct hci_dev *hdev,
-> > >                                            struct adv_monitor *monito=
-r)
-> > > @@ -77,4 +77,10 @@ static inline bool msft_curve_validity(struct hci_=
-dev *hdev)
-> > >         return false;
-> > >  }
-> > >
-> > > +static inline struct ext_vendor_prefix *
-> > > +msft_get_ext_prefix(struct hci_dev *hdev)
-> > > +{
-> > > +       return NULL;
-> > > +}
-> > > +
-> > >  #endif
-> > > --
-> > > 2.36.1.124.g0e6072fb45-goog
-> > >
-> >
-> >
-> > --
-> > Luiz Augusto von Dentz
->
->
->
-> --
->
-> Joseph Shyh-In Hwang
-> Email: josephsih@google.com
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+---
+Changes RFC -> V1:
+   - no changes
 
+Changes V1 -> V2:
+   - no changes
 
+Changes V2 -> V3:
+   - rebase, move "if (unlikely(ref < GNTTAB_NR_RESERVED_ENTRIES))"
+     to put_free_entry_locked()
+   - do not overwrite "i" in gnttab_init(), introduce local max_nr_grefs
+   - add a comment on top of "while (from < to)" in get_free_seq()
+   - add Boris' R-b
+---
+ drivers/xen/grant-table.c | 251 +++++++++++++++++++++++++++++++++++++++-------
+ include/xen/grant_table.h |   4 +
+ 2 files changed, 219 insertions(+), 36 deletions(-)
 
---=20
-Luiz Augusto von Dentz
+diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
+index 1a1aec0..947d82f 100644
+--- a/drivers/xen/grant-table.c
++++ b/drivers/xen/grant-table.c
+@@ -33,6 +33,7 @@
+ 
+ #define pr_fmt(fmt) "xen:" KBUILD_MODNAME ": " fmt
+ 
++#include <linux/bitmap.h>
+ #include <linux/memblock.h>
+ #include <linux/sched.h>
+ #include <linux/mm.h>
+@@ -70,9 +71,32 @@
+ 
+ static grant_ref_t **gnttab_list;
+ static unsigned int nr_grant_frames;
++
++/*
++ * Handling of free grants:
++ *
++ * Free grants are in a simple list anchored in gnttab_free_head. They are
++ * linked by grant ref, the last element contains GNTTAB_LIST_END. The number
++ * of free entries is stored in gnttab_free_count.
++ * Additionally there is a bitmap of free entries anchored in
++ * gnttab_free_bitmap. This is being used for simplifying allocation of
++ * multiple consecutive grants, which is needed e.g. for support of virtio.
++ * gnttab_last_free is used to add free entries of new frames at the end of
++ * the free list.
++ * gnttab_free_tail_ptr specifies the variable which references the start
++ * of consecutive free grants ending with gnttab_last_free. This pointer is
++ * updated in a rather defensive way, in order to avoid performance hits in
++ * hot paths.
++ * All those variables are protected by gnttab_list_lock.
++ */
+ static int gnttab_free_count;
+-static grant_ref_t gnttab_free_head;
++static unsigned int gnttab_size;
++static grant_ref_t gnttab_free_head = GNTTAB_LIST_END;
++static grant_ref_t gnttab_last_free = GNTTAB_LIST_END;
++static grant_ref_t *gnttab_free_tail_ptr;
++static unsigned long *gnttab_free_bitmap;
+ static DEFINE_SPINLOCK(gnttab_list_lock);
++
+ struct grant_frames xen_auto_xlat_grant_frames;
+ static unsigned int xen_gnttab_version;
+ module_param_named(version, xen_gnttab_version, uint, 0);
+@@ -168,16 +192,116 @@ static int get_free_entries(unsigned count)
+ 
+ 	ref = head = gnttab_free_head;
+ 	gnttab_free_count -= count;
+-	while (count-- > 1)
+-		head = gnttab_entry(head);
++	while (count--) {
++		bitmap_clear(gnttab_free_bitmap, head, 1);
++		if (gnttab_free_tail_ptr == __gnttab_entry(head))
++			gnttab_free_tail_ptr = &gnttab_free_head;
++		if (count)
++			head = gnttab_entry(head);
++	}
+ 	gnttab_free_head = gnttab_entry(head);
+ 	gnttab_entry(head) = GNTTAB_LIST_END;
+ 
++	if (!gnttab_free_count) {
++		gnttab_last_free = GNTTAB_LIST_END;
++		gnttab_free_tail_ptr = NULL;
++	}
++
+ 	spin_unlock_irqrestore(&gnttab_list_lock, flags);
+ 
+ 	return ref;
+ }
+ 
++static int get_seq_entry_count(void)
++{
++	if (gnttab_last_free == GNTTAB_LIST_END || !gnttab_free_tail_ptr ||
++	    *gnttab_free_tail_ptr == GNTTAB_LIST_END)
++		return 0;
++
++	return gnttab_last_free - *gnttab_free_tail_ptr + 1;
++}
++
++/* Rebuilds the free grant list and tries to find count consecutive entries. */
++static int get_free_seq(unsigned int count)
++{
++	int ret = -ENOSPC;
++	unsigned int from, to;
++	grant_ref_t *last;
++
++	gnttab_free_tail_ptr = &gnttab_free_head;
++	last = &gnttab_free_head;
++
++	for (from = find_first_bit(gnttab_free_bitmap, gnttab_size);
++	     from < gnttab_size;
++	     from = find_next_bit(gnttab_free_bitmap, gnttab_size, to + 1)) {
++		to = find_next_zero_bit(gnttab_free_bitmap, gnttab_size,
++					from + 1);
++		if (ret < 0 && to - from >= count) {
++			ret = from;
++			bitmap_clear(gnttab_free_bitmap, ret, count);
++			from += count;
++			gnttab_free_count -= count;
++			if (from == to)
++				continue;
++		}
++
++		/*
++		 * Recreate the free list in order to have it properly sorted.
++		 * This is needed to make sure that the free tail has the maximum
++		 * possible size.
++		 */
++		while (from < to) {
++			*last = from;
++			last = __gnttab_entry(from);
++			gnttab_last_free = from;
++			from++;
++		}
++		if (to < gnttab_size)
++			gnttab_free_tail_ptr = __gnttab_entry(to - 1);
++	}
++
++	*last = GNTTAB_LIST_END;
++	if (gnttab_last_free != gnttab_size - 1)
++		gnttab_free_tail_ptr = NULL;
++
++	return ret;
++}
++
++static int get_free_entries_seq(unsigned int count)
++{
++	unsigned long flags;
++	int ret = 0;
++
++	spin_lock_irqsave(&gnttab_list_lock, flags);
++
++	if (gnttab_free_count < count) {
++		ret = gnttab_expand(count - gnttab_free_count);
++		if (ret < 0)
++			goto out;
++	}
++
++	if (get_seq_entry_count() < count) {
++		ret = get_free_seq(count);
++		if (ret >= 0)
++			goto out;
++		ret = gnttab_expand(count - get_seq_entry_count());
++		if (ret < 0)
++			goto out;
++	}
++
++	ret = *gnttab_free_tail_ptr;
++	*gnttab_free_tail_ptr = gnttab_entry(ret + count - 1);
++	gnttab_free_count -= count;
++	if (!gnttab_free_count)
++		gnttab_free_tail_ptr = NULL;
++	bitmap_clear(gnttab_free_bitmap, ret, count);
++
++ out:
++	spin_unlock_irqrestore(&gnttab_list_lock, flags);
++
++	return ret;
++}
++
+ static void do_free_callbacks(void)
+ {
+ 	struct gnttab_free_callback *callback, *next;
+@@ -204,21 +328,51 @@ static inline void check_free_callbacks(void)
+ 		do_free_callbacks();
+ }
+ 
+-static void put_free_entry(grant_ref_t ref)
++static void put_free_entry_locked(grant_ref_t ref)
+ {
+-	unsigned long flags;
+-
+ 	if (unlikely(ref < GNTTAB_NR_RESERVED_ENTRIES))
+ 		return;
+ 
+-	spin_lock_irqsave(&gnttab_list_lock, flags);
+ 	gnttab_entry(ref) = gnttab_free_head;
+ 	gnttab_free_head = ref;
++	if (!gnttab_free_count)
++		gnttab_last_free = ref;
++	if (gnttab_free_tail_ptr == &gnttab_free_head)
++		gnttab_free_tail_ptr = __gnttab_entry(ref);
+ 	gnttab_free_count++;
++	bitmap_set(gnttab_free_bitmap, ref, 1);
++}
++
++static void put_free_entry(grant_ref_t ref)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&gnttab_list_lock, flags);
++	put_free_entry_locked(ref);
+ 	check_free_callbacks();
+ 	spin_unlock_irqrestore(&gnttab_list_lock, flags);
+ }
+ 
++static void gnttab_set_free(unsigned int start, unsigned int n)
++{
++	unsigned int i;
++
++	for (i = start; i < start + n - 1; i++)
++		gnttab_entry(i) = i + 1;
++
++	gnttab_entry(i) = GNTTAB_LIST_END;
++	if (!gnttab_free_count) {
++		gnttab_free_head = start;
++		gnttab_free_tail_ptr = &gnttab_free_head;
++	} else {
++		gnttab_entry(gnttab_last_free) = start;
++	}
++	gnttab_free_count += n;
++	gnttab_last_free = i;
++
++	bitmap_set(gnttab_free_bitmap, start, n);
++}
++
+ /*
+  * Following applies to gnttab_update_entry_v1 and gnttab_update_entry_v2.
+  * Introducing a valid entry into the grant table:
+@@ -450,23 +604,31 @@ void gnttab_free_grant_references(grant_ref_t head)
+ {
+ 	grant_ref_t ref;
+ 	unsigned long flags;
+-	int count = 1;
+-	if (head == GNTTAB_LIST_END)
+-		return;
++
+ 	spin_lock_irqsave(&gnttab_list_lock, flags);
+-	ref = head;
+-	while (gnttab_entry(ref) != GNTTAB_LIST_END) {
+-		ref = gnttab_entry(ref);
+-		count++;
++	while (head != GNTTAB_LIST_END) {
++		ref = gnttab_entry(head);
++		put_free_entry_locked(head);
++		head = ref;
+ 	}
+-	gnttab_entry(ref) = gnttab_free_head;
+-	gnttab_free_head = head;
+-	gnttab_free_count += count;
+ 	check_free_callbacks();
+ 	spin_unlock_irqrestore(&gnttab_list_lock, flags);
+ }
+ EXPORT_SYMBOL_GPL(gnttab_free_grant_references);
+ 
++void gnttab_free_grant_reference_seq(grant_ref_t head, unsigned int count)
++{
++	unsigned long flags;
++	unsigned int i;
++
++	spin_lock_irqsave(&gnttab_list_lock, flags);
++	for (i = count; i > 0; i--)
++		put_free_entry_locked(head + i - 1);
++	check_free_callbacks();
++	spin_unlock_irqrestore(&gnttab_list_lock, flags);
++}
++EXPORT_SYMBOL_GPL(gnttab_free_grant_reference_seq);
++
+ int gnttab_alloc_grant_references(u16 count, grant_ref_t *head)
+ {
+ 	int h = get_free_entries(count);
+@@ -480,6 +642,24 @@ int gnttab_alloc_grant_references(u16 count, grant_ref_t *head)
+ }
+ EXPORT_SYMBOL_GPL(gnttab_alloc_grant_references);
+ 
++int gnttab_alloc_grant_reference_seq(unsigned int count, grant_ref_t *first)
++{
++	int h;
++
++	if (count == 1)
++		h = get_free_entries(1);
++	else
++		h = get_free_entries_seq(count);
++
++	if (h < 0)
++		return -ENOSPC;
++
++	*first = h;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(gnttab_alloc_grant_reference_seq);
++
+ int gnttab_empty_grant_references(const grant_ref_t *private_head)
+ {
+ 	return (*private_head == GNTTAB_LIST_END);
+@@ -572,16 +752,13 @@ static int grow_gnttab_list(unsigned int more_frames)
+ 			goto grow_nomem;
+ 	}
+ 
++	gnttab_set_free(gnttab_size, extra_entries);
+ 
+-	for (i = grefs_per_frame * nr_grant_frames;
+-	     i < grefs_per_frame * new_nr_grant_frames - 1; i++)
+-		gnttab_entry(i) = i + 1;
+-
+-	gnttab_entry(i) = gnttab_free_head;
+-	gnttab_free_head = grefs_per_frame * nr_grant_frames;
+-	gnttab_free_count += extra_entries;
++	if (!gnttab_free_tail_ptr)
++		gnttab_free_tail_ptr = __gnttab_entry(gnttab_size);
+ 
+ 	nr_grant_frames = new_nr_grant_frames;
++	gnttab_size += extra_entries;
+ 
+ 	check_free_callbacks();
+ 
+@@ -1424,20 +1601,20 @@ static int gnttab_expand(unsigned int req_entries)
+ int gnttab_init(void)
+ {
+ 	int i;
+-	unsigned long max_nr_grant_frames;
++	unsigned long max_nr_grant_frames, max_nr_grefs;
+ 	unsigned int max_nr_glist_frames, nr_glist_frames;
+-	unsigned int nr_init_grefs;
+ 	int ret;
+ 
+ 	gnttab_request_version();
+ 	max_nr_grant_frames = gnttab_max_grant_frames();
++	max_nr_grefs = max_nr_grant_frames *
++			gnttab_interface->grefs_per_grant_frame;
+ 	nr_grant_frames = 1;
+ 
+ 	/* Determine the maximum number of frames required for the
+ 	 * grant reference free list on the current hypervisor.
+ 	 */
+-	max_nr_glist_frames = (max_nr_grant_frames *
+-			       gnttab_interface->grefs_per_grant_frame / RPP);
++	max_nr_glist_frames = max_nr_grefs / RPP;
+ 
+ 	gnttab_list = kmalloc_array(max_nr_glist_frames,
+ 				    sizeof(grant_ref_t *),
+@@ -1454,6 +1631,12 @@ int gnttab_init(void)
+ 		}
+ 	}
+ 
++	gnttab_free_bitmap = bitmap_zalloc(max_nr_grefs, GFP_KERNEL);
++	if (!gnttab_free_bitmap) {
++		ret = -ENOMEM;
++		goto ini_nomem;
++	}
++
+ 	ret = arch_gnttab_init(max_nr_grant_frames,
+ 			       nr_status_frames(max_nr_grant_frames));
+ 	if (ret < 0)
+@@ -1464,15 +1647,10 @@ int gnttab_init(void)
+ 		goto ini_nomem;
+ 	}
+ 
+-	nr_init_grefs = nr_grant_frames *
+-			gnttab_interface->grefs_per_grant_frame;
+-
+-	for (i = GNTTAB_NR_RESERVED_ENTRIES; i < nr_init_grefs - 1; i++)
+-		gnttab_entry(i) = i + 1;
++	gnttab_size = nr_grant_frames * gnttab_interface->grefs_per_grant_frame;
+ 
+-	gnttab_entry(nr_init_grefs - 1) = GNTTAB_LIST_END;
+-	gnttab_free_count = nr_init_grefs - GNTTAB_NR_RESERVED_ENTRIES;
+-	gnttab_free_head  = GNTTAB_NR_RESERVED_ENTRIES;
++	gnttab_set_free(GNTTAB_NR_RESERVED_ENTRIES,
++			gnttab_size - GNTTAB_NR_RESERVED_ENTRIES);
+ 
+ 	printk("Grant table initialized\n");
+ 	return 0;
+@@ -1481,6 +1659,7 @@ int gnttab_init(void)
+ 	for (i--; i >= 0; i--)
+ 		free_page((unsigned long)gnttab_list[i]);
+ 	kfree(gnttab_list);
++	bitmap_free(gnttab_free_bitmap);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(gnttab_init);
+diff --git a/include/xen/grant_table.h b/include/xen/grant_table.h
+index 7d0f2f0..a174f90 100644
+--- a/include/xen/grant_table.h
++++ b/include/xen/grant_table.h
+@@ -127,10 +127,14 @@ int gnttab_try_end_foreign_access(grant_ref_t ref);
+  */
+ int gnttab_alloc_grant_references(u16 count, grant_ref_t *pprivate_head);
+ 
++int gnttab_alloc_grant_reference_seq(unsigned int count, grant_ref_t *first);
++
+ void gnttab_free_grant_reference(grant_ref_t ref);
+ 
+ void gnttab_free_grant_references(grant_ref_t head);
+ 
++void gnttab_free_grant_reference_seq(grant_ref_t head, unsigned int count);
++
+ int gnttab_empty_grant_references(const grant_ref_t *pprivate_head);
+ 
+ int gnttab_claim_grant_reference(grant_ref_t *pprivate_head);
+-- 
+2.7.4
+

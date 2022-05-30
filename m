@@ -2,110 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8CD537338
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 03:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8786553733C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 03:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbiE3BJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 21:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        id S231562AbiE3BQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 21:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbiE3BJn (ORCPT
+        with ESMTP id S229881AbiE3BQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 21:09:43 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267AD663E4;
-        Sun, 29 May 2022 18:09:41 -0700 (PDT)
-Received: from kwepemi500004.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LBHNg5LgrzjWyr;
-        Mon, 30 May 2022 09:08:51 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi500004.china.huawei.com (7.221.188.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 30 May 2022 09:09:39 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 30 May 2022 09:09:38 +0800
-Subject: Re: [PATCH 5.10 000/163] 5.10.119-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
-References: <20220527084828.156494029@linuxfoundation.org>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <cbe51a80-109b-0ae1-149c-34f4162b8eee@huawei.com>
-Date:   Mon, 30 May 2022 09:09:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Sun, 29 May 2022 21:16:14 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A8E72225;
+        Sun, 29 May 2022 18:16:11 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 6052266E; Sun, 29 May 2022 20:16:10 -0500 (CDT)
+Date:   Sun, 29 May 2022 20:16:10 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v12 21/26] ima: Setup securityfs for IMA namespace
+Message-ID: <20220530011610.GA7909@mail.hallyn.com>
+References: <20220420140633.753772-1-stefanb@linux.ibm.com>
+ <20220420140633.753772-22-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420140633.753772-22-stefanb@linux.ibm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/5/27 16:48, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.119 release.
-> There are 163 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Apr 20, 2022 at 10:06:28AM -0400, Stefan Berger wrote:
+> Setup securityfs with symlinks, directories, and files for IMA
+> namespacing support. The same directory structure that IMA uses on the
+> host is also created for the namespacing case.
 > 
-> Responses should be made by Sun, 29 May 2022 08:46:26 +0000.
-> Anything received after that time might be too late.
+> The securityfs file and directory ownerships cannot be set when the
+> IMA namespace is initialized. Therefore, delay the setup of the file
+> system to a later point when securityfs is in securityfs_fill_super.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.119-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
+> Introduce a variable ima_policy_removed in ima_namespace that is used to
+> remember whether the policy file has previously been removed and thus
+> should not be created again in case of unmounting and again mounting
+> securityfs inside an IMA namespace.
 > 
-> thanks,
+> This filesystem can now be mounted as follows:
 > 
-> greg k-h
+> mount -t securityfs /sys/kernel/security/ /sys/kernel/security/
 > 
+> The following directories, symlinks, and files are available
+> when IMA namespacing is enabled, otherwise it will be empty:
+> 
+> $ ls -l sys/kernel/security/
+> total 0
+> lr--r--r--. 1 root root 0 Dec  2 00:18 ima -> integrity/ima
+> drwxr-xr-x. 3 root root 0 Dec  2 00:18 integrity
+> 
+> $ ls -l sys/kernel/security/ima/
+> total 0
+> -r--r-----. 1 root root 0 Dec  2 00:18 ascii_runtime_measurements
+> -r--r-----. 1 root root 0 Dec  2 00:18 binary_runtime_measurements
+> -rw-------. 1 root root 0 Dec  2 00:18 policy
+> -r--r-----. 1 root root 0 Dec  2 00:18 runtime_measurements_count
+> -r--r-----. 1 root root 0 Dec  2 00:18 violations
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> Acked-by: Christian Brauner <brauner@kernel.org>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-Tested on arm64 and x86 for 5.10.119-rc1,
+Acked-by: Serge Hallyn <serge@hallyn.com>
 
-Kernel repo:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-5.10.y
-Version: 5.10.119-rc1
-Commit: d318333bd3dbc483b4d566521dc6486ef9f6ba04
-Compiler: gcc version 7.3.0 (GCC)
+but a nit below
 
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9033
-passed: 9033
-failed: 0
-timeout: 0
---------------------------------------------------------------------
+> 
+> ---
+> 
+> v9:
+>  - rename policy_dentry_removed to ima_policy_removed
+> ---
+>  include/linux/ima.h             | 13 ++++++++++
+>  security/inode.c                |  6 ++++-
+>  security/integrity/ima/ima.h    |  1 +
+>  security/integrity/ima/ima_fs.c | 46 +++++++++++++++++++++++----------
+>  4 files changed, 52 insertions(+), 14 deletions(-)
+> 
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index b9301e2aaa8b..0cbf0434bc93 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -41,6 +41,7 @@ extern int ima_measure_critical_data(const char *event_label,
+>  				     const char *event_name,
+>  				     const void *buf, size_t buf_len,
+>  				     bool hash, u8 *digest, size_t digest_len);
+> +extern int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root);
+>  
+>  #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
+>  extern void ima_appraise_parse_cmdline(void);
+> @@ -227,6 +228,12 @@ void free_ima_ns(struct user_namespace *ns);
+>  
+>  void ima_free_ns_status_list(struct list_head *head, rwlock_t *ns_list_lock);
+>  
+> +static inline int ima_securityfs_init(struct user_namespace *user_ns,
+> +				      struct dentry *root)
+> +{
+> +	return ima_fs_ns_init(user_ns, root);
+> +}
+> +
+>  #else
+>  
+>  static inline void free_ima_ns(struct user_namespace *user_ns)
+> @@ -238,6 +245,12 @@ static inline void ima_free_ns_status_list(struct list_head *head,
+>  {
+>  }
+>  
+> +static inline int ima_securityfs_init(struct user_namespace *ns,
+> +				      struct dentry *root)
+> +{
+> +	return 0;
+> +}
+> +
+>  #endif /* CONFIG_IMA_NS */
+>  
+>  #endif /* _LINUX_IMA_H */
+> diff --git a/security/inode.c b/security/inode.c
+> index 84c9396792a9..e81f55f054dc 100644
+> --- a/security/inode.c
+> +++ b/security/inode.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/fs_context.h>
+>  #include <linux/mount.h>
+>  #include <linux/pagemap.h>
+> +#include <linux/ima.h>
+>  #include <linux/init.h>
+>  #include <linux/namei.h>
+>  #include <linux/security.h>
+> @@ -82,7 +83,10 @@ static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>  	sb->s_op = &securityfs_super_operations;
+>  	sb->s_root->d_inode->i_op = &securityfs_dir_inode_operations;
+>  
+> -	return 0;
+> +	if (ns != &init_user_ns)
+> +		error = ima_securityfs_init(ns, sb->s_root);
+> +
+> +	return error;
+>  }
+>  
+>  static int securityfs_get_tree(struct fs_context *fc)
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index cb48fc1d5b80..801dc3c8bfde 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -152,6 +152,7 @@ struct ima_namespace {
+>  	int valid_policy;
+>  
+>  	struct dentry *ima_policy;
+> +	bool ima_policy_removed;
+>  
+>  	struct notifier_block ima_lsm_policy_notifier;
+>  } __randomize_layout;
+> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+> index c41aa61b7393..84cd02a9e19b 100644
+> --- a/security/integrity/ima/ima_fs.c
+> +++ b/security/integrity/ima/ima_fs.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/rcupdate.h>
+>  #include <linux/parser.h>
+>  #include <linux/vmalloc.h>
+> +#include <linux/ima.h>
+>  
+>  #include "ima.h"
+>  
+> @@ -433,6 +434,7 @@ static int ima_release_policy(struct inode *inode, struct file *file)
+>  #if !defined(CONFIG_IMA_WRITE_POLICY) && !defined(CONFIG_IMA_READ_POLICY)
+>  	securityfs_remove(ns->ima_policy);
+>  	ns->ima_policy = NULL;
+> +	ns->ima_policy_removed = true;
+>  #elif defined(CONFIG_IMA_WRITE_POLICY)
+>  	clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
+>  #elif defined(CONFIG_IMA_READ_POLICY)
+> @@ -449,9 +451,11 @@ static const struct file_operations ima_measure_policy_ops = {
+>  	.llseek = generic_file_llseek,
+>  };
+>  
+> -static int __init ima_fs_ns_init(struct ima_namespace *ns)
+> +int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
+>  {
+> -	struct dentry *ima_dir;
+> +	struct ima_namespace *ns = ima_ns_from_user_ns(user_ns);
+> +	struct dentry *int_dir;
+> +	struct dentry *ima_dir = NULL;
+>  	struct dentry *ima_symlink = NULL;
+>  	struct dentry *binary_runtime_measurements = NULL;
+>  	struct dentry *ascii_runtime_measurements = NULL;
+> @@ -459,11 +463,22 @@ static int __init ima_fs_ns_init(struct ima_namespace *ns)
+>  	struct dentry *violations = NULL;
+>  	int ret;
+>  
+> -	ima_dir = securityfs_create_dir("ima", integrity_dir);
+> -	if (IS_ERR(ima_dir))
+> -		return PTR_ERR(ima_dir);
+> +	/* FIXME: update when evm and integrity are namespaced */
+> +	if (user_ns != &init_user_ns) {
+> +		int_dir = securityfs_create_dir("integrity", root);
+> +		if (IS_ERR(int_dir))
+> +			return PTR_ERR(int_dir);
+> +	} else {
+> +		int_dir = integrity_dir;
+> +	}
+>  
+> -	ima_symlink = securityfs_create_symlink("ima", NULL, "integrity/ima",
+> +	ima_dir = securityfs_create_dir("ima", int_dir);
+> +	if (IS_ERR(ima_dir)) {
+> +		ret = PTR_ERR(ima_dir);
+> +		goto out;
+> +	}
+> +
+> +	ima_symlink = securityfs_create_symlink("ima", root, "integrity/ima",
+>  						NULL);
+>  	if (IS_ERR(ima_symlink)) {
+>  		ret = PTR_ERR(ima_symlink);
+> @@ -505,12 +520,15 @@ static int __init ima_fs_ns_init(struct ima_namespace *ns)
+>  		goto out;
+>  	}
+>  
+> -	ns->ima_policy = securityfs_create_file("policy", POLICY_FILE_FLAGS,
+> -						ima_dir, NULL,
+> -						&ima_measure_policy_ops);
+> -	if (IS_ERR(ns->ima_policy)) {
+> -		ret = PTR_ERR(ns->ima_policy);
+> -		goto out;
+> +	if (!ns->ima_policy_removed) {
 
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9033
-passed: 9033
-failed: 0
-timeout: 0
---------------------------------------------------------------------
+It would be nicer to avoid this indent level by just doing
 
-Tested-by: Hulk Robot <hulkrobot@huawei.com>
+	if (ns->ima_policy_removed)
+		return 0;
+
+above the securityfs_create_file().
+
+> +		ns->ima_policy =
+> +		    securityfs_create_file("policy", POLICY_FILE_FLAGS,
+> +					   ima_dir, NULL,
+> +					   &ima_measure_policy_ops);
+> +		if (IS_ERR(ns->ima_policy)) {
+> +			ret = PTR_ERR(ns->ima_policy);
+> +			goto out;
+> +		}
+>  	}
+>  
+>  	return 0;
+> @@ -522,11 +540,13 @@ static int __init ima_fs_ns_init(struct ima_namespace *ns)
+>  	securityfs_remove(binary_runtime_measurements);
+>  	securityfs_remove(ima_symlink);
+>  	securityfs_remove(ima_dir);
+> +	if (user_ns != &init_user_ns)
+> +		securityfs_remove(int_dir);
+>  
+>  	return ret;
+>  }
+>  
+>  int __init ima_fs_init(void)
+>  {
+> -	return ima_fs_ns_init(&init_ima_ns);
+> +	return ima_fs_ns_init(&init_user_ns, NULL);
+>  }
+> -- 
+> 2.34.1
+> 

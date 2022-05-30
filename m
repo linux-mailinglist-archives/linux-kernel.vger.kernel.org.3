@@ -2,123 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACDE537FA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 16:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8956A537E7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 16:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236702AbiE3N7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 09:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34630 "EHLO
+        id S239578AbiE3N5H convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 30 May 2022 09:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239278AbiE3NvZ (ORCPT
+        with ESMTP id S239320AbiE3Nv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 09:51:25 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5416184A27
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:35:48 -0700 (PDT)
-Received: from mail-yw1-f178.google.com ([209.85.128.178]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MfZDK-1nK8wk15ZI-00g16a for <linux-kernel@vger.kernel.org>; Mon, 30 May
- 2022 15:35:46 +0200
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2fee010f509so109981217b3.11
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:35:46 -0700 (PDT)
-X-Gm-Message-State: AOAM530hDCIMXA2LTXs8jCJlLJAMpT/BAumIE6ARmkF3mgOZ1NZHH2lY
-        3CY5HmMC1Q92ZDFrF15EL0XPtM10UmvUh2ZDNxc=
-X-Google-Smtp-Source: ABdhPJxqcrHm9DJ9xalPcS1XKzKpoD6pOtVW3V1SFSsljiXnSICipI3F6JSFJRR63xqJBfk3V3It/sMFGGDe8RlARWQ=
-X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
- 206-20020a810ad7000000b002e684de3223mr59829800ywk.209.1653917745100; Mon, 30
- May 2022 06:35:45 -0700 (PDT)
+        Mon, 30 May 2022 09:51:27 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAFA880CA;
+        Mon, 30 May 2022 06:36:28 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id t31so6154031ybi.2;
+        Mon, 30 May 2022 06:36:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Ctyj8jhtqDdweE4lavI3quEUZCKV+EHuOOErPIUdLrc=;
+        b=H9rITRT741X/2k2LFXhTwgphnhEvHMag2VmmuRNDeJ3EGuNxsuwPB1FrLE678kfZG4
+         5B7Di18sAXd2XzC96N8teBImSosgPDx657bEGfu//rYcFYGJVzxaV+f7qVLOH/HbMoHP
+         +D9jcR/zAz4mQa4M2MbSY3zGoyx5EBCGXHzMrF80MvKHAPB/W1umx9MB79EH+pI/v+4q
+         dIzStMAfpSUctl4YZ3GbZcBMse4NtIxktnUh5d4NWdyB4PAVuTtyzAc/6bD3BZW2eReK
+         vJUrYQ2s1FvOXL96J3pqE7Vg7JLDNPQEpXfEpz/Nkv46PZdXtlDyPJ0JMB69na19J7IS
+         IrEg==
+X-Gm-Message-State: AOAM532QZmk+KSVONaUm6STryhR+Cula2hOUa7ytJYF8NgGKqtnPPMxS
+        PNsa+glkPPmZn/7U9zukTqSDXsLf3pUe3kVX0+g=
+X-Google-Smtp-Source: ABdhPJyb0iZxfAaRN/OL5PW28EO/JOfURGcI7tX4+kyohamIRvWbmypvoyTbRkJ+jLQBQNzIZcV9m5XrxzQC8NRT1RU=
+X-Received: by 2002:a25:d98b:0:b0:65c:9dc9:7a8f with SMTP id
+ q133-20020a25d98b000000b0065c9dc97a8fmr10646856ybg.622.1653917787866; Mon, 30
+ May 2022 06:36:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <YpCUzStDnSgQLNFN@debian> <CAHk-=wg0uGAX5DYZq+tY2KeUAR8DtR91YE1y9CkPMKkKOyE4jg@mail.gmail.com>
- <CADVatmNGPbSdRNQuwJEWAaPtqb3vBYRjvsuBpoRUnhEHj=X5GQ@mail.gmail.com>
- <CAHk-=wisQd8yiPX=SsK3eFiakKo713hq4SyqPWsJ-oyAmLFefQ@mail.gmail.com>
- <YpIR67FMtTGCwARZ@debian> <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
- <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com>
- <CAK8P3a0-QyOQiieEvM0yQb43XbCtPmeao8UvoAsdFnjCxYPz7Q@mail.gmail.com>
- <CAHk-=whfmwzjF4eBPYS6pHFqHVzJF3m=2h=gRWSRyHks8V=ABA@mail.gmail.com>
- <87a6aztli2.fsf@intel.com> <877d63tleq.fsf@intel.com> <CAK8P3a0-S77QLR1dK3NT6ot7JTAD5AdojAZJr-Xi112-v5EOdw@mail.gmail.com>
- <87czfvrwsv.fsf@intel.com>
-In-Reply-To: <87czfvrwsv.fsf@intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 30 May 2022 15:35:28 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0HNOCOSx9UONw6gf1UUU8J4iAOmMFP8-DtJ3O7XAACsQ@mail.gmail.com>
-Message-ID: <CAK8P3a0HNOCOSx9UONw6gf1UUU8J4iAOmMFP8-DtJ3O7XAACsQ@mail.gmail.com>
-Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
- block count and size helpers")
-To:     Jani Nikula <jani.nikula@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        SoC Team <soc@kernel.org>
+References: <20220530100424.103301-1-pierre.gondois@arm.com>
+ <20220530100424.103301-2-pierre.gondois@arm.com> <f2b9386a-16dd-bd03-4972-aaa026f72c03@hisilicon.com>
+In-Reply-To: <f2b9386a-16dd-bd03-4972-aaa026f72c03@hisilicon.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 30 May 2022 15:36:16 +0200
+Message-ID: <CAJZ5v0h7UEhXUUW5u=1PhvRWGURUF-KNJMPwL_MQPU-cAaYYDA@mail.gmail.com>
+Subject: Re: [PATCH -next v2 1/1] cpufreq: CPPC: Fix unused-function warning
+To:     Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Pierre Gondois <pierre.gondois@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ionela Voinescu <Ionela.Voinescu@arm.com>,
+        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:rzsa03eeqIQ8apQAiT85cbcZDekwnj75JYrCwH/bTgWY4EtRZZd
- QnZet8BsjNcEXzS6LvwNytFO9wCsF3+QkNHS8TG0KJOsdGheUWFgLXNdrS8n3P0ph0tSF/d
- JIt7vvZITIH/tZ5+YKtH4z6NIlEzzhdnlS13C/+TfTmLS07qzyD1I/VoBiqN5cHOsm63myU
- Jbr23fWS0yWignE+XUP5Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:h6cTD7p23yU=:DEyHDjNBFwqbW/1LsGKpfs
- EFFD9OOc/9tUAwS8yS/2Ome7csgZWNM4MA1aeOJbeplnDOvlcQv13vyviYdqJdeZ5qzhdpFMJ
- XOQ424P+MrItrmZRNCjeeuShG3akBpuRE8ubROsrfdSxdhSWsOqjVmMB2GMicp+azm8WBxoMK
- keNhpRkL9X+q2W5j5Ax0h1ykhaWU8oBSSuUCWOn6mB1l+SkQBKqvmEwMnwJJSS2s9AWE6T6WY
- h7krffX7M1/PIFnrmqWL8ynFHzWVk8dPLKnCd1qKaBsCk1JmvhmEuMN9vC+D1dulgDmSagQw0
- fprzmoq0hdpnWB0g3aXL4Ua6sRE2Gp0kBAeEaXAoIfmkMw01BsEYzQN1T3YXWsVyWA2H04a7t
- SG1a12u3inP6v9Iu7l7AMyPmdpbdVUD4+XgTIS6fiJHJopPZNyYrMrQdy2OMmUWDd/oPuxUFv
- J2r+JhfdOIInJj4n0s9wRGeAVtKMd0IMA6Bt/iQTp+wVfvFAaVhTxePFvkGtlJ4knR03OFY4X
- thUDH4tOX4udPpmW6QaojbncmaDlWyqBoLNLObLoNmTWD6PzHaXCNxVySfwpRicB9k9FD+O1m
- s3C8gA9BjZG8bF8DbH00xHjAQ1skef0Xq48HHAHsuBMQGAuHXEpZhidX+iI3Rk+zhUI13Awoh
- oUCGX4egpkRgt0pKrrlST9jhCKOpULbZ92T3k8zQ2E/HwR5c7frcvIZLVKu42vRN40Xk0jh5e
- acSwI3BgU6P3noLDOLi2VFbTPE5tgjlRXI2robRAvCDEhG8KOdVrmtZuCEOGyfhwQpqhoDQth
- MqAIZU3GtbeHayav0opkJiVcIgzjCeNZicWo5SZ44v7+/1qvtqqBOdqSHMRd6h4JqGySvmajh
- bAbONdkfU5wFds0ZNdOQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 3:10 PM Jani Nikula <jani.nikula@intel.com> wrote:
+On Mon, May 30, 2022 at 1:56 PM Shaokun Zhang
+<zhangshaokun@hisilicon.com> wrote:
+>
+> Hi,
+>
+> It works for me on compile when CONFIG_ENERGY_MODEL=n, please feel free to add:
+> Tested-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+
+Applied, thanks!
+
+> On 2022/5/30 18:04, Pierre Gondois wrote:
+> > Building the cppc_cpufreq driver with for arm64 with
+> > CONFIG_ENERGY_MODEL=n triggers the following warnings:
+> >  drivers/cpufreq/cppc_cpufreq.c:550:12: error: ‘cppc_get_cpu_cost’ defined but not used
+> > [-Werror=unused-function]
+> >    550 | static int cppc_get_cpu_cost(struct device *cpu_dev, unsigned long KHz,
+> >        |            ^~~~~~~~~~~~~~~~~
+> >  drivers/cpufreq/cppc_cpufreq.c:481:12: error: ‘cppc_get_cpu_power’ defined but not used
+> > [-Werror=unused-function]
+> >    481 | static int cppc_get_cpu_power(struct device *cpu_dev,
+> >        |            ^~~~~~~~~~~~~~~~~~
 > >
-> > I think in general, most __packed annotations we have in the kernel are
-> > completely pointless because they do not change the structure layout on
-> > any architecture but instead just make member access slower on
->
-> Please explain.
->
-> They are used quite a bit for parsing blob data, or
-> serialization/deserialization, like in the EDID case at hand. Try
-> removing __attribute__((packed)) from include/drm/drm_edid.h and see the
-> sizeof(struct edid) on any architecture.
-
-The annotations for edid are completely correct and necessary. However
-other driver authors just slap __packed annotations on any structure
-even if the layout is not fixed at all like:
-
-struct my_driver_priv {
-       struct device dev;
-       u8 causes_misalignment;
-       spinlock_t lock;
-       atomic_t counter;
-} __packed; /* this annotation is harmful because it breaks the atomics */
-
-or if the annotation does not change the layout like
-
-struct my_dma_descriptor {
-     __le64 address;
-     __le64 length;
-} __packed; /* does not change layout but makes access slow on some
-architectures */
-
-       Arnd
+> > Move the Energy Model related functions into specific guards.
+> > This allows to fix the warning and prevent doing extra work
+> > when the Energy Model is not present.
+> >
+> > Fixes: 740fcdc2c20e ("cpufreq: CPPC: Register EM based on efficiency class information")
+> > Reported-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+> > Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> > ---
+> >  drivers/cpufreq/cppc_cpufreq.c | 17 ++++++++---------
+> >  1 file changed, 8 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> > index f0a8bb2c59e5..24eaf0ec344d 100644
+> > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > @@ -441,6 +441,14 @@ static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
+> >       }
+> >       return cppc_get_transition_latency(cpu) / NSEC_PER_USEC;
+> >  }
+> > +#else
+> > +static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
+> > +{
+> > +     return cppc_get_transition_latency(cpu) / NSEC_PER_USEC;
+> > +}
+> > +#endif
+> > +
+> > +#if defined(CONFIG_ARM64) && defined(CONFIG_ENERGY_MODEL)
+> >
+> >  static DEFINE_PER_CPU(unsigned int, efficiency_class);
+> >  static void cppc_cpufreq_register_em(struct cpufreq_policy *policy);
+> > @@ -621,21 +629,12 @@ static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+> >  }
+> >
+> >  #else
+> > -
+> > -static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
+> > -{
+> > -     return cppc_get_transition_latency(cpu) / NSEC_PER_USEC;
+> > -}
+> >  static int populate_efficiency_class(void)
+> >  {
+> >       return 0;
+> >  }
+> > -static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+> > -{
+> > -}
+> >  #endif
+> >
+> > -
+> >  static struct cppc_cpudata *cppc_cpufreq_get_cpu_data(unsigned int cpu)
+> >  {
+> >       struct cppc_cpudata *cpu_data;
+> >

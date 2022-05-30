@@ -2,173 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC51537509
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364CF53755A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbiE3GzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 02:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
+        id S233136AbiE3GzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 02:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233092AbiE3GzA (ORCPT
+        with ESMTP id S233096AbiE3GzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 30 May 2022 02:55:00 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBD96F49E;
-        Sun, 29 May 2022 23:54:59 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id q21so2073368wra.2;
-        Sun, 29 May 2022 23:54:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=q7syxmBySjwfnHsIvdxxYLTq0FodLAYaXUi0vCyeTbo=;
-        b=ZVeQQHIRZEVyIZ2oDkMq7XjD88sBia2B4KKm0khujXyy1SJbYkLjolBCYHMfdpS/yF
-         Cz2oBl6Ktz+Iw910Y42S5exUzCwJ9dHsLE1foeiLIsFTMIhsJOtvsmXLsyTiZVaZPKcM
-         Rvfi+uSLzmuLD7W8m6+vR86ez233fAQW1LQSgF24FCjIi247//6mMXdt2Inj915N7vT1
-         AoFmN1nVOSB3Lo0YkVKVqRS+gz5FO8zAk6dKvQcXzamdRHfaJHcGXWV60244gWTjL2ME
-         ZsrPBDo6pfCR5GV5vELfdYgePC39rzjk+SsiFUZgLL9rpn5CX1OKfPagR0BClUvPl+Er
-         xOAA==
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9829D694B0
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 23:54:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653893698;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cW5xo99K8NrpbNwecJUSYiEDfaIs12UK7aKWMx8Wt/A=;
+        b=crTceKyqzEw8YVTt8ZnDcd57Vg5wk+iRxfx2Z1D5MubTDbm5ZQyCMfochA1NHpt7sjV0OB
+        24Aq8tvOqXJyt3QMlxudliOZxMih9vFgnOAJonSwldllO//OlaGdDmVfjKVIbfhgIw7rr5
+        3szRgKqbBdtswzB3isDHoq/1ub4ZEAY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-657-e7q_DNl_PGiyfUK6WlRUXw-1; Mon, 30 May 2022 02:54:56 -0400
+X-MC-Unique: e7q_DNl_PGiyfUK6WlRUXw-1
+Received: by mail-wm1-f70.google.com with SMTP id n18-20020a05600c3b9200b0039746f3d9faso4149173wms.4
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 23:54:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=q7syxmBySjwfnHsIvdxxYLTq0FodLAYaXUi0vCyeTbo=;
-        b=NiI3eBWx0FFtm3ikfalvm3+lgx7A9B43jdzcEpd1S2PkDodOoPhpuHUVp5004Auvo9
-         5P3M86LDqJaRgtvAGxbXSBeauA3WzHWGD4mfYzgwZN4v3dUeMzRTJIVPtwKcJrhEsUux
-         jTxhs+vLz0Gtw9BfokSk8SBVCQRiSJQkew9RTl44eENAI45zbLCmdkNbj7qHZHOBpqvo
-         LMuGmEyMaBT89UM6GtodtjjxqP2oatoHgmOpGilL62xIWLvbA784i8ocvVWkHqEsE+wY
-         ZXhjhFe8w07y1jm8KFxFa91PQ1DmdM788rQzZkg3bzTYnNRddUjKIi9/V95uS2mXyJFU
-         bxpA==
-X-Gm-Message-State: AOAM5330NmB3m1p8+xPiMpkjp2zIKcLWAJV9k/fcSpK/CMaUAtEVD2tz
-        E3iMyAiqnmuTPToMW5vWSLFO3kAym7M=
-X-Google-Smtp-Source: ABdhPJyBegUWfRpIAV1MtGnjhf15IxbEt8TghdtXx85rZhob+LmL0OtrFj8DwZ8fSxzHIG8gFm1Xcg==
-X-Received: by 2002:a5d:4886:0:b0:20d:527:f98b with SMTP id g6-20020a5d4886000000b0020d0527f98bmr45849795wrq.70.1653893697657;
-        Sun, 29 May 2022 23:54:57 -0700 (PDT)
-Received: from elementary ([94.73.36.128])
-        by smtp.gmail.com with ESMTPSA id bg11-20020a05600c3c8b00b0039c151298b7sm499327wmb.10.2022.05.29.23.54.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 23:54:57 -0700 (PDT)
-Date:   Mon, 30 May 2022 08:54:52 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Stefan Berzl <stefanberzl@gmail.com>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH for-5.19/uclogic] HID: uclogic: Remove useless loop
-Message-ID: <20220530065452.GA39613@elementary>
-References: <20220518224702.1409327-1-jose.exposito89@gmail.com>
- <20220518224702.1409327-4-jose.exposito89@gmail.com>
- <17153eb3-0eb9-cc05-4b65-9c0f4e8d3c90@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=cW5xo99K8NrpbNwecJUSYiEDfaIs12UK7aKWMx8Wt/A=;
+        b=4gxnfPA71vvZn74Yk7P6GttFJoantP/9X0yKYJuNC/gZlM7Z+ZU/o0tIB0gKjAySRP
+         ZaRk7aT68yX9PJVLQPk3FIXmlESqQAAu6EjWWMP0vlLQi7fkQ9/eaCD+6qwq2yhTWrJZ
+         qQZafXqXCbYU1DsGcBfT5o4YweTxS+zr+F3KGjPaOULUZ8Hxt0SOMgnNY76F9B6vVUE0
+         Rfh5F3nFO6ldfHX3vaBX+1CRtTDBSL9CYIrYQ1/49EVXrGpYtTh5nSpHQM1BRfIaQQHQ
+         RkIA1Ec5xx4lPKVEvWuPqBfMRs7HTpGDG7TpYK3Htz8pRBFjVvY/RF39gNNOiK3Go9Xf
+         Yz1A==
+X-Gm-Message-State: AOAM5332qUT/ACjPTYaznTQqv3Eoh5bQxmzQa97IyGhef59GCrgFXsFg
+        MCIedDCC/aSRaQDlwEj2ziMVKLqaozBqH/67kyxdSnrvAcfkPqELtrgPtTGCRFO/VA+pU6TDn73
+        936m9Gxt6vBUqJy/t6ESNhW8g
+X-Received: by 2002:a05:6000:348:b0:210:323c:769a with SMTP id e8-20020a056000034800b00210323c769amr3647052wre.411.1653893694924;
+        Sun, 29 May 2022 23:54:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyICxlknhx3Jy2L9ApC8AN3s3zIcSZThNHOhs6y6eptBkQeGBfv0C8nT+vtfVHYxEDjG14G0g==
+X-Received: by 2002:a05:6000:348:b0:210:323c:769a with SMTP id e8-20020a056000034800b00210323c769amr3647039wre.411.1653893694715;
+        Sun, 29 May 2022 23:54:54 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:7c00:aaa9:2ce5:5aa0:f736? (p200300cbc7047c00aaa92ce55aa0f736.dip0.t-ipconnect.de. [2003:cb:c704:7c00:aaa9:2ce5:5aa0:f736])
+        by smtp.gmail.com with ESMTPSA id m19-20020a7bca53000000b003942a244ee6sm9038107wml.43.2022.05.29.23.54.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 May 2022 23:54:54 -0700 (PDT)
+Message-ID: <8c5c5bd6-fea6-4c27-9a84-4b9c937068d7@redhat.com>
+Date:   Mon, 30 May 2022 08:54:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <17153eb3-0eb9-cc05-4b65-9c0f4e8d3c90@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V2] mm/memory_hotplug: Drop 'reason' argument from
+ check_pfn_span()
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
+Cc:     Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20220526021258.4030749-1-anshuman.khandual@arm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220526021258.4030749-1-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan,
-
-Thanks for the patch. You can send it as an standalone patch rather
-than as a response to my patches, I don't know if it could be missed by
-maintaners this way.
-
-On Sun, May 29, 2022 at 11:49:46PM +0200, Stefan Berzl wrote:
-> The while in question does nothing except provide the possibility
-> to have an infinite loop in case the subreport id is actually the same
-> as the pen id.
+On 26.05.22 04:12, Anshuman Khandual wrote:
+> In check_pfn_span(), a 'reason' string is being used to recreate the caller
+> function name, while printing the warning message. It is really unnecessary
+> as the warning message could just be printed inside the caller depending on
+> the return code. Currently there are just two callers for check_pfn_span()
+> i.e  __add_pages() and __remove_pages(). Let's clean this up.
 > 
-> Signed-off-by: Stefan Berzl <stefanberzl@gmail.com>
-> 
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 > ---
->  drivers/hid/hid-uclogic-core.c | 55 ++++++++++++++++------------------
->  1 file changed, 25 insertions(+), 30 deletions(-)
+> Changes in V2:
 > 
-> diff --git a/drivers/hid/hid-uclogic-core.c b/drivers/hid/hid-uclogic-core.c
-> index c0fe66e50c58..1a6b941f3964 100644
-> --- a/drivers/hid/hid-uclogic-core.c
-> +++ b/drivers/hid/hid-uclogic-core.c
-> @@ -423,40 +423,35 @@ static int uclogic_raw_event(struct hid_device *hdev,
->  	if (report->type != HID_INPUT_REPORT)
->  		return 0;
->  
-> -	while (true) {
-> -		/* Tweak pen reports, if necessary */
-> -		if ((report_id == params->pen.id) && (size >= 2)) {
-> -			subreport_list_end =
-> -				params->pen.subreport_list +
-> -				ARRAY_SIZE(params->pen.subreport_list);
-> -			/* Try to match a subreport */
-> -			for (subreport = params->pen.subreport_list;
-> -			     subreport < subreport_list_end; subreport++) {
-> -				if (subreport->value != 0 &&
-> -				    subreport->value == data[1]) {
-> -					break;
-> -				}
-> -			}
-> -			/* If a subreport matched */
-> -			if (subreport < subreport_list_end) {
-> -				/* Change to subreport ID, and restart */
-> -				report_id = data[0] = subreport->id;
-> -				continue;
-
-Here, in the previous code, the "report_id" is set to the subreport ID
-and the while loop is executed again with the new ID. The loop acts as
-a recursive function.
-
-Isn't this behaviour removed by your patch?
-
-Jose
-
-> -			} else {
-> -				return uclogic_raw_event_pen(drvdata, data, size);
-> +	/* Tweak pen reports, if necessary */
-> +	if ((report_id == params->pen.id) && (size >= 2)) {
-> +		subreport_list_end =
-> +			params->pen.subreport_list +
-> +			ARRAY_SIZE(params->pen.subreport_list);
-> +		/* Try to match a subreport */
-> +		for (subreport = params->pen.subreport_list;
-> +		     subreport < subreport_list_end; subreport++) {
-> +			if (subreport->value != 0 &&
-> +			    subreport->value == data[1]) {
-> +				break;
->  			}
->  		}
-> -
-> -		/* Tweak frame control reports, if necessary */
-> -		for (i = 0; i < ARRAY_SIZE(params->frame_list); i++) {
-> -			if (report_id == params->frame_list[i].id) {
-> -				return uclogic_raw_event_frame(
-> -					drvdata, &params->frame_list[i],
-> -					data, size);
-> -			}
-> +		/* If a subreport matched */
-> +		if (subreport < subreport_list_end) {
-> +			/* Change to subreport ID, and restart */
-> +			report_id = data[0] = subreport->id;
-> +		} else {
-> +			return uclogic_raw_event_pen(drvdata, data, size);
->  		}
-> +	}
->  
-> -		break;
-> +	/* Tweak frame control reports, if necessary */
-> +	for (i = 0; i < ARRAY_SIZE(params->frame_list); i++) {
-> +		if (report_id == params->frame_list[i].id) {
-> +			return uclogic_raw_event_frame(
-> +				drvdata, &params->frame_list[i],
-> +				data, size);
-> +		}
->  	}
->  
->  	return 0;
-> -- 
-> 2.36.1
+> - Fixed typo in commit message
+> - Dropped using 'ret' to capture check_pfn_span() return value in __add_pages()
 > 
+> Changes in V1:
 > 
+> https://lore.kernel.org/all/20220525033910.3781764-1-anshuman.khandual@arm.com/
+> 
+>  mm/memory_hotplug.c | 20 +++++++++-----------
+>  1 file changed, 9 insertions(+), 11 deletions(-)
+> 
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 416b38ca8def..3b24386e9276 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -220,8 +220,7 @@ static void release_memory_resource(struct resource *res)
+>  	kfree(res);
+>  }
+>  
+> -static int check_pfn_span(unsigned long pfn, unsigned long nr_pages,
+> -		const char *reason)
+> +static int check_pfn_span(unsigned long pfn, unsigned long nr_pages)
+>  {
+>  	/*
+>  	 * Disallow all operations smaller than a sub-section and only
+> @@ -238,12 +237,8 @@ static int check_pfn_span(unsigned long pfn, unsigned long nr_pages,
+>  		min_align = PAGES_PER_SUBSECTION;
+>  	else
+>  		min_align = PAGES_PER_SECTION;
+> -	if (!IS_ALIGNED(pfn, min_align)
+> -			|| !IS_ALIGNED(nr_pages, min_align)) {
+> -		WARN(1, "Misaligned __%s_pages start: %#lx end: #%lx\n",
+> -				reason, pfn, pfn + nr_pages - 1);
+> +	if (!IS_ALIGNED(pfn, min_align) || !IS_ALIGNED(nr_pages, min_align))
+
+We could do
+
+if (!IS_ALIGNED(pfn | nr_pages, min_align))
+
+
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
+

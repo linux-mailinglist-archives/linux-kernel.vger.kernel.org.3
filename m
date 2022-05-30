@@ -2,128 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE95537901
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F39F5378F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235076AbiE3KH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S235085AbiE3KIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235067AbiE3KHy (ORCPT
+        with ESMTP id S234605AbiE3KIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:07:54 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05167A827;
-        Mon, 30 May 2022 03:07:50 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U7gK1K005553;
-        Mon, 30 May 2022 10:07:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=TZ4znyQsI0lnl6cDL8B7n/cmWh+0o3s1W6OHXbUTjkk=;
- b=qxG3IiUPd9Kj2RsFtR7luWgsMpUXLW5TD2VytfzTK2ArToHHptv2TAQKF5P6mMcd5JUS
- YxkQw7Rxro11RHRfXtGesI/UI+/hKuTcEhGHjZKRDgkat6YY5WPZZLWcK5cVMg1/Jg6o
- HKk15D0F9DRLvHG0uFYUZIvvd97XQ7VkyA4vtUZZYaodf/fHCwln6Rfq2/Luww33UW6b
- HTQiXilKEbv1aX0aedajrl834xUO3bIYo2hSVLHmqOzzHplohp7rCcqTili+pTPWSpbj
- yG3K+EKCHWOtRFI/W25Wpng9G9H/egxH2dcDHh96JPAg2ctBxpKhcS6o4H+E1MQW3WN6 uQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcsrw2tt5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 10:07:50 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24U7k5fW019993;
-        Mon, 30 May 2022 10:07:49 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcsrw2tsk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 10:07:49 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24U9ppJj014747;
-        Mon, 30 May 2022 10:07:47 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3gbcb7hvqv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 10:07:46 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24UA7hmr31785312
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 May 2022 10:07:43 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AE38FAE053;
-        Mon, 30 May 2022 10:07:43 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4109FAE045;
-        Mon, 30 May 2022 10:07:43 +0000 (GMT)
-Received: from li-ca45c2cc-336f-11b2-a85c-c6e71de567f1.ibm.com (unknown [9.171.70.209])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 30 May 2022 10:07:43 +0000 (GMT)
-Message-ID: <d76e875c360c53d6bd03c3f2767c90dcc4ca6df9.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 18/19] KVM: s390: pv: avoid export before import if
- possible
-From:   Nico Boehr <nrb@linux.ibm.com>
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        mimu@linux.ibm.com
-Date:   Mon, 30 May 2022 12:07:43 +0200
-In-Reply-To: <20220414080311.1084834-19-imbrenda@linux.ibm.com>
-References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
-         <20220414080311.1084834-19-imbrenda@linux.ibm.com>
+        Mon, 30 May 2022 06:08:40 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E44F7B9CD;
+        Mon, 30 May 2022 03:08:38 -0700 (PDT)
+X-UUID: 34d71082f2294258b1b74adaad5ab8f4-20220530
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:4c9ce4b4-4be1-413f-83e7-68bcbae0e369,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:626cc6b8-3c45-407b-8f66-25095432a27a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 34d71082f2294258b1b74adaad5ab8f4-20220530
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1333704574; Mon, 30 May 2022 18:08:34 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 30 May 2022 18:08:33 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 30 May 2022 18:08:33 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 30 May 2022 18:08:33 +0800
+Message-ID: <828da579f872747943dbb7684b35f58bc592c6ca.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        "Kishon Vijay Abraham I" <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        Jitao shi <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
+Date:   Mon, 30 May 2022 18:08:33 +0800
+In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: QBZTYuNQdcNsv58ETnhzrF-MCmnGoWsJ
-X-Proofpoint-ORIG-GUID: drjplrHCL46X1KlijVoGtLVuk9tfgMH4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-30_03,2022-05-30_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 mlxlogscore=999 spamscore=0 adultscore=0 malwarescore=0
- phishscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205300050
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-14 at 10:03 +0200, Claudio Imbrenda wrote:
+Hi, Guillaume:
 
-> diff --git a/arch/s390/kernel/uv.c b/arch/s390/kernel/uv.c
-> index e358b8bd864b..43393568f844 100644
-> --- a/arch/s390/kernel/uv.c
-> +++ b/arch/s390/kernel/uv.c
-> @@ -236,7 +236,8 @@ static int make_secure_pte(pte_t *ptep, unsigned
-> long addr,
-> =C2=A0
-> =C2=A0static bool should_export_before_import(struct uv_cb_header *uvcb,
-> struct mm_struct *mm)
-> =C2=A0{
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return uvcb->cmd !=3D UVC_CMD_=
-UNPIN_PAGE_SHARED &&
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return !test_bit_inv(BIT_UV_FE=
-AT_MISC,
-> &uv_info.uv_feature_indications) &&
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0uvcb->cmd !=3D UVC_CMD_UNPIN_PAGE_SHARED &&
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0atomic_read(&mm->context.protected_count) > 1;
+On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> 
+> It supports the mt8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
+>  
 
-This might be nicer to read like this:
+[snip]
 
-if (test_bit_inv(BIT_UV_FEAT_MISC, &uv_info.uv_feature_indications))
-  return false;
+> +
+> +static irqreturn_t mtk_dp_hpd_isr_handler(struct mtk_dp *mtk_dp)
+> +{
+> +	bool connected;
+> +	u16 swirq_status = mtk_dp_swirq_get_clear(mtk_dp);
+> +	u8 hwirq_status = mtk_dp_hwirq_get_clear(mtk_dp);
+> +	struct mtk_dp_train_info *train_info = &mtk_dp->train_info;
+> +
+> +	train_info->irq_status |= hwirq_status | swirq_status;
 
-if (uvcb->cmd =3D=3D UVC_CMD_UNPIN_PAGE_SHARED)
-  return false;
+You mix software control variable and irq status here. Break each flag
+in irq_status to variables in train_info to decouple software control
+variable and irq status.
 
-return atomic_read(&mm->context.protected_count) > 1;
+> +
+> +	if (!train_info->irq_status)
+> +		return IRQ_HANDLED;
+> +
+> +	connected = mtk_dp_plug_state(mtk_dp);
+> +	if (connected || !train_info->cable_plugged_in)
+> +		train_info->irq_status &= ~MTK_DP_HPD_DISCONNECT;
+> +	else if (!connected || train_info->cable_plugged_in)
+> +		train_info->irq_status &= ~MTK_DP_HPD_CONNECT;
+> +
+> +	if (!(train_info->irq_status &
+> +	      (MTK_DP_HPD_CONNECT | MTK_DP_HPD_DISCONNECT)))
+> +		return IRQ_HANDLED;
+> +
+> +	if (train_info->irq_status & MTK_DP_HPD_CONNECT) {
+> +		train_info->irq_status &= ~MTK_DP_HPD_CONNECT;
+> +		train_info->cable_plugged_in = true;
+> +	} else {
+> +		train_info->irq_status &= ~MTK_DP_HPD_DISCONNECT;
+> +		train_info->cable_plugged_in = false;
+> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_STARTUP;
+> +	}
+> +	train_info->cable_state_change = true;
+> +
+> +	return IRQ_WAKE_THREAD;
+> +}
+> +
 

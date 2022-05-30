@@ -2,310 +2,418 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0B8537604
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563C45375FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234202AbiE3Hww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
+        id S234174AbiE3HwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234256AbiE3Hw3 (ORCPT
+        with ESMTP id S234025AbiE3HuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:52:29 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73842C679
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:51:55 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id j191so2230231pgd.3
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:51:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zTIPIwKXUo1jntkJwVJ1sc6imAMuNPgvSBrYOaWp7QA=;
-        b=nG5qRDAwcXWO+X0Dki+i4YRhICkZTgizDnL8jGVt8i38gBcnMQ+PEzB+4S8f9bRmMM
-         /dr5aZuC15y7PfpyTFr/vkOdIFmHF/lvgEW6BcSF+u0sQfJ0Jr1riyfq7eyAXMqBMriU
-         gpaWesos7gIbjD/4ebYzpph8ntcaNrvYk6ZsIs+O9X8LLNZnEwvhBciiUHcFWbUkepH6
-         f7uQXVabUjxGAqexFEeMZtu0mn+ShivhUM3cH96KyBk8JbMdL6sAPc5rpchNyBeAr4vu
-         mkiOhXkDrR99zKdVBXqW1XnPc4KPjTH5VGTiyNXtRA+pl7QVsUAJzg1OYerfzLi4ttKY
-         WPsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zTIPIwKXUo1jntkJwVJ1sc6imAMuNPgvSBrYOaWp7QA=;
-        b=F2OMBh+fXFFeEBMnWLItfgprpPX5R9ZGmEdMWPS/l0cUkT8xo2tagjnnAdS5PltxLS
-         vVuAqmXr1hxpErD/02Zh+fRUzR2D38ZtfNtmXauiSVBc4GwvoAnLV5TU8/lNJJdxbtyN
-         aKiwkdEZcalve32Z98ugseM8FLh0m9tw+2vNv8o1GI/BBzyQcTQ6bukbYibv0A56ehAl
-         Ivoyw5SHlZbuDi+/PpOLBKYQA1SKRLwYLCo2fXuj06Tke5hjPJ/chm+ATN2msoMH1SqQ
-         JK/0xHdZ2Gcwg6cVpgmSYoepllTjnNYRyMlxSesd0lCNI1kGsJx8cTzigjfkd+h7dC+d
-         akdQ==
-X-Gm-Message-State: AOAM531MyYt8pbB/85435nvKByo/5eryzlfyIeOhB7bV3lURtURfu5qk
-        +lil5OsF9v9g9+MEgG2UT+zIpw==
-X-Google-Smtp-Source: ABdhPJwuVWp+MeKG8ZENJf/0D824rv/vfRXylHNl8RsBcRIKzT3qmI+YmeK9lvxmKvP3eliznaQo/w==
-X-Received: by 2002:aa7:8094:0:b0:505:b544:d1ca with SMTP id v20-20020aa78094000000b00505b544d1camr56072290pff.26.1653897114489;
-        Mon, 30 May 2022 00:51:54 -0700 (PDT)
-Received: from FVFYT0MHHV2J.bytedance.net ([2408:8207:18da:2310:2071:e13a:8aa:cacf])
-        by smtp.gmail.com with ESMTPSA id a23-20020a170902b59700b001616c3bd5c2sm8421381pls.162.2022.05.30.00.51.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 00:51:54 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
-        shakeelb@google.com, akpm@linux-foundation.org
-Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        longman@redhat.com, Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v5 11/11] mm: lru: use lruvec lock to serialize memcg changes
-Date:   Mon, 30 May 2022 15:49:19 +0800
-Message-Id: <20220530074919.46352-12-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.1 (Apple Git-133)
-In-Reply-To: <20220530074919.46352-1-songmuchun@bytedance.com>
-References: <20220530074919.46352-1-songmuchun@bytedance.com>
-MIME-Version: 1.0
+        Mon, 30 May 2022 03:50:24 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80045.outbound.protection.outlook.com [40.107.8.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FE672230;
+        Mon, 30 May 2022 00:50:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lNXdWE4gbrH2j5VeblCbIM1jc1BfInYP2NtcqD2RfrheEvPXaUHJs88BxkonADNFp0uORQDvI0CSxiYMpHO/qebwBtjO8ma8oe1OrlyFoGXdsQwtzdl/qg903MTy5Dp4U9f+wwfTzagLqF6GMSGK6w2+UdMIUxQIoV0sJuykDsjgB0S6PGsx51WfLpFIYEv7RDTzbozAeERNMQ28uDl3F/h4lNOEX7i/zdstp8shGGGTDBA/YpRGbsQ7k7ZogeQoEa3SQeN3OtuUCHuG4SBrrgx+Y0ihNDWRM5QHwzAphfezN0mOuzIYWNz3+ncoT39e5tC2YfhRLIAtHjMexkKt6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wq6bTS2J/2rQR39Mutmqtwel7YgxAHwNJvanAXyBFSw=;
+ b=c37Bs8WK9lIJAQR+snFt8XjtJOLoAuyENZXe/YPqcQK38jvMftbwSbFOp1vZCcfPePk4mwDnyx5aBDPSEs7G2Vj8ZdaDxdvgCzs9ZwZt1BfR/BURzpIacFfDanddodQkLMUXUYIVsiefjIAlqTKBF/EiHW3SV8FN0cRFIKPvHMVLpDgTD4izlmslRxzfpIItDrU6W62OszTHIdcKvfyXUhb5G5zczT/bxWr3aftyMylHOh9mK4dGqNnv5cfqvRUNe/wVUaYyxibrkj87by5cW9NFay4ciRYwsGymCZ+yRW5mwvp3CSoqkMg5YDEdIQ1N74v1GC3ok6B539ZpUXGotQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wq6bTS2J/2rQR39Mutmqtwel7YgxAHwNJvanAXyBFSw=;
+ b=oxmyUizXUuYUTKeiMOzk39An8wdCKZmhfcN6B7Z3yuFFK8FN2347OedBWg0C1igjJKLqkR/q05OAeIgy9Sp+QYHIqOqjQeuv6NLL4w3YHr8mee7hcNsuyE2O4DaWROgZneDww3rgVMWGQcz0kvudNeV3mCz993ok7wOtbFIdD/8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by AM6PR04MB6085.eurprd04.prod.outlook.com (2603:10a6:20b:b9::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.19; Mon, 30 May
+ 2022 07:50:16 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::bc48:7565:c619:62c3]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::bc48:7565:c619:62c3%7]) with mapi id 15.20.5293.018; Mon, 30 May 2022
+ 07:50:16 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     mchehab@kernel.org, mirela.rabulea@oss.nxp.com,
+        hverkuil-cisco@xs4all.nl
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] media: imx-jpeg: Implement drain using v4l2-mem2mem helpers
+Date:   Mon, 30 May 2022 15:50:02 +0800
+Message-Id: <20220530075002.15327-1-ming.qian@nxp.com>
+X-Mailer: git-send-email 2.36.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR04CA0182.apcprd04.prod.outlook.com
+ (2603:1096:4:14::20) To AM6PR04MB6341.eurprd04.prod.outlook.com
+ (2603:10a6:20b:d8::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f40bb6ea-221f-4c35-9e94-08da4211096a
+X-MS-TrafficTypeDiagnostic: AM6PR04MB6085:EE_
+X-Microsoft-Antispam-PRVS: <AM6PR04MB6085E7345385084A0E57119DE7DD9@AM6PR04MB6085.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: roEkhUB86IkDobhb9QjmJOWVw35xTW4QuFDauD4dyg1VSwIuVBhAo7DOEPJexxT8JUbpck4pNI4vde67tRdJFUNocwOlemWZE4OjTXb9VKJW8XN8T14WYqZ6c14bvN5FmCLdSwK0GQt44zAfBt1HxFdr1a+jZRLvUz3tw/H0RpUFPfgmgBtiDnp8/pNiVIfO0ZgN7RU7C4Qn3FVfIhBQY3DfNpOIXjwqMSQD5bhXT4PCIUyuT/fh8irsVBDdXEEaQOsVZ2tnBVzXjPaNbexwRKQBf++6y7tQ7HJAL6P1YpPp4igV9YnGJWEmhrliiKOiwY8gke714xbXlJUdwIH6btgp1BWA/UFP9kqQPR1S5NL4Z64wZUThB9SFQFDLWbECrjUJo0Z9QlMTEtGct+Ym3+B24RHj5oP5Sg4m5X1XSq6fyfoti5otZXFicIeEpNnZgRuBtAfW6b79BrafHA48EDBrqZ9hdNExP9Uty/k1vmOyZf0/7QL2dZY835SjF8wHtUcz5wq0cPO9JJEEvsy2dLMIvzaO4ExkwnolqJWDUDz8ZbLiY/f7hMWZZUxUh+hDFRD/A+yWCcuildurFYcws5Opu+nD3mzfkeMfr5/YO4n+pwaG1bOwy4bHY6JNtKkCPhyWcKG6ihC0pFCruI1fuD+zhSbkVClptXWyjElACBmiPN4vG4dDxpENZ39ZPd3eFxxEjEzAnEHzUAVfjey+2Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(5660300002)(6486002)(86362001)(1076003)(26005)(6512007)(8936002)(2616005)(6666004)(83380400001)(2906002)(52116002)(186003)(7416002)(6506007)(44832011)(66556008)(66476007)(4326008)(66946007)(8676002)(38100700002)(36756003)(316002)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RMsn0D4sNNWnRyqISvaFBXWcf20OqX44DXAugC1VvraDPaxDQnMQqLd/5TZ2?=
+ =?us-ascii?Q?+CkSG2rAyiG+Sm106Pn6RHOWTupdX4sRj084l44Kw+myM/U+LEb4qnogKNW9?=
+ =?us-ascii?Q?iFbhQDPRGHxZSHVfUecOG9zqPDHtbs0MxCZcHbHvkKt30TwjCP8vaGnoJh4p?=
+ =?us-ascii?Q?0d/jJloA2fl5cmi+bt+dLoNBwyzUFwRbqGMArreu8dhPhqDHa4osiPXMgOX+?=
+ =?us-ascii?Q?rb4arN6cgSTeRgYFXM/a+jQQ2I0Ea6Tvznl8wsVBSuA+7vLDGmh3pvGL1ewn?=
+ =?us-ascii?Q?3wSjglNKZleDcCCu+Ny7qYEVkJtxYIiy0lkOUgWqItGhob2eiI416Njlc0gG?=
+ =?us-ascii?Q?5g474uBvXn8Mt2Z73ARGqGOFHyQC+HKt2g0Nfsp+P2U0a1fJzSwk0W8tQ4DW?=
+ =?us-ascii?Q?7RXbaRCY+EX8qgpTIdzvwCvosXXFzIzFW0ejAUCzP6bfgaCIjT7x78iGjpNw?=
+ =?us-ascii?Q?39ygkNh6sorM4EB0NAgTixkeRwA3SIdfc2rXsWlt6z1QKGfe4AqvlwAgiemR?=
+ =?us-ascii?Q?awQLObep+VsBMPtSfeZjQ3ozzb8cHv6/zQOWVdg7p4OoofnX246RpVaqXxbV?=
+ =?us-ascii?Q?6QNwLyYS610Tt5dn/fCDLQs6Sq60sHHwmfu3QyIlG+gDDfEnl/4a/7gtVkhh?=
+ =?us-ascii?Q?jkjV1DQGc5iYoO1vf7tPcz9B2QZMPvjBUtpkMMo1hV81yIMJboc8OkUXg2G6?=
+ =?us-ascii?Q?1/kUtoxQqJKEmPznlnK5WF+P1lBEPCqrBhO4uinogJhX/9SweO4juFsiNmdn?=
+ =?us-ascii?Q?dX2J1roGRadmaltxNV2V8i9P+Jksq4mW1roAlPkyPbxH8R7OyFAOPr0hTTMJ?=
+ =?us-ascii?Q?TGy+qnYaaMKA2FV0p1jnd8b7waZyTyTjcMr0GPMudqC4uThqDfqDFAWlD6O5?=
+ =?us-ascii?Q?YgTXNFWEZiKuAY3WyB7uc1r+gb3FnBk5nou0JfuRi98k3xJheaumxyDeOjwU?=
+ =?us-ascii?Q?7GxZYvwpKS+B20twnike5yNTlnDyDI45oq1mG99ztRJKBLC0FwAZbsfHWC6/?=
+ =?us-ascii?Q?/Ti9QHzaIvHefellPPrdACGHhaa7NAJhUyrQtHYlaMlfOvT4upNOynQoroel?=
+ =?us-ascii?Q?ApGZpIDdlktujLuBhlt9ZNAzoOTBx70RoKKMjkESyngAcVWpR/AMjmijt3hp?=
+ =?us-ascii?Q?GnIE5OdUTrL9JNAw9pWUvtWfbSyp43Kmj2zFCILWVUYHLUWVEC4KLbGDWbMl?=
+ =?us-ascii?Q?IG2sZzb5yzFd8PLaZj/A5w3MetDou42bp3x84fgdCRvz8sJe/NhnHeI+JXfq?=
+ =?us-ascii?Q?l+Oi7ncSTs/CUvw532uej55B4mVZAJZHLhRxP+RlS7u5chSGQhPuEi4CuY91?=
+ =?us-ascii?Q?U1anDlyHKaYdarQDFg3eoOlz6Y4C6c4FJdQJimpKQ8Ox4DsN2BMptaU2Fk5x?=
+ =?us-ascii?Q?nnG/Ptg9DRqXIs55pOhZD0zCsfAymaYuYAj4r5kmTI4PH6ETqilrnG4KZENP?=
+ =?us-ascii?Q?2VanJGr+il+abo5+d25A2gYMJ84O0CEnbcvySSQrubq8SVMveIdksfig7+wF?=
+ =?us-ascii?Q?HpV2yu5UprrULIdMpMAuDpzchX8yVTLJSv+77f2it9/CPU2xEpdrcFaqDT8U?=
+ =?us-ascii?Q?CfJfNUC5EnFsnptmKelXUjSBB3lD+TsKGtelwG6CWpU2STGegoZbUtZh2wR/?=
+ =?us-ascii?Q?j8j4F/jjOd8VPP6aVsApYEc/yd7zEqhDLqEyaQ0l1xP044Bk8aSf8Xfe16BE?=
+ =?us-ascii?Q?/NkaVgm+Jg1hMcBTezJpHoRvwWTgcA0KGlvx4kc8VBkrmV3bzAI7/hD0DyP5?=
+ =?us-ascii?Q?AI9+lDLhNQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f40bb6ea-221f-4c35-9e94-08da4211096a
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 07:50:16.8705
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5aic90kwtRGDnoQXRMRYbOihHbZRcnj+ahSHMwmV8b6xyzKep8SfjZB5MRA+ZhhwXpYZ6T+rQ351BmNolUSrzQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6085
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As described by commit fc574c23558c ("mm/swap.c: serialize memcg
-changes in pagevec_lru_move_fn"), TestClearPageLRU() aims to
-serialize mem_cgroup_move_account() during pagevec_lru_move_fn().
-Now folio_lruvec_lock*() has the ability to detect whether page
-memcg has been changed. So we can use lruvec lock to serialize
-mem_cgroup_move_account() during pagevec_lru_move_fn(). This
-change is a partial revert of the commit fc574c23558c ("mm/swap.c:
-serialize memcg changes in pagevec_lru_move_fn").
+v4l2 m2m has supplied some helper function to handle drain,
+so the driver can use the helper function directly.
 
-And pagevec_lru_move_fn() is more hot compare with
-mem_cgroup_move_account(), removing an atomic operation would be
-an optimization. Also this change would not dirty cacheline for a
-page which isn't on the LRU.
-
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Fixes: d8ebe298d008c ("media: imx-jpeg: Set V4L2_BUF_FLAG_LAST at eos")
+Signed-off-by: Ming Qian <ming.qian@nxp.com>
 ---
- mm/memcontrol.c | 34 ++++++++++++++++++++++++++++++++++
- mm/swap.c       | 45 ++++++++++++++-------------------------------
- mm/vmscan.c     |  9 ++++-----
- 3 files changed, 52 insertions(+), 36 deletions(-)
+v2
+- add Fixes tag
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 155 +++++++++---------
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg.h    |   2 -
+ 2 files changed, 73 insertions(+), 84 deletions(-)
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index f4db3cb2aedc..3a0f3838f02d 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -1333,10 +1333,39 @@ struct lruvec *folio_lruvec_lock(struct folio *folio)
- 	lruvec = folio_lruvec(folio);
- 	spin_lock(&lruvec->lru_lock);
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+index 9a1c8df522ed..965021d3c7ef 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+@@ -558,6 +558,18 @@ static void mxc_jpeg_free_slot_data(struct mxc_jpeg_dev *jpeg,
+ 	jpeg->slot_data[slot].used = false;
+ }
  
-+	/*
-+	 * The memcg of the page can be changed by any the following routines:
-+	 *
-+	 * 1) mem_cgroup_move_account() or
-+	 * 2) memcg_reparent_objcgs()
-+	 *
-+	 * The possible bad scenario would like:
-+	 *
-+	 * CPU0:                CPU1:                CPU2:
-+	 * lruvec = folio_lruvec()
-+	 *
-+	 *                      if (!isolate_lru_page())
-+	 *                              mem_cgroup_move_account()
-+	 *
-+	 *                                           memcg_reparent_objcgs()
-+	 *
-+	 * spin_lock(&lruvec->lru_lock)
-+	 *                ^^^^^^
-+	 *              wrong lock
-+	 *
-+	 * Either CPU1 or CPU2 can change page memcg, so we need to check
-+	 * whether page memcg is changed, if so, we should reacquire the
-+	 * new lruvec lock.
-+	 */
- 	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
- 		spin_unlock(&lruvec->lru_lock);
- 		goto retry;
++static void mxc_jpeg_check_and_set_last_buffer(struct mxc_jpeg_ctx *ctx,
++					       struct vb2_v4l2_buffer *src_buf,
++					       struct vb2_v4l2_buffer *dst_buf)
++{
++	if (v4l2_m2m_is_last_draining_src_buf(ctx->fh.m2m_ctx, src_buf)) {
++		dst_buf->flags |= V4L2_BUF_FLAG_LAST;
++		v4l2_m2m_mark_stopped(ctx->fh.m2m_ctx);
++		notify_eos(ctx);
++		ctx->header_parsed = false;
++	}
++}
++
+ static irqreturn_t mxc_jpeg_dec_irq(int irq, void *priv)
+ {
+ 	struct mxc_jpeg_dev *jpeg = priv;
+@@ -633,6 +645,7 @@ static irqreturn_t mxc_jpeg_dec_irq(int irq, void *priv)
+ 		dev_dbg(dev, "Decoder DHT cfg finished. Start decoding...\n");
+ 		goto job_unlock;
  	}
 +
-+	/*
-+	 * When we reach here, it means that the folio_memcg(folio) is
-+	 * stable.
-+	 */
- 	rcu_read_unlock();
+ 	if (jpeg->mode == MXC_JPEG_ENCODE) {
+ 		payload = readl(reg + MXC_SLOT_OFFSET(slot, SLOT_BUF_PTR));
+ 		vb2_set_plane_payload(&dst_buf->vb2_buf, 0, payload);
+@@ -661,6 +674,7 @@ static irqreturn_t mxc_jpeg_dec_irq(int irq, void *priv)
  
- 	return lruvec;
-@@ -1364,6 +1393,7 @@ struct lruvec *folio_lruvec_lock_irq(struct folio *folio)
- 	lruvec = folio_lruvec(folio);
- 	spin_lock_irq(&lruvec->lru_lock);
- 
-+	/* See the comments in folio_lruvec_lock(). */
- 	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
- 		spin_unlock_irq(&lruvec->lru_lock);
- 		goto retry;
-@@ -1397,6 +1427,7 @@ struct lruvec *folio_lruvec_lock_irqsave(struct folio *folio,
- 	lruvec = folio_lruvec(folio);
- 	spin_lock_irqsave(&lruvec->lru_lock, *flags);
- 
-+	/* See the comments in folio_lruvec_lock(). */
- 	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
- 		spin_unlock_irqrestore(&lruvec->lru_lock, *flags);
- 		goto retry;
-@@ -5738,7 +5769,10 @@ static int mem_cgroup_move_account(struct page *page,
- 	obj_cgroup_put(rcu_dereference(from->objcg));
- 	rcu_read_unlock();
- 
-+	/* See the comments in folio_lruvec_lock(). */
-+	spin_lock(&from_vec->lru_lock);
- 	folio->memcg_data = (unsigned long)rcu_access_pointer(to->objcg);
-+	spin_unlock(&from_vec->lru_lock);
- 
- 	__folio_memcg_unlock(from);
- 
-diff --git a/mm/swap.c b/mm/swap.c
-index 6cea469b6ff2..1b893c157bd1 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -199,14 +199,8 @@ static void pagevec_lru_move_fn(struct pagevec *pvec,
- 		struct page *page = pvec->pages[i];
- 		struct folio *folio = page_folio(page);
- 
--		/* block memcg migration during page moving between lru */
--		if (!TestClearPageLRU(page))
--			continue;
--
- 		lruvec = folio_lruvec_relock_irqsave(folio, lruvec, &flags);
- 		(*move_fn)(page, lruvec);
--
--		SetPageLRU(page);
+ buffers_done:
+ 	jpeg->slot_data[slot].used = false; /* unused, but don't free */
++	mxc_jpeg_check_and_set_last_buffer(ctx, src_buf, dst_buf);
+ 	v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+ 	v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
+ 	v4l2_m2m_buf_done(src_buf, buf_state);
+@@ -1034,6 +1048,7 @@ static void mxc_jpeg_device_run(void *priv)
+ 		jpeg_src_buf->jpeg_parse_error = true;
  	}
- 	if (lruvec)
- 		lruvec_unlock_irqrestore(lruvec, flags);
-@@ -218,7 +212,7 @@ static void pagevec_move_tail_fn(struct page *page, struct lruvec *lruvec)
- {
- 	struct folio *folio = page_folio(page);
- 
--	if (!folio_test_unevictable(folio)) {
-+	if (folio_test_lru(folio) && !folio_test_unevictable(folio)) {
- 		lruvec_del_folio(lruvec, folio);
- 		folio_clear_active(folio);
- 		lruvec_add_folio_tail(lruvec, folio);
-@@ -314,7 +308,8 @@ void lru_note_cost_folio(struct folio *folio)
- 
- static void __folio_activate(struct folio *folio, struct lruvec *lruvec)
- {
--	if (!folio_test_active(folio) && !folio_test_unevictable(folio)) {
-+	if (folio_test_lru(folio) && !folio_test_active(folio) &&
-+	    !folio_test_unevictable(folio)) {
- 		long nr_pages = folio_nr_pages(folio);
- 
- 		lruvec_del_folio(lruvec, folio);
-@@ -371,12 +366,9 @@ static void folio_activate(struct folio *folio)
- {
- 	struct lruvec *lruvec;
- 
--	if (folio_test_clear_lru(folio)) {
--		lruvec = folio_lruvec_lock_irq(folio);
--		__folio_activate(folio, lruvec);
--		lruvec_unlock_irq(lruvec);
--		folio_set_lru(folio);
--	}
-+	lruvec = folio_lruvec_lock_irq(folio);
-+	__folio_activate(folio, lruvec);
-+	lruvec_unlock_irq(lruvec);
+ 	if (jpeg_src_buf->jpeg_parse_error) {
++		mxc_jpeg_check_and_set_last_buffer(ctx, src_buf, dst_buf);
+ 		v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+ 		v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
+ 		v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_ERROR);
+@@ -1084,45 +1099,33 @@ static void mxc_jpeg_device_run(void *priv)
+ 	spin_unlock_irqrestore(&ctx->mxc_jpeg->hw_lock, flags);
  }
- #endif
  
-@@ -519,6 +511,9 @@ static void lru_deactivate_file_fn(struct page *page, struct lruvec *lruvec)
- 	bool active = PageActive(page);
- 	int nr_pages = thp_nr_pages(page);
+-static void mxc_jpeg_set_last_buffer_dequeued(struct mxc_jpeg_ctx *ctx)
+-{
+-	struct vb2_queue *q;
+-
+-	ctx->stopped = 1;
+-	q = v4l2_m2m_get_dst_vq(ctx->fh.m2m_ctx);
+-	if (!list_empty(&q->done_list))
+-		return;
+-
+-	q->last_buffer_dequeued = true;
+-	wake_up(&q->done_wq);
+-	ctx->stopped = 0;
+-	ctx->header_parsed = false;
+-}
+-
+ static int mxc_jpeg_decoder_cmd(struct file *file, void *priv,
+ 				struct v4l2_decoder_cmd *cmd)
+ {
+ 	struct v4l2_fh *fh = file->private_data;
+ 	struct mxc_jpeg_ctx *ctx = mxc_jpeg_fh_to_ctx(fh);
+-	struct device *dev = ctx->mxc_jpeg->dev;
+ 	int ret;
  
-+	if (!PageLRU(page))
+ 	ret = v4l2_m2m_ioctl_try_decoder_cmd(file, fh, cmd);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (cmd->cmd == V4L2_DEC_CMD_STOP) {
+-		dev_dbg(dev, "Received V4L2_DEC_CMD_STOP");
+-		if (v4l2_m2m_num_src_bufs_ready(fh->m2m_ctx) == 0) {
+-			/* No more src bufs, notify app EOS */
+-			notify_eos(ctx);
+-			mxc_jpeg_set_last_buffer_dequeued(ctx);
+-		} else {
+-			/* will send EOS later*/
+-			ctx->stopping = 1;
+-		}
++	if (!vb2_is_streaming(v4l2_m2m_get_src_vq(fh->m2m_ctx)))
++		return 0;
++
++	ret = v4l2_m2m_ioctl_decoder_cmd(file, priv, cmd);
++	if (ret < 0)
++		return ret;
++
++	if (cmd->cmd == V4L2_DEC_CMD_STOP &&
++	    v4l2_m2m_has_stopped(fh->m2m_ctx)) {
++		notify_eos(ctx);
++		ctx->header_parsed = false;
+ 	}
+ 
++	if (cmd->cmd == V4L2_DEC_CMD_START &&
++	    v4l2_m2m_has_stopped(fh->m2m_ctx))
++		vb2_clear_last_buffer_dequeued(&fh->m2m_ctx->cap_q_ctx.q);
+ 	return 0;
+ }
+ 
+@@ -1131,24 +1134,27 @@ static int mxc_jpeg_encoder_cmd(struct file *file, void *priv,
+ {
+ 	struct v4l2_fh *fh = file->private_data;
+ 	struct mxc_jpeg_ctx *ctx = mxc_jpeg_fh_to_ctx(fh);
+-	struct device *dev = ctx->mxc_jpeg->dev;
+ 	int ret;
+ 
+ 	ret = v4l2_m2m_ioctl_try_encoder_cmd(file, fh, cmd);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (cmd->cmd == V4L2_ENC_CMD_STOP) {
+-		dev_dbg(dev, "Received V4L2_ENC_CMD_STOP");
+-		if (v4l2_m2m_num_src_bufs_ready(fh->m2m_ctx) == 0) {
+-			/* No more src bufs, notify app EOS */
+-			notify_eos(ctx);
+-			mxc_jpeg_set_last_buffer_dequeued(ctx);
+-		} else {
+-			/* will send EOS later*/
+-			ctx->stopping = 1;
+-		}
+-	}
++	if (!vb2_is_streaming(v4l2_m2m_get_src_vq(fh->m2m_ctx)) ||
++	    !vb2_is_streaming(v4l2_m2m_get_dst_vq(fh->m2m_ctx)))
++		return 0;
++
++	ret = v4l2_m2m_ioctl_encoder_cmd(file, fh, cmd);
++	if (ret < 0)
++		return 0;
++
++	if (cmd->cmd == V4L2_ENC_CMD_STOP &&
++	    v4l2_m2m_has_stopped(fh->m2m_ctx))
++		notify_eos(ctx);
++
++	if (cmd->cmd == V4L2_ENC_CMD_START &&
++	    v4l2_m2m_has_stopped(fh->m2m_ctx))
++		vb2_clear_last_buffer_dequeued(&fh->m2m_ctx->cap_q_ctx.q);
+ 
+ 	return 0;
+ }
+@@ -1204,6 +1210,8 @@ static int mxc_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	struct mxc_jpeg_q_data *q_data = mxc_jpeg_get_q_data(ctx, q->type);
+ 	int ret;
+ 
++	v4l2_m2m_update_start_streaming_state(ctx->fh.m2m_ctx, q);
++
+ 	if (ctx->mxc_jpeg->mode == MXC_JPEG_DECODE && V4L2_TYPE_IS_CAPTURE(q->type))
+ 		ctx->source_change = 0;
+ 	dev_dbg(ctx->mxc_jpeg->dev, "Start streaming ctx=%p", ctx);
+@@ -1235,11 +1243,15 @@ static void mxc_jpeg_stop_streaming(struct vb2_queue *q)
+ 			break;
+ 		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
+ 	}
+-	pm_runtime_put_sync(&ctx->mxc_jpeg->pdev->dev);
+-	if (V4L2_TYPE_IS_OUTPUT(q->type)) {
+-		ctx->stopping = 0;
+-		ctx->stopped = 0;
++
++	v4l2_m2m_update_stop_streaming_state(ctx->fh.m2m_ctx, q);
++	if (V4L2_TYPE_IS_OUTPUT(q->type) &&
++	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx)) {
++		notify_eos(ctx);
++		ctx->header_parsed = false;
+ 	}
++
++	pm_runtime_put_sync(&ctx->mxc_jpeg->pdev->dev);
+ }
+ 
+ static int mxc_jpeg_valid_comp_id(struct device *dev,
+@@ -1438,6 +1450,20 @@ static void mxc_jpeg_buf_queue(struct vb2_buffer *vb)
+ 	struct mxc_jpeg_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
+ 	struct mxc_jpeg_src_buf *jpeg_src_buf;
+ 
++	if (V4L2_TYPE_IS_CAPTURE(vb->vb2_queue->type) &&
++	    vb2_is_streaming(vb->vb2_queue) &&
++	    v4l2_m2m_dst_buf_is_last(ctx->fh.m2m_ctx)) {
++		struct mxc_jpeg_q_data *q_data;
++
++		q_data = mxc_jpeg_get_q_data(ctx, vb->vb2_queue->type);
++		vbuf->field = V4L2_FIELD_NONE;
++		vbuf->sequence = q_data->sequence++;
++		v4l2_m2m_last_buffer_done(ctx->fh.m2m_ctx, vbuf);
++		notify_eos(ctx);
++		ctx->header_parsed = false;
 +		return;
++	}
 +
- 	if (PageUnevictable(page))
- 		return;
+ 	if (vb->vb2_queue->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
+ 		goto end;
  
-@@ -556,7 +551,7 @@ static void lru_deactivate_file_fn(struct page *page, struct lruvec *lruvec)
- 
- static void lru_deactivate_fn(struct page *page, struct lruvec *lruvec)
- {
--	if (PageActive(page) && !PageUnevictable(page)) {
-+	if (PageLRU(page) && PageActive(page) && !PageUnevictable(page)) {
- 		int nr_pages = thp_nr_pages(page);
- 
- 		del_page_from_lru_list(page, lruvec);
-@@ -572,7 +567,7 @@ static void lru_deactivate_fn(struct page *page, struct lruvec *lruvec)
- 
- static void lru_lazyfree_fn(struct page *page, struct lruvec *lruvec)
- {
--	if (PageAnon(page) && PageSwapBacked(page) &&
-+	if (PageLRU(page) && PageAnon(page) && PageSwapBacked(page) &&
- 	    !PageSwapCache(page) && !PageUnevictable(page)) {
- 		int nr_pages = thp_nr_pages(page);
- 
-@@ -1007,8 +1002,9 @@ void __pagevec_release(struct pagevec *pvec)
- }
- EXPORT_SYMBOL(__pagevec_release);
- 
--static void __pagevec_lru_add_fn(struct folio *folio, struct lruvec *lruvec)
-+static void __pagevec_lru_add_fn(struct page *page, struct lruvec *lruvec)
- {
-+	struct folio *folio = page_folio(page);
- 	int was_unevictable = folio_test_clear_unevictable(folio);
- 	long nr_pages = folio_nr_pages(folio);
- 
-@@ -1054,20 +1050,7 @@ static void __pagevec_lru_add_fn(struct folio *folio, struct lruvec *lruvec)
-  */
- void __pagevec_lru_add(struct pagevec *pvec)
- {
--	int i;
--	struct lruvec *lruvec = NULL;
--	unsigned long flags = 0;
--
--	for (i = 0; i < pagevec_count(pvec); i++) {
--		struct folio *folio = page_folio(pvec->pages[i]);
--
--		lruvec = folio_lruvec_relock_irqsave(folio, lruvec, &flags);
--		__pagevec_lru_add_fn(folio, lruvec);
--	}
--	if (lruvec)
--		lruvec_unlock_irqrestore(lruvec, flags);
--	release_pages(pvec->pages, pvec->nr);
--	pagevec_reinit(pvec);
-+	pagevec_lru_move_fn(pvec, __pagevec_lru_add_fn);
- }
- 
- /**
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 51853d6df7b4..c591d071a598 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -4789,18 +4789,17 @@ void check_move_unevictable_pages(struct pagevec *pvec)
- 		nr_pages = thp_nr_pages(page);
- 		pgscanned += nr_pages;
- 
--		/* block memcg migration during page moving between lru */
--		if (!TestClearPageLRU(page))
-+		lruvec = folio_lruvec_relock_irq(folio, lruvec);
-+
-+		if (!PageLRU(page) || !PageUnevictable(page))
- 			continue;
- 
--		lruvec = folio_lruvec_relock_irq(folio, lruvec);
--		if (page_evictable(page) && PageUnevictable(page)) {
-+		if (page_evictable(page)) {
- 			del_page_from_lru_list(page, lruvec);
- 			ClearPageUnevictable(page);
- 			add_page_to_lru_list(page, lruvec);
- 			pgrescued += nr_pages;
+@@ -1486,24 +1512,11 @@ static int mxc_jpeg_buf_prepare(struct vb2_buffer *vb)
+ 			return -EINVAL;
  		}
--		SetPageLRU(page);
  	}
+-	return 0;
+-}
+-
+-static void mxc_jpeg_buf_finish(struct vb2_buffer *vb)
+-{
+-	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+-	struct mxc_jpeg_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
+-	struct vb2_queue *q = vb->vb2_queue;
+-
+-	if (V4L2_TYPE_IS_OUTPUT(vb->type))
+-		return;
+-	if (!ctx->stopped)
+-		return;
+-	if (list_empty(&q->done_list)) {
+-		vbuf->flags |= V4L2_BUF_FLAG_LAST;
+-		ctx->stopped = 0;
+-		ctx->header_parsed = false;
++	if (V4L2_TYPE_IS_CAPTURE(vb->vb2_queue->type)) {
++		vb2_set_plane_payload(vb, 0, 0);
++		vb2_set_plane_payload(vb, 1, 0);
+ 	}
++	return 0;
+ }
  
- 	if (lruvec) {
+ static const struct vb2_ops mxc_jpeg_qops = {
+@@ -1512,7 +1525,6 @@ static const struct vb2_ops mxc_jpeg_qops = {
+ 	.wait_finish		= vb2_ops_wait_finish,
+ 	.buf_out_validate	= mxc_jpeg_buf_out_validate,
+ 	.buf_prepare		= mxc_jpeg_buf_prepare,
+-	.buf_finish             = mxc_jpeg_buf_finish,
+ 	.start_streaming	= mxc_jpeg_start_streaming,
+ 	.stop_streaming		= mxc_jpeg_stop_streaming,
+ 	.buf_queue		= mxc_jpeg_buf_queue,
+@@ -2015,27 +2027,6 @@ static int mxc_jpeg_subscribe_event(struct v4l2_fh *fh,
+ 	}
+ }
+ 
+-static int mxc_jpeg_dqbuf(struct file *file, void *priv,
+-			  struct v4l2_buffer *buf)
+-{
+-	struct v4l2_fh *fh = file->private_data;
+-	struct mxc_jpeg_ctx *ctx = mxc_jpeg_fh_to_ctx(priv);
+-	struct device *dev = ctx->mxc_jpeg->dev;
+-	int num_src_ready = v4l2_m2m_num_src_bufs_ready(fh->m2m_ctx);
+-	int ret;
+-
+-	dev_dbg(dev, "DQBUF type=%d, index=%d", buf->type, buf->index);
+-	if (ctx->stopping == 1 && num_src_ready == 0) {
+-		/* No more src bufs, notify app EOS */
+-		notify_eos(ctx);
+-		ctx->stopping = 0;
+-		mxc_jpeg_set_last_buffer_dequeued(ctx);
+-	}
+-
+-	ret = v4l2_m2m_dqbuf(file, fh->m2m_ctx, buf);
+-	return ret;
+-}
+-
+ static const struct v4l2_ioctl_ops mxc_jpeg_ioctl_ops = {
+ 	.vidioc_querycap		= mxc_jpeg_querycap,
+ 	.vidioc_enum_fmt_vid_cap	= mxc_jpeg_enum_fmt_vid_cap,
+@@ -2059,7 +2050,7 @@ static const struct v4l2_ioctl_ops mxc_jpeg_ioctl_ops = {
+ 	.vidioc_encoder_cmd		= mxc_jpeg_encoder_cmd,
+ 
+ 	.vidioc_qbuf			= v4l2_m2m_ioctl_qbuf,
+-	.vidioc_dqbuf			= mxc_jpeg_dqbuf,
++	.vidioc_dqbuf			= v4l2_m2m_ioctl_dqbuf,
+ 
+ 	.vidioc_create_bufs		= v4l2_m2m_ioctl_create_bufs,
+ 	.vidioc_prepare_buf		= v4l2_m2m_ioctl_prepare_buf,
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
+index d439be6e4acf..c508d41a906f 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
+@@ -92,8 +92,6 @@ struct mxc_jpeg_ctx {
+ 	struct mxc_jpeg_q_data		cap_q;
+ 	struct v4l2_fh			fh;
+ 	enum mxc_jpeg_enc_state		enc_state;
+-	unsigned int			stopping;
+-	unsigned int			stopped;
+ 	unsigned int			slot;
+ 	unsigned int			source_change;
+ 	bool				header_parsed;
 -- 
-2.11.0
+2.36.1
 

@@ -2,106 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FBB538511
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481EE538525
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237465AbiE3PjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
+        id S239924AbiE3PmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238030AbiE3Pi4 (ORCPT
+        with ESMTP id S240606AbiE3PmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:38:56 -0400
-Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79C7BFC
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:46:33 -0700 (PDT)
-Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 2022053014463192e5094154a767525e
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 30 May 2022 16:46:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=m8BcC5RpZgB+i6fbhgtW1oR23hnpSx1Czk1VI7kZ69k=;
- b=TvVGDygaccrl3cFGGey2An+3M+m61eMwk5ASnmE8dIJPm4EwtPumGi/6AxPhU3e7N8rsX9
- ZcGNp0B34GTo+mvphg6ocpPIe12o7eZ7gBCrUec6prRnHo5g9Dph2nQw5zfIaBMpqYBFOjCp
- 1UXAQ+u7b2fwtGyWzfpSiBWopYh/Q=;
-From:   "D. Starke" <daniel.starke@siemens.com>
-To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v3 9/9] tty: n_gsm: fix race condition in gsmld_write()
-Date:   Mon, 30 May 2022 16:45:12 +0200
-Message-Id: <20220530144512.2731-9-daniel.starke@siemens.com>
-In-Reply-To: <20220530144512.2731-1-daniel.starke@siemens.com>
-References: <20220530144512.2731-1-daniel.starke@siemens.com>
+        Mon, 30 May 2022 11:42:00 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C0320FC52;
+        Mon, 30 May 2022 07:49:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653922155; x=1685458155;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xcOydMoGrTfPeiG4u/paPT/YoYgwMhUeig4F7gxUuY8=;
+  b=FaeC9TU5m0T/THcYrKB83tAtu4e4BsAoVcupO0N7oA99fEh0eSEpkmhu
+   hXv7XYAwsusuL2uvzaLWWpr7qajI+XLzR0TuHb6Ofe/ax8jQtYthpSQWN
+   3AOYMcFEKxqVYobTOkayQYJpPxugCyHQ4krQZa5353Cuyg1aHGEGXyD46
+   xOKql8LzQHZqR1t8b/33kQcJgD0NWa8b29sBDhr5+vCDFrEfQBQbSvhAH
+   JHZoRzxiepALimJZz5N2VnWIDrUZtE0dgDa+J+gipx3EamxjLr8Mstcnf
+   0hyo2GQPr4uug2NAO9fBnUsOPQ83VoEQ6WGw2JlLmU65WcYAwsI7WwLbE
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="361394724"
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="361394724"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 07:49:01 -0700
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="903585639"
+Received: from embargo.jf.intel.com ([10.165.9.183])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 07:49:01 -0700
+From:   Yang Weijiang <weijiang.yang@intel.com>
+To:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     like.xu.linux@gmail.com, Yang Weijiang <weijiang.yang@intel.com>
+Subject: [PATCH] KVM: x86: Bypass cpuid check for empty arch-lbr leaf
+Date:   Mon, 30 May 2022 10:48:29 -0400
+Message-Id: <20220530144829.39714-1-weijiang.yang@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-314044:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+On arch-lbr capable platforms, cpuid(0x1c,0) returns meaningful
+arch-lbr supported values, in this case, eax[7:0] = lbr depth mask.
+Whereas on legacy platforms(non-arch-lbr), cpuid(0x1c,0) returns
+with eax/ebx/ecx/edx zeroed out.
 
-The function may be used by the user directly and also by the n_gsm
-internal functions. They can lead into a race condition which results in
-interleaved frames if both are writing at the same time. The receiving side
-is not able to decode those interleaved frames correctly.
+On legacy platforms, during selftests app startup, it first gets
+supported cpuids by KVM_GET_SUPPORTED_CPUID then sets the returned
+data with KVM_SET_CPUID2, this leads to empty cpuid leaf(0x1c,0)
+written to KVM and makes the check fail, app finally ends up with
+below error message when run selftest:
 
-Add a lock around the low side tty write to avoid race conditions and frame
-interleaving between user originated writes and n_gsm writes.
+ KVM_SET_CPUID2 failed, rc: -1 errno: 22
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+So check the validity of the leaf(0x1c,0) before validate lbr
+depth value.
+
+QEMU filters out empty CPUID leaves before calls KVM_SET_CPUID2,
+so this is not a problem.
+
+Fixes: 4b73207592: ("KVM: x86/cpuid: Advertise Arch LBR feature in CPUID")
+Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
 ---
- drivers/tty/n_gsm.c | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
+ arch/x86/kvm/cpuid.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-There have been no comments on v2, hence, no change was done.
-
-Link: https://lore.kernel.org/all/20220519070757.2096-9-daniel.starke@siemens.com/
-
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index b0b093e8e9d9..afd179a8481d 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -2999,11 +2999,24 @@ static ssize_t gsmld_read(struct tty_struct *tty, struct file *file,
- static ssize_t gsmld_write(struct tty_struct *tty, struct file *file,
- 			   const unsigned char *buf, size_t nr)
- {
--	int space = tty_write_room(tty);
-+	struct gsm_mux *gsm = tty->disc_data;
-+	unsigned long flags;
-+	int space;
-+	int ret;
-+
-+	if (!gsm)
-+		return -ENODEV;
-+
-+	ret = -ENOBUFS;
-+	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	space = tty_write_room(tty);
- 	if (space >= nr)
--		return tty->ops->write(tty, buf, nr);
--	set_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
--	return -ENOBUFS;
-+		ret = tty->ops->write(tty, buf, nr);
-+	else
-+		set_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
-+	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+
-+	return ret;
- }
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 9c107b5cc88f..c2eab1a73aab 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -103,13 +103,14 @@ static int kvm_check_cpuid(struct kvm_vcpu *vcpu,
+ 			return -EINVAL;
+ 	}
+ 	best = cpuid_entry2_find(entries, nent, 0x1c, 0);
+-	if (best) {
++	if (best && best->eax) {
+ 		unsigned int eax, ebx, ecx, edx;
  
- /**
+ 		/* Reject user-space CPUID if depth is different from host's.*/
+ 		cpuid_count(0x1c, 0, &eax, &ebx, &ecx, &edx);
+ 
+-		if ((best->eax & 0xff) != BIT(fls(eax & 0xff) - 1))
++		if ((eax & 0xff) &&
++		    (best->eax & 0xff) != BIT(fls(eax & 0xff) - 1))
+ 			return -EINVAL;
+ 	}
+ 
 -- 
-2.34.1
+2.27.0
 

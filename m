@@ -2,73 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F145378C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506DD537818
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234883AbiE3Jqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 05:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
+        id S234889AbiE3JrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 05:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234879AbiE3Jqx (ORCPT
+        with ESMTP id S234892AbiE3JrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 05:46:53 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F719588
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:46:48 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id bo5so10149207pfb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UALvhWndaZ+8NVhyXVMTGWogK9BCZuA7nUC2dpZdhFc=;
-        b=nfZTMfLpScX+7i5oxd+QZy4f+mKCKtr/6YCGg5q0/lgh99OiWWiF9Lhh/QN4IyB06x
-         2moQEr4XBMjGQbiaC0VpfDMoopZq24/GbvNSsjxuZ6Wg5tXQqYnssMAXVLkV6IBTc1Uc
-         I0W43D5oupX+ULjNU0O/Zy079+v15+Hpwi1Lwjcpw8s3TZPuPh46PHH6DRzVVX3YYFei
-         voXdEcR5xXF1NbbXIQkCEHvN9PVS5Ua+/Xc5iO8BFurRxfgaDKxQLXF3xBUTYzFjATFp
-         nRFunal+5Xm4EQwL9DrkIb+ItUSCfQcxQg4eVXGpxciSU5/WlY+xV84yfqm58TLrPcMt
-         dOlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UALvhWndaZ+8NVhyXVMTGWogK9BCZuA7nUC2dpZdhFc=;
-        b=k2bYyGeNYwwOeZVv7Ums0l3kqLVh4SW3ynloWJYRwsxaRdLVJ5NdYtMppZ+2XRVzea
-         GaOqMMhBd92MD6AQAU//iniTWKEluu285u6EJOvHlBHqFXNYVtgR28EykMh+NNsoKCeH
-         Vj6HhtJqq/qzM3wHsWzOLU9TTn6gyltIrGIH3ZibT7UKQwWfMoaFEH2qw4+lmzOKXw1U
-         cRzggRwUXUUK5jN/0d2yc/QLltpLAGirlxTqvQCSxplfFzLh6dnWr9TuZhcwmDKegRD+
-         CxZNxWL/k+4q8yA2RRTT/uCRzRSfttfkCdVABfwkr5iLrhZINXjyZfYosQ2l6aMIAHfa
-         Ax9A==
-X-Gm-Message-State: AOAM532vqU+HaBWURvsu3gBmII4m3VURLhOAuG2XhYYIiPMU4vhoD3B2
-        adeSNchRvDfrKw0TwIDyxJJl2Q==
-X-Google-Smtp-Source: ABdhPJxqfWEVJFwZmG5yodoFspNLPE7pWMsnb8wZBPkQOCSd4+v8Lx2w85ya08P/2p5qJrj2pACptA==
-X-Received: by 2002:a63:8243:0:b0:3f9:6c94:5112 with SMTP id w64-20020a638243000000b003f96c945112mr41340598pgd.173.1653904007740;
-        Mon, 30 May 2022 02:46:47 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id j13-20020a17090a588d00b001d9927ef1desm6377266pji.34.2022.05.30.02.46.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 02:46:47 -0700 (PDT)
-Date:   Mon, 30 May 2022 15:16:45 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
-        Dietmar.Eggemann@arm.com,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1] cpufreq: CPPC: Fix unused-function warning
-Message-ID: <20220530094645.wky42wwkbszfjjzs@vireshk-i7>
-References: <20220530081236.40728-1-pierre.gondois@arm.com>
- <20220530082025.vqzk37dvyzxiq7dv@vireshk-i7>
- <3a26ce90-5d2d-0164-3799-85a9dc1abee6@arm.com>
- <20220530090738.7ycfr7g52b54jzj3@vireshk-i7>
- <2b2df076-f8fe-10f7-9bc4-3e1f3c1639d0@arm.com>
+        Mon, 30 May 2022 05:47:07 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1FE6593;
+        Mon, 30 May 2022 02:47:05 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 330FE1F42772
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653904023;
+        bh=TscsrSniRUbTF2lS5EjYkm9gJZ0Gk4By33O4vJgUvvk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=il99dXitmCOx0A/VyZZgaOg/pMyn3K9JWvwUiQJ80FitEn4Totge5VEgd5QM6PiHm
+         Ofum2lXAOT6ZkGd8iTUrvCUA8L0eYcWD+A4NF858gkt72XXcf0KeBLqKqmAohKMTgz
+         kVHoGOiLJtHCsCn1jKLT4amWAGjjrTxYSO54cl/We8FeI+ww8NEiyoe25wUsUPwQKm
+         6NZY9VVIyvwU3belzrLQZAJM+WMC+7zV5XLJx+Yg18rGaKj8NFhDy8t7q+mhwefEto
+         4MUajxomeppisUKDJkcu6uN14/o5ESv5DiKBTFWm5LRQ9WJPPZNixL60ms9FW98n5k
+         A6aOhdL1o/b7Q==
+Message-ID: <e9cf5b0c-cb11-f68b-3130-4fa6243468da@collabora.com>
+Date:   Mon, 30 May 2022 11:47:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2b2df076-f8fe-10f7-9bc4-3e1f3c1639d0@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 0/3] MediaTek Helio X10 MT6795 - MT6331 PMIC Keys
+Content-Language: en-US
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     dmitry.torokhov@gmail.com, matthias.bgg@gmail.com,
+        mkorpershoek@baylibre.com, linux-input@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220524093505.85438-1-angelogioacchino.delregno@collabora.com>
+ <20220526110827.GC5138@localhost>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220526110827.GC5138@localhost>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,32 +57,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30-05-22, 11:42, Pierre Gondois wrote:
-> Ok yes. Just to be sure and except if disagreed, I will use the
-> following structure:
-> #if CONFIG_ARM64
-> #else
-> #endif
+Il 26/05/22 13:08, Pavel Machek ha scritto:
+> Hi!
 > 
-> #if defined(CONFIG_ARM64) && defined(CONFIG_ENERGY_MODEL)
-> int populate_efficiency_class();
-> #else
-> int populate_efficiency_class();
-> #endif
+>> In an effort to give some love to the apparently forgotten MT6795 SoC,
+>> I am upstreaming more components that are necessary to support platforms
+>> powered by this one apart from a simple boot to serial console.
+>>
+>> This series performs some cleanups in mtk-pmic-keys and adds support for
+>> the MT6331 PMIC's keys.
+>>
+>> Adding support to each driver in each subsystem is done in different
+>> patch series as to avoid spamming uninteresting patches to maintainers.
+>>
+>> This series depends on another two series series [1], [2] named
+>> "MediaTek Helio X10 MT6795 - MT6331/6332 PMIC Wrapper" and
+>> "MediaTek Helio X10 MT6795 - MT6331/6332 PMIC MFD integration"
+>>
+>> Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
 > 
-> to avoid having multiple empty definitions of
-> populate_efficiency_class() (for eg.) that we would have with:
-> #if CONFIG_ARM64
-> #if CONFIG_ENERGY_MODEL
-> int populate_efficiency_class();
-> #else // CONFIG_ENERGY_MODEL
-> int populate_efficiency_class();
-> #endif // CONFIG_ENERGY_MODEL
-> #else // CONFIG_ARM64
-> int populate_efficiency_class();
-> #endif // CONFIG_ARM64
+> Please cc phone-devel with phone stuff...
+> 
+> ...and thanks for all the work. I guess we still don't have an android
+> phone with basic phone functionality working on mainline...?
+> 
+> Best regards,
+> 							Pavel
 
-Look good.
 
--- 
-viresh
+Hello Pavel,
+
+I'm sorry, I've been sending a lot of things lately and I forgot to add
+that list to the Cc on some series...
+
+Btw, we don't have any MediaTek android phone working at all on mainline:
+the one that I'm in the process of upstreaming would be the first one ever,
+the hope is that doing this will encourage other developers to do the same
+with other platforms.
+
+Speaking of them all... I don't think that there's any retail smartphone
+that comes with Android having any phone call ability... I'm aware of some
+Qualcomm smartphones being able to use mobile data and SMS, but no calling.
+
+Unless anything changed and unless I'm unaware of recent developments.
+
+Aside from that, MediaTek chips should be a little simpler in this regard,
+so I think that we can (and I would love to) get that working, so that
+smartphones can still be smart -- phones -- on mainline as well... but I
+have a hunch that this will require quite some time.
+
+Regards,
+Angelo

@@ -2,490 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48107538866
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 23:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7714753885F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 23:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243248AbiE3VAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 17:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
+        id S242566AbiE3VAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 17:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242803AbiE3VAc (ORCPT
+        with ESMTP id S231630AbiE3VAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 17:00:32 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A3891561
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 14:00:30 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id s13so980935ljd.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 14:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=2t0W0Kf92gsyA+wOLOX+tpqo5IEanf8vKd5d+TCSHc4=;
-        b=qaAXmDoctd89JEFM4Jisqij+yBHCzKG7SZBi45f6sMHo3m/4PUQ013lYcGtETGEHP2
-         /AEEO1rfDotHbRkTIa7Z0O47PnU1BnCW+N4DfnmMMp1iY2jlwgbm0ciYr1sNizqcorZK
-         Za/tXIOhcIC1E9bHeVdvu5Ii/k+eEI65n/6juSFnVUWAn54XuypuXwUyJ7XDNlTVKj+W
-         w7m77hzM5B1cfhfx6Q1V2tbmfWQsuQgk7dcd+0tAFHxP8YVibUYGQWO6nMl4/7gdJlzY
-         pOkqGUg4EzHE2GqKmWbn6ffvHy/giVFbe9vSA9+yF9/b5QTHIm0AwLodYxcvXRuz9A9a
-         jz/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=2t0W0Kf92gsyA+wOLOX+tpqo5IEanf8vKd5d+TCSHc4=;
-        b=mMx8dXZ0GKce4F7PG+IKn8yRSatgrlzE1B9pTENNnpn9RaI+hFbGblo9qSOdSWZRal
-         Rce41XylfnMaKF1l1oMy+jtRYCPtpxryICFN7wfPU7/cN1rIr9StjKj+GlK5BByrnd6x
-         gimy8Z3l+AvGc+1G+ccOc/n98n6gFfBdd3aimYNzEEiFo/c2TYcF1jYySG1RiIcBUyiX
-         sZ7qod+KfO8V7ktRUZGyRaIjQVRGi2aexckBeGDnkaHA8Sqbz/5l71xVQCpYzfOJQnTb
-         T4piur/vJHeh2Oy5BrgWfTWxAjJRV/Ha8gek3psxf5EnwUAiWUEB5KFoekGpA8EOBIt7
-         XGhw==
-X-Gm-Message-State: AOAM532vP4mR1bhloe2Q5WTwo5Cn2JBZNm0aYP4TCU6++z4udwOPlBWB
-        pVX6UmZldUYbha0AHPEr49s=
-X-Google-Smtp-Source: ABdhPJyLamYJx4UbyuwE3IRLYem/SU5aTTXg8XDfI465PA9EXhxfERBgKB5WcKKauA7BqRl/UHkUMA==
-X-Received: by 2002:a2e:330f:0:b0:253:da40:de51 with SMTP id d15-20020a2e330f000000b00253da40de51mr32409091ljc.76.1653944428677;
-        Mon, 30 May 2022 14:00:28 -0700 (PDT)
-Received: from otyshchenko.router ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id k21-20020a2ea275000000b0025550e2693asm581541ljm.38.2022.05.30.14.00.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 May 2022 14:00:28 -0700 (PDT)
-From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Julien Grall <julien@xen.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: [PATCH V3 3/8] xen/grant-dma-ops: Add option to restrict memory access under Xen
-Date:   Tue, 31 May 2022 00:00:12 +0300
-Message-Id: <1653944417-17168-4-git-send-email-olekstysh@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1653944417-17168-1-git-send-email-olekstysh@gmail.com>
-References: <1653944417-17168-1-git-send-email-olekstysh@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 30 May 2022 17:00:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449C691552;
+        Mon, 30 May 2022 14:00:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E328B80F6F;
+        Mon, 30 May 2022 21:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0FEEDC34119;
+        Mon, 30 May 2022 21:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653944413;
+        bh=KnLcGa8uT4mDL9pauNRzvEuxlMfsU4gFkddnssg+gyk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=cqpMULpacTG0sPd1SAx2v9AZ8/kpViOVtVxdO6Mu1HcuHNEhmAmvesPhRcTuQc2uP
+         qD1Bdaz1HaoTqvSy0WxpqBvQlz6SYg9csQxo4eqx1oXdv1VQowvluEBHYUkl7yskYs
+         bVo2W8XbtBBYA0IAycRVB1G95R9b800X1KPxGNWfJvP1F90mUgjghOQEGHJdCtYarc
+         YfOS0b/ePUcKafAOty3pSRvly18GLs3AD06NIKlVsooJiLro6WRM6n1M1kxigVYgrq
+         Qmtis2W1UgkPsxf7OGjEdMWJ8Dz7gvf4hyou8hxH+LT7c4NXiKzHNlacvXCJ0r7Nj8
+         BLeQ2z9WGrc1g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E148AF03944;
+        Mon, 30 May 2022 21:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 0/6] Support riscv jit to provide
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165394441291.12813.18139846661607728867.git-patchwork-notify@kernel.org>
+Date:   Mon, 30 May 2022 21:00:12 +0000
+References: <20220530092815.1112406-1-pulehui@huawei.com>
+In-Reply-To: <20220530092815.1112406-1-pulehui@huawei.com>
+To:     Pu Lehui <pulehui@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        bjorn@kernel.org, luke.r.nels@gmail.com, xi.wang@gmail.com,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+Hello:
 
-Introduce Xen grant DMA-mapping layer which contains special DMA-mapping
-routines for providing grant references as DMA addresses to be used by
-frontends (e.g. virtio) in Xen guests.
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-Add the needed functionality by providing a special set of DMA ops
-handling the needed grant operations for the I/O pages.
+On Mon, 30 May 2022 17:28:09 +0800 you wrote:
+> patch 1 fix an issue that could not print bpf line info due
+> to data inconsistency in 32-bit environment.
+> 
+> patch 2 add support for riscv jit to provide bpf_line_info.
+> "test_progs -a btf" and "test_bpf.ko" all test pass, as well
+> as "test_verifier" and "test_progs" with no new failure ceses.
+> 
+> [...]
 
-The subsequent commit will introduce the use case for xen-grant DMA ops
-layer to enable using virtio devices in Xen guests in a safe manner.
+Here is the summary with links:
+  - [bpf-next,v3,1/6] bpf: Unify data extension operation of jited_ksyms and jited_linfo
+    (no matching commit)
+  - [bpf-next,v3,2/6] riscv, bpf: Support riscv jit to provide bpf_line_info
+    https://git.kernel.org/bpf/bpf-next/c/b863b163aa8a
+  - [bpf-next,v3,3/6] bpf: Correct the comment about insn_to_jit_off
+    https://git.kernel.org/bpf/bpf-next/c/4b4b4f94a4f6
+  - [bpf-next,v3,4/6] libbpf: Unify memory address casting operation style
+    (no matching commit)
+  - [bpf-next,v3,5/6] selftests/bpf: Unify memory address casting operation style
+    (no matching commit)
+  - [bpf-next,v3,6/6] selftests/bpf: Remove the casting about jited_ksyms and jited_linfo
+    (no matching commit)
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
----
-Changes RFC -> V1:
-   - squash with almost all changes from commit (except handling "xen,dev-domid"
-     property):
-     "[PATCH 4/6] virtio: Various updates to xen-virtio DMA ops layer"
-   - update commit subject/description and comments in code
-   - leave only single Kconfig option XEN_VIRTIO and remove architectural
-     dependencies
-   - introduce common xen_has_restricted_virtio_memory_access() in xen.h
-     and update arch_has_restricted_virtio_memory_access() for both
-     Arm and x86 to call new helper
-   - use (1ULL << 63) instead of 0x8000000000000000ULL for XEN_GRANT_ADDR_OFF
-   - implement xen_virtio_dma_map(unmap)_sg() using example in swiotlb-xen.c
-   - optimize padding by moving "broken" field in struct xen_virtio_data
-   - remove unneeded per-device spinlock
-   - remove the inclusion of virtio_config.h
-   - remane everything according to the new naming scheme:
-     s/virtio/grant_dma
-   - add new hidden config option XEN_GRANT_DMA_OPS
-
-Changes V1 -> V2:
-   - fix checkpatch.pl warnings
-   - remove the inclusion of linux/pci.h
-   - rework to use xarray for data context
-   - remove EXPORT_SYMBOL_GPL(xen_grant_setup_dma_ops);
-   - remove the line of * after SPDX-License-Identifier
-   - split changes into grant-dma-ops.c and arch_has_restricted_virtio_memory_access()
-     and update commit subject/description accordingly
-   - remove "default n" for config XEN_VIRTIO
-   - implement xen_grant_dma_alloc(free)_pages()
-
-Changes V2 -> V3:
-   - Stefano already gave his Reviewed-by, I dropped it due to the changes (minor)
-   - remane field "dev_domid" in struct xen_grant_dma_data to "backend_domid"
-   - remove local variable "domid" in xen_grant_setup_dma_ops()
----
- drivers/xen/Kconfig         |   4 +
- drivers/xen/Makefile        |   1 +
- drivers/xen/grant-dma-ops.c | 311 ++++++++++++++++++++++++++++++++++++++++++++
- include/xen/xen-ops.h       |   8 ++
- 4 files changed, 324 insertions(+)
- create mode 100644 drivers/xen/grant-dma-ops.c
-
-diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
-index 120d32f..313a9127 100644
---- a/drivers/xen/Kconfig
-+++ b/drivers/xen/Kconfig
-@@ -335,4 +335,8 @@ config XEN_UNPOPULATED_ALLOC
- 	  having to balloon out RAM regions in order to obtain physical memory
- 	  space to create such mappings.
- 
-+config XEN_GRANT_DMA_OPS
-+	bool
-+	select DMA_OPS
-+
- endmenu
-diff --git a/drivers/xen/Makefile b/drivers/xen/Makefile
-index 5aae66e..1a23cb0 100644
---- a/drivers/xen/Makefile
-+++ b/drivers/xen/Makefile
-@@ -39,3 +39,4 @@ xen-gntalloc-y				:= gntalloc.o
- xen-privcmd-y				:= privcmd.o privcmd-buf.o
- obj-$(CONFIG_XEN_FRONT_PGDIR_SHBUF)	+= xen-front-pgdir-shbuf.o
- obj-$(CONFIG_XEN_UNPOPULATED_ALLOC)	+= unpopulated-alloc.o
-+obj-$(CONFIG_XEN_GRANT_DMA_OPS)		+= grant-dma-ops.o
-diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-new file mode 100644
-index 00000000..44659f4
---- /dev/null
-+++ b/drivers/xen/grant-dma-ops.c
-@@ -0,0 +1,311 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Xen grant DMA-mapping layer - contains special DMA-mapping routines
-+ * for providing grant references as DMA addresses to be used by frontends
-+ * (e.g. virtio) in Xen guests
-+ *
-+ * Copyright (c) 2021, Juergen Gross <jgross@suse.com>
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/dma-map-ops.h>
-+#include <linux/of.h>
-+#include <linux/pfn.h>
-+#include <linux/xarray.h>
-+#include <xen/xen.h>
-+#include <xen/grant_table.h>
-+
-+struct xen_grant_dma_data {
-+	/* The ID of backend domain */
-+	domid_t backend_domid;
-+	/* Is device behaving sane? */
-+	bool broken;
-+};
-+
-+static DEFINE_XARRAY(xen_grant_dma_devices);
-+
-+#define XEN_GRANT_DMA_ADDR_OFF	(1ULL << 63)
-+
-+static inline dma_addr_t grant_to_dma(grant_ref_t grant)
-+{
-+	return XEN_GRANT_DMA_ADDR_OFF | ((dma_addr_t)grant << PAGE_SHIFT);
-+}
-+
-+static inline grant_ref_t dma_to_grant(dma_addr_t dma)
-+{
-+	return (grant_ref_t)((dma & ~XEN_GRANT_DMA_ADDR_OFF) >> PAGE_SHIFT);
-+}
-+
-+static struct xen_grant_dma_data *find_xen_grant_dma_data(struct device *dev)
-+{
-+	struct xen_grant_dma_data *data;
-+
-+	xa_lock(&xen_grant_dma_devices);
-+	data = xa_load(&xen_grant_dma_devices, (unsigned long)dev);
-+	xa_unlock(&xen_grant_dma_devices);
-+
-+	return data;
-+}
-+
-+/*
-+ * DMA ops for Xen frontends (e.g. virtio).
-+ *
-+ * Used to act as a kind of software IOMMU for Xen guests by using grants as
-+ * DMA addresses.
-+ * Such a DMA address is formed by using the grant reference as a frame
-+ * number and setting the highest address bit (this bit is for the backend
-+ * to be able to distinguish it from e.g. a mmio address).
-+ *
-+ * Note that for now we hard wire dom0 to be the backend domain. In order
-+ * to support any domain as backend we'd need to add a way to communicate
-+ * the domid of this backend, e.g. via Xenstore, via the PCI-device's
-+ * config space or DT/ACPI.
-+ */
-+static void *xen_grant_dma_alloc(struct device *dev, size_t size,
-+				 dma_addr_t *dma_handle, gfp_t gfp,
-+				 unsigned long attrs)
-+{
-+	struct xen_grant_dma_data *data;
-+	unsigned int i, n_pages = PFN_UP(size);
-+	unsigned long pfn;
-+	grant_ref_t grant;
-+	void *ret;
-+
-+	data = find_xen_grant_dma_data(dev);
-+	if (!data)
-+		return NULL;
-+
-+	if (unlikely(data->broken))
-+		return NULL;
-+
-+	ret = alloc_pages_exact(n_pages * PAGE_SIZE, gfp);
-+	if (!ret)
-+		return NULL;
-+
-+	pfn = virt_to_pfn(ret);
-+
-+	if (gnttab_alloc_grant_reference_seq(n_pages, &grant)) {
-+		free_pages_exact(ret, n_pages * PAGE_SIZE);
-+		return NULL;
-+	}
-+
-+	for (i = 0; i < n_pages; i++) {
-+		gnttab_grant_foreign_access_ref(grant + i, data->backend_domid,
-+				pfn_to_gfn(pfn + i), 0);
-+	}
-+
-+	*dma_handle = grant_to_dma(grant);
-+
-+	return ret;
-+}
-+
-+static void xen_grant_dma_free(struct device *dev, size_t size, void *vaddr,
-+			       dma_addr_t dma_handle, unsigned long attrs)
-+{
-+	struct xen_grant_dma_data *data;
-+	unsigned int i, n_pages = PFN_UP(size);
-+	grant_ref_t grant;
-+
-+	data = find_xen_grant_dma_data(dev);
-+	if (!data)
-+		return;
-+
-+	if (unlikely(data->broken))
-+		return;
-+
-+	grant = dma_to_grant(dma_handle);
-+
-+	for (i = 0; i < n_pages; i++) {
-+		if (unlikely(!gnttab_end_foreign_access_ref(grant + i))) {
-+			dev_alert(dev, "Grant still in use by backend domain, disabled for further use\n");
-+			data->broken = true;
-+			return;
-+		}
-+	}
-+
-+	gnttab_free_grant_reference_seq(grant, n_pages);
-+
-+	free_pages_exact(vaddr, n_pages * PAGE_SIZE);
-+}
-+
-+static struct page *xen_grant_dma_alloc_pages(struct device *dev, size_t size,
-+					      dma_addr_t *dma_handle,
-+					      enum dma_data_direction dir,
-+					      gfp_t gfp)
-+{
-+	void *vaddr;
-+
-+	vaddr = xen_grant_dma_alloc(dev, size, dma_handle, gfp, 0);
-+	if (!vaddr)
-+		return NULL;
-+
-+	return virt_to_page(vaddr);
-+}
-+
-+static void xen_grant_dma_free_pages(struct device *dev, size_t size,
-+				     struct page *vaddr, dma_addr_t dma_handle,
-+				     enum dma_data_direction dir)
-+{
-+	xen_grant_dma_free(dev, size, page_to_virt(vaddr), dma_handle, 0);
-+}
-+
-+static dma_addr_t xen_grant_dma_map_page(struct device *dev, struct page *page,
-+					 unsigned long offset, size_t size,
-+					 enum dma_data_direction dir,
-+					 unsigned long attrs)
-+{
-+	struct xen_grant_dma_data *data;
-+	unsigned int i, n_pages = PFN_UP(size);
-+	grant_ref_t grant;
-+	dma_addr_t dma_handle;
-+
-+	if (WARN_ON(dir == DMA_NONE))
-+		return DMA_MAPPING_ERROR;
-+
-+	data = find_xen_grant_dma_data(dev);
-+	if (!data)
-+		return DMA_MAPPING_ERROR;
-+
-+	if (unlikely(data->broken))
-+		return DMA_MAPPING_ERROR;
-+
-+	if (gnttab_alloc_grant_reference_seq(n_pages, &grant))
-+		return DMA_MAPPING_ERROR;
-+
-+	for (i = 0; i < n_pages; i++) {
-+		gnttab_grant_foreign_access_ref(grant + i, data->backend_domid,
-+				xen_page_to_gfn(page) + i, dir == DMA_TO_DEVICE);
-+	}
-+
-+	dma_handle = grant_to_dma(grant) + offset;
-+
-+	return dma_handle;
-+}
-+
-+static void xen_grant_dma_unmap_page(struct device *dev, dma_addr_t dma_handle,
-+				     size_t size, enum dma_data_direction dir,
-+				     unsigned long attrs)
-+{
-+	struct xen_grant_dma_data *data;
-+	unsigned int i, n_pages = PFN_UP(size);
-+	grant_ref_t grant;
-+
-+	if (WARN_ON(dir == DMA_NONE))
-+		return;
-+
-+	data = find_xen_grant_dma_data(dev);
-+	if (!data)
-+		return;
-+
-+	if (unlikely(data->broken))
-+		return;
-+
-+	grant = dma_to_grant(dma_handle);
-+
-+	for (i = 0; i < n_pages; i++) {
-+		if (unlikely(!gnttab_end_foreign_access_ref(grant + i))) {
-+			dev_alert(dev, "Grant still in use by backend domain, disabled for further use\n");
-+			data->broken = true;
-+			return;
-+		}
-+	}
-+
-+	gnttab_free_grant_reference_seq(grant, n_pages);
-+}
-+
-+static void xen_grant_dma_unmap_sg(struct device *dev, struct scatterlist *sg,
-+				   int nents, enum dma_data_direction dir,
-+				   unsigned long attrs)
-+{
-+	struct scatterlist *s;
-+	unsigned int i;
-+
-+	if (WARN_ON(dir == DMA_NONE))
-+		return;
-+
-+	for_each_sg(sg, s, nents, i)
-+		xen_grant_dma_unmap_page(dev, s->dma_address, sg_dma_len(s), dir,
-+				attrs);
-+}
-+
-+static int xen_grant_dma_map_sg(struct device *dev, struct scatterlist *sg,
-+				int nents, enum dma_data_direction dir,
-+				unsigned long attrs)
-+{
-+	struct scatterlist *s;
-+	unsigned int i;
-+
-+	if (WARN_ON(dir == DMA_NONE))
-+		return -EINVAL;
-+
-+	for_each_sg(sg, s, nents, i) {
-+		s->dma_address = xen_grant_dma_map_page(dev, sg_page(s), s->offset,
-+				s->length, dir, attrs);
-+		if (s->dma_address == DMA_MAPPING_ERROR)
-+			goto out;
-+
-+		sg_dma_len(s) = s->length;
-+	}
-+
-+	return nents;
-+
-+out:
-+	xen_grant_dma_unmap_sg(dev, sg, i, dir, attrs | DMA_ATTR_SKIP_CPU_SYNC);
-+	sg_dma_len(sg) = 0;
-+
-+	return -EIO;
-+}
-+
-+static int xen_grant_dma_supported(struct device *dev, u64 mask)
-+{
-+	return mask == DMA_BIT_MASK(64);
-+}
-+
-+static const struct dma_map_ops xen_grant_dma_ops = {
-+	.alloc = xen_grant_dma_alloc,
-+	.free = xen_grant_dma_free,
-+	.alloc_pages = xen_grant_dma_alloc_pages,
-+	.free_pages = xen_grant_dma_free_pages,
-+	.mmap = dma_common_mmap,
-+	.get_sgtable = dma_common_get_sgtable,
-+	.map_page = xen_grant_dma_map_page,
-+	.unmap_page = xen_grant_dma_unmap_page,
-+	.map_sg = xen_grant_dma_map_sg,
-+	.unmap_sg = xen_grant_dma_unmap_sg,
-+	.dma_supported = xen_grant_dma_supported,
-+};
-+
-+void xen_grant_setup_dma_ops(struct device *dev)
-+{
-+	struct xen_grant_dma_data *data;
-+
-+	data = find_xen_grant_dma_data(dev);
-+	if (data) {
-+		dev_err(dev, "Xen grant DMA data is already created\n");
-+		return;
-+	}
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		goto err;
-+
-+	/* XXX The dom0 is hardcoded as the backend domain for now */
-+	data->backend_domid = 0;
-+
-+	if (xa_err(xa_store(&xen_grant_dma_devices, (unsigned long)dev, data,
-+			GFP_KERNEL))) {
-+		dev_err(dev, "Cannot store Xen grant DMA data\n");
-+		goto err;
-+	}
-+
-+	dev->dma_ops = &xen_grant_dma_ops;
-+
-+	return;
-+
-+err:
-+	dev_err(dev, "Cannot set up Xen grant DMA ops, retain platform DMA ops\n");
-+}
-+
-+MODULE_DESCRIPTION("Xen grant DMA-mapping layer");
-+MODULE_AUTHOR("Juergen Gross <jgross@suse.com>");
-+MODULE_LICENSE("GPL");
-diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
-index a3584a3..4f9fad5 100644
---- a/include/xen/xen-ops.h
-+++ b/include/xen/xen-ops.h
-@@ -221,4 +221,12 @@ static inline void xen_preemptible_hcall_end(void) { }
- 
- #endif /* CONFIG_XEN_PV && !CONFIG_PREEMPTION */
- 
-+#ifdef CONFIG_XEN_GRANT_DMA_OPS
-+void xen_grant_setup_dma_ops(struct device *dev);
-+#else
-+static inline void xen_grant_setup_dma_ops(struct device *dev)
-+{
-+}
-+#endif /* CONFIG_XEN_GRANT_DMA_OPS */
-+
- #endif /* INCLUDE_XEN_OPS_H */
+You are awesome, thank you!
 -- 
-2.7.4
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

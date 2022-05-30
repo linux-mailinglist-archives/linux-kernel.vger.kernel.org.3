@@ -2,94 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DAF653856C
+	by mail.lfdr.de (Postfix) with ESMTP id EA05C53856E
 	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241695AbiE3Puu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
+        id S241566AbiE3Puk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240698AbiE3Ptx (ORCPT
+        with ESMTP id S242042AbiE3PuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:49:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6631366CBF
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 08:12:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653923542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DRdewCPW2PjLfahETyqZJaykG2Z7dGzih3m2LJk0xYA=;
-        b=EGDAlOBCn+0TAmGUILzuGqWSTRPDc0I1HTKv92R3vFhrWwog/JZ3ltK0Am+47epSTFAxsW
-        hpKPKk/BelMwdN89ueCIuAdjgalWC6Eo+q9IQsC3F8KxbzTFOAG0waBHGnxlPsyK+93Ioz
-        3GMsZNDWbvjI9e2u0PLACmPhWSmophY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-1sfrdPbbN7-JuiOV3jgnBw-1; Mon, 30 May 2022 11:12:19 -0400
-X-MC-Unique: 1sfrdPbbN7-JuiOV3jgnBw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 05CD785A5B9;
-        Mon, 30 May 2022 15:12:19 +0000 (UTC)
-Received: from localhost (unknown [10.39.194.233])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A6BD51410F36;
-        Mon, 30 May 2022 15:12:18 +0000 (UTC)
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>, mst@redhat.com,
-        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     tglx@linutronix.de, peterz@infradead.org, paulmck@kernel.org,
-        maz@kernel.org, pasic@linux.ibm.com, eperezma@redhat.com,
-        lulu@redhat.com, sgarzare@redhat.com, xuanzhuo@linux.alibaba.com,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH V6 6/9] virtio-ccw: implement synchronize_cbs()
-In-Reply-To: <20220527060120.20964-7-jasowang@redhat.com>
-Organization: Red Hat GmbH
-References: <20220527060120.20964-1-jasowang@redhat.com>
- <20220527060120.20964-7-jasowang@redhat.com>
-User-Agent: Notmuch/0.34 (https://notmuchmail.org)
-Date:   Mon, 30 May 2022 17:12:17 +0200
-Message-ID: <87y1yjt5pq.fsf@redhat.com>
+        Mon, 30 May 2022 11:50:02 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297806B000
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 08:13:36 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id k16so10726719wrg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 08:13:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:user-agent:mime-version:to:cc:subject
+         :references:in-reply-to:content-transfer-encoding;
+        bh=ShWA5Lf0IpnRT/XMhhsf2/+2EvIbcOqOmelUR0srNOc=;
+        b=AVap6MTvKL8EUOtxSsbeFx/oS7vr6T58xi77FurdF+yckI3eVzLyhv/kZza1SpGPMs
+         iTweZHGgyaqx0uAQyBgGt0apu0+S39Tqdpr/C8BrzJhSsbclxVFKbz9QJU9QK9y4OvXK
+         /b/JtXyrHr0rjT1ekKRzzZ+fCMkoBzbLCwm3oUPkUaupadGhprLqzSgjji35kAJTj7ue
+         BVNgtsd2qMnR6BDOlQFZ68NCNsImXh+3mMaGYExhel7n3UahQc17ds95uS3if/g6xakk
+         jRZbnh7pO6rCwndwbDgP7ZUZ0etEL69Pc9+a+SL60fBrJiGomCV5xif0g9L76H8l9LlV
+         yl8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
+         :cc:subject:references:in-reply-to:content-transfer-encoding;
+        bh=ShWA5Lf0IpnRT/XMhhsf2/+2EvIbcOqOmelUR0srNOc=;
+        b=ZxAh6e/4+e1/arIPfqWKguyoyKowLLXxR5sqWhSiTqkT31JmWf03tjzG/v+n0/TmO7
+         g57k83W6cAmqmkP5ni4dW+tShRCry839JIX5q8XZSmzTsgwNmuHOR352dU+r1aa9fs+9
+         kks6aHG3vobRy+bS5Vd2EEYb4k0qf+Qj0cSkM+ypfpf2tpuo0ThxjNqqTMQqJenXweOK
+         IlHVn5PB6jRZvJtbAlABMP9kn6/f+9ACZmVdLIFgv62v7BiwmUAdDhQcz72nMbC9mTVd
+         fdncMz0Ho2vQ8eDL2sdpUS7RbWrMTtlQK2dXfnd1bqxchkOpW6uhZIrYtzjKjbUUOsy8
+         wx7g==
+X-Gm-Message-State: AOAM5325kegLXGNl6HtvyLQPQXf8Aj5ZlRKu+EBGNObdn+C1oasRGvK9
+        62sCT0tVzl00xwaN3Xx0Sm78HVKZ1Sg=
+X-Google-Smtp-Source: ABdhPJycjThRvVXA4TdgZGtCguNCNnJmMgh0NeSrVoGYQoxN2AdcaQpJZxsyR8DfdIBQA3s7RaI9XA==
+X-Received: by 2002:adf:e198:0:b0:210:4e7:f57b with SMTP id az24-20020adfe198000000b0021004e7f57bmr19518989wrb.296.1653923614640;
+        Mon, 30 May 2022 08:13:34 -0700 (PDT)
+Received: from [109.186.23.63] (109-186-23-63.bb.netvision.net.il. [109.186.23.63])
+        by smtp.gmail.com with ESMTPSA id w15-20020a5d680f000000b0021033ba8b15sm3208679wru.44.2022.05.30.08.13.33
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Mon, 30 May 2022 08:13:34 -0700 (PDT)
+Message-ID: <6294DED6.70904@gmail.com>
+Date:   Mon, 30 May 2022 18:12:22 +0300
+From:   Eli Billauer <eli.billauer@gmail.com>
+User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.12) Gecko/20100907 Fedora/3.0.7-1.fc12 Thunderbird/3.0.7
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     Zheyu Ma <zheyuma97@gmail.com>
+CC:     arnd@arndb.de, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] char: xillybus: Check endpoint type at probe time
+References: <20220529065839.3817434-1-zheyuma97@gmail.com>
+In-Reply-To: <20220529065839.3817434-1-zheyuma97@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27 2022, Jason Wang <jasowang@redhat.com> wrote:
+On 29/05/22 09:58, Zheyu Ma wrote:
+>   static int xillyusb_setup_base_eps(struct xillyusb_dev *xdev)
+>   {
+> +	int ret;
+> +	struct usb_endpoint_descriptor *in, *out;
+> +
+> +	ret = usb_find_common_endpoints(xdev->intf->cur_altsetting,&in,&out, NULL, NULL);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (in->bEndpointAddress != (IN_EP_NUM | USB_DIR_IN) ||
+> +		out->bEndpointAddress != (MSG_EP_NUM | USB_DIR_OUT))
+> +		return -EINVAL;
+> +
+>    
+As far as I understand, this finds the first BULK endpoints in both 
+directions, and verifies that their addresses are MSG_EP_NUM and 
+IN_EP_NUM. Because both of these happen to equal 1, I suppose this 
+indeed checks the right thing. But am I right that this won't work if 
+either MSG_EP_NUM or IN_EP_NUM have a value that isn't 1? Not that I 
+think that will ever happen, but still.
 
-> This patch tries to implement the synchronize_cbs() for ccw. For the
-> vring_interrupt() that is called via virtio_airq_handler(), the
-> synchronization is simply done via the airq_info's lock. For the
-> vring_interrupt() that is called via virtio_ccw_int_handler(), a per
-> device rwlock is introduced and used in the synchronization method.
+> +static int xillyusb_check_endpoint(struct xillyusb_dev *xdev, u8 addr)
+> +{
+> +	int i;
+> +	struct usb_host_interface *if_desc = xdev->intf->altsetting;
+> +
+> +	for (i = 0; i<  if_desc->desc.bNumEndpoints; i++) {
+> +		struct usb_endpoint_descriptor *ep =&if_desc->endpoint[i].desc;
+> +
+> +		if (ep->bEndpointAddress == addr&&  usb_endpoint_is_bulk_out(ep))
+> +			return 0;
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +
 >
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Halil Pasic <pasic@linux.ibm.com>
-> Cc: Cornelia Huck <cohuck@redhat.com>
-> Cc: Vineeth Vijayan <vneethv@linux.ibm.com>
-> Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
-> Cc: linux-s390@vger.kernel.org
-> Reviewed-by: Halil Pasic <pasic@linux.ibm.com>
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> ---
->  drivers/s390/virtio/virtio_ccw.c | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
+>    
+Given that you've added this function, why isn't it used in 
+xillyusb_setup_base_eps()?
 
-Reviewed-by: Cornelia Huck <cohuck@redhat.com>
+Thanks,
+    Eli
+
+
 

@@ -2,351 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020B853763E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71D353764C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbiE3IKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 04:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
+        id S233158AbiE3IL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 04:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232901AbiE3IKG (ORCPT
+        with ESMTP id S233125AbiE3ILs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 04:10:06 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF0175216
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:10:03 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id x62so627798ede.10
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:10:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=kd0CCk3LCRGaJbR7VB5KtX1TXqRTWxU6Qhf/vwEDl04=;
-        b=j24uc8Ag4iPMN4ajktr6aP+Xgax39Yfqn51EeuP6JqPfb6E4YD4zRnVqqV1ds9Doxk
-         orgi1Z0vPVnXzZJFiJmQ+WBnnFnji/hsZ8UB7eESAJ98oebxIS5ik0IF2HswOjKHyg9c
-         BmpT6qp2p7ypBk0Xy4dMP5uV1IAfdypF29IrTTixHvoVZrM7z5f+WYJNCV7E+cfiEQFB
-         VGy+X1zZ5owWzkm9coIbbXObazgKO3sBj5cpbnNhNLzFar5p87rbBlG7qvuLA6+8i1KP
-         F7l0zT8RO2PiUx7EYcU99QMt+tP9kUuqZnPaXpBP2kNhPjfo4m9gomLVg31aIxpDPhg3
-         viPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=kd0CCk3LCRGaJbR7VB5KtX1TXqRTWxU6Qhf/vwEDl04=;
-        b=YzDq8rGtDcSG8/Mipw1qGo3cfgsWYemztxK1ILfJStwC7w5pXoxgUlyPddoF00DHqg
-         BKOXpyuATITZd8/3w7rU6vc5ANV3j1LcBBrF/NBLamBndFU7IO0Au8PDlxHDwYKgbVeY
-         A6W+x2G7V2MkNaDNMDRZMP6S+EaTZqQ/3nHFlpNWxeXA7HwCgGjb0omvyOgJGydw5prp
-         2NYbJSFKgRcSiLF0aF27bT+w6/E2+5Q5h/VTRXKoVUuFgYXsbrV9gLlAonny67JacK6E
-         68hn9mdXVRxQHSaz3Ni59ozG3Oy9oYyAManQlx5EnIYU6HoNgZXsgCe8oDnzp5Ktzj76
-         dPVw==
-X-Gm-Message-State: AOAM5300lnqdmw64o09dkqgG1JUJW6XCoquEQP7ZAD4gzkza5wuVYLaq
-        R2ORkqXzH05NBN7pA/GCpZzpqw==
-X-Google-Smtp-Source: ABdhPJyR0Ap0vvV9MQC6yDeV6wFNnk2l2gN0Cfm3bTfmzWeXwuYnGuUl4/kq+OJlfmhn74q1Y76s9w==
-X-Received: by 2002:a05:6402:4316:b0:42b:4d3d:c064 with SMTP id m22-20020a056402431600b0042b4d3dc064mr42706814edc.194.1653898202222;
-        Mon, 30 May 2022 01:10:02 -0700 (PDT)
-Received: from mbp-di-paolo.station (net-93-144-98-177.cust.dsl.teletu.it. [93.144.98.177])
-        by smtp.gmail.com with ESMTPSA id v4-20020a50a444000000b0042ab87ea713sm4973920edb.22.2022.05.30.01.10.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 May 2022 01:10:01 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH -next v7 2/3] block, bfq: refactor the counting of
- 'num_groups_with_pending_reqs'
-From:   Paolo Valente <paolo.valente@linaro.org>
-In-Reply-To: <20220528095020.186970-3-yukuai3@huawei.com>
-Date:   Mon, 30 May 2022 10:10:00 +0200
-Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        cgroups@vger.kernel.org, linux-block <linux-block@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com
+        Mon, 30 May 2022 04:11:48 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DB0F47;
+        Mon, 30 May 2022 01:11:43 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U6nVp1015905;
+        Mon, 30 May 2022 08:11:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=VIAjJqEzkS48zVmiLhW0Cuseh14NQVVk7EMZNm/V3kM=;
+ b=CkXBUudzS/2KSjwKS9KW7kvdFWeZp+QPo9MhiRW4CdAEvPG1igc6/R51ukVSEnkgGi20
+ Gubyj9BGU6xp7dQYDOUrLAufrAzhv3RfOhVsxHE+vdNXCoAnGRWaRzwxKbhHUp3xfUv6
+ KCkuMsGR3NUqng6/hvUwRBUJtCK6gvPK3PDT/LDweWewMv3PiJOuoBWL2YfTc8DYiOmn
+ /WAMwXE/QN3JPPKkANHfZT1tpcOzo2LRSI1EBMSHDADsAVwsILDgk6YrgWwFPr11Bb4X
+ PKfLWQAcAmaPrRZx0wwNLxiWlJRUI/xcBgWYu72WxzvYYbGLIfHbmjV+CQx1CIedKHKv 9w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcs0e9j3q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 May 2022 08:11:43 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24U7FssP018503;
+        Mon, 30 May 2022 08:11:42 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcs0e9j2t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 May 2022 08:11:42 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24U85ssi011816;
+        Mon, 30 May 2022 08:11:40 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3gbc97srrj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 May 2022 08:11:40 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24U8BcIn20775392
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 May 2022 08:11:38 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E80174203F;
+        Mon, 30 May 2022 08:11:37 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5F6D642045;
+        Mon, 30 May 2022 08:11:37 +0000 (GMT)
+Received: from li-ca45c2cc-336f-11b2-a85c-c6e71de567f1.ibm.com (unknown [9.171.70.209])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 30 May 2022 08:11:37 +0000 (GMT)
+Message-ID: <ff5f394db586169fe6dc16dc0e24d534e4825caa.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 14/19] KVM: s390: pv: cleanup leftover protected VMs
+ if needed
+From:   Nico Boehr <nrb@linux.ibm.com>
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        mimu@linux.ibm.com
+Date:   Mon, 30 May 2022 10:11:37 +0200
+In-Reply-To: <20220414080311.1084834-15-imbrenda@linux.ibm.com>
+References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
+         <20220414080311.1084834-15-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <0D9355CE-F85B-4B1A-AEC3-F63DFC4B3A54@linaro.org>
-References: <20220528095020.186970-1-yukuai3@huawei.com>
- <20220528095020.186970-3-yukuai3@huawei.com>
-To:     Yu Kuai <yukuai3@huawei.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3wkk6YIzroH11PyGEpAGH_HujTMraCg2
+X-Proofpoint-GUID: 2suuD96DNGc5t-uCPwgeAy7rbtuPnfb6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-30_02,2022-05-27_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501
+ spamscore=0 adultscore=0 bulkscore=0 phishscore=0 mlxlogscore=999
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205300042
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2022-04-14 at 10:03 +0200, Claudio Imbrenda wrote:
+[...]
+> diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
+> index bd850be08c86..b20f2cbd43d9 100644
+> --- a/arch/s390/kvm/pv.c
+> +++ b/arch/s390/kvm/pv.c
+> @@ -17,6 +17,19 @@
+[...]
+> +/**
+> + * @struct deferred_priv
+> + * Represents a "leftover" protected VM that is still registered
+> with the
+> + * Ultravisor, but which does not correspond any longer to an active
+> KVM VM.
+> + */
+> +struct deferred_priv {
 
-
-> Il giorno 28 mag 2022, alle ore 11:50, Yu Kuai <yukuai3@huawei.com> ha =
-scritto:
->=20
-> Currently, bfq can't handle sync io concurrently as long as they
-> are not issued from root group. This is because
-> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
-> bfq_asymmetric_scenario().
->=20
-> The way that bfqg is counted into 'num_groups_with_pending_reqs':
->=20
-> Before this patch:
-> 1) root group will never be counted.
-> 2) Count if bfqg or it's child bfqgs have pending requests.
-> 3) Don't count if bfqg and it's child bfqgs complete all the requests.
->=20
-> After this patch:
-> 1) root group is counted.
-> 2) Count if bfqg have at least one bfqq that is marked busy.
-> 3) Don't count if bfqg doesn't have any busy bfqqs.
-
-Unfortunately, I see a last problem here. I see a double change:
-(1) a bfqg is now counted only as a function of the state of its child
-    queues, and not of also its child bfqgs
-(2) the state considered for counting a bfqg moves from having pending
-    requests to having busy queues
-
-I'm ok with with (1), which is a good catch (you are lady explained
-the idea to me some time ago IIRC).
-
-Yet I fear that (2) is not ok.  A bfqq can become non busy even if it
-still has in-flight I/O, i.e.  I/O being served in the drive.  The
-weight of such a bfqq must still be considered in the weights_tree,
-and the group containing such a queue must still be counted when
-checking whether the scenario is asymmetric.  Otherwise service
-guarantees are broken.  The reason is that, if a scenario is deemed as
-symmetric because in-flight I/O is not taken into account, then idling
-will not be performed to protect some bfqq, and in-flight I/O may
-steal bandwidth to that bfqq in an uncontrolled way.
-
-I verified this also experimentally a few years ago, when I added this
-weights_tree stuff.  That's the rationale behind the part of
-bfq_weights_tree_remove that this patch eliminates.  IOW,
-for a bfqq and its parent bfqg to be out of the count for symmetry,
-all bfqq's requests must also be completed.
-
-Thanks,
-Paolo
-
->=20
-> The main reason to use busy state of bfqq instead of 'pending =
-requests'
-> is that bfqq can stay busy after dispatching the last request if =
-idling
-> is needed for service guarantees.
->=20
-> With this change, the occasion that only one group is activated can be
-> detected, and next patch will support concurrent sync io in the
-> occasion.
->=20
-> This patch also rename 'num_groups_with_pending_reqs' to
-> 'num_groups_with_busy_queues'.
->=20
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> Reviewed-by: Jan Kara <jack@suse.cz>
-> ---
-> block/bfq-iosched.c | 46 ++-----------------------------------
-> block/bfq-iosched.h | 55 ++++++---------------------------------------
-> block/bfq-wf2q.c    | 19 ++++------------
-> 3 files changed, 13 insertions(+), 107 deletions(-)
->=20
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index 0d46cb728bbf..eb1da1bd5eb4 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -852,7 +852,7 @@ static bool bfq_asymmetric_scenario(struct =
-bfq_data *bfqd,
->=20
-> 	return varied_queue_weights || multiple_classes_busy
-> #ifdef CONFIG_BFQ_GROUP_IOSCHED
-> -	       || bfqd->num_groups_with_pending_reqs > 0
-> +	       || bfqd->num_groups_with_busy_queues > 0
-> #endif
-> 		;
-> }
-> @@ -970,48 +970,6 @@ void __bfq_weights_tree_remove(struct bfq_data =
-*bfqd,
-> void bfq_weights_tree_remove(struct bfq_data *bfqd,
-> 			     struct bfq_queue *bfqq)
-> {
-> -	struct bfq_entity *entity =3D bfqq->entity.parent;
-> -
-> -	for_each_entity(entity) {
-> -		struct bfq_sched_data *sd =3D entity->my_sched_data;
-> -
-> -		if (sd->next_in_service || sd->in_service_entity) {
-> -			/*
-> -			 * entity is still active, because either
-> -			 * next_in_service or in_service_entity is not
-> -			 * NULL (see the comments on the definition of
-> -			 * next_in_service for details on why
-> -			 * in_service_entity must be checked too).
-> -			 *
-> -			 * As a consequence, its parent entities are
-> -			 * active as well, and thus this loop must
-> -			 * stop here.
-> -			 */
-> -			break;
-> -		}
-> -
-> -		/*
-> -		 * The decrement of num_groups_with_pending_reqs is
-> -		 * not performed immediately upon the deactivation of
-> -		 * entity, but it is delayed to when it also happens
-> -		 * that the first leaf descendant bfqq of entity gets
-> -		 * all its pending requests completed. The following
-> -		 * instructions perform this delayed decrement, if
-> -		 * needed. See the comments on
-> -		 * num_groups_with_pending_reqs for details.
-> -		 */
-> -		if (entity->in_groups_with_pending_reqs) {
-> -			entity->in_groups_with_pending_reqs =3D false;
-> -			bfqd->num_groups_with_pending_reqs--;
-> -		}
-> -	}
-> -
-> -	/*
-> -	 * Next function is invoked last, because it causes bfqq to be
-> -	 * freed if the following holds: bfqq is not in service and
-> -	 * has no dispatched request. DO NOT use bfqq after the next
-> -	 * function invocation.
-> -	 */
-> 	__bfq_weights_tree_remove(bfqd, bfqq,
-> 				  &bfqd->queue_weights_tree);
-> }
-> @@ -7118,7 +7076,7 @@ static int bfq_init_queue(struct request_queue =
-*q, struct elevator_type *e)
-> 	bfqd->idle_slice_timer.function =3D bfq_idle_slice_timer;
->=20
-> 	bfqd->queue_weights_tree =3D RB_ROOT_CACHED;
-> -	bfqd->num_groups_with_pending_reqs =3D 0;
-> +	bfqd->num_groups_with_busy_queues =3D 0;
->=20
-> 	INIT_LIST_HEAD(&bfqd->active_list);
-> 	INIT_LIST_HEAD(&bfqd->idle_list);
-> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-> index d92adbdd70ee..6c6cd984d769 100644
-> --- a/block/bfq-iosched.h
-> +++ b/block/bfq-iosched.h
-> @@ -197,9 +197,6 @@ struct bfq_entity {
-> 	/* flag, set to request a weight, ioprio or ioprio_class change  =
-*/
-> 	int prio_changed;
->=20
-> -	/* flag, set if the entity is counted in =
-groups_with_pending_reqs */
-> -	bool in_groups_with_pending_reqs;
-> -
-> 	/* last child queue of entity created (for non-leaf entities) */
-> 	struct bfq_queue *last_bfqq_created;
-> };
-> @@ -496,52 +493,14 @@ struct bfq_data {
-> 	struct rb_root_cached queue_weights_tree;
->=20
-> 	/*
-> -	 * Number of groups with at least one descendant process that
-> -	 * has at least one request waiting for completion. Note that
-> -	 * this accounts for also requests already dispatched, but not
-> -	 * yet completed. Therefore this number of groups may differ
-> -	 * (be larger) than the number of active groups, as a group is
-> -	 * considered active only if its corresponding entity has
-> -	 * descendant queues with at least one request queued. This
-> -	 * number is used to decide whether a scenario is symmetric.
-> -	 * For a detailed explanation see comments on the computation
-> -	 * of the variable asymmetric_scenario in the function
-> -	 * bfq_better_to_idle().
-> -	 *
-> -	 * However, it is hard to compute this number exactly, for
-> -	 * groups with multiple descendant processes. Consider a group
-> -	 * that is inactive, i.e., that has no descendant process with
-> -	 * pending I/O inside BFQ queues. Then suppose that
-> -	 * num_groups_with_pending_reqs is still accounting for this
-> -	 * group, because the group has descendant processes with some
-> -	 * I/O request still in flight. num_groups_with_pending_reqs
-> -	 * should be decremented when the in-flight request of the
-> -	 * last descendant process is finally completed (assuming that
-> -	 * nothing else has changed for the group in the meantime, in
-> -	 * terms of composition of the group and active/inactive state =
-of child
-> -	 * groups and processes). To accomplish this, an additional
-> -	 * pending-request counter must be added to entities, and must
-> -	 * be updated correctly. To avoid this additional field and =
-operations,
-> -	 * we resort to the following tradeoff between simplicity and
-> -	 * accuracy: for an inactive group that is still counted in
-> -	 * num_groups_with_pending_reqs, we decrement
-> -	 * num_groups_with_pending_reqs when the first descendant
-> -	 * process of the group remains with no request waiting for
-> -	 * completion.
-> -	 *
-> -	 * Even this simpler decrement strategy requires a little
-> -	 * carefulness: to avoid multiple decrements, we flag a group,
-> -	 * more precisely an entity representing a group, as still
-> -	 * counted in num_groups_with_pending_reqs when it becomes
-> -	 * inactive. Then, when the first descendant queue of the
-> -	 * entity remains with no request waiting for completion,
-> -	 * num_groups_with_pending_reqs is decremented, and this flag
-> -	 * is reset. After this flag is reset for the entity,
-> -	 * num_groups_with_pending_reqs won't be decremented any
-> -	 * longer in case a new descendant queue of the entity remains
-> -	 * with no request waiting for completion.
-> +	 * Number of groups with at least one bfqq that is marked busy,
-> +	 * and this number is used to decide whether a scenario is =
-symmetric.
-> +	 * Note that bfqq is busy doesn't mean that the bfqq contains =
-requests.
-> +	 * If idling is needed for service guarantees, bfqq will stay =
-busy
-> +	 * after dispatching the last request, see details in
-> +	 * __bfq_bfqq_expire().
-> 	 */
-> -	unsigned int num_groups_with_pending_reqs;
-> +	unsigned int num_groups_with_busy_queues;
->=20
-> 	/*
-> 	 * Per-class (RT, BE, IDLE) number of bfq_queues containing
-> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
-> index b97e33688335..48ca7922035c 100644
-> --- a/block/bfq-wf2q.c
-> +++ b/block/bfq-wf2q.c
-> @@ -221,13 +221,15 @@ static bool bfq_no_longer_next_in_service(struct =
-bfq_entity *entity)
-> static void bfq_inc_busy_queues(struct bfq_queue *bfqq)
-> {
-> 	bfqq->bfqd->busy_queues[bfqq->ioprio_class - 1]++;
-> -	bfqq_group(bfqq)->busy_queues++;
-> +	if (!(bfqq_group(bfqq)->busy_queues++))
-> +		bfqq->bfqd->num_groups_with_busy_queues++;
-> }
->=20
-> static void bfq_dec_busy_queues(struct bfq_queue *bfqq)
-> {
-> 	bfqq->bfqd->busy_queues[bfqq->ioprio_class - 1]--;
-> -	bfqq_group(bfqq)->busy_queues--;
-> +	if (!(--bfqq_group(bfqq)->busy_queues))
-> +		bfqq->bfqd->num_groups_with_busy_queues--;
-> }
->=20
-> #else /* CONFIG_BFQ_GROUP_IOSCHED */
-> @@ -1006,19 +1008,6 @@ static void __bfq_activate_entity(struct =
-bfq_entity *entity,
-> 		entity->on_st_or_in_serv =3D true;
-> 	}
->=20
-> -#ifdef CONFIG_BFQ_GROUP_IOSCHED
-> -	if (!bfq_entity_to_bfqq(entity)) { /* bfq_group */
-> -		struct bfq_group *bfqg =3D
-> -			container_of(entity, struct bfq_group, entity);
-> -		struct bfq_data *bfqd =3D bfqg->bfqd;
-> -
-> -		if (!entity->in_groups_with_pending_reqs) {
-> -			entity->in_groups_with_pending_reqs =3D true;
-> -			bfqd->num_groups_with_pending_reqs++;
-> -		}
-> -	}
-> -#endif
-> -
-> 	bfq_update_fin_time_enqueue(entity, st, backshifted);
-> }
->=20
-> --=20
-> 2.31.1
->=20
+Why not just name this leftover_vm?
 

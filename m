@@ -2,143 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E115374AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49CF5374CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232550AbiE3FkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 01:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
+        id S232575AbiE3FvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 01:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiE3FkP (ORCPT
+        with ESMTP id S232568AbiE3Fu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 01:40:15 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1845060AA0;
-        Sun, 29 May 2022 22:40:14 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24U1RhPA020067;
-        Sun, 29 May 2022 22:40:13 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=3lb3dEaVcahd4zN+F7VZ081zZCGfKJ9dBDRTyi4F6hw=;
- b=DIPPX64TRfaW0YLFtADxq2rG8yZJVszwZPvNJNbRdncNE8Qm1vDaRbTKr6QCkWaMjRd6
- CUJByHmguGUagixFc7j/78f/ulJLUEHzJwPeilLUyaK36YUfTK465NFtuvdJ3WmlyZsr
- XG0yOycQIF5pYpKZ6fY3SNo8r4HtPkfl2r8= 
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2102.outbound.protection.outlook.com [104.47.55.102])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3gbfdt6v9p-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 May 2022 22:40:13 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J/cP2ItyHKSkw6WIoblBsjOm3aSZHYBomfX9pi9JbRwMN8CLNGNc3rangAfdzMsryf9Kzyf51iaQrXV5KWgDKhnNM1s9r55xlyej/N469Ru4vHjeVvdqlg257a58SsgM/mj479ZfnNTulvhU0ytTdgOSQ8Zij+hV9dR0JFUPi+xtQlsPZf1uYyzoD+DhgdhfHgbOUvOrQ1ZWIeXJ/n5N5GhW6LohMS9SZ+H/pZgwTSsxcxqB97SwtcXA8E7V/tOCDTa6za9RfXxlhVC/7sPs03YNKg3gBEdP6Uf6/Uc+SFs9rQeTQ2L7ZKLg9JgNYoP/G35q3KsP/IHvN2vcR6ooQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3lb3dEaVcahd4zN+F7VZ081zZCGfKJ9dBDRTyi4F6hw=;
- b=lzqEhOoiBXrNYYL7splO6FY/PJg7qM3BeldOpQkDBOpTuGUVgHiso7demwW7iwaVHPcblKRDVFyBTN8yCjug6oVvi2Q7o92H0xb+EJ6NfqxPpr97lY1bEnt4QW7w1AXiN+VAK2tbeWDw/WIvVwX+XPOP9BUZQT63YhuIegiNtQNQ5Sgn2HlSgUq7DfpJNWrgv6TLHi24S4NCs34ge1OjFTsv59+qNXzif+z7SORkrvs4MTjQTyJ/3gls5YpiuhilDIoqPi2Bap+mi4dhivRCcAJ5Nk0djdymohcecCyhFKyB3rWLpvNZWsuEnTxKweffOQrplkhuVX8Yp7lfzVHM7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by SA0PR15MB3838.namprd15.prod.outlook.com (2603:10b6:806:88::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.19; Mon, 30 May
- 2022 05:40:11 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::3061:40ff:2ad:33aa]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::3061:40ff:2ad:33aa%5]) with mapi id 15.20.5293.019; Mon, 30 May 2022
- 05:40:11 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH bpf-next 3/3] bpf: Force cookies array to follow symbols
- sorting
-Thread-Topic: [PATCH bpf-next 3/3] bpf: Force cookies array to follow symbols
- sorting
-Thread-Index: AQHYcgxSVBWsVySjlUSr8uYpYc7Mn60261yA
-Date:   Mon, 30 May 2022 05:40:11 +0000
-Message-ID: <A562FD5D-AB25-4659-B5C6-A403374AECD0@fb.com>
-References: <20220527205611.655282-1-jolsa@kernel.org>
- <20220527205611.655282-4-jolsa@kernel.org>
-In-Reply-To: <20220527205611.655282-4-jolsa@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.80.82.1.1)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c26d798e-3e82-4de7-78bc-08da41fedd20
-x-ms-traffictypediagnostic: SA0PR15MB3838:EE_
-x-microsoft-antispam-prvs: <SA0PR15MB38387146DDD2CECB2B16D3CDB3DD9@SA0PR15MB3838.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: x6+t4SSLdpkLMikZigiUMy8r0TMfznMZxSTSYJxerT2+Vvk5+59I0LL+/TvcxCFsGvhMeah19/pPctGFi/6UFC+GwHPKqpgq80I8tx96jxfrfwv8+D2gnnCTeaUMcQL1gqTKhnp0LXXXWT72k4NrX0+iw86x+Ld8wy9s6tIG0h74uiXu/GNXxepTx+MKnfB2CmPi0UAzZnxq7QjGigArzQIQlCBbqJsId7AIXPu9bMH69LyJXBkeC3Zmx0MNVK4C+EGUn4rp7px47LffBv8XPk17RGWLgWuxKsBoVbtWV6fdBHu3PzBvUnINLRptnuVDK2LoNeMeeXowQizPx1rGgUkfsKfMarZa2dLkcP8nFekYGMMEIRQJU69EMkI1h9S4JHmEXCHXCipzmP8YUzn3NWDx7ToyzLpNzBQ+K9KhpznfjYnt4mQECdvlUaV65S0cKqupypX458ipnQriGdT9Sc3H7ZGVni36JF2jCINUt3736HqZ6fkTpibG69y6mVPAhwPG73r7DHTvGkfi/mcGiQPxcQBtnN/1yf4BDRk1hsqi8Skvg23Tx/Y78i0FhG+xZbSGpbv4VqeE5leBSxHDxwc2Y/TWlc+CkLJ86+JI7PPSXABaeI19pr0zMAQcsYel7nHYpDEgQ3s1Q4fVh3yNlIfajn5FCBT0x+WRVJnlJmsM0mTTdApnshb/8DiJMaqEvirgIb2hk8sJH6biaA5YIseBZsEfLl3WknnobZ3cZdVrWfi2d6ZTDajVVwMThWh5
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(71200400001)(4744005)(6916009)(53546011)(38070700005)(5660300002)(7416002)(33656002)(54906003)(38100700002)(316002)(122000001)(6486002)(76116006)(4326008)(66476007)(66946007)(91956017)(66556008)(64756008)(66446008)(2906002)(6512007)(2616005)(8936002)(86362001)(36756003)(8676002)(508600001)(6506007)(186003)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?s1FI+72klZt1aD8ZAwml4Ij725qs3aQpHwQwFANYHHcCMuP3Jt0KljHOwad3?=
- =?us-ascii?Q?13HAa7MjqndB+A0iS+ezdTeCVojinwsuJk/MeeaQjmwoQa4WqgbxY97iJooU?=
- =?us-ascii?Q?943/cXyerKnN+ljnfNXnjyz+KwUhx/vBTELXho4+0dvXt5WN+gCMzLh07eCn?=
- =?us-ascii?Q?vH5wdt2gcKVSq/4YePQyukDRu3Ia0y2R6iBhcwqK0bYDzs3hfAXZCjRTFbNS?=
- =?us-ascii?Q?zsyD5pPN+/PudP/19hEYCvX01P9dFmJMfww8jq+7iEwnMYU+CSZGFu5scz7L?=
- =?us-ascii?Q?jy6YIGFxV2WCQA+9hcKCCwN2gjegutk4Lp4rtIIcL7dIeZCEHSsRx7ovBiyt?=
- =?us-ascii?Q?6PjbkQwKKcOy7sQUd6sDXSAoRxvDkZJg2D5x/nXCKqOYIeyqpMqCTkeLxI3W?=
- =?us-ascii?Q?XabIDo+eDkfA+2GbflDO80hrUh7eiK5QN2nL79FCVG+OSIqijiDnlPw+dNDM?=
- =?us-ascii?Q?WiUVo3wo8GCXqidOE7oRGYdY2X/UJSNZa7C/yBzXHuoin7LUfa7shIPD39EQ?=
- =?us-ascii?Q?js3R524AI8avxBjC3SQsx2FOJfGevmPmMXGB1Q17+I5gtsro4amWoTdEYAZJ?=
- =?us-ascii?Q?15NFE+vdP8heoyrJDB9R38xTtygHIptrYM1R2er5c/Vfr5PTY12Vx3gSgsGF?=
- =?us-ascii?Q?eSy7j4NVjL7aUU0Ybr/1Bf5Cq427smph6DJR/LwUl+1wglhopUGuBNCNdjDO?=
- =?us-ascii?Q?rAn73V/3P4zfQ36BhZWg1nLBhIUtRPnbGUh6EPk10awYvYMLziPmcDt5V/Uj?=
- =?us-ascii?Q?NJqFkMKh5allKvxGURA3p+c+CigS9umy33zVfozWI6gu6RbRv3v4zrhMb7vx?=
- =?us-ascii?Q?h+oHLlk66D5UJAWTJ1TuJtcaQi0RfOXxnFlr/eN3KQHVEnul2pv5jQFik9U/?=
- =?us-ascii?Q?xs3jC7usStIH+nH8fK4ojHfnr1+eYS+mhFyqrioRpUUuWFw4c8+jBqbWOHZ/?=
- =?us-ascii?Q?PD18rvjyzVZcyFKG49j44fcUTM27S4PtTv6MjxyvtNAxEZu7fN9NihHfHcya?=
- =?us-ascii?Q?HK3Y/dTCOyuiyrhIxGQgtQdP7d1Yk/foc+o0hDJ+1WnE5tlLvN+qvRvdQp8x?=
- =?us-ascii?Q?kkHkfre9P4SQ1w69tpzHReKe7DRIFKI4etHewRCWdXU4VY7ql5kZ94HFKEyS?=
- =?us-ascii?Q?pp12f/XSsr/Hk2XNhJ2f8o7qF8cAC21ImS+RA0/jW7cOML2knNqIjY2VjHO4?=
- =?us-ascii?Q?DF8nZ6Hiw03xZHDDzfZtLkKgO+wWvC7yk+RYRuoeKRDz/Lf5KabuX7lG1h6U?=
- =?us-ascii?Q?1dEBeGH5scVXWnIKg1GdygaWfk61biyk0brQCnshMRSiExO2IUmVlf2iOtc3?=
- =?us-ascii?Q?easylV/+0gzhjxyDyjpazX2Dt1dLFx9IJzE8ekXM7IJcTkhVvQVD1RP8l9X+?=
- =?us-ascii?Q?TR953J2hJ69hBh0pWo4MDO1J+bWrNtGa0HD+yPgk/q1z50ftJyVSYVVHfTF4?=
- =?us-ascii?Q?7JRhl1tWxD+YXqo2QgmTq2b+bNK+UKgdYly8DqgHOFTc/dUSfy/AjD7kChtf?=
- =?us-ascii?Q?tS1QX4xWEFCuNsMkn078VTO4ZuPgGFU3DEIL9m8KkUtDttXgvg4zpPFKET9M?=
- =?us-ascii?Q?Ff1w16MGgWgKUvwUpTT7E9/jp+5qs8N98dyd42XlWjWwKyvtRtD9xnya3rry?=
- =?us-ascii?Q?GoUX+ShLZKtm2vzfMtijK/1fEmLipkWvZT3E3So3NJsRDelDGc91/NI2mpk0?=
- =?us-ascii?Q?NuMgxLLrZnsE0mTBLT2PnN5qMFtK7UGNluVnMywH/Gty9tG9k1kXEJnEEusf?=
- =?us-ascii?Q?lrIdXL3JWtXYiCP5p+BBI9qXQ5Q9VLJZxDtopW5obWpp/DPAn2qR?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <02E738643A63724FA82CBE3C43F0AB93@namprd15.prod.outlook.com>
+        Mon, 30 May 2022 01:50:59 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457756C571
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 22:50:58 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id n18so9404595plg.5
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 22:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BobJJoukDoqDMc7RsnBOslTuYcnA41bZYrPd0qFtxLo=;
+        b=HEF7yI75q4/jLPdr8k8FIN79TtOolBn3y8oOoLyjUcQYCeEubGiOVFNCZYHOP2DodO
+         U3Wxv75HH2hosZRM/pbXPabBahO3aYxmP0MTfPaO68wLdg/hinLanrclStogNjTTwQet
+         TXtPyvEsQ6saNOUa+1mNKc6Jy9BktQiF2Kn9xg0R9GqRE4g7x9dMKt1nuKZKzXbP2761
+         E7HNl6lR5tnBzQTLUjEb3ZF82XKABWtVYbmq+1/P/ZQE4Su6qZ7HeRTiNyUXy0u4HbTt
+         scgUx+yUTiFQ0fPdV8vmfKAUE6m7EVxKXGJUpVytEDTAHK9P1G/8K5VY6f6E7W6N0KhU
+         1qFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BobJJoukDoqDMc7RsnBOslTuYcnA41bZYrPd0qFtxLo=;
+        b=PbZN4M1lYKMk9ke/p02XPOc+YbO1j9r1UTibfAezuxt1vrvv5LCIgfpY/2VPXYwLy3
+         YF568tX7VVi6m4irENiJpz4Zscm3C2umjmjHEoFXSX73rFkuzP2ISVcx8nVljILp9+MD
+         Tk2iy9R+fQ9JGWBuyyZBtq1ON7lcDnXJkJ5auLOzmoVuqblKmKKfs269FDgm/dK1NnDS
+         tVZykxo1kG39HVukhd8kHvibqad+PHJyyTYHlEdMknChS4DxvRxVJeUW2f2/PWp6l0G8
+         2vUBKDp0EuwE46euqdrA6B4MJhPusLgmfUDmmcJfKzOuyIEgvC//QZ5i7XvZSJ1yeUHx
+         3gUA==
+X-Gm-Message-State: AOAM5313+O0+SbdoeWiMGksqy9CLEOLaVeIkOxjYnEgAa3SmpSLSb0Pa
+        7uI7r6Uk1LnJ2cKD2E08WwLXQwyBL8YCkA==
+X-Google-Smtp-Source: ABdhPJzcG+Wj6HLqctwFpGM4LHkzUb2FX/9k6M4jkgCUJI4u5NtU/hy1qSKbgIOb5h07et2CFwjE5A==
+X-Received: by 2002:a17:90b:224a:b0:1e2:7afb:3367 with SMTP id hk10-20020a17090b224a00b001e27afb3367mr16511516pjb.37.1653889857790;
+        Sun, 29 May 2022 22:50:57 -0700 (PDT)
+Received: from [10.255.89.136] ([139.177.225.249])
+        by smtp.gmail.com with ESMTPSA id q11-20020a170903204b00b00163be997587sm3169891pla.100.2022.05.29.22.50.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 May 2022 22:50:57 -0700 (PDT)
+Message-ID: <286dbd1f-1c62-a171-7453-d772bd98332c@bytedance.com>
+Date:   Mon, 30 May 2022 13:46:57 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c26d798e-3e82-4de7-78bc-08da41fedd20
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2022 05:40:11.3580
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zVExeV/loRFiKmDU+j02bthh50ESyHB/yMuvIaz7Nom64os7N/tHcVRl5O7kW6fL3YUZt/InAbvh1D1tOgv5Uw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR15MB3838
-X-Proofpoint-ORIG-GUID: HEkuBvT6355fHo_6U9hH3jQKvKuW3i2i
-X-Proofpoint-GUID: HEkuBvT6355fHo_6U9hH3jQKvKuW3i2i
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-30_01,2022-05-27_01,2022-02-23_01
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: Re: [PATCH 2/3] mm/memory-failure.c: support reset PTE during
+ unpoison
+Content-Language: en-US
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "mst@redhat.com" <mst@redhat.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>
+References: <20220520070648.1794132-1-pizhenwei@bytedance.com>
+ <20220520070648.1794132-3-pizhenwei@bytedance.com>
+ <20220530050234.GA1036127@hori.linux.bs1.fc.nec.co.jp>
+From:   zhenwei pi <pizhenwei@bytedance.com>
+In-Reply-To: <20220530050234.GA1036127@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -148,21 +88,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-> On May 27, 2022, at 1:56 PM, Jiri Olsa <jolsa@kernel.org> wrote:
+On 5/30/22 13:02, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Fri, May 20, 2022 at 03:06:47PM +0800, zhenwei pi wrote:
+>> Origianlly, unpoison_memory() is only used by hwpoison-inject, and
+>> unpoisons a page which is poisoned by hwpoison-inject too. The kernel PTE
+>> entry has no change during software poison/unpoison.
+>>
+>> On a virtualization platform, it's possible to fix hardware corrupted page
+>> by hypervisor, typically the hypervisor remaps the error HVA(host virtual
+>> address). So add a new parameter 'const char *reason' to show the reason
+>> called by.
+>>
+>> Once the corrupted page gets fixed, the guest kernel needs put page to
+>> buddy. Reuse the page and hit the following issue(Intel Platinum 8260):
+>>   BUG: unable to handle page fault for address: ffff888061646000
+>>   #PF: supervisor write access in kernel mode
+>>   #PF: error_code(0x0002) - not-present page
+>>   PGD 2c01067 P4D 2c01067 PUD 61aaa063 PMD 10089b063 PTE 800fffff9e9b9062
+>>   Oops: 0002 [#1] PREEMPT SMP NOPTI
+>>   CPU: 2 PID: 31106 Comm: stress Kdump: loaded Tainted: G   M       OE     5.18.0-rc6.bm.1-amd64 #6
+>>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+>>   RIP: 0010:clear_page_erms+0x7/0x10
+>>
+>> The kernel PTE entry of the fixed page is still uncorrected, kernel hits
+>> page fault during prep_new_page. So add 'bool reset_kpte' to get a change
+>> to fix the PTE entry if the page is fixed by hypervisor.
+>>
+>> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+>> ---
+>>   include/linux/mm.h   |  2 +-
+>>   mm/hwpoison-inject.c |  2 +-
+>>   mm/memory-failure.c  | 26 +++++++++++++++++++-------
+>>   3 files changed, 21 insertions(+), 9 deletions(-)
+>>
 > 
-> When user specifies symbols and cookies for kprobe_multi link
-> interface it's very likely the cookies will be misplaced and
-> returned to wrong functions (via get_attach_cookie helper).
+> Do you need undoing rate limiting here?  In the original unpoison's usage,
+> avoiding flood of "Unpoison: Software-unpoisoned page" messages is helpful.
 > 
-> The reason is that to resolve the provided functions we sort
-> them before passing them to ftrace_lookup_symbols, but we do
-> not do the same sort on the cookie values.
+> And unpoison seems to be called from virtio-balloon multiple times when
+> the backend is 2MB hugepages.  If it's right, printing out 512 lines of
+> "Unpoison: Unpoisoned page 0xXXX by virtio-balloon" messages might not be
+> so helpful?
 > 
-> Fixing this by using sort_r function with custom swap callback
-> that swaps cookie values as well.
-> 
-> Fixes: 0236fec57a15 ("bpf: Resolve symbols with ftrace_lookup_symbols for kprobe multi link")
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org
 
-Acked-by: Song Liu <songliubraving@fb.com>
+All the suggestions(include '[PATCH 1/3] memory-failure: Introduce 
+memory failure notifier') are reasonable, I'll fix them in the next 
+version. Thanks a lot!
 
+
+-- 
+zhenwei pi

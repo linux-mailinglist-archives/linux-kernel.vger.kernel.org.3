@@ -2,328 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE2F537ACD
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DAE537AC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236205AbiE3Mvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 08:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        id S236189AbiE3MsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 08:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232828AbiE3Mvi (ORCPT
+        with ESMTP id S229841AbiE3MsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 08:51:38 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DE0279
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 05:51:35 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id m14-20020a17090a414e00b001df77d29587so13671465pjg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 05:51:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZvzQrzGqX0fJW9mWiWfNdI5A2ruzfhQVGGg4PFZYL8Y=;
-        b=5LTfDx+bkaTCFM5Negv4ttvuFWwAThetWZq9GeHLSuU8N31iQe1v8qXouG9NSNS0T6
-         Ldm0sm18jhB1MBs9eYRRV7f1xbyELfqCVplUXoMX5P8rOuax3m7DbYSS3HH2p+0C2wXA
-         25cTRL8bfAHIi1ohekGqUvVk5YCD0/RQk4GlG7kF6iC+nDlmqLXH48VoPgZx8eQzyXfE
-         XX4R12kZTezWJnw+cM1ZBL/I6AzA0V/7qEI9H850um38DokHxOMHJ2mbMcpGIq2TUcBZ
-         UuCPKXlnmfjHYemIDioZETjyYo67acLvfOdphzCFSLNjKWFn7fWOPl6fUo4D5TWaxJNI
-         9pwQ==
+        Mon, 30 May 2022 08:48:21 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DD561623
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 05:48:20 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id k184-20020a6bbac1000000b0065aeedd4ba8so5443583iof.20
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 05:48:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZvzQrzGqX0fJW9mWiWfNdI5A2ruzfhQVGGg4PFZYL8Y=;
-        b=OlRkjTd/yIIM6kFeSZREqoasnCti/HgZ/PK2BPYld+lgJHvXS9uuH0u/NUFpnK/6CT
-         k5+i4ego46yABmH6igEzBZNTXkQvQyH/2kRgy8IyIqjI9D9RdzP1QEocx/71vb9fPay7
-         fVyErYV8CQo7g/zc+c+O6kksELOTcD4tVDwjn9td9AJh7l3hOAQe8XW+sDnagpkpvRc6
-         NIde/n+BIxoim4pSDEr1xEyp+Lo6a7n1Nk8RsPXYCd4si12+eHTueCtDOV6F+zrKz9uR
-         dyl09Unq75+ZtpWf3lilBh8FyNIrIbQa4QZyS+84Fltgl7Cl/uqgSzU6ch+OvYPoISUr
-         Biaw==
-X-Gm-Message-State: AOAM531bzuPRLtKZYhX0DIh25Az7DQHFdoMMqYFkyDWSdGT7OfIg/43K
-        SGIaYgiCRmSlKBeHG9QkIS2xpqdL+vFE3Q==
-X-Google-Smtp-Source: ABdhPJwTiynlgnZijOQCrJvfmuzkL14Lu9xuJdj0+djeOHFAyAPupu8F5badEOZlrtCuCzbEYSTGWw==
-X-Received: by 2002:a17:902:7b8f:b0:162:467:db7c with SMTP id w15-20020a1709027b8f00b001620467db7cmr43791860pll.140.1653915094829;
-        Mon, 30 May 2022 05:51:34 -0700 (PDT)
-Received: from [10.255.89.136] ([139.177.225.249])
-        by smtp.gmail.com with ESMTPSA id u13-20020a170902e5cd00b001624dab05edsm9341931plf.8.2022.05.30.05.51.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 05:51:34 -0700 (PDT)
-Message-ID: <e870424d-da27-b369-7406-27f7f2983428@bytedance.com>
-Date:   Mon, 30 May 2022 20:47:34 +0800
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=fviMwFuCOHUegEvnIFsjn2njt9ZqkztQPMv6YKuPdAA=;
+        b=OaGeDhGlOn75Y02o4svMgDqO9yIBg2b34d7E+zcHx7ieJ1No/QIWTM15TT0tOxu0+T
+         XRtzz2axEK00QS3iW0idoXHpwa7/7ce9Im9XarAJVmwNxpTiO6GHbu8zE73K+g368TW/
+         NGCrmE2ssFOJs3qAV+OF37H+0h4v+Vqw0d03BRnu8JHQqSBqCIXNCznY1V+zA1ieMGJD
+         z4SFkGpCdvY3NrUfX/gf5BHf+OGmF2hUWe1KkOPjpTc5gfqyC5LJdBwCBO1dbcWfT3kc
+         9Qbf8adK1pQ2vqEfTwGVekOV5PnoVzumjkklLcYAxCgbIOkzxB03Qx8dUhI/aTXHZoiC
+         XGgQ==
+X-Gm-Message-State: AOAM533k+4HzobXTRhVFOc+UWMVBceqvmdydM2lyYjQ2JjkCeRFEHvPp
+        Y6DFcxhDPHoUUCwAps0dv4rW9ulnZGcpIaSvHROOi/S63xMP
+X-Google-Smtp-Source: ABdhPJycnqRf6X1SBHFUkROsgHjQtpBF8Dm7PO+qwNPyD6tzwCY/b/l83ev4fZbc8+AUU6TRX9qmxx5ZaxRAKtUZFRfbJ4Z8oofl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Re: [PATCH 3/3] virtio_balloon: Introduce memory recover
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, mst@redhat.com,
-        naoya.horiguchi@nec.com, akpm@linux-foundation.org,
-        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        pbonzini@redhat.com, peterx@redhat.com, qemu-devel@nongnu.org
-References: <20220520070648.1794132-1-pizhenwei@bytedance.com>
- <20220520070648.1794132-4-pizhenwei@bytedance.com>
- <612e42f7-1a97-9b01-2d45-d4661911e7a8@redhat.com>
-From:   zhenwei pi <pizhenwei@bytedance.com>
-In-Reply-To: <612e42f7-1a97-9b01-2d45-d4661911e7a8@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:218b:b0:2d1:1d0c:2e28 with SMTP id
+ j11-20020a056e02218b00b002d11d0c2e28mr28257557ila.216.1653914899437; Mon, 30
+ May 2022 05:48:19 -0700 (PDT)
+Date:   Mon, 30 May 2022 05:48:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000011e14605e03a125d@google.com>
+Subject: [syzbot] WARNING in dma_map_sgtable (2)
+From:   syzbot <syzbot+3ba551855046ba3b3806@syzkaller.appspotmail.com>
+To:     christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
+        hch@lst.de, iommu@lists.linux-foundation.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, sumit.semwal@linaro.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    7e062cda7d90 Merge tag 'net-next-5.19' of git://git.kernel..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=172151d3f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e9d71d3c07c36588
+dashboard link: https://syzkaller.appspot.com/bug?extid=3ba551855046ba3b3806
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12918503f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1386fa39f00000
+
+Bisection is inconclusive: the issue happens on the oldest tested release.
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14107ee5f00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16107ee5f00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12107ee5f00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3ba551855046ba3b3806@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3610 at kernel/dma/mapping.c:188 dma_map_sgtable+0x203/0x260 kernel/dma/mapping.c:264
+Modules linked in:
+CPU: 0 PID: 3610 Comm: syz-executor162 Not tainted 5.18.0-syzkaller-04943-g7e062cda7d90 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__dma_map_sg_attrs kernel/dma/mapping.c:188 [inline]
+RIP: 0010:dma_map_sgtable+0x203/0x260 kernel/dma/mapping.c:264
+Code: 75 15 e8 50 5f 14 00 eb cb e8 49 5f 14 00 eb c4 e8 42 5f 14 00 eb bd e8 3b 5f 14 00 0f 0b bd fb ff ff ff eb af e8 2d 5f 14 00 <0f> 0b 31 ed 48 bb 00 00 00 00 00 fc ff df e9 7b ff ff ff 89 e9 80
+RSP: 0018:ffffc9000305fd40 EFLAGS: 00010293
+RAX: ffffffff81723873 RBX: dffffc0000000000 RCX: ffff88801fbb8000
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000002
+RBP: ffff8881487e5408 R08: ffffffff81723743 R09: ffffed1003592c9e
+R10: ffffed1003592c9e R11: 1ffff11003592c9c R12: ffff8881487e5000
+R13: ffff88801ac964e0 R14: 0000000000000000 R15: 0000000000000001
+FS:  0000555556c2a300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000005d84c8 CR3: 000000001f1ef000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ get_sg_table+0xf9/0x150 drivers/dma-buf/udmabuf.c:72
+ begin_cpu_udmabuf+0xf5/0x160 drivers/dma-buf/udmabuf.c:126
+ dma_buf_begin_cpu_access+0xd8/0x170 drivers/dma-buf/dma-buf.c:1172
+ dma_buf_ioctl+0x2a0/0x2f0 drivers/dma-buf/dma-buf.c:363
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f8bf9c6dc19
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd7cfae1d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f8bf9c6dc19
+RDX: 0000000020000100 RSI: 0000000040086200 RDI: 0000000000000006
+RBP: 00007f8bf9c31dc0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f8bf9c31e50
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
 
-On 5/30/22 15:48, David Hildenbrand wrote:
-> 
->> +
->>   struct virtio_balloon {
->>   	struct virtio_device *vdev;
->>   	struct virtqueue *inflate_vq, *deflate_vq, *stats_vq, *free_page_vq;
->> @@ -126,6 +133,16 @@ struct virtio_balloon {
->>   	/* Free page reporting device */
->>   	struct virtqueue *reporting_vq;
->>   	struct page_reporting_dev_info pr_dev_info;
->> +
->> +	/* Memory recover VQ - VIRTIO_BALLOON_F_RECOVER */
->> +	struct virtqueue *recover_vq;
->> +	spinlock_t recover_vq_lock;
->> +	struct notifier_block memory_failure_nb;
->> +	struct list_head corrupted_page_list;
->> +	struct list_head recovered_page_list;
->> +	spinlock_t recover_page_list_lock;
->> +	struct __virtio_balloon_recover in_vbr;
->> +	struct work_struct unpoison_memory_work;
-> 
-> I assume we want all that only with CONFIG_MEMORY_FAILURE.
-> 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Sorry, I missed this.
-
->>   };
->>   
->>   static const struct virtio_device_id id_table[] = {
->> @@ -494,6 +511,198 @@ static void update_balloon_size_func(struct work_struct *work)
->>   		queue_work(system_freezable_wq, work);
->>   }
->>   
->> +/*
->> + * virtballoon_memory_failure - notified by memory failure, try to fix the
->> + *                              corrupted page.
->> + * The memory failure notifier is designed to call back when the kernel handled
->> + * successfully only, WARN_ON_ONCE on the unlikely condition to find out any
->> + * error(memory error handling is a best effort, not 100% coverd).
->> + */
->> +static int virtballoon_memory_failure(struct notifier_block *notifier,
->> +				      unsigned long pfn, void *parm)
->> +{
->> +	struct virtio_balloon *vb = container_of(notifier, struct virtio_balloon,
->> +						 memory_failure_nb);
->> +	struct page *page;
->> +	struct __virtio_balloon_recover *out_vbr;
->> +	struct scatterlist sg;
->> +	unsigned long flags;
->> +	int err;
->> +
->> +	page = pfn_to_online_page(pfn);
->> +	if (WARN_ON_ONCE(!page))
->> +		return NOTIFY_DONE;
->> +
->> +	if (PageHuge(page))
->> +		return NOTIFY_DONE;
->> +
->> +	if (WARN_ON_ONCE(!PageHWPoison(page)))
->> +		return NOTIFY_DONE;
->> +
->> +	if (WARN_ON_ONCE(page_count(page) != 1))
->> +		return NOTIFY_DONE;
-> 
-> Relying on the page_count to be 1 for correctness is usually a bit
-> shaky, for example, when racing against isolate_movable_page() that
-> might temporarily bump upo the refcount.
-> 
-
-The memory notifier is designed to call the chain if a page gets result 
-MF_RECOVERED only:
-      if (result == MF_RECOVERED)
-          blocking_notifier_call_chain(&mf_notifier_list, pfn, NULL);
-
-
->> +
->> +	get_page(page); /* balloon reference */
->> +
->> +	out_vbr = kzalloc(sizeof(*out_vbr), GFP_KERNEL);
-> 
-> Are we always guaranteed to be able to use GFP_KERNEL out of MCE
-> context? (IOW, are we never atomic?)
-> 
->> +	if (WARN_ON_ONCE(!out_vbr))
->> +		return NOTIFY_BAD;
->> +
->> +	spin_lock(&vb->recover_page_list_lock);
->> +	balloon_page_push(&vb->corrupted_page_list, page);
->> +	spin_unlock(&vb->recover_page_list_lock);
->> +
->> +	out_vbr->vbr.cmd = VIRTIO_BALLOON_R_CMD_RECOVER;
-> 
-> This makes me wonder if we should have a more generic guest->host
-> request queue, similar to what e.g., virtio-mem uses, instead of adding
-> a separate VIRTIO_BALLOON_VQ_RECOVER vq.
-> 
-
-I'm OK with either one, I'll follow your decision! :D
-
->> +	set_page_pfns(vb, out_vbr->pfns, page);
->> +	sg_init_one(&sg, out_vbr, sizeof(*out_vbr));
->> +
->> +	spin_lock_irqsave(&vb->recover_vq_lock, flags);
->> +	err = virtqueue_add_outbuf(vb->recover_vq, &sg, 1, out_vbr, GFP_KERNEL);
->> +	if (unlikely(err)) {
->> +		spin_unlock_irqrestore(&vb->recover_vq_lock, flags);
->> +		return NOTIFY_DONE;
->> +	}
->> +	virtqueue_kick(vb->recover_vq);
->> +	spin_unlock_irqrestore(&vb->recover_vq_lock, flags);
->> +
->> +	return NOTIFY_OK;
->> +}
->> +
->> +static int recover_vq_get_response(struct virtio_balloon *vb)
->> +{
->> +	struct __virtio_balloon_recover *in_vbr;
->> +	struct scatterlist sg;
->> +	unsigned long flags;
->> +	int err;
->> +
->> +	spin_lock_irqsave(&vb->recover_vq_lock, flags);
->> +	in_vbr = &vb->in_vbr;
->> +	memset(in_vbr, 0x00, sizeof(*in_vbr));
->> +	sg_init_one(&sg, in_vbr, sizeof(*in_vbr));
->> +	err = virtqueue_add_inbuf(vb->recover_vq, &sg, 1, in_vbr, GFP_KERNEL);
->> +	if (unlikely(err)) {
->> +		spin_unlock_irqrestore(&vb->recover_vq_lock, flags);
->> +		return err;
->> +	}
->> +
->> +	virtqueue_kick(vb->recover_vq);
->> +	spin_unlock_irqrestore(&vb->recover_vq_lock, flags);
->> +
->> +	return 0;
->> +}
->> +
->> +static void recover_vq_handle_response(struct virtio_balloon *vb, unsigned int len)
->> +{
->> +	struct __virtio_balloon_recover *in_vbr;
->> +	struct virtio_balloon_recover *vbr;
->> +	struct page *page;
->> +	unsigned int pfns;
->> +	u32 pfn0, pfn1;
->> +	__u8 status;
->> +
->> +	/* the response is not expected */
->> +	if (unlikely(len != sizeof(struct __virtio_balloon_recover)))
->> +		return;
->> +
->> +	in_vbr = &vb->in_vbr;
->> +	vbr = &in_vbr->vbr;
->> +	if (unlikely(vbr->cmd != VIRTIO_BALLOON_R_CMD_RESPONSE))
->> +		return;
->> +
->> +	/* to make sure the contiguous balloon PFNs */
->> +	for (pfns = 1; pfns < VIRTIO_BALLOON_PAGES_PER_PAGE; pfns++) {
->> +		pfn0 = virtio32_to_cpu(vb->vdev, in_vbr->pfns[pfns - 1]);
->> +		pfn1 = virtio32_to_cpu(vb->vdev, in_vbr->pfns[pfns]);
->> +		if (pfn1 - pfn0 != 1)
->> +			return;
-> 
-> Yeah, we really shouldn't be dealing with (legacy) 4k PFNs here, but
-> instead, proper ranges I guess.
-> 
-
-MST also pointed out this, I explained in this link:
-https://lkml.org/lkml/2022/5/26/942
-
-Rather than page reporting style, virtio-mem style should be fine. Ex,
-struct virtio_memory_recover {
-         __virtio64 addr;
-         __virtio32 length;
-         __virtio16 padding[2];
-};
-
->> +	}
->> +
->> +	pfn0 = virtio32_to_cpu(vb->vdev, in_vbr->pfns[0]);
->> +	if (!pfn_valid(pfn0))
->> +		return;
->> +
->> +	pfn1 = -1;
->> +	spin_lock(&vb->recover_page_list_lock);
->> +	list_for_each_entry(page, &vb->corrupted_page_list, lru) {
->> +		pfn1 = page_to_pfn(page);
->> +		if (pfn1 == pfn0)
->> +			break;
->> +	}
->> +	spin_unlock(&vb->recover_page_list_lock);
->> +
->> +	status = vbr->status;
->> +	switch (status) {
->> +	case VIRTIO_BALLOON_R_STATUS_RECOVERED:
->> +		if (pfn1 == pfn0) {
->> +			spin_lock(&vb->recover_page_list_lock);
->> +			list_del(&page->lru);
->> +			balloon_page_push(&vb->recovered_page_list, page);
-> 
-> We rather not reuse actual balloon functions in !balloon context. Just
-> move the page to the proper list directly.
-> 
-
-OK.
-
->> +			spin_unlock(&vb->recover_page_list_lock);
->> +			queue_work(system_freezable_wq, &vb->unpoison_memory_work);
->> +			dev_info_ratelimited(&vb->vdev->dev, "recovered pfn 0x%x", pfn0);
-> 
-> Well, not yet. Shouldn't this go into unpoison_memory_func() ?
-> 
-
-OK.
-
-[...]
-
-> 
->>   
->> +out_unregister_reporting:
->> +	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_REPORTING))
->> +		page_reporting_unregister(&vb->pr_dev_info);
->>   out_unregister_oom:
->>   	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
->>   		unregister_oom_notifier(&vb->oom_nb);
->> @@ -1082,6 +1319,11 @@ static void virtballoon_remove(struct virtio_device *vdev)
->>   		destroy_workqueue(vb->balloon_wq);
->>   	}
->>   
->> +	if (virtio_has_feature(vdev, VIRTIO_BALLOON_F_RECOVER)) {
-> 
-> Could the notifier already have been triggered and we might be using the
-> device before already fully initialized from the notifier and might end
-> up leaking memory here that we allocated?
-> 
->> +		unregister_memory_failure_notifier(&vb->memory_failure_nb);
->> +		cancel_work_sync(&vb->unpoison_memory_work);
->> +	}
->> +
-> 
-> Could we be leaking memory from the virtballoon_remove() path?
-> 
-
-Yes, I'll fix the possible memory leak here.
-
-Thanks a lot.
-
--- 
-zhenwei pi
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,132 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31D05385C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 18:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365AC5385C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 18:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238912AbiE3P75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
+        id S239999AbiE3QBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 12:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241127AbiE3P7g (ORCPT
+        with ESMTP id S243044AbiE3QAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:59:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7122C22BDB
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 08:53:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653925982;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bDYue/Afd3VGZHzU7tYF7qy5xBeBUpqe85rLuoAiRcE=;
-        b=AkXHNJKvAQRHb5OqI+OhXnw4AlFTHU7SQ25I25r8DrkTB9nwXx2U3S7uy3yWEhfxPKMgZ0
-        MCHoCCU4ElbTk7DKNd2mXmRpWE6tOdwsDRWpn7scMraYzymGuve2EYFM1vMWpJYkKpJQS0
-        OjtcJUf23O2R/uhMV8v3cei4In0oe2Y=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-439-JXIUKUVtNoSifQX8E4lzFQ-1; Mon, 30 May 2022 11:53:01 -0400
-X-MC-Unique: JXIUKUVtNoSifQX8E4lzFQ-1
-Received: by mail-io1-f72.google.com with SMTP id n19-20020a056602341300b0066850b49e09so3662090ioz.12
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 08:53:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bDYue/Afd3VGZHzU7tYF7qy5xBeBUpqe85rLuoAiRcE=;
-        b=GYBoQ4BLZwgavD0YrQ3fP6ENDrjnpkDGTKp1DEcYFgM2A1F5FhYh6xA+zi9xV2YRfm
-         MCuAyBxe3x2oJC4mTaqCEfudUDQLw8aZ94nWUIu9WcKZbhXZqMMHGPU1lIbMOOFvORQT
-         q0KKM2mBrXbWMEtz4vC685JR3X+krm+zG6BT1F80tIbk/2cu1MXGY5tAm80MwCfeAdCi
-         hDOVkVc95KuNoiSbYn7l7k/tvGycJvo/ZrBfH8aeF7Z3NEVyEMfkcKFKTQxcpXyisY6F
-         nGkM321zzNcTb6Pu6LdPNPBIkPUmQyY9zwW+mCkmEC7zu8qWJAhnI5fuMnPXTNZdj5Cd
-         Ydng==
-X-Gm-Message-State: AOAM532dWIcSH0lzGwdFw8QgJpnyQct6y4Nbsgiqi5uovvrchTgAhLEJ
-        Uhhe7N5CP67Z2wkXhD0eH6BiftjtaYVhrHx60OVmPpU4d3pkJBaI7CKp1Q38gIA7t6M0be1L53i
-        ZXFs5cPc6yjaDVc145ilqygYJ
-X-Received: by 2002:a5d:9cc8:0:b0:663:2899:4b8 with SMTP id w8-20020a5d9cc8000000b00663289904b8mr16857364iow.192.1653925980593;
-        Mon, 30 May 2022 08:53:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyKQIoyyqGc41UCjMUnObS0GZ5Lh8IPSVLY8KDGIOa5YRMfMwdzANPXLWIG/1E7oUnwvcvO1w==
-X-Received: by 2002:a5d:9cc8:0:b0:663:2899:4b8 with SMTP id w8-20020a5d9cc8000000b00663289904b8mr16857337iow.192.1653925980357;
-        Mon, 30 May 2022 08:53:00 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id 66-20020a021d45000000b0032e75bfe344sm2781109jaj.171.2022.05.30.08.52.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 08:52:59 -0700 (PDT)
-Date:   Mon, 30 May 2022 11:52:54 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Will Deacon <will@kernel.org>,
-        Matt Turner <mattst88@gmail.com>, linux-s390@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brian Cain <bcain@quicinc.com>, Borislav Petkov <bp@alien8.de>,
-        linux-alpha@vger.kernel.org, Alistair Popple <apopple@nvidia.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        linux-snps-arc@lists.infradead.org,
-        Vineet Gupta <vgupta@kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Rich Felker <dalias@libc.org>, sparclinux@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        David Hildenbrand <david@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-xtensa@linux-xtensa.org, linux-sh@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org,
-        Richard Henderson <rth@twiddle.net>,
-        Guo Ren <guoren@kernel.org>, linux-parisc@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Helge Deller <deller@gmx.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-um@lists.infradead.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        openrisc@lists.librecores.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-hexagon@vger.kernel.org, Andy Lutomirski <luto@kernel.org>,
-        Stafford Horne <shorne@gmail.com>, linux-csky@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-mips@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-riscv@lists.infradead.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Chris Zankel <chris@zankel.net>,
-        Michal Simek <monstr@monstr.eu>, x86@kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [PATCH v4] mm: Avoid unnecessary page fault retires on shared
- memory types
-Message-ID: <YpToVpjXmdFqGOpY@xz-m1.local>
-References: <20220527193936.30678-1-peterx@redhat.com>
- <YpPYkzbrQmy4FjrI@osiris>
- <33fd4731-9765-d78b-bdc3-f8243c98e81f@linux.ibm.com>
+        Mon, 30 May 2022 12:00:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2C526AD4;
+        Mon, 30 May 2022 08:56:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E407B80E2E;
+        Mon, 30 May 2022 15:56:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40FBDC341C5;
+        Mon, 30 May 2022 15:56:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653926162;
+        bh=vZNOahuquc61LYGJE+zDOh1Tfc1eF8K3ftYrqLR3Jlg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dgYj/Yzu6xQgvbDr+aTMPj3JC11vuXrprxRvhYSLFKVR2F8er+ja/ylKcZNMSUjkT
+         WGMwvpDTgm8oxIMmajdhHZfNdq8Wm9Bi7f9UP9icxcb6p6BvkjZZIwu+kLGCiKbXZd
+         39HUgv2IbaKQ1xEbQG9jYq0t18S9YjJKZGMtS7q80RHTpBZ1ZIm5oGDK7FiufTCUr/
+         U3+enbtWDaCLOR8mx60jcCGOXkqTnSOfG0Po2CrZysqy1vXk7emgiIsopVywnfNwnl
+         fDEDzpuI4HVb4MMGALQW4bQRnPTk1+1hSmuGQ5xhW1ulVyCcy9FnGjXTY7D+7fXsPc
+         IuUCHkGo1VgWw==
+Received: by mail-yb1-f181.google.com with SMTP id p13so8111378ybm.1;
+        Mon, 30 May 2022 08:56:02 -0700 (PDT)
+X-Gm-Message-State: AOAM530imDYHVcD/QI/7M9b+VMF2w1U3ti959Q5LTQVXhWPhavEKL2As
+        tzyfJEKXKVj4El0JsgLEgXIuN1M7jxrdQJpso0U=
+X-Google-Smtp-Source: ABdhPJw8YN2D7OioGQU3VBmoUMbh0gioLp3yRY1XdaTroJXM/gLDD3ji8AXoRaouQ2fK2WQ4/43SP4bwYsUoMcacvmc=
+X-Received: by 2002:a25:4f0a:0:b0:64f:6a76:3d8f with SMTP id
+ d10-20020a254f0a000000b0064f6a763d8fmr43939287ybb.134.1653926161185; Mon, 30
+ May 2022 08:56:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <33fd4731-9765-d78b-bdc3-f8243c98e81f@linux.ibm.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <CAK8P3a2_52JPnBWNvTTkFVwLxPAa7=NaQ4whwC1UeH_NYHeUKQ@mail.gmail.com>
+ <CAK8P3a0SpU1n+29KQxzKnPRvzmDE=L0V9RUpKxhemv=74kevcQ@mail.gmail.com>
+ <df5c406c-eec6-c340-2847-49670b7fe8bf@xen0n.name> <CAK8P3a3awFdB1-G65DC38NBuSTvo6SvFTaS0m9YBxunHjHjQvQ@mail.gmail.com>
+ <CAAhV-H6sNr-yo8brBFtzziH6k9Tby0dFp7yehK55SfH5HjZ8hQ@mail.gmail.com> <358025d1-28e6-708b-d23d-3f22ae12a800@xen0n.name>
+In-Reply-To: <358025d1-28e6-708b-d23d-3f22ae12a800@xen0n.name>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 30 May 2022 17:55:43 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1ge2bZS13ahm_LdO3jEcbtR4w3do-gLjggKvppqnBDkw@mail.gmail.com>
+Message-ID: <CAK8P3a1ge2bZS13ahm_LdO3jEcbtR4w3do-gLjggKvppqnBDkw@mail.gmail.com>
+Subject: Re: [musl] Re: [GIT PULL] asm-generic changes for 5.19
+To:     musl@lists.openwall.com
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,41 +79,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 11:35:10AM +0200, Christian Borntraeger wrote:
-> 
-> 
-> Am 29.05.22 um 22:33 schrieb Heiko Carstens:
-> [...]
-> > 
-> > Guess the patch below on top of your patch is what we want.
-> > Just for clarification: if gmap is not NULL then the process is a kvm
-> > process. So, depending on the workload, this optimization makes sense.
-> > 
-> > diff --git a/arch/s390/mm/fault.c b/arch/s390/mm/fault.c
-> > index 4608cc962ecf..e1d40ca341b7 100644
-> > --- a/arch/s390/mm/fault.c
-> > +++ b/arch/s390/mm/fault.c
-> > @@ -436,12 +436,11 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
-> >   	/* The fault is fully completed (including releasing mmap lock) */
-> >   	if (fault & VM_FAULT_COMPLETED) {
-> > -		/*
-> > -		 * Gmap will need the mmap lock again, so retake it.  TODO:
-> > -		 * only conditionally take the lock when CONFIG_PGSTE set.
-> > -		 */
-> > -		mmap_read_lock(mm);
-> > -		goto out_gmap;
-> > +		if (gmap) {
-> > +			mmap_read_lock(mm);
-> > +			goto out_gmap;
-> > +		}
-> > +		goto out;
-> 
-> Yes, that makes sense. With that
-> 
-> Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+On Mon, May 30, 2022 at 5:00 PM WANG Xuerui <kernel@xen0n.name> wrote:
+> On 5/30/22 21:01, Huacai Chen wrote:
+>
+> Thanks for the recognition from both of you; it is my honor and pleasure
+> to contribute to the LoongArch port and to Linux in general.
+>
+> As I'm still not entirely satisfied with my kernel development skills,
+> plus my day job is not kernel-related nor Loongson/LoongArch-related at
+> all, listing me as reviewer should be enough for now. I will take care
+> of the arch as long as I have the hardware.
 
-Looks sane, thanks Heiko, Christian.  I'll cook another one.
+Thanks, sounds good to me.
 
--- 
-Peter Xu
+> BTW, there were already several breakages when rebasing the previous
+> revision (I believe it's commit 215da6d2dac0 ("MAINTAINERS: Add
+> maintainer information for LoongArch")) on top of linus' tree.
 
+Right, at least most of these should be fairly easy to address by disabling
+the corresponding features. For the allmodconfig build, I see some
+warnings that are introduced in gcc-12.1 across all architectures, and
+those can be ignored for now.
+
+Some of the errors already have fixes on top of the 215da6d2dac0
+commit, but some of the other commits look like we should leave
+them out here.
+
+I also see some conflicts between local symbol definitions and device
+drivers such as
+
+arch/loongarch/include/asm/loongarch.h:240:29: note: previous
+definition of 'csr_writel' with type 'void(u32,  u32)' {aka
+'void(unsigned int,  unsigned int)'}
+  240 | static __always_inline void csr_writel(u32 val, u32 reg)
+      |                             ^~~~~~~~~~
+drivers/media/platform/amphion/vpu_core.h:10:5: error: conflicting
+types for 'csr_readl'; have 'u32(struct vpu_core *, u32)' {aka
+'unsigned int(struct vpu_core *, unsigned int)'}
+
+and
+
+drivers/usb/cdns3/cdns3-imx.c:85: error: "PS_MASK" redefined [-Werror]
+
+I would suggest renaming the loongarch specific symbols here, though we
+may want to also change those drivers to use less generic identifiers.
+
+> Now I see
+> the loongarch-next HEAD is already rebased on top of what I believe to
+> be the current main branch, however I vaguely remember that it's not
+> good to base one's patches on top of "some random commit", so I wonder
+> whether the current branch state is appropriate for a PR?
+
+You are correct, a pull request should always be based on an -rc, orat least
+have the minimum set of dependencies. The branch was previously
+based on top of the spinlock implementation, which is still the best
+place to start here.
+
+       Arnd

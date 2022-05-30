@@ -2,113 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AE4537A63
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE3F537A68
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236030AbiE3MJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 08:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
+        id S236054AbiE3MKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 08:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiE3MJz (ORCPT
+        with ESMTP id S232772AbiE3MKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 08:09:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1DA05DD15
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 05:09:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653912593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=l+xhfzs8lWvum/5z4y3LJduPiIcYZl/dK4jHG88Ohl0=;
-        b=OdNWoAzhJse6CSm7TEOD9UjHVAjNgm1wlKuDh6M3/+cTHWrZzC6qp2y+iioRYv8AsTOir8
-        mPLMKKRa/oFsNrA2Wc+wIPlUyQSNYayY8Mnxr5DGxKg4z1o8Z0PoIvWe3Q0jkR3W6oUELZ
-        7awkCAz2nkb8QalZlxbQqS9b9fMcPdE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-606-bmzpHDSXPdOUkfjJ9dqVjw-1; Mon, 30 May 2022 08:09:52 -0400
-X-MC-Unique: bmzpHDSXPdOUkfjJ9dqVjw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 30 May 2022 08:10:42 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BF35EDD6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 05:10:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 41D7C3804501;
-        Mon, 30 May 2022 12:09:52 +0000 (UTC)
-Received: from localhost (ovpn-13-142.pek2.redhat.com [10.72.13.142])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 74C94492C3B;
-        Mon, 30 May 2022 12:09:50 +0000 (UTC)
-Date:   Mon, 30 May 2022 20:09:47 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     ysato@users.sourceforge.jp, dalias@libc.org
-Cc:     linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] sh: cast away __iomem to remove sparse warning
-Message-ID: <YpS0C8tVG2E5jGSV@MiWiFi-R3L-srv>
-References: <20220507013411.74277-1-bhe@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220507013411.74277-1-bhe@redhat.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AFDF41F86A;
+        Mon, 30 May 2022 12:10:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653912640; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yxqJGbuE6P6Hw+OVYSyk7rHgWLv47KPb6ahZ4Z1+CM4=;
+        b=C09BnQSWh0+urizSipr6yzs0sZxhxUk+Hr3C7ckn7SCtxDcOaQSi+7E0icEvFE3axy5oYK
+        yDljXx2xG8bM/Huoc/tMYH9SivL1S9XavvrvsBiOsMrrFWDRdbWIGm6Frqf/ncSnmBbYxz
+        aKNNY1xj0WwGFgLB039y948C2v6xL3s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653912640;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yxqJGbuE6P6Hw+OVYSyk7rHgWLv47KPb6ahZ4Z1+CM4=;
+        b=FAAW0034LAj/dRvlhCfrd2wYirLGb9PW6nvO4vx+6qRtr7ZcsE/GcpxB2PcW8vqbHw1OhH
+        m2GnJK+S8ZuAL6Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8A03E13A84;
+        Mon, 30 May 2022 12:10:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xAbMIEC0lGJoCwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 30 May 2022 12:10:40 +0000
+Date:   Mon, 30 May 2022 14:10:40 +0200
+Message-ID: <87pmjvw79b.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Marios Levogiannis <marios.levogiannis@gmail.com>
+Cc:     Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek - Fix microphone noise on ASUS TUF B550M-PLUS
+In-Reply-To: <20220530074131.12258-1-marios.levogiannis@gmail.com>
+References: <87r14by1xi.wl-tiwai@suse.de>
+        <20220530074131.12258-1-marios.levogiannis@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 05/07/22 at 09:34am, Baoquan He wrote:
-> LKP reported a sparse warning in arch/sh/kernel/crash_dump.c during
-> a kdump patchset reviewing:
-> https://lore.kernel.org/all/202204082128.JKXXDGpa-lkp@intel.com/T/#u
+On Mon, 30 May 2022 09:41:31 +0200,
+Marios Levogiannis wrote:
 > 
-> ../arch/sh/kernel/crash_dump.c:23:36: sparse: warning: incorrect type in argument 1 (different address spaces)
-> ../arch/sh/kernel/crash_dump.c:23:36: sparse:    expected void const *addr
-> ../arch/sh/kernel/crash_dump.c:23:36: sparse:    got void [noderef] __iomem *
+> Set microphone pins 0x18 (rear) and 0x19 (front) to VREF_50 to fix the
+> microphone noise on ASUS TUF B550M-PLUS which uses the ALCS1200A codec.
+> The initial value was VREF_80.
 > 
-> This warning happened when __iomem pointer is passed into fucntion
-> which doesn't expect it. Casting away the __iomem can fix it.
-
-This warning was reported by lkp during one patchset posted and
-reviewing. Since it's not related to the patchset, I just sent it
-separately so that later code change on arch/sh/kernel/crash_dump.c
-won't trigger the lkp warning again.
-
-[PATCH v5 RESEND 0/3] Convert vmcore to use an iov_iter
-https://lore.kernel.org/all/20220408090636.560886-2-bhe@redhat.com/T/#u
-
-Now the above patchset has been merged into linus's tree, please
-consider taking this patch.
-
-Thanks
-Baoquan
-
+> The same issue is also present on Windows using both the default Windows
+> driver and all tested Realtek drivers before version 6.0.9049.1. Comparing
+> Realtek driver 6.0.9049.1 (the first one without the microphone noise) to
+> Realtek driver 6.0.9047.1 (the last one with the microphone noise)
+> revealed that the fix is the result of setting pins 0x18 and 0x19 to
+> VREF_50.
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> ---
->  arch/sh/kernel/crash_dump.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> This fix may also work for other boards that have been reported to have
+> the same microphone issue and use the ALC1150 and ALCS1200A codecs, since
+> these codecs are similar and the fix in the Realtek driver on Windows is
+> common for both. However, it is currently enabled only for ASUS TUF
+> B550M-PLUS as this is the only board that could be tested.
 > 
-> diff --git a/arch/sh/kernel/crash_dump.c b/arch/sh/kernel/crash_dump.c
-> index 19ce6a950aac..52d1d54eb6b1 100644
-> --- a/arch/sh/kernel/crash_dump.c
-> +++ b/arch/sh/kernel/crash_dump.c
-> @@ -20,7 +20,7 @@ ssize_t copy_oldmem_page(struct iov_iter *iter, unsigned long pfn,
->  		return 0;
->  
->  	vaddr = ioremap(pfn << PAGE_SHIFT, PAGE_SIZE);
-> -	csize = copy_to_iter(vaddr + offset, csize, iter);
-> +	csize = copy_to_iter((const void __force *)vaddr + offset, csize, iter);
->  	iounmap(vaddr);
->  
->  	return csize;
-> -- 
-> 2.34.1
-> 
+> Signed-off-by: Marios Levogiannis <marios.levogiannis@gmail.com>
 
+Thanks, applied now.
+
+
+Takashi

@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD0253790C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08C95378ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235134AbiE3KPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
+        id S235189AbiE3KQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbiE3KPj (ORCPT
+        with ESMTP id S230025AbiE3KQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:15:39 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6B57C14C
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 03:15:38 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id i18so10178889pfk.7
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 03:15:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dSIId2jwQ4+fUi86yIerIU/RtvrjvP8+8HeoM/mBGE8=;
-        b=SjxfIl9RebcUiS1Zk1I09TdKR6wyANZYTIiZ6mdDZ797nms0DJexF9pVaGGCNW7gEh
-         iF9nHDOx/hNYuJYeDzSfTjqWCHPo7UtBo+L6YX+5Mb6I2gz2Pvk3iPODz+jz8yRwHDFW
-         bJhbDQ6cXk92AaQiDs7QQDa2HSqQcpkxMFRpnZmU08JZIP61sgXByYB7U3NNltcy/l6f
-         PgqeyHdo4mvBI57wSOQGY0IGKVF7cGrqg7lswurjilm1nlV0KeDp9A6v7VqbL4ISN1t6
-         LGsAaxMejmMC23BHj7WEnwTVP75R9g6SWm3edb7QeZ60PhNMaAC4z/emv7F4j/FlWXly
-         lZTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dSIId2jwQ4+fUi86yIerIU/RtvrjvP8+8HeoM/mBGE8=;
-        b=5CzBFxM29dtbFULEL2zYUDHK9i56P0Tnng5XJr4TBGwVFv7ARqdZwg2ialaAeKkbw2
-         RA2TU4WCYlzbig24ebJFShhra3VHXAS2YAJFrPRx4+sBiMPl7xQjb8qxHB3irYuEv942
-         cRAPANwGUI9GR0HRQhek5eDo9ZGL0wAdyJoQ+Zs+I7NlJjPo+nsi1wqPNe4BYlRtGj/Q
-         cjH98D+cQATljdImKvtmhzDKAdIczhDMrTP5LUf9N37V7xG5mDjnxo/tW2ZpFz30HDd0
-         VqluszARpZZubx6s1jVcZmCSLltkEaclOozHue1Z852OoAzxAaXac2hE2MfkYzryrxI7
-         0SCA==
-X-Gm-Message-State: AOAM533YyNJnZgu7Ffw3IbYk8kJ2u0U6vLc0DsuNsWH+wIo321hPfeKh
-        GTD6sg3k0DTRpwr1qGV88TG9Y1a/WwI=
-X-Google-Smtp-Source: ABdhPJzYpOwc0bhssxkzw8xrYfOr4/qVMRe4DnIkCmHsOXhO/fad+aV1I0j8LYhcv7X4GNI9ZY2FGQ==
-X-Received: by 2002:a05:6a00:298c:b0:518:afaf:f7cd with SMTP id cj12-20020a056a00298c00b00518afaff7cdmr35645564pfb.23.1653905737667;
-        Mon, 30 May 2022 03:15:37 -0700 (PDT)
-Received: from RedHat-Sangam.redhat.com ([2401:4900:1c2d:a0bf:bf5f:bf5f:7aee:cfb0])
-        by smtp.gmail.com with ESMTPSA id a5-20020aa780c5000000b0050dc762816dsm8463329pfn.71.2022.05.30.03.15.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 03:15:37 -0700 (PDT)
-From:   sababu <sangambabu1@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     sababu@redhat.com, jmaxwell@redhat.com,
-        sababu <sangambabu1@gmail.com>
-Subject: [PATCH] Qperf support for ipv4 when ipv6 is disabled at protocol layer
-Date:   Mon, 30 May 2022 15:45:31 +0530
-Message-Id: <20220530101531.173447-1-sangambabu1@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 30 May 2022 06:16:47 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2817E11A1C
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 03:16:45 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nvcRv-0003fA-BD; Mon, 30 May 2022 12:16:35 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nvcRu-0001E5-MC; Mon, 30 May 2022 12:16:34 +0200
+Date:   Mon, 30 May 2022 12:16:34 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Ping-Ke Shih <pkshih@realtek.com>,
+        Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        linux-kernel@vger.kernel.org, Neo Jou <neojou@gmail.com>,
+        kernel@pengutronix.de, Johannes Berg <johannes@sipsolutions.net>
+Subject: Re: [PATCH 00/10] RTW88: Add support for USB variants
+Message-ID: <20220530101634.GJ1615@pengutronix.de>
+References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
+ <87fskrv0cm.fsf@kernel.org>
+ <20220530095232.GI1615@pengutronix.de>
+ <87a6azpc4i.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a6azpc4i.fsf@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: sababu <sababu@redhat.com>
+On Mon, May 30, 2022 at 01:07:25PM +0300, Kalle Valo wrote:
+> Sascha Hauer <s.hauer@pengutronix.de> writes:
+> 
+> > On Mon, May 30, 2022 at 12:25:13PM +0300, Kalle Valo wrote:
+> >> Sascha Hauer <s.hauer@pengutronix.de> writes:
+> >> 
+> >> > Another problem to address is that the driver uses
+> >> > ieee80211_iterate_stations_atomic() and
+> >> > ieee80211_iterate_active_interfaces_atomic() and does register accesses
+> >> > in the iterator. This doesn't work with USB, so iteration is done in two
+> >> > steps now: The ieee80211_iterate_*_atomic() functions are only used to
+> >> > collect the stations/interfaces on a list which is then iterated over
+> >> > non-atomically in the second step. The implementation for this is
+> >> > basically the one suggested by Ping-Ke here:
+> >> >
+> >> > https://lore.kernel.org/lkml/423f474e15c948eda4db5bc9a50fd391@realtek.com/
+> >> 
+> >> Isn't this racy? What guarantees that vifs are not deleted after
+> >> ieee80211_iterate_active_interfaces_atomic() call?
+> >
+> > The driver mutex &rtwdev->mutex is acquired during the whole
+> > collection/iteration process. For deleting an interface
+> > ieee80211_ops::remove_interface would have to be called, right?
+> > That would acquire &rtwdev->mutex as well, so I think this should be
+> > safe.
+> 
+> Can you add a comment to the code explaining this?
 
-    With qperf version 0.4.9 we defined AI_FAMILY as AF_UNSPEC, starting
-    qperf 0.4.11 the same is changed to AF_INET6 which causes issues
-    when ipv6 is disabled at protocol layer (as a kernel command line
-    arguement). This patch reverses the behavior.
+Sure.
 
-Signed-off-by: sababu <sangambabu1@gmail.com>
----
- src/qperf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> And
+> lockdep_assert_held() is a good way to guarantee that the mutex is
+> really held.
 
-diff --git a/src/qperf.c b/src/qperf.c
-index 89fe5b8..4de0cce 100644
---- a/src/qperf.c
-+++ b/src/qperf.c
-@@ -1418,7 +1418,7 @@ server_listen(void)
-     AI *ai;
-     AI hints ={
-         .ai_flags    = AI_PASSIVE | AI_NUMERICSERV,
--	.ai_family   = AF_INET6,
-+	.ai_family   = AF_UNSPEC,
-         .ai_socktype = SOCK_STREAM
-     };
-     AI *ailist = getaddrinfo_port(0, ListenPort, &hints);
+Yes, Ping-Ke already pointed that out. Will add in the next round.
+
+Sascha
+
 -- 
-2.31.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

@@ -2,177 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E574C537A92
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11848537A9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235386AbiE3MWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 08:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
+        id S236143AbiE3MYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 08:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiE3MWw (ORCPT
+        with ESMTP id S236119AbiE3MYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 08:22:52 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2065.outbound.protection.outlook.com [40.107.223.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D017939B;
-        Mon, 30 May 2022 05:22:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CaQrbp0EdDDTKXGtvEPvy1IcRtxKgOQll2kiT0KBD17KjmCePbyXthuUBfImKF70HU5KBrdRP2QBtUx3YeqO/tsExfW4bvKEFC8JhvPzloElfaj3w7d/IK3LCVW1/116juyzA7WC5LDArx45CJBvTqjTVWqerrGMHqUUWydf4b6f0B9OBDiVYvoYHe0angfkC9Rlc5HHNdH9xFzGogkSvReFgGxaVHkJaDr4ZWi2EX2xxjzq6uxhNV3KwTcUA1rxxJvedziQTCaRaYYeeeP5EJZIQdf/kNwjJnaLjv8z3KaS+d7wwkNZSxvWxVqSHyM28ksKsVAykziAoi2Sxmrc2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Od/PypjkWbYH7Nl+PwR6UpGUx48414rIxRVvISNsXGI=;
- b=fZRRhsK0k3fDcj22LJx2Q50ZkPIzllFB2ucPU5Aensa1+nebfvsPSLB7s8/UgIkdHDh1A5zFDSFEmXvqES7axjA+sQcQMl7Mq4BZKiCeK/e7bqIiHxyzgZnqclQmbfrEFErBWMC3g+wFw2yc2216mwMJ0vWJy6xiwZWBAqGj8ewvC1yA/CCNiA756c5Ct3HQpHFX266ada4gdv9d9GitlJEPeaetXlxakDpsP112cDrH/rde+svwrUT9hUOcML/VPZzIROMQsFH68zGzhgS1PYRm2SkGZffMN5aPR24VlcYPrKYEODpShnSmnQZs0RVK8DoKKMUDlVqK0MlW9dWVjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Od/PypjkWbYH7Nl+PwR6UpGUx48414rIxRVvISNsXGI=;
- b=VPxVra4lw/LOLFQ/r6BxsI5YdeAmYuBTbQ6oAokD8iGghIx2ZuCfpqdsxZyF8FINZKOazFeQOrnzYKOET8qxSYdvCYCdWnd3gPMMtCZipXGvOvnCngqgQ37fnQG8FYuwNoDfnOqz0d3ui15Aw5/KkPpv4FP0iR1t6YuIOzhUifjba5kzxLBNq/ORYprEA1VYzTCYRO4VDbFJECKLQrAuM2di+UCz5mYp+xyBzKMvseHJMaEz87Pe/dcsPGGySVn6SKBlYexqCQ/rlQ6UU7j0UkV1ukkMB5ldT3y/KtPlJSSCfzSvbwa1dGYvPbHN/NUxQGPZwVqO2w8+YMVQGXo50Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SJ0PR12MB5405.namprd12.prod.outlook.com (2603:10b6:a03:3af::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Mon, 30 May
- 2022 12:22:49 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::2484:51da:d56f:f1a5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::2484:51da:d56f:f1a5%7]) with mapi id 15.20.5293.019; Mon, 30 May 2022
- 12:22:48 +0000
-Date:   Mon, 30 May 2022 09:22:47 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>, dmaengine@vger.kernel.org,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Christoph Hellwig <hch@infradead.org>, vkoul@kernel.org,
-        robin.murphy@arm.com, will@kernel.org, Yi Liu <yi.l.liu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v4 1/6] iommu: Add a per domain PASID for DMA API
-Message-ID: <20220530122247.GY1343366@nvidia.com>
-References: <20220518182120.1136715-1-jacob.jun.pan@linux.intel.com>
- <20220518182120.1136715-2-jacob.jun.pan@linux.intel.com>
- <20220524135034.GU1343366@nvidia.com>
- <20220524081727.19c2dd6d@jacob-builder>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524081727.19c2dd6d@jacob-builder>
-X-ClientProxiedBy: BL1PR13CA0155.namprd13.prod.outlook.com
- (2603:10b6:208:2bd::10) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Mon, 30 May 2022 08:24:39 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03737CDDB;
+        Mon, 30 May 2022 05:24:37 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id w27so6615918edl.7;
+        Mon, 30 May 2022 05:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Gf3IvEnikRvp3Oa8O4SMunFc6fuhRnS1KPonMS+jQ+I=;
+        b=NyQ+kCGK3kg3v6Adv/XUYZAJCjEWhflsEmpIwgkeTZw0Ni7YgQNimIJ2MWBNV1J314
+         nFrO3LoILzRYfe9Uxh7YsjXWZd2OPNcp8ToAqOOe0jCLJgXnz/o5vCjc42nMfojO7kCj
+         QAgjC16cVioo2a0vkXIolNnbvAvJQXhm23uI9P611ez5yYfOfS+13Mj3Ko5Y3eSd8nqu
+         04KBpo7UkSbNUsWgDO4pPc/PjbB3R5O+rJ4J80+Wq+oPF1Ds2ccn9Jw9JfMx9b+VGSBj
+         RdU8wZe8Yc+5yxCCchki9DZpn+1NmjBczSEkDXrqxz61zhVt9K2emiU88ADzGKrJNWRU
+         bnag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Gf3IvEnikRvp3Oa8O4SMunFc6fuhRnS1KPonMS+jQ+I=;
+        b=KNGwRgAMLmeFE709/ScNI0S0eOlAVPL2H6+DUBTmfREg5Z2XhMZ8h6QKV/QsQhK/Jq
+         DurzMYS7XPnSbfAcSnaJNVycp8gAZhcgZEWv7HCKsm5cn4TtNWDJG9ioy3Q+Fk6w8gaD
+         fAts/qBVsczUhedTktuLYZOeuvTMamDTzFCfwq0gUoo84BGC1LkWZ5gNnQqzO4EEcu5t
+         jutyAy4vJlQkz0seMTch0IyV/hp82afvKccXcZn6wc4sMHe5z6cU8zHMxSN8ZmpKw3ot
+         L1POJ/qPgu6ILtRSenrjoD3nC0pJI/lKkajsStNhgPQToKN5emms4mX0WU1+fl18U7Vt
+         UHbQ==
+X-Gm-Message-State: AOAM533+/0TJO1fNOmSf8q6E4m4LzjcMx/Kzowd99zithjiu6s4PiRVk
+        Owy0dkvgsArDsTP+vBbIXkE4Cx0C7ZkL8Amp+Lk=
+X-Google-Smtp-Source: ABdhPJyByk+8pCmJj05rtEymQhMckw/8QiNYSuteRwbfSGq4YiABghOAxycfRHnt7uQgycGiWNHw22Dc1Nbyr02Cx7o=
+X-Received: by 2002:a05:6402:2382:b0:42b:7fec:1abf with SMTP id
+ j2-20020a056402238200b0042b7fec1abfmr33516209eda.111.1653913476233; Mon, 30
+ May 2022 05:24:36 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7bcecfb7-51e0-4259-a781-08da42371c04
-X-MS-TrafficTypeDiagnostic: SJ0PR12MB5405:EE_
-X-Microsoft-Antispam-PRVS: <SJ0PR12MB5405A9069449EB28EB4C6C6AC2DD9@SJ0PR12MB5405.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PWp/yTmXGm5IK4WJqt3pwY0/rutFh9WkIxoQZvFR4ToB4wJCoSJ0KGqs+SSJTKX+Uo98NpkUuer298Ykj9FIb7DumU67UC3YXOiP7UJ3BnShGMELDgJXyGrAMNm5VHvc2qtGHUtEyqzBfr/HmCsNsBgJ5XCXhfAxBsewA9kZchtbAV4446K0a+iY0DGpSNnrN3n+NXkPg5HGEa/GqokhIxEGmBuXK4NUfRyFgBWwuo+urAw4O0gHoXoXaeKORdcNh9jUwO53b4EV/kkUkmVgBFiZUg2ZFrRx/q7i4c9WEIkMGIT4eligvHrJEmmBYPQcAAGn6P67EcSnEAGDWRKIe9Lm955jqMuT+MBj4jq2QrWzJx9Z5zwOGJwdXt0vNc4HlcHepQ2qYs84/PHIkRJ5mgV/0EigoXuZq09EChghYBSQK/+xm3thzyDLr/WZHgaZZKooNfdLK5AZiDNZu3rtZh1GeuHZZM06J/8/SVi87wt/Xm7xdYlVJwLUvf6soMKFtObyNo6s/CQRAh305nIDk/aEcGCTMDDGEIIYIXN7POcd6T+ylol7Xl0QiDfJ0IuVcoH+z+D5y80Ij+WJR5Znwmi1AOjc8s1Fywgx6U9eXFUqCMPGfO5Qva07eEFyemVwnFtrWigSNENiNcR2JPgjUA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(5660300002)(33656002)(6486002)(7416002)(8936002)(6506007)(86362001)(26005)(6512007)(2906002)(66556008)(66946007)(2616005)(38100700002)(186003)(1076003)(83380400001)(6916009)(36756003)(8676002)(316002)(4326008)(54906003)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EU01j8HHu8b9igd/nNMvMO1GobakerL+yiqauepS2QLwHUaZRHvNeWEt2LZe?=
- =?us-ascii?Q?nDEoHU7CSzEJFHu1B7wx0NOa/lk2tLw1uaGnsgZthvW8Ujj1EWlIgL2p+3jP?=
- =?us-ascii?Q?Nq0W+gU1CJ7mLUUqoYCvtZwd/MI1dOG6cjO3Zh4gizwc3aBWtLAut/N+Fw1n?=
- =?us-ascii?Q?W0IuQ2hDkRXRtqM5M4QU7gXczBJ87Fm7jfwW3d6xYJg07/4brL7d1i7fWaAu?=
- =?us-ascii?Q?b3nMCy80NiUgHrae8r4FSTuB4ZTPX4VIixvtA8QQ6EfbEv1xuXMXZYNslrho?=
- =?us-ascii?Q?tvJwNSg0is0pKpteJMlhD6EClVJq9sbz/AIaNd+HebJ5Wy8gjk9v+3s6mH+z?=
- =?us-ascii?Q?eU26tFSChIVY+voKdwD9eZvEI2OqdUt1dIUXpgPWNIzDOnB48E5x4UxgVB/s?=
- =?us-ascii?Q?Zm2WT7Jiav4X4gawtGMFNYZM35PRVSc27h9+WS5XWP7DZPbSrwQ8KWFzv9ow?=
- =?us-ascii?Q?Xijvgc8Z/AvTYDDhNt9R8L6j6Hk1HstV+QxRGQb94ukQsTS3uX0ExFSeDyaF?=
- =?us-ascii?Q?dod/9ZBcuowzimlwg6fb5WkM1NNnsBV/wM5W8zQE1zpN8GM6G3x8QNHwh9Qg?=
- =?us-ascii?Q?LIS4cEw5ca18wlfd26r+FmrUTRj2lIgm3BGam03dpwOmrlTldpOTQQg73Pzg?=
- =?us-ascii?Q?4OGWhixDZWx37yLOZQW7E1rDJHV57shcoITpi+o8eC+EfIIYHwGdYqGPCty4?=
- =?us-ascii?Q?z2/i47aKf1J+WQariix7YYtZ+1RAy71jf5bFVEbvsZQqkpMiGt1evzXSYtcM?=
- =?us-ascii?Q?I+17QQ/kiVD5Eybnmp7FrK16+lKUZE4126f4zvqyliQNpT/2LW0O4CjAzwvT?=
- =?us-ascii?Q?0Lq7LDw0JJuskhSCBdf8iFv22FqBSHw6kfq9/1VvFiNyturOyWKIlP+Lf+RW?=
- =?us-ascii?Q?9lEwboAc5sRljKAPEGxy8GsUG62LfMfsr5k7LHXw7BIOjVfOlZrIn4KJp+cQ?=
- =?us-ascii?Q?1lVWQNiOC7jnkhC8h+p6on9YaQC013rob7eO/4hL6dHdqYT4Hx53YaWcFaeC?=
- =?us-ascii?Q?gFHwNjvVG20kITao9HeIHRgjbAEOpaOKrt+nhjm+oFqd4SIQLq6TJre+Lsrr?=
- =?us-ascii?Q?rjIBwjqNRR7eMLNlgsRFNtFzxzpDwHJb4ssGx9Cl3+tO2HsWQ++huj78cFP8?=
- =?us-ascii?Q?zDkkn6YUONkzm+QS7bKne3LHgYrz9TOAG4vSUftvR7XDKnoQ65+14TzB+s5M?=
- =?us-ascii?Q?SbU3Cs1hxsWxHe5aYM/e+i3GgtaOY9guzBF3oRxjeG/wvf7OkNpWSRtbBWWT?=
- =?us-ascii?Q?PGKXBjAQRn442XBWYrCVcyYkzGZqmC1Y3bK/nwXMCFEeUdAydm67KkgvoQcM?=
- =?us-ascii?Q?RqB5clSR1677xTmZwtrsxG+m7EukDg7pGHoQWjKbkUkL+RYhjc+zTo6JgU7q?=
- =?us-ascii?Q?W98oCsIAvDxFSPAlt0cQUGqWRLt9UEvKuIE1OOT6GpRU0Dwwele3JjelNGHk?=
- =?us-ascii?Q?0aI/7PHw/e4RmIquZ8BuSWlpL57xyXeQb8tlnHVnuclj2NnHY5fKS2izfZUB?=
- =?us-ascii?Q?hnwAtnIKgWZJNBqmLzVgajufPzKCn+osttji+rhZS781s0v6olnD19QOpBso?=
- =?us-ascii?Q?tOVvfYngzpm+0DKEUyumfMMRHQHlQUsmsRoqbA7Ag+ILiTgan05H3eKd1tb9?=
- =?us-ascii?Q?5RudmYJrjGbQW2HFfi7Nc96OWrdN5oUururTDz4Mi44HIzcAKKhD1vEvJQ+3?=
- =?us-ascii?Q?28nbYCnlcfmTm6gH5I7Nk8Y2N6a1DEe+BO6XibZgUByUnFe7OV5h3HnYVJHQ?=
- =?us-ascii?Q?1Mafh+Cfdw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bcecfb7-51e0-4259-a781-08da42371c04
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 12:22:48.9078
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: N5ub/F18Yl9kaJ0BGERWihExYDKHqCwBqdiCZqeqj2F03R/fW2DswjcP88jl9KSB
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5405
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220522155046.260146-1-tmaimon77@gmail.com> <CAK8P3a2CUy17vbd5Go523894vcF_oLz=dAR7JNLsUuR1Gsc9sA@mail.gmail.com>
+In-Reply-To: <CAK8P3a2CUy17vbd5Go523894vcF_oLz=dAR7JNLsUuR1Gsc9sA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 30 May 2022 14:24:00 +0200
+Message-ID: <CAHp75Vc3i6bWOo_ZHD25rtn0o1pjzHtdfRQg4RkAfrmMs77eOw@mail.gmail.com>
+Subject: Re: [PATCH v1 00/19] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Tomer Maimon <tmaimon77@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        "nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>, SoC Team <soc@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 08:17:27AM -0700, Jacob Pan wrote:
-> Hi Jason,
-> 
-> On Tue, 24 May 2022 10:50:34 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
-> 
-> > On Wed, May 18, 2022 at 11:21:15AM -0700, Jacob Pan wrote:
-> > > DMA requests tagged with PASID can target individual IOMMU domains.
-> > > Introduce a domain-wide PASID for DMA API, it will be used on the same
-> > > mapping as legacy DMA without PASID. Let it be IOVA or PA in case of
-> > > identity domain.  
-> > 
-> > Huh? I can't understand what this is trying to say or why this patch
-> > makes sense.
-> > 
-> > We really should not have pasid's like this attached to the domains..
-> > 
-> This is the same "DMA API global PASID" you reviewed in v3, I just
-> singled it out as a standalone patch and renamed it. Here is your previous
-> review comment.
-> 
-> > +++ b/include/linux/iommu.h
-> > @@ -105,6 +105,8 @@ struct iommu_domain {
-> >  	enum iommu_page_response_code (*iopf_handler)(struct iommu_fault *fault,
-> >  						      void *data);
-> >  	void *fault_data;
-> > +	ioasid_t pasid;		/* Used for DMA requests with PASID */
-> > +	atomic_t pasid_users;  
-> 
-> These are poorly named, this is really the DMA API global PASID and
-> shouldn't be used for other things.
-> 
-> 
-> 
-> Perhaps I misunderstood, do you mind explaining more?
+On Mon, May 23, 2022 at 1:59 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Sun, May 22, 2022 at 5:50 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> >
+> > This patchset  adds initial support for the Nuvoton
+> > Arbel NPCM8XX Board Management controller (BMC) SoC family.
+> >
+> > The Nuvoton Arbel NPCM8XX SoC is a fourth-generation BMC.
+> > The NPCM8XX computing subsystem comprises a quadcore ARM
+> > Cortex A35 ARM-V8 architecture.
+> >
+> > This patchset adds minimal architecture and drivers such as:
+> > Clocksource, Clock, Reset, and WD.
+> >
+> > Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
+> >
+> > This patchset was tested on the Arbel NPCM8XX evaluation board.
+>
+> Thanks for your submission. Please note a few things about the process here:
+>
+> - The merge window is currently open, which means a lo
 
-You still haven't really explained what this is for in this patch,
-maybe it just needs a better commit message, or maybe something is
-wrong.
+Something wrong with the script?
 
-I keep saying the DMA API usage is not special, so why do we need to
-create a new global pasid and refcount? Realistically this is only
-going to be used by IDXD, why can't we just allocate a PASID and
-return it to the driver every time a driver asks for DMA API on PASI
-mode? Why does the core need to do anything special?
+> Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
+>
+> This patchset was tested on the Arbel NPCM8XX evaluation board.
+>
+> Tomer Maimon (19):
+>   dt-bindings: timer: npcm: Add npcm845 compatible string
+>   clocksource: timer-npcm7xx: Add NPCM845 timer support
+>   dt-bindings: serial: 8250: Add npcm845 compatible string
+>   tty: serial: 8250: Add NPCM845 UART support
+>   dt-bindings: watchdog: npcm: Add npcm845 compatible string
+>   watchdog: npcm_wdt: Add NPCM845 watchdog support
+>   dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
+>   clk: npcm8xx: add clock controller
+>   dt-bindings: reset: add syscon property
+>   reset: npcm: using syscon instead of device data
+>   dt-bindings: reset: npcm: Add support for NPCM8XX
+>   reset: npcm: Add NPCM8XX support
+>   dt-bindings: arm: npcm: Add maintainer
+>   dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
+>   dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
+>   arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
+>   arm64: dts: nuvoton: Add initial NPCM8XX device tree
+>   arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
+>   arm64: defconfig: Add Nuvoton NPCM family supportt of maintainers
+>   won't be reviewing your patches at the moment. It may be better to wait
+>   for the -rc1 to be out before sending out v2
+>
+> - don't send your patches to soc@kernel.org unless you want me to pick
+>   them up into the soc tree and they have been reviewed already. The series
+>   is clearly still under review at the moment, and I expect it to go through
+>   a few revisions first.
+>
+> - gmail marked your emails as possible spam for me. I don't know what
+>   happened here, but you may want to look into this to ensure that
+>   everybody receives it.
+>
+> Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
+>
+> This patchset was tested on the Arbel NPCM8XX evaluation board.
+>
+> Tomer Maimon (19):
+>   dt-bindings: timer: npcm: Add npcm845 compatible string
+>   clocksource: timer-npcm7xx: Add NPCM845 timer support
+>   dt-bindings: serial: 8250: Add npcm845 compatible string
+>   tty: serial: 8250: Add NPCM845 UART support
+>   dt-bindings: watchdog: npcm: Add npcm845 compatible string
+>   watchdog: npcm_wdt: Add NPCM845 watchdog support
+>   dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
+>   clk: npcm8xx: add clock controller
+>   dt-bindings: reset: add syscon property
+>   reset: npcm: using syscon instead of device data
+>   dt-bindings: reset: npcm: Add support for NPCM8XX
+>   reset: npcm: Add NPCM8XX support
+>   dt-bindings: arm: npcm: Add maintainer
+>   dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
+>   dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
+>   arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
+>   arm64: dts: nuvoton: Add initial NPCM8XX device tree
+>   arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
+>   arm64: defconfig: Add Nuvoton NPCM family support
+>
+> - For an initial platform submission, I can merge the
+>   clk/clocksource/serial/reset drivers along with the platform if they
+>   have an Ack from the subsystem maintainers. I would normally
+>   not include the watchdog patch in this as it's not essential, but
+>   I suppose that it's fine if you only do a oneline change and it
+>   has an Ack. If you have other nonessential drivers that need changes,
+>   best submit them separately though.
+>
+>          Arnd
 
-Jason
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

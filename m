@@ -2,163 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4CE5388F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 00:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF095388FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 00:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243316AbiE3Wdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 18:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
+        id S240518AbiE3WgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 18:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237559AbiE3Wdg (ORCPT
+        with ESMTP id S231669AbiE3WgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 18:33:36 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75164FD2A;
-        Mon, 30 May 2022 15:33:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0B54A1F8AC;
-        Mon, 30 May 2022 22:33:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1653950014; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LtUFZbsNyrL0zWig6EzpbLMXgFPtxPsoz+GCNlSTOSg=;
-        b=G3LPSB0MZohvr0dclthqDwDoe4VO89ZFUxIPx9s5DLYS+A3U1KNPUg/QsE4U2zROCuQE6J
-        NsFmaG4A27VWv1VIdlYuxCxoEgjoNpSA6d8mVEi0g4CsU51K22TPXpbpDZ+DC+VFPHXNBx
-        UWE31GILABixTBie6+WkAbSd8sbpEwQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1653950014;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LtUFZbsNyrL0zWig6EzpbLMXgFPtxPsoz+GCNlSTOSg=;
-        b=OGj7fXfnm5S56SM3kfx6nvLkw/qpsnpj++QTA4Qm9iOWfzLBxNxqssZ6OBOIs7o8HtIX6O
-        iSdWL+k/q0G11/Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1F48813AFD;
-        Mon, 30 May 2022 22:33:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fzbQMzpGlWIdGwAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 30 May 2022 22:33:30 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 30 May 2022 18:36:15 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF91C77F3F
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 15:36:12 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id a64so10765112ybg.11
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 15:36:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=aurora.tech; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Jzunswihq7emLJrZKcMyFQww1H3CwuUil00+SfCZ470=;
+        b=MxjhMKPHxKe9mLGtiURZCmcqHs+PbmChzbnPdapWj+nZAARhwolGI2X489aj/Ol/od
+         DU/tsxpThvmrpN+KcX44K2fxSgN2vfqg1P5ROsPegWgYx92LUi7T6yCHcBg6eB9TZDJA
+         HPuIlmrHXvI0NPYbogQg5rbd8phPteFDUM3mQP/P6Tc2K7ADcoJWSiGr+itEcY+XVgsh
+         wXK7VPtNtj4TLSe11qVs28OilAzut0zrja6ULNxeKmm0BIZ+LCATFH6bAYrIE1CqlUcu
+         n6pUh2rEMiIsKtd53c6rx98wiHpaVuemQGrQUv6nWwAWl/DSvImGS1ucRwJsu2Mhvrr7
+         4wQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jzunswihq7emLJrZKcMyFQww1H3CwuUil00+SfCZ470=;
+        b=2hvMeLsO+xjtz/NqNMOrGU5qMItnthm2ibGqnyPPBTCQcEMhzwrFm/Nz8sI3dReM1u
+         VI9RL/OMVd8ZZOIW3xinOp3QNUZ91LEE15+hmIkw5BpytIiRquS/mYSW6VHey7TlbpuN
+         ON8e1XHMuFCGxxoeCJLIsvXAdHd8iMo6QnL64sMMYI0Xm9q/xt5L3ar6sy6Z+7mZojbz
+         s15UWHaT3ziHR+Ki5813uX1bLncv8qIuH5JoC+eXxXU/PPgdFMA4o05oJbI+Wygvvb/M
+         TRgLRxkptFzN38WdpoFwj4IFeih4BQoRp16O344k9Y75iOy6xMMHMA9lARHB9thxddlo
+         Brjw==
+X-Gm-Message-State: AOAM532Og0ee0kKieQZnTZRyEnm/GcuKBlwBot3g9gpLqSlHtbSWpPCw
+        YaCFueNFD5feJC3fEg48xWyAOkXYEbsG4w7AJtncSQ==
+X-Google-Smtp-Source: ABdhPJzDijRYVPb5lrhvE30t1R3zPS93TTddTSa3lLjvWRew/B5wnApP5hxJmE/yG3aN3K3SD5I3f1yRJkaNXoZdMBg=
+X-Received: by 2002:a25:8691:0:b0:65c:f544:4186 with SMTP id
+ z17-20020a258691000000b0065cf5444186mr5817316ybk.277.1653950172140; Mon, 30
+ May 2022 15:36:12 -0700 (PDT)
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Jeff Layton" <jlayton@kernel.org>
-Cc:     "Miklos Szeredi" <miklos@szeredi.hu>,
-        "Al Viro" <viro@zeniv.linux.org.uk>,
-        "ChenXiaoSong" <chenxiaosong2@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liuyongqiang13@huawei.com, "zhangyi (F)" <yi.zhang@huawei.com>,
-        zhangxiaoxu5@huawei.com, "Steve French" <smfrench@gmail.com>
-Subject: Re: [PATCH -next,v2] fuse: return the more nuanced writeback error on close()
-In-reply-to: <9915b7b556106d2a525941141755adcca9e50163.camel@kernel.org>
-References: <20220523014838.1647498-1-chenxiaosong2@huawei.com>,
- <CAJfpegt-+6oSCxx1-LHet4qm4s7p0jSoP9Vg8PJka3=1dqBXng@mail.gmail.com>,
- <9915b7b556106d2a525941141755adcca9e50163.camel@kernel.org>
-Date:   Tue, 31 May 2022 08:33:26 +1000
-Message-id: <165395000670.20289.6180005723599338606@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220525221055.1152307-5-frederic@kernel.org> <Yo/FGcG+uiBh88sT@slm.duckdns.org>
+ <20220526225141.GA1214445@lothringen> <YpAHEt0j30vBw9au@slm.duckdns.org>
+ <9e44bb00-955a-dbc6-a863-be649e0c701f@redhat.com> <YpAdSW8JXVPOoNJl@slm.duckdns.org>
+ <20220527083018.n43nc73vuuzm5ixo@localhost.localdomain> <YpIwsiaY2IPK96WO@hirez.programming.kicks-ass.net>
+ <20220530004049.GA1251147@lothringen> <e3010471ee43e7e134f882f320fc4643fe4e4810.camel@kernel.org>
+ <20220530144922.GA1790663@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220530144922.GA1790663@paulmck-ThinkPad-P17-Gen-1>
+From:   Alison Chaiken <achaiken@aurora.tech>
+Date:   Mon, 30 May 2022 15:36:01 -0700
+Message-ID: <CAFzL-7vqTX-y06Kc3HaLqRWAYE0d=ms3TzVtZLn0c6ATrKD+Qw@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/4] cpuset: Support RCU-NOCB toggle on v2 root partitions
+To:     paulmck@kernel.org
+Cc:     nicolas saenz julienne <nsaenz@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 May 2022, Jeff Layton wrote:
-> On Mon, 2022-05-30 at 14:13 +0200, Miklos Szeredi wrote:
-> > On Mon, 23 May 2022 at 03:35, ChenXiaoSong <chenxiaosong2@huawei.com> wro=
-te:
-> > >=20
-> > > As filemap_check_errors() only report -EIO or -ENOSPC, we return more n=
-uanced
-> > > writeback error -(file->f_mapping->wb_err & MAX_ERRNO).
-> > >=20
-> > >   filemap_write_and_wait
-> > >     filemap_write_and_wait_range
-> > >       filemap_check_errors
-> > >         -ENOSPC or -EIO
-> > >   filemap_check_wb_err
-> > >     errseq_check
-> > >       return -(file->f_mapping->wb_err & MAX_ERRNO)
-> > >=20
-> > > Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
-> > > ---
-> > >  fs/fuse/file.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >=20
-> > > diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-> > > index f18d14d5fea1..9917bc2795e6 100644
-> > > --- a/fs/fuse/file.c
-> > > +++ b/fs/fuse/file.c
-> > > @@ -488,10 +488,10 @@ static int fuse_flush(struct file *file, fl_owner=
-_t id)
-> > >         inode_unlock(inode);
-> > >=20
-> > >         err =3D filemap_check_errors(file->f_mapping);
-> > > +       /* return more nuanced writeback errors */
-> > >         if (err)
-> > > -               return err;
-> > > +               return filemap_check_wb_err(file->f_mapping, 0);
-> >=20
-> > I'm wondering if this should be file_check_and_advance_wb_err() instead.
-> >=20
->=20
-> I think that it probably shouldn't be, actually. Reason below...
->=20
-> > Is there a difference between ->flush() and ->fsync()?
-> >=20
-> > Jeff, can you please help?
-> >=20
-> >=20
->=20
-> The main difference is that ->flush is called from filp_close, so it's
-> called when a file descriptor (or equivalent) is being torn down out,
-> whereas ->fsync is (obviously) called from the fsync codepath.
+> On Mon, May 30, 2022 at 04:29:56PM +0200, nicolas saenz julienne wrote:
+> > On Mon, 2022-05-30 at 02:40 +0200, Frederic Weisbecker wrote:
+> > > On Sat, May 28, 2022 at 04:24:50PM +0200, Peter Zijlstra wrote:
+> > > > On Fri, May 27, 2022 at 10:30:18AM +0200, Juri Lelli wrote:
+> > > > > Hi,
+> > > > >
+> > > > > On 26/05/22 14:37, Tejun Heo wrote:
+> > > > > > On Thu, May 26, 2022 at 08:28:43PM -0400, Waiman Long wrote:
+> > > > > > > I am thinking along the line that it will not be hierarchical. However,
+> > > > > > > cpuset can be useful if we want to have multiple isolated partitions
+> > > > > > > underneath the top cpuset with different isolation attributes, but no more
+> > > > > > > sub-isolated partition with sub-attributes underneath them. IOW, we can only
+> > > > > > > set them at the first level under top_cpuset. Will that be useful?
+> > > > > >
+> > > > > > At that point, I'd just prefer to have it under /proc or /sys.
+> > > > >
+> > > > > FWIW, I was under the impression that this would nicely fit along the
+> > > > > side of other feaures towards implenting dynamic isolation of CPUs (say
+> > > > > https://lore.kernel.org/lkml/20220510153413.400020-1-longman@redhat.com/
+> > > > > for example). Wouldn't be awkward to have to poke different places to
+> > > > > achieve isolation at runtime?
+> > > >
+> > > > This, that's what I was thinking.
+> > > >
+> > > > My main objection to the whole thing is that it's an RCU_NOCB specific
+> > > > interface. *That* I think is daft.
+> > > >
+> > > > I was thinking a partition would be able to designate a house-keeping
+> > > > sub-partition/mask, but who cares about all the various different
+> > > > housekeeping parties.
+> > >
+> > > It's time for the isolation users to step up here! I very rarely hear from them
+> > > and I just can't figure out by myself all the variants of uses for each of the
+> > > isolation features. May be some people are only interested in nocb for some
+> > > specific uses, or may be it never makes sense without nohz full and all the rest
+> > > of the isolation features. So for now I take the very cautious path to split the
+> > > interface.
+> >
+> > OK, my 2 cents. I personally deal with virtualisation setups that involve RT
+> > and CPU isolation on both host and guests.
+> >
+> > The main use-case ATM is running DPDK-like workloads. We want to achieve
+> > latencies in the order of tens of microseconds, so it's essential to avoid
+> > entering the kernel at all cost. So, no HW interrupts, sched tick, RCU
+> > callbacks, clocksource watchdogs, softlockup, intel_pstate, timers, etc...
+> > Everything is deferred onto housekeeping CPUs or disabled.
+> >
+> > Then we have setups that need to deal with HW on the host, exposed to the guest
+> > through emulation or VirtIO. The same rules apply really, except for some IRQ
+> > affinity tweaks and sched priority magic.
+> >
+> > I find it hard to see how running RCU callback locally could be useful to any
+> > latency sensitive workload.
+> >
+> > Frederic, out of curiosity, do you have a use-case in mind that might benefit
+> > from nohz_full but not rcu_nocb? Maybe HPC?
 
-->flush is for cache coherence. It is best-effort
-->fsync is for data safety. Obviously errors are important.
+On Mon, May 30, 2022 at 8:42 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> Would users looking for millisecond-scale latencies want rcu_nocbs but
+> not nohz_full, that is, the other way around?
 
->=20
-> We _must_ report writeback errors on fsync, but reporting them on the
-> close() syscall is less clear. The thing about close() is that it's
-> going be successful no matter what is returned. The file descriptor will
-> no longer work afterward regardless.
->=20
-> fsync also must also initiate writeback of all the buffered data, but
-> it's not required for filesystems to do that on close() (and in fact,
-> there are good reasons not to if you can). A successful close() tells
-> you nothing about whether your data made it to the backing store. It
-> might just not have been synced out yet.
->=20
-> Personally, I think it's probably best to _not_ return writeback errors
-> on close at all. The only "legitimate" error on close is -EBADF.
-> Arguably, we should make ->flush be void return. Note that most
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+On Intel processors running 5.15 with the timersd patches from Siewior
+backported and Weisbecker's bug-fix, choosing CONFIG_HZ_PERIODIC
+prevents cores from entering deeper C-states when hrtimers are
+pending.   With CONFIG_NO_HZ_COMMON, the cores do not service
+non-blocking timer callbacks until another thread wakes them.  Since
+low latency is critical, this is a use case where NO_HZ_FULL will not
+work but rcu_nocbs is needed.
 
-Excellent idea!
-
-NeilBrown
-
-> filp_close callers ignore the error anyway, so it's not much of a
-> stretch.
->=20
-> In any case, if you do decide to return errors in fuse_flush, then
-> advancing the cursor would also have the effect of masking writeback
-> errors on dup()'ed file descriptors, and I don't think you want to do
-> that.
-> --=20
-> Jeff Layton <jlayton@kernel.org>
->=20
+-- Alison Chaiken, Aurora Innovation

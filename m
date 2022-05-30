@@ -2,140 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C250537B15
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB090537B1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236441AbiE3NJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 09:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
+        id S236367AbiE3NKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 09:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236381AbiE3NJG (ORCPT
+        with ESMTP id S236014AbiE3NKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 09:09:06 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2048198E
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:09:04 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id w23so763730ljd.11
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NzV8dfvq8cM1l3XimLO2tX+6Q+tj9m2ZJPGNF/NhjTo=;
-        b=yhuJl6kgzdEsB6MDpBTkzDuIqI/wRbimnVLT6eSntaZc6lWCsxW2wrBPEL3gUZsDBQ
-         kt7rSdHWA9c1as0IPZMH6dqVC7eR/eoshPwpiRNaxS2rd/8T+IHsxklwl0SQhX3+IE7h
-         /Yej+6rAGirETCjtvpHewEhik6BmYoJwI9pVIfnRAou/ThMFyfB07ZeamdtfGJOf8YkU
-         tF3X6JSQcT+QO+h0POANTn+JyY5OPapGHnK2rqcabhbVPiXAXFXw0f8PDR8kbz9ZxMUB
-         JLEuSo3jNxb4w3QKYhAGoTPfJoJx4Vw2h0zr8dEJxMcYahoP1kEJq72EfUtjGpnsPuDd
-         H7Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NzV8dfvq8cM1l3XimLO2tX+6Q+tj9m2ZJPGNF/NhjTo=;
-        b=xeBzdn0dKtCNBzw13kC9HQ98H5cnLQGppItrH/U+ero3y+Td7maxtJfZlrcT4i7UjX
-         WBIYSrX/CrIjfaV4xA78UxYP1O6ntUe1uBDEd1LdIj0TVeTd4/goYhLzwL8laYEnTVhu
-         V1/vNcEV+/Pi17WGtLyaxjcLtiWVMmml5jr/5RyDMMWhk1VZAXPvVyyhrk1WO4/lExfQ
-         ByQW5yD4jIepb7XkmJ2IbgvtsPNkU76gPy+vUA/Z9v7+NSusMyy6Oi50nwfRcj3e5U+P
-         She/zruNxGpcnRgSzYPGEP31Q1EfbgLHtofV1lxzYnGEIxUYx452/IliPVgA2jmWL54s
-         a+WA==
-X-Gm-Message-State: AOAM532KxYkt1/wtEvqruNiAnZTooOak1kx0fqFKBJxru6GQZgPK56X+
-        pPEzCtW+zMd5KOqWjGqOVhXooiN02HWOfQ==
-X-Google-Smtp-Source: ABdhPJyGEmw4OOsueL6lBotf/Xe/ex21rgqNILXZQYJpAEatNT/bo2JEBuXL1R2Rijfpp90G6vOHfA==
-X-Received: by 2002:a2e:7d18:0:b0:254:1e86:a3c with SMTP id y24-20020a2e7d18000000b002541e860a3cmr13281239ljc.77.1653916142662;
-        Mon, 30 May 2022 06:09:02 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.129])
-        by smtp.gmail.com with ESMTPSA id s20-20020a056512203400b00477b0779016sm1162502lfs.264.2022.05.30.06.09.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 06:09:02 -0700 (PDT)
-Message-ID: <ef9f7516-853d-ffe4-9a7a-5e87556bdbbe@openvz.org>
-Date:   Mon, 30 May 2022 16:09:00 +0300
+        Mon, 30 May 2022 09:10:43 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2517092B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:10:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653916240; x=1685452240;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=yR4CvAYEHnhJy9L0L3rshOUShjBlml110o6x0DwIo1A=;
+  b=LXT3rX902qcHmZS8ShzsCqkwy/X062sfDvAymc0pO/U5FbLjkrLRSxnx
+   g8OirrZFgLrMFqZrD1X13yAeqj9k7cy4abRWWUHJGafXLLrXnWBk4OqAc
+   AKxyvcU7gmMxPWxCWmJR16/xEynb15OhRNDLct2HjpbC/5ccfxeVTYsC7
+   uTlKJUDzoB5sKUubOYgHOnWUZGlr+OCZTGWAHOVHLg92gBZdoFQpgFgl/
+   sv8I5qwu7GMwIlCxyNBge+JgfbacDqDaOpZ9vMYtxto2U51PcxDwvHmX6
+   kALBll5/2GAAoDUtcn+WqntzuOfoOA7CAJSqza8B8p22GL5Ho2oH5NHVL
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="274998691"
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="274998691"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 06:10:16 -0700
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="605183061"
+Received: from jkuna-mobl.ger.corp.intel.com (HELO localhost) ([10.249.150.228])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 06:10:10 -0700
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        SoC Team <soc@kernel.org>
+Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
+ block count and size helpers")
+In-Reply-To: <CAK8P3a0-S77QLR1dK3NT6ot7JTAD5AdojAZJr-Xi112-v5EOdw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <YpCUzStDnSgQLNFN@debian>
+ <CAHk-=wg0uGAX5DYZq+tY2KeUAR8DtR91YE1y9CkPMKkKOyE4jg@mail.gmail.com>
+ <CADVatmNGPbSdRNQuwJEWAaPtqb3vBYRjvsuBpoRUnhEHj=X5GQ@mail.gmail.com>
+ <CAHk-=wisQd8yiPX=SsK3eFiakKo713hq4SyqPWsJ-oyAmLFefQ@mail.gmail.com>
+ <YpIR67FMtTGCwARZ@debian>
+ <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
+ <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com>
+ <CAK8P3a0-QyOQiieEvM0yQb43XbCtPmeao8UvoAsdFnjCxYPz7Q@mail.gmail.com>
+ <CAHk-=whfmwzjF4eBPYS6pHFqHVzJF3m=2h=gRWSRyHks8V=ABA@mail.gmail.com>
+ <87a6aztli2.fsf@intel.com> <877d63tleq.fsf@intel.com>
+ <CAK8P3a0-S77QLR1dK3NT6ot7JTAD5AdojAZJr-Xi112-v5EOdw@mail.gmail.com>
+Date:   Mon, 30 May 2022 16:10:08 +0300
+Message-ID: <87czfvrwsv.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH mm v3 0/9] memcg: accounting for objects allocated by
- mkdir cgroup
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
-References: <06505918-3b8a-0ad5-5951-89ecb510138e@openvz.org>
- <3e1d6eab-57c7-ba3d-67e1-c45aa0dfa2ab@openvz.org>
- <YpSwvii5etfnOYC9@dhcp22.suse.cz>
-From:   Vasily Averin <vvs@openvz.org>
-In-Reply-To: <YpSwvii5etfnOYC9@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/22 14:55, Michal Hocko wrote:
-> On Mon 30-05-22 14:25:45, Vasily Averin wrote:
->> Below is tracing results of mkdir /sys/fs/cgroup/vvs.test on 
->> 4cpu VM with Fedora and self-complied upstream kernel. The calculations
->> are not precise, it depends on kernel config options, number of cpus,
->> enabled controllers, ignores possible page allocations etc.
->> However this is enough to clarify the general situation.
->> All allocations are splited into:
->> - common part, always called for each cgroup type
->> - per-cgroup allocations
+On Mon, 30 May 2022, Arnd Bergmann <arnd@arndb.de> wrote:
+> On Mon, May 30, 2022 at 11:33 AM Jani Nikula <jani.nikula@intel.com> wrote:
 >>
->> In each group we consider 2 corner cases:
->> - usual allocations, important for 1-2 CPU nodes/Vms
->> - percpu allocations, important for 'big irons'
->>
->> common part: 	~11Kb	+  318 bytes percpu
->> memcg: 		~17Kb	+ 4692 bytes percpu
->> cpu:		~2.5Kb	+ 1036 bytes percpu
->> cpuset:		~3Kb	+   12 bytes percpu
->> blkcg:		~3Kb	+   12 bytes percpu
->> pid:		~1.5Kb	+   12 bytes percpu		
->> perf:		 ~320b	+   60 bytes percpu
->> -------------------------------------------
->> total:		~38Kb	+ 6142 bytes percpu
->> currently accounted:	  4668 bytes percpu
->>
->> - it's important to account usual allocations called
->> in common part, because almost all of cgroup-specific allocations
->> are small. One exception here is memory cgroup, it allocates a few
->> huge objects that should be accounted.
->> - Percpu allocation called in common part, in memcg and cpu cgroups
->> should be accounted, rest ones are small an can be ignored.
->> - KERNFS objects are allocated both in common part and in most of
->> cgroups 
->>
->> Details can be found here:
->> https://lore.kernel.org/all/d28233ee-bccb-7bc3-c2ec-461fd7f95e6a@openvz.org/
->>
->> I checked other cgroups types was found that they all can be ignored.
->> Additionally I found allocation of struct rt_rq called in cpu cgroup 
->> if CONFIG_RT_GROUP_SCHED was enabled, it allocates huge (~1700 bytes)
->> percpu structure and should be accounted too.
-> 
-> One thing that the changelog is missing is an explanation why do we need
-> to account those objects. Users are usually not empowered to create
-> cgroups arbitrarily. Or at least they shouldn't because we can expect
-> more problems to happen.
-> 
-> Could you clarify this please?
+>> That is, for EDID. Makes you wonder about all the other packed structs
+>> with enum members across the kernel.
+>
+> It is not the 'enum' that is special here, it's the 'union' having
+> unpacked members,
 
-The problem is actual for OS-level containers: LXC or OpenVz.
-They are widely used for hosting and allow to run containers
-by untrusted end-users. Root inside such containers is able
-to create groups inside own container and consume host memory
-without its proper accounting.
+Obviously meant union not enum, that was just a -ENOCOFFEE on my part.
 
-Thank you,
-	Vasily Averin
+> and the same thing happens when you have nested structs: both the inner
+> and the outer aggregate need to be packed, either with __packed at the
+> end, or on each individual member that is not fully aligned to
+> max(sizeof(member), 4)).
+>
+> I think in general, most __packed annotations we have in the kernel are
+> completely pointless because they do not change the structure layout on
+> any architecture but instead just make member access slower on
+
+Please explain.
+
+They are used quite a bit for parsing blob data, or
+serialization/deserialization, like in the EDID case at hand. Try
+removing __attribute__((packed)) from include/drm/drm_edid.h and see the
+sizeof(struct edid) on any architecture.
+
+BR,
+Jani.
+
+> architectures that lack unaligned load/store instructions. There have
+> definitely been other cases though where a __packed annotation is
+> not needed on any sane architecture but is needed for OABI ARM.
+>
+> Overall I'm not that worried because the only machines running OABI
+> kernels would be on really old hardware that runs a limited set of
+> driver code.
+>
+> A completely different matter are the extraneous __packed annotations
+> that lead to possible problems when accessed through a misaligned
+> pointer. We ignore -Waddress-of-packed-member and -Wcast-align
+> in the kernel, so these never get caught at build time, but we have
+> seen bugs from gcc making incorrect assumptions about alignment
+> even on architectures that have unaligned load/store instructions.
+>
+>       Arnd
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center

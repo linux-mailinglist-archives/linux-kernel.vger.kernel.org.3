@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7925379CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5DA5379D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbiE3L1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 07:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54112 "EHLO
+        id S235762AbiE3L1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 07:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233224AbiE3L1A (ORCPT
+        with ESMTP id S235773AbiE3L1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 07:27:00 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB213FD9A
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:26:53 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id u23so16306481lfc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:26:53 -0700 (PDT)
+        Mon, 30 May 2022 07:27:10 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C5120183
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:27:02 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id q1so11309143ljb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=openvz-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:from:subject:to:cc
          :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=4e9cAQNYvP51hKc6KpBonPtXgR81jEqGpiEVOIyf/5s=;
-        b=xizF6KRy3bFdr7qqwILsD9GKyKXrT5rRjnCMU+4tebhEx+64CxYJbtIbvsChGeZp9p
-         eSNkgCkAudTzd3EKloNzUi0JiC3932qtJlaXk1tfWhx3CZo0+1/dlrPo2A0+4lDBNj1/
-         oy6OpdKdMux4+Yco38Cdoh1Ak2+Q7U0JVjDpaDnR9IQhAyAgrDsDlmf9XZ7w9jnPg8hZ
-         6lVTYkwk7E555m7EJX5Ebmj9BJHMo+oyNavkwL/xerfAMHsVuJKLEuhAr+reY72Zpvms
-         GKxs7z2KmJmMOOMUjpCHbYKh3Q965rKnTT3EtDdZNmVh1yEu4+GEDLRkHsOXns+JVJmo
-         onaw==
+        bh=1bz2HF6EsnuVkI8ZLNySbZ6/e4i0Dqd56vDd6/MtYsM=;
+        b=MJH7jgZ0nByKKabpLoAPA5HN9v21BI0dbjoYKv7JTJsZIG9t7CYmKL10/W6A4CAJjz
+         YjoRkjjkc7rnBG4iIl52t8YBffLXDTaOk0FPU+R/iUFJxypPSriGxh9W/Yp0Xb2YBS3n
+         u8rGfnyQ69D7OdxyAxhEqBpRbcEOZtgatuzFi1ROaPTtGWFVuQ8Ynlz3uO4xDFqo8r4l
+         WK/pDR4j7nZ8vJmIiytexPw++UZNwa2TUENNay2Qdqs1hgi/d47tM/IS92zI/+yxh40n
+         /qegCkoMk0oOX1fRJCG8CUX8qr6p2SS7H4vuyz1TCOxloqJz6bEygG1OkLqHyZ3QIEiK
+         J+yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:from
          :subject:to:cc:references:content-language:in-reply-to
          :content-transfer-encoding;
-        bh=4e9cAQNYvP51hKc6KpBonPtXgR81jEqGpiEVOIyf/5s=;
-        b=k6HJtawU8D0fczX1FBb1qzq4DKY59V+QvWHIV7zQItJJq+b5UrvmQjqot2edr4HGLY
-         GRRYi8wOntjfrFkLJpEeALnJ9Z8+A/N5WERQFqF4db4Xp1n9KwI/eB5cMQpIrQRqXzc4
-         JY3Xal2X1gejtFd/kHtwkzfk8Ef3yhzOmD6J1ur4PPo/jr6t84dFLV5Shi+u+DK2LTuP
-         FIgryyHifV4bCyHXOI5+fUSp3b9FwJBGIu7VdDjLExwkBLKSP8l1S1hQnqVLFz8HflEI
-         4OcjjSfuWDtwrLsCFaCYYZq32BwiBmBH2dUrlGlHjhJSu8be+D0JrnhOvFXtR3fpaMNy
-         i+Ng==
-X-Gm-Message-State: AOAM533st5rx3xJ3Q1CmSiSfuIDpEM4n68KD9qo8njhQBXwH50Ajlcpn
-        By/Q6DaQGFEkH+3XlwoTsBOuWQ==
-X-Google-Smtp-Source: ABdhPJwF1AwMaj291W7nGiUPQz5B+WwYAG2NqIo/7HzPTtCYWTM7nFaT7vdg6FgpWglp2bJz7VaG2Q==
-X-Received: by 2002:a05:6512:31d0:b0:477:ce21:fa6d with SMTP id j16-20020a05651231d000b00477ce21fa6dmr35830913lfe.219.1653910011534;
-        Mon, 30 May 2022 04:26:51 -0700 (PDT)
+        bh=1bz2HF6EsnuVkI8ZLNySbZ6/e4i0Dqd56vDd6/MtYsM=;
+        b=hiT+g41iwsCo/Ts97MPfcAzISrvOoREy1q7jjXWvzw7ldp/k2N+i7SyGSL+eXdDLZ3
+         gOY6dSe2kn7XbBXyFIfWeSK9DfmKZYUhQTutCKuNermyzeAJKBv9+NJt+81VCNoQC6rH
+         7piU3maw8493F8tbfaXgXPAYBkR2eSUW9viNIN/kfJAMHaIGW8u8pwEwts89/hUxl/Rq
+         xXYkxg1Vr7lVTmbWCrS/550iEQZsm8m+JYcUcbdNAHrblUD7mQ44u6nWp4YI0xqYvmDW
+         kmzY9udiCY4O5tf+haa0JM19+3shfTisfOIpmM0bMxxvOJwEgkW+lMht813uCXTsDqjh
+         wS/w==
+X-Gm-Message-State: AOAM530ZYY6mklKe47G6dJLqVRKHZqeQbZRvjd+8oN9iad2P3RU0Ta4m
+        rOhQD6quUPD81YOVUZVljAKAKg==
+X-Google-Smtp-Source: ABdhPJxchjq+vPEv7BDN5f83/B73zaDF6zRhHb+aUExV2DDt1M6CIZoAIgyJaA82Tud2AlFiPpMv+A==
+X-Received: by 2002:a2e:a448:0:b0:24c:8fe8:f3c6 with SMTP id v8-20020a2ea448000000b0024c8fe8f3c6mr32212835ljn.115.1653910021164;
+        Mon, 30 May 2022 04:27:01 -0700 (PDT)
 Received: from [192.168.1.65] ([46.188.121.129])
-        by smtp.gmail.com with ESMTPSA id be10-20020a056512250a00b00478cd831077sm1308038lfb.271.2022.05.30.04.26.50
+        by smtp.gmail.com with ESMTPSA id x37-20020a056512132500b0047255d2115csm2254247lfu.139.2022.05.30.04.27.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 04:26:51 -0700 (PDT)
-Message-ID: <3b524f9c-c078-1118-9385-7e57cb5a0347@openvz.org>
-Date:   Mon, 30 May 2022 14:26:50 +0300
+        Mon, 30 May 2022 04:27:00 -0700 (PDT)
+Message-ID: <ea77f3ea-3832-83e8-b33d-6df40b01ee67@openvz.org>
+Date:   Mon, 30 May 2022 14:26:59 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
 From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH mm v3 7/9] memcg: enable accounting for large allocations in
- mem_cgroup_css_alloc
+Subject: [PATCH mm v3 8/9] memcg: enable accounting for allocations in
+ alloc_fair_sched_group
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Shakeel Butt <shakeelb@google.com>,
@@ -73,41 +73,21 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Creation of each memory cgroup allocates few huge objects in
-mem_cgroup_css_alloc(). Its size exceeds the size of memory
-accounted in common part of cgroup creation:
+Creating of each new cpu cgroup allocates two 512-bytes kernel objects
+per CPU. This is especially important for cgroups shared parent memory
+cgroup. In this scenario, on nodes with multiple processors, these
+allocations become one of the main memory consumers.
 
+Memory allocated during new cpu cgroup creation:
 common part: 	~11Kb	+  318 bytes percpu
-memcg: 		~17Kb	+ 4692 bytes percpu
-
-memory:
-------
-Allocs  Alloc   $1*$2   Sum     Allocation
-number  size
---------------------------------------------
-1   +   8192    8192    8192    (mem_cgroup_css_alloc+0x4a) <NB
-14  ~   352     4928    13120   KERNFS
-1   +   2048    2048    15168   (mem_cgroup_css_alloc+0xdd) <NB
-1       1024    1024    16192   (alloc_shrinker_info+0x79)
-1       584     584     16776   (radix_tree_node_alloc.constprop.0+0x89)
-2       64      128     16904   (percpu_ref_init+0x6a)
-1       64      64      16968   (mem_cgroup_css_online+0x32)
-
-1   =   3684    3684    3684    call_site=mem_cgroup_css_alloc+0x9e
-1   =   984     984     4668    call_site=mem_cgroup_css_alloc+0xfd
-2       12      24      4692    call_site=percpu_ref_init+0x23
-
-     '=' -- already accounted,
-     '+' -- to be accounted,
-     '~' -- partially accounted
+cpu cgroup:	~2.5Kb	+ 1036 bytes percpu
 
 Accounting for this memory helps to avoid misuse inside memcg-limited
 contianers.
@@ -118,30 +98,27 @@ Reviewed-by: Michal Koutný <mkoutny@suse.com>
 Acked-by: Shakeel Butt <shakeelb@google.com>
 Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 ---
- mm/memcontrol.c | 4 ++--
+ kernel/sched/fair.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index abec50f31fe6..376734af8935 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -5064,7 +5064,7 @@ static int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
- {
- 	struct mem_cgroup_per_node *pn;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 8c5b74f66bd3..f4fc39d5aa4b 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -11499,12 +11499,12 @@ int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
  
--	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL, node);
-+	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL_ACCOUNT, node);
- 	if (!pn)
- 		return 1;
+ 	for_each_possible_cpu(i) {
+ 		cfs_rq = kzalloc_node(sizeof(struct cfs_rq),
+-				      GFP_KERNEL, cpu_to_node(i));
++				      GFP_KERNEL_ACCOUNT, cpu_to_node(i));
+ 		if (!cfs_rq)
+ 			goto err;
  
-@@ -5116,7 +5116,7 @@ static struct mem_cgroup *mem_cgroup_alloc(void)
- 	int __maybe_unused i;
- 	long error = -ENOMEM;
- 
--	memcg = kzalloc(struct_size(memcg, nodeinfo, nr_node_ids), GFP_KERNEL);
-+	memcg = kzalloc(struct_size(memcg, nodeinfo, nr_node_ids), GFP_KERNEL_ACCOUNT);
- 	if (!memcg)
- 		return ERR_PTR(error);
+ 		se = kzalloc_node(sizeof(struct sched_entity_stats),
+-				  GFP_KERNEL, cpu_to_node(i));
++				  GFP_KERNEL_ACCOUNT, cpu_to_node(i));
+ 		if (!se)
+ 			goto err_free_rq;
  
 -- 
 2.36.1

@@ -2,61 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CBC53731E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 02:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 977A3537327
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 02:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiE3AnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 20:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S231712AbiE3Arw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 20:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbiE3AnM (ORCPT
+        with ESMTP id S230242AbiE3Art (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 20:43:12 -0400
-Received: from rome.phoronix.com (rome.phoronix.com [192.211.48.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A591D0EA
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 17:43:11 -0700 (PDT)
-Received: from c-73-176-63-28.hsd1.il.comcast.net ([73.176.63.28]:44544 helo=[192.168.1.42])
-        by rome.phoronix.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <Michael@phoronix.com>)
-        id 1nvTUx-00043a-3z;
-        Sun, 29 May 2022 20:43:06 -0400
-Message-ID: <15f9bf67-8ee4-9ade-987b-78c20966edc1@phoronix.com>
-Date:   Sun, 29 May 2022 19:43:01 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] clocksource: Make clocksource watchdog check with
- WATCHDOG_INTERVAL period
-Content-Language: en-CA
-To:     Waiman Long <longman@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Feng Tang <feng.tang@intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        John Stultz <jstultz@google.com>
-Cc:     linux-kernel@vger.kernel.org, Joe Mario <jmario@redhat.com>,
-        Michey Mehta <mimehta@redhat.com>
-References: <20220528015714.109442-1-longman@redhat.com>
- <fa2d516e-70b5-3012-9134-5ca325282bc4@redhat.com>
- <6a5b80e8-a614-5452-4cf0-b636fa9b23cc@phoronix.com>
- <b8ae204b-0e92-a87e-5ae0-0b38d2adb33a@redhat.com>
-From:   Michael Larabel <Michael@phoronix.com>
-In-Reply-To: <b8ae204b-0e92-a87e-5ae0-0b38d2adb33a@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - rome.phoronix.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - phoronix.com
-X-Get-Message-Sender-Via: rome.phoronix.com: authenticated_id: michael@phoronix.com
-X-Authenticated-Sender: rome.phoronix.com: michael@phoronix.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Sun, 29 May 2022 20:47:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DE426AE8
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 17:47:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED81AB80B8E
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:47:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2296C385A9;
+        Mon, 30 May 2022 00:47:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653871664;
+        bh=AKGFZnFZhl5FcvGf409jZaWe3zPmGMXl8Zhf0Ptpo4w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hjy86r2YHNEC1a6MlICcDjLkSGgwQslRNby6pF7aNVfHIjaGaUQJkdUQPZHivV3i9
+         Xc764Xhh8x8g4VeZ9IcRGRb9lcTOMIU2nfxTohv/FfBAGc21VF5lUelyUtgjm6QAgP
+         AKw0IB3t3rVAOXas3xFnCmuRwTdPMNwKtE1kUA2URhPXi+lgNHXgN3Cs4asJ9Rwh3V
+         W3YoJhjR/8DKXyAOobaYPWg5BGF2XyFmgjogmZNC5rl3AnSrLX3JtSdhykeL3h0FNg
+         q9BWx+i1sO4AU/s2HOm9OK4kg8JP1PAiKyf6WsbAaV/jbxfviP0MRVhaqSWixyVG3+
+         2VzpoJZe3kOjg==
+Date:   Mon, 30 May 2022 09:47:40 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
+        Tzvetomir Stoyanov (VMware) <tz.stoyanov@gmail.com>
+Subject: Re: [PATCH v2 1/2] tracing: auto generate event name when create a
+ group of events
+Message-Id: <20220530094740.322073e73471b636fa110d46@kernel.org>
+In-Reply-To: <1653795294-19764-2-git-send-email-quic_linyyuan@quicinc.com>
+References: <1653795294-19764-1-git-send-email-quic_linyyuan@quicinc.com>
+        <1653795294-19764-2-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,156 +59,381 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linyu,
 
-On 5/29/22 19:16, Waiman Long wrote:
-> On 5/29/22 18:16, Michael Larabel wrote:
->> On 5/27/22 21:07, Waiman Long wrote:
->>> On 5/27/22 21:57, Waiman Long wrote:
->>>> Since commit c86ff8c55b8a ("clocksource: Avoid accidental unstable
->>>> marking of clocksource"), a new WD_READ_SKIP value was introduced
->>>> as a possible return value of cs_watchdog_read() to skip the current
->>>> check. However, this has an undesriable side effect of extending the
->>>> time gap between csnow and cs_last to more than one WATCHDOG_INTERVAL
->>>> (0.5s) in case of intermittent WD_READ_SKIP's.
->>>>
->>>> There was an instance of reported clocksource watchdog failure with
->>>> the time skew of 485us where the uncertainly threshold is 400us. In
->>>> that particular case, the (now - last) gap was about 2s. Looking at
->>>> the dmesg log, it was clear there was a successful cs_watchdog_read()
->>>> followed by 3 skips and then another successful cs_watchdog_read().
->>>>
->>>> If there is an existing skew between the hpet (watchdog) and tsc
->>>> clocksource, enlarging the period by 4x will certainly increase the
->>>> measured skew causing it to exceed the threshold in this case. Fix
->>>> this variable period problem by resetting the CLOCK_SOURCE_WATCHDOG 
->>>> bit
->>>> after each WD_READ_SKIP to force the reloading of wd_last and cs_last
->>>> in the next round. This ensures that we have two consecutive 
->>>> successful
->>>> cs_watchdog_read()'s before checking the clock skew.
->>>>
->>>> Fixes: c86ff8c55b8a ("clocksource: Avoid accidental unstable 
->>>> marking of clocksource")
->>>> Reported-by: Michael Larabel <Michael@phoronix.com>
->>>> Signed-off-by: Waiman Long <longman@redhat.com>
->>>> ---
->>>>   kernel/time/clocksource.c | 11 ++++++++++-
->>>>   1 file changed, 10 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
->>>> index cee5da1e54c4..173e052c12b6 100644
->>>> --- a/kernel/time/clocksource.c
->>>> +++ b/kernel/time/clocksource.c
->>>> @@ -411,9 +411,18 @@ static void clocksource_watchdog(struct 
->>>> timer_list *unused)
->>>>           read_ret = cs_watchdog_read(cs, &csnow, &wdnow);
->>>>             if (read_ret != WD_READ_SUCCESS) {
->>>> -            if (read_ret == WD_READ_UNSTABLE)
->>>> +            if (read_ret == WD_READ_UNSTABLE) {
->>>>                   /* Clock readout unreliable, so give it up. */
->>>>                   __clocksource_unstable(cs);
->>>> +            } else { /* WD_READ_SKIP */
->>>> +                /*
->>>> +                 * Watchdog clock unstable at the moment,
->>>> +                 * discard the stored wd_last and cs_last to
->>>> +                 * make sure the gap between now and last
->>>> +                 * is always one WATCHDOG_INTERVAL.
->>>> +                 */
->>>> +                cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
->>>> +            }
->>>>               continue;
->>>>           }
->>>
->>> Sorry, I accidentally use the old email address for John.
->>>
->>> Cheers,
->>> Longman
->>
->>
->> I've tested this patch on the affected Daytona + Milan-X system and 
->> can confirm it does fix the performance problem that led to this 
->> issue. Though it is spamming the kernel log now every half-second 
->> with clocksource messages,  not sure if that is intended/desirable 
->> behavior?
->>
->>
->> [    0.000000] tsc: Fast TSC calibration using PIT
->> [    0.000000] tsc: Detected 2195.990 MHz processor
->> [    1.238759] clocksource: tsc-early: mask: 0xffffffffffffffff 
->> max_cycles: 0x1fa766bc6ba, max_idle_ns: 440795275714 ns
->> [    2.769608] clocksource: Switched to clocksource tsc-early
->> [    3.263925] clocksource: wd-tsc-early-wd read-back delay of 
->> 292215ns, clock-skew test skipped!
->> [    3.743804] clocksource: wd-tsc-early-wd read-back delay of 
->> 268469ns, clock-skew test skipped!
->> [    3.935663] tsc: Refined TSC clocksource calibration: 2195.274 MHz
->> [    3.935844] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 
->> 0x1fa4c255513, max_idle_ns: 440795289702 ns
->> [    3.936449] clocksource: Switched to clocksource tsc
->> [    4.255932] clocksource: wd-tsc-wd read-back delay of 260228ns, 
->> clock-skew test skipped!
->> [    4.767892] clocksource: wd-tsc-wd read-back delay of 272520ns, 
->> clock-skew test skipped!
->> [    5.247581] clocksource: wd-tsc-wd read-back delay of 200444ns, 
->> clock-skew test skipped!
->> [    5.759560] clocksource: wd-tsc-wd read-back delay of 165942ns, 
->> clock-skew test skipped!
->> [    6.239687] clocksource: wd-tsc-wd read-back delay of 232222ns, 
->> clock-skew test skipped!
->> [    7.264014] clocksource: wd-tsc-wd read-back delay of 282927ns, 
->> clock-skew test skipped!
->> [    7.743864] clocksource: wd-tsc-wd read-back delay of 288374ns, 
->> clock-skew test skipped!
->> [    8.255590] clocksource: wd-tsc-wd read-back delay of 206730ns, 
->> clock-skew test skipped!
->> [    8.767778] clocksource: wd-tsc-wd read-back delay of 267771ns, 
->> clock-skew test skipped!
->> [    9.247870] clocksource: wd-tsc-wd read-back delay of 224469ns, 
->> clock-skew test skipped!
->> [   10.239340] clocksource: wd-tsc-wd read-back delay of 109720ns, 
->> clock-skew test skipped!
->> [   12.255276] clocksource: wd-tsc-wd read-back delay of 104692ns, 
->> clock-skew test skipped!
->> [   16.255362] clocksource: wd-tsc-wd read-back delay of 122780ns, 
->> clock-skew test skipped!
->> [   17.759335] clocksource: wd-tsc-wd read-back delay of 155885ns, 
->> clock-skew test skipped!
->> [   18.239500] clocksource: wd-tsc-wd read-back delay of 176558ns, 
->> clock-skew test skipped!
->> [   18.751341] clocksource: wd-tsc-wd read-back delay of 157352ns, 
->> clock-skew test skipped!
->> [   19.263618] clocksource: wd-tsc-wd read-back delay of 177606ns, 
->> clock-skew test skipped!
->> [   19.743487] clocksource: wd-tsc-wd read-back delay of 157841ns, 
->> clock-skew test skipped!
->> [   20.255482] clocksource: wd-tsc-wd read-back delay of 157701ns, 
->> clock-skew test skipped!
->> [   20.767634] clocksource: wd-tsc-wd read-back delay of 173136ns, 
->> clock-skew test skipped!
->> [   21.247405] clocksource: wd-tsc-wd read-back delay of 175441ns, 
->> clock-skew test skipped!
->> ...
->>
->> Thanks,
->> Michael
->>
-> Thanks for the testing. Did the spamming stop after a while?
->
-> It does show that your particular Milan-X CPU(s) have unreliable hpet. 
-> The only way to stop the spamming is to build a kernel with a larger 
-> CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US. By default, it is 100us. The 
-> allowable hpet-hpet delay is only half of that. In this particular 
-> case, it will have to be set to at least 500 or maybe even 600.
->
-> Thanks,
-> Longman
->
+On Sun, 29 May 2022 11:34:53 +0800
+Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
 
-No, the spamming hadn't stopped. At least as of one hour into the uptime 
-it was still spewing every half second. Can confirm tomorrow if it ever 
-stops after a longer duration but at least as of one hour of running the 
-benchmarks to verify the performance was back to expectations, I had 
-shut down that server to move onto other work.
+> Currently when create a specific group of trace events,
+> take kprobe event as example, user must use the following format:
+> p:GRP/EVENT [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS],
+> which means user must enter EVENT name, one example is: echo
+> 'p:usb_gadget/config_usb_cfg_link config_usb_cfg_link $arg1' >>
+> kprobe_events, it is not simple if there are too many entries
+> because the event name is same as symbol name.
+> 
+> This change allows user to specify no EVENT name, format changed as:
+> p:GRP/ [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS],
+> it will generate event name automatically and one example is:
+> echo 'p:usb_gadget/ config_usb_cfg_link $arg1' >> kprobe_events.
+> 
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> ---
+> v2: fix review comments in V1:
+>     change TP_ENAME_EMPTTY to TP_ENAME_EMPTY,
 
-Thanks,
-Michael
+Thanks for update! And I think this return code is a bit redundant
+because those cases can be rephrased as follows;
+
+TP_ENAME_GROUP_EVENT : event != NULL && group != (default)
+TP_ENAME_GROUP : event == NULL && group != (default)
+TP_ENAME_EVENT : event != NULL && group == (default)
+TP_ENAME_EMPTY : event == NULL && group == (default)
+
+What about this (e.g. trace_kprobe.c)?
+
+	if (event) {
+		/* event and group will be updated in this function */
+		ret = traceprobe_parse_event_name(&event, &group, gbuf,
+							event - argv[0]);
+		if (ret)
+			goto parse_error;
+	}
+
+	if (!event) {
+		/* Make a new event name */
+		if (symbol)
+			snprintf(buf, MAX_EVENT_NAME_LEN, "%c_%s_%ld",
+				is_return ? 'r' : 'p', symbol, offset);
+		else
+			snprintf(buf, MAX_EVENT_NAME_LEN, "%c_0x%p",
+				is_return ? 'r' : 'p', addr);
+		sanitize_event_name(buf);
+		event = buf;
+	}
+
+This makes the code clearer.
+
+>     add some space,
+>     document the macros return by traceprobe_parse_event_name(),
+>     updatea commit description.
+> 
+>  Documentation/trace/kprobetrace.rst  |  8 ++++----
+>  Documentation/trace/uprobetracer.rst |  8 ++++----
+>  kernel/trace/trace_dynevent.c        |  2 +-
+>  kernel/trace/trace_eprobe.c          | 20 ++++++++++++--------
+>  kernel/trace/trace_kprobe.c          | 19 ++++++++++++-------
+>  kernel/trace/trace_probe.c           |  9 ++++++++-
+>  kernel/trace/trace_probe.h           |  4 ++++
+>  kernel/trace/trace_uprobe.c          | 15 ++++++++++-----
+>  8 files changed, 55 insertions(+), 30 deletions(-)
+> 
+> diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
+> index b175d88..4274cc6 100644
+> --- a/Documentation/trace/kprobetrace.rst
+> +++ b/Documentation/trace/kprobetrace.rst
+> @@ -28,10 +28,10 @@ Synopsis of kprobe_events
+>  -------------------------
+>  ::
+>  
+> -  p[:[GRP/]EVENT] [MOD:]SYM[+offs]|MEMADDR [FETCHARGS]	: Set a probe
+> -  r[MAXACTIVE][:[GRP/]EVENT] [MOD:]SYM[+0] [FETCHARGS]	: Set a return probe
+> -  p:[GRP/]EVENT] [MOD:]SYM[+0]%return [FETCHARGS]	: Set a return probe
+> -  -:[GRP/]EVENT						: Clear a probe
+> +  p[:[GRP/][EVENT]] [MOD:]SYM[+offs]|MEMADDR [FETCHARGS]	: Set a probe
+> +  r[MAXACTIVE][:[GRP/][EVENT]] [MOD:]SYM[+0] [FETCHARGS]	: Set a return probe
+> +  p[:[GRP/][EVENT]] [MOD:]SYM[+0]%return [FETCHARGS]	: Set a return probe
+> +  -:[GRP/][EVENT]						: Clear a probe
+
+
+Could you also update 'readme_msg' in kernel/trace/trace.c in this patch?
+e.g. 
+
+#if defined(CONFIG_KPROBE_EVENTS) || defined(CONFIG_UPROBE_EVENTS)
+        "\t  accepts: event-definitions (one definition per line)\n"
+        "\t   Format: p[:[<group>/][<event>]] <place> [<args>]\n"
+        "\t           r[maxactive][:[<group>/][<event>]] <place> [<args>]\n"
+#ifdef CONFIG_HIST_TRIGGERS
+        "\t           s:[synthetic/]<event> <field> [<field>]\n"
+#endif
+        "\t           e[:[<group>/][<event>]] <attached-group>.<attached-event> [<args>]\n"
+        "\t           -:[<group>/]<event>\n"
+
+
+And also, could you add *another patch* to update below testcases about
+dynevent to ensure this feature is working? 
+
+tools/testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc
+and tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
+
+e.g. 
+
+if grep -q '\[<event>\]' README then
+  (add your test...)
+fi
+
+
+Thank you,
+
+
+>  
+>   GRP		: Group name. If omitted, use "kprobes" for it.
+>   EVENT		: Event name. If omitted, the event name is generated
+> diff --git a/Documentation/trace/uprobetracer.rst b/Documentation/trace/uprobetracer.rst
+> index a8e5938..3a1797d7 100644
+> --- a/Documentation/trace/uprobetracer.rst
+> +++ b/Documentation/trace/uprobetracer.rst
+> @@ -26,10 +26,10 @@ Synopsis of uprobe_tracer
+>  -------------------------
+>  ::
+>  
+> -  p[:[GRP/]EVENT] PATH:OFFSET [FETCHARGS] : Set a uprobe
+> -  r[:[GRP/]EVENT] PATH:OFFSET [FETCHARGS] : Set a return uprobe (uretprobe)
+> -  p[:[GRP/]EVENT] PATH:OFFSET%return [FETCHARGS] : Set a return uprobe (uretprobe)
+> -  -:[GRP/]EVENT                           : Clear uprobe or uretprobe event
+> +  p[:[GRP/][EVENT]] PATH:OFFSET [FETCHARGS] : Set a uprobe
+> +  r[:[GRP/][EVENT]] PATH:OFFSET [FETCHARGS] : Set a return uprobe (uretprobe)
+> +  p[:[GRP/][EVENT]] PATH:OFFSET%return [FETCHARGS] : Set a return uprobe (uretprobe)
+> +  -:[GRP/][EVENT]                           : Clear uprobe or uretprobe event
+>  
+>    GRP           : Group name. If omitted, "uprobes" is the default value.
+>    EVENT         : Event name. If omitted, the event name is generated based
+> diff --git a/kernel/trace/trace_dynevent.c b/kernel/trace/trace_dynevent.c
+> index e34e8182..033248d 100644
+> --- a/kernel/trace/trace_dynevent.c
+> +++ b/kernel/trace/trace_dynevent.c
+> @@ -101,7 +101,7 @@ int dyn_event_release(const char *raw_command, struct dyn_event_operations *type
+>  		event = p + 1;
+>  		*p = '\0';
+>  	}
+> -	if (event[0] == '\0') {
+> +	if (!system && event[0] == '\0') {
+>  		ret = -EINVAL;
+>  		goto out;
+>  	}
+> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+> index 7d44785..13cd7fc 100644
+> --- a/kernel/trace/trace_eprobe.c
+> +++ b/kernel/trace/trace_eprobe.c
+> @@ -125,6 +125,7 @@ static bool eprobe_dyn_event_match(const char *system, const char *event,
+>  	 * We match the following:
+>  	 *  event only			- match all eprobes with event name
+>  	 *  system and event only	- match all system/event probes
+> +	 *  system only			- match all system probes
+>  	 *
+>  	 * The below has the above satisfied with more arguments:
+>  	 *
+> @@ -143,7 +144,7 @@ static bool eprobe_dyn_event_match(const char *system, const char *event,
+>  		return false;
+>  
+>  	/* Must match the event name */
+> -	if (strcmp(trace_probe_name(&ep->tp), event) != 0)
+> +	if (event[0] != '\0' && strcmp(trace_probe_name(&ep->tp), event) != 0)
+>  		return false;
+>  
+>  	/* No arguments match all */
+> @@ -848,7 +849,7 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+>  {
+>  	/*
+>  	 * Argument syntax:
+> -	 *      e[:[GRP/]ENAME] SYSTEM.EVENT [FETCHARGS]
+> +	 *      e[:[GRP/][ENAME]] SYSTEM.EVENT [FETCHARGS]
+>  	 * Fetch args:
+>  	 *  <name>=$<field>[:TYPE]
+>  	 */
+> @@ -858,6 +859,7 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+>  	struct trace_eprobe *ep = NULL;
+>  	char buf1[MAX_EVENT_NAME_LEN];
+>  	char buf2[MAX_EVENT_NAME_LEN];
+> +	char grp_buf[MAX_EVENT_NAME_LEN];
+>  	int ret = 0;
+>  	int i;
+>  
+> @@ -866,14 +868,17 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+>  
+>  	trace_probe_log_init("event_probe", argc, argv);
+>  
+> +	ret = TP_ENAME_EMPTY;
+>  	event = strchr(&argv[0][1], ':');
+>  	if (event) {
+>  		event++;
+> -		ret = traceprobe_parse_event_name(&event, &group, buf1,
+> +		ret = traceprobe_parse_event_name(&event, &group, grp_buf,
+>  						  event - argv[0]);
+> -		if (ret)
+> +		if (ret < 0)
+>  			goto parse_error;
+> -	} else {
+> +	}
+> +
+> +	if (ret == TP_ENAME_EMPTY || ret == TP_ENAME_GROUP) {
+>  		strscpy(buf1, argv[1], MAX_EVENT_NAME_LEN);
+>  		sanitize_event_name(buf1);
+>  		event = buf1;
+> @@ -882,9 +887,8 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+>  		goto parse_error;
+>  
+>  	sys_event = argv[1];
+> -	ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2,
+> -					  sys_event - argv[1]);
+> -	if (ret || !sys_name)
+> +	ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2, 0);
+> +	if (ret != TP_ENAME_GROUP_EVENT)
+>  		goto parse_error;
+>  	if (!is_good_name(sys_event) || !is_good_name(sys_name))
+>  		goto parse_error;
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index 47cebef..55822b6 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -163,7 +163,8 @@ static bool trace_kprobe_match(const char *system, const char *event,
+>  {
+>  	struct trace_kprobe *tk = to_trace_kprobe(ev);
+>  
+> -	return strcmp(trace_probe_name(&tk->tp), event) == 0 &&
+> +	return (event[0] == '\0' ||
+> +		strcmp(trace_probe_name(&tk->tp), event) == 0) &&
+>  	    (!system || strcmp(trace_probe_group_name(&tk->tp), system) == 0) &&
+>  	    trace_kprobe_match_command_head(tk, argc, argv);
+>  }
+> @@ -708,11 +709,11 @@ static int __trace_kprobe_create(int argc, const char *argv[])
+>  	/*
+>  	 * Argument syntax:
+>  	 *  - Add kprobe:
+> -	 *      p[:[GRP/]EVENT] [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS]
+> +	 *      p[:[GRP/][EVENT]] [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS]
+>  	 *  - Add kretprobe:
+> -	 *      r[MAXACTIVE][:[GRP/]EVENT] [MOD:]KSYM[+0] [FETCHARGS]
+> +	 *      r[MAXACTIVE][:[GRP/][EVENT]] [MOD:]KSYM[+0] [FETCHARGS]
+>  	 *    Or
+> -	 *      p:[GRP/]EVENT] [MOD:]KSYM[+0]%return [FETCHARGS]
+> +	 *      p[:[GRP/][EVENT]] [MOD:]KSYM[+0]%return [FETCHARGS]
+>  	 *
+>  	 * Fetch args:
+>  	 *  $retval	: fetch return value
+> @@ -739,6 +740,7 @@ static int __trace_kprobe_create(int argc, const char *argv[])
+>  	long offset = 0;
+>  	void *addr = NULL;
+>  	char buf[MAX_EVENT_NAME_LEN];
+> +	char grp_buf[MAX_EVENT_NAME_LEN];
+>  	unsigned int flags = TPARG_FL_KERNEL;
+>  
+>  	switch (argv[0][0]) {
+> @@ -832,12 +834,15 @@ static int __trace_kprobe_create(int argc, const char *argv[])
+>  	}
+>  
+>  	trace_probe_log_set_index(0);
+> +	ret = TP_ENAME_EMPTY;
+>  	if (event) {
+> -		ret = traceprobe_parse_event_name(&event, &group, buf,
+> +		ret = traceprobe_parse_event_name(&event, &group, grp_buf,
+>  						  event - argv[0]);
+> -		if (ret)
+> +		if (ret < 0)
+>  			goto parse_error;
+> -	} else {
+> +	}
+> +
+> +	if (ret == TP_ENAME_EMPTY || ret == TP_ENAME_GROUP) {
+>  		/* Make a new event name */
+>  		if (symbol)
+>  			snprintf(buf, MAX_EVENT_NAME_LEN, "%c_%s_%ld",
+> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> index 80863c6..7fd50ab 100644
+> --- a/kernel/trace/trace_probe.c
+> +++ b/kernel/trace/trace_probe.c
+> @@ -257,6 +257,9 @@ int traceprobe_parse_event_name(const char **pevent, const char **pgroup,
+>  	}
+>  	len = strlen(event);
+>  	if (len == 0) {
+> +		if (slash)
+> +			return TP_ENAME_GROUP;
+> +
+>  		trace_probe_log_err(offset, NO_EVENT_NAME);
+>  		return -EINVAL;
+>  	} else if (len > MAX_EVENT_NAME_LEN) {
+> @@ -267,7 +270,11 @@ int traceprobe_parse_event_name(const char **pevent, const char **pgroup,
+>  		trace_probe_log_err(offset, BAD_EVENT_NAME);
+>  		return -EINVAL;
+>  	}
+> -	return 0;
+> +
+> +	if (slash)
+> +		return TP_ENAME_GROUP_EVENT;
+> +
+> +	return TP_ENAME_EVENT;
+>  }
+>  
+>  #define PARAM_MAX_STACK (THREAD_SIZE / sizeof(unsigned long))
+> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> index 92cc149..7390669 100644
+> --- a/kernel/trace/trace_probe.h
+> +++ b/kernel/trace/trace_probe.h
+> @@ -364,6 +364,10 @@ extern void traceprobe_free_probe_arg(struct probe_arg *arg);
+>  extern int traceprobe_split_symbol_offset(char *symbol, long *offset);
+>  int traceprobe_parse_event_name(const char **pevent, const char **pgroup,
+>  				char *buf, int offset);
+> +#define TP_ENAME_GROUP_EVENT	0 /* GRP/EVENT format, user defined group and event name */
+> +#define TP_ENAME_EVENT		1 /* EVENT format, user defined event name, default group */
+> +#define TP_ENAME_GROUP		2 /* GRP/ format, user defined group name, auto event name */
+> +#define TP_ENAME_EMPTY		3 /* default group and auto event name */
+>  
+>  enum probe_print_type {
+>  	PROBE_PRINT_NORMAL,
+> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
+> index 9711589..bc32361 100644
+> --- a/kernel/trace/trace_uprobe.c
+> +++ b/kernel/trace/trace_uprobe.c
+> @@ -312,7 +312,8 @@ static bool trace_uprobe_match(const char *system, const char *event,
+>  {
+>  	struct trace_uprobe *tu = to_trace_uprobe(ev);
+>  
+> -	return strcmp(trace_probe_name(&tu->tp), event) == 0 &&
+> +	return (event[0] == '\0' ||
+> +		strcmp(trace_probe_name(&tu->tp), event) == 0) &&
+>  	   (!system || strcmp(trace_probe_group_name(&tu->tp), system) == 0) &&
+>  	   trace_uprobe_match_command_head(tu, argc, argv);
+>  }
+> @@ -532,7 +533,7 @@ static int register_trace_uprobe(struct trace_uprobe *tu)
+>  
+>  /*
+>   * Argument syntax:
+> - *  - Add uprobe: p|r[:[GRP/]EVENT] PATH:OFFSET[%return][(REF)] [FETCHARGS]
+> + *  - Add uprobe: p|r[:[GRP/][EVENT]] PATH:OFFSET[%return][(REF)] [FETCHARGS]
+>   */
+>  static int __trace_uprobe_create(int argc, const char **argv)
+>  {
+> @@ -540,6 +541,7 @@ static int __trace_uprobe_create(int argc, const char **argv)
+>  	const char *event = NULL, *group = UPROBE_EVENT_SYSTEM;
+>  	char *arg, *filename, *rctr, *rctr_end, *tmp;
+>  	char buf[MAX_EVENT_NAME_LEN];
+> +	char grp_buf[MAX_EVENT_NAME_LEN];
+>  	enum probe_print_type ptype;
+>  	struct path path;
+>  	unsigned long offset, ref_ctr_offset;
+> @@ -644,12 +646,15 @@ static int __trace_uprobe_create(int argc, const char **argv)
+>  
+>  	/* setup a probe */
+>  	trace_probe_log_set_index(0);
+> +	ret = TP_ENAME_EMPTY;
+>  	if (event) {
+> -		ret = traceprobe_parse_event_name(&event, &group, buf,
+> +		ret = traceprobe_parse_event_name(&event, &group, grp_buf,
+>  						  event - argv[0]);
+> -		if (ret)
+> +		if (ret < 0)
+>  			goto fail_address_parse;
+> -	} else {
+> +	}
+> +
+> +	if (ret == TP_ENAME_EMPTY || ret == TP_ENAME_GROUP) {
+>  		char *tail;
+>  		char *ptr;
+>  
+> -- 
+> 2.7.4
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

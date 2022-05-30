@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77197538713
+	by mail.lfdr.de (Postfix) with ESMTP id E76CE538714
 	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 20:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242412AbiE3SJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 14:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
+        id S242415AbiE3SKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 14:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241124AbiE3SJx (ORCPT
+        with ESMTP id S242403AbiE3SJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 14:09:53 -0400
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-eopbgr20053.outbound.protection.outlook.com [40.107.2.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5845B8A054;
-        Mon, 30 May 2022 11:09:52 -0700 (PDT)
+        Mon, 30 May 2022 14:09:56 -0400
+Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-eopbgr20062.outbound.protection.outlook.com [40.107.2.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DD6A2073;
+        Mon, 30 May 2022 11:09:55 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fE1JDGoyA+R81ZqSrYz6TXGukYWviSjwUI80g7cPh4VXRJOyny1MxEED6ON5dY+yyDCDQRCsL4DdVK9N/oVyxlQREQnJVRQ4yHH3nw/aABOQtkafUdgCxiQ+v8q4mfB0dCteIPxdTr8BcGZm8qnJaXkn1wD9cFJiHr7yUxPvKJwFpaJgSq0Exde1dzX3i3DYXaLPmItEE9UFwtxqyuEv7O9UmP8OroXHiMu3k5mzbNAxNqTImNU4HmHnRB58YFoodJDRNO0exCvAuff/ay8z/GPVMdIEYGW/ZqKer6Lc908ATgSI0eXdHq0squ1JgVdLteJC6zCAJd/uke8md1BFzQ==
+ b=Y0ojoRHarobOC8kKmB23sQecF908sfjxI9dSaF38DtKnKdck2S5h9gU2EjMLi4NPDMTTe+1OhkADkdl/hl5kpG1lS4zPPyre5nH7IZgMCO49lHzsaKAGjBoRXXYC4Pw/T5d6HjV8mGvKiH1YnfJU5CUl+OYykdHD4mQETNW3bXy0B968oaxGXYKjkj5HW3jVi2ccGM5tpT1e9uAAQdUG+RHDVYB80MP8r0NqhMxKp8Jmpb8Y+MZUuSKYN5N0vh5UvgBmfBd60sMkv/jYcl24AQyN5CY3a3SF3iP5ZEUkeHVftkpK8Cb7uFJiIVLiN0RyGkjwNoLKqpdzTwAgNTiCpw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uRrljajkmCpyW1/NHWx4lNkd+GqOd7VoemtMfuUIMUk=;
- b=WReDSNgJP5L1UCcBYFmL2b3wE8dKMMY2gMoY/RJJMXE1XVQOk9fBin9fhmtZMD90OK9udmYqinshQMf4Fjegbfh0kEJP4chXNqaNN0yZfxsXptJysNhYIr+HGIq/gTLUG7BB1QW6tUj4U5E6Lecy7GwcufkbVPnqfJi4nip8mtaU/WGBVKB/rbt72rV2RZEDe2RpBk7D0/RkaQCNbsi2qLh2z2nH6seC2BJbzFvRvJwJ2Lw3MTRC2XYzAVbgwmHYstA3RfKOk5rJCjGsu8LCCQHJliiD6twMIdIZoPcGVluEw2L6MK2stuwkOzFVXRdKQhe/B+/Cd3neUsTEEJbaXg==
+ bh=4AdYb1+/KC9VIWXxGZKcoMU+hZqZ+SVXJGjcss9YtPo=;
+ b=LUsPFjfk+mlVj93jVTvX35/luiUCUFfCaiCzhVeV1UaaKqSB0wRDUruaZkQO/PAdjYRs/drahbrGDcje8w9LbV4ff8bSHxyISgU+lBWC+MBlA3ois7sQqLFcZRyX/xLyilhnZhR3oFFx6UvBKhmGXeh8uq41OBIm5XrxiCrNW/+ghik2ucorWGhfRx9p1lnVDAz7g8dICKi3bkhCGhAqmncvxHlVITLxnYxTasL4mhCwW6TKSVv6IFTCFI+nYRtEo1KNhWT7kJCAAZ1yD9QMNmhWksQ14NaKJHMDqJ6mfQREn5yKBEOKyFCmsu7NLaH9msU6qHVJ62JjOqI00kYsIw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uRrljajkmCpyW1/NHWx4lNkd+GqOd7VoemtMfuUIMUk=;
- b=Wpd4ug1LR4zzzwnog8dcdH/eiFbUIoEGVfKvAM7n9i4aqVzPO8RBwT2t1Vk4ybUBJsc28AViBpByoreSsyBE69v6EYVv+SiWlP7lhdVnkVvK0tO6BbUoJ6eM2A/RP3QLnCJ9097HVXIiymDZ0I+iI2U2cK5GB0WiFZpGoXXdfK4=
+ bh=4AdYb1+/KC9VIWXxGZKcoMU+hZqZ+SVXJGjcss9YtPo=;
+ b=IhyQ0D0QtMT7qNuQKZgBBqogA4R1UKrb/9P/0edviSI05YyyEV5WPrd/8B98bNyeNpT/Zy5jzsiZAiHkPiar6Y4yHfPwtYgQK0bsSrdxNLnAW6Rk7QxsdZhzKihZ0xyAI7UGO4BiV/NHI4xbogkb0YrSHgZEEqoYmkcwEIM/tuI=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AS1PR04MB9358.eurprd04.prod.outlook.com (2603:10a6:20b:4dc::19)
  by VI1PR04MB4462.eurprd04.prod.outlook.com (2603:10a6:803:65::30) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.19; Mon, 30 May
- 2022 18:09:49 +0000
+ 2022 18:09:53 +0000
 Received: from AS1PR04MB9358.eurprd04.prod.outlook.com
  ([fe80::1076:5516:ef4:7c6d]) by AS1PR04MB9358.eurprd04.prod.outlook.com
  ([fe80::1076:5516:ef4:7c6d%9]) with mapi id 15.20.5293.019; Mon, 30 May 2022
- 18:09:48 +0000
+ 18:09:53 +0000
 From:   Vabhav Sharma <vabhav.sharma@nxp.com>
 To:     horia.geanta@nxp.com, gaurav.jain@nxp.com, pankaj.gupta@nxp.com,
         herbert@gondor.apana.org.au, davem@davemloft.net,
@@ -48,10 +48,12 @@ Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         NXP Linux Team <linux-imx@nxp.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         silvano.dininno@nxp.com, V.Sethi@nxp.com
-Subject: [PATCH 0/3] add entropy delay device tree property                       
-Date:   Mon, 30 May 2022 23:39:21 +0530
-Message-Id: <20220530180924.1792399-1-vabhav.sharma@nxp.com>
+Subject: [PATCH 1/3] dt-bindings: crypto: fsl: add entropy delay property
+Date:   Mon, 30 May 2022 23:39:22 +0530
+Message-Id: <20220530180924.1792399-2-vabhav.sharma@nxp.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220530180924.1792399-1-vabhav.sharma@nxp.com>
+References: <20220530180924.1792399-1-vabhav.sharma@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SI2PR01CA0051.apcprd01.prod.exchangelabs.com
@@ -59,55 +61,55 @@ X-ClientProxiedBy: SI2PR01CA0051.apcprd01.prod.exchangelabs.com
  (2603:10a6:20b:4dc::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 67d532b9-ae5d-4bc5-d6d0-08da4267952e
+X-MS-Office365-Filtering-Correlation-Id: 216f7356-f8fc-43c4-fbc2-08da426797c6
 X-MS-TrafficTypeDiagnostic: VI1PR04MB4462:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR04MB44627D1AA4FBC9FA1F474806F3DD9@VI1PR04MB4462.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <VI1PR04MB4462ABFB0BC27F5079AEBBEAF3DD9@VI1PR04MB4462.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: q7AzUVTkGj3YVe2Tuman87b5NLOiNZ2Prfvjve9Nv55A977RKSIURF9W6O5s8duB0pKhUK9Bb9YkyiEIJzITQYYBR+XDij4Kbgkdzx9ENYTj/K6LRpljm0rDW/gEsNnvvVlQoAeY+cWfy87DmtWB5WMf+vekNPBz96qZ7LekfUk5nw2s9jmHxrQWTAowdTJ1La8vh+sVuiI1QTrmHex+ZmVB/yLyKL0mdkCNhDWF6ImlEHLMDqjIMvYtIOMKKLE6evWFOflTTIjPczEcb2z7R+UNoV1DQbbiqe/iJvzujhYoBAPf9OGia0yMJCez25syKMDYIc/vSuLIbxqaJ9fyONYDNxaV0rPheCdqJUohsauN/nx2aK3osMOaVqXvisDGeDzKB4M6EtoXqWydDCojRq9dmDAJk3FilC8sdG6rsKHUwt9xveUE6C3p3o0GutsRkqdVJl0/+SDIw3L/ZFNkRAY0LrJbuzVz4mRPcYiBPM0pMWVgF9QS7wCpxt7Rm9KV1LlsbZs+cvNzxQqHaFpN1oq5CA9GDOj0BVvF/RwOVJyHzJlcJ0grCF7QRLuLplo/8DJrlVcYefFlK5qFwJ4Baj0f3ON5ydsnRJsyzQIriibtqTmyVHD/Q1EMGQg+YhCEQdoMQiLW2m7ZqQNTVpg48AdEYgGF2AwMwLHiPn25AYAX0qNIe/KPFJgBAf/gjfB+Mfzp4rvrh1U5eeVF4jzKJA==
+X-Microsoft-Antispam-Message-Info: nQZDBHJWzJRzNqWVGNUgIQ/Z7olnkmwwPe59iP6i/EM4XvqeA35wHysbOPwysHtIq2Ie+wT1WSnG6rWHxjAjEpNMm6MxnW+dDRVfoLnZOUDoC9yZH8OZn5oo7yZWUXnY3+VtFy/y/6DSpe6+WhqU1Ptuf8zUMb0FlJ5JOrKhz/sl5yxK4Jx9CNejHcPnoI6AVPMc6tYRcJcITLKsaLym1LlpztwuBU5GMpbynTZxndxZa/sb0SlE448Td0BVSLoGHs4wCeDwjB7KFj3sbIYx1S74NK+R2SETSJWP+VPncHHxQqYBAVm+J8pjv+1ZlJmlA+9Atd6B9SlDVwW3ODUuAhGhSl1eRe7+tKP42/FoV/CvjXgcySQ6naOAYTtK/MDJhsQDUauqqx7CyNo0GRoQ/Oj7lfe/YpPvt55wiqd2RJhp3EMVskS6BiBrkydl3QqtNmuYDM6kS7VBcXHZQORsDLuRDoTqEuDVmDYr0L3rDspCFU7WhdDa6d5rJvk+42aXNqQ7oVGhzKAFV/u7sGxUljYAVfC3dstTBtBYdpAmmn60f4WpZYp5IMfr8JeA1JMOOUlGPhRZIS0FATapxqb/T+X0J/nbGDCn3mScPjNMHPyBaedjh73mbBvB+N7mD9RfJgdVKziyTU419Mezn7++jzqbwri2XqgwohZG5TG3h+CaAJ6GXauRmgBQidZv/HqlsgvfksKGmo1iUV8EQO15dg==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS1PR04MB9358.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(38350700002)(8936002)(36756003)(6486002)(508600001)(44832011)(86362001)(4744005)(5660300002)(38100700002)(4326008)(66946007)(66556008)(66476007)(8676002)(6512007)(26005)(6506007)(6666004)(52116002)(2906002)(55236004)(186003)(2616005)(1076003)(83380400001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LsSroSnJA51P1IhpmchJVStukHkF1RR5fzzTi/Kfurv4+A/sJy6KvSDaepIX?=
- =?us-ascii?Q?rnHgAUibgLaC5Nue4YrqyigryX2p5+f8oBioQdOnZAZ/6IEQXpmDcLd5wi/k?=
- =?us-ascii?Q?4tLoJPE1gM/AEFMouVRh0tcQj9TPur9hWzeChJiqOchRxLBuWhN3XPbLb0MB?=
- =?us-ascii?Q?k3LC7OjX8DpHpOOzByinE2Qa2qGQrAIvN/atwsERl2ef3qszZFpSWyJvg2Xx?=
- =?us-ascii?Q?nW9AaZvW+b7EOWetfDXjO8NH3a1LlL9AK7vZnaNYNiqFL2CA/unMY5FFcqsh?=
- =?us-ascii?Q?2pGBEThwSDv6WSaM5XSURqLj+cV5vmZxytmAOZ6oqsDl03yb8O+6Cc7SnR6P?=
- =?us-ascii?Q?BoWehguJ4PN03rnYIxhS/1ZoEdCYmwbt29OU4zZ4URLc2HoSxDr1bTHpOqC2?=
- =?us-ascii?Q?XebM6SIHFItPDqz2U03pXts1OfHHYju0nYPb5Q2s8Xg7/ebAcCTYl0KYWgPV?=
- =?us-ascii?Q?ogFSvvfTC696j0Cg2kzjX56tI9CSzvFvYhr50OOFJ3qrDFuMF0GRuc9NJwye?=
- =?us-ascii?Q?aF+Qf8EtFEfnyMLzJSqibD/wodpON5+ditBA/ZNopHxoNz10WYdI3IpGOyJ9?=
- =?us-ascii?Q?27LVuUgweFb7CuMkWH0kNIPz0/kOb0i7iT4KF5z2niUDKkt+3zRQcOAD+l4r?=
- =?us-ascii?Q?vmwnH8IfOkr8mKR9CnjPddZLXEkV+i5oRJEAhVb4CeTvMNiGlQNiiOb0rJfW?=
- =?us-ascii?Q?rqnHhlTjIMWwU1BZ7TuXFAPoSZM3U1QA6AXV9XKdeUDAT+dyHTFbDI57Ynof?=
- =?us-ascii?Q?MYna5KvenhD8n/27E7V1cCwL8d62fx7b17Ki63Iu5JotL54X2Bd0wyfw04Kp?=
- =?us-ascii?Q?jjlS+goRdAGuvDGJWDzI+Ykm6bo+U6h5ljQvXemNXnA1uszQsDGyoK5IrNEU?=
- =?us-ascii?Q?oqq9jQKCSoCxAsBpxmQfPOD8EiJNfkpu6x86hqnvP7BqiRdLEY9WAqCNTO1U?=
- =?us-ascii?Q?3L+9Pg0ZN7erFE/BU0y8+ZlQTvUoSyYDE7p4v0Dn67Yybwli2A73TXKqK/p1?=
- =?us-ascii?Q?aoK8wVGsyjQzwDzU89pQ0YUafDh1425qeQm04+o7Tjk4RAnzcvor6v58x8mW?=
- =?us-ascii?Q?OcGPQVYH3eeBBKe2nkLbOwK7TTH+MhRB45W453eGHZf+eLSIiWhMpj90RA5w?=
- =?us-ascii?Q?qqVctpqjf3PR5Oujz4o101rjg3W2U7cX7yPtjtRuRU8ijMs571AyXCsBxv4P?=
- =?us-ascii?Q?UV9Kwh0KhvHbKju0I1+LerixoU1su0W33P9btCKyenTWs7kL0xWsVHkRyQ3Q?=
- =?us-ascii?Q?pL2gWXK3MK03ARzsyl/ZdFKp1tV5LU0PQI1b4Avqq+j+UirT8Y5lewJQnLQ+?=
- =?us-ascii?Q?CjNXJIC9ysl7cdQbHRpLnuiSQjWgHmpxAFojFv+fZtwVvXEIt0A/ghoEXadY?=
- =?us-ascii?Q?mmSghoViBmB14sh7fQw6UPP8ITl8XuJY7i1WZoTdTvr3TdfpPrc9p4nxuP27?=
- =?us-ascii?Q?Crn3Ywxj2DoReeZiQ/uGZN+4G+6uzmkX/iLw5ktR841xCwtEDSGIJhGFOsO7?=
- =?us-ascii?Q?PMzvcRu4OWuOt7LYHoj6FWFGI/kmdrOQ8ESVYPhl5MnPPTBPt2269TrXiFiA?=
- =?us-ascii?Q?ThhCSQSF5S59vCil0pRJQo4Ot2gq3CA5qnPacc7ktLDs4S7Jhk6v51WAoQ1N?=
- =?us-ascii?Q?TEBNeWzznpbrvox2KOZWZy1MZjRHLSSr+aWtajYYTeaZadqfmA48PVYoTAqC?=
- =?us-ascii?Q?fDuZvYjdNU5EQ014N2yjNWdddZKwbEcZhgVQZqbBRzaoJ/IO6jlMmpoB27hv?=
- =?us-ascii?Q?7F1c9gqp/w=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/d/Ia1/dDMXnjzcumII/l/IZuzaUtBZsrsfsmEvXic5aW9vL3Wd+CKIwle/5?=
+ =?us-ascii?Q?ozxJDR5NDuDqosQge5V4iyJ0Uj3v3e1GexP5HRK2p27MjwCU8z5vWGDZN54T?=
+ =?us-ascii?Q?x3gk5nAIjtapLMq4ZPXHKpKhpjzkak+3DeYWVdwZpdyCi9Nlte36yW4LE2wi?=
+ =?us-ascii?Q?m1RfxP1Yw3TKOy0HGkMjUDLLKAu0wkK0XcW7vMPirhSqf5gFD+q76BpmsJIs?=
+ =?us-ascii?Q?0siiGD1jIXwhIDCMBP6kYTnTa7kwjx1cvbc895G/4e/EAh6FmhfFiyrCzYd9?=
+ =?us-ascii?Q?Go5JPJh+bXHAMVucc01z4MLPtqkNWrZNNLdu1yvoYDG2+tcQr6ap7rzNB7oJ?=
+ =?us-ascii?Q?XX/VsXu799K6ITOHWL3Hc0UJ35psbvdKEKl/BxovzdYbYlCfagk2rZCC7RO+?=
+ =?us-ascii?Q?WVJsUsRhHFkW3yHnvGkNEpQAI7mE0ET5Ha80PGfgYnJ1G6PZ0LYD6xLWmD8o?=
+ =?us-ascii?Q?TKWPW8a2q0UAzMugTLkAbdEK2mrpUKjamb8lIQq4jljOwIl33vlScMI+OAXB?=
+ =?us-ascii?Q?ipua/8bSqubmb01lyW3VK4aCcpv4+vA79IXG22CyC0VvKqgP6QXqBU+EYRRQ?=
+ =?us-ascii?Q?WzSmb90JNrduYbY95pwYOfm+hIIXh5tuXwFYrbt9jw/XOVxzuZtXd/qvhWcm?=
+ =?us-ascii?Q?J88Vcr8H781KeV6aKJrEsEJCA4b5gfP9CQw8tjWetKRStdB+zbZMtb7oJ0Ya?=
+ =?us-ascii?Q?ol0IgJZkkswtpH7uftmTG3E+UL0XJDPXwqwcxyL5hruFSfWGyE+ShFM7xdb9?=
+ =?us-ascii?Q?99qD145vAv2tQRveLNFnE7rm81kszpaZsp2LvaA1qHgRC4sbfwSDJgontWAJ?=
+ =?us-ascii?Q?VYsEPk/8oVw31/GENfn90qgv9pRDwk7tA72v+M0qOOfNOnyM6EkLzj1O0IBd?=
+ =?us-ascii?Q?s0mhsk9y5t1AslRnFcGj4ExDxdQMLNA1cqo0Ai+7R5f3hYLm9VidZlpa/rE6?=
+ =?us-ascii?Q?JUgsjrasvByS5Nq+sTdBLiHxkUyiSEcPBUNqB4pabLP6rk3RWysE/BQOVe+J?=
+ =?us-ascii?Q?LR27wZQOeJN8UcgdK/vn5gy+eAXX+FXedHiLJRDAaYQHJ5/h1blPjRC+i5XS?=
+ =?us-ascii?Q?3jWX3Y6/wc8BUnLEcllw3s9UZ8sBSRkmyPCwiuadNM8gpe5E2Lo/6nA3/Rkc?=
+ =?us-ascii?Q?IfpNlQycCB7lMKJEspIQ3c/oZDwUf77jL5idT2kWAjm7OFNBAzNbWA1u13zP?=
+ =?us-ascii?Q?1BTuiI3DoeNJFokMTaoxUp2UTfVThJwtWzukNrrDDj+uOY1x8FOyacVP6tYx?=
+ =?us-ascii?Q?QEsMeWr92m9w+xceOKrPEobxku8eC3pJSAJp/iydXwyAwDmw5pQjh3kKTnTJ?=
+ =?us-ascii?Q?0hDftUR6iF0TNyyxUQs61WYhjkhiQkW33E5HZ11bztwVLKsOzqeLzHNUZUAS?=
+ =?us-ascii?Q?UyjyGXZss4OLlu7Wf9WEIz8dbmxC+ViJOpzyw1hidL3Q3j5HskqJi2EvZf1n?=
+ =?us-ascii?Q?IIckqf+G9r7eyh9TclJQxqyjwWITBZIsgXTPw7p64KGMl7EtAxTG110G3KZY?=
+ =?us-ascii?Q?en19adBygGA6RLeTHCll4e4oSZ9M9Tgg0uXR/tev31fLahnNj9k6SPpxck3h?=
+ =?us-ascii?Q?dazi3B/ezDWCDyH+7MwmiyGS5K95ZIfwhI0bg0Y8BwNv5h9IPkuDTXjpwGTI?=
+ =?us-ascii?Q?aSzhZ+QJKtkavGnf2vE+aBD1T07nb2Bdzid33qvKdZ3eaLaJ1iVOdq5DdZY4?=
+ =?us-ascii?Q?Z7gvYWmCMtm3vGAihcaYfyexMUlyOna7PYXUczmKFWdRAEgQJMxFaD0m/xiY?=
+ =?us-ascii?Q?VaybgqjNXqiCSW27JffAQiPLzy3yGpE=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 67d532b9-ae5d-4bc5-d6d0-08da4267952e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 216f7356-f8fc-43c4-fbc2-08da426797c6
 X-MS-Exchange-CrossTenant-AuthSource: AS1PR04MB9358.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 18:09:48.6252
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 18:09:53.0562
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oZt2CBqkJ23zY6riq87IwDbVjLjsqkpwyVq5+wkNIzbGe2igEDZAhZDms7LNRrnw/TsnejyaJWTsVz4la46g7A==
+X-MS-Exchange-CrossTenant-UserPrincipalName: zTQxR2hKE52sSRj9XURw21rHfHhe9GVRB2Ch5ExE3mgD/CsVTgvvmYc4Ia1a6xI8eYH1YgZiT233KvP4z/nBvA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4462
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -119,25 +121,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add entropy delay device tree property,TRNG self test are run to determine         
-the correct entropy delay.                                                         
-Firmware test is executed with different voltage and temperature to                
-identify the worst case value for entropy delay on imx6sx platform, after          
-adding a margin value(1000),entropy delay should be at least 12000.                
-- Add dt-bindings                                                                  
-- updated imx6sx device tree                                                       
-- modify caam driver to read the property
+Add entropy delay property which defines the length (in system clocks) of
+each Entropy sample taken for TRNG configuration.
 
-Vabhav Sharma (3):
-  dt-bindings: crypto: fsl: add entropy delay property
-  arm: dts: imx6sx: Add entropy delay property
-  crypto: caam: read entropy delay from device tree
+Signed-off-by: Vabhav Sharma <vabhav.sharma@nxp.com>
+Reviewed-by: Horia Geanta <horia.geanta@nxp.com>
+Reviewed-by: Varun Sethi <v.sethi@nxp.com>
+---
+ Documentation/devicetree/bindings/crypto/fsl-sec4.txt | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- .../devicetree/bindings/crypto/fsl-sec4.txt      |  6 ++++++
- arch/arm/boot/dts/imx6sx.dtsi                    |  1 +
- drivers/crypto/caam/ctrl.c                       | 16 ++++++++++++----
- 3 files changed, 19 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/crypto/fsl-sec4.txt b/Documentation/devicetree/bindings/crypto/fsl-sec4.txt
+index 8f359f473ada..1477294eda38 100644
+--- a/Documentation/devicetree/bindings/crypto/fsl-sec4.txt
++++ b/Documentation/devicetree/bindings/crypto/fsl-sec4.txt
+@@ -62,6 +62,12 @@ PROPERTIES
+       Definition: A standard property. Define the 'ERA' of the SEC
+           device.
+ 
++   - entropy-delay
++      Usage: optional
++      Value type: <u32>
++      Definition: A property which specifies the length (in system clocks)
++          of each Entropy sample taken.
++
+    - #address-cells
+        Usage: required
+        Value type: <u32>
 -- 
 2.25.1
 

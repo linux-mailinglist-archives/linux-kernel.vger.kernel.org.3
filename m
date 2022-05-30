@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454455388B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 23:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643FF5388B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 23:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242191AbiE3VyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 17:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
+        id S242943AbiE3VyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 17:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240085AbiE3VyJ (ORCPT
+        with ESMTP id S241037AbiE3VyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 17:54:09 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1903A53B6F
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 14:54:08 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-e656032735so15956988fac.0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 14:54:07 -0700 (PDT)
+        Mon, 30 May 2022 17:54:11 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD23553B65
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 14:54:10 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id k187so11208957oif.1
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 14:54:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4p32GEuTMGI9oMmOtqkzKTHBHF2Kr46ihYOqGaUec2g=;
-        b=pplyD/50N3pQ1Kic5z4t4Mn9L9nMQ98OX694u+DtyQvfi0DPmogGQhaGVvIuYc8TEE
-         xJLU87pmcc/K1V9daiWT4T2J2IRm5gVkWXxrG3wc8WzdFK2fwOD8p8POfJ29vQKrL5II
-         p4tNTlZiEx8VaZwk25ABmB7MiRpR7wkENOAE8VrwF69A8g1eT/peUc3432Mu1ZMyFxhT
-         RrZeQVgcpIn34F8RuX1omiflD9NnrnOwWYkqxpGlcihlGVB5Kr7ql05FQ7c6K5dbSn7P
-         E+jTDndvPTIsrMVCFJfHHc9DSxgd2vt8p/pDZs3FyQZEIxjV8tJmBkJv5HCaDGpjBRsG
-         KE6A==
+        bh=5UQuwLpVA4OjRgP15iwD9HH2xQXEfpjnSzFpNwRNrhE=;
+        b=VsuQfNj3Iv9yVAXonlTOc5/hmvE/qStqm02fRgMbHn1rEflpZZbn4HwzqMByiyse+s
+         mQh7mtRna5sdhTRJPKe+msYrJTxx8W5/wiWm364c+i0HuNtU++xc7z8AjchbJmP03AAf
+         kMfgB/irlFkGe/tN1/SfGDbkwxeUztw9WRpLZc+woVUi0LXtwD3ecJzrYUn1IdIoGV0x
+         z1qvCsiIwPkIi1h8d+5vX9NB1/ID93TRKWC6hm30Muqx8cxRvOqNtBOFP8m5UIQnGyJr
+         yaUe7Vgy7yqx+We8OxYZUwz9FDw0zohflcQcQkwG5gV19foH7At2Hz9EYkOzC1ZTO1ir
+         rMOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4p32GEuTMGI9oMmOtqkzKTHBHF2Kr46ihYOqGaUec2g=;
-        b=t2bQUBz/5R0fPv+2OIb4uIqV38GOsVtchkRZRoBajvar+jGh/KWuvdRPGN34biZGPe
-         flAv8G3hsF3Q61iAaLr5GMOltOd5fgxe3X153TgJhCnGGfOxL/Xhia6OEA3admvt5MxG
-         gA18mMvsNs18Ag9O5X2POvxozAFUdc49sH6Jo+myIh08wRjkpuzenH4ZupiVBz/524x/
-         y45y1JwIS4X5nLdJbYUIdtTyBopY0zYjDdGD2A998XZaKcB7qlFi5+/bnq8snvBK0lyo
-         9hyTzhX7mNAf5+T+0Ih9HW5qRwStmiflVeWn96Z0A8TwAh7yDzY/uEB7uFJgLcmdzY7O
-         9qRg==
-X-Gm-Message-State: AOAM531bdvE7KrZugdtLVLyHzG3Cnd9AyMbfPpeSc0UtuBtaV0ipe0Bp
-        IXWlOtUAfNjmgyfHgUndacJjdQ==
-X-Google-Smtp-Source: ABdhPJzu+B/bQqocsmErKvFXIvYU6Z8ETES5x0chWa2J28udLBMQFij8gvGlclizW30qqhvSo0fYwA==
-X-Received: by 2002:a05:6870:479f:b0:f2:bdee:1461 with SMTP id c31-20020a056870479f00b000f2bdee1461mr11313814oaq.299.1653947647211;
-        Mon, 30 May 2022 14:54:07 -0700 (PDT)
+        bh=5UQuwLpVA4OjRgP15iwD9HH2xQXEfpjnSzFpNwRNrhE=;
+        b=KBkuGp9oYPy6Y6QyM8EpMWiAXBEtjgwO974Hmzay50HCJxNhZmmcOkwZTL5Yd0P+fR
+         IkJUWJ4s1YW6QIMbV5vzbOIKnlGg8RwLXck3io+pQ3QDO+sw/wJ0jtG3K/B2nhJlB6bR
+         UibNkJvG3sXg/BtpEMHJDGo/iJxT94+88a3hc/e0jDzkyA8wNwe4bJWdNkXdC6Pq9Rcd
+         9PwuCh6S+EEsjFOF97yHQdO64chUyQgUJpapEMWFz8JsYMPFO2LFHRSUSLGl3aewDTeB
+         pZ+UwdWnJ+ZpddlNqk7GJQPN8HyjxQGsFrNiHnKo25R/mlTJTcq+0luKr8E2tuxzgJOE
+         yHuw==
+X-Gm-Message-State: AOAM532y1CFWrmMPgQ90rIH9dSiYh5UHT5VUXnb7d8NuF1+CmQHpqJrm
+        PWyRhOnv1L+lTZ0C95DwQts1hQ==
+X-Google-Smtp-Source: ABdhPJzU0GK7Q5Um92i4VssPulboE+k40OsU8k+TlEwJ6UbefSNs+2F27bQ8+QOx6vFC33NPiw/Esg==
+X-Received: by 2002:a05:6808:2127:b0:32b:7dff:4f58 with SMTP id r39-20020a056808212700b0032b7dff4f58mr10813992oiw.124.1653947650136;
+        Mon, 30 May 2022 14:54:10 -0700 (PDT)
 Received: from alago.cortijodelrio.net ([189.219.75.147])
-        by smtp.googlemail.com with ESMTPSA id fq11-20020a0568710b0b00b000f23989c532sm4230425oab.8.2022.05.30.14.54.06
+        by smtp.googlemail.com with ESMTPSA id fq11-20020a0568710b0b00b000f23989c532sm4230425oab.8.2022.05.30.14.54.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 14:54:06 -0700 (PDT)
+        Mon, 30 May 2022 14:54:09 -0700 (PDT)
 From:   =?UTF-8?q?Daniel=20D=C3=ADaz?= <daniel.diaz@linaro.org>
 To:     gregkh@linuxfoundation.org, sashal@kernel.org,
         stable@vger.kernel.org
-Cc:     Ben Hutchings <ben@decadent.org.uk>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-devel@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
         =?UTF-8?q?Daniel=20D=C3=ADaz?= <daniel.diaz@linaro.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 4.19 1/3] libtraceevent: Fix build with binutils 2.35
-Date:   Mon, 30 May 2022 16:53:23 -0500
-Message-Id: <20220530215325.921847-2-daniel.diaz@linaro.org>
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM)
+Subject: [PATCH 4.19 2/3] perf bench: Share some global variables to fix build with gcc 10
+Date:   Mon, 30 May 2022 16:53:24 -0500
+Message-Id: <20220530215325.921847-3-daniel.diaz@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220530215325.921847-1-daniel.diaz@linaro.org>
 References: <20220530215325.921847-1-daniel.diaz@linaro.org>
@@ -69,7 +76,7 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,39 +84,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ben Hutchings <ben@decadent.org.uk>
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-[ Upstream commit 39efdd94e314336f4acbac4c07e0f37bdc3bef71 ]
+[ Upstream commit e4d9b04b973b2dbce7b42af95ea70d07da1c936d ]
 
-In binutils 2.35, 'nm -D' changed to show symbol versions along with
-symbol names, with the usual @@ separator.  When generating
-libtraceevent-dynamic-list we need just the names, so strip off the
-version suffix if present.
+Noticed with gcc 10 (fedora rawhide) that those variables were not being
+declared as static, so end up with:
 
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-Tested-by: Salvatore Bonaccorso <carnil@debian.org>
-Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-trace-devel@vger.kernel.org
-Cc: stable@vger.kernel.org
+  ld: /tmp/build/perf/bench/epoll-wait.o:/git/perf/tools/perf/bench/epoll-wait.c:93: multiple definition of `end'; /tmp/build/perf/bench/futex-hash.o:/git/perf/tools/perf/bench/futex-hash.c:40: first defined here
+  ld: /tmp/build/perf/bench/epoll-wait.o:/git/perf/tools/perf/bench/epoll-wait.c:93: multiple definition of `start'; /tmp/build/perf/bench/futex-hash.o:/git/perf/tools/perf/bench/futex-hash.c:40: first defined here
+  ld: /tmp/build/perf/bench/epoll-wait.o:/git/perf/tools/perf/bench/epoll-wait.c:93: multiple definition of `runtime'; /tmp/build/perf/bench/futex-hash.o:/git/perf/tools/perf/bench/futex-hash.c:40: first defined here
+  ld: /tmp/build/perf/bench/epoll-ctl.o:/git/perf/tools/perf/bench/epoll-ctl.c:38: multiple definition of `end'; /tmp/build/perf/bench/futex-hash.o:/git/perf/tools/perf/bench/futex-hash.c:40: first defined here
+  ld: /tmp/build/perf/bench/epoll-ctl.o:/git/perf/tools/perf/bench/epoll-ctl.c:38: multiple definition of `start'; /tmp/build/perf/bench/futex-hash.o:/git/perf/tools/perf/bench/futex-hash.c:40: first defined here
+  ld: /tmp/build/perf/bench/epoll-ctl.o:/git/perf/tools/perf/bench/epoll-ctl.c:38: multiple definition of `runtime'; /tmp/build/perf/bench/futex-hash.o:/git/perf/tools/perf/bench/futex-hash.c:40: first defined here
+  make[4]: *** [/git/perf/tools/build/Makefile.build:145: /tmp/build/perf/bench/perf-in.o] Error 1
+
+Prefix those with bench__ and add them to bench/bench.h, so that we can
+share those on the tools needing to access those variables from signal
+handlers.
+
+Acked-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Link: http://lore.kernel.org/lkml/20200303155811.GD13702@kernel.org
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Daniel Díaz <daniel.diaz@linaro.org>
 ---
- tools/lib/traceevent/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/bench/bench.h         |  4 ++++
+ tools/perf/bench/futex-hash.c    | 12 ++++++------
+ tools/perf/bench/futex-lock-pi.c | 11 +++++------
+ 3 files changed, 15 insertions(+), 12 deletions(-)
 
-diff --git a/tools/lib/traceevent/Makefile b/tools/lib/traceevent/Makefile
-index 05f8a0f27121a..b7f7e4e541d7b 100644
---- a/tools/lib/traceevent/Makefile
-+++ b/tools/lib/traceevent/Makefile
-@@ -263,7 +263,7 @@ define do_generate_dynamic_list_file
- 	xargs echo "U w W" | tr 'w ' 'W\n' | sort -u | xargs echo`;\
- 	if [ "$$symbol_type" = "U W" ];then				\
- 		(echo '{';						\
--		$(NM) -u -D $1 | awk 'NF>1 {print "\t"$$2";"}' | sort -u;\
-+		$(NM) -u -D $1 | awk 'NF>1 {sub("@.*", "", $$2); print "\t"$$2";"}' | sort -u;\
- 		echo '};';						\
- 		) > $2;							\
- 	else								\
+diff --git a/tools/perf/bench/bench.h b/tools/perf/bench/bench.h
+index 6c9fcd757f310..b3e418afc21a2 100644
+--- a/tools/perf/bench/bench.h
++++ b/tools/perf/bench/bench.h
+@@ -2,6 +2,10 @@
+ #ifndef BENCH_H
+ #define BENCH_H
+ 
++#include <sys/time.h>
++
++extern struct timeval bench__start, bench__end, bench__runtime;
++
+ /*
+  * The madvise transparent hugepage constants were added in glibc
+  * 2.13. For compatibility with older versions of glibc, define these
+diff --git a/tools/perf/bench/futex-hash.c b/tools/perf/bench/futex-hash.c
+index 9aa3a674829b3..ee9b280651093 100644
+--- a/tools/perf/bench/futex-hash.c
++++ b/tools/perf/bench/futex-hash.c
+@@ -35,7 +35,7 @@ static unsigned int nfutexes = 1024;
+ static bool fshared = false, done = false, silent = false;
+ static int futex_flag = 0;
+ 
+-struct timeval start, end, runtime;
++struct timeval bench__start, bench__end, bench__runtime;
+ static pthread_mutex_t thread_lock;
+ static unsigned int threads_starting;
+ static struct stats throughput_stats;
+@@ -101,8 +101,8 @@ static void toggle_done(int sig __maybe_unused,
+ {
+ 	/* inform all threads that we're done for the day */
+ 	done = true;
+-	gettimeofday(&end, NULL);
+-	timersub(&end, &start, &runtime);
++	gettimeofday(&bench__end, NULL);
++	timersub(&bench__end, &bench__start, &bench__runtime);
+ }
+ 
+ static void print_summary(void)
+@@ -112,7 +112,7 @@ static void print_summary(void)
+ 
+ 	printf("%sAveraged %ld operations/sec (+- %.2f%%), total secs = %d\n",
+ 	       !silent ? "\n" : "", avg, rel_stddev_stats(stddev, avg),
+-	       (int) runtime.tv_sec);
++	       (int)bench__runtime.tv_sec);
+ }
+ 
+ int bench_futex_hash(int argc, const char **argv)
+@@ -159,7 +159,7 @@ int bench_futex_hash(int argc, const char **argv)
+ 
+ 	threads_starting = nthreads;
+ 	pthread_attr_init(&thread_attr);
+-	gettimeofday(&start, NULL);
++	gettimeofday(&bench__start, NULL);
+ 	for (i = 0; i < nthreads; i++) {
+ 		worker[i].tid = i;
+ 		worker[i].futex = calloc(nfutexes, sizeof(*worker[i].futex));
+@@ -202,7 +202,7 @@ int bench_futex_hash(int argc, const char **argv)
+ 	pthread_mutex_destroy(&thread_lock);
+ 
+ 	for (i = 0; i < nthreads; i++) {
+-		unsigned long t = worker[i].ops/runtime.tv_sec;
++		unsigned long t = worker[i].ops / bench__runtime.tv_sec;
+ 		update_stats(&throughput_stats, t);
+ 		if (!silent) {
+ 			if (nfutexes == 1)
+diff --git a/tools/perf/bench/futex-lock-pi.c b/tools/perf/bench/futex-lock-pi.c
+index 8e9c4753e3040..017609ae35906 100644
+--- a/tools/perf/bench/futex-lock-pi.c
++++ b/tools/perf/bench/futex-lock-pi.c
+@@ -35,7 +35,6 @@ static bool silent = false, multi = false;
+ static bool done = false, fshared = false;
+ static unsigned int nthreads = 0;
+ static int futex_flag = 0;
+-struct timeval start, end, runtime;
+ static pthread_mutex_t thread_lock;
+ static unsigned int threads_starting;
+ static struct stats throughput_stats;
+@@ -62,7 +61,7 @@ static void print_summary(void)
+ 
+ 	printf("%sAveraged %ld operations/sec (+- %.2f%%), total secs = %d\n",
+ 	       !silent ? "\n" : "", avg, rel_stddev_stats(stddev, avg),
+-	       (int) runtime.tv_sec);
++	       (int)bench__runtime.tv_sec);
+ }
+ 
+ static void toggle_done(int sig __maybe_unused,
+@@ -71,8 +70,8 @@ static void toggle_done(int sig __maybe_unused,
+ {
+ 	/* inform all threads that we're done for the day */
+ 	done = true;
+-	gettimeofday(&end, NULL);
+-	timersub(&end, &start, &runtime);
++	gettimeofday(&bench__end, NULL);
++	timersub(&bench__end, &bench__start, &bench__runtime);
+ }
+ 
+ static void *workerfn(void *arg)
+@@ -183,7 +182,7 @@ int bench_futex_lock_pi(int argc, const char **argv)
+ 
+ 	threads_starting = nthreads;
+ 	pthread_attr_init(&thread_attr);
+-	gettimeofday(&start, NULL);
++	gettimeofday(&bench__start, NULL);
+ 
+ 	create_threads(worker, thread_attr, cpu);
+ 	pthread_attr_destroy(&thread_attr);
+@@ -209,7 +208,7 @@ int bench_futex_lock_pi(int argc, const char **argv)
+ 	pthread_mutex_destroy(&thread_lock);
+ 
+ 	for (i = 0; i < nthreads; i++) {
+-		unsigned long t = worker[i].ops/runtime.tv_sec;
++		unsigned long t = worker[i].ops / bench__runtime.tv_sec;
+ 
+ 		update_stats(&throughput_stats, t);
+ 		if (!silent)
 -- 
 2.32.0
 

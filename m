@@ -2,194 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29355386E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 19:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6055386E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 19:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238621AbiE3Ru2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 13:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
+        id S240198AbiE3RvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 13:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbiE3RuZ (ORCPT
+        with ESMTP id S238710AbiE3Ru4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 13:50:25 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F009532FB;
-        Mon, 30 May 2022 10:50:24 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 94CB55C0076;
-        Mon, 30 May 2022 13:50:23 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 30 May 2022 13:50:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1653933023; x=
-        1654019423; bh=HYNcAzcvwA3jPOCMpvHYfWi0Skxi5GTfqaUV0qrK9gg=; b=S
-        pth8jQdSuwO44sgJMv3Y/gIHQTpHZs7u2XzstVORSqkekW5iLTQthWKeXk4kdDGs
-        mzhaH4W/e6bDoH9yiD3hQiUzRhquJZXpWXJYU9jdwWJgUykV7GJg/rbfB1pTKVC0
-        4pXA4P50DLAHQX35VMnzfZn+4RNmTZ7fXz6EqM6AMl8e+EJ+e/Pr3JbPfivGwVc9
-        AesmDKjQw+gSd9z4g60SEyyoSD6eeoS+UWFTwF3rnsnlLJMt7Wpti04xq9X6eRCD
-        XH2XuDRuPeUtBMT0LhiX1zPNVPwMl6Bbvw2mNo9KAHB/610qmgwLenAAocAMmy84
-        UqFyzSzZaViuKAG/FNQxw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1653933023; x=1654019423; bh=HYNcAzcvwA3jPOCMpvHYfWi0Skxi
-        5GTfqaUV0qrK9gg=; b=motbhBUaedsrcp8VBHcEXOM7zJtYgWkWTCLIGce60Pex
-        NgePkc1lkZcnd8qB6TuXgfKQ5CabyBuilZzHTNKlIq1QLOhw7ORU3dufS8wBOlhr
-        BI37skxdCWZ9uBQ/gRoJ7w+TbWm40CZur8ERsdUwVY1tpTpDJbKpbuan7y2f9FpL
-        ireLzXAOVOsQf2WTIRxEhimz0lce8mUy31JZsi70fjXJ+oYmkXKR2Xontut+FvZq
-        tSz+SQKT6TVHhAdRKAfkIq22eqHXJ8wS7MNip4IehFsMdCeW+yHv4CZ+zDUUEdB3
-        +vF4YhbvgMOIRhaicG61Myv3HXcMgnl8wyaorZ3eCg==
-X-ME-Sender: <xms:3gOVYjlzBz9YZzJlJESVixC8NY-hyK3T07xFExjhQImxsTTMzhEfhw>
-    <xme:3gOVYm1hM3aNtnOmeTx3Ci_YsQBaJxlFYJcqQ68wfslKIHIKv418-N0-uxud69jc7
-    L5hOPWxrSDuHeA>
-X-ME-Received: <xmr:3gOVYprBRMtMGMtQMgnDi_pasorwka3jsQij_cU-jQPdI6gs1IYzis_PfyY1>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeeigdduudefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepuedthefhtddvffefjeejvdehvdej
-    ieehffehkeekheegleeuleevleduteehteetnecuffhomhgrihhnpehgihhthhhusgdrtg
-    homhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegu
-    vghmihesihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
-X-ME-Proxy: <xmx:3gOVYrk2Ep01XP_9ABWxv3Ys7wNAAkhn6JbFi1O6Bvtz26sjqu4UCw>
-    <xmx:3gOVYh1Hu1pt2OH1pYuVL53UyLLlsc-SZxoxz2uzgzXjy6HdMfFt8w>
-    <xmx:3gOVYqvxQxktpotj1P-djgSAvb5yVaVSw4C99Dh_SQsiDTPQlF1xQQ>
-    <xmx:3wOVYp86AkeK_yh4n0H2p9_8v2Xh4hwLML3ofnlECYn-9y3pY2BwcA>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 30 May 2022 13:50:22 -0400 (EDT)
-Date:   Mon, 30 May 2022 13:50:18 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Jennifer Herbert <jennifer.herbert@citrix.com>,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] xen/gntdev: Avoid blocking in unmap_grant_pages()
-Message-ID: <YpUD3PnPoGj84jMq@itl-email>
-References: <20220525184153.6059-1-demi@invisiblethingslab.com>
- <00c0b10c-a35d-6729-5b4f-424febd9d5a3@suse.com>
+        Mon, 30 May 2022 13:50:56 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8A26353A
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 10:50:54 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id e66so10683398pgc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 10:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5FL+pSqHkuYAmD4lldd9M4+JHQIM8FUTF/ahgwVLrFw=;
+        b=g9wPBpD7I/Sq7GAtJVH9D8y2+G/UqPAY6mDRRCT4plZG/sKf6xaZeFOj/tWTAlaRBi
+         CFFbs7TofJfVFCQZTzcmOXi6bOWD+KwPelWpLjbbZpfoX4gmo5qtRIAfCtD8l9uEylIq
+         p8YrIg0SMIKVCOGMKaMU4GR7OOVvFVWFB6bsGOhMMmJSfhlLFYUm1naNx/RuWjtDz5l/
+         Pxe426Eng2DkSOEB52Xml61WxHwynfyYcHxdwcCI3r+Vu/vj5jhA4U8xMyWaMhl6AekX
+         TI/ZV+hqez53umb3aZf0uVl8qExNXizm/BpaZKFeU25jFvh5g11HteYH9Nzx3I6ANBFD
+         68wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5FL+pSqHkuYAmD4lldd9M4+JHQIM8FUTF/ahgwVLrFw=;
+        b=R15jOJT2aomnAdvaQ1D44L8K/E0m3lrpdobPCGMB0p+m04ZpDLCo6xhBA2hg6c5NeH
+         U4RCJPv20pqVnOG35w8jOZRUgGEy8G0cqK8C5E4yrhi3YFYsi8CHGGBT4UIc1+HbUA17
+         IX4z2ezVAV4YNX6a5Ejlhpsyou/CWn5Uco2IAy1XbMHG7kzu1XxAdbnajZeSsI7BOLNA
+         0ZcqrYyUbG2M8yeDDINIU/HX6Zm+IOKEWV9VR/YGYfDaBNEX3Q5Wd2Ye2+NhrV28EIQd
+         vTkW43WGhk+7d9u/0FflbaL2HRh15eQR5q//NA6Lnxbvphg4FPguARgIp4QEli7AlH9Y
+         EgmA==
+X-Gm-Message-State: AOAM530/AVHP9xPwDJwA65Of4PiAW4mktaVh+r6jhaTpSG6hzFxRytl2
+        owG/P7DemCer5TjZZmqWguI/Og==
+X-Google-Smtp-Source: ABdhPJxZ5AEgKSi2efiKwS8umeMKozakAcySTRs3eD+rAY5c/sxUpmNAgsdySZOs7N3WExMmmqiemQ==
+X-Received: by 2002:a63:1661:0:b0:3fa:5855:989a with SMTP id 33-20020a631661000000b003fa5855989amr33767711pgw.451.1653933054407;
+        Mon, 30 May 2022 10:50:54 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id f14-20020a17090a4a8e00b001e32a7f876dsm462634pjh.16.2022.05.30.10.50.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 10:50:53 -0700 (PDT)
+Date:   Mon, 30 May 2022 11:50:51 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     bjorn.andersson@linaro.org, arnaud.pouliquen@foss.st.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peng.fan@nxp.com
+Subject: Re: [PATCH V4 2/2] remoteproc: support attach recovery after rproc
+ crash
+Message-ID: <20220530175051.GB482330@p14s>
+References: <20220323034405.976643-1-peng.fan@oss.nxp.com>
+ <20220323034405.976643-3-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+4H1oyCNBJ2i7PTh"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <00c0b10c-a35d-6729-5b4f-424febd9d5a3@suse.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220323034405.976643-3-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 23, 2022 at 11:44:05AM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Current logic only support main processor to stop/start the remote
+> processor after rproc crash. However to SoC, such as i.MX8QM/QXP, the
+> remote processor could do attach recovery after crash and trigger watchdog
+> reboot. It does not need main processor to load image, or stop/start M4
+> core.
+> 
+> Introduce two functions: rproc_attach_recovery, rproc_firmware_recovery
+> for the two cases. Firmware recovery is as before, let main processor to
+> help recovery, while attach recovery is recover itself withou help.
+> To attach recovery, we only do detach and attach.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/remoteproc/remoteproc_core.c | 67 ++++++++++++++++++++--------
+>  1 file changed, 48 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index c510125769b9..ad04515750ef 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -1887,6 +1887,50 @@ static int __rproc_detach(struct rproc *rproc)
+>  	return 0;
+>  }
+>  
+> +static int rproc_attach_recovery(struct rproc *rproc)
+> +{
+> +	int ret;
+> +
+> +	mutex_unlock(&rproc->lock);
+> +	ret = rproc_detach(rproc);
+> +	mutex_lock(&rproc->lock);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (atomic_inc_return(&rproc->power) > 1)
+> +		return 0;
+> +
+> +	return rproc_attach(rproc);
 
---+4H1oyCNBJ2i7PTh
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 30 May 2022 13:50:18 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Juergen Gross <jgross@suse.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Jennifer Herbert <jennifer.herbert@citrix.com>,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
-Cc: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] xen/gntdev: Avoid blocking in unmap_grant_pages()
+The correct functions to call here are __rproc_detach() and __rproc_attach() -
+they are similar to rproc_stop() and rproc_start() without the parts related to
+the firmware image.
 
-On Mon, May 30, 2022 at 08:41:20AM +0200, Juergen Gross wrote:
-> On 25.05.22 20:41, Demi Marie Obenour wrote:
-> > unmap_grant_pages() currently waits for the pages to no longer be used.
-> > In https://github.com/QubesOS/qubes-issues/issues/7481, this lead to a
-> > deadlock against i915: i915 was waiting for gntdev's MMU notifier to
-> > finish, while gntdev was waiting for i915 to free its pages.  I also
-> > believe this is responsible for various deadlocks I have experienced in
-> > the past.
-> >=20
-> > Avoid these problems by making unmap_grant_pages async.  This requires
-> > making it return void, as any errors will not be available when the
-> > function returns.  Fortunately, the only use of the return value is a
-> > WARN_ON(), which can be replaced by a WARN_ON when the error is
-> > detected.  Additionally, a failed call will not prevent further calls
-> > from being made, but this is harmless.
-> >=20
-> > Because unmap_grant_pages is now async, the grant handle will be sent to
-> > INVALID_GRANT_HANDLE too late to prevent multiple unmaps of the same
-> > handle.  Instead, a separate bool array is allocated for this purpose.
-> > This wastes memory, but stuffing this information in padding bytes is
-> > too fragile.  Furthermore, it is necessary to grab a reference to the
-> > map before making the asynchronous call, and release the reference when
-> > the call returns.
->=20
-> I think there is even more syncing needed:
->=20
-> - In the error path of gntdev_mmap() unmap_grant_pages() is being called =
-and
->   it is assumed, map is available afterwards again. This should be rather=
- easy
->   to avoid by adding a counter of active mappings to struct gntdev_grant_=
-map
->   (number of pages not being unmapped yet). In case this counter is not z=
-ero
->   gntdev_mmap() should bail out early.
+And you should not be dealing with rproc->power at this stage, which leaves the
+remote processor's state machine in the same way as the start/stop scenario.  
 
-Is it possible to just unmap the pages directly here?  I don=E2=80=99t think
-there can be any other users of these pages yet.  Userspace could race
-against the unmap and cause a page fault, but that should just cause
-userspace to get SIGSEGV or SIGBUS.  In any case this code can use the
-sync version; if it gets blocked that=E2=80=99s userspace=E2=80=99s problem.
+That being said, now that we actually count how many instances are requesting
+the remote processor to be powered, we might have a problem with rproc->power when
+the system is recovered after a crash.  But we can address that when we get
+there.
 
-> - gntdev_put_map() is calling unmap_grant_pages() in case the refcount has
->   dropped to zero. This call can set the refcount to 1 again, so there is
->   another delay needed before freeing map. I think unmap_grant_pages() sh=
-ould
->   return in case the count of mapped pages is zero (see above), thus avoi=
-ding
->   to increment the refcount of map if nothing is to be done. This would e=
-nable
->   gntdev_put_map() to just return after the call of unmap_grant_pages() i=
-n case
->   the refcount has been incremented again.
+Thanks,
+Mathieu
 
-I will change this in v3, but I do wonder if gntdev is using the wrong
-MMU notifier callback.  It seems that the appropriate callback is
-actually release(): if I understand correctly, release() is called
-precisely when the refcount on the physical page is about to drop to 0,
-and that is what we want.
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
-
---+4H1oyCNBJ2i7PTh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmKVA9wACgkQsoi1X/+c
-IsF9ZBAAikctLY/AMtbOiBJtLzm10XD7eKKXsULHrVKCvoqXCVKzLGw58uboGyGB
-hrLD5nM0b5fkiOdvsHuau4hm72mJIX7m/WBrtpUStMeipOUl5dZWNuz5NENNGnsx
-y5zafYGmc3VSx+bAv7+K8xb8GNJCX9HkNXT4frPrnYPSC4b/SzFpdxQyCQhreyyx
-4w8FYVcSC0piMYJ5qY1JfZUIukFLGoCP0ckmn/lsjeYkTCG1FdxMYUdgkD7bLowr
-a34wI8z5a38UKADYZMdCdKuDR7zVvdj3hMrmuRsQygRhnYkzTCpWT8/3tkM8+cxP
-VnriSTIWNI8mnfbub1po8OmQJ3A1oIEYItiONFxhHXUmRxNwPkNwWpT3KdX6vk63
-xmA1rUvuBfmVFlBQ3Oa2WJWUhknSxfcHA+g5/MDqKzoA5gv7h//O1lIAEwmgLXkb
-EHXPzI5KJmA/MyuMaILpCmJP6dI2OoWHv9fn+b+piG0Jlc+VUOBAB/yyXK3hKjLp
-C0sIJ4LIdrCTDnCr9enl69IuVH+yoIicflGuXmB7lWn5VO8rTgRz/RVpzdWNvVdM
-YJp5gvWl6JM/fwFcPBGVZmQArGubWKEaQ3LO1YOadIcOBuogOpCipsOBaYUPQ/Yc
-9yI54267qpe32hXoC5kiVVUSassMgvi70p142cl7csLbhNRbJ8A=
-=PRoO
------END PGP SIGNATURE-----
-
---+4H1oyCNBJ2i7PTh--
+> +}
+> +
+> +static int rproc_firmware_recovery(struct rproc *rproc)
+> +{
+> +	const struct firmware *firmware_p;
+> +	struct device *dev = &rproc->dev;
+> +	int ret;
+> +
+> +	ret = rproc_stop(rproc, true);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* generate coredump */
+> +	rproc->ops->coredump(rproc);
+> +
+> +	/* load firmware */
+> +	ret = request_firmware(&firmware_p, rproc->firmware, dev);
+> +	if (ret < 0) {
+> +		dev_err(dev, "request_firmware failed: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* boot the remote processor up again */
+> +	ret = rproc_start(rproc, firmware_p);
+> +
+> +	release_firmware(firmware_p);
+> +
+> +	return ret;
+> +}
+> +
+>  /**
+>   * rproc_trigger_recovery() - recover a remoteproc
+>   * @rproc: the remote processor
+> @@ -1901,7 +1945,6 @@ static int __rproc_detach(struct rproc *rproc)
+>   */
+>  int rproc_trigger_recovery(struct rproc *rproc)
+>  {
+> -	const struct firmware *firmware_p;
+>  	struct device *dev = &rproc->dev;
+>  	int ret;
+>  
+> @@ -1915,24 +1958,10 @@ int rproc_trigger_recovery(struct rproc *rproc)
+>  
+>  	dev_err(dev, "recovering %s\n", rproc->name);
+>  
+> -	ret = rproc_stop(rproc, true);
+> -	if (ret)
+> -		goto unlock_mutex;
+> -
+> -	/* generate coredump */
+> -	rproc->ops->coredump(rproc);
+> -
+> -	/* load firmware */
+> -	ret = request_firmware(&firmware_p, rproc->firmware, dev);
+> -	if (ret < 0) {
+> -		dev_err(dev, "request_firmware failed: %d\n", ret);
+> -		goto unlock_mutex;
+> -	}
+> -
+> -	/* boot the remote processor up again */
+> -	ret = rproc_start(rproc, firmware_p);
+> -
+> -	release_firmware(firmware_p);
+> +	if (rproc_has_feature(rproc, RPROC_FEAT_ATTACH_RECOVERY))
+> +		ret = rproc_attach_recovery(rproc);
+> +	else
+> +		ret = rproc_firmware_recovery(rproc);
+>  
+>  unlock_mutex:
+>  	mutex_unlock(&rproc->lock);
+> -- 
+> 2.25.1
+> 

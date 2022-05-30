@@ -2,88 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E6C537A40
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB439537A41
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236004AbiE3L6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 07:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
+        id S236015AbiE3L6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 07:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234481AbiE3L6A (ORCPT
+        with ESMTP id S236012AbiE3L6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 07:58:00 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FA57CB02;
-        Mon, 30 May 2022 04:57:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653911879; x=1685447879;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=24EPdI/dz5vGA6WlWmXpgkj9d8noMoEjT0TMJTdk5CE=;
-  b=lm4li/LRmG+8GYI3G3hN7HgxNrvUM3mzkJyJUsP0r+tIdT2g134updjK
-   pXO+JbxIRNdWCvXqu9mHWMLHcjMyE50w29q14/VJ5QhT+T4eP5prSumKA
-   VH7ElOq9m4UQj3b/mqtKUdSgHTVuLVb1nOrJIyv/G9wW7arEZkLKAjjHh
-   dHOWZpynPK86iPNoiDJ1dVkkOp1IP58g9oG/WvzxtNT9vlyEtp4D0lOND
-   +Fs0ZQ9HmUIEmdenApzjwg61JwcaK3gtm4PtEhLLYjWf+YKEzAc1DVOIv
-   VRr/DltJZMGAaL1N/5Es2ZyH8OdhS6s1IN9ZYIdBPq3kpijAyNsTqlmDo
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="254856239"
-X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
-   d="scan'208";a="254856239"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 04:57:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
-   d="scan'208";a="706132637"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 30 May 2022 04:57:57 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 63B641A7; Mon, 30 May 2022 14:57:59 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        dave.hansen@linux.intel.com
-Subject: [PATCH v1 1/1] MAINTAINERS: Update Intel pin control to Supported
-Date:   Mon, 30 May 2022 14:57:50 +0300
-Message-Id: <20220530115750.70470-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 30 May 2022 07:58:35 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDD27CB2F
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:58:33 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LBYkk5XHjzRhVk;
+        Mon, 30 May 2022 19:55:26 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 30 May
+ 2022 19:58:31 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <hughd@google.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH] mm/shmem.c: clean up comment of shmem_swapin_folio
+Date:   Mon, 30 May 2022 19:58:41 +0800
+Message-ID: <20220530115841.4348-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The actual status of the code is Supported.
+shmem_swapin_folio has changed to use folio but comment still mentions
+page. Update the relevant comment accordingly as suggested by Naoya.
 
-Reported-by: dave.hansen@linux.intel.com
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Suggested-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/shmem.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2831a1a5b4c2..56dd473d5d59 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15555,7 +15555,7 @@ F:	drivers/pinctrl/freescale/
- PIN CONTROLLER - INTEL
- M:	Mika Westerberg <mika.westerberg@linux.intel.com>
- M:	Andy Shevchenko <andy@kernel.org>
--S:	Maintained
-+S:	Supported
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/intel.git
- F:	drivers/pinctrl/intel/
+diff --git a/mm/shmem.c b/mm/shmem.c
+index a6f565308133..12d45a03f7fc 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -1706,10 +1706,10 @@ static void shmem_set_folio_swapin_error(struct inode *inode, pgoff_t index,
+ }
  
+ /*
+- * Swap in the page pointed to by *pagep.
+- * Caller has to make sure that *pagep contains a valid swapped page.
+- * Returns 0 and the page in pagep if success. On failure, returns the
+- * error code and NULL in *pagep.
++ * Swap in the folio pointed to by *foliop.
++ * Caller has to make sure that *foliop contains a valid swapped folio.
++ * Returns 0 and the folio in foliop if success. On failure, returns the
++ * error code and NULL in *foliop.
+  */
+ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
+ 			     struct folio **foliop, enum sgp_type sgp,
+@@ -1749,7 +1749,7 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
+ 	}
+ 	folio = page_folio(page);
+ 
+-	/* We have to do this with page locked to prevent races */
++	/* We have to do this with folio locked to prevent races */
+ 	folio_lock(folio);
+ 	if (!folio_test_swapcache(folio) ||
+ 	    folio_swap_entry(folio).val != swap.val ||
 -- 
-2.35.1
+2.23.0
 

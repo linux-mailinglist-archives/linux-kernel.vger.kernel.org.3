@@ -2,259 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD31E53884A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 22:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E2D53884E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 22:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243012AbiE3Ump (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 16:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S239024AbiE3Utn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 16:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242138AbiE3Umg (ORCPT
+        with ESMTP id S233225AbiE3Utj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 16:42:36 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA5A25293
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 13:42:34 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id bg25so6992477wmb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 13:42:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=g1BTI86GlCK1B9gqDk4gnt+V9Nf1fSdYsJY6Md6XtoU=;
-        b=kY99WDkAWVOh54SCO/3qB4XP6Gi7HB9yfTH90kF7z+qu2VBkXD8+vTIhquydAl1JJE
-         RavN3eE5RXzZBrGuXEbiB6wDAgPVOexZTp9tgURhT4bQ1corzFDmtxnt2tHegysUWRuA
-         FQxLUHvA6FXqUSZdyohgSRnjqINZ4y2BuGlKJASGCLh9gsXyIMA3QYueow5H18XiNhp+
-         pfHiWxrcxx/Uzwsa5evosRMKlZXWudITswFqMKxFdvGoyjEqQyaqaWKXJhJhgbUnYz4g
-         bonRn6KqU2YHi8Y4XUryATwDdwv74NFCoegeLKQcu9h9ZeSgFkdmmIGQuFTLyZfVwqqf
-         K9tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=g1BTI86GlCK1B9gqDk4gnt+V9Nf1fSdYsJY6Md6XtoU=;
-        b=G3c0b9lpChFN2NKJSQoKS67tMvjlwW9Fxow1AMRGJ/y7riwbDrq4pojYmKUu9NM0ci
-         /jJVqqKznNf4mh1TanSQyjdy93uYTbngOJkc/rjvUjuJF5AdkOz5Lk1dNcZT9VH2A/en
-         FLAS4MChRA6cHWQhVreUzo3VXTqL+nPQ0VbUrQXP7vpI9aLy3cNCM+Di8NxKfmdQGwmM
-         HyC9pzjcz3GL23qr7LD1CfwDx/Ubt7CJmb5IvKWlXN+d10/2++Pc/OAyeojrcMxI5Vf6
-         tP9uMNfRR3wdb86XpbHIWES9tlcXCfU9u7ekG1+U9mZhpi4lc2ZjvGCUramVxAs6Vmzl
-         V97g==
-X-Gm-Message-State: AOAM532IDDF+XJHR+jIQbgV/sm7iFBz7SLMwN5nLkK/nxmIpm06GMAgy
-        VCRLemDkMxB3PHqPjNXW4MJoZA==
-X-Google-Smtp-Source: ABdhPJztwgk5E+JDeFhXu/KM8ELV1Vby7n3FQo7UPBdmqMRL6mBAbLlk2+XaDJR2ujnjhdfdgWG5jA==
-X-Received: by 2002:a05:600c:4f4d:b0:394:6ead:3523 with SMTP id m13-20020a05600c4f4d00b003946ead3523mr20392821wmq.109.1653943353248;
-        Mon, 30 May 2022 13:42:33 -0700 (PDT)
-Received: from localhost.localdomain ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id w13-20020a7bc74d000000b0039b17714eb2sm262253wmk.34.2022.05.30.13.42.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 13:42:32 -0700 (PDT)
-From:   Fabien Parent <fparent@baylibre.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Fabien Parent <fparent@baylibre.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 4/4] soc: mediatek: pm-domains: Add support for MT8365
-Date:   Mon, 30 May 2022 22:42:14 +0200
-Message-Id: <20220530204214.913251-4-fparent@baylibre.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220530204214.913251-1-fparent@baylibre.com>
-References: <20220530204214.913251-1-fparent@baylibre.com>
+        Mon, 30 May 2022 16:49:39 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926B47A468
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 13:49:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653943778; x=1685479778;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yLgUrwmBvYJzRs/dmjYgtmUxC/OOMG1qe2Oil/gEllQ=;
+  b=mfnMuW8JOptCO1Vwg/7pFk0G8KLDvFdEMIKu1fro3q/V4k4IKHBUgii+
+   e322eitsNnmpHoDw4yBPZi3/oIoquOaGHda/Zmik/RBLx8M4AJC11w4JB
+   MImZm+HDhv9sN94nzwBIGoS5i7L9YZNk2RxZLU5xhvWqtmjcoh1+2QxH4
+   QMiVk7VuUIXQZ17Qe8lQcUAjmRaddCXZpCN1zm4i5inrMIQBnwUCAXUkA
+   pjBzk8DK0aSuvuu+3bjqZCuiIAiEsCBEQuWEMaqFwpBmDsn0/+egxBkkn
+   HfDjzPQX2KlKfvloOoe+6tpIIzc6/6xEiB1tKatqH1uA5s3oJuAPffZKQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="255561770"
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="255561770"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 13:49:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="611553038"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 30 May 2022 13:49:36 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nvmKV-0001yy-PD;
+        Mon, 30 May 2022 20:49:35 +0000
+Date:   Tue, 31 May 2022 04:48:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-netfs 32/41]
+ fs/cifs/fscache.c:112:37: warning: incompatible integer to pointer
+ conversion passing 'unsigned long' to parameter of type 'volatile unsigned
+ long *'; take the address with &
+Message-ID: <202205310411.hGi2pWAu-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the needed board data to support MT8365 SoC.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-netfs
+head:   1fc71b6b30f6d2a981c163b77c9aee0aecaecb29
+commit: ccc1acdfa787b5bf5c9c2b3f829b18f5a0bb0938 [32/41] mm, netfs, fscache: Stop read optimisation when folio removed from pagecache
+config: x86_64-randconfig-a015-20220530 (https://download.01.org/0day-ci/archive/20220531/202205310411.hGi2pWAu-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0776c48f9b7e69fa447bee57c7c0985caa856be9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/ccc1acdfa787b5bf5c9c2b3f829b18f5a0bb0938
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-netfs
+        git checkout ccc1acdfa787b5bf5c9c2b3f829b18f5a0bb0938
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/cifs/
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
----
- drivers/soc/mediatek/mt8365-pm-domains.h | 147 +++++++++++++++++++++++
- drivers/soc/mediatek/mtk-pm-domains.c    |   5 +
- 2 files changed, 152 insertions(+)
- create mode 100644 drivers/soc/mediatek/mt8365-pm-domains.h
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/soc/mediatek/mt8365-pm-domains.h b/drivers/soc/mediatek/mt8365-pm-domains.h
-new file mode 100644
-index 000000000000..d5097d0741f7
---- /dev/null
-+++ b/drivers/soc/mediatek/mt8365-pm-domains.h
-@@ -0,0 +1,147 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __SOC_MEDIATEK_MT8365_PM_DOMAINS_H
-+#define __SOC_MEDIATEK_MT8365_PM_DOMAINS_H
-+
-+#include "mtk-pm-domains.h"
-+#include <dt-bindings/power/mt8365-power.h>
-+
-+/*
-+ * MT8365 power domain support
-+ */
-+
-+static const struct scpsys_domain_data scpsys_domain_data_mt8365[] = {
-+	[MT8365_POWER_DOMAIN_MM] = {
-+		.name = "mm",
-+		.sta_mask = PWR_STATUS_DISP,
-+		.ctl_offs = 0x30c,
-+		.pwr_sta_offs = 0x0180,
-+		.pwr_sta2nd_offs = 0x0184,
-+		.sram_pdn_bits = GENMASK(8, 8),
-+		.sram_pdn_ack_bits = GENMASK(12, 12),
-+		.caps = MTK_SCPD_STRICT_BUSP,
-+		.bp_infracfg = {
-+			BUS_PROT_WR(BIT(16) | BIT(17), 0x2a8, 0x2ac, 0x258),
-+			BUS_PROT_WR(BIT(1) | BIT(2) | BIT(10) | BIT(11), 0x2a0, 0x2a4, 0x228),
-+			BUS_PROT_WAYEN(BIT(6), BIT(24), 0x200, 0x0),
-+			BUS_PROT_WAYEN(BIT(5), BIT(14), 0x234, 0x28),
-+			BUS_PROT_WR(BIT(6), 0x2a0, 0x2a4, 0x228),
-+		},
-+	},
-+	[MT8365_POWER_DOMAIN_VENC] = {
-+		.name = "venc",
-+		.sta_mask = PWR_STATUS_VENC,
-+		.ctl_offs = 0x0304,
-+		.pwr_sta_offs = 0x0180,
-+		.pwr_sta2nd_offs = 0x0184,
-+		.sram_pdn_bits = GENMASK(8, 8),
-+		.sram_pdn_ack_bits = GENMASK(12, 12),
-+		.bp_smi = {
-+			BUS_PROT_WR(BIT(1), 0x3c4, 0x3c8, 0x3c0),
-+		},
-+	},
-+	[MT8365_POWER_DOMAIN_AUDIO] = {
-+		.name = "audio",
-+		.sta_mask = PWR_STATUS_AUDIO,
-+		.ctl_offs = 0x0314,
-+		.pwr_sta_offs = 0x0180,
-+		.pwr_sta2nd_offs = 0x0184,
-+		.sram_pdn_bits = GENMASK(12, 8),
-+		.sram_pdn_ack_bits = GENMASK(17, 13),
-+		.bp_infracfg = {
-+			BUS_PROT_WR(BIT(27) | BIT(28), 0x2a8, 0x2ac, 0x258),
-+		},
-+		.caps = MTK_SCPD_ACTIVE_WAKEUP,
-+	},
-+	[MT8365_POWER_DOMAIN_CONN] = {
-+		.name = "conn",
-+		.sta_mask = PWR_STATUS_CONN,
-+		.ctl_offs = 0x032c,
-+		.pwr_sta_offs = 0x0180,
-+		.pwr_sta2nd_offs = 0x0184,
-+		.sram_pdn_bits = 0,
-+		.sram_pdn_ack_bits = 0,
-+		.bp_infracfg = {
-+			BUS_PROT_WR(BIT(13), 0x2a0, 0x2a4, 0x228),
-+			BUS_PROT_WR(BIT(18), 0x2a8, 0x2ac, 0x258),
-+			BUS_PROT_WR(BIT(14), 0x2a0, 0x2a4, 0x228),
-+			BUS_PROT_WR(BIT(21), 0x2a8, 0x2ac, 0x258),
-+		},
-+		.caps = MTK_SCPD_ACTIVE_WAKEUP | MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8365_POWER_DOMAIN_MFG] = {
-+		.name = "mfg",
-+		.sta_mask = PWR_STATUS_MFG,
-+		.ctl_offs = 0x0338,
-+		.pwr_sta_offs = 0x0180,
-+		.pwr_sta2nd_offs = 0x0184,
-+		.sram_pdn_bits = GENMASK(9, 8),
-+		.sram_pdn_ack_bits = GENMASK(13, 12),
-+		.bp_infracfg = {
-+			BUS_PROT_WR(BIT(25), 0x2a0, 0x2a4, 0x228),
-+			BUS_PROT_WR(BIT(21) | BIT(22), 0x2a0, 0x2a4, 0x228),
-+		},
-+	},
-+	[MT8365_POWER_DOMAIN_CAM] = {
-+		.name = "cam",
-+		.sta_mask = BIT(25),
-+		.ctl_offs = 0x0344,
-+		.pwr_sta_offs = 0x0180,
-+		.pwr_sta2nd_offs = 0x0184,
-+		.sram_pdn_bits = GENMASK(9, 8),
-+		.sram_pdn_ack_bits = GENMASK(13, 12),
-+		.bp_infracfg = {
-+			BUS_PROT_WR(BIT(19), 0x2a8, 0x2ac, 0x258),
-+		},
-+		.bp_smi = {
-+			BUS_PROT_WR(BIT(2), 0x3c4, 0x3c8, 0x3c0),
-+		},
-+	},
-+	[MT8365_POWER_DOMAIN_VDEC] = {
-+		.name = "vdec",
-+		.sta_mask = BIT(31),
-+		.ctl_offs = 0x0370,
-+		.pwr_sta_offs = 0x0180,
-+		.pwr_sta2nd_offs = 0x0184,
-+		.sram_pdn_bits = GENMASK(8, 8),
-+		.sram_pdn_ack_bits = GENMASK(12, 12),
-+		.bp_smi = {
-+			BUS_PROT_WR(BIT(3), 0x3c4, 0x3c8, 0x3c0),
-+		},
-+	},
-+	[MT8365_POWER_DOMAIN_APU] = {
-+		.name = "apu",
-+		.sta_mask = BIT(16),
-+		.ctl_offs = 0x0378,
-+		.pwr_sta_offs = 0x0180,
-+		.pwr_sta2nd_offs = 0x0184,
-+		.sram_pdn_bits = GENMASK(14, 8),
-+		.sram_pdn_ack_bits = GENMASK(21, 15),
-+		.bp_infracfg = {
-+			BUS_PROT_WR(BIT(2) | BIT(20), 0x2a8, 0x2ac, 0x258),
-+		},
-+		.bp_smi = {
-+			BUS_PROT_WR(BIT(4), 0x3c4, 0x3c8, 0x3c0),
-+		},
-+	},
-+	[MT8365_POWER_DOMAIN_DSP] = {
-+		.name = "dsp",
-+		.sta_mask = BIT(17),
-+		.ctl_offs = 0x037C,
-+		.pwr_sta_offs = 0x0180,
-+		.pwr_sta2nd_offs = 0x0184,
-+		.sram_pdn_bits = GENMASK(11, 8),
-+		.sram_pdn_ack_bits = GENMASK(15, 12),
-+		.bp_infracfg = {
-+			BUS_PROT_WR(BIT(24) | BIT(30) | BIT(31), 0x2a8, 0x2ac, 0x258),
-+		},
-+		.caps = MTK_SCPD_ACTIVE_WAKEUP,
-+	},
-+};
-+
-+static const struct scpsys_soc_data mt8365_scpsys_data = {
-+	.domains_data = scpsys_domain_data_mt8365,
-+	.num_domains = ARRAY_SIZE(scpsys_domain_data_mt8365),
-+};
-+
-+#endif /* __SOC_MEDIATEK_MT8365_PM_DOMAINS_H */
-diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
-index beaa5785fda2..1f922db7eddf 100644
---- a/drivers/soc/mediatek/mtk-pm-domains.c
-+++ b/drivers/soc/mediatek/mtk-pm-domains.c
-@@ -22,6 +22,7 @@
- #include "mt8186-pm-domains.h"
- #include "mt8192-pm-domains.h"
- #include "mt8195-pm-domains.h"
-+#include "mt8365-pm-domains.h"
- 
- #define MTK_POLL_DELAY_US		10
- #define MTK_POLL_TIMEOUT		USEC_PER_SEC
-@@ -634,6 +635,10 @@ static const struct of_device_id scpsys_of_match[] = {
- 		.compatible = "mediatek,mt8195-power-controller",
- 		.data = &mt8195_scpsys_data,
- 	},
-+	{
-+		.compatible = "mediatek,mt8365-power-controller",
-+		.data = &mt8365_scpsys_data,
-+	},
- 	{ }
- };
- 
+All warnings (new ones prefixed by >>):
+
+>> fs/cifs/fscache.c:112:37: warning: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'volatile unsigned long *'; take the address with & [-Wint-conversion]
+                   set_bit(AS_NOTIFY_REMOVING_FOLIO, inode->i_mapping->flags);
+                                                     ^~~~~~~~~~~~~~~~~~~~~~~
+                                                     &
+   include/asm-generic/bitops/instrumented-atomic.h:26:70: note: passing argument to parameter 'addr' here
+   static __always_inline void set_bit(long nr, volatile unsigned long *addr)
+                                                                        ^
+   1 warning generated.
+
+
+vim +112 fs/cifs/fscache.c
+
+    96	
+    97	void cifs_fscache_get_inode_cookie(struct inode *inode)
+    98	{
+    99		struct cifs_fscache_inode_coherency_data cd;
+   100		struct cifsInodeInfo *cifsi = CIFS_I(inode);
+   101		struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
+   102		struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
+   103	
+   104		cifs_fscache_fill_coherency(&cifsi->vfs_inode, &cd);
+   105	
+   106		cifsi->netfs_ctx.cache =
+   107			fscache_acquire_cookie(tcon->fscache, 0,
+   108					       &cifsi->uniqueid, sizeof(cifsi->uniqueid),
+   109					       &cd, sizeof(cd),
+   110					       i_size_read(&cifsi->vfs_inode));
+   111		if (cifsi->netfs_ctx.cache)
+ > 112			set_bit(AS_NOTIFY_REMOVING_FOLIO, inode->i_mapping->flags);
+   113	
+
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

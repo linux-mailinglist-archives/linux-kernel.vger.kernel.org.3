@@ -2,54 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506DD537818
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07CB537825
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234889AbiE3JrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 05:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
+        id S234913AbiE3JrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 05:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234892AbiE3JrH (ORCPT
+        with ESMTP id S234892AbiE3JrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 05:47:07 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1FE6593;
-        Mon, 30 May 2022 02:47:05 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 330FE1F42772
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653904023;
-        bh=TscsrSniRUbTF2lS5EjYkm9gJZ0Gk4By33O4vJgUvvk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=il99dXitmCOx0A/VyZZgaOg/pMyn3K9JWvwUiQJ80FitEn4Totge5VEgd5QM6PiHm
-         Ofum2lXAOT6ZkGd8iTUrvCUA8L0eYcWD+A4NF858gkt72XXcf0KeBLqKqmAohKMTgz
-         kVHoGOiLJtHCsCn1jKLT4amWAGjjrTxYSO54cl/We8FeI+ww8NEiyoe25wUsUPwQKm
-         6NZY9VVIyvwU3belzrLQZAJM+WMC+7zV5XLJx+Yg18rGaKj8NFhDy8t7q+mhwefEto
-         4MUajxomeppisUKDJkcu6uN14/o5ESv5DiKBTFWm5LRQ9WJPPZNixL60ms9FW98n5k
-         A6aOhdL1o/b7Q==
-Message-ID: <e9cf5b0c-cb11-f68b-3130-4fa6243468da@collabora.com>
-Date:   Mon, 30 May 2022 11:47:00 +0200
+        Mon, 30 May 2022 05:47:11 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C6638B4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:47:09 -0700 (PDT)
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CE6633FBF5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 09:47:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1653904027;
+        bh=0UZymv9RVAChspHI58gTmQkqQr5ViPWxsQqyFUaGwGI=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=BQynBlSIrLEmYQRf+w2HXFMDTvf97rwyOncqlhH1ugNqF9+QZk+anHNnipANfsbA2
+         R7F2tEkTgJyT7wKz50y8fDXRGcSyFZY7dP8zZjkelZcDXGLIofQmHAoT7aznr0J/N7
+         +1Y3oHVlC/zyrNd+M8Tsgl2ULJD5c9LUyg3RpcQwrNQw8NeCxvnEQZFBCIxQNqXgMk
+         ct8in+v1Ip8YVeldJ5xd72J+30fn/NOS9NBObnaLznL9b7HXPjTM5VWqSqAKimsTzz
+         jquSd7jb2oVBcQVkLYrnKCuVwZDsSRQTG7avBXvXEM1si/tOJ4ZSUSZYiHWb9rjZrJ
+         GLNWya8RFamww==
+Received: by mail-wr1-f70.google.com with SMTP id p10-20020adfaa0a000000b0020c4829af5fso1524276wrd.16
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:47:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0UZymv9RVAChspHI58gTmQkqQr5ViPWxsQqyFUaGwGI=;
+        b=sDpJSicet2fhB1V6HtIGLm+SS5vlf2T47Hgmf6otKkIcwFrHnIRgo/UcSgtLSiKCMK
+         yqeg3Odk8+8jWdQFNPtXErCtGLNbV/M51Eu6k89bO+dHtgjc9GP9B8072oqybXab+TFW
+         0bz9/5P0cUJ8Jd4/FtNzbnkYdK+0I6a2NPRXVXxNkoWUNbB+hP4S/eXSDLkTpqBSCqtS
+         a7EmpOJ/osH4TT5LdPUt5NatdEpWtykLigrE60/yc/DnWjnaAAX8JAioF9jPjhbG78t4
+         uy0bzaYdjAW8cPMOAV+xRiq8SiKHr8dnXXTyjyNRP/uZZckwpxSxpDVK3qZrqEL602BF
+         mrfA==
+X-Gm-Message-State: AOAM530OwDsUXCPr6rN/MCC6XdKN7kWhzIXfHK3blsEk7mp9dvFd4mR6
+        SEjk4ib/d7wUDcJM7JM7fJQcdBH6NzEcW6K3G/VQSRymDrYh2Pe3pfh11deggA06jslm/PIyN5O
+        HoADQWc95n5TPSG9miqWARdIEOOWcyrU8Qw3hVcTu6Q==
+X-Received: by 2002:a05:600c:501f:b0:397:74e2:caa1 with SMTP id n31-20020a05600c501f00b0039774e2caa1mr18326906wmr.89.1653904023986;
+        Mon, 30 May 2022 02:47:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxcIRFrZmFoHMctcwJfjIoXZM+fuLzFmiVCBZ3hBYIMDRUovPi+iGVmBjDvXX5Wh2a1poEgFA==
+X-Received: by 2002:a05:600c:501f:b0:397:74e2:caa1 with SMTP id n31-20020a05600c501f00b0039774e2caa1mr18326883wmr.89.1653904023811;
+        Mon, 30 May 2022 02:47:03 -0700 (PDT)
+Received: from alex.home (lfbn-gre-1-146-29.w90-112.abo.wanadoo.fr. [90.112.113.29])
+        by smtp.gmail.com with ESMTPSA id f12-20020a05600c154c00b003942a244f30sm13897640wmg.9.2022.05.30.02.47.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 02:47:03 -0700 (PDT)
+From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
+To:     =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Subject: [PATCH -for-next] riscv: Fix missing PAGE_PFN_MASK
+Date:   Mon, 30 May 2022 11:47:01 +0200
+Message-Id: <20220530094701.2891404-1-alexandre.ghiti@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 0/3] MediaTek Helio X10 MT6795 - MT6331 PMIC Keys
-Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     dmitry.torokhov@gmail.com, matthias.bgg@gmail.com,
-        mkorpershoek@baylibre.com, linux-input@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220524093505.85438-1-angelogioacchino.delregno@collabora.com>
- <20220526110827.GC5138@localhost>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220526110827.GC5138@localhost>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,54 +82,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/05/22 13:08, Pavel Machek ha scritto:
-> Hi!
-> 
->> In an effort to give some love to the apparently forgotten MT6795 SoC,
->> I am upstreaming more components that are necessary to support platforms
->> powered by this one apart from a simple boot to serial console.
->>
->> This series performs some cleanups in mtk-pmic-keys and adds support for
->> the MT6331 PMIC's keys.
->>
->> Adding support to each driver in each subsystem is done in different
->> patch series as to avoid spamming uninteresting patches to maintainers.
->>
->> This series depends on another two series series [1], [2] named
->> "MediaTek Helio X10 MT6795 - MT6331/6332 PMIC Wrapper" and
->> "MediaTek Helio X10 MT6795 - MT6331/6332 PMIC MFD integration"
->>
->> Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
-> 
-> Please cc phone-devel with phone stuff...
-> 
-> ...and thanks for all the work. I guess we still don't have an android
-> phone with basic phone functionality working on mainline...?
-> 
-> Best regards,
-> 							Pavel
+There are a bunch of functions that use the PFN from a page table entry
+that end up with the svpbmt upper-bits because they are missing the newly
+introduced PAGE_PFN_MASK which leads to wrong addresses conversions and
+then crash: fix this by adding this mask.
 
+Fixes: 100631b48ded ("riscv: Fix accessing pfn bits in PTEs for non-32bit variants")
+Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+---
+ arch/riscv/include/asm/pgtable-64.h | 4 ++--
+ arch/riscv/include/asm/pgtable.h    | 4 ++--
+ arch/riscv/kvm/mmu.c                | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-Hello Pavel,
+diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
+index 6d59e4695200..0e57bf1e25e9 100644
+--- a/arch/riscv/include/asm/pgtable-64.h
++++ b/arch/riscv/include/asm/pgtable-64.h
+@@ -153,7 +153,7 @@ static inline pud_t pfn_pud(unsigned long pfn, pgprot_t prot)
+ 
+ static inline unsigned long _pud_pfn(pud_t pud)
+ {
+-	return pud_val(pud) >> _PAGE_PFN_SHIFT;
++	return (pud_val(pud) & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT;
+ }
+ 
+ static inline pmd_t *pud_pgtable(pud_t pud)
+@@ -240,7 +240,7 @@ static inline void p4d_clear(p4d_t *p4d)
+ static inline pud_t *p4d_pgtable(p4d_t p4d)
+ {
+ 	if (pgtable_l4_enabled)
+-		return (pud_t *)pfn_to_virt(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
++		return (pud_t *)pfn_to_virt((p4d_val(p4d) & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT);
+ 
+ 	return (pud_t *)pud_pgtable((pud_t) { p4d_val(p4d) });
+ }
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index e2658a25f06d..43064025f4b0 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -255,7 +255,7 @@ static inline pgd_t pfn_pgd(unsigned long pfn, pgprot_t prot)
+ 
+ static inline unsigned long _pgd_pfn(pgd_t pgd)
+ {
+-	return pgd_val(pgd) >> _PAGE_PFN_SHIFT;
++	return (pgd_val(pgd) & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT;
+ }
+ 
+ static inline struct page *pmd_page(pmd_t pmd)
+@@ -568,7 +568,7 @@ static inline pmd_t pmd_mkinvalid(pmd_t pmd)
+ 	return __pmd(pmd_val(pmd) & ~(_PAGE_PRESENT|_PAGE_PROT_NONE));
+ }
+ 
+-#define __pmd_to_phys(pmd)  (pmd_val(pmd) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
++#define __pmd_to_phys(pmd)  ((pmd_val(pmd) & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
+ 
+ static inline unsigned long pmd_pfn(pmd_t pmd)
+ {
+diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+index f80a34fbf102..db03c5a29d4c 100644
+--- a/arch/riscv/kvm/mmu.c
++++ b/arch/riscv/kvm/mmu.c
+@@ -55,7 +55,7 @@ static inline unsigned long stage2_pte_index(gpa_t addr, u32 level)
+ 
+ static inline unsigned long stage2_pte_page_vaddr(pte_t pte)
+ {
+-	return (unsigned long)pfn_to_virt(pte_val(pte) >> _PAGE_PFN_SHIFT);
++	return (unsigned long)pfn_to_virt((pte_val(pte) & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT);
+ }
+ 
+ static int stage2_page_size_to_level(unsigned long page_size, u32 *out_level)
+-- 
+2.34.1
 
-I'm sorry, I've been sending a lot of things lately and I forgot to add
-that list to the Cc on some series...
-
-Btw, we don't have any MediaTek android phone working at all on mainline:
-the one that I'm in the process of upstreaming would be the first one ever,
-the hope is that doing this will encourage other developers to do the same
-with other platforms.
-
-Speaking of them all... I don't think that there's any retail smartphone
-that comes with Android having any phone call ability... I'm aware of some
-Qualcomm smartphones being able to use mobile data and SMS, but no calling.
-
-Unless anything changed and unless I'm unaware of recent developments.
-
-Aside from that, MediaTek chips should be a little simpler in this regard,
-so I think that we can (and I would love to) get that working, so that
-smartphones can still be smart -- phones -- on mainline as well... but I
-have a hunch that this will require quite some time.
-
-Regards,
-Angelo

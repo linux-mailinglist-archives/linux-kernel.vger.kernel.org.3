@@ -2,51 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BBE5379FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E837537A05
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235020AbiE3Lgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 07:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
+        id S235803AbiE3Lh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 07:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiE3Lgq (ORCPT
+        with ESMTP id S235640AbiE3Lh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 07:36:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822F520183
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:36:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F1CC6117F
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 11:36:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23E1DC385B8;
-        Mon, 30 May 2022 11:36:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653910603;
-        bh=5LtQDdTkIvQa6ICSoLrYFZ54K3qngKB9lzRRMnsuNyQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p5qi07HIIQiGu/LzCxw4uSlKkYuhGQmrA2S71NSAEzkRMS2hNXbxPDIFil1bxIpAC
-         tul20n4qsXybFJ5Tg9BBn4sUysu++BNTk2JFVq9vd6GSHnZ2A1gEyA1YAXceJLa1xy
-         JVcr45x13Oa7xhTSw1+k7VjOkKDqAXk/X8i4HIGgd0OT/QkiM+MN6H//rrnXjjqPBe
-         UrKeJREAY0JOBfjw1km38BF61GffXn1TP2kIzCg0W+Aa676B8F6WSNWDp18G8EaM/E
-         ZuAkmP2chCtuP20CpTPv4vQOrYpgij9RdaORboyyPNidIAYzvIO9+UldW/19QE1pi5
-         TRplFK68y5bCg==
-Date:   Mon, 30 May 2022 13:36:40 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     paulmck@kernel.org, rjw@rjwysocki.net, x86@kernel.org,
-        linux-kernel@vger.kernel.org, jpoimboe@kernel.org
-Subject: Re: [RFC][PATCH 3/9] cpuidle: Move IRQ state validation
-Message-ID: <20220530113640.GC1257179@lothringen>
-References: <20220519212750.656413111@infradead.org>
- <20220519213421.748352112@infradead.org>
+        Mon, 30 May 2022 07:37:56 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E06B4EF6F
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:37:55 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id wh22so20287659ejb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:37:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/LkbtPQcvwsRsFCT5B2kafAu6Wm//Jx4TksDG+egz0c=;
+        b=qj5/Flbj+znEbYrCKN88/BLH1DQQSNRbO1JdpNo36o4slyOTzw8AGeygowAM4/6woR
+         l81CdycuLucbenbuxFf4zJAIQ00vD2NIvMG45LP+4H3+jumcWpH6EVpzhsP+dIY/DCk2
+         cic8Du6ej5Y1v+OKZuTbzmic5vp0jr8aGdRVY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/LkbtPQcvwsRsFCT5B2kafAu6Wm//Jx4TksDG+egz0c=;
+        b=Dzg8ZNptin9LzFnV2AbB4HsyKU1fcevwLTU2KivTk7zobfGuAf3DSqbTU3ZMqGWuw1
+         Qbp4oS5W1RZm6MorrppmI4Y4sNYKlWQJnK6LISUxsjyUdy6/aOf+x2SmvmoQvxwDOCOe
+         yEMb1wZQYtAO5OLGcz8DsTx4npGfbXnyhdontc9hm+OnDsqp6G40Hu27LLUnfb9XWpN0
+         F3uhqm6t5QhiFOFcHgx+4vOwXkmGtYRiFgqy02ivD3G26d1aZIgV/fy7bly+dCBOzTL3
+         q5JP9W3boNeIi0adYbba0ZXhlXH6+f1cJ8W+AWje/cdZ587U9ljfqS+T/76FkxdOSR7g
+         Vn3A==
+X-Gm-Message-State: AOAM5332kLbqaFYiQQpiNWCrAFHeZVh65FHgKQ/8fhNylQLfbVopkAxF
+        9oWM9nhdT1b136P3qOyDscHgpQ==
+X-Google-Smtp-Source: ABdhPJz/AQ/g9cFWSF/kO0IUjFAcw7PU+/bypjmMqBnz8vJn84FyVYW3yTumja8Cn3A5+anbddCwXA==
+X-Received: by 2002:a17:907:3f89:b0:6fe:e7a7:c038 with SMTP id hr9-20020a1709073f8900b006fee7a7c038mr32987693ejc.730.1653910673717;
+        Mon, 30 May 2022 04:37:53 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-2-39-143-183.cust.vodafonedsl.it. [2.39.143.183])
+        by smtp.gmail.com with ESMTPSA id z1-20020a1709060ac100b006f3ef214de1sm3900692ejf.71.2022.05.30.04.37.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 04:37:53 -0700 (PDT)
+Date:   Mon, 30 May 2022 13:37:50 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: atomisp-mt9m114: Fix pointer dereferenced before
+ checking
+Message-ID: <20220530113750.GD99280@tom-ThinkPad-T14s-Gen-2i>
+References: <1653897481-25681-1-git-send-email-baihaowen@meizu.com>
+ <20220530112232.GB99280@tom-ThinkPad-T14s-Gen-2i>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220519213421.748352112@infradead.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220530112232.GB99280@tom-ThinkPad-T14s-Gen-2i>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,47 +72,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 11:27:53PM +0200, Peter Zijlstra wrote:
-> Make cpuidle_enter_state() consistent with the s2idle variant and
-> verify ->enter() always returns with interrupts disabled.
+On Mon, May 30, 2022 at 01:22:32PM +0200, Tommaso Merciai wrote:
+> On Mon, May 30, 2022 at 03:58:01PM +0800, Haowen Bai wrote:
+> > The info->data is dereferencing before null checking, so move
+> > it after checking.
+> > 
+> > Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> > ---
+> >  drivers/staging/media/atomisp/i2c/atomisp-mt9m114.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/staging/media/atomisp/i2c/atomisp-mt9m114.c b/drivers/staging/media/atomisp/i2c/atomisp-mt9m114.c
+> > index 00d6842c07d6..3c81ab73cdae 100644
+> > --- a/drivers/staging/media/atomisp/i2c/atomisp-mt9m114.c
+> > +++ b/drivers/staging/media/atomisp/i2c/atomisp-mt9m114.c
+> > @@ -616,13 +616,15 @@ static int mt9m114_get_intg_factor(struct i2c_client *client,
+> >  				   struct camera_mipi_info *info,
+> >  				   const struct mt9m114_res_struct *res)
+> >  {
+> > -	struct atomisp_sensor_mode_data *buf = &info->data;
+> > +	struct atomisp_sensor_mode_data *buf;
+> >  	u32 reg_val;
+> >  	int ret;
+> >  
+> >  	if (!info)
+> >  		return -EINVAL;
+> >  
+> > +	buf = &info->data;
+> > +
+> >  	ret =  mt9m114_read_reg(client, MISENSOR_32BIT,
+> >  				REG_PIXEL_CLK, &reg_val);
+> >  	if (ret)
+> > -- 
+> > 2.7.4
+> > 
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  drivers/cpuidle/cpuidle.c |   10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+> Hi Haowen,
+> Looks good to me, thanks.
 > 
-> --- a/drivers/cpuidle/cpuidle.c
-> +++ b/drivers/cpuidle/cpuidle.c
-> @@ -234,7 +234,11 @@ int cpuidle_enter_state(struct cpuidle_d
->  	stop_critical_timings();
->  	if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE))
->  		rcu_idle_enter();
-> +
->  	entered_state = target_state->enter(dev, drv, index);
-> +	if (WARN_ON_ONCE(!irqs_disabled()))
-> +		raw_local_irq_disable();
+> Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 
-So it means that idle functions are supposed to return with IRQs disabled
-without tracing, right? I can see that at least acpi_safe_halt() is using
-the non-raw local_irq_disable().
+Hi,
+My bad, Dan is right. Nothing to fix here.
+Sorry for previous review.
 
-> +
->  	if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE))
->  		rcu_idle_exit();
->  	start_critical_timings();
-> @@ -246,12 +250,8 @@ int cpuidle_enter_state(struct cpuidle_d
->  	/* The cpu is no longer idle or about to enter idle. */
->  	sched_idle_set_state(NULL);
->  
-> -	if (broadcast) {
-> -		if (WARN_ON_ONCE(!irqs_disabled()))
-> -			local_irq_disable();
-> -
-> +	if (broadcast)
->  		tick_broadcast_exit();
-> -	}
->  
->  	if (!cpuidle_state_is_coupled(drv, index))
->  		local_irq_enable();
+Regards,
+Tommaso
+> -- 
+> Tommaso Merciai
+> Embedded Linux Engineer
+> tommaso.merciai@amarulasolutions.com
+> __________________________________
 > 
-> 
+> Amarula Solutions SRL
+> Via Le Canevare 30, 31100 Treviso, Veneto, IT
+> T. +39 042 243 5310
+> info@amarulasolutions.com
+> www.amarulasolutions.com
+
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com

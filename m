@@ -2,153 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233C95384E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1A75384E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241585AbiE3P2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
+        id S240356AbiE3P1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbiE3P1I (ORCPT
+        with ESMTP id S241402AbiE3P1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:27:08 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BB61DAE58;
-        Mon, 30 May 2022 07:29:53 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-f2cd424b9cso14529191fac.7;
-        Mon, 30 May 2022 07:29:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iwvW/HUlxK27ANHP+B5t/wvOGVQFTrLuINyXeF8Fnsc=;
-        b=SbsEyMSC+Zc2RYMEL3E5M3A2HZZwF18iQH7DN4e1yTpOz82C9lW1G5ka9g8aIxWulU
-         lLgyodZaJmoAB7TjoXNJR8XidkP3pdn1pXBLvTwEEcNmlLu1e32M2yOCguFqG80Rmz2k
-         XxI4VWdmklZQv6wDzFJ1LWoO1vXr3QTH/ul2dg0NzPW2RCfrur9R9iUAHS1NDbhKFAqI
-         NQTo5zSLsZj2VsNSX/v2bnVDcy9FItEMeny4xMa0RA02L9OG6yKusd9zFH4Kmh6WlqdE
-         JVTCBknfXFErlK7s+ZXTNulP7x+rRVRA+0t4H0BvzWqGhhhtls9mCx/A1t1VPstBF5Ui
-         5qzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iwvW/HUlxK27ANHP+B5t/wvOGVQFTrLuINyXeF8Fnsc=;
-        b=eguQAgVzdB2eS7Wamb+O9t+xJDJJt32RyvNExhiTq93AjrIudiXp6RGw+f/0IifD8i
-         76IkaIoyMj86cRyJ2Km50/fpsKsKTaBbzmjT91/daBghtaMefElPRgaaJrcAYxOM12+p
-         KXNDqp04S84ROsNAxWvgKZBkq1jwmyS7jqAXCHLiwo4L5blR+1dFju47JLu1bj80JASY
-         Cbrw1SqRs0JKdRzTliepzsI0bDzi2r9t+W7flKshmvw3TP3hUhnv7bAW5TsAsAOHK3cO
-         Rxiwg0ASFqoLeGiqChjsGzs0fWbIxJ1UxnxKBKAdoPvwdsHuJEZUYEI68nDRDhiVWGJP
-         CBGQ==
-X-Gm-Message-State: AOAM530fQtIzH0/qyLM5u0uroWkvTrHo1hA3n928OosjS7ekCOAgxDK4
-        2KZ8HRuEmPPowvUu0cObUjM=
-X-Google-Smtp-Source: ABdhPJzgwljlXzcHj2r8yeRw/yi+GoCSaZiBQTBAwY0m1H36Kn1ELRD5lms3iszOshTrdd8YP9JUhw==
-X-Received: by 2002:a05:6870:c8a9:b0:f2:87f0:6707 with SMTP id er41-20020a056870c8a900b000f287f06707mr10512381oab.97.1653920990559;
-        Mon, 30 May 2022 07:29:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d22-20020a05683025d600b0060603221236sm5105666otu.6.2022.05.30.07.29.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 07:29:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <612c066d-6bc6-2b9b-5211-6dbfd88a7899@roeck-us.net>
-Date:   Mon, 30 May 2022 07:29:47 -0700
+        Mon, 30 May 2022 11:27:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A14113B78;
+        Mon, 30 May 2022 07:30:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B164B80E23;
+        Mon, 30 May 2022 14:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08943C385B8;
+        Mon, 30 May 2022 14:29:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653921003;
+        bh=OFwDldeLq6VK5vNQssnp+LuPob86xk+/cjvgoNLQoGU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Y4GM3MP5RuPDaWkZHgc4qqGl+aTGH7H+4a0dfyVxQuoN5Zw+c94fGBwLgyvfr8YQP
+         v6xQ6qNbMHOvK66DcfQZnvV1wLwHAsVgEZKlTI+3Ys0mS+OIzmAONzkCppysiLn+UH
+         F+982SYqwke8va6Mwq/KjrYa9SDVjywbo4cm3DVHNbE4yzaZb5Rs/sxB0lzhmmuI6o
+         Jby84/PfuO37HR7CpCFsse7R75bPo6eIUC4+alaQHvPMjoHv/IFqH/sPM6h8HbYFvX
+         WkQ+RLnZTh64sbbEhcqOfwAgfySe0zcYXHLn+zYaSUuvwXCiA/7t8/TmO+AWDS4vJl
+         xtmgTFdea+5HQ==
+Message-ID: <e3010471ee43e7e134f882f320fc4643fe4e4810.camel@kernel.org>
+Subject: Re: [RFC PATCH 4/4] cpuset: Support RCU-NOCB toggle on v2 root
+ partitions
+From:   nicolas saenz julienne <nsaenz@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        rcu@vger.kernel.org
+Date:   Mon, 30 May 2022 16:29:56 +0200
+In-Reply-To: <20220530004049.GA1251147@lothringen>
+References: <20220525221055.1152307-1-frederic@kernel.org>
+         <20220525221055.1152307-5-frederic@kernel.org>
+         <Yo/FGcG+uiBh88sT@slm.duckdns.org> <20220526225141.GA1214445@lothringen>
+         <YpAHEt0j30vBw9au@slm.duckdns.org>
+         <9e44bb00-955a-dbc6-a863-be649e0c701f@redhat.com>
+         <YpAdSW8JXVPOoNJl@slm.duckdns.org>
+         <20220527083018.n43nc73vuuzm5ixo@localhost.localdomain>
+         <YpIwsiaY2IPK96WO@hirez.programming.kicks-ass.net>
+         <20220530004049.GA1251147@lothringen>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH AUTOSEL 5.15 102/109] hwmon: Make chip parameter for
- with_info API mandatory
-Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220530133825.1933431-1-sashal@kernel.org>
- <20220530133825.1933431-102-sashal@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220530133825.1933431-102-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/22 06:38, Sasha Levin wrote:
-> From: Guenter Roeck <linux@roeck-us.net>
-> 
-> [ Upstream commit ddaefa209c4ac791c1262e97c9b2d0440c8ef1d5 ]
-> 
-> Various attempts were made recently to "convert" the old
-> hwmon_device_register() API to devm_hwmon_device_register_with_info()
-> by just changing the function name without actually converting the
-> driver. Prevent this from happening by making the 'chip' parameter of
-> devm_hwmon_device_register_with_info() mandatory.
-> 
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Mon, 2022-05-30 at 02:40 +0200, Frederic Weisbecker wrote:
+> On Sat, May 28, 2022 at 04:24:50PM +0200, Peter Zijlstra wrote:
+> > On Fri, May 27, 2022 at 10:30:18AM +0200, Juri Lelli wrote:
+> > > Hi,
+> > >=20
+> > > On 26/05/22 14:37, Tejun Heo wrote:
+> > > > On Thu, May 26, 2022 at 08:28:43PM -0400, Waiman Long wrote:
+> > > > > I am thinking along the line that it will not be hierarchical. Ho=
+wever,
+> > > > > cpuset can be useful if we want to have multiple isolated partiti=
+ons
+> > > > > underneath the top cpuset with different isolation attributes, bu=
+t no more
+> > > > > sub-isolated partition with sub-attributes underneath them. IOW, =
+we can only
+> > > > > set them at the first level under top_cpuset. Will that be useful=
+?
+> > > >=20
+> > > > At that point, I'd just prefer to have it under /proc or /sys.
+> > >=20
+> > > FWIW, I was under the impression that this would nicely fit along the
+> > > side of other feaures towards implenting dynamic isolation of CPUs (s=
+ay
+> > > https://lore.kernel.org/lkml/20220510153413.400020-1-longman@redhat.c=
+om/
+> > > for example). Wouldn't be awkward to have to poke different places to
+> > > achieve isolation at runtime?
+> >=20
+> > This, that's what I was thinking.
+> >=20
+> > My main objection to the whole thing is that it's an RCU_NOCB specific
+> > interface. *That* I think is daft.
+> >=20
+> > I was thinking a partition would be able to designate a house-keeping
+> > sub-partition/mask, but who cares about all the various different
+> > housekeeping parties.
+>=20
+> It's time for the isolation users to step up here! I very rarely hear fro=
+m them
+> and I just can't figure out by myself all the variants of uses for each o=
+f the
+> isolation features. May be some people are only interested in nocb for so=
+me
+> specific uses, or may be it never makes sense without nohz full and all t=
+he rest
+> of the isolation features. So for now I take the very cautious path to sp=
+lit the
+> interface.
 
-Please drop.
+OK, my 2 cents. I personally deal with virtualisation setups that involve R=
+T
+and CPU isolation on both host and guests.
 
-> ---
->   Documentation/hwmon/hwmon-kernel-api.rst |  2 +-
->   drivers/hwmon/hwmon.c                    | 16 +++++++---------
->   2 files changed, 8 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-> index c41eb6108103..23f27fe78e37 100644
-> --- a/Documentation/hwmon/hwmon-kernel-api.rst
-> +++ b/Documentation/hwmon/hwmon-kernel-api.rst
-> @@ -72,7 +72,7 @@ hwmon_device_register_with_info is the most comprehensive and preferred means
->   to register a hardware monitoring device. It creates the standard sysfs
->   attributes in the hardware monitoring core, letting the driver focus on reading
->   from and writing to the chip instead of having to bother with sysfs attributes.
-> -The parent device parameter cannot be NULL with non-NULL chip info. Its
-> +The parent device parameter as well as the chip parameter must not be NULL. Its
->   parameters are described in more detail below.
->   
->   devm_hwmon_device_register_with_info is similar to
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index 3ae961986fc3..55237a5fc49a 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -854,11 +854,12 @@ EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
->   
->   /**
->    * hwmon_device_register_with_info - register w/ hwmon
-> - * @dev: the parent device
-> - * @name: hwmon name attribute
-> - * @drvdata: driver data to attach to created device
-> - * @chip: pointer to hwmon chip information
-> + * @dev: the parent device (mandatory)
-> + * @name: hwmon name attribute (mandatory)
-> + * @drvdata: driver data to attach to created device (optional)
-> + * @chip: pointer to hwmon chip information (mandatory)
->    * @extra_groups: pointer to list of additional non-standard attribute groups
-> + *	(optional)
->    *
->    * hwmon_device_unregister() must be called when the device is no
->    * longer needed.
-> @@ -871,13 +872,10 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
->   				const struct hwmon_chip_info *chip,
->   				const struct attribute_group **extra_groups)
->   {
-> -	if (!name)
-> -		return ERR_PTR(-EINVAL);
-> -
-> -	if (chip && (!chip->ops || !chip->ops->is_visible || !chip->info))
-> +	if (!dev || !name || !chip)
->   		return ERR_PTR(-EINVAL);
->   
-> -	if (chip && !dev)
-> +	if (!chip->ops || !chip->ops->is_visible || !chip->info)
->   		return ERR_PTR(-EINVAL);
->   
->   	return __hwmon_device_register(dev, name, drvdata, chip, extra_groups);
+The main use-case ATM is running DPDK-like workloads. We want to achieve
+latencies in the order of tens of microseconds, so it's essential to avoid
+entering the kernel at all cost. So, no HW interrupts, sched tick, RCU
+callbacks, clocksource watchdogs, softlockup, intel_pstate, timers, etc...
+Everything is deferred onto housekeeping CPUs or disabled.
 
+Then we have setups that need to deal with HW on the host, exposed to the g=
+uest
+through emulation or VirtIO. The same rules apply really, except for some I=
+RQ
+affinity tweaks and sched priority magic.
+
+I find it hard to see how running RCU callback locally could be useful to a=
+ny
+latency sensitive workload.
+
+Frederic, out of curiosity, do you have a use-case in mind that might benef=
+it
+from nohz_full but not rcu_nocb? Maybe HPC?
+
+Regards,
+Nicolas

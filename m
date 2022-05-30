@@ -2,141 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D235379A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B895379AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235613AbiE3LRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 07:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34156 "EHLO
+        id S235625AbiE3LTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 07:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233351AbiE3LRC (ORCPT
+        with ESMTP id S235615AbiE3LS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 07:17:02 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2CC2BFF;
-        Mon, 30 May 2022 04:17:01 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U9hhWq012309;
-        Mon, 30 May 2022 11:17:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=P9AVFZWf0HG36drg4odsdhvueQ9fVsxMlv3iuTAcDH8=;
- b=lU/ONV7vXcmpFyNn60Vl2GVk7hUd+M1fEVl6YB2ow2u9spcxAAszb7NDyCYkkdR8p7FZ
- 8tQur4sCOHD1bGCPsx3/yOvrQsN8maoLMYXnhiOZdYMzQB62rFCL2cJSLFkgJu3bu0LS
- 8TJ8rL8AC4q6Q3E+2sXvhiWmXWngNSANptWZpHiW4TMj4Pm1VuWdgux2524EJ0RyE0oM
- yZTwUHG+hmAy6kG6srctmZCai7QSdFfMb9eYliNGfwRl/3FaWoBHpZUPGvmLFNuY0x+5
- t6DmRDCDYxqB+Sf9r+oK1DOG7qqqlWBpP9iJ05k3ogLLbwo914Pr5IVkoInJum152AKt Mg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcuhw9jpm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 11:17:00 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24UB9EqO012053;
-        Mon, 30 May 2022 11:17:00 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcuhw9jpb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 11:17:00 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24UB4cZf031661;
-        Mon, 30 May 2022 11:16:58 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gbc7h2m8m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 11:16:58 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24UBGtLU20775282
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 May 2022 11:16:55 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 12BB2A405C;
-        Mon, 30 May 2022 11:16:55 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5D40EA4054;
-        Mon, 30 May 2022 11:16:54 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.145.12.149])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 30 May 2022 11:16:54 +0000 (GMT)
-Date:   Mon, 30 May 2022 13:16:52 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Nico Boehr <nrb@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, borntraeger@de.ibm.com, frankja@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, david@redhat.com,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        scgl@linux.ibm.com, mimu@linux.ibm.com
-Subject: Re: [PATCH v10 18/19] KVM: s390: pv: avoid export before import if
- possible
-Message-ID: <20220530131652.4a0b0057@p-imbrenda>
-In-Reply-To: <d76e875c360c53d6bd03c3f2767c90dcc4ca6df9.camel@linux.ibm.com>
-References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
-        <20220414080311.1084834-19-imbrenda@linux.ibm.com>
-        <d76e875c360c53d6bd03c3f2767c90dcc4ca6df9.camel@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Mon, 30 May 2022 07:18:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 147851EC48
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653909536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wEJh1v0yLYrSJEztMDHMWNNVxRvZnSx1mwbtnZON0mc=;
+        b=F0eD5cBBLXa5ml3E4vgpDLAbZ/Ny9T5lio+m/f3f+8TGyRbs7DH85cpUM1IhL7rASnQ8qY
+        Xev9qhzlIoUVezxx1JbA5y46yYA+NwB+ZEHqyMNWPdOnX7miVitLMjjHQG2UMizg9fIzOS
+        mn9zemIzZDPbGyADvw2HgSYAIQUsIkU=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-282-wK0xw018Os-QuozHSk8hpQ-1; Mon, 30 May 2022 07:18:54 -0400
+X-MC-Unique: wK0xw018Os-QuozHSk8hpQ-1
+Received: by mail-wr1-f71.google.com with SMTP id w17-20020adf8bd1000000b0020fc99aee61so1582662wra.18
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:18:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=wEJh1v0yLYrSJEztMDHMWNNVxRvZnSx1mwbtnZON0mc=;
+        b=M7ONI2EIxFmTuwZvtjQLj8tTmc/2eE4A9X21sCHNbaxEprFwkP3AA511kmZxPJLXgq
+         6ehePrhkjVYcdhhLS6a5hVzmgcH88uegRHDhYCQI0XgWCpjetEPBn+UPHglieQw3vkWs
+         qfEtIij5FWP416axp+TuDxtVgdxXokmbu8MwwlnOimNap7JTC35uzHjzS6wwQ8waY3nK
+         WIka6hCnENm1SJuLFCZWQv3pYUR7h1eSCvgxa9zr3It2OfkUMo6JPubl3j3rfm9X1eN4
+         1gtAnRRFekPvxvfHBPQIfRq2bJBdW0zQnOwjFXacXbZHMz5auUd963lEvZJeegK+WWPW
+         IQJA==
+X-Gm-Message-State: AOAM530X3n8GPSVTBjZXZn9Y/C4c87sqiKWbMSDV8ZMgJHH27bnm3ExV
+        1U34r8HfdZQgx0OwsFb58/0XGfblIXLACKBB808geb2y62TqUdp2AGBWJXTAmAZLLFVlETSj7mX
+        d7jqjeVxTQW1EqVVoKlT2x7rD
+X-Received: by 2002:a5d:42c6:0:b0:210:28d4:428e with SMTP id t6-20020a5d42c6000000b0021028d4428emr8771533wrr.656.1653909533624;
+        Mon, 30 May 2022 04:18:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz4SCvlVorH7XhVUqk5VCMW1In5HEL8g6G5SaYE+tD5YzSnK2c4QB/yCmPf0uA2yyfXAYNkxw==
+X-Received: by 2002:a5d:42c6:0:b0:210:28d4:428e with SMTP id t6-20020a5d42c6000000b0021028d4428emr8771480wrr.656.1653909533220;
+        Mon, 30 May 2022 04:18:53 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:7c00:aaa9:2ce5:5aa0:f736? (p200300cbc7047c00aaa92ce55aa0f736.dip0.t-ipconnect.de. [2003:cb:c704:7c00:aaa9:2ce5:5aa0:f736])
+        by smtp.gmail.com with ESMTPSA id m3-20020a5d6243000000b0020cd8f1d25csm8957554wrv.8.2022.05.30.04.18.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 04:18:52 -0700 (PDT)
+Message-ID: <55109e8f-29b8-4016-dcee-28eb8a70bd12@redhat.com>
+Date:   Mon, 30 May 2022 13:18:31 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Barry Song <21cnbao@gmail.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        ebiederm@xmission.com, hagen@jauu.net, jack@suse.cz,
+        Kees Cook <keescook@chromium.org>, kirill@shutemov.name,
+        kucharsk@gmail.com, linkinjeon@kernel.org,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, longpeng2@huawei.com,
+        Andy Lutomirski <luto@kernel.org>, markhemm@googlemail.com,
+        pcc@google.com, Mike Rapoport <rppt@kernel.org>,
+        sieberf@amazon.com, sjpark@amazon.de,
+        Suren Baghdasaryan <surenb@google.com>, tst@schoebel-theuer.de,
+        Iurii Zaikin <yzaikin@google.com>
+References: <cover.1649370874.git.khalid.aziz@oracle.com>
+ <CAGsJ_4yXnmifuU7+BFOkZrz-7AkW4CDQF5cHqQS-oci-rJ=ZdA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 00/14] Add support for shared PTEs across processes
+In-Reply-To: <CAGsJ_4yXnmifuU7+BFOkZrz-7AkW4CDQF5cHqQS-oci-rJ=ZdA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 1EpXGJDaZm9b2eG_pQWvgVLYvfbeKl79
-X-Proofpoint-GUID: IHiGLOAV--jpkv7lrNu626JPF5eRkpEX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-30_03,2022-05-30_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 spamscore=0 priorityscore=1501
- bulkscore=0 mlxscore=0 impostorscore=0 adultscore=0 mlxlogscore=999
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2204290000 definitions=main-2205300058
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 May 2022 12:07:43 +0200
-Nico Boehr <nrb@linux.ibm.com> wrote:
+On 30.05.22 12:48, Barry Song wrote:
+> On Tue, Apr 12, 2022 at 4:07 AM Khalid Aziz <khalid.aziz@oracle.com> wrote:
+>>
+>> Page tables in kernel consume some of the memory and as long as number
+>> of mappings being maintained is small enough, this space consumed by
+>> page tables is not objectionable. When very few memory pages are
+>> shared between processes, the number of page table entries (PTEs) to
+>> maintain is mostly constrained by the number of pages of memory on the
+>> system. As the number of shared pages and the number of times pages
+>> are shared goes up, amount of memory consumed by page tables starts to
+>> become significant.
+>>
+>> Some of the field deployments commonly see memory pages shared across
+>> 1000s of processes. On x86_64, each page requires a PTE that is only 8
+>> bytes long which is very small compared to the 4K page size. When 2000
+>> processes map the same page in their address space, each one of them
+>> requires 8 bytes for its PTE and together that adds up to 8K of memory
+>> just to hold the PTEs for one 4K page. On a database server with 300GB
+>> SGA, a system carsh was seen with out-of-memory condition when 1500+
+>> clients tried to share this SGA even though the system had 512GB of
+>> memory. On this server, in the worst case scenario of all 1500
+>> processes mapping every page from SGA would have required 878GB+ for
+>> just the PTEs. If these PTEs could be shared, amount of memory saved
+>> is very significant.
+>>
+>> This patch series implements a mechanism in kernel to allow userspace
+>> processes to opt into sharing PTEs. It adds two new system calls - (1)
+>> mshare(), which can be used by a process to create a region (we will
+>> call it mshare'd region) which can be used by other processes to map
+>> same pages using shared PTEs, (2) mshare_unlink() which is used to
+>> detach from the mshare'd region. Once an mshare'd region is created,
+>> other process(es), assuming they have the right permissions, can make
+>> the mashare() system call to map the shared pages into their address
+>> space using the shared PTEs.  When a process is done using this
+>> mshare'd region, it makes a mshare_unlink() system call to end its
+>> access. When the last process accessing mshare'd region calls
+>> mshare_unlink(), the mshare'd region is torn down and memory used by
+>> it is freed.
+>>
+>>
+>> API
+>> ===
+>>
+>> The mshare API consists of two system calls - mshare() and mshare_unlink()
+>>
+>> --
+>> int mshare(char *name, void *addr, size_t length, int oflags, mode_t mode)
+>>
+>> mshare() creates and opens a new, or opens an existing mshare'd
+>> region that will be shared at PTE level. "name" refers to shared object
+>> name that exists under /sys/fs/mshare. "addr" is the starting address
+>> of this shared memory area and length is the size of this area.
+>> oflags can be one of:
+>>
+>> - O_RDONLY opens shared memory area for read only access by everyone
+>> - O_RDWR opens shared memory area for read and write access
+>> - O_CREAT creates the named shared memory area if it does not exist
+>> - O_EXCL If O_CREAT was also specified, and a shared memory area
+>>   exists with that name, return an error.
+>>
+>> mode represents the creation mode for the shared object under
+>> /sys/fs/mshare.
+>>
+>> mshare() returns an error code if it fails, otherwise it returns 0.
+>>
+>> PTEs are shared at pgdir level and hence it imposes following
+>> requirements on the address and size given to the mshare():
+>>
+>> - Starting address must be aligned to pgdir size (512GB on x86_64).
+>>   This alignment value can be looked up in /proc/sys/vm//mshare_size
+>> - Size must be a multiple of pgdir size
+>> - Any mappings created in this address range at any time become
+>>   shared automatically
+>> - Shared address range can have unmapped addresses in it. Any access
+>>   to unmapped address will result in SIGBUS
+>>
+>> Mappings within this address range behave as if they were shared
+>> between threads, so a write to a MAP_PRIVATE mapping will create a
+>> page which is shared between all the sharers. The first process that
+>> declares an address range mshare'd can continue to map objects in
+>> the shared area. All other processes that want mshare'd access to
+>> this memory area can do so by calling mshare(). After this call, the
+>> address range given by mshare becomes a shared range in its address
+>> space. Anonymous mappings will be shared and not COWed.
+>>
+>> A file under /sys/fs/mshare can be opened and read from. A read from
+>> this file returns two long values - (1) starting address, and (2)
+>> size of the mshare'd region.
+>>
+>> --
+>> int mshare_unlink(char *name)
+>>
+>> A shared address range created by mshare() can be destroyed using
+>> mshare_unlink() which removes the  shared named object. Once all
+>> processes have unmapped the shared object, the shared address range
+>> references are de-allocated and destroyed.
+>>
+>> mshare_unlink() returns 0 on success or -1 on error.
+>>
+>>
+>> Example Code
+>> ============
+>>
+>> Snippet of the code that a donor process would run looks like below:
+>>
+>> -----------------
+>>         addr = mmap((void *)TB(2), GB(512), PROT_READ | PROT_WRITE,
+>>                         MAP_SHARED | MAP_ANONYMOUS, 0, 0);
+>>         if (addr == MAP_FAILED)
+>>                 perror("ERROR: mmap failed");
+>>
+>>         err = syscall(MSHARE_SYSCALL, "testregion", (void *)TB(2),
+>>                         GB(512), O_CREAT|O_RDWR|O_EXCL, 600);
+>>         if (err < 0) {
+>>                 perror("mshare() syscall failed");
+>>                 exit(1);
+>>         }
+>>
+>>         strncpy(addr, "Some random shared text",
+>>                         sizeof("Some random shared text"));
+>> -----------------
+>>
+>> Snippet of code that a consumer process would execute looks like:
+>>
+>> -----------------
+>>         struct mshare_info minfo;
+>>
+>>         fd = open("testregion", O_RDONLY);
+>>         if (fd < 0) {
+>>                 perror("open failed");
+>>                 exit(1);
+>>         }
+>>
+>>         if ((count = read(fd, &minfo, sizeof(struct mshare_info)) > 0))
+>>                 printf("INFO: %ld bytes shared at addr 0x%lx \n",
+>>                                 minfo.size, minfo.start);
+>>         else
+>>                 perror("read failed");
+>>
+>>         close(fd);
+>>
+>>         addr = (void *)minfo.start;
+>>         err = syscall(MSHARE_SYSCALL, "testregion", addr, minfo.size,
+>>                         O_RDWR, 600);
+>>         if (err < 0) {
+>>                 perror("mshare() syscall failed");
+>>                 exit(1);
+>>         }
+>>
+>>         printf("Guest mmap at %px:\n", addr);
+>>         printf("%s\n", addr);
+>>         printf("\nDone\n");
+>>
+>>         err = syscall(MSHARE_UNLINK_SYSCALL, "testregion");
+>>         if (err < 0) {
+>>                 perror("mshare_unlink() failed");
+>>                 exit(1);
+>>         }
+>> -----------------
+> 
+> 
+> Does  that mean those shared pages will get page_mapcount()=1 ?
 
-> On Thu, 2022-04-14 at 10:03 +0200, Claudio Imbrenda wrote:
->=20
-> > diff --git a/arch/s390/kernel/uv.c b/arch/s390/kernel/uv.c
-> > index e358b8bd864b..43393568f844 100644
-> > --- a/arch/s390/kernel/uv.c
-> > +++ b/arch/s390/kernel/uv.c
-> > @@ -236,7 +236,8 @@ static int make_secure_pte(pte_t *ptep, unsigned
-> > long addr,
-> > =C2=A0
-> > =C2=A0static bool should_export_before_import(struct uv_cb_header *uvcb,
-> > struct mm_struct *mm)
-> > =C2=A0{
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return uvcb->cmd !=3D UVC_CM=
-D_UNPIN_PAGE_SHARED &&
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return !test_bit_inv(BIT_UV_=
-FEAT_MISC,
-> > &uv_info.uv_feature_indications) &&
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0uvcb->cmd !=3D UVC_CMD_UNPIN_PAGE_SHARED &&
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0atomic_read(&mm->context.protected_count) > 1; =
-=20
->=20
-> This might be nicer to read like this:
->=20
-> if (test_bit_inv(BIT_UV_FEAT_MISC, &uv_info.uv_feature_indications))
->   return false;
->=20
-> if (uvcb->cmd =3D=3D UVC_CMD_UNPIN_PAGE_SHARED)
->   return false;
->=20
-> return atomic_read(&mm->context.protected_count) > 1;
+AFAIU, for mshare() that is the case.
 
-fair enough
+> 
+> A big pain for a memory limited system like a desktop/embedded system is
+> that reverse mapping will take tons of cpu in memory reclamation path
+> especially for those pages mapped by multiple processes. sometimes,
+> 100% cpu utilization on LRU to scan and find out if a page is accessed
+> by reading PTE young.
 
-then I'll also fix patch 6 in a similar way, the function is first
-introduced there
+Regarding PTE-table sharing:
 
+Even if we'd account each logical mapping (independent of page table
+sharing) in the page_mapcount(), we would benefit from page table
+sharing. Simply when we unmap the page from the shared page table, we'd
+have to adjust the mapcount accordingly. So unmapping from a single
+(shared) pagetable could directly result in the mapcount dropping to zero.
 
+What I am trying to say is: how the mapcount is handled might be an
+implementation detail for PTE-sharing. Not sure how hugetlb handles that
+with its PMD-table sharing.
+
+We'd have to clarify what the mapcount actually expresses. Having the
+mapcount express "is this page mapped by multiple processes or at
+multiple VMAs" might be helpful in some cases. Right now it mostly
+expresses exactly that.
+
+> 
+> if we result in one PTE only by this patchset, it means we are getting
+> significant
+> performance improvement in kernel LRU particularly when free memory
+> approaches the watermarks.
+> 
+> But I don't see how a new system call like mshare(),  can be used
+> by those systems as they might need some more automatic PTEs sharing
+> mechanism.
+
+IMHO, we should look into automatic PTE-table sharing of MAP_SHARED
+mappings, similar to what hugetlb provides for PMD table sharing, which
+leaves semantics unchanged for existing user space. Maybe there is a way
+to factor that out and reuse it for PTE-table sharing.
+
+I can understand that there are use cases for explicit sharing with new
+(e.g., mprotect) semantics.
+
+> 
+> BTW, I suppose we are actually able to share PTEs as long as the address
+> is 2MB aligned?
+
+2MB is x86 specific, but yes. As long as we're aligned to PMDs and
+* the VMA spans the complete PMD
+* the VMA permissions match the page table
+* no process-specific page table features are used (uffd, softdirty
+  tracking)
+
+... probably there are more corner cases. (e.g., referenced and dirty
+bit don't reflect what the mapping process did, which might or might not
+be relevant for current/future features)
+
+-- 
+Thanks,
+
+David / dhildenb
 

@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2534D5387D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 21:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19ACF5387D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 21:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240857AbiE3Tmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 15:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
+        id S243079AbiE3Toe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 15:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbiE3Tmf (ORCPT
+        with ESMTP id S233186AbiE3Toc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 15:42:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F0762219
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 12:42:33 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvlGn-0004LO-Ul; Mon, 30 May 2022 21:41:41 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvlGh-005Vep-Cd; Mon, 30 May 2022 21:41:34 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvlGf-00D9uL-Eh; Mon, 30 May 2022 21:41:33 +0200
-Date:   Mon, 30 May 2022 21:41:33 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     wangkefeng.wang@huawei.com, guoren@linux.alibaba.com,
-        sunnanyong@huawei.com, jszhang@kernel.org, mick@ics.forth.gr,
-        linux-riscv@lists.infradead.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>, alex@ghiti.fr,
-        christophe.leroy@csgroup.eu, naveen.n.rao@linux.vnet.ibm.com,
-        lizhengyu3@huawei.com, aou@eecs.berkeley.edu,
-        liaochang1@huawei.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        Bjorn Topel <bjorn.topel@gmail.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, penberg@kernel.org,
-        ebiederm@xmission.com, kernel@pengutronix.de,
-        akpm@linux-foundation.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] RISC-V: Prepare dropping week attribute from
- arch_kexec_apply_relocations[_add]
-Message-ID: <20220530194133.udwdjsb2l33hsiil@pengutronix.de>
-References: <20220530074202.pydmbbgvbtaugw5j@pengutronix.de>
- <mhng-5872aea0-6f64-4685-8f8d-fdeb42e4c972@palmer-mbp2014>
+        Mon, 30 May 2022 15:44:32 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6C37378B;
+        Mon, 30 May 2022 12:44:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1653939865;
+        bh=9cmrvCRTdgXaup6Nc51jhXQLb5o1bU8es4kMpmpQUeU=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=PX4+QIVmbFbqVxJY9Upeo6loo+EQC9OILx1a6Eza4o/dm4wCBm51hLX+ihEd4RXFr
+         tFV57Z9OCZ5lYgbEmfV147t4zcZi2ZxM3blpp3Bsb54NSujwhh4byZs6JbmQtGl/Qt
+         tQw82dNvC6sKklfIsnZvM7voV3cvp0oqcsgyYz1Q=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530 ([92.116.163.222]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MeCtj-1nLs473SHH-00bGtt; Mon, 30
+ May 2022 21:44:24 +0200
+Date:   Mon, 30 May 2022 21:44:08 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [GIT PULL] fbdev updates & fixes for v5.19-rc1
+Message-ID: <YpUeiCcb0ntt7wct@ls3530>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="krrdaxdkw2concro"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <mhng-5872aea0-6f64-4685-8f8d-fdeb42e4c972@palmer-mbp2014>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Provags-ID: V03:K1:NIiHrl8+99HDFndqQ4eAHjEOWGUJ6ZR9dfFwtTRsiV6jUjHuQM4
+ 98addmh+DJXAOrkJVdSKVLJGn/IeJsCP5VJQDnDvDHTJdOx7ntFwvfXOIjtXJJIEztgXxGb
+ IDO2gWWAyLCiO1gbmj8chSL0sElA7+HhnodCHemBYPiToJdIL2CCMEhTLL0TKLahhJLxuZa
+ MFvvxCmMHEymoEQ1vCjVw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1qOfKNMH/l4=:l6l1bQdjImuctlhMGbESh4
+ J8r8yCr3I/oezt0iAtFK9tvXbpv21Kwpu4+Fx3SOaEgk+kZefuP2bBRfhSwDl5p6m7Yk2R751
+ XBB1yfy0I9vNs91OcCjOBnscx4H7akk9nNZDArzOgift8tBTRVHpea/B83GfxOXNnzH9uDhup
+ bPXsYmTjOpDL/EBJMN8UcDM/OOibisvyW5+aKfjIdwwi8P+UzzEK+OH5DEjRFuMi7f7vY0S7G
+ a66ai6kl+xVyK/FP+s8x88njXEk2YX0hunptr+M+BokmF+FU5T/CAevhVfFhUMRy8+ReT9C7b
+ ty6imZRXK7WGHFKhPyAOUvzHQECIg5i+Ia2R+gljZaYWCg1wc10dXI1gKJJ9Spt/HYP4hkYNo
+ vphzdLbHQVtlfiCJt9sS/hhMBcgbTMyz4jUPbs42cRQ3U71bm/LouurXY1SQE0KTXKxP+7/wL
+ EMngrRYnPZGd5t5u5G6SMBDS6Yne3foNfFfHzP/b7U8vN1d8UsjDc7qtLVZAzumTnfekz228u
+ MRIxpAkY+fyGbblLKGdepaS/YUT/UoGcWIePo0PQw14EpOBUDrnl0pI1yUUEbhVdRRNYUn4AU
+ T1wdcFO+v5n4xd9DQjez1TTPM1eBu5gMg+MVvGANkXm7537MXqdGfZxaXM96UVWokkenmDYt0
+ 6k8QQVD14uTkbBdek2l57g1meglR5pFPoJJzVvgKoN0kxwclALMIE5wEP8gMaFBvCcNSyhLFe
+ 51gmlgPMuCojmLwjzioAZsUZS12d5dftcnxVDSHsO9WKgpzCMmgHBJyBzcN3ekVG4ohFIISsq
+ kRb39aSWMO7YZbvMni53Clg9mv0Ig8GeUgMIeqa8n83dcmkDbG6yij7gHCzlnn0N0IKaFbpGV
+ /h826F95xfRV5M4tduCHSqPX5CTPPNPJqFI6R2y0dubqhVrDZaSGJnIjFhnFKDsQa5hn+5Tuq
+ 4fsWVjXvfgAEoOscLL86oJxNLT/PJnIrnccokuvcsW/XhIKeMY+R7g27dNu71FuKTa4pO3HZA
+ DnrDmI37ZOQLamBV5aNG5rslhPZ3C+LAdh2mI40PAch1LJtUzv0OKzzoo0vQ2VucAzipPIWiy
+ ozrgbnE+tCKyvi4pFdPAvehwiWvlbLC+oKBgp9qhnJNlUMSPbhQxRFr6w==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,101 +67,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit 42226c989789d8da4af1de0c31070c96726d990c:
 
---krrdaxdkw2concro
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Linux 5.18-rc7 (2022-05-15 18:08:58 -0700)
 
-Hello,
+are available in the Git repository at:
 
-On Mon, May 30, 2022 at 11:58:16AM -0700, Palmer Dabbelt wrote:
-> On Mon, 30 May 2022 00:42:02 PDT (-0700), u.kleine-koenig@pengutronix.de =
-wrote:
-> > Without this change arch/riscv/kernel/elf_kexec.c fails to compile once
-> > commit 233c1e6c319c ("kexec_file: drop weak attribute from
-> > arch_kexec_apply_relocations[_add]") is also contained in the tree.
-> > This currently happens in next-20220527.
-> >=20
-> > Prepare the RISC-V similar to the s390 adaption done in 233c1e6c319c.
-> > This is safe to do on top of the riscv change even without the change to
-> > arch_kexec_apply_relocations.
-> >=20
-> > Fixes: 838b3e28488f ("RISC-V: Load purgatory in kexec_file")
-> > Looks-good-to: liaochang (A) <liaochang1@huawei.com>
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> >=20
-> > On Mon, May 30, 2022 at 09:43:26AM +0800, liaochang (A) wrote:
-> > > > I can confirm that doing
-> > > > > diff --git a/arch/riscv/include/asm/kexec.h
-> > > b/arch/riscv/include/asm/kexec.h
-> > > > index 206217b23301..eee260e8ab30 100644
-> > > > --- a/arch/riscv/include/asm/kexec.h
-> > > > +++ b/arch/riscv/include/asm/kexec.h
-> > > > @@ -55,6 +55,13 @@ extern riscv_kexec_method riscv_kexec_norelocate;
-> > > >  >  #ifdef CONFIG_KEXEC_FILE
-> > > >  extern const struct kexec_file_ops elf_kexec_ops;
-> > > > +
-> > > > +struct purgatory_info;
-> > > > +int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
-> > > > +				     Elf_Shdr *section,
-> > > > +				     const Elf_Shdr *relsec,
-> > > > +				     const Elf_Shdr *symtab);
-> > > > +#define arch_kexec_apply_relocations_add arch_kexec_apply_relocati=
-ons_add
-> > > >  #endif
-> > > >  >  #endif
-> > >=20
-> > > LGTM, you could send a fixup patch to riscv, thanks.
-> > >=20
-> > > > > on top of 838b3e28488f results in a compilable tree. And when
-> > > merging
-> > > > 233c1e6c319c into this, it is still building.
-> > > > > I'm not enough into kexec (and riscv) to judge if this is
-> > > sensible, or
-> > > > create a useful commit log but the obvious way forward is to apply =
-the
-> > > > above patch to the riscv tree before it hits Linus' tree.
-> >=20
-> > Ok, here comes a patch with a generic commit log.
-> >=20
-> > @riscv people: If you prefer, squash it into 838b3e28488f.
->=20
-> Sorry, just saw this after I sent my version of the fix.  They're the sam=
-e,
-> but do you mind sending a full-on patch so I can merge it?
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/for-5.19/fbdev-1
 
-Sorry, I don't understand your request. I found
-https://lore.kernel.org/linux-riscv/20220530180408.16239-1-palmer@rivosinc.=
-com/
+for you to fetch changes up to 79b66128f13f5c22dea03a2197495c4b96ab31f5:
 
-but I don't know what a full-on patch is and what stops you merging my
-patch.=20
+  video: fbdev: omap: Add prototype for hwa742_update_window_async() (2022-05-29 10:20:15 +0200)
 
-Is it that it's in reply to a patch series and b4 fails to fetch the
-right patch and you ask to send it in a new thread?
+----------------------------------------------------------------
+fbdev fixes and updates for kernel v5.19-rc1
 
-Best regards
-Uwe
+A buch of small fixes and cleanups, including:
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+- vesafb: Fix a use-after-free due early fb_info cleanup
+- clcdfb: Fix refcount leak in clcdfb_of_vram_setup
+- hyperv_fb: Allow resolutions with size > 64 MB for Gen1
+- pxa3xx-gcu: release the resources correctly in pxa3xx_gcu_probe/remove()
+- omapfb: Prevent compiler warning regarding hwa742_update_window_async()
 
---krrdaxdkw2concro
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+Helge Deller (1):
+      video: fbdev: omap: Add prototype for hwa742_update_window_async()
 
------BEGIN PGP SIGNATURE-----
+Javier Martinez Canillas (1):
+      video: fbdev: vesafb: Fix a use-after-free due early fb_info cleanup
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKVHeoACgkQwfwUeK3K
-7AmIjAf/cIdZXzTm8ALuTDgUrKH3cNzpFjQ944mYn/qfLoGkdCnQlYzghw570rDo
-0QKgHNkqRQQ7lgaXGnex5HizEMdc+++QESut+gBcrV92K33EZU3XSXUp+75SE+Jz
-DjRnmCm4xkh/9zZysNW0OXLnjd4AtGMlbzXYFKsKKxtaGgd7+f06D3cTzoVOfLbL
-i0DPa56ftXEmEYl6WpqIg1gb9gQMQx7E9vsscEgoOX6u9AlinTk/cxkDA6lhMNEj
-03qeCXcYyUQtszhTYw3jo8cLqM1KGLVU3i9Blj0mAIQ8DVaXUd3hWx3AFqjeA55K
-bErpEBzedIdALZNq1g3XX9JHLEMP7Q==
-=qw7s
------END PGP SIGNATURE-----
+Miaoqian Lin (1):
+      video: fbdev: clcdfb: Fix refcount leak in clcdfb_of_vram_setup
 
---krrdaxdkw2concro--
+Minghao Chi (2):
+      video: fbdev: omapfb: simplify the return expression of dsi_init_pll_data()
+      video: fbdev: omapfb: simplify the return expression of nec_8048_connect()
+
+Saurabh Sengar (1):
+      video: fbdev: hyperv_fb: Allow resolutions with size > 64 MB for Gen1
+
+Tom Rix (1):
+      video: fbdev: xen: remove setting of 'transp' parameter
+
+Yang Yingliang (1):
+      video: fbdev: pxa3xx-gcu: release the resources correctly in pxa3xx_gcu_probe/remove()
+
+pengfuyuan (1):
+      video: fbdev: radeon: Fix spelling typo in comment
+
+ drivers/video/fbdev/amba-clcd.c                       |  5 ++++-
+ drivers/video/fbdev/hyperv_fb.c                       | 19 +------------------
+ drivers/video/fbdev/omap/omapfb.h                     |  4 ++++
+ .../omap2/omapfb/displays/panel-nec-nl8048hl11.c      |  7 +------
+ drivers/video/fbdev/omap2/omapfb/dss/hdmi_pll.c       |  8 +-------
+ drivers/video/fbdev/pxa3xx-gcu.c                      | 12 +++++++-----
+ drivers/video/fbdev/vesafb.c                          |  5 +++--
+ drivers/video/fbdev/xen-fbfront.c                     |  1 -
+ include/video/radeon.h                                |  2 +-
+ 9 files changed, 22 insertions(+), 41 deletions(-)

@@ -2,243 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9622753888F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 23:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8FB538891
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 23:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241261AbiE3VUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 17:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36362 "EHLO
+        id S243263AbiE3VU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 17:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbiE3VUT (ORCPT
+        with ESMTP id S241918AbiE3VUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 17:20:19 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D244EA30;
-        Mon, 30 May 2022 14:20:18 -0700 (PDT)
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nvmo7-000EnB-SM; Mon, 30 May 2022 23:20:11 +0200
-Received: from [85.1.206.226] (helo=linux-2.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nvmo7-000Sj7-Dh; Mon, 30 May 2022 23:20:11 +0200
-Subject: Re: [PATCH v3 1/2] bpf: avoid grabbing spin_locks of all cpus when no
- free elems
-To:     Feng zhou <zhoufeng.zf@bytedance.com>, ast@kernel.org,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
-        cong.wang@bytedance.com, zhouchengming@bytedance.com
-References: <20220530091340.53443-1-zhoufeng.zf@bytedance.com>
- <20220530091340.53443-2-zhoufeng.zf@bytedance.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <3cd2bc87-d766-0466-7079-eaff14fbe422@iogearbox.net>
-Date:   Mon, 30 May 2022 23:20:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 30 May 2022 17:20:25 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0A46A428;
+        Mon, 30 May 2022 14:20:22 -0700 (PDT)
+Received: (Authenticated sender: peter@korsgaard.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6D8F420005;
+        Mon, 30 May 2022 21:20:16 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+        (envelope-from <peter@korsgaard.com>)
+        id 1nvmoB-006sq4-Sw; Mon, 30 May 2022 23:20:15 +0200
+From:   Peter Korsgaard <peter@korsgaard.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     santoshkumar.yadav@barco.com, peter.korsgaard@barco.com,
+        hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] platform/x86: barco-p50-gpio: Add check for
+ platform_driver_register
+References: <20220526090345.1444172-1-jiasheng@iscas.ac.cn>
+Date:   Mon, 30 May 2022 23:20:15 +0200
+In-Reply-To: <20220526090345.1444172-1-jiasheng@iscas.ac.cn> (Jiasheng Jiang's
+        message of "Thu, 26 May 2022 17:03:45 +0800")
+Message-ID: <87bkve4t0w.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20220530091340.53443-2-zhoufeng.zf@bytedance.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26557/Mon May 30 10:05:44 2022)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/22 11:13 AM, Feng zhou wrote:
-> From: Feng Zhou <zhoufeng.zf@bytedance.com>
-> 
-> This patch add is_empty in pcpu_freelist_head to check freelist
-> having free or not. If having, grab spin_lock, or check next cpu's
-> freelist.
-> 
-> Before patch: hash_map performance
-> ./map_perf_test 1
-> 0:hash_map_perf pre-alloc 975345 events per sec
-> 4:hash_map_perf pre-alloc 855367 events per sec
-> 12:hash_map_perf pre-alloc 860862 events per sec
-> 8:hash_map_perf pre-alloc 849561 events per sec
-> 3:hash_map_perf pre-alloc 849074 events per sec
-> 6:hash_map_perf pre-alloc 847120 events per sec
-> 10:hash_map_perf pre-alloc 845047 events per sec
-> 5:hash_map_perf pre-alloc 841266 events per sec
-> 14:hash_map_perf pre-alloc 849740 events per sec
-> 2:hash_map_perf pre-alloc 839598 events per sec
-> 9:hash_map_perf pre-alloc 838695 events per sec
-> 11:hash_map_perf pre-alloc 845390 events per sec
-> 7:hash_map_perf pre-alloc 834865 events per sec
-> 13:hash_map_perf pre-alloc 842619 events per sec
-> 1:hash_map_perf pre-alloc 804231 events per sec
-> 15:hash_map_perf pre-alloc 795314 events per sec
-> 
-> hash_map the worst: no free
-> ./map_perf_test 2048
-> 6:worse hash_map_perf pre-alloc 28628 events per sec
-> 5:worse hash_map_perf pre-alloc 28553 events per sec
-> 11:worse hash_map_perf pre-alloc 28543 events per sec
-> 3:worse hash_map_perf pre-alloc 28444 events per sec
-> 1:worse hash_map_perf pre-alloc 28418 events per sec
-> 7:worse hash_map_perf pre-alloc 28427 events per sec
-> 13:worse hash_map_perf pre-alloc 28330 events per sec
-> 14:worse hash_map_perf pre-alloc 28263 events per sec
-> 9:worse hash_map_perf pre-alloc 28211 events per sec
-> 15:worse hash_map_perf pre-alloc 28193 events per sec
-> 12:worse hash_map_perf pre-alloc 28190 events per sec
-> 10:worse hash_map_perf pre-alloc 28129 events per sec
-> 8:worse hash_map_perf pre-alloc 28116 events per sec
-> 4:worse hash_map_perf pre-alloc 27906 events per sec
-> 2:worse hash_map_perf pre-alloc 27801 events per sec
-> 0:worse hash_map_perf pre-alloc 27416 events per sec
-> 3:worse hash_map_perf pre-alloc 28188 events per sec
-> 
-> ftrace trace
-> 
-> 0)               |  htab_map_update_elem() {
-> 0)   0.198 us    |    migrate_disable();
-> 0)               |    _raw_spin_lock_irqsave() {
-> 0)   0.157 us    |      preempt_count_add();
-> 0)   0.538 us    |    }
-> 0)   0.260 us    |    lookup_elem_raw();
-> 0)               |    alloc_htab_elem() {
-> 0)               |      __pcpu_freelist_pop() {
-> 0)               |        _raw_spin_lock() {
-> 0)   0.152 us    |          preempt_count_add();
-> 0)   0.352 us    |          native_queued_spin_lock_slowpath();
-> 0)   1.065 us    |        }
-> 		 |	  ...
-> 0)               |        _raw_spin_unlock() {
-> 0)   0.254 us    |          preempt_count_sub();
-> 0)   0.555 us    |        }
-> 0) + 25.188 us   |      }
-> 0) + 25.486 us   |    }
-> 0)               |    _raw_spin_unlock_irqrestore() {
-> 0)   0.155 us    |      preempt_count_sub();
-> 0)   0.454 us    |    }
-> 0)   0.148 us    |    migrate_enable();
-> 0) + 28.439 us   |  }
-> 
-> The test machine is 16C, trying to get spin_lock 17 times, in addition
-> to 16c, there is an extralist.
-> 
-> after patch: hash_map performance
-> ./map_perf_test 1
-> 0:hash_map_perf pre-alloc 969348 events per sec
-> 10:hash_map_perf pre-alloc 906526 events per sec
-> 11:hash_map_perf pre-alloc 904557 events per sec
-> 9:hash_map_perf pre-alloc 902384 events per sec
-> 15:hash_map_perf pre-alloc 912287 events per sec
-> 14:hash_map_perf pre-alloc 905689 events per sec
-> 12:hash_map_perf pre-alloc 903680 events per sec
-> 13:hash_map_perf pre-alloc 902631 events per sec
-> 8:hash_map_perf pre-alloc 875369 events per sec
-> 4:hash_map_perf pre-alloc 862808 events per sec
-> 1:hash_map_perf pre-alloc 857218 events per sec
-> 2:hash_map_perf pre-alloc 852875 events per sec
-> 5:hash_map_perf pre-alloc 846497 events per sec
-> 6:hash_map_perf pre-alloc 828467 events per sec
-> 3:hash_map_perf pre-alloc 812542 events per sec
-> 7:hash_map_perf pre-alloc 805336 events per sec
-> 
-> hash_map worst: no free
-> ./map_perf_test 2048
-> 7:worse hash_map_perf pre-alloc 391104 events per sec
-> 4:worse hash_map_perf pre-alloc 388073 events per sec
-> 5:worse hash_map_perf pre-alloc 387038 events per sec
-> 1:worse hash_map_perf pre-alloc 386546 events per sec
-> 0:worse hash_map_perf pre-alloc 384590 events per sec
-> 11:worse hash_map_perf pre-alloc 379378 events per sec
-> 10:worse hash_map_perf pre-alloc 375480 events per sec
-> 12:worse hash_map_perf pre-alloc 372394 events per sec
-> 6:worse hash_map_perf pre-alloc 367692 events per sec
-> 3:worse hash_map_perf pre-alloc 363970 events per sec
-> 9:worse hash_map_perf pre-alloc 364008 events per sec
-> 8:worse hash_map_perf pre-alloc 363759 events per sec
-> 2:worse hash_map_perf pre-alloc 360743 events per sec
-> 14:worse hash_map_perf pre-alloc 361195 events per sec
-> 13:worse hash_map_perf pre-alloc 360276 events per sec
-> 15:worse hash_map_perf pre-alloc 360057 events per sec
-> 0:worse hash_map_perf pre-alloc 378177 events per sec
-> 
-> ftrace trace
-> 0)               |  htab_map_update_elem() {
-> 0)   0.317 us    |    migrate_disable();
-> 0)               |    _raw_spin_lock_irqsave() {
-> 0)   0.260 us    |      preempt_count_add();
-> 0)   1.803 us    |    }
-> 0)   0.276 us    |    lookup_elem_raw();
-> 0)               |    alloc_htab_elem() {
-> 0)   0.586 us    |      __pcpu_freelist_pop();
-> 0)   0.945 us    |    }
-> 0)               |    _raw_spin_unlock_irqrestore() {
-> 0)   0.160 us    |      preempt_count_sub();
-> 0)   0.972 us    |    }
-> 0)   0.657 us    |    migrate_enable();
-> 0)   8.669 us    |  }
-> 
-> It can be seen that after adding this patch, the map performance is
-> almost not degraded, and when free=0, first check is_empty instead of
-> directly acquiring spin_lock.
-> 
-> As for why to add is_empty instead of directly judging head->first, my
-> understanding is this, head->first is frequently modified during updating
-> map, which will lead to invalid other cpus's cache, and is_empty is after
-> freelist having no free elems will be changed, the performance will be better.
-> 
-> Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>>>> "Jiasheng" == Jiasheng Jiang <jiasheng@iscas.ac.cn> writes:
+
+ > As platform_driver_register() could fail, it should be better
+ > to deal with the return value in order to maintain the code
+ > consisitency.
+
+ > Fixes: 86af1d02d458 ("platform/x86: Support for EC-connected GPIOs for
+ > identify LED/button on Barco P50 board")
+
+ > Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+
+Acked-by: Peter Korsgaard <peter.korsgaard@barco.com>
+
+
 > ---
->   kernel/bpf/percpu_freelist.c | 28 +++++++++++++++++++++++++---
->   kernel/bpf/percpu_freelist.h |  1 +
->   2 files changed, 26 insertions(+), 3 deletions(-)
-[...]
->   	/* per cpu lists are all empty, try extralist */
-> +	if (s->extralist.is_empty)
-> +		return NULL;
->   	raw_spin_lock(&s->extralist.lock);
->   	node = s->extralist.first;
-> -	if (node)
-> +	if (node) {
->   		s->extralist.first = node->next;
-> +		if (!s->extralist.first)
-> +			s->extralist.is_empty = true;
-> +	}
->   	raw_spin_unlock(&s->extralist.lock);
->   	return node;
->   }
-> @@ -164,15 +178,20 @@ ___pcpu_freelist_pop_nmi(struct pcpu_freelist *s)
->   	orig_cpu = cpu = raw_smp_processor_id();
->   	while (1) {
->   		head = per_cpu_ptr(s->freelist, cpu);
-> +		if (head->is_empty)
+ >  drivers/platform/x86/barco-p50-gpio.c | 5 ++++-
+ >  1 file changed, 4 insertions(+), 1 deletion(-)
 
-This should use READ_ONCE/WRITE_ONCE pair for head->is_empty.
+ > diff --git a/drivers/platform/x86/barco-p50-gpio.c b/drivers/platform/x86/barco-p50-gpio.c
+ > index 05534287bc26..8dd672339485 100644
+ > --- a/drivers/platform/x86/barco-p50-gpio.c
+ > +++ b/drivers/platform/x86/barco-p50-gpio.c
+ > @@ -405,11 +405,14 @@ MODULE_DEVICE_TABLE(dmi, dmi_ids);
+ >  static int __init p50_module_init(void)
+ >  {
+ >  	struct resource res = DEFINE_RES_IO(P50_GPIO_IO_PORT_BASE, P50_PORT_CMD + 1);
+ > +	int ret;
+ 
+ >  	if (!dmi_first_match(dmi_ids))
+ >  		return -ENODEV;
+ 
+ > -	platform_driver_register(&p50_gpio_driver);
+ > +	ret = platform_driver_register(&p50_gpio_driver);
+ > +	if (ret)
+ > +		return ret;
+ 
+ >  	gpio_pdev = platform_device_register_simple(DRIVER_NAME, PLATFORM_DEVID_NONE, &res, 1);
+ >  	if (IS_ERR(gpio_pdev)) {
+ > -- 
 
-> +			goto next_cpu;
->   		if (raw_spin_trylock(&head->lock)) {
->   			node = head->first;
->   			if (node) {
->   				head->first = node->next;
-> +				if (!head->first)
-> +					head->is_empty = true;
->   				raw_spin_unlock(&head->lock);
->   				return node;
->   			}
->   			raw_spin_unlock(&head->lock);
->   		}
-> +next_cpu:
->   		cpu = cpumask_next(cpu, cpu_possible_mask);
->   		if (cpu >= nr_cpu_ids)
->   			cpu = 0;
+ > 2.25.1
+
+
+-- 
+Bye, Peter Korsgaard

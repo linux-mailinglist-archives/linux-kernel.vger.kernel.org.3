@@ -2,161 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FDA53755F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB884537564
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233121AbiE3H0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
+        id S232798AbiE3H3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233101AbiE3H0S (ORCPT
+        with ESMTP id S231709AbiE3H25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:26:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A505D52;
-        Mon, 30 May 2022 00:26:16 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C4EB921AB5;
-        Mon, 30 May 2022 07:26:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1653895574; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mJhMXK11Oy9OhbT6zRLVWRcJQzjCFhTldK+ScXnegQA=;
-        b=GFazepm3++MQc+JvEX+nuoDzrGWvVKQtNGemVY6id7ald3HrjbGSJKqjYk7Dr+C2mKrezG
-        7HUG+YsPdcW8WwKRTGbq6sThn/PB4b6lFbjBuVs9A5iJ9qLNVgLZyCxrEVafdJ9aO7N3jE
-        uHp/9Fuxl5dw7JMnSY1Ky9tLsHyClUw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1653895574;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mJhMXK11Oy9OhbT6zRLVWRcJQzjCFhTldK+ScXnegQA=;
-        b=pWMxiAVxkYR1ilH6EE+IPModiCqZn0R8C3qoYh/x6JLx5n2PoZstXcUn+AUta+rlpaK1b4
-        Z0BqCUwAGnEwSTAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9A7C913A84;
-        Mon, 30 May 2022 07:26:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FYujJJZxlGIJcwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 30 May 2022 07:26:14 +0000
-Message-ID: <0bf230f4-c888-b9c9-f061-7450406baa4a@suse.de>
-Date:   Mon, 30 May 2022 09:26:13 +0200
+        Mon, 30 May 2022 03:28:57 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632EA712EC
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:28:56 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id n10so19090902ejk.5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:28:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=B9L6G9B5eN5Puf1M+NouHaRWrtqC0JwMcCfdy6UJJdw=;
+        b=OZAJcflM2iCm/RirirZn6iQLv8JoxceKnzSyEZOVBh9Y5X4tQv6eEqSgriPvTvEFeW
+         2WGqsMGgNlHndmG2QSC/MKZ5ZnDHEzcS3ytsDmS9rpwwsLZN3YAK65gUae6Qijnd8i1U
+         DmncVSxdISrEyJdlw0YBawdSBbHsL1689HJXDH5JXec44H3Mp/ucc4YdJ9ggWw9v/sM1
+         iD7Suoad9+WijBFbIaYegzSz39ywYEcCJC/ukWczmjtJmIDHaf+8Y3b21h/QTXWYCFQM
+         islnukRpLYO5FS8p4DEMaERmMZ5coHAA/o1bfue8Feb96Bzsg++gVeQVqkMeOMC1yv7a
+         ewEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=B9L6G9B5eN5Puf1M+NouHaRWrtqC0JwMcCfdy6UJJdw=;
+        b=dRZuAhR43QpIi4liFIbuTn0RRrN0SVt0sRaRWRUwJJ9jq87GK/BvN/qcBpYAUpayLF
+         Tbwe8eFBCL+8OltnqvGE95Wh+tXspXtLJc/OjWd0SRSKX/XJIN1OTZ1WcrH/JtH5iDGO
+         QCS0u3yCl01MBp+stGELWgZtC43cMgN8kyKUQ/fM2XtQJXIVI88dbb4hVNG1Ysm1KKpM
+         RaGfidii+OQ3JqsnxZTZ1onsKHLw2SIxwv8jI5tlZHDE5MfZKb3oHALk4UMdhioAEPei
+         TPxYgOm9/tL2QQB5kzvFcNWaTDIUJM+inNRNoNIZrtJX5jQFDaZQAdFTrYujs+aoiGoi
+         EaiA==
+X-Gm-Message-State: AOAM532L4lo0OiC1yD/7paTyKTc0NSW0tFgsYSX7Yyv242GiRW7uU5bi
+        4JTtSXV9zcyyYDgzVhvxYo2kHj8BGI9/i7xY9tU=
+X-Google-Smtp-Source: ABdhPJx06eC7ZRIEhMwvrpvvZypSQUPxZqgrqNwJlD7tZXX684pB/M2vrLv8fhHsCJazKG6RDHmbgs3XcpA+Jaz4BJQ=
+X-Received: by 2002:a17:907:1b1c:b0:6fe:f1a9:ef5a with SMTP id
+ mp28-20020a1709071b1c00b006fef1a9ef5amr30705728ejc.233.1653895734352; Mon, 30
+ May 2022 00:28:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] drm/prime: Ensure mmap offset is initialized
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        freedreno@lists.freedesktop.org
-References: <20220529162936.2539901-1-robdclark@gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220529162936.2539901-1-robdclark@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------KAozOQ62OHty5tESxRwyUNjL"
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: djmacdon5@gmail.com
+Received: by 2002:a54:3b11:0:0:0:0:0 with HTTP; Mon, 30 May 2022 00:28:53
+ -0700 (PDT)
+From:   Dina Mckenna <dinamckenna1894@gmail.com>
+Date:   Sun, 29 May 2022 19:28:53 -1200
+X-Google-Sender-Auth: -8KVmABulLFDQSmQ1unOy3FzCUw
+Message-ID: <CAKGPEqiQisc05_3K6opmy=woSPTHo_maZF+E7X9W_T6cL5FjAA@mail.gmail.com>
+Subject: Calvary greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_99,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:634 listed in]
+        [list.dnswl.org]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 0.9980]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [dinamckenna1894[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [djmacdon5[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  0.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------KAozOQ62OHty5tESxRwyUNjL
-Content-Type: multipart/mixed; boundary="------------WQ1cpBIzbW4zQgWTHfM76xLG";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc: Rob Clark <robdclark@chromium.org>, David Airlie <airlied@linux.ie>,
- linux-arm-msm@vger.kernel.org, open list <linux-kernel@vger.kernel.org>,
- Gerd Hoffmann <kraxel@redhat.com>, freedreno@lists.freedesktop.org
-Message-ID: <0bf230f4-c888-b9c9-f061-7450406baa4a@suse.de>
-Subject: Re: [PATCH] drm/prime: Ensure mmap offset is initialized
-References: <20220529162936.2539901-1-robdclark@gmail.com>
-In-Reply-To: <20220529162936.2539901-1-robdclark@gmail.com>
+Hello my dear,
 
---------------WQ1cpBIzbW4zQgWTHfM76xLG
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs. Dina mckenna howley., a widow. I am
+suffering from a long time brain tumor, It has defiled all forms of
+medical treatment, and right now I have about a few months to leave,
+according to medical experts. The situation has gotten complicated
+recently with my inability to hear proper, am communicating with you
+with the help of the chief nurse herein the hospital, from all
+indication my conditions is really deteriorating and it is quite
+obvious that, according to my doctors they have advised me that I may
+not live too long, Because this illness has gotten to a very bad
+stage. I plead that you will not expose or betray this trust and
+confidence that I am about to repose on you for the mutual benefit of
+the orphans and the less privilege. I have some funds I inherited from
+my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
+Having known my condition, I decided to donate this fund to you
+believing that you will utilize it the way i am going to instruct
+herein. I need you to assist me and reclaim this money and use it for
+Charity works therein your country for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of God
+and the effort that the house of God is maintained. I do not want a
+situation where this money will be used in an ungodly manner. That's
+why I'm taking this decision. I'm not afraid of death, so I know where
+I'm going. I accept this decision because I do not have any child who
+will inherit this money after I die. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
 
-SGkNCg0KQW0gMjkuMDUuMjIgdW0gMTg6Mjkgc2NocmllYiBSb2IgQ2xhcms6DQo+IEZyb206
-IFJvYiBDbGFyayA8cm9iZGNsYXJrQGNocm9taXVtLm9yZz4NCj4gDQo+IElmIGEgR0VNIG9i
-amVjdCBpcyBhbGxvY2F0ZWQsIGFuZCB0aGVuIGV4cG9ydGVkIGFzIGEgZG1hLWJ1ZiBmZCB3
-aGljaCBpcw0KPiBtbWFwJ2QgYmVmb3JlIG9yIHdpdGhvdXQgdGhlIEdFTSBidWZmZXIgYmVp
-bmcgZGlyZWN0bHkgbW1hcCdkLCB0aGUNCj4gdm1hX25vZGUgY291bGQgYmUgdW5pdGlhbGl6
-ZWQuICBUaGlzIGxlYWRzIHRvIGEgc2l0dWF0aW9uIHdoZXJlIHRoZSBDUFUNCj4gbWFwcGlu
-ZyBpcyBub3QgY29ycmVjdGx5IHRvcm4gZG93biBpbiBkcm1fdm1hX25vZGVfdW5tYXAoKS4N
-Cg0KV2hpY2ggZHJpdmVycyBhcmUgYWZmZWN0ZWQgYnkgdGhpcyBwcm9ibGVtPw0KDQpJIGNo
-ZWNrZWQgc2V2ZXJhbCBkcml2ZXJzIGFuZCBtb3N0IGFwcGVhciB0byBiZSBpbml0aWFsaXpp
-bmcgdGhlIG9mZnNldCANCmR1cmluZyBvYmplY3QgY29uc3RydWN0aW9uLCBzdWNoIGFzIEdF
-TSBTSE1FTS4gWzFdIFRUTS1iYXNlZCBkcml2ZXJzIA0KYWxzbyBzZWVtIHVuYWZmZWN0ZWQu
-IFsyXQ0KDQogRnJvbSBhIHF1aWNrIGdyZXAsIG9ubHkgZXRuYXZpdiwgbXNtIGFuZCBvbWFw
-ZHJtIGFwcGVhciB0byBiZSBhZmZlY3RlZD8gDQpUaGV5IG9ubHkgc2VlbSB0byBydW4gZHJt
-X2dlbV9jcmVhdGVfbW1hcF9vZmZzZXQoKSBmcm9tIHRoZWlyIA0KaW9jdGwtaGFuZGxpbmcg
-Y29kZS4NCg0KSWYgc28sIEknZCBzYXkgaXQncyBwcmVmZXJhYmxlIHRvIGZpeCB0aGVzZSBk
-cml2ZXJzIGFuZCBwdXQgYSANCmRybV9XQVJOX09OQ0UoKSBpbnRvIGRybV9nZW1fcHJpbWVf
-bW1hcCgpLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQpbMV0gDQpodHRwczovL2VsaXhp
-ci5ib290bGluLmNvbS9saW51eC92NS4xOC9zb3VyY2UvZHJpdmVycy9ncHUvZHJtL2RybV9n
-ZW1fc2htZW1faGVscGVyLmMjTDg1DQpbMl0gDQpodHRwczovL2VsaXhpci5ib290bGluLmNv
-bS9saW51eC92NS4xOC9zb3VyY2UvZHJpdmVycy9ncHUvZHJtL3R0bS90dG1fYm8uYyNMMTAw
-Mg0KDQo+IA0KPiBGaXhlczogZTU1MTY1NTM5OTlmICgiZHJtOiBjYWxsIGRybV9nZW1fb2Jq
-ZWN0X2Z1bmNzLm1tYXAgd2l0aCBmYWtlIG9mZnNldCIpDQo+IFNpZ25lZC1vZmYtYnk6IFJv
-YiBDbGFyayA8cm9iZGNsYXJrQGNocm9taXVtLm9yZz4NCj4gLS0tDQo+IE5vdGUsIGl0J3Mg
-cG9zc2libGUgdGhlIGlzc3VlIGV4aXN0ZWQgaW4gc29tZSByZWxhdGVkIGZvcm0gcHJpb3Ig
-dG8gdGhlDQo+IGNvbW1pdCB0YWdnZWQgd2l0aCBGaXhlcy4NCj4gDQo+ICAgZHJpdmVycy9n
-cHUvZHJtL2RybV9wcmltZS5jIHwgNSArKysrKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA1IGlu
-c2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX3By
-aW1lLmMgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX3ByaW1lLmMNCj4gaW5kZXggZTNmMDlmMTgx
-MTBjLi44NDllZWExNTRkZmMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1f
-cHJpbWUuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX3ByaW1lLmMNCj4gQEAgLTcx
-Niw2ICs3MTYsMTEgQEAgaW50IGRybV9nZW1fcHJpbWVfbW1hcChzdHJ1Y3QgZHJtX2dlbV9v
-YmplY3QgKm9iaiwgc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEpDQo+ICAgCXN0cnVjdCBm
-aWxlICpmaWw7DQo+ICAgCWludCByZXQ7DQo+ICAgDQo+ICsJLyogRW5zdXJlIHRoYXQgdGhl
-IHZtYV9ub2RlIGlzIGluaXRpYWxpemVkOiAqLw0KPiArCXJldCA9IGRybV9nZW1fY3JlYXRl
-X21tYXBfb2Zmc2V0KG9iaik7DQo+ICsJaWYgKHJldCkNCj4gKwkJcmV0dXJuIHJldDsNCj4g
-Kw0KPiAgIAkvKiBBZGQgdGhlIGZha2Ugb2Zmc2V0ICovDQo+ICAgCXZtYS0+dm1fcGdvZmYg
-Kz0gZHJtX3ZtYV9ub2RlX3N0YXJ0KCZvYmotPnZtYV9ub2RlKTsNCj4gICANCg0KLS0gDQpU
-aG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0
-d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xy
-bmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNm
-w7xocmVyOiBJdm8gVG90ZXYNCg==
+I'm waiting for your immediate reply.
 
---------------WQ1cpBIzbW4zQgWTHfM76xLG--
-
---------------KAozOQ62OHty5tESxRwyUNjL
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmKUcZUFAwAAAAAACgkQlh/E3EQov+Bw
-Rw//W0YImYzt681b9jeTvi99JxWCBN10xHjtXjt9frakEKCA6CbV3NfBp8bbJBpC92l7RQhgHkJn
-A4fglQwVsZBFELAxjiv97XAf+2bNumGHvQCUVHBZZIA+ug7Q2QtEanZe/69C7PisFBJAgnU/2mU6
-Y/UAfKU2fd0fW47khfuDyQrxE15OHHDA3YCnuj5kWl10BxgbcJTMpKFk0CuEculFDpg04ptBFSaK
-y22kBGEAoRDxjlXSNJdsAVU//aeQDfdV1DwIQNsonj91VpSDrzDzcf+L+qFOGM0VCUi7Uh1QgIQ0
-Z7wM2OLdJUQLfP1/BZpLZy4jo0rf85Qw9bP526apAcz3EVB4+oYnXlcZ7SEmiRr6UaihkOySLWbc
-dmPbvG7UM2IFkkZsZK1aFQUeDxESXW3wltmvUjt6YwICZf/XSwqu4WFOPuJbbQEX0ykXCxf2ideE
-kyG2jw3HF1OgEYUYpJsZRV5KbySOS+73kmRoQFptD3X4/L4ScBPPoWD6G6Cj3PeQJ2OK6VDIgCsH
-VH4RKxzjspxDakcXM0TChx6S0ms4OhKUro9yNh1wwjBX+Ncc1ew/qBlJWfYvyol+zXk9FhBAOiUa
-zzZfzlScYWwPg0+jUMKi2saSeKSv9qsx/BopsPQ1yzt3v46zcF+aBljQTGtWu8d19reoRxDMOy6j
-Ngc=
-=DPWT
------END PGP SIGNATURE-----
-
---------------KAozOQ62OHty5tESxRwyUNjL--
+May God Bless you,
+Mrs. Dina Mckenna Howley.

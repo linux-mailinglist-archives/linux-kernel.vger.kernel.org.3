@@ -2,86 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D385384CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 663ED5384F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239461AbiE3PZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S238600AbiE3Pbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241804AbiE3PZB (ORCPT
+        with ESMTP id S237141AbiE3PZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:25:01 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF424140C5
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:27:03 -0700 (PDT)
-Received: from mail-yb1-f175.google.com ([209.85.219.175]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MAwoL-1o705U2mAD-00BNnR for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022
- 16:27:01 +0200
-Received: by mail-yb1-f175.google.com with SMTP id t31so6376265ybi.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:27:01 -0700 (PDT)
-X-Gm-Message-State: AOAM530iK3Q2mV8VZSC7415vACqiXJ7deUN+Nxd+NCGh1deNO/Jec/+s
-        uOOWffgn70Zwp4/0T3M9UwRiZ5pM+8T+1oJ0c9E=
-X-Google-Smtp-Source: ABdhPJx5T8sAy2mpNYpXUMEEXXq3paGLe37RJlBPWUL37w/VrSqmqA+dX26yPRFsA+fHHAhbaULTIG1qF0gAbTdb1Dw=
-X-Received: by 2002:a25:4f0a:0:b0:64f:6a76:3d8f with SMTP id
- d10-20020a254f0a000000b0064f6a763d8fmr43544693ybb.134.1653920820404; Mon, 30
- May 2022 07:27:00 -0700 (PDT)
+        Mon, 30 May 2022 11:25:48 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EA3147834;
+        Mon, 30 May 2022 07:28:25 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24UBbrif003335;
+        Mon, 30 May 2022 14:27:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=Eh3hGqTPE9V1zQbdUok+0KSvn0gc1dE2U1PNkR2Qn+8=;
+ b=TMJUrwRXftidZszM2xqW/WeGNELv7yNZNNPm5sGVbbuQNCax/Ux50DnmnnpVR5sI2uK7
+ UFg3Mggd8XnTYCxtDlIC51GTD4wJjRef7ULnMwMQlZxtmeK3BfRle4VW2DZwbEvm1OrK
+ ngMfrVW4E5Co50YRhIu1fRzC9dsZI/dmgVBiQsT1MGV40KDO5ZJj1Zj7lRRiB2p0udAA
+ v+MJsovUrNvv1JTve7S/MFtjYuMapEqQedX3/VwlcQ12eizLLYNNWxqDusvuSdSYIfKl
+ SxVUa2WUui/L0MkRFbHNw64o7wxaWRkCiYZrpkipVN+yqb1ZHDHWIbYvibU6E2D3uBKW SQ== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gbc6x35g5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 May 2022 14:27:59 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24UEFN25006668;
+        Mon, 30 May 2022 14:27:58 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2042.outbound.protection.outlook.com [104.47.66.42])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gc8jw7x3y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 May 2022 14:27:58 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i9cVizEbGI95XmzCG3GY1SwAGSfUrtEiWjCJKZhB2ppVMQJpZLZe9BMMAGVkTnejaz7PAHO2ugnp0rnb69oxputlzfpVXRdP1bApkRAC01V013LQ/L6U71q63y2A3swo9lXijiBQkteudXzP2h6bDffwDGzDWCKcZt7S7DSYS0A9KHQkfkDmlvpqsm/FF8pwtLA3FpHB7pMhGtdruFbDNR2lO18xSFXmmPEUszegOxCOcq0DwPguOPvqnzX3Umk3FAochSXdpH898+qxqCtTXVkaQeaNhFa0wLxJIgmX5i2TjPShVGOq9Kyi1gxuVyCoS2CHHolIfx4l6DBnRvBIeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Eh3hGqTPE9V1zQbdUok+0KSvn0gc1dE2U1PNkR2Qn+8=;
+ b=d+TZw+Zn6C52vMtfQe+ISebfYcth00Ove6xuS5ooLxVM5WjismpHFtBb1ZcxwsJnOLZQQsrG3Q8xwOFPw3oIW0pn/EVYczzUnK+43eN8YQUw2gO6FFLPlRs0c4g7MC2d3P7NMQlp8w9fkhEl0HL+xKWtY8c+qDRQhFTq8Si66+Ha+yNMeFA7YxYEBqxdJn8oKRw3J3EmwYCGfO8pcaL2Q3jLis8r7ebjyirK2hpLsNdI0Lz0I3g8iMwBsN8I2Y/Y1OvuFNRxKK38zYWIqQ1sxb3EXoLuxPdjbC8vHEciN5IsR8V/3sIdOiL0KHR/CB/WUL6UbsrA7zYbG2c7a2CkJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Eh3hGqTPE9V1zQbdUok+0KSvn0gc1dE2U1PNkR2Qn+8=;
+ b=SPt3bsY8HGwyTRPd2ZlxoP4+qBf3/zWSC8njWCdBq9sRENJYQuewJV03PR/kezcSv2Ihb1PQoOyPLnuszIVs+szRKMUe7auHwHKHGtDNLo6EvPbeSCJSiNiQU46unqU9Z0MQDej1q+25aPbzqdTe6t4cJga4/d4UNlc4N/sYoAw=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by BN0PR10MB5272.namprd10.prod.outlook.com
+ (2603:10b6:408:124::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.15; Mon, 30 May
+ 2022 14:27:55 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::86f:81ba:9951:5a7e]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::86f:81ba:9951:5a7e%2]) with mapi id 15.20.5293.019; Mon, 30 May 2022
+ 14:27:55 +0000
+Date:   Mon, 30 May 2022 17:27:25 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Eugenio Perez Martin <eperezma@redhat.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        "Dawar, Gautam" <gautam.dawar@amd.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        "martinh@xilinx.com" <martinh@xilinx.com>,
+        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
+        Eli Cohen <elic@nvidia.com>, Parav Pandit <parav@nvidia.com>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        "dinang@xilinx.com" <dinang@xilinx.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "martinpo@xilinx.com" <martinpo@xilinx.com>,
+        "pabloc@xilinx.com" <pabloc@xilinx.com>,
+        Longpeng <longpeng2@huawei.com>,
+        "Piotr.Uminski@intel.com" <Piotr.Uminski@intel.com>,
+        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
+        "lvivier@redhat.com" <lvivier@redhat.com>,
+        Zhang Min <zhang.min9@zte.com.cn>,
+        "hanand@xilinx.com" <hanand@xilinx.com>
+Subject: Re: [PATCH v3 2/4] vhost-vdpa: introduce STOP backend feature bit
+Message-ID: <20220530142725.GU2168@kadam>
+References: <20220525105922.2413991-3-eperezma@redhat.com>
+ <BL1PR12MB582520CC9CE024149141327499D69@BL1PR12MB5825.namprd12.prod.outlook.com>
+ <CAJaqyWc9_ErCg4whLKrjNyP5z2DZno-LJm7PN=-9uk7PUT4fJw@mail.gmail.com>
+ <20220526090706.maf645wayelb7mcp@sgarzare-redhat>
+ <CAJaqyWf7PumZXy1g3PbbTNCdn3u1XH3XQF73tw2w8Py5yLkSAg@mail.gmail.com>
+ <20220526132038.GF2168@kadam>
+ <CAJaqyWe4311B6SK997eijEJyhwnAxkBUGJ_0iuDNd=wZSt0DmQ@mail.gmail.com>
+ <20220526190630.GJ2168@kadam>
+ <CAJaqyWdfWgC-uthR0aCjitCrBf=ca=Ee1oAB=JumffK=eSLgng@mail.gmail.com>
+ <20220527073654.GM2168@kadam>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220527073654.GM2168@kadam>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNXP275CA0002.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:19::14)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-References: <YpCUzStDnSgQLNFN@debian> <CAHk-=wg0uGAX5DYZq+tY2KeUAR8DtR91YE1y9CkPMKkKOyE4jg@mail.gmail.com>
- <CADVatmNGPbSdRNQuwJEWAaPtqb3vBYRjvsuBpoRUnhEHj=X5GQ@mail.gmail.com>
- <CAHk-=wisQd8yiPX=SsK3eFiakKo713hq4SyqPWsJ-oyAmLFefQ@mail.gmail.com>
- <YpIR67FMtTGCwARZ@debian> <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
- <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com>
- <CAK8P3a0-QyOQiieEvM0yQb43XbCtPmeao8UvoAsdFnjCxYPz7Q@mail.gmail.com>
- <CAHk-=whfmwzjF4eBPYS6pHFqHVzJF3m=2h=gRWSRyHks8V=ABA@mail.gmail.com>
- <87a6aztli2.fsf@intel.com> <877d63tleq.fsf@intel.com> <CAK8P3a0-S77QLR1dK3NT6ot7JTAD5AdojAZJr-Xi112-v5EOdw@mail.gmail.com>
- <87czfvrwsv.fsf@intel.com> <CAK8P3a0HNOCOSx9UONw6gf1UUU8J4iAOmMFP8-DtJ3O7XAACsQ@mail.gmail.com>
- <874k17ru44.fsf@intel.com>
-In-Reply-To: <874k17ru44.fsf@intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 30 May 2022 16:26:43 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
-Message-ID: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
-Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
- block count and size helpers")
-To:     Jani Nikula <jani.nikula@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        SoC Team <soc@kernel.org>, Julia Lawall <Julia.Lawall@inria.fr>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:GsNo+lmxofIjxKfQ8P/W5vYMLw6wvfExggyZZJBLHymM0U2xCqF
- cxpRJ+VsjR+G/v2AI1vekY7nhm32qhgNDTfnRRMES1bZLtvq3j9ylWbEBxn+eNBwcmwlxoP
- 3Pg83FL9wGY6nxqr7sZlorgCf9dc6tpvs3EGxhPPbOCaHT/SODxv+qIS27AhGBLcWNFfOKA
- KQT89jtpp9CxL1rLWkHAQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VU2d7sJRNV8=:Bb/K79iZoDkd6FMmH6HbZr
- ShzTmmi4LwZ192mHRmZ3E/bDE6RcJY/kLczT9q/T596wCFBUf8pIfkJlG1mYS/zSkPHmi6ZRq
- IEjHfkH+c55EXwx5vlQDkdWuwNvA+g4BLC4Z2eXZsFpeXCUM1iPdwQfQ25kmwzR7holEsuWVm
- kkdcqlDAOQKv0aErxKI1LkS5CBWhb59LJ2+jZ+wzhd1RrcZTeUmdPLUYYGEn08ogIHj32y6PU
- maDeS++VXnS7Ltjl0b1tvH8IsaAMpkVbp4Dvz/iIpo/xeMv1ftETwJaY9T1a5TFhEf2jm9FJc
- +R21QJACaW8P0kcDqxyZ6Aegx3oFgomTKYtmmVanAErV4oBDaxeJQMOwdqMp+25Pd3pNKUZK2
- je+T5kATa3Sb511AmWyANY0JEo8kbJhnXeXl6UqpF95aErZIK1/5V/v91P7nFiqHJIi0FDiSj
- k2nn52NezY02cJmIdyGm2M9kS7b+6gTBroxnNjoM326pQRVXwxtSvuTo7XPE4DcM3+iiYgrks
- ozFP++1g3WrlOiGPK/8+dSElauOyEYwDmTIoztHxvBPacaqiDfcyfy3lUCMlckz3YgNVz57+T
- I0NzhKoqpd7V524JO12hc5iMKQjna/l0Cf9lC4nrcycAkAa1C+MCweVGPP3iPVc378fbdE1Tv
- BtGzSsJsUZTVGxCSuObU248PDkw/Hzt6XcNVtM/vpoJ5qszqQA8a+jxmaN90lcMTWScUmIhMU
- OA7W9zcmiRghRH7MaVPBnGyn5F5APCeOeLBTtcsUi+Wtkmf9mtvM8KkI+FqeJHJnc0l2hmZaq
- I4VxKFtmAlYDOSTnkFG4iEMpl414Oi591niobnfbMtCjpu54KaU3O62z9+AeZ6sp4j/QL0SEI
- F1gjL/J0BPIEyhbIxwliWD8hFV8SNgNnQtvzU1Vds=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 37d887e0-721e-4e7c-ccb7-08da4248962c
+X-MS-TrafficTypeDiagnostic: BN0PR10MB5272:EE_
+X-Microsoft-Antispam-PRVS: <BN0PR10MB52720419460C20BEFA6F7FD98EDD9@BN0PR10MB5272.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4RZouvnY2sUyuwmW12sTcBuUrkRtxnR1I9bEXO6dSySKmBytYC5H/jAtT5sL8Gv8bjkT4oZOAxPDvHLQvijO38WrMekS0uyqulYvhfaJsZNZvD68+H67+furGn8e8FTdqWbVYYecBlzIJL1zV5S2W9qYm0eRsjY9N2liWBuzju5qaDSUq2vFZtD14GNIrS6SLsBnZwngMLjHqyCGEGRQx157FD3Q4b5pugnTZ0xyP2ac2KXkt/FFlR8Ji0xAtF/RdYavIymRH0t+C41CyjzvwWxTBK3tbdIR7OW4vDXoRoehyVcKEYPQJIzrY9uoU3woC7sl6VkIetCJ9AdKYxAwzY+KKBKiC6+RslXVB78Knxh3UCzNXFj6dEY1qb8HlJv0UcfIwmDxFl1FR9vnE52ZJSnyWi2Nnwj+VDz3cYoJSeg4Asp2x/z9qpL84SYV2WBJecEvymR00LsFoCopWfSgNbZjLk370zuNZNY3IDCe7ZGHc4qqJTwQi2eMgpJX2FKvNbf5gGJePsGnRhUy0yQGbm8BdNHXuOdlLmrMgsoRhtXVVKtXg9x4hyqDJ2/boE3Rs4+7K2mbloALsDUffi9ETp3CDyYpOqOBTW1BN4C6KbFnw75WZJKJCgJyIMyt0sri0W4FjdJFJsDGe6pft+OQM331IGALJh7gTqQ0jVPMbDHTvGpsG9AWPhRLZ/mRGCoH9T4Kn+ouhCMtyTKOiivh+Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(2906002)(6666004)(8676002)(6486002)(44832011)(66556008)(4326008)(66476007)(7416002)(33716001)(66946007)(54906003)(316002)(5660300002)(52116002)(508600001)(6916009)(26005)(6506007)(6512007)(9686003)(33656002)(38350700002)(1076003)(38100700002)(86362001)(83380400001)(8936002)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZJvOYFFyqFnRaQ+Hc4n3Da1Wnp3N/M2dtCl6l6RRV0tRjIV4ccL6i+PlC8Gs?=
+ =?us-ascii?Q?IwzVCVfHlphrpglDd+5UPOmLrUxmBh5jqyfsoR53spCWMLLtYYFmjLg4j4gE?=
+ =?us-ascii?Q?6dxNS8qpf6ftvPcpwtVRc/DgNU/t+79dAuNzuyb+bYQDiA+th+ToU/D77jRd?=
+ =?us-ascii?Q?tLjm4h3HDVbnzfbw2zN6tFr8rzClPzIakCG/o2o1LTW0E01KPQztnAhr1ZD5?=
+ =?us-ascii?Q?uO6FqgYPBXoZFL9XQkegQVGix9AHuFERhNXKFp6lbQB0ciGv+nmSlj4s6a3A?=
+ =?us-ascii?Q?hhD1u4rWYo+aIKD2NizwvS+haqtsP9UZZJiyjwmGpgjiRTmoNBkUfQoCHF0T?=
+ =?us-ascii?Q?a94DKhy9t0FO0wNS10jQ5R3cZQ9VkgE/kiL98PRjeeA3ECAB4w4QokyYcll0?=
+ =?us-ascii?Q?VcHvq6+uLPfCkc47qHJY+Yldiv4Uut4yGYjzrAk04UoUUk111STWdVHsYeB/?=
+ =?us-ascii?Q?dH1vD7TDy/+vZ2Es4PlQeMxrptohCPFlERbOOU/+0uTQ9HDxslbwIdgfK+Wg?=
+ =?us-ascii?Q?7vnavyNwSnwu/SG+XFjF0HS5a7KlXtSxgIQ69SHEoRdmsR6zXzfLIo83Xuqe?=
+ =?us-ascii?Q?OlXnGkLBFB4z3D9U0oD+Gl72jisc5Jzf9gZ2jCmXalp+BzsUTzg9pY3zmSCf?=
+ =?us-ascii?Q?gMT0hrFLIWTRSYrvxXWMa+J7LpEDLA2F5j4YKpC/NIKIT06PEBU0OF9ZcYSL?=
+ =?us-ascii?Q?ac0a1yabMUqYIlfdKOe7sif2VpPmwacHpU5B7V2sZnBeW6oIO9L0hEKivRu3?=
+ =?us-ascii?Q?/VXPfQWGNsyZL/qYLcWW7E4Ed1DlGSI/LoqZqQ5egQTBMQ13+b5CrXh5iUtV?=
+ =?us-ascii?Q?YnTYNxTugn4VqNaS12gxmQvunZ3C35HtJBA8KNINJ6SxJnl5DykxqJLaH7WW?=
+ =?us-ascii?Q?nP6vaUxAm9zuLZMMUwdjsmO8gS/Sn2Zw48UO9RWEYFqg+iy3xhgL/YHuTk9X?=
+ =?us-ascii?Q?P7D1kvW3Jw6UMeRDTMsuKle6/QcIdWKExxad9KowSxuN+cbs0lA9PiDA+Tzd?=
+ =?us-ascii?Q?+EjJ7VNl6ERpLJ9DQmxgKcxjunq4APznaVpCSfvYBWDKz4egsrLGJ27Q1J4w?=
+ =?us-ascii?Q?OhHg6h6YuSd5TfW/xhYANbMYHWfgMjoKLhYHY0YXFiG3p/obyMPoA8nMHYJ5?=
+ =?us-ascii?Q?zE3DSR0ytMW3rzwOm50/2dW1exaa68/25Blqq7cIWaCts7vuu6aBOHW/dUdM?=
+ =?us-ascii?Q?YZMlSaDR6TzEjfpb2na7HOraWPjUZ/omAn7jhGSC/jAJpZTFapsUbi65O6jd?=
+ =?us-ascii?Q?3Oyr5JmvbXe7rrCJjpw6ZlIo9u/xsKDVdA2ebuZC06THJ+RSnIm5LN7jof+d?=
+ =?us-ascii?Q?VKuw4dABsFkUkTICqh+l3Vm1X7jnSbEkhk12waY3moLI7xhalkEDypOLtL/D?=
+ =?us-ascii?Q?nwkCm8TLjJJ6Sw6GOj9Z72r03WcF04fmqc6WNBFl1VKoCuN8ukpec1p22FVe?=
+ =?us-ascii?Q?pTrETf68HVfohJH4nNMdZDsOaV+fa793gb+CwPd9LYrqdAL7+f1mg4AMW7v9?=
+ =?us-ascii?Q?4kAIMQWWXRnxda+sAmngN22xUE9yvvgaHBxxpC51BRvMBrHPN33xvQ8bPxWT?=
+ =?us-ascii?Q?mmeLikw25i9SIb8eaFuqYpy2RvzQCtK5ooVuTRNZOzyBgSio85+JRE4hv8lc?=
+ =?us-ascii?Q?vFO+e2n4D8rjmMUE73+zvfSPi0+/OO1KD293kpiX2ynGR50+wz+vKqKXL9/K?=
+ =?us-ascii?Q?c/fTqocZt/ZXSxn3HOL+OtEAS+vGir9CmrA0kqg5l8EDh2QRXrrgFC42vNnx?=
+ =?us-ascii?Q?VwW4XgJkZ4Rmd67tMKkf3rd7IVCtCXo=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37d887e0-721e-4e7c-ccb7-08da4248962c
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 14:27:55.3911
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IOODWtycYq4ULsympuCZ38MSIsYG20ThJidYWJKaRy2yRbbX1lWXJM9/lhdq4jQCAzUVy5RCZps5/oSTQAh6UWxwWpM4GDuaakkZwZwVvdo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5272
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.874
+ definitions=2022-05-30_05:2022-05-30,2022-05-30 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 spamscore=0 phishscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205300075
+X-Proofpoint-GUID: daDRscZ9FCioRZekyb3L16boc0TI3vrc
+X-Proofpoint-ORIG-GUID: daDRscZ9FCioRZekyb3L16boc0TI3vrc
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,46 +181,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 4:08 PM Jani Nikula <jani.nikula@intel.com> wrote:
-> On Mon, 30 May 2022, Arnd Bergmann <arnd@arndb.de> wrote:
-> > struct my_driver_priv {
-> >        struct device dev;
-> >        u8 causes_misalignment;
-> >        spinlock_t lock;
-> >        atomic_t counter;
-> > } __packed; /* this annotation is harmful because it breaks the atomics */
->
-> I wonder if this is something that could be caught with coccinelle. Or
-> sparse. Are there any cases where this combo is necessary? (I can't
-> think of any, but it's a low bar. ;)
->
-> Cc: Julia.
+On Fri, May 27, 2022 at 10:36:55AM +0300, Dan Carpenter wrote:
+> static void match_pointer(struct expression *ret_value)
+> {
+>         struct symbol *type;
+>         char *name;
+> 
+>         type = cur_func_return_type();
+>         if (!type || sval_type_max(type).value != 1)
+>                 return;
+> 
+>         if (!is_pointer(ret_value))
+>                 return;
+> 
+>         name = expr_to_str(ret_value);
+>         sm_msg("'%s' return pointer cast to bool", name);
+>         free_string(name);
+> }
 
-I think one would first have to make a list of data types that are not
-meant to be in a packed structure. It could be a good start to
-search for any packed aggregates with a pointer, atomic_t or spinlock_t
-in them, but there are of course many more types that you won't
-find in hardware structures.
+I found a bug in Smatch with this check.  With the Smatch bug fixed then
+there is only only place which does a legitimate implied pointer to bool
+cast.  A different function returns NULL on error instead of false.
 
-> > or if the annotation does not change the layout like
-> >
-> > struct my_dma_descriptor {
-> >      __le64 address;
-> >      __le64 length;
-> > } __packed; /* does not change layout but makes access slow on some
-> > architectures */
->
-> Why is this the case, though? I'd imagine the compiler could figure this
-> out.
+drivers/gpu/drm/i915/display/intel_dmc.c:249 intel_dmc_has_payload() 'i915->dmc.dmc_info[0]->payload' return pointer cast to bool
+drivers/net/wireless/rndis_wlan.c:1980 rndis_bss_info_update() '(0)' return pointer cast to bool
+drivers/net/wireless/rndis_wlan.c:1989 rndis_bss_info_update() '(0)' return pointer cast to bool
+drivers/net/wireless/rndis_wlan.c:1995 rndis_bss_info_update() '(0)' return pointer cast to bool
 
-When you annotate the entire structure as __packed without an
-extra __aligned() annotation, the compiler has to assume that the
-structure itself is unaligned as well. On many of the older architectures,
-this will result in accessing the values one byte at a time. Marking
-the structure as "__packed __aligned(8)" instead would be harmless.
+regards,
+dan carpenter
 
-When I have a structure with a few misaligned members, I generally
-prefer to only annotate the members that are not naturally aligned,
-but this approach is not very common.
-
-         Arnd

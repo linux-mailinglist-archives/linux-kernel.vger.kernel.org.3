@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40379537938
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44DD537939
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235304AbiE3KjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
+        id S235287AbiE3KjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235229AbiE3Kiz (ORCPT
+        with ESMTP id S235234AbiE3Ki4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:38:55 -0400
+        Mon, 30 May 2022 06:38:56 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BB86B664;
-        Mon, 30 May 2022 03:38:53 -0700 (PDT)
-Date:   Mon, 30 May 2022 10:38:51 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1533E6B7CE;
+        Mon, 30 May 2022 03:38:55 -0700 (PDT)
+Date:   Mon, 30 May 2022 10:38:52 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653907132;
+        s=2020; t=1653907133;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tIYI9r1xg9SEjXONgAPSijJ/633c70XiaGGltpvKbQk=;
-        b=MG3LaSIwkIXNnPuYg2VWxfqSJbFYPz1B1WGUlHPiq39YpjypuD6lrIit7Tm/aGvcnB0o1P
-        eH7nByOsS9eKHK5URKtsdtzdG9iBQ92KpAJRtRf1g4iMdYdJ768PMcCVXp0f/6UEINqvA4
-        zlVLVY/OJYPIkDkHeXkA0qbBd9TaHkByKQiofwlJUGw5E2a0EBE4bYSeAkiimVnhahaYSC
-        YTjOumPBwGPEWsHMcHk2lltCK1cc54qcC+UEx/BYzrOu5ZRviSYkDRgJILVzTIuHYYyrv3
-        gbkKi5f6GbedoEKaR3ymn7q11zUPM0CpQVUAaZcedgdcN0fVAuo78vUbCEMPLQ==
+        bh=GYcZQb6y/XCkh2YYSGLSoheHoc4Pzjv7/7ozpxfJPoM=;
+        b=XnvVP0CfJ8YSCNB5w5XDfbYNB7JJoBy4Pu0hKQBhfYXqRkJTn1kbaGowZ2jvufm2N2MM8c
+        k9MC5SAXcHdiIQwbURIZEMyLvpq4/wqdYpIA0786vIcZgW9yuBKSIafAL4iOPPSgo6bIxF
+        F4C3uDVeUAUzFCQPVGVZWeM924pOTE/3qEUw3ymIxYtNnLUA/kLZ+dkg3c/BFbl8AM4neR
+        msVXH6OcujgAmwv+L9H9ryggLJ4vp0x9n/y43VsX269B8Z0IqefUBXr8p02jP2S7tp4mDr
+        2IOTLorW+Ul9JRWckvh5NOuRTQYsrLU+yGuKKV0u2H92xLxMdLs9Oz2oH3n9FA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653907132;
+        s=2020e; t=1653907133;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tIYI9r1xg9SEjXONgAPSijJ/633c70XiaGGltpvKbQk=;
-        b=/Kc/KiE14HQCmDfn0tJQeHW14H1w2GhANKHgHmLIT934XHOPYdtE0m4M+qu+NV63ifV97k
-        Wmmxjl7D3UmvheDg==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+        bh=GYcZQb6y/XCkh2YYSGLSoheHoc4Pzjv7/7ozpxfJPoM=;
+        b=C3LuBmTkUUQIR7wWtzvJ4Yh6tl4FvrCZsc7iHlgabT0PyNW/N7EuXAxq9pGFPWuy6n5qNX
+        BJCg9FjFu3/Gc0AQ==
+From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/urgent] objtool: Mark
- __ubsan_handle_builtin_unreachable() as noreturn
-Cc:     kernel test robot <lkp@intel.com>,
+Subject: [tip: objtool/urgent] objtool: Add CONFIG_HAVE_UACCESS_VALIDATION
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220502091514.GB479834@worktop.programming.kicks-ass.net>
-References: <20220502091514.GB479834@worktop.programming.kicks-ass.net>
+In-Reply-To: <d393d5e2fe73aec6e8e41d5c24f4b6fe8583f2d8.1650384225.git.jpoimboe@redhat.com>
+References: <d393d5e2fe73aec6e8e41d5c24f4b6fe8583f2d8.1650384225.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
-Message-ID: <165390713152.4207.14750134351387268996.tip-bot2@tip-bot2>
+Message-ID: <165390713250.4207.16901240644447647410.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,61 +67,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/urgent branch of tip:
 
-Commit-ID:     385bd430c011a8cb8278e61c32d602d11e06f414
-Gitweb:        https://git.kernel.org/tip/385bd430c011a8cb8278e61c32d602d11e06f414
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Mon, 02 May 2022 11:15:14 +02:00
+Commit-ID:     5f3da8c08508df82823566c32f753071c8ad36af
+Gitweb:        https://git.kernel.org/tip/5f3da8c08508df82823566c32f753071c8ad36af
+Author:        Josh Poimboeuf <jpoimboe@redhat.com>
+AuthorDate:    Tue, 19 Apr 2022 09:05:09 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 27 May 2022 12:34:43 +02:00
 
-objtool: Mark __ubsan_handle_builtin_unreachable() as noreturn
+objtool: Add CONFIG_HAVE_UACCESS_VALIDATION
 
-  fs/ntfs3/ntfs3.prelink.o: warning: objtool: ni_read_frame() falls through to next function ni_readpage_cmpr.cold()
+Allow an arch specify that it has objtool uaccess validation with
+CONFIG_HAVE_UACCESS_VALIDATION.  For now, doing so unconditionally
+selects CONFIG_OBJTOOL.
 
-That is in fact:
-
-000000000000124a <ni_read_frame.cold>:
-    124a:       44 89 e0                mov    %r12d,%eax
-    124d:       0f b6 55 98             movzbl -0x68(%rbp),%edx
-    1251:       48 c7 c7 00 00 00 00    mov    $0x0,%rdi        1254: R_X86_64_32S      .data+0x1380
-    1258:       48 89 c6                mov    %rax,%rsi
-    125b:       e8 00 00 00 00          call   1260 <ni_read_frame.cold+0x16>   125c: R_X86_64_PLT32    __ubsan_handle_shift_out_of_bounds-0x4
-    1260:       48 8d 7d cc             lea    -0x34(%rbp),%rdi
-    1264:       e8 00 00 00 00          call   1269 <ni_read_frame.cold+0x1f>   1265: R_X86_64_PLT32    __tsan_read4-0x4
-    1269:       8b 45 cc                mov    -0x34(%rbp),%eax
-    126c:       e9 00 00 00 00          jmp    1271 <ni_read_frame.cold+0x27>   126d: R_X86_64_PC32     .text+0x19109
-    1271:       48 8b 75 a0             mov    -0x60(%rbp),%rsi
-    1275:       48 63 d0                movslq %eax,%rdx
-    1278:       48 c7 c7 00 00 00 00    mov    $0x0,%rdi        127b: R_X86_64_32S      .data+0x13a0
-    127f:       89 45 88                mov    %eax,-0x78(%rbp)
-    1282:       e8 00 00 00 00          call   1287 <ni_read_frame.cold+0x3d>   1283: R_X86_64_PLT32    __ubsan_handle_shift_out_of_bounds-0x4
-    1287:       8b 45 88                mov    -0x78(%rbp),%eax
-    128a:       e9 00 00 00 00          jmp    128f <ni_read_frame.cold+0x45>   128b: R_X86_64_PC32     .text+0x19098
-    128f:       48 c7 c7 00 00 00 00    mov    $0x0,%rdi        1292: R_X86_64_32S      .data+0x11f0
-    1296:       e8 00 00 00 00          call   129b <ni_readpage_cmpr.cold>     1297: R_X86_64_PLT32    __ubsan_handle_builtin_unreachable-0x4
-
-000000000000129b <ni_readpage_cmpr.cold>:
-
-Tell objtool that __ubsan_handle_builtin_unreachable() is a noreturn.
-
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220502091514.GB479834@worktop.programming.kicks-ass.net
+Link: https://lkml.kernel.org/r/d393d5e2fe73aec6e8e41d5c24f4b6fe8583f2d8.1650384225.git.jpoimboe@redhat.com
 ---
- tools/objtool/check.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/Kconfig            | 4 ++++
+ arch/x86/Kconfig        | 1 +
+ scripts/Makefile.build  | 2 +-
+ scripts/link-vmlinux.sh | 4 +++-
+ 4 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 190b2f6..7a187da 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -185,7 +185,8 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
- 		"do_group_exit",
- 		"stop_this_cpu",
- 		"__invalid_creds",
--               "cpu_startup_entry",
-+		"cpu_startup_entry",
-+		"__ubsan_handle_builtin_unreachable",
- 	};
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 904ed51..cb29540 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -1050,6 +1050,10 @@ config HAVE_NOINSTR_HACK
+ config HAVE_NOINSTR_VALIDATION
+ 	bool
  
- 	if (!func)
++config HAVE_UACCESS_VALIDATION
++	bool
++	select OBJTOOL
++
+ config HAVE_STACK_VALIDATION
+ 	bool
+ 	help
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index cf531fb..5f41f3c 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -258,6 +258,7 @@ config X86
+ 	select HAVE_PREEMPT_DYNAMIC_CALL
+ 	select HAVE_RSEQ
+ 	select HAVE_SYSCALL_TRACEPOINTS
++	select HAVE_UACCESS_VALIDATION		if HAVE_OBJTOOL
+ 	select HAVE_UNSTABLE_SCHED_CLOCK
+ 	select HAVE_USER_RETURN_NOTIFIER
+ 	select HAVE_GENERIC_VDSO
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 0640050..6a663b2 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -218,7 +218,7 @@ objtool_args =								\
+ 	$(if $(CONFIG_SLS), --sls)					\
+ 	$(if $(CONFIG_STACK_VALIDATION), --stackval)			\
+ 	$(if $(CONFIG_HAVE_STATIC_CALL_INLINE), --static-call)		\
+-	--uaccess							\
++	$(if $(CONFIG_HAVE_UACCESS_VALIDATION), --uaccess)		\
+ 	$(if $(linked-object), --link)					\
+ 	$(if $(part-of-module), --module)				\
+ 	$(if $(CONFIG_GCOV_KERNEL), --no-unreachable)
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index a7f6196..fd578c3 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -134,7 +134,9 @@ objtool_link()
+ 			objtoolopt="${objtoolopt} --static-call"
+ 		fi
+ 
+-		objtoolopt="${objtoolopt} --uaccess"
++		if is_enabled CONFIG_HAVE_UACCESS_VALIDATION; then
++			objtoolopt="${objtoolopt} --uaccess"
++		fi
+ 	fi
+ 
+ 	if is_enabled CONFIG_NOINSTR_VALIDATION; then

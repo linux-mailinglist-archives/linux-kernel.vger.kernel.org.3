@@ -2,128 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E31F537B54
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E13A537C83
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236536AbiE3NWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 09:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
+        id S237156AbiE3Ncz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 09:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236524AbiE3NWq (ORCPT
+        with ESMTP id S237094AbiE3NaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 09:22:46 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D56819AA
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:22:37 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9A0595C01B4;
-        Mon, 30 May 2022 09:22:36 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 30 May 2022 09:22:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1653916956; x=
-        1654003356; bh=z7a79ghN+N76ZhwQ641IsKDuKwUgLOjLc7mVHgDfios=; b=s
-        3P4KBN+gl3HsslnjzvnXp2LcO5teFuFBSxeCpyP/gLvEO50TDtuuQ1Gf4WK6bdI9
-        JHrm9pAbafzd/Rudmo4V/fuWNXm3LIYKykwnXVbyDATrswzSL7WOjX28G2OaHPbT
-        4vkeB1/UIJH3JObjxLlKM6uD9ORLO6Y6KF01wrI7b3vIK8IhZzsChlF5bNQmVjje
-        6Kv920BrDUY22w4recK/E8+ORAXzRKYrYgG3Q7zqPMcvLF+gAzvsxpUSSq8ScVNW
-        hWpvsiUF5tYHnwZ1MIQxcDkHu/rTlT6L9Bob+gNSy0qDNUITQ0i/eKV7c1IeFATn
-        U7lqNEfuxktZ5xa4SbUqQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1653916956; x=
-        1654003356; bh=z7a79ghN+N76ZhwQ641IsKDuKwUgLOjLc7mVHgDfios=; b=q
-        J8GEZqHBSm/cxidTwgjMDhW6snhd0QwR9/+Vo/PJJnd2Fo8qOtLDo5i3Ki3sXGiY
-        NUq0DeG4Gq5olkpk0aaucPs09yU2glhLRWt3bssdI0ktBqgR5LSGNzKwtrEMZJC2
-        8dCDQXBQ/QQijgYyA0uIIiaxmm6n8yhd9TySJiydr9Xkti5OGjhlHzn2gZEikg1I
-        enMMUKpwpvuZsBxCGjdBYQxsarpWss/849VnLVDPfk3bAIDL460DL5MG8O38tmNe
-        cqQ/ek4ReRFHJ4xhKC3O3RUcvPo+abI6gddbK6cDtVpzpjOIx3WMuKem+zJW3eS5
-        C68Tu11QiDQPbqgUn6L6g==
-X-ME-Sender: <xms:G8WUYn_5eZ7uW-GMnMnxcz_9ZOYBYl8BCDyi7YgIAUAr5NNHOF7lwA>
-    <xme:G8WUYjtxIXsyBygiFSFuRmcVhvX3PzdXjorK9bP-u2Q1taH_Sj7wrL6uDp1d7JK3p
-    joWyui7iPsvDQAau7c>
-X-ME-Received: <xmr:G8WUYlCQvPw96h6iJeqM2_qgelWcT91lR2AnGWtafkcDeAO2BVz76BHxpw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeeigdehlecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetgfelgefggeekkefggfeludeiudffjeffgeevveekjedukedtudeuteef
-    teefgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:G8WUYje-lLTlw-rdu1x5n7XuL0H7G3wZo-Uffv6u-ZfWFHaQ5QVEaw>
-    <xmx:G8WUYsMrMs_6nuOGP6DJdL5z5yjbfdI2TedIAxds20dn72knm587kQ>
-    <xmx:G8WUYllwWD5A02oRVxGPmWikoyP3qQbPlIg3Ob6XH0GxoVh2fmS5Dg>
-    <xmx:HMWUYtE014QcM0DE06p4XUMtvHQxPnnciyrKE5Gm2JBi3A5jRf4Ofg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 30 May 2022 09:22:35 -0400 (EDT)
-Date:   Mon, 30 May 2022 15:22:32 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Roman Stratiienko <r.stratiienko@gmail.com>
-Cc:     wens@csie.org, jernej.skrabec@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, samuel@sholland.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, megi@xff.cz,
-        Roman Stratiienko <roman.o.stratiienko@globallogic.com>
-Subject: Re: [PATCH] drm/sun4i: Fix blend route/enable register corruption
- for DE2.0/DE3.0
-Message-ID: <20220530132232.himfp7ubiacbmkpx@penduick>
-References: <20220525115445.93500-1-roman.o.stratiienko@globallogic.com>
+        Mon, 30 May 2022 09:30:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122358B093;
+        Mon, 30 May 2022 06:26:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AAFB60EC3;
+        Mon, 30 May 2022 13:26:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7438FC3411C;
+        Mon, 30 May 2022 13:26:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653917187;
+        bh=6GPI7gYf07+zFN1Ol/tp6iH7PZSLrK3qLnRFMdReihY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XOIMSwUJ+25++lY7+iV7k5UUwowV7uiFOpuYQgmsCYYInyVjTuJNzJay7vi8Nilmt
+         +bmEz4RQsZ8o9qg97jh0Rhp46g7siXQlmxBQsEBQGDRD1vUCeCTMcW3uhi5iVl7Bdn
+         vvMuxxwB7LcILX8N4B9ZtbMDrPA7yfVcuACHOWY4GrLPFNqGUQICK8Yas0QrjGyyqw
+         sQX2lKpkcXDUKSgTmvt2s8lumWJIpFS8DJKw9yzrKJPXgCmTT2RJfv2/RwGhRg8y/z
+         oxXSV2mwMVu+56GmainLGYOJJZ0bpZnXNoCY2snX1SnD4oYBVvw/H9f3wTAm0kqytO
+         514JlWe+vCKfQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     =?UTF-8?q?Thibaut=20VAR=C3=88NE?= <hacks+kernel@slashdirt.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 047/159] ath9k: fix QCA9561 PA bias level
+Date:   Mon, 30 May 2022 09:22:32 -0400
+Message-Id: <20220530132425.1929512-47-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
+References: <20220530132425.1929512-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220525115445.93500-1-roman.o.stratiienko@globallogic.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roman,
+From: Thibaut VARÈNE <hacks+kernel@slashdirt.org>
 
-On Wed, May 25, 2022 at 11:54:45AM +0000, Roman Stratiienko wrote:
-> By this commit 2 related issues are solved:
->=20
->   Issue #1. Corruption in blend route/enable register:
->=20
-> Register corruption happens after using old_state->zpos to disable layer
-> state. Blend route/enable registers are shared with other layers
-> and other layers may have already assigned this PIPE to valid value.
->=20
-> Solution: Do not use old_state->zpos to disable the plane pipe in
-> blend registers.
->=20
->   Issue #2. Remove disabled layer from blend route/enable registers:
->=20
-> Since sun4i/drm are using normalized_zpos, .atomic_update() will setup
-> blend route/enable pipes starting from PIPE0 to PIPEX, where X+1 is a
-> number of layers used by the CRTC in this frame.
->=20
-> Remaining pipes (PIPE[X+1] - PIPE[MAX]) can have old data that MUST be
-> updated.
->=20
-> new_state->normalized_zpos can't be used, since drm helpers won't update
-> it for disabled planes.
->=20
-> Solution:
->=20
-> 1. Track the number of total used planes for crtc.
-> 2. Use this number instead of zpos to disable unused blend pipes.
->=20
-> Signed-off-by: Roman Stratiienko <roman.o.stratiienko@globallogic.com>
+[ Upstream commit e999a5da28a0e0f7de242d841ef7d5e48f4646ae ]
 
-If there's two issues, and two solutions, it should be two patches.
+This patch fixes an invalid TX PA DC bias level on QCA9561, which
+results in a very low output power and very low throughput as devices
+are further away from the AP (compared to other 2.4GHz APs).
 
-Maxime
+This patch was suggested by Felix Fietkau, who noted[1]:
+"The value written to that register is wrong, because while the mask
+definition AR_CH0_TOP2_XPABIASLVL uses a different value for 9561, the
+shift definition AR_CH0_TOP2_XPABIASLVL_S is hardcoded to 12, which is
+wrong for 9561."
+
+In real life testing, without this patch the 2.4GHz throughput on
+Yuncore XD3200 is around 10Mbps sitting next to the AP, and closer to
+practical maximum with the patch applied.
+
+[1] https://lore.kernel.org/all/91c58969-c60e-2f41-00ac-737786d435ae@nbd.name
+
+Signed-off-by: Thibaut VARÈNE <hacks+kernel@slashdirt.org>
+Acked-by: Felix Fietkau <nbd@nbd.name>
+Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220417145145.1847-1-hacks+kernel@slashdirt.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/wireless/ath/ath9k/ar9003_phy.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/ath/ath9k/ar9003_phy.h b/drivers/net/wireless/ath/ath9k/ar9003_phy.h
+index a171dbb29fbb..ad949eb02f3d 100644
+--- a/drivers/net/wireless/ath/ath9k/ar9003_phy.h
++++ b/drivers/net/wireless/ath/ath9k/ar9003_phy.h
+@@ -720,7 +720,7 @@
+ #define AR_CH0_TOP2		(AR_SREV_9300(ah) ? 0x1628c : \
+ 					(AR_SREV_9462(ah) ? 0x16290 : 0x16284))
+ #define AR_CH0_TOP2_XPABIASLVL		(AR_SREV_9561(ah) ? 0x1e00 : 0xf000)
+-#define AR_CH0_TOP2_XPABIASLVL_S	12
++#define AR_CH0_TOP2_XPABIASLVL_S	(AR_SREV_9561(ah) ? 9 : 12)
+ 
+ #define AR_CH0_XTAL		(AR_SREV_9300(ah) ? 0x16294 : \
+ 				 ((AR_SREV_9462(ah) || AR_SREV_9565(ah)) ? 0x16298 : \
+-- 
+2.35.1
+

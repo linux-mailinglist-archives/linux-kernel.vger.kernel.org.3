@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F255379E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFD85379ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235854AbiE3Laq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 07:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S235860AbiE3Lar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 07:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235849AbiE3Lam (ORCPT
+        with ESMTP id S235800AbiE3Lan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 07:30:42 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6E57E1FC
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:30:40 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id j7so4884866pjn.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:30:40 -0700 (PDT)
+        Mon, 30 May 2022 07:30:43 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC2D7E1F9
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:30:43 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so10461818pjf.5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:30:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1LR1Tu5dH4Zqx/bEdD15yjr+iCH9O5A3630Rxdr7ufM=;
-        b=iq8hfF07jpOTw9vnza7dhu2R3VgXuYuWFbQJXvXUywAg2a7FwiOA9DZqik/AY+Iw9c
-         dc/xqzKTnSpkG4Gh/1+wb2Uql6MKGJ0DAAuxrH9DZ4Da2i1MSSRBR+OHp1JrCV9OcEq4
-         Ow/85pl2hxvu+EJ2Ie5FMtST8Go1YBa+6Npvo=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=0FDANzoD+ved+kLqkfGfvHR/pdrWdYCkcffUnS1gfwU=;
+        b=Fu3f0elDLJOB2qbC/WiNHHrnzhkyIj+M6hmuWqiHDK3vOkYLQvzCSrr7LVh4m3XTYw
+         zHYE0cnTsfWTDpSMBzpspezMLKffVInpKtx6Q6xL1bYNG/62ysHWflZJ8iUZZwz2DmLa
+         LESrtBQuLJ1bR/V4bpVZuA5UHrSfe0QY1yOHo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1LR1Tu5dH4Zqx/bEdD15yjr+iCH9O5A3630Rxdr7ufM=;
-        b=Zj4U7USkrgXo1e68InxL2Ofil1SRGFScbzmH8waK4FfuGO+VelVhaAu2QW+TzhORxq
-         nXzbwsc82wWiCY+2mwyvFyrKWY6CqFWAxhYgCqlsk3/M2lnh9+SL0dnChFXmOBKHxxA8
-         L6o3PGDilJ16gy8PofXLil1/iB4pO/qLZfRoMeTzCC68IH8ikhm22wpnnl/iQGS2SYi7
-         kWCo3JvNousfAJ439GqbbQ6z4Ng3uPYq5VRa1wvxY1nRcsjFcrhELiT3vtvFdWptG3Ip
-         Qd4ZyFghfZNa5BptYQdcJcaWGWlRgE/2yj+GuWJiQNWskSoytv9BkoliZbwmHgdZXsVG
-         cLhA==
-X-Gm-Message-State: AOAM533D3sIdZoEuTnBe0reeVrJqlOnaUAYtne8GNbsRCqArltVlFjEm
-        NE64e9qyZ3dPU8cRdoORe96L5A==
-X-Google-Smtp-Source: ABdhPJyNeD8LmDCsvC/XVQPkRq4HOHV0lgFLmaOFAz25EFxhZMA8/4iMeqygIHLdjPqRtFlwHfwzuQ==
-X-Received: by 2002:a17:902:b688:b0:162:3124:cde2 with SMTP id c8-20020a170902b68800b001623124cde2mr36157868pls.166.1653910239861;
-        Mon, 30 May 2022 04:30:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=0FDANzoD+ved+kLqkfGfvHR/pdrWdYCkcffUnS1gfwU=;
+        b=swX+LzeiiDg8JB44Czyzj8TsjQjRYvS9uIRkXdSJdre52FsPws7Ap5TGyOZ4/QyAvF
+         jrSgdTEvCr9U+1d3jl/OHhL0qWJS99mbI+Fg01mi+SYSNMaCA2/FErecOjVDwD7vHkTe
+         NXEWxKEjoMNSxnBUeaK1K12y4W4CyREqEsiEo+afLXN2SAhgMkKXOqZZUMP+acCgWtTl
+         X5HmZseUp5bXKpzusDxs1cUvnRBP3sIgRjRSnV0VvgsZAZ2HSvusD5iOLcX+wKSh7tah
+         dh/E8q7uZg8+i2o0aDFAvf6C34JKEze76Lwt2HMapBCpzCOLFyAESfY+jBKf+CI7NkgI
+         R2Ow==
+X-Gm-Message-State: AOAM530D64eI3+kOaj8iDLhyaxFjBNJR79Rr4sVQ7MQPjyVfpyAOsjBg
+        zBwx+cSev3m3iWaDqnhl6YGlHg==
+X-Google-Smtp-Source: ABdhPJxub7eHxeB4mlpr+M6AT+c0bGpa7kjAzy63YjDOWYW87ck7sC0r1LTX1UfyD0/ZFy7H+5i/oQ==
+X-Received: by 2002:a17:903:1c1:b0:163:ef7b:e11a with SMTP id e1-20020a17090301c100b00163ef7be11amr2002458plh.76.1653910242646;
+        Mon, 30 May 2022 04:30:42 -0700 (PDT)
 Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:ae1c:3d63:abec:1097])
-        by smtp.gmail.com with ESMTPSA id o3-20020a654583000000b003fa5b550303sm8384222pgq.68.2022.05.30.04.30.37
+        by smtp.gmail.com with ESMTPSA id o3-20020a654583000000b003fa5b550303sm8384222pgq.68.2022.05.30.04.30.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 04:30:39 -0700 (PDT)
+        Mon, 30 May 2022 04:30:42 -0700 (PDT)
 From:   Hsin-Yi Wang <hsinyi@chromium.org>
 To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
 Cc:     Hans de Goede <hdegoede@redhat.com>,
@@ -59,10 +59,12 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Douglas Anderson <dianders@chromium.org>,
         Rob Herring <robh+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] drm/mediatek: Config orientation property if panel provides it
-Date:   Mon, 30 May 2022 19:30:32 +0800
-Message-Id: <20220530113033.124072-1-hsinyi@chromium.org>
+Subject: [PATCH 2/2] arm64: dts: mt8183: Add panel rotation
+Date:   Mon, 30 May 2022 19:30:33 +0800
+Message-Id: <20220530113033.124072-2-hsinyi@chromium.org>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+In-Reply-To: <20220530113033.124072-1-hsinyi@chromium.org>
+References: <20220530113033.124072-1-hsinyi@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -75,63 +77,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Panel orientation property should be set before drm_dev_register().
-Mediatek drm driver calls drm_dev_register() in .bind(). However, most
-panels sets orientation property relatively late, mostly in .get_modes()
-callback, since this is when they are able to get the connector and
-binds the orientation property to it, though the value should be known
-when the panel is probed.
-
-Let the drm driver check if the remote end point is a panel and if it
-contains the orientation property. If it does, set it before
-drm_dev_register() is called.
+krane, kakadu, and kodama boards have a default panel rotation.
 
 Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Tested-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 ---
-This patch is to solve the same problem as [1]
-[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220530081910.3947168-2-hsinyi@chromium.org/
----
- drivers/gpu/drm/mediatek/mtk_dsi.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index d9f10a33e6fa..091107f97ccc 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -198,6 +198,7 @@ struct mtk_dsi {
- 
- 	unsigned long mode_flags;
- 	enum mipi_dsi_pixel_format format;
-+	enum drm_panel_orientation orientation;
- 	unsigned int lanes;
- 	struct videomode vm;
- 	struct mtk_phy_timing phy_timing;
-@@ -822,6 +823,10 @@ static int mtk_dsi_encoder_init(struct drm_device *drm, struct mtk_dsi *dsi)
- 		ret = PTR_ERR(dsi->connector);
- 		goto err_cleanup_encoder;
- 	}
-+
-+	if (dsi->orientation != DRM_MODE_PANEL_ORIENTATION_UNKNOWN)
-+		drm_connector_set_panel_orientation(dsi->connector, dsi->orientation);
-+
- 	drm_connector_attach_encoder(dsi->connector, &dsi->encoder);
- 
- 	return 0;
-@@ -836,6 +841,14 @@ static int mtk_dsi_bind(struct device *dev, struct device *master, void *data)
- 	int ret;
- 	struct drm_device *drm = data;
- 	struct mtk_dsi *dsi = dev_get_drvdata(dev);
-+	struct drm_panel *panel;
-+
-+	/* Read panel orientation if existed */
-+	dsi->orientation = DRM_MODE_PANEL_ORIENTATION_UNKNOWN;
-+	ret = drm_of_find_panel_or_bridge(dev->of_node, 0, 0, &panel, NULL);
-+	if (!ret && panel && panel->dev) {
-+		of_drm_get_panel_orientation(panel->dev->of_node, &dsi->orientation);
-+	}
- 
- 	ret = mtk_dsi_encoder_init(drm, dsi);
- 	if (ret)
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+index 8d5bf73a9099..f0dd5a06629d 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+@@ -276,6 +276,7 @@ panel: panel@0 {
+ 		avee-supply = <&ppvarp_lcd>;
+ 		pp1800-supply = <&pp1800_lcd>;
+ 		backlight = <&backlight_lcd0>;
++		rotation = <270>;
+ 		port {
+ 			panel_in: endpoint {
+ 				remote-endpoint = <&dsi_out>;
 -- 
 2.36.1.124.g0e6072fb45-goog
 

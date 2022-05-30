@@ -2,106 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFB7537427
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 06:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D150353742A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 06:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbiE3Ev0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 00:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
+        id S232471AbiE3Evn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 00:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiE3EvW (ORCPT
+        with ESMTP id S232459AbiE3Evj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 00:51:22 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F69B70927;
-        Sun, 29 May 2022 21:51:21 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id s24so5656304wrb.10;
-        Sun, 29 May 2022 21:51:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=LELXwtIIYJe0NF4K6OawoTsFSY6J+FVjbPvU3ikss6s=;
-        b=KRC5F4j041Kk3SA3GmG7xlhhwYLCjfRxlQde+xEyn10pTqxTs4zg5NEYCGpCTLKjaQ
-         VwbGZ4HdcH7ntSS8Wj1wAoZUeugoNg8tABp03jedsE0Arbs95+M24rfoUzgZ8NvcqMbb
-         MbUcveKEdIDaVyy/XlY9Ei0GUwqkTzDwuoSwJ7Y7hO2yPzYu7RynUzzKsbEvUmW1XFTI
-         pu2WZgb/GKJUoLWFRBP5OqhfvW62qwFKlJj7ytWsfALiRI+53qTt7XlD2+rD8/cnJqWx
-         /uo4LqP/AqyE03Lfa0PDgDw4/NkZNR3j3CuxWRFN6lsx3bgzLpxOlcF+zmyxTTP3KmU3
-         QcXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=LELXwtIIYJe0NF4K6OawoTsFSY6J+FVjbPvU3ikss6s=;
-        b=pfwfJ1uQeghrZ3E0Z8p3UCaTxpQ9cbuw0xiDVKEr4ul9r5u2ln7KBA2gE9LOyx9TQB
-         f7nm0coQNoa4mReycTNbmArAw1gBOKh59SecOF5TM3F18NVJAGfNmNJZaif0bFEnWvUp
-         Gsf1t8wyirzxXIp0uelhKGakf4Cg1/ZtUk5/+kbOssvqAzN6MDfKbOCw+8Fm2mDZMpnm
-         epsCJqLIdqMEUAuF+oT3j/6AwxQfT735na2aKF7IVk/zOjbJy3EQdJ3wvByrcmgeIIZo
-         mhsEFez+pRkGNXEu6jxkJ37ZUnZ6gIejTv8Sf0F8nXdEa/yPH0HNICGDBV1+kySz5Dj6
-         OzCg==
-X-Gm-Message-State: AOAM533g2vLthpJTfLa9hbhrDY/GlXZ4TTystKjxeT1/wTepQc/m/4MI
-        NClzt2UeyeZmTWkjEbNIRYs=
-X-Google-Smtp-Source: ABdhPJzj/tnDr26ClZFxa3yjdjaUe1R7YLdcAYEMa/2HHDD9FQr5zW6KCuCqvWXKlbBurv+oKKHssA==
-X-Received: by 2002:a05:6000:1549:b0:20f:c4c7:a697 with SMTP id 9-20020a056000154900b0020fc4c7a697mr36185138wry.716.1653886279691;
-        Sun, 29 May 2022 21:51:19 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id k1-20020adfe8c1000000b0021031c894d3sm2300562wrn.94.2022.05.29.21.51.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 21:51:19 -0700 (PDT)
-Date:   Mon, 30 May 2022 06:51:14 +0200
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     patchwork-bot+netdevbpf@kernel.org
-Cc:     None <conleylee@foxmail.com>, davem@davemloft.net, kuba@kernel.org,
-        mripard@kernel.org, wens@csie.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] sun4i-emac.c: add dma support
-Message-ID: <YpRNQlPHiuNoLu3J@Red>
-References: <tencent_DE05ADA53D5B084D4605BE6CB11E49EF7408@qq.com>
- <164082961168.30206.13406661054070190413.git-patchwork-notify@kernel.org>
+        Mon, 30 May 2022 00:51:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1089264E;
+        Sun, 29 May 2022 21:51:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75AD8B80B96;
+        Mon, 30 May 2022 04:51:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDE47C3411A;
+        Mon, 30 May 2022 04:51:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653886293;
+        bh=OdMcpP1QXzbmaMEOQHSg0tJb1SXeGCoI1kdc4bMVi4U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=it2mwnYJ8xtr0uGlPMBw2MLgegWAeoDm2Q4JMrnPgbMdP17Ow0RJ2oGDJXBPvcKIs
+         4T9gA0qvbqj5YW9yL6j1DtYN0WQEbWnDiaJcT1mBXHOtLbxyzO6EM0jb5s+8VFOOKW
+         i5qhrOEoRI9UmySrxkPYgaNKzMR368AqvJuogmuupUlMOlN6Brmy7hzf0D+13y1d7I
+         zGRmZcsQgRFYojZEJzkkTVInQOwHE036MNSHHxi70d48MEMTysI/FrmY3vpUhLOwRI
+         glukqhXPH/sJ+QQT3wcxbx3ouqDtfM3WZ9ogd59UM2Ixc06bxFrISfU4OUa/5p3h8f
+         b6plth18ZFkpQ==
+Date:   Mon, 30 May 2022 10:21:28 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Dave Jiang <dave.jiang@intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        dma <dmaengine@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL]: dmaengine updates for v5.19-rc1
+Message-ID: <YpRNUK+Fi/YAXZd+@matsya>
+References: <YpOyb40/g5gIYigF@matsya>
+ <CAHk-=wgZtj6A7ggq7Ak5ZFwnLriGwU52NzC_3db5u+yLGJDJfA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3kqsFapICUiohUto"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <164082961168.30206.13406661054070190413.git-patchwork-notify@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=wgZtj6A7ggq7Ak5ZFwnLriGwU52NzC_3db5u+yLGJDJfA@mail.gmail.com>
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Thu, Dec 30, 2021 at 02:00:11AM +0000, patchwork-bot+netdevbpf@kernel.org a écrit :
-> Hello:
-> 
-> This patch was applied to netdev/net-next.git (master)
-> by Jakub Kicinski <kuba@kernel.org>:
-> 
-> On Wed, 29 Dec 2021 09:43:51 +0800 you wrote:
-> > From: Conley Lee <conleylee@foxmail.com>
-> > 
-> > Thanks for your review. Here is the new version for this patch.
-> > 
-> > This patch adds support for the emac rx dma present on sun4i. The emac
-> > is able to move packets from rx fifo to RAM by using dma.
-> > 
-> > [...]
-> 
-> Here is the summary with links:
->   - [v6] sun4i-emac.c: add dma support
->     https://git.kernel.org/netdev/net-next/c/47869e82c8b8
-> 
-> You are awesome, thank you!
-> -- 
-> Deet-doot-dot, I am a bot.
-> https://korg.docs.kernel.org/patchwork/pwbot.html
-> 
 
-Hello
+--3kqsFapICUiohUto
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Any news on patch which enable sun4i-emac DMA in DT ?
+On 29-05-22, 11:49, Linus Torvalds wrote:
+> On Sun, May 29, 2022 at 10:50 AM Vinod Koul <vkoul@kernel.org> wrote:
+> >
+> > Please pull to receive the dmaengine updates for this cycle. Nothing
+> > special, this includes a couple of new device support and new driver
+> > support and bunch of driver updates.
+>=20
+> Vinod, _please_ report it when it turns out that there are semantic
+> merge issues in linux-next.
+>=20
+> The whole point of linux-next is to report and find problems, but that
+> also means that if the issues found in linux-next are then completely
+> ignored, the _point_ of being in linux-next goes away.
+>=20
+> In particular, there was a semantic drivers/dma/idxd/device.c that git
+> was perfectly happy to merge one way, but that needed manual
+> intervention to get the locking right. See
+>=20
+>    https://lore.kernel.org/all/a6df0b8a-dc42-51e4-4b7b-62d1d11c7800@intel=
+=2Ecom/
+>=20
+> and this is exactly the kind of thing that should be mentioned in the
+> pull request, because no, I do not track every single merge issue in
+> linux-next.
+>=20
+> I only catch them when something makes me go "Hmm", and in this case
+> it was a different conflict near-by that just happened to make me look
+> closer (the same one that Stephen had noted).
+>=20
+> Stephen makes this clear in his notifications:
+>=20
+>  "This is now fixed as far as linux-next is concerned, but any non
+>   trivial conflicts should be mentioned to your upstream maintainer when
+>   your tree is submitted for merging"
+>=20
+> and yes, the original merge was indeed trivial and wouldn't have
+> needed any further mention had it _stayed_ that way.
+>=20
+> But it didn't actually stay that way, as pointed out by Dave Jiang in
+> that thread.
+>=20
+> The fact that I caught it this time doesn't mean that I will catch
+> things like this in general. I'm pretty good at merging, but there
+> really is a reason linux-next exists.
 
-Regards
+Hi Linus,
+
+Sorry about missing it, am not sure why I didn't add it here, usually I
+do add. Apologies again for missing this and will ensure it won't be
+missed again.
+
+Yes merge had conflicts and linux-next had an updated and correct
+resolution which should have been mentioned by me as was done in the
+past. Will take steps to ensure I dont miss them.
+
+Thanks
+--=20
+~Vinod
+
+--3kqsFapICUiohUto
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmKUTVAACgkQfBQHDyUj
+g0cyuw//VnI7CrFYGTFjH0kb6X6VY1A84hKejQOuen/jpGNgXjsJPS8X+Xg2A/RY
+0FTJt8Ib2G1zpcEu1E02rIjX+5mAt1oqrI0Rc+WM7uNZ+IxtVGetNcQ14Kv6+glQ
+HGszmNzjl+yRbtaGw2XpHZqxCH2iDOx8bE7AZJFAVKpO4CJe8Sp/Sxh7VgEjdksA
+N+Wp4iN9aa+ZD7GMUgJAYUkTKFRh6xrG8ySfOIimh9ipTONdJnoBcgcceZcVLxNk
+EL44B7lejQmvJAHxxpeRYXbRovQNM49yV6yE3zWBAMaOVjDXMKicuraZpdJxfuNe
+AQSq0Uq1AeI/NAN6p0ILhsYxAeE34v+4CUcBMPJMfv60wi916K/svd09VMC7E0+U
+2bNAEkYRMMowy05B8AcqEDZ25IuFKSvB7pHdFYn0TJeK/hdw9T3RR/bb5ePzs0yY
+NaLVb/ZXTNiPJSmKulFhcngDE3DXJiWzasbd9kB1YmDJNFMmYpsoULlhCoSQDHOj
+q0/A8utV2Tb9vVxCs/gc64XCknIur4o2Xn3uyKWda9oO3Byuv0M2ZcDfYLX2wWyA
+0aCp4E7eayAiSE3FCvzanydQ5fzHsSYrgs71TQzJF5PaTc3aLxecx+KgPee49Ks2
+TBkgVuUgej3fYSFa/E11IuZwSO5DWqV9D2xLyz+9NHpYU6FIeb4=
+=FpGz
+-----END PGP SIGNATURE-----
+
+--3kqsFapICUiohUto--

@@ -2,129 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E37C85385BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 18:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9AB5385B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 18:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240440AbiE3QBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 12:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
+        id S241756AbiE3QBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 12:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243122AbiE3QAl (ORCPT
+        with ESMTP id S243183AbiE3QAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 12:00:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9959748E59;
-        Mon, 30 May 2022 08:56:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DDFCB80E2E;
-        Mon, 30 May 2022 15:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19569C36AE7;
-        Mon, 30 May 2022 15:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653926182;
-        bh=oY2To6Dq8E4ZlSNzE9OvSOJ4Ec6SlQMPkQKRYIbD1j4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LAYG1a7rWuqBm9UiZAAn/vKEnZDJg/f4xBpHZZKdElqCHN070n/QJ3w70BKDdGFdZ
-         7szxQd3rnBJmIkjXnkTXxNchF3dQ1Nw+4Kyz2poAZrfu/OKNjCwqzNFU9xcie1Un57
-         PVnF99w8tArh1pbxOxGwtr1pkrlwAZ/VZ04ZLoeAlHejvJrwPp1leTzDt5TsRVOw8T
-         /uj8NtafELR0Sn/4EYy8GGZ6V9h+ahcR5JpRKeal1l1xLYXCahBr1wenBnx7Rx+nA1
-         VuIaJqM03bUvtOMIR7hUcGf5NSpvPLsIwkpbmKj/rD/LvTGGZgVCbol6f/mOEJRo3V
-         1IwW85crae4fw==
-Received: by mail-oi1-f178.google.com with SMTP id y131so6972376oia.6;
-        Mon, 30 May 2022 08:56:22 -0700 (PDT)
-X-Gm-Message-State: AOAM530cJFhvS+f2WprL+8x3daK6PiB6sFZp4Q8o+J7AhrU/dzp4qJKf
-        u8DiE7hoWUF5EPznEDjufxHMadPtwPR+HzLnwFo=
-X-Google-Smtp-Source: ABdhPJx1z4xy7gzvzyGPxKXo7f7InAUbUfc1mL0H8QmD86R83QH82XT9ytmiExoj5XZx70/VX0uvCQ6dvxRVUKn4xkw=
-X-Received: by 2002:a05:6808:f88:b0:32b:d10f:cc6b with SMTP id
- o8-20020a0568080f8800b0032bd10fcc6bmr8351264oiw.228.1653926181276; Mon, 30
- May 2022 08:56:21 -0700 (PDT)
+        Mon, 30 May 2022 12:00:44 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3789B4EDD8;
+        Mon, 30 May 2022 08:57:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=WyabVAhDYiZqjSLa5iju0Bgbs3O1v4mXmm6tJlHV12k=; b=JSmX09cFPFxA27bTAP0p93a5XR
+        74XlYlnwPcnsFnhr83bhqymLFY9AmJW69rfr6PiYF+iBN1xU3LHacKJPhgEWZEZw3uQZQhOMCqX3C
+        9Up1ynMSnkL5dXkaGj2AtN24Wwet9BHY26OKlwlpgr6E/ZfuTBzvCEeSTZ26pSY8amVRxEAytZihy
+        pEEnoFP6kxfBPnsdtQ54wfgsRnU+G6nv4+Os8SyEcB1uGmxJVyn9JTL1S6VrauaJjQtmvUTqd4p5h
+        NX0+GBnRHZd9CZwLBN4VvIxi/D6ViyN+w+jv5Ika3/ZRu4MiJInRTq2q/85F0r/Go17sFgbbqJHoJ
+        BWYzJOOA==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1nvhlP-00Bk5v-OU; Mon, 30 May 2022 09:57:04 -0600
+Message-ID: <7d6e6699-348a-af5a-0ab4-a7c4bd917ed1@deltatee.com>
+Date:   Mon, 30 May 2022 09:57:02 -0600
 MIME-Version: 1.0
-References: <20220530132425.1929512-1-sashal@kernel.org> <20220530132425.1929512-147-sashal@kernel.org>
- <CAMj1kXGAuKTqV0S4jxticZJp7ChtqqeXjn7SV1E83p5yVE1pkw@mail.gmail.com> <YpTh9dan5lJgH2aL@kroah.com>
-In-Reply-To: <YpTh9dan5lJgH2aL@kroah.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 30 May 2022 17:56:09 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGO-1ccxaK_GnE+d2yc0XkF5y9ZawXXC3ypeGAanv9VtA@mail.gmail.com>
-Message-ID: <CAMj1kXGO-1ccxaK_GnE+d2yc0XkF5y9ZawXXC3ypeGAanv9VtA@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.18 147/159] ARM: 9201/1: spectre-bhb: rely on
- linker to emit cross-section literal loads
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>
-Cc:     Sasha Levin <sashal@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "# 3.4.x" <stable@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Keith Packard <keithpac@amazon.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-CA
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        Donald Buczek <buczek@molgen.mpg.de>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Xiao Ni <xni@redhat.com>, Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>
+References: <20220526163604.32736-1-logang@deltatee.com>
+ <20220526163604.32736-14-logang@deltatee.com>
+ <YpRdrytEQkw/0vMH@infradead.org>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <YpRdrytEQkw/0vMH@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: hch@infradead.org, linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, buczek@molgen.mpg.de, guoqing.jiang@linux.dev, xni@redhat.com, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v2 13/17] md/raid5-cache: Add RCU protection to conf->log
+ accesses
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 May 2022 at 17:25, Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Mon, May 30, 2022 at 03:32:47PM +0200, Ard Biesheuvel wrote:
-> > AUTONAK
-> >
-> > As discussed before, please disregard all patches authored by me when
-> > running the bot.
->
-> Ok, but why wasn't this spectre-bhb commit asked to be backported to
-> stable in the first place?
 
-Because it doesn't belong in -stable. Hence the lack of cc:stable or
-fixes: tags.
 
-> Do older kernels not need these types of
-> fixes?
->
+On 2022-05-30 00:01, Christoph Hellwig wrote:
+> On Thu, May 26, 2022 at 10:36:00AM -0600, Logan Gunthorpe wrote:
+>> The mdadm test 21raid5cache randomly fails with NULL pointer accesses
+>> of conf->log when run repeatedly. conf->log was sort of protected with
+>> RCU, but most dereferences were not done with the correct functions.
+>>
+>> Add rcu_read_locks(), rcu_dereference_protected() and rcu_access_pointers()
+>> calls to the appropriate places and mark the pointer with __rcu.
+> 
+> Looking at the code a bit more, is this really enough?  Calls to
+> r5c_is_writeback / r5c_confi_is_writeback are sprinkled all over the
+> code, and my gut feeling is the value is not expected to change over
+> way longer critical sections than this.  So maybe the answer here is to
+> fix up the release to be properly locked as it only affects the non-I/O
+> slow path anyway.
 
-This commit was part of a series of six, two of which were bug fixes
-and had fixes: tags. They do not have cc:stable tags because the
-'fixed' patches had not been backported yet when they were sent out.
+Yeah, I think your gut feeling is correct. It looks like all the
+is_writeback calls are in the IO path as well. I'll review this again
+and see if we can just replace the RCU stuff and the paths that were
+hitting NULL pointer deference with the taking of a lock.
 
-So those are clear candidates for -stable, and as far as I can tell,
-they have already been backported.
-
-This patch does not fix a bug. It makes the asm code more resilient to
-potential bugs introduced inadvertently by future changes, which will
-be harder to detect now that we have three different versions of the
-exception vector table. (Any given system will only exercise one of
-the three, depending on whether and which Spectre-BHB workaround it
-requires)
-
-I build and boot test my patches carefully, and so I consciously
-decided that the regression risk of backporting this patch outweighs
-the benefits. This is why I did not add a cc:stable or fixes: tag. If
-a tag existed that said 'do not backport this unless explicitly
-requested', I would have added it.
-
-I would expect anyone that proposes this patch for -stable to be as
-diligent in ensuring that the patch is safe for backporting, which
-includes building the code with older GCC versions that those stable
-kernels still support, and boot testing the result on actual hardware.
-
-If this is part of the AUTOSEL workflow, then I stand corrected. But
-even then, this does not mean that the patch *belongs* in -stable. As
-you know, I enjoy throwing stable-kernel-rules.rst in your face, and I
-am pretty sure that using a bot to find patches that apply cleanly and
-happen not to cause build breakage is not covered by the criteria
-defined by that document by any stretch of the imagination.
-
-On top of that, I feel that 'saving' precious stable maintainer's time
-by using a bot to offload this burden to the community uninvited is
-really not ok. We work very hard to keep highly heterogeneous
-architectures such as ARM working across all supported platforms, and
-this is work enough as it is without all the bogus patches that
-AUTOSEL digs up without *any* justification beyond 'hey, it applies!'
+Logan

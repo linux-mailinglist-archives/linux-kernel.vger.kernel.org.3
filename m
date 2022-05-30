@@ -2,232 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE175538507
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11374538508
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238757AbiE3Pf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
+        id S241831AbiE3PgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242709AbiE3PfW (ORCPT
+        with ESMTP id S242712AbiE3PfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:35:22 -0400
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 90983996B7;
-        Mon, 30 May 2022 07:41:40 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [106.117.80.109])
-        by mail-app2 (Coremail) with SMTP id by_KCgDHeAh415Rir1sMAQ--.3918S2;
-        Mon, 30 May 2022 22:41:08 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-hams@vger.kernel.org
-Cc:     jreuter@yaina.de, ralf@linux-mips.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thomas@osterried.de, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH v4] ax25: Fix ax25 session cleanup problems
-Date:   Mon, 30 May 2022 22:40:56 +0800
-Message-Id: <20220530144056.100002-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgDHeAh415Rir1sMAQ--.3918S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxtF45ZFWxZry7XFWfXry7KFg_yoWxGw47pF
-        W7Ka1fJrZrXr4rCw4rWFWkWF18uw4qq3yUGr1UuFnakw13G3s8JF1ktFWjqFW3GFWfJF1D
-        Z34UWan8Ar4kuFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6ry5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
-        nxnUUI43ZEXa7VUbkR65UUUUU==
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg4GAVZdtZ9W2gAIsu
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 30 May 2022 11:35:23 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C9614916D;
+        Mon, 30 May 2022 07:42:04 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 903513200645;
+        Mon, 30 May 2022 10:42:02 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 30 May 2022 10:42:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1653921722; x=
+        1654008122; bh=I5n0iZMhvRYtVlqNaE5gXodeWKpPzOtBBF09/N8SYdo=; b=u
+        nCiFpukoiLLGljwmlJqGAHNyALbBXAsnzoSGPWQlTQ1fB+Glsl54gEspnxjnffNm
+        76aH6MNrNn1KPUtIyVwdUlsWXByhi041izCSeA3m34cGnsYOTF+jaYOx8Pl+0YZt
+        WkIOEkjK5IP+ui3p0arns2qGz0tKXyGjbdwDJ2PTu/i6KpQbsLJwpmcT+ln4oGKD
+        PNMKdfOJq1py85vL8rUaMbsc1CoO5jlgdnZhdd1mLELn/iMaGctEwdmsMpH5yS0v
+        acUh4v49x0WL4q/1H6GG1fqKVxH/AkpFowg3HlXKgp1tM9mK3CArwWUh8KIcM3yD
+        MAiuipejo7nGrc4fX1Ssg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1653921722; x=
+        1654008122; bh=I5n0iZMhvRYtVlqNaE5gXodeWKpPzOtBBF09/N8SYdo=; b=S
+        h/4vnGUiQadEwLFHt+V4mM8ql7zAOxHwJZOyk0d4Wa1PtM/lYQYN3XbvF2ScpM4N
+        0ko1X02PK9LbKwqAAugDY3Iwp0nR8iFn3NxJWN20VkfhJJGNLDjdTV/orSmysjeL
+        ECodXYQwAKfAk/x8SFQsnhwEORtLDdJ8ZFIZWkcu1XceYMbk4ekqoTKKDhwAWbjt
+        ZeGIeG+1stwpm3QPQeJT/gRN7153pbfZ1oSxIQhDw8DS1643CfiltPR5OjMWMEap
+        b97iw5VF8zWOAIogcfT1nMJEfwOrLyOeyumC55aDj7HTYctHH8tsfBk0Q+KtDp1D
+        Ro6/uPKdu1Yn0VeLV7xng==
+X-ME-Sender: <xms:udeUYollbMzrIHtLnAUvc5LBky07XH1VNo-4-3xb0hciP04jf_reVg>
+    <xme:udeUYn1toh2_-fbCxqgYD_nQGIOTfpDCWRyJQcxYgUMzoQ6cULMh7_lQ6keoNeFQC
+    aqpbS5ku922f2PLUQ>
+X-ME-Received: <xmr:udeUYmpEI9nXImBOVz1j26DT8Quxeb9y9Yz2bQYek4wEEL_i7DGvW64nUh9Mvzx3-WGCtZGk3Pylt7e7Bk7B5V2gEbhViuew9KR6HBbbAcjasQUt0KLG0Tg33A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeeigdejiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepkeeiteejuedttdehgfelveevjedtkeehuedtteeiiefggffffefh
+    ueegudekkeffnecuffhomhgrihhnpehfrhgvvgguvghskhhtohhprdhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehs
+    hhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:udeUYknJFmbBs5-2XgJHL_PjLU_QvUeT9aowu62Em_GW_PrqT5WHmQ>
+    <xmx:udeUYm0OGwq0Pc4vbfUJZKYiQXby3BptIr62O3UjADtDrBR8bolV2g>
+    <xmx:udeUYruu3e9BvxDfjBO0QbWfjXUmwAyeLIbgJ_qa6z2U-qym0E7BOw>
+    <xmx:uteUYvsVxsDDmQ5WyR-Mus3vOsM482qZhWDWeQNBHAqORY0cAz4EsA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 30 May 2022 10:42:00 -0400 (EDT)
+Subject: Re: [PATCH AUTOSEL 4.19 16/38] drm/sun4i: Add support for D1 TCONs
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>, mripard@kernel.org,
+        wens@csie.org, airlied@linux.ie, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <20220530134924.1936816-1-sashal@kernel.org>
+ <20220530134924.1936816-16-sashal@kernel.org>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <0f81cfb5-de3c-02eb-8d6d-e5aa1b69c439@sholland.org>
+Date:   Mon, 30 May 2022 09:41:59 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <20220530134924.1936816-16-sashal@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are session cleanup problems in ax25_release() and
-ax25_disconnect(). If we setup a session and then disconnect,
-the disconnected session is still in "LISTENING" state that
-is shown below.
+Hi Sasha,
 
-Active AX.25 sockets
-Dest       Source     Device  State        Vr/Vs    Send-Q  Recv-Q
-DL9SAU-4   DL9SAU-3   ???     LISTENING    000/000  0       0
-DL9SAU-3   DL9SAU-4   ???     LISTENING    000/000  0       0
+On 5/30/22 8:49 AM, Sasha Levin wrote:
+> From: Samuel Holland <samuel@sholland.org>
+> 
+> [ Upstream commit b9b52d2f4aafa2bd637ace0f24615bdad8e49f01 ]
+> 
+> D1 has a TCON TOP, so its quirks are similar to those for the R40 TCONs.
+> While there are some register changes, the part of the TCON TV supported
+> by the driver matches the R40 quirks, so that quirks structure can be
+> reused. D1 has the first supported TCON LCD with a TCON TOP, so the TCON
+> LCD needs a new quirks structure.
+> 
+> D1's TCON LCD hardware supports LVDS; in fact it provides dual-link LVDS
+> from a single TCON. However, it comes with a brand new LVDS PHY. Since
+> this PHY has not been tested, leave out LVDS driver support for now.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> Link: https://patchwork.freedesktop.org/patch/msgid/20220424162633.12369-14-samuel@sholland.org
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-The first reason is caused by del_timer_sync() in ax25_release().
-The timers of ax25 are used for correct session cleanup. If we use
-ax25_release() to close ax25 sessions and ax25_dev is not null,
-the del_timer_sync() functions in ax25_release() will execute.
-As a result, the sessions could not be cleaned up correctly,
-because the timers have stopped.
+This patch adds support for hardware in a SoC that will not boot on earlier
+kernel releases, so there is no benefit to backporting the patch (to any
+previous release).
 
-In order to solve this problem, this patch adds a device_up flag
-in ax25_dev in order to judge whether the device is up. If there
-are sessions to be cleaned up, the del_timer_sync() in
-ax25_release() will not execute. What's more, we add ax25_cb_del()
-in ax25_kill_by_device(), because the timers have been stopped
-and there are no functions that could delete ax25_cb if we do not
-call ax25_release(). Finally, we reorder the position of
-ax25_list_lock in ax25_cb_del() in order to synchronize among
-different functions that call ax25_cb_del().
+Regards,
+Samuel
 
-The second reason is caused by improper check in ax25_disconnect().
-The incoming ax25 sessions which ax25->sk is null will close
-heartbeat timer, because the check "if(!ax25->sk || ..)" is
-satisfied. As a result, the session could not be cleaned up properly.
-
-In order to solve this problem, this patch changes "||" to "&&"
-in ax25_disconnect().
-
-What`s more, the ax25_disconnect() may be called twice, which is
-not necessary. For example, ax25_kill_by_device() calls
-ax25_disconnect() and sets ax25->state to AX25_STATE_0, but
-ax25_release() calls ax25_disconnect() again.
-
-In order to solve this problem, this patch add a check in
-ax25_release(). If the flag of ax25->sk equals to SOCK_DEAD,
-the ax25_disconnect() in ax25_release() should not be executed.
-
-Fixes: 82e31755e55f ("ax25: Fix UAF bugs in ax25 timers")
-Fixes: 8a367e74c012 ("ax25: Fix segfault after sock connection timeout")
-Reported-and-tested-by: Thomas Osterried <thomas@osterried.de>
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
-Changes in v4:
-  - Fix session cleanup problem in ax25_disconnect().
-  - Fix ax25_disconnect() may be called twice problem.
-
- include/net/ax25.h   |  1 +
- net/ax25/af_ax25.c   | 27 +++++++++++++++++----------
- net/ax25/ax25_dev.c  |  1 +
- net/ax25/ax25_subr.c |  2 +-
- 4 files changed, 20 insertions(+), 11 deletions(-)
-
-diff --git a/include/net/ax25.h b/include/net/ax25.h
-index 0f9790c455b..a427a05672e 100644
---- a/include/net/ax25.h
-+++ b/include/net/ax25.h
-@@ -228,6 +228,7 @@ typedef struct ax25_dev {
- 	ax25_dama_info		dama;
- #endif
- 	refcount_t		refcount;
-+	bool device_up;
- } ax25_dev;
- 
- typedef struct ax25_cb {
-diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
-index 363d47f9453..289f355e185 100644
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -62,12 +62,12 @@ static void ax25_free_sock(struct sock *sk)
-  */
- static void ax25_cb_del(ax25_cb *ax25)
- {
-+	spin_lock_bh(&ax25_list_lock);
- 	if (!hlist_unhashed(&ax25->ax25_node)) {
--		spin_lock_bh(&ax25_list_lock);
- 		hlist_del_init(&ax25->ax25_node);
--		spin_unlock_bh(&ax25_list_lock);
- 		ax25_cb_put(ax25);
- 	}
-+	spin_unlock_bh(&ax25_list_lock);
- }
- 
- /*
-@@ -81,6 +81,7 @@ static void ax25_kill_by_device(struct net_device *dev)
- 
- 	if ((ax25_dev = ax25_dev_ax25dev(dev)) == NULL)
- 		return;
-+	ax25_dev->device_up = false;
- 
- 	spin_lock_bh(&ax25_list_lock);
- again:
-@@ -91,6 +92,7 @@ static void ax25_kill_by_device(struct net_device *dev)
- 				spin_unlock_bh(&ax25_list_lock);
- 				ax25_disconnect(s, ENETUNREACH);
- 				s->ax25_dev = NULL;
-+				ax25_cb_del(s);
- 				spin_lock_bh(&ax25_list_lock);
- 				goto again;
- 			}
-@@ -103,6 +105,7 @@ static void ax25_kill_by_device(struct net_device *dev)
- 				dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
- 				ax25_dev_put(ax25_dev);
- 			}
-+			ax25_cb_del(s);
- 			release_sock(sk);
- 			spin_lock_bh(&ax25_list_lock);
- 			sock_put(sk);
-@@ -995,9 +998,11 @@ static int ax25_release(struct socket *sock)
- 	if (sk->sk_type == SOCK_SEQPACKET) {
- 		switch (ax25->state) {
- 		case AX25_STATE_0:
--			release_sock(sk);
--			ax25_disconnect(ax25, 0);
--			lock_sock(sk);
-+			if (!sock_flag(ax25->sk, SOCK_DEAD)) {
-+				release_sock(sk);
-+				ax25_disconnect(ax25, 0);
-+				lock_sock(sk);
-+			}
- 			ax25_destroy_socket(ax25);
- 			break;
- 
-@@ -1053,11 +1058,13 @@ static int ax25_release(struct socket *sock)
- 		ax25_destroy_socket(ax25);
- 	}
- 	if (ax25_dev) {
--		del_timer_sync(&ax25->timer);
--		del_timer_sync(&ax25->t1timer);
--		del_timer_sync(&ax25->t2timer);
--		del_timer_sync(&ax25->t3timer);
--		del_timer_sync(&ax25->idletimer);
-+		if (!ax25_dev->device_up) {
-+			del_timer_sync(&ax25->timer);
-+			del_timer_sync(&ax25->t1timer);
-+			del_timer_sync(&ax25->t2timer);
-+			del_timer_sync(&ax25->t3timer);
-+			del_timer_sync(&ax25->idletimer);
-+		}
- 		dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
- 		ax25_dev_put(ax25_dev);
- 	}
-diff --git a/net/ax25/ax25_dev.c b/net/ax25/ax25_dev.c
-index d2a244e1c26..5451be15e07 100644
---- a/net/ax25/ax25_dev.c
-+++ b/net/ax25/ax25_dev.c
-@@ -62,6 +62,7 @@ void ax25_dev_device_up(struct net_device *dev)
- 	ax25_dev->dev     = dev;
- 	dev_hold_track(dev, &ax25_dev->dev_tracker, GFP_ATOMIC);
- 	ax25_dev->forward = NULL;
-+	ax25_dev->device_up = true;
- 
- 	ax25_dev->values[AX25_VALUES_IPDEFMODE] = AX25_DEF_IPDEFMODE;
- 	ax25_dev->values[AX25_VALUES_AXDEFMODE] = AX25_DEF_AXDEFMODE;
-diff --git a/net/ax25/ax25_subr.c b/net/ax25/ax25_subr.c
-index 3a476e4f6cd..227c2b09c52 100644
---- a/net/ax25/ax25_subr.c
-+++ b/net/ax25/ax25_subr.c
-@@ -268,7 +268,7 @@ void ax25_disconnect(ax25_cb *ax25, int reason)
- 		del_timer_sync(&ax25->t3timer);
- 		del_timer_sync(&ax25->idletimer);
- 	} else {
--		if (!ax25->sk || !sock_flag(ax25->sk, SOCK_DESTROY))
-+		if (!ax25->sk && !sock_flag(ax25->sk, SOCK_DESTROY))
- 			ax25_stop_heartbeat(ax25);
- 		ax25_stop_t1timer(ax25);
- 		ax25_stop_t2timer(ax25);
--- 
-2.17.1
+> ---
+>  drivers/gpu/drm/sun4i/sun4i_tcon.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/sun4i/sun4i_tcon.c b/drivers/gpu/drm/sun4i/sun4i_tcon.c
+> index 113c032a2720..0ebb7c1dfee6 100644
+> --- a/drivers/gpu/drm/sun4i/sun4i_tcon.c
+> +++ b/drivers/gpu/drm/sun4i/sun4i_tcon.c
+> @@ -1316,6 +1316,12 @@ static const struct sun4i_tcon_quirks sun9i_a80_tcon_tv_quirks = {
+>  	.needs_edp_reset = true,
+>  };
+>  
+> +static const struct sun4i_tcon_quirks sun20i_d1_lcd_quirks = {
+> +	.has_channel_0		= true,
+> +	.dclk_min_div		= 1,
+> +	.set_mux		= sun8i_r40_tcon_tv_set_mux,
+> +};
+> +
+>  /* sun4i_drv uses this list to check if a device node is a TCON */
+>  const struct of_device_id sun4i_tcon_of_table[] = {
+>  	{ .compatible = "allwinner,sun4i-a10-tcon", .data = &sun4i_a10_quirks },
+> @@ -1329,6 +1335,8 @@ const struct of_device_id sun4i_tcon_of_table[] = {
+>  	{ .compatible = "allwinner,sun8i-v3s-tcon", .data = &sun8i_v3s_quirks },
+>  	{ .compatible = "allwinner,sun9i-a80-tcon-lcd", .data = &sun9i_a80_tcon_lcd_quirks },
+>  	{ .compatible = "allwinner,sun9i-a80-tcon-tv", .data = &sun9i_a80_tcon_tv_quirks },
+> +	{ .compatible = "allwinner,sun20i-d1-tcon-lcd", .data = &sun20i_d1_lcd_quirks },
+> +	{ .compatible = "allwinner,sun20i-d1-tcon-tv", .data = &sun8i_r40_tv_quirks },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(of, sun4i_tcon_of_table);
+> 
 

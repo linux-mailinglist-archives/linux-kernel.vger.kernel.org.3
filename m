@@ -2,48 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1E65387C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 21:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8B35387CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 21:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243069AbiE3Tfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 15:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
+        id S243074AbiE3Th2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 15:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbiE3Tff (ORCPT
+        with ESMTP id S233186AbiE3Th0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 15:35:35 -0400
+        Mon, 30 May 2022 15:37:26 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D727403D4;
-        Mon, 30 May 2022 12:35:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40F953700;
+        Mon, 30 May 2022 12:37:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1CA8B80EF5;
-        Mon, 30 May 2022 19:35:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3C0AC385B8;
-        Mon, 30 May 2022 19:35:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A417B80EF4;
+        Mon, 30 May 2022 19:37:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 801CAC385B8;
+        Mon, 30 May 2022 19:37:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653939331;
-        bh=eijbhpTJ2B3JlcVU/XzMFj2+PLIBef38WosQNqTCfrk=;
+        s=korg; t=1653939443;
+        bh=N++pdaqxxR3mfmUMBn2HNu9rkyihptoWh1TrpMRBdys=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e2OiJJm48j1Ovm1Iw5XFX7Lpl8jev4IHDuE4+pdi0xlYhRdnfkd+yEHVf/DDjnLHY
-         Es3rfrST95gJYei1rlGgdtBu3MOrhTV6+HKayuKixhs+tJwiluiyObU8DE7JFvaNDY
-         8vbExebiT7c90LgMJpIG4hQhdooOenpAyVgnVOxg=
-Date:   Mon, 30 May 2022 21:35:27 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     Borislav Petkov <bp@suse.de>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org
-Subject: Re: Warnings when suspending to disk
-Message-ID: <YpUcf19E+qgb6Eyu@kroah.com>
-References: <alpine.LRH.2.02.2205301145540.25840@file01.intranet.prod.int.rdu2.redhat.com>
+        b=xztIAB4G5ZyIVNwBARbpTyYCuuretroT66NXzmhntA8dW2REk1RzcHREzSeqa0dUJ
+         +T/Csb4a2YlAPLSIhFbfUm8j1cVt3r7/78CVFpKXQxukReAOMDb6anzvCzYN7CRUHu
+         N1S4FOZKyy2uO8RgOnAuMvqj3ffycmVnHvpS+t80=
+Date:   Mon, 30 May 2022 21:37:19 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Russell King <rmk+kernel@armlinux.org.uk>,
+        Sasha Levin <sashal@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "# 3.4.x" <stable@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Keith Packard <keithpac@amazon.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH AUTOSEL 5.18 147/159] ARM: 9201/1: spectre-bhb: rely on
+ linker to emit cross-section literal loads
+Message-ID: <YpUc73oi012uxl8w@kroah.com>
+References: <20220530132425.1929512-1-sashal@kernel.org>
+ <20220530132425.1929512-147-sashal@kernel.org>
+ <CAMj1kXGAuKTqV0S4jxticZJp7ChtqqeXjn7SV1E83p5yVE1pkw@mail.gmail.com>
+ <YpTh9dan5lJgH2aL@kroah.com>
+ <CAMj1kXGO-1ccxaK_GnE+d2yc0XkF5y9ZawXXC3ypeGAanv9VtA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.LRH.2.02.2205301145540.25840@file01.intranet.prod.int.rdu2.redhat.com>
+In-Reply-To: <CAMj1kXGO-1ccxaK_GnE+d2yc0XkF5y9ZawXXC3ypeGAanv9VtA@mail.gmail.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,46 +64,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 12:16:24PM -0400, Mikulas Patocka wrote:
-> Hi
+On Mon, May 30, 2022 at 05:56:09PM +0200, Ard Biesheuvel wrote:
+> On Mon, 30 May 2022 at 17:25, Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, May 30, 2022 at 03:32:47PM +0200, Ard Biesheuvel wrote:
+> > > AUTONAK
+> > >
+> > > As discussed before, please disregard all patches authored by me when
+> > > running the bot.
+> >
+> > Ok, but why wasn't this spectre-bhb commit asked to be backported to
+> > stable in the first place?
 > 
-> The commit 7f99cb5e60392fc3494c610776e733b68784280c ("x86/CPU/AMD: Use 
-> default_groups in kobj_type") causes the following warnings to be printed 
-> during suspend to disk and resume from disk. There are many of these 
-> warnings, 3 for each core.
-
-And if you revert that change it goes back to not warning?
-
-that is odd.
-
+> Because it doesn't belong in -stable. Hence the lack of cc:stable or
+> fixes: tags.
 > 
-> The machine is two six-core Opterons 8435.
+> > Do older kernels not need these types of
+> > fixes?
+> >
 > 
-> Mikulas
+> This commit was part of a series of six, two of which were bug fixes
+> and had fixes: tags. They do not have cc:stable tags because the
+> 'fixed' patches had not been backported yet when they were sent out.
 > 
-> 
-> [   31.349584] PM: hibernation: hibernation entry
-> [   31.350319] Filesystems sync: 0.000 seconds
-> [   31.350417] Freezing user space processes ... (elapsed 0.001 seconds) done.
-> [   31.351994] OOM killer disabled.
-> [   31.357889] PM: hibernation: Preallocating image memory
-> [   34.791852] PM: hibernation: Allocated 735563 pages for snapshot
-> [   34.792065] PM: hibernation: Allocated 2942252 kbytes in 3.43 seconds (857.79 MB/s)
-> [   34.792296] Freezing remaining freezable tasks ... (elapsed 0.000 seconds) done.
-> [   34.793791] printk: Suspending console(s) (use no_console_suspend to debug)
-> [   34.795159] serial 00:03: disabled
-> [   34.795248] serial 00:02: disabled
-> [   34.824316] mptbase: ioc0: pci-suspend: pdev=0x00000000f4bc4e1a, slot=0000:02:06.0, Entering operating state [D3]
-> [   35.470390] amdgpu 0000:07:00.0: amdgpu: BACO reset
-> [   35.533783] Disabling non-boot CPUs ...
-> [   35.535798] smpboot: CPU 1 is now offline
-> [   35.537754] ------------[ cut here ]------------
-> [   35.537764] kernfs: can not remove 'threshold_limit', no directory
+> So those are clear candidates for -stable, and as far as I can tell,
+> they have already been backported.
 
-Before you suspend, is this directory (and the other ones) really there?
+Great, thanks for verifying.
 
-Are they not getting created now properly somehow?  Any warning messages
-at boot time?
+> This patch does not fix a bug. It makes the asm code more resilient to
+> potential bugs introduced inadvertently by future changes, which will
+> be harder to detect now that we have three different versions of the
+> exception vector table. (Any given system will only exercise one of
+> the three, depending on whether and which Spectre-BHB workaround it
+> requires)
+
+Ok, that's good to know, it was not obvious from the changelog text that
+this wasn't doing anything but a cleanup.
+
+> I build and boot test my patches carefully, and so I consciously
+> decided that the regression risk of backporting this patch outweighs
+> the benefits. This is why I did not add a cc:stable or fixes: tag. If
+> a tag existed that said 'do not backport this unless explicitly
+> requested', I would have added it.
+> 
+> I would expect anyone that proposes this patch for -stable to be as
+> diligent in ensuring that the patch is safe for backporting, which
+> includes building the code with older GCC versions that those stable
+> kernels still support, and boot testing the result on actual hardware.
+> 
+> If this is part of the AUTOSEL workflow, then I stand corrected. But
+> even then, this does not mean that the patch *belongs* in -stable. As
+> you know, I enjoy throwing stable-kernel-rules.rst in your face, and I
+> am pretty sure that using a bot to find patches that apply cleanly and
+> happen not to cause build breakage is not covered by the criteria
+> defined by that document by any stretch of the imagination.
+> 
+> On top of that, I feel that 'saving' precious stable maintainer's time
+> by using a bot to offload this burden to the community uninvited is
+> really not ok. We work very hard to keep highly heterogeneous
+> architectures such as ARM working across all supported platforms, and
+> this is work enough as it is without all the bogus patches that
+> AUTOSEL digs up without *any* justification beyond 'hey, it applies!'
+
+If you want to keep arm-core stuff out of the AUTOSEL process, because
+you all do a good job of marking stuff already properly, that's fine,
+Sasha can easily do that, just let us know.
 
 thanks,
 

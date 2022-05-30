@@ -2,121 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6BE537986
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCA653798E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235580AbiE3LBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 07:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
+        id S235521AbiE3LGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 07:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234255AbiE3LBU (ORCPT
+        with ESMTP id S230180AbiE3LGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 07:01:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4405E5640F
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:01:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8457B80D79
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 11:01:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D5C6C3411A
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 11:01:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653908475;
-        bh=hN3WhjxTaLGcWaPjo+wfUUJbxsQKSn8GzQyB50jE1NE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RzBEYqXAospaesRdrFkbtXeqU/aRiGdtqN+kDSkCBQphbq73ZJaVahwEO1osQHyoO
-         yViZFIFuF1VqpNYps1UO9+AmI5MsxRU5ULTOg7s7Yjt/WKTDgeqmSrJ4h7rhDMlNRh
-         9q+XnBWDhw+iZ7l1OMk4wlegw8juNERC7jarq/fJE6X/J8jM2j3QHKk8YIT6cMkLJs
-         L1nOeVfEU1SAeYuldAiKXd+Vh7A82ilSzGxTWZtqxvrhAKUppsVZ9e6bExEvDX5DP3
-         OSyLzz/eyPMkFYUqriZC4hnu+Yq9MlwgaK+4P4R/2cFmbWkNWn0W1u3wN5eUkqzbo6
-         aydEiMkIgy92g==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-f3381207a5so2612426fac.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:01:15 -0700 (PDT)
-X-Gm-Message-State: AOAM531qJG1wpcf/T3UkFxuuKGwizbQ+ODX/Xj/HRbE81a/1CbCO8Bq+
-        JzXHIPI8ph/gU0fQx4d+oa76eKCeWlHtm1Rtzy0=
-X-Google-Smtp-Source: ABdhPJyzW7d1LkreDf+LUIXe7xFKiCNXCUok/909StaPbqBsgVbN30QvM8IqHtyc0AELA7POe0pA0ixwjUs0fdPnOxc=
-X-Received: by 2002:a05:6870:eaa5:b0:da:b3f:2b45 with SMTP id
- s37-20020a056870eaa500b000da0b3f2b45mr10318942oap.228.1653908474755; Mon, 30
- May 2022 04:01:14 -0700 (PDT)
+        Mon, 30 May 2022 07:06:32 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A7855483;
+        Mon, 30 May 2022 04:06:31 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U91UOw026575;
+        Mon, 30 May 2022 11:06:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=wK6/q36Gb8XJZO9BQ/uI6Vo7ghIK6y7J+vH6fv00uZI=;
+ b=qWQjS4onfIvfEI+7GG+3Eik2am6ikgdxgtm/N7poDWQTsm20HkdbjWzbIYmsEPc9ae9A
+ nGz9L2rOwPLNNFxWh3wvYtyb4FVvc8kOD5AF1rcIeivZg7d9h0o5cbdKrlHL5Qs4HRUO
+ twoVaV3xAIBwCXPu0iGLPO4fb44PB66PdIRyipmc+nnD1Kw5Dfwu9hL3bYzRLe6caBuG
+ iqtz4HkimRnJSmuYhL+z7kWAHlvv0WfdWBD8IdgkuV+cyeh7ZPrhh21ZzKVbzk0YlRZu
+ YmCRQcn1GmbIteOV8sp1955BnsV3oByefsH5C+NfuoeoOWhHZ/w8rNXUraRgGJD7Dx7n hg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcrgpw8mu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 May 2022 11:06:30 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24UAlVuQ006005;
+        Mon, 30 May 2022 11:06:29 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcrgpw8kx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 May 2022 11:06:29 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24UAok5M016575;
+        Mon, 30 May 2022 11:06:28 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma02fra.de.ibm.com with ESMTP id 3gbcc69x5c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 May 2022 11:06:27 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24UAq4Ik40829360
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 May 2022 10:52:04 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8543211C078;
+        Mon, 30 May 2022 11:06:24 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DE86E11C064;
+        Mon, 30 May 2022 11:06:23 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.12.149])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 30 May 2022 11:06:23 +0000 (GMT)
+Date:   Mon, 30 May 2022 13:06:21 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Nico Boehr <nrb@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, borntraeger@de.ibm.com, frankja@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, david@redhat.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        scgl@linux.ibm.com, mimu@linux.ibm.com
+Subject: Re: [PATCH v10 15/19] KVM: s390: pv: asynchronous destroy for
+ reboot
+Message-ID: <20220530130621.5256a0b1@p-imbrenda>
+In-Reply-To: <49c2667ecfc2c628c13cae79796ffac4ddc2c0c3.camel@linux.ibm.com>
+References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
+        <20220414080311.1084834-16-imbrenda@linux.ibm.com>
+        <49c2667ecfc2c628c13cae79796ffac4ddc2c0c3.camel@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <202205290805.1vZLAr36-lkp@intel.com>
-In-Reply-To: <202205290805.1vZLAr36-lkp@intel.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 30 May 2022 13:01:03 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEBT=y+_4JHe=i-5c59YXg6MReK2cHxf0ufWYQUq5GsJQ@mail.gmail.com>
-Message-ID: <CAMj1kXEBT=y+_4JHe=i-5c59YXg6MReK2cHxf0ufWYQUq5GsJQ@mail.gmail.com>
-Subject: Re: <instantiation>:2:2: error: out of range pc-relative fixup value
-To:     kernel test robot <lkp@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 243vsKcxalx1whJALGpcdThRix-8ZFKf
+X-Proofpoint-ORIG-GUID: S04ELvEcyK5xQkai81T9A5vz7kbs2Jb8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-30_03,2022-05-30_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ lowpriorityscore=0 malwarescore=0 phishscore=0 priorityscore=1501
+ mlxlogscore=999 spamscore=0 clxscore=1015 bulkscore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205300058
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(cc Nathan and Nick)
+On Mon, 30 May 2022 11:46:26 +0200
+Nico Boehr <nrb@linux.ibm.com> wrote:
 
-On Sun, 29 May 2022 at 02:22, kernel test robot <lkp@intel.com> wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   9d004b2f4fea97cde123e7f1939b80e77bf2e695
-> commit: 508074607c7b95b24f0adf633fdf606761bb7824 ARM: 9195/1: entry: avoid explicit literal loads
-> date:   9 days ago
-> config: arm-randconfig-r005-20220529 (https://download.01.org/0day-ci/archive/20220529/202205290805.1vZLAr36-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0fbe3f3f486e01448121f7931a4ca29fac1504ab)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=508074607c7b95b24f0adf633fdf606761bb7824
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 508074607c7b95b24f0adf633fdf606761bb7824
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> <instantiation>:2:2: error: out of range pc-relative fixup value
->     ldr tsk, =__current
->     ^
->
+> On Thu, 2022-04-14 at 10:03 +0200, Claudio Imbrenda wrote:
+> [...]
+> > diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
+> > index b20f2cbd43d9..36bc107bbd7d 100644
+> > --- a/arch/s390/kvm/pv.c
+> > +++ b/arch/s390/kvm/pv.c  
+> [...]
+> > +/**
+> > + * kvm_s390_pv_deinit_vm_async - Perform an asynchronous teardown of
+> > a
+> > + * protected VM.
+> > + * @kvm the VM previously associated with the protected VM
+> > + * @rc return value for the RC field of the UVCB
+> > + * @rrc return value for the RRC field of the UVCB
+> > + *
+> > + * Tear down the protected VM that had previously been set aside
+> > using
+> > + * kvm_s390_pv_deinit_vm_async_prepare.
+> > + *
+> > + * Context: kvm->lock needs to be held  
+> 
+> ...and will be released...
 
-This log snippet is a bit terse. I managed to narrow this down to
-arch/arm/kernel/entry-common.S but having a bit more context from the
-build log would be useful here.
+no, I decided to refactor this so that the lock won't be held at
+all when not needed (you'll see in the next respin), should be cleaner
 
-The commit in question reorganizes some variable loads from asm code
-by switching to the ldr_va macro, which avoids literals in most cases,
-but not when CONFIG_COMPILE_TEST=y as is the case here. (This is due
-to the fact that allyesconfig produces a vmlinux image whose size
-exceeds the 256 MB range of ARM group relocations used by ldr_va, and
-so group relocations are not used in this case)
+> 
+> > + *
+> > + * Return: 0 in case of success, -EINVAL if no protected VM had been
+> > + * prepared for asynchronous teardowm, -EIO in case of other errors.
+> > + */
+> > +int kvm_s390_pv_deinit_vm_async(struct kvm *kvm, u16 *rc, u16 *rrc)  
+> 
+> Do you also want to set rc and rrc as in kvm_s390_pv_deinit_vm_async_prepare()?
 
-This means that those ldr_va macros evaluate to literal loads such as
-the 'ldr tsk, =__current' reported above, and the literal pool entry
-carrying the address of __current can no longer be emitted close
-enough to the LDR instruction itself, due to the way those literal
-loads have been slightly reshuffled by that commit.
+oh... no I don't
 
-This is easily fixed by putting a .ltorg directive in the appropriate
-location (I'll send out the patch right away) but it does beg the
-question whether or not we need to keep allyesconfig building, given
-that it cannot actually boot on a real (or emulated) system.
+I should propagate the actual RC and RRC from the UVC, which I'm not
+doing (will fix)
+

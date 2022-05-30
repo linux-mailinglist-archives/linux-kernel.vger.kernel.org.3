@@ -2,86 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7C6537A07
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E18E537A20
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235681AbiE3LlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 07:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
+        id S233748AbiE3Lnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 07:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235496AbiE3LlB (ORCPT
+        with ESMTP id S235989AbiE3Lnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 07:41:01 -0400
-X-Greylist: delayed 121 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 30 May 2022 04:40:57 PDT
-Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184EF419A3
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:40:57 -0700 (PDT)
-Received: from mail1.perex.cz (localhost [127.0.0.1])
-        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 981BBA0046;
-        Mon, 30 May 2022 13:40:55 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 981BBA0046
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-        t=1653910855; bh=A94usJLEIZvHxs0NLWIgXXMYLwbbDmxswIagNBme1fA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aqO3x3TZZmEChRN+9pBFGi42ZbmxIRT6l6Fv3SLOfOaU5XUHs41fyYweMmKlfB+DD
-         3CJVPNlYi7SWJa9Y+sr46OsbSYUvH35X6fLHGKqDwAV5QJ67Jusl4Q5iubQlwTJWSt
-         zAHbudEDy7ZCqBnOxh8lzjWkK2QAsOcavsjm84dE=
-Received: from [192.168.100.98] (unknown [192.168.100.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: perex)
-        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-        Mon, 30 May 2022 13:40:47 +0200 (CEST)
-Message-ID: <7ca20354-1a91-8f18-2de8-8571987fa519@perex.cz>
-Date:   Mon, 30 May 2022 13:40:47 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v4 00/17] ALSA: hda: cirrus: Add initial DSP support and
- firmware loading
-Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
-        Takashi Iwai <tiwai@suse.com>, Mark Brown <broonie@kernel.org>,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org
-References: <20220525131638.5512-1-vitalyr@opensource.cirrus.com>
- <871qwf0x8t.wl-tiwai@suse.de>
- <20220530090846.GS38351@ediswmail.ad.cirrus.com>
- <87czfvxtsc.wl-tiwai@suse.de>
- <20220530093639.GT38351@ediswmail.ad.cirrus.com>
- <87a6azxr7h.wl-tiwai@suse.de>
- <20220530103415.GU38351@ediswmail.ad.cirrus.com>
- <871qwbxpsb.wl-tiwai@suse.de>
- <20220530105329.GV38351@ediswmail.ad.cirrus.com>
- <87wne3wa5w.wl-tiwai@suse.de>
-From:   Jaroslav Kysela <perex@perex.cz>
-In-Reply-To: <87wne3wa5w.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 30 May 2022 07:43:42 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE293EF0E;
+        Mon, 30 May 2022 04:43:40 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id n13-20020a17090a394d00b001e30a60f82dso1882875pjf.5;
+        Mon, 30 May 2022 04:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=1BvAlV75hXlmEW6H7NZj8m2+emc7pNPWivCpEN7QdQQ=;
+        b=AKkizI5vxdL5uQcfmsXWVkWdXI8Pq9JhYnyFP0MGpMimsx6reIaVisnHQEXGR52xZY
+         wxcGjJUMBWEq9eU3gQCY9ZNIey6s8Xd+jt09aZwkWby8RrmpXEC3olVVASmhX7omnVVq
+         f9OXP5KNAL5TxNuAhyUwDs12Cr+pMSULGKNyEe/pvJoAeLqw2rbAVFV5b8IIBNaoaX8q
+         yHlK9CB/JoHkSgMvc0+BF9zg2QRbGlDIqm2qGYVo4DmMDHAE8XLGNzvQFBeab+ux4gxo
+         X7OcuLR3x+woErt+qDtGgD+/CG2m3vkFsd8jc9O9WMvm/qzqtlGr2UYZr9a84t5CAyPl
+         xn/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=1BvAlV75hXlmEW6H7NZj8m2+emc7pNPWivCpEN7QdQQ=;
+        b=soDzh7/pn3xw8afz6RIUfap9ztd41VfEcGT1VaO7EmIy4jpUXxifjS7lqPdyja/B5E
+         oqVqGc/ukzEwBahu0cC4EBTt3iQvy2KI4ZnweLC8jONghgriPs0acAwS9TBldBuEBh/k
+         c9j+DY58MSPYF8VjrwyW+38dasIhBneuyfKhx55bfLZU5dXrff4gfmSwLpJbISNjS6IH
+         6ZmO74Z0EJbJHLnUWXAsLrYcWu1e9p/pdJn7HnyVopXXGQnlq5lq5A3J177CZlRfwEAq
+         JwfQIovaL0IpECGlVGOgfPA+H/K1lckbbfN1IbDdabFCXQjLKA3QW2Z6USNdhJ94lB1c
+         zQTw==
+X-Gm-Message-State: AOAM533LhSnfQEusrkon5Shv5Q9Q/+sUiBzskJjI6oRyRqk457LQbQH/
+        TDv+0tUtbuRg1eDBnabx8dI=
+X-Google-Smtp-Source: ABdhPJyBjD7ZjB9mqxCcZxSrR5aW0PfM7hAyksDSD984OOLHfR+h/OvSF/fOXgX4vDfty6M+7PqF0A==
+X-Received: by 2002:a17:902:8ecc:b0:15e:f63f:233f with SMTP id x12-20020a1709028ecc00b0015ef63f233fmr55548885plo.86.1653911020277;
+        Mon, 30 May 2022 04:43:40 -0700 (PDT)
+Received: from potin-quanta.dhcpserver.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170902c2ca00b0015e8d4eb207sm8865069pla.81.2022.05.30.04.43.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 04:43:39 -0700 (PDT)
+From:   Potin Lai <potin.lai.pt@gmail.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Cc:     Patrick Williams <patrick@stwcx.xyz>,
+        Porin Lai <potin.lai@quantatw.com>,
+        Porin Lai <potin.lai.pt@gmail.com>, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] aspeed: i2c: add manual clock setup feature
+Date:   Mon, 30 May 2022 19:40:56 +0800
+Message-Id: <20220530114056.8722-1-potin.lai.pt@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30. 05. 22 13:07, Takashi Iwai wrote:
+From: Porin Lai <potin.lai.pt@gmail.com>
 
-> And yet moreover, we'll need to consider some way for protecting
-> against DoS-like behavior by frequent kctl changes.
+Add properties for manual tuning i2c clock timing register.
 
-I agree, but only the driver knows details about the kctl operation time and 
-resource constraints. So the driver should implement a rate or i/o limit for 
-those controls. We may offer helper functions in the ALSA core for this job 
-(if required).
+* aspeed,i2c-manual-clk: Enable aspeed i2c clock manual setup
+* aspeed,i2c-base-clk-div: Base Clock divisor (tBaseClk)
+* aspeed,i2c-clk-high-cycle: Cycles of clock-high pulse (tClkHigh)
+* aspeed,i2c-clk-low-cycle: Cycles of clock-low pulse (tClkLow)
 
-						Jaroslav
+Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+---
+ drivers/i2c/busses/i2c-aspeed.c | 55 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 54 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+index 67e8b97c0c95..1f4b5c4b5bf4 100644
+--- a/drivers/i2c/busses/i2c-aspeed.c
++++ b/drivers/i2c/busses/i2c-aspeed.c
+@@ -898,6 +898,56 @@ static int aspeed_i2c_init_clk(struct aspeed_i2c_bus *bus)
+ 	return 0;
+ }
+ 
++/* precondition: bus.lock has been acquired. */
++static int aspeed_i2c_manual_clk_setup(struct aspeed_i2c_bus *bus)
++{
++	u32 divisor, clk_high, clk_low, clk_reg_val;
++
++	if (device_property_read_u32(bus->dev, "aspeed,i2c-base-clk-div",
++				     &divisor) != 0) {
++		dev_err(bus->dev, "Could not read aspeed,i2c-base-clk-div\n");
++		return -EINVAL;
++	} else if (divisor > ASPEED_I2CD_TIME_BASE_DIVISOR_MASK) {
++		dev_err(bus->dev, "Invalid aspeed,i2c-base-clk-div: %u\n",
++			divisor);
++		return -EINVAL;
++	}
++
++	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-high-cycle",
++				     &clk_high) != 0) {
++		dev_err(bus->dev, "Could not read aspeed,i2c-clk-high-cycle\n");
++		return -EINVAL;
++	} else if (clk_high > ASPEED_I2CD_TIME_SCL_REG_MAX) {
++		dev_err(bus->dev, "Invalid aspeed,i2c-clk-high-cycle: %u\n",
++			clk_high);
++		return -EINVAL;
++	}
++
++	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-low-cycle",
++				     &clk_low) != 0) {
++		dev_err(bus->dev, "Could not read aspeed,i2c-clk-low-cycle\n");
++		return -EINVAL;
++	} else if (clk_low > ASPEED_I2CD_TIME_SCL_REG_MAX) {
++		dev_err(bus->dev, "Invalid aspeed,i2c-clk-low-cycle: %u\n",
++			clk_low);
++		return -EINVAL;
++	}
++
++	clk_reg_val = readl(bus->base + ASPEED_I2C_AC_TIMING_REG1);
++	clk_reg_val &= (ASPEED_I2CD_TIME_TBUF_MASK |
++			ASPEED_I2CD_TIME_THDSTA_MASK |
++			ASPEED_I2CD_TIME_TACST_MASK);
++	clk_reg_val |= (divisor & ASPEED_I2CD_TIME_BASE_DIVISOR_MASK)
++			| ((clk_high << ASPEED_I2CD_TIME_SCL_HIGH_SHIFT)
++			   & ASPEED_I2CD_TIME_SCL_HIGH_MASK)
++			| ((clk_low << ASPEED_I2CD_TIME_SCL_LOW_SHIFT)
++			   & ASPEED_I2CD_TIME_SCL_LOW_MASK);
++	writel(clk_reg_val, bus->base + ASPEED_I2C_AC_TIMING_REG1);
++	writel(ASPEED_NO_TIMEOUT_CTRL, bus->base + ASPEED_I2C_AC_TIMING_REG2);
++
++	return 0;
++}
++
+ /* precondition: bus.lock has been acquired. */
+ static int aspeed_i2c_init(struct aspeed_i2c_bus *bus,
+ 			     struct platform_device *pdev)
+@@ -908,7 +958,10 @@ static int aspeed_i2c_init(struct aspeed_i2c_bus *bus,
+ 	/* Disable everything. */
+ 	writel(0, bus->base + ASPEED_I2C_FUN_CTRL_REG);
+ 
+-	ret = aspeed_i2c_init_clk(bus);
++	if (of_property_read_bool(pdev->dev.of_node, "aspeed,i2c-manual-clk"))
++		ret = aspeed_i2c_manual_clk_setup(bus);
++	else
++		ret = aspeed_i2c_init_clk(bus);
+ 	if (ret < 0)
+ 		return ret;
+ 
 -- 
-Jaroslav Kysela <perex@perex.cz>
-Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+2.17.1
+

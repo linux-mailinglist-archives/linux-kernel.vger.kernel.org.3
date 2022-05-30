@@ -2,168 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2317A537BE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B85537B55
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236689AbiE3N2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 09:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
+        id S236513AbiE3NWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 09:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236870AbiE3N1D (ORCPT
+        with ESMTP id S236497AbiE3NW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 09:27:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4910887A3B;
-        Mon, 30 May 2022 06:25:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A82960EB4;
-        Mon, 30 May 2022 13:25:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B35CC36AE5;
-        Mon, 30 May 2022 13:25:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917145;
-        bh=kdM3fNE5gu/C38KDzzmn5dQwtfjNDKoBsKPgDt1kxYY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LmCEEL6Hf/eeOK7BVUAaO5UETckHnF3jnCG6/5FfyOn3Aflc/BDV0vDnqASUtXaQ+
-         B/0JusFfZlfnp6dWoFLeZHD2UgCv13OlB/i7Azz0f/WVBEjLlJJecEjuCPvQNMUnYd
-         Ne9H+iX80WM0lvv/DKvltgr4g/2A434kogrqh5bLOlhaoW7iB49h2S+YPtgw7R6PL6
-         rEJU3GyoiX6PgzwzlWP2cRqrqBaTUt5ZDgcAM6jzKNOzvLGJOmtAnxiS6CKNnqgjMx
-         5gn+Om9Tb6nj6OkobQPPBl+6s1CtOveMudIOv4ydtkATvgt9tXRjg7THbckl2DljiU
-         jR1ozwL2E6NYg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Justin Tee <justin.tee@broadcom.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 035/159] scsi: lpfc: Move cfg_log_verbose check before calling lpfc_dmp_dbg()
-Date:   Mon, 30 May 2022 09:22:20 -0400
-Message-Id: <20220530132425.1929512-35-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
-References: <20220530132425.1929512-1-sashal@kernel.org>
+        Mon, 30 May 2022 09:22:26 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60072.outbound.protection.outlook.com [40.107.6.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861E263FF
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:22:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EJJUecNoC4eFnhArfYKwlLjuIkJue5vxgPE0USA+A9GU8Ob2ufKnHtZRB1hSuFXWdMkWyZkOON8+dUZOCs/kdhMvCkR9S4ETx48EuU2ceFzOqT9N26WoWvHAuJ1BaJnLPBQeMkvGqKEFiUa6eQUoj/Kdwy6TKhn04FS2MLmYuvfoCJgt9zqh5fkD2g0G1Ju57srUpx03OfHm72i8yW0vhOMZfBLjlvGGDyVjDzRJf9hycydioF/G6j3/TuSFXNRxlIWWzx+mu8UES68zdjGOFXgwP2LS796T68Hhc28MKb8JcVCfwgSE0wNtJVm/dFB3BFkHI3/MYbSExTjavecfNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QvvhPtiYvj/ucVaHUjGOzhyc0VeQkgTPJQYLa33diwM=;
+ b=UG4yM5wuwCtyAAErs5XXUCmadINnuRWaHZ2DQGGLb7Fwi+UhWsHYdCcBUg6idOYzvqOVJeeVyCf6p0r7a9wjTC0pJbWJYBkKQ0j+D3wAAOBG3U78ved+DDByzswbEqF0LbCb0lZ31wNzpvv67Q/Y76FO24SXb52pXfVe8cOVigxwyVDNSatxNha9FiE66w0LKztigrmyqvhwVMXM5ddcsoB1DCf/+CI0yQ4hYpoi+NwGJf4tAPiBzvSFeVfKaPh6OmRP90d2mrN0dnKkD/s74B/7b3rYC/vUp6lBPMaK9OsJ5TBP3g14oijt+N1IAhs1b2xOJLPXpJfuvcDDRsjbhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 193.240.239.45) smtp.rcpttodomain=alsa-project.org
+ smtp.mailfrom=diasemi.com; dmarc=fail (p=none sp=none pct=100) action=none
+ header.from=dm.renesas.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=dialogsemiconductor.onmicrosoft.com;
+ s=selector1-dialogsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QvvhPtiYvj/ucVaHUjGOzhyc0VeQkgTPJQYLa33diwM=;
+ b=u0zT6DPuQg3zv4x+MJ9e8hO1lhEYsSe16wXU+A3qJHM0R4JQa0F/+VjIYgD7kj0HrrlriVEl4q1eSkkAqpCvk6jIZ3mHYrghGiKuDrsqv+fZVlrfPeaeIAsZzxU6DzKqe84XXFOJP9Ifby4L6uevx5Dew2/pndKOyh9HOQ6NEVE=
+Received: from AM6P195CA0048.EURP195.PROD.OUTLOOK.COM (2603:10a6:209:87::25)
+ by AM5PR1001MB1058.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:203:12::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Mon, 30 May
+ 2022 13:22:23 +0000
+Received: from VE1EUR02FT103.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:209:87:cafe::c0) by AM6P195CA0048.outlook.office365.com
+ (2603:10a6:209:87::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13 via Frontend
+ Transport; Mon, 30 May 2022 13:22:23 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 193.240.239.45) smtp.mailfrom=diasemi.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=dm.renesas.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ diasemi.com discourages use of 193.240.239.45 as permitted sender)
+Received: from mailrelay1.diasemi.com (193.240.239.45) by
+ VE1EUR02FT103.mail.protection.outlook.com (10.152.13.38) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5293.13 via Frontend Transport; Mon, 30 May 2022 13:22:22 +0000
+Received: from nbsrvex-01v.diasemi.com (10.1.17.243) by
+ nbsrvex-01v.diasemi.com (10.1.17.243) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 30 May 2022 15:22:21 +0200
+Received: from slsrvapps-01.diasemi.com (10.24.28.40) by
+ nbsrvex-01v.diasemi.com (10.1.17.243) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Mon, 30 May 2022 15:22:21 +0200
+Received: by slsrvapps-01.diasemi.com (Postfix, from userid 22379)
+        id C96E580007F; Mon, 30 May 2022 13:22:21 +0000 (UTC)
+Message-ID: <cover.1653916368.git.DLG-Adam.Thomson.Opensource@dm.renesas.com>
+From:   Adam Thomson <DLG-Adam.Thomson.Opensource@dm.renesas.com>
+Date:   Mon, 30 May 2022 13:22:21 +0000
+Subject: [PATCH 0/2] ASoC: da7219: Small fixes for jack detection and removal
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        Support Opensource <DLG-Support.Opensource@lm.renesas.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fa607533-3a99-47c0-f620-08da423f6e29
+X-MS-TrafficTypeDiagnostic: AM5PR1001MB1058:EE_
+X-Microsoft-Antispam-PRVS: <AM5PR1001MB10582389719EDF07616F4E97A7DD9@AM5PR1001MB1058.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 2
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wQybtY5JClESGCTbN45+6hi+HwSAdI3WifNeNFOcf/iCimJxyzln2XTTeW7mWKlw/0JWLuP+VJ2dPfu69R/haM9TUgyGH4JXqy3KnzeC0oS+03BxNPiHMdUvQRUEZ6KPpv5IyvNOhLGo8HTa8mFh0uAnnGb91Dl6NkpQp9SBMw8Xz87KdMOHGrHNSAQxGCZPj/8E+LkJWY8fPWPG7enhTkAmfuufwGy7qQaju6Eo+pOJ8/PEHXlIZzjMsnvNGTipkY05S7l135WB1hCTe26ZTrMsvpr11esTWCqA+uAIrJHr7KE/bkQJ2IimMW3jv3PP5s8jeiWW8TPsSH2g2nl1FJfaZZPEEags6RaPj64ElMGtxHWiy32d5D4I28SLKns27vBhD2GmZILOqGh5H7CIe8tPuph5cFl1LAvQPS9ztuGigIU89BZu5DEybDethaeq9OnvGFfsIT9U1nDjXvRpXE+oPvhalgz6a3nXoDBhypRSaZfRl8RhSGlLqL4sJF5pXnnVG2P1rowW7xDaWy4xKFjOIfLMktK/lZujNvjvwHrjPiRkwYyrpKu7ny5ad8BOHvoRXOiWlGGKjMyof2K0FlIbGTi18Ce0pOQFjDnnaU/YYzoD20WO8qXbgWeFKeiLv3M5R8+FV+sWyDdv0MIWuXcai3CltJ3OWrcm5B8ftX6CmpUTEquq4RsQrEpbe8oxtiyj3lKtkhIxK9D/2efguyWqZYAOLPdHRk9yeUJBCJBaoo7u+BGLyOT/I7t0e1wl
+X-Forefront-Antispam-Report: CIP:193.240.239.45;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mailrelay1.diasemi.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(396003)(376002)(39860400002)(346002)(136003)(46966006)(40470700004)(36840700001)(47076005)(40460700003)(4744005)(82740400003)(5660300002)(36860700001)(83380400001)(54906003)(42882007)(110136005)(42186006)(316002)(336012)(70206006)(4326008)(70586007)(40480700001)(2906002)(41300700001)(6266002)(82310400005)(2616005)(83170400001)(356005)(81166007)(8936002)(26005)(508600001)(8676002)(186003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: diasemi.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 13:22:22.4338
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa607533-3a99-47c0-f620-08da423f6e29
+X-MS-Exchange-CrossTenant-Id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=511e3c0e-ee96-486e-a2ec-e272ffa37b7c;Ip=[193.240.239.45];Helo=[mailrelay1.diasemi.com]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR02FT103.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR1001MB1058
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+This series contains 2 small fixes around the AAD part of DA7219, particularly
+in relation to jack pole detection on certain active headsets, and tidy up
+when a jack is removed.
 
-[ Upstream commit e294647b1aed4247fe52851f3a3b2b19ae906228 ]
+Adam Thomson (2):
+  ASoC: da7219: Fix pole orientation detection on certain headsets
+  ASoC: da7219: cancel AAD related work earlier for jack removal
 
-In an attempt to log message 0126 with LOG_TRACE_EVENT, the following hard
-lockup call trace hangs the system.
+ sound/soc/codecs/da7219-aad.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-Call Trace:
- _raw_spin_lock_irqsave+0x32/0x40
- lpfc_dmp_dbg.part.32+0x28/0x220 [lpfc]
- lpfc_cmpl_els_fdisc+0x145/0x460 [lpfc]
- lpfc_sli_cancel_jobs+0x92/0xd0 [lpfc]
- lpfc_els_flush_cmd+0x43c/0x670 [lpfc]
- lpfc_els_flush_all_cmd+0x37/0x60 [lpfc]
- lpfc_sli4_async_event_proc+0x956/0x1720 [lpfc]
- lpfc_do_work+0x1485/0x1d70 [lpfc]
- kthread+0x112/0x130
- ret_from_fork+0x1f/0x40
-Kernel panic - not syncing: Hard LOCKUP
-
-The same CPU tries to claim the phba->port_list_lock twice.
-
-Move the cfg_log_verbose checks as part of the lpfc_printf_vlog() and
-lpfc_printf_log() macros before calling lpfc_dmp_dbg().  There is no need
-to take the phba->port_list_lock within lpfc_dmp_dbg().
-
-Link: https://lore.kernel.org/r/20220412222008.126521-3-jsmart2021@gmail.com
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/lpfc/lpfc_init.c   | 29 +----------------------------
- drivers/scsi/lpfc/lpfc_logmsg.h |  6 +++---
- 2 files changed, 4 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 461d333b1b3a..f9cd4b72d949 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -15700,34 +15700,7 @@ void lpfc_dmp_dbg(struct lpfc_hba *phba)
- 	unsigned int temp_idx;
- 	int i;
- 	int j = 0;
--	unsigned long rem_nsec, iflags;
--	bool log_verbose = false;
--	struct lpfc_vport *port_iterator;
--
--	/* Don't dump messages if we explicitly set log_verbose for the
--	 * physical port or any vport.
--	 */
--	if (phba->cfg_log_verbose)
--		return;
--
--	spin_lock_irqsave(&phba->port_list_lock, iflags);
--	list_for_each_entry(port_iterator, &phba->port_list, listentry) {
--		if (port_iterator->load_flag & FC_UNLOADING)
--			continue;
--		if (scsi_host_get(lpfc_shost_from_vport(port_iterator))) {
--			if (port_iterator->cfg_log_verbose)
--				log_verbose = true;
--
--			scsi_host_put(lpfc_shost_from_vport(port_iterator));
--
--			if (log_verbose) {
--				spin_unlock_irqrestore(&phba->port_list_lock,
--						       iflags);
--				return;
--			}
--		}
--	}
--	spin_unlock_irqrestore(&phba->port_list_lock, iflags);
-+	unsigned long rem_nsec;
- 
- 	if (atomic_cmpxchg(&phba->dbg_log_dmping, 0, 1) != 0)
- 		return;
-diff --git a/drivers/scsi/lpfc/lpfc_logmsg.h b/drivers/scsi/lpfc/lpfc_logmsg.h
-index 7d480c798794..a5aafe230c74 100644
---- a/drivers/scsi/lpfc/lpfc_logmsg.h
-+++ b/drivers/scsi/lpfc/lpfc_logmsg.h
-@@ -73,7 +73,7 @@ do { \
- #define lpfc_printf_vlog(vport, level, mask, fmt, arg...) \
- do { \
- 	{ if (((mask) & (vport)->cfg_log_verbose) || (level[1] <= '3')) { \
--		if ((mask) & LOG_TRACE_EVENT) \
-+		if ((mask) & LOG_TRACE_EVENT && !(vport)->cfg_log_verbose) \
- 			lpfc_dmp_dbg((vport)->phba); \
- 		dev_printk(level, &((vport)->phba->pcidev)->dev, "%d:(%d):" \
- 			   fmt, (vport)->phba->brd_no, vport->vpi, ##arg);  \
-@@ -89,11 +89,11 @@ do { \
- 				 (phba)->pport->cfg_log_verbose : \
- 				 (phba)->cfg_log_verbose; \
- 	if (((mask) & log_verbose) || (level[1] <= '3')) { \
--		if ((mask) & LOG_TRACE_EVENT) \
-+		if ((mask) & LOG_TRACE_EVENT && !log_verbose) \
- 			lpfc_dmp_dbg(phba); \
- 		dev_printk(level, &((phba)->pcidev)->dev, "%d:" \
- 			fmt, phba->brd_no, ##arg); \
--	} else  if (!(phba)->cfg_log_verbose)\
-+	} else if (!log_verbose)\
- 		lpfc_dbg_print(phba, "%d:" fmt, phba->brd_no, ##arg); \
- 	} \
- } while (0)
 -- 
-2.35.1
+2.17.1
 

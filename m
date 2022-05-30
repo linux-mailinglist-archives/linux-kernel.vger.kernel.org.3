@@ -2,77 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F39F5378F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 789B7537910
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235085AbiE3KIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
+        id S235094AbiE3KJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234605AbiE3KIk (ORCPT
+        with ESMTP id S233941AbiE3KJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:08:40 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E44F7B9CD;
-        Mon, 30 May 2022 03:08:38 -0700 (PDT)
-X-UUID: 34d71082f2294258b1b74adaad5ab8f4-20220530
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:4c9ce4b4-4be1-413f-83e7-68bcbae0e369,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:626cc6b8-3c45-407b-8f66-25095432a27a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 34d71082f2294258b1b74adaad5ab8f4-20220530
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1333704574; Mon, 30 May 2022 18:08:34 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 30 May 2022 18:08:33 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 30 May 2022 18:08:33 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 30 May 2022 18:08:33 +0800
-Message-ID: <828da579f872747943dbb7684b35f58bc592c6ca.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao shi <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
-Date:   Mon, 30 May 2022 18:08:33 +0800
-In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 30 May 2022 06:09:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F5C07A80A
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 03:09:07 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD265113E;
+        Mon, 30 May 2022 03:09:06 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8A5C3F73D;
+        Mon, 30 May 2022 03:09:05 -0700 (PDT)
+Date:   Mon, 30 May 2022 11:08:59 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org, lkp@intel.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [kbuild] drivers/firmware/arm_scmi/clock.c:242:40: warning:
+ Variable 'msg' is not assigned a value. [unassignedVariable]
+Message-ID: <YpSR3SV3CVrDEyi5@e120937-lin>
+References: <202205271608.aIWtyM7b-lkp@intel.com>
+ <YpSIrIxrqdUn4Lpf@e120937-lin>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YpSIrIxrqdUn4Lpf@e120937-lin>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,75 +44,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Guillaume:
-
-On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Mon, May 30, 2022 at 10:04:55AM +0100, Cristian Marussi wrote:
+> On Fri, May 27, 2022 at 11:57:29AM +0300, Dan Carpenter wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git  master
+> > head:   7e284070abe53d448517b80493863595af4ab5f0
+> > commit: 7bc7caafe6b1e5b882255a42bc1bf112fa87b69b firmware: arm_scmi: Use common iterators in the clock protocol
+> > compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+> > reproduce (cppcheck warning):
+> >         # apt-get install cppcheck
+> >         git checkout 7bc7caafe6b1e5b882255a42bc1bf112fa87b69b
+> >         cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
 > 
-> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> Hi Dan,
 > 
-> It supports the mt8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
+> thanks for the report.
 > 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
+> > cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
+> > 
+> > >> drivers/firmware/arm_scmi/clock.c:242:40: warning: Variable 'msg' is not assigned a value. [unassignedVariable]
+> >     struct scmi_msg_clock_describe_rates *msg;
+> >                                           ^
+> > 
+> > vim +/msg +242 drivers/firmware/arm_scmi/clock.c
+> > 
+> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30  235  static int
+> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30  236  scmi_clock_describe_rates_get(const struct scmi_protocol_handle *ph, u32 clk_id,
+> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30  237  			      struct scmi_clock_info *clk)
+> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30  238  {
+> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30  239  	int ret;
+> > 5f6c6430e904d2 Sudeep Holla     2017-06-06  240  
+> > 
+> > Please delete the blank line.
 > 
-> This driver is based on an initial version by
-> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> I'll do.
 > 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
->  
+> > 
+> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30  241  	void *iter;
+> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30 @242  	struct scmi_msg_clock_describe_rates *msg;
+> > 
+> > I was so surprised that GCC doesn't warn about this but "msg" is only
+> > used to calculate the sizeof(*msg).
+> > 
+> 
+> Probably a leftover from a previous version of the series where msg was
+> usaed not only for sizeof()....I'll send a fix anyway to silence the
+> bot.
 
-[snip]
+... and btw there are a bunch of similar other sizeof(*msg) in a few
+other SCMI protocols when calling the same response_init() helper...
+..even though innocuos...I'll fix all of these to avoid needless stuff
+on the stack.
 
-> +
-> +static irqreturn_t mtk_dp_hpd_isr_handler(struct mtk_dp *mtk_dp)
-> +{
-> +	bool connected;
-> +	u16 swirq_status = mtk_dp_swirq_get_clear(mtk_dp);
-> +	u8 hwirq_status = mtk_dp_hwirq_get_clear(mtk_dp);
-> +	struct mtk_dp_train_info *train_info = &mtk_dp->train_info;
-> +
-> +	train_info->irq_status |= hwirq_status | swirq_status;
-
-You mix software control variable and irq status here. Break each flag
-in irq_status to variables in train_info to decouple software control
-variable and irq status.
-
-> +
-> +	if (!train_info->irq_status)
-> +		return IRQ_HANDLED;
-> +
-> +	connected = mtk_dp_plug_state(mtk_dp);
-> +	if (connected || !train_info->cable_plugged_in)
-> +		train_info->irq_status &= ~MTK_DP_HPD_DISCONNECT;
-> +	else if (!connected || train_info->cable_plugged_in)
-> +		train_info->irq_status &= ~MTK_DP_HPD_CONNECT;
-> +
-> +	if (!(train_info->irq_status &
-> +	      (MTK_DP_HPD_CONNECT | MTK_DP_HPD_DISCONNECT)))
-> +		return IRQ_HANDLED;
-> +
-> +	if (train_info->irq_status & MTK_DP_HPD_CONNECT) {
-> +		train_info->irq_status &= ~MTK_DP_HPD_CONNECT;
-> +		train_info->cable_plugged_in = true;
-> +	} else {
-> +		train_info->irq_status &= ~MTK_DP_HPD_DISCONNECT;
-> +		train_info->cable_plugged_in = false;
-> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_STARTUP;
-> +	}
-> +	train_info->cable_state_change = true;
-> +
-> +	return IRQ_WAKE_THREAD;
-> +}
-> +
-
+Thanks,
+Cristian

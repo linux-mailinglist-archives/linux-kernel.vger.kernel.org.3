@@ -2,127 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A153537846
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BF6537878
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234877AbiE3Jqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 05:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S234923AbiE3Jr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 05:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233979AbiE3Jqh (ORCPT
+        with ESMTP id S234922AbiE3JrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 05:46:37 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D245D1F8;
-        Mon, 30 May 2022 02:46:33 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U93Xbs031806;
-        Mon, 30 May 2022 09:46:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=apVMKSEu3+c8cSIa+J7x/qxcIBqSkTjcAftQlSQ/mnM=;
- b=r5dkp2oB5dlSnqe7TVDtV3ExCCEDXoxQXRO4YeaQnvdIqvG7Npia4rIcmvtPDAOLKNGc
- Pt0I50RmkQgSuzP/av7JQpdz40zzSX5vuMGFD0/8+tmLSdFeCuPfcNFf3gm7gAEPFuFz
- +ljpioVlQafKRxv5EQpVBNoDq7fPpcQPOrUuhJpoBrg7fcRxbbaX/Z6TaIqjFHRG6fNv
- 6Z4nP7Mtigy8iXHSGEeXmFXFLWqSbQm3Ny3HWISEV58NbcSTq3IHPUF0bsOyF5DtgNEc
- TNn9RuuyRrswTqCaILHqCyj+rc5dAwv77qm1/wsXblBcIYNXo58VdlBsx0I8a7sy+u13 xA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcty78t09-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 09:46:32 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24U9VF55017637;
-        Mon, 30 May 2022 09:46:32 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcty78syu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 09:46:32 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24U9axJD018194;
-        Mon, 30 May 2022 09:46:30 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma02fra.de.ibm.com with ESMTP id 3gbcc69umy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 09:46:30 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24U9W79855837142
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 May 2022 09:32:07 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E626EAE051;
-        Mon, 30 May 2022 09:46:26 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 779DAAE045;
-        Mon, 30 May 2022 09:46:26 +0000 (GMT)
-Received: from li-ca45c2cc-336f-11b2-a85c-c6e71de567f1.ibm.com (unknown [9.171.70.209])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 30 May 2022 09:46:26 +0000 (GMT)
-Message-ID: <49c2667ecfc2c628c13cae79796ffac4ddc2c0c3.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 15/19] KVM: s390: pv: asynchronous destroy for reboot
-From:   Nico Boehr <nrb@linux.ibm.com>
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        mimu@linux.ibm.com
-Date:   Mon, 30 May 2022 11:46:26 +0200
-In-Reply-To: <20220414080311.1084834-16-imbrenda@linux.ibm.com>
-References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
-         <20220414080311.1084834-16-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+        Mon, 30 May 2022 05:47:25 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A2EA19F;
+        Mon, 30 May 2022 02:47:20 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id wh22so19758116ejb.7;
+        Mon, 30 May 2022 02:47:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/k2m83LaODmcLsyS0dbBoJk+VKnEiUhqE8c6BRPwNpA=;
+        b=HEdtIu9h1Ee4llxxfLUHdT6WXTT7YVh7HuJ1UWwgpaAZEzYcK8Kt18Rc0y6hhxh/pk
+         gNEh0cjdDf/DymaC3VMDJfzt8hACMMSArRNFzvgV2rASP/QOIxu5SVhVDBmuBaF6jSqH
+         pE7Z+UNUl0L+YpcyxdWHlt+wnBHwJZV6FpL32JVe2MnfNBn8UF1zu7hi0PqUJB5JrUta
+         PzgzVuMmyO9cQBNDseiGyFnSevNpMoE0l5EdZjqKzsaGAyssfHObZ+KUH6ErxYptI92w
+         d+o7sRvi1EM4ocHQV9T1yTo01whLdcagvrS5NvenSKkHgxAUoXpqgSIjqaOGUKnRw74d
+         T+gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/k2m83LaODmcLsyS0dbBoJk+VKnEiUhqE8c6BRPwNpA=;
+        b=XIrlJyRmWz55gyGgE2tHLcI3n1KCn3c0QQ4hM8elz+uMq7DZLj8SVGg7SjPePkUrNK
+         r4voehXaHfnMIi4k9R7MHYk8P6hUkma9KiUXJ2CcdAAIMfTUNkc4W7O8AjWXLqwiwADi
+         xClUWCGk7ai8jeyhGmxF3Q7/E4Tyci7rQsHXql1ewvXhvVXuAN7QyD72prej/TRDBgg7
+         AtZwYQbjBi1hPaMT0pvI7oAdvKk9816J90m/2lHgMYfTJ8R18XmS0vRCyOl8Wy8U9puT
+         +UAJ7H6lSqmJILbwPHC8aa3AIYmV5tFXro0meFeE7HIRE+dCdqDNtXMfZfUQQdMsDbM+
+         /gRg==
+X-Gm-Message-State: AOAM533BXqkPbcSKmfTVv+5p287lnPZ/DiMfDzh/8cUPXy0OIAmfmvjH
+        X9MFVBJqNPNeWV7/TCB5jR9fGi/HEkNLF8OpVj8=
+X-Google-Smtp-Source: ABdhPJz2Y4PPvobMreDaaaGYBcFdlzgaDp1D8UrIIx2/xRRkK7/L2BM9dOFFBRp5uNmzREpsNBcvOr4GVqLWfEZBHGw=
+X-Received: by 2002:a17:907:6e04:b0:6f4:d6f3:c72a with SMTP id
+ sd4-20020a1709076e0400b006f4d6f3c72amr47585054ejc.636.1653904039317; Mon, 30
+ May 2022 02:47:19 -0700 (PDT)
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: jPXnunXG_P-bggrCcCuqZUbKi4yvWZqQ
-X-Proofpoint-GUID: -EpW3T9QejJq_UMEupMBV9vPTKv5zgYv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-30_03,2022-05-27_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- adultscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0 mlxscore=0
- bulkscore=0 impostorscore=0 spamscore=0 priorityscore=1501 mlxlogscore=944
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2205300050
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220526081550.1089805-1-saravanak@google.com> <20220526081550.1089805-8-saravanak@google.com>
+In-Reply-To: <20220526081550.1089805-8-saravanak@google.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 30 May 2022 11:46:43 +0200
+Message-ID: <CAHp75VcJRfQO6oJpVUoGK4JQpr3Wbff9vgkm8+q8fn8cxohQug@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 7/9] driver core: Add fw_devlink_unblock_may_probe()
+ helper function
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, Len Brown <lenb@kernel.org>,
+        Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        John Stultz <jstultz@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "list@263.net:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-14 at 10:03 +0200, Claudio Imbrenda wrote:
-[...]
-> diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
-> index b20f2cbd43d9..36bc107bbd7d 100644
-> --- a/arch/s390/kvm/pv.c
-> +++ b/arch/s390/kvm/pv.c
-[...]
-> +/**
-> + * kvm_s390_pv_deinit_vm_async - Perform an asynchronous teardown of
-> a
-> + * protected VM.
-> + * @kvm the VM previously associated with the protected VM
-> + * @rc return value for the RC field of the UVCB
-> + * @rrc return value for the RRC field of the UVCB
-> + *
-> + * Tear down the protected VM that had previously been set aside
-> using
-> + * kvm_s390_pv_deinit_vm_async_prepare.
-> + *
-> + * Context: kvm->lock needs to be held
+On Thu, May 26, 2022 at 1:22 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> This function can be used during the kernel boot sequence to forcefully
+> override fw_devlink=on and unblock the probing of all devices that have
+> a driver.
+>
+> It's mainly meant to be called from late_initcall() or
+> late_initcall_sync() where a device needs to probe before the kernel can
+> mount rootfs.
 
-...and will be released...
+...
 
-> + *
-> + * Return: 0 in case of success, -EINVAL if no protected VM had been
-> + * prepared for asynchronous teardowm, -EIO in case of other errors.
-> + */
-> +int kvm_s390_pv_deinit_vm_async(struct kvm *kvm, u16 *rc, u16 *rrc)
+> diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+> index 9a81c4410b9f..0770edda7068 100644
+> --- a/include/linux/fwnode.h
+> +++ b/include/linux/fwnode.h
+> @@ -13,6 +13,7 @@
+>  #include <linux/list.h>
+>  #include <linux/bits.h>
+>  #include <linux/err.h>
+> +#include <linux/init.h>
+>
+>  struct fwnode_operations;
+>  struct device;
+> @@ -199,5 +200,6 @@ extern bool fw_devlink_is_strict(void);
+>  int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup);
+>  void fwnode_links_purge(struct fwnode_handle *fwnode);
+>  void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode);
+> +void __init fw_devlink_unblock_may_probe(void);
 
-Do you also want to set rc and rrc as in kvm_s390_pv_deinit_vm_async_prepar=
-e()?
+I don't think you need init.h and __init here. Important is that you
+have it in the C-file. Am I wrong?
 
+-- 
+With Best Regards,
+Andy Shevchenko

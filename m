@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED46A537330
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 03:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD59537331
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 03:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232045AbiE3BEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 21:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232027AbiE3BEP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232034AbiE3BEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sun, 29 May 2022 21:04:15 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A045E749
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229603AbiE3BEO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 29 May 2022 21:04:14 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928D95E17E
         for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 18:04:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653872653; x=1685408653;
+  t=1653872652; x=1685408652;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=O3iZwkM7DCKbD+KTKrXng+IeQJIP32YD5lc+35eO9mc=;
-  b=hajcDB0gfupCk4bpdH0p219zzWrXzEM+t1dhRK7Tb0JugvNrEdwALzSg
-   aW/K48lQRh+59gt0AUDTYQcN3/PBzYxJTFNlJho5aBs+HQAwO7qWCzTjQ
-   1yW4PxVvH4IRIVUQ4mYOIT4vD2jyMf414fdBbo26FWj+lv4YFhPIqJl67
-   fh7S9ZYz5sMw/q0wFrH4fVn94ip3+otGcweKAdgRadkoIidLv+EQt4P70
-   I7UoHnU98GTy6YQ6rEr6FAvc/FosXe7TB+mGSavz9wpd5simpliNZGMxe
-   kMdAd5o1AY9ZYqK9T8CV6FTgA3uZjeyX3vAkjnlWyVrPpbo27lAIIIBsL
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="337901728"
+  bh=DpVzabfFdk1JZkQyeX5x0Gi27kcC3io6I2TyAuR3P4E=;
+  b=c31UoUI6h5EaZya+smspo80IXh6ZJktIH8CgNaB2f1OBK+UEEHTLGqS2
+   TXW1G6EqLXRpKAtWRsZ3vud+Q87uRa+6ew0ewTc5lalRlDSK6HZEQaaD6
+   ex1C39tAk6HLo1IuPwrEgs8iKBE4f/uIZWed5RWn4/ovGAWbD7o6Reet4
+   tIWlkPN/czzOm/7XBU+hjgYABInuVXzB5L3wUinlUJ6lykOwhK7PWAP8o
+   9Y2rMSQN63ZrZpDr0NNf0b0YFb8F6JXm5VjAgjnKHFl4lDJ9jiO3EIIBA
+   5SMe7HGVTSIgF7hB/2G5GZAwb/7bsIkBy1UUUb+XLbTaiQUAfjyV4pMVm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="262478733"
 X-IronPort-AV: E=Sophos;i="5.91,261,1647327600"; 
-   d="scan'208";a="337901728"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2022 18:04:12 -0700
+   d="scan'208";a="262478733"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2022 18:04:12 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,261,1647327600"; 
-   d="scan'208";a="705939872"
+   d="scan'208";a="666289701"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 29 May 2022 18:04:10 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 29 May 2022 18:04:10 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nvTpJ-0001Lp-GC;
+        id 1nvTpJ-0001Ls-If;
         Mon, 30 May 2022 01:04:09 +0000
-Date:   Mon, 30 May 2022 09:03:56 +0800
+Date:   Mon, 30 May 2022 09:03:57 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
 Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
         0day robot <lkp@intel.com>
 Subject: drivers/hid/hid-uclogic-rdesc.c:950:9: error:
  'UCLOGIC_RDESC_FRAME_PH_BTN' undeclared here (not in a function)
-Message-ID: <202205300828.L1ZmqYg3-lkp@intel.com>
+Message-ID: <202205300835.y0VGClp4-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,18 +66,16 @@ tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220530-055140/Jo
 head:   25ca549ae188f6dcbd3ddadebd64f2f6777002f5
 commit: 25ca549ae188f6dcbd3ddadebd64f2f6777002f5 HID: uclogic: Add support for XP-PEN Deco L
 date:   3 hours ago
-config: arc-randconfig-r043-20220530 (https://download.01.org/0day-ci/archive/20220530/202205300828.L1ZmqYg3-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.3.0
+config: x86_64-randconfig-m001-20220530 (https://download.01.org/0day-ci/archive/20220530/202205300835.y0VGClp4-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
         # https://github.com/intel-lab-lkp/linux/commit/25ca549ae188f6dcbd3ddadebd64f2f6777002f5
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review UPDATE-20220530-055140/Jos-Exp-sito/Add-support-for-XP-PEN-Deco-L/20220519-065024
         git checkout 25ca549ae188f6dcbd3ddadebd64f2f6777002f5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/hid/
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hid/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>

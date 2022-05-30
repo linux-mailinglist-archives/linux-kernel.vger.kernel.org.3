@@ -2,177 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA1253890D
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 00:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6591D53890E
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 01:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239285AbiE3W6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 18:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
+        id S240870AbiE3XAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 19:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234309AbiE3W6K (ORCPT
+        with ESMTP id S234309AbiE3XAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 18:58:10 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25224515A6
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 15:58:09 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id q1so6839663ejz.9
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 15:58:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=93b76ZHbZcuHCfscxd3Lk2d9Wx/yBWaIajc4fFNKsBY=;
-        b=KCNnBbaZtRLRoY3MVGmEaI+oOj68q4mGW3ulnyBw04EH4w9DzxWhvCRj6surNXd8CS
-         fuvEHexXKjIqHTvvN3ZoulQQHSq0xCM25YCFhkqcpATO3cfAwJ9XdmOp8vsbSk60rIoX
-         ACOTcJFXi+Q02vZwlN1nc1GvU+Pltqyfxs1CgDWE2hPQIviYaGqdCf9SlYUaIFhfV99R
-         RhOBpWVW63h2VJb5hnKPSFw5j5S10V2knTtJ+PMQykdhK07awXOOzPvcINh6JfX4ckUS
-         X4TMdYwN9Vsz2tgWnocs8Lp1qj5oEloCgZNB1xE/VKtK1vrkCexEQHTRRQ6OELY89TS0
-         NZiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=93b76ZHbZcuHCfscxd3Lk2d9Wx/yBWaIajc4fFNKsBY=;
-        b=UVFtvi3JJQv9pHKxGt6zrSUWq0v3d0c/ZSUg/7/CVa/DJZb+7vynx9xF6uBTZzXysn
-         3yXVJ7MCU29vEk79VeTG11Hn1z0G9I/0/Kz8P2DUTQlYnWWDYyNxbfxWwBZZL0+w4qpO
-         Xx33e/st1vKHJ9qEyZLjTddyCIUVV2rIvHTiO42PdGXQ9ytZ+E1XAFzkffMM2zIuDlMJ
-         PxdeFkM5NQRkKdZ9o3TCL+/zovFmxJB7hyLt1ikBCw/cv2qsUq+kxn8z557Tib+zzwuo
-         aUP+uB0LMvE1C/1eyaCILs3FfBzikJ1/50jDESc3y+/26NON/838d21Yd5iX4fvU7uCr
-         lD4w==
-X-Gm-Message-State: AOAM533wNqq5Z2tAshqzyv6xMUYUaP9bNWLLd1XUQwwuytdN5P9MTxLO
-        3sSslO12vbCqzJ94j0hvvS+bsJ7pGhH86jWRk8SlXw==
-X-Google-Smtp-Source: ABdhPJwZ6vkc2aa9sZyVGj16xAXXu9l6zE8Gc+5vtwdxy87CFX8L2LO8+BmGDLTdugZNPYrKkOn+f1cBxRdBcQ97f4s=
-X-Received: by 2002:a17:907:2cc7:b0:6fa:7356:f411 with SMTP id
- hg7-20020a1709072cc700b006fa7356f411mr49703826ejc.369.1653951487392; Mon, 30
- May 2022 15:58:07 -0700 (PDT)
+        Mon, 30 May 2022 19:00:45 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8ED515A8
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 16:00:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653951644; x=1685487644;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GK4+EgVeD/QOyFHwiAKeZt8AIZ6VFYmsmDrQEWTfFgU=;
+  b=DzHULdXk3NDA+yFaZtB1ACi2n5iqi+ylb70KwGUKFq9MH925L8uD8ORz
+   gweoh569MQ2DREXVUFnmHZem56p0PwahNRFQyBKoRe79VJtjXrfy4RZtm
+   aHigK3V2rEwqo5jVJZJDTuVyBMQoH5O2LquTFX/c4v5suGXrAiUz3jpBh
+   kEDaRmAh6JfI3a1mZwt7EXkgq0RNadN4NZ68XjbP2cb+LWZ/JaNvfHDfw
+   NBuUs1ocxKEGjsnYT1tUM7U7B6VfYBTWSf35CkIiV3A0i6LSp8W/wPlpb
+   e9bzl71LN4yFj6RBdmpp4/6lffDZFMUBM9PedwGHL3NKTOAyZLEM3HKEr
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="257156078"
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="257156078"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 16:00:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="666670410"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 May 2022 16:00:42 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nvoNN-000242-Tc;
+        Mon, 30 May 2022 23:00:41 +0000
+Date:   Tue, 31 May 2022 07:00:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gerhard Engleder <gerhard@engleder-embedded.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/net/ethernet/engleder/tsnep_main.c:1254:34: warning:
+ 'tsnep_of_match' defined but not used
+Message-ID: <202205310654.bV25IHSy-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220530102017.471865-1-jose.exposito89@gmail.com>
- <20220530102017.471865-2-jose.exposito89@gmail.com> <20220530131158.kqq2mohxoh52xpeg@penduick>
- <20220530162903.GA6546@elementary>
-In-Reply-To: <20220530162903.GA6546@elementary>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 30 May 2022 15:57:56 -0700
-Message-ID: <CAGS_qxpV2SsihEdgXZ6+7N0dxLmdRANq+qE4iUZ2aNrf6vuLYg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/1] drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb332()
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>, kunit-dev@googlegroups.com,
-        javierm@redhat.com, tzimmermann@suse.de,
-        maarten.lankhorst@linux.intel.com, airlied@linux.ie,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 9:29 AM Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gm=
-ail.com> wrote:
-> I just cc'ed kunit-dev@googlegroups.com. For anyone joining the
-> conversation, here is the link to the patch and the cover letter with
-> some questions:
->
-> https://lore.kernel.org/dri-devel/20220530102017.471865-1-jose.exposito89=
-@gmail.com/T/
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8ab2afa23bd197df47819a87f0265c0ac95c5b6a
+commit: 403f69bbdbadb2e601f725be2d00b4ccc7b61c9d tsnep: Add TSN endpoint Ethernet MAC driver
+date:   6 months ago
+config: i386-buildonly-randconfig-r001-20220530 (https://download.01.org/0day-ci/archive/20220531/202205310654.bV25IHSy-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=403f69bbdbadb2e601f725be2d00b4ccc7b61c9d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 403f69bbdbadb2e601f725be2d00b4ccc7b61c9d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/engleder/
 
-Thanks for the link.
-A few initial notes:
-a) normally, `select`ing other kconfigs is discouraged. It's not
-explicitly called out in
-https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html#test-kcon=
-fig-entries
-but this was the conclusion after  some debate on the mailing lists
-earlier.
-b) I see `dst` is allocated with kzalloc but not freed. Should we use
-`kunit_kzalloc()` instead so it does get automatically freed?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> >
-> > > ---
-> > >  drivers/gpu/drm/Kconfig                  |  12 ++
-> > >  drivers/gpu/drm/Makefile                 |   3 +
-> > >  drivers/gpu/drm/drm_format_helper_test.c | 166 +++++++++++++++++++++=
-++
-> > >  3 files changed, 181 insertions(+)
-> > >  create mode 100644 drivers/gpu/drm/drm_format_helper_test.c
-> > >
-> > > diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-> > > index e88c497fa010..d92be6faef15 100644
-> > > --- a/drivers/gpu/drm/Kconfig
-> > > +++ b/drivers/gpu/drm/Kconfig
-> > > @@ -76,6 +76,18 @@ config DRM_KMS_HELPER
-> > >     help
-> > >       CRTC helpers for KMS drivers.
-> > >
-> > > +config DRM_FORMAR_HELPER_TEST
-> > > +   bool "drm_format_helper tests" if !KUNIT_ALL_TESTS
-> > > +   depends on DRM && KUNIT=3Dy
-> > > +   select DRM_KMS_HELPER
+All warnings (new ones prefixed by >>):
 
-From above, a)
-Specifically here, it'd be encouraged to instead do
-  depends on DRM && KUNIT=3Dy && DRM_KMS_HELPER
+   drivers/net/ethernet/engleder/tsnep_main.c: In function 'tsnep_netdev_set_mac_address':
+   drivers/net/ethernet/engleder/tsnep_main.c:1007:31: warning: passing argument 1 of 'ether_addr_copy' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+    1007 |         ether_addr_copy(netdev->dev_addr, sock_addr->sa_data);
+         |                         ~~~~~~^~~~~~~~~~
+   In file included from drivers/net/ethernet/engleder/tsnep.h:11,
+                    from drivers/net/ethernet/engleder/tsnep_main.c:18:
+   include/linux/etherdevice.h:295:40: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'const unsigned char *'
+     295 | static inline void ether_addr_copy(u8 *dst, const u8 *src)
+         |                                    ~~~~^~~
+   drivers/net/ethernet/engleder/tsnep_main.c: In function 'tsnep_mac_init':
+   drivers/net/ethernet/engleder/tsnep_main.c:1054:40: warning: passing argument 1 of 'ether_addr_copy' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+    1054 |         ether_addr_copy(adapter->netdev->dev_addr, adapter->mac_address);
+         |                         ~~~~~~~~~~~~~~~^~~~~~~~~~
+   In file included from drivers/net/ethernet/engleder/tsnep.h:11,
+                    from drivers/net/ethernet/engleder/tsnep_main.c:18:
+   include/linux/etherdevice.h:295:40: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'const unsigned char *'
+     295 | static inline void ether_addr_copy(u8 *dst, const u8 *src)
+         |                                    ~~~~^~~
+   At top level:
+>> drivers/net/ethernet/engleder/tsnep_main.c:1254:34: warning: 'tsnep_of_match' defined but not used [-Wunused-const-variable=]
+    1254 | static const struct of_device_id tsnep_of_match[] = {
+         |                                  ^~~~~~~~~~~~~~
 
-Ideally, using a .kunitconfig file would make it so having to select
-DRM_KMS_HELPER manually isn't that annoying.
 
-> > AFAIK, kunit test cases are supposed to have a .kunitconfig too to
-> > enable the kunit tests easily.
-> >
-> > Maxime
->
-> A .kuniconfig example is present in the cover letter. My understanding
-> from the docs:
->
-> https://docs.kernel.org/dev-tools/kunit/run_wrapper.html#create-a-kunitco=
-nfig-file
+vim +/tsnep_of_match +1254 drivers/net/ethernet/engleder/tsnep_main.c
 
-The bit of the documentation you're looking for is
-https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips.html#de=
-fining-a-set-of-tests
-You can create a drivers/gpu/drm/.kunitconfig file and run with
-$ ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/drm --arch=
-=3Dx86_86
+  1253	
+> 1254	static const struct of_device_id tsnep_of_match[] = {
+  1255		{ .compatible = "engleder,tsnep", },
+  1256	{ },
+  1257	};
+  1258	MODULE_DEVICE_TABLE(of, tsnep_of_match);
+  1259	
 
-The contents of that file would be just like
-  CONFIG_KUNIT=3Dy
-  CONFIG_DRM=3Dy
-  CONFIG_DRM_KMS_HELPER=3Dy  # if no `select`
-  CONFIG_DRM_FORMAR_HELPER_TEST=3Dy
-
-Re "kunit test cases are supposed to have a .kunitconfig too"
-As I noted in the docs:
-  This is a relatively new feature (5.12+) so we don=E2=80=99t have any
-conventions yet about on what files should be checked in versus just
-kept around locally. It=E2=80=99s up to you and your maintainer to decide i=
-f a
-config is useful enough to submit (and therefore have to maintain).
-
-So it's up to whatever people think works best/is worth it.
-I think in this case, it makes sense to add the file.
-
-> Is that, like the .config file, the .kunitconfig file is not meant to
-> be included in git, but I'm sure someone else will clarify this point.
-
-That bit of the docs needs to be rewritten.
-You're recommended to check in a drivers/gpu/drm/.kunitconfig file into git=
-.
-
-Context: `kunit.py` used to use the "<root>/.kunitconfig" file.
-Anytime you wanted to run more tests, you'd append to that file.
-So we agreed that no one should check in that file specifically.
-
-Now kunit.py
-* uses "<build-dir>/.kunitconfig", by default: ".kunit/.kunitconfig"
-* has the --kunitconfig flag so you can use different files
-so it's no longer as relevant.
-
-Hope that helps,
-Daniel
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

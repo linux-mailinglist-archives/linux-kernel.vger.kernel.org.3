@@ -2,128 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC96E5384C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9365384D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237734AbiE3PW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
+        id S240235AbiE3PZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241993AbiE3PVk (ORCPT
+        with ESMTP id S240201AbiE3PYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:21:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FC61C0C86;
-        Mon, 30 May 2022 07:23:22 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 83E9721B02;
-        Mon, 30 May 2022 14:22:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1653920560; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R1q2pfo2QzLbUTyCNmaIYF0n/fj7XyAs77ZlAUjQ6ak=;
-        b=lwzC5Fk0mpiDTx3KNaKbU0hkbTWL5JORAz04k/a1jlcG0T/BzcVAhTgQNNKKXmGTqPTrz4
-        LX+DskAB/Ytzxmb9xe7q/xAVI2oE4tZVPSqopcWzPvH5ro6oNis8YpZ9wLQ5oLCuGAqyQw
-        PRdffCQMfEglqhDe1R6XROoKtU4kWYU=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B16172C141;
-        Mon, 30 May 2022 14:22:39 +0000 (UTC)
-Date:   Mon, 30 May 2022 16:22:39 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
-Subject: Re: [PATCH mm v3 0/9] memcg: accounting for objects allocated by
- mkdir cgroup
-Message-ID: <YpTTL3Ys35kgYyAW@dhcp22.suse.cz>
-References: <06505918-3b8a-0ad5-5951-89ecb510138e@openvz.org>
- <3e1d6eab-57c7-ba3d-67e1-c45aa0dfa2ab@openvz.org>
- <YpSwvii5etfnOYC9@dhcp22.suse.cz>
- <ef9f7516-853d-ffe4-9a7a-5e87556bdbbe@openvz.org>
+        Mon, 30 May 2022 11:24:51 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAC01CC605;
+        Mon, 30 May 2022 07:25:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653920737; x=1685456737;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qa66nN8IHyybRSUPiNIjAkNufZbxITgV0L9y8AsjeHI=;
+  b=fL8+57KS9STNQ8MQVO1DWL17X2fwwiNGtuI1sjKw71qp73CVlebZuwEY
+   2GSYdAT/YVliJzcJWmBtTXFcnJT0myLqpxpuWggveSzCZmq2uB1+5yGxK
+   i8RPxvtNnkmGUqzR4ZftloEULEtlPgFVtfVQGaG5woKNyNjF+G0q/0vQp
+   sl96J7ac6ic/BbJ2MWTOGnrX3HAmSrE3mUwU6nl2Wyc/ZPurR9ehlsIyY
+   AmWw7UwCV66cc37R6kmUtE5WLGNOaLIOh3fg9bTGQ6fcYMDfufD3Wkd+d
+   4atSGh1IMfX2u8kh/JPycGQ70MaMwrLFc/lpkxb1SB3TBORhlMSRzMyrG
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="254888820"
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="254888820"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 07:25:36 -0700
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="605212357"
+Received: from rli9-dbox.sh.intel.com (HELO rli9-dbox) ([10.239.159.142])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 07:25:30 -0700
+Date:   Mon, 30 May 2022 22:23:53 +0800
+From:   Philip Li <philip.li@intel.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     menglong8.dong@gmail.com, kuba@kernel.org, kbuild-all@lists.01.org,
+        rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, nhorman@tuxdriver.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        imagedong@tencent.com, dsahern@kernel.org, talalahmad@google.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/3] net: skb: use auto-generation to convert
+ skb drop reason to string
+Message-ID: <YpTTedzTnj3s1hdo@rli9-dbox>
+References: <20220530081201.10151-3-imagedong@tencent.com>
+ <202205301730.inNRSOxX-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ef9f7516-853d-ffe4-9a7a-5e87556bdbbe@openvz.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <202205301730.inNRSOxX-lkp@intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 30-05-22 16:09:00, Vasily Averin wrote:
-> On 5/30/22 14:55, Michal Hocko wrote:
-> > On Mon 30-05-22 14:25:45, Vasily Averin wrote:
-> >> Below is tracing results of mkdir /sys/fs/cgroup/vvs.test on 
-> >> 4cpu VM with Fedora and self-complied upstream kernel. The calculations
-> >> are not precise, it depends on kernel config options, number of cpus,
-> >> enabled controllers, ignores possible page allocations etc.
-> >> However this is enough to clarify the general situation.
-> >> All allocations are splited into:
-> >> - common part, always called for each cgroup type
-> >> - per-cgroup allocations
-> >>
-> >> In each group we consider 2 corner cases:
-> >> - usual allocations, important for 1-2 CPU nodes/Vms
-> >> - percpu allocations, important for 'big irons'
-> >>
-> >> common part: 	~11Kb	+  318 bytes percpu
-> >> memcg: 		~17Kb	+ 4692 bytes percpu
-> >> cpu:		~2.5Kb	+ 1036 bytes percpu
-> >> cpuset:		~3Kb	+   12 bytes percpu
-> >> blkcg:		~3Kb	+   12 bytes percpu
-> >> pid:		~1.5Kb	+   12 bytes percpu		
-> >> perf:		 ~320b	+   60 bytes percpu
-> >> -------------------------------------------
-> >> total:		~38Kb	+ 6142 bytes percpu
-> >> currently accounted:	  4668 bytes percpu
-> >>
-> >> - it's important to account usual allocations called
-> >> in common part, because almost all of cgroup-specific allocations
-> >> are small. One exception here is memory cgroup, it allocates a few
-> >> huge objects that should be accounted.
-> >> - Percpu allocation called in common part, in memcg and cpu cgroups
-> >> should be accounted, rest ones are small an can be ignored.
-> >> - KERNFS objects are allocated both in common part and in most of
-> >> cgroups 
-> >>
-> >> Details can be found here:
-> >> https://lore.kernel.org/all/d28233ee-bccb-7bc3-c2ec-461fd7f95e6a@openvz.org/
-> >>
-> >> I checked other cgroups types was found that they all can be ignored.
-> >> Additionally I found allocation of struct rt_rq called in cpu cgroup 
-> >> if CONFIG_RT_GROUP_SCHED was enabled, it allocates huge (~1700 bytes)
-> >> percpu structure and should be accounted too.
-> > 
-> > One thing that the changelog is missing is an explanation why do we need
-> > to account those objects. Users are usually not empowered to create
-> > cgroups arbitrarily. Or at least they shouldn't because we can expect
-> > more problems to happen.
-> > 
-> > Could you clarify this please?
+On Mon, May 30, 2022 at 06:01:36PM +0800, kernel test robot wrote:
+> Hi,
 > 
-> The problem is actual for OS-level containers: LXC or OpenVz.
-> They are widely used for hosting and allow to run containers
-> by untrusted end-users. Root inside such containers is able
-> to create groups inside own container and consume host memory
-> without its proper accounting.
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on net-next/master]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/menglong8-dong-gmail-com/reorganize-the-code-of-the-enum-skb_drop_reason/20220530-161614
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 7e062cda7d90543ac8c7700fc7c5527d0c0f22ad
+> config: nios2-defconfig (https://download.01.org/0day-ci/archive/20220530/202205301730.inNRSOxX-lkp@intel.com/config)
+> compiler: nios2-linux-gcc (GCC) 11.3.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/73e3b002fb9086fc734ba4dcc3041f9bb56eb1a2
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review menglong8-dong-gmail-com/reorganize-the-code-of-the-enum-skb_drop_reason/20220530-161614
+>         git checkout 73e3b002fb9086fc734ba4dcc3041f9bb56eb1a2
+>         # save the config file
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 ARCH=nios2 
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
 
-Is the unaccounted memory really the biggest problem here?
-IIRC having really huge cgroup trees can hurt quite some controllers.
-E.g. how does the cpu controller deal with too many or too deep
-hierarchies?
+Kindly ignore this report, the report itself has issue with empty
+warnings here. We will check and resolve this.
 
--- 
-Michal Hocko
-SUSE Labs
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp

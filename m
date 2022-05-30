@@ -2,197 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6918537A0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 116C2537A23
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235939AbiE3LlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 07:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
+        id S235700AbiE3LpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 07:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235831AbiE3LlH (ORCPT
+        with ESMTP id S235724AbiE3Lo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 07:41:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A856B813D1;
-        Mon, 30 May 2022 04:41:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 59BD82199D;
-        Mon, 30 May 2022 11:41:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1653910865; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=i4LKt8LZNv7O3Wwu1DiLKI3Zd8LxtAGWiwhpXlwpTRU=;
-        b=uSiaXqJKBGwScZ32qFf6c8Gr0kfZ5zQ7IMWOMLz8yYZlkjP6w7ux8Ebr/jpu5M3k/m7nX9
-        yQkTTaWffg4F9bOlmht+H+K9W4NJ5QNWKiDRpQdAkqYDJoF57sL4Eu1COtrTyxLFAOCwFj
-        DUEwooU54jdHpvSXYHRTmHKg5+d1eRA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0795913A84;
-        Mon, 30 May 2022 11:41:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1vmPAFGtlGITeQAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 30 May 2022 11:41:05 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>, Wei Liu <wei.liu@kernel.org>,
-        Paul Durrant <paul@xen.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH] xen/netback: do some code cleanup
-Date:   Mon, 30 May 2022 13:41:03 +0200
-Message-Id: <20220530114103.20657-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Mon, 30 May 2022 07:44:58 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6236342
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:44:57 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LBYTJ1SgRzcfdL;
+        Mon, 30 May 2022 19:43:48 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 30 May
+ 2022 19:44:55 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <vitaly.wool@konsulko.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH] MAINTAINERS: Add maintainer information for z3fold
+Date:   Mon, 30 May 2022 19:45:05 +0800
+Message-ID: <20220530114505.52367-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove some unused macros and functions, make local functions static.
+Add the maintainer information for the z3fold compressed page allocator.
+Also Add myself as a reviewer.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- drivers/net/xen-netback/common.h    | 12 ------------
- drivers/net/xen-netback/interface.c | 16 +---------------
- drivers/net/xen-netback/netback.c   |  4 +++-
- drivers/net/xen-netback/rx.c        |  2 +-
- 4 files changed, 5 insertions(+), 29 deletions(-)
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/net/xen-netback/common.h b/drivers/net/xen-netback/common.h
-index d9dea4829c86..8174d7b2966c 100644
---- a/drivers/net/xen-netback/common.h
-+++ b/drivers/net/xen-netback/common.h
-@@ -48,7 +48,6 @@
- #include <linux/debugfs.h>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f0a90b256b26..6a4706aa80d8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22012,6 +22012,13 @@ L:	linux-mm@kvack.org
+ S:	Maintained
+ F:	mm/zbud.c
  
- typedef unsigned int pending_ring_idx_t;
--#define INVALID_PENDING_RING_IDX (~0U)
- 
- struct pending_tx_info {
- 	struct xen_netif_tx_request req; /* tx request */
-@@ -82,8 +81,6 @@ struct xenvif_rx_meta {
- /* Discriminate from any valid pending_idx value. */
- #define INVALID_PENDING_IDX 0xFFFF
- 
--#define MAX_BUFFER_OFFSET XEN_PAGE_SIZE
--
- #define MAX_PENDING_REQS XEN_NETIF_TX_RING_SIZE
- 
- /* The maximum number of frags is derived from the size of a grant (same
-@@ -367,11 +364,6 @@ void xenvif_free(struct xenvif *vif);
- int xenvif_xenbus_init(void);
- void xenvif_xenbus_fini(void);
- 
--int xenvif_schedulable(struct xenvif *vif);
--
--int xenvif_queue_stopped(struct xenvif_queue *queue);
--void xenvif_wake_queue(struct xenvif_queue *queue);
--
- /* (Un)Map communication rings. */
- void xenvif_unmap_frontend_data_rings(struct xenvif_queue *queue);
- int xenvif_map_frontend_data_rings(struct xenvif_queue *queue,
-@@ -394,7 +386,6 @@ int xenvif_dealloc_kthread(void *data);
- irqreturn_t xenvif_ctrl_irq_fn(int irq, void *data);
- 
- bool xenvif_have_rx_work(struct xenvif_queue *queue, bool test_kthread);
--void xenvif_rx_action(struct xenvif_queue *queue);
- void xenvif_rx_queue_tail(struct xenvif_queue *queue, struct sk_buff *skb);
- 
- void xenvif_carrier_on(struct xenvif *vif);
-@@ -403,9 +394,6 @@ void xenvif_carrier_on(struct xenvif *vif);
- void xenvif_zerocopy_callback(struct sk_buff *skb, struct ubuf_info *ubuf,
- 			      bool zerocopy_success);
- 
--/* Unmap a pending page and release it back to the guest */
--void xenvif_idx_unmap(struct xenvif_queue *queue, u16 pending_idx);
--
- static inline pending_ring_idx_t nr_pending_reqs(struct xenvif_queue *queue)
- {
- 	return MAX_PENDING_REQS -
-diff --git a/drivers/net/xen-netback/interface.c b/drivers/net/xen-netback/interface.c
-index 8e035374a370..fb32ae82d9b0 100644
---- a/drivers/net/xen-netback/interface.c
-+++ b/drivers/net/xen-netback/interface.c
-@@ -69,7 +69,7 @@ void xenvif_skb_zerocopy_complete(struct xenvif_queue *queue)
- 	wake_up(&queue->dealloc_wq);
- }
- 
--int xenvif_schedulable(struct xenvif *vif)
-+static int xenvif_schedulable(struct xenvif *vif)
- {
- 	return netif_running(vif->dev) &&
- 		test_bit(VIF_STATUS_CONNECTED, &vif->status) &&
-@@ -177,20 +177,6 @@ irqreturn_t xenvif_interrupt(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
--int xenvif_queue_stopped(struct xenvif_queue *queue)
--{
--	struct net_device *dev = queue->vif->dev;
--	unsigned int id = queue->id;
--	return netif_tx_queue_stopped(netdev_get_tx_queue(dev, id));
--}
--
--void xenvif_wake_queue(struct xenvif_queue *queue)
--{
--	struct net_device *dev = queue->vif->dev;
--	unsigned int id = queue->id;
--	netif_tx_wake_queue(netdev_get_tx_queue(dev, id));
--}
--
- static u16 xenvif_select_queue(struct net_device *dev, struct sk_buff *skb,
- 			       struct net_device *sb_dev)
- {
-diff --git a/drivers/net/xen-netback/netback.c b/drivers/net/xen-netback/netback.c
-index d93814c14a23..fc61a4418737 100644
---- a/drivers/net/xen-netback/netback.c
-+++ b/drivers/net/xen-netback/netback.c
-@@ -112,6 +112,8 @@ static void make_tx_response(struct xenvif_queue *queue,
- 			     s8       st);
- static void push_tx_responses(struct xenvif_queue *queue);
- 
-+static void xenvif_idx_unmap(struct xenvif_queue *queue, u16 pending_idx);
++Z3FOLD COMPRESSED PAGE ALLOCATOR
++M:	Vitaly Wool <vitaly.wool@konsulko.com>
++R:	Miaohe Lin <linmiaohe@huawei.com>
++L:	linux-mm@kvack.org
++S:	Maintained
++F:	mm/z3fold.c
 +
- static inline int tx_work_todo(struct xenvif_queue *queue);
- 
- static inline unsigned long idx_to_pfn(struct xenvif_queue *queue,
-@@ -1418,7 +1420,7 @@ static void push_tx_responses(struct xenvif_queue *queue)
- 		notify_remote_via_irq(queue->tx_irq);
- }
- 
--void xenvif_idx_unmap(struct xenvif_queue *queue, u16 pending_idx)
-+static void xenvif_idx_unmap(struct xenvif_queue *queue, u16 pending_idx)
- {
- 	int ret;
- 	struct gnttab_unmap_grant_ref tx_unmap_op;
-diff --git a/drivers/net/xen-netback/rx.c b/drivers/net/xen-netback/rx.c
-index dbac4c03d21a..8df2c736fd23 100644
---- a/drivers/net/xen-netback/rx.c
-+++ b/drivers/net/xen-netback/rx.c
-@@ -486,7 +486,7 @@ static void xenvif_rx_skb(struct xenvif_queue *queue)
- 
- #define RX_BATCH_SIZE 64
- 
--void xenvif_rx_action(struct xenvif_queue *queue)
-+static void xenvif_rx_action(struct xenvif_queue *queue)
- {
- 	struct sk_buff_head completed_skbs;
- 	unsigned int work_done = 0;
+ ZD1211RW WIRELESS DRIVER
+ M:	Ulrich Kunitz <kune@deine-taler.de>
+ L:	linux-wireless@vger.kernel.org
 -- 
-2.35.3
+2.23.0
 

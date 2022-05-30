@@ -2,187 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CE15384B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC96E5384C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241410AbiE3PWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
+        id S237734AbiE3PW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242939AbiE3PUx (ORCPT
+        with ESMTP id S241993AbiE3PVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:20:53 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0110F11AFEB
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:22:50 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id g67so2683243pfb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:22:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3GQ31AOMg6CYL2o02SAXplBrbILZAQU3ouRxiSJOrgU=;
-        b=cgfAWNSA80459wk4ly9bSAoXoF/r0/0/legUd21+ZHniCAG1wV1B7JWCmIV9cguxnR
-         NV+x0Xe7rxk2pW6mtOL0GEwag0Bw5mdIxGiHpGKwJ5FcR94bn8Tj5J80iBM1BOCblTGM
-         PptUeWclGDH0aOgyVPyWxqj6BN9KxTrSnvYHY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3GQ31AOMg6CYL2o02SAXplBrbILZAQU3ouRxiSJOrgU=;
-        b=1UHM+6l7o1oz3hdxD1vrp5ccQsiwnfITFZq6+WawQCNkZDAXT4x6fbKeaVPgDIDVYQ
-         F3E5E3mtaDhzJ9ycFK3Pr7CZu5qyZW/QmhsoW6nFbTP4eYQehdsyGS5RQXC1HwF76vw+
-         4lOEVLd8CpbjBGNTqdl05PL4bm7PbPpPEazSd9+gqLT3T6ki2KOkGeRIyCdTRq3MbIEK
-         asvO/g+L3L1L/q48TRv66Bt6b1q6/dn/+agWiNuwsNLk6DJDSo1LMsGeRCP3qTqXw6g9
-         TsymO0XEbPRS8HpEJWffOz4HUA5VfIoIh6YgOQX/q1e0b+rIhypODtFo7x9JSQBY8CpS
-         pgdw==
-X-Gm-Message-State: AOAM5316QFbrfAMt/fCxrGysyilU1miolOl2kilYS0srdOS/zRMm/F3l
-        jeWRDIoBfGIfhFj6XNRqUlPhgg==
-X-Google-Smtp-Source: ABdhPJygqQPEqP+uApdlFFyunbfljkbAcq0qYTWB6hl/oH8z4ZP/AA/eKh0jCieqFOXEU2LAYOIIAQ==
-X-Received: by 2002:a05:6a00:a8b:b0:4cd:6030:4df3 with SMTP id b11-20020a056a000a8b00b004cd60304df3mr57535126pfl.40.1653920570326;
-        Mon, 30 May 2022 07:22:50 -0700 (PDT)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:5f0f:14e6:3bd7:41e3])
-        by smtp.gmail.com with ESMTPSA id i29-20020a056a00005d00b00517de3dc3c6sm8835947pfk.84.2022.05.30.07.22.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 07:22:49 -0700 (PDT)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Christian Konig <christian.koenig@amd.com>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCH] dma-fence: allow dma fence to have their own lock
-Date:   Mon, 30 May 2022 23:22:32 +0900
-Message-Id: <20220530142232.2871634-1-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+        Mon, 30 May 2022 11:21:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FC61C0C86;
+        Mon, 30 May 2022 07:23:22 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 83E9721B02;
+        Mon, 30 May 2022 14:22:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653920560; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=R1q2pfo2QzLbUTyCNmaIYF0n/fj7XyAs77ZlAUjQ6ak=;
+        b=lwzC5Fk0mpiDTx3KNaKbU0hkbTWL5JORAz04k/a1jlcG0T/BzcVAhTgQNNKKXmGTqPTrz4
+        LX+DskAB/Ytzxmb9xe7q/xAVI2oE4tZVPSqopcWzPvH5ro6oNis8YpZ9wLQ5oLCuGAqyQw
+        PRdffCQMfEglqhDe1R6XROoKtU4kWYU=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B16172C141;
+        Mon, 30 May 2022 14:22:39 +0000 (UTC)
+Date:   Mon, 30 May 2022 16:22:39 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
+Subject: Re: [PATCH mm v3 0/9] memcg: accounting for objects allocated by
+ mkdir cgroup
+Message-ID: <YpTTL3Ys35kgYyAW@dhcp22.suse.cz>
+References: <06505918-3b8a-0ad5-5951-89ecb510138e@openvz.org>
+ <3e1d6eab-57c7-ba3d-67e1-c45aa0dfa2ab@openvz.org>
+ <YpSwvii5etfnOYC9@dhcp22.suse.cz>
+ <ef9f7516-853d-ffe4-9a7a-5e87556bdbbe@openvz.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ef9f7516-853d-ffe4-9a7a-5e87556bdbbe@openvz.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	RFC
+On Mon 30-05-22 16:09:00, Vasily Averin wrote:
+> On 5/30/22 14:55, Michal Hocko wrote:
+> > On Mon 30-05-22 14:25:45, Vasily Averin wrote:
+> >> Below is tracing results of mkdir /sys/fs/cgroup/vvs.test on 
+> >> 4cpu VM with Fedora and self-complied upstream kernel. The calculations
+> >> are not precise, it depends on kernel config options, number of cpus,
+> >> enabled controllers, ignores possible page allocations etc.
+> >> However this is enough to clarify the general situation.
+> >> All allocations are splited into:
+> >> - common part, always called for each cgroup type
+> >> - per-cgroup allocations
+> >>
+> >> In each group we consider 2 corner cases:
+> >> - usual allocations, important for 1-2 CPU nodes/Vms
+> >> - percpu allocations, important for 'big irons'
+> >>
+> >> common part: 	~11Kb	+  318 bytes percpu
+> >> memcg: 		~17Kb	+ 4692 bytes percpu
+> >> cpu:		~2.5Kb	+ 1036 bytes percpu
+> >> cpuset:		~3Kb	+   12 bytes percpu
+> >> blkcg:		~3Kb	+   12 bytes percpu
+> >> pid:		~1.5Kb	+   12 bytes percpu		
+> >> perf:		 ~320b	+   60 bytes percpu
+> >> -------------------------------------------
+> >> total:		~38Kb	+ 6142 bytes percpu
+> >> currently accounted:	  4668 bytes percpu
+> >>
+> >> - it's important to account usual allocations called
+> >> in common part, because almost all of cgroup-specific allocations
+> >> are small. One exception here is memory cgroup, it allocates a few
+> >> huge objects that should be accounted.
+> >> - Percpu allocation called in common part, in memcg and cpu cgroups
+> >> should be accounted, rest ones are small an can be ignored.
+> >> - KERNFS objects are allocated both in common part and in most of
+> >> cgroups 
+> >>
+> >> Details can be found here:
+> >> https://lore.kernel.org/all/d28233ee-bccb-7bc3-c2ec-461fd7f95e6a@openvz.org/
+> >>
+> >> I checked other cgroups types was found that they all can be ignored.
+> >> Additionally I found allocation of struct rt_rq called in cpu cgroup 
+> >> if CONFIG_RT_GROUP_SCHED was enabled, it allocates huge (~1700 bytes)
+> >> percpu structure and should be accounted too.
+> > 
+> > One thing that the changelog is missing is an explanation why do we need
+> > to account those objects. Users are usually not empowered to create
+> > cgroups arbitrarily. Or at least they shouldn't because we can expect
+> > more problems to happen.
+> > 
+> > Could you clarify this please?
+> 
+> The problem is actual for OS-level containers: LXC or OpenVz.
+> They are widely used for hosting and allow to run containers
+> by untrusted end-users. Root inside such containers is able
+> to create groups inside own container and consume host memory
+> without its proper accounting.
 
-	I don't have a good name for this yet and I did not spend
-	any time on documentataion (for that reason)
+Is the unaccounted memory really the biggest problem here?
+IIRC having really huge cgroup trees can hurt quite some controllers.
+E.g. how does the cpu controller deal with too many or too deep
+hierarchies?
 
-We create fences (out fences) as part of operations execution, which
-are short-lived objects, we want to release all memory after operation
-execution is completed or when operation gets cancelled/deleted via
-ioctl().
-
-This creates a bit of a problem. DMA fences are refcounted objects and
-exporter never knows when importer imports a fence or puts its refcount,
-so exporter never knows when fence will be destoyed, which should not
-be a problem for refcounted objects, but here comes the twist...
-
-	operation A - creates and exports out fence X
-	... user-space imports fence X
-	operation A - finishes execution, signals fence X
-	kfree operation A, put dma_fence
-
-DMA fences are designed to borrow spinlock that DMA fences use to
-protect struct dma_fence members:
-
-	struct dma_fence {
-	        spinlock_t *lock;
-
-	        const struct dma_fence_ops *ops;
-		.....
-	};
-
-	void dma_fence_init(struct dma_fence *fence,
-			const struct dma_fence_ops *ops,
-			spinlock_t *lock,
-			u64 context,
-			u64 seqno);
-
-So the `lock` should have at least same lifespan as the DMA fence
-that borrows it, which is impossible to guarantee in our case. When
-we kfree operation A struct we also kfree ->lock that operation
-lends to DMA fence, which outlives operation A (depending on what
-fence importers do and when they drop imported fence refcount).
-
-This patch adds a new memnber to struct dma_fence: __lock_inplace.
-Which is a lock that DMA fence will use to protect its own data when
-it cannot reliably borrow a lock from the outside object.
-
-I also had a patch that puts inplace and borrowed locks to an unnamed
-uninon and adds one more dma_fence_flag_bits to distinguish between
-fences with borrowed and inplace locks
-
-	struct dma_fence {
-		uninon {
-			spinlock_t *lock;
-			spinlock_t __lock_inplace;
-		};
-		...
-	};
-
-And then instead of locking/unlocking ->lock directly we would use
-dma_fence_lock_irqsave()/dma_fence_unlock_irqrestore() macros which
-would check fence flags and either use borrowed lock or inplace lock.
-But after seeing how owten drivers directly access fence ->lock I
-decided to scratch that approach and just add extra spinlock member.
-
-Not-Yet-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- drivers/dma-buf/dma-fence.c | 10 ++++++++++
- include/linux/dma-fence.h   |  6 ++++++
- 2 files changed, 16 insertions(+)
-
-diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
-index 066400ed8841..7ae40b8adb73 100644
---- a/drivers/dma-buf/dma-fence.c
-+++ b/drivers/dma-buf/dma-fence.c
-@@ -958,3 +958,13 @@ dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops *ops,
- 	trace_dma_fence_init(fence);
- }
- EXPORT_SYMBOL(dma_fence_init);
-+
-+void dma_fence_inplace_lock_init(struct dma_fence *fence,
-+				 const struct dma_fence_ops *ops,
-+				 u64 context, u64 seqno)
-+{
-+	spin_lock_init(&fence->__lock_inplace);
-+
-+	dma_fence_init(fence, ops, &fence->__lock_inplace, context, seqno);
-+}
-+EXPORT_SYMBOL(dma_fence_inplace_lock_init);
-diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
-index 1ea691753bd3..6b15a0d2eccf 100644
---- a/include/linux/dma-fence.h
-+++ b/include/linux/dma-fence.h
-@@ -64,6 +64,8 @@ struct dma_fence_cb;
-  */
- struct dma_fence {
- 	spinlock_t *lock;
-+	spinlock_t __lock_inplace;
-+
- 	const struct dma_fence_ops *ops;
- 	/*
- 	 * We clear the callback list on kref_put so that by the time we
-@@ -262,6 +264,10 @@ struct dma_fence_ops {
- void dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops *ops,
- 		    spinlock_t *lock, u64 context, u64 seqno);
- 
-+void dma_fence_inplace_lock_init(struct dma_fence *fence,
-+				 const struct dma_fence_ops *ops,
-+				 u64 context, u64 seqno);
-+
- void dma_fence_release(struct kref *kref);
- void dma_fence_free(struct dma_fence *fence);
- void dma_fence_describe(struct dma_fence *fence, struct seq_file *seq);
 -- 
-2.36.1.124.g0e6072fb45-goog
-
+Michal Hocko
+SUSE Labs

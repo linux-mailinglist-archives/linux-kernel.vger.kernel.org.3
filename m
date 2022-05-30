@@ -2,126 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67EC538702
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 20:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE225386FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 20:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242400AbiE3SEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 14:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        id S240565AbiE3SEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 14:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240239AbiE3SEC (ORCPT
+        with ESMTP id S237939AbiE3SEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 14:04:02 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58959A205F
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 11:04:01 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id s24so8350213wrb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 11:04:01 -0700 (PDT)
+        Mon, 30 May 2022 14:04:00 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE6EA206A
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 11:03:58 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id f7so1565701ilr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 11:03:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vmIAgX4stP7tbN1utudJdCwbmHGl9Wqirrw9D2YXhxA=;
-        b=sj37xc3nASZ+YCXla39Pf94LuVNA1E3wbnpESKap4+mtZJkHFXPsMp7U6qzSqZUvSP
-         Zkbt24QW2ES5ClbIchtBy19300ZLdqUNMSmmUTpB6UYympcjd01q1M0KrPM9xHbQ1Qxw
-         GHrOPXCT+kGQ4dB/KttIVWVEUjPvL6qWZSfqcDa2MSh2XvY34u/O4j3wXJ/4xhzDGdS4
-         KDD0P2RkI/tv81gLON3wHXZdLn5dCEoFpv7k5Jf/+ktP9RymmXCa2CHYVACXJiwm6ZVm
-         HPCp8Ul/ru2dIS28/dji4srbNBakB6xMGNuUeH94i8RGl8OD1U0q+N7faTgqNzcaWwdG
-         6aHw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1ZeR0nN/1eFyuWwXvp0L7EiUsdKyoUpqzB7kyH/D/WM=;
+        b=GTWyyPNRACEttMtFjSJ8gUXIGRBmUXZBKEwGpHWqYbIHSfqlUiXqSzBt+r5ZE3DmjF
+         AUV2Em9x+IZRGz4QfdnIc1mS7RwLGT8ZMTYS5JBM1oDAZx1BKBCSekGFONRhU+w/qUOo
+         DWyUbkGNTcx8E/ASF0dmHm9B1CbjYIW99zv/TFXbZzv5LkCdfaaCIiTmT/Zo0fb5QDXw
+         /FU7HR0av4bMFFJ5xR1yA2v91frTUAxaS2pWVoWv7SE1BKdxx5jQ32HzihvT6ZI4I1qi
+         v2m0PzCHg12pUVrR5/Qh92oO7Ck/kW+eUVU0ZbgbVA0XIzsNXQzCl1Tg5SVAPuLaMG09
+         nUpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vmIAgX4stP7tbN1utudJdCwbmHGl9Wqirrw9D2YXhxA=;
-        b=qHJUZ7mCH+jQxwlEhGxmV7cO0bOL5kePJObnfRv2c+Onfo0g1Ac5Te2m0tfzsxNiYD
-         P5Ky6dKMEHK6lnDmUofrwkxmWu7HLrxN4pUYeF77V+kKWxJm7o2tHmu9qV7bYLMArScz
-         NZwQC7UTFlP4jsk9sVkAdcDSuTdLaEYpkaQrnGsV44Wv4h2TUGEGfUZwIQ5DsDR/gQjm
-         CfYGiUU+8700rAaP8Qe1974SmCwgjOk4U4QyiCs8Oegnwn1Purzbv5+cGtGNo0g4pCU0
-         TA1E6JiV4NOS89LYWuysmuwhZX6+mf7VkAQCmTxVFzCW9k6Gvpsx0AvvQX41VmIM1e5s
-         SyvA==
-X-Gm-Message-State: AOAM531FX9u83GR69scZLohg/QbxnWXgscq8LBvt+aEDOU2CAWmXrtjA
-        g/r1WMeoyXZxv/0MoZfUlbi7bw==
-X-Google-Smtp-Source: ABdhPJzbbLY65ueNfiMy634xwWX8GhshgQaMx9qx3BJ/rdkq+iVkOzEljqVwWPwdzKhOxGv1GHmSOg==
-X-Received: by 2002:a05:6000:1247:b0:210:1f6c:b1cb with SMTP id j7-20020a056000124700b002101f6cb1cbmr12912728wrx.709.1653933839926;
-        Mon, 30 May 2022 11:03:59 -0700 (PDT)
-Received: from helium.lan ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id 9-20020a1c0209000000b00397550b387bsm1647wmc.23.2022.05.30.11.03.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 11:03:59 -0700 (PDT)
-From:   Fabien Parent <fparent@baylibre.com>
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] iommu: mtk_iommu: add support for MT8365 SoC
-Date:   Mon, 30 May 2022 20:03:28 +0200
-Message-Id: <20220530180328.845692-3-fparent@baylibre.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220530180328.845692-1-fparent@baylibre.com>
-References: <20220530180328.845692-1-fparent@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1ZeR0nN/1eFyuWwXvp0L7EiUsdKyoUpqzB7kyH/D/WM=;
+        b=pab4aliOXWFW6kWLnYLaxllXLPtiUm/nxDPyaEImrNCazJGZFwi5O7BqmXNiF2nxbL
+         7jtK2XY+Prlz47vTKDroEiznlg2VmLOifDoUXO8HC//KQOqlU/lQgDv8oqcdJxUN05jg
+         mFcsQWNspuFfEUduJKOqbWVbWB+KSmtwPIGBbDyZ1C0Tm70za5u3KuL7j0QDEUjcA0Wp
+         QPx9+DrMBCJu6Cs1WLiQ5Bvohn95EVfpi5DyN+4tlpkR6rfG5cJPIOlb4NgTXdxg8fPu
+         6ndJzp5JbKc+l9EHzSSa/tLDsRYxDUiqqdnJg0ngO2C/vX5N+Ni9hoBggLE44FS1+aVN
+         6MRw==
+X-Gm-Message-State: AOAM530Tdo9sM3AgxxKvn8FApoBpfHPxyn+RjiHQ4YeiBXdrQfEeljQy
+        KeDrGyoWmoTXeCJWgQ2QQK09b1r3GIGeia6Fwf4=
+X-Google-Smtp-Source: ABdhPJxiqxPqwJuqTiFuZDkGTIRpFwwWIWMOfo3koX/mS67/Z2NFSGsiwTDAU3oePhaHTSWXzOV+eDNnRpinoTkJYk8=
+X-Received: by 2002:a92:3609:0:b0:2c6:3595:2a25 with SMTP id
+ d9-20020a923609000000b002c635952a25mr29189046ila.233.1653933838071; Mon, 30
+ May 2022 11:03:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220527185600.1236769-1-davidgow@google.com> <20220527185600.1236769-2-davidgow@google.com>
+In-Reply-To: <20220527185600.1236769-2-davidgow@google.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 30 May 2022 20:03:47 +0200
+Message-ID: <CA+fCnZe63vugPRbD3fVNGnTWbSvjd08g8coG3D71-=NtqpjOvQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] UML: add support for KASAN under x86_64
+To:     David Gow <davidgow@google.com>
+Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        anton.ivanov@cambridgegreys.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-um@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add IOMMU support for MT8365 SoC.
+On Fri, May 27, 2022 at 8:56 PM David Gow <davidgow@google.com> wrote:
+>
+> From: Patricia Alfonso <trishalfonso@google.com>
+>
+> Make KASAN run on User Mode Linux on x86_64.
+>
+> The UML-specific KASAN initializer uses mmap to map the roughly 2.25TB
+> of shadow memory to the location defined by KASAN_SHADOW_OFFSET.
+> kasan_init() utilizes constructors to initialize KASAN before main().
+>
+> The location of the KASAN shadow memory, starting at
+> KASAN_SHADOW_OFFSET, can be configured using the KASAN_SHADOW_OFFSET
+> option. UML uses roughly 18TB of address space, and KASAN requires 1/8th
+> of this. The default location of this offset is 0x100000000000, which
+> keeps it out-of-the-way even on UML setups with more "physical" memory.
+>
+> For low-memory setups, 0x7fff8000 can be used instead, which fits in an
+> immediate and is therefore faster, as suggested by Dmitry Vyukov. There
+> is usually enough free space at this location; however, it is a config
+> option so that it can be easily changed if needed.
+>
+> Note that, unlike KASAN on other architectures, vmalloc allocations
+> still use the shadow memory allocated upfront, rather than allocating
+> and free-ing it per-vmalloc allocation.
+>
+> Also note that, while UML supports both KASAN in inline mode
+> (CONFIG_KASAN_INLINE) and static linking (CONFIG_STATIC_LINK), it does
+> not support both at the same time.
+>
+> Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
+> Co-developed-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
----
- drivers/iommu/mtk_iommu.c | 11 +++++++++++
- drivers/iommu/mtk_iommu.h |  1 +
- 2 files changed, 12 insertions(+)
+Hi David,
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index b692347d8d56..039b8f9d5022 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -1093,6 +1093,16 @@ static const struct mtk_iommu_plat_data mt8192_data = {
- 	.port_width     = 5,
- };
- 
-+static const struct mtk_iommu_plat_data mt8365_data = {
-+	.m4u_plat     = M4U_MT8365,
-+	.flags	      = RESET_AXI,
-+	.inv_sel_reg  = REG_MMU_INV_SEL_GEN1,
-+	.iova_region  = single_domain,
-+	.iova_region_nr = ARRAY_SIZE(single_domain),
-+	.larbid_remap = {{0}, {1}, {2}, {3}, {4}, {5}}, /* Linear mapping. */
-+	.port_width   = 6,
-+};
-+
- static const struct of_device_id mtk_iommu_of_ids[] = {
- 	{ .compatible = "mediatek,mt2712-m4u", .data = &mt2712_data},
- 	{ .compatible = "mediatek,mt6779-m4u", .data = &mt6779_data},
-@@ -1100,6 +1110,7 @@ static const struct of_device_id mtk_iommu_of_ids[] = {
- 	{ .compatible = "mediatek,mt8173-m4u", .data = &mt8173_data},
- 	{ .compatible = "mediatek,mt8183-m4u", .data = &mt8183_data},
- 	{ .compatible = "mediatek,mt8192-m4u", .data = &mt8192_data},
-+	{ .compatible = "mediatek,mt8365-m4u", .data = &mt8365_data},
- 	{}
- };
- 
-diff --git a/drivers/iommu/mtk_iommu.h b/drivers/iommu/mtk_iommu.h
-index 84cecaf6d61c..cb174fa6f2ab 100644
---- a/drivers/iommu/mtk_iommu.h
-+++ b/drivers/iommu/mtk_iommu.h
-@@ -46,6 +46,7 @@ enum mtk_iommu_plat {
- 	M4U_MT8173,
- 	M4U_MT8183,
- 	M4U_MT8192,
-+	M4U_MT8365,
- };
- 
- struct mtk_iommu_iova_region;
--- 
-2.36.1
+Thanks for working on this!
 
+> diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
+> index a4f07de21771..c993d99116f2 100644
+> --- a/mm/kasan/shadow.c
+> +++ b/mm/kasan/shadow.c
+> @@ -295,9 +295,29 @@ int kasan_populate_vmalloc(unsigned long addr, unsigned long size)
+>                 return 0;
+>
+>         shadow_start = (unsigned long)kasan_mem_to_shadow((void *)addr);
+> -       shadow_start = ALIGN_DOWN(shadow_start, PAGE_SIZE);
+>         shadow_end = (unsigned long)kasan_mem_to_shadow((void *)addr + size);
+> -       shadow_end = ALIGN(shadow_end, PAGE_SIZE);
+> +
+> +       /*
+> +        * User Mode Linux maps enough shadow memory for all of physical memory
+> +        * at boot, so doesn't need to allocate more on vmalloc, just clear it.
+
+Should this say "for all of _virtual_ memory"?
+
+Otherwise, this is confusing. All KASAN-enabled architectures map
+shadow for physical memory. And they still need map shadow for
+vmalloc() separately. This is what kasan_populate_vmalloc() is for.
+
+> +        *
+> +        * If another architecture chooses to go down the same path, we should
+> +        * replace this check for CONFIG_UML with something more generic, such
+> +        * as:
+> +        * - A CONFIG_KASAN_NO_SHADOW_ALLOC option, which architectures could set
+> +        * - or, a way of having architecture-specific versions of these vmalloc
+> +        *   and module shadow memory allocation options.
+
+I think this part above and the first sentence below belong to the
+commit changelog, not to a comment.
+
+> +        *
+> +        * For the time being, though, this check works. The remaining CONFIG_UML
+> +        * checks in this file exist for the same reason.
+> +        */
+> +       if (IS_ENABLED(CONFIG_UML)) {
+> +               __memset((void *)shadow_start, KASAN_VMALLOC_INVALID, shadow_end - shadow_start);
+> +               return 0;
+> +       }
+> +
+> +       shadow_start = PAGE_ALIGN_DOWN(shadow_start);
+> +       shadow_end = PAGE_ALIGN(shadow_end);
+>
+>         ret = apply_to_page_range(&init_mm, shadow_start,
+>                                   shadow_end - shadow_start,
+> @@ -466,6 +486,10 @@ void kasan_release_vmalloc(unsigned long start, unsigned long end,
+>
+>         if (shadow_end > shadow_start) {
+>                 size = shadow_end - shadow_start;
+> +               if (IS_ENABLED(CONFIG_UML)) {
+> +                       __memset(shadow_start, KASAN_SHADOW_INIT, shadow_end - shadow_start);
+> +                       return;
+> +               }
+>                 apply_to_existing_page_range(&init_mm,
+>                                              (unsigned long)shadow_start,
+>                                              size, kasan_depopulate_vmalloc_pte,
+> @@ -531,6 +555,11 @@ int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask)
+>         if (WARN_ON(!PAGE_ALIGNED(shadow_start)))
+>                 return -EINVAL;
+>
+> +       if (IS_ENABLED(CONFIG_UML)) {
+> +               __memset((void *)shadow_start, KASAN_SHADOW_INIT, shadow_size);
+> +               return 0;
+> +       }
+> +
+>         ret = __vmalloc_node_range(shadow_size, 1, shadow_start,
+>                         shadow_start + shadow_size,
+>                         GFP_KERNEL,
+> @@ -554,6 +583,9 @@ int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask)
+>
+>  void kasan_free_module_shadow(const struct vm_struct *vm)
+>  {
+> +       if (IS_ENABLED(CONFIG_UML))
+> +               return;
+> +
+>         if (vm->flags & VM_KASAN)
+>                 vfree(kasan_mem_to_shadow(vm->addr));
+>  }
+> --
+> 2.36.1.124.g0e6072fb45-goog
+>
+
+Thanks!

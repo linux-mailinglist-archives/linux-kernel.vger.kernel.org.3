@@ -2,127 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA535384FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828D3538509
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240169AbiE3Pdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
+        id S241840AbiE3PgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241531AbiE3Pdj (ORCPT
+        with ESMTP id S240809AbiE3Pey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:33:39 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0AD151FDB
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:38:29 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id jx22so21130261ejb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:38:29 -0700 (PDT)
+        Mon, 30 May 2022 11:34:54 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA57D1F62D0;
+        Mon, 30 May 2022 07:39:48 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id z186so15087336ybz.3;
+        Mon, 30 May 2022 07:39:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9XVHS3rlr74kwDPS9cPLZWGBf1IHIjmcfJWC5iwwI2Q=;
-        b=MbARoEMNQrQQ5S51pge6GPzZS8oHKf3IaF+XiDUy8Ks5VCzzDxfw2dNHfzHZpEiWQC
-         Lir4csByQgi8syophTh9lcO08dPkZ5b+pcyLI4xvARvyOpGO5Dz1suPagZKcrX5giq++
-         tWsVlviaPGUMTu82QwfnMk/+msafi9JIPmz0I=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PwYudAlsrV6L0E/1oct3kLnDMatMHOnVQrUxmfQHNp0=;
+        b=nJb/D6o7T7a8Mb297LS5itZxyr9hhXOWE4cI1CS2gGTaAQcWmDs6sgxITAckTcsbqO
+         aVjCnMiZTw+b4RHeeUOfs7ZZ8uhJu+9H3vrDwR8kDUeIJPmAAz+dNjR8nEL4TV+1QxDF
+         u49vwV3izHOZZjnCA/h3xEh2LMtiihGNrkHxPVvfRH9pZsq1jJB+cD3l2YcOrZE/FHV3
+         oO0LniQOktfpUCJyeRfpEKg9DDa8WBNFOctawAeqAkazISl11g4V/X/KrhW3BSqcXDpM
+         rHmuPxyGLKaHOFGx+URNH8GUTtkCZhF8UINV8Pv9mO9GCiQtRvv2jNcgvDl1QzaFiII6
+         59oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9XVHS3rlr74kwDPS9cPLZWGBf1IHIjmcfJWC5iwwI2Q=;
-        b=n+r8eYO+WQb5XWC/XqRK6S4rnHoX2N8RWUBLAmTOzQUR7rUhLtQJCwp5V7GcdY5vxo
-         O9dFDBJnVCrlj6p3O19w4SZhFebwwNpsSlDKbeQUkyjfS37V/jWZ5hmeNqqqwp7Iqp52
-         EBcLn5Cu+Q1htBwPLNY9i04TjRP0E5236spyDkjinVwrtRYGaJZGFE+TbOEBbqyJkHtv
-         +9LWtEo8PXCgl2PGt4Gi/j7CrEd4OeM82AvXuPvkM6/Axd0XF8mbA+Am7xjzL3xLFVdP
-         3kbrAkygtzBTq5Bkw+n6kOKtE1BDaMFcblriwmI5DLVu31xTIUifCc6gSHMFpuS4289I
-         Oi8w==
-X-Gm-Message-State: AOAM532jPwSUYDwXjb62rNkLQ91cijzlP9H3yMdnqX3jhojHyQ6Y9O6C
-        OIAxpyc7u5EHjyslXZmbuQF1OQ==
-X-Google-Smtp-Source: ABdhPJzCJc9LIiLBdHANCcQcfp+8G5VZEaFRDSMPja3qGm5Y6mFm1R/ni7P5lpa3+cR3SNJNCX9l9A==
-X-Received: by 2002:a17:906:90c9:b0:6fe:9e40:5cc with SMTP id v9-20020a17090690c900b006fe9e4005ccmr46125940ejw.367.1653921508038;
-        Mon, 30 May 2022 07:38:28 -0700 (PDT)
-Received: from miu.piliscsaba.redhat.com (catv-178-48-189-3.catv.fixed.vodafone.hu. [178.48.189.3])
-        by smtp.gmail.com with ESMTPSA id bh19-20020a170906a0d300b006ff802baf5dsm910684ejb.54.2022.05.30.07.38.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 07:38:27 -0700 (PDT)
-Date:   Mon, 30 May 2022 16:38:24 +0200
-From:   Miklos Szeredi <miklos@szeredi.hu>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        ChenXiaoSong <chenxiaosong2@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liuyongqiang13@huawei.com, "zhangyi (F)" <yi.zhang@huawei.com>,
-        zhangxiaoxu5@huawei.com, Steve French <smfrench@gmail.com>,
-        NeilBrown <neilb@suse.de>
-Subject: Re: [PATCH -next,v2] fuse: return the more nuanced writeback error
- on close()
-Message-ID: <YpTW4LNGGzuXu/bq@miu.piliscsaba.redhat.com>
-References: <20220523014838.1647498-1-chenxiaosong2@huawei.com>
- <CAJfpegt-+6oSCxx1-LHet4qm4s7p0jSoP9Vg8PJka3=1dqBXng@mail.gmail.com>
- <9915b7b556106d2a525941141755adcca9e50163.camel@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PwYudAlsrV6L0E/1oct3kLnDMatMHOnVQrUxmfQHNp0=;
+        b=aoPXoIOYdhP8cLmwgoLQBRKqKz87uOKGoGp2WRT8WCelpPCiyjAqqm/N/1Fyaqqj7i
+         9EpRd4LnnfG24ufFc0WoLojpisWHGN5149fJqESDyTwNiG2uwu0eQ55j3mn+s0vacKHh
+         eigz2zr5Yh8gEd1LwGqWYjOvMYznSQaoEXObuJsvU3G33SBEuRsEDun2bJWXjZFjL131
+         hIJRv0sz+Yij7YJggW9sTQp/ilq/QkJjE6BMnnmeDHUBVV74KO6hwbnRUMs+N4HpgDoG
+         98KW9XWstKZleeBhmwQz/E87cIcBmRfevhNteJjJZ+lPpJnys9C2zD5ls7ugGZlOY8hb
+         5rSw==
+X-Gm-Message-State: AOAM533KDGkmo1GnxSNfa5ZeMNdzyV3mJ/ced2T/4aotX++ACxFArTVa
+        d/zufvtSTrCnNvvCZYWlZwAvgApjqI6jyDTYe7o=
+X-Google-Smtp-Source: ABdhPJwrsgLQtAtWqwcrdq2e1TjIgoIDbrErxGbmJH2wa0Fkm6oxdLbvdkS+K4BYIuwE3er69f8iVYy5UEogxMtnFeI=
+X-Received: by 2002:a25:21c3:0:b0:64a:b29a:9b0d with SMTP id
+ h186-20020a2521c3000000b0064ab29a9b0dmr54184246ybh.59.1653921585005; Mon, 30
+ May 2022 07:39:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9915b7b556106d2a525941141755adcca9e50163.camel@kernel.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-8-tmaimon77@gmail.com>
+ <20220526192412.8ECAAC385A9@smtp.kernel.org>
+In-Reply-To: <20220526192412.8ECAAC385A9@smtp.kernel.org>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Mon, 30 May 2022 17:39:34 +0300
+Message-ID: <CAP6Zq1gtB_kiEutV=uE30nev_S0rAjs=9BdMnqQbAbi-M1W6iQ@mail.gmail.com>
+Subject: Re: [PATCH v1 07/19] dt-binding: clk: npcm845: Add binding for
+ Nuvoton NPCM8XX Clock
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Olof Johansson <olof@lixom.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Patrick Venture <venture@google.com>,
+        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Nancy Yuen <yuenn@google.com>, SoC Team <soc@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 10:02:06AM -0400, Jeff Layton wrote:
+Hi Stephen,
 
-> The main difference is that ->flush is called from filp_close, so it's
-> called when a file descriptor (or equivalent) is being torn down out,
-> whereas ->fsync is (obviously) called from the fsync codepath.
-> 
-> We _must_ report writeback errors on fsync, but reporting them on the
-> close() syscall is less clear. The thing about close() is that it's
-> going be successful no matter what is returned. The file descriptor will
-> no longer work afterward regardless.
-> 
-> fsync also must also initiate writeback of all the buffered data, but
-> it's not required for filesystems to do that on close() (and in fact,
-> there are good reasons not to if you can). A successful close() tells
-> you nothing about whether your data made it to the backing store. It
-> might just not have been synced out yet.
-> 
-> Personally, I think it's probably best to _not_ return writeback errors
-> on close at all. The only "legitimate" error on close is -EBADF.
-> Arguably, we should make ->flush be void return. Note that most
-> filp_close callers ignore the error anyway, so it's not much of a
-> stretch.
-> 
-> In any case, if you do decide to return errors in fuse_flush, then
-> advancing the cursor would also have the effect of masking writeback
-> errors on dup()'ed file descriptors, and I don't think you want to do
-> that.
+Thanks for your comments.
 
-Thanks for clarifying.
+The patch will modify according to your comments and will be sent in
+the next kernel revision 5.19.rc1
 
-Chen, would the following patch make sense for your case?
+On Thu, 26 May 2022 at 22:24, Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Tomer Maimon (2022-05-22 08:50:34)
+> > diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> > new file mode 100644
+> > index 000000000000..f305c7c7eaf0
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> > @@ -0,0 +1,68 @@
+> [...]
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - "#clock-cells"
+>
+> Are clocks not required because sometimes the reference clk isn't
+> connected?
+require, will be fixed
+>
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  # Clock Control Module node:
+> > +  - |
+> > +
+> > +    ahb {
+>
+> drop ahb node please.
+>
+> > +        #address-cells = <2>;
+> > +        #size-cells = <2>;
+> > +
+> > +        clk: clock-controller@f0801000 {
+>
+> Drop label 'clk' as well please.
+>
+> > +            compatible = "nuvoton,npcm845-clk";
+> > +            reg = <0x0 0xf0801000 0x0 0x1000>;
+> > +            #clock-cells = <1>;
+> > +        };
+> > +    };
+> > +
+> > +...
 
-Thanks,
-Miklos
+Best regards,
 
----
- fs/fuse/file.c |    5 -----
- 1 file changed, 5 deletions(-)
-
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -487,11 +487,6 @@ static int fuse_flush(struct file *file,
- 	fuse_sync_writes(inode);
- 	inode_unlock(inode);
- 
--	err = filemap_check_errors(file->f_mapping);
--	if (err)
--		return err;
--
--	err = 0;
- 	if (fm->fc->no_flush)
- 		goto inval_attr_out;
- 
+Tomer

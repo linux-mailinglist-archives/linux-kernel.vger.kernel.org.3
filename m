@@ -2,122 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04BA537B49
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97347537B5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236474AbiE3NVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 09:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
+        id S236527AbiE3NYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 09:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbiE3NVr (ORCPT
+        with ESMTP id S230415AbiE3NYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 09:21:47 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BECC1092
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:21:46 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id d5-20020a05600c34c500b0039776acee62so4464123wmq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=KSDG0U/1IGZ7kluecMX3prlFwmehmdHTdLX0wbLPlIQ=;
-        b=CTPzIl/SwkN6uFzKkt0yVkMrGn40XVdsQxpOnk5/4EBhO07WjBX5Am0zFchnMY97a8
-         F1JyUP2gfFeNojp2ICfmSK81ILDiZz4IQ68ddZzZ+Mupt54t/un/nYux/P2DLP5c0nYW
-         A8o2V0Hv6z5nLySq9C43Y/uJJ8kEGZ9GsgPYEDa8HNfDBHJkUZzu5IMggRW5ljaq8+s6
-         9yJbqdPpGvg7PtnxWVsrpjxQMEJwxT1f41KpmR4kMESbpV59oyR1Do5uySOJ1p3BWdC6
-         032TOcPWjuN4p/1ZsYgNcuQiLuRNu2bw4vTVO8LNwbj1JdJMH4//FcJnoeYXroimV7fi
-         vH3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=KSDG0U/1IGZ7kluecMX3prlFwmehmdHTdLX0wbLPlIQ=;
-        b=oT+PW6T2+4dP5zAFtcyHXjTIvlILqyPh8U3Xwvrtvh8enULgZaVrfJWM7AFajgaoOG
-         RU+j7WF4VFpO/gdHbQpmYpwpw/6W9psUWaFH2oACgSo0+NV6BF0nXMkYccDMbjKfm1X2
-         IPA3Rce9FoY5Tr1QJZTbCx9gmFOpy7SyRVHM1pTkEj8FU+TNbN6sOMeSAW6pWXWKqhQ6
-         tBUHaWVHPD4dwvCVZP7MTnViLD6jefcEn6OYmKW1DrFnTJ9kg5RwZkVIR68yLY3QcjaJ
-         jDdZi5+j5QxXpy2pBAkQEaYbBAV5lricLyW6xASagKacAymvnsWfBTJ/Z1aU1ovzd1+4
-         uuIg==
-X-Gm-Message-State: AOAM530gP/ppv2WfjLJZcWzGqbYLE4WCahiNTxYUnD7KA1VuElLXN14u
-        YCMiMLJi871JCXMtlIYXnFH1zA==
-X-Google-Smtp-Source: ABdhPJzV3KDqUNmfgjA421DMwTXIrMmm8oPMs2OygyRZysZ922uLjHWXV68osV9j7j0U4HYOtUuZ8A==
-X-Received: by 2002:a7b:c3c2:0:b0:394:9229:3b40 with SMTP id t2-20020a7bc3c2000000b0039492293b40mr19359442wmj.195.1653916904958;
-        Mon, 30 May 2022 06:21:44 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:9c:201:c918:d0ea:5b07:e1c3])
-        by smtp.gmail.com with ESMTPSA id l36-20020a05600c08a400b003942a244f48sm9778734wmp.33.2022.05.30.06.21.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 06:21:44 -0700 (PDT)
-Date:   Mon, 30 May 2022 15:21:37 +0200
-From:   Marco Elver <elver@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
-        jbaron@akamai.com, rostedt@goodmis.org, ardb@kernel.org,
-        mark.rutland@arm.com
-Subject: Re: [PATCH 6/7] x86: Always inline on_thread_stack() and
- current_top_of_stack()
-Message-ID: <YpTE4YUoTvtGB/6Y@elver.google.com>
-References: <20220526105252.440440893@infradead.org>
- <20220526105958.071435483@infradead.org>
+        Mon, 30 May 2022 09:24:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85C162F6;
+        Mon, 30 May 2022 06:24:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8262FB80D84;
+        Mon, 30 May 2022 13:24:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17BABC385B8;
+        Mon, 30 May 2022 13:24:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653917068;
+        bh=v6STE/M7umHmQhXZl5W6Am/3Zz1pQY0LUnmLP5HuXO8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PSH1Y5HK/smNoPMvz4Yg5A+BFRA46DwGlSgwBfM3AVYTZulg5alVgvdbLn03ROotT
+         hDZrojGNubPP8GSMntc1dji17j4hszFJ/ctOsRpD022Gn29DTLkuxyNMAExaWXvQW8
+         6W7XYfYWklKlXoK/So3Xubh5/LA+xxjO43TxBMoFLHePf42+2CtTity04YMG3+Lkp8
+         GseBofE6XQWSSYQDpjXlRVfTvL7dgyRKUSpS4tEO0heFlH6LJ8t5wNckMoJO3T7b+c
+         HlH31PfRdhiNp03k89eJWrH5IyuBkwP7jK3NPK52WVdFllnCmat01RrzUgWAaK/NUG
+         A/eLeVeCA20Ww==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
+        Raviteja Goud Talla <ravitejax.goud.talla@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>, dwmw2@infradead.org,
+        joro@8bytes.org, will@kernel.org, iommu@lists.linux-foundation.org
+Subject: [PATCH AUTOSEL 5.18 001/159] iommu/vt-d: Add RPLS to quirk list to skip TE disabling
+Date:   Mon, 30 May 2022 09:21:46 -0400
+Message-Id: <20220530132425.1929512-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220526105958.071435483@infradead.org>
-User-Agent: Mutt/2.1.4 (2021-12-11)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 12:52PM +0200, Peter Zijlstra wrote:
-> Becaues GCC clearly lost it's marbles again...
-> 
+From: Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>
 
-This must have been with some of the big sanitizers though, right?
+[ Upstream commit 0a967f5bfd9134b89681cae58deb222e20840e76 ]
 
-> vmlinux.o: warning: objtool: enter_from_user_mode+0x4e: call to on_thread_stack() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x53: call to on_thread_stack() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x4e: call to on_thread_stack() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x4e: call to on_thread_stack() leaves .noinstr.text section
-> 
-> vmlinux.o: warning: objtool: enter_from_user_mode+0x4e: call to current_top_of_stack() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x53: call to current_top_of_stack() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x4e: call to current_top_of_stack() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x4e: call to current_top_of_stack() leaves .noinstr.text section
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+The VT-d spec requires (10.4.4 Global Command Register, TE
+field) that:
 
-Acked-by: Marco Elver <elver@google.com>
+Hardware implementations supporting DMA draining must drain
+any in-flight DMA read/write requests queued within the
+Root-Complex before completing the translation enable
+command and reflecting the status of the command through
+the TES field in the Global Status register.
 
-> ---
->  arch/x86/include/asm/processor.h |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> --- a/arch/x86/include/asm/processor.h
-> +++ b/arch/x86/include/asm/processor.h
-> @@ -559,7 +559,7 @@ static __always_inline void native_swapg
->  #endif
->  }
->  
-> -static inline unsigned long current_top_of_stack(void)
-> +static __always_inline unsigned long current_top_of_stack(void)
->  {
->  	/*
->  	 *  We can't read directly from tss.sp0: sp0 on x86_32 is special in
-> @@ -569,7 +569,7 @@ static inline unsigned long current_top_
->  	return this_cpu_read_stable(cpu_current_top_of_stack);
->  }
->  
-> -static inline bool on_thread_stack(void)
-> +static __always_inline bool on_thread_stack(void)
->  {
->  	return (unsigned long)(current_top_of_stack() -
->  			       current_stack_pointer) < THREAD_SIZE;
-> 
-> 
+Unfortunately, some integrated graphic devices fail to do
+so after some kind of power state transition. As the
+result, the system might stuck in iommu_disable_translati
+on(), waiting for the completion of TE transition.
+
+This adds RPLS to a quirk list for those devices and skips
+TE disabling if the qurik hits.
+
+Link: https://gitlab.freedesktop.org/drm/intel/-/issues/4898
+Tested-by: Raviteja Goud Talla <ravitejax.goud.talla@intel.com>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Acked-by: Lu Baolu <baolu.lu@linux.intel.com>
+Signed-off-by: Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>
+Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220302043256.191529-1-tejaskumarx.surendrakumar.upadhyay@intel.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/iommu/intel/iommu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 0ea47e17b379..ba9a63cac47c 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -5031,7 +5031,7 @@ static void quirk_igfx_skip_te_disable(struct pci_dev *dev)
+ 	ver = (dev->device >> 8) & 0xff;
+ 	if (ver != 0x45 && ver != 0x46 && ver != 0x4c &&
+ 	    ver != 0x4e && ver != 0x8a && ver != 0x98 &&
+-	    ver != 0x9a)
++	    ver != 0x9a && ver != 0xa7)
+ 		return;
+ 
+ 	if (risky_device(dev))
+-- 
+2.35.1
+

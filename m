@@ -2,45 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBD453791E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E705537925
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235214AbiE3K3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
+        id S233970AbiE3KeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbiE3K3J (ORCPT
+        with ESMTP id S229457AbiE3Kd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:29:09 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DA77C16B;
-        Mon, 30 May 2022 03:29:01 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 73F851C0B82; Mon, 30 May 2022 12:28:59 +0200 (CEST)
-Date:   Mon, 30 May 2022 12:28:59 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Pavel Machek <pavel@denx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 4.14 04/33] Input: stmfts - fix reference leak in
- stmfts_input_open
-Message-ID: <20220530102859.GA32111@duo.ucw.cz>
-References: <20220523165746.957506211@linuxfoundation.org>
- <20220523165747.818755611@linuxfoundation.org>
- <20220525105248.GA31002@duo.ucw.cz>
- <Yo5vmwfaJKhg9fzF@google.com>
+        Mon, 30 May 2022 06:33:58 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860D763535;
+        Mon, 30 May 2022 03:33:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653906836; x=1685442836;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=uaWrA9Ka6myw33tDlOhmilsHeblqSEZ4ITcAA+dKBEk=;
+  b=WbugykDdHpdWno0rxwICS/cC7Nfj3BRTHG3TZ9QOXIxt0wguQ1/ccuC/
+   zKgXJjI1XIbh6NjtbQ1OCUQDDdOKxTocagAVNCcIznbEMxVSOqlZY/J0u
+   iNvnDYiPC0vezSBzAYJ3QrTtY/QK/RNhsJ3CEYTlLEdlYThC/MsHKQOBt
+   Y=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 30 May 2022 03:33:56 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 03:33:55 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 30 May 2022 03:33:54 -0700
+Received: from [10.50.10.34] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 30 May
+ 2022 03:33:50 -0700
+Message-ID: <4b9a2abe-c462-81d9-2098-d430da24f030@quicinc.com>
+Date:   Mon, 30 May 2022 16:03:47 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="uAKRQypu60I7Lcqm"
-Content-Disposition: inline
-In-Reply-To: <Yo5vmwfaJKhg9fzF@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V13 7/9] regulator: Add a regulator driver for the PM8008
+ PMIC
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
+        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
+References: <1653043777-24003-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1653043777-24003-8-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n53WLYR1pjnr6wASVmXXQ7xTq5n2Q7GdeKOCkWf4H4n=0A@mail.gmail.com>
+ <e70aceba-02d5-15b5-46d0-d5ed5706e81a@quicinc.com>
+ <CAE-0n539gePyXhw7r+XcaHtooN98KfYsx_qwgDaFkJtMSg+80g@mail.gmail.com>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+In-Reply-To: <CAE-0n539gePyXhw7r+XcaHtooN98KfYsx_qwgDaFkJtMSg+80g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -48,59 +78,93 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---uAKRQypu60I7Lcqm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 5/28/2022 2:32 AM, Stephen Boyd wrote:
+> HTML mail? Please send plaintext next time.
+>
+> Quoting Satya Priya Kakitapalli (Temp) (2022-05-27 01:24:19)
+>> On 5/21/2022 8:26 AM, Stephen Boyd wrote:
+>>
+>>      Quoting Satya Priya (2022-05-20 03:49:35)
+>>
+>>          diff --git a/drivers/regulator/qcom-pm8008-regulator.c b/drivers/regulator/qcom-pm8008-regulator.c
+>>          new file mode 100644
+>>          index 0000000..6e815c6
+>>          --- /dev/null
+>>          +++ b/drivers/regulator/qcom-pm8008-regulator.c
+>>          @@ -0,0 +1,225 @@
+>>          +// SPDX-License-Identifier: GPL-2.0-only
+>>          +/* Copyright (c) 2022, The Linux Foundation. All rights reserved. */
+>>          +
+>>          +#include <linux/device.h>
+>>          +#include <linux/kernel.h>
+>>          +#include <linux/mfd/qcom_pm8008.h>
+>>          +#include <linux/module.h>
+>>          +#include <linux/of.h>
+>>          +#include <linux/of_device.h>
+>>
+>>      What in of_device.h is used?
+>>
+>>
+>> struct of_device_id
+> That struct is defined in mod_devicetable.h, not of_device.h
+>
+>>
+>>
+>>          +#include <linux/platform_device.h>
+>>          +#include <linux/regmap.h>
+>>          +#include <linux/regulator/driver.h>
+>>          +
+> [...]
+>>
+>>          +};
+>>          +
+>>          +static int pm8008_regulator_get_voltage(struct regulator_dev *rdev)
+>>          +{
+>>          +       struct pm8008_regulator *pm8008_reg = rdev_get_drvdata(rdev);
+>>          +
+>>          +       return pm8008_reg->voltage_selector;
+>>
+>>      Can this read the hardware instead of caching the value from
+>>      pm8008_regulator_set_voltage()?
+>>
+>>
+>> I can use the regmap_bulk_read like below (which was present in the earlier
+>> versions)
+> Please do
+>
+>>          +       }
+>>          +
+>>          +       pm8008_reg->dev = dev;
+>>          +
+>>          +       rc = of_property_read_string(dev->of_node, "regulator-name", &name);
+>>          +       if (rc)
+>>          +               return rc;
+>>          +
+>>          +       /* get the required regulator data */
+>>          +       for (i = 0; i < ARRAY_SIZE(reg_data); i++)
+>>          +               if (strstr(name, reg_data[i].name))
+>>
+>>      Why not find this via reg/address instead? It would save storing the
+>>      regulator name in the reg_data table.
+>>
+>>
+>> You mean match this using base address? then we should add base address in the
+>> reg_data table. We will need the name to be stored in reg_data table anyway for
+>> the pm8008_reg->rdesc.of_match
+> Why? Now that this driver binds to each node individually the usage of
+> of_match doesn't make any sense to me. Can you set 'struct
+> regulator_config::dev' instead and not set of_match?
 
-Hi!
 
-> > > From: Zheng Yongjun <zhengyongjun3@huawei.com>
-> > >=20
-> > > [ Upstream commit 26623eea0da3476446909af96c980768df07bbd9 ]
-> > >=20
-> > > pm_runtime_get_sync() will increment pm usage counter even it
-> > > failed. Forgetting to call pm_runtime_put_noidle will result
-> > > in reference leak in stmfts_input_open, so we should fix it.
-> >=20
-> > This is wrong, AFAICT.
->=20
-> Yes, I think you are right. How about below?
+Currently we are setting regulator_config::dev as dev->parent i.e., 
+pm8008@8, because the parent supplies are present under pm8008@8, to get 
+the regulators mapped correctly to the parent supplies we are using 
+dev->parent.
 
-Looks good to me.
+If we do not set of_match in regulator descriptor, 
+regulator_of_get_init_node() would return NULL, causing init_data to be 
+NULL during regulator_register and regulators are not getting probed. 
+This can be resolved, if we get the init_data during pm8008_probe 
+itself. I'll do that in the next version.
 
-> Input: stmfts - do not leave device disabled in stmfts_input_open
->=20
-> From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
->=20
-> The commit 26623eea0da3 attempted to deal with potential leak of runtime
-> PM counter when opening the touchscreen device, however it ended up
-> erroneously dropping the counter in the case of successfully enabling the
-> device.
->=20
-> Let's address this by using pm_runtime_resume_and_get() and then executing
-> pm_runtime_put_sync() only when we fail to send "sense on" command to the
-> device.
->=20
-> Fixes: 26623eea0da3 ("Input: stmfts - fix reference leak in stmfts_input_=
-open")
 
-Reviewed-by: Pavel Machek <pavel@denx.de>
-
-Thank you,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---uAKRQypu60I7Lcqm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYpScawAKCRAw5/Bqldv6
-8vA0AJ0WjbKH+mFtXAIKAZ3By6pG9v1jhgCfTV013nZ/6CHe/OW8Cyz5Utg7wrE=
-=73fp
------END PGP SIGNATURE-----
-
---uAKRQypu60I7Lcqm--

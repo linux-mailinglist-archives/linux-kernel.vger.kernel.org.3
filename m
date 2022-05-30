@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC406538431
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6A95383E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240140AbiE3PKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
+        id S237455AbiE3POM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242520AbiE3PKX (ORCPT
+        with ESMTP id S236710AbiE3PNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:10:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BF3268FBB
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:08:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653919738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=B2gLpclaR1OD0ds87WG+CHvKTXHfN/d11Umv3JQ16uk=;
-        b=i4eVQY8/OuyGo/HSRvQLvvO4/TipVOqarRFyD0VwnbUJE3xJF5xLpG04/eunrZaWAlZgDV
-        d4fHqT4fmqC7c9sobrXvlIznG4rfLpEP4TXBzH/D5BMZ5xMMbrQgD627J4QlA5tEBscmpV
-        o0qanxIyBhz8E6jKkMBBUsliEhqDJtg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-UzopWHUSOW202Wxlj5ukTw-1; Mon, 30 May 2022 10:08:56 -0400
-X-MC-Unique: UzopWHUSOW202Wxlj5ukTw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 30 May 2022 11:13:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269F31A0067
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:13:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 60F6180013E;
-        Mon, 30 May 2022 14:08:56 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AA74EC15E72;
-        Mon, 30 May 2022 14:08:55 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] afs: Fix infinite loop found by xfstest generic/676
-From:   David Howells <dhowells@redhat.com>
-To:     marc.dionne@auristor.com
-Cc:     linux-afs@lists.infradead.org, dhowells@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 30 May 2022 15:08:54 +0100
-Message-ID: <165391973497.110268.2939296942213894166.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5E4BACE106B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 14:13:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DC87C385B8;
+        Mon, 30 May 2022 14:13:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653920011;
+        bh=M+00GOuXuD3qATD1qzKNz1hVq15YrxTq0pMnKrwvVeY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jox3gxFnMJU1mWKLehrO+A1MOhqnkIk7Oipg39sFbcHHnmKaAZRVYrdTuaBEpmjv4
+         lcL8dWWain6ty0I9wQNm9Vw7QzIFXnBizSCFStfVcFmRDZkwgun69wdrtci3b7hUPW
+         +zReSXJAeShCyXWK42qBF4IHy/m4cBrc2bl9vAPQyk225seicmLauLtIWEHCVJcp44
+         sXOJm2iEuiqEDWBEEInwuh95ouU0kF/xff/7NA8jlRTspt7AYYXFhOb4nhtxFesJu/
+         7dBN1CAf7eaBv5oigmIAH4rgI79QGcl5OF+ZlwAmbY7P9RpDu2UPPFB5vrvNt+6eb9
+         pOyi3WIrvBhDA==
+Date:   Mon, 30 May 2022 16:13:27 +0200
+From:   Mark Brown <broonie@kernel.org>
+To:     Raghu Bankapur <quic_rbankapu@quicinc.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Krishna Jha <quic_kkishorj@quicinc.com>
+Subject: Re: [PATCH V0 1/1] asoc: msm: use hashtable to check kcontrol
+Message-ID: <YpTRB6rwGGUnUmvK@sirena.org.uk>
+References: <cover.1653813866.git.quic_rbankapu@quicinc.com>
+ <ad55bbd41cc253acb9af6ac068c15dd1545ecd81.1653813866.git.quic_rbankapu@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w30vGsfjdTtApDVJ"
+Content-Disposition: inline
+In-Reply-To: <ad55bbd41cc253acb9af6ac068c15dd1545ecd81.1653813866.git.quic_rbankapu@quicinc.com>
+X-Cookie: May your camel be as swift as the wind.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,53 +59,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In AFS, a directory is handled as a file that the client downloads and
-parses locally for the purposes of performing lookup and getdents
-operations.  The in-kernel afs filesystem has a number of functions that do
-this.  A directory file is arranged as a series of 2K blocks divided into
-32-byte slots, where a directory entry occupies one or more slots, plus
-each block starts with one or more metadata blocks.
 
-When parsing a block, if the last slots are occupied by a dirent that
-occupies more than a single slot and the file position points at a slot
-that's not the initial one, the logic in afs_dir_iterate_block() that skips
-over it won't advance the file pointer to the end of it.  This will cause
-an infinite loop in getdents() as it will keep retrying that block and
-failing to advance beyond the final entry.
+--w30vGsfjdTtApDVJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fix this by advancing the file pointer if the next entry will be beyond it
-when we skip a block.
+On Sun, May 29, 2022 at 02:20:09PM +0530, Raghu Bankapur wrote:
 
-This was found by the generic/676 xfstest but can also be triggered with
-something like:
+> index 5dcf77af07af..0eb18f8ee6fd 100644
+> --- a/sound/soc/Kconfig
+> +++ b/sound/soc/Kconfig
+> @@ -58,6 +58,15 @@ config SND_SOC_TOPOLOGY_KUNIT_TEST
+>  config SND_SOC_ACPI
+>  	tristate
+> =20
+> +config SND_CTL_HASHTABLE
+> +	bool "Add SND CTL hashtable"
+> +	help
+> +	  This enables hash table in sound card for kcontrols. The traditional =
+way is
 
-	~/xfstests-dev/src/t_readdir_3 /xfstest.test/z 4000 1
+Since the rest of the change is to the ALSA core this should be
+in the core ALSA Kconfig, though I'm also wondering if there's
+any reason to make it configurable at all - is there any big
+downside to just using the hastable all the time?  This sort of
+tuning control tends to be a bit unclear for users.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
----
+--w30vGsfjdTtApDVJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
- fs/afs/dir.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/fs/afs/dir.c b/fs/afs/dir.c
-index 932e61e28e5d..bdac73554e6e 100644
---- a/fs/afs/dir.c
-+++ b/fs/afs/dir.c
-@@ -463,8 +463,11 @@ static int afs_dir_iterate_block(struct afs_vnode *dvnode,
- 		}
- 
- 		/* skip if starts before the current position */
--		if (offset < curr)
-+		if (offset < curr) {
-+			if (next > curr)
-+				ctx->pos = blkoff + next * sizeof(union afs_xdr_dirent);
- 			continue;
-+		}
- 
- 		/* found the next entry */
- 		if (!dir_emit(ctx, dire->u.name, nlen,
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKU0QcACgkQJNaLcl1U
+h9CgDgf8CA1ZjPNPDW9eTebFImHbdjUFqR86l8zehQwy0N0Cwxx9Sfpe7WQPbR9a
+ZeJ9L4cgNQ0e7l4+txIc+i+G/BzIOc5ojK3/OiUqTlCaiie5bP9aNVVd1SaHVCRW
+2buYD+83wCTYdpjRDHd6stmHc2XDZCkRRmeYeaKFNINNNe2ovg8W+LteV7dZdX9S
+/K8cHu+bIJzdUetALHkKS/jyHyD1xX0QVb7b6vQOfKmlelGVyVq7i5VVOso/tvqV
+A/Rmy8HUwbCbQieD2zGxsvRK4k50/tQH/1GmHp5O8vVzPfuqZRbHNR7dodJnz9gA
+fM18/fn88qbrP4HiYNiVKDnJ2heShA==
+=98Bq
+-----END PGP SIGNATURE-----
 
-
+--w30vGsfjdTtApDVJ--

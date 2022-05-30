@@ -2,170 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7805375DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5865375F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232364AbiE3Htk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59024 "EHLO
+        id S234161AbiE3Hvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbiE3Hs4 (ORCPT
+        with ESMTP id S234020AbiE3HuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:48:56 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60044.outbound.protection.outlook.com [40.107.6.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B31B71D8B;
-        Mon, 30 May 2022 00:48:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K+KCWI+7iUp8grU/4Q07wgC4uDh6RpOQelIbg4gEOh/7s0T3Bw5J0O4bwXbCYiayyvAMqW/N53efXiYegez0z5C/agEYvTZ+6Cww7Sc+721UkcqRoKRNL+b3vN0HaagTInxBObecD2W0dVruDj9tFwFRiLSmsxeQmKoklHwTLkTWTdl8WSxenuNZZLd4Q758NssWyTK4OYed7RRykqjMNO7VeLV2Ul8Me28T+AGG0dI8ENjEUJPkLSKA/iyOM4x54PL78ysMqMt1Z1E+06OGG575DSUmxrleYRgMQR7/uutTQSMBd+a47SOJGjwkrOzXlN17hk0QZYkX8v4aXsHJpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wldO5Mwxe7XSyHRxNqBjPrwzyUBp+vSZB1mEGZn6yvI=;
- b=J7OSGAe5AbK1K2yt99b4vd05ZaQERlHOXLGxhbDJPB3Vg1P/nLKC68y/BbsrxfJV/aze0uQ5tOvzzJUEATH1YfvpPDThXQBLujP/ILvh9XLbID5eKlDNfdr2290Ww08CebL/zLlxHYSQ7B8VixhfTE869pYJvdanta74VySDIP6LJ1Dwe/ljDZwUKd5JqV6fm7b/3Gi7gSvQiptedJ0JDrnub0TrTTB+TJ1P3NFL+KcPyoSJKpZNKJIUrEu5AMrrnwGeGD+W1W4u8d8a38hRqYYONyYMAsKm2dgJc8usGbbdBL7Ai3Xe3B4i1ukkImGYtsg2XJsHkfhROWAYLhAiIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wldO5Mwxe7XSyHRxNqBjPrwzyUBp+vSZB1mEGZn6yvI=;
- b=bfSZitAGSCd0yLB4B1zMA5WxkoUl1jGI6PCIyB01WdKX8/ajjJilDAXi3wCWfGxN9DjhtBEu4N66Op8Lm/sKO6VEUfULV/PaoLHKyl0hbBYcnHg94SIQYs0XY2geil/szeiCnpx8XsbeLmbvXMDmMWuZ3fgFNeI2w/6YvkSrj/4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by DB7PR04MB5452.eurprd04.prod.outlook.com (2603:10a6:10:84::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.19; Mon, 30 May
- 2022 07:48:53 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::bc48:7565:c619:62c3]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::bc48:7565:c619:62c3%7]) with mapi id 15.20.5293.018; Mon, 30 May 2022
- 07:48:52 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mchehab@kernel.org, mirela.rabulea@oss.nxp.com,
-        hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3] media: imx-jpeg: Leave a blank space before the configuration data
-Date:   Mon, 30 May 2022 15:48:37 +0800
-Message-Id: <20220530074837.14643-1-ming.qian@nxp.com>
-X-Mailer: git-send-email 2.36.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0054.apcprd02.prod.outlook.com
- (2603:1096:4:196::13) To AM6PR04MB6341.eurprd04.prod.outlook.com
- (2603:10a6:20b:d8::14)
+        Mon, 30 May 2022 03:50:24 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA1B6300
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:50:16 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id qe5-20020a17090b4f8500b001e26126abccso6755342pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:50:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S3Tbyt5KcpmGR11iN8hvh+Wl6ORt3Cqz1+TY0tIhK3E=;
+        b=uSQgQQfj5GqDrXU1zWs9WINjEKu656aXs9Fnzv6IGozce0pAhlKELt28GKZJz0Iytb
+         WVaK3qt0SZvF9omLClcJC1XjtSHHkN4kFVqbLTBOCUpOqhbAXv1Baga55URrifp4GzMs
+         OyoiVxPt8ri6Q3lu9a/+7IKmnWfVTBhbI9jrseo/aEfwl0CERh78WFAt3XAQiOk6ARHM
+         B0syr/Pp/7WeA9P8s0xh7cw6Unvrn5G+yHzfx4FsNCYYvqHP/BFTGTz43+IFbLLStNti
+         sgCNa0zBlIowrUwDfLfp84x+oJrY5jwytHHe60wTRfdq4aCx3r3CSUvVKplUluVJcZbL
+         gEKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S3Tbyt5KcpmGR11iN8hvh+Wl6ORt3Cqz1+TY0tIhK3E=;
+        b=nVXCB3KvDML/Z/Gf1ePs64CjUS3b/Hl/SsH7adm7UIWXUrBm02Wnl21P6Oq2bAw6Hr
+         MrE0cPDGGY/Qp4432RlRlYiyavHE0dXmcaFHyaEa5tOmx+pgmDHghcL7AmY26zpI/c/k
+         3VKrN1nR58ZEeaIOgpmNkMSB2LinJc014Z2x8S778Q5RvEmg3hu2CZozgt9ZY6uINy8V
+         eJXsogOnWzOrfn4KlpJVh5Nfm2vHTLkjrHp352uWiMow4mw/XKZqW5XbZAY9hiOO3TAk
+         KOyXgnJeW/fHtNh85Teo439WBjlT6nUsrQYCwuihqgFKPh4if2tMk7Ji+lcEEQ15lLNW
+         Xi2w==
+X-Gm-Message-State: AOAM531/wfbL/PXqf0GK0GvoAy1xdXSeJ+o/dKUh3wmc/y/dvLoQTJPF
+        167SE0DQbzmHw9ZL3lyTNEMEEQ==
+X-Google-Smtp-Source: ABdhPJxiOFKQmnWR0xGMOJtuFa01j/rINpkSTW4MnEPt0QGI1zIerAdsROSLkXaF8x1MHGpGcQM1ag==
+X-Received: by 2002:a17:90b:4d8b:b0:1dc:a9c0:3d53 with SMTP id oj11-20020a17090b4d8b00b001dca9c03d53mr21414474pjb.29.1653897015552;
+        Mon, 30 May 2022 00:50:15 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([2408:8207:18da:2310:2071:e13a:8aa:cacf])
+        by smtp.gmail.com with ESMTPSA id a23-20020a170902b59700b001616c3bd5c2sm8421381pls.162.2022.05.30.00.50.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 00:50:14 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
+        shakeelb@google.com, akpm@linux-foundation.org
+Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        longman@redhat.com, Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v5 00/11] Use obj_cgroup APIs to charge the LRU pages
+Date:   Mon, 30 May 2022 15:49:08 +0800
+Message-Id: <20220530074919.46352-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 13a97624-765f-4d06-eb36-08da4210d759
-X-MS-TrafficTypeDiagnostic: DB7PR04MB5452:EE_
-X-Microsoft-Antispam-PRVS: <DB7PR04MB54526FFB87BFC584044C7584E7DD9@DB7PR04MB5452.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BXY0JuE7cr3+kCGRhNZHsbcqdD2FPxwBhopxbZAS7bF+Szo+09bVifrOLyWmCwF2hqO4JD8YzuFJ1L6sbXMH+8u5PjbIf3D7X5LeTWLvDEaygLMSNldX187SNK+rvvrHpa5uXYIdUgYTqV6KRGTHSnLCmMlJDSDegyorOyuksUhq5FzDw7P2Rzya2nSdnplehmh4eQPiiQplsQL2SmA9Pn561u1hRvsX6BEmWELR6UEPfKEnjDP5jDjU4eKTcRkWVsJ8SIgTBy2M3E6jBuOdqjV/ePdrK1pcXImco09NF7F54H1iQP3LhUnKgcOkZXcGPH+c1BoZuGJr3NZSfBbYQuRcPAxFDdrSzrTBcJ8KNhr+IjoIyVXTyA2teDAIw4c3DAwqVNx/gxAABteafKdJp55za+5H3l8s5GRuyZRoFud+00ZPE5CgQW6ef8eSeoRgJ4zcPT1ft9H7X9U6Bak/tnLi+vFuZBrJTsvmujBfRd7gPRcIqg1KxmzhYDwafW2rWPOsgEO2YKkOEzv9wKiFZxD4M+75/SzKnQ/7uyzHVlebRFBnHN6ZNGAy06t2yQTRfF87hbE8uNXg1G8ZRWEmtNIX5ysGvQSzHtQZeb6Kc53RLoGAFZihaGG8uYrGTn3pxPouH47MntJ0GTDapsJnAPJ/A64Xf1h+7d96+Tr7HAfh81MQdMscSt58rFbLiTu8ThpgPhdqOYSPmrnYDK8JCw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38350700002)(66556008)(66946007)(66476007)(36756003)(38100700002)(7416002)(6666004)(316002)(8936002)(1076003)(86362001)(186003)(5660300002)(52116002)(2616005)(2906002)(4326008)(8676002)(508600001)(83380400001)(26005)(6506007)(6512007)(44832011)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WSLJZjytOFxPno2ahuUExXpiZKtscJN3bXdd+/6zEk1PHfqDsCUZhJ/DjQdX?=
- =?us-ascii?Q?xJ8p9r3hZVKsziwupZL14lSftY/JwFlcxN5xhHgHfU1eKOUMMq2DmQ+H/xPm?=
- =?us-ascii?Q?+qbc6iTL3+sVy9OI3c/XUpIpc2pPrUlCjHvM6RqaqSvrfEZvN9/w5IqKcrVU?=
- =?us-ascii?Q?FAKFx436JtdQhTpiT3kClPEnid4RgayF5DPtThOCEskme9dR5dCSuEl47g/e?=
- =?us-ascii?Q?w4K+hmoghUgVY0S+pdWJtuJ70R6xu3HLzcTiwJk1EhwVuD3OVKBzllL9WdzB?=
- =?us-ascii?Q?AXtlD1jdzTtqaAJ9fjZCnXYnTQ+z0r5QyarcQzsKGLL0xhmS4BgajNHiBBcc?=
- =?us-ascii?Q?IOl2JLDZoUZU/yTNN8BVkAX81xoClC+3D0fZX1/bqDR//wKpRiu6iadKNCVV?=
- =?us-ascii?Q?imLiDG6SDlP6yUsGzGkcbN/USAMQfIPI8ixdIsrZJ7zSpxta2RLLc9bREM//?=
- =?us-ascii?Q?50I49pVeQZHMPbzGioLIVcv8EAb+qdg9u4wUXPY6EnkA0aOXkBphWhUpwxGz?=
- =?us-ascii?Q?Bnd+4u9lW+5Ph6i4xP8lC53os7vPi90FERUrnYLZFYLjYtfKsH9Mk4wBxqhC?=
- =?us-ascii?Q?1lKixlGakojwGFl2poIpZ6Kp79RxGiFFogX6kCDAq6kEenFIElbZyQoGYcHv?=
- =?us-ascii?Q?neey2hOCSt0YlReV+cjn3+WwA0xsPqY6zWZzdwzQPxZ+kFti7Wa02QdI8eJ5?=
- =?us-ascii?Q?wfaP82VoMlLHQHLDS3Ttk/2QOVmxlM2Jc8LGtlQunDiokk2Hd/Y65l9wGc3p?=
- =?us-ascii?Q?/+sxIgET/a/+feS4wjjSO4xPnuwiOXpqnZQ/8yWDpuRiDdV5yb7MlKA2nkFg?=
- =?us-ascii?Q?D2aCv/NmZPAIGWhus/Httz9b+6zPLHjTcgoRMhztHi5rdhWxOK616AXLVWly?=
- =?us-ascii?Q?FaOHNa+tObJGXQzdL0K18ZiDnqtxdLU4/Et0hGdL2YrrcAFh6KQsjF5BueRK?=
- =?us-ascii?Q?OOeOLYmmP5rwQ2+toPb05G6mjjFjHb0GQRC317oa0dgEpLZZ69V0Brwgfb6N?=
- =?us-ascii?Q?b3EN0lwIexTyMiKv7A3h8zUub1x/D0HQ3hyuWZAnJOfIY0caHwm85ky2XO/O?=
- =?us-ascii?Q?i8tiTG44SzwnL7PYdvNqqUZTg6DTR8VUfIf7bg+o8J3eRx3VZ4JrmE1TG12K?=
- =?us-ascii?Q?R+XS+Ht1d1VDxf6VHfv3fgvdH6WFpMUrCdMwxzAe2zukjY0BlJ0hgv8Oegvi?=
- =?us-ascii?Q?IEOzOkrdk8YMGwboEyLjhjagvCdRxtvQiRtGrf2HOTq9Q7IUOJVMkp/5kN1t?=
- =?us-ascii?Q?Eago+8Rz1rN3bXlyJXA/9UdazvEWQFAt3SyLudObIIaAwk+wsQZBGG4ib2wf?=
- =?us-ascii?Q?HBvjXGMO3O5ZKayo0VaQnTx+9hMU6+0LXLhJbjoqkS4U7FviDxb+yKeG0O+Q?=
- =?us-ascii?Q?T7DU91Hoj6IBNrbTP9RVQ+CxdUnRMgLt04U+pm6+ZsynmNy4KJRd7QaxhCak?=
- =?us-ascii?Q?yWB3neMAq0bSMQaXbyp74fGXJZ+wYnoQhJVgDf/ggw7s8uMOR8d5MBbe573D?=
- =?us-ascii?Q?Pw1o6UCaRItAIHOSezA2B7CUjANUJhqMXEd4O9UIB9ZojJ7GpZUJOADrTI6R?=
- =?us-ascii?Q?CwEhMfuD52i6Ee6aIp8c4ll/t8WLaonn6aCf5T9ZrOCIWkgnnAu5lUo/WlFC?=
- =?us-ascii?Q?jndUghINnT+pBok5kz75a9UsPU2ZZIZeXvb/mEDqLm9Yz+pWxctZ/za1B4WI?=
- =?us-ascii?Q?ySHxwoL2smcN42NRzeTesBnMfhYzWMUXWQ50Y4eesNujGvtNIKrxJUHeXyYd?=
- =?us-ascii?Q?3EnpVC81mA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13a97624-765f-4d06-eb36-08da4210d759
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 07:48:52.8594
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yQRHCv46q0qFjiKea85XZ/THOeaGZ5nOovNKoyhO0lMPToI+4e+xY/ZKf8q6z1MCnMTYl8wPdNhIxMoNjVP7/w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5452
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a hardware bug that it will load
-the first 128 bytes of configuration data twice,
-it will led to some configure error.
-so shift the configuration data 128 bytes,
-and make the first 128 bytes all zero,
-then hardware will load the 128 zero twice,
-and ignore them as garbage.
-then the configuration data can be loaded correctly
+This version is rebased on v5.18.
 
-Fixes: 2db16c6ed72ce ("media: imx-jpeg: Add V4L2 driver for i.MX8 JPEG Encoder/Decoder")
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
-Reviewed-by: Mirela Rabulea <mirela.rabulea@nxp.com>
-Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
----
-v3
-- add Fixes tag
-v2
-- add some comments about why the 0x80 offset is needed
- drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Since the following patchsets applied. All the kernel memory are charged
+with the new APIs of obj_cgroup.
 
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index 734e1b65fbc7..c0fd030d0f19 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -519,6 +519,7 @@ static bool mxc_jpeg_alloc_slot_data(struct mxc_jpeg_dev *jpeg,
- 				     GFP_ATOMIC);
- 	if (!cfg_stm)
- 		goto err;
-+	memset(cfg_stm, 0, MXC_JPEG_MAX_CFG_STREAM);
- 	jpeg->slot_data[slot].cfg_stream_vaddr = cfg_stm;
- 
- skip_alloc:
-@@ -755,7 +756,13 @@ static unsigned int mxc_jpeg_setup_cfg_stream(void *cfg_stream_vaddr,
- 					      u32 fourcc,
- 					      u16 w, u16 h)
- {
--	unsigned int offset = 0;
-+	/*
-+	 * There is a hardware issue that first 128 bytes of configuration data
-+	 * can't be loaded correctly.
-+	 * To avoid this issue, we need to write the configuration from
-+	 * an offset which should be no less than 0x80 (128 bytes).
-+	 */
-+	unsigned int offset = 0x80;
- 	u8 *cfg = (u8 *)cfg_stream_vaddr;
- 	struct mxc_jpeg_sof *sof;
- 	struct mxc_jpeg_sos *sos;
+	[v17,00/19] The new cgroup slab memory controller [1]
+	[v5,0/7] Use obj_cgroup APIs to charge kmem pages [2]
+
+But user memory allocations (LRU pages) pinning memcgs for a long time -
+it exists at a larger scale and is causing recurring problems in the real
+world: page cache doesn't get reclaimed for a long time, or is used by the
+second, third, fourth, ... instance of the same job that was restarted into
+a new cgroup every time. Unreclaimable dying cgroups pile up, waste memory,
+and make page reclaim very inefficient.
+
+We can convert LRU pages and most other raw memcg pins to the objcg direction
+to fix this problem, and then the LRU pages will not pin the memcgs.
+
+This patchset aims to make the LRU pages to drop the reference to memory
+cgroup by using the APIs of obj_cgroup. Finally, we can see that the number
+of the dying cgroups will not increase if we run the following test script.
+
+```bash
+#!/bin/bash
+
+dd if=/dev/zero of=temp bs=4096 count=1
+cat /proc/cgroups | grep memory
+
+for i in {0..2000}
+do
+	mkdir /sys/fs/cgroup/memory/test$i
+	echo $$ > /sys/fs/cgroup/memory/test$i/cgroup.procs
+	cat temp >> log
+	echo $$ > /sys/fs/cgroup/memory/cgroup.procs
+	rmdir /sys/fs/cgroup/memory/test$i
+done
+
+cat /proc/cgroups | grep memory
+
+rm -f temp log
+```
+
+[1] https://lore.kernel.org/linux-mm/20200623015846.1141975-1-guro@fb.com/
+[2] https://lore.kernel.org/linux-mm/20210319163821.20704-1-songmuchun@bytedance.com/
+
+v4: https://lore.kernel.org/all/20220524060551.80037-1-songmuchun@bytedance.com/
+v3: https://lore.kernel.org/all/20220216115132.52602-1-songmuchun@bytedance.com/
+v2: https://lore.kernel.org/all/20210916134748.67712-1-songmuchun@bytedance.com/
+v1: https://lore.kernel.org/all/20210814052519.86679-1-songmuchun@bytedance.com/
+RFC v4: https://lore.kernel.org/all/20210527093336.14895-1-songmuchun@bytedance.com/
+RFC v3: https://lore.kernel.org/all/20210421070059.69361-1-songmuchun@bytedance.com/
+RFC v2: https://lore.kernel.org/all/20210409122959.82264-1-songmuchun@bytedance.com/
+RFC v1: https://lore.kernel.org/all/20210330101531.82752-1-songmuchun@bytedance.com/
+
+v5:
+ - Lots of improvements from Johannes, Roman and Waiman.
+ - Fix lockdep warning reported by kernel test robot.
+ - Add two new patches to do code cleanup.
+ - Collect Acked-by and Reviewed-by from Johannes and Roman.
+ - I didn't replace local_irq_disable/enable() to local_lock/unlock_irq() since
+   local_lock/unlock_irq() takes an parameter, it needs more thinking to transform
+   it to local_lock.  It could be an improvement in the future.
+
+v4:
+ - Resend and rebased on v5.18.
+
+v3:
+ - Removed the Acked-by tags from Roman since this version is based on
+   the folio relevant.
+
+v2:
+ - Rename obj_cgroup_release_kmem() to obj_cgroup_release_bytes() and the
+   dependencies of CONFIG_MEMCG_KMEM (suggested by Roman, Thanks).
+ - Rebase to linux 5.15-rc1.
+ - Add a new pacth to cleanup mem_cgroup_kmem_disabled().
+
+v1:
+ - Drop RFC tag.
+ - Rebase to linux next-20210811.
+
+RFC v4:
+ - Collect Acked-by from Roman.
+ - Rebase to linux next-20210525.
+ - Rename obj_cgroup_release_uncharge() to obj_cgroup_release_kmem().
+ - Change the patch 1 title to "prepare objcg API for non-kmem usage".
+ - Convert reparent_ops_head to an array in patch 8.
+
+Thanks for Roman's review and suggestions.
+
+RFC v3:
+ - Drop the code cleanup and simplification patches. Gather those patches
+   into a separate series[1].
+ - Rework patch #1 suggested by Johannes.
+
+RFC v2:
+ - Collect Acked-by tags by Johannes. Thanks.
+ - Rework lruvec_holds_page_lru_lock() suggested by Johannes. Thanks.
+ - Fix move_pages_to_lru().
+
+Muchun Song (11):
+  mm: memcontrol: remove dead code and comments
+  mm: rename unlock_page_lruvec{_irq, _irqrestore} to
+    lruvec_unlock{_irq, _irqrestore}
+  mm: memcontrol: prepare objcg API for non-kmem usage
+  mm: memcontrol: make lruvec lock safe when LRU pages are reparented
+  mm: vmscan: rework move_pages_to_lru()
+  mm: thp: make split queue lock safe when LRU pages are reparented
+  mm: memcontrol: make all the callers of {folio,page}_memcg() safe
+  mm: memcontrol: introduce memcg_reparent_ops
+  mm: memcontrol: use obj_cgroup APIs to charge the LRU pages
+  mm: lru: add VM_BUG_ON_FOLIO to lru maintenance function
+  mm: lru: use lruvec lock to serialize memcg changes
+
+ fs/buffer.c                      |   4 +-
+ fs/fs-writeback.c                |  23 +-
+ include/linux/memcontrol.h       | 213 +++++++++------
+ include/linux/mm_inline.h        |   6 +
+ include/trace/events/writeback.h |   5 +
+ mm/compaction.c                  |  39 ++-
+ mm/huge_memory.c                 | 153 +++++++++--
+ mm/memcontrol.c                  | 560 +++++++++++++++++++++++++++------------
+ mm/migrate.c                     |   4 +
+ mm/mlock.c                       |   2 +-
+ mm/page_io.c                     |   5 +-
+ mm/swap.c                        |  62 ++---
+ mm/vmscan.c                      |  67 +++--
+ 13 files changed, 767 insertions(+), 376 deletions(-)
+
+
+base-commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
 -- 
-2.36.1
+2.11.0
 

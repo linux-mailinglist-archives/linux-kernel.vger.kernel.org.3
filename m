@@ -2,108 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934C253731C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 02:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9DA53731D
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 02:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbiE3AnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 20:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        id S232003AbiE3AnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 20:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbiE3Am6 (ORCPT
+        with ESMTP id S230192AbiE3AnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 20:42:58 -0400
-Received: from mail.boiledscript.com (unknown [192.151.158.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A068D1D0DD;
-        Sun, 29 May 2022 17:42:54 -0700 (PDT)
-Received: from localhost (unknown [192.168.203.1])
-        by mail.boiledscript.com (Postfix) with ESMTP id 0BAE13008F7;
-        Mon, 30 May 2022 00:42:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ultrarare.space;
-        s=dkim; t=1653871366;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yPIjYQQdsfuDIdFfxUyyO6NHvouvVSBJhHz9aU19hqg=;
-        b=xdnh+ab0Ma67O31r6jonZ40k094uFi8Uo7m55DzuV58mIWAvjhK+lpPeUslc5XF0a66Ddk
-        U2g8vqldtpZM2RlzJV4DNZq3urVmQaL3Ubfc7x5kzRB8Ostju986GBaeWgc+IoPSm++vPp
-        qBaLT7ALyGQ3Xgs8LTAMKhX/OTViD7NFKyOgdCK6+rA3h2ZMrl+nq1QKmTVPGe7XZHl18v
-        MXqk3CnzYrlZV7b83T2hv0kO1Sigf62fsPW9G2OL0sjOdWBpWrbJpKtDX8GU1KPx3PfkkN
-        AtOm6vyjCrO6/vkZjQt1UMuHe55wp18CwAgsCZ+ZX8tmfpjBTTFdhoawPu1zXg==
-Date:   Mon, 30 May 2022 08:42:32 +0800
-From:   Hilton Chain <hako@ultrarare.space>
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     bryancain3@gmail.com, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH] HID: apple: Reset quirks when Fn key is not found
-Message-ID: <20220530083752.1973a905@ultrarare.space>
-In-Reply-To: <20220529182036.10226-1-jose.exposito89@gmail.com>
-References: <20220529180230.17e9a0f9@ultrarare.space>
- <20220529182036.10226-1-jose.exposito89@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        Sun, 29 May 2022 20:43:11 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265EE1D307
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 17:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653871391; x=1685407391;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=J7WPoFuWwXk1d8BpiQ7DWYSAVOuKKLbKnpnHfxLZ+z8=;
+  b=V3OKsNQtgXoNnmOOE3Lpf9Z2sWRh4/dQBURuRk8HvyOCW1S1mxW3MNDI
+   aivpR9560VP2ZFCJ40a6krInjanklR4G0ZTbXQhliaGx3usC8+huELz6y
+   /4n49Hzw/RFjjazp6O4ATOpFI3Xrbct0De7ZudGRrogoe/nR7Bdn8wkk2
+   nI0gIH2v/Zwf3sC31W4JGnB7LQ/UKGfCqw1VtQ44095uA72dUC/3knYPX
+   4SSEZ0qRJQHHAEoMqV+LwRvbpB7rsjE+t/RiwPfoXWU6f66wix2tErzDB
+   NvW6c9Zz6h+TytUjCCv6NDY6T6EOamvkCEtS2/ES+oTVisP1CBXFlTtIB
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="361237342"
+X-IronPort-AV: E=Sophos;i="5.91,261,1647327600"; 
+   d="scan'208";a="361237342"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2022 17:43:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,261,1647327600"; 
+   d="scan'208";a="611225462"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 29 May 2022 17:43:09 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nvTUy-0001L4-Qg;
+        Mon, 30 May 2022 00:43:08 +0000
+Date:   Mon, 30 May 2022 08:42:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hannes Reinecke <hare@suse.de>
+Subject: [cel:topic-rpc-with-tls-upcall 3/19] af_tlsh.c:undefined reference
+ to `inet6_getname'
+Message-ID: <202205300819.feTtS52k-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Bar: +
-Authentication-Results: mail.boiledscript.com;
-        none
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jose,
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux topic-rpc-with-tls-upcall
+head:   b1c8574490c25c8b5bade67796641a449badc818
+commit: 47ebadbb7c8a9c6329f485ed254c38350492727b [3/19] net/tls: Add support for PF_TLSH (a TLS handshake listener)
+config: i386-randconfig-a005-20220530 (https://download.01.org/0day-ci/archive/20220530/202205300819.feTtS52k-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=47ebadbb7c8a9c6329f485ed254c38350492727b
+        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
+        git fetch --no-tags cel topic-rpc-with-tls-upcall
+        git checkout 47ebadbb7c8a9c6329f485ed254c38350492727b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-> Reverting that commit will break battery reporting on the Magic
-> Keyboards 2015 and 2021.
->
-> When a keyboard has the APPLE_HAS_FN and another valid quirk, in this
-> case APPLE_RDESC_BATTERY, setting asc->quirks =3D 0 (i.e., removing all
-> quirks) also removes the valid ones.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks for the explanation!
+All errors (new ones prefixed by >>):
 
-> My understanding of=C2=A0Bryan's patch (in cc) was that the new config op=
-tion
-> worked out of the box for Keychron and Apple keyboards and allowed for
-> manual configuration where required.
->
-> Could you explain a bit which bug is fixed by reverting these 2
-> commits, please? I don't own a Keychron keyboard for testing, so it is
-> not obvious to me why this change is required.
+   ld: net/tls/af_tlsh.o: in function `tlsh_getname':
+>> af_tlsh.c:(.text+0x4ff): undefined reference to `inet6_getname'
+   ld: net/tls/af_tlsh.o: in function `tlsh_release':
+>> af_tlsh.c:(.text+0x2991): undefined reference to `inet6_release'
 
-I own a GANSS keyboard which encounters this issue as well, related device
-information given by `lsusb -v` below:
-
-    idVendor           0x05ac Apple, Inc.
-    idProduct          0x024f Aluminium Keyboard (ANSI)
-    iManufacturer           1 SONiX
-    iProduct                2 USB DEVICE
-
-As I searching through, I found similar reports regarding another GANSS
-model[1], and other brands like Varmilo[2] (a lot!) and Keychron. As a
-common pattern, they mostly use 05ac:024f.
-
-Currently I have two idea:
-
-1. Modify Bryan's patch, so that fnmode default to 2 if device name not
-starting with "Apple" (But I can't validate my assumption since I don't
-own any Apple keyboards), I'll attach this patch in the next email.
-
-2. Find out which quirk pattern solves this issue brute-forcely, I may
-attach this patch later when I finally find a solution.
-
-What's your opinion?
-
-Stay boiled,
-Hilton Chain
-
----
-[1]: https://www.amazon.com/gp/customer-reviews/R1EV0B1FG21GGD
-[2]: https://unix.stackexchange.com/questions/604791/keyboard-function-keys=
--always-trigger-media-shortcuts-regardless-of-whether-fn
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,146 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DBBA53763C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3961537662
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbiE3IHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 04:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
+        id S232527AbiE3IJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 04:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiE3IHD (ORCPT
+        with ESMTP id S232230AbiE3II7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 04:07:03 -0400
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8A13ED14;
-        Mon, 30 May 2022 01:07:01 -0700 (PDT)
-Received: by mail-qv1-f48.google.com with SMTP id c12so201699qvr.3;
-        Mon, 30 May 2022 01:07:01 -0700 (PDT)
+        Mon, 30 May 2022 04:08:59 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEB2644F7
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:08:54 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so3215147pjl.4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:08:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ktUZ7Jayji8WcqStkjl0qUGO7i4FHkmNzMUAUMXluTg=;
+        b=KuTdqisqGYSWAu9SpxFOYy6qtFuiRMNGCggpOV+CbFXI4ZSeUon0O8i81XddsFFMJU
+         F/nhFSVsFdL6K6S5zZDT2gWQiyi2uQfS4h7PGa2eyEbK46NkZ2eRVKw5vGz+TOIi7Fde
+         I7N3j6JrIzC03AKojxk+3NXLtx0hMP4kIsAJwvSsF69vwDC1gx7jZEkTDoFqR6AsWJID
+         wyXYMeqB/ZlYcce12VPnEu/TV61dqeQj+bEwmGEiREeznbKsp7JEx5otKBToddC/Jdz1
+         keQ0DMZzMJDvefRKjIhL+UwV07DWFn/06fmGfLTactx2RV2muBxrIsfTqQi5WsiH0i7n
+         2O/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8KDfY4dQwlNAmncMm2pCzSPhY1XaCkL0xC+jiRDhr8M=;
-        b=LTq8DnzHn6yKSWk8PoN1MwJeeQ3Vmev33gp39evw9XWNo/AEAm4BmbDSDZNDfuLjzt
-         JdGIN8IPeoap11URDNeHrLj2dc43j6Ymi/FPKXizrIsDs5ry3gl2oKTVtTU4mGidV/iB
-         zyiaXfzFVfeu6KzfGXduVm1vAbDSGxK5jd+yTQM5Wh/y6XDQPhJoHo03nk0C37/TBpwE
-         mzOwDrLvas/YqOBROfucF2enGiuJvGPw/5E1xvpGam/Y/iOIy0CK1aukqdJpAO/CKpGh
-         Hbc1TA4esyO4zZa5ZLjPkHpdZxulm9A53Gz+IK/Mg3+idEX/XX5pFZTq0As6TymRxEKC
-         rtDQ==
-X-Gm-Message-State: AOAM533SnqwQ9VFtij2zOf/AwaftrFMGL86/mBtc/RLcyCBETTGbt7mz
-        caS14UijSmlY3L9c7M2Zco5mJnGwPza7XA==
-X-Google-Smtp-Source: ABdhPJwOokFmvwRP4f/heywtDP1NBeu1tI/Qgnw40bnTUuzIZIVwhcBJkLKZFcVqMFlqkVNsr1Wigw==
-X-Received: by 2002:a05:6214:f02:b0:462:2876:2938 with SMTP id gw2-20020a0562140f0200b0046228762938mr34846494qvb.116.1653898020068;
-        Mon, 30 May 2022 01:07:00 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id c17-20020a05620a269100b006a37eb728cfsm7307904qkp.1.2022.05.30.01.06.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 01:06:59 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id x137so17758365ybg.5;
-        Mon, 30 May 2022 01:06:58 -0700 (PDT)
-X-Received: by 2002:a25:7307:0:b0:65c:b98a:f592 with SMTP id
- o7-20020a257307000000b0065cb98af592mr6483502ybc.380.1653898018583; Mon, 30
- May 2022 01:06:58 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ktUZ7Jayji8WcqStkjl0qUGO7i4FHkmNzMUAUMXluTg=;
+        b=K3dLqK+6SBciJ/juxsFOOZwnwN1z9bbMO7g74eLmqileOWHanhoYwivREjUsnf5nco
+         cv8rxvGE+8clecLR7FtrwbuP2PUo1WFa/+iFofEovOjsghTVMCHGS8GSsWmliFSxMgmV
+         psw/v0TiZo7YVC5F4Zu6RS7DFk3hUHTnVimeLWJYU6QO35G9hJaMOJHhEIlLPNQCcqKP
+         leMHXSqe7+I9rw/sYHhMrTFIX1x2H74t55HubF38cFzzhwFnlYfPHcRvpOcpa1SU1bkJ
+         CMRoPmZuSy2PhrgxJm61WccdK7I6jOy+hbLvLgh+krImRdGjqQfBiiAfvTE3qsnohnpb
+         BP1Q==
+X-Gm-Message-State: AOAM531Uln4TaVn1S7U/n/AhkYcjs84cO6CXywB2C+QQKS9PMiuq9E3v
+        uxUG3COkEkh3uIk8gDnEsEeAt1FF/K71
+X-Google-Smtp-Source: ABdhPJzpye3BIRyeRcfZKMgh/enut/RYAKyDccJEWHc1q3Au19MJ6OtkkdKME793c6nbw7YIkrGV7g==
+X-Received: by 2002:a17:902:f543:b0:161:9f00:7b2c with SMTP id h3-20020a170902f54300b001619f007b2cmr55193063plf.1.1653898133768;
+        Mon, 30 May 2022 01:08:53 -0700 (PDT)
+Received: from localhost.localdomain ([220.158.159.114])
+        by smtp.gmail.com with ESMTPSA id io17-20020a17090312d100b0015e8d4eb285sm8450345plb.207.2022.05.30.01.08.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 01:08:53 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     tglx@linutronix.de, maz@kernel.org, bjorn.andersson@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 0/3] Check for IRQ trigger type mismatch in __setup_irq()
+Date:   Mon, 30 May 2022 13:38:39 +0530
+Message-Id: <20220530080842.37024-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <164978679251.2361020.5856734256126725993.stgit@djiang5-desk3.ch.intel.com>
-In-Reply-To: <164978679251.2361020.5856734256126725993.stgit@djiang5-desk3.ch.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 30 May 2022 10:06:39 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVjDTAW-84c9Fh21f_GWOhnD4+VW2nqSTQ6EK-m+KG=vQ@mail.gmail.com>
-Message-ID: <CAMuHMdVjDTAW-84c9Fh21f_GWOhnD4+VW2nqSTQ6EK-m+KG=vQ@mail.gmail.com>
-Subject: Re: [PATCH] dmaengine: add verification of DMA_INTERRUPT capability
- for dmatest
-To:     Dave Jiang <dave.jiang@intel.com>, Vinod <vkoul@kernel.org>
-Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave, Vinod,
+Hi,
 
-On Wed, Apr 13, 2022 at 12:58 AM Dave Jiang <dave.jiang@intel.com> wrote:
-> Looks like I forgot to add DMA_INTERRUPT cap setting to the idxd driver and
-> dmatest is still working regardless of this mistake. Add an explicit check
-> of DMA_INTERRUPT capability for dmatest to make sure the DMA device being used
-> actually supports interrupt before the test is launched and also that the
-> driver is programmed correctly.
->
-> Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+This series adds a check for detecting the IRQ trigger type mismatch between the
+platform (DT) and a device driver. Currently, if there is a mismatch, there
+is no error thrown but the driver requested trigger gets set silently. Then
+during the second time probe of a driver (due to probe defer or rmmod/insmod),
+platform_get_irq() throws a warning similar to below and fails.
 
-Thanks for your patch, which is now commit a8facc7b988599f8
-("dmaengine: add verification of DMA_INTERRUPT capability for
-dmatest") upstream.
+irq: type mismatch, failed to map hwirq-9 for interrupt-controller@b220000!
 
-> --- a/drivers/dma/dmatest.c
-> +++ b/drivers/dma/dmatest.c
-> @@ -675,10 +675,16 @@ static int dmatest_func(void *data)
->         /*
->          * src and dst buffers are freed by ourselves below
->          */
-> -       if (params->polled)
-> +       if (params->polled) {
->                 flags = DMA_CTRL_ACK;
-> -       else
-> -               flags = DMA_CTRL_ACK | DMA_PREP_INTERRUPT;
-> +       } else {
-> +               if (dma_has_cap(DMA_INTERRUPT, dev->cap_mask)) {
-> +                       flags = DMA_CTRL_ACK | DMA_PREP_INTERRUPT;
-> +               } else {
-> +                       pr_err("Channel does not support interrupt!\n");
-> +                       goto err_pq_array;
-> +               }
-> +       }
->
->         ktime = ktime_get();
->         while (!(kthread_should_stop() ||
-> @@ -906,6 +912,7 @@ static int dmatest_func(void *data)
+But ideally, during the first time itself, request_irq() should've failed as
+the flag mismatch is a hard error. So let's add a check in __setup_irq(), such
+that the request_irq() would fail if a mismatch has been detected.
 
-Shimoda-san reports that this commit breaks dmatest on rcar-dmac.
-Like most DMA engine drivers, rcar-dmac does not set the DMA_INTERRUPT
-capability flag, hence dmatest now fails to start:
+NOTE: This might break platforms those has the flag set incorrectly in DT. One
+of such case is SDX55, where the UART node has the trigger set incorrectly.
+I fixed it in a couple of places I happen to know. But there could be many...
 
-    dmatest: Channel does not support interrupt!
+Thanks,
+Mani
 
-To me, it looks like the new check is bogus, as I believe it confuses
-two different concepts:
+Manivannan Sadhasivam (3):
+  ARM: dts: qcom: sdx55: Fix the IRQ trigger type for UART
+  arm64: dts: qcom: sm8450: Fix the IRQ trigger type for remoteproc
+    nodes
+  genirq: Check for trigger type mismatch in __setup_irq()
 
-  1. Documentation/driver-api/dmaengine/provider.rst says:
+ arch/arm/boot/dts/qcom-sdx55.dtsi    |  2 +-
+ arch/arm64/boot/dts/qcom/sm8450.dtsi |  8 ++++----
+ kernel/irq/manage.c                  | 14 ++++++++++++--
+ 3 files changed, 17 insertions(+), 7 deletions(-)
 
-       - DMA_INTERRUPT
+-- 
+2.25.1
 
-         - The device is able to trigger a dummy transfer that will
-           generate periodic interrupts
-
-  2. In non-polled mode, dmatest sets DMA_PREP_INTERRUPT.
-     include/linux/dmaengine.h says:
-
-       * @DMA_PREP_INTERRUPT - trigger an interrupt (callback) upon
-completion of
-       *  this transaction
-
-As dmatest uses real transfers, I think it does not depend on
-the ability to use interrupts from dummy transfers.
-
-Do you agree?
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

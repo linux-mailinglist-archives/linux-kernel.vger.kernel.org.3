@@ -2,75 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B975385AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54CC5386D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 19:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241419AbiE3P6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
+        id S234748AbiE3Rhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 13:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240807AbiE3P6k (ORCPT
+        with ESMTP id S234205AbiE3RhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:58:40 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E087764B
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 08:50:09 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id c19so17417963lfv.5
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 08:50:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=m/H8RjStCv6hVv65KzAZgkQzcHdDtuUqNpn5uu8u3WA=;
-        b=m5RSpmpJBah+4lRzVn/fbIaVs0XcWhic1GjZ7CDpnw2aCAN1qiGOKCTJRPIZIu4lSv
-         hIBKmlQYpOR1pmXj1aR6D2/vS1xqAj8RSiQp75KwfMhwcN8/A3bZzBbAfhi1FQYbEDGa
-         oLjInceL22Kh3gZb6P1OJXLau2Ain5wvWwWPiLpEh/dAfeoIEREeXn37qqXb2ccdjV6j
-         dFeVJhZ29ZR0w33y+4bN6MOAywwOWqWE7KiXIY2/n1ySWL0LXoYd0I44PwYQubFrEou3
-         BHJyIemx7HIAN61XAB+z/MavDbomQxGdPtOQzQgDgGh6bIk4zkdTAKSEI2HjAjULa1QZ
-         gVbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=m/H8RjStCv6hVv65KzAZgkQzcHdDtuUqNpn5uu8u3WA=;
-        b=3PelP8NXkkLOjhEGg9owPNm4rl5blgjdYXKMqpZoNG5upnT8iopuysMhByjSQXQ5XF
-         +4KpnbyLiX2EJzn2G0FZInMpakbQZvyONAl8fu72witjGfiFY2R0RUhCrNBzAfmHFXPM
-         ZoJcjXQ3ptybDTqOh24oFkJJC2b93CDRpctAQxWGUfBpCW0AQtZQ9exunzdytGGl18pr
-         0zaS5b9kQUvIPD7dCNXxRhXbZcnaXjVFTz+8w4XMpjKUmvGlVbWgi+ZuxnWzPsYP7CTd
-         6i9M9TCgjpBGiYfCKhwg/uLDmwbZexTPEHJWcpS6QOaHHt+hKRPqN1OO51GJNVDZWpgJ
-         np9Q==
-X-Gm-Message-State: AOAM533TaVtgjuiGzH1XqcvZhJvsSdbKuTEdebjzP8A3mEZIs8XgEMi4
-        ruJ0VRnrbDyOQoevEuOQ+dcsnAR3RlPI3aW9F8RdJcjoXyI=
-X-Google-Smtp-Source: ABdhPJyts9y9Pdt89TN05BzK0tePeCTtCE6497hjB4ReqVQkr8TQIKW2IVuIf26YqgsFX3TvdpjeXCGK3sNtR/4W8RE=
-X-Received: by 2002:a05:6512:239c:b0:478:efa9:9533 with SMTP id
- c28-20020a056512239c00b00478efa99533mr32959lfv.661.1653925807654; Mon, 30 May
- 2022 08:50:07 -0700 (PDT)
+        Mon, 30 May 2022 13:37:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B783850B31
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 10:37:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653932239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=shV7O+Jl4tdPj+rv5TqwBvaVp+vMnu1oH0m+CFvaf8k=;
+        b=RF1qWitLnOacGqhqRVp7F7t4ovYh3eJahN4ZCfGKf8ytEUDCjes75xZOVYWEp7UyuF2kbQ
+        t2u6D8GP4fNeMaKP73vH2okR04tsinhC4GaVfbs1IzRdPqJ1SjshpsculbQ4MVUKte+nUZ
+        mzCtnu3Nw2j4nR7qKvmTWl/qk3Sqbds=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-604-_zQIoO3pMBaILemnTaw8ig-1; Mon, 30 May 2022 13:37:16 -0400
+X-MC-Unique: _zQIoO3pMBaILemnTaw8ig-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 21DA91C08979;
+        Mon, 30 May 2022 17:37:16 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D97D8416365;
+        Mon, 30 May 2022 17:37:15 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id C57C44169301; Mon, 30 May 2022 12:51:56 -0300 (-03)
+Date:   Mon, 30 May 2022 12:51:56 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH] mm: lru_cache_disable: use synchronize_rcu_expedited 
+Message-ID: <YpToHCmnx/HEcVyR@fuller.cnet>
 MIME-Version: 1.0
-Reply-To: sgtkaylama@gmail.com
-Sender: sgtkaylamanthey32@gmail.com
-Received: by 2002:a05:6520:4281:b0:18f:1b94:87b8 with HTTP; Mon, 30 May 2022
- 08:50:07 -0700 (PDT)
-From:   sgtkaylama <sgtkaylama@gmail.com>
-Date:   Mon, 30 May 2022 15:50:07 +0000
-X-Google-Sender-Auth: mBlDzxmHewOdedfyNyfHOxhqW2E
-Message-ID: <CALsSCysU1qzaq0ASDWxtVVykmB2XxjpMpNE0NhDn5doAZ4Xhmw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings, did you get my two previous email that I sent to you?
-please check and reply to me
 
-Pozdrowienia, czy dosta=C5=82e=C5=9B moje dwa poprzednie e-maile, kt=C3=B3r=
-e ci
-wys=C5=82a=C5=82em? prosz=C4=99 sprawd=C5=BA i odpowiedz mi
+commit ff042f4a9b050895a42cae893cc01fa2ca81b95c replaced
+lru_cache_disable's usage of work queues with synchronize_rcu.
+
+Some users reported performance regressions due to this commit, for example:
+https://lore.kernel.org/all/20220521234616.GO1790663@paulmck-ThinkPad-P17-Gen-1/T/
+
+Switching to synchronize_rcu_expedited fixes the problem.
+
+Tested-by: Stefan Wahren <stefan.wahren@i2se.com> 
+Tested-by: Michael Larabel <Michael@MichaelLarabel.com>
+Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+
+diff --git a/mm/swap.c b/mm/swap.c
+index bceff0cb559c..04a8bbf9817a 100644
+--- a/mm/swap.c
++++ b/mm/swap.c
+@@ -879,7 +879,7 @@ void lru_cache_disable(void)
+ 	 * lru_disable_count = 0 will have exited the critical
+ 	 * section when synchronize_rcu() returns.
+ 	 */
+-	synchronize_rcu();
++	synchronize_rcu_expedited();
+ #ifdef CONFIG_SMP
+ 	__lru_add_drain_all(true);
+ #else
+

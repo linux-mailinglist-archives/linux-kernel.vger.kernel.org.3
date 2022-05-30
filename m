@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8B35387CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 21:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2534D5387D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 21:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243074AbiE3Th2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 15:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
+        id S240857AbiE3Tmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 15:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbiE3Th0 (ORCPT
+        with ESMTP id S233186AbiE3Tmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 15:37:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40F953700;
-        Mon, 30 May 2022 12:37:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A417B80EF4;
-        Mon, 30 May 2022 19:37:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 801CAC385B8;
-        Mon, 30 May 2022 19:37:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653939443;
-        bh=N++pdaqxxR3mfmUMBn2HNu9rkyihptoWh1TrpMRBdys=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xztIAB4G5ZyIVNwBARbpTyYCuuretroT66NXzmhntA8dW2REk1RzcHREzSeqa0dUJ
-         +T/Csb4a2YlAPLSIhFbfUm8j1cVt3r7/78CVFpKXQxukReAOMDb6anzvCzYN7CRUHu
-         N1S4FOZKyy2uO8RgOnAuMvqj3ffycmVnHvpS+t80=
-Date:   Mon, 30 May 2022 21:37:19 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Russell King <rmk+kernel@armlinux.org.uk>,
-        Sasha Levin <sashal@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "# 3.4.x" <stable@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Keith Packard <keithpac@amazon.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH AUTOSEL 5.18 147/159] ARM: 9201/1: spectre-bhb: rely on
- linker to emit cross-section literal loads
-Message-ID: <YpUc73oi012uxl8w@kroah.com>
-References: <20220530132425.1929512-1-sashal@kernel.org>
- <20220530132425.1929512-147-sashal@kernel.org>
- <CAMj1kXGAuKTqV0S4jxticZJp7ChtqqeXjn7SV1E83p5yVE1pkw@mail.gmail.com>
- <YpTh9dan5lJgH2aL@kroah.com>
- <CAMj1kXGO-1ccxaK_GnE+d2yc0XkF5y9ZawXXC3ypeGAanv9VtA@mail.gmail.com>
+        Mon, 30 May 2022 15:42:35 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F0762219
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 12:42:33 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nvlGn-0004LO-Ul; Mon, 30 May 2022 21:41:41 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nvlGh-005Vep-Cd; Mon, 30 May 2022 21:41:34 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nvlGf-00D9uL-Eh; Mon, 30 May 2022 21:41:33 +0200
+Date:   Mon, 30 May 2022 21:41:33 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     wangkefeng.wang@huawei.com, guoren@linux.alibaba.com,
+        sunnanyong@huawei.com, jszhang@kernel.org, mick@ics.forth.gr,
+        linux-riscv@lists.infradead.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>, alex@ghiti.fr,
+        christophe.leroy@csgroup.eu, naveen.n.rao@linux.vnet.ibm.com,
+        lizhengyu3@huawei.com, aou@eecs.berkeley.edu,
+        liaochang1@huawei.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        Bjorn Topel <bjorn.topel@gmail.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, penberg@kernel.org,
+        ebiederm@xmission.com, kernel@pengutronix.de,
+        akpm@linux-foundation.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] RISC-V: Prepare dropping week attribute from
+ arch_kexec_apply_relocations[_add]
+Message-ID: <20220530194133.udwdjsb2l33hsiil@pengutronix.de>
+References: <20220530074202.pydmbbgvbtaugw5j@pengutronix.de>
+ <mhng-5872aea0-6f64-4685-8f8d-fdeb42e4c972@palmer-mbp2014>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="krrdaxdkw2concro"
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXGO-1ccxaK_GnE+d2yc0XkF5y9ZawXXC3ypeGAanv9VtA@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <mhng-5872aea0-6f64-4685-8f8d-fdeb42e4c972@palmer-mbp2014>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,73 +64,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 05:56:09PM +0200, Ard Biesheuvel wrote:
-> On Mon, 30 May 2022 at 17:25, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, May 30, 2022 at 03:32:47PM +0200, Ard Biesheuvel wrote:
-> > > AUTONAK
-> > >
-> > > As discussed before, please disregard all patches authored by me when
-> > > running the bot.
-> >
-> > Ok, but why wasn't this spectre-bhb commit asked to be backported to
-> > stable in the first place?
-> 
-> Because it doesn't belong in -stable. Hence the lack of cc:stable or
-> fixes: tags.
-> 
-> > Do older kernels not need these types of
-> > fixes?
-> >
-> 
-> This commit was part of a series of six, two of which were bug fixes
-> and had fixes: tags. They do not have cc:stable tags because the
-> 'fixed' patches had not been backported yet when they were sent out.
-> 
-> So those are clear candidates for -stable, and as far as I can tell,
-> they have already been backported.
 
-Great, thanks for verifying.
+--krrdaxdkw2concro
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> This patch does not fix a bug. It makes the asm code more resilient to
-> potential bugs introduced inadvertently by future changes, which will
-> be harder to detect now that we have three different versions of the
-> exception vector table. (Any given system will only exercise one of
-> the three, depending on whether and which Spectre-BHB workaround it
-> requires)
+Hello,
 
-Ok, that's good to know, it was not obvious from the changelog text that
-this wasn't doing anything but a cleanup.
+On Mon, May 30, 2022 at 11:58:16AM -0700, Palmer Dabbelt wrote:
+> On Mon, 30 May 2022 00:42:02 PDT (-0700), u.kleine-koenig@pengutronix.de =
+wrote:
+> > Without this change arch/riscv/kernel/elf_kexec.c fails to compile once
+> > commit 233c1e6c319c ("kexec_file: drop weak attribute from
+> > arch_kexec_apply_relocations[_add]") is also contained in the tree.
+> > This currently happens in next-20220527.
+> >=20
+> > Prepare the RISC-V similar to the s390 adaption done in 233c1e6c319c.
+> > This is safe to do on top of the riscv change even without the change to
+> > arch_kexec_apply_relocations.
+> >=20
+> > Fixes: 838b3e28488f ("RISC-V: Load purgatory in kexec_file")
+> > Looks-good-to: liaochang (A) <liaochang1@huawei.com>
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+> >=20
+> > On Mon, May 30, 2022 at 09:43:26AM +0800, liaochang (A) wrote:
+> > > > I can confirm that doing
+> > > > > diff --git a/arch/riscv/include/asm/kexec.h
+> > > b/arch/riscv/include/asm/kexec.h
+> > > > index 206217b23301..eee260e8ab30 100644
+> > > > --- a/arch/riscv/include/asm/kexec.h
+> > > > +++ b/arch/riscv/include/asm/kexec.h
+> > > > @@ -55,6 +55,13 @@ extern riscv_kexec_method riscv_kexec_norelocate;
+> > > >  >  #ifdef CONFIG_KEXEC_FILE
+> > > >  extern const struct kexec_file_ops elf_kexec_ops;
+> > > > +
+> > > > +struct purgatory_info;
+> > > > +int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
+> > > > +				     Elf_Shdr *section,
+> > > > +				     const Elf_Shdr *relsec,
+> > > > +				     const Elf_Shdr *symtab);
+> > > > +#define arch_kexec_apply_relocations_add arch_kexec_apply_relocati=
+ons_add
+> > > >  #endif
+> > > >  >  #endif
+> > >=20
+> > > LGTM, you could send a fixup patch to riscv, thanks.
+> > >=20
+> > > > > on top of 838b3e28488f results in a compilable tree. And when
+> > > merging
+> > > > 233c1e6c319c into this, it is still building.
+> > > > > I'm not enough into kexec (and riscv) to judge if this is
+> > > sensible, or
+> > > > create a useful commit log but the obvious way forward is to apply =
+the
+> > > > above patch to the riscv tree before it hits Linus' tree.
+> >=20
+> > Ok, here comes a patch with a generic commit log.
+> >=20
+> > @riscv people: If you prefer, squash it into 838b3e28488f.
+>=20
+> Sorry, just saw this after I sent my version of the fix.  They're the sam=
+e,
+> but do you mind sending a full-on patch so I can merge it?
 
-> I build and boot test my patches carefully, and so I consciously
-> decided that the regression risk of backporting this patch outweighs
-> the benefits. This is why I did not add a cc:stable or fixes: tag. If
-> a tag existed that said 'do not backport this unless explicitly
-> requested', I would have added it.
-> 
-> I would expect anyone that proposes this patch for -stable to be as
-> diligent in ensuring that the patch is safe for backporting, which
-> includes building the code with older GCC versions that those stable
-> kernels still support, and boot testing the result on actual hardware.
-> 
-> If this is part of the AUTOSEL workflow, then I stand corrected. But
-> even then, this does not mean that the patch *belongs* in -stable. As
-> you know, I enjoy throwing stable-kernel-rules.rst in your face, and I
-> am pretty sure that using a bot to find patches that apply cleanly and
-> happen not to cause build breakage is not covered by the criteria
-> defined by that document by any stretch of the imagination.
-> 
-> On top of that, I feel that 'saving' precious stable maintainer's time
-> by using a bot to offload this burden to the community uninvited is
-> really not ok. We work very hard to keep highly heterogeneous
-> architectures such as ARM working across all supported platforms, and
-> this is work enough as it is without all the bogus patches that
-> AUTOSEL digs up without *any* justification beyond 'hey, it applies!'
+Sorry, I don't understand your request. I found
+https://lore.kernel.org/linux-riscv/20220530180408.16239-1-palmer@rivosinc.=
+com/
 
-If you want to keep arm-core stuff out of the AUTOSEL process, because
-you all do a good job of marking stuff already properly, that's fine,
-Sasha can easily do that, just let us know.
+but I don't know what a full-on patch is and what stops you merging my
+patch.=20
 
-thanks,
+Is it that it's in reply to a patch series and b4 fails to fetch the
+right patch and you ask to send it in a new thread?
 
-greg k-h
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--krrdaxdkw2concro
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKVHeoACgkQwfwUeK3K
+7AmIjAf/cIdZXzTm8ALuTDgUrKH3cNzpFjQ944mYn/qfLoGkdCnQlYzghw570rDo
+0QKgHNkqRQQ7lgaXGnex5HizEMdc+++QESut+gBcrV92K33EZU3XSXUp+75SE+Jz
+DjRnmCm4xkh/9zZysNW0OXLnjd4AtGMlbzXYFKsKKxtaGgd7+f06D3cTzoVOfLbL
+i0DPa56ftXEmEYl6WpqIg1gb9gQMQx7E9vsscEgoOX6u9AlinTk/cxkDA6lhMNEj
+03qeCXcYyUQtszhTYw3jo8cLqM1KGLVU3i9Blj0mAIQ8DVaXUd3hWx3AFqjeA55K
+bErpEBzedIdALZNq1g3XX9JHLEMP7Q==
+=qw7s
+-----END PGP SIGNATURE-----
+
+--krrdaxdkw2concro--

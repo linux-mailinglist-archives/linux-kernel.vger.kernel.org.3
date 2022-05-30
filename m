@@ -2,82 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776F25387C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 21:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1E65387C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 21:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243051AbiE3Tdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 15:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
+        id S243069AbiE3Tfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 15:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbiE3Tdn (ORCPT
+        with ESMTP id S233186AbiE3Tff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 15:33:43 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698FF3CFFA;
-        Mon, 30 May 2022 12:33:41 -0700 (PDT)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nvl8r-0001V6-CF; Mon, 30 May 2022 21:33:29 +0200
-Received: from [85.1.206.226] (helo=linux-2.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nvl8q-000VcP-QA; Mon, 30 May 2022 21:33:29 +0200
-Subject: Re: [PATCH] tracing/kprobes: Check whether get_kretprobe() returns
- NULL in kretprobe_dispatcher()
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Yonghong Song <yhs@fb.com>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <165366693881.797669.16926184644089588731.stgit@devnote2>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <0204f480-cdb0-e49f-9034-602eced02966@iogearbox.net>
-Date:   Mon, 30 May 2022 21:33:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 30 May 2022 15:35:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D727403D4;
+        Mon, 30 May 2022 12:35:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1CA8B80EF5;
+        Mon, 30 May 2022 19:35:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3C0AC385B8;
+        Mon, 30 May 2022 19:35:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1653939331;
+        bh=eijbhpTJ2B3JlcVU/XzMFj2+PLIBef38WosQNqTCfrk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e2OiJJm48j1Ovm1Iw5XFX7Lpl8jev4IHDuE4+pdi0xlYhRdnfkd+yEHVf/DDjnLHY
+         Es3rfrST95gJYei1rlGgdtBu3MOrhTV6+HKayuKixhs+tJwiluiyObU8DE7JFvaNDY
+         8vbExebiT7c90LgMJpIG4hQhdooOenpAyVgnVOxg=
+Date:   Mon, 30 May 2022 21:35:27 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Borislav Petkov <bp@suse.de>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org
+Subject: Re: Warnings when suspending to disk
+Message-ID: <YpUcf19E+qgb6Eyu@kroah.com>
+References: <alpine.LRH.2.02.2205301145540.25840@file01.intranet.prod.int.rdu2.redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <165366693881.797669.16926184644089588731.stgit@devnote2>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26557/Mon May 30 10:05:44 2022)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LRH.2.02.2205301145540.25840@file01.intranet.prod.int.rdu2.redhat.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/27/22 5:55 PM, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Mon, May 30, 2022 at 12:16:24PM -0400, Mikulas Patocka wrote:
+> Hi
 > 
-> There is a small chance that get_kretprobe(ri) returns NULL in
-> kretprobe_dispatcher() when another CPU unregisters the kretprobe
-> right after __kretprobe_trampoline_handler().
-> 
-> To avoid this issue, kretprobe_dispatcher() checks the get_kretprobe()
-> return value again. And if it is NULL, it returns soon because that
-> kretprobe is under unregistering process.
-> 
-> This issue has been introduced when the kretprobe is decoupled
-> from the struct kretprobe_instance by commit d741bf41d7c7
-> ("kprobes: Remove kretprobe hash"). Before that commit, the
-> struct kretprob_instance::rp directly points the kretprobe
-> and it is never be NULL.
-> 
-> Reported-by: Yonghong Song <yhs@fb.com>
-> Fixes: d741bf41d7c7 ("kprobes: Remove kretprobe hash")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> The commit 7f99cb5e60392fc3494c610776e733b68784280c ("x86/CPU/AMD: Use 
+> default_groups in kobj_type") causes the following warnings to be printed 
+> during suspend to disk and resume from disk. There are many of these 
+> warnings, 3 for each core.
 
-Steven, I presume you'll pick this fix up?
+And if you revert that change it goes back to not warning?
 
-Thanks,
-Daniel
+that is odd.
+
+> 
+> The machine is two six-core Opterons 8435.
+> 
+> Mikulas
+> 
+> 
+> [   31.349584] PM: hibernation: hibernation entry
+> [   31.350319] Filesystems sync: 0.000 seconds
+> [   31.350417] Freezing user space processes ... (elapsed 0.001 seconds) done.
+> [   31.351994] OOM killer disabled.
+> [   31.357889] PM: hibernation: Preallocating image memory
+> [   34.791852] PM: hibernation: Allocated 735563 pages for snapshot
+> [   34.792065] PM: hibernation: Allocated 2942252 kbytes in 3.43 seconds (857.79 MB/s)
+> [   34.792296] Freezing remaining freezable tasks ... (elapsed 0.000 seconds) done.
+> [   34.793791] printk: Suspending console(s) (use no_console_suspend to debug)
+> [   34.795159] serial 00:03: disabled
+> [   34.795248] serial 00:02: disabled
+> [   34.824316] mptbase: ioc0: pci-suspend: pdev=0x00000000f4bc4e1a, slot=0000:02:06.0, Entering operating state [D3]
+> [   35.470390] amdgpu 0000:07:00.0: amdgpu: BACO reset
+> [   35.533783] Disabling non-boot CPUs ...
+> [   35.535798] smpboot: CPU 1 is now offline
+> [   35.537754] ------------[ cut here ]------------
+> [   35.537764] kernfs: can not remove 'threshold_limit', no directory
+
+Before you suspend, is this directory (and the other ones) really there?
+
+Are they not getting created now properly somehow?  Any warning messages
+at boot time?
+
+thanks,
+
+greg k-h

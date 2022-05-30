@@ -2,96 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C125378FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D05537915
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235197AbiE3KVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
+        id S235215AbiE3KYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234884AbiE3KVF (ORCPT
+        with ESMTP id S233886AbiE3KYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:21:05 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03017C156;
-        Mon, 30 May 2022 03:21:04 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id h1so734389plf.11;
-        Mon, 30 May 2022 03:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WFiLnT3W0j8YmQ0vGQC0wNX6AZ3ylQaFctxEdup2GHM=;
-        b=UX2JZrN6MoAhDt/j+Zn9ZOZyPHpUxAF4IPjUZHmNkR0VuZau1KdXma4z1quyinbDa+
-         j1XqTYlnXl/VM4nKoWwGGpsdtGf10qFomEJBmLGrscpa3bh4hullTu1Xv8gkgGe9zu4K
-         DYjEY409DHg9hgQn3CDLrEDWs6+PIvoLqOrJbn9y+8+0ZkTfipIvwwpynkX24rr/jy4O
-         GtP51+zWNtZh6UcsNNsWjkMI4ctY6j25po81UVqxdKSAdEoRSiMNGAGIZIk91T2zJVjz
-         isppPI+1LZks7ygPZIBXbAlVommKkd10UU24SpBSHLf4F6jlu4jXDKPTzXsF1TqOoGd4
-         Eovw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WFiLnT3W0j8YmQ0vGQC0wNX6AZ3ylQaFctxEdup2GHM=;
-        b=cETzjROe6j3kvOk0n1a7OMNg2PXhCQYT7sbuzBXzTjfDtjOEbvbD1vbkUADweThKnT
-         7sdh8Zy3p4rNJ23wiTt2YBZgXbvcsvydFYvNEJi+QYpWNTYGWv28MSrOZ53VtcX3L9dp
-         ozkyXhX8opzxxdqbnITNmFqQsBkDbuxWskyjoUcA27vmKKyKde9Bno/3Yex1pbXSxbaB
-         pfspuEpJBTgb2PqS42dnrwRHlioc7kB//t2yAR8dLT+0SJ83hvli74YrDX0itmb/35ut
-         fOaF0fGqRUb3d6slOSvt8shb/RN0234VTpEGEs28kV34VAsXX0e8LCM/V4stjUNvOamT
-         cjzA==
-X-Gm-Message-State: AOAM531kDCeSaU5Ax+lpUpaITzd0MpPV0SKhhNVoTtaJ132+ZXHjl0nQ
-        NfZocfo2+1wPs7S53LPuuVLGkGHKhVXU2w==
-X-Google-Smtp-Source: ABdhPJy+3XPSzi01KJqkr8y6fTyshXo/Ufa+RXFCY+n/Bj4tzOg/364b3UZt9n+2PSJsOvSL4al8xA==
-X-Received: by 2002:a17:90b:3b46:b0:1e2:f8a2:cd03 with SMTP id ot6-20020a17090b3b4600b001e2f8a2cd03mr5115415pjb.229.1653906064375;
-        Mon, 30 May 2022 03:21:04 -0700 (PDT)
-Received: from localhost.localdomain ([103.84.139.165])
-        by smtp.gmail.com with ESMTPSA id j18-20020aa783d2000000b00518a9c82d28sm8450275pfn.21.2022.05.30.03.21.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 03:21:04 -0700 (PDT)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH] xfrm: xfrm_input: fix a possible memory leak in xfrm_input()
-Date:   Mon, 30 May 2022 18:20:46 +0800
-Message-Id: <20220530102046.41249-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 30 May 2022 06:24:16 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9ED7C16B;
+        Mon, 30 May 2022 03:24:15 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U9OkDm018338;
+        Mon, 30 May 2022 10:24:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=TkPShSIqR7IPAaTfXZ/l/J5JsMi96HBJOqYWSfdSBs0=;
+ b=AeMbsmbaMr3h7DFpZ2jdeftC09l6Hp7GTyI4x/EmprHVmmj9Xbs+u+bwO7CDpMvixsNv
+ DW/aHn3aNMnJmeTzJML6AlANWYKDb6nYPILxtf+QfBdtouKDhmzOKNStiYFsB6dnhQGw
+ l1wBdYdoiwjeRf3thXuf7iAazeF+r9fT10qqpdNjwIdwbAy4JmMYuQtpHV45Zwuc2U5j
+ uRsakDyRAbFCWZuhiHtYc5cOGwmfF83jQud/U6yCi+8ezdcrjpGw3lH356q4HizwgluL
+ 3L1v9ht/g9VnDzHMGRTfS1m/81+aGiUdAuRDdpoLXdo10EtE6F27R4EFB7JI3tbELo73 5g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcu95136p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 May 2022 10:24:14 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24UAMItK010227;
+        Mon, 30 May 2022 10:24:14 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcu951366-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 May 2022 10:24:14 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24UAJuMD007670;
+        Mon, 30 May 2022 10:24:12 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3gbcb7hwbc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 May 2022 10:24:12 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24UAO9ru50463078
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 May 2022 10:24:09 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3491D4C044;
+        Mon, 30 May 2022 10:24:09 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B232B4C040;
+        Mon, 30 May 2022 10:24:08 +0000 (GMT)
+Received: from li-ca45c2cc-336f-11b2-a85c-c6e71de567f1.ibm.com (unknown [9.171.70.209])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 30 May 2022 10:24:08 +0000 (GMT)
+Message-ID: <f23fd9bcfed138c4a18080cb6af45641971366a9.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 17/19] KVM: s390: pv: add
+ KVM_CAP_S390_PROTECTED_ASYNC_DISABLE
+From:   Nico Boehr <nrb@linux.ibm.com>
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        mimu@linux.ibm.com
+Date:   Mon, 30 May 2022 12:24:08 +0200
+In-Reply-To: <20220414080311.1084834-18-imbrenda@linux.ibm.com>
+References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
+         <20220414080311.1084834-18-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3uz1BIoS9whtemtrxnKakovFO-uOEgAd
+X-Proofpoint-GUID: RUxO8D-ovJF9PK0lAqcxZX4nysiKr4D6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-30_03,2022-05-30_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 clxscore=1015 mlxscore=0
+ suspectscore=0 impostorscore=0 mlxlogscore=783 priorityscore=1501
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205300053
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xfrm_input needs to handle skb internally. But skb is not freed When
-xo->flags & XFRM_GRO == 0 and decaps == 0.
+On Thu, 2022-04-14 at 10:03 +0200, Claudio Imbrenda wrote:
+> Add KVM_CAP_S390_PROTECTED_ASYNC_DISABLE to signal that the
+> KVM_PV_ASYNC_DISABLE and KVM_PV_ASYNC_DISABLE_PREPARE commands for
+> the
+> KVM_S390_PV_COMMAND ioctl are available.
+>=20
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-Fixes: 7785bba299a8 ("esp: Add a software GRO codepath")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
- net/xfrm/xfrm_input.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/xfrm/xfrm_input.c b/net/xfrm/xfrm_input.c
-index 144238a50f3d..6f9576352f30 100644
---- a/net/xfrm/xfrm_input.c
-+++ b/net/xfrm/xfrm_input.c
-@@ -742,7 +742,7 @@ int xfrm_input(struct sk_buff *skb, int nexthdr, __be32 spi, int encap_type)
- 			gro_cells_receive(&gro_cells, skb);
- 			return err;
- 		}
--
-+		kfree_skb(skb);
- 		return err;
- 	}
- 
--- 
-2.25.1
-
+Reviewed-by: Nico Boehr <nrb@linux.ibm.com>

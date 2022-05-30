@@ -2,90 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60D705388C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 00:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C635388D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 00:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241470AbiE3WH3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 30 May 2022 18:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
+        id S241057AbiE3WOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 18:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239182AbiE3WH1 (ORCPT
+        with ESMTP id S232445AbiE3WOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 18:07:27 -0400
-X-Greylist: delayed 432 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 30 May 2022 15:07:26 PDT
-Received: from relay4.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994D14BBA7;
-        Mon, 30 May 2022 15:07:26 -0700 (PDT)
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay01.hostedemail.com (Postfix) with ESMTP id B5E396031E;
-        Mon, 30 May 2022 22:00:12 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf03.hostedemail.com (Postfix) with ESMTPA id 96F2360010;
-        Mon, 30 May 2022 22:00:06 +0000 (UTC)
-Date:   Tue, 31 May 2022 00:00:06 +0200
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Yonghong Song <yhs@fb.com>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_tracing/kprobes=3A_Check_whether_get=5Fk?= =?US-ASCII?Q?retprobe=28=29_returns_NULL_in_kretprobe=5Fdispatcher=28=29?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <0204f480-cdb0-e49f-9034-602eced02966@iogearbox.net>
-References: <165366693881.797669.16926184644089588731.stgit@devnote2> <0204f480-cdb0-e49f-9034-602eced02966@iogearbox.net>
-Message-ID: <7619DB57-C39B-4A49-808C-7ACF12D58592@goodmis.org>
+        Mon, 30 May 2022 18:14:45 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BAD5D5F7;
+        Mon, 30 May 2022 15:14:43 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id h19so7096996edj.0;
+        Mon, 30 May 2022 15:14:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Tcw7h7wb8BE8oW7NJUYk/qOSs6p8a/jo+wYZpgwb+VQ=;
+        b=KRtOg3sD6ksVEizMT8xbk1CGtMAEAcC4rwk/8/z4uq/lozs9E/1jPnZ/59uP6eXRIe
+         IO5fGFqWiNAIZtqBWaN/GUif65mztAqqdbI1eOGKkvt9VJDDdtA36ru/lds5czBDlbNw
+         +zzUPW3FG8E1TQT3dgl+gPPjJugewEcbffgVKOJ6G7NBTGukNqHU1L4QAC9fXvvp7u7V
+         Kov9V72LIxasw8//Ojrirf7YsLxk4Bv9FUo/idi06mW+mlj6I6O3fywjTdcPVJBcxdvO
+         mCcWS/oSW+HKNQTp+SpPW5HgPgH7S6u/ysfRl1kVSMGK4GtCBU9kKQz5YGUIXe66FOZg
+         9a/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Tcw7h7wb8BE8oW7NJUYk/qOSs6p8a/jo+wYZpgwb+VQ=;
+        b=uSK66jNZo9zdQ0bDz/DUalOIiEpErJpPry2LU8UhAckYb8v9Ln4ZNZKGqsge+JpMNo
+         wWdWIhDRMhHtxwIRliAsXwU74a+KRxkiVs8JOVZikKkPAQinQEQsD28cg0NRi7qrkrOB
+         fT/LACf4qBSuArV/KzKM7DQrClr7rBX7Q+7RVBc3UwDe8BdFqTGY9T3cSarJZ0cB1nyv
+         76pA9JErriFk4VYSRyKmInkFZl2VY6OGa6wWTX7xZe9J53mmk/wVL+J80zw933yea2tg
+         EUVJJJuZ5myhYLoD5fVT6b67G3PDazppHxo1BUGQsushTxM7bQu5W4KI4mVn7DGDcVUx
+         Nmcg==
+X-Gm-Message-State: AOAM532m/+Xmpky3n0GlZQC+Ghmr2qgwRP5t872VtziOj2a3Jkj/p+XM
+        BznXpGC+mrv4dPfXe9K4goh9R5DPWKE=
+X-Google-Smtp-Source: ABdhPJyOZh7MEWvb1fnDNrYpL8RK+Xx2D3HceU25XfIY4Nn6sekFW6SoDgoxacZX5dkRq0uPVBmsNw==
+X-Received: by 2002:aa7:d4c9:0:b0:42d:cbf0:bfb1 with SMTP id t9-20020aa7d4c9000000b0042dcbf0bfb1mr10286216edr.278.1653948882134;
+        Mon, 30 May 2022 15:14:42 -0700 (PDT)
+Received: from demon-pc.localdomain ([188.24.86.218])
+        by smtp.gmail.com with ESMTPSA id a92-20020a509ee5000000b0042dbc55f6e4sm4485850edf.7.2022.05.30.15.14.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 15:14:41 -0700 (PDT)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: [PATCH 1/4] serial: max310x: use regmap methods for SPI batch operations
+Date:   Tue, 31 May 2022 01:14:26 +0300
+Message-Id: <20220530221429.1248083-1-demonsingur@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: 96F2360010
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
-X-Stat-Signature: c5jjitb71wxu61mgg3cdk4ifxq19mnzc
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19SJ4DA/RUAg8tgaymn2dO+x7FzwARsHRg=
-X-HE-Tag: 1653948006-138409
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
+The SPI batch read/write operations can be implemented as simple
+regmap raw read and write, which will also try to do a gather
+write just as it is done here.
 
-On May 30, 2022 9:33:23 PM GMT+02:00, Daniel Borkmann <daniel@iogearbox.net> wrote:
->On 5/27/22 5:55 PM, Masami Hiramatsu (Google) wrote:
->> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->> 
->> There is a small chance that get_kretprobe(ri) returns NULL in
->> kretprobe_dispatcher() when another CPU unregisters the kretprobe
->> right after __kretprobe_trampoline_handler().
->> 
->> To avoid this issue, kretprobe_dispatcher() checks the get_kretprobe()
->> return value again. And if it is NULL, it returns soon because that
->> kretprobe is under unregistering process.
->> 
->> This issue has been introduced when the kretprobe is decoupled
->> from the struct kretprobe_instance by commit d741bf41d7c7
->> ("kprobes: Remove kretprobe hash"). Before that commit, the
->> struct kretprob_instance::rp directly points the kretprobe
->> and it is never be NULL.
->> 
->> Reported-by: Yonghong Song <yhs@fb.com>
->> Fixes: d741bf41d7c7 ("kprobes: Remove kretprobe hash")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->
->Steven, I presume you'll pick this fix up?
+Use the regmap raw read and write methods.
 
-I'm currently at Embedded/Kernel Recipes, but yeah, I'll take a look at it. (Just need to finish my slides first ;-)
+Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+---
+ drivers/tty/serial/max310x.c | 36 ++++++++----------------------------
+ 1 file changed, 8 insertions(+), 28 deletions(-)
 
--- Steve
->
->Thanks,
->Daniel
-
+diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
+index a0b6ea52d133..46887a4ffea4 100644
+--- a/drivers/tty/serial/max310x.c
++++ b/drivers/tty/serial/max310x.c
+@@ -259,8 +259,6 @@ struct max310x_one {
+ 	struct work_struct	md_work;
+ 	struct work_struct	rs_work;
+ 
+-	u8 wr_header;
+-	u8 rd_header;
+ 	u8 rx_buf[MAX310X_FIFO_SIZE];
+ };
+ #define to_max310x_port(_port) \
+@@ -623,32 +621,18 @@ static u32 max310x_set_ref_clk(struct device *dev, struct max310x_port *s,
+ 
+ static void max310x_batch_write(struct uart_port *port, u8 *txbuf, unsigned int len)
+ {
+-	struct max310x_one *one = to_max310x_port(port);
+-	struct spi_transfer xfer[] = {
+-		{
+-			.tx_buf = &one->wr_header,
+-			.len = sizeof(one->wr_header),
+-		}, {
+-			.tx_buf = txbuf,
+-			.len = len,
+-		}
+-	};
+-	spi_sync_transfer(to_spi_device(port->dev), xfer, ARRAY_SIZE(xfer));
++	struct max310x_port *s = dev_get_drvdata(port->dev);
++	u8 reg = port->iobase + MAX310X_THR_REG;
++
++	regmap_raw_write(s->regmap, reg, txbuf, len);
+ }
+ 
+ static void max310x_batch_read(struct uart_port *port, u8 *rxbuf, unsigned int len)
+ {
+-	struct max310x_one *one = to_max310x_port(port);
+-	struct spi_transfer xfer[] = {
+-		{
+-			.tx_buf = &one->rd_header,
+-			.len = sizeof(one->rd_header),
+-		}, {
+-			.rx_buf = rxbuf,
+-			.len = len,
+-		}
+-	};
+-	spi_sync_transfer(to_spi_device(port->dev), xfer, ARRAY_SIZE(xfer));
++	struct max310x_port *s = dev_get_drvdata(port->dev);
++	u8 reg = port->iobase + MAX310X_RHR_REG;
++
++	regmap_raw_read(s->regmap, reg, rxbuf, len);
+ }
+ 
+ static void max310x_handle_rx(struct uart_port *port, unsigned int rxlen)
+@@ -1368,10 +1352,6 @@ static int max310x_probe(struct device *dev, const struct max310x_devtype *devty
+ 		INIT_WORK(&s->p[i].md_work, max310x_md_proc);
+ 		/* Initialize queue for changing RS485 mode */
+ 		INIT_WORK(&s->p[i].rs_work, max310x_rs_proc);
+-		/* Initialize SPI-transfer buffers */
+-		s->p[i].wr_header = (s->p[i].port.iobase + MAX310X_THR_REG) |
+-				    MAX310X_WRITE_BIT;
+-		s->p[i].rd_header = (s->p[i].port.iobase + MAX310X_RHR_REG);
+ 
+ 		/* Register port */
+ 		ret = uart_add_one_port(&max310x_uart, &s->p[i].port);
 -- 
-Sent from my Android device with K-9 Mail. Please excuse my brevity and top posting.
+2.36.1
+

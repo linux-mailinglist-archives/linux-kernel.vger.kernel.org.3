@@ -2,91 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2438F537B2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBD2537B39
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236454AbiE3NQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 09:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43036 "EHLO
+        id S236467AbiE3NRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 09:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbiE3NQm (ORCPT
+        with ESMTP id S236459AbiE3NRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 09:16:42 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DB364ED;
-        Mon, 30 May 2022 06:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=obYBR28FbpSJAp30gAezgU5OKkXGsA5r4rJru5EBzPo=; b=Jg0O7ZkawyIbRQYiQh/fe1DLO5
-        pOHRuud+4bXV4vL70xI5fSEpFwKXx0k5p4uGlhacsWYGmIHWHSsVGbRyuXlR3uffdhblS/7bbXNKi
-        wFgq5v6bZdIQTW8lSpbYaBomCcTk41s8jINRbPxdE4s4Z5HP0k2UJAAhioDN9Bj4fRvk324HcvURl
-        Qk5VRSvmcYMXz1ORFPtzMgA/OtlL7xWpuu/TcLqh7cvKTFCHVCClBOSJFTmCfDAT8CY8PPs4AzG8T
-        3Nnct7Q0l8e+WE/0fLFV7vgC8CiW8FRkiGpRXWR9rMLz6kxKhh527AUvtIxDXX7zzjuga2UOZifWq
-        U9dDap5w==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nvfG2-004Umx-3z; Mon, 30 May 2022 13:16:30 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DB035980DE7; Mon, 30 May 2022 15:16:27 +0200 (CEST)
-Date:   Mon, 30 May 2022 15:16:27 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        rcu@vger.kernel.org
-Subject: Re: [RFC PATCH 4/4] cpuset: Support RCU-NOCB toggle on v2 root
- partitions
-Message-ID: <YpTDq6Z/+hp+CHwf@worktop.programming.kicks-ass.net>
-References: <Yo/FGcG+uiBh88sT@slm.duckdns.org>
- <20220526225141.GA1214445@lothringen>
- <YpAHEt0j30vBw9au@slm.duckdns.org>
- <9e44bb00-955a-dbc6-a863-be649e0c701f@redhat.com>
- <YpAdSW8JXVPOoNJl@slm.duckdns.org>
- <20220527083018.n43nc73vuuzm5ixo@localhost.localdomain>
- <YpIwsiaY2IPK96WO@hirez.programming.kicks-ass.net>
- <20220530004049.GA1251147@lothringen>
- <YpR8PUlIraYE2+5L@worktop.programming.kicks-ass.net>
- <20220530105650.GA1257179@lothringen>
+        Mon, 30 May 2022 09:17:39 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57EF3B578
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:17:37 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id bg25so6350001wmb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:17:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=j2loAziqNhERzkIv8i37duQw2j1y8JUfAmT6kjwPqZ0=;
+        b=KwYYKWhlIhh3l4N4cICO7brn1+7OxGWaU4COumZbiBwZ4VFqp9u+wX9k+G0YbVlMnE
+         3F5WC/OoMM/slLp6rWmD1EGyIoYSFxtB0y4jzGXkaaXvnu2o+yFViteuX1pN/OpRgBk7
+         UGoWAnxh08Y4zajj/5UCs1PfQrDB7f6QlAZy908BPsrikp+qWkykweT6+7deCm/IDFWD
+         atIfN78IfE9SJqpCyeyNHL4cxzi4WbesQTBmMI3Xuwy+dE0AD7tDZk7x8DBFGpPNOeqb
+         2zS/8lMS9PkNW8tL2GaUQHMOmHKz1EiA6QCNOZRIdTSIBVPzL8eguuKPuNlSem8y02zp
+         G0aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=j2loAziqNhERzkIv8i37duQw2j1y8JUfAmT6kjwPqZ0=;
+        b=YQxTKrVt/uxXCPFycIlflOZEfuNk+L4g7E+dCG2qwEfd2TkyS1HnkdKBZq7bLCS0jv
+         MXqjBzSX1+LXwx3C4uewutlPtLcYnteC+fqeYneePf4yP0ed0KlLHvvFaK7DO5wUwgNv
+         C9MGNLuhZTfmuUVHwXVajVuTQVRUTl+8UoP/wr/vbhTQtiSMWGuXAEfyr9V5h6OJRdWR
+         3L5gmZaOhVnZrPTnQb0ahghHBH5bia+Azu56HPR+8vh1MDBCWsLcr1W+fNpgWLjKFgjD
+         3Za3iT9eG0YI0H0WQP5VMSM0CSaRHBAg+Fpo7fdbY3m0M6UhP6Tgk+7hmAixgp8UD2UU
+         7XoQ==
+X-Gm-Message-State: AOAM530q+VeVIV0K5Hi0p65nvxSViddQmryEjCQ3kWkDVInu3ESnVVfb
+        LFwaaJEk7wRGXdwsFrsV12qI3w==
+X-Google-Smtp-Source: ABdhPJxq1wtbPgPiWsaIvF0LsfgvrATmkZbeRau6FYu3krMyKIizLBhqo+Ag/CWDZ/RyBV1Zd+hM1Q==
+X-Received: by 2002:a1c:f20f:0:b0:39c:388:f22a with SMTP id s15-20020a1cf20f000000b0039c0388f22amr5403146wmc.52.1653916656269;
+        Mon, 30 May 2022 06:17:36 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:c918:d0ea:5b07:e1c3])
+        by smtp.gmail.com with ESMTPSA id m3-20020a5d6243000000b0020cd8f1d25csm9213648wrv.8.2022.05.30.06.17.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 06:17:35 -0700 (PDT)
+Date:   Mon, 30 May 2022 15:17:30 +0200
+From:   Marco Elver <elver@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
+        jbaron@akamai.com, rostedt@goodmis.org, ardb@kernel.org,
+        mark.rutland@arm.com, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 3/7] objtool: Mark __ubsan_handle_builtin_unreachable()
+ as noreturn
+Message-ID: <YpTD6k95/4dShUl1@elver.google.com>
+References: <20220526105252.440440893@infradead.org>
+ <20220526105957.879581277@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220530105650.GA1257179@lothringen>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220526105957.879581277@infradead.org>
+User-Agent: Mutt/2.1.4 (2021-12-11)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 12:56:50PM +0200, Frederic Weisbecker wrote:
-
-> > This is ABI, you can't walk back on it. I would suggest starting with an
-> > 'all feature' isolation. Only if there's real demand for something more
-> > fine-grained add that on top. Simple first etc.
+On Thu, May 26, 2022 at 12:52PM +0200, Peter Zijlstra wrote:
+>   fs/ntfs3/ntfs3.prelink.o: warning: objtool: ni_read_frame() falls through to next function ni_readpage_cmpr.cold()
 > 
-> That's actually my worry. If we start with an all in one ABI, how do we later
-> mix that up with more finegrained features? Like what will be the behaviour of:
+> That is in fact:
 > 
-> cpuset.isolation.rcu_nocb = 0
-> cpuset.isolation.all = 1
+> 000000000000124a <ni_read_frame.cold>:
+>     124a:       44 89 e0                mov    %r12d,%eax
+>     124d:       0f b6 55 98             movzbl -0x68(%rbp),%edx
+>     1251:       48 c7 c7 00 00 00 00    mov    $0x0,%rdi        1254: R_X86_64_32S      .data+0x1380
+>     1258:       48 89 c6                mov    %rax,%rsi
+>     125b:       e8 00 00 00 00          call   1260 <ni_read_frame.cold+0x16>   125c: R_X86_64_PLT32    __ubsan_handle_shift_out_of_bounds-0x4
+>     1260:       48 8d 7d cc             lea    -0x34(%rbp),%rdi
+>     1264:       e8 00 00 00 00          call   1269 <ni_read_frame.cold+0x1f>   1265: R_X86_64_PLT32    __tsan_read4-0x4
+>     1269:       8b 45 cc                mov    -0x34(%rbp),%eax
+>     126c:       e9 00 00 00 00          jmp    1271 <ni_read_frame.cold+0x27>   126d: R_X86_64_PC32     .text+0x19109
+>     1271:       48 8b 75 a0             mov    -0x60(%rbp),%rsi
+>     1275:       48 63 d0                movslq %eax,%rdx
+>     1278:       48 c7 c7 00 00 00 00    mov    $0x0,%rdi        127b: R_X86_64_32S      .data+0x13a0
+>     127f:       89 45 88                mov    %eax,-0x78(%rbp)
+>     1282:       e8 00 00 00 00          call   1287 <ni_read_frame.cold+0x3d>   1283: R_X86_64_PLT32    __ubsan_handle_shift_out_of_bounds-0x4
+>     1287:       8b 45 88                mov    -0x78(%rbp),%eax
+>     128a:       e9 00 00 00 00          jmp    128f <ni_read_frame.cold+0x45>   128b: R_X86_64_PC32     .text+0x19098
+>     128f:       48 c7 c7 00 00 00 00    mov    $0x0,%rdi        1292: R_X86_64_32S      .data+0x11f0
+>     1296:       e8 00 00 00 00          call   129b <ni_readpage_cmpr.cold>     1297: R_X86_64_PLT32    __ubsan_handle_builtin_unreachable-0x4
+> 
+> 000000000000129b <ni_readpage_cmpr.cold>:
+> 
+> Tell objtool that __ubsan_handle_builtin_unreachable() is a noreturn.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Link: https://lkml.kernel.org/r/20220502091514.GB479834@worktop.programming.kicks-ass.net
 
-Well clearly that doesn't make sense. I was more thinking along the
-lines of cgroup.subtree_control, where instead all features are enabled
-by default.
+Acked-by: Marco Elver <elver@google.com>
 
-But only if there's a real usecase, otherwise there's no point in
-providing such knobs.
+> ---
+>  tools/objtool/check.c |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -185,6 +185,7 @@ static bool __dead_end_function(struct o
+>  		"stop_this_cpu",
+>  		"__invalid_creds",
+>                 "cpu_startup_entry",
+> +		"__ubsan_handle_builtin_unreachable",
+>  	};
+>  
+>  	if (!func)
+> 
+> 

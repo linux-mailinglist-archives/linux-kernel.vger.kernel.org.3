@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BF95386AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 19:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07FCC5386B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 19:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239715AbiE3RRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 13:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S241033AbiE3RVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 13:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbiE3RRf (ORCPT
+        with ESMTP id S232809AbiE3RU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 13:17:35 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB2057139
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 10:17:33 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id j6so11024745pfe.13
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 10:17:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=v32XyTzYwEZ6CcA55bpkB++VCp4n/aQDrKIUuhlqtLw=;
-        b=u8TAtGuCUdK5voRyLmSukH8SoKS84J0lPAzQOXpDnxNjtGSZx/CKLZoB1SKoIiLm/f
-         3ayEBaewDh2Z/9oyMweEy7IIRXL0/ESm4yT4+SecscYeXmjCMz8RRZiA5UoYRRBnnsbk
-         wVvx9+KOQ21oyra6V3KMk+gXh+ugrpxAwlYZ/Fn4pybFHLYnR+x26JOnkurJfLYg13WX
-         MIRhlS6alU+wurnKCOTj5JfIMP5JBzG43jvpsVVDCyDXQnoKWfL6i+J22mb0zd4M5ZlR
-         5Wu1lY3zCyzdQ+x8sHB5w3MwQNnDwU2l8K51shptwZtFLg0TqfDYiPN+gxT3WHUYCO1G
-         W+1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=v32XyTzYwEZ6CcA55bpkB++VCp4n/aQDrKIUuhlqtLw=;
-        b=apn6SGdHj66ScXtsyWbxoOYBveLbLl+uDFpiHpaGI+67mjBMi4c3bm+uY8SIXXZybR
-         wmpuxLtntSwS6bSNPUyT1GCU0oAxNVM309sLouDFeDK9DIqfbgKBrX0u41RRFiT/2R3i
-         +YiMYJcZyIV0Tw0bPWlfnxQfiLuutIOFTcpbrOCtgBF965qQUnfGG1cwCZeFuEXLotRu
-         m2CsQqtLKIV++ncEtgJNbZgiRtlENqdTZQdAaR5nccvKoZu1rccxzT3pqJpHoyWbr/mN
-         xBo23Oc/8CzZnFicTlD2ybCbEUaFWYmBlGMTqbXOcGWftQcVQ5vqPVN2WhyNKfCb7nGj
-         eAKA==
-X-Gm-Message-State: AOAM531S88/HyEE4eqBuDxO7q7UIf3jddEbTDzCRmFS1TM0IrU226BjL
-        gHH6tJMvSkoAg7hLU4qkZuIYRg==
-X-Google-Smtp-Source: ABdhPJwCr4F4DOh6HBx4KBklJyG6sO2vY56x0JQAK8vbbspV4akagYbYnfnULot7a4R+5hXyEDDnJg==
-X-Received: by 2002:a63:63c7:0:b0:3f5:faf8:c45e with SMTP id x190-20020a6363c7000000b003f5faf8c45emr49893892pgb.234.1653931053461;
-        Mon, 30 May 2022 10:17:33 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id h22-20020a170902ac9600b00163ed0931b7sm1855644plr.302.2022.05.30.10.17.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 10:17:31 -0700 (PDT)
-Date:   Mon, 30 May 2022 11:17:28 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     bjorn.andersson@linaro.org, arnaud.pouliquen@foss.st.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peng.fan@nxp.com
-Subject: Re: [PATCH V4 1/2] remoteproc: introduce rproc features
-Message-ID: <20220530171728.GA482330@p14s>
-References: <20220323034405.976643-1-peng.fan@oss.nxp.com>
- <20220323034405.976643-2-peng.fan@oss.nxp.com>
+        Mon, 30 May 2022 13:20:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5A76A032;
+        Mon, 30 May 2022 10:20:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8199121B8D;
+        Mon, 30 May 2022 17:20:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653931255; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CJyIwtAg/jNa1Bodfbo+azB/rtZUEVRWLEsBdgvem4o=;
+        b=eN/Aw00vrTRgT2BOLWw/JDT1z2FMyBqFCvkxqN047x6wpYqerwESI2flL/xN7tDuLPvq06
+        LpvkVgYaCzMu+IeE48wBpFcfGNOlQ4jzxcVVTJ6wY+kAiLBH4boQq4buyH8h8rZuy48lnC
+        1gHRYmoblI3jrbHuqMkEmFm5yfVeXw8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653931255;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CJyIwtAg/jNa1Bodfbo+azB/rtZUEVRWLEsBdgvem4o=;
+        b=jm5Dgvsqv9X8LG2KtQkUe8+T4CEetvyfUp60KRcgK+WUlrWPWdY3gsxs+oxXspCckBf9e5
+        dTkQnlswuSkNQJCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5115F13AFD;
+        Mon, 30 May 2022 17:20:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8KXREvf8lGIbKAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 30 May 2022 17:20:55 +0000
+Message-ID: <df7de69a-47b3-1a28-f673-8f9a94f70a97@suse.de>
+Date:   Mon, 30 May 2022 19:20:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220323034405.976643-2-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] drm/prime: Ensure mmap offset is initialized
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
+Cc:     Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        freedreno <freedreno@lists.freedesktop.org>
+References: <20220529162936.2539901-1-robdclark@gmail.com>
+ <0bf230f4-c888-b9c9-f061-7450406baa4a@suse.de>
+ <CAF6AEGthAfWyAvbuE4EP+u52LEKS2Fs6X=gG8qUjc7gci6oh-A@mail.gmail.com>
+ <CAKMK7uG9=EcmD4hPqm4zYsDHiS9Mr=y_5tUa_R1veDxSSK-P-Q@mail.gmail.com>
+ <CAF6AEGuLeLmD4m+yi5csGdb0XZbnAOfYOKx6c-wEgMGt6rj7Cw@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAF6AEGuLeLmD4m+yi5csGdb0XZbnAOfYOKx6c-wEgMGt6rj7Cw@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------F0cE3sBzn3h7KklEgauifnUx"
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,89 +82,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------F0cE3sBzn3h7KklEgauifnUx
+Content-Type: multipart/mixed; boundary="------------VCCzzrsxShmwjk0tRjIOQdtW";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Rob Clark <robdclark@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
+Cc: Rob Clark <robdclark@chromium.org>, David Airlie <airlied@linux.ie>,
+ linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ dri-devel <dri-devel@lists.freedesktop.org>,
+ Gerd Hoffmann <kraxel@redhat.com>,
+ freedreno <freedreno@lists.freedesktop.org>
+Message-ID: <df7de69a-47b3-1a28-f673-8f9a94f70a97@suse.de>
+Subject: Re: [PATCH] drm/prime: Ensure mmap offset is initialized
+References: <20220529162936.2539901-1-robdclark@gmail.com>
+ <0bf230f4-c888-b9c9-f061-7450406baa4a@suse.de>
+ <CAF6AEGthAfWyAvbuE4EP+u52LEKS2Fs6X=gG8qUjc7gci6oh-A@mail.gmail.com>
+ <CAKMK7uG9=EcmD4hPqm4zYsDHiS9Mr=y_5tUa_R1veDxSSK-P-Q@mail.gmail.com>
+ <CAF6AEGuLeLmD4m+yi5csGdb0XZbnAOfYOKx6c-wEgMGt6rj7Cw@mail.gmail.com>
+In-Reply-To: <CAF6AEGuLeLmD4m+yi5csGdb0XZbnAOfYOKx6c-wEgMGt6rj7Cw@mail.gmail.com>
 
-On Wed, Mar 23, 2022 at 11:44:04AM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> remote processor may support:
->  - firmware recovery with help from main processor
->  - self recovery without help from main processor
->  - iommu
->  - etc
-> 
-> Introduce rproc features could simplify code to avoid adding more bool
-> flags
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/remoteproc/remoteproc_internal.h | 10 ++++++++++
->  include/linux/remoteproc.h               |  7 +++++++
->  2 files changed, 17 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-> index 72d4d3d7d94d..e9ae743c5587 100644
-> --- a/drivers/remoteproc/remoteproc_internal.h
-> +++ b/drivers/remoteproc/remoteproc_internal.h
-> @@ -24,6 +24,16 @@ struct rproc_debug_trace {
->  	struct rproc_mem_entry trace_mem;
->  };
->  
-> +static inline bool rproc_has_feature(struct rproc *rproc, unsigned int feature)
-> +{
-> +	return test_bit(feature, rproc->features);
-> +}
-> +
-> +static inline void rproc_set_feature(struct rproc *rproc, unsigned int feature)
-> +{
+--------------VCCzzrsxShmwjk0tRjIOQdtW
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-I would expect this function to return -EINVAL if feature is >
-RPROC_MAX_FEATURES.
+SGkNCg0KQW0gMzAuMDUuMjIgdW0gMTc6NDEgc2NocmllYiBSb2IgQ2xhcms6DQo+IE9uIE1v
+biwgTWF5IDMwLCAyMDIyIGF0IDc6NDkgQU0gRGFuaWVsIFZldHRlciA8ZGFuaWVsQGZmd2xs
+LmNoPiB3cm90ZToNCj4+DQo+PiBPbiBNb24sIDMwIE1heSAyMDIyIGF0IDE1OjU0LCBSb2Ig
+Q2xhcmsgPHJvYmRjbGFya0BnbWFpbC5jb20+IHdyb3RlOg0KPj4+DQo+Pj4gT24gTW9uLCBN
+YXkgMzAsIDIwMjIgYXQgMTI6MjYgQU0gVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5u
+QHN1c2UuZGU+IHdyb3RlOg0KPj4+Pg0KPj4+PiBIaQ0KPj4+Pg0KPj4+PiBBbSAyOS4wNS4y
+MiB1bSAxODoyOSBzY2hyaWViIFJvYiBDbGFyazoNCj4+Pj4+IEZyb206IFJvYiBDbGFyayA8
+cm9iZGNsYXJrQGNocm9taXVtLm9yZz4NCj4+Pj4+DQo+Pj4+PiBJZiBhIEdFTSBvYmplY3Qg
+aXMgYWxsb2NhdGVkLCBhbmQgdGhlbiBleHBvcnRlZCBhcyBhIGRtYS1idWYgZmQgd2hpY2gg
+aXMNCj4+Pj4+IG1tYXAnZCBiZWZvcmUgb3Igd2l0aG91dCB0aGUgR0VNIGJ1ZmZlciBiZWlu
+ZyBkaXJlY3RseSBtbWFwJ2QsIHRoZQ0KPj4+Pj4gdm1hX25vZGUgY291bGQgYmUgdW5pdGlh
+bGl6ZWQuICBUaGlzIGxlYWRzIHRvIGEgc2l0dWF0aW9uIHdoZXJlIHRoZSBDUFUNCj4+Pj4+
+IG1hcHBpbmcgaXMgbm90IGNvcnJlY3RseSB0b3JuIGRvd24gaW4gZHJtX3ZtYV9ub2RlX3Vu
+bWFwKCkuDQo+Pj4+DQo+Pj4+IFdoaWNoIGRyaXZlcnMgYXJlIGFmZmVjdGVkIGJ5IHRoaXMg
+cHJvYmxlbT8NCj4+Pj4NCj4+Pj4gSSBjaGVja2VkIHNldmVyYWwgZHJpdmVycyBhbmQgbW9z
+dCBhcHBlYXIgdG8gYmUgaW5pdGlhbGl6aW5nIHRoZSBvZmZzZXQNCj4+Pj4gZHVyaW5nIG9i
+amVjdCBjb25zdHJ1Y3Rpb24sIHN1Y2ggYXMgR0VNIFNITUVNLiBbMV0gVFRNLWJhc2VkIGRy
+aXZlcnMNCj4+Pj4gYWxzbyBzZWVtIHVuYWZmZWN0ZWQuIFsyXQ0KPj4+Pg0KPj4+PiAgIEZy
+b20gYSBxdWljayBncmVwLCBvbmx5IGV0bmF2aXYsIG1zbSBhbmQgb21hcGRybSBhcHBlYXIg
+dG8gYmUgYWZmZWN0ZWQ/DQo+Pj4+IFRoZXkgb25seSBzZWVtIHRvIHJ1biBkcm1fZ2VtX2Ny
+ZWF0ZV9tbWFwX29mZnNldCgpIGZyb20gdGhlaXINCj4+Pj4gaW9jdGwtaGFuZGxpbmcgY29k
+ZS4NCj4+Pj4NCj4+Pj4gSWYgc28sIEknZCBzYXkgaXQncyBwcmVmZXJhYmxlIHRvIGZpeCB0
+aGVzZSBkcml2ZXJzIGFuZCBwdXQgYQ0KPj4+PiBkcm1fV0FSTl9PTkNFKCkgaW50byBkcm1f
+Z2VtX3ByaW1lX21tYXAoKS4NCj4+Pg0KPj4+IFRoYXQgaXMgZ29vZCBpZiBmZXdlciBkcml2
+ZXJzIGFyZSBhZmZlY3RlZCwgaG93ZXZlciBJIGRpc2FncmVlIHdpdGgNCj4+PiB5b3VyIHBy
+b3Bvc2FsLiAgQXQgbGVhc3QgZm9yIGZyZWVkcmVubyB1c2Vyc3BhY2UsIGEgbG90IG9mIGJv
+J3MgbmV2ZXINCj4+PiBnZXQgbW1hcCdkIChlaXRoZXIgZGlyZWN0bHkgb2YgdmlhIGRtYWJ1
+ZiksIHNvIHdlIHNob3VsZCBub3QgYmUNCj4+PiBhbGxvY2F0aW5nIGEgbW1hcCBvZmZzZXQg
+dW5uZWNlc3NhcmlseS4NCj4+DQo+PiBEb2VzIHRoaXMgYWN0dWFsbHkgbWF0dGVyIGluIHRo
+ZSBncmFuZCBzY2hlbWUgb2YgdGhpbmdzPyBXZSBvcmlnaW5hbGx5DQo+PiBhbGxvY2F0ZWQg
+bW1hcCBvZmZzZXQgb25seSBvbiBkZW1hbmQgYmVjYXVzZSB1c2Vyc3BhY2Ugb25seSBoYWQg
+MzJiaXQNCj4+IGxvZmZfdCBzdXBwb3J0IGFuZCBzbyBzaW1wbHkgY291bGRuJ3QgbW1hcCBh
+bnl0aGluZyBpZiB0aGUgb2Zmc2V0DQo+PiBlbmRlZCB1cCBhYm92ZSAzMmJpdCAoZXZlbiBp
+ZiB0aGVyZSB3YXMgc3RpbGwgdmEgc3BhY2UgYXZhaWxhYmxlKS4NCj4+DQo+PiBCdXQgdGhv
+c2UgZGF5cyBhcmUgbG9uZyBnb25lIChhYm91dCAxMCB5ZWFycyBvciBzbykgYW5kIHRoZSBh
+bGxvY2F0aW9uDQo+PiBvdmVyaGVhZCBmb3IgYW4gbW1hcCBvZmZzZXQgaXMgdGlueS4gU28g
+SSB0aGluayB1bmxlc3MgeW91IGNhbg0KPj4gYmVuY2htYXJrIGFuIGltcGFjdCBhbGxvY2F0
+aW5nIGl0IGF0IGJvIGFsbG9jIHNlZW1zIGxpa2UgdGhlIHNpbXBsZXN0DQo+PiBkZXNpZ24g
+b3ZlcmFsbCwgYW5kIGhlbmNlIHdoYXQgd2Ugc2hvdWxkIGJlIGRvaW5nLiBBbmQgaWYgdGhl
+IHZtYQ0KPj4gb2Zmc2V0IGFsbG9jYXRpb24gZXZlcnkgZ2V0cyB0b28gc2xvdyBkdWUgdG8g
+ZnJhZ21lbnRhdGlvbiB3ZSBjYW4gbGlmdA0KPj4gdGhlIGhvbGUgdHJlZSBmcm9tIGk5MTUg
+aW50byBkcm1fbW0gYW5kIHRoZSBqb2Igc2hvdWxkIGJlIGRvbmUuIEF0DQo+PiB0aGF0IHBv
+aW50IHdlIGNvdWxkIGFsc28gYWxsb2NhdGUgdGhlIG9mZnNldCB1bmNvbmRpdGlvbmFsbHkg
+aW4gdGhlDQo+PiBnZW1faW5pdCBmdW5jdGlvbiBhbmQgYmUgZG9uZSB3aXRoIGl0Lg0KPj4N
+Cj4+IElvdyBJIGNvbmN1ciB3aXRoIFRob21hcyBoZXJlLCB1bmxlc3MgdGhlcmUncyBoYXJk
+IGRhdGEgY29udHJhcnkNCj4+IHNpbXBsaWNpdHkgaW1vIHRydW1wcyBoZXJlLg0KPiANCj4g
+MzJiIHVzZXJzcGFjZSBpcyBzdGlsbCBhbGl2ZSBhbmQgd2VsbCwgYXQgbGVhc3Qgb24gYXJt
+IGNocm9tZWJvb2tzIDstKQ0KDQpJIG1vc3RseSBkaXNsaWtlIHRoZSBpbmNvbnNpc3RlbmN5
+IGFtb25nIGRyaXZlcnMuIElmIHdlIHdhbnQgdG8gY3JlYXRlIA0KdGhlIG9mZnNldCBvbi1k
+ZW1hbmQgaW4gdGhlIERSTSBoZWxwZXJzLCB3ZSBzaG91bGQgZG8gc28gZm9yIGFsbCANCmRy
+aXZlcnMuIEF0IGxlYXN0IG91ciBnZW5lcmljIEdFTSBoZWxwZXJzIGFuZCBUVE0gc2hvdWxk
+IGltcGxlbWVudCB0aGlzIA0KcGF0dGVybi4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0K
+PiANCj4gQlIsDQo+IC1SDQo+IA0KPj4gLURhbmllbA0KPj4NCj4+Pg0KPj4+IEJSLA0KPj4+
+IC1SDQo+Pj4NCj4+Pj4gQmVzdCByZWdhcmRzDQo+Pj4+IFRob21hcw0KPj4+Pg0KPj4+PiBb
+MV0NCj4+Pj4gaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvdjUuMTgvc291cmNl
+L2RyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtX3NobWVtX2hlbHBlci5jI0w4NQ0KPj4+PiBbMl0N
+Cj4+Pj4gaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvdjUuMTgvc291cmNlL2Ry
+aXZlcnMvZ3B1L2RybS90dG0vdHRtX2JvLmMjTDEwMDINCj4+Pj4NCj4+Pj4+DQo+Pj4+PiBG
+aXhlczogZTU1MTY1NTM5OTlmICgiZHJtOiBjYWxsIGRybV9nZW1fb2JqZWN0X2Z1bmNzLm1t
+YXAgd2l0aCBmYWtlIG9mZnNldCIpDQo+Pj4+PiBTaWduZWQtb2ZmLWJ5OiBSb2IgQ2xhcmsg
+PHJvYmRjbGFya0BjaHJvbWl1bS5vcmc+DQo+Pj4+PiAtLS0NCj4+Pj4+IE5vdGUsIGl0J3Mg
+cG9zc2libGUgdGhlIGlzc3VlIGV4aXN0ZWQgaW4gc29tZSByZWxhdGVkIGZvcm0gcHJpb3Ig
+dG8gdGhlDQo+Pj4+PiBjb21taXQgdGFnZ2VkIHdpdGggRml4ZXMuDQo+Pj4+Pg0KPj4+Pj4g
+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9wcmltZS5jIHwgNSArKysrKw0KPj4+Pj4gICAgMSBm
+aWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKQ0KPj4+Pj4NCj4+Pj4+IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL2dwdS9kcm0vZHJtX3ByaW1lLmMgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX3By
+aW1lLmMNCj4+Pj4+IGluZGV4IGUzZjA5ZjE4MTEwYy4uODQ5ZWVhMTU0ZGZjIDEwMDY0NA0K
+Pj4+Pj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2RybV9wcmltZS5jDQo+Pj4+PiArKysgYi9k
+cml2ZXJzL2dwdS9kcm0vZHJtX3ByaW1lLmMNCj4+Pj4+IEBAIC03MTYsNiArNzE2LDExIEBA
+IGludCBkcm1fZ2VtX3ByaW1lX21tYXAoc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmosIHN0
+cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hKQ0KPj4+Pj4gICAgICAgIHN0cnVjdCBmaWxlICpm
+aWw7DQo+Pj4+PiAgICAgICAgaW50IHJldDsNCj4+Pj4+DQo+Pj4+PiArICAgICAvKiBFbnN1
+cmUgdGhhdCB0aGUgdm1hX25vZGUgaXMgaW5pdGlhbGl6ZWQ6ICovDQo+Pj4+PiArICAgICBy
+ZXQgPSBkcm1fZ2VtX2NyZWF0ZV9tbWFwX29mZnNldChvYmopOw0KPj4+Pj4gKyAgICAgaWYg
+KHJldCkNCj4+Pj4+ICsgICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4+Pj4+ICsNCj4+Pj4+
+ICAgICAgICAvKiBBZGQgdGhlIGZha2Ugb2Zmc2V0ICovDQo+Pj4+PiAgICAgICAgdm1hLT52
+bV9wZ29mZiArPSBkcm1fdm1hX25vZGVfc3RhcnQoJm9iai0+dm1hX25vZGUpOw0KPj4+Pj4N
+Cj4+Pj4NCj4+Pj4gLS0NCj4+Pj4gVGhvbWFzIFppbW1lcm1hbm4NCj4+Pj4gR3JhcGhpY3Mg
+RHJpdmVyIERldmVsb3Blcg0KPj4+PiBTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55
+IEdtYkgNCj4+Pj4gTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQo+
+Pj4+IChIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCj4+Pj4gR2VzY2jDpGZ0c2bDvGhyZXI6
+IEl2byBUb3Rldg0KPj4NCj4+DQo+Pg0KPj4gLS0NCj4+IERhbmllbCBWZXR0ZXINCj4+IFNv
+ZnR3YXJlIEVuZ2luZWVyLCBJbnRlbCBDb3Jwb3JhdGlvbg0KPj4gaHR0cDovL2Jsb2cuZmZ3
+bGwuY2gNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVs
+b3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3Ry
+LiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVy
+ZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-> +	set_bit(feature, rproc->features);
-> +}
-> +
->  /* from remoteproc_core.c */
->  void rproc_release(struct kref *kref);
->  irqreturn_t rproc_vq_interrupt(struct rproc *rproc, int vq_id);
-> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> index 7c943f0a2fc4..7847c6b10a69 100644
-> --- a/include/linux/remoteproc.h
-> +++ b/include/linux/remoteproc.h
-> @@ -489,6 +489,11 @@ struct rproc_dump_segment {
->  	loff_t offset;
->  };
-> 
+--------------VCCzzrsxShmwjk0tRjIOQdtW--
 
-Please add proper kernel documentation.
+--------------F0cE3sBzn3h7KklEgauifnUx
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> +enum rproc_features {
-> +	RPROC_FEAT_ATTACH_RECOVERY,
+-----BEGIN PGP SIGNATURE-----
 
-s/RPROC_FEAT_ATTACH_RECOVERY/RPROC_FEAT_ATTACH_ON_RECOVERY
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmKU/PYFAwAAAAAACgkQlh/E3EQov+BE
+VRAAhMnp4FXmobeRVKi/auHmYMhzxIXd3wN5GCgKn9X/yYQXI4LxaY9OPl6We/kvgmNu7y4AW0Jt
+w4S7ciT3sZH18lqVwmJyv9AbUiL2w9toGAkMClmiiOTIvU0hbaHIaNfG6Z5CCFXAlhy4xbA/MNjH
+XFA/lcstS35eZX7iyP/0KPReQYlh8wPLONP0VoWx7nI3WOt9JhTyrF4I6zrvl774E3pSEE4NwpOG
+l6KE20g0qJrNaETInfLswBwOC6rO++x6Kd10DWC8DiTwV1Hw8BocS52LrDKS6KTaV0z9purJvvKP
+GFOv3vOANT3xZTSe+DbgMEZLWSEMZjwl3MDBsGBLMaU1jsuljo+iE6RfceVxQHmTUAKrFssFJ2rm
+JcvjgetAJj+8Osaf4lNy2kaj0N4cxDr2IEsSSxn/RBOdTCBn7IpB/Ws+X4dXzZ+uqhM9Jd77oKTu
+tepsbP4UybbFaLAGxOttXIkWLPl4BBVB+/Mp9VYZARugG0CbmfXCbjiuGB6OqIXucGxov5QKQYbw
+kYllsVq1wh5aM7CQv6H8zpc/ZNpe6HBEpwiYydI3S/Iti6J3rg0si9cC7VlsrIxFr04p7yUclFNZ
+Ceza+TQTE2ixDK7qYxG/rZtp4fe6l1Q4XDWcb21lN9IJUpQ5KhLxyY4cbDrjZ0Q6IkYdrmyh+J0I
+wxs=
+=eWIu
+-----END PGP SIGNATURE-----
 
-> +	RPROC_MAX_FEATURES,
-> +};
-> +
->  /**
->   * struct rproc - represents a physical remote processor device
->   * @node: list node of this rproc object
-> @@ -530,6 +535,7 @@ struct rproc_dump_segment {
->   * @elf_machine: firmware ELF machine
->   * @cdev: character device of the rproc
->   * @cdev_put_on_release: flag to indicate if remoteproc should be shutdown on @char_dev release
-> + * @features: indicate remoteproc features
->   */
->  struct rproc {
->  	struct list_head node;
-> @@ -570,6 +576,7 @@ struct rproc {
->  	u16 elf_machine;
->  	struct cdev cdev;
->  	bool cdev_put_on_release;
-> +	DECLARE_BITMAP(features, RPROC_MAX_FEATURES);
->  };
->  
->  /**
-> -- 
-> 2.25.1
-> 
+--------------F0cE3sBzn3h7KklEgauifnUx--

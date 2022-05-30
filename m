@@ -2,341 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F2D537857
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B149B537898
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234746AbiE3JO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 05:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
+        id S234046AbiE3JSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 05:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234737AbiE3JOJ (ORCPT
+        with ESMTP id S230467AbiE3JSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 05:14:09 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2AF7A460
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:14:07 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so3360749pjl.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:14:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=B9vwKfbKHzDOEY1WrU024PdJUi8+ydTG61v0lkvD1q4=;
-        b=3CVTEMHe5u8PnWdpoi2iCxc8bv6kuPc09y9WU15ndr1za+Iad4T+G5PNWH4XwcwgCL
-         jPKFwE8NR+XU1GgadI/BDU/gR3Etnmw2QI90EQuuDOpRB/fDbkDCrMviKLer5CIy9gbQ
-         jM2ELm8cv1ez6RFoSL/PAavPJLzkbLXQJ8cJpEqo+e3LAbigfu9jRpz0Xht99lbNJRec
-         efhmI4TsgMfcHS4Ovs2PqpS9/t5FPelss9yvvepDUvQknOn5sHjYwb70xpcQZ3bXQJxl
-         m83HZPq/68T2+0MgULpHhse7Ob/SeUE83N36oBb2s2XMbRN/EGJ97iJyV+hL5qXMuC7e
-         lf5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=B9vwKfbKHzDOEY1WrU024PdJUi8+ydTG61v0lkvD1q4=;
-        b=J1bLPDDPWrO3uX+biiy7h8WIBUTizcLgXEMR5keKtGS6cHiIRSZ71IRml2InZLfy7O
-         Dz9SBgo98bwZgCVuRQC1myd0WancT0v/PZh17kj+AJ4QcZJsL5ejiHLxNGroknmwUD1/
-         69EhMVSGUemeF1nmSCvhULSP1KNZLA74Bu1hwjIpkw/La8RjyRNLbJfEPR5r92b7kfHW
-         bRdihcyjl4OtQUpS45tHX+kHm3X0MRrqte18w+M61TKKgDboEAHWtWWxl5AyeHqx7V/S
-         SBt+ZRy32vyGtJnFb9orrQm0ZfG2YqFDw4jb+66k09O/nd5h/4xre+cUXddmbQ4OKEpz
-         NGew==
-X-Gm-Message-State: AOAM530Nb4ErzaG/yncFpySTYiLIINSLBbaqHzTDGMcdOSd1+y1BKomQ
-        sEzusApC/eg/C69VrZLuQa5TSw==
-X-Google-Smtp-Source: ABdhPJxej8okzLLPhKbjWHGOYrjxyaHMYkzqfwAkHgSu+0zudUGwcu3bx61LnfVoShiJQHT1nGoemQ==
-X-Received: by 2002:a17:902:6b03:b0:161:51d6:61b with SMTP id o3-20020a1709026b0300b0016151d6061bmr31413370plk.23.1653902047063;
-        Mon, 30 May 2022 02:14:07 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id p2-20020a170902ebc200b0015e8d4eb20dsm8640644plg.87.2022.05.30.02.14.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 May 2022 02:14:06 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
-        cong.wang@bytedance.com, zhouchengming@bytedance.com,
-        zhoufeng.zf@bytedance.com
-Subject: [PATCH v3 2/2] selftest/bpf/benchs: Add bpf_map benchmark
-Date:   Mon, 30 May 2022 17:13:40 +0800
-Message-Id: <20220530091340.53443-3-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20220530091340.53443-1-zhoufeng.zf@bytedance.com>
-References: <20220530091340.53443-1-zhoufeng.zf@bytedance.com>
+        Mon, 30 May 2022 05:18:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FD062CFD;
+        Mon, 30 May 2022 02:18:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DC4A60FB5;
+        Mon, 30 May 2022 09:18:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CEC3C385B8;
+        Mon, 30 May 2022 09:18:38 +0000 (UTC)
+Message-ID: <c639efc2-2089-359d-44c6-e9d92e8fd22e@xs4all.nl>
+Date:   Mon, 30 May 2022 11:18:36 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v6 11/17] media: uapi: Add
+ V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
+Content-Language: en-US
+To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        samuel@sholland.org, nicolas.dufresne@collabora.com,
+        andrzej.p@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+References: <20220527143134.3360174-1-benjamin.gaignard@collabora.com>
+ <20220527143134.3360174-12-benjamin.gaignard@collabora.com>
+ <2102641.irdbgypaU6@kista>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <2102641.irdbgypaU6@kista>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On 29/05/2022 08:40, Jernej Škrabec wrote:
+> Hi!
+> 
+> This series looks very good and I plan to test it shortly on Cedrus, but I 
+> have one major concern below.
+> 
+> Dne petek, 27. maj 2022 ob 16:31:28 CEST je Benjamin Gaignard napisal(a):
+>> The number of 'entry point offset' can be very variable.
+>> Instead of using a large static array define a v4l2 dynamic array
+>> of U32 (V4L2_CTRL_TYPE_U32).
+>> The number of entry point offsets is reported by the elems field
+>> and in struct v4l2_ctrl_hevc_slice_params.num_entry_point_offsets
+>> field.
+> 
+> Slice control by itself is variable length array, so you would actually need 
+> 2D variable array for entry points which is not supported. However, easy 
+> workaround for that is to flatten 2D array to 1D and either have another slice 
+> control field which would tell first entry point index for convenience or let 
+> driver calculate it by adding up all num_entry_point_offsets of previous 
+> slices.
+> 
+> Hans, what do you think?
 
-Add benchmark for hash_map to reproduce the worst case
-that non-stop update when map's free is zero.
+If I would support 2D variable array sizes, wouldn't that be more elegant?
 
-before patch:
-Setting up benchmark 'bpf-hashmap-ful-update'...
-Benchmark 'bpf-hashmap-ful-update' started.
-1:hash_map_full_perf 107796 events per sec
-2:hash_map_full_perf 108072 events per sec
-3:hash_map_full_perf 112169 events per sec
-4:hash_map_full_perf 111423 events per sec
-5:hash_map_full_perf 110778 events per sec
-6:hash_map_full_perf 121336 events per sec
-7:hash_map_full_perf 98676 events per sec
-8:hash_map_full_perf 105860 events per sec
-9:hash_map_full_perf 109930 events per sec
-10:hash_map_full_perf 123434 events per sec
-11:hash_map_full_perf 125374 events per sec
-12:hash_map_full_perf 121979 events per sec
-13:hash_map_full_perf 123014 events per sec
-14:hash_map_full_perf 126219 events per sec
-15:hash_map_full_perf 104793 events per sec
+The current implementation doesn't support that, but as the commit log for
+patch 1/17 says:
 
-after patch:
-Setting up benchmark 'bpf-hashmap-ful-update'...
-Benchmark 'bpf-hashmap-ful-update' started.
-0:hash_map_full_perf 1219230 events per sec
-1:hash_map_full_perf 1320256 events per sec
-2:hash_map_full_perf 1196550 events per sec
-3:hash_map_full_perf 1375684 events per sec
-4:hash_map_full_perf 1365551 events per sec
-5:hash_map_full_perf 1318432 events per sec
-6:hash_map_full_perf 1222007 events per sec
-7:hash_map_full_perf 1240786 events per sec
-8:hash_map_full_perf 1190005 events per sec
-9:hash_map_full_perf 1562336 events per sec
-10:hash_map_full_perf 1385241 events per sec
-11:hash_map_full_perf 1387909 events per sec
-12:hash_map_full_perf 1371877 events per sec
-13:hash_map_full_perf 1561836 events per sec
-14:hash_map_full_perf 1388895 events per sec
-15:hash_map_full_perf 1579054 events per sec
+"Currently dynamically sized arrays are limited to one dimensional arrays,
+but that might change in the future if there is a need for it."
 
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- tools/testing/selftests/bpf/Makefile          |  4 +-
- tools/testing/selftests/bpf/bench.c           |  2 +
- .../benchs/bench_bpf_hashmap_full_update.c    | 96 +++++++++++++++++++
- .../run_bench_bpf_hashmap_full_update.sh      | 11 +++
- .../bpf/progs/bpf_hashmap_full_update_bench.c | 40 ++++++++
- 5 files changed, 152 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
- create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c
+Let me know if you agree, and I'll try to implement this. It's been a while
+since I last looked at this, so I'm not sure how much work it is, but it is
+probably worth a shot.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 3820608faf57..b968649c7aa1 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -549,6 +549,7 @@ $(OUTPUT)/bench_ringbufs.o: $(OUTPUT)/ringbuf_bench.skel.h \
- $(OUTPUT)/bench_bloom_filter_map.o: $(OUTPUT)/bloom_filter_bench.skel.h
- $(OUTPUT)/bench_bpf_loop.o: $(OUTPUT)/bpf_loop_bench.skel.h
- $(OUTPUT)/bench_strncmp.o: $(OUTPUT)/strncmp_bench.skel.h
-+$(OUTPUT)/bench_bpf_hashmap_full_update.o: $(OUTPUT)/bpf_hashmap_full_update_bench.skel.h
- $(OUTPUT)/bench.o: bench.h testing_helpers.h $(BPFOBJ)
- $(OUTPUT)/bench: LDLIBS += -lm
- $(OUTPUT)/bench: $(OUTPUT)/bench.o \
-@@ -560,7 +561,8 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_ringbufs.o \
- 		 $(OUTPUT)/bench_bloom_filter_map.o \
- 		 $(OUTPUT)/bench_bpf_loop.o \
--		 $(OUTPUT)/bench_strncmp.o
-+		 $(OUTPUT)/bench_strncmp.o \
-+		 $(OUTPUT)/bench_bpf_hashmap_full_update.o
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
- 
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index f973320e6dbf..35de886d9a05 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -397,6 +397,7 @@ extern const struct bench bench_hashmap_with_bloom;
- extern const struct bench bench_bpf_loop;
- extern const struct bench bench_strncmp_no_helper;
- extern const struct bench bench_strncmp_helper;
-+extern const struct bench bench_bpf_hashmap_full_update;
- 
- static const struct bench *benchs[] = {
- 	&bench_count_global,
-@@ -431,6 +432,7 @@ static const struct bench *benchs[] = {
- 	&bench_bpf_loop,
- 	&bench_strncmp_no_helper,
- 	&bench_strncmp_helper,
-+	&bench_bpf_hashmap_full_update,
- };
- 
- static void setup_benchmark()
-diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c b/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
-new file mode 100644
-index 000000000000..cec51e0ff4b8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
-@@ -0,0 +1,96 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Bytedance */
-+
-+#include <argp.h>
-+#include "bench.h"
-+#include "bpf_hashmap_full_update_bench.skel.h"
-+#include "bpf_util.h"
-+
-+/* BPF triggering benchmarks */
-+static struct ctx {
-+	struct bpf_hashmap_full_update_bench *skel;
-+} ctx;
-+
-+#define MAX_LOOP_NUM 10000
-+
-+static void validate(void)
-+{
-+	if (env.consumer_cnt != 1) {
-+		fprintf(stderr, "benchmark doesn't support multi-consumer!\n");
-+		exit(1);
-+	}
-+}
-+
-+static void *producer(void *input)
-+{
-+	while (true) {
-+		/* trigger the bpf program */
-+		syscall(__NR_getpgid);
-+	}
-+
-+	return NULL;
-+}
-+
-+static void *consumer(void *input)
-+{
-+	return NULL;
-+}
-+
-+static void measure(struct bench_res *res)
-+{
-+}
-+
-+static void setup(void)
-+{
-+	struct bpf_link *link;
-+	int map_fd, i, max_entries;
-+
-+	setup_libbpf();
-+
-+	ctx.skel = bpf_hashmap_full_update_bench__open_and_load();
-+	if (!ctx.skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		exit(1);
-+	}
-+
-+	ctx.skel->bss->nr_loops = MAX_LOOP_NUM;
-+
-+	link = bpf_program__attach(ctx.skel->progs.benchmark);
-+	if (!link) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+
-+	/* fill hash_map */
-+	map_fd = bpf_map__fd(ctx.skel->maps.hash_map_bench);
-+	max_entries = bpf_map__max_entries(ctx.skel->maps.hash_map_bench);
-+	for (i = 0; i < max_entries; i++)
-+		bpf_map_update_elem(map_fd, &i, &i, BPF_ANY);
-+}
-+
-+void hashmap_report_final(struct bench_res res[], int res_cnt)
-+{
-+	unsigned int nr_cpus = bpf_num_possible_cpus();
-+	int i;
-+
-+	for (i = 0; i < nr_cpus; i++) {
-+		u64 time = ctx.skel->bss->percpu_time[i];
-+
-+		if (!time)
-+			continue;
-+
-+		printf("%d:hash_map_full_perf %lld events per sec\n",
-+		       i, ctx.skel->bss->nr_loops * 1000000000ll / time);
-+	}
-+}
-+
-+const struct bench bench_bpf_hashmap_full_update = {
-+	.name = "bpf-hashmap-ful-update",
-+	.validate = validate,
-+	.setup = setup,
-+	.producer_thread = producer,
-+	.consumer_thread = consumer,
-+	.measure = measure,
-+	.report_progress = NULL,
-+	.report_final = hashmap_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh b/tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh
-new file mode 100755
-index 000000000000..1e2de838f9fa
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh
-@@ -0,0 +1,11 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ./benchs/run_common.sh
-+
-+set -eufo pipefail
-+
-+nr_threads=`expr $(cat /proc/cpuinfo | grep "processor"| wc -l) - 1`
-+summary=$($RUN_BENCH -p $nr_threads bpf-hashmap-ful-update)
-+printf "$summary"
-+printf "\n"
-diff --git a/tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c b/tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c
-new file mode 100644
-index 000000000000..aa93a03f961d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Bytedance */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#define MAX_ENTRIES 1000
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__type(key, u32);
-+	__type(value, u64);
-+	__uint(max_entries, MAX_ENTRIES);
-+} hash_map_bench SEC(".maps");
-+
-+u64 __attribute__((__aligned__(256))) percpu_time[256];
-+u64 nr_loops;
-+
-+static int loop_update_callback(__u32 index, u32 *key)
-+{
-+	u64 init_val = 1;
-+
-+	bpf_map_update_elem(&hash_map_bench, key, &init_val, BPF_ANY);
-+	return 0;
-+}
-+
-+SEC("fentry/" SYS_PREFIX "sys_getpgid")
-+int benchmark(void *ctx)
-+{
-+	u32 key = bpf_get_prandom_u32() % MAX_ENTRIES + MAX_ENTRIES;
-+	u32 cpu = bpf_get_smp_processor_id();
-+	u64 start_time = bpf_ktime_get_ns();
-+
-+	bpf_loop(nr_loops, loop_update_callback, &key, 0);
-+	percpu_time[cpu & 255] = bpf_ktime_get_ns() - start_time;
-+	return 0;
-+}
--- 
-2.20.1
+Regards,
+
+	Hans
+
+> 
+> Note, it seems that H265 decoding on Cedrus still works without entry points, 
+> so this problem can be solved later. I'm not sure what we lose with that but 
+> it was suggested that this could influence speed or error resilience or both. 
+> However, I think we're close to solve it, so I'd like to do that now.
+> 
+> Best regards,
+> Jernej
+> 
+>>
+>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>> ---
+>>  .../userspace-api/media/v4l/ext-ctrls-codec.rst       | 11 +++++++++++
+>>  drivers/media/v4l2-core/v4l2-ctrls-defs.c             |  5 +++++
+>>  include/media/hevc-ctrls.h                            |  5 ++++-
+>>  3 files changed, 20 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/
+> Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>> index 0796b1563daa..05228e280f66 100644
+>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>> @@ -3010,6 +3010,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>      * - __u32
+>>        - ``data_bit_offset``
+>>        - Offset (in bits) to the video data in the current slice data.
+>> +    * - __u32
+>> +      - ``num_entry_point_offsets``
+>> +      - Specifies the number of entry point offset syntax elements in the 
+> slice header.
+>>      * - __u8
+>>        - ``nal_unit_type``
+>>        - Specifies the coding type of the slice (B, P or I).
+>> @@ -3150,6 +3153,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>  
+>>      \normalsize
+>>  
+>> +``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
+>> +    Specifies entry point offsets in bytes.
+>> +    This control is a dynamically sized array. The number of entry point
+>> +    offsets is reported by the ``elems`` field.
+>> +    This bitstream parameter is defined according to :ref:`hevc`.
+>> +    They are described in section 7.4.7.1 "General slice segment header
+>> +    semantics" of the specification.
+>> +
+>>  ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
+>>      Specifies the HEVC scaling matrix parameters used for the scaling 
+> process
+>>      for transform coefficients.
+>> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-
+> core/v4l2-ctrls-defs.c
+>> index d594efbcbb93..e22921e7ea61 100644
+>> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>> @@ -1188,6 +1188,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+>>  	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:		return 
+> "HEVC Decode Parameters";
+>>  	case V4L2_CID_STATELESS_HEVC_DECODE_MODE:		return 
+> "HEVC Decode Mode";
+>>  	case V4L2_CID_STATELESS_HEVC_START_CODE:		return 
+> "HEVC Start Code";
+>> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:	return 
+> "HEVC Entry Point Offsets";
+>>  
+>>  	/* Colorimetry controls */
+>>  	/* Keep the order of the 'case's the same as in v4l2-controls.h! 
+> */
+>> @@ -1518,6 +1519,10 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum 
+> v4l2_ctrl_type *type,
+>>  	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:
+>>  		*type = V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
+>>  		break;
+>> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:
+>> +		*type = V4L2_CTRL_TYPE_U32;
+>> +		*flags |= V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
+>> +		break;
+>>  	case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR:
+>>  		*type = V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR;
+>>  		break;
+>> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+>> index a3c829ef531a..1319cb99ae3f 100644
+>> --- a/include/media/hevc-ctrls.h
+>> +++ b/include/media/hevc-ctrls.h
+>> @@ -20,6 +20,7 @@
+>>  #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS	(V4L2_CID_CODEC_BASE 
+> + 1012)
+>>  #define V4L2_CID_STATELESS_HEVC_DECODE_MODE	(V4L2_CID_CODEC_BASE + 1015)
+>>  #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 1016)
+>> +#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (V4L2_CID_CODEC_BASE + 
+> 1017)
+>>  
+>>  /* enum v4l2_ctrl_type type values */
+>>  #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
+>> @@ -318,6 +319,8 @@ struct v4l2_hevc_pred_weight_table {
+>>   *
+>>   * @bit_size: size (in bits) of the current slice data
+>>   * @data_bit_offset: offset (in bits) to the video data in the current slice 
+> data
+>> + * @num_entry_point_offsets: specifies the number of entry point offset syntax
+>> + *			     elements in the slice header.
+>>   * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+>>   * @nuh_temporal_id_plus1: minus 1 specifies a temporal identifier for the 
+> NAL unit
+>>   * @slice_type: see V4L2_HEVC_SLICE_TYPE_{}
+>> @@ -360,7 +363,7 @@ struct v4l2_hevc_pred_weight_table {
+>>  struct v4l2_ctrl_hevc_slice_params {
+>>  	__u32	bit_size;
+>>  	__u32	data_bit_offset;
+>> -
+>> +	__u32	num_entry_point_offsets;
+>>  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
+>>  	__u8	nal_unit_type;
+>>  	__u8	nuh_temporal_id_plus1;
+>> -- 
+>> 2.32.0
+>>
+>>
+> 
+> 
 

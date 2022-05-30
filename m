@@ -2,132 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24AA538533
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 465E4538535
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241349AbiE3PqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S242691AbiE3Pqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242673AbiE3Pp7 (ORCPT
+        with ESMTP id S242246AbiE3PqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:45:59 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855174B435;
-        Mon, 30 May 2022 07:56:44 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0CC375C01AA;
-        Mon, 30 May 2022 10:56:42 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 30 May 2022 10:56:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1653922602; x=1654009002; bh=ibjnI8Geex
-        5eh6AY7BjUezUuIjEtyn8A9+EqUJ4bMcc=; b=Zc4guAAbjCZPW1oy4/pvYVjbmK
-        L4SIDfKq+K8W2disdVij7aHl9gykkN+c83dd63PVuGVkMTOL7A6r3GVqFvXajcbl
-        u7RBLsAXNT4gJeZTGwAzjhz1hsFgk1JDXagLzunTPgOhFiRbqM2XC97xXN3oIjUv
-        BxqCMDpQXHSYy4AMJzF5c43hSu1GfYEYpiKqSc9Y6sm7Th2RoEYWUsT1H2ztwwpz
-        bwr3xWHc8mqg6yVX1GNZ/CnSihk7trfanrV8kNcjR/EGmc1e5Nbc/URl62EXt2Oe
-        B8m7TBp7ENKru1m0o66Thzx5Bs++AmOFkUYtpHUEfgCRpxikOVXZT4Ty85Kg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1653922602; x=1654009002; bh=ibjnI8Geex5eh6AY7BjUezUuIjEt
-        yn8A9+EqUJ4bMcc=; b=Ku9WXIBvVTOendts8TxCy1zIHRrURG4K36Fp6BQwY5Kb
-        IolmOUFnvR09GXd3b8cQCxO4+qnK+DW2kQBtdepoLxssSGJvFGb9SVdttDPXDcR1
-        AyX+mbTqRILl+cFoNmZUC0fZ9c3Q04LuJcwazdL5HV+JRYffWS2T3xLlu0Ip0LzP
-        MwbAAw5zKJF1UD6S8W/2m3XlO7/JEY8HQ39n3UhkQpAKaKoL5N71783aTV2HetvZ
-        BSIZvOfcfAZqx4sMgtpfYm/hw0F0WWi9BMfns4esJPtirDaAMC08p2m+89JTCDE8
-        PwVPsK/zEKhCe2s4IIOF/aeps6E4fZokZufLHs0MVQ==
-X-ME-Sender: <xms:KduUYtZn9AxioNICwyMqhiOxXiR9JHpIG4nyPrwB8M_db8zQelkXfg>
-    <xme:KduUYkaWmK5MQWI_JS-rSmPbFXVrpJEsgRbZJDf10Wv9eNOZtGN0O-9V2R7NjdE77
-    6bdAE_ci8g6PvP6hQ>
-X-ME-Received: <xmr:KduUYv8346H6L5bl9JK_tkfJ1FGvlIm1Pb-T3JCDVMHM2wCX4Oamok-7gUzfi4sQ2FU_YoRj6Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeeigdejkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
-    hrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    vdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
-    ggtffrrghtthgvrhhnpeevuddugeeihfdtffehgffgudeggeegheetgfevhfekkeeileeu
-    ieejleekiedvgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:KduUYrpdBRhIi15smniQh5BOu53OFH96kOsIhWtPFVBWeiiQWpd5_w>
-    <xmx:KduUYorIOfx2o5_IN3Cuvv8BqUuC08EnpFGBOrjE_3T564wFg_80wA>
-    <xmx:KduUYhT75FpIWw-XHep7pSZx7ClzO07HEYwUQdbBcDsA_y44SScedg>
-    <xmx:KtuUYhlXx3nDUKSuKMh8tTpnLB_4xkHnxT8-hxUp3JhKJdwZmWnkCA>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 30 May 2022 10:56:41 -0400 (EDT)
-Date:   Mon, 30 May 2022 09:56:39 -0500
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Song Liu <song@kernel.org>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 0/2] Add PROG_TEST_RUN support to
- BPF_PROG_TYPE_KPROBE
-Message-ID: <20220530145639.slbwvbwewonj6im2@kashmir.localdomain>
-References: <cover.1653861287.git.dxu@dxuuu.xyz>
- <CAPhsuW4nC_7L48aMJfNPcx69O6JtS7zk8p2=4Vro2S1608dztw@mail.gmail.com>
+        Mon, 30 May 2022 11:46:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC60A26C3
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:57:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1204FB80D84
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 14:57:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30034C385B8;
+        Mon, 30 May 2022 14:57:03 +0000 (UTC)
+Date:   Mon, 30 May 2022 15:56:59 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Patrick Wang <patrick.wang.shcn@gmail.com>
+Cc:     Yee Lee <yee.lee@mediatek.com>, linux-kernel@vger.kernel.org,
+        Kuan-Ying.lee@mediatek.com, Andrew.Yang@mediatek.com,
+        Sunny.Kao@mediatek.com, chinwen.chang@mediatek.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Ariel Marcovitch <arielmarcovitch@gmail.com>
+Subject: Re: [PATCH] mm: kmemleak: Skip check in kmemleak_*_phys when pfn
+ bound is not ready
+Message-ID: <YpTbO/z1n0UYswBf@arm.com>
+References: <20220527032504.30341-1-yee.lee@mediatek.com>
+ <CAGcnep9B+z8QG4f4kkW8NF+fM1Kgj=NOV=YRhLK4yK74jbqpAw@mail.gmail.com>
+ <05cfaf936a0c5f37f2e7ba779a8a1b0a6252be96.camel@mediatek.com>
+ <64281aab-0301-7237-d72c-b7ab41bf50e4@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPhsuW4nC_7L48aMJfNPcx69O6JtS7zk8p2=4Vro2S1608dztw@mail.gmail.com>
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <64281aab-0301-7237-d72c-b7ab41bf50e4@gmail.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
+Hi Patrick,
 
-On Sun, May 29, 2022 at 11:00:48PM -0700, Song Liu wrote:
-> On Sun, May 29, 2022 at 3:06 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
-> >
-> > This patchset adds PROG_TEST_RUN support to BPF_PROG_TYPE_KPROBE progs.
-> > On top of being generally useful for unit testing kprobe progs, this
-> > feature more specifically helps solve a relability problem with bpftrace
-> > BEGIN and END probes.
-> >
-> > BEGIN and END probes are run exactly once at the beginning and end of a
-> > bpftrace tracing session, respectively. bpftrace currently implements
-> > the probes by creating two dummy functions and attaching the BEGIN and
-> > END progs, if defined, to those functions and calling the dummy
-> > functions as appropriate. This works pretty well most of the time except
-> > for when distros strip symbols from bpftrace. Every now and then this
-> > happens and users get confused. Having PROG_TEST_RUN support will help
-> > solve this issue by allowing us to directly trigger uprobes from
-> > userspace.
-> >
-> > Admittedly, this is a pretty specific problem and could probably be
-> > solved other ways. However, PROG_TEST_RUN also makes unit testing more
-> > convenient, especially as users start building more complex tracing
-> > applications. So I see this as killing two birds with one stone.
+On Mon, May 30, 2022 at 09:32:18PM +0800, Patrick Wang wrote:
+> On 2022/5/30 10:27, Yee Lee wrote:
+> > On Fri, 2022-05-27 at 21:39 +0800, patrick wang wrote:
+> > > On Fri, May 27, 2022 at 11:25 AM <yee.lee@mediatek.com> wrote:
+> > > > From: Yee Lee <yee.lee@mediatek.com>
+> > > > 
+> > > > In some archs (arm64), memblock allocates memory in boot time when
+> > > > the pfn boundary (max_pfn/min_pfn) is not ready. The lowmen checks in
+> > > > kmemleak_*_phys() drop those blocks and cause some false leak alarms
+> > > > on common kernel objects.
+> > > > 
+> > > > Kmemleak output: (Qemu/arm64)
+> > > > unreferenced object 0xffff0000c0170a00 (size 128):
+> > > >    comm "swapper/0", pid 1, jiffies 4294892404 (age 126.208s)
+> > > >    hex dump (first 32 bytes):
+> > > >      62 61 73 65 00 00 00 00 00 00 00 00 00 00 00 00  base............
+> > > >      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> > > >    backtrace:
+> > > >      [<(____ptrval____)>] __kmalloc_track_caller+0x1b0/0x2e4
+> > > >      [<(____ptrval____)>] kstrdup_const+0x8c/0xc4
+> > > >      [<(____ptrval____)>] kvasprintf_const+0xbc/0xec
+> > > >      [<(____ptrval____)>] kobject_set_name_vargs+0x58/0xe4
+> > > >      [<(____ptrval____)>] kobject_add+0x84/0x100
+> > > >      [<(____ptrval____)>] __of_attach_node_sysfs+0x78/0xec
+> > > >      [<(____ptrval____)>] of_core_init+0x68/0x104
+> > > >      [<(____ptrval____)>] driver_init+0x28/0x48
+> > > >      [<(____ptrval____)>] do_basic_setup+0x14/0x28
+> > > >      [<(____ptrval____)>] kernel_init_freeable+0x110/0x178
+> > > >      [<(____ptrval____)>] kernel_init+0x20/0x1a0
+> > > >      [<(____ptrval____)>] ret_from_fork+0x10/0x20
+> > > > 
+> > > > This patch relaxs the boundary checking in kmemleak_*_phys api
+> > > > if max_low_pfn is uninitialzed.
+> > > > 
+> > > > Fixes: 23c2d4 (mm: kmemleak: take a full lowmem check in kmemleak_*_phy)
+
+BTW, please use at least 12 characters for the git sha1, the above is
+ambiguous.
+
+> > > > Signed-off-by: Yee Lee <yee.lee@mediatek.com>
+> > > > ---
+> > > >   mm/kmemleak.c | 8 ++++----
+> > > >   1 file changed, 4 insertions(+), 4 deletions(-)
+> > > > 
+> > > > diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+> > > > index a182f5ddaf68..6b2af544aa0f 100644
+> > > > --- a/mm/kmemleak.c
+> > > > +++ b/mm/kmemleak.c
+> > > > @@ -1132,7 +1132,7 @@ EXPORT_SYMBOL(kmemleak_no_scan);
+> > > >   void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int min_count,
+> > > >                                 gfp_t gfp)
+> > > >   {
+> > > > -       if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
+> > > > +       if (!max_low_pfn || (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn))
+> > > 
+> > > Just skip checking will bring the crash possibility back. Seems
+> > > it's beyond these interfaces' handle scope for this situation,
+> > > since "min_low_pfn" and "max_low_pfn" are depending on arches.
+> > 
+> > Yes, for the cases beyond the pfn guard, users have to take care the
+> > boundary by themselves.
 > 
-> We have BPF_PROG_RUN which is an alias of BPF_PROG_TEST_RUN. I guess
-> that's a better name for the BEGIN/END use case.
-
-Right, sorry. Was getting names mixed up.
-
+> Could we record these early calling and deal with them when it's
+> ready? Is this appropriate?
 > 
-> Have you checked out bpf_prog_test_run_raw_tp()? AFAICT, it works as good as
-> kprobe for this use case.
+> I have an implementation based on this approach. Could you please
+> help to have a test on your machine as well? And someone to take
+> a look or review?
 
-I just took a look -- I think it'll work for BEGIN/END use case. But
-also like I mentioned, BPF_PROG_RUN/BPF_PROG_TEST_RUN support for
-kprobes is probably still useful. For example if kprobe accesses 13th
-register. I suppose the raw_tp 12 arg limit could be lifted but it might
-be tricky to capture that logic in the absence of something like `struct
-pt_regs` to check the ctx_size_in against.
+We had something similar until 5.4, removed by commit c5665868183f ("mm:
+kmemleak: use the memory pool for early allocations"). It was a bit
+painful as we never had the right buffer, so I'm not keen on adding it
+back.
 
-Thanks,
-Daniel
+> From 82cae75dfaa78f414faf85bb49133e95159c041a Mon Sep 17 00:00:00 2001
+> From: Patrick Wang <patrick.wang.shcn@gmail.com>
+> Date: Mon, 30 May 2022 18:38:23 +0800
+> Subject: [PATCH] mm: kmemleak: record early operations and handle later
+> 
+> The kmemleak_*_phys() interface uses "min_low_pfn" and
+> "max_low_pfn" to check address. But on some architectures,
+> kmemleak_*_phys() is called before those two variables
+> initialized. Record these early operations and handle them
+> when kmemleak_*_phys() are ready.
+
+Could we instead record everything (no checks) but later avoid scanning
+if below min or above max_low_pfn? We can add an OBJECT_PHYS flag to all
+objects allocated via kmemleak_*_phys() and always check the
+virt_to_phys() boundaries at scan time. It may actually help with this
+problem as well:
+
+https://lore.kernel.org/r/9dd08bb5-f39e-53d8-f88d-bec598a08c93@gmail.com
+
+-- 
+Catalin

@@ -2,91 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138C25376F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F355376B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233695AbiE3IW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 04:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41808 "EHLO
+        id S233545AbiE3IYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 04:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233724AbiE3IWQ (ORCPT
+        with ESMTP id S229503AbiE3IYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 04:22:16 -0400
-Received: from mail.meizu.com (unknown [14.29.68.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016B21148
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:22:14 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
- (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 30 May
- 2022 16:22:15 +0800
-Received: from [172.16.137.70] (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Mon, 30 May
- 2022 16:22:12 +0800
-Message-ID: <61130a41-a626-c860-e321-9295f9c9d0dd@meizu.com>
-Date:   Mon, 30 May 2022 16:22:11 +0800
+        Mon, 30 May 2022 04:24:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B702870932;
+        Mon, 30 May 2022 01:24:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 723D8B80B8C;
+        Mon, 30 May 2022 08:24:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03624C3411C;
+        Mon, 30 May 2022 08:23:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653899039;
+        bh=ziDIAEc7g+1E4mW3as6Ps9AEfz+2BHYsygKs8QcKuy4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dd1oX3NlmptzEvjI4JEG5Edx65zEfnF+Mpq2UcNPvScWXKuqvMvNq4VzIaK0fEUBv
+         tulre+TE4nQFLsxbdio20l/juEyj0pUnTORe1r8Ba/32jcwwMdSencOBOWDs9mUKMF
+         geQVmZWH7UY5oOMgr1ZfkioFz82L3PyTalGJoT/oNGPgbnmAK1/0YYPKthHJL0mcwH
+         FUISxMK+YQU9sZrn2s1LCHDhB8uii7wU8JeC9SpJif4QlITccZYaMleN0lVk/mPDZU
+         VDsk8ALgoBymJj0vNb4lYePxFLyaxQawhRgDcCr/34jVi3tcZOTDlFE4FFmJVHofMt
+         Rcf22g9l4G1Dg==
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2ef5380669cso101518307b3.9;
+        Mon, 30 May 2022 01:23:58 -0700 (PDT)
+X-Gm-Message-State: AOAM531+ICClQvaVBP6mIzd0yzbre+8lZ/2l2nOV82G5wzl8UzbYNMud
+        Xe+QP5QG4pdbrL+uqUvXuw+1hk0Tk0WDDixPlXY=
+X-Google-Smtp-Source: ABdhPJzv/FemciRjN1uYS9zyr/cVvRRBKH6md2A/ekgrEEK6qu8OC/IzKOMLVZP+1vKl3A1riaDtnOnDAsIMbwQ4ROY=
+X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
+ 206-20020a810ad7000000b002e684de3223mr58350303ywk.209.1653899038059; Mon, 30
+ May 2022 01:23:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] staging: rtl8712: Fix pointer dereferenced before
- checking
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
-        <linux-staging@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-References: <1653897933-25931-1-git-send-email-baihaowen@meizu.com>
- <YpR85JgzGsTzYm3W@kroah.com>
-From:   baihaowen <baihaowen@meizu.com>
-In-Reply-To: <YpR85JgzGsTzYm3W@kroah.com>
+References: <CAK8P3a2_52JPnBWNvTTkFVwLxPAa7=NaQ4whwC1UeH_NYHeUKQ@mail.gmail.com>
+ <CAK8P3a0SpU1n+29KQxzKnPRvzmDE=L0V9RUpKxhemv=74kevcQ@mail.gmail.com> <875ylomq3m.wl-maz@kernel.org>
+In-Reply-To: <875ylomq3m.wl-maz@kernel.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 30 May 2022 10:23:41 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0dcmeehX=ByKqFe_aa7=fJFjAfpCG6ch99BzK8N4FA2A@mail.gmail.com>
+Message-ID: <CAK8P3a0dcmeehX=ByKqFe_aa7=fJFjAfpCG6ch99BzK8N4FA2A@mail.gmail.com>
+Subject: Re: [GIT PULL] asm-generic changes for 5.19
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, libc-alpha@sourceware.org,
+        musl@lists.openwall.com, ardb@kernel.org,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/5/30 下午4:14, Greg Kroah-Hartman 写道:
-> On Mon, May 30, 2022 at 04:05:32PM +0800, Haowen Bai wrote:
->> The padapter->recvpriv.signal_qual_data is dereferencing before null
->> checking, so move it after checking.
->>
->> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
->> ---
->>  drivers/staging/rtl8712/rtl8712_recv.c | 4 +++-
->>  1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/staging/rtl8712/rtl8712_recv.c b/drivers/staging/rtl8712/rtl8712_recv.c
->> index 7f1fdd058551..8ed94b259dbe 100644
->> --- a/drivers/staging/rtl8712/rtl8712_recv.c
->> +++ b/drivers/staging/rtl8712/rtl8712_recv.c
->> @@ -863,10 +863,12 @@ static void process_link_qual(struct _adapter *padapter,
->>  {
->>  	u32	last_evm = 0, tmpVal;
->>  	struct rx_pkt_attrib *pattrib;
->> -	struct smooth_rssi_data *sqd = &padapter->recvpriv.signal_qual_data;
->> +	struct smooth_rssi_data *sqd;
->>  
->>  	if (!prframe || !padapter)
->>  		return;
->> +
->> +	sqd = &padapter->recvpriv.signal_qual_data;
-> How can padapter ever be NULL in this codepath?
+On Sun, May 29, 2022 at 3:21 PM Marc Zyngier <maz@kernel.org> wrote:
+> > My feeling is that there is also no point in merging a port without
+> > the drivers as it cannot work on any hardware. On the other hand,
+> > the libc submissions (glibc and musl) are currently blocked while
+> > they are waiting for the kernel port to get merged.
 >
-> thanks,
->
-> greg k-h
-Just the original  code, show me
+> I'd tend to agree. But if on the other hand the userspace ABI is
+> clearly defined, I think it could make sense to go for it (if I
+> remember well, we merged arm64 without any support irqchip support,
+> and the arm64 GIC support appeared later in the game).
 
-if (!prframe || !padapter)
+Ok, thanks for taking another look. I think we should just merge the
+port without the drivers then, and you can make a decision on
+the irqchip drivers after you've reviewed the latest version.
 
-It would be null, and then return.
-
--- 
-Haowen Bai
-
+      Arnd

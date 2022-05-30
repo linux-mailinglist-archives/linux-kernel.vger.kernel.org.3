@@ -2,90 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07FD5388FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 00:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA1253890D
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 00:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242409AbiE3Wjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 18:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
+        id S239285AbiE3W6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 18:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238261AbiE3Wjh (ORCPT
+        with ESMTP id S234309AbiE3W6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 18:39:37 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597965DD1B
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 15:39:35 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id t25so18731799lfg.7
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 15:39:35 -0700 (PDT)
+        Mon, 30 May 2022 18:58:10 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25224515A6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 15:58:09 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id q1so6839663ejz.9
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 15:58:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=b836Hwaa25hw9M7Z+368J9Eu0dyxv+PkfmBi1LY54Zg=;
-        b=HTDgud/cnqJA53cMtygJCrwf/TA4n6/dzAbBozqOQAL/VIGAz7yworbRH7YWqf34Ht
-         ncDu3wbkmZtJLlDLg6VgwdE40QfyH5X4gmPyK5kFQfykEEnNQsWFeUTgzmK4ZyyzySMS
-         LQuR8gmLVNXHkfZnDoIBXx23II8g4/MR8cK+qvhU8+7edh2xwaWMQt1puVH0pr9o+Gpd
-         6sWEJwnVhbWpUuk/mw7wJh04gJPLNs794/qW65mpjGXBxb4ENUf4KXXpV0NnxGCcLtSQ
-         5R8cWd3v0u0p3qXfj5Oobg61TnhnqTUqRNELjTnmXPGpwFiwUol+yc3p6Iz7NqF+oUY1
-         pSAw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=93b76ZHbZcuHCfscxd3Lk2d9Wx/yBWaIajc4fFNKsBY=;
+        b=KCNnBbaZtRLRoY3MVGmEaI+oOj68q4mGW3ulnyBw04EH4w9DzxWhvCRj6surNXd8CS
+         fuvEHexXKjIqHTvvN3ZoulQQHSq0xCM25YCFhkqcpATO3cfAwJ9XdmOp8vsbSk60rIoX
+         ACOTcJFXi+Q02vZwlN1nc1GvU+Pltqyfxs1CgDWE2hPQIviYaGqdCf9SlYUaIFhfV99R
+         RhOBpWVW63h2VJb5hnKPSFw5j5S10V2knTtJ+PMQykdhK07awXOOzPvcINh6JfX4ckUS
+         X4TMdYwN9Vsz2tgWnocs8Lp1qj5oEloCgZNB1xE/VKtK1vrkCexEQHTRRQ6OELY89TS0
+         NZiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=b836Hwaa25hw9M7Z+368J9Eu0dyxv+PkfmBi1LY54Zg=;
-        b=MiHUTsZ+ArSC0xf8pk9I4X+kW8pG6+qC+7SBagw4Sspuy+tP+2ghS9nS9/BHB4ws7g
-         FZ/0ld6FSjQQALPpSQgU9aMtdQ4Zexbiy0x+sGibMBVWz033gKAIvpHVEJfY3xUVNgWd
-         UelgFDID/wzKm5BLH3SERQjxWmA4Ahs55fNYeZJhKAenwJmOs3CR5e0YiOMOhz+D8XUz
-         RrZji5Me3RUrA4NDnEZog0YATde8jOBj/qvu6YsE3F8BEI8DHpfsaYBZlFdHqGLP1bGq
-         udQuAgPTbUa0IS5nhay0GGs+VnpmGlKnJk+jIr/CC/mumeoiTbbicMd7AIgOAaH2KDyi
-         yIhw==
-X-Gm-Message-State: AOAM531prAd63VbZmeuxOKUG9sar1Yys4RZF/0orv151kdtvKpBol6pp
-        CzPtO4J6LOD2TneSABPod8m6Mw==
-X-Google-Smtp-Source: ABdhPJwL/kYaRSEshZrSrq15BSStK/gx783mRIkQR9eF0XkTpUjVrrwLBl7M/PByAxjfz35p+txh5w==
-X-Received: by 2002:a05:6512:374a:b0:478:6208:63c with SMTP id a10-20020a056512374a00b004786208063cmr33479245lfs.483.1653950373589;
-        Mon, 30 May 2022 15:39:33 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id v25-20020a2e4819000000b002502e691b05sm2742896lja.136.2022.05.30.15.39.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 15:39:33 -0700 (PDT)
-Message-ID: <04af7d5f-a4d1-3403-c481-1cc2bb13d30f@linaro.org>
-Date:   Tue, 31 May 2022 01:39:32 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=93b76ZHbZcuHCfscxd3Lk2d9Wx/yBWaIajc4fFNKsBY=;
+        b=UVFtvi3JJQv9pHKxGt6zrSUWq0v3d0c/ZSUg/7/CVa/DJZb+7vynx9xF6uBTZzXysn
+         3yXVJ7MCU29vEk79VeTG11Hn1z0G9I/0/Kz8P2DUTQlYnWWDYyNxbfxWwBZZL0+w4qpO
+         Xx33e/st1vKHJ9qEyZLjTddyCIUVV2rIvHTiO42PdGXQ9ytZ+E1XAFzkffMM2zIuDlMJ
+         PxdeFkM5NQRkKdZ9o3TCL+/zovFmxJB7hyLt1ikBCw/cv2qsUq+kxn8z557Tib+zzwuo
+         aUP+uB0LMvE1C/1eyaCILs3FfBzikJ1/50jDESc3y+/26NON/838d21Yd5iX4fvU7uCr
+         lD4w==
+X-Gm-Message-State: AOAM533wNqq5Z2tAshqzyv6xMUYUaP9bNWLLd1XUQwwuytdN5P9MTxLO
+        3sSslO12vbCqzJ94j0hvvS+bsJ7pGhH86jWRk8SlXw==
+X-Google-Smtp-Source: ABdhPJwZ6vkc2aa9sZyVGj16xAXXu9l6zE8Gc+5vtwdxy87CFX8L2LO8+BmGDLTdugZNPYrKkOn+f1cBxRdBcQ97f4s=
+X-Received: by 2002:a17:907:2cc7:b0:6fa:7356:f411 with SMTP id
+ hg7-20020a1709072cc700b006fa7356f411mr49703826ejc.369.1653951487392; Mon, 30
+ May 2022 15:58:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/3] arm64: dts: qcom: sm8450: Fix the IRQ trigger type
- for remoteproc nodes
-Content-Language: en-GB
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        tglx@linutronix.de, maz@kernel.org, bjorn.andersson@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20220530080842.37024-1-manivannan.sadhasivam@linaro.org>
- <20220530080842.37024-3-manivannan.sadhasivam@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220530080842.37024-3-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220530102017.471865-1-jose.exposito89@gmail.com>
+ <20220530102017.471865-2-jose.exposito89@gmail.com> <20220530131158.kqq2mohxoh52xpeg@penduick>
+ <20220530162903.GA6546@elementary>
+In-Reply-To: <20220530162903.GA6546@elementary>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 30 May 2022 15:57:56 -0700
+Message-ID: <CAGS_qxpV2SsihEdgXZ6+7N0dxLmdRANq+qE4iUZ2aNrf6vuLYg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/1] drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb332()
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>, kunit-dev@googlegroups.com,
+        javierm@redhat.com, tzimmermann@suse.de,
+        maarten.lankhorst@linux.intel.com, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2022 11:08, Manivannan Sadhasivam wrote:
-> The watchdog IRQ trigger type should be EDGE_RISING. So fix all remoteproc
-> nodes.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+On Mon, May 30, 2022 at 9:29 AM Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gm=
+ail.com> wrote:
+> I just cc'ed kunit-dev@googlegroups.com. For anyone joining the
+> conversation, here is the link to the patch and the cover letter with
+> some questions:
+>
+> https://lore.kernel.org/dri-devel/20220530102017.471865-1-jose.exposito89=
+@gmail.com/T/
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Thanks for the link.
+A few initial notes:
+a) normally, `select`ing other kconfigs is discouraged. It's not
+explicitly called out in
+https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html#test-kcon=
+fig-entries
+but this was the conclusion after  some debate on the mailing lists
+earlier.
+b) I see `dst` is allocated with kzalloc but not freed. Should we use
+`kunit_kzalloc()` instead so it does get automatically freed?
 
-BTW: Could you please send the same patches for sm8250/8350 too?
+>
+> >
+> > > ---
+> > >  drivers/gpu/drm/Kconfig                  |  12 ++
+> > >  drivers/gpu/drm/Makefile                 |   3 +
+> > >  drivers/gpu/drm/drm_format_helper_test.c | 166 +++++++++++++++++++++=
+++
+> > >  3 files changed, 181 insertions(+)
+> > >  create mode 100644 drivers/gpu/drm/drm_format_helper_test.c
+> > >
+> > > diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+> > > index e88c497fa010..d92be6faef15 100644
+> > > --- a/drivers/gpu/drm/Kconfig
+> > > +++ b/drivers/gpu/drm/Kconfig
+> > > @@ -76,6 +76,18 @@ config DRM_KMS_HELPER
+> > >     help
+> > >       CRTC helpers for KMS drivers.
+> > >
+> > > +config DRM_FORMAR_HELPER_TEST
+> > > +   bool "drm_format_helper tests" if !KUNIT_ALL_TESTS
+> > > +   depends on DRM && KUNIT=3Dy
+> > > +   select DRM_KMS_HELPER
 
--- 
-With best wishes
-Dmitry
+From above, a)
+Specifically here, it'd be encouraged to instead do
+  depends on DRM && KUNIT=3Dy && DRM_KMS_HELPER
+
+Ideally, using a .kunitconfig file would make it so having to select
+DRM_KMS_HELPER manually isn't that annoying.
+
+> > AFAIK, kunit test cases are supposed to have a .kunitconfig too to
+> > enable the kunit tests easily.
+> >
+> > Maxime
+>
+> A .kuniconfig example is present in the cover letter. My understanding
+> from the docs:
+>
+> https://docs.kernel.org/dev-tools/kunit/run_wrapper.html#create-a-kunitco=
+nfig-file
+
+The bit of the documentation you're looking for is
+https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips.html#de=
+fining-a-set-of-tests
+You can create a drivers/gpu/drm/.kunitconfig file and run with
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/drm --arch=
+=3Dx86_86
+
+The contents of that file would be just like
+  CONFIG_KUNIT=3Dy
+  CONFIG_DRM=3Dy
+  CONFIG_DRM_KMS_HELPER=3Dy  # if no `select`
+  CONFIG_DRM_FORMAR_HELPER_TEST=3Dy
+
+Re "kunit test cases are supposed to have a .kunitconfig too"
+As I noted in the docs:
+  This is a relatively new feature (5.12+) so we don=E2=80=99t have any
+conventions yet about on what files should be checked in versus just
+kept around locally. It=E2=80=99s up to you and your maintainer to decide i=
+f a
+config is useful enough to submit (and therefore have to maintain).
+
+So it's up to whatever people think works best/is worth it.
+I think in this case, it makes sense to add the file.
+
+> Is that, like the .config file, the .kunitconfig file is not meant to
+> be included in git, but I'm sure someone else will clarify this point.
+
+That bit of the docs needs to be rewritten.
+You're recommended to check in a drivers/gpu/drm/.kunitconfig file into git=
+.
+
+Context: `kunit.py` used to use the "<root>/.kunitconfig" file.
+Anytime you wanted to run more tests, you'd append to that file.
+So we agreed that no one should check in that file specifically.
+
+Now kunit.py
+* uses "<build-dir>/.kunitconfig", by default: ".kunit/.kunitconfig"
+* has the --kunitconfig flag so you can use different files
+so it's no longer as relevant.
+
+Hope that helps,
+Daniel

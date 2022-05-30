@@ -2,50 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B0B537936
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E693537937
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235270AbiE3KjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
+        id S230291AbiE3KjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235202AbiE3Kix (ORCPT
+        with ESMTP id S235220AbiE3Kiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:38:53 -0400
+        Mon, 30 May 2022 06:38:54 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C0A6B093;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F395D6B640;
         Mon, 30 May 2022 03:38:52 -0700 (PDT)
-Date:   Mon, 30 May 2022 10:38:49 -0000
+Date:   Mon, 30 May 2022 10:38:50 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653907130;
+        s=2020; t=1653907131;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=cX2diM0hx2QDVuYjxjJ2Th0skcEyhMoeTFbxjTZ3Hyk=;
-        b=WEXXVLug8xcM7tNeXVw0ROX3ip50mrSwc2wSGX/ypEV2tTdOnmxzZp4H5dt70Iin7Y9E7i
-        8dLUIOACq8ygUWmjPoHJXnwUjiYmLnyghUITRoaDnBDuNbCeTpGCfzy5DjafFCRVjxDE/Y
-        +sXXCBveCCbgOxmH/K/tbF5KBwW5IZqqhE0PheduxxOi/KK4FoI1lIZVbAluyMzo1I5sj4
-        EBRYKXQQJE+8z3Eerhw0gEe0mWNfmY/zF99TrcxuhWUirNJRkleO3Hd0tmmMqhth6IYS41
-        mynVZNliqRfUr50i3FIVdaMeidOiTeStL0nzetguX4ByhQFOY+xIzJsgbqwREw==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PTeQ6fnREq4qXDwHFkrj17z198VHA7y3Wn11fc0EtNg=;
+        b=HbB8J7GaecFhS3TbiYK/iZW3z3OePZ/ACh8U+eDL4GO5lo/mwlrkQO/EVKIFc1u3AGd1cA
+        S5LBPbJQdUVN9+pGd9EfLeYiAsKYGQT5uULuqru32bmuZUpnjRoHxFrGEl2Qi1OReLI3Bm
+        CgyHcsNMM0sBF0TlWzv19Yvh7dzbq9GS/E8j302c/RXcLsPUYH/n306M8Hop5jyg1MmyxP
+        Iu+xr6pooNXUT6qH988P7oCjUn7KEJEZhR32bxVReY4aiSAuk9IYxeV4ZlwV1UCBjez/lQ
+        R8NmGuU6Ad10G6FWF6nGSBSmoh3YrHuIW12qqvcOKPan3tVmQ5/vBqZEqD2r3g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653907130;
+        s=2020e; t=1653907131;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=cX2diM0hx2QDVuYjxjJ2Th0skcEyhMoeTFbxjTZ3Hyk=;
-        b=4rGHFUqONaupfIYTEb0l9llHcsf8g7YvyH4fS5jjpZkcxzXC5VyRy+CBeZAQuyPpIrw2VT
-        kuabXfHoTb93JXCg==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PTeQ6fnREq4qXDwHFkrj17z198VHA7y3Wn11fc0EtNg=;
+        b=Pv2VjKmjh1eOKbgK9a1yXi+V65X3s4ZDGBrFiXsTnepHG1ACrauyRfIl7LuA6RsFkF1K3E
+        SFTdU9Nqy4+Co5AA==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/urgent] jump_label,noinstr: Avoid instrumentation for
- JUMP_LABEL=n builds
+Subject: [tip: objtool/urgent] x86/cpu: Elide KCSAN for cpu_has() and friends
 Cc:     kernel test robot <lkp@intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
+In-Reply-To: <20220502111216.290518605@infradead.org>
+References: <20220502111216.290518605@infradead.org>
 MIME-Version: 1.0
-Message-ID: <165390712965.4207.7873247519209876133.tip-bot2@tip-bot2>
+Message-ID: <165390713059.4207.4023459267386713267.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,43 +67,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/urgent branch of tip:
 
-Commit-ID:     656d054e0a15ec327bd82801ccd58201e59f6896
-Gitweb:        https://git.kernel.org/tip/656d054e0a15ec327bd82801ccd58201e59f6896
+Commit-ID:     a6a5eb269f6f3a2fe392f725a8d9052190c731e2
+Gitweb:        https://git.kernel.org/tip/a6a5eb269f6f3a2fe392f725a8d9052190c731e2
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Mon, 02 May 2022 12:30:20 +02:00
+AuthorDate:    Mon, 02 May 2022 12:15:23 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 27 May 2022 12:34:44 +02:00
+CommitterDate: Fri, 27 May 2022 12:34:43 +02:00
 
-jump_label,noinstr: Avoid instrumentation for JUMP_LABEL=n builds
+x86/cpu: Elide KCSAN for cpu_has() and friends
 
-When building x86_64 with JUMP_LABEL=n it's possible for
-instrumentation to sneak into noinstr:
+As x86 uses the <asm-generic/bitops/instrumented-*.h> headers, the
+regular forms of all bitops are instrumented with explicit calls to
+KASAN and KCSAN checks. As these are explicit calls, these are not
+suppressed by the noinstr function attribute.
 
-vmlinux.o: warning: objtool: exit_to_user_mode+0x14: call to static_key_count.constprop.0() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_exit_to_user_mode+0x2d: call to static_key_count.constprop.0() leaves .noinstr.text section
-vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0x1b: call to static_key_count.constprop.0() leaves .noinstr.text section
+This can result in calls to those check functions in noinstr code, which
+objtool warns about:
 
-Switch to arch_ prefixed atomic to avoid the explicit instrumentation.
+vmlinux.o: warning: objtool: enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x28: call to __kcsan_check_access() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
 
+Prevent this by using the arch_*() bitops, which are the underlying
+bitops without explciit instrumentation.
+
+[null: Changelog]
 Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220502111216.290518605@infradead.org
 ---
- include/linux/jump_label.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/cpufeature.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
-index 107751c..bf1eef3 100644
---- a/include/linux/jump_label.h
-+++ b/include/linux/jump_label.h
-@@ -256,9 +256,9 @@ extern void static_key_disable_cpuslocked(struct static_key *key);
- #include <linux/atomic.h>
- #include <linux/bug.h>
+diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
+index 66d3e3b..ea34cc3 100644
+--- a/arch/x86/include/asm/cpufeature.h
++++ b/arch/x86/include/asm/cpufeature.h
+@@ -54,7 +54,7 @@ extern const char * const x86_power_flags[32];
+ extern const char * const x86_bug_flags[NBUGINTS*32];
  
--static inline int static_key_count(struct static_key *key)
-+static __always_inline int static_key_count(struct static_key *key)
- {
--	return atomic_read(&key->enabled);
-+	return arch_atomic_read(&key->enabled);
- }
+ #define test_cpu_cap(c, bit)						\
+-	 test_bit(bit, (unsigned long *)((c)->x86_capability))
++	 arch_test_bit(bit, (unsigned long *)((c)->x86_capability))
  
- static __always_inline void jump_label_init(void)
+ /*
+  * There are 32 bits/features in each mask word.  The high bits

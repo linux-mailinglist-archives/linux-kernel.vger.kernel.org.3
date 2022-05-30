@@ -2,186 +2,417 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F5953732F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 03:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED46A537330
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 03:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232024AbiE3BDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 21:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
+        id S232045AbiE3BEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 21:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiE3BDS (ORCPT
+        with ESMTP id S232027AbiE3BEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 21:03:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EE65E744;
-        Sun, 29 May 2022 18:03:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9520760FDD;
-        Mon, 30 May 2022 01:03:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88B1C385A9;
-        Mon, 30 May 2022 01:03:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653872595;
-        bh=16kfMHANr14G2Fw7JOodCftfv67KCK1i1z0jnxn/vdk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lxJgUMesJPKEt55yh3FMik8u0Pv4PfofDycfkbW/g8DbNsd++2/cLQkcwWwQItHoK
-         kNvuk3J4Uz5lLvuQ+bp7XYHGvYvJqeWU3AV+XdpxUTE0mTeK+ktZT/A4WMs5+Ur2zf
-         /TM75CW0XfB1ObdR42mtQ90jzuhDb6tmre62ChAccC2cy4EyjaOLOlRtYkTu8ZCkYD
-         wWdcl534vR+9Qk3LP9bgUMimyvfo5fB+wxLbSlEhGtKJqkWnonvXrm8+mM87G3GJXC
-         f+jyTybEdsM7U0sbTajlgHSg7kCXxpL8NXBcAvml1K0T+fsUSbmUJMa/1F86BIzhTm
-         LCP/Ox7WjYBfQ==
-Date:   Mon, 30 May 2022 10:03:10 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        cj.chengjian@huawei.com, huawei.libin@huawei.com,
-        xiexiuqi@huawei.com, liwei391@huawei.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
- allocated trampolines
-Message-Id: <20220530100310.c22c36df4ea9324cb9cb3515@kernel.org>
-In-Reply-To: <Yo4eWqHA/IjNElNN@FVFF77S0Q05N>
-References: <YmLlmaXF00hPkOID@lakrids>
-        <20220426174749.b5372c5769af7bf901649a05@kernel.org>
-        <YnJUTuOIX9YoJq23@FVFF77S0Q05N>
-        <20220505121538.04773ac98e2a8ba17f675d39@kernel.org>
-        <20220509142203.6c4f2913@gandalf.local.home>
-        <20220510181012.d5cba23a2547f14d14f016b9@kernel.org>
-        <20220510104446.6d23b596@gandalf.local.home>
-        <20220511233450.40136cdf6a53eb32cd825be8@kernel.org>
-        <20220511111207.25d1a693@gandalf.local.home>
-        <20220512210231.f9178a98f20a37981b1e89e3@kernel.org>
-        <Yo4eWqHA/IjNElNN@FVFF77S0Q05N>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 29 May 2022 21:04:15 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A045E749
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 18:04:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653872653; x=1685408653;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=O3iZwkM7DCKbD+KTKrXng+IeQJIP32YD5lc+35eO9mc=;
+  b=hajcDB0gfupCk4bpdH0p219zzWrXzEM+t1dhRK7Tb0JugvNrEdwALzSg
+   aW/K48lQRh+59gt0AUDTYQcN3/PBzYxJTFNlJho5aBs+HQAwO7qWCzTjQ
+   1yW4PxVvH4IRIVUQ4mYOIT4vD2jyMf414fdBbo26FWj+lv4YFhPIqJl67
+   fh7S9ZYz5sMw/q0wFrH4fVn94ip3+otGcweKAdgRadkoIidLv+EQt4P70
+   I7UoHnU98GTy6YQ6rEr6FAvc/FosXe7TB+mGSavz9wpd5simpliNZGMxe
+   kMdAd5o1AY9ZYqK9T8CV6FTgA3uZjeyX3vAkjnlWyVrPpbo27lAIIIBsL
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="337901728"
+X-IronPort-AV: E=Sophos;i="5.91,261,1647327600"; 
+   d="scan'208";a="337901728"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2022 18:04:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,261,1647327600"; 
+   d="scan'208";a="705939872"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 29 May 2022 18:04:10 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nvTpJ-0001Lp-GC;
+        Mon, 30 May 2022 01:04:09 +0000
+Date:   Mon, 30 May 2022 09:03:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: drivers/hid/hid-uclogic-rdesc.c:950:9: error:
+ 'UCLOGIC_RDESC_FRAME_PH_BTN' undeclared here (not in a function)
+Message-ID: <202205300828.L1ZmqYg3-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Cc: BPF ML)
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220530-055140/Jos-Exp-sito/Add-support-for-XP-PEN-Deco-L/20220519-065024
+head:   25ca549ae188f6dcbd3ddadebd64f2f6777002f5
+commit: 25ca549ae188f6dcbd3ddadebd64f2f6777002f5 HID: uclogic: Add support for XP-PEN Deco L
+date:   3 hours ago
+config: arc-randconfig-r043-20220530 (https://download.01.org/0day-ci/archive/20220530/202205300828.L1ZmqYg3-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/25ca549ae188f6dcbd3ddadebd64f2f6777002f5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220530-055140/Jos-Exp-sito/Add-support-for-XP-PEN-Deco-L/20220519-065024
+        git checkout 25ca549ae188f6dcbd3ddadebd64f2f6777002f5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/hid/
 
-On Wed, 25 May 2022 13:17:30 +0100
-Mark Rutland <mark.rutland@arm.com> wrote:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> On Thu, May 12, 2022 at 09:02:31PM +0900, Masami Hiramatsu wrote:
-> > On Wed, 11 May 2022 11:12:07 -0400
-> > Steven Rostedt <rostedt@goodmis.org> wrote:
-> > 
-> > > On Wed, 11 May 2022 23:34:50 +0900
-> > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > 
-> > > > OK, so fregs::regs will have a subset of pt_regs, and accessibility of
-> > > > the registers depends on the architecture. If we can have a checker like
-> > > > 
-> > > > ftrace_regs_exist(fregs, reg_offset)
-> > > 
-> > > Or something. I'd have to see the use case.
-> > > 
-> > > > 
-> > > > kprobe on ftrace or fprobe user (BPF) can filter user's requests.
-> > > > I think I can introduce a flag for kprobes so that user can make a
-> > > > kprobe handler only using a subset of registers. 
-> > > > Maybe similar filter code is also needed for BPF 'user space' library
-> > > > because this check must be done when compiling BPF.
-> > > 
-> > > Is there any other case without full regs that the user would want anything
-> > > other than the args, stack pointer and instruction pointer?
-> > 
-> > For the kprobes APIs/events, yes, it needs to access to the registers
-> > which is used for local variables when probing inside the function body.
-> > However at the function entry, I think almost no use case. (BTW, pstate
-> > is a bit special, that may show the actual processor-level status
-> > (context), so for the debugging, user might want to read it.)
-> 
-> As before, if we really need PSTATE we *must* take an exception to get a
-> reliable snapshot (or to alter the value). So I'd really like to split this
-> into two cases:
-> 
-> * Where users *really* need PSTATE (or arbitrary GPRs), they use kprobes. That
->   always takes an exception and they can have a complete, real struct pt_regs.
-> 
-> * Where users just need to capture a function call boundary, they use ftrace.
->   That uses a trampoline without taking an exception, and they get the minimal
->   set of registers relevant to the function call boundary (which does not
->   include PSTATE or most GPRs).
+All errors (new ones prefixed by >>):
 
-I totally agree with this idea. The x86 is a special case, since the
--fentry option puts a call on the first instruction of the function entry,
-I had to reuse the ftrace instead of swbp for kprobes.
-But on arm64 (and other RISCs), we can use them properly.
+>> drivers/hid/hid-uclogic-rdesc.c:950:9: error: 'UCLOGIC_RDESC_FRAME_PH_BTN' undeclared here (not in a function)
+     950 |         UCLOGIC_RDESC_FRAME_PH_BTN,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+--
+   drivers/hid/hid-uclogic-params.c: In function 'uclogic_params_ugee_v2_init':
+>> drivers/hid/hid-uclogic-params.c:1131:21: error: 'UCLOGIC_RDESC_FRAME_PH_ID_UM' undeclared (first use in this function); did you mean 'UCLOGIC_RDESC_PH_ID_NUM'?
+    1131 |         desc_params[UCLOGIC_RDESC_FRAME_PH_ID_UM] = str_desc[6];
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                     UCLOGIC_RDESC_PH_ID_NUM
+   drivers/hid/hid-uclogic-params.c:1131:21: note: each undeclared identifier is reported only once for each function it appears in
 
-My concern is that the eBPF depends on kprobe (pt_regs) interface, thus
-I need to ask them that it is OK to not accessable to some part of
-pt_regs (especially, PSTATE) if they puts probes on function entry
-with ftrace (fprobe in this case.)
 
-(Jiri and BPF developers)
-Currently fprobe is only enabled on x86 for "multiple kprobes" BPF
-interface, but in the future, it will be enabled on arm64. And at
-that point, it will be only accessible to the regs for function
-arguments. Is that OK for your use case? And will the BPF compiler
-be able to restrict the user program to access only those registers
-when using the "multiple kprobes"?
+vim +/UCLOGIC_RDESC_FRAME_PH_BTN +950 drivers/hid/hid-uclogic-rdesc.c
 
-> > Thus the BPF use case via fprobes, I think there is no usecase.
-> > My concern is that the BPF may allow user program to access any
-> > field of pt_regs. Thus if the user miss-programmed, they may see
-> > a wrong value (I guess the fregs is not zero-filled) for unsaved
-> > registers.
-> > 
-> > > That is, have a flag that says "only_args" or something, that says they
-> > > will only get the registers for arguments, a stack pointer, and the
-> > > instruction pointer (note, the fregs may not have the instruction pointer
-> > > as that is passed to the the caller via the "ip" parameter. If the fregs
-> > > needs that, we can add a "ftrace_regs_set_ip()" before calling the
-> > > callback registered to the fprobe).
-> > 
-> > Yes, that is what I'm thinking. If "only_args" flag is set, BPF runtime
-> > must check the user program. And if it finds the program access the
-> > unsaved registers, it should stop executing.
-> > 
-> > BTW, "what register is saved" can be determined statically, thus I think
-> > we just need the offset for checking (for fprobe usecase, since it will
-> > set the ftrace_ops flag by itself.)
-> 
-> For arm64 I'd like to make this static, and have ftrace *always* capture a
-> minimal set of ftrace_regs, which would be:
-> 
->   X0 to X8 inclusive
->   SP
->   PC
->   LR
->   FP
-> 
-> Since X0 to X8 + SP is all that we need for arguments and return values (per
-> the calling convention we use), and PC+LR+FP gives us everything we need for
-> unwinding and live patching.
-
-It would be good for me. So is it enabled with CONFIG_DYNAMIC_FTRACE_WITH_ARGS,
-instead of CONFIG_DYNAMIC_FTRACE_WITH_REGS?
-
-Thank you,
-
-> 
-> I *might* want to add x18 to that when SCS is enabled, but I'm not immediately
-> sure.
-> 
-> Thanks,
-> Mark.
-
+   650	
+   651	const size_t uclogic_rdesc_v2_pen_template_size =
+   652				sizeof(uclogic_rdesc_v2_pen_template_arr);
+   653	
+   654	/*
+   655	 * Expand to the contents of a generic frame buttons report descriptor.
+   656	 *
+   657	 * @_id:	The report ID to use.
+   658	 * @_size:	Size of the report to pad to, including report ID, bytes.
+   659	 */
+   660	#define UCLOGIC_RDESC_FRAME_BUTTONS_BYTES(_id, _size) \
+   661		0x05, 0x01,     /*  Usage Page (Desktop),               */ \
+   662		0x09, 0x07,     /*  Usage (Keypad),                     */ \
+   663		0xA1, 0x01,     /*  Collection (Application),           */ \
+   664		0x85, (_id),    /*      Report ID (_id),                */ \
+   665		0x14,           /*      Logical Minimum (0),            */ \
+   666		0x25, 0x01,     /*      Logical Maximum (1),            */ \
+   667		0x75, 0x01,     /*      Report Size (1),                */ \
+   668		0x05, 0x0D,     /*      Usage Page (Digitizer),         */ \
+   669		0x09, 0x39,     /*      Usage (Tablet Function Keys),   */ \
+   670		0xA0,           /*      Collection (Physical),          */ \
+   671		0x09, 0x44,     /*          Usage (Barrel Switch),      */ \
+   672		0x95, 0x01,     /*          Report Count (1),           */ \
+   673		0x81, 0x02,     /*          Input (Variable),           */ \
+   674		0x05, 0x01,     /*          Usage Page (Desktop),       */ \
+   675		0x09, 0x30,     /*          Usage (X),                  */ \
+   676		0x09, 0x31,     /*          Usage (Y),                  */ \
+   677		0x95, 0x02,     /*          Report Count (2),           */ \
+   678		0x81, 0x02,     /*          Input (Variable),           */ \
+   679		0x95, 0x15,     /*          Report Count (21),          */ \
+   680		0x81, 0x01,     /*          Input (Constant),           */ \
+   681		0x05, 0x09,     /*          Usage Page (Button),        */ \
+   682		0x19, 0x01,     /*          Usage Minimum (01h),        */ \
+   683		0x29, 0x0A,     /*          Usage Maximum (0Ah),        */ \
+   684		0x95, 0x0A,     /*          Report Count (10),          */ \
+   685		0x81, 0x02,     /*          Input (Variable),           */ \
+   686		0xC0,           /*      End Collection,                 */ \
+   687		0x05, 0x01,     /*      Usage Page (Desktop),           */ \
+   688		0x09, 0x05,     /*      Usage (Gamepad),                */ \
+   689		0xA0,           /*      Collection (Physical),          */ \
+   690		0x05, 0x09,     /*          Usage Page (Button),        */ \
+   691		0x19, 0x01,     /*          Usage Minimum (01h),        */ \
+   692		0x29, 0x03,     /*          Usage Maximum (03h),        */ \
+   693		0x95, 0x03,     /*          Report Count (3),           */ \
+   694		0x81, 0x02,     /*          Input (Variable),           */ \
+   695		0x95, ((_size) * 8 - 45),                                  \
+   696				/*          Report Count (padding),     */ \
+   697		0x81, 0x01,     /*          Input (Constant),           */ \
+   698		0xC0,           /*      End Collection,                 */ \
+   699		0xC0            /*  End Collection                      */
+   700	
+   701	/* Fixed report descriptor for (tweaked) v1 frame reports */
+   702	const __u8 uclogic_rdesc_v1_frame_arr[] = {
+   703		UCLOGIC_RDESC_FRAME_BUTTONS_BYTES(UCLOGIC_RDESC_V1_FRAME_ID, 8)
+   704	};
+   705	const size_t uclogic_rdesc_v1_frame_size =
+   706				sizeof(uclogic_rdesc_v1_frame_arr);
+   707	
+   708	/* Fixed report descriptor for (tweaked) v2 frame button reports */
+   709	const __u8 uclogic_rdesc_v2_frame_buttons_arr[] = {
+   710		UCLOGIC_RDESC_FRAME_BUTTONS_BYTES(UCLOGIC_RDESC_V2_FRAME_BUTTONS_ID,
+   711						  12)
+   712	};
+   713	const size_t uclogic_rdesc_v2_frame_buttons_size =
+   714				sizeof(uclogic_rdesc_v2_frame_buttons_arr);
+   715	
+   716	/* Fixed report descriptor for (tweaked) v2 frame touch ring reports */
+   717	const __u8 uclogic_rdesc_v2_frame_touch_ring_arr[] = {
+   718		0x05, 0x01,         /*  Usage Page (Desktop),               */
+   719		0x09, 0x07,         /*  Usage (Keypad),                     */
+   720		0xA1, 0x01,         /*  Collection (Application),           */
+   721		0x85, UCLOGIC_RDESC_V2_FRAME_TOUCH_ID,
+   722				    /*      Report ID (TOUCH_ID),           */
+   723		0x14,               /*      Logical Minimum (0),            */
+   724		0x05, 0x0D,         /*      Usage Page (Digitizer),         */
+   725		0x09, 0x39,         /*      Usage (Tablet Function Keys),   */
+   726		0xA0,               /*      Collection (Physical),          */
+   727		0x25, 0x01,         /*          Logical Maximum (1),        */
+   728		0x75, 0x01,         /*          Report Size (1),            */
+   729		0x05, 0x09,         /*          Usage Page (Button),        */
+   730		0x09, 0x01,         /*          Usage (01h),                */
+   731		0x95, 0x01,         /*          Report Count (1),           */
+   732		0x81, 0x02,         /*          Input (Variable),           */
+   733		0x95, 0x07,         /*          Report Count (7),           */
+   734		0x81, 0x01,         /*          Input (Constant),           */
+   735		0x75, 0x08,         /*          Report Size (8),            */
+   736		0x95, 0x02,         /*          Report Count (2),           */
+   737		0x81, 0x01,         /*          Input (Constant),           */
+   738		0x05, 0x0D,         /*          Usage Page (Digitizer),     */
+   739		0x0A, 0xFF, 0xFF,   /*          Usage (FFFFh),              */
+   740		0x26, 0xFF, 0x00,   /*          Logical Maximum (255),      */
+   741		0x95, 0x01,         /*          Report Count (1),           */
+   742		0x81, 0x02,         /*          Input (Variable),           */
+   743		0x05, 0x01,         /*          Usage Page (Desktop),       */
+   744		0x09, 0x38,         /*          Usage (Wheel),              */
+   745		0x95, 0x01,         /*          Report Count (1),           */
+   746		0x15, 0x00,         /*          Logical Minimum (0),        */
+   747		0x25, 0x0B,         /*          Logical Maximum (11),       */
+   748		0x81, 0x02,         /*          Input (Variable),           */
+   749		0x09, 0x30,         /*          Usage (X),                  */
+   750		0x09, 0x31,         /*          Usage (Y),                  */
+   751		0x14,               /*          Logical Minimum (0),        */
+   752		0x25, 0x01,         /*          Logical Maximum (1),        */
+   753		0x75, 0x01,         /*          Report Size (1),            */
+   754		0x95, 0x02,         /*          Report Count (2),           */
+   755		0x81, 0x02,         /*          Input (Variable),           */
+   756		0x95, 0x2E,         /*          Report Count (46),          */
+   757		0x81, 0x01,         /*          Input (Constant),           */
+   758		0xC0,               /*      End Collection,                 */
+   759		0xC0                /*  End Collection                      */
+   760	};
+   761	const size_t uclogic_rdesc_v2_frame_touch_ring_size =
+   762				sizeof(uclogic_rdesc_v2_frame_touch_ring_arr);
+   763	
+   764	/* Fixed report descriptor for (tweaked) v2 frame touch strip reports */
+   765	const __u8 uclogic_rdesc_v2_frame_touch_strip_arr[] = {
+   766		0x05, 0x01,         /*  Usage Page (Desktop),               */
+   767		0x09, 0x07,         /*  Usage (Keypad),                     */
+   768		0xA1, 0x01,         /*  Collection (Application),           */
+   769		0x85, UCLOGIC_RDESC_V2_FRAME_TOUCH_ID,
+   770				    /*      Report ID (TOUCH_ID),           */
+   771		0x14,               /*      Logical Minimum (0),            */
+   772		0x05, 0x0D,         /*      Usage Page (Digitizer),         */
+   773		0x09, 0x39,         /*      Usage (Tablet Function Keys),   */
+   774		0xA0,               /*      Collection (Physical),          */
+   775		0x25, 0x01,         /*          Logical Maximum (1),        */
+   776		0x75, 0x01,         /*          Report Size (1),            */
+   777		0x05, 0x09,         /*          Usage Page (Button),        */
+   778		0x09, 0x01,         /*          Usage (01h),                */
+   779		0x95, 0x01,         /*          Report Count (1),           */
+   780		0x81, 0x02,         /*          Input (Variable),           */
+   781		0x95, 0x07,         /*          Report Count (7),           */
+   782		0x81, 0x01,         /*          Input (Constant),           */
+   783		0x75, 0x08,         /*          Report Size (8),            */
+   784		0x95, 0x02,         /*          Report Count (2),           */
+   785		0x81, 0x01,         /*          Input (Constant),           */
+   786		0x05, 0x0D,         /*          Usage Page (Digitizer),     */
+   787		0x0A, 0xFF, 0xFF,   /*          Usage (FFFFh),              */
+   788		0x26, 0xFF, 0x00,   /*          Logical Maximum (255),      */
+   789		0x95, 0x01,         /*          Report Count (1),           */
+   790		0x81, 0x02,         /*          Input (Variable),           */
+   791		0x05, 0x01,         /*          Usage Page (Desktop),       */
+   792		0x09, 0x38,         /*          Usage (Wheel),              */
+   793		0x95, 0x01,         /*          Report Count (1),           */
+   794		0x15, 0x00,         /*          Logical Minimum (0),        */
+   795		0x25, 0x07,         /*          Logical Maximum (7),        */
+   796		0x81, 0x02,         /*          Input (Variable),           */
+   797		0x09, 0x30,         /*          Usage (X),                  */
+   798		0x09, 0x31,         /*          Usage (Y),                  */
+   799		0x14,               /*          Logical Minimum (0),        */
+   800		0x25, 0x01,         /*          Logical Maximum (1),        */
+   801		0x75, 0x01,         /*          Report Size (1),            */
+   802		0x95, 0x02,         /*          Report Count (2),           */
+   803		0x81, 0x02,         /*          Input (Variable),           */
+   804		0x95, 0x2E,         /*          Report Count (46),          */
+   805		0x81, 0x01,         /*          Input (Constant),           */
+   806		0xC0,               /*      End Collection,                 */
+   807		0xC0                /*  End Collection                      */
+   808	};
+   809	const size_t uclogic_rdesc_v2_frame_touch_strip_size =
+   810				sizeof(uclogic_rdesc_v2_frame_touch_strip_arr);
+   811	
+   812	/* Fixed report descriptor for (tweaked) v2 frame dial reports */
+   813	const __u8 uclogic_rdesc_v2_frame_dial_arr[] = {
+   814		0x05, 0x01,         /*  Usage Page (Desktop),               */
+   815		0x09, 0x07,         /*  Usage (Keypad),                     */
+   816		0xA1, 0x01,         /*  Collection (Application),           */
+   817		0x85, UCLOGIC_RDESC_V2_FRAME_DIAL_ID,
+   818				    /*      Report ID (DIAL_ID),            */
+   819		0x14,               /*      Logical Minimum (0),            */
+   820		0x05, 0x0D,         /*      Usage Page (Digitizer),         */
+   821		0x09, 0x39,         /*      Usage (Tablet Function Keys),   */
+   822		0xA0,               /*      Collection (Physical),          */
+   823		0x25, 0x01,         /*          Logical Maximum (1),        */
+   824		0x75, 0x01,         /*          Report Size (1),            */
+   825		0x95, 0x01,         /*          Report Count (1),           */
+   826		0x81, 0x01,         /*          Input (Constant),           */
+   827		0x05, 0x09,         /*          Usage Page (Button),        */
+   828		0x09, 0x01,         /*          Usage (01h),                */
+   829		0x95, 0x01,         /*          Report Count (1),           */
+   830		0x81, 0x02,         /*          Input (Variable),           */
+   831		0x95, 0x06,         /*          Report Count (6),           */
+   832		0x81, 0x01,         /*          Input (Constant),           */
+   833		0x75, 0x08,         /*          Report Size (8),            */
+   834		0x95, 0x02,         /*          Report Count (2),           */
+   835		0x81, 0x01,         /*          Input (Constant),           */
+   836		0x05, 0x0D,         /*          Usage Page (Digitizer),     */
+   837		0x0A, 0xFF, 0xFF,   /*          Usage (FFFFh),              */
+   838		0x26, 0xFF, 0x00,   /*          Logical Maximum (255),      */
+   839		0x95, 0x01,         /*          Report Count (1),           */
+   840		0x81, 0x02,         /*          Input (Variable),           */
+   841		0x05, 0x01,         /*          Usage Page (Desktop),       */
+   842		0x09, 0x38,         /*          Usage (Wheel),              */
+   843		0x95, 0x01,         /*          Report Count (1),           */
+   844		0x15, 0xFF,         /*          Logical Minimum (-1),       */
+   845		0x25, 0x01,         /*          Logical Maximum (1),        */
+   846		0x81, 0x06,         /*          Input (Variable, Relative), */
+   847		0x09, 0x30,         /*          Usage (X),                  */
+   848		0x09, 0x31,         /*          Usage (Y),                  */
+   849		0x14,               /*          Logical Minimum (0),        */
+   850		0x25, 0x01,         /*          Logical Maximum (1),        */
+   851		0x75, 0x01,         /*          Report Size (1),            */
+   852		0x95, 0x02,         /*          Report Count (2),           */
+   853		0x81, 0x02,         /*          Input (Variable),           */
+   854		0x95, 0x2E,         /*          Report Count (46),          */
+   855		0x81, 0x01,         /*          Input (Constant),           */
+   856		0xC0,               /*      End Collection,                 */
+   857		0xC0                /*  End Collection                      */
+   858	};
+   859	const size_t uclogic_rdesc_v2_frame_dial_size =
+   860				sizeof(uclogic_rdesc_v2_frame_dial_arr);
+   861	
+   862	/* Fixed report descriptor template for UGEE v2 pen reports */
+   863	const __u8 uclogic_rdesc_ugee_v2_pen_template_arr[] = {
+   864		0x05, 0x0d,         /*  Usage Page (Digitizers),                */
+   865		0x09, 0x01,         /*  Usage (Digitizer),                      */
+   866		0xa1, 0x01,         /*  Collection (Application),               */
+   867		0x85, 0x02,         /*      Report ID (2),                      */
+   868		0x09, 0x20,         /*      Usage (Stylus),                     */
+   869		0xa1, 0x00,         /*      Collection (Physical),              */
+   870		0x09, 0x42,         /*          Usage (Tip Switch),             */
+   871		0x09, 0x44,         /*          Usage (Barrel Switch),          */
+   872		0x09, 0x46,         /*          Usage (Tablet Pick),            */
+   873		0x75, 0x01,         /*          Report Size (1),                */
+   874		0x95, 0x03,         /*          Report Count (3),               */
+   875		0x14,               /*          Logical Minimum (0),            */
+   876		0x25, 0x01,         /*          Logical Maximum (1),            */
+   877		0x81, 0x02,         /*          Input (Variable),               */
+   878		0x95, 0x02,         /*          Report Count (2),               */
+   879		0x81, 0x03,         /*          Input (Constant, Variable),     */
+   880		0x09, 0x32,         /*          Usage (In Range),               */
+   881		0x95, 0x01,         /*          Report Count (1),               */
+   882		0x81, 0x02,         /*          Input (Variable),               */
+   883		0x95, 0x02,         /*          Report Count (2),               */
+   884		0x81, 0x03,         /*          Input (Constant, Variable),     */
+   885		0x75, 0x10,         /*          Report Size (16),               */
+   886		0x95, 0x01,         /*          Report Count (1),               */
+   887		0x35, 0x00,         /*          Physical Minimum (0),           */
+   888		0xa4,               /*          Push,                           */
+   889		0x05, 0x01,         /*          Usage Page (Desktop),           */
+   890		0x09, 0x30,         /*          Usage (X),                      */
+   891		0x65, 0x13,         /*          Unit (Inch),                    */
+   892		0x55, 0x0d,         /*          Unit Exponent (-3),             */
+   893		0x27, UCLOGIC_RDESC_PEN_PH(X_LM),
+   894				    /*          Logical Maximum (PLACEHOLDER),  */
+   895		0x47, UCLOGIC_RDESC_PEN_PH(X_PM),
+   896				    /*          Physical Maximum (PLACEHOLDER), */
+   897		0x81, 0x02,         /*          Input (Variable),               */
+   898		0x09, 0x31,         /*          Usage (Y),                      */
+   899		0x27, UCLOGIC_RDESC_PEN_PH(Y_LM),
+   900				    /*          Logical Maximum (PLACEHOLDER),  */
+   901		0x47, UCLOGIC_RDESC_PEN_PH(Y_PM),
+   902				    /*          Physical Maximum (PLACEHOLDER), */
+   903		0x81, 0x02,         /*          Input (Variable),               */
+   904		0xb4,               /*          Pop,                            */
+   905		0x09, 0x30,         /*          Usage (Tip Pressure),           */
+   906		0x45, 0x00,         /*          Physical Maximum (0),           */
+   907		0x27, UCLOGIC_RDESC_PEN_PH(PRESSURE_LM),
+   908				    /*          Logical Maximum (PLACEHOLDER),  */
+   909		0x75, 0x0D,         /*          Report Size (13),               */
+   910		0x95, 0x01,         /*          Report Count (1),               */
+   911		0x81, 0x02,         /*          Input (Variable),               */
+   912		0x75, 0x01,         /*          Report Size (1),                */
+   913		0x95, 0x03,         /*          Report Count (3),               */
+   914		0x81, 0x01,         /*          Input (Constant),               */
+   915		0x09, 0x3d,         /*          Usage (X Tilt),                 */
+   916		0x35, 0xC3,         /*          Physical Minimum (-61),         */
+   917		0x45, 0x3C,         /*          Physical Maximum (60),          */
+   918		0x15, 0xC3,         /*          Logical Minimum (-61),          */
+   919		0x25, 0x3C,         /*          Logical Maximum (60),           */
+   920		0x75, 0x08,         /*          Report Size (8),                */
+   921		0x95, 0x01,         /*          Report Count (1),               */
+   922		0x81, 0x02,         /*          Input (Variable),               */
+   923		0x09, 0x3e,         /*          Usage (Y Tilt),                 */
+   924		0x35, 0xC3,         /*          Physical Minimum (-61),         */
+   925		0x45, 0x3C,         /*          Physical Maximum (60),          */
+   926		0x15, 0xC3,         /*          Logical Minimum (-61),          */
+   927		0x25, 0x3C,         /*          Logical Maximum (60),           */
+   928		0x81, 0x02,         /*          Input (Variable),               */
+   929		0xc0,               /*      End Collection,                     */
+   930		0xc0,               /*  End Collection                          */
+   931	};
+   932	const size_t uclogic_rdesc_ugee_v2_pen_template_size =
+   933				sizeof(uclogic_rdesc_ugee_v2_pen_template_arr);
+   934	
+   935	/* Fixed report descriptor template for UGEE v2 frame reports (buttons only) */
+   936	const __u8 uclogic_rdesc_ugee_v2_frame_btn_template_arr[] = {
+   937		0x05, 0x01,         /*  Usage Page (Desktop),                   */
+   938		0x09, 0x07,         /*  Usage (Keypad),                         */
+   939		0xA1, 0x01,         /*  Collection (Application),               */
+   940		0x85, UCLOGIC_RDESC_V1_FRAME_ID,
+   941				    /*      Report ID,                          */
+   942		0x05, 0x0D,         /*      Usage Page (Digitizer),             */
+   943		0x09, 0x39,         /*      Usage (Tablet Function Keys),       */
+   944		0xA0,               /*      Collection (Physical),              */
+   945		0x75, 0x01,         /*          Report Size (1),                */
+   946		0x95, 0x08,         /*          Report Count (8),               */
+   947		0x81, 0x01,         /*          Input (Constant),               */
+   948		0x05, 0x09,         /*          Usage Page (Button),            */
+   949		0x19, 0x01,         /*          Usage Minimum (01h),            */
+ > 950		UCLOGIC_RDESC_FRAME_PH_BTN,
+   951				    /*          Usage Maximum (PLACEHOLDER),    */
+   952		0x95, 0x0A,         /*          Report Count (10),              */
+   953		0x14,               /*          Logical Minimum (0),            */
+   954		0x25, 0x01,         /*          Logical Maximum (1),            */
+   955		0x81, 0x02,         /*          Input (Variable),               */
+   956		0x95, 0x46,         /*          Report Count (70),              */
+   957		0x81, 0x01,         /*          Input (Constant),               */
+   958		0xC0,               /*      End Collection,                     */
+   959		0xC0                /*  End Collection                          */
+   960	};
+   961	const size_t uclogic_rdesc_ugee_v2_frame_btn_template_size =
+   962				sizeof(uclogic_rdesc_ugee_v2_frame_btn_template_arr);
+   963	
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+0-DAY CI Kernel Test Service
+https://01.org/lkp

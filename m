@@ -2,74 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFD85379ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F8F537A25
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235860AbiE3Lar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 07:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
+        id S235724AbiE3LtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 07:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235800AbiE3Lan (ORCPT
+        with ESMTP id S233512AbiE3Ls4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 07:30:43 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC2D7E1F9
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:30:43 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so10461818pjf.5
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:30:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0FDANzoD+ved+kLqkfGfvHR/pdrWdYCkcffUnS1gfwU=;
-        b=Fu3f0elDLJOB2qbC/WiNHHrnzhkyIj+M6hmuWqiHDK3vOkYLQvzCSrr7LVh4m3XTYw
-         zHYE0cnTsfWTDpSMBzpspezMLKffVInpKtx6Q6xL1bYNG/62ysHWflZJ8iUZZwz2DmLa
-         LESrtBQuLJ1bR/V4bpVZuA5UHrSfe0QY1yOHo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0FDANzoD+ved+kLqkfGfvHR/pdrWdYCkcffUnS1gfwU=;
-        b=swX+LzeiiDg8JB44Czyzj8TsjQjRYvS9uIRkXdSJdre52FsPws7Ap5TGyOZ4/QyAvF
-         jrSgdTEvCr9U+1d3jl/OHhL0qWJS99mbI+Fg01mi+SYSNMaCA2/FErecOjVDwD7vHkTe
-         NXEWxKEjoMNSxnBUeaK1K12y4W4CyREqEsiEo+afLXN2SAhgMkKXOqZZUMP+acCgWtTl
-         X5HmZseUp5bXKpzusDxs1cUvnRBP3sIgRjRSnV0VvgsZAZ2HSvusD5iOLcX+wKSh7tah
-         dh/E8q7uZg8+i2o0aDFAvf6C34JKEze76Lwt2HMapBCpzCOLFyAESfY+jBKf+CI7NkgI
-         R2Ow==
-X-Gm-Message-State: AOAM530D64eI3+kOaj8iDLhyaxFjBNJR79Rr4sVQ7MQPjyVfpyAOsjBg
-        zBwx+cSev3m3iWaDqnhl6YGlHg==
-X-Google-Smtp-Source: ABdhPJxub7eHxeB4mlpr+M6AT+c0bGpa7kjAzy63YjDOWYW87ck7sC0r1LTX1UfyD0/ZFy7H+5i/oQ==
-X-Received: by 2002:a17:903:1c1:b0:163:ef7b:e11a with SMTP id e1-20020a17090301c100b00163ef7be11amr2002458plh.76.1653910242646;
-        Mon, 30 May 2022 04:30:42 -0700 (PDT)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:ae1c:3d63:abec:1097])
-        by smtp.gmail.com with ESMTPSA id o3-20020a654583000000b003fa5b550303sm8384222pgq.68.2022.05.30.04.30.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 04:30:42 -0700 (PDT)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        Rob Clark <robdclark@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] arm64: dts: mt8183: Add panel rotation
-Date:   Mon, 30 May 2022 19:30:33 +0800
-Message-Id: <20220530113033.124072-2-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-In-Reply-To: <20220530113033.124072-1-hsinyi@chromium.org>
-References: <20220530113033.124072-1-hsinyi@chromium.org>
+        Mon, 30 May 2022 07:48:56 -0400
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B27B692BD
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:48:54 -0700 (PDT)
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 3ABDBA0047;
+        Mon, 30 May 2022 13:32:06 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 3ABDBA0047
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1653910326; bh=zjOHNt523dbFOX2xDzHhluv4/0kMV+wexiBuakxIphQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZJHLT1qARbd3f64k2TMFvhtn40n0feo6CMHuh2hvI+YggpDXWOsuPKN2+X79dbEt2
+         xheVPxLuXhBZj8PQfCENcoXrDVozMqKt6dYFncRRVDZGt94BglqOqAQnl+Pp5/9rCJ
+         7xc4sC62joPZ/9Pb00HUqKy9kaQR1HpGdSklKrZU=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Mon, 30 May 2022 13:31:59 +0200 (CEST)
+Message-ID: <dd0817a9-16f9-a08f-fcde-97788de445d3@perex.cz>
+Date:   Mon, 30 May 2022 13:31:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v4 16/17] ALSA: hda: cs35l41: Support Firmware switching
+ and reloading
+Content-Language: en-US
+To:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
+        Takashi Iwai <tiwai@suse.com>, Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+References: <20220525131638.5512-1-vitalyr@opensource.cirrus.com>
+ <20220525131638.5512-17-vitalyr@opensource.cirrus.com>
+From:   Jaroslav Kysela <perex@perex.cz>
+In-Reply-To: <20220525131638.5512-17-vitalyr@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,27 +60,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-krane, kakadu, and kodama boards have a default panel rotation.
+On 25. 05. 22 15:16, Vitaly Rodionov wrote:
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Tested-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
----
- arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+> This patch adds 2 ALSA Controls for each amp:
+> "DSP1 Firmware Load"
+> "DSP1 Firmware Type"
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 8d5bf73a9099..f0dd5a06629d 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -276,6 +276,7 @@ panel: panel@0 {
- 		avee-supply = <&ppvarp_lcd>;
- 		pp1800-supply = <&pp1800_lcd>;
- 		backlight = <&backlight_lcd0>;
-+		rotation = <270>;
- 		port {
- 			panel_in: endpoint {
- 				remote-endpoint = <&dsi_out>;
+...
+
+> +	struct snd_kcontrol_new fw_type_ctl = {
+> +		.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+> +		.info = cs35l41_fw_type_ctl_info,
+> +		.get = cs35l41_fw_type_ctl_get,
+> +		.put = cs35l41_fw_type_ctl_put,
+> +	};
+> +	struct snd_kcontrol_new fw_load_ctl = {
+> +		.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+> +		.info = snd_ctl_boolean_mono_info,
+> +		.get = cs35l41_fw_load_ctl_get,
+> +		.put = cs35l41_fw_load_ctl_put,
+> +	};
+
+I don't think that those controls should be SNDRV_CTL_ELEM_IFACE_MIXER type. 
+The SNDRV_CTL_ELEM_IFACE_CARD seems more appropriate (service controls for the 
+sound card).
+
+						Jaroslav
+
 -- 
-2.36.1.124.g0e6072fb45-goog
-
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.

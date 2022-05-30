@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 878BF537934
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B8D537935
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235247AbiE3Ki7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S235257AbiE3KjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233486AbiE3Kiv (ORCPT
+        with ESMTP id S235216AbiE3Kix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:38:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90BC6B024;
-        Mon, 30 May 2022 03:38:50 -0700 (PDT)
-Date:   Mon, 30 May 2022 10:38:47 -0000
+        Mon, 30 May 2022 06:38:53 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BA76B092;
+        Mon, 30 May 2022 03:38:51 -0700 (PDT)
+Date:   Mon, 30 May 2022 10:38:48 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653907128;
+        s=2020; t=1653907129;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ufDnFMnnXBqzc5K3MvijCT7r3uQmHklKS0W/nXF0apA=;
-        b=eKCsbOTSBFO3tNIIUqGu0TgSqb16bl9Azav5AsnQpcV7M++y7nL8f7AWmUICSC+H7wWZqX
-        jbxlnKCu6Pw6ySZnwRvmRyGqXm2tq0cZHTom/JsiZ0LABexsF+P2b1VEvKSgPnd88oTe5e
-        9Lg4sAxQpl1Vrj/H4d2zr5l0AlYGSWvrw+7kygr6eBerv/9I5WQPypPhDt1+i48EGpHarX
-        HxsEeuO0uBQDEz1tTHmMMvumLnDOhpTA0EP2JW21tp6qALS0E7HkbuAwG4m6J+QfHA+Pnu
-        SON8/pqexro1A+Uw+kNOxTqDl/Gt0cYMkWTf0gXRE8kRqvZaUTNxewRAqf/36g==
+        bh=gYKLtWD+8AqufC/EShi41u03pMom2TKKZ//8h9CsWGk=;
+        b=d74cuSKBZXL2FD49jBQR0Nfqr1V6MhOUekYq05DxOiNx+Aof69ZposIWZqE0bXwLq/Crau
+        SzKnymH0XXcfsGYUos0/XjqoRFjgXpPqtL9aAOZpVip1tQM78mxpe/WLMaxIvoQy3bnbYc
+        O9ANzS9LrvyDSYpFv6vEzlpZdYfdAagID5QD+b/wT9+4wTPJxvSj4TFb9HsMNMaNvtzPYn
+        zg2Y+4tbLsd6WEU0LYLvu9dt48432L4uD7orpXfna++8/QWbUhob8l27MlyXSR9tia8wy8
+        PeSRXu8N0n8cm7efrx80konHHZzfCFzQdE/hAPILqd0W5ovAFeyEc6VCiTOUCg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653907128;
+        s=2020e; t=1653907129;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ufDnFMnnXBqzc5K3MvijCT7r3uQmHklKS0W/nXF0apA=;
-        b=XMJDFjPTforWFbcukIdOfeoLkQe405AmjyghiTNjVDb2HHjqlx9Sy2vyzFyas7J8lzV7PN
-        pR/t0LzEHQAwPmCQ==
+        bh=gYKLtWD+8AqufC/EShi41u03pMom2TKKZ//8h9CsWGk=;
+        b=DtYvize89ckVZgzY4/PNeGLoGIeMv38mTDjod7kK8hrp0/0s5bQpUZLYrc59qN/r452MEo
+        j2BRa9kkqZS8iNCQ==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/urgent] context_tracking: Always inline empty stubs
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>, x86@kernel.org,
+Subject: [tip: objtool/urgent] x86: Always inline on_thread_stack() and
+ current_top_of_stack()
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220526105958.134113388@infradead.org>
-References: <20220526105958.134113388@infradead.org>
+In-Reply-To: <20220526105958.071435483@infradead.org>
+References: <20220526105958.071435483@infradead.org>
 MIME-Version: 1.0
-Message-ID: <165390712760.4207.5469965396434048789.tip-bot2@tip-bot2>
+Message-ID: <165390712869.4207.16169682719382895946.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,45 +67,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/urgent branch of tip:
 
-Commit-ID:     620f8d3bd3d5e82dff8cc591c831827d4beeae2e
-Gitweb:        https://git.kernel.org/tip/620f8d3bd3d5e82dff8cc591c831827d4beeae2e
+Commit-ID:     1894a4030582472336c2873cb07911ce67e0d14e
+Gitweb:        https://git.kernel.org/tip/1894a4030582472336c2873cb07911ce67e0d14e
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Sat, 07 May 2022 13:35:37 +02:00
+AuthorDate:    Sat, 07 May 2022 13:37:45 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 27 May 2022 12:34:44 +02:00
 
-context_tracking: Always inline empty stubs
+x86: Always inline on_thread_stack() and current_top_of_stack()
 
-Because GCC is seriously challenged..
+Becaues GCC clearly lost it's marbles again...
 
-vmlinux.o: warning: objtool: enter_from_user_mode+0x85: call to context_tracking_enabled() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x8f: call to context_tracking_enabled() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x85: call to context_tracking_enabled() leaves .noinstr.text section
-vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x85: call to context_tracking_enabled() leaves .noinstr.text section
+vmlinux.o: warning: objtool: enter_from_user_mode+0x4e: call to on_thread_stack() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x53: call to on_thread_stack() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x4e: call to on_thread_stack() leaves .noinstr.text section
+vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x4e: call to on_thread_stack() leaves .noinstr.text section
+
+vmlinux.o: warning: objtool: enter_from_user_mode+0x4e: call to current_top_of_stack() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x53: call to current_top_of_stack() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x4e: call to current_top_of_stack() leaves .noinstr.text section
+vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x4e: call to current_top_of_stack() leaves .noinstr.text section
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-Link: https://lkml.kernel.org/r/20220526105958.134113388@infradead.org
+Link: https://lkml.kernel.org/r/20220526105958.071435483@infradead.org
 ---
- include/linux/context_tracking_state.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/include/asm/processor.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
-index 65a60d3..ae1e63e 100644
---- a/include/linux/context_tracking_state.h
-+++ b/include/linux/context_tracking_state.h
-@@ -46,10 +46,10 @@ static __always_inline bool context_tracking_in_user(void)
- 	return __this_cpu_read(context_tracking.state) == CONTEXT_USER;
- }
- #else
--static inline bool context_tracking_in_user(void) { return false; }
--static inline bool context_tracking_enabled(void) { return false; }
--static inline bool context_tracking_enabled_cpu(int cpu) { return false; }
--static inline bool context_tracking_enabled_this_cpu(void) { return false; }
-+static __always_inline bool context_tracking_in_user(void) { return false; }
-+static __always_inline bool context_tracking_enabled(void) { return false; }
-+static __always_inline bool context_tracking_enabled_cpu(int cpu) { return false; }
-+static __always_inline bool context_tracking_enabled_this_cpu(void) { return false; }
- #endif /* CONFIG_CONTEXT_TRACKING */
- 
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 91d0f93..356308c 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -559,7 +559,7 @@ static __always_inline void native_swapgs(void)
  #endif
+ }
+ 
+-static inline unsigned long current_top_of_stack(void)
++static __always_inline unsigned long current_top_of_stack(void)
+ {
+ 	/*
+ 	 *  We can't read directly from tss.sp0: sp0 on x86_32 is special in
+@@ -569,7 +569,7 @@ static inline unsigned long current_top_of_stack(void)
+ 	return this_cpu_read_stable(cpu_current_top_of_stack);
+ }
+ 
+-static inline bool on_thread_stack(void)
++static __always_inline bool on_thread_stack(void)
+ {
+ 	return (unsigned long)(current_top_of_stack() -
+ 			       current_stack_pointer) < THREAD_SIZE;

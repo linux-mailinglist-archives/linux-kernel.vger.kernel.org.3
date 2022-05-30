@@ -2,102 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18AA35379D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C184A5379D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235710AbiE3L0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 07:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52758 "EHLO
+        id S235715AbiE3L0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 07:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235699AbiE3L0S (ORCPT
+        with ESMTP id S235712AbiE3L0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 07:26:18 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F667CDFD
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:26:17 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id t13so8885114ljd.6
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:26:17 -0700 (PDT)
+        Mon, 30 May 2022 07:26:22 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C187E1CE
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:26:20 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id p4so16289528lfg.4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:26:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=npSoPOR18gr4kYVcO6FCP7SdcO9Nfox2m4Mymj662QY=;
-        b=DzFBkjp3mxBY6C3TkNtzvS3/ADlVGt5Bn8JVavdokD3lBw+vFquDRlLPRgJVM1nCxk
-         cTwSZ3t9JJ2thLH8pWrWRvRU8/zAPYoK5BBLjTHlm3amSYYgZSk3UlFMe8E4Kk+ku6Qx
-         GaV7upGsDVYX+XZgINYmA5dgGadtfVH4qDLm443NC1Jj7mZpLfIbb5ycqic/c1ozMzIY
-         pv5X3DY4xnp4kezJSQyNLofVY/k6Tp99MSgOyFZVVv8IsbSrISqyzfDCUdi1XYuTFgLg
-         JND5M5/OmgGPqvgvTwidQk/pN2uDRmFBb0+jjq0ff+1Ua8b4VDVrRRvoWrtY3okgLLf3
-         2TSQ==
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=k8OfFf3zteeGV4NoXsW7mYQBRm/UT3jxMOm3SilJFI0=;
+        b=K/QFxlODFRAVf5bt4Q3P/XNh1C8S/u5UgjkwbSrQRpQsAlAfqwyev+c+gKJa7sqM/E
+         oQZSKjl/uojTT/rpHIvx0MAm4K8ZHdoT5kwFjZRwHOZa9yv6Ym6HisUbdsUdy1+BkCLn
+         L5peMyjN5TEkxZCi/h1dH+nfo5XsybR/iIDzcJRIdXQ0oMZgtKynvBMNcuWwSJHRivKh
+         c/tAJLVDRKtzyZ4IydneAMA8SrsOIVPc4G+J/qRvjIB/Xw7o9KziSEBXV6+2XhpiVWaP
+         BiXPrksHoHCXi3svqTtexh4P+jYBn5XvE4noKsvPXrztol0mmqbsUK7ATZjq+fvDxVg4
+         DyaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=npSoPOR18gr4kYVcO6FCP7SdcO9Nfox2m4Mymj662QY=;
-        b=2QpecDhb8HtqoqZsD3o1ievnZwr5PhzHjVkrRFN/XVnb5GOD2ndG1MuerEqTtX58YQ
-         vGcKWjSTKNegvO8vJJ5czNwJ9eQa7hzXosym+/gPvGlTo5sfTVkFwd5+5HhsBoIDrAwU
-         SgNp1pEFMnZrH1fNKmd4z+okttBMYeVofN/++zBd1xUP/RN0656aV5FqrDsRVScLYGb8
-         r/b7Ji/8cvMYVNzVOCI7Qf3RMskTReWGuvK7lISzCkZckjxcER8Y+tKfUPk6j+QY7h44
-         lZCIex0ODa5SPJAymduGR+VWpmCOPBfcbGhnG85waKG1skDfk5YMyLTnxgoBN5gWJeUb
-         xv6A==
-X-Gm-Message-State: AOAM5329ZfqhBKMgnX8ajone6QryJ6UV2YWunEQVwSuzfjuUCDuYoNca
-        Ymf5C7QSGdYZz2Q1X97hi6kkj61ky7SY2w==
-X-Google-Smtp-Source: ABdhPJyvMauwBGWci6pyzoGU2h1C9VnN++whWVOzXhb8QUPfKvpCll4M/eYaFsgnVQeW9MsJ5FB22Q==
-X-Received: by 2002:a2e:330f:0:b0:253:da40:de51 with SMTP id d15-20020a2e330f000000b00253da40de51mr31122907ljc.76.1653909975531;
-        Mon, 30 May 2022 04:26:15 -0700 (PDT)
-Received: from jade (h-79-136-84-253.A175.priv.bahnhof.se. [79.136.84.253])
-        by smtp.gmail.com with ESMTPSA id a10-20020a194f4a000000b0047255d2117csm2257899lfk.171.2022.05.30.04.26.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 04:26:14 -0700 (PDT)
-Date:   Mon, 30 May 2022 13:26:12 +0200
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     arm@kernel.org, soc@kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] Fix OP-TEE compiler warning for v5.19
-Message-ID: <20220530112612.GA1511426@jade>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=k8OfFf3zteeGV4NoXsW7mYQBRm/UT3jxMOm3SilJFI0=;
+        b=60iRsTWfcvD66vf4tKyI9VqTTB7jocK4C3Ow31GbP0TO91AaBGsI0/AWmGol72Hi+X
+         6NkWU9U0SaM+7EBVZctLoXNfyHYqb49w2Nxi88WfJ5wDvGTBxgpltPpheUXeCv4aBaiF
+         l7nPilBJLteJd0F/IJF6HI9xrwpEYRKM4qTh/+Fapt28fGQmmd8nlt5dMjBp7g8VLgJ+
+         dOTTG2H6IIVvPPpMKmCWi5+gbDGluF759rm4sLbLafmaeYllOjydo/tXYQYclX9FH56r
+         4aV7UB/Oy8dvQsMlQ57XltJI0I/Vkw8560flhr777vj+F8Mipfs/LIgGLrVecLDG766f
+         aK6A==
+X-Gm-Message-State: AOAM532cJqm954LLmS4Dk2EQpq5Zug04WiYoFo1nVDCGMMXSsXYdCB8f
+        MaAewM8jNQlbPsTp2oBCCWS9Hw==
+X-Google-Smtp-Source: ABdhPJzitZ5wwfvVpz+DFbNxCabWi5NGZMe3ykeTBzzkgh7ViTPBzssNCMu6Zq+df5lnnce3Dah3dQ==
+X-Received: by 2002:a05:6512:2304:b0:477:a99b:53e4 with SMTP id o4-20020a056512230400b00477a99b53e4mr40004522lfu.445.1653909979299;
+        Mon, 30 May 2022 04:26:19 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.129])
+        by smtp.gmail.com with ESMTPSA id bf14-20020a2eaa0e000000b002555232be9asm196311ljb.83.2022.05.30.04.26.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 04:26:19 -0700 (PDT)
+Message-ID: <ecce42f6-28bf-5d59-e84c-688a6a3b40b8@openvz.org>
+Date:   Mon, 30 May 2022 14:26:18 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH mm v3 4/9] memcg: enable accounting for struct simple_xattr
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
+References: <06505918-3b8a-0ad5-5951-89ecb510138e@openvz.org>
+ <cover.1653899364.git.vvs@openvz.org>
+Content-Language: en-US
+In-Reply-To: <cover.1653899364.git.vvs@openvz.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello arm-soc maintainers,
+kernfs nodes are quite small kernel objects, however there are few
+scenarios where it consumes significant piece of all allocated memory:
 
-Please pull this small patch which fixes a compiler warning in the OP-TEE
-driver.
+1) creating a new netdevice allocates ~50Kb of memory, where ~10Kb
+   was allocated for 80+ kernfs nodes.
 
-Note that this pull request is on top of and earlier accepted/applied [1]
-pull request in order to avoid a merge conflict.
+2) cgroupv2 mkdir allocates ~60Kb of memory, ~10Kb of them are kernfs
+   structures.
 
-Thanks,
-Jens
+3) Shakeel Butt reports that Google has workloads which create 100s
+   of subcontainers and they have observed high system overhead
+   without memcg accounting of kernfs.
 
-[1] https://lore.kernel.org/lkml/20220503192916.GA3288817@jade/
+Usually new kernfs node creates few other objects:
 
-The following changes since commit 3e47235eaee09488c7e467b9aaccb7c93c862c6b:
+Allocs  Alloc   Allocation
+number  size
+--------------------------------------------
+1   +  128      (__kernfs_new_node+0x4d)        kernfs node
+1   +   88      (__kernfs_iattrs+0x57)          kernfs iattrs
+1   +   96      (simple_xattr_alloc+0x28)       simple_xattr
+1       32      (simple_xattr_set+0x59)
+1       8       (__kernfs_new_node+0x30)
 
-  tee: make tee_shm_register_kernel_buf vmalloc supported (2022-04-05 08:04:16 +0200)
+'+' -- to be accounted
 
-are available in the Git repository at:
+This patch enables accounting for struct simple_xattr. Size of this
+structure depends on userspace and can grow over 4Kb.
 
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git/ tags/optee-warning-for-v5.19
-
-for you to fetch changes up to a3b9ecc805e9131476c719111fe347c7dbc0d1d1:
-
-  tee: optee: Pass a pointer to virt_addr_valid() (2022-05-30 08:06:45 +0200)
-
-----------------------------------------------------------------
-Fix a compiler warning in OP-TEE driver
-
-----------------------------------------------------------------
-Linus Walleij (1):
-      tee: optee: Pass a pointer to virt_addr_valid()
-
- drivers/tee/optee/call.c | 2 +-
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
+Reviewed-by: Michal Koutný <mkoutny@suse.com>
+Acked-by: Shakeel Butt <shakeelb@google.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+---
+ fs/xattr.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/xattr.c b/fs/xattr.c
+index e8dd03e4561e..98dcf6600bd9 100644
+--- a/fs/xattr.c
++++ b/fs/xattr.c
+@@ -1001,7 +1001,7 @@ struct simple_xattr *simple_xattr_alloc(const void *value, size_t size)
+ 	if (len < sizeof(*new_xattr))
+ 		return NULL;
+ 
+-	new_xattr = kvmalloc(len, GFP_KERNEL);
++	new_xattr = kvmalloc(len, GFP_KERNEL_ACCOUNT);
+ 	if (!new_xattr)
+ 		return NULL;
+ 
+-- 
+2.36.1
+

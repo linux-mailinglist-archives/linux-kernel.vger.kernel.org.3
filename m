@@ -2,212 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4944553730E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 02:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 271D8537311
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 02:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbiE3ARI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 20:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
+        id S231961AbiE3ARe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 20:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbiE3ARH (ORCPT
+        with ESMTP id S231951AbiE3ARd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 20:17:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 553FD1AD88
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 17:17:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653869824;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4fsYlzwucPN5cgftx5guOu4yYqJvaNF2rrBP58LM9Ig=;
-        b=ZuFeDlIJengD6VeFqv6qjO0buv/Ahgu7Vp5pByFa+sR8JRqH/e3Q4QQ/LP1mzxFw6U+NI2
-        JIL+Ro0AaDR/aKk4+r9C2EqlxZrBBQoQ/V2mGC/c58Xmnx7WB+OFY2DRccSy2coul7rByh
-        h/XSVaiHnANhUVGdGgozfqy1kKdmVvE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-443-Lw8ljpAyO8u3dyEpsWxm1A-1; Sun, 29 May 2022 20:17:00 -0400
-X-MC-Unique: Lw8ljpAyO8u3dyEpsWxm1A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5B340185A7A4;
-        Mon, 30 May 2022 00:17:00 +0000 (UTC)
-Received: from [10.22.8.89] (unknown [10.22.8.89])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BBBC01410F36;
-        Mon, 30 May 2022 00:16:59 +0000 (UTC)
-Message-ID: <b8ae204b-0e92-a87e-5ae0-0b38d2adb33a@redhat.com>
-Date:   Sun, 29 May 2022 20:16:59 -0400
+        Sun, 29 May 2022 20:17:33 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD551BE8F;
+        Sun, 29 May 2022 17:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=3MFiazr+BIa7mxTlJyKT5T3zyYYhOWZJgXwNkt8FF0c=; b=rNex2oA2fs7Gn5+tXSYIhdA39b
+        kiZia63GDM53cV29Hz5AdAJIoT2HXVakwRHy4qe9kRDMDiMvrcA4gx+n+Lkh+sxtFD3fgFltLlNVN
+        nX5HJhBUukjzEnxmUtP/tAQqvXFK+XyWYyEEazTEhewVMZ66RJXEmHxUVHCLnRbNui0Gg+z6dEEDg
+        4J+pVZeCe7HWD7PMs3tKx045R6b4enr71bM45tK11Gugx5NBTXXch6vDnjeP5oCcPmD/OKCVniHna
+        lZ1/WTeMKtXcJxUI50b5BpjZIsqO4GhUvX2anWRg/zKRdsJ6eyPtZcm16y7SwIA6n4ScfEyaEr4uS
+        1dFBYU2Q==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nvT65-002t4I-3s; Mon, 30 May 2022 00:17:26 +0000
+Message-ID: <593f31f6-1628-87f2-1b5d-ad8e79119dd6@infradead.org>
+Date:   Sun, 29 May 2022 17:17:19 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] clocksource: Make clocksource watchdog check with
- WATCHDOG_INTERVAL period
+ Thunderbird/91.9.1
+Subject: Re: kbuild problem: ERROR: modpost: missing MODULE_LICENSE() in
+ drivers/iio/afe/iio-rescale.o
 Content-Language: en-US
-To:     Michael Larabel <Michael@phoronix.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Feng Tang <feng.tang@intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        John Stultz <jstultz@google.com>
-Cc:     linux-kernel@vger.kernel.org, Joe Mario <jmario@redhat.com>,
-        Michey Mehta <mimehta@redhat.com>
-References: <20220528015714.109442-1-longman@redhat.com>
- <fa2d516e-70b5-3012-9134-5ca325282bc4@redhat.com>
- <6a5b80e8-a614-5452-4cf0-b636fa9b23cc@phoronix.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <6a5b80e8-a614-5452-4cf0-b636fa9b23cc@phoronix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Liam Beguin <liambeguin@gmail.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+References: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
+ <3ae306e0-c6c7-ed12-cacd-62b1c26dba3c@infradead.org>
+ <6671de03-c09c-bfaf-e06c-e45af70d4354@infradead.org>
+ <6601a387-de9a-a0d0-11b5-01e0cfa75657@infradead.org>
+ <7a97bac3-6ade-8e1b-cf0c-4a05c83163a3@infradead.org> <Yo+lHSmeIsx144cv@shaak>
+ <3b7ec693-f4a5-e1aa-3e07-b22a4008d4c9@infradead.org> <YpPjqC+kVLIBpNlq@shaak>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <YpPjqC+kVLIBpNlq@shaak>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/29/22 18:16, Michael Larabel wrote:
-> On 5/27/22 21:07, Waiman Long wrote:
->> On 5/27/22 21:57, Waiman Long wrote:
->>> Since commit c86ff8c55b8a ("clocksource: Avoid accidental unstable
->>> marking of clocksource"), a new WD_READ_SKIP value was introduced
->>> as a possible return value of cs_watchdog_read() to skip the current
->>> check. However, this has an undesriable side effect of extending the
->>> time gap between csnow and cs_last to more than one WATCHDOG_INTERVAL
->>> (0.5s) in case of intermittent WD_READ_SKIP's.
->>>
->>> There was an instance of reported clocksource watchdog failure with
->>> the time skew of 485us where the uncertainly threshold is 400us. In
->>> that particular case, the (now - last) gap was about 2s. Looking at
->>> the dmesg log, it was clear there was a successful cs_watchdog_read()
->>> followed by 3 skips and then another successful cs_watchdog_read().
->>>
->>> If there is an existing skew between the hpet (watchdog) and tsc
->>> clocksource, enlarging the period by 4x will certainly increase the
->>> measured skew causing it to exceed the threshold in this case. Fix
->>> this variable period problem by resetting the CLOCK_SOURCE_WATCHDOG bit
->>> after each WD_READ_SKIP to force the reloading of wd_last and cs_last
->>> in the next round. This ensures that we have two consecutive successful
->>> cs_watchdog_read()'s before checking the clock skew.
->>>
->>> Fixes: c86ff8c55b8a ("clocksource: Avoid accidental unstable marking 
->>> of clocksource")
->>> Reported-by: Michael Larabel <Michael@phoronix.com>
->>> Signed-off-by: Waiman Long <longman@redhat.com>
->>> ---
->>>   kernel/time/clocksource.c | 11 ++++++++++-
->>>   1 file changed, 10 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
->>> index cee5da1e54c4..173e052c12b6 100644
->>> --- a/kernel/time/clocksource.c
->>> +++ b/kernel/time/clocksource.c
->>> @@ -411,9 +411,18 @@ static void clocksource_watchdog(struct 
->>> timer_list *unused)
->>>           read_ret = cs_watchdog_read(cs, &csnow, &wdnow);
->>>             if (read_ret != WD_READ_SUCCESS) {
->>> -            if (read_ret == WD_READ_UNSTABLE)
->>> +            if (read_ret == WD_READ_UNSTABLE) {
->>>                   /* Clock readout unreliable, so give it up. */
->>>                   __clocksource_unstable(cs);
->>> +            } else { /* WD_READ_SKIP */
->>> +                /*
->>> +                 * Watchdog clock unstable at the moment,
->>> +                 * discard the stored wd_last and cs_last to
->>> +                 * make sure the gap between now and last
->>> +                 * is always one WATCHDOG_INTERVAL.
->>> +                 */
->>> +                cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
->>> +            }
->>>               continue;
->>>           }
+
+
+On 5/29/22 14:20, Liam Beguin wrote:
+> Hi Randy,
+> 
+> On Thu, May 26, 2022 at 01:04:41PM -0700, Randy Dunlap wrote:
 >>
->> Sorry, I accidentally use the old email address for John.
 >>
->> Cheers,
->> Longman
->
->
-> I've tested this patch on the affected Daytona + Milan-X system and 
-> can confirm it does fix the performance problem that led to this 
-> issue. Though it is spamming the kernel log now every half-second with 
-> clocksource messages,  not sure if that is intended/desirable behavior?
->
->
-> [    0.000000] tsc: Fast TSC calibration using PIT
-> [    0.000000] tsc: Detected 2195.990 MHz processor
-> [    1.238759] clocksource: tsc-early: mask: 0xffffffffffffffff 
-> max_cycles: 0x1fa766bc6ba, max_idle_ns: 440795275714 ns
-> [    2.769608] clocksource: Switched to clocksource tsc-early
-> [    3.263925] clocksource: wd-tsc-early-wd read-back delay of 
-> 292215ns, clock-skew test skipped!
-> [    3.743804] clocksource: wd-tsc-early-wd read-back delay of 
-> 268469ns, clock-skew test skipped!
-> [    3.935663] tsc: Refined TSC clocksource calibration: 2195.274 MHz
-> [    3.935844] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 
-> 0x1fa4c255513, max_idle_ns: 440795289702 ns
-> [    3.936449] clocksource: Switched to clocksource tsc
-> [    4.255932] clocksource: wd-tsc-wd read-back delay of 260228ns, 
-> clock-skew test skipped!
-> [    4.767892] clocksource: wd-tsc-wd read-back delay of 272520ns, 
-> clock-skew test skipped!
-> [    5.247581] clocksource: wd-tsc-wd read-back delay of 200444ns, 
-> clock-skew test skipped!
-> [    5.759560] clocksource: wd-tsc-wd read-back delay of 165942ns, 
-> clock-skew test skipped!
-> [    6.239687] clocksource: wd-tsc-wd read-back delay of 232222ns, 
-> clock-skew test skipped!
-> [    7.264014] clocksource: wd-tsc-wd read-back delay of 282927ns, 
-> clock-skew test skipped!
-> [    7.743864] clocksource: wd-tsc-wd read-back delay of 288374ns, 
-> clock-skew test skipped!
-> [    8.255590] clocksource: wd-tsc-wd read-back delay of 206730ns, 
-> clock-skew test skipped!
-> [    8.767778] clocksource: wd-tsc-wd read-back delay of 267771ns, 
-> clock-skew test skipped!
-> [    9.247870] clocksource: wd-tsc-wd read-back delay of 224469ns, 
-> clock-skew test skipped!
-> [   10.239340] clocksource: wd-tsc-wd read-back delay of 109720ns, 
-> clock-skew test skipped!
-> [   12.255276] clocksource: wd-tsc-wd read-back delay of 104692ns, 
-> clock-skew test skipped!
-> [   16.255362] clocksource: wd-tsc-wd read-back delay of 122780ns, 
-> clock-skew test skipped!
-> [   17.759335] clocksource: wd-tsc-wd read-back delay of 155885ns, 
-> clock-skew test skipped!
-> [   18.239500] clocksource: wd-tsc-wd read-back delay of 176558ns, 
-> clock-skew test skipped!
-> [   18.751341] clocksource: wd-tsc-wd read-back delay of 157352ns, 
-> clock-skew test skipped!
-> [   19.263618] clocksource: wd-tsc-wd read-back delay of 177606ns, 
-> clock-skew test skipped!
-> [   19.743487] clocksource: wd-tsc-wd read-back delay of 157841ns, 
-> clock-skew test skipped!
-> [   20.255482] clocksource: wd-tsc-wd read-back delay of 157701ns, 
-> clock-skew test skipped!
-> [   20.767634] clocksource: wd-tsc-wd read-back delay of 173136ns, 
-> clock-skew test skipped!
-> [   21.247405] clocksource: wd-tsc-wd read-back delay of 175441ns, 
-> clock-skew test skipped!
-> ...
->
-> Thanks,
-> Michael
->
-Thanks for the testing. Did the spamming stop after a while?
+>> On 5/26/22 09:04, Liam Beguin wrote:
+>>> Hi Randy,
+>>>
+>>> On Thu, May 26, 2022 at 08:36:34AM -0700, Randy Dunlap wrote:
+>>>> Liam:
+>>>>
+>>>> Any comment on this?
+>>>> Otherwise I'll just send a formal patch like this (below).
+>>>
+>>> Apologies for not answering earlier.
+>>>
+>>> I wanted to look more into Masahiro's comment and try to fix the
+>>> Makefile, but that can be done after.
+>>>
+>>> IMO your patch improves the current Kconfig, so I'd recommend sending
+>>> the patch. If it can wait a bit, I can look at the Makefile over the
+>>> weekend.
+>>>
+>>
+>> Liam,
+>>
+>> I'll wait until next week to see if you come up with anything.
+>>
+> 
+> The following patch fixes the issue while addressing Masahiro's comment.
+> I also considered `select IIO_RESCALE`, but I'm not sure what's usually
+> preferred.
+> 
+> diff --git a/drivers/iio/test/Kconfig b/drivers/iio/test/Kconfig
+> index 56ca0ad7e77a..4c66c3f18c34 100644
+> --- a/drivers/iio/test/Kconfig
+> +++ b/drivers/iio/test/Kconfig
+> @@ -6,7 +6,7 @@
+>  # Keep in alphabetical order
+>  config IIO_RESCALE_KUNIT_TEST
+>  	bool "Test IIO rescale conversion functions"
+> -	depends on KUNIT=y && !IIO_RESCALE
+> +	depends on KUNIT=y && IIO_RESCALE=y
+>  	default KUNIT_ALL_TESTS
+>  	help
+>  	  If you want to run tests on the iio-rescale code say Y here.
+> diff --git a/drivers/iio/test/Makefile b/drivers/iio/test/Makefile
+> index f15ae0a6394f..880360f8d02c 100644
+> --- a/drivers/iio/test/Makefile
+> +++ b/drivers/iio/test/Makefile
+> @@ -4,6 +4,6 @@
+>  #
+>  
+>  # Keep in alphabetical order
+> -obj-$(CONFIG_IIO_RESCALE_KUNIT_TEST) += iio-test-rescale.o ../afe/iio-rescale.o
+> +obj-$(CONFIG_IIO_RESCALE_KUNIT_TEST) += iio-test-rescale.o
+>  obj-$(CONFIG_IIO_TEST_FORMAT) += iio-test-format.o
+>  CFLAGS_iio-test-format.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+> 
+> I'll send a patch as soon as you confirm this works for you too.
 
-It does show that your particular Milan-X CPU(s) have unreliable hpet. 
-The only way to stop the spamming is to build a kernel with a larger 
-CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US. By default, it is 100us. The 
-allowable hpet-hpet delay is only half of that. In this particular case, 
-it will have to be set to at least 500 or maybe even 600.
+Looks good. Thanks.
 
-Thanks,
-Longman
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
 
+-- 
+~Randy

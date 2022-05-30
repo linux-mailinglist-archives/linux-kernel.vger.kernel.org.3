@@ -2,76 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B742453758C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506B053758E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233602AbiE3Hhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
+        id S233620AbiE3Hhz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 30 May 2022 03:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233592AbiE3Hh2 (ORCPT
+        with ESMTP id S233594AbiE3Hhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:37:28 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247E91276A
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:37:17 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id e2so13448865wrc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:37:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nUCeNrlCxSw9uMUiAzjXL467HYJr9B+OzTQ7H3Yk3Cg=;
-        b=Who/+JNYbudXenChiXobKR5VodLsrJQ1DRvcOD3IeXxKAOJ7rgTSDLqTMs12k4DcXx
-         Tdeu55CeVrOrxX7mLNBZgSqsm2CIVje3nEgDa3mVEWDz9Mspd29lMgjlHTAD3iF8hWgw
-         06b4I9Zp8q2OEmfytjQpxaY3NktMoq/TP6n5Sw0nihwnoUE3XTdPWb9XcEAuz+Rr3jnK
-         bytsnn/JbGaRkKOJrd3+b9E/Y6cd3R02kv700XJVseZQpw0WPW1XCANFZL1Qyww1J5/m
-         WmfEKdKZGMyVEnbmefHVpY3hJnOKjQZnK1Ux+WjYOi4zLDAJNhXBBBfzd/KJkaz/PInC
-         9UYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nUCeNrlCxSw9uMUiAzjXL467HYJr9B+OzTQ7H3Yk3Cg=;
-        b=5CzFbeWtS0CsqSufZeQexiK+aqqZgWqyzOccF7kHSA433rhiBc1qPb6jOyFCa6kggF
-         /nrUpQw0ukOs2wyfwNjBYJ/MD1pLIMxxcG3G2to0pjTvF4zVGJbMiIMP7BZ09MFhXpPl
-         KLB7L5NuPPutCT7nqMipZeZu4W+jKU11Nhbgi+b0y10J7QdtFM698OGyG7hdz8wPkICW
-         MxQ6fprDrEi/Rg31svq8CUAOcIzuIw7TAMvoY/f5mzPqN784gGQ0y+utUXlyexPkvbES
-         1hpJzdOmpZI/ehFjTZd8EpB86o1XfJ+uqkjDZoT1ET9T4AMzM1BOuK8heBXTJxjOj2Tj
-         kcmg==
-X-Gm-Message-State: AOAM531i8qfY0gZOR2A9+KYotT/N4AsUcnQbIcXClZiwcLE3zZD/EaFa
-        xmQLMVx90M5+pbLADJuMn5ip5g==
-X-Google-Smtp-Source: ABdhPJxILpNe/ZRRBVDJ8C8RJouI8WbtUTtW//ambOyntu5ZBKk9QCkDy73ATfXhntOCidY6JNdB6A==
-X-Received: by 2002:a05:6000:1569:b0:20f:e429:d6d8 with SMTP id 9-20020a056000156900b0020fe429d6d8mr28684610wrz.663.1653896235732;
-        Mon, 30 May 2022 00:37:15 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o2-20020a5d62c2000000b00210335f7aaesm2358423wrv.35.2022.05.30.00.37.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 00:37:15 -0700 (PDT)
-Message-ID: <6c14aa95-00c4-960b-d71a-3967096f19cb@linaro.org>
-Date:   Mon, 30 May 2022 09:37:14 +0200
+        Mon, 30 May 2022 03:37:37 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44B6472229
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:37:23 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-1-58zlEE0YN66WK_EGsQ6QUA-1; Mon, 30 May 2022 08:37:20 +0100
+X-MC-Unique: 58zlEE0YN66WK_EGsQ6QUA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Mon, 30 May 2022 08:37:18 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Mon, 30 May 2022 08:37:18 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Eric Biggers' <ebiggers@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+CC:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        gaochao <gaochao49@huawei.com>, Ard Biesheuvel <ardb@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH crypto v2] crypto: blake2s - remove shash module
+Thread-Topic: [PATCH crypto v2] crypto: blake2s - remove shash module
+Thread-Index: AQHYcrcaP7gQRKQBI0K/b88268hXeq03CmUA
+Date:   Mon, 30 May 2022 07:37:18 +0000
+Message-ID: <7719057c0de047ebacea46ab9588da44@AcuMS.aculab.com>
+References: <YpCGQvpirQWaAiRF@zx2c4.com>
+ <20220527081106.63227-1-Jason@zx2c4.com> <YpGeIT1KHv9QwF4X@sol.localdomain>
+ <YpHx7arH4lLaZuhm@zx2c4.com> <YpJZqJd9j1gEOdTe@sol.localdomain>
+In-Reply-To: <YpJZqJd9j1gEOdTe@sol.localdomain>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/3] dt-bindings: mfd: ti,j721e-system-controller: Add
- clock property
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Rahul T R <r-ravikumar@ti.com>, robh+dt@kernel.org, nm@ti.com,
-        vigneshr@ti.com, kishon@ti.com, krzysztof.kozlowski+dt@linaro.org
-Cc:     lee.jones@linaro.org, rogerq@kernel.org,
-        devicetree@vger.kernel.org, kristo@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        s-anna@ti.com
-References: <20220530073429.17514-1-r-ravikumar@ti.com>
- <20220530073429.17514-2-r-ravikumar@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220530073429.17514-2-r-ravikumar@ti.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,31 +65,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2022 09:34, Rahul T R wrote:
-> Add a pattern property for clock, also update the example with
-> a clock node
+From: Eric Biggers
+> Sent: 28 May 2022 18:20
 > 
-> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-> ---
->  .../bindings/mfd/ti,j721e-system-controller.yaml       | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> On Sat, May 28, 2022 at 11:57:01AM +0200, Jason A. Donenfeld wrote:
+> > > Also, the wrong value is being passed for the 'inc' argument.
+> >
+> > Are you sure? Not sure I'm seeing what you are on first glance.
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
-> index fa86691ebf16..290b22cab52f 100644
-> --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
-> @@ -48,6 +48,10 @@ patternProperties:
->      description:
->        This is the SERDES lane control mux.
->  
-> +  "^clock@[0-9a-f]+$":
-> +    type: object
-> +    $ref: /schemas/clock/ti,am654-ehrpwm-tbclk.yaml#
-> +
+> Yes, 'inc' is the increment amount per block.  It needs to always be
+> BLAKE2S_BLOCK_SIZE unless a partial block is being processed.
 
-Thanks for the changes, but the question what is this remains. Clock
-consumers use "clocks" property. Is this a clock controller (provider)
-instead?
+IIRC it isn't used for partial blocks.
+Which rather begs the question as to why it is a parameter at all.
 
-Best regards,
-Krzysztof
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

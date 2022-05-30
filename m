@@ -2,120 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1764B537AF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EE2537AF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236292AbiE3NBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 09:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
+        id S236300AbiE3NCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 09:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233847AbiE3NBn (ORCPT
+        with ESMTP id S236299AbiE3NCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 09:01:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A885F94;
-        Mon, 30 May 2022 06:01:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 333C060DD8;
-        Mon, 30 May 2022 13:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9256DC3411F;
-        Mon, 30 May 2022 13:01:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653915698;
-        bh=P31uo602B0Lw3sp32uTNYyaSbPsuU19TeHSt9/MJjyI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fAaR0zTawFiHbHpKN5pzKPk+m99MGmCVzLz5sm2Oe043iPI2mRlzm19OnVfUGJQ+q
-         hjxqRzlOaEDqfGDhQFcQEOhENj41lCAx82me6SDWpaH0BBVWcSrZWGtRvkaSIE5PsN
-         Nta3N/ZMKjhueE68+BCp74+MUB3+Sz/0D9vicpRX8np6E/nv1P/fZIntobbe62/bDz
-         GNMqfnu6OgS2CZ3bQ4/+OEayxmysUqlvUSLHvrfIhkzGcB0M/om5Av6hWX0OM+DGWw
-         O91gx/9RQjXjm5n+F1tpfSNGqXhMI8NvX3nxxE9zXgNjd0Ux8Ig3YntNQcdmg3rBg7
-         2lrCDG/rRUW7g==
-Received: by mail-ua1-f54.google.com with SMTP id q1so3804844uao.1;
-        Mon, 30 May 2022 06:01:38 -0700 (PDT)
-X-Gm-Message-State: AOAM533s12IQrVDKYy3h8/CHc6vkZO6URorwOlORD3S/W1VULj8JazVN
-        FKCduYhwEhwkXh/7OdAUTJ31rBapEyqeR36qEho=
-X-Google-Smtp-Source: ABdhPJyhqQ9qgd1r5/qcNoED52QOHpIhyWBhd2usCvKUVn8AsyE5OajEl3nhKMAILqXIBpnc17BmTEG5fiUwQuc9EqE=
-X-Received: by 2002:ab0:2bc9:0:b0:362:8750:8032 with SMTP id
- s9-20020ab02bc9000000b0036287508032mr19067906uar.118.1653915697481; Mon, 30
- May 2022 06:01:37 -0700 (PDT)
+        Mon, 30 May 2022 09:02:01 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3061717E1C;
+        Mon, 30 May 2022 06:02:00 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id q203so11299583iod.0;
+        Mon, 30 May 2022 06:02:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/nsX7tQgFVjCVndQ6RpFV7BObhww0aFphEST3Aew1pU=;
+        b=aDBnKozUQpAbtuN5D/ooDBBqSx3Y+oo5MQ+1QeE2crNOB4+uZi4F8AFaQo9IURBPMv
+         TVWtenQ8DPSkeu06Zak5ks2S0Dg84W67tc+vI5DtTswEgZk0k2+gKNpJrlE5EJbOodqG
+         Vdxm0mdvIGW6kx8eUFHGJWjG24kkF6b+xVMNWdVNSCFR2Bmjq0viGo30qySCSC8imz1j
+         5z4u2g9ZUnnau7guKEFPonzFCeCgumyuk0EIouAa59SVc8aqIe1q1Xtsd+OmaJdST0aP
+         8BEyiBJL9ImKKd5CZTG7axLZNZNcTTOKhiZMNC0fAeljoM4c/Avg9Rhmy9lgOHrQzCx2
+         JA0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/nsX7tQgFVjCVndQ6RpFV7BObhww0aFphEST3Aew1pU=;
+        b=79lmhcP105YbKJX1Hk/34Yo9ey9MeCwVB4u6uWwL/kMOLxkzFIwCWnvCH+0mN477vG
+         KCW6bQG7yugO8SvKiSgDrbZ8AZazFEEK7c6QKRITk6VW0Ogi4Sl63RFJGh7wvYyTpp7U
+         Ss6nEZ3O0vXpFPFu0zXYJ/gbXmtsiRB36qTLmwvHHQpZaW5exZZAHcdHIzueMIcyjIdZ
+         R09Ndkb2MIvTTVCpTOEyA01GaMBaEcLBeKg+bkWEnt+iYq/zmcKTTObyBg4zAYSNJlwX
+         /ho8Tk3UmI8ZeEUvmc69sy8wavfJ7FGwopOkhcHGgDIAJXppukDc7aAKB0KDgkJmShmG
+         iaKg==
+X-Gm-Message-State: AOAM53173F8XARlvS0wlmU8bg6jwagNgORAzswyymofaIUxlbb9LFhWg
+        D+TUcHj7ahVJMuvEBPc4kZwI08mmhqn1XjBGNr8=
+X-Google-Smtp-Source: ABdhPJz/KcdushmmWd5Wmx13C1o+XFxVQFOFTt9BakFoqOPc639maIlLVqG2CA9llEfhnfiqOLefeStVd6eXaJtnvLM=
+X-Received: by 2002:a05:6638:f89:b0:32e:89f4:e150 with SMTP id
+ h9-20020a0566380f8900b0032e89f4e150mr27709726jal.308.1653915717905; Mon, 30
+ May 2022 06:01:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAK8P3a2_52JPnBWNvTTkFVwLxPAa7=NaQ4whwC1UeH_NYHeUKQ@mail.gmail.com>
- <CAK8P3a0SpU1n+29KQxzKnPRvzmDE=L0V9RUpKxhemv=74kevcQ@mail.gmail.com>
- <df5c406c-eec6-c340-2847-49670b7fe8bf@xen0n.name> <CAK8P3a3awFdB1-G65DC38NBuSTvo6SvFTaS0m9YBxunHjHjQvQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3awFdB1-G65DC38NBuSTvo6SvFTaS0m9YBxunHjHjQvQ@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 30 May 2022 21:01:25 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6sNr-yo8brBFtzziH6k9Tby0dFp7yehK55SfH5HjZ8hQ@mail.gmail.com>
-Message-ID: <CAAhV-H6sNr-yo8brBFtzziH6k9Tby0dFp7yehK55SfH5HjZ8hQ@mail.gmail.com>
-Subject: Re: [GIT PULL] asm-generic changes for 5.19
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
+References: <20220523020209.11810-1-ojeda@kernel.org> <20220523020209.11810-4-ojeda@kernel.org>
+ <YovvIQeN3lmOYzJO@kernel.org> <CANiq72m6ttD9QpB3nW-5B+M1seknv0GZ4-DqtF85qTg6Lvxnhg@mail.gmail.com>
+ <459385ee7ccf4fcf3e22d4a11b4f438d648422bf.camel@kernel.org>
+In-Reply-To: <459385ee7ccf4fcf3e22d4a11b4f438d648422bf.camel@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 30 May 2022 15:01:47 +0200
+Message-ID: <CANiq72=TmWvVUR8yAAU-oT9=TdYPJC0sGxEBv4aVKBHKdEOjJg@mail.gmail.com>
+Subject: Re: [PATCH v7 03/25] kallsyms: increase maximum kernel symbol length
+ to 512
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        libc-alpha@sourceware.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        musl@lists.openwall.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        live-patching@vger.kernel.org, linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Arnd,
+On Fri, May 27, 2022 at 6:27 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> The honest answer: I don't actually remember what I was thinking
+> (other stuff stole my focus) but my comment neither makes much
+> sense to me. Please just ignore it, and apologies for causing
+> confusion.
 
-On Mon, May 30, 2022 at 4:21 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> On Sun, May 29, 2022 at 3:10 PM WANG Xuerui <kernel@xen0n.name> wrote:
-> > But what for the users and downstream projects? Do the users owning
-> > LoongArch hardware (me included) and projects/companies porting their
-> > offerings have to pay for Loongson's mistakes and wait another [2mo,
-> > 1yr], "ideally" also missing the glibc 2.36 release too?
-> ...
-> > Lastly, I'd like to clarify, that this is by no means a
-> > passive-aggressive statement to make the community look like "the bad
-> > guy", or to make Loongson "look bad"; I just intend to provide a
-> > hopefully fresh perspective from a/an {end user, hobbyist kernel
-> > developer, distro developer, native Chinese speaker with a hopefully
-> > decent grasp of English}'s view.
->
-> Your feedback has been extremely valuable, as always. I definitely
-> don't want to hold up merging the port for the glibc-2.36 release. If
-> that is a risk, and if merging the architecture port without the drivers
-> helps with that, I agree we should just do that. This will also help
-> with build testing and any treewide changes that are going to be
-> done on top of v5.19-rc1.
->
-> For the continuous maintenance, would you be available as an
-> additional Reviewer or co-maintainer to be listed in the maintainers
-> file? I think in general it is a good idea to have at least one maintainer
-> that is not directly part of the organization that owns the product,
-> and you are clearly the best person outside of loongson technology
-> for this.
-Yes, Xuerui is very suitable as a Reviewer.
+No apologies needed!
 
-Huacai
+> There's something I'm looking into in my spare time right now.
+> I'm experimenting with interfacing keyring types to Rust. The
+> first step, I guess, is to provide a Rust abstraction for
+> assoc_array.
 >
-> Regarding the irqchip driver, merging those is entirely up to Marc and
-> Thomas. Marc already brought up the precedent of merging arch/arm64
-> without the required irqchip driver support, and if it turns out that he
-> find the latest driver submission acceptable, that might still make it in
-> through the irqchip tree.
+> I've skimmed through the patch set and have now *rough* idea of
+> patterns and techniques. My opens are more on the process side
+> of things since there's no yet mainline subtree.
+
+Thanks a lot for taking a look and taking the initiative.
+
+> If I send a patch or patch sets, would this be a good workflow:
 >
->         Arnd
+> 1. RFC tag.
+> 2. In the cover letter denote the patch set version, which was
+>    used the baseline.
+
+Sounds good to me. Alternatively, you can use a `--base=` pointing to
+one of the commits in our `rust` branch.
+
+Cheers,
+Miguel

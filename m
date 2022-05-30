@@ -2,173 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9D45376E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9311453772D
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233626AbiE3IjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 04:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
+        id S234015AbiE3Ijk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 04:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231968AbiE3IjR (ORCPT
+        with ESMTP id S231968AbiE3Ijj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 04:39:17 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2965A6443;
-        Mon, 30 May 2022 01:39:10 -0700 (PDT)
-X-UUID: a589dd4724db487f977625090a759ee3-20220530
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:7d2e6138-7406-4dbd-982e-d9435960be05,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:7f9efe47-4fb1-496b-8f1d-39e733fed1ea,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: a589dd4724db487f977625090a759ee3-20220530
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1855203391; Mon, 30 May 2022 16:39:05 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 30 May 2022 16:39:04 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 30 May 2022 16:39:03 +0800
-Message-ID: <76ddd49bb2bb46923900b085056ce22d7bfa0b0a.camel@mediatek.com>
-Subject: Re: [PATCH v10 11/21] drm/mediatek: dpi: move swap_shift to SoC
- config
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao shi <jitao.shi@mediatek.com>
-CC:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
-Date:   Mon, 30 May 2022 16:38:59 +0800
-In-Reply-To: <20220523104758.29531-12-granquet@baylibre.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-12-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 30 May 2022 04:39:39 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 848F9643F;
+        Mon, 30 May 2022 01:39:38 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 2A7D420BA5D8;
+        Mon, 30 May 2022 01:39:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2A7D420BA5D8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1653899978;
+        bh=isQm+mC6yQ0sCy8PaEq3jIAYfeo6j5NEVgjYF1/d2VQ=;
+        h=From:To:Subject:Date:From;
+        b=QiJ6Q5H4Cxr7tpdjLd9/Zo4nh7OqYynFyIfiqUdZCvEyjR3PgKtAY8AtZKU1G+WMt
+         WIkICuv/HhEA1XD2EqC4cNsNi1zzRhavo0D/Q+M8bTZ4bapK4hCGVfUNlGkLxACOz3
+         Vt5rCNURYrMKN7nznkz8xpN0cB6kdN/vWF1UKM9g=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com,
+        martin.petersen@oracle.com, jejb@linux.ibm.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ssengar@microsoft.com, mikelley@microsoft.com
+Subject: [PATCH] scsi: storvsc: Enabling WRITE_SAME
+Date:   Mon, 30 May 2022 01:39:33 -0700
+Message-Id: <1653899973-21039-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Guillaume:
+This driver already has code logic for WRITE_SAME, but was never working
+because of a bug where WRITE_SAME is disabled at scsi controller level.
+Apparently if WRITE_SAME is disabled at scsi controller level it takes
+precedence over disk level setting. This patch fixes this bug, and enables
+this feature only for VMSTOR protocol version 10.0 and above.
 
-On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> Add flexibility by moving the swap shift value to SoC specific config
-> 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dpi.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index 6eeda222a973..6d4d8c6ec47d 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -131,6 +131,7 @@ struct mtk_dpi_conf {
->  	u32 dimension_mask;
->  	/* HSIZE and VSIZE mask (no shift) */
->  	u32 hvsize_mask;
-> +	u32 channel_swap_shift;
->  	const struct mtk_dpi_yc_limit *limit;
->  };
->  
-> @@ -349,7 +350,8 @@ static void mtk_dpi_config_channel_swap(struct
-> mtk_dpi *dpi,
->  		break;
->  	}
->  
-> -	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, val << CH_SWAP,
-> CH_SWAP_MASK);
-> +	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, val << dpi->conf-
-> >channel_swap_shift,
-> +		     CH_SWAP_MASK);
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+---
+ drivers/scsi/storvsc_drv.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-From the definiton:
-
- #define CH_SWAP				0
-+#define DPINTF_CH_SWAP			BIT(1)
- #define CH_SWAP_MASK			(0x7 << 0)
-+#define DPINTF_CH_SWAP_MASK		(0x7 << 1)
-
-This statement should be:
-
-mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, val << dpi->conf-
->channel_swap_shift, CH_SWAP_MASK << dpi->conf->channel_swap_shift);
-
-dpi->conf->channel_swap_shift is 1 for MT8195-DP_INTF and 0 for others.
-And drop the definition of DPINTF_CH_SWAP and DPINTF_CH_SWAP_MASK,
-
-Regards,
-CK
-
-
->  }
->  
->  static void mtk_dpi_config_yuv422_enable(struct mtk_dpi *dpi, bool
-> enable)
-> @@ -821,6 +823,7 @@ static const struct mtk_dpi_conf mt8173_conf = {
->  	.swap_input_support = true,
->  	.dimension_mask = HPW_MASK,
->  	.hvsize_mask = HSIZE_MASK,
-> +	.channel_swap_shift = CH_SWAP,
->  	.limit = &mtk_dpi_limit,
->  };
->  
-> @@ -835,6 +838,7 @@ static const struct mtk_dpi_conf mt2701_conf = {
->  	.swap_input_support = true,
->  	.dimension_mask = HPW_MASK,
->  	.hvsize_mask = HSIZE_MASK,
-> +	.channel_swap_shift = CH_SWAP,
->  	.limit = &mtk_dpi_limit,
->  };
->  
-> @@ -848,6 +852,7 @@ static const struct mtk_dpi_conf mt8183_conf = {
->  	.swap_input_support = true,
->  	.dimension_mask = HPW_MASK,
->  	.hvsize_mask = HSIZE_MASK,
-> +	.channel_swap_shift = CH_SWAP,
->  	.limit = &mtk_dpi_limit,
->  };
->  
-> @@ -861,6 +866,7 @@ static const struct mtk_dpi_conf mt8192_conf = {
->  	.swap_input_support = true,
->  	.dimension_mask = HPW_MASK,
->  	.hvsize_mask = HSIZE_MASK,
-> +	.channel_swap_shift = CH_SWAP,
->  	.limit = &mtk_dpi_limit,
->  };
->  
+diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+index ca35309..3e55687 100644
+--- a/drivers/scsi/storvsc_drv.c
++++ b/drivers/scsi/storvsc_drv.c
+@@ -50,6 +50,7 @@
+  * Win8: 5.1
+  * Win8.1: 6.0
+  * Win10: 6.2
++ * Win10.1: 10.0
+  */
+ 
+ #define VMSTOR_PROTO_VERSION(MAJOR_, MINOR_)	((((MAJOR_) & 0xff) << 8) | \
+@@ -59,6 +60,7 @@
+ #define VMSTOR_PROTO_VERSION_WIN8	VMSTOR_PROTO_VERSION(5, 1)
+ #define VMSTOR_PROTO_VERSION_WIN8_1	VMSTOR_PROTO_VERSION(6, 0)
+ #define VMSTOR_PROTO_VERSION_WIN10	VMSTOR_PROTO_VERSION(6, 2)
++#define VMSTOR_PROTO_VERSION_WIN10_1	VMSTOR_PROTO_VERSION(10, 0)
+ 
+ /*  Packet structure describing virtual storage requests. */
+ enum vstor_packet_operation {
+@@ -205,6 +207,7 @@ struct vmscsi_request {
+  */
+ 
+ static const int protocol_version[] = {
++		VMSTOR_PROTO_VERSION_WIN10_1,
+ 		VMSTOR_PROTO_VERSION_WIN10,
+ 		VMSTOR_PROTO_VERSION_WIN8_1,
+ 		VMSTOR_PROTO_VERSION_WIN8,
+@@ -1558,7 +1561,7 @@ static int storvsc_device_configure(struct scsi_device *sdevice)
+ 			break;
+ 		}
+ 
+-		if (vmstor_proto_version >= VMSTOR_PROTO_VERSION_WIN10)
++		if (vmstor_proto_version >= VMSTOR_PROTO_VERSION_WIN10_1)
+ 			sdevice->no_write_same = 0;
+ 	}
+ 
+@@ -1845,7 +1848,6 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
+ 	.this_id =		-1,
+ 	/* Ensure there are no gaps in presented sgls */
+ 	.virt_boundary_mask =	PAGE_SIZE-1,
+-	.no_write_same =	1,
+ 	.track_queue_depth =	1,
+ 	.change_queue_depth =	storvsc_change_queue_depth,
+ };
+-- 
+1.8.3.1
 

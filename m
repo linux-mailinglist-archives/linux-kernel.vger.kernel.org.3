@@ -2,102 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9365384D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5485384C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240235AbiE3PZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
+        id S238936AbiE3PXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240201AbiE3PYv (ORCPT
+        with ESMTP id S239582AbiE3PXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:24:51 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAC01CC605;
-        Mon, 30 May 2022 07:25:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653920737; x=1685456737;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qa66nN8IHyybRSUPiNIjAkNufZbxITgV0L9y8AsjeHI=;
-  b=fL8+57KS9STNQ8MQVO1DWL17X2fwwiNGtuI1sjKw71qp73CVlebZuwEY
-   2GSYdAT/YVliJzcJWmBtTXFcnJT0myLqpxpuWggveSzCZmq2uB1+5yGxK
-   i8RPxvtNnkmGUqzR4ZftloEULEtlPgFVtfVQGaG5woKNyNjF+G0q/0vQp
-   sl96J7ac6ic/BbJ2MWTOGnrX3HAmSrE3mUwU6nl2Wyc/ZPurR9ehlsIyY
-   AmWw7UwCV66cc37R6kmUtE5WLGNOaLIOh3fg9bTGQ6fcYMDfufD3Wkd+d
-   4atSGh1IMfX2u8kh/JPycGQ70MaMwrLFc/lpkxb1SB3TBORhlMSRzMyrG
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="254888820"
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="254888820"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 07:25:36 -0700
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="605212357"
-Received: from rli9-dbox.sh.intel.com (HELO rli9-dbox) ([10.239.159.142])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 07:25:30 -0700
-Date:   Mon, 30 May 2022 22:23:53 +0800
-From:   Philip Li <philip.li@intel.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     menglong8.dong@gmail.com, kuba@kernel.org, kbuild-all@lists.01.org,
-        rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, nhorman@tuxdriver.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        imagedong@tencent.com, dsahern@kernel.org, talalahmad@google.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/3] net: skb: use auto-generation to convert
- skb drop reason to string
-Message-ID: <YpTTedzTnj3s1hdo@rli9-dbox>
-References: <20220530081201.10151-3-imagedong@tencent.com>
- <202205301730.inNRSOxX-lkp@intel.com>
+        Mon, 30 May 2022 11:23:33 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3941913392B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:24:19 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id s24so7546705wrb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rUAWdJ1Rf6hO8ecNBUpnATX0ltMJMJR8PSAH4KO8bJM=;
+        b=LXAGdGTLAayi/VD6RlJh8cDSac2FGSYcJt/uGESSMobfyQL1XbIq81Ywa+yllK/x2E
+         sJAS1Rtf5zCjVFmHW4pfy9Tm5dcA5ZVlkEAgvw2NGpz9WZyyL1fOivsSvW9ytr3I57tI
+         +6fjo5tQhXgr2qaexjNggNiuq6T69aTHW9odw2YHwZzw+W6m95HcY+q9sBmorz9c0xYk
+         bA0W/CuhgZRg2uQS5Mkr9/Y/bZpmCfybLP6mrXZw7koQ3b+VufvplHhXB5NVUCdaMUoW
+         TCkVYinu9AA7khJHktcQJTHSDsPEUzbWColgtl13bs4lm9K4PQIRKfICpI7XOPwBSQPj
+         1kIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rUAWdJ1Rf6hO8ecNBUpnATX0ltMJMJR8PSAH4KO8bJM=;
+        b=wguXXSstmbFqMlC4UYsrOBnM7Ct/0i1T4ExsHwq4UCzo2CMyYeQifTeXAiN23Zc9j7
+         x3Zb+2YITWhxm+az/ZVVNmCy+0kdnPvaqcGpEO0jKyKoRBHEdnV2xCuBiyFhe1kM5Srb
+         A12KykUZUVucP2qqwYdJMH2KeinTqFtdMlfsyD2GrLEh8mnoXQa4x+Yhi8+4YhEc6d28
+         LKcyAaAmfyEe3dfFVGNP1v1O8e2JBrvPVb3UDPNfA0Y1yVgkeelKpAf6Bd2I+Xn9k29O
+         JC2B1GCICPqV7FPup+lVAOi4IXcvc1d4wVFq5yCswVuZeZ7WjbeOvZhrRxVpmHGxU4/V
+         7JGg==
+X-Gm-Message-State: AOAM53226kiCf7XeZlriR/g1XWlIC8N5M1PQDMYT0WNYHces6cD74CKl
+        q2s45J22AfLlzyd1XcrzugiNPw==
+X-Google-Smtp-Source: ABdhPJwUdn2UEohzLhlkvTp89uivSBFAQcrCfQrdg/myp0CdGWHmaAJLOG8f0NAC612sXpmZ9kB+sw==
+X-Received: by 2002:a05:6000:1288:b0:210:154:ea50 with SMTP id f8-20020a056000128800b002100154ea50mr21132673wrx.213.1653920656629;
+        Mon, 30 May 2022 07:24:16 -0700 (PDT)
+Received: from localhost.localdomain ([88.160.162.107])
+        by smtp.gmail.com with ESMTPSA id y4-20020a056000168400b0020d10a249eesm9134310wrd.13.2022.05.30.07.24.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 07:24:15 -0700 (PDT)
+From:   Fabien Parent <fparent@baylibre.com>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/mediatek: fix crtc index computation
+Date:   Mon, 30 May 2022 16:24:07 +0200
+Message-Id: <20220530142407.781187-1-fparent@baylibre.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202205301730.inNRSOxX-lkp@intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 06:01:36PM +0800, kernel test robot wrote:
-> Hi,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on net-next/master]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/menglong8-dong-gmail-com/reorganize-the-code-of-the-enum-skb_drop_reason/20220530-161614
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 7e062cda7d90543ac8c7700fc7c5527d0c0f22ad
-> config: nios2-defconfig (https://download.01.org/0day-ci/archive/20220530/202205301730.inNRSOxX-lkp@intel.com/config)
-> compiler: nios2-linux-gcc (GCC) 11.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/73e3b002fb9086fc734ba4dcc3041f9bb56eb1a2
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review menglong8-dong-gmail-com/reorganize-the-code-of-the-enum-skb_drop_reason/20220530-161614
->         git checkout 73e3b002fb9086fc734ba4dcc3041f9bb56eb1a2
->         # save the config file
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 ARCH=nios2 
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
+The code always assume that the main path is enabled, which is not
+always the case. When the main path is not enabled, the CRTC index
+of the ext path is incorrect which makes the secondary path
+not usable. Fix the CRTC index calculation.
 
-Kindly ignore this report, the report itself has issue with empty
-warnings here. We will check and resolve this.
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+---
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c | 46 +++++++++++++++------
+ 1 file changed, 34 insertions(+), 12 deletions(-)
 
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+index 5d7504a72b11..6f2abfc608fb 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+@@ -430,25 +430,47 @@ int mtk_ddp_comp_get_id(struct device_node *node,
+ 	return -EINVAL;
+ }
+ 
++static bool mtk_drm_comp_is_enabled(struct drm_device *drm,
++				    const enum mtk_ddp_comp_id *path,
++				    unsigned int path_len)
++{
++	struct mtk_drm_private *priv = drm->dev_private;
++
++	return path && path_len && !!priv->comp_node[path[path_len - 1]];
++}
++
+ unsigned int mtk_drm_find_possible_crtc_by_comp(struct drm_device *drm,
+ 						struct device *dev)
+ {
+ 	struct mtk_drm_private *private = drm->dev_private;
+-	unsigned int ret = 0;
++	unsigned int index = 0;
+ 
+-	if (mtk_drm_find_comp_in_ddp(dev, private->data->main_path, private->data->main_len,
++	if (mtk_drm_find_comp_in_ddp(dev, private->data->main_path,
++				     private->data->main_len,
+ 				     private->ddp_comp))
+-		ret = BIT(0);
+-	else if (mtk_drm_find_comp_in_ddp(dev, private->data->ext_path,
+-					  private->data->ext_len, private->ddp_comp))
+-		ret = BIT(1);
+-	else if (mtk_drm_find_comp_in_ddp(dev, private->data->third_path,
+-					  private->data->third_len, private->ddp_comp))
+-		ret = BIT(2);
+-	else
+-		DRM_INFO("Failed to find comp in ddp table\n");
++		return BIT(index);
++
++	if (mtk_drm_comp_is_enabled(drm, private->data->main_path,
++				    private->data->main_len))
++		index++;
+ 
+-	return ret;
++	if (mtk_drm_find_comp_in_ddp(dev, private->data->ext_path,
++				     private->data->ext_len,
++				     private->ddp_comp))
++		return BIT(index);
++
++	if (mtk_drm_comp_is_enabled(drm, private->data->ext_path,
++				    private->data->ext_len))
++		index++;
++
++	if (mtk_drm_find_comp_in_ddp(dev, private->data->third_path,
++					  private->data->third_len,
++					  private->ddp_comp))
++		return BIT(index);
++
++	DRM_INFO("Failed to find comp in ddp table\n");
++
++	return 0;
+ }
+ 
+ int mtk_ddp_comp_init(struct device_node *node, struct mtk_ddp_comp *comp,
+-- 
+2.36.1
+

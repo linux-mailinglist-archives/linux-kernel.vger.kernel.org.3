@@ -2,88 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2895538896
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 23:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F54D53883D
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 22:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241186AbiE3VaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 17:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
+        id S241906AbiE3UbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 16:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234333AbiE3VaO (ORCPT
+        with ESMTP id S241378AbiE3UbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 17:30:14 -0400
-X-Greylist: delayed 3001 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 30 May 2022 14:30:13 PDT
-Received: from blue.oak.relay.mailchannels.net (blue.oak.relay.mailchannels.net [23.83.215.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA2A986D2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 14:30:13 -0700 (PDT)
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 93010122314;
-        Mon, 30 May 2022 20:40:11 +0000 (UTC)
-Received: from pdx1-sub0-mail-a312.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 2AD21121A0F;
-        Mon, 30 May 2022 20:40:01 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1653943201; a=rsa-sha256;
-        cv=none;
-        b=o3eK0jyGSyhfP+gjp7e2bU0+JbjZS7rcl1wPj/CsEIOjgDjGUl2N1tgum7ZF0mPDUsa6/X
-        MR7bmxs45y3bmdXH3w3SKt4SAbgqi6dF/8P/Z6EZQ4EEtpMEooZLq2Tqoo/7EJilrOOX4k
-        TDN91FVXtRWW2vA6O6j6wXxwcCrBfjRkJs8hke/9dwonpJfq4k+vabMHBqSwFDnfnEu4c5
-        YYzJJ0gQoeVyEaSn/vwyMO7mt89QkrspbiyJxokilEpAzBiyC8VeFssmIH3+xiPkjEhVDI
-        CJkIwT18Q92JrWEWqmxD70oVAF9WjqEO1X58dRy1Xl79tfD7zEmpMPB3KbpzUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1653943201;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=+6cSYBpZDS32mSj8yS3fuze9FxP3KWL3wu/pxgIPKE8=;
-        b=qwM5dLSsQbuz69Y4CcVodndU0j8MdqsW+XEX/HW27FekzWTw4q8wnh/XzafdhSCxzuZwhH
-        gVHYJI6Oj3mgajw+Uv2NuZPxa68WEmWCJz/l4PKEH9c236JNMN1tZVD+L18HLfMdrVM/IX
-        Dx/4qeYv6HxRFYmE9IwdP67upeZgMhUPyeCWsA6OOOLoLDu2z8TtMHt+6n59/bvrmghx3y
-        OeD/iyP6ub0qsYLRf4cj4o7BbvuxWEJ0IewZ+RE1reJv2Q1Xe66eZWQ9m3FDFhMrQDSNKo
-        2TZIFyZF7P/KFKGKPWoWq8Sb/FRApgwEJuOD/qnb2xWVFabUDeXHri5EyyO2Kg==
-ARC-Authentication-Results: i=1;
-        rspamd-77f9f854d9-l2v42;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-Received: from pdx1-sub0-mail-a312.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.120.38.156 (trex/6.7.1);
-        Mon, 30 May 2022 20:40:01 +0000
-Received: from offworld (unknown [104.36.31.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a312.dreamhost.com (Postfix) with ESMTPSA id 4LBnN02tGHz1n;
-        Mon, 30 May 2022 13:40:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1653943200;
-        bh=+6cSYBpZDS32mSj8yS3fuze9FxP3KWL3wu/pxgIPKE8=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=KNChsDYpRVcsbfTO0Y35UGaUwSE9QTDxa9HMfv/58Miiqc0uYPivRfNjfTZ3omdOT
-         vbAWKTCLAxOewmgZM3HUa4hiMahh/OgKSHxEMG3x02kMGCwM35RFe6tyiYJ6/1d4jr
-         M7rFsNxqv+eSI62+RfvCLf2VtizMJzcfXkxVflnq+FNxfkegpqBckFAVJEU+80ffCb
-         zi2H/Ja/DDLPJ4dyf1u3gyjN3XkVsHbfGRgT1b3DDpQKH4mOaEZiq3BeTnTEXzxJU6
-         zuDYNiRkgAVoAbtl8wjE0hOrq6NqNL5N26g114Juv3Yyt2qXM5l6B+VC8zzOAAbudr
-         3ukU9OPays4gA==
-Date:   Mon, 30 May 2022 13:26:42 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Junwen Wu <wudaemon@163.com>
-Cc:     rostedt@goodmis.org, mingo@redhat.com, will@kernel.org,
-        peterz@infradead.org, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] softirq: Add tracepoint for tasklet_entry/exit
-Message-ID: <20220530202642.q22urp5yl6pzdyqq@offworld>
-References: <20220528144228.46867-1-wudaemon@163.com>
+        Mon, 30 May 2022 16:31:12 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA137379A
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 13:31:11 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nvm2b-0001eR-CN; Mon, 30 May 2022 22:31:05 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nvm2a-005W7e-AZ; Mon, 30 May 2022 22:31:02 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nvm2X-00DAOs-V5; Mon, 30 May 2022 22:31:01 +0200
+Date:   Mon, 30 May 2022 22:31:01 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Fabien Parent <fparent@baylibre.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/2] dt-bindings: pwm: add MT8365 SoC binding
+Message-ID: <20220530203101.5wq52q5pq523ewuu@pengutronix.de>
+References: <20220530202136.906407-1-fparent@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ydudqqbygmakmkzx"
 Content-Disposition: inline
-In-Reply-To: <20220528144228.46867-1-wudaemon@163.com>
-User-Agent: NeoMutt/20220408
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220530202136.906407-1-fparent@baylibre.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,15 +59,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 28 May 2022, Junwen Wu wrote:
 
->Usually softirq handler is pre-defined,only tasklet can be register by
->driver.We expand tracepoint for tasklet_entry/exit to trace
->tasklet handler.
+--ydudqqbygmakmkzx
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tasklets are artifacts of the past, and deprecated years ago. Lets not
-add to moot interfaces. Everything should be converted to run in task
-context.
+On Mon, May 30, 2022 at 10:21:34PM +0200, Fabien Parent wrote:
+> Add binding documentation for the MT8365 SoC.
+>=20
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> ---
+>  Documentation/devicetree/bindings/pwm/pwm-mediatek.txt | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt b/Doc=
+umentation/devicetree/bindings/pwm/pwm-mediatek.txt
+> index 25ed214473d7..ac5c58bbb22d 100644
+> --- a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
+> +++ b/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
+> @@ -8,6 +8,7 @@ Required properties:
+>     - "mediatek,mt7628-pwm": found on mt7628 SoC.
+>     - "mediatek,mt7629-pwm": found on mt7629 SoC.
+>     - "mediatek,mt8183-pwm": found on mt8183 SoC.
+> +   - "mediatek,mt8365-pwm": found on mt8365 SoC.
+>     - "mediatek,mt8516-pwm": found on mt8516 SoC.
+>   - reg: physical base address and length of the controller's registers.
+>   - #pwm-cells: must be 2. See pwm.yaml in this directory for a descripti=
+on of
+> @@ -17,6 +18,7 @@ Required properties:
+>                  has no clocks
+>     - "top": the top clock generator
+>     - "main": clock used by the PWM core
+> +   - "pwm1-3": the five per PWM clocks for mt8365
 
-Thanks,
-Davidlohr
+I think you either want s/3/5/ or s/five/three/ here?!
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ydudqqbygmakmkzx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKVKYMACgkQwfwUeK3K
+7AlmTAf+IC1ZakoG/AbDBiw+ISsvysZi3oDGLTm43optth/vSyX8NRewez5UcedF
+lhD+yb619mm33nUfifszc601C2x4L47zLAVRSyVoMn2XiaDporeX17CbcCyq1tDO
+yb7dTFuQEdfYr+TbvvVp/5UkCq6cCNS0yojfqxcP+WmXVDD1GsRnzH5BR2dT4Ofy
+ynvcYyx8d7wroDefw9IMs01DdPDrXdA7qa6NcSBAzwrAKPRAOVSNvn8ULuE8Op8Y
+DyG+WasQYyCDO/k3grKxatZ/ht7OJKObTC+VSbhBucC6yTxYPtZp7tTyLfNR4ReJ
+q09ZfRsmPbRLgEVf+5phxmbaevk7uw==
+=Gzed
+-----END PGP SIGNATURE-----
+
+--ydudqqbygmakmkzx--

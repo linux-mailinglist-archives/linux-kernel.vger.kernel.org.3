@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58415385F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 18:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161E35385FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 18:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240993AbiE3QQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 12:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
+        id S236079AbiE3QUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 12:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239180AbiE3QQb (ORCPT
+        with ESMTP id S230086AbiE3QUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 12:16:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D29B56C55F
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 09:16:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653927389;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=raXCefhJnjzd6mraUSou6h7qOVXvwwBKOs2CvERjEjE=;
-        b=Cu1KU38aiFPe2CaBQwY5x2r77nt/29C/NltCzgLKm0+Gweb5tR+K5UQ6k281J2hmVs8xS2
-        80W6sGvfMMkGP4Bp9t+Z+1vEFIdMJv/KDPeakTkPrTeaEq1EK7MHQu0zQF79ytRBTlop2D
-        8p5aqCU2THEfY8m5ddAmRX/D2D7ZyEA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-262-rUfYDHeYOfSiEqITVW8cmw-1; Mon, 30 May 2022 12:16:25 -0400
-X-MC-Unique: rUfYDHeYOfSiEqITVW8cmw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 30 May 2022 12:20:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3CA972AA
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 09:20:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E3F2E8041AB;
-        Mon, 30 May 2022 16:16:24 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D27162166B2F;
-        Mon, 30 May 2022 16:16:24 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 24UGGO5s027306;
-        Mon, 30 May 2022 12:16:24 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 24UGGOZ4027297;
-        Mon, 30 May 2022 12:16:24 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Mon, 30 May 2022 12:16:24 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     Borislav Petkov <bp@suse.de>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org
-Subject: Warnings when suspending to disk
-Message-ID: <alpine.LRH.2.02.2205301145540.25840@file01.intranet.prod.int.rdu2.redhat.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C1A6B80C88
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 16:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0427C385B8;
+        Mon, 30 May 2022 16:20:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653927635;
+        bh=KtxTn+S4pRqtEWr3E2L4U6LmC80RPQZ7A/PM/qY8iAM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fMDYcgeMJ8geLHOb3EuhLRYf9fRuEuLy0w7aIKHytnIyUdRNjbq2zNH2OZYRGEifd
+         ziObihXaSPgKn0+aDDX305LVhD7psvhR0jog6vn2QTmMZBF7pdDwLzCRc0oNsUODvr
+         IIOsg4pRxI3CzDI5ruyHEZ/KX1JByno7K5XF5XAdEmERnJ7lEP7Ut/E4xirA4ZIYOM
+         8kuhobhOZlwnxQFi74WONy3blUnIMBhSLpIdPBmOEfKPXKGIdfguchJk2KVwEzDCWY
+         NaKy2kdClZMdOS22kJrncTyXQGUTXw0KS+Df+WVtvNQRJrBJmN2RFR0lFIAfYUQCDl
+         WFxww1d3r0O6g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nvi88-00EbAU-BH; Mon, 30 May 2022 17:20:32 +0100
+Date:   Mon, 30 May 2022 17:20:31 +0100
+Message-ID: <87bkvf56wg.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH RFC V2 02/10] irqchip: Add LoongArch CPU interrupt controller support
+In-Reply-To: <1653649335-11998-3-git-send-email-lvjianmin@loongson.cn>
+References: <1653649335-11998-1-git-send-email-lvjianmin@loongson.cn>
+        <1653649335-11998-3-git-send-email-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, chenhuacai@gmail.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,142 +69,507 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On Fri, 27 May 2022 12:02:12 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> We are preparing to add new Loongson (based on LoongArch, not compatible
+> with old MIPS-based Loongson) support. This patch add the LoongArch CPU
+> interrupt controller support.
 
-The commit 7f99cb5e60392fc3494c610776e733b68784280c ("x86/CPU/AMD: Use 
-default_groups in kobj_type") causes the following warnings to be printed 
-during suspend to disk and resume from disk. There are many of these 
-warnings, 3 for each core.
+Please drop this paragraph, as it doesn't help at all.
 
-The machine is two six-core Opterons 8435.
+> 
+> LoongArch CPUINTC stands for CSR.ECFG/CSR.ESTAT and related interrupt
+> controller that described in Section 7.4 of "LoongArch Reference Manual,
+> Vol 1". For more information please refer Documentation/loongarch/irq-
+> chip-model.rst.
 
-Mikulas
+Where is this the patch adding this document?
+
+> 
+> LoongArch CPUINTC has 13 interrupt sources: SWI0~1, HWI0~7, IPI, TI
+> (Timer) and PCOV (PMC). IRQ mappings of HWI0~7 are configurable (can be
+> created from DT/ACPI), but IPI, TI (Timer) and PCOV (PMC) are hardcoded
+> bits, so we define get_xxx_irq() for them.
+
+Where are these functions? How are they used?
+
+> 
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> ---
+>  drivers/irqchip/Kconfig                    |  10 ++
+>  drivers/irqchip/Makefile                   |   1 +
+>  drivers/irqchip/irq-loongarch-cpu.c        | 115 +++++++++++++++++
+>  drivers/irqchip/irq-loongarch-pic-common.c | 201 +++++++++++++++++++++++++++++
+
+One patch per driver, please.
+
+>  drivers/irqchip/irq-loongarch-pic-common.h |  44 +++++++
+>  5 files changed, 371 insertions(+)
+>  create mode 100644 drivers/irqchip/irq-loongarch-cpu.c
+>  create mode 100644 drivers/irqchip/irq-loongarch-pic-common.c
+>  create mode 100644 drivers/irqchip/irq-loongarch-pic-common.h
+> 
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index 39d6be2..a596ee7 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -545,6 +545,16 @@ config EXYNOS_IRQ_COMBINER
+>  	  Say yes here to add support for the IRQ combiner devices embedded
+>  	  in Samsung Exynos chips.
+>  
+> +config IRQ_LOONGARCH_CPU
+> +	bool
+> +	select GENERIC_IRQ_CHIP
+> +	select IRQ_DOMAIN
+> +	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
+> +	help
+> +	  Support for the LoongArch CPU Interrupt Controller. For details of
+> +	  irq chip hierarchy on LoongArch platforms please read the document
+> +	  Documentation/loongarch/irq-chip-model.rst.
+> +
+>  config LOONGSON_LIOINTC
+>  	bool "Loongson Local I/O Interrupt Controller"
+>  	depends on MACH_LOONGSON64
+> diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
+> index 160a1d8..736f030 100644
+> --- a/drivers/irqchip/Makefile
+> +++ b/drivers/irqchip/Makefile
+> @@ -105,6 +105,7 @@ obj-$(CONFIG_LS1X_IRQ)			+= irq-ls1x.o
+>  obj-$(CONFIG_TI_SCI_INTR_IRQCHIP)	+= irq-ti-sci-intr.o
+>  obj-$(CONFIG_TI_SCI_INTA_IRQCHIP)	+= irq-ti-sci-inta.o
+>  obj-$(CONFIG_TI_PRUSS_INTC)		+= irq-pruss-intc.o
+> +obj-$(CONFIG_IRQ_LOONGARCH_CPU)		+= irq-loongarch-cpu.o irq-loongarch-pic-common.o
+>  obj-$(CONFIG_LOONGSON_LIOINTC)		+= irq-loongson-liointc.o
+>  obj-$(CONFIG_LOONGSON_HTPIC)		+= irq-loongson-htpic.o
+>  obj-$(CONFIG_LOONGSON_HTVEC)		+= irq-loongson-htvec.o
+> diff --git a/drivers/irqchip/irq-loongarch-cpu.c b/drivers/irqchip/irq-loongarch-cpu.c
+> new file mode 100644
+> index 0000000..26f948f
+> --- /dev/null
+> +++ b/drivers/irqchip/irq-loongarch-cpu.c
+> @@ -0,0 +1,115 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqdomain.h>
+> +
+> +#include <asm/loongarch.h>
+> +#include <asm/setup.h>
+> +#include "irq-loongarch-pic-common.h"
+> +
+> +static struct irq_domain *irq_domain;
+> +
+> +static void mask_loongarch_irq(struct irq_data *d)
+> +{
+> +	clear_csr_ecfg(ECFGF(d->hwirq));
+> +}
+> +
+> +static void unmask_loongarch_irq(struct irq_data *d)
+> +{
+> +	set_csr_ecfg(ECFGF(d->hwirq));
+> +}
+> +
+> +static struct irq_chip cpu_irq_controller = {
+> +	.name		= "LoongArch",
+> +	.irq_mask	= mask_loongarch_irq,
+> +	.irq_unmask	= unmask_loongarch_irq,
+> +};
+> +
+> +static void handle_cpu_irq(struct pt_regs *regs)
+> +{
+> +	int hwirq;
+> +	unsigned int estat = read_csr_estat() & CSR_ESTAT_IS;
+> +
+> +	while ((hwirq = ffs(estat))) {
+> +		estat &= ~BIT(hwirq - 1);
+> +		generic_handle_domain_irq(irq_domain, hwirq - 1);
+> +	}
+> +}
+> +
+> +static int loongarch_cpu_intc_map(struct irq_domain *d, unsigned int irq,
+> +			     irq_hw_number_t hwirq)
+> +{
+> +	irq_set_noprobe(irq);
+> +	irq_set_chip_and_handler(irq, &cpu_irq_controller, handle_percpu_irq);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops loongarch_cpu_intc_irq_domain_ops = {
+> +	.map = loongarch_cpu_intc_map,
+> +	.xlate = irq_domain_xlate_onecell,
+> +};
+> +
+> +struct irq_domain * __init loongarch_cpu_irq_init(void)
+> +{
+> +	/* Mask interrupts. */
+> +	clear_csr_ecfg(ECFG0_IM);
+> +	clear_csr_estat(ESTATF_IP);
+> +
+> +	irq_domain = irq_domain_add_legacy(NULL, EXCCODE_INT_NUM, 0, 0,
+> +						&loongarch_cpu_intc_irq_domain_ops, NULL);
+
+I already commented on this in the past, and my position is still the
+same: this isn't a legacy architecture, you are not converting
+anything from a board file, so there is no reason why you get to use a
+legacy domain.
+
+Since you are using ACPI, irq_domain_add_*() really is the wrong API,
+as they take an of_node. Use irq_domain_create_linear(), and pass an
+actual fwnode there (there are plenty of examples in the tree).
+
+> +	if (!irq_domain)
+> +		panic("Failed to add irqdomain for LoongArch CPU");
+> +
+> +	set_handle_irq(&handle_cpu_irq);
+> +
+> +	return irq_domain;
+
+What uses this irq_domain in the arch code?
+
+> +}
+> +#ifdef CONFIG_ACPI
+
+Why the #ifdef? Isn't this system supposed to be ACPI only? There is
+no DT support anyway, so you should make the driver depend on ACPI and
+that's about it.
+
+> +static int __init
+> +liointc_parse_madt(union acpi_subtable_headers *header,
+> +		       const unsigned long end)
+> +{
+> +	struct acpi_madt_lio_pic *liointc_entry = (struct acpi_madt_lio_pic *)header;
+> +
+> +	return liointc_acpi_init(irq_domain, liointc_entry);
+> +}
+> +
+> +static int __init
+> +eiointc_parse_madt(union acpi_subtable_headers *header,
+> +		       const unsigned long end)
+> +{
+> +	struct acpi_madt_eio_pic *eiointc_entry = (struct acpi_madt_eio_pic *)header;
+> +
+> +	return eiointc_acpi_init(irq_domain, eiointc_entry);
+> +}
+> +static int __init acpi_cascade_irqdomain_init(void)
+> +{
+> +	acpi_table_parse_madt(ACPI_MADT_TYPE_LIO_PIC,
+> +			      liointc_parse_madt, 0);
+> +	acpi_table_parse_madt(ACPI_MADT_TYPE_EIO_PIC,
+> +			      eiointc_parse_madt, 0);
+> +	return 0;
+> +}
+> +static int __init coreintc_acpi_init_v1(union acpi_subtable_headers *header,
+> +				   const unsigned long end)
+> +{
+> +	if (irq_domain)
+> +		return 0;
+> +
+> +	init_vector_parent_group();
+> +	loongarch_cpu_irq_init();
+> +	acpi_cascade_irqdomain_init();
+> +	return 0;
+> +}
+> +IRQCHIP_ACPI_DECLARE(coreintc_v1, ACPI_MADT_TYPE_CORE_PIC,
+> +		NULL, ACPI_MADT_CORE_PIC_VERSION_V1,
+> +		coreintc_acpi_init_v1);
+> +#endif
+> diff --git a/drivers/irqchip/irq-loongarch-pic-common.c b/drivers/irqchip/irq-loongarch-pic-common.c
+> new file mode 100644
+> index 0000000..94437e4
+> --- /dev/null
+> +++ b/drivers/irqchip/irq-loongarch-pic-common.c
+> @@ -0,0 +1,201 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2022 Loongson Limited, All Rights Reserved.
+> + */
+> +
+> +#include <linux/irq.h>
+> +#include <linux/acpi.h>
+> +#include <linux/pci.h>
+> +#include "irq-loongarch-pic-common.h"
+> +
+> +static struct acpi_vector_group vector_group[MAX_IO_PICS];
+> +struct acpi_madt_bio_pic *acpi_pchpic[MAX_IO_PICS];
+> +
+> +struct irq_domain *liointc_domain;
+> +struct irq_domain *pch_lpc_domain;
+> +struct irq_domain *pch_msi_domain[MAX_IO_PICS];
+> +struct irq_domain *pch_pic_domain[MAX_IO_PICS];
+
+Why isn't this static? If someone needs to know, why isn't there an
+accessor?
 
 
-[   31.349584] PM: hibernation: hibernation entry
-[   31.350319] Filesystems sync: 0.000 seconds
-[   31.350417] Freezing user space processes ... (elapsed 0.001 seconds) done.
-[   31.351994] OOM killer disabled.
-[   31.357889] PM: hibernation: Preallocating image memory
-[   34.791852] PM: hibernation: Allocated 735563 pages for snapshot
-[   34.792065] PM: hibernation: Allocated 2942252 kbytes in 3.43 seconds (857.79 MB/s)
-[   34.792296] Freezing remaining freezable tasks ... (elapsed 0.000 seconds) done.
-[   34.793791] printk: Suspending console(s) (use no_console_suspend to debug)
-[   34.795159] serial 00:03: disabled
-[   34.795248] serial 00:02: disabled
-[   34.824316] mptbase: ioc0: pci-suspend: pdev=0x00000000f4bc4e1a, slot=0000:02:06.0, Entering operating state [D3]
-[   35.470390] amdgpu 0000:07:00.0: amdgpu: BACO reset
-[   35.533783] Disabling non-boot CPUs ...
-[   35.535798] smpboot: CPU 1 is now offline
-[   35.537754] ------------[ cut here ]------------
-[   35.537764] kernfs: can not remove 'threshold_limit', no directory
-[   35.537789] WARNING: CPU: 2 PID: 21 at fs/kernfs/dir.c:1555 kernfs_remove_by_name_ns+0xa9/0xc0
-[   35.537812] Modules linked in: ipt_REJECT nf_reject_ipv4 hid_generic nft_chain_nat xt_MASQUERADE xt_tcpudp nft_compat nf_tables libcrc32c crc32c_generic nfnetlink snd_usb_audio snd_hwdep snd_usbmidi_lib snd_rawmidi snd_pcm snd_timer usbhid snd hid soundcore cpufreq_userspace cpufreq_ondemand cpufreq_powersave cpufreq_conservative bridge stp llc ohci_pci amd64_edac edac_mce_amd kvm_amd tg3 ohci_hcd ehci_pci ptp ehci_hcd e100 pps_core kvm mii usbcore pata_serverworks k10temp irqbypass libphy i2c_piix4 usb_common pcspkr rtc_cmos floppy acpi_cpufreq processor button mousedev dmi_sysfs nf_nat_ftp nf_conntrack_ftp nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 lm85 hwmon_vid fuse configfs ip_tables x_tables ipv6 autofs4 spadfs amdgpu drm_ttm_helper ttm hwmon gpu_sched i2c_algo_bit drm_kms_helper cfbfillrect syscopyarea cfbimgblt sysfillrect sysimgblt fb_sys_fops cfbcopyarea drm evdev fb font fbdev drm_panel_orientation_quirks backlight
-[   35.537994] CPU: 2 PID: 21 Comm: cpuhp/2 Not tainted 5.17.0-rc2 #1
-[   35.538003] Hardware name: empty empty/S3992-E, BIOS 'V1.06   ' 06/09/2009
-[   35.538008] RIP: 0010:kernfs_remove_by_name_ns+0xa9/0xc0
-[   35.538052] Code: 4c 8b 6c 24 10 4c 8b 74 24 18 48 83 c4 20 c3 4c 89 e7 e8 ba d1 de ff b8 fe ff ff ff eb d9 48 c7 c7 70 6f d6 81 e8 95 30 31 00 <0f> 0b b8 fe ff ff ff eb c4 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f
-[   35.538060] RSP: 0018:ffff8881036d7d80 EFLAGS: 00010282
-[   35.538067] RAX: 0000000000000036 RBX: ffffffff820320c8 RCX: ffff88900fc9b3c8
-[   35.538071] RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: ffff88900fc9b3c0
-[   35.538076] RBP: 0000000000000000 R08: ffffffff8204da60 R09: 64206f6e202c2774
-[   35.538080] R10: 726964206f6e202c R11: 2774696d696c5f64 R12: ffffffff81c0d820
-[   35.538084] R13: ffffffff81d3b89a R14: ffff888103e04800 R15: ffff88900fd751f0
-[   35.538089] FS:  0000000000000000(0000) GS:ffff88900fc80000(0000) knlGS:0000000000000000
-[   35.538095] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   35.538099] CR2: 00007f8bc5d4f4b0 CR3: 0000000150296000 CR4: 00000000000006e0
-[   35.538104] Call Trace:
-[   35.538110]  <TASK>
-[   35.538115]  remove_files+0x26/0x60
-[   35.538124]  sysfs_remove_group+0x41/0xa0
-[   35.538131]  sysfs_remove_groups+0x23/0x40
-[   35.538137]  __kobject_del+0x1b/0xa0
-[   35.538146]  kobject_del+0xf/0x20
-[   35.538153]  mce_threshold_remove_device+0xd4/0x1c0
-[   35.538164]  mce_cpu_pre_down+0x5c/0x70
-[   35.538170]  ? mce_enable_ce+0x40/0x40
-[   35.538176]  cpuhp_invoke_callback+0x2bd/0x460
-[   35.538185]  ? __schedule+0x232/0x630
-[   35.538195]  ? smpboot_register_percpu_thread+0xd0/0xd0
-[   35.538204]  cpuhp_thread_fun+0x75/0x120
-[   35.538212]  smpboot_thread_fn+0xc3/0x1c0
-[   35.538220]  kthread+0xd1/0x100
-[   35.538229]  ? kthread_complete_and_exit+0x20/0x20
-[   35.538238]  ret_from_fork+0x1f/0x30
-[   35.538248]  </TASK>
-[   35.538250] ---[ end trace 0000000000000000 ]---
-[   35.538254] ------------[ cut here ]------------
-[   35.538256] kernfs: can not remove 'error_count', no directory
-[   35.538271] WARNING: CPU: 2 PID: 21 at fs/kernfs/dir.c:1555 kernfs_remove_by_name_ns+0xa9/0xc0
-[   35.538283] Modules linked in: ipt_REJECT nf_reject_ipv4 hid_generic nft_chain_nat xt_MASQUERADE xt_tcpudp nft_compat nf_tables libcrc32c crc32c_generic nfnetlink snd_usb_audio snd_hwdep snd_usbmidi_lib snd_rawmidi snd_pcm snd_timer usbhid snd hid soundcore cpufreq_userspace cpufreq_ondemand cpufreq_powersave cpufreq_conservative bridge stp llc ohci_pci amd64_edac edac_mce_amd kvm_amd tg3 ohci_hcd ehci_pci ptp ehci_hcd e100 pps_core kvm mii usbcore pata_serverworks k10temp irqbypass libphy i2c_piix4 usb_common pcspkr rtc_cmos floppy acpi_cpufreq processor button mousedev dmi_sysfs nf_nat_ftp nf_conntrack_ftp nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 lm85 hwmon_vid fuse configfs ip_tables x_tables ipv6 autofs4 spadfs amdgpu drm_ttm_helper ttm hwmon gpu_sched i2c_algo_bit drm_kms_helper cfbfillrect syscopyarea cfbimgblt sysfillrect sysimgblt fb_sys_fops cfbcopyarea drm evdev fb font fbdev drm_panel_orientation_quirks backlight
-[   35.538429] CPU: 2 PID: 21 Comm: cpuhp/2 Tainted: G        W         5.17.0-rc2 #1
-[   35.538436] Hardware name: empty empty/S3992-E, BIOS 'V1.06   ' 06/09/2009
-[   35.538438] RIP: 0010:kernfs_remove_by_name_ns+0xa9/0xc0
-[   35.538447] Code: 4c 8b 6c 24 10 4c 8b 74 24 18 48 83 c4 20 c3 4c 89 e7 e8 ba d1 de ff b8 fe ff ff ff eb d9 48 c7 c7 70 6f d6 81 e8 95 30 31 00 <0f> 0b b8 fe ff ff ff eb c4 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f
-[   35.538453] RSP: 0018:ffff8881036d7d80 EFLAGS: 00010282
-[   35.538459] RAX: 0000000000000032 RBX: ffffffff820320d0 RCX: ffff88900fc9b3c8
-[   35.538463] RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: ffff88900fc9b3c0
-[   35.538467] RBP: 0000000000000000 R08: ffffffff8204da60 R09: 64206f6e202c2774
-[   35.538471] R10: 6f74636572696420 R11: 6f6e202c27746e75 R12: ffffffff81c0d820
-[   35.538475] R13: ffffffff81d3b8bb R14: ffff888103e04800 R15: ffff88900fd751f0
-[   35.538479] FS:  0000000000000000(0000) GS:ffff88900fc80000(0000) knlGS:0000000000000000
-[   35.538484] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   35.538488] CR2: 00007f8bc5d4f4b0 CR3: 0000000150296000 CR4: 00000000000006e0
-[   35.538493] Call Trace:
-[   35.538494]  <TASK>
-[   35.538497]  remove_files+0x26/0x60
-[   35.538503]  sysfs_remove_group+0x41/0xa0
-[   35.538509]  sysfs_remove_groups+0x23/0x40
-[   35.538515]  __kobject_del+0x1b/0xa0
-[   35.538521]  kobject_del+0xf/0x20
-[   35.538527]  mce_threshold_remove_device+0xd4/0x1c0
-[   35.538535]  mce_cpu_pre_down+0x5c/0x70
-[   35.538540]  ? mce_enable_ce+0x40/0x40
-[   35.538545]  cpuhp_invoke_callback+0x2bd/0x460
-[   35.538553]  ? __schedule+0x232/0x630
-[   35.538562]  ? smpboot_register_percpu_thread+0xd0/0xd0
-[   35.538569]  cpuhp_thread_fun+0x75/0x120
-[   35.538577]  smpboot_thread_fn+0xc3/0x1c0
-[   35.538585]  kthread+0xd1/0x100
-[   35.538592]  ? kthread_complete_and_exit+0x20/0x20
-[   35.538601]  ret_from_fork+0x1f/0x30
-[   35.538609]  </TASK>
-[   35.538611] ---[ end trace 0000000000000000 ]---
-[   35.538614] ------------[ cut here ]------------
-[   35.538615] kernfs: can not remove 'interrupt_enable', no directory
-[   35.538629] WARNING: CPU: 2 PID: 21 at fs/kernfs/dir.c:1555 kernfs_remove_by_name_ns+0xa9/0xc0
-[   35.538641] Modules linked in: ipt_REJECT nf_reject_ipv4 hid_generic nft_chain_nat xt_MASQUERADE xt_tcpudp nft_compat nf_tables libcrc32c crc32c_generic nfnetlink snd_usb_audio snd_hwdep snd_usbmidi_lib snd_rawmidi snd_pcm snd_timer usbhid snd hid soundcore cpufreq_userspace cpufreq_ondemand cpufreq_powersave cpufreq_conservative bridge stp llc ohci_pci amd64_edac edac_mce_amd kvm_amd tg3 ohci_hcd ehci_pci ptp ehci_hcd e100 pps_core kvm mii usbcore pata_serverworks k10temp irqbypass libphy i2c_piix4 usb_common pcspkr rtc_cmos floppy acpi_cpufreq processor button mousedev dmi_sysfs nf_nat_ftp nf_conntrack_ftp nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 lm85 hwmon_vid fuse configfs ip_tables x_tables ipv6 autofs4 spadfs amdgpu drm_ttm_helper ttm hwmon gpu_sched i2c_algo_bit drm_kms_helper cfbfillrect syscopyarea cfbimgblt sysfillrect sysimgblt fb_sys_fops cfbcopyarea drm evdev fb font fbdev drm_panel_orientation_quirks backlight
-[   35.538785] CPU: 2 PID: 21 Comm: cpuhp/2 Tainted: G        W         5.17.0-rc2 #1
-[   35.538791] Hardware name: empty empty/S3992-E, BIOS 'V1.06   ' 06/09/2009
-[   35.538794] RIP: 0010:kernfs_remove_by_name_ns+0xa9/0xc0
-[   35.538803] Code: 4c 8b 6c 24 10 4c 8b 74 24 18 48 83 c4 20 c3 4c 89 e7 e8 ba d1 de ff b8 fe ff ff ff eb d9 48 c7 c7 70 6f d6 81 e8 95 30 31 00 <0f> 0b b8 fe ff ff ff eb c4 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f
-[   35.538808] RSP: 0018:ffff8881036d7d80 EFLAGS: 00010282
-[   35.538813] RAX: 0000000000000037 RBX: ffffffff820320d8 RCX: ffff88900fc9b3c8
-[   35.538817] RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: ffff88900fc9b3c0
-[   35.538821] RBP: 0000000000000000 R08: ffffffff8204da60 R09: 64206f6e202c2765
-[   35.538825] R10: 6964206f6e202c27 R11: 656c62616e655f74 R12: ffffffff81c0d820
-[   35.538829] R13: ffffffff81d3b8aa R14: ffff888103e04800 R15: ffff88900fd751f0
-[   35.538833] FS:  0000000000000000(0000) GS:ffff88900fc80000(0000) knlGS:0000000000000000
-[   35.538838] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   35.538842] CR2: 00007f8bc5d4f4b0 CR3: 0000000150296000 CR4: 00000000000006e0
-[   35.538846] Call Trace:
-[   35.538848]  <TASK>
-[   35.538850]  remove_files+0x26/0x60
-[   35.538856]  sysfs_remove_group+0x41/0xa0
-[   35.538862]  sysfs_remove_groups+0x23/0x40
-[   35.538868]  __kobject_del+0x1b/0xa0
-[   35.538874]  kobject_del+0xf/0x20
-[   35.538880]  mce_threshold_remove_device+0xd4/0x1c0
-[   35.538887]  mce_cpu_pre_down+0x5c/0x70
-[   35.538893]  ? mce_enable_ce+0x40/0x40
-[   35.538897]  cpuhp_invoke_callback+0x2bd/0x460
-[   35.538905]  ? __schedule+0x232/0x630
-[   35.538914]  ? smpboot_register_percpu_thread+0xd0/0xd0
-[   35.538922]  cpuhp_thread_fun+0x75/0x120
-[   35.538929]  smpboot_thread_fn+0xc3/0x1c0
-[   35.538937]  kthread+0xd1/0x100
-[   35.538944]  ? kthread_complete_and_exit+0x20/0x20
-[   35.538953]  ret_from_fork+0x1f/0x30
-[   35.538961]  </TASK>
-[   35.538963] ---[ end trace 0000000000000000 ]---
+> +
+> +static int find_pch_pic(u32 gsi)
+> +{
+> +	int i, start, end;
+> +
+> +	/* Find the PCH_PIC that manages this GSI. */
+> +	for (i = 0; i < MAX_IO_PICS; i++) {
+> +		struct acpi_madt_bio_pic *irq_cfg = acpi_pchpic[i];
+> +
+> +		if (!irq_cfg)
+> +			return -1;
+> +
+> +		start = irq_cfg->gsi_base;
+> +		end   = irq_cfg->gsi_base + irq_cfg->size;
+> +		if (gsi >= start && gsi < end)
+> +			return i;
+> +	}
+> +
+> +	pr_err("ERROR: Unable to locate PCH_PIC for GSI %d\n", gsi);
+> +	return -1;
+> +}
+> +
+> +int pcibios_device_add(struct pci_dev *dev)
+> +{
+> +	int id = pci_domain_nr(dev->bus);
+> +
+> +	dev_set_msi_domain(&dev->dev, pch_msi_domain[id]);
+> +
+> +	return 0;
+> +}
 
+This doesn't belong here at all. Please move it to the PCI code.
+
+> +
+> +int acpi_gsi_to_irq(u32 gsi, unsigned int *irqp)
+> +{
+> +	if (irqp != NULL)
+> +		*irqp = acpi_register_gsi(NULL, gsi, -1, -1);
+> +	return (*irqp >= 0) ? 0 : -EINVAL;
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_gsi_to_irq);
+> +
+> +int acpi_isa_irq_to_gsi(unsigned int isa_irq, u32 *gsi)
+> +{
+> +	if (gsi)
+> +		*gsi = isa_irq;
+> +	return 0;
+> +}
+> +
+> +/*
+> + * success: return IRQ number (>=0)
+> + * failure: return < 0
+> + */
+> +int acpi_register_gsi(struct device *dev, u32 gsi, int trigger, int polarity)
+> +{
+> +	int id;
+> +	struct irq_fwspec fwspec;
+> +
+> +	switch (gsi) {
+> +	case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
+> +		fwspec.fwnode = liointc_domain->fwnode;
+> +		fwspec.param[0] = gsi - GSI_MIN_CPU_IRQ;
+> +		fwspec.param_count = 1;
+> +
+> +		return irq_create_fwspec_mapping(&fwspec);
+> +
+> +	case GSI_MIN_LPC_IRQ ... GSI_MAX_LPC_IRQ:
+> +		if (!pch_lpc_domain)
+> +			return -EINVAL;
+> +
+> +		fwspec.fwnode = pch_lpc_domain->fwnode;
+> +		fwspec.param[0] = gsi - GSI_MIN_LPC_IRQ;
+> +		fwspec.param[1] = acpi_dev_get_irq_type(trigger, polarity);
+> +		fwspec.param_count = 2;
+> +
+> +		return irq_create_fwspec_mapping(&fwspec);
+> +
+> +	case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
+> +		id = find_pch_pic(gsi);
+> +		if (id < 0)
+> +			return -EINVAL;
+> +
+> +		fwspec.fwnode = pch_pic_domain[id]->fwnode;
+> +		fwspec.param[0] = gsi - acpi_pchpic[id]->gsi_base;
+> +		fwspec.param[1] = IRQ_TYPE_LEVEL_HIGH;
+> +		fwspec.param_count = 2;
+> +
+> +		return irq_create_fwspec_mapping(&fwspec);
+> +	}
+
+So all the complexity here seems to stem from the fact that you deal
+with three ranges of interrupts, managed by three different pieces of
+code?
+
+Other architectures have similar requirements, and don't require to
+re-implement a private version of the ACPI API. Instead, they expose a
+single irqdomain, and deal with the various ranges internally.
+
+Clearly, not being able to reuse drivers/acpi/irq.c *is* an issue.
+
+> +
+> +	return -EINVAL;
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_register_gsi);
+> +
+> +void acpi_unregister_gsi(u32 gsi)
+> +{
+> +	int id, irq, hw_irq;
+> +	struct irq_domain *d;
+> +
+> +	switch (gsi) {
+> +	case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
+> +		if (!liointc_domain)
+> +			return;
+> +		d = liointc_domain;
+> +		hw_irq = gsi - GSI_MIN_CPU_IRQ;
+> +		break;
+> +
+> +	case GSI_MIN_LPC_IRQ ... GSI_MAX_LPC_IRQ:
+> +		if (!pch_lpc_domain)
+> +			return;
+> +		d = pch_lpc_domain;
+> +		hw_irq = gsi - GSI_MIN_LPC_IRQ;
+> +		break;
+> +
+> +	case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
+> +		id = find_pch_pic(gsi);
+> +		if (id < 0)
+> +			return;
+> +		if (!pch_pic_domain[id])
+> +			return;
+> +		d = pch_pic_domain[id];
+> +
+> +		hw_irq = gsi - acpi_pchpic[id]->gsi_base;
+> +		break;
+> +	}
+> +	irq = irq_find_mapping(d, hw_irq);
+> +	irq_dispose_mapping(irq);
+> +
+> +	return;
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_unregister_gsi);
+> +
+> +static int pci_mcfg_parse(struct acpi_table_header *header)
+> +{
+> +	struct acpi_table_mcfg *mcfg;
+> +	struct acpi_mcfg_allocation *mptr;
+> +	int i, n;
+> +
+> +	if (header->length < sizeof(struct acpi_table_mcfg))
+> +		return -EINVAL;
+> +
+> +	n = (header->length - sizeof(struct acpi_table_mcfg)) /
+> +					sizeof(struct acpi_mcfg_allocation);
+> +	mcfg = (struct acpi_table_mcfg *)header;
+> +	mptr = (struct acpi_mcfg_allocation *) &mcfg[1];
+> +
+> +	for (i = 0; i < n; i++, mptr++)
+> +		vector_group[mptr->pci_segment].node = (mptr->address >> 44) & 0xf;
+> +
+> +	return 0;
+> +}
+
+Again, why can't you reuse drivers/acpi/pci_mcfg.c?
+
+> +
+> +void __init init_vector_parent_group(void)
+> +{
+> +	acpi_table_parse(ACPI_SIG_MCFG, pci_mcfg_parse);
+> +}
+> +
+> +void acpi_set_vector_parent(int node, struct irq_domain *parent)
+> +{
+> +	int i;
+> +
+> +	if (cpu_has_flatmode)
+> +		node = cpu_to_node(node * CORES_PER_EIO_NODE);
+> +
+> +	for (i = 0; i < MAX_IO_PICS; i++) {
+> +		if (node == vector_group[i].node) {
+> +			vector_group[i].parent = parent;
+> +			return;
+> +		}
+> +	}
+> +}
+> +
+> +struct irq_domain *acpi_get_msi_parent(int index)
+> +{
+> +	return vector_group[index].parent;
+> +}
+> +
+> +struct irq_domain *acpi_get_pch_parent(int node)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < MAX_IO_PICS; i++) {
+> +		if (node == vector_group[i].node)
+> +			return vector_group[i].parent;
+> +	}
+> +	return NULL;
+> +}
+> diff --git a/drivers/irqchip/irq-loongarch-pic-common.h b/drivers/irqchip/irq-loongarch-pic-common.h
+> new file mode 100644
+> index 0000000..3815fc9
+> --- /dev/null
+> +++ b/drivers/irqchip/irq-loongarch-pic-common.h
+> @@ -0,0 +1,44 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2022 Loongson Limited, All Rights Reserved.
+> + */
+> +
+> +#ifndef _IRQ_LOONGARCH_PIC_COMMON_H
+> +#define _IRQ_LOONGARCH_PIC_COMMON_H
+> +
+> +#include <linux/of.h>
+> +#include <linux/irqdomain.h>
+> +
+> +struct acpi_vector_group {
+> +	int node;
+> +	struct irq_domain *parent;
+> +};
+> +
+> +/* IRQ number definitions */
+> +#define LOONGSON_LPC_IRQ_BASE		0
+> +#define LOONGSON_CPU_IRQ_BASE		16
+> +#define LOONGSON_PCH_IRQ_BASE		64
+> +
+> +#define GSI_MIN_LPC_IRQ		LOONGSON_LPC_IRQ_BASE
+> +#define GSI_MAX_LPC_IRQ		(LOONGSON_LPC_IRQ_BASE + 16 - 1)
+> +#define GSI_MIN_CPU_IRQ		LOONGSON_CPU_IRQ_BASE
+> +#define GSI_MAX_CPU_IRQ		(LOONGSON_CPU_IRQ_BASE + 48 - 1)
+> +#define GSI_MIN_PCH_IRQ		LOONGSON_PCH_IRQ_BASE
+> +#define GSI_MAX_PCH_IRQ		(LOONGSON_PCH_IRQ_BASE + 256 - 1)
+> +
+> +extern struct acpi_madt_bio_pic *acpi_pchpic[MAX_IO_PICS];
+> +extern struct irq_domain *liointc_domain;
+> +extern struct irq_domain *pch_lpc_domain;
+> +extern struct irq_domain *pch_msi_domain[MAX_IO_PICS];
+> +extern struct irq_domain *pch_pic_domain[MAX_IO_PICS];
+> +
+> +int liointc_acpi_init(struct irq_domain *parent, struct acpi_madt_lio_pic *acpi_liointc);
+> +int eiointc_acpi_init(struct irq_domain *parent, struct acpi_madt_eio_pic *acpi_eiointc);
+> +int htvec_acpi_init(struct irq_domain *parent, struct acpi_madt_ht_pic *acpi_htvec);
+> +int pch_lpc_acpi_init(struct irq_domain *parent, struct acpi_madt_lpc_pic *acpi_pchlpc);
+> +void init_vector_parent_group(void);
+> +void acpi_set_vector_parent(int node, struct irq_domain *parent);
+> +struct irq_domain *acpi_get_msi_parent(int index);
+> +struct irq_domain *acpi_get_pch_parent(int node);
+> +
+> +#endif /* _IRQ_LOONGARCH_PIC_COMMON_H */
+> -- 
+> 1.8.3.1
+> 
+> 
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,207 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355DD537C3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA934537B52
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237007AbiE3N2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 09:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S235773AbiE3NWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 09:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236808AbiE3N10 (ORCPT
+        with ESMTP id S236478AbiE3NW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 09:27:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBAF84A02;
-        Mon, 30 May 2022 06:25:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1B0360EA5;
-        Mon, 30 May 2022 13:25:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 161F8C36AE7;
-        Mon, 30 May 2022 13:25:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917147;
-        bh=2KToFwkNvNzfdHZcKKJhemrDipNoBJWJHSrlZBAWX2s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KYMsTlRuxe7knRvbc1mGE/bxyE7UaxMYNaJ05MkxqVFJ5oEnznWHn02vT4Dsu9EpK
-         6d1vmt0WH3P4QHvXhZUZdFc5s8Xs5exY7msNKNfxM69oF4CKB1gojDWDiSo6klSEGv
-         jtex8VZDjmM5YwRI3nWKcLj8iLIObR3ING/RZAlh2pWNvB6gKvlJ3qhpyg6uZt+RUv
-         9btudViPTMfrBNmglINbE81GfdiQNMpJLg6ygPr6CNaubK8zlEjSO+VH85J5p89zCB
-         DxIQqW+oa3cXpPh+kJKwgxtGuIxa5fvRa+njXZZkBzgLkzFsi1FZpJh3jymiWjWSB+
-         pOYZMt4obRiKA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Justin Tee <justin.tee@broadcom.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 036/159] scsi: lpfc: Fix SCSI I/O completion and abort handler deadlock
-Date:   Mon, 30 May 2022 09:22:21 -0400
-Message-Id: <20220530132425.1929512-36-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
-References: <20220530132425.1929512-1-sashal@kernel.org>
+        Mon, 30 May 2022 09:22:27 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2085.outbound.protection.outlook.com [40.107.21.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7073862F6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:22:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y8PE3TiWEaO8o2QIKbgsb4gBZ7ze6T/CPgVtv29HzdVrHdBbb181v0cnj4cjxya1KTIdCVGDz2RY1cco1uGGFFxdBFZOJxRhp+fSgTP6+A1cc84q2dRgoFWRrzZ6YzsfyplA1lukNY3Ig9zVa46FWT/HdQrmqG6P8GADF0IU8GU0zhVh4ztG/GGVMBoP9X3XZbV+WipBz9bshcjKWwWCjEmYrB0acup7ihYhINiR9K7KzK66wGtWocM/E9+M5fz75saA5aXjHUIiPQdo4y9lCJhj1ShQUns2IN8J0EcQ535QocT+FWeopkHtDyDLR9ZBsONCp/KmJX29vLRQhBbQGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z2dXRhO2zN4O/VMDv2A5cVohtgsMei5ctsybRNuD968=;
+ b=PzVa329GJHYb8Emm/yKQziz//A6qVmdFyTCATPteVBg1MhT61Y91pLogdv4WVyh5lGUhSHfCc2fjPc99PAjIFEgm4yDKQXToO/RoluG4HvmMPOtwgWFmMCgxqcMxRKXVlzZYBguO7xOe+LDFvYY0C77ADTm+ImHI6DcqCymYAfVu/PquJEbyHdxXfIDiMNvDXQKTaYonfBeD8EnhyzLF0rXPAFvnyIE7xS8uuKK3EAQBvQsLSbpSibNc96UHHo1prAd+Z/neXiSN3s5stNDEO2D+RM2B+2yEfkDasnkwQh1pkyQYgCDACl2oGaRioek/GhfpBdxilQz5A+V1vDfAHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 193.240.239.45) smtp.rcpttodomain=alsa-project.org
+ smtp.mailfrom=diasemi.com; dmarc=fail (p=none sp=none pct=100) action=none
+ header.from=dm.renesas.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=dialogsemiconductor.onmicrosoft.com;
+ s=selector1-dialogsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z2dXRhO2zN4O/VMDv2A5cVohtgsMei5ctsybRNuD968=;
+ b=zuui1emS/jiP6TGXumOfT+goC2jqxPgyMqaqlq7zUmjuhlUSPHMb8jFHcl7WK9mwMN2HHDTYS5MOBExVo874IumvVl5YbNc5hxoIYlpnGeE1fApR2luBua2Ew0dE6zt3UJwxSvTpJHVlWfV3RUk0k0oooP2O4NUuPkVrUO89/WA=
+Received: from AM6P195CA0037.EURP195.PROD.OUTLOOK.COM (2603:10a6:209:87::14)
+ by AM0PR10MB2833.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:125::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Mon, 30 May
+ 2022 13:22:23 +0000
+Received: from VE1EUR02FT103.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:209:87:cafe::c9) by AM6P195CA0037.outlook.office365.com
+ (2603:10a6:209:87::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13 via Frontend
+ Transport; Mon, 30 May 2022 13:22:23 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 193.240.239.45) smtp.mailfrom=diasemi.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=dm.renesas.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ diasemi.com discourages use of 193.240.239.45 as permitted sender)
+Received: from mailrelay1.diasemi.com (193.240.239.45) by
+ VE1EUR02FT103.mail.protection.outlook.com (10.152.13.38) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5293.13 via Frontend Transport; Mon, 30 May 2022 13:22:23 +0000
+Received: from nbsrvex-01v.diasemi.com (10.1.17.243) by
+ nbsrvex-01v.diasemi.com (10.1.17.243) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 30 May 2022 15:22:22 +0200
+Received: from slsrvapps-01.diasemi.com (10.24.28.40) by
+ nbsrvex-01v.diasemi.com (10.1.17.243) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Mon, 30 May 2022 15:22:22 +0200
+Received: by slsrvapps-01.diasemi.com (Postfix, from userid 22379)
+        id CD1C580007F; Mon, 30 May 2022 13:22:22 +0000 (UTC)
+Message-ID: <e0a627725c189dd50d6ce24571aed87fe2597395.1653916368.git.DLG-Adam.Thomson.Opensource@dm.renesas.com>
+In-Reply-To: <cover.1653916368.git.DLG-Adam.Thomson.Opensource@dm.renesas.com>
+References: <cover.1653916368.git.DLG-Adam.Thomson.Opensource@dm.renesas.com>
+From:   Adam Thomson <DLG-Adam.Thomson.Opensource@dm.renesas.com>
+Date:   Mon, 30 May 2022 13:22:22 +0000
+Subject: [PATCH 1/2] ASoC: da7219: Fix pole orientation detection on certain
+ headsets
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        Support Opensource <DLG-Support.Opensource@lm.renesas.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7253d793-1107-4905-d7a9-08da423f6ed0
+X-MS-TrafficTypeDiagnostic: AM0PR10MB2833:EE_
+X-Microsoft-Antispam-PRVS: <AM0PR10MB283397B5C951A49D0005596CA7DD9@AM0PR10MB2833.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 2
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: maFO8AoOl8J3f0+wKnQ80cxPaDWyuHi3jAyZKEM6aRSagia5UBjteYCeSG/fCWxhkH14vxenrxWPXIvfS/Nklx0WHEt2oW0rfMUGXApNJ9/hX8ReU5JYz1+K3vItOeV8MCqd5qBoAwo0hWv1Z1UJQ9E3MXwZvV948G490NzQcd5xwCBkGzhVBCW9WbPRZBKdiPHqWwy+mnKN7NMpqTrwF2aqeekQbxn0XndVbwKN9kMNLx6Cr1a6bHIdQDCLk0fTNRQaJhhjeb17Bt/NtGzG7Kg28HAv/NwdFw6iDF+u7XW8n9Xz+7fZWT1Ldbifl5ZuPDyybdRgBVhE1PrZh6A5TYp0YLXWX5+YfBNX97+9xSpSfLs0gppPSAn5AJHkvMDAeq+vCfHKc/bnra4COE5v/x0pofYUoKW9QbOHP0heaf5oZthteEuiNERWTipkZzxc7ypvIvAl1HqldaFTRs4DUZwab09d4Wi8jNUn3p71O1SHUpG8BLZxFKEZvvoJvFzZcRNbQeMzfUt44lxlMxhLH64Dr8yM6nake8MfhSTDxg9I/+aUYc7X3o/kI3oiOi4ukT3XXIyDE61nQHaVwJYIMD4xdrQlJE8OAFbgnM8TaOjTai+BvfuroFc7tztl5OQch29O+NbSuMsWM1jDhD8zm601jPh1Uke912GeVuvVUFkGf6IDiAgXPuh1tj6ac6gmFnt41471oboLguID74Z1iTuweu2atZ72IRnP9oEGLBOUpBBBEbLvgJO5n2n7pyyH
+X-Forefront-Antispam-Report: CIP:193.240.239.45;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mailrelay1.diasemi.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(136003)(346002)(376002)(396003)(39860400002)(40470700004)(46966006)(36840700001)(42882007)(42186006)(54906003)(70586007)(70206006)(110136005)(316002)(8936002)(186003)(336012)(82740400003)(5660300002)(40480700001)(2616005)(2906002)(508600001)(81166007)(6266002)(83380400001)(83170400001)(36860700001)(40460700003)(26005)(41300700001)(356005)(47076005)(82310400005)(4326008)(8676002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: diasemi.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 13:22:23.5118
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7253d793-1107-4905-d7a9-08da423f6ed0
+X-MS-Exchange-CrossTenant-Id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=511e3c0e-ee96-486e-a2ec-e272ffa37b7c;Ip=[193.240.239.45];Helo=[mailrelay1.diasemi.com]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR02FT103.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB2833
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+It has been recently found that certain 'active' headsets can
+be mis-detected as OMTP instead of CTIA, causing obvious issus
+with audio quality. This relates to increased resistances which
+negatively impacts the pole detection circuitry within the device.
 
-[ Upstream commit 03cbbd7c2f5ee288f648f4aeedc765a181188553 ]
+To counter this, ground switches on both headphone channels are
+available to enable/disable and these allow for the detection
+process to operate as intended, even with active headsets. This
+commit adds control of the ground switches to the AAD logic.
 
-During stress I/O tests with 500+ vports, hard LOCKUP call traces are
-observed.
-
-CPU A:
- native_queued_spin_lock_slowpath+0x192
- _raw_spin_lock_irqsave+0x32
- lpfc_handle_fcp_err+0x4c6
- lpfc_fcp_io_cmd_wqe_cmpl+0x964
- lpfc_sli4_fp_handle_cqe+0x266
- __lpfc_sli4_process_cq+0x105
- __lpfc_sli4_hba_process_cq+0x3c
- lpfc_cq_poll_hdler+0x16
- irq_poll_softirq+0x76
- __softirqentry_text_start+0xe4
- irq_exit+0xf7
- do_IRQ+0x7f
-
-CPU B:
- native_queued_spin_lock_slowpath+0x5b
- _raw_spin_lock+0x1c
- lpfc_abort_handler+0x13e
- scmd_eh_abort_handler+0x85
- process_one_work+0x1a7
- worker_thread+0x30
- kthread+0x112
- ret_from_fork+0x1f
-
-Diagram of lockup:
-
-CPUA                            CPUB
-----                            ----
-lpfc_cmd->buf_lock
-                            phba->hbalock
-                            lpfc_cmd->buf_lock
-phba->hbalock
-
-Fix by reordering the taking of the lpfc_cmd->buf_lock and phba->hbalock in
-lpfc_abort_handler routine so that it tries to take the lpfc_cmd->buf_lock
-first before phba->hbalock.
-
-Link: https://lore.kernel.org/r/20220412222008.126521-7-jsmart2021@gmail.com
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Adam Thomson <DLG-Adam.Thomson.Opensource@dm.renesas.com>
 ---
- drivers/scsi/lpfc/lpfc_scsi.c | 33 +++++++++++++++------------------
- 1 file changed, 15 insertions(+), 18 deletions(-)
+ sound/soc/codecs/da7219-aad.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
-index ba9dbb51b75f..c4fa7d68fe03 100644
---- a/drivers/scsi/lpfc/lpfc_scsi.c
-+++ b/drivers/scsi/lpfc/lpfc_scsi.c
-@@ -5864,25 +5864,25 @@ lpfc_abort_handler(struct scsi_cmnd *cmnd)
- 	if (!lpfc_cmd)
- 		return ret;
+diff --git a/sound/soc/codecs/da7219-aad.c b/sound/soc/codecs/da7219-aad.c
+index 7998fdd3b378..e7d8c33e02cc 100644
+--- a/sound/soc/codecs/da7219-aad.c
++++ b/sound/soc/codecs/da7219-aad.c
+@@ -60,6 +60,9 @@ static void da7219_aad_btn_det_work(struct work_struct *work)
+ 	bool micbias_up = false;
+ 	int retries = 0;
  
--	spin_lock_irqsave(&phba->hbalock, flags);
-+	/* Guard against IO completion being called at same time */
-+	spin_lock_irqsave(&lpfc_cmd->buf_lock, flags);
++	/* Disable ground switch */
++	snd_soc_component_update_bits(component, 0xFB, 0x01, 0x00);
 +
-+	spin_lock(&phba->hbalock);
- 	/* driver queued commands are in process of being flushed */
- 	if (phba->hba_flag & HBA_IOQ_FLUSH) {
- 		lpfc_printf_vlog(vport, KERN_WARNING, LOG_FCP,
- 			"3168 SCSI Layer abort requested I/O has been "
- 			"flushed by LLD.\n");
- 		ret = FAILED;
--		goto out_unlock;
-+		goto out_unlock_hba;
+ 	/* Drive headphones/lineout */
+ 	snd_soc_component_update_bits(component, DA7219_HP_L_CTRL,
+ 			    DA7219_HP_L_AMP_OE_MASK,
+@@ -153,6 +156,9 @@ static void da7219_aad_hptest_work(struct work_struct *work)
+ 		tonegen_freq_hptest = cpu_to_le16(DA7219_AAD_HPTEST_RAMP_FREQ_INT_OSC);
  	}
  
--	/* Guard against IO completion being called at same time */
--	spin_lock(&lpfc_cmd->buf_lock);
--
- 	if (!lpfc_cmd->pCmd) {
- 		lpfc_printf_vlog(vport, KERN_WARNING, LOG_FCP,
- 			 "2873 SCSI Layer I/O Abort Request IO CMPL Status "
- 			 "x%x ID %d LUN %llu\n",
- 			 SUCCESS, cmnd->device->id, cmnd->device->lun);
--		goto out_unlock_buf;
-+		goto out_unlock_hba;
- 	}
++	/* Disable ground switch */
++	snd_soc_component_update_bits(component, 0xFB, 0x01, 0x00);
++
+ 	/* Ensure gain ramping at fastest rate */
+ 	gain_ramp_ctrl = snd_soc_component_read(component, DA7219_GAIN_RAMP_CTRL);
+ 	snd_soc_component_write(component, DA7219_GAIN_RAMP_CTRL, DA7219_GAIN_RAMP_RATE_X8);
+@@ -444,6 +450,9 @@ static irqreturn_t da7219_aad_irq_thread(int irq, void *data)
+ 			snd_soc_dapm_disable_pin(dapm, "Mic Bias");
+ 			snd_soc_dapm_sync(dapm);
  
- 	iocb = &lpfc_cmd->cur_iocbq;
-@@ -5890,7 +5890,7 @@ lpfc_abort_handler(struct scsi_cmnd *cmnd)
- 		pring_s4 = phba->sli4_hba.hdwq[iocb->hba_wqidx].io_wq->pring;
- 		if (!pring_s4) {
- 			ret = FAILED;
--			goto out_unlock_buf;
-+			goto out_unlock_hba;
- 		}
- 		spin_lock(&pring_s4->ring_lock);
- 	}
-@@ -5923,8 +5923,8 @@ lpfc_abort_handler(struct scsi_cmnd *cmnd)
- 			 "3389 SCSI Layer I/O Abort Request is pending\n");
- 		if (phba->sli_rev == LPFC_SLI_REV4)
- 			spin_unlock(&pring_s4->ring_lock);
--		spin_unlock(&lpfc_cmd->buf_lock);
--		spin_unlock_irqrestore(&phba->hbalock, flags);
-+		spin_unlock(&phba->hbalock);
-+		spin_unlock_irqrestore(&lpfc_cmd->buf_lock, flags);
- 		goto wait_for_cmpl;
- 	}
++			/* Enable ground switch */
++			snd_soc_component_update_bits(component, 0xFB, 0x01, 0x01);
++
+ 			/* Cancel any pending work */
+ 			cancel_work_sync(&da7219_aad->btn_det_work);
+ 			cancel_work_sync(&da7219_aad->hptest_work);
+@@ -899,6 +908,9 @@ int da7219_aad_init(struct snd_soc_component *component)
+ 	snd_soc_component_update_bits(component, DA7219_ACCDET_CONFIG_1,
+ 			    DA7219_BUTTON_CONFIG_MASK, 0);
  
-@@ -5945,15 +5945,13 @@ lpfc_abort_handler(struct scsi_cmnd *cmnd)
- 	if (ret_val != IOCB_SUCCESS) {
- 		/* Indicate the IO is not being aborted by the driver. */
- 		lpfc_cmd->waitq = NULL;
--		spin_unlock(&lpfc_cmd->buf_lock);
--		spin_unlock_irqrestore(&phba->hbalock, flags);
- 		ret = FAILED;
--		goto out;
-+		goto out_unlock_hba;
- 	}
++	/* Enable ground switch */
++	snd_soc_component_update_bits(component, 0xFB, 0x01, 0x01);
++
+ 	INIT_WORK(&da7219_aad->btn_det_work, da7219_aad_btn_det_work);
+ 	INIT_WORK(&da7219_aad->hptest_work, da7219_aad_hptest_work);
  
- 	/* no longer need the lock after this point */
--	spin_unlock(&lpfc_cmd->buf_lock);
--	spin_unlock_irqrestore(&phba->hbalock, flags);
-+	spin_unlock(&phba->hbalock);
-+	spin_unlock_irqrestore(&lpfc_cmd->buf_lock, flags);
- 
- 	if (phba->cfg_poll & DISABLE_FCP_RING_INT)
- 		lpfc_sli_handle_fast_ring_event(phba,
-@@ -5988,10 +5986,9 @@ lpfc_abort_handler(struct scsi_cmnd *cmnd)
- out_unlock_ring:
- 	if (phba->sli_rev == LPFC_SLI_REV4)
- 		spin_unlock(&pring_s4->ring_lock);
--out_unlock_buf:
--	spin_unlock(&lpfc_cmd->buf_lock);
--out_unlock:
--	spin_unlock_irqrestore(&phba->hbalock, flags);
-+out_unlock_hba:
-+	spin_unlock(&phba->hbalock);
-+	spin_unlock_irqrestore(&lpfc_cmd->buf_lock, flags);
- out:
- 	lpfc_printf_vlog(vport, KERN_WARNING, LOG_FCP,
- 			 "0749 SCSI Layer I/O Abort Request Status x%x ID %d "
 -- 
-2.35.1
+2.17.1
 

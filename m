@@ -2,240 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E41537909
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5A753791A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234755AbiE3KLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
+        id S235144AbiE3KNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235144AbiE3KLr (ORCPT
+        with ESMTP id S231240AbiE3KNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:11:47 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1517D65DF;
-        Mon, 30 May 2022 03:11:47 -0700 (PDT)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U8oqmn005241;
-        Mon, 30 May 2022 06:11:43 -0400
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2108.outbound.protection.outlook.com [104.47.70.108])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3gbdk54upn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 06:11:42 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cR4ePtfYYT2lVNRfkZ6c5zKCSv8SovcXZIEed7EMOJ+0XLODFB2MylquPUtoe2ER6hLIxHBUn3pnU86LcNjeZ0CR2Z6aVkYrfbuJNcThIfRoO+ICHp4BFWEpXv3zacS+Ycy0GR8pwykKMypEzJtTRgoDa2mUaasZ4w0nYOAupzEyA3chjAvU3lZ0Tmt6dc3uX41wnnrsLrsSLEz9jLbHOb3pmcHpfQMs1ZQb5B/GSpyA3413nuzl4rIadzeVvPApinQkflkctW1KmPnPMPcUgwC3gQ5hauJapneY1z/kz+ElX8YC7qvO71pWrPaUd84CYMtwVZXA6GEAk2nGUmlnmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fLI9BVR5+DMEZm+tZn2Juhp1L2uE7AB0jYMaejlssCA=;
- b=HCkGe0/a0ar1k60yYgOHXTvWBYbq6mu8K9HPafm/DpfbQGqyAEW2T6MQkGhnPHdtG8VQMoUvCHQoTbYQSjS4XEiHa1fUvRQJDoWY0tX8tkbWHVaJxzjP42QfS6eFP9nMEoKOnic4uvSJLH4AgSUfFXjbEj7x/uI1ddcgUJndHrIt5BMrjpoNM5ThfbfTeTQ0pmqcLPQPUmXsL23YcVFozseMFZE9JuqTim63naegQ5CAZx3uv2W0UqN2+82/NsvYzJ2VLResJUS6Nx/Yf66J26ppeyL9kQ4roGCks0E8VOOCGk60vSzshWu5quUfMmO+0iEwFau0s2Qii/4AT3kRYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fLI9BVR5+DMEZm+tZn2Juhp1L2uE7AB0jYMaejlssCA=;
- b=dE+o3WP70fQEgqa2YOTje8iVfGnUb5DLUjwWlIFxKlqXyMy4QJRupNLrUkq7Ieo0xWeqqvrLkWNO+Jjj0ME8D7dUuODoVPt+aX3ZpqDUdBGqxhLxsMWpULduG3WhXF2Pgi0TukFq3oTUDa/QkuBKBCpIF0aQfmBaMp+0ahQwttE=
-Received: from SJ0PR03MB6253.namprd03.prod.outlook.com (2603:10b6:a03:3b8::19)
- by CY4PR03MB2920.namprd03.prod.outlook.com (2603:10b6:903:130::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.17; Mon, 30 May
- 2022 10:11:40 +0000
-Received: from SJ0PR03MB6253.namprd03.prod.outlook.com
- ([fe80::b188:7eab:15fc:aa39]) by SJ0PR03MB6253.namprd03.prod.outlook.com
- ([fe80::b188:7eab:15fc:aa39%5]) with mapi id 15.20.5293.019; Mon, 30 May 2022
- 10:11:40 +0000
-From:   "Hennerich, Michael" <Michael.Hennerich@analog.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-CC:     =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 4/4] Input: adp5588-keys - do not explicitly set device as
- wakeup source
-Thread-Topic: [PATCH 4/4] Input: adp5588-keys - do not explicitly set device
- as wakeup source
-Thread-Index: AQHYck9UeYaGFflcA0CXsbBmXOprFq03NpJw
-Date:   Mon, 30 May 2022 10:11:40 +0000
-Message-ID: <SJ0PR03MB6253063976AAAB80769049918EDD9@SJ0PR03MB6253.namprd03.prod.outlook.com>
-References: <20220528045631.289821-1-dmitry.torokhov@gmail.com>
- <20220528045631.289821-4-dmitry.torokhov@gmail.com>
-In-Reply-To: <20220528045631.289821-4-dmitry.torokhov@gmail.com>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?iso-8859-1?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcbWhlbm5lcm?=
- =?iso-8859-1?Q?lcYXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZi?=
- =?iso-8859-1?Q?ODRiYTI5ZTM1Ylxtc2dzXG1zZy1lNDEwZjc3My1lMDAwLTExZWMtOTJhMS?=
- =?iso-8859-1?Q?00ODg5ZTc3Y2RkZWZcYW1lLXRlc3RcZTQxMGY3NzUtZTAwMC0xMWVjLTky?=
- =?iso-8859-1?Q?YTEtNDg4OWU3N2NkZGVmYm9keS50eHQiIHN6PSIyMTE3IiB0PSIxMzI5OD?=
- =?iso-8859-1?Q?M3OTA5ODMwNDcxMTkiIGg9IkRVVGFlQ3FIRGJmUHl5em5USkF0dmxwL1Vp?=
- =?iso-8859-1?Q?az0iIGlkPSIiIGJsPSIwIiBibz0iMSIgY2k9ImNBQUFBRVJIVTFSU1JVRk?=
- =?iso-8859-1?Q?5DZ1VBQUVvQ0FBRFA1MjJtRFhUWUFUYm92YjVZNXorak51aTl2bGpuUDZN?=
- =?iso-8859-1?Q?REFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFIQUFBQURhQVFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFFQUFRQUJBQUFBSnJqSklRQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBSjRBQUFCaEFHUUFhUUJmQUhNQVpRQmpBSFVBY2dCbEFGOEFjQUJ5QU?=
- =?iso-8859-1?Q?c4QWFnQmxBR01BZEFCekFGOEFaZ0JoQUd3QWN3QmxBRjhBWmdCdkFITUFh?=
- =?iso-8859-1?Q?UUIwQUdrQWRnQmxBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUVBQUFBQUFBQUFBZ0FBQUFBQW5nQU?=
- =?iso-8859-1?Q?FBR0VBWkFCcEFGOEFjd0JsQUdNQWRRQnlBR1VBWHdCd0FISUFid0JxQUdV?=
- =?iso-8859-1?Q?QVl3QjBBSE1BWHdCMEFHa0FaUUJ5QURFQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FBQUFBQUNlQUFBQVlRQmtB?=
- =?iso-8859-1?Q?R2tBWHdCekFHVUFZd0IxQUhJQVpRQmZBSEFBY2dCdkFHb0FaUUJqQUhRQW?=
- =?iso-8859-1?Q?N3QmZBSFFBYVFCbEFISUFNZ0FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFBPT0iLz48L21ldGE+?=
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 711d6f15-b987-47ea-a7eb-08da4224ca37
-x-ms-traffictypediagnostic: CY4PR03MB2920:EE_
-x-microsoft-antispam-prvs: <CY4PR03MB29207E6B224156EAB84A54808EDD9@CY4PR03MB2920.namprd03.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tA0Ok5ZSd3mA6EIIUwkDmfaIJ3xm0IaKLyhgK6nM4uChN2ujN/RiSoEa95H2Hyno5MhD8Xbg2xwkUDRK9Kvlhw3y4xuiTlC6E+3FtDE0CduniiQ8NEfkAY5azon22+qYStk7kOkf+WXOZDHJwVZsIe+XpGHSAvT3w8iQLxfSvmFoZnYaHtYlEhTBLPv70okqqdwqJQ+8HqsleqJxfNe7GaZRcSldvd1cv1TqzZ8nNRPrfNW8L1q1yTnKr3jOXsyVD0o2BfKmJf17s5DWZfxMBNwTksn1MswojouUCaDGgxBf+1C6z7/GAJZ3FK+QOnBAJ+lS3tfL+Hy0+C0dkuejdN3oAnDn0RcAFDw68n3rmqswSI5lqZFtpECI/rWHmKJlO2+tjExnOE9WF6iEJ02OyKxXA5uvfsZene90wR40eES2Dz7ePkT0kNwB/9JRG31inUCoRrIVyuuJoeYguoAW8+hP6kpYHRCSLR5Nn9q6RhnXTqJoVPzZhhv+q1ftJdoPoKUGGaL5ASYTd8QG+yRLLQ99fVPxgDsEezfgU8uaMOiULUvBzwGqcT4YRRa+aZ7O8zXRnYv5mN7zIqa7H90PpthJpU307Sfv4VgSm2K6mt0YPbKXsELFPsQpbc/jZBa5yQ5b/nDfbQxb8u8iFDkR4J96c3j4BrwaRdtJPq6hEYcRDYfrMs3nCgg3/RREZebTioATHdJfE184wnEHEff88A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB6253.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(2906002)(71200400001)(64756008)(66476007)(66446008)(66556008)(4326008)(8676002)(316002)(76116006)(83380400001)(33656002)(5660300002)(53546011)(508600001)(38070700005)(122000001)(6506007)(55016003)(186003)(26005)(7696005)(86362001)(9686003)(8936002)(52536014)(54906003)(66574015)(6916009)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?6iM5rlvg5CbzI1Ggsq2+LihU+w8aaiODO8i5cINEC10vttvK5FIDAY6owB?=
- =?iso-8859-1?Q?WxORHhw0/VVArt15sOhh1UghAGbGKWV3ZwmI0xJ8yBlqF75dkfEMT/GwK/?=
- =?iso-8859-1?Q?ZcShMOL0rAjYNM3ukPzxkJsftj5DUkrv9xJG4YOz0I28B2oD+NZZW5JVTl?=
- =?iso-8859-1?Q?kOHNTIdaTtXqgn5C5e2ohcSRGB9BF3ohqyfI2U0kcIKCqBh+McXJf1xJC7?=
- =?iso-8859-1?Q?/SOJZlGp1e+g8hS2oYgGLOs9+4asprZUBez/HShA00jBD3rzvCUdkcUTOL?=
- =?iso-8859-1?Q?rd6uSXEI3/VlfpMtQSz+ylE4rKgxPl4JwV1sx5IWxAvemkrPGy1p3vPhDL?=
- =?iso-8859-1?Q?QtlkhEbDjLHo+Hd5Q9VyRA07owrcXYgZ+QQFMs0qxYuJcg/GwygnKeo72B?=
- =?iso-8859-1?Q?h70UDss1dkW2nQJAjAJlxqah598q+/LrVamCfsY4M6a+Wo/IiNK5tRiX5g?=
- =?iso-8859-1?Q?BzbHfFjojGJs1DyaRuMxCumGoybW+16KrUCCkj7bjYjyZpexffQhC8aGLJ?=
- =?iso-8859-1?Q?CzIoD/d5Hkxf/mw+Sq0OhT7vvFLdLpaJYAvE4P/MjlJjfOB7rvWx26kg38?=
- =?iso-8859-1?Q?yp2himcommb40D0SGxhFPIZk6+RsNW7QVVC5Fs8VNrS8VRsrFx+6xr/Cwe?=
- =?iso-8859-1?Q?qsf/UGn6PuCdl5vRm70YXdUeO+agilcOxvZ0YDbcqmEWSQMTkqUA/GTvZv?=
- =?iso-8859-1?Q?2/KOTZFWg9NzRn1soQDK2hPUdlt1AAA9wD5z94X4ktUT/n1/nQjgoWeims?=
- =?iso-8859-1?Q?pY4TAKsUeaINu2IpytDDkjCuisEJyJrOq9WWUiwwhkyTYxQ6QGBGyKbYz2?=
- =?iso-8859-1?Q?pP3+DHYlXatctFlbsf5PL2QorjSfbDO6hEla+oy79jh48Eptxbgmb066sQ?=
- =?iso-8859-1?Q?r36HctuNWV7jQtKADPrU2gaIOPQYcH/EiubtX+eUxH0H3dDYGI2EOMI3aH?=
- =?iso-8859-1?Q?mCJIT7Pde8P0TPyBEEQfDFXr5u+BbBG8267dSNdLEXonWvQFMMnvWDyL/j?=
- =?iso-8859-1?Q?arbsYd/OqKRwK1MGKwV8C59u1W8ZLCW98o4vYW8w54pMvhMd6OAC6Tux0g?=
- =?iso-8859-1?Q?S5FKRbmMS+Z5wZ5xFjTvpSxzE5wfobpr9sGGbp4lPZF94X+gSGL5Tbp/al?=
- =?iso-8859-1?Q?WKuDObxHRfY41hX8GL+stgtyl9k7kI7EW37REzTf/qQKF+brDP5iBqmkNU?=
- =?iso-8859-1?Q?wu5/FFtCifDzj1epbEX1w/ZGGXntJ2a2GT2pxIq1khPEsnIX3CuSTZj/x8?=
- =?iso-8859-1?Q?JkFZHtcV562+0AfGyZclKxnjdn4KyPUZj5fst5sS4nkUln1k7aqmELHql9?=
- =?iso-8859-1?Q?+KZgKTYHa6qjqIOrn8hoVYXSDcqpLZDXVefPHZcq2+tJ42iOca6aEHi9Mf?=
- =?iso-8859-1?Q?V/UhV/s+Sv4XyMGad5nAjrJkdXvI36W4qMxNAXjrBK1KD3tlJkxPCcA63J?=
- =?iso-8859-1?Q?Ep/qOAhI1LRECuUdQxFq7gyM00ND3mtpgNOhpKqVtt+FOIaTPl9wOECl76?=
- =?iso-8859-1?Q?liq0TjF1tmjgzggkByOzP1VGBX768GGIVjCtQ3Kuj1zasOqTeTYLJs+hQY?=
- =?iso-8859-1?Q?gB0btduzAK9pu9QRyQRduddoG4oaDSiqQPl44/pZFPDiry/Uww7L9s0WmG?=
- =?iso-8859-1?Q?gi0gJy0yGJIe3y/axz+i110+Pp/yQjUGdEJs57tnrGGUXWYfYUp6X6vsvF?=
- =?iso-8859-1?Q?zEIsyUbMF19wWwYtbre+2R3zAjKv4Hdl1pqUmWjdyg6yuMApBFMr+uOQwZ?=
- =?iso-8859-1?Q?wz2k8Mai9bnOKafVJ2K5xno9U/uYV5+bnE3fS61pxAgfW9RCYqsH183DC2?=
- =?iso-8859-1?Q?/vUpclm0WEEh4HVJf/cakzYM682s6NU=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 30 May 2022 06:13:01 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100D03EBB4;
+        Mon, 30 May 2022 03:12:59 -0700 (PDT)
+Received: from [192.168.1.107] ([37.4.249.170]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MsqMq-1ng8ps2W1Q-00t8kq; Mon, 30 May 2022 12:12:40 +0200
+Message-ID: <d7a5a0d8-5d27-548f-bc94-0e7d116cc3f2@i2se.com>
+Date:   Mon, 30 May 2022 12:12:39 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB6253.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 711d6f15-b987-47ea-a7eb-08da4224ca37
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2022 10:11:40.4935
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WQbQ9/bCOXnxu1+3eZtGOi1+zrbUd6juEPBE2LcLQMLtAws+sz57kCvrnStCEHtgnDPvqFwZTKy52MUe1wb68Nhfr838uZCNZGDRf7rv1f4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR03MB2920
-X-Proofpoint-GUID: AVy4UM2HyUdBJXalsnuhCS2qKGlwcVPE
-X-Proofpoint-ORIG-GUID: AVy4UM2HyUdBJXalsnuhCS2qKGlwcVPE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-30_03,2022-05-30_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 clxscore=1015 malwarescore=0 lowpriorityscore=0
- bulkscore=0 phishscore=0 adultscore=0 priorityscore=1501 impostorscore=0
- spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205300054
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/1] PCI: brcmstb: Fix regression regarding missing
+ PCIe linkup
+Content-Language: en-US
+To:     Cyril Brulebois <kibi@debian.org>,
+        Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, james.dutton@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220528224423.7017-1-jim2101024@gmail.com>
+ <20220528224423.7017-2-jim2101024@gmail.com>
+ <20220529011526.4lzuvkv5zclwntce@mraw.org>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20220529011526.4lzuvkv5zclwntce@mraw.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:X6zz3xruG0Mm0SMgqnOkGTso0yDamTe+KRXiTUlbqs5HZaqCveg
+ rzksIO55d/mQd5xz7K8MAXsHCwzaRwKa/OFnFAbtmhwFJ19Yd5DilErjXQqmuUGWSCN1tE6
+ +4FbPflYIzWXLaQKWxUzCOpdXObMENXC2FeVMub78d0K6lHXnFfCTmWg1Pu/NxhVdBA+doX
+ 5qJvXWtqnwsz7fzBjqVEw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LRdd73yRQww=:nG5PWsEl7zYYnqWa0BeYSj
+ +9vqf4ScijIgOrkgtCwd1QdQatG/Um7nxdC9iZ1xrl8IJ8lo5vVTtR6DI3Qz7SWHejT4TeJZz
+ 0FwbLSrQ+KrKDSvawm28lQBtvnIlHNx2A+1j0lMGwIc5YwUY45KPGKAVtrz4JQgsVnDQJ3vVS
+ fI2Sg6u6Tltvp74pXLmkw4uoF9LVrCOA/fYB7V4GILAtHUnhmYB94H9ot6W/+FB1Da0eqQ7Fy
+ 6kqBRqk7U2XY4nlustpfCGsFDW41w+QsVQj0CfhyEymBEAmRSOL+NW5s5HrgA0K9qEPKgj6h7
+ gAoo858DxJz2GUZy5ztS8RwkDLbFyLV8bArrCl6aSXXE+gG511TBTfQa0fnKYpHKcsHwqHQrq
+ q1zjYSVpI8+Wxl+p6gQQgvXUJJ2uSC+M448yg0Q+s8LpHra8NZFyuOjBLwfstt0EG8SdUKRCO
+ 4PX9IR6O8jWSEmSyv5gFCymRh6zUal9WdR/8bMOHwB0LXIEostu+LNgU71p4Dge6oOanW8t00
+ e6ufB+f8yfadvu1SSAKAw7rFU1pvdqzvzgug6CVln2EDV+VEtyhXN7zuLOZ2bmdRfNwyCZjdG
+ 5sW17bbXU1avWkxvon2X845xzvctSOu59I1xgditqUnv/TOW07oLdbiGgP4kWt7YIe6kunfsL
+ +0Wl9xLRHaOTXCDCl+b8cj1LXZ6BPXROSMgDjkzQg+//LAgNufJykro3OjM3Cq1okUnAfFp4q
+ WXweEMiTvZWuYQXuA9pvYkjv/3R9duySR9VtBWYRaAF1Un4QcZnX4yIqRKA=
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Cyril,
 
+Am 29.05.22 um 03:15 schrieb Cyril Brulebois:
+> Hi Jim,
+>
+> Jim Quinlan <jim2101024@gmail.com> (2022-05-28):
+>> commit 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
+>>
+>> introduced a regression on the PCIe RPi4 Compute Module.  If the PCIe
+>> root port DT node described in [2] was missing, no linkup would be attempted,
+>> and subsequent accesses would cause a panic because this particular PCIe HW
+>> causes a CPU abort on illegal accesses (instead of returning 0xffffffff).
+>>
+>> We fix this by allowing the DT root port node to be missing, as it behaved
+>> before the original patchset messed things up.
+>>
+>> In addition, two small changes are made:
+>>
+>>    1. Having pci_subdev_regulators_remove_bus() call
+>>       regulator_bulk_free() in addtion to regulator_bulk_disable().
+>>    2. Having brcm_pcie_add_bus() return 0 if there is an
+>>       error in calling pci_subdev_regulators_add_bus().
+>>       Instead, we dev_err() and turn on our refusal mode instead.
+>>
+>> It would be best if this commit were tested by someone with a Rpi CM4
+>> platform, as that is how the regression was found.  I have only emulated
+>> the problem and fix on different platform.
+> Testing is less flawless than it was with the earlier version, but this
+> might be related to the fact master has moved a lot since then (from
+> v5.18-rcX to open merge window).
+>
+> Overall, it's still a net win over the status quo (broken boot).
+>
+>
+> Applying your patch on 664a393a2663a0f62fc1b18157ccae33dcdbb8c8 and
+> performing cold boots is mostly fine:
+>   - without anything on the PCIe slot;
+>   - with a PCIe→quad-USB extension board, a USB keyboard and a USB stick
+>     (both work fine).
+>
+> However, with an empty PCIe slot, I'm no longer able to perform the
+> following (which was rock solid, and has been used in all my testing up
+> to now):
+>   - boot the exact same Debian stable image as before (running v5.10.y if
+>     that matters);
+>   - deploy the patched kernel;
+>   - enable serial console;
+>   - reboot into the patched kernel.
+>
+> PCI-related messages, a call trace, and broken storage:
+>
+>      [    3.425331] brcm-pcie fd500000.pcie: host bridge /scb/pcie@7d500000 ranges:
+>      [    3.425353] brcm-pcie fd500000.pcie:   No bus range found for /scb/pcie@7d500000, using [bus 00-ff]
+>      [    3.425388] brcm-pcie fd500000.pcie:      MEM 0x0600000000..0x0603ffffff -> 0x00f8000000
+>      [    3.425420] brcm-pcie fd500000.pcie:   IB MEM 0x0000000000..0x003fffffff -> 0x0400000000
+>      [    3.426229] brcm-pcie fd500000.pcie: PCI host bridge to bus 0000:00
+>      [    3.426243] pci_bus 0000:00: root bus resource [bus 00-ff]
+>      [    3.426255] pci_bus 0000:00: root bus resource [mem 0x600000000-0x603ffffff] (bus address [0xf8000000-0xfbffffff])
+>      [    3.426303] pci 0000:00:00.0: [14e4:2711] type 01 class 0x060400
+>      [    3.426398] pci 0000:00:00.0: PME# supported from D0 D3hot
+>      [    3.428797] pci 0000:00:00.0: bridge configuration invalid ([bus 00-00]), reconfiguring
+>      [    3.745909] brcm-pcie fd500000.pcie: link down
+>      [    3.747915] pci_bus 0000:01: busn_res: [bus 01-ff] end is updated to 01
+>      [    3.747944] pci 0000:00:00.0: PCI bridge to [bus 01]
+>      [    3.748294] pcieport 0000:00:00.0: PME: Signaling with IRQ 23
+>      [    3.748691] pcieport 0000:00:00.0: AER: enabled with IRQ 23
+>      [    3.749201] pci_bus 0000:01: busn_res: [bus 01] is released
+>      [    3.749462] pci_bus 0000:00: busn_res: [bus 00-ff] is released
+>      …
+>      [    5.617308] irq 35: nobody cared (try booting with the "irqpoll" option)
+>      [    5.617335] CPU: 0 PID: 127 Comm: systemd-udevd Not tainted 5.18.0+ #1
+>      [    5.617350] Hardware name: Raspberry Pi Compute Module 4 Rev 1.0 (DT)
+>      [    5.617358] Call trace:
+>      [    5.617362]  dump_backtrace+0xc0/0x130
+>      [    5.617386]  show_stack+0x24/0x70
+>      [    5.617396]  dump_stack_lvl+0x68/0x84
+>      [    5.617415]  dump_stack+0x18/0x34
+>      [    5.617426]  __report_bad_irq+0x54/0x16c
+>      [    5.617436]  note_interrupt+0x324/0x41c
+>      [    5.617445]  handle_irq_event+0xc0/0x180
+>      [    5.617460]  handle_fasteoi_irq+0xc8/0x1fc
+>      [    5.617468]  generic_handle_domain_irq+0x38/0x50
+>      [    5.617481]  gic_handle_irq+0x68/0xa0
+>      [    5.617489]  call_on_irq_stack+0x2c/0x60
+>      [    5.617500]  do_interrupt_handler+0x88/0x90
+>      [    5.617511]  el0_interrupt+0x58/0x124
+>      [    5.617526]  __el0_irq_handler_common+0x18/0x2c
+>      [    5.617538]  el0t_64_irq_handler+0x10/0x20
+>      [    5.617549]  el0t_64_irq+0x18c/0x190
+>      [    5.617558] handlers:
+>      [    5.617563] [<(____ptrval____)>] sdhci_irq [sdhci] threaded [<(____ptrval____)>] sdhci_thread_irq [sdhci]
+>      [    5.617613] Disabling IRQ #35
+>      …
+>      [   15.581894] mmc0: Timeout waiting for hardware cmd interrupt.
+>      [   15.581914] mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+>      [   15.581920] mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00001002
+>      [   15.581931] mmc0: sdhci: Blk size:  0x00000000 | Blk cnt:  0x00000000
+>      [   15.581937] mmc0: sdhci: Argument:  0x00000c00 | Trn mode: 0x00000000
+>      [   15.581944] mmc0: sdhci: Present:   0x1fff0000 | Host ctl: 0x00000001
+>      [   15.581951] mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000080
+>      [   15.581957] mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00007d07
+>      [   15.581964] mmc0: sdhci: Timeout:   0x00000000 | Int stat: 0x00018000
+>      [   15.581971] mmc0: sdhci: Int enab:  0x00ff1003 | Sig enab: 0x00ff1003
+>      [   15.581976] mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000001
+>      [   15.581982] mmc0: sdhci: Caps:      0x45ee6432 | Caps_1:   0x0000a525
+>      [   15.581988] mmc0: sdhci: Cmd:       0x0000341a | Max curr: 0x00080008
+>      [   15.581996] mmc0: sdhci: Resp[0]:   0x00000000 | Resp[1]:  0x00000000
+>      [   15.582001] mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+>      [   15.582005] mmc0: sdhci: Host ctl2: 0x00000000
+>      [   15.582011] mmc0: sdhci: ADMA Err:  0x00000000 | ADMA Ptr: 0x00000000
+>      [   15.582016] mmc0: sdhci: ============================================
+>
+> This last part gets repeated over and over, and storage (external SD
+> card) never comes up. I can share fuller logs if that's desirable. I can
+> also test booting with irqpoll if that's desirable. Or anything else that
+> might help.
+>
+>
+> I did check that applying the same patch on top of the v5.18 tag gives
+> good results (cold boots and reboots are fine, with or without an empty
+> PCIe slot, as that was the case during earlier test sessions), so I'd
+> guess something changed since then, and makes reboots more brittle than
+> they used to be.
 
-> -----Original Message-----
-> From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Sent: Samstag, 28. Mai 2022 06:57
-> To: Hennerich, Michael <Michael.Hennerich@analog.com>
-> Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>; linux-
-> input@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: [PATCH 4/4] Input: adp5588-keys - do not explicitly set device a=
-s
-> wakeup source
->=20
-> [External]
->=20
-> I2C core will set up device as a wakeup source and will configure interru=
-pt as a
-> wakeup interrupt if client is created with I2C_CLIENT_WAKE flag. Let's re=
-ly on
-> this facility and to not unconditionally set up the device as wakeup devi=
-ce in the
-> driver.
->=20
+i think we should better trust the results based on the v5.18 tag. 
+During the merge window, regressions from other subsystems are possible.
 
+Best regards
 
-Looks good! Thanks for the cleanup!
-
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-
-Acked-by: Michael Hennerich <michael.hennerich@analog.com>
-
-
-> ---
->  drivers/input/keyboard/adp5588-keys.c | 8 --------
->  1 file changed, 8 deletions(-)
->=20
-> diff --git a/drivers/input/keyboard/adp5588-keys.c
-> b/drivers/input/keyboard/adp5588-keys.c
-> index df84a2998ed2..2a274240facb 100644
-> --- a/drivers/input/keyboard/adp5588-keys.c
-> +++ b/drivers/input/keyboard/adp5588-keys.c
-> @@ -589,8 +589,6 @@ static int adp5588_probe(struct i2c_client *client,
->  	if (error)
->  		return error;
->=20
-> -	device_init_wakeup(&client->dev, 1);
-> -
->  	dev_info(&client->dev, "Rev.%d keypad, irq %d\n", revid, client->irq);
->  	return 0;
->  }
-> @@ -609,9 +607,6 @@ static int __maybe_unused adp5588_suspend(struct
-> device *dev)
->=20
->  	disable_irq(client->irq);
->=20
-> -	if (device_may_wakeup(&client->dev))
-> -		enable_irq_wake(client->irq);
-> -
->  	return 0;
->  }
->=20
-> @@ -619,9 +614,6 @@ static int __maybe_unused adp5588_resume(struct
-> device *dev)  {
->  	struct i2c_client *client =3D to_i2c_client(dev);
->=20
-> -	if (device_may_wakeup(&client->dev))
-> -		disable_irq_wake(client->irq);
-> -
->  	enable_irq(client->irq);
->=20
->  	return 0;
-> --
-> 2.36.1.124.g0e6072fb45-goog
-
+>
+> I can also check applying the v1 patch on top of master and compare
+> results, to give a different perspective.
+>
+> But I'd also be happy to get some directions as to which test(s) would
+> be most beneficial, which would help me cut down on combinatorics.
+>
+>
+> Cheers,
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

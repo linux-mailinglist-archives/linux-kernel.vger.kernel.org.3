@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D187E537930
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 878BF537934
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235226AbiE3Kiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
+        id S235247AbiE3Ki7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiE3Kiv (ORCPT
+        with ESMTP id S233486AbiE3Kiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 30 May 2022 06:38:51 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D7D6B020;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90BC6B024;
         Mon, 30 May 2022 03:38:50 -0700 (PDT)
-Date:   Mon, 30 May 2022 10:38:46 -0000
+Date:   Mon, 30 May 2022 10:38:47 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653907127;
+        s=2020; t=1653907128;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rnzHGAnhOyq2k09aaH0EESq2qgJyhDeir+FLHc2J8To=;
-        b=r8LDmN4TrWj7KiVPzXDuBSvMtpKxriYtsnG0nCoYQQIYl6y85CFFb9g1fjcrz97+6rwTS8
-        TQ0MLgwQR9PhVLJIp3xtQqqOCpnAZrE5pjx8X6uFSRl7q+0NymbM332qQFIR28wwyERwWT
-        aBe1ZysQGCbWVZDPTT4g09C9yFEuMKUQqeZRbSypxkM/QQMFqLiHw+5vU88l60rcq4RSsT
-        brz+Nbm9UJk8MeU+tdVekrmE64/4y78Y+wOVESUcrf70qK0sSk8O0bI8BCXnXAGMR68Zef
-        1h4E2yiRhOa+0fZjgGvFQ2u4e7S/hJiS6fCehAIRFAhTLtHy9JePdVxNR4gjgw==
+        bh=ufDnFMnnXBqzc5K3MvijCT7r3uQmHklKS0W/nXF0apA=;
+        b=eKCsbOTSBFO3tNIIUqGu0TgSqb16bl9Azav5AsnQpcV7M++y7nL8f7AWmUICSC+H7wWZqX
+        jbxlnKCu6Pw6ySZnwRvmRyGqXm2tq0cZHTom/JsiZ0LABexsF+P2b1VEvKSgPnd88oTe5e
+        9Lg4sAxQpl1Vrj/H4d2zr5l0AlYGSWvrw+7kygr6eBerv/9I5WQPypPhDt1+i48EGpHarX
+        HxsEeuO0uBQDEz1tTHmMMvumLnDOhpTA0EP2JW21tp6qALS0E7HkbuAwG4m6J+QfHA+Pnu
+        SON8/pqexro1A+Uw+kNOxTqDl/Gt0cYMkWTf0gXRE8kRqvZaUTNxewRAqf/36g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653907127;
+        s=2020e; t=1653907128;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rnzHGAnhOyq2k09aaH0EESq2qgJyhDeir+FLHc2J8To=;
-        b=9Tb8qO3eEK/6INM3DhLY9XuV1dKKynFSBjbuMbM02ZkPhhnjria51iKoXARUK9E/3t4b6N
-        8ZE4Um6J9ZuyhCDA==
-From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
+        bh=ufDnFMnnXBqzc5K3MvijCT7r3uQmHklKS0W/nXF0apA=;
+        b=XMJDFjPTforWFbcukIdOfeoLkQe405AmjyghiTNjVDb2HHjqlx9Sy2vyzFyas7J8lzV7PN
+        pR/t0LzEHQAwPmCQ==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/urgent] x86/extable: Annotate ex_handler_msr_mce() as a
- dead end
-Cc:     Borislav Petkov <bp@suse.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: objtool/urgent] context_tracking: Always inline empty stubs
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220520192729.23969-1-bp@alien8.de>
-References: <20220520192729.23969-1-bp@alien8.de>
+In-Reply-To: <20220526105958.134113388@infradead.org>
+References: <20220526105958.134113388@infradead.org>
 MIME-Version: 1.0
-Message-ID: <165390712655.4207.8607067039695969119.tip-bot2@tip-bot2>
+Message-ID: <165390712760.4207.5469965396434048789.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,56 +67,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/urgent branch of tip:
 
-Commit-ID:     2028a255f4df3af9e759f01f958d3237f825f256
-Gitweb:        https://git.kernel.org/tip/2028a255f4df3af9e759f01f958d3237f825f256
-Author:        Borislav Petkov <bp@suse.de>
-AuthorDate:    Fri, 20 May 2022 21:27:29 +02:00
+Commit-ID:     620f8d3bd3d5e82dff8cc591c831827d4beeae2e
+Gitweb:        https://git.kernel.org/tip/620f8d3bd3d5e82dff8cc591c831827d4beeae2e
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Sat, 07 May 2022 13:35:37 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 27 May 2022 12:34:45 +02:00
+CommitterDate: Fri, 27 May 2022 12:34:44 +02:00
 
-x86/extable: Annotate ex_handler_msr_mce() as a dead end
+context_tracking: Always inline empty stubs
 
-Fix
+Because GCC is seriously challenged..
 
-  vmlinux.o: warning: objtool: fixup_exception+0x2d6: unreachable instruction
+vmlinux.o: warning: objtool: enter_from_user_mode+0x85: call to context_tracking_enabled() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x8f: call to context_tracking_enabled() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x85: call to context_tracking_enabled() leaves .noinstr.text section
+vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x85: call to context_tracking_enabled() leaves .noinstr.text section
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220520192729.23969-1-bp@alien8.de
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Link: https://lkml.kernel.org/r/20220526105958.134113388@infradead.org
 ---
- arch/x86/include/asm/extable.h | 8 ++++++--
- tools/objtool/check.c          | 1 +
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ include/linux/context_tracking_state.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/include/asm/extable.h b/arch/x86/include/asm/extable.h
-index 155c991..eeed395 100644
---- a/arch/x86/include/asm/extable.h
-+++ b/arch/x86/include/asm/extable.h
-@@ -42,9 +42,13 @@ extern int ex_get_fixup_type(unsigned long ip);
- extern void early_fixup_exception(struct pt_regs *regs, int trapnr);
- 
- #ifdef CONFIG_X86_MCE
--extern void ex_handler_msr_mce(struct pt_regs *regs, bool wrmsr);
-+extern void __noreturn ex_handler_msr_mce(struct pt_regs *regs, bool wrmsr);
+diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
+index 65a60d3..ae1e63e 100644
+--- a/include/linux/context_tracking_state.h
++++ b/include/linux/context_tracking_state.h
+@@ -46,10 +46,10 @@ static __always_inline bool context_tracking_in_user(void)
+ 	return __this_cpu_read(context_tracking.state) == CONTEXT_USER;
+ }
  #else
--static inline void ex_handler_msr_mce(struct pt_regs *regs, bool wrmsr) { }
-+static inline void __noreturn ex_handler_msr_mce(struct pt_regs *regs, bool wrmsr)
-+{
-+	for (;;)
-+		cpu_relax();
-+}
+-static inline bool context_tracking_in_user(void) { return false; }
+-static inline bool context_tracking_enabled(void) { return false; }
+-static inline bool context_tracking_enabled_cpu(int cpu) { return false; }
+-static inline bool context_tracking_enabled_this_cpu(void) { return false; }
++static __always_inline bool context_tracking_in_user(void) { return false; }
++static __always_inline bool context_tracking_enabled(void) { return false; }
++static __always_inline bool context_tracking_enabled_cpu(int cpu) { return false; }
++static __always_inline bool context_tracking_enabled_this_cpu(void) { return false; }
+ #endif /* CONFIG_CONTEXT_TRACKING */
+ 
  #endif
- 
- #if defined(CONFIG_BPF_JIT) && defined(CONFIG_X86_64)
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 7a187da..864bb9d 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -187,6 +187,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
- 		"__invalid_creds",
- 		"cpu_startup_entry",
- 		"__ubsan_handle_builtin_unreachable",
-+		"ex_handler_msr_mce",
- 	};
- 
- 	if (!func)

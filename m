@@ -2,127 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CED5374D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8C85374E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233392AbiE3HRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
+        id S233406AbiE3HRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233376AbiE3HRN (ORCPT
+        with ESMTP id S233393AbiE3HRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:17:13 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093BA66AD7
+        Mon, 30 May 2022 03:17:15 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F415C64B
         for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:17:12 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-30c2f288f13so25502807b3.7
+Received: by mail-pl1-x630.google.com with SMTP id b5so9539746plx.10
         for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:17:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ak1D+ugJ6qTkmKZrpOC7+3+y3lRcWmSH3V55J3uAaB8=;
-        b=T2Xg4swJ5iaYFC2iVHH0G2EPFgzo6f4tPoAE6C2AmURNLcfHvoeW7o3dj3DndOK8As
-         aIXrCGaHo9FThfNzUnhyzNI1ebWkUSrb3CrL4Pdxr8DF/FaKI6FeTaE+hYeVnJ/0zwSl
-         t4RhyXJbq+7FrXzacwD5m+jU8mv7gq5tbTGzNiHIKowW4JNvWO7Q8BVw5OJiew2gDaVc
-         9Xndca96mgVvhtlX4xhqb8CEUgcgB1bGEPDMknElskEZ6WUkfrYXI6u/AHcad2MaizGY
-         XG+5+mAGQsJ8jlX8Hs+sveCRhH9LCZ/6FrOqrLTj2IthQB0uXicZhdFVKUSYqOTALS4I
-         z0JA==
+        d=arista.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6SyAFe8yiRS+xJf7v92sSCs8jgpttKvVsYzEwlwQFS4=;
+        b=ZOeRe7U0XN51BGptO4ulac6NQI0nCMB9cTNM1vtwVSsEuo+Y57HJ/rVD289kTpOuNA
+         BqgcfBDZ6o+pHimdt0qhyNgUMPKNtGaJ4DIIVLMPWjBQk4H+qMmshEjyRqTIWPlntKk9
+         GUpuvW++NU3UYHPd2RcmrAHdIMTiwCGxM/wmpU6/fC//bJt80kCyfSh0p+NPsxNGzAYQ
+         iwWRKdj5cuyVsncgOsZpANMHNeqFdOHigS/lALVQ1LrxcNRJgm1eZBrj2VO/qQBUrtgX
+         ok85n1NSwUYI5ten6ARtJGpj4NiQZtY0YAk4bOv4ffCsfa5Fa1ffSzRIUq9kYmAY5vy6
+         Odmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ak1D+ugJ6qTkmKZrpOC7+3+y3lRcWmSH3V55J3uAaB8=;
-        b=17OK6wxUPTdQ9XA1cPgNSTkqtS86cSRQS0MJaO1Yx2IVoyTQC0WQAIlEn0rf/EQeex
-         AA6wUpd89/fWoTYBwHEP4VZ/gj9eW8dBVowQAVCUHQfvQPL/as8HfTygdyeTxReJpY3G
-         sKW3hcNXGpzYEOosmsr62OcMW6+EzW/aEfUNaxuK6e2MHDswOk3juWcv7amAS00A4I8e
-         d0KB6liby9DGU5UCrdZgyAiptcxc6TdkjEG48zrzNny7v9HVlJXKFQQsAfmWavB9HrpN
-         wsnrVd1CEp2hyxu7JfuMM6RXUKq7IYM/DWMUXRpwluY4Hof2iOSP9KO+L+U+z4MnpqKU
-         es+g==
-X-Gm-Message-State: AOAM531UYaK5zvMq4Snm+h3ljLsYTU46na3v4zk7NIkFGW508CbyVcTk
-        5gX/BkOlxfLZTHm3Xw7++DkqwQrP5oTbxFwQNeEcMw==
-X-Google-Smtp-Source: ABdhPJzFAdQxNtSotndeMAwvEUZLvfLjFFsu3KDucCLSPD3yriQIyCXnU+eD654awmTZG588EHs1z3CTqrHZXSSRj7g=
-X-Received: by 2002:a81:4c8e:0:b0:300:37ba:2c1e with SMTP id
- z136-20020a814c8e000000b0030037ba2c1emr31212087ywa.141.1653895031253; Mon, 30
- May 2022 00:17:11 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6SyAFe8yiRS+xJf7v92sSCs8jgpttKvVsYzEwlwQFS4=;
+        b=zeZ/oBYPNppY5vaOjtmOJ9oJSZnNJCazsWvIfjaxTBstnfYp/YaGty1d03LmL4aXmw
+         8vHjrAulGz5AtFfyg28lyDT8YZ113z2Vc24eDy3ym1mNerBmZr48vGVf3/mNsWKnI6dq
+         3Lcoa8yCH2p4m9mVu5YG1Kl7P8hnOuS8qcqeUnErnB/O2gS1jTbHHpCZBSsimS04bBf4
+         JRkvtIhR6z/ZgHjHd5SJUkkK4TnwL15xNw+OSM7v0nZYMJG6oeQ3Src8ysyq9Vx+6/UH
+         iMoTcH187KxeREV6gwUyV3lldbXxoRfIcnQKxmQH8HQpf+lZOQ+jwUPT0uPnImqIUfnX
+         413A==
+X-Gm-Message-State: AOAM533D5eXzPlpbm83JbGs9OHaQIp+SsBuT37l/dUdt4GRDoZOVqdax
+        IkftHka6Ez5i590NJ7I87uEllA==
+X-Google-Smtp-Source: ABdhPJy5m/fEfM/HgnPEeOcyxwTjHUpQZCqLSOeoiRXgi/yKZgASya8AZr9lUSqPGzHVqkTH6fSOjg==
+X-Received: by 2002:a17:90a:690f:b0:1df:336d:5533 with SMTP id r15-20020a17090a690f00b001df336d5533mr21802608pjj.222.1653895032082;
+        Mon, 30 May 2022 00:17:12 -0700 (PDT)
+Received: from localhost.localdomain ([49.37.162.84])
+        by smtp.gmail.com with ESMTPSA id a1-20020a170902900100b0015e9d4a5d27sm8355503plp.23.2022.05.30.00.17.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 00:17:10 -0700 (PDT)
+From:   Arun Ajith S <aajith@arista.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        dsahern@kernel.org, bagasdotme@gmail.com, yoshfuji@linux-ipv6.org,
+        kuba@kernel.org, pabeni@redhat.com, prestwoj@gmail.com,
+        corbet@lwn.net, justin.iurman@uliege.be, edumazet@google.com,
+        shuah@kernel.org, aajith@arista.com, gilligan@arista.com,
+        noureddine@arista.com, gk@arista.com
+Subject: [PATCH net v2] net/ipv6: Expand and rename accept_unsolicited_na to accept_untracked_na
+Date:   Mon, 30 May 2022 07:17:00 +0000
+Message-Id: <20220530071700.12237-1-aajith@arista.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220530053326.41682-1-songmuchun@bytedance.com>
- <0563a019-09e3-a176-d4c1-c240f3cf62d0@redhat.com> <CAMZfGtUMfNjOGJ3j4tgha6SxFymNGDo3CW5NO73ZsMby42BPjg@mail.gmail.com>
- <1bbbe572-5aa3-18d1-35f0-3e089942b4cf@redhat.com>
-In-Reply-To: <1bbbe572-5aa3-18d1-35f0-3e089942b4cf@redhat.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Mon, 30 May 2022 15:16:34 +0800
-Message-ID: <CAMZfGtUFFbBO-1kwgCRFKyasS+BUoGcRwd-E6-iOng-kiNrVGg@mail.gmail.com>
-Subject: Re: [PATCH] mm: memory_hotplug: fix memory error handling
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        cheloha@linux.vnet.ibm.com, Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux- stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 3:10 PM David Hildenbrand <david@redhat.com> wrote:
->
-> On 30.05.22 09:08, Muchun Song wrote:
-> > On Mon, May 30, 2022 at 2:56 PM David Hildenbrand <david@redhat.com> wrote:
-> >>
-> >> On 30.05.22 07:33, Muchun Song wrote:
-> >>> The device_unregister() is supposed to be used to unregister devices if
-> >>> device_register() has succeed.  And device_unregister() will put device.
-> >>> The caller should not do it again, otherwise, the first call of
-> >>> put_device() will drop the last reference count, then the next call
-> >>> of device_unregister() will UAF on device.
-> >>>
-> >>> Fixes: 4fb6eabf1037 ("drivers/base/memory.c: cache memory blocks in xarray to accelerate lookup")
-> >>> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> >>> Cc: <stable@vger.kernel.org>
-> >>> ---
-> >>>  drivers/base/memory.c | 5 ++---
-> >>>  1 file changed, 2 insertions(+), 3 deletions(-)
-> >>>
-> >>> diff --git a/drivers/base/memory.c b/drivers/base/memory.c
-> >>> index 7222ff9b5e05..084d67fd55cc 100644
-> >>> --- a/drivers/base/memory.c
-> >>> +++ b/drivers/base/memory.c
-> >>> @@ -636,10 +636,9 @@ static int __add_memory_block(struct memory_block *memory)
-> >>>       }
-> >>>       ret = xa_err(xa_store(&memory_blocks, memory->dev.id, memory,
-> >>>                             GFP_KERNEL));
-> >>> -     if (ret) {
-> >>> -             put_device(&memory->dev);
-> >>> +     if (ret)
-> >>>               device_unregister(&memory->dev);
-> >>> -     }
-> >>> +
-> >>>       return ret;
-> >>>  }
-> >>>
-> >>
-> >> See
-> >>
-> >> https://lkml.kernel.org/r/d44c63d78affe844f020dc02ad6af29abc448fc4.1650611702.git.christophe.jaillet@wanadoo.fr
-> >>
-> >
-> > I see. Good job by Christophe. Thanks David.
-> >
->
-> I'm curious how both of you found that issue? Just by staring at that
-> code? :)
->
+RFC 9131 changes default behaviour of handling RX of NA messages when the
+corresponding entry is absent in the neighbour cache. The current
+implementation is limited to accept just unsolicited NAs. However, the
+RFC is more generic where it also accepts solicited NAs. Both types
+should result in adding a STALE entry for this case.
 
-I am reading the code here today, then I saw it by chance.
-No tricks :-).
+Expand accept_untracked_na behaviour to also accept solicited NAs to
+be compliant with the RFC and rename the sysctl knob to
+accept_untracked_na.
 
-THanks.
+Fixes: f9a2fb73318e ("net/ipv6: Introduce accept_unsolicited_na knob to implement router-side changes for RFC9131")
+Signed-off-by: Arun Ajith S <aajith@arista.com>
+---
+This change updates the accept_unsolicited_na feature that merged to net-next
+for v5.19 to be better compliant with the RFC. It also involves renaming the sysctl
+knob to accept_untracked_na before shipping in a release.
+
+Note that the behaviour table has been modifed in the code comments,
+but dropped from the Documentation. This is because the table 
+documents behaviour that is not unique to the knob, and it is more
+relevant to understanding the code. The documentation has been updated
+to be unambiguous even without the table.
+
+v2:
+  1. Changed commit message and subject as suggested.
+  2. Added Fixes tag.
+  3. Used en-uk spellings consistently.
+  4. Added a couple of missing comments.
+  5. Refactored patch to be smaller by avoiding early return.
+  6. Made the documentation more clearer.
+
+ Documentation/networking/ip-sysctl.rst        | 23 ++++-------
+ include/linux/ipv6.h                          |  2 +-
+ include/uapi/linux/ipv6.h                     |  2 +-
+ net/ipv6/addrconf.c                           |  6 +--
+ net/ipv6/ndisc.c                              | 41 +++++++++++--------
+ .../net/ndisc_unsolicited_na_test.sh          | 23 +++++------
+ 6 files changed, 49 insertions(+), 48 deletions(-)
+
+diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+index b882d4238581..04216564a03c 100644
+--- a/Documentation/networking/ip-sysctl.rst
++++ b/Documentation/networking/ip-sysctl.rst
+@@ -2474,21 +2474,16 @@ drop_unsolicited_na - BOOLEAN
+ 
+ 	By default this is turned off.
+ 
+-accept_unsolicited_na - BOOLEAN
+-	Add a new neighbour cache entry in STALE state for routers on receiving an
+-	unsolicited neighbour advertisement with target link-layer address option
+-	specified. This is as per router-side behavior documented in RFC9131.
+-	This has lower precedence than drop_unsolicited_na.
++accept_untracked_na - BOOLEAN
++	Add a new neighbour cache entry in STALE state for routers on receiving a
++	neighbour advertisement (either solicited or unsolicited) with target
++	link-layer address option specified if no neighbour entry is already
++	present for the advertised IPv6 address. Without this knob, NAs received
++	for untracked addresses (absent in neighbour cache) are silently ignored.
++
++	This is as per router-side behaviour documented in RFC9131.
+ 
+-	 ====   ======  ======  ==============================================
+-	 drop   accept  fwding                   behaviour
+-	 ----   ------  ------  ----------------------------------------------
+-	    1        X       X  Drop NA packet and don't pass up the stack
+-	    0        0       X  Pass NA packet up the stack, don't update NC
+-	    0        1       0  Pass NA packet up the stack, don't update NC
+-	    0        1       1  Pass NA packet up the stack, and add a STALE
+-	                        NC entry
+-	 ====   ======  ======  ==============================================
++	This has lower precedence than drop_unsolicited_na.
+ 
+ 	This will optimize the return path for the initial off-link communication
+ 	that is initiated by a directly connected host, by ensuring that
+diff --git a/include/linux/ipv6.h b/include/linux/ipv6.h
+index 38c8203d52cb..37dfdcfcdd54 100644
+--- a/include/linux/ipv6.h
++++ b/include/linux/ipv6.h
+@@ -61,7 +61,7 @@ struct ipv6_devconf {
+ 	__s32		suppress_frag_ndisc;
+ 	__s32		accept_ra_mtu;
+ 	__s32		drop_unsolicited_na;
+-	__s32		accept_unsolicited_na;
++	__s32		accept_untracked_na;
+ 	struct ipv6_stable_secret {
+ 		bool initialized;
+ 		struct in6_addr secret;
+diff --git a/include/uapi/linux/ipv6.h b/include/uapi/linux/ipv6.h
+index 549ddeaf788b..03cdbe798fe3 100644
+--- a/include/uapi/linux/ipv6.h
++++ b/include/uapi/linux/ipv6.h
+@@ -194,7 +194,7 @@ enum {
+ 	DEVCONF_IOAM6_ID,
+ 	DEVCONF_IOAM6_ID_WIDE,
+ 	DEVCONF_NDISC_EVICT_NOCARRIER,
+-	DEVCONF_ACCEPT_UNSOLICITED_NA,
++	DEVCONF_ACCEPT_UNTRACKED_NA,
+ 	DEVCONF_MAX
+ };
+ 
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index ca0aa744593e..1b1932502e9e 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -5586,7 +5586,7 @@ static inline void ipv6_store_devconf(struct ipv6_devconf *cnf,
+ 	array[DEVCONF_IOAM6_ID] = cnf->ioam6_id;
+ 	array[DEVCONF_IOAM6_ID_WIDE] = cnf->ioam6_id_wide;
+ 	array[DEVCONF_NDISC_EVICT_NOCARRIER] = cnf->ndisc_evict_nocarrier;
+-	array[DEVCONF_ACCEPT_UNSOLICITED_NA] = cnf->accept_unsolicited_na;
++	array[DEVCONF_ACCEPT_UNTRACKED_NA] = cnf->accept_untracked_na;
+ }
+ 
+ static inline size_t inet6_ifla6_size(void)
+@@ -7038,8 +7038,8 @@ static const struct ctl_table addrconf_sysctl[] = {
+ 		.extra2		= (void *)SYSCTL_ONE,
+ 	},
+ 	{
+-		.procname	= "accept_unsolicited_na",
+-		.data		= &ipv6_devconf.accept_unsolicited_na,
++		.procname	= "accept_untracked_na",
++		.data		= &ipv6_devconf.accept_untracked_na,
+ 		.maxlen		= sizeof(int),
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec_minmax,
+diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
+index 254addad0dd3..ed0bbe87e345 100644
+--- a/net/ipv6/ndisc.c
++++ b/net/ipv6/ndisc.c
+@@ -979,7 +979,6 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 	struct inet6_dev *idev = __in6_dev_get(dev);
+ 	struct inet6_ifaddr *ifp;
+ 	struct neighbour *neigh;
+-	bool create_neigh;
+ 
+ 	if (skb->len < sizeof(struct nd_msg)) {
+ 		ND_PRINTK(2, warn, "NA: packet too short\n");
+@@ -1000,7 +999,7 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 	/* For some 802.11 wireless deployments (and possibly other networks),
+ 	 * there will be a NA proxy and unsolicitd packets are attacks
+ 	 * and thus should not be accepted.
+-	 * drop_unsolicited_na takes precedence over accept_unsolicited_na
++	 * drop_unsolicited_na takes precedence over accept_untracked_na
+ 	 */
+ 	if (!msg->icmph.icmp6_solicited && idev &&
+ 	    idev->cnf.drop_unsolicited_na)
+@@ -1041,25 +1040,33 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 		in6_ifa_put(ifp);
+ 		return;
+ 	}
++
++	neigh = neigh_lookup(&nd_tbl, &msg->target, dev);
++
+ 	/* RFC 9131 updates original Neighbour Discovery RFC 4861.
+-	 * An unsolicited NA can now create a neighbour cache entry
+-	 * on routers if it has Target LL Address option.
++	 * NAs with Target LL Address option without a corresponding
++	 * entry in the neighbour cache can now create a STALE neighbour
++	 * cache entry on routers.
++	 *
++	 *   entry accept  fwding  solicited        behaviour
++	 * ------- ------  ------  ---------    ----------------------
++	 * present      X       X         0     Set state to STALE
++	 * present      X       X         1     Set state to REACHABLE
++	 *  absent      0       X         X     Do nothing
++	 *  absent      1       0         X     Do nothing
++	 *  absent      1       1         X     Add a new STALE entry
+ 	 *
+-	 * drop   accept  fwding                   behaviour
+-	 * ----   ------  ------  ----------------------------------------------
+-	 *    1        X       X  Drop NA packet and don't pass up the stack
+-	 *    0        0       X  Pass NA packet up the stack, don't update NC
+-	 *    0        1       0  Pass NA packet up the stack, don't update NC
+-	 *    0        1       1  Pass NA packet up the stack, and add a STALE
+-	 *                          NC entry
+ 	 * Note that we don't do a (daddr == all-routers-mcast) check.
+ 	 */
+-	create_neigh = !msg->icmph.icmp6_solicited && lladdr &&
+-		       idev && idev->cnf.forwarding &&
+-		       idev->cnf.accept_unsolicited_na;
+-	neigh = __neigh_lookup(&nd_tbl, &msg->target, dev, create_neigh);
++	new_state = msg->icmph.icmp6_solicited ? NUD_REACHABLE : NUD_STALE;
++	if (!neigh && lladdr &&
++	    idev && idev->cnf.forwarding &&
++	    idev->cnf.accept_untracked_na) {
++		neigh = neigh_create(&nd_tbl, &msg->target, dev);
++		new_state = NUD_STALE;
++	}
+ 
+-	if (neigh) {
++	if (neigh && !IS_ERR(neigh)) {
+ 		u8 old_flags = neigh->flags;
+ 		struct net *net = dev_net(dev);
+ 
+@@ -1079,7 +1086,7 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 		}
+ 
+ 		ndisc_update(dev, neigh, lladdr,
+-			     msg->icmph.icmp6_solicited ? NUD_REACHABLE : NUD_STALE,
++			     new_state,
+ 			     NEIGH_UPDATE_F_WEAK_OVERRIDE|
+ 			     (msg->icmph.icmp6_override ? NEIGH_UPDATE_F_OVERRIDE : 0)|
+ 			     NEIGH_UPDATE_F_OVERRIDE_ISROUTER|
+diff --git a/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh b/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
+index f508657ee126..86e621b7b9c7 100755
+--- a/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
++++ b/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
+@@ -1,15 +1,14 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-# This test is for the accept_unsolicited_na feature to
++# This test is for the accept_untracked_na feature to
+ # enable RFC9131 behaviour. The following is the test-matrix.
+ # drop   accept  fwding                   behaviour
+ # ----   ------  ------  ----------------------------------------------
+-#    1        X       X  Drop NA packet and don't pass up the stack
+-#    0        0       X  Pass NA packet up the stack, don't update NC
+-#    0        1       0  Pass NA packet up the stack, don't update NC
+-#    0        1       1  Pass NA packet up the stack, and add a STALE
+-#                           NC entry
++#    1        X       X  Don't update NC
++#    0        0       X  Don't update NC
++#    0        1       0  Don't update NC
++#    0        1       1  Add a STALE NC entry
+ 
+ ret=0
+ # Kselftest framework requirement - SKIP code is 4.
+@@ -72,7 +71,7 @@ setup()
+ 	set -e
+ 
+ 	local drop_unsolicited_na=$1
+-	local accept_unsolicited_na=$2
++	local accept_untracked_na=$2
+ 	local forwarding=$3
+ 
+ 	# Setup two namespaces and a veth tunnel across them.
+@@ -93,7 +92,7 @@ setup()
+ 	${IP_ROUTER_EXEC} sysctl -qw \
+                 ${ROUTER_CONF}.drop_unsolicited_na=${drop_unsolicited_na}
+ 	${IP_ROUTER_EXEC} sysctl -qw \
+-                ${ROUTER_CONF}.accept_unsolicited_na=${accept_unsolicited_na}
++                ${ROUTER_CONF}.accept_untracked_na=${accept_untracked_na}
+ 	${IP_ROUTER_EXEC} sysctl -qw ${ROUTER_CONF}.disable_ipv6=0
+ 	${IP_ROUTER} addr add ${ROUTER_ADDR_WITH_MASK} dev ${ROUTER_INTF}
+ 
+@@ -144,13 +143,13 @@ link_up() {
+ 
+ verify_ndisc() {
+ 	local drop_unsolicited_na=$1
+-	local accept_unsolicited_na=$2
++	local accept_untracked_na=$2
+ 	local forwarding=$3
+ 
+ 	neigh_show_output=$(${IP_ROUTER} neigh show \
+                 to ${HOST_ADDR} dev ${ROUTER_INTF} nud stale)
+ 	if [ ${drop_unsolicited_na} -eq 0 ] && \
+-			[ ${accept_unsolicited_na} -eq 1 ] && \
++			[ ${accept_untracked_na} -eq 1 ] && \
+ 			[ ${forwarding} -eq 1 ]; then
+ 		# Neighbour entry expected to be present for 011 case
+ 		[[ ${neigh_show_output} ]]
+@@ -179,14 +178,14 @@ test_unsolicited_na_combination() {
+ 	test_unsolicited_na_common $1 $2 $3
+ 	test_msg=("test_unsolicited_na: "
+ 		"drop_unsolicited_na=$1 "
+-		"accept_unsolicited_na=$2 "
++		"accept_untracked_na=$2 "
+ 		"forwarding=$3")
+ 	log_test $? 0 "${test_msg[*]}"
+ 	cleanup
+ }
+ 
+ test_unsolicited_na_combinations() {
+-	# Args: drop_unsolicited_na accept_unsolicited_na forwarding
++	# Args: drop_unsolicited_na accept_untracked_na forwarding
+ 
+ 	# Expect entry
+ 	test_unsolicited_na_combination 0 1 1
+-- 
+2.27.0
+

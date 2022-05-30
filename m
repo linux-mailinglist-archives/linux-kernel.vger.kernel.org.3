@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B9453763F
+	by mail.lfdr.de (Postfix) with ESMTP id 020B853763E
 	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232902AbiE3IKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 04:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
+        id S232971AbiE3IKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 04:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbiE3IKD (ORCPT
+        with ESMTP id S232901AbiE3IKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 04:10:03 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD9F075205
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:10:01 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-37-Q1IaZgzkNfy3MLvifs1jIQ-1; Mon, 30 May 2022 09:09:59 +0100
-X-MC-Unique: Q1IaZgzkNfy3MLvifs1jIQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Mon, 30 May 2022 09:09:57 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Mon, 30 May 2022 09:09:57 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Yu-Jen Chang' <arthurchang09@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "jdike@linux.intel.com" <jdike@linux.intel.com>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "richard@nod.at" <richard@nod.at>,
-        "anton.ivanov@cambridgegreys.com" <anton.ivanov@cambridgegreys.com>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "jserv@ccns.ncku.edu.tw" <jserv@ccns.ncku.edu.tw>
-Subject: RE: [PATCH 1/2] x86/lib: Optimize memchr()
-Thread-Topic: [PATCH 1/2] x86/lib: Optimize memchr()
-Thread-Index: AQHYcmroNJne+UgOCEK2wOYbJvL5k603Dq9w
-Date:   Mon, 30 May 2022 08:09:57 +0000
-Message-ID: <8b480c85f53c4f3b88bf99ba585e8768@AcuMS.aculab.com>
-References: <20220528081236.3020-1-arthurchang09@gmail.com>
- <20220528081236.3020-2-arthurchang09@gmail.com>
-In-Reply-To: <20220528081236.3020-2-arthurchang09@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 30 May 2022 04:10:06 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF0175216
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:10:03 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id x62so627798ede.10
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:10:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=kd0CCk3LCRGaJbR7VB5KtX1TXqRTWxU6Qhf/vwEDl04=;
+        b=j24uc8Ag4iPMN4ajktr6aP+Xgax39Yfqn51EeuP6JqPfb6E4YD4zRnVqqV1ds9Doxk
+         orgi1Z0vPVnXzZJFiJmQ+WBnnFnji/hsZ8UB7eESAJ98oebxIS5ik0IF2HswOjKHyg9c
+         BmpT6qp2p7ypBk0Xy4dMP5uV1IAfdypF29IrTTixHvoVZrM7z5f+WYJNCV7E+cfiEQFB
+         VGy+X1zZ5owWzkm9coIbbXObazgKO3sBj5cpbnNhNLzFar5p87rbBlG7qvuLA6+8i1KP
+         F7l0zT8RO2PiUx7EYcU99QMt+tP9kUuqZnPaXpBP2kNhPjfo4m9gomLVg31aIxpDPhg3
+         viPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=kd0CCk3LCRGaJbR7VB5KtX1TXqRTWxU6Qhf/vwEDl04=;
+        b=YzDq8rGtDcSG8/Mipw1qGo3cfgsWYemztxK1ILfJStwC7w5pXoxgUlyPddoF00DHqg
+         BKOXpyuATITZd8/3w7rU6vc5ANV3j1LcBBrF/NBLamBndFU7IO0Au8PDlxHDwYKgbVeY
+         A6W+x2G7V2MkNaDNMDRZMP6S+EaTZqQ/3nHFlpNWxeXA7HwCgGjb0omvyOgJGydw5prp
+         2NYbJSFKgRcSiLF0aF27bT+w6/E2+5Q5h/VTRXKoVUuFgYXsbrV9gLlAonny67JacK6E
+         68hn9mdXVRxQHSaz3Ni59ozG3Oy9oYyAManQlx5EnIYU6HoNgZXsgCe8oDnzp5Ktzj76
+         dPVw==
+X-Gm-Message-State: AOAM5300lnqdmw64o09dkqgG1JUJW6XCoquEQP7ZAD4gzkza5wuVYLaq
+        R2ORkqXzH05NBN7pA/GCpZzpqw==
+X-Google-Smtp-Source: ABdhPJyR0Ap0vvV9MQC6yDeV6wFNnk2l2gN0Cfm3bTfmzWeXwuYnGuUl4/kq+OJlfmhn74q1Y76s9w==
+X-Received: by 2002:a05:6402:4316:b0:42b:4d3d:c064 with SMTP id m22-20020a056402431600b0042b4d3dc064mr42706814edc.194.1653898202222;
+        Mon, 30 May 2022 01:10:02 -0700 (PDT)
+Received: from mbp-di-paolo.station (net-93-144-98-177.cust.dsl.teletu.it. [93.144.98.177])
+        by smtp.gmail.com with ESMTPSA id v4-20020a50a444000000b0042ab87ea713sm4973920edb.22.2022.05.30.01.10.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 30 May 2022 01:10:01 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH -next v7 2/3] block, bfq: refactor the counting of
+ 'num_groups_with_pending_reqs'
+From:   Paolo Valente <paolo.valente@linaro.org>
+In-Reply-To: <20220528095020.186970-3-yukuai3@huawei.com>
+Date:   Mon, 30 May 2022 10:10:00 +0200
+Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        cgroups@vger.kernel.org, linux-block <linux-block@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <0D9355CE-F85B-4B1A-AEC3-F63DFC4B3A54@linaro.org>
+References: <20220528095020.186970-1-yukuai3@huawei.com>
+ <20220528095020.186970-3-yukuai3@huawei.com>
+To:     Yu Kuai <yukuai3@huawei.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,86 +75,278 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogWXUtSmVuIENoYW5nDQo+IFNlbnQ6IDI4IE1heSAyMDIyIDA5OjEzDQo+IA0KPiBUaGUg
-b3JpZ2luYWwgYXNzZW1ibHkgdmVyc2lvbiBvZiBtZW1jaHIoKSBpcyBpbXBsZW1lbnRlZCB3aXRo
-DQo+IHRoZSBieXRlLXdpc2UgY29tcGFyaW5nIHRlY2huaXF1ZSwgd2hpY2ggZG9lcyBub3QgZnVs
-bHkNCj4gdXNlIDY0LWJpdHMgcmVnaXN0ZXJzIGluIHg4Nl82NCBDUFUuIFdlIHVzZSB3b3JkLXdp
-ZGUNCj4gY29tcGFyaW5nIHNvIHRoYXQgOCBjaGFyYWN0ZXJzIGNhbiBiZSBjb21wYXJlZCBhdCB0
-aGUgc2FtZSB0aW1lDQo+IG9uIHg4Nl82NCBDUFUuIEZpcnN0IHdlIGFsaWduIHRoZSBpbnB1dCBh
-bmQgdGhlbiB1c2Ugd29yZC13aXNlDQo+IGNvbXBhcmluZyB0byBmaW5kIHRoZSBmaXJzdCA2NC1i
-aXQgd29yZCB0aGF0IGNvbnRhaW4gdGhlIHRhcmdldC4NCj4gU2Vjb25kbHksIHdlIGNvbXBhcmUg
-ZXZlcnkgYnl0ZSBpbiB0aGUgd29yZCBhbmQgZ2V0IHRoZSBvdXRwdXQuDQo+IA0KPiBXZSBjcmVh
-dGUgdHdvIGZpbGVzIHRvIG1lYXN1cmUgdGhlIHBlcmZvcm1hbmNlLiBUaGUgZmlyc3QgZmlsZQ0K
-PiBjb250YWlucyBvbiBhdmVyYWdlIDEwIGNoYXJhY3RlcnMgYWhlYWQgdGhlIHRhcmdldCBjaGFy
-YWN0ZXIuDQo+IFRoZSBzZWNvbmQgZmlsZSBjb250YWlucyBhdCBsZWFzdCAxMDAwIGNoYXJhY3Rl
-cnMgYWhlYWQgdGhlDQo+IHRhcmdldCBjaGFyYWN0ZXIuIE91ciBpbXBsZW1lbnRhdGlvbiBvZiDi
-gJxtZW1jaHIoKeKAnSBpcyBzbGlnaHRseQ0KPiBiZXR0ZXIgaW4gdGhlIGZpcnN0IHRlc3QgYW5k
-IG5lYXJseSA0eCBmYXN0ZXIgdGhhbiB0aGUgb3JnaW5hbA0KPiBpbXBsZW1lbnRhdGlvbiBpbiB0
-aGUgc2Vjb25kIHRlc3QuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBZdS1KZW4gQ2hhbmcgPGFydGh1
-cmNoYW5nMDlAZ21haWwuY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBDaGluZy1DaHVuIChKaW0pIEh1
-YW5nIDxqc2VydkBjY25zLm5ja3UuZWR1LnR3Pg0KPiAtLS0NCj4gIGFyY2gveDg2L2luY2x1ZGUv
-YXNtL3N0cmluZ182NC5oIHwgIDMgKysNCj4gIGFyY2gveDg2L2xpYi9NYWtlZmlsZSAgICAgICAg
-ICAgIHwgIDEgKw0KPiAgYXJjaC94ODYvbGliL3N0cmluZ182NC5jICAgICAgICAgfCA3OCArKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiAgMyBmaWxlcyBjaGFuZ2VkLCA4MiBpbnNl
-cnRpb25zKCspDQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC94ODYvbGliL3N0cmluZ182NC5j
-DQo+IA0KLi4uDQo+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9saWIvc3RyaW5nXzY0LmMgYi9hcmNo
-L3g4Ni9saWIvc3RyaW5nXzY0LmMNCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAw
-MDAwMDAwLi40ZTA2N2Q1YmUNCj4gLS0tIC9kZXYvbnVsbA0KPiArKysgYi9hcmNoL3g4Ni9saWIv
-c3RyaW5nXzY0LmMNCj4gQEAgLTAsMCArMSw3OCBAQA0KPiArLy8gU1BEWC1MaWNlbnNlLUlkZW50
-aWZpZXI6IEdQTC0yLjANCj4gKyNpbmNsdWRlIDxsaW51eC9zdHJpbmcuaD4NCj4gKyNpbmNsdWRl
-IDxsaW51eC9leHBvcnQuaD4NCj4gKyNpbmNsdWRlIDxsaW51eC9hbGlnbi5oPg0KPiArDQo+ICsv
-KiBIb3cgbWFueSBieXRlcyBhcmUgbG9hZGVkIGVhY2ggaXRlcmF0aW9uIG9mIHRoZSB3b3JkIGNv
-cHkgbG9vcCAqLw0KPiArI2RlZmluZSBMQkxPQ0tTSVpFIChzaXplb2YobG9uZykpDQo+ICsNCj4g
-KyNpZmRlZiBfX0hBVkVfQVJDSF9NRU1DSFINCj4gKw0KPiArdm9pZCAqbWVtY2hyKGNvbnN0IHZv
-aWQgKmNzLCBpbnQgYywgc2l6ZV90IGxlbmd0aCkNCj4gK3sNCj4gKwljb25zdCB1bnNpZ25lZCBj
-aGFyICpzcmMgPSAoY29uc3QgdW5zaWduZWQgY2hhciAqKWNzLCBkID0gYzsNCg0KWW91IGRvbid0
-IG5lZWQgdGhlIGNhc3QuDQoNCj4gKw0KPiArCXdoaWxlICghSVNfQUxJR05FRCgobG9uZylzcmMs
-IHNpemVvZihsb25nKSkpIHsNCj4gKwkJaWYgKCFsZW5ndGgtLSkNCj4gKwkJCXJldHVybiBOVUxM
-Ow0KPiArCQlpZiAoKnNyYyA9PSBkKQ0KPiArCQkJcmV0dXJuICh2b2lkICopc3JjOw0KPiArCQlz
-cmMrKzsNCj4gKwl9DQoNClRoZXJlIGlzIG5vIHBvaW50IGFsaWduaW5nIHRoZSBhZGRyZXNzLg0K
-T24gdGVzdHMgSSd2ZSBkb25lIG1pc2FsaWduZWQgcmVhZHMgZG9uJ3QgZXZlbiB0YWtlIGFuIGV4
-dHJhDQpjbG9jayAtIGV2ZW4gaWYgeW91IGdldCB0aGUgY3B1IGRvaW5nIHR3byByZWFkcy9jbG9j
-ay4NCkV2ZW4gaWYgdGhleSBkaWQgdGhlIGNvZGUgaXNuJ3QgbWVtb3J5IGxpbWl0ZWQuDQoNCj4g
-KwlpZiAobGVuZ3RoID49IExCTE9DS1NJWkUpIHsNCj4gKwkJdW5zaWduZWQgbG9uZyBtYXNrID0g
-ZCA8PCA4IHwgZDsNCj4gKwkJdW5zaWduZWQgaW50IGkgPSAzMjsNCj4gKwkJbG9uZyB4b3IsIGRh
-dGE7DQo+ICsJCWNvbnN0IGxvbmcgY29uc3RhID0gMHhGRUZFRkVGRUZFRkVGRUZGLA0KPiArCQkJ
-ICAgY29uc3RiID0gMHg4MDgwODA4MDgwODA4MDgwOw0KPiArDQo+ICsJCS8qDQo+ICsJCSAqIENy
-ZWF0ZSBhIDgtYnl0ZXMgbWFzayBmb3Igd29yZC13aXNlIGNvbXBhcmluZy4NCj4gKwkJICogRm9y
-IGV4YW1wbGUsIGEgbWFzayBmb3IgJ2EnIGlzIDB4NjE2MTYxNjE2MTYxNjE2MS4NCj4gKwkJICov
-DQo+ICsNCj4gKwkJbWFzayB8PSBtYXNrIDw8IDE2Ow0KPiArCQlmb3IgKGkgPSAzMjsgaSA8IExC
-TE9DS1NJWkUgKiA4OyBpIDw8PSAxKQ0KPiArCQkJbWFzayB8PSBtYXNrIDw8IGk7DQoNCkdpdmVu
-IHRoYXQgY29uc3RhL2Igb25seSBzdXBwb3J0IDY0IGJpdCB3aHkgdGhlIGxvb3AuDQpKdXN0IGRv
-IG1hc2sgfD0gbWFzayA8PCAzMi4NCkknZCBhbHNvIHB1dCBhbGwgMyBjYWxjdWxhdGlvbnMgdG9n
-ZXRoZXIgLSBub3QgaGlkZSBvbmUNCmluIHRoZSBpbml0aWFsaXNlci4NCg0KPiArCQkvKg0KPiAr
-CQkgKiBXZSBwZXJmb3JtIHdvcmQtd2lzZSBjb21wYXJpbmcgd2l0aCBmb2xsb3dpbmcgb3BlcmF0
-aW9uOg0KPiArCQkgKgkxLiBQZXJmb3JtIHhvciBvbiB0aGUgbG9uZyB3b3JkIEBzcmMgYW5kIEBt
-YXNrDQo+ICsJCSAqCSAgIGFuZCBwdXQgaW50byBAeG9yLg0KPiArCQkgKgkyLiBBZGQgQHhvciB3
-aXRoIEBjb25zdGEuDQo+ICsJCSAqCTMuIH5AeG9yICYgQGNvbnN0Yi4NCj4gKwkJICoJNC4gUGVy
-Zm9ybSAmIHdpdGggdGhlIHJlc3VsdCBvZiBzdGVwIDIgYW5kIDMuDQo+ICsJCSAqDQo+ICsJCSAq
-IFN0ZXAgMSBjcmVhdGVzIGEgYnl0ZSB3aGljaCBpcyAwIGluIHRoZSBsb25nIHdvcmQgaWYNCj4g
-KwkJICogdGhlcmUgaXMgYXQgbGVhc3Qgb25lIHRhcmdldCBieXRlIGluIGl0Lg0KPiArCQkgKg0K
-PiArCQkgKiBTdGVwIDIgdG8gU3RlcCA0IGZpbmQgaWYgdGhlcmUgaXMgYSBieXRlIHdpdGggMCBp
-bg0KPiArCQkgKiB0aGUgbG9uZyB3b3JkLg0KPiArCQkgKi8NCj4gKwkJYXNtIHZvbGF0aWxlKCIx
-OlxuXHQiDQo+ICsJCQkgICAgICJtb3ZxICglMCksJTFcblx0Ig0KPiArCQkJICAgICAieG9ycSAl
-NiwlMVxuXHQiDQo+ICsJCQkgICAgICJsZWEgKCUxLCU0KSwgJTJcblx0Ig0KPiArCQkJICAgICAi
-bm90cSAlMVxuXHQiDQo+ICsJCQkgICAgICJhbmRxICU1LCUxXG5cdCINCj4gKwkJCSAgICAgInRl
-c3RxICUxLCUyXG5cdCINCj4gKwkJCSAgICAgImpuZSAyZlxuXHQiDQo+ICsJCQkgICAgICJhZGQg
-JDgsJTBcblx0Ig0KPiArCQkJICAgICAic3ViICQ4LCUzXG5cdCINCj4gKwkJCSAgICAgImNtcCAk
-NywlM1xuXHQiDQo+ICsJCQkgICAgICJqYSAxYlxuXHQiDQo+ICsJCQkgICAgICIyOlxuXHQiDQo+
-ICsJCQkgICAgIDogIj1EIihzcmMpLCAiPXIiKHhvciksICI9ciIoZGF0YSksICI9ciIobGVuZ3Ro
-KQ0KDQpXaHkgY29uc3RyYWluIHNyYyB0byAlcmRpPw0KDQo+ICsJCQkgICAgIDogInIiKGNvbnN0
-YSksICJyIihjb25zdGIpLCAiciIobWFzayksICIwIihzcmMpLA0KPiArCQkJICAgICAgICIxIih4
-b3IpLCAiMiIoZGF0YSksICIzIihsZW5ndGgpDQoNClVzZSAiK3IiIGluIHRoZSBvdXRwdXRzIGlu
-c3RlYWQgb2YgcmVzcGVjaWZ5aW5nIHRoZSBhcmdzLg0KSSdkIGFsc28gc3VnZ2VzdCB1c2luZyBu
-YW1lZCBhcmd1bWVudHMgLSBtdWNoIGVhc2llciB0byByZWFkLg0KDQo+ICsJCQkgICAgIDogIm1l
-bW9yeSIsICJjYyIpOw0KDQpEb2Vzbid0IHRoZSBjb21waWxlciBnZW5lcmF0ZSBtdWNoIHRoZSBz
-YW1lIGNvZGU/DQpZb3Ugc2hvdWxkIGFsc28gYmUgYWJsZSB0byBjb2RlIHdpdGhvdXQgbmVlZGlu
-ZyBhZGQsIHN1YiBhbmQgY21wDQphdCB0aGUgZW5kIG9mIHRoZSBsb29wLg0KSWYgeW91IHVzZSBu
-ZWdhdGl2ZSBvZmZzZXRzIGZyb20gdGhlIGVuZCBvZiB0aGUgYnVmZmVyDQp0aGUgbG9vcCBjYW4g
-YmUgYSBzaW5nbGUgYWRkIGFuZCBqbnouDQoNCglEYXZpZA0KDQo+ICsJfQ0KPiArDQo+ICsJd2hp
-bGUgKGxlbmd0aC0tKSB7DQo+ICsJCWlmICgqc3JjID09IGQpDQo+ICsJCQlyZXR1cm4gKHZvaWQg
-KilzcmM7DQo+ICsJCXNyYysrOw0KPiArCX0NCj4gKwlyZXR1cm4gTlVMTDsNCj4gK30NCj4gK0VY
-UE9SVF9TWU1CT0wobWVtY2hyKTsNCj4gKyNlbmRpZg0KPiAtLQ0KPiAyLjI1LjENCg0KLQ0KUmVn
-aXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRv
-biBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+
+
+> Il giorno 28 mag 2022, alle ore 11:50, Yu Kuai <yukuai3@huawei.com> ha =
+scritto:
+>=20
+> Currently, bfq can't handle sync io concurrently as long as they
+> are not issued from root group. This is because
+> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+> bfq_asymmetric_scenario().
+>=20
+> The way that bfqg is counted into 'num_groups_with_pending_reqs':
+>=20
+> Before this patch:
+> 1) root group will never be counted.
+> 2) Count if bfqg or it's child bfqgs have pending requests.
+> 3) Don't count if bfqg and it's child bfqgs complete all the requests.
+>=20
+> After this patch:
+> 1) root group is counted.
+> 2) Count if bfqg have at least one bfqq that is marked busy.
+> 3) Don't count if bfqg doesn't have any busy bfqqs.
+
+Unfortunately, I see a last problem here. I see a double change:
+(1) a bfqg is now counted only as a function of the state of its child
+    queues, and not of also its child bfqgs
+(2) the state considered for counting a bfqg moves from having pending
+    requests to having busy queues
+
+I'm ok with with (1), which is a good catch (you are lady explained
+the idea to me some time ago IIRC).
+
+Yet I fear that (2) is not ok.  A bfqq can become non busy even if it
+still has in-flight I/O, i.e.  I/O being served in the drive.  The
+weight of such a bfqq must still be considered in the weights_tree,
+and the group containing such a queue must still be counted when
+checking whether the scenario is asymmetric.  Otherwise service
+guarantees are broken.  The reason is that, if a scenario is deemed as
+symmetric because in-flight I/O is not taken into account, then idling
+will not be performed to protect some bfqq, and in-flight I/O may
+steal bandwidth to that bfqq in an uncontrolled way.
+
+I verified this also experimentally a few years ago, when I added this
+weights_tree stuff.  That's the rationale behind the part of
+bfq_weights_tree_remove that this patch eliminates.  IOW,
+for a bfqq and its parent bfqg to be out of the count for symmetry,
+all bfqq's requests must also be completed.
+
+Thanks,
+Paolo
+
+>=20
+> The main reason to use busy state of bfqq instead of 'pending =
+requests'
+> is that bfqq can stay busy after dispatching the last request if =
+idling
+> is needed for service guarantees.
+>=20
+> With this change, the occasion that only one group is activated can be
+> detected, and next patch will support concurrent sync io in the
+> occasion.
+>=20
+> This patch also rename 'num_groups_with_pending_reqs' to
+> 'num_groups_with_busy_queues'.
+>=20
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> ---
+> block/bfq-iosched.c | 46 ++-----------------------------------
+> block/bfq-iosched.h | 55 ++++++---------------------------------------
+> block/bfq-wf2q.c    | 19 ++++------------
+> 3 files changed, 13 insertions(+), 107 deletions(-)
+>=20
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 0d46cb728bbf..eb1da1bd5eb4 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -852,7 +852,7 @@ static bool bfq_asymmetric_scenario(struct =
+bfq_data *bfqd,
+>=20
+> 	return varied_queue_weights || multiple_classes_busy
+> #ifdef CONFIG_BFQ_GROUP_IOSCHED
+> -	       || bfqd->num_groups_with_pending_reqs > 0
+> +	       || bfqd->num_groups_with_busy_queues > 0
+> #endif
+> 		;
+> }
+> @@ -970,48 +970,6 @@ void __bfq_weights_tree_remove(struct bfq_data =
+*bfqd,
+> void bfq_weights_tree_remove(struct bfq_data *bfqd,
+> 			     struct bfq_queue *bfqq)
+> {
+> -	struct bfq_entity *entity =3D bfqq->entity.parent;
+> -
+> -	for_each_entity(entity) {
+> -		struct bfq_sched_data *sd =3D entity->my_sched_data;
+> -
+> -		if (sd->next_in_service || sd->in_service_entity) {
+> -			/*
+> -			 * entity is still active, because either
+> -			 * next_in_service or in_service_entity is not
+> -			 * NULL (see the comments on the definition of
+> -			 * next_in_service for details on why
+> -			 * in_service_entity must be checked too).
+> -			 *
+> -			 * As a consequence, its parent entities are
+> -			 * active as well, and thus this loop must
+> -			 * stop here.
+> -			 */
+> -			break;
+> -		}
+> -
+> -		/*
+> -		 * The decrement of num_groups_with_pending_reqs is
+> -		 * not performed immediately upon the deactivation of
+> -		 * entity, but it is delayed to when it also happens
+> -		 * that the first leaf descendant bfqq of entity gets
+> -		 * all its pending requests completed. The following
+> -		 * instructions perform this delayed decrement, if
+> -		 * needed. See the comments on
+> -		 * num_groups_with_pending_reqs for details.
+> -		 */
+> -		if (entity->in_groups_with_pending_reqs) {
+> -			entity->in_groups_with_pending_reqs =3D false;
+> -			bfqd->num_groups_with_pending_reqs--;
+> -		}
+> -	}
+> -
+> -	/*
+> -	 * Next function is invoked last, because it causes bfqq to be
+> -	 * freed if the following holds: bfqq is not in service and
+> -	 * has no dispatched request. DO NOT use bfqq after the next
+> -	 * function invocation.
+> -	 */
+> 	__bfq_weights_tree_remove(bfqd, bfqq,
+> 				  &bfqd->queue_weights_tree);
+> }
+> @@ -7118,7 +7076,7 @@ static int bfq_init_queue(struct request_queue =
+*q, struct elevator_type *e)
+> 	bfqd->idle_slice_timer.function =3D bfq_idle_slice_timer;
+>=20
+> 	bfqd->queue_weights_tree =3D RB_ROOT_CACHED;
+> -	bfqd->num_groups_with_pending_reqs =3D 0;
+> +	bfqd->num_groups_with_busy_queues =3D 0;
+>=20
+> 	INIT_LIST_HEAD(&bfqd->active_list);
+> 	INIT_LIST_HEAD(&bfqd->idle_list);
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index d92adbdd70ee..6c6cd984d769 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -197,9 +197,6 @@ struct bfq_entity {
+> 	/* flag, set to request a weight, ioprio or ioprio_class change  =
+*/
+> 	int prio_changed;
+>=20
+> -	/* flag, set if the entity is counted in =
+groups_with_pending_reqs */
+> -	bool in_groups_with_pending_reqs;
+> -
+> 	/* last child queue of entity created (for non-leaf entities) */
+> 	struct bfq_queue *last_bfqq_created;
+> };
+> @@ -496,52 +493,14 @@ struct bfq_data {
+> 	struct rb_root_cached queue_weights_tree;
+>=20
+> 	/*
+> -	 * Number of groups with at least one descendant process that
+> -	 * has at least one request waiting for completion. Note that
+> -	 * this accounts for also requests already dispatched, but not
+> -	 * yet completed. Therefore this number of groups may differ
+> -	 * (be larger) than the number of active groups, as a group is
+> -	 * considered active only if its corresponding entity has
+> -	 * descendant queues with at least one request queued. This
+> -	 * number is used to decide whether a scenario is symmetric.
+> -	 * For a detailed explanation see comments on the computation
+> -	 * of the variable asymmetric_scenario in the function
+> -	 * bfq_better_to_idle().
+> -	 *
+> -	 * However, it is hard to compute this number exactly, for
+> -	 * groups with multiple descendant processes. Consider a group
+> -	 * that is inactive, i.e., that has no descendant process with
+> -	 * pending I/O inside BFQ queues. Then suppose that
+> -	 * num_groups_with_pending_reqs is still accounting for this
+> -	 * group, because the group has descendant processes with some
+> -	 * I/O request still in flight. num_groups_with_pending_reqs
+> -	 * should be decremented when the in-flight request of the
+> -	 * last descendant process is finally completed (assuming that
+> -	 * nothing else has changed for the group in the meantime, in
+> -	 * terms of composition of the group and active/inactive state =
+of child
+> -	 * groups and processes). To accomplish this, an additional
+> -	 * pending-request counter must be added to entities, and must
+> -	 * be updated correctly. To avoid this additional field and =
+operations,
+> -	 * we resort to the following tradeoff between simplicity and
+> -	 * accuracy: for an inactive group that is still counted in
+> -	 * num_groups_with_pending_reqs, we decrement
+> -	 * num_groups_with_pending_reqs when the first descendant
+> -	 * process of the group remains with no request waiting for
+> -	 * completion.
+> -	 *
+> -	 * Even this simpler decrement strategy requires a little
+> -	 * carefulness: to avoid multiple decrements, we flag a group,
+> -	 * more precisely an entity representing a group, as still
+> -	 * counted in num_groups_with_pending_reqs when it becomes
+> -	 * inactive. Then, when the first descendant queue of the
+> -	 * entity remains with no request waiting for completion,
+> -	 * num_groups_with_pending_reqs is decremented, and this flag
+> -	 * is reset. After this flag is reset for the entity,
+> -	 * num_groups_with_pending_reqs won't be decremented any
+> -	 * longer in case a new descendant queue of the entity remains
+> -	 * with no request waiting for completion.
+> +	 * Number of groups with at least one bfqq that is marked busy,
+> +	 * and this number is used to decide whether a scenario is =
+symmetric.
+> +	 * Note that bfqq is busy doesn't mean that the bfqq contains =
+requests.
+> +	 * If idling is needed for service guarantees, bfqq will stay =
+busy
+> +	 * after dispatching the last request, see details in
+> +	 * __bfq_bfqq_expire().
+> 	 */
+> -	unsigned int num_groups_with_pending_reqs;
+> +	unsigned int num_groups_with_busy_queues;
+>=20
+> 	/*
+> 	 * Per-class (RT, BE, IDLE) number of bfq_queues containing
+> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+> index b97e33688335..48ca7922035c 100644
+> --- a/block/bfq-wf2q.c
+> +++ b/block/bfq-wf2q.c
+> @@ -221,13 +221,15 @@ static bool bfq_no_longer_next_in_service(struct =
+bfq_entity *entity)
+> static void bfq_inc_busy_queues(struct bfq_queue *bfqq)
+> {
+> 	bfqq->bfqd->busy_queues[bfqq->ioprio_class - 1]++;
+> -	bfqq_group(bfqq)->busy_queues++;
+> +	if (!(bfqq_group(bfqq)->busy_queues++))
+> +		bfqq->bfqd->num_groups_with_busy_queues++;
+> }
+>=20
+> static void bfq_dec_busy_queues(struct bfq_queue *bfqq)
+> {
+> 	bfqq->bfqd->busy_queues[bfqq->ioprio_class - 1]--;
+> -	bfqq_group(bfqq)->busy_queues--;
+> +	if (!(--bfqq_group(bfqq)->busy_queues))
+> +		bfqq->bfqd->num_groups_with_busy_queues--;
+> }
+>=20
+> #else /* CONFIG_BFQ_GROUP_IOSCHED */
+> @@ -1006,19 +1008,6 @@ static void __bfq_activate_entity(struct =
+bfq_entity *entity,
+> 		entity->on_st_or_in_serv =3D true;
+> 	}
+>=20
+> -#ifdef CONFIG_BFQ_GROUP_IOSCHED
+> -	if (!bfq_entity_to_bfqq(entity)) { /* bfq_group */
+> -		struct bfq_group *bfqg =3D
+> -			container_of(entity, struct bfq_group, entity);
+> -		struct bfq_data *bfqd =3D bfqg->bfqd;
+> -
+> -		if (!entity->in_groups_with_pending_reqs) {
+> -			entity->in_groups_with_pending_reqs =3D true;
+> -			bfqd->num_groups_with_pending_reqs++;
+> -		}
+> -	}
+> -#endif
+> -
+> 	bfq_update_fin_time_enqueue(entity, st, backshifted);
+> }
+>=20
+> --=20
+> 2.31.1
+>=20
 

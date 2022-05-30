@@ -2,204 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C662A537802
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C15537873
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234123AbiE3I5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 04:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
+        id S234457AbiE3I56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 04:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233054AbiE3I51 (ORCPT
+        with ESMTP id S234068AbiE3I5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 04:57:27 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 258567220E;
-        Mon, 30 May 2022 01:57:24 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nvbDG-0006tr-00; Mon, 30 May 2022 10:57:22 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 20EE0C0327; Mon, 30 May 2022 10:57:13 +0200 (CEST)
-Date:   Mon, 30 May 2022 10:57:13 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS changes for v5.19
-Message-ID: <20220530085713.GA4761@alpha.franken.de>
+        Mon, 30 May 2022 04:57:55 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413A47220E
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:57:54 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id t13so8511987ljd.6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:57:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject
+         :content-language:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=lAZ+j4i7HJwXaSuMT5P/9OWwy3X9DfOqr/MHBEG4KHI=;
+        b=aDnPkj6r5ZzjADGCBpBF0k2//QShcfRFpuzPbuPgGZvD1xyq81kSN27OswexYp7b4Y
+         +sZn/ScrbzAoL29odFLAPT/8ckwv6U08kqj4rQhfGnq+w/Ci3V3z9WDQQSuOlz2fdTGu
+         +Xq9fkeacpiSJPniUbxXbjMJSA//GNTsaKoS3JfWa1O2rtOa7HtZJ3wnbZi/a3S82gDW
+         rd2RMVXROO10vULaokSHE2OCkAc3nm9DLdIfU9vG8x7/1sPPvKqqqrzFpLLDbZ2DDT+C
+         pEYB3X5lXUGsvCUc3usc7dqIROPrdOvOX8YXV8zE2MbysPBjl/kzIhyBm3cCRN03/5ot
+         yfJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:content-language:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=lAZ+j4i7HJwXaSuMT5P/9OWwy3X9DfOqr/MHBEG4KHI=;
+        b=zgEL1kKw+TevH9CJmn50+T/JyLpVcpbvCXeemWxZQzSXOrFoWo1xvoCAkdY5d1AkZx
+         yKgvHgYVOFeqWepEgFfuQgvzFHvD+qA4yTrFXUFt8Utyxbv4jIWD7WwSdGNo4FVqTpR/
+         dclYt26gSaoeDGMaYhBEr3QZYvyI20XX0G4bVMs+Gfd5iyopSdXjLBCIC1X8F6Q2kupR
+         2mDEh3fqQBh71TxnR7zTzXgBMt2r/3T9AySKC5r3tb8adRqRz9/mGEgvjxC4p85umeN9
+         YpTByEEILJ8A/QhUj7vBROql5iV9d2wAXAFg57aZoB00FiLh5rw2auZ6vmnGy5LtWkkp
+         BsLg==
+X-Gm-Message-State: AOAM5338esAWIg89aOg7vORSGns1dpMzHjnROlMNqiMYsUZqTQomp3tr
+        IHUFQdQSv1Jo05soLLIien7gWQ==
+X-Google-Smtp-Source: ABdhPJwRnA1vjBQ/lHk4ny41879c4r+co+vuchDOUFjscAu4AhPvLAaz+2PEIyemFIqMm0E91oVE0w==
+X-Received: by 2002:a05:651c:893:b0:249:4023:3818 with SMTP id d19-20020a05651c089300b0024940233818mr33595563ljq.44.1653901072467;
+        Mon, 30 May 2022 01:57:52 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.129])
+        by smtp.gmail.com with ESMTPSA id f3-20020a05651201c300b0047408564c31sm2177490lfp.286.2022.05.30.01.57.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 01:57:52 -0700 (PDT)
+Message-ID: <6b362c6e-9c80-4344-9430-b831f9871a3c@openvz.org>
+Date:   Mon, 30 May 2022 11:57:48 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: Re: [PATCH memcg v5] net: set proper memcg for net_init hooks
+ allocations
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     kernel@openvz.org, Florian Westphal <fw@strlen.de>,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>
+References: <CALvZod5HugCO2G3+Av3pXC6s2sy0zKW_HRaRyhOO9GOOWV1SsQ@mail.gmail.com>
+ <0ccfe7a4-c178-0b66-d481-2326c85a8ffb@openvz.org>
+In-Reply-To: <0ccfe7a4-c178-0b66-d481-2326c85a8ffb@openvz.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit b2d229d4ddb17db541098b83524d901257e93845:
+Dear Andrew,
+could you please pick up this patch?
 
-  Linux 5.18-rc3 (2022-04-17 13:57:31 -0700)
+Thank you,
+	Vasily Averin
 
-are available in the Git repository at:
+On 5/2/22 03:10, Vasily Averin wrote:
+> __register_pernet_operations() executes init hook of registered
+> pernet_operation structure in all existing net namespaces.
+> 
+> Typically, these hooks are called by a process associated with
+> the specified net namespace, and all __GFP_ACCOUNT marked
+> allocation are accounted for corresponding container/memcg.
+> 
+> However __register_pernet_operations() calls the hooks in the same
+> context, and as a result all marked allocations are accounted
+> to one memcg for all processed net namespaces.
+> 
+> This patch adjusts active memcg for each net namespace and helps
+> to account memory allocated inside ops_init() into the proper memcg.
+> 
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
+> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Acked-by: Shakeel Butt <shakeelb@google.com>
+> 
+> ---
+> v5: documented get_mem_cgroup_from_obj() and for mem_cgroup_or_root()
+>     functions, asked by Shakeel.
+> 
+> v4: get_mem_cgroup_from_kmem() renamed to get_mem_cgroup_from_obj(),
+>     get_net_memcg() renamed to mem_cgroup_or_root(), suggested by Roman.
+> 
+> v3: put_net_memcg() replaced by an alreay existing mem_cgroup_put()
+>     It checks memcg before accessing it, this is required for
+>     __register_pernet_operations() called before memcg initialization.
+>     Additionally fixed leading whitespaces in non-memcg_kmem version
+>     of mem_cgroup_from_obj().
+> 
+> v2: introduced get/put_net_memcg(),
+>     new functions are moved under CONFIG_MEMCG_KMEM
+>     to fix compilation issues reported by Intel's kernel test robot
+> 
+> v1: introduced get_mem_cgroup_from_kmem(), which takes the refcount
+>     for the found memcg, suggested by Shakeel
+> ---
+>  include/linux/memcontrol.h | 47 +++++++++++++++++++++++++++++++++++++-
+>  net/core/net_namespace.c   |  7 ++++++
+>  2 files changed, 53 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index 0abbd685703b..6405f9b8f5a8 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -1714,6 +1714,42 @@ static inline int memcg_cache_id(struct mem_cgroup *memcg)
+>  
+>  struct mem_cgroup *mem_cgroup_from_obj(void *p);
+>  
+> +/**
+> + * get_mem_cgroup_from_obj - get a memcg associated with passed kernel object.
+> + * @p: pointer to object from which memcg should be extracted. It can be NULL.
+> + *
+> + * Retrieves the memory group into which the memory of the pointed kernel
+> + * object is accounted. If memcg is found, its reference is taken.
+> + * If a passed kernel object is uncharged, or if proper memcg cannot be found,
+> + * as well as if mem_cgroup is disabled, NULL is returned.
+> + *
+> + * Return: valid memcg pointer with taken reference or NULL.
+> + */
+> +static inline struct mem_cgroup *get_mem_cgroup_from_obj(void *p)
+> +{
+> +	struct mem_cgroup *memcg;
+> +
+> +	rcu_read_lock();
+> +	do {
+> +		memcg = mem_cgroup_from_obj(p);
+> +	} while (memcg && !css_tryget(&memcg->css));
+> +	rcu_read_unlock();
+> +	return memcg;
+> +}
+> +
+> +/**
+> + * mem_cgroup_or_root - always returns a pointer to a valid memory cgroup.
+> + * @memcg: pointer to a valid memory cgroup or NULL.
+> + *
+> + * If passed argument is not NULL, returns it without any additional checks
+> + * and changes. Otherwise, root_mem_cgroup is returned.
+> + *
+> + * NOTE: root_mem_cgroup can be NULL during early boot.
+> + */
+> +static inline struct mem_cgroup *mem_cgroup_or_root(struct mem_cgroup *memcg)
+> +{
+> +	return memcg ? memcg : root_mem_cgroup;
+> +}
+>  #else
+>  static inline bool mem_cgroup_kmem_disabled(void)
+>  {
+> @@ -1763,9 +1799,18 @@ static inline void memcg_put_cache_ids(void)
+>  
+>  static inline struct mem_cgroup *mem_cgroup_from_obj(void *p)
+>  {
+> -       return NULL;
+> +	return NULL;
+>  }
+>  
+> +static inline struct mem_cgroup *get_mem_cgroup_from_obj(void *p)
+> +{
+> +	return NULL;
+> +}
+> +
+> +static inline struct mem_cgroup *mem_cgroup_or_root(struct mem_cgroup *memcg)
+> +{
+> +	return NULL;
+> +}
+>  #endif /* CONFIG_MEMCG_KMEM */
+>  
+>  #endif /* _LINUX_MEMCONTROL_H */
+> diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
+> index a5b5bb99c644..240f3db77dec 100644
+> --- a/net/core/net_namespace.c
+> +++ b/net/core/net_namespace.c
+> @@ -26,6 +26,7 @@
+>  #include <net/net_namespace.h>
+>  #include <net/netns/generic.h>
+>  
+> +#include <linux/sched/mm.h>
+>  /*
+>   *	Our network namespace constructor/destructor lists
+>   */
+> @@ -1147,7 +1148,13 @@ static int __register_pernet_operations(struct list_head *list,
+>  		 * setup_net() and cleanup_net() are not possible.
+>  		 */
+>  		for_each_net(net) {
+> +			struct mem_cgroup *old, *memcg;
+> +
+> +			memcg = mem_cgroup_or_root(get_mem_cgroup_from_obj(net));
+> +			old = set_active_memcg(memcg);
+>  			error = ops_init(ops, net);
+> +			set_active_memcg(old);
+> +			mem_cgroup_put(memcg);
+>  			if (error)
+>  				goto out_undo;
+>  			list_add_tail(&net->exit_list, &net_exit_list);
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.19
-
-for you to fetch changes up to 7e4fd16b38923028b01d3dbadf4ca973d885c53e:
-
-  MIPS: RALINK: Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC (2022-05-26 10:12:11 +0200)
-
-----------------------------------------------------------------
-Cleanups and fixes
-
-----------------------------------------------------------------
-Aidan MacDonald (1):
-      mips: dts: ingenic: x1000: Add PWM device tree node
-
-Arınç ÜNAL (3):
-      mips: dts: ralink: mt7621: add mdio label to mdio-bus
-      mips: dts: ralink: mt7621: mux phy4 to gmac1 for GB-PC1
-      mips: dts: ralink: mt7621: remove defining gpio function for pin groups
-
-Christophe JAILLET (2):
-      MIPS: SGI-IP27: Free some unused memory
-      MIPS: SGI-IP30: Free some unused memory
-
-Gong Yuanjun (1):
-      mips: cpc: Fix refcount leak in mips_cpc_default_phys_base
-
-Guenter Roeck (1):
-      MIPS: Loongson: Use hwmon_device_register_with_groups() to register hwmon
-
-Guilherme G. Piccoli (1):
-      mips: ip22: Reword PANICED to PANICKED and remove useless header
-
-Guo Zhengkui (1):
-      MIPS: Sibyte: remove unnecessary return variable
-
-Haowen Bai (1):
-      MIPS: VR41xx: Drop redundant spinlock initialization
-
-Jason Wang (1):
-      MIPS: tools: no need to initialise statics to 0
-
-Jim Quinlan (1):
-      MIPS: bmips: Fix compiler warning observed on W=1 build
-
-Juerg Haefliger (2):
-      MIPS: loongson32: Kconfig: Remove extra space
-      MIPS: Kconfig: Fix indentation and add endif comment
-
-Julia Lawall (2):
-      MIPS: fix typos in comments
-      MIPS: Octeon: fix typo in comment
-
-Krzysztof Kozlowski (1):
-      MIPS: dts: align SPI NOR node name with dtschema
-
-Maciej W. Rozycki (3):
-      MIPS: IP27: Remove incorrect `cpu_has_fpu' override
-      MIPS: IP30: Remove incorrect `cpu_has_fpu' override
-      MIPS: Rewrite `csum_tcpudp_nofold' in plain C
-
-Mao Bibo (1):
-      MIPS: smp: optimization for flush_tlb_mm when exiting
-
-Michael Walle (3):
-      MIPS: mscc: jaguar2: rename pinctrl nodes
-      MIPS: mscc: ocelot: rename pinctrl nodes
-      MIPS: mscc: serval: rename pinctrl nodes
-
-Shida Zhang (1):
-      MIPS: adding a safety check for cpu_has_fpu
-
-Stijn Tintel (3):
-      MIPS: Octeon: fix CN6640 hang on XAUI init
-      MIPS: Octeon: support all interfaces on CN66XX
-      MIPS: Octeon: add SNIC10E board
-
-Tiezhu Yang (5):
-      selftests/ftrace: Save kprobe_events to test log
-      MIPS: Use NOKPROBE_SYMBOL() instead of __kprobes annotation
-      MIPS: Return -EINVAL if mem parameter is empty in early_parse_mem()
-      MIPS: Use memblock_add_node() in early_parse_mem() under CONFIG_NUMA
-      MIPS: RALINK: Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC
-
-周琰杰 (Zhou Yanjie) (3):
-      MIPS: Ingenic: Add PWM nodes for X1830.
-      MIPS: Ingenic: Refresh device tree for Ingenic SoCs and boards.
-      MIPS: Ingenic: Refresh defconfig for CU1000-Neo and CU1830-Neo.
-
-陈学兵 (1):
-      mips: setup: use strscpy to replace strlcpy
-
- arch/mips/Kconfig                                  |  12 +-
- arch/mips/alchemy/common/dbdma.c                   |   2 +-
- arch/mips/bmips/dma.c                              |   1 +
- arch/mips/boot/dts/brcm/bcm97358svmb.dts           |   2 +-
- arch/mips/boot/dts/brcm/bcm97360svmb.dts           |   2 +-
- arch/mips/boot/dts/brcm/bcm97425svmb.dts           |   2 +-
- arch/mips/boot/dts/ingenic/cu1000-neo.dts          |  77 +++++++------
- arch/mips/boot/dts/ingenic/cu1830-neo.dts          |  76 ++++++------
- arch/mips/boot/dts/ingenic/x1000.dtsi              |  32 ++++++
- arch/mips/boot/dts/ingenic/x1830.dtsi              |  53 +++++++++
- arch/mips/boot/dts/mscc/jaguar2_pcb110.dts         |  10 +-
- arch/mips/boot/dts/mscc/jaguar2_pcb111.dts         |  10 +-
- arch/mips/boot/dts/mscc/jaguar2_pcb118.dts         |   6 +-
- arch/mips/boot/dts/mscc/ocelot.dtsi                |   4 +-
- arch/mips/boot/dts/mscc/ocelot_pcb120.dts          |   6 +-
- arch/mips/boot/dts/mscc/serval_common.dtsi         |  14 +--
- .../dts/ralink/gardena_smart_gateway_mt7688.dts    |   2 +-
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts |  26 ++---
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts |  30 ++---
- arch/mips/boot/dts/ralink/mt7621.dtsi              |   2 +-
- arch/mips/boot/tools/relocs.c                      |   2 +-
- arch/mips/cavium-octeon/executive/cvmx-bootmem.c   |   2 +-
- .../cavium-octeon/executive/cvmx-helper-xaui.c     |   5 +-
- arch/mips/cavium-octeon/executive/cvmx-helper.c    |   6 +
- arch/mips/cavium-octeon/executive/cvmx-pko.c       |   2 +-
- arch/mips/cavium-octeon/octeon-irq.c               |   2 +-
- arch/mips/cavium-octeon/octeon-usb.c               |   2 +-
- arch/mips/configs/cu1000-neo_defconfig             |   2 +-
- arch/mips/configs/cu1830-neo_defconfig             |   2 +-
- arch/mips/dec/ioasic-irq.c                         |   4 +-
- arch/mips/dec/setup.c                              |   2 +-
- arch/mips/fw/arc/memory.c                          |   2 +-
- arch/mips/include/asm/checksum.h                   |  79 ++++++-------
- arch/mips/include/asm/cpu-features.h               |   3 +
- .../include/asm/mach-ip27/cpu-feature-overrides.h  |   1 -
- .../include/asm/mach-ip30/cpu-feature-overrides.h  |   1 -
- arch/mips/include/asm/mach-ralink/spaces.h         |   2 +
- arch/mips/include/asm/octeon/cvmx-bootinfo.h       |   2 +
- arch/mips/jazz/irq.c                               |   2 +-
- arch/mips/kernel/cmpxchg.c                         |   2 +-
- arch/mips/kernel/cpu-probe.c                       |   2 +-
- arch/mips/kernel/idle.c                            |   2 +-
- arch/mips/kernel/kprobes.c                         |  36 ++++--
- arch/mips/kernel/mips-cpc.c                        |   1 +
- arch/mips/kernel/perf_event_mipsxx.c               |   2 +-
- arch/mips/kernel/setup.c                           |  17 ++-
- arch/mips/kernel/smp.c                             |   6 +
- arch/mips/kvm/tlb.c                                |   2 +-
- arch/mips/loongson32/Kconfig                       |   2 +-
- arch/mips/mm/fault.c                               |   6 +-
- arch/mips/net/bpf_jit_comp32.c                     |   2 +-
- arch/mips/pci/pcie-octeon.c                        |   4 +-
- arch/mips/pic32/pic32mzda/config.c                 |   2 +-
- arch/mips/sgi-ip22/ip22-reset.c                    |  11 +-
- arch/mips/sgi-ip27/ip27-xtalk.c                    |   4 +
- arch/mips/sgi-ip30/ip30-xtalk.c                    |   4 +
- arch/mips/sibyte/bcm1480/setup.c                   |   4 +-
- arch/mips/tools/loongson3-llsc-check.c             |   2 +-
- arch/mips/txx9/generic/pci.c                       |   2 +-
- arch/mips/vr41xx/common/cmu.c                      |   2 -
- drivers/platform/mips/cpu_hwmon.c                  | 127 +++++++--------------
- .../ftrace/test.d/kprobe/multiple_kprobes.tc       |   2 +
- 62 files changed, 401 insertions(+), 335 deletions(-)
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]

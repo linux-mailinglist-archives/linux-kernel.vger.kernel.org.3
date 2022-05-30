@@ -2,53 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CE7538432
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8B3537F2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 16:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242210AbiE3Opy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 10:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
+        id S240397AbiE3OLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 10:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241088AbiE3ORN (ORCPT
+        with ESMTP id S238667AbiE3OEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 10:17:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598A81109AB;
-        Mon, 30 May 2022 06:44:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB014B80D83;
-        Mon, 30 May 2022 13:44:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9336EC36AE3;
-        Mon, 30 May 2022 13:44:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918245;
-        bh=HwjH44pS8984mw7Nh4lKusX1l8RJWXNJDc+xlPI7FLA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vNdq4VSj4Keixr6kMEEGQHNG4BxbncWAY2yxA+UNYJVP4ED7GG7bnBkOH9mspcsmc
-         Ouu4LVQAywPuA2CkHNkfE8F95hzILIxTCeUYniaZFkvrEFo4PDcUICuOyV/JyCq0KG
-         5JYbktyd2wIIrLThCvEs6ZC+HY6ADVwTcBJWKx/oSdG+14fMMzn3CNtIpnyi6ETv7w
-         pxPcrS8jSBfabWQXb8YbeBCbRzij2ksnBpCdkYG/p+5NZU1vXFxeQPLR5VF0WXKoGh
-         JBxWIoKIl6UNLZwu2VIjIt7qYDUySc75meT3VmLwK0UTSPZ65y1XALPhLt4LHVe9In
-         bhJh+bSg0r8Cg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, cluster-devel@redhat.com
-Subject: [PATCH AUTOSEL 5.15 109/109] gfs2: use i_lock spin_lock for inode qadata
-Date:   Mon, 30 May 2022 09:38:25 -0400
-Message-Id: <20220530133825.1933431-109-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530133825.1933431-1-sashal@kernel.org>
-References: <20220530133825.1933431-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Mon, 30 May 2022 10:04:45 -0400
+Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79082994E0;
+        Mon, 30 May 2022 06:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=pAaMY+j2sYlcGXBo+T
+        l/106hE5vn1j7rLU/jBsZmyb0=; b=jTMZTqW7LoEoQlhvQyd+EhF8McmtnCP7w9
+        FEBRaWpGwgkM/mraPsZgTw/48dhPhu80hZv+J36QnN3SOKZR//uIuM70Z4O5ag0y
+        kHH5Oy3Jm+oFFCucyh6kjT/WyJ5wNV1hXPSTMxVxrDWtQuH0JxKyC+0PXc2y2ak2
+        0ZcYMAm+4=
+Received: from localhost.localdomain (unknown [171.221.150.250])
+        by smtp8 (Coremail) with SMTP id DMCowADXdaYMyZRiQha+FA--.22801S2;
+        Mon, 30 May 2022 21:39:32 +0800 (CST)
+From:   Chen Lin <chen45464546@163.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        alexander.h.duyck@linux.intel.com, netdev@vger.kernel.org,
+        Chen Lin <chen45464546@163.com>
+Subject: [PATCH v2] mm: page_frag: Warn_on when frag_alloc size is bigger than PAGE_SIZE
+Date:   Mon, 30 May 2022 21:39:02 +0800
+Message-Id: <1653917942-5982-1-git-send-email-chen45464546@163.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <20220529163029.12425c1e5286d7c7e3fe3708@linux-foundation.org>
+References: <20220529163029.12425c1e5286d7c7e3fe3708@linux-foundation.org>
+X-CM-TRANSID: DMCowADXdaYMyZRiQha+FA--.22801S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tr17tw1fGFWkur17WF4rXwb_yoW8KrW7pF
+        W7Cr15ZFs0qwnxCw4kAw4vyr45A398WFWUKrWFv34Y9w13Gr109w1DKr4jvFyrAr10kFW7
+        tF4Yyr13C3WjvaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pE66wsUUUUU=
+X-Originating-IP: [171.221.150.250]
+X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/xtbCqRsRnl0DfvPs0gAAsQ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,86 +53,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bob Peterson <rpeterso@redhat.com>
+netdev_alloc_frag->page_frag_alloc may cause memory corruption in 
+the following process:
 
-[ Upstream commit 5fcff61eea9efd1f4b60e89d2d686b5feaea100f ]
+1. A netdev_alloc_frag function call need alloc 200 Bytes to build a skb.
 
-Before this patch, functions gfs2_qa_get and _put used the i_rw_mutex to
-prevent simultaneous access to its i_qadata. But i_rw_mutex is now used
-for many other things, including iomap_begin and end, which causes a
-conflict according to lockdep. We cannot just remove the lock since
-simultaneous opens (gfs2_open -> gfs2_open_common -> gfs2_qa_get) can
-then stomp on each others values for i_qadata.
+2. Insufficient memory to alloc PAGE_FRAG_CACHE_MAX_ORDER(32K) in 
+__page_frag_cache_refill to fill frag cache, then one page(eg:4K) 
+is allocated, now current frag cache is 4K, alloc is success, 
+nc->pagecnt_bias--.
 
-This patch solves the conflict by using the i_lock spin_lock in the inode
-to prevent simultaneous access.
+3. Then this 200 bytes skb in step 1 is freed, page->_refcount--.
 
-Signed-off-by: Bob Peterson <rpeterso@redhat.com>
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+4. Another netdev_alloc_frag function call need alloc 5k, page->_refcount 
+is equal to nc->pagecnt_bias, reset page count bias and offset to 
+start of new frag. page_frag_alloc will return the 4K memory for a 
+5K memory request.
+
+5. The caller write on the extra 1k memory which is not actual allocated 
+will cause memory corruption.
+
+page_frag_alloc is for fragmented allocation. We should warn the caller 
+to avoid memory corruption.
+
+When fragsz is larger than one page, we report the failure and return.
+I don't think it is a good idea to make efforts to support the
+allocation of more than one page in this function because the total
+frag cache size(PAGE_FRAG_CACHE_MAX_SIZE 32768) is relatively small.
+When the request is larger than one page, the caller should switch to
+use other kernel interfaces, such as kmalloc and alloc_Pages.
+
+This bug is mainly caused by the reuse of the previously allocated
+frag cache memory by the following LARGER allocations. This bug existed
+before page_frag_alloc was ported from __netdev_alloc_frag in 
+net/core/skbuff.c, so most Linux versions have this problem.
+
+Signed-off-by: Chen Lin <chen45464546@163.com>
 ---
- fs/gfs2/quota.c | 32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+ mm/page_alloc.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
-index be0997e24d60..dc77080a82bb 100644
---- a/fs/gfs2/quota.c
-+++ b/fs/gfs2/quota.c
-@@ -531,34 +531,42 @@ static void qdsb_put(struct gfs2_quota_data *qd)
-  */
- int gfs2_qa_get(struct gfs2_inode *ip)
- {
--	int error = 0;
- 	struct gfs2_sbd *sdp = GFS2_SB(&ip->i_inode);
-+	struct inode *inode = &ip->i_inode;
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e008a3d..1e9e2c4 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -5574,6 +5574,16 @@ void *page_frag_alloc_align(struct page_frag_cache *nc,
+ 	struct page *page;
+ 	int offset;
  
- 	if (sdp->sd_args.ar_quota == GFS2_QUOTA_OFF)
- 		return 0;
- 
--	down_write(&ip->i_rw_mutex);
-+	spin_lock(&inode->i_lock);
- 	if (ip->i_qadata == NULL) {
--		ip->i_qadata = kmem_cache_zalloc(gfs2_qadata_cachep, GFP_NOFS);
--		if (!ip->i_qadata) {
--			error = -ENOMEM;
--			goto out;
--		}
-+		struct gfs2_qadata *tmp;
++	/* frag_alloc is not suitable for memory alloc which fragsz
++	 * is bigger than PAGE_SIZE, use kmalloc or alloc_pages instead.
++	 */
++	if (unlikely(fragsz > PAGE_SIZE)) {
++		WARN(1, "alloc fragsz(%d) > PAGE_SIZE(%ld) not supported,
++			alloc fail\n", fragsz, PAGE_SIZE);
 +
-+		spin_unlock(&inode->i_lock);
-+		tmp = kmem_cache_zalloc(gfs2_qadata_cachep, GFP_NOFS);
-+		if (!tmp)
-+			return -ENOMEM;
++		return NULL;
++	}
 +
-+		spin_lock(&inode->i_lock);
-+		if (ip->i_qadata == NULL)
-+			ip->i_qadata = tmp;
-+		else
-+			kmem_cache_free(gfs2_qadata_cachep, tmp);
- 	}
- 	ip->i_qadata->qa_ref++;
--out:
--	up_write(&ip->i_rw_mutex);
--	return error;
-+	spin_unlock(&inode->i_lock);
-+	return 0;
- }
- 
- void gfs2_qa_put(struct gfs2_inode *ip)
- {
--	down_write(&ip->i_rw_mutex);
-+	struct inode *inode = &ip->i_inode;
-+
-+	spin_lock(&inode->i_lock);
- 	if (ip->i_qadata && --ip->i_qadata->qa_ref == 0) {
- 		kmem_cache_free(gfs2_qadata_cachep, ip->i_qadata);
- 		ip->i_qadata = NULL;
- 	}
--	up_write(&ip->i_rw_mutex);
-+	spin_unlock(&inode->i_lock);
- }
- 
- int gfs2_quota_hold(struct gfs2_inode *ip, kuid_t uid, kgid_t gid)
+ 	if (unlikely(!nc->va)) {
+ refill:
+ 		page = __page_frag_cache_refill(nc, gfp_mask);
 -- 
-2.35.1
+1.7.9.5
 

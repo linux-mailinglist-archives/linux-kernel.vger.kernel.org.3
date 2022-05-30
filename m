@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94E3537583
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3186253758B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbiE3HhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
+        id S233589AbiE3Hh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233510AbiE3HfB (ORCPT
+        with ESMTP id S233520AbiE3HfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 30 May 2022 03:35:01 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3097C71DA1;
-        Mon, 30 May 2022 00:34:47 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24U7Yhfk084868;
-        Mon, 30 May 2022 02:34:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1653896083;
-        bh=D3w8nI02oB8EoNoAqaEWvOutV6JaRMHHmHyziuHi/rQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ww1shQVWRaLgun/B5eWiCAfnkkNp9Bfx8IbuEKoazaIOlMmP6jISaU6yEyn8QLj3F
-         ps/ZHwxhwq1nZOGqO/1igE1OaYqo+FoeEl/z+FIr3kVX0WFEbFr6n+I9ALJ1vPv2eS
-         fyI58NxVgSdrr5bWaSiuK5qiPbafu86rcOyeRZC8=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24U7YhbD098446
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 30 May 2022 02:34:43 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 30
- May 2022 02:34:43 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 30 May 2022 02:34:43 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24U7Ygi7098610;
-        Mon, 30 May 2022 02:34:42 -0500
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     <robh+dt@kernel.org>, <nm@ti.com>, <vigneshr@ti.com>,
-        <kishon@ti.com>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <lee.jones@linaro.org>, <rogerq@kernel.org>,
-        <devicetree@vger.kernel.org>, <kristo@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <s-anna@ti.com>,
-        Sinthu Raja <sinthu.raja@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>
-Subject: [PATCH v2 3/3] arm64: dts: ti: k3-j721e-sk: Add pinmux for RPi Header
-Date:   Mon, 30 May 2022 13:04:29 +0530
-Message-ID: <20220530073429.17514-4-r-ravikumar@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220530073429.17514-1-r-ravikumar@ti.com>
-References: <20220530073429.17514-1-r-ravikumar@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0968C72202
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:34:50 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id y13so19141813eje.2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:34:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=i2FIUxMX07dIItmCTvQjDvu7n64mA3I16Cf2RtZUc9E=;
+        b=DLaTskUkWjAQizg06WRK4OQ5IjBDjAR1xNLKk6o5mJOCZgMi3CKiKiSgzNBJVktQOr
+         FJw6QDr48a4i+waCCeI2SgKfgtvDUkMC6OleUzscAXa2/SUKfk7G0jbv8OlPIeef5Lx4
+         G4uxf2YfIfNi7bdZJKJ5u+Dfe7MXdiUW3gDuWiO4zk8eRfYE9/++jJEd0m2x1a6+Vwmw
+         A85OWPBHmk/+4r/z9k70SjrjLLFZxd7gX45N3onexytP1A0RLt/8WTO6S6uWsMkCv/ji
+         jz0pRQE5tS9wJQfIrlFEmvUI36KgT8ggw+guxi8dCOiZwHazQYMb7FbPcEBrmInQzSxQ
+         O2Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=i2FIUxMX07dIItmCTvQjDvu7n64mA3I16Cf2RtZUc9E=;
+        b=n4Jhb9I1hq20ELDkEaFT0mU8/A+erPVCvsCCOzwb/0qauAPMk7BxCTtgSDSWs5Mhgw
+         bi4FysvmET2levOmCUXq5krUOIIzm/PIE+tAXpSawZMVhiSpqtNja+9qMxZe5W9rCx/t
+         Z2NoR5+RsLEA1mKd3IV9Skqob791h525AHYZ3yJqE6mA8GAWO+ch+/UT1AbsUSQjRQgs
+         4MU4orgdXG8OsK6w47p4LgaRnAQ71e/KD+j8Z8gEl5z1eaIrWW2+N24v8a5rEha7VD+q
+         Zq+BB1FLPzD/T86xTusMZjBdTyxOP2DgobZ+HdEH63YmQGK6SYu3OTSeI2JldYBAcLqQ
+         4gEQ==
+X-Gm-Message-State: AOAM531KVmmZpWbvZcWSZxdusm+F2MryIiwmgqQNUclmnxbM/zSuzSrh
+        mAUFX6SYE5APQBJSqERkLkjnsxfZdpR5Fg==
+X-Google-Smtp-Source: ABdhPJyOWCr+ry/+jm/PsYI8+iO7oAWa66QadSkDdE5Rnbhx/yj6CcTLuaoTqNzbRqVr9zN9/Cg1+A==
+X-Received: by 2002:a17:907:628c:b0:6ee:70cf:d59 with SMTP id nd12-20020a170907628c00b006ee70cf0d59mr48302537ejc.402.1653896088557;
+        Mon, 30 May 2022 00:34:48 -0700 (PDT)
+Received: from mbp-di-paolo.station (net-93-144-98-177.cust.dsl.teletu.it. [93.144.98.177])
+        by smtp.gmail.com with ESMTPSA id kv25-20020a17090778d900b006fea0532462sm3723498ejc.167.2022.05.30.00.34.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 30 May 2022 00:34:48 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH -next v3 0/6] multiple cleanup patches for bfq
+From:   Paolo Valente <paolo.valente@linaro.org>
+In-Reply-To: <20220528095958.270455-1-yukuai3@huawei.com>
+Date:   Mon, 30 May 2022 09:34:46 +0200
+Cc:     Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <5BC943C7-3AA4-4CED-9B11-15DA969DA852@linaro.org>
+References: <20220528095958.270455-1-yukuai3@huawei.com>
+To:     Yu Kuai <yukuai3@huawei.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,138 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sinthu Raja <sinthu.raja@ti.com>
 
-Add pinmux required to bring out
-i2c5, ehrpwm 2 and 3 and gpios on
-40 pin RPi header on sk board
 
-Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
-Signed-off-by: Rahul T R <r-ravikumar@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 89 ++++++++++++++++++++++----
- 1 file changed, 78 insertions(+), 11 deletions(-)
+> Il giorno 28 mag 2022, alle ore 11:59, Yu Kuai <yukuai3@huawei.com> ha =
+scritto:
+>=20
+> Resend just in case v2 end up in spam (for Paolo).
+>=20
+> Changes in v2:
+> - add missing blank line in patch 1.
+> - remove patch 7,8, since they are wrong.
+> - add reviewed-by tag
+>=20
+> There are no functional changes in this patchset, just some places
+> that I think can be improved during code review.
+>=20
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-index 98a55778f3fe..b913b18ae133 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-@@ -400,6 +400,57 @@
- 			J721E_IOPAD(0x124, PIN_INPUT, 7) /* (Y24) PRG0_PRU1_GPO9.GPIO0_72 */
- 		>;
- 	};
-+
-+	main_i2c5_pins_default: main-i2c5-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x150, PIN_INPUT_PULLUP, 2) /* (Y26) PRG0_MDIO0_MDIO.I2C5_SCL */
-+			J721E_IOPAD(0x154, PIN_INPUT_PULLUP, 2) /* (AA27) PRG0_MDIO0_MDC.I2C5_SDA */
-+		>;
-+	};
-+
-+	rpi_header_gpio0_pins_default: rpi-header-gpio0-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x01c, PIN_INPUT, 7) /* (AD22) PRG1_PRU0_GPO6.GPIO0_7 */
-+			J721E_IOPAD(0x120, PIN_INPUT, 7) /* (AA28) PRG0_PRU1_GPO8.GPIO0_71 */
-+			J721E_IOPAD(0x14c, PIN_INPUT, 7) /* (AA29) PRG0_PRU1_GPO19.GPIO0_82 */
-+			J721E_IOPAD(0x02c, PIN_INPUT, 7) /* (AD21) PRG1_PRU0_GPO10.GPIO0_11 */
-+			J721E_IOPAD(0x198, PIN_INPUT, 7) /* (V25) RGMII6_TD1.GPIO0_101 */
-+			J721E_IOPAD(0x1b0, PIN_INPUT, 7) /* (W24) RGMII6_RD1.GPIO0_107 */
-+			J721E_IOPAD(0x1a0, PIN_INPUT, 7) /* (W29) RGMII6_TXC.GPIO0_103 */
-+			J721E_IOPAD(0x008, PIN_INPUT, 7) /* (AG22) PRG1_PRU0_GPO1.GPIO0_2 */
-+			J721E_IOPAD(0x1d0, PIN_INPUT, 7) /* (AA3) SPI0_D1.GPIO0_115 */
-+			J721E_IOPAD(0x11c, PIN_INPUT, 7) /* (AA24) PRG0_PRU1_GPO7.GPIO0_70 */
-+			J721E_IOPAD(0x148, PIN_INPUT, 7) /* (AA26) PRG0_PRU1_GPO18.GPIO0_81 */
-+			J721E_IOPAD(0x004, PIN_INPUT, 7) /* (AC23) PRG1_PRU0_GPO0.GPIO0_1 */
-+			J721E_IOPAD(0x014, PIN_INPUT, 7) /* (AH23) PRG1_PRU0_GPO4.GPIO0_5 */
-+			J721E_IOPAD(0x020, PIN_INPUT, 7) /* (AE20) PRG1_PRU0_GPO7.GPIO0_8 */
-+			J721E_IOPAD(0x19c, PIN_INPUT, 7) /* (W27) RGMII6_TD0.GPIO0_102 */
-+			J721E_IOPAD(0x1b4, PIN_INPUT, 7) /* (W25) RGMII6_RD0.GPIO0_108 */
-+			J721E_IOPAD(0x188, PIN_INPUT, 7) /* (Y28) RGMII6_TX_CTL.GPIO0_97 */
-+			J721E_IOPAD(0x00c, PIN_INPUT, 7) /* (AF22) PRG1_PRU0_GPO2.GPIO0_3 */
-+			J721E_IOPAD(0x010, PIN_INPUT, 7) /* (AJ23) PRG1_PRU0_GPO3.GPIO0_4 */
-+		>;
-+	};
-+
-+	rpi_header_gpio1_pins_default: rpi-header-gpio1-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x234, PIN_INPUT, 7) /* (U3) EXT_REFCLK1.GPIO1_12 */
-+		>;
-+	};
-+
-+	rpi_header_ehrpwm2_pins_default: rpi-header-ehrpwm2-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x178, PIN_INPUT, 6) /* (U27) RGMII5_RD3.EHRPWM2_A */
-+			J721E_IOPAD(0x17c, PIN_INPUT, 6) /* (U24) RGMII5_RD2.EHRPWM2_B */
-+		>;
-+	};
-+
-+	rpi_header_ehrpwm3_pins_default: rpi-header-ehrpwm3-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x18c, PIN_INPUT, 6) /* (V23) RGMII6_RX_CTL.EHRPWM3_A */
-+			J721E_IOPAD(0x190, PIN_INPUT, 6) /* (W23) RGMII6_TD3.EHRPWM3_B */
-+		>;
-+	};
- };
- 
- &wkup_pmx0 {
-@@ -631,11 +682,6 @@
- 	status = "disabled";
- };
- 
--&main_i2c5 {
--	/* Brought out on RPi Header */
--	status = "disabled";
--};
--
- &main_i2c6 {
- 	/* Unused */
- 	status = "disabled";
-@@ -1138,18 +1184,39 @@
- 	status = "disabled";
- };
- 
--&main_ehrpwm2 {
-+&main_ehrpwm4 {
- 	status = "disabled";
- };
- 
--&main_ehrpwm3 {
-+&main_ehrpwm5 {
- 	status = "disabled";
- };
- 
--&main_ehrpwm4 {
--	status = "disabled";
-+&main_gpio0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rpi_header_gpio0_pins_default>;
- };
- 
--&main_ehrpwm5 {
--	status = "disabled";
-+&main_gpio1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rpi_header_gpio1_pins_default>;
-+};
-+
-+&main_i2c5 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c5_pins_default>;
-+	clock-frequency = <400000>;
-+	status = "okay";
-+};
-+
-+&main_ehrpwm2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rpi_header_ehrpwm2_pins_default>;
-+	status = "okay";
-+};
-+
-+&main_ehrpwm3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rpi_header_ehrpwm3_pins_default>;
-+	status = "okay";
- };
--- 
-2.17.1
+Thank you for this cleanup!
+
+Acked-by: Paolo Valente <paolo.valente@unimore.it>
+
+> Previous version:
+> v1: =
+https://lore.kernel.org/all/20220514090522.1669270-1-yukuai3@huawei.com/
+>=20
+> Yu Kuai (6):
+>  block, bfq: cleanup bfq_weights_tree add/remove apis
+>  block, bfq: cleanup __bfq_weights_tree_remove()
+>  block, bfq: factor out code to update 'active_entities'
+>  block, bfq: don't declare 'bfqd' as type 'void *' in bfq_group
+>  block, bfq: cleanup bfq_activate_requeue_entity()
+>  block, bfq: remove dead code for updating 'rq_in_driver'
+>=20
+> block/bfq-cgroup.c  |  2 +-
+> block/bfq-iosched.c | 38 +++----------------
+> block/bfq-iosched.h | 11 ++----
+> block/bfq-wf2q.c    | 91 ++++++++++++++++++++-------------------------
+> 4 files changed, 51 insertions(+), 91 deletions(-)
+>=20
+> --=20
+> 2.31.1
+>=20
 

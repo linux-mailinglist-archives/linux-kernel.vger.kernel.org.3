@@ -2,108 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C455378C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E72537805
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234671AbiE3JJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 05:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
+        id S234684AbiE3JKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 05:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbiE3JJr (ORCPT
+        with ESMTP id S234746AbiE3JKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 05:09:47 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0D45675C
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:09:47 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U6wBOD026011;
-        Mon, 30 May 2022 04:08:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=0nnOuY1I043AVIcqJp6idornjjCkVFno4tKetd4mjcg=;
- b=dcA8nd8emnmbSgN94gyFjds6JYlgsnV6WPdItTZqAGW1hPixBmwHDADeSUanEUz6SNHw
- X1CCccxXaGjE9DuhMsr1knSgyhYapF9Tz9VAa8ek7kqD8JHQSD0pVX1OKvTdpUqjKlZj
- mV5pUr8mhzidTHu7V56T67OqLxSJ7VQmJCAopr8Pe6j15RuAqOYRbxZBwerg3NFZXIcg
- 2k5OFeUelpgCIEOVqNNmzh8L//7uzyUXTIw6sz3dG5xXPWx4pXkTOeY7Y9pfCNEevvvH
- 0ioGmUifskKoDYMkHHUtuloND6a0ecd1PQO+o+TC6Yy/T3VhrkMMdqn/b/jxhHEc9YIb PQ== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gbh51hk07-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 30 May 2022 04:08:48 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 30 May
- 2022 10:08:46 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Mon, 30 May 2022 10:08:46 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id CB8C7468;
-        Mon, 30 May 2022 09:08:46 +0000 (UTC)
-Date:   Mon, 30 May 2022 09:08:46 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Takashi Iwai <tiwai@suse.de>
-CC:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Mark Brown <broonie@kernel.org>,
-        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 00/17] ALSA: hda: cirrus: Add initial DSP support and
- firmware loading
-Message-ID: <20220530090846.GS38351@ediswmail.ad.cirrus.com>
-References: <20220525131638.5512-1-vitalyr@opensource.cirrus.com>
- <871qwf0x8t.wl-tiwai@suse.de>
+        Mon, 30 May 2022 05:10:02 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C9278EFF;
+        Mon, 30 May 2022 02:10:01 -0700 (PDT)
+X-UUID: 0fbd74dc37fe493694fda1c5eb33a9cf-20220530
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:451ddfd5-8631-4f57-8aed-d4c1d2ea9557,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:100
+X-CID-INFO: VERSION:1.1.5,REQID:451ddfd5-8631-4f57-8aed-d4c1d2ea9557,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:100
+X-CID-META: VersionHash:2a19b09,CLOUDID:badec3b8-3c45-407b-8f66-25095432a27a,C
+        OID:cdbde5112185,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:0,BEC:nil
+X-UUID: 0fbd74dc37fe493694fda1c5eb33a9cf-20220530
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chui-hao.chiu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 210577012; Mon, 30 May 2022 17:09:55 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 30 May 2022 17:09:54 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 30 May 2022 17:09:54 +0800
+From:   Peter Chiu <chui-hao.chiu@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <devicetree@vger.kernel.org>, Ryder Lee <ryder.Lee@mediatek.com>,
+        "Evelyn Tsai" <evelyn.tsai@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Peter Chiu <chui-hao.chiu@mediatek.com>
+Subject: [PATCH v3] arm64: dts: mt7986: add built-in Wi-Fi device nodes
+Date:   Mon, 30 May 2022 17:09:44 +0800
+Message-ID: <20220530090944.4558-1-chui-hao.chiu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <871qwf0x8t.wl-tiwai@suse.de>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: Mw2lI25xkuV3lPWIZ9LW5Vkodbz5fSRr
-X-Proofpoint-ORIG-GUID: Mw2lI25xkuV3lPWIZ9LW5Vkodbz5fSRr
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 06:13:38PM +0200, Takashi Iwai wrote:
-> On Wed, 25 May 2022 15:16:21 +0200,
-> Vitaly Rodionov wrote:
-> The idea to add / delete controls by the control element change
-> doesn't sound good; as already mentioned in my reply to the previous
-> patch set, the change of the control elements can be triggered too
-> easily by any normal users who have the access to the sound devices.
-> It means thousands of additions and removals per second could be
-> attacked by any user.
-> 
+This enables built-in 802.11ax Wi-Fi support.
 
-This I am a little less sure how we handle. I mean arn't there
-already a few ways to do this? Both the existing ASoC wm_adsp
-stuff, and the topology stuff (used on all new Intel platforms,
-so very widely deployed) let you create controls by loading a
-firmware file. Also within ALSA itself can't user-space create
-user ALSA controls? Is there some rate limiting on that? How is
-this issue tackled there?
+Reviewed-by: Sam Shih <sam.shih@mediatek.com>
+Reviewed-by: Ryder Lee <ryder.lee@mediatek.com>
+Signed-off-by: Peter Chiu <chui-hao.chiu@mediatek.com>
+---
+v2: add clocks and clock-names.
+v3: rename wmac to wifi and change underscores to dash in node names.
+---
+ arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 41 +++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 22 ++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts | 43 ++++++++++++++++++++
+ 3 files changed, 106 insertions(+)
 
-> Moreover, the new controls with TLV controls don't look following the
-> standard TLV syntax (type-length-value).  My previous questions about
-> the TLV usages are still unanswered, so I'm not sure what impact this
-> would have, though.  At least, alsactl behavior must be checked
-> beforehand. If this is really device-specific (non-)TLV usages, it has
-> to be clearly documented.
-> 
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+index 24c155c71f0d..42b4f42754f3 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+@@ -57,6 +57,13 @@
+ 	status = "okay";
+ };
 
-The TLV stuff should be completely removed once my latest
-comments have been updated. I don't think we need this for the
-amps and I would also rather keep the usage to a minimum until
-one of us finally gets around to resolving the large control
-issues in a way that is more acceptable to everyone (likely
-with a new IOCTL).
++&wifi {
++	status = "okay";
++	pinctrl-names = "default", "dbdc";
++	pinctrl-0 = <&wf_2g_5g_pins>;
++	pinctrl-1 = <&wf_dbdc_pins>;
++};
++
+ &pio {
+ 	pcie_pins: pcie-pins {
+ 		mux {
+@@ -99,6 +106,40 @@
+ 			groups = "jtag";
+ 		};
+ 	};
++
++	wf_2g_5g_pins: wf-2g-5g-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_2g", "wf_5g";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
++			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
++			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
++			       "WF1_TOP_CLK", "WF1_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
++
++	wf_dbdc_pins: wf-dbdc-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_dbdc";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
++			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
++			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
++			       "WF1_TOP_CLK", "WF1_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
+ };
 
-Thanks,
-Charles
+ &spi0 {
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+index 9663a0779416..0f7d555996fc 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+@@ -8,6 +8,7 @@
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/clock/mt7986-clk.h>
+ #include <dt-bindings/phy/phy.h>
++#include <dt-bindings/reset/mt7986-resets.h>
+
+ / {
+ 	interrupt-parent = <&gic>;
+@@ -80,6 +81,11 @@
+ 			reg = <0 0x43000000 0 0x30000>;
+ 			no-map;
+ 		};
++
++		wmcpu_emi: wmcpu-reserved@4fc00000 {
++			no-map;
++			reg = <0 0x4fc00000 0 0x00100000>;
++		};
+ 	};
+
+ 	timer {
+@@ -381,6 +387,22 @@
+ 			 #reset-cells = <1>;
+ 		};
+
++		wifi: wifi@18000000 {
++			compatible = "mediatek,mt7986-wmac";
++			resets = <&watchdog MT7986_TOPRGU_CONSYS_SW_RST>;
++			reset-names = "consys";
++			clocks = <&topckgen CLK_TOP_CONN_MCUSYS_SEL>,
++				 <&topckgen CLK_TOP_AP2CNN_HOST_SEL>;
++			clock-names = "mcu", "ap2conn";
++			reg = <0 0x18000000 0 0x1000000>,
++			      <0 0x10003000 0 0x1000>,
++			      <0 0x11d10000 0 0x1000>;
++			interrupts = <GIC_SPI 213 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 214 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 215 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 216 IRQ_TYPE_LEVEL_HIGH>;
++			memory-region = <&wmcpu_emi>;
++		};
+ 	};
+
+ };
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+index d4078feb4aad..088722c1e14c 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+@@ -97,3 +97,46 @@
+ &usb_phy {
+ 	status = "okay";
+ };
++
++&wifi {
++	status = "okay";
++	pinctrl-names = "default", "dbdc";
++	pinctrl-0 = <&wf_2g_5g_pins>;
++	pinctrl-1 = <&wf_dbdc_pins>;
++};
++
++&pio {
++	wf_2g_5g_pins: wf-2g-5g-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_2g", "wf_5g";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
++			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
++			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
++			       "WF1_TOP_CLK", "WF1_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
++
++	wf_dbdc_pins: wf-dbdc-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_dbdc";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
++			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
++			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
++			       "WF1_TOP_CLK", "WF1_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
++};
+--
+2.18.0
+

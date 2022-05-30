@@ -2,112 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9824153795C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85165537966
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235474AbiE3Kqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
+        id S231134AbiE3Krx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235354AbiE3Kpx (ORCPT
+        with ESMTP id S235615AbiE3Krn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:45:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5057CB25;
-        Mon, 30 May 2022 03:45:51 -0700 (PDT)
-Date:   Mon, 30 May 2022 10:45:49 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653907550;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oN0BchjI0S/uiKLm500Vkkr8chqe+DNI+Hp7hPtlPf8=;
-        b=Py4QG6U/wsFwBrArb8Lod/82iJCJnpOnVvAxgwZc67w8C2W+bGx1NyWetexdvNMa7nTvLz
-        UVF1KfbR5l8+xVBfY9qSi11QacB6nY2iKwLQqgLHP9V9ZO19fKJpYlx00RqesD/BtAf+LZ
-        iBO/x7NsMFei2kjh26xtu9H1R6kfdQAO3hhXZkYwWM1BJfRVacjh7wyikjC8qS+DNZVEkE
-        OJ48NijzKAwh2geGGcpgEQg4QW0Q/PxqT77W/9AQdmkQCqR0gJCyE2CA319CvD1BVIQwu3
-        OTJlQH8G9iC5vYKY38Zu8/rumXJxMF/HTLpddgZvJMvxA0xwL0J3WayvpM3TOQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653907550;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oN0BchjI0S/uiKLm500Vkkr8chqe+DNI+Hp7hPtlPf8=;
-        b=bhdLHd+hi6E7ioq31ntS7fvfx8GSdxqIpUdHwpzL5sF+Pb1DwCNPJ4sa9sa1aX9YRXgtxU
-        tTQEeg5rz/RmrtCA==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/urgent] sched/autogroup: Fix sysctl move
-Cc:     Ivan Kozik <ivan@ludios.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        Mon, 30 May 2022 06:47:43 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74397CB67
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 03:47:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653907653; x=1685443653;
+  h=message-id:subject:from:to:cc:in-reply-to:references:
+   mime-version:date:content-transfer-encoding;
+  bh=o5SGoknLhcf36naf8dL6NWETDY5hMeyO9OFdAjzRBRg=;
+  b=IhWj4q+ATeByo99j7QWu9H1fmdUqAn6CUAgd+B5w9ox5v5B5UE1K5aIQ
+   LbIOnkXfN3vzwNKrDrceOiZS3B9XHRLjlc+Uam8S0pEiJZocV6H2FXeGj
+   ex5UIe7CaldQpdG0XI2LII0VxsUoKLGuNsIfQTm0f3kKg22hhejd4gqaP
+   nRldWCbGN3aYwwUQ/9jQeRNaBAPYd7VkZLTSWhPbK6g71vFd768IcdakE
+   dkzq4eFmRmlL7eIWhvD+Fnm346e1edcLD7oVpo3fMk9GufTTKp71VAWWK
+   /lkydqE3aYNrQCCHSJBQb2kyP/MBfTJKJ7dMuFuxp27TM05Rb/+oIN5IX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="275056254"
+X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
+   d="scan'208";a="275056254"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 03:47:31 -0700
+X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
+   d="scan'208";a="529128753"
+Received: from machambe-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.36.179])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 03:47:27 -0700
+Message-ID: <ba5aa2939e81f730396d41120aa603df7999d937.camel@intel.com>
+Subject: Re: [PATCH v7 3/5] x86/mm: Make tdx_enc_status_changed() vmalloc
+ address compatible
+From:   Kai Huang <kai.huang@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
         linux-kernel@vger.kernel.org
-In-Reply-To: <YpR2IqndgsyMzN00@worktop.programming.kicks-ass.net>
-References: <YpR2IqndgsyMzN00@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220524040517.703581-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+References: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220524040517.703581-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-Message-ID: <165390754900.4207.11439782656946256684.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+Date:   Mon, 30 May 2022 22:47:15 +1200
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/urgent branch of tip:
+On Mon, 2022-05-23 at 21:05 -0700, Kuppuswamy Sathyanarayanan wrote:
+> set_memory_*crypted() APIs are used to change encryption or decryption
+> page attributes for the given address. It also by default support the
+> conversion for the vmalloc'ed memory address.
+> 
+> In TDX Guest, tdx_enc_status_changed() function is triggered by
+> set_memory_*crypted() APIs when converting memory from/to shared or
+> private. Internally this function uses __pa() for physical address
+> conversion, which breaks the vmalloc address compatibility of the
+> set_memory_*crypted() APIs.
+> 
+> So add support to fix the vmalloc'ed address compatibility issue.
+> 
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> ---
+>  arch/x86/coco/tdx/tdx.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> index b49211994864..37d58675ccf1 100644
+> --- a/arch/x86/coco/tdx/tdx.c
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -15,6 +15,7 @@
+>  #include <asm/idtentry.h>
+>  #include <asm/irq_regs.h>
+>  #include <asm/desc.h>
+> +#include <asm/io.h>
+>  
+>  /* TDX module Call Leaf IDs */
+>  #define TDX_GET_INFO			1
+> @@ -680,8 +681,14 @@ static bool try_accept_one(phys_addr_t *start, unsigned long len,
+>   */
+>  static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+>  {
+> -	phys_addr_t start = __pa(vaddr);
+> -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
+> +	phys_addr_t start, end;
+> +
+> +	if (is_vmalloc_addr((void *)vaddr))
+> +		start = vmalloc_to_pfn((void *) vaddr) << PAGE_SHIFT;
+> +	else
+> +		start = __pa(vaddr);
+> +
+> +	end = start + numpages * PAGE_SIZE;
+>  
+>  	if (!enc) {
+>  		/* Set the shared (decrypted) bits: */
 
-Commit-ID:     82f586f923e3ac6062bc7867717a7f8afc09e0ff
-Gitweb:        https://git.kernel.org/tip/82f586f923e3ac6062bc7867717a7f8afc09e0ff
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Mon, 30 May 2022 09:45:38 +02:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 30 May 2022 12:36:36 +02:00
+AMD uses lookup_address() which doesn't require the vaddr being vmap() address.
+Shouldn't TDX use the same way?
 
-sched/autogroup: Fix sysctl move
+-- 
+Thanks,
+-Kai
 
-Ivan reported /proc/sys/kernel/sched_autogroup_enabled went walk-about
-and using the noautogroup command line parameter would result in a
-boot error message.
 
-Turns out the sysctl move placed the init function wrong.
-
-Fixes: c8eaf6ac76f4 ("sched: move autogroup sysctls into its own file")
-Reported-by: Ivan Kozik <ivan@ludios.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Ivan Kozik <ivan@ludios.org>
-Link: https://lkml.kernel.org/r/YpR2IqndgsyMzN00@worktop.programming.kicks-ass.net
----
- kernel/sched/autogroup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/sched/autogroup.c b/kernel/sched/autogroup.c
-index 16092b4..4ebaf97 100644
---- a/kernel/sched/autogroup.c
-+++ b/kernel/sched/autogroup.c
-@@ -36,6 +36,7 @@ void __init autogroup_init(struct task_struct *init_task)
- 	kref_init(&autogroup_default.kref);
- 	init_rwsem(&autogroup_default.lock);
- 	init_task->signal->autogroup = &autogroup_default;
-+	sched_autogroup_sysctl_init();
- }
- 
- void autogroup_free(struct task_group *tg)
-@@ -219,7 +220,6 @@ void sched_autogroup_exit(struct signal_struct *sig)
- static int __init setup_autogroup(char *str)
- {
- 	sysctl_sched_autogroup_enabled = 0;
--	sched_autogroup_sysctl_init();
- 
- 	return 1;
- }

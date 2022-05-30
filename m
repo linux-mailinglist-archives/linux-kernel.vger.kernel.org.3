@@ -2,78 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16416537596
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B3C53759A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233655AbiE3HkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
+        id S233670AbiE3Hkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbiE3HkV (ORCPT
+        with ESMTP id S233660AbiE3Hko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:40:21 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1FAE0A1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:40:20 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id v25so4300034eda.6
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:40:20 -0700 (PDT)
+        Mon, 30 May 2022 03:40:44 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76CF12ABF
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:40:41 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 67-20020a1c1946000000b00397382b44f4so5916679wmz.2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:40:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :in-reply-to;
-        bh=3ie7fxZ/7i068+0rOaIZdjZ18uClBhAfOUmO9sbKKqg=;
-        b=nH39KqqxBYB1IvGVPmLjKFw9JNDUaDBGc9vtWNfNN89+Sx20MGCkgDeLH3CjTtzkyx
-         xYmWUENbzgUAwpyazDZ445wJBfnZZR5OcUTikLQ34zTttCpSrOKW2yKQnjuSB2Wgsc4s
-         0z0tQqPfTgzSSIFJPrmna8bdKBp/9KRXmbLqrfCRGt67KUOxICmrcKRnFZmadFv9qjBK
-         2oJ2ZpvDnoUSo5utVxdX+SuQjSCXLDW5/68v0TiaWrxM+AGhLulO8ZK3DJKltBH8urM5
-         11FjDEYv8zx2VUjGavUjEsEXePtr+8cdIkc87vcK2M4p2UzggFwKjrJusemjJw2MNMC7
-         5Q2A==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yJvJHo6WigzGU+Bo8i27kFyA2o+86owNrCMmWJXdlE8=;
+        b=W4BYSpqDTbHV+hbVi3/CpOCs7LKmmS1CEMqy5HUoFQCOguVArLULseXhFL/JULV4Vd
+         Eo4VFd7b4x+y2HN+FG9NkKGbKnnzYv9OIxXTL73azJ7lf89e94vesObKZKJ6SiG28DiK
+         yX+4TIXLGGNm4CbOsTeKyIh47cM0N9CAap+ck58AvLb4fOle8nYEtBohBK/A1//lcRCg
+         j95vXrzs4gziXs4px9y4DJmEmCUvdTKEtn5YAjT5DF0RGNJdwZdXKibwfo3O9KTu/GT5
+         F4vQzdeZy57g3bAEEENQ6e+tuf51A/HCUSKII8ir1NYFCbgLQPvxpmiXfZQFoTkLpec7
+         8hMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:in-reply-to;
-        bh=3ie7fxZ/7i068+0rOaIZdjZ18uClBhAfOUmO9sbKKqg=;
-        b=v8+7xR4eoTJ2ja6axB74SLjXJ2TxZncF1FQhWVuTpesRgOml2A65eJKsITa7skypfW
-         U7PII2OTh0wQQzTlQY8YNrzW90bb0Jx2bh2BS7h1Ll2ptvlo0Du3wv/RTTwvDUKv8QBg
-         rRn1K8R4LzzLQA60mMABH6BlVFGCoOSCWYakPk7zKynvkHgOlq6moLLKezei1b5Tdboc
-         sFpLumN/PtGAsgF/B/80nUBUO0gBFk/z800QUWWQp3dyV+zloHdHgSXSO+tG66nE6QPi
-         OR5AHUzA9EeO4dfhBoxibPH34+nK4d5SSxAtk15VVXSTz0IrRIJPdAHtXprIjavyM50G
-         lBpQ==
-X-Gm-Message-State: AOAM533L23DyRq1/VH0+cpbAtYeGYni/8yaJl4Bzb7eWTVYw+12rtOnK
-        uUxdaFWPuHuvfl8l8//LytA=
-X-Google-Smtp-Source: ABdhPJy39Fq/URijgituE1hHV8Rc2qHJ5gD7L0+5lWtaa4aiRuv3zVRgTLpY1WvO6IoSHTyi22bk/Q==
-X-Received: by 2002:a05:6402:34d4:b0:42b:35e5:fc78 with SMTP id w20-20020a05640234d400b0042b35e5fc78mr47098275edc.372.1653896418639;
-        Mon, 30 May 2022 00:40:18 -0700 (PDT)
-Received: from nam-dell ([2a02:8109:afbf:ed88:b5c4:5fcb:73aa:5762])
-        by smtp.gmail.com with ESMTPSA id o18-20020a50c292000000b0042bc54296a1sm6023025edf.91.2022.05.30.00.40.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 00:40:18 -0700 (PDT)
-Date:   Mon, 30 May 2022 09:40:17 +0200
-From:   Nam Cao <namcaov@gmail.com>
-To:     dan.carpenter@oracle.com
-Cc:     forest@alittletooquiet.net, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        namcaov@gmail.com
-Subject: Re: [PATCH] staging: vt6655: remove unnecessary type cast
-Message-ID: <20220530074017.GA15684@nam-dell>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yJvJHo6WigzGU+Bo8i27kFyA2o+86owNrCMmWJXdlE8=;
+        b=xpqCbjwYo86t+UxI4/6NZabGKWzjwtXpmkH/6yBL//xQ3l9GQVHg0HDgbB/DU6FR86
+         DHKwRDUH6C/3JYI/+AvP8cOujI0WEzL3GPiNjALr0fqcOkLLzqGRUM85bSXSZGah3E69
+         rO54udhCzupL1QPfwgz7FSBsdxfrycOK8HOp8O8TKGAhoZzddBK/TRfxEDpIyY1QsDQk
+         DlfWjBXYq6C4cJn2tORWaO5xckGUQkK5KcNwX7sZ5cFh9w0vOThrbrTs5OYwP290zw4K
+         84qN4LJn3Dtyyg0Sz6Aw0b8DRniIZXQE6sli80qPdYilQsjgp2h91bumDJ7fz5YQ0ho3
+         je3w==
+X-Gm-Message-State: AOAM532YLp5rXsQVEp0DqFWFVHWM5CkRWukZMc4zhUyKEVi9sRwTx+o6
+        T/zq1HsY6NDZo3PrRhYc0mrJtw==
+X-Google-Smtp-Source: ABdhPJzWZl/XXPcljunVWHqjNPh9NxSE5LyrBrelvogQHAI/oaz8TISreCp2+FfVSpBlEvS/xcf15Q==
+X-Received: by 2002:a05:600c:6015:b0:397:54e1:8279 with SMTP id az21-20020a05600c601500b0039754e18279mr17451068wmb.100.1653896440461;
+        Mon, 30 May 2022 00:40:40 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id g13-20020a5d64ed000000b002100e86319asm8647487wri.78.2022.05.30.00.40.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 00:40:39 -0700 (PDT)
+Message-ID: <9f40d587-bfaa-a3cd-d261-a10d1740610d@linaro.org>
+Date:   Mon, 30 May 2022 09:40:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220530073341.GK2146@kadam>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V2 1/7] dt-bindings: soc: add i.MX93 SRC
+Content-Language: en-US
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+Cc:     Aisheng Dong <aisheng.dong@nxp.com>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220526123411.270083-1-peng.fan@oss.nxp.com>
+ <20220526123411.270083-2-peng.fan@oss.nxp.com>
+ <2e6c2995-9204-61fa-0aee-f4ea4cce084c@linaro.org>
+ <DU0PR04MB9417353FE7BA649887E7C5B188DD9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <DU0PR04MB9417353FE7BA649887E7C5B188DD9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yes, this patch is a mistake. I clarified that but I think my email
-got blocked because it's html.
+On 30/05/2022 08:57, Peng Fan wrote:
+>> Subject: Re: [PATCH V2 1/7] dt-bindings: soc: add i.MX93 SRC
+>>
+>> On 26/05/2022 14:34, Peng Fan (OSS) wrote:
+>>> From: Peng Fan <peng.fan@nxp.com>
+>>>
+>>> Add bindings for i.MX93 System Reset Controller(SRC). SRC supports
+>>> resets and power gating for mixes.
+>>>
+>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>>> ---
+>>>  .../bindings/soc/imx/fsl,imx93-src.yaml       | 96
+>> +++++++++++++++++++
+>>
+>> Still wrong location of bindings.
+> 
+> Although it is called SRC(system reset controller), but actually
+> it not functions only as reset controller, it also supports power
+> gating of each slice including slice's memory low power control.
+> It also includes some system general configuration.
+> 
+> So follow your suggestion in V1, I rename it as system-controller,
+> but I not find a directory for system-controller.
 
-Sorry for wasting your time.
+Therefore I propose "power". 2 out of 3 functions (reset controller,
+power domain controller) are related to power.
 
 Best regards,
-Nam
+Krzysztof

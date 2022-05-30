@@ -2,58 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0D5537994
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 571F4537996
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235587AbiE3LJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 07:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
+        id S235535AbiE3LMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 07:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbiE3LJ2 (ORCPT
+        with ESMTP id S234908AbiE3LML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 07:09:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7075B6F482
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:09:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 06E67113E;
-        Mon, 30 May 2022 04:09:25 -0700 (PDT)
-Received: from [10.57.34.243] (unknown [10.57.34.243])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9159A3F766;
-        Mon, 30 May 2022 04:09:22 -0700 (PDT)
-Message-ID: <f71d5348-f619-2259-8645-6d3b04cc330d@arm.com>
-Date:   Mon, 30 May 2022 12:09:21 +0100
+        Mon, 30 May 2022 07:12:11 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E43679818;
+        Mon, 30 May 2022 04:12:08 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id z7so2215127edm.13;
+        Mon, 30 May 2022 04:12:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/BPBLFyQ8NC6AfQ4pTqQuan/NBf30qcif989YZ5u9L0=;
+        b=eZl19VGsqnbzNubpDJj5CyTloc9FIN2p7Aj1K9DC3KRGbpjtkqAHXZ3qHj/UsqF3a9
+         Msgh22pxVs6FPZ+tvk9nP688zJ6mU8HPkJuxVSGSgyE0JzRirHhLlNCmtPPitsF1MZus
+         7blJTJn2CItZLNwjaFOxmBt2D7N2Scz3ub628+Kj3bQLDAwb6HmjGXv6PCaUpOY2ZCiY
+         FbVDJKUXkXMl948d/M9tNT5hdAXqwoFpMg2un5+onx6/8l5XMlpQTWOhJR6tIyHKLiRM
+         Lk4Kjpo1+5B4Ecau0YKaUZAkBJydKrXzothixEIZo2Lfs7QgVYNnSmzIfwhdd1XXitU6
+         oKFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/BPBLFyQ8NC6AfQ4pTqQuan/NBf30qcif989YZ5u9L0=;
+        b=dyk+RyW8Rx0C+kz2Ft5KHGbJFLhq65JP1yNOrJLUhdus4rR70fnbwqQ8i08Ytdr/cA
+         /yle5mUv4j2J9j+1OhOb1ZbmLgWBX1nqgH/3DBW3N9miHY0MH6Q7mW2O/3V90tf+FR0I
+         RlXyalEhqMNv4p+Q5apxGBnePpFkc6AmUquvx1kKOG8W6WGAPtx02G//Y/1uX7THRkdE
+         Nr9L+MKiYF3oEHf0a8cQso7F5s/q6cz+yrDbYoDsYeD8Bf2d9Z82WaBfzEqRMimRHyPU
+         IlS5i3E/J72576V/yA9OrKDVV8z9Z61qZ0OgXkGuyCffBCVWiV+HbjzAyOFNzuQIkcpF
+         RVgQ==
+X-Gm-Message-State: AOAM531A1hrFs4P2qEUuEOeV2oPOg60w3E/iA2dC3SlqeMWGPhDSDCIt
+        YFNhjGHGhizs0P3MhFk7p3TpkTlYhiNSNiV/hko=
+X-Google-Smtp-Source: ABdhPJyzzbFBqovzJ8wyS+m0VTPiFmhYYtu7K6GM6G9KZbhhTmZQXShGqxffgrDWCaCaJR3o79PvWwA0JoUDilgzONk=
+X-Received: by 2002:a05:6402:1150:b0:42a:9dbf:8860 with SMTP id
+ g16-20020a056402115000b0042a9dbf8860mr57997158edw.350.1653909126999; Mon, 30
+ May 2022 04:12:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] arm64: enable THP_SWAP for arm64
-Content-Language: en-GB
-To:     Barry Song <21cnbao@gmail.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
+References: <cover.1649370874.git.khalid.aziz@oracle.com> <5c96dd165d7ec3da14306b8fd857c7eb95a8c3e6.1649370874.git.khalid.aziz@oracle.com>
+In-Reply-To: <5c96dd165d7ec3da14306b8fd857c7eb95a8c3e6.1649370874.git.khalid.aziz@oracle.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Mon, 30 May 2022 23:11:55 +1200
+Message-ID: <CAGsJ_4xPFu5FCQtNE6cJxbV7kMQXNtzotBFQKC3OkXUOtweyYQ@mail.gmail.com>
+Subject: Re: [PATCH v1 08/14] mm/mshare: Add basic page table sharing using mshare
+To:     Khalid Aziz <khalid.aziz@oracle.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5n?= =?UTF-8?Q?=29?= 
-        <zhangshiming@oppo.com>, =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        hanchuanhua <hanchuanhua@oppo.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Yang Shi <shy828301@gmail.com>
-References: <20220527100644.293717-1-21cnbao@gmail.com>
- <b2694573-a696-8435-70eb-ebc9c06500a0@arm.com>
- <CAGsJ_4yF_5DvBuvNfsUcywv8uzXHy2x9saVdhXz8xh=wvt01iA@mail.gmail.com>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <CAGsJ_4yF_5DvBuvNfsUcywv8uzXHy2x9saVdhXz8xh=wvt01iA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Matthew Wilcox <willy@infradead.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, ebiederm@xmission.com,
+        hagen@jauu.net, jack@suse.cz, Kees Cook <keescook@chromium.org>,
+        kirill@shutemov.name, kucharsk@gmail.com, linkinjeon@kernel.org,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, longpeng2@huawei.com,
+        Andy Lutomirski <luto@kernel.org>, markhemm@googlemail.com,
+        pcc@google.com, Mike Rapoport <rppt@kernel.org>,
+        sieberf@amazon.com, sjpark@amazon.de,
+        Suren Baghdasaryan <surenb@google.com>, tst@schoebel-theuer.de,
+        Iurii Zaikin <yzaikin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,193 +80,387 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2022 10:53, Barry Song wrote:
-> On Mon, May 30, 2022 at 7:07 PM Anshuman Khandual
-> <anshuman.khandual@arm.com> wrote:
->>
->> Hello Barry,
-> 
-> Hi Anshuman,
-> thanks!
-> 
->>
->> On 5/27/22 15:36, Barry Song wrote:
->>> From: Barry Song <v-songbaohua@oppo.com>
->>>
->>> THP_SWAP has been proved to improve the swap throughput significantly
->>> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
->>> splitting THP after swapped out").
->> It will be useful to run similar experiments on arm64 platform to
->> demonstrate tangible benefit, else we might be just enabling this
->> feature just because x86 has it. Do you have some data points ?
->>
->>> As long as arm64 uses 4K page size, it is quite similar with x86_64
->>> by having 2MB PMD THP. So we are going to get similar improvement.
->>
->> This is an assumption without any data points (until now). Please
->> do provide some results.
-> 
-> Fair enough though I believe THP_SWP is arch-independent. Our testing
-> will post data. Plus, we do need it for real use cases with some possible
-> out-of-tree code for this moment. so this patch does not originate only
-> because x86 has it :-)
-> 
->>
->>> For other page sizes such as 16KB and 64KB, PMD might be too large.
->>> Negative side effects such as IO latency might be a problem. Thus,
->>> we can only safely enable the counterpart of X86_64.
->>
->> Incorrect reasoning. Although sometimes it might be okay to enable
->> a feature on platforms with possible assumptions about its benefits,
->> but to claim 'similar improvement, safely, .. etc' while comparing
->> against x86 4K page config without data points, is not very helpful.
->>
->>> A corner case is that MTE has an assumption that only base pages
->>> can be swapped. We won't enable THP_SWP for ARM64 hardware with
->>> MTE support until MTE is re-arched.
->>
->> re-arched ?? Did you imply that MTE is reworked to support THP ?
-> 
-> I think at least MTE should be able to coexist with THP_SWP though
-> I am not quite sure if MTE can be re-worked to fully support THP.
+On Tue, Apr 12, 2022 at 4:07 AM Khalid Aziz <khalid.aziz@oracle.com> wrote:
+>
+> This patch adds basic page table sharing across tasks by making
+> mshare syscall. It does this by creating a new mm_struct which
+> hosts the shared vmas and page tables. This mm_struct is
+> maintained as long as there is at least one task using the mshare'd
+> range. It is cleaned up by the last mshare_unlink syscall.
+>
+> Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  mm/internal.h |   2 +
+>  mm/memory.c   |  35 ++++++++++
+>  mm/mshare.c   | 190 ++++++++++++++++++++++++++++++++++++++++++++++----
+>  3 files changed, 214 insertions(+), 13 deletions(-)
+>
+> diff --git a/mm/internal.h b/mm/internal.h
+> index cf50a471384e..68f82f0f8b66 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -718,6 +718,8 @@ void vunmap_range_noflush(unsigned long start, unsigned long end);
+>  int numa_migrate_prep(struct page *page, struct vm_area_struct *vma,
+>                       unsigned long addr, int page_nid, int *flags);
+>
+> +extern vm_fault_t find_shared_vma(struct vm_area_struct **vma,
+> +                       unsigned long *addrp);
+>  static inline bool vma_is_shared(const struct vm_area_struct *vma)
+>  {
+>         return vma->vm_flags & VM_SHARED_PT;
+> diff --git a/mm/memory.c b/mm/memory.c
+> index c125c4969913..c77c0d643ea8 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -4776,6 +4776,7 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+>                            unsigned int flags, struct pt_regs *regs)
+>  {
+>         vm_fault_t ret;
+> +       bool shared = false;
+>
+>         __set_current_state(TASK_RUNNING);
+>
+> @@ -4785,6 +4786,15 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+>         /* do counter updates before entering really critical section. */
+>         check_sync_rss_stat(current);
+>
+> +       if (unlikely(vma_is_shared(vma))) {
+> +               ret = find_shared_vma(&vma, &address);
+> +               if (ret)
+> +                       return ret;
+> +               if (!vma)
+> +                       return VM_FAULT_SIGSEGV;
+> +               shared = true;
+> +       }
+> +
+>         if (!arch_vma_access_permitted(vma, flags & FAULT_FLAG_WRITE,
+>                                             flags & FAULT_FLAG_INSTRUCTION,
+>                                             flags & FAULT_FLAG_REMOTE))
+> @@ -4802,6 +4812,31 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+>         else
+>                 ret = __handle_mm_fault(vma, address, flags);
+>
+> +       /*
+> +        * Release the read lock on shared VMA's parent mm unless
+> +        * __handle_mm_fault released the lock already.
+> +        * __handle_mm_fault sets VM_FAULT_RETRY in return value if
+> +        * it released mmap lock. If lock was released, that implies
+> +        * the lock would have been released on task's original mm if
+> +        * this were not a shared PTE vma. To keep lock state consistent,
+> +        * make sure to release the lock on task's original mm
+> +        */
+> +       if (shared) {
+> +               int release_mmlock = 1;
+> +
+> +               if (!(ret & VM_FAULT_RETRY)) {
+> +                       mmap_read_unlock(vma->vm_mm);
+> +                       release_mmlock = 0;
+> +               } else if ((flags & FAULT_FLAG_ALLOW_RETRY) &&
+> +                       (flags & FAULT_FLAG_RETRY_NOWAIT)) {
+> +                       mmap_read_unlock(vma->vm_mm);
+> +                       release_mmlock = 0;
+> +               }
+> +
+> +               if (release_mmlock)
+> +                       mmap_read_unlock(current->mm);
+> +       }
+> +
+>         if (flags & FAULT_FLAG_USER) {
+>                 mem_cgroup_exit_user_fault();
+>                 /*
+> diff --git a/mm/mshare.c b/mm/mshare.c
+> index cd2f7ad24d9d..d1896adcb00f 100644
+> --- a/mm/mshare.c
+> +++ b/mm/mshare.c
+> @@ -17,18 +17,49 @@
+>  #include <linux/pseudo_fs.h>
+>  #include <linux/fileattr.h>
+>  #include <linux/refcount.h>
+> +#include <linux/mman.h>
+>  #include <linux/sched/mm.h>
+>  #include <uapi/linux/magic.h>
+>  #include <uapi/linux/limits.h>
+>
+>  struct mshare_data {
+> -       struct mm_struct *mm;
+> +       struct mm_struct *mm, *host_mm;
+>         mode_t mode;
+>         refcount_t refcnt;
+>  };
+>
+>  static struct super_block *msharefs_sb;
+>
+> +/* Returns holding the host mm's lock for read.  Caller must release. */
+> +vm_fault_t
+> +find_shared_vma(struct vm_area_struct **vmap, unsigned long *addrp)
+> +{
+> +       struct vm_area_struct *vma, *guest = *vmap;
+> +       struct mshare_data *info = guest->vm_private_data;
+> +       struct mm_struct *host_mm = info->mm;
+> +       unsigned long host_addr;
+> +       pgd_t *pgd, *guest_pgd;
+> +
+> +       host_addr = *addrp - guest->vm_start + host_mm->mmap_base;
+> +       pgd = pgd_offset(host_mm, host_addr);
+> +       guest_pgd = pgd_offset(current->mm, *addrp);
+> +       if (!pgd_same(*guest_pgd, *pgd)) {
+> +               set_pgd(guest_pgd, *pgd);
+> +               return VM_FAULT_NOPAGE;
+> +       }
+> +
+> +       *addrp = host_addr;
+> +       mmap_read_lock(host_mm);
+> +       vma = find_vma(host_mm, host_addr);
+> +
+> +       /* XXX: expand stack? */
+> +       if (vma && vma->vm_start > host_addr)
+> +               vma = NULL;
+> +
+> +       *vmap = vma;
+> +       return 0;
+> +}
+> +
+>  static void
+>  msharefs_evict_inode(struct inode *inode)
+>  {
+> @@ -169,11 +200,13 @@ SYSCALL_DEFINE5(mshare, const char __user *, name, unsigned long, addr,
+>                 unsigned long, len, int, oflag, mode_t, mode)
+>  {
+>         struct mshare_data *info;
+> -       struct mm_struct *mm;
+>         struct filename *fname = getname(name);
+>         struct dentry *dentry;
+>         struct inode *inode;
+>         struct qstr namestr;
+> +       struct vm_area_struct *vma, *next, *new_vma;
+> +       struct mm_struct *new_mm;
+> +       unsigned long end;
+>         int err = PTR_ERR(fname);
+>
+>         /*
+> @@ -193,6 +226,8 @@ SYSCALL_DEFINE5(mshare, const char __user *, name, unsigned long, addr,
+>         if (IS_ERR(fname))
+>                 goto err_out;
+>
+> +       end = addr + len;
+> +
+>         /*
+>          * Does this mshare entry exist already? If it does, calling
+>          * mshare with O_EXCL|O_CREAT is an error
+> @@ -205,49 +240,165 @@ SYSCALL_DEFINE5(mshare, const char __user *, name, unsigned long, addr,
+>         inode_lock(d_inode(msharefs_sb->s_root));
+>         dentry = d_lookup(msharefs_sb->s_root, &namestr);
+>         if (dentry && (oflag & (O_EXCL|O_CREAT))) {
+> +               inode = d_inode(dentry);
+>                 err = -EEXIST;
+>                 dput(dentry);
+>                 goto err_unlock_inode;
+>         }
+>
+>         if (dentry) {
+> +               unsigned long mapaddr, prot = PROT_NONE;
+> +
+>                 inode = d_inode(dentry);
+>                 if (inode == NULL) {
+> +                       mmap_write_unlock(current->mm);
+>                         err = -EINVAL;
+>                         goto err_out;
+>                 }
+>                 info = inode->i_private;
+> -               refcount_inc(&info->refcnt);
+>                 dput(dentry);
+> +
+> +               /*
+> +                * Map in the address range as anonymous mappings
+> +                */
+> +               oflag &= (O_RDONLY | O_WRONLY | O_RDWR);
+> +               if (oflag & O_RDONLY)
+> +                       prot |= PROT_READ;
+> +               else if (oflag & O_WRONLY)
+> +                       prot |= PROT_WRITE;
+> +               else if (oflag & O_RDWR)
+> +                       prot |= (PROT_READ | PROT_WRITE);
+> +               mapaddr = vm_mmap(NULL, addr, len, prot,
+> +                               MAP_FIXED | MAP_SHARED | MAP_ANONYMOUS, 0);
 
-There's no fundamental reason it cannot coexist, but there are many open
-areas around MTE support in general. For example at the moment swap
-support keeps the tags in memory because there's no easy way to plumb
-the extra tag data into the swap infrastructure.
+From the perspective of hardware, do we have to use MAP_FIXED to make
+sure those processes sharing PTE
+use the same virtual address for the shared area? or actually we don't
+necessarily need it? as long as the
+upper level pgtable entries point to the same lower level pgtable?
 
-The lazy zeroing of MTE tag storage has introduced a lot of complexity
-and THP is another case where this complexity would show. It's possible
-that it might make sense to take the hit of clearing tags in all pages
-(i.e. make clear_page() clear the tags like mte_zero_clear_page_tags()).
 
->>
->>>
->>> Cc: "Huang, Ying" <ying.huang@intel.com>
->>> Cc: Minchan Kim <minchan@kernel.org>
->>> Cc: Johannes Weiner <hannes@cmpxchg.org>
->>> Cc: Hugh Dickins <hughd@google.com>
->>> Cc: Andrea Arcangeli <aarcange@redhat.com>
->>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
->>> Cc: Steven Price <steven.price@arm.com>
->>> Cc: Yang Shi <shy828301@gmail.com>
->>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
->>> ---
->>>  arch/arm64/Kconfig               |  1 +
->>>  arch/arm64/include/asm/pgtable.h |  2 ++
->>>  include/linux/huge_mm.h          | 12 ++++++++++++
->>>  mm/swap_slots.c                  |  2 +-
->>>  4 files changed, 16 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->>> index a4968845e67f..5306009df2dc 100644
->>> --- a/arch/arm64/Kconfig
->>> +++ b/arch/arm64/Kconfig
->>> @@ -101,6 +101,7 @@ config ARM64
->>>       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
->>>       select ARCH_WANT_LD_ORPHAN_WARN
->>>       select ARCH_WANTS_NO_INSTR
->>> +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
->>>       select ARCH_HAS_UBSAN_SANITIZE_ALL
->>>       select ARM_AMBA
->>>       select ARM_ARCH_TIMER
->>> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
->>> index 0b6632f18364..06076139c72c 100644
->>> --- a/arch/arm64/include/asm/pgtable.h
->>> +++ b/arch/arm64/include/asm/pgtable.h
->>> @@ -45,6 +45,8 @@
->>>       __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
->>>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
->>>
->>> +#define arch_thp_swp_supported !system_supports_mte
->>
->> Does it check for 'system_supports_mte' as a symbol or call system_supports_mte()
->> to ascertain runtime MTE support ? It might well be correct, but just does not
->> look much intuitive.
-> 
-> yep. looks a bit weird. but considering we only need this for arm64
-> and arch_thp_swp_supported
-> is a macro, I can't find a better way to make code modification
-> smaller than this in mm core, arm64
-> and x86. and probably we will totally remove it once we make MTE
-> co-exist with THP_SWP.
-> 
-> Do you have any suggestions for a better solution?
+> +               if (IS_ERR((void *)mapaddr)) {
+> +                       err = -EINVAL;
+> +                       goto err_out;
+> +               }
+> +
+> +               refcount_inc(&info->refcnt);
+> +
+> +               /*
+> +                * Now that we have mmap'd the mshare'd range, update vma
+> +                * flags and vm_mm pointer for this mshare'd range.
+> +                */
+> +               mmap_write_lock(current->mm);
+> +               vma = find_vma(current->mm, addr);
+> +               if (vma && vma->vm_start < addr) {
+> +                       mmap_write_unlock(current->mm);
+> +                       err = -EINVAL;
+> +                       goto err_out;
+> +               }
+> +
+> +               while (vma && vma->vm_start < (addr + len)) {
+> +                       vma->vm_private_data = info;
+> +                       vma->vm_mm = info->mm;
+> +                       vma->vm_flags |= VM_SHARED_PT;
+> +                       next = vma->vm_next;
+> +                       vma = next;
+> +               }
+>         } else {
+> -               mm = mm_alloc();
+> -               if (!mm)
+> +               unsigned long myaddr;
+> +               struct mm_struct *old_mm;
+> +
+> +               old_mm = current->mm;
+> +               new_mm = mm_alloc();
+> +               if (!new_mm)
+>                         return -ENOMEM;
+>                 info = kzalloc(sizeof(*info), GFP_KERNEL);
+>                 if (!info) {
+>                         err = -ENOMEM;
+>                         goto err_relmm;
+>                 }
+> -               mm->mmap_base = addr;
+> -               mm->task_size = addr + len;
+> -               if (!mm->task_size)
+> -                       mm->task_size--;
+> -               info->mm = mm;
+> +               new_mm->mmap_base = addr;
+> +               new_mm->task_size = addr + len;
+> +               if (!new_mm->task_size)
+> +                       new_mm->task_size--;
+> +               info->mm = new_mm;
+> +               info->host_mm = old_mm;
+>                 info->mode = mode;
+>                 refcount_set(&info->refcnt, 1);
+> +
+> +               /*
+> +                * VMAs for this address range may or may not exist.
+> +                * If VMAs exist, they should be marked as shared at
+> +                * this point and page table info should be copied
+> +                * over to newly created mm_struct. TODO: If VMAs do not
+> +                * exist, create them and mark them as shared.
+> +                */
+> +               mmap_write_lock(old_mm);
+> +               vma = find_vma_intersection(old_mm, addr, end);
+> +               if (!vma) {
+> +                       err = -EINVAL;
+> +                       goto unlock;
+> +               }
+> +               /*
+> +                * TODO: If the currently allocated VMA goes beyond the
+> +                * mshare'd range, this VMA needs to be split.
+> +                *
+> +                * Double check that source VMAs do not extend outside
+> +                * the range
+> +                */
+> +               vma = find_vma(old_mm, addr + len);
+> +               if (vma && vma->vm_start < (addr + len)) {
+> +                       err = -EINVAL;
+> +                       goto unlock;
+> +               }
+> +
+> +               vma = find_vma(old_mm, addr);
+> +               if (vma && vma->vm_start < addr) {
+> +                       err = -EINVAL;
+> +                       goto unlock;
+> +               }
+> +
+> +               mmap_write_lock(new_mm);
+> +               while (vma && vma->vm_start < (addr + len)) {
+> +                       /*
+> +                        * Copy this vma over to host mm
+> +                        */
+> +                       vma->vm_private_data = info;
+> +                       vma->vm_mm = new_mm;
+> +                       vma->vm_flags |= VM_SHARED_PT;
+> +                       new_vma = vm_area_dup(vma);
+> +                       if (!new_vma) {
+> +                               err = -ENOMEM;
+> +                               goto unlock;
+> +                       }
+> +                       err = insert_vm_struct(new_mm, new_vma);
+> +                       if (err)
+> +                               goto unlock;
+> +
+> +                       vma = vma->vm_next;
+> +               }
+> +               mmap_write_unlock(new_mm);
+> +
+>                 err = mshare_file_create(fname, oflag, info);
+>                 if (err)
+> -                       goto err_relinfo;
+> +                       goto unlock;
+> +
+> +               /*
+> +                * Copy over current PTEs
+> +                */
+> +               myaddr = addr;
+> +               while (myaddr < new_mm->task_size) {
+> +                       *pgd_offset(new_mm, myaddr) = *pgd_offset(old_mm, myaddr);
+> +                       myaddr += PGDIR_SIZE;
+> +               }
+> +               /*
+> +                * TODO: Free the corresponding page table in calling
+> +                * process
+> +                */
+>         }
+>
+> +       mmap_write_unlock(current->mm);
+>         inode_unlock(d_inode(msharefs_sb->s_root));
+>         putname(fname);
+>         return 0;
+>
+> -err_relinfo:
+> +unlock:
+> +       mmap_write_unlock(current->mm);
+>         kfree(info);
+>  err_relmm:
+> -       mmput(mm);
+> +       mmput(new_mm);
+>  err_unlock_inode:
+>         inode_unlock(d_inode(msharefs_sb->s_root));
+>  err_out:
+> @@ -294,11 +445,24 @@ SYSCALL_DEFINE1(mshare_unlink, const char *, name)
+>
+>         /*
+>          * Is this the last reference?
+> +        * TODO: permission checks are needed before proceeding
+>          */
+>         if (refcount_dec_and_test(&info->refcnt)) {
+>                 simple_unlink(d_inode(msharefs_sb->s_root), dentry);
+>                 d_drop(dentry);
+>                 d_delete(dentry);
+> +               /*
+> +                * TODO: Release all physical pages allocated for this
+> +                * mshare range and release associated page table. If
+> +                * the final unlink happens from the process that created
+> +                * mshare'd range, do we return page tables and pages to
+> +                * that process so the creating process can continue using
+> +                * the address range it had chosen to mshare at some
+> +                * point?
+> +                *
+> +                * TODO: unmap shared vmas from every task that is using
+> +                * this mshare'd range.
+> +                */
+>                 mmput(info->mm);
+>                 kfree(info);
+>         } else {
+> --
+> 2.32.0
+>
 
-It would be better to write it as a function macro:
-
-  #define arch_thp_swp_supported() (!system_supports_mte())
-
-or you could go the whole way and introduce a static inline function
-(overkill in this case IMHO):
-
-  #define arch_thp_swp_supported
-  static inline bool arch_thp_swp_supported(void)
-  {
-  	return !system_supports_mte();
-  }
-
-Otherwise it looks like arch_thp_swp_supported is dependent on the
-symbol system_supports_mte being NULL (not on the return from the function).
-
-Steve
-
->>
->>> +
->>>  /*
->>>   * Outside of a few very special situations (e.g. hibernation), we always
->>>   * use broadcast TLB invalidation instructions, therefore a spurious page
->>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
->>> index de29821231c9..4ddaf6ad73ef 100644
->>> --- a/include/linux/huge_mm.h
->>> +++ b/include/linux/huge_mm.h
->>> @@ -461,4 +461,16 @@ static inline int split_folio_to_list(struct folio *folio,
->>>       return split_huge_page_to_list(&folio->page, list);
->>>  }
->>>
->>> +/*
->>> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
->>> + * limitations in the implementation like arm64 MTE can override this to
->>
->> A small nit.
->>
->> A 'comma' here will be better. s/arm64 MTE can/arm64 MTE, can/
-> 
-> yep.
-> 
->>
->>> + * false
->>
->> Similarly a 'full stop' here will be better as well.
->>
-> 
-> yep.
-> 
->>> + */
->>> +#ifndef arch_thp_swp_supported
->>> +static inline bool arch_thp_swp_supported(void)
->>> +{
->>> +     return true;
->>> +}
->>> +#endif
->>> +
->>>  #endif /* _LINUX_HUGE_MM_H */
->>> diff --git a/mm/swap_slots.c b/mm/swap_slots.c
->>> index 2a65a89b5b4d..10b94d64cc25 100644
->>> --- a/mm/swap_slots.c
->>> +++ b/mm/swap_slots.c
->>> @@ -307,7 +307,7 @@ swp_entry_t folio_alloc_swap(struct folio *folio)
->>>       entry.val = 0;
->>>
->>>       if (folio_test_large(folio)) {
->>> -             if (IS_ENABLED(CONFIG_THP_SWAP))
->>> +             if (IS_ENABLED(CONFIG_THP_SWAP) && arch_thp_swp_supported())
->>>                       get_swap_pages(1, &entry, folio_nr_pages(folio));
->>>               goto out;
->>>       }
->>
->> - Anshuman
-> 
-> Thanks
-> Barry
-
+Thanks
+Barry

@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF095388FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 00:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07FD5388FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 00:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240518AbiE3WgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 18:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
+        id S242409AbiE3Wjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 18:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbiE3WgP (ORCPT
+        with ESMTP id S238261AbiE3Wjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 18:36:15 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF91C77F3F
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 15:36:12 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id a64so10765112ybg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 15:36:12 -0700 (PDT)
+        Mon, 30 May 2022 18:39:37 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597965DD1B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 15:39:35 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id t25so18731799lfg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 15:39:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=aurora.tech; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Jzunswihq7emLJrZKcMyFQww1H3CwuUil00+SfCZ470=;
-        b=MxjhMKPHxKe9mLGtiURZCmcqHs+PbmChzbnPdapWj+nZAARhwolGI2X489aj/Ol/od
-         DU/tsxpThvmrpN+KcX44K2fxSgN2vfqg1P5ROsPegWgYx92LUi7T6yCHcBg6eB9TZDJA
-         HPuIlmrHXvI0NPYbogQg5rbd8phPteFDUM3mQP/P6Tc2K7ADcoJWSiGr+itEcY+XVgsh
-         wXK7VPtNtj4TLSe11qVs28OilAzut0zrja6ULNxeKmm0BIZ+LCATFH6bAYrIE1CqlUcu
-         n6pUh2rEMiIsKtd53c6rx98wiHpaVuemQGrQUv6nWwAWl/DSvImGS1ucRwJsu2Mhvrr7
-         4wQg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=b836Hwaa25hw9M7Z+368J9Eu0dyxv+PkfmBi1LY54Zg=;
+        b=HTDgud/cnqJA53cMtygJCrwf/TA4n6/dzAbBozqOQAL/VIGAz7yworbRH7YWqf34Ht
+         ncDu3wbkmZtJLlDLg6VgwdE40QfyH5X4gmPyK5kFQfykEEnNQsWFeUTgzmK4ZyyzySMS
+         LQuR8gmLVNXHkfZnDoIBXx23II8g4/MR8cK+qvhU8+7edh2xwaWMQt1puVH0pr9o+Gpd
+         6sWEJwnVhbWpUuk/mw7wJh04gJPLNs794/qW65mpjGXBxb4ENUf4KXXpV0NnxGCcLtSQ
+         5R8cWd3v0u0p3qXfj5Oobg61TnhnqTUqRNELjTnmXPGpwFiwUol+yc3p6Iz7NqF+oUY1
+         pSAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jzunswihq7emLJrZKcMyFQww1H3CwuUil00+SfCZ470=;
-        b=2hvMeLsO+xjtz/NqNMOrGU5qMItnthm2ibGqnyPPBTCQcEMhzwrFm/Nz8sI3dReM1u
-         VI9RL/OMVd8ZZOIW3xinOp3QNUZ91LEE15+hmIkw5BpytIiRquS/mYSW6VHey7TlbpuN
-         ON8e1XHMuFCGxxoeCJLIsvXAdHd8iMo6QnL64sMMYI0Xm9q/xt5L3ar6sy6Z+7mZojbz
-         s15UWHaT3ziHR+Ki5813uX1bLncv8qIuH5JoC+eXxXU/PPgdFMA4o05oJbI+Wygvvb/M
-         TRgLRxkptFzN38WdpoFwj4IFeih4BQoRp16O344k9Y75iOy6xMMHMA9lARHB9thxddlo
-         Brjw==
-X-Gm-Message-State: AOAM532Og0ee0kKieQZnTZRyEnm/GcuKBlwBot3g9gpLqSlHtbSWpPCw
-        YaCFueNFD5feJC3fEg48xWyAOkXYEbsG4w7AJtncSQ==
-X-Google-Smtp-Source: ABdhPJzDijRYVPb5lrhvE30t1R3zPS93TTddTSa3lLjvWRew/B5wnApP5hxJmE/yG3aN3K3SD5I3f1yRJkaNXoZdMBg=
-X-Received: by 2002:a25:8691:0:b0:65c:f544:4186 with SMTP id
- z17-20020a258691000000b0065cf5444186mr5817316ybk.277.1653950172140; Mon, 30
- May 2022 15:36:12 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=b836Hwaa25hw9M7Z+368J9Eu0dyxv+PkfmBi1LY54Zg=;
+        b=MiHUTsZ+ArSC0xf8pk9I4X+kW8pG6+qC+7SBagw4Sspuy+tP+2ghS9nS9/BHB4ws7g
+         FZ/0ld6FSjQQALPpSQgU9aMtdQ4Zexbiy0x+sGibMBVWz033gKAIvpHVEJfY3xUVNgWd
+         UelgFDID/wzKm5BLH3SERQjxWmA4Ahs55fNYeZJhKAenwJmOs3CR5e0YiOMOhz+D8XUz
+         RrZji5Me3RUrA4NDnEZog0YATde8jOBj/qvu6YsE3F8BEI8DHpfsaYBZlFdHqGLP1bGq
+         udQuAgPTbUa0IS5nhay0GGs+VnpmGlKnJk+jIr/CC/mumeoiTbbicMd7AIgOAaH2KDyi
+         yIhw==
+X-Gm-Message-State: AOAM531prAd63VbZmeuxOKUG9sar1Yys4RZF/0orv151kdtvKpBol6pp
+        CzPtO4J6LOD2TneSABPod8m6Mw==
+X-Google-Smtp-Source: ABdhPJwL/kYaRSEshZrSrq15BSStK/gx783mRIkQR9eF0XkTpUjVrrwLBl7M/PByAxjfz35p+txh5w==
+X-Received: by 2002:a05:6512:374a:b0:478:6208:63c with SMTP id a10-20020a056512374a00b004786208063cmr33479245lfs.483.1653950373589;
+        Mon, 30 May 2022 15:39:33 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id v25-20020a2e4819000000b002502e691b05sm2742896lja.136.2022.05.30.15.39.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 15:39:33 -0700 (PDT)
+Message-ID: <04af7d5f-a4d1-3403-c481-1cc2bb13d30f@linaro.org>
+Date:   Tue, 31 May 2022 01:39:32 +0300
 MIME-Version: 1.0
-References: <20220525221055.1152307-5-frederic@kernel.org> <Yo/FGcG+uiBh88sT@slm.duckdns.org>
- <20220526225141.GA1214445@lothringen> <YpAHEt0j30vBw9au@slm.duckdns.org>
- <9e44bb00-955a-dbc6-a863-be649e0c701f@redhat.com> <YpAdSW8JXVPOoNJl@slm.duckdns.org>
- <20220527083018.n43nc73vuuzm5ixo@localhost.localdomain> <YpIwsiaY2IPK96WO@hirez.programming.kicks-ass.net>
- <20220530004049.GA1251147@lothringen> <e3010471ee43e7e134f882f320fc4643fe4e4810.camel@kernel.org>
- <20220530144922.GA1790663@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220530144922.GA1790663@paulmck-ThinkPad-P17-Gen-1>
-From:   Alison Chaiken <achaiken@aurora.tech>
-Date:   Mon, 30 May 2022 15:36:01 -0700
-Message-ID: <CAFzL-7vqTX-y06Kc3HaLqRWAYE0d=ms3TzVtZLn0c6ATrKD+Qw@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/4] cpuset: Support RCU-NOCB toggle on v2 root partitions
-To:     paulmck@kernel.org
-Cc:     nicolas saenz julienne <nsaenz@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        rcu@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 2/3] arm64: dts: qcom: sm8450: Fix the IRQ trigger type
+ for remoteproc nodes
+Content-Language: en-GB
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        tglx@linutronix.de, maz@kernel.org, bjorn.andersson@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20220530080842.37024-1-manivannan.sadhasivam@linaro.org>
+ <20220530080842.37024-3-manivannan.sadhasivam@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220530080842.37024-3-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,73 +76,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Mon, May 30, 2022 at 04:29:56PM +0200, nicolas saenz julienne wrote:
-> > On Mon, 2022-05-30 at 02:40 +0200, Frederic Weisbecker wrote:
-> > > On Sat, May 28, 2022 at 04:24:50PM +0200, Peter Zijlstra wrote:
-> > > > On Fri, May 27, 2022 at 10:30:18AM +0200, Juri Lelli wrote:
-> > > > > Hi,
-> > > > >
-> > > > > On 26/05/22 14:37, Tejun Heo wrote:
-> > > > > > On Thu, May 26, 2022 at 08:28:43PM -0400, Waiman Long wrote:
-> > > > > > > I am thinking along the line that it will not be hierarchical. However,
-> > > > > > > cpuset can be useful if we want to have multiple isolated partitions
-> > > > > > > underneath the top cpuset with different isolation attributes, but no more
-> > > > > > > sub-isolated partition with sub-attributes underneath them. IOW, we can only
-> > > > > > > set them at the first level under top_cpuset. Will that be useful?
-> > > > > >
-> > > > > > At that point, I'd just prefer to have it under /proc or /sys.
-> > > > >
-> > > > > FWIW, I was under the impression that this would nicely fit along the
-> > > > > side of other feaures towards implenting dynamic isolation of CPUs (say
-> > > > > https://lore.kernel.org/lkml/20220510153413.400020-1-longman@redhat.com/
-> > > > > for example). Wouldn't be awkward to have to poke different places to
-> > > > > achieve isolation at runtime?
-> > > >
-> > > > This, that's what I was thinking.
-> > > >
-> > > > My main objection to the whole thing is that it's an RCU_NOCB specific
-> > > > interface. *That* I think is daft.
-> > > >
-> > > > I was thinking a partition would be able to designate a house-keeping
-> > > > sub-partition/mask, but who cares about all the various different
-> > > > housekeeping parties.
-> > >
-> > > It's time for the isolation users to step up here! I very rarely hear from them
-> > > and I just can't figure out by myself all the variants of uses for each of the
-> > > isolation features. May be some people are only interested in nocb for some
-> > > specific uses, or may be it never makes sense without nohz full and all the rest
-> > > of the isolation features. So for now I take the very cautious path to split the
-> > > interface.
-> >
-> > OK, my 2 cents. I personally deal with virtualisation setups that involve RT
-> > and CPU isolation on both host and guests.
-> >
-> > The main use-case ATM is running DPDK-like workloads. We want to achieve
-> > latencies in the order of tens of microseconds, so it's essential to avoid
-> > entering the kernel at all cost. So, no HW interrupts, sched tick, RCU
-> > callbacks, clocksource watchdogs, softlockup, intel_pstate, timers, etc...
-> > Everything is deferred onto housekeeping CPUs or disabled.
-> >
-> > Then we have setups that need to deal with HW on the host, exposed to the guest
-> > through emulation or VirtIO. The same rules apply really, except for some IRQ
-> > affinity tweaks and sched priority magic.
-> >
-> > I find it hard to see how running RCU callback locally could be useful to any
-> > latency sensitive workload.
-> >
-> > Frederic, out of curiosity, do you have a use-case in mind that might benefit
-> > from nohz_full but not rcu_nocb? Maybe HPC?
+On 30/05/2022 11:08, Manivannan Sadhasivam wrote:
+> The watchdog IRQ trigger type should be EDGE_RISING. So fix all remoteproc
+> nodes.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-On Mon, May 30, 2022 at 8:42 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> Would users looking for millisecond-scale latencies want rcu_nocbs but
-> not nohz_full, that is, the other way around?
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-On Intel processors running 5.15 with the timersd patches from Siewior
-backported and Weisbecker's bug-fix, choosing CONFIG_HZ_PERIODIC
-prevents cores from entering deeper C-states when hrtimers are
-pending.   With CONFIG_NO_HZ_COMMON, the cores do not service
-non-blocking timer callbacks until another thread wakes them.  Since
-low latency is critical, this is a use case where NO_HZ_FULL will not
-work but rcu_nocbs is needed.
+BTW: Could you please send the same patches for sm8250/8350 too?
 
--- Alison Chaiken, Aurora Innovation
+-- 
+With best wishes
+Dmitry

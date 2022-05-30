@@ -2,54 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADD8537302
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 01:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99B553730B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 02:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbiE2XxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 19:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
+        id S231938AbiE3AGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 20:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiE2XxN (ORCPT
+        with ESMTP id S230465AbiE3AG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 19:53:13 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C09A5EBFB
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 16:53:11 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id p5-20020a1c2905000000b003970dd5404dso5584569wmp.0
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 16:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ludios.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=BMcXcZRDgsVhF2JW/OguxESCZVj4ejMNNDUboWUbOrw=;
-        b=DfxmqHXwSC1od3Sz/psUpzwHOgcXMBZ6DpgvvOTs0NYh8hjrJJJ0DQVAencfF5az0S
-         BlSuag7TON87kspEIl5QkKK6/wfVyzITUeDmoRh3D3SE9kvJ0zM2V4VdFaqO14l3c9yG
-         K42q4eu1CnbYnsMyzK/6PADOZS2kFDGXsMgqg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=BMcXcZRDgsVhF2JW/OguxESCZVj4ejMNNDUboWUbOrw=;
-        b=VLN8MSDLVfuu8rlI185AD/ZvrX+24E1Bsp7qMwec96Us3fsLWXGDpAMZlixAFf2F7O
-         P8/2sWcoQ53tKW+0VnpNJXqXOHh8C0N4n9GcOHh+LC8c1ra/ONJBJd7hT+UMBWFcNQH/
-         xZ8Qn7AGXa3VHAxrlALLQ/YReLWVasdHrgjkdqdsb6p/KUC5YigP15vupf/b1FyGSGrK
-         anyWlgxDHJceR+8ndiowzTQgqsQL8s6+TA/RE4vFpNGigq65U4MRv48HC1BHrxJOYW9K
-         xCpkF0SQlTvwEQOQYYQ8ErPNmTQo94a08RTxTw0JDeDFwifKKnmfjj0F4vggbvnvAJek
-         5vag==
-X-Gm-Message-State: AOAM531LDD8RrMn36r8iaN7hRBwAWkcreFAVzpKDQErrfjV9TOw+h1Wt
-        Ig1v2dXhRoNQVVvPwPkTNT1coLr2ULDcYA//n0lWRFnLasiX8A==
-X-Google-Smtp-Source: ABdhPJy2Upe3A/vaaPwwNR5p3eWyjlyxF95uCVQy7yQTAGPYGr/KAY2mq+IsM5Yuvkkenr/L2X8FQslN7krrOG962zg=
-X-Received: by 2002:a05:600c:2182:b0:397:58f5:c6cf with SMTP id
- e2-20020a05600c218200b0039758f5c6cfmr16291136wme.86.1653868388725; Sun, 29
- May 2022 16:53:08 -0700 (PDT)
-MIME-Version: 1.0
-From:   Ivan Kozik <ivan@ludios.org>
-Date:   Sun, 29 May 2022 23:52:42 +0000
-Message-ID: <CAKynti+AtijnHPG-hR-zDM9eCX9HawLgB+p2C9VzS8GN-4+UsQ@mail.gmail.com>
-Subject: 5.18 missing /proc/sys/kernel/sched_autogroup_enabled?
-To:     linux-kernel@vger.kernel.org
-Cc:     nizhen@uniontech.com, peterz@infradead.org, mingo@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Sun, 29 May 2022 20:06:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0BB737B3
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 17:06:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9023660FC6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:06:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60065C385A9;
+        Mon, 30 May 2022 00:06:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1653869186;
+        bh=mT1I3Fl37Fkszm5PlYwey/4KQg+RDSh/eN7Z/0JYqjA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Pd7wVlI61dtMkMOOvN2T1uMh8JGl9L0YXk0X+2KKI+4OJ7IQORCgRx0t6bOTUu8ZX
+         Z1tohQoFHWEGHqtNCWp7vrOhlKAxZm1ncMn7sAnFbNOpQgIf6wPZiMPTGS8ZVY3TLD
+         CVOzDDcgyW6r6KQKmcEWL1w/H++wcZxi1VJQhrbo=
+Date:   Sun, 29 May 2022 17:06:24 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     David Gow <davidgow@google.com>
+Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        anton.ivanov@cambridgegreys.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-um@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        Daniel Latypov <dlatypov@google.com>, linux-mm@kvack.org
+Subject: Re: [PATCH v2 1/2] mm: Add PAGE_ALIGN_DOWN macro
+Message-Id: <20220529170624.0ceefb52ffd2c4496cbe696d@linux-foundation.org>
+In-Reply-To: <20220527185600.1236769-1-davidgow@google.com>
+References: <20220527185600.1236769-1-davidgow@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,110 +63,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, 27 May 2022 11:55:59 -0700 David Gow <davidgow@google.com> wrote:
 
-I noticed that /proc/sys/kernel/sched_autogroup_enabled seems to have
-gone missing in 5.18. Am I doing something wrong, or is this a
-regression?
+> This is just the same as PAGE_ALIGN(), but rounds the address down, not
+> up.
 
-I also noticed that booting 5.18 with "noautogroup" results in a
-"kernel: failed when register_sysctl sched_autogroup_sysctls to
-kernel" message.  Because of the error and the missing
-/proc/sys/kernel/sched_autogroup_enabled, it is unclear whether
-autogroup is enabled or not.
+Acked-by: Andrew Morton <akpm@linux-foundation.org>
 
-Please see below for my testing. These kernels came from
-https://kernel.ubuntu.com/~kernel-ppa/mainline/v5.18/ but I saw the
-same thing with a 5.18.0 on NixOS.
-
-Best regards,
-
-Ivan
-
-
-
-5.17, default:
-
-at@ubuntu2204:~$ uname -a
-Linux ubuntu2204 5.17.11-051711-generic #202205251331 SMP PREEMPT Wed
-May 25 13:57:33 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
-
-at@ubuntu2204:~$ journalctl -b | grep -i autogroup
-
-at@ubuntu2204:~$ cat /proc/sys/kernel/sched_autogroup_enabled
-1
-
-
-
-5.17, noautogroup:
-
-at@ubuntu2204:~$ uname -a
-Linux ubuntu2204 5.17.11-051711-generic #202205251331 SMP PREEMPT Wed
-May 25 13:57:33 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
-
-at@ubuntu2204:~$ journalctl -b | grep -i autogroup
-May 29 15:58:17 ubuntu2204 kernel: Command line:
-BOOT_IMAGE=/boot/vmlinuz-5.17.11-051711-generic
-root=UUID=20672a55-02fc-49b3-8c04-bd040f068096 ro
-find_preseed=/preseed.cfg auto noprompt priority=critical locale=en_US
-quiet splash noautogroup
-May 29 15:58:17 ubuntu2204 kernel: Kernel command line:
-BOOT_IMAGE=/boot/vmlinuz-5.17.11-051711-generic
-root=UUID=20672a55-02fc-49b3-8c04-bd040f068096 ro
-find_preseed=/preseed.cfg auto noprompt priority=critical locale=en_US
-quiet splash noautogroup
-
-at@ubuntu2204:~$ cat /proc/sys/kernel/sched_autogroup_enabled
-0
-
-
-
-5.18, default:
-
-at@ubuntu2204:~$ uname -a
-Linux ubuntu2204 5.18.0-051800-generic #202205222030 SMP
-PREEMPT_DYNAMIC Sun May 22 20:33:46 UTC 2022 x86_64 x86_64 x86_64
-GNU/Linux
-
-at@ubuntu2204:~$ journalctl -b | grep -i autogroup
-
-at@ubuntu2204:~$ cat /proc/sys/kernel/sched_autogroup_enabled
-cat: /proc/sys/kernel/sched_autogroup_enabled: No such file or directory
-
-root@ubuntu2204:~# sysctl -a | grep -i autogroup
-
-
-
-5.18, noautogroup:
-
-at@ubuntu2204:~$ uname -a
-Linux ubuntu2204 5.18.0-051800-generic #202205222030 SMP
-PREEMPT_DYNAMIC Sun May 22 20:33:46 UTC 2022 x86_64 x86_64 x86_64
-GNU/Linux
-
-at@ubuntu2204:~$ journalctl -b | grep -i autogroup
-May 29 15:53:17 ubuntu2204 kernel: Command line:
-BOOT_IMAGE=/boot/vmlinuz-5.18.0-051800-generic
-root=UUID=20672a55-02fc-49b3-8c04-bd040f068096 ro
-find_preseed=/preseed.cfg auto noprompt priority=critical locale=en_US
-quiet splash noautogroup
-May 29 15:53:17 ubuntu2204 kernel: Kernel command line:
-BOOT_IMAGE=/boot/vmlinuz-5.18.0-051800-generic
-root=UUID=20672a55-02fc-49b3-8c04-bd040f068096 ro
-find_preseed=/preseed.cfg auto noprompt priority=critical locale=en_US
-quiet splash noautogroup
-May 29 15:53:17 ubuntu2204 kernel: failed when register_sysctl
-sched_autogroup_sysctls to kernel
-
-at@ubuntu2204:~$ cat /proc/sys/kernel/sched_autogroup_enabled
-cat: /proc/sys/kernel/sched_autogroup_enabled: No such file or directory
-
-
-
-root@ubuntu2204:~# cat /boot/config-5.1[78]* | grep -i config_sysctl=
-CONFIG_SYSCTL=y
-CONFIG_SYSCTL=y
-
-root@ubuntu2204:~# cat /boot/config-5.1[78]* | grep -i autogroup
-CONFIG_SCHED_AUTOGROUP=y
-CONFIG_SCHED_AUTOGROUP=y
+Please include this in the UML tree alongside [2/2].

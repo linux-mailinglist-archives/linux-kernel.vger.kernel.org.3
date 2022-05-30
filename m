@@ -2,40 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 789B7537910
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8AAB5378F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235094AbiE3KJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
+        id S235098AbiE3KJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233941AbiE3KJI (ORCPT
+        with ESMTP id S235095AbiE3KJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:09:08 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F5C07A80A
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 03:09:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD265113E;
-        Mon, 30 May 2022 03:09:06 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8A5C3F73D;
-        Mon, 30 May 2022 03:09:05 -0700 (PDT)
-Date:   Mon, 30 May 2022 11:08:59 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     kbuild@lists.01.org, lkp@intel.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [kbuild] drivers/firmware/arm_scmi/clock.c:242:40: warning:
- Variable 'msg' is not assigned a value. [unassignedVariable]
-Message-ID: <YpSR3SV3CVrDEyi5@e120937-lin>
-References: <202205271608.aIWtyM7b-lkp@intel.com>
- <YpSIrIxrqdUn4Lpf@e120937-lin>
+        Mon, 30 May 2022 06:09:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587CA7B9CA;
+        Mon, 30 May 2022 03:09:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12E20B80CEE;
+        Mon, 30 May 2022 10:09:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFA09C34119;
+        Mon, 30 May 2022 10:09:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653905356;
+        bh=/kppvhYwD8/XAUtnmJGkTh0/Ss6kFj/Di0BL20r+ByY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FJWwmKAoz1OhR0fCXaw00w8fpI0D5h7Kf9X+efPrrCEfyMERp9hKgiUrJosKGQitv
+         Vytjn5kzWtH/P8LCemSknMl+TzlBPTf8NLWRxki0Ax406pk05vMK3XS4yOLFhlmrP9
+         kT/9NExxMXxolh/idTx4hsJYae4PHtqR23Q+V8zSuRIw/fXjhkDek8ZSezuf8rvtwW
+         fAzUR1/z1tNvy7Xj+2xIoirIHAuO0zGXWLWffCb9AH1ZJKYagw5++jDVJOSE8SqKFz
+         zJ+qKBIVcC5EY6UtT0qolpuQqng4eczB3h5CJmd2yyrS+4VoWdS0tYpuUhEdnIYnfw
+         tFGFa8WI1UWbw==
+Received: by mail-ot1-f43.google.com with SMTP id e11-20020a9d6e0b000000b0060afcbafa80so7406146otr.3;
+        Mon, 30 May 2022 03:09:16 -0700 (PDT)
+X-Gm-Message-State: AOAM531SnS3dnRwh1/wMhThx3QKXH9f3X8fb+7ekiiPe8ocq/QUEU9e8
+        K+ztaQvkA6qPDsT+oLI3LTfrw2lexZc9VOLXIAQ=
+X-Google-Smtp-Source: ABdhPJxlYII5iC3+bAlEIZXSUojaOxYZF3pyifh19p4ELiRg5+9LGZcvlwIiQk+X/1RMsijPyi+2Rn3qVYB6vhveKJk=
+X-Received: by 2002:a9d:76d5:0:b0:60b:1882:78bd with SMTP id
+ p21-20020a9d76d5000000b0060b188278bdmr13976917otl.71.1653905355895; Mon, 30
+ May 2022 03:09:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YpSIrIxrqdUn4Lpf@e120937-lin>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+References: <CAMj1kXEF6KV=3CXhaRKygBs9hvun7=bKRua5NbWOrksaZBgtCQ@mail.gmail.com>
+ <49eb2888-712e-7c81-313b-aec58e906778@foss.arm.com>
+In-Reply-To: <49eb2888-712e-7c81-313b-aec58e906778@foss.arm.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 30 May 2022 12:09:04 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEj6eGT8LszJTgBAec3Aq9tgsPC-cByGJ1vEXKny3Ui5Q@mail.gmail.com>
+Message-ID: <CAMj1kXEj6eGT8LszJTgBAec3Aq9tgsPC-cByGJ1vEXKny3Ui5Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] Removes the x86 dependency on the QAT drivers
+To:     yoan.picchi@arm.com
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        qat-linux <qat-linux@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -44,60 +68,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 10:04:55AM +0100, Cristian Marussi wrote:
-> On Fri, May 27, 2022 at 11:57:29AM +0300, Dan Carpenter wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git  master
-> > head:   7e284070abe53d448517b80493863595af4ab5f0
-> > commit: 7bc7caafe6b1e5b882255a42bc1bf112fa87b69b firmware: arm_scmi: Use common iterators in the clock protocol
-> > compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-> > reproduce (cppcheck warning):
-> >         # apt-get install cppcheck
-> >         git checkout 7bc7caafe6b1e5b882255a42bc1bf112fa87b69b
-> >         cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> 
-> Hi Dan,
-> 
-> thanks for the report.
-> 
-> > cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
-> > 
-> > >> drivers/firmware/arm_scmi/clock.c:242:40: warning: Variable 'msg' is not assigned a value. [unassignedVariable]
-> >     struct scmi_msg_clock_describe_rates *msg;
-> >                                           ^
-> > 
-> > vim +/msg +242 drivers/firmware/arm_scmi/clock.c
-> > 
-> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30  235  static int
-> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30  236  scmi_clock_describe_rates_get(const struct scmi_protocol_handle *ph, u32 clk_id,
-> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30  237  			      struct scmi_clock_info *clk)
-> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30  238  {
-> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30  239  	int ret;
-> > 5f6c6430e904d2 Sudeep Holla     2017-06-06  240  
-> > 
-> > Please delete the blank line.
-> 
-> I'll do.
-> 
-> > 
-> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30  241  	void *iter;
-> > 7bc7caafe6b1e5 Cristian Marussi 2022-03-30 @242  	struct scmi_msg_clock_describe_rates *msg;
-> > 
-> > I was so surprised that GCC doesn't warn about this but "msg" is only
-> > used to calculate the sizeof(*msg).
-> > 
-> 
-> Probably a leftover from a previous version of the series where msg was
-> usaed not only for sizeof()....I'll send a fix anyway to silence the
-> bot.
+On Mon, 30 May 2022 at 11:58, Yoan Picchi <yoan.picchi@foss.arm.com> wrote:
+>
+>  > On Wed, 18 May 2022 at 17:55, Andre Przywara <andre.przywara@arm.com>
+> wrote:
+>  > >
+>  > > On Tue, 17 May 2022 10:11:09 +0200
+>  > > Ard Biesheuvel <ardb@kernel.org> wrote:
+>  > >
+>  > > Hi,
+>  > >
+>  > > > On Mon, 16 May 2022 at 12:16, <yoan.picchi@arm.com> wrote:
+>  > > > >
+>  > > > > From: Yoan Picchi <yoan.picchi@arm.com>
+>  > > > >
+>  > > > > This dependency looks outdated. After the previous patch, we
+> have been able
+>  > > > > to use this driver to encrypt some data and to create working
+> VF on arm64.
+>  > > > >
+>  > > > > Signed-off-by: Yoan Picchi <yoan.picchi@arm.com>
+>  > > >
+>  > > > Are you sure the driver is safe for non-coherent DMA as well?
+>  > >
+>  > > That depends on your definition of "sure".
+>  > > We indeed tested this only on a server with coherent PCIe.
+>  > >
+>  > > I skimmed through the driver, and it looks like to use the DMA API
+>  > > correctly:
+>  > > - I see dma_alloc_coherent() calls for DMA ring buffers.
+>  > > - There are dma_map_single()/dma_unmap_single() pairs in other parts.
+>  > > - Accesses to the BARs are capsuled via macros, using readl/writel.
+>  > > - Access the the SRAM BAR is also only done via those macros.
+>  > >
+>  > > I didn't go through the driver systematically, and of course the
+>  > > interesting parts are the ones you don't see easily, so I am eager
+> to hear
+>  > > any other opinions on this topic.
+>  > >
+>  > > Ard, do you have anything special in mind? Is there something to
+> look out
+>  > > for, specifically?
+>  > >
+>  >
+>  > If it uses the DMA api consistently and correctly, and works as
+>  > expected when running under a SMMU, things are probably fine
+>  >
+>  > > The few cards we have access to are in some server in the data
+> centre, so
+>  > > I can't easily walk in with, say a RockPro64, and test this there.
+>  > >
+>  >
+>  > I suppose this implies that you have tested with SMMUs enabled.
+>
+> Sorry for the delay, I was away for a few days.
+> Actually, our previous attempts were with the iommu set to passthrough,
+> but I
+> just tested without the passthrough and it works the same way.
 
-... and btw there are a bunch of similar other sizeof(*msg) in a few
-other SCMI protocols when calling the same response_init() helper...
-..even though innocuos...I'll fix all of these to avoid needless stuff
-on the stack.
+Thanks for confirming.
 
-Thanks,
-Cristian
+So this looks fine to me as far as un-x86-like DMA topologies are
+concerned. I do agree that big-endian should be forbidden or tested
+thoroughly as well.

@@ -2,141 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C43B5382BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 16:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F7D5382A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 16:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242125AbiE3O1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 10:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
+        id S241212AbiE3O0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 10:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241430AbiE3ORf (ORCPT
+        with ESMTP id S241388AbiE3ORd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 10:17:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398434D243;
-        Mon, 30 May 2022 06:47:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB7FFB80D89;
-        Mon, 30 May 2022 13:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 013EBC3411E;
-        Mon, 30 May 2022 13:46:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918419;
-        bh=ozh1G02jBvU/LggvUu4u7Djg4oaIrmGMdGp9z3bVmYs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PdZiaJ6DxysB9/5yl6Djut51ioMLXQlmHGjDH93o1A3gVr+81p4Hmoc8+mrgJfG9H
-         K5pXiRSZGP7DB7cRjzAjKDrj/3CD/nMizVWKvh05hBfDowg4o71oZQuZlsLmszSREg
-         CHgNaVzGnX4dbXLOxmFPlom0woDlDXctb8KXIzygI6tWQpsjpzYW18R0mOf3xwnEFL
-         YLQSaLS51z30pWtji88iPLokyv83QySQr2/wWcFJzviiXCQKxH/sJk+eagvTTiqtrG
-         /+N3BD8+rG5qfwYwf6Z9tDmQ5jYRbPv8fipig4IiASfwElmUoacmo3V7BHW88iL74B
-         M76qeQMkBT2uw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, cluster-devel@redhat.com
-Subject: [PATCH AUTOSEL 5.10 76/76] gfs2: use i_lock spin_lock for inode qadata
-Date:   Mon, 30 May 2022 09:44:06 -0400
-Message-Id: <20220530134406.1934928-76-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
-References: <20220530134406.1934928-1-sashal@kernel.org>
+        Mon, 30 May 2022 10:17:33 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FE58FF8A
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:46:00 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id b200so11256261qkc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:46:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=8tubySlO9EL1sX7JJbgIYlj3V7gJSLQUkL2tqjiHPYE=;
+        b=qGFcst+H2sU9jethczFKj5MxMnXaCOn7OK090+/w4SslVfP0RhOPM+PrM/s6zmntEl
+         F0i0jWuXjup30AM1FCFtkmrQsYf603Ww0X7DlWH4G1X8DXidwxDvsLuIyOSA46WT96pb
+         gk/ByJ8wJJ6VG89vBxpWS4sT4viGby0Q7/aGVZjueV2Ol45MU6QR/kGUMziF9kEKL5jr
+         Vq5IvoXl5vRQyKgPRCK8sxmINhmRSQBk+B7MLNnt8CZ+4eyNendacm1T2oVMcG8QIJLi
+         JWs9iipRsPWjnyyw+uAEIr8g/Vhe0bmPXgyg2Sg9dqgZeemBHQFV9hvvB+/wubuuBXQ7
+         z3Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=8tubySlO9EL1sX7JJbgIYlj3V7gJSLQUkL2tqjiHPYE=;
+        b=wWOLChQuxbRgPwtfmJ5M+Pbm4qOkykKhMDXrAtz8olav73IW4SXMhODRz5AvJNLBiU
+         NOBUrhnEPARp6FzUzQ1HT6eh1b5kka4IX1ZjyNIkRBGUq5kXcFT/ipf+psUwl+XqFyW2
+         5dRYwiRJg9h0/ORrRSeN4LSP3vjXLsf0bGsdxifG5d/YTPn0aCt9DQdEvyeWZK+egLHV
+         5zT0FIEoE6COD8bLwz7ytBJl+Y76BV/88a/cpcy2OV6XB29hgankmr1rHvCgqfk9J/z4
+         llG+5YjthP+7vYZ+GguHdtkYppdZpzxGZTEN7NETGNZD3unKv6OvxkqOUAj3Ia074vtU
+         1+pA==
+X-Gm-Message-State: AOAM5337u7akCBwRzpfMiXqM3+gbrmN1Ny/diTj0YN7k0u/hVR3U9R4P
+        1ZzwNO5D5XHkL225JNFNFP+1KpsCV/yOChj8iVs=
+X-Google-Smtp-Source: ABdhPJw9o/+WDde4Jga387TqM8IY0EJdHUkX7NWLrzCofs5w6vulQVu5Xs2CiFpqzcOEIKw7lNGA0rRWaL1NB5GNp1o=
+X-Received: by 2002:a05:620a:40d1:b0:6a5:b4a3:dfbe with SMTP id
+ g17-20020a05620a40d100b006a5b4a3dfbemr14550181qko.340.1653918359158; Mon, 30
+ May 2022 06:45:59 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220525115445.93500-1-roman.o.stratiienko@globallogic.com> <20220530132232.himfp7ubiacbmkpx@penduick>
+In-Reply-To: <20220530132232.himfp7ubiacbmkpx@penduick>
+From:   Roman Stratiienko <r.stratiienko@gmail.com>
+Date:   Mon, 30 May 2022 16:45:48 +0300
+Message-ID: <CAGphcdnPnFeafky=8-vyd_wKgbuTJc+MOb9UsM_0P-hVL_oiMQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/sun4i: Fix blend route/enable register corruption for DE2.0/DE3.0
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     wens@csie.org,
+        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        airlied@linux.ie, Daniel Vetter <daniel@ffwll.ch>,
+        Samuel Holland <samuel@sholland.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, megi@xff.cz,
+        Roman Stratiienko <roman.o.stratiienko@globallogic.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bob Peterson <rpeterso@redhat.com>
+Hi Maxime,
 
-[ Upstream commit 5fcff61eea9efd1f4b60e89d2d686b5feaea100f ]
+=D0=BF=D0=BD, 30 =D0=BC=D0=B0=D1=8F 2022 =D0=B3. =D0=B2 16:22, Maxime Ripar=
+d <maxime@cerno.tech>:
+>
+> Hi Roman,
+>
+> On Wed, May 25, 2022 at 11:54:45AM +0000, Roman Stratiienko wrote:
+> > By this commit 2 related issues are solved:
+> >
+> >   Issue #1. Corruption in blend route/enable register:
+> >
+> > Register corruption happens after using old_state->zpos to disable laye=
+r
+> > state. Blend route/enable registers are shared with other layers
+> > and other layers may have already assigned this PIPE to valid value.
+> >
+> > Solution: Do not use old_state->zpos to disable the plane pipe in
+> > blend registers.
+> >
+> >   Issue #2. Remove disabled layer from blend route/enable registers:
+> >
+> > Since sun4i/drm are using normalized_zpos, .atomic_update() will setup
+> > blend route/enable pipes starting from PIPE0 to PIPEX, where X+1 is a
+> > number of layers used by the CRTC in this frame.
+> >
+> > Remaining pipes (PIPE[X+1] - PIPE[MAX]) can have old data that MUST be
+> > updated.
+> >
+> > new_state->normalized_zpos can't be used, since drm helpers won't updat=
+e
+> > it for disabled planes.
+> >
+> > Solution:
+> >
+> > 1. Track the number of total used planes for crtc.
+> > 2. Use this number instead of zpos to disable unused blend pipes.
+> >
+> > Signed-off-by: Roman Stratiienko <roman.o.stratiienko@globallogic.com>
+>
+> If there's two issues, and two solutions, it should be two patches.
 
-Before this patch, functions gfs2_qa_get and _put used the i_rw_mutex to
-prevent simultaneous access to its i_qadata. But i_rw_mutex is now used
-for many other things, including iomap_begin and end, which causes a
-conflict according to lockdep. We cannot just remove the lock since
-simultaneous opens (gfs2_open -> gfs2_open_common -> gfs2_qa_get) can
-then stomp on each others values for i_qadata.
+I would say.. It's a single complex issue.
+Solving one part without solving another will make things only worse.
 
-This patch solves the conflict by using the i_lock spin_lock in the inode
-to prevent simultaneous access.
-
-Signed-off-by: Bob Peterson <rpeterso@redhat.com>
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/gfs2/quota.c | 32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
-
-diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
-index 6e173ae378c4..ad953ecb5853 100644
---- a/fs/gfs2/quota.c
-+++ b/fs/gfs2/quota.c
-@@ -531,34 +531,42 @@ static void qdsb_put(struct gfs2_quota_data *qd)
-  */
- int gfs2_qa_get(struct gfs2_inode *ip)
- {
--	int error = 0;
- 	struct gfs2_sbd *sdp = GFS2_SB(&ip->i_inode);
-+	struct inode *inode = &ip->i_inode;
- 
- 	if (sdp->sd_args.ar_quota == GFS2_QUOTA_OFF)
- 		return 0;
- 
--	down_write(&ip->i_rw_mutex);
-+	spin_lock(&inode->i_lock);
- 	if (ip->i_qadata == NULL) {
--		ip->i_qadata = kmem_cache_zalloc(gfs2_qadata_cachep, GFP_NOFS);
--		if (!ip->i_qadata) {
--			error = -ENOMEM;
--			goto out;
--		}
-+		struct gfs2_qadata *tmp;
-+
-+		spin_unlock(&inode->i_lock);
-+		tmp = kmem_cache_zalloc(gfs2_qadata_cachep, GFP_NOFS);
-+		if (!tmp)
-+			return -ENOMEM;
-+
-+		spin_lock(&inode->i_lock);
-+		if (ip->i_qadata == NULL)
-+			ip->i_qadata = tmp;
-+		else
-+			kmem_cache_free(gfs2_qadata_cachep, tmp);
- 	}
- 	ip->i_qadata->qa_ref++;
--out:
--	up_write(&ip->i_rw_mutex);
--	return error;
-+	spin_unlock(&inode->i_lock);
-+	return 0;
- }
- 
- void gfs2_qa_put(struct gfs2_inode *ip)
- {
--	down_write(&ip->i_rw_mutex);
-+	struct inode *inode = &ip->i_inode;
-+
-+	spin_lock(&inode->i_lock);
- 	if (ip->i_qadata && --ip->i_qadata->qa_ref == 0) {
- 		kmem_cache_free(gfs2_qadata_cachep, ip->i_qadata);
- 		ip->i_qadata = NULL;
- 	}
--	up_write(&ip->i_rw_mutex);
-+	spin_unlock(&inode->i_lock);
- }
- 
- int gfs2_quota_hold(struct gfs2_inode *ip, kuid_t uid, kgid_t gid)
--- 
-2.35.1
-
+>
+> Maxime

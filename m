@@ -2,80 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93CE537395
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 04:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B913C53739A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 04:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbiE3CfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 22:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
+        id S232281AbiE3CjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 22:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbiE3CfQ (ORCPT
+        with ESMTP id S231174AbiE3CjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 22:35:16 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9662272E17;
-        Sun, 29 May 2022 19:35:15 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LBKGS6xxyzbbYT;
-        Mon, 30 May 2022 10:33:36 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 30 May 2022 10:35:13 +0800
-Message-ID: <9ee160e1-a0e7-1d7f-040f-1bcaa581ecd1@huawei.com>
-Date:   Mon, 30 May 2022 10:35:13 +0800
+        Sun, 29 May 2022 22:39:15 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FCF2FFE8;
+        Sun, 29 May 2022 19:39:13 -0700 (PDT)
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 24U2ccAY014384;
+        Mon, 30 May 2022 11:38:39 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 24U2ccAY014384
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653878319;
+        bh=qE7WzXO+Fvb8LCHJhg8ITc3RTlFLdDuh1rXDaHDbiIs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sPCU552xllBU8amPTSEmdOp5gcSpR0zm/ArNfQPjwi9XgCuHtFun7XDOjdYLirYM3
+         p+AkSQw0AR+3WvBwarF9TuRlpuBCBLTppdLT7qvlPdRKSFvgHZrlnPUbDwKIgEj5rK
+         SwdW2n57Z1ViQezOnF2lY2gvivUA0gmGIk/EJz0RwNeUyn9AbdfWT0pPqsfWINIeJx
+         Dvh2bTyOvlSeUQ9/TXqmRNJUpk8i3TPwmQGrPjLy0uSGNycLt/VmX9qnwlxiuRqUad
+         1k9k9XefjR8Jh2MNl0Y6bTdhSpTJbuNizNo9b50pVcS+aIywLjWXMl3z1+bLYRInYI
+         9tKzTcarevDog==
+X-Nifty-SrcIP: [209.85.216.42]
+Received: by mail-pj1-f42.google.com with SMTP id m14-20020a17090a414e00b001df77d29587so12264206pjg.2;
+        Sun, 29 May 2022 19:38:39 -0700 (PDT)
+X-Gm-Message-State: AOAM530iAPxxtkmVBFFZdAKJbfQHPeVHXqYUFqZpTzJHaaahLo+WQcKd
+        UAWSWsqvebltB9YNWZpSY6xOy+OkfcJSjvTqXl8=
+X-Google-Smtp-Source: ABdhPJyaQ/wy9B9fshk3yW3KU4TEmW6glMJp4RuyA4kh5/iojS5tBbBKH3o+PslFQejImPVohc4VfuJPFqJ/RefpdpU=
+X-Received: by 2002:a17:90a:9412:b0:1e0:c0cc:8630 with SMTP id
+ r18-20020a17090a941200b001e0c0cc8630mr20484625pjo.77.1653878318504; Sun, 29
+ May 2022 19:38:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 3/3] ext4: support flex_bg in ext4_mb_normalize_request
-To:     Ritesh Harjani <ritesh.list@gmail.com>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <jack@suse.cz>, <lczerner@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yebin10@huawei.com>, <yukuai3@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>
-References: <20220528110017.354175-1-libaokun1@huawei.com>
- <20220528110017.354175-4-libaokun1@huawei.com>
- <20220528150906.om746qfxoxu7svzx@riteshh-domain>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20220528150906.om746qfxoxu7svzx@riteshh-domain>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
+ <3ae306e0-c6c7-ed12-cacd-62b1c26dba3c@infradead.org> <6671de03-c09c-bfaf-e06c-e45af70d4354@infradead.org>
+ <6601a387-de9a-a0d0-11b5-01e0cfa75657@infradead.org> <7a97bac3-6ade-8e1b-cf0c-4a05c83163a3@infradead.org>
+ <Yo+lHSmeIsx144cv@shaak> <3b7ec693-f4a5-e1aa-3e07-b22a4008d4c9@infradead.org>
+ <YpPjqC+kVLIBpNlq@shaak> <593f31f6-1628-87f2-1b5d-ad8e79119dd6@infradead.org>
+In-Reply-To: <593f31f6-1628-87f2-1b5d-ad8e79119dd6@infradead.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 30 May 2022 11:37:12 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASUvQdEnSzUUYCjRVaZJpun5hdJ_oY=wYEW2RcF3spHuw@mail.gmail.com>
+Message-ID: <CAK7LNASUvQdEnSzUUYCjRVaZJpun5hdJ_oY=wYEW2RcF3spHuw@mail.gmail.com>
+Subject: Re: kbuild problem: ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Liam Beguin <liambeguin@gmail.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/5/28 23:09, Ritesh Harjani 写道:
-> On 22/05/28 07:00PM, Baokun Li wrote:
->> In ext4_mb_normalize_request, the size of the allocation request is
->> limited to no more than EXT4_BLOCKS_PER_GROUP. Ritesh mentions that this
->> does not take into account the case of flex_bg groups. So we should add
->> support for flex_bg to make the physical blocks of large files contiguous.
-> My only concern here was that what if we are at the flex group end boundary and
-> decide to take the size as of flex group size. How are we detecting that case.
+On Mon, May 30, 2022 at 9:17 AM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> But, I haven't yet looked at this patch of yours (as I am on travel for next few days),
-> but if this requires further discussion, we can work on this seperately and let
-> the other two patches go in as those are part of the bug fixes which you
-> identified (just my thoughts).
 >
-> -ritesh
-> .
+>
+> On 5/29/22 14:20, Liam Beguin wrote:
+> > Hi Randy,
+> >
+> > On Thu, May 26, 2022 at 01:04:41PM -0700, Randy Dunlap wrote:
+> >>
+> >>
+> >> On 5/26/22 09:04, Liam Beguin wrote:
+> >>> Hi Randy,
+> >>>
+> >>> On Thu, May 26, 2022 at 08:36:34AM -0700, Randy Dunlap wrote:
+> >>>> Liam:
+> >>>>
+> >>>> Any comment on this?
+> >>>> Otherwise I'll just send a formal patch like this (below).
+> >>>
+> >>> Apologies for not answering earlier.
+> >>>
+> >>> I wanted to look more into Masahiro's comment and try to fix the
+> >>> Makefile, but that can be done after.
+> >>>
+> >>> IMO your patch improves the current Kconfig, so I'd recommend sending
+> >>> the patch. If it can wait a bit, I can look at the Makefile over the
+> >>> weekend.
+> >>>
+> >>
+> >> Liam,
+> >>
+> >> I'll wait until next week to see if you come up with anything.
+> >>
+> >
+> > The following patch fixes the issue while addressing Masahiro's comment.
+> > I also considered `select IIO_RESCALE`, but I'm not sure what's usually
+> > preferred.
+> >
+> > diff --git a/drivers/iio/test/Kconfig b/drivers/iio/test/Kconfig
+> > index 56ca0ad7e77a..4c66c3f18c34 100644
+> > --- a/drivers/iio/test/Kconfig
+> > +++ b/drivers/iio/test/Kconfig
+> > @@ -6,7 +6,7 @@
+> >  # Keep in alphabetical order
+> >  config IIO_RESCALE_KUNIT_TEST
+> >       bool "Test IIO rescale conversion functions"
+> > -     depends on KUNIT=y && !IIO_RESCALE
+> > +     depends on KUNIT=y && IIO_RESCALE=y
+> >       default KUNIT_ALL_TESTS
+> >       help
+> >         If you want to run tests on the iio-rescale code say Y here.
+> > diff --git a/drivers/iio/test/Makefile b/drivers/iio/test/Makefile
+> > index f15ae0a6394f..880360f8d02c 100644
+> > --- a/drivers/iio/test/Makefile
+> > +++ b/drivers/iio/test/Makefile
+> > @@ -4,6 +4,6 @@
+> >  #
+> >
+> >  # Keep in alphabetical order
+> > -obj-$(CONFIG_IIO_RESCALE_KUNIT_TEST) += iio-test-rescale.o ../afe/iio-rescale.o
+> > +obj-$(CONFIG_IIO_RESCALE_KUNIT_TEST) += iio-test-rescale.o
+> >  obj-$(CONFIG_IIO_TEST_FORMAT) += iio-test-format.o
+> >  CFLAGS_iio-test-format.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+> >
+> > I'll send a patch as soon as you confirm this works for you too.
+>
+> Looks good. Thanks.
+>
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> Tested-by: Randy Dunlap <rdunlap@infradead.org>
+>
+> --
+> ~Randy
 
-All right, work on this separately.
 
-Have a nice trip!
+ Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
 
 -- 
-With Best Regards,
-Baokun Li
-
+Best Regards
+Masahiro Yamada

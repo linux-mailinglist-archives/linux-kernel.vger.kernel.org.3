@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441B3537A1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7C6537A07
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbiE3Lmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 07:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
+        id S235681AbiE3LlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 07:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235766AbiE3LmF (ORCPT
+        with ESMTP id S235496AbiE3LlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 07:42:05 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602B512752
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:41:58 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id y1so10363029pfr.6
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:41:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LdxnTcXDrJ5Hs4bCX9T3OZHsm8XEJDCruVBdQ6pwKoc=;
-        b=ooUrNtahWsQ/dC/e3fO6YAyaQSMxODE6/OQ6nYHoSjmHvFGqgpLkHe3/hRwNWXuB0v
-         Yg5WP+nhNqzLXUuu7QQBrejrPUMWVylWInURkgIzUzfe7OS+oYXBYVz5VMFl3bQRa09Z
-         Cso5qREOTM0fDZ9Pav5SAyLlbaTBtrFV0u4NwACN0bPaKfWvm3ajw5mq1UXYHTMO7Tte
-         dXTwvMtSQNVScWSwlWuJ1uG0vQNbGO2IGKIRZKV9ZgDJ1dT5hnrJhna6WkPXH2Ks3J76
-         jINH1Qpxuq3fCz4LXptKKbtFHt7weHfti8p0cuuZm5yCTS+Oz96QrvwemkQ5IINOPJjQ
-         Vl3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LdxnTcXDrJ5Hs4bCX9T3OZHsm8XEJDCruVBdQ6pwKoc=;
-        b=1k8XTOh0KpfneP+n/LWVByX/RxTKUjKnMv6z0XeA18pIaipW5moepLlVQiJIwAspFf
-         nzxA95REhSB0YRuOl3fGdt2/YpI0aUaO8NJy1gZJnTaHskF3X/hsdoileelAx0xxZRUR
-         nesELM5DfPU8cviy1kmQkxJnpow0NO9JnYu632qwnHqq2s/hbiJyZ+ZFJaNyfVvdTcpP
-         fZHYl0XzWbynB4pOQhsb+5zHZtMvx2CVTLY2l1EsYL5aXPxWKHDxzMEmEcIq2pj2lz5+
-         V2PLv7jf2yZ2uInsDs0AHG2VO1BloucqhfMS8fvtlO16m/EpdQsWWrnp407zSHml3ptm
-         k0aA==
-X-Gm-Message-State: AOAM532cUJMuWvrozz1S8i4mVXtlJhcf71aSnDlwBPvBnvqEE+qE2gES
-        kVZjLNWpZWrMgFpqepsF09m9/g==
-X-Google-Smtp-Source: ABdhPJzXUeKZvxuLnb/e7hEqtwEeM9YU+K0OtIUC58d4PVWRRcbiWsnWXYTefnUXwlC4viMdlGugFA==
-X-Received: by 2002:a62:1b06:0:b0:518:1649:bb6d with SMTP id b6-20020a621b06000000b005181649bb6dmr57040995pfb.25.1653910917454;
-        Mon, 30 May 2022 04:41:57 -0700 (PDT)
-Received: from leo-build-box.lan (n058152077182.netvigator.com. [58.152.77.182])
-        by smtp.gmail.com with ESMTPSA id c7-20020a170902724700b00161a9df4de8sm8846194pll.145.2022.05.30.04.41.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 04:41:57 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, Alyssa Ross <hi@alyssa.is>,
-        Ian Rogers <irogers@google.com>, Like Xu <likexu@tencent.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Li Huafei <lihuafei1@huawei.com>,
-        Joe Mario <jmario@redhat.com>,
-        Adam Li <adam.li@amperecomputing.com>,
-        German Gomez <german.gomez@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Ali Saidi <alisaidi@amazon.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v4 12/12] perf c2c: Update documentation for new display option 'peer'
-Date:   Mon, 30 May 2022 19:40:36 +0800
-Message-Id: <20220530114036.3225544-13-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220530114036.3225544-1-leo.yan@linaro.org>
-References: <20220530114036.3225544-1-leo.yan@linaro.org>
+        Mon, 30 May 2022 07:41:01 -0400
+X-Greylist: delayed 121 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 30 May 2022 04:40:57 PDT
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184EF419A3
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 04:40:57 -0700 (PDT)
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 981BBA0046;
+        Mon, 30 May 2022 13:40:55 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 981BBA0046
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1653910855; bh=A94usJLEIZvHxs0NLWIgXXMYLwbbDmxswIagNBme1fA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aqO3x3TZZmEChRN+9pBFGi42ZbmxIRT6l6Fv3SLOfOaU5XUHs41fyYweMmKlfB+DD
+         3CJVPNlYi7SWJa9Y+sr46OsbSYUvH35X6fLHGKqDwAV5QJ67Jusl4Q5iubQlwTJWSt
+         zAHbudEDy7ZCqBnOxh8lzjWkK2QAsOcavsjm84dE=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Mon, 30 May 2022 13:40:47 +0200 (CEST)
+Message-ID: <7ca20354-1a91-8f18-2de8-8571987fa519@perex.cz>
+Date:   Mon, 30 May 2022 13:40:47 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v4 00/17] ALSA: hda: cirrus: Add initial DSP support and
+ firmware loading
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
+        Takashi Iwai <tiwai@suse.com>, Mark Brown <broonie@kernel.org>,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org
+References: <20220525131638.5512-1-vitalyr@opensource.cirrus.com>
+ <871qwf0x8t.wl-tiwai@suse.de>
+ <20220530090846.GS38351@ediswmail.ad.cirrus.com>
+ <87czfvxtsc.wl-tiwai@suse.de>
+ <20220530093639.GT38351@ediswmail.ad.cirrus.com>
+ <87a6azxr7h.wl-tiwai@suse.de>
+ <20220530103415.GU38351@ediswmail.ad.cirrus.com>
+ <871qwbxpsb.wl-tiwai@suse.de>
+ <20220530105329.GV38351@ediswmail.ad.cirrus.com>
+ <87wne3wa5w.wl-tiwai@suse.de>
+From:   Jaroslav Kysela <perex@perex.cz>
+In-Reply-To: <87wne3wa5w.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,97 +70,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the new display option 'peer' is introduced, this patch is to
-update the documentation to reflect it.
+On 30. 05. 22 13:07, Takashi Iwai wrote:
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- tools/perf/Documentation/perf-c2c.txt | 30 ++++++++++++++++++++-------
- 1 file changed, 23 insertions(+), 7 deletions(-)
+> And yet moreover, we'll need to consider some way for protecting
+> against DoS-like behavior by frequent kctl changes.
 
-diff --git a/tools/perf/Documentation/perf-c2c.txt b/tools/perf/Documentation/perf-c2c.txt
-index 6f69173731aa..e1549798c6f3 100644
---- a/tools/perf/Documentation/perf-c2c.txt
-+++ b/tools/perf/Documentation/perf-c2c.txt
-@@ -109,7 +109,8 @@ REPORT OPTIONS
- 
- -d::
- --display::
--	Switch to HITM type (rmt, lcl) to display and sort on. Total HITMs as default.
-+	Switch to HITM type (rmt, lcl) or peer snooping type (peer) to display
-+	and sort on. Total HITMs (tot) as default.
- 
- --stitch-lbr::
- 	Show callgraph with stitched LBRs, which may have more complete
-@@ -174,12 +175,18 @@ For each cacheline in the 1) list we display following data:
-   Cacheline
-   - cacheline address (hex number)
- 
--  Rmt/Lcl Hitm
-+  Rmt/Lcl Hitm (Display with HITM types)
-   - cacheline percentage of all Remote/Local HITM accesses
- 
--  LLC Load Hitm - Total, LclHitm, RmtHitm
-+  Peer Snoop (Display with peer type)
-+  - cacheline percentage of all peer accesses
-+
-+  LLC Load Hitm - Total, LclHitm, RmtHitm (For display with HITM types)
-   - count of Total/Local/Remote load HITMs
- 
-+  Load Peer - Total, Local, Remote (For display with peer type)
-+  - count of Total/Local/Remote load from peer cache or DRAM
-+
-   Total records
-   - sum of all cachelines accesses
- 
-@@ -201,16 +208,21 @@ For each cacheline in the 1) list we display following data:
-   - count of LLC load accesses, includes LLC hits and LLC HITMs
- 
-   RMT Load Hit - RmtHit, RmtHitm
--  - count of remote load accesses, includes remote hits and remote HITMs
-+  - count of remote load accesses, includes remote hits and remote HITMs;
-+    on Arm neoverse cores, RmtHit is used to account remote accesses,
-+    includes remote DRAM or any upward cache level in remote node
- 
-   Load Dram - Lcl, Rmt
-   - count of local and remote DRAM accesses
- 
- For each offset in the 2) list we display following data:
- 
--  HITM - Rmt, Lcl
-+  HITM - Rmt, Lcl (Display with HITM types)
-   - % of Remote/Local HITM accesses for given offset within cacheline
- 
-+  Peer Snoop - Rmt, Lcl (Display with peer type)
-+  - % of Remote/Local peer accesses for given offset within cacheline
-+
-   Store Refs - L1 Hit, L1 Miss, N/A
-   - % of store accesses that hit L1, missed L1 and N/A (no available) memory
-     level for given offset within cacheline
-@@ -227,9 +239,12 @@ For each offset in the 2) list we display following data:
-   Code address
-   - code address responsible for the accesses
- 
--  cycles - rmt hitm, lcl hitm, load
-+  cycles - rmt hitm, lcl hitm, load (Display with HITM types)
-     - sum of cycles for given accesses - Remote/Local HITM and generic load
- 
-+  cycles - rmt peer, lcl peer, load (Display with peer type)
-+    - sum of cycles for given accesses - Remote/Local peer load and generic load
-+
-   cpu cnt
-     - number of cpus that participated on the access
- 
-@@ -251,7 +266,8 @@ The 'Node' field displays nodes that accesses given cacheline
- offset. Its output comes in 3 flavors:
-   - node IDs separated by ','
-   - node IDs with stats for each ID, in following format:
--      Node{cpus %hitms %stores}
-+      Node{cpus %hitms %stores} (Display with HITM types)
-+      Node{cpus %peers %stores} (Display with peer type)
-   - node IDs with list of affected CPUs in following format:
-       Node{cpu list}
- 
+I agree, but only the driver knows details about the kctl operation time and 
+resource constraints. So the driver should implement a rate or i/o limit for 
+those controls. We may offer helper functions in the ALSA core for this job 
+(if required).
+
+						Jaroslav
+
 -- 
-2.25.1
-
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.

@@ -2,72 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F7E5387E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 21:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6225387E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 21:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243087AbiE3TyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 15:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
+        id S243093AbiE3T5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 15:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232698AbiE3TyS (ORCPT
+        with ESMTP id S232698AbiE3T4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 15:54:18 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D78D65422
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 12:54:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653940456; x=1685476456;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=glIVLesF9bUs71QpLqXPHIcztRqPJ11tc0MAhp62YCU=;
-  b=O6Lstzj39V8aA8C3vg7vHMv3/kGaog65CwhNK1XsiByaZHQG1uJnncYF
-   QEJfE2REm/zy1ldHpiO8Kzhe0srm4AdjG+ShDlAHDpAIMT0GEDIAgxD9B
-   +ng4p7h608yZH9zW8p7/sNyZah/t9OddFCih1qB07FJXjDTY7yITPnOYa
-   LnlebNeDpJwpE7vn5pRhOPVlzM1YiXiLFvRGx4C7bHKqyKcP8rRuYrpmP
-   CfO8Ss4mqbyEfWvAkFOY85gXPo1lPABerBf63TlOXOqFtjP8wEJ9+QLEM
-   2/vZtbA3crZWhAqJHqSuqEqzFAO0gUAQrg4rRA7zQ+ISWqRyPl1Clca8k
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="275157561"
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="275157561"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 12:54:16 -0700
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="720012259"
-Received: from hyang-mobl1.amr.corp.intel.com (HELO [10.212.248.21]) ([10.212.248.21])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 12:54:15 -0700
-Message-ID: <61b2da02-0e71-1da5-cc3f-8777a8647962@linux.intel.com>
-Date:   Mon, 30 May 2022 12:54:14 -0700
+        Mon, 30 May 2022 15:56:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EA999FEC
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 12:56:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653940608;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SrQHuKkuR8CrrdLyf+7/DQkTTkrKszGSGsUUA8WbICA=;
+        b=ENhqMlIQCB8VmpWLc5cr+gknYoM7DjX6fLEfmaIAOejNn+69HrSIAJFahIHdKjCpnSsuwS
+        i/TUwaAiiRp9/cS71k3khs60KWnRMSYfna4cIVSGe4wLlJBDZF88rlAxOCqzSVs0f2bycV
+        /PofzANUgqzGn84h59sQSzczkPyw8ag=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-398-WA6lToafNQ-UsDriutUGUQ-1; Mon, 30 May 2022 15:56:47 -0400
+X-MC-Unique: WA6lToafNQ-UsDriutUGUQ-1
+Received: by mail-io1-f69.google.com with SMTP id y12-20020a5e920c000000b006657a63c653so5893386iop.11
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 12:56:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SrQHuKkuR8CrrdLyf+7/DQkTTkrKszGSGsUUA8WbICA=;
+        b=Q+34h/4UJkY5nBrp/8vUEBlkULleHAkJ/18OLoBI6hpHmwwRDsOdBdmuyYQyG9ciDt
+         tdXg3ouHpPhNkpgV0Wb5CtAcyi/DDJI9KVT/ukj+QT6GzaLzH1jhSKOJTFgD7/5XdVAn
+         1hxkyFtoEaV2//xZ9LCBqU1+LAHHREjyGtdKjfliQTArMSwbbn6bdoLAcO5+EmMJKr9Y
+         EhfQeNaELM12d2g4QbXnnEaIr4KOozTDL0YZCzpgiHnRtczaW5cXbrK58uf819pRu7oJ
+         sxMjuoZzkC5nNCVRc13Q9MVriF2xWwQ6yAtkYMDan9nMdGUAaedixumtorXWgz/J3uok
+         Iu2w==
+X-Gm-Message-State: AOAM533RgXlSEhlDu09fKzODc+jMlKIv+6lL6hPFjQ2wTyRBL98Px6d4
+        hiOG8CvF9RQKabwYdYHEJ+ARX0PvDPeJ+NXJnX6H16irsq51XlDtv6uLmSC88DD3UX+TDzXDsJi
+        f7ifei15FM3FNP/vCzNa6i9in
+X-Received: by 2002:a05:6638:25d3:b0:32e:e5ee:496c with SMTP id u19-20020a05663825d300b0032ee5ee496cmr16603121jat.52.1653940606493;
+        Mon, 30 May 2022 12:56:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwx3+eDeVC1tEGsUjSxkWbRjFFdRh89vPjGO12nGBme87S4wjpsuBO4lyT0OcGY9695AehSpg==
+X-Received: by 2002:a05:6638:25d3:b0:32e:e5ee:496c with SMTP id u19-20020a05663825d300b0032ee5ee496cmr16603114jat.52.1653940606320;
+        Mon, 30 May 2022 12:56:46 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id b16-20020a6be710000000b00665f77d74d6sm3364787ioh.51.2022.05.30.12.56.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 12:56:45 -0700 (PDT)
+Date:   Mon, 30 May 2022 15:56:43 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [RFC PATCH 1/3] hugetlb: skip to end of PT page mapping when pte
+ not present
+Message-ID: <YpUhe6BSfflOVz7b@xz-m1.local>
+References: <20220527225849.284839-1-mike.kravetz@oracle.com>
+ <20220527225849.284839-2-mike.kravetz@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Subject: Re: [PATCH v7 3/5] x86/mm: Make tdx_enc_status_changed() vmalloc
- address compatible
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220524040517.703581-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <ba5aa2939e81f730396d41120aa603df7999d937.camel@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <ba5aa2939e81f730396d41120aa603df7999d937.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220527225849.284839-2-mike.kravetz@oracle.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,65 +87,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Mike,
 
+On Fri, May 27, 2022 at 03:58:47PM -0700, Mike Kravetz wrote:
+> +unsigned long hugetlb_mask_last_hp(struct hstate *h)
+> +{
+> +	unsigned long hp_size = huge_page_size(h);
+> +
+> +	if (hp_size == P4D_SIZE)
+> +		return PGDIR_SIZE - P4D_SIZE;
+> +	else if (hp_size == PUD_SIZE)
+> +		return P4D_SIZE - PUD_SIZE;
+> +	else if (hp_size == PMD_SIZE)
+> +		return PUD_SIZE - PMD_SIZE;
+> +
+> +	return ~(0);
+> +}
 
-On 5/30/22 3:47 AM, Kai Huang wrote:
-> On Mon, 2022-05-23 at 21:05 -0700, Kuppuswamy Sathyanarayanan wrote:
->> set_memory_*crypted() APIs are used to change encryption or decryption
->> page attributes for the given address. It also by default support the
->> conversion for the vmalloc'ed memory address.
->>
->> In TDX Guest, tdx_enc_status_changed() function is triggered by
->> set_memory_*crypted() APIs when converting memory from/to shared or
->> private. Internally this function uses __pa() for physical address
->> conversion, which breaks the vmalloc address compatibility of the
->> set_memory_*crypted() APIs.
->>
->> So add support to fix the vmalloc'ed address compatibility issue.
->>
->> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
->> ---
->>   arch/x86/coco/tdx/tdx.c | 11 +++++++++--
->>   1 file changed, 9 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
->> index b49211994864..37d58675ccf1 100644
->> --- a/arch/x86/coco/tdx/tdx.c
->> +++ b/arch/x86/coco/tdx/tdx.c
->> @@ -15,6 +15,7 @@
->>   #include <asm/idtentry.h>
->>   #include <asm/irq_regs.h>
->>   #include <asm/desc.h>
->> +#include <asm/io.h>
->>   
->>   /* TDX module Call Leaf IDs */
->>   #define TDX_GET_INFO			1
->> @@ -680,8 +681,14 @@ static bool try_accept_one(phys_addr_t *start, unsigned long len,
->>    */
->>   static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
->>   {
->> -	phys_addr_t start = __pa(vaddr);
->> -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
->> +	phys_addr_t start, end;
->> +
->> +	if (is_vmalloc_addr((void *)vaddr))
->> +		start = vmalloc_to_pfn((void *) vaddr) << PAGE_SHIFT;
->> +	else
->> +		start = __pa(vaddr);
->> +
->> +	end = start + numpages * PAGE_SIZE;
->>   
->>   	if (!enc) {
->>   		/* Set the shared (decrypted) bits: */
-> 
-> AMD uses lookup_address() which doesn't require the vaddr being vmap() address.
-> Shouldn't TDX use the same way?
+How about:
 
-AMD uses it to add some additional checks for address validation and
-missing PTE entry. But in our case, reaching here means address is valid
-and there is a valid PTE entry. So there is no need to lookup again and
-convert it. It is easier to use above method.
+unsigned long hugetlb_mask_last_hp(struct hstate *h)
+{
+	unsigned long hp_size = huge_page_size(h);
+
+	return hp_size * (PTRS_PER_PTE - 1);
+}
+
+?
+
+This is definitely a good idea, though I'm wondering the possibility to go
+one step further to make hugetlb pgtable walk just like the normal pages.
+
+Say, would it be non-trivial to bring some of huge_pte_offset() into the
+walker functions, so that we can jump over even larger than PTRS_PER_PTE
+entries (e.g. when p4d==NULL for 2m huge pages)?  It's very possible I
+overlooked something, though.
+
+Thanks,
 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Peter Xu
+

@@ -2,71 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34BD538037
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 16:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A9F538145
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 16:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240001AbiE3ODJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 10:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
+        id S239675AbiE3OTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 10:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238992AbiE3Nzb (ORCPT
+        with ESMTP id S239272AbiE3ONp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 09:55:31 -0400
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759B0954A4;
-        Mon, 30 May 2022 06:38:03 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id z17so6393374wmf.1;
-        Mon, 30 May 2022 06:38:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ytl48+gf/9+wU974bliYN68rRr9GC5CbXhv9Mqbfs9Y=;
-        b=7xDOwNr7xvdjI0Dmws9lD6EJBin+IlsgKVOFb/eeKlvlrAEem/DC489NQv3O1eN5IY
-         YrkTkPVoiFDdG1yrEMRzbwhisC7OLn3D6vHP+chtIDK1DdsV2sRIcTpwhT/yzr1v9Wt0
-         3hcLOaH62FARz/TWyecrSfnSvqPC9zSyNnnCLP6ePNchVc34flzCBUPnLSmQIw2R8fla
-         9nil4FKSMoUTUwX8fI1c34j8s7jKSM5cfwW3r3wqi/Ae2lznuYcpHMim6EbPDneVPkSC
-         fpem+yz9XO/p/tVfxMdiwyleCUNU4BcdDmkI6KD4m/5dpjbI0VYNM6+0TSqZHrkIn9+a
-         qfqQ==
-X-Gm-Message-State: AOAM532+VTZgxuMy+Kju2ixwKx4i55jH5Dg2eVW/1Qh0/7/4NY8UITO9
-        D25rzo5ySS251OCmy2sgGzw=
-X-Google-Smtp-Source: ABdhPJyoFBGlSKlV74jeFHZeQEIiKD71BnJBLmLRXZanLlnEJT/DxNOlAxTa51VmVdIsBUKX2lv0Kg==
-X-Received: by 2002:a1c:4e19:0:b0:397:7b13:1bc7 with SMTP id g25-20020a1c4e19000000b003977b131bc7mr18980855wmh.114.1653917881735;
-        Mon, 30 May 2022 06:38:01 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id o15-20020a5d58cf000000b0020d02ddf4d0sm8911403wrf.69.2022.05.30.06.38.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 06:38:01 -0700 (PDT)
-Date:   Mon, 30 May 2022 13:37:59 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wei Liu <wei.liu@kernel.org>,
-        Paul Durrant <paul@xen.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH] xen/netback: do some code cleanup
-Message-ID: <20220530133759.mpwhh744l7miszbp@liuwe-devbox-debian-v2>
-References: <20220530114103.20657-1-jgross@suse.com>
+        Mon, 30 May 2022 10:13:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF771E15D8;
+        Mon, 30 May 2022 06:43:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC377B80AE8;
+        Mon, 30 May 2022 13:42:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ED8AC3411A;
+        Mon, 30 May 2022 13:42:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653918172;
+        bh=n+AaXBeWTOxHXF2nYHq4qOyEFHDvsdaw+ZoRXf+hNbc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JgHb71gHE1FFBuuS5loS/ZcBS3sUER/lPXVK4oLQ8EtT5qAcG4w4XQcOUN91m62Co
+         9Cmss5jNQG1h+xoPIcMr4sIDKtmOJi0QFiBRrEb4LOWJXFoCKuRtC8a3lDZ0iqqp//
+         Z3pmR9Vo0aV1TUf3yf9zVlSf92asptvNFUP9fLwH8j+26lb2p0yyJqPEyHqlM8NXsP
+         E6LnTaRZF3cAVBoN6vEyX2jn94C09yPL+yxPyMvLMwJ4sCCTkRWlqwmKJbkOWS1epl
+         rELF5wkFL+vN0w67ul1GAm4ABADLSbRPqIg02O3GocHVEnR4vNZS341c+H1WmwTdBJ
+         uqFFELF2f7czg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>, Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, rdunlap@infradead.org,
+        linux@dominikbrodowski.net, openrisc@lists.librecores.org
+Subject: [PATCH AUTOSEL 5.15 084/109] openrisc: start CPU timer early in boot
+Date:   Mon, 30 May 2022 09:38:00 -0400
+Message-Id: <20220530133825.1933431-84-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220530133825.1933431-1-sashal@kernel.org>
+References: <20220530133825.1933431-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220530114103.20657-1-jgross@suse.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 01:41:03PM +0200, Juergen Gross wrote:
-> Remove some unused macros and functions, make local functions static.
-> 
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-Acked-by: Wei Liu <wei.liu@kernel.org>
+[ Upstream commit 516dd4aacd67a0f27da94f3fe63fe0f4dbab6e2b ]
+
+In order to measure the boot process, the timer should be switched on as
+early in boot as possible. As well, the commit defines the get_cycles
+macro, like the previous patches in this series, so that generic code is
+aware that it's implemented by the platform, as is done on other archs.
+
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Jonas Bonn <jonas@southpole.se>
+Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+Acked-by: Stafford Horne <shorne@gmail.com>
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/openrisc/include/asm/timex.h | 1 +
+ arch/openrisc/kernel/head.S       | 9 +++++++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/arch/openrisc/include/asm/timex.h b/arch/openrisc/include/asm/timex.h
+index d52b4e536e3f..5487fa93dd9b 100644
+--- a/arch/openrisc/include/asm/timex.h
++++ b/arch/openrisc/include/asm/timex.h
+@@ -23,6 +23,7 @@ static inline cycles_t get_cycles(void)
+ {
+ 	return mfspr(SPR_TTCR);
+ }
++#define get_cycles get_cycles
+ 
+ /* This isn't really used any more */
+ #define CLOCK_TICK_RATE 1000
+diff --git a/arch/openrisc/kernel/head.S b/arch/openrisc/kernel/head.S
+index 15f1b38dfe03..871f4c858859 100644
+--- a/arch/openrisc/kernel/head.S
++++ b/arch/openrisc/kernel/head.S
+@@ -521,6 +521,15 @@ _start:
+ 	l.ori	r3,r0,0x1
+ 	l.mtspr	r0,r3,SPR_SR
+ 
++	/*
++	 * Start the TTCR as early as possible, so that the RNG can make use of
++	 * measurements of boot time from the earliest opportunity. Especially
++	 * important is that the TTCR does not return zero by the time we reach
++	 * rand_initialize().
++	 */
++	l.movhi r3,hi(SPR_TTMR_CR)
++	l.mtspr r0,r3,SPR_TTMR
++
+ 	CLEAR_GPR(r1)
+ 	CLEAR_GPR(r2)
+ 	CLEAR_GPR(r3)
+-- 
+2.35.1
+

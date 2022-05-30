@@ -2,72 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119BA537962
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9824153795C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235532AbiE3KrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
+        id S235474AbiE3Kqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235561AbiE3KpN (ORCPT
+        with ESMTP id S235354AbiE3Kpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:45:13 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC0E7CB1E
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 03:45:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 537F221B50;
-        Mon, 30 May 2022 10:45:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1653907509; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 30 May 2022 06:45:53 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5057CB25;
+        Mon, 30 May 2022 03:45:51 -0700 (PDT)
+Date:   Mon, 30 May 2022 10:45:49 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1653907550;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BE55qxSMS0UTxraTXVwJDW4YqxLCR/urdAJrBe0gCjw=;
-        b=SaslVQ8qqTXREhp2ONr5sZIADkyLY7VBzO/FdeerZHCfkYsNKTiqRQVeM+bYuLXRvUnvA/
-        bDuFdy25BMZnb5I5Ifls1U9/2hd2ZbfsA7WGkVMHR/JOi7pRFbJ7h0Z1ocv8yYD+Fq8p4z
-        y7c+xLY2VDfOod3G4oWWQuqUqhBTS0I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1653907509;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        bh=oN0BchjI0S/uiKLm500Vkkr8chqe+DNI+Hp7hPtlPf8=;
+        b=Py4QG6U/wsFwBrArb8Lod/82iJCJnpOnVvAxgwZc67w8C2W+bGx1NyWetexdvNMa7nTvLz
+        UVF1KfbR5l8+xVBfY9qSi11QacB6nY2iKwLQqgLHP9V9ZO19fKJpYlx00RqesD/BtAf+LZ
+        iBO/x7NsMFei2kjh26xtu9H1R6kfdQAO3hhXZkYwWM1BJfRVacjh7wyikjC8qS+DNZVEkE
+        OJ48NijzKAwh2geGGcpgEQg4QW0Q/PxqT77W/9AQdmkQCqR0gJCyE2CA319CvD1BVIQwu3
+        OTJlQH8G9iC5vYKY38Zu8/rumXJxMF/HTLpddgZvJMvxA0xwL0J3WayvpM3TOQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1653907550;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BE55qxSMS0UTxraTXVwJDW4YqxLCR/urdAJrBe0gCjw=;
-        b=/wSTltsAeifd2pgyDzeqdXh8CFgtineg0dz9gyhR7VoUAXN1GkeblyC9SCmj093gg4gzK5
-        5yE5Wj516Wyv+hBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 27EF013AFD;
-        Mon, 30 May 2022 10:45:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id G+3rCDWglGKvWgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Mon, 30 May 2022 10:45:09 +0000
-Date:   Mon, 30 May 2022 12:45:08 +0200
-Message-ID: <871qwbxpsb.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Mark Brown <broonie@kernel.org>,
-        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 00/17] ALSA: hda: cirrus: Add initial DSP support and firmware loading
-In-Reply-To: <20220530103415.GU38351@ediswmail.ad.cirrus.com>
-References: <20220525131638.5512-1-vitalyr@opensource.cirrus.com>
-        <871qwf0x8t.wl-tiwai@suse.de>
-        <20220530090846.GS38351@ediswmail.ad.cirrus.com>
-        <87czfvxtsc.wl-tiwai@suse.de>
-        <20220530093639.GT38351@ediswmail.ad.cirrus.com>
-        <87a6azxr7h.wl-tiwai@suse.de>
-        <20220530103415.GU38351@ediswmail.ad.cirrus.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+        bh=oN0BchjI0S/uiKLm500Vkkr8chqe+DNI+Hp7hPtlPf8=;
+        b=bhdLHd+hi6E7ioq31ntS7fvfx8GSdxqIpUdHwpzL5sF+Pb1DwCNPJ4sa9sa1aX9YRXgtxU
+        tTQEeg5rz/RmrtCA==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/urgent] sched/autogroup: Fix sysctl move
+Cc:     Ivan Kozik <ivan@ludios.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <YpR2IqndgsyMzN00@worktop.programming.kicks-ass.net>
+References: <YpR2IqndgsyMzN00@worktop.programming.kicks-ass.net>
+MIME-Version: 1.0
+Message-ID: <165390754900.4207.11439782656946256684.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -78,49 +65,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 May 2022 12:34:15 +0200,
-Charles Keepax wrote:
-> 
-> On Mon, May 30, 2022 at 12:14:26PM +0200, Takashi Iwai wrote:
-> > On Mon, 30 May 2022 11:36:39 +0200,
-> > Charles Keepax wrote:
-> > > On Mon, May 30, 2022 at 11:18:43AM +0200, Takashi Iwai wrote:
-> > > > On Mon, 30 May 2022 11:08:46 +0200,
-> > > > Charles Keepax wrote:
-> > > > > On Fri, May 27, 2022 at 06:13:38PM +0200, Takashi Iwai wrote:
-> > > > > > On Wed, 25 May 2022 15:16:21 +0200,
-> > > > > > Vitaly Rodionov wrote:
-> > > Yeah that should be what is happening here. Although it looks
-> > > like this code might be removing all the controls if the firmware
-> > > is unloaded. I will discuss that with the guys, we normal just
-> > > disable the controls on the wm_adsp stuff.
-> > 
-> > OK, that sounds good.  Basically my concern came up from the code
-> > snippet doing asynchronous addition/removal via work.  This showed
-> > some yellow signal, as such a pattern doesn't appear in the normal
-> > implementation.  If this is (still) really necessary, it has to be
-> > clarified as an exception.
-> > 
-> 
-> Hm... ok we will think about that. I think that part will
-> probably still be necessary. Because there is an ALSA control
-> that selects the firmware, then it is necesarry to defer creating
-> the controls to some work, since you are already holding the
-> lock.
+The following commit has been merged into the sched/urgent branch of tip:
 
-Well, if an ALSA control can trigger the firmware loading, that's
-already fragile.  A firmware loading is a heavy task, which should
-happen only at probing and/or resuming in general.  Do we have other
-drivers doing the f/w loading triggered by a kctl...?
+Commit-ID:     82f586f923e3ac6062bc7867717a7f8afc09e0ff
+Gitweb:        https://git.kernel.org/tip/82f586f923e3ac6062bc7867717a7f8afc09e0ff
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Mon, 30 May 2022 09:45:38 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Mon, 30 May 2022 12:36:36 +02:00
 
-> I guess we could look at adding locked versions of the add
-> control functions as well if that might be preferred?
+sched/autogroup: Fix sysctl move
 
-If the patterns of additional kctls (specific for firmware?) are
-fixed, we may create all such kctls beforehand and let them inactive
-unless the corresponding firmware is really loaded, too.
+Ivan reported /proc/sys/kernel/sched_autogroup_enabled went walk-about
+and using the noautogroup command line parameter would result in a
+boot error message.
 
+Turns out the sysctl move placed the init function wrong.
 
-thanks,
+Fixes: c8eaf6ac76f4 ("sched: move autogroup sysctls into its own file")
+Reported-by: Ivan Kozik <ivan@ludios.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Ivan Kozik <ivan@ludios.org>
+Link: https://lkml.kernel.org/r/YpR2IqndgsyMzN00@worktop.programming.kicks-ass.net
+---
+ kernel/sched/autogroup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Takashi
+diff --git a/kernel/sched/autogroup.c b/kernel/sched/autogroup.c
+index 16092b4..4ebaf97 100644
+--- a/kernel/sched/autogroup.c
++++ b/kernel/sched/autogroup.c
+@@ -36,6 +36,7 @@ void __init autogroup_init(struct task_struct *init_task)
+ 	kref_init(&autogroup_default.kref);
+ 	init_rwsem(&autogroup_default.lock);
+ 	init_task->signal->autogroup = &autogroup_default;
++	sched_autogroup_sysctl_init();
+ }
+ 
+ void autogroup_free(struct task_group *tg)
+@@ -219,7 +220,6 @@ void sched_autogroup_exit(struct signal_struct *sig)
+ static int __init setup_autogroup(char *str)
+ {
+ 	sysctl_sched_autogroup_enabled = 0;
+-	sched_autogroup_sysctl_init();
+ 
+ 	return 1;
+ }

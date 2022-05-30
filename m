@@ -2,104 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304F45376EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7276F537722
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233817AbiE3IZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 04:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
+        id S233823AbiE3IZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 04:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiE3IZe (ORCPT
+        with ESMTP id S229503AbiE3IZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 04:25:34 -0400
-Received: from smtp-4.orcon.net.nz (smtp-4.orcon.net.nz [60.234.4.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193B271D87
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:25:32 -0700 (PDT)
-Received: from [121.99.247.178] (port=35962 helo=creeky)
-        by smtp-4.orcon.net.nz with esmtpa (Exim 4.90_1)
-        (envelope-from <mcree@orcon.net.nz>)
-        id 1nvaiK-0001jW-6X; Mon, 30 May 2022 20:25:24 +1200
-Date:   Mon, 30 May 2022 20:25:22 +1200
-From:   Michael Cree <mcree@orcon.net.nz>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Subject: Re: Alpha: rare random memory corruption/segfault in user space
- bisected
-Message-ID: <YpR/cpU+V9Dovj1p@creeky>
-References: <YnWRVd5slCy5H0fC@creeky>
- <20220507015646.5377-1-hdanton@sina.com>
- <CAOUHufY=xAvDKSaV8vybgObXPBEsPqqS7R3+T_-6ix7bUvQc6w@mail.gmail.com>
- <YnweYF9E5mt2HIwV@creeky>
- <CAOUHufZ_kBF+f3_RE9p8itJ8YN86cbEq9oXHCt+e1qw2Q-b8Zw@mail.gmail.com>
+        Mon, 30 May 2022 04:25:50 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9742170366
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:25:49 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id b135so9953673pfb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jZI6WVqWeYgtBaY+QfPTn8jMgzc1eYPXPJ030wAMSgY=;
+        b=tu7dZq2fa+/+cBLFAnJ9WpUxgjW8BRP2wCO8KDg6zJ1sVpv8ObnsyOCZomVzCE51WC
+         /YN0WtyzjKOn0odpnTxPx3Y1g3wSZjCQgjqH1Q7vKyRydmS+yt4x5g+wwUkM0oMnf9be
+         Tq/ffy+Girj1TD5MBIFw0jF5vPqCt5Ik7S5lZ3TDrMxbxXWkT8iHUq8yMg3/fNASr7yk
+         cJql96YDFQv3N7/rMm1ljSrsArm8BFpK3LJ193qpGoUmqP4I1PgnaQW53/yf+jimyTcg
+         Bcrpdd3nbjgbn5KqW/GDNthbWmTNZyxnL13r9IsbId0h+N5qq0gMnqpVP3fdTbiO3q5o
+         +uiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jZI6WVqWeYgtBaY+QfPTn8jMgzc1eYPXPJ030wAMSgY=;
+        b=N1Fvs/AMCj+W6bTxpXe/xqToZFUInUkPpurk41JkGVvwC+25KSFiEkcUAA8sOyyP4P
+         6Zh1rQP5S8eAECSOBQ2gQxuyb/wq6wsLjgc4Sl41/RgQ6wHjRazJgCjA4+Rbs+qytooo
+         1SprQanOhHj2sGfXIQKLDRxF+F84d4sYGspo3+AAclvr5QjNQdJCZg8iB1B124l8vM6K
+         n4XdH65y/dCCtqcjFPEZ6y2WrSiVKb77sBICdl7PkiVyhG7d1RI66nMtbcN8jGnJA4O7
+         zFVelwbmyEW0a3r4y0IilUt4Lcp/zKJZJrDFO6gxtO51eixkdZ7VoiHNWc2tWA2/hMR5
+         Pb5w==
+X-Gm-Message-State: AOAM533auDIEIbRgIRykFTfEGCKlpDzV7Uz3neScZBUBrFZRfzBZTXcI
+        JF6Vv4pk2AO+2N5c8qAxGsxfgg==
+X-Google-Smtp-Source: ABdhPJyRh6+exQcNpjgCh/yNzciF9P0YOK/KwR2+UV9+M85WLLazzyvmZ5Z2lQA7LawDRMZ1tQbW+g==
+X-Received: by 2002:a63:7781:0:b0:3f6:2c8f:5c75 with SMTP id s123-20020a637781000000b003f62c8f5c75mr47260605pgc.358.1653899149165;
+        Mon, 30 May 2022 01:25:49 -0700 (PDT)
+Received: from localhost ([2408:8207:18da:2310:2071:e13a:8aa:cacf])
+        by smtp.gmail.com with ESMTPSA id f66-20020a636a45000000b003c14af50603sm7927993pgc.27.2022.05.30.01.25.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 01:25:48 -0700 (PDT)
+Date:   Mon, 30 May 2022 16:25:42 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Matthew Wilcox <willy@infradead.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: Re: [PATCH v5] tracing: add 'accounted' entry into output of
+ allocation tracepoints
+Message-ID: <YpR/hl6/Fk/vOVKa@FVFYT0MHHV2J>
+References: <c7f687a8-637c-b119-6e3a-7dacc885b851@suse.cz>
+ <80bcb043-3782-1d81-d8a2-4bdcb213cf30@openvz.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAOUHufZ_kBF+f3_RE9p8itJ8YN86cbEq9oXHCt+e1qw2Q-b8Zw@mail.gmail.com>
-X-GeoIP: NZ
-X-Spam_score: -2.9
-X-Spam_score_int: -28
-X-Spam_bar: --
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <80bcb043-3782-1d81-d8a2-4bdcb213cf30@openvz.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 02:56:12PM -0600, Yu Zhao wrote:
-> On Wed, May 11, 2022 at 2:37 PM Michael Cree <mcree@orcon.net.nz> wrote:
-> >
-> > On Sat, May 07, 2022 at 11:27:15AM -0700, Yu Zhao wrote:
-> > > On Fri, May 6, 2022 at 6:57 PM Hillf Danton <hdanton@sina.com> wrote:
-> > > >
-> > > > On Sat, 7 May 2022 09:21:25 +1200 Michael Cree wrote:
-> > > > > Alpha kernel has been exhibiting rare and random memory
-> > > > > corruptions/segaults in user space since the 5.9.y kernel.  First seen
-> > > > > on the Debian Ports build daemon when running 5.10.y kernel resulting
-> > > > > in the occasional (one or two a day) build failures with gcc ICEs either
-> > > > > due to self detected corrupt memory structures or segfaults.  Have been
-> > > > > running 5.8.y kernel without such problems for over six months.
-> > > > >
-> > > > > Tried bisecting last year but went off track with incorrect good/bad
-> > > > > determinations due to rare nature of bug.  After trying a 5.16.y kernel
-> > > > > early this year and seen the bug is still present retried the bisection
-> > > > > and have got to:
-> > > > >
-> > > > > aae466b0052e1888edd1d7f473d4310d64936196 is the first bad commit
-> > > > > commit aae466b0052e1888edd1d7f473d4310d64936196
-> > > > > Author: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> > > > > Date:   Tue Aug 11 18:30:50 2020 -0700
-> > > > >
-> > > > >     mm/swap: implement workingset detection for anonymous LRU
-> > >
-> > > This commit seems innocent to me. While not ruling out anything, i.e.,
-> > > this commit, compiler, qemu, userspace itself, etc., my wild guess is
-> > > the problem is memory barrier related. Two lock/unlock pairs, which
-> > > imply two full barriers, were removed. This is not a small deal on
-> > > Alpha, since it imposes no constraints on cache coherency, AFAIK.
-> > >
-> > > Can you please try the attached patch on top of this commit? Thanks!
-> >
-> > Thanks, I have that running now for a day without any problem showing
-> > up, but that's not long enough to be sure it has fixed the problem. Will
-> > get back to you after another day or two of testing.
+On Mon, May 30, 2022 at 10:47:26AM +0300, Vasily Averin wrote:
+> Slab caches marked with SLAB_ACCOUNT force accounting for every
+> allocation from this cache even if __GFP_ACCOUNT flag is not passed.
+> Unfortunately, at the moment this flag is not visible in ftrace output,
+> and this makes it difficult to analyze the accounted allocations.
 > 
-> Any luck? Thanks!
+> This patch adds boolean "accounted" entry into trace output,
+> and set it to 'true' for calls used __GFP_ACCOUNT flag and
+> for allocations from caches marked with SLAB_ACCOUNT.
+> 
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
 
-Sorry for the delay in replying.  Testing has taken longer due to an
-unexpected hitch.  The patch proved to be good but for a double check I
-retested the above commit without the patch but it now won't fail which
-calls into question whether aae466b0052e188 is truly the bad commit. I
-have gone back to the prior bad commit in the bisection (25788738eb9c)
-and it failed again confirming it is bad.  So it looks like the first
-bad commit is somewhere between aae466b0052e188 and 25788738eb9c (a
-total of five commits inclusive, four if we take aae466b0052e188 as
-good) and I am now building 471e78cc7687337abd1 and will test that.
+Acked-by: Muchun Song <songmuchun@bytedance.com>
 
-Cheers,
-Michael.
+Thanks.

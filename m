@@ -2,91 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E8D5385D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 18:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0B05385DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 18:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238741AbiE3QDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 12:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
+        id S236748AbiE3QI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 12:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242724AbiE3QCd (ORCPT
+        with ESMTP id S230062AbiE3QIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 12:02:33 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3EC93;
-        Mon, 30 May 2022 09:02:23 -0700 (PDT)
-X-UUID: 4827a7887c5a489aa9649e311c4d8c30-20220531
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:c7243481-68b2-439e-9beb-cecbb626aa87,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:14,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:14
-X-CID-META: VersionHash:2a19b09,CLOUDID:2f7bceb8-3c45-407b-8f66-25095432a27a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:3,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 4827a7887c5a489aa9649e311c4d8c30-20220531
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 68746084; Tue, 31 May 2022 00:02:16 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 31 May 2022 00:02:15 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 31 May 2022 00:02:15 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 31 May 2022 00:02:15 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <fparent@baylibre.com>
-CC:     <chaotian.jing@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-mmc@vger.kernel.org>,
-        <matthias.bgg@gmail.com>, <ulf.hansson@linaro.org>
-Subject: Re: [PATCH] mmc: mtk-sd: fix typo
-Date:   Tue, 31 May 2022 00:02:15 +0800
-Message-ID: <20220530160215.8749-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220530123857.692076-1-fparent@baylibre.com>
-References: <20220530123857.692076-1-fparent@baylibre.com>
+        Mon, 30 May 2022 12:08:25 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11olkn2020.outbound.protection.outlook.com [40.92.18.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62485908D;
+        Mon, 30 May 2022 09:08:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KVqtkgha+dbPqTnhwLyyVh7FAzfFMk/0+NBhYxfbyW4T7hJ00owxEjS7GAjYPUy64OTvtdkRBBxdfmPtcRdA6HHeBifk5W52G/THy1rvR0n3zBnI/eeM2B6VObM9J+3hBEdrjBmv81nkyk0nQOxNH7HFtuwTb5zFBovSXzLEpfMCPcfgSFg2A9TWOZoE5CMJqW1IrI+BQWvONfe8Qu10sO0ju4GCoU9zswVB9fwg7IgcrgrOpE+6pj1cFj7DNcF3B0bblaFJQQwF2fmufzgzk7ixB2tNyAG92SMV7hjltr/eP2WzxQdKcqbG5zrhnZaL15fAeSw11fl3b6/ygeo2ug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=suDOP3FDgsbk3lo037gMex3JtVTcUC+7mu1TUSYdvZM=;
+ b=DzKjz3lotJpWqfcwKoNArAKSxmoQYS4EL4DrBmxnK10k1ebUoHo7JzVW/H32uWxMcgwOb/zX8yO4O9AhmSXbxdt/IK57GY66LdWR4ZaBwSAvz3hnIpDA6HHN48z8OrRTN6YpAak2Fks902gww7fXXPtWomiGnAdCb10d2/m4VYvV01OfMxW+lJTX/rnRGT24FG+GbrVF2FaI5k5YmgZPdVN/irU2TBJCzYMxTrQTdo+kWIDezJ7O03cL0lloEp4J9e3gNcP60+5WvN8nFjdNp9aErkUVhD/5i5VfnZdVaxG3zSMxKDUC4A6mn55G7roHrXfKi7gfsSgY1k36p+sBxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com (2603:10b6:a03:236::13)
+ by BYAPR02MB5880.namprd02.prod.outlook.com (2603:10b6:a03:11d::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Mon, 30 May
+ 2022 16:08:21 +0000
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::303a:ab1:17c1:2d16]) by BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::303a:ab1:17c1:2d16%8]) with mapi id 15.20.5293.019; Mon, 30 May 2022
+ 16:08:21 +0000
+From:   Joel Selvaraj <jo@jsfamily.in>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hao Fang <fanghao11@huawei.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Joel Selvaraj <jo@jsfamily.in>
+Subject: [PATCH v3 0/3] Introduce EBBG FT8719 DRM panel driver
+Date:   Mon, 30 May 2022 21:37:50 +0530
+Message-ID: <BY5PR02MB7009F3259F82C08023E7365AD9DD9@BY5PR02MB7009.namprd02.prod.outlook.com>
+X-Mailer: git-send-email 2.36.1
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-TMN:  [UF0Zb/hjgkyOnAsunSFINw15siQCBqAmyQ0qhmI3GNmUUSiBvAxAwIyxPGZY5ixI]
+X-ClientProxiedBy: PN2PR01CA0066.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:23::11) To BY5PR02MB7009.namprd02.prod.outlook.com
+ (2603:10b6:a03:236::13)
+X-Microsoft-Original-Message-ID: <20220530160753.100892-1-jo@jsfamily.in>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 23b5eacf-567e-4bca-82ee-08da42569e0b
+X-MS-TrafficTypeDiagnostic: BYAPR02MB5880:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fopcoA9U/zxWDysiYd1/g+L0jFjhoMSUX6NIvrMBia3AcYf0L9yiXGT/NPK9cwUq/deUFkGlUcHVCVCakptKu0+hEkGurL4wFhKkSc03sfJHlwyjQGhlG5JMZKp4aNOAou1A2oMbqbvdmLO2i2rRbQUkVplwoSTjbI7qxRtcjwMv5XxXKZ1QrcA1G9z6NYvox6ShQQow36RVnspq6drcwfCuXKbhQRvA+TVE0Nkuj3KFLJCRjQ8yHljbY1tQFXou+o+Qgs86EmM8hE2WSwW144W/7rtgr7pAIHza47Q+eLCXU4XsdTgukDxU8bJHJfxPyhU3wX7O6AzgQg7woRi6HG3kNGHCH2K2Oh22cpNFNBerZYqefK2p5iXxo4G1NdtmhAP9vB229WMSmNPbX4UNW9rfXfo7MXDvw1Vsb2towt8dQ9BGd7gs7j8rUpauj00T/WLAClYNNm1aIet15U68mRYWo0FZ+/yrwkRNiiF0B/omUP7iybbunCey+3OFSTqzuWFkY3ONBk41CS2GhHYRZDISqd8Db3FWYPr8bpA2w+yqiMJvVl+CO5U3V8vAZbJJW2GVxWbCOGfLV4LRj/DSOx7fQZkHdVQQhHqZmZP2CmjYqi7RUNW+9BhAm0tovnge
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xzc5vpqr+uLB9JIZ8bOiAGqC9ePwt2dNHS3czDqH1bqWbgcMPjoNZdExp1xR?=
+ =?us-ascii?Q?z/lqCLdIpVRULZyT9hzDY4Q/+YaFNTWn8gdBOhnbUNfOYzSJzFc6U4xLxwz1?=
+ =?us-ascii?Q?kcA+G5voCXDaO5Q/vhAgvGhKTnr+R+YkzQHojwORN17D5RUGqywsKi5uTH2t?=
+ =?us-ascii?Q?0kbArFdgxiNcLG3lU0Kj1nI+L+5/TXuuWn7kswCVqeNLQQK5HrvaOea3Lu4f?=
+ =?us-ascii?Q?DeitvRd2ITz5xPv/JbqYO9srHxZL9AQSHIoM08eAdiPtzM0+HSvGuwsTCBly?=
+ =?us-ascii?Q?B5RR8U+P+bqa1+QVPLnJ9HHYldCES2g2wjZ2wN6HVNsb5iGOE4VT2FKR1+n5?=
+ =?us-ascii?Q?3V9vzgV2suLsae6GutfcsxrPTo0bvvpDFRC3lyaLEuEC5vnAPUK3Mm1u8kvv?=
+ =?us-ascii?Q?u5s7vDWGzwvkV+iopt/KrKkXAdd+DoA3qPtWarwZNBvfVc7d7LBMza5bbLrE?=
+ =?us-ascii?Q?n9hr9rb51Fa67BaiwVvkVFFS2NON3faPGOBUuUYpTH3dLEE2InzlKdQr5YQX?=
+ =?us-ascii?Q?qJaaHTDoYv8aExcwl7Pf2ANHy72hJZH65Juwt3KsNUJTknwMFIe983a2BCC7?=
+ =?us-ascii?Q?JIRSol1MIx9oS4Fdbcn06p1U0GUkAFQo6uVGvYeN7AKz7qPHnTNL/rXWbSs8?=
+ =?us-ascii?Q?AGbYM1mN0lpODcyElGSfVVmMBBrewa1lUmWvmHwRD5vQMrXX8ZlZ8x3Gq+v9?=
+ =?us-ascii?Q?2nidTsn0EgzlAiWgG79xhzh0JGvZDdtkyBgIYG4VKBZnzJqHbpqhdAXecWPS?=
+ =?us-ascii?Q?8jy9xLt0rAprr9ZuwyEadRivoZTLCXtfuhu8napQoDUbFhEI/hmzydheANt1?=
+ =?us-ascii?Q?MJk1jHC/yBW7Poe++d37eNtkoUihQIR4lNgqFmt3XLLLy4EZuBpGQSSPJnQJ?=
+ =?us-ascii?Q?IxYRXVSwJ8TZtLS7HeM2V4utJteHvGrHSQ9N0cKx/oXyTyfjEDL5b1RCdFxB?=
+ =?us-ascii?Q?PVou+ZOsTrIEmSVRt8zL1SIUtJKfz9mftjNw7zRP6IpBJnYufqo01aR19tYR?=
+ =?us-ascii?Q?MULK44DTssB5rPeWQQs4HUajIs5BwkvX2d6AaZcMdziHdPraJwGsdZpJMX+p?=
+ =?us-ascii?Q?ItuQgieEItQLbV3QRYnz5LkiMBGd4/0RteUYuMKgY455TJW7+nEWf53WpbLf?=
+ =?us-ascii?Q?CQ1aQ7y9BfcGNbHXaYLkYuap6qlMAki1oN5V8rpV8gbTwMiDbfOw2w+bsXBs?=
+ =?us-ascii?Q?WqKl8gQbqIZTcLhMYPjwRLdMFramA8pwSoN7aYbQCDh7RPIsJP2xznoZTNGi?=
+ =?us-ascii?Q?esXvcv4HAWJNe83dDHFRmg/AYX9B9Cd1XIvqSiOpp7E50QWg+UPd50HepoF6?=
+ =?us-ascii?Q?HUooOQP34GMLWiwjeQp3Bk8JQJQ1/OxCULOdH9+GnZiYT9rri6QcE2VsKQtt?=
+ =?us-ascii?Q?fjpYUG3UoavrFkQpPX5ZbZ0dRz1rVx8tD6XCOMAJAg44YYd6lp6ebizqG5ze?=
+ =?us-ascii?Q?K5ULk5DT0IRQLV/JuMggGfV9GbPYzz8rzpGT8vKvn18JlskHRXr3UA=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-99c3d.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23b5eacf-567e-4bca-82ee-08da42569e0b
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB7009.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 16:08:21.5958
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5880
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->Fix a typo: Fianl -> Final.
->
->Signed-off-by: Fabien Parent <fparent@baylibre.com>
+Add bindings and DRM panel driver for EBBG FT8719 6.18" 2246x1080 DSI
+video mode panel, which can be found on some Xiaomi Poco F1 phones.
+The panel's backlight is managed through QCOM WLED driver.
 
-Reviewed-by: Miles Chen <miles.chen@mediatek.com> 
+The driver is built using linux-mdss-dsi-panel-driver-generator[1], and
+additionally support for handling regulators and linking external
+backlight is added.
 
->---
-> drivers/mmc/host/mtk-sd.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
->index 195dc897188b..c7d196f805ec 100644
->--- a/drivers/mmc/host/mtk-sd.c
->+++ b/drivers/mmc/host/mtk-sd.c
->@@ -2318,7 +2318,7 @@ static int msdc_execute_hs400_tuning(struct mmc_host *mmc, struct mmc_card *card
-> 	else
-> 		val = readl(host->base + PAD_DS_TUNE);
-> 
->-	dev_info(host->dev, "Fianl PAD_DS_TUNE: 0x%x\n", val);
->+	dev_info(host->dev, "Final PAD_DS_TUNE: 0x%x\n", val);
-> 
-> 	return 0;
-> 
->-- 
->2.36.1
+[1] https://github.com/msm8916-mainline/linux-mdss-dsi-panel-driver-generator
 
+Changes in v3: (Mostly Linus Walleij's Suggestions)
+ - Removed ctx->prepared state variable as it's handled by the core
+ - Print error in dsi_dcs_write_seq macro if it fails to write
+ - Removed magic power on sequences as panel works fine without them
+
+Changes in v2: (Krzysztof Kozlowski's Suggestions)
+ - dt-bindings: specify maxItems for reg
+ - dt-bindings: cleanup and simplify the panel properties
+ - dt-bindings: in example change "|+" to "|' and "dsi0" to "dsi"
+
+Joel Selvaraj (3):
+  dt-bindings: vendor-prefixes: Add prefix for EBBG
+  dt-bindings: display: Add bindings for EBBG FT8719
+  drm/panel: introduce ebbg,ft8719 panel
+
+ .../bindings/display/panel/ebbg,ft8719.yaml   |  74 +++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   7 +
+ drivers/gpu/drm/panel/Kconfig                 |  11 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ drivers/gpu/drm/panel/panel-ebbg-ft8719.c     | 296 ++++++++++++++++++
+ 6 files changed, 391 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/ebbg,ft8719.yaml
+ create mode 100644 drivers/gpu/drm/panel/panel-ebbg-ft8719.c
+
+-- 
+2.36.1
 

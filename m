@@ -2,94 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8635E537620
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049A153760C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbiE3H5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S232726AbiE3HxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234271AbiE3Hyc (ORCPT
+        with ESMTP id S233600AbiE3HxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:54:32 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC4E74DC4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:54:30 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id u3so13460195wrg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:54:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3kcYg8SvftZ4Pv8K6+My0zsHrpG5RiRd2GgL3qZs2gI=;
-        b=oOHy+1wa0Y1QWiyS+VCO8OYEDSfeb4P6rKwugYGCN7bpah1DiWveZ7BFpagsJ7/B5p
-         OFcsrtoRriPmcS4y0Xfdrn28EYWxIU5YJq872nY+HwsO1qmuE/QtQjFI64s2uIjoTiEj
-         0peNA3xx6oibsD+QlQydo71XbCH7+zX6x8zZ72Djnya0nWIeZyRmhSIZtC/AbU2/DAbZ
-         05Ycpn6SQdheX229ZnQMYOcTXVVZNOTHXRjJXt6IJVLIh6Fl+CdQFhb92g0QWIJRnvF8
-         K3t02JPLJ6733jL3PdmtIoU//SZXX8NcRJOXrPll3iUMbHyRhB3j/DEivj0AZzZURgyx
-         feRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3kcYg8SvftZ4Pv8K6+My0zsHrpG5RiRd2GgL3qZs2gI=;
-        b=MPOKJpvvogQz/5rA9I7uyL5I9DN4Z/lWRe1Rp01TF4yXdboPAOg9qcrD+vDrBP4L+K
-         NxtcqWE7B9bGqBaYqgGfu5ObsnLHXXGoNj3lEfX+1FjFHaEjQU6Qbam4AKnmO/jN82GN
-         WQrGquG8K9ZoojfqA66DB/oq1jNGkPFay6uLf9Drn4zAftEEQMTJ+8vjZ9nXGnawb5av
-         1rTzkWV6R/DDBDBvifN6T2ouzPwcxQXwqtb5moTgJlQfWxUOQHONRtJkn47/R7A2cTQG
-         3CIrilZamUa/5pRlH+oZ64OEy+QPX3cXTvWapjxOPt8+hFv12fkU69/NDrCLJN9Njjnb
-         YUrA==
-X-Gm-Message-State: AOAM533bHAiDWA2KfZ5K3BWkSu/G1vtnL3MK7hfVg7iqDe7Ggn/c1pmW
-        acEVgxE7HLEWmN2jc0YsY5bl0f3GLvhM8QoL
-X-Google-Smtp-Source: ABdhPJw6xnN8Iy6RqczuscjkcuqNxwqXuNH9d2cQ78QPMlE0uD4bsefwpWemYj8HuHLpLpqQB6LkUg==
-X-Received: by 2002:a05:6000:2cf:b0:20d:c9f:63d0 with SMTP id o15-20020a05600002cf00b0020d0c9f63d0mr46629276wry.45.1653897269034;
-        Mon, 30 May 2022 00:54:29 -0700 (PDT)
-Received: from ownia.. ([103.105.48.166])
-        by smtp.gmail.com with ESMTPSA id n21-20020a05600c3b9500b003974860e15esm10578642wms.40.2022.05.30.00.54.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 00:54:28 -0700 (PDT)
-From:   Weizhao Ouyang <o451686892@gmail.com>
-To:     Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
-        Yue Hu <huyue2@coolpad.com>
-Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Weizhao Ouyang <o451686892@gmail.com>
-Subject: [PATCH] erofs: fix 'backmost' member of z_erofs_decompress_frontend
-Date:   Mon, 30 May 2022 15:51:14 +0800
-Message-Id: <20220530075114.918874-1-o451686892@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 30 May 2022 03:53:07 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494B0287;
+        Mon, 30 May 2022 00:52:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PA/t+O0nJ8ZID3NeeJjW9bADPDFRaoAD2wrlnvNm2Fc=; b=JA05FiD+94Y9SDtuOfX8qU7/8b
+        jQWH1UQ/LOU5p+OQy7OXowgT92X1PEDMGFn8eOHLmFZ5jNS3dia/BQzM8friSrCqpcyAwXOeq/bGA
+        Sdh8fWGD3zvA1fweBQ/SVTvosAAa+0/lrhlLUJna7Oj38RVccmcXxeTnUG2kp4q45U41H9UrZoO3V
+        J7MkpFmGQKV2c/RYPw4NuksF7YmyZduE7aIimfAS9vxjrv/3eLJ6nenDMKXzCULjpF8W2wLvwh5AX
+        fW9xxzVa9+BLNQQWyDwveVUtRVkTHaQQA5sDLJEj1ckFQVAUzlF9MJRKxmzMJD3t4X9n02wa52bep
+        ntxwAg7A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nvaC0-004I5j-7g; Mon, 30 May 2022 07:52:00 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0B9AC980DE7; Mon, 30 May 2022 09:51:58 +0200 (CEST)
+Date:   Mon, 30 May 2022 09:51:57 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Cc:     Mark Brown <broonie@kernel.org>, jpoimboe@redhat.com,
+        chenzhongjin@huawei.com, mark.rutland@arm.com,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 09/20] objtool: arm64: Implement command to invoke
+ the decoder
+Message-ID: <YpR3naaNCNG9ZJGC@worktop.programming.kicks-ass.net>
+References: <e81e773678f88f7c2ff7480e2eb096973ec198db>
+ <20220524001637.1707472-1-madvenka@linux.microsoft.com>
+ <20220524001637.1707472-10-madvenka@linux.microsoft.com>
+ <YoznLR30T+03Ea08@sirena.org.uk>
+ <ff58b576-efee-276a-bfb3-11f5d258d580@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ff58b576-efee-276a-bfb3-11f5d258d580@linux.microsoft.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Initialize 'backmost' to true in DECOMPRESS_FRONTEND_INIT.
+On Sun, May 29, 2022 at 09:49:44AM -0500, Madhavan T. Venkataraman wrote:
+> 
+> 
+> On 5/24/22 09:09, Mark Brown wrote:
+> > On Mon, May 23, 2022 at 07:16:26PM -0500, madvenka@linux.microsoft.com wrote:
+> >> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+> >>
+> >> Implement a built-in command called cmd_fpv() that can be invoked as
+> >> follows:
+> >>
+> >> 	objtool fpv generate file.o
+> >>
+> >> The built-in command invokes decode_instructions() to walk each function
+> >> and decode the instructions of the function.
+> > 
+> > In commit b51277eb9775ce91 ("objtool: Ditch subcommands") Josh removed
+> > subcommands so this interface is going to need a rethink.
+> 
+> Thanks for mentioning this. I will sync my patchset to the latest and send out version 3.
 
-Fixes: 5c6dcc57e2e5 ("erofs: get rid of `struct z_erofs_collector'")
-Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
----
- fs/erofs/zdata.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Before you do; why are you duplicating lots of validate_branch() ? Why
+can't you use the regular code to generate ORC data?
 
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index 95efc127b2ba..94d2cb970644 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -214,7 +214,7 @@ struct z_erofs_decompress_frontend {
- 
- #define DECOMPRESS_FRONTEND_INIT(__i) { \
- 	.inode = __i, .owned_head = Z_EROFS_PCLUSTER_TAIL, \
--	.mode = COLLECT_PRIMARY_FOLLOWED }
-+	.mode = COLLECT_PRIMARY_FOLLOWED, .backmost = true }
- 
- static struct page *z_pagemap_global[Z_EROFS_VMAP_GLOBAL_PAGES];
- static DEFINE_MUTEX(z_pagemap_global_lock);
--- 
-2.34.1
-
+I'm really not happy about all this.

@@ -2,58 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394D05383E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D62538479
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240290AbiE3PD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
+        id S236482AbiE3PDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243235AbiE3PBs (ORCPT
+        with ESMTP id S243267AbiE3PBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:01:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BAC74DEB;
-        Mon, 30 May 2022 07:02:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E02261138;
-        Mon, 30 May 2022 14:02:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 872F7C385B8;
-        Mon, 30 May 2022 14:02:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653919328;
-        bh=C2X5kSVfJKWy7iJa8rZT/0Escr5C771N57orGsEtS1E=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=m2VzrdOoPJY4ZJttjh9yFNKKEJwm9RcAA9PY+8FsNzXxT6aAEq1JV9+owT9gl/EQZ
-         7hl+yP33+Pjd9g3H+G0JFCraxieuBqqgJNgzUqdOvdTI+7yzcq1bmfYgOAXPixaseQ
-         Y6P7yZALek06IX16wvn3SYbrThPO2siGOkGD8q5tOK2hlUaenKjEks7cv7U/f2iBDV
-         SqDFpxhRToU4Kxh8qRPlgKDUSNKoP1jPaWRYcs2eIWwey90Ay9P7Vhx9KAgrMT/xM6
-         jtEVfKJwQL/lafRqwqvyUUGIufPMicAKUEZUGsWPlVWFUUXBjGVQuHctK1XrVjv7ch
-         oHSFGfaKkprZQ==
-Message-ID: <9915b7b556106d2a525941141755adcca9e50163.camel@kernel.org>
-Subject: Re: [PATCH -next,v2] fuse: return the more nuanced writeback error
- on close()
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Miklos Szeredi <miklos@szeredi.hu>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     ChenXiaoSong <chenxiaosong2@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liuyongqiang13@huawei.com, "zhangyi (F)" <yi.zhang@huawei.com>,
-        zhangxiaoxu5@huawei.com, Steve French <smfrench@gmail.com>,
-        NeilBrown <neilb@suse.de>
-Date:   Mon, 30 May 2022 10:02:06 -0400
-In-Reply-To: <CAJfpegt-+6oSCxx1-LHet4qm4s7p0jSoP9Vg8PJka3=1dqBXng@mail.gmail.com>
-References: <20220523014838.1647498-1-chenxiaosong2@huawei.com>
-         <CAJfpegt-+6oSCxx1-LHet4qm4s7p0jSoP9Vg8PJka3=1dqBXng@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+        Mon, 30 May 2022 11:01:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86F368BD13
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:03:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653919395;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rC0eN7t3z6ODekS0ZqenuKqbnlhAc460c9vZw1utlEU=;
+        b=cjZ6+drduH9XX7+jizuJkyEqK4Vj/j1Tx0ewnmye8IzN3Fe7aoCXg5w25wVa0JuYKyPjJb
+        l4N/MaWVTopG6k7JlRahr71ReavRpJ5NtHiZNhZpdJfFoEuI3BVi92XV4FIPT/taoeNMj4
+        /O3thEJhJWfb6xDJQ9Y8KZB9Qkk2DS4=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-384-tMocUGKMOs6sZHZxpG6dZQ-1; Mon, 30 May 2022 10:03:14 -0400
+X-MC-Unique: tMocUGKMOs6sZHZxpG6dZQ-1
+Received: by mail-wr1-f72.google.com with SMTP id m8-20020adfc588000000b0020c4edd8a57so1630195wrg.10
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:03:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rC0eN7t3z6ODekS0ZqenuKqbnlhAc460c9vZw1utlEU=;
+        b=qYra6eD8QtnYlBiMUnaYqzLEVQvtrRTEu+A8wZHUT+P3Ho5nuvvrAsz3dkDiy9kPq7
+         Lda6Q+GTopTmTFkdMiFxWouRgOcgsom2wsZHHVV37xPBfSA7lJ+Q5JXO2lBB4IItB9YX
+         NWUCJKK50hVq3htwKfp3EZlw0OvEobXNzK1VzrcGK+jJe2V8yKuOFrBPAjo0qr6FBs2r
+         fw9zsmDHzVrTiqsvAaIpwruhVlv8r+7tWpn9lSE0bgUNaa+Mg/9t7nib1XAgpss9w9pD
+         4W6LXfXUh88JId3HXcwpAwCv+DiNTV4eGMBrfJGQjb8voPxqS1jy7kLIJXeD32fyy/3j
+         P4fg==
+X-Gm-Message-State: AOAM530cTIcT1I7Ep3TFPB8OQCjtSUlrBTH/hrxWKzpRYLX+FptaWwrV
+        4rrspS5BK5Ms+kK1Enrgjq9ACdXy9s1Ne5DsFxC9B4RYlI4kzra3n1/JwBwydWlXG3t+fLy8LlO
+        aNjBPsAEQENxRJvFglNLWGKCVYukyZNh1SwEJdUgEsGVtbJGe5FQe+rsbgXrcYNFesetbg0+FhT
+        I=
+X-Received: by 2002:a05:6000:15c1:b0:20f:c1d3:8a89 with SMTP id y1-20020a05600015c100b0020fc1d38a89mr40174127wry.287.1653919392648;
+        Mon, 30 May 2022 07:03:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJygJwMi3I5Al7M7Nn7GvI6xqupt54m+kg76DqqOBO1hzb2Izc3i81He1uttnWN3YXnrWy+hgw==
+X-Received: by 2002:a05:6000:15c1:b0:20f:c1d3:8a89 with SMTP id y1-20020a05600015c100b0020fc1d38a89mr40174093wry.287.1653919392345;
+        Mon, 30 May 2022 07:03:12 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id ay5-20020a05600c1e0500b0039765a7add4sm10539109wmb.29.2022.05.30.07.03.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 07:03:12 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        kernel test robot <lkp@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mark Brown <broonie@kernel.org>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH] drm/ssd130x: Only define a SPI device ID table when built as a module
+Date:   Mon, 30 May 2022 16:02:46 +0200
+Message-Id: <20220530140246.742469-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,76 +83,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-30 at 14:13 +0200, Miklos Szeredi wrote:
-> On Mon, 23 May 2022 at 03:35, ChenXiaoSong <chenxiaosong2@huawei.com> wro=
-te:
-> >=20
-> > As filemap_check_errors() only report -EIO or -ENOSPC, we return more n=
-uanced
-> > writeback error -(file->f_mapping->wb_err & MAX_ERRNO).
-> >=20
-> >   filemap_write_and_wait
-> >     filemap_write_and_wait_range
-> >       filemap_check_errors
-> >         -ENOSPC or -EIO
-> >   filemap_check_wb_err
-> >     errseq_check
-> >       return -(file->f_mapping->wb_err & MAX_ERRNO)
-> >=20
-> > Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
-> > ---
-> >  fs/fuse/file.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-> > index f18d14d5fea1..9917bc2795e6 100644
-> > --- a/fs/fuse/file.c
-> > +++ b/fs/fuse/file.c
-> > @@ -488,10 +488,10 @@ static int fuse_flush(struct file *file, fl_owner=
-_t id)
-> >         inode_unlock(inode);
-> >=20
-> >         err =3D filemap_check_errors(file->f_mapping);
-> > +       /* return more nuanced writeback errors */
-> >         if (err)
-> > -               return err;
-> > +               return filemap_check_wb_err(file->f_mapping, 0);
->=20
-> I'm wondering if this should be file_check_and_advance_wb_err() instead.
->=20
+The kernel test robot reports a compile warning due the ssd130x_spi_table
+variable being defined but not used. This happen when ssd130x-spi driver
+is built-in instead of being built as a module, i.e:
 
-I think that it probably shouldn't be, actually. Reason below...
+  CC      drivers/gpu/drm/solomon/ssd130x-spi.o
+  AR      drivers/base/firmware_loader/built-in.a
+  AR      drivers/base/built-in.a
+  CC      kernel/trace/trace.o
+drivers/gpu/drm/solomon/ssd130x-spi.c:155:35: warning: ‘ssd130x_spi_table’ defined but not used [-Wunused-const-variable=]
+  155 | static const struct spi_device_id ssd130x_spi_table[] = {
+      |                                   ^~~~~~~~~~~~~~~~~
 
-> Is there a difference between ->flush() and ->fsync()?
->=20
-> Jeff, can you please help?
->=20
->=20
+The driver shouldn't need a SPI device ID table and only have an OF device
+ID table, but the former is needed to workaround an issue in the SPI core.
+This always reports a MODALIAS of the form "spi:<device>" even for devices
+registered through Device Trees.
 
-The main difference is that ->flush is called from filp_close, so it's
-called when a file descriptor (or equivalent) is being torn down out,
-whereas ->fsync is (obviously) called from the fsync codepath.
+But the table is only needed when the driver built as a module to populate
+the .ko alias info. It's not needed when the driver is built-in the kernel.
 
-We _must_ report writeback errors on fsync, but reporting them on the
-close() syscall is less clear. The thing about close() is that it's
-going be successful no matter what is returned. The file descriptor will
-no longer work afterward regardless.
+Fixes: 74373977d2ca ("drm/solomon: Add SSD130x OLED displays SPI support")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
 
-fsync also must also initiate writeback of all the buffered data, but
-it's not required for filesystems to do that on close() (and in fact,
-there are good reasons not to if you can). A successful close() tells
-you nothing about whether your data made it to the backing store. It
-might just not have been synced out yet.
+ drivers/gpu/drm/solomon/ssd130x-spi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Personally, I think it's probably best to _not_ return writeback errors
-on close at all. The only "legitimate" error on close is -EBADF.
-Arguably, we should make ->flush be void return. Note that most
-filp_close callers ignore the error anyway, so it's not much of a
-stretch.
+diff --git a/drivers/gpu/drm/solomon/ssd130x-spi.c b/drivers/gpu/drm/solomon/ssd130x-spi.c
+index 43722adab1f8..07802907e39a 100644
+--- a/drivers/gpu/drm/solomon/ssd130x-spi.c
++++ b/drivers/gpu/drm/solomon/ssd130x-spi.c
+@@ -143,6 +143,7 @@ static const struct of_device_id ssd130x_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, ssd130x_of_match);
+ 
++#if IS_MODULE(CONFIG_DRM_SSD130X_SPI)
+ /*
+  * The SPI core always reports a MODALIAS uevent of the form "spi:<dev>", even
+  * if the device was registered via OF. This means that the module will not be
+@@ -160,6 +161,7 @@ static const struct spi_device_id ssd130x_spi_table[] = {
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(spi, ssd130x_spi_table);
++#endif
+ 
+ static struct spi_driver ssd130x_spi_driver = {
+ 	.driver = {
+-- 
+2.36.1
 
-In any case, if you do decide to return errors in fuse_flush, then
-advancing the cursor would also have the effect of masking writeback
-errors on dup()'ed file descriptors, and I don't think you want to do
-that.
---=20
-Jeff Layton <jlayton@kernel.org>

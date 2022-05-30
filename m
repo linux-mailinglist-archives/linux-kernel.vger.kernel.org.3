@@ -2,104 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384D153853C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA535384FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241235AbiE3Prp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
+        id S240169AbiE3Pdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242853AbiE3Pqr (ORCPT
+        with ESMTP id S241531AbiE3Pdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:46:47 -0400
-X-Greylist: delayed 862 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 30 May 2022 07:58:38 PDT
-Received: from mail.mleia.com (mleia.com [178.79.152.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826A21649B8;
-        Mon, 30 May 2022 07:58:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-        t=1653921250; bh=idjzIs6nM/GzEGxcBT5U9Zvmwvs1WbeN6ytiAFKcA/M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qkrj84hcUoYR17888l+IifmTZFDvK4R7zKao/29k7PHMWnpCu9vaUfiQrmwkWOl1y
-         J/YgyDDK27WXn2lBC7DGmXHnFaMK6k/T2vlDIQIdk+y7QTc4m8e5LMnvTiN8BA83WE
-         T2IpUls4AbmmUkP+8siXcj26vS9kmnJdzB5kTmy6n46485N72bZ0AAXEJPLpgxRECF
-         ZtFgGu3xy3rXpEicA2tYLwr8rkH6OWRrHgmNUrVkbci5d9BzDicFN/3j2tu9Gs2hbz
-         mrU81t2SiQccsxcpFgS9TS5HIjJ1iH2YFwNGUhlDbfrJa4C6Xh/lSaCX0fEtCV4uNd
-         KcJ/TvunmhEPg==
-Received: from mail.mleia.com (localhost [127.0.0.1])
-        by mail.mleia.com (Postfix) with ESMTP id 03A5B3B7DED;
-        Mon, 30 May 2022 14:34:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-        t=1653921249; bh=idjzIs6nM/GzEGxcBT5U9Zvmwvs1WbeN6ytiAFKcA/M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GmWNllcbKIoAUVIxhCH5rQiQpya4rETl28xsA8jdTEkntFAr6kBFjUmW4UrO9Ij/P
-         wYCAPYMrPp4MDsff+RVjSUkONQKYMi2vVsSvNO1FSTCrPxafM3gtSp7t+kTDxv9p1y
-         O8QnSt5vc5SlVxlbA9vypjujLo86N7qCq8GLUPeC9lwL0qy16xJ2xa3drhaEI0W9JT
-         fpJtwULyFvxYyXzNucUVV3I4isREqQ/iY7EZ+OkctOZtRop1bjpcQUzIFawYgpymeL
-         se+Dv00LH7Z93Nj87qQESli+MXq6CGxdMKvixsJ/t1qGba5h8hQuw0DMxMBalGZHFp
-         P4wn1+pH+kJiw==
-Received: from [192.168.1.102] (88-112-131-206.elisa-laajakaista.fi [88.112.131.206])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mail.mleia.com (Postfix) with ESMTPSA id 8B8F93B7DE9;
-        Mon, 30 May 2022 14:34:09 +0000 (UTC)
-Message-ID: <148d6f7b-3973-0b58-c777-7a3f889d5032@mleia.com>
-Date:   Mon, 30 May 2022 17:34:08 +0300
+        Mon, 30 May 2022 11:33:39 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0AD151FDB
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:38:29 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id jx22so21130261ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 07:38:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9XVHS3rlr74kwDPS9cPLZWGBf1IHIjmcfJWC5iwwI2Q=;
+        b=MbARoEMNQrQQ5S51pge6GPzZS8oHKf3IaF+XiDUy8Ks5VCzzDxfw2dNHfzHZpEiWQC
+         Lir4csByQgi8syophTh9lcO08dPkZ5b+pcyLI4xvARvyOpGO5Dz1suPagZKcrX5giq++
+         tWsVlviaPGUMTu82QwfnMk/+msafi9JIPmz0I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9XVHS3rlr74kwDPS9cPLZWGBf1IHIjmcfJWC5iwwI2Q=;
+        b=n+r8eYO+WQb5XWC/XqRK6S4rnHoX2N8RWUBLAmTOzQUR7rUhLtQJCwp5V7GcdY5vxo
+         O9dFDBJnVCrlj6p3O19w4SZhFebwwNpsSlDKbeQUkyjfS37V/jWZ5hmeNqqqwp7Iqp52
+         EBcLn5Cu+Q1htBwPLNY9i04TjRP0E5236spyDkjinVwrtRYGaJZGFE+TbOEBbqyJkHtv
+         +9LWtEo8PXCgl2PGt4Gi/j7CrEd4OeM82AvXuPvkM6/Axd0XF8mbA+Am7xjzL3xLFVdP
+         3kbrAkygtzBTq5Bkw+n6kOKtE1BDaMFcblriwmI5DLVu31xTIUifCc6gSHMFpuS4289I
+         Oi8w==
+X-Gm-Message-State: AOAM532jPwSUYDwXjb62rNkLQ91cijzlP9H3yMdnqX3jhojHyQ6Y9O6C
+        OIAxpyc7u5EHjyslXZmbuQF1OQ==
+X-Google-Smtp-Source: ABdhPJzCJc9LIiLBdHANCcQcfp+8G5VZEaFRDSMPja3qGm5Y6mFm1R/ni7P5lpa3+cR3SNJNCX9l9A==
+X-Received: by 2002:a17:906:90c9:b0:6fe:9e40:5cc with SMTP id v9-20020a17090690c900b006fe9e4005ccmr46125940ejw.367.1653921508038;
+        Mon, 30 May 2022 07:38:28 -0700 (PDT)
+Received: from miu.piliscsaba.redhat.com (catv-178-48-189-3.catv.fixed.vodafone.hu. [178.48.189.3])
+        by smtp.gmail.com with ESMTPSA id bh19-20020a170906a0d300b006ff802baf5dsm910684ejb.54.2022.05.30.07.38.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 07:38:27 -0700 (PDT)
+Date:   Mon, 30 May 2022 16:38:24 +0200
+From:   Miklos Szeredi <miklos@szeredi.hu>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        ChenXiaoSong <chenxiaosong2@huawei.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liuyongqiang13@huawei.com, "zhangyi (F)" <yi.zhang@huawei.com>,
+        zhangxiaoxu5@huawei.com, Steve French <smfrench@gmail.com>,
+        NeilBrown <neilb@suse.de>
+Subject: Re: [PATCH -next,v2] fuse: return the more nuanced writeback error
+ on close()
+Message-ID: <YpTW4LNGGzuXu/bq@miu.piliscsaba.redhat.com>
+References: <20220523014838.1647498-1-chenxiaosong2@huawei.com>
+ <CAJfpegt-+6oSCxx1-LHet4qm4s7p0jSoP9Vg8PJka3=1dqBXng@mail.gmail.com>
+ <9915b7b556106d2a525941141755adcca9e50163.camel@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] clk: nxp: fix typo in comment
-Content-Language: en-US
-To:     Julia Lawall <Julia.Lawall@inria.fr>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     kernel-janitors@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220521111145.81697-42-Julia.Lawall@inria.fr>
-From:   Vladimir Zapolskiy <vz@mleia.com>
-In-Reply-To: <20220521111145.81697-42-Julia.Lawall@inria.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20220530_143410_035189_0CCDEF31 
-X-CRM114-Status: GOOD (  12.89  )
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9915b7b556106d2a525941141755adcca9e50163.camel@kernel.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/21/22 14:10, Julia Lawall wrote:
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
-> 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-> 
-> ---
->   drivers/clk/nxp/clk-lpc18xx-cgu.c |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/nxp/clk-lpc18xx-cgu.c b/drivers/clk/nxp/clk-lpc18xx-cgu.c
-> index c23ac463ab0f..1bb18dc0a80a 100644
-> --- a/drivers/clk/nxp/clk-lpc18xx-cgu.c
-> +++ b/drivers/clk/nxp/clk-lpc18xx-cgu.c
-> @@ -609,7 +609,7 @@ static void __init lpc18xx_cgu_register_source_clks(struct device_node *np,
->   	if (IS_ERR(clk))
->   		pr_warn("%s: failed to register irc clk\n", __func__);
->   
-> -	/* Register crystal oscillator controlller */
-> +	/* Register crystal oscillator controller */
->   	parents[0] = of_clk_get_parent_name(np, 0);
->   	clk = clk_register_gate(NULL, clk_src_names[CLK_SRC_OSC], parents[0],
->   				0, base + LPC18XX_CGU_XTAL_OSC_CTRL,
-> 
+On Mon, May 30, 2022 at 10:02:06AM -0400, Jeff Layton wrote:
 
-Acked-by: Vladimir Zapolskiy <vz@mleia.com>
+> The main difference is that ->flush is called from filp_close, so it's
+> called when a file descriptor (or equivalent) is being torn down out,
+> whereas ->fsync is (obviously) called from the fsync codepath.
+> 
+> We _must_ report writeback errors on fsync, but reporting them on the
+> close() syscall is less clear. The thing about close() is that it's
+> going be successful no matter what is returned. The file descriptor will
+> no longer work afterward regardless.
+> 
+> fsync also must also initiate writeback of all the buffered data, but
+> it's not required for filesystems to do that on close() (and in fact,
+> there are good reasons not to if you can). A successful close() tells
+> you nothing about whether your data made it to the backing store. It
+> might just not have been synced out yet.
+> 
+> Personally, I think it's probably best to _not_ return writeback errors
+> on close at all. The only "legitimate" error on close is -EBADF.
+> Arguably, we should make ->flush be void return. Note that most
+> filp_close callers ignore the error anyway, so it's not much of a
+> stretch.
+> 
+> In any case, if you do decide to return errors in fuse_flush, then
+> advancing the cursor would also have the effect of masking writeback
+> errors on dup()'ed file descriptors, and I don't think you want to do
+> that.
 
---
-Best wishes,
-Vladimir
+Thanks for clarifying.
+
+Chen, would the following patch make sense for your case?
+
+Thanks,
+Miklos
+
+---
+ fs/fuse/file.c |    5 -----
+ 1 file changed, 5 deletions(-)
+
+--- a/fs/fuse/file.c
++++ b/fs/fuse/file.c
+@@ -487,11 +487,6 @@ static int fuse_flush(struct file *file,
+ 	fuse_sync_writes(inode);
+ 	inode_unlock(inode);
+ 
+-	err = filemap_check_errors(file->f_mapping);
+-	if (err)
+-		return err;
+-
+-	err = 0;
+ 	if (fm->fc->no_flush)
+ 		goto inval_attr_out;
+ 

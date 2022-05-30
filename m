@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581D6537A48
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB86537A4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236034AbiE3MAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 08:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
+        id S236043AbiE3MAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 08:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236030AbiE3MAc (ORCPT
+        with ESMTP id S236037AbiE3MAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 08:00:32 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A367CB1F
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 05:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653912031; x=1685448031;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Ouav3TwG8lzXe/MdC2mRFtJxhn88S8RrP5ZlQzFCr94=;
-  b=Tqr4SyBbaFPU7Xc1QsIAztEeaQEg6gkivpHY1/WyMizkntT2kjGrSyPo
-   8eFTYem0Adcp6d8c5JPV1S3k1H/ZBAxtEmpErnQNbCUTCy+bZlWfxzgPG
-   bKmuiXoMZCUxZ6aadhgRKJB7iofDgrvVs+JfUUkfOEVE3u8bAxajWkiRP
-   nlByb19g5r+HDgmkDXOqb4WtVTcKLsk67AYwqWu6l5PTSzJLHc9pOnNwB
-   NyJdtYXm2ZsJBFga/DuK/9Cgv0NfR+Ad/HIybuKREj7ItbxSSxa8rBsRJ
-   fyyTVSQu9ru0LDDD5vEm1fbL7K51P6wL5S82rxvtRPBAyqSe7imX6BZQ1
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="254856744"
-X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
-   d="scan'208";a="254856744"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 05:00:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
-   d="scan'208";a="679115877"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 30 May 2022 05:00:30 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 562AA1A7; Mon, 30 May 2022 15:00:32 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        dave.hansen@linux.intel.com
-Subject: [PATCH v1 1/1] MAINTAINERS: Update Intel PMIC (MFD part) to Supported
-Date:   Mon, 30 May 2022 15:00:15 +0300
-Message-Id: <20220530120015.70543-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 30 May 2022 08:00:52 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F487CB35
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 05:00:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=pxj0J/YhMMhKAH1EkbuiQrbuk0Qda0v5TTbkiBkZN3M=; b=i3KE6kOP6FM7xKwMx8F4naRfR/
+        Tv2rcCqj9mMDhTVAe2VjSVPqM036ElOQQ3r56b/GoRMeLiAFnmLsBJZxUwHZHz8sAi8en/Ugl+qdG
+        /pvEl2QOCqBsrpo5V/WWHOBy60Bs36rp1h5qSoOBwN//+dDyXJy2sIzMJWc/RezAXVRRMXUmTazAz
+        Bx4DX3V0L9sEykDMBFDBy0/BhlV80fhlSooeJ4rM4QiOmg2colZ8E98Ri+RKZDGalMNy76AkzzHb4
+        XxjBXR36La1hPUlmq36nL3ovFeOtuBFuY/FcLCPICgShJOYYxu7GJj0Hv/swT8JB/m75gCjevmXUu
+        pgPhryJg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nve4c-0032El-4c; Mon, 30 May 2022 12:00:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1E2213001EA;
+        Mon, 30 May 2022 14:00:36 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0A97B207688E7; Mon, 30 May 2022 14:00:36 +0200 (CEST)
+Date:   Mon, 30 May 2022 14:00:35 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     paulmck@kernel.org, rjw@rjwysocki.net, x86@kernel.org,
+        linux-kernel@vger.kernel.org, jpoimboe@kernel.org
+Subject: Re: [RFC][PATCH 3/9] cpuidle: Move IRQ state validation
+Message-ID: <YpSx47DA05npvtzQ@hirez.programming.kicks-ass.net>
+References: <20220519212750.656413111@infradead.org>
+ <20220519213421.748352112@infradead.org>
+ <20220530113640.GC1257179@lothringen>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220530113640.GC1257179@lothringen>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,27 +60,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The actual status of the code is Supported.
+On Mon, May 30, 2022 at 01:36:40PM +0200, Frederic Weisbecker wrote:
+> On Thu, May 19, 2022 at 11:27:53PM +0200, Peter Zijlstra wrote:
+> > Make cpuidle_enter_state() consistent with the s2idle variant and
+> > verify ->enter() always returns with interrupts disabled.
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > ---
+> >  drivers/cpuidle/cpuidle.c |   10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > 
+> > --- a/drivers/cpuidle/cpuidle.c
+> > +++ b/drivers/cpuidle/cpuidle.c
+> > @@ -234,7 +234,11 @@ int cpuidle_enter_state(struct cpuidle_d
+> >  	stop_critical_timings();
+> >  	if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE))
+> >  		rcu_idle_enter();
+> > +
+> >  	entered_state = target_state->enter(dev, drv, index);
+> > +	if (WARN_ON_ONCE(!irqs_disabled()))
+> > +		raw_local_irq_disable();
+> 
+> So it means that idle functions are supposed to return with IRQs disabled
+> without tracing, right? I can see that at least acpi_safe_halt() is using
+> the non-raw local_irq_disable().
 
-Reported-by: dave.hansen@linux.intel.com
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bacb41953679..2831a1a5b4c2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10028,7 +10028,7 @@ F:	drivers/gpio/gpio-*cove.c
- 
- INTEL PMIC MULTIFUNCTION DEVICE DRIVERS
- M:	Andy Shevchenko <andy@kernel.org>
--S:	Maintained
-+S:	Supported
- F:	drivers/mfd/intel_soc_pmic*
- F:	include/linux/mfd/intel_soc_pmic*
- 
--- 
-2.35.1
-
+Yeah, I might need to re-order this. 0day also complained about that.
+I'll need to find a moment to re-audit this and put it in the right
+place.

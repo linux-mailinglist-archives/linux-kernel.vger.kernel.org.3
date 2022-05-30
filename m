@@ -2,160 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E18E537A20
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6918537A0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 13:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233748AbiE3Lnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 07:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
+        id S235939AbiE3LlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 07:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235989AbiE3Lnm (ORCPT
+        with ESMTP id S235831AbiE3LlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 07:43:42 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE293EF0E;
-        Mon, 30 May 2022 04:43:40 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id n13-20020a17090a394d00b001e30a60f82dso1882875pjf.5;
-        Mon, 30 May 2022 04:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=1BvAlV75hXlmEW6H7NZj8m2+emc7pNPWivCpEN7QdQQ=;
-        b=AKkizI5vxdL5uQcfmsXWVkWdXI8Pq9JhYnyFP0MGpMimsx6reIaVisnHQEXGR52xZY
-         wxcGjJUMBWEq9eU3gQCY9ZNIey6s8Xd+jt09aZwkWby8RrmpXEC3olVVASmhX7omnVVq
-         f9OXP5KNAL5TxNuAhyUwDs12Cr+pMSULGKNyEe/pvJoAeLqw2rbAVFV5b8IIBNaoaX8q
-         yHlK9CB/JoHkSgMvc0+BF9zg2QRbGlDIqm2qGYVo4DmMDHAE8XLGNzvQFBeab+ux4gxo
-         X7OcuLR3x+woErt+qDtGgD+/CG2m3vkFsd8jc9O9WMvm/qzqtlGr2UYZr9a84t5CAyPl
-         xn/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=1BvAlV75hXlmEW6H7NZj8m2+emc7pNPWivCpEN7QdQQ=;
-        b=soDzh7/pn3xw8afz6RIUfap9ztd41VfEcGT1VaO7EmIy4jpUXxifjS7lqPdyja/B5E
-         oqVqGc/ukzEwBahu0cC4EBTt3iQvy2KI4ZnweLC8jONghgriPs0acAwS9TBldBuEBh/k
-         c9j+DY58MSPYF8VjrwyW+38dasIhBneuyfKhx55bfLZU5dXrff4gfmSwLpJbISNjS6IH
-         6ZmO74Z0EJbJHLnUWXAsLrYcWu1e9p/pdJn7HnyVopXXGQnlq5lq5A3J177CZlRfwEAq
-         JwfQIovaL0IpECGlVGOgfPA+H/K1lckbbfN1IbDdabFCXQjLKA3QW2Z6USNdhJ94lB1c
-         zQTw==
-X-Gm-Message-State: AOAM533LhSnfQEusrkon5Shv5Q9Q/+sUiBzskJjI6oRyRqk457LQbQH/
-        TDv+0tUtbuRg1eDBnabx8dI=
-X-Google-Smtp-Source: ABdhPJyBjD7ZjB9mqxCcZxSrR5aW0PfM7hAyksDSD984OOLHfR+h/OvSF/fOXgX4vDfty6M+7PqF0A==
-X-Received: by 2002:a17:902:8ecc:b0:15e:f63f:233f with SMTP id x12-20020a1709028ecc00b0015ef63f233fmr55548885plo.86.1653911020277;
-        Mon, 30 May 2022 04:43:40 -0700 (PDT)
-Received: from potin-quanta.dhcpserver.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id c10-20020a170902c2ca00b0015e8d4eb207sm8865069pla.81.2022.05.30.04.43.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 04:43:39 -0700 (PDT)
-From:   Potin Lai <potin.lai.pt@gmail.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Cc:     Patrick Williams <patrick@stwcx.xyz>,
-        Porin Lai <potin.lai@quantatw.com>,
-        Porin Lai <potin.lai.pt@gmail.com>, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] aspeed: i2c: add manual clock setup feature
-Date:   Mon, 30 May 2022 19:40:56 +0800
-Message-Id: <20220530114056.8722-1-potin.lai.pt@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 30 May 2022 07:41:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A856B813D1;
+        Mon, 30 May 2022 04:41:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 59BD82199D;
+        Mon, 30 May 2022 11:41:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653910865; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=i4LKt8LZNv7O3Wwu1DiLKI3Zd8LxtAGWiwhpXlwpTRU=;
+        b=uSiaXqJKBGwScZ32qFf6c8Gr0kfZ5zQ7IMWOMLz8yYZlkjP6w7ux8Ebr/jpu5M3k/m7nX9
+        yQkTTaWffg4F9bOlmht+H+K9W4NJ5QNWKiDRpQdAkqYDJoF57sL4Eu1COtrTyxLFAOCwFj
+        DUEwooU54jdHpvSXYHRTmHKg5+d1eRA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0795913A84;
+        Mon, 30 May 2022 11:41:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1vmPAFGtlGITeQAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 30 May 2022 11:41:05 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>, Wei Liu <wei.liu@kernel.org>,
+        Paul Durrant <paul@xen.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH] xen/netback: do some code cleanup
+Date:   Mon, 30 May 2022 13:41:03 +0200
+Message-Id: <20220530114103.20657-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Porin Lai <potin.lai.pt@gmail.com>
+Remove some unused macros and functions, make local functions static.
 
-Add properties for manual tuning i2c clock timing register.
-
-* aspeed,i2c-manual-clk: Enable aspeed i2c clock manual setup
-* aspeed,i2c-base-clk-div: Base Clock divisor (tBaseClk)
-* aspeed,i2c-clk-high-cycle: Cycles of clock-high pulse (tClkHigh)
-* aspeed,i2c-clk-low-cycle: Cycles of clock-low pulse (tClkLow)
-
-Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
 ---
- drivers/i2c/busses/i2c-aspeed.c | 55 ++++++++++++++++++++++++++++++++-
- 1 file changed, 54 insertions(+), 1 deletion(-)
+ drivers/net/xen-netback/common.h    | 12 ------------
+ drivers/net/xen-netback/interface.c | 16 +---------------
+ drivers/net/xen-netback/netback.c   |  4 +++-
+ drivers/net/xen-netback/rx.c        |  2 +-
+ 4 files changed, 5 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-index 67e8b97c0c95..1f4b5c4b5bf4 100644
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -898,6 +898,56 @@ static int aspeed_i2c_init_clk(struct aspeed_i2c_bus *bus)
- 	return 0;
+diff --git a/drivers/net/xen-netback/common.h b/drivers/net/xen-netback/common.h
+index d9dea4829c86..8174d7b2966c 100644
+--- a/drivers/net/xen-netback/common.h
++++ b/drivers/net/xen-netback/common.h
+@@ -48,7 +48,6 @@
+ #include <linux/debugfs.h>
+ 
+ typedef unsigned int pending_ring_idx_t;
+-#define INVALID_PENDING_RING_IDX (~0U)
+ 
+ struct pending_tx_info {
+ 	struct xen_netif_tx_request req; /* tx request */
+@@ -82,8 +81,6 @@ struct xenvif_rx_meta {
+ /* Discriminate from any valid pending_idx value. */
+ #define INVALID_PENDING_IDX 0xFFFF
+ 
+-#define MAX_BUFFER_OFFSET XEN_PAGE_SIZE
+-
+ #define MAX_PENDING_REQS XEN_NETIF_TX_RING_SIZE
+ 
+ /* The maximum number of frags is derived from the size of a grant (same
+@@ -367,11 +364,6 @@ void xenvif_free(struct xenvif *vif);
+ int xenvif_xenbus_init(void);
+ void xenvif_xenbus_fini(void);
+ 
+-int xenvif_schedulable(struct xenvif *vif);
+-
+-int xenvif_queue_stopped(struct xenvif_queue *queue);
+-void xenvif_wake_queue(struct xenvif_queue *queue);
+-
+ /* (Un)Map communication rings. */
+ void xenvif_unmap_frontend_data_rings(struct xenvif_queue *queue);
+ int xenvif_map_frontend_data_rings(struct xenvif_queue *queue,
+@@ -394,7 +386,6 @@ int xenvif_dealloc_kthread(void *data);
+ irqreturn_t xenvif_ctrl_irq_fn(int irq, void *data);
+ 
+ bool xenvif_have_rx_work(struct xenvif_queue *queue, bool test_kthread);
+-void xenvif_rx_action(struct xenvif_queue *queue);
+ void xenvif_rx_queue_tail(struct xenvif_queue *queue, struct sk_buff *skb);
+ 
+ void xenvif_carrier_on(struct xenvif *vif);
+@@ -403,9 +394,6 @@ void xenvif_carrier_on(struct xenvif *vif);
+ void xenvif_zerocopy_callback(struct sk_buff *skb, struct ubuf_info *ubuf,
+ 			      bool zerocopy_success);
+ 
+-/* Unmap a pending page and release it back to the guest */
+-void xenvif_idx_unmap(struct xenvif_queue *queue, u16 pending_idx);
+-
+ static inline pending_ring_idx_t nr_pending_reqs(struct xenvif_queue *queue)
+ {
+ 	return MAX_PENDING_REQS -
+diff --git a/drivers/net/xen-netback/interface.c b/drivers/net/xen-netback/interface.c
+index 8e035374a370..fb32ae82d9b0 100644
+--- a/drivers/net/xen-netback/interface.c
++++ b/drivers/net/xen-netback/interface.c
+@@ -69,7 +69,7 @@ void xenvif_skb_zerocopy_complete(struct xenvif_queue *queue)
+ 	wake_up(&queue->dealloc_wq);
  }
  
-+/* precondition: bus.lock has been acquired. */
-+static int aspeed_i2c_manual_clk_setup(struct aspeed_i2c_bus *bus)
-+{
-+	u32 divisor, clk_high, clk_low, clk_reg_val;
-+
-+	if (device_property_read_u32(bus->dev, "aspeed,i2c-base-clk-div",
-+				     &divisor) != 0) {
-+		dev_err(bus->dev, "Could not read aspeed,i2c-base-clk-div\n");
-+		return -EINVAL;
-+	} else if (divisor > ASPEED_I2CD_TIME_BASE_DIVISOR_MASK) {
-+		dev_err(bus->dev, "Invalid aspeed,i2c-base-clk-div: %u\n",
-+			divisor);
-+		return -EINVAL;
-+	}
-+
-+	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-high-cycle",
-+				     &clk_high) != 0) {
-+		dev_err(bus->dev, "Could not read aspeed,i2c-clk-high-cycle\n");
-+		return -EINVAL;
-+	} else if (clk_high > ASPEED_I2CD_TIME_SCL_REG_MAX) {
-+		dev_err(bus->dev, "Invalid aspeed,i2c-clk-high-cycle: %u\n",
-+			clk_high);
-+		return -EINVAL;
-+	}
-+
-+	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-low-cycle",
-+				     &clk_low) != 0) {
-+		dev_err(bus->dev, "Could not read aspeed,i2c-clk-low-cycle\n");
-+		return -EINVAL;
-+	} else if (clk_low > ASPEED_I2CD_TIME_SCL_REG_MAX) {
-+		dev_err(bus->dev, "Invalid aspeed,i2c-clk-low-cycle: %u\n",
-+			clk_low);
-+		return -EINVAL;
-+	}
-+
-+	clk_reg_val = readl(bus->base + ASPEED_I2C_AC_TIMING_REG1);
-+	clk_reg_val &= (ASPEED_I2CD_TIME_TBUF_MASK |
-+			ASPEED_I2CD_TIME_THDSTA_MASK |
-+			ASPEED_I2CD_TIME_TACST_MASK);
-+	clk_reg_val |= (divisor & ASPEED_I2CD_TIME_BASE_DIVISOR_MASK)
-+			| ((clk_high << ASPEED_I2CD_TIME_SCL_HIGH_SHIFT)
-+			   & ASPEED_I2CD_TIME_SCL_HIGH_MASK)
-+			| ((clk_low << ASPEED_I2CD_TIME_SCL_LOW_SHIFT)
-+			   & ASPEED_I2CD_TIME_SCL_LOW_MASK);
-+	writel(clk_reg_val, bus->base + ASPEED_I2C_AC_TIMING_REG1);
-+	writel(ASPEED_NO_TIMEOUT_CTRL, bus->base + ASPEED_I2C_AC_TIMING_REG2);
-+
-+	return 0;
-+}
-+
- /* precondition: bus.lock has been acquired. */
- static int aspeed_i2c_init(struct aspeed_i2c_bus *bus,
- 			     struct platform_device *pdev)
-@@ -908,7 +958,10 @@ static int aspeed_i2c_init(struct aspeed_i2c_bus *bus,
- 	/* Disable everything. */
- 	writel(0, bus->base + ASPEED_I2C_FUN_CTRL_REG);
+-int xenvif_schedulable(struct xenvif *vif)
++static int xenvif_schedulable(struct xenvif *vif)
+ {
+ 	return netif_running(vif->dev) &&
+ 		test_bit(VIF_STATUS_CONNECTED, &vif->status) &&
+@@ -177,20 +177,6 @@ irqreturn_t xenvif_interrupt(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
  
--	ret = aspeed_i2c_init_clk(bus);
-+	if (of_property_read_bool(pdev->dev.of_node, "aspeed,i2c-manual-clk"))
-+		ret = aspeed_i2c_manual_clk_setup(bus);
-+	else
-+		ret = aspeed_i2c_init_clk(bus);
- 	if (ret < 0)
- 		return ret;
+-int xenvif_queue_stopped(struct xenvif_queue *queue)
+-{
+-	struct net_device *dev = queue->vif->dev;
+-	unsigned int id = queue->id;
+-	return netif_tx_queue_stopped(netdev_get_tx_queue(dev, id));
+-}
+-
+-void xenvif_wake_queue(struct xenvif_queue *queue)
+-{
+-	struct net_device *dev = queue->vif->dev;
+-	unsigned int id = queue->id;
+-	netif_tx_wake_queue(netdev_get_tx_queue(dev, id));
+-}
+-
+ static u16 xenvif_select_queue(struct net_device *dev, struct sk_buff *skb,
+ 			       struct net_device *sb_dev)
+ {
+diff --git a/drivers/net/xen-netback/netback.c b/drivers/net/xen-netback/netback.c
+index d93814c14a23..fc61a4418737 100644
+--- a/drivers/net/xen-netback/netback.c
++++ b/drivers/net/xen-netback/netback.c
+@@ -112,6 +112,8 @@ static void make_tx_response(struct xenvif_queue *queue,
+ 			     s8       st);
+ static void push_tx_responses(struct xenvif_queue *queue);
  
++static void xenvif_idx_unmap(struct xenvif_queue *queue, u16 pending_idx);
++
+ static inline int tx_work_todo(struct xenvif_queue *queue);
+ 
+ static inline unsigned long idx_to_pfn(struct xenvif_queue *queue,
+@@ -1418,7 +1420,7 @@ static void push_tx_responses(struct xenvif_queue *queue)
+ 		notify_remote_via_irq(queue->tx_irq);
+ }
+ 
+-void xenvif_idx_unmap(struct xenvif_queue *queue, u16 pending_idx)
++static void xenvif_idx_unmap(struct xenvif_queue *queue, u16 pending_idx)
+ {
+ 	int ret;
+ 	struct gnttab_unmap_grant_ref tx_unmap_op;
+diff --git a/drivers/net/xen-netback/rx.c b/drivers/net/xen-netback/rx.c
+index dbac4c03d21a..8df2c736fd23 100644
+--- a/drivers/net/xen-netback/rx.c
++++ b/drivers/net/xen-netback/rx.c
+@@ -486,7 +486,7 @@ static void xenvif_rx_skb(struct xenvif_queue *queue)
+ 
+ #define RX_BATCH_SIZE 64
+ 
+-void xenvif_rx_action(struct xenvif_queue *queue)
++static void xenvif_rx_action(struct xenvif_queue *queue)
+ {
+ 	struct sk_buff_head completed_skbs;
+ 	unsigned int work_done = 0;
 -- 
-2.17.1
+2.35.3
 

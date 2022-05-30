@@ -2,96 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2046537814
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B941537861
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234596AbiE3JAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 05:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
+        id S234647AbiE3JBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 05:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234798AbiE3JAb (ORCPT
+        with ESMTP id S234667AbiE3JB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 05:00:31 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4704E77F36;
-        Mon, 30 May 2022 02:00:30 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id BA4C11F4263D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653901229;
-        bh=oVWZjJhb7qhA9swQsNjKyIH4iNxQFAuTs6yfX8nGbjY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BNLFSACyyunH5pzqLMctQd1Xk+suq1vnZWHFxZZmI/Im55ZJyLLoZa5/nJQPNth8z
-         kPxqSsHZx7TobCa+Rl3/7oOdCynLTJhFqMztuXuqvA9Pt5eyYsdejdB0U3mN9MXIvv
-         Y6IExcTX+/biME3rmT/0cVJmSoNn7MnM8kDZXzPCUifSA+obi6IiTidcUP5rH2rLmx
-         80VSRYqItBDC1baJ46hR0Pp4R0Ltq1edOOEo95nXr8AvciH9vfVVkX99nH4wiBEHdC
-         X7ohDHPmCDn4yx7P047gZHKqEGVyybixkFCdPnw3WSTbjhOg/3zVEs/+Uc2cbNUx3Z
-         TWFIjzCUUbtag==
-Message-ID: <524f15ad-07d1-37e1-eebb-ae86d4ee1763@collabora.com>
-Date:   Mon, 30 May 2022 11:00:26 +0200
+        Mon, 30 May 2022 05:01:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 558E679837
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:01:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653901273;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j8JZgcij+gKnMYf8fKHUKx+imL3jnW+UtIPfMaKpnr0=;
+        b=excobCexiXKpMfMOg1ncSjNIU4LBlNVVX3Yjt9eIAng3uT+uUXaOEx9RwT8tXnQlVtYJpy
+        Tp0o920zywcgBKvPHlQu6/CBXYdIZvy1VZbVqWlczZH+X3ccLtddbe8f+ctj8S52Kdjf18
+        dPRjw9YJplOe32kP5s9X5p2oejU0M6E=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-300-ERq77CtaM0KBSUutZXCU5Q-1; Mon, 30 May 2022 05:01:11 -0400
+X-MC-Unique: ERq77CtaM0KBSUutZXCU5Q-1
+Received: by mail-ed1-f71.google.com with SMTP id eh10-20020a0564020f8a00b0042dd9bf7c57so143500edb.17
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:01:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=j8JZgcij+gKnMYf8fKHUKx+imL3jnW+UtIPfMaKpnr0=;
+        b=inKDtPLRhEKZ34qnT8b0h0Yn/FtS0etUrL43hwQMCK6VojbQtxYr/un2rDvVi3/Yyh
+         73sskGEcG5uRG2Z20IlUPSOrtvnuYyQnGebmq8I/fDrBZGkT/NvLVtc2m/cjflRzyvnO
+         moTGVdRi4pLwYbvYTGw47Gl6Rh++B8b4e91Xozz77rfHZxkeF/iuZM1BATcuSuHXCX3n
+         x97MQyRbsDgVr5DpN4nTGK1Zj69TZDuL4BLWjETjTb+GjtVCdHXKB+T8J7GjAVtdbZ5c
+         SbFOabWrIz82XestXw4L2bNiw2b+Wd4Wd7OOAtUSxtAYE70d2bXmFZf6Vryt+ieZY6Pw
+         MLYA==
+X-Gm-Message-State: AOAM531dHoJPLtMHHTtMqVRLl2tk7XciTbzCqRrUeSqiuEWzJVFyfImO
+        5yq2DsBXQGFAyhVXxLx6PGvZYxDSossXAoFd3OdMsuIFK87Z5vrOFJ0hXl2BaCGh2By/tae895O
+        Cj4CLnyfSwBpq1l5lhtTME3m+
+X-Received: by 2002:a17:906:f88f:b0:6fe:f872:f3af with SMTP id lg15-20020a170906f88f00b006fef872f3afmr29691584ejb.627.1653901270638;
+        Mon, 30 May 2022 02:01:10 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw5DlWNOsVX1VM8ucBtn1pO6Mh+8c28hLgjehjeqRui77jXCNk66Axf0S6mekQOhS/6hZ/F4w==
+X-Received: by 2002:a17:906:f88f:b0:6fe:f872:f3af with SMTP id lg15-20020a170906f88f00b006fef872f3afmr29691553ejb.627.1653901270378;
+        Mon, 30 May 2022 02:01:10 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id e21-20020a1709061e9500b006fee27d471csm3808574ejj.150.2022.05.30.02.01.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 02:01:09 -0700 (PDT)
+Message-ID: <09c12a48-534f-e6b8-eaef-f05874087d35@redhat.com>
+Date:   Mon, 30 May 2022 11:01:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 1/3] Input: mtk-pmic-keys - Transfer per-key bit in
- mtk_pmic_keys_regs
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v10 1/4] gpu: drm: separate panel orientation property
+ creating and value setting
 Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     matthias.bgg@gmail.com, mkorpershoek@baylibre.com,
-        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220524093505.85438-1-angelogioacchino.delregno@collabora.com>
- <20220524093505.85438-2-angelogioacchino.delregno@collabora.com>
- <YpBiz7fGCgHaKqGs@google.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <YpBiz7fGCgHaKqGs@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Simon Ser <contact@emersion.fr>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+References: <20220530081910.3947168-1-hsinyi@chromium.org>
+ <20220530081910.3947168-2-hsinyi@chromium.org>
+ <3ae6d7d1-fcf2-a769-5e4d-f80328ae06fe@redhat.com>
+In-Reply-To: <3ae6d7d1-fcf2-a769-5e4d-f80328ae06fe@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/05/22 07:34, Dmitry Torokhov ha scritto:
-> On Tue, May 24, 2022 at 11:35:03AM +0200, AngeloGioacchino Del Regno wrote:
->> Place the key bit in struct mtk_pmic_keys_regs to enhance this
->> driver's flexibility, in preparation for adding support for more
->> PMICs.
+Hi,
+
+On 5/30/22 10:57, Hans de Goede wrote:
+> Hi,
+> 
+> On 5/30/22 10:19, Hsin-Yi Wang wrote:
+>> drm_dev_register() sets connector->registration_state to
+>> DRM_CONNECTOR_REGISTERED and dev->registered to true. If
+>> drm_connector_set_panel_orientation() is first called after
+>> drm_dev_register(), it will fail several checks and results in following
+>> warning.
 >>
->> While at it, remove the definition of MTK_PMIC_RST_KEY_MASK as
->> we are now dynamically setting the keymask relatively to the keys
->> that are defined in the newly added rst_en_mask variable, on a
->> per-key basis.
+>> Add a function to create panel orientation property and set default value
+>> to UNKNOWN, so drivers can call this function to init the property earlier
+>> , and let the panel set the real value later.
 >>
->> This commit brings no functional changes.
+>> [    4.480976] ------------[ cut here ]------------
+>> [    4.485603] WARNING: CPU: 5 PID: 369 at drivers/gpu/drm/drm_mode_object.c:45 __drm_mode_object_add+0xb4/0xbc
+>> <snip>
+>> [    4.609772] Call trace:
+>> [    4.612208]  __drm_mode_object_add+0xb4/0xbc
+>> [    4.616466]  drm_mode_object_add+0x20/0x2c
+>> [    4.620552]  drm_property_create+0xdc/0x174
+>> [    4.624723]  drm_property_create_enum+0x34/0x98
+>> [    4.629241]  drm_connector_set_panel_orientation+0x64/0xa0
+>> [    4.634716]  boe_panel_get_modes+0x88/0xd8
+>> [    4.638802]  drm_panel_get_modes+0x2c/0x48
+>> [    4.642887]  panel_bridge_get_modes+0x1c/0x28
+>> [    4.647233]  drm_bridge_connector_get_modes+0xa0/0xd4
+>> [    4.652273]  drm_helper_probe_single_connector_modes+0x218/0x700
+>> [    4.658266]  drm_mode_getconnector+0x1b4/0x45c
+>> [    4.662699]  drm_ioctl_kernel+0xac/0x128
+>> [    4.666611]  drm_ioctl+0x268/0x410
+>> [    4.670002]  drm_compat_ioctl+0xdc/0xf0
+>> [    4.673829]  __arm64_compat_sys_ioctl+0xc8/0x100
+>> [    4.678436]  el0_svc_common+0xf4/0x1c0
+>> [    4.682174]  do_el0_svc_compat+0x28/0x3c
+>> [    4.686088]  el0_svc_compat+0x10/0x1c
+>> [    4.689738]  el0_sync_compat_handler+0xa8/0xcc
+>> [    4.694171]  el0_sync_compat+0x178/0x180
+>> [    4.698082] ---[ end trace b4f2db9d9c88610b ]---
+>> [    4.702721] ------------[ cut here ]------------
+>> [    4.707329] WARNING: CPU: 5 PID: 369 at drivers/gpu/drm/drm_mode_object.c:243 drm_object_attach_property+0x48/0xb8
+>> <snip>
+>> [    4.833830] Call trace:
+>> [    4.836266]  drm_object_attach_property+0x48/0xb8
+>> [    4.840958]  drm_connector_set_panel_orientation+0x84/0xa0
+>> [    4.846432]  boe_panel_get_modes+0x88/0xd8
+>> [    4.850516]  drm_panel_get_modes+0x2c/0x48
+>> [    4.854600]  panel_bridge_get_modes+0x1c/0x28
+>> [    4.858946]  drm_bridge_connector_get_modes+0xa0/0xd4
+>> [    4.863984]  drm_helper_probe_single_connector_modes+0x218/0x700
+>> [    4.869978]  drm_mode_getconnector+0x1b4/0x45c
+>> [    4.874410]  drm_ioctl_kernel+0xac/0x128
+>> [    4.878320]  drm_ioctl+0x268/0x410
+>> [    4.881711]  drm_compat_ioctl+0xdc/0xf0
+>> [    4.885536]  __arm64_compat_sys_ioctl+0xc8/0x100
+>> [    4.890142]  el0_svc_common+0xf4/0x1c0
+>> [    4.893879]  do_el0_svc_compat+0x28/0x3c
+>> [    4.897791]  el0_svc_compat+0x10/0x1c
+>> [    4.901441]  el0_sync_compat_handler+0xa8/0xcc
+>> [    4.905873]  el0_sync_compat+0x178/0x180
+>> [    4.909783] ---[ end trace b4f2db9d9c88610c ]---
+>>
+>> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+>> Reviewed-by: Sean Paul <seanpaul@chromium.org>
+>> ---
+>> v9->v10: rebase to latest linux-next.
+>> v9: https://patchwork.kernel.org/project/linux-mediatek/patch/20220318074825.3359978-2-hsinyi@chromium.org/
+>> v8: https://patchwork.kernel.org/project/linux-mediatek/patch/20220208084234.1684930-1-hsinyi@chromium.org/
+>> v7: https://patchwork.kernel.org/project/linux-mediatek/patch/20220208073714.1540390-1-hsinyi@chromium.org/
+>> ---
+>>  drivers/gpu/drm/drm_connector.c | 58 +++++++++++++++++++++++++--------
+>>  include/drm/drm_connector.h     |  2 ++
+>>  2 files changed, 47 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+>> index 1c48d162c77e..d68cc78f6684 100644
+>> --- a/drivers/gpu/drm/drm_connector.c
+>> +++ b/drivers/gpu/drm/drm_connector.c
+>> @@ -1252,7 +1252,7 @@ static const struct drm_prop_enum_list dp_colorspaces[] = {
+>>   *	INPUT_PROP_DIRECT) will still map 1:1 to the actual LCD panel
+>>   *	coordinates, so if userspace rotates the picture to adjust for
+>>   *	the orientation it must also apply the same transformation to the
+>> - *	touchscreen input coordinates. This property is initialized by calling
+>> + *	touchscreen input coordinates. This property value is set by calling
+>>   *	drm_connector_set_panel_orientation() or
+>>   *	drm_connector_set_panel_orientation_with_quirk()
+>>   *
+>> @@ -2310,8 +2310,8 @@ EXPORT_SYMBOL(drm_connector_set_vrr_capable_property);
+>>   * @connector: connector for which to set the panel-orientation property.
+>>   * @panel_orientation: drm_panel_orientation value to set
+>>   *
+>> - * This function sets the connector's panel_orientation and attaches
+>> - * a "panel orientation" property to the connector.
+>> + * This function sets the connector's panel_orientation value. If the property
+>> + * doesn't exist, it will try to create one.
+>>   *
+>>   * Calling this function on a connector where the panel_orientation has
+>>   * already been set is a no-op (e.g. the orientation has been overridden with
+>> @@ -2343,18 +2343,13 @@ int drm_connector_set_panel_orientation(
+>>  
+>>  	prop = dev->mode_config.panel_orientation_property;
+>>  	if (!prop) {
+>> -		prop = drm_property_create_enum(dev, DRM_MODE_PROP_IMMUTABLE,
+>> -				"panel orientation",
+>> -				drm_panel_orientation_enum_list,
+>> -				ARRAY_SIZE(drm_panel_orientation_enum_list));
+>> -		if (!prop)
+>> +		if (drm_connector_init_panel_orientation_property(connector) < 0)
+>>  			return -ENOMEM;
+>> -
+>> -		dev->mode_config.panel_orientation_property = prop;
+>> +		prop = dev->mode_config.panel_orientation_property;
+>>  	}
+>>  
+>> -	drm_object_attach_property(&connector->base, prop,
+>> -				   info->panel_orientation);
+>> +	drm_object_property_set_value(&connector->base, prop,
+>> +				      info->panel_orientation);
+>>  	return 0;
+>>  }
+>>  EXPORT_SYMBOL(drm_connector_set_panel_orientation);
+>> @@ -2362,7 +2357,7 @@ EXPORT_SYMBOL(drm_connector_set_panel_orientation);
+>>  /**
+>>   * drm_connector_set_panel_orientation_with_quirk - set the
+>>   *	connector's panel_orientation after checking for quirks
+>> - * @connector: connector for which to init the panel-orientation property.
+>> + * @connector: connector for which to set the panel-orientation property.
+>>   * @panel_orientation: drm_panel_orientation value to set
+>>   * @width: width in pixels of the panel, used for panel quirk detection
+>>   * @height: height in pixels of the panel, used for panel quirk detection
+>> @@ -2389,6 +2384,43 @@ int drm_connector_set_panel_orientation_with_quirk(
+>>  }
+>>  EXPORT_SYMBOL(drm_connector_set_panel_orientation_with_quirk);
+>>  
+>> +/**
+>> + * drm_connector_init_panel_orientation_property -
+>> + * 	create the connector's panel orientation property
+>> + *
+>> + * This function attaches a "panel orientation" property to the connector
+>> + * and initializes its value to DRM_MODE_PANEL_ORIENTATION_UNKNOWN.
+>> + *
+>> + * The value of the property can be set by drm_connector_set_panel_orientation()
+>> + * or drm_connector_set_panel_orientation_with_quirk() later.
+>> + *
+>> + * Returns:
+>> + * Zero on success, negative errno on failure.
+>> + */
+>> +int drm_connector_init_panel_orientation_property(
+>> +	struct drm_connector *connector)
+>> +{
+>> +	struct drm_device *dev = connector->dev;
+>> +	struct drm_property *prop;
+>> +
+>> +	if(dev->mode_config.panel_orientation_property)
+>> +		return 0;
+>> +
+>> +	prop = drm_property_create_enum(dev, DRM_MODE_PROP_IMMUTABLE,
+>> +			"panel orientation",
+>> +			drm_panel_orientation_enum_list,
+>> +			ARRAY_SIZE(drm_panel_orientation_enum_list));
+>> +	if (!prop)
+>> +		return -ENOMEM;
+>> +
+>> +	dev->mode_config.panel_orientation_property = prop;
+>> +	drm_object_attach_property(&connector->base, prop,
+>> +				   DRM_MODE_PANEL_ORIENTATION_UNKNOWN);
 > 
-> AngeloGioacchino,
-> 
-> Could you please tell me if these devices (currently supported by the
-> driver) have 2 fully independent reset settings for HOME and PWR keys,
-> or is there are actually 2 separate bits, one to enable/disable key
-> reset, and another controlling what keys will cause the reset - only PWR
-> or either PWR or HOME?
-> 
-> Thanks.
-> 
+> DRM_MODE_PANEL_ORIENTATION_UNKNOWN is -1 which is not a valid value
+> for an enum. IOW when the panel-orientation is DRM_MODE_PANEL_ORIENTATION_UNKNOWN
+> then the property should not be created on the drm-connector object at all.
 
+p.s. note that the original drm_connector_set_panel_orientation() avoids
+ever creating the property when the orientation is unknown because of
+this bit of code near the top of the function:
 
-Hello Dmitry,
+        /* Don't attach the property if the orientation is unknown */
+        if (panel_orientation == DRM_MODE_PANEL_ORIENTATION_UNKNOWN)
+                return 0;
 
-there are two separate bits for the "Long Press Reset", you can achieve
-reset with either holding the power button, volume up button (register
-name is HOMEKEY because on very old devices this was a "home" button),
-or both - for a certain amount of time.
-If both {HOME,PWR}KEY_RST_EN bits are *not set*, the long press reset
-PMIC trigger will be disabled.
-Long-press time is controlled with the RST_DU register.
+> Which brings us back to what I said in reply to the coverletter,
+> it seems that you have a probe ordering problem here; and fixing that
+> issue would make this patch-set unnecessary.
 
 Regards,
-Angelo
+
+Hans
+
+
+>> +
+>> +	return 0;
+>> +}
+>> +EXPORT_SYMBOL(drm_connector_init_panel_orientation_property);
+>> +
+>>  static const struct drm_prop_enum_list privacy_screen_enum[] = {
+>>  	{ PRIVACY_SCREEN_DISABLED,		"Disabled" },
+>>  	{ PRIVACY_SCREEN_ENABLED,		"Enabled" },
+>> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+>> index 3ac4bf87f257..f0681091c617 100644
+>> --- a/include/drm/drm_connector.h
+>> +++ b/include/drm/drm_connector.h
+>> @@ -1802,6 +1802,8 @@ int drm_connector_set_panel_orientation_with_quirk(
+>>  	struct drm_connector *connector,
+>>  	enum drm_panel_orientation panel_orientation,
+>>  	int width, int height);
+>> +int drm_connector_init_panel_orientation_property(
+>> +	struct drm_connector *connector);
+>>  int drm_connector_attach_max_bpc_property(struct drm_connector *connector,
+>>  					  int min, int max);
+>>  void drm_connector_create_privacy_screen_properties(struct drm_connector *conn);
+

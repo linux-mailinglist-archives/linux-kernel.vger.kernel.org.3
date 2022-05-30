@@ -2,355 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8C85374E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE3B53755C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233406AbiE3HRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S232956AbiE3HXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233393AbiE3HRP (ORCPT
+        with ESMTP id S230074AbiE3HXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:17:15 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F415C64B
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:17:12 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id b5so9539746plx.10
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:17:12 -0700 (PDT)
+        Mon, 30 May 2022 03:23:51 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31FBD52
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:23:48 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U5ukVV007190;
+        Mon, 30 May 2022 07:23:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=uqcjBnBUEe3ERdqfq0pmqf3Wsea4oU2c2NJCElqKhPI=;
+ b=Kqw7Ftj+QJu1fUY3a2dh9mfXORQA3E6CT6PhG5/7GGpjAFM0Q8M9FxReO/MZSXdx++cy
+ F7F0csVptIjjqA+k5QFMTVKPm1I78xUIeGfkz0j4k5LnBzZPHWTYVHrXH1HfPVITJGbl
+ eYaeJvaMrVOImrO8OhHRXGfC6XSW7WnbQxc6bySQ/DaqT317fYJnJfjyLYK3B5HFYxUu
+ 9xlxD6FsiWyifMhfX/rpzYpgvCUVxyw9fFR7Y3XLAsGvpqJWOQa7o1ldYwplknhEQtHa
+ m2E/q1CIG/xlFSCxpYiW43fSH4lIk/u85NcjbjPTbynjWHP1ntUxS8pVbQQAsaiGdzhQ 2Q== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gbcauj8x0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 May 2022 07:23:45 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24U7FnUk030693;
+        Mon, 30 May 2022 07:23:45 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2104.outbound.protection.outlook.com [104.47.58.104])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gc8hqfcj4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 May 2022 07:23:45 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i44yLwflfDF1WFiG9v3uQkwGuDeDK0cDJymxMMSyzCotxnfAIwKNZX9ptPTreLEGPn/7bpFWMPfVpCEX5sHwCj4n67sJyScn9mFM106j2cYefD09cta7UXo7VjQ7EnhRWFnXBGNmjqc1qO7tL3MnPCcCTX3ElG4dAs00EHbyr/2VnvEj3j6kJ4hZauxh/bcMHEcbFMmbEM2qRHJDw+I3wu0IMeqhgcyWVxMJxxDtEHyij7ea59qUhWeoCZnhja7++d4/GLJ3ToMsBKot6RmQqsltgZ6fLv6nat7w371nZt7i0RxV0L5WkW8FNkrzYxgVP41MhHyuZZ2iCdtiwTviGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uqcjBnBUEe3ERdqfq0pmqf3Wsea4oU2c2NJCElqKhPI=;
+ b=Lz8ga6EwBWMmMkZPl5LAEj8kqdxemumYKQAhTXDXe2iYcz34cxk82Kcl/+rCK7RzMgLhZHqynJI+9NU6ohNnqWMgYLQ2kod2OnL8Ptt+mlvolCBarEOjK9dMRH9XHTd12wwiufbN6ZSy1Aum9LkhNPAF7lUnulmk4vCHI17T6Huu4P2HVWl1PADy613pjixGrgu1yypMBWuzyEZpiB+poD96/2fwFmwaKD8P746NPZ8/UsZ8+zysTcjEydFYCenlSQAQiocQusaXuXGELYbaFKN2zdiRe8j6s+zDMqZg84eQQ+IGIPdyBXtDuhy7kwm17LGCiLRlg5apAamqtI5MGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6SyAFe8yiRS+xJf7v92sSCs8jgpttKvVsYzEwlwQFS4=;
-        b=ZOeRe7U0XN51BGptO4ulac6NQI0nCMB9cTNM1vtwVSsEuo+Y57HJ/rVD289kTpOuNA
-         BqgcfBDZ6o+pHimdt0qhyNgUMPKNtGaJ4DIIVLMPWjBQk4H+qMmshEjyRqTIWPlntKk9
-         GUpuvW++NU3UYHPd2RcmrAHdIMTiwCGxM/wmpU6/fC//bJt80kCyfSh0p+NPsxNGzAYQ
-         iwWRKdj5cuyVsncgOsZpANMHNeqFdOHigS/lALVQ1LrxcNRJgm1eZBrj2VO/qQBUrtgX
-         ok85n1NSwUYI5ten6ARtJGpj4NiQZtY0YAk4bOv4ffCsfa5Fa1ffSzRIUq9kYmAY5vy6
-         Odmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6SyAFe8yiRS+xJf7v92sSCs8jgpttKvVsYzEwlwQFS4=;
-        b=zeZ/oBYPNppY5vaOjtmOJ9oJSZnNJCazsWvIfjaxTBstnfYp/YaGty1d03LmL4aXmw
-         8vHjrAulGz5AtFfyg28lyDT8YZ113z2Vc24eDy3ym1mNerBmZr48vGVf3/mNsWKnI6dq
-         3Lcoa8yCH2p4m9mVu5YG1Kl7P8hnOuS8qcqeUnErnB/O2gS1jTbHHpCZBSsimS04bBf4
-         JRkvtIhR6z/ZgHjHd5SJUkkK4TnwL15xNw+OSM7v0nZYMJG6oeQ3Src8ysyq9Vx+6/UH
-         iMoTcH187KxeREV6gwUyV3lldbXxoRfIcnQKxmQH8HQpf+lZOQ+jwUPT0uPnImqIUfnX
-         413A==
-X-Gm-Message-State: AOAM533D5eXzPlpbm83JbGs9OHaQIp+SsBuT37l/dUdt4GRDoZOVqdax
-        IkftHka6Ez5i590NJ7I87uEllA==
-X-Google-Smtp-Source: ABdhPJy5m/fEfM/HgnPEeOcyxwTjHUpQZCqLSOeoiRXgi/yKZgASya8AZr9lUSqPGzHVqkTH6fSOjg==
-X-Received: by 2002:a17:90a:690f:b0:1df:336d:5533 with SMTP id r15-20020a17090a690f00b001df336d5533mr21802608pjj.222.1653895032082;
-        Mon, 30 May 2022 00:17:12 -0700 (PDT)
-Received: from localhost.localdomain ([49.37.162.84])
-        by smtp.gmail.com with ESMTPSA id a1-20020a170902900100b0015e9d4a5d27sm8355503plp.23.2022.05.30.00.17.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 00:17:10 -0700 (PDT)
-From:   Arun Ajith S <aajith@arista.com>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        dsahern@kernel.org, bagasdotme@gmail.com, yoshfuji@linux-ipv6.org,
-        kuba@kernel.org, pabeni@redhat.com, prestwoj@gmail.com,
-        corbet@lwn.net, justin.iurman@uliege.be, edumazet@google.com,
-        shuah@kernel.org, aajith@arista.com, gilligan@arista.com,
-        noureddine@arista.com, gk@arista.com
-Subject: [PATCH net v2] net/ipv6: Expand and rename accept_unsolicited_na to accept_untracked_na
-Date:   Mon, 30 May 2022 07:17:00 +0000
-Message-Id: <20220530071700.12237-1-aajith@arista.com>
-X-Mailer: git-send-email 2.27.0
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uqcjBnBUEe3ERdqfq0pmqf3Wsea4oU2c2NJCElqKhPI=;
+ b=LwY/GbKDPHLek8w1F1/Xtz7QA0RVYDLfAQHpIc0iasH30VhG2Pk94iJAIyJ9RUdsujZnx4r1I9X5QM1hbZMzaxppCjwq+QOW+sU2IUWC12luhHLXqSn3dNS2TvV+oDoW8eLf70l/EE1nP3z4I1ceCACvnez6us3r4uK1x9on9CY=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by BN0PR10MB5030.namprd10.prod.outlook.com
+ (2603:10b6:408:12a::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Mon, 30 May
+ 2022 07:23:43 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::86f:81ba:9951:5a7e]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::86f:81ba:9951:5a7e%2]) with mapi id 15.20.5293.019; Mon, 30 May 2022
+ 07:23:42 +0000
+Date:   Mon, 30 May 2022 10:23:23 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kbuild@lists.01.org, Jiri Pirko <jiri@nvidia.com>
+Cc:     lkp@intel.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:jiri_devel_components 1/3] net/core/devlink.c:6558
+ devlink_nl_info_fill() warn: missing error code 'err'
+Message-ID: <202205281346.ewkXalBD-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNAP275CA0054.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4e::20)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 27b41d1b-a808-43c3-c09d-08da420d5355
+X-MS-TrafficTypeDiagnostic: BN0PR10MB5030:EE_
+X-Microsoft-Antispam-PRVS: <BN0PR10MB5030629F33C638E551469DEE8EDD9@BN0PR10MB5030.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mdDXbFh++c7CjwVmHHls9+FPwz5O07lhSj7PpRyMOEPDRVm5IrFsODMgTWu9NwH524lOMGNmhbJCyNRxFWDUK2+iaEVFr6+e8lJwkVO7bssjshUIK22viKl9Nn0KxLJ3zQzftwS9jE5cy03fhnad9zk1InuxPmDSanwAPNROdNtf8M12haPa15GnOUj2xxDC86ejBfT9vKPI00XCldyRIiGCd0XT3r137o3saCKGUESo4q9bTjY4zWTNsRnsjlMdoZ5MGcPASakbncGNSK14U1PqUT9K+WM+DQ6bWz99FN3sOovjeIoXj1a64EjdlK6dwahXLgj+pHpm+2avaVdP43YP8assZQASqovbeXvm6dRCTBi2zIBZgyk29k2H9CMLecIIAabIXOvvapuNT1i1/VV7GcFBT12NhMbETpDeRRUbB6ZutcrpuJMvP9XKiUrQSqfOiLTUmOP7eV+npraUWhBRKVxiVInSJNtAtt9D1oU6ynPLTbsIF3Hn5YTbEQnb6ThMmCZOPkooHWBHpfswqwP5dad/1PymDRjg4XyxdKXBs0RDjdvLpSiW3AMeAY/NqhhD/R7nM4kv3vZCk6fH2apR3QNKgiA+dz1PVR5WbfXDeIxnsw7feyY3aj2kFvVc/MwkEY0LCcoIdaOpAczjv9WNrek8PBp0Q+qSDLHToYyIrF44hXInaaVOmze14COLvaTzeTzWhfXVzBzOvQ9sxcHqDjGnNNe2LQKm267RlU41p+HyiB4B0SHpfE+ECoI44/Al/alBR+HZHdlipSrwFWjj8GIZORcZRYnsegZ5m551+h6b5QZDmdciJ4SKHiSa7/+WYMUi5kKLg75qMAzvng==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(186003)(52116002)(86362001)(6666004)(2906002)(38350700002)(966005)(1076003)(6486002)(26005)(6916009)(6512007)(9686003)(508600001)(8676002)(6506007)(5660300002)(83380400001)(44832011)(36756003)(4326008)(66946007)(8936002)(38100700002)(66556008)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EWd4T0qbhv1isHCwbn8f/xhHfcE2LF7p0S8/hlcbpA7jxRK2GFaGACJTknbc?=
+ =?us-ascii?Q?PV0s5Ty8Ek1StM0uYTUP1ephJut3JNKGjvo0twyY4HD6oYB/1MwaXtj00L2q?=
+ =?us-ascii?Q?rtUZ9c+VJAj5YUU0j56XGqPOGWvafdEHHfeAr//QV9Da4f9hbre6NLGc3eEY?=
+ =?us-ascii?Q?3jC/LBQLfok1Bea5bBkVtQ2LrbwGa6CjkXYiGu4UrxJg1FaChvS+3KPFx9d0?=
+ =?us-ascii?Q?VdT/OcheuFsEHAxjQ6oT1Mxr0J2Njfn6Oxz2Bo9Hkpr2dDne2jhdbwTSbBp/?=
+ =?us-ascii?Q?vYNeY3nBP/5dnXTmXD3zidOykOszfn29e33lIuMIaaUArOcYcJB8VjBPN8GD?=
+ =?us-ascii?Q?oMBtp/Uve3HfvSjk59bZYHvmA1gu/4gVuENBBC3BU7e2tzCrTRQez7MH2LfA?=
+ =?us-ascii?Q?0fQJrDfsZxR8/7uY7HQnV+BA1ef72SGtBty2m/bYA/Ju2Cv32LBryt62QYr6?=
+ =?us-ascii?Q?NkZujKEfI8mUGnyYrs6gQYb6uynBRk94lbYO12YZHdXyLcZfbtSkEGdoXxm1?=
+ =?us-ascii?Q?xvBg8Aef26P+wLDw0PeGtujHpgRDcgi8if3QfUtYVFmakwpkPwMf4CGj2tn6?=
+ =?us-ascii?Q?qbcF+khDbf3x9l0+PCsyt1fyIso1aqYBFJl0OFJOOkzkMkfFTc9I99AvIIno?=
+ =?us-ascii?Q?su9Kx3YlbLaUmmSDlnqt2mzhVsAZHBnWC5BBZv4LhayP/fEZIabnMkmyB4xP?=
+ =?us-ascii?Q?kSEhAsg58sOryFY89pa19dQ3pfcksb+I79XWI2a9Qdcrwn5maE+L5Rx3/HRr?=
+ =?us-ascii?Q?YbT57oFR/Wkay2GdX2RPPXKmTPgh8AuG+Y8zCmgGBdesf7y1GFTf+geUb9G1?=
+ =?us-ascii?Q?3cMWM5n1DxLnsA4iHBWJ677ACpcA3ebo1By5rdQlkQyb0BkW8ikpkFFBxzH/?=
+ =?us-ascii?Q?JLG6/YNtEXiZUlGhzmfOey8ZEk43P3wYDekKmMMJE8aiMI8g+CQUMR26KlWa?=
+ =?us-ascii?Q?DOQXvEdgfy2LWMPZ2xZ2lu0X7n9rriTyp1pvIlJn2rWDVB+zs/rNINqFH1aJ?=
+ =?us-ascii?Q?xzenAQWQ8aaW+kOzNwGmcLp4qyayYs4ivajeYBQDL+JbIH8xOE2xq4wAKVJy?=
+ =?us-ascii?Q?KpNjKZDTEL+r+/RCvjeTIh3GY6PGeJ4UWOokuywaaNHPie5GC25rh5oNatKL?=
+ =?us-ascii?Q?kE9via70xneQ5CNp4S9LzMeHKzQ+ov7u3AyM8/ZdKcYtj8tIMRfmc3oNen+2?=
+ =?us-ascii?Q?qwqpMwp/g7CmAMBkqVTXY9MWdSgoKbeVmark/IZCI7rwIQSWIWH/4iGAtG4X?=
+ =?us-ascii?Q?2WNdaXFkB1uEPky0goM8bpvwEtN6itDCGKEIttDmZuV2BvhdtnlPnBsONvhd?=
+ =?us-ascii?Q?i58SB/oBzUuEQDhG2ekTKzsKUhWmF7zYpXqJz9WWHc7IT5/DNvXVc0+NM8q3?=
+ =?us-ascii?Q?XVg08xLQpEV4HDWjrLAokrGPF3cwl8pghvF0uQ/KUIEu4Vqrjdf9+pXa/0gO?=
+ =?us-ascii?Q?wIn+yAzA4n2j6KAyPm3qw8WVhnMo6RLR6f7T6TnKTsIamxjVrD7vCxDZXhhr?=
+ =?us-ascii?Q?ekrbxIcH78rUru/wQRwqJ9SyW5v3XUN4Ir+o6bZ++LcMSwmtzgd+Gq4nR1wq?=
+ =?us-ascii?Q?Lm9u6EkJ/CqSK8QFNOEYd+sARzzxmzUi3kJCpScLGlifLtYG7/Ig1J+QgcLf?=
+ =?us-ascii?Q?FIN4bggb4/FxWgdMg89COyZB+sOdzRWnEjImQBDbRk2dRjV8YUrNBIr7kYvv?=
+ =?us-ascii?Q?Ij2lFzekIETybDWMssrROd15IACLXGj0qnDmirAOVhxLEOJmEnvzaquR52OG?=
+ =?us-ascii?Q?/75K+GYuasY601S8+Ah9MldBuzHZRLo=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27b41d1b-a808-43c3-c09d-08da420d5355
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 07:23:42.8358
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +9bT/fjByHUEYi+9iBEQV3vyYytsTO7WjTPYlAdwjekzZihtHinDIABwu9ZYP7DmJXv33AkNDNQ3CDJpYLVZIiyJlEAQblCYGja44vswZEs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5030
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.874
+ definitions=2022-05-30_02:2022-05-27,2022-05-30 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
+ mlxlogscore=999 malwarescore=0 mlxscore=0 spamscore=0 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205300038
+X-Proofpoint-ORIG-GUID: vfJQgJql7Qfg7BXMTESzaIK6kez-1pxf
+X-Proofpoint-GUID: vfJQgJql7Qfg7BXMTESzaIK6kez-1pxf
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RFC 9131 changes default behaviour of handling RX of NA messages when the
-corresponding entry is absent in the neighbour cache. The current
-implementation is limited to accept just unsolicited NAs. However, the
-RFC is more generic where it also accepts solicited NAs. Both types
-should result in adding a STALE entry for this case.
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_components
+head:   9360f04ac2b51764d94b40113ef1b21b95835ae6
+commit: e7261a9db46b29988444322b7b506954c06a7f4d [1/3] net: devlink: introduce flash components list
+config: arc-randconfig-m031-20220524 (https://download.01.org/0day-ci/archive/20220528/202205281346.ewkXalBD-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
 
-Expand accept_untracked_na behaviour to also accept solicited NAs to
-be compliant with the RFC and rename the sysctl knob to
-accept_untracked_na.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Fixes: f9a2fb73318e ("net/ipv6: Introduce accept_unsolicited_na knob to implement router-side changes for RFC9131")
-Signed-off-by: Arun Ajith S <aajith@arista.com>
----
-This change updates the accept_unsolicited_na feature that merged to net-next
-for v5.19 to be better compliant with the RFC. It also involves renaming the sysctl
-knob to accept_untracked_na before shipping in a release.
+New smatch warnings:
+net/core/devlink.c:6558 devlink_nl_info_fill() warn: missing error code 'err'
 
-Note that the behaviour table has been modifed in the code comments,
-but dropped from the Documentation. This is because the table 
-documents behaviour that is not unique to the knob, and it is more
-relevant to understanding the code. The documentation has been updated
-to be unambiguous even without the table.
+Old smatch warnings:
+net/core/devlink.c:7154 devlink_fmsg_prepare_skb() error: uninitialized symbol 'err'.
 
-v2:
-  1. Changed commit message and subject as suggested.
-  2. Added Fixes tag.
-  3. Used en-uk spellings consistently.
-  4. Added a couple of missing comments.
-  5. Refactored patch to be smaller by avoiding early return.
-  6. Made the documentation more clearer.
+vim +/err +6558 net/core/devlink.c
 
- Documentation/networking/ip-sysctl.rst        | 23 ++++-------
- include/linux/ipv6.h                          |  2 +-
- include/uapi/linux/ipv6.h                     |  2 +-
- net/ipv6/addrconf.c                           |  6 +--
- net/ipv6/ndisc.c                              | 41 +++++++++++--------
- .../net/ndisc_unsolicited_na_test.sh          | 23 +++++------
- 6 files changed, 49 insertions(+), 48 deletions(-)
+f9cf22882c606f Jakub Kicinski 2019-01-31  6530  static int
+f9cf22882c606f Jakub Kicinski 2019-01-31  6531  devlink_nl_info_fill(struct sk_buff *msg, struct devlink *devlink,
+f9cf22882c606f Jakub Kicinski 2019-01-31  6532  		     enum devlink_command cmd, u32 portid,
+f9cf22882c606f Jakub Kicinski 2019-01-31  6533  		     u32 seq, int flags, struct netlink_ext_ack *extack)
+f9cf22882c606f Jakub Kicinski 2019-01-31  6534  {
+e7261a9db46b29 Jiri Pirko     2022-05-27  6535  	struct devlink_flash_component *component;
+e7261a9db46b29 Jiri Pirko     2022-05-27  6536  	struct nlattr *component_attr;
+f9cf22882c606f Jakub Kicinski 2019-01-31  6537  	struct devlink_info_req req;
+f9cf22882c606f Jakub Kicinski 2019-01-31  6538  	void *hdr;
+f9cf22882c606f Jakub Kicinski 2019-01-31  6539  	int err;
+f9cf22882c606f Jakub Kicinski 2019-01-31  6540  
+f9cf22882c606f Jakub Kicinski 2019-01-31  6541  	hdr = genlmsg_put(msg, portid, seq, &devlink_nl_family, flags, cmd);
+f9cf22882c606f Jakub Kicinski 2019-01-31  6542  	if (!hdr)
+f9cf22882c606f Jakub Kicinski 2019-01-31  6543  		return -EMSGSIZE;
+f9cf22882c606f Jakub Kicinski 2019-01-31  6544  
+f9cf22882c606f Jakub Kicinski 2019-01-31  6545  	err = -EMSGSIZE;
+f9cf22882c606f Jakub Kicinski 2019-01-31  6546  	if (devlink_nl_put_handle(msg, devlink))
+f9cf22882c606f Jakub Kicinski 2019-01-31  6547  		goto err_cancel_msg;
+f9cf22882c606f Jakub Kicinski 2019-01-31  6548  
+f9cf22882c606f Jakub Kicinski 2019-01-31  6549  	req.msg = msg;
+f9cf22882c606f Jakub Kicinski 2019-01-31  6550  	err = devlink->ops->info_get(devlink, &req, extack);
+f9cf22882c606f Jakub Kicinski 2019-01-31  6551  	if (err)
+f9cf22882c606f Jakub Kicinski 2019-01-31  6552  		goto err_cancel_msg;
+f9cf22882c606f Jakub Kicinski 2019-01-31  6553  
+e7261a9db46b29 Jiri Pirko     2022-05-27  6554  	mutex_lock(&devlink->components_lock);
+e7261a9db46b29 Jiri Pirko     2022-05-27  6555  	list_for_each_entry(component, &devlink->component_list, list) {
+e7261a9db46b29 Jiri Pirko     2022-05-27  6556  		component_attr = nla_nest_start(msg, DEVLINK_ATTR_INFO_COMPONENT);
+e7261a9db46b29 Jiri Pirko     2022-05-27  6557  		if (!component_attr)
+e7261a9db46b29 Jiri Pirko     2022-05-27 @6558  			goto err_cancel_msg_unlock;
 
-diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-index b882d4238581..04216564a03c 100644
---- a/Documentation/networking/ip-sysctl.rst
-+++ b/Documentation/networking/ip-sysctl.rst
-@@ -2474,21 +2474,16 @@ drop_unsolicited_na - BOOLEAN
- 
- 	By default this is turned off.
- 
--accept_unsolicited_na - BOOLEAN
--	Add a new neighbour cache entry in STALE state for routers on receiving an
--	unsolicited neighbour advertisement with target link-layer address option
--	specified. This is as per router-side behavior documented in RFC9131.
--	This has lower precedence than drop_unsolicited_na.
-+accept_untracked_na - BOOLEAN
-+	Add a new neighbour cache entry in STALE state for routers on receiving a
-+	neighbour advertisement (either solicited or unsolicited) with target
-+	link-layer address option specified if no neighbour entry is already
-+	present for the advertised IPv6 address. Without this knob, NAs received
-+	for untracked addresses (absent in neighbour cache) are silently ignored.
-+
-+	This is as per router-side behaviour documented in RFC9131.
- 
--	 ====   ======  ======  ==============================================
--	 drop   accept  fwding                   behaviour
--	 ----   ------  ------  ----------------------------------------------
--	    1        X       X  Drop NA packet and don't pass up the stack
--	    0        0       X  Pass NA packet up the stack, don't update NC
--	    0        1       0  Pass NA packet up the stack, don't update NC
--	    0        1       1  Pass NA packet up the stack, and add a STALE
--	                        NC entry
--	 ====   ======  ======  ==============================================
-+	This has lower precedence than drop_unsolicited_na.
- 
- 	This will optimize the return path for the initial off-link communication
- 	that is initiated by a directly connected host, by ensuring that
-diff --git a/include/linux/ipv6.h b/include/linux/ipv6.h
-index 38c8203d52cb..37dfdcfcdd54 100644
---- a/include/linux/ipv6.h
-+++ b/include/linux/ipv6.h
-@@ -61,7 +61,7 @@ struct ipv6_devconf {
- 	__s32		suppress_frag_ndisc;
- 	__s32		accept_ra_mtu;
- 	__s32		drop_unsolicited_na;
--	__s32		accept_unsolicited_na;
-+	__s32		accept_untracked_na;
- 	struct ipv6_stable_secret {
- 		bool initialized;
- 		struct in6_addr secret;
-diff --git a/include/uapi/linux/ipv6.h b/include/uapi/linux/ipv6.h
-index 549ddeaf788b..03cdbe798fe3 100644
---- a/include/uapi/linux/ipv6.h
-+++ b/include/uapi/linux/ipv6.h
-@@ -194,7 +194,7 @@ enum {
- 	DEVCONF_IOAM6_ID,
- 	DEVCONF_IOAM6_ID_WIDE,
- 	DEVCONF_NDISC_EVICT_NOCARRIER,
--	DEVCONF_ACCEPT_UNSOLICITED_NA,
-+	DEVCONF_ACCEPT_UNTRACKED_NA,
- 	DEVCONF_MAX
- };
- 
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index ca0aa744593e..1b1932502e9e 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -5586,7 +5586,7 @@ static inline void ipv6_store_devconf(struct ipv6_devconf *cnf,
- 	array[DEVCONF_IOAM6_ID] = cnf->ioam6_id;
- 	array[DEVCONF_IOAM6_ID_WIDE] = cnf->ioam6_id_wide;
- 	array[DEVCONF_NDISC_EVICT_NOCARRIER] = cnf->ndisc_evict_nocarrier;
--	array[DEVCONF_ACCEPT_UNSOLICITED_NA] = cnf->accept_unsolicited_na;
-+	array[DEVCONF_ACCEPT_UNTRACKED_NA] = cnf->accept_untracked_na;
- }
- 
- static inline size_t inet6_ifla6_size(void)
-@@ -7038,8 +7038,8 @@ static const struct ctl_table addrconf_sysctl[] = {
- 		.extra2		= (void *)SYSCTL_ONE,
- 	},
- 	{
--		.procname	= "accept_unsolicited_na",
--		.data		= &ipv6_devconf.accept_unsolicited_na,
-+		.procname	= "accept_untracked_na",
-+		.data		= &ipv6_devconf.accept_untracked_na,
- 		.maxlen		= sizeof(int),
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec_minmax,
-diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
-index 254addad0dd3..ed0bbe87e345 100644
---- a/net/ipv6/ndisc.c
-+++ b/net/ipv6/ndisc.c
-@@ -979,7 +979,6 @@ static void ndisc_recv_na(struct sk_buff *skb)
- 	struct inet6_dev *idev = __in6_dev_get(dev);
- 	struct inet6_ifaddr *ifp;
- 	struct neighbour *neigh;
--	bool create_neigh;
- 
- 	if (skb->len < sizeof(struct nd_msg)) {
- 		ND_PRINTK(2, warn, "NA: packet too short\n");
-@@ -1000,7 +999,7 @@ static void ndisc_recv_na(struct sk_buff *skb)
- 	/* For some 802.11 wireless deployments (and possibly other networks),
- 	 * there will be a NA proxy and unsolicitd packets are attacks
- 	 * and thus should not be accepted.
--	 * drop_unsolicited_na takes precedence over accept_unsolicited_na
-+	 * drop_unsolicited_na takes precedence over accept_untracked_na
- 	 */
- 	if (!msg->icmph.icmp6_solicited && idev &&
- 	    idev->cnf.drop_unsolicited_na)
-@@ -1041,25 +1040,33 @@ static void ndisc_recv_na(struct sk_buff *skb)
- 		in6_ifa_put(ifp);
- 		return;
- 	}
-+
-+	neigh = neigh_lookup(&nd_tbl, &msg->target, dev);
-+
- 	/* RFC 9131 updates original Neighbour Discovery RFC 4861.
--	 * An unsolicited NA can now create a neighbour cache entry
--	 * on routers if it has Target LL Address option.
-+	 * NAs with Target LL Address option without a corresponding
-+	 * entry in the neighbour cache can now create a STALE neighbour
-+	 * cache entry on routers.
-+	 *
-+	 *   entry accept  fwding  solicited        behaviour
-+	 * ------- ------  ------  ---------    ----------------------
-+	 * present      X       X         0     Set state to STALE
-+	 * present      X       X         1     Set state to REACHABLE
-+	 *  absent      0       X         X     Do nothing
-+	 *  absent      1       0         X     Do nothing
-+	 *  absent      1       1         X     Add a new STALE entry
- 	 *
--	 * drop   accept  fwding                   behaviour
--	 * ----   ------  ------  ----------------------------------------------
--	 *    1        X       X  Drop NA packet and don't pass up the stack
--	 *    0        0       X  Pass NA packet up the stack, don't update NC
--	 *    0        1       0  Pass NA packet up the stack, don't update NC
--	 *    0        1       1  Pass NA packet up the stack, and add a STALE
--	 *                          NC entry
- 	 * Note that we don't do a (daddr == all-routers-mcast) check.
- 	 */
--	create_neigh = !msg->icmph.icmp6_solicited && lladdr &&
--		       idev && idev->cnf.forwarding &&
--		       idev->cnf.accept_unsolicited_na;
--	neigh = __neigh_lookup(&nd_tbl, &msg->target, dev, create_neigh);
-+	new_state = msg->icmph.icmp6_solicited ? NUD_REACHABLE : NUD_STALE;
-+	if (!neigh && lladdr &&
-+	    idev && idev->cnf.forwarding &&
-+	    idev->cnf.accept_untracked_na) {
-+		neigh = neigh_create(&nd_tbl, &msg->target, dev);
-+		new_state = NUD_STALE;
-+	}
- 
--	if (neigh) {
-+	if (neigh && !IS_ERR(neigh)) {
- 		u8 old_flags = neigh->flags;
- 		struct net *net = dev_net(dev);
- 
-@@ -1079,7 +1086,7 @@ static void ndisc_recv_na(struct sk_buff *skb)
- 		}
- 
- 		ndisc_update(dev, neigh, lladdr,
--			     msg->icmph.icmp6_solicited ? NUD_REACHABLE : NUD_STALE,
-+			     new_state,
- 			     NEIGH_UPDATE_F_WEAK_OVERRIDE|
- 			     (msg->icmph.icmp6_override ? NEIGH_UPDATE_F_OVERRIDE : 0)|
- 			     NEIGH_UPDATE_F_OVERRIDE_ISROUTER|
-diff --git a/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh b/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
-index f508657ee126..86e621b7b9c7 100755
---- a/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
-+++ b/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
-@@ -1,15 +1,14 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
--# This test is for the accept_unsolicited_na feature to
-+# This test is for the accept_untracked_na feature to
- # enable RFC9131 behaviour. The following is the test-matrix.
- # drop   accept  fwding                   behaviour
- # ----   ------  ------  ----------------------------------------------
--#    1        X       X  Drop NA packet and don't pass up the stack
--#    0        0       X  Pass NA packet up the stack, don't update NC
--#    0        1       0  Pass NA packet up the stack, don't update NC
--#    0        1       1  Pass NA packet up the stack, and add a STALE
--#                           NC entry
-+#    1        X       X  Don't update NC
-+#    0        0       X  Don't update NC
-+#    0        1       0  Don't update NC
-+#    0        1       1  Add a STALE NC entry
- 
- ret=0
- # Kselftest framework requirement - SKIP code is 4.
-@@ -72,7 +71,7 @@ setup()
- 	set -e
- 
- 	local drop_unsolicited_na=$1
--	local accept_unsolicited_na=$2
-+	local accept_untracked_na=$2
- 	local forwarding=$3
- 
- 	# Setup two namespaces and a veth tunnel across them.
-@@ -93,7 +92,7 @@ setup()
- 	${IP_ROUTER_EXEC} sysctl -qw \
-                 ${ROUTER_CONF}.drop_unsolicited_na=${drop_unsolicited_na}
- 	${IP_ROUTER_EXEC} sysctl -qw \
--                ${ROUTER_CONF}.accept_unsolicited_na=${accept_unsolicited_na}
-+                ${ROUTER_CONF}.accept_untracked_na=${accept_untracked_na}
- 	${IP_ROUTER_EXEC} sysctl -qw ${ROUTER_CONF}.disable_ipv6=0
- 	${IP_ROUTER} addr add ${ROUTER_ADDR_WITH_MASK} dev ${ROUTER_INTF}
- 
-@@ -144,13 +143,13 @@ link_up() {
- 
- verify_ndisc() {
- 	local drop_unsolicited_na=$1
--	local accept_unsolicited_na=$2
-+	local accept_untracked_na=$2
- 	local forwarding=$3
- 
- 	neigh_show_output=$(${IP_ROUTER} neigh show \
-                 to ${HOST_ADDR} dev ${ROUTER_INTF} nud stale)
- 	if [ ${drop_unsolicited_na} -eq 0 ] && \
--			[ ${accept_unsolicited_na} -eq 1 ] && \
-+			[ ${accept_untracked_na} -eq 1 ] && \
- 			[ ${forwarding} -eq 1 ]; then
- 		# Neighbour entry expected to be present for 011 case
- 		[[ ${neigh_show_output} ]]
-@@ -179,14 +178,14 @@ test_unsolicited_na_combination() {
- 	test_unsolicited_na_common $1 $2 $3
- 	test_msg=("test_unsolicited_na: "
- 		"drop_unsolicited_na=$1 "
--		"accept_unsolicited_na=$2 "
-+		"accept_untracked_na=$2 "
- 		"forwarding=$3")
- 	log_test $? 0 "${test_msg[*]}"
- 	cleanup
- }
- 
- test_unsolicited_na_combinations() {
--	# Args: drop_unsolicited_na accept_unsolicited_na forwarding
-+	# Args: drop_unsolicited_na accept_untracked_na forwarding
- 
- 	# Expect entry
- 	test_unsolicited_na_combination 0 1 1
+Is this an error path?
+
+e7261a9db46b29 Jiri Pirko     2022-05-27  6559  		if (nla_put_string(msg, DEVLINK_ATTR_FLASH_UPDATE_COMPONENT,
+e7261a9db46b29 Jiri Pirko     2022-05-27  6560  				   component->name))
+e7261a9db46b29 Jiri Pirko     2022-05-27  6561  			goto err_cancel_msg_unlock;
+
+Same
+
+e7261a9db46b29 Jiri Pirko     2022-05-27  6562  		err = component->info_get(devlink, &req, component->priv,
+e7261a9db46b29 Jiri Pirko     2022-05-27  6563  					  extack);
+e7261a9db46b29 Jiri Pirko     2022-05-27  6564  		if (err)
+e7261a9db46b29 Jiri Pirko     2022-05-27  6565  			goto err_cancel_msg_unlock;
+e7261a9db46b29 Jiri Pirko     2022-05-27  6566  		nla_nest_end(msg, component_attr);
+e7261a9db46b29 Jiri Pirko     2022-05-27  6567  	}
+e7261a9db46b29 Jiri Pirko     2022-05-27  6568  	mutex_unlock(&devlink->components_lock);
+f9cf22882c606f Jakub Kicinski 2019-01-31  6569  	genlmsg_end(msg, hdr);
+f9cf22882c606f Jakub Kicinski 2019-01-31  6570  	return 0;
+f9cf22882c606f Jakub Kicinski 2019-01-31  6571  
+e7261a9db46b29 Jiri Pirko     2022-05-27  6572  err_cancel_msg_unlock:
+e7261a9db46b29 Jiri Pirko     2022-05-27  6573  	mutex_unlock(&devlink->components_lock);
+f9cf22882c606f Jakub Kicinski 2019-01-31  6574  err_cancel_msg:
+f9cf22882c606f Jakub Kicinski 2019-01-31  6575  	genlmsg_cancel(msg, hdr);
+f9cf22882c606f Jakub Kicinski 2019-01-31  6576  	return err;
+f9cf22882c606f Jakub Kicinski 2019-01-31  6577  }
+
 -- 
-2.27.0
+0-DAY CI Kernel Test Service
+https://01.org/lkp
 

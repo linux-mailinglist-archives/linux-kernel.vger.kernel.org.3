@@ -2,108 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F7553735D
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 03:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F9253735E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 03:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbiE3Bma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 21:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57202 "EHLO
+        id S232143AbiE3Bng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 21:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiE3Bm2 (ORCPT
+        with ESMTP id S230337AbiE3Bnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 21:42:28 -0400
-Received: from mail.boiledscript.com (unknown [192.151.158.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961FFD13E;
-        Sun, 29 May 2022 18:42:27 -0700 (PDT)
-Received: from localhost (unknown [192.168.203.1])
-        by mail.boiledscript.com (Postfix) with ESMTP id B13113007FD;
-        Mon, 30 May 2022 01:42:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ultrarare.space;
-        s=dkim; t=1653874946;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lbjr5jPtIZSbFT/L4XEbOX84sdmNhtUofdql/o6UFQ0=;
-        b=E6cE1dB2AdRfJGrHJgwwxdTw23Z8WYHbocs68f/xpOncS8ffoXaS/sOd4kn+Fvk0zjqWuK
-        zLqbBS7b+Q3f3tutpBNMbqUg3qvs6Rzyk1bcSj9bxRjTAAzrm+Z3jATaqNh9nVJ4nUpU4u
-        34BXvpP6Xou+9acQ4tkoLhmySqvodTZkw95QAJakjENkZU3oyutP5Fdyf+NutxTEOCmIHC
-        w8jz7itwL0U5z+syuEy4qY+hudV5LYbpjp8FDsarBoxuCak9FGpBlkLGIWTS4le3YM/9Nr
-        dxNQsgp7BEFILsMkfGd3PVvdWHu5QJkwuX3n0fp+QG44oFsLZnKovzHMYY0eYw==
-Date:   Mon, 30 May 2022 09:42:15 +0800
-From:   Hilton Chain <hako@ultrarare.space>
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     bryancain3@gmail.com, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org
-Subject: [PATCH] HID: apple: Properly handle function keys on misset
- non-apple keyboards
-Message-ID: <20220530094215.646432cd@ultrarare.space>
-In-Reply-To: <20220530083752.1973a905@ultrarare.space>
-References: <20220529180230.17e9a0f9@ultrarare.space>
-        <20220529182036.10226-1-jose.exposito89@gmail.com>
-        <20220530083752.1973a905@ultrarare.space>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        Sun, 29 May 2022 21:43:33 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64664DEAB
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 18:43:30 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LBJ7K4K7JzjX0y;
+        Mon, 30 May 2022 09:42:21 +0800 (CST)
+Received: from [10.67.110.108] (10.67.110.108) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 30 May 2022 09:43:27 +0800
+Message-ID: <59e8faec-05fd-805d-7de0-4b0508f8467f@huawei.com>
+Date:   Mon, 30 May 2022 09:43:26 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spamd-Bar: +
-Authentication-Results: mail.boiledscript.com;
-        none
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2] kexec_file: Drop weak attribute from
+ arch_kexec_apply_relocations[_add]
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+CC:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+References: <20220519091237.676736-1-naveen.n.rao@linux.vnet.ibm.com>
+ <20220529065637.xgapqjp2342flbuj@pengutronix.de>
+ <264786d9-7756-19e0-2742-8b8d17f5ace5@csgroup.eu>
+ <20220529140655.bnd4fgggccrorj4t@pengutronix.de>
+From:   "liaochang (A)" <liaochang1@huawei.com>
+In-Reply-To: <20220529140655.bnd4fgggccrorj4t@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.108]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit extends fa33382c7f74 ("HID: apple: Properly handle function
-keys on Keychron keyboards") to support all misset non-apple keyboards.
 
-Signed-off-by: Hilton Chain <hako@ultrarare.space>
----
 
- drivers/hid/hid-apple.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+在 2022/5/29 22:06, Uwe Kleine-König 写道:
+> Hello,
+> 
+> On Sun, May 29, 2022 at 09:46:47AM +0000, Christophe Leroy wrote:
+>> Le 29/05/2022 à 08:56, Uwe Kleine-König a écrit :
+>>> Hello,
+>>>
+>>> on current linux-next ARCH=riscv allmodconfig breaks with:
+>>>
+>>>    CC      arch/riscv/kernel/elf_kexec.o
+>>> arch/riscv/kernel/elf_kexec.c:345:5: error: redefinition of ‘arch_kexec_apply_relocations_add’
+>>>    345 | int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
+>>>        |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>> In file included from arch/riscv/kernel/elf_kexec.c:16:
+>>> include/linux/kexec.h:236:1: note: previous definition of ‘arch_kexec_apply_relocations_add’ with type ‘int(struct purgatory_info *, Elf64_Shdr *, const Elf64_Shdr *, const Elf64_Shdr *)’ {aka ‘int(struct purgatory_info *, struct elf64_shdr *, const struct elf64_shdr *, const struct elf64_shdr *)’}
+>>>    236 | arch_kexec_apply_relocations_add(struct purgatory_info *pi, Elf_Shdr *section,
+>>>        | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>
+>>> (I think) because there is a conflict between the two commits:
+>>>
+>>> 233c1e6c319c kexec_file: drop weak attribute from arch_kexec_apply_relocations[_add]
+>>> 838b3e28488f RISC-V: Load purgatory in kexec_file
+>>>
+>>> And so next is broken starting from
+>>> 164a9037b1d33f28ba27671c16ec1c23d4a11acf which merges the riscv tree.
+>>>
+>>
+>> In arch/riscv/include/asm/kexec.h, do the same as s390 did in commit 
+>> 233c1e6c319c:
+>>
+>> diff --git a/arch/s390/include/asm/kexec.h b/arch/s390/include/asm/kexec.h
+>> index 7f3c9ac34bd8..540dd469b088 100644
+>> --- a/arch/s390/include/asm/kexec.h
+>> +++ b/arch/s390/include/asm/kexec.h
+>> @@ -83,4 +83,12 @@ struct kimage_arch {
+>>   extern const struct kexec_file_ops s390_kexec_image_ops;
+>>   extern const struct kexec_file_ops s390_kexec_elf_ops;
+>>
+>> +#ifdef CONFIG_KEXEC_FILE
+>> +struct purgatory_info;
+>> +int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
+>> +				     Elf_Shdr *section,
+>> +				     const Elf_Shdr *relsec,
+>> +				     const Elf_Shdr *symtab);
+>> +#define arch_kexec_apply_relocations_add arch_kexec_apply_relocations_add
+>> +#endif
+>>   #endif /*_S390_KEXEC_H */
+> 
+> I can confirm that doing
+> 
+> diff --git a/arch/riscv/include/asm/kexec.h b/arch/riscv/include/asm/kexec.h
+> index 206217b23301..eee260e8ab30 100644
+> --- a/arch/riscv/include/asm/kexec.h
+> +++ b/arch/riscv/include/asm/kexec.h
+> @@ -55,6 +55,13 @@ extern riscv_kexec_method riscv_kexec_norelocate;
+>  
+>  #ifdef CONFIG_KEXEC_FILE
+>  extern const struct kexec_file_ops elf_kexec_ops;
+> +
+> +struct purgatory_info;
+> +int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
+> +				     Elf_Shdr *section,
+> +				     const Elf_Shdr *relsec,
+> +				     const Elf_Shdr *symtab);
+> +#define arch_kexec_apply_relocations_add arch_kexec_apply_relocations_add
+>  #endif
+>  
+>  #endif
 
-diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
-index 42a568902f49..3b15753be467 100644
---- a/drivers/hid/hid-apple.c
-+++ b/drivers/hid/hid-apple.c
-@@ -36,7 +36,7 @@
- #define APPLE_NUMLOCK_EMULATION	BIT(8)
- #define APPLE_RDESC_BATTERY	BIT(9)
- #define APPLE_BACKLIGHT_CTL	BIT(10)
--#define APPLE_IS_KEYCHRON	BIT(11)
-+#define APPLE_IS_BAD_APPLE	BIT(11)
+LGTM, you could send a fixup patch to riscv, thanks.
 
- #define APPLE_FLAG_FKEY		0x01
+> 
+> on top of 838b3e28488f results in a compilable tree. And when merging
+> 233c1e6c319c into this, it is still building.
+> 
+> I'm not enough into kexec (and riscv) to judge if this is sensible, or
+> create a useful commit log but the obvious way forward is to apply the
+> above patch to the riscv tree before it hits Linus' tree.
+> 
+> Best regards
+> Uwe
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-@@ -363,7 +363,7 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
- 	}
-
- 	if (fnmode == 3) {
--		real_fnmode = (asc->quirks & APPLE_IS_KEYCHRON) ? 2 : 1;
-+		real_fnmode = (asc->quirks & APPLE_IS_BAD_APPLE) ? 2 : 1;
- 	} else {
- 		real_fnmode = fnmode;
- 	}
-@@ -669,9 +669,9 @@ static int apple_input_configured(struct hid_device *hdev,
- 		asc->quirks &= ~APPLE_HAS_FN;
- 	}
-
--	if (strncmp(hdev->name, "Keychron", 8) == 0) {
--		hid_info(hdev, "Keychron keyboard detected; function keys will default to fnmode=2 behavior\n");
--		asc->quirks |= APPLE_IS_KEYCHRON;
-+	if (strncmp(hdev->name, "Apple", 5)) {
-+		hid_info(hdev, "Non-apple keyboard detected; function keys will default to fnmode=2 behavior\n");
-+		asc->quirks |= APPLE_IS_BAD_APPLE;
- 	}
-
- 	return 0;
-
-base-commit: b00ed48bb0a7c295facf9036135a573a5cdbe7de
---
-2.36.1
+-- 
+BR,
+Liao, Chang

@@ -2,115 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC8A537B29
+	by mail.lfdr.de (Postfix) with ESMTP id 663A1537B2B
 	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 15:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236435AbiE3NO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 09:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
+        id S236453AbiE3NPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 09:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbiE3NOz (ORCPT
+        with ESMTP id S236510AbiE3NPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 09:14:55 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4B630F64
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:14:54 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id k19so6416934wrd.8
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:14:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=DqpmVnuueZQIlhBb560o3jiUPdmh9qmgxvpm22XE9vM=;
-        b=GMTaxPbUqiwzHpHfkliB8mj7se8B6PzPUTvAMZdLtcGnLWiiJbXMYAVwKmUrThTfZd
-         7hpNWNuyx0Ttnh2y3LKFdDvfWpKFiqUCnrk6IUapEtaRWb/kC8+cTgtp/bHjXF56N8Ij
-         74JeOKQ3YgehnwAPeJZvInf3ouOgmEKhCOv+TfIyP/Xe7V2kP6spGrUS4bXo7XRk9+Yw
-         6BILXAK8D59e4fUgAov4u4KE8zIVtncceXzpGjilkZp6k2wy8EHUyyaYDD5lN+jxfJ3m
-         ttobB+h0Kc4w+gan1Lv/Cp0Tji0MRHuVELPOyi2rGyjY4y3uAPeqXQuKmSw8BMfWtwfw
-         0j9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DqpmVnuueZQIlhBb560o3jiUPdmh9qmgxvpm22XE9vM=;
-        b=X5BxZs2mEuAIG628YrAWx5F89CCeApm1nulRvDPnXtuMmhFMsBWdX2pU+xBdk0z2dd
-         FrWKgkXQg6tjmdQQapMJE4HWisAcIqkbXk7biK2BFV6GTItoGQR3ar5G+8zgGHNYKI7G
-         MtQBLZbjvuFyLY20M5GNodox1/sLOGYGZPW4tJaheZl37QLLQcrKf6jODJ+xosnN0RyO
-         hhJ+bTBJ9/LokmfYXPl/JawSJzOPdRIk+9S4vY4/Qc+FmYmk3q+KKSNhhEYD3AiKygnm
-         hU61BA00hqLTcZ8MF8DJEdpQ5fDduuTu1+c+nxHLmyf7/LOpbNk+K5ZSzOUQrfDOezlE
-         lJOQ==
-X-Gm-Message-State: AOAM530m5N2pQoTxOlYfhhTD1dVTosUSXdTukWo0GXa6NVx5Z0/NqArP
-        u6pIdI/PnXMVsJC6thA0dl959Q==
-X-Google-Smtp-Source: ABdhPJxQXzAcuUBoixPcrN69srTJpY3wO9TCvwr9ZTgR2YeGk8NcoeWXn8GRB7VV4Gy1c9ONfKzyHA==
-X-Received: by 2002:a5d:6dc3:0:b0:210:89d:30bc with SMTP id d3-20020a5d6dc3000000b00210089d30bcmr17971785wrz.272.1653916491972;
-        Mon, 30 May 2022 06:14:51 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:9c:201:c918:d0ea:5b07:e1c3])
-        by smtp.gmail.com with ESMTPSA id n21-20020a05600c3b9500b003974860e15esm11712274wms.40.2022.05.30.06.14.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 06:14:51 -0700 (PDT)
-Date:   Mon, 30 May 2022 15:14:44 +0200
-From:   Marco Elver <elver@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
-        jbaron@akamai.com, rostedt@goodmis.org, ardb@kernel.org,
-        mark.rutland@arm.com, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH 4/7] x86/cpu: Elide KCSAN for cpu_has() and friends
-Message-ID: <YpTDRFGcEGIO0h06@elver.google.com>
-References: <20220526105252.440440893@infradead.org>
- <20220526105957.944756116@infradead.org>
+        Mon, 30 May 2022 09:15:13 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E66230F64;
+        Mon, 30 May 2022 06:15:12 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 9D8491F42E59
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653916510;
+        bh=sEie6GXsRwAWSR4UPX24pvsXPPWCr0i8UxuSQOMqwEs=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=dvv2c6kYLYDSJolgU65XbB33Z60fYRhamY0Tz8WYctFlG2XOi2biD1x8zKubNKCmJ
+         4Sf7u4ZiX8SGYDLQWwgl0qoYPK/bVj57bDD+tp9plFVMLopTPOaV8dP5cB5J7L96D1
+         IWJmLskH4VmeyBxx2C6YGxYdjPDTi2wXe/r6zCZ4Pt6Za6AKemf1z2qc/NyNluvgaZ
+         3TBbdf42gkKaITMFnSZdZzvkTd6ke0ytpt5X46U/Yk1X50vn6X9Fvum7ZFBeCu+tqM
+         imD1UhiA2KlHkHgpL6r/Is5oMn58f6/ti4nYVgMrhzNBPRLaOuPGIX51hrkyFDoupj
+         bs9jRW8XuIUew==
+Message-ID: <8eb9b438-7018-4fe3-8be6-bb023df99594@collabora.com>
+Date:   Mon, 30 May 2022 18:15:03 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220526105957.944756116@infradead.org>
-User-Agent: Mutt/2.1.4 (2021-12-11)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: Re: [RFC] EADDRINUSE from bind() on application restart after killing
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     usama.anjum@collabora.com, "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
+        Sami Farin <hvtaifwkbgefbaei@gmail.com>
+References: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com>
+ <CANn89i+R9RgmD=AQ4vX1Vb_SQAj4c3fi7-ZtQz-inYY4Sq4CMQ@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CANn89i+R9RgmD=AQ4vX1Vb_SQAj4c3fi7-ZtQz-inYY4Sq4CMQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 12:52PM +0200, Peter Zijlstra wrote:
-> As x86 uses the <asm-generic/bitops/instrumented-*.h> headers, the
-> regular forms of all bitops are instrumented with explicit calls to
-> KASAN and KCSAN checks. As these are explicit calls, these are not
-> suppressed by the noinstr function attribute.
-> 
-> This can result in calls to those check functions in noinstr code, which
-> objtool warns about:
-> 
-> vmlinux.o: warning: objtool: enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x28: call to __kcsan_check_access() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-> 
-> Prevent this by using the arch_*() bitops, which are the underlying
-> bitops without explciit instrumentation.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Link: https://lkml.kernel.org/r/20220502111216.290518605@infradead.org
+Hi,
 
-Acked-by: Marco Elver <elver@google.com>
+Thank you for your reply.
 
-> ---
->  arch/x86/include/asm/cpufeature.h |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 5/25/22 3:13 AM, Eric Dumazet wrote:
+> On Tue, May 24, 2022 at 1:19 AM Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> Hello,
+>>
+>> We have a set of processes which talk with each other through a local
+>> TCP socket. If the process(es) are killed (through SIGKILL) and
+>> restarted at once, the bind() fails with EADDRINUSE error. This error
+>> only appears if application is restarted at once without waiting for 60
+>> seconds or more. It seems that there is some timeout of 60 seconds for
+>> which the previous TCP connection remains alive waiting to get closed
+>> completely. In that duration if we try to connect again, we get the error.
+>>
+>> We are able to avoid this error by adding SO_REUSEADDR attribute to the
+>> socket in a hack. But this hack cannot be added to the application
+>> process as we don't own it.
+>>
+>> I've looked at the TCP connection states after killing processes in
+>> different ways. The TCP connection ends up in 2 different states with
+>> timeouts:
+>>
+>> (1) Timeout associated with FIN_WAIT_1 state which is set through
+>> `tcp_fin_timeout` in procfs (60 seconds by default)
+>>
+>> (2) Timeout associated with TIME_WAIT state which cannot be changed. It
+>> seems like this timeout has come from RFC 1337.
+>>
+>> The timeout in (1) can be changed. Timeout in (2) cannot be changed. It
+>> also doesn't seem feasible to change the timeout of TIME_WAIT state as
+>> the RFC mentions several hazards. But we are talking about a local TCP
+>> connection where maybe those hazards aren't applicable directly? Is it
+>> possible to change timeout for TIME_WAIT state for only local
+>> connections without any hazards?
+>>
+>> We have tested a hack where we replace timeout of TIME_WAIT state from a
+>> value in procfs for local connections. This solves our problem and
+>> application starts to work without any modifications to it.
+>>
+>> The question is that what can be the best possible solution here? Any
+>> thoughts will be very helpful.
+>>
 > 
-> --- a/arch/x86/include/asm/cpufeature.h
-> +++ b/arch/x86/include/asm/cpufeature.h
-> @@ -51,7 +51,7 @@ extern const char * const x86_power_flag
->  extern const char * const x86_bug_flags[NBUGINTS*32];
->  
->  #define test_cpu_cap(c, bit)						\
-> -	 test_bit(bit, (unsigned long *)((c)->x86_capability))
-> +	 arch_test_bit(bit, (unsigned long *)((c)->x86_capability))
->  
->  /*
->   * There are 32 bits/features in each mask word.  The high bits
+> One solution would be to extend TCP diag to support killing TIME_WAIT sockets.
+> (This has been raised recently anyway)
+I think this has been raised here:
+https://lore.kernel.org/netdev/ba65f579-4e69-ae0d-4770-bc6234beb428@gmail.com/
+
 > 
+> Then you could zap all sockets, before re-starting your program.
 > 
+> ss -K -ta src :listen_port
+> 
+> Untested patch:
+The following command and patch work for my use case. The socket in
+TIME_WAIT_2 or TIME_WAIT state are closed when zapped.
+
+Can you please upstream this patch?
+
+> 
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index 9984d23a7f3e1353d2e1fc9053d98c77268c577e..1b7bde889096aa800b2994c64a3a68edf3b62434
+> 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -4519,6 +4519,15 @@ int tcp_abort(struct sock *sk, int err)
+>                         local_bh_enable();
+>                         return 0;
+>                 }
+> +               if (sk->sk_state == TCP_TIME_WAIT) {
+> +                       struct inet_timewait_sock *tw = inet_twsk(sk);
+> +
+> +                       refcount_inc(&tw->tw_refcnt);
+> +                       local_bh_disable();
+> +                       inet_twsk_deschedule_put(tw);
+> +                       local_bh_enable();
+> +                       return 0;
+> +               }
+>                 return -EOPNOTSUPP;
+>         }
+
+-- 
+Muhammad Usama Anjum

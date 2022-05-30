@@ -2,99 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FD95373BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 05:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B774A5373C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 05:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbiE3Djn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 May 2022 23:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
+        id S232304AbiE3Dsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 May 2022 23:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiE3Dji (ORCPT
+        with ESMTP id S229533AbiE3DsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 May 2022 23:39:38 -0400
+        Sun, 29 May 2022 23:48:25 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7FD4719F0
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 20:39:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20EB5719FA
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 20:48:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653881975;
+        s=mimecast20190719; t=1653882503;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FdZG8wd/mfaE1rIlJ69hB8EXyZHW/gHoxx+VKCUjuys=;
-        b=Jjzoh9QA1gH+XboJr1s4bzFEH97iKQlySG9L4fbxysEXFsWvuKWNHVA3q6gq6ILvJCCTFn
-        057HsOalJYU/yMzWuW/bKzhU/qSXB+saHfdubzo/PK/h3vb3oIA2DtAoW2GkY+/PRixWcC
-        ic2ne+7dSF5bCYCtYD0o2+f1+1XfAi4=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=FmGS+JorM6DychXTopYG3ZDAjK7UxTCFM8Tie0jNFQA=;
+        b=coLTib89G0z2U2YcThCUnhrH6CeKyjEYS/Ly7BNhazaEV+oC2AE5oYcwOVAme/oG/iSZ9k
+        TPiWaNoP1R0rvYLWMP55937vw0ojxlZjQpcMb83tq++BalZSwLKrhcNKbeMpimPQX99wzM
+        6ha/8a1i/9ouvqGuuK5BTyw4oe+R9bI=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-up2NUfEOPQubt0ZG_ul0sg-1; Sun, 29 May 2022 23:39:34 -0400
-X-MC-Unique: up2NUfEOPQubt0ZG_ul0sg-1
-Received: by mail-lf1-f72.google.com with SMTP id c6-20020a056512104600b00477b25bfdf8so4646261lfb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 20:39:34 -0700 (PDT)
+ us-mta-135-T0h_jfJuNcyCbZWiRvKajA-1; Sun, 29 May 2022 23:48:21 -0400
+X-MC-Unique: T0h_jfJuNcyCbZWiRvKajA-1
+Received: by mail-lf1-f71.google.com with SMTP id bi27-20020a0565120e9b00b004786caccc7dso4642735lfb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 29 May 2022 20:48:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=FdZG8wd/mfaE1rIlJ69hB8EXyZHW/gHoxx+VKCUjuys=;
-        b=d+HSS5qz2Autm9iaOQPzPRp9KvKVlDX+x8M4fGwAoWitTf9+TgwKmgMAWDQtlY8De+
-         VCUjLr/FPt10ug5OpPB66qA20bb2QUgew4LBaHn5u0eZBGFp+vcPWBmqGVNTqOSuWp5F
-         ujhv+PleIOU6ppQRgnaX7MEl8O0+pduulaEPVww5SWjnBGFrLTr3cPDEs0vWugumRzOs
-         RQZ5oBYkuLal8xzln0I/NsXRcXMtvsDS4Wk5dfUg8I5Y90qxTlo1FZNOQUxDqGOIuCbx
-         zAYvrRcoZV7PtLr+6jsRXAnS+OglnyB39XbSnNZOHEl9NQk6FpTPT5NfrAWM5W95/IBv
-         ru0A==
-X-Gm-Message-State: AOAM533zK59QeMGyrEORDoiK31SBOwOs/Yv0REP4IcDbUE5V7BXBhIF/
-        oo/R8lSjxRUkJ+f83Ka1uxWhGnRdSig0EkK1jddGXrYP62FHIMIAh5U99NFgqInrG2ufw3anLlB
-        boeML/b7ceERXGMpBWO5foJ8NbOFZ9aIwr3E3IzyG
-X-Received: by 2002:a2e:bd85:0:b0:250:9bf2:8e27 with SMTP id o5-20020a2ebd85000000b002509bf28e27mr31984316ljq.177.1653881972926;
-        Sun, 29 May 2022 20:39:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwJ+6zqmnNnl7EEnXkdvxuYG8LYk8erHBazoZjoQnAG/qmTMJwUD0nMIgF2AK7TVkQU1NACb7Vt0qIrH9A2MBc=
-X-Received: by 2002:a2e:bd85:0:b0:250:9bf2:8e27 with SMTP id
- o5-20020a2ebd85000000b002509bf28e27mr31984290ljq.177.1653881972697; Sun, 29
- May 2022 20:39:32 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=FmGS+JorM6DychXTopYG3ZDAjK7UxTCFM8Tie0jNFQA=;
+        b=DghKjBq0P3Q3My5ytbCD6o32vnteTGvt7ArEQQTA3Wi7tr7gCV4pQZmFmESUUAx5uk
+         kyuf0IrkLb45vbq+4T+gw5i8fSVzzDJgyOytpXBEaD/KDekD1mdUJjLwUG2PxYnAIJQg
+         XtocqXuwtefJiFraHyT70ED8oGBGHS1rKvuYJUcI58luO5mTD+hE1idDKvD+clxkvSya
+         jEW2jyyHzQIvV2Y0khqeq+j9SWQCWDoq8rphXjT4R/IpEQ+EEcBKBQgHswh+T4IYZh5F
+         mII4JkAvoQeJw00TW+PvB+5yELDeQ+9DXa/N/RHyEcXF572AU/y4nue2dXokucXDOG6w
+         YGvA==
+X-Gm-Message-State: AOAM530pgJGm4jFG4a5+wezSIMb08n9k+iVc+kMf3FBK91E6gSVzdX64
+        3eY6AA/qvYVkax9oY0O8+B6t1Fy5XZVdP1z1rdjNkdfv27joiLzz7BU72syh3RmicBlq/WDW1DK
+        /AzRN/V7Ap9TIYG4v7zytM+rcE1odtdDvcv/yDUgI
+X-Received: by 2002:a2e:bc05:0:b0:24b:212d:7521 with SMTP id b5-20020a2ebc05000000b0024b212d7521mr30777798ljf.243.1653882500083;
+        Sun, 29 May 2022 20:48:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJybmkowLkDNeOswXv7BzZ6+71C1oQB0CScKxGz3UP85HZsXfBflYJu2iC9B1ybQW9EKdBuBcy9WDtQBSdSav6s=
+X-Received: by 2002:a2e:bc05:0:b0:24b:212d:7521 with SMTP id
+ b5-20020a2ebc05000000b0024b212d7521mr30777785ljf.243.1653882499911; Sun, 29
+ May 2022 20:48:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220526124338.36247-1-eperezma@redhat.com> <PH0PR12MB54819C6C6DAF6572AEADC1AEDCD99@PH0PR12MB5481.namprd12.prod.outlook.com>
- <20220527065442-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220527065442-mutt-send-email-mst@kernel.org>
+References: <20220527060120.20964-1-jasowang@redhat.com> <20220527060120.20964-10-jasowang@redhat.com>
+ <20220527064118-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220527064118-mutt-send-email-mst@kernel.org>
 From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 30 May 2022 11:39:21 +0800
-Message-ID: <CACGkMEubfv_OJOsJ_ROgei41Qx4mPO0Xz8rMVnO8aPFiEqr8rA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Implement vdpasim stop operation
+Date:   Mon, 30 May 2022 11:48:08 +0800
+Message-ID: <CACGkMEvoFapNoqsqq59iH+z_qx1swecjnbbPs7=nN4bn6XdbtA@mail.gmail.com>
+Subject: Re: [PATCH V6 9/9] virtio: use WARN_ON() to warning illegal status value
 To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Parav Pandit <parav@nvidia.com>,
-        =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "martinh@xilinx.com" <martinh@xilinx.com>,
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
         Stefano Garzarella <sgarzare@redhat.com>,
-        "martinpo@xilinx.com" <martinpo@xilinx.com>,
-        "lvivier@redhat.com" <lvivier@redhat.com>,
-        "pabloc@xilinx.com" <pabloc@xilinx.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        "Piotr.Uminski@intel.com" <Piotr.Uminski@intel.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
-        "gautam.dawar@amd.com" <gautam.dawar@amd.com>,
-        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
-        "tanuj.kamde@amd.com" <tanuj.kamde@amd.com>,
-        "hanand@xilinx.com" <hanand@xilinx.com>,
-        "dinang@xilinx.com" <dinang@xilinx.com>,
-        Longpeng <longpeng2@huawei.com>
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-s390@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,79 +85,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 6:56 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+On Fri, May 27, 2022 at 6:50 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 >
-> On Thu, May 26, 2022 at 12:54:32PM +0000, Parav Pandit wrote:
-> >
-> >
-> > > From: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> > > Sent: Thursday, May 26, 2022 8:44 AM
-> >
-> > > Implement stop operation for vdpa_sim devices, so vhost-vdpa will off=
-er
-> > >
-> > > that backend feature and userspace can effectively stop the device.
-> > >
-> > >
-> > >
-> > > This is a must before get virtqueue indexes (base) for live migration=
-,
-> > >
-> > > since the device could modify them after userland gets them. There ar=
-e
-> > >
-> > > individual ways to perform that action for some devices
-> > >
-> > > (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there
-> > > was no
-> > >
-> > > way to perform it for any vhost device (and, in particular, vhost-vdp=
-a).
-> > >
-> > >
-> > >
-> > > After the return of ioctl with stop !=3D 0, the device MUST finish an=
-y
-> > >
-> > > pending operations like in flight requests. It must also preserve all
-> > >
-> > > the necessary state (the virtqueue vring base plus the possible devic=
-e
-> > >
-> > > specific states) that is required for restoring in the future. The
-> > >
-> > > device must not change its configuration after that point.
-> > >
-> > >
-> > >
-> > > After the return of ioctl with stop =3D=3D 0, the device can continue
-> > >
-> > > processing buffers as long as typical conditions are met (vq is enabl=
-ed,
-> > >
-> > > DRIVER_OK status bit is enabled, etc).
-> >
-> > Just to be clear, we are adding vdpa level new ioctl() that doesn=E2=80=
-=99t map to any mechanism in the virtio spec.
-> >
-> > Why can't we use this ioctl() to indicate driver to start/stop the devi=
-ce instead of driving it through the driver_ok?
-> > This is in the context of other discussion we had in the LM series.
+> At a minimum, I don't see why it's part of the series. Host can always
+> crash the guest if it wants to ...
+
+Probably not with some recent technology. In those cases, a fault will
+be generated if the hypervisor tries to access the memory that is
+private to the guest.
+
+> The point of BUG_ON is device or driver is already corrupted so we
+> should not try to drive it.  If you still want this in pls come up with
+> a better commit log explaining the why.
+
+A question here, should we always use BUG_ON for the buggy/malicious hypervisor?
+
+The interrupt hardening logic in this series tries to make guest
+survive, so did this patch.
+
 >
-> If there's something in the spec that does this then let's use that.
+> On Fri, May 27, 2022 at 02:01:20PM +0800, Jason Wang wrote:
+> > We used to use BUG_ON() in virtio_device_ready() to detect illegal
+>
+> not really, BUG_ON just crashes the kernel.  we detect by checking
+> status.
 
-Actually, we try to propose a independent feature here:
+We need a kind of notification otherwise there's no way for the user
+to know about this expected value.
 
-https://lists.oasis-open.org/archives/virtio-dev/202111/msg00020.html
+>
+> > status value, this seems sub-optimal since the value is under the
+> > control of the device. Switch to use WARN_ON() instead.
+>
+> some people use crash on warn so ...
 
-Does it make sense to you?
+Yes, but the policy is under the control of the user.
+
+>
+> >
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> > Cc: Marc Zyngier <maz@kernel.org>
+> > Cc: Halil Pasic <pasic@linux.ibm.com>
+> > Cc: Cornelia Huck <cohuck@redhat.com>
+> > Cc: Vineeth Vijayan <vneethv@linux.ibm.com>
+> > Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+> > Cc: linux-s390@vger.kernel.org
+> > Signed-off-by: Jason Wang <jasowang@redhat.com>
+>
+> > ---
+> >  include/linux/virtio_config.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+> > index d4edfd7d91bb..9a36051ceb76 100644
+> > --- a/include/linux/virtio_config.h
+> > +++ b/include/linux/virtio_config.h
+> > @@ -255,7 +255,7 @@ void virtio_device_ready(struct virtio_device *dev)
+> >  {
+> >       unsigned status = dev->config->get_status(dev);
+> >
+> > -     BUG_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
+> > +     WARN_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
+> >
+>
+> we lose debuggability as guest will try to continue.
+> if we are doing this let us print a helpful message and dump a lot of
+> state right here.
+
+I'm ok with dropping this patch from the series. And revisit it in the future.
 
 Thanks
 
-> Unfortunately the LM series seems to be stuck on moving
-> bits around with the admin virtqueue ...
 >
-> --
-> MST
+> >       /*
+> >        * The virtio_synchronize_cbs() makes sure vring_interrupt()
+> > --
+> > 2.25.1
 >
 

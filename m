@@ -2,127 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6FC537591
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16416537596
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233618AbiE3HiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S233655AbiE3HkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233680AbiE3Hhw (ORCPT
+        with ESMTP id S233644AbiE3HkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:37:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36ED71DB4;
-        Mon, 30 May 2022 00:37:44 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U6GHaG026664;
-        Mon, 30 May 2022 07:37:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=2x1TC/lV7sFdGeMYAlrgQ/GiPxyjwkcnYZuJEIQYjCw=;
- b=K9V67GwPy/X/WBnScG9C3Cv15dCDT3gWQPOq3AzpHFVr3NNdymniBTb5HYz1Fyf4Lqd+
- kiVYAwQuSHUqBsrb0UuYqbLVjL2wyMEJPwsTn7ok8mFW3cOpmdC/awQAwT4B7o8WPaK2
- qMCt9TrCQYnkm5oGJwZbq38jgVmPeirmNhH6QQfQX4AbV9VzrMsa3YWgioeh9j3T6Tkf
- 5J0jaz4Re1440FkcRqQShTjn/ja7DEE9vlotBZB3KZOKyBWPo/ijgNy4rhC4cK7IQ2xN
- 4rZ7P8gzrQzLIfc5hHfSrOXlwYxYDHlMRxlqAEL9BgJHYKH8YHAw0cOr8VU2tqVUk+4Z aA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcrgpscw1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 07:37:43 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24U7XrmX020012;
-        Mon, 30 May 2022 07:37:43 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcrgpscvp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 07:37:43 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24U7J5Pg002807;
-        Mon, 30 May 2022 07:37:41 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3gbbynjb4e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 07:37:41 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24U7bcpn16318822
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 May 2022 07:37:38 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3845642045;
-        Mon, 30 May 2022 07:37:38 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BCBF742042;
-        Mon, 30 May 2022 07:37:37 +0000 (GMT)
-Received: from li-ca45c2cc-336f-11b2-a85c-c6e71de567f1.ibm.com (unknown [9.171.70.209])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 30 May 2022 07:37:37 +0000 (GMT)
-Message-ID: <96ee2d8c2c64b4968529b78bd7ad8a042542d353.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 13/19] KVM: s390: pv: destroy the configuration
- before its memory
-From:   Nico Boehr <nrb@linux.ibm.com>
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        mimu@linux.ibm.com
-Date:   Mon, 30 May 2022 09:37:37 +0200
-In-Reply-To: <20220414080311.1084834-14-imbrenda@linux.ibm.com>
-References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
-         <20220414080311.1084834-14-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+        Mon, 30 May 2022 03:40:21 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1FAE0A1
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:40:20 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id v25so4300034eda.6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:40:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :in-reply-to;
+        bh=3ie7fxZ/7i068+0rOaIZdjZ18uClBhAfOUmO9sbKKqg=;
+        b=nH39KqqxBYB1IvGVPmLjKFw9JNDUaDBGc9vtWNfNN89+Sx20MGCkgDeLH3CjTtzkyx
+         xYmWUENbzgUAwpyazDZ445wJBfnZZR5OcUTikLQ34zTttCpSrOKW2yKQnjuSB2Wgsc4s
+         0z0tQqPfTgzSSIFJPrmna8bdKBp/9KRXmbLqrfCRGt67KUOxICmrcKRnFZmadFv9qjBK
+         2oJ2ZpvDnoUSo5utVxdX+SuQjSCXLDW5/68v0TiaWrxM+AGhLulO8ZK3DJKltBH8urM5
+         11FjDEYv8zx2VUjGavUjEsEXePtr+8cdIkc87vcK2M4p2UzggFwKjrJusemjJw2MNMC7
+         5Q2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:in-reply-to;
+        bh=3ie7fxZ/7i068+0rOaIZdjZ18uClBhAfOUmO9sbKKqg=;
+        b=v8+7xR4eoTJ2ja6axB74SLjXJ2TxZncF1FQhWVuTpesRgOml2A65eJKsITa7skypfW
+         U7PII2OTh0wQQzTlQY8YNrzW90bb0Jx2bh2BS7h1Ll2ptvlo0Du3wv/RTTwvDUKv8QBg
+         rRn1K8R4LzzLQA60mMABH6BlVFGCoOSCWYakPk7zKynvkHgOlq6moLLKezei1b5Tdboc
+         sFpLumN/PtGAsgF/B/80nUBUO0gBFk/z800QUWWQp3dyV+zloHdHgSXSO+tG66nE6QPi
+         OR5AHUzA9EeO4dfhBoxibPH34+nK4d5SSxAtk15VVXSTz0IrRIJPdAHtXprIjavyM50G
+         lBpQ==
+X-Gm-Message-State: AOAM533L23DyRq1/VH0+cpbAtYeGYni/8yaJl4Bzb7eWTVYw+12rtOnK
+        uUxdaFWPuHuvfl8l8//LytA=
+X-Google-Smtp-Source: ABdhPJy39Fq/URijgituE1hHV8Rc2qHJ5gD7L0+5lWtaa4aiRuv3zVRgTLpY1WvO6IoSHTyi22bk/Q==
+X-Received: by 2002:a05:6402:34d4:b0:42b:35e5:fc78 with SMTP id w20-20020a05640234d400b0042b35e5fc78mr47098275edc.372.1653896418639;
+        Mon, 30 May 2022 00:40:18 -0700 (PDT)
+Received: from nam-dell ([2a02:8109:afbf:ed88:b5c4:5fcb:73aa:5762])
+        by smtp.gmail.com with ESMTPSA id o18-20020a50c292000000b0042bc54296a1sm6023025edf.91.2022.05.30.00.40.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 00:40:18 -0700 (PDT)
+Date:   Mon, 30 May 2022 09:40:17 +0200
+From:   Nam Cao <namcaov@gmail.com>
+To:     dan.carpenter@oracle.com
+Cc:     forest@alittletooquiet.net, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        namcaov@gmail.com
+Subject: Re: [PATCH] staging: vt6655: remove unnecessary type cast
+Message-ID: <20220530074017.GA15684@nam-dell>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: u_qdatLNA22tl79AEDvPCMrYuF3ry-qx
-X-Proofpoint-ORIG-GUID: GkGTbdCm_0xTLqL3EMHUcTxQx43sy4RC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-30_02,2022-05-27_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- lowpriorityscore=0 malwarescore=0 phishscore=0 priorityscore=1501
- mlxlogscore=999 spamscore=0 clxscore=1011 bulkscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205300039
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220530073341.GK2146@kadam>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-14 at 10:03 +0200, Claudio Imbrenda wrote:
-> Move the Destroy Secure Configuration UVC before the loop to destroy
-> the memory. If the protected VM has memory, it will be cleaned up and
-> made accessible by the Destroy Secure Configuraion UVC. The struct
-> page for the relevant pages will still have the protected bit set, so
-> the loop is still needed to clean that up.
->=20
-> Switching the order of those two operations does not change the
-> outcome, but it is significantly faster.
->=20
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Yes, this patch is a mistake. I clarified that but I think my email
+got blocked because it's html.
 
-Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
+Sorry for wasting your time.
 
-See one tiny thing below.
-
-> diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
-> index be3b467f8feb..bd850be08c86 100644
-> --- a/arch/s390/kvm/pv.c
-> +++ b/arch/s390/kvm/pv.c
-[...]
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cc =3D uv_cmd_nodata(kvm_s390_=
-pv_get_handle(kvm),
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 UVC_CMD_DESTROY_SEC_CONF, rc, rrc);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0WRITE_ONCE(kvm->arch.gmap=
-->guest_handle, 0);
-
-Maybe it makes sense to also move the WRITE_ONCE up.
-
+Best regards,
+Nam

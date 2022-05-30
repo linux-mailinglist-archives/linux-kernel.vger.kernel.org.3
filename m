@@ -2,89 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E384537ABB
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47188537ABD
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 14:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236178AbiE3Mkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 08:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
+        id S236183AbiE3MoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 08:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiE3Mku (ORCPT
+        with ESMTP id S229841AbiE3MoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 08:40:50 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB9C7DE09;
-        Mon, 30 May 2022 05:40:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653914449; x=1685450449;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BbByahY1nfmcJEgPBRh3UpjJMSql/8lYm9tvLU4hTs0=;
-  b=dMa8KfUSRvWsh0RzfnvldZAmkuOln7v7I2PO97m2gXAZF4+t0IZntUnf
-   5mkQ6sgMt4yyiW/L8hJunIFAfqZvmotgmXeyRYfLpSoHOTUfVXZjDNZn4
-   tpzS5QihTyaNoFFDIHElgxY0YAgamHJ6qmTymwYf5fVv9hosgJYjC0fG6
-   Uyc/L39jnWlKhoZ7ffpl4c0jfIiRuAtc2HpnTZiIzfiS+ftQAGvmkmeyx
-   naQ9VpQM87lDYGqML7w83oK+XpAI+5BB38/TrPCygCdpeCYBR37Q38+7y
-   csHaw++k28x+ZRSgTUha13mvn7kRm412H+vBW22A2LpeSTvxZXz8k3+h7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="274708112"
-X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
-   d="scan'208";a="274708112"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 05:40:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
-   d="scan'208";a="644611148"
-Received: from mylly.fi.intel.com (HELO [10.237.72.161]) ([10.237.72.161])
-  by fmsmga004.fm.intel.com with ESMTP; 30 May 2022 05:40:47 -0700
-Message-ID: <178d6b21-ef29-0790-1470-3324efa76def@linux.intel.com>
-Date:   Mon, 30 May 2022 15:40:46 +0300
+        Mon, 30 May 2022 08:44:06 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BC45D5FB
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 05:44:05 -0700 (PDT)
+Received: from mail-yb1-f173.google.com ([209.85.219.173]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N6szR-1nkFkC1A3b-018IoF for <linux-kernel@vger.kernel.org>; Mon, 30 May
+ 2022 14:44:03 +0200
+Received: by mail-yb1-f173.google.com with SMTP id v22so283901ybd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 05:44:03 -0700 (PDT)
+X-Gm-Message-State: AOAM5322+2JrGPL5XXW1zGKCfv8gP/EAoBGBoP5CIJQvMdiK91yGy+qQ
+        WmbeBOfY9jflDoUm/BtiXsX5Ld4NZD86aWzIgNM=
+X-Google-Smtp-Source: ABdhPJwGhDH7TTQEFtfKClpkV8v6MgE6/PlkkdchHiAR2sctlXWrlvyx8XgWbwbNazMHWQ8TgK10FAziIIsvzr+V4hc=
+X-Received: by 2002:a25:9b89:0:b0:655:8454:dc92 with SMTP id
+ v9-20020a259b89000000b006558454dc92mr25317431ybo.550.1653914642134; Mon, 30
+ May 2022 05:44:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.0
-Subject: Re: [PATCH v1 1/1] MAINTAINERS: Update Synopsys DesingWare I2C to
- Supported
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, dave.hansen@linux.intel.com
-References: <20220530120247.70582-1-andriy.shevchenko@linux.intel.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20220530120247.70582-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <YpCUzStDnSgQLNFN@debian> <CAHk-=wg0uGAX5DYZq+tY2KeUAR8DtR91YE1y9CkPMKkKOyE4jg@mail.gmail.com>
+ <CADVatmNGPbSdRNQuwJEWAaPtqb3vBYRjvsuBpoRUnhEHj=X5GQ@mail.gmail.com>
+ <CAHk-=wisQd8yiPX=SsK3eFiakKo713hq4SyqPWsJ-oyAmLFefQ@mail.gmail.com>
+ <YpIR67FMtTGCwARZ@debian> <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
+ <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com>
+ <CAK8P3a0-QyOQiieEvM0yQb43XbCtPmeao8UvoAsdFnjCxYPz7Q@mail.gmail.com>
+ <CAHk-=whfmwzjF4eBPYS6pHFqHVzJF3m=2h=gRWSRyHks8V=ABA@mail.gmail.com>
+ <87a6aztli2.fsf@intel.com> <877d63tleq.fsf@intel.com>
+In-Reply-To: <877d63tleq.fsf@intel.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 30 May 2022 14:43:45 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0-S77QLR1dK3NT6ot7JTAD5AdojAZJr-Xi112-v5EOdw@mail.gmail.com>
+Message-ID: <CAK8P3a0-S77QLR1dK3NT6ot7JTAD5AdojAZJr-Xi112-v5EOdw@mail.gmail.com>
+Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
+ block count and size helpers")
+To:     Jani Nikula <jani.nikula@intel.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        SoC Team <soc@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ROt8HJLr1bE6X42SfpL5/xLh4A/NdA+fxKeNyLU6TSSMS/8JuOi
+ 4GyPlPLjZPA6q1wvmIxBulw4MZAQvRCrPlhQyC/ftHpdiNZBGQ7bX6gVAbbqbA5BpkFh0rV
+ r/0ZS/++RDeDaxhi3VlbVElIiedKfx1x8ErTbrrLDKKRxOcjagF/Psn5V+vNi60z6yWe4pw
+ ooYw7pNS7soOh8n8LMH4A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bajO18H2TA4=:Cyg5l/rkTdnFK5DVgYeops
+ BidFMsiwufVv1I89DYTktK8jDRBBEDkNQSiy0EMS0gvcs2KWFKA84D+r1yJcImJUL2kYPCsc3
+ 43hmQoR5vf4TAgdUeE/6DHlRNQmccJZtGKY22BMVp5zhuIeCIIwTmMbYSU+6nQtaVnwiJEg37
+ B0DJXg5hmLMjWgc6T0BUwzpq7QQ0YnFfxOB0LmybDu3LtzeoY236hOrrP+PJCg7vl2OlZZGGB
+ VxBdf6XTSb92ImYi72Yp3c9vzNOxIx1ULZlxQyK/d2HvMhCuk7mCUYuby82At+zh891E61+fN
+ QbZkVufY/Sj+3PleAAdDYtjuYjVbeUo77r/koKSQ2leekjbRUqLBOA0XbqA5VpWgFDJmlvvko
+ 2WiTXhYHQZVcM0FZfOzG5QB8ADsuUBYdRIhNZJHCR+e9oEOKa0NqwEGfB5fpCFC858a6xVmPt
+ VoD4F+BoM1S6b+IQPX9UxVtj1ZQfwFbOW2q+yaoDuTrv4wEX7iyNnXJGa0p1UGjaBytSD/A6l
+ VIClFJuLhmR0mncYxCoZl8ZaU5tJp90oX07FBo+FX3Ea/sheNtV5acOqIcoGVCE9yCmVbkyDF
+ DW8Kmkcp1cYYNUztGqqHBB5mErCA4bDSD4rfeQYv6UQVpSMgSkGj3T2EHpL3Ak0ecaHNC18tV
+ j9LRrrr/G0GTyYyv3xoJj4fByYb7S75cahSS55M6+Dwm28BdbusQDXFUxWn4MOZR6jQSnSoIO
+ AClkme2w7VLUZqUA9Q7+lg0/esD4k9E1sUBiWQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/22 15:02, Andy Shevchenko wrote:
-> The actual status of the code is Supported (from x86 perspective).
-> 
-> Reported-by: dave.hansen@linux.intel.com
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->   MAINTAINERS | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 56dd473d5d59..f8ff2b523498 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19066,7 +19066,7 @@ R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->   R:	Mika Westerberg <mika.westerberg@linux.intel.com>
->   R:	Jan Dabros <jsd@semihalf.com>
->   L:	linux-i2c@vger.kernel.org
-> -S:	Maintained
-> +S:	Supported
->   F:	drivers/i2c/busses/i2c-designware-*
->   
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+On Mon, May 30, 2022 at 11:33 AM Jani Nikula <jani.nikula@intel.com> wrote:
+>
+> That is, for EDID. Makes you wonder about all the other packed structs
+> with enum members across the kernel.
 
+It is not the 'enum' that is special here, it's the 'union' having
+unpacked members,
+and the same thing happens when you have nested structs: both the inner
+and the outer aggregate need to be packed, either with __packed at the
+end, or on each individual member that is not fully aligned to
+max(sizeof(member), 4)).
+
+I think in general, most __packed annotations we have in the kernel are
+completely pointless because they do not change the structure layout on
+any architecture but instead just make member access slower on
+architectures that lack unaligned load/store instructions. There have
+definitely been other cases though where a __packed annotation is
+not needed on any sane architecture but is needed for OABI ARM.
+
+Overall I'm not that worried because the only machines running OABI
+kernels would be on really old hardware that runs a limited set of
+driver code.
+
+A completely different matter are the extraneous __packed annotations
+that lead to possible problems when accessed through a misaligned
+pointer. We ignore -Waddress-of-packed-member and -Wcast-align
+in the kernel, so these never get caught at build time, but we have
+seen bugs from gcc making incorrect assumptions about alignment
+even on architectures that have unaligned load/store instructions.
+
+      Arnd

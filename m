@@ -2,216 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2785374D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463F3537536
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233019AbiE3Gle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 02:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
+        id S233039AbiE3Gmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 02:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbiE3GlZ (ORCPT
+        with ESMTP id S231516AbiE3Gms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 02:41:25 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6E01BE9D;
-        Sun, 29 May 2022 23:41:22 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 930081F8A8;
-        Mon, 30 May 2022 06:41:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1653892881; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=71IJN/uvPmtGbzax6AW8Uvan1VSTvj6QtEu8AQf7oeU=;
-        b=RWYOW5ZU7DwS+tbReR7dwWeCaGBMDKJP+lqaYwDDH6LB+b+xa5JRwwW+bBWV/BXYtxgDyd
-        EnrTtu+t0wOUFbBFTYNIcHyW7BCdoY2YPsCfY/Iubmnn8sVPVGUHbq9WPAFQpB+AXdMQC9
-        TDoE516dUv6LB5IIt2pBO5oyO2Ab7A0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 526E013AFD;
-        Mon, 30 May 2022 06:41:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mFmPEhFnlGLdXgAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 30 May 2022 06:41:21 +0000
-Message-ID: <00c0b10c-a35d-6729-5b4f-424febd9d5a3@suse.com>
-Date:   Mon, 30 May 2022 08:41:20 +0200
+        Mon, 30 May 2022 02:42:48 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478333B574;
+        Sun, 29 May 2022 23:42:47 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LBQnm1RFxzDqXl;
+        Mon, 30 May 2022 14:42:36 +0800 (CST)
+Received: from [10.67.77.175] (10.67.77.175) by dggpeml500023.china.huawei.com
+ (7.185.36.114) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 30 May
+ 2022 14:42:44 +0800
+From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
+Subject: Re: [PATCH v3 2/2] cpufreq: CPPC: Register EM based on efficiency
+ class information
+To:     Pierre Gondois <pierre.gondois@arm.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <Ionela.Voinescu@arm.com>, <Lukasz.Luba@arm.com>,
+        <Morten.Rasmussen@arm.com>, <Dietmar.Eggemann@arm.com>,
+        <maz@kernel.org>, <daniel.lezcano@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Fuad Tabba <tabba@google.com>, Phil Auld <pauld@redhat.com>,
+        Rob Herring <robh@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
+References: <20220425123819.137735-1-pierre.gondois@arm.com>
+ <20220425123819.137735-3-pierre.gondois@arm.com>
+Message-ID: <626c99d3-edaf-4544-7e64-5b3653591086@hisilicon.com>
+Date:   Mon, 30 May 2022 14:42:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
+In-Reply-To: <20220425123819.137735-3-pierre.gondois@arm.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Jennifer Herbert <jennifer.herbert@citrix.com>,
-        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
-        <marmarek@invisiblethingslab.com>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220525184153.6059-1-demi@invisiblethingslab.com>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH v2] xen/gntdev: Avoid blocking in unmap_grant_pages()
-In-Reply-To: <20220525184153.6059-1-demi@invisiblethingslab.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------JsLfkxePRUaQci00CUJuEKC0"
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.77.175]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------JsLfkxePRUaQci00CUJuEKC0
-Content-Type: multipart/mixed; boundary="------------4n1k394n10VIXl50CWi9p4Ih";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Demi Marie Obenour <demi@invisiblethingslab.com>,
- Boris Ostrovsky <boris.ostrovsky@oracle.com>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Jennifer Herbert <jennifer.herbert@citrix.com>,
- =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= <marmarek@invisiblethingslab.com>
-Cc: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-Message-ID: <00c0b10c-a35d-6729-5b4f-424febd9d5a3@suse.com>
-Subject: Re: [PATCH v2] xen/gntdev: Avoid blocking in unmap_grant_pages()
-References: <20220525184153.6059-1-demi@invisiblethingslab.com>
-In-Reply-To: <20220525184153.6059-1-demi@invisiblethingslab.com>
+Hi,
 
---------------4n1k394n10VIXl50CWi9p4Ih
-Content-Type: multipart/mixed; boundary="------------0RU3jj5DFajfimWsnYd00sbd"
+There is a warning on arm64 platform when CONFIG_ENERGY_MODEL is not set:
+ drivers/cpufreq/cppc_cpufreq.c:550:12: error: ‘cppc_get_cpu_cost’ defined but not used
+[-Werror=unused-function]
+   550 | static int cppc_get_cpu_cost(struct device *cpu_dev, unsigned long KHz,
+       |            ^~~~~~~~~~~~~~~~~
+ drivers/cpufreq/cppc_cpufreq.c:481:12: error: ‘cppc_get_cpu_power’ defined but not used
+[-Werror=unused-function]
+   481 | static int cppc_get_cpu_power(struct device *cpu_dev,
+       |            ^~~~~~~~~~~~~~~~~~
 
---------------0RU3jj5DFajfimWsnYd00sbd
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Thanks,
+Shaokun
 
-T24gMjUuMDUuMjIgMjA6NDEsIERlbWkgTWFyaWUgT2Jlbm91ciB3cm90ZToNCj4gdW5tYXBf
-Z3JhbnRfcGFnZXMoKSBjdXJyZW50bHkgd2FpdHMgZm9yIHRoZSBwYWdlcyB0byBubyBsb25n
-ZXIgYmUgdXNlZC4NCj4gSW4gaHR0cHM6Ly9naXRodWIuY29tL1F1YmVzT1MvcXViZXMtaXNz
-dWVzL2lzc3Vlcy83NDgxLCB0aGlzIGxlYWQgdG8gYQ0KPiBkZWFkbG9jayBhZ2FpbnN0IGk5
-MTU6IGk5MTUgd2FzIHdhaXRpbmcgZm9yIGdudGRldidzIE1NVSBub3RpZmllciB0bw0KPiBm
-aW5pc2gsIHdoaWxlIGdudGRldiB3YXMgd2FpdGluZyBmb3IgaTkxNSB0byBmcmVlIGl0cyBw
-YWdlcy4gIEkgYWxzbw0KPiBiZWxpZXZlIHRoaXMgaXMgcmVzcG9uc2libGUgZm9yIHZhcmlv
-dXMgZGVhZGxvY2tzIEkgaGF2ZSBleHBlcmllbmNlZCBpbg0KPiB0aGUgcGFzdC4NCj4gDQo+
-IEF2b2lkIHRoZXNlIHByb2JsZW1zIGJ5IG1ha2luZyB1bm1hcF9ncmFudF9wYWdlcyBhc3lu
-Yy4gIFRoaXMgcmVxdWlyZXMNCj4gbWFraW5nIGl0IHJldHVybiB2b2lkLCBhcyBhbnkgZXJy
-b3JzIHdpbGwgbm90IGJlIGF2YWlsYWJsZSB3aGVuIHRoZQ0KPiBmdW5jdGlvbiByZXR1cm5z
-LiAgRm9ydHVuYXRlbHksIHRoZSBvbmx5IHVzZSBvZiB0aGUgcmV0dXJuIHZhbHVlIGlzIGEN
-Cj4gV0FSTl9PTigpLCB3aGljaCBjYW4gYmUgcmVwbGFjZWQgYnkgYSBXQVJOX09OIHdoZW4g
-dGhlIGVycm9yIGlzDQo+IGRldGVjdGVkLiAgQWRkaXRpb25hbGx5LCBhIGZhaWxlZCBjYWxs
-IHdpbGwgbm90IHByZXZlbnQgZnVydGhlciBjYWxscw0KPiBmcm9tIGJlaW5nIG1hZGUsIGJ1
-dCB0aGlzIGlzIGhhcm1sZXNzLg0KPiANCj4gQmVjYXVzZSB1bm1hcF9ncmFudF9wYWdlcyBp
-cyBub3cgYXN5bmMsIHRoZSBncmFudCBoYW5kbGUgd2lsbCBiZSBzZW50IHRvDQo+IElOVkFM
-SURfR1JBTlRfSEFORExFIHRvbyBsYXRlIHRvIHByZXZlbnQgbXVsdGlwbGUgdW5tYXBzIG9m
-IHRoZSBzYW1lDQo+IGhhbmRsZS4gIEluc3RlYWQsIGEgc2VwYXJhdGUgYm9vbCBhcnJheSBp
-cyBhbGxvY2F0ZWQgZm9yIHRoaXMgcHVycG9zZS4NCj4gVGhpcyB3YXN0ZXMgbWVtb3J5LCBi
-dXQgc3R1ZmZpbmcgdGhpcyBpbmZvcm1hdGlvbiBpbiBwYWRkaW5nIGJ5dGVzIGlzDQo+IHRv
-byBmcmFnaWxlLiAgRnVydGhlcm1vcmUsIGl0IGlzIG5lY2Vzc2FyeSB0byBncmFiIGEgcmVm
-ZXJlbmNlIHRvIHRoZQ0KPiBtYXAgYmVmb3JlIG1ha2luZyB0aGUgYXN5bmNocm9ub3VzIGNh
-bGwsIGFuZCByZWxlYXNlIHRoZSByZWZlcmVuY2Ugd2hlbg0KPiB0aGUgY2FsbCByZXR1cm5z
-Lg0KDQpJIHRoaW5rIHRoZXJlIGlzIGV2ZW4gbW9yZSBzeW5jaW5nIG5lZWRlZDoNCg0KLSBJ
-biB0aGUgZXJyb3IgcGF0aCBvZiBnbnRkZXZfbW1hcCgpIHVubWFwX2dyYW50X3BhZ2VzKCkg
-aXMgYmVpbmcgY2FsbGVkIGFuZA0KICAgaXQgaXMgYXNzdW1lZCwgbWFwIGlzIGF2YWlsYWJs
-ZSBhZnRlcndhcmRzIGFnYWluLiBUaGlzIHNob3VsZCBiZSByYXRoZXIgZWFzeQ0KICAgdG8g
-YXZvaWQgYnkgYWRkaW5nIGEgY291bnRlciBvZiBhY3RpdmUgbWFwcGluZ3MgdG8gc3RydWN0
-IGdudGRldl9ncmFudF9tYXANCiAgIChudW1iZXIgb2YgcGFnZXMgbm90IGJlaW5nIHVubWFw
-cGVkIHlldCkuIEluIGNhc2UgdGhpcyBjb3VudGVyIGlzIG5vdCB6ZXJvDQogICBnbnRkZXZf
-bW1hcCgpIHNob3VsZCBiYWlsIG91dCBlYXJseS4NCg0KLSBnbnRkZXZfcHV0X21hcCgpIGlz
-IGNhbGxpbmcgdW5tYXBfZ3JhbnRfcGFnZXMoKSBpbiBjYXNlIHRoZSByZWZjb3VudCBoYXMN
-CiAgIGRyb3BwZWQgdG8gemVyby4gVGhpcyBjYWxsIGNhbiBzZXQgdGhlIHJlZmNvdW50IHRv
-IDEgYWdhaW4sIHNvIHRoZXJlIGlzDQogICBhbm90aGVyIGRlbGF5IG5lZWRlZCBiZWZvcmUg
-ZnJlZWluZyBtYXAuIEkgdGhpbmsgdW5tYXBfZ3JhbnRfcGFnZXMoKSBzaG91bGQNCiAgIHJl
-dHVybiBpbiBjYXNlIHRoZSBjb3VudCBvZiBtYXBwZWQgcGFnZXMgaXMgemVybyAoc2VlIGFi
-b3ZlKSwgdGh1cyBhdm9pZGluZw0KICAgdG8gaW5jcmVtZW50IHRoZSByZWZjb3VudCBvZiBt
-YXAgaWYgbm90aGluZyBpcyB0byBiZSBkb25lLiBUaGlzIHdvdWxkIGVuYWJsZQ0KICAgZ250
-ZGV2X3B1dF9tYXAoKSB0byBqdXN0IHJldHVybiBhZnRlciB0aGUgY2FsbCBvZiB1bm1hcF9n
-cmFudF9wYWdlcygpIGluIGNhc2UNCiAgIHRoZSByZWZjb3VudCBoYXMgYmVlbiBpbmNyZW1l
-bnRlZCBhZ2Fpbi4NCg0KDQpKdWVyZ2VuDQo=
---------------0RU3jj5DFajfimWsnYd00sbd
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------0RU3jj5DFajfimWsnYd00sbd--
-
---------------4n1k394n10VIXl50CWi9p4Ih--
-
---------------JsLfkxePRUaQci00CUJuEKC0
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmKUZxAFAwAAAAAACgkQsN6d1ii/Ey/M
-nAgAiYz1TCudfsk6bf8+Ckl+7deE9VZbL85q3NM8vev40dbLLD2ranezAEaUT8UgBJxIKtJ4flx9
-DuGbA+N58cEHvPNRIg4/E3zzAr92Cnzff6AF4HEGiZ1ZFVI8XASzccv9LLgvo11DkccIfunVKhHU
-quqf+0cyyK1RhskoYn/qdVGqUr7CG2W3BoiNOrYjndR8rJBh7zhj7Xx1RiHjMSGi/7pXOeK9oPxW
-s3FhBMdQAdP+ccO6pzGtgt+fecxgZZ1/U/DqN1D0mMzUoNANSwVpELFGqq37pbuFhrCMkVoDa2wM
-KisFTnpTsv9derB35pOTRV9/rQXc6a7tmmpkmi2SJw==
-=g5Al
------END PGP SIGNATURE-----
-
---------------JsLfkxePRUaQci00CUJuEKC0--
+On 2022/4/25 20:38, Pierre Gondois wrote:
+> From: Pierre Gondois <Pierre.Gondois@arm.com>
+> 
+> Performance states and energy consumption values are not advertised
+> in ACPI. In the GicC structure of the MADT table, the "Processor
+> Power Efficiency Class field" (called efficiency class from now)
+> allows to describe the relative energy efficiency of CPUs.
+> 
+> To leverage the EM and EAS, the CPPC driver creates a set of
+> artificial performance states and registers them in the Energy Model
+> (EM), such as:
+> - Every 20 capacity unit, a performance state is created.
+> - The energy cost of each performance state gradually increases.
+> No power value is generated as only the cost is used in the EM.
+> 
+> During task placement, a task can raise the frequency of its whole
+> pd. This can make EAS place a task on a pd with CPUs that are
+> individually less energy efficient.
+> As cost values are artificial, and to place tasks on CPUs with the
+> lower efficiency class, a gap in cost values is generated for adjacent
+> efficiency classes.
+> E.g.:
+> - efficiency class = 0, capacity is in [0-1024], so cost values
+>   are in [0: 51] (one performance state every 20 capacity unit)
+> - efficiency class = 1, capacity is in [0-1024], cost values
+>   are in [1*gap+0: 1*gap+51].
+> 
+> The value of the cost gap is chosen to absorb a the energy of 4 CPUs
+> at their maximum capacity. This means that between:
+> 1- a pd of 4 CPUs, each of them being used at almost their full
+>    capacity. Their efficiency class is N.
+> 2- a CPU using almost none of its capacity. Its efficiency class is
+>    N+1
+> EAS will choose the first option.
+> 
+> This patch also populates the (struct cpufreq_driver).register_em
+> callback if the valid efficiency_class ACPI values are provided.
+> 
+> Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 144 +++++++++++++++++++++++++++++++++
+>  1 file changed, 144 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 3cd05651707d..3eaa23d1aaf5 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -421,6 +421,134 @@ static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
+>  }
+>  
+>  static DEFINE_PER_CPU(unsigned int, efficiency_class);
+> +static void cppc_cpufreq_register_em(struct cpufreq_policy *policy);
+> +
+> +/* Create an artificial performance state every CPPC_EM_CAP_STEP capacity unit. */
+> +#define CPPC_EM_CAP_STEP	(20)
+> +/* Increase the cost value by CPPC_EM_COST_STEP every performance state. */
+> +#define CPPC_EM_COST_STEP	(1)
+> +/* Add a cost gap correspnding to the energy of 4 CPUs. */
+> +#define CPPC_EM_COST_GAP	(4 * SCHED_CAPACITY_SCALE * CPPC_EM_COST_STEP \
+> +				/ CPPC_EM_CAP_STEP)
+> +
+> +static unsigned int get_perf_level_count(struct cpufreq_policy *policy)
+> +{
+> +	struct cppc_perf_caps *perf_caps;
+> +	unsigned int min_cap, max_cap;
+> +	struct cppc_cpudata *cpu_data;
+> +	int cpu = policy->cpu;
+> +
+> +	cpu_data = policy->driver_data;
+> +	perf_caps = &cpu_data->perf_caps;
+> +	max_cap = arch_scale_cpu_capacity(cpu);
+> +	min_cap = div_u64(max_cap * perf_caps->lowest_perf, perf_caps->highest_perf);
+> +	if ((min_cap == 0) || (max_cap < min_cap))
+> +		return 0;
+> +	return 1 + max_cap / CPPC_EM_CAP_STEP - min_cap / CPPC_EM_CAP_STEP;
+> +}
+> +
+> +/*
+> + * The cost is defined as:
+> + *   cost = power * max_frequency / frequency
+> + */
+> +static inline unsigned long compute_cost(int cpu, int step)
+> +{
+> +	return CPPC_EM_COST_GAP * per_cpu(efficiency_class, cpu) +
+> +			step * CPPC_EM_COST_STEP;
+> +}
+> +
+> +static int cppc_get_cpu_power(struct device *cpu_dev,
+> +		unsigned long *power, unsigned long *KHz)
+> +{
+> +	unsigned long perf_step, perf_prev, perf, perf_check;
+> +	unsigned int min_step, max_step, step, step_check;
+> +	unsigned long prev_freq = *KHz;
+> +	unsigned int min_cap, max_cap;
+> +	struct cpufreq_policy *policy;
+> +
+> +	struct cppc_perf_caps *perf_caps;
+> +	struct cppc_cpudata *cpu_data;
+> +
+> +	policy = cpufreq_cpu_get_raw(cpu_dev->id);
+> +	cpu_data = policy->driver_data;
+> +	perf_caps = &cpu_data->perf_caps;
+> +	max_cap = arch_scale_cpu_capacity(cpu_dev->id);
+> +	min_cap = div_u64(max_cap * perf_caps->lowest_perf,
+> +			perf_caps->highest_perf);
+> +
+> +	perf_step = CPPC_EM_CAP_STEP * perf_caps->highest_perf / max_cap;
+> +	min_step = min_cap / CPPC_EM_CAP_STEP;
+> +	max_step = max_cap / CPPC_EM_CAP_STEP;
+> +
+> +	perf_prev = cppc_cpufreq_khz_to_perf(cpu_data, *KHz);
+> +	step = perf_prev / perf_step;
+> +
+> +	if (step > max_step)
+> +		return -EINVAL;
+> +
+> +	if (min_step == max_step) {
+> +		step = max_step;
+> +		perf = perf_caps->highest_perf;
+> +	} else if (step < min_step) {
+> +		step = min_step;
+> +		perf = perf_caps->lowest_perf;
+> +	} else {
+> +		step++;
+> +		if (step == max_step)
+> +			perf = perf_caps->highest_perf;
+> +		else
+> +			perf = step * perf_step;
+> +	}
+> +
+> +	*KHz = cppc_cpufreq_perf_to_khz(cpu_data, perf);
+> +	perf_check = cppc_cpufreq_khz_to_perf(cpu_data, *KHz);
+> +	step_check = perf_check / perf_step;
+> +
+> +	/*
+> +	 * To avoid bad integer approximation, check that new frequency value
+> +	 * increased and that the new frequency will be converted to the
+> +	 * desired step value.
+> +	 */
+> +	while ((*KHz == prev_freq) || (step_check != step)) {
+> +		perf++;
+> +		*KHz = cppc_cpufreq_perf_to_khz(cpu_data, perf);
+> +		perf_check = cppc_cpufreq_khz_to_perf(cpu_data, *KHz);
+> +		step_check = perf_check / perf_step;
+> +	}
+> +
+> +	/*
+> +	 * With an artificial EM, only the cost value is used. Still the power
+> +	 * is populated such as 0 < power < EM_MAX_POWER. This allows to add
+> +	 * more sense to the artificial performance states.
+> +	 */
+> +	*power = compute_cost(cpu_dev->id, step);
+> +
+> +	return 0;
+> +}
+> +
+> +static int cppc_get_cpu_cost(struct device *cpu_dev, unsigned long KHz,
+> +		unsigned long *cost)
+> +{
+> +	unsigned long perf_step, perf_prev;
+> +	struct cppc_perf_caps *perf_caps;
+> +	struct cpufreq_policy *policy;
+> +	struct cppc_cpudata *cpu_data;
+> +	unsigned int max_cap;
+> +	int step;
+> +
+> +	policy = cpufreq_cpu_get_raw(cpu_dev->id);
+> +	cpu_data = policy->driver_data;
+> +	perf_caps = &cpu_data->perf_caps;
+> +	max_cap = arch_scale_cpu_capacity(cpu_dev->id);
+> +
+> +	perf_prev = cppc_cpufreq_khz_to_perf(cpu_data, KHz);
+> +	perf_step = CPPC_EM_CAP_STEP * perf_caps->highest_perf / max_cap;
+> +	step = perf_prev / perf_step;
+> +
+> +	*cost = compute_cost(cpu_dev->id, step);
+> +
+> +	return 0;
+> +}
+>  
+>  static int populate_efficiency_class(void)
+>  {
+> @@ -453,10 +581,23 @@ static int populate_efficiency_class(void)
+>  		}
+>  		index++;
+>  	}
+> +	cppc_cpufreq_driver.register_em = cppc_cpufreq_register_em;
+>  
+>  	return 0;
+>  }
+>  
+> +static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+> +{
+> +	struct cppc_cpudata *cpu_data;
+> +	struct em_data_callback em_cb =
+> +		EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
+> +
+> +	cpu_data = policy->driver_data;
+> +	em_dev_register_perf_domain(get_cpu_device(policy->cpu),
+> +			get_perf_level_count(policy), &em_cb,
+> +			cpu_data->shared_cpu_map, 0);
+> +}
+> +
+>  #else
+>  
+>  static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
+> @@ -467,6 +608,9 @@ static int populate_efficiency_class(void)
+>  {
+>  	return 0;
+>  }
+> +static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+> +{
+> +}
+>  #endif
+>  
+>  
+> 

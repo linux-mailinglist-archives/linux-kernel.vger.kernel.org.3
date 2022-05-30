@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748CA537810
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2ECC53780E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235046AbiE3KBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
+        id S230482AbiE3KCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235018AbiE3KBY (ORCPT
+        with ESMTP id S235047AbiE3KB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:01:24 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56AE7A802;
-        Mon, 30 May 2022 03:01:22 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24UA1DJV033222;
-        Mon, 30 May 2022 05:01:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1653904873;
-        bh=D3w8nI02oB8EoNoAqaEWvOutV6JaRMHHmHyziuHi/rQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=A+G0YRg2s4rQiCFlgGGTogV7JCTk8a7GVffdrFKDMXqA8mkiJ+KFgKozxw981YZaG
-         3IyKvQmMPnN7H5d/MSRTOXIFK/P8iG1nqvyBeOEVWPc2n1B/NkWqWgJqSPsk9TnWdt
-         txoWBhZVt5mzN4lQYGxVVY1aRL7oM5fCnhckPRcc=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24UA1DZa018755
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 30 May 2022 05:01:13 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 30
- May 2022 05:01:12 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 30 May 2022 05:01:12 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24UA1BGQ018397;
-        Mon, 30 May 2022 05:01:12 -0500
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     <robh+dt@kernel.org>, <nm@ti.com>, <vigneshr@ti.com>,
-        <kishon@ti.com>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <lee.jones@linaro.org>, <rogerq@kernel.org>,
-        <devicetree@vger.kernel.org>, <kristo@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <s-anna@ti.com>,
-        Sinthu Raja <sinthu.raja@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>
-Subject: [PATCH v3 3/3] arm64: dts: ti: k3-j721e-sk: Add pinmux for RPi Header
-Date:   Mon, 30 May 2022 15:31:00 +0530
-Message-ID: <20220530100100.10420-4-r-ravikumar@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220530100100.10420-1-r-ravikumar@ti.com>
-References: <20220530100100.10420-1-r-ravikumar@ti.com>
+        Mon, 30 May 2022 06:01:56 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE79F793B1;
+        Mon, 30 May 2022 03:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653904915; x=1685440915;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eWFXU1FqNlG5B/9DM+yltZRjaMGGPd6zhl4yLDxNnVE=;
+  b=ZTMjp5ZcNyAUNbVF6UaKAO3B4Si8hz68sYaSITRT8Ql3+vbeYBBDZPXL
+   JpmRsOJpTwxgEfkvIixEfISFDy9D2o3Uqy9vIh5rBJhQtWXD+ZfD41Rxw
+   b950PO7QxHn/tlaw2KtQ/hbbA7uURNVCcPnGGjwpsrelhh3/IlqGaD6H6
+   PQcK3GDN6gps4eYaiPMOsjdpRaj4gsXdeO+Gp74ba6ls5kMqD56qGYkhS
+   iO+lvJIXSBj6XuUM61SnMH8Hznu8Nmayb2Rl+teAuW/kWKwPaPy9sMgP6
+   EvGO58ouJRlENHqDfkqGwt/SXxW6vSrHmRHMHsi4fArhB0FH3VB7aCmZk
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="273772964"
+X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
+   d="scan'208";a="273772964"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 03:01:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
+   d="scan'208";a="644564836"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 30 May 2022 03:01:48 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nvcDb-0001eE-Mo;
+        Mon, 30 May 2022 10:01:47 +0000
+Date:   Mon, 30 May 2022 18:01:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     menglong8.dong@gmail.com, kuba@kernel.org
+Cc:     kbuild-all@lists.01.org, rostedt@goodmis.org, mingo@redhat.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        nhorman@tuxdriver.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        imagedong@tencent.com, dsahern@kernel.org, talalahmad@google.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/3] net: skb: use auto-generation to convert
+ skb drop reason to string
+Message-ID: <202205301730.inNRSOxX-lkp@intel.com>
+References: <20220530081201.10151-3-imagedong@tencent.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220530081201.10151-3-imagedong@tencent.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,138 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sinthu Raja <sinthu.raja@ti.com>
+Hi,
 
-Add pinmux required to bring out
-i2c5, ehrpwm 2 and 3 and gpios on
-40 pin RPi header on sk board
+Thank you for the patch! Perhaps something to improve:
 
-Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
-Signed-off-by: Rahul T R <r-ravikumar@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 89 ++++++++++++++++++++++----
- 1 file changed, 78 insertions(+), 11 deletions(-)
+[auto build test WARNING on net-next/master]
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-index 98a55778f3fe..b913b18ae133 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-@@ -400,6 +400,57 @@
- 			J721E_IOPAD(0x124, PIN_INPUT, 7) /* (Y24) PRG0_PRU1_GPO9.GPIO0_72 */
- 		>;
- 	};
-+
-+	main_i2c5_pins_default: main-i2c5-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x150, PIN_INPUT_PULLUP, 2) /* (Y26) PRG0_MDIO0_MDIO.I2C5_SCL */
-+			J721E_IOPAD(0x154, PIN_INPUT_PULLUP, 2) /* (AA27) PRG0_MDIO0_MDC.I2C5_SDA */
-+		>;
-+	};
-+
-+	rpi_header_gpio0_pins_default: rpi-header-gpio0-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x01c, PIN_INPUT, 7) /* (AD22) PRG1_PRU0_GPO6.GPIO0_7 */
-+			J721E_IOPAD(0x120, PIN_INPUT, 7) /* (AA28) PRG0_PRU1_GPO8.GPIO0_71 */
-+			J721E_IOPAD(0x14c, PIN_INPUT, 7) /* (AA29) PRG0_PRU1_GPO19.GPIO0_82 */
-+			J721E_IOPAD(0x02c, PIN_INPUT, 7) /* (AD21) PRG1_PRU0_GPO10.GPIO0_11 */
-+			J721E_IOPAD(0x198, PIN_INPUT, 7) /* (V25) RGMII6_TD1.GPIO0_101 */
-+			J721E_IOPAD(0x1b0, PIN_INPUT, 7) /* (W24) RGMII6_RD1.GPIO0_107 */
-+			J721E_IOPAD(0x1a0, PIN_INPUT, 7) /* (W29) RGMII6_TXC.GPIO0_103 */
-+			J721E_IOPAD(0x008, PIN_INPUT, 7) /* (AG22) PRG1_PRU0_GPO1.GPIO0_2 */
-+			J721E_IOPAD(0x1d0, PIN_INPUT, 7) /* (AA3) SPI0_D1.GPIO0_115 */
-+			J721E_IOPAD(0x11c, PIN_INPUT, 7) /* (AA24) PRG0_PRU1_GPO7.GPIO0_70 */
-+			J721E_IOPAD(0x148, PIN_INPUT, 7) /* (AA26) PRG0_PRU1_GPO18.GPIO0_81 */
-+			J721E_IOPAD(0x004, PIN_INPUT, 7) /* (AC23) PRG1_PRU0_GPO0.GPIO0_1 */
-+			J721E_IOPAD(0x014, PIN_INPUT, 7) /* (AH23) PRG1_PRU0_GPO4.GPIO0_5 */
-+			J721E_IOPAD(0x020, PIN_INPUT, 7) /* (AE20) PRG1_PRU0_GPO7.GPIO0_8 */
-+			J721E_IOPAD(0x19c, PIN_INPUT, 7) /* (W27) RGMII6_TD0.GPIO0_102 */
-+			J721E_IOPAD(0x1b4, PIN_INPUT, 7) /* (W25) RGMII6_RD0.GPIO0_108 */
-+			J721E_IOPAD(0x188, PIN_INPUT, 7) /* (Y28) RGMII6_TX_CTL.GPIO0_97 */
-+			J721E_IOPAD(0x00c, PIN_INPUT, 7) /* (AF22) PRG1_PRU0_GPO2.GPIO0_3 */
-+			J721E_IOPAD(0x010, PIN_INPUT, 7) /* (AJ23) PRG1_PRU0_GPO3.GPIO0_4 */
-+		>;
-+	};
-+
-+	rpi_header_gpio1_pins_default: rpi-header-gpio1-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x234, PIN_INPUT, 7) /* (U3) EXT_REFCLK1.GPIO1_12 */
-+		>;
-+	};
-+
-+	rpi_header_ehrpwm2_pins_default: rpi-header-ehrpwm2-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x178, PIN_INPUT, 6) /* (U27) RGMII5_RD3.EHRPWM2_A */
-+			J721E_IOPAD(0x17c, PIN_INPUT, 6) /* (U24) RGMII5_RD2.EHRPWM2_B */
-+		>;
-+	};
-+
-+	rpi_header_ehrpwm3_pins_default: rpi-header-ehrpwm3-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x18c, PIN_INPUT, 6) /* (V23) RGMII6_RX_CTL.EHRPWM3_A */
-+			J721E_IOPAD(0x190, PIN_INPUT, 6) /* (W23) RGMII6_TD3.EHRPWM3_B */
-+		>;
-+	};
- };
- 
- &wkup_pmx0 {
-@@ -631,11 +682,6 @@
- 	status = "disabled";
- };
- 
--&main_i2c5 {
--	/* Brought out on RPi Header */
--	status = "disabled";
--};
--
- &main_i2c6 {
- 	/* Unused */
- 	status = "disabled";
-@@ -1138,18 +1184,39 @@
- 	status = "disabled";
- };
- 
--&main_ehrpwm2 {
-+&main_ehrpwm4 {
- 	status = "disabled";
- };
- 
--&main_ehrpwm3 {
-+&main_ehrpwm5 {
- 	status = "disabled";
- };
- 
--&main_ehrpwm4 {
--	status = "disabled";
-+&main_gpio0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rpi_header_gpio0_pins_default>;
- };
- 
--&main_ehrpwm5 {
--	status = "disabled";
-+&main_gpio1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rpi_header_gpio1_pins_default>;
-+};
-+
-+&main_i2c5 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c5_pins_default>;
-+	clock-frequency = <400000>;
-+	status = "okay";
-+};
-+
-+&main_ehrpwm2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rpi_header_ehrpwm2_pins_default>;
-+	status = "okay";
-+};
-+
-+&main_ehrpwm3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rpi_header_ehrpwm3_pins_default>;
-+	status = "okay";
- };
+url:    https://github.com/intel-lab-lkp/linux/commits/menglong8-dong-gmail-com/reorganize-the-code-of-the-enum-skb_drop_reason/20220530-161614
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 7e062cda7d90543ac8c7700fc7c5527d0c0f22ad
+config: nios2-defconfig (https://download.01.org/0day-ci/archive/20220530/202205301730.inNRSOxX-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/73e3b002fb9086fc734ba4dcc3041f9bb56eb1a2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review menglong8-dong-gmail-com/reorganize-the-code-of-the-enum-skb_drop_reason/20220530-161614
+        git checkout 73e3b002fb9086fc734ba4dcc3041f9bb56eb1a2
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 ARCH=nios2 
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

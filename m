@@ -2,217 +2,359 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5A753791A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40602537907
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235144AbiE3KNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
+        id S235195AbiE3KOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbiE3KNB (ORCPT
+        with ESMTP id S235169AbiE3KOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:13:01 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100D03EBB4;
-        Mon, 30 May 2022 03:12:59 -0700 (PDT)
-Received: from [192.168.1.107] ([37.4.249.170]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MsqMq-1ng8ps2W1Q-00t8kq; Mon, 30 May 2022 12:12:40 +0200
-Message-ID: <d7a5a0d8-5d27-548f-bc94-0e7d116cc3f2@i2se.com>
-Date:   Mon, 30 May 2022 12:12:39 +0200
+        Mon, 30 May 2022 06:14:31 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253627C144
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 03:14:29 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id c2so9938097plh.2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 03:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kdhDMm58x5s/7UFfJZf6SmUgAhS+Yr/zFOHfXp+0uHQ=;
+        b=AfvjEKwucRiOk9T1zOP2r8CfIUb57TVmjY6S5ageXy+p4604d8QTjlgpFDWCSwMLzf
+         p9Lm6FB0rimoZniVcmxWyQel7eT3B01cFbRNEPuwHObfVj8bbW8xH8QxgLS3AxzgWym1
+         Fc8kVUh/cIr0tFiXCkIKhEl1k6RmTMlLg5fIO9gLD+z8wtHdfFKoVboiUYyUUN3A+Ilp
+         uhBpyiMdUhlH0ROnIrd3sIBmFh16LFrMCA1mHyjhiVxLayZ1+VAB60a2fHMuTfmRoSWC
+         qZQ+lTuVwEbA2Hb8XhZYzy0T/ZzWqzpFZy29nszesa6E5PRqLEzs0ASddzMP5z/KWbCn
+         TEUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kdhDMm58x5s/7UFfJZf6SmUgAhS+Yr/zFOHfXp+0uHQ=;
+        b=XCTGLIEL2mn/WV0fRRWWzuC3muKlTG+t2gvBsjeUUSblR4zvPkrAp3DPWCGl6NZEPr
+         QwBAreU7LwvNNfDA0XW3efyO9VHuRVWdGzA1bCLGNwmWAItr+A9dfZcUL8CUZUGlVih7
+         nPHWhsVVerePGyt+7da3mA279RfwKxTm3NwgXjWYK4boN5g4CqECqzM8gD2F+1bg2K1a
+         Kq04YsSKdpU+O97PJc+eXXZpTuv16Ai4ZtKRsfXBmwu6jVJfHm8fWcGJyKN4KjIjkqUp
+         3nj54kYiD5IlP1+YnuafDihyz1OVjWkl1t+jCb9saW5f5VRaPn08qfnOwP/1x+FuZqxr
+         e1WA==
+X-Gm-Message-State: AOAM530W3N5GJClvrCSEqbH3VHKXaD1rLcp0VBWxFVXpjXdS0JOifuxC
+        8gojKZoTOL71tAoLvyADfxhfTw==
+X-Google-Smtp-Source: ABdhPJwTz7tYTBe0TAArza2tUWRhF3bMHHy7mbzZrv3T2NVVoBGMVXzbK1nderIDtgIM6nIgfHhyJA==
+X-Received: by 2002:a17:90b:4c8f:b0:1e0:5b0e:eddc with SMTP id my15-20020a17090b4c8f00b001e05b0eeddcmr22515732pjb.23.1653905668534;
+        Mon, 30 May 2022 03:14:28 -0700 (PDT)
+Received: from localhost.localdomain ([49.37.162.84])
+        by smtp.gmail.com with ESMTPSA id q18-20020aa79832000000b0050dc7628162sm8509378pfl.60.2022.05.30.03.14.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 03:14:26 -0700 (PDT)
+From:   Arun Ajith S <aajith@arista.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        dsahern@kernel.org, bagasdotme@gmail.com, yoshfuji@linux-ipv6.org,
+        kuba@kernel.org, pabeni@redhat.com, prestwoj@gmail.com,
+        corbet@lwn.net, justin.iurman@uliege.be, edumazet@google.com,
+        shuah@kernel.org, aajith@arista.com, gilligan@arista.com,
+        noureddine@arista.com, gk@arista.com
+Subject: [PATCH net v3] net/ipv6: Expand and rename accept_unsolicited_na to accept_untracked_na
+Date:   Mon, 30 May 2022 10:14:14 +0000
+Message-Id: <20220530101414.65439-1-aajith@arista.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/1] PCI: brcmstb: Fix regression regarding missing
- PCIe linkup
-Content-Language: en-US
-To:     Cyril Brulebois <kibi@debian.org>,
-        Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, james.dutton@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220528224423.7017-1-jim2101024@gmail.com>
- <20220528224423.7017-2-jim2101024@gmail.com>
- <20220529011526.4lzuvkv5zclwntce@mraw.org>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20220529011526.4lzuvkv5zclwntce@mraw.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:X6zz3xruG0Mm0SMgqnOkGTso0yDamTe+KRXiTUlbqs5HZaqCveg
- rzksIO55d/mQd5xz7K8MAXsHCwzaRwKa/OFnFAbtmhwFJ19Yd5DilErjXQqmuUGWSCN1tE6
- +4FbPflYIzWXLaQKWxUzCOpdXObMENXC2FeVMub78d0K6lHXnFfCTmWg1Pu/NxhVdBA+doX
- 5qJvXWtqnwsz7fzBjqVEw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LRdd73yRQww=:nG5PWsEl7zYYnqWa0BeYSj
- +9vqf4ScijIgOrkgtCwd1QdQatG/Um7nxdC9iZ1xrl8IJ8lo5vVTtR6DI3Qz7SWHejT4TeJZz
- 0FwbLSrQ+KrKDSvawm28lQBtvnIlHNx2A+1j0lMGwIc5YwUY45KPGKAVtrz4JQgsVnDQJ3vVS
- fI2Sg6u6Tltvp74pXLmkw4uoF9LVrCOA/fYB7V4GILAtHUnhmYB94H9ot6W/+FB1Da0eqQ7Fy
- 6kqBRqk7U2XY4nlustpfCGsFDW41w+QsVQj0CfhyEymBEAmRSOL+NW5s5HrgA0K9qEPKgj6h7
- gAoo858DxJz2GUZy5ztS8RwkDLbFyLV8bArrCl6aSXXE+gG511TBTfQa0fnKYpHKcsHwqHQrq
- q1zjYSVpI8+Wxl+p6gQQgvXUJJ2uSC+M448yg0Q+s8LpHra8NZFyuOjBLwfstt0EG8SdUKRCO
- 4PX9IR6O8jWSEmSyv5gFCymRh6zUal9WdR/8bMOHwB0LXIEostu+LNgU71p4Dge6oOanW8t00
- e6ufB+f8yfadvu1SSAKAw7rFU1pvdqzvzgug6CVln2EDV+VEtyhXN7zuLOZ2bmdRfNwyCZjdG
- 5sW17bbXU1avWkxvon2X845xzvctSOu59I1xgditqUnv/TOW07oLdbiGgP4kWt7YIe6kunfsL
- +0Wl9xLRHaOTXCDCl+b8cj1LXZ6BPXROSMgDjkzQg+//LAgNufJykro3OjM3Cq1okUnAfFp4q
- WXweEMiTvZWuYQXuA9pvYkjv/3R9duySR9VtBWYRaAF1Un4QcZnX4yIqRKA=
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cyril,
+RFC 9131 changes default behaviour of handling RX of NA messages when the
+corresponding entry is absent in the neighbour cache. The current
+implementation is limited to accept just unsolicited NAs. However, the
+RFC is more generic where it also accepts solicited NAs. Both types
+should result in adding a STALE entry for this case.
 
-Am 29.05.22 um 03:15 schrieb Cyril Brulebois:
-> Hi Jim,
->
-> Jim Quinlan <jim2101024@gmail.com> (2022-05-28):
->> commit 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
->>
->> introduced a regression on the PCIe RPi4 Compute Module.  If the PCIe
->> root port DT node described in [2] was missing, no linkup would be attempted,
->> and subsequent accesses would cause a panic because this particular PCIe HW
->> causes a CPU abort on illegal accesses (instead of returning 0xffffffff).
->>
->> We fix this by allowing the DT root port node to be missing, as it behaved
->> before the original patchset messed things up.
->>
->> In addition, two small changes are made:
->>
->>    1. Having pci_subdev_regulators_remove_bus() call
->>       regulator_bulk_free() in addtion to regulator_bulk_disable().
->>    2. Having brcm_pcie_add_bus() return 0 if there is an
->>       error in calling pci_subdev_regulators_add_bus().
->>       Instead, we dev_err() and turn on our refusal mode instead.
->>
->> It would be best if this commit were tested by someone with a Rpi CM4
->> platform, as that is how the regression was found.  I have only emulated
->> the problem and fix on different platform.
-> Testing is less flawless than it was with the earlier version, but this
-> might be related to the fact master has moved a lot since then (from
-> v5.18-rcX to open merge window).
->
-> Overall, it's still a net win over the status quo (broken boot).
->
->
-> Applying your patch on 664a393a2663a0f62fc1b18157ccae33dcdbb8c8 and
-> performing cold boots is mostly fine:
->   - without anything on the PCIe slot;
->   - with a PCIe→quad-USB extension board, a USB keyboard and a USB stick
->     (both work fine).
->
-> However, with an empty PCIe slot, I'm no longer able to perform the
-> following (which was rock solid, and has been used in all my testing up
-> to now):
->   - boot the exact same Debian stable image as before (running v5.10.y if
->     that matters);
->   - deploy the patched kernel;
->   - enable serial console;
->   - reboot into the patched kernel.
->
-> PCI-related messages, a call trace, and broken storage:
->
->      [    3.425331] brcm-pcie fd500000.pcie: host bridge /scb/pcie@7d500000 ranges:
->      [    3.425353] brcm-pcie fd500000.pcie:   No bus range found for /scb/pcie@7d500000, using [bus 00-ff]
->      [    3.425388] brcm-pcie fd500000.pcie:      MEM 0x0600000000..0x0603ffffff -> 0x00f8000000
->      [    3.425420] brcm-pcie fd500000.pcie:   IB MEM 0x0000000000..0x003fffffff -> 0x0400000000
->      [    3.426229] brcm-pcie fd500000.pcie: PCI host bridge to bus 0000:00
->      [    3.426243] pci_bus 0000:00: root bus resource [bus 00-ff]
->      [    3.426255] pci_bus 0000:00: root bus resource [mem 0x600000000-0x603ffffff] (bus address [0xf8000000-0xfbffffff])
->      [    3.426303] pci 0000:00:00.0: [14e4:2711] type 01 class 0x060400
->      [    3.426398] pci 0000:00:00.0: PME# supported from D0 D3hot
->      [    3.428797] pci 0000:00:00.0: bridge configuration invalid ([bus 00-00]), reconfiguring
->      [    3.745909] brcm-pcie fd500000.pcie: link down
->      [    3.747915] pci_bus 0000:01: busn_res: [bus 01-ff] end is updated to 01
->      [    3.747944] pci 0000:00:00.0: PCI bridge to [bus 01]
->      [    3.748294] pcieport 0000:00:00.0: PME: Signaling with IRQ 23
->      [    3.748691] pcieport 0000:00:00.0: AER: enabled with IRQ 23
->      [    3.749201] pci_bus 0000:01: busn_res: [bus 01] is released
->      [    3.749462] pci_bus 0000:00: busn_res: [bus 00-ff] is released
->      …
->      [    5.617308] irq 35: nobody cared (try booting with the "irqpoll" option)
->      [    5.617335] CPU: 0 PID: 127 Comm: systemd-udevd Not tainted 5.18.0+ #1
->      [    5.617350] Hardware name: Raspberry Pi Compute Module 4 Rev 1.0 (DT)
->      [    5.617358] Call trace:
->      [    5.617362]  dump_backtrace+0xc0/0x130
->      [    5.617386]  show_stack+0x24/0x70
->      [    5.617396]  dump_stack_lvl+0x68/0x84
->      [    5.617415]  dump_stack+0x18/0x34
->      [    5.617426]  __report_bad_irq+0x54/0x16c
->      [    5.617436]  note_interrupt+0x324/0x41c
->      [    5.617445]  handle_irq_event+0xc0/0x180
->      [    5.617460]  handle_fasteoi_irq+0xc8/0x1fc
->      [    5.617468]  generic_handle_domain_irq+0x38/0x50
->      [    5.617481]  gic_handle_irq+0x68/0xa0
->      [    5.617489]  call_on_irq_stack+0x2c/0x60
->      [    5.617500]  do_interrupt_handler+0x88/0x90
->      [    5.617511]  el0_interrupt+0x58/0x124
->      [    5.617526]  __el0_irq_handler_common+0x18/0x2c
->      [    5.617538]  el0t_64_irq_handler+0x10/0x20
->      [    5.617549]  el0t_64_irq+0x18c/0x190
->      [    5.617558] handlers:
->      [    5.617563] [<(____ptrval____)>] sdhci_irq [sdhci] threaded [<(____ptrval____)>] sdhci_thread_irq [sdhci]
->      [    5.617613] Disabling IRQ #35
->      …
->      [   15.581894] mmc0: Timeout waiting for hardware cmd interrupt.
->      [   15.581914] mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
->      [   15.581920] mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00001002
->      [   15.581931] mmc0: sdhci: Blk size:  0x00000000 | Blk cnt:  0x00000000
->      [   15.581937] mmc0: sdhci: Argument:  0x00000c00 | Trn mode: 0x00000000
->      [   15.581944] mmc0: sdhci: Present:   0x1fff0000 | Host ctl: 0x00000001
->      [   15.581951] mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000080
->      [   15.581957] mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00007d07
->      [   15.581964] mmc0: sdhci: Timeout:   0x00000000 | Int stat: 0x00018000
->      [   15.581971] mmc0: sdhci: Int enab:  0x00ff1003 | Sig enab: 0x00ff1003
->      [   15.581976] mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000001
->      [   15.581982] mmc0: sdhci: Caps:      0x45ee6432 | Caps_1:   0x0000a525
->      [   15.581988] mmc0: sdhci: Cmd:       0x0000341a | Max curr: 0x00080008
->      [   15.581996] mmc0: sdhci: Resp[0]:   0x00000000 | Resp[1]:  0x00000000
->      [   15.582001] mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
->      [   15.582005] mmc0: sdhci: Host ctl2: 0x00000000
->      [   15.582011] mmc0: sdhci: ADMA Err:  0x00000000 | ADMA Ptr: 0x00000000
->      [   15.582016] mmc0: sdhci: ============================================
->
-> This last part gets repeated over and over, and storage (external SD
-> card) never comes up. I can share fuller logs if that's desirable. I can
-> also test booting with irqpoll if that's desirable. Or anything else that
-> might help.
->
->
-> I did check that applying the same patch on top of the v5.18 tag gives
-> good results (cold boots and reboots are fine, with or without an empty
-> PCIe slot, as that was the case during earlier test sessions), so I'd
-> guess something changed since then, and makes reboots more brittle than
-> they used to be.
+Expand accept_untracked_na behaviour to also accept solicited NAs to
+be compliant with the RFC and rename the sysctl knob to
+accept_untracked_na.
 
-i think we should better trust the results based on the v5.18 tag. 
-During the merge window, regressions from other subsystems are possible.
+Fixes: f9a2fb73318e ("net/ipv6: Introduce accept_unsolicited_na knob to implement router-side changes for RFC9131")
+Signed-off-by: Arun Ajith S <aajith@arista.com>
+---
+This change updates the accept_unsolicited_na feature that merged to net-next
+for v5.19 to be better compliant with the RFC. It also involves renaming the sysctl
+knob to accept_untracked_na before shipping in a release.
 
-Best regards
+Note that the behaviour table has been modifed in the code comments,
+but dropped from the Documentation. This is because the table 
+documents behaviour that is not unique to the knob, and it is more
+relevant to understanding the code. The documentation has been updated
+to be unambiguous even without the table.
 
->
-> I can also check applying the v1 patch on top of master and compare
-> results, to give a different perspective.
->
-> But I'd also be happy to get some directions as to which test(s) would
-> be most beneficial, which would help me cut down on combinatorics.
->
->
-> Cheers,
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+v2:
+  1. Changed commit message and subject as suggested.
+  2. Added Fixes tag.
+  3. Used en-uk spellings consistently.
+  4. Added a couple of missing comments.
+  5. Refactored patch to be smaller by avoiding early return.
+  6. Made the documentation more clearer.
+
+v3:
+  1. Fixed build issue. (Verified make defconfig && make && make htmldocs SPHINXDIRS=networking)
+
+ Documentation/networking/ip-sysctl.rst        | 23 ++++------
+ include/linux/ipv6.h                          |  2 +-
+ include/uapi/linux/ipv6.h                     |  2 +-
+ net/ipv6/addrconf.c                           |  6 +--
+ net/ipv6/ndisc.c                              | 42 +++++++++++--------
+ .../net/ndisc_unsolicited_na_test.sh          | 23 +++++-----
+ 6 files changed, 50 insertions(+), 48 deletions(-)
+
+diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+index b882d4238581..04216564a03c 100644
+--- a/Documentation/networking/ip-sysctl.rst
++++ b/Documentation/networking/ip-sysctl.rst
+@@ -2474,21 +2474,16 @@ drop_unsolicited_na - BOOLEAN
+ 
+ 	By default this is turned off.
+ 
+-accept_unsolicited_na - BOOLEAN
+-	Add a new neighbour cache entry in STALE state for routers on receiving an
+-	unsolicited neighbour advertisement with target link-layer address option
+-	specified. This is as per router-side behavior documented in RFC9131.
+-	This has lower precedence than drop_unsolicited_na.
++accept_untracked_na - BOOLEAN
++	Add a new neighbour cache entry in STALE state for routers on receiving a
++	neighbour advertisement (either solicited or unsolicited) with target
++	link-layer address option specified if no neighbour entry is already
++	present for the advertised IPv6 address. Without this knob, NAs received
++	for untracked addresses (absent in neighbour cache) are silently ignored.
++
++	This is as per router-side behaviour documented in RFC9131.
+ 
+-	 ====   ======  ======  ==============================================
+-	 drop   accept  fwding                   behaviour
+-	 ----   ------  ------  ----------------------------------------------
+-	    1        X       X  Drop NA packet and don't pass up the stack
+-	    0        0       X  Pass NA packet up the stack, don't update NC
+-	    0        1       0  Pass NA packet up the stack, don't update NC
+-	    0        1       1  Pass NA packet up the stack, and add a STALE
+-	                        NC entry
+-	 ====   ======  ======  ==============================================
++	This has lower precedence than drop_unsolicited_na.
+ 
+ 	This will optimize the return path for the initial off-link communication
+ 	that is initiated by a directly connected host, by ensuring that
+diff --git a/include/linux/ipv6.h b/include/linux/ipv6.h
+index 38c8203d52cb..37dfdcfcdd54 100644
+--- a/include/linux/ipv6.h
++++ b/include/linux/ipv6.h
+@@ -61,7 +61,7 @@ struct ipv6_devconf {
+ 	__s32		suppress_frag_ndisc;
+ 	__s32		accept_ra_mtu;
+ 	__s32		drop_unsolicited_na;
+-	__s32		accept_unsolicited_na;
++	__s32		accept_untracked_na;
+ 	struct ipv6_stable_secret {
+ 		bool initialized;
+ 		struct in6_addr secret;
+diff --git a/include/uapi/linux/ipv6.h b/include/uapi/linux/ipv6.h
+index 549ddeaf788b..03cdbe798fe3 100644
+--- a/include/uapi/linux/ipv6.h
++++ b/include/uapi/linux/ipv6.h
+@@ -194,7 +194,7 @@ enum {
+ 	DEVCONF_IOAM6_ID,
+ 	DEVCONF_IOAM6_ID_WIDE,
+ 	DEVCONF_NDISC_EVICT_NOCARRIER,
+-	DEVCONF_ACCEPT_UNSOLICITED_NA,
++	DEVCONF_ACCEPT_UNTRACKED_NA,
+ 	DEVCONF_MAX
+ };
+ 
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index ca0aa744593e..1b1932502e9e 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -5586,7 +5586,7 @@ static inline void ipv6_store_devconf(struct ipv6_devconf *cnf,
+ 	array[DEVCONF_IOAM6_ID] = cnf->ioam6_id;
+ 	array[DEVCONF_IOAM6_ID_WIDE] = cnf->ioam6_id_wide;
+ 	array[DEVCONF_NDISC_EVICT_NOCARRIER] = cnf->ndisc_evict_nocarrier;
+-	array[DEVCONF_ACCEPT_UNSOLICITED_NA] = cnf->accept_unsolicited_na;
++	array[DEVCONF_ACCEPT_UNTRACKED_NA] = cnf->accept_untracked_na;
+ }
+ 
+ static inline size_t inet6_ifla6_size(void)
+@@ -7038,8 +7038,8 @@ static const struct ctl_table addrconf_sysctl[] = {
+ 		.extra2		= (void *)SYSCTL_ONE,
+ 	},
+ 	{
+-		.procname	= "accept_unsolicited_na",
+-		.data		= &ipv6_devconf.accept_unsolicited_na,
++		.procname	= "accept_untracked_na",
++		.data		= &ipv6_devconf.accept_untracked_na,
+ 		.maxlen		= sizeof(int),
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec_minmax,
+diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
+index 254addad0dd3..b0dfe97ea4ee 100644
+--- a/net/ipv6/ndisc.c
++++ b/net/ipv6/ndisc.c
+@@ -979,7 +979,7 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 	struct inet6_dev *idev = __in6_dev_get(dev);
+ 	struct inet6_ifaddr *ifp;
+ 	struct neighbour *neigh;
+-	bool create_neigh;
++	u8 new_state;
+ 
+ 	if (skb->len < sizeof(struct nd_msg)) {
+ 		ND_PRINTK(2, warn, "NA: packet too short\n");
+@@ -1000,7 +1000,7 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 	/* For some 802.11 wireless deployments (and possibly other networks),
+ 	 * there will be a NA proxy and unsolicitd packets are attacks
+ 	 * and thus should not be accepted.
+-	 * drop_unsolicited_na takes precedence over accept_unsolicited_na
++	 * drop_unsolicited_na takes precedence over accept_untracked_na
+ 	 */
+ 	if (!msg->icmph.icmp6_solicited && idev &&
+ 	    idev->cnf.drop_unsolicited_na)
+@@ -1041,25 +1041,33 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 		in6_ifa_put(ifp);
+ 		return;
+ 	}
++
++	neigh = neigh_lookup(&nd_tbl, &msg->target, dev);
++
+ 	/* RFC 9131 updates original Neighbour Discovery RFC 4861.
+-	 * An unsolicited NA can now create a neighbour cache entry
+-	 * on routers if it has Target LL Address option.
++	 * NAs with Target LL Address option without a corresponding
++	 * entry in the neighbour cache can now create a STALE neighbour
++	 * cache entry on routers.
++	 *
++	 *   entry accept  fwding  solicited        behaviour
++	 * ------- ------  ------  ---------    ----------------------
++	 * present      X       X         0     Set state to STALE
++	 * present      X       X         1     Set state to REACHABLE
++	 *  absent      0       X         X     Do nothing
++	 *  absent      1       0         X     Do nothing
++	 *  absent      1       1         X     Add a new STALE entry
+ 	 *
+-	 * drop   accept  fwding                   behaviour
+-	 * ----   ------  ------  ----------------------------------------------
+-	 *    1        X       X  Drop NA packet and don't pass up the stack
+-	 *    0        0       X  Pass NA packet up the stack, don't update NC
+-	 *    0        1       0  Pass NA packet up the stack, don't update NC
+-	 *    0        1       1  Pass NA packet up the stack, and add a STALE
+-	 *                          NC entry
+ 	 * Note that we don't do a (daddr == all-routers-mcast) check.
+ 	 */
+-	create_neigh = !msg->icmph.icmp6_solicited && lladdr &&
+-		       idev && idev->cnf.forwarding &&
+-		       idev->cnf.accept_unsolicited_na;
+-	neigh = __neigh_lookup(&nd_tbl, &msg->target, dev, create_neigh);
++	new_state = msg->icmph.icmp6_solicited ? NUD_REACHABLE : NUD_STALE;
++	if (!neigh && lladdr &&
++	    idev && idev->cnf.forwarding &&
++	    idev->cnf.accept_untracked_na) {
++		neigh = neigh_create(&nd_tbl, &msg->target, dev);
++		new_state = NUD_STALE;
++	}
+ 
+-	if (neigh) {
++	if (neigh && !IS_ERR(neigh)) {
+ 		u8 old_flags = neigh->flags;
+ 		struct net *net = dev_net(dev);
+ 
+@@ -1079,7 +1087,7 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 		}
+ 
+ 		ndisc_update(dev, neigh, lladdr,
+-			     msg->icmph.icmp6_solicited ? NUD_REACHABLE : NUD_STALE,
++			     new_state,
+ 			     NEIGH_UPDATE_F_WEAK_OVERRIDE|
+ 			     (msg->icmph.icmp6_override ? NEIGH_UPDATE_F_OVERRIDE : 0)|
+ 			     NEIGH_UPDATE_F_OVERRIDE_ISROUTER|
+diff --git a/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh b/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
+index f508657ee126..86e621b7b9c7 100755
+--- a/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
++++ b/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
+@@ -1,15 +1,14 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-# This test is for the accept_unsolicited_na feature to
++# This test is for the accept_untracked_na feature to
+ # enable RFC9131 behaviour. The following is the test-matrix.
+ # drop   accept  fwding                   behaviour
+ # ----   ------  ------  ----------------------------------------------
+-#    1        X       X  Drop NA packet and don't pass up the stack
+-#    0        0       X  Pass NA packet up the stack, don't update NC
+-#    0        1       0  Pass NA packet up the stack, don't update NC
+-#    0        1       1  Pass NA packet up the stack, and add a STALE
+-#                           NC entry
++#    1        X       X  Don't update NC
++#    0        0       X  Don't update NC
++#    0        1       0  Don't update NC
++#    0        1       1  Add a STALE NC entry
+ 
+ ret=0
+ # Kselftest framework requirement - SKIP code is 4.
+@@ -72,7 +71,7 @@ setup()
+ 	set -e
+ 
+ 	local drop_unsolicited_na=$1
+-	local accept_unsolicited_na=$2
++	local accept_untracked_na=$2
+ 	local forwarding=$3
+ 
+ 	# Setup two namespaces and a veth tunnel across them.
+@@ -93,7 +92,7 @@ setup()
+ 	${IP_ROUTER_EXEC} sysctl -qw \
+                 ${ROUTER_CONF}.drop_unsolicited_na=${drop_unsolicited_na}
+ 	${IP_ROUTER_EXEC} sysctl -qw \
+-                ${ROUTER_CONF}.accept_unsolicited_na=${accept_unsolicited_na}
++                ${ROUTER_CONF}.accept_untracked_na=${accept_untracked_na}
+ 	${IP_ROUTER_EXEC} sysctl -qw ${ROUTER_CONF}.disable_ipv6=0
+ 	${IP_ROUTER} addr add ${ROUTER_ADDR_WITH_MASK} dev ${ROUTER_INTF}
+ 
+@@ -144,13 +143,13 @@ link_up() {
+ 
+ verify_ndisc() {
+ 	local drop_unsolicited_na=$1
+-	local accept_unsolicited_na=$2
++	local accept_untracked_na=$2
+ 	local forwarding=$3
+ 
+ 	neigh_show_output=$(${IP_ROUTER} neigh show \
+                 to ${HOST_ADDR} dev ${ROUTER_INTF} nud stale)
+ 	if [ ${drop_unsolicited_na} -eq 0 ] && \
+-			[ ${accept_unsolicited_na} -eq 1 ] && \
++			[ ${accept_untracked_na} -eq 1 ] && \
+ 			[ ${forwarding} -eq 1 ]; then
+ 		# Neighbour entry expected to be present for 011 case
+ 		[[ ${neigh_show_output} ]]
+@@ -179,14 +178,14 @@ test_unsolicited_na_combination() {
+ 	test_unsolicited_na_common $1 $2 $3
+ 	test_msg=("test_unsolicited_na: "
+ 		"drop_unsolicited_na=$1 "
+-		"accept_unsolicited_na=$2 "
++		"accept_untracked_na=$2 "
+ 		"forwarding=$3")
+ 	log_test $? 0 "${test_msg[*]}"
+ 	cleanup
+ }
+ 
+ test_unsolicited_na_combinations() {
+-	# Args: drop_unsolicited_na accept_unsolicited_na forwarding
++	# Args: drop_unsolicited_na accept_untracked_na forwarding
+ 
+ 	# Expect entry
+ 	test_unsolicited_na_combination 0 1 1
+-- 
+2.27.0
+

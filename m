@@ -2,162 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08DA538532
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24AA538533
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242075AbiE3PqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 11:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S241349AbiE3PqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242709AbiE3Ppy (ORCPT
+        with ESMTP id S242673AbiE3Pp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 11:45:54 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2056.outbound.protection.outlook.com [40.107.244.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C475415A3EE;
-        Mon, 30 May 2022 07:55:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cXLPxIMSl5ySEMVDsgdhGcW55LyLmAuwckKlpBLYb8CU94ycKLfgCUYY0pm11pc0FjFhVfrLxOpgBBvUpPt/jhrG7BAk6st5kFXkrFslsGIn17m7yjB8wXwwWyxdlRGjDbdLgWeh64kkiGEqTknKPZXV2IYKJWB43LjQubZOUzqSZ8L+lI8jFAcNcdKUxdCq6R3c8HWsp1aWRGiHRFgH2WpCes7N5nEIDxy6cT/NPqY9KqfcKfbq3cQArGmFZauMdQM0XjC1aErtF+Z61mmJT2DX2Mcld1kTPcx9Lmi5HKQKLom1LAazVbSJS3D7bfCc3UbCKR4Rm39AZYfPSYs7rw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EQ547yExcWveY4uDKq0gq0V5eKy4q8PAPpUqrTBxYpo=;
- b=OhMbnlh7LryyYazQ57ona46Cv7r5zVJA3DExykcAAQLE5qciIhXFU79IWkAOGB/k6aWc9rK+xY20HRXBkzVpIB0L0abpKYQSzH9/cvAN0sBapUiVMbOctrrYdOi1rVs9JDZcbfQJQR+7g2+LE3WEVB1kdp+qPKT0iiHL5iDCiGCiOkkdUQvQHO62XDgwqyDjznYDP2HnNp2L4N7TWLtFotYIhCGBjNROFSYPqUMUHt9hBZBSg3FGk/ik0biRqOf0l/ERa4NLHOsL5/oS58CXxysQYFXiBu7nLLSDsGSjWZa3XW1Jizt6zcxa2+jb7Tnu3kHHFkFCAGYcgwGxCs58qQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EQ547yExcWveY4uDKq0gq0V5eKy4q8PAPpUqrTBxYpo=;
- b=X2XLvkNn4/cEoJIyb8y2AF6wWMLre53/IdqLXUagX5iWR8PGfXabAqYigeb0OKvW6mssdDuHqBn/BOmFwZHhMRGewEBBYC3OKcpEXJYkcBz6Q7eHJxzMnl7ybs7LGR4qHyhmwXwOGO4JLAi9b/AqJ7OjomWiNIW/dEjiX1X3xag=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DM6PR12MB4283.namprd12.prod.outlook.com (2603:10b6:5:211::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Mon, 30 May
- 2022 14:55:47 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7146:65ee:8fd3:dd03]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7146:65ee:8fd3:dd03%4]) with mapi id 15.20.5293.019; Mon, 30 May 2022
- 14:55:47 +0000
-Message-ID: <7eee4274-bd69-df8d-9067-771366217804@amd.com>
-Date:   Mon, 30 May 2022 16:55:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] dma-fence: allow dma fence to have their own lock
-Content-Language: en-US
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220530142232.2871634-1-senozhatsky@chromium.org>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220530142232.2871634-1-senozhatsky@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM6P194CA0061.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:209:84::38) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 30 May 2022 11:45:59 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855174B435;
+        Mon, 30 May 2022 07:56:44 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0CC375C01AA;
+        Mon, 30 May 2022 10:56:42 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 30 May 2022 10:56:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1653922602; x=1654009002; bh=ibjnI8Geex
+        5eh6AY7BjUezUuIjEtyn8A9+EqUJ4bMcc=; b=Zc4guAAbjCZPW1oy4/pvYVjbmK
+        L4SIDfKq+K8W2disdVij7aHl9gykkN+c83dd63PVuGVkMTOL7A6r3GVqFvXajcbl
+        u7RBLsAXNT4gJeZTGwAzjhz1hsFgk1JDXagLzunTPgOhFiRbqM2XC97xXN3oIjUv
+        BxqCMDpQXHSYy4AMJzF5c43hSu1GfYEYpiKqSc9Y6sm7Th2RoEYWUsT1H2ztwwpz
+        bwr3xWHc8mqg6yVX1GNZ/CnSihk7trfanrV8kNcjR/EGmc1e5Nbc/URl62EXt2Oe
+        B8m7TBp7ENKru1m0o66Thzx5Bs++AmOFkUYtpHUEfgCRpxikOVXZT4Ty85Kg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1653922602; x=1654009002; bh=ibjnI8Geex5eh6AY7BjUezUuIjEt
+        yn8A9+EqUJ4bMcc=; b=Ku9WXIBvVTOendts8TxCy1zIHRrURG4K36Fp6BQwY5Kb
+        IolmOUFnvR09GXd3b8cQCxO4+qnK+DW2kQBtdepoLxssSGJvFGb9SVdttDPXDcR1
+        AyX+mbTqRILl+cFoNmZUC0fZ9c3Q04LuJcwazdL5HV+JRYffWS2T3xLlu0Ip0LzP
+        MwbAAw5zKJF1UD6S8W/2m3XlO7/JEY8HQ39n3UhkQpAKaKoL5N71783aTV2HetvZ
+        BSIZvOfcfAZqx4sMgtpfYm/hw0F0WWi9BMfns4esJPtirDaAMC08p2m+89JTCDE8
+        PwVPsK/zEKhCe2s4IIOF/aeps6E4fZokZufLHs0MVQ==
+X-ME-Sender: <xms:KduUYtZn9AxioNICwyMqhiOxXiR9JHpIG4nyPrwB8M_db8zQelkXfg>
+    <xme:KduUYkaWmK5MQWI_JS-rSmPbFXVrpJEsgRbZJDf10Wv9eNOZtGN0O-9V2R7NjdE77
+    6bdAE_ci8g6PvP6hQ>
+X-ME-Received: <xmr:KduUYv8346H6L5bl9JK_tkfJ1FGvlIm1Pb-T3JCDVMHM2wCX4Oamok-7gUzfi4sQ2FU_YoRj6Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeeigdejkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
+    hrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
+    vdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
+    ggtffrrghtthgvrhhnpeevuddugeeihfdtffehgffgudeggeegheetgfevhfekkeeileeu
+    ieejleekiedvgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:KduUYrpdBRhIi15smniQh5BOu53OFH96kOsIhWtPFVBWeiiQWpd5_w>
+    <xmx:KduUYorIOfx2o5_IN3Cuvv8BqUuC08EnpFGBOrjE_3T564wFg_80wA>
+    <xmx:KduUYhT75FpIWw-XHep7pSZx7ClzO07HEYwUQdbBcDsA_y44SScedg>
+    <xmx:KtuUYhlXx3nDUKSuKMh8tTpnLB_4xkHnxT8-hxUp3JhKJdwZmWnkCA>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 30 May 2022 10:56:41 -0400 (EDT)
+Date:   Mon, 30 May 2022 09:56:39 -0500
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Song Liu <song@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 0/2] Add PROG_TEST_RUN support to
+ BPF_PROG_TYPE_KPROBE
+Message-ID: <20220530145639.slbwvbwewonj6im2@kashmir.localdomain>
+References: <cover.1653861287.git.dxu@dxuuu.xyz>
+ <CAPhsuW4nC_7L48aMJfNPcx69O6JtS7zk8p2=4Vro2S1608dztw@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0e6f0579-0610-4f44-77c1-08da424c7ac1
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4283:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB42832B3807D1AF4D81F19EDC83DD9@DM6PR12MB4283.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xOs1+qmegwsbgdnvGkbk5uLZBt6U4RywQ8mRyMO4osSrE+JjfwHsJLPdpREgpygJfXWMwO6ZRBJ/JCBuQcrd05XWMzF+nZcDFiWdP0CATQRbl1EasGbjLsgg2J8HldduGva1ZcMQB5rlcBKYXaqApVwuu7xlmGnYwmkEZEU3CZ8pdXAA25pY1Yqofac9p9FLTp0af5RxRwDe09+n/Is1tKRrD8M89T5PnPqk06kaDF4I3sBoLQHRpfG9Bpkd7z7rxVZWRm81E29ccln2+9zIuD8Bhns8FLPqHdWzbfwMVYGEXpKFeYNNVSnHytsMbeLrEzX+Vn9x2H1J3H6akVspNTocHLdf4DUhOjjdPYa6TpkgL2IJpMGpra6BuGc89MaP/qCfrHfwO7YrEPcXY0/31k+8JqXn3FAVElenMidK5d8VtMqB0eSiOxrfPExYcXEFQo80J/siokUGJaqiApOXIjoo0wRGvUUYymjiHr0dsswLED8GKwrWn9E99KMx/VbzY7ZuOPqr8eMy8WuoOxurXdnOz9oRrMzeiflKa0jyLuT1cQLQ1omDEfEW8CvH1FPuqwXrC9/G5iR7NATQAEz7zN8ItsnVhBu9lBYnZ1qTFl5dtysWAznJlV3+Qi0MTy7n7w3m8vko4jkY2aiGp+AGA/5O+BVLgAUrTl98owhrVFHjnI4qRV/fOciYZgxdQZfxpULGegVJDTGx6+L5i4Bc5wM2otjf7HhabWnQotZuCkOYENf36eoRC9f/INgC+eOpZvKztgF54JE2cCY5Fp27pXNfbozSAgrH1ydVo7zQE6e3+I7BJxaamQEdM99Z8yrz
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(83380400001)(4744005)(8676002)(508600001)(7416002)(6506007)(38100700002)(66556008)(66476007)(4326008)(31686004)(66946007)(36756003)(2616005)(8936002)(6666004)(31696002)(2906002)(186003)(316002)(86362001)(6486002)(54906003)(6512007)(110136005)(966005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q09WcmY4LzFnbzAyN3hXZkNhQkkvc2lwOGJXRFkzNmk2VEQxeHIvS3N3Umtz?=
- =?utf-8?B?NXpreVR3ZGczeVlTajl5Y2wvT2s1bmd1c3NrM2FSb3RjYWZMdmdDRGh1VWsx?=
- =?utf-8?B?ZnphOU5TZUVndk9uL1FFYXpDdmgvTUVLd2liTmxXU0cvb0lEUWU2WC96VDlV?=
- =?utf-8?B?bzQ5OU9YOG5NazNncHdDUzE1WXdVTnlWa0llVGRaaVlmSGpUQVFKQkNmZm92?=
- =?utf-8?B?NEFIMjJDMm1WWjB2aXlmcjNEYUV4VkRCZ1g1L0dsVVJSY0s5alJ0TVF0S1hv?=
- =?utf-8?B?TWdxQUhqenZFZkpBYzF5VjdlR2ZJVE8ydUkvQ041aVpqcEFlWSttYnBMOEo4?=
- =?utf-8?B?bFpCNXVGazZZZERLR0ZwdXIvNC95RnB2VXczVnFTVnZTSDNweU9EL0tpMEtI?=
- =?utf-8?B?UllWRnV6bHNNVWE1REVFNy9MZlZGVy8xTmJSODhNanlVL05EZzNZZUJvNXlC?=
- =?utf-8?B?SDN1alVOZDJGR0IzS0FlWXBmOHQ0YjVWTmVWVGg1QWdkUEpBRmJaaERZOExJ?=
- =?utf-8?B?bTdiSUJaNzM1cHIxVzYxRzJTYWJJbEhVQlNWV0lMM09lK1Z4OVhRUjRta2ll?=
- =?utf-8?B?ZHUwKzlxaHlnTFBRbHZucGUxbUFEbmRYbXZGcDN5RDROQVd0UE84YkNQaVo2?=
- =?utf-8?B?OWpWSVhoUjFkcGhDT3l3T2g0WGNtaWhDQXpJa1dFR2ZZMit6Q3QwclZEYmsv?=
- =?utf-8?B?b21FYVR4K0M1cHF4V20rZnlTcUhESVNwVkFyaWROMDdDbTN4WmtMVlI0S0FC?=
- =?utf-8?B?eE41M251bUlBLzFocmNPc0tUMjVaTXR4dW8yL1JDd1JkZTdDRzRKWko5akNG?=
- =?utf-8?B?N0ViZXR6V1oxU2RBU1JKTlRrRVRiSFR6MitJeDVCWndvWkZjT2FyejdldWxm?=
- =?utf-8?B?NzVJb3pyOEJlNTBxSXJlb0lWRWlaUTQzNEZNbFBOVW8veWhDRm1FamdvRk5x?=
- =?utf-8?B?SmZrL2Zya050cUxjeCtmbVhxclNKQm51ckorcXR1UVUzOFN0TytmYnROYngr?=
- =?utf-8?B?dkxHbHJNMEtxK3JHbC9GY2xrckxhZlg5NmxtMFpTVjRtS05Ubjh3Y0tsZUFo?=
- =?utf-8?B?aE1Odjh0R3JXWWVoL09EOWtDZjZSNnRjWU9nVzlRZ1F2cXRnVUY5cFBRNHdr?=
- =?utf-8?B?Q1ZQeFRmVGZ0Z1NHQUtlelVrN3pWUU9HQWJIMytUUzFZZGthTCtNZytKazZr?=
- =?utf-8?B?cDAzRUZiVzl5ZmlnemFKU0dZZVQrMWNiRm5aVzNDdHEyenovcmcwRUEzMWNl?=
- =?utf-8?B?SUM1dXAzbWVGRmNvQ3pCbTlIVU1LamtteFBVMk03bWllc2V5alN1SVBoaDBn?=
- =?utf-8?B?TjFFdlZvUUJKSElXc0dnOVBjQW40akYwQTUrazg4VmN1M2tTTW1hTDVJb1Nu?=
- =?utf-8?B?RVc4V3VoOU5YQ3ZNL0tTMmNNTG9xa3YxNGozSCtyRnNKbTZGWmlFdG1BYXdu?=
- =?utf-8?B?SG9vcFF2N0UwT2lPb2lGR0pxWk80ZWxiV1MrSC9ub2RwSkVUNDFuVjgvNmMz?=
- =?utf-8?B?b3VHM1ZteTRHU0dDS0tuS0h6ZjFtUlNZb0JjTzRFNTBGYm14d0ZMMFozNHh1?=
- =?utf-8?B?VElIdnpYN2RhbW5CTng4YkNSRlF1TTV2ODhrNk91TWlvVFlMMVVMOUpqbFp0?=
- =?utf-8?B?dFB1d0pRUkFzYVB5M1N1ZlczU1FsTWZXUFEzUjM2eXFNWjdEbDlVK3FFcG9w?=
- =?utf-8?B?MzNuemtQQlpZcG8rUHpHb01na3RRWVFZWmxOWDVVWmg2ZDZVc2JRUnNFRHAx?=
- =?utf-8?B?UC9ZS3BZd0JERUVSeXhKU0VTMk9oNzZlTE5wN2EwTzgzakl4TEZzeEtkVWIv?=
- =?utf-8?B?amVFanJLcnlxNGZTS01HeEtycXpVbFRVQXBxSllpVHNtc0dkaE1RQlR4OGYx?=
- =?utf-8?B?WTlHQVZiYktLZjNnUVhDV3Z4YWNvTjlmdzdsaUZId2tIMHJaTHpHc3JMNngy?=
- =?utf-8?B?cHpxbWtaR1lKYkh4blRZNzRRQVpkQjVzbGk4WTJnSThRa055S0hNWm5peG1x?=
- =?utf-8?B?R3hNUU1Ka2cxTkxsTEJzTS82SlVyc2lORXhxblVyZ05jTGYxMWRSaW5VdjFw?=
- =?utf-8?B?OWYrWmhVWUN2b1JlQit0U25EVTg1YXVGK2QzbExXdDRsMkVmTGUrZC8rZk9J?=
- =?utf-8?B?STRQM3JtUkZEdUxieFBIaGhETXQvK1JwRTNVTzg1Z2dSV0doMDFlZkUvdWZM?=
- =?utf-8?B?VWN6dDREQ2g2NHhPeGRkZHM1d205bDZkaElNYlNrMy93ZFRzMGs2SWN4VjQv?=
- =?utf-8?B?R2lMMmplSGQweTgzT0Y3L3NzMmRZVWw4Ry9FeFFDZXBnYm40NSs5ak16c1E3?=
- =?utf-8?B?L1djTjdOTGthcVBNTHlzdSswTnAwTjBSWHNzT1p0M3dwZ3ZIdFA1di9jZzFl?=
- =?utf-8?Q?f916PgOtzC4prBkJWHHr9yA34lYtUjZbESo6FoddK+Ycu?=
-X-MS-Exchange-AntiSpam-MessageData-1: eAh4gLw0V7Ps2Q==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e6f0579-0610-4f44-77c1-08da424c7ac1
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 14:55:47.2668
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CsdN08+hlHz028LxbjO1/hmdzUR3NBII2JRNfo7f9Pk+X8DRIydMHQZvOA20H59s
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4283
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW4nC_7L48aMJfNPcx69O6JtS7zk8p2=4Vro2S1608dztw@mail.gmail.com>
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey,
+Hi Song,
 
-I'm removing most of the mail because you have a very fundamental 
-misunderstanding about what this dma_fence lock is all about.
+On Sun, May 29, 2022 at 11:00:48PM -0700, Song Liu wrote:
+> On Sun, May 29, 2022 at 3:06 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
+> >
+> > This patchset adds PROG_TEST_RUN support to BPF_PROG_TYPE_KPROBE progs.
+> > On top of being generally useful for unit testing kprobe progs, this
+> > feature more specifically helps solve a relability problem with bpftrace
+> > BEGIN and END probes.
+> >
+> > BEGIN and END probes are run exactly once at the beginning and end of a
+> > bpftrace tracing session, respectively. bpftrace currently implements
+> > the probes by creating two dummy functions and attaching the BEGIN and
+> > END progs, if defined, to those functions and calling the dummy
+> > functions as appropriate. This works pretty well most of the time except
+> > for when distros strip symbols from bpftrace. Every now and then this
+> > happens and users get confused. Having PROG_TEST_RUN support will help
+> > solve this issue by allowing us to directly trigger uprobes from
+> > userspace.
+> >
+> > Admittedly, this is a pretty specific problem and could probably be
+> > solved other ways. However, PROG_TEST_RUN also makes unit testing more
+> > convenient, especially as users start building more complex tracing
+> > applications. So I see this as killing two birds with one stone.
+> 
+> We have BPF_PROG_RUN which is an alias of BPF_PROG_TEST_RUN. I guess
+> that's a better name for the BEGIN/END use case.
 
-Am 30.05.22 um 16:22 schrieb Sergey Senozhatsky:
-> [SNIP]
-> So the `lock` should have at least same lifespan as the DMA fence
-> that borrows it, which is impossible to guarantee in our case.
+Right, sorry. Was getting names mixed up.
 
-Nope, that's not correct. The lock should have at least same lifespan as 
-the context of the DMA fence.
+> 
+> Have you checked out bpf_prog_test_run_raw_tp()? AFAICT, it works as good as
+> kprobe for this use case.
 
-The idea here is that DMA fence signaling and callback calling 
-serializes. E.g. when you have fence a,b,c,d... they must signal in the 
-order a,b,c,d... and that's what this lock is good for.
+I just took a look -- I think it'll work for BEGIN/END use case. But
+also like I mentioned, BPF_PROG_RUN/BPF_PROG_TEST_RUN support for
+kprobes is probably still useful. For example if kprobe accesses 13th
+register. I suppose the raw_tp 12 arg limit could be lifted but it might
+be tricky to capture that logic in the absence of something like `struct
+pt_regs` to check the ctx_size_in against.
 
-If you just want to create a single dma_fence which is also only bound 
-to a single context you can embed the lock into the fence without much 
-problem.
-
-See how the dma_fence_array does that for example: 
-https://elixir.bootlin.com/linux/latest/source/include/linux/dma-fence-array.h#L37
-
-Regards,
-Christian.
+Thanks,
+Daniel

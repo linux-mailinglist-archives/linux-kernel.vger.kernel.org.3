@@ -2,200 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068A8538465
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B41765383F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242490AbiE3OzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 10:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
+        id S242631AbiE3Ozg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 10:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240989AbiE3OoV (ORCPT
+        with ESMTP id S241847AbiE3Op1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 10:44:21 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962DB62CCE
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:55:46 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id u3so14741942wrg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:55:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3ny6VUrWxjHm8jMh3Ia0lCl9MeSKoF7nURmAMV7qqfw=;
-        b=A9vqnek0ZPA0hdZmxuGUbrYRquI1u0RCVqKrwZ14ATjw+ekMR89m9Ed90xvow1mBst
-         p5Xbs5JHmPR0Te9yt1uUWLQCv13rEe/ZSkauaGx+V+gv0Vwjk5reCm/Hj6LYIcwAUnXH
-         J/QTcNhnpiYBRqTVDxiobEYXw1RDKzhbQzb4k9gZZbMB+0/fnrPS6AYkPDPOx2gAOKOl
-         X/lGY1YrhmbGRviMtXJZqHK4zxtd87Tn4CXeWwhBAuGVP5RGI8mh3qxzB34IcvQK32RQ
-         qpEr1a4Q6Nmog7m0YjvF0rRATNUz+3xqhHjkIVny7u0s7Tu+Bu22+OrTRUX2cgQwIahV
-         wc6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3ny6VUrWxjHm8jMh3Ia0lCl9MeSKoF7nURmAMV7qqfw=;
-        b=DkTJXRIICNPqDuogHaD1IVjY/P7hJDBjKUmgWUR+0M7SVHZgRwzEHGYWokHso1EeAL
-         vi73pE62ubBe+WGIjxtlS7sGsU8ANqa70DTzZ1E76Su6KouzIS/kXpL4+ihjYayGVos7
-         fzXpX6JuCsyyOisWbH+qoopmPjDoLxFw9+NUQmeNIu0wdh5IM4Fx/B0j2WR0KTk0U+/H
-         pJc7mHGfn9FUsApZyAqPWDuvj49teJkgC2SI3dpa+9g1CSJluME4EAJmEOVB2/N+tqcI
-         5u8Ok0n4sJLA6o167gN5SPz3xjnyBWx+0WYFUnhsu5Om7lNCh6VRpz5KJt6ZXPhC3H9b
-         X81g==
-X-Gm-Message-State: AOAM530AYm+/zqB4OzgGSoCvnpDyCDB3FyuZl2FuTfbRloHex1dM0lzF
-        hoCmPqK9FTv5qnZZMEr1xh65sQ==
-X-Google-Smtp-Source: ABdhPJyG9MFHWhDCKIB+1mOHRrIPC43arbgwTvE15Nb9SeGNOh+fykkMHaWuUCjeLE7KibBEbUgPjg==
-X-Received: by 2002:adf:ffcf:0:b0:20d:437:97a7 with SMTP id x15-20020adfffcf000000b0020d043797a7mr45424305wrs.286.1653918945433;
-        Mon, 30 May 2022 06:55:45 -0700 (PDT)
-Received: from localhost.localdomain ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id w9-20020adfee49000000b0020cfed0bb7fsm9214856wro.53.2022.05.30.06.55.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 06:55:44 -0700 (PDT)
-From:   Fabien Parent <fparent@baylibre.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] soc: mediatek: pwrap: add mt8365 SoC support
-Date:   Mon, 30 May 2022 15:55:22 +0200
-Message-Id: <20220530135522.762560-3-fparent@baylibre.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220530135522.762560-1-fparent@baylibre.com>
-References: <20220530135522.762560-1-fparent@baylibre.com>
+        Mon, 30 May 2022 10:45:27 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA4B5DE4E;
+        Mon, 30 May 2022 06:57:30 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id B98F41F417FE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653919049;
+        bh=2XRBuky6ctLBMkVpHH42tRbnrHaVzoRJDfOS/8wLl/E=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mPwSP+W1lUR0EdMvCliWfZoiylZ8CVpOpjwgflCUTZaI9WHJh5tJXhk8DyguPhNeN
+         HogdCkNBgtGD2G8U9Ep2K49/vmqE56g1BgD7MA21xGk1ZVBj+VJcIxxm08FCLdNgVK
+         RmZOwzc+caJBzV5axbiwKDrCGcHjZmvJd24egZXw9xLh3XfQFPhTT3EpgfN70g8mqC
+         9sjT+smifz0WHNiGEqr7+RZqCI9QQehNyQ19Mpiv9LWCOB9wzR78FM0tska4e7lqKe
+         50oVtOr/eGMjVeh2uPvpXIVZhL/NQ2LFQ3MNEmBcidBDh44gsd28fmmYzNC+2ue0aj
+         H9xWHCkQ7dKmg==
+Message-ID: <7372dd1b-06f7-5336-4738-15f9b4d4d4b3@collabora.com>
+Date:   Mon, 30 May 2022 16:57:22 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v6 14/22] dma-buf: Introduce new locking convention
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, kernel@collabora.com
+References: <20220526235040.678984-1-dmitry.osipenko@collabora.com>
+ <20220526235040.678984-15-dmitry.osipenko@collabora.com>
+ <0a02a31d-a256-4ca4-0e35-e2ea1868a8ae@amd.com>
+ <e6e17c52-43c2-064b-500e-325bb3ba3b2c@collabora.com>
+ <02e7946b-34ca-b48e-1ba6-e7b63740a2d9@amd.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <02e7946b-34ca-b48e-1ba6-e7b63740a2d9@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add PMIC Wrap support for MT8365 SoC.
+On 5/30/22 16:41, Christian König wrote:
+> Hi Dmitry,
+> 
+> Am 30.05.22 um 15:26 schrieb Dmitry Osipenko:
+>> Hello Christian,
+>>
+>> On 5/30/22 09:50, Christian König wrote:
+>>> Hi Dmitry,
+>>>
+>>> First of all please separate out this patch from the rest of the series,
+>>> since this is a complex separate structural change.
+>> I assume all the patches will go via the DRM tree in the end since the
+>> rest of the DRM patches in this series depend on this dma-buf change.
+>> But I see that separation may ease reviewing of the dma-buf changes, so
+>> let's try it.
+> 
+> That sounds like you are underestimating a bit how much trouble this
+> will be.
+> 
+>>> I have tried this before and failed because catching all the locks in
+>>> the right code paths are very tricky. So expect some fallout from this
+>>> and make sure the kernel test robot and CI systems are clean.
+>> Sure, I'll fix up all the reported things in the next iteration.
+>>
+>> BTW, have you ever posted yours version of the patch? Will be great if
+>> we could compare the changed code paths.
+> 
+> No, I never even finished creating it after realizing how much work it
+> would be.
+> 
+>>>> This patch introduces new locking convention for dma-buf users. From
+>>>> now
+>>>> on all dma-buf importers are responsible for holding dma-buf
+>>>> reservation
+>>>> lock around operations performed over dma-bufs.
+>>>>
+>>>> This patch implements the new dma-buf locking convention by:
+>>>>
+>>>>     1. Making dma-buf API functions to take the reservation lock.
+>>>>
+>>>>     2. Adding new locked variants of the dma-buf API functions for
+>>>> drivers
+>>>>        that need to manage imported dma-bufs under the held lock.
+>>> Instead of adding new locked variants please mark all variants which
+>>> expect to be called without a lock with an _unlocked postfix.
+>>>
+>>> This should make it easier to remove those in a follow up patch set and
+>>> then fully move the locking into the importer.
+>> Do we really want to move all the locks to the importers? Seems the
+>> majority of drivers should be happy with the dma-buf helpers handling
+>> the locking for them.
+> 
+> Yes, I clearly think so.
+> 
+>>
+>>>>     3. Converting all drivers to the new locking scheme.
+>>> I have strong doubts that you got all of them. At least radeon and
+>>> nouveau should grab the reservation lock in their ->attach callbacks
+>>> somehow.
+>> Radeon and Nouveau use gem_prime_import_sg_table() and they take resv
+>> lock already, seems they should be okay (?)
+> 
+> You are looking at the wrong side. You need to fix the export code path,
+> not the import ones.
+> 
+> See for example attach on radeon works like this
+> drm_gem_map_attach->drm_gem_pin->radeon_gem_prime_pin->radeon_bo_reserve->ttm_bo_reserve->dma_resv_lock.
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
----
- drivers/soc/mediatek/mtk-pmic-wrap.c | 80 ++++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
+Yeah, I was looking at the both sides, but missed this one.
 
-diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
-index 8dea5e14d73e..16595c3330ef 100644
---- a/drivers/soc/mediatek/mtk-pmic-wrap.c
-+++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
-@@ -980,6 +980,68 @@ static int mt8195_regs[] = {
- 	[PWRAP_WACS2_RDATA] =		0x8A8,
- };
- 
-+static int mt8365_regs[] = {
-+	[PWRAP_MUX_SEL] =		0x0,
-+	[PWRAP_WRAP_EN] =		0x4,
-+	[PWRAP_DIO_EN] =		0x8,
-+	[PWRAP_CSHEXT_WRITE] =		0x24,
-+	[PWRAP_CSHEXT_READ] =		0x28,
-+	[PWRAP_STAUPD_PRD] =		0x3c,
-+	[PWRAP_STAUPD_GRPEN] =		0x40,
-+	[PWRAP_STAUPD_MAN_TRIG] =	0x58,
-+	[PWRAP_STAUPD_STA] =		0x5c,
-+	[PWRAP_WRAP_STA] =		0x60,
-+	[PWRAP_HARB_INIT] =		0x64,
-+	[PWRAP_HARB_HPRIO] =		0x68,
-+	[PWRAP_HIPRIO_ARB_EN] =		0x6c,
-+	[PWRAP_HARB_STA0] =		0x70,
-+	[PWRAP_HARB_STA1] =		0x74,
-+	[PWRAP_MAN_EN] =		0x7c,
-+	[PWRAP_MAN_CMD] =		0x80,
-+	[PWRAP_MAN_RDATA] =		0x84,
-+	[PWRAP_MAN_VLDCLR] =		0x88,
-+	[PWRAP_WACS0_EN] =		0x8c,
-+	[PWRAP_INIT_DONE0] =		0x90,
-+	[PWRAP_WACS0_CMD] =		0xc00,
-+	[PWRAP_WACS0_RDATA] =		0xc04,
-+	[PWRAP_WACS0_VLDCLR] =		0xc08,
-+	[PWRAP_WACS1_EN] =		0x94,
-+	[PWRAP_INIT_DONE1] =		0x98,
-+	[PWRAP_WACS2_EN] =		0x9c,
-+	[PWRAP_INIT_DONE2] =		0xa0,
-+	[PWRAP_WACS2_CMD] =		0xc20,
-+	[PWRAP_WACS2_RDATA] =		0xc24,
-+	[PWRAP_WACS2_VLDCLR] =		0xc28,
-+	[PWRAP_INT_EN] =		0xb4,
-+	[PWRAP_INT_FLG_RAW] =		0xb8,
-+	[PWRAP_INT_FLG] =		0xbc,
-+	[PWRAP_INT_CLR] =		0xc0,
-+	[PWRAP_SIG_ADR] =		0xd4,
-+	[PWRAP_SIG_MODE] =		0xd8,
-+	[PWRAP_SIG_VALUE] =		0xdc,
-+	[PWRAP_SIG_ERRVAL] =		0xe0,
-+	[PWRAP_CRC_EN] =		0xe4,
-+	[PWRAP_TIMER_EN] =		0xe8,
-+	[PWRAP_TIMER_STA] =		0xec,
-+	[PWRAP_WDT_UNIT] =		0xf0,
-+	[PWRAP_WDT_SRC_EN] =		0xf4,
-+	[PWRAP_WDT_FLG] =		0xfc,
-+	[PWRAP_DEBUG_INT_SEL] =		0x104,
-+	[PWRAP_CIPHER_KEY_SEL] =	0x1c4,
-+	[PWRAP_CIPHER_IV_SEL] =		0x1c8,
-+	[PWRAP_CIPHER_RDY] =		0x1d0,
-+	[PWRAP_CIPHER_MODE] =		0x1d4,
-+	[PWRAP_CIPHER_SWRST] =		0x1d8,
-+	[PWRAP_DCM_EN] =		0x1dc,
-+	[PWRAP_DCM_DBC_PRD] =		0x1e0,
-+	[PWRAP_EINT_STA0_ADR] =		0x44,
-+	[PWRAP_EINT_STA1_ADR] =		0x48,
-+	[PWRAP_INT1_EN] =		0xc4,
-+	[PWRAP_INT1_FLG] =		0xcc,
-+	[PWRAP_INT1_CLR] =		0xd0,
-+	[PWRAP_WDT_SRC_EN_1] =		0xf8,
-+};
-+
- static int mt8516_regs[] = {
- 	[PWRAP_MUX_SEL] =		0x0,
- 	[PWRAP_WRAP_EN] =		0x4,
-@@ -1136,6 +1198,7 @@ enum pwrap_type {
- 	PWRAP_MT8183,
- 	PWRAP_MT8186,
- 	PWRAP_MT8195,
-+	PWRAP_MT8365,
- 	PWRAP_MT8516,
- };
- 
-@@ -1590,6 +1653,7 @@ static int pwrap_init_cipher(struct pmic_wrapper *wrp)
- 	case PWRAP_MT6797:
- 	case PWRAP_MT8173:
- 	case PWRAP_MT8186:
-+	case PWRAP_MT8365:
- 	case PWRAP_MT8516:
- 		pwrap_writel(wrp, 1, PWRAP_CIPHER_EN);
- 		break;
-@@ -2112,6 +2176,19 @@ static struct pmic_wrapper_type pwrap_mt8195 = {
- 	.init_soc_specific = NULL,
- };
- 
-+static const struct pmic_wrapper_type pwrap_mt8365 = {
-+	.regs = mt8365_regs,
-+	.type = PWRAP_MT8365,
-+	.arb_en_all = 0x3ffff,
-+	.int_en_all = 0x7f1fffff,
-+	.int1_en_all = 0x0,
-+	.spi_w = PWRAP_MAN_CMD_SPI_WRITE,
-+	.wdt_src = PWRAP_WDT_SRC_MASK_ALL,
-+	.caps = PWRAP_CAP_INT1_EN | PWRAP_CAP_WDT_SRC1,
-+	.init_reg_clock = pwrap_common_init_reg_clock,
-+	.init_soc_specific = NULL,
-+};
-+
- static struct pmic_wrapper_type pwrap_mt8516 = {
- 	.regs = mt8516_regs,
- 	.type = PWRAP_MT8516,
-@@ -2171,6 +2248,9 @@ static const struct of_device_id of_pwrap_match_tbl[] = {
- 	}, {
- 		.compatible = "mediatek,mt8195-pwrap",
- 		.data = &pwrap_mt8195,
-+	}, {
-+		.compatible = "mediatek,mt8365-pwrap",
-+		.data = &pwrap_mt8365,
- 	}, {
- 		.compatible = "mediatek,mt8516-pwrap",
- 		.data = &pwrap_mt8516,
+> Same for nouveau and probably a few other exporters as well. That will
+> certainly cause a deadlock if you don't fix it.
+> 
+> I strongly suggest to do this step by step, first attach/detach and then
+> the rest.
+
+Thank you very much for the suggestions. I'll implement them in the next
+version.
+
 -- 
-2.36.1
-
+Best regards,
+Dmitry

@@ -2,117 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C12F5376FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E645376BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233431AbiE3ISA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 04:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
+        id S233504AbiE3IT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 04:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiE3IR5 (ORCPT
+        with ESMTP id S231287AbiE3ITX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 04:17:57 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD131183D
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:17:53 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id z43so7989989ede.1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:17:53 -0700 (PDT)
+        Mon, 30 May 2022 04:19:23 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11ADE6CF5B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:19:22 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id u18so3520814plb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:19:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=YSjVIXrz4aX1dpD91UET7Xaw2MPWafK4NrWr0v1gvIU=;
-        b=EF2gtJoOMhhPECKiHY28H+iATlv2dq/o4/nOU3ygyYe/7wgW52995x891LTFHf2GDb
-         NEY4/7Wl7kZPVhgFrDO5bWHPaQ2KcKmMaEFitbOqTLHrc0QbvJljDa74nlONPsC3vLmO
-         e8PbDucVrkf96oq2id2sSF2If5k8zTyhL0Q/U=
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pBLLK5jVhwbNway5d1jcnH/mwgI9yxE1r2VmUrlYtDU=;
+        b=LLgjKgp2+ro4rOIKxUWfMFimQjfxFWRvVWoMjpqWUvgtX/IIENmwdkMHUIq88hcolf
+         ROFZ7vAAUlY+NJsshhvUkkommU11wX7sGxpjL1CjmCeZgVV/zkVhk3p7u/ZyNujeoi9J
+         QxRXyXc9nqN8qIybleH4/7N9FDZp9fBXbaLPk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=YSjVIXrz4aX1dpD91UET7Xaw2MPWafK4NrWr0v1gvIU=;
-        b=TdFZzNmViyP5pjAFwvdC8q8PpcwmBBiSq7566RXgtqqUN55mGl63cwKUIqWTJxh93r
-         xcpLVo2HpmxuOrgcqnoSRtLDjW2i6zMnN1bqA7jZRUYdflgt2tiGaB5RNHdZJlw15u5q
-         cm2EAKH96nEEakAk8VxS0ROi+BBg2fOJj7wkwcM3IOGvWy6xFJ8fCmTgocqSXITySd6O
-         zCX595LmO5dLBtcxQIeadSkREtLRN8Vr36nf284MgIRzZ+9GqM2Lfb82p3nZoSh1DF3K
-         ZOB69qxTKUnMTVabQZXM19l1TpOxt+WkMOiIu7KGP52rRUW8oc0r0brIkdVTUAurS9/P
-         SSqg==
-X-Gm-Message-State: AOAM532LjBHoEnXBKyZPrj1xDuhNo6xV0ex/174Ar+5Xy1Ipu20bLPvI
-        H7txICtcS8JDeAfDkWxqhuz5dA==
-X-Google-Smtp-Source: ABdhPJyVWevsco2ThF7lWQUJr6+RGj1iLEFH43aT9ZE+5VZe50hGTKKueU6g9jvG0y8Oym2Aqp7DRw==
-X-Received: by 2002:a05:6402:1113:b0:428:679e:f73f with SMTP id u19-20020a056402111300b00428679ef73fmr57733573edv.378.1653898672304;
-        Mon, 30 May 2022 01:17:52 -0700 (PDT)
-Received: from miu.piliscsaba.redhat.com (catv-178-48-189-3.catv.fixed.vodafone.hu. [178.48.189.3])
-        by smtp.gmail.com with ESMTPSA id c2-20020a17090603c200b006fea59ef3a5sm3800929eja.32.2022.05.30.01.17.50
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pBLLK5jVhwbNway5d1jcnH/mwgI9yxE1r2VmUrlYtDU=;
+        b=5xCbj0iGCYHiBtA5e4wlCuezMGzMinm676AFMFeFIptlVmMdj870XRp+8VSSb40UQ+
+         YJBBTaFc5pCJvDWEQ+BRu6aDyFbKi3/ONCDawYq7rqSAaVE+L+mTg4xrvOmYCLtW0tv1
+         4wo0lvI9tUiBbh6jLQmGiy5iheQxwEZgaboZbbCemyXHX7Dk3HKjlJXU+Y/AcPEuBSXV
+         Yx2Rs7E5XQSfm7JkEgzGSUTng/Oy4x6cl2OZszpxC9pUwHSUighsLuq7IDfIZKXhPZZo
+         MgRR/GtXGuVRx2iopny+9UXJXB3QklIy/fWrYpyPUqf1fqncwIV+5NEfjKJmxMipbzBw
+         miBw==
+X-Gm-Message-State: AOAM530QpntOfLa55t+FxHEh9r7luJ89yfJW/bMUbr7kfkY7W9XecXTk
+        PrrWVhY9Lz933uEYq2ISHG0VKw==
+X-Google-Smtp-Source: ABdhPJz+H5PQ1/wn0WMWpccN62eOSMQ6CsdGl2YYPW6OhEKjBgqYnlaum+TZJlp8G3W0bq500UZXIw==
+X-Received: by 2002:a17:903:124a:b0:154:c860:6d52 with SMTP id u10-20020a170903124a00b00154c8606d52mr55869147plh.159.1653898761542;
+        Mon, 30 May 2022 01:19:21 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:ae1c:3d63:abec:1097])
+        by smtp.gmail.com with ESMTPSA id m1-20020a170902f64100b001618b70dcc9sm8537900plg.101.2022.05.30.01.19.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 01:17:51 -0700 (PDT)
-Date:   Mon, 30 May 2022 10:17:48 +0200
-From:   Miklos Szeredi <miklos@szeredi.hu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org
-Subject: [GIT PULL] overlayfs update for 5.19
-Message-ID: <YpR9rJkjso7lXdFC@miu.piliscsaba.redhat.com>
+        Mon, 30 May 2022 01:19:21 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Simon Ser <contact@emersion.fr>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH v10 0/4] Separate panel orientation property creating and value setting
+Date:   Mon, 30 May 2022 16:19:06 +0800
+Message-Id: <20220530081910.3947168-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Some drivers, eg. mtk_drm and msm_drm, rely on the panel to set the
+orientation. Panel calls drm_connector_set_panel_orientation() to create
+orientation property and sets the value. However, connector properties
+can't be created after drm_dev_register() is called. The goal is to
+separate the orientation property creation, so drm drivers can create it
+earlier before drm_dev_register().
 
-Please pull from:
+After this series, drm_connector_set_panel_orientation() works like
+before. It won't affect existing callers of
+drm_connector_set_panel_orientation(). The only difference is that
+some drm drivers can call drm_connector_init_panel_orientation_property()
+earlier.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/vfs.git tags/ovl-update-5.19
+Hsin-Yi Wang (4):
+  gpu: drm: separate panel orientation property creating and value
+    setting
+  drm/mediatek: init panel orientation property
+  drm/msm: init panel orientation property
+  arm64: dts: mt8183: Add panel rotation
 
-Support idmapped layers in overlayfs (Christian Brauner).  Add a fix to
-exportfs that is relevant to open_by_handle_at(2) as well.  Also introduce
-new lookup helpers that allow passing mnt_userns into inode_permission().
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  1 +
+ drivers/gpu/drm/drm_connector.c               | 58 ++++++++++++++-----
+ drivers/gpu/drm/mediatek/mtk_dsi.c            |  7 +++
+ drivers/gpu/drm/msm/dsi/dsi_manager.c         |  4 ++
+ include/drm/drm_connector.h                   |  2 +
+ 5 files changed, 59 insertions(+), 13 deletions(-)
 
-Thanks,
-Miklos
+-- 
+2.36.1.124.g0e6072fb45-goog
 
----
-Amir Goldstein (3):
-      ovl: use wrappers to all vfs_*xattr() calls
-      ovl: pass layer mnt to ovl_open_realfile()
-      ovl: store lower path in ovl_inode
-
-Christian Brauner (16):
-      fs: add two trivial lookup helpers
-      exportfs: support idmapped mounts
-      ovl: pass ofs to creation operations
-      ovl: add ovl_upper_mnt_userns() wrapper
-      ovl: handle idmappings in creation operations
-      ovl: pass ofs to setattr operations
-      ovl: use ovl_do_notify_change() wrapper
-      ovl: use ovl_lookup_upper() wrapper
-      ovl: use ovl_path_getxattr() wrapper
-      ovl: handle idmappings for layer fileattrs
-      ovl: handle idmappings for layer lookup
-      ovl: use ovl_copy_{real,upper}attr() wrappers
-      ovl: handle idmappings in ovl_permission()
-      ovl: handle idmappings in layer open helpers
-      ovl: handle idmappings in ovl_xattr_{g,s}et()
-      ovl: support idmapped layers
-
----
- fs/exportfs/expfs.c      |   5 +-
- fs/namei.c               |  70 ++++++++++++--
- fs/overlayfs/copy_up.c   |  90 +++++++++---------
- fs/overlayfs/dir.c       | 147 +++++++++++++++---------------
- fs/overlayfs/export.c    |   5 +
- fs/overlayfs/file.c      |  43 +++++----
- fs/overlayfs/inode.c     |  68 ++++++++------
- fs/overlayfs/namei.c     |  53 +++++++----
- fs/overlayfs/overlayfs.h | 232 +++++++++++++++++++++++++++++++++--------------
- fs/overlayfs/ovl_entry.h |   7 +-
- fs/overlayfs/readdir.c   |  48 +++++-----
- fs/overlayfs/super.c     |  57 ++++++------
- fs/overlayfs/util.c      | 103 ++++++++++++++++-----
- include/linux/namei.h    |   6 ++
- 14 files changed, 598 insertions(+), 336 deletions(-)

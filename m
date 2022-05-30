@@ -2,98 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A449537579
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1C953757C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233498AbiE3Hf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
+        id S233551AbiE3HgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233504AbiE3HfX (ORCPT
+        with ESMTP id S233542AbiE3HgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:35:23 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8692719C7
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:35:21 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id p5-20020a1c2905000000b003970dd5404dso5921657wmp.0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:35:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=j9oWpoYF6cP0rasfQg0lgU3K+paVeBGM3B58Xnx0N70=;
-        b=J+Nmc5vIraLihuVuNTQS3pr8e/7nM1ph14p0AXnhWFqAnwjoMKWbxFIZD2zkjxIEBl
-         gHZUqLzIRqPoLrXbukGzWJM3zfc1ofhuP/ULOzLkZzSgl1hDRyPf7dOo8MfGwy7deYM5
-         vNT2ilEX48SKQX11OPqHQSV3vrRdsQv9LoNVOc81tFGoYO0GGwe4ZueCj+WejHDYxf+h
-         F51DzT9qt/THYLBug11JDqhkQ73pJe2yCCVbI9As873b/Ck83LmW2qKspryFs1iDtJuh
-         HkPYN7VWXoNFGrodnuLTH8uH1Mqx7cse7GHr328H7YXe4Oeq4e5l0q/uv3n8tCezSnvb
-         Ur7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=j9oWpoYF6cP0rasfQg0lgU3K+paVeBGM3B58Xnx0N70=;
-        b=AxpEAk5O2gnOejrug9BTz7bsLq0aNmLkkpnxhHIYKBiSFW2GGnxBQ9vK0yKct6GeMz
-         2uOEH/0l4w1xxTmQPjnl8hXTnuRRpJd5IAAL1J57OtB0+TTS3+n319+cWz5CzIV0dXOv
-         0OJpdEYeEKnjZksaflNFz6ldYfx8d4rPnlnLQc1GlH6hXqUUyv5GmXMKl5k3/y1i/eO9
-         qdkQ6s9yczJdYlWuw5H5N/MB3667lPwUgx28zw3ReRaVoh9qmM1Htr3MeblSCVGI63XQ
-         f39SeJ+sUeCCm/L4gwmlImjH6bEjANZezKVMlyXxTRpVB/Rp66VDF6dr857d8i4ujThc
-         INHw==
-X-Gm-Message-State: AOAM530hTkXoA+lZljXRX0iJcAxqGDnbfRxAiv6MSyL2ICwGTsYW5xK1
-        D6GTsvGWZybWSSdgnbbtReNIPg==
-X-Google-Smtp-Source: ABdhPJxJ7o9DPjs3Sap3nZ8dMyV7GNUSisQEhRGh8ngGsb8rZCZsFbu3TWaWmTIrENCsWJ30MyyU4w==
-X-Received: by 2002:a05:600c:acb:b0:397:bdb:ffea with SMTP id c11-20020a05600c0acb00b003970bdbffeamr17906469wmr.56.1653896120344;
-        Mon, 30 May 2022 00:35:20 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id i8-20020adfefc8000000b002102af52a2csm5860109wrp.9.2022.05.30.00.35.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 00:35:19 -0700 (PDT)
-Message-ID: <11b5c026-26ef-6b79-fbd9-f994a21e6755@linaro.org>
-Date:   Mon, 30 May 2022 09:35:18 +0200
+        Mon, 30 May 2022 03:36:09 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CA039B99;
+        Mon, 30 May 2022 00:36:03 -0700 (PDT)
+X-UUID: 33b064ae7da048188e2a565cc58ae238-20220530
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:57f8ed2e-6554-4fd0-bd82-9213fe71ea40,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:0e78bfb8-3c45-407b-8f66-25095432a27a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 33b064ae7da048188e2a565cc58ae238-20220530
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1687734413; Mon, 30 May 2022 15:35:57 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 30 May 2022 15:35:56 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 30 May 2022 15:35:55 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 30 May 2022 15:35:55 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <linmq006@gmail.com>
+CC:     <bhelgaas@google.com>, <jianjun.wang@mediatek.com>, <kw@linux.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-pci@vger.kernel.org>,
+        <lorenzo.pieralisi@arm.com>, <matthias.bgg@gmail.com>,
+        <maz@kernel.org>, <miles.chen@mediatek.com>, <robh@kernel.org>,
+        <ryder.lee@mediatek.com>
+Subject: Re: [PATCH] PCI: mediatek-gen3: Fix refcount leak in mtk_pcie_init_irq_domains
+Date:   Mon, 30 May 2022 15:35:56 +0800
+Message-ID: <20220530073556.1831-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <6cf820cf-a2e7-c93e-3c00-08bc366f2eb2@gmail.com>
+References: <6cf820cf-a2e7-c93e-3c00-08bc366f2eb2@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 0/2] Add support for Xiaomi Mi 5s Plus
-Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>, Alec Su <ae40515@yahoo.com.tw>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sboyd@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, y.oudjana@protonmail.com
-References: <20220520120449.12996-1-ae40515.ref@yahoo.com.tw>
- <20220520120449.12996-1-ae40515@yahoo.com.tw> <20220530070738.GI1363@bug>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220530070738.GI1363@bug>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2022 09:07, Pavel Machek wrote:
-> Hi!
-> 
->> This series adds the device tree for Xiaomi Mi 5s Plus (xiaomi-natrium)
->> smartphone which is based on Snapdragon 821 SoC.
-> 
-> Please cc phone-devel@ mailing list with phone-related patches.
+Hi Miaoqian,
 
-I think you need to come up with some smart content-pattern for
-get_maintainers, because there is little chance I will remember to
-manually Cc some different mailing lists depending on type of some
-device or some other factor. I remember just to cc soc folks on certain
-patches and that's it. Nothing else fits my memory. :) To avoid the
-problem of poor human memory, we have a tool - scripts/get_maintainer.pl
-- and contributors are encouraged to use that one. If you want to be
-cc-ed, please either work on proper maintainers entry or set up some
-custom lei filters.
+>Hi, Miles
+>
+>On 2022/5/30 10:19, Miles Chen wrote:
+>> Hi Miaoqian,
+>>
+>>>>> 						  &intx_domain_ops, pcie);
+>>>>> 	if (!pcie->intx_domain) {
+>>>>> 		dev_err(dev, "failed to create INTx IRQ domain\n");
+>>>>> +		of_node_put(intc_node);
+>>>>> 		return -ENODEV;
+>>>>> 	}
+>>>> Thanks for doing this.
+>>>>
+>>>> I checked mtk_pcie_init_irq_domains() and there are multiple exit paths like
+>>>> err_msi_domain and err_msi_bottom_domain and the normal path which also
+>>>> need of_node_put(intc_node).
+>>> Thanks for your reply,
+>>>
+>>> I didn't add of_node_put() in other paths because I am not sure if the reference passed through irq_domain_add_linear(), since intc_node is passed to irq_domain_add_linear().
+>>>
+>>> __irq_domain_add() keeps &node->fwnode in the irq_domain structure.
+>>>
+>>> and use fwnode_handle_get() to get the reference of fwnode, but I still uncertain.
+>>>
+>>> If the reference don't needed anymore after irq_domain_add_linear(),
+>>>
+>>> your suggestion looks fine, and I will submit v2.
+>>
+>> Thanks for your reply, I think we can do similar things like
+>> rtl8365mb_irq_setup() in drivers/net/dsa/realtek/rtl8365mb.c
+>
+>I checked rtl8365mb_irq_setup(), it calls of_node_put() by goto statement for error paths.
+>
+>and calls of_node_put() before return 0 in normal path. I didn't see the same problem.
 
-Best regards,
-Krzysztof
+Sorry for the confusing. I meant that we can do the same thing - 
+it calls of_node_put() by goto statement for error paths
+and calls of_node_put() before return 0 in normal path. :-)
+
+Thanks,
+Miles

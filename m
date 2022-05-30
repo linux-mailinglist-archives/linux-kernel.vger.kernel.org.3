@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6475376B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B4B537710
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 10:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbiE3IaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 04:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
+        id S233889AbiE3Ie3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 04:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231432AbiE3IaN (ORCPT
+        with ESMTP id S231302AbiE3IeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 04:30:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB5A75212;
-        Mon, 30 May 2022 01:30:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46B8B60DD8;
-        Mon, 30 May 2022 08:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 877D7C385B8;
-        Mon, 30 May 2022 08:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653899411;
-        bh=/tZ0Vu5aT5OryBX4TVZ47LFjNaoFWQryrceZ5hFB8xc=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=qSlraGWG9JUGjkvG0CRRTWCgIWF/IiZCaeXEKBKfLxcG/Jqsm5RK0KcYVFmnchGHq
-         S9oj/RZOSU6rXy7lp0T0SLivjFJwiqscWDN/LxYtxqdGmjMMZe3GLoomolYJ/+wHlo
-         TX5fA/DToXiS4JFCJjNzQkxFKVtZOMI1iHG/Pki8PqWJVCdSuYHGV07x3/IF7Uky89
-         gnY4tU7XawTsYc6+Jk42/+Kv65maydbURDWrwOV6jtMhQoeGXqwD7p3R+yxN2ggHeB
-         2sZ/y0GcRaeQBh/65n6TLkg99HU0KYItRTGogFenmCWsQwfZk+XAY8LJEnYMBzC82Q
-         HYAXuvwYK9GjQ==
-Content-Type: text/plain; charset="utf-8"
+        Mon, 30 May 2022 04:34:25 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0781A66CAC;
+        Mon, 30 May 2022 01:34:23 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id B78A41F42694
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653899662;
+        bh=qUCGQiwcmmxHUZWpHYZduseXroEBbLWvH0gOBqAZRus=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OegG5mkCCC00NQZCKbWpWKo/eyoZEns6uPwDCnhGm7pcarfTCq/jkMWxjMvPVBKvA
+         TrOUXwCPnkWP5PtrHHJO/2MRxVMWbhUA2wAqy34QewdTSuhv0o48C/+JBJBNFb6fJh
+         kFzJwwRaQDt6p/C9Tip+aJ5zPMfs7yOuas8lRHaUTeQNu+waJ1EMHeNuRUGCtmxDum
+         4Xs3pkjATcmTNICMZReOTqhAPi4eSG54/WfHM+G4N4AwE1VSpCXbkbJT6/YCs0xogC
+         +SqFChfGfaWZscKKXbY0UmcLBzhQTDRwxAJh261kwsstOLUvPhP+61x6ghWe4V3l5l
+         1FSrHDNDPuE7g==
+Message-ID: <74a6159b-40d0-bbc3-5b4a-ebf6ed98bac7@collabora.com>
+Date:   Mon, 30 May 2022 10:34:19 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: wifi: cw1200: cleanup the code a bit
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220517014136.410450-1-bernard@vivo.com>
-References: <20220517014136.410450-1-bernard@vivo.com>
-To:     Bernard Zhao <bernard@vivo.com>
-Cc:     Solomon Peachy <pizza@shaftnet.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhaojunkui2008@126.com,
-        Bernard Zhao <bernard@vivo.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <165389938026.27266.17563804631194227085.kvalo@kernel.org>
-Date:   Mon, 30 May 2022 08:30:09 +0000 (UTC)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v1 0/2] MT8192 pinctrl properties adjustments
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Linus Walleij <linus.walleij@linaro.org>
+Cc:     kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20220525155714.1837360-1-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220525155714.1837360-1-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,19 +60,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bernard Zhao <bernard@vivo.com> wrote:
-
-> Delete if NULL check before dev_kfree_skb call.
-> This change is to cleanup the code a bit.
+Il 25/05/22 17:57, Nícolas F. R. A. Prado ha scritto:
 > 
-> Signed-off-by: Bernard Zhao <bernard@vivo.com>
+> The two patches in this series substitute properties in the mt8192
+> pinctrl dt-binding for ones which have a clearer meaning and are more
+> standardized. At this point there's no DT using the mt8192 pinctrl
+> binding, so if such changes are to be made, they need to happen now.
+> 
+> 
+> Nícolas F. R. A. Prado (2):
+>    dt-bindings: pinctrl: mt8192: Add drive-strength-microamp
+>    dt-bindings: pinctrl: mt8192: Use generic bias instead of pull-*-adv
+> 
+>   .../bindings/pinctrl/pinctrl-mt8192.yaml      | 58 ++++++-------------
+>   1 file changed, 18 insertions(+), 40 deletions(-)
+> 
 
-Patch applied to wireless-next.git, thanks.
+Hey Nic,
 
-d092de2c28dc wifi: cw1200: cleanup the code a bit
+As you know, I definitely agree with these changes, but they don't deserve
+to get any Fixes tag: backporting should be useless in this case... and you
+anyway aren't fixing a faulty binding.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220517014136.410450-1-bernard@vivo.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+Cheers!
+Angelo

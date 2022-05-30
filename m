@@ -2,88 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41765383F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 394D05383E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 17:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242631AbiE3Ozg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 10:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
+        id S240290AbiE3PD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 11:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241847AbiE3Op1 (ORCPT
+        with ESMTP id S243235AbiE3PBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 10:45:27 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA4B5DE4E;
-        Mon, 30 May 2022 06:57:30 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id B98F41F417FE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653919049;
-        bh=2XRBuky6ctLBMkVpHH42tRbnrHaVzoRJDfOS/8wLl/E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mPwSP+W1lUR0EdMvCliWfZoiylZ8CVpOpjwgflCUTZaI9WHJh5tJXhk8DyguPhNeN
-         HogdCkNBgtGD2G8U9Ep2K49/vmqE56g1BgD7MA21xGk1ZVBj+VJcIxxm08FCLdNgVK
-         RmZOwzc+caJBzV5axbiwKDrCGcHjZmvJd24egZXw9xLh3XfQFPhTT3EpgfN70g8mqC
-         9sjT+smifz0WHNiGEqr7+RZqCI9QQehNyQ19Mpiv9LWCOB9wzR78FM0tska4e7lqKe
-         50oVtOr/eGMjVeh2uPvpXIVZhL/NQ2LFQ3MNEmBcidBDh44gsd28fmmYzNC+2ue0aj
-         H9xWHCkQ7dKmg==
-Message-ID: <7372dd1b-06f7-5336-4738-15f9b4d4d4b3@collabora.com>
-Date:   Mon, 30 May 2022 16:57:22 +0300
+        Mon, 30 May 2022 11:01:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BAC74DEB;
+        Mon, 30 May 2022 07:02:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E02261138;
+        Mon, 30 May 2022 14:02:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 872F7C385B8;
+        Mon, 30 May 2022 14:02:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653919328;
+        bh=C2X5kSVfJKWy7iJa8rZT/0Escr5C771N57orGsEtS1E=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=m2VzrdOoPJY4ZJttjh9yFNKKEJwm9RcAA9PY+8FsNzXxT6aAEq1JV9+owT9gl/EQZ
+         7hl+yP33+Pjd9g3H+G0JFCraxieuBqqgJNgzUqdOvdTI+7yzcq1bmfYgOAXPixaseQ
+         Y6P7yZALek06IX16wvn3SYbrThPO2siGOkGD8q5tOK2hlUaenKjEks7cv7U/f2iBDV
+         SqDFpxhRToU4Kxh8qRPlgKDUSNKoP1jPaWRYcs2eIWwey90Ay9P7Vhx9KAgrMT/xM6
+         jtEVfKJwQL/lafRqwqvyUUGIufPMicAKUEZUGsWPlVWFUUXBjGVQuHctK1XrVjv7ch
+         oHSFGfaKkprZQ==
+Message-ID: <9915b7b556106d2a525941141755adcca9e50163.camel@kernel.org>
+Subject: Re: [PATCH -next,v2] fuse: return the more nuanced writeback error
+ on close()
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Miklos Szeredi <miklos@szeredi.hu>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     ChenXiaoSong <chenxiaosong2@huawei.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liuyongqiang13@huawei.com, "zhangyi (F)" <yi.zhang@huawei.com>,
+        zhangxiaoxu5@huawei.com, Steve French <smfrench@gmail.com>,
+        NeilBrown <neilb@suse.de>
+Date:   Mon, 30 May 2022 10:02:06 -0400
+In-Reply-To: <CAJfpegt-+6oSCxx1-LHet4qm4s7p0jSoP9Vg8PJka3=1dqBXng@mail.gmail.com>
+References: <20220523014838.1647498-1-chenxiaosong2@huawei.com>
+         <CAJfpegt-+6oSCxx1-LHet4qm4s7p0jSoP9Vg8PJka3=1dqBXng@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v6 14/22] dma-buf: Introduce new locking convention
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, kernel@collabora.com
-References: <20220526235040.678984-1-dmitry.osipenko@collabora.com>
- <20220526235040.678984-15-dmitry.osipenko@collabora.com>
- <0a02a31d-a256-4ca4-0e35-e2ea1868a8ae@amd.com>
- <e6e17c52-43c2-064b-500e-325bb3ba3b2c@collabora.com>
- <02e7946b-34ca-b48e-1ba6-e7b63740a2d9@amd.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <02e7946b-34ca-b48e-1ba6-e7b63740a2d9@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,85 +61,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/22 16:41, Christian König wrote:
-> Hi Dmitry,
-> 
-> Am 30.05.22 um 15:26 schrieb Dmitry Osipenko:
->> Hello Christian,
->>
->> On 5/30/22 09:50, Christian König wrote:
->>> Hi Dmitry,
->>>
->>> First of all please separate out this patch from the rest of the series,
->>> since this is a complex separate structural change.
->> I assume all the patches will go via the DRM tree in the end since the
->> rest of the DRM patches in this series depend on this dma-buf change.
->> But I see that separation may ease reviewing of the dma-buf changes, so
->> let's try it.
-> 
-> That sounds like you are underestimating a bit how much trouble this
-> will be.
-> 
->>> I have tried this before and failed because catching all the locks in
->>> the right code paths are very tricky. So expect some fallout from this
->>> and make sure the kernel test robot and CI systems are clean.
->> Sure, I'll fix up all the reported things in the next iteration.
->>
->> BTW, have you ever posted yours version of the patch? Will be great if
->> we could compare the changed code paths.
-> 
-> No, I never even finished creating it after realizing how much work it
-> would be.
-> 
->>>> This patch introduces new locking convention for dma-buf users. From
->>>> now
->>>> on all dma-buf importers are responsible for holding dma-buf
->>>> reservation
->>>> lock around operations performed over dma-bufs.
->>>>
->>>> This patch implements the new dma-buf locking convention by:
->>>>
->>>>     1. Making dma-buf API functions to take the reservation lock.
->>>>
->>>>     2. Adding new locked variants of the dma-buf API functions for
->>>> drivers
->>>>        that need to manage imported dma-bufs under the held lock.
->>> Instead of adding new locked variants please mark all variants which
->>> expect to be called without a lock with an _unlocked postfix.
->>>
->>> This should make it easier to remove those in a follow up patch set and
->>> then fully move the locking into the importer.
->> Do we really want to move all the locks to the importers? Seems the
->> majority of drivers should be happy with the dma-buf helpers handling
->> the locking for them.
-> 
-> Yes, I clearly think so.
-> 
->>
->>>>     3. Converting all drivers to the new locking scheme.
->>> I have strong doubts that you got all of them. At least radeon and
->>> nouveau should grab the reservation lock in their ->attach callbacks
->>> somehow.
->> Radeon and Nouveau use gem_prime_import_sg_table() and they take resv
->> lock already, seems they should be okay (?)
-> 
-> You are looking at the wrong side. You need to fix the export code path,
-> not the import ones.
-> 
-> See for example attach on radeon works like this
-> drm_gem_map_attach->drm_gem_pin->radeon_gem_prime_pin->radeon_bo_reserve->ttm_bo_reserve->dma_resv_lock.
+On Mon, 2022-05-30 at 14:13 +0200, Miklos Szeredi wrote:
+> On Mon, 23 May 2022 at 03:35, ChenXiaoSong <chenxiaosong2@huawei.com> wro=
+te:
+> >=20
+> > As filemap_check_errors() only report -EIO or -ENOSPC, we return more n=
+uanced
+> > writeback error -(file->f_mapping->wb_err & MAX_ERRNO).
+> >=20
+> >   filemap_write_and_wait
+> >     filemap_write_and_wait_range
+> >       filemap_check_errors
+> >         -ENOSPC or -EIO
+> >   filemap_check_wb_err
+> >     errseq_check
+> >       return -(file->f_mapping->wb_err & MAX_ERRNO)
+> >=20
+> > Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+> > ---
+> >  fs/fuse/file.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> > index f18d14d5fea1..9917bc2795e6 100644
+> > --- a/fs/fuse/file.c
+> > +++ b/fs/fuse/file.c
+> > @@ -488,10 +488,10 @@ static int fuse_flush(struct file *file, fl_owner=
+_t id)
+> >         inode_unlock(inode);
+> >=20
+> >         err =3D filemap_check_errors(file->f_mapping);
+> > +       /* return more nuanced writeback errors */
+> >         if (err)
+> > -               return err;
+> > +               return filemap_check_wb_err(file->f_mapping, 0);
+>=20
+> I'm wondering if this should be file_check_and_advance_wb_err() instead.
+>=20
 
-Yeah, I was looking at the both sides, but missed this one.
+I think that it probably shouldn't be, actually. Reason below...
 
-> Same for nouveau and probably a few other exporters as well. That will
-> certainly cause a deadlock if you don't fix it.
-> 
-> I strongly suggest to do this step by step, first attach/detach and then
-> the rest.
+> Is there a difference between ->flush() and ->fsync()?
+>=20
+> Jeff, can you please help?
+>=20
+>=20
 
-Thank you very much for the suggestions. I'll implement them in the next
-version.
+The main difference is that ->flush is called from filp_close, so it's
+called when a file descriptor (or equivalent) is being torn down out,
+whereas ->fsync is (obviously) called from the fsync codepath.
 
--- 
-Best regards,
-Dmitry
+We _must_ report writeback errors on fsync, but reporting them on the
+close() syscall is less clear. The thing about close() is that it's
+going be successful no matter what is returned. The file descriptor will
+no longer work afterward regardless.
+
+fsync also must also initiate writeback of all the buffered data, but
+it's not required for filesystems to do that on close() (and in fact,
+there are good reasons not to if you can). A successful close() tells
+you nothing about whether your data made it to the backing store. It
+might just not have been synced out yet.
+
+Personally, I think it's probably best to _not_ return writeback errors
+on close at all. The only "legitimate" error on close is -EBADF.
+Arguably, we should make ->flush be void return. Note that most
+filp_close callers ignore the error anyway, so it's not much of a
+stretch.
+
+In any case, if you do decide to return errors in fuse_flush, then
+advancing the cursor would also have the effect of masking writeback
+errors on dup()'ed file descriptors, and I don't think you want to do
+that.
+--=20
+Jeff Layton <jlayton@kernel.org>

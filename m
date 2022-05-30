@@ -2,365 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5ABC5375DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E8F5375D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 09:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233943AbiE3Hsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 03:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S233911AbiE3HsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 03:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbiE3Hsh (ORCPT
+        with ESMTP id S233904AbiE3HsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 03:48:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 098AB71D8B
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653896902;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PEMVsNOAzZKL9Irxm9eBIY6vcqLvs7dAXVbpmQP/bfk=;
-        b=By7Gerwzvy7p9dkcdKexj+Zg3fGRZ49UqudzF8ejpu5tIIJ8Wc2/4b+lbLKJDzcRhHgDDW
-        63mVxegXdDNYZVfTYBH5HeJ0C9/jvOlOArMbLjF0OpzcD+TelsYmBjPR41lxRROsrSnMwE
-        DszSt6X/eYAolZiKR9BMWe+AEQDK7Ro=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-461-J26GZ1GhPMCU740ltIXXRw-1; Mon, 30 May 2022 03:48:13 -0400
-X-MC-Unique: J26GZ1GhPMCU740ltIXXRw-1
-Received: by mail-wr1-f69.google.com with SMTP id bt14-20020a056000080e00b002100d89c219so1402058wrb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 00:48:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=PEMVsNOAzZKL9Irxm9eBIY6vcqLvs7dAXVbpmQP/bfk=;
-        b=FTjKpzzzAY8Ui9H9Pg5rFzw6j6FXv0i+LQsGqospsvvuA8jAOrHxdtKMfeM2ZExlYN
-         fDdt84/2S7104jWldMZYi8xEpYCZZiGNotniPUpyQYgOJK5r6FQDcorwtaWJ2BZhn3ep
-         bihVJs7Zwy1pGDcfE0q0qQoenyjpllf2QwpMMZISY4qIDorB/UbTmTGUC3C4QZk/pW8/
-         wv1k4mC89BN94GLB3EWtjaUy3BpWqG3JiQgZUggIflpTmWo0j649Wu3qKqdTik5gpTml
-         QGA+QLzIYxz4v1tTiMPjirYeo7NTNfC1Eaovms3N7ysxCSWYlPiLqtpsmfnhr7s4ujSl
-         DgRg==
-X-Gm-Message-State: AOAM531zeHNjamxyG5QiYbym/edbxYne9L1GE7DUo9dwOa2Ue+rDpNRV
-        U6yJCBnr+lhRGwSU5DXvHLHANr+imU0y7sneLMZ99ni+2Nzoz7/2DWSxh/Z7ArbpZ9zjFf71NeE
-        yceC/vDJD5+Du9Y1vNC3zWDeP
-X-Received: by 2002:adf:d1c4:0:b0:210:1935:3dd8 with SMTP id b4-20020adfd1c4000000b0021019353dd8mr12366049wrd.229.1653896892002;
-        Mon, 30 May 2022 00:48:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyNPExjXLN7wQlflrPRtntRQrkaNjM7MUf8QcWcvv9S4BcH43wTUtjdzSQBAqMJnsRF+swHNw==
-X-Received: by 2002:adf:d1c4:0:b0:210:1935:3dd8 with SMTP id b4-20020adfd1c4000000b0021019353dd8mr12366031wrd.229.1653896891745;
-        Mon, 30 May 2022 00:48:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:7c00:aaa9:2ce5:5aa0:f736? (p200300cbc7047c00aaa92ce55aa0f736.dip0.t-ipconnect.de. [2003:cb:c704:7c00:aaa9:2ce5:5aa0:f736])
-        by smtp.gmail.com with ESMTPSA id b14-20020a056000054e00b0021023877ac5sm5990344wrf.107.2022.05.30.00.48.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 00:48:11 -0700 (PDT)
-Message-ID: <612e42f7-1a97-9b01-2d45-d4661911e7a8@redhat.com>
-Date:   Mon, 30 May 2022 09:48:10 +0200
+        Mon, 30 May 2022 03:48:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA3A71D8B;
+        Mon, 30 May 2022 00:48:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A0E060DF6;
+        Mon, 30 May 2022 07:48:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 721C8C385B8;
+        Mon, 30 May 2022 07:48:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1653896898;
+        bh=ot8RSXY3LkZoLuZYtf8fmVq4D1Hc+uwtOXvjNEh/DhQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Wnj2llm7uuWhzgymdtTS14NE591yhQJNEGaC0rLfGdaHBbRp0TJRMbr8MilOfCRRI
+         vVaFyI2zzYblxdLMTQ49MKCLhFRxhPVPfBPjs5l7Wz652Vyz9WQPhXcBpS5QzOjMOH
+         Lp5l8gH5Hhm7MNWDDuxkup04JAK9MhZWVuxvCq3U=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.10.119
+Date:   Mon, 30 May 2022 09:48:14 +0200
+Message-Id: <165389689496142@kroah.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     zhenwei pi <pizhenwei@bytedance.com>, akpm@linux-foundation.org,
-        naoya.horiguchi@nec.com, mst@redhat.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        pbonzini@redhat.com, peterx@redhat.com, qemu-devel@nongnu.org
-References: <20220520070648.1794132-1-pizhenwei@bytedance.com>
- <20220520070648.1794132-4-pizhenwei@bytedance.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 3/3] virtio_balloon: Introduce memory recover
-In-Reply-To: <20220520070648.1794132-4-pizhenwei@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I'm announcing the release of the 5.10.119 kernel.
 
-> +
->  struct virtio_balloon {
->  	struct virtio_device *vdev;
->  	struct virtqueue *inflate_vq, *deflate_vq, *stats_vq, *free_page_vq;
-> @@ -126,6 +133,16 @@ struct virtio_balloon {
->  	/* Free page reporting device */
->  	struct virtqueue *reporting_vq;
->  	struct page_reporting_dev_info pr_dev_info;
-> +
-> +	/* Memory recover VQ - VIRTIO_BALLOON_F_RECOVER */
-> +	struct virtqueue *recover_vq;
-> +	spinlock_t recover_vq_lock;
-> +	struct notifier_block memory_failure_nb;
-> +	struct list_head corrupted_page_list;
-> +	struct list_head recovered_page_list;
-> +	spinlock_t recover_page_list_lock;
-> +	struct __virtio_balloon_recover in_vbr;
-> +	struct work_struct unpoison_memory_work;
+All users of the 5.10 kernel series must upgrade.
 
-I assume we want all that only with CONFIG_MEMORY_FAILURE.
+The updated 5.10.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
->  };
->  
->  static const struct virtio_device_id id_table[] = {
-> @@ -494,6 +511,198 @@ static void update_balloon_size_func(struct work_struct *work)
->  		queue_work(system_freezable_wq, work);
->  }
->  
-> +/*
-> + * virtballoon_memory_failure - notified by memory failure, try to fix the
-> + *                              corrupted page.
-> + * The memory failure notifier is designed to call back when the kernel handled
-> + * successfully only, WARN_ON_ONCE on the unlikely condition to find out any
-> + * error(memory error handling is a best effort, not 100% coverd).
-> + */
-> +static int virtballoon_memory_failure(struct notifier_block *notifier,
-> +				      unsigned long pfn, void *parm)
-> +{
-> +	struct virtio_balloon *vb = container_of(notifier, struct virtio_balloon,
-> +						 memory_failure_nb);
-> +	struct page *page;
-> +	struct __virtio_balloon_recover *out_vbr;
-> +	struct scatterlist sg;
-> +	unsigned long flags;
-> +	int err;
-> +
-> +	page = pfn_to_online_page(pfn);
-> +	if (WARN_ON_ONCE(!page))
-> +		return NOTIFY_DONE;
-> +
-> +	if (PageHuge(page))
-> +		return NOTIFY_DONE;
-> +
-> +	if (WARN_ON_ONCE(!PageHWPoison(page)))
-> +		return NOTIFY_DONE;
-> +
-> +	if (WARN_ON_ONCE(page_count(page) != 1))
-> +		return NOTIFY_DONE;
+thanks,
 
-Relying on the page_count to be 1 for correctness is usually a bit
-shaky, for example, when racing against isolate_movable_page() that
-might temporarily bump upo the refcount.
+greg k-h
 
-> +
-> +	get_page(page); /* balloon reference */
-> +
-> +	out_vbr = kzalloc(sizeof(*out_vbr), GFP_KERNEL);
+------------
 
-Are we always guaranteed to be able to use GFP_KERNEL out of MCE
-context? (IOW, are we never atomic?)
+ Documentation/admin-guide/kernel-parameters.txt |    6 
+ Documentation/admin-guide/sysctl/kernel.rst     |   22 
+ MAINTAINERS                                     |    2 
+ Makefile                                        |    2 
+ arch/alpha/include/asm/timex.h                  |    1 
+ arch/arm/include/asm/timex.h                    |    1 
+ arch/ia64/include/asm/timex.h                   |    1 
+ arch/m68k/include/asm/timex.h                   |    2 
+ arch/mips/include/asm/timex.h                   |   17 
+ arch/nios2/include/asm/timex.h                  |    3 
+ arch/parisc/include/asm/timex.h                 |    3 
+ arch/powerpc/include/asm/timex.h                |    1 
+ arch/riscv/include/asm/timex.h                  |    2 
+ arch/s390/include/asm/timex.h                   |    1 
+ arch/sparc/include/asm/timex_32.h               |    4 
+ arch/um/include/asm/timex.h                     |    9 
+ arch/x86/crypto/Makefile                        |    4 
+ arch/x86/crypto/blake2s-glue.c                  |  166 -
+ arch/x86/crypto/blake2s-shash.c                 |   77 
+ arch/x86/include/asm/timex.h                    |    9 
+ arch/x86/include/asm/tsc.h                      |    7 
+ arch/x86/kernel/cpu/mshyperv.c                  |    2 
+ arch/x86/kvm/lapic.c                            |    6 
+ arch/x86/kvm/mmu/mmu.c                          |    6 
+ arch/x86/kvm/x86.c                              |    2 
+ arch/xtensa/include/asm/timex.h                 |    6 
+ crypto/Kconfig                                  |    3 
+ crypto/blake2s_generic.c                        |  158 -
+ crypto/drbg.c                                   |   17 
+ drivers/acpi/sysfs.c                            |   23 
+ drivers/char/Kconfig                            |    3 
+ drivers/char/hw_random/core.c                   |    1 
+ drivers/char/random.c                           | 3035 ++++++++----------------
+ drivers/hv/vmbus_drv.c                          |    2 
+ drivers/media/test-drivers/vim2m.c              |   22 
+ drivers/net/Kconfig                             |    1 
+ drivers/net/wireguard/noise.c                   |   45 
+ drivers/staging/rtl8723bs/os_dep/ioctl_linux.c  |    6 
+ include/crypto/blake2s.h                        |   66 
+ include/crypto/chacha.h                         |   15 
+ include/crypto/drbg.h                           |    2 
+ include/crypto/internal/blake2s.h               |  123 
+ include/linux/cpuhotplug.h                      |    2 
+ include/linux/hw_random.h                       |    2 
+ include/linux/mm.h                              |    1 
+ include/linux/prandom.h                         |   23 
+ include/linux/random.h                          |  100 
+ include/linux/security.h                        |    2 
+ include/linux/siphash.h                         |   28 
+ include/linux/timex.h                           |   10 
+ include/net/inet_hashtables.h                   |    2 
+ include/net/secure_seq.h                        |    4 
+ include/trace/events/random.h                   |  330 --
+ init/main.c                                     |   13 
+ kernel/cpu.c                                    |   11 
+ kernel/debug/debug_core.c                       |   24 
+ kernel/debug/kdb/kdb_main.c                     |   62 
+ kernel/irq/handle.c                             |    2 
+ kernel/time/timekeeping.c                       |   15 
+ lib/Kconfig.debug                               |    3 
+ lib/crypto/Kconfig                              |   23 
+ lib/crypto/Makefile                             |    9 
+ lib/crypto/blake2s-generic.c                    |    6 
+ lib/crypto/blake2s-selftest.c                   |   33 
+ lib/crypto/blake2s.c                            |   81 
+ lib/random32.c                                  |   16 
+ lib/sha1.c                                      |   95 
+ lib/siphash.c                                   |   32 
+ lib/vsprintf.c                                  |   10 
+ mm/util.c                                       |   32 
+ net/core/secure_seq.c                           |    4 
+ net/ipv4/inet_hashtables.c                      |   28 
+ net/ipv6/inet6_hashtables.c                     |    4 
+ security/security.c                             |    2 
+ sound/pci/ctxfi/ctatc.c                         |    2 
+ sound/pci/ctxfi/cthardware.h                    |    3 
+ 76 files changed, 1864 insertions(+), 3034 deletions(-)
 
-> +	if (WARN_ON_ONCE(!out_vbr))
-> +		return NOTIFY_BAD;
-> +
-> +	spin_lock(&vb->recover_page_list_lock);
-> +	balloon_page_push(&vb->corrupted_page_list, page);
-> +	spin_unlock(&vb->recover_page_list_lock);
-> +
-> +	out_vbr->vbr.cmd = VIRTIO_BALLOON_R_CMD_RECOVER;
+Andy Shevchenko (1):
+      ACPI: sysfs: Make sparse happy about address space in use
 
-This makes me wonder if we should have a more generic guest->host
-request queue, similar to what e.g., virtio-mem uses, instead of adding
-a separate VIRTIO_BALLOON_VQ_RECOVER vq.
+Ard Biesheuvel (1):
+      random: avoid arch_get_random_seed_long() when collecting IRQ randomness
 
-> +	set_page_pfns(vb, out_vbr->pfns, page);
-> +	sg_init_one(&sg, out_vbr, sizeof(*out_vbr));
-> +
-> +	spin_lock_irqsave(&vb->recover_vq_lock, flags);
-> +	err = virtqueue_add_outbuf(vb->recover_vq, &sg, 1, out_vbr, GFP_KERNEL);
-> +	if (unlikely(err)) {
-> +		spin_unlock_irqrestore(&vb->recover_vq_lock, flags);
-> +		return NOTIFY_DONE;
-> +	}
-> +	virtqueue_kick(vb->recover_vq);
-> +	spin_unlock_irqrestore(&vb->recover_vq_lock, flags);
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static int recover_vq_get_response(struct virtio_balloon *vb)
-> +{
-> +	struct __virtio_balloon_recover *in_vbr;
-> +	struct scatterlist sg;
-> +	unsigned long flags;
-> +	int err;
-> +
-> +	spin_lock_irqsave(&vb->recover_vq_lock, flags);
-> +	in_vbr = &vb->in_vbr;
-> +	memset(in_vbr, 0x00, sizeof(*in_vbr));
-> +	sg_init_one(&sg, in_vbr, sizeof(*in_vbr));
-> +	err = virtqueue_add_inbuf(vb->recover_vq, &sg, 1, in_vbr, GFP_KERNEL);
-> +	if (unlikely(err)) {
-> +		spin_unlock_irqrestore(&vb->recover_vq_lock, flags);
-> +		return err;
-> +	}
-> +
-> +	virtqueue_kick(vb->recover_vq);
-> +	spin_unlock_irqrestore(&vb->recover_vq_lock, flags);
-> +
-> +	return 0;
-> +}
-> +
-> +static void recover_vq_handle_response(struct virtio_balloon *vb, unsigned int len)
-> +{
-> +	struct __virtio_balloon_recover *in_vbr;
-> +	struct virtio_balloon_recover *vbr;
-> +	struct page *page;
-> +	unsigned int pfns;
-> +	u32 pfn0, pfn1;
-> +	__u8 status;
-> +
-> +	/* the response is not expected */
-> +	if (unlikely(len != sizeof(struct __virtio_balloon_recover)))
-> +		return;
-> +
-> +	in_vbr = &vb->in_vbr;
-> +	vbr = &in_vbr->vbr;
-> +	if (unlikely(vbr->cmd != VIRTIO_BALLOON_R_CMD_RESPONSE))
-> +		return;
-> +
-> +	/* to make sure the contiguous balloon PFNs */
-> +	for (pfns = 1; pfns < VIRTIO_BALLOON_PAGES_PER_PAGE; pfns++) {
-> +		pfn0 = virtio32_to_cpu(vb->vdev, in_vbr->pfns[pfns - 1]);
-> +		pfn1 = virtio32_to_cpu(vb->vdev, in_vbr->pfns[pfns]);
-> +		if (pfn1 - pfn0 != 1)
-> +			return;
+Daniel Thompson (1):
+      lockdown: also lock down previous kgdb use
 
-Yeah, we really shouldn't be dealing with (legacy) 4k PFNs here, but
-instead, proper ranges I guess.
+Denis Efremov (Oracle) (1):
+      staging: rtl8723bs: prevent ->Ssid overflow in rtw_wx_set_scan()
 
-> +	}
-> +
-> +	pfn0 = virtio32_to_cpu(vb->vdev, in_vbr->pfns[0]);
-> +	if (!pfn_valid(pfn0))
-> +		return;
-> +
-> +	pfn1 = -1;
-> +	spin_lock(&vb->recover_page_list_lock);
-> +	list_for_each_entry(page, &vb->corrupted_page_list, lru) {
-> +		pfn1 = page_to_pfn(page);
-> +		if (pfn1 == pfn0)
-> +			break;
-> +	}
-> +	spin_unlock(&vb->recover_page_list_lock);
-> +
-> +	status = vbr->status;
-> +	switch (status) {
-> +	case VIRTIO_BALLOON_R_STATUS_RECOVERED:
-> +		if (pfn1 == pfn0) {
-> +			spin_lock(&vb->recover_page_list_lock);
-> +			list_del(&page->lru);
-> +			balloon_page_push(&vb->recovered_page_list, page);
+Dominik Brodowski (7):
+      random: harmonize "crng init done" messages
+      random: early initialization of ChaCha constants
+      random: continually use hwgenerator randomness
+      random: access primary_pool directly rather than through pointer
+      random: only call crng_finalize_init() for primary_crng
+      random: fix locking in crng_fast_load()
+      random: fix locking for crng_init in crng_reseed()
 
-We rather not reuse actual balloon functions in !balloon context. Just
-move the page to the proper list directly.
+Edward Matijevic (1):
+      ALSA: ctxfi: Add SB046x PCI ID
 
-> +			spin_unlock(&vb->recover_page_list_lock);
-> +			queue_work(system_freezable_wq, &vb->unpoison_memory_work);
-> +			dev_info_ratelimited(&vb->vdev->dev, "recovered pfn 0x%x", pfn0);
+Eric Biggers (11):
+      random: remove dead code left over from blocking pool
+      crypto: blake2s - define shash_alg structs using macros
+      crypto: x86/blake2s - define shash_alg structs using macros
+      crypto: blake2s - remove unneeded includes
+      crypto: blake2s - move update and final logic to internal/blake2s.h
+      crypto: blake2s - share the "shash" API boilerplate code
+      crypto: blake2s - optimize blake2s initialization
+      crypto: blake2s - add comment for blake2s_state fields
+      crypto: blake2s - adjust include guard naming
+      crypto: blake2s - include <linux/bug.h> instead of <asm/bug.h>
+      random: remove use_input_pool parameter from crng_reseed()
 
-Well, not yet. Shouldn't this go into unpoison_memory_func() ?
+Eric Dumazet (1):
+      tcp: change source port randomizarion at connect() time
 
-> +		}
-> +		break;
-> +	case VIRTIO_BALLOON_R_STATUS_FAILED:
-> +		/* the hypervisor can't fix this corrupted page, balloon puts page */
-> +		if (pfn1 == pfn0) {
-> +			spin_lock(&vb->recover_page_list_lock);
-> +			list_del(&page->lru);
-> +			spin_unlock(&vb->recover_page_list_lock);
-> +			put_page(page);
-> +			dev_info_ratelimited(&vb->vdev->dev, "failed to recover pfn 0x%x", pfn0);
-> +		}
-> +	default:
-> +		break;
-> +	};
-> +
-> +	/* continue to get response from host side if the response gets handled successfully */
-> +	recover_vq_get_response(vb);
-> +}
-> +
-> +static void unpoison_memory_func(struct work_struct *work)
-> +{
-> +	struct virtio_balloon *vb;
-> +	struct page *page;
-> +
-> +	vb = container_of(work, struct virtio_balloon, unpoison_memory_work);
-> +
-> +	do {
-> +		spin_lock(&vb->recover_page_list_lock);
-> +		page = list_first_entry_or_null(&vb->recovered_page_list,
-> +						struct page, lru);
-> +		if (page)
-> +			list_del(&page->lru);
-> +		spin_unlock(&vb->recover_page_list_lock);
-> +
-> +		if (page) {
-> +			put_page(page);
-> +			unpoison_memory(page_to_pfn(page), true, "virtio-balloon");
-> +		}
-> +	} while (page);
-> +}
-> +
-> +static void recover_vq_cb(struct virtqueue *vq)
-> +{
-> +	struct virtio_balloon *vb = vq->vdev->priv;
-> +	struct __virtio_balloon_recover *vbr;
-> +	unsigned long flags;
-> +	unsigned int len;
-> +
-> +	spin_lock_irqsave(&vb->recover_vq_lock, flags);
-> +	do {
-> +		virtqueue_disable_cb(vq);
-> +		while ((vbr = virtqueue_get_buf(vq, &len)) != NULL) {
-> +			spin_unlock_irqrestore(&vb->recover_vq_lock, flags);
-> +			if (vbr == &vb->in_vbr)
-> +				recover_vq_handle_response(vb, len);
-> +			else
-> +				kfree(vbr); /* just free the memory for out vbr request */
-> +			spin_lock_irqsave(&vb->recover_vq_lock, flags);
-> +		}
-> +	} while (!virtqueue_enable_cb(vq));
-> +	spin_unlock_irqrestore(&vb->recover_vq_lock, flags);
-> +}
-> +
+Greg Kroah-Hartman (1):
+      Linux 5.10.119
 
+Hans Verkuil (1):
+      media: vim2m: initialize the media device earlier
 
-[...]
+Herbert Xu (1):
+      crypto: lib/blake2s - Move selftest prototype into header file
 
->  
-> +out_unregister_reporting:
-> +	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_REPORTING))
-> +		page_reporting_unregister(&vb->pr_dev_info);
->  out_unregister_oom:
->  	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
->  		unregister_oom_notifier(&vb->oom_nb);
-> @@ -1082,6 +1319,11 @@ static void virtballoon_remove(struct virtio_device *vdev)
->  		destroy_workqueue(vb->balloon_wq);
->  	}
->  
-> +	if (virtio_has_feature(vdev, VIRTIO_BALLOON_F_RECOVER)) {
+Jan Varho (1):
+      random: do not split fast init input in add_hwgenerator_randomness()
 
-Could the notifier already have been triggered and we might be using the
-device before already fully initialized from the notifier and might end
-up leaking memory here that we allocated?
+Jann Horn (2):
+      random: don't reset crng_init_cnt on urandom_read()
+      random: check for signal_pending() outside of need_resched() check
 
-> +		unregister_memory_failure_notifier(&vb->memory_failure_nb);
-> +		cancel_work_sync(&vb->unpoison_memory_work);
-> +	}
-> +
+Jason A. Donenfeld (123):
+      MAINTAINERS: co-maintain random.c
+      MAINTAINERS: add git tree for random.c
+      lib/crypto: blake2s: include as built-in
+      lib/crypto: blake2s: move hmac construction into wireguard
+      lib/crypto: sha1: re-roll loops to reduce code size
+      lib/crypto: blake2s: avoid indirect calls to compression function for Clang CFI
+      random: use BLAKE2s instead of SHA1 in extraction
+      random: do not sign extend bytes for rotation when mixing
+      random: do not re-init if crng_reseed completes before primary init
+      random: mix bootloader randomness into pool
+      random: use IS_ENABLED(CONFIG_NUMA) instead of ifdefs
+      random: avoid superfluous call to RDRAND in CRNG extraction
+      random: cleanup poolinfo abstraction
+      random: cleanup integer types
+      random: remove incomplete last_data logic
+      random: remove unused extract_entropy() reserved argument
+      random: rather than entropy_store abstraction, use global
+      random: remove unused OUTPUT_POOL constants
+      random: de-duplicate INPUT_POOL constants
+      random: prepend remaining pool constants with POOL_
+      random: cleanup fractional entropy shift constants
+      random: access input_pool_data directly rather than through pointer
+      random: selectively clang-format where it makes sense
+      random: simplify arithmetic function flow in account()
+      random: use computational hash for entropy extraction
+      random: simplify entropy debiting
+      random: use linear min-entropy accumulation crediting
+      random: always wake up entropy writers after extraction
+      random: make credit_entropy_bits() always safe
+      random: remove batched entropy locking
+      random: use RDSEED instead of RDRAND in entropy extraction
+      random: get rid of secondary crngs
+      random: inline leaves of rand_initialize()
+      random: ensure early RDSEED goes through mixer on init
+      random: do not xor RDRAND when writing into /dev/random
+      random: absorb fast pool into input pool after fast load
+      random: use simpler fast key erasure flow on per-cpu keys
+      random: use hash function for crng_slow_load()
+      random: make more consistent use of integer types
+      random: remove outdated INT_MAX >> 6 check in urandom_read()
+      random: zero buffer after reading entropy from userspace
+      random: tie batched entropy generation to base_crng generation
+      random: remove ifdef'd out interrupt bench
+      random: remove unused tracepoints
+      random: add proper SPDX header
+      random: deobfuscate irq u32/u64 contributions
+      random: introduce drain_entropy() helper to declutter crng_reseed()
+      random: remove useless header comment
+      random: remove whitespace and reorder includes
+      random: group initialization wait functions
+      random: group crng functions
+      random: group entropy extraction functions
+      random: group entropy collection functions
+      random: group userspace read/write functions
+      random: group sysctl functions
+      random: rewrite header introductory comment
+      random: defer fast pool mixing to worker
+      random: do not take pool spinlock at boot
+      random: unify early init crng load accounting
+      random: check for crng_init == 0 in add_device_randomness()
+      random: pull add_hwgenerator_randomness() declaration into random.h
+      random: clear fast pool, crng, and batches in cpuhp bring up
+      random: round-robin registers as ulong, not u32
+      random: only wake up writers after zap if threshold was passed
+      random: cleanup UUID handling
+      random: unify cycles_t and jiffies usage and types
+      random: do crng pre-init loading in worker rather than irq
+      random: give sysctl_random_min_urandom_seed a more sensible value
+      random: don't let 644 read-only sysctls be written to
+      random: replace custom notifier chain with standard one
+      random: use SipHash as interrupt entropy accumulator
+      random: make consistent usage of crng_ready()
+      random: reseed more often immediately after booting
+      random: check for signal and try earlier when generating entropy
+      random: skip fast_init if hwrng provides large chunk of entropy
+      random: treat bootloader trust toggle the same way as cpu trust toggle
+      random: re-add removed comment about get_random_{u32,u64} reseeding
+      random: mix build-time latent entropy into pool at init
+      random: do not allow user to keep crng key around on stack
+      random: check for signals every PAGE_SIZE chunk of /dev/[u]random
+      random: allow partial reads if later user copies fail
+      random: make random_get_entropy() return an unsigned long
+      random: document crng_fast_key_erasure() destination possibility
+      random: fix sysctl documentation nits
+      init: call time_init() before rand_initialize()
+      ia64: define get_cycles macro for arch-override
+      s390: define get_cycles macro for arch-override
+      parisc: define get_cycles macro for arch-override
+      alpha: define get_cycles macro for arch-override
+      powerpc: define get_cycles macro for arch-override
+      timekeeping: Add raw clock fallback for random_get_entropy()
+      m68k: use fallback for random_get_entropy() instead of zero
+      riscv: use fallback for random_get_entropy() instead of zero
+      mips: use fallback for random_get_entropy() instead of just c0 random
+      arm: use fallback for random_get_entropy() instead of zero
+      nios2: use fallback for random_get_entropy() instead of zero
+      x86/tsc: Use fallback for random_get_entropy() instead of zero
+      um: use fallback for random_get_entropy() instead of zero
+      sparc: use fallback for random_get_entropy() instead of zero
+      xtensa: use fallback for random_get_entropy() instead of zero
+      random: insist on random_get_entropy() existing in order to simplify
+      random: do not use batches when !crng_ready()
+      random: use first 128 bits of input as fast init
+      random: do not pretend to handle premature next security model
+      random: order timer entropy functions below interrupt functions
+      random: do not use input pool from hard IRQs
+      random: help compiler out with fast_mix() by using simpler arguments
+      siphash: use one source of truth for siphash permutations
+      random: use symbolic constants for crng_init states
+      random: avoid initializing twice in credit race
+      random: move initialization out of reseeding hot path
+      random: remove ratelimiting for in-kernel unseeded randomness
+      random: use proper jiffies comparison macro
+      random: handle latent entropy and command line from random_init()
+      random: credit architectural init the exact amount
+      random: use static branch for crng_ready()
+      random: remove extern from functions in header
+      random: use proper return types on get_random_{int,long}_wait()
+      random: make consistent use of buf and len
+      random: move initialization functions out of hot pages
+      random: move randomize_page() into mm where it belongs
+      random: unify batched entropy implementations
+      random: check for signals after page of pool writes
 
-Could we be leaking memory from the virtballoon_remove() path?
+Jens Axboe (3):
+      random: convert to using fops->read_iter()
+      random: convert to using fops->write_iter()
+      random: wire up fops->splice_{read,write}_iter()
 
--- 
-Thanks,
+Lorenzo Pieralisi (1):
+      ACPI: sysfs: Fix BERT error region memory mapping
 
-David / dhildenb
+Mark Brown (1):
+      random: document add_hwgenerator_randomness() with other input functions
+
+Paolo Bonzini (1):
+      KVM: x86/mmu: fix NULL pointer dereference on guest INVPCID
+
+Sakari Ailus (1):
+      media: vim2m: Register video device after setting up internals
+
+Schspa Shi (1):
+      random: fix typo in comments
+
+Sebastian Andrzej Siewior (1):
+      random: remove unused irq_flags argument from add_interrupt_randomness()
+
+Vitaly Kuznetsov (1):
+      KVM: x86: Properly handle APF vs disabled LAPIC situation
+
+Willy Tarreau (1):
+      secure_seq: use the 64 bits of the siphash for port offset calculation
 

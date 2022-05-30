@@ -2,121 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F7D5382A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 16:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8357D5382BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 16:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241212AbiE3O0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 10:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S242206AbiE3O1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 10:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241388AbiE3ORd (ORCPT
+        with ESMTP id S241431AbiE3ORf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 10:17:33 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FE58FF8A
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:46:00 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id b200so11256261qkc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 06:46:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8tubySlO9EL1sX7JJbgIYlj3V7gJSLQUkL2tqjiHPYE=;
-        b=qGFcst+H2sU9jethczFKj5MxMnXaCOn7OK090+/w4SslVfP0RhOPM+PrM/s6zmntEl
-         F0i0jWuXjup30AM1FCFtkmrQsYf603Ww0X7DlWH4G1X8DXidwxDvsLuIyOSA46WT96pb
-         gk/ByJ8wJJ6VG89vBxpWS4sT4viGby0Q7/aGVZjueV2Ol45MU6QR/kGUMziF9kEKL5jr
-         Vq5IvoXl5vRQyKgPRCK8sxmINhmRSQBk+B7MLNnt8CZ+4eyNendacm1T2oVMcG8QIJLi
-         JWs9iipRsPWjnyyw+uAEIr8g/Vhe0bmPXgyg2Sg9dqgZeemBHQFV9hvvB+/wubuuBXQ7
-         z3Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8tubySlO9EL1sX7JJbgIYlj3V7gJSLQUkL2tqjiHPYE=;
-        b=wWOLChQuxbRgPwtfmJ5M+Pbm4qOkykKhMDXrAtz8olav73IW4SXMhODRz5AvJNLBiU
-         NOBUrhnEPARp6FzUzQ1HT6eh1b5kka4IX1ZjyNIkRBGUq5kXcFT/ipf+psUwl+XqFyW2
-         5dRYwiRJg9h0/ORrRSeN4LSP3vjXLsf0bGsdxifG5d/YTPn0aCt9DQdEvyeWZK+egLHV
-         5zT0FIEoE6COD8bLwz7ytBJl+Y76BV/88a/cpcy2OV6XB29hgankmr1rHvCgqfk9J/z4
-         llG+5YjthP+7vYZ+GguHdtkYppdZpzxGZTEN7NETGNZD3unKv6OvxkqOUAj3Ia074vtU
-         1+pA==
-X-Gm-Message-State: AOAM5337u7akCBwRzpfMiXqM3+gbrmN1Ny/diTj0YN7k0u/hVR3U9R4P
-        1ZzwNO5D5XHkL225JNFNFP+1KpsCV/yOChj8iVs=
-X-Google-Smtp-Source: ABdhPJw9o/+WDde4Jga387TqM8IY0EJdHUkX7NWLrzCofs5w6vulQVu5Xs2CiFpqzcOEIKw7lNGA0rRWaL1NB5GNp1o=
-X-Received: by 2002:a05:620a:40d1:b0:6a5:b4a3:dfbe with SMTP id
- g17-20020a05620a40d100b006a5b4a3dfbemr14550181qko.340.1653918359158; Mon, 30
- May 2022 06:45:59 -0700 (PDT)
+        Mon, 30 May 2022 10:17:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963884DF66;
+        Mon, 30 May 2022 06:47:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24B0460FB4;
+        Mon, 30 May 2022 13:47:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69210C385B8;
+        Mon, 30 May 2022 13:47:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653918424;
+        bh=TwVHwNN/o9XLM+Y5O2G/KwViT1tktgTbWNFKIcVo8PU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kU2SVSpdxP+nYkb0vOukbkMlwDeoXgv4tteomo5JlXPbvbKZNBUZfhFDivrPmAmP0
+         xBh4PzP/xn2BwvrUq+YQQm4Dy7e5o/d2P4Yea3VCgILsqCSlMmnkz2eeMMFaBdqj2V
+         /Sjy7oxUY/dLjutOV1tyfPf201JJabcFOnJaOW4KUZHYld4g/36q6QRdpxdQFz9bx0
+         sktv+C+gpiP7Zm4GCOrJWEXpbEeRRiMrNvnRNMHhd66TSw+GwxABbw+8lU5w0P+VPp
+         70PRfqDZV90A3IjS+JFObi73ZmAQVuv07THxWep5RCWW7a0hGtbZ9yoaAvVEbat0op
+         b/z/pfhiOVhQw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Liu Zixian <liuzixian4@huawei.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH AUTOSEL 5.4 01/55] drm/virtio: fix NULL pointer dereference in virtio_gpu_conn_get_modes
+Date:   Mon, 30 May 2022 09:46:07 -0400
+Message-Id: <20220530134701.1935933-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220525115445.93500-1-roman.o.stratiienko@globallogic.com> <20220530132232.himfp7ubiacbmkpx@penduick>
-In-Reply-To: <20220530132232.himfp7ubiacbmkpx@penduick>
-From:   Roman Stratiienko <r.stratiienko@gmail.com>
-Date:   Mon, 30 May 2022 16:45:48 +0300
-Message-ID: <CAGphcdnPnFeafky=8-vyd_wKgbuTJc+MOb9UsM_0P-hVL_oiMQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/sun4i: Fix blend route/enable register corruption for DE2.0/DE3.0
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     wens@csie.org,
-        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        airlied@linux.ie, Daniel Vetter <daniel@ffwll.ch>,
-        Samuel Holland <samuel@sholland.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, megi@xff.cz,
-        Roman Stratiienko <roman.o.stratiienko@globallogic.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+From: Liu Zixian <liuzixian4@huawei.com>
 
-=D0=BF=D0=BD, 30 =D0=BC=D0=B0=D1=8F 2022 =D0=B3. =D0=B2 16:22, Maxime Ripar=
-d <maxime@cerno.tech>:
->
-> Hi Roman,
->
-> On Wed, May 25, 2022 at 11:54:45AM +0000, Roman Stratiienko wrote:
-> > By this commit 2 related issues are solved:
-> >
-> >   Issue #1. Corruption in blend route/enable register:
-> >
-> > Register corruption happens after using old_state->zpos to disable laye=
-r
-> > state. Blend route/enable registers are shared with other layers
-> > and other layers may have already assigned this PIPE to valid value.
-> >
-> > Solution: Do not use old_state->zpos to disable the plane pipe in
-> > blend registers.
-> >
-> >   Issue #2. Remove disabled layer from blend route/enable registers:
-> >
-> > Since sun4i/drm are using normalized_zpos, .atomic_update() will setup
-> > blend route/enable pipes starting from PIPE0 to PIPEX, where X+1 is a
-> > number of layers used by the CRTC in this frame.
-> >
-> > Remaining pipes (PIPE[X+1] - PIPE[MAX]) can have old data that MUST be
-> > updated.
-> >
-> > new_state->normalized_zpos can't be used, since drm helpers won't updat=
-e
-> > it for disabled planes.
-> >
-> > Solution:
-> >
-> > 1. Track the number of total used planes for crtc.
-> > 2. Use this number instead of zpos to disable unused blend pipes.
-> >
-> > Signed-off-by: Roman Stratiienko <roman.o.stratiienko@globallogic.com>
->
-> If there's two issues, and two solutions, it should be two patches.
+[ Upstream commit 194d250cdc4a40ccbd179afd522a9e9846957402 ]
 
-I would say.. It's a single complex issue.
-Solving one part without solving another will make things only worse.
+drm_cvt_mode may return NULL and we should check it.
 
->
-> Maxime
+This bug is found by syzkaller:
+
+FAULT_INJECTION stacktrace:
+[  168.567394] FAULT_INJECTION: forcing a failure.
+name failslab, interval 1, probability 0, space 0, times 1
+[  168.567403] CPU: 1 PID: 6425 Comm: syz Kdump: loaded Not tainted 4.19.90-vhulk2201.1.0.h1035.kasan.eulerosv2r10.aarch64 #1
+[  168.567406] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
+[  168.567408] Call trace:
+[  168.567414]  dump_backtrace+0x0/0x310
+[  168.567418]  show_stack+0x28/0x38
+[  168.567423]  dump_stack+0xec/0x15c
+[  168.567427]  should_fail+0x3ac/0x3d0
+[  168.567437]  __should_failslab+0xb8/0x120
+[  168.567441]  should_failslab+0x28/0xc0
+[  168.567445]  kmem_cache_alloc_trace+0x50/0x640
+[  168.567454]  drm_mode_create+0x40/0x90
+[  168.567458]  drm_cvt_mode+0x48/0xc78
+[  168.567477]  virtio_gpu_conn_get_modes+0xa8/0x140 [virtio_gpu]
+[  168.567485]  drm_helper_probe_single_connector_modes+0x3a4/0xd80
+[  168.567492]  drm_mode_getconnector+0x2e0/0xa70
+[  168.567496]  drm_ioctl_kernel+0x11c/0x1d8
+[  168.567514]  drm_ioctl+0x558/0x6d0
+[  168.567522]  do_vfs_ioctl+0x160/0xf30
+[  168.567525]  ksys_ioctl+0x98/0xd8
+[  168.567530]  __arm64_sys_ioctl+0x50/0xc8
+[  168.567536]  el0_svc_common+0xc8/0x320
+[  168.567540]  el0_svc_handler+0xf8/0x160
+[  168.567544]  el0_svc+0x10/0x218
+
+KASAN stacktrace:
+[  168.567561] BUG: KASAN: null-ptr-deref in virtio_gpu_conn_get_modes+0xb4/0x140 [virtio_gpu]
+[  168.567565] Read of size 4 at addr 0000000000000054 by task syz/6425
+[  168.567566]
+[  168.567571] CPU: 1 PID: 6425 Comm: syz Kdump: loaded Not tainted 4.19.90-vhulk2201.1.0.h1035.kasan.eulerosv2r10.aarch64 #1
+[  168.567573] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
+[  168.567575] Call trace:
+[  168.567578]  dump_backtrace+0x0/0x310
+[  168.567582]  show_stack+0x28/0x38
+[  168.567586]  dump_stack+0xec/0x15c
+[  168.567591]  kasan_report+0x244/0x2f0
+[  168.567594]  __asan_load4+0x58/0xb0
+[  168.567607]  virtio_gpu_conn_get_modes+0xb4/0x140 [virtio_gpu]
+[  168.567612]  drm_helper_probe_single_connector_modes+0x3a4/0xd80
+[  168.567617]  drm_mode_getconnector+0x2e0/0xa70
+[  168.567621]  drm_ioctl_kernel+0x11c/0x1d8
+[  168.567624]  drm_ioctl+0x558/0x6d0
+[  168.567628]  do_vfs_ioctl+0x160/0xf30
+[  168.567632]  ksys_ioctl+0x98/0xd8
+[  168.567636]  __arm64_sys_ioctl+0x50/0xc8
+[  168.567641]  el0_svc_common+0xc8/0x320
+[  168.567645]  el0_svc_handler+0xf8/0x160
+[  168.567649]  el0_svc+0x10/0x218
+
+Signed-off-by: Liu Zixian <liuzixian4@huawei.com>
+Link: http://patchwork.freedesktop.org/patch/msgid/20220322091730.1653-1-liuzixian4@huawei.com
+Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/virtio/virtgpu_display.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/gpu/drm/virtio/virtgpu_display.c b/drivers/gpu/drm/virtio/virtgpu_display.c
+index e622485ae826..7e34307eb075 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_display.c
++++ b/drivers/gpu/drm/virtio/virtgpu_display.c
+@@ -174,6 +174,8 @@ static int virtio_gpu_conn_get_modes(struct drm_connector *connector)
+ 		DRM_DEBUG("add mode: %dx%d\n", width, height);
+ 		mode = drm_cvt_mode(connector->dev, width, height, 60,
+ 				    false, false, false);
++		if (!mode)
++			return count;
+ 		mode->type |= DRM_MODE_TYPE_PREFERRED;
+ 		drm_mode_probed_add(connector, mode);
+ 		count++;
+-- 
+2.35.1
+

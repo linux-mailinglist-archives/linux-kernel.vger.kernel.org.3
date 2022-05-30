@@ -2,143 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 049F6538814
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 22:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D2D538819
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 22:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241376AbiE3UNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 16:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
+        id S243142AbiE3UPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 16:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235259AbiE3UNR (ORCPT
+        with ESMTP id S241729AbiE3UPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 16:13:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3006CE25;
-        Mon, 30 May 2022 13:13:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE38AB80ED2;
-        Mon, 30 May 2022 20:13:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC01C385B8;
-        Mon, 30 May 2022 20:13:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653941593;
-        bh=IyPskumtuU2sLSwhSBmkDFek1VnDLMcF+obJ0NF+o/U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=D2Tz2KPPrsUmuqH5STuOqut8buTDr6ggZPNJ1cIfSfdoTeSLizUOgTtEYrNO/Has0
-         AACyHIYhh02gas1nLyAiF6Zl8JswNzGvjO4o1xNGmC7u4jVHxAj6byUnNhmlX5pheE
-         l13c9t+OFMZ9w2F4+zGO5aHbKli2cwl4qnW5Kts3Hm7dL4yI6pBqCUerBkOhNklxBB
-         84qBsAH4XkZQmrUIsluCDOIPc2d0K2ZTcsW7CuvkbW0zsuq2IBm3VNU0dsaWYXsUfO
-         8WsVuQrfq406hbfK8SCDp2uf8c8rww2uVrFfCMDPajPcdr7SLsmRM1zNFfNYUW7yj4
-         zn73vYpJoSx3w==
-Date:   Mon, 30 May 2022 13:13:11 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     menglong8.dong@gmail.com
-Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, nhorman@tuxdriver.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        imagedong@tencent.com, dsahern@kernel.org, talalahmad@google.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/3] net: skb: use auto-generation to
- convert skb drop reason to string
-Message-ID: <20220530131311.40914ab7@kernel.org>
-In-Reply-To: <20220530081201.10151-3-imagedong@tencent.com>
-References: <20220530081201.10151-1-imagedong@tencent.com>
-        <20220530081201.10151-3-imagedong@tencent.com>
+        Mon, 30 May 2022 16:15:02 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF56768980
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 13:15:00 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id k16so11675967wrg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 13:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v1KekYBsM60PWOUWQkx+YAzcNsdLIbx5495ax2Uk44I=;
+        b=CqyGXFlBzgROVHYp7ecYqfw78XKSS+1L6CsO2OmUQm1gW9QrLMVzAign7WkMfXoBme
+         A8lr2oORL6b6NHYKjjkGlHMWy7WFnjRrmqtAWvs/Q9zTHfZTXuiqF3FDL3d9wiX/in6V
+         1y+cx25AaHHtQ/O9bqYMNx4kDPTzWFDu+rFFWtZ+VbALHzs8N3WQ9XJKKYwr7qvthQfp
+         skZkKYkVdVHMoEGPFjwk/62HwsA0GrOQw6QBBXa3+BnVTT+YrZOyX75AW/4ZXbrAZ+Px
+         05flweFs9wJmVhJcMbp4jwVZB++k4TYn8pbr+gMqfBnuWNl1Ka8iCQB8UiZ18JHZw7Q2
+         r9eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v1KekYBsM60PWOUWQkx+YAzcNsdLIbx5495ax2Uk44I=;
+        b=Okpmch8PCgOjgB8aYpnCZcGmIwgR1a0Ol23DGGuittj40D1ulYGkQKRD+oQ+RFvR/g
+         i1BDnwkewSJ6IKmUWYNzbhB7ciKHiRUPFfoKOo5zn3NKBoh4I3Akh2xp9TSARaLrTvnx
+         1CK72f1yZ53W6MocXxfMg+E197UeOGwclpd9NvnqO2n/QzQ/eExQ0JnVTHcFXtqHEWnO
+         MGjFlDwxyNOfRVTkTdXndvFpl0NXi5StMjLIzMUoKbn2JHmTOCDt6W+oB1w3yTgdpJ4P
+         /VH+F5woI+NhFJdF2yVTFwk91MLKagoIqIq7zh80iVDTTlzepBFOS9g4n3KoEDclpQzr
+         6SWQ==
+X-Gm-Message-State: AOAM533Y9XcIE9fAgkjnqQG2cxdXU8Rk0fe1Ji3I7SR3BWqLJIvlcCyr
+        CNOQXbMP9B+Q73LFWSBjohN7Rg==
+X-Google-Smtp-Source: ABdhPJywyGKnqq1V2paxWnR8T4gDyaRPZAbgv7ZM88KcD65BYAgOubg2wGcIuvlSdR++OtUlPvntWw==
+X-Received: by 2002:a5d:5281:0:b0:20c:d5be:331c with SMTP id c1-20020a5d5281000000b0020cd5be331cmr46490408wrv.9.1653941699537;
+        Mon, 30 May 2022 13:14:59 -0700 (PDT)
+Received: from localhost.localdomain ([88.160.162.107])
+        by smtp.gmail.com with ESMTPSA id t1-20020adfe101000000b0020d110bc39esm9770401wrz.64.2022.05.30.13.14.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 13:14:58 -0700 (PDT)
+From:   Fabien Parent <fparent@baylibre.com>
+To:     matthias.bgg@gmail.com, ck.hu@mediatek.com, jitao.shi@mediatek.com,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
+Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>
+Subject: [PATCH 1/7] dt-bindings: display: mediatek: dpi: add power-domains property
+Date:   Mon, 30 May 2022 22:14:30 +0200
+Message-Id: <20220530201436.902505-1-fparent@baylibre.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 May 2022 16:12:00 +0800 menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> It is annoying to add new skb drop reasons to 'enum skb_drop_reason'
-> and TRACE_SKB_DROP_REASON in trace/event/skb.h, and it's easy to forget
-> to add the new reasons we added to TRACE_SKB_DROP_REASON.
-> 
-> TRACE_SKB_DROP_REASON is used to convert drop reason of type number
-> to string. For now, the string we passed to user space is exactly the
-> same as the name in 'enum skb_drop_reason' with a 'SKB_DROP_REASON_'
-> prefix. Therefore, we can use 'auto-generation' to generate these
-> drop reasons to string at build time.
-> 
-> The new header 'dropreason_str.h'
+DPI is part of the display / multimedia block in MediaTek SoCs, and
+always have a power-domain (at least in the upstream device-trees).
+Add the power-domains property to the binding documentation.
 
-Not any more.
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+---
+ .../devicetree/bindings/display/mediatek/mediatek,dpi.yaml  | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> will be generated, and the
-> __DEFINE_SKB_DROP_REASON() in it can do the converting job. Meanwhile,
-> we use a global array to store these string, which can be used both
-> in drop_monitor and 'kfree_skb' tracepoint.
-
-> diff --git a/include/net/dropreason.h b/include/net/dropreason.h
-> index ecd18b7b1364..460de425297c 100644
-> --- a/include/net/dropreason.h
-> +++ b/include/net/dropreason.h
-> @@ -3,6 +3,8 @@
->  #ifndef _LINUX_DROPREASON_H
->  #define _LINUX_DROPREASON_H
->  
-> +#include <linux/kernel.h>
-
-Why?
-
-> +dropreason_str.c
-> \ No newline at end of file
-
-Heed the warning.
-
-> diff --git a/net/core/Makefile b/net/core/Makefile
-> index a8e4f737692b..3c7f99ff6d89 100644
-> --- a/net/core/Makefile
-> +++ b/net/core/Makefile
-> @@ -4,7 +4,8 @@
->  #
->  
->  obj-y := sock.o request_sock.o skbuff.o datagram.o stream.o scm.o \
-> -	 gen_stats.o gen_estimator.o net_namespace.o secure_seq.o flow_dissector.o
-> +	 gen_stats.o gen_estimator.o net_namespace.o secure_seq.o \
-> +	 flow_dissector.o dropreason_str.o
->  
->  obj-$(CONFIG_SYSCTL) += sysctl_net_core.o
->  
-> @@ -39,3 +40,23 @@ obj-$(CONFIG_NET_SOCK_MSG) += skmsg.o
->  obj-$(CONFIG_BPF_SYSCALL) += sock_map.o
->  obj-$(CONFIG_BPF_SYSCALL) += bpf_sk_storage.o
->  obj-$(CONFIG_OF)	+= of_net.o
-> +
-> +clean-files := dropreason_str.c
-> +
-> +quiet_cmd_dropreason_str = GEN     $@
-> +cmd_dropreason_str = awk -F ',' 'BEGIN{ print "\#include <net/dropreason.h>\n"; \
-> +	print "const char * const drop_reasons[] = {" }\
-> +	/^enum skb_drop/ { dr=1; }\
-> +	/\}\;/ { dr=0; }\
-> +	/^\tSKB_DROP_REASON_/ {\
-> +		if (dr) {\
-> +			sub(/\tSKB_DROP_REASON_/, "", $$1);\
-> +			printf "\t[SKB_DROP_REASON_%s] = \"%s\",\n", $$1, $$1;\
-> +		}\
-> +	} \
-> +	END{ print "};\nEXPORT_SYMBOL(drop_reasons);" }' $< > $@
-> +
-> +$(obj)/dropreason_str.c: $(srctree)/include/net/dropreason.h
-> +	$(call cmd,dropreason_str)
-
-I'm getting this:
-
-  awk: cmd. line:1: warning: regexp escape sequence `\;' is not a known regexp operator
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+index 77ee1b923991..caf4c88708f4 100644
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+@@ -57,6 +57,9 @@ properties:
+       Output port node. This port should be connected to the input port of an
+       attached HDMI or LVDS encoder chip.
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+@@ -64,6 +67,7 @@ required:
+   - clocks
+   - clock-names
+   - port
++  - power-domains
+ 
+ additionalProperties: false
+ 
+@@ -71,11 +75,13 @@ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+     #include <dt-bindings/clock/mt8173-clk.h>
++    #include <dt-bindings/power/mt8183-power.h>
+ 
+     dpi0: dpi@1401d000 {
+         compatible = "mediatek,mt8173-dpi";
+         reg = <0x1401d000 0x1000>;
+         interrupts = <GIC_SPI 194 IRQ_TYPE_LEVEL_LOW>;
++        power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
+         clocks = <&mmsys CLK_MM_DPI_PIXEL>,
+              <&mmsys CLK_MM_DPI_ENGINE>,
+              <&apmixedsys CLK_APMIXED_TVDPLL>;
+-- 
+2.36.1
 

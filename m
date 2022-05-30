@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C7C5387BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 21:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8847D5387BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 21:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242979AbiE3TZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 15:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
+        id S242240AbiE3T1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 15:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236624AbiE3TZI (ORCPT
+        with ESMTP id S236624AbiE3T1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 15:25:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1902AF0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 12:25:07 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvl0i-0002B8-4P; Mon, 30 May 2022 21:25:04 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvl0i-005Vcu-Of; Mon, 30 May 2022 21:25:03 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nvl0g-00D9s2-DX; Mon, 30 May 2022 21:25:02 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Lee Jones <lee.jones@linaro.org>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 4/4] mfd: tc6393xb: Make disable callback return void
-Date:   Mon, 30 May 2022 21:24:30 +0200
-Message-Id: <20220530192430.2108217-5-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220530192430.2108217-1-u.kleine-koenig@pengutronix.de>
-References: <20220530192430.2108217-1-u.kleine-koenig@pengutronix.de>
+        Mon, 30 May 2022 15:27:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D83381A0;
+        Mon, 30 May 2022 12:27:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5033CB80EEF;
+        Mon, 30 May 2022 19:27:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B014AC385B8;
+        Mon, 30 May 2022 19:27:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653938827;
+        bh=VqyJ6noyoqh1S7m6hSDlQTa4dwHKLepTFOb1kWS4Bn0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SZmYTXA0cg2agATwf3lreIr597+4bg+ZiO5067DPzcrZywy523jz23y0QFzvogU4F
+         3b81ndHyZkvqHSLhDOT1qIBJrOSC/spWz55EJ3l/Vx5nJBOZlwja63GvtZGisWz0Wi
+         GxMU5o+oRmO29kg9Vuz87bHNYi6w88n0JilKw4iEpKRpWkhP6od9MVHFIMcypzY/VM
+         JkhsNNE8xd/8wDKcute9JPRXPxCo7nq78n9ap9+sbWkw/9DbnfbN1JJjlJlgR+9xCW
+         TS5YJDszNKCkLugEief/EG4kTFhQsQUMUkjOucvYmQVuXixDfdL/jrpvhIF/YwqaoN
+         uVAXh6zQktVQw==
+Date:   Mon, 30 May 2022 12:27:05 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Chen Lin <chen45464546@163.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v2] mm: page_frag: Warn_on when frag_alloc size is
+ bigger than PAGE_SIZE
+Message-ID: <20220530122705.4e74bc1e@kernel.org>
+In-Reply-To: <1653917942-5982-1-git-send-email-chen45464546@163.com>
+References: <20220529163029.12425c1e5286d7c7e3fe3708@linux-foundation.org>
+        <1653917942-5982-1-git-send-email-chen45464546@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2970; h=from:subject; bh=f/Kbd6S1TkQ8db5BjGINURGo9N9WQ2gxpBhEfpvdF2A=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBilRnj8N5AiR1ecmr6JmPbpwgdH//GPbgtCPqHxS0E 1m0q2+2JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYpUZ4wAKCRDB/BR4rcrsCfm2B/ 9QvlkDId2uuzHUmtJZOesyOeUguhTboadbdEaMSkTQq3o0LNcPfE4tZhFKvavlYewNqgGBdO4ybNfm P04ccvy+RWljfOFnJs9szpLsLghOE6JNkj8ao0FyqVMToL6qpu9mVD51pu/gOVNk6X+dZuoCbl/iaB ZtJ5b/MDKqxx/AOBDawaUq/5w/lbsINhZbIcl7Lm3R/nXUH2LLD8ALZU5DxsD2tuaVELkybV7wjPXg pFovyBRqja0C660rBDde8QqJRBSDl+3rBqJLoRAJQMmZS6M30c3Z8TU5H7DeHKak5aaQiCaABz/4yh qqh5VwYqm90YhlV42C85xpA5l75C/Q
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,96 +58,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All implementations return 0, so simplify accordingly.
+On Mon, 30 May 2022 21:39:02 +0800 Chen Lin wrote:
+> netdev_alloc_frag->page_frag_alloc may cause memory corruption in 
+> the following process:
+> 
+> 1. A netdev_alloc_frag function call need alloc 200 Bytes to build a skb.
+> 
+> 2. Insufficient memory to alloc PAGE_FRAG_CACHE_MAX_ORDER(32K) in 
+> __page_frag_cache_refill to fill frag cache, then one page(eg:4K) 
+> is allocated, now current frag cache is 4K, alloc is success, 
+> nc->pagecnt_bias--.
+> 
+> 3. Then this 200 bytes skb in step 1 is freed, page->_refcount--.
+> 
+> 4. Another netdev_alloc_frag function call need alloc 5k, page->_refcount 
+> is equal to nc->pagecnt_bias, reset page count bias and offset to 
+> start of new frag. page_frag_alloc will return the 4K memory for a 
+> 5K memory request.
+> 
+> 5. The caller write on the extra 1k memory which is not actual allocated 
+> will cause memory corruption.
+> 
+> page_frag_alloc is for fragmented allocation. We should warn the caller 
+> to avoid memory corruption.
+> 
+> When fragsz is larger than one page, we report the failure and return.
+> I don't think it is a good idea to make efforts to support the
+> allocation of more than one page in this function because the total
+> frag cache size(PAGE_FRAG_CACHE_MAX_SIZE 32768) is relatively small.
+> When the request is larger than one page, the caller should switch to
+> use other kernel interfaces, such as kmalloc and alloc_Pages.
+> 
+> This bug is mainly caused by the reuse of the previously allocated
+> frag cache memory by the following LARGER allocations. This bug existed
+> before page_frag_alloc was ported from __netdev_alloc_frag in 
+> net/core/skbuff.c, so most Linux versions have this problem.
+> 
+> Signed-off-by: Chen Lin <chen45464546@163.com>
+> ---
+>  mm/page_alloc.c |   10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index e008a3d..1e9e2c4 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -5574,6 +5574,16 @@ void *page_frag_alloc_align(struct page_frag_cache *nc,
+>  	struct page *page;
+>  	int offset;
+>  
+> +	/* frag_alloc is not suitable for memory alloc which fragsz
+> +	 * is bigger than PAGE_SIZE, use kmalloc or alloc_pages instead.
+> +	 */
+> +	if (unlikely(fragsz > PAGE_SIZE)) {
+> +		WARN(1, "alloc fragsz(%d) > PAGE_SIZE(%ld) not supported,
+> +			alloc fail\n", fragsz, PAGE_SIZE);
+> +
+> +		return NULL;
+> +	}
+> +
+>  	if (unlikely(!nc->va)) {
+>  refill:
+>  		page = __page_frag_cache_refill(nc, gfp_mask);
 
-This is a preparation for making platform remove callbacks return void.
+Let's see what Alex says (fixing his email now). It seems a little too
+drastic to me. I'd go with something like:
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- arch/arm/mach-pxa/eseries.c  | 3 +--
- arch/arm/mach-pxa/tosa.c     | 4 +---
- drivers/mfd/tc6393xb.c       | 5 ++---
- include/linux/mfd/tc6393xb.h | 2 +-
- 4 files changed, 5 insertions(+), 9 deletions(-)
-
-diff --git a/arch/arm/mach-pxa/eseries.c b/arch/arm/mach-pxa/eseries.c
-index cb7bf6294e12..c0b496300e3f 100644
---- a/arch/arm/mach-pxa/eseries.c
-+++ b/arch/arm/mach-pxa/eseries.c
-@@ -85,11 +85,10 @@ int eseries_tmio_enable(struct platform_device *dev)
- 	return 0;
- }
- 
--int eseries_tmio_disable(struct platform_device *dev)
-+void eseries_tmio_disable(struct platform_device *dev)
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e008a3df0485..360a545ee5e8 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -5537,6 +5537,7 @@ EXPORT_SYMBOL(free_pages);
+  * sk_buff->head, or to be used in the "frags" portion of skb_shared_info.
+  */
+ static struct page *__page_frag_cache_refill(struct page_frag_cache *nc,
++					     unsigned int fragsz,
+ 					     gfp_t gfp_mask)
  {
- 	gpio_set_value(GPIO_ESERIES_TMIO_SUSPEND, 0);
- 	gpio_set_value(GPIO_ESERIES_TMIO_PCLR, 0);
--	return 0;
- }
+ 	struct page *page = NULL;
+@@ -5549,7 +5550,7 @@ static struct page *__page_frag_cache_refill(struct page_frag_cache *nc,
+ 				PAGE_FRAG_CACHE_MAX_ORDER);
+ 	nc->size = page ? PAGE_FRAG_CACHE_MAX_SIZE : PAGE_SIZE;
+ #endif
+-	if (unlikely(!page))
++	if (unlikely(!page && fragsz <= PAGE_SIZE))
+ 		page = alloc_pages_node(NUMA_NO_NODE, gfp, 0);
  
- int eseries_tmio_suspend(struct platform_device *dev)
-diff --git a/arch/arm/mach-pxa/tosa.c b/arch/arm/mach-pxa/tosa.c
-index 431709725d02..8d97c0d74e8f 100644
---- a/arch/arm/mach-pxa/tosa.c
-+++ b/arch/arm/mach-pxa/tosa.c
-@@ -662,13 +662,11 @@ static int tosa_tc6393xb_enable(struct platform_device *dev)
- 	return rc;
- }
+ 	nc->va = page ? page_address(page) : NULL;
+@@ -5576,7 +5577,7 @@ void *page_frag_alloc_align(struct page_frag_cache *nc,
  
--static int tosa_tc6393xb_disable(struct platform_device *dev)
-+static void tosa_tc6393xb_disable(struct platform_device *dev)
- {
- 	gpio_free(TOSA_GPIO_TC6393XB_L3V_ON);
- 	gpio_free(TOSA_GPIO_TC6393XB_SUSPEND);
- 	gpio_free(TOSA_GPIO_TC6393XB_REST_IN);
--
--	return 0;
- }
+ 	if (unlikely(!nc->va)) {
+ refill:
+-		page = __page_frag_cache_refill(nc, gfp_mask);
++		page = __page_frag_cache_refill(nc, fragsz, gfp_mask);
+ 		if (!page)
+ 			return NULL;
  
- static int tosa_tc6393xb_resume(struct platform_device *dev)
-diff --git a/drivers/mfd/tc6393xb.c b/drivers/mfd/tc6393xb.c
-index 3d5b14c60e20..7de210f143de 100644
---- a/drivers/mfd/tc6393xb.c
-+++ b/drivers/mfd/tc6393xb.c
-@@ -734,7 +734,6 @@ static int tc6393xb_remove(struct platform_device *dev)
- {
- 	struct tc6393xb_platform_data *tcpd = dev_get_platdata(&dev->dev);
- 	struct tc6393xb *tc6393xb = platform_get_drvdata(dev);
--	int ret;
- 
- 	mfd_remove_devices(&dev->dev);
- 
-@@ -746,14 +745,14 @@ static int tc6393xb_remove(struct platform_device *dev)
- 	if (tc6393xb->gpio.base != -1)
- 		gpiochip_remove(&tc6393xb->gpio);
- 
--	ret = tcpd->disable(dev);
-+	tcpd->disable(dev);
- 	clk_disable_unprepare(tc6393xb->clk);
- 	iounmap(tc6393xb->scr);
- 	release_resource(&tc6393xb->rscr);
- 	clk_put(tc6393xb->clk);
- 	kfree(tc6393xb);
- 
--	return ret;
-+	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/include/linux/mfd/tc6393xb.h b/include/linux/mfd/tc6393xb.h
-index fcc8e74f0e8d..602b391ed13a 100644
---- a/include/linux/mfd/tc6393xb.h
-+++ b/include/linux/mfd/tc6393xb.h
-@@ -22,7 +22,7 @@ struct tc6393xb_platform_data {
- 	u16	scr_gper;	/* GP Enable */
- 
- 	int	(*enable)(struct platform_device *dev);
--	int	(*disable)(struct platform_device *dev);
-+	void	(*disable)(struct platform_device *dev);
- 	int	(*suspend)(struct platform_device *dev);
- 	int	(*resume)(struct platform_device *dev);
- 
--- 
-2.36.1
-

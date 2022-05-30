@@ -2,164 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185CD538601
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 18:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA75538607
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 18:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237397AbiE3QVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 12:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
+        id S239976AbiE3QWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 12:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiE3QVN (ORCPT
+        with ESMTP id S230086AbiE3QWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 12:21:13 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03032972AA
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 09:21:12 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LBgdL3cRcz9tCN;
-        Mon, 30 May 2022 18:21:10 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id RmJIc-8qv3tG; Mon, 30 May 2022 18:21:10 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LBgdL2R55z9t24;
-        Mon, 30 May 2022 18:21:10 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2F3508B77B;
-        Mon, 30 May 2022 18:21:10 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 9hsQRt9P2tOr; Mon, 30 May 2022 18:21:10 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 027518B763;
-        Mon, 30 May 2022 18:21:10 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 24UGKpIE281368
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 18:20:51 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 24UGKoEx281367;
-        Mon, 30 May 2022 18:20:50 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Erhard Furtner <erhard_f@mailbox.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] powerpc/irq: Increase stack_overflow detection limit when KASAN is enabled
-Date:   Mon, 30 May 2022 18:20:42 +0200
-Message-Id: <a07c6616ea19a28e9af6008b58ff6ac6ae90efa1.1653927631.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.3
+        Mon, 30 May 2022 12:22:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5955157B33;
+        Mon, 30 May 2022 09:22:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3103B80C9C;
+        Mon, 30 May 2022 16:22:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0965C3411C;
+        Mon, 30 May 2022 16:22:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653927734;
+        bh=w9uR6p19zt4t9FNAbykaSG3eVIwVY8qsIWAZ+DGrWEY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HWlpm46fgkL+OJIQu9JPKhtCaNloJDLGQKnezPzJ6FuZjk1go2Deynmxs7YUssobU
+         zCEwP/FrZDXU6X6VQ9Y42sH/fGoUGh+7ma4dtTL3yuqTaFVviIynWsr6Va8N6q1NwF
+         NU1cjFQBQVaRsCLlAhYzuPyluZkmmkp5pGs0VNGWe8Tu4mkuwX4gbwJY2ERehGeAvn
+         RugO6ik7vQwB+geoXpee+C0lIj8x1IB5Hw/XcK/UVVeBx++lm1cnuGrvd5TK9dkK9t
+         2buffm38wmHGOmHbL4h/fuXR4Faf4wzT0qJQHweCgC9tLSSWoJV5BNUsJuJhHxi1m1
+         Z0cyfmpixiV8A==
+Message-ID: <f79c9fc6-9635-50a6-8b71-f280bf2a192b@kernel.org>
+Date:   Mon, 30 May 2022 10:22:12 -0600
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1653927641; l=3866; s=20211009; h=from:subject:message-id; bh=AasC5R2ZlZJCNvahOum7bO7JZJQHSnMQhlxhtOFxSM8=; b=XY5hjSl0p5F392EhD9PHG2bsGIYPsoEjL+9NLTTo3xxoSIojlvnPowKPqG3aXbC1BEGpz4NqQy4g iz5BbzTLCwJUc4UQldL1C3vn/KL5jk0Hpi4zhueUKjIOer2ax146
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH net v3] net/ipv6: Expand and rename accept_unsolicited_na
+ to accept_untracked_na
+Content-Language: en-US
+To:     Arun Ajith S <aajith@arista.com>, netdev@vger.kernel.org
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        bagasdotme@gmail.com, yoshfuji@linux-ipv6.org, kuba@kernel.org,
+        pabeni@redhat.com, prestwoj@gmail.com, corbet@lwn.net,
+        justin.iurman@uliege.be, edumazet@google.com, shuah@kernel.org,
+        gilligan@arista.com, noureddine@arista.com, gk@arista.com
+References: <20220530101414.65439-1-aajith@arista.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220530101414.65439-1-aajith@arista.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When KASAN is enabled, as shown by the Oops below, the 2k limit is not
-enough to allow stack dump after a stack overflow detection when
-CONFIG_DEBUG_STACKOVERFLOW is selected:
+On 5/30/22 4:14 AM, Arun Ajith S wrote:
+> RFC 9131 changes default behaviour of handling RX of NA messages when the
+> corresponding entry is absent in the neighbour cache. The current
+> implementation is limited to accept just unsolicited NAs. However, the
+> RFC is more generic where it also accepts solicited NAs. Both types
+> should result in adding a STALE entry for this case.
+> 
+> Expand accept_untracked_na behaviour to also accept solicited NAs to
+> be compliant with the RFC and rename the sysctl knob to
+> accept_untracked_na.
+> 
+> Fixes: f9a2fb73318e ("net/ipv6: Introduce accept_unsolicited_na knob to implement router-side changes for RFC9131")
+> Signed-off-by: Arun Ajith S <aajith@arista.com>
+> ---
+> This change updates the accept_unsolicited_na feature that merged to net-next
+> for v5.19 to be better compliant with the RFC. It also involves renaming the sysctl
+> knob to accept_untracked_na before shipping in a release.
+> 
+> Note that the behaviour table has been modifed in the code comments,
+> but dropped from the Documentation. This is because the table 
+> documents behaviour that is not unique to the knob, and it is more
+> relevant to understanding the code. The documentation has been updated
+> to be unambiguous even without the table.
+> 
+> v2:
+>   1. Changed commit message and subject as suggested.
+>   2. Added Fixes tag.
+>   3. Used en-uk spellings consistently.
+>   4. Added a couple of missing comments.
+>   5. Refactored patch to be smaller by avoiding early return.
+>   6. Made the documentation more clearer.
+> 
+> v3:
+>   1. Fixed build issue. (Verified make defconfig && make && make htmldocs SPHINXDIRS=networking)
+> 
+>  Documentation/networking/ip-sysctl.rst        | 23 ++++------
+>  include/linux/ipv6.h                          |  2 +-
+>  include/uapi/linux/ipv6.h                     |  2 +-
+>  net/ipv6/addrconf.c                           |  6 +--
+>  net/ipv6/ndisc.c                              | 42 +++++++++++--------
+>  .../net/ndisc_unsolicited_na_test.sh          | 23 +++++-----
+>  6 files changed, 50 insertions(+), 48 deletions(-)
+> 
 
-	do_IRQ: stack overflow: 1984
-	CPU: 0 PID: 126 Comm: systemd-udevd Not tainted 5.18.0-gentoo-PMacG4 #1
-	Call Trace:
-	Oops: Kernel stack overflow, sig: 11 [#1]
-	BE PAGE_SIZE=4K MMU=Hash SMP NR_CPUS=2 PowerMac
-	Modules linked in: sr_mod cdrom radeon(+) ohci_pci(+) hwmon i2c_algo_bit drm_ttm_helper ttm drm_dp_helper snd_aoa_i2sbus snd_aoa_soundbus snd_pcm ehci_pci snd_timer ohci_hcd snd ssb ehci_hcd 8250_pci soundcore drm_kms_helper pcmcia 8250 pcmcia_core syscopyarea usbcore sysfillrect 8250_base sysimgblt serial_mctrl_gpio fb_sys_fops usb_common pkcs8_key_parser fuse drm drm_panel_orientation_quirks configfs
-	CPU: 0 PID: 126 Comm: systemd-udevd Not tainted 5.18.0-gentoo-PMacG4 #1
-	NIP:  c02e5558 LR: c07eb3bc CTR: c07f46a8
-	REGS: e7fe9f50 TRAP: 0000   Not tainted  (5.18.0-gentoo-PMacG4)
-	MSR:  00001032 <ME,IR,DR,RI>  CR: 44a14824  XER: 20000000
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-	GPR00: c07eb3bc eaa1c000 c26baea0 eaa1c0a0 00000008 00000000 c07eb3bc eaa1c010
-	GPR08: eaa1c0a8 04f3f3f3 f1f1f1f1 c07f4c84 44a14824 0080f7e4 00000005 00000010
-	GPR16: 00000025 eaa1c154 eaa1c158 c0dbad64 00000020 fd543810 eaa1c0a0 eaa1c29e
-	GPR24: c0dbad44 c0db8740 05ffffff fd543802 eaa1c150 c0c9a3c0 eaa1c0a0 c0c9a3c0
-	NIP [c02e5558] kasan_check_range+0xc/0x2b4
-	LR [c07eb3bc] format_decode+0x80/0x604
-	Call Trace:
-	[eaa1c000] [c07eb3bc] format_decode+0x80/0x604 (unreliable)
-	[eaa1c070] [c07f4dac] vsnprintf+0x128/0x938
-	[eaa1c110] [c07f5788] sprintf+0xa0/0xc0
-	[eaa1c180] [c0154c1c] __sprint_symbol.constprop.0+0x170/0x198
-	[eaa1c230] [c07ee71c] symbol_string+0xf8/0x260
-	[eaa1c430] [c07f46d0] pointer+0x15c/0x710
-	[eaa1c4b0] [c07f4fbc] vsnprintf+0x338/0x938
-	[eaa1c550] [c00e8fa0] vprintk_store+0x2a8/0x678
-	[eaa1c690] [c00e94e4] vprintk_emit+0x174/0x378
-	[eaa1c6d0] [c00ea008] _printk+0x9c/0xc0
-	[eaa1c750] [c000ca94] show_stack+0x21c/0x260
-	[eaa1c7a0] [c07d0bd4] dump_stack_lvl+0x60/0x90
-	[eaa1c7c0] [c0009234] __do_IRQ+0x170/0x174
-	[eaa1c800] [c0009258] do_IRQ+0x20/0x34
-	[eaa1c820] [c00045b4] HardwareInterrupt_virt+0x108/0x10c
-...
-
-Increase the limit to 3k when KASAN is enabled.
-
-While at it remove the 'inline' keywork for check_stack_overflow().
-This function is called only once so it will be inlined regardless.
-
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/kernel/irq.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/arch/powerpc/kernel/irq.c b/arch/powerpc/kernel/irq.c
-index 873e6dffb868..5ff4cf69fc2f 100644
---- a/arch/powerpc/kernel/irq.c
-+++ b/arch/powerpc/kernel/irq.c
-@@ -53,6 +53,7 @@
- #include <linux/vmalloc.h>
- #include <linux/pgtable.h>
- #include <linux/static_call.h>
-+#include <linux/sizes.h>
- 
- #include <linux/uaccess.h>
- #include <asm/interrupt.h>
-@@ -184,7 +185,7 @@ u64 arch_irq_stat_cpu(unsigned int cpu)
- 	return sum;
- }
- 
--static inline void check_stack_overflow(void)
-+static void check_stack_overflow(void)
- {
- 	long sp;
- 
-@@ -193,11 +194,14 @@ static inline void check_stack_overflow(void)
- 
- 	sp = current_stack_pointer & (THREAD_SIZE - 1);
- 
--	/* check for stack overflow: is there less than 2KB free? */
--	if (unlikely(sp < 2048)) {
--		pr_err("do_IRQ: stack overflow: %ld\n", sp);
--		dump_stack();
--	}
-+	/* check for stack overflow: is there less than 2/3KB free? */
-+	if (!IS_ENABLED(KASAN) && likely(sp >= SZ_2K))
-+		return;
-+	if (IS_ENABLED(KASAN) && likely(sp >= SZ_2K + SZ_1K))
-+		return;
-+
-+	pr_err("do_IRQ: stack overflow: %ld\n", sp);
-+	dump_stack();
- }
- 
- static __always_inline void call_do_softirq(const void *sp)
--- 
-2.35.3
 

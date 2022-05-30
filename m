@@ -2,123 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5366537942
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119BA537962
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235305AbiE3Knd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
+        id S235532AbiE3KrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235266AbiE3Kn1 (ORCPT
+        with ESMTP id S235561AbiE3KpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 06:43:27 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195967092E;
-        Mon, 30 May 2022 03:43:25 -0700 (PDT)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24U9Xubs013204;
-        Mon, 30 May 2022 10:43:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=djv0+l8cdCMs2AXk4dJ8GHFW/CWC71QuRmanB9cAsqg=;
- b=CAWbxK5VNQlr4OUhaD5+wMj6uZCjRTNXtw8tF/JJE+c2epFaxKbY4HzLGiz3tWUx9iX3
- mq639SB+Cvpzbd9uUhjltXVadIENU0r7wIJI1vPcwk4BCLb5MVGWsv7g/uH3r1JyPR6H
- WS11YT5YS2PyqdZAmfq0TvkYupfVzTsyXjAeR7TwDULZILOCI2MuuhRphQzTtb0/nx74
- SSzzXUjlXc8auRZr1Zc9sKiL5T39IYBCBrlJkvK3eJ650WGMrVy/b2QroQsoxckMP3jb
- HuBQnnz+5JpcinBODUrmbG+5wNx8SlwTO9pUT2JP+Jmc0wR3ppKT8hK/JoounInG7Kpp ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcudgh74y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 10:43:24 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24UAhNJ1008729;
-        Mon, 30 May 2022 10:43:23 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gcudgh74k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 10:43:23 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24UAWuLN030403;
-        Mon, 30 May 2022 10:43:22 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3gbbynjkc8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 May 2022 10:43:21 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24UAhInr44433788
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 May 2022 10:43:18 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9E552A405B;
-        Mon, 30 May 2022 10:43:18 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 04788A405C;
-        Mon, 30 May 2022 10:43:18 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.145.12.149])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 30 May 2022 10:43:17 +0000 (GMT)
-Date:   Mon, 30 May 2022 12:43:15 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Nico Boehr <nrb@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, borntraeger@de.ibm.com, frankja@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, david@redhat.com,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        scgl@linux.ibm.com, mimu@linux.ibm.com
-Subject: Re: [PATCH v10 14/19] KVM: s390: pv: cleanup leftover protected VMs
- if needed
-Message-ID: <20220530124315.31dc3742@p-imbrenda>
-In-Reply-To: <ff5f394db586169fe6dc16dc0e24d534e4825caa.camel@linux.ibm.com>
-References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
-        <20220414080311.1084834-15-imbrenda@linux.ibm.com>
-        <ff5f394db586169fe6dc16dc0e24d534e4825caa.camel@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
+        Mon, 30 May 2022 06:45:13 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC0E7CB1E
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 03:45:10 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 537F221B50;
+        Mon, 30 May 2022 10:45:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653907509; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BE55qxSMS0UTxraTXVwJDW4YqxLCR/urdAJrBe0gCjw=;
+        b=SaslVQ8qqTXREhp2ONr5sZIADkyLY7VBzO/FdeerZHCfkYsNKTiqRQVeM+bYuLXRvUnvA/
+        bDuFdy25BMZnb5I5Ifls1U9/2hd2ZbfsA7WGkVMHR/JOi7pRFbJ7h0Z1ocv8yYD+Fq8p4z
+        y7c+xLY2VDfOod3G4oWWQuqUqhBTS0I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653907509;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BE55qxSMS0UTxraTXVwJDW4YqxLCR/urdAJrBe0gCjw=;
+        b=/wSTltsAeifd2pgyDzeqdXh8CFgtineg0dz9gyhR7VoUAXN1GkeblyC9SCmj093gg4gzK5
+        5yE5Wj516Wyv+hBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 27EF013AFD;
+        Mon, 30 May 2022 10:45:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id G+3rCDWglGKvWgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 30 May 2022 10:45:09 +0000
+Date:   Mon, 30 May 2022 12:45:08 +0200
+Message-ID: <871qwbxpsb.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Mark Brown <broonie@kernel.org>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 00/17] ALSA: hda: cirrus: Add initial DSP support and firmware loading
+In-Reply-To: <20220530103415.GU38351@ediswmail.ad.cirrus.com>
+References: <20220525131638.5512-1-vitalyr@opensource.cirrus.com>
+        <871qwf0x8t.wl-tiwai@suse.de>
+        <20220530090846.GS38351@ediswmail.ad.cirrus.com>
+        <87czfvxtsc.wl-tiwai@suse.de>
+        <20220530093639.GT38351@ediswmail.ad.cirrus.com>
+        <87a6azxr7h.wl-tiwai@suse.de>
+        <20220530103415.GU38351@ediswmail.ad.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: oHh5hNQ89EDiVKZ149snJANkX2vEhK2N
-X-Proofpoint-ORIG-GUID: aL4QO2Clu9DBGL2q9Rswrbb_9gR3oo80
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-30_03,2022-05-30_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- spamscore=0 mlxscore=0 priorityscore=1501 clxscore=1015 phishscore=0
- lowpriorityscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205300055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 May 2022 10:11:37 +0200
-Nico Boehr <nrb@linux.ibm.com> wrote:
-
-> On Thu, 2022-04-14 at 10:03 +0200, Claudio Imbrenda wrote:
-> [...]
-> > diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
-> > index bd850be08c86..b20f2cbd43d9 100644
-> > --- a/arch/s390/kvm/pv.c
-> > +++ b/arch/s390/kvm/pv.c
-> > @@ -17,6 +17,19 @@  
-> [...]
-> > +/**
-> > + * @struct deferred_priv
-> > + * Represents a "leftover" protected VM that is still registered
-> > with the
-> > + * Ultravisor, but which does not correspond any longer to an active
-> > KVM VM.
-> > + */
-> > +struct deferred_priv {  
+On Mon, 30 May 2022 12:34:15 +0200,
+Charles Keepax wrote:
 > 
-> Why not just name this leftover_vm?
+> On Mon, May 30, 2022 at 12:14:26PM +0200, Takashi Iwai wrote:
+> > On Mon, 30 May 2022 11:36:39 +0200,
+> > Charles Keepax wrote:
+> > > On Mon, May 30, 2022 at 11:18:43AM +0200, Takashi Iwai wrote:
+> > > > On Mon, 30 May 2022 11:08:46 +0200,
+> > > > Charles Keepax wrote:
+> > > > > On Fri, May 27, 2022 at 06:13:38PM +0200, Takashi Iwai wrote:
+> > > > > > On Wed, 25 May 2022 15:16:21 +0200,
+> > > > > > Vitaly Rodionov wrote:
+> > > Yeah that should be what is happening here. Although it looks
+> > > like this code might be removing all the controls if the firmware
+> > > is unloaded. I will discuss that with the guys, we normal just
+> > > disable the controls on the wm_adsp stuff.
+> > 
+> > OK, that sounds good.  Basically my concern came up from the code
+> > snippet doing asynchronous addition/removal via work.  This showed
+> > some yellow signal, as such a pattern doesn't appear in the normal
+> > implementation.  If this is (still) really necessary, it has to be
+> > clarified as an exception.
+> > 
+> 
+> Hm... ok we will think about that. I think that part will
+> probably still be necessary. Because there is an ALSA control
+> that selects the firmware, then it is necesarry to defer creating
+> the controls to some work, since you are already holding the
+> lock.
 
-because I did not think of it :)
+Well, if an ALSA control can trigger the firmware loading, that's
+already fragile.  A firmware loading is a heavy task, which should
+happen only at probing and/or resuming in general.  Do we have other
+drivers doing the f/w loading triggered by a kctl...?
 
-will fix
+> I guess we could look at adding locked versions of the add
+> control functions as well if that might be preferred?
+
+If the patterns of additional kctls (specific for firmware?) are
+fixed, we may create all such kctls beforehand and let them inactive
+unless the corresponding firmware is really loaded, too.
+
+
+thanks,
+
+Takashi

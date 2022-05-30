@@ -2,85 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF0853784F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CEE537813
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbiE3Iyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 04:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
+        id S234448AbiE3IzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 04:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234576AbiE3Iyf (ORCPT
+        with ESMTP id S234726AbiE3IzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 04:54:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C968B79803;
-        Mon, 30 May 2022 01:54:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65FAA60F5D;
-        Mon, 30 May 2022 08:54:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F24D5C385B8;
-        Mon, 30 May 2022 08:54:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653900858;
-        bh=yEKVmMWK6lyNhSCmKPWhzyc4BzhgTKEYjm2tPlbe8uo=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=X/KDvl6KPIRfTvroX/sm7epzNqtcT4vTaafU5hMARos7ERYM6vWOgchH7gLo4Tx+1
-         f0+TKkogF6+Z9sqW9ayj1GZT5Xg6LgzPR97rBQ5bMQV24EVwwaA5qlLN4rJ35edSSn
-         1kqFZX9P/bb9s9pyEpyiZgZO4iMGM3IHRMrl0aPH9nuU/Sg+MaOtgKVfXeueO3ZTL4
-         rxTlIuak7mSOD1VQd7o+BmzmiYnXAOU99r3mRugXG5//Bhj5Q13jygasATQLN6vOyB
-         aM27ya63BbEEeKkLK1LLG54xcfp96dkOTd34zGf8287vfqdJsz+tm34YRXxqWqg3su
-         WBRk7iklIfj+A==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: linux-next: wireless for-next branches
-References: <87a6b3qrms.fsf@kernel.org>
-        <20220528102053.3733f275@canb.auug.org.au>
-Date:   Mon, 30 May 2022 11:54:13 +0300
-In-Reply-To: <20220528102053.3733f275@canb.auug.org.au> (Stephen Rothwell's
-        message of "Sat, 28 May 2022 10:20:53 +1000")
-Message-ID: <87ilpnpfii.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Mon, 30 May 2022 04:55:07 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C6213EA9
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:55:06 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id h1so550903plf.11
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 01:55:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0H0zQuhfwBWace/gM3VoJC+BnbGdiHLKJagjl3jEq3M=;
+        b=EF62q7Q3oMoO+z+5RDfg5gzwDGy+5Mgc/CpZLLiKi1NmzSAIj9SUkUvNAi21n+ZC9S
+         wWWwckJXijLwzTsX8uhvvVGKmJh35ObrgG7uVpZS1dh5ICCLGZx2b3juck9uVa/WyUv+
+         r2FENoYuRXuzLnhZTGF2X1Dqhdoq2/YbhZJPMf0p0gWI4mf06Wjia6n1PPtFuvRGW1ZJ
+         jK+EfuDmO7YrxPj1zk4iP+4qu6UAMLJ8OUR4AIWH6u7FTPZvc6RTH00cCF9cqZ83p3UZ
+         JAZSlmOQ3JOkaxjHgdS1lF/E5ja19txVvaJI0JOYr/OYpxDzuZClmCfe/soEsca1mqqo
+         3Now==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0H0zQuhfwBWace/gM3VoJC+BnbGdiHLKJagjl3jEq3M=;
+        b=CaWtyW+Vjk07y5Dy1qHi0tYtHPxHppLZJE7Pm8vZOsm9swerYYuX8UFEkXsliPnKwG
+         xadX04TaX7PjcNICCWKcr3T6C273KOa1ZrDxeboF03Hwuv/wVNe0uPRQ4YHLSnRAWF1h
+         REJ/ExRDhzp7O9UbH6QNkGH2zHj5rkKs+W3W9w6J41EPlq5slkxT2PFl4g94JtwECtRH
+         GATXlsVsWIvTxnbFbJgzuaZB7GMUMN/yhCFAFjjf6NYlvxaiUhHwDZk+3ujjHV/qE3uO
+         jqEbDHvP7JwxGJjnNidLov4XS90dgk0m4Pt2TbEIVeFpKG3M5ZjM15cEr4TSEAm6WwA3
+         F8DQ==
+X-Gm-Message-State: AOAM533YCt+/k78ENUEkvcVi7ddIsV/hUSeeqrpxmXV1zzG/0iiXtpsg
+        qbkKb/eoezqV2k/iUZ7eJYM=
+X-Google-Smtp-Source: ABdhPJxrSACZi1MuyKXlNpU+Vh3dNJjQEQRDTaVFDuE5Gs9VXiolOOXmJWa12DeQhlyIbREinPT43Q==
+X-Received: by 2002:a17:90b:2782:b0:1e2:97d4:53d7 with SMTP id pw2-20020a17090b278200b001e297d453d7mr13009781pjb.53.1653900905911;
+        Mon, 30 May 2022 01:55:05 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id 71-20020a17090a09cd00b001e25e3ba05csm9977319pjo.2.2022.05.30.01.55.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 01:55:05 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Alexey Brodkin <abrodkin@synopsys.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] drm/arc: Fix refcount leak in arcpgu_load
+Date:   Mon, 30 May 2022 12:54:57 +0400
+Message-Id: <20220530085458.44265-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+of_graph_get_remote_port_parent() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-> On Fri, 27 May 2022 11:58:03 +0300 Kalle Valo <kvalo@kernel.org> wrote:
->>
->> We are experimenting how we could take "next-next" patches during merge
->> windows and avoid accumulation of patches for the period which is in
->> practice three weeks for wireless patches. To do that could you please
->> change linux-next to pull from wireless trees for-next branches instead
->> of main branches? So the new locations are:
->> 
->> git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless.git for-next
->> git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git for-next
->> 
->> The idea we have is that wireless-next for-next branch is not updated
->> during the merge window and then the "next-next" patches will not be
->> included in linux-next until the merge window has closed.
->
-> OK, I have switched to using those branches.
+Fixes: 3ea66a794fdc ("drm/arc: Inline arcpgu_drm_hdmi_init")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/gpu/drm/tiny/arcpgu.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Great, thank you Stephen. I now took the first patch[1] to wireless-next
-main branch but you should not see it in for-next branch until the merge
-window is closed.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git/commit/?id=d092de2c28dcf752890252dedefed98f00a631fe
-
+diff --git a/drivers/gpu/drm/tiny/arcpgu.c b/drivers/gpu/drm/tiny/arcpgu.c
+index f0fa3b15c341..6cbc4e9d382e 100644
+--- a/drivers/gpu/drm/tiny/arcpgu.c
++++ b/drivers/gpu/drm/tiny/arcpgu.c
+@@ -310,6 +310,7 @@ static int arcpgu_load(struct arcpgu_drm_private *arcpgu)
+ 
+ 		/* Locate drm bridge from the hdmi encoder DT node */
+ 		bridge = of_drm_find_bridge(encoder_node);
++		of_node_put(encoder_node);
+ 		if (!bridge)
+ 			return -EPROBE_DEFER;
+ 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.25.1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

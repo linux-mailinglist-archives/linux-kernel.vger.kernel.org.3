@@ -2,135 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BF6537878
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F145378C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234923AbiE3Jr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 05:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59150 "EHLO
+        id S234883AbiE3Jqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 05:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234922AbiE3JrZ (ORCPT
+        with ESMTP id S234879AbiE3Jqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 05:47:25 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A2EA19F;
-        Mon, 30 May 2022 02:47:20 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id wh22so19758116ejb.7;
-        Mon, 30 May 2022 02:47:20 -0700 (PDT)
+        Mon, 30 May 2022 05:46:53 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F719588
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:46:48 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id bo5so10149207pfb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 02:46:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/k2m83LaODmcLsyS0dbBoJk+VKnEiUhqE8c6BRPwNpA=;
-        b=HEdtIu9h1Ee4llxxfLUHdT6WXTT7YVh7HuJ1UWwgpaAZEzYcK8Kt18Rc0y6hhxh/pk
-         gNEh0cjdDf/DymaC3VMDJfzt8hACMMSArRNFzvgV2rASP/QOIxu5SVhVDBmuBaF6jSqH
-         pE7Z+UNUl0L+YpcyxdWHlt+wnBHwJZV6FpL32JVe2MnfNBn8UF1zu7hi0PqUJB5JrUta
-         PzgzVuMmyO9cQBNDseiGyFnSevNpMoE0l5EdZjqKzsaGAyssfHObZ+KUH6ErxYptI92w
-         d+o7sRvi1EM4ocHQV9T1yTo01whLdcagvrS5NvenSKkHgxAUoXpqgSIjqaOGUKnRw74d
-         T+gA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UALvhWndaZ+8NVhyXVMTGWogK9BCZuA7nUC2dpZdhFc=;
+        b=nfZTMfLpScX+7i5oxd+QZy4f+mKCKtr/6YCGg5q0/lgh99OiWWiF9Lhh/QN4IyB06x
+         2moQEr4XBMjGQbiaC0VpfDMoopZq24/GbvNSsjxuZ6Wg5tXQqYnssMAXVLkV6IBTc1Uc
+         I0W43D5oupX+ULjNU0O/Zy079+v15+Hpwi1Lwjcpw8s3TZPuPh46PHH6DRzVVX3YYFei
+         voXdEcR5xXF1NbbXIQkCEHvN9PVS5Ua+/Xc5iO8BFurRxfgaDKxQLXF3xBUTYzFjATFp
+         nRFunal+5Xm4EQwL9DrkIb+ItUSCfQcxQg4eVXGpxciSU5/WlY+xV84yfqm58TLrPcMt
+         dOlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/k2m83LaODmcLsyS0dbBoJk+VKnEiUhqE8c6BRPwNpA=;
-        b=XIrlJyRmWz55gyGgE2tHLcI3n1KCn3c0QQ4hM8elz+uMq7DZLj8SVGg7SjPePkUrNK
-         r4voehXaHfnMIi4k9R7MHYk8P6hUkma9KiUXJ2CcdAAIMfTUNkc4W7O8AjWXLqwiwADi
-         xClUWCGk7ai8jeyhGmxF3Q7/E4Tyci7rQsHXql1ewvXhvVXuAN7QyD72prej/TRDBgg7
-         AtZwYQbjBi1hPaMT0pvI7oAdvKk9816J90m/2lHgMYfTJ8R18XmS0vRCyOl8Wy8U9puT
-         +UAJ7H6lSqmJILbwPHC8aa3AIYmV5tFXro0meFeE7HIRE+dCdqDNtXMfZfUQQdMsDbM+
-         /gRg==
-X-Gm-Message-State: AOAM533BXqkPbcSKmfTVv+5p287lnPZ/DiMfDzh/8cUPXy0OIAmfmvjH
-        X9MFVBJqNPNeWV7/TCB5jR9fGi/HEkNLF8OpVj8=
-X-Google-Smtp-Source: ABdhPJz2Y4PPvobMreDaaaGYBcFdlzgaDp1D8UrIIx2/xRRkK7/L2BM9dOFFBRp5uNmzREpsNBcvOr4GVqLWfEZBHGw=
-X-Received: by 2002:a17:907:6e04:b0:6f4:d6f3:c72a with SMTP id
- sd4-20020a1709076e0400b006f4d6f3c72amr47585054ejc.636.1653904039317; Mon, 30
- May 2022 02:47:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UALvhWndaZ+8NVhyXVMTGWogK9BCZuA7nUC2dpZdhFc=;
+        b=k2bYyGeNYwwOeZVv7Ums0l3kqLVh4SW3ynloWJYRwsxaRdLVJ5NdYtMppZ+2XRVzea
+         GaOqMMhBd92MD6AQAU//iniTWKEluu285u6EJOvHlBHqFXNYVtgR28EykMh+NNsoKCeH
+         Vj6HhtJqq/qzM3wHsWzOLU9TTn6gyltIrGIH3ZibT7UKQwWfMoaFEH2qw4+lmzOKXw1U
+         cRzggRwUXUUK5jN/0d2yc/QLltpLAGirlxTqvQCSxplfFzLh6dnWr9TuZhcwmDKegRD+
+         CxZNxWL/k+4q8yA2RRTT/uCRzRSfttfkCdVABfwkr5iLrhZINXjyZfYosQ2l6aMIAHfa
+         Ax9A==
+X-Gm-Message-State: AOAM532vqU+HaBWURvsu3gBmII4m3VURLhOAuG2XhYYIiPMU4vhoD3B2
+        adeSNchRvDfrKw0TwIDyxJJl2Q==
+X-Google-Smtp-Source: ABdhPJxqfWEVJFwZmG5yodoFspNLPE7pWMsnb8wZBPkQOCSd4+v8Lx2w85ya08P/2p5qJrj2pACptA==
+X-Received: by 2002:a63:8243:0:b0:3f9:6c94:5112 with SMTP id w64-20020a638243000000b003f96c945112mr41340598pgd.173.1653904007740;
+        Mon, 30 May 2022 02:46:47 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id j13-20020a17090a588d00b001d9927ef1desm6377266pji.34.2022.05.30.02.46.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 02:46:47 -0700 (PDT)
+Date:   Mon, 30 May 2022 15:16:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        Dietmar.Eggemann@arm.com,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1] cpufreq: CPPC: Fix unused-function warning
+Message-ID: <20220530094645.wky42wwkbszfjjzs@vireshk-i7>
+References: <20220530081236.40728-1-pierre.gondois@arm.com>
+ <20220530082025.vqzk37dvyzxiq7dv@vireshk-i7>
+ <3a26ce90-5d2d-0164-3799-85a9dc1abee6@arm.com>
+ <20220530090738.7ycfr7g52b54jzj3@vireshk-i7>
+ <2b2df076-f8fe-10f7-9bc4-3e1f3c1639d0@arm.com>
 MIME-Version: 1.0
-References: <20220526081550.1089805-1-saravanak@google.com> <20220526081550.1089805-8-saravanak@google.com>
-In-Reply-To: <20220526081550.1089805-8-saravanak@google.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 30 May 2022 11:46:43 +0200
-Message-ID: <CAHp75VcJRfQO6oJpVUoGK4JQpr3Wbff9vgkm8+q8fn8cxohQug@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 7/9] driver core: Add fw_devlink_unblock_may_probe()
- helper function
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, Len Brown <lenb@kernel.org>,
-        Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        John Stultz <jstultz@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "list@263.net:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2b2df076-f8fe-10f7-9bc4-3e1f3c1639d0@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 1:22 PM Saravana Kannan <saravanak@google.com> wrote:
->
-> This function can be used during the kernel boot sequence to forcefully
-> override fw_devlink=on and unblock the probing of all devices that have
-> a driver.
->
-> It's mainly meant to be called from late_initcall() or
-> late_initcall_sync() where a device needs to probe before the kernel can
-> mount rootfs.
+On 30-05-22, 11:42, Pierre Gondois wrote:
+> Ok yes. Just to be sure and except if disagreed, I will use the
+> following structure:
+> #if CONFIG_ARM64
+> #else
+> #endif
+> 
+> #if defined(CONFIG_ARM64) && defined(CONFIG_ENERGY_MODEL)
+> int populate_efficiency_class();
+> #else
+> int populate_efficiency_class();
+> #endif
+> 
+> to avoid having multiple empty definitions of
+> populate_efficiency_class() (for eg.) that we would have with:
+> #if CONFIG_ARM64
+> #if CONFIG_ENERGY_MODEL
+> int populate_efficiency_class();
+> #else // CONFIG_ENERGY_MODEL
+> int populate_efficiency_class();
+> #endif // CONFIG_ENERGY_MODEL
+> #else // CONFIG_ARM64
+> int populate_efficiency_class();
+> #endif // CONFIG_ARM64
 
-...
-
-> diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
-> index 9a81c4410b9f..0770edda7068 100644
-> --- a/include/linux/fwnode.h
-> +++ b/include/linux/fwnode.h
-> @@ -13,6 +13,7 @@
->  #include <linux/list.h>
->  #include <linux/bits.h>
->  #include <linux/err.h>
-> +#include <linux/init.h>
->
->  struct fwnode_operations;
->  struct device;
-> @@ -199,5 +200,6 @@ extern bool fw_devlink_is_strict(void);
->  int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup);
->  void fwnode_links_purge(struct fwnode_handle *fwnode);
->  void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode);
-> +void __init fw_devlink_unblock_may_probe(void);
-
-I don't think you need init.h and __init here. Important is that you
-have it in the C-file. Am I wrong?
+Look good.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+viresh

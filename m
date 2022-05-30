@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B8D537935
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B0B537936
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 May 2022 12:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235257AbiE3KjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 06:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
+        id S235270AbiE3KjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 06:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235216AbiE3Kix (ORCPT
+        with ESMTP id S235202AbiE3Kix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 30 May 2022 06:38:53 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BA76B092;
-        Mon, 30 May 2022 03:38:51 -0700 (PDT)
-Date:   Mon, 30 May 2022 10:38:48 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C0A6B093;
+        Mon, 30 May 2022 03:38:52 -0700 (PDT)
+Date:   Mon, 30 May 2022 10:38:49 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653907129;
+        s=2020; t=1653907130;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gYKLtWD+8AqufC/EShi41u03pMom2TKKZ//8h9CsWGk=;
-        b=d74cuSKBZXL2FD49jBQR0Nfqr1V6MhOUekYq05DxOiNx+Aof69ZposIWZqE0bXwLq/Crau
-        SzKnymH0XXcfsGYUos0/XjqoRFjgXpPqtL9aAOZpVip1tQM78mxpe/WLMaxIvoQy3bnbYc
-        O9ANzS9LrvyDSYpFv6vEzlpZdYfdAagID5QD+b/wT9+4wTPJxvSj4TFb9HsMNMaNvtzPYn
-        zg2Y+4tbLsd6WEU0LYLvu9dt48432L4uD7orpXfna++8/QWbUhob8l27MlyXSR9tia8wy8
-        PeSRXu8N0n8cm7efrx80konHHZzfCFzQdE/hAPILqd0W5ovAFeyEc6VCiTOUCg==
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=cX2diM0hx2QDVuYjxjJ2Th0skcEyhMoeTFbxjTZ3Hyk=;
+        b=WEXXVLug8xcM7tNeXVw0ROX3ip50mrSwc2wSGX/ypEV2tTdOnmxzZp4H5dt70Iin7Y9E7i
+        8dLUIOACq8ygUWmjPoHJXnwUjiYmLnyghUITRoaDnBDuNbCeTpGCfzy5DjafFCRVjxDE/Y
+        +sXXCBveCCbgOxmH/K/tbF5KBwW5IZqqhE0PheduxxOi/KK4FoI1lIZVbAluyMzo1I5sj4
+        EBRYKXQQJE+8z3Eerhw0gEe0mWNfmY/zF99TrcxuhWUirNJRkleO3Hd0tmmMqhth6IYS41
+        mynVZNliqRfUr50i3FIVdaMeidOiTeStL0nzetguX4ByhQFOY+xIzJsgbqwREw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653907129;
+        s=2020e; t=1653907130;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gYKLtWD+8AqufC/EShi41u03pMom2TKKZ//8h9CsWGk=;
-        b=DtYvize89ckVZgzY4/PNeGLoGIeMv38mTDjod7kK8hrp0/0s5bQpUZLYrc59qN/r452MEo
-        j2BRa9kkqZS8iNCQ==
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=cX2diM0hx2QDVuYjxjJ2Th0skcEyhMoeTFbxjTZ3Hyk=;
+        b=4rGHFUqONaupfIYTEb0l9llHcsf8g7YvyH4fS5jjpZkcxzXC5VyRy+CBeZAQuyPpIrw2VT
+        kuabXfHoTb93JXCg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/urgent] x86: Always inline on_thread_stack() and
- current_top_of_stack()
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: objtool/urgent] jump_label,noinstr: Avoid instrumentation for
+ JUMP_LABEL=n builds
+Cc:     kernel test robot <lkp@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220526105958.071435483@infradead.org>
-References: <20220526105958.071435483@infradead.org>
 MIME-Version: 1.0
-Message-ID: <165390712869.4207.16169682719382895946.tip-bot2@tip-bot2>
+Message-ID: <165390712965.4207.7873247519209876133.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,52 +62,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/urgent branch of tip:
 
-Commit-ID:     1894a4030582472336c2873cb07911ce67e0d14e
-Gitweb:        https://git.kernel.org/tip/1894a4030582472336c2873cb07911ce67e0d14e
+Commit-ID:     656d054e0a15ec327bd82801ccd58201e59f6896
+Gitweb:        https://git.kernel.org/tip/656d054e0a15ec327bd82801ccd58201e59f6896
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Sat, 07 May 2022 13:37:45 +02:00
+AuthorDate:    Mon, 02 May 2022 12:30:20 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 27 May 2022 12:34:44 +02:00
 
-x86: Always inline on_thread_stack() and current_top_of_stack()
+jump_label,noinstr: Avoid instrumentation for JUMP_LABEL=n builds
 
-Becaues GCC clearly lost it's marbles again...
+When building x86_64 with JUMP_LABEL=n it's possible for
+instrumentation to sneak into noinstr:
 
-vmlinux.o: warning: objtool: enter_from_user_mode+0x4e: call to on_thread_stack() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x53: call to on_thread_stack() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x4e: call to on_thread_stack() leaves .noinstr.text section
-vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x4e: call to on_thread_stack() leaves .noinstr.text section
+vmlinux.o: warning: objtool: exit_to_user_mode+0x14: call to static_key_count.constprop.0() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_exit_to_user_mode+0x2d: call to static_key_count.constprop.0() leaves .noinstr.text section
+vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0x1b: call to static_key_count.constprop.0() leaves .noinstr.text section
 
-vmlinux.o: warning: objtool: enter_from_user_mode+0x4e: call to current_top_of_stack() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x53: call to current_top_of_stack() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x4e: call to current_top_of_stack() leaves .noinstr.text section
-vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x4e: call to current_top_of_stack() leaves .noinstr.text section
+Switch to arch_ prefixed atomic to avoid the explicit instrumentation.
 
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220526105958.071435483@infradead.org
 ---
- arch/x86/include/asm/processor.h | 4 ++--
+ include/linux/jump_label.h | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 91d0f93..356308c 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -559,7 +559,7 @@ static __always_inline void native_swapgs(void)
- #endif
+diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
+index 107751c..bf1eef3 100644
+--- a/include/linux/jump_label.h
++++ b/include/linux/jump_label.h
+@@ -256,9 +256,9 @@ extern void static_key_disable_cpuslocked(struct static_key *key);
+ #include <linux/atomic.h>
+ #include <linux/bug.h>
+ 
+-static inline int static_key_count(struct static_key *key)
++static __always_inline int static_key_count(struct static_key *key)
+ {
+-	return atomic_read(&key->enabled);
++	return arch_atomic_read(&key->enabled);
  }
  
--static inline unsigned long current_top_of_stack(void)
-+static __always_inline unsigned long current_top_of_stack(void)
- {
- 	/*
- 	 *  We can't read directly from tss.sp0: sp0 on x86_32 is special in
-@@ -569,7 +569,7 @@ static inline unsigned long current_top_of_stack(void)
- 	return this_cpu_read_stable(cpu_current_top_of_stack);
- }
- 
--static inline bool on_thread_stack(void)
-+static __always_inline bool on_thread_stack(void)
- {
- 	return (unsigned long)(current_top_of_stack() -
- 			       current_stack_pointer) < THREAD_SIZE;
+ static __always_inline void jump_label_init(void)

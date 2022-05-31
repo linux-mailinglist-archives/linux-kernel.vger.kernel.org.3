@@ -2,106 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DBA5389DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AEEF5389E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243535AbiEaCOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 22:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
+        id S243548AbiEaCRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 22:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234705AbiEaCOl (ORCPT
+        with ESMTP id S234705AbiEaCR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 22:14:41 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37BE77F22;
-        Mon, 30 May 2022 19:14:39 -0700 (PDT)
+        Mon, 30 May 2022 22:17:27 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A46163BE8;
+        Mon, 30 May 2022 19:17:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=MCE74GR5cd4AP/uMh3B09r7w3iqnVZmjXLrGDc0ll4E=; b=Sp8gIrzZmwjlDwR5gLvzxZlTob
-        3lUWElXFB0MMLAjtHo29QD2GCLRRwCdl40feohIHVpqAzHw55Car5/w/8M8myyGDnOu/0tPhIKafr
-        LaM26tWBClui7FElSgXvJXAWHOMY2j99Nkfo7OvaL/EPBKk+Ae9aHG4irS4Xh8P11o/ZTR0PvZlIS
-        qeIDZOaKwogWNJXWBLOzB8Jfasoj5siKHrCpxTCEUmnK0hM1fcR1M7ElGdev7Ur34ytz5MPozWF3Q
-        yHwlZnY9JxNSR9Gad/8mD20qOcH4PQLW4Zj8Q7JFaZA8jWWuxz/t+iehITJIlfud8+Ym5mtV7a0AX
-        iPQ/N86w==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nvrOx-003F1K-W7; Tue, 31 May 2022 02:14:32 +0000
-Message-ID: <d2db660d-edaf-c5a0-8c27-ac27f6232fed@infradead.org>
-Date:   Mon, 30 May 2022 19:14:23 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v9 2/6] drivers/input/joystick: sensehat: Raspberry Pi
- Sense HAT joystick driver
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Charles Mirabile <cmirabil@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Serge Schneider <serge@raspberrypi.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Mattias Brugger <mbrugger@suse.com>,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, fedora-rpi@googlegroups.com,
-        linux-input@vger.kernel.org, Daniel Bauman <dbauman@redhat.com>,
-        Mwesigwa Guma <mguma@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>
-References: <20220419205158.28088-1-cmirabil@redhat.com>
- <20220419205158.28088-3-cmirabil@redhat.com>
- <ecb3f627-3379-1b18-02c0-44782a2623d4@infradead.org>
- <YpV2GNAJQhag9Osu@google.com>
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=cZUqmeJtYaU0Pqny7S69e3JuJrm04akOK2P4y4OgcwE=; b=KTJFqrY68DyuaDw7XIfCJ8VDvb
+        ZeMfOdBkH74O6PPoKFTVEJHvd7l9Mcr+F/Lrjpj7BmmXo9Ai7PHyMCtNb4zHe4coDHxX0/F4cMj6M
+        bGoR9SUNy+azShmvFGVuroQChJfMegkGXWcRl/aH7+lh4oKpVfcI96UPxfBqFGjT4GDSJxOkb5PYL
+        3YS04a4Z5M2Zcj+pS54GlyBr6A9SG9Q44016A/pWHFsex5rjaaTnboTSJv/8lAY+hhaQZAZEdwBbk
+        yqBce6yzH+2gAy3c+LGA3oRtBZgiVkHiRHrbUSNrQhBth7/bzsc5xt1LS9/QgdfX3cSRfblKwkbQ1
+        eNCdg0Lg==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nvrRe-004xy5-22; Tue, 31 May 2022 02:17:18 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <YpV2GNAJQhag9Osu@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, uclinux-dev@uclinux.org,
+        Angelo Dureghello <angelo@kernel-space.org>
+Subject: [PATCH] m68k: coldfire/device.c: protect FLEXCAN blocks
+Date:   Mon, 30 May 2022 19:17:12 -0700
+Message-Id: <20220531021712.6050-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When CAN_FLEXCAN=y and M5441x is not set/enabled, there are build
+errors in coldfire/device.c:
 
+../arch/m68k/coldfire/device.c:595:26: error: 'MCFFLEXCAN_BASE0' undeclared here (not in a function); did you mean 'MCFDMA_BASE0'?
+  595 |                 .start = MCFFLEXCAN_BASE0,
+../arch/m68k/coldfire/device.c:596:43: error: 'MCFFLEXCAN_SIZE' undeclared here (not in a function)
+  596 |                 .end = MCFFLEXCAN_BASE0 + MCFFLEXCAN_SIZE,
+../arch/m68k/coldfire/device.c:600:26: error: 'MCF_IRQ_IFL0' undeclared here (not in a function); did you mean 'MCF_IRQ_I2C0'?
+  600 |                 .start = MCF_IRQ_IFL0,
+../arch/m68k/coldfire/device.c:605:26: error: 'MCF_IRQ_BOFF0' undeclared here (not in a function); did you mean 'MCF_IRQ_I2C0'?
+  605 |                 .start = MCF_IRQ_BOFF0,
+../arch/m68k/coldfire/device.c:610:26: error: 'MCF_IRQ_ERR0' undeclared here (not in a function); did you mean 'MCF_IRQ_I2C0'?
+  610 |                 .start = MCF_IRQ_ERR0,
 
-On 5/30/22 18:57, Dmitry Torokhov wrote:
-> Hi Randy,
-> 
-> On Mon, May 30, 2022 at 06:26:26PM -0700, Randy Dunlap wrote:
->> Hi--
->>
->> On 4/19/22 13:51, Charles Mirabile wrote:
->>> diff --git a/drivers/input/joystick/Kconfig b/drivers/input/joystick/Kconfig
->>> index 3b23078bc7b5..505a032e2786 100644
->>> --- a/drivers/input/joystick/Kconfig
->>> +++ b/drivers/input/joystick/Kconfig
->>> @@ -399,4 +399,15 @@ config JOYSTICK_N64
->>>  	  Say Y here if you want enable support for the four
->>>  	  built-in controller ports on the Nintendo 64 console.
->>>  
->>> +config JOYSTICK_SENSEHAT
->>> +	tristate "Raspberry Pi Sense HAT joystick"
->>> +	depends on INPUT && I2C
->>> +	select MFD_SIMPLE_MFD_I2C
->>
->> Looks like this also needs
->> 	depends on HAS_IOMEM
->>
->> since everything in drivers/mfd/Kconfig depends on HAS_IOMEM and
->> since this 'select' causes a kconfig warning when HAS_IOMEM is not set:
->>
->> WARNING: unmet direct dependencies detected for MFD_SIMPLE_MFD_I2C
->>   Depends on [n]: HAS_IOMEM [=n] && I2C [=y]
->>   Selected by [y]:
->>   - JOYSTICK_SENSEHAT [=y] && INPUT_JOYSTICK [=y] && INPUT [=y] && I2C [=y]
-> 
-> Do you mind sending a patch?
+Protect the FLEXCAN code blocks by checking if MCFFLEXCAN_SIZE
+is defined.
 
-OK, will do.
+Fixes: 35a9f9363a89 ("m68k: m5441x: add flexcan support")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Greg Ungerer <gerg@linux-m68k.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: uclinux-dev@uclinux.org
+Cc: Angelo Dureghello <angelo@kernel-space.org>
+---
+ arch/m68k/coldfire/device.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
--- 
-~Randy
+--- a/arch/m68k/coldfire/device.c
++++ b/arch/m68k/coldfire/device.c
+@@ -581,7 +581,7 @@ static struct platform_device mcf_esdhc
+ };
+ #endif /* MCFSDHC_BASE */
+ 
+-#if IS_ENABLED(CONFIG_CAN_FLEXCAN)
++#ifdef MCFFLEXCAN_SIZE
+ 
+ #include <linux/can/platform/flexcan.h>
+ 
+@@ -620,7 +620,7 @@ static struct platform_device mcf_flexca
+ 	.resource = mcf5441x_flexcan0_resource,
+ 	.dev.platform_data = &mcf5441x_flexcan_info,
+ };
+-#endif /* IS_ENABLED(CONFIG_CAN_FLEXCAN) */
++#endif /* MCFFLEXCAN_SIZE */
+ 
+ static struct platform_device *mcf_devices[] __initdata = {
+ 	&mcf_uart,
+@@ -657,7 +657,7 @@ static struct platform_device *mcf_devic
+ #ifdef MCFSDHC_BASE
+ 	&mcf_esdhc,
+ #endif
+-#if IS_ENABLED(CONFIG_CAN_FLEXCAN)
++#ifdef MCFFLEXCAN_SIZE
+ 	&mcf_flexcan0,
+ #endif
+ };

@@ -2,97 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6132053963F
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5707539641
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347029AbiEaS0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 14:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        id S1347037AbiEaS0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 14:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346376AbiEaS0L (ORCPT
+        with ESMTP id S1347022AbiEaS0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 14:26:11 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD2F7A80B;
+        Tue, 31 May 2022 14:26:14 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F167A80B
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 11:26:13 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so487747pjm.2
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 11:26:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Jt9UiuYKYkRDB1utdjVYxAdnl9EcYV1Ii/EQF80omk8=;
+        b=jLN7vMT7AJHzDunUJIIzv2z15hHdReTAQJuZyYY4ihN8AwLoz2IbOiYHUSVAAb3cOI
+         ZFR3bvFUviSEOclFHWwMf8GmGtO/QlXIzU1WgydtqKHFVEvxQaYfLjjpgQ0aKhys7dm8
+         Q1ay6fBzPE3kglxGKG0NAhmalVhl0e1uT1OWBTCNMKUzDOaDre0UHYzotDArGbTTTYWC
+         IaC+A3/akYFlEyB51sYkNJXwg8R14S7lHWX2IBvX4MYNd7vxBrEj1QtVGw4l5Lmovo3P
+         Dqxzqc1fsb5okJ0b9whGmuC3I7CPNJ6r/R/eNiFf+rg0xrynHWysEkIqo7Qwi9NOHsSa
+         Ms3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Jt9UiuYKYkRDB1utdjVYxAdnl9EcYV1Ii/EQF80omk8=;
+        b=s/Ru2ASfjVCG1jDvYYLy2o+kOCySFOXZeVJIwi4u2JFfmIcNccWX0N5wsqS2TQdBfe
+         yN7Bq84JcuPpn6Rf+KKlV6aqgYn7bicanXd4JxKGT+NP4sDWD4v7YoSOX9h2bsvEVioT
+         2s0FyaHuv0lHK17jQ19kiiSO68CG41yaK31BxSl0WXxpD/U99yuT14H3RKLIpqE61NC4
+         WLm0rdrlg9GqYb/wj/6LMFISayPDfp3a/UHLETfBhlsI3ZR8LMKAWmDH7aJbgJGMxdnw
+         psR0NI8+hW8Iq/8W9nXhK16pbKTLjnChoXtWai+6+hUSG1DcKcCt5sW7O0izeOWDJxLP
+         fF5g==
+X-Gm-Message-State: AOAM5309ybFY2hnK35LJcj+1twwOcQ7NMc6EBW4rsXHcGxOTWXBAKRJZ
+        7KeEPoitnBt7TKsCofNaE7k=
+X-Google-Smtp-Source: ABdhPJw/sGlre7sIgfaTlbcCMwRpIg3AGzlJQ4fvGoBq8q71w8LqbbjAmMiNuY0v73z9zWOaLpl1+Q==
+X-Received: by 2002:a17:903:41c1:b0:163:771e:e61c with SMTP id u1-20020a17090341c100b00163771ee61cmr27996646ple.49.1654021572414;
+        Tue, 31 May 2022 11:26:12 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:1d0d:8533:84b5:d973])
+        by smtp.gmail.com with ESMTPSA id m8-20020a170902f64800b0015edfccfdb5sm11400428plg.50.2022.05.31.11.26.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 31 May 2022 11:26:11 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24VHOOei024927;
-        Tue, 31 May 2022 18:26:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=JU4EHGVLubemL79Q3kfvk0r0lYuMGhy/CRrixhY0xpw=;
- b=sZ1jy57hlMBAd9ulbLrdjOtdY1XKk07DGOT4gpzqVj8aiOVk8IVTB2EPX0faRjILQSft
- g9fXw6azdxmAfFE50AjA1m63YkQBf/nELpDGTIn8bMDYADuwwa57wFIMBBYQMvLfawWK
- NzMOqtUD81LBkOzRJO8wHTINjyzw6YpKFJQtt9zZVVUCqd3y7VJGP6TptHK/yPaYMbjJ
- zQJ5G1VDoX1JVG/PKTQEoydW8ynZCOs4qb2Mm/t/cTZtfGiTuTyLh9BKssA4+MxTnWu3
- oUhevLSyTd7mRLtA94bswdUqzhakXORHeQfWDr1rSjwTVxFb0CQEhQSJrbK4+85TlDpw Cw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdnm6bcpt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 18:26:09 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24VINB1q022962;
-        Tue, 31 May 2022 18:26:09 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdnm6bcpe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 18:26:08 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24VILt4i003837;
-        Tue, 31 May 2022 18:26:07 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma01dal.us.ibm.com with ESMTP id 3gcxt5aeqn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 18:26:07 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24VIQ5V435127650
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 May 2022 18:26:06 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E49757805C;
-        Tue, 31 May 2022 18:26:05 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D81FB78066;
-        Tue, 31 May 2022 18:26:04 +0000 (GMT)
-Received: from [9.211.104.178] (unknown [9.211.104.178])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 31 May 2022 18:26:04 +0000 (GMT)
-Message-ID: <bcdf9615-628a-8696-4a3b-f10a35d7af87@linux.ibm.com>
-Date:   Tue, 31 May 2022 14:26:04 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v19 20/20] MAINTAINERS: pick up all vfio_ap docs for VFIO
- AP maintainers
-Content-Language: en-US
-To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     jjherne@linux.ibm.com, freude@linux.ibm.com,
-        borntraeger@de.ibm.com, cohuck@redhat.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20220404221039.1272245-1-akrowiak@linux.ibm.com>
- <20220404221039.1272245-21-akrowiak@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20220404221039.1272245-21-akrowiak@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: WCN-HclrMjJ6CHbLb9w7JBfLB4degXNs
-X-Proofpoint-GUID: vOWFa3Ir4UTxyHDYegB3sMlv2Nqf2LAp
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Tue, 31 May 2022 11:26:09 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        John Dias <joaodias@google.com>,
+        Tim Murray <timmurray@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Martin Liu <liumartin@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Subject: Re: [PATCH] mm: throttle LRU pages skipping on rmap_lock contention
+Message-ID: <YpZdwRDuX/aQoAGu@google.com>
+References: <Yo+0HMJYuhiJv+Ak@google.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-05-31_07,2022-05-30_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 spamscore=0 bulkscore=0 malwarescore=0 impostorscore=0
- mlxlogscore=980 adultscore=0 lowpriorityscore=0 clxscore=1015 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205310082
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yo+0HMJYuhiJv+Ak@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,35 +79,223 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/22 6:10 PM, Tony Krowiak wrote:
-> A new document, Documentation/s390/vfio-ap-locking.rst was added. Make sure
-> the new document is picked up for the VFIO AP maintainers by using a
-> wildcard: Documentation/s390/vfio-ap*.
+Bump up.
+
+On Thu, May 26, 2022 at 10:08:44AM -0700, Minchan Kim wrote:
+> On Thu, May 12, 2022 at 12:55:16PM -0700, Minchan Kim wrote:
+> > On Wed, May 11, 2022 at 07:05:23PM -0700, Andrew Morton wrote:
+> > > On Wed, 11 May 2022 15:57:09 -0700 Minchan Kim <minchan@kernel.org> wrote:
+> > > 
+> > > > > 
+> > > > > Could we burn much CPU time pointlessly churning though the LRU?  Could
+> > > > > it mess up aging decisions enough to be performance-affecting in any
+> > > > > workload?
+> > > > 
+> > > > Yes, correct. However, we are already churning LRUs by several
+> > > > ways. For example, isolate and putback from LRU list for page
+> > > > migration from several sources(typical example is compaction)
+> > > > and trylock_page and sc->gfp_mask not allowing page to be
+> > > > reclaimed in shrink_page_list.
+> > > 
+> > > Well.  "we're already doing a risky thing so it's OK to do more of that
+> > > thing"?
+> > 
+> > I meant the aging is not rocket science.
+> > 
+> > 
+> > > 
+> > > > > 
+> > > > > Something else?
+> > > > 
+> > > > One thing I am worry about was the granularity of the churning.
+> > > > Example above was page granuarity churning so might be execuse
+> > > > but this one is address space's churning, especically for file LRU
+> > > > (i_mmap_rwsem) which might cause too many rotating and live-lock
+> > > > in the end(keey rotating in small LRU with heavy memory pressure).
+> > > > 
+> > > > If it could be a problem, maybe we use sc->priority to stop
+> > > > the skipping on a certain level of memory pressure.
+> > > > 
+> > > > Any thought? Do we really need it?
+> > > 
+> > > Are we able to think of a test which might demonstrate any worst case? 
+> > > Whip that up and see what the numbers say?
+> > 
+> > Yeah, let me create a worst test case to see how it goes.
+> > 
+> > A thread keep reading a file-backed vma with 2xRAM file but other threads
+> > keep changing other vmas mapped at the same file so heavy i_mmap_rwsem
+> > contention in aging path.
 > 
-> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
+> Forking new thread
+> 
+> I checked what happens the worst case. I am not sure how the worst
+> case is realistic but would be great to have safety net.
+> 
+> From 5ccc8b170af5496f803243732e96b131419d7462 Mon Sep 17 00:00:00 2001
+> From: Minchan Kim <minchan@kernel.org>
+> Date: Thu, 19 May 2022 19:48:12 -0700
+> Subject: [PATCH] mm: throttle LRU pages skipping on rmap_lock contention
+> 
+> On heavy contention on rmap_lock(e.g., i_mmap_rwsem), VM can keep
+> skipping LRU pages so reclaim efficiency(steal/scanning) would drop
+> from 48% to 27% and workingset would be reclaimed faster than old
+> so workingset_refault rate increased to 240%.
+> 
+> We need a safe net to throttle the skipping LRU pages. This patch
+> throttle the skipping policy using (DEF_PRIRORITY - 2) magic value
+> VM has used for indicating non-light memory pressure.
+> IOW, let's skip rmap_lock contendeded pages only when
+> only when sc->priority >= (DEF_PRIRORITY - 2).
+> 
+> The test scenario to see the worst case:
+> 
+> 1. A thread mmap a big file(e.g., 2x times of RAM) and keep touching
+>    the address space up to three times.
+> 2. B thread keeps doing mmap/munmap with the same file to cause
+>    heavy lock contention in i_mmap_rwsem until the A thread finish
+>    the job.
+> 3. measure vmstat and thread A's elapsed time.
+> 
+> Thread's elapsed time:
+> 
+> 1. vanilla
+> 24.64sec(5.04%)
+> 
+> 2. rmap_skip(i.e., mm-dont-be-stuck-to-rmap-lock-on-reclaim-path.patch)
+> 25.20sec(4.16%)
+> 
+> 3. priority(2 + this patch)
+> 23.62sec(6.61%)
+> 
+> Vmstat Comparison:
+> 				     vanilla    rmap_skip    priority
+> 	     allocstall_movable          582         9772       14643
+> 		     pgactivate          232        25865        4906
+>       		   pgdeactivate           78        17265         651
+>         	     pgmajfault           58        10639        1376
+>     		 pgsteal_kswapd     15947857     15133195    15095445
+>     		 pgsteal_direct       105439       583092      943195
+>      	          pgscan_kswapd     24647536     52768898    28103170
+>      		  pgscan_direct      8398139      3767100     7966353
+> 	workingset_refault_file     12582926     12248353    12565934
+> 
+> B test scenario
+> 
+> 1. A thread mmap a big file(e.g., 2x times of RAM) and keep touching
+>    the address space up to three times.
+> 2. B thread keeps doing mmap/munmap with the same file to cause
+>    heavy lock contention in i_mmap_rwsem until the A thread finish
+>    the job.
+> 3. C thread keep reading other big file using read(2) syscall
+> 4. measure vmstat and thread A's elapsed time.
+> 
+> 1. vanilla
+> 27.24sec(5.29%)
+> 
+> 2. rmap_skip
+> 33.54sec(3.20%)
+> 
+> 3. priority
+> 28.68sec(1.26%)
+> 
+> Vmstat Comparison:
+> 				     vanilla    rmap_skip    priority
+> 	     allocstall_movable        15262        81258       21644
+>         	     pgactivate      3042004      3086906     3502959
+>       		   pgdeactivate      2307849      8959162     3605768
+>         	     pgmajfault          566         1059	  557
+>     		 pgsteal_kswapd     17557735     30861283    18385674
+>     		 pgsteal_direct       955389      6353527     1233605
+>      		  pgscan_kswapd     31622695     59670433    35372575
+> 		  pgscan_direct      4924052     13939254     4310247
+> 	workingset_refault_file     13466538     32193161    14588019
+> 
+> Signed-off-by: Minchan Kim <minchan@kernel.org>
 > ---
->   MAINTAINERS | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
+>  include/linux/rmap.h | 5 +++--
+>  mm/rmap.c            | 6 ++++--
+>  mm/vmscan.c          | 6 ++++--
+>  3 files changed, 11 insertions(+), 6 deletions(-)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fd768d43e048..c8d8637c184c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17239,8 +17239,10 @@ M:	Jason Herne <jjherne@linux.ibm.com>
->   L:	linux-s390@vger.kernel.org
->   S:	Supported
->   W:	http://www.ibm.com/developerworks/linux/linux390/
-> -F:	Documentation/s390/vfio-ap.rst
-> -F:	drivers/s390/crypto/vfio_ap*
-> +F:	Documentation/s390/vfio-ap*
-> +F:	drivers/s390/crypto/vfio_ap_drv.c
-> +F:	drivers/s390/crypto/vfio_ap_ops.c
-> +F:	drivers/s390/crypto/vfio_ap_private.h
-
-I think this change was a rebase error, the Documentation change makes 
-sense but you should leave drivers/s390/crypto/vfio_ap* alone, so the 
-final result looks like:
-
-F:	Documentation/s390/vfio-ap*
-F:	drivers/s390/crypto/vfio_ap*
-
+> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+> index 9ec23138e410..2893da3f1cd3 100644
+> --- a/include/linux/rmap.h
+> +++ b/include/linux/rmap.h
+> @@ -296,7 +296,8 @@ static inline int page_try_share_anon_rmap(struct page *page)
+>   * Called from mm/vmscan.c to handle paging out
+>   */
+>  int folio_referenced(struct folio *, int is_locked,
+> -			struct mem_cgroup *memcg, unsigned long *vm_flags);
+> +			struct mem_cgroup *memcg, unsigned long *vm_flags,
+> +			bool rmap_try_lock);
+>  
+>  void try_to_migrate(struct folio *folio, enum ttu_flags flags);
+>  void try_to_unmap(struct folio *, enum ttu_flags flags);
+> @@ -418,7 +419,7 @@ void page_unlock_anon_vma_read(struct anon_vma *anon_vma);
+>  
+>  static inline int folio_referenced(struct folio *folio, int is_locked,
+>  				  struct mem_cgroup *memcg,
+> -				  unsigned long *vm_flags)
+> +				  unsigned long *vm_flags, bool rmap_try_lock)
+>  {
+>  	*vm_flags = 0;
+>  	return 0;
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index d4cf3ea1b616..a75c7f7a0392 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -888,6 +888,7 @@ static bool invalid_folio_referenced_vma(struct vm_area_struct *vma, void *arg)
+>   * @is_locked: Caller holds lock on the folio.
+>   * @memcg: target memory cgroup
+>   * @vm_flags: A combination of all the vma->vm_flags which referenced the folio.
+> + * @rmap_try_lock: bail out if the rmap lock is contended
+>   *
+>   * Quick test_and_clear_referenced for all mappings of a folio,
+>   *
+> @@ -895,7 +896,8 @@ static bool invalid_folio_referenced_vma(struct vm_area_struct *vma, void *arg)
+>   * the function bailed out due to rmap lock contention.
+>   */
+>  int folio_referenced(struct folio *folio, int is_locked,
+> -		     struct mem_cgroup *memcg, unsigned long *vm_flags)
+> +		     struct mem_cgroup *memcg, unsigned long *vm_flags,
+> +		     bool rmap_try_lock)
+>  {
+>  	int we_locked = 0;
+>  	struct folio_referenced_arg pra = {
+> @@ -906,7 +908,7 @@ int folio_referenced(struct folio *folio, int is_locked,
+>  		.rmap_one = folio_referenced_one,
+>  		.arg = (void *)&pra,
+>  		.anon_lock = folio_lock_anon_vma_read,
+> -		.try_lock = true,
+> +		.try_lock = rmap_try_lock,
+>  	};
+>  
+>  	*vm_flags = 0;
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index ac168f4b0492..f0987e027aba 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -1381,7 +1381,8 @@ static enum page_references folio_check_references(struct folio *folio,
+>  	unsigned long vm_flags;
+>  
+>  	referenced_ptes = folio_referenced(folio, 1, sc->target_mem_cgroup,
+> -					   &vm_flags);
+> +					   &vm_flags,
+> +					   sc->priority >= DEF_PRIORITY - 2);
+>  	referenced_folio = folio_test_clear_referenced(folio);
+>  
+>  	/*
+> @@ -2497,7 +2498,8 @@ static void shrink_active_list(unsigned long nr_to_scan,
+>  
+>  		/* Referenced or rmap lock contention: rotate */
+>  		if (folio_referenced(folio, 0, sc->target_mem_cgroup,
+> -				     &vm_flags) != 0) {
+> +				     &vm_flags,
+> +				     sc->priority >= DEF_PRIORITY - 2) != 0) {
+>  			/*
+>  			 * Identify referenced, file-backed active pages and
+>  			 * give them one more trip around the active list. So
+> -- 
+> 2.36.1.124.g0e6072fb45-goog
+> 

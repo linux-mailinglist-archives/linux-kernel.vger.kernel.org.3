@@ -2,80 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B5C538DBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC99538DC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245247AbiEaJbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 05:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
+        id S245259AbiEaJdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 05:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237326AbiEaJbv (ORCPT
+        with ESMTP id S237326AbiEaJdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 05:31:51 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D75E627C
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:31:50 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 24V9HLNb095917;
-        Tue, 31 May 2022 17:17:21 +0800 (GMT-8)
-        (envelope-from ryan_chen@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.9) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 31 May
- 2022 17:31:46 +0800
-From:   ryan_chen <ryan_chen@aspeedtech.com>
-To:     <brendanhiggins@google.com>, <benh@kernel.crashing.org>,
-        <joel@jms.id.au>, <andrew@aj.id.au>, <linux-i2c@vger.kernel.org>,
-        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] i2c: aspeed: Fix slave mode unexpected irq handler
-Date:   Tue, 31 May 2022 17:31:40 +0800
-Message-ID: <20220531093140.28770-1-ryan_chen@aspeedtech.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 31 May 2022 05:33:32 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECBD22B0F;
+        Tue, 31 May 2022 02:33:29 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LC6VY1rRpz1JCSF;
+        Tue, 31 May 2022 17:31:49 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 31 May 2022 17:33:27 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 31 May 2022 17:33:26 +0800
+Subject: Re: [PATCH -next v7 2/3] block, bfq: refactor the counting of
+ 'num_groups_with_pending_reqs'
+To:     Paolo Valente <paolo.valente@unimore.it>
+CC:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
+        Tejun Heo <tj@kernel.org>, <cgroups@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220528095020.186970-1-yukuai3@huawei.com>
+ <20220528095020.186970-3-yukuai3@huawei.com>
+ <0D9355CE-F85B-4B1A-AEC3-F63DFC4B3A54@linaro.org>
+ <b9a4ea60-28e5-b7aa-0154-ad7481eafbd3@huawei.com>
+ <efe01dd1-0f99-dadf-956d-b0e80e1e602c@huawei.com>
+ <1803FD7E-9FB1-4A1E-BD6D-D6657006589A@unimore.it>
+ <a0d8452c-e421-45d3-b012-5355207fc0e1@huawei.com>
+ <81214347-3806-4F54-B60F-3E5A1A5EC84D@unimore.it>
+From:   Yu Kuai <yukuai3@huawei.com>
+Message-ID: <756631ee-6a85-303c-aca1-d60aaf477d0d@huawei.com>
+Date:   Tue, 31 May 2022 17:33:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [192.168.10.9]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 24V9HLNb095917
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <81214347-3806-4F54-B60F-3E5A1A5EC84D@unimore.it>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When i2c master send the new i2c transfer immediately
-after stop. the i2c slave will see the stop and new
-address match stage together. And it needs handle the
-stop first. otherwise will occur unexpected handle
-isr.
+在 2022/05/31 17:19, Paolo Valente 写道:
+> 
+> 
+>> Il giorno 31 mag 2022, alle ore 11:06, Yu Kuai <yukuai3@huawei.com> ha scritto:
+>>
+>> 在 2022/05/31 16:36, Paolo VALENTE 写道:
+>>>> Il giorno 30 mag 2022, alle ore 10:40, Yu Kuai <yukuai3@huawei.com> ha scritto:
+>>>>
+>>>> 在 2022/05/30 16:34, Yu Kuai 写道:
+>>>>> 在 2022/05/30 16:10, Paolo Valente 写道:
+>>>>>>
+>>>>>>
+>>>>>>> Il giorno 28 mag 2022, alle ore 11:50, Yu Kuai <yukuai3@huawei.com> ha scritto:
+>>>>>>>
+>>>>>>> Currently, bfq can't handle sync io concurrently as long as they
+>>>>>>> are not issued from root group. This is because
+>>>>>>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+>>>>>>> bfq_asymmetric_scenario().
+>>>>>>>
+>>>>>>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
+>>>>>>>
+>>>>>>> Before this patch:
+>>>>>>> 1) root group will never be counted.
+>>>>>>> 2) Count if bfqg or it's child bfqgs have pending requests.
+>>>>>>> 3) Don't count if bfqg and it's child bfqgs complete all the requests.
+>>>>>>>
+>>>>>>> After this patch:
+>>>>>>> 1) root group is counted.
+>>>>>>> 2) Count if bfqg have at least one bfqq that is marked busy.
+>>>>>>> 3) Don't count if bfqg doesn't have any busy bfqqs.
+>>>>>>
+>>>>>> Unfortunately, I see a last problem here. I see a double change:
+>>>>>> (1) a bfqg is now counted only as a function of the state of its child
+>>>>>>       queues, and not of also its child bfqgs
+>>>>>> (2) the state considered for counting a bfqg moves from having pending
+>>>>>>       requests to having busy queues
+>>>>>>
+>>>>>> I'm ok with with (1), which is a good catch (you are lady explained
+>>>>>> the idea to me some time ago IIRC).
+>>>>>>
+>>>>>> Yet I fear that (2) is not ok.  A bfqq can become non busy even if it
+>>>>>> still has in-flight I/O, i.e.  I/O being served in the drive.  The
+>>>>>> weight of such a bfqq must still be considered in the weights_tree,
+>>>>>> and the group containing such a queue must still be counted when
+>>>>>> checking whether the scenario is asymmetric.  Otherwise service
+>>>>>> guarantees are broken.  The reason is that, if a scenario is deemed as
+>>>>>> symmetric because in-flight I/O is not taken into account, then idling
+>>>>>> will not be performed to protect some bfqq, and in-flight I/O may
+>>>>>> steal bandwidth to that bfqq in an uncontrolled way.
+>>>>> Hi, Paolo
+>>>>> Thanks for your explanation.
+>>>>> My orginal thoughts was using weights_tree insertion/removal, however,
+>>>>> Jan convinced me that using bfq_add/del_bfqq_busy() is ok.
+>>>>>  From what I see, when bfqq dispatch the last request,
+>>>>> bfq_del_bfqq_busy() will not be called from __bfq_bfqq_expire() if
+>>>>> idling is needed, and it will delayed to when such bfqq get scheduled as
+>>>>> in-service queue again. Which means the weight of such bfqq should still
+>>>>> be considered in the weights_tree.
+>>>>> I also run some tests on null_blk with "irqmode=2
+>>>>> completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
+>>>>> that service guarantees are still preserved on slow device.
+>>>>> Do you this is strong enough to cover your concern?
+>>> Unfortunately it is not.  Your very argument is what made be believe
+>>> that considering busy queues was enough, in the first place.  But, as
+>>> I found out, the problem is caused by the queues that do not enjoy
+>>> idling.  With your patch (as well as in my initial version) they are
+>>> not counted when they remain without requests queued.  And this makes
+>>> asymmetric scenarios be considered erroneously as symmetric.  The
+>>> consequence is that idling gets switched off when it had to be kept
+>>> on, and control on bandwidth is lost for the victim in-service queues.
+>>
+>> Hi，Paolo
+>>
+>> Thanks for your explanation, are you thinking that if bfqq doesn't enjoy
+>> idling, then such bfqq will clear busy after dispatching the last
+>> request?
+>>
+>> Please kindly correct me if I'm wrong in the following process:
+>>
+>> If there are more than one bfqg that is activatied, then bfqqs that are
+>> not enjoying idle are still left busy after dispatching the last
+>> request.
+>>
+>> details in __bfq_bfqq_expire:
+>>
+>>         if (RB_EMPTY_ROOT(&bfqq->sort_list) &&
+>>         ┊   !(reason == BFQQE_PREEMPTED &&
+>>         ┊     idling_needed_for_service_guarantees(bfqd, bfqq))) {
+>> -> idling_needed_for_service_guarantees will always return true,
+> 
+> It returns true only is the scenario is symmetric.  Not counting bfqqs
+> with in-flight requests makes an asymmetric scenario be considered
+> wrongly symmetric.  See function bfq_asymmetric_scenario().
 
-Fixes: f327c686d3ba ("i2c: aspeed: added drover for Aspeed I2C)
-Signed-off-by: ryan_chen <ryan_chen@aspeedtech.com>
----
- drivers/i2c/busses/i2c-aspeed.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Hi, Paolo
 
-diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-index 771e53d3d197..9f21e090ce47 100644
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -252,6 +252,12 @@ static u32 aspeed_i2c_slave_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
- 
- 	/* Slave was requested, restart state machine. */
- 	if (irq_status & ASPEED_I2CD_INTR_SLAVE_MATCH) {
-+		if (irq_status & ASPEED_I2CD_INTR_NORMAL_STOP &&
-+			bus->slave_state == ASPEED_I2C_SLAVE_WRITE_RECEIVED) {
-+			irq_handled |= ASPEED_I2CD_INTR_NORMAL_STOP;
-+			irq_status &= ~ASPEED_I2CD_INTR_NORMAL_STOP;
-+			i2c_slave_event(slave, I2C_SLAVE_STOP, &value);
-+		}
- 		irq_handled |= ASPEED_I2CD_INTR_SLAVE_MATCH;
- 		bus->slave_state = ASPEED_I2C_SLAVE_START;
- 	}
--- 
-2.17.1
+Do you mean this gap?
 
+1. io1 is issued from bfqq1(from bfqg1)
+2. bfqq1 dispatched this io, it's busy is cleared
+3. *before io1 is completed*, io2 is issued from bfqq2(bfqg2)
+4. with this patchset, while dispatching io2 from bfqq2, the scenario
+should be symmetric while it's considered wrongly asymmetric.
+> 
+> Paolo
+> 
+>> bfqq(whether or not enjoy idling) will stay busy.
+>>                 if (bfqq->dispatched == 0)
+>>                         /*
+>>                         ┊* Overloading budget_timeout field to store
+>>                         ┊* the time at which the queue remains with no
+>>                         ┊* backlog and no outstanding request; used by
+>>                         ┊* the weight-raising mechanism.
+>>                         ┊*/
+>>                         bfqq->budget_timeout = jiffies;
+>>
+>>                 bfq_del_bfqq_busy(bfqd, bfqq, true);
+>>
+>> Thanks,
+>> Kuai
+> 
+> .
+> 

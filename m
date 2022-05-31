@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE89538F78
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB94538F7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245450AbiEaLNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 07:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
+        id S1343702AbiEaLNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 07:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240207AbiEaLNI (ORCPT
+        with ESMTP id S1343691AbiEaLNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 07:13:08 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE1D6E8C7;
-        Tue, 31 May 2022 04:13:06 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24VBCpYT039705;
-        Tue, 31 May 2022 06:12:51 -0500
+        Tue, 31 May 2022 07:13:10 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653546F4B3;
+        Tue, 31 May 2022 04:13:09 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24VBD20H004194;
+        Tue, 31 May 2022 06:13:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1653995571;
-        bh=nLIsHC9dAzdUxh2oSgJpYTsG4I96PU5Qg0diryQh7E8=;
-        h=From:To:CC:Subject:Date;
-        b=UgeI+D636TQ0k5eDhHI4vwHE6zy/U8BIiMFlKZtZght3ncjf1u4iZiZe5XAOMDCd1
-         gVnQL5mVNF/Z+ZH179elfMHG10PUTFR4uqLRdR3Rc5x+xH+KJyPr64mAbj0yjMqnII
-         Rq9nfmOeUQMtno51FHsKoYDBiy1SsEpSkHWysWnw=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24VBCpuR008332
+        s=ti-com-17Q1; t=1653995582;
+        bh=sk63Z4ufXimfVQy5b3IO3HJO0DUDoexen2snbThS2zg=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=xnSIQLnLrTGMgUr4ohI1l2c+g/Npx7zJ2oqsskvJ9RyT8s/HnKW9+AYaGBMR+/Aiz
+         gbXSTsgp6pMC3LIKFOLhJmEKNOENObxoiPiAZ962+3eDSuFvt50sZweryNzrLvCiE5
+         s1GF1FQ4iDPYkigmsySHca7Aywki32JAuQcLAknY=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24VBD217036632
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 31 May 2022 06:12:51 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 31 May 2022 06:13:02 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 31
- May 2022 06:12:51 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ May 2022 06:13:01 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 31 May 2022 06:12:51 -0500
+ Frontend Transport; Tue, 31 May 2022 06:13:02 -0500
 Received: from ula0492258.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24VBCka7045977;
-        Tue, 31 May 2022 06:12:47 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24VBCka8045977;
+        Tue, 31 May 2022 06:12:58 -0500
 From:   Siddharth Vadapalli <s-vadapalli@ti.com>
 To:     <robh+dt@kernel.org>, <lee.jones@linaro.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <kishon@ti.com>,
@@ -48,10 +48,12 @@ To:     <robh+dt@kernel.org>, <lee.jones@linaro.org>,
 CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-phy@lists.infradead.org>,
         Siddharth Vadapalli <s-vadapalli@ti.com>
-Subject: [PATCH 0/2] Add support for QSGMII mode
-Date:   Tue, 31 May 2022 16:42:19 +0530
-Message-ID: <20220531111221.22963-1-s-vadapalli@ti.com>
+Subject: [PATCH 1/2] dt-bindings: phy: ti: phy-gmii-sel: Add bindings for J7200
+Date:   Tue, 31 May 2022 16:42:20 +0530
+Message-ID: <20220531111221.22963-2-s-vadapalli@ti.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220531111221.22963-1-s-vadapalli@ti.com>
+References: <20220531111221.22963-1-s-vadapalli@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -66,19 +68,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible for J7200 CPSW5G.
+TI's J7200 SoC supports additional PHY modes like QSGMII and SGMII
+that are not supported on earlier SoCs. Add a compatible for it.
 
-Add support for QSGMII mode in phy-gmii-sel driver for CPSW5G in J7200.
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+---
+ .../mfd/ti,j721e-system-controller.yaml       |  5 ++++
+ .../bindings/phy/ti,phy-gmii-sel.yaml         | 24 ++++++++++++++++++-
+ 2 files changed, 28 insertions(+), 1 deletion(-)
 
-Siddharth Vadapalli (2):
-  dt-bindings: phy: ti: phy-gmii-sel: Add bindings for J7200
-  phy: ti: gmii-sel: Add support for CPSW5G GMII SEL in J7200
-
- .../mfd/ti,j721e-system-controller.yaml       |  5 +++
- .../bindings/phy/ti,phy-gmii-sel.yaml         | 24 +++++++++++-
- drivers/phy/ti/phy-gmii-sel.c                 | 39 +++++++++++++++++--
- 3 files changed, 64 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+index fa86691ebf16..e381ba62a513 100644
+--- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
++++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+@@ -48,6 +48,11 @@ patternProperties:
+     description:
+       This is the SERDES lane control mux.
+ 
++  "phy@[0-9a-f]+$":
++    type: object
++    description:
++      This is the register to set phy mode through phy-gmii-sel driver.
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+index ff8a6d9eb153..7427758451e7 100644
+--- a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
++++ b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+@@ -53,12 +53,21 @@ properties:
+       - ti,am43xx-phy-gmii-sel
+       - ti,dm814-phy-gmii-sel
+       - ti,am654-phy-gmii-sel
++      - ti,j7200-cpsw5g-phy-gmii-sel
+ 
+   reg:
+     maxItems: 1
+ 
+   '#phy-cells': true
+ 
++  ti,enet-ctrl-qsgmii:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Required only for QSGMII mode. Bitmask to select the port for
++      QSGMII main mode. Rest of the ports are selected as QSGMII_SUB
++      ports automatically. Any of the 4 CPSW5G ports can act as the
++      main port with the rest of them being the QSGMII_SUB ports.
++
+ allOf:
+   - if:
+       properties:
+@@ -73,6 +82,19 @@ allOf:
+         '#phy-cells':
+           const: 1
+           description: CPSW port number (starting from 1)
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - ti,j7200-cpsw5g-phy-gmii-sel
++    then:
++      properties:
++        '#phy-cells':
++          const: 1
++          description: CPSW port number (starting from 1)
++        ti,enet-ctrl-qsgmii:
++          enum: [1, 2, 4, 8]
+   - if:
+       properties:
+         compatible:
+@@ -97,7 +119,7 @@ additionalProperties: false
+ 
+ examples:
+   - |
+-    phy_gmii_sel: phy-gmii-sel@650 {
++    phy_gmii_sel: phy@650 {
+         compatible = "ti,am3352-phy-gmii-sel";
+         reg = <0x650 0x4>;
+         #phy-cells = <2>;
 -- 
 2.36.1
 

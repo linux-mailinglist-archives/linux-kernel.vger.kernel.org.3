@@ -2,124 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325B153982F
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 22:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 637EC539822
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 22:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347851AbiEaUnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 16:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
+        id S1347849AbiEaUkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 16:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237511AbiEaUnV (ORCPT
+        with ESMTP id S1347839AbiEaUk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 16:43:21 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238DA6F4B6;
-        Tue, 31 May 2022 13:43:20 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id y8so15362505iof.10;
-        Tue, 31 May 2022 13:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TI/uINot2gV0lsjsvp3p4xP/LTEZ58Gik5+AdIHYdjg=;
-        b=WjUDqvXL2OO2piHgXTpKnWg7kXo9tMrfgtr27wgnYh5T8GyiOc6uw6wKAyJO394Zql
-         fh+tPnrmnm+ECm22gO3dHdskQ1xsBGOXDIPcZlMK28PdlJ5llhwCCHdC6n+n60CQaTVW
-         iw96wJJ4F85cmoal2mWrAfo0V6q8OksPYWhXPMZYzdq/EIu4xG54DN4qDRTeiYT4j4K3
-         Lt8pC/MAKLTQ8RKQAG2tBmU6yObfyVkXMBCkWffZ2O6Zp6HD1JSjhfIcwdVvRMI+ijS3
-         mSyz4iwbpDpK6M5kQ9YpoF9irzRtLVTpUpukpuDglcjijqmhUvcHgfLPTUmcnlaKJBBw
-         GHBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TI/uINot2gV0lsjsvp3p4xP/LTEZ58Gik5+AdIHYdjg=;
-        b=Jqj/TuePmGqAjrETXJFb1p50NdGSp8v/2QW29jKfgNjibglVHMgVIbyKjLNeutAHPN
-         DX8tjXAsLQrzl9TLvTHudRPVo8gmaFHIhlbcDHbQZe5rfZHl93OvV3fHQj2nJ3iOcmXY
-         ptSPasACXQZE2AJYXJ7K0yzqzEk58I69TlIc8Q7OfC1hLW+RRA1HSvDk1TYURLRAnqiW
-         cJpHRVyCPffg3XXhqsdw1m4avCJKqf7oXI8bj80woaeqShIYqBS4tuf0m6PCJDwTrfk+
-         FPs9JOP6lVGMotb89seEof2SykFMlm2BmuICvCDd22sXGo2bnj1qqmqYOaPahpVRj24I
-         tOdw==
-X-Gm-Message-State: AOAM530DKkEUsiasQCtK8Xh+dkEi6qBP+qXql/n5VEn3G20wHp3ZHo3h
-        JyY1wTtjbaJoSQVDx8LvMpA=
-X-Google-Smtp-Source: ABdhPJx8SX0NE5W2CPxvdPdhXAbiWnUhFsofQHgdXznAXgWnYRcojbA8I3LXi1OxTQffPNYS3M4g7A==
-X-Received: by 2002:a05:6602:3299:b0:668:6cd3:60e6 with SMTP id d25-20020a056602329900b006686cd360e6mr7510796ioz.183.1654029799400;
-        Tue, 31 May 2022 13:43:19 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:bd78:a862:1b9c:aef9? ([2600:1700:2442:6db0:bd78:a862:1b9c:aef9])
-        by smtp.gmail.com with ESMTPSA id q11-20020a92050b000000b002d3bb071d5bsm1010934ile.0.2022.05.31.13.43.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 13:43:19 -0700 (PDT)
-Message-ID: <8d4b8cc3-8433-24f9-1fc5-12d71e640952@gmail.com>
-Date:   Tue, 31 May 2022 16:43:18 -0400
+        Tue, 31 May 2022 16:40:28 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AB4DE8B;
+        Tue, 31 May 2022 13:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654029619; x=1685565619;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xVNourZTR1Kt6OmuqtuVyyuHWlgFnrM3yUwYczvadfk=;
+  b=NlOqj7F3y/QumbRlfvfPrKlgTbn18skdpOkC6pfc4XYVUc/R+g2QEIac
+   gSLIePI74Tz5d8id/GiQFi3+eG1+OKEhX0MfVBy+IEyvaW2WW7WGG1Hid
+   L5pf2pEUEtXDSBC9U02fN+P8vvzdl0tovDmLtMrhUcqzYCloNzYqe3NSZ
+   MQVR9GHgrG6mmcgrdBZYjoWCtrnqRP+sbH43WPnwI8G7/00JdCwoiCHrY
+   lUXSnAMB4i+HKFav2RLG8b91S+gU87SxxZZNJlvLuKEs+0YoIVrMtTFFg
+   iETbEHNGHxtHN+TjIgsHC9aMdfEUOj31YsD8oDINt8DmRBEiRdXSvPBJB
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="257449622"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="257449622"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 13:40:17 -0700
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="612003367"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 13:40:17 -0700
+Date:   Tue, 31 May 2022 13:44:14 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v4 1/6] iommu: Add a per domain PASID for DMA API
+Message-ID: <20220531134414.37a62c88@jacob-builder>
+In-Reply-To: <20220531190550.GK1343366@nvidia.com>
+References: <20220518182120.1136715-1-jacob.jun.pan@linux.intel.com>
+        <20220518182120.1136715-2-jacob.jun.pan@linux.intel.com>
+        <20220524135034.GU1343366@nvidia.com>
+        <20220524081727.19c2dd6d@jacob-builder>
+        <20220530122247.GY1343366@nvidia.com>
+        <BN9PR11MB52768105FC4FB959298F8A188CDC9@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <628aa885-dd12-8bcd-bfc6-446345bf69ed@linux.intel.com>
+        <20220531102955.6618b540@jacob-builder>
+        <20220531190550.GK1343366@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] scripts: dtc: fix a false alarm for
- node_name_chars_strict
-Content-Language: en-US
-To:     Qun-Wei Lin <qun-wei.lin@mediatek.com>, robh+dt@kernel.org,
-        matthias.bgg@gmail.com
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, casper.li@mediatek.com,
-        chinwen.chang@mediatek.com, kuan-ying.lee@mediatek.com
-References: <20220531053358.19003-1-qun-wei.lin@mediatek.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <20220531053358.19003-1-qun-wei.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/22 01:33, Qun-Wei Lin wrote:
-> The function check_node_name_chars_strict issues a false alarm when
-> compiling an overlay dts.
+Hi Jason,
+
+On Tue, 31 May 2022 16:05:50 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
+
+> On Tue, May 31, 2022 at 10:29:55AM -0700, Jacob Pan wrote:
 > 
-> /fragment@0/__overlay__: Character '_' not recommended in node name
+> > The reason why I store PASID at IOMMU domain is for IOTLB flush within
+> > the domain. Device driver is not aware of domain level IOTLB flush. We
+> > also have iova_cookie for each domain which essentially is for
+> > RIDPASID.  
 > 
-> This workaround will fix it by skip checking for node named __overlay__.
-
-This is not a false alarm.
-
-Do not special case node name "__overlay__".  This node name should never
-occur in a modern overlay source file.
-
-For details, see "Overlay Source Format" in the "Overlays" section of:
-https://elinux.org/Device_Tree_Reference#Overlays
-
-That paragraph also has a pointer to the correct format for overlay
-source files, which is slides 29-34 of:
-https://elinux.org/Device_Tree_Reference#Overlays
-
--Frank
-
+> You need to make the PASID stuff work generically.
 > 
-> Signed-off-by: Qun-Wei Lin <qun-wei.lin@mediatek.com>
-> ---
->  scripts/dtc/checks.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> The domain needs to hold a list of all the places it needs to flush
+> and that list needs to be maintained during attach/detach.
 > 
-> diff --git a/scripts/dtc/checks.c b/scripts/dtc/checks.c
-> index 781ba1129a8e..6ef4f2cd67b9 100644
-> --- a/scripts/dtc/checks.c
-> +++ b/scripts/dtc/checks.c
-> @@ -325,6 +325,11 @@ static void check_node_name_chars_strict(struct check *c, struct dt_info *dti,
->  {
->  	int n = strspn(node->name, c->data);
->  
-> +	if (streq(node->name, "__overlay__")) {
-> +		/* HACK: Overlay fragments are a special case */
-> +		return;
-> +	}
-> +
->  	if (n < node->basenamelen)
->  		FAIL(c, dti, node, "Character '%c' not recommended in node name",
->  		     node->name[n]);
+> A single PASID on the domain is obviously never going to work
+> generically.
+> 
+I agree, I did it this way really meant to be part of iommu_domain's
+iommu_dma_cookie, not meant to be global. But for the lack of common
+storage between identity domain and dma domain, I put it here as global.
 
+Then should we also extract RIDPASID to become part of the generic API?
+i.e. set pasid, flush IOTLB etc. Right? RIDPASID is not in group's
+pasid_array today.
+
+Thanks,
+
+Jacob

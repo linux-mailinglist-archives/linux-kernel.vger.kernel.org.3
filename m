@@ -2,65 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE5F539124
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A832539135
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243790AbiEaMwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 08:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
+        id S1344441AbiEaM7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 08:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234793AbiEaMwx (ORCPT
+        with ESMTP id S239911AbiEaM7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 08:52:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843A473552
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:52:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AF0F60916
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:52:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A531C385A9;
-        Tue, 31 May 2022 12:52:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654001571;
-        bh=BgK5r/VJqTsmBomquLZzHoVkoWPmJmwZKJWnFVBtVXY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DoateXwG9MzCnbzwyP8eV6xrPLYE2RNW+9dF685B1U5RNwYa1QdibyEtIlZ8DIDQa
-         pu+aLBC8jirh4L/Ew+/9KeSW+7TkvFyLvLBmj7QRIS7gKz/gIzcqRJuSTn82KM6ljB
-         532yi9KdQzsu06yciAlFo5CE0W7gFqxhxyirLckekavyQ8Z0DiF1+fQDieQnZGtrxx
-         cUxhHK06DvC7Bw0x9JGCHvtBdkMhtjxTdjdlMRJs9qo3IOdoVEjugn9Boq+oMuVno5
-         v49B1j9u9OeVUJJnZgLsQTl3BlYmdvLzGaiwvndDfMuQ1Ar7FMIOjtIeX+xbUvDCQa
-         HHTPXGr7nTABQ==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nw1Mf-00El8I-2Y; Tue, 31 May 2022 13:52:49 +0100
+        Tue, 31 May 2022 08:59:41 -0400
+X-Greylist: delayed 321 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 May 2022 05:59:39 PDT
+Received: from mail.aperture-lab.de (mail.aperture-lab.de [IPv6:2a01:4f8:c2c:665b::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E5B165A2;
+        Tue, 31 May 2022 05:59:39 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C911F3EA15;
+        Tue, 31 May 2022 14:54:13 +0200 (CEST)
+Date:   Tue, 31 May 2022 14:54:12 +0200
+From:   Linus =?utf-8?Q?L=C3=BCssing?= <linus.luessing@c0d3.blue>
+To:     Baligh Gasmi <gasmibal@gmail.com>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:MAC80211" <linux-wireless@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        b.a.t.m.a.n@lists.open-mesh.org
+Subject: Re: [RFC PATCH v3 1/1] mac80211: use AQL airtime for expected
+ throughput.
+Message-ID: <YpYP9NBD+Wmzup+s@sellars>
+References: <20220531100922.491344-1-gasmibal@gmail.com>
 MIME-Version: 1.0
-Date:   Tue, 31 May 2022 13:52:48 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH 1/2] irqchip: Adjust Kconfig for Loongson
-In-Reply-To: <20220531115942.1686812-1-chenhuacai@loongson.cn>
-References: <20220531115942.1686812-1-chenhuacai@loongson.cn>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <e7cf33a170d0b4e98e53744f60dbf922@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: chenhuacai@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, chenhuacai@gmail.com, jiaxun.yang@flygoat.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220531100922.491344-1-gasmibal@gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,28 +48,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-31 12:59, Huacai Chen wrote:
-> We are preparing to add new Loongson (based on LoongArch, not 
-> compatible
-> with old MIPS-based Loongson) support.
-
-Please drop this blurb from all your patches. It adds zero information.
-
-> HTVEC will be shared by both old
-> and new Loongson processors, so we adjust its description. HTPIC is 
-> only
-> used by MIPS-based Loongson, so we add a MIPS dependency. PCH_PIC and
-> PCH_MSI will have some arch-specific code, so we remove the 
-> COMPILE_TEST
-> dependency to avoid build warnings.
+On Tue, May 31, 2022 at 12:09:22PM +0200, Baligh Gasmi wrote:
+> Since the integration of AQL, packet TX airtime estimation is
+> calculated and counted to be used for the dequeue limit.
 > 
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> Use this estimated airtime to compute expected throughput for
+> each station.
+> 
+> It will be a generic mac80211 implementation. If the driver has
+> get_expected_throughput implementation, it will be used instead.
+> 
+> Useful for L2 routing protocols, like B.A.T.M.A.N.
+> 
+> Signed-off-by: Baligh Gasmi <gasmibal@gmail.com>
 
-No cover letter, no indication of what this applies on, no mention
-of how this relates to the ongoing irqchip review.
+Hi Baligh,
 
-What do you want me to do with this?
+Thanks for your work, this indeed sounds very relevant for
+batman-adv. Do you have some test results on how this compares to
+real throughput? And maybe how it compares to other methods we
+already have in the kernel, like expected throughput via
+minstrel_ht rate control or the estimates performed in 802.11s
+HWMP [0]?
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Is there a certain minimum amount of traffic you'd suggest to have
+enough samples to get a meaningful result?
+
+I'm also wondering if we are starting to accumulate too many
+places to provide wifi expected throughput calculations. Do you
+see a chance that this generic mac80211 implementation could be made
+good enough to be used as the sole source for both batman-adv and
+802.11s HWMP, for instance? Or do you see some pros and cons
+between the different methods?
+
+Regards, Linus
+
+
+[0]: https://elixir.bootlin.com/linux/v5.18/source/net/mac80211/mesh_hwmp.c#L295

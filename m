@@ -2,81 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4695397F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 22:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32C15397F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 22:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347738AbiEaUbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 16:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
+        id S1347750AbiEaUcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 16:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240755AbiEaUbp (ORCPT
+        with ESMTP id S240755AbiEaUcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 16:31:45 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3A11108
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 13:31:43 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-f2e0a41009so18505198fac.6
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 13:31:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=AN+Ko66d9Yo5Ua3h+9nJbgsd8+nb3+CXOXYHCdIP1go=;
-        b=OrYfkpTBDytfSR3lV5xOMd65xYbn9Z1CEFjz3b83PHZHkDxJUrkZKTxhig1LqVqi5i
-         wHTs5iS63snDqmnhzHYGNfa4JaajUWXKih/ig8x1hNVJzt+8tYveQEjd59QWP9czHHW3
-         9jQE0Qm6+9kJgY/3oastPjY+nApf5qjoXwW/F5M460Kizio5W8JtcBUI43vnLon1HdNG
-         bV/28AmfZ/xMd6Tjr9b59ks15kjiXojFKfQEXu8GbWjjtwOas4suinfhzqn9kb0nNVmf
-         XxY81UXCbXRpBpzOLD/R7jllkKHCFb61W7dDt7SmjmzAIwKPgZ6RmEo+5DDmSM6+GHui
-         YBkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=AN+Ko66d9Yo5Ua3h+9nJbgsd8+nb3+CXOXYHCdIP1go=;
-        b=JxOWUsWU61b0i2iWvoI4rAA19VwUA/RVtKCAqU4y62Q8oMX4fQvP/LAEqq1M0cZDv5
-         4qascHRpwLVQB69MmL8pUmNwqsLXS+gkmoZJueVyUomiiOCPGXrS81uTQlpu0ezoNNkK
-         rCuPw49E2+/0vMkadwG46GqVPvkyzHF0gZbXq9oit9L4lWFGzEkAKq/GjGvYWoaSZ+D1
-         VR9EUymI0HGi6BUFowRoDCEECC6jPcXiJ7QSSFfVipWz/J5P7D+yPK6GrNJGt8319Wv5
-         vi42BXZOLlrP5gzZiH+8jfHD1wKwEyBpEigdFGVmm7+q8R/Kg5FDBajLbA+zzyyWywxc
-         lu6g==
-X-Gm-Message-State: AOAM5313tkfJVkA8Rph5OaTUMvrV+onqrNDFtnjSlnDmgxlf1HU9KaFp
-        4MjIKo8wSReyi84jnk3Uxpb5qVXGMMaNTQ779wM=
-X-Google-Smtp-Source: ABdhPJxB+/DScEugLMVqyUMyFsSMkpd4QYZZHdBrh/PKm9TOMEFle9WQ6mlWcEtazZtE+lXv1KcusIdx4Onm9A+aQZM=
-X-Received: by 2002:a05:6870:340b:b0:ee:37af:2722 with SMTP id
- g11-20020a056870340b00b000ee37af2722mr14262607oah.91.1654029102904; Tue, 31
- May 2022 13:31:42 -0700 (PDT)
+        Tue, 31 May 2022 16:32:10 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE1422294
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 13:32:07 -0700 (PDT)
+Received: from mail-yb1-f174.google.com ([209.85.219.174]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mofx1-1nTtGx0Qkj-00p12a for <linux-kernel@vger.kernel.org>; Tue, 31 May
+ 2022 22:32:06 +0200
+Received: by mail-yb1-f174.google.com with SMTP id t31so12992175ybi.2
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 13:32:05 -0700 (PDT)
+X-Gm-Message-State: AOAM531OCBn3Kr/TCtqZMAecA28AboIg+SLrlEM3VPki6htzLIYIBwA1
+        g9yveLDZxZsBOL6KXU1LJala+szVJmfke49Tl7M=
+X-Google-Smtp-Source: ABdhPJwjtZlEHUDtrRgInqT8PUMnSYWeIpr6O7uPiFgcfh3m+qQsGvklVZcEBIzDXwGJS1Kt8XGU3Bi7zIGSW73tXxQ=
+X-Received: by 2002:a25:1209:0:b0:65d:63f9:e10a with SMTP id
+ 9-20020a251209000000b0065d63f9e10amr3017293ybs.480.1654029124925; Tue, 31 May
+ 2022 13:32:04 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6838:2f88:0:0:0:0 with HTTP; Tue, 31 May 2022 13:31:42
- -0700 (PDT)
-From:   Debora Jay <deborajay372@gmail.com>
-Date:   Tue, 31 May 2022 20:31:42 +0000
-Message-ID: <CAHUR393N+MmWHf0APtOnB2oWYsTKVFHy5dZddEDw3i4UEDG0SA@mail.gmail.com>
-Subject: HELP
-To:     undisclosed-recipients:;
+References: <20220531202404.70282-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220531202404.70282-1-andriy.shevchenko@linux.intel.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 31 May 2022 22:31:47 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3mq+ACjJqfoqwA2hqrzRMEmiOpWiqZGRtRDX9rftLbTA@mail.gmail.com>
+Message-ID: <CAK8P3a3mq+ACjJqfoqwA2hqrzRMEmiOpWiqZGRtRDX9rftLbTA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] syscon: Use %pa to format the variable of
+ resource_size_t type
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.9 required=5.0 tests=ADVANCE_FEE_5_NEW,BAYES_60,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+X-Provags-ID: V03:K1:97e6kF8LhA+Jjgp1MEA513MjR14P2It7aBGA0MEvwV4dbSpjtCy
+ hdmzXYnABIXrNTDKHsqgRh2hkOo5D46G1SsW/00q7BZtk8QiwS0t8nAYYy/j4lO9VWD2RGW
+ zL6suZbh2h1A0QoPtWHLGLBi2WsivTKfbtO0hyPoxZe2p+ffKRmUu2NFXlNLhHtH4jby+ZJ
+ jzDBiFvuZ7lpPj66cEFhw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Or2DaDQX1JE=:oTk20MTQZUKr7AgTzxPtBU
+ 2bu6sMKxjWvr/Z8wzB0afdp2Cjo30Wvi7hd7RPsqjZh9wJUzNJ0wOImzDxlybg+Sn+CeXfc1E
+ Ch8NGxiQCGTBKyj0MMWN0S+dou2e0AlanaM/b+EE2nNdOkLCpuwSi6TWsdvYUo+RYfTK+oR5N
+ q8MKD117O2VskspaXL47Yk8xkX9onBktfT4zfLw+P6Uq43xBrbNiRl4K/u1NPFN0fwQnyOiSY
+ vspewi8GIP28bgglK475+Wj0QD10kme/UnAud3vcu/t3YB/ZRApGyKiATzsJGaOYVB5zkRCSI
+ rE3w5E2z/ndJq98sapxTchI4V3LfcQqOygpBIPUtF09p7EPXBgRKoWSEiOZumCGSXGLknUFFd
+ pg7Fy4bh9DMOxs0HBqMeXiufGBIdLGpMBLx5r31ovmqRL6YZYVWI4A02GpPlKk2RorSfuYUP9
+ kCEEdwcmNQCkAWqdln/LwWX/qBBemMSuYVYA4MudZuY3rhB266w3CdQXRuaJMDx8LGqii4Vnv
+ Cj+p5JZALc7q3wxfQM4aOz8q+hkIiiz6CcCvMO8wK0RtXg3VoCoYveYeYqG7QIOK4cNSzeFhE
+ Bo86J/OxdTT3WLhRgFHGizkhWCR3Vq67E9OaccADeHnMBXokXlz/6zo4sfg191GySXBxkPpog
+ XE+jjw+g3DoTan4I9iSL5vgMhFw6BVbcu77bQl3s9OubIy8WEnOjuZEYZZWsQ22wl1EGBLSuK
+ +Sap0g13u2SNm0NGQZ17SslWwtwUQQ/DAwkE0Q==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Good day
+On Tue, May 31, 2022 at 10:24 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Instead of explicit casting, use %pa specifier to format
+> the variable of resource_size_t type.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-I sent this mail praying for it to reach you in good health since I
-myself are in a very critical health condition in which I sleep every
-night without knowing if I Maybe alive to see the next day., I am a
-widow suffering from a long-time illness. I have some funds I
-inherited from my late husband; my
-
-Doctor told me recently that I would not last due to the illness.
-Having known my condition, I need you to claim this money and use it
-for Charity work or any profitable venture that can help the poor and
-
-street children especially, I accept this decision because I do not
-have any child who will inherit this money after I die.
-
-Thank you, Debora
+Acked-by: Arnd Bergmann <arnd@arndb.de>

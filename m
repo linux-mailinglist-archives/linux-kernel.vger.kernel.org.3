@@ -2,79 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29A75398CA
+	by mail.lfdr.de (Postfix) with ESMTP id B64C35398CB
 	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 23:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348020AbiEaVaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 17:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
+        id S1348032AbiEaVar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 17:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348042AbiEaVaF (ORCPT
+        with ESMTP id S1346692AbiEaVap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 17:30:05 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6069CF28;
-        Tue, 31 May 2022 14:30:03 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id n10so29153787ejk.5;
-        Tue, 31 May 2022 14:30:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OdK+eE4TOLAxsJTNj+9orro+91ojVQC6MaYJmCCbeQE=;
-        b=piTVTfroLPwR9dT+4Pxk3X3JiQOi8Rvd7xtOxQFx22lNbSupKGHOb6zriXv+TUGynk
-         fX0z5+eNlfg9jIyx3P+oq8kLuA/g+0IJ41r4WwXAgBllyhENcpto9vfLhekqVuFVoe+v
-         ZcNdT+zYtkLnjbb7PBkn+c211KiaN/Wl562tyGgJVXK89NJrMqZtT/Vg7QKP+pGhzcDf
-         3pRWxtyXogxNnfGeWDYyCRcUtgBMfvaGiSQj+3egVqLwVmxiHNXEp4ADIAMmQCHJ7wQg
-         hBFM69KE1ooA+Qqi5iIh0uEpykPCaCNtb98Ev52oHt7yi97C/zp2pHELNMgdvWzd4NXS
-         ORVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OdK+eE4TOLAxsJTNj+9orro+91ojVQC6MaYJmCCbeQE=;
-        b=q7r7/RddAkUiTZmcrQqAK6Q7jo7Y0ozRp3v/uDeN4pFV8XGX3eLkrZeSA8FcuzeBmd
-         afsEGxrdJtoNi5wTHF2RyUNF2Njet0dcuPxpnyc5P7srfIKi3n9KTMe30FEpO15zRE3F
-         id3IPBOeGdV4uwKkHFLq3xVk0gGoxV1/UgRJey5NnRTXb9OFfxgLI7kMZAu3EmTbgIT2
-         ieJO1AEtZHZxobJAGIkVLjbVQtdQc28DOCjbwsjn6fobIB2M8CkGT+cdp0U6eVrOwBEw
-         Stb3z9gpR/j279iEe0Gf3wwYRDq7EAxQf276Ff8D6tLaJRWK4Ih+tOWiOLfCcUdNkTUP
-         gciw==
-X-Gm-Message-State: AOAM530NqrsXcOVoNwPzBKNgM5qoi7v7hbuc06Njq9CR9d0gFfWv36Ix
-        zfXXbw7YEu3Sa3Bnmf7ABhjhDEreIU4TO/JzlFg=
-X-Google-Smtp-Source: ABdhPJyOPJ2fxBW5GtBabP3sWZr13JugYTG7IRGrl+fbQSib4tmjBMNQZI9rwETvFrK9H3lHfAOxdiHHf2/cp8zGX3k=
-X-Received: by 2002:a17:907:1b19:b0:6f0:1022:1430 with SMTP id
- mp25-20020a1709071b1900b006f010221430mr55649654ejc.13.1654032602340; Tue, 31
- May 2022 14:30:02 -0700 (PDT)
+        Tue, 31 May 2022 17:30:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FD39D4D5;
+        Tue, 31 May 2022 14:30:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A47B61309;
+        Tue, 31 May 2022 21:30:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06CABC3411C;
+        Tue, 31 May 2022 21:30:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654032644;
+        bh=dgKMOmPer7iKgCojd4nmuoUy3ULtSG1a8CWjkVRT/cU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WbRj7VYpyKzOjUQhYUviEB++FiWhTF5EDaAV86pQjN84wbUrnCUWGi5pbw+O8hG6G
+         dT9Zp3V6WViklchFXMiuZehiAw52rFGB90NixQ93WpDBUPjNjRzAEza/8ZAk05u3ds
+         gVDI17kNkuwAXOrlqmohzaFE1qjfXuJWzXx5wxLxmWY5MYoWnnq4PyWDeFkyoNGbmO
+         gm9HYXDmQCKqy+/WVFzdzPRyr+D4v4LCiSNZFgxoMepcTx/IOJb/4MRTiAF/Vjl1DC
+         B/BxHm15J0ySVGEVbs+4cfsl5xVW0cZEWVaSgEH4vrb6Rrjn7LwZ/uhEGA3/Qkjp/3
+         Wa4t3rbgNVOiA==
+Received: by mail-vs1-f54.google.com with SMTP id w10so14906983vsa.4;
+        Tue, 31 May 2022 14:30:43 -0700 (PDT)
+X-Gm-Message-State: AOAM532V6h3hfhzhyUUX6Bh/GdSDGv7b/NRK/TfoJ9n+y1GaaCfLpLen
+        7v746VC5xN/wAMmI2Ye3JmL5Yyd8aopzyBrwZQ==
+X-Google-Smtp-Source: ABdhPJwrsIDv4UJc5u6xTXBY/96ny0Alz0jVz/mRjD3IguJf2tCd0IZV0fcDQUb1XVM49IQ34zyFkt+/6Dy0JwDc6ic=
+X-Received: by 2002:a67:c118:0:b0:337:96d2:d624 with SMTP id
+ d24-20020a67c118000000b0033796d2d624mr19823826vsj.26.1654032643023; Tue, 31
+ May 2022 14:30:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220531211842.71998-1-andriy.shevchenko@linux.intel.com> <20220531211842.71998-2-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220531211842.71998-2-andriy.shevchenko@linux.intel.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 31 May 2022 23:29:51 +0200
-Message-ID: <CAFBinCCDyX-dncLWV-CEuQ2Ksauxg-Qm=ZO4jRtMvXNbMYuBCA@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] iio: adc: meson_saradc: Use devm_clk_get_optional()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
+References: <20220531211018.2287964-1-robh@kernel.org>
+In-Reply-To: <20220531211018.2287964-1-robh@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 31 May 2022 16:30:31 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKnBHfvi9iec2sgoEs6sLUgxnPY0gzxaO+bevzO3DjcmQ@mail.gmail.com>
+Message-ID: <CAL_JsqKnBHfvi9iec2sgoEs6sLUgxnPY0gzxaO+bevzO3DjcmQ@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: net/dsa: Add spi-peripheral-props.yaml references
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Marek Vasut <marex@denx.de>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 11:18 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Tue, May 31, 2022 at 4:10 PM Rob Herring <robh@kernel.org> wrote:
 >
-> Replace open coded variants of devm_clk_get_optional().
+> SPI peripheral device bindings need to reference spi-peripheral-props.yaml
+> in order to use various SPI controller specific properties. Otherwise,
+> the unevaluatedProperties check will reject any controller specific
+> properties.
 >
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> v2:
+>  - Also add references in nxp,sja1105.yaml and brcm,b53.yaml as
+>    pointed out by Vladimir Oltean
+
+Sigh, a bit too quick on this one. v3 coming.
+
+Rob

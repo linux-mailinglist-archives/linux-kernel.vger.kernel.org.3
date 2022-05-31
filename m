@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52671539977
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C8653997C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348382AbiEaW0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 18:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
+        id S1348401AbiEaW12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 18:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233920AbiEaW0J (ORCPT
+        with ESMTP id S233920AbiEaW1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 18:26:09 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8E29CF13;
-        Tue, 31 May 2022 15:26:08 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id l10-20020a9d7a8a000000b0060b151de434so9129otn.2;
-        Tue, 31 May 2022 15:26:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U/HhHjk87DNmOtvk2ThjSVTCRMcfpWWBfbOJFJqNM5w=;
-        b=KIAkcCvxfNsD1xUIEFDe7ZzgX3nJOKq4Oe5ZaWgCfgEtzO9fp5WsfvS0AL5OD0iZLv
-         lawiLlvxw++5kwV4oTPn0XnaPCdUfmIqo/g7rmW0Ao/GcsN5MKn32ZlIz8hrbNMp1Ysy
-         MBfFWF4gXMZD83OcSW+B44VrrYK+e8UqTx8erMBU2G759AhgT67q/sIyUE7E751DM+jV
-         UI6nVhuvtRNUln9vG2AJPh/+V1KAqy9RPGhnKhF3Lm+4BA+CqByy5Q1WDUfr9sUGY8ev
-         xYzszi9uKc1rFdblxfj0qTai4ou5ILqThgu8xYeE0I7Kwzwciq5ktqpPO67T7KDAc8xC
-         8LyQ==
-X-Gm-Message-State: AOAM531UIQaX2mzzQGpcVvWkfENfHLRRaxWXMgGSsc75fKpZGNY+rBfe
-        ExEg4RFXUQP2zpBkM1Ps9rOOp4gY/mxUZV1Kd/o=
-X-Google-Smtp-Source: ABdhPJyjP86slnOiOlbM5K8gcqb0FH8w7fwtfGR/9pabENJX+H5SFQXQ+rntDTds0bS3dZAjx5ImNeGgcnZjRCRr57k=
-X-Received: by 2002:a05:6830:1e83:b0:60b:1ad3:6296 with SMTP id
- n3-20020a0568301e8300b0060b1ad36296mr16440075otr.124.1654035967742; Tue, 31
- May 2022 15:26:07 -0700 (PDT)
+        Tue, 31 May 2022 18:27:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CD34ECDB;
+        Tue, 31 May 2022 15:27:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7B37B81717;
+        Tue, 31 May 2022 22:27:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C4BC385A9;
+        Tue, 31 May 2022 22:27:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654036039;
+        bh=OunOxBC+k7o9OrvxxcKFBRB8QFvQhoJy4jFX3affSqc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KfXNuKCCAZ4LjF9dMrnVueTKKeDR5zhqyFenJukPO33jgv1Z8XOrSPG2W6JUIIGrV
+         ph5eV8gNlul/v48sKRAeXNYmHumGfCQp/EOJVdzeCmHIqocAKWGzNs1NYIR4dF76Y1
+         tmVaWOYhc6bkmrATFNinJLA9SwmZc2pFSaP0YZda+b/38rNiw1EYHaFWtcPF8Nmy6D
+         3IQJ4g1FaJbH3hVNdQpCX0uOqsDzZt8/tEHfYbuJ+ayR1zd1nBXm4mKbY5khBMtRWh
+         qdD8Aorv3LfPB83OvRII9UREKv5UlxCeUBkqC+mKU36XU/lmsM3YSzTufvU372QeY5
+         Dn6emA1k8DgJw==
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-30c1b401711so196167b3.2;
+        Tue, 31 May 2022 15:27:19 -0700 (PDT)
+X-Gm-Message-State: AOAM530WYGRaCZkhb9iOvvxA26nr8f+5EVLBj2Wc+kScMAorifCfOj+w
+        pvnSK2g0WUygHnL4uLMcg5rxJWSyZ5UtJABjucI=
+X-Google-Smtp-Source: ABdhPJwPoH/v/n7U+49ZTqMuPuNF+FEX/vs3krbLN/3x2j+pXOLLkMzSaI1GKHunHaVHcD+/r/cny2JIyqSq2oNgRWU=
+X-Received: by 2002:a81:4e48:0:b0:30c:6c6a:616d with SMTP id
+ c69-20020a814e48000000b0030c6c6a616dmr11828673ywb.447.1654036038539; Tue, 31
+ May 2022 15:27:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220530083645.253432-1-leo.yan@linaro.org>
-In-Reply-To: <20220530083645.253432-1-leo.yan@linaro.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 31 May 2022 15:25:56 -0700
-Message-ID: <CAM9d7cjKAEk1cOcuv+Ncu8pEhTEMLBJrR48RCn4rEAFQnNpwGw@mail.gmail.com>
-Subject: Re: [PATCH] perf mem: Trace physical address for Arm SPE events
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        German Gomez <german.gomez@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220530062126.27808-1-lina.wang@mediatek.com>
+In-Reply-To: <20220530062126.27808-1-lina.wang@mediatek.com>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 31 May 2022 15:27:07 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW57zs54sT9N-2mvUAA6HUQ6TOzh+zM0kN0vHzH+AszD5g@mail.gmail.com>
+Message-ID: <CAPhsuW57zs54sT9N-2mvUAA6HUQ6TOzh+zM0kN0vHzH+AszD5g@mail.gmail.com>
+Subject: Re: [PATCH] selftests net: fix bpf build error
+To:     Lina Wang <lina.wang@mediatek.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Maciej enczykowski <maze@google.com>,
+        Networking <netdev@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        kbuild test robot <lkp@intel.com>, rong.a.chen@intel.com,
+        kernel test robot <oliver.sang@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo,
+On Sun, May 29, 2022 at 11:28 PM Lina Wang <lina.wang@mediatek.com> wrote:
+>
+> bpf_helpers.h has been moved to tools/lib/bpf since 5.10, so add more
+> incliding path.
+nit:  including
 
-On Mon, May 30, 2022 at 1:37 AM Leo Yan <leo.yan@linaro.org> wrote:
 >
-> Currently, Arm SPE events don't trace physical address, therefore, the
-> field 'phys_addr' is always zero in synthesized memory samples.  This
-> leads to perf c2c tool cannot locate the memory node for samples.
->
-> This patch enables configuration 'pa_enable' for Arm SPE events, so the
-> physical address packet can be traced, finally this can allow perf c2c
-> tool to locate properly for memory node.
->
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> Fixes: edae34a3ed92 ("selftests net: add UDP GRO fraglist + bpf self-tests")
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Signed-off-by: Lina Wang <lina.wang@mediatek.com>
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+Acked-by: Song Liu <songliubraving@fb.com>
 
 
 > ---
->  tools/perf/arch/arm64/util/mem-events.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/net/bpf/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/tools/perf/arch/arm64/util/mem-events.c b/tools/perf/arch/arm64/util/mem-events.c
-> index be41721b9aa1..df817d1f9f3e 100644
-> --- a/tools/perf/arch/arm64/util/mem-events.c
-> +++ b/tools/perf/arch/arm64/util/mem-events.c
-> @@ -5,9 +5,9 @@
->  #define E(t, n, s) { .tag = t, .name = n, .sysfs_name = s }
+> diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
+> index f91bf14bbee7..070251986dbe 100644
+> --- a/tools/testing/selftests/net/bpf/Makefile
+> +++ b/tools/testing/selftests/net/bpf/Makefile
+> @@ -2,6 +2,7 @@
 >
->  static struct perf_mem_event perf_mem_events[PERF_MEM_EVENTS__MAX] = {
-> -       E("spe-load",   "arm_spe_0/ts_enable=1,load_filter=1,store_filter=0,min_latency=%u/",   "arm_spe_0"),
-> -       E("spe-store",  "arm_spe_0/ts_enable=1,load_filter=0,store_filter=1/",                  "arm_spe_0"),
-> -       E("spe-ldst",   "arm_spe_0/ts_enable=1,load_filter=1,store_filter=1,min_latency=%u/",   "arm_spe_0"),
-> +       E("spe-load",   "arm_spe_0/ts_enable=1,pa_enable=1,load_filter=1,store_filter=0,min_latency=%u/",       "arm_spe_0"),
-> +       E("spe-store",  "arm_spe_0/ts_enable=1,pa_enable=1,load_filter=0,store_filter=1/",                      "arm_spe_0"),
-> +       E("spe-ldst",   "arm_spe_0/ts_enable=1,pa_enable=1,load_filter=1,store_filter=1,min_latency=%u/",       "arm_spe_0"),
-
-Unrelated, but is there "arm_spe_1" or others?
-
-Thanks,
-Namhyung
-
-
->  };
+>  CLANG ?= clang
+>  CCINCLUDE += -I../../bpf
+> +CCINCLUDE += -I../../../../lib
+>  CCINCLUDE += -I../../../../../usr/include/
 >
->  static char mem_ev_name[100];
+>  TEST_CUSTOM_PROGS = $(OUTPUT)/bpf/nat6to4.o
 > --
-> 2.25.1
+> 2.18.0
 >

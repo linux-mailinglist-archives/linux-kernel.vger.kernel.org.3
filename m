@@ -2,208 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B1D538983
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 03:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B41538987
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 03:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242738AbiEaBVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 21:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
+        id S243337AbiEaBXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 21:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbiEaBVY (ORCPT
+        with ESMTP id S237942AbiEaBXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 21:21:24 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E5592D0F
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 18:21:21 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id k4so1253375vsp.3
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 18:21:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=BWNRT5udm1cgBdQ1Fxg5zG/+3/maHcJ/jTCZwv9kK0Y=;
-        b=YQYAAlLeMUHgntePBFcBgxcUsquOmjLnhtgUC/3Q3o/zgoZkgVeK36XpsBCi6pns+R
-         kLef9uDuC+Io3XodrSVzibaBXvsOd5uSUfLuES2zkWFDV89HFpb3G0w+Zj0tTY1/E+IC
-         3LuKDTbAuqiVOqwu7QJvcN0qtjWnECEHDZoQc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BWNRT5udm1cgBdQ1Fxg5zG/+3/maHcJ/jTCZwv9kK0Y=;
-        b=rY2UR/CMNWhrF7sVrTFpcnwqkL+34vFOtzP5M/OApiiVSt4pEWILW025/mZ+OZibre
-         yZ8ub90OQvilGJNgRCAQTmDws0e0hXtCeakfrlLOxthV+0HZE+kgC2FqXnnGL5xbt2xD
-         308SuYtaIP6r0GxrtQ+CV0e/3qd4iMOm88m4abmFJpbvjHOBh/7j5Fcl9bzCekKGK/jY
-         ENbqXwCTH+lUc8KKviUhwL3D7ageXxkpdrFGQkq+gOQYu4xiXUSiAJhksW35Xccy6+Vq
-         YjnR0g7UeVaw/x0ylTUkKcgoUWHxixz60rE04yCbWmGVq2L4ZgkpC36c0ZrHOZRmZ3Zp
-         K/Hg==
-X-Gm-Message-State: AOAM533lf+BANDHDSuwhObl683uJztc/d2q7pN63ct6vpiPWqWWdK1xk
-        EIiSE4YINDeONFoFpdARuTR+aStEfEZTsA==
-X-Google-Smtp-Source: ABdhPJxwWObh6sJftYE9s570LAI1/0wshEDZwSKI9h88bItdnAOzzb4l0CJwrVsmPHO+V58zaEJOXw==
-X-Received: by 2002:a67:ce05:0:b0:348:e08e:1708 with SMTP id s5-20020a67ce05000000b00348e08e1708mr629252vsl.8.1653960080899;
-        Mon, 30 May 2022 18:21:20 -0700 (PDT)
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com. [209.85.221.175])
-        by smtp.gmail.com with ESMTPSA id w124-20020a1f9482000000b0034350d68fd9sm2021130vkd.0.2022.05.30.18.21.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 18:21:20 -0700 (PDT)
-Received: by mail-vk1-f175.google.com with SMTP id e7so5594709vkh.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 18:21:20 -0700 (PDT)
-X-Received: by 2002:a05:6122:818:b0:357:26f8:5e73 with SMTP id
- 24-20020a056122081800b0035726f85e73mr20773778vkj.5.1653960079694; Mon, 30 May
- 2022 18:21:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220530130839.120710-1-pan@semihalf.com> <20220530130839.120710-3-pan@semihalf.com>
- <f789afb2-33c5-2b28-5ade-0c76ebb7206f@linaro.org>
-In-Reply-To: <f789afb2-33c5-2b28-5ade-0c76ebb7206f@linaro.org>
-From:   Alexandru M Stan <amstan@chromium.org>
-Date:   Mon, 30 May 2022 18:20:43 -0700
-X-Gmail-Original-Message-ID: <CAHNYxRw00QraVW0085xO-qzgGJdZ2joukuSYzBQo+yjLnkD=Tw@mail.gmail.com>
-Message-ID: <CAHNYxRw00QraVW0085xO-qzgGJdZ2joukuSYzBQo+yjLnkD=Tw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dts: socfpga: Add Google Chameleon v3 devicetree
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>, soc@kernel.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, arnd@arndb.de,
-        Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 30 May 2022 21:23:43 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766B440A02
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 18:23:41 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220531012335epoutp04324f25b0576a152826a0eeddac659a08~0DA2eFgUZ0078100781epoutp04K
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:23:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220531012335epoutp04324f25b0576a152826a0eeddac659a08~0DA2eFgUZ0078100781epoutp04K
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1653960215;
+        bh=BIxyiwfJS8WC2lXfrfvvUTI+RGWMHUX5CSx4MIxIl4c=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=Tz7g8OGorxj2OAKYAKPpp1SgUO2yZd8DXdABmg+1BNuK6QbTzaD6DUnpZSBkca2g9
+         s0j+2iBqPRz99vk8Aei72ItPC3JrG2VFMuGS1y5L6XRW8zBmA0pJtZELAUU3Zr+0QG
+         qCTdgWDNYlcpL0iJgZibrRZ7W+90efKSx/h0b+b0=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20220531012335epcas5p1577a4b30fdac44ab4cec18065da4be29~0DA118a6e1430814308epcas5p1i;
+        Tue, 31 May 2022 01:23:35 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.174]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4LBvg75qYpz4x9Q1; Tue, 31 May
+        2022 01:23:31 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1B.4B.10063.31E65926; Tue, 31 May 2022 10:23:31 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220531012331epcas5p23a835b3635e187ef04d4f28f0933f7c1~0DAySUxIY0088200882epcas5p2f;
+        Tue, 31 May 2022 01:23:31 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220531012331epsmtrp2c37f4308b4e062edca4c16abdc12a384~0DAyRVdty2334523345epsmtrp2m;
+        Tue, 31 May 2022 01:23:31 +0000 (GMT)
+X-AuditID: b6c32a49-4cbff7000000274f-59-62956e13191c
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8B.5F.11276.31E65926; Tue, 31 May 2022 10:23:31 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.108.73.139]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220531012329epsmtip27be3fcac4e87382ea714681e9e8fbcec~0DAwVKqOp0656506565epsmtip2A;
+        Tue, 31 May 2022 01:23:29 +0000 (GMT)
+From:   Alim Akhtar <alim.akhtar@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-phy@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        avri.altman@wdc.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, chanho61.park@samsung.com,
+        pankaj.dubey@samsung.com, Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH 0/6] Add support for UFS controller found in FSD SoC
+Date:   Tue, 31 May 2022 06:52:14 +0530
+Message-Id: <20220531012220.80563-1-alim.akhtar@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOKsWRmVeSWpSXmKPExsWy7bCmhq5w3tQkg0mHdSwezNvGZvHy51U2
+        i2kffjJbXN6vbTH/yDlWi74XD5ktNj2+xmpxedccNosJq76xWHRf38Fmsfz4PyaLRVu/sFu0
+        7j3CbrHzzglmBz6Py1e8PTat6mTzuHNtD5vH5iX1Hh+f3mLx6NuyitHj8yY5j/YD3UwBHFHZ
+        NhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+AbpumTlAVysplCXm
+        lAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCkwK9IoTc4tL89L18lJLrAwNDIxMgQoTsjO2
+        H9vEWrCZu2LZ1m7WBsbrHF2MnBwSAiYSZ9afYOti5OIQEtjNKLH1/SpGCOcTo8SXdx3MEM43
+        Rol5Mw6zwbTsuLWSBSKxl1Hi07EjUC0tTBKNa3awglSxCWhL3J2+hQkkISLQzChxsGMXmMMs
+        0MckseT2bbAqYQEXiYYjfewgNouAqsSmd42MIDavgI3EjT1z2SH2yUus3nAA7BAJga/sEic+
+        XmGCSLhIXP6yCcoWlnh1fAtUg5TE53d7gY7lALI9JBb9kYIIZ0i8Xb6eEcK2lzhwZQ4LSAmz
+        gKbE+l36IGFmAT6J3t9PmCA6eSU62oQgqlUlmt9dZYGwpSUmdnezQtgeEtM3LwNbKiQQK7H+
+        7Cq2CYwysxCGLmBkXMUomVpQnJueWmxaYJiXWg6PneT83E2M4BSo5bmD8e6DD3qHGJk4GA8x
+        SnAwK4nwWkVMTRLiTUmsrEotyo8vKs1JLT7EaAoMpYnMUqLJ+cAknFcSb2hiaWBiZmZmYmls
+        ZqgkzivwvzFJSCA9sSQ1OzW1ILUIpo+Jg1OqgWl5G9PMRlfzjHAtRu786RKJ6yfq6Uxhf7l4
+        j1nsqqsTlS4uY1zQMreVablfyITyt97fOL3DAidwRKVs5nCas3xvb8P0n1srA5uP/5Nf9ODO
+        35sGcdkRZut5xS9dltboCuxTabz+XYLLUL5v+ukCj+zUMwx2Bx6su/rzvlGkZs/H/cxz9sQy
+        1J09VFfUu2LuliO5V06dq/B0uXSS+fK2lcsnubLvL9l9ScqNveh5jlWl/3zfJ8v9+3Y9lMn1
+        Z5n18d1zDnO2jceXrlpasuXGPL91IaG1339/DErYJxJ9z3rtkfMqHjnTGZ5peh5xbTb21X1+
+        bOqEwnL3ZoVFbmue5Z53DVJuDjFJub6WKblYJlqJpTgj0VCLuag4EQDff+mOCgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHLMWRmVeSWpSXmKPExsWy7bCSvK5w3tQkg20LeS0ezNvGZvHy51U2
+        i2kffjJbXN6vbTH/yDlWi74XD5ktNj2+xmpxedccNosJq76xWHRf38Fmsfz4PyaLRVu/sFu0
+        7j3CbrHzzglmBz6Py1e8PTat6mTzuHNtD5vH5iX1Hh+f3mLx6NuyitHj8yY5j/YD3UwBHFFc
+        NimpOZllqUX6dglcGduPbWIt2MxdsWxrN2sD43WOLkZODgkBE4kdt1aydDFycQgJ7GaUWDjx
+        HgtEQlri+sYJ7BC2sMTKf8/BbCGBJiaJZ98tQWw2AW2Ju9O3MIHYIgLtjBL3t7OBDGIWmMUk
+        8X7SE0aQhLCAi0TDkT6wZhYBVYlN7xrB4rwCNhI39syFWiAvsXrDAeYJjDwLGBlWMUqmFhTn
+        pucWGxYY5qWW6xUn5haX5qXrJefnbmIEB6mW5g7G7as+6B1iZOJgPMQowcGsJMJrFTE1SYg3
+        JbGyKrUoP76oNCe1+BCjNAeLkjjvha6T8UIC6YklqdmpqQWpRTBZJg5OqQamKtn1i55/01jC
+        XdXQVftx9oItkWVP5Tylfh72Ezglxdv454rU87+TW8UCp6k8V2uIKQz4HTiP7bmw5Bbmjza3
+        Nggpci1Sm+zuH7GrY0W/6cqb0imVTZ/zY3RYppwqmn7smoxnaOPpSNNgvY135i71D9Z2Cu91
+        jLaf1qlQ5em/h9Hy9I8Xl1L22M3bVbnxYsidyebnvxq/1l/yzi6jdGWUS0wGm35J4JzNkxK/
+        y3z9lrbzY3a7wpM1+55sWNSnt4wn9NcMgYKTTkpHuA2fzapcnqh+ulU7/YRtl8Hc2NrtzJnK
+        Ou5qa3q/lXfvqS7cd+6F5NJv267+2fi6xlpjQctee96Ugj3ZIdmFVwtXXNNXYinOSDTUYi4q
+        TgQAf9c3PsECAAA=
+X-CMS-MailID: 20220531012331epcas5p23a835b3635e187ef04d4f28f0933f7c1
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220531012331epcas5p23a835b3635e187ef04d4f28f0933f7c1
+References: <CGME20220531012331epcas5p23a835b3635e187ef04d4f28f0933f7c1@epcas5p2.samsung.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof
+This series adds support for UFS controller found in FSD SoC.
+The HCI is almost same as found on other Exynos SoCs with minor
+differences. This also adds the required UFS-PHY driver changes.
 
-On Mon, May 30, 2022 at 11:56 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 30/05/2022 15:08, Pawe=C5=82 Anikiel wrote:
-> > Add devicetree for the Google Chameleon v3 board.
-> >
-> > Signed-off-by: Pawe=C5=82 Anikiel <pan@semihalf.com>
-> > Signed-off-by: Alexandru M Stan <amstan@chromium.org>
->
-> Your SoB chain looks odd. Who did what here?
+Patch 2/6: common change to handle different CDR offsets
 
-Sorry about this.
 
-It was mainly Pawel but I did some small changes at some point before
-it landed in our tree (particularly the GPIOs).
+Alim Akhtar (6):
+  dt-bindings: phy: Add FSD UFS PHY bindings
+  phy: samsung-ufs: move cdr offset to drvdata
+  phy: samsung-ufs: add support for FSD ufs phy driver
+  dt-bindings: ufs: exynos-ufs: add fsd compatible
+  ufs: host: ufs-exynos: add support for fsd ufs hci
+  arm64: dts: fsd: add ufs device node
 
->
-> > ---
-> >  arch/arm/boot/dts/Makefile                    |  1 +
-> >  .../boot/dts/socfpga_arria10_chameleonv3.dts  | 90 +++++++++++++++++++
-> >  2 files changed, 91 insertions(+)
-> >  create mode 100644 arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
-> >
-> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> > index 023c8b4ba45c..9417106d3289 100644
-> > --- a/arch/arm/boot/dts/Makefile
-> > +++ b/arch/arm/boot/dts/Makefile
-> > @@ -1146,6 +1146,7 @@ dtb-$(CONFIG_ARCH_S5PV210) +=3D \
-> >       s5pv210-torbreck.dtb
-> >  dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) +=3D \
-> >       socfpga_arria5_socdk.dtb \
-> > +     socfpga_arria10_chameleonv3.dtb \
-> >       socfpga_arria10_socdk_nand.dtb \
-> >       socfpga_arria10_socdk_qspi.dtb \
-> >       socfpga_arria10_socdk_sdmmc.dtb \
-> > diff --git a/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts b/arch/a=
-rm/boot/dts/socfpga_arria10_chameleonv3.dts
-> > new file mode 100644
-> > index 000000000000..988cc445438e
-> > --- /dev/null
-> > +++ b/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
-> > @@ -0,0 +1,90 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright 2022 Google LLC
-> > + */
-> > +/dts-v1/;
-> > +#include "socfpga_arria10_mercury_aa1.dtsi"
-> > +
-> > +/ {
-> > +     model =3D "Google Chameleon V3";
-> > +     compatible =3D "google,chameleon-v3",
->
-> You miss here enclustra compatible.
+ .../bindings/phy/samsung,ufs-phy.yaml         |   1 +
+ .../bindings/ufs/samsung,exynos-ufs.yaml      |   1 +
+ arch/arm64/boot/dts/tesla/fsd-evb.dts         |   4 +
+ arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi    |  14 ++
+ arch/arm64/boot/dts/tesla/fsd.dtsi            |  29 ++++
+ drivers/phy/samsung/Makefile                  |   1 +
+ drivers/phy/samsung/phy-exynos7-ufs.c         |   3 +
+ drivers/phy/samsung/phy-exynosautov9-ufs.c    |   2 +
+ drivers/phy/samsung/phy-fsd-ufs.c             |  63 ++++++++
+ drivers/phy/samsung/phy-samsung-ufs.c         |   6 +-
+ drivers/phy/samsung/phy-samsung-ufs.h         |   3 +-
+ drivers/ufs/host/ufs-exynos.c                 | 143 +++++++++++++++++-
+ 12 files changed, 267 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/phy/samsung/phy-fsd-ufs.c
 
-Does this make sense? I don't expect this device tree to boot/work on
-an enclustra motherboard. It's only really compatible with a
-"chameleon-v3".
 
->
-> > +                  "altr,socfpga-arria10", "altr,socfpga";
-> > +
-> > +     aliases {
-> > +             serial0 =3D &uart0;
-> > +             i2c0 =3D &i2c0;
-> > +             i2c1 =3D &i2c1;
-> > +     };
-> > +};
-> > +
-> > +&gmac0 {
-> > +     status =3D "okay";
-> > +};
-> > +
-> > +&gpio0 {
-> > +     status =3D "okay";
-> > +};
-> > +
-> > +&gpio1 {
-> > +     status =3D "okay";
-> > +};
-> > +
-> > +&gpio2 {
-> > +     status =3D "okay";
-> > +};
-> > +
-> > +&i2c0 {
-> > +     status =3D "okay";
-> > +
-> > +     ssm2603: ssm2603@1a {
->
-> Generic node names.
+base-commit: d3fde8ff50ab265749704bd7fbcf70d35235421f
+-- 
+2.25.1
 
-Dumb question: what does this mean?
-
-Are you saying the name is too generic? As someone reading the
-schematics this would be immediately clear what chip it's talking
-about.
-
->
-> > +             compatible =3D "adi,ssm2603";
-> > +             reg =3D <0x1a>;
-> > +     };
-> > +};
-> > +
-> > +&i2c1 {
-> > +     status =3D "okay";
-> > +
-> > +     u80: u80@21 {
-> > +             compatible =3D "nxp,pca9535";
->
-> Generic node names.
-
-FWIW: Schematic is full of these pca9535 io expanders, only one (U80)
-is visible to linux on an I2C bus.
-
->
->
->
-> Best regards,
-> Krzysztof
-
-Thanks,
-Alexandru Stan (amstan)

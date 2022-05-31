@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743D7538AAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 06:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA83B538AB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 06:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243894AbiEaEkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 00:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
+        id S243900AbiEaErI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 00:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238541AbiEaEkP (ORCPT
+        with ESMTP id S229468AbiEaErB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 00:40:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754A1939FD;
-        Mon, 30 May 2022 21:40:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E639B80FAF;
-        Tue, 31 May 2022 04:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D1CDAC34114;
-        Tue, 31 May 2022 04:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653972011;
-        bh=YYGMHB1tRZgyGr3hkrF7aXliEHOxYxSinGWXm7jnZpg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hATqCSBioHx7P0SLQNKcXrlj/DAH/MMgdYTSrgqSIrLsoiEDASflQVIbOS12i9r8l
-         gyeuU7EePR+hDBipkNNWQ/lRow9xkQRObgnboNehmLONRWUcAt+fwwA/LGwqIlFsSG
-         u5D/tkvf8NbWOt+BnNsuX6GgTLKDzgajm0W4Yo2BuMaTMYVlZUbUn6OeAYMLDpa7//
-         DlBmqxGusX1Z0Gz2ohHBReLRGSy4zWyzXTA88RDLKgHR4qov6dlLQ+5/tK+AhfYsSM
-         dwzLUTrAo2h2Fvb4/C3IQSJLXP6kdDcj5FKnExitM4g5zrE7pdfhyMK9CldQ47r943
-         jyUibhI2Np5fA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ACFB3F0394E;
-        Tue, 31 May 2022 04:40:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 31 May 2022 00:47:01 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7C1DEE9
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 21:46:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653972418; x=1685508418;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dsljJZJpdOgC/cqu+DzOSVS7dwFiKyD01thxVC8LABc=;
+  b=GaftfBJStrhWEUpaSWSVODVxukMV+CdN2FKpvNw3RX/DiZ6U9gbamTfe
+   vEanDVjNuqz0cpXOJJ6o2JBIFC1NJ1Klaxikj2MWVXYL8mZpGnq6dBu9S
+   uDeWmrnfqUxKCqbXklL7txPL5y+Ebo7iLGhuQCRtdVa0pHi0L59nsEGzQ
+   /hDdbdzwnXRy1DWVhZOZOLFAEEoMoi5qpdaXkHSCGI3cF7aR+ygc5V7a2
+   d0fqGLa2Qs5QuCjiuxT1nO/Dwif1SF/TjTlqfQn2YhAvP6twIvtgPeAeR
+   RH/zUslxs6GFK1zPnUEbUIbCr4iYpvoFRm+oUVcTcjZkP3PqLkt42DVg1
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="255009464"
+X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
+   d="scan'208";a="255009464"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 21:46:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
+   d="scan'208";a="551600518"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 30 May 2022 21:46:56 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nvtmR-0002KY-G5;
+        Tue, 31 May 2022 04:46:55 +0000
+Date:   Tue, 31 May 2022 12:46:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 20/20]
+ arch/arm64/include/asm/memory.h:311:16: error: implicit declaration of
+ function '__phys_to_pfn'
+Message-ID: <202205311221.dNwFCY8b-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] net: phy: at803x: disable WOL at probe
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165397201170.21793.7926133541403141360.git-patchwork-notify@kernel.org>
-Date:   Tue, 31 May 2022 04:40:11 +0000
-References: <20220527084935.235274-1-viorel.suman@oss.nxp.com>
-In-Reply-To: <20220527084935.235274-1-viorel.suman@oss.nxp.com>
-To:     Viorel Suman (OSS) <viorel.suman@oss.nxp.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, luoj@codeaurora.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        viorel.suman@nxp.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,33 +62,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
+head:   eae5a86aafbe4bfbcb5c21b271073b014626a472
+commit: eae5a86aafbe4bfbcb5c21b271073b014626a472 [20/20] arm64: memory: Make virt_to_pfn() a static inline
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220531/202205311221.dNwFCY8b-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=eae5a86aafbe4bfbcb5c21b271073b014626a472
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
+        git checkout eae5a86aafbe4bfbcb5c21b271073b014626a472
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 prepare
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Fri, 27 May 2022 11:49:34 +0300 you wrote:
-> From: Viorel Suman <viorel.suman@nxp.com>
-> 
-> Before 7beecaf7d507b ("net: phy: at803x: improve the WOL feature") patch
-> "at803x_get_wol" implementation used AT803X_INTR_ENABLE_WOL value to set
-> WAKE_MAGIC flag, and now AT803X_WOL_EN value is used for the same purpose.
-> The problem here is that the values of these two bits are different after
-> hardware reset: AT803X_INTR_ENABLE_WOL=0 after hardware reset, but
-> AT803X_WOL_EN=1. So now, if called right after boot, "at803x_get_wol" will
-> set WAKE_MAGIC flag, even if WOL function is not enabled by calling
-> "at803x_set_wol" function. The patch disables WOL function on probe thus
-> the behavior is consistent.
-> 
-> [...]
+All errors (new ones prefixed by >>):
 
-Here is the summary with links:
-  - [v2] net: phy: at803x: disable WOL at probe
-    https://git.kernel.org/netdev/net/c/d7cd5e06c9dd
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+   In file included from arch/arm64/include/asm/thread_info.h:17,
+                    from include/linux/thread_info.h:60,
+                    from arch/arm64/include/asm/preempt.h:6,
+                    from include/linux/preempt.h:78,
+                    from include/linux/smp.h:110,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/mutex.h:17,
+                    from include/linux/kernfs.h:11,
+                    from include/linux/sysfs.h:16,
+                    from include/linux/kobject.h:20,
+                    from include/linux/of.h:17,
+                    from include/linux/irqdomain.h:35,
+                    from include/linux/acpi.h:13,
+                    from include/acpi/apei.h:9,
+                    from include/acpi/ghes.h:5,
+                    from include/linux/arm_sdei.h:8,
+                    from arch/arm64/kernel/asm-offsets.c:10:
+   arch/arm64/include/asm/memory.h: In function 'virt_to_pfn':
+>> arch/arm64/include/asm/memory.h:311:16: error: implicit declaration of function '__phys_to_pfn' [-Werror=implicit-function-declaration]
+     311 |         return __phys_to_pfn(__virt_to_phys((unsigned long)(x)));
+         |                ^~~~~~~~~~~~~
+>> arch/arm64/include/asm/memory.h:311:61: error: 'x' undeclared (first use in this function)
+     311 |         return __phys_to_pfn(__virt_to_phys((unsigned long)(x)));
+         |                                                             ^
+   arch/arm64/include/asm/memory.h:311:61: note: each undeclared identifier is reported only once for each function it appears in
+   cc1: some warnings being treated as errors
+   make[2]: *** [scripts/Makefile.build:120: arch/arm64/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1194: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-You are awesome, thank you!
+
+vim +/__phys_to_pfn +311 arch/arm64/include/asm/memory.h
+
+   308	
+   309	static inline unsigned long virt_to_pfn(const void *p)
+   310	{
+ > 311		return __phys_to_pfn(__virt_to_phys((unsigned long)(x)));
+   312	}
+   313	
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

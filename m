@@ -2,88 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA6A5392BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0C65392C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345443AbiEaNyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
+        id S1344835AbiEaNzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345409AbiEaNya (ORCPT
+        with ESMTP id S1345436AbiEaNyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:54:30 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711298FFB0;
-        Tue, 31 May 2022 06:53:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654005208; x=1685541208;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LltwEzJ1PPFMhj2wpaN+6JtJMLZwcYWN9NWBcvqkjy4=;
-  b=dMg6MVArOvTNpo8VRXhLAUJylq1uQwQIMcv5k2tc3vLLTWxXo6NOksuu
-   +rpKpJ00pvFkdRhbUvpCV1p82lwNNyIEDNIge2X9dYmBLQuLTVx5F7Ei+
-   F4Ij3slX2BjTdWdgXZqOLT96Jk1pV/GbvDRnzWHs7pga/RNJkm/CxKQcs
-   ABzopF7/MEl9HvFDKcDh6ayGtlg1G2G6E/Y6i/JUd7FAr8VGlMa18nP7N
-   FBQrIhXqvjIbzzjbQ18XR54GZ3V8zSRC8Z62LFGVrHHrky0dJ8wXUUlh/
-   GTeYBLEW/Qn4AQkOJtwf7f1CU6JoDct/3DeGABOdYpyEtYoXgjvURxofc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="335916866"
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="335916866"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 06:53:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="666927157"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 31 May 2022 06:53:18 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 03F081AA; Tue, 31 May 2022 16:53:20 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] iio: dac: ad5592r: Get rid of OF specifics
-Date:   Tue, 31 May 2022 16:53:20 +0300
-Message-Id: <20220531135320.63096-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 31 May 2022 09:54:44 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7F5DD4;
+        Tue, 31 May 2022 06:53:55 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id m82so3532380oif.13;
+        Tue, 31 May 2022 06:53:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4k3vq7qVFqQjuoYQtYlHJSa5PUcZKNyVP9mXHmGrUIY=;
+        b=sCkyZsMYgxJbK21qSrm6V4ft9aPyWPgl42Sp7CKHjwaIg5jcdZeiMuXyzVkUI4W74b
+         xIr36ykpWusW2BIDsktEW4ft9WEF9tNoX+kXHCpznESDEhU4ypxo1AM/bSn4IIrcw2MO
+         5xu6PzfCkzBwOw/figjSAQtG9wkKIPTyXUnpTJVfEZuMBRQYEbd0R6p4bBOco4vyYk0s
+         RB98RYMGfWUmTmomlR+at08Lv/1+w8r1PoODB6j2F6vJXdwT1G0H1AgeC/3pHlHN/7Dx
+         0nB8lN7ICzg1yNMHFdmFt5oXiTqqwd8w3LTjbAvd1H724x3Xyw16W7SgFSEi4Fnh7pYl
+         hPSw==
+X-Gm-Message-State: AOAM531DH2nPM4SaaasAcHXmI6dssXR9EIY4XUTw+AwUkAQDXM/dxcxb
+        ichXIoIEJmc6EySBJ2gl+F+9rMSdhw==
+X-Google-Smtp-Source: ABdhPJwQOjHoUBvDdB7j+dMl7MIS9ke/fwu3hFRc4UmLOTUpNablAae0T4QSsjIYR4rYw0RcXG9gBQ==
+X-Received: by 2002:a05:6808:e82:b0:322:4c17:2f61 with SMTP id k2-20020a0568080e8200b003224c172f61mr11749556oil.131.1654005235223;
+        Tue, 31 May 2022 06:53:55 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bm8-20020a0568081a8800b00325cda1ffabsm5676933oib.42.2022.05.31.06.53.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 06:53:54 -0700 (PDT)
+Received: (nullmailer pid 1657141 invoked by uid 1000);
+        Tue, 31 May 2022 13:53:54 -0000
+Date:   Tue, 31 May 2022 08:53:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: soc: qcom,smd: do not use pattern for
+ simple rpm-requests string
+Message-ID: <20220531135354.GA1654151-robh@kernel.org>
+References: <20220524070408.39505-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524070408.39505-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use dev_fwnode() instead of direct OF node dereference when checking
-for regulator API error code.
+On Tue, 24 May 2022 09:04:08 +0200, Krzysztof Kozlowski wrote:
+> patternProperties should not be used for properties with a simple string
+> as name:
+> 
+>   Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml: patternProperties:^(.*-edge|rpm)$:patternProperties:
+>     '^rpm-requests$' should not be valid under {'pattern': '^\\^[a-zA-Z0-9,\\-._#]+\\$$'}
+> 
+> Fixes: 375eed5f51a8 ("dt-bindings: soc: qcom,smd: convert to dtschema")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/iio/dac/ad5592r-base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Now failing in Linus' tree and linux-next and no response, so I've 
+applied.
 
-diff --git a/drivers/iio/dac/ad5592r-base.c b/drivers/iio/dac/ad5592r-base.c
-index 4434c1b2a322..7a9b5fc1e579 100644
---- a/drivers/iio/dac/ad5592r-base.c
-+++ b/drivers/iio/dac/ad5592r-base.c
-@@ -603,7 +603,7 @@ int ad5592r_probe(struct device *dev, const char *name,
- 
- 	st->reg = devm_regulator_get_optional(dev, "vref");
- 	if (IS_ERR(st->reg)) {
--		if ((PTR_ERR(st->reg) != -ENODEV) && dev->of_node)
-+		if ((PTR_ERR(st->reg) != -ENODEV) && dev_fwnode(dev))
- 			return PTR_ERR(st->reg);
- 
- 		st->reg = NULL;
--- 
-2.35.1
-
+Rob

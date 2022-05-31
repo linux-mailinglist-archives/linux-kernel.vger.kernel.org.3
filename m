@@ -2,127 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4103538C70
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5A7538C7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244711AbiEaIDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 04:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        id S244641AbiEaIEo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 31 May 2022 04:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244666AbiEaIDF (ORCPT
+        with ESMTP id S235288AbiEaIEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 04:03:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A10A91551
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653984183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yyZQADKZC4ReRzpE60kxchJgWQOZMoqrjCrM2arpsng=;
-        b=DGSr3bTHe3BhqCSmsCXJNLBdxrE8E6MTuxPCFvLsog1t+vbtTXR9rpIYTIfF7W5F7AfzZB
-        V3pAqYP3wfthhTFxIrp/898QkDJZHeBrGNu9Lu+KIgWYfcfWqa+BAVwn1YTpQZx7VSm45x
-        VCqXx7IUWTvbeMniMq+NNRWJ5rpktzY=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-451-NlWNu8-tOMiGcptVsx7Bzw-1; Tue, 31 May 2022 04:03:00 -0400
-X-MC-Unique: NlWNu8-tOMiGcptVsx7Bzw-1
-Received: by mail-wr1-f72.google.com with SMTP id s14-20020adfa28e000000b0020ac7532f08so1848340wra.15
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:03:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=yyZQADKZC4ReRzpE60kxchJgWQOZMoqrjCrM2arpsng=;
-        b=mCwe9L+AS0/Si/8jrVjUSVTLyB7YMoiyASekt2HmYuWFyGZl+h/XP2PfXqHrEFcmSL
-         jGLzi1pMFY/aJKAyskGpC30tQXZK+AqgB797GEZNDAxAzSZNjHjXE/popMpi+zCGuk/m
-         27dxdPlmatiRRaupsICnQfvgPRPfdjUIyS1O+WjvZaM+rPA3/PA0Q++Zq2my2Zof3L+H
-         8El3L8VTR1OBQ8a+hOnQm0LRJEb9PF717EBcl2hV0/swnsAbcbsNTkkAH9NtLEYpjvsY
-         qMnJksGFxb62nNT6VzeFS3NAlJL5xsc1jKevTvkkHMtpeJD5ZsM+erqdsQ3Y4ZEDP45/
-         Fewg==
-X-Gm-Message-State: AOAM531LHZV6+w8RGJcEfiK4AS7vdUh1UzlI+zaO9gAV1x+h+BqhC7jE
-        TPpwYB3AY7pX8ieIxVn/jEWJJruYgyGzpD6fAbSAVCdiMddSc5wd2dXWXoZvFiykn8pbfy24Fk/
-        I/Nl7tElGyT58JqibngQXBuB2
-X-Received: by 2002:a7b:ca59:0:b0:397:8c63:4bd2 with SMTP id m25-20020a7bca59000000b003978c634bd2mr18044032wml.76.1653984179706;
-        Tue, 31 May 2022 01:02:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxvK+kVHptLw/I1R4X+Hc3Su3WAjoCzlHqw32wWdDS/iEXLwXclgerYkX9VR5zibNnxhwKRgg==
-X-Received: by 2002:a7b:ca59:0:b0:397:8c63:4bd2 with SMTP id m25-20020a7bca59000000b003978c634bd2mr18044015wml.76.1653984179461;
-        Tue, 31 May 2022 01:02:59 -0700 (PDT)
-Received: from [192.168.0.2] (ip-109-43-177-214.web.vodafone.de. [109.43.177.214])
-        by smtp.gmail.com with ESMTPSA id j14-20020a05600c190e00b00397381a7ae8sm1525224wmq.30.2022.05.31.01.02.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 01:02:58 -0700 (PDT)
-Message-ID: <e39149e0-e6c4-f850-cd0f-cbdb453ee0c2@redhat.com>
-Date:   Tue, 31 May 2022 10:02:56 +0200
+        Tue, 31 May 2022 04:04:41 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8DB91542
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:04:39 -0700 (PDT)
+Received: from mail-yb1-f171.google.com ([209.85.219.171]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MmU9R-1nVApw1i41-00iTmX for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022
+ 10:04:37 +0200
+Received: by mail-yb1-f171.google.com with SMTP id h75so16599727ybg.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:04:37 -0700 (PDT)
+X-Gm-Message-State: AOAM530aw5leJ1RwDe+iu2KrD5u23lSXAQBwTDKdHhikFwgQFP9S3h3j
+        Avtoj69awDVwYE6+w7ajwrFyRYTlPYkMibtzkYE=
+X-Google-Smtp-Source: ABdhPJzullwHURqjYFLuUbj5z3ZAXSH5S2TTm7eQzxfj3C4Cw8NUJrDyWWQCTyWhoCHKYMFfEK0FxV85gP8hLdTej/I=
+X-Received: by 2002:a25:69c4:0:b0:65c:ed2b:9106 with SMTP id
+ e187-20020a2569c4000000b0065ced2b9106mr8172776ybc.394.1653984276242; Tue, 31
+ May 2022 01:04:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 0/4] KVM: s390: selftests: Provide TAP output in tests
-Content-Language: en-US
-From:   Thomas Huth <thuth@redhat.com>
-To:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-References: <20220429063724.480919-1-thuth@redhat.com>
-In-Reply-To: <20220429063724.480919-1-thuth@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
+ <91E67F46-A3C7-4159-9E0C-C6C6306F3669@inria.fr>
+In-Reply-To: <91E67F46-A3C7-4159-9E0C-C6C6306F3669@inria.fr>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 31 May 2022 10:04:19 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2iAsemAQdbTZ_E7GGGCXAOeWbjSjLgXEsd5sg_buZWhw@mail.gmail.com>
+Message-ID: <CAK8P3a2iAsemAQdbTZ_E7GGGCXAOeWbjSjLgXEsd5sg_buZWhw@mail.gmail.com>
+Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
+ block count and size helpers")
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jani Nikula <jani.nikula@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        SoC Team <soc@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:2R1P1Gj0IweJyyXJRxu8c/mrctPJm4neceddRGqn1jVAANXCgZ4
+ 2KJuatX4FlJj7il5QO3IZlNyWzEsYScptKwpmDUTF+C2nj08/IitVQoOd35s3ct2OiMUlRl
+ J2N9t/tGr64c25lrG7sPoCXwVJ+xenKb5PyAqtuIf1NzMydw/llvcUjd//qgRizqhc/A/b4
+ boU2IjVjw6yL+LhXh8JoQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CxMYW/Mw3NE=:r7inTzKgFRIGDiMlPfTIZO
+ SmEcu+v4ajGooG4auLhrtvHVHbznwLsU9RjpEjL4UJ+SWJ9YzXTd9QBoHZ8BTyGGGoGGjXm7O
+ S+0gC9axKHKy9+Ho17Tn07K1fxSvUmS2y+XGp4wAmVPV5y6rwnR3W8yzTHz19V8JtW9Sc1yMn
+ zf+9g0sNHlTkJaK3OKjy8EooC3rTolBYn64YD8LDCUU8HldXrwUAOrbD6oJJ5wuDRnYpdtLa9
+ uhuz+AY+wJKHxiDvVo4XGlbJXTblf+3RlVvNGUMwcw3ULoWZ8NMAELvhk6qxZ5sq5gIdZYak/
+ geArgJtmWIt5+K7yrs9EqjjVz7TU05vh5OdwtHpSf8uBQUbWaEB3Zqah2A1rCWYfw363h4m2y
+ nxVPsJ0fgvXbBTY+IqMztKCvABG022a84DhvABb3v1OyiyGVPO1l6dr6GWL8DAS58vzXTwkxC
+ 4748TO66VDx8t3EYt9+lpFX+4uni3HNYRn/Mw8VwtxTLD+ZhJjl0mPMPz26og69iLWMMmqui5
+ 7FwNR1tCL+yxrVlNs2Ljy9s3FFRTZtV/XTuvTki/rwbNdfsrCwn2uk/Lh32/XA7zUJ1Lg6xQU
+ svRaVVUBtwurrODXxTUIJ6S2O5GTC3hLQOrP+tmfwcGXi4OH4jXcasSLp6u6yeNWQkNC/z4/y
+ F8ejrziBBT1F4SqYZApqoCzRZdiQFJM5jbcDW03+BNhfFxuLn4JaT6g+uXVrvhYw1/+VSQPIh
+ cvWjpwiNiy49g4Yov3b5BBINW1AA7CGL1Q33Uw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 08.37, Thomas Huth wrote:
-> This patch series is motivated by Shuah's suggestion here:
-> 
->   https://lore.kernel.org/kvm/d576d8f7-980f-3bc6-87ad-5a6ae45609b8@linuxfoundation.org/
-> 
-> Many s390x KVM selftests do not output any information about which
-> tests have been run, so it's hard to say whether a test binary
-> contains a certain sub-test or not. To improve this situation let's
-> add some TAP output via the kselftest.h interface to these tests,
-> so that it easier to understand what has been executed or not.
-> 
-> v3:
->   - Added comments / fixed cosmetics according to Janosch's and
->     Janis' reviews of the v2 series
->   - Added Reviewed-by tags from the v2 series
-> 
-> v2:
->   - Reworked the extension checking in the first patch
->   - Make sure to always print the TAP 13 header in the second patch
->   - Reworked the SKIP printing in the third patch
-> 
-> Thomas Huth (4):
->    KVM: s390: selftests: Use TAP interface in the memop test
->    KVM: s390: selftests: Use TAP interface in the sync_regs test
->    KVM: s390: selftests: Use TAP interface in the tprot test
->    KVM: s390: selftests: Use TAP interface in the reset test
-> 
->   tools/testing/selftests/kvm/s390x/memop.c     | 90 +++++++++++++++----
->   tools/testing/selftests/kvm/s390x/resets.c    | 38 ++++++--
->   .../selftests/kvm/s390x/sync_regs_test.c      | 87 +++++++++++++-----
->   tools/testing/selftests/kvm/s390x/tprot.c     | 29 ++++--
->   4 files changed, 193 insertions(+), 51 deletions(-)
+On Tue, May 31, 2022 at 8:26 AM Julia Lawall <Julia.Lawall@inria.fr> wrote:
+> > On 30 May 2022, at 15:27, Arnd Bergmann <arnd@arndb.de> wrote:
+> > ﻿On Mon, May 30, 2022 at 4:08 PM Jani Nikula <jani.nikula@intel.com> wrote:
+> >>> On Mon, 30 May 2022, Arnd Bergmann <arnd@arndb.de> wrote:
+> >>> struct my_driver_priv {
+> >>>       struct device dev;
+> >>>       u8 causes_misalignment;
+> >>>       spinlock_t lock;
+> >>>       atomic_t counter;
+> >>> } __packed; /* this annotation is harmful because it breaks the atomics */
+> >>
+> >> I wonder if this is something that could be caught with coccinelle. Or
+> >> sparse. Are there any cases where this combo is necessary? (I can't
+> >> think of any, but it's a low bar. ;)
+> >>
+...
+> >>> or if the annotation does not change the layout like
+> >>>
+> >>> struct my_dma_descriptor {
+> >>>     __le64 address;
+> >>>     __le64 length;
+> >>> } __packed; /* does not change layout but makes access slow on some
+> >>> architectures */
+> >>
+> >> Why is this the case, though? I'd imagine the compiler could figure this
+> >> out.
+> >
+> > When you annotate the entire structure as __packed without an
+> > extra __aligned() annotation, the compiler has to assume that the
+> > structure itself is unaligned as well. On many of the older architectures,
+> > this will result in accessing the values one byte at a time. Marking
+> > the structure as "__packed __aligned(8)" instead would be harmless.
+> >
+> > When I have a structure with a few misaligned members, I generally
+> > prefer to only annotate the members that are not naturally aligned,
+> > but this approach is not very common.
+>
+> Searching for specific types in a packed structure would be easy.
 
-Ping!
+As an experiment: what kind of results would we get when looking
+for packed structures and unions that contain any of these:
 
-  Thomas
+- spinlock_t
+- atomic_t
+- dma_addr_t
+- phys_addr_t
+- size_t
+- any pointer
+- any enum
+- struct mutex
+- struct device
 
+This is just a list of common data types that are used in a lot of
+structures but that one should never find in hardware specific
+types. If the output from coccinelle is 90% actual bugs, this would
+be really helpful. OTOH if there is no output at all, or all
+false-positives, we don't need to look for additional types.
 
+> Coccinelle could duplicate the structure without the packed and see if
+> any offsets change, using build bug on, but that would be architecture
+> specific so maybe not useful.
+
+I would consider this a separate issue. The first one above is for identifying
+structures that are marked as packed but should not be packed at
+all, regardless of whether that changes the layout.
+
+       Arnd

@@ -2,48 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB54538A0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0B3538A0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 05:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243671AbiEaCz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 22:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S243681AbiEaDAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 23:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbiEaCzX (ORCPT
+        with ESMTP id S232746AbiEaDAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 22:55:23 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D798CCFB
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 19:55:22 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LBxdW6NSLzQkNx;
-        Tue, 31 May 2022 10:52:15 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 31 May 2022 10:55:20 +0800
-Subject: Re: [PATCH 2/3] mm/swapfile: avoid confusing swap cache statistics
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220527092626.31883-1-linmiaohe@huawei.com>
- <20220527092626.31883-3-linmiaohe@huawei.com>
- <20220530160409.c9b17085adb6112d8580f37d@linux-foundation.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <c7d6fec7-039d-2f54-c3b3-95deb7417a73@huawei.com>
-Date:   Tue, 31 May 2022 10:55:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 30 May 2022 23:00:44 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6738D6AC;
+        Mon, 30 May 2022 20:00:43 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id s24so9476738wrb.10;
+        Mon, 30 May 2022 20:00:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pVuKTlsFDvJFeQ9fSgBWrUZpUIPWJSWwNPRVXl0JeGI=;
+        b=K/ufnd/iFa7FlGXPxfbCp1orkHjJJji1utQ7ks56XADOonZAbnLtaW+4Ren9TmG5Pz
+         Izv8eqg/ehDLwjIuBtZOwT1xX1ToZH5SpNeQ5riS3kJeWsO2S1i2OfyBVaGvqnX+rZI0
+         yswuLBrQiacjXMWnhtX0oxLZCOSd4ieCDOlBjmET2f//KrIzK8wYveZvz5ro1lqLJ2ro
+         LjcBCKsLSVaF8Fqx9QR6nYaNOJheT9AaZlSAO81Rtl9L5G12AlbsTgMd4RktGWTUFxUS
+         4FcXMtTbc6OpjgDIAmrUPbOUgwk25jELKZrXYToRTjD+O2JL+V8csn0QsESZYDgz1itk
+         wrFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pVuKTlsFDvJFeQ9fSgBWrUZpUIPWJSWwNPRVXl0JeGI=;
+        b=H7koeDmzud/SuLS/Ii9YxyotOBeigThrHlD5q/VTHry0DsUMsNnfTfWeGUSx81EeGj
+         wM5F01hnmFD0NlzlB2KxfVDxKBbPIVTTqhMiTJZosmBb5JPGi2jPEzp5gyHAVZZkvXbl
+         hUzwNUtVXKMhnUkk3XfUJET/ExjthLemb7FPQQKR9RlI/Dx3UiXQKvjr/O5crEJ4O+Xu
+         8JEJm9Md0TE+Auf7dJ/29akrZ3CzVxyBtnEGBjHyWx49vCfUee9/K9ZQ2lS0ILmAiAz7
+         BDTAzEeFrC+y54i9a6aKly9it3eIjetv3LMu0SEqi5t5SNYR4q+DuIPkxuublrULfx2K
+         FFWg==
+X-Gm-Message-State: AOAM5306vXVpm0GXGY8aFrnDNuPZ+ZwJJtbZHrWBNlAqR/P4yze0uWfC
+        f/oJejrJM9jqDrKFsRT/ycA=
+X-Google-Smtp-Source: ABdhPJwotxfYmnUs8DsqAn8sh5ula5ZCaCu4Q0MeGWIh5fTsjc3pT0eLuwV6tqoh6rYPefuYJRQppw==
+X-Received: by 2002:a05:6000:178d:b0:20f:e960:2f2 with SMTP id e13-20020a056000178d00b0020fe96002f2mr31673284wrg.569.1653966041855;
+        Mon, 30 May 2022 20:00:41 -0700 (PDT)
+Received: from olivier-3493erg ([2a01:e34:ec42:fd70:8e84:c3a8:e5ed:7183])
+        by smtp.gmail.com with ESMTPSA id 12-20020a5d47ac000000b0020c6b78eb5asm11576977wrb.68.2022.05.30.20.00.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 20:00:41 -0700 (PDT)
+Date:   Tue, 31 May 2022 05:00:39 +0200
+From:   Olivier dautricourt <olivierdautricourt@gmail.com>
+To:     Nam Cao <namcaov@gmail.com>
+Cc:     vkoul@kernel.org, sr@denx.de, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dmaengine: altera-msgdma: correct mutex locking order
+Message-ID: <YpWE11ZI5MyyhtlD@olivier-3493erg>
+References: <20220529182306.GA26782@nam-dell>
 MIME-Version: 1.0
-In-Reply-To: <20220530160409.c9b17085adb6112d8580f37d@linux-foundation.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220529182306.GA26782@nam-dell>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,27 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/31 7:04, Andrew Morton wrote:
-> On Fri, 27 May 2022 17:26:25 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+On Sun, May 29, 2022 at 08:23:06PM +0200, Nam Cao wrote:
+> The order of spin_unlock and spin_lock seems wrong. Correct it.
 > 
->> At swapoff time, we're going to swap in the pages continuously. So calling
->> lookup_swap_cache would confuse statistics. We should use find_get_page
->> directly here.
+> Signed-off-by: Nam Cao <namcaov@gmail.com>
+> ---
+> Changes in v2:
+> 	- Get rid of dirty index problem due to the patch being manually editted.
 > 
-> Why is the existing behaviour wrong?  swapoff() has to swap stuff in to
-> be able to release the swap device.  Why do you believe that this
-> swapin activity should not be accounted?
+>  drivers/dma/altera-msgdma.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma/altera-msgdma.c b/drivers/dma/altera-msgdma.c
+> index 6f56dfd375e3..e35096c12abc 100644
+> --- a/drivers/dma/altera-msgdma.c
+> +++ b/drivers/dma/altera-msgdma.c
+> @@ -591,9 +591,9 @@ static void msgdma_chan_desc_cleanup(struct msgdma_device *mdev)
+>  
+>  		dmaengine_desc_get_callback(&desc->async_tx, &cb);
+>  		if (dmaengine_desc_callback_valid(&cb)) {
+> -			spin_unlock(&mdev->lock);
+> -			dmaengine_desc_callback_invoke(&cb, NULL);
+>  			spin_lock(&mdev->lock);
+> +			dmaengine_desc_callback_invoke(&cb, NULL);
+> +			spin_unlock(&mdev->lock);
+>  		}
+>  
+>  		/* Run any dependencies, then free the descriptor */
+> -- 
+> 2.25.1
+> 
+Hello,
 
-IMHO, statistics, e.g. swap_cache_info.find_success, are used to show the effectiveness
-of the swap cache activity. So they should only reflect the memory accessing activity
-of the user. I think swapoff can't reflect the effectiveness of the swap cache activity
-because it just swaps in pages one by one. Or statistics should reflect all the activity
-of the user including swapoff?
+the lock is first grabbed in msgdma_tasklet.
 
-Thanks!
+Kr,
 
-> 
-> 
-> .
-> 
-
+Olivier

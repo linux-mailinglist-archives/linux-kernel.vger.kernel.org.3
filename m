@@ -2,140 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7608E538D72
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E62538D6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235557AbiEaJHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 05:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
+        id S245086AbiEaJHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 05:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245068AbiEaJHE (ORCPT
+        with ESMTP id S234703AbiEaJHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 05:07:04 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C431CB01;
-        Tue, 31 May 2022 02:06:58 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24V6xGdr024794;
-        Tue, 31 May 2022 09:06:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=fAHU2rGOL5A9cKDCCU+65wK9t9lX0odo/5gNkrL7RrE=;
- b=d7T4kbhPCvKczmXNb9Oyn6xkcQco5OZB0YFf37LeYzCPb/RzH21kv0bTeB/cjGtnyMsp
- cfyjwmrjS7kDi73gBz4lbiGP0bZ5vpzB2kxV32Ac5YNBYRlJbPLClXsz9fUJPtoJXROc
- hDccOi6bz2fd8ApjR3B3V9IxymKIAaJle+/xnC5oYOiAboB/5qzj7DprGwVXV6rxlOt6
- NnjY7ndf3vv8XVCTGZien0cUg6TQ4KoR/cGMdzZ7W8Kl/kZ9i+GdOmgOdTKSBTGCYo/G
- jFqdPIoNMDgbzgQsHwOgUfC8rHzQvQ3xe6erjakWaA49c/KEYggQ9JSnBH+vXWhKdC8G Uw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gda53e9ge-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 09:06:55 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24V8Zh5M030807;
-        Tue, 31 May 2022 09:06:55 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gda53e9fb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 09:06:55 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24V8rHbh015563;
-        Tue, 31 May 2022 09:06:52 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3gbcae3ub3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 09:06:52 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24V95i3G29491500
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 May 2022 09:05:44 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8274AA404D;
-        Tue, 31 May 2022 09:06:49 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E5B34A4040;
-        Tue, 31 May 2022 09:06:48 +0000 (GMT)
-Received: from [9.171.6.109] (unknown [9.171.6.109])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 31 May 2022 09:06:48 +0000 (GMT)
-Message-ID: <9b3c88f2-ca23-df23-4a5b-d86b0b38a6aa@linux.ibm.com>
-Date:   Tue, 31 May 2022 11:06:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 0/4] KVM: s390: selftests: Provide TAP output in tests
-Content-Language: en-US
-To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-References: <20220429063724.480919-1-thuth@redhat.com>
- <e39149e0-e6c4-f850-cd0f-cbdb453ee0c2@redhat.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <e39149e0-e6c4-f850-cd0f-cbdb453ee0c2@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jao7N3FvW6AykUFcVV3MtLJT33K9lNIY
-X-Proofpoint-ORIG-GUID: OgBash_X-XnBTBGxkmjQJ6Hhj_Rwpo9A
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 31 May 2022 05:07:01 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132031A071;
+        Tue, 31 May 2022 02:06:55 -0700 (PDT)
+Received: from kwepemi100010.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LC5vv4X22z1JCW9;
+        Tue, 31 May 2022 17:05:15 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100010.china.huawei.com (7.221.188.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 31 May 2022 17:06:53 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 31 May 2022 17:06:52 +0800
+Subject: Re: [PATCH -next v7 2/3] block, bfq: refactor the counting of
+ 'num_groups_with_pending_reqs'
+To:     Paolo VALENTE <paolo.valente@unimore.it>
+CC:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
+        Tejun Heo <tj@kernel.org>, <cgroups@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220528095020.186970-1-yukuai3@huawei.com>
+ <20220528095020.186970-3-yukuai3@huawei.com>
+ <0D9355CE-F85B-4B1A-AEC3-F63DFC4B3A54@linaro.org>
+ <b9a4ea60-28e5-b7aa-0154-ad7481eafbd3@huawei.com>
+ <efe01dd1-0f99-dadf-956d-b0e80e1e602c@huawei.com>
+ <1803FD7E-9FB1-4A1E-BD6D-D6657006589A@unimore.it>
+From:   Yu Kuai <yukuai3@huawei.com>
+Message-ID: <a0d8452c-e421-45d3-b012-5355207fc0e1@huawei.com>
+Date:   Tue, 31 May 2022 17:06:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-05-31_03,2022-05-30_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1011
- impostorscore=0 spamscore=0 mlxscore=0 suspectscore=0 adultscore=0
- priorityscore=1501 mlxlogscore=999 phishscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205310047
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1803FD7E-9FB1-4A1E-BD6D-D6657006589A@unimore.it>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+在 2022/05/31 16:36, Paolo VALENTE 写道:
+> 
+> 
+>> Il giorno 30 mag 2022, alle ore 10:40, Yu Kuai <yukuai3@huawei.com> ha scritto:
+>>
+>> 在 2022/05/30 16:34, Yu Kuai 写道:
+>>> 在 2022/05/30 16:10, Paolo Valente 写道:
+>>>>
+>>>>
+>>>>> Il giorno 28 mag 2022, alle ore 11:50, Yu Kuai <yukuai3@huawei.com> ha scritto:
+>>>>>
+>>>>> Currently, bfq can't handle sync io concurrently as long as they
+>>>>> are not issued from root group. This is because
+>>>>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+>>>>> bfq_asymmetric_scenario().
+>>>>>
+>>>>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
+>>>>>
+>>>>> Before this patch:
+>>>>> 1) root group will never be counted.
+>>>>> 2) Count if bfqg or it's child bfqgs have pending requests.
+>>>>> 3) Don't count if bfqg and it's child bfqgs complete all the requests.
+>>>>>
+>>>>> After this patch:
+>>>>> 1) root group is counted.
+>>>>> 2) Count if bfqg have at least one bfqq that is marked busy.
+>>>>> 3) Don't count if bfqg doesn't have any busy bfqqs.
+>>>>
+>>>> Unfortunately, I see a last problem here. I see a double change:
+>>>> (1) a bfqg is now counted only as a function of the state of its child
+>>>>       queues, and not of also its child bfqgs
+>>>> (2) the state considered for counting a bfqg moves from having pending
+>>>>       requests to having busy queues
+>>>>
+>>>> I'm ok with with (1), which is a good catch (you are lady explained
+>>>> the idea to me some time ago IIRC).
+>>>>
+>>>> Yet I fear that (2) is not ok.  A bfqq can become non busy even if it
+>>>> still has in-flight I/O, i.e.  I/O being served in the drive.  The
+>>>> weight of such a bfqq must still be considered in the weights_tree,
+>>>> and the group containing such a queue must still be counted when
+>>>> checking whether the scenario is asymmetric.  Otherwise service
+>>>> guarantees are broken.  The reason is that, if a scenario is deemed as
+>>>> symmetric because in-flight I/O is not taken into account, then idling
+>>>> will not be performed to protect some bfqq, and in-flight I/O may
+>>>> steal bandwidth to that bfqq in an uncontrolled way.
+>>> Hi, Paolo
+>>> Thanks for your explanation.
+>>> My orginal thoughts was using weights_tree insertion/removal, however,
+>>> Jan convinced me that using bfq_add/del_bfqq_busy() is ok.
+>>>  From what I see, when bfqq dispatch the last request,
+>>> bfq_del_bfqq_busy() will not be called from __bfq_bfqq_expire() if
+>>> idling is needed, and it will delayed to when such bfqq get scheduled as
+>>> in-service queue again. Which means the weight of such bfqq should still
+>>> be considered in the weights_tree.
+>>> I also run some tests on null_blk with "irqmode=2
+>>> completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
+>>> that service guarantees are still preserved on slow device.
+>>> Do you this is strong enough to cover your concern?
+> 
+> Unfortunately it is not.  Your very argument is what made be believe
+> that considering busy queues was enough, in the first place.  But, as
+> I found out, the problem is caused by the queues that do not enjoy
+> idling.  With your patch (as well as in my initial version) they are
+> not counted when they remain without requests queued.  And this makes
+> asymmetric scenarios be considered erroneously as symmetric.  The
+> consequence is that idling gets switched off when it had to be kept
+> on, and control on bandwidth is lost for the victim in-service queues.
 
+Hi，Paolo
 
-Am 31.05.22 um 10:02 schrieb Thomas Huth:
-> On 29/04/2022 08.37, Thomas Huth wrote:
->> This patch series is motivated by Shuah's suggestion here:
->>
->>   https://lore.kernel.org/kvm/d576d8f7-980f-3bc6-87ad-5a6ae45609b8@linuxfoundation.org/
->>
->> Many s390x KVM selftests do not output any information about which
->> tests have been run, so it's hard to say whether a test binary
->> contains a certain sub-test or not. To improve this situation let's
->> add some TAP output via the kselftest.h interface to these tests,
->> so that it easier to understand what has been executed or not.
->>
->> v3:
->>   - Added comments / fixed cosmetics according to Janosch's and
->>     Janis' reviews of the v2 series
->>   - Added Reviewed-by tags from the v2 series
->>
->> v2:
->>   - Reworked the extension checking in the first patch
->>   - Make sure to always print the TAP 13 header in the second patch
->>   - Reworked the SKIP printing in the third patch
->>
->> Thomas Huth (4):
->>    KVM: s390: selftests: Use TAP interface in the memop test
->>    KVM: s390: selftests: Use TAP interface in the sync_regs test
->>    KVM: s390: selftests: Use TAP interface in the tprot test
->>    KVM: s390: selftests: Use TAP interface in the reset test
->>
->>   tools/testing/selftests/kvm/s390x/memop.c     | 90 +++++++++++++++----
->>   tools/testing/selftests/kvm/s390x/resets.c    | 38 ++++++--
->>   .../selftests/kvm/s390x/sync_regs_test.c      | 87 +++++++++++++-----
->>   tools/testing/selftests/kvm/s390x/tprot.c     | 29 ++++--
->>   4 files changed, 193 insertions(+), 51 deletions(-)
+Thanks for your explanation, are you thinking that if bfqq doesn't enjoy
+idling, then such bfqq will clear busy after dispatching the last
+request?
 
-Can you refresh against latest linus master? I will apply then
+Please kindly correct me if I'm wrong in the following process:
+
+If there are more than one bfqg that is activatied, then bfqqs that are
+not enjoying idle are still left busy after dispatching the last
+request.
+
+details in __bfq_bfqq_expire:
+
+         if (RB_EMPTY_ROOT(&bfqq->sort_list) &&
+         ┊   !(reason == BFQQE_PREEMPTED &&
+         ┊     idling_needed_for_service_guarantees(bfqd, bfqq))) {
+-> idling_needed_for_service_guarantees will always return true,
+bfqq(whether or not enjoy idling) will stay busy.
+                 if (bfqq->dispatched == 0)
+                         /*
+                         ┊* Overloading budget_timeout field to store
+                         ┊* the time at which the queue remains with no
+                         ┊* backlog and no outstanding request; used by
+                         ┊* the weight-raising mechanism.
+                         ┊*/
+                         bfqq->budget_timeout = jiffies;
+
+                 bfq_del_bfqq_busy(bfqd, bfqq, true);
+
+Thanks,
+Kuai

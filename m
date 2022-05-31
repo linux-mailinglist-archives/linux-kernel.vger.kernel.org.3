@@ -2,94 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC29D539588
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A6B53958A
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346626AbiEaRnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 13:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
+        id S1346632AbiEaRpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 13:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238878AbiEaRnF (ORCPT
+        with ESMTP id S234837AbiEaRp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 13:43:05 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8DD2A253
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:43:04 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id n18so13480227plg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:43:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3WxQn9E/7whni2mhVaroiI/yQsUs4wjticHDb7nV9zY=;
-        b=d2wII8WbOHvtxl7uBrOtAFysBbDl0gxdbNJ8vpXmxGcAyeAZP/rRvrZY3X/HGSwcQL
-         12AqzGzDT5oaQI7RYD7Nc61tl76vB3o97KxtPLRFYVo1/BaujqCDnenDiGl6KvrJjPg5
-         vuAZ3TWoZicnpwuKVzJih16grbuIwinxf1831xa2/xmhDWNxJu2hQY4KRC3BxUgBu5m7
-         j2gpRWcWx6fwDGIMfdExxjFw3hlp6EGHBeYFRo54S53xg8Ap9cRB1HgXIg2ryQGmVejK
-         jqEVzg1m/p0CO1qWHQD37Gi4w5BfteMGOrviag7DHRYo7Cy3QLSjxBmc6yEZI2my2b9y
-         ssww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=3WxQn9E/7whni2mhVaroiI/yQsUs4wjticHDb7nV9zY=;
-        b=fl2aIZblv9uS+iZtjdO9aMa/3exYm7TEfJwOxy7O/N5Zx+QgVgGJepeM9xV2BOU99D
-         7buizRJeiUTHhUpztPji8HjPO/L+e/zaO2bj23Qygf5CvWoxcGk4FuEqqkVk6ddBWtin
-         E5KaYovVVkVTvQBZIVKPHlStQFqlQUsDHKxSFITDPv1kOpJDRUvgkX8eOJsEKnippH+8
-         mLRaRcqyvemQMvHDPnDOpqFE3CE/aUQh/0QSr3JY2l3MSWnKh6Avvm0zwnylwGB74RUI
-         bsJqlVACfnSealj5nq9p3GLsrOVQWxoi0T4X1lrjcfFgEmBAxYDOZUb5nyAQ4F8nIKXP
-         UUBg==
-X-Gm-Message-State: AOAM533OcXRg4QeGk2Y2Y+VDsFuqPDCxGaSrzC/NTbdgWBpmpvPDl2xV
-        FgS7d5bPwHIyeVzVlPeqJJFJ4C45Xl8=
-X-Google-Smtp-Source: ABdhPJxHJHzQo8FmvKN/hvqO6eSV7wXRfR1G/UCFS9Z6lSjzquwSqmAD3BLHKwILzRsa06wO8i2Lfg==
-X-Received: by 2002:a17:902:b418:b0:15f:713:c914 with SMTP id x24-20020a170902b41800b0015f0713c914mr62588635plr.171.1654018983785;
-        Tue, 31 May 2022 10:43:03 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:987b])
-        by smtp.gmail.com with ESMTPSA id e18-20020a056a001a9200b00518285976cdsm11071470pfv.9.2022.05.31.10.43.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 10:43:03 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 31 May 2022 07:43:01 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Geraldo Nascimento <geraldogabriel@gmail.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] workqueue: missing NOT while checking if Workqueue is
- offline
-Message-ID: <YpZTpXiubZUG14gJ@slm.duckdns.org>
-References: <YpKA5Bdk1Cm6KgKU@geday>
- <YpLLnx8/xpZIPMbi@geday>
- <YpL2rHUXd0vf8IML@geday>
- <YpMDmZZ7IpEhjywp@slm.duckdns.org>
- <YpMKY88/2tTK319E@geday>
- <YpMPPyIZVlBwUrNe@slm.duckdns.org>
- <YpWVz51hyMo+w4a4@geday>
+        Tue, 31 May 2022 13:45:27 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415132AC7C;
+        Tue, 31 May 2022 10:45:25 -0700 (PDT)
+Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue011
+ [212.227.15.167]) with ESMTPSA (Nemesis) id 1MVMqF-1oL5Br2wAZ-00SMuQ; Tue, 31
+ May 2022 19:45:16 +0200
+From:   Laurent Vivier <laurent@vivier.eu>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        linux-m68k@lists.linux-m68k.org, Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Laurent Vivier <laurent@vivier.eu>
+Subject: [PATCH] m68k: virt: Kconfig minor fixes
+Date:   Tue, 31 May 2022 19:45:14 +0200
+Message-Id: <20220531174514.1586248-1-laurent@vivier.eu>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YpWVz51hyMo+w4a4@geday>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:PnWVcVdYE0G9+ScLQlKSfM0HYC62jAW4m7Wb0mbdiWu1G2k1LH1
+ +dcs64/0y9GVJfc1WnykHWHV2hpXvhBGnudWuGD8oQp4LGDtxS2OPmqRYo1Te/EL9lY10C8
+ JrtSaObePtpwQzVL5UoD04UTjDDEdV4T+uC/p3YTw95SM88icfG4NDZccqOLnkxj+bTsRiC
+ MUlH66vxFG0RwC9I5rp9A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Ys0Wbk22O+I=:N2lFnVjbpz4+1Ws8Akm2NE
+ 3X40bO1YwxG9sxTeYw96LttbRsKYUDYF4KrlUSnBZYrcUq5mPruycHarV+QCHBOvZAIqw9PvW
+ jwbfCe3MXWpNIf/Fj0/z6FxQx0fh7Niro8q6b41Ulke7uaew0qw8O+gZ2Ox+UO1YVTzTq4yOS
+ ggowdv6zzROHBESYblQLIjzH9J94nO3+au9DYi+Zq87OfvjZltggG4uXVuG6c7ciVUOswLPpD
+ 2vT8ryPhmEs/O2FTDspoUDKkbDCTLkQV0o5UPPlpSXwon7ww2xw0POK3SGyiB529h43RnbbYI
+ yCuqCAw24vO3NQJhdtlqGKP9KucKk+ysBQ3kDnogmAaz1Ssh2SBtwivHava6NP4QbXEY6Wk8E
+ 60MN8uJ8/FROHMphfOm3fTTicufBLqYWZrvjQ0rPGYzZ7IbihU52hOhuRp+ur6kCFf/8rk2Ao
+ ye5vaLMvkiTUSIjHzDkbWJKv/6RdATlrs17gMuzzJngJHkF4xF1HaYj/59ncal3K9t3lLwmlu
+ ln783wxQoKn8v+taPIIfyyRtH8480qsaFQK+nuewcrwX0LGq44qY56R93VPsipzF14EqSrubo
+ Qja+/RKq5HOEhI385PPlVa4kaReabJDdy7UZMjjsFRTaVBIqEDw7bW+olRNRYCrJC5tCeJZRI
+ pOJ/AaRwCCaS6cm2s7krqSqTPrHN+ph9Rnldhzw2xHE/GIhIPKuYo533xDNfh92+z8W6rkql1
+ bFg2uM/KiyUnmQSbluoWirZCTeN6PuRabhy0+g==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Select VIRTIO_MENU as it is needed by VIRTIO_MMIO.
 
-On Tue, May 31, 2022 at 01:13:03AM -0300, Geraldo Nascimento wrote:
-> you were completely right about me being wrong. It's a real shame to me
-> and I am only asking for an apology in case there were any doubts.
+Add an ending period at the end the virt machine help message.
 
-I don't think there's any need for shame or aplogies. You weren't familiar
-with the code base and it just takes some effort to pick up skills for good
-bug reporting. I'm sure you'll pick them up in no time.
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+---
+ arch/m68k/Kconfig.machine | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks.
-
+diff --git a/arch/m68k/Kconfig.machine b/arch/m68k/Kconfig.machine
+index a1042568b9ad..4fbe57de1851 100644
+--- a/arch/m68k/Kconfig.machine
++++ b/arch/m68k/Kconfig.machine
+@@ -161,10 +161,11 @@ config VIRT
+ 	select RTC_CLASS
+ 	select RTC_DRV_GOLDFISH
+ 	select TTY
++	select VIRTIO_MENU
+ 	select VIRTIO_MMIO
+ 	help
+ 	  This options enable a pure virtual machine based on m68k,
+-	  VIRTIO MMIO devices and GOLDFISH interfaces (TTY, RTC, PIC)
++	  VIRTIO MMIO devices and GOLDFISH interfaces (TTY, RTC, PIC).
+ 
+ config PILOT
+ 	bool
 -- 
-tejun
+2.36.1
+

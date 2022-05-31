@@ -2,98 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85ED539420
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F106539426
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345793AbiEaPjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 11:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
+        id S1345798AbiEaPkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 11:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242627AbiEaPjm (ORCPT
+        with ESMTP id S1345663AbiEaPkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 11:39:42 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6CC8BD18;
-        Tue, 31 May 2022 08:39:41 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24VFdFJH004068
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 11:39:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1654011558; bh=fTxdM4FSLoudm9qNGxkHMxJHzf43vLhFwNmW/rU7VTA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=KMkCQvG7tjlVWymzZpN13bzwSnBHf6sP9CXk0af4AXfcYb40gq0W3IadVs0L/CfZk
-         2W4S3DE2bNZHFbaRO3Kmj9txctBWNYjtjPg2RGCvsLE0CGmjZ8f8RZdRkyAFVz3nZP
-         nTFnKXlwqga67Yu6w0lk+LGYh3cVk/vD6Vdms22aJds9K0X2q64a0ONQBsgg00hwl2
-         Jfr2UIk8D8Q2V494kj3hXJZlv7sTBHTc0kJeTt7WrUiO+ORAN0S+SwROLrssrtS/so
-         anbbVYx6N5W0qTz+Pjwgf30dETyvvFJrIT/5lf5r6iUPvATZCJtAxkowqCZNFWr6fY
-         mFjYMTQYQuXyA==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 36EBF15C3E1F; Tue, 31 May 2022 11:39:15 -0400 (EDT)
-Date:   Tue, 31 May 2022 11:39:15 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Donald Buczek <buczek@molgen.mpg.de>
-Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, dm-devel@redhat.com,
-        it+linux@molgen.mpg.de,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: ext4_writepages: jbd2_start: 5120 pages, ino 11; err -5
-Message-ID: <YpY2o/GG8HWJHTdo@mit.edu>
-References: <4e83fb26-4d4a-d482-640c-8104973b7ebf@molgen.mpg.de>
- <20220531103834.vhscyk3yzsocorco@quack3.lan>
- <3bfd0ad9-d378-9631-310f-0a1a80d8e482@molgen.mpg.de>
+        Tue, 31 May 2022 11:40:14 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB1D8BD1A;
+        Tue, 31 May 2022 08:40:13 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id D535E3200938;
+        Tue, 31 May 2022 11:40:11 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 31 May 2022 11:40:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1654011611; x=
+        1654098011; bh=Zcj/r1clfv533pxHCEgYX485weAeVVQ7YWF9px8Y20M=; b=P
+        tBmw8yntsvkYQyIETqzRdLCQ7mfPIlMiw3xGIZ40GW6ywBE8EPvatD4q4L4zCL7s
+        SSf+24zsoTegwFK0RxhYzE04/+HVK0E2ETqtBQrmVHeUEcjhBodzGFR7CY0GIP1c
+        kPMkagQdIjUP51s6wtKVeDSn4V3rwVPWqPbWr7XngdUr0sD94CCx02D1pLVYXIN+
+        etASS6mNZ6umkzoJs+Wuy9UML73xkZdajKBZD2OisFoUZzMaNqkpEKqYRfjUVUiO
+        AYV3aEActNykvPkuwHS/aEiAfGmgtJBSvsIE9QViU91+GJdqbiy4bARUp2gylQ9S
+        +ggpjvP4qJod+kYkuvVsA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1654011611; x=
+        1654098011; bh=Zcj/r1clfv533pxHCEgYX485weAeVVQ7YWF9px8Y20M=; b=j
+        sofJUnds361JQGwYeRPpx9YGRhCwwtYUg5duQ26uu1ONlmBaIVUIVaOubixk7BD9
+        tP7EC/jmXCa8DHzvMR3EmK+evGpCBFrkjmH6v9KSezl1ss9lQ5DoWUDJh1OUc2C8
+        oqPPe1qXJiZ7vV8EYEm+0R4XVm2WPn2tJaz/H3SZL85V83k6c7MkNJ5cLLm0zyw7
+        sep+Cd9pHYYtLjsWxgTytqWWgN29m37R5vG5J3Q6dSIDS66xrKhemvZqwueXLyhf
+        Kf3RR2edW0AzPJgID4WAKR9xIohbEZ+KDb/JDZr7TGwV0ux308rGXv+vwbPcq3+K
+        2rwuE5OMlPuQCi2YlBWvw==
+X-ME-Sender: <xms:2jaWYunxF6uc6E9FNKTZ8_IzSrQTJAmBfayS-UtqP0GWIBTtxD04Dw>
+    <xme:2jaWYl1yS7VAECFNnQPptW3kMHoFPG9319MXBiMXH5CcfF1mE2sHqAskrZ5GxyVJC
+    USlyQps82_wYB21f5A>
+X-ME-Received: <xmr:2jaWYsqX-wRyd6r4_ECgncombix3Rh-bwUGW-2-Xi67t2FRZZxdZn0uc4LfFNag>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeekgdeltdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeduhfekvedvtdeukeeffefgteelgfeugeeuledttdeijeegieeh
+    vefghefgvdefgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:2jaWYimJmoj4BZ6mpWe4tkmaDX7dRO8Xel2IAzmrSH6ROxgqT84q_g>
+    <xmx:2jaWYs0AFz0HV-NmB2cZHa8RzhyYfkmJKiDwuC8dRxQT9-yDlrYlIw>
+    <xmx:2jaWYpshZrHU2yx7LjPk80_dIz-nvYUZAlyiY8Avg771m5IIVgwdMA>
+    <xmx:2zaWYvScrpueCLw6YPcgypbU2vMP43taWHnnjbhNuA4-HgcGenELIA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 31 May 2022 11:40:09 -0400 (EDT)
+Message-ID: <e8cca5c1-2db1-840e-609b-4ae98791ba80@flygoat.com>
+Date:   Tue, 31 May 2022 16:40:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3bfd0ad9-d378-9631-310f-0a1a80d8e482@molgen.mpg.de>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] MIPS: fix pmd_mkinvalid
+Content-Language: en-GB
+To:     Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Zhaolong Zhang <zhangzl2013@126.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1653971769-14152-1-git-send-email-zhanghongchen@loongson.cn>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <1653971769-14152-1-git-send-email-zhanghongchen@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hmmm..... I think this patch should fix your issues.
-
-If the journal has been aborted (which happens as part of the
-shutdown, we will never write out the commit block --- so it should be
-fine to skip the writeback of any dirty inodes in data=ordered mode.
-
-BTW, if you know that the file system is going to get nuked in this
-way all the time, so you never care about file system after it is shut
-down, you could mount the file system with the mount option
-data=writeback.
-
-       	      	      	    		- Ted
 
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 8ff4c6545a49..2e18211121f6 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -542,7 +542,10 @@ static int ext4_journalled_submit_inode_data_buffers(struct jbd2_inode *jinode)
- static int ext4_journal_submit_inode_data_buffers(struct jbd2_inode *jinode)
- {
- 	int ret;
-+	journal_t *journal = EXT4_SB(jinode->i_vfs_inode->i_sb)->s_journal;
- 
-+	if (!journal || is_journal_aborted(journal))
-+		return 0;
- 	if (ext4_should_journal_data(jinode->i_vfs_inode))
- 		ret = ext4_journalled_submit_inode_data_buffers(jinode);
- 	else
-@@ -554,7 +557,10 @@ static int ext4_journal_submit_inode_data_buffers(struct jbd2_inode *jinode)
- static int ext4_journal_finish_inode_data_buffers(struct jbd2_inode *jinode)
- {
- 	int ret = 0;
-+	journal_t *journal = EXT4_SB(jinode->i_vfs_inode->i_sb)->s_journal;
- 
-+	if (!journal || is_journal_aborted(journal))
-+		return 0;
- 	if (!ext4_should_journal_data(jinode->i_vfs_inode))
- 		ret = jbd2_journal_finish_inode_data_buffers(jinode);
+在 2022/5/31 5:36, Hongchen Zhang 写道:
+> pmd_mkinvalid should not clear dirty flag,otherwise the pmd
+> dirty flag,it's ok to just clear _PAGE_VALID.
+Hi Hongcheng,
+
+Sorry, what is meant by "otherwise the pmd dirty flag"? Could you please
+elaborate?
+In my humble opinion _PAGE_PRESENT must be cleared in mkinvalid as it
+nolonger present here. And thus it lose the dirty status.
+
+Thanks
+- Jiaxun
+
+> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+> ---
+>   arch/mips/include/asm/pgtable.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+> index 374c632..d30a186 100644
+> --- a/arch/mips/include/asm/pgtable.h
+> +++ b/arch/mips/include/asm/pgtable.h
+> @@ -698,7 +698,7 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
+>   
+>   static inline pmd_t pmd_mkinvalid(pmd_t pmd)
+>   {
+> -	pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID | _PAGE_DIRTY);
+> +	pmd_val(pmd) &= ~_PAGE_VALID;
+>   
+>   	return pmd;
+>   }
 

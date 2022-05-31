@@ -2,159 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9158A53931E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0140F5392E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345250AbiEaOYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 10:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
+        id S1345086AbiEaOBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 10:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345218AbiEaOYM (ORCPT
+        with ESMTP id S241048AbiEaOBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 10:24:12 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157978020A;
-        Tue, 31 May 2022 07:24:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=J8M8YGaMefHW0AkjWLNXVgXcmOvL6c5NpOJNy13U8SQ=;
-        b=TwsKZAcMfsw0dFg/O/U99HLXqXQq9VkRXI37vXdvrKA98ORvu9PInhGuyZk+cIZVygLWjLAHM3N3l
-         MnJer1wvhJUhvi4fBv6KsDsJFHNXsDr98h8tqnWNwraMkSJcNRkJhY0L8WzoZN/2QRuhpzTp3S+0iU
-         IRV+WBugKbquFlXtDcTzvtTraxtlbk1m7psgFDrfXzOI4GfzlMwfJB2Vnv6k7icIpZuakhZ3LVudhd
-         M8UmHn6KvD200jKTHWNFRhKAFeg258ZEXRsD/YzfJf2liWdGI2G4XB+lRgMJup+N/VqrA0DLWR230m
-         JPBRN2a2+VW1JQZ03G6k3mS2MS3p0dA==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000009,0.030747)], BW: [Enabled, t: (0.000013,0.000001)], RTDA: [Enabled, t: (0.077851), Hit: No, Details: v2.39.0; Id: 15.52kerb.1g4d80gac.6c0f; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from x260 ([178.70.36.174])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Tue, 31 May 2022 17:23:38 +0300
-Date:   Tue, 31 May 2022 17:01:22 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Conor.Dooley@microchip.com
-Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        system@metrotek.ru
-Subject: Re: [PATCH v13 2/3] fpga: microchip-spi: add Microchip MPF FPGA
- manager
-Message-ID: <20220531140122.teiuoqwo2zmly6kh@x260>
-References: <20220526181344.2088-1-i.bornyakov@metrotek.ru>
- <20220526181344.2088-3-i.bornyakov@metrotek.ru>
- <f655cf2f-555c-6480-a461-bcddb9e510f3@microchip.com>
- <20220530120701.sedwn3qeohlnj52e@x260>
- <95c44458-aeff-e356-1e32-c8f735570c3a@microchip.com>
- <3b6867a8-d4ce-c5f3-71d4-bd9c3c88c389@microchip.com>
+        Tue, 31 May 2022 10:01:41 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E24B2E;
+        Tue, 31 May 2022 07:01:39 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so2800757pju.1;
+        Tue, 31 May 2022 07:01:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Mrb04JIXyqFQ3QOJ4ljFjUENecQCixeg6qU8fHaKeZk=;
+        b=obmR59m0Y0vY2NPUoD6WSZci9Ko+JC2tIToDAe4VBgkSuyXRWScFXBhpc/TGFu4ZJH
+         0KqnwtrlMx0ODAJTwmUvhk0Mf3fffWaH68i6GXQhUfFygeCHcsr5dTR+RSX4O/6fGyC1
+         s7GNfZ27SlwB8Sb4JaplTUwawtiFdoQ6go/zaaKo5JZAy1Az4Wh4t6ybDfhbnysvEv5E
+         BOmLvezqVqTiu76Upwot5elJ/4u3bE2w4OYD3hV35WoSNgNCAsciv7CotPOVbHiCxkD+
+         opMEQwLjyw4R3HMJpMxGDw1rcWV1jKhHwSCvTtvidbwWZif+Es7otGe4KP/UqS6lIQFJ
+         KRhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Mrb04JIXyqFQ3QOJ4ljFjUENecQCixeg6qU8fHaKeZk=;
+        b=m6O5Emo3Qb7kP72Cm32kqU1Utfl2YzA7FaZAGsS5R1sVbzVWc5gC/bD9ogQ+1AIw3j
+         SD1apj3Mf/3w/qH9K0/dlx2ZsVQOw+npJmBq77quZgPPDOwEOrYbK2O8o27fXOTgadZi
+         evjYBSjicjKj6Ngs05zrbQOEjwH8PGml7dBMU5IJvEkLVaUCOBiiZtF/XIeio+PiraUw
+         k7/c1OG8Pd3W3eSC4q4RJSNOUahyOoXffT79Hm7r5vB6RlEAT7hRh6j0wkqwV0r8vTLK
+         T/Ak1l8EHEsA2yu1CcEIQEkQD1izlu0DeyAPRzgwf7hb7d1gzMAGd8z7vDriZvcj2twz
+         Eetg==
+X-Gm-Message-State: AOAM532pESMoW/68nbnZ8doMqDoTnbYNHFLhslKTAV98rtz/fJuxgcbm
+        lmkXWwDZEmhBN8JI7yVZ8tY=
+X-Google-Smtp-Source: ABdhPJzFnIkAf7SzEujOh3vbwx4zBDuoIj5QBUHpQkAIlLjI2rtJTa7RIM9vMNmPLUHXlHMlt1UTug==
+X-Received: by 2002:a17:90a:9318:b0:1e0:b957:ffda with SMTP id p24-20020a17090a931800b001e0b957ffdamr29249871pjo.199.1654005699256;
+        Tue, 31 May 2022 07:01:39 -0700 (PDT)
+Received: from [172.16.4.4] ([219.142.146.208])
+        by smtp.gmail.com with ESMTPSA id d5-20020aa78685000000b0050dc76281e6sm10642401pfo.192.2022.05.31.07.01.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 07:01:38 -0700 (PDT)
+Message-ID: <d6ba61ed-7a78-126a-de0d-e3e88c51bbd9@gmail.com>
+Date:   Tue, 31 May 2022 22:01:32 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3b6867a8-d4ce-c5f3-71d4-bd9c3c88c389@microchip.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] PCI: mediatek-gen3: Fix refcount leak in
+ mtk_pcie_init_irq_domains
+Content-Language: en-US
+To:     Miles Chen <miles.chen@mediatek.com>
+Cc:     bhelgaas@google.com, jianjun.wang@mediatek.com, kw@linux.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pci@vger.kernel.org,
+        lorenzo.pieralisi@arm.com, matthias.bgg@gmail.com, maz@kernel.org,
+        robh@kernel.org, ryder.lee@mediatek.com
+References: <6cf820cf-a2e7-c93e-3c00-08bc366f2eb2@gmail.com>
+ <20220530073556.1831-1-miles.chen@mediatek.com>
+From:   Miaoqian Lin <linmq006@gmail.com>
+In-Reply-To: <20220530073556.1831-1-miles.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 10:53:07AM +0000, Conor.Dooley@microchip.com wrote:
-> One last item, sorry!
-> 
-> On 30/05/2022 15:24, Conor Dooley wrote:
-> > On 30/05/2022 13:07, Ivan Bornyakov wrote:
-> >> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >>
-> >> On Mon, May 30, 2022 at 11:22:26AM +0000, Conor.Dooley@microchip.com wrote:
-> >>> On 26/05/2022 19:13, Ivan Bornyakov wrote:
-> >>>> +static int mpf_read_status(struct spi_device *spi)
-> >>>> +{
-> >>>> +       u8 status = 0, status_command = MPF_SPI_READ_STATUS;
-> >>>> +       /*
-> >>>> +        * Two identical SPI transfers are used for status reading.
-> >>>> +        * The reason is that the first one can be inadequate.
-> >>>> +        * We ignore it completely and use the second one.
-> >>>> +        */
-> >>>> +       struct spi_transfer xfers[] = {
-> >>>> +               [0 ... 1] = {
-> >>>> +                       .tx_buf = &status_command,
-> >>>> +                       .rx_buf = &status,
-> >>>> +                       .len = 1,
-> >>>> +                       .cs_change = 1,
-> 
-> Should cs_change be set for both messages or just the first?
->  From reading the documentation, it looks like we only want it
-> for the first one.
-> 
-> https://elixir.bootlin.com/linux/latest/source/include/linux/spi/spi.h#L895
-> 
+Hi, Miles
+
+On 2022/5/30 15:35, Miles Chen wrote:
+> Hi Miaoqian,
+>
+>> Hi, Miles
+>>
+>> On 2022/5/30 10:19, Miles Chen wrote:
+>>> Hi Miaoqian,
+>>>
+>>>>>> 						  &intx_domain_ops, pcie);
+>>>>>> 	if (!pcie->intx_domain) {
+>>>>>> 		dev_err(dev, "failed to create INTx IRQ domain\n");
+>>>>>> +		of_node_put(intc_node);
+>>>>>> 		return -ENODEV;
+>>>>>> 	}
+>>>>> Thanks for doing this.
+>>>>>
+>>>>> I checked mtk_pcie_init_irq_domains() and there are multiple exit paths like
+>>>>> err_msi_domain and err_msi_bottom_domain and the normal path which also
+>>>>> need of_node_put(intc_node).
+>>>> Thanks for your reply,
+>>>>
+>>>> I didn't add of_node_put() in other paths because I am not sure if the reference passed through irq_domain_add_linear(), since intc_node is passed to irq_domain_add_linear().
+>>>>
+>>>> __irq_domain_add() keeps &node->fwnode in the irq_domain structure.
+>>>>
+>>>> and use fwnode_handle_get() to get the reference of fwnode, but I still uncertain.
+>>>>
+>>>> If the reference don't needed anymore after irq_domain_add_linear(),
+>>>>
+>>>> your suggestion looks fine, and I will submit v2.
+>>> Thanks for your reply, I think we can do similar things like
+>>> rtl8365mb_irq_setup() in drivers/net/dsa/realtek/rtl8365mb.c
+>> I checked rtl8365mb_irq_setup(), it calls of_node_put() by goto statement for error paths.
+>>
+>> and calls of_node_put() before return 0 in normal path. I didn't see the same problem.
+> Sorry for the confusing. I meant that we can do the same thing - 
+> it calls of_node_put() by goto statement for error paths
+> and calls of_node_put() before return 0 in normal path. :-)
+
+I'll sent a v2 for this: https://lore.kernel.org/all/20220530064807.34534-1-linmq006@gmail.com/
+
+following your original suggestion.
+
 > Thanks,
-> Conor.
-> 
-
-You're right, I've overlooked that moment.
-
-> >>>> +               }
-> >>>> +       };
-> >>>
-> >>> Hmm, I don't think that this is correct, or at least it is not
-> >>> correct from the polarfire /soc/ perspective. I was told that
-> >>> there was nothing different other than the envm between the
-> >>> programming for both devices - but this is another situation
-> >>> where I start to question that.
-> >>>
-> >>> When I run this code, ISC enable /never/ passes - failing due
-> >>> to timing out. I see something like this picture here:
-> >>> https://i.imgur.com/EKhd1S3.png
-> >>> You can see the 0x0B ISC enable coming through & then a status
-> >>> check after it.
-> >>>
-> >>> With the current code, the value of the "status" variable will
-> >>> be 0x0, given you are overwriting the first MISO value with the
-> >>> second. According to the hw guys, the spi hw status *should*
-> >>> only be returned on MISO in the first byte after SS goes low.
-> >>>
-> >>> If this is not the case for a non -soc part, which, as I said
-> >>> before, I don't have a board with the SPI programmer exposed
-> >>> for & I have been told is not the case then my comments can
-> >>> just be ignored entirely & I'll have some head scratching to
-> >>> do...
-> >>>
-> >>> Thanks,
-> >>> Conor.
-> >>>
-> >>
-> >> If I understood correctly, SS doesn't alter between two status reading
-> >> transactions despite .cs_change = 1. May be adding some .cs_change_delay
-> >> to spi_transfer struct can help with that?
-> > 
-> > D-oh - bug in the spi controller driver :)
-> > LGTM now, successfully programmed my PolarFire SoC with v12.
-> > I'd almost suggest adding a compatible for it too - but since
-> > the envm programming doesn't work I don't think that would be
-> > correct.
-> > 
-> > Tested-by: Conor Dooley <conor.dooley@microchip.com>
-> > 
-> > With a small comment about why it's using spi_sync_transfer():
-> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > 
-> >>
-> >>>> +       int ret = spi_sync_transfer(spi, xfers, 2);
-> >>>> +
-> >>>> +       if ((status & MPF_STATUS_SPI_VIOLATION) ||
-> >>>> +           (status & MPF_STATUS_SPI_ERROR))
-> >>>> +               ret = -EIO;
-> >>>> +
-> >>>> +       return ret ? : status;
-> >>>> +}
-> >>
-> > 
-> 
-
+> Miles

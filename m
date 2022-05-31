@@ -2,95 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8BFA5391EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03185391FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344845AbiEaNjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58558 "EHLO
+        id S1344811AbiEaNr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344860AbiEaNjf (ORCPT
+        with ESMTP id S233818AbiEaNr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:39:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E2F986D1;
-        Tue, 31 May 2022 06:39:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=k8+0kfbh15DqVWqmUPPXqZdwpqwvfa3/efB+Um28rcA=; b=UuX0SRaS1swoA6ODqc2CXz3ZXz
-        +87aNOIPluPRRrIt5Qjh/RnrRiSPO0UJzukTRFNHhAZUWnN9xVhi9ElcMEoEVuiTZky3ZTleab2K7
-        LP4o72J4GK3V0rlEi5c1FJQzKwpuPeJyMDIjMVMYfWl7d7MBXxkZibkzKiJ3OsKFetKq5fxBq8jSY
-        w3UiOqZzaykYkG50Ksp91LqxhuFw+4xF/DdG2r7UCoMVfUzn8W/GNl+NxUnRxhWccT+8DBhQ/pBA7
-        xUhB+NcqVT6UcSKlv/G+P+Jq40MtS6SYWagvMLG1NFISorW8tSe/RiwFyOg6GFenMZyBXPOav3o9V
-        srcjQW8Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nw255-005PYu-FN; Tue, 31 May 2022 13:38:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3F7A83001F7;
-        Tue, 31 May 2022 15:38:40 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2BA6D2097B8EF; Tue, 31 May 2022 15:38:40 +0200 (CEST)
-Date:   Tue, 31 May 2022 15:38:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jack Allister <jalliste@amazon.com>
-Cc:     diapop@amazon.co.uk, metikaya@amazon.co.uk,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: VMX: CPU frequency scaling for intel x86_64 KVM
- guests
-Message-ID: <YpYaYK7a28DFT5Ne@hirez.programming.kicks-ass.net>
-References: <20220531105925.27676-1-jalliste@amazon.com>
+        Tue, 31 May 2022 09:47:26 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9C12126F;
+        Tue, 31 May 2022 06:47:24 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id DEBE03200035;
+        Tue, 31 May 2022 09:47:20 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 31 May 2022 09:47:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1654004840; x=1654091240; bh=s8b8COO5Yb
+        Ga8xG5/i9yEEf+vE3uG78vIzviBYnAo1M=; b=N52hijfpV1UMRrhHBEsjZlBlof
+        doLJ+cEEVuVC54JKFV3kw7tnE9v3C8cO1Wt+0t7wRVY1tYWZpyfKd8Caxr5vd6ec
+        JpFTyqF8PYyiHrFnfJvcHYDB/Arzr9AFkaYy7gQsyrRi/0JT0GgCnlWydd9IagYJ
+        qrwoFtG4Rm43CY2v6G39mNz/KfRzpFnhSKDPu9GSp2Cu54I8M/+3Pi14pUmePLi2
+        wqN1CQuVTcplyDzrlS+tHZSS+oLdcpeOf6ABVntZE4MIA3WaQsJ75bJ58qlJT6Gw
+        nHLBBoPweRyZA1ZCMiTq/jQJKl5v3vIGAQfAKW6U1wfCaNzGW/BAp3v8QEKw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1654004840; x=1654091240; bh=s8b8COO5YbGa8xG5/i9yEEf+vE3u
+        G78vIzviBYnAo1M=; b=y0LexLUkBrU37DxqXCaEEErb5ht+9N5MV5M4VfIMEV1b
+        I+fn/jYy1h8qDjqRVfLUtTwm0pdnggWsfDmoww8Z5iU8+a+zPxlWdoNF/qTr6Y4w
+        kYTr9b9GRJPJJfUuGeZ2FXDYhVPDsjtk9EY/Sa2YW+rjxcxON/PCMWkzcfTBK0zv
+        NEyh4SKPZ3HWFlXmOu27SQdsIq/8HbZj8s3WkrcFf4O5K9PrjhczF9uSRtNlNfeQ
+        u9A09CvdAO23kFYDtwDpZ0JxhfUn/f5GHGXa2O7+UT2JivzRGYakabBIo6XdMZPZ
+        WBm1R0x2d2dAyQhnAy0KMueo7qoqdj9/ElTDgQJK6g==
+X-ME-Sender: <xms:ZxyWYmY8Qh1VZxpOy26rSI2cJxMVFaaxDaDlTTfCq6BxWkJJ0jukZA>
+    <xme:ZxyWYpZ3dWFBaiLd2xZBIXKgecGLJ-H5cSyk7vEcGcWABmRRgCxF6AXjkvhGBVkLr
+    2zUgcJB1vuYGzdX4Dc>
+X-ME-Received: <xmr:ZxyWYg8HHVL_n7RN5p0Vsi9JIzojqpAiBWubSVwHfH5RtKdv_H_zv7zsXOL_B7kcmJL5I4rdliXbvw8y6ffqftWqpFBUkVOz0Kg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeekgdeijecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
+    hrlhcuvffnffculddvfedmnecujfgurhepfffhvfevuffkfhggtggujgesghdtreertddt
+    vdenucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkhessh
+    htfigtgidrgiihiieqnecuggftrfgrthhtvghrnhepheefjeehfedtjeeivdefkeffheel
+    udekudelleffkefgtdeludelvddtgedtheeknecuvehluhhsthgvrhfuihiivgepudenuc
+    frrghrrghmpehmrghilhhfrhhomhepphgrthhrihgtkhesshhtfigtgidrgiihii
+X-ME-Proxy: <xmx:ZxyWYornatPqLkQdmOBuIYSOEMpvBA4BGe1zPcfwo3qlrNwfG1Y39Q>
+    <xmx:ZxyWYhpWBmzgnbEuaJZPfpxWtYftXt53l8cIHN-o0kau3LP1fT7vHw>
+    <xmx:ZxyWYmSh7ByBNWghoeSCPk78S7TKf4VbwA9KxFTJkl3sN6BegI1D6g>
+    <xmx:aByWYs3-kEv5BUqz_2o6XvkhLxXOEw6c1y-I_r7zMBTjXMGt6UyHbQ>
+Feedback-ID: i68a1478a:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 31 May 2022 09:47:19 -0400 (EDT)
+Date:   Tue, 31 May 2022 08:47:18 -0500
+From:   Patrick Williams <patrick@stwcx.xyz>
+To:     Potin Lai <potin.lai.pt@gmail.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Porin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] aspeed: i2c: add manual clock setup feature
+Message-ID: <YpYcZn+Zsz3g7xl+@heinlein.stwcx.org.github.beta.tailscale.net>
+References: <20220530114056.8722-1-potin.lai.pt@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="K2Ju2BjYugMc6h9r"
 Content-Disposition: inline
-In-Reply-To: <20220531105925.27676-1-jalliste@amazon.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220530114056.8722-1-potin.lai.pt@gmail.com>
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 10:59:25AM +0000, Jack Allister wrote:
-> A VMM can control a vCPU's CPU frequency by interfacing with KVM via
-> the vCPU file descriptor to enable/set CPU frequency scaling for a
-> guest. Instead of creating a separate IOCTL to this this, KVM capabil-
-> ities are extended to include a capability called
-> KVM_CAP_CPU_FREQ_SCALING.
-> 
-> A generic set_cpu_freq interface is added to kvm_x86_ops
-> to allow for architecture (AMD/Intel) independent CPU frequency
-> scaling setting.
-> 
-> For Intel platforms, Hardware-Controlled Performance States (HWP) are
-> used to implement CPU scaling within the guest. Further information on
-> this mechanism can be seen in Intel SDM Vol 3B (section 14.4). The CPU
-> frequency is set as soon as this function is called and is kept running
-> until explicitly reset or set again.
-> 
-> Currently the AMD frequency setting interface is left unimplemented.
-> 
-> Please note that CPU frequency scaling will have an effect on host
-> processing in it's current form. To change back to full performance
-> when running in host context an IOCTL with a frequency value of 0
-> is needed to run back at uncapped speed.
 
-Nowhere does this explain *WHY* we would want to do this?
+--K2Ju2BjYugMc6h9r
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, May 30, 2022 at 07:40:56PM +0800, Potin Lai wrote:
+> From: Porin Lai <potin.lai.pt@gmail.com>
+>=20
+> Add properties for manual tuning i2c clock timing register.
+>=20
+> * aspeed,i2c-manual-clk: Enable aspeed i2c clock manual setup
+> * aspeed,i2c-base-clk-div: Base Clock divisor (tBaseClk)
+> * aspeed,i2c-clk-high-cycle: Cycles of clock-high pulse (tClkHigh)
+> * aspeed,i2c-clk-low-cycle: Cycles of clock-low pulse (tClkLow)
+
+Do we need to add these to
+Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml ?
+
+>=20
+> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+> ---
+>  drivers/i2c/busses/i2c-aspeed.c | 55 ++++++++++++++++++++++++++++++++-
+>  1 file changed, 54 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-asp=
+eed.c
+> index 67e8b97c0c95..1f4b5c4b5bf4 100644
+> --- a/drivers/i2c/busses/i2c-aspeed.c
+> +++ b/drivers/i2c/busses/i2c-aspeed.c
+> @@ -898,6 +898,56 @@ static int aspeed_i2c_init_clk(struct aspeed_i2c_bus=
+ *bus)
+>  	return 0;
+>  }
+> =20
+> +/* precondition: bus.lock has been acquired. */
+> +static int aspeed_i2c_manual_clk_setup(struct aspeed_i2c_bus *bus)
+> +{
+> +	u32 divisor, clk_high, clk_low, clk_reg_val;
+> +
+> +	if (device_property_read_u32(bus->dev, "aspeed,i2c-base-clk-div",
+> +				     &divisor) !=3D 0) {
+> +		dev_err(bus->dev, "Could not read aspeed,i2c-base-clk-div\n");
+> +		return -EINVAL;
+> +	} else if (divisor > ASPEED_I2CD_TIME_BASE_DIVISOR_MASK) {
+> +		dev_err(bus->dev, "Invalid aspeed,i2c-base-clk-div: %u\n",
+> +			divisor);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-high-cycle",
+> +				     &clk_high) !=3D 0) {
+> +		dev_err(bus->dev, "Could not read aspeed,i2c-clk-high-cycle\n");
+> +		return -EINVAL;
+> +	} else if (clk_high > ASPEED_I2CD_TIME_SCL_REG_MAX) {
+> +		dev_err(bus->dev, "Invalid aspeed,i2c-clk-high-cycle: %u\n",
+> +			clk_high);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-low-cycle",
+> +				     &clk_low) !=3D 0) {
+> +		dev_err(bus->dev, "Could not read aspeed,i2c-clk-low-cycle\n");
+> +		return -EINVAL;
+> +	} else if (clk_low > ASPEED_I2CD_TIME_SCL_REG_MAX) {
+> +		dev_err(bus->dev, "Invalid aspeed,i2c-clk-low-cycle: %u\n",
+> +			clk_low);
+> +		return -EINVAL;
+> +	}
+> +
+> +	clk_reg_val =3D readl(bus->base + ASPEED_I2C_AC_TIMING_REG1);
+> +	clk_reg_val &=3D (ASPEED_I2CD_TIME_TBUF_MASK |
+> +			ASPEED_I2CD_TIME_THDSTA_MASK |
+> +			ASPEED_I2CD_TIME_TACST_MASK);
+> +	clk_reg_val |=3D (divisor & ASPEED_I2CD_TIME_BASE_DIVISOR_MASK)
+> +			| ((clk_high << ASPEED_I2CD_TIME_SCL_HIGH_SHIFT)
+> +			   & ASPEED_I2CD_TIME_SCL_HIGH_MASK)
+> +			| ((clk_low << ASPEED_I2CD_TIME_SCL_LOW_SHIFT)
+> +			   & ASPEED_I2CD_TIME_SCL_LOW_MASK);
+> +	writel(clk_reg_val, bus->base + ASPEED_I2C_AC_TIMING_REG1);
+> +	writel(ASPEED_NO_TIMEOUT_CTRL, bus->base + ASPEED_I2C_AC_TIMING_REG2);
+> +
+> +	return 0;
+> +}
+> +
+>  /* precondition: bus.lock has been acquired. */
+>  static int aspeed_i2c_init(struct aspeed_i2c_bus *bus,
+>  			     struct platform_device *pdev)
+> @@ -908,7 +958,10 @@ static int aspeed_i2c_init(struct aspeed_i2c_bus *bu=
+s,
+>  	/* Disable everything. */
+>  	writel(0, bus->base + ASPEED_I2C_FUN_CTRL_REG);
+> =20
+> -	ret =3D aspeed_i2c_init_clk(bus);
+> +	if (of_property_read_bool(pdev->dev.of_node, "aspeed,i2c-manual-clk"))
+> +		ret =3D aspeed_i2c_manual_clk_setup(bus);
+> +	else
+> +		ret =3D aspeed_i2c_init_clk(bus);
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> --=20
+> 2.17.1
+>=20
+
+--=20
+Patrick Williams
+
+--K2Ju2BjYugMc6h9r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmKWHGYACgkQqwNHzC0A
+wRmniw//ReljGNV+Q4CIui/96gQHz615me2pPG7mqsYlvAJHQDt4GDYYEcJzl0l4
+KqYKK03DW5c7UGsk2MddvPOdHGLFt9Qxb8aqh+cTelPjzrezByNBYtuQC6zs+3Si
+VLYNjz1cXsrRPuVnsKhgEgCMpALC+6Js3luUMDBpW1FpZ83FIwQFlLk7oit9oHN2
+eZSQiQYlnsUx9ZV5BrI8VALrhNtbyfyC4sAMIeuIEtjCbgOv6LUIQl1PCFZOWM9O
+fsaLJhuaulKfHHYPrumt6VlFgXT4M7Bn+KvOoHGK36HmByKZVjy7K9mFmhsxrUXq
+6TeQzn0vixKO4myXxO/SbkVdRxquKCnFXicNT1BFt/P2M6HJ4GxjVaTbAptWNRHy
+QXSmI8py77yctldXfk2mPGGfhQ+KkuiNCtHJVCARMY93CQA0nYhLLrDNRhWx9wjp
+GGvCk/VZhmfr1TVeH15Lqxh1h+xVE3NItVumVYnu0xSccOwIRf5NOtDJc9MLXB1H
+Q5F4bSJNd5wgb3V/ULVqaxpys62jo7p+Ks0TSULVE8hJ7FfC8YMqJP7z8oPvmLoU
+u97WB7urZpQGjjTKZlPzFpPlSp1VjM3GV154FexUGKNMnASZZU8sdC5brXAotMsa
+BtSeHG788WBtHi6PWqSuSaqy9tyqUCSm/Je90yJ5PvX4ULfhAh0=
+=Z5+f
+-----END PGP SIGNATURE-----
+
+--K2Ju2BjYugMc6h9r--

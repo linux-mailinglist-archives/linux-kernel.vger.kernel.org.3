@@ -2,108 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163135396FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE85539700
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244105AbiEaT17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 15:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
+        id S1347280AbiEaT2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 15:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbiEaT15 (ORCPT
+        with ESMTP id S231594AbiEaT2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 15:27:57 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F077548E4A;
-        Tue, 31 May 2022 12:27:55 -0700 (PDT)
-Received: from mail-yb1-f174.google.com ([209.85.219.174]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MWzXd-1oKV5n0CHh-00XJVd; Tue, 31 May 2022 21:27:54 +0200
-Received: by mail-yb1-f174.google.com with SMTP id p13so14076781ybm.1;
-        Tue, 31 May 2022 12:27:53 -0700 (PDT)
-X-Gm-Message-State: AOAM532f4dg8HULohbX6nQcM4xAEDG8av11mec3SxxLIq1EMnmBgGVrh
-        SKJI7TDrIIrP+5s+889lTGQuaJ0ndxxsZQupSUA=
-X-Google-Smtp-Source: ABdhPJxyk421E9RkuQAkYxSldlpP0Sx5xvw/SZmoip5B1Zf2Fbf21hH68zXh6tR8O7vabTnD3t2ya1dr8dbyv7ZmpwY=
-X-Received: by 2002:a25:1209:0:b0:65d:63f9:e10a with SMTP id
- 9-20020a251209000000b0065d63f9e10amr2750286ybs.480.1654025272658; Tue, 31 May
- 2022 12:27:52 -0700 (PDT)
+        Tue, 31 May 2022 15:28:33 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950EC4ECC8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:28:31 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id m20so28512471ejj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DT1x8TLoaq/2aEcPF9yc25Y7gGZNqIa6OPt/9Mp+d6o=;
+        b=BiTqHH1d77R6l5gMjMmYdehih1O7opPVsJ7Bxq1gsyya6CNRYUxnRfdBuxqKfhTYsl
+         klBq6jkA3GcAFjfn6zFUPB498xdOb+BcTXdqB16WnfohHNUgW+VWqEcwI38+iWz0NMmI
+         ZHnUUOR6xk/3/RA0uAmjbBjTzDu9DxmI5j4SE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DT1x8TLoaq/2aEcPF9yc25Y7gGZNqIa6OPt/9Mp+d6o=;
+        b=AYJaRjjo3RPZ6KHGh1FFQ31MH+Rva44iar+QR+Y0I9n5N3CjztJ0h0URDFjWpLDQL8
+         UWxNHWwu7HU2drHc1cUJM+RFwPyP9sJzoVqjcVPRxoFvK+v8jYTg5jMVCMH3xK736emN
+         t/nwzHlmBSakZGZPaidgq17VZmwziZlLdWl6ruKBaRfIZ+Zk5LC8OSKkwGBs7q1ABLNO
+         RD+eFe8VugfyBQbCW4AtWp3MBwbhkWWugk7d+2jZdDh1vTcUSFEKGjPiTlUa/N3giJFY
+         nwek4KmrZ9i6sFF7my7WhYzEfEa0L9eFIEa6/ErYUUEj9Udq6y+uP4tuOgYXY+dVDhmk
+         ujfw==
+X-Gm-Message-State: AOAM5315821WfyD7q59UBQUWmxJXibD6gXYIJ1ARtvHb6kQACgtKqWJ5
+        6WzulNr9hfnPmfqXLXVw4zCuIvqGAGjpXg==
+X-Google-Smtp-Source: ABdhPJwIvhXKiV073uYERdRdBNcRs6KHip36FjqbB9WwKS18j2RrNFycBBr8p0sjWUgUzo2w8cwgpg==
+X-Received: by 2002:a17:907:3f11:b0:6fe:bcef:5eaf with SMTP id hq17-20020a1709073f1100b006febcef5eafmr43794266ejc.741.1654025309603;
+        Tue, 31 May 2022 12:28:29 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id qn21-20020a170907211500b00706287ba061sm78847ejb.180.2022.05.31.12.28.28
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 12:28:28 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id p10so19962056wrg.12
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:28:28 -0700 (PDT)
+X-Received: by 2002:a05:6000:1548:b0:20f:c4e3:637a with SMTP id
+ 8-20020a056000154800b0020fc4e3637amr41530977wry.513.1654025308057; Tue, 31
+ May 2022 12:28:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220419211658.11403-1-apais@linux.microsoft.com>
- <20220419211658.11403-2-apais@linux.microsoft.com> <CACRpkdZ2DFZRPHS1x0=M3_8zYvU-jpCG5Tm3863dXv51EhY+BA@mail.gmail.com>
- <CAK8P3a0j_rziihsgHnG5bHMxmPbOkAhT6_+CCE4iFZy7HzQrLw@mail.gmail.com>
- <YpCGePbo9B/Z7slV@matsya> <CAK8P3a2wD7=hgvqyS14X5p-eP+7Ajk4dFJOXgbOo8Z0r5UNYmg@mail.gmail.com>
- <YpW8J40hKwc7jwQh@matsya> <0A9EDEDC-9E6C-47F8-89C0-48DCDD3F9DE3@linux.microsoft.com>
- <CAK8P3a3vf_huJ5ysBvFDV=11E-=OxFGiDQ9ND04YKug8g6jV_A@mail.gmail.com> <708F627F-0F7D-477F-BDF7-274424501DA0@linux.microsoft.com>
-In-Reply-To: <708F627F-0F7D-477F-BDF7-274424501DA0@linux.microsoft.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 31 May 2022 21:27:35 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a314SxhTNy6psYr_MzarOPmkjv1_KKGdeVUPpBjVkC5nA@mail.gmail.com>
-Message-ID: <CAK8P3a314SxhTNy6psYr_MzarOPmkjv1_KKGdeVUPpBjVkC5nA@mail.gmail.com>
-Subject: Re: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
-To:     Allen Pais <apais@linux.microsoft.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Vinod Koul <vkoul@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        olivier.dautricourt@orolia.com, Stefan Roese <sr@denx.de>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Eugeniy.Paltsev@synopsys.com,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Leo Li <leoyang.li@nxp.com>, zw@zh-kernel.org,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Sanjay R Mehta <sanju.mehta@amd.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Andy Gross <agross@kernel.org>,
+References: <1654021066-13341-1-git-send-email-quic_vnivarth@quicinc.com>
+In-Reply-To: <1654021066-13341-1-git-send-email-quic_vnivarth@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 31 May 2022 12:28:16 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UF3x5RHrQH-m1X-4kQSsKiufLnkew=VuJz7W9EAi3GHQ@mail.gmail.com>
+Message-ID: <CAD=FV=UF3x5RHrQH-m1X-4kQSsKiufLnkew=VuJz7W9EAi3GHQ@mail.gmail.com>
+Subject: Re: [PATCH] tty: serial: qcom-geni-serial: minor fixes to get_clk_div_rate()
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        green.wan@sifive.com, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Lyra Zhang <zhang.lyra@gmail.com>,
-        Patrice CHOTARD <patrice.chotard@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        dmaengine@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-serial@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        quic_msavaliy@quicinc.com, Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:B22oMGCygCRXUXUiRid2wa6+BPuoeRZrXYWJD0/ExzKDN6lwySO
- xH8HbHRxnH1IlxNnE6ciDtBoQgfNtFTTGS72Pk666yGlIvC/wTZZXUc88QAqizrZ+9YsB+N
- 1D+8hYbJxL7Umn93m51z6RurGdsgjA55XZcdFezzKurxbCBhT3/YRvHY2ku35E8C4tyhspf
- FiDbX0/aJOhDOtD8eom5g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:aDK9dosKDUI=:qDjs0bR0Xz30Gn2NaW7Yrc
- CW9vStNFFTN452LbNgA88uS2TixpgufC4Lvc421s0a/s1PM85Ba0a/eRunYQHQ56cuudv2qDK
- MxkS1qqGUEyee/oBkXRYTSgM/A7CNVJgrUELiAR9hm8OW8fthTq8LqlqVR4i+yEhL1wR2M/G0
- TaiYXU6PpLKkRBFFegR1fvNVI9mtrhkFs2+F8Sckeh/sT/25BR/uGMEVpIYCzTwidf++pHO8U
- XnjKdgZMkLg7Fdmf5BgT2+WC7gdBuC4IIypurcdqx+rjJdeQ4Ho02hO+dVlKQmFbjfG7OSbIb
- PDms623pJzX70HggVXajBASwiNMGktAbJjt2kvFalOLm1k7rCno77UnKY68zg/HL9q76GYD+j
- Up5tYU6pUx1z/cuYMnTEO8Uigp2K6zS7HxgeuMojl7yKs3REqWws5nxY+tAj5IjYyfv0160xs
- u/DbAdxY8MpXeKNKE6g6JPpk8qFPGk7uDkETHGA7NK0FdrOLalYp0gdczaW8zCTMQGb1W4Nji
- RsqDvZmEaCPO2TusMI9bMNvkW77+O6qn3zY9oQvWAeygooAiQu4s0i3H6gt6GzNNiSu+K3bcF
- nQ1xnGB3Jd43MTOKKxV5S92Yqp3vTccBCh8i2esC7Jo8ni4FbALwdXn3gCdYjNHmDBLDMJsYR
- MLS301I8EFrAletx0HLKpf8ARqMIc31nT4kYaaheFZrPMhQKAVh8/Gh0bVUi4I4fEC7FvnQnB
- ZNsJ9Plr8/S9uB6k4sfR6jiFOmt7njjUQJUwqKd7c8BK9S85XZ+OdxG+14yQguAo9G3kFFqhz
- oD91QO6zS4Ln7SUpp9XTEiFxjDtrSZNUMwWJjnM/XJRT7V4t0ZG4GDKywjqJocQRtPb1NGp/O
- 08/AR1B0XHi7XYPnGrsQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,29 +79,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 8:19 PM Allen Pais <apais@linux.microsoft.com> wrote:
-> >>> That is a good idea, lot of drivers are waiting for completion which can
-> >>> be signalled from hardirq, this would also reduce the hops we have and
-> >>> help improve latency a bit. On the downside, some controllers provide
-> >>> error information, which would need to be dealt with.
-> >>
-> >>
-> >>   I am not an expert in dma subsystem, but by using completion from
-> >> Hardirq context be a concern? Especially with latency.
-> >
-> > I don't see how: to the task waiting for the completion, there should
-> > be no difference, and for the irq handler sending it, it just avoids
-> > a few cycles going into softirq context.
->
->   Thanks for clarification.
->
->   If I have understood it correctly, your suggestion is to move the current
-> Callback mechanism out to dmaengine as a generic helper function
-> And introduce completion in dma_async_tx_descriptor to handle what
-> Tasklets currently do.
+Hi,
 
-Right: around half the callbacks are a trivial version that does nothing
-other than calling complete(), so these will benefit from skipping the
-softirq, while the others still need the callback.
+On Tue, May 31, 2022 at 11:18 AM Vijaya Krishna Nivarthi
+<quic_vnivarth@quicinc.com> wrote:
+>
+> Add missing initialisation and correct type casting
+>
+> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+> ---
+>  drivers/tty/serial/qcom_geni_serial.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index 4733a23..08f3ad4 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -943,11 +943,11 @@ static int qcom_geni_serial_startup(struct uart_port *uport)
+>  static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
+>                         unsigned int sampling_rate, unsigned int *clk_div)
+>  {
+> -       unsigned long ser_clk;
+> +       unsigned long ser_clk = 0;
 
-       Arnd
+In this patch it's not at all obvious why you'd need to init to 0. I
+think the "for loop" is guaranteed to run at least once because
+"max_div" is known at compile time. ...and currently each time through
+the "for" loop you'll always set "ser_clk".
+
+I think in a future patch you'll want to _remove_ this from the for loop:
+
+if (!prev)
+  ser_clk = freq;
+
+...and _that's_ when you should init "ser_clk" to 0. Until then I'd
+leave it as uninitialized...
+
+Honestly, I'd throw all the fixes into one series, too.
+
+
+>         unsigned long desired_clk;
+>         unsigned long freq, prev;
+>         unsigned long div, maxdiv;
+> -       int64_t mult;
+> +       unsigned long long mult;
+>
+>         desired_clk = baud * sampling_rate;
+>         if (!desired_clk) {
+> @@ -959,8 +959,8 @@ static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
+>         prev = 0;
+>
+>         for (div = 1; div <= maxdiv; div++) {
+> -               mult = div * desired_clk;
+> -               if (mult > ULONG_MAX)
+> +               mult = (unsigned long long)div * (unsigned long long)desired_clk;
+
+I think you only need to cast one of the two. The other will be
+up-cast automatically.
+
+
+> +               if (mult > (unsigned long long)ULONG_MAX)
+
+I don't think you need this cast. As far as I know the C language will
+"upcast" to the larger of the two types.
+
+
+-Doug

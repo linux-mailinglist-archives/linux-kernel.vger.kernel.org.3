@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0C7539199
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2708D53919B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344665AbiEaNO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        id S1344680AbiEaNOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344647AbiEaNOT (ORCPT
+        with ESMTP id S1344646AbiEaNOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:14:19 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4DB90CF4
+        Tue, 31 May 2022 09:14:22 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA7B93459
         for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:14:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1654002855; x=1685538855;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SegM12i9kVBv1XKnxpXguRMrPff9WVpH727h9VAvaCY=;
-  b=idQTXTnDrAj/L7vpbdj4bSVii3TCK5uSllWRbaoj9/MkDo8XfJQrO9ZL
-   l6Rhe/W8/Gooqz5X8o5CjJMT64An/EMx2vB8hJ9fCwzoAwpVywTseI1T+
-   dxbUgQBLC7jlSXzrqth1t8P6uE5dOnlzJPA8czOWtDDOYewnroc04FBFZ
-   fn8WlcWsmka2lYipD+eSNixsksytsUS17dWPg5tRe4vc+MjIRJbZbnAl4
-   cc954QAN7HbxbT3n15c9WJY7eqzlv/2P61Q2wpGUNZREZGp1McNYb6Im2
-   PPTmV1YuOT+X7+kUThAlN5WRUQpzD+jsDvZGUCp3Wq4jurJ9j34f9CS+K
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="361622969"
+  bh=T8180kI4h+7eDKHwEjREjcScPaffRqPWo+geg994vE8=;
+  b=G4Nx3E3OCmM2y8puLsQ+B6Z+wYjIkDW3zbzz9wb2lcuNfb0XWrmnMy5O
+   hS7thZ2/a5/18+Hrc2xvYaqLwpk8W3FyStCan2MJoTkXgmH+Y1PAz9fKX
+   K2Hva7ab+6aV18M4z28dasew34GsHtVZXFMzf/208ywkIzM3LXqgHWbYN
+   TzmulOJZ3zEgxmPMPPI7ee4oTD9y7BnWMyA1QbxhDkbNUYbLFjyS0urZD
+   NcJtKiw6Brq5cgaojRjvLqmSriyNt3LTTZycYdMMHkVYBSM2VNpqgEMNO
+   q85jLUE0Qp9cQk6mVyMe6Cop1BOxpk06FCYrUG+XwSAK5zwgKeczCBddZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="335907380"
 X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="361622969"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 06:14:15 -0700
+   d="scan'208";a="335907380"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 06:14:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="611825633"
+   d="scan'208";a="666915101"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 31 May 2022 06:14:13 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 31 May 2022 06:14:13 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nw1hM-0002k2-Jl;
+        id 1nw1hM-0002k4-KM;
         Tue, 31 May 2022 13:14:12 +0000
-Date:   Tue, 31 May 2022 21:13:54 +0800
+Date:   Tue, 31 May 2022 21:13:56 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Subject: kernel/time/hrtimer.c:276:20: warning: unused function
- 'is_migration_base'
-Message-ID: <202205312116.EvPoTOOK-lkp@intel.com>
+To:     KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: drivers/gpu/drm/ast/ast_dp.c:37:46: sparse: sparse: cast truncates
+ bits from constant value (ffffff00 becomes 0)
+Message-ID: <202205312143.Fbn8z9qP-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -62,96 +62,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcelo,
-
-FYI, the error/warning still remains.
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   8ab2afa23bd197df47819a87f0265c0ac95c5b6a
-commit: 81d741d3460ca422843ce0ec8351083f259c6166 hrtimer: Avoid unnecessary SMP function calls in clock_was_set()
-date:   10 months ago
-config: mips-randconfig-r033-20220530 (https://download.01.org/0day-ci/archive/20220531/202205312116.EvPoTOOK-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0776c48f9b7e69fa447bee57c7c0985caa856be9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=81d741d3460ca422843ce0ec8351083f259c6166
+commit: 594e9c04b5864b4b8b151ef4ba9521c59e0f5c54 drm/ast: Create the driver for ASPEED proprietory Display-Port
+date:   4 weeks ago
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220531/202205312143.Fbn8z9qP-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-14-g5a0004b5-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=594e9c04b5864b4b8b151ef4ba9521c59e0f5c54
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 81d741d3460ca422843ce0ec8351083f259c6166
+        git checkout 594e9c04b5864b4b8b151ef4ba9521c59e0f5c54
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/time/
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/ast/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
 
-   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_REALTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_MONOTONIC,
-   ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_BOOTTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_TAI,
-   ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
->> kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
-   static inline bool is_migration_base(struct hrtimer_clock_base
-   ^
->> kernel/time/hrtimer.c:1816:20: warning: unused function '__hrtimer_peek_ahead_timers'
-   static inline void __hrtimer_peek_ahead_timers(void)
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1
-   or $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project c825abd6b0198fb088d9752f556a70705bc99dfd)
-   Target: mips-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-c825abd6b0/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch certs crypto drivers fs include init ipc kernel lib mm scripts security sound source usr virt
+sparse warnings: (new ones prefixed by >>)
+>> drivers/gpu/drm/ast/ast_dp.c:37:46: sparse: sparse: cast truncates bits from constant value (ffffff00 becomes 0)
+   drivers/gpu/drm/ast/ast_dp.c:278:66: sparse: sparse: cast truncates bits from constant value (ffffff00 becomes 0)
+   drivers/gpu/drm/ast/ast_dp.c:280:66: sparse: sparse: cast truncates bits from constant value (ffffff00 becomes 0)
+   drivers/gpu/drm/ast/ast_dp.c:281:66: sparse: sparse: cast truncates bits from constant value (ffffff00 becomes 0)
 
+vim +37 drivers/gpu/drm/ast/ast_dp.c
 
-vim +/is_migration_base +276 kernel/time/hrtimer.c
-
-c0a3132963db68 kernel/hrtimer.c      Thomas Gleixner           2006-01-09  275  
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04 @276  static inline bool is_migration_base(struct hrtimer_clock_base *base)
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  277  {
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  278  	return false;
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  279  }
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  280  
-
-:::::: The code at line 276 was first introduced by commit
-:::::: 5d2295f3a93b04986d069ebeaf5b07725f9096c1 hrtimer: Add a missing bracket and hide `migration_base' on !SMP
-
-:::::: TO: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+     9	
+    10	int ast_astdp_read_edid(struct drm_device *dev, u8 *ediddata)
+    11	{
+    12		struct ast_private *ast = to_ast_private(dev);
+    13		u8 i = 0, j = 0;
+    14	
+    15		/*
+    16		 * CRD1[b5]: DP MCU FW is executing
+    17		 * CRDC[b0]: DP link success
+    18		 * CRDF[b0]: DP HPD
+    19		 * CRE5[b0]: Host reading EDID process is done
+    20		 */
+    21		if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, ASTDP_MCU_FW_EXECUTING) &&
+    22			ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDC, ASTDP_LINK_SUCCESS) &&
+    23			ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF, ASTDP_HPD) &&
+    24			ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
+    25									ASTDP_HOST_EDID_READ_DONE_MASK))) {
+    26			goto err_astdp_edid_not_ready;
+    27		}
+    28	
+    29		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5, (u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
+    30								0x00);
+    31	
+    32		for (i = 0; i < 32; i++) {
+    33			/*
+    34			 * CRE4[7:0]: Read-Pointer for EDID (Unit: 4bytes); valid range: 0~64
+    35			 */
+    36			ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE4,
+  > 37						(u8) ~ASTDP_EDID_READ_POINTER_MASK, (u8) i);
+    38			j = 0;
+    39	
+    40			/*
+    41			 * CRD7[b0]: valid flag for EDID
+    42			 * CRD6[b0]: mirror read pointer for EDID
+    43			 */
+    44			while ((ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD7,
+    45					ASTDP_EDID_VALID_FLAG_MASK) != 0x01) ||
+    46				(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD6,
+    47							ASTDP_EDID_READ_POINTER_MASK) != i)) {
+    48				/*
+    49				 * Delay are getting longer with each retry.
+    50				 * 1. The Delays are often 2 loops when users request "Display Settings"
+    51				 *	  of right-click of mouse.
+    52				 * 2. The Delays are often longer a lot when system resume from S3/S4.
+    53				 */
+    54				mdelay(j+1);
+    55	
+    56				if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1,
+    57								ASTDP_MCU_FW_EXECUTING) &&
+    58					ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDC,
+    59								ASTDP_LINK_SUCCESS) &&
+    60					ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF, ASTDP_HPD))) {
+    61					goto err_astdp_jump_out_loop_of_edid;
+    62				}
+    63	
+    64				j++;
+    65				if (j > 200)
+    66					goto err_astdp_jump_out_loop_of_edid;
+    67			}
+    68	
+    69			*(ediddata) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT,
+    70								0xD8, ASTDP_EDID_READ_DATA_MASK);
+    71			*(ediddata + 1) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD9,
+    72									ASTDP_EDID_READ_DATA_MASK);
+    73			*(ediddata + 2) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDA,
+    74									ASTDP_EDID_READ_DATA_MASK);
+    75			*(ediddata + 3) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDB,
+    76									ASTDP_EDID_READ_DATA_MASK);
+    77	
+    78			if (i == 31) {
+    79				/*
+    80				 * For 128-bytes EDID_1.3,
+    81				 * 1. Add the value of Bytes-126 to Bytes-127.
+    82				 *		The Bytes-127 is Checksum. Sum of all 128bytes should
+    83				 *		equal 0	(mod 256).
+    84				 * 2. Modify Bytes-126 to be 0.
+    85				 *		The Bytes-126 indicates the Number of extensions to
+    86				 *		follow. 0 represents noextensions.
+    87				 */
+    88				*(ediddata + 3) = *(ediddata + 3) + *(ediddata + 2);
+    89				*(ediddata + 2) = 0;
+    90			}
+    91	
+    92			ediddata += 4;
+    93		}
+    94	
+    95		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5, (u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
+    96								ASTDP_HOST_EDID_READ_DONE);
+    97	
+    98		return 0;
+    99	
+   100	err_astdp_jump_out_loop_of_edid:
+   101		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
+   102								(u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
+   103								ASTDP_HOST_EDID_READ_DONE);
+   104		return (~(j+256) + 1);
+   105	
+   106	err_astdp_edid_not_ready:
+   107		if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, ASTDP_MCU_FW_EXECUTING)))
+   108			return (~0xD1 + 1);
+   109		if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDC, ASTDP_LINK_SUCCESS)))
+   110			return (~0xDC + 1);
+   111		if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF, ASTDP_HPD)))
+   112			return (~0xDF + 1);
+   113		if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5, ASTDP_HOST_EDID_READ_DONE_MASK)))
+   114			return (~0xE5 + 1);
+   115	
+   116		return	0;
+   117	}
+   118	
 
 -- 
 0-DAY CI Kernel Test Service

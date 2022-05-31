@@ -2,268 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51541539494
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A84453949C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345964AbiEaP6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 11:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
+        id S1345963AbiEaP7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 11:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235314AbiEaP6u (ORCPT
+        with ESMTP id S1345975AbiEaP7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 11:58:50 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABA811A2F;
-        Tue, 31 May 2022 08:58:49 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id u12so1866820eja.8;
-        Tue, 31 May 2022 08:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dL+hwlnyQfBxIjai3EdOmMP0TtLf4Hp9ALwZGNm7s1I=;
-        b=XOubp5zgtznPb77Ok3lMua3tuOw6RGrccijXoaXIYI6B+YlKY85FdBFyGmDUI1t+BQ
-         6I2rYAgxP1S24Hdy94cWBMCl4MyTEyNUtOOovqJ8p6KF22IRaODdwVa3Q3rIHTb92EFr
-         vSKrNzDXaNLxve32W6um0RIWYlgqC+a0s+dZdNdHfjPvWyYQt+36s/HLQbIXDgoiQC0x
-         EmD5lbGgtysNvTdXKlZZm/r2Nx8cC5l1w9moz2XHkpcnDVLwPBv/HTe3cPJwIK4H+xsL
-         iMu+ki2J26ypNdTZ2ltEqN1XqQowjYVR/mTPKYRs1tWmJD24bL0vdhXjdUqWICQU7/D+
-         cndw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dL+hwlnyQfBxIjai3EdOmMP0TtLf4Hp9ALwZGNm7s1I=;
-        b=wZrcW02HaNV7klJySm7k0Z1SeJFHZUgz4kRO4sHRADHNc95suzZ0zmmzuj2y6yXsQ6
-         AMx1Q6yL1diLSBG9h0ostRXXsi7xjj4jH0z9UqCpZaJZcscsavVuo+KCif7b8l4lyqxE
-         YpSzfEXdFJ/iXTxcxvizIu7yMutChhLYNPvF1Q+cEVzDg3PLc9GzoBrJG36qeiBUNpHO
-         ttPlZBwHQjsoh8LBHmp6g20Nb5AvDNtYCusTQdr1GaAeMgvhjm8ny+kdE1xJhkNRwQPZ
-         xGdYhcUxF5nH1emnf1OCuA7w0IIdn9POGMsxp5o1Se5UpihJO5RwFy1JUn3ed+g8LFHS
-         g5PA==
-X-Gm-Message-State: AOAM530MgAj0fwPRnyCl0d+kmTUcVHF/sDvDAg9HtKfTX+K4kvcnBlMY
-        X4dYT5KU+5AlizBlilRg3hI=
-X-Google-Smtp-Source: ABdhPJxJKg+EefuQIDZlUs/hl/kmxPY3U2eFBxdlW2gOWQ2YIvGn2x8FMhH2IVwpjNLjdE7Drm8C2Q==
-X-Received: by 2002:a17:907:724b:b0:6ff:2ed0:957 with SMTP id ds11-20020a170907724b00b006ff2ed00957mr20309634ejc.445.1654012728164;
-        Tue, 31 May 2022 08:58:48 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id h17-20020a1709060f5100b006f3ef214da6sm5203607ejj.12.2022.05.31.08.58.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 08:58:47 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <bf76a63c-c687-34bf-4c46-ecc9cea575eb@redhat.com>
-Date:   Tue, 31 May 2022 17:58:39 +0200
+        Tue, 31 May 2022 11:59:15 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2048.outbound.protection.outlook.com [40.107.236.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AA59AE62
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:59:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hB6bMUtfEHGYrdQvfmONJ5u01h5OKKkU3XgQ/L2HUEdN4c9PsShRmrbX8CNK+Qjg0tcUrI5qjBiZvvYevciNKi15kuAaksGSmNo4aZtxOymVdEq6phhhKXaWyrQloa5vp0e656gdJyeqZ4kvVN7OVdU+HrDTQh2h7BzJ6SRa8/HrVa1De6Q37tv6UCDZ1hhJpAbxFcdgK4FeK6XmB3FEB8LBGIHW8NDP1dnuEwqSDUnjoUnLebBxmyH1eXk+t+miLNuSkiIIvbqFS/eO0imr9+Au8z7+NqEXrCXoCL4dhE8RYBnmhuL7Wpe4Oe1ltFiP6h3zuXKZcO58FqGDqIo1qw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=l7CeqyMG66SAGO16LSNszkZXO4j3V6e7XBzodLqnIwE=;
+ b=hxAzlSXX0I+NNntloefk7EN+RM0xmmKfKyry+JXSXJLY74BbKqO5u9Azi1GjXT//qOFh15ye+yYidXBENebaRvQiB4r+WX3JO4w12DaaU/jXdLgAHKLjHIUwb3/DGqXfeKLhSd5Z9LsnmRzNDTyqQokWJJoeyz88V7kVQ/XhtziUchRaNTy94SAdhd53DF3yGILSP73ocbStjFgB2nEeLZLDW+W1z1Yz88PrOrHXAk5xJHy59V1rRNKs8zFHg0thBHBMbWWxgbqv9W4k4ijCPBtrjXFqXWCqGrSTUrouAc/olGZF4WILOlM+mrJW5RhJt4wuOyhtLKfrEcvbgA6wLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=l7CeqyMG66SAGO16LSNszkZXO4j3V6e7XBzodLqnIwE=;
+ b=NfTTZyqroxWgT5YgOJRd2bHQ+bLM2g7POj9ULhhlLagouE8DG9BwSGy3UswYUyyboOJz/ZbuRiuMPtioNSqJuMSJ1VIjSvtF+hCfhZPCdVrgaiN1alTMPvQV+/QzHRD/9QhhhtiLmV8SO/WRvERU1gc3wBTScHlrz0tDJ+r1qGHm2fC7A1skab5KWnoJWT2B/ubgvWUB73XVCbf8b5Gj/blqvjW6496/QxufnVdZuEjbw5ZYVP0qmfAG/vP4h+iO+7UTsxspdDm3poD/Lsc8jcVQpWz7RCZph9rn9SB+cuHODrXnd3QByd8IAvwguSgmnMlIO//o9gmgGLgU5m1+mg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by MWHPR12MB1534.namprd12.prod.outlook.com (2603:10b6:301:10::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.17; Tue, 31 May
+ 2022 15:59:06 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::2484:51da:d56f:f1a5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::2484:51da:d56f:f1a5%9]) with mapi id 15.20.5314.012; Tue, 31 May 2022
+ 15:59:06 +0000
+Date:   Tue, 31 May 2022 12:59:04 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        iommu@lists.linux-foundation.org,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 01/12] iommu/vt-d: Use iommu_get_domain_for_dev() in
+ debugfs
+Message-ID: <20220531155904.GA3726345@nvidia.com>
+References: <20220527063019.3112905-1-baolu.lu@linux.intel.com>
+ <20220527063019.3112905-2-baolu.lu@linux.intel.com>
+ <20220527145910.GQ1343366@nvidia.com>
+ <eda4d688-257b-d12a-56c0-0f9d3a10ef8c@linux.intel.com>
+ <20220530121412.GX1343366@nvidia.com>
+ <42623a73-c288-1c0d-7021-93caff4ffb6f@linux.intel.com>
+ <0b7bd793-a3c7-e7e7-8ef0-214dd5b98f05@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0b7bd793-a3c7-e7e7-8ef0-214dd5b98f05@arm.com>
+X-ClientProxiedBy: BL0PR0102CA0007.prod.exchangelabs.com
+ (2603:10b6:207:18::20) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [RFC PATCH v6 064/104] KVM: TDX: Add helper assembly function to
- TDX vcpu
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>
-References: <cover.1651774250.git.isaku.yamahata@intel.com>
- <f40b7827026d65963fea84d4af78cb1cbca85149.1651774250.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <f40b7827026d65963fea84d4af78cb1cbca85149.1651774250.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a307f1e8-2323-4d98-833e-08da431e7d7a
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1534:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB153464E4E9CAED81922825DBC2DC9@MWHPR12MB1534.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V2DHnXs7kRfOpmgu8rui1Ndu7f9poWXty2Ejo3s5EBYf5zazHL0izzHTYbc1NNixHMfH71fy9dAgNYukUJVsAJ+Le/fnStJziInagESJsQH0VG1ymEhHQxt0rGRjkvw1MHE9bUR/hP5kridWAu9GV5gBKj4tPvgQwEtrLapoDXF+4B7aNAUvQY0zLi1v+9ajIOWKUM2yLsPCNhWlVxb03qVNzyy6qt6EVKJv+a/e80VcMVxusOkUmfEe5Aw8AcGq+E6NLL3G+LCVzzUZC0OJSPtPuv+Sk72JfSImg4QI/ItPxZ7DhW8yxv6oHBDV0fk+IQj8eKr/fK3M/zc6+R+p0mQr4jkzOEfd0w8v3AZ8stUGfY5O8ipT7akq4b8+eHt9Ix8zTUY2NjTwksiIE2BUpPkcUejnPc3GbgLPjADTI7hkdoCjijqHDOs8IlWsLM9VzOk9dA6MRfzT6LgcMIWsW2eUFPyYgn2ebHEkxH7imREG0nRnquF66TIMC+zaTiGefCSW05TZB9meuArWnBVD5Ty+mNKPX6ChT5fZhS8LFMBVVyfuHs54lOgC40yTrWyBY7l01S7kpBPa4fEaOtVqWM0zn5OBil3nsfWp8dnTOmc5Jt3xhEXYsyLfxx+RPNS4nm3pkKPJzFARyhr/5CLaAA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(6506007)(66946007)(66476007)(4326008)(66556008)(8676002)(186003)(5660300002)(6486002)(33656002)(508600001)(4744005)(83380400001)(8936002)(2906002)(54906003)(36756003)(316002)(6916009)(38100700002)(1076003)(2616005)(26005)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y24wS3Myc2E1QTRuNERCYjlobTB3U2srTWFwb3Y1dGh4RkpiZ1hXSUpCNWZo?=
+ =?utf-8?B?WTZ2dHdMa3J6N21rNkZLbGZ6dHhXczJkNCtDVmE2WVF4b1dqZG02TGNFcWM3?=
+ =?utf-8?B?UzQvalZMU1pkMTVibS9Pd0NsTE9KWWp0VEV5N0VJbk9uek9GY1NMNTRjSFVy?=
+ =?utf-8?B?aURtQnFWcnE0a0lXdnhXdUROYzlURFhzbDdKZHBGTy81MS91c204SUFVTVVu?=
+ =?utf-8?B?dkhicFBXRTlqTVZTeUlycDd4V1d5WnhYdU1PV2R3dU0yVnE3bE1lWVluYTFy?=
+ =?utf-8?B?RzRPK0FaTjlFN1o2Rzk4aEJNdTVIcGtwSTNrZzcrNFVMWHdGVlRjT1pXanNl?=
+ =?utf-8?B?blkyWTl0dmRaK21jY0hUTmNKYWYwVWFLclVqNVlTUGt5ZUYvMWF6RHBwaW42?=
+ =?utf-8?B?aHNuWjB4UjFOOHNhVUtYNGVobGgydzQ5STRJeFhuWHFvTW9UdVY0RHdQa0Ur?=
+ =?utf-8?B?aFdXQW1uZ3d6blcwNy8zRHlpRzRIa0FvT1JtYm40QWJIakxoaENiK1d4ZjN0?=
+ =?utf-8?B?b24rT0NxZHZ5TEw3Yms4cUhQNnNHTjdiNmhVTDhkN25zVFlhMFNralBZYzZB?=
+ =?utf-8?B?MStpaFNMY2hPSzNOb2sySXE4RXYxL1dkOVk0STdmVnlOcnNpNHYwWjk2UW1Y?=
+ =?utf-8?B?bmMyc3JzQzUwS0RDYnl2M1pvdzRZRExPeStkbGJlc2p3dGZWbHJxVEw3WlRq?=
+ =?utf-8?B?M2FnTHlVbVo2ZnAwblRWWmtVbFNRR0FtNTBTN3owMU9Ud1grZEJlRzY2UFNZ?=
+ =?utf-8?B?NWpKdDhvZFdQRE9CcGhTRTJVbm5FcEIxUDY0cFFKYWZ1QUpIVFozc0xkWnZX?=
+ =?utf-8?B?Nm5XdXVBVE1jL0NqTkxCbzlmZTA3cHo2dm9pYTFCMzdiSE9aWjFCOUZITHZ1?=
+ =?utf-8?B?NTlqSHZGalBjektESFZ6WXJYYzhaYlF6dHp0UEF4T2FoYkkxSmRETkhSeXc4?=
+ =?utf-8?B?VGc0bTFqTzRKa083WEZ5eHRpQ3VtVlgrMUdMTHlBU3l2ekJBSFg0VVVvTWJM?=
+ =?utf-8?B?aENLamZEdjFiNFNyeDhXdXEwL29XUEtTb01PMWVCZHdjMm80K0NwRGlldXp4?=
+ =?utf-8?B?QjV6allVaHRXYkdUOW05VVNnYkIyVlp6bEIrelVxRW4yRlJoVklPeTNqZ0p6?=
+ =?utf-8?B?cExmTjhsVitUbldwekdpLzhVME9DZkNuRDZZL1pjLzJHVjFBRTZDcE1hdklx?=
+ =?utf-8?B?Q2dPRDhVMC91b2JXM0J4U2lZc2haeXB3UHV6bkZVYTVYb0F0NFJ5bkYyVmJy?=
+ =?utf-8?B?dmQ1ZDd2bXRaRll6RE1BUU81M0xTMXFBSlVtZXg0Tm9kN3Jhd0psUzNndC9N?=
+ =?utf-8?B?ZlRNT1l6Uk5hQXlpc21ObG4rRXdxdmE5RVhXek1sdm50VGhvTG93VTg5NmlU?=
+ =?utf-8?B?bGMyVWdIcWl4U01iNVRqN1AxdVp0dWh1VGZlZ05qR3VTcE16bWdxekx6Sm1I?=
+ =?utf-8?B?bkltdlVpaVpLeDlCQVQ0MXZWNkY1N0JoeFA0OU9FdFVCYUdIdzhvOVlIRlJD?=
+ =?utf-8?B?bHZYcjZnTDdYUFhpMFFSQS92ODhrQXl4M1phTDJLdWpIQlFBNU41WWdMU2I0?=
+ =?utf-8?B?WlNaTGI1Uk1pd2x6bC9RZnlBdTRoM0FoYTB6UC9lZHFxbjU4M0hVSHZaTERV?=
+ =?utf-8?B?R0FCTXlxb0VYdnRKWGZLbWJvdTIwWklDOFVPZko4Z25QaU5nejZlcFhoZWtn?=
+ =?utf-8?B?QStvMStiU0hVb1d3ZDZpN3pESmZrdEF5Y2ppdVE5bFRYR2pEeUxjbVB1N3pk?=
+ =?utf-8?B?TE8zQXdzZ256WjBQL2JiRThjcWJKeHFqVzhvM2xOS0RhNUloVkNSTTVOYkJw?=
+ =?utf-8?B?ajJETHNGQUcxd2Qza0JTcWphS0tJMVRKYXVkcUNzbEJ5SCs0ZitkVWNhb3VL?=
+ =?utf-8?B?NFQ1TmxCN3pjdEFUV2tiVDFubytYUWJBSkxJNmZmU09MVkZ3TUdwZGYwdHkr?=
+ =?utf-8?B?L2ZYS29jVXprSlJFL2FuaGV5dmN6U0hPMEV1bytBcUVCOWh5ZEx0NHlNeE95?=
+ =?utf-8?B?N3RjUW5JS3h1dTFRVFE4dUdCcGpwRkNWK0pJa1IzM3VQMHpyYTN4Qm5ESHNl?=
+ =?utf-8?B?VDkwYlI2RERSZ05XSjZleTRxS2xFb25jNjFxc1FwenQ3S2VlTmgrOE4vTFpY?=
+ =?utf-8?B?K3psN1lVMlgzUmJ4N2c5ZmpYVEhxT3d3dnRld2x3Y2dqV3VXMUhhR0VlZWg5?=
+ =?utf-8?B?RzBQOW9WN3NHOWtzTFNDNm1lRWIzckp4UUxwUFNhRnA2aU1HdE9DczFnVFZD?=
+ =?utf-8?B?azBRQXhwTVFJQkduTHJ3eWEwZFl0bnRVdjYrV3ljVHY1dXNIRjVINURNTEQ5?=
+ =?utf-8?B?YW1FajNDY0RyUmRXeGQzOEZYcDltU0Y5V1FOMjB0ZUJmK3YrcDBSUT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a307f1e8-2323-4d98-833e-08da431e7d7a
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2022 15:59:06.0700
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Jq75xuf991s5r2XM1eajtpQsgXPFNZLvSh1iDRmkEtgdUZ70/HUKFaoCwH7T8w+S
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1534
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/22 20:14, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Tue, May 31, 2022 at 02:52:28PM +0100, Robin Murphy wrote:
+
+> > +                break;
+> > +            pgtable_walk_level(m, phys_to_virt(phys_addr),
 > 
-> TDX defines an API to run TDX vcpu with its own ABI.  Define an assembly
-> helper function to run TDX vcpu to hide the special ABI so that C code can
-> call it with function call ABI.
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Also, obligatory reminder that pfn_valid() only means that pfn_to_page()
+> gets you a valid struct page. Whether that page is direct-mapped kernel
+> memory or not is a different matter.
 
-"ret" needs to be "RET" to support SLS mitigation.
+Even though this is debugfs, if the operation is sketchy like that and
+can theortically crash the kernel the driver should test capabilities,
+CAP_SYS_RAWIO or something may be appropriate. I don't think we have a
+better cap for 'userspace may crash the kernel'
 
-Paolo
-
-> ---
->   arch/x86/kvm/vmx/vmenter.S | 146 +++++++++++++++++++++++++++++++++++++
->   1 file changed, 146 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-> index 435c187927c4..f655bcca0e93 100644
-> --- a/arch/x86/kvm/vmx/vmenter.S
-> +++ b/arch/x86/kvm/vmx/vmenter.S
-> @@ -2,6 +2,7 @@
->   #include <linux/linkage.h>
->   #include <asm/asm.h>
->   #include <asm/bitsperlong.h>
-> +#include <asm/errno.h>
->   #include <asm/kvm_vcpu_regs.h>
->   #include <asm/nospec-branch.h>
->   #include <asm/segment.h>
-> @@ -28,6 +29,13 @@
->   #define VCPU_R15	__VCPU_REGS_R15 * WORD_SIZE
->   #endif
->   
-> +#ifdef CONFIG_INTEL_TDX_HOST
-> +#define TDENTER 		0
-> +#define EXIT_REASON_TDCALL	77
-> +#define TDENTER_ERROR_BIT	63
-> +#define seamcall		.byte 0x66,0x0f,0x01,0xcf
-> +#endif
-> +
->   .section .noinstr.text, "ax"
->   
->   /**
-> @@ -328,3 +336,141 @@ SYM_FUNC_START(vmx_do_interrupt_nmi_irqoff)
->   	pop %_ASM_BP
->   	RET
->   SYM_FUNC_END(vmx_do_interrupt_nmi_irqoff)
-> +
-> +#ifdef CONFIG_INTEL_TDX_HOST
-> +
-> +.pushsection .noinstr.text, "ax"
-> +
-> +/**
-> + * __tdx_vcpu_run - Call SEAMCALL(TDENTER) to run a TD vcpu
-> + * @tdvpr:	physical address of TDVPR
-> + * @regs:	void * (to registers of TDVCPU)
-> + * @gpr_mask:	non-zero if guest registers need to be loaded prior to TDENTER
-> + *
-> + * Returns:
-> + *	TD-Exit Reason
-> + *
-> + * Note: KVM doesn't support using XMM in its hypercalls, it's the HyperV
-> + *	 code's responsibility to save/restore XMM registers on TDVMCALL.
-> + */
-> +SYM_FUNC_START(__tdx_vcpu_run)
-> +	push %rbp
-> +	mov  %rsp, %rbp
-> +
-> +	push %r15
-> +	push %r14
-> +	push %r13
-> +	push %r12
-> +	push %rbx
-> +
-> +	/* Save @regs, which is needed after TDENTER to capture output. */
-> +	push %rsi
-> +
-> +	/* Load @tdvpr to RCX */
-> +	mov %rdi, %rcx
-> +
-> +	/* No need to load guest GPRs if the last exit wasn't a TDVMCALL. */
-> +	test %dx, %dx
-> +	je 1f
-> +
-> +	/* Load @regs to RAX, which will be clobbered with $TDENTER anyways. */
-> +	mov %rsi, %rax
-> +
-> +	mov VCPU_RBX(%rax), %rbx
-> +	mov VCPU_RDX(%rax), %rdx
-> +	mov VCPU_RBP(%rax), %rbp
-> +	mov VCPU_RSI(%rax), %rsi
-> +	mov VCPU_RDI(%rax), %rdi
-> +
-> +	mov VCPU_R8 (%rax),  %r8
-> +	mov VCPU_R9 (%rax),  %r9
-> +	mov VCPU_R10(%rax), %r10
-> +	mov VCPU_R11(%rax), %r11
-> +	mov VCPU_R12(%rax), %r12
-> +	mov VCPU_R13(%rax), %r13
-> +	mov VCPU_R14(%rax), %r14
-> +	mov VCPU_R15(%rax), %r15
-> +
-> +	/*  Load TDENTER to RAX.  This kills the @regs pointer! */
-> +1:	mov $TDENTER, %rax
-> +
-> +2:	seamcall
-> +
-> +	/* Skip to the exit path if TDENTER failed. */
-> +	bt $TDENTER_ERROR_BIT, %rax
-> +	jc 4f
-> +
-> +	/* Temporarily save the TD-Exit reason. */
-> +	push %rax
-> +
-> +	/* check if TD-exit due to TDVMCALL */
-> +	cmp $EXIT_REASON_TDCALL, %ax
-> +
-> +	/* Reload @regs to RAX. */
-> +	mov 8(%rsp), %rax
-> +
-> +	/* Jump on non-TDVMCALL */
-> +	jne 3f
-> +
-> +	/* Save all output from SEAMCALL(TDENTER) */
-> +	mov %rbx, VCPU_RBX(%rax)
-> +	mov %rbp, VCPU_RBP(%rax)
-> +	mov %rsi, VCPU_RSI(%rax)
-> +	mov %rdi, VCPU_RDI(%rax)
-> +	mov %r10, VCPU_R10(%rax)
-> +	mov %r11, VCPU_R11(%rax)
-> +	mov %r12, VCPU_R12(%rax)
-> +	mov %r13, VCPU_R13(%rax)
-> +	mov %r14, VCPU_R14(%rax)
-> +	mov %r15, VCPU_R15(%rax)
-> +
-> +3:	mov %rcx, VCPU_RCX(%rax)
-> +	mov %rdx, VCPU_RDX(%rax)
-> +	mov %r8,  VCPU_R8 (%rax)
-> +	mov %r9,  VCPU_R9 (%rax)
-> +
-> +	/*
-> +	 * Clear all general purpose registers except RSP and RAX to prevent
-> +	 * speculative use of the guest's values.
-> +	 */
-> +	xor %rbx, %rbx
-> +	xor %rcx, %rcx
-> +	xor %rdx, %rdx
-> +	xor %rsi, %rsi
-> +	xor %rdi, %rdi
-> +	xor %rbp, %rbp
-> +	xor %r8,  %r8
-> +	xor %r9,  %r9
-> +	xor %r10, %r10
-> +	xor %r11, %r11
-> +	xor %r12, %r12
-> +	xor %r13, %r13
-> +	xor %r14, %r14
-> +	xor %r15, %r15
-> +
-> +	/* Restore the TD-Exit reason to RAX for return. */
-> +	pop %rax
-> +
-> +	/* "POP" @regs. */
-> +4:	add $8, %rsp
-> +	pop %rbx
-> +	pop %r12
-> +	pop %r13
-> +	pop %r14
-> +	pop %r15
-> +
-> +	pop %rbp
-> +	ret
-> +
-> +5:	cmpb $0, kvm_rebooting
-> +	je 6f
-> +	mov $-EFAULT, %rax
-> +	jmp 4b
-> +6:	ud2
-> +	_ASM_EXTABLE(2b, 5b)
-> +
-> +SYM_FUNC_END(__tdx_vcpu_run)
-> +
-> +.popsection
-> +
-> +#endif
-
+Jason

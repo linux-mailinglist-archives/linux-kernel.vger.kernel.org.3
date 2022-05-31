@@ -2,101 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C499538E62
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C591538E65
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245618AbiEaKCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 06:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
+        id S245495AbiEaKBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 06:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245471AbiEaKAa (ORCPT
+        with ESMTP id S245653AbiEaKBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 06:00:30 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C6284A14;
-        Tue, 31 May 2022 03:00:29 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id t5so16807078edc.2;
-        Tue, 31 May 2022 03:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=dox2mMkLl/5c9D2gga469zGN9zQ+j614KEWkuEZ4MV4=;
-        b=TtHtny7NdbtnaKMNgHxxZ1P6YiZMqlmrfAD504KQpkpUdOed8kz6s4qe73Oso8t6aL
-         GH45XnJdlS9fPbcsu06cjzlIDPfSLe4vdmLZk7L0colYmkysDdcFQUfaXrpgfhWM8Uu9
-         mwNsso9fA2grp70nK3W+gfRLzK4em/GxgeHMyOxZAQwF2uHJZHUlKeoWDTsO9Pf3mIoR
-         +MU2pw1Hj93sIubQtkBk95FwjgyvioAIuxLDOXetbKFAI5WclUufvdU4gR+xUVC90tO0
-         kjPZ8sljqOzsGufGGBR2iVo/n5ohkrTAeCPS+lQRYxTn5nYYxcG4Bmjfy2K5n7PsifJS
-         ohDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dox2mMkLl/5c9D2gga469zGN9zQ+j614KEWkuEZ4MV4=;
-        b=R9EQlfnogdhovkuWtbKi7WmNKNGzsgbZzVQcou2RUYVzeU3Z1K/Q9/0Hf/VA291VGC
-         PJcI1he9qf43XlhXd2zDECwCEuridMqly+xh9uy00J012va49lpQX/xDBIDxKO0Gq1Hr
-         89H2ezS3LCdFQZshRPneapEvds22w3qMl88tY9CWlbIn/1PgZ4r/swKkLF5ylb0jR5Au
-         a5uON4cJc9MAWGoR2n4eD785pwbtlKXH3XvsV7/i6g56lanyyzkxtA//uzh+PF1aYNwE
-         KYcIkbTyT0ODLPgrInmMBC649i4ufFJ/IyWu4JnS70uDwXJdU1CWb4+VRiiui9czkC8h
-         43og==
-X-Gm-Message-State: AOAM533ay4mCTKdrXplfP9GfFptIV0dqH2UB+WIH6E3x6U8zFUKUOAck
-        UZRRf92qB91xKHUnRm8wH7BPVbp6SLtYTA==
-X-Google-Smtp-Source: ABdhPJwaDMI96aKfbI0lqqtNolmvi5yHB6A4EjRXIsAbd+0AZ25rrn/qiMxaKibl1aGvqzYNEfcjIQ==
-X-Received: by 2002:aa7:db02:0:b0:42d:c3ba:9c86 with SMTP id t2-20020aa7db02000000b0042dc3ba9c86mr14927377eds.337.1653991228918;
-        Tue, 31 May 2022 03:00:28 -0700 (PDT)
-Received: from able.fritz.box (p5b0ea02f.dip0.t-ipconnect.de. [91.14.160.47])
-        by smtp.gmail.com with ESMTPSA id r13-20020a056402018d00b0042617ba6389sm582062edv.19.2022.05.31.03.00.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 03:00:28 -0700 (PDT)
-From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
-        <ckoenig.leichtzumerken@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Cc:     christian.koenig@amd.com, alexander.deucher@amd.com,
-        daniel@ffwll.ch, viro@zeniv.linux.org.uk,
-        akpm@linux-foundation.org, hughd@google.com,
-        andrey.grodzovsky@amd.com
-Subject: [PATCH 13/13] drm/tegra: use drm_oom_badness
-Date:   Tue, 31 May 2022 12:00:07 +0200
-Message-Id: <20220531100007.174649-14-christian.koenig@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220531100007.174649-1-christian.koenig@amd.com>
-References: <20220531100007.174649-1-christian.koenig@amd.com>
+        Tue, 31 May 2022 06:01:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C079B18A;
+        Tue, 31 May 2022 03:01:02 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9D7961F91B;
+        Tue, 31 May 2022 10:01:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1653991261; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GeqE+PYzKxVerAAZsXdKHVxse+8dsGkPV10Yy1P8Zq4=;
+        b=Yr/3KPPNeLlTDw3o354CqM+pwdHC9g0oeTxl7lPpC7BYLf9Iz2EQTFRYt3CHzZOA5fqHqW
+        gvL5skpaQJHyBAlmv1v/urQy0w1Cyq3zgx8QvCJxgHQnHi4sWLmRZ2vhZbSW1XWI0EZDky
+        iIT0HfQXuq5fyMtrL5LOieHEGR5qCxo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1653991261;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GeqE+PYzKxVerAAZsXdKHVxse+8dsGkPV10Yy1P8Zq4=;
+        b=8kV0na10f0JszYcu3vpSjcQ3CWyIaxDfSYGbdJyGXfHQuKmZUfTz3QYkziO2yLNCpMgiUs
+        6lRcs8SuxgKMzQDg==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 8849D2C141;
+        Tue, 31 May 2022 10:01:01 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 43CCEA0633; Tue, 31 May 2022 12:01:01 +0200 (CEST)
+Date:   Tue, 31 May 2022 12:01:01 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     Paolo Valente <paolo.valente@unimore.it>, Jan Kara <jack@suse.cz>,
+        Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
+        cgroups@vger.kernel.org, linux-block <linux-block@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com
+Subject: Re: [PATCH -next v7 2/3] block, bfq: refactor the counting of
+ 'num_groups_with_pending_reqs'
+Message-ID: <20220531100101.pdnrpkxbapur5gsk@quack3.lan>
+References: <20220528095020.186970-1-yukuai3@huawei.com>
+ <20220528095020.186970-3-yukuai3@huawei.com>
+ <0D9355CE-F85B-4B1A-AEC3-F63DFC4B3A54@linaro.org>
+ <b9a4ea60-28e5-b7aa-0154-ad7481eafbd3@huawei.com>
+ <efe01dd1-0f99-dadf-956d-b0e80e1e602c@huawei.com>
+ <1803FD7E-9FB1-4A1E-BD6D-D6657006589A@unimore.it>
+ <a0d8452c-e421-45d3-b012-5355207fc0e1@huawei.com>
+ <81214347-3806-4F54-B60F-3E5A1A5EC84D@unimore.it>
+ <756631ee-6a85-303c-aca1-d60aaf477d0d@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <756631ee-6a85-303c-aca1-d60aaf477d0d@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows the OOM killer to make a better decision which process to reap.
+On Tue 31-05-22 17:33:25, Yu Kuai wrote:
+> 在 2022/05/31 17:19, Paolo Valente 写道:
+> > > Il giorno 31 mag 2022, alle ore 11:06, Yu Kuai <yukuai3@huawei.com> ha scritto:
+> > > 
+> > > 在 2022/05/31 16:36, Paolo VALENTE 写道:
+> > > > > Il giorno 30 mag 2022, alle ore 10:40, Yu Kuai <yukuai3@huawei.com> ha scritto:
+> > > > > 
+> > > > > 在 2022/05/30 16:34, Yu Kuai 写道:
+> > > > > > 在 2022/05/30 16:10, Paolo Valente 写道:
+> > > > > > > 
+> > > > > > > 
+> > > > > > > > Il giorno 28 mag 2022, alle ore 11:50, Yu Kuai <yukuai3@huawei.com> ha scritto:
+> > > > > > > > 
+> > > > > > > > Currently, bfq can't handle sync io concurrently as long as they
+> > > > > > > > are not issued from root group. This is because
+> > > > > > > > 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+> > > > > > > > bfq_asymmetric_scenario().
+> > > > > > > > 
+> > > > > > > > The way that bfqg is counted into 'num_groups_with_pending_reqs':
+> > > > > > > > 
+> > > > > > > > Before this patch:
+> > > > > > > > 1) root group will never be counted.
+> > > > > > > > 2) Count if bfqg or it's child bfqgs have pending requests.
+> > > > > > > > 3) Don't count if bfqg and it's child bfqgs complete all the requests.
+> > > > > > > > 
+> > > > > > > > After this patch:
+> > > > > > > > 1) root group is counted.
+> > > > > > > > 2) Count if bfqg have at least one bfqq that is marked busy.
+> > > > > > > > 3) Don't count if bfqg doesn't have any busy bfqqs.
+> > > > > > > 
+> > > > > > > Unfortunately, I see a last problem here. I see a double change:
+> > > > > > > (1) a bfqg is now counted only as a function of the state of its child
+> > > > > > >       queues, and not of also its child bfqgs
+> > > > > > > (2) the state considered for counting a bfqg moves from having pending
+> > > > > > >       requests to having busy queues
+> > > > > > > 
+> > > > > > > I'm ok with with (1), which is a good catch (you are lady explained
+> > > > > > > the idea to me some time ago IIRC).
+> > > > > > > 
+> > > > > > > Yet I fear that (2) is not ok.  A bfqq can become non busy even if it
+> > > > > > > still has in-flight I/O, i.e.  I/O being served in the drive.  The
+> > > > > > > weight of such a bfqq must still be considered in the weights_tree,
+> > > > > > > and the group containing such a queue must still be counted when
+> > > > > > > checking whether the scenario is asymmetric.  Otherwise service
+> > > > > > > guarantees are broken.  The reason is that, if a scenario is deemed as
+> > > > > > > symmetric because in-flight I/O is not taken into account, then idling
+> > > > > > > will not be performed to protect some bfqq, and in-flight I/O may
+> > > > > > > steal bandwidth to that bfqq in an uncontrolled way.
+> > > > > > Hi, Paolo
+> > > > > > Thanks for your explanation.
+> > > > > > My orginal thoughts was using weights_tree insertion/removal, however,
+> > > > > > Jan convinced me that using bfq_add/del_bfqq_busy() is ok.
+> > > > > >  From what I see, when bfqq dispatch the last request,
+> > > > > > bfq_del_bfqq_busy() will not be called from __bfq_bfqq_expire() if
+> > > > > > idling is needed, and it will delayed to when such bfqq get scheduled as
+> > > > > > in-service queue again. Which means the weight of such bfqq should still
+> > > > > > be considered in the weights_tree.
+> > > > > > I also run some tests on null_blk with "irqmode=2
+> > > > > > completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
+> > > > > > that service guarantees are still preserved on slow device.
+> > > > > > Do you this is strong enough to cover your concern?
+> > > > Unfortunately it is not.  Your very argument is what made be believe
+> > > > that considering busy queues was enough, in the first place.  But, as
+> > > > I found out, the problem is caused by the queues that do not enjoy
+> > > > idling.  With your patch (as well as in my initial version) they are
+> > > > not counted when they remain without requests queued.  And this makes
+> > > > asymmetric scenarios be considered erroneously as symmetric.  The
+> > > > consequence is that idling gets switched off when it had to be kept
+> > > > on, and control on bandwidth is lost for the victim in-service queues.
+> > > 
+> > > Hi，Paolo
+> > > 
+> > > Thanks for your explanation, are you thinking that if bfqq doesn't enjoy
+> > > idling, then such bfqq will clear busy after dispatching the last
+> > > request?
+> > > 
+> > > Please kindly correct me if I'm wrong in the following process:
+> > > 
+> > > If there are more than one bfqg that is activatied, then bfqqs that are
+> > > not enjoying idle are still left busy after dispatching the last
+> > > request.
+> > > 
+> > > details in __bfq_bfqq_expire:
+> > > 
+> > >         if (RB_EMPTY_ROOT(&bfqq->sort_list) &&
+> > >         ┊   !(reason == BFQQE_PREEMPTED &&
+> > >         ┊     idling_needed_for_service_guarantees(bfqd, bfqq))) {
+> > > -> idling_needed_for_service_guarantees will always return true,
+> > 
+> > It returns true only is the scenario is symmetric.  Not counting bfqqs
+> > with in-flight requests makes an asymmetric scenario be considered
+> > wrongly symmetric.  See function bfq_asymmetric_scenario().
+> 
+> Hi, Paolo
+> 
+> Do you mean this gap?
+> 
+> 1. io1 is issued from bfqq1(from bfqg1)
+> 2. bfqq1 dispatched this io, it's busy is cleared
+> 3. *before io1 is completed*, io2 is issued from bfqq2(bfqg2)
 
-Signed-off-by: Christian König <christian.koenig@amd.com>
----
- drivers/gpu/drm/tegra/drm.c | 1 +
- 1 file changed, 1 insertion(+)
+Yes. So as far as I understand Paolo is concerned about this scenario.
 
-diff --git a/drivers/gpu/drm/tegra/drm.c b/drivers/gpu/drm/tegra/drm.c
-index 9464f522e257..89ea4f658815 100644
---- a/drivers/gpu/drm/tegra/drm.c
-+++ b/drivers/gpu/drm/tegra/drm.c
-@@ -803,6 +803,7 @@ static const struct file_operations tegra_drm_fops = {
- 	.read = drm_read,
- 	.compat_ioctl = drm_compat_ioctl,
- 	.llseek = noop_llseek,
-+	.oom_badness = drm_oom_badness,
- };
- 
- static int tegra_drm_context_cleanup(int id, void *p, void *data)
+> 4. with this patchset, while dispatching io2 from bfqq2, the scenario
+> should be symmetric while it's considered wrongly asymmetric.
+
+But with this patchset, we will consider this scenario symmetric because at
+any point in time there is only one busy bfqq. Before, we considered this
+scenario asymmetric because two different bfq groups have bfqq in their
+weights_tree. So before this patchset
+idling_needed_for_service_guarantees() returned true, after this patchset
+the function returns false so we won't idle anymore and Paolo argues that
+bfqq1 does not get adequate protection from bfqq2 as a result.
+
+I agree with Paolo this seems possible. The fix is relatively simple though
+- instead of changing how weights_tree is used for weight raised queues as
+you did originally, I'd move the accounting of groups with pending requests
+to bfq_add/del_bfqq_busy() and bfq_completed_request().
+
+								Honza
 -- 
-2.25.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

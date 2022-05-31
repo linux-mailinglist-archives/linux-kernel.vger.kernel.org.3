@@ -2,75 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557FD538D93
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88A6538D98
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245127AbiEaJTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 05:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
+        id S245117AbiEaJVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 05:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245006AbiEaJTX (ORCPT
+        with ESMTP id S235515AbiEaJVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 05:19:23 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E827C62A26
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:19:20 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id q7so6831630wrg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unimore.it; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=Z28jpdTmHxjV8ax9hyrwR2GnHy5t21qrhC5BIev/QD4=;
-        b=gWX/C7SZ5pkAEgdZVPyWOQRd80HLkperu2WPySC+MFUBohcpCWfcQJhtrVx2cKD3Ac
-         JRPrAgFIitnn2lwg4slAq0slLqBjXPHRniO179F9GrIr3S03rdsEgFt3ap46Wj/vVEi4
-         eEpfb/+ljdaC4s7oBibdVp+sUfEhSKrV/tBC4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=Z28jpdTmHxjV8ax9hyrwR2GnHy5t21qrhC5BIev/QD4=;
-        b=J6p1zsnlVBK6xV7lZUfQaZIBJtWZPyWTMPbWs8Wjj1m7VSRfSMNflZLAUtyBICdBzf
-         t7pzy5cIGBnn6bUYUETRTAeeZX4MaiT4Ub0R4+esd6hmkx8opuTsYaEw39ld9Wgr/k7Q
-         OvhxP7HFzwgLN1PEIlCS32pD32rqEPhHC4n2APzW57LiMeND3H4WAwLforIKqiTzJCbt
-         TFrQrevxn9ooZoerhxSVpUCXMJScEo4aOaZIZOx9U/QG7He8af2JoQPr+Lw+VGy1IXYw
-         GMTdH6JJanglon8/Ri3S6bdh6fhLgDjQr3F111sfkH3fsMl56gXO1oM+oAIgZTkSlQkR
-         /t0w==
-X-Gm-Message-State: AOAM531wLqENYwzbN/lqUWfxR0aLVBiyE3XNBRYHL9/CCkPrCOnEqT4/
-        /BFsh5H9f7jwBaaDZ68U72mP
-X-Google-Smtp-Source: ABdhPJyf+Jl8eEykVrUxJYOL8Y/SCADMLo00CH+/x2YvCQXrFNJ7xKn2D2EbeDgEsLItIgGysSc6mQ==
-X-Received: by 2002:a05:6000:1acd:b0:20f:dae8:569d with SMTP id i13-20020a0560001acd00b0020fdae8569dmr35229996wry.491.1653988759475;
-        Tue, 31 May 2022 02:19:19 -0700 (PDT)
-Received: from mbp-di-paolo.station (net-93-144-98-177.cust.vodafonedsl.it. [93.144.98.177])
-        by smtp.gmail.com with ESMTPSA id u1-20020adfae41000000b0020c5253d926sm11108335wrd.114.2022.05.31.02.19.18
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 31 May 2022 02:19:19 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH -next v7 2/3] block, bfq: refactor the counting of
- 'num_groups_with_pending_reqs'
-From:   Paolo Valente <paolo.valente@unimore.it>
-In-Reply-To: <a0d8452c-e421-45d3-b012-5355207fc0e1@huawei.com>
-Date:   Tue, 31 May 2022 11:19:15 +0200
-Cc:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
-        Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <81214347-3806-4F54-B60F-3E5A1A5EC84D@unimore.it>
-References: <20220528095020.186970-1-yukuai3@huawei.com>
- <20220528095020.186970-3-yukuai3@huawei.com>
- <0D9355CE-F85B-4B1A-AEC3-F63DFC4B3A54@linaro.org>
- <b9a4ea60-28e5-b7aa-0154-ad7481eafbd3@huawei.com>
- <efe01dd1-0f99-dadf-956d-b0e80e1e602c@huawei.com>
- <1803FD7E-9FB1-4A1E-BD6D-D6657006589A@unimore.it>
- <a0d8452c-e421-45d3-b012-5355207fc0e1@huawei.com>
-To:     Yu Kuai <yukuai3@huawei.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 31 May 2022 05:21:42 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CDDB7B
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:21:38 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 31 May
+ 2022 17:19:53 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 31 May
+ 2022 17:19:51 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+CC:     Haowen Bai <baihaowen@meizu.com>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] powerpc/papr_scm: use dev_get_drvdata
+Date:   Tue, 31 May 2022 17:19:50 +0800
+Message-ID: <1653988790-19999-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,135 +46,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Eliminate direct accesses to the driver_data field.
 
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ arch/powerpc/platforms/pseries/papr_scm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Il giorno 31 mag 2022, alle ore 11:06, Yu Kuai <yukuai3@huawei.com> ha =
-scritto:
->=20
-> =E5=9C=A8 2022/05/31 16:36, Paolo VALENTE =E5=86=99=E9=81=93:
->>> Il giorno 30 mag 2022, alle ore 10:40, Yu Kuai <yukuai3@huawei.com> =
-ha scritto:
->>>=20
->>> =E5=9C=A8 2022/05/30 16:34, Yu Kuai =E5=86=99=E9=81=93:
->>>> =E5=9C=A8 2022/05/30 16:10, Paolo Valente =E5=86=99=E9=81=93:
->>>>>=20
->>>>>=20
->>>>>> Il giorno 28 mag 2022, alle ore 11:50, Yu Kuai =
-<yukuai3@huawei.com> ha scritto:
->>>>>>=20
->>>>>> Currently, bfq can't handle sync io concurrently as long as they
->>>>>> are not issued from root group. This is because
->>>>>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
->>>>>> bfq_asymmetric_scenario().
->>>>>>=20
->>>>>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
->>>>>>=20
->>>>>> Before this patch:
->>>>>> 1) root group will never be counted.
->>>>>> 2) Count if bfqg or it's child bfqgs have pending requests.
->>>>>> 3) Don't count if bfqg and it's child bfqgs complete all the =
-requests.
->>>>>>=20
->>>>>> After this patch:
->>>>>> 1) root group is counted.
->>>>>> 2) Count if bfqg have at least one bfqq that is marked busy.
->>>>>> 3) Don't count if bfqg doesn't have any busy bfqqs.
->>>>>=20
->>>>> Unfortunately, I see a last problem here. I see a double change:
->>>>> (1) a bfqg is now counted only as a function of the state of its =
-child
->>>>>      queues, and not of also its child bfqgs
->>>>> (2) the state considered for counting a bfqg moves from having =
-pending
->>>>>      requests to having busy queues
->>>>>=20
->>>>> I'm ok with with (1), which is a good catch (you are lady =
-explained
->>>>> the idea to me some time ago IIRC).
->>>>>=20
->>>>> Yet I fear that (2) is not ok.  A bfqq can become non busy even if =
-it
->>>>> still has in-flight I/O, i.e.  I/O being served in the drive.  The
->>>>> weight of such a bfqq must still be considered in the =
-weights_tree,
->>>>> and the group containing such a queue must still be counted when
->>>>> checking whether the scenario is asymmetric.  Otherwise service
->>>>> guarantees are broken.  The reason is that, if a scenario is =
-deemed as
->>>>> symmetric because in-flight I/O is not taken into account, then =
-idling
->>>>> will not be performed to protect some bfqq, and in-flight I/O may
->>>>> steal bandwidth to that bfqq in an uncontrolled way.
->>>> Hi, Paolo
->>>> Thanks for your explanation.
->>>> My orginal thoughts was using weights_tree insertion/removal, =
-however,
->>>> Jan convinced me that using bfq_add/del_bfqq_busy() is ok.
->>>> =46rom what I see, when bfqq dispatch the last request,
->>>> bfq_del_bfqq_busy() will not be called from __bfq_bfqq_expire() if
->>>> idling is needed, and it will delayed to when such bfqq get =
-scheduled as
->>>> in-service queue again. Which means the weight of such bfqq should =
-still
->>>> be considered in the weights_tree.
->>>> I also run some tests on null_blk with "irqmode=3D2
->>>> completion_nsec=3D100000000(100ms) hw_queue_depth=3D1", and tests =
-show
->>>> that service guarantees are still preserved on slow device.
->>>> Do you this is strong enough to cover your concern?
->> Unfortunately it is not.  Your very argument is what made be believe
->> that considering busy queues was enough, in the first place.  But, as
->> I found out, the problem is caused by the queues that do not enjoy
->> idling.  With your patch (as well as in my initial version) they are
->> not counted when they remain without requests queued.  And this makes
->> asymmetric scenarios be considered erroneously as symmetric.  The
->> consequence is that idling gets switched off when it had to be kept
->> on, and control on bandwidth is lost for the victim in-service =
-queues.
->=20
-> Hi=EF=BC=8CPaolo
->=20
-> Thanks for your explanation, are you thinking that if bfqq doesn't =
-enjoy
-> idling, then such bfqq will clear busy after dispatching the last
-> request?
->=20
-> Please kindly correct me if I'm wrong in the following process:
->=20
-> If there are more than one bfqg that is activatied, then bfqqs that =
-are
-> not enjoying idle are still left busy after dispatching the last
-> request.
->=20
-> details in __bfq_bfqq_expire:
->=20
->        if (RB_EMPTY_ROOT(&bfqq->sort_list) &&
->        =E2=94=8A   !(reason =3D=3D BFQQE_PREEMPTED &&
->        =E2=94=8A     idling_needed_for_service_guarantees(bfqd, =
-bfqq))) {
-> -> idling_needed_for_service_guarantees will always return true,
-
-It returns true only is the scenario is symmetric.  Not counting bfqqs
-with in-flight requests makes an asymmetric scenario be considered
-wrongly symmetric.  See function bfq_asymmetric_scenario().
-
-Paolo
-
-> bfqq(whether or not enjoy idling) will stay busy.
->                if (bfqq->dispatched =3D=3D 0)
->                        /*
->                        =E2=94=8A* Overloading budget_timeout field to =
-store
->                        =E2=94=8A* the time at which the queue remains =
-with no
->                        =E2=94=8A* backlog and no outstanding request; =
-used by
->                        =E2=94=8A* the weight-raising mechanism.
->                        =E2=94=8A*/
->                        bfqq->budget_timeout =3D jiffies;
->=20
->                bfq_del_bfqq_busy(bfqd, bfqq, true);
->=20
-> Thanks,
-> Kuai
+diff --git a/arch/powerpc/platforms/pseries/papr_scm.c b/arch/powerpc/platforms/pseries/papr_scm.c
+index 181b855b3050..4e793e6e7d11 100644
+--- a/arch/powerpc/platforms/pseries/papr_scm.c
++++ b/arch/powerpc/platforms/pseries/papr_scm.c
+@@ -354,7 +354,7 @@ static int papr_scm_pmu_get_value(struct perf_event *event, struct device *dev,
+ {
+ 	struct papr_scm_perf_stat *stat;
+ 	struct papr_scm_perf_stats *stats;
+-	struct papr_scm_priv *p = (struct papr_scm_priv *)dev->driver_data;
++	struct papr_scm_priv *p = dev_get_drvdata(dev);
+ 	int rc, size;
+ 
+ 	/* Allocate request buffer enough to hold single performance stat */
+-- 
+2.7.4
 

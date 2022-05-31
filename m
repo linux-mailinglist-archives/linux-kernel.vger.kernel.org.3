@@ -2,98 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07DB7538D65
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E95538D69
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239121AbiEaJFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 05:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42032 "EHLO
+        id S245066AbiEaJGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 05:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiEaJFn (ORCPT
+        with ESMTP id S244620AbiEaJGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 05:05:43 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A81B369C9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:05:43 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LC5v46cZ8zjXD9;
-        Tue, 31 May 2022 17:04:32 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 31 May 2022 17:05:40 +0800
-Subject: Re: [PATCH] mm: page_isolation: use compound_nr() correctly in
- isolate_single_pageblock()
-To:     Zi Yan <ziy@nvidia.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Qian Cai <quic_qiancai@quicinc.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>, <linux-mm@kvack.org>
-References: <20220531024450.2498431-1-zi.yan@sent.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <8cfbab19-8feb-796d-9951-a07fb4855433@huawei.com>
-Date:   Tue, 31 May 2022 17:05:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 31 May 2022 05:06:16 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D87396BA
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:06:15 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id c2so7087212edf.5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:06:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=B2NZyh+cIzrC0yFlwkj26EY9e6xfk3X9ZOP0bB7w4RU=;
+        b=evfYu89qrruMy5yGwmxBJhM8KXCVIu/OZBaUQPkSOXRQHIJSgPxnAPck4/CEMxA2xS
+         9A7fxfcNylHRm04f+y4UMLYh/5/ugmpXz/dtkGEleESJNaRVi5nItdPU3zCXw6R/FyTk
+         pEAm6gxRh8AHpjMqWy7kfyHE+70PbcPRhs25Ua0PkuS/i6eLr4f2Yr8nPe5tFyqo7g8k
+         RFDYapRfPijF2lpkcIgRSma8knwy6R00DZgglmSmZVwx0/EoggbEtqt+ZvIHxilNQgjW
+         jMhwJHDaFGIg960qPHjNUv7zjTAy5mCruh52XrxatfsES+i/H1XvXEfg8VsinY91pwT/
+         FOlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=B2NZyh+cIzrC0yFlwkj26EY9e6xfk3X9ZOP0bB7w4RU=;
+        b=N5kBDzLEXTU3v0Suss8wH8GyTddMh9lq9bWzvxc2cAGb2wr/Ybn00NWCoRpp1rO3VG
+         uPfVrC8rh6GNY5WQWZBS+i0Xm8obHXKUHuLiUR4zhFQRnWixaUxRLCFkiq0Vp1/Ak/ax
+         v/EFkSEphTaljdQZ+gdLn5osaWQlUbCOkAYr9eQbH3eBP2f1gVYizejhJEdnyDLxlXty
+         fODMRdotYPBsKsq+c2zLM4djS7CYABH0YtokxF0XOmQ31CnTkvkSn0be54UO8Q6OJnq7
+         Kh5RmsoTc2fWw6AnLQwPCg+GAM8FJlce0ZukUNpvMUAcupIDr+BoIS84/WM83G+CcKs3
+         HivA==
+X-Gm-Message-State: AOAM533CeQ3QYLSO7ZVNjXLq9fqgZP4f2LMgdd+gZ576P71Qhx3ayEnq
+        N2dv2WOScwDS4ePdY40mFJOqLfrSEQJ04rvt
+X-Google-Smtp-Source: ABdhPJzfU8m5rdIdp7q9S5qXsHiz9hvCjAboBg4T85QPihizQhore6X/2gC1ZgEh7FJCE7skEc8wyA==
+X-Received: by 2002:a05:6402:d0e:b0:413:3d99:f2d6 with SMTP id eb14-20020a0564020d0e00b004133d99f2d6mr63612187edb.189.1653987974122;
+        Tue, 31 May 2022 02:06:14 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id fi5-20020a1709073ac500b006fed93bf71fsm4808930ejc.18.2022.05.31.02.06.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 02:06:13 -0700 (PDT)
+Message-ID: <ae36420f-847b-c53b-24ad-22e3181bff51@linaro.org>
+Date:   Tue, 31 May 2022 11:06:12 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220531024450.2498431-1-zi.yan@sent.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/2] net/ncsi: use proper "mellanox" DT vendor prefix
 Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20220529111017.181766-1-krzysztof.kozlowski@linaro.org>
+ <48cb78ebd38dfe4ac05e337d5fb38623b7ee0e8f.camel@redhat.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <48cb78ebd38dfe4ac05e337d5fb38623b7ee0e8f.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/31 10:44, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
+On 31/05/2022 10:21, Paolo Abeni wrote:
+> Hello,
 > 
-> When compound_nr(page) was used, page was not guaranteed to be the head
-> of the compound page and it could cause an infinite loop. Fix it by calling
-> it on the head page.
+> On Sun, 2022-05-29 at 13:10 +0200, Krzysztof Kozlowski wrote:
+>> "mlx" Devicetree vendor prefix is not documented and instead "mellanox"
+>> should be used.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  net/ncsi/ncsi-manage.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/net/ncsi/ncsi-manage.c b/net/ncsi/ncsi-manage.c
+>> index 78814417d753..80713febfac6 100644
+>> --- a/net/ncsi/ncsi-manage.c
+>> +++ b/net/ncsi/ncsi-manage.c
+>> @@ -1803,7 +1803,8 @@ struct ncsi_dev *ncsi_register_dev(struct net_device *dev,
+>>  	pdev = to_platform_device(dev->dev.parent);
+>>  	if (pdev) {
+>>  		np = pdev->dev.of_node;
+>> -		if (np && of_get_property(np, "mlx,multi-host", NULL))
+>> +		if (np && (of_get_property(np, "mellanox,multi-host", NULL) ||
+>> +			   of_get_property(np, "mlx,multi-host", NULL)))
+>>  			ndp->mlx_multi_host = true;
+>>  	}
+>>
 > 
-> Fixes: b2c9e2fbba32 ("mm: make alloc_contig_range work at pageblock granularity")
-> Reported-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> Link: https://lore.kernel.org/linux-mm/20220530115027.123341-1-anshuman.khandual@arm.com/
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> I can't guess which tree are you targeting, devicetree? net-next? could
+> you please specify?
 
-LGTM. Thanks!
+Both independently. The patch here for net-next (although it is closed
+now). The DTS patch can come later via ARM SoC maintainer tree.
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 
-> ---
->  mm/page_isolation.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
-> index 6021f8444b5a..d200d41ad0d3 100644
-> --- a/mm/page_isolation.c
-> +++ b/mm/page_isolation.c
-> @@ -385,9 +385,9 @@ static int isolate_single_pageblock(unsigned long boundary_pfn, int flags,
->  		 * above do the rest. If migration is not possible, just fail.
->  		 */
->  		if (PageCompound(page)) {
-> -			unsigned long nr_pages = compound_nr(page);
->  			struct page *head = compound_head(page);
->  			unsigned long head_pfn = page_to_pfn(head);
-> +			unsigned long nr_pages = compound_nr(head);
->  
->  			if (head_pfn + nr_pages <= boundary_pfn) {
->  				pfn = head_pfn + nr_pages;
-> 
-
+Best regards,
+Krzysztof

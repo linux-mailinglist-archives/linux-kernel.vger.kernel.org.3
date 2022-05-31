@@ -2,205 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663ED538F3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09917538F49
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343563AbiEaKuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 06:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
+        id S1343609AbiEaKwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 06:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233804AbiEaKuU (ORCPT
+        with ESMTP id S244823AbiEaKwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 06:50:20 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BC190CC8;
-        Tue, 31 May 2022 03:50:18 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2186B1C0006;
-        Tue, 31 May 2022 10:50:13 +0000 (UTC)
-Date:   Tue, 31 May 2022 12:50:11 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Quentin Schulz <foss+kernel@0leil.net>
-Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Subject: Re: [PATCH v5 4/4] media: i2c: ov5675: add .get_selection support
-Message-ID: <20220531105011.yxrosmwtw3mpaomb@uno.localdomain>
-References: <20220525145833.1165437-1-foss+kernel@0leil.net>
- <20220525145833.1165437-4-foss+kernel@0leil.net>
+        Tue, 31 May 2022 06:52:01 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5145748897
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:51:58 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id h19so8857379edj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:51:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f+aAYlhBaoqcFmdU6C9Gx84E9qMJBIbqGLgTA0/mSl4=;
+        b=pwIV2cacZ4ygg//TwNYbRKiQjUBGzgJXtzcat0O1FUmk1LRXTQlUJc6YLXXq5TAeVn
+         XTCERPOuIAUvyA1fsx/lioJV542cqtv6JlHCeTPnTmWtkvMqpvUNnDfn0Nn7mnVzj2kN
+         2V7sQohQUnjdNW6Y0rM64nPDNwRlpqtkcahLIXo/vWcujgCoxDuG7MYyY1LbTXnUCT/g
+         RwhPdpNiD3G44Ta4qb/1IKHQ5Ve1UePVPf/Fq3m871Uf1efZ3z/zrq7rBnrfJ2e3ETSO
+         qfWsPGcPhc31ZKBeBSaPCp6wfmp3PQDAY3ob04CrCAty60UOsIVAlXrhkiHVyKRxzsHK
+         uWTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f+aAYlhBaoqcFmdU6C9Gx84E9qMJBIbqGLgTA0/mSl4=;
+        b=JBAkvjmMg6fK8lMAuyu2o6xZfQ5Fo2OrVOQFlPuAXnRmII1H0o2HZ1O6E5sLFPdekv
+         Ti+gRrscEql4+2fdZO/HvMM/3HLwyCvldrArgXtTdm1OIWkt+M9tDBJdytoL02rYkd6i
+         /wv1PCctRzMw7muwbv3udiwRiWotY1g02p2asNEUYOkSnlp/WCHBSKKTXmVfmVZ3NLQ+
+         KrVLXJv4EwF8OvuZTreeL4d9UhHX/X5mgYwGyfwMNP4TsnabhRWGYTUeqBvd/rUkk/F4
+         jHRElUNC9K61GEAO4j+7nFOI4JNGnOLpHUqr7/5DXPQDYoGvzsUfvqcSkayPGR2Y1l6Z
+         BCFA==
+X-Gm-Message-State: AOAM5330RjMWA4IPnhparS+9/x1uE07Jo4m6GgMfo7UYAj5rzpLpOgmo
+        ybFeIpAZQQJdDEf/1ouM2A+0ow==
+X-Google-Smtp-Source: ABdhPJw6rnERzo76jayiAAFVyPq+buvlnElOKXK3el57Jti5fQow9ZL3T4gzpxQSRGCHCDm5L/IYNg==
+X-Received: by 2002:a05:6402:2741:b0:41f:69dc:9bcd with SMTP id z1-20020a056402274100b0041f69dc9bcdmr63412100edd.239.1653994316871;
+        Tue, 31 May 2022 03:51:56 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id q3-20020a50aa83000000b0042dc513ced8sm5117441edc.30.2022.05.31.03.51.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 03:51:56 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/4] soc/arm64: qcom: Add initial version of bwmon
+Date:   Tue, 31 May 2022 12:51:33 +0200
+Message-Id: <20220531105137.110050-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220525145833.1165437-4-foss+kernel@0leil.net>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Quentin
+Hi,
 
-On Wed, May 25, 2022 at 04:58:33PM +0200, Quentin Schulz wrote:
-> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
->
-> The sensor has 2592*1944 active pixels, surrounded by 16 active dummy
-> pixels and there are an additional 24 black rows "at the bottom".
->
->                      [2624]
->         +-----+------------------+-----+
->         |     |     16 dummy     |     |
->         +-----+------------------+-----+
->         |     |                  |     |
->         |     |     [2592]       |     |
->         |     |                  |     |
->         |16   |      valid       | 16  |[2000]
->         |dummy|                  |dummy|
->         |     |            [1944]|     |
->         |     |                  |     |
->         +-----+------------------+-----+
->         |     |     16 dummy     |     |
->         +-----+------------------+-----+
->         |     |  24 black lines  |     |
->         +-----+------------------+-----+
->
-> The top-left coordinate is gotten from the registers specified in the
-> modes which are identical for both currently supported modes.
->
-> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> ---
->
-> v4:
->  - explicit a bit more the commit log,
->  - added drawing in the commit log,
->  - fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
->
-> added in v3
->
->  drivers/media/i2c/ov5675.c | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->
-> diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
-> index c1f3c387afde0..384a9ea2372c3 100644
-> --- a/drivers/media/i2c/ov5675.c
-> +++ b/drivers/media/i2c/ov5675.c
-> @@ -1121,6 +1121,38 @@ static int ov5675_get_format(struct v4l2_subdev *sd,
->  	return 0;
->  }
->
-> +static int ov5675_get_selection(struct v4l2_subdev *sd,
-> +				struct v4l2_subdev_state *state,
-> +				struct v4l2_subdev_selection *sel)
-> +{
-> +	struct ov5675 *ov5675 = to_ov5675(sd);
-> +
-> +	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
-> +		return -EINVAL;
-> +
-> +	switch (sel->target) {
-> +	case V4L2_SEL_TGT_CROP_BOUNDS:
-> +		sel->r.top = 0;
-> +		sel->r.left = 0;
-> +		sel->r.width = 2624;
-> +		sel->r.height = 2000;
-> +		return 0;
-> +	case V4L2_SEL_TGT_CROP:
-> +		sel->r.top = 16;
-> +		sel->r.left = 16;
-> +		sel->r.width = ov5675->cur_mode->width;
-> +		sel->r.height = ov5675->cur_mode->height;
-> +		return 0;
+Changes since v2
+================
+1. Spent a lot of time on benchmarking and learning the BWMON behavior.
+2. Drop PM/OPP patch - applied.
+3. Patch #1: drop opp-avg-kBps.
+4. Patch #2: Add several comments explaining pieces of code and BWMON, extend
+   commit msg with measurements, extend help message, add new #defines to document
+   some magic values, reorder bwmon clear/disable/enable operations to match
+   downstream source and document this with comments, fix unit count from 1 MB
+   to 65 kB.
+5. Patch #4: drop opp-avg-kBps.
+6. Add accumulated Rb tags.
 
-I'm afraid this doesn't match exactly my understanding of the
-discussion we had.
+Changes since v1
+================
+1. Add defconfig change.
+2. Fix missing semicolon in MODULE_AUTHOR.
+3. Add original downstream (msm-4.9 tree) copyrights to the driver.
 
-The driver defines the following modes
+Description
+===========
+BWMON is a data bandwidth monitor providing throughput/bandwidth over certain
+interconnect links in a SoC.  It might be used to gather current bus usage and
+vote for interconnect bandwidth, thus adjusting the bus speed based on actual
+usage.
 
-/*
- * OV5670 sensor supports following resolutions with full FOV:
- * 4:3  ==> {2592x1944, 1296x972, 648x486}
- * 16:9 ==> {2560x1440, 1280x720, 640x360}
- */
-static const struct ov5670_mode supported_modes[] = {
-	{
-		.width = 2592,
-		.height = 1944,
-	},
-	{
-		.width = 1296,
-		.height = 972,
-	},
-	{
-		.width = 648,
-		.height = 486,
-	},
-	{
-		.width = 2560,
-		.height = 1440,
-	},
-	{
-		.width = 1280,
-		.height = 720,
-	},
-	{
-		.width = 640,
-		.height = 360,
-	}
-};
+The work is built on top of Thara Gopinath's patches with several cleanups,
+changes and simplifications.
 
-The comment says all modes retain the "full FOV", which I assume it
-implies they are obtained by sub-sampling and not cropping.
+Best regards,
+Krzysztof
 
-The first three modes (4:3) are indeed obtained by subsampling the
-full active pixel array:
+Krzysztof Kozlowski (4):
+  dt-bindings: interconnect: qcom,sdm845-cpu-bwmon: add BWMON device
+  soc: qcom: icc-bwmon: Add bandwidth monitoring driver
+  arm64: defconfig: enable Qualcomm Bandwidth Monitor
+  arm64: dts: qcom: sdm845: Add CPU BWMON
 
-        (2592,1944) / 2 = (1296,972) / 2 = (648,486)
+ .../interconnect/qcom,sdm845-cpu-bwmon.yaml   |  97 ++++
+ MAINTAINERS                                   |   7 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  54 +++
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/soc/qcom/Kconfig                      |  15 +
+ drivers/soc/qcom/Makefile                     |   1 +
+ drivers/soc/qcom/icc-bwmon.c                  | 418 ++++++++++++++++++
+ 7 files changed, 593 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
+ create mode 100644 drivers/soc/qcom/icc-bwmon.c
 
-The last three are obtained by subsampling a slightly cropped portion
-of the pixel array
+-- 
+2.34.1
 
-        (2560,1440) / 2 = (1280,720) / 2 = (640,360)
-
-If you set CROP = cur_mode->[width/height] you will instead report the
-visible width/height, which as said it's obtained by subsampling (of a
-slightly cropped portion of the pixel array for the last three ones)
-
-The CROP rectangle is then (2592, 1944) for the first three and (2560,
-1440) for the last three.
-
-I would add a v4l2_rect to struct ov5670_mode where to record that and
-report it here.
-
-> +	case V4L2_SEL_TGT_CROP_DEFAULT:
-> +		sel->r.top = 16;
-> +		sel->r.left = 16;
-> +		sel->r.width = supported_modes[0].width;
-> +		sel->r.height = supported_modes[0].height;
-> +		return 0;
-
-You could also define these values instead of fishing in the
-supported_modes array, to protect against future changes to the array
-itself. Up to you.
-
-
-> +	}
-> +	return -EINVAL;
-> +}
-> +
->  static int ov5675_enum_mbus_code(struct v4l2_subdev *sd,
->  				 struct v4l2_subdev_state *sd_state,
->  				 struct v4l2_subdev_mbus_code_enum *code)
-> @@ -1170,6 +1202,7 @@ static const struct v4l2_subdev_video_ops ov5675_video_ops = {
->  static const struct v4l2_subdev_pad_ops ov5675_pad_ops = {
->  	.set_fmt = ov5675_set_format,
->  	.get_fmt = ov5675_get_format,
-> +	.get_selection = ov5675_get_selection,
->  	.enum_mbus_code = ov5675_enum_mbus_code,
->  	.enum_frame_size = ov5675_enum_frame_size,
->  };
-> --
-> 2.36.1
->

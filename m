@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1253538A45
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 05:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57FF538A47
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 05:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243749AbiEaDrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 23:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        id S242047AbiEaDuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 23:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243735AbiEaDrj (ORCPT
+        with ESMTP id S238368AbiEaDuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 23:47:39 -0400
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582E7506DD;
-        Mon, 30 May 2022 20:47:39 -0700 (PDT)
-Received: by mail-pg1-f182.google.com with SMTP id r71so11728257pgr.0;
-        Mon, 30 May 2022 20:47:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=J88H2LWRLwC+ieC8JScbnG8mP43mgFvekYycMO4/ses=;
-        b=ndZB8+1IxJTuVN/IwEGpEo2glfb7X1F7oL4RYyyzZGR8nMTPf88Vv+PEz6MVwrPnl6
-         EpgOzb1jPv5kStsP9MY5/Mc09/Fbsa1U9KCPZUqBQe7FTFPzns0Yg4Ze67VXjzpYjtNa
-         gtORFhrB/z2GlE0DIXRXUblaTljzB+2eOyMUS11nmBHkVe0h/WyfWX3AoBU5vwT/YmYd
-         OcRXQTObcBKOP8vp9Tf/QLCTsP9UPTZaPTiljxm7l7AMZljEYpvuLWsvavPZW8kbYFMy
-         5ITTV006eMuFuDnVpkNi6CH7PCjY1j+nfzXZF4k3PELBcWn5uATtsQKgT9rxkXeMHRjA
-         os6Q==
-X-Gm-Message-State: AOAM532tmSBvslrekaR9teY2HleBAn+PoWhNzM7Hb3AsR/JENnEI+/HV
-        IZqiLHs9oS8sTo7mO2l/BZQ=
-X-Google-Smtp-Source: ABdhPJxAE16L0kA27cz2/U35A3Ni4sJOYW6n1ipy9pryUT7sj/V99AF3l1wrhV+18hPF5ybqLWP40A==
-X-Received: by 2002:a05:6a00:1ac9:b0:518:a48a:d8f6 with SMTP id f9-20020a056a001ac900b00518a48ad8f6mr41016280pfv.16.1653968858746;
-        Mon, 30 May 2022 20:47:38 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id nh9-20020a17090b364900b001d903861194sm521563pjb.30.2022.05.30.20.47.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 20:47:37 -0700 (PDT)
-Message-ID: <f4e1d900-5755-c57f-029a-eade78a17476@acm.org>
-Date:   Mon, 30 May 2022 20:47:36 -0700
+        Mon, 30 May 2022 23:50:00 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E113892D1C;
+        Mon, 30 May 2022 20:49:58 -0700 (PDT)
+Received: from [10.180.13.185] (unknown [10.180.13.185])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Cxn+ZhkJViHEUJAA--.42980S3;
+        Tue, 31 May 2022 11:49:55 +0800 (CST)
+Subject: Re: [PATCH] cgroup: wait for css offline when rmdir
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1653619158-27607-1-git-send-email-zhanghongchen@loongson.cn>
+ <YpCQZ5RRnxwh7fmK@slm.duckdns.org>
+ <e74e03f1-cb54-b158-a085-2965fd088d1d@loongson.cn>
+ <YpVo4XiIDu68w40Z@slm.duckdns.org>
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+Message-ID: <fbb820c5-dbcb-0f00-c365-d3c57ca27edf@loongson.cn>
+Date:   Tue, 31 May 2022 11:49:53 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 3/6] phy: samsung-ufs: add support for FSD ufs phy driver
+In-Reply-To: <YpVo4XiIDu68w40Z@slm.duckdns.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-phy@lists.infradead.org
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        avri.altman@wdc.com, martin.petersen@oracle.com,
-        chanho61.park@samsung.com, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, Bharat Uppal <bharat.uppal@samsung.com>
-References: <20220531012220.80563-1-alim.akhtar@samsung.com>
- <CGME20220531012347epcas5p48262cae18c75bb6ed029f7cd920800b4@epcas5p4.samsung.com>
- <20220531012220.80563-4-alim.akhtar@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220531012220.80563-4-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Cxn+ZhkJViHEUJAA--.42980S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7Wr1DXF1DAFWDJw4rJF1xuFg_yoWDZwc_Wa
+        yIkw1Duw1DCF1kua1UKr4YvrW2kFWDWa98X3saqw4aga4UJF98JF47Wr1rZw1aqF4Syrnx
+        Kr95Aw1FqrnFvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxkYjsxI4VWkCwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY
+        02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8
+        P5r7UUUUU==
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,25 +64,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/22 18:22, Alim Akhtar wrote:
-> diff --git a/drivers/phy/samsung/phy-fsd-ufs.c b/drivers/phy/samsung/phy-fsd-ufs.c
-> new file mode 100644
-> index 000000000000..a03656006093
-> --- /dev/null
-> +++ b/drivers/phy/samsung/phy-fsd-ufs.c
-> @@ -0,0 +1,63 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * UFS PHY driver data for FSD SoC
-> + *
-> + * Copyright (C) 2022 Samsung Electronics Co., Ltd.
-> + *
-> + */
-> +#ifndef _PHY_FSD_UFS_H_
-> +#define _PHY_FSD_UFS_H_
+On 2022/5/31 上午9:01, Tejun Heo wrote:
+> Hello,
+> 
+> On Mon, May 30, 2022 at 09:53:51AM +0800, Hongchen Zhang wrote:
+>>    When I test the LTP's memcg_test_3 testcase at 8 Node server,I get the
+>> -ENOMEM error,which caused by no avaliable idr found in mem_cgroup_idr.
+>> the reason is the use of idr in mem_cgroup_idr is too fast than the free.In
+>> the specific case,the idr is used and freed cyclically,so when we rmdir one
+>> cgroup dir, we can synchronize the idr free through wating for the memcg css
+>> offlined,and then we can use it the next cycle.
+> 
+> This is a micro benchmark specific problem and it doesn't make sense to
+> change the overall behavior for this as the suggested change is neither
+> desirable or logical. Maybe you can just incur the delay only after idr
+> allocation fails and then retry?
+> 
+> Thanks.
+> 
+Hi Tejun,
 
-Please do not use header file guards in a .c file.
+Yes, the problem would disappear when add some reasonable delay. But I 
+think if we can increase the MEM_CGROUP_ID_MAX to INT_MAX.Thus the 
+-ENOMEM error would be never occured,even if the system is out of memory.
 
-Thanks,
+Thanks.
 
-Bart.

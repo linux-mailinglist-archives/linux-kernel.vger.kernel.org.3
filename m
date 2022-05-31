@@ -2,58 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AE15389F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 658EE5389F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243608AbiEaCkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 22:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
+        id S243615AbiEaClD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 22:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237072AbiEaCkO (ORCPT
+        with ESMTP id S237072AbiEaClB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 22:40:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 509E96128D
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 19:40:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F5F323A;
-        Mon, 30 May 2022 19:40:13 -0700 (PDT)
-Received: from [10.162.41.9] (unknown [10.162.41.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 663353F66F;
-        Mon, 30 May 2022 19:40:07 -0700 (PDT)
-Message-ID: <84d81a4b-84fb-a1e9-9c9f-d0239f2b3841@arm.com>
-Date:   Tue, 31 May 2022 08:10:04 +0530
+        Mon, 30 May 2022 22:41:01 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585556470E
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 19:41:00 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LBxNJ5QpJzDqZ8;
+        Tue, 31 May 2022 10:40:48 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 31 May 2022 10:40:58 +0800
+Subject: Re: [PATCH 1/3] mm/swapfile: make security_vm_enough_memory_mm() work
+ as expected
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220527092626.31883-1-linmiaohe@huawei.com>
+ <20220527092626.31883-2-linmiaohe@huawei.com>
+ <20220530160223.63ae3bdef7420f252d7366ed@linux-foundation.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <cbcd5684-8bfd-46cd-c49c-8a3727cabf11@huawei.com>
+Date:   Tue, 31 May 2022 10:40:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] arm64: enable THP_SWAP for arm64
+In-Reply-To: <20220530160223.63ae3bdef7420f252d7366ed@linux-foundation.org>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Steven Price <steven.price@arm.com>, Barry Song <21cnbao@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5n?= =?UTF-8?Q?=29?= 
-        <zhangshiming@oppo.com>, =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        hanchuanhua <hanchuanhua@oppo.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Yang Shi <shy828301@gmail.com>
-References: <20220527100644.293717-1-21cnbao@gmail.com>
- <b2694573-a696-8435-70eb-ebc9c06500a0@arm.com>
- <CAGsJ_4yF_5DvBuvNfsUcywv8uzXHy2x9saVdhXz8xh=wvt01iA@mail.gmail.com>
- <f71d5348-f619-2259-8645-6d3b04cc330d@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <f71d5348-f619-2259-8645-6d3b04cc330d@arm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,133 +52,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/5/31 7:02, Andrew Morton wrote:
+> On Fri, 27 May 2022 17:26:24 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+> 
+>> security_vm_enough_memory_mm() checks whether a process has enough memory
+>> to allocate a new virtual mapping. And total_swap_pages is considered as
+>> available memory while swapoff tries to make sure there's enough memory
+>> that can hold the swapped out memory. But total_swap_pages contains the
+>> swap space that is being swapoff. So security_vm_enough_memory_mm() will
+>> success even if there's no memory to hold the swapped out memory because
+>> total_swap_pages always greater than or equal to p->pages.
+>>
+>> In order to fix it, p->pages should be retracted from total_swap_pages
+>> first and then check whether there's enough memory for inuse swap pages.
+> 
+> User-visible impact?
 
+With this change, swapping in pages is not even tried if there's no enough memory.
+But in user's view, swapoff() is failed just like before when there's no enough memory.
 
-On 5/30/22 16:39, Steven Price wrote:
-> On 30/05/2022 10:53, Barry Song wrote:
->> On Mon, May 30, 2022 at 7:07 PM Anshuman Khandual
->> <anshuman.khandual@arm.com> wrote:
->>>
->>> Hello Barry,
->>
->> Hi Anshuman,
->> thanks!
->>
->>>
->>> On 5/27/22 15:36, Barry Song wrote:
->>>> From: Barry Song <v-songbaohua@oppo.com>
->>>>
->>>> THP_SWAP has been proved to improve the swap throughput significantly
->>>> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
->>>> splitting THP after swapped out").
->>> It will be useful to run similar experiments on arm64 platform to
->>> demonstrate tangible benefit, else we might be just enabling this
->>> feature just because x86 has it. Do you have some data points ?
->>>
->>>> As long as arm64 uses 4K page size, it is quite similar with x86_64
->>>> by having 2MB PMD THP. So we are going to get similar improvement.
->>>
->>> This is an assumption without any data points (until now). Please
->>> do provide some results.
->>
->> Fair enough though I believe THP_SWP is arch-independent. Our testing
->> will post data. Plus, we do need it for real use cases with some possible
->> out-of-tree code for this moment. so this patch does not originate only
->> because x86 has it :-)
->>
->>>
->>>> For other page sizes such as 16KB and 64KB, PMD might be too large.
->>>> Negative side effects such as IO latency might be a problem. Thus,
->>>> we can only safely enable the counterpart of X86_64.
->>>
->>> Incorrect reasoning. Although sometimes it might be okay to enable
->>> a feature on platforms with possible assumptions about its benefits,
->>> but to claim 'similar improvement, safely, .. etc' while comparing
->>> against x86 4K page config without data points, is not very helpful.
->>>
->>>> A corner case is that MTE has an assumption that only base pages
->>>> can be swapped. We won't enable THP_SWP for ARM64 hardware with
->>>> MTE support until MTE is re-arched.
->>>
->>> re-arched ?? Did you imply that MTE is reworked to support THP ?
->>
->> I think at least MTE should be able to coexist with THP_SWP though
->> I am not quite sure if MTE can be re-worked to fully support THP.
 > 
-> There's no fundamental reason it cannot coexist, but there are many open
-> areas around MTE support in general. For example at the moment swap
-> support keeps the tags in memory because there's no easy way to plumb
-> the extra tag data into the swap infrastructure.
-> 
-> The lazy zeroing of MTE tag storage has introduced a lot of complexity
-> and THP is another case where this complexity would show. It's possible
-> that it might make sense to take the hit of clearing tags in all pages
-> (i.e. make clear_page() clear the tags like mte_zero_clear_page_tags()).
-> 
->>>
->>>>
->>>> Cc: "Huang, Ying" <ying.huang@intel.com>
->>>> Cc: Minchan Kim <minchan@kernel.org>
->>>> Cc: Johannes Weiner <hannes@cmpxchg.org>
->>>> Cc: Hugh Dickins <hughd@google.com>
->>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
->>>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
->>>> Cc: Steven Price <steven.price@arm.com>
->>>> Cc: Yang Shi <shy828301@gmail.com>
->>>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
->>>> ---
->>>>  arch/arm64/Kconfig               |  1 +
->>>>  arch/arm64/include/asm/pgtable.h |  2 ++
->>>>  include/linux/huge_mm.h          | 12 ++++++++++++
->>>>  mm/swap_slots.c                  |  2 +-
->>>>  4 files changed, 16 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->>>> index a4968845e67f..5306009df2dc 100644
->>>> --- a/arch/arm64/Kconfig
->>>> +++ b/arch/arm64/Kconfig
->>>> @@ -101,6 +101,7 @@ config ARM64
->>>>       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
->>>>       select ARCH_WANT_LD_ORPHAN_WARN
->>>>       select ARCH_WANTS_NO_INSTR
->>>> +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
->>>>       select ARCH_HAS_UBSAN_SANITIZE_ALL
->>>>       select ARM_AMBA
->>>>       select ARM_ARCH_TIMER
->>>> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
->>>> index 0b6632f18364..06076139c72c 100644
->>>> --- a/arch/arm64/include/asm/pgtable.h
->>>> +++ b/arch/arm64/include/asm/pgtable.h
->>>> @@ -45,6 +45,8 @@
->>>>       __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
->>>>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
->>>>
->>>> +#define arch_thp_swp_supported !system_supports_mte
->>>
->>> Does it check for 'system_supports_mte' as a symbol or call system_supports_mte()
->>> to ascertain runtime MTE support ? It might well be correct, but just does not
->>> look much intuitive.
->>
->> yep. looks a bit weird. but considering we only need this for arm64
->> and arch_thp_swp_supported
->> is a macro, I can't find a better way to make code modification
->> smaller than this in mm core, arm64
->> and x86. and probably we will totally remove it once we make MTE
->> co-exist with THP_SWP.
->>
->> Do you have any suggestions for a better solution?
-> 
-> It would be better to write it as a function macro:
-> 
->   #define arch_thp_swp_supported() (!system_supports_mte())
-> 
-> or you could go the whole way and introduce a static inline function
-> (overkill in this case IMHO):
-> 
->   #define arch_thp_swp_supported
->   static inline bool arch_thp_swp_supported(void)
->   {
->   	return !system_supports_mte();
->   }
+> If I'm understanding correctly, there's a risk that this fix will cause
+> existing setups to newly fail when attempting swapoff()?
 
-I guess this approach is slightly better.
+IIUC, the previous behavior would be:
+Failing swapoff() after swapping in many pages due to lacking of physical memory, though
+security_vm_enough_memory_mm() always tell us there's enough memory.
+
+The changed behavior will be:
+Failing swapoff() *without* swapping in many pages according to the right conclusion
+of security_vm_enough_memory_mm().
+
+IMHO, The final result should be same, but security_vm_enough_memory_mm() can tell us
+whether we could succeed to swapoff() with this patch. Or am I miss something?
+
+Many thanks for comment and reply!
+
+> 
+> 
+> 
+> .
+> 
+

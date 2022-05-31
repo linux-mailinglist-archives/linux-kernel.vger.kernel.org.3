@@ -2,180 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 464ED538BDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25026538BE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244453AbiEaHOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 03:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
+        id S244463AbiEaHQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 03:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244450AbiEaHOT (ORCPT
+        with ESMTP id S234371AbiEaHQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 03:14:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10220915AF
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653981257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=33Q+kZ3exxiCIGxTXejuFhcm2TRKe5xhqodtK0AziM4=;
-        b=KCEEKl3GXEmz3ruD79j2/X3BRFeQj3yLqJCUny6x63GQ2Xy1kIitu7qQJ+GbGvmJtIpIsK
-        AJGIqwZy+fpEGLa4Gb4CH/JDyXL4oD/WdE4hnVTpAEPt8D2FmNq2LjV3JIPug8YTLn+o3t
-        8s6cm1s3kX5iKhYJgwud+Te3TBHPqkg=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-317-BuO1X3eCNei4KF9YOnCMWw-1; Tue, 31 May 2022 03:14:15 -0400
-X-MC-Unique: BuO1X3eCNei4KF9YOnCMWw-1
-Received: by mail-qk1-f200.google.com with SMTP id g14-20020ae9e10e000000b006a394d35dbfso9955794qkm.5
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:14:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=33Q+kZ3exxiCIGxTXejuFhcm2TRKe5xhqodtK0AziM4=;
-        b=F+kIr31v0C8kMv/EE6kU3gaIOgC8XqoIjYuICPWGRT9G/tb1vPcEufhZVSAnLgPnmp
-         TXackeIOgzLLLgBSHlweogWOtx/QEEwn9pZTqa/cWaul4XJ8CHwkYSPbaG+Sk+btplTa
-         s5lsaC/AgZDAzHgValFMtIoBLDejQo2ShfQMlehcAft/t3d6dJAT9pVsmw+8DL23gqIC
-         bHf9lx/HsO6imP6rv/wqcOzNTIxsHcDNy/w+f9Ew/N8obzQc5NgFT428IsPNQdk/1o1Z
-         g0TBGZD3Y1cfCZr+r1Xhaddh4QCNLF0tq6H8Z51gYJ9nYUBqBXjOB6wvMfycS4VZgt+/
-         FctA==
-X-Gm-Message-State: AOAM533chRmgaMNch3PlCgPs/+WMz4/wf2jDTO00+G4oFYrf5beQR3TW
-        OjQ1sHI9jvmcmCjiWBiKn5Ic+FDLTG8UgDJxpwXri4AIWJbWs7q7ueLQI5fbA1Mj4qxqRfj5fhr
-        qF66KSYDqvIkkyHiLw8d6ZJ2udjOgj0CNF5aUPk5m
-X-Received: by 2002:ac8:5ad0:0:b0:2f3:e37a:e768 with SMTP id d16-20020ac85ad0000000b002f3e37ae768mr45957241qtd.592.1653981254776;
-        Tue, 31 May 2022 00:14:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxfsK62AT66aNNUrpiRT8Q1h/z0vwoFAfZ6ojK+Cso5QwGPLczuZn5KrJtMDcQKDAqYGqbzNtxijjj7ElUmbMA=
-X-Received: by 2002:ac8:5ad0:0:b0:2f3:e37a:e768 with SMTP id
- d16-20020ac85ad0000000b002f3e37ae768mr45957224qtd.592.1653981254525; Tue, 31
- May 2022 00:14:14 -0700 (PDT)
+        Tue, 31 May 2022 03:16:50 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88B0433AD;
+        Tue, 31 May 2022 00:16:48 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 42FE068B05; Tue, 31 May 2022 09:16:40 +0200 (CEST)
+Date:   Tue, 31 May 2022 09:16:39 +0200
+From:   "hch@lst.de" <hch@lst.de>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Tianyu Lan <ltykernel@gmail.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "andi.kleen@intel.com" <andi.kleen@intel.com>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        vkuznets <vkuznets@redhat.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "hch@lst.de" <hch@lst.de>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kirill.shutemov" <kirill.shutemov@intel.com>
+Subject: Re: [RFC PATCH V2 1/2] swiotlb: Add Child IO TLB mem support
+Message-ID: <20220531071639.GA23482@lst.de>
+References: <20220502125436.23607-1-ltykernel@gmail.com> <20220502125436.23607-2-ltykernel@gmail.com> <YoH+mbxQAp/2XGyG@infradead.org> <PH0PR21MB30258D2B3B727A9BCEE039FCD7DD9@PH0PR21MB3025.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220526124338.36247-1-eperezma@redhat.com> <20220531014108-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220531014108-mutt-send-email-mst@kernel.org>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Tue, 31 May 2022 09:13:38 +0200
-Message-ID: <CAJaqyWfRSD6xiS8DROkPvjJ4Y4dotOPWqUzaQeM3X=q_XgABdw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Implement vdpasim stop operation
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     kvm list <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Martin Porter <martinpo@xilinx.com>,
-        Laurent Vivier <lvivier@redhat.com>,
-        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
-        Parav Pandit <parav@nvidia.com>, Eli Cohen <elic@nvidia.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Cindy Lu <lulu@redhat.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        "Uminski, Piotr" <Piotr.Uminski@intel.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>, ecree.xilinx@gmail.com,
-        "Dawar, Gautam" <gautam.dawar@amd.com>, habetsm.xilinx@gmail.com,
-        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
-        Harpreet Singh Anand <hanand@xilinx.com>,
-        Dinan Gunawardena <dinang@xilinx.com>,
-        Longpeng <longpeng2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR21MB30258D2B3B727A9BCEE039FCD7DD9@PH0PR21MB3025.namprd21.prod.outlook.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 7:42 AM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Thu, May 26, 2022 at 02:43:34PM +0200, Eugenio P=C3=A9rez wrote:
-> > Implement stop operation for vdpa_sim devices, so vhost-vdpa will offer
-> > that backend feature and userspace can effectively stop the device.
-> >
-> > This is a must before get virtqueue indexes (base) for live migration,
-> > since the device could modify them after userland gets them. There are
-> > individual ways to perform that action for some devices
-> > (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
-> > way to perform it for any vhost device (and, in particular, vhost-vdpa)=
-.
-> >
-> > After the return of ioctl with stop !=3D 0, the device MUST finish any
-> > pending operations like in flight requests. It must also preserve all
-> > the necessary state (the virtqueue vring base plus the possible device
-> > specific states) that is required for restoring in the future. The
-> > device must not change its configuration after that point.
-> >
-> > After the return of ioctl with stop =3D=3D 0, the device can continue
-> > processing buffers as long as typical conditions are met (vq is enabled=
-,
-> > DRIVER_OK status bit is enabled, etc).
-> >
-> > In the future, we will provide features similar to VHOST_USER_GET_INFLI=
-GHT_FD
-> > so the device can save pending operations.
-> >
-> > Comments are welcome.
->
->
-> So given this is just for simulator and affects UAPI I think it's fine
-> to make it wait for the next merge window, until there's a consensus.
-> Right?
->
+On Mon, May 30, 2022 at 01:52:37AM +0000, Michael Kelley (LINUX) wrote:
+> B) The contents of the memory buffer must transition between
+> encrypted and not encrypted.  The hardware doesn't provide
+> any mechanism to do such a transition "in place".  The only
+> way to transition is for the CPU to copy the contents between
+> an encrypted area and an unencrypted area of memory.
+> 
+> Because of (B), we're stuck needing bounce buffers.  There's no
+> way to avoid them with the current hardware.  Tianyu also pointed
+> out not wanting to expose uninitialized guest memory to the host,
+> so, for example, sharing a read buffer with the host requires that
+> it first be initialized to zero.
 
-While the change is only implemented in the simulator at this moment,
-it's just the very last missing piece in the kernel to implement
-complete live migration for net devices with cvq :). All vendor
-drivers can implement this call with current code, just a little bit
-of plumbing is needed. And it was accepted in previous meetings.
+Ok, B is a deal breaker.  I just brought this in because I've received
+review comments that state bouncing is just the easiest option for
+now and we could map it into the hypervisor in the future.  But at
+least for SEV that does not seem like an option without hardware
+changes.
 
-If it proves it works for every configuration (nested, etc), the
-implementation can forward the call to the admin vq for example. At
-the moment, it follows the proposed stop status bit sematic to stop
-the device, which POC has been tested in these circumstances.
+> We should reset and make sure we agree on the top-level approach.
+> 1) We want general scalability improvements to swiotlb.  These
+>     improvements should scale to high CPUs counts (> 100) and for
+>     multiple NUMA nodes.
+> 2) Drivers should not require any special knowledge of swiotlb to
+>     benefit from the improvements.  No new swiotlb APIs should be
+>     need to be used by drivers -- the swiotlb scalability improvements
+>     should be transparent.
+> 3) The scalability improvements should not be based on device
+>     boundaries since a single device may have multiple channels
+>     doing bounce buffering on multiple CPUs in parallel.
 
-Thanks!
+Agreed to all counts.
 
-> > v4:
-> > * Replace VHOST_STOP to VHOST_VDPA_STOP in vhost ioctl switch case too.
-> >
-> > v3:
-> > * s/VHOST_STOP/VHOST_VDPA_STOP/
-> > * Add documentation and requirements of the ioctl above its definition.
-> >
-> > v2:
-> > * Replace raw _F_STOP with BIT_ULL(_F_STOP).
-> > * Fix obtaining of stop ioctl arg (it was not obtained but written).
-> > * Add stop to vdpa_sim_blk.
-> >
-> > Eugenio P=C3=A9rez (4):
-> >   vdpa: Add stop operation
-> >   vhost-vdpa: introduce STOP backend feature bit
-> >   vhost-vdpa: uAPI to stop the device
-> >   vdpa_sim: Implement stop vdpa op
-> >
-> >  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 21 +++++++++++++++++
-> >  drivers/vdpa/vdpa_sim/vdpa_sim.h     |  1 +
-> >  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  3 +++
-> >  drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  3 +++
-> >  drivers/vhost/vdpa.c                 | 34 +++++++++++++++++++++++++++-
-> >  include/linux/vdpa.h                 |  6 +++++
-> >  include/uapi/linux/vhost.h           | 14 ++++++++++++
-> >  include/uapi/linux/vhost_types.h     |  2 ++
-> >  8 files changed, 83 insertions(+), 1 deletion(-)
-> >
-> > --
-> > 2.31.1
-> >
->
+> The patch from Andi Kleen [3] (not submitted upstream, but referenced
+> by Tianyu as the basis for his patches) seems like a good starting point
+> for meeting the top-level approach.
 
+Yes, I think doing per-cpu and/or per-node scaling sounds like the
+right general approach. Why was this never sent out?
+
+> Andi and Robin had some
+> back-and-forth about Andi's patch that I haven't delved into yet, but
+> getting that worked out seems like a better overall approach.  I had
+> an offline chat with Tianyu, and he would agree as well.
+
+Where was this discussion?

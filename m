@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5835390EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FBF5390F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344317AbiEaMlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 08:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S1344340AbiEaMlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 08:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238991AbiEaMls (ORCPT
+        with ESMTP id S1344267AbiEaMlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 08:41:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F8C1056F;
-        Tue, 31 May 2022 05:41:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E914611EC;
-        Tue, 31 May 2022 12:41:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D415C385A9;
-        Tue, 31 May 2022 12:41:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654000905;
-        bh=50k5P2deod6KO8gvHsZ0qJej+m44dwOkD8HE8Gg5bjs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MO2bw7bbdUFxvvki8bhZ3MgawmrbJZNY4ep7dcTpbtkPkBrD1hNo20l60DI3T7Oj1
-         nlEdkpQz4meR1xf1XIYnfpCEfnmw3hcFzO7dSl+AV566wl8NggjS3iS6AJi7CzsMZX
-         AN27nByTMKymlcyySqfBAbf2gzy8zhdHvemoux4FVUEYrqpGuxQI+T7JGhU0N6HVrH
-         foWmceq2jqtCybmNYuVDwkPIWVeUhAcJAKqePfeEoG7aeHhOX0vJwnz4IPCq6XRJS0
-         Qh7pYiaRubz31TiwxkjXegOnMv4Tyt7uBHh0AoRxhnqbluKjyV3pK5BlOng75mJBSN
-         FCgiuBVpURnIQ==
-Date:   Tue, 31 May 2022 14:41:42 +0200
-From:   Mark Brown <broonie@kernel.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     lee.jones@linaro.org, daniel.thompson@linaro.org,
-        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de,
-        cy_huang@richtek.com, alice_chen@richtek.com,
-        chiaen_wu@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH 03/14] regulator: mt6370: Add mt6370 DisplayBias and
- VibLDO support
-Message-ID: <YpYNBo90NETXtjkV@sirena.org.uk>
-References: <20220531102809.11976-1-peterwu.pub@gmail.com>
- <20220531102809.11976-4-peterwu.pub@gmail.com>
+        Tue, 31 May 2022 08:41:49 -0400
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CED31056F
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:41:48 -0700 (PDT)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id ABA8B20012B9;
+        Tue, 31 May 2022 21:41:47 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.16.1/8.16.1/Debian-3) with ESMTPS id 24VCfkaR042459
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 31 May 2022 21:41:47 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.16.1/8.16.1/Debian-3) with ESMTPS id 24VCfk49221105
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 31 May 2022 21:41:46 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.16.1/8.16.1/Submit) id 24VCfj6Q221104;
+        Tue, 31 May 2022 21:41:45 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Christian Kellner <ckellner@redhat.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        Alberto Ruiz <aruiz@redhat.com>,
+        Peter Jones <pjones@redhat.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        Colin Walters <walters@verbum.org>,
+        Chung-Chiang Cheng <cccheng@synology.com>
+Subject: Re: [PATCH v3 2/3] fat: add renameat2 RENAME_EXCHANGE flag support
+References: <20220526134119.242182-1-javierm@redhat.com>
+        <20220526134119.242182-3-javierm@redhat.com>
+        <87ilpmows4.fsf@mail.parknet.co.jp>
+        <0ca7d264-2522-c820-d26e-19b6685d5016@redhat.com>
+Date:   Tue, 31 May 2022 21:41:45 +0900
+In-Reply-To: <0ca7d264-2522-c820-d26e-19b6685d5016@redhat.com> (Javier
+        Martinez Canillas's message of "Tue, 31 May 2022 14:15:02 +0200")
+Message-ID: <87czftq3g6.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hl22OOkO/wMChZ8B"
-Content-Disposition: inline
-In-Reply-To: <20220531102809.11976-4-peterwu.pub@gmail.com>
-X-Cookie: May your camel be as swift as the wind.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,47 +61,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Javier Martinez Canillas <javierm@redhat.com> writes:
 
---hl22OOkO/wMChZ8B
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>> Main purpose of me is to consolidate helpers with vfat_rename(), and
+>> tweak coding style to use existent fat codes.
+>>
+>
+> Indeed. What do you think of the following plan for v4 ?
+>
+> 1) Keep patch "fat: add a vfat_rename2() and make existing .rename callback a helper"
+>    as the first patch of the series.
+> 2) Add a patch #2 with your authorship that adds the helper and use them in the
+>    vfat_rename() function.
+> 3) Make this patch "fat: add renameat2 RENAME_EXCHANGE flag support" to be patch #3
+>    and use the helpers introduced in patch #2.
+> 4) Make patch #4 to not only add a test for RENAME_EXCHANGE but also for renameat()
+>    and renameat2(..., RENAME_NOREPLACE). That way it will also cover your changes in
+>    patch #2.
 
-On Tue, May 31, 2022 at 06:27:58PM +0800, ChiaEn Wu wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
->=20
-> Add mt6370 DisplayBias and VibLDO support.
+I don't care much about it because whole is not big (in short, I'm ok
+with even one patch), so the point is the patches should be able to
+bisect easily if separated.
 
-Other than one small thing this looks nice and clean:
+>>> +	/* update inode version and timestamps */
+>>> +	inode_inc_iversion(old_inode);
+>>> +	inode_inc_iversion(new_inode);
+>> 
+>> Why do we need to update iversion of those inodes? I couldn't get intent
+>> of this.
+>>
+>
+> To be honest, I wasn't sure about this either but I saw that the implementation
+> of RENAME_EXCHANGE in other filesystems did. For example btrfs_rename_exchange().
 
-> +	enable_gpio =3D fwnode_gpiod_get_index(of_fwnode_handle(np), "enable", =
-0,
-> +					     GPIOD_OUT_HIGH |
-> +					     GPIOD_FLAGS_BIT_NONEXCLUSIVE,
-> +					     desc->name);
-> +	if (IS_ERR(enable_gpio)) {
-> +		config->ena_gpiod =3D NULL;
-> +		return 0;
-> +	}
+Ok. If I'm not overlooking, it looks like only btrfs. Please remove
+those inode_inc_iversion() for {new,old}_inode.
 
-Please just use the OF APIs - due to ACPI's handling of power for
-devices the regulator API OF bindings can't be used sensibly on
-ACPI so it's better to explicitly work on DT only.  This won't
-actually cause problems here but it's a bit clearer.
-
---hl22OOkO/wMChZ8B
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKWDQUACgkQJNaLcl1U
-h9CrHwf/Xn0rciY/VlcVjndWUL/zYX17wRyxPAwxx/DOq/VCeystayvT4671ML/1
-6h5ZE7pKGSzHQjyt8x3BXHDAvn0EW5KNrc+lwBTQDrhiE7hbKcXb0cChQBvcM4KJ
-m2ETTDdgNoBEkUQwj40OnrL/DIw7NpILWAOaoB+gGwelfj4Lu8LxTcZsRQqdwAGN
-Q4lC4mPkae3NP0+tc82DyjtHytJPaX5jCPML4AofpFKs6A95yGyKlARdDgQqVVXP
-sbKZA93RwgxZDSH0pxXBaKCBTEwOIjIl5qXbk0OXyvnopAYvVGVe6oFgutC2MPqa
-joJC6sXurZO+wFB9H9tlKwq9Au8AOQ==
-=WP6+
------END PGP SIGNATURE-----
-
---hl22OOkO/wMChZ8B--
+Thanks.
+-- 
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>

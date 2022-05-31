@@ -2,193 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2263E539531
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BC8539537
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346287AbiEaREx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 13:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
+        id S1346373AbiEaRFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 13:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238234AbiEaREt (ORCPT
+        with ESMTP id S1346410AbiEaRFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 13:04:49 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B1C8DDCC;
-        Tue, 31 May 2022 10:04:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0BFD8CE1796;
-        Tue, 31 May 2022 17:04:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47727C3411F;
-        Tue, 31 May 2022 17:04:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654016684;
-        bh=j6s+IalVNYTBUA6wgYGP0AcZEJmrt0aOpCnaWU1k1AI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=P3682zCCL69GcHpwMCjJpBaQnRgMtwuXh9+cfVEf+V0w9cxd9vwV19GSXvldWAK2o
-         Eg4KqpuDdUEW5NAEwwjsqOL8duStTFknbbT4gQaEbEKvgIByScXX1Aij/+UWCSQKDP
-         SioFa9jae6NIbvqHviJpXhYhfXCjJTy/cceXJET9Bb6yrVmNIDjeB010xxLVpJ8CGs
-         g52qgh3FJxYzHVFCCK9/9+5cCuYmWF+QSIsxTea6LyGPK2Nsrz566/v06hJQanRYm3
-         nbHmdO8gQr+czBrOLi3lWukECTWe/iK7Of9YCv0GqMlXt41zeeMdkS0hGR1FZcN4mg
-         Af1Iayvp1AiPg==
-Received: by mail-yb1-f180.google.com with SMTP id f34so11926203ybj.6;
-        Tue, 31 May 2022 10:04:44 -0700 (PDT)
-X-Gm-Message-State: AOAM532gnAQHvq+hUbLa2bFvFLdUoesu89CtVjxOKXfea5OXwO4dLO9m
-        BTai0LkbuMCrN98Dmtks/DlH3D/EMXPoibHcgHU=
-X-Google-Smtp-Source: ABdhPJzqIftVjeP8D3QiVTvl+6CgAWHDhosTcS1v7b8iyGp7C79UUnQqjMkeQMKziYevILPRTrMSyXfh4Omy4fUNPBY=
-X-Received: by 2002:a25:7e84:0:b0:650:10e0:87bd with SMTP id
- z126-20020a257e84000000b0065010e087bdmr39214644ybc.257.1654016683266; Tue, 31
- May 2022 10:04:43 -0700 (PDT)
+        Tue, 31 May 2022 13:05:46 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCB88DDCC
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:05:45 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24VFuWca007300;
+        Tue, 31 May 2022 17:05:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=Xiguyp3NbD6/X0Ke2hFELDlS5vee0Gh2mXk/DVfofpA=;
+ b=GIL2Vc82wdP5zGTziivLfwPhm9U1jgDR70jZwf171EHos9Vev6QVgtUP7gVXU75AhjVd
+ pln1F4v7/x+pxpLiqcog92I3caiHzPFjtu8mVlOh/qvi4KaGiVX75/FySg0Nl4l05hY1
+ P/1/z9vcRIdy3p8d/5+dvOpglypKmXI26aEDX+Ll4o//R7nDyvgGUU8VT6LGKIOAv8Oy
+ DMAejfWR/JbYZmy79nZJ2aGcgPbWkEnUwwgWfW0YEVrJqAwKGM3TzQR6R58KiuBPSgIZ
+ P0jW6vsArC9NieHZXthEmxpyLwE0LkdJH+H1hlOuyPdQpXQ5Tzwu7eZ+OlgMTVOIgffO 2A== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gbcauns6y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 May 2022 17:05:27 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24VGpRgL036599;
+        Tue, 31 May 2022 17:05:26 GMT
+Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam08lp2040.outbound.protection.outlook.com [104.47.74.40])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gc8jxfcmc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 May 2022 17:05:25 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rlru86Hmmo0QjqK/D+FvjCTjg9lLhfTphlNbbzHrz3NEyD5nMz4DtrpPIONSigICUYibs0ZulGdkC8Y4WJao+lhyMHmqG3D5HDpOMU6o8mT2UlR3RPzwhS+z/VA5kI3WqynS4CngViCvTdfxwTjQPtPvSBcuxuxq3mU9bH32xBb7twNnwlHmQjzB377A5DbI+hHRC4HQaBm8Mvxo6rdqLmhNZJQ/l/jgpRw1aT4/+Bb14jplfq6DSupBcHnxBB1Oe1IzmheS9VQAwTstDqzEj6HjfXVPGqkxNDN5tFEeHsJDx+TdIHGSrlFzAuNHe5htznFawGmDw9ECzSakxXqcvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Xiguyp3NbD6/X0Ke2hFELDlS5vee0Gh2mXk/DVfofpA=;
+ b=QjTmXF758P1BGLzHUtQzt03g6gd7zLahxhcixuE6MFbW6MEpOPwGPUdKGs9JnJnEL3sRjIJlXVHnVuYm2CxuzC8DSrjA7E7PVROAMfFl3tblqC8HzP3gFun5eEEfcMa0rD6X41v21V71T4DFbLhxoo7POysrEOgmlGxxDzOjPHZnzxNQnCds4Qx6ikLqe5dY2vNo42MQAQNamLFIb5Owl5r8pgJYAMWVPBbckn6rI9gZwFd+23mv/IXC0H/yl+Cd8Chw/IkaJo3UPWiK2y0gtAcNWxhtMt1OcPdGR9aBYNbOcQAt24Mb7G3ZSqq50wgbAG0yKIfQcWcvduNkNqd0qg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Xiguyp3NbD6/X0Ke2hFELDlS5vee0Gh2mXk/DVfofpA=;
+ b=U+yn74fNb5OTvL5zk/Ua25e9+Tl3MJxNkf0FumNNNMnPtG8Qpg6iIlaubd4+LSEYBxEL62ib32FHt118CBkU2H7fwipoO4UCrhKNosj9zdx4OqpLASlSoNhOCw7WGw4oYVpHJBihOymbDfCz3hTJDIcz0Rt3vMIpZ3aIK4uxZ2I=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by PH0PR10MB5529.namprd10.prod.outlook.com (2603:10b6:510:106::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Tue, 31 May
+ 2022 17:05:24 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::2125:9bb7:bfeb:81f9]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::2125:9bb7:bfeb:81f9%9]) with mapi id 15.20.5314.012; Tue, 31 May 2022
+ 17:05:24 +0000
+Message-ID: <95bd9375-36d2-7e34-83a8-d9eedfe70956@oracle.com>
+Date:   Tue, 31 May 2022 10:05:21 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC PATCH 1/3] hugetlb: skip to end of PT page mapping when pte
+ not present
+Content-Language: en-US
+To:     Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Michal Hocko <mhocko@suse.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220527225849.284839-1-mike.kravetz@oracle.com>
+ <20220527225849.284839-2-mike.kravetz@oracle.com>
+ <YpUhe6BSfflOVz7b@xz-m1.local> <YpV3qrSHGsIuvifX@FVFYT0MHHV2J.googleapis.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+In-Reply-To: <YpV3qrSHGsIuvifX@FVFYT0MHHV2J.googleapis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW2PR16CA0036.namprd16.prod.outlook.com (2603:10b6:907::49)
+ To BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-References: <cover.1653861287.git.dxu@dxuuu.xyz> <b544771c7bce102f2a97a34e2f5e7ebbb9ea0a24.1653861287.git.dxu@dxuuu.xyz>
-In-Reply-To: <b544771c7bce102f2a97a34e2f5e7ebbb9ea0a24.1653861287.git.dxu@dxuuu.xyz>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 31 May 2022 10:04:32 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5EGq2uFgO5P3zaX_mcyvn86Fyq9ByEy4QretjL0R3Pcg@mail.gmail.com>
-Message-ID: <CAPhsuW5EGq2uFgO5P3zaX_mcyvn86Fyq9ByEy4QretjL0R3Pcg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf, test_run: Add PROG_TEST_RUN support to kprobe
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2b4be85d-6743-48ba-661f-08da4327c06d
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5529:EE_
+X-Microsoft-Antispam-PRVS: <PH0PR10MB552959DFBC3669A3A1A5EF47E2DC9@PH0PR10MB5529.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FTKFEJLP8cYa4XCIrtdR+GexH90XKwXJW7p6b38ap9DH5ZmlI+F8hD/GoGmoHziP+y+n/EDJ68031drCBnK/fcemaFiSWGyNT15Oan6VJX7qb1sSHMNQBAN+ke29xmu6n5kKLNOquyOfjqbHhbXP6k/8+yKv6PR+DB785zZRRCS5svGAnNHLWfHiVoTVibSHXp709CnrzwQcPzMR9o1nZIkyxt/1T+6ofeBgfI/nbR8dXiadxsyAHFTBinUwfJNCwn0BDGszb5QvbQMkHRKQzJ8EvlOBSDMwhnlbGUj26d+GmlSimZ5D5ybH7Nlnw31UeI+eLKJfzkQ//yDv+4O8nw1KM1l+JJyq7LsxLgn+8audVS9cmk7g3keb7Hp0Nbi/euMLDysL+iLPYEXXheoVuM8fBzrG3vlhULeNMOmrd0bTjpetiosGlVWoAHKmOEv7MKiHfxCsax70vypRKXefZOfsPSTJovCdYsFdpiTzZiAe+W0OJ7hM8h9Nhe9uO4uPc+pxLKZbgJYAyDViWXygXmZ7ofo3RdXLwBj2WSuNFbPFvRyo2HOWOlm3jv5fP15xIC0/b+oea47NBXL7IXuiV6/2Nte+vbdgsRiciuVXSq/fPTUfLxauV+RwXHpKRrOFOxXY5fUBY95y6YD02VSzHNHli4VRgQZbtX+RchPbRPMCWMpC8s9/PnxNw6bpUS6YEQKMlmPE540jG2Vt4yFh1lJN/E4XQJPdLhsg8S9lTUNxnBaYS4fA3m7ueXmFhjVpcIj+3lvCZKr5RctgFWLHsA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(54906003)(66476007)(66556008)(66946007)(38100700002)(31696002)(4744005)(36756003)(7416002)(38350700002)(316002)(110136005)(2616005)(8936002)(86362001)(186003)(5660300002)(52116002)(2906002)(508600001)(4326008)(8676002)(53546011)(26005)(6506007)(6512007)(44832011)(6486002)(6666004)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VDFhaEwwQ1JVVTFSaUh4SFlZOGt6NDRZYmtiY0k0OEJVSnRyMWR2UlZlVHVu?=
+ =?utf-8?B?Si92RkIzejFHMU1uc1ZybVlRdnhBZ0d5WStlVUdsTW1KQU9EK2tVZks0V1M3?=
+ =?utf-8?B?bVpDOVdELzc3UlY0WnE5Uzk3R3FybDByZDkwVk1KYis0Y1hFbnBlbGU5bldp?=
+ =?utf-8?B?bi83RnJSdkxPWGlleEh3bFdJcnZlRjVsYWJIOVpKMHJRaG1vbm1kVm1PV3kx?=
+ =?utf-8?B?VzhzRThvci9UTUtiTGVxRGUrVEFkWG5QRVBQakh4dVU1dmRDWEVWdmM0NU4r?=
+ =?utf-8?B?d0RDUHUwOUlma0szSXh5TTVWSmlhMEhMR3k0RHBrUGRhMnppYS9VdTNsTkp2?=
+ =?utf-8?B?OHMwU2ttbjI2c0tWWUJtK2IxUXdTek5id0xwcWsrQWVrcTFzajY0UnZSNnZx?=
+ =?utf-8?B?cW1vMmxwMWtySE00ZTE4US9sK1A4UitFNGs0Yi9QMTEwT1ZCVGIrTVNlRTl0?=
+ =?utf-8?B?c0VoSUp0Y0xRZkJFa2prRnhkbCt6WEcrUTdMMGxOQ3B0R2w2VW5Gc0s2MlY3?=
+ =?utf-8?B?Z0JYeXlCZFJWTXgydUMxM0Z4WmpOWDNwMm1ucTB3VXc1QlFXRUFHak9CYitR?=
+ =?utf-8?B?eEs4cDhSTllZK1ZGOXpQaDM1YS9rY05pZHBZWlNZZDZUT2dSV25CT2lCM3BO?=
+ =?utf-8?B?MzZtdVBPUGJMS0tQajZRcGx0bW9ETWlrTUh3UzlIZnBPNlcvci8wWDlWZ0ZQ?=
+ =?utf-8?B?bTJnNis3dHVzdTc5TlV6SytTM3VVeXV4dnNSUDdidzRTNkN6aFJJNGJOQ25Q?=
+ =?utf-8?B?VnV2QTlNYWJxeXJCUkM3akw2QmRUY0dKSHpXaTRoZVhDWTQxSG5QVWM2QWJI?=
+ =?utf-8?B?SjdoS0FuQzByUHFFcDhiY0ZWNm9XTktDYTVwMEFPZTJnOFl4blZmaHdTZXU1?=
+ =?utf-8?B?cko1VjBSa2krUnVXQmhldWJPWmo0MFRBM2ZqRVNYZnUydEpldWVLUk1GZDdJ?=
+ =?utf-8?B?VG16UFJmQVNKeUh6WWYzVXF2OXRrNkJVVHRBeWRSeG9hTTY3QVdrU3F3OFRr?=
+ =?utf-8?B?SDdwVjN0cFlDbUlFSmwyZnpZMDN1SVN1S3F5YlRmWGRvaXNSNFRuN0daMUVi?=
+ =?utf-8?B?dGFPMFpTQUVYVjkxUXNDUkQ4MHBSejhvQWtYWnVyaXN1dEdhZWtCQTNsR0xJ?=
+ =?utf-8?B?cGdTSmg3dXk4bTB0azFyRXJiRVhub3RXalptVGdNV00xRkRMVVArdCs4ck9z?=
+ =?utf-8?B?cS9ZNkpYOUdHTjZUVDBLRlN1OWoySkxTRklvYU9lTUczYVNqZUo4SkJFMEZ0?=
+ =?utf-8?B?YUxpWjZkaTNpN3dnZ0s3VHlOSTZ3UkRYYzR3SXEveXI0cEo3WkFBeVJuZmRN?=
+ =?utf-8?B?bkhZWjZzb0N5aWtSU2s5UnZocS9scmxweWFZYzY4ZHFjR240M2JBZzZXMWZ0?=
+ =?utf-8?B?bjRxS3hCOVlHWVNZN0V5ZmJZYytPNmY5RkhLYjVjRHJTRVo4c2lTb2JrVHpR?=
+ =?utf-8?B?YnB2ZGxXbTY4M2NSRzB6elAyYWZMWEd0SnMyQUc5QWs0U3ZxK1NFSWVFbnd2?=
+ =?utf-8?B?MG5OWkhvayszQmp4MGJqbWdzSkFVaEY5NE1QVTZrZjRQeEpWV25EeFJkNUxr?=
+ =?utf-8?B?WE4veEo2cFRWV0pHMEZ3a3lzbHNPcmxTa1RHR2hDN05ZNGE2S2V1Tm5nRm1K?=
+ =?utf-8?B?SGdpUGlueUo5b1lBZktMNFJvMzYxWFdYN01mekNHelJOYWxCNkMrS1ZMRW1a?=
+ =?utf-8?B?R0g0cjNEN0dPKzZsVE40elkweXF4dVpJQVI4UW0yUWF3M3FNcmVPc3F0aHE2?=
+ =?utf-8?B?S2MzS1VrMlBOd2tKQUlpNkMyajlhNVU2eHl6NGEvYjhMSzZxTmpScVVscTRh?=
+ =?utf-8?B?MkpaT2FqMWVsVzZXUEJHR2UwWkZsSlo0cXZOTzRsYmhpYzhNV0VWWVp5cHdR?=
+ =?utf-8?B?NDNFc1E5b1JxV2huWU5leC9ZdkxML05ycVBHUG0vNFRNY0YrRmFpR0hyMXJD?=
+ =?utf-8?B?SlFIbytHWVp0VFRqV0NSSFF0alIxeUo0L3ExYXJVbS96WmJVcWQ4OEtPa0hl?=
+ =?utf-8?B?WmZ3V3F1dXJIMHFrWTg1R2twdGE4RTE2K0VFek5qS1pyb3hXZmVvN3hDUnNU?=
+ =?utf-8?B?NFk1UDFGT0psbTdmc2l6WXh1ekhqVGxOVUZuVXNMQnhQTHMrckpNcVVUM0pM?=
+ =?utf-8?B?dHlTOE9nK1JxVmMzbnE3S0Fod3d0WU9zZHZGRENEYTIvV3VJdjVQSlV4SkZI?=
+ =?utf-8?B?b0o0d0YyOHVPMEEvazlCekZNYStRbk0zb1RHU3Evb0FqN2FsTkw1cGx6N3Fn?=
+ =?utf-8?B?bnovMmJKS0wza3NzbHVDYW5TRTJFbVRWZlU3M0xVdDU0U2cwa3lWVXRxSHJE?=
+ =?utf-8?B?OWt6K1ViWWwxcXNGOXU1c240UitUb0J3UnFaekpGQ0RQSUtSNjNZaWU4M0RS?=
+ =?utf-8?Q?LYKq3V6BLuJWCM/8=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b4be85d-6743-48ba-661f-08da4327c06d
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2022 17:05:23.9245
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Z8n+1UOPi9lXnnwfJgJamq+F5i5Yl2RwfaU4IhNbmRUUGQM3wY8EufBPFCzewcfZT69ydmmmmuI8DOAgX8nv8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5529
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
+ definitions=2022-05-31_07:2022-05-30,2022-05-31 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 spamscore=0 phishscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205310080
+X-Proofpoint-ORIG-GUID: z7rcaOZ2SRZvtErotTyi53r8uauLW7dB
+X-Proofpoint-GUID: z7rcaOZ2SRZvtErotTyi53r8uauLW7dB
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 29, 2022 at 3:06 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
-> This commit adds PROG_TEST_RUN support to BPF_PROG_TYPE_KPROBE progs. On
-> top of being generally useful for unit testing kprobe progs, this commit
-> more specifically helps solve a relability problem with bpftrace BEGIN
-> and END probes.
->
-> BEGIN and END probes are run exactly once at the beginning and end of a
-> bpftrace tracing session, respectively. bpftrace currently implements
-> the probes by creating two dummy functions and attaching the BEGIN and
-> END progs, if defined, to those functions and calling the dummy
-> functions as appropriate. This works pretty well most of the time except
-> for when distros strip symbols from bpftrace. Every now and then this
-> happens and users get confused. Having PROG_TEST_RUN support will help
-> solve this issue by allowing us to directly trigger uprobes from
-> userspace.
->
-> Admittedly, this is a pretty specific problem and could probably be
-> solved other ways. However, PROG_TEST_RUN also makes unit testing more
-> convenient, especially as users start building more complex tracing
-> applications. So I see this as killing two birds with one stone.
->
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> ---
->  include/linux/bpf.h      | 10 ++++++++++
->  kernel/trace/bpf_trace.c |  1 +
->  net/bpf/test_run.c       | 36 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 47 insertions(+)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 2b914a56a2c5..dec3082ee158 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1751,6 +1751,9 @@ int bpf_prog_test_run_raw_tp(struct bpf_prog *prog,
->  int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog,
->                                 const union bpf_attr *kattr,
->                                 union bpf_attr __user *uattr);
-> +int bpf_prog_test_run_kprobe(struct bpf_prog *prog,
-> +                            const union bpf_attr *kattr,
-> +                            union bpf_attr __user *uattr);
->  bool btf_ctx_access(int off, int size, enum bpf_access_type type,
->                     const struct bpf_prog *prog,
->                     struct bpf_insn_access_aux *info);
-> @@ -1998,6 +2001,13 @@ static inline int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog,
->         return -ENOTSUPP;
->  }
->
-> +static inline int bpf_prog_test_run_kprobe(struct bpf_prog *prog,
-> +                                          const union bpf_attr *kattr,
-> +                                          union bpf_attr __user *uattr)
-> +{
-> +       return -ENOTSUPP;
-> +}
+On 5/30/22 19:04, Muchun Song wrote:
+> On Mon, May 30, 2022 at 03:56:43PM -0400, Peter Xu wrote:
+>> Hi, Mike,
+>>
+>> On Fri, May 27, 2022 at 03:58:47PM -0700, Mike Kravetz wrote:
+>>> +unsigned long hugetlb_mask_last_hp(struct hstate *h)
+>>> +{
+>>> +	unsigned long hp_size = huge_page_size(h);
+>>> +
+>>> +	if (hp_size == P4D_SIZE)
+>>> +		return PGDIR_SIZE - P4D_SIZE;
+>>> +	else if (hp_size == PUD_SIZE)
+>>> +		return P4D_SIZE - PUD_SIZE;
+>>> +	else if (hp_size == PMD_SIZE)
+>>> +		return PUD_SIZE - PMD_SIZE;
+>>> +
+>>> +	return ~(0);
+>>> +}
+>>
+>> How about:
+>>
+>> unsigned long hugetlb_mask_last_hp(struct hstate *h)
+>> {
+>> 	unsigned long hp_size = huge_page_size(h);
+>>
+>> 	return hp_size * (PTRS_PER_PTE - 1);
+>> }
+>>
+> 
+> +1
+>  
 
-As the kernel test bot reported, this is not enough to cover all
-different configs. We can
-follow the pattern with bpf_prog_test_run_tracing().
 
-Otherwise, this looks good to me.
+I like this as well, but I wonder if we should put something like the
+following in just to be safe.
 
-Song
+BUILD_BUG_ON(PTRS_PER_PTE != PTRS_PER_PMD);
+BUILD_BUG_ON(PTRS_PER_PTE != PTRS_PER_PUD);
+BUILD_BUG_ON(PTRS_PER_PTE != PTRS_PER_P4D);
 
-> +
->  static inline void bpf_map_put(struct bpf_map *map)
->  {
->  }
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 10b157a6d73e..b452e84b9ba4 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1363,6 +1363,7 @@ const struct bpf_verifier_ops kprobe_verifier_ops = {
->  };
->
->  const struct bpf_prog_ops kprobe_prog_ops = {
-> +       .test_run = bpf_prog_test_run_kprobe,
->  };
->
->  BPF_CALL_5(bpf_perf_event_output_tp, void *, tp_buff, struct bpf_map *, map,
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 56f059b3c242..0b6fc17ce901 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -1622,6 +1622,42 @@ int bpf_prog_test_run_syscall(struct bpf_prog *prog,
->         return err;
->  }
->
-> +int bpf_prog_test_run_kprobe(struct bpf_prog *prog,
-> +                            const union bpf_attr *kattr,
-> +                            union bpf_attr __user *uattr)
-> +{
-> +       void __user *ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
-> +       __u32 ctx_size_in = kattr->test.ctx_size_in;
-> +       u32 repeat = kattr->test.repeat;
-> +       struct pt_regs *ctx = NULL;
-> +       u32 retval, duration;
-> +       int err = 0;
-> +
-> +       if (kattr->test.data_in || kattr->test.data_out ||
-> +           kattr->test.ctx_out || kattr->test.flags ||
-> +           kattr->test.cpu || kattr->test.batch_size)
-> +               return -EINVAL;
-> +
-> +       if (ctx_size_in != sizeof(struct pt_regs))
-> +               return -EINVAL;
-> +
-> +       ctx = memdup_user(ctx_in, ctx_size_in);
-> +       if (IS_ERR(ctx))
-> +               return PTR_ERR(ctx);
-> +
-> +       err = bpf_test_run(prog, ctx, repeat, &retval, &duration, false);
-> +       if (err)
-> +               goto out;
-> +
-> +       if (copy_to_user(&uattr->test.retval, &retval, sizeof(retval)) ||
-> +           copy_to_user(&uattr->test.duration, &duration, sizeof(duration))) {
-> +               err = -EFAULT;
-> +       }
-> +out:
-> +       kfree(ctx);
-> +       return err;
-> +}
-> +
->  static const struct btf_kfunc_id_set bpf_prog_test_kfunc_set = {
->         .owner        = THIS_MODULE,
->         .check_set        = &test_sk_check_kfunc_ids,
-> --
-> 2.36.1
->
+-- 
+Mike Kravetz

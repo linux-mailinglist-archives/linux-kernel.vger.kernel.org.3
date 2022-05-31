@@ -2,153 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9437D539807
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 22:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799B0539808
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 22:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347771AbiEaUeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 16:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
+        id S1347780AbiEaUfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 16:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347764AbiEaUes (ORCPT
+        with ESMTP id S230050AbiEaUf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 16:34:48 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70716994E9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 13:34:46 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id 135so14075128qkm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 13:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2fh41uCU0B0HjBQXprAp7krFBQPqgkjOy/nUjVHNbUw=;
-        b=cg6LfZ2kXIK9pxClWtEHJwSucUWw4dIXpd5+sYRrz3pb5+GxzuJ1aq9JCx6TIF2m5p
-         RT20SL65M2yezc64XYlLvzEI6Sd+Bqh79gRnc64JONcBV+aNMuQe1kq9bYba3YSI92Ys
-         h8rpWCWKrdWsCeM0nM4YKH+YtLRPiu03o5n/B+IoT9qwKMDQl+nU6wZD+1GP6z5jVWoR
-         r81DOxzJA3HGeAG1/CYbRaDkxQWHryEDJ7jXGekIyqbfTemiNu1CWtmckG5jr6iSU0uP
-         mpK0G+BqvyyKnarnXuLVX6IMIK6AVtwYYWZceOyq5V2OVHA5C4V2p6DrK7Q0WYk+Jnb7
-         uT4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2fh41uCU0B0HjBQXprAp7krFBQPqgkjOy/nUjVHNbUw=;
-        b=vJ+PUyGE/Ev1gFVv83RGTzrAennJ5CMVfAUAEfnWeljBalBxXMtyPpDte4hUlqq1XM
-         //baChd9hOpgweehDIq3ddjgWyD5NvVawwhlAaaIykFhLOu5y6JzYo3UZ5WROWfvpcA9
-         lX//F2hzJ1GqzI3g/AWzVAAiR88aw+5015FS4vQvyzSmMmjLIDNIMi8IZsdwxuacGnlJ
-         m5PDNRKA2maDQeBnf/Lw9KdFVTrRxupDHnu2xGyJxbrvdvf05adeLFmm+/VKg3p/khqP
-         NHoPjP5BZjoBulk7++5IovyvmqplvaA1glDj1kvAym2mnivxkrG5piikUh5oU9p3jX7/
-         srhg==
-X-Gm-Message-State: AOAM531i0m7/YoRRTwbeQlH2Lx+iSEE6n2P/FQS8ZtG89x6O6FaBw8/t
-        6zsTPVKX5UMzPzVbpZUDOt9eZ80PVvrhPPYNgXktzQ==
-X-Google-Smtp-Source: ABdhPJz5IQSs0iubNWF0AHMHHE5gGY9ALKbjx1Exvbh1qJxPkgPlKRPWxj874jacm+IrqVX5a3l3Jg663f6Em2Lj6X0=
-X-Received: by 2002:a05:620a:414e:b0:6a5:8dec:57bb with SMTP id
- k14-20020a05620a414e00b006a58dec57bbmr24700836qko.30.1654029285518; Tue, 31
- May 2022 13:34:45 -0700 (PDT)
+        Tue, 31 May 2022 16:35:28 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74004994E5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 13:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654029327; x=1685565327;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UZOgFp9+adD77OPWITW9APSUL9c90SwpIF7Rg7TWWZw=;
+  b=i80/FpyRPzzhfDVgDM9x5/6JxaV6hke+guuQEFBFW4r3/i7DCNOZ3cS4
+   pER/9xjZIilgQOxUhczB+seb3h9tlASpt4NuXQSNVPghAI0acw31lMbfn
+   Fd8+BfCrobX3tHb+0TntrBbc61JvT2MpuM+wnw555EgdHFYmr4gCmJPMM
+   gVh5br97TwhibIw3XUO5T37CtXu/0VsDwsbCVZtyLlU/6Z2OsbRm3O5Hv
+   0185IkQGEdXB8doFTJy+t2Qwq5DKX/1qolaK+HsRwllgZPe1zQAWLhlAs
+   /+UhH5K49bdNFgKtlSsJeAjCzvKFf5eS6rozUDS/G84OgI+YiSEgcuui9
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="275384053"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="275384053"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 13:35:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="576582579"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 31 May 2022 13:35:25 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nw8aK-00033C-Le;
+        Tue, 31 May 2022 20:35:24 +0000
+Date:   Wed, 01 Jun 2022 04:34:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/microcode] BUILD SUCCESS
+ 0c0fe08c76485fe0178ebb0fa1a2052c727abe94
+Message-ID: <62967be5.FmYVm5qy/TvWc5VJ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220531200857.136547-1-robdclark@gmail.com>
-In-Reply-To: <20220531200857.136547-1-robdclark@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 31 May 2022 23:34:34 +0300
-Message-ID: <CAA8EJpouqO9KfhAQSqEHP8MUGTkntx7iARRRqrvx3uMFQd4-dQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm: Ensure mmap offset is initialized
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 May 2022 at 23:08, Rob Clark <robdclark@gmail.com> wrote:
->
-> From: Rob Clark <robdclark@chromium.org>
->
-> If a GEM object is allocated, and then exported as a dma-buf fd which is
-> mmap'd before or without the GEM buffer being directly mmap'd, the
-> vma_node could be unitialized.  This leads to a situation where the CPU
-> mapping is not correctly torn down in drm_vma_node_unmap().
->
-> Fixes: e5516553999f ("drm: call drm_gem_object_funcs.mmap with fake offset")
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/gpu/drm/msm/msm_drv.c       |  2 +-
->  drivers/gpu/drm/msm/msm_drv.h       |  1 +
->  drivers/gpu/drm/msm/msm_gem_prime.c | 15 +++++++++++++++
->  3 files changed, 17 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-> index 44485363f37a..14ab9a627d8b 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.c
-> +++ b/drivers/gpu/drm/msm/msm_drv.c
-> @@ -964,7 +964,7 @@ static const struct drm_driver msm_driver = {
->         .prime_handle_to_fd = drm_gem_prime_handle_to_fd,
->         .prime_fd_to_handle = drm_gem_prime_fd_to_handle,
->         .gem_prime_import_sg_table = msm_gem_prime_import_sg_table,
-> -       .gem_prime_mmap     = drm_gem_prime_mmap,
-> +       .gem_prime_mmap     = msm_gem_prime_mmap,
->  #ifdef CONFIG_DEBUG_FS
->         .debugfs_init       = msm_debugfs_init,
->  #endif
-> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-> index bb052071b16d..090b8074fec7 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.h
-> +++ b/drivers/gpu/drm/msm/msm_drv.h
-> @@ -275,6 +275,7 @@ unsigned long msm_gem_shrinker_shrink(struct drm_device *dev, unsigned long nr_t
->  void msm_gem_shrinker_init(struct drm_device *dev);
->  void msm_gem_shrinker_cleanup(struct drm_device *dev);
->
-> +int msm_gem_prime_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma);
->  struct sg_table *msm_gem_prime_get_sg_table(struct drm_gem_object *obj);
->  int msm_gem_prime_vmap(struct drm_gem_object *obj, struct iosys_map *map);
->  void msm_gem_prime_vunmap(struct drm_gem_object *obj, struct iosys_map *map);
-> diff --git a/drivers/gpu/drm/msm/msm_gem_prime.c b/drivers/gpu/drm/msm/msm_gem_prime.c
-> index 94ab705e9b8a..dcc8a573bc76 100644
-> --- a/drivers/gpu/drm/msm/msm_gem_prime.c
-> +++ b/drivers/gpu/drm/msm/msm_gem_prime.c
-> @@ -11,6 +11,21 @@
->  #include "msm_drv.h"
->  #include "msm_gem.h"
->
-> +int msm_gem_prime_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma)
-> +{
-> +       int ret;
-> +
-> +       /* Ensure the mmap offset is initialized.  We lazily initialize it,
-> +        * so if it has not been first mmap'd directly as a GEM object, the
-> +        * mmap offset will not be already initialized.
-> +        */
-> +       ret = drm_gem_create_mmap_offset(obj);
-> +       if (ret)
-> +               return ret;
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
+branch HEAD: 0c0fe08c76485fe0178ebb0fa1a2052c727abe94  x86/microcode: Remove unnecessary perf callback
 
-Wouldn't it be better to have this call directly in the
-drm_gem_prime_mmap() ? This way all drivers can be lazy.
+elapsed time: 725m
 
+configs tested: 132
+configs skipped: 82
 
-> +
-> +       return drm_gem_prime_mmap(obj, vma);
-> +}
-> +
->  struct sg_table *msm_gem_prime_get_sg_table(struct drm_gem_object *obj)
->  {
->         struct msm_gem_object *msm_obj = to_msm_bo(obj);
-> --
-> 2.36.1
->
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+sh                  sh7785lcr_32bit_defconfig
+arm64                            alldefconfig
+sh                   sh7770_generic_defconfig
+sh                          lboxre2_defconfig
+sh                        sh7763rdp_defconfig
+powerpc                      pcm030_defconfig
+xtensa                  cadence_csp_defconfig
+m68k                             allmodconfig
+arm                        realview_defconfig
+arm                        mvebu_v7_defconfig
+arm                        spear6xx_defconfig
+powerpc                     pq2fads_defconfig
+openrisc                 simple_smp_defconfig
+powerpc                     tqm8555_defconfig
+xtensa                  nommu_kc705_defconfig
+arm                            zeus_defconfig
+alpha                            alldefconfig
+sparc                       sparc32_defconfig
+parisc64                         alldefconfig
+arc                           tb10x_defconfig
+sh                          sdk7786_defconfig
+powerpc                     stx_gp3_defconfig
+ia64                         bigsur_defconfig
+sh                        dreamcast_defconfig
+parisc                generic-64bit_defconfig
+arm                        clps711x_defconfig
+h8300                            alldefconfig
+powerpc                 mpc8540_ads_defconfig
+mips                       bmips_be_defconfig
+h8300                            allyesconfig
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+riscv                             allnoconfig
+m68k                             allyesconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a015
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220531
+s390                 randconfig-r044-20220531
+riscv                randconfig-r042-20220531
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+mips                 randconfig-c004-20220531
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+s390                 randconfig-c005-20220531
+arm                  randconfig-c002-20220531
+powerpc              randconfig-c003-20220531
+riscv                randconfig-c006-20220531
+arm                            mmp2_defconfig
+mips                       rbtx49xx_defconfig
+powerpc                     mpc512x_defconfig
+arm                             mxs_defconfig
+mips                      maltaaprp_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                     akebono_defconfig
+powerpc                   lite5200b_defconfig
+arm                   milbeaut_m10v_defconfig
+arm                           sama7_defconfig
+arm                         shannon_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                     skiroot_defconfig
+powerpc                    ge_imp3a_defconfig
+mips                         tb0287_defconfig
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://01.org/lkp

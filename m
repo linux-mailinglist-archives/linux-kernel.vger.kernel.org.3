@@ -2,130 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0106D5392F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33FC539310
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345180AbiEaOL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 10:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S1345216AbiEaOVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 10:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345005AbiEaOLX (ORCPT
+        with ESMTP id S242427AbiEaOVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 10:11:23 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7719265422;
-        Tue, 31 May 2022 07:11:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654006282; x=1685542282;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=K2Sm7KR4WlYANKzzxvSs11cMHFq39jJccsP/ycyK3bY=;
-  b=oHemOSvPp4APn+z/NUfMWYfS4mreiS17DozPYsGCaryUHbXA5Am3NyD6
-   4LQs5MNu1ggXWFPmRPmA65GhfI+oz71UZySQeFKBnJv9WHxJ4IcecWUD9
-   MOyYzA4ZfKHw/61y1l/Fe1grNEVGkm3f2ddKHxzznG1yhAtsPEua+UMpM
-   C5EWr64Q+f/b/26OuEDk9VnqxwMV8T7DT+jdYYOw/156wpl3RhqaE7+qe
-   wwzHezQOSFvmoHKjrU/ScSDu6CFuMM1bURYfjZ6XdQ74giA6EdvlKI7L4
-   uyy8q4FPgsj4qr9+Iu3XEZ23rNJpk2zh0J0X/qscJnLIOA2qgarzjvefy
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="272831554"
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="272831554"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 07:11:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="562335391"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 31 May 2022 07:11:20 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 5C9E2165; Tue, 31 May 2022 17:11:22 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 2/2] iio: adc: xilinx-xadc: Drop duplicate NULL check in xadc_parse_dt()
-Date:   Tue, 31 May 2022 17:11:18 +0300
-Message-Id: <20220531141118.64540-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220531141118.64540-1-andriy.shevchenko@linux.intel.com>
-References: <20220531141118.64540-1-andriy.shevchenko@linux.intel.com>
+        Tue, 31 May 2022 10:21:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 829BA70367
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:21:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654006878;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=054tb8AogR5kqRpkgYxu+jA4/lLcTMkATpeGkVLSWIc=;
+        b=Hl4m0BMnQzMusX6/hU2CKokGaBnOO97r8YUlBT0ACktb0zhErNfolKMk0hXddDLb3OLTOJ
+        HMOxuk42dlwj9IeIxhQUqyuzUmiVVMfRZ8AUag4IlT45pr92Z3DwJIeGTKotaWcSqwMM8n
+        asY7NJvHMXG8OG4qkQ5cfOWqRMmlDmE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-661-EylW6zkhOaC9wANYEmdqPg-1; Tue, 31 May 2022 10:21:12 -0400
+X-MC-Unique: EylW6zkhOaC9wANYEmdqPg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CAE191C16B49;
+        Tue, 31 May 2022 14:21:04 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 09D20492CA2;
+        Tue, 31 May 2022 14:21:04 +0000 (UTC)
+Message-ID: <6936d198-7ae4-e022-20d5-e60c17f119e8@redhat.com>
+Date:   Tue, 31 May 2022 10:21:03 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC PATCH 4/4] cpuset: Support RCU-NOCB toggle on v2 root
+ partitions
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>, Tejun Heo <tj@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        rcu@vger.kernel.org
+References: <Yo/FGcG+uiBh88sT@slm.duckdns.org>
+ <20220526225141.GA1214445@lothringen> <YpAHEt0j30vBw9au@slm.duckdns.org>
+ <9e44bb00-955a-dbc6-a863-be649e0c701f@redhat.com>
+ <YpAdSW8JXVPOoNJl@slm.duckdns.org>
+ <20220527083018.n43nc73vuuzm5ixo@localhost.localdomain>
+ <YpIwsiaY2IPK96WO@hirez.programming.kicks-ass.net>
+ <20220530004049.GA1251147@lothringen>
+ <YpR8PUlIraYE2+5L@worktop.programming.kicks-ass.net>
+ <20220530105650.GA1257179@lothringen>
+ <YpTDq6Z/+hp+CHwf@worktop.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YpTDq6Z/+hp+CHwf@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The fwnode_for_each_child_node() is NULL-aware, no need to check
-its parameters outside. Drop duplicate NULL check in xadc_parse_dt().
+On 5/30/22 09:16, Peter Zijlstra wrote:
+> On Mon, May 30, 2022 at 12:56:50PM +0200, Frederic Weisbecker wrote:
+>
+>>> This is ABI, you can't walk back on it. I would suggest starting with an
+>>> 'all feature' isolation. Only if there's real demand for something more
+>>> fine-grained add that on top. Simple first etc.
+>> That's actually my worry. If we start with an all in one ABI, how do we later
+>> mix that up with more finegrained features? Like what will be the behaviour of:
+>>
+>> cpuset.isolation.rcu_nocb = 0
+>> cpuset.isolation.all = 1
+> Well clearly that doesn't make sense. I was more thinking along the
+> lines of cgroup.subtree_control, where instead all features are enabled
+> by default.
+>
+> But only if there's a real usecase, otherwise there's no point in
+> providing such knobs.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/iio/adc/xilinx-xadc-core.c | 38 ++++++++++++++----------------
- 1 file changed, 18 insertions(+), 20 deletions(-)
+I am actually thinking about extending the cpuset partition interface 
+for isolation. Right now, I have an outstanding patch [1] to add an 
+"isolated" state to partition which disable load balancing somewhat 
+similar to isolcpus command line option. In the future, we can add 
+attribute to the isolation state like "isolated:full" to similar to 
+nohz_full currently. If the needs arise, we can even  extend the 
+attribute to allow list like "isolated:rcu_nocbs". I don't think it is 
+good idea to keep on adding new cpuset control files extensively. I 
+would prefer extending the existing ones.
 
-diff --git a/drivers/iio/adc/xilinx-xadc-core.c b/drivers/iio/adc/xilinx-xadc-core.c
-index e883f95f0cda..1b247722ba25 100644
---- a/drivers/iio/adc/xilinx-xadc-core.c
-+++ b/drivers/iio/adc/xilinx-xadc-core.c
-@@ -1247,30 +1247,28 @@ static int xadc_parse_dt(struct iio_dev *indio_dev, unsigned int *conf, int irq)
- 	chan = &channels[9];
- 
- 	chan_node = device_get_named_child_node(dev, "xlnx,channels");
--	if (chan_node) {
--		fwnode_for_each_child_node(chan_node, child) {
--			if (num_channels >= max_channels) {
--				fwnode_handle_put(child);
--				break;
--			}
-+	fwnode_for_each_child_node(chan_node, child) {
-+		if (num_channels >= max_channels) {
-+			fwnode_handle_put(child);
-+			break;
-+		}
- 
--			ret = fwnode_property_read_u32(child, "reg", &reg);
--			if (ret || reg > 16)
--				continue;
-+		ret = fwnode_property_read_u32(child, "reg", &reg);
-+		if (ret || reg > 16)
-+			continue;
- 
--			if (fwnode_property_read_bool(child, "xlnx,bipolar"))
--				chan->scan_type.sign = 's';
-+		if (fwnode_property_read_bool(child, "xlnx,bipolar"))
-+			chan->scan_type.sign = 's';
- 
--			if (reg == 0) {
--				chan->scan_index = 11;
--				chan->address = XADC_REG_VPVN;
--			} else {
--				chan->scan_index = 15 + reg;
--				chan->address = XADC_REG_VAUX(reg - 1);
--			}
--			num_channels++;
--			chan++;
-+		if (reg == 0) {
-+			chan->scan_index = 11;
-+			chan->address = XADC_REG_VPVN;
-+		} else {
-+			chan->scan_index = 15 + reg;
-+			chan->address = XADC_REG_VAUX(reg - 1);
- 		}
-+		num_channels++;
-+		chan++;
- 	}
- 	fwnode_handle_put(chan_node);
- 
--- 
-2.35.1
+[1] https://lore.kernel.org/lkml/20220510153413.400020-1-longman@redhat.com/
+
+Cheers,
+Longman
 

@@ -2,142 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB7C539185
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 169355390FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344601AbiEaNMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
+        id S1344336AbiEaMpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 08:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344605AbiEaNMU (ORCPT
+        with ESMTP id S239853AbiEaMpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:12:20 -0400
-X-Greylist: delayed 1595 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 May 2022 06:12:19 PDT
-Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449FB60045;
-        Tue, 31 May 2022 06:12:17 -0700 (PDT)
-Received: from xenbits.xenproject.org ([104.239.192.120])
-        by mail.xenproject.org with esmtp (Exim 4.92)
-        (envelope-from <pdurrant@amazon.com>)
-        id 1nw1F3-0003Pr-Ez; Tue, 31 May 2022 12:44:57 +0000
-Received: from 54-240-197-226.amazon.com ([54.240.197.226] helo=debian.cbg12.amazon.com)
-        by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <pdurrant@amazon.com>)
-        id 1nw1F3-0006Db-3n; Tue, 31 May 2022 12:44:57 +0000
-From:   Paul Durrant <pdurrant@amazon.com>
-To:     kvm@vger.kernel.org
-Cc:     Paul Durrant <pdurrant@amazon.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86: PIT: Preserve state of speaker port data bit
-Date:   Tue, 31 May 2022 13:44:21 +0100
-Message-Id: <20220531124421.1427-1-pdurrant@amazon.com>
-X-Mailer: git-send-email 2.20.1
+        Tue, 31 May 2022 08:45:35 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F376EB22;
+        Tue, 31 May 2022 05:45:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654001134; x=1685537134;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=E2ntfHjCIkuUyHhmuXAzUVCFkINVleA6ROwALxGHnvM=;
+  b=CVtistdmUYgQ9RoNZ3kivk1aSK2dMRCMwsd5IccMq6lOCCTVOL2zUWhQ
+   LaFnTl+QowXxRa8+3dozV2OTxSF418Sio47Je/DtJLHNfrr3XbH6eyxGu
+   +xlXhMeuDPVICGMkq53oWxOVXuO7KSgn9AmIOEByepvP1V41mBm1+nKmn
+   2ZC4+XHqGUXlOWwPDayEC2ESyJQ3jy2nYQ2ohkgYLrLFk2S1O2DGwPtmh
+   6xuYxMNK2g+DHfr5nJyc0COPi2dqoaqMeZmtKx/k6xgc2elNm3Lk7H3og
+   Lm0Dci8Ce+CCbCUHtqeCp91MtpvreFDrdz0E0pfTckkY/Jh+Nb72zBGlu
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="275246180"
+X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
+   d="scan'208";a="275246180"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 05:45:33 -0700
+X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
+   d="scan'208";a="706557881"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.249.170.74]) ([10.249.170.74])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 05:45:30 -0700
+Message-ID: <628aa885-dd12-8bcd-bfc6-446345bf69ed@linux.intel.com>
+Date:   Tue, 31 May 2022 20:45:28 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
-        RCVD_IN_DNSWL_MED,SPF_FAIL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v4 1/6] iommu: Add a per domain PASID for DMA API
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
+References: <20220518182120.1136715-1-jacob.jun.pan@linux.intel.com>
+ <20220518182120.1136715-2-jacob.jun.pan@linux.intel.com>
+ <20220524135034.GU1343366@nvidia.com> <20220524081727.19c2dd6d@jacob-builder>
+ <20220530122247.GY1343366@nvidia.com>
+ <BN9PR11MB52768105FC4FB959298F8A188CDC9@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB52768105FC4FB959298F8A188CDC9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the state of the speaker port (0x61) data bit (bit 1) is not
-saved in the exported state (kvm_pit_state2) and hence is lost when
-re-constructing guest state.
+On 2022/5/31 18:12, Tian, Kevin wrote:
+>>>> +++ b/include/linux/iommu.h
+>>>> @@ -105,6 +105,8 @@ struct iommu_domain {
+>>>>   	enum iommu_page_response_code (*iopf_handler)(struct
+>> iommu_fault *fault,
+>>>>   						      void *data);
+>>>>   	void *fault_data;
+>>>> +	ioasid_t pasid;		/* Used for DMA requests with PASID */
+>>>> +	atomic_t pasid_users;
+>>> These are poorly named, this is really the DMA API global PASID and
+>>> shouldn't be used for other things.
+>>>
+>>>
+>>>
+>>> Perhaps I misunderstood, do you mind explaining more?
+>> You still haven't really explained what this is for in this patch,
+>> maybe it just needs a better commit message, or maybe something is
+>> wrong.
+>>
+>> I keep saying the DMA API usage is not special, so why do we need to
+>> create a new global pasid and refcount? Realistically this is only
+>> going to be used by IDXD, why can't we just allocate a PASID and
+>> return it to the driver every time a driver asks for DMA API on PASI
+>> mode? Why does the core need to do anything special?
+>>
+> Agree. I guess it was a mistake caused by treating ENQCMD as the
+> only user although the actual semantics of the invented interfaces
+> have already evolved to be quite general.
+> 
+> This is very similar to what we have been discussing for iommufd.
+> a PASID is just an additional routing info when attaching a device
+> to an I/O address space (DMA API in this context) and by default
+> it should be a per-device resource except when ENQCMD is
+> explicitly opt in.
+> 
+> Hence it's right time for us to develop common facility working
+> for both this DMA API usage and iommufd, i.e.:
+> 
+> for normal PASID attach to a domain, driver:
+> 
+> 	allocates a local pasid from device local space;
+> 	attaches the local pasid to a domain;
+> 
+> for PASID attach in particular for ENQCMD, driver:
+> 
+> 	allocates a global pasid in system-wide;
+> 	attaches the global pasid to a domain;
+> 	set the global pasid in PASID_MSR;
+> 
+> In both cases the pasid is stored in the attach data instead of the
+> domain.
+> 
+> DMA API pasid is no special from above except it needs to allow
+> one device attached to the same domain twice (one with RID
+> and the other with RID+PASID).
+> 
+> for iommufd those operations are initiated by userspace via
+> iommufd uAPI.
 
-This patch removes the 'speaker_data_port' field from kvm_kpit_state and
-instead tracks the state using a new KVM_PIT_FLAGS_SPEAKER_DATA_ON flag
-defined in the API.
+My understanding is that device driver owns its PASID policy. If ENQCMD
+is supported on the device, the PASIDs should be allocated through
+ioasid_alloc(). Otherwise, the whole PASID pool is managed by the device
+driver.
 
-Signed-off-by: Paul Durrant <pdurrant@amazon.com>
----
- Documentation/virt/kvm/api.rst  |  4 +++-
- arch/x86/include/uapi/asm/kvm.h |  3 ++-
- arch/x86/kvm/i8254.c            | 10 +++++++---
- arch/x86/kvm/i8254.h            |  1 -
- 4 files changed, 12 insertions(+), 6 deletions(-)
+For kernel DMA w/ PASID, after the driver has a PASID for this purpose,
+it can just set the default domain to the PASID on device. There's no
+need for enable/disable() interfaces.
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 28b547a9d96a..8659dbfd3095 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -2998,7 +2998,9 @@ KVM_CREATE_PIT2. The state is returned in the following structure::
- Valid flags are::
- 
-   /* disable PIT in HPET legacy mode */
--  #define KVM_PIT_FLAGS_HPET_LEGACY  0x00000001
-+  #define KVM_PIT_FLAGS_HPET_LEGACY     0x00000001
-+  /* speaker port data bit enabled */
-+  #define KVM_PIT_FLAGS_SPEAKER_DATA_ON 0x00000002
- 
- This IOCTL replaces the obsolete KVM_GET_PIT.
- 
-diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-index 21614807a2cb..1b30c222d51c 100644
---- a/arch/x86/include/uapi/asm/kvm.h
-+++ b/arch/x86/include/uapi/asm/kvm.h
-@@ -306,7 +306,8 @@ struct kvm_pit_state {
- 	struct kvm_pit_channel_state channels[3];
- };
- 
--#define KVM_PIT_FLAGS_HPET_LEGACY  0x00000001
-+#define KVM_PIT_FLAGS_HPET_LEGACY     0x00000001
-+#define KVM_PIT_FLAGS_SPEAKER_DATA_ON 0x00000002
- 
- struct kvm_pit_state2 {
- 	struct kvm_pit_channel_state channels[3];
-diff --git a/arch/x86/kvm/i8254.c b/arch/x86/kvm/i8254.c
-index 1c83076091af..e0a7a0e7a73c 100644
---- a/arch/x86/kvm/i8254.c
-+++ b/arch/x86/kvm/i8254.c
-@@ -591,7 +591,10 @@ static int speaker_ioport_write(struct kvm_vcpu *vcpu,
- 		return -EOPNOTSUPP;
- 
- 	mutex_lock(&pit_state->lock);
--	pit_state->speaker_data_on = (val >> 1) & 1;
-+	if (val & (1 << 1))
-+		pit_state->flags |= KVM_PIT_FLAGS_SPEAKER_DATA_ON;
-+	else
-+		pit_state->flags &= ~KVM_PIT_FLAGS_SPEAKER_DATA_ON;
- 	pit_set_gate(pit, 2, val & 1);
- 	mutex_unlock(&pit_state->lock);
- 	return 0;
-@@ -612,8 +615,9 @@ static int speaker_ioport_read(struct kvm_vcpu *vcpu,
- 	refresh_clock = ((unsigned int)ktime_to_ns(ktime_get()) >> 14) & 1;
- 
- 	mutex_lock(&pit_state->lock);
--	ret = ((pit_state->speaker_data_on << 1) | pit_get_gate(pit, 2) |
--		(pit_get_out(pit, 2) << 5) | (refresh_clock << 4));
-+	ret = (!!(pit_state->flags & KVM_PIT_FLAGS_SPEAKER_DATA_ON) << 1) |
-+		pit_get_gate(pit, 2) | (pit_get_out(pit, 2) << 5) |
-+		(refresh_clock << 4);
- 	if (len > sizeof(ret))
- 		len = sizeof(ret);
- 	memcpy(data, (char *)&ret, len);
-diff --git a/arch/x86/kvm/i8254.h b/arch/x86/kvm/i8254.h
-index 394d9527da7e..a768212ba821 100644
---- a/arch/x86/kvm/i8254.h
-+++ b/arch/x86/kvm/i8254.h
-@@ -29,7 +29,6 @@ struct kvm_kpit_state {
- 	bool is_periodic;
- 	s64 period; 				/* unit: ns */
- 	struct hrtimer timer;
--	u32    speaker_data_on;
- 
- 	struct mutex lock;
- 	atomic_t reinject;
--- 
-2.20.1
-
+Best regards,
+baolu

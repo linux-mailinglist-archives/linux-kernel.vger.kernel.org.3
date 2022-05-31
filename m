@@ -2,192 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3175395CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4715395CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346765AbiEaSAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 14:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
+        id S1346778AbiEaSCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 14:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237702AbiEaSAr (ORCPT
+        with ESMTP id S233752AbiEaSCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 14:00:47 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AF38AE68;
-        Tue, 31 May 2022 11:00:46 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id f4so13507422pgf.4;
-        Tue, 31 May 2022 11:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BbUxo4yAz2zldbWEi0GluCNfOnin3cth9gUswEAqzU8=;
-        b=hynBTbzO9rYY0qHxLkPOCSAV7PkFkMuKMQVwaYDYARYuWnM9o4kW+6rxRIYdspG+DS
-         J/rTMUxu4nnsZKopHh7CclvjRd+Z/b82662SEdMCD65Cd39uYVAGCiz7JRhBmcVVzQPI
-         QDeGJ+IBQiVFYn6Kzx7UMnvT4azS4kAVvyImB+arcqQ6/pihcplCHDY3QyiTllbucoFN
-         s+tofLkTZcKnWf2Wl+ZXzM76fOuLvkSS7kcLWWcadnYm+2q0cNkQYAh+4VhLz/wHaBTx
-         Ih6Bha6yH+VQl9q2yp7SlKX2ZvfKv5svKSOuMRR/wSv5RH2t4xvwUmZLACrz2ZwjXtqJ
-         w9IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BbUxo4yAz2zldbWEi0GluCNfOnin3cth9gUswEAqzU8=;
-        b=OxTvBpXQK2b2q4lqUFeCZ3BUEs8VOTMJm1+29sMYqcy7iZOSehVvrWfI3cdNrlkGFO
-         VwW7rXoGVR7e2QvVHtTx6zPqpp4JWRPkH4XDWT1R/5+aUVaKj61oLnCV8bgz2Uyg6LYx
-         s+LAlLrvU8XfxixokoxOwQHcEzFwCyxw7LmDHBRymJZ/ACm2JML6Sewd5vgIruEzsVhZ
-         bwFujBGYwMZltKXhj0c38s+uy+CC4/3gHRhGijXjXVdFrSAlsIblzo+Qi7aKvxCf/zMp
-         apV4kqnP+3jPxBVy7cbZCtheVfdSduTsIvl4+y2yieKW0/90QhOFYcJ3WdFiVHUmqUp3
-         SlHg==
-X-Gm-Message-State: AOAM5302ifVDr+/pa46HJf4xUH4JALRZsvWkn6QJ2Cxcpf1MJEA1crSk
-        /XsBOdDsyeKmFXXmNfZnhLAEM9JQ2Xx+psXId8U=
-X-Google-Smtp-Source: ABdhPJw72huO/7ofZw41/IrdbsJVshRqpIuB7v6o/MbZmah6cvF05hc9Bj6ASGuXAbQ+cjixMHZrrtyd3POkZdxlnbM=
-X-Received: by 2002:a63:2ad6:0:b0:3f9:d9fa:2713 with SMTP id
- q205-20020a632ad6000000b003f9d9fa2713mr44235809pgq.512.1654020046159; Tue, 31
- May 2022 11:00:46 -0700 (PDT)
+        Tue, 31 May 2022 14:02:35 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31BBA50E06;
+        Tue, 31 May 2022 11:02:33 -0700 (PDT)
+Received: from mail-yb1-f176.google.com ([209.85.219.176]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MyK5K-1nbFSO0mbc-00yjob; Tue, 31 May 2022 20:02:32 +0200
+Received: by mail-yb1-f176.google.com with SMTP id p13so13702398ybm.1;
+        Tue, 31 May 2022 11:02:31 -0700 (PDT)
+X-Gm-Message-State: AOAM530eRoinXj/sLkSXe86Nv9+bOvHZoCGwK+0RiPasmo/lNI+5uWvN
+        woZMlAkRUC9hIyIx6TvvlfFJD5IDADXr6LC4EmY=
+X-Google-Smtp-Source: ABdhPJwmlIPCmhVaQV5Dv+KE6cBzd1ctI3OGOfbpvy1/ZbbEzjQyU6zzQG2uDs+UAOlk9ynawe6ny7TI68QJmuINvY0=
+X-Received: by 2002:a25:db8a:0:b0:65c:b04a:f612 with SMTP id
+ g132-20020a25db8a000000b0065cb04af612mr16322691ybf.106.1654020150830; Tue, 31
+ May 2022 11:02:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <Yh0+9cFyAfnsXqxI@kernel.org> <05df964f-552e-402e-981c-a8bea11c555c@www.fastmail.com>
- <YiEZyTT/UBFZd6Am@kernel.org> <CALCETrWacW8SC2tpPxQSaLtxsOXfXHueyuwLcXpNF4aG-0ZvhA@mail.gmail.com>
- <fb7d6e4da58ae77be2c6321ee3f3487485b2886c.camel@intel.com>
- <40a3500c-835a-60b0-15bf-40c6622ad013@kernel.org> <YiZVbPwlgSFnhadv@kernel.org>
- <CAMe9rOrSLPKdL2gL=yx84zrs-u6ch1AVvjk3oqUe3thR5ZD=dQ@mail.gmail.com>
- <YpYDKVjMEYVlV6Ya@kernel.org> <d0c94eed6e3c7f35b78bab3f00aadebd960ee0d8.camel@intel.com>
- <YpZEDjxSPxUfMxDZ@kernel.org> <7c637f729e14f03d0df744568800fc986542e33d.camel@intel.com>
-In-Reply-To: <7c637f729e14f03d0df744568800fc986542e33d.camel@intel.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Tue, 31 May 2022 11:00:10 -0700
-Message-ID: <CAMe9rOpctH-FQZH_5e=f17Ma7Ev0u9jiXap5bgqFyhLfsx102g@mail.gmail.com>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "rppt@kernel.org" <rppt@kernel.org>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "adrian@lisas.de" <adrian@lisas.de>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "avagin@gmail.com" <avagin@gmail.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "dave.martin@arm.com" <dave.martin@arm.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
+References: <20220419211658.11403-1-apais@linux.microsoft.com>
+ <20220419211658.11403-2-apais@linux.microsoft.com> <CACRpkdZ2DFZRPHS1x0=M3_8zYvU-jpCG5Tm3863dXv51EhY+BA@mail.gmail.com>
+ <CAK8P3a0j_rziihsgHnG5bHMxmPbOkAhT6_+CCE4iFZy7HzQrLw@mail.gmail.com>
+ <YpCGePbo9B/Z7slV@matsya> <CAK8P3a2wD7=hgvqyS14X5p-eP+7Ajk4dFJOXgbOo8Z0r5UNYmg@mail.gmail.com>
+ <YpW8J40hKwc7jwQh@matsya> <0A9EDEDC-9E6C-47F8-89C0-48DCDD3F9DE3@linux.microsoft.com>
+In-Reply-To: <0A9EDEDC-9E6C-47F8-89C0-48DCDD3F9DE3@linux.microsoft.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 31 May 2022 20:02:13 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3vf_huJ5ysBvFDV=11E-=OxFGiDQ9ND04YKug8g6jV_A@mail.gmail.com>
+Message-ID: <CAK8P3a3vf_huJ5ysBvFDV=11E-=OxFGiDQ9ND04YKug8g6jV_A@mail.gmail.com>
+Subject: Re: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
+To:     Allen Pais <apais@linux.microsoft.com>
+Cc:     Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        olivier.dautricourt@orolia.com, Stefan Roese <sr@denx.de>,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Eugeniy.Paltsev@synopsys.com,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Leo Li <leoyang.li@nxp.com>, zw@zh-kernel.org,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        green.wan@sifive.com, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Lyra Zhang <zhang.lyra@gmail.com>,
+        Patrice CHOTARD <patrice.chotard@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        dmaengine@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:IJ1K80200rib6/6tXN6GT3BD3Ebp7d57MAQTsQcwUCpfBNwo2d/
+ fViC3OY5YCcQMBkzLw7M1TKpbj6dzjDkxUKRcuQb1MEGxJe8t3kJ4JeuTpckPfAPuXUbxLV
+ 8zHpjLgX7mwTVDMA0TH9eeBaOcD3ThFsE1kqy1FzkfkpBIc55dnTdn+ojJw71nWTnGaP3MA
+ LoSOMACAbTAiDJSeZwBwA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:R7kKsU5Hx9A=:CDBT6FMK4FPGF9yi+gPs4H
+ Z4EJ9ks9vUQwUiSDw96wrUj+cl0cTbF3wnT5Zb7rG7IP/5ZOh/pHDFoCsMOziJZwVtRG/IARt
+ 0mX0fhVYtd1pdNb5zC2R9mrqTo0VbzwhDpP4swGe9+pUiYN2Zmu9w8ZBN2Jdwe4IVHTMqcPiY
+ xOb1T2eq+EIm9hordaxfufTFpcSHtJ9rhYfTXirK1VqejeAeL/00HQm8itbGgcOEDwn4vgXc8
+ 57jz4zJA8aluQ+r5UxmxYD3jDYGQ7przn8BUBrZSoMpmkncbuwdHI1SJlQPmdGSxFWHIGNeOB
+ F3y397a3x9KDsOYA58+td/05cGuTFSc0y2LuNMwPJudD+CqkQxn1TIVW15zz5BdLfl/esk9fA
+ v/nkQM/QwBqpJMgqpj0Ahuk9EmOq5z6GqcMYdZT2scUy7lYbOMrF+cHfAhHp9fIOZID4h+u9M
+ Pcq7G2k8pSywYW0bEzirvfxZ/RmdyAm1eFa2O9dE4X2BcFTVcXf8pjNo/uGOt1wHVGBBkf/Qu
+ 7IqB5i7vC7hRi1WInV9fy5qZi5r/AiDCnx9+3tkpGQWzJKSgVfwlUD7rRm5fG3x/YiAg4/ObU
+ zW0hc68UUf5uFeSJUEJGo5RznJie2TddJIoZQnfYcMXEHHAdndVkKo8LTHpzt4s0qTgua1OC7
+ 7FwWudxQ7njaii8LynC7usRFB+jL3oMdqA9wbUKPP0EnVy2Yl+HUjI+GfLTK3KhW3fyFSbpB3
+ nCMgC9LpL+nguWeMeX5w980Eel1QYHqnpV3lpQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 10:34 AM Edgecombe, Rick P
-<rick.p.edgecombe@intel.com> wrote:
->
-> On Tue, 2022-05-31 at 19:36 +0300, Mike Rapoport wrote:
-> > > WRSS is a feature where you would usually want to lock it as
-> > > disabled,
-> > > but WRSS cannot be enabled if shadow stack is not enabled. Locking
-> > > shadow stack and WRSS off together doesn't have any security
-> > > benefits
-> > > in theory. so I'm thinking glibc doesn't need to do this. The
-> > > kernel
-> > > could even refuse to lock WRSS without shadow stack being enabled.
-> > > Could we avoid the extra ptrace functionality then?
-> >
-> > What I see for is that a program can support shadow stack, glibc
-> > enables
-> > shadow stack, does not enable WRSS and than calls
-> >
-> >         arch_prctl(ARCH_X86_FEATURE_LOCK,
-> >                    LINUX_X86_FEATURE_SHSTK | LINUX_X86_FEATURE_WRSS);
->
-> I see the logic is glibc will lock SHSTK|IBT if either is enabled in
-> the elf header. I guess that is why I didn't see the locking happening
-> for me, because my manual enablement test doesn't have either set in
-> the header.
->
-> It can't see where that glibc knows about WRSS though...
->
-> The glibc logic seems wrong to me also, because shadow stack or IBT
-> could be force-disabled via glibc tunables. I don't see why the elf
-> header bit should exclusively control the feature locking. Or why both
-> should be locked if only one is in the header.
+On Tue, May 31, 2022 at 7:02 PM Allen Pais <apais@linux.microsoft.com> wrote:
 
-glibc locks SHSTK and IBT only if they are enabled at run-time. It doesn't
-enable/disable/lock WRSS at the moment.  If WRSS can be enabled
-via arch_prctl at any time, we can't lock it.  If WRSS should be locked early,
-how should it be enabled in application?  Also can WRSS be enabled
-from a dlopened object?
+[note: something is wrong with your email client, your previous reply appears to
+be in HTML]
 
-> >
-> > so that WRSS cannot be re-enabled.
-> >
-> > For the programs that do not support shadow stack, both SHSTK and
-> > WRSS are
-> > disabled, but still there is the same call to
-> > arch_prctl(ARCH_X86_FEATURE_LOCK, ...) and then neither shadow stack
-> > nor
-> > WRSS can be enabled.
-> >
-> > My original plan was to run CRIU with no shadow stack, enable shadow
-> > stack
-> > and WRSS in the restored tasks using arch_prct() and after the shadow
-> > stack
-> > contents is restored disable WRSS.
-> >
-> > Obviously, this didn't work with glibc I have :)
+> > That is a good idea, lot of drivers are waiting for completion which can
+> > be signalled from hardirq, this would also reduce the hops we have and
+> > help improve latency a bit. On the downside, some controllers provide
+> > error information, which would need to be dealt with.
 >
-> Were you disabling shadow stack via glibc tunnable? Or was the elf
-> header marked for IBT? If it was a plain old binary, the code looks to
-> me like it should not lock any features.
 >
-> >
-> > On the bright side, having a ptrace call to unlock shadow stack and
-> > wrss
-> > allows running CRIU itself with shadow stack.
-> >
->
-> Yea, having something working is really great. My only hesitancy is
-> that, per a discussion on the LAM patchset, we are going to make this
-> enabling API CET only (same semantics for though). I suppose the
-> locking API arch_prctl() could still be support other arch features,
-> but it might be a second CET only regset. It's not the end of the
-> world.
->
-> I guess the other consideration is tieing CRIU to glibc peculiarities.
-> Like even if we fix glibc, then CRIU may not work with some other libc
-> or app that force disables for some weird reason. Is it supposed to be
-> libc-agnostic?
->
+>    I am not an expert in dma subsystem, but by using completion from
+> Hardirq context be a concern? Especially with latency.
 
+I don't see how: to the task waiting for the completion, there should
+be no difference, and for the irq handler sending it, it just avoids
+a few cycles going into softirq context.
 
--- 
-H.J.
+> > Yes that would be a very reasonable mechanism, thanks for the
+> > suggestions.
+>
+>   I have started working on the idea of global softirq. A RFC should be ready
+> For review soon.
+
+Ok, thanks!
+
+       Arnd

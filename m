@@ -2,60 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E122538B99
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 08:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBDF1538BA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 08:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244383AbiEaGxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 02:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
+        id S244390AbiEaG4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 02:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244378AbiEaGxE (ORCPT
+        with ESMTP id S232460AbiEaG4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 02:53:04 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F78939FA
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 23:53:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653979982; x=1685515982;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ma44jTROXQUBIJvV7UIVSeUgWdRfrebXzqj5X6VLvO8=;
-  b=naHeEerfj/puzaRQeIk3DmJnl1qjw7gbBNtuBG5R0tJHEhM0XAQ3M8KW
-   c2LwUkg7xgYwXDmBb7VHpldLBViuJZrNx/Lezz9YLqbMexgrq8af4595y
-   WYJ48EJA1c6utkxMeeDMmwb7s779ycX4cIcPiZl61vugdbnIxqbap6EXK
-   xOpWhoEggW2Ijw/NmU1uyvWnbkznXdlf8595pSlWQg1iz127NubqIjO9V
-   odH1GGKbOLFqWTTj1N49tAFs7cAnP+b/968cpJo2EeJdM4dyd0q8mMPTQ
-   T7Sywa5H8mna3++P5NWHi4MIzovMDa6887k9ybZj4VLuiUJjmvL0JYonV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="361535472"
-X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
-   d="scan'208";a="361535472"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 23:53:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
-   d="scan'208";a="529448406"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 30 May 2022 23:52:59 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nvvkR-0002RQ-6m;
-        Tue, 31 May 2022 06:52:59 +0000
-Date:   Tue, 31 May 2022 14:52:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sagi Grimberg <sagi@grimberg.me>
-Subject: [hare-scsi-devel:auth.v13 8/9]
- drivers/nvme/target/fabrics-cmd-auth.c:364:30: sparse: sparse: incorrect
- type in assignment (different base types)
-Message-ID: <202205311440.ymt1kZQE-lkp@intel.com>
+        Tue, 31 May 2022 02:56:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDAF10FDE;
+        Mon, 30 May 2022 23:56:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F8D9611EA;
+        Tue, 31 May 2022 06:56:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B29ACC3411D;
+        Tue, 31 May 2022 06:56:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653980203;
+        bh=2UQ3qgaNPc369GMhUN6AfskhbVIaavXK++b0jOePdlY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LhWWZIm9XMv1vuCvkIGBV0DV7cR+pkMSRulKThrzkuWQ1Sxm8tfQ0w0nvYVYAuYD5
+         Y09diPZ2qPlRPyV6noGyHR03G11+FhLdySnGMFTcl0PPvtW8zoytLWxwFpG/3HsRZA
+         JF2vxluM0PV/KGPpArPYJ1oxhKiq0AVkvtSfeletmpLehx+tfFgQ+jD5wspqIEvPNY
+         l/QU+acm0n85/wPBGhRlvRLbuxvhZECNli/2unqW4AE05jJ4nfR5X3DGBo7wCKWCdx
+         SnzHNTbXgnpSIA63+5M6zypPBdATj4ALy2gZQdIXQWNBZF/3kkhBFIJcAPtaNWkPbS
+         iftq7/oqZtInA==
+Date:   Tue, 31 May 2022 12:26:39 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Allen Pais <apais@linux.microsoft.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        olivier.dautricourt@orolia.com, Stefan Roese <sr@denx.de>,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Eugeniy.Paltsev@synopsys.com,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Leo Li <leoyang.li@nxp.com>, zw@zh-kernel.org,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        green.wan@sifive.com, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Lyra Zhang <zhang.lyra@gmail.com>,
+        Patrice CHOTARD <patrice.chotard@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        dmaengine@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
+Message-ID: <YpW8J40hKwc7jwQh@matsya>
+References: <20220419211658.11403-1-apais@linux.microsoft.com>
+ <20220419211658.11403-2-apais@linux.microsoft.com>
+ <CACRpkdZ2DFZRPHS1x0=M3_8zYvU-jpCG5Tm3863dXv51EhY+BA@mail.gmail.com>
+ <CAK8P3a0j_rziihsgHnG5bHMxmPbOkAhT6_+CCE4iFZy7HzQrLw@mail.gmail.com>
+ <YpCGePbo9B/Z7slV@matsya>
+ <CAK8P3a2wD7=hgvqyS14X5p-eP+7Ajk4dFJOXgbOo8Z0r5UNYmg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAK8P3a2wD7=hgvqyS14X5p-eP+7Ajk4dFJOXgbOo8Z0r5UNYmg@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,82 +100,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git auth.v13
-head:   a444c5289874c2a619b92858d240a7cf40c9874b
-commit: 830cde52659a9c803beaa86a353ee8209a1f0767 [8/9] nvmet-auth: Diffie-Hellman key exchange support
-config: arm-randconfig-s032-20220531 (https://download.01.org/0day-ci/archive/20220531/202205311440.ymt1kZQE-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-14-g5a0004b5-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=830cde52659a9c803beaa86a353ee8209a1f0767
-        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-        git fetch --no-tags hare-scsi-devel auth.v13
-        git checkout 830cde52659a9c803beaa86a353ee8209a1f0767
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/nvme/target/
+On 27-05-22, 12:59, Arnd Bergmann wrote:
+> On Fri, May 27, 2022 at 10:06 AM Vinod Koul <vkoul@kernel.org> wrote:
+> > On 25-05-22, 13:03, Arnd Bergmann wrote:
+> > > What might work better in the case of the dmaengine API would
+> > > be an approach like:
+> > >
+> > > 1. add helper functions to call the callback functions from a
+> > >     tasklet locally defined in drivers/dma/dmaengine.c to allow
+> > >     deferring it from hardirq context
+> > >
+> > > 2. Change all  tasklets that are not part of the callback
+> > >     mechanism to work queue functions, I only see
+> > >     xilinx_dpdma_chan_err_task in the patch, but there
+> > >     may be more
+> > >
+> > > 3. change all drivers to move their custom tasklets back into
+> > >     hardirq context and instead call the new helper for deferring
+> > >     the callback.
+> > >
+> > > 4. Extend the dmaengine callback API to let slave drivers
+> > >     pick hardirq, tasklet or task context for the callback.
+> > >     task context can mean either a workqueue, or a threaded
+> > >     IRQ here, with the default remaining the tasklet version.
+> >
+> > That does sound a good idea, but I dont know who will use the workqueue
+> > or a threaded context here, it might be that most would default to
+> > hardirq or tasklet context for obvious reasons...
+> 
+> If the idea is to remove tasklets from the kernel for good, then the
+> choice is only between workqueue and hardirq at this point. The
+> workqueue version is the one that would make sense for any driver
+> that just defers execution from the callback down into task context.
+> If that gets called in task context already, the driver can be simpler.
+> 
+> I took a brief look at the roughly 150 slave drivers, and it does
+> seem like very few of them actually want task context:
+> 
+> * Over Half the drivers just do a complete(), which could
+>   probably be pulled into the dmaengine layer and done from
+>   hardirq, avoiding the callback entirely
+> 
+> * A lot of the remaining drivers have interrupts disabled for
+>   the entire callback, which means they might as well use
+>   hardirqs, regardless of what they want
+> 
+> * drivers/crypto/* and drivers/mmc/* tend to call another tasklet
+>   to do the real work.
+> 
+> * drivers/ata/sata_dwc_460ex.c and drivers/ntb/ntb_transport.c
+>    probably want task context
+> 
+> * Some drivers like sound/soc/sh/siu_pcm.c start a new DMA
+>   from the callback. Is that allowed from hardirq?
+> 
+> If we do the first three steps above, and then add a 'struct
+> completion' pointer to dma_async_tx_descriptor as an alternative
+> to the callback, that would already reduce the number of drivers
+> that end up in a tasklet significantly and should be completely
+> safe.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+That is a good idea, lot of drivers are waiting for completion which can
+be signalled from hardirq, this would also reduce the hops we have and
+help improve latency a bit. On the downside, some controllers provide
+error information, which would need to be dealt with.
 
+I will prototype this on Qcom boards I have...
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/nvme/target/fabrics-cmd-auth.c:20:30: sparse: sparse: invalid assignment: |=
-   drivers/nvme/target/fabrics-cmd-auth.c:20:30: sparse:    left side has type restricted __le32
-   drivers/nvme/target/fabrics-cmd-auth.c:20:30: sparse:    right side has type int
-   drivers/nvme/target/fabrics-cmd-auth.c:102:22: sparse: sparse: cast to restricted __le32
-   drivers/nvme/target/fabrics-cmd-auth.c:102:22: sparse: sparse: cast from restricted __le16
->> drivers/nvme/target/fabrics-cmd-auth.c:364:30: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 [usertype] dhvlen @@     got restricted __le32 [usertype] @@
-   drivers/nvme/target/fabrics-cmd-auth.c:364:30: sparse:     expected restricted __le16 [usertype] dhvlen
-   drivers/nvme/target/fabrics-cmd-auth.c:364:30: sparse:     got restricted __le32 [usertype]
+> 
+> Unfortunately we can't just move the rest into hardirq
+> context because that breaks anything using spin_lock_bh
+> to protect against concurrent execution of the tasklet.
+> 
+> A possible alternative might be to then replace the global
+> dmaengine tasklet with a custom softirq. Obviously those
+> are not so hot either,  but dmaengine could be considered
+> special enough to fit in the same category as net_rx/tx
+> and block with their global softirqs.
 
-vim +364 drivers/nvme/target/fabrics-cmd-auth.c
-
-   333	
-   334	static int nvmet_auth_challenge(struct nvmet_req *req, void *d, int al)
-   335	{
-   336		struct nvmf_auth_dhchap_challenge_data *data = d;
-   337		struct nvmet_ctrl *ctrl = req->sq->ctrl;
-   338		int ret = 0;
-   339		int hash_len = nvme_auth_hmac_hash_len(ctrl->shash_id);
-   340		int data_size = sizeof(*d) + hash_len;
-   341	
-   342		if (ctrl->dh_tfm)
-   343			data_size += ctrl->dh_keysize;
-   344		if (al < data_size) {
-   345			pr_debug("%s: buffer too small (al %d need %d)\n", __func__,
-   346				 al, data_size);
-   347			return -EINVAL;
-   348		}
-   349		memset(data, 0, data_size);
-   350		req->sq->dhchap_s1 = nvme_auth_get_seqnum();
-   351		data->auth_type = NVME_AUTH_DHCHAP_MESSAGES;
-   352		data->auth_id = NVME_AUTH_DHCHAP_MESSAGE_CHALLENGE;
-   353		data->t_id = cpu_to_le16(req->sq->dhchap_tid);
-   354		data->hashid = ctrl->shash_id;
-   355		data->hl = hash_len;
-   356		data->seqnum = cpu_to_le32(req->sq->dhchap_s1);
-   357		req->sq->dhchap_c1 = kmalloc(data->hl, GFP_KERNEL);
-   358		if (!req->sq->dhchap_c1)
-   359			return -ENOMEM;
-   360		get_random_bytes(req->sq->dhchap_c1, data->hl);
-   361		memcpy(data->cval, req->sq->dhchap_c1, data->hl);
-   362		if (ctrl->dh_tfm) {
-   363			data->dhgid = ctrl->dh_gid;
- > 364			data->dhvlen = cpu_to_le32(ctrl->dh_keysize);
-   365			ret = nvmet_auth_ctrl_exponential(req, data->cval + data->hl,
-   366							  ctrl->dh_keysize);
-   367		}
-   368		pr_debug("%s: ctrl %d qid %d seq %d transaction %d hl %d dhvlen %zu\n",
-   369			 __func__, ctrl->cntlid, req->sq->qid, req->sq->dhchap_s1,
-   370			 req->sq->dhchap_tid, data->hl, ctrl->dh_keysize);
-   371		return ret;
-   372	}
-   373	
+Yes that would be a very reasonable mechanism, thanks for the
+suggestions.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Vinod

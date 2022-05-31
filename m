@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADBAC5391D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C455391D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344748AbiEaNdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
+        id S1344759AbiEaNfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiEaNdn (ORCPT
+        with ESMTP id S229939AbiEaNfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:33:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9608FD66;
-        Tue, 31 May 2022 06:33:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 787B961202;
-        Tue, 31 May 2022 13:33:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE73EC3411E;
-        Tue, 31 May 2022 13:33:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654004021;
-        bh=Z1whR2Seo++h8Uvy3NRM8CLdGeRMk3/5Fhy4XLisltk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cPVxm69Jbg+3fiO8JqUkXLXOD3pdyUhd1MlQm0oMnsnf55jefml2siTeRt11DQHj6
-         j2XvEIwBhLIetl2w51tLK3B2a0OH2Z6D0nlXRYIg/OwhCh9PiTgvXzmtIqsaGVmCk/
-         NKbc9Y8PlTLEjGx6hE7AsqZPZ63XO8dLqIFkWoRvf5c1NjMqCoIcoSwXF5SVIY5lUk
-         8yy0Ek1jNVgbeKugcbrmeNa6X6xfwxRoEHv9D7y02QUzG4xMThGu6A77YkIcbXIDCO
-         zWyzDcprTUSJlyHWEJ6vSN13Fe2Y5DFL0DOsh5h6/dcJ5SSJVn1Q0Awe0RVh1hSBfx
-         aAMov2J80OI8w==
-Received: by mail-ua1-f53.google.com with SMTP id y2so4793056uan.4;
-        Tue, 31 May 2022 06:33:41 -0700 (PDT)
-X-Gm-Message-State: AOAM5324/hXJsqjrtMtCRbOakjadASmODKos4GyTpqOlmof57aZFGCif
-        vS608GbBZKgVhquTEXhTU7PfvLVes8cgunM4mg==
-X-Google-Smtp-Source: ABdhPJzfl2q8a4/jnTVhQHUMa2kRAa20r2HuCUl7f2SfBzhtY8jiaU660L5f3oIf9EZfTKfxQZBl0thsed79l8nNzVE=
-X-Received: by 2002:ab0:4ac1:0:b0:351:ed7d:e65c with SMTP id
- t1-20020ab04ac1000000b00351ed7de65cmr22397280uae.36.1654004020745; Tue, 31
- May 2022 06:33:40 -0700 (PDT)
+        Tue, 31 May 2022 09:35:16 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AC58FD79
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:35:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654004115; x=1685540115;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9OQLC9RyE8HpdeYC8gfXq1eTavuumgL3xY0hyE3MlXw=;
+  b=BNUli8q21Zu+dZMHLMyd58pirCWzc0lOwhfhEOmeiOkoqk10kMYJS+6H
+   sj+TQBjfeVmcxjD7vmDGbY+EHO5Ksz9EuFJtPf/shgrk6My243V8a68Dn
+   XP2uJB1YIYkNjDjkuYLDyJ9/WP7lBZ+iZiq9uYJPVdv/7ZJ/cCIGbP8lD
+   9Uocy/+HhM8kclFkobNuj5WrMD45ylMc+HH/01tyfe+0NlFbQanXCk+SW
+   oDB0y5Kk1YIxuPAMvFnj+M/nkacwT45swhWxOiQM1sn2Df+2ZkzC2lC4p
+   5Ya/qcomwcMNqgj7qXef4+Jvq0nLYkVXsQ/ZYRCd9oHIvR5NyW9VCZKpV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="275258597"
+X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
+   d="scan'208";a="275258597"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 06:35:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
+   d="scan'208";a="755004806"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 31 May 2022 06:35:13 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nw21h-0002kk-11;
+        Tue, 31 May 2022 13:35:13 +0000
+Date:   Tue, 31 May 2022 21:34:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 18/18]
+ arch/arm64/include/asm/memory.h:311:9: error: call to undeclared function
+ 'PHYS_PFN'; ISO C99 and later do not support implicit function declarations
+Message-ID: <202205312153.DcObRpN1-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220523172515.5941-1-dipenp@nvidia.com>
-In-Reply-To: <20220523172515.5941-1-dipenp@nvidia.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 31 May 2022 08:33:29 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJSF=7FOW4oNydRtDYY8L9Y43E4FsBkUzM+U5ZRjYdt7A@mail.gmail.com>
-Message-ID: <CAL_JsqJSF=7FOW4oNydRtDYY8L9Y43E4FsBkUzM+U5ZRjYdt7A@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: timestamp: Correct id path
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, Dipen Patel <dipenp@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,63 +63,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 12:25 PM Dipen Patel <dipenp@nvidia.com> wrote:
->
-> During the repository renaming from hte to timestamp, $id path was not
-> updated accordingly. This patch corrects $id path.
->
-> Fixes: af583852d2ef ("dt-bindings: Renamed hte directory to timestamp")
-> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
-> ---
->  .../bindings/timestamp/hardware-timestamps-common.yaml          | 2 +-
->  Documentation/devicetree/bindings/timestamp/hte-consumer.yaml   | 2 +-
->  .../devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml      | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
+head:   a71d4962de17d9a95418e25f1f98e66ba910105a
+commit: a71d4962de17d9a95418e25f1f98e66ba910105a [18/18] arm64: memory: Make virt_to_pfn() a static inline
+config: arm64-randconfig-r036-20220531 (https://download.01.org/0day-ci/archive/20220531/202205312153.DcObRpN1-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=a71d4962de17d9a95418e25f1f98e66ba910105a
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
+        git checkout a71d4962de17d9a95418e25f1f98e66ba910105a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
 
-Ping. Still failing in linux-next.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> diff --git a/Documentation/devicetree/bindings/timestamp/hardware-timestamps-common.yaml b/Documentation/devicetree/bindings/timestamp/hardware-timestamps-common.yaml
-> index 4c25ba248a72..fd6a7b51f571 100644
-> --- a/Documentation/devicetree/bindings/timestamp/hardware-timestamps-common.yaml
-> +++ b/Documentation/devicetree/bindings/timestamp/hardware-timestamps-common.yaml
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->  %YAML 1.2
->  ---
-> -$id: http://devicetree.org/schemas/hte/hardware-timestamps-common.yaml#
-> +$id: http://devicetree.org/schemas/timestamp/hardware-timestamps-common.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
->  title: Hardware timestamp providers
-> diff --git a/Documentation/devicetree/bindings/timestamp/hte-consumer.yaml b/Documentation/devicetree/bindings/timestamp/hte-consumer.yaml
-> index 68d764ac040a..6456515c3d26 100644
-> --- a/Documentation/devicetree/bindings/timestamp/hte-consumer.yaml
-> +++ b/Documentation/devicetree/bindings/timestamp/hte-consumer.yaml
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->  %YAML 1.2
->  ---
-> -$id: http://devicetree.org/schemas/hte/hte-consumer.yaml#
-> +$id: http://devicetree.org/schemas/timestamp/hte-consumer.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
->  title: HTE Consumer Device Tree Bindings
-> diff --git a/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
-> index 69e8402d95e5..c31e207d1652 100644
-> --- a/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
-> +++ b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->  %YAML 1.2
->  ---
-> -$id: http://devicetree.org/schemas/hte/nvidia,tegra194-hte.yaml#
-> +$id: http://devicetree.org/schemas/timestamp/nvidia,tegra194-hte.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
->  title: Tegra194 on chip generic hardware timestamping engine (HTE)
->
-> base-commit: cc63e8e92cb872081f249ea16e6c460642f3e4fb
-> --
-> 2.17.1
->
+All errors (new ones prefixed by >>):
+
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/irqdomain.h:35:
+   In file included from include/linux/of.h:17:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:11:
+   In file included from include/linux/mutex.h:17:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:110:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/arm64/include/asm/preempt.h:6:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/arm64/include/asm/thread_info.h:17:
+>> arch/arm64/include/asm/memory.h:311:9: error: call to undeclared function 'PHYS_PFN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return PHYS_PFN(virt_to_phys(p));
+                  ^
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:15:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:15:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:15:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                           set->sig[1] | set->sig[0]) == 0;
+                           ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:15:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return (set->sig[1] | set->sig[0]) == 0;
+                           ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:15:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+
+
+vim +/PHYS_PFN +311 arch/arm64/include/asm/memory.h
+
+   308	
+   309	static inline unsigned long virt_to_pfn(const void *p)
+   310	{
+ > 311		return PHYS_PFN(virt_to_phys(p));
+   312	}
+   313	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,201 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E98F5539008
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DEC539022
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343933AbiEaLrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 07:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
+        id S1344002AbiEaL4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 07:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242016AbiEaLq7 (ORCPT
+        with ESMTP id S1343989AbiEaL4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 07:46:59 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B1D49931
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:46:58 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id 2so13810158iou.5
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:46:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=93uhBt8Wzct8J4+CdbYjcgwsc3kwGGU4sNgYP7SDugU=;
-        b=Ok/wAPTVkx7ULmfKE4buubCQQgiOQrL+1p2aGP6w95FzI5yXyJEl3p1oat5ye85LMe
-         8MrC86gVZKkFsUoWalAUpFCHN3p2mBSk4Pl9FybWQiCWOXyXf6hEBD2OtTiSoKH7PCJ6
-         MDIXuaxzHxe+Xvn/ucv70+hs8apG5dTtueutariyx7mbE5Iy9jK08VDKtZnNK14gqREa
-         CNVDlxagBgDWqwyv/95OZFh0z5XiF/6+w1nRxd7hZhMqiz+dIA11Q/8d8kHYaXwsIsT+
-         mqjpmrt97Fu8jzSx+6khcBe7EEQwUrzTEYEvj+fCSmoX8GOS2z2bdkpkFe+EdDyroSk9
-         ORpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=93uhBt8Wzct8J4+CdbYjcgwsc3kwGGU4sNgYP7SDugU=;
-        b=HGL74C4oFNLu5bCJmEYNJQMNxRny0WPUCz2/cykvBc5aioisB9i/XwlA5BOsVsEdgb
-         WpehEG5QJdAH0MsIf/PArTsZVCiQlP5dPZk7DK+hBRJdx4m4HSI9l4Ck6A5OFfVMZRAC
-         sa4GonatUlmkWIFYLjd53aSo6+998Rf+4catq720T4NhZWsnIH2vmda+x6jtAEO6YbiT
-         eenQrirMHTlmKXg8HgIG33lkwafqtg+7Dkks4cjipi1qizOe8vagKl4WjgOwY9Wyodx1
-         d4PmdqLbmQ85ztW1mkHEhhRWEtZkdG2ASmSPaCNKa6MPxYYtoPClYqgJZlWJ9CTsaEqi
-         k+og==
-X-Gm-Message-State: AOAM532DAnkCdGO8TGw6j7sb8mHW81sD+q1toeVMyqaJyj8at2Pb/IS7
-        O3JbkbgnFYspoVjA+cB/GLc=
-X-Google-Smtp-Source: ABdhPJxV2VhIXeWm6sXONG+DapOQ+XeGntmxg+hgJTxxViQd6k6Owy195rdwhsURjD9ZZJN4XnvmNw==
-X-Received: by 2002:a5d:9d06:0:b0:65e:5162:475b with SMTP id j6-20020a5d9d06000000b0065e5162475bmr23574835ioj.149.1653997617554;
-        Tue, 31 May 2022 04:46:57 -0700 (PDT)
-Received: from n2.us-central1-a.c.spheric-algebra-350919.internal (151.16.70.34.bc.googleusercontent.com. [34.70.16.151])
-        by smtp.gmail.com with ESMTPSA id c18-20020a5ea912000000b00665754e45c2sm4023663iod.24.2022.05.31.04.46.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 04:46:56 -0700 (PDT)
-Date:   Tue, 31 May 2022 11:46:55 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Matthew Wilcox <willy@infradead.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v5] tracing: add 'accounted' entry into output of
- allocation tracepoints
-Message-ID: <YpYAL4H/L2ERQ9Fj@n2.us-central1-a.c.spheric-algebra-350919.internal>
-References: <c7f687a8-637c-b119-6e3a-7dacc885b851@suse.cz>
- <80bcb043-3782-1d81-d8a2-4bdcb213cf30@openvz.org>
+        Tue, 31 May 2022 07:56:05 -0400
+X-Greylist: delayed 526 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 May 2022 04:56:03 PDT
+Received: from mailout1.rbg.tum.de (mailout1.rbg.tum.de [131.159.0.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64491880EE;
+        Tue, 31 May 2022 04:56:03 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
+        by mailout1.rbg.tum.de (Postfix) with ESMTPS id 63DF0240;
+        Tue, 31 May 2022 13:47:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1653997635;
+        bh=9J6pD/CrhjbB1zdbQ/WsFZ5sMWMLDeoTX+MCbCnhM20=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cbtV7Ux4Fjo7XMm8Siy+aAHS0F7ijcSiKuOkoUZl1H66Y8YKUS3OfsisbgqKOcoaP
+         Rc8ueYVPuPaM0T3vWaB8tI7J2PhsbzPYyLFxbsE5yHOz0cbZRXkvuVpLAqmFe+QjVd
+         n/7BRKH7W8E/9Ih3kr8GqvdB4iBw5L1x/GvTBdzh8v/zLtIOEM+wn0LULECYQJ4V0h
+         KGuQRJir2lWVFmmwkL7bVLCWhVrTjipBgZlE75zZW3GqWrGhnXGnAfO9P0nJpv3yNk
+         RJwtOCkYp1NWhhoack46VVvitEdBldy05j1e7CgmIBzB/jF9ADwigRutNUlVSkNhkM
+         BfOjo0+XbmJ3Q==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 6036B28B; Tue, 31 May 2022 13:47:15 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 3220328A;
+        Tue, 31 May 2022 13:47:15 +0200 (CEST)
+Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 2DE75286;
+        Tue, 31 May 2022 13:47:15 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id 29CBB4A038D; Tue, 31 May 2022 13:47:15 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id 4ED874A0367;
+        Tue, 31 May 2022 13:47:14 +0200 (CEST)
+        (Extended-Queue-bit xtech_rq@fff.in.tum.de)
+Date:   Tue, 31 May 2022 13:47:12 +0200
+From:   Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
+Message-ID: <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
+References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
+ <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <80bcb043-3782-1d81-d8a2-4bdcb213cf30@openvz.org>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 10:47:26AM +0300, Vasily Averin wrote:
-> Slab caches marked with SLAB_ACCOUNT force accounting for every
-> allocation from this cache even if __GFP_ACCOUNT flag is not passed.
-> Unfortunately, at the moment this flag is not visible in ftrace output,
-> and this makes it difficult to analyze the accounted allocations.
+On Tue, Apr 26, 2022 at 01:32:54PM -0700, Paul E. McKenney wrote:
+> On Fri, Apr 22, 2022 at 12:35:41PM +0200, Paul Heidekrüger wrote:
+> > Hi all, 
+> > 
+> > My dependency checker is flagging yet another broken dependency. For
+> > context, see [1].
+> > 
+> > Thankfully, it is fairly straight-forward to explain this time.
+> > 
+> > > stable_node = page_stable_node(page);
+> > 
+> > Line 2032 in mm/ksm.c::cmp_and_merge_page() sees the return value of a
+> > call to "page_stable_node()", which can depend on a "READ_ONCE()", being
+> > assigned to "stable_node".
+> > 
+> > > if (stable_node) {
+> > >         if (stable_node->head != &migrate_nodes &&
+> > >             get_kpfn_nid(READ_ONCE(stable_node->kpfn)) != 
+> > >             NUMA(stable_node->nid)) {
+> > >                 stable_node_dup_del(stable_node); ‣dup: stable_node
+> > >                 stable_node->head = &migrate_nodes;
+> > >                 list_add(&stable_node->list, stable_node->head);
+> > 
+> > The dependency chain then runs into the two following if's, through an
+> > assignment of "migrate_nodes" to "stable_node->head" (line 2038) and
+> > finally reaches a call to "list_add()" (line 2039) where
+> > "stable_node->head" gets passed as the second function argument. 
 > 
-> This patch adds boolean "accounted" entry into trace output,
-> and set it to 'true' for calls used __GFP_ACCOUNT flag and
-> for allocations from caches marked with SLAB_ACCOUNT.
+> Huh.
 > 
-> Signed-off-by: Vasily Averin <vvs@openvz.org>
-> Acked-by: Shakeel Butt <shakeelb@google.com>
-> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> But migrate_nodes is nothing more or less than a list_head structure.
+> So one would expect that some other mechanism is protecting its ->prev
+> and ->next pointers.
 > 
-> ---
-> v5:
->  1) re-based to current upstream (v5.18-11267-gb00ed48bb0a7)
->  2) added "Acked-by" from Roman
->  3) re-addressed to slab maintaiers
+> > >         }
+> > > }
+> > > 
+> > > static inline void list_add(struct list_head *new, struct list_head *head)
+> > > {
+> > >         __list_add(new, head, head->next);
+> > > }
+> > > 
+> > > static inline void __list_add(struct list_head *new,
+> > >                               struct list_head *prev,
+> > >                               struct list_head *next)
+> > > {
+> > >         if (!__list_add_valid(new, prev, next))
+> > >                 return;
+> > > 
+> > >         next->prev = new;
+> > >         new->next = next;
+> > >         new->prev = prev;
+> > >         WRITE_ONCE(prev->next, new);
+> > > }
+> > 
+> > By being passed into "list_add()" via "stable_node->head", the
+> > dependency chain eventually reaches a "WRITE_ONCE()" in "__list_add()"
+> > whose destination address, "stable_node->head->next", is part of the
+> > dependency chain and therefore carries an address dependency. 
+> > 
+> > However, as a result of the assignment in line 2038, Clang knows that
+> > "stable_node->head" is "migrate_nodes" and replaces it, thereby breaking
+> > the dependency chain. 
+> > 
+> > What do you think?
 > 
-> v4:
->  1) replaced in patch descripion: "accounted" instead of "allocated"
->  2) added "Acked-by" from Shakeel,
->  3) re-addressed to akpm@
+> Given that this is a non-atomic update, there had better be something
+> protecting it.  This something might be a lock, a decremented-to-zero
+> reference count, a rule about only one kthread being permitted to update
+> that list, and so on.  In all such cases, the code would not be relying
+> on the dependency, but rather on whatever was protecting that operation.
 > 
-> v3:
->  1) rework kmem_cache_alloc* tracepoints once again,
->     added struct kmem_cache argument into existing templates,
-> 	thanks to Matthew Wilcox
->  2) updated according trace_* calls
->  3) added boolean "allocated" entry into trace output,
-> 	thanks to Roman
->  4) updated patch subject and description
-> 
-> v2:
->  1) handle kmem_cache_alloc_node(), thanks to Shakeel
->  2) rework kmem_cache_alloc* tracepoints to use cachep instead
->     of current cachep->*size parameters.
->     NB: kmem_cache_alloc_node tracepoint in SLOB cannot use cachep,
->         and therefore it was replaced by kmalloc_node.
-> ---
->  include/trace/events/kmem.h | 38 +++++++++++++++++++++++--------------
->  mm/slab.c                   | 10 +++++-----
->  mm/slab_common.c            |  9 ++++-----
->  mm/slob.c                   |  8 ++++----
->  mm/slub.c                   | 20 +++++++++----------
->  5 files changed, 47 insertions(+), 38 deletions(-)
-> 
+> Or am I missing something here?
 
-Looks good to me.
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Nope, missing nothing, that was exactly it!
 
-a small comment:
->  
->  	TP_fast_assign(
-> @@ -33,42 +35,46 @@ DECLARE_EVENT_CLASS(kmem_alloc,
->  		__entry->bytes_req	= bytes_req;
->  		__entry->bytes_alloc	= bytes_alloc;
->  		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
-> +		__entry->accounted	= (gfp_flags & __GFP_ACCOUNT) ||
-> +					  (s && s->flags & SLAB_ACCOUNT);
->  	),
->  
+In ksm_scan_thread(), which calls ksm_do_scan(), which calls
+cmp_and_merge_page(), there is a mutex_lock() / mutex_unlock() pair,
+surrounding the dependency. 
 
-It doesn't make sense for SLOB to print accounted=true because SLOB does
-not support object accounting.
+Still keeping this as a trophy for our dependency checker though ;-)
 
->  DEFINE_EVENT(kmem_alloc, kmalloc,
->  
-> -	TP_PROTO(unsigned long call_site, const void *ptr,
-> +	TP_PROTO(unsigned long call_site, const void *ptr, struct kmem_cache *s,
->  		 size_t bytes_req, size_t bytes_alloc, gfp_t gfp_flags),
->  
-> -	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags)
-> +	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags)
->  );
->  
->  DEFINE_EVENT(kmem_alloc, kmem_cache_alloc,
->  
-> -	TP_PROTO(unsigned long call_site, const void *ptr,
-> +	TP_PROTO(unsigned long call_site, const void *ptr, struct kmem_cache *s,
->  		 size_t bytes_req, size_t bytes_alloc, gfp_t gfp_flags),
->  
-> -	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags)
-> +	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags)
->  );
->  
->  DECLARE_EVENT_CLASS(kmem_alloc_node,
->  
->  	TP_PROTO(unsigned long call_site,
->  		 const void *ptr,
-> +		 struct kmem_cache *s,
->  		 size_t bytes_req,
->  		 size_t bytes_alloc,
->  		 gfp_t gfp_flags,
->  		 int node),
->  
-> -	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node),
-> +	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags, node),
->  
->  	TP_STRUCT__entry(
->  		__field(	unsigned long,	call_site	)
-> @@ -77,6 +83,7 @@ DECLARE_EVENT_CLASS(kmem_alloc_node,
->  		__field(	size_t,		bytes_alloc	)
->  		__field(	unsigned long,	gfp_flags	)
->  		__field(	int,		node		)
-> +		__field(	bool,		accounted	)
->  	),
->  
->  	TP_fast_assign(
-> @@ -86,33 +93,36 @@ DECLARE_EVENT_CLASS(kmem_alloc_node,
->  		__entry->bytes_alloc	= bytes_alloc;
->  		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
->  		__entry->node		= node;
-> +		__entry->accounted	= (gfp_flags & __GFP_ACCOUNT) ||
-> +					  (s && s->flags & SLAB_ACCOUNT);
->  	),
+Many thanks,
+Paul
+
+PS Sorry for the late reply - been distracted ..
+
+> 
+> 							Thanx, Paul
+> 
+> > Many thanks,
+> > Paul
+> > 
+> > --
+> > [1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/
+> > 

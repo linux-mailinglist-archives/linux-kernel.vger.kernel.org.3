@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA3653952A
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2263E539531
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346279AbiEaRCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 13:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
+        id S1346287AbiEaREx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 13:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243327AbiEaRCH (ORCPT
+        with ESMTP id S238234AbiEaREt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 13:02:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B658A11A28
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:02:05 -0700 (PDT)
+        Tue, 31 May 2022 13:04:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B1C8DDCC;
+        Tue, 31 May 2022 10:04:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6EFD8B810F5
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 17:02:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB68C385A9;
-        Tue, 31 May 2022 17:02:01 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0BFD8CE1796;
+        Tue, 31 May 2022 17:04:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47727C3411F;
+        Tue, 31 May 2022 17:04:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654016523;
-        bh=djguEZZRDPP3prGCOje7q6bgq4eAd52mgC9VJE+UvZo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u8LXi8TrTLqG5iEZu55P2t2fyZ7OD8tsnQ5PXBbTHF/LgZ7Gi/yTmdTg35xoBS1iF
-         kPWVMEi0YCNM3eiemsEVp4EWCKCcBMPir39ZJGsRQAiXvhi47LZTtJIz5CnwwL+BCC
-         itAMIVSohp4iS+gL8uhbPTelu0YU8Tmf5gErzxEd7PqW/ikfvH/Nd1XUPACMS3Imf9
-         KytTjEIc588n91CXJVh98FTVqVQQZ2/k/hHrC/O9VTR0YgOVWOc6xBnSEYwTmVv49V
-         L3TY/sY3bxouJIpPcwL6yYLVMiIsCRS3RfMNniPc4lETv9a6GNBVMmERdniNJycG7o
-         FnXOpjXSYq6BQ==
-Date:   Tue, 31 May 2022 18:01:58 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: arm64: Fix memory leaks from stage2 pagetable
-Message-ID: <20220531170157.GC25631@willie-the-truck>
-References: <20220526203956.143873-1-quic_qiancai@quicinc.com>
- <20220531165710.GB25631@willie-the-truck>
+        s=k20201202; t=1654016684;
+        bh=j6s+IalVNYTBUA6wgYGP0AcZEJmrt0aOpCnaWU1k1AI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=P3682zCCL69GcHpwMCjJpBaQnRgMtwuXh9+cfVEf+V0w9cxd9vwV19GSXvldWAK2o
+         Eg4KqpuDdUEW5NAEwwjsqOL8duStTFknbbT4gQaEbEKvgIByScXX1Aij/+UWCSQKDP
+         SioFa9jae6NIbvqHviJpXhYhfXCjJTy/cceXJET9Bb6yrVmNIDjeB010xxLVpJ8CGs
+         g52qgh3FJxYzHVFCCK9/9+5cCuYmWF+QSIsxTea6LyGPK2Nsrz566/v06hJQanRYm3
+         nbHmdO8gQr+czBrOLi3lWukECTWe/iK7Of9YCv0GqMlXt41zeeMdkS0hGR1FZcN4mg
+         Af1Iayvp1AiPg==
+Received: by mail-yb1-f180.google.com with SMTP id f34so11926203ybj.6;
+        Tue, 31 May 2022 10:04:44 -0700 (PDT)
+X-Gm-Message-State: AOAM532gnAQHvq+hUbLa2bFvFLdUoesu89CtVjxOKXfea5OXwO4dLO9m
+        BTai0LkbuMCrN98Dmtks/DlH3D/EMXPoibHcgHU=
+X-Google-Smtp-Source: ABdhPJzqIftVjeP8D3QiVTvl+6CgAWHDhosTcS1v7b8iyGp7C79UUnQqjMkeQMKziYevILPRTrMSyXfh4Omy4fUNPBY=
+X-Received: by 2002:a25:7e84:0:b0:650:10e0:87bd with SMTP id
+ z126-20020a257e84000000b0065010e087bdmr39214644ybc.257.1654016683266; Tue, 31
+ May 2022 10:04:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531165710.GB25631@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <cover.1653861287.git.dxu@dxuuu.xyz> <b544771c7bce102f2a97a34e2f5e7ebbb9ea0a24.1653861287.git.dxu@dxuuu.xyz>
+In-Reply-To: <b544771c7bce102f2a97a34e2f5e7ebbb9ea0a24.1653861287.git.dxu@dxuuu.xyz>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 31 May 2022 10:04:32 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5EGq2uFgO5P3zaX_mcyvn86Fyq9ByEy4QretjL0R3Pcg@mail.gmail.com>
+Message-ID: <CAPhsuW5EGq2uFgO5P3zaX_mcyvn86Fyq9ByEy4QretjL0R3Pcg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, test_run: Add PROG_TEST_RUN support to kprobe
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,29 +64,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 05:57:11PM +0100, Will Deacon wrote:
-> On Thu, May 26, 2022 at 04:39:56PM -0400, Qian Cai wrote:
-> > Running some SR-IOV workloads could trigger some leak reports from
-> > kmemleak.
-> > 
-> > unreferenced object 0xffff080243cef500 (size 128):
-> >   comm "qemu-system-aar", pid 179935, jiffies 4298359506 (age 1629.732s)
-> >   hex dump (first 32 bytes):
-> >     28 00 00 00 01 00 00 00 00 e0 4c 52 03 08 ff ff  (.........LR....
-> >     e0 af a4 7f 7c d1 ff ff a8 3c b3 08 00 80 ff ff  ....|....<......
-> >   backtrace:
-> >      kmem_cache_alloc_trace
-> >      kvm_init_stage2_mmu
-> 
-> Hmm, I can't spot a 128-byte allocation in here so this is pretty cryptic.
-> I don't really like the idea of papering over the report; we'd be better off
-> trying to reproduce it.
+On Sun, May 29, 2022 at 3:06 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
+>
+> This commit adds PROG_TEST_RUN support to BPF_PROG_TYPE_KPROBE progs. On
+> top of being generally useful for unit testing kprobe progs, this commit
+> more specifically helps solve a relability problem with bpftrace BEGIN
+> and END probes.
+>
+> BEGIN and END probes are run exactly once at the beginning and end of a
+> bpftrace tracing session, respectively. bpftrace currently implements
+> the probes by creating two dummy functions and attaching the BEGIN and
+> END progs, if defined, to those functions and calling the dummy
+> functions as appropriate. This works pretty well most of the time except
+> for when distros strip symbols from bpftrace. Every now and then this
+> happens and users get confused. Having PROG_TEST_RUN support will help
+> solve this issue by allowing us to directly trigger uprobes from
+> userspace.
+>
+> Admittedly, this is a pretty specific problem and could probably be
+> solved other ways. However, PROG_TEST_RUN also makes unit testing more
+> convenient, especially as users start building more complex tracing
+> applications. So I see this as killing two birds with one stone.
+>
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
+>  include/linux/bpf.h      | 10 ++++++++++
+>  kernel/trace/bpf_trace.c |  1 +
+>  net/bpf/test_run.c       | 36 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 47 insertions(+)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 2b914a56a2c5..dec3082ee158 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1751,6 +1751,9 @@ int bpf_prog_test_run_raw_tp(struct bpf_prog *prog,
+>  int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog,
+>                                 const union bpf_attr *kattr,
+>                                 union bpf_attr __user *uattr);
+> +int bpf_prog_test_run_kprobe(struct bpf_prog *prog,
+> +                            const union bpf_attr *kattr,
+> +                            union bpf_attr __user *uattr);
+>  bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+>                     const struct bpf_prog *prog,
+>                     struct bpf_insn_access_aux *info);
+> @@ -1998,6 +2001,13 @@ static inline int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog,
+>         return -ENOTSUPP;
+>  }
+>
+> +static inline int bpf_prog_test_run_kprobe(struct bpf_prog *prog,
+> +                                          const union bpf_attr *kattr,
+> +                                          union bpf_attr __user *uattr)
+> +{
+> +       return -ENOTSUPP;
+> +}
 
-... although the hexdump does look like {u32; u32; ptr; ptr; ptr}, which
-would match 'struct kvm_pgtable'. I guess the allocation is aligned to
-ARCH_DMA_MINALIGN, which could explain the size?
+As the kernel test bot reported, this is not enough to cover all
+different configs. We can
+follow the pattern with bpf_prog_test_run_tracing().
 
-Have you spotted any pattern for when the leak occurs? How are you
-terminating the guest?
+Otherwise, this looks good to me.
 
-Will
+Song
+
+> +
+>  static inline void bpf_map_put(struct bpf_map *map)
+>  {
+>  }
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 10b157a6d73e..b452e84b9ba4 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1363,6 +1363,7 @@ const struct bpf_verifier_ops kprobe_verifier_ops = {
+>  };
+>
+>  const struct bpf_prog_ops kprobe_prog_ops = {
+> +       .test_run = bpf_prog_test_run_kprobe,
+>  };
+>
+>  BPF_CALL_5(bpf_perf_event_output_tp, void *, tp_buff, struct bpf_map *, map,
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 56f059b3c242..0b6fc17ce901 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -1622,6 +1622,42 @@ int bpf_prog_test_run_syscall(struct bpf_prog *prog,
+>         return err;
+>  }
+>
+> +int bpf_prog_test_run_kprobe(struct bpf_prog *prog,
+> +                            const union bpf_attr *kattr,
+> +                            union bpf_attr __user *uattr)
+> +{
+> +       void __user *ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
+> +       __u32 ctx_size_in = kattr->test.ctx_size_in;
+> +       u32 repeat = kattr->test.repeat;
+> +       struct pt_regs *ctx = NULL;
+> +       u32 retval, duration;
+> +       int err = 0;
+> +
+> +       if (kattr->test.data_in || kattr->test.data_out ||
+> +           kattr->test.ctx_out || kattr->test.flags ||
+> +           kattr->test.cpu || kattr->test.batch_size)
+> +               return -EINVAL;
+> +
+> +       if (ctx_size_in != sizeof(struct pt_regs))
+> +               return -EINVAL;
+> +
+> +       ctx = memdup_user(ctx_in, ctx_size_in);
+> +       if (IS_ERR(ctx))
+> +               return PTR_ERR(ctx);
+> +
+> +       err = bpf_test_run(prog, ctx, repeat, &retval, &duration, false);
+> +       if (err)
+> +               goto out;
+> +
+> +       if (copy_to_user(&uattr->test.retval, &retval, sizeof(retval)) ||
+> +           copy_to_user(&uattr->test.duration, &duration, sizeof(duration))) {
+> +               err = -EFAULT;
+> +       }
+> +out:
+> +       kfree(ctx);
+> +       return err;
+> +}
+> +
+>  static const struct btf_kfunc_id_set bpf_prog_test_kfunc_set = {
+>         .owner        = THIS_MODULE,
+>         .check_set        = &test_sk_check_kfunc_ids,
+> --
+> 2.36.1
+>

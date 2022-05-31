@@ -2,386 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24B45395E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0D5539647
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346809AbiEaSLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 14:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
+        id S1347040AbiEaS1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 14:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237803AbiEaSLF (ORCPT
+        with ESMTP id S1347022AbiEaS1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 14:11:05 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2195A996A7;
-        Tue, 31 May 2022 11:11:04 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id ew15so3127373qtb.2;
-        Tue, 31 May 2022 11:11:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rgG+HZL25+Sq4rfZI6DR4wzIXou34HoqlI0ILL2AkQo=;
-        b=L4SKswsHnWJURM/zNqp7hWiCPrd33KTNyD0E6meBIjqLNCRDhbRhi4Qysw4RFW0qvu
-         ryDqARfp41mPsdCbsD+NRRX1NH+aypmCZLjfTczclF5fpVZpRjvxgYgCR6pNVlf5ADCb
-         roCiW+gcHgqSOESAH48SUi8NAjEYhfqe3fGPJk3aFDUgch0aTjnrn3l/6bbX223Ty8OH
-         ajLWp4G3H/Gv6/OLI5jKSFnaYDasEt35i5l2215uRKjhQFJp8WKN2FtcsP+jdoRccAOd
-         jlZ3Z7cPLBulBizrfrmiVZyHBN/krfdxun1TGSmdfvaztFjQSYPeq9+1zNKXxwEP1RvT
-         3P0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rgG+HZL25+Sq4rfZI6DR4wzIXou34HoqlI0ILL2AkQo=;
-        b=54TC2Dlr2s6npCauMM/ZewEXIkCxI5RLsTKOPTgiN+DhlWhyatiNl5y/j2dRjz6Q7d
-         H5A7WLeWDLDekBRhzM1n8aTiUiPB5KgG9klka4fcaH1LCXsTQdTEJSBYUfT3pc4DiYYB
-         qWw8SSo/MyrGyv6e8LK4PbxfItceDTDJGh28iUN79MmP8SbFDjtKRz+hNvOIFkkIJujy
-         Y+QWtGjtu4yPl3Bx8VZwEvX/ugPqeSLGqJydLRz8v0GGrZ3Ce/dLAdYrXLyrAQO2xqEo
-         UFafqly3WEjMhHWT1RQgkd3HbuiRGLZ9AMMU6hmCg3x0lpecTvTUZ6RwO0YwsqQnypoZ
-         kqeQ==
-X-Gm-Message-State: AOAM533GR0VPPfZl34wAyKrrlPMDJqpBtX3hrBxQulqG/BTyw+S+nVkb
-        xrdmbH8RtNLLDx23Xav8HiWhP8QmA6P8Aw==
-X-Google-Smtp-Source: ABdhPJwNlqdoRbW1B1bqQAoS3EiwJ6y4NzmDgWMkm0IOOiBf8mzjG7Tn1RYtj6Tkf5aApU7V1xChLg==
-X-Received: by 2002:ac8:5795:0:b0:2fa:3038:b8f3 with SMTP id v21-20020ac85795000000b002fa3038b8f3mr28911150qta.659.1654020663115;
-        Tue, 31 May 2022 11:11:03 -0700 (PDT)
-Received: from spruce.. (c-71-206-142-238.hsd1.va.comcast.net. [71.206.142.238])
-        by smtp.gmail.com with ESMTPSA id u23-20020a05622a199700b00304b506eec2sm3160554qtc.93.2022.05.31.11.11.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 11:11:02 -0700 (PDT)
-From:   Joe Simmons-Talbott <joetalbott@gmail.com>
-To:     jic23@kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Joe Simmons-Talbott <joetalbott@gmail.com>,
-        Joe Perches <joe@perches.com>
-Subject: [PATCH v2] iio: Use octal permissions and DEVICE_ATTR_{RO,RW}.
-Date:   Tue, 31 May 2022 14:10:16 -0400
-Message-Id: <20220531181016.76007-1-joetalbott@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 31 May 2022 14:27:00 -0400
+Received: from mail.cybernetics.com (mail.cybernetics.com [173.71.130.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765AF10FDA
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 11:26:59 -0700 (PDT)
+X-ASG-Debug-ID: 1654020677-1cf43917f334afa0001-xx1T2L
+Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id wbqVFrYsF9UO9ekk; Tue, 31 May 2022 14:11:17 -0400 (EDT)
+X-Barracuda-Envelope-From: tonyb@cybernetics.com
+X-ASG-Whitelist: Client
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
+        bh=QvvHI94cjVSZ3vyzLq0aE4IbkuwCS7vLvfKjrgG4UFU=;
+        h=Content-Transfer-Encoding:Content-Type:Cc:To:Subject:From:Content-Language:
+        MIME-Version:Date:Message-ID; b=cdHo3GAMcWDRJ0VGiCWvXlyIXhHwRhAR44nZK//A1tvRT
+        d2BjwWd9JShX2dFtLN6fSvPzVQCXgXil9PAdI8Wj2ZmL6SkzZRUPpYY3OSL3k3Ip8B7njnzSJgaZg
+        nIQyJjOiw0pjXEOVFlb1XTpA4pOl5WOwRUtj+NTaT5uO9KtoI=
+Received: from [10.157.2.224] (HELO [192.168.200.1])
+  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
+  with ESMTPS id 11829182; Tue, 31 May 2022 14:11:17 -0400
+Message-ID: <9b08ab7c-b80b-527d-9adf-7716b0868fbc@cybernetics.com>
+Date:   Tue, 31 May 2022 14:11:16 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+From:   Tony Battersby <tonyb@cybernetics.com>
+Subject: [PATCH 00/10] mpt3sas and dmapool scalability
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+X-ASG-Orig-Subj: [PATCH 00/10] mpt3sas and dmapool scalability
+Cc:     iommu@lists.linux-foundation.org, kernel-team@fb.com,
+        Matthew Wilcox <willy@infradead.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tony Lindgren <tony@atomide.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Barracuda-Connect: UNKNOWN[10.10.4.126]
+X-Barracuda-Start-Time: 1654020677
+X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at cybernetics.com
+X-Barracuda-Scan-Msg-Size: 3968
+X-Barracuda-BRTS-Status: 1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As reported by checkpatch.pl.  Where possible use DEVICE_ATTR_RO and
-DEVICE_ATTR_RW.  Change function names to be <var>_show() for read and
-<var>_store() for write.
+This patch series improves dmapool scalability by replacing linear scans
+with red-black trees.
 
-Suggested-by: Joe Perches <joe@perches.com>
-Signed-off-by: Joe Simmons-Talbott <joetalbott@gmail.com>
----
+History:
 
-Changes in v2:
-  - Use DEVICE_ATTR_RO and DEVICE_ATTR_RW rather than octal permissions
-	where applicable.  Rename functions to <var>-show() and
-	<var>-store().  Based on review by Joe Perches <joe@perches.com>
+In 2018 this patch series made it through 4 versions.  v1 used red-black
+trees; v2 - v4 put the dma pool info directly into struct page and used
+virt_to_page() to get at it.  v4 made a brief appearance in linux-next,
+but it caused problems on non-x86 archs where virt_to_page() doesn't
+work with dma_alloc_coherent, so it was reverted.  I was too busy at the
+time to repost the red-black tree version, and I forgot about it until
+now.  This version is based on the red-black trees of v1, but addressing
+all the review comments I got at the time and with additional cleanup
+patches.
 
- drivers/iio/industrialio-buffer.c  | 62 ++++++++++++++----------------
- drivers/iio/industrialio-core.c    | 35 ++++++++---------
- drivers/iio/industrialio-trigger.c | 32 ++++++++-------
- 3 files changed, 61 insertions(+), 68 deletions(-)
+Note that Keith Busch is also working on improving dmapool scalability,
+so for now I would recommend not merging my scalability patches until
+Keith's approach can be evaluated.  In the meantime, my patches can
+serve as a benchmark comparison.  I also have a number of cleanup
+patches in my series that could be useful on their own.
 
-diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
-index b078eb2f3c9d..4bafadddd1f6 100644
---- a/drivers/iio/industrialio-buffer.c
-+++ b/drivers/iio/industrialio-buffer.c
-@@ -630,18 +630,18 @@ static int iio_buffer_add_channel_sysfs(struct iio_dev *indio_dev,
- 	return ret;
- }
- 
--static ssize_t iio_buffer_read_length(struct device *dev,
--				      struct device_attribute *attr,
--				      char *buf)
-+static ssize_t length_show(struct device *dev,
-+			   struct device_attribute *attr,
-+			   char *buf)
- {
- 	struct iio_buffer *buffer = to_iio_dev_attr(attr)->buffer;
- 
- 	return sysfs_emit(buf, "%d\n", buffer->length);
- }
- 
--static ssize_t iio_buffer_write_length(struct device *dev,
--				       struct device_attribute *attr,
--				       const char *buf, size_t len)
-+static ssize_t length_store(struct device *dev,
-+			    struct device_attribute *attr,
-+			    const char *buf, size_t len)
- {
- 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
- 	struct iio_buffer *buffer = to_iio_dev_attr(attr)->buffer;
-@@ -672,9 +672,9 @@ static ssize_t iio_buffer_write_length(struct device *dev,
- 	return ret ? ret : len;
- }
- 
--static ssize_t iio_buffer_show_enable(struct device *dev,
--				      struct device_attribute *attr,
--				      char *buf)
-+static ssize_t enable_show(struct device *dev,
-+			   struct device_attribute *attr,
-+			   char *buf)
- {
- 	struct iio_buffer *buffer = to_iio_dev_attr(attr)->buffer;
- 
-@@ -1289,10 +1289,10 @@ void iio_disable_all_buffers(struct iio_dev *indio_dev)
- 	iio_buffer_deactivate_all(indio_dev);
- }
- 
--static ssize_t iio_buffer_store_enable(struct device *dev,
--				       struct device_attribute *attr,
--				       const char *buf,
--				       size_t len)
-+static ssize_t enable_store(struct device *dev,
-+			    struct device_attribute *attr,
-+			    const char *buf,
-+			    size_t len)
- {
- 	int ret;
- 	bool requested_state;
-@@ -1322,19 +1322,19 @@ static ssize_t iio_buffer_store_enable(struct device *dev,
- 	return (ret < 0) ? ret : len;
- }
- 
--static ssize_t iio_buffer_show_watermark(struct device *dev,
--					 struct device_attribute *attr,
--					 char *buf)
-+static ssize_t watermark_show(struct device *dev,
-+			      struct device_attribute *attr,
-+			      char *buf)
- {
- 	struct iio_buffer *buffer = to_iio_dev_attr(attr)->buffer;
- 
- 	return sysfs_emit(buf, "%u\n", buffer->watermark);
- }
- 
--static ssize_t iio_buffer_store_watermark(struct device *dev,
--					  struct device_attribute *attr,
--					  const char *buf,
--					  size_t len)
-+static ssize_t watermark_store(struct device *dev,
-+			       struct device_attribute *attr,
-+			       const char *buf,
-+			       size_t len)
- {
- 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
- 	struct iio_buffer *buffer = to_iio_dev_attr(attr)->buffer;
-@@ -1366,9 +1366,9 @@ static ssize_t iio_buffer_store_watermark(struct device *dev,
- 	return ret ? ret : len;
- }
- 
--static ssize_t iio_dma_show_data_available(struct device *dev,
--						struct device_attribute *attr,
--						char *buf)
-+static ssize_t data_available_show(struct device *dev,
-+				   struct device_attribute *attr,
-+				   char *buf)
- {
- 	struct iio_buffer *buffer = to_iio_dev_attr(attr)->buffer;
- 
-@@ -1391,18 +1391,14 @@ static ssize_t direction_show(struct device *dev,
- 	}
- }
- 
--static DEVICE_ATTR(length, S_IRUGO | S_IWUSR, iio_buffer_read_length,
--		   iio_buffer_write_length);
-+static DEVICE_ATTR_RW(length);
- static struct device_attribute dev_attr_length_ro = __ATTR(length,
--	S_IRUGO, iio_buffer_read_length, NULL);
--static DEVICE_ATTR(enable, S_IRUGO | S_IWUSR,
--		   iio_buffer_show_enable, iio_buffer_store_enable);
--static DEVICE_ATTR(watermark, S_IRUGO | S_IWUSR,
--		   iio_buffer_show_watermark, iio_buffer_store_watermark);
-+	0444, length_show, NULL);
-+static DEVICE_ATTR_RW(enable);
-+static DEVICE_ATTR_RW(watermark);
- static struct device_attribute dev_attr_watermark_ro = __ATTR(watermark,
--	S_IRUGO, iio_buffer_show_watermark, NULL);
--static DEVICE_ATTR(data_available, S_IRUGO,
--		iio_dma_show_data_available, NULL);
-+	0444, watermark_show, NULL);
-+static DEVICE_ATTR_RO(data_available);
- static DEVICE_ATTR_RO(direction);
- 
- /*
-diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
-index e1ed44dec2ab..bb1dd00b99ac 100644
---- a/drivers/iio/industrialio-core.c
-+++ b/drivers/iio/industrialio-core.c
-@@ -1114,12 +1114,12 @@ int __iio_device_attr_init(struct device_attribute *dev_attr,
- 	dev_attr->attr.name = name;
- 
- 	if (readfunc) {
--		dev_attr->attr.mode |= S_IRUGO;
-+		dev_attr->attr.mode |= 0444;
- 		dev_attr->show = readfunc;
- 	}
- 
- 	if (writefunc) {
--		dev_attr->attr.mode |= S_IWUSR;
-+		dev_attr->attr.mode |= 0200;
- 		dev_attr->store = writefunc;
- 	}
- 
-@@ -1393,29 +1393,29 @@ void iio_free_chan_devattr_list(struct list_head *attr_list)
- 	}
- }
- 
--static ssize_t iio_show_dev_name(struct device *dev,
--				 struct device_attribute *attr,
--				 char *buf)
-+static ssize_t name_show(struct device *dev,
-+			 struct device_attribute *attr,
-+			 char *buf)
- {
- 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
- 	return sysfs_emit(buf, "%s\n", indio_dev->name);
- }
- 
--static DEVICE_ATTR(name, S_IRUGO, iio_show_dev_name, NULL);
-+static DEVICE_ATTR_RO(name);
- 
--static ssize_t iio_show_dev_label(struct device *dev,
--				 struct device_attribute *attr,
--				 char *buf)
-+static ssize_t label_show(struct device *dev,
-+			  struct device_attribute *attr,
-+			  char *buf)
- {
- 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
- 	return sysfs_emit(buf, "%s\n", indio_dev->label);
- }
- 
--static DEVICE_ATTR(label, S_IRUGO, iio_show_dev_label, NULL);
-+static DEVICE_ATTR_RO(label);
- 
--static ssize_t iio_show_timestamp_clock(struct device *dev,
--					struct device_attribute *attr,
--					char *buf)
-+static ssize_t current_timestamp_clock_show(struct device *dev,
-+					    struct device_attribute *attr,
-+					    char *buf)
- {
- 	const struct iio_dev *indio_dev = dev_to_iio_dev(dev);
- 	const clockid_t clk = iio_device_get_clock(indio_dev);
-@@ -1459,9 +1459,9 @@ static ssize_t iio_show_timestamp_clock(struct device *dev,
- 	return sz;
- }
- 
--static ssize_t iio_store_timestamp_clock(struct device *dev,
--					 struct device_attribute *attr,
--					 const char *buf, size_t len)
-+static ssize_t current_timestamp_clock_store(struct device *dev,
-+					     struct device_attribute *attr,
-+					     const char *buf, size_t len)
- {
- 	clockid_t clk;
- 	int ret;
-@@ -1509,8 +1509,7 @@ int iio_device_register_sysfs_group(struct iio_dev *indio_dev,
- 	return 0;
- }
- 
--static DEVICE_ATTR(current_timestamp_clock, S_IRUGO | S_IWUSR,
--		   iio_show_timestamp_clock, iio_store_timestamp_clock);
-+static DEVICE_ATTR_RW(current_timestamp_clock);
- 
- static int iio_device_register_sysfs(struct iio_dev *indio_dev)
- {
-diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
-index f504ed351b3e..21f113c0ee96 100644
---- a/drivers/iio/industrialio-trigger.c
-+++ b/drivers/iio/industrialio-trigger.c
-@@ -37,7 +37,7 @@ static LIST_HEAD(iio_trigger_list);
- static DEFINE_MUTEX(iio_trigger_list_lock);
- 
- /**
-- * iio_trigger_read_name() - retrieve useful identifying name
-+ * name_show() - retrieve useful identifying name
-  * @dev:	device associated with the iio_trigger
-  * @attr:	pointer to the device_attribute structure that is
-  *		being processed
-@@ -46,15 +46,15 @@ static DEFINE_MUTEX(iio_trigger_list_lock);
-  * Return: a negative number on failure or the number of written
-  *	   characters on success.
-  */
--static ssize_t iio_trigger_read_name(struct device *dev,
--				     struct device_attribute *attr,
--				     char *buf)
-+static ssize_t name_show(struct device *dev,
-+			 struct device_attribute *attr,
-+			 char *buf)
- {
- 	struct iio_trigger *trig = to_iio_trigger(dev);
- 	return sysfs_emit(buf, "%s\n", trig->name);
- }
- 
--static DEVICE_ATTR(name, S_IRUGO, iio_trigger_read_name, NULL);
-+static DEVICE_ATTR_RO(name);
- 
- static struct attribute *iio_trig_dev_attrs[] = {
- 	&dev_attr_name.attr,
-@@ -395,7 +395,7 @@ void iio_dealloc_pollfunc(struct iio_poll_func *pf)
- EXPORT_SYMBOL_GPL(iio_dealloc_pollfunc);
- 
- /**
-- * iio_trigger_read_current() - trigger consumer sysfs query current trigger
-+ * current_trigger_show() - trigger consumer sysfs query current trigger
-  * @dev:	device associated with an industrial I/O device
-  * @attr:	pointer to the device_attribute structure that
-  *		is being processed
-@@ -407,9 +407,9 @@ EXPORT_SYMBOL_GPL(iio_dealloc_pollfunc);
-  * Return: a negative number on failure, the number of characters written
-  *	   on success or 0 if no trigger is available
-  */
--static ssize_t iio_trigger_read_current(struct device *dev,
--					struct device_attribute *attr,
--					char *buf)
-+static ssize_t current_trigger_show(struct device *dev,
-+				    struct device_attribute *attr,
-+				    char *buf)
- {
- 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
- 
-@@ -419,7 +419,7 @@ static ssize_t iio_trigger_read_current(struct device *dev,
- }
- 
- /**
-- * iio_trigger_write_current() - trigger consumer sysfs set current trigger
-+ * current_trigger_store() - trigger consumer sysfs set current trigger
-  * @dev:	device associated with an industrial I/O device
-  * @attr:	device attribute that is being processed
-  * @buf:	string buffer that holds the name of the trigger
-@@ -432,10 +432,10 @@ static ssize_t iio_trigger_read_current(struct device *dev,
-  * Return: negative error code on failure or length of the buffer
-  *	   on success
-  */
--static ssize_t iio_trigger_write_current(struct device *dev,
--					 struct device_attribute *attr,
--					 const char *buf,
--					 size_t len)
-+static ssize_t current_trigger_store(struct device *dev,
-+				     struct device_attribute *attr,
-+				     const char *buf,
-+				     size_t len)
- {
- 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
- 	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
-@@ -494,9 +494,7 @@ static ssize_t iio_trigger_write_current(struct device *dev,
- 	return ret;
- }
- 
--static DEVICE_ATTR(current_trigger, S_IRUGO | S_IWUSR,
--		   iio_trigger_read_current,
--		   iio_trigger_write_current);
-+static DEVICE_ATTR_RW(current_trigger);
- 
- static struct attribute *iio_trigger_consumer_attrs[] = {
- 	&dev_attr_current_trigger.attr,
--- 
-2.35.3
+References:
+
+v1
+https://lore.kernel.org/linux-mm/73ec1f52-d758-05df-fb6a-41d269e910d0@cybernetics.com/
+
+v2
+https://lore.kernel.org/linux-mm/ec701153-fdc9-37f3-c267-f056159b4606@cybernetics.com/
+
+v3
+https://lore.kernel.org/linux-mm/d48854ff-995d-228e-8356-54c141c32117@cybernetics.com/
+
+v4
+https://lore.kernel.org/linux-mm/88395080-efc1-4e7b-f813-bb90c86d0745@cybernetics.com/
+
+problem caused by virt_to_page()
+https://lore.kernel.org/linux-kernel/20181206013054.GI6707@atomide.com/
+
+Keith Busch's dmapool performance enhancements
+https://lore.kernel.org/linux-mm/20220428202714.17630-1-kbusch@kernel.org/
+
+Below is my original description of the motivation for these patches.
+
+drivers/scsi/mpt3sas is running into a scalability problem with the
+kernel's DMA pool implementation.  With a LSI/Broadcom SAS 9300-8i
+12Gb/s HBA and max_sgl_entries=256, during modprobe, mpt3sas does the
+equivalent of:
+
+chain_dma_pool = dma_pool_create(size = 128);
+for (i = 0; i < 373959; i++)
+    {
+    dma_addr[i] = dma_pool_alloc(chain_dma_pool);
+    }
+
+And at rmmod, system shutdown, or system reboot, mpt3sas does the
+equivalent of:
+
+for (i = 0; i < 373959; i++)
+    {
+    dma_pool_free(chain_dma_pool, dma_addr[i]);
+    }
+dma_pool_destroy(chain_dma_pool);
+
+With this usage, both dma_pool_alloc() and dma_pool_free() exhibit
+O(n^2) complexity, although dma_pool_free() is much worse due to
+implementation details.  On my system, the dma_pool_free() loop above
+takes about 9 seconds to run.  Note that the problem was even worse
+before commit 74522a92bbf0 ("scsi: mpt3sas: Optimize I/O memory
+consumption in driver."), where the dma_pool_free() loop could take ~30
+seconds.
+
+mpt3sas also has some other DMA pools, but chain_dma_pool is the only
+one with so many allocations:
+
+cat /sys/devices/pci0000:80/0000:80:07.0/0000:85:00.0/pools
+(manually cleaned up column alignment)
+poolinfo - 0.1
+reply_post_free_array pool  1      21     192     1
+reply_free pool             1      1      41728   1
+reply pool                  1      1      1335296 1
+sense pool                  1      1      970272  1
+chain pool                  373959 386048 128     12064
+reply_post_free pool        12     12     166528  12
+
+The patches in this series improve the scalability of the DMA pool
+implementation, which significantly reduces the running time of the
+DMA alloc/free loops.  With the patches applied, "modprobe mpt3sas",
+"rmmod mpt3sas", and system shutdown/reboot with mpt3sas loaded are
+significantly faster.  Here are some benchmarks (of DMA alloc/free
+only, not the entire modprobe/rmmod):
+
+dma_pool_create() + dma_pool_alloc() loop, size = 128, count = 373959
+  original:        350 ms ( 1x)
+  dmapool patches:  18 ms (19x)
+
+dma_pool_free() loop + dma_pool_destroy(), size = 128, count = 373959
+  original:        8901 ms (   1x)
+  dmapool patches:   19 ms ( 477x)
+
 

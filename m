@@ -2,65 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BF8539598
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 744D953959B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346679AbiEaRwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 13:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
+        id S1346682AbiEaRwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 13:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343782AbiEaRwB (ORCPT
+        with ESMTP id S1343782AbiEaRwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 13:52:01 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675C353B64;
-        Tue, 31 May 2022 10:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654019520; x=1685555520;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=z9sgpsSPs9NDoq7xVy5L9QPtqJrdgsPFZQ+CXd/DLBo=;
-  b=n1X79n9fCFQcMfaIDqzrw6l/sfoPKoqBF20195aKwGnr4KCyerq4ZVTU
-   zWbqvqkUCpLAQDWgG5oxlkvAcszIEL8vs0RG7oH303IVq1JoHCgePycEa
-   IV1hCsTENyF2HpqQvayiOk7DuQfEg0lmfI5JU74lKIHn6+AU9dUQiJGfk
-   c=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 31 May 2022 10:52:00 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 10:51:59 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 31 May 2022 10:51:59 -0700
-Received: from [10.38.242.41] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 31 May
- 2022 10:51:57 -0700
-Message-ID: <73f2e94b-daa5-b30e-4fa9-f6725ed1a686@quicinc.com>
-Date:   Tue, 31 May 2022 10:51:55 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm/dpu: Fix pointer dereferenced before checking
-Content-Language: en-US
-To:     Haowen Bai <baihaowen@meizu.com>, Rob Clark <robdclark@gmail.com>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, "David Airlie" <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
-References: <1653877196-23114-1-git-send-email-baihaowen@meizu.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <1653877196-23114-1-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Tue, 31 May 2022 13:52:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0FF5A09C
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:52:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C005BB8116B
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 17:52:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E06C385A9;
+        Tue, 31 May 2022 17:52:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1654019521;
+        bh=OEffCozNQpohIH5eyJLNtoMpjRKcnRWUeID9VGyaAnw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OxCWkOU/KlRTYWJIU77tH7DqxetqA3KFACMH/TOXjqVqEk57kgpF3O26zUfycCHWE
+         0XYuBliVm13YxzKcZun2fxq2A7DNTiLDxFBiJVJtOrM35PmN6mal9g9Pk4AOxBxEeq
+         QHLAVyMduwHx2dCypmsfubYv34RV1vZiaR6MK9HM=
+Date:   Tue, 31 May 2022 10:52:00 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH 2/3] mm: introduce clear_highpage_tagged
+Message-Id: <20220531105200.587db61db99f19e308a05c5e@linux-foundation.org>
+In-Reply-To: <d6ba060f18999a00052180c2c10536226b50438a.1654011120.git.andreyknvl@google.com>
+References: <4c76a95aff79723de76df146a10888a5a9196faf.1654011120.git.andreyknvl@google.com>
+        <d6ba060f18999a00052180c2c10536226b50438a.1654011120.git.andreyknvl@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,38 +59,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 31 May 2022 17:43:49 +0200 andrey.konovalov@linux.dev wrote:
 
-
-On 5/29/2022 7:19 PM, Haowen Bai wrote:
-> The phys_enc->wb_idx is dereferencing before null checking, so move
-> it after checking.
+> From: Andrey Konovalov <andreyknvl@google.com>
 > 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> Add a clear_highpage_tagged() helper that does clear_highpage() on a
+> page potentially tagged by KASAN.
 
-Fixes: d7d0e73f7de33 ("drm/msm/dpu: introduce the dpu_encoder_phys_* for 
-writeback")
+clear_highpage_kasan_tagged() would be a better name, no?
 
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+--- a/include/linux/highmem.h~mm-introduce-clear_highpage_tagged-fix
++++ a/include/linux/highmem.h
+@@ -243,7 +243,7 @@ static inline void clear_highpage(struct
+ 	kunmap_local(kaddr);
+ }
+ 
+-static inline void clear_highpage_tagged(struct page *page)
++static inline void clear_highpage_kasan_tagged(struct page *page)
+ {
+ 	u8 tag;
+ 
+--- a/mm/page_alloc.c~mm-introduce-clear_highpage_tagged-fix
++++ a/mm/page_alloc.c
+@@ -1311,7 +1311,7 @@ static void kernel_init_pages(struct pag
+ 	/* s390's use of memset() could override KASAN redzones. */
+ 	kasan_disable_current();
+ 	for (i = 0; i < numpages; i++)
+-		clear_highpage_tagged(page + i);
++		clear_highpage_kasan_tagged(page + i);
+ 	kasan_enable_current();
+ }
+ 
+_
 
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
-> index 4829d1ce0cf8..59da348ff339 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
-> @@ -574,11 +574,11 @@ static void dpu_encoder_phys_wb_disable(struct dpu_encoder_phys *phys_enc)
->    */
->   static void dpu_encoder_phys_wb_destroy(struct dpu_encoder_phys *phys_enc)
->   {
-> -	DPU_DEBUG("[wb:%d]\n", phys_enc->wb_idx - WB_0);
-> -
->   	if (!phys_enc)
->   		return;
->   
-> +	DPU_DEBUG("[wb:%d]\n", phys_enc->wb_idx - WB_0);
-> +
->   	kfree(phys_enc);
->   }
->   

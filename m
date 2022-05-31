@@ -2,132 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9BC538D75
+	by mail.lfdr.de (Postfix) with ESMTP id BB758538D76
 	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245068AbiEaJH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 05:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
+        id S245077AbiEaJIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 05:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245095AbiEaJHQ (ORCPT
+        with ESMTP id S242735AbiEaJID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 05:07:16 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA2421251
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:07:13 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id s24so10424901wrb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:07:13 -0700 (PDT)
+        Tue, 31 May 2022 05:08:03 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E611655206
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:07:59 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id r14-20020a056830418e00b0060b8da9ff75so3053227otu.11
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:07:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Da7CpUzfigAT4CIYpAa4S3dnkp2cNQHn7AtCXpqTizs=;
-        b=lIHzKa+jSnfytsD+Mp7xDDDZi7o4cUhwyisi0ts+8d3JRUbjVIV38DYCJHOl8pq2ib
-         UB6/+hbLc2Sy2SYynmoqY/YWspccNUcJhI3/Sr2/+C9rg4S+digPGeenGn/SlFQCtKTd
-         Gv8Jb+u/6n3HRS+vVcBKXeNKB2B40wlgPmWTbJqat3UipFJjX4oQmjTNENDYcMOvWUoT
-         Eps+CWDrirAYSy07eTbSUzozxFjnoTuWQ/RyWsrs3m2UCCUU29fSVVaiJfWmtkAL/bUq
-         Km2FcwbmPjMSMDx2wv+6XivFP7x6QJGHUYpyBcr4ouSR3yHAjaFL0T/YPnPy47UxTgIY
-         jJlw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RWsthZPxNDA39U3KIC6LMsBvLuzLbrfSrlsINFHYDcI=;
+        b=GIYO75yR6RxABAavORON5hxUzN4kdiuq7iHSEQU+CYmSKkkfZ8vjYY7xX1gDRJoG5K
+         WA75V3DNHdz/zDQXyHEiAH5srFHNeIsH2HYfdJMpQ9w1XsbSWECD8ZOulAam5RJpg6fY
+         NhnvWk26PwIEleos7OZzKK8rR2pvXqVteUll6hvklGGoXj/S6IspbIDwpd+Ift+Vybjb
+         wEeXzYj5OjZ94nZYdMK7gyTFAIti2MtbG/oejv+cr+8XhQ/mazoM4Ro7zRM68pWVz+zM
+         YKZuF6uX6UrEUrH0DkPcfa89zq0xmnpzrmr6a9G0wxvHQdCMY77aNgspIxpSuNWyDxRN
+         sSTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Da7CpUzfigAT4CIYpAa4S3dnkp2cNQHn7AtCXpqTizs=;
-        b=6IoRBWsdbU9M9Tfj2p8TecASy1Xf9rY28ku4mwg9GVnu9Iefuy23bm6aLVEILwWzLg
-         KEjcxFCK9acNrLykF6afvlPDfYDFVcs3dZXOc9JXuuENrUDGBYjme1REEg4McspV8GeW
-         6ezYNeeAO45a1WTLJNoddj5LGIDRzCobgJjON+seQ1xssDFTNxngQuKerdROoSLqTTPk
-         k10aKl24dbCROJqdxMuTMGBLc8YmBkHMIevokg/SAwkd+NP3b6X39y1KyqCwGwFMDxEX
-         F3T9Qh8SbjNBsWe21aAxPlQZb6QNPUqiEIUROHXgAv0c3wVRgjABD5zJFwwglwwEhowk
-         oMEQ==
-X-Gm-Message-State: AOAM5328L39lIcapQC8atFd+AKqh7u6RhOesa8+SU5H+BOKjHJ+lOTYp
-        RtgoDJyp7fZ/f3RrEk3JnrCVPw==
-X-Google-Smtp-Source: ABdhPJynCOtAl39IHyypdJg+WREtGlQuCJn0fX9jFpVVRkxUzkTM3i4oHVsc21wrbJlrvrSbtW7hUg==
-X-Received: by 2002:a5d:4fc2:0:b0:210:940:b1fd with SMTP id h2-20020a5d4fc2000000b002100940b1fdmr21151584wrw.134.1653988031891;
-        Tue, 31 May 2022 02:07:11 -0700 (PDT)
-Received: from [10.188.163.71] (cust-east-parth2-46-193-73-98.wb.wifirst.net. [46.193.73.98])
-        by smtp.gmail.com with ESMTPSA id m10-20020a7bcb8a000000b00397243d3dbcsm1545690wmi.31.2022.05.31.02.07.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 02:07:11 -0700 (PDT)
-Message-ID: <7c582099-0eef-6689-203a-606cb2f69391@kernel.dk>
-Date:   Tue, 31 May 2022 03:07:10 -0600
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RWsthZPxNDA39U3KIC6LMsBvLuzLbrfSrlsINFHYDcI=;
+        b=VM24LhbceZ8wBWvfIVkFd5WkDnjzhVPynkKlQdTpCD4VQK1pXoZ1QxjcyYaGAqgDh9
+         PSt/Izviafzi4UuPbDbsaFPOvqx9u2RCQupq7A7m+JBgILsv0FzugJErdxuk2hCWXEOM
+         v7JRTy/T1CYyagYi8rVFmssifqsZDlciJ0ave7emuvniG8OvRNEKCv6Gv46oxGcBjUSU
+         W6xle2Nv6VPrvG0jin76LiDfW05PJ7DeB9XZGF5Y6gjrCKey8Ba6RbSoMgMo0KoPq4L8
+         nEVtovh++M501M8HTY0dlCkjUktShFl3zbk/ZzrYfFPVMi0tH39PqHaNpefcKEHyB84E
+         kfIw==
+X-Gm-Message-State: AOAM533Zkxk9W7ygnaVWWfwU8XwedC3E7jFcz8FoM6utDz2eEnybdX0K
+        A2BemfzOpHp8YjOR8IxApZSq7mtO5yHvlUiDlL+jAg==
+X-Google-Smtp-Source: ABdhPJxVvTrJGlPKkgE3ckW+2BAEYRKazdCH8wFipcEpTVtbBTK4iTzPHd32UxIZGi3IQCROhrDqUirCGPDwLhTbJs0=
+X-Received: by 2002:a9d:6f1a:0:b0:60b:20fd:ca75 with SMTP id
+ n26-20020a9d6f1a000000b0060b20fdca75mr13961134otq.126.1653988078875; Tue, 31
+ May 2022 02:07:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [syzbot] UBSAN: array-index-out-of-bounds in io_submit_sqes
-Content-Language: en-US
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Hao Xu <haoxu.linux@icloud.com>,
-        syzbot <syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000f0b26205e04a183b@google.com>
- <3d3c6b5f-84cd-cb25-812e-dac77e02ddbf@kernel.dk>
- <e0867860-12c6-e958-07de-cfbcf644b9fe@icloud.com>
- <bcac089a-36e5-0d85-1ec3-b683dac68b4f@kernel.dk>
- <CACT4Y+aqriNp1F5CJofqaxNMM+-3cxNR2nY0tHEtb4YDqDuHtg@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CACT4Y+aqriNp1F5CJofqaxNMM+-3cxNR2nY0tHEtb4YDqDuHtg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220517094532.2729049-1-poprdi@google.com>
+In-Reply-To: <20220517094532.2729049-1-poprdi@google.com>
+From:   =?UTF-8?Q?Tam=C3=A1s_Koczka?= <poprdi@google.com>
+Date:   Tue, 31 May 2022 11:07:47 +0200
+Message-ID: <CAPUC6bKo6EdacUVAWaJp+_Z_sEztnv96Li6zLpm-UR=2rZth-w@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: Collect kcov coverage from hci_rx_work
+To:     Marcel Holtmann <marcel@holtmann.org>
+Cc:     Andy Nguyen <theflow@google.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Aleksandr Nogikh <nogikh@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/22 3:05 AM, Dmitry Vyukov wrote:
-> On Tue, 31 May 2022 at 11:01, Jens Axboe <axboe@kernel.dk> wrote:
->>
->> On 5/31/22 3:00 AM, Hao Xu wrote:
->>> On 5/31/22 16:45, Jens Axboe wrote:
->>>> On 5/31/22 1:55 AM, syzbot wrote:
->>>>> Hello,
->>>>>
->>>>> syzbot found the following issue on:
->>>>>
->>>>> HEAD commit:    3b46e4e44180 Add linux-next specific files for 20220531
->>>>> git tree:       linux-next
->>>>> console output: https://syzkaller.appspot.com/x/log.txt?x=16e151f5f00000
->>>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=ccb8d66fc9489ef
->>>>> dashboard link: https://syzkaller.appspot.com/bug?extid=b6c9b65b6753d333d833
->>>>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->>>>>
->>>>> Unfortunately, I don't have any reproducer for this issue yet.
->>>>>
->>>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->>>>> Reported-by: syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com
->>>>>
->>>>> ================================================================================
->>>>> ================================================================================
->>>>> UBSAN: array-index-out-of-bounds in fs/io_uring.c:8860:19
->>>>> index 75 is out of range for type 'io_op_def [47]'
->>>>
->>>> 'def' is just set here, it's not actually used after 'opcode' has been
->>>> verified.
->>>>
->>>
->>> Maybe we can move it to be below the opcode check to comfort UBSAN.
->>
->> Yeah that's what I did, just rebased it to get rid of it:
->>
->> https://git.kernel.dk/cgit/linux-block/commit/?h=io_uring-5.19&id=fcde59feb1affb6d56aecadc3868df4631480da5
-> 
-> If you are rebasing it, please add the following tag so that the bug
-> is closed later:
-> 
-> Tested-by: syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com
+Hello Everyone,
 
-Sorry, missed that, would be a bit confusing? 5.20 branch is rebased
-on top of that too. Can we just do:
+Thank you for reviewing the patch - I hope everything is going well.
 
-#syz fix: io_uring: add io_op_defs 'def' pointer in req init and issue
+Please feel free to ask me if you need any more information regarding it!
 
-?
+Thank you,
+Tamas
 
--- 
-Jens Axboe
-
+On Tue, May 17, 2022 at 11:45 AM Tamas Koczka <poprdi@google.com> wrote:
+>
+> Annotate hci_rx_work() with kcov_remote_start() and kcov_remote_stop()
+> calls, so remote KCOV coverage is collected while processing the rx_q
+> queue which is the main incoming Bluetooth packet queue.
+>
+> Coverage is associated with the thread which created the packet skb.
+>
+> Signed-off-by: Tamas Koczka <poprdi@google.com>
+> ---
+>  net/bluetooth/hci_core.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> index 45c2dd2e1590..703722031b8d 100644
+> --- a/net/bluetooth/hci_core.c
+> +++ b/net/bluetooth/hci_core.c
+> @@ -29,6 +29,7 @@
+>  #include <linux/rfkill.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/crypto.h>
+> +#include <linux/kcov.h>
+>  #include <linux/property.h>
+>  #include <linux/suspend.h>
+>  #include <linux/wait.h>
+> @@ -3780,7 +3781,9 @@ static void hci_rx_work(struct work_struct *work)
+>
+>         BT_DBG("%s", hdev->name);
+>
+> -       while ((skb = skb_dequeue(&hdev->rx_q))) {
+> +       for (; (skb = skb_dequeue(&hdev->rx_q)); kcov_remote_stop()) {
+> +               kcov_remote_start_common(skb_get_kcov_handle(skb));
+> +
+>                 /* Send copy to monitor */
+>                 hci_send_to_monitor(hdev, skb);
+>
+> --
+> 2.36.0.550.gb090851708-goog
+>

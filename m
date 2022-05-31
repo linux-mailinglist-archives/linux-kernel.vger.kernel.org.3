@@ -2,149 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5A7538C7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B814538C89
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244641AbiEaIEo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 31 May 2022 04:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
+        id S244734AbiEaIJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 04:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbiEaIEl (ORCPT
+        with ESMTP id S244657AbiEaIJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 04:04:41 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8DB91542
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:04:39 -0700 (PDT)
-Received: from mail-yb1-f171.google.com ([209.85.219.171]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MmU9R-1nVApw1i41-00iTmX for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022
- 10:04:37 +0200
-Received: by mail-yb1-f171.google.com with SMTP id h75so16599727ybg.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:04:37 -0700 (PDT)
-X-Gm-Message-State: AOAM530aw5leJ1RwDe+iu2KrD5u23lSXAQBwTDKdHhikFwgQFP9S3h3j
-        Avtoj69awDVwYE6+w7ajwrFyRYTlPYkMibtzkYE=
-X-Google-Smtp-Source: ABdhPJzullwHURqjYFLuUbj5z3ZAXSH5S2TTm7eQzxfj3C4Cw8NUJrDyWWQCTyWhoCHKYMFfEK0FxV85gP8hLdTej/I=
-X-Received: by 2002:a25:69c4:0:b0:65c:ed2b:9106 with SMTP id
- e187-20020a2569c4000000b0065ced2b9106mr8172776ybc.394.1653984276242; Tue, 31
- May 2022 01:04:36 -0700 (PDT)
+        Tue, 31 May 2022 04:09:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E184490CEC;
+        Tue, 31 May 2022 01:09:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94C53B80F96;
+        Tue, 31 May 2022 08:09:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49DA3C385A9;
+        Tue, 31 May 2022 08:09:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653984584;
+        bh=RYpC6xoAQxlzwzTS1Q9qNjdKjQ7qaBCIuSSqtsnXLSA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=W1ConLa0fa4CSVyJdeiG/MvfrvK8aQ6HhtVkyfspn7uvFJDxNNOIcNyqLmAfKqTcO
+         EkRa2N9Ses3HUwH4CrDat1jsce69unKSvoYkDIDQwQqnYtoinOjxy+pHTc4ukWM/Gi
+         GOVRlheQSO57/Tfw11+rtubK4AoEvwzXLi0INwbCbZbBw6BfB36JcBDvgoN7LldXtf
+         NdYwbo7NuSILBQsj8f6cGY4crptgEmSZsDjcPGqb7FJfJ3K5fl4hjDqQpW8Tlzz6eL
+         iwvdFbfphy0PmCw+MbzVQa9ctwRLaqQAQQRLZcBzWeTrH04N/d0Kq3dpFN0Xp8kZXt
+         9ru/+Z/QAH3wg==
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-3043b3f7d8fso120808117b3.8;
+        Tue, 31 May 2022 01:09:44 -0700 (PDT)
+X-Gm-Message-State: AOAM533M6MX1rKOBrp9iTr/VHuG+iBY99xXLp1BcRLbH8YHXV0r+MgNf
+        LfoEK5cZG+amFsMYMNlcMduHoBHrzR46Vle5UtA=
+X-Google-Smtp-Source: ABdhPJyhJog8azsioErC+i5PlBgcKzbEGCvn4zseszGYzoUs1FVRvYrMO45NFlB3l1wsrjJ5hIWZQ9m0KHU6vN1LfV8=
+X-Received: by 2002:a81:28b:0:b0:30c:5e57:fac3 with SMTP id
+ 133-20020a81028b000000b0030c5e57fac3mr8140757ywc.249.1653984583406; Tue, 31
+ May 2022 01:09:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
- <91E67F46-A3C7-4159-9E0C-C6C6306F3669@inria.fr>
-In-Reply-To: <91E67F46-A3C7-4159-9E0C-C6C6306F3669@inria.fr>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 31 May 2022 10:04:19 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2iAsemAQdbTZ_E7GGGCXAOeWbjSjLgXEsd5sg_buZWhw@mail.gmail.com>
-Message-ID: <CAK8P3a2iAsemAQdbTZ_E7GGGCXAOeWbjSjLgXEsd5sg_buZWhw@mail.gmail.com>
-Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
- block count and size helpers")
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jani Nikula <jani.nikula@intel.com>,
+References: <CAK8P3a2_52JPnBWNvTTkFVwLxPAa7=NaQ4whwC1UeH_NYHeUKQ@mail.gmail.com>
+ <CAK8P3a0SpU1n+29KQxzKnPRvzmDE=L0V9RUpKxhemv=74kevcQ@mail.gmail.com>
+ <df5c406c-eec6-c340-2847-49670b7fe8bf@xen0n.name> <CAK8P3a3awFdB1-G65DC38NBuSTvo6SvFTaS0m9YBxunHjHjQvQ@mail.gmail.com>
+ <CAAhV-H6sNr-yo8brBFtzziH6k9Tby0dFp7yehK55SfH5HjZ8hQ@mail.gmail.com>
+ <358025d1-28e6-708b-d23d-3f22ae12a800@xen0n.name> <CAK8P3a1ge2bZS13ahm_LdO3jEcbtR4w3do-gLjggKvppqnBDkw@mail.gmail.com>
+ <CAAhV-H5NCUpR6aBtR9d7c9vW2KiHpk3iFQxj7BeTSS0boMz8PQ@mail.gmail.com>
+In-Reply-To: <CAAhV-H5NCUpR6aBtR9d7c9vW2KiHpk3iFQxj7BeTSS0boMz8PQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 31 May 2022 10:09:26 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2JgrW5a7_udCUWen-gOnJgVeRV2oAd-uq4VSuYkFUqNQ@mail.gmail.com>
+Message-ID: <CAK8P3a2JgrW5a7_udCUWen-gOnJgVeRV2oAd-uq4VSuYkFUqNQ@mail.gmail.com>
+Subject: Re: [musl] Re: [GIT PULL] asm-generic changes for 5.19
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     musl@lists.openwall.com, WANG Xuerui <kernel@xen0n.name>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        SoC Team <soc@kernel.org>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:2R1P1Gj0IweJyyXJRxu8c/mrctPJm4neceddRGqn1jVAANXCgZ4
- 2KJuatX4FlJj7il5QO3IZlNyWzEsYScptKwpmDUTF+C2nj08/IitVQoOd35s3ct2OiMUlRl
- J2N9t/tGr64c25lrG7sPoCXwVJ+xenKb5PyAqtuIf1NzMydw/llvcUjd//qgRizqhc/A/b4
- boU2IjVjw6yL+LhXh8JoQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CxMYW/Mw3NE=:r7inTzKgFRIGDiMlPfTIZO
- SmEcu+v4ajGooG4auLhrtvHVHbznwLsU9RjpEjL4UJ+SWJ9YzXTd9QBoHZ8BTyGGGoGGjXm7O
- S+0gC9axKHKy9+Ho17Tn07K1fxSvUmS2y+XGp4wAmVPV5y6rwnR3W8yzTHz19V8JtW9Sc1yMn
- zf+9g0sNHlTkJaK3OKjy8EooC3rTolBYn64YD8LDCUU8HldXrwUAOrbD6oJJ5wuDRnYpdtLa9
- uhuz+AY+wJKHxiDvVo4XGlbJXTblf+3RlVvNGUMwcw3ULoWZ8NMAELvhk6qxZ5sq5gIdZYak/
- geArgJtmWIt5+K7yrs9EqjjVz7TU05vh5OdwtHpSf8uBQUbWaEB3Zqah2A1rCWYfw363h4m2y
- nxVPsJ0fgvXbBTY+IqMztKCvABG022a84DhvABb3v1OyiyGVPO1l6dr6GWL8DAS58vzXTwkxC
- 4748TO66VDx8t3EYt9+lpFX+4uni3HNYRn/Mw8VwtxTLD+ZhJjl0mPMPz26og69iLWMMmqui5
- 7FwNR1tCL+yxrVlNs2Ljy9s3FFRTZtV/XTuvTki/rwbNdfsrCwn2uk/Lh32/XA7zUJ1Lg6xQU
- svRaVVUBtwurrODXxTUIJ6S2O5GTC3hLQOrP+tmfwcGXi4OH4jXcasSLp6u6yeNWQkNC/z4/y
- F8ejrziBBT1F4SqYZApqoCzRZdiQFJM5jbcDW03+BNhfFxuLn4JaT6g+uXVrvhYw1/+VSQPIh
- cvWjpwiNiy49g4Yov3b5BBINW1AA7CGL1Q33Uw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 8:26 AM Julia Lawall <Julia.Lawall@inria.fr> wrote:
-> > On 30 May 2022, at 15:27, Arnd Bergmann <arnd@arndb.de> wrote:
-> > ﻿On Mon, May 30, 2022 at 4:08 PM Jani Nikula <jani.nikula@intel.com> wrote:
-> >>> On Mon, 30 May 2022, Arnd Bergmann <arnd@arndb.de> wrote:
-> >>> struct my_driver_priv {
-> >>>       struct device dev;
-> >>>       u8 causes_misalignment;
-> >>>       spinlock_t lock;
-> >>>       atomic_t counter;
-> >>> } __packed; /* this annotation is harmful because it breaks the atomics */
-> >>
-> >> I wonder if this is something that could be caught with coccinelle. Or
-> >> sparse. Are there any cases where this combo is necessary? (I can't
-> >> think of any, but it's a low bar. ;)
-> >>
-...
-> >>> or if the annotation does not change the layout like
-> >>>
-> >>> struct my_dma_descriptor {
-> >>>     __le64 address;
-> >>>     __le64 length;
-> >>> } __packed; /* does not change layout but makes access slow on some
-> >>> architectures */
-> >>
-> >> Why is this the case, though? I'd imagine the compiler could figure this
-> >> out.
+On Tue, May 31, 2022 at 9:50 AM Huacai Chen <chenhuacai@kernel.org> wrote:
+> On Mon, May 30, 2022 at 11:56 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > On Mon, May 30, 2022 at 5:00 PM WANG Xuerui <kernel@xen0n.name> wrote:
+> > > Now I see
+> > > the loongarch-next HEAD is already rebased on top of what I believe to
+> > > be the current main branch, however I vaguely remember that it's not
+> > > good to base one's patches on top of "some random commit", so I wonder
+> > > whether the current branch state is appropriate for a PR?
 > >
-> > When you annotate the entire structure as __packed without an
-> > extra __aligned() annotation, the compiler has to assume that the
-> > structure itself is unaligned as well. On many of the older architectures,
-> > this will result in accessing the values one byte at a time. Marking
-> > the structure as "__packed __aligned(8)" instead would be harmless.
-> >
-> > When I have a structure with a few misaligned members, I generally
-> > prefer to only annotate the members that are not naturally aligned,
-> > but this approach is not very common.
->
-> Searching for specific types in a packed structure would be easy.
+> > You are correct, a pull request should always be based on an -rc, orat least
+> > have the minimum set of dependencies. The branch was previously
+> > based on top of the spinlock implementation, which is still the best
+> > place to start here.
+> I have a difficult problem to select the base. Take swiotlb_init() as
+> an example: If I select 5.18-rc1, I should use swiotlb_init(1); if I
+> select Linus' latest tree, I should use swiotlb_init(true,
+> SWIOTLB_VERBOSE). However, if I select 5.18-rc1, linux-next will have
+> a build error because the code there expect swiotlb_init(true,
+> SWIOTLB_VERBOSE).
 
-As an experiment: what kind of results would we get when looking
-for packed structures and unions that contain any of these:
-
-- spinlock_t
-- atomic_t
-- dma_addr_t
-- phys_addr_t
-- size_t
-- any pointer
-- any enum
-- struct mutex
-- struct device
-
-This is just a list of common data types that are used in a lot of
-structures but that one should never find in hardware specific
-types. If the output from coccinelle is 90% actual bugs, this would
-be really helpful. OTOH if there is no output at all, or all
-false-positives, we don't need to look for additional types.
-
-> Coccinelle could duplicate the structure without the packed and see if
-> any offsets change, using build bug on, but that would be architecture
-> specific so maybe not useful.
-
-I would consider this a separate issue. The first one above is for identifying
-structures that are marked as packed but should not be packed at
-all, regardless of whether that changes the layout.
+Ok, I see. This is the kind of thing we normally prevent by having everything
+in linux-next for a few weeks before the merge window. How many issues
+like this are you aware of? If it's just the swiotlb, you could try merging
+the swiotlb branch that is in mainline now on top of the spinlock branch,
+and still get a minimum set of dependencies. If there are many more,
+then basing on top of the current mainline is probably less intrusive after
+all.
 
        Arnd

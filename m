@@ -2,151 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B432539990
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265C8539993
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348468AbiEaWbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 18:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
+        id S1348463AbiEaWcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 18:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348448AbiEaWbH (ORCPT
+        with ESMTP id S240474AbiEaWcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 18:31:07 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F300F9E9DD
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 15:31:06 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id b6-20020a252e46000000b0065d5168f3f0so2128956ybn.21
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 15:31:06 -0700 (PDT)
+        Tue, 31 May 2022 18:32:10 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30355A0B7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 15:32:09 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id j6so195384pfe.13
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 15:32:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=UfACMRIARsl50+9wESZ79WxVKrf1+DeKmOpN6HZLSFs=;
-        b=Qp+2cBCS7ITPDOl5rHNmdb1lWOYKjukksEth7d58stLaRDNC0idqCpnhdxF3mkFcTa
-         1FGFBrEBZ2LgvCruuE+4qYGthyMFsYizvEH8o6++tF22Lfeva7pKpmSjnKFdQGzZHGfy
-         iPtlGCx26lneyD09J0vFnpmuieGI82MhDAVi/hid9dRAUZE8mfJTCFoUgzJ9CQ0cqjCJ
-         aw+sr/GwcHIdrVOzXjn9Nj9SwlMpcHQxRah7CJxuT0RKzNrTinTBz5FvdmTjyNwxMoUE
-         Cz4Fr3RnUu3ztwTz4Gkp1nYNmeMnSIox8YdaxKNhGK8UhevC30YG9+F1b7o8Ahnxca4o
-         /LCg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=P9LyQVuvmVsNZW+3nPRkSL6POGxEfk0Mn3guF1+YKuI=;
+        b=KN2tTYofItlyGe49xSbgyxQWQ327Y7iR6YoFSM9lhh+wiM1RX/01VGMPQk3muL0ImN
+         ZabsYj5dpUeZY8QZi0bzCA53EjL5//Ogzm6HcmIBFQLYHH6Gdnqx/Mm0QCfURZwwN/6+
+         Bfh5dacPirFGkAjSKezJgUXm/9DqjlcIXhLQE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=UfACMRIARsl50+9wESZ79WxVKrf1+DeKmOpN6HZLSFs=;
-        b=FPD5ao1F45RQZwwjihHJa6ryyCiMkYArRw97A8im1b5mbCvCnsOiglSBkyYxmZIuDx
-         oMv0JKEnoDejob2IljXBl6z7TiExBgQvFVHSiYaGivGJfiThsDqibpOZvdG/AvEjMsE6
-         BciV2LIO8Yi5pVaNn8aX2kROIRpHXtpZLMXKSCBEdsvhUh8KCHW8PRZVFKpJ7uTJGmAI
-         TwziiFud/mSyHSFEASFQYH3hoaIRFiI7TlP80XWs6kU2wEm0T7EOWN54J7Piulr6RMN0
-         HlALzz3rb/WZTIoU0+l27YFOhEu4s95py6Z9L5M+QftNAnEQVhm+cfegzPXm/m6AfnyG
-         T9Iw==
-X-Gm-Message-State: AOAM532C+kTpoNlLW7cXp549OXCVnO3+KXgytyDJii7C8OvARDh7IXuN
-        82aZZ1eFRkjMquJ5MqbAVTIuAB8PP8Y=
-X-Google-Smtp-Source: ABdhPJxX6iFY+WymNZyAKQoSiD+LL6u2FyieTp6U+XBjEKo1mTwLbBFK4SjCjkolRPSHBi/WsllO9vmq/xQ=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:5ba6:9c55:2664:4cc])
- (user=surenb job=sendgmr) by 2002:a81:b0b:0:b0:2e5:dcc1:3d49 with SMTP id
- 11-20020a810b0b000000b002e5dcc13d49mr66111326ywl.210.1654036266179; Tue, 31
- May 2022 15:31:06 -0700 (PDT)
-Date:   Tue, 31 May 2022 15:31:00 -0700
-In-Reply-To: <20220531223100.510392-1-surenb@google.com>
-Message-Id: <20220531223100.510392-2-surenb@google.com>
-Mime-Version: 1.0
-References: <20220531223100.510392-1-surenb@google.com>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH RESEND v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
-        hannes@cmpxchg.org, guro@fb.com, minchan@kernel.org,
-        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
-        hch@infradead.org, oleg@redhat.com, david@redhat.com,
-        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
-        jhubbard@nvidia.com, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com,
-        surenb@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P9LyQVuvmVsNZW+3nPRkSL6POGxEfk0Mn3guF1+YKuI=;
+        b=359JvSMfuPUuaCTRXw36nT6+ZapSFRm/MFZ5GzduFJkCxS6ZuUIDF5qAlbu33DzAew
+         Z/nlKbhyBtg3BXggm/ti+vXZtjHR3XL0CJAL3mt3sIQkZSy8+M5jsBHn0SaXe8ZloJ+3
+         CsqfON/dvHi46Mam6ZWVnUsI1INGoR76qumYy7IRCyDwWeWtLyIWJHuNhLfUQ8hLTI8i
+         kaVT8tLoMPH73EoPYdZf43HI9LrufBXCGDKtnQf4gSNPEdwaUJqgcGgFB1PszptyEU3j
+         0TYvUXg7YYYfQqQtFLg+y4I4N6XVZj2IpAYBWBjjAGZz2vqnlZd33AGpz5gW/upi27Hi
+         a61Q==
+X-Gm-Message-State: AOAM5337p9uekNexLva/0gMAdqAWw8njT35arpUhPjEF6yB6I6ymQs1r
+        b6NAwq55EL0R2e56x2vAgV/ASA==
+X-Google-Smtp-Source: ABdhPJwjBCrqDfLak45rq28qmCzF8Bpop3q8Bs7jqR40KSaDpro/v7PxK29LFIjoEyuzeSdZ/p9aGA==
+X-Received: by 2002:a63:5843:0:b0:3fc:34b5:8278 with SMTP id i3-20020a635843000000b003fc34b58278mr7454016pgm.249.1654036329384;
+        Tue, 31 May 2022 15:32:09 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:e69e:f483:e751:7c7c])
+        by smtp.gmail.com with UTF8SMTPSA id b3-20020a170902d40300b001620a2737b6sm59801ple.74.2022.05.31.15.32.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 15:32:09 -0700 (PDT)
+Date:   Tue, 31 May 2022 15:32:07 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>, agross@kernel.org,
+        alsa-devel@alsa-project.org, bgoswami@quicinc.com,
+        bjorn.andersson@linaro.org, broonie@kernel.org,
+        devicetree@vger.kernel.org, judyhsiao@chromium.org,
+        lgirdwood@gmail.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, perex@perex.cz,
+        quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
+        robh+dt@kernel.org, srinivas.kandagatla@linaro.org, tiwai@suse.com,
+        vkoul@kernel.org
+Subject: Re: [PATCH v2] ASoC: qcom: soundwire: Add support for controlling
+ audio CGCR from HLOS
+Message-ID: <YpaXZ6KfApGebkBy@google.com>
+References: <1652877755-25120-1-git-send-email-quic_srivasam@quicinc.com>
+ <CAE-0n53g9rWks+euk5KHBzmJNEB3xLbJzMgCxN52DO5x+9-Wgg@mail.gmail.com>
+ <51b8aca1-e038-4907-e973-ebdbebaf9b28@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <51b8aca1-e038-4907-e973-ebdbebaf9b28@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the last usage of MMF_OOM_VICTIM in exit_mmap gone, this flag is
-now unused and can be removed.
+On Tue, May 24, 2022 at 04:19:47PM +0530, Srinivasa Rao Mandadapu wrote:
+> 
+> On 5/21/2022 8:43 AM, Stephen Boyd wrote:
+> Thanks for your time Stephen!!!
+> > Quoting Srinivasa Rao Mandadapu (2022-05-18 05:42:35)
+> > > diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+> > > index da1ad7e..445e481 100644
+> > > --- a/drivers/soundwire/qcom.c
+> > > +++ b/drivers/soundwire/qcom.c
+> > > @@ -1333,6 +1337,10 @@ static int qcom_swrm_probe(struct platform_device *pdev)
+> > >          ctrl->bus.compute_params = &qcom_swrm_compute_params;
+> > >          ctrl->bus.clk_stop_timeout = 300;
+> > > 
+> > > +       ctrl->audio_cgcr = devm_reset_control_get_exclusive(dev, "swr_audio_cgcr");
+> > > +       if (IS_ERR(ctrl->audio_cgcr))
+> > > +               dev_err(dev, "Failed to get audio_cgcr reset required for soundwire-v1.6.0\n");
+> > Why is there no return on error here? Is the reset optional?
+> Yes it's optional. For older platforms this is not required.
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
----
- include/linux/oom.h            | 9 ---------
- include/linux/sched/coredump.h | 7 +++----
- mm/oom_kill.c                  | 4 +---
- 3 files changed, 4 insertions(+), 16 deletions(-)
-
-diff --git a/include/linux/oom.h b/include/linux/oom.h
-index 6cdde62b078b..7d0c9c48a0c5 100644
---- a/include/linux/oom.h
-+++ b/include/linux/oom.h
-@@ -77,15 +77,6 @@ static inline bool tsk_is_oom_victim(struct task_struct * tsk)
- 	return tsk->signal->oom_mm;
- }
- 
--/*
-- * Use this helper if tsk->mm != mm and the victim mm needs a special
-- * handling. This is guaranteed to stay true after once set.
-- */
--static inline bool mm_is_oom_victim(struct mm_struct *mm)
--{
--	return test_bit(MMF_OOM_VICTIM, &mm->flags);
--}
--
- /*
-  * Checks whether a page fault on the given mm is still reliable.
-  * This is no longer true if the oom reaper started to reap the
-diff --git a/include/linux/sched/coredump.h b/include/linux/sched/coredump.h
-index 4d0a5be28b70..8270ad7ae14c 100644
---- a/include/linux/sched/coredump.h
-+++ b/include/linux/sched/coredump.h
-@@ -71,9 +71,8 @@ static inline int get_dumpable(struct mm_struct *mm)
- #define MMF_UNSTABLE		22	/* mm is unstable for copy_from_user */
- #define MMF_HUGE_ZERO_PAGE	23      /* mm has ever used the global huge zero page */
- #define MMF_DISABLE_THP		24	/* disable THP for all VMAs */
--#define MMF_OOM_VICTIM		25	/* mm is the oom victim */
--#define MMF_OOM_REAP_QUEUED	26	/* mm was queued for oom_reaper */
--#define MMF_MULTIPROCESS	27	/* mm is shared between processes */
-+#define MMF_OOM_REAP_QUEUED	25	/* mm was queued for oom_reaper */
-+#define MMF_MULTIPROCESS	26	/* mm is shared between processes */
- /*
-  * MMF_HAS_PINNED: Whether this mm has pinned any pages.  This can be either
-  * replaced in the future by mm.pinned_vm when it becomes stable, or grow into
-@@ -81,7 +80,7 @@ static inline int get_dumpable(struct mm_struct *mm)
-  * pinned pages were unpinned later on, we'll still keep this bit set for the
-  * lifecycle of this mm, just for simplicity.
-  */
--#define MMF_HAS_PINNED		28	/* FOLL_PIN has run, never cleared */
-+#define MMF_HAS_PINNED		27	/* FOLL_PIN has run, never cleared */
- #define MMF_DISABLE_THP_MASK	(1 << MMF_DISABLE_THP)
- 
- #define MMF_INIT_MASK		(MMF_DUMPABLE_MASK | MMF_DUMP_FILTER_MASK |\
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 98dca2b42357..c6c76c313b39 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -764,10 +764,8 @@ static void mark_oom_victim(struct task_struct *tsk)
- 		return;
- 
- 	/* oom_mm is bound to the signal struct life time. */
--	if (!cmpxchg(&tsk->signal->oom_mm, NULL, mm)) {
-+	if (!cmpxchg(&tsk->signal->oom_mm, NULL, mm))
- 		mmgrab(tsk->signal->oom_mm);
--		set_bit(MMF_OOM_VICTIM, &mm->flags);
--	}
- 
- 	/*
- 	 * Make sure that the task is woken up from uninterruptible sleep
--- 
-2.36.1.255.ge46751e96f-goog
-
+If it's optional then either there should be no error message, or the
+error message should only be logged when the version is >= 1.6.0. There
+are few things worse than a kernel log riddled with misleading error
+messages.

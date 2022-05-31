@@ -2,268 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF8A539087
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A38E539090
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344198AbiEaMSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 08:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
+        id S1344156AbiEaMTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 08:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344170AbiEaMSQ (ORCPT
+        with ESMTP id S234110AbiEaMT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 08:18:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 086BE37BEC
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:18:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653999494;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9uLoEnI8xm05pZOEfh79Bm5RkqDb66wzQpVIVDjFd1Y=;
-        b=LuYBjqvMov5CE1+4KjLm98HWzilUyeVkJee0rW5bJ+5ynLFrtOIKMNrDwwg7tChv9wPfYT
-        I94LzB/CGU7ofwLINvTpzU6CQhDzYY8NJaKi9rtN0NlyV9T8iHHmAzmKuwf6pHpl4RkSLv
-        9/k1kCNhbqgjYZnJMJ2l7oXQYs87nEI=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-395-a3R-3TivNMyWJ4u68VnVIQ-1; Tue, 31 May 2022 08:18:13 -0400
-X-MC-Unique: a3R-3TivNMyWJ4u68VnVIQ-1
-Received: by mail-ed1-f72.google.com with SMTP id f9-20020a056402354900b0042ded146259so429621edd.20
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:18:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=9uLoEnI8xm05pZOEfh79Bm5RkqDb66wzQpVIVDjFd1Y=;
-        b=uUXHtHFe7sJRb8PEqO4HoKUVOA+vIbEZzkTXMlK8WyuTXH0Nmgk2paEhKKyB2pWhw0
-         gJnmBsiHKJvJ5cTi7ygHq5HytqD0+ptXCE1DygtP8kfxHzi37jYt08SnoaAynPpof+dz
-         N3T1x2TM31UM/x2UWqkxb+2Em0oi2i0pusa+HtFQWh4YZfe/30XLvZgGMwtQECHAM4oW
-         wSf8bsAQy2yKdJwa0N7wlWodsKITj3V3pHmkDJ/lNRw0Vq8rrDit3ESZipCRAiPETkf8
-         Z0bNXbHcxyEIix3QSGDTMPzwWdaV9W45DVqx8N74A5ZgGqU4E5zEje/AMLetwnTKtjJK
-         DoyQ==
-X-Gm-Message-State: AOAM531PSYGgTfQSZLU1lNCRLA7A70V3PL6Fq9mPeAixnBaTZpcBEESz
-        UXkCQikTYnVSkph9sNSfL9m76vuuBSv3oYZoGhECSKgZyrAZmJ0qu3iQwEsR1UECmLYBIu/JKVn
-        8m13cmUD+SPPf+UR5gsU8zQ3q
-X-Received: by 2002:aa7:d789:0:b0:42b:cf4e:d585 with SMTP id s9-20020aa7d789000000b0042bcf4ed585mr15494188edq.321.1653999486630;
-        Tue, 31 May 2022 05:18:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyQfkPdyC7SgNA2BaBjdFN/n5w5hMEYyZWasZX+lhZnbuwJEkjpOYRv4tu109MMrSfJjcY91Q==
-X-Received: by 2002:aa7:d789:0:b0:42b:cf4e:d585 with SMTP id s9-20020aa7d789000000b0042bcf4ed585mr15494160edq.321.1653999486398;
-        Tue, 31 May 2022 05:18:06 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170906390d00b006fee961b9e0sm4840341eje.195.2022.05.31.05.18.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 05:18:05 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v5 21/37] KVM: nSVM: hyper-v: Enable L2 TLB flush
-In-Reply-To: <20220527155546.1528910-22-vkuznets@redhat.com>
-References: <20220527155546.1528910-1-vkuznets@redhat.com>
- <20220527155546.1528910-22-vkuznets@redhat.com>
-Date:   Tue, 31 May 2022 14:18:05 +0200
-Message-ID: <874k15q4jm.fsf@redhat.com>
+        Tue, 31 May 2022 08:19:28 -0400
+Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00072.outbound.protection.outlook.com [40.107.0.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CA9813F3;
+        Tue, 31 May 2022 05:19:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NktgjD0u0IB1+iFPip0PW5ttVP75EUCJr0W0j6FQNrPWVaf1faI46p5qjryiKPdfbxsFN9U5u77llYbCvIVdBf76QR+idSFtNmsKn6SwNq3S0sBap5QG5Y12CvGtC05eaYfFstOqJ4I2qgNFjNB05ePQNkEOGkbsq0qjDwrTFvYCRwC3WV/jU43qru7PTjZRYmjN+GsJVQFnEH4GiQQGvfKXXW3ARd9E75oUKEjvYpc97UGu4iDeXOIow3IUOypMdyr576ykd9DTuIde7HYAcaMp7zQAtOZKq7/P1vzqT+LQ+x+KAiQt+3+ifbb3mYgkvLrd6/+wlYhZzSQnwXE6yg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pFMxpgKu2coUJwuFZbTEz6AYwEtB437i3ZEeDpmGHe4=;
+ b=h9Jbw8Q0YQP8FkD3qHA/ZWdA7A1NwJDhQ76FoqmKvDSvo6le7hQKeNSeY1uqL99rKwbTwyAvZ4ZYsEcvpf0HzGX1w0gwHGNNbCAlB1nq46rJ5v4FJdfYt4FjPk/v+K/yUubdUorGk0FBfr4n53P7GLDrA+U+SoqRKEnOqQvymaKBO443OgneZM3f0/vSa0hBRjMw/LwmH40wwu7Sjs8wXNK5PIreP61hHuEHWrOUMY6A99O7dbuVDWkaXrqRpeMJseVogN5YorcQ/9vb8sx5MA4+9MZ0v/ZoQ0mM9YMs0Zd48NfaJTRTZ8GnFIgCXAuY3QLYVJnFRGoOrTCLXHpEgQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
+ header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cherrycloud.onmicrosoft.com; s=selector2-cherrycloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pFMxpgKu2coUJwuFZbTEz6AYwEtB437i3ZEeDpmGHe4=;
+ b=Z2lFz18k/oWjdQ/4Xf0HDyPMzxUQ+0ESO4LHEfu5UffZ+KgNrPiaTzez1mIpmbbQJb71E+dlzyiJkQoC4AO93Tjc+FMZ7yUZlgBvJK+SZE4DdVKWJaRpwdzskKMciiqeRHxuxmrjsfxMVoCIvpK4EEfOJKLUvN/2OOev6TTKWBc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
+Received: from PA4PR04MB9367.eurprd04.prod.outlook.com (2603:10a6:102:2aa::7)
+ by DB7PR04MB4393.eurprd04.prod.outlook.com (2603:10a6:5:32::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.19; Tue, 31 May
+ 2022 12:19:23 +0000
+Received: from PA4PR04MB9367.eurprd04.prod.outlook.com
+ ([fe80::880a:6606:6f57:dd0a]) by PA4PR04MB9367.eurprd04.prod.outlook.com
+ ([fe80::880a:6606:6f57:dd0a%5]) with mapi id 15.20.5293.018; Tue, 31 May 2022
+ 12:19:23 +0000
+Message-ID: <842dbd3c-856b-e5a8-e942-545ceb6741ca@theobroma-systems.com>
+Date:   Tue, 31 May 2022 14:19:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 4/4] media: i2c: ov5675: add .get_selection support
+Content-Language: en-US
+To:     Jacopo Mondi <jacopo@jmondi.org>,
+        Quentin Schulz <foss+kernel@0leil.net>
+Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220525145833.1165437-1-foss+kernel@0leil.net>
+ <20220525145833.1165437-4-foss+kernel@0leil.net>
+ <20220531105011.yxrosmwtw3mpaomb@uno.localdomain>
+From:   Quentin Schulz <quentin.schulz@theobroma-systems.com>
+In-Reply-To: <20220531105011.yxrosmwtw3mpaomb@uno.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR04CA0174.eurprd04.prod.outlook.com
+ (2603:10a6:20b:530::15) To PA4PR04MB9367.eurprd04.prod.outlook.com
+ (2603:10a6:102:2aa::7)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 408b9bb4-17ad-4532-e437-08da42ffcc0d
+X-MS-TrafficTypeDiagnostic: DB7PR04MB4393:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR04MB4393348350A735999CF9BB32C2DC9@DB7PR04MB4393.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xen3LErGR/tOU9X/DyX73u3vwDZywpUD7rpt1ZJ52im863g4/gWfLb8empnarQdGZteVxG4oFhFrX7Ich73PG5UJZKML92vRu2Dw8rPSJ6423SC/NRNGDinlhFqBQeS07X3o/87WC6PmFVNobCKpZabtFTbpbnGwZJ1OOqupvISFPJIoyQQ+d8XJZzLp/RmkYunxZfmTUl5hjGP/9aNVDbRC6ReM4mYk77RHaU2trsTf0u0TgunN0DncuuxikgpnXEY0V11egwNmHKu3wvqPnGXKnEc9XoJdo0K1r2TJmm07IQOKO4PJKnI0r4Kuu5g5Ul5kSFUin+5V24JoUiLAh1cJOMxAcWaOHeh2R7gt0NY1g/T5CU/1ekcQf3S4lKhwnsVyNLARWiPN4gmmDPDwpwmE/5gOtWqIIIXFOvf+ZwcLQ8++YTc1KfxjT3TDCPL2/dq09ZzPPo+7IRXAXW4w+o5VbAnVYxNORrp5FIPvmVlS0/2oRZLsja5Fprg5LjgT5ps0vAipqFJOjmG2/uBdZHr0z6PBBqlhkcXIA1FUvgkLUB2+Du5oa0CmAyQyLaPdwwC5JN4wfiYP3Ek6+9RhzEJ9Edrrza8aVGLIM2AQGK27WObjfQXYPldyWnuZGxCgJ1oPXSyCvonoN3TSK9Wx/lbba7biU7i8PjBWyzx/RnBBVZAx+7kyigN9iLVSjsJPyx5EZhxM4f1xXAU+nqRFGpUNIEpaPBQmWN9eb8bFNreYz4uow+Xn4Qi4aqrqInzrUEs5qbj0UcHg07H/XXwF0Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9367.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(110136005)(316002)(36756003)(508600001)(6486002)(31696002)(186003)(2906002)(8676002)(66556008)(66476007)(2616005)(4326008)(66946007)(86362001)(44832011)(5660300002)(8936002)(83380400001)(26005)(6506007)(6512007)(53546011)(31686004)(142923001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aHRPWWxDQ2F1bDVVTGFXTXBSdmpFVkRIMjdSeko3WGJ1RmJmTXEvRUkxN3pO?=
+ =?utf-8?B?YnVWU29Lalg4a0Z6VGR5RGFKTmRic01CNk1hS0ovWWFIUGFHWUs1emk1M290?=
+ =?utf-8?B?eENTVUc5TTlZSDF1L3V6TUdsbHoxTEpnT1NoSCs3ZHlzeVlFVFVpazltbWZu?=
+ =?utf-8?B?akVTaU1nZGY4QTUxdG5va2ZVeXpxS2VFUW14NFR3YlJkV2l4Z2cyWVlnRGhQ?=
+ =?utf-8?B?bnVZTzlXMGRUK1VLT09tUzBsM2t4Y1l2eEx1cUE3UHpKWUVoSmY5SjgrWXhN?=
+ =?utf-8?B?UUR4cGM3UFJNd0RqdlNFY3k0S2VRNFQyYzY0NTNJWVFlZllDc0NZc0NQaktD?=
+ =?utf-8?B?NThsUEtZSTEyWEEvdXlTNVo2dDkzLzdkT2ZkeDZ5SjJFemdlNmk3SFlwQzNO?=
+ =?utf-8?B?VCtwTGpLM0FPVTVLQVNNa0VuZmZKd0FyQ25TLzVGTytsZXNxdEFWa1F3ZFJw?=
+ =?utf-8?B?RU1MQ0EycGRkcTVYVWJOL1lWek9Va3BiM2xSWmp1YTFKcGg2dXRqQUVkdXcz?=
+ =?utf-8?B?aHhwbm5tTFkvb0REU01sZGhOQ2xMRk1IbTNZN2FwN3Q4S29sanJwWVFGUUVC?=
+ =?utf-8?B?WDVPMVVlellPOUZsRE5heDB1Tng1eWcrZjZoLzRIaTRpWmxwZXdhenNDV09m?=
+ =?utf-8?B?U0xzRVhYNEsrdW1oUUI5SUlCbDN3alBuOGVDcXlxK2tFRkdpTmRzWVk3MVph?=
+ =?utf-8?B?VXI3N3dXb2lrbXkyalZmRU1Uajdaa1dwVFNiQUN5YnFUcWhjRmNGdXFObG1a?=
+ =?utf-8?B?ZWVHdEdRbjduV29BdVVPd2JicXNKeEhNZ0RvUUpUWlRyNUhFT0FONHE2cDgx?=
+ =?utf-8?B?OWd6ZjUwaHEvQ0NSeEF2L3JtQWxSaVMvNXcvRmoxNWRlYjI4T3FlOEpwaUFq?=
+ =?utf-8?B?M3J2bzdTTEF5cU1RV2haMjdPVk1EZUx0RUkrZ0w2L3lVU0dFamt3RkduQU8z?=
+ =?utf-8?B?d3BjNUEwcFlNbXQxU0dLQlpqNzBwQ2N3MWgrcEJ2Qy9PYURoRGdkeDZQRDBR?=
+ =?utf-8?B?YXhhRDZDc2pLQXprRzloaU0zNGIwTFgrcCtjNGN6bzcvK1ZlajFVZVh3djJt?=
+ =?utf-8?B?V1RTOFgxM3l5bGtBNTErOG85MVlRSWQzcmlpb3d4dmZ6OUpGUjJCQjBaMVp5?=
+ =?utf-8?B?WUJWUW5lYzBkNStQUkNXN2RoUDJUQ1hYVUxGVHhoTWZEcnNnQTk1WXgwb3Nm?=
+ =?utf-8?B?by83eTNnRXl4VWVaTW50R2NRRitkTHVmV3d4cnpvSC9NS0EybC9lMjVjSCt5?=
+ =?utf-8?B?NitwZUxDVmdRN3ZMYjkxY2VYRDBOdjlQeSttdWd5RFJTODE1Z3dhT0hoc0NZ?=
+ =?utf-8?B?V1VlSzBJbkpJK1pLMnlLMnhxTG5DdFNYRGpIakpNdTF3Skw0RHZWaldkYVM5?=
+ =?utf-8?B?Y3o3ZlNmcUxCVmtMUkRucW5PWHpIQ0lub3JqY21BaSsyZ1dnb3R4anB4U0dz?=
+ =?utf-8?B?QXhITHl1Q01WVWpxWUs1R3o4bzYzSDVnZkhxb3VIcWVRNjlMQzZoU29QaytK?=
+ =?utf-8?B?SVdXS1o5U05Nejk1SDRBYUhrTE1DQ3ZxMjBWenhIMjdSUU1Bamtzdmc3aHRs?=
+ =?utf-8?B?T3BDUnRKb0tZQUp2ekxSQ2Vya2gxaFUxTHFRRENpc0FUU0pFM2ptWmp3cU0w?=
+ =?utf-8?B?Sk4wUDZkY3NXaUtNTlFOTGpCaEtxL05aSjVDejh6a2dpclhzWElvTWJsUDlT?=
+ =?utf-8?B?aE9lS01XSWtSVEJpQVIwZENlb2E5L3lUTm0xV2lwY0d5UHlIZHRlamN4WDVL?=
+ =?utf-8?B?V1ZZN1EwZEg2UWJMUnA0L2x6WDU4UU1xbTQ3Nk1LNFYxREJicFVaQmxzQ1E0?=
+ =?utf-8?B?ZCs5Ulc3YzJZaVVUS1Nrem9sN3UyK2s5T2lIT3RLc0lHTHoyRTdlTlgxUTRv?=
+ =?utf-8?B?dzIvY2V0SVlGL3pJNzR3OVpjZjBGYnFpTDAzLzhwWE80aFlGRE1JUUh4Q3JM?=
+ =?utf-8?B?cDU1QkVFVmc1VHIzMnFWTUF1dUw2NWRTRDdSMm9GK05SRUhuRFU2ZERmTWE5?=
+ =?utf-8?B?b05JaUFFeDErSDQwOCtreU4yWDBVWG5LOHBxUFRtZWwzWmVBSUZrUjZjQ01Q?=
+ =?utf-8?B?QUVBTktKdTZKQVJERWNvMG00VzFrSktNWXFQc3RRUi9PQzVUT093Y3Bwc1cy?=
+ =?utf-8?B?aUdMSlBwUllqQ3kvdW5FTVA2YmFwTHY1YS9aTWhTL09JNFRiTWZqK0ZiOFR5?=
+ =?utf-8?B?OHloWE94UUFsNEZIYUthbFVjMEgyUzJwbVlPY3p1SkFsSWtub01rREdBZFh5?=
+ =?utf-8?B?cXArNjlIVTlQcjl3dW51T3ZmV1BMc3V5RnBIQlBRSHh0QndTTXc4elhDRGgw?=
+ =?utf-8?B?REVWcDRJWitUN1BzcXBydXVGV3hUMjJYa09pdzNaUFNzdndrS1hZVi9Dbkc1?=
+ =?utf-8?Q?AMYw4o8xZFWZ6UR6qKVWEJiIqStatUajuDIW6?=
+X-OriginatorOrg: theobroma-systems.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 408b9bb4-17ad-4532-e437-08da42ffcc0d
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9367.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2022 12:19:23.5464
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YVacjLAdQunNoKjetfS1rH7+60pZxmX0usektiA+2fXJlmXxWVk/qBymy4n0gMamEXtk14chv0sqdMfT1CRy1PeNwUOB0X97l09R+kKB8+qw3OH2djoQfnL4ZrygmjCf
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4393
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vitaly Kuznetsov <vkuznets@redhat.com> writes:
+Hi Jacopo,
 
-> Implement Hyper-V L2 TLB flush for nSVM. The feature needs to be enabled
-> both in extended 'nested controls' in VMCB and partition assist page.
-> According to Hyper-V TLFS, synthetic vmexit to L1 is performed with
-> - HV_SVM_EXITCODE_ENL exit_code.
-> - HV_SVM_ENL_EXITCODE_TRAP_AFTER_FLUSH exit_info_1.
->
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/svm/hyperv.c |  7 +++++++
->  arch/x86/kvm/svm/hyperv.h | 19 +++++++++++++++++++
->  arch/x86/kvm/svm/nested.c | 27 +++++++++++++++++++++++++--
->  3 files changed, 51 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/kvm/svm/hyperv.c b/arch/x86/kvm/svm/hyperv.c
-> index 911f51021af1..088f6429b24c 100644
-> --- a/arch/x86/kvm/svm/hyperv.c
-> +++ b/arch/x86/kvm/svm/hyperv.c
-> @@ -8,4 +8,11 @@
->  
->  void svm_hv_inject_synthetic_vmexit_post_tlb_flush(struct kvm_vcpu *vcpu)
->  {
-> +	struct vcpu_svm *svm = to_svm(vcpu);
-> +
-> +	svm->vmcb->control.exit_code = HV_SVM_EXITCODE_ENL;
-> +	svm->vmcb->control.exit_code_hi = 0;
-> +	svm->vmcb->control.exit_info_1 = HV_SVM_ENL_EXITCODE_TRAP_AFTER_FLUSH;
-> +	svm->vmcb->control.exit_info_2 = 0;
-> +	nested_svm_vmexit(svm);
->  }
-> diff --git a/arch/x86/kvm/svm/hyperv.h b/arch/x86/kvm/svm/hyperv.h
-> index dd2e393f84a0..6ea78499e21b 100644
-> --- a/arch/x86/kvm/svm/hyperv.h
-> +++ b/arch/x86/kvm/svm/hyperv.h
-> @@ -33,6 +33,9 @@ struct hv_enlightenments {
+On 5/31/22 12:50, Jacopo Mondi wrote:
+> Hi Quentin
+> 
+> On Wed, May 25, 2022 at 04:58:33PM +0200, Quentin Schulz wrote:
+>> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+>>
+>> The sensor has 2592*1944 active pixels, surrounded by 16 active dummy
+>> pixels and there are an additional 24 black rows "at the bottom".
+>>
+>>                       [2624]
+>>          +-----+------------------+-----+
+>>          |     |     16 dummy     |     |
+>>          +-----+------------------+-----+
+>>          |     |                  |     |
+>>          |     |     [2592]       |     |
+>>          |     |                  |     |
+>>          |16   |      valid       | 16  |[2000]
+>>          |dummy|                  |dummy|
+>>          |     |            [1944]|     |
+>>          |     |                  |     |
+>>          +-----+------------------+-----+
+>>          |     |     16 dummy     |     |
+>>          +-----+------------------+-----+
+>>          |     |  24 black lines  |     |
+>>          +-----+------------------+-----+
+>>
+>> The top-left coordinate is gotten from the registers specified in the
+>> modes which are identical for both currently supported modes.
+>>
+>> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+>> ---
+>>
+>> v4:
+>>   - explicit a bit more the commit log,
+>>   - added drawing in the commit log,
+>>   - fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
+>>
+>> added in v3
+>>
+>>   drivers/media/i2c/ov5675.c | 33 +++++++++++++++++++++++++++++++++
+>>   1 file changed, 33 insertions(+)
+>>
+>> diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
+>> index c1f3c387afde0..384a9ea2372c3 100644
+>> --- a/drivers/media/i2c/ov5675.c
+>> +++ b/drivers/media/i2c/ov5675.c
+>> @@ -1121,6 +1121,38 @@ static int ov5675_get_format(struct v4l2_subdev *sd,
+>>   	return 0;
+>>   }
+>>
+>> +static int ov5675_get_selection(struct v4l2_subdev *sd,
+>> +				struct v4l2_subdev_state *state,
+>> +				struct v4l2_subdev_selection *sel)
+>> +{
+>> +	struct ov5675 *ov5675 = to_ov5675(sd);
+>> +
+>> +	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
+>> +		return -EINVAL;
+>> +
+>> +	switch (sel->target) {
+>> +	case V4L2_SEL_TGT_CROP_BOUNDS:
+>> +		sel->r.top = 0;
+>> +		sel->r.left = 0;
+>> +		sel->r.width = 2624;
+>> +		sel->r.height = 2000;
+>> +		return 0;
+>> +	case V4L2_SEL_TGT_CROP:
+>> +		sel->r.top = 16;
+>> +		sel->r.left = 16;
+>> +		sel->r.width = ov5675->cur_mode->width;
+>> +		sel->r.height = ov5675->cur_mode->height;
+>> +		return 0;
+> 
+> I'm afraid this doesn't match exactly my understanding of the
+> discussion we had.
+> 
+> The driver defines the following modes
+> 
+> /*
+>   * OV5670 sensor supports following resolutions with full FOV:
+>   * 4:3  ==> {2592x1944, 1296x972, 648x486}
+>   * 16:9 ==> {2560x1440, 1280x720, 640x360}
 >   */
->  #define VMCB_HV_NESTED_ENLIGHTENMENTS VMCB_SW
->  
-> +#define HV_SVM_EXITCODE_ENL 0xF0000000
-> +#define HV_SVM_ENL_EXITCODE_TRAP_AFTER_FLUSH   (1)
-> +
->  static inline void nested_svm_hv_update_vm_vp_ids(struct kvm_vcpu *vcpu)
->  {
->  	struct vcpu_svm *svm = to_svm(vcpu);
-> @@ -48,6 +51,22 @@ static inline void nested_svm_hv_update_vm_vp_ids(struct kvm_vcpu *vcpu)
->  	hv_vcpu->nested.vp_id = hve->hv_vp_id;
->  }
->  
-> +static inline bool nested_svm_l2_tlb_flush_enabled(struct kvm_vcpu *vcpu)
-> +{
-> +	struct vcpu_svm *svm = to_svm(vcpu);
-> +	struct hv_enlightenments *hve =
-> +		(struct hv_enlightenments *)svm->nested.ctl.reserved_sw;
-> +	struct hv_vp_assist_page assist_page;
-> +
-> +	if (unlikely(!kvm_hv_get_assist_page(vcpu, &assist_page)))
-> +		return false;
-> +
-> +	if (!hve->hv_enlightenments_control.nested_flush_hypercall)
-> +		return false;
-> +
-> +	return assist_page.nested_control.features.directhypercall;
-> +}
-> +
->  void svm_hv_inject_synthetic_vmexit_post_tlb_flush(struct kvm_vcpu *vcpu);
->  
->  #endif /* __ARCH_X86_KVM_SVM_HYPERV_H__ */
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index b203e6cd75dc..083b95d85495 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -171,8 +171,12 @@ void recalc_intercepts(struct vcpu_svm *svm)
->  		vmcb_clr_intercept(c, INTERCEPT_VINTR);
->  	}
->  
-> -	/* We don't want to see VMMCALLs from a nested guest */
-> -	vmcb_clr_intercept(c, INTERCEPT_VMMCALL);
-> +	/*
-> +	 * We want to see VMMCALLs from a nested guest only when Hyper-V L2 TLB
-> +	 * flush feature is enabled.
-> +	 */
-> +	if (!nested_svm_l2_tlb_flush_enabled(&svm->vcpu))
-> +		vmcb_clr_intercept(c, INTERCEPT_VMMCALL);
+> static const struct ov5670_mode supported_modes[] = {
+> 	{
+> 		.width = 2592,
+> 		.height = 1944,
+> 	},
+> 	{
+> 		.width = 1296,
+> 		.height = 972,
+> 	},
+> 	{
+> 		.width = 648,
+> 		.height = 486,
+> 	},
+> 	{
+> 		.width = 2560,
+> 		.height = 1440,
+> 	},
+> 	{
+> 		.width = 1280,
+> 		.height = 720,
+> 	},
+> 	{
+> 		.width = 640,
+> 		.height = 360,
+> 	}
+> };
+> 
+> The comment says all modes retain the "full FOV", which I assume it
+> implies they are obtained by sub-sampling and not cropping.
+> 
+> The first three modes (4:3) are indeed obtained by subsampling the
+> full active pixel array:
+> 
+>          (2592,1944) / 2 = (1296,972) / 2 = (648,486)
+> 
+> The last three are obtained by subsampling a slightly cropped portion
+> of the pixel array
+> 
+>          (2560,1440) / 2 = (1280,720) / 2 = (640,360)
+> 
+> If you set CROP = cur_mode->[width/height] you will instead report the
+> visible width/height, which as said it's obtained by subsampling (of a
+> slightly cropped portion of the pixel array for the last three ones)
+> 
+> The CROP rectangle is then (2592, 1944) for the first three and (2560,
+> 1440) for the last three.
+> 
+> I would add a v4l2_rect to struct ov5670_mode where to record that and
+> report it here.
+> 
 
-I've just noticed that this generates a warning:
+That makes a lot of sense to me, thanks for your patience and explanations.
 
-[  823.047913] =============================
-[  823.048376] WARNING: suspicious RCU usage
-[  823.048745] 5.18.0-rc1+ #454 Not tainted
-[  823.049098] -----------------------------
-[  823.049435] include/linux/kvm_host.h:936 suspicious rcu_dereference_check() usage!
-[  823.049791] 
-               other info that might help us debug this:
+FYI, you're looking at the wrong driver (ov5670 vs ov5675; a mistake I 
+make every now and then too :) ). However, the datasheet does say that 
+"The OV5675 supports a binning mode to provide a lower resolution output 
+while maintaining the field of view.[...] The OV5675 supports 2x2 
+binning." so I assume we're in the same scenario as you just explained.
 
-[  823.050756] 
-               rcu_scheduler_active = 2, debug_locks = 1
-[  823.051410] 1 lock held by qemu-system-x86/8931:
-[  823.051747]  #0: ffff8ad90c144fa8 (&vcpu->mutex){+.+.}-{3:3}, at: kvm_vcpu_ioctl+0x77/0x700 [kvm]
-[  823.052171] 
-               stack backtrace:
-[  823.052849] CPU: 3 PID: 8931 Comm: qemu-system-x86 Kdump: loaded Not tainted 5.18.0-rc1+ #454
-[  823.053230] Hardware name: Dell Inc. PowerEdge R6415/065PKD, BIOS 1.9.3 06/25/2019
-[  823.053644] Call Trace:
-[  823.054279]  <TASK>
-[  823.054695]  dump_stack_lvl+0x6c/0x9b
-[  823.055076]  kvm_read_guest_offset_cached+0x14a/0x190 [kvm]
-[  823.055504]  kvm_hv_get_assist_page+0x40/0x50 [kvm]
-[  823.055932]  recalc_intercepts+0x6f/0x140 [kvm_amd]
-[  823.056317]  ? native_load_tr_desc+0x63/0x70
-[  823.056696]  ? svm_vcpu_run+0x27f/0x780 [kvm_amd]
-[  823.057080]  kvm_arch_vcpu_ioctl_run+0x1a9f/0x2220 [kvm]
-[  823.057519]  ? kvm_vcpu_ioctl+0x275/0x700 [kvm]
-[  823.057932]  kvm_vcpu_ioctl+0x275/0x700 [kvm]
-[  823.058358]  __x64_sys_ioctl+0x82/0xb0
-[  823.058747]  do_syscall_64+0x3b/0x90
-[  823.059133]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  823.059519] RIP: 0033:0x7fcd123540ab
-[  823.059899] Code: ff ff ff 85 c0 79 9b 49 c7 c4 ff ff ff ff 5b 5d 4c 89 e0 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 9d bd 0c 00 f7 d8 64 89 01 48
-[  823.060787] RSP: 002b:00007fcd04dfa478 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-[  823.061246] RAX: ffffffffffffffda RBX: 000000000000ae80 RCX: 00007fcd123540ab
-[  823.061702] RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 0000000000000010
-[  823.062166] RBP: 00005626d1d13c20 R08: 0000000000000000 R09: 00000000ffffffff
-[  823.062628] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-[  823.063096] R13: 00005626d111fa6e R14: 0000000000000000 R15: 00007fcd04dff640
-[  823.063579]  </TASK>
-[  823.064024] BUG: sleeping function called from invalid context at include/linux/uaccess.h:69
-[  823.064485] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 8931, name: qemu-system-x86
-[  823.064956] preempt_count: 1, expected: 0
-[  823.065416] RCU nest depth: 0, expected: 0
+Since the OV5675 modes currently supported by the drivers are 4/3 only 
+and the smaller size mode a result of subsampling, they both have the 
+same CROP rectangle.
 
-It is likely a bad idea to read guest memory from recalc_intercepts()
-but we don't actually have to, we can cache the whole partition assist
-page and update it upon VMRUN (and after svm_set_nested_state()). For
-VMX, this can be part of enlightened vmentry.
+>> +	case V4L2_SEL_TGT_CROP_DEFAULT:
+>> +		sel->r.top = 16;
+>> +		sel->r.left = 16;
+>> +		sel->r.width = supported_modes[0].width;
+>> +		sel->r.height = supported_modes[0].height;
+>> +		return 0;
+> 
+> You could also define these values instead of fishing in the
+> supported_modes array, to protect against future changes to the array
+> itself. Up to you.
+> 
 
->  
->  	for (i = 0; i < MAX_INTERCEPT; i++)
->  		c->intercepts[i] |= g->intercepts[i];
-> @@ -489,6 +493,17 @@ static void nested_save_pending_event_to_vmcb12(struct vcpu_svm *svm,
->  
->  static void nested_svm_transition_tlb_flush(struct kvm_vcpu *vcpu)
->  {
-> +	/*
-> +	 * KVM_REQ_HV_TLB_FLUSH flushes entries from either L1's VP_ID or
-> +	 * L2's VP_ID upon request from the guest. Make sure we check for
-> +	 * pending entries for the case when the request got misplaced (e.g.
-> +	 * a transition from L2->L1 happened while processing L2 TLB flush
-> +	 * request or vice versa). kvm_hv_vcpu_flush_tlb() will not flush
-> +	 * anything if there are no requests in the corresponding buffer.
-> +	 */
-> +	if (to_hv_vcpu(vcpu))
-> +		kvm_make_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
-> +
->  	/*
->  	 * TODO: optimize unconditional TLB flush/MMU sync.  A partial list of
->  	 * things to fix before this can be conditional:
-> @@ -1409,6 +1424,7 @@ static int svm_check_nested_events(struct kvm_vcpu *vcpu)
->  int nested_svm_exit_special(struct vcpu_svm *svm)
->  {
->  	u32 exit_code = svm->vmcb->control.exit_code;
-> +	struct kvm_vcpu *vcpu = &svm->vcpu;
->  
->  	switch (exit_code) {
->  	case SVM_EXIT_INTR:
-> @@ -1427,6 +1443,13 @@ int nested_svm_exit_special(struct vcpu_svm *svm)
->  			return NESTED_EXIT_HOST;
->  		break;
->  	}
-> +	case SVM_EXIT_VMMCALL:
-> +		/* Hyper-V L2 TLB flush hypercall is handled by L0 */
-> +		if (guest_hv_cpuid_has_l2_tlb_flush(vcpu) &&
-> +		    nested_svm_l2_tlb_flush_enabled(vcpu) &&
-> +		    kvm_hv_is_tlb_flush_hcall(vcpu))
-> +			return NESTED_EXIT_HOST;
-> +		break;
->  	default:
->  		break;
->  	}
+Since there's no cropping involved in the current modes, I assume we 
+could just hardcode the width and height and tackle this limitation 
+later, once we add more modes or support for configuring cropping (this 
+patch only adds the getter and not the setter).
 
--- 
-Vitaly
-
+Cheers,
+Quentin

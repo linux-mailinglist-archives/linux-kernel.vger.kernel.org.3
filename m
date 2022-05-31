@@ -2,315 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CA6539A12
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 01:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E7F539A1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 01:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348684AbiEaXbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 19:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        id S1348701AbiEaXnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 19:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241462AbiEaXb2 (ORCPT
+        with ESMTP id S234456AbiEaXns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 19:31:28 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770979A98B
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 16:31:26 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id n28so10708296edb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 16:31:26 -0700 (PDT)
+        Tue, 31 May 2022 19:43:48 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2086.outbound.protection.outlook.com [40.107.237.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C32F6D976;
+        Tue, 31 May 2022 16:43:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LZ3DUAgjhLOjhjKRdAJCv5u5pEHuADdgwuiA23KU9mHvUl3zziOp8z1lJzzcDCYHwjhJ//W/teEeH0SOzgjcqQQkZ1dLIBtphiaSebemfIlOMNn8UYc+3YU3AgEK+fVcg2IENsUtvWAavMg2bJC661ynGwfnV/k2si9GVJPO6RdcivShvgfjX+tLEGGsIJ8R3f8pVg7UVDHnGFysUmTtSIdauU3rYqQtcaiePLE4Gx5eQs/+u8dzEJD/9QlzlTVxFcWHfFWaQZy+o5VgOgHuasOb4C6U267udmfLoKdQI474AFgkMyvWrz1V+Xhtn0kT0cuOZVbuFa1u26BtCGQ+qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9yiWMsQfn5YskgktoEFC6118HhVQF4TxV5MaSat+mXU=;
+ b=oXQEimIzAaeGPAUzZvhN2bdYFeytwFqWLxDRIoXbRGA4X0F14x/7tdrbjIJIzfqRJdlhQ0oANU4Dp5iOAWkPoqXDK+Q2Zu4NrXlsMxgGJBegGioEG/Ns28xFWfVz5m0eKJswqFlmCHCACpk/ztS2k3Jc0f25NJa8EyXDtNtRwvA5uQHjov3rsHGfYXrGnCRT4C4PzWCXLRvw28vCAOIqM4Xwj+5qwDHPr8rwdqyfoWttSXBVJ50YHSDUBOjOFaWWalZ294e76AmSxe6b+FT8BjmvcyH03q56PYmHVygbijb1wYpYDdE4MBV8DtyBvjz9luvS7lyHE+8LlyUzTdFStw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=lists.openampproject.org
+ smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wr9xpxSibC0ctyCpjnvowaocMYx7SBWLKjpEyTnQD44=;
-        b=PvlmpA2rjw0N8/GZkXsGQSPJ+gcFfBQQagwSoQXhhsGWaWkC4/aViDXoh7vjWD2eMO
-         PoypXG4Mwckqsh5TG/Ju9Baovrq2i16PZVUv7d5Djd5yr3LFRSyoWcy11iOcaS7Hjfj2
-         b4d01OclJMNng7WSUtYzSLPHRqnPtig5Ygvs+56tpXaVeQ5NHj43hL+6qrDoh5FGOYhI
-         k97kD4qqlanzUJ5rYdQg7avhqu0ICGXWLZV1rvIbZISX6MLx8Fftp16BlLkYtqXjwlCz
-         S8D7zJUw1ef7Qa6oqcvNvnYS5L4h/DR7QPjaW+Ets1RZf5ftjXdx46Cnsu0lMe7jsV0J
-         SYtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wr9xpxSibC0ctyCpjnvowaocMYx7SBWLKjpEyTnQD44=;
-        b=BpZQTc1FAXoEaf0i2iXCj30XSYeO1URiCH0oWrc2rGfpkTrBhSWM9492MNGgFzqHeC
-         8LXgOV0l0SzKhagysSy9hfPR0quqXXB0NRfdQglkMRbvL94TABRL4F4/Ta2mzcZNUF/l
-         t/MYjI9rc/U1SKf1EI38QHzNTMN1hNNyWb60GoZJGhr9EFGPeP+j/3YCIfThcPZyVu7q
-         IjLpN7JY/ndKrSp3grpJOVMkCa/9p4ZcDs092FovwslIQzAM41mKFAWFtkBRG2ol3AEF
-         o3XCbJ8It/sQIDX6KEYwzSmqZxGYaoRquEGmg0MwRwg6ChscBrdqt21obJxuLWsbSL0E
-         JbJA==
-X-Gm-Message-State: AOAM530Mucx/httGXe5jUMr/GV6h7kjHiM6fIh6wMv1+ZFqvJrqL1Jzq
-        7HU1Va8MUIgz7kqltO1jR81LS//Lg0z1yWjk7uCgQQ==
-X-Google-Smtp-Source: ABdhPJwdIobYizmVKy4rwtwaMbS3U+uqxpsfRmQeYYxhL47ztI017EI3rsLbA/mlRl2fwXB2lZYMjjOS4AbhEdjaYzo=
-X-Received: by 2002:a05:6402:354c:b0:42b:4e22:203b with SMTP id
- f12-20020a056402354c00b0042b4e22203bmr52476539edd.308.1654039884720; Tue, 31
- May 2022 16:31:24 -0700 (PDT)
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9yiWMsQfn5YskgktoEFC6118HhVQF4TxV5MaSat+mXU=;
+ b=DBlnJWoldiJyPbUv8ewesLLlqoLE2dtv4L+Q3QCKWUqySH8KFcOrggdDZdp6mIuDArlFkiEj4TacL+yl9Cq5/ZFHKPQ4NpFarzdgpI/bhCHsnkeTAvzX4r+6Roy06u6eYjlbkhB1aCG6P70OvH2/+xspA2sMG/dSvV+GsrOys4U=
+Received: from BN6PR22CA0067.namprd22.prod.outlook.com (2603:10b6:404:ca::29)
+ by BL0PR02MB6497.namprd02.prod.outlook.com (2603:10b6:208:1c2::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12; Tue, 31 May
+ 2022 23:43:45 +0000
+Received: from BN1NAM02FT012.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:404:ca:cafe::64) by BN6PR22CA0067.outlook.office365.com
+ (2603:10b6:404:ca::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.15 via Frontend
+ Transport; Tue, 31 May 2022 23:43:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT012.mail.protection.outlook.com (10.13.2.130) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5314.12 via Frontend Transport; Tue, 31 May 2022 23:43:45 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 31 May 2022 16:43:44 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 31 May 2022 16:43:44 -0700
+Envelope-to: openamp-system-reference@lists.openampproject.org,
+ bjorn.andersson@linaro.org,
+ mathieu.poirier@linaro.org,
+ robh+dt@kernel.org,
+ krzk+dt@kernel.org,
+ linux-remoteproc@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Received: from [172.19.3.14] (port=48904 helo=xsjtanmays50.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <tanmay.shah@xilinx.com>)
+        id 1nwBWa-0006jm-1P; Tue, 31 May 2022 16:43:44 -0700
+From:   Tanmay Shah <tanmay.shah@xilinx.com>
+To:     <openamp-system-reference@lists.openampproject.org>,
+        <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <michal.simek@xilinx.com>, <ben.levinsky@xilinx.com>,
+        <tanmay.shah@xilinx.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH v6 0/6] Add Xilinx RPU subsystem support
+Date:   Tue, 31 May 2022 16:43:03 -0700
+Message-ID: <20220531234308.3317795-1-tanmay.shah@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220516171315.2400578-1-tjmercier@google.com>
- <175c5af3-9224-9c8e-0784-349dad9a2954@amd.com> <CABdmKX2GcgCs1xANYPBp8OEtk9qqH7AvCzpdppj9rHXvMqWSAw@mail.gmail.com>
- <0875fa95-3a25-a354-1433-201fca81ed3e@amd.com> <CABdmKX1+VYfdzyVYOS5MCsr4ptGTygmuUP9ikyh-vW6DgKk2kg@mail.gmail.com>
- <YoM9BAwybcjG7K/H@kroah.com> <Yo4/XhWQkACWaPIh@phenom.ffwll.local>
- <CABdmKX2dC0fkFrCedjhzmheYiDVP4PnKBMeGkX3_bgrLjOiYOg@mail.gmail.com> <38da6dcd-b395-f32f-5a47-6a8f2c6a4331@amd.com>
-In-Reply-To: <38da6dcd-b395-f32f-5a47-6a8f2c6a4331@amd.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Tue, 31 May 2022 16:31:13 -0700
-Message-ID: <CABdmKX2aUTLHGkiKLhP=4k4X3j6M9zmUvFMS=ddJVTWE+wk0+g@mail.gmail.com>
-Subject: Re: [PATCH v2] dma-buf: Move sysfs work out of DMA-BUF export path
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Greg Kroah-Hartman <gregkh@google.com>,
-        John Stultz <jstultz@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0b529542-20a9-4f5e-ba90-08da435f66db
+X-MS-TrafficTypeDiagnostic: BL0PR02MB6497:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR02MB6497F968B9839A34CFEBE2D5CADC9@BL0PR02MB6497.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mJutpr66u7dAsdv4uCqZSjv+4P3uUtBM878KdoFPYizOCxzmdxL8NrQXtED0IaBGxJmcBgHaEQ8HH7yljKjT7d3lbDg1+WVvj+Tde18+10JLtW6lbzXNxYAJzAaIqoWv4iELa9AKy7pRd3ltBy7m0GT64rNgQEUNfF731mpMTarDiwY5XYKE4EBP3nBX+ockxpj/F+NAHCHqIHHlwmAuAGZ7fkKgdPobCP/ok6bhC7RYG2tjc6/iJj5wqX8OkUTppoQ2fStJDHeFUxZIhCPNlmlMi7rygxDN4QB1t6QXl1wa2iJctByFx87TtR3dp9zOCrU4p4DJ5Csfmq84XeQRd2YSU3xuw9scmmEEZEuQPqh/3J5zRpARNkCA5Q6Uds/KEtGonxUOi+v0Dhn5cmFc612cg+5LebVCB9JShM/mMR5PsFwxs7+iYHNAWu8SlyuWrQU/JpplpG9OUAgiUCjf0D4WgTsL6sagjdsJsb1SMMmDU/yZg/ZLL9B+rRi4tcxro2++SelLtkWlh/ysG0Ttd+8m6AtPpTdNl1s0M4lIZY8yhL+ViPelysQkJxFK8ywunLFy3BGXMsJdtJd5ADFZ4ZWO1JsdXtkI1M0egRR3B02yGzuvs/HWtMb9T3Pxg63S5N78W4kmsSMg9i8+1HUGOikP4yr+xVdVCcHnFaJB7deU63YPz9qr1AockwIWP/sZ144bqFgd2pk1lF2wgG6FmQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(8676002)(4326008)(6666004)(83380400001)(70586007)(70206006)(1076003)(508600001)(7696005)(8936002)(7049001)(5660300002)(9786002)(40460700003)(44832011)(36860700001)(2616005)(7636003)(110136005)(54906003)(36756003)(26005)(47076005)(82310400005)(426003)(336012)(186003)(316002)(356005)(2906002)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2022 23:43:45.1570
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b529542-20a9-4f5e-ba90-08da435f66db
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT012.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB6497
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 29, 2022 at 11:12 PM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Am 25.05.22 um 23:05 schrieb T.J. Mercier:
-> > On Wed, May 25, 2022 at 7:38 AM Daniel Vetter <daniel@ffwll.ch> wrote:
-> >> On Tue, May 17, 2022 at 08:13:24AM +0200, Greg Kroah-Hartman wrote:
-> >>> On Mon, May 16, 2022 at 05:08:05PM -0700, T.J. Mercier wrote:
-> >>>> On Mon, May 16, 2022 at 12:21 PM Christian K=C3=B6nig
-> >>>> <christian.koenig@amd.com> wrote:
-> >>>>> Am 16.05.22 um 20:08 schrieb T.J. Mercier:
-> >>>>>> On Mon, May 16, 2022 at 10:20 AM Christian K=C3=B6nig
-> >>>>>> <christian.koenig@amd.com> wrote:
-> >>>>>>> Am 16.05.22 um 19:13 schrieb T.J. Mercier:
-> >>>>>>>> Recently, we noticed an issue where a process went into direct r=
-eclaim
-> >>>>>>>> while holding the kernfs rw semaphore for sysfs in write (exclus=
-ive)
-> >>>>>>>> mode. This caused processes who were doing DMA-BUF exports and r=
-eleases
-> >>>>>>>> to go into uninterruptible sleep since they needed to acquire th=
-e same
-> >>>>>>>> semaphore for the DMA-BUF sysfs entry creation/deletion. In orde=
-r to avoid
-> >>>>>>>> blocking DMA-BUF export for an indeterminate amount of time whil=
-e
-> >>>>>>>> another process is holding the sysfs rw semaphore in exclusive m=
-ode,
-> >>>>>>>> this patch moves the per-buffer sysfs file creation to the defau=
-lt work
-> >>>>>>>> queue. Note that this can lead to a short-term inaccuracy in the=
- dmabuf
-> >>>>>>>> sysfs statistics, but this is a tradeoff to prevent the hot path=
- from
-> >>>>>>>> being blocked. A work_struct is added to dma_buf to achieve this=
-, but as
-> >>>>>>>> it is unioned with the kobject in the sysfs_entry, dma_buf does =
-not
-> >>>>>>>> increase in size.
-> >>>>>>> I'm still not very keen of this approach as it strongly feels lik=
-e we
-> >>>>>>> are working around shortcoming somewhere else.
-> >>>>>>>
-> >>>>>> My read of the thread for the last version is that we're running i=
-nto
-> >>>>>> a situation where sysfs is getting used for something it wasn't
-> >>>>>> originally intended for, but we're also stuck with this sysfs
-> >>>>>> functionality for dmabufs.
-> >>>>>>
-> >>>>>>>> Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-B=
-UF stats in sysfs")
-> >>>>>>>> Originally-by: Hridya Valsaraju <hridya@google.com>
-> >>>>>>>> Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> >>>>>>>>
-> >>>>>>>> ---
-> >>>>>>>> See the originally submitted patch by Hridya Valsaraju here:
-> >>>>>>>> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2=
-F%2Flkml.org%2Flkml%2F2022%2F1%2F4%2F1066&amp;data=3D05%7C01%7Cchristian.ko=
-enig%40amd.com%7C8f00afd44b9744c45f5708da3e926503%7C3dd8961fe4884e608e11a82=
-d994e183d%7C0%7C0%7C637891095771223650%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4w=
-LjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;=
-sdata=3DpubWqUyqhCWpXHhJHsoqarc3GLtB6IFB1rhgfsL4a1M%3D&amp;reserved=3D0
-> >>>>>>>>
-> >>>>>>>> v2 changes:
-> >>>>>>>> - Defer only sysfs creation instead of creation and teardown per
-> >>>>>>>> Christian K=C3=B6nig
-> >>>>>>>>
-> >>>>>>>> - Use a work queue instead of a kthread for deferred work per
-> >>>>>>>> Christian K=C3=B6nig
-> >>>>>>>> ---
-> >>>>>>>>     drivers/dma-buf/dma-buf-sysfs-stats.c | 56 +++++++++++++++++=
-+++-------
-> >>>>>>>>     include/linux/dma-buf.h               | 14 ++++++-
-> >>>>>>>>     2 files changed, 54 insertions(+), 16 deletions(-)
-> >>>>>>>>
-> >>>>>>>> diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma=
--buf/dma-buf-sysfs-stats.c
-> >>>>>>>> index 2bba0babcb62..67b0a298291c 100644
-> >>>>>>>> --- a/drivers/dma-buf/dma-buf-sysfs-stats.c
-> >>>>>>>> +++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
-> >>>>>>>> @@ -11,6 +11,7 @@
-> >>>>>>>>     #include <linux/printk.h>
-> >>>>>>>>     #include <linux/slab.h>
-> >>>>>>>>     #include <linux/sysfs.h>
-> >>>>>>>> +#include <linux/workqueue.h>
-> >>>>>>>>
-> >>>>>>>>     #include "dma-buf-sysfs-stats.h"
-> >>>>>>>>
-> >>>>>>>> @@ -168,10 +169,46 @@ void dma_buf_uninit_sysfs_statistics(void)
-> >>>>>>>>         kset_unregister(dma_buf_stats_kset);
-> >>>>>>>>     }
-> >>>>>>>>
-> >>>>>>>> +static void sysfs_add_workfn(struct work_struct *work)
-> >>>>>>>> +{
-> >>>>>>>> +     struct dma_buf_sysfs_entry *sysfs_entry =3D
-> >>>>>>>> +             container_of(work, struct dma_buf_sysfs_entry, sys=
-fs_add_work);
-> >>>>>>>> +     struct dma_buf *dmabuf =3D sysfs_entry->dmabuf;
-> >>>>>>>> +
-> >>>>>>>> +     /*
-> >>>>>>>> +      * A dmabuf is ref-counted via its file member. If this ha=
-ndler holds the only
-> >>>>>>>> +      * reference to the dmabuf, there is no need for sysfs kob=
-ject creation. This is an
-> >>>>>>>> +      * optimization and a race; when the reference count drops=
- to 1 immediately after
-> >>>>>>>> +      * this check it is not harmful as the sysfs entry will st=
-ill get cleaned up in
-> >>>>>>>> +      * dma_buf_stats_teardown, which won't get called until th=
-e final dmabuf reference
-> >>>>>>>> +      * is released, and that can't happen until the end of thi=
-s function.
-> >>>>>>>> +      */
-> >>>>>>>> +     if (file_count(dmabuf->file) > 1) {
-> >>>>>>> Please completely drop that. I see absolutely no justification fo=
-r this
-> >>>>>>> additional complexity.
-> >>>>>>>
-> >>>>>> This case gets hit around 5% of the time in my testing so the else=
- is
-> >>>>>> not a completely unused branch.
-> >>>>> Well I can only repeat myself: This means that your userspace is
-> >>>>> severely broken!
-> >>>>>
-> >>>>> DMA-buf are meant to be long living objects
-> >>>> This patch addresses export *latency* regardless of how long-lived t=
-he
-> >>>> object is. Even a single, long-lived export will benefit from this
-> >>>> change if it would otherwise be blocked on adding an object to sysfs=
-.
-> >>>> I think attempting to improve this latency still has merit.
-> >>> Fixing the latency is nice, but as it's just pushing the needed work =
-off
-> >>> to another code path, it will take longer overall for the sysfs stuff=
- to
-> >>> be ready for userspace to see.
-> >>>
-> >>> Perhaps we need to step back and understand what this code is suppose=
-d
-> >>> to be doing.  As I recall, it was created because some systems do not
-> >>> allow debugfs anymore, and they wanted the debugging information that
-> >>> the dmabuf code was exposing to debugfs on a "normal" system.  Moving
-> >>> that logic to sysfs made sense, but now I am wondering why we didn't =
-see
-> >>> these issues in the debugfs code previously?
-> >>>
-> >>> Perhaps we should go just one step further and make a misc device nod=
-e
-> >>> for dmabug debugging information to be in and just have userspace
-> >>> poll/read on the device node and we spit the info that used to be in
-> >>> debugfs out through that?  That way this only affects systems when th=
-ey
-> >>> want to read the information and not normal code paths?  Yeah that's =
-a
-> >>> hack, but this whole thing feels overly complex now.
-> >> A bit late on this discussion, but just wanted to add my +1 that we sh=
-ould
-> >> either redesign the uapi, or fix the underlying latency issue in sysfs=
-, or
-> >> whatever else is deemed the proper fix.
-> >>
-> >> Making uapi interfaces async in ways that userspace can't discover is =
-a
-> >> hack that we really shouldn't consider, at least for upstream. All kin=
-ds
-> >> of hilarious things might start to happen when an object exists, but n=
-ot
-> >> consistently in all the places where it should be visible. There's a
-> >> reason sysfs has all these neat property groups so that absolutely
-> >> everything is added atomically. Doing stuff later on just because usua=
-lly
-> >> no one notices that the illusion falls apart isn't great.
-> >>
-> >> Unfortunately I don't have a clear idea here what would be the right
-> >> solution :-/ One idea perhaps: Should we dynamically enumerate the obj=
-ects
-> >> when userspace does a readdir()? That's absolutely not how sysfs works=
-,
-> >> but procfs works like that and there's discussions going around about
-> >> moving these optimizations to other kernfs implementations. At least t=
-here
-> >> was a recent lwn article on this:
-> >>
-> >> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flw=
-n.net%2FArticles%2F895111%2F&amp;data=3D05%7C01%7Cchristian.koenig%40amd.co=
-m%7C8f00afd44b9744c45f5708da3e926503%7C3dd8961fe4884e608e11a82d994e183d%7C0=
-%7C0%7C637891095771223650%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQI=
-joiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DQ58OZ=
-i79vmKMCZLL0pY7NniIW6hmSqyWjlEaZgqzYtM%3D&amp;reserved=3D0
-> >>
-> >> But that would be serious amounts of work I guess.
-> >> -Daniel
-> >> --
-> >> Daniel Vetter"
-> >> Software Engineer, Intel Corporation
-> >> https://nam11.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fblo=
-g.ffwll.ch%2F&amp;data=3D05%7C01%7Cchristian.koenig%40amd.com%7C8f00afd44b9=
-744c45f5708da3e926503%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C63789109=
-5771223650%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJB=
-TiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DpOIl5yszzak4TPqjBYyL=
-0mHjj%2F1nYRfNJbNPQTXBhbA%3D&amp;reserved=3D0
-> > Hi Daniel,
-> >
-> > My team has been discussing this, and I think we're approaching a
-> > consensus on a way forward that involves deprecating the existing
-> > uapi.
-> >
-> > I actually proposed a similar (but less elegant) idea to the readdir()
-> > one. A new "dump_dmabuf_data" sysfs file that a user would write to,
-> > which would cause a one-time creation of the per-buffer files. These
-> > could be left around to become stale, or get cleaned up after first
-> > read. However to me it seems impossible to correctly deal with
-> > multiple simultaneous users with this technique. We're not currently
-> > planning to pursue this.
-> >
-> > Thanks for the link to the article. That on-demand creation sounds
-> > like it would allow us to keep the existing structure and files for
-> > DMA-buf, assuming there is not a similar lock contention issue when
-> > adding a new node to the virtual tree. :)
->
-> I think that this on demand creation is even worse than the existing
-> ideas, but if you can get Greg to accept the required sysfs changes than
-> that's at least outside of my maintenance domain any more :)
+This patch series adds bindings document for RPU subsystem found on Xilinx
+ZynqMP platforms. It also adds device nodes and driver to enable RPU
+subsystem in split mode and lockstep mode.
 
-Hah, ok. After chatting with Steven it sounds like an attempt at on
-demand creation for sysfs is not likely to happen soon, as the focus
-is on getting it working for tracefs first and letting it stew there
-for a while to polish it. I'll check with Greg when he's available
-again next week about whether that is a direction we should even
-consider before moving forward from here.
->
->
-> Regards,
-> Christian.
+Xilinx ZynqMP platform contains Remote Processing Unit(RPU). RPU subsystem
+contains two arm cortex r5f cores. RPU subsystem can be configured in
+split mode, lockstep mode and single-cpu mode.
+
+RPU subsystem also contains 4 Tightly Coupled Memory(TCM) banks.
+In lockstep mode, all 4 banks are combined and total of 256KB memory is
+made available to r5 core0. In split mode, both cores can access two
+TCM banks i.e. 128 KB.
+
+RPU can also fetch data and execute instructions from DDR memory along with
+TCM memory.
+---
+
+Changes in v6:
+  - Add maxItems to sram and memory-region property
+
+Changes in v5:
+  - Add constraints of the possible values of xlnx,cluster-mode property
+  - fix description of power-domains property for r5 core
+  - Remove reg, address-cells and size-cells properties as it is not required
+  - Fix description of mboxes property
+  - Add description of each memory-region and remove old .txt binding link
+    reference in the description
+  - Remove optional reg property from r5fss node
+  - Move r5fss node out of axi node
+
+Changes in v4:
+  - Add memory-region, mboxes and mbox-names properties in dt-bindings example
+  - Add reserved memory region node and use it in Xilinx dt RPU subsystem node
+  - Remove redundant header files
+  - use dev_err_probe() to report errors during probe
+  - Fix missing check on error code returned by zynqmp_r5_add_rproc_core()
+  - Fix memory leaks all over the driver when resource allocation fails for any core
+  - make cluster mode check only at one place
+  - remove redundant initialization of variable
+  - remove redundant use of of_node_put() 
+  - Fix Comment format problem
+  - Assign offset of zynqmp_tcm_banks instead of duplicating it
+  - Add tcm and memory regions rproc carveouts during prepare instead of parse_fw
+  - Remove rproc_mem_entry object from r5_core
+  - Use put_device() and rproc_del() APIs to fix memory leaks
+  - Replace pr_* with dev_*. This was missed in v3, fix now.
+  - Use "GPL" instead of "GPL v2" in MODULE_LICENSE macro. This was reported by checkpatch script.
+
+Changes in v3:
+  - Fix checkpatch script indentation warning
+  - Remove unused variable from xilinx remoteproc driver
+  - use C style comments, i.e /*...*/
+  - Remove redundant debug information which can be derived using /proc/device-tree
+  - Fix multiline comment format
+  - s/"final fot TCM"/"final for TCM"
+  - Function devm_kzalloc() does not return an code on error, just NULL.
+    Remove redundant error check for this function throughout the driver.
+  - Fix RPU mode configuration and add documentation accordingly
+  - Get rid of the indentations to match function documentation style with rest of the driver
+  - Fix memory leak by only using r5_rproc->priv and not replace it with new instance
+  - Use 'i' for the outer loop and 'j' for the inner one as per convention
+  - Remove redundant error and NULL checks throughout the driver
+  - Use devm_kcalloc() when more than one element is required
+  - Add memory-regions carveouts during driver probe instead of parse_fw call
+    This removes redundant copy of reserved_mem object in r5_core structure.
+  - Fix memory leak by using of_node_put()
+  - Fix indentation of tcm_mem_map function args
+  - Remove redundant init of variables
+  - Initialize tcm bank size variable for lockstep mode
+  - Replace u32 with phys_addr_t for variable stroing memory bank address
+  - Add documentation of TCM behavior in lockstep mode
+  - Use dev_get_drvdata instead of platform driver API
+  - Remove info level messages
+  - Fix checkpatch.pl warnings
+  - Add documentation for the Xilinx r5f platform to understand driver design
+
+Changes in v2:
+  - Remove proprietary copyright footer from cover letter
+
+Ben Levinsky (3):
+  firmware: xilinx: Add ZynqMP firmware ioctl enums for RPU
+    configuration.
+  firmware: xilinx: Add shutdown/wakeup APIs
+  firmware: xilinx: Add RPU configuration APIs
+
+Tanmay Shah (3):
+  dt-bindings: remoteproc: Add Xilinx RPU subsystem bindings
+  arm64: dts: xilinx: zynqmp: Add RPU subsystem device node
+  drivers: remoteproc: Add Xilinx r5 remoteproc driver
+
+ .../bindings/remoteproc/xlnx,r5f-rproc.yaml   |  129 ++
+ arch/arm64/boot/dts/xilinx/zynqmp.dtsi        |   33 +
+ drivers/firmware/xilinx/zynqmp.c              |   97 ++
+ drivers/remoteproc/Kconfig                    |   12 +
+ drivers/remoteproc/Makefile                   |    1 +
+ drivers/remoteproc/xlnx_r5_remoteproc.c       | 1045 +++++++++++++++++
+ include/dt-bindings/power/xlnx-zynqmp-power.h |    6 +
+ include/linux/firmware/xlnx-zynqmp.h          |   60 +
+ 8 files changed, 1383 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
+ create mode 100644 drivers/remoteproc/xlnx_r5_remoteproc.c
+
+
+base-commit: 01a1a0c8d456b11f2f6b9b822414481beaa44d6f
+-- 
+2.25.1
+

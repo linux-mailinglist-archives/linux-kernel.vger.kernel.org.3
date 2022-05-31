@@ -2,181 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05F6539542
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97879539546
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346309AbiEaRJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 13:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
+        id S1346449AbiEaRLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 13:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236090AbiEaRJY (ORCPT
+        with ESMTP id S236090AbiEaRLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 13:09:24 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8465A6B036;
-        Tue, 31 May 2022 10:09:23 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id s6so6526300lfo.13;
-        Tue, 31 May 2022 10:09:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=oXC+omMyhQE+yQOLbS6KJe5K78bZY03LjtAozxlOWS4=;
-        b=TAyjZkyHiTXmbmHCSrE2qWJwfpy2mK18RqayHB9KPwF3D5Pg+bZ6eGYNeN34jbspjz
-         XKAIAKaqLBFgTkjxxqEqqjzKoQ4toUSB64OhXxsfMMRXeKBxTuUTXvyIQGUiGfioo7kC
-         oMkYvmT4C0UXva0czCxfN3JpmbeZVhWBsYi1qGOpj0WhxatmjVmbr0Qp0zNQmGicVbqD
-         XOkcjG3W1KKt5f0akOma0UDAHja0EIq/KJOrVyQ2kluOg8ugvRzH57Wsp2EqTBQKNt5m
-         4tqMtwtv+jysyfjiBaAa2EYLry0bXPvGexMdU0w2FewQWJm/hZYWq2QWm7FRLYNLGMi4
-         npkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=oXC+omMyhQE+yQOLbS6KJe5K78bZY03LjtAozxlOWS4=;
-        b=PtSFlzs/ZV6s2lB045ns/cNkFL0Qj4KFrIkWpZ2KrlQ1dUN8S1QVOuAgxnVDi9Zug5
-         5anLRvBfgYNGvoTJIrai+cQwo4f2kvmyWJuYE/Tc2sJo31gLiT6XRWxGqIRxPH2dj8qa
-         PnSDjGI9TTzfaURHJSGaVTQD60QS8wmQ7cy3AfDnfYwxWReFjMWu5xcaTvOn6nE7BLHh
-         Bb3tCw1wZcJcf9R4mAbR+E35OcJC8SoWYFawRxaleI5dsBshNAEdA9xE9PMILQCbUu/k
-         S1mb5hS5FaoQbj44hn6VjvK1U+vIn/VYuWWhMW6MMRX556BbvXc2sh33Bjk66aIVIPZJ
-         8Kaw==
-X-Gm-Message-State: AOAM5310fwHwklb2R2goWSWJUEMp1XPsvJ3KDzOqioSbHdTLPJYvhbc4
-        6whBHQPALodaYmZJQJmPr0O/fZogUOw=
-X-Google-Smtp-Source: ABdhPJwx9hqwCt9lTBlhLuxF3159ZiuKQMGeaQRRGSerHfQCM1lHwBJOFfe0u0PJDGwPNceRQMYbag==
-X-Received: by 2002:ac2:4f09:0:b0:478:6c80:64fc with SMTP id k9-20020ac24f09000000b004786c8064fcmr26696653lfr.34.1654016961692;
-        Tue, 31 May 2022 10:09:21 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id i6-20020a196d06000000b00477cab33759sm3072432lfc.256.2022.05.31.10.09.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 10:09:21 -0700 (PDT)
-Subject: Re: [PATCH V3 5/8] dt-bindings: Add xen,grant-dma IOMMU description
- for xen-grant DMA ops
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        xen-devel@lists.xenproject.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org
-Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <1653944417-17168-1-git-send-email-olekstysh@gmail.com>
- <1653944417-17168-6-git-send-email-olekstysh@gmail.com>
- <15eef004-74c7-0eb5-3f87-86e164ef70ff@linaro.org>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <f5aa3337-e1fc-752e-5337-120599ed508b@gmail.com>
-Date:   Tue, 31 May 2022 20:09:19 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 31 May 2022 13:11:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777D58BD1E;
+        Tue, 31 May 2022 10:11:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC64860A54;
+        Tue, 31 May 2022 17:11:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 631D5C3411D;
+        Tue, 31 May 2022 17:11:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654017093;
+        bh=PiJTFDNVbEqwodufEmKeOFpsiPkT1+3psU+PLhFiVvU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=a1kBtGxeowAhq9hi8kGTWlPnjN6B174ifLpjM0UytOV0o/RNsLoF97qVr5j31gMHo
+         8UQ9FmXxVkOntl7m1kJNMvlMQahstqASa/9BC5oh2XcmhM2C5GTJYbgZLcq1wAXYtz
+         a1hRp9RsIGzu7Va8u8+dvr4Zu9T57Osn1ip4rNLIiwZmb2OGzY5KGvMlWldrqDv1sf
+         8rBaurh9N9UnJ7QJuSG8E7kbrQXxJTsGoJ9KnbxocUfWHqomOLPmqDeqS2mcDiMwMW
+         SPr73kr0YRSgFvuA5fgcuz3gekf3c19qRq+l/abo4ZmhT0PFeiDssuavc4h1hDXPHA
+         owNDiCUGP40tA==
+Received: by mail-yb1-f169.google.com with SMTP id i11so24997869ybq.9;
+        Tue, 31 May 2022 10:11:33 -0700 (PDT)
+X-Gm-Message-State: AOAM532IHZ3o/Zo1ERSBqel7rb6JQ+Zj1jKFHLGfd7C7PGnRQh33Eym9
+        phGv4HSgqSiBHuLlQKPidHpzoif8jr7Z0sXgh5s=
+X-Google-Smtp-Source: ABdhPJwvDKqKQC9u2rSsjZrg7aOLDH1q98E2Fy1YGgfjIjyvfPDnWPlwAS8Sm1EVf3Ec6+b95jlZB9zo0bfU7vsaVUM=
+X-Received: by 2002:a25:4705:0:b0:65d:43f8:5652 with SMTP id
+ u5-20020a254705000000b0065d43f85652mr3648473yba.389.1654017092431; Tue, 31
+ May 2022 10:11:32 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <15eef004-74c7-0eb5-3f87-86e164ef70ff@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1653861287.git.dxu@dxuuu.xyz> <a8f5faada9b96218d79beb7b7ddebe6a837a5536.1653861287.git.dxu@dxuuu.xyz>
+In-Reply-To: <a8f5faada9b96218d79beb7b7ddebe6a837a5536.1653861287.git.dxu@dxuuu.xyz>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 31 May 2022 10:11:21 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6eQXZrnJdRGUEu6jQAjpXnEB_f4bzBF1rXst4LWBWd=g@mail.gmail.com>
+Message-ID: <CAPhsuW6eQXZrnJdRGUEu6jQAjpXnEB_f4bzBF1rXst4LWBWd=g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add PROG_TEST_RUN selftest
+ for BPF_PROG_TYPE_KPROBE
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 31.05.22 14:52, Krzysztof Kozlowski wrote:
-
-Hello Krzysztof
-
-> On 30/05/2022 23:00, Oleksandr Tyshchenko wrote:
->> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> Thank you for your patch. There is something to discuss/improve.
+On Sun, May 29, 2022 at 3:06 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
 >
->> diff --git a/Documentation/devicetree/bindings/iommu/xen,grant-dma.yaml b/Documentation/devicetree/bindings/iommu/xen,grant-dma.yaml
->> new file mode 100644
->> index 00000000..ab5765c
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/iommu/xen,grant-dma.yaml
->> @@ -0,0 +1,49 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/iommu/xen,grant-dma.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Xen specific IOMMU for virtualized devices (e.g. virtio)
->> +
->> +maintainers:
->> +  - Stefano Stabellini <sstabellini@kernel.org>
->> +
->> +description:
->> +  The reference to Xen specific IOMMU node using "iommus" property indicates
->> +  that Xen grant mappings need to be enabled for the device, and it specifies
->> +  the ID of the domain where the corresponding backend resides.
->> +  The binding is required to restrict memory access using Xen grant mappings.
->> +
->> +properties:
->> +  compatible:
->> +    const: xen,grant-dma
->> +
->> +  '#iommu-cells':
->> +    const: 1
->> +    description:
->> +      Xen specific IOMMU is multiple-master IOMMU device.
->> +      The single cell describes the domid (domain ID) of the domain where
->> +      the backend is running.
->> +
->> +required:
->> +  - compatible
->> +  - "#iommu-cells"
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    xen_iommu {
-> No underscores in node names, generic node names, so this looks like
-> "iommu".
+> This commit adds a selftest to test that we can both PROG_TEST_RUN a
+> kprobe prog and set its context.
 
+nit: per Documentation/process/submitting-patches.rst:
 
-ok, will change
-
+Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+to do frotz", as if you are giving orders to the codebase to change
+its behaviour.
 
 >
->> +        compatible = "xen,grant-dma";
->> +        #iommu-cells = <1>;
->> +    };
->> +
->> +    virtio@3000 {
->> +        compatible = "virtio,mmio";
->> +        reg = <0x3000 0x100>;
->> +        interrupts = <41>;
->> +
->> +        /* The backend is located in Xen domain with ID 1 */
->> +        iommus = <&xen_iommu 1>;
-> There is no need usually to give consumer examples in provider binding.
-> If there is nothing specific here (looks exactly like every IOMMU
-> consumer in Linux kernel), drop the consumer.
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+
+Other than that,
+
+Acked-by: Song Liu <songliubraving@fb.com>
 
 
-I got it.  There is nothing specific from the device tree's perspective, 
-I was thinking to draw attention to the IOMMU specifier (in our case, 
-the master device's ID == backend's domain ID). But  '#iommu-cells' 
-description above already clarifies that. Will drop.
-
-
+> ---
+>  .../selftests/bpf/prog_tests/kprobe_ctx.c     | 57 +++++++++++++++++++
+>  .../testing/selftests/bpf/progs/kprobe_ctx.c  | 33 +++++++++++
+>  2 files changed, 90 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/kprobe_ctx.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/kprobe_ctx.c
 >
->> +    };
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_ctx.c b/tools/testing/selftests/bpf/prog_tests/kprobe_ctx.c
+> new file mode 100644
+> index 000000000000..260966fd4506
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_ctx.c
+> @@ -0,0 +1,57 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include <linux/ptrace.h>
+> +#include "kprobe_ctx.skel.h"
+> +
+> +/*
+> + * x86_64 happens to be one of the architectures that exports the
+> + * kernel `struct pt_regs` to userspace ABI. For the architectures
+> + * that don't, users will have to extract `struct pt_regs` from vmlinux
+> + * BTF in order to use BPF_PROG_TYPE_KPROBE's BPF_PROG_RUN functionality.
+> + *
+> + * We choose to only test x86 here to keep the test simple.
+> + */
+> +void test_kprobe_ctx(void)
+> +{
+> +#ifdef __x86_64__
+> +       struct pt_regs regs = {
+> +               .rdi = 1,
+> +               .rsi = 2,
+> +               .rdx = 3,
+> +               .rcx = 4,
+> +               .r8 = 5,
+> +       };
+> +
+> +       LIBBPF_OPTS(bpf_test_run_opts, tattr,
+> +               .ctx_in = &regs,
+> +               .ctx_size_in = sizeof(regs),
+> +       );
+> +
+> +       struct kprobe_ctx *skel = NULL;
+> +       int prog_fd;
+> +       int err;
+> +
+> +       skel = kprobe_ctx__open_and_load();
+> +       if (!ASSERT_OK_PTR(skel, "skel_open"))
+> +               return;
+> +
+> +       skel->bss->expected_p1 = (void *)1;
+> +       skel->bss->expected_p2 = (void *)2;
+> +       skel->bss->expected_p3 = (void *)3;
+> +       skel->bss->expected_p4 = (void *)4;
+> +       skel->bss->expected_p5 = (void *)5;
+> +
+> +       prog_fd = bpf_program__fd(skel->progs.prog);
+> +       err = bpf_prog_test_run_opts(prog_fd, &tattr);
+> +       if (!ASSERT_OK(err, "bpf_prog_test_run"))
+> +               goto cleanup;
+> +
+> +       if (!ASSERT_TRUE(skel->bss->ret, "ret"))
+> +               goto cleanup;
+> +
+> +       if (!ASSERT_GT(tattr.duration, 0, "duration"))
+> +               goto cleanup;
+> +cleanup:
+> +       kprobe_ctx__destroy(skel);
+> +#endif
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/kprobe_ctx.c b/tools/testing/selftests/bpf/progs/kprobe_ctx.c
+> new file mode 100644
+> index 000000000000..98063c549930
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/kprobe_ctx.c
+> @@ -0,0 +1,33 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +volatile void *expected_p1;
+> +volatile void *expected_p2;
+> +volatile void *expected_p3;
+> +volatile void *expected_p4;
+> +volatile void *expected_p5;
+> +volatile bool ret = false;
+> +
+> +SEC("kprobe/this_function_does_not_exist")
+> +int prog(struct pt_regs *ctx)
+> +{
+> +       void *p1, *p2, *p3, *p4, *p5;
+> +
+> +       p1 = (void *)PT_REGS_PARM1(ctx);
+> +       p2 = (void *)PT_REGS_PARM2(ctx);
+> +       p3 = (void *)PT_REGS_PARM3(ctx);
+> +       p4 = (void *)PT_REGS_PARM4(ctx);
+> +       p5 = (void *)PT_REGS_PARM5(ctx);
+> +
+> +       if (p1 != expected_p1 || p2 != expected_p2 || p3 != expected_p3 ||
+> +           p4 != expected_p4 || p5 != expected_p5)
+> +               return 0;
+> +
+> +       ret = true;
+> +       return 0;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
+> --
+> 2.36.1
 >
-> Best regards,
-> Krzysztof
-
--- 
-Regards,
-
-Oleksandr Tyshchenko
-

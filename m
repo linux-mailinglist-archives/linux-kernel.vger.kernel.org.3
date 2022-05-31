@@ -2,89 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6822D538AF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 07:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1802538AF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 07:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244032AbiEaFgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 01:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
+        id S244018AbiEaFkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 01:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244009AbiEaFgh (ORCPT
+        with ESMTP id S239126AbiEaFkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 01:36:37 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F292C8;
-        Mon, 30 May 2022 22:36:36 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id B9E743200939;
-        Tue, 31 May 2022 01:36:34 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 31 May 2022 01:36:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1653975394; x=1654061794; bh=lM
-        0S6haiMeSAJIWm3addevlytdvDfSDjGYz4PQB/xHY=; b=P8BGvgiqIVgKsWJs3I
-        s6o/hn+H4a1ioH8m0Qcc1YQYphxGET4bl0YDcVZ3qLbPQZqPFvXkHvm5UaRoyJ4Q
-        gm5dbKhEAfIxbDInVJ8M3gIrkJnd3aQ0me3O7bJhP/o6xmJq47mZMKInPtbT8vN2
-        CRFrxgUZ7DySC8obCtYmlqorn5i80PJ3UjHXVG+WaT3/kHZgX9SpbkUfIyY/sJtf
-        l6zzD+fs0MCl7+s81KLjTBFXKefl6+p2DXnhnodomR5KHMx++aZSPcgK86RLLBCw
-        oK1fIfriHfFooDx2O4DJo/JEkhUi306ENACmWtIWLUkWhHQM1VlnLzBBL09nqc0T
-        xLlQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1653975394; x=1654061794; bh=lM0S6haiMeSAJ
-        IWm3addevlytdvDfSDjGYz4PQB/xHY=; b=qNSqGItOQAOhIRwk3nMTfXomBQNSb
-        kmZIIsqKMZGGvzCUc6fJlD/bqywCw4k6EUb3XBHvI5F2pWiqsqMTsSQ9as34qYv/
-        c7ILMnalRyUNhhIej3FPHzKZNVaO/W5G4HgGYW0LvEt5T6R2PMAq4uzW8jjHZInT
-        mLyeWRdG1VcUxvvKJvgHKNOUKQkaqoA6iZYNCh5BWHSikz6Klf3MRsiqpXhrcpSq
-        WCAn+HZzEICBL7hVP9BnmqKt/xOgTxYLX8hVEhO0OafKCMz9jC7r7vqym7g2LonH
-        3AmcQl3zuN7xM1ZkN/zXKAZuddt/ogiRnvcxrdimSTJA0gDyYpPVdPikA==
-X-ME-Sender: <xms:YqmVYgXnfY4X9fiL9FzRVRzj3BbRJWx0rJgfWATt4hRowqOnQfRKyQ>
-    <xme:YqmVYkn3u1-1_usfpzJN_hBxrUom5LtcxcMRvlomonf4S3NVtrJJs7jMAl1pb0FBC
-    YReDsTx6mZ_3cnYww>
-X-ME-Received: <xmr:YqmVYkY44N-xVfsSgPL4NaW1etI1q_zBLjXlDgGSA1TpzHiMJRbeJxofSBzOZ7P1nnYLlEN8wzz8yZ2bElWgu70gmVjFitxZDiDWIGskGuJPXgH_esNipdWn9rwVRtkX1C_I5Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeejgdeljecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
-    feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:YqmVYvVFcp5gN57wAcv75UXSjCTgO72aXLME-UNcwqaclgt__Cv_7A>
-    <xmx:YqmVYqmroVEtWQo2XRLBpwOuJuWW4qxHBD86wkkLRr2xY33f6FCc6g>
-    <xmx:YqmVYkeJwlAJDPjjBJtJCe63LgM_bdceiVbxcv7PkB0gvEcDdAMb8Q>
-    <xmx:YqmVYl8B7fgY0lf7vwMMbS7ILIkT85cL9CURcoT-abX5LhMFKumngA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 31 May 2022 01:36:33 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH 3/3] dt-bindings: pinctrl: sunxi: Disallow the resets property
-Date:   Tue, 31 May 2022 00:36:23 -0500
-Message-Id: <20220531053623.43851-4-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220531053623.43851-1-samuel@sholland.org>
-References: <20220531053623.43851-1-samuel@sholland.org>
+        Tue, 31 May 2022 01:40:00 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EB0941B0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 22:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653975599; x=1685511599;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xF6wkeiaRhZGjYJipmw22MTWtdehCD+jNIaQZYGniXw=;
+  b=ElyvXWsj2GjEw3+L7NXjQprZ6irBz6E0kW+pPKVbFE2aADSOSEHIhj1y
+   yb6Et7sjbAcheXJkECC1l4qrQkmDqwmE+MZ6MxcB5/utMBUFVkGltwuwt
+   ukBkonP9N3cb/boy9bMX495NEWO0h0FFYux7/CBI+H22jS2v962ETOa/n
+   zzR55K8qLSWuFVhSobhAigKXkAqQXRHEjhxl3VEGHvZP20fDwK1Fv7xgt
+   +ZBSIDHRhyMAhE5nJMMovCiOWamXbvAcKFt+Rsn6UWlFcPpzx41hGC2AR
+   oZ41TLvW1SQPJ1xZP5s2to+fF+vZcXzXIvp12XyH+rk43Db8rH9beAJI/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="257212300"
+X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
+   d="scan'208";a="257212300"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 22:39:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
+   d="scan'208";a="706420305"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 30 May 2022 22:39:57 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nvubl-0002NW-2b;
+        Tue, 31 May 2022 05:39:57 +0000
+Date:   Tue, 31 May 2022 13:38:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:sched/idle 5/10] vmlinux.o: warning: objtool:
+ tick_check_broadcast_expired+0x31: call to ftrace_likely_update() leaves
+ .noinstr.text section
+Message-ID: <202205311351.WSYw2egY-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,32 +62,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-None of the sunxi pin controllers have a module reset line. This is
-confirmed by documentation (A80) as well as experimentation (A33).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/idle
+head:   e501ffcdad48900629ba842b081d182ea4a6a30a
+commit: 54ce84759fb2760fd6952fa47718f2b46efdb8b1 [5/10] idle: Fix rcu_idle_*() usage
+config: x86_64-randconfig-a001-20220530 (https://download.01.org/0day-ci/archive/20220531/202205311351.WSYw2egY-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=54ce84759fb2760fd6952fa47718f2b46efdb8b1
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/idle
+        git checkout 54ce84759fb2760fd6952fa47718f2b46efdb8b1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Since the property is not applicable to any variant of the hardware,
-let's remove it from the binding.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+All warnings (new ones prefixed by >>):
 
- .../bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml          | 3 ---
- 1 file changed, 3 deletions(-)
+   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x27: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x24: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x72: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: noist_exc_debug+0x3c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi+0x31: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: poke_int3_handler+0x3e: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: mce_check_crashing_cpu+0x2c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: mce_start+0x66: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_machine_check+0x4a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_machine_check+0x4a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter+0x1a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit+0x1a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_eqs_exit.constprop.0+0x26: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_eqs_enter.constprop.0+0x43: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_irq_exit+0x22: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_nmi_enter+0x31: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_irq_enter+0x22: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x48: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x43: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode+0x57: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x57: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x57: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_exit+0x29: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: tick_check_broadcast_expired+0x31: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_idle_enter_bm+0x77: call to rcu_idle_enter() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_idle_enter_s2idle+0x77: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_idle_enter+0x61: call to ftrace_likely_update() leaves .noinstr.text section
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
-index bfce850c2035..fa0c2df04675 100644
---- a/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
-@@ -80,9 +80,6 @@ properties:
-       - const: hosc
-       - const: losc
- 
--  resets:
--    maxItems: 1
--
-   gpio-controller: true
-   interrupt-controller: true
-   gpio-line-names: true
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

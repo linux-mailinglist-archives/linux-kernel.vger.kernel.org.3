@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80417538BD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37EE7538BD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244436AbiEaHKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 03:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45798 "EHLO
+        id S244445AbiEaHNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 03:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236425AbiEaHK0 (ORCPT
+        with ESMTP id S236425AbiEaHNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 03:10:26 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683E468990
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:10:22 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id wh22so24790992ejb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:10:22 -0700 (PDT)
+        Tue, 31 May 2022 03:13:40 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F149A2AC5A
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:13:37 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id x17so8284427wrg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:13:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=BRbXu6m33l9xOYN6oZLICV8uXrRApTlLMoTq61AAB5o=;
-        b=LHjgkW/k+1B3d7ZP04bLh02sSFYSJgEJiTVvm2cecNZ/kLERWWcFOzZkrXlQRCDaZN
-         r3alxmuzish3yaur6QWFfj6s9wbpHKmd9GP+TUYoctHuVV5np5yixqaPqx37PoWRBakt
-         MT0LtMRD+4hfAbozveOf74DzVfVtdf/tEw+itU4Bzf+j6+BiiAmwTZV40a9SNgYwEzNx
-         cySwj+5s5bUROYiU8FPo7DK5DTPO2g1rAJd3Gy4G3TmFLHq/lS7I5w+8KP15L8lQZTIx
-         yuBnB+ngn0NySOrqWd2Gf8SRFUpEppDSRpDTkQnHx/flwCl7wTIT+TzYBfrqGZ5bOdur
-         vwJg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gpJXD4uWmZk0N+tXI9zTVOKV/51RZ9LSRoM3wkb91iQ=;
+        b=VfQb/SAzTYskOxUvNYLCKPFqjCFKzcYWhzgZpZ6pq7GdpAMBxZn5a90aWMRdAzsm3+
+         4V4YNQh1HAjrLTlgay2ujDoZBtNRdkMQST4kadNvaBeFHauvhWDEvP/LZIaTkDll9uHO
+         Nm7j9xrVrwIjpmKuygLLXnOL5xcxSkb8hxcHZDJKvt+qvXyi+3AL92H9vV9jRf+szLt5
+         fMcmH5sB6oXHhbJQ1ra8by5lEllDrIkaBVyruEo4kkXmuD4dJg6dIFMvhZ9VcLI493/o
+         WNLg08cTpv4JDaoiTnYL6hWkKoZpmRdk05GNhOTHlqfKBPcQoUqzxSPSuLZ49nLCtU32
+         JqDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=BRbXu6m33l9xOYN6oZLICV8uXrRApTlLMoTq61AAB5o=;
-        b=rru4vdzaEwmF+Pyqv5Gh7UoB6sSTp/SpYgR3taNYLdfklDnFWrgYpJuKzGq7uXimZm
-         y3wCpKZW5Bu2CLQ7sTUZvBbZfisopMCoO5TspqQoCqqN9jP3veC8Zo+wrdh+hzF1wKCA
-         1O9v/T9hx95NFvqcN1TZqVBN/4zet6ZRS1n9AFeTQEq3S8svo9+zA6bgjSrvNu2JaZ2R
-         7XL6bt5KgI9crIGHbX+SoYqClBODtWU3s2PMuN2pdKcdF3/WpeOXBuAIlpjENlLkpFVu
-         i9L4AAXJF6BNyNr9KOL27qKoQ2Ac9OStP6R5YQMU2krNR7NLMaVEKEm/ggli56EFD7Wf
-         Ssvw==
-X-Gm-Message-State: AOAM5333SV7pNkC+lEgWgFb0JT8K6x+8CFgNZMV9KoVHCHVnXhCsL7M3
-        bdmZjT0TDAuFIXN022l734dBnhkccDe8iA==
-X-Google-Smtp-Source: ABdhPJxgIJGOy9JplmXmTBkg4kpqC8A2SXGQH8VDggXmRDsNDY5aTCdEPixVtnkTFIo82goS2wKHvQ==
-X-Received: by 2002:a17:907:94c3:b0:6ff:8cd6:93d6 with SMTP id dn3-20020a17090794c300b006ff8cd693d6mr5673812ejc.118.1653981020957;
-        Tue, 31 May 2022 00:10:20 -0700 (PDT)
-Received: from ?IPV6:2a02:768:2307:40d6::f9e? ([2a02:768:2307:40d6::f9e])
-        by smtp.gmail.com with ESMTPSA id d22-20020a170906371600b006f3ef214e14sm4616762ejc.122.2022.05.31.00.10.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 00:10:20 -0700 (PDT)
-Message-ID: <9bfbc0fb-ddd2-d65c-f9ac-2a2696581c71@monstr.eu>
-Date:   Tue, 31 May 2022 09:10:19 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gpJXD4uWmZk0N+tXI9zTVOKV/51RZ9LSRoM3wkb91iQ=;
+        b=KpT1uPMADBT56bynM20MdlAMhmbEg1V/vVPUrCCPds4f7GcmMmOIC3tDGNcyuu5LBv
+         sI9YFr1/22UlkRTA9yBllUodwUXkd2ElHVquZ8V3m3Hg56wW4zeQZi5ephc2c/N6KfOJ
+         FxhB21Dfgdn69sq1kmzlpqH+m8RjSFGC2v6zpMzK52P02sLSlAcoii0+hKH1VXo/82tB
+         i/vnmx7D1PwXuV+4eO9SBjvwnvl28Xn3J368hi5J8IGLbuzcByZOpiJnBhOBffCx3uOv
+         eznQe9pFhQPsg3zkZ+fzzpV2/mLTiI/K2U9OzwGYfa9n9/gxWjJABtf6gLSWDs/hP9tB
+         MjzQ==
+X-Gm-Message-State: AOAM5321X78roLyv71dIBsgng/plBCIEIOxboMzF8iLi5JYFBmFldnzN
+        U102bk9jFGBaQOlQWfJC8yFrGw9Z7M5GvU2xMx5NUfWhXp0=
+X-Google-Smtp-Source: ABdhPJwO3f3UUsNyWqrqdELliF94hlgYLBXaZYE9Ur7xStNyChRvc+OILJ07/u8p0E7flMcjZGJDvj4C2BSr4QdsHHM=
+X-Received: by 2002:a05:6000:1788:b0:20c:a43c:10fa with SMTP id
+ e8-20020a056000178800b0020ca43c10famr48558569wrg.511.1653981216503; Tue, 31
+ May 2022 00:13:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-From:   Michal Simek <monstr@monstr.eu>
-Subject: [GIT PULL] arch/microblaze patches for 5.19-rc1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220512170008.1301613-1-xiehuan09@gmail.com> <20220512170008.1301613-3-xiehuan09@gmail.com>
+ <20220522232216.bb1451fb6efc18c2bccc8d09@kernel.org>
+In-Reply-To: <20220522232216.bb1451fb6efc18c2bccc8d09@kernel.org>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Tue, 31 May 2022 15:13:24 +0800
+Message-ID: <CAEr6+EAU_FUvCqZqqpp_hC5ichV9WJ+Up+N6ya5KW_CbqbRGFA@mail.gmail.com>
+Subject: Re: [PATCH v10 2/4] trace/objtrace: Get the value of the object
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,55 +67,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Masami and steve,
 
-please pull these patches to your tree.
+On Sun, May 22, 2022 at 10:22 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> Hi Jeff,
+>
+> On Fri, 13 May 2022 01:00:06 +0800
+> Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> [...]
+> > @@ -175,9 +271,27 @@ trace_object_trigger(struct event_trigger_data *data,
+> >
+> >       field = obj_data->field;
+> >       memcpy(&obj, rec + field->offset, sizeof(obj));
+> > -     set_trace_object(obj, tr);
+> > +     /* set the offset from the special object and the type size of the value*/
+> > +     set_trace_object(obj, obj_data->obj_offset,
+> > +                     obj_data->obj_value_type_size, tr);
+> >  }
+> >
+> > +static const struct objtrace_fetch_type objtrace_fetch_types[] = {
+> > +     {"u8", 1},
+> > +     {"s8", 1},
+> > +     {"x8", 1},
+> > +     {"u16", 2},
+> > +     {"s16", 2},
+> > +     {"x16", 2},
+> > +     {"u32", 4},
+> > +     {"s32", 4},
+> > +     {"x32", 4},
+> > +     {"u64", 8},
+> > +     {"s64", 8},
+> > +     {"x64", 8},
+>
+> Hmm, as far as I can see, you don't distinguish the prefix 'u','s','x'.
+> If so, please support only 'x' at this moment. kprobe events supports
+> those types, and it distinguishes the types when printing the logged
+> data. E.g. 's16' shows '-1' for 0xffff, but 'x16' shows '0xffff'.
+> You can add another patch to support such different types afterwards.
+
+I feel to let the objtrace trigger to distinguish the prefix 'u', 's',
+'x', It seems a very challenging work ;-)
+I spent a lot of time thinking, I would like to add a callback
+function(print function) in the struct trace_object_entry  for each
+data type.
+Not sure if this is possible or allowed, as I haven't seen any example
+like this to add function in the  struct *_entry  ;-)
+
+The following is part of the code I have prepared. I don't know if you
+can give any suggestions or wait until I submit the next version to
+discuss.
+
+<snip>
+diff --git a/kernel/trace/trace_entries.h b/kernel/trace/trace_entries.h
+index 2407c45a568c..5f8289e26f91 100644
+--- a/kernel/trace/trace_entries.h
++++ b/kernel/trace/trace_entries.h
+@@ -414,6 +414,7 @@ FTRACE_ENTRY(object, trace_object_entry,
+                __field(        unsigned long,          parent_ip       )
+                __field(        unsigned long,          object          )
+                __field(        unsigned long,          value           )
++               __field(        unsigned long,          print           )
+        ),
+
++/* get the type size for the special object */
++struct objtrace_fetch_type {
++       char *name;
++       int type_size;
++       int is_signed;
++       print_type_func_t       print;
++};
++
+
+ static const struct objtrace_fetch_type objtrace_fetch_types[] = {
+-       {"x8", 1},
+-       {"x16", 2},
+-       {"x32", 4},
+-       {"x64", 8},
+-       {NULL, 0}
++       {"u8", 1, 0, PRINT_TYPE_FUNC_NAME(u8)},
++       {"s8", 1, 1, PRINT_TYPE_FUNC_NAME(s8)},
++       {"x8", 1, 0, PRINT_TYPE_FUNC_NAME(x8)},
++       {"u16", 2, 0, PRINT_TYPE_FUNC_NAME(u16)},
++       {"s16", 2, 1, PRINT_TYPE_FUNC_NAME(s16)},
++       {"x16", 2, 0, PRINT_TYPE_FUNC_NAME(x16)},
++       {"u32", 4, 0, PRINT_TYPE_FUNC_NAME(u32)},
++       {"s32", 4, 1, PRINT_TYPE_FUNC_NAME(s32)},
++       {"x32", 4, 0, PRINT_TYPE_FUNC_NAME(x32)},
++       {"u64", 8, 0, PRINT_TYPE_FUNC_NAME(u64)},
++       {"s64", 8, 1, PRINT_TYPE_FUNC_NAME(s64)},
++       {"x64", 8, 1, PRINT_TYPE_FUNC_NAME(x64)},
++       {NULL, 0, 0, NULL}
+ };
+</snip>
+
+> > +     {}
+>
+> If this array is null terminated, please explictly do that, like
+>
+>         {NULL, 0},
+>
+> for readability.
+>
+> Thank you,
+>
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
 Thanks,
-Michal
-
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
-
-   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-   git://git.monstr.eu/linux-2.6-microblaze.git tags/microblaze-v5.19
-
-for you to fetch changes up to 78b5f52ab6f6074a6fe2f27122e2165f32d6a143:
-
-   microblaze: fix typos in comments (2022-05-02 08:36:10 +0200)
-
-----------------------------------------------------------------
-Microblaze patches for 5.19-rc1
-
-- Fix issues with freestanding
-- Wire memblock_dump_all()
-- Add support for memory reservation from DT
-
-----------------------------------------------------------------
-Julia Lawall (1):
-       microblaze: fix typos in comments
-
-Michal Simek (5):
-       microblaze: Use simple memset implementation from lib/string.c
-       microblaze: Do loop unrolling for optimized memset implementation
-       microblaze: Use simple memmove/memcpy implementation from lib/string.c
-       microblaze: Wire memblock_dump_all()
-       microblaze: Add support for reserved memory defined by DT
-
-  arch/microblaze/include/asm/string.h |  2 ++
-  arch/microblaze/kernel/kgdb.c        |  2 +-
-  arch/microblaze/lib/memcpy.c         | 18 ++---------
-  arch/microblaze/lib/memmove.c        | 31 ++----------------
-  arch/microblaze/lib/memset.c         | 33 +++++++++-----------
-  arch/microblaze/mm/init.c            |  5 +++
-  6 files changed, 27 insertions(+), 64 deletions(-)
-
--- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
-
+JeffXie

@@ -2,216 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1836538C65
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4103538C70
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244702AbiEaIBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 04:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
+        id S244711AbiEaIDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 04:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235885AbiEaIBJ (ORCPT
+        with ESMTP id S244666AbiEaIDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 04:01:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4529C7220A
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:01:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2238B80E20
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:01:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14DB1C34119;
-        Tue, 31 May 2022 08:01:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653984065;
-        bh=jDuI1OezqWtRhCv5nxYOoLBrXfUkFW5cSU8f621yeiU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hnncicVxHW86XI1aJOefhoU8I5MQu4f342W0L31+J4wjyHdqUCm7PYgbR4SI6I0rK
-         J6ZlOAdYhe1wIVE/1+qT9gMtP0Z3yb9IBug/M+NY/Gc0q18XW+d2P1zf5XzrHeg6cs
-         mNE+hrAXSeAeVwo2Hd0xCNf+hF9mhCDLSr7YQGUAC+iyYIKF6KMdcHTAvTPdUoDfK+
-         U2MRDCoQmoJHbmr7QPzDS7hBWRH1XOJudAL/nr3qM/9FIvTqvTV1Z948JqSHtiyI4l
-         L1JC+LKawmNUq1WmeLQpy3uxugeDZItIS8CIUooyGhvO5qqLxPSBwNQNxBkykHV3dZ
-         skS+W0hmvpODg==
-Message-ID: <fa3cbe36-1738-a811-ce03-dd5aaf8ea3d4@kernel.org>
-Date:   Tue, 31 May 2022 16:01:01 +0800
+        Tue, 31 May 2022 04:03:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A10A91551
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653984183;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yyZQADKZC4ReRzpE60kxchJgWQOZMoqrjCrM2arpsng=;
+        b=DGSr3bTHe3BhqCSmsCXJNLBdxrE8E6MTuxPCFvLsog1t+vbtTXR9rpIYTIfF7W5F7AfzZB
+        V3pAqYP3wfthhTFxIrp/898QkDJZHeBrGNu9Lu+KIgWYfcfWqa+BAVwn1YTpQZx7VSm45x
+        VCqXx7IUWTvbeMniMq+NNRWJ5rpktzY=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-451-NlWNu8-tOMiGcptVsx7Bzw-1; Tue, 31 May 2022 04:03:00 -0400
+X-MC-Unique: NlWNu8-tOMiGcptVsx7Bzw-1
+Received: by mail-wr1-f72.google.com with SMTP id s14-20020adfa28e000000b0020ac7532f08so1848340wra.15
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:03:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=yyZQADKZC4ReRzpE60kxchJgWQOZMoqrjCrM2arpsng=;
+        b=mCwe9L+AS0/Si/8jrVjUSVTLyB7YMoiyASekt2HmYuWFyGZl+h/XP2PfXqHrEFcmSL
+         jGLzi1pMFY/aJKAyskGpC30tQXZK+AqgB797GEZNDAxAzSZNjHjXE/popMpi+zCGuk/m
+         27dxdPlmatiRRaupsICnQfvgPRPfdjUIyS1O+WjvZaM+rPA3/PA0Q++Zq2my2Zof3L+H
+         8El3L8VTR1OBQ8a+hOnQm0LRJEb9PF717EBcl2hV0/swnsAbcbsNTkkAH9NtLEYpjvsY
+         qMnJksGFxb62nNT6VzeFS3NAlJL5xsc1jKevTvkkHMtpeJD5ZsM+erqdsQ3Y4ZEDP45/
+         Fewg==
+X-Gm-Message-State: AOAM531LHZV6+w8RGJcEfiK4AS7vdUh1UzlI+zaO9gAV1x+h+BqhC7jE
+        TPpwYB3AY7pX8ieIxVn/jEWJJruYgyGzpD6fAbSAVCdiMddSc5wd2dXWXoZvFiykn8pbfy24Fk/
+        I/Nl7tElGyT58JqibngQXBuB2
+X-Received: by 2002:a7b:ca59:0:b0:397:8c63:4bd2 with SMTP id m25-20020a7bca59000000b003978c634bd2mr18044032wml.76.1653984179706;
+        Tue, 31 May 2022 01:02:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxvK+kVHptLw/I1R4X+Hc3Su3WAjoCzlHqw32wWdDS/iEXLwXclgerYkX9VR5zibNnxhwKRgg==
+X-Received: by 2002:a7b:ca59:0:b0:397:8c63:4bd2 with SMTP id m25-20020a7bca59000000b003978c634bd2mr18044015wml.76.1653984179461;
+        Tue, 31 May 2022 01:02:59 -0700 (PDT)
+Received: from [192.168.0.2] (ip-109-43-177-214.web.vodafone.de. [109.43.177.214])
+        by smtp.gmail.com with ESMTPSA id j14-20020a05600c190e00b00397381a7ae8sm1525224wmq.30.2022.05.31.01.02.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 01:02:58 -0700 (PDT)
+Message-ID: <e39149e0-e6c4-f850-cd0f-cbdb453ee0c2@redhat.com>
+Date:   Tue, 31 May 2022 10:02:56 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4] f2fs: separate NOCoW and pinfile semantics
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 0/4] KVM: s390: selftests: Provide TAP output in tests
 Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
-References: <20220517032410.3564033-1-chao@kernel.org>
- <YoPZh+vl68IH5loV@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <YoPZh+vl68IH5loV@google.com>
+From:   Thomas Huth <thuth@redhat.com>
+To:     kvm@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+References: <20220429063724.480919-1-thuth@redhat.com>
+In-Reply-To: <20220429063724.480919-1-thuth@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/18 1:21, Jaegeuk Kim wrote:
-> On 05/17, Chao Yu wrote:
->> Pinning a file is heavy, because skipping pinned files make GC
->> running with heavy load or no effect.
->>
->> So that this patch proposes to separate nocow and pinfile semantics:
->> - NOCoW flag can only be set on regular file.
->> - NOCoW file will only trigger IPU at common writeback/flush.
->> - NOCow file will do OPU during GC.
+On 29/04/2022 08.37, Thomas Huth wrote:
+> This patch series is motivated by Shuah's suggestion here:
 > 
-> How about adding
->   - NOCow file will allocate 2MB-aligned space via fallocate.
+>   https://lore.kernel.org/kvm/d576d8f7-980f-3bc6-87ad-5a6ae45609b8@linuxfoundation.org/
 > 
-> So, it'd be same as file pinning except allowing GCs. wdyt?
-
-Well, it seems the segment-aligned allocation feature should not couple with
-pin_file or NoCow flag, what about introducing another ioctl for that? something
-like: F2FS_IOC_ALIGNMENT_PREALLOCATION w/ arg.alignment_start, arg.alignment_len,
-arg.total_len?
-
-Thanks,
-
+> Many s390x KVM selftests do not output any information about which
+> tests have been run, so it's hard to say whether a test binary
+> contains a certain sub-test or not. To improve this situation let's
+> add some TAP output via the kselftest.h interface to these tests,
+> so that it easier to understand what has been executed or not.
 > 
->>
->> This flag can satisfying the demand of:
->> 1) avoiding fragment of file's physical block
->> 2) userspace doesn't want to pin file's physical address
->>
->> After commit 5d539245cb18 ("f2fs: export FS_NOCOW_FL flag to user"),
->> Pin_file and NOCoW flags have already been twined closely. e.g.
->> once we set pinfile flag in file, nocow flag will be shown; and after
->> clearing pinfile flag, nocow flag will disappear.
->>
->> So, in order to keep backward compatibility, let use below semantics:
->>
->> f2fs_ioc_set_pin_file/f2fs_fileattr_set logic:
->> 		pinfile			nocow
->> set		set pinfile | nocow	set nocow
->> clear		clear pinfile | nocow	clear nocow
->>
->> File Behaviors:
->> w/ pinfile, w/ nocow:		use pinfile semantics
->> w/ pinfile, w/o nocow:		use pinfile semantics
->> w/o pinfile, w/ nocow:		use nocow semantics
->> w/o pinfile, w/o nocow:		no pinfile or nocow semantics
->>
->> NOCoW can also be set on directory, and it will have no effect on
->> directory, however, new files created in nocow directory will have the
->> flag set.
->>
->> Signed-off-by: Chao Yu <chao.yu@oppo.com>
->> ---
->> v4:
->> - allow IPU only for NoCowed regular inode.
->>   fs/f2fs/data.c |  3 +++
->>   fs/f2fs/f2fs.h | 13 +++++++++++--
->>   fs/f2fs/file.c | 18 +++++++++++++++++-
->>   3 files changed, 31 insertions(+), 3 deletions(-)
->>
->> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
->> index 54a7a8ad994d..42d95ac6b508 100644
->> --- a/fs/f2fs/data.c
->> +++ b/fs/f2fs/data.c
->> @@ -2498,6 +2498,9 @@ bool f2fs_should_update_inplace(struct inode *inode, struct f2fs_io_info *fio)
->>   	if (f2fs_is_pinned_file(inode))
->>   		return true;
->>   
->> +	if (S_ISREG(inode->i_mode) && F2FS_I(inode)->i_flags & F2FS_NOCOW_FL)
->> +		return true;
->> +
->>   	/* if this is cold file, we should overwrite to avoid fragmentation */
->>   	if (file_is_cold(inode))
->>   		return true;
->> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
->> index 492af5b96de1..5c67736000a7 100644
->> --- a/fs/f2fs/f2fs.h
->> +++ b/fs/f2fs/f2fs.h
->> @@ -2916,13 +2916,15 @@ static inline void f2fs_change_bit(unsigned int nr, char *addr)
->>   #define F2FS_NOCOMP_FL			0x00000400 /* Don't compress */
->>   #define F2FS_INDEX_FL			0x00001000 /* hash-indexed directory */
->>   #define F2FS_DIRSYNC_FL			0x00010000 /* dirsync behaviour (directories only) */
->> +#define F2FS_NOCOW_FL			0x00800000 /* Do not cow file */
->>   #define F2FS_PROJINHERIT_FL		0x20000000 /* Create with parents projid */
->>   #define F2FS_CASEFOLD_FL		0x40000000 /* Casefolded file */
->>   
->>   /* Flags that should be inherited by new inodes from their parent. */
->>   #define F2FS_FL_INHERITED (F2FS_SYNC_FL | F2FS_NODUMP_FL | F2FS_NOATIME_FL | \
->>   			   F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
->> -			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL)
->> +			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL | \
->> +			   F2FS_NOCOW_FL)
->>   
->>   /* Flags that are appropriate for regular files (all but dir-specific ones). */
->>   #define F2FS_REG_FLMASK		(~(F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
->> @@ -2954,9 +2956,16 @@ static inline void __mark_inode_dirty_flag(struct inode *inode,
->>   		fallthrough;
->>   	case FI_DATA_EXIST:
->>   	case FI_INLINE_DOTS:
->> -	case FI_PIN_FILE:
->>   	case FI_COMPRESS_RELEASED:
->>   		f2fs_mark_inode_dirty_sync(inode, true);
->> +		break;
->> +	case FI_PIN_FILE:
->> +		if (set)
->> +			F2FS_I(inode)->i_flags |= F2FS_NOCOW_FL;
->> +		else
->> +			F2FS_I(inode)->i_flags &= ~F2FS_NOCOW_FL;
->> +		f2fs_mark_inode_dirty_sync(inode, true);
->> +		break;
->>   	}
->>   }
->>   
->> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
->> index 216081ea8c81..9e71ce8601f9 100644
->> --- a/fs/f2fs/file.c
->> +++ b/fs/f2fs/file.c
->> @@ -1851,6 +1851,20 @@ static int f2fs_setflags_common(struct inode *inode, u32 iflags, u32 mask)
->>   	if (IS_NOQUOTA(inode))
->>   		return -EPERM;
->>   
->> +	if ((iflags ^ masked_flags) & F2FS_NOCOW_FL) {
->> +		int ret;
->> +
->> +		if (!S_ISREG(inode->i_mode) && !S_ISDIR(inode->i_mode))
->> +			return -EINVAL;
->> +		if (S_ISREG(inode->i_mode)) {
->> +			if (f2fs_should_update_outplace(inode, NULL))
->> +				return -EINVAL;
->> +			ret = f2fs_convert_inline_inode(inode);
->> +			if (ret)
->> +				return ret;
->> +		}
->> +	}
->> +
->>   	if ((iflags ^ masked_flags) & F2FS_CASEFOLD_FL) {
->>   		if (!f2fs_sb_has_casefold(F2FS_I_SB(inode)))
->>   			return -EOPNOTSUPP;
->> @@ -1926,6 +1940,7 @@ static const struct {
->>   	{ F2FS_NOCOMP_FL,	FS_NOCOMP_FL },
->>   	{ F2FS_INDEX_FL,	FS_INDEX_FL },
->>   	{ F2FS_DIRSYNC_FL,	FS_DIRSYNC_FL },
->> +	{ F2FS_NOCOW_FL,	FS_NOCOW_FL },
->>   	{ F2FS_PROJINHERIT_FL,	FS_PROJINHERIT_FL },
->>   	{ F2FS_CASEFOLD_FL,	FS_CASEFOLD_FL },
->>   };
->> @@ -1957,7 +1972,8 @@ static const struct {
->>   		FS_NOCOMP_FL |		\
->>   		FS_DIRSYNC_FL |		\
->>   		FS_PROJINHERIT_FL |	\
->> -		FS_CASEFOLD_FL)
->> +		FS_CASEFOLD_FL |	\
->> +		FS_NOCOW_FL)
->>   
->>   /* Convert f2fs on-disk i_flags to FS_IOC_{GET,SET}FLAGS flags */
->>   static inline u32 f2fs_iflags_to_fsflags(u32 iflags)
->> -- 
->> 2.25.1
+> v3:
+>   - Added comments / fixed cosmetics according to Janosch's and
+>     Janis' reviews of the v2 series
+>   - Added Reviewed-by tags from the v2 series
+> 
+> v2:
+>   - Reworked the extension checking in the first patch
+>   - Make sure to always print the TAP 13 header in the second patch
+>   - Reworked the SKIP printing in the third patch
+> 
+> Thomas Huth (4):
+>    KVM: s390: selftests: Use TAP interface in the memop test
+>    KVM: s390: selftests: Use TAP interface in the sync_regs test
+>    KVM: s390: selftests: Use TAP interface in the tprot test
+>    KVM: s390: selftests: Use TAP interface in the reset test
+> 
+>   tools/testing/selftests/kvm/s390x/memop.c     | 90 +++++++++++++++----
+>   tools/testing/selftests/kvm/s390x/resets.c    | 38 ++++++--
+>   .../selftests/kvm/s390x/sync_regs_test.c      | 87 +++++++++++++-----
+>   tools/testing/selftests/kvm/s390x/tprot.c     | 29 ++++--
+>   4 files changed, 193 insertions(+), 51 deletions(-)
+
+Ping!
+
+  Thomas
+
+

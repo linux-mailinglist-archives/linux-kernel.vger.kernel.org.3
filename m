@@ -2,78 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72008538DB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3EE538DB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245248AbiEaJ1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 05:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44276 "EHLO
+        id S245205AbiEaJ1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 05:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245190AbiEaJ10 (ORCPT
+        with ESMTP id S245193AbiEaJ12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 05:27:26 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA0A1A071;
+        Tue, 31 May 2022 05:27:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB64327CEA;
         Tue, 31 May 2022 02:27:23 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24V8hraX010094;
-        Tue, 31 May 2022 09:27:19 GMT
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24V9J6jY022955;
+        Tue, 31 May 2022 09:27:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=HwnbxJQtjXvfzk6PP+Mzw83KRVC6kLRKJ2SV/eAhNV0=;
- b=pL8r9pFPe+h3F56fAWF3vo70iPo+OCRsAd6F0P10o2JycbZrson/VuZn4qOFSBt8546s
- 0sbQmxYnMAgqfvxHa2YrVTjHIijQLv5TpJWPp5S8uoNBT1BOYtNlTNGQv+KO8NDJozhf
- fZJUPtxzDlKinQwhC5a84Rs8Kz8tDG3ZW6k8Tw4JG88P45fQH0/2ezS9bbG3HH9Dcz66
- yKfZCWIfwYKWotfeLccXBpN8fiYaXGHpPkdRhVDskd1nAyryiPWq4qiwXZ5E4pMNpaB5
- SSDRVn9Ofw+5QLvmQ/RK864EenEAGeYavpwwPYEvnviVkFdLqlBnR6FQQSQVxfhMVt8L 1A== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gd95kqk9c-1
+ bh=jAwT330NLi69IxAPcptxrl96YraD/V/EHm8msUTpmVU=;
+ b=kgZUEw/AzCYTFtkF7d7dvZeFwzP9XZ1mSOedduz+Ndx/Dbt/zUKcEhwK/kWvxhP7rtar
+ VVESbfwpU7cx34xeEF+HTCfFVKWbbOuRw1rGcwxKoKfFe0sDlUv9fldZmlP9FN1Hhcss
+ WbbV965O7jumYLJl5JFWjXvlckhMzFRg599R7y0W/Iwkgd9lUd+oYOeCCY+YXISUjTn2
+ RLmZEuhiJ0xPR4CVAijgCa+MP3tFjDrSYu3mO9TF4k4aHhm2sjVoq5eCCbB//oWu9HZl
+ vRe32L38WwnOJ24OFZy8xi3wfGdk2qLUITfb9HW4pQeoB34yxpmSVWxcUdD3frjdU8sd eg== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdg9h83sx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 09:27:18 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24V9L624003377;
-        Tue, 31 May 2022 09:27:16 GMT
+        Tue, 31 May 2022 09:27:19 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24V9MkXA022783;
+        Tue, 31 May 2022 09:27:17 GMT
 Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 3gbcc6awj6-1
+        by ppma06fra.de.ibm.com with ESMTP id 3gbcb7jwyh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 09:27:16 +0000
+        Tue, 31 May 2022 09:27:17 +0000
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24V9RDBS41091394
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24V9REeI55443726
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 May 2022 09:27:13 GMT
+        Tue, 31 May 2022 09:27:14 GMT
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DA278A405B;
-        Tue, 31 May 2022 09:27:12 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id D4B6EA4054;
+        Tue, 31 May 2022 09:27:13 +0000 (GMT)
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 88308A4054;
-        Tue, 31 May 2022 09:27:12 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 838B0A405B;
+        Tue, 31 May 2022 09:27:13 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 31 May 2022 09:27:12 +0000 (GMT)
+        Tue, 31 May 2022 09:27:13 +0000 (GMT)
 From:   Thomas Richter <tmricht@linux.ibm.com>
 To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         acme@kernel.org
 Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
         hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
-Subject: [PATCH 4/7] perf list: Update event description for IBM z14 to latest level
-Date:   Tue, 31 May 2022 11:27:03 +0200
-Message-Id: <20220531092706.1931503-4-tmricht@linux.ibm.com>
+Subject: [PATCH 5/7] perf list: Update event description for IBM z15 to latest level
+Date:   Tue, 31 May 2022 11:27:04 +0200
+Message-Id: <20220531092706.1931503-5-tmricht@linux.ibm.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220531092706.1931503-1-tmricht@linux.ibm.com>
 References: <20220531092706.1931503-1-tmricht@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: VR7cz9EuaWIdvgnXQEXXicA3J7rISjMN
-X-Proofpoint-ORIG-GUID: VR7cz9EuaWIdvgnXQEXXicA3J7rISjMN
+X-Proofpoint-ORIG-GUID: x0_00ApdQmOEw9GdlwySKL4TKMF9VuX9
+X-Proofpoint-GUID: x0_00ApdQmOEw9GdlwySKL4TKMF9VuX9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-05-31_03,2022-05-30_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- spamscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015
- mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 clxscore=1015
+ priorityscore=1501 suspectscore=0 phishscore=0 impostorscore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2204290000 definitions=main-2205310047
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
@@ -84,36 +84,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update IBM z14 event counter description to the latest level
+Update IBM z15 event counter description to the latest level
 as described in the documents
 1. SA23-2260-07:
    "The Load-Program-Parameter and the CPU-Measurement Facilities."
    released on May, 2022
 for the following counter sets:
-  * Basic counter set
-  * Problem counter set
-  * Crypto counter set
+   * Basic counter set
+   * Problem counter set
+   * Crypto counter set
 
 2. SA23-2261-07:
    "The CPU-Measurement Facility Extended Counters Definition
-    for z10, z196/z114, zEC12/zBC12, z13/z13s, z14, z15 and z16"
-    released on April 29, 2022
+   for z10, z196/z114, zEC12/zBC12, z13/z13s, z14, z15 and z16"
+   released on April 29, 2022
 for the following counter sets:
-  * Extended counter set
-  * MT-Diagnostic counter set
+   * Extended counter set
+   * MT-Diagnostic counter set
 
 Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
 Acked-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
 ---
- .../pmu-events/arch/s390/cf_z14/basic.json    |  32 +++---
- .../pmu-events/arch/s390/cf_z14/crypto.json   |  64 +++++------
- .../pmu-events/arch/s390/cf_z14/extended.json | 102 +++++++++---------
- 3 files changed, 99 insertions(+), 99 deletions(-)
+ .../pmu-events/arch/s390/cf_z15/basic.json    |  32 ++---
+ .../pmu-events/arch/s390/cf_z15/crypto.json   | 114 ------------------
+ .../pmu-events/arch/s390/cf_z15/crypto6.json  | 112 +++++++++++++++++
+ .../pmu-events/arch/s390/cf_z15/extended.json | 108 ++++++++---------
+ 4 files changed, 182 insertions(+), 184 deletions(-)
+ delete mode 100644 tools/perf/pmu-events/arch/s390/cf_z15/crypto.json
 
-diff --git a/tools/perf/pmu-events/arch/s390/cf_z14/basic.json b/tools/perf/pmu-events/arch/s390/cf_z14/basic.json
+diff --git a/tools/perf/pmu-events/arch/s390/cf_z15/basic.json b/tools/perf/pmu-events/arch/s390/cf_z15/basic.json
 index fc762e9f1d6e..1023d47028ce 100644
---- a/tools/perf/pmu-events/arch/s390/cf_z14/basic.json
-+++ b/tools/perf/pmu-events/arch/s390/cf_z14/basic.json
+--- a/tools/perf/pmu-events/arch/s390/cf_z15/basic.json
++++ b/tools/perf/pmu-events/arch/s390/cf_z15/basic.json
 @@ -3,56 +3,56 @@
  		"Unit": "CPU-M-CF",
  		"EventCode": "0",
@@ -187,159 +189,251 @@ index fc762e9f1d6e..1023d47028ce 100644
 +		"PublicDescription": "This counter counts the total number of instructions executed by the CPU while in the problem state."
  	}
  ]
-diff --git a/tools/perf/pmu-events/arch/s390/cf_z14/crypto.json b/tools/perf/pmu-events/arch/s390/cf_z14/crypto.json
-index 3f28007d3892..a8d391ddeb8c 100644
---- a/tools/perf/pmu-events/arch/s390/cf_z14/crypto.json
-+++ b/tools/perf/pmu-events/arch/s390/cf_z14/crypto.json
-@@ -3,112 +3,112 @@
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "64",
- 		"EventName": "PRNG_FUNCTIONS",
+diff --git a/tools/perf/pmu-events/arch/s390/cf_z15/crypto.json b/tools/perf/pmu-events/arch/s390/cf_z15/crypto.json
+deleted file mode 100644
+index 3f28007d3892..000000000000
+--- a/tools/perf/pmu-events/arch/s390/cf_z15/crypto.json
++++ /dev/null
+@@ -1,114 +0,0 @@
+-[
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "64",
+-		"EventName": "PRNG_FUNCTIONS",
 -		"BriefDescription": "PRNG Functions",
 -		"PublicDescription": "Total number of the PRNG functions issued by the CPU"
-+		"BriefDescription": "PRNG Function Count",
-+		"PublicDescription": "This counter counts the total number of the pseudorandom-number-generation functions issued by the CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "65",
- 		"EventName": "PRNG_CYCLES",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "65",
+-		"EventName": "PRNG_CYCLES",
 -		"BriefDescription": "PRNG Cycles",
 -		"PublicDescription": "Total number of CPU cycles when the DEA/AES coprocessor is busy performing PRNG functions issued by the CPU"
-+		"BriefDescription": "PRNG Cycle Count",
-+		"PublicDescription": "This counter counts the total number of CPU cycles when the DEA/AES/SHA coprocessor is busy performing the pseudorandom- number-generation functions issued by the CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "66",
- 		"EventName": "PRNG_BLOCKED_FUNCTIONS",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "66",
+-		"EventName": "PRNG_BLOCKED_FUNCTIONS",
 -		"BriefDescription": "PRNG Blocked Functions",
 -		"PublicDescription": "Total number of the PRNG functions that are issued by the CPU and are blocked because the DEA/AES coprocessor is busy performing a function issued by another CPU"
-+		"BriefDescription": "PRNG Blocked Function Count",
-+		"PublicDescription": "This counter counts the total number of the pseudorandom-number-generation functions that are issued by the CPU and are blocked because the DEA/AES/SHA coprocessor is busy performing a function issued by another CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "67",
- 		"EventName": "PRNG_BLOCKED_CYCLES",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "67",
+-		"EventName": "PRNG_BLOCKED_CYCLES",
 -		"BriefDescription": "PRNG Blocked Cycles",
 -		"PublicDescription": "Total number of CPU cycles blocked for the PRNG functions issued by the CPU because the DEA/AES coprocessor is busy performing a function issued by another CPU"
-+		"BriefDescription": "PRNG Blocked Cycle Count",
-+		"PublicDescription": "This counter counts the total number of CPU cycles blocked for the pseudorandom-number-generation functions issued by the CPU because the DEA/AES/SHA coprocessor is busy performing a function issued by another CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "68",
- 		"EventName": "SHA_FUNCTIONS",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "68",
+-		"EventName": "SHA_FUNCTIONS",
 -		"BriefDescription": "SHA Functions",
 -		"PublicDescription": "Total number of SHA functions issued by the CPU"
-+		"BriefDescription": "SHA Function Count",
-+		"PublicDescription": "This counter counts the total number of the SHA functions issued by the CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "69",
- 		"EventName": "SHA_CYCLES",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "69",
+-		"EventName": "SHA_CYCLES",
 -		"BriefDescription": "SHA Cycles",
 -		"PublicDescription": "Total number of CPU cycles when the SHA coprocessor is busy performing the SHA functions issued by the CPU"
-+		"BriefDescription": "SHA Cycle Count",
-+		"PublicDescription": "This counter counts the total number of CPU cycles when the SHA coprocessor is busy performing the SHA functions issued by the CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "70",
- 		"EventName": "SHA_BLOCKED_FUNCTIONS",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "70",
+-		"EventName": "SHA_BLOCKED_FUNCTIONS",
 -		"BriefDescription": "SHA Blocked Functions",
 -		"PublicDescription": "Total number of the SHA functions that are issued by the CPU and are blocked because the SHA coprocessor is busy performing a function issued by another CPU"
-+		"BriefDescription": "SHA Blocked Function Count",
-+		"PublicDescription": "This counter counts the total number of the SHA functions that are issued by the CPU and are blocked because the SHA coprocessor is busy performing a function issued by another CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "71",
- 		"EventName": "SHA_BLOCKED_CYCLES",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "71",
+-		"EventName": "SHA_BLOCKED_CYCLES",
 -		"BriefDescription": "SHA Bloced Cycles",
 -		"PublicDescription": "Total number of CPU cycles blocked for the SHA functions issued by the CPU because the SHA coprocessor is busy performing a function issued by another CPU"
-+		"BriefDescription": "SHA Blocked Cycle Count",
-+		"PublicDescription": "This counter counts the total number of CPU cycles blocked for the SHA functions issued by the CPU because the SHA coprocessor is busy performing a function issued by another CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "72",
- 		"EventName": "DEA_FUNCTIONS",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "72",
+-		"EventName": "DEA_FUNCTIONS",
 -		"BriefDescription": "DEA Functions",
 -		"PublicDescription": "Total number of the DEA functions issued by the CPU"
-+		"BriefDescription": "DEA Function Count",
-+		"PublicDescription": "This counter counts the total number of the DEA functions issued by the CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "73",
- 		"EventName": "DEA_CYCLES",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "73",
+-		"EventName": "DEA_CYCLES",
 -		"BriefDescription": "DEA Cycles",
 -		"PublicDescription": "Total number of CPU cycles when the DEA/AES coprocessor is busy performing the DEA functions issued by the CPU"
-+		"BriefDescription": "DEA Cycle Count",
-+		"PublicDescription": "This counter counts the total number of CPU cycles when the DEA/AES coprocessor is busy performing the DEA functions issued by the CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "74",
- 		"EventName": "DEA_BLOCKED_FUNCTIONS",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "74",
+-		"EventName": "DEA_BLOCKED_FUNCTIONS",
 -		"BriefDescription": "DEA Blocked Functions",
 -		"PublicDescription": "Total number of the DEA functions that are issued by the CPU and are blocked because the DEA/AES coprocessor is busy performing a function issued by another CPU"
-+		"BriefDescription": "DEA Blocked Function Count",
-+		"PublicDescription": "This counter counts the total number of the DEA functions that are issued by the CPU and are blocked because the DEA/AES coprocessor is busy performing a function issued by another CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "75",
- 		"EventName": "DEA_BLOCKED_CYCLES",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "75",
+-		"EventName": "DEA_BLOCKED_CYCLES",
 -		"BriefDescription": "DEA Blocked Cycles",
 -		"PublicDescription": "Total number of CPU cycles blocked for the DEA functions issued by the CPU because the DEA/AES coprocessor is busy performing a function issued by another CPU"
-+		"BriefDescription": "DEA Blocked Cycle Count",
-+		"PublicDescription": "This counter counts the total number of CPU cycles blocked for the DEA functions issued by the CPU because the DEA/AES coprocessor is busy performing a function issued by another CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "76",
- 		"EventName": "AES_FUNCTIONS",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "76",
+-		"EventName": "AES_FUNCTIONS",
 -		"BriefDescription": "AES Functions",
 -		"PublicDescription": "Total number of AES functions issued by the CPU"
-+		"BriefDescription": "AES Function Count",
-+		"PublicDescription": "This counter counts the total number of the AES functions issued by the CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "77",
- 		"EventName": "AES_CYCLES",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "77",
+-		"EventName": "AES_CYCLES",
 -		"BriefDescription": "AES Cycles",
 -		"PublicDescription": "Total number of CPU cycles when the DEA/AES coprocessor is busy performing the AES functions issued by the CPU"
-+		"BriefDescription": "AES Cycle Count",
-+		"PublicDescription": "This counter counts the total number of CPU cycles when the DEA/AES coprocessor is busy performing the AES functions issued by the CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "78",
- 		"EventName": "AES_BLOCKED_FUNCTIONS",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "78",
+-		"EventName": "AES_BLOCKED_FUNCTIONS",
 -		"BriefDescription": "AES Blocked Functions",
 -		"PublicDescription": "Total number of AES functions that are issued by the CPU and are blocked because the DEA/AES coprocessor is busy performing a function issued by another CPU"
-+		"BriefDescription": "AES Blocked Function Count",
-+		"PublicDescription": "This counter counts the total number of the AES functions that are issued by the CPU and are blocked because the DEA/AES coprocessor is busy performing a function issued by another CPU."
- 	},
- 	{
- 		"Unit": "CPU-M-CF",
- 		"EventCode": "79",
- 		"EventName": "AES_BLOCKED_CYCLES",
+-	},
+-	{
+-		"Unit": "CPU-M-CF",
+-		"EventCode": "79",
+-		"EventName": "AES_BLOCKED_CYCLES",
 -		"BriefDescription": "AES Blocked Cycles",
 -		"PublicDescription": "Total number of CPU cycles blocked for the AES functions issued by the CPU because the DEA/AES coprocessor is busy performing a function issued by another CPU"
+-	}
+-]
+diff --git a/tools/perf/pmu-events/arch/s390/cf_z15/crypto6.json b/tools/perf/pmu-events/arch/s390/cf_z15/crypto6.json
+index ad79189050a0..8b4380b8e489 100644
+--- a/tools/perf/pmu-events/arch/s390/cf_z15/crypto6.json
++++ b/tools/perf/pmu-events/arch/s390/cf_z15/crypto6.json
+@@ -1,4 +1,116 @@
+ [
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "64",
++		"EventName": "PRNG_FUNCTIONS",
++		"BriefDescription": "PRNG Function Count",
++		"PublicDescription": "This counter counts the total number of the pseudorandom-number-generation functions issued by the CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "65",
++		"EventName": "PRNG_CYCLES",
++		"BriefDescription": "PRNG Cycle Count",
++		"PublicDescription": "This counter counts the total number of CPU cycles when the DEA/AES/SHA coprocessor is busy performing the pseudorandom- number-generation functions issued by the CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "66",
++		"EventName": "PRNG_BLOCKED_FUNCTIONS",
++		"BriefDescription": "PRNG Blocked Function Count",
++		"PublicDescription": "This counter counts the total number of the pseudorandom-number-generation functions that are issued by the CPU and are blocked because the DEA/AES/SHA coprocessor is busy performing a function issued by another CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "67",
++		"EventName": "PRNG_BLOCKED_CYCLES",
++		"BriefDescription": "PRNG Blocked Cycle Count",
++		"PublicDescription": "This counter counts the total number of CPU cycles blocked for the pseudorandom-number-generation functions issued by the CPU because the DEA/AES/SHA coprocessor is busy performing a function issued by another CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "68",
++		"EventName": "SHA_FUNCTIONS",
++		"BriefDescription": "SHA Function Count",
++		"PublicDescription": "This counter counts the total number of the SHA functions issued by the CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "69",
++		"EventName": "SHA_CYCLES",
++		"BriefDescription": "SHA Cycle Count",
++		"PublicDescription": "This counter counts the total number of CPU cycles when the SHA coprocessor is busy performing the SHA functions issued by the CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "70",
++		"EventName": "SHA_BLOCKED_FUNCTIONS",
++		"BriefDescription": "SHA Blocked Function Count",
++		"PublicDescription": "This counter counts the total number of the SHA functions that are issued by the CPU and are blocked because the SHA coprocessor is busy performing a function issued by another CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "71",
++		"EventName": "SHA_BLOCKED_CYCLES",
++		"BriefDescription": "SHA Blocked Cycle Count",
++		"PublicDescription": "This counter counts the total number of CPU cycles blocked for the SHA functions issued by the CPU because the SHA coprocessor is busy performing a function issued by another CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "72",
++		"EventName": "DEA_FUNCTIONS",
++		"BriefDescription": "DEA Function Count",
++		"PublicDescription": "This counter counts the total number of the DEA functions issued by the CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "73",
++		"EventName": "DEA_CYCLES",
++		"BriefDescription": "DEA Cycle Count",
++		"PublicDescription": "This counter counts the total number of CPU cycles when the DEA/AES coprocessor is busy performing the DEA functions issued by the CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "74",
++		"EventName": "DEA_BLOCKED_FUNCTIONS",
++		"BriefDescription": "DEA Blocked Function Count",
++		"PublicDescription": "This counter counts the total number of the DEA functions that are issued by the CPU and are blocked because the DEA/AES coprocessor is busy performing a function issued by another CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "75",
++		"EventName": "DEA_BLOCKED_CYCLES",
++		"BriefDescription": "DEA Blocked Cycle Count",
++		"PublicDescription": "This counter counts the total number of CPU cycles blocked for the DEA functions issued by the CPU because the DEA/AES coprocessor is busy performing a function issued by another CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "76",
++		"EventName": "AES_FUNCTIONS",
++		"BriefDescription": "AES Function Count",
++		"PublicDescription": "This counter counts the total number of the AES functions issued by the CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "77",
++		"EventName": "AES_CYCLES",
++		"BriefDescription": "AES Cycle Count",
++		"PublicDescription": "This counter counts the total number of CPU cycles when the DEA/AES coprocessor is busy performing the AES functions issued by the CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "78",
++		"EventName": "AES_BLOCKED_FUNCTIONS",
++		"BriefDescription": "AES Blocked Function Count",
++		"PublicDescription": "This counter counts the total number of the AES functions that are issued by the CPU and are blocked because the DEA/AES coprocessor is busy performing a function issued by another CPU."
++	},
++	{
++		"Unit": "CPU-M-CF",
++		"EventCode": "79",
++		"EventName": "AES_BLOCKED_CYCLES",
 +		"BriefDescription": "AES Blocked Cycle Count",
 +		"PublicDescription": "This counter counts the total number of CPU cycles blocked for the AES functions issued by the CPU because the DEA/AES coprocessor is busy performing a function issued by another CPU."
- 	}
- ]
-diff --git a/tools/perf/pmu-events/arch/s390/cf_z14/extended.json b/tools/perf/pmu-events/arch/s390/cf_z14/extended.json
-index 4942b20a1ea1..ad40cc4f9727 100644
---- a/tools/perf/pmu-events/arch/s390/cf_z14/extended.json
-+++ b/tools/perf/pmu-events/arch/s390/cf_z14/extended.json
++	},
+ 	{
+ 		"Unit": "CPU-M-CF",
+ 		"EventCode": "80",
+diff --git a/tools/perf/pmu-events/arch/s390/cf_z15/extended.json b/tools/perf/pmu-events/arch/s390/cf_z15/extended.json
+index 8ac61f8f286b..9c691c391086 100644
+--- a/tools/perf/pmu-events/arch/s390/cf_z15/extended.json
++++ b/tools/perf/pmu-events/arch/s390/cf_z15/extended.json
 @@ -4,357 +4,357 @@
  		"EventCode": "128",
  		"EventName": "L1D_RO_EXCL_WRITES",
@@ -368,8 +462,8 @@ index 4942b20a1ea1..ad40cc4f9727 100644
  		"EventCode": "131",
  		"EventName": "DTLB2_HPAGE_WRITES",
  		"BriefDescription": "DTLB2 One-Megabyte Page Writes",
--		"PublicDescription": "A translation entry was written into the Combined Region and Segment Table Entry array in the Level-2 TLB for a one-megabyte page or a Last Host Translation was done"
-+		"PublicDescription": "A translation entry was written into the Combined Region and Segment Table Entry array in the Level-2 TLB for a one-megabyte page or a Last Host Translation was done."
+-		"PublicDescription": "A translation entry was written into the Combined Region and Segment Table Entry array in the Level-2 TLB for a one-megabyte page"
++		"PublicDescription": "A translation entry was written into the Combined Region and Segment Table Entry array in the Level-2 TLB for a one-megabyte page."
  	},
  	{
  		"Unit": "CPU-M-CF",
@@ -746,6 +840,25 @@ index 4942b20a1ea1..ad40cc4f9727 100644
  		"BriefDescription": "Aborted transactions in constrained TX mode using special completion logic",
 -		"PublicDescription": "A transaction abort has occurred in a constrained transactional-execution mode and the CPU is using special logic to allow the transaction to complete"
 +		"PublicDescription": "A transaction abort has occurred in a constrained transactional-execution mode and the CPU is using special logic to allow the transaction to complete."
+ 	},
+ 	{
+ 		"Unit": "CPU-M-CF",
+@@ -374,15 +374,15 @@
+ 		"Unit": "CPU-M-CF",
+ 		"EventCode": "264",
+ 		"EventName": "DFLT_CC",
+-		"BriefDescription": "Increments by one for every DEFLATE CONVERSION CALL instruction executed",
++		"BriefDescription": "Increments DEFLATE CONVERSION CALL",
+ 		"PublicDescription": "Increments by one for every DEFLATE CONVERSION CALL instruction executed"
+ 	},
+ 	{
+ 		"Unit": "CPU-M-CF",
+ 		"EventCode": "265",
+ 		"EventName": "DFLT_CCFINISH",
+-		"BriefDescription": "Increments by one for every DEFLATE CONVERSION CALL instruction executed that ended in Condition Codes 0, 1 or 2",
+-		"PublicDescription": "Increments by one for every DEFLATE CONVERSION CALL instruction executed that ended in Condition Codes 0, 1 or 2"
++		"BriefDescription": "Increments completed DEFLATE CONVERSION CALL",
++		"PublicDescription": " Increments by one for every DEFLATE CONVERSION CALL instruction executed that ended in Condition Codes 0, 1 or 2 complete. "
  	},
  	{
  		"Unit": "CPU-M-CF",

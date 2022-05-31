@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6E9538B12
+	by mail.lfdr.de (Postfix) with ESMTP id 73141538B11
 	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 07:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244150AbiEaFwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 01:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
+        id S244173AbiEaFwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 01:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244090AbiEaFwe (ORCPT
+        with ESMTP id S244098AbiEaFwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 01:52:34 -0400
+        Tue, 31 May 2022 01:52:35 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAA51CFFE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1038619FAF;
         Mon, 30 May 2022 22:52:32 -0700 (PDT)
-X-UUID: a4fe502c9df049b7b5ab10d5c2dcdf39-20220531
+X-UUID: d1f65c8a3ba94c8c860910c931363db9-20220531
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:6d60efb2-9d11-427f-a828-bb6eb8f608c4,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:2a19b09,CLOUDID:1ac55714-f88c-475e-badf-d9ee54230b8f,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+X-CID-O-INFO: VERSION:1.1.5,REQID:f901a3ec-ed3e-41e6-9147-610cb9643b8e,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:fef0ee89-32d7-4fc0-b2ef-8776ac194f8f,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
         ,QS:0,BEC:nil
-X-UUID: a4fe502c9df049b7b5ab10d5c2dcdf39-20220531
+X-UUID: d1f65c8a3ba94c8c860910c931363db9-20220531
 Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 509384947; Tue, 31 May 2022 13:52:27 +0800
+        with ESMTP id 240645898; Tue, 31 May 2022 13:52:27 +0800
 Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
  mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
@@ -65,10 +65,12 @@ CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         <river.cheng@mediatek.com>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         <cellopoint.kai@gmail.com>
-Subject: [PATCH v19 0/6] Add mutex support for MDP
-Date:   Tue, 31 May 2022 13:52:18 +0800
-Message-ID: <20220531055224.19280-1-moudy.ho@mediatek.com>
+Subject: [PATCH v19 1/6] soc: mediatek: mutex: add common interface for modules setting
+Date:   Tue, 31 May 2022 13:52:19 +0800
+Message-ID: <20220531055224.19280-2-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220531055224.19280-1-moudy.ho@mediatek.com>
+References: <20220531055224.19280-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -81,97 +83,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change since V18:
-- Rebase on v5.19-rc1
-- Remove unnecessary functions:
-  "mtk_mutex_set_mod", "mtk_mutex_clear_mod",
-  "mtk_mutex_set_sof" and "mtk_mutex_clear_sof", and export
-  "mtk_mutex_write_mod" and "mtk_mutex_write_sof" to
-  set MOD/SOF directly.
-- Remove unnecessary SOF tables and add new enumerations of SOF instead.
-- Adjust the error checking for CMDQ operations.
+In order to allow multiple modules to operate MUTEX hardware through
+a common interfrace, two flexible indexes "mtk_mutex_mod_index" and
+"mtk_mutex_sof_index" need to be added to replace original component
+ID so that like DDP and MDP can add their own MOD table or SOF
+settings independently.
 
-Change since V17:
-- Rebase on v5.18-rc6
-- Fix undeclared identifier causing compilation to fail.
+In addition, 2 generic interface "mtk_mutex_write_mod" and
+"mtk_mutex_write_sof" have been added, which is expected to replace
+the "mtk_mutex_add_comp" and "mtk_mutex_remove_comp" pair originally
+dedicated to DDP in the future.
 
-Change since V16:
-- Rebase on v5.18-rc4
-- Fix misplacement of definition "CONFIG_MTK_CMDQ" which
-  caused compilation error when CMD is not supported.
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+---
+ drivers/soc/mediatek/mtk-mutex.c       | 59 ++++++++++++++++++++++++++
+ include/linux/soc/mediatek/mtk-mutex.h | 26 ++++++++++++
+ 2 files changed, 85 insertions(+)
 
-Change since V15:
-- Rebase on linux-next.
-- As suggested by Angelo, split common parts into independent functions to
-  make functions more concise.
-- Based on safety considerations, increase the returned error number and
-  message to facilitate error handling.
-
-Change since V14:
-- Rebase on linux-next.
-- Add new SOF and MOD table for general interface to integrate the requirement
-  of different modules.
-- Remove unnecessary MOD structure.
-- By Rob Herring's suggestion, revise the description of
-  "mediatek,gce-client-reg" in MUTEX dt-bindings.
-- Delete the redundant definition of MTK_MUTEX_ENABLE and modify corresponding
-  function.
-
-Change since V13:
-- Rebase on linux-next tag:next-20220316
-- Adjust the MUTEX MOD table structure and corresponding functions.
-- Adjust the definition style about 8183 MDP MOD.
-- Remove redundant definitions and enumerations.
-- Adjust the CMDQ operation in MUTEX to be backward compatible
-
-Change since V12:
-- Rebase on linux-next
-- Remove ISP related settings in MMSYS
-- Removed CMDQ operations previously used by MDP in MMSYS
-- Move mediatek MUTEX dt-binding path
-- Add additional property in MUTEX for CMDQ operations
-
-Change since V11:
-- Rebase on v5.17-rc6.
-
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.17-next/soc&id=5f9b5b757e44de47ebdc116c14b90e3cc8bc7acb
-[2]: https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.17-next/soc&id=831785f0e5b919c29e1bc5f9a74e9ebd38289e24
-[3]: https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.17-next/soc&id=15f1768365aed810826a61fef4a744437aa5b426
-
-Change since v10:
-- For some ISP application scenarios, such as preview and recording
-  at the same time.
-  The routing table needs to be discarded, and the calculation result
-  on the SCP side is used to write a suitable mux setting for
-  1 input and 2 output.
-- Adjust the GCE client register parsing method to avoid redundant warning logs.
-
-Change since v9:
-- Add API for MDP getting mutex mod.
-
-Hi,
-
-This patch splits mmsys and mutex settings from Media Data Path 3 (MDP3),
-and original mailling list list below:
-https://patchwork.kernel.org/project/linux-mediatek/cover/20211201095031.31606-1-moudy.ho@mediatek.com/
-Corresponding settings and interfaces are added for MDP operation in the
-mmsys and mutex drivers, which increases the independence of the modules
-
-Moudy Ho (6):
-  soc: mediatek: mutex: add common interface for modules setting
-  soc: mediatek: mutex: add 8183 MUTEX MOD settings for MDP
-  dt-bindings: soc: mediatek: move out common module from display folder
-  dt-bindings: soc: mediatek: add gce-client-reg for MUTEX
-  dts: arm64: mt8183: add GCE client property for Mediatek MUTEX
-  soc: mediatek: mutex: add functions that operate registers by CMDQ
-
- .../mediatek/mediatek,mutex.yaml              |  14 +-
- arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   1 +
- drivers/soc/mediatek/mtk-mutex.c              | 125 +++++++++++++++++-
- include/linux/soc/mediatek/mtk-mutex.h        |  28 ++++
- 4 files changed, 166 insertions(+), 2 deletions(-)
- rename Documentation/devicetree/bindings/{display => soc}/mediatek/mediatek,mutex.yaml (81%)
-
+diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+index 981d56967e7a..a3b054b33826 100644
+--- a/drivers/soc/mediatek/mtk-mutex.c
++++ b/drivers/soc/mediatek/mtk-mutex.c
+@@ -185,6 +185,7 @@ struct mtk_mutex_data {
+ 	const unsigned int *mutex_sof;
+ 	const unsigned int mutex_mod_reg;
+ 	const unsigned int mutex_sof_reg;
++	const unsigned int *mutex_table_mod;
+ 	const bool no_clk;
+ };
+ 
+@@ -606,6 +607,64 @@ void mtk_mutex_release(struct mtk_mutex *mutex)
+ }
+ EXPORT_SYMBOL_GPL(mtk_mutex_release);
+ 
++int mtk_mutex_write_mod(struct mtk_mutex *mutex,
++			enum mtk_mutex_mod_index idx, bool clear)
++{
++	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
++						 mutex[mutex->id]);
++	unsigned int reg;
++	unsigned int offset;
++
++	WARN_ON(&mtx->mutex[mutex->id] != mutex);
++
++	if (idx < MUTEX_MOD_IDX_MDP_RDMA0 ||
++	    idx >= MUTEX_MOD_IDX_MAX) {
++		dev_err(mtx->dev, "Not supported MOD table index : %d", idx);
++		return -EINVAL;
++	}
++
++	offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg,
++				    mutex->id);
++	reg = readl_relaxed(mtx->regs + offset);
++
++	if (clear)
++		reg &= ~BIT(mtx->data->mutex_table_mod[idx]);
++	else
++		reg |= BIT(mtx->data->mutex_table_mod[idx]);
++
++	writel_relaxed(reg, mtx->regs + offset);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(mtk_mutex_write_mod);
++
++int mtk_mutex_write_sof(struct mtk_mutex *mutex,
++			enum mtk_mutex_sof_index idx, bool clear)
++{
++	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
++						 mutex[mutex->id]);
++	unsigned int val;
++
++	WARN_ON(&mtx->mutex[mutex->id] != mutex);
++
++	if (idx < MUTEX_SOF_IDX_SINGLE_MODE ||
++	    idx >= MUTEX_SOF_IDX_MAX) {
++		dev_err(mtx->dev, "Not supported SOF index : %d", idx);
++		return -EINVAL;
++	}
++
++	if (clear)
++		val = MUTEX_SOF_SINGLE_MODE;
++	else
++		val = idx;
++
++	writel_relaxed(val, mtx->regs +
++		       DISP_REG_MUTEX_SOF(mtx->data->mutex_sof_reg, mutex->id));
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(mtk_mutex_write_sof);
++
+ static int mtk_mutex_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+diff --git a/include/linux/soc/mediatek/mtk-mutex.h b/include/linux/soc/mediatek/mtk-mutex.h
+index 6fe4ffbde290..829231523e3f 100644
+--- a/include/linux/soc/mediatek/mtk-mutex.h
++++ b/include/linux/soc/mediatek/mtk-mutex.h
+@@ -10,6 +10,26 @@ struct regmap;
+ struct device;
+ struct mtk_mutex;
+ 
++enum mtk_mutex_mod_index {
++	/* MDP table index */
++	MUTEX_MOD_IDX_MDP_RDMA0,
++	MUTEX_MOD_IDX_MDP_RSZ0,
++	MUTEX_MOD_IDX_MDP_RSZ1,
++	MUTEX_MOD_IDX_MDP_TDSHP0,
++	MUTEX_MOD_IDX_MDP_WROT0,
++	MUTEX_MOD_IDX_MDP_WDMA,
++	MUTEX_MOD_IDX_MDP_AAL0,
++	MUTEX_MOD_IDX_MDP_CCORR0,
++
++	MUTEX_MOD_IDX_MAX		/* ALWAYS keep at the end */
++};
++
++enum mtk_mutex_sof_index {
++	MUTEX_SOF_IDX_SINGLE_MODE,
++
++	MUTEX_SOF_IDX_MAX		/* ALWAYS keep at the end */
++};
++
+ struct mtk_mutex *mtk_mutex_get(struct device *dev);
+ int mtk_mutex_prepare(struct mtk_mutex *mutex);
+ void mtk_mutex_add_comp(struct mtk_mutex *mutex,
+@@ -22,5 +42,11 @@ void mtk_mutex_unprepare(struct mtk_mutex *mutex);
+ void mtk_mutex_put(struct mtk_mutex *mutex);
+ void mtk_mutex_acquire(struct mtk_mutex *mutex);
+ void mtk_mutex_release(struct mtk_mutex *mutex);
++int mtk_mutex_write_mod(struct mtk_mutex *mutex,
++			enum mtk_mutex_mod_index idx,
++			bool clear);
++int mtk_mutex_write_sof(struct mtk_mutex *mutex,
++			enum mtk_mutex_sof_index idx,
++			bool clear);
+ 
+ #endif /* MTK_MUTEX_H */
 -- 
 2.18.0
 

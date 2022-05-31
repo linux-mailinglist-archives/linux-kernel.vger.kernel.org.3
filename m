@@ -2,70 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAF95399D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9EB5399D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345178AbiEaWv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 18:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
+        id S1348584AbiEaWwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 18:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235623AbiEaWvW (ORCPT
+        with ESMTP id S1347985AbiEaWwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 18:51:22 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39821A006E
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 15:51:21 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id i185so163432pge.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 15:51:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ObltlVOkUE2OJx3EUGLxpwIeNHmLofE/Hbbs9yC2dVI=;
-        b=Srv1f/KQO53oV2Tdw4Dlb/nPN3mc/93OBmsbGIWKG20D9iH/qqIWPLhb2EuaUZtJRi
-         e8CKPb8b7fsheC3U2bWW3MVBsov/GIJalDF/qPgYQOu7L9A8yrYZpfWVA3mNwS7wl6cn
-         PfWQykclGNYr8vAYQ1yIvaYi5YwBVJJQvU8qo=
+        Tue, 31 May 2022 18:52:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CADDD2AE1B
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 15:52:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654037532;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9q9k+C5RGQU4qKgmWFkXDcgQ25M6UKH1DBXC6+yr110=;
+        b=E8E9R7zmtGGFSoCgN1WEBfttrIFe142RHCIs3N/J7k/laNcpKXQcjeOVw8WsgBIc56QPhH
+        NPE9SExht5T5qy3SHxf0Qgo90E2oHpsNZXJiNnKmvg5Yu3GItknp9kJ78Nd7R0PzucS3Li
+        yyslTAj5nF5PajyfZ3LAuuD8bekEiwI=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-127-mSd_iKPnO5CXyy5FFMsT8Q-1; Tue, 31 May 2022 18:52:11 -0400
+X-MC-Unique: mSd_iKPnO5CXyy5FFMsT8Q-1
+Received: by mail-il1-f199.google.com with SMTP id j18-20020a056e02219200b002d3aff22b4cso21835ila.9
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 15:52:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ObltlVOkUE2OJx3EUGLxpwIeNHmLofE/Hbbs9yC2dVI=;
-        b=Z+l7oA9Bt4nZWHd00SrK6OsH3XFKf8oQDwjcNRWGbxdl780CrLXNrgIFS3LBVpJEgY
-         3cUZ8wxgoZAIxuwBK+8Gzot0cL1fFBAlvOmwePjSvBiI/KvKnW89UwsBwUkN7uIlGdU2
-         pvt/uBDQtRV9zIDojFOIJTxrAm88BK2dYAK8JOUL6oF3t9rtz+ReowSjxwFgJ3N8rvkQ
-         Zd2TC3EYOxhklbc9KAUperz8VB2Z8g2fdlWdO1uEtAaaFl5HnBBs85NV+yFmhds8h9Lz
-         WbpyHJBWR5vsyzDGVwhO678otu2JZ/+XiEkHE8NqeDIg7q6hafQrSCOIbju3UsiMd6HM
-         uoZA==
-X-Gm-Message-State: AOAM533Sjek0+AdB2fassBlvZrmgg96TK6rj176BAOuWNFvy8PW4oBk9
-        pQOOrBCoHJV5el2Twv/RFCPRpg==
-X-Google-Smtp-Source: ABdhPJxsuSwLjSCmKCwHbwK6CS4COgLya/whNqnIb0LrGO6Da9iL3ujpmNVaCDeyUb3R7xd8Vt67QQ==
-X-Received: by 2002:a05:6a02:19b:b0:3fa:3e63:15fb with SMTP id bj27-20020a056a02019b00b003fa3e6315fbmr40523358pgb.129.1654037480826;
-        Tue, 31 May 2022 15:51:20 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:e69e:f483:e751:7c7c])
-        by smtp.gmail.com with UTF8SMTPSA id i33-20020a632221000000b003fc5b1db26fsm2040797pgi.52.2022.05.31.15.51.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 15:51:20 -0700 (PDT)
-Date:   Tue, 31 May 2022 15:51:19 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Taniya Das <quic_tdas@quicinc.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette =?utf-8?B?wqA=?= <mturquette@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v3 3/3] clk: qcom: lpass: Add support for resets &
- external mclk for SC7280
-Message-ID: <Ypab50H+Y9W9XnnU@google.com>
-References: <20220526042601.32064-1-quic_tdas@quicinc.com>
- <20220526042601.32064-4-quic_tdas@quicinc.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=9q9k+C5RGQU4qKgmWFkXDcgQ25M6UKH1DBXC6+yr110=;
+        b=ncgGw1Mg69HNz6o4dk46rl0BhQJTw5OcaMlmUjqkyl4FXcHBy0X5UvGtyWLdeJi0g7
+         3mFawaUMcnCNLgd4OKbUq6l6Gx0yaPC/Zt1Qn5hXZKcN3dktgHkEtz/9athwKFTFaySo
+         90aiE2tGyVHswZwTiJr2F1S4AqphK3Q8ZcQy0cVXQDP8qUPVmRtRE8V3OXPFeU6T7CWP
+         E444IABauwllxgfQZLidkFmZpjWJFqbnfQWthHQDsfZRdlvhm6RyCXvA/uNHoZY8Vj7h
+         UNO0VCp+LwGuz8R+Y0MW+kul1AiGWbXwV2NvEDNYvFYRRHHP+BfhawdEkIC7X68TvRo/
+         jqUA==
+X-Gm-Message-State: AOAM531Fxto60PPmcnFwXOzg8gBxHcm300x0Hgre7LAuTfK3i7lEuegT
+        fGouimzFfXMynJLnPqmhk1tSM3uOZTYfOe5af+DsPe+igSqQReDFzp1y05OFORDE1cJysLANgag
+        2lrrNbtLtRAmoe/ge9NCcqfTM
+X-Received: by 2002:a05:6638:dc6:b0:32e:e2d7:8261 with SMTP id m6-20020a0566380dc600b0032ee2d78261mr21306053jaj.152.1654037531000;
+        Tue, 31 May 2022 15:52:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyFaz/Zncf57CZD055l8ggcPaldX2dVcDSiNf2yikAtVetyU+4sMp+QQR12XvYG/vo4kFwZKA==
+X-Received: by 2002:a05:6638:dc6:b0:32e:e2d7:8261 with SMTP id m6-20020a0566380dc600b0032ee2d78261mr21306045jaj.152.1654037530793;
+        Tue, 31 May 2022 15:52:10 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id c18-20020a92c8d2000000b002cde6e352ffsm33236ilq.73.2022.05.31.15.52.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 15:52:10 -0700 (PDT)
+Date:   Tue, 31 May 2022 16:52:09 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Abhishek Sahu <abhsahu@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v3 8/8] vfio/pci: Add the support for PCI D3cold state
+Message-ID: <20220531165209.1c18854f.alex.williamson@redhat.com>
+In-Reply-To: <20220531194304.GN1343366@nvidia.com>
+References: <20220425092615.10133-1-abhsahu@nvidia.com>
+        <20220425092615.10133-9-abhsahu@nvidia.com>
+        <20220504134551.70d71bf0.alex.williamson@redhat.com>
+        <9e44e9cc-a500-ab0d-4785-5ae26874b3eb@nvidia.com>
+        <20220509154844.79e4915b.alex.williamson@redhat.com>
+        <68463d9b-98ee-b9ec-1a3e-1375e50a2ad2@nvidia.com>
+        <42518bd5-da8b-554f-2612-80278b527bf5@nvidia.com>
+        <20220530122546.GZ1343366@nvidia.com>
+        <c73d537b-a653-bf79-68cd-ddc8f0f62a25@nvidia.com>
+        <20220531194304.GN1343366@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220526042601.32064-4-quic_tdas@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,23 +95,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 09:56:01AM +0530, Taniya Das wrote:
-> The clock gating control for TX/RX/WSA core bus clocks would be required
-> to be reset(moved from hardware control) from audio core driver. Thus
-> add the support for the reset clocks.
-> 
-> Also add the external mclk to interface external MI2S.
-> 
-> Fixes: 2b75e142523e ("clk: qcom: lpass: Add support for LPASS clock controller for SC7280").
+On Tue, 31 May 2022 16:43:04 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-This commit doesn't exist either:
+> On Tue, May 31, 2022 at 05:44:11PM +0530, Abhishek Sahu wrote:
+> > On 5/30/2022 5:55 PM, Jason Gunthorpe wrote: =20
+> > > On Mon, May 30, 2022 at 04:45:59PM +0530, Abhishek Sahu wrote:
+> > >  =20
+> > >>  1. In real use case, config or any other ioctl should not come along
+> > >>     with VFIO_DEVICE_FEATURE_POWER_MANAGEMENT ioctl request.
+> > >> =20
+> > >>  2. Maintain some 'access_count' which will be incremented when we
+> > >>     do any config space access or ioctl. =20
+> > >=20
+> > > Please don't open code locks - if you need a lock then write a proper
+> > > lock. You can use the 'try' variants to bail out in cases where that
+> > > is appropriate.
+> > >=20
+> > > Jason =20
+> >=20
+> >  Thanks Jason for providing your inputs.
+> >=20
+> >  In that case, should I introduce new rw_semaphore (For example
+> >  power_lock) and move =E2=80=98platform_pm_engaged=E2=80=99 under =E2=
+=80=98power_lock=E2=80=99 ? =20
+>=20
+> Possibly, this is better than an atomic at least
+>=20
+> >  1. At the beginning of config space access or ioctl, we can take the
+> >     lock
+> > =20
+> >      down_read(&vdev->power_lock); =20
+>=20
+> You can also do down_read_trylock() here and bail out as you were
+> suggesting with the atomic.
+>=20
+> trylock doesn't have lock odering rules because it can't sleep so it
+> gives a bit more flexability when designing the lock ordering.
+>=20
+> Though userspace has to be able to tolerate the failure, or never make
+> the request.
+>=20
+> >          down_write(&vdev->power_lock);
+> >          ...
+> >          switch (vfio_pm.low_power_state) {
+> >          case VFIO_DEVICE_LOW_POWER_STATE_ENTER:
+> >                  ...
+> >                          vfio_pci_zap_and_down_write_memory_lock(vdev);
+> >                          vdev->power_state_d3 =3D true;
+> >                          up_write(&vdev->memory_lock);
+> >=20
+> >          ...
+> >          up_write(&vdev->power_lock); =20
+>=20
+> And something checks the power lock before allowing the memor to be
+> re-enabled?
+>=20
+> >  4.  For ioctl access, as mentioned previously I need to add two
+> >      callbacks functions (one for start and one for end) in the struct
+> >      vfio_device_ops and call the same at start and end of ioctl from
+> >      vfio_device_fops_unl_ioctl(). =20
+>=20
+> Not sure I followed this..
 
-git show 2b75e142523e
-fatal: ambiguous argument '2b75e142523e': unknown revision or path not in the working tree.
+I'm kinda lost here too.  A couple replies back there was some concern
+about race scenarios with multiple user threads accessing the device.
+The ones concerning non-deterministic behavior if a user is
+concurrently changing power state and performing other accesses are a
+non-issue, imo.  I think our goal is only to expand the current
+memory_lock to block accesses, including config space, while the device
+is in low power, or some approximation bounded by the entry/exit ioctl.
 
-You probably mean:
+I think the remaining issues is how to do that relative to the fact
+that config space access can change the memory enable state and would
+therefore need to upgrade the memory_lock read-lock to a write-lock.
+For that I think we can simply drop the read-lock, acquire the
+write-lock, and re-test the low power state.  If it has changed, that
+suggests the user has again raced changing power state with another
+access and we can simply drop the lock and return -EIO.
 
-a9dd26639d05 clk: qcom: lpass: Add support for LPASS clock controller for SC7280
+If I'm still misunderstanding, please let me know.  Thanks,
 
-It seems you got these commit ids from a downstream branch, instead of an
-upstream/maintainer branch.
+Alex
+

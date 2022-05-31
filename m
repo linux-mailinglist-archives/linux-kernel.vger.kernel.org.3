@@ -2,101 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81AE8538D40
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7702538D4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245010AbiEaIwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 04:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
+        id S245031AbiEaI6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 04:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244117AbiEaIw2 (ORCPT
+        with ESMTP id S233830AbiEaI6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 04:52:28 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F042032ED1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:52:23 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id br17so20378860lfb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:52:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hdz49r3V2X3U4pi1USEl8OmSAZKCJRD+QzfUeTux25s=;
-        b=TNJmaOj24mhsrSk94wpVXAbkJKeNJX6tOccrc4N8hmQfoaET8m7TSwEohBoYxRihFU
-         vbqzYwYM6Bfo5OSj/gxzloziDoL5C+iVjpqSD2TgFYbXKbnsaizWC0A3pK3nBmnBFY99
-         JNcitfsMokb+yCr2wje+baZK13PgiuqCiUf7JYhJ4dJsMpSIy9p5u2HkFJq9ZjpNB/EZ
-         qHK1koJrLPlTMCX1w6nixQCbw8fujVWEpYz4+Zrz6YRjWCyV+jq9bnG3bEUi+RyBdgFM
-         rTi28iVBAxOryrOwdPZPwNEsco5ixgqLbiaGS5AnyFrLf/G6CT5yArJejo0lLw1FkBmE
-         4xUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hdz49r3V2X3U4pi1USEl8OmSAZKCJRD+QzfUeTux25s=;
-        b=HXEIQksrt/74hRanJ+hVkYVtaaof0AgdRU1H6VDwSNYK64iLE0mSOOSBIHcuJNN4k5
-         6K/qx72O+5/oWjw6dnrUS4paGlw9Xn6XyFvbueXTu1NmwqqTpEs/IKYNlYYKxcKxdT7h
-         2/XisO0tDjrc3OhauftIPwj5MmVegq69d5gGodXSTbebr3Q3SzUPko9AZlz3cxtJMwGV
-         o5oqLfODJNUIh0yeOji1K+A8AI76ba6SoKKjwruO/aiHIjK17/QuD00gLmS77lEhsYnK
-         qukLIFn1cU0quOl0a9LMgma1AM+XnyYUy6GRHY9ofeTxUs9velF6KlWYQQyCwG+tihKQ
-         +k4Q==
-X-Gm-Message-State: AOAM533PTIs8+NJo0UMSWkcmrbKnMcl22gPf1AQbwdiqvuQblOtbzQvE
-        Nlaha2fCHmbTB3FO3rz5ZmtX7RYBKzwg+ehoHMsAhA==
-X-Google-Smtp-Source: ABdhPJxsZz5kBoL6Ux+Ztj+JLaNa/QWQLcRxB5vCUF6gaZf2nL8wz+TqqWYVegwAVntJ6/Cb0izqUWMvOXaAXf6sUYQ=
-X-Received: by 2002:a19:7106:0:b0:478:68b5:86d9 with SMTP id
- m6-20020a197106000000b0047868b586d9mr32260909lfc.417.1653987142058; Tue, 31
- May 2022 01:52:22 -0700 (PDT)
+        Tue, 31 May 2022 04:58:00 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BC4BC36;
+        Tue, 31 May 2022 01:57:57 -0700 (PDT)
+Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LC5jY037SzgYTF;
+        Tue, 31 May 2022 16:56:16 +0800 (CST)
+Received: from huawei.com (10.67.174.157) by kwepemi500014.china.huawei.com
+ (7.221.188.232) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 31 May
+ 2022 16:57:55 +0800
+From:   Li Zhengyu <lizhengyu3@huawei.com>
+To:     <tdas@codeaurora.org>
+CC:     <bjorn.andersson@linaro.org>, <agross@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] clk: qcom: clk-rpmh: Remove redundant if statement
+Date:   Tue, 31 May 2022 16:56:11 +0800
+Message-ID: <20220531085611.122884-1-lizhengyu3@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <000000000000f0b26205e04a183b@google.com> <3d3c6b5f-84cd-cb25-812e-dac77e02ddbf@kernel.dk>
-In-Reply-To: <3d3c6b5f-84cd-cb25-812e-dac77e02ddbf@kernel.dk>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 31 May 2022 10:52:10 +0200
-Message-ID: <CACT4Y+ah2r5AVDSyDoz=VA_GO6gtp77JfOqc3RjVzLe3DfRAMw@mail.gmail.com>
-Subject: Re: [syzbot] UBSAN: array-index-out-of-bounds in io_submit_sqes
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     syzbot <syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.157]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500014.china.huawei.com (7.221.188.232)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 May 2022 at 10:45, Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 5/31/22 1:55 AM, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    3b46e4e44180 Add linux-next specific files for 20220531
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=16e151f5f00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=ccb8d66fc9489ef
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=b6c9b65b6753d333d833
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> >
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com
-> >
-> > ================================================================================
-> > ================================================================================
-> > UBSAN: array-index-out-of-bounds in fs/io_uring.c:8860:19
-> > index 75 is out of range for type 'io_op_def [47]'
->
-> 'def' is just set here, it's not actually used after 'opcode' has been
-> verified.
+(!ret) has been checked, so remove (ret).
 
-An interesting thing about C is that now the compiler is within its
-rights to actually remove the check that is supposed to validate the
-index because indexing io_op_defs[opcode] implies that opcode is
-already within bounds, otherwise the program already has undefined
-behavior, so removing the check is that case is also OK ;)
+Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
+---
+ drivers/clk/qcom/clk-rpmh.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+index aed907982344..6d207f7e943d 100644
+--- a/drivers/clk/qcom/clk-rpmh.c
++++ b/drivers/clk/qcom/clk-rpmh.c
+@@ -207,10 +207,7 @@ static int clk_rpmh_aggregate_state_send_command(struct clk_rpmh *c,
+ 	if (!ret)
+ 		return 0;
+ 
+-	if (ret && enable)
+-		c->state = 0;
+-	else if (ret)
+-		c->state = c->valid_state_mask;
++	c->state = enable ? 0 : c->valid_state_mask;
+ 
+ 	WARN(1, "clk: %s failed to %s\n", c->res_name,
+ 	     enable ? "enable" : "disable");
+-- 
+2.17.1
+

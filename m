@@ -2,701 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D205392B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13BAC5392C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343827AbiEaNwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
+        id S240353AbiEaNzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345145AbiEaNwA (ORCPT
+        with ESMTP id S238649AbiEaNyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:52:00 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAEC5713C
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:51:12 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id t6so18805486wra.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Mxap1WEwdByjvPC0mpGlD9RkZLO1nqQEbYm1KO0qpGw=;
-        b=Z9AaZe+YN+9Y/DvkBQCGoi5C4fe9XwkJsBqz0DUpj73OvfDgpM3DE7NK/2uva3ubaZ
-         f2ZA/2Y6ysdvsGSYtsX/pGbzO2O7FqeY//RQLhQpTdNLVOlhO6fqj59Fcm8LXaXfFk0Y
-         g+MVKfQ+no7vwNWgYSkmWaZij9tKQ1fDwhDSNkITHwlkXrmNoow4akG8Q3kb7ATYotH5
-         0zEsilKFjPM+joe5D9qFDSJTTUfQjTfYnvi5ZtUXHidu/KT8stZ2ckPNzez1qhmM+LWw
-         EYhGP6mq+1CzbAhWtpbV9DbiDpsV8QCgYDRKslfW4flDCQW3XYGe+qAl18djucj/hFGs
-         IS4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Mxap1WEwdByjvPC0mpGlD9RkZLO1nqQEbYm1KO0qpGw=;
-        b=XXW+BAD0b+hHkRwgnobnb9Isk/kHaw1XAqcaBIxEFLap2sgfE/+onFgPd8+Qn3/e8l
-         deWUqU0XL/LHEZVBXyBqPeGa5a9bNFu+B8z9lHU0WFjFQraiHTBB7iLi9n+Xtx+D2fPE
-         sj+MWXOOglXrdY0skMD59mc9sC5OHBgx1Mu6aMIWrG7VQ98k9NKgm3zwAB/zZ8ddyvpZ
-         zd+wl2vVeQLRq0dkKdiMFEskqikJAJJsVzr+hkNAH86/85C4zBped82dY2v9t/UT5g6b
-         t5mRNCgpqPtDXK1DqrYtGZb/jvXIvOGj7iTgCM3nKQuSJY8H1GxdG/VsMBtBgAZeoSW1
-         QuSw==
-X-Gm-Message-State: AOAM531GsHFPk7lUg8kmYcttfTX9si6/3SJ9dQhOlGX996JRfFujuBIB
-        fJLwINSiMe+qcVcTkG290XuFoQ==
-X-Google-Smtp-Source: ABdhPJyXl0DdP2e9n/QxwXICD+w+MV38jIzwdGj4vIoq26OkXHJf3AfQ2K5zFBto6WtGSVWccVFl0A==
-X-Received: by 2002:a5d:5145:0:b0:210:55c:4790 with SMTP id u5-20020a5d5145000000b00210055c4790mr23043579wrt.714.1654005071847;
-        Tue, 31 May 2022 06:51:11 -0700 (PDT)
-Received: from localhost.localdomain ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id l11-20020a05600c1d0b00b00394351e35edsm2404806wms.26.2022.05.31.06.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 06:51:11 -0700 (PDT)
-From:   Fabien Parent <fparent@baylibre.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, qii.wang@mediatek.com, matthias.bgg@gmail.com,
-        jic23@kernel.org, chaotian.jing@mediatek.com,
-        ulf.hansson@linaro.org, srinivas.kandagatla@linaro.org,
-        chunfeng.yun@mediatek.com, broonie@kernel.org,
-        wim@linux-watchdog.org, linux@roeck-us.net
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>
-Subject: [PATCH 17/17] arm64: dts: mediatek: add mt8365-evk board device-tree
-Date:   Tue, 31 May 2022 15:50:26 +0200
-Message-Id: <20220531135026.238475-18-fparent@baylibre.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220531135026.238475-1-fparent@baylibre.com>
-References: <20220531135026.238475-1-fparent@baylibre.com>
+        Tue, 31 May 2022 09:54:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7822E99682
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:52:36 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CFD4D23A;
+        Tue, 31 May 2022 06:52:35 -0700 (PDT)
+Received: from [10.57.81.38] (unknown [10.57.81.38])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 256633F73D;
+        Tue, 31 May 2022 06:52:34 -0700 (PDT)
+Message-ID: <0b7bd793-a3c7-e7e7-8ef0-214dd5b98f05@arm.com>
+Date:   Tue, 31 May 2022 14:52:28 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 01/12] iommu/vt-d: Use iommu_get_domain_for_dev() in
+ debugfs
+Content-Language: en-GB
+To:     Baolu Lu <baolu.lu@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Will Deacon <will@kernel.org>, Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20220527063019.3112905-1-baolu.lu@linux.intel.com>
+ <20220527063019.3112905-2-baolu.lu@linux.intel.com>
+ <20220527145910.GQ1343366@nvidia.com>
+ <eda4d688-257b-d12a-56c0-0f9d3a10ef8c@linux.intel.com>
+ <20220530121412.GX1343366@nvidia.com>
+ <42623a73-c288-1c0d-7021-93caff4ffb6f@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <42623a73-c288-1c0d-7021-93caff4ffb6f@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device-tree for the MT8365-EVK board. The MT8365 EVK board
-has the following IOs:
-* DPI <-> HDMI bridge and HDMI connector.
-* 2 audio jack
-* 1 USB Type-A Host port
-* 2 UART to USB port
-* 1 battery connector
-* 1 eMMC
-* 1 SD card
-* 2 camera connectors
-* 1 M.2 slot for connectivity
-* 1 DSI connector + touchscreen connector
-* RPI compatible header
-* 1 Ethernet port
+On 2022-05-31 04:02, Baolu Lu wrote:
+> On 2022/5/30 20:14, Jason Gunthorpe wrote:
+>> On Sun, May 29, 2022 at 01:14:46PM +0800, Baolu Lu wrote:
+>>
+>>>  From 1e87b5df40c6ce9414cdd03988c3b52bfb17af5f Mon Sep 17 00:00:00 2001
+>>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>>> Date: Sun, 29 May 2022 10:18:56 +0800
+>>> Subject: [PATCH 1/1] iommu/vt-d: debugfs: Remove device_domain_lock 
+>>> usage
+>>>
+>>> The domain_translation_struct debugfs node is used to dump static
+>>> mappings of PCI devices. It potentially races with setting new
+>>> domains to devices and the iommu_map/unmap() interfaces. The existing
+>>> code tries to use the global spinlock device_domain_lock to avoid the
+>>> races, but this is problematical as this lock is only used to protect
+>>> the device tracking lists of the domains.
+>>>
+>>> Instead of using an immature lock to cover up the problem, it's better
+>>> to explicitly restrict the use of this debugfs node. This also makes
+>>> device_domain_lock static.
+>>
+>> What does "explicitly restrict" mean?
+> 
+> I originally thought about adding restrictions on this interface to a
+> document. But obviously, this is a naive idea. :-) I went over the code
+> again. The races exist in two paths:
+> 
+> 1. Dump the page table in use while setting a new page table to the
+>     device.
+> 2. A high-level page table entry has been marked as non-present, but the
+>     dumping code has walked down to the low-level tables.
+> 
+> For case 1, we can try to solve it by dumping tables while holding the
+> group->mutex.
+> 
+> For case 2, it is a bit weird. I tried to add a rwsem lock to make the
+> iommu_unmap() and dumping tables in debugfs exclusive. This does not
+> work because debugfs may depend on the DMA of the devices to work. It
+> seems that what we can do is to allow this race, but when we traverse
+> the page table in debugfs, we will check the validity of the physical
+> address retrieved from the page table entry. Then, the worst case is to
+> print some useless information.
+> 
+> The real code looks like this:
+> 
+>  From 3feb0727f9d7095729ef75ab1967270045b3a38c Mon Sep 17 00:00:00 2001
+> From: Lu Baolu <baolu.lu@linux.intel.com>
+> Date: Sun, 29 May 2022 10:18:56 +0800
+> Subject: [PATCH 1/1] iommu/vt-d: debugfs: Remove device_domain_lock usage
+> 
+> The domain_translation_struct debugfs node is used to dump the DMAR page
+> tables for the PCI devices. It potentially races with setting domains to
+> devices and the iommu_unmap() interface. The existing code uses a global
+> spinlock device_domain_lock to avoid the races, but this is problematical
+> as this lock is only used to protect the device tracking lists of each
+> domain.
+> 
+> This replaces device_domain_lock with group->mutex to protect the traverse
+> of the page tables from setting a new domain and always check the physical
+> address retrieved from the page table entry before traversing to the next-
+> level page table.
+> 
+> As a cleanup, this also makes device_domain_lock static.
+> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>   drivers/iommu/intel/debugfs.c | 42 ++++++++++++++++++++++-------------
+>   drivers/iommu/intel/iommu.c   |  2 +-
+>   drivers/iommu/intel/iommu.h   |  1 -
+>   3 files changed, 27 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/iommu/intel/debugfs.c b/drivers/iommu/intel/debugfs.c
+> index d927ef10641b..e6f4835b8d9f 100644
+> --- a/drivers/iommu/intel/debugfs.c
+> +++ b/drivers/iommu/intel/debugfs.c
+> @@ -333,25 +333,28 @@ static void pgtable_walk_level(struct seq_file *m, 
+> struct dma_pte *pde,
+>               continue;
+> 
+>           path[level] = pde->val;
+> -        if (dma_pte_superpage(pde) || level == 1)
+> +        if (dma_pte_superpage(pde) || level == 1) {
+>               dump_page_info(m, start, path);
+> -        else
+> -            pgtable_walk_level(m, phys_to_virt(dma_pte_addr(pde)),
+> +        } else {
+> +            unsigned long phys_addr;
+> +
+> +            phys_addr = (unsigned long)dma_pte_addr(pde);
+> +            if (!pfn_valid(__phys_to_pfn(phys_addr)))
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
----
- arch/arm64/boot/dts/mediatek/Makefile       |   1 +
- arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 578 ++++++++++++++++++++
- 2 files changed, 579 insertions(+)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+Given that pte_present(pde) passed just above, it was almost certainly a 
+valid entry, so it seems unlikely that the physical address it pointed 
+to could have disappeared in the meantime. If you're worried about the 
+potential case where we've been preempted during this walk for long 
+enough that the page has already been freed by an unmap, reallocated, 
+and filled with someone else's data that happens to look like valid 
+PTEs, this still isn't enough, since that data could just as well happen 
+to look like valid physical addresses too.
 
-diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index c7d4636a2cb7..02a9f784358e 100644
---- a/arch/arm64/boot/dts/mediatek/Makefile
-+++ b/arch/arm64/boot/dts/mediatek/Makefile
-@@ -40,4 +40,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-demo.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt8365-evk.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
-diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-new file mode 100644
-index 000000000000..8f472caa06a3
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-@@ -0,0 +1,578 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 BayLibre, SAS.
-+ * Author: Fabien Parent <fparent@baylibre.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/pinctrl/mt8365-pinfunc.h>
-+#include "mt8365.dtsi"
-+#include "mt6357.dtsi"
-+
-+/ {
-+	model = "MediaTek MT8365 Open Platform EVK";
-+	compatible = "mediatek,mt8365-evk", "mediatek,mt8365";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:921600n8";
-+	};
-+
-+	connector {
-+		compatible = "hdmi-connector";
-+		label = "hdmi";
-+		type = "a";
-+
-+		port {
-+			hdmi_connector_in: endpoint {
-+				remote-endpoint = <&hdmi_connector_out>;
-+			};
-+		};
-+	};
-+
-+	firmware {
-+		optee {
-+			compatible = "linaro,optee-tz";
-+			method = "smc";
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		input-name = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&gpio_keys>;
-+
-+		volume-up {
-+			gpios = <&pio 24 GPIO_ACTIVE_LOW>;
-+			label = "volume_up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			wakeup-source;
-+			debounce-interval = <15>;
-+		};
-+	};
-+
-+	memory@40000000 {
-+		device_type = "memory";
-+		reg = <0 0x40000000 0 0xc0000000>;
-+	};
-+
-+	usb_otg_vbus: regulator-2 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "otg_vbus";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		gpio = <&pio 16 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		/* 12 MiB reserved for OP-TEE (BL32)
-+		 * +-----------------------+ 0x43e0_0000
-+		 * |      SHMEM 2MiB       |
-+		 * +-----------------------+ 0x43c0_0000
-+		 * |        | TA_RAM  8MiB |
-+		 * + TZDRAM +--------------+ 0x4340_0000
-+		 * |        | TEE_RAM 2MiB |
-+		 * +-----------------------+ 0x4320_0000
-+		 */
-+		optee_reserved: optee@43200000 {
-+			no-map;
-+			reg = <0 0x43200000 0 0x00c00000>;
-+		};
-+	};
-+};
-+
-+&cpu0 {
-+	proc-supply = <&mt6357_vproc_reg>;
-+	sram-supply = <&mt6357_vsram_proc_reg>;
-+};
-+
-+&cpu1 {
-+	proc-supply = <&mt6357_vproc_reg>;
-+	sram-supply = <&mt6357_vsram_proc_reg>;
-+};
-+
-+&cpu2 {
-+	proc-supply = <&mt6357_vproc_reg>;
-+	sram-supply = <&mt6357_vsram_proc_reg>;
-+};
-+
-+&cpu3 {
-+	proc-supply = <&mt6357_vproc_reg>;
-+	sram-supply = <&mt6357_vsram_proc_reg>;
-+};
-+
-+&dpi0 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&dpi_func_pins>;
-+	pinctrl-1 = <&dpi_idle_pins>;
-+	assigned-clocks = <&topckgen CLK_TOP_DPI0_SEL>;
-+	assigned-clock-parents = <&topckgen CLK_TOP_LVDSPLL_D4>;
-+
-+	/*
-+	 * Ethernet and HDMI are sharing pins.
-+	 * Only one can be enabled at a time and require the physical switch
-+	 * SW2101 to be set on DPI position
-+	 */
-+	status = "okay";
-+
-+	port {
-+		dpi_out: endpoint {
-+			remote-endpoint = <&it66121_in>;
-+		};
-+	};
-+};
-+
-+&ethernet {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ethernet_pins>;
-+	phy-handle = <&eth_phy>;
-+	phy-mode = "rmii";
-+	mac-address = [00 00 00 00 00 00];
-+
-+	/*
-+	 * Ethernet and HDMI are sharing pins.
-+	 * Only one can be enabled at a time and require the physical switch
-+	 * SW2101 to be set on LAN position
-+	 */
-+	status = "disabled";
-+
-+	mdio {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		eth_phy: ethernet-phy@0 {
-+			reg = <0>;
-+		};
-+	};
-+};
-+
-+&i2c1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c1_pins>;
-+	clock-frequency = <100000>;
-+	status = "okay";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	it66121hdmitx: hdmi@4c {
-+		compatible = "ite,it66121";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ite_pins>;
-+		vcn33-supply = <&mt6357_vibr_reg>;
-+		vcn18-supply = <&mt6357_vsim2_reg>;
-+		vrf12-supply = <&mt6357_vrf12_reg>;
-+		reset-gpios = <&pio 69 GPIO_ACTIVE_LOW>;
-+		interrupts-extended = <&pio 68 IRQ_TYPE_LEVEL_LOW>;
-+		#sound-dai-cells = <0>;
-+		reg = <0x4c>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+
-+				it66121_in: endpoint {
-+					bus-width = <12>;
-+					remote-endpoint = <&dpi_out>;
-+				};
-+			};
-+
-+			port@1 {
-+				reg = <1>;
-+
-+				hdmi_connector_out: endpoint {
-+					remote-endpoint = <&hdmi_connector_in>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&mmc0 {
-+	status = "okay";
-+	pinctrl-names = "default", "state_uhs";
-+	pinctrl-0 = <&mmc0_pins_default>;
-+	pinctrl-1 = <&mmc0_pins_uhs>;
-+	bus-width = <8>;
-+	max-frequency = <200000000>;
-+	cap-mmc-highspeed;
-+	mmc-hs200-1_8v;
-+	mmc-hs400-1_8v;
-+	cap-mmc-hw-reset;
-+	no-sdio;
-+	no-sd;
-+	hs400-ds-delay = <0x12012>;
-+	vmmc-supply = <&mt6357_vemc_reg>;
-+	vqmmc-supply = <&mt6357_vio18_reg>;
-+	assigned-clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>;
-+	assigned-clock-parents = <&topckgen CLK_TOP_MSDCPLL>;
-+	non-removable;
-+};
-+
-+&mmc1 {
-+	pinctrl-names = "default", "state_uhs";
-+	pinctrl-0 = <&mmc1_pins_default>;
-+	pinctrl-1 = <&mmc1_pins_uhs>;
-+	cd-gpios = <&pio 76 GPIO_ACTIVE_LOW>;
-+	bus-width = <4>;
-+	max-frequency = <200000000>;
-+	cap-sd-highspeed;
-+	sd-uhs-sdr50;
-+	sd-uhs-sdr104;
-+	vmmc-supply = <&mt6357_vmch_reg>;
-+	vqmmc-supply = <&mt6357_vio18_reg>;
-+	status = "okay";
-+};
-+
-+&mt6357_pmic {
-+	interrupt-parent = <&pio>;
-+	interrupts = <145 IRQ_TYPE_LEVEL_HIGH>;
-+	interrupt-controller;
-+	#interrupt-cells = <2>;
-+};
-+
-+&mt6357_vibr_reg {
-+	regulator-always-on;
-+};
-+
-+/* Needed by MSDC1 */
-+&mt6357_vmc_reg {
-+	regulator-always-on;
-+};
-+
-+&mt6357_vrf12_reg {
-+	regulator-always-on;
-+};
-+
-+&mt6357_vsim2_reg {
-+	regulator-always-on;
-+};
-+
-+&mt6357keys {
-+	power-key {
-+		label = "power";
-+		linux,keycodes = <KEY_POWER>;
-+		wakeup-source;
-+	};
-+
-+	volume-down {
-+		label = "volume_down";
-+		linux,keycodes = <KEY_VOLUMEDOWN>;
-+		wakeup-source;
-+	};
-+};
-+
-+&pio {
-+	dpi_func_pins: dpi-func-pins {
-+		pins {
-+			pinmux = <MT8365_PIN_0_GPIO0__FUNC_DPI_D0>,
-+				 <MT8365_PIN_1_GPIO1__FUNC_DPI_D1>,
-+				 <MT8365_PIN_2_GPIO2__FUNC_DPI_D2>,
-+				 <MT8365_PIN_3_GPIO3__FUNC_DPI_D3>,
-+				 <MT8365_PIN_4_GPIO4__FUNC_DPI_D4>,
-+				 <MT8365_PIN_5_GPIO5__FUNC_DPI_D5>,
-+				 <MT8365_PIN_6_GPIO6__FUNC_DPI_D6>,
-+				 <MT8365_PIN_7_GPIO7__FUNC_DPI_D7>,
-+				 <MT8365_PIN_8_GPIO8__FUNC_DPI_D8>,
-+				 <MT8365_PIN_9_GPIO9__FUNC_DPI_D9>,
-+				 <MT8365_PIN_10_GPIO10__FUNC_DPI_D10>,
-+				 <MT8365_PIN_11_GPIO11__FUNC_DPI_D11>,
-+				 <MT8365_PIN_12_GPIO12__FUNC_DPI_DE>,
-+				 <MT8365_PIN_13_GPIO13__FUNC_DPI_VSYNC>,
-+				 <MT8365_PIN_14_GPIO14__FUNC_DPI_CK>,
-+				 <MT8365_PIN_15_GPIO15__FUNC_DPI_HSYNC>;
-+			drive-strength = <MTK_DRIVE_4mA>;
-+		};
-+	};
-+
-+	dpi_idle_pins: dpi-idle-pins {
-+		pins {
-+			pinmux = <MT8365_PIN_0_GPIO0__FUNC_GPIO0>,
-+				 <MT8365_PIN_1_GPIO1__FUNC_GPIO1>,
-+				 <MT8365_PIN_2_GPIO2__FUNC_GPIO2>,
-+				 <MT8365_PIN_3_GPIO3__FUNC_GPIO3>,
-+				 <MT8365_PIN_4_GPIO4__FUNC_GPIO4>,
-+				 <MT8365_PIN_5_GPIO5__FUNC_GPIO5>,
-+				 <MT8365_PIN_6_GPIO6__FUNC_GPIO6>,
-+				 <MT8365_PIN_7_GPIO7__FUNC_GPIO7>,
-+				 <MT8365_PIN_8_GPIO8__FUNC_GPIO8>,
-+				 <MT8365_PIN_9_GPIO9__FUNC_GPIO9>,
-+				 <MT8365_PIN_10_GPIO10__FUNC_GPIO10>,
-+				 <MT8365_PIN_11_GPIO11__FUNC_GPIO11>,
-+				 <MT8365_PIN_12_GPIO12__FUNC_GPIO12>,
-+				 <MT8365_PIN_13_GPIO13__FUNC_GPIO13>,
-+				 <MT8365_PIN_14_GPIO14__FUNC_GPIO14>,
-+				 <MT8365_PIN_15_GPIO15__FUNC_GPIO15>;
-+		};
-+	};
-+
-+	ethernet_pins: ethernet-pins {
-+		pins-ethernet {
-+			pinmux = <MT8365_PIN_0_GPIO0__FUNC_EXT_TXD0>,
-+				 <MT8365_PIN_1_GPIO1__FUNC_EXT_TXD1>,
-+				 <MT8365_PIN_2_GPIO2__FUNC_EXT_TXD2>,
-+				 <MT8365_PIN_3_GPIO3__FUNC_EXT_TXD3>,
-+				 <MT8365_PIN_4_GPIO4__FUNC_EXT_TXC>,
-+				 <MT8365_PIN_5_GPIO5__FUNC_EXT_RXER>,
-+				 <MT8365_PIN_6_GPIO6__FUNC_EXT_RXC>,
-+				 <MT8365_PIN_7_GPIO7__FUNC_EXT_RXDV>,
-+				 <MT8365_PIN_8_GPIO8__FUNC_EXT_RXD0>,
-+				 <MT8365_PIN_9_GPIO9__FUNC_EXT_RXD1>,
-+				 <MT8365_PIN_10_GPIO10__FUNC_EXT_RXD2>,
-+				 <MT8365_PIN_11_GPIO11__FUNC_EXT_RXD3>,
-+				 <MT8365_PIN_12_GPIO12__FUNC_EXT_TXEN>,
-+				 <MT8365_PIN_13_GPIO13__FUNC_EXT_COL>,
-+				 <MT8365_PIN_14_GPIO14__FUNC_EXT_MDIO>,
-+				 <MT8365_PIN_15_GPIO15__FUNC_EXT_MDC>;
-+		};
-+
-+		pins-phy-reset {
-+			pinmux = <MT8365_PIN_133_TDM_TX_DATA1__FUNC_GPIO133>;
-+		};
-+	};
-+
-+	gpio_keys: gpio-keys-pins {
-+		pins {
-+			pinmux = <MT8365_PIN_24_KPCOL0__FUNC_KPCOL0>;
-+			bias-pull-up;
-+			input-enable;
-+		};
-+	};
-+
-+	i2c1_pins: i2c1-pins {
-+		pins {
-+			pinmux = <MT8365_PIN_59_SDA1__FUNC_SDA1_0>,
-+				 <MT8365_PIN_60_SCL1__FUNC_SCL1_0>;
-+			mediatek,pull-up-adv = <3>;
-+			mediatek,drive-strength-adv = <00>;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	ite_pins: ite-pins {
-+		pins-rst-ite {
-+			pinmux = <MT8365_PIN_69_CMDAT1__FUNC_GPIO69>;
-+			output-high;
-+		};
-+
-+		pins-irq-ite {
-+			pinmux = <MT8365_PIN_68_CMDAT0__FUNC_GPIO68>;
-+			input-enable;
-+			bias-pull-up;
-+		};
-+
-+		pins-pwr {
-+			pinmux = <MT8365_PIN_70_CMDAT2__FUNC_GPIO70>,
-+				 <MT8365_PIN_71_CMDAT3__FUNC_GPIO71>;
-+			output-high;
-+		};
-+	};
-+
-+	mmc0_pins_default: mmc0-default-pins {
-+		pins-clk {
-+			pinmux = <MT8365_PIN_99_MSDC0_CLK__FUNC_MSDC0_CLK>;
-+			bias-pull-down;
-+		};
-+
-+		pins-cmd-dat {
-+			pinmux = <MT8365_PIN_103_MSDC0_DAT0__FUNC_MSDC0_DAT0>,
-+				 <MT8365_PIN_102_MSDC0_DAT1__FUNC_MSDC0_DAT1>,
-+				 <MT8365_PIN_101_MSDC0_DAT2__FUNC_MSDC0_DAT2>,
-+				 <MT8365_PIN_100_MSDC0_DAT3__FUNC_MSDC0_DAT3>,
-+				 <MT8365_PIN_96_MSDC0_DAT4__FUNC_MSDC0_DAT4>,
-+				 <MT8365_PIN_95_MSDC0_DAT5__FUNC_MSDC0_DAT5>,
-+				 <MT8365_PIN_94_MSDC0_DAT6__FUNC_MSDC0_DAT6>,
-+				 <MT8365_PIN_93_MSDC0_DAT7__FUNC_MSDC0_DAT7>,
-+				 <MT8365_PIN_98_MSDC0_CMD__FUNC_MSDC0_CMD>;
-+			input-enable;
-+			bias-pull-up;
-+		};
-+
-+		pins-rst {
-+			pinmux = <MT8365_PIN_97_MSDC0_RSTB__FUNC_MSDC0_RSTB>;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	mmc0_pins_uhs: mmc0-uhs-pins {
-+		pins-clk {
-+			pinmux = <MT8365_PIN_99_MSDC0_CLK__FUNC_MSDC0_CLK>;
-+			drive-strength = <MTK_DRIVE_10mA>;
-+			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
-+		};
-+
-+		pins-cmd-dat {
-+			pinmux = <MT8365_PIN_103_MSDC0_DAT0__FUNC_MSDC0_DAT0>,
-+				 <MT8365_PIN_102_MSDC0_DAT1__FUNC_MSDC0_DAT1>,
-+				 <MT8365_PIN_101_MSDC0_DAT2__FUNC_MSDC0_DAT2>,
-+				 <MT8365_PIN_100_MSDC0_DAT3__FUNC_MSDC0_DAT3>,
-+				 <MT8365_PIN_96_MSDC0_DAT4__FUNC_MSDC0_DAT4>,
-+				 <MT8365_PIN_95_MSDC0_DAT5__FUNC_MSDC0_DAT5>,
-+				 <MT8365_PIN_94_MSDC0_DAT6__FUNC_MSDC0_DAT6>,
-+				 <MT8365_PIN_93_MSDC0_DAT7__FUNC_MSDC0_DAT7>,
-+				 <MT8365_PIN_98_MSDC0_CMD__FUNC_MSDC0_CMD>;
-+			input-enable;
-+			drive-strength = <MTK_DRIVE_10mA>;
-+			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
-+		};
-+
-+		pins-ds {
-+			pinmux = <MT8365_PIN_104_MSDC0_DSL__FUNC_MSDC0_DSL>;
-+			drive-strength = <MTK_DRIVE_10mA>;
-+			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
-+		};
-+
-+		pins-rst {
-+			pinmux = <MT8365_PIN_97_MSDC0_RSTB__FUNC_MSDC0_RSTB>;
-+			drive-strength = <MTK_DRIVE_10mA>;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	mmc1_pins_default: mmc1-default-pins {
-+		pins-cd {
-+			pinmux = <MT8365_PIN_76_CMDAT8__FUNC_GPIO76>;
-+			bias-pull-up;
-+		};
-+
-+		pins-clk {
-+			pinmux = <MT8365_PIN_88_MSDC1_CLK__FUNC_MSDC1_CLK>;
-+			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
-+		};
-+
-+		pins-cmd-dat {
-+			pinmux = <MT8365_PIN_89_MSDC1_DAT0__FUNC_MSDC1_DAT0>,
-+				 <MT8365_PIN_90_MSDC1_DAT1__FUNC_MSDC1_DAT1>,
-+				 <MT8365_PIN_91_MSDC1_DAT2__FUNC_MSDC1_DAT2>,
-+				 <MT8365_PIN_92_MSDC1_DAT3__FUNC_MSDC1_DAT3>,
-+				 <MT8365_PIN_87_MSDC1_CMD__FUNC_MSDC1_CMD>;
-+			input-enable;
-+			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
-+		};
-+	};
-+
-+	mmc1_pins_uhs: mmc1-uhs-pins {
-+		pins-clk {
-+			pinmux = <MT8365_PIN_88_MSDC1_CLK__FUNC_MSDC1_CLK>;
-+			drive-strength = <MTK_DRIVE_8mA>;
-+			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
-+		};
-+
-+		pins-cmd-dat {
-+			pinmux = <MT8365_PIN_89_MSDC1_DAT0__FUNC_MSDC1_DAT0>,
-+				 <MT8365_PIN_90_MSDC1_DAT1__FUNC_MSDC1_DAT1>,
-+				 <MT8365_PIN_91_MSDC1_DAT2__FUNC_MSDC1_DAT2>,
-+				 <MT8365_PIN_92_MSDC1_DAT3__FUNC_MSDC1_DAT3>,
-+				 <MT8365_PIN_87_MSDC1_CMD__FUNC_MSDC1_CMD>;
-+			input-enable;
-+			drive-strength = <MTK_DRIVE_6mA>;
-+			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
-+		};
-+	};
-+
-+	uart0_pins: uart0-pins {
-+		pins {
-+			pinmux = <MT8365_PIN_35_URXD0__FUNC_URXD0>,
-+				 <MT8365_PIN_36_UTXD0__FUNC_UTXD0>;
-+		};
-+	};
-+
-+	uart1_pins: uart1-pins {
-+		pins {
-+			pinmux = <MT8365_PIN_37_URXD1__FUNC_URXD1>,
-+				 <MT8365_PIN_38_UTXD1__FUNC_UTXD1>;
-+		};
-+	};
-+
-+	uart2_pins: uart2-pins {
-+		pins {
-+			pinmux = <MT8365_PIN_39_URXD2__FUNC_URXD2>,
-+				 <MT8365_PIN_40_UTXD2__FUNC_UTXD2>;
-+		};
-+	};
-+
-+	usb_pins: usb-pins {
-+		pins-id {
-+			pinmux = <MT8365_PIN_17_GPIO17__FUNC_GPIO17>;
-+			input-enable;
-+			bias-pull-up;
-+		};
-+
-+		pins-usb0-vbus {
-+			pinmux = <MT8365_PIN_16_GPIO16__FUNC_USB_DRVVBUS>;
-+			output-high;
-+		};
-+
-+		pin-usb1-vbus {
-+			pinmux = <MT8365_PIN_18_GPIO18__FUNC_GPIO18>;
-+			output-high;
-+		};
-+	};
-+
-+	pwm_pins: pwm-pins {
-+		pins {
-+			pinmux = <MT8365_PIN_19_DISP_PWM__FUNC_PWM_A>,
-+				 <MT8365_PIN_116_I2S_BCK__FUNC_PWM_C>;
-+		};
-+	};
-+};
-+
-+&pwm {
-+	pinctrl-0 = <&pwm_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&ssusb {
-+	pinctrl-0 = <&usb_pins>;
-+	pinctrl-names = "default";
-+	maximum-speed = "high-speed";
-+	usb-role-switch;
-+	dr_mode = "otg";
-+	vusb33-supply = <&mt6357_vusb33_reg>;
-+	status = "okay";
-+
-+	connector {
-+		compatible = "gpio-usb-b-connector", "usb-b-connector";
-+		type = "micro";
-+		id-gpios = <&pio 17 GPIO_ACTIVE_HIGH>;
-+		vbus-supply = <&usb_otg_vbus>;
-+	};
-+};
-+
-+&uart0 {
-+	pinctrl-0 = <&uart0_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	pinctrl-0 = <&uart1_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	pinctrl-0 = <&uart2_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&usb_host {
-+	vusb33-supply = <&mt6357_vusb33_reg>;
-+	status = "okay";
-+};
--- 
-2.36.1
+I imagine that if you want to safely walk pagetables concurrently with 
+them potentially being freed, you'd probably need to get RCU involved.
 
+> +                break;
+> +            pgtable_walk_level(m, phys_to_virt(phys_addr),
+
+Also, obligatory reminder that pfn_valid() only means that pfn_to_page() 
+gets you a valid struct page. Whether that page is direct-mapped kernel 
+memory or not is a different matter.
+
+>                          level - 1, start, path);
+> +        }
+>           path[level] = 0;
+>       }
+>   }
+> 
+> -static int show_device_domain_translation(struct device *dev, void *data)
+> +static int __show_device_domain_translation(struct device *dev, void 
+> *data)
+>   {
+>       struct device_domain_info *info = dev_iommu_priv_get(dev);
+>       struct dmar_domain *domain = info->domain;
+>       struct seq_file *m = data;
+>       u64 path[6] = { 0 };
+> 
+> -    if (!domain)
+> -        return 0;
+> -
+>       seq_printf(m, "Device %s @0x%llx\n", dev_name(dev),
+>              (u64)virt_to_phys(domain->pgd));
+>       seq_puts(m, 
+> "IOVA_PFN\t\tPML5E\t\t\tPML4E\t\t\tPDPE\t\t\tPDE\t\t\tPTE\n");
+> @@ -359,20 +362,27 @@ static int show_device_domain_translation(struct 
+> device *dev, void *data)
+>       pgtable_walk_level(m, domain->pgd, domain->agaw + 2, 0, path);
+>       seq_putc(m, '\n');
+> 
+> -    return 0;
+> +    return 1;
+>   }
+> 
+> -static int domain_translation_struct_show(struct seq_file *m, void 
+> *unused)
+> +static int show_device_domain_translation(struct device *dev, void *data)
+>   {
+> -    unsigned long flags;
+> -    int ret;
+> +    struct iommu_group *group;
+> 
+> -    spin_lock_irqsave(&device_domain_lock, flags);
+> -    ret = bus_for_each_dev(&pci_bus_type, NULL, m,
+> -                   show_device_domain_translation);
+> -    spin_unlock_irqrestore(&device_domain_lock, flags);
+> +    group = iommu_group_get(dev);
+> +    if (group) {
+> +        iommu_group_for_each_dev(group, data,
+> +                     __show_device_domain_translation);
+
+Why group_for_each_dev? If there *are* multiple devices in the group 
+then by definition they should be attached to the same domain, so 
+dumping that domain's mappings more than once seems pointless. 
+Especially given that the outer bus_for_each_dev iteration will already 
+visit each individual device anyway, so this would only make the 
+redundancy even worse than it already is.
+
+Robin.
+
+> +        iommu_group_put(group);
+> +    }
+> 
+> -    return ret;
+> +    return 0;
+> +}
+> +
+> +static int domain_translation_struct_show(struct seq_file *m, void 
+> *unused)
+> +{
+> +    return bus_for_each_dev(&pci_bus_type, NULL, m,
+> +                show_device_domain_translation);
+>   }
+>   DEFINE_SHOW_ATTRIBUTE(domain_translation_struct);
+> 
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 1af4b6562266..cacae8bdaa65 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -314,7 +314,7 @@ static int iommu_skip_te_disable;
+>   #define IDENTMAP_GFX        2
+>   #define IDENTMAP_AZALIA        4
+> 
+> -DEFINE_SPINLOCK(device_domain_lock);
+> +static DEFINE_SPINLOCK(device_domain_lock);
+>   static LIST_HEAD(device_domain_list);
+> 
+>   /*
+> diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+> index a22adfbdf870..8a6d64d726c0 100644
+> --- a/drivers/iommu/intel/iommu.h
+> +++ b/drivers/iommu/intel/iommu.h
+> @@ -480,7 +480,6 @@ enum {
+>   #define VTD_FLAG_SVM_CAPABLE        (1 << 2)
+> 
+>   extern int intel_iommu_sm;
+> -extern spinlock_t device_domain_lock;
+> 
+>   #define sm_supported(iommu)    (intel_iommu_sm && 
+> ecap_smts((iommu)->ecap))
+>   #define pasid_supported(iommu)    (sm_supported(iommu) &&
+> 
+> Best regards,
+> baolu

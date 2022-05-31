@@ -2,143 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C699538A5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 06:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3938538A33
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 05:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243799AbiEaEQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 00:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
+        id S243658AbiEaDYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 23:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbiEaEQ0 (ORCPT
+        with ESMTP id S240504AbiEaDYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 00:16:26 -0400
-Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11ED591566
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 21:16:23 -0700 (PDT)
-X-UUID: abb7c48168d341c5b76b13f5233e59cb-20220531
-X-Spam-Fingerprint: 0
-X-GW-Reason: 13103
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
-X-Content-Feature: ica/max.line-size 100
-        audit/email.address 1
-        meta/cnt.alert 1
-X-CPASD-INFO: a36877d0361348c9a228887ad17d70b1@qoNwWGRpkmBfVnN_g3uuc4FjYmhoZFe
-        wpmtXlGVgjlGVhH5xTWJsXVKBfG5QZWNdYVN_eGpQYl9gZFB5i3-XblBgXoZgUZB3sHVwWGdllA==
-X-CLOUD-ID: a36877d0361348c9a228887ad17d70b1
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:186.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:296.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:9,DUF:41853,ACD:300,DCD:402,SL:0,EISP:0,AG:0,CFC:0.817,CFSR:0.03,UAT:0,
-        RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0
-        ,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: abb7c48168d341c5b76b13f5233e59cb-20220531
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: abb7c48168d341c5b76b13f5233e59cb-20220531
-X-User: huangbing@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by nksmu.kylinos.cn
-        (envelope-from <huangbing@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1892234530; Tue, 31 May 2022 11:15:50 +0800
-From:   Bing Huang <huangbing@kylinos.cn>
-To:     peterz@infradead.org
-Cc:     brauner@kernel.org, bristot@redhat.com, bsegall@google.com,
-        dietmar.eggemann@arm.com, juri.lelli@redhat.com,
-        linux-kernel@vger.kernel.org, mgorman@suse.de, mingo@redhat.com,
-        rostedt@goodmis.org, vincent.guittot@linaro.org
-Subject: [PATCH v2] sched/fair: static cpumasks for load balance
-Date:   Tue, 31 May 2022 11:12:55 +0800
-Message-Id: <20220531031255.30966-1-huangbing@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 30 May 2022 23:24:41 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F1F91589
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 20:24:38 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id s14so11734222plk.8
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 20:24:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=QLemg35dtO0TggrOtHsmX2G8r9FZ0B/KT3RLAejsh4U=;
+        b=rC54PeeMuU8j1dq+b34pSGbGrDtfYR37oseYqNxdFvlQSERPokecvYHWf8gIyG/zms
+         26C6vVO6Lo8uYlfas7oTx3YECIhiuOI0ycylVWHwCJHJh9YbC7naOatjDp4H2C0dQc6/
+         5msyN/q0LSM5BUlAUXdkylWWzWcMySYE5p/KNjDoS/yqYuHBMJ6nJ8D0we5fGlGakM8/
+         Pl9ak5WZuD4rcyVmhrQYtWDeWyrMljDocktriE4F8kuu7itM1x9eQ07FYbW+AmU4QC6R
+         gzxV5VGFhSA11k3VH9Mq89S/28tZhKbBxXsgtgOptDsHsJnssWeiTGDJTPuyy6xY9235
+         AIJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QLemg35dtO0TggrOtHsmX2G8r9FZ0B/KT3RLAejsh4U=;
+        b=3PN+ossM6ivRXTZZKzReyDnqVw3lXOecwfNLhmjJnDEyHEMAnsd4izId9MJzVf+UfO
+         TgXlcJ80pNIE4xbULiAaONtWep/frzNkaqHry730e2uar1qmENlAm+jXvp5VK+tWsdKi
+         opi76VdRVnSP5GsLXFYZKm4cJmSvxR6BzRG4eHq6PUz2/65LEFnPBsrGqmZ5TA+Y/Aqs
+         RSQ7beuX0qOSarRe3oeqMGnwUJg5LhxlOBXqfyNs73+21r01TRxCn41YnPP+l+8evQIx
+         /RxiveQTRxLKNTVIxkL7lob3pbsI6x3FAqgR3qf3751nCF93SZo+Dc1VRDqZfaKJM2/m
+         LCOQ==
+X-Gm-Message-State: AOAM531R/sL7P5FWVYb9v/PcjE2XSLEpRyGbg+cuduEl7t6Z7F8RvVTo
+        1msFFzQLpVJm3b3GJQED/NpSBg==
+X-Google-Smtp-Source: ABdhPJyVXeL/+sKZJvszTSuatiJtXzvb33Ze9d4ceYMbJ7rWDV4jLin5P6/QcPPZPdrhwG127DAP0A==
+X-Received: by 2002:a17:902:e552:b0:163:6a5e:4e0d with SMTP id n18-20020a170902e55200b001636a5e4e0dmr27124956plf.66.1653967478391;
+        Mon, 30 May 2022 20:24:38 -0700 (PDT)
+Received: from [10.71.57.194] ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id z3-20020a17090a8b8300b001e2afd35791sm476368pjn.18.2022.05.30.20.24.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 20:24:38 -0700 (PDT)
+Message-ID: <1302ea6d-3b25-bcc9-e988-9f538231e088@bytedance.com>
+Date:   Tue, 31 May 2022 11:24:30 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: Re: [PATCH v3 1/2] bpf: avoid grabbing spin_locks of all cpus
+ when no free elems
+To:     Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
+        cong.wang@bytedance.com, zhouchengming@bytedance.com
+References: <20220530091340.53443-1-zhoufeng.zf@bytedance.com>
+ <20220530091340.53443-2-zhoufeng.zf@bytedance.com>
+ <3cd2bc87-d766-0466-7079-eaff14fbe422@iogearbox.net>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <3cd2bc87-d766-0466-7079-eaff14fbe422@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The both cpu mask load_balance_mask and select_idle_mask just only used
-in fair.c, but allocation in core.c in CONFIG_CPUMASK_OFFSTACK=y case,
-and global via declare per cpu variations. More or less, it looks wired.
+在 2022/5/31 上午5:20, Daniel Borkmann 写道:
+> On 5/30/22 11:13 AM, Feng zhou wrote:
+>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>
+>> This patch add is_empty in pcpu_freelist_head to check freelist
+>> having free or not. If having, grab spin_lock, or check next cpu's
+>> freelist.
+>>
+>> Before patch: hash_map performance
+>> ./map_perf_test 1
+>> 0:hash_map_perf pre-alloc 975345 events per sec
+>> 4:hash_map_perf pre-alloc 855367 events per sec
+>> 12:hash_map_perf pre-alloc 860862 events per sec
+>> 8:hash_map_perf pre-alloc 849561 events per sec
+>> 3:hash_map_perf pre-alloc 849074 events per sec
+>> 6:hash_map_perf pre-alloc 847120 events per sec
+>> 10:hash_map_perf pre-alloc 845047 events per sec
+>> 5:hash_map_perf pre-alloc 841266 events per sec
+>> 14:hash_map_perf pre-alloc 849740 events per sec
+>> 2:hash_map_perf pre-alloc 839598 events per sec
+>> 9:hash_map_perf pre-alloc 838695 events per sec
+>> 11:hash_map_perf pre-alloc 845390 events per sec
+>> 7:hash_map_perf pre-alloc 834865 events per sec
+>> 13:hash_map_perf pre-alloc 842619 events per sec
+>> 1:hash_map_perf pre-alloc 804231 events per sec
+>> 15:hash_map_perf pre-alloc 795314 events per sec
+>>
+>> hash_map the worst: no free
+>> ./map_perf_test 2048
+>> 6:worse hash_map_perf pre-alloc 28628 events per sec
+>> 5:worse hash_map_perf pre-alloc 28553 events per sec
+>> 11:worse hash_map_perf pre-alloc 28543 events per sec
+>> 3:worse hash_map_perf pre-alloc 28444 events per sec
+>> 1:worse hash_map_perf pre-alloc 28418 events per sec
+>> 7:worse hash_map_perf pre-alloc 28427 events per sec
+>> 13:worse hash_map_perf pre-alloc 28330 events per sec
+>> 14:worse hash_map_perf pre-alloc 28263 events per sec
+>> 9:worse hash_map_perf pre-alloc 28211 events per sec
+>> 15:worse hash_map_perf pre-alloc 28193 events per sec
+>> 12:worse hash_map_perf pre-alloc 28190 events per sec
+>> 10:worse hash_map_perf pre-alloc 28129 events per sec
+>> 8:worse hash_map_perf pre-alloc 28116 events per sec
+>> 4:worse hash_map_perf pre-alloc 27906 events per sec
+>> 2:worse hash_map_perf pre-alloc 27801 events per sec
+>> 0:worse hash_map_perf pre-alloc 27416 events per sec
+>> 3:worse hash_map_perf pre-alloc 28188 events per sec
+>>
+>> ftrace trace
+>>
+>> 0)               |  htab_map_update_elem() {
+>> 0)   0.198 us    |    migrate_disable();
+>> 0)               |    _raw_spin_lock_irqsave() {
+>> 0)   0.157 us    |      preempt_count_add();
+>> 0)   0.538 us    |    }
+>> 0)   0.260 us    |    lookup_elem_raw();
+>> 0)               |    alloc_htab_elem() {
+>> 0)               |      __pcpu_freelist_pop() {
+>> 0)               |        _raw_spin_lock() {
+>> 0)   0.152 us    |          preempt_count_add();
+>> 0)   0.352 us    |          native_queued_spin_lock_slowpath();
+>> 0)   1.065 us    |        }
+>>          |      ...
+>> 0)               |        _raw_spin_unlock() {
+>> 0)   0.254 us    |          preempt_count_sub();
+>> 0)   0.555 us    |        }
+>> 0) + 25.188 us   |      }
+>> 0) + 25.486 us   |    }
+>> 0)               |    _raw_spin_unlock_irqrestore() {
+>> 0)   0.155 us    |      preempt_count_sub();
+>> 0)   0.454 us    |    }
+>> 0)   0.148 us    |    migrate_enable();
+>> 0) + 28.439 us   |  }
+>>
+>> The test machine is 16C, trying to get spin_lock 17 times, in addition
+>> to 16c, there is an extralist.
+>>
+>> after patch: hash_map performance
+>> ./map_perf_test 1
+>> 0:hash_map_perf pre-alloc 969348 events per sec
+>> 10:hash_map_perf pre-alloc 906526 events per sec
+>> 11:hash_map_perf pre-alloc 904557 events per sec
+>> 9:hash_map_perf pre-alloc 902384 events per sec
+>> 15:hash_map_perf pre-alloc 912287 events per sec
+>> 14:hash_map_perf pre-alloc 905689 events per sec
+>> 12:hash_map_perf pre-alloc 903680 events per sec
+>> 13:hash_map_perf pre-alloc 902631 events per sec
+>> 8:hash_map_perf pre-alloc 875369 events per sec
+>> 4:hash_map_perf pre-alloc 862808 events per sec
+>> 1:hash_map_perf pre-alloc 857218 events per sec
+>> 2:hash_map_perf pre-alloc 852875 events per sec
+>> 5:hash_map_perf pre-alloc 846497 events per sec
+>> 6:hash_map_perf pre-alloc 828467 events per sec
+>> 3:hash_map_perf pre-alloc 812542 events per sec
+>> 7:hash_map_perf pre-alloc 805336 events per sec
+>>
+>> hash_map worst: no free
+>> ./map_perf_test 2048
+>> 7:worse hash_map_perf pre-alloc 391104 events per sec
+>> 4:worse hash_map_perf pre-alloc 388073 events per sec
+>> 5:worse hash_map_perf pre-alloc 387038 events per sec
+>> 1:worse hash_map_perf pre-alloc 386546 events per sec
+>> 0:worse hash_map_perf pre-alloc 384590 events per sec
+>> 11:worse hash_map_perf pre-alloc 379378 events per sec
+>> 10:worse hash_map_perf pre-alloc 375480 events per sec
+>> 12:worse hash_map_perf pre-alloc 372394 events per sec
+>> 6:worse hash_map_perf pre-alloc 367692 events per sec
+>> 3:worse hash_map_perf pre-alloc 363970 events per sec
+>> 9:worse hash_map_perf pre-alloc 364008 events per sec
+>> 8:worse hash_map_perf pre-alloc 363759 events per sec
+>> 2:worse hash_map_perf pre-alloc 360743 events per sec
+>> 14:worse hash_map_perf pre-alloc 361195 events per sec
+>> 13:worse hash_map_perf pre-alloc 360276 events per sec
+>> 15:worse hash_map_perf pre-alloc 360057 events per sec
+>> 0:worse hash_map_perf pre-alloc 378177 events per sec
+>>
+>> ftrace trace
+>> 0)               |  htab_map_update_elem() {
+>> 0)   0.317 us    |    migrate_disable();
+>> 0)               |    _raw_spin_lock_irqsave() {
+>> 0)   0.260 us    |      preempt_count_add();
+>> 0)   1.803 us    |    }
+>> 0)   0.276 us    |    lookup_elem_raw();
+>> 0)               |    alloc_htab_elem() {
+>> 0)   0.586 us    |      __pcpu_freelist_pop();
+>> 0)   0.945 us    |    }
+>> 0)               |    _raw_spin_unlock_irqrestore() {
+>> 0)   0.160 us    |      preempt_count_sub();
+>> 0)   0.972 us    |    }
+>> 0)   0.657 us    |    migrate_enable();
+>> 0)   8.669 us    |  }
+>>
+>> It can be seen that after adding this patch, the map performance is
+>> almost not degraded, and when free=0, first check is_empty instead of
+>> directly acquiring spin_lock.
+>>
+>> As for why to add is_empty instead of directly judging head->first, my
+>> understanding is this, head->first is frequently modified during 
+>> updating
+>> map, which will lead to invalid other cpus's cache, and is_empty is 
+>> after
+>> freelist having no free elems will be changed, the performance will 
+>> be better.
+>>
+>> Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
+>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+>> ---
+>>   kernel/bpf/percpu_freelist.c | 28 +++++++++++++++++++++++++---
+>>   kernel/bpf/percpu_freelist.h |  1 +
+>>   2 files changed, 26 insertions(+), 3 deletions(-)
+> [...]
+>>       /* per cpu lists are all empty, try extralist */
+>> +    if (s->extralist.is_empty)
+>> +        return NULL;
+>>       raw_spin_lock(&s->extralist.lock);
+>>       node = s->extralist.first;
+>> -    if (node)
+>> +    if (node) {
+>>           s->extralist.first = node->next;
+>> +        if (!s->extralist.first)
+>> +            s->extralist.is_empty = true;
+>> +    }
+>>       raw_spin_unlock(&s->extralist.lock);
+>>       return node;
+>>   }
+>> @@ -164,15 +178,20 @@ ___pcpu_freelist_pop_nmi(struct pcpu_freelist *s)
+>>       orig_cpu = cpu = raw_smp_processor_id();
+>>       while (1) {
+>>           head = per_cpu_ptr(s->freelist, cpu);
+>> +        if (head->is_empty)
+>
+> This should use READ_ONCE/WRITE_ONCE pair for head->is_empty.
 
-Signed-off-by: Bing Huang <huangbing@kylinos.cn>
----
+Yes, will do. Thanks.
 
- v2: move load_balance_mask and select_idle_mask allocation from
-sched_init() to init_sched_fair_class()   
-
- kernel/sched/core.c | 11 -----------
- kernel/sched/fair.c | 14 ++++++++++++--
- 2 files changed, 12 insertions(+), 13 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 696c6490bd5b..707df2aeebf8 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9503,9 +9503,6 @@ LIST_HEAD(task_groups);
- static struct kmem_cache *task_group_cache __read_mostly;
- #endif
- 
--DECLARE_PER_CPU(cpumask_var_t, load_balance_mask);
--DECLARE_PER_CPU(cpumask_var_t, select_idle_mask);
--
- void __init sched_init(void)
- {
- 	unsigned long ptr = 0;
-@@ -9549,14 +9546,6 @@ void __init sched_init(void)
- 
- #endif /* CONFIG_RT_GROUP_SCHED */
- 	}
--#ifdef CONFIG_CPUMASK_OFFSTACK
--	for_each_possible_cpu(i) {
--		per_cpu(load_balance_mask, i) = (cpumask_var_t)kzalloc_node(
--			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
--		per_cpu(select_idle_mask, i) = (cpumask_var_t)kzalloc_node(
--			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
--	}
--#endif
- 
- 	init_rt_bandwidth(&def_rt_bandwidth, global_rt_period(), global_rt_runtime());
- 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 8c5b74f66bd3..377d908866ab 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -5843,8 +5843,8 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
- #ifdef CONFIG_SMP
- 
- /* Working cpumask for: load_balance, load_balance_newidle. */
--DEFINE_PER_CPU(cpumask_var_t, load_balance_mask);
--DEFINE_PER_CPU(cpumask_var_t, select_idle_mask);
-+static DEFINE_PER_CPU(cpumask_var_t, load_balance_mask);
-+static DEFINE_PER_CPU(cpumask_var_t, select_idle_mask);
- 
- #ifdef CONFIG_NO_HZ_COMMON
- 
-@@ -11841,6 +11841,16 @@ void show_numa_stats(struct task_struct *p, struct seq_file *m)
- __init void init_sched_fair_class(void)
- {
- #ifdef CONFIG_SMP
-+
-+#ifdef CONFIG_CPUMASK_OFFSTACK
-+	for_each_possible_cpu(i) {
-+		per_cpu(load_balance_mask, i) = (cpumask_var_t)kzalloc_node(
-+			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
-+		per_cpu(select_idle_mask, i) = (cpumask_var_t)kzalloc_node(
-+			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
-+	}
-+#endif
-+
- 	open_softirq(SCHED_SOFTIRQ, run_rebalance_domains);
- 
- #ifdef CONFIG_NO_HZ_COMMON
--- 
-2.25.1
+>
+>> +            goto next_cpu;
+>>           if (raw_spin_trylock(&head->lock)) {
+>>               node = head->first;
+>>               if (node) {
+>>                   head->first = node->next;
+>> +                if (!head->first)
+>> +                    head->is_empty = true;
+>>                   raw_spin_unlock(&head->lock);
+>>                   return node;
+>>               }
+>>               raw_spin_unlock(&head->lock);
+>>           }
+>> +next_cpu:
+>>           cpu = cpumask_next(cpu, cpu_possible_mask);
+>>           if (cpu >= nr_cpu_ids)
+>>               cpu = 0;
 
 
-No virus found
-		Checked by Hillstone Network AntiVirus

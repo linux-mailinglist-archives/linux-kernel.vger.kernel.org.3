@@ -2,90 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3AF5393C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C53A5393C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345578AbiEaPSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 11:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
+        id S1345589AbiEaPSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 11:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344803AbiEaPR5 (ORCPT
+        with ESMTP id S1344803AbiEaPSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 11:17:57 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDAF633AE
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:17:56 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id k20so6435483ljc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:17:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=2ykgC3HP10sFR+M5OFc4keUFKEyxKDR9TE9x5DhBIZ4=;
-        b=guxECElPKr2CERKrU7bUTa3W8s5akY8+JdTyrlPvl198H8iwwZj7wuLqql3T63ZJcx
-         2y6IRXINTXW+WBtddpO6yhDktvN4/X5oDtzKtTPc0IzeoQiSnKp4UyKLfh4Gv2tPe85C
-         k9ISJMy0WEf6xP3s9Yk4D+AyBFCUhrCS2v1LUGqlpeNLEYldD5awTrCew7FifpDB6iuP
-         A4DDUDlHdaVj8Vdxq4EJ0YBeba2hGgW7kfyp8okRPnf2fDoNq2JHVS5w/KoRKJcz668B
-         8t8XoYVkAIX56mHRlAlNalsWpzHrpDt83molVv+6KNagFfb89lEnVc67pbutMHvbkkJW
-         Mgeg==
+        Tue, 31 May 2022 11:18:08 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4463D633B2;
+        Tue, 31 May 2022 08:18:07 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-e5e433d66dso18768924fac.5;
+        Tue, 31 May 2022 08:18:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=2ykgC3HP10sFR+M5OFc4keUFKEyxKDR9TE9x5DhBIZ4=;
-        b=6dLJ6w4nlY4SZYNy5BZlnXdStbcDtgwvZJjtKX8tvOIenj4Ze18NNtgzcSMUGxLGWQ
-         ini8vDF1bQq9DvtBtVLTUKuK9QPUynqADO4qgNYxXcPvNDgXydvShbyNBBmoA6TRX5Dp
-         KhdlFHir/8sxYXyWbH2IFVbWcypozN41OOdkusxElUSFOwz20fsVJw0Uvxgr08fVfw2a
-         TT4XfWTGVz8E9yhMnw3NwxxsZyhyDJtdFWfEzlyUkiVo/+Id26t5p9jH7PsSzqoK6N8T
-         1pWef/HYDK95L7gshQew7dL/SFZgg3oMy65M3QQizerk6j9/HhNNCmjTNy09+V9cPWcW
-         Qgpw==
-X-Gm-Message-State: AOAM533VedukHLEmgY63PBPyosuIokTw+WVztMrU+KWvSb5hjJZYXws1
-        LYOAYjJMYagWsfrJOtb0MwH2bqeI2B+IINHR0UQ=
-X-Google-Smtp-Source: ABdhPJzSnFU0/zgvEf7VSBnPc3z47eQ5I1X484h2PhrA2Yd/+Ct94gsBe73nj/tf+rZl7RnxhKnBzYuJ9247YwvcKLA=
-X-Received: by 2002:a2e:bf01:0:b0:247:dfe7:62dc with SMTP id
- c1-20020a2ebf01000000b00247dfe762dcmr36713385ljr.365.1654010274931; Tue, 31
- May 2022 08:17:54 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hw6HT0YhpU0Nzy8vat+zVfd+GtraoN/T8IMTFBgNYMw=;
+        b=tfpoIRS1tMPtFNgOICSK7AYhNogSMAX3agLq5ALRg2t6691S2BkybUiLpqGv9CoCBQ
+         NQ63ZUSj+Q8GkI5hAqca1Tgsl1463g78wDsGiOkvw7CZAM523LAM6X06DLztlUmBHXcz
+         Q7jE9MfI/Tk/B/HZkXQJk6dwOXlg/H2iSXYfVm07iE9XqiD94jaqcTfjYt28eZWllvDE
+         q6C9d4wW5AjkxkPZInEktBPw+QNCrV6b/aRldihBn4+NvCrRU/Kh8xuFMhBR4kvvGUzP
+         2MVsI/A2icmInI1ZCVUtmD5mxwP7D/A23wmmqGqmH+1l752WQ2mL5cEx74pKRPDzh/lh
+         4KKg==
+X-Gm-Message-State: AOAM532YFK3Va58YsfA07XqwG7UQIAbaBPE7LRJDTLEdru8onxaP+qaD
+        +5pQsXnzG9x7L0C2EBM16fY8q4X85Q==
+X-Google-Smtp-Source: ABdhPJw6/muc28+MxomD6dKLajsUp3//40HWkOp4KAueSb0Cb/n2QUlgd7og+IQhsYKbhLoeM4vkrQ==
+X-Received: by 2002:a05:6870:c583:b0:f2:e92f:e1c4 with SMTP id ba3-20020a056870c58300b000f2e92fe1c4mr11835783oab.48.1654010286550;
+        Tue, 31 May 2022 08:18:06 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id la13-20020a056871410d00b000f33f8b7603sm2518321oab.17.2022.05.31.08.18.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 08:18:06 -0700 (PDT)
+Received: (nullmailer pid 1781709 invoked by uid 1000);
+        Tue, 31 May 2022 15:18:05 -0000
+Date:   Tue, 31 May 2022 10:18:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: snps,dwc3: Add missing 'dma-coherent'
+ property
+Message-ID: <20220531151805.GD1742958-robh@kernel.org>
+References: <20220526014118.2872057-1-robh@kernel.org>
 MIME-Version: 1.0
-From:   Muni Sekhar <munisekharrms@gmail.com>
-Date:   Tue, 31 May 2022 20:47:43 +0530
-Message-ID: <CAHhAz+gqRDh=CJseQEhAJcRVEguxQ5c4vdUX8dvzdPNT=Sy3iA@mail.gmail.com>
-Subject: soundwire: device drivers for PC based hardware
-To:     vkoul@kernel.org, sanyog.r.kale@intel.com,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        alsa-devel <alsa-devel@alsa-project.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526014118.2872057-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Wed, May 25, 2022 at 08:41:18PM -0500, Rob Herring wrote:
+> The 'unevaluatedProperties' schema checks is not fully working and doesn't
+> catch some cases where there's a $ref to another schema. A fix is pending,
+> but results in new warnings in examples.
+> 
+> Some DWC3 implementations such as Xilinx are hooked up coherently and need
+> to set the 'dma-coherent' property.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-I am looking for the soundwire device drivers which run on x86 CPU for
-PC based platforms.
-
-linux/drivers/soundwire at master =C2=B7 torvalds/linux =C2=B7 GitHub
-
-Can the above mentioned mainline tree drivers can be used for this purpose?
-
-config SOUNDWIRE_INTEL
-depends on ACPI && SND_SOC
-
-config SOUNDWIRE_QCOM
-depends on SND_SOC
-
-As per the Kconfig file, both the Intel and Qualcomm SoundWire Master
-driver depend on SND_SOC, does it mean it is only possible to run on
-SoC CPU(Arm chipsets)?
-
-
---=20
-Thanks,
-Sekhar
+Applied, thanks.

@@ -2,57 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F282A539157
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E58753917C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344519AbiEaNGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
+        id S1344578AbiEaNKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbiEaNGk (ORCPT
+        with ESMTP id S231451AbiEaNKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:06:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C4E272;
-        Tue, 31 May 2022 06:06:39 -0700 (PDT)
+        Tue, 31 May 2022 09:10:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61084880C1;
+        Tue, 31 May 2022 06:10:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C139FB80FAE;
-        Tue, 31 May 2022 13:06:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5E99C385A9;
-        Tue, 31 May 2022 13:06:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE08B611E8;
+        Tue, 31 May 2022 13:10:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4BEECC3411D;
+        Tue, 31 May 2022 13:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654002396;
-        bh=CUlX+9z8cfAhEXvA+cWNMHHopVVQF0wsmaL19jamKuA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SWC/CiPCADCJ6kefLyjARmREtOnWV+fbhBHIDASIWVmi8Bp27I0V1nbrW/xYBsDcw
-         99RsF9I4hOAsh3TXzFqRPSEncZ+8c0cJRb9/aEoGh1OKeT6v28TNSnWFa38di80MKx
-         IowrMNRrVQBr28ICDqepU7RuuO0ufWLJKByhwBkioBw3BgFK9lacmHLfQH3Ls30Yv0
-         ngAFa18bHmnaTCbLAcfu/bA/dVzKgvrwUzwKKT1hs1bPY+wZZbnxveRuWcNMVrvxDk
-         xSh7QKU5ToBWxP+OGHCAPAdnRPEVYjIThVnzpifUterxL5nL3VO4jYA8cyL2kG8HL4
-         H8oY6IWcQEd7Q==
-Date:   Tue, 31 May 2022 15:06:33 +0200
-From:   Mark Brown <broonie@kernel.org>
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 3/7] dt-bindings: regulator: Add binding schema for
- mt6357 regulators
-Message-ID: <YpYS2e1uGmoJGWxr@sirena.org.uk>
-References: <20220531124959.202787-1-fparent@baylibre.com>
- <20220531124959.202787-4-fparent@baylibre.com>
+        s=k20201202; t=1654002613;
+        bh=LaTXhCuMwgI4WA45VBnWzAMyaiH/DYYEL0PrWaBNUW4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=K1Tm64+RqHAbNl8i7qETqWYBbV8Ox/aZ3zddS2YiAdsffS425PSi8XFVJt5Cuy42F
+         pwoOq7HZLY4R85tXusK2ITuquZqnEWx+nX1GCv0bmWrnXHE9bQU6oWUaMGOkBO6rRo
+         /N0BJ/hf3FkYWxFzK5Siibnzxwc+LT0XMsgcrMM0AxINZw9XNjGEj42LLq3sto+MWd
+         iHMieWSWHgHM/IAeTw8FBQn1bQNcYI+8rTJZp4D0ZokzVmPaKki3Prmi4Pr4tqGH32
+         BfwmRlaDq8bv8Wc7N9ySlEwBBesltaYdIg0s0QNHH/g6fJW6cHfV2jdHOurhvZwPHQ
+         xe8pPC23zUlxg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2B888F03944;
+        Tue, 31 May 2022 13:10:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ES4vVuyUeavLpiLg"
-Content-Disposition: inline
-In-Reply-To: <20220531124959.202787-4-fparent@baylibre.com>
-X-Cookie: May your camel be as swift as the wind.
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] xen/netback: fix incorrect usage of
+ RING_HAS_UNCONSUMED_REQUESTS()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165400261317.8298.1056578023912493620.git-patchwork-notify@kernel.org>
+Date:   Tue, 31 May 2022 13:10:13 +0000
+References: <20220530113459.20124-1-jgross@suse.com>
+In-Reply-To: <20220530113459.20124-1-jgross@suse.com>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wei.liu@kernel.org, paul@xen.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, jbeulich@suse.com
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,35 +60,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
---ES4vVuyUeavLpiLg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-On Tue, May 31, 2022 at 02:49:55PM +0200, Fabien Parent wrote:
+On Mon, 30 May 2022 13:34:59 +0200 you wrote:
+> Commit 6fac592cca60 ("xen: update ring.h") missed to fix one use case
+> of RING_HAS_UNCONSUMED_REQUESTS().
+> 
+> Reported-by: Jan Beulich <jbeulich@suse.com>
+> Fixes: 6fac592cca60 ("xen: update ring.h")
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> 
+> [...]
 
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^v(core|modem|pa|proc|s1)$"
+Here is the summary with links:
+  - xen/netback: fix incorrect usage of RING_HAS_UNCONSUMED_REQUESTS()
+    https://git.kernel.org/netdev/net/c/09e545f73814
 
-This is a standard property which you shouldn't need to describe
-and should not be imposing any constraints on, the property is
-there to provide a system relevant name to the supply provided by
-the regulator to aid diagnostics and association with schematics.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---ES4vVuyUeavLpiLg
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKWEtgACgkQJNaLcl1U
-h9BPxAf+OS9V2/7UbTz61u9a3et3gJurNEsT8gJJVwGGyIHKaLsHpArDO6nNUgzZ
-jWMDBk5KAhW8aeF4+eV1A1kyAfVNakRnkKose6A7sXZT5UPCFImND6jnXfvXmWla
-x6NO+B2a+aBrP9BJ6DW8OFf1CRpf+o7HQAw8Cai4Qad+1icFQ9A3y9k/JjjQewSX
-y0g4EhuK5DiakAE4f2Wbk3qX30mFY/xaz/k9GOmLLqqjjDDD0N6f6Cj8j7eKDz/G
-A/VUC1NivcsWuHCvioNMGY7soxNBWanVtm4z9q4Y7I9rv5A5lez0rawWkFIMRpug
-t0eGypEI+DYyO4/pTt4vzBOZNgkqrQ==
-=joEQ
------END PGP SIGNATURE-----
-
---ES4vVuyUeavLpiLg--

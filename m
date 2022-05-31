@@ -2,218 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14B55390B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256775390E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344247AbiEaMcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 08:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56126 "EHLO
+        id S1344323AbiEaMhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 08:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237954AbiEaMcd (ORCPT
+        with ESMTP id S243424AbiEaMhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 08:32:33 -0400
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AE9DF5C
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:32:31 -0700 (PDT)
-Received: by mail-oo1-xc33.google.com with SMTP id e13-20020a4a884d000000b004154e612440so781149ooi.0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:32:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=b5n2e4xJe4nQRM9S+eJYL96ssz1qtMJPh3cecd/u2F4=;
-        b=JJ+o//A34GebRbOJoHtnLj39Zi8DsGE1hjWaF5Yleq55rZ5bJCBipkp6EPDIE8WxT7
-         YE6XSDgz7cL8BGPmpugti3iz78JnNisFF1n9+wBnkSVtJtsuRU78JcSDzHoyGKN+zROb
-         Sv3O2XUm+gJKXhEy2Uu2o0ZLGWhpeDEBJyiAk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=b5n2e4xJe4nQRM9S+eJYL96ssz1qtMJPh3cecd/u2F4=;
-        b=IXhhGUFlxJzu/VVlcYsowbDoRpjtS6fT7rEb7UVBsxNc9Cup5pzQEYxKlnvUs0jQPX
-         GelN/L/aC1vg30pulsiSeOmUlqvXy1j6TBbkX/4zlhk3OgBQAhdEKs7AoVPb7KWYKn6R
-         V6X+YbBFbdUiHh3wJEdkF0DJiozm2tI9c/1fNnho71e5lrKcKLDxu9EBUA5v4Yme5PmH
-         VvoMuiOHeaBL80+Q1QlZYaQ90Zapv2KGiGmC3Z4SwiD6oidAlg33qYFLmZ1dFr9Ki5mj
-         xHyE+rhJHMvXoHeFhOgnovZ/ijFQwlAZ/Gma8iosuRrCWG3yr+KUC7qN1TByGFt23fHn
-         zB6w==
-X-Gm-Message-State: AOAM531HwFuD/mTiYe0W35iP9Y3eP8ds+DCYSvwImI89uS5gHU36N0o/
-        ST67LTKoZaaOBtkNgsdAsoNM2QO1Le2KX8Srl6xNpw==
-X-Google-Smtp-Source: ABdhPJz1znTWlLdZXrBa1EEGMEdqekYP8msNxFFVPQ7Y9QZwe+Us0gduhZqingQrUbIhjjOVxoxX0MjqxnUvsbGqScU=
-X-Received: by 2002:a4a:870d:0:b0:35f:7c65:1340 with SMTP id
- z13-20020a4a870d000000b0035f7c651340mr23177842ooh.46.1654000350734; Tue, 31
- May 2022 05:32:30 -0700 (PDT)
+        Tue, 31 May 2022 08:37:50 -0400
+Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF7E3526F
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:37:47 -0700 (PDT)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 212264FE; Tue, 31 May 2022 14:37:45 +0200 (CEST)
+Date:   Tue, 31 May 2022 14:37:42 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+Subject: [git pull] IOMMU Updates for Linux v5.19
+Message-ID: <YpYMFlGhQQOt914S@8bytes.org>
 MIME-Version: 1.0
-References: <20220529162936.2539901-1-robdclark@gmail.com> <0bf230f4-c888-b9c9-f061-7450406baa4a@suse.de>
- <CAF6AEGthAfWyAvbuE4EP+u52LEKS2Fs6X=gG8qUjc7gci6oh-A@mail.gmail.com>
- <CAKMK7uG9=EcmD4hPqm4zYsDHiS9Mr=y_5tUa_R1veDxSSK-P-Q@mail.gmail.com> <CAF6AEGuLeLmD4m+yi5csGdb0XZbnAOfYOKx6c-wEgMGt6rj7Cw@mail.gmail.com>
-In-Reply-To: <CAF6AEGuLeLmD4m+yi5csGdb0XZbnAOfYOKx6c-wEgMGt6rj7Cw@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Tue, 31 May 2022 14:32:19 +0200
-Message-ID: <CAKMK7uE2sywR9qpVqGqk4s71pini3iU47iBfYakz=V=xfm8DZg@mail.gmail.com>
-Subject: Re: [PATCH] drm/prime: Ensure mmap offset is initialized
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        freedreno <freedreno@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zPPHnwUiWBRWLSRR"
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 May 2022 at 17:41, Rob Clark <robdclark@gmail.com> wrote:
->
-> On Mon, May 30, 2022 at 7:49 AM Daniel Vetter <daniel@ffwll.ch> wrote:
-> >
-> > On Mon, 30 May 2022 at 15:54, Rob Clark <robdclark@gmail.com> wrote:
-> > >
-> > > On Mon, May 30, 2022 at 12:26 AM Thomas Zimmermann <tzimmermann@suse.=
-de> wrote:
-> > > >
-> > > > Hi
-> > > >
-> > > > Am 29.05.22 um 18:29 schrieb Rob Clark:
-> > > > > From: Rob Clark <robdclark@chromium.org>
-> > > > >
-> > > > > If a GEM object is allocated, and then exported as a dma-buf fd w=
-hich is
-> > > > > mmap'd before or without the GEM buffer being directly mmap'd, th=
-e
-> > > > > vma_node could be unitialized.  This leads to a situation where t=
-he CPU
-> > > > > mapping is not correctly torn down in drm_vma_node_unmap().
-> > > >
-> > > > Which drivers are affected by this problem?
-> > > >
-> > > > I checked several drivers and most appear to be initializing the of=
-fset
-> > > > during object construction, such as GEM SHMEM. [1] TTM-based driver=
-s
-> > > > also seem unaffected. [2]
-> > > >
-> > > >  From a quick grep, only etnaviv, msm and omapdrm appear to be affe=
-cted?
-> > > > They only seem to run drm_gem_create_mmap_offset() from their
-> > > > ioctl-handling code.
-> > > >
-> > > > If so, I'd say it's preferable to fix these drivers and put a
-> > > > drm_WARN_ONCE() into drm_gem_prime_mmap().
-> > >
-> > > That is good if fewer drivers are affected, however I disagree with
-> > > your proposal.  At least for freedreno userspace, a lot of bo's never
-> > > get mmap'd (either directly of via dmabuf), so we should not be
-> > > allocating a mmap offset unnecessarily.
-> >
-> > Does this actually matter in the grand scheme of things? We originally
-> > allocated mmap offset only on demand because userspace only had 32bit
-> > loff_t support and so simply couldn't mmap anything if the offset
-> > ended up above 32bit (even if there was still va space available).
-> >
-> > But those days are long gone (about 10 years or so) and the allocation
-> > overhead for an mmap offset is tiny. So I think unless you can
-> > benchmark an impact allocating it at bo alloc seems like the simplest
-> > design overall, and hence what we should be doing. And if the vma
-> > offset allocation every gets too slow due to fragmentation we can lift
-> > the hole tree from i915 into drm_mm and the job should be done. At
-> > that point we could also allocate the offset unconditionally in the
-> > gem_init function and be done with it.
-> >
-> > Iow I concur with Thomas here, unless there's hard data contrary
-> > simplicity imo trumps here.
->
-> 32b userspace is still alive and well, at least on arm chromebooks ;-)
 
-There's lots of different 32b userspace. The old thing was about
-userspace which didn't use mmap64, but only mmap. Which could only
-mmap the lower 4GB of a file, and so if you ended up with mmap_offset
-above 4G then you'd blow up.
+--zPPHnwUiWBRWLSRR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-But mmap64 is a thing since forever, and if you compile with the right
-glibc switch (loff_t is the magic thing iirc) it all works even with
-default mmap. So I really don't think you should have this problem
-anymore (except when cros is doing something really, really silly).
--Daniel
+Hi Linus,
 
->
-> BR,
-> -R
->
-> > -Daniel
-> >
-> > >
-> > > BR,
-> > > -R
-> > >
-> > > > Best regards
-> > > > Thomas
-> > > >
-> > > > [1]
-> > > > https://elixir.bootlin.com/linux/v5.18/source/drivers/gpu/drm/drm_g=
-em_shmem_helper.c#L85
-> > > > [2]
-> > > > https://elixir.bootlin.com/linux/v5.18/source/drivers/gpu/drm/ttm/t=
-tm_bo.c#L1002
-> > > >
-> > > > >
-> > > > > Fixes: e5516553999f ("drm: call drm_gem_object_funcs.mmap with fa=
-ke offset")
-> > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > > > ---
-> > > > > Note, it's possible the issue existed in some related form prior =
-to the
-> > > > > commit tagged with Fixes.
-> > > > >
-> > > > >   drivers/gpu/drm/drm_prime.c | 5 +++++
-> > > > >   1 file changed, 5 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_pr=
-ime.c
-> > > > > index e3f09f18110c..849eea154dfc 100644
-> > > > > --- a/drivers/gpu/drm/drm_prime.c
-> > > > > +++ b/drivers/gpu/drm/drm_prime.c
-> > > > > @@ -716,6 +716,11 @@ int drm_gem_prime_mmap(struct drm_gem_object=
- *obj, struct vm_area_struct *vma)
-> > > > >       struct file *fil;
-> > > > >       int ret;
-> > > > >
-> > > > > +     /* Ensure that the vma_node is initialized: */
-> > > > > +     ret =3D drm_gem_create_mmap_offset(obj);
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > > +
-> > > > >       /* Add the fake offset */
-> > > > >       vma->vm_pgoff +=3D drm_vma_node_start(&obj->vma_node);
-> > > > >
-> > > >
-> > > > --
-> > > > Thomas Zimmermann
-> > > > Graphics Driver Developer
-> > > > SUSE Software Solutions Germany GmbH
-> > > > Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
-> > > > (HRB 36809, AG N=C3=BCrnberg)
-> > > > Gesch=C3=A4ftsf=C3=BChrer: Ivo Totev
-> >
-> >
-> >
-> > --
-> > Daniel Vetter
-> > Software Engineer, Intel Corporation
-> > http://blog.ffwll.ch
+Apologies for the late pull request, I know you prefer the main stuff in
+the first week. Some vacation and a public holiday came in between here.
 
+So here are the IOMMU updates for 5.19. Some patches are probably
+arleady merged via the VFIO tree, namely everyting from the
+vfio-notifier-fix topic branch.
 
+Also, there will be a merge conflict in MAINTAINERS and
+drivers/iommu/amd/iommu.c. The latter one is resolved by removing the
+function in question, for the former I attached my resolution.
 
---=20
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+With that in mind:
+
+The following changes since commit 42226c989789d8da4af1de0c31070c96726d990c:
+
+  Linux 5.18-rc7 (2022-05-15 18:08:58 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-updates-v5.19
+
+for you to fetch changes up to b0dacee202efbf1a5d9f5cdfd82049e8b5b085d2:
+
+  Merge branches 'apple/dart', 'arm/mediatek', 'arm/msm', 'arm/smmu', 'ppc/pamu', 'x86/vt-d', 'x86/amd' and 'vfio-notifier-fix' into next (2022-05-20 12:27:17 +0200)
+
+----------------------------------------------------------------
+IOMMU Updates for Linux v5.19
+
+Including:
+
+	- Intel VT-d driver updates
+	  - Domain force snooping improvement.
+	  - Cleanups, no intentional functional changes.
+
+	- ARM SMMU driver updates
+	  - Add new Qualcomm device-tree compatible strings
+	  - Add new Nvidia device-tree compatible string for Tegra234
+	  - Fix UAF in SMMUv3 shared virtual addressing code
+	  - Force identity-mapped domains for users of ye olde SMMU
+	    legacy binding
+	  - Minor cleanups
+
+	- Patches to fix a BUG_ON in the vfio_iommu_group_notifier
+	  - Groundwork for upcoming iommufd framework
+	  - Introduction of DMA ownership so that an entire IOMMU group
+	    is either controlled by the kernel or by user-space
+
+	- MT8195 and MT8186 support in the Mediatek IOMMU driver
+
+	- Patches to make forcing of cache-coherent DMA more coherent
+	  between IOMMU drivers
+
+	- Fixes for thunderbolt device DMA protection
+
+	- Various smaller fixes and cleanups
+
+----------------------------------------------------------------
+Bjorn Andersson (2):
+      dt-bindings: arm-smmu: Add compatible for Qualcomm SC8280XP
+      iommu/arm-smmu-qcom: Add SC8280XP support
+
+Christophe Leroy (1):
+      iommu/fsl_pamu: Prepare cleanup of powerpc's asm/prom.h
+
+Jason Gunthorpe (5):
+      vfio: Delete the unbound_list
+      iommu: Introduce the domain op enforce_cache_coherency()
+      vfio: Move the Intel no-snoop control off of IOMMU_CACHE
+      iommu: Redefine IOMMU_CAP_CACHE_COHERENCY as the cap flag for IOMMU_CACHE
+      vfio: Require that devices support DMA cache coherence
+
+Jason Gunthorpe via iommu (1):
+      iommu: iommu_group_claim_dma_owner() must always assign a domain
+
+Jean-Philippe Brucker (1):
+      iommu/arm-smmu-v3-sva: Fix mm use-after-free
+
+Joerg Roedel (4):
+      Merge tag 'arm-smmu-updates' of git://git.kernel.org/pub/scm/linux/kernel/git/will/linux into arm/smmu
+      iommu/amd: Increase timeout waiting for GA log enablement
+      Merge tag 'v5.18-rc7' into arm/smmu
+      Merge branches 'apple/dart', 'arm/mediatek', 'arm/msm', 'arm/smmu', 'ppc/pamu', 'x86/vt-d', 'x86/amd' and 'vfio-notifier-fix' into next
+
+Lu Baolu (17):
+      iommu: Add DMA ownership management interfaces
+      driver core: Add dma_cleanup callback in bus_type
+      amba: Stop sharing platform_dma_configure()
+      bus: platform,amba,fsl-mc,PCI: Add device DMA ownership management
+      PCI: pci_stub: Set driver_managed_dma
+      PCI: portdrv: Set driver_managed_dma
+      vfio: Set DMA ownership for VFIO devices
+      vfio: Remove use of vfio_group_viable()
+      vfio: Remove iommu group notifier
+      iommu: Remove iommu group changes notifier
+      iommu/vt-d: Change return type of dmar_insert_one_dev_info()
+      iommu/vt-d: Fold dmar_insert_one_dev_info() into its caller
+      iommu/vt-d: Size Page Request Queue to avoid overflow condition
+      iommu/vt-d: Block force-snoop domain attaching if no SC support
+      iommu/vt-d: Check domain force_snooping against attached devices
+      iommu/vt-d: Remove domain_update_iommu_snooping()
+      iommu/vt-d: Remove hard coding PGSNP bit in PASID entries
+
+Mario Limonciello (3):
+      iommu/amd: Enable swiotlb in all cases
+      dma-iommu: Check that swiotlb is active before trying to use it
+      iommu/amd: Indicate whether DMA remap support is enabled
+
+Matthew Rosato (1):
+      iommu/s390: Tolerate repeat attach_dev calls
+
+Miles Chen (1):
+      iommu/mediatek: Fix NULL pointer dereference when printing dev_name
+
+Muhammad Usama Anjum (1):
+      iommu/vt-d: Remove unneeded validity check on dev
+
+Rob Herring (1):
+      dt-bindings: iommu: Drop client node in examples
+
+Robin Murphy (5):
+      iommu: Introduce device_iommu_capable()
+      iommu: Add capability for pre-boot DMA protection
+      thunderbolt: Make iommu_dma_protection more accurate
+      iommu/arm-smmu: Force identity domains for legacy binding
+      iommu/dma: Explicitly sort PCI DMA windows
+
+Rohit Agarwal (1):
+      dt-bindings: arm-smmu: Add binding for SDX65 SMMU
+
+Suravee Suthikulpanit (1):
+      iommu/amd: Do not call sleep while holding spinlock
+
+Sven Peter (1):
+      MAINTAINERS: Merge DART into ARM/APPLE MACHINE
+
+Thierry Reding (3):
+      dt-bindings: arm-smmu: Document nvidia,memory-controller property
+      dt-bindings: arm-smmu: Add compatible for Tegra234 SOC
+      iommu/arm-smmu: Support Tegra234 SMMU
+
+Vasant Hegde via iommu (1):
+      iommu/amd: Remove redundant check
+
+Xiaoke Wang (1):
+      iommu/msm: Add a check for the return of kzalloc()
+
+Xiaomeng Tong (1):
+      iommu/msm: Fix an incorrect NULL check on list iterator
+
+Yang Yingliang (2):
+      iommu/arm-smmu: fix possible null-ptr-deref in arm_smmu_device_probe()
+      iommu/arm-smmu-v3: check return value after calling platform_get_resource()
+
+Yong Wu (36):
+      dt-bindings: mediatek: mt8195: Add binding for MM IOMMU
+      dt-bindings: mediatek: mt8195: Add binding for infra IOMMU
+      dt-bindings: mediatek: mt8186: Add binding for MM iommu
+      iommu/mediatek: Fix 2 HW sharing pgtable issue
+      iommu/mediatek: Add list_del in mtk_iommu_remove
+      iommu/mediatek: Remove clk_disable in mtk_iommu_remove
+      iommu/mediatek: Add mutex for m4u_group and m4u_dom in data
+      iommu/mediatek: Add mutex for data in the mtk_iommu_domain
+      iommu/mediatek: Adapt sharing and non-sharing pgtable case
+      iommu/mediatek: Add 12G~16G support for multi domains
+      iommu/mediatek: Add a flag DCM_DISABLE
+      iommu/mediatek: Add a flag STD_AXI_MODE
+      iommu/mediatek: Remove the granule in the tlb flush
+      iommu/mediatek: Always enable output PA over 32bits in isr
+      iommu/mediatek: Add SUB_COMMON_3BITS flag
+      iommu/mediatek: Add IOMMU_TYPE flag
+      iommu/mediatek: Contain MM IOMMU flow with the MM TYPE
+      iommu/mediatek: Adjust device link when it is sub-common
+      iommu/mediatek: Allow IOMMU_DOMAIN_UNMANAGED for PCIe VFIO
+      iommu/mediatek: Add a PM_CLK_AO flag for infra iommu
+      iommu/mediatek: Add infra iommu support
+      iommu/mediatek: Add PCIe support
+      iommu/mediatek: Add mt8195 support
+      iommu/mediatek: Only adjust code about register base
+      iommu/mediatek: Just move code position in hw_init
+      iommu/mediatek: Separate mtk_iommu_data for v1 and v2
+      iommu/mediatek: Remove mtk_iommu.h
+      iommu/mediatek-v1: Just rename mtk_iommu to mtk_iommu_v1
+      iommu/mediatek: Add mtk_iommu_bank_data structure
+      iommu/mediatek: Initialise bank HW for each a bank
+      iommu/mediatek: Change the domid to iova_region_id
+      iommu/mediatek: Get the proper bankid for multi banks
+      iommu/mediatek: Initialise/Remove for multi bank dev
+      iommu/mediatek: Backup/restore regsiters for multi banks
+      iommu/mediatek: mt8195: Enable multi banks for infra iommu
+      iommu/mediatek: Add mt8186 iommu support
+
+Yunfei Wang (1):
+      iommu/dma: Fix iova map result check bug
+
+ .../devicetree/bindings/iommu/arm,smmu.yaml        |  25 +-
+ .../devicetree/bindings/iommu/mediatek,iommu.yaml  |  34 +-
+ .../devicetree/bindings/iommu/samsung,sysmmu.yaml  |  10 -
+ MAINTAINERS                                        |  10 +-
+ drivers/amba/bus.c                                 |  37 +-
+ drivers/base/dd.c                                  |   5 +
+ drivers/base/platform.c                            |  21 +-
+ drivers/bus/fsl-mc/fsl-mc-bus.c                    |  24 +-
+ drivers/iommu/amd/amd_iommu_types.h                |   4 +
+ drivers/iommu/amd/init.c                           |   8 +-
+ drivers/iommu/amd/iommu.c                          |  16 +-
+ drivers/iommu/amd/iommu_v2.c                       |  12 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c    |  13 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c        |   2 +
+ drivers/iommu/arm/arm-smmu/arm-smmu-impl.c         |   3 +-
+ drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         |   1 +
+ drivers/iommu/arm/arm-smmu/arm-smmu.c              |   8 +-
+ drivers/iommu/dma-iommu.c                          |  25 +-
+ drivers/iommu/fsl_pamu.c                           |   3 +
+ drivers/iommu/fsl_pamu_domain.c                    |   1 +
+ drivers/iommu/intel/iommu.c                        | 216 ++---
+ drivers/iommu/intel/pasid.c                        |  45 +-
+ drivers/iommu/intel/pasid.h                        |   2 +
+ drivers/iommu/iommu.c                              | 354 +++++---
+ drivers/iommu/msm_iommu.c                          |  22 +-
+ drivers/iommu/mtk_iommu.c                          | 980 +++++++++++++++------
+ drivers/iommu/mtk_iommu.h                          | 101 ---
+ drivers/iommu/mtk_iommu_v1.c                       | 242 ++---
+ drivers/iommu/s390-iommu.c                         |  15 +-
+ drivers/pci/of.c                                   |   8 +-
+ drivers/pci/pci-driver.c                           |  18 +
+ drivers/pci/pci-stub.c                             |   1 +
+ drivers/pci/pcie/portdrv_pci.c                     |   2 +
+ drivers/thunderbolt/domain.c                       |  12 +-
+ drivers/thunderbolt/nhi.c                          |  44 +
+ drivers/vfio/fsl-mc/vfio_fsl_mc.c                  |   1 +
+ drivers/vfio/pci/vfio_pci.c                        |   1 +
+ drivers/vfio/platform/vfio_amba.c                  |   1 +
+ drivers/vfio/platform/vfio_platform.c              |   1 +
+ drivers/vfio/vfio.c                                | 252 +-----
+ drivers/vfio/vfio_iommu_type1.c                    |  30 +-
+ include/dt-bindings/memory/mt8186-memory-port.h    | 217 +++++
+ include/dt-bindings/memory/mt8195-memory-port.h    | 408 +++++++++
+ include/dt-bindings/memory/mtk-memory-port.h       |   2 +
+ include/linux/amba/bus.h                           |   8 +
+ include/linux/device/bus.h                         |   3 +
+ include/linux/fsl/mc.h                             |   8 +
+ include/linux/intel-iommu.h                        |   3 +-
+ include/linux/intel-svm.h                          |   2 +-
+ include/linux/iommu.h                              |  69 +-
+ include/linux/pci.h                                |   8 +
+ include/linux/platform_device.h                    |  10 +-
+ include/linux/thunderbolt.h                        |   2 +
+ 53 files changed, 2317 insertions(+), 1033 deletions(-)
+ delete mode 100644 drivers/iommu/mtk_iommu.h
+ create mode 100644 include/dt-bindings/memory/mt8186-memory-port.h
+ create mode 100644 include/dt-bindings/memory/mt8195-memory-port.h
+
+Please pull.
+
+Thanks,
+
+	Joerg
+
+diff --cc MAINTAINERS
+index b85ee59e808b,1f4f4ba84c2e..f1b4b77daa5f
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -1834,9 -1829,8 +1826,10 @@@ F:	Documentation/devicetree/bindings/ar
+  F:	Documentation/devicetree/bindings/clock/apple,nco.yaml
+  F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+  F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
++ F:	Documentation/devicetree/bindings/iommu/apple,dart.yaml
+ +F:	Documentation/devicetree/bindings/iommu/apple,sart.yaml
+  F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
+ +F:	Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml
+  F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+  F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+  F:	Documentation/devicetree/bindings/power/apple*
+@@@ -1845,9 -1839,9 +1838,10 @@@ F:	arch/arm64/boot/dts/apple
+  F:	drivers/clk/clk-apple-nco.c
+  F:	drivers/i2c/busses/i2c-pasemi-core.c
+  F:	drivers/i2c/busses/i2c-pasemi-platform.c
++ F:	drivers/iommu/apple-dart.c
+  F:	drivers/irqchip/irq-apple-aic.c
+  F:	drivers/mailbox/apple-mailbox.c
+ +F:	drivers/nvme/host/apple.c
+  F:	drivers/pinctrl/pinctrl-apple-gpio.c
+  F:	drivers/soc/apple/*
+  F:	drivers/watchdog/apple_wdt.c
+
+--zPPHnwUiWBRWLSRR
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmKWDBMACgkQK/BELZcB
+GuP9QhAAziT3t/hlzTkHEK9gwHYXCjl8j6WBSIgBivtFiby/kdCF1jFxkHEptI8p
+IaK946Obu8ccyBpZebH+82xQeZn0B7mBQs4oa/HYdI7dWZgvrQ0gv1hf4U9ThA3O
+sqqrSTQkuKpt17+99gvkJbazf0mceqdlRasnOzclAhH431aXKQMtZYPCha4Jzno6
+EXPf4IGtQX8Myq/7iV2A8NvibH8jXGi+UEKfugichh5wdh11goS/kHsq52SVzuco
+PJS498c0vfFldwegMr4gBoiPdFkc/DIhMe8i+juXO0CRclLkSOft4zgAfdwC++ZX
+Bp/RvCI+1Hom2UWTLvJP460qwZZcEhl5VU/dQjyXnO6B4D+inpgEYrqWzY9fPBXm
+xZq8fPQYZixZ59/+cx64hOBn1b4qhQmCTl66wBukutNM6zpv38pJj86drJiN/1Hi
+88d95qWuOPj1Jnr4xH/LqYX/DQhthD0VvllOzBofqUjyogn1WDhoHYOslOHAFyS1
+VMjUfCz++ey9zZ+q1vVUFCR1009W+k0PyLa9k20DziAUCeJGAuzUIIPwew+Gv2sd
+BA3G2gId6L9Di9wSL3c/cSwfp1jLOagqBVdA9HeHYm6BWwOh5IZFPb4PFRn7UGI3
+ftKoDbCdExbY1CjpHoxQVo5MCgbJejDpI2DL0TVGjLfkRIZu18c=
+=i1nP
+-----END PGP SIGNATURE-----
+
+--zPPHnwUiWBRWLSRR--

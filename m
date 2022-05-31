@@ -2,126 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2B153935E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB48539422
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345340AbiEaOwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 10:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
+        id S1345812AbiEaPjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 11:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiEaOwR (ORCPT
+        with ESMTP id S1345794AbiEaPjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 10:52:17 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDEBDED2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654008736; x=1685544736;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BtbQmZDkCquEDIfsWj73N9gWNM/A1shVRZ9gerMwOnk=;
-  b=WZvmToNf5jhaV9cDb7NZI6YRjoSf81TMr7dAcdMWapE15VibV3Cxs/Lz
-   N6oU9lx0dHqSAITxwirpcDEK+n70EAcVVbXT/vP0r7MBlvDpQqH2wOZL1
-   w7HVLLWvOdelmD0soq13ge25htVkGYrx72EgaG8AbtSXcjvcWWW0V0iz0
-   GbCRp+LLv686hG7U7ponD3ImCrP5M0KINVaymVTU0J4SiJ6MA89K+HzIp
-   j8auKQQRCuj78MdKJSfHyZIsdswOAkYUU1Y39iWQf8kMz/c+PqPZgQ/4a
-   EtUgubUsE0xuJXqlQ2vALTlhimq9+OXaOirfqk9dSMLAe18eLckXlXeus
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="255145691"
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="255145691"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 07:52:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="755058955"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 31 May 2022 07:52:15 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nw3EE-0002nK-LT;
-        Tue, 31 May 2022 14:52:14 +0000
-Date:   Tue, 31 May 2022 22:51:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 18/18]
- arch/arm64/include/asm/memory.h:311:16: error: implicit declaration of
- function 'PHYS_PFN'
-Message-ID: <202205312239.YsC9Dh2Y-lkp@intel.com>
+        Tue, 31 May 2022 11:39:46 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF888BD1A;
+        Tue, 31 May 2022 08:39:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
+  s=amazon201209; t=1654011586; x=1685547586;
+  h=from:to:cc:date:message-id:references:in-reply-to:
+   content-transfer-encoding:mime-version:subject;
+  bh=CI6iH6yoecF9cc7BOEACEO1QsTfmPhaS1od4bXaY42o=;
+  b=jmqV5VVhmobue6GPr6fJID30p/J1EhPhSWs1zmk7BdB2wfMFXI0jMR+9
+   TmFe/AZAvJRCX9wov5ywItOCMfHUuTFtu/PRKKLOJI9HXH1YmJhuNEri7
+   K10HQoATuy+7VtTw2eR6aHdmRn4X/0EaIxwcDJMpeoh6kXAnwUu1nrht8
+   g=;
+X-IronPort-AV: E=Sophos;i="5.91,265,1647302400"; 
+   d="scan'208";a="223996123"
+Subject: RE: ...\n
+Thread-Topic: ...\n
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-72dc3927.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 31 May 2022 14:52:08 +0000
+Received: from EX13D33EUC004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-72dc3927.us-west-2.amazon.com (Postfix) with ESMTPS id 97B8A40CB9;
+        Tue, 31 May 2022 14:52:06 +0000 (UTC)
+Received: from EX13D32EUC003.ant.amazon.com (10.43.164.24) by
+ EX13D33EUC004.ant.amazon.com (10.43.164.63) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Tue, 31 May 2022 14:52:05 +0000
+Received: from EX13D32EUC003.ant.amazon.com ([10.43.164.24]) by
+ EX13D32EUC003.ant.amazon.com ([10.43.164.24]) with mapi id 15.00.1497.036;
+ Tue, 31 May 2022 14:52:05 +0000
+From:   "Durrant, Paul" <pdurrant@amazon.co.uk>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        "Allister, Jack" <jalliste@amazon.com>
+CC:     "bp@alien8.de" <bp@alien8.de>,
+        "diapop@amazon.co.uk" <diapop@amazon.co.uk>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "metikaya@amazon.co.uk" <metikaya@amazon.co.uk>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "rkrcmar@redhat.com" <rkrcmar@redhat.com>,
+        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Thread-Index: AQHYdPhkNX+wk5QumkS6hY2ybmOpva05D+WAgAABcbA=
+Date:   Tue, 31 May 2022 14:52:04 +0000
+Message-ID: <059ab3327ac440479ecfdf49fa054347@EX13D32EUC003.ant.amazon.com>
+References: <YpYaYK7a28DFT5Ne@hirez.programming.kicks-ass.net>
+ <20220531140236.1435-1-jalliste@amazon.com>
+ <YpYpxzt4rmG+LFy9@hirez.programming.kicks-ass.net>
+In-Reply-To: <YpYpxzt4rmG+LFy9@hirez.programming.kicks-ass.net>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.43.164.66]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-15.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
-head:   a71d4962de17d9a95418e25f1f98e66ba910105a
-commit: a71d4962de17d9a95418e25f1f98e66ba910105a [18/18] arm64: memory: Make virt_to_pfn() a static inline
-config: arm64-allnoconfig (https://download.01.org/0day-ci/archive/20220531/202205312239.YsC9Dh2Y-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=a71d4962de17d9a95418e25f1f98e66ba910105a
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
-        git checkout a71d4962de17d9a95418e25f1f98e66ba910105a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 prepare
+> -----Original Message-----
+> From: Peter Zijlstra <peterz@infradead.org>
+> Sent: 31 May 2022 15:44
+> To: Allister, Jack <jalliste@amazon.com>
+> Cc: bp@alien8.de; diapop@amazon.co.uk; hpa@zytor.com; jmattson@google.com=
+; joro@8bytes.org;
+> kvm@vger.kernel.org; linux-kernel@vger.kernel.org; metikaya@amazon.co.uk;=
+ mingo@redhat.com;
+> pbonzini@redhat.com; rkrcmar@redhat.com; sean.j.christopherson@intel.com;=
+ tglx@linutronix.de;
+> vkuznets@redhat.com; wanpengli@tencent.com; x86@kernel.org
+> Subject: RE: [EXTERNAL]...\n
+>=20
+>=20
+> On Tue, May 31, 2022 at 02:02:36PM +0000, Jack Allister wrote:
+> > The reasoning behind this is that you may want to run a guest at a
+> > lower CPU frequency for the purposes of trying to match performance
+> > parity between a host of an older CPU type to a newer faster one.
+>=20
+> That's quite ludicrus. Also, then it should be the host enforcing the
+> cpufreq, not the guest.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I'll bite... What's ludicrous about wanting to run a guest at a lower CPU f=
+req to minimize observable change in whatever workload it is running?
 
-All errors (new ones prefixed by >>):
-
-   In file included from arch/arm64/include/asm/thread_info.h:17,
-                    from include/linux/thread_info.h:60,
-                    from arch/arm64/include/asm/preempt.h:6,
-                    from include/linux/preempt.h:78,
-                    from include/linux/smp.h:110,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/mutex.h:17,
-                    from include/linux/kernfs.h:11,
-                    from include/linux/sysfs.h:16,
-                    from include/linux/kobject.h:20,
-                    from include/linux/of.h:17,
-                    from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from include/acpi/apei.h:9,
-                    from include/acpi/ghes.h:5,
-                    from include/linux/arm_sdei.h:8,
-                    from arch/arm64/kernel/asm-offsets.c:10:
-   arch/arm64/include/asm/memory.h: In function 'virt_to_pfn':
->> arch/arm64/include/asm/memory.h:311:16: error: implicit declaration of function 'PHYS_PFN' [-Werror=implicit-function-declaration]
-     311 |         return PHYS_PFN(virt_to_phys(p));
-         |                ^~~~~~~~
-   cc1: some warnings being treated as errors
-   make[2]: *** [scripts/Makefile.build:120: arch/arm64/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/PHYS_PFN +311 arch/arm64/include/asm/memory.h
-
-   308	
-   309	static inline unsigned long virt_to_pfn(const void *p)
-   310	{
- > 311		return PHYS_PFN(virt_to_phys(p));
-   312	}
-   313	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  Paul

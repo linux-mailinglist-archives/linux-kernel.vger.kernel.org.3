@@ -2,219 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03185391FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B53B05391FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344811AbiEaNr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
+        id S1344825AbiEaNsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233818AbiEaNr0 (ORCPT
+        with ESMTP id S233818AbiEaNsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:47:26 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9C12126F;
-        Tue, 31 May 2022 06:47:24 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id DEBE03200035;
-        Tue, 31 May 2022 09:47:20 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 31 May 2022 09:47:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1654004840; x=1654091240; bh=s8b8COO5Yb
-        Ga8xG5/i9yEEf+vE3uG78vIzviBYnAo1M=; b=N52hijfpV1UMRrhHBEsjZlBlof
-        doLJ+cEEVuVC54JKFV3kw7tnE9v3C8cO1Wt+0t7wRVY1tYWZpyfKd8Caxr5vd6ec
-        JpFTyqF8PYyiHrFnfJvcHYDB/Arzr9AFkaYy7gQsyrRi/0JT0GgCnlWydd9IagYJ
-        qrwoFtG4Rm43CY2v6G39mNz/KfRzpFnhSKDPu9GSp2Cu54I8M/+3Pi14pUmePLi2
-        wqN1CQuVTcplyDzrlS+tHZSS+oLdcpeOf6ABVntZE4MIA3WaQsJ75bJ58qlJT6Gw
-        nHLBBoPweRyZA1ZCMiTq/jQJKl5v3vIGAQfAKW6U1wfCaNzGW/BAp3v8QEKw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1654004840; x=1654091240; bh=s8b8COO5YbGa8xG5/i9yEEf+vE3u
-        G78vIzviBYnAo1M=; b=y0LexLUkBrU37DxqXCaEEErb5ht+9N5MV5M4VfIMEV1b
-        I+fn/jYy1h8qDjqRVfLUtTwm0pdnggWsfDmoww8Z5iU8+a+zPxlWdoNF/qTr6Y4w
-        kYTr9b9GRJPJJfUuGeZ2FXDYhVPDsjtk9EY/Sa2YW+rjxcxON/PCMWkzcfTBK0zv
-        NEyh4SKPZ3HWFlXmOu27SQdsIq/8HbZj8s3WkrcFf4O5K9PrjhczF9uSRtNlNfeQ
-        u9A09CvdAO23kFYDtwDpZ0JxhfUn/f5GHGXa2O7+UT2JivzRGYakabBIo6XdMZPZ
-        WBm1R0x2d2dAyQhnAy0KMueo7qoqdj9/ElTDgQJK6g==
-X-ME-Sender: <xms:ZxyWYmY8Qh1VZxpOy26rSI2cJxMVFaaxDaDlTTfCq6BxWkJJ0jukZA>
-    <xme:ZxyWYpZ3dWFBaiLd2xZBIXKgecGLJ-H5cSyk7vEcGcWABmRRgCxF6AXjkvhGBVkLr
-    2zUgcJB1vuYGzdX4Dc>
-X-ME-Received: <xmr:ZxyWYg8HHVL_n7RN5p0Vsi9JIzojqpAiBWubSVwHfH5RtKdv_H_zv7zsXOL_B7kcmJL5I4rdliXbvw8y6ffqftWqpFBUkVOz0Kg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeekgdeijecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
-    hrlhcuvffnffculddvfedmnecujfgurhepfffhvfevuffkfhggtggujgesghdtreertddt
-    vdenucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkhessh
-    htfigtgidrgiihiieqnecuggftrfgrthhtvghrnhepheefjeehfedtjeeivdefkeffheel
-    udekudelleffkefgtdeludelvddtgedtheeknecuvehluhhsthgvrhfuihiivgepudenuc
-    frrghrrghmpehmrghilhhfrhhomhepphgrthhrihgtkhesshhtfigtgidrgiihii
-X-ME-Proxy: <xmx:ZxyWYornatPqLkQdmOBuIYSOEMpvBA4BGe1zPcfwo3qlrNwfG1Y39Q>
-    <xmx:ZxyWYhpWBmzgnbEuaJZPfpxWtYftXt53l8cIHN-o0kau3LP1fT7vHw>
-    <xmx:ZxyWYmSh7ByBNWghoeSCPk78S7TKf4VbwA9KxFTJkl3sN6BegI1D6g>
-    <xmx:aByWYs3-kEv5BUqz_2o6XvkhLxXOEw6c1y-I_r7zMBTjXMGt6UyHbQ>
-Feedback-ID: i68a1478a:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 31 May 2022 09:47:19 -0400 (EDT)
-Date:   Tue, 31 May 2022 08:47:18 -0500
-From:   Patrick Williams <patrick@stwcx.xyz>
-To:     Potin Lai <potin.lai.pt@gmail.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Porin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] aspeed: i2c: add manual clock setup feature
-Message-ID: <YpYcZn+Zsz3g7xl+@heinlein.stwcx.org.github.beta.tailscale.net>
-References: <20220530114056.8722-1-potin.lai.pt@gmail.com>
+        Tue, 31 May 2022 09:48:16 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5CB26D4;
+        Tue, 31 May 2022 06:48:13 -0700 (PDT)
+Received: from theinternet.molgen.mpg.de (theinternet.molgen.mpg.de [141.14.31.7])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: buczek)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 0CE5C61EA1928;
+        Tue, 31 May 2022 15:48:11 +0200 (CEST)
+Subject: Re: ext4_writepages: jbd2_start: 5120 pages, ino 11; err -5
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        dm-devel@redhat.com, it+linux@molgen.mpg.de,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <4e83fb26-4d4a-d482-640c-8104973b7ebf@molgen.mpg.de>
+ <20220531103834.vhscyk3yzsocorco@quack3.lan>
+From:   Donald Buczek <buczek@molgen.mpg.de>
+Message-ID: <3bfd0ad9-d378-9631-310f-0a1a80d8e482@molgen.mpg.de>
+Date:   Tue, 31 May 2022 15:48:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="K2Ju2BjYugMc6h9r"
-Content-Disposition: inline
-In-Reply-To: <20220530114056.8722-1-potin.lai.pt@gmail.com>
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220531103834.vhscyk3yzsocorco@quack3.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/31/22 12:38 PM, Jan Kara wrote:
+> Late reply but maybe it is still useful :)
 
---K2Ju2BjYugMc6h9r
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That's very welcome!
 
-On Mon, May 30, 2022 at 07:40:56PM +0800, Potin Lai wrote:
-> From: Porin Lai <potin.lai.pt@gmail.com>
->=20
-> Add properties for manual tuning i2c clock timing register.
->=20
-> * aspeed,i2c-manual-clk: Enable aspeed i2c clock manual setup
-> * aspeed,i2c-base-clk-div: Base Clock divisor (tBaseClk)
-> * aspeed,i2c-clk-high-cycle: Cycles of clock-high pulse (tClkHigh)
-> * aspeed,i2c-clk-low-cycle: Cycles of clock-low pulse (tClkLow)
+> On Thu 14-04-22 17:19:49, Donald Buczek wrote:
+>> We have a cluster scheduler which provides each cluster job with a
+>> private scratch filesystem (TMPDIR). These are created when a job starts
+>> and removed when a job completes. The setup works by fallocate, losetup,
+>> mkfs.ext4, mkdir, mount, "losetup -d", rm and the teardown just does a
+>> umount and rmdir.
+>>
+>> This works but there is one nuisance: The systems usually have a lot of
+>> memory and some jobs write a lot of data to their scratch filesystems. So
+>> when a job finishes, there often is a lot to sync by umount which
+>> sometimes takes many minutes and wastes a lot of I/O bandwidth.
+>> Additionally, the reserved space can't be returned and reused until the
+>> umount is finished and the backing file is deleted.
+>>
+>> So I was looking for a way to avoid that but didn't find something
+>> straightforward. The workaround I've found so far is using a dm-device
+>> (linear target) between the filesystem and the loop device and then use
+>> this sequence for teardown:
+>>
+>> - fcntl EXT4_IOC_SHUTDOWN with EXT4_GOING_FLAGS_NOLOGFLUSH
+>> - dmestup reload $dmname --table "0 $sectors zero"
+>> - dmsetup resume $dmname --noflush
+>> - umount $mountpoint
+>> - dmsetup remove --deferred $dmname
+>> - rmdir $mountpoint
+>>
+>> This seems to do what I want. The unnecessary flushing of the temporary data is redirected from the backing file into the zero target and it works really fast. There is one remaining problem though, which might be just a cosmetic one: Although ext4 is shut down to prevent it from writing, I sometimes get the error message from the subject in the logs:
+>>
+>> [2963044.462043] EXT4-fs (dm-1): mounted filesystem without journal. Opts: (null)
+>> [2963044.686994] EXT4-fs (dm-0): mounted filesystem without journal. Opts: (null)
+>> [2963044.728391] EXT4-fs (dm-2): mounted filesystem without journal. Opts: (null)
+>> [2963055.585198] EXT4-fs (dm-2): shut down requested (2)
+>> [2963064.821246] EXT4-fs (dm-2): mounted filesystem without journal. Opts: (null)
+>> [2963074.838259] EXT4-fs (dm-2): shut down requested (2)
+>> [2963095.979089] EXT4-fs (dm-0): shut down requested (2)
+>> [2963096.066376] EXT4-fs (dm-0): ext4_writepages: jbd2_start: 5120 pages, ino 11; err -5
+>> [2963108.636648] EXT4-fs (dm-0): mounted filesystem without journal. Opts: (null)
+>> [2963125.194740] EXT4-fs (dm-0): shut down requested (2)
+>> [2963166.708088] EXT4-fs (dm-1): shut down requested (2)
+>> [2963169.334437] EXT4-fs (dm-0): mounted filesystem without journal. Opts: (null)
+>> [2963227.515974] EXT4-fs (dm-0): shut down requested (2)
+>> [2966222.515143] EXT4-fs (dm-0): mounted filesystem without journal. Opts: (null)
+>> [2966222.523390] EXT4-fs (dm-1): mounted filesystem without journal. Opts: (null)
+>> [2966222.598071] EXT4-fs (dm-2): mounted filesystem without journal. Opts: (null)
+> 
+>>
+>> So I'd like to ask a few questions:
+>>
+>> - Is this error message expected or is it a bug?
+> 
+> Well, shutdown is not 100% tuned for clean teardown. It is mostly a testing
+> / debugging aid.
+> 
+>> - Can it be ignored or is there a leak or something on that error path.
+> 
+> The error recovery path should be cleaning up everything. If not, that
+> would be a bug :)
+> 
+>> - Is there a better way to do what I want? Something I've overlooked?
+> 
+> Why not just rm -rf $mountpoint/*? That will remove all dirty data from
+> memory without writing it back. It will cost you more in terms of disk IOs
+> than the above dance with shutdown but unless you have many files, it
+> should be fast... And it is much more standard path than shutdown :).
 
-Do we need to add these to
-Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml ?
+This is in fact what we are doing now, after I've rejected the above solution
+because of the fear of a leak on the probably not so well tested error path.
 
->=20
-> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
-> ---
->  drivers/i2c/busses/i2c-aspeed.c | 55 ++++++++++++++++++++++++++++++++-
->  1 file changed, 54 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-asp=
-eed.c
-> index 67e8b97c0c95..1f4b5c4b5bf4 100644
-> --- a/drivers/i2c/busses/i2c-aspeed.c
-> +++ b/drivers/i2c/busses/i2c-aspeed.c
-> @@ -898,6 +898,56 @@ static int aspeed_i2c_init_clk(struct aspeed_i2c_bus=
- *bus)
->  	return 0;
->  }
-> =20
-> +/* precondition: bus.lock has been acquired. */
-> +static int aspeed_i2c_manual_clk_setup(struct aspeed_i2c_bus *bus)
-> +{
-> +	u32 divisor, clk_high, clk_low, clk_reg_val;
-> +
-> +	if (device_property_read_u32(bus->dev, "aspeed,i2c-base-clk-div",
-> +				     &divisor) !=3D 0) {
-> +		dev_err(bus->dev, "Could not read aspeed,i2c-base-clk-div\n");
-> +		return -EINVAL;
-> +	} else if (divisor > ASPEED_I2CD_TIME_BASE_DIVISOR_MASK) {
-> +		dev_err(bus->dev, "Invalid aspeed,i2c-base-clk-div: %u\n",
-> +			divisor);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-high-cycle",
-> +				     &clk_high) !=3D 0) {
-> +		dev_err(bus->dev, "Could not read aspeed,i2c-clk-high-cycle\n");
-> +		return -EINVAL;
-> +	} else if (clk_high > ASPEED_I2CD_TIME_SCL_REG_MAX) {
-> +		dev_err(bus->dev, "Invalid aspeed,i2c-clk-high-cycle: %u\n",
-> +			clk_high);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-low-cycle",
-> +				     &clk_low) !=3D 0) {
-> +		dev_err(bus->dev, "Could not read aspeed,i2c-clk-low-cycle\n");
-> +		return -EINVAL;
-> +	} else if (clk_low > ASPEED_I2CD_TIME_SCL_REG_MAX) {
-> +		dev_err(bus->dev, "Invalid aspeed,i2c-clk-low-cycle: %u\n",
-> +			clk_low);
-> +		return -EINVAL;
-> +	}
-> +
-> +	clk_reg_val =3D readl(bus->base + ASPEED_I2C_AC_TIMING_REG1);
-> +	clk_reg_val &=3D (ASPEED_I2CD_TIME_TBUF_MASK |
-> +			ASPEED_I2CD_TIME_THDSTA_MASK |
-> +			ASPEED_I2CD_TIME_TACST_MASK);
-> +	clk_reg_val |=3D (divisor & ASPEED_I2CD_TIME_BASE_DIVISOR_MASK)
-> +			| ((clk_high << ASPEED_I2CD_TIME_SCL_HIGH_SHIFT)
-> +			   & ASPEED_I2CD_TIME_SCL_HIGH_MASK)
-> +			| ((clk_low << ASPEED_I2CD_TIME_SCL_LOW_SHIFT)
-> +			   & ASPEED_I2CD_TIME_SCL_LOW_MASK);
-> +	writel(clk_reg_val, bus->base + ASPEED_I2C_AC_TIMING_REG1);
-> +	writel(ASPEED_NO_TIMEOUT_CTRL, bus->base + ASPEED_I2C_AC_TIMING_REG2);
-> +
-> +	return 0;
-> +}
-> +
->  /* precondition: bus.lock has been acquired. */
->  static int aspeed_i2c_init(struct aspeed_i2c_bus *bus,
->  			     struct platform_device *pdev)
-> @@ -908,7 +958,10 @@ static int aspeed_i2c_init(struct aspeed_i2c_bus *bu=
-s,
->  	/* Disable everything. */
->  	writel(0, bus->base + ASPEED_I2C_FUN_CTRL_REG);
-> =20
-> -	ret =3D aspeed_i2c_init_clk(bus);
-> +	if (of_property_read_bool(pdev->dev.of_node, "aspeed,i2c-manual-clk"))
-> +		ret =3D aspeed_i2c_manual_clk_setup(bus);
-> +	else
-> +		ret =3D aspeed_i2c_init_clk(bus);
->  	if (ret < 0)
->  		return ret;
-> =20
-> --=20
-> 2.17.1
->=20
+You answer encourages me to maybe just try it. The problem is, that if a few pages
+or inodes keep hanging around only occasionally, the systems would probably need month
+and month until this manifest as a problem. So I'd never know when to declare the
+test as finished and trust the solution.
 
---=20
-Patrick Williams
+The "rm -r" does help a bit but not as much as I've hoped. It might take half
+the time for some workloads but it is still in the same order of magnitude
+for typical loads.
 
---K2Ju2BjYugMc6h9r
-Content-Type: application/pgp-signature; name="signature.asc"
+>> - I consider to create a new dm target or add an option to an existing
+>> one, because I feel that "zero" underneath a filesystem asks for problems
+>> because a filesystem expects to read back the data that it wrote, and the
+>> "error" target would trigger lots of errors during the writeback
+>> attempts. What I really want is a target which silently discard writes
+>> and returns errors on reads. Any opinion about that?
+>
+>> - But to use devicemapper to eat away the I/O is also just a workaround
+>> to the fact that we can't parse some flag to umount to say that we are
+>> okay to lose all data and leave the filesystem in a corrupted state if
+>> this was the last reference to it. Would this be a useful feature?
+> 
+> I think something like this might be useful if the "rm -rf" solution is too
+> slow. But it is a bit of a niche usecase ;).
 
------BEGIN PGP SIGNATURE-----
+I've abandoned the "dm"-path as well, more or less for the same reason:
+This would trigger seldom used error paths in the filesystem.
 
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmKWHGYACgkQqwNHzC0A
-wRmniw//ReljGNV+Q4CIui/96gQHz615me2pPG7mqsYlvAJHQDt4GDYYEcJzl0l4
-KqYKK03DW5c7UGsk2MddvPOdHGLFt9Qxb8aqh+cTelPjzrezByNBYtuQC6zs+3Si
-VLYNjz1cXsrRPuVnsKhgEgCMpALC+6Js3luUMDBpW1FpZ83FIwQFlLk7oit9oHN2
-eZSQiQYlnsUx9ZV5BrI8VALrhNtbyfyC4sAMIeuIEtjCbgOv6LUIQl1PCFZOWM9O
-fsaLJhuaulKfHHYPrumt6VlFgXT4M7Bn+KvOoHGK36HmByKZVjy7K9mFmhsxrUXq
-6TeQzn0vixKO4myXxO/SbkVdRxquKCnFXicNT1BFt/P2M6HJ4GxjVaTbAptWNRHy
-QXSmI8py77yctldXfk2mPGGfhQ+KkuiNCtHJVCARMY93CQA0nYhLLrDNRhWx9wjp
-GGvCk/VZhmfr1TVeH15Lqxh1h+xVE3NItVumVYnu0xSccOwIRf5NOtDJc9MLXB1H
-Q5F4bSJNd5wgb3V/ULVqaxpys62jo7p+Ks0TSULVE8hJ7FfC8YMqJP7z8oPvmLoU
-u97WB7urZpQGjjTKZlPzFpPlSp1VjM3GV154FexUGKNMnASZZU8sdC5brXAotMsa
-BtSeHG788WBtHi6PWqSuSaqy9tyqUCSm/Je90yJ5PvX4ULfhAh0=
-=Z5+f
------END PGP SIGNATURE-----
+Aside from the already mentioned one, I could think of others usecases:
 
---K2Ju2BjYugMc6h9r--
+- You've already unplugged a removable drive. Whatever happened to the data on
+the device already happened and you just want to make sure, the system releases
+all resources.
+
+- Anything which uses file system images where the final state of the image
+doesn't need to be kept (build systems, test systems).
+
+Another idea I've had is to add a ioctl for the block layer which just undirtyes all
+pages which go to that backing device. It would help for file data only, not for
+the metadata, but I guess that would be enough. I wouldn't need to mess with the
+layer under the filesystem. Good idea or bad idea?
+
+But I have the feeling this would be complicated taking all the required locking
+and possible in-flight states into account. This could well be over my level. And
+it would never be accepted upstream, so I'd need to forward-port that forever.
+
+
+Thanks!
+
+   Donald
+
+> 								Honza
+
+
+-- 
+Donald Buczek
+buczek@molgen.mpg.de
+Tel: +49 30 8413 1433

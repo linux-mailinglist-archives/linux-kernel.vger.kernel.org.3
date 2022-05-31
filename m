@@ -2,281 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEADB5390F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB7C539185
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344304AbiEaMoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 08:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        id S1344601AbiEaNMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbiEaMoB (ORCPT
+        with ESMTP id S1344605AbiEaNMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 08:44:01 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844866D87E
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:44:00 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-30c2f288f13so63210757b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Wv+lZyCaE5kbkLZpqQvi2xp+OoDSqLcG7HNruSmDfC8=;
-        b=XNWi1d1oeE0HDSgunP6m9EOL2loWM0Nn14vYZ7RDHJApDMHysMiN9E9GxGPeft5nSa
-         BTgo7Ek7+TpqeLvM+63oxN+U81RPwTIV96z04d7ugi/hj1bv9WfjpfefwvGxP+4Rt1DV
-         4almvcFW6ZKDRTJWC/ranIrKv9t3ENmkKE/Z2a/Vl3yPIxFDZXTT+O8JJHNedz9ZGxCI
-         K/xeYzvmmRJcY0+z5wO+eZPJ/cpNZXAXr70FT0SdPea0rDxWWoxMo3DZ3ks6lHCc7+Ty
-         dhl1y8aMn2pppa3+ZjvqABteKAeQ/1DDZZkj0VSPfqXa3uTZO6uPE0+QSLJxhdfIy5ja
-         Zf2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Wv+lZyCaE5kbkLZpqQvi2xp+OoDSqLcG7HNruSmDfC8=;
-        b=qin38GCirZl4OayksvC34jhyXnp9cneoHg2kdfSsKsJGKc3h3VvYkStfCtNSXeVxHw
-         6kanD3TN6uDyKrStC567qz1vTMBeoXLb8nSxmdk4gpf2ZeweooB+85sIBeyhqsL3x+Ke
-         UF5hYVsWPrJ0xzUGCGdr1BNOzWVW8TYEj1ESkWlaWfdyDiszUPLrJi9Ysh0bXZLlvhdz
-         90edHnhGub96/YTOypg6RW4rV9H2JJt8gJfl0dU9eZuu1lOQRbDOvmei6GAhwY/geSBQ
-         eWTquvmqb9HP6sZKNE1PZAzqZdpYKFjuWMvXxQH6VDw9UxZs8ztMN3vznVGFMhQmOq+t
-         vwQQ==
-X-Gm-Message-State: AOAM530iP2/LNH86ydDt6TUtu9HmVUpRcJKRB3YLokDlXZG8hrnQg/Z4
-        slkzDA5TiiB0mj0WYbnLVkhyRPaKSLcrj0l2DWWlUA==
-X-Google-Smtp-Source: ABdhPJzeGNxtL8TPdvCOrBOXNjOCKP8RSjF0qzXwrWGx09HwYJPlam/R5UHa322kEdYOs0PWmQPr2S/j6AIlnevJFPY=
-X-Received: by 2002:a81:ccd:0:b0:30c:2ad6:925b with SMTP id
- 196-20020a810ccd000000b0030c2ad6925bmr15444888ywm.498.1654001039770; Tue, 31
- May 2022 05:43:59 -0700 (PDT)
+        Tue, 31 May 2022 09:12:20 -0400
+X-Greylist: delayed 1595 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 May 2022 06:12:19 PDT
+Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449FB60045;
+        Tue, 31 May 2022 06:12:17 -0700 (PDT)
+Received: from xenbits.xenproject.org ([104.239.192.120])
+        by mail.xenproject.org with esmtp (Exim 4.92)
+        (envelope-from <pdurrant@amazon.com>)
+        id 1nw1F3-0003Pr-Ez; Tue, 31 May 2022 12:44:57 +0000
+Received: from 54-240-197-226.amazon.com ([54.240.197.226] helo=debian.cbg12.amazon.com)
+        by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <pdurrant@amazon.com>)
+        id 1nw1F3-0006Db-3n; Tue, 31 May 2022 12:44:57 +0000
+From:   Paul Durrant <pdurrant@amazon.com>
+To:     kvm@vger.kernel.org
+Cc:     Paul Durrant <pdurrant@amazon.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86: PIT: Preserve state of speaker port data bit
+Date:   Tue, 31 May 2022 13:44:21 +0100
+Message-Id: <20220531124421.1427-1-pdurrant@amazon.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220530130839.120710-1-pan@semihalf.com> <20220530130839.120710-2-pan@semihalf.com>
- <73f01056-e674-d910-1c0d-98c4001f909d@linaro.org>
-In-Reply-To: <73f01056-e674-d910-1c0d-98c4001f909d@linaro.org>
-From:   =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
-Date:   Tue, 31 May 2022 14:43:49 +0200
-Message-ID: <CAF9_jYQTTtK-MmEc11NnW8Aez6OtmZeJB7aPhYLoEvQ9vFiuLQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dts: socfpga: Change Mercury+ AA1 devicetree to header
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Dinh Nguyen <dinguyen@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_MED,SPF_FAIL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for the review, I'm thinking of splitting this commit into
-several smaller ones:
-- remove all status =3D "okay" things and i2c aliases
-- remove sdmmc-ecc node (it's a part of the Arria 10 SoC, not the mercury)
-- add atsha204a node
-- add copyright header
-- style fixes (phy reg, memory)
-What do you think?
+Currently the state of the speaker port (0x61) data bit (bit 1) is not
+saved in the exported state (kvm_pit_state2) and hence is lost when
+re-constructing guest state.
 
-Please see my other comments below.
+This patch removes the 'speaker_data_port' field from kvm_kpit_state and
+instead tracks the state using a new KVM_PIT_FLAGS_SPEAKER_DATA_ON flag
+defined in the API.
 
-On Mon, May 30, 2022 at 8:55 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 30/05/2022 15:08, Pawe=C5=82 Anikiel wrote:
-> > The Mercury+ AA1 is not a standalone board, rather it's a module
-> > with an Arria 10 SoC and some peripherals on it. Remove everything that
-> > is not strictly related to the module.
->
-> Subject has several issues:
-> 1. Use prefix matching subsystem (git log --oneline)
+Signed-off-by: Paul Durrant <pdurrant@amazon.com>
+---
+ Documentation/virt/kvm/api.rst  |  4 +++-
+ arch/x86/include/uapi/asm/kvm.h |  3 ++-
+ arch/x86/kvm/i8254.c            | 10 +++++++---
+ arch/x86/kvm/i8254.h            |  1 -
+ 4 files changed, 12 insertions(+), 6 deletions(-)
 
-Just to make sure, are you referring to the ARM: prefix?
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index 28b547a9d96a..8659dbfd3095 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -2998,7 +2998,9 @@ KVM_CREATE_PIT2. The state is returned in the following structure::
+ Valid flags are::
+ 
+   /* disable PIT in HPET legacy mode */
+-  #define KVM_PIT_FLAGS_HPET_LEGACY  0x00000001
++  #define KVM_PIT_FLAGS_HPET_LEGACY     0x00000001
++  /* speaker port data bit enabled */
++  #define KVM_PIT_FLAGS_SPEAKER_DATA_ON 0x00000002
+ 
+ This IOCTL replaces the obsolete KVM_GET_PIT.
+ 
+diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
+index 21614807a2cb..1b30c222d51c 100644
+--- a/arch/x86/include/uapi/asm/kvm.h
++++ b/arch/x86/include/uapi/asm/kvm.h
+@@ -306,7 +306,8 @@ struct kvm_pit_state {
+ 	struct kvm_pit_channel_state channels[3];
+ };
+ 
+-#define KVM_PIT_FLAGS_HPET_LEGACY  0x00000001
++#define KVM_PIT_FLAGS_HPET_LEGACY     0x00000001
++#define KVM_PIT_FLAGS_SPEAKER_DATA_ON 0x00000002
+ 
+ struct kvm_pit_state2 {
+ 	struct kvm_pit_channel_state channels[3];
+diff --git a/arch/x86/kvm/i8254.c b/arch/x86/kvm/i8254.c
+index 1c83076091af..e0a7a0e7a73c 100644
+--- a/arch/x86/kvm/i8254.c
++++ b/arch/x86/kvm/i8254.c
+@@ -591,7 +591,10 @@ static int speaker_ioport_write(struct kvm_vcpu *vcpu,
+ 		return -EOPNOTSUPP;
+ 
+ 	mutex_lock(&pit_state->lock);
+-	pit_state->speaker_data_on = (val >> 1) & 1;
++	if (val & (1 << 1))
++		pit_state->flags |= KVM_PIT_FLAGS_SPEAKER_DATA_ON;
++	else
++		pit_state->flags &= ~KVM_PIT_FLAGS_SPEAKER_DATA_ON;
+ 	pit_set_gate(pit, 2, val & 1);
+ 	mutex_unlock(&pit_state->lock);
+ 	return 0;
+@@ -612,8 +615,9 @@ static int speaker_ioport_read(struct kvm_vcpu *vcpu,
+ 	refresh_clock = ((unsigned int)ktime_to_ns(ktime_get()) >> 14) & 1;
+ 
+ 	mutex_lock(&pit_state->lock);
+-	ret = ((pit_state->speaker_data_on << 1) | pit_get_gate(pit, 2) |
+-		(pit_get_out(pit, 2) << 5) | (refresh_clock << 4));
++	ret = (!!(pit_state->flags & KVM_PIT_FLAGS_SPEAKER_DATA_ON) << 1) |
++		pit_get_gate(pit, 2) | (pit_get_out(pit, 2) << 5) |
++		(refresh_clock << 4);
+ 	if (len > sizeof(ret))
+ 		len = sizeof(ret);
+ 	memcpy(data, (char *)&ret, len);
+diff --git a/arch/x86/kvm/i8254.h b/arch/x86/kvm/i8254.h
+index 394d9527da7e..a768212ba821 100644
+--- a/arch/x86/kvm/i8254.h
++++ b/arch/x86/kvm/i8254.h
+@@ -29,7 +29,6 @@ struct kvm_kpit_state {
+ 	bool is_periodic;
+ 	s64 period; 				/* unit: ns */
+ 	struct hrtimer timer;
+-	u32    speaker_data_on;
+ 
+ 	struct mutex lock;
+ 	atomic_t reinject;
+-- 
+2.20.1
 
-> 2. You are not changing here anything to header. Header files have
-> different format and end with .h. This is a DTSI file.
-
-Yes, I meant dtsi.
-
->
-> >
-> > Signed-off-by: Pawe=C5=82 Anikiel <pan@semihalf.com>
->
-> Thank you for your patch. There is something to discuss/improve.
->
-> > ---
-> >  arch/arm/boot/dts/Makefile                    |  1 -
-> >  ...1.dts =3D> socfpga_arria10_mercury_aa1.dtsi} | 68 ++++-------------=
---
-> >  2 files changed, 14 insertions(+), 55 deletions(-)
-> >  rename arch/arm/boot/dts/{socfpga_arria10_mercury_aa1.dts =3D> socfpga=
-_arria10_mercury_aa1.dtsi} (58%)
-> >
-> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> > index edfbedaa6168..023c8b4ba45c 100644
-> > --- a/arch/arm/boot/dts/Makefile
-> > +++ b/arch/arm/boot/dts/Makefile
-> > @@ -1146,7 +1146,6 @@ dtb-$(CONFIG_ARCH_S5PV210) +=3D \
-> >       s5pv210-torbreck.dtb
-> >  dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) +=3D \
-> >       socfpga_arria5_socdk.dtb \
-> > -     socfpga_arria10_mercury_aa1.dtb \
-> >       socfpga_arria10_socdk_nand.dtb \
-> >       socfpga_arria10_socdk_qspi.dtb \
-> >       socfpga_arria10_socdk_sdmmc.dtb \
-> > diff --git a/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dts b/arch/a=
-rm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
-> > similarity index 58%
-> > rename from arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dts
-> > rename to arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
-> > index a75c059b6727..fee1fc39bb2b 100644
-> > --- a/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dts
-> > +++ b/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
-> > @@ -1,57 +1,38 @@
-> >  // SPDX-License-Identifier: GPL-2.0
-> > -/dts-v1/;
-> > -
-> > +/*
-> > + * Copyright 2022 Google LLC
-> > + */
->
-> How is this related to the patch?
-
-I'll move this change to a seperate commit.
-
->
-> >  #include "socfpga_arria10.dtsi"
-> >
-> >  / {
-> > -
-> > -     model =3D "Enclustra Mercury AA1";
-> > -     compatible =3D "enclustra,mercury-aa1", "altr,socfpga-arria10", "=
-altr,socfpga";
-> > -
-> >       aliases {
-> >               ethernet0 =3D &gmac0;
-> >               serial1 =3D &uart1;
-> > -             i2c0 =3D &i2c0;
-> > -             i2c1 =3D &i2c1;
-> > -     };
-> > -
-> > -     memory@0 {
-> > -             name =3D "memory";
-> > -             device_type =3D "memory";
-> > -             reg =3D <0x0 0x80000000>; /* 2GB */
-> >       };
-> >
-> >       chosen {
-> >               stdout-path =3D "serial1:115200n8";
-> >       };
-> > -};
-> >
-> > -&eccmgr {
-> > -     sdmmca-ecc@ff8c2c00 {
-> > -             compatible =3D "altr,socfpga-sdmmc-ecc";
-> > -             reg =3D <0xff8c2c00 0x400>;
-> > -             altr,ecc-parent =3D <&mmc>;
-> > -             interrupts =3D <15 IRQ_TYPE_LEVEL_HIGH>,
-> > -                          <47 IRQ_TYPE_LEVEL_HIGH>,
-> > -                          <16 IRQ_TYPE_LEVEL_HIGH>,
-> > -                          <48 IRQ_TYPE_LEVEL_HIGH>;
-> > +     memory@0 {
-> > +             name =3D "memory";
-> > +             device_type =3D "memory";
-> > +             reg =3D <0x0 0x80000000>; /* 2GB */
-> >       };
-> >  };
-> >
-> >  &gmac0 {
-> >       phy-mode =3D "rgmii";
-> > -     phy-addr =3D <0xffffffff>; /* probe for phy addr */
-> > +     phy-handle =3D <&phy3>;
-> >
-> >       max-frame-size =3D <3800>;
-> > -     status =3D "okay";
-> > -
-> > -     phy-handle =3D <&phy3>;
-> >
-> >       mdio {
-> >               #address-cells =3D <1>;
-> >               #size-cells =3D <0>;
-> >               compatible =3D "snps,dwmac-mdio";
-> >               phy3: ethernet-phy@3 {
-> > +                     reg =3D <3>;
-> >                       txd0-skew-ps =3D <0>; /* -420ps */
-> >                       txd1-skew-ps =3D <0>; /* -420ps */
-> >                       txd2-skew-ps =3D <0>; /* -420ps */
-> > @@ -64,35 +45,23 @@ phy3: ethernet-phy@3 {
-> >                       txc-skew-ps =3D <1860>; /* 960ps */
-> >                       rxdv-skew-ps =3D <420>; /* 0ps */
-> >                       rxc-skew-ps =3D <1680>; /* 780ps */
-> > -                     reg =3D <3>;
->
-> This and few other changes (like memory) are not related to the commit.
-> Do not mix different cleanups together.
-
-l'll put the cleanup changes into a seperate commit.
-
->
-> >               };
-> >       };
-> >  };
-> >
-> > -&gpio0 {
-> > -     status =3D "okay";
-> > -};
-> > -
-> > -&gpio1 {
-> > -     status =3D "okay";
-> > -};
-> > -
-> > -&gpio2 {
-> > -     status =3D "okay";
-> > -};
->
-> Why removing all these? Aren't they available on the SoM? The same
-> question applies to several other pieces, for example UART and USB -
-> aren't these part of SoM?
-
-I'm removing them from here, but adding them to socfpga_arria10_chameleonv3=
-.dts.
-I think that enabling them should be done in the base board's dts, as
-the connections
-go to the base board. The Chameleon v3 has a USB port, but a different
-base board might
-not have one.
-
->
-> > -
-> >  &i2c1 {
-> > -     status =3D "okay";
-> > +     atsha204a: atsha204a@64 {
->
-> How is this change related at all to what you described in commit? There
-> was no atsha204a before.
-
-As previously mentioned, I'll move this change to a seperate commit.
-
->
-> > +             compatible =3D "atmel,atsha204a";
-> > +             reg =3D <0x64>;
-> > +     };
-> > +
-> >       isl12022: isl12022@6f {
-> > -             status =3D "okay";
-> >               compatible =3D "isil,isl12022";
-> >               reg =3D <0x6f>;
-> >       };
-> >  };
-> >
->
-> Best regards,
-> Krzysztof
-
-
-Regards,
-Pawe=C5=82

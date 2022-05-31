@@ -2,220 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7B553934C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 924E0539355
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345308AbiEaOrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 10:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
+        id S1345328AbiEaOtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 10:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345310AbiEaOr3 (ORCPT
+        with ESMTP id S1345299AbiEaOtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 10:47:29 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9471FCC0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:47:25 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-30c1b401711so78674497b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:47:25 -0700 (PDT)
+        Tue, 31 May 2022 10:49:39 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507DDF43
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:49:39 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id e24so5253274pjt.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:49:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0/w36mR8lkluvb8r4zMg9iFSFRhtHLpPbTXMI17TU+0=;
-        b=LSLyPRCEhXwgNFtzrXoohD9b0LordUSKogzPD70Sspkp+qbF4XrKc4emGZDOqFhtZq
-         V9GMbd4oqskJ5yX/Onrv4xCdE2Hb19sjiQLd5lXz3isCADO36PQwBR+CqvHyIbovAct9
-         2Goq8LE+bgXwOcTIUbdiMiZ2/O7Hi0EY7NhlWgT4KL5DdcHjD+VfD4cw9dbk7afIZAlR
-         ajkQOPs+PJeB46bfEqAgEH6FVCR9dcpq36yDQx5eqH/udxd20DndGF/cTN1/b1XwmS1t
-         23sMUF4kMLrWJYOsmDZGqCXs7TLhu2OnlFf3HEPhJMHSsLvyuN9AswgDHGEJUjJUV0Ay
-         v9xw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NAOtSJQ0e7lMXAVSUZPZ1qHrCN9pnSWlg6iMnewBSfg=;
+        b=cV7Mz+wAIW+PUEe0iYCSMFq+uwxZ91W/LWcYZNEYSILqBIgtLaEyH4um2dlf1uimil
+         Hi01/2VYvnNhg5DSMEI7jjDXglilceVlkoiPmjoJ7T37eqTTua6KsZfxs7YJoqo9iVYF
+         ZBze3AfYyWmvNzLR0j+MK6mh8wov6wK65LrFma3m1bAzxLgSpHMraTJBX2Bx14ExdN3Q
+         p8kWMI3acpRst921i2EBqp2XK8bfYwjbpd4dNcxzRkq0pyMxVqQoxW3Et3XaRFHK9XGT
+         2OCdR5DusT0ZqUmE3AGkp7ntPwr7BoFNaUddygiHIKy4/LvF4KgYPvWivit4UnnS58j3
+         OWjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0/w36mR8lkluvb8r4zMg9iFSFRhtHLpPbTXMI17TU+0=;
-        b=ZT9CHWf3vxP1JvLohmScWPsFbM2WHNcON0hh1wh6cRWXwLAHRaG29ZACnYspTcJEp8
-         t/aqMF2yoVwESKpJYxJn7erEGNwNOvcJKoSJ9Vw4iRjFOkgdVGEKGuJajsOnRSIJP32/
-         W6HZ3MRyCzf1R5VVnQ+ncnpkz97XvqcmN/SLYYdymuDs/vyYxQY1ySziEC+7WNFmult1
-         YdWCOwpais4yLJhw65qhMPiwbwR4+0KHzuOQZYVlqEBEQ1b967hi2N+f9SD8mOeSXWuI
-         +FBulm29ewnFAoWoERLNiVFWEvia9WbIKxNvdTULXHlkNoo8SlR5fKtLJ3ckm2sIl7Id
-         25tQ==
-X-Gm-Message-State: AOAM5330DlftmQmOCrl5Wk6bjsHw6uSz+7j79+wHHEpUps253yNB0npQ
-        UPo7ANULi5080mAP2qI/5+gdoF/vpIZN37nBS3UMOA==
-X-Google-Smtp-Source: ABdhPJxalwaZgY7TBxR+rRUyZGByUKq8vkvMzwrupGRbsbPzVyQkfLLhgbl3SHj69aTFZUjOQDLsewD3X2l5ox/iwNk=
-X-Received: by 2002:a81:92cd:0:b0:30c:33ad:377e with SMTP id
- j196-20020a8192cd000000b0030c33ad377emr14554771ywg.286.1654008444987; Tue, 31
- May 2022 07:47:24 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NAOtSJQ0e7lMXAVSUZPZ1qHrCN9pnSWlg6iMnewBSfg=;
+        b=8KR/Pg+gUgrS7Pykg6gdSWsin+p9Qcl4Q48e7g85xoImt6TmJxs2FduBNWzy4B0BSE
+         bIVKbf5t506HZmJsh7nK1Tb7vS7hDqeVl18iM0cs885OB5Hqh6Jou+KdWqlRWyGv7zHN
+         x0kzPNPdyUXQFBN3okDg0+yj7XoxlfqMGpKlcW2gFYNUxXMlBTrjiQes33T0+4RIkTxP
+         81UmL6C3RNvWqY4M4GJToe28oltS7j+OzZT1ogPFunmzsbdGm3vgxxK0CcBrd3uQgboh
+         xfZKYo0rmJjEKpCtaJmAfD9kPJCMNp1+ywInQNIQceD46wC5/IRe0piMU1ZXYZpAzRoG
+         OPdw==
+X-Gm-Message-State: AOAM533dViHQUaqHEhhdIVARKVe6fCLT8UPear7goUyLObXsFT4YdJ7g
+        26nowOzMP7oCmsdn4e+9ofs=
+X-Google-Smtp-Source: ABdhPJwp7L4klTmbrkke0YpYCLWkj2Vr73IGnj3X69pgKGLK4gcgENFTfpGqAgXHRx3n2vVZJlo34g==
+X-Received: by 2002:a17:902:e80c:b0:163:d222:60b7 with SMTP id u12-20020a170902e80c00b00163d22260b7mr12131714plg.54.1654008578559;
+        Tue, 31 May 2022 07:49:38 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id d3-20020a17090a8d8300b001e2d4ef6160sm2007215pjo.27.2022.05.31.07.49.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 07:49:38 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH 1/2] drm/meson: encoder_cvbs: Fix refcount leak in meson_encoder_cvbs_init
+Date:   Tue, 31 May 2022 18:48:15 +0400
+Message-Id: <20220531144818.26943-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220530130839.120710-1-pan@semihalf.com> <20220530130839.120710-3-pan@semihalf.com>
- <f789afb2-33c5-2b28-5ade-0c76ebb7206f@linaro.org> <CAHNYxRw00QraVW0085xO-qzgGJdZ2joukuSYzBQo+yjLnkD=Tw@mail.gmail.com>
- <e4ef2056-c990-b308-a9d5-98f11ac0ba51@linaro.org>
-In-Reply-To: <e4ef2056-c990-b308-a9d5-98f11ac0ba51@linaro.org>
-From:   =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
-Date:   Tue, 31 May 2022 16:47:13 +0200
-Message-ID: <CAF9_jYR=sjP9wYW9wyfbrVYO4PDYTfMhjvyyh53U3a3+2Zyw=g@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dts: socfpga: Add Google Chameleon v3 devicetree
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Alexandru M Stan <amstan@chromium.org>, SoC Team <soc@kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Dinh Nguyen <dinguyen@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 11:11 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 31/05/2022 03:20, Alexandru M Stan wrote:
-> > Hello Krzysztof
-> >
-> > On Mon, May 30, 2022 at 11:56 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 30/05/2022 15:08, Pawe=C5=82 Anikiel wrote:
-> >>> Add devicetree for the Google Chameleon v3 board.
-> >>>
-> >>> Signed-off-by: Pawe=C5=82 Anikiel <pan@semihalf.com>
-> >>> Signed-off-by: Alexandru M Stan <amstan@chromium.org>
-> >>
-> >> Your SoB chain looks odd. Who did what here?
-> >
-> > Sorry about this.
-> >
-> > It was mainly Pawel but I did some small changes at some point before
-> > it landed in our tree (particularly the GPIOs).
->
-> Then usually Pawe=C5=82 should be the owner of the patch, not you.
-> Alternatively it could be also co-developed.
->
-> >
-> >>
-> >>> ---
-> >>>  arch/arm/boot/dts/Makefile                    |  1 +
-> >>>  .../boot/dts/socfpga_arria10_chameleonv3.dts  | 90 +++++++++++++++++=
-++
-> >>>  2 files changed, 91 insertions(+)
-> >>>  create mode 100644 arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
-> >>>
-> >>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> >>> index 023c8b4ba45c..9417106d3289 100644
-> >>> --- a/arch/arm/boot/dts/Makefile
-> >>> +++ b/arch/arm/boot/dts/Makefile
-> >>> @@ -1146,6 +1146,7 @@ dtb-$(CONFIG_ARCH_S5PV210) +=3D \
-> >>>       s5pv210-torbreck.dtb
-> >>>  dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) +=3D \
-> >>>       socfpga_arria5_socdk.dtb \
-> >>> +     socfpga_arria10_chameleonv3.dtb \
-> >>>       socfpga_arria10_socdk_nand.dtb \
-> >>>       socfpga_arria10_socdk_qspi.dtb \
-> >>>       socfpga_arria10_socdk_sdmmc.dtb \
-> >>> diff --git a/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts b/arch=
-/arm/boot/dts/socfpga_arria10_chameleonv3.dts
-> >>> new file mode 100644
-> >>> index 000000000000..988cc445438e
-> >>> --- /dev/null
-> >>> +++ b/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
-> >>> @@ -0,0 +1,90 @@
-> >>> +// SPDX-License-Identifier: GPL-2.0
-> >>> +/*
-> >>> + * Copyright 2022 Google LLC
-> >>> + */
-> >>> +/dts-v1/;
-> >>> +#include "socfpga_arria10_mercury_aa1.dtsi"
-> >>> +
-> >>> +/ {
-> >>> +     model =3D "Google Chameleon V3";
-> >>> +     compatible =3D "google,chameleon-v3",
-> >>
-> >> You miss here enclustra compatible.
-> >
-> > Does this make sense? I don't expect this device tree to boot/work on
-> > an enclustra motherboard. It's only really compatible with a
-> > "chameleon-v3".
->
-> You also do not expect it to boot on altr,socfpga, do you?
->
-> If I understood correctly, this board has physically Mercury AA1 SoM, so
-> that compatible should be there.
+of_graph_get_remote_node() returns remote device nodepointer with
+refcount incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-Yes, you understood correctly.
-I looked at a similar device - the Cyclone V MCV (SoM) and the MCVEVK
-(base board):
-arch/arm/boot/dts/socfpga_cyclone5_mcv.dtsi
-arch/arm/boot/dts/socfpga_cyclone5_mcvevk.dts
-And there is no denx,mcv compatible anywhere, only denx,mcvevk.
-Also, devicetree bindings documentation lists denx,mcvevk under
-"Cyclone 5 boards", and, unless you consider the MCV to be a board,
-there isn't a good place to put denx,mcv (same story with mercury+
-aa1/chameleon).
+Fixes: 318ba02cd8a8 ("drm/meson: encoder_cvbs: switch to bridge with ATTACH_NO_CONNECTOR")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/gpu/drm/meson/meson_encoder_cvbs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
->
-> It's the same for every other SoM. Neither Google nor Enclustra are
-> special...
->
-> >
-> >>
-> >>> +                  "altr,socfpga-arria10", "altr,socfpga";
-> >>> +
-> >>> +     aliases {
-> >>> +             serial0 =3D &uart0;
-> >>> +             i2c0 =3D &i2c0;
-> >>> +             i2c1 =3D &i2c1;
-> >>> +     };
-> >>> +};
-> >>> +
-> >>> +&gmac0 {
-> >>> +     status =3D "okay";
-> >>> +};
-> >>> +
-> >>> +&gpio0 {
-> >>> +     status =3D "okay";
-> >>> +};
-> >>> +
-> >>> +&gpio1 {
-> >>> +     status =3D "okay";
-> >>> +};
-> >>> +
-> >>> +&gpio2 {
-> >>> +     status =3D "okay";
-> >>> +};
-> >>> +
-> >>> +&i2c0 {
-> >>> +     status =3D "okay";
-> >>> +
-> >>> +     ssm2603: ssm2603@1a {
-> >>
-> >> Generic node names.
-> >
-> > Dumb question: what does this mean?
-> >
-> > Are you saying the name is too generic? As someone reading the
-> > schematics this would be immediately clear what chip it's talking
-> > about.
->
-> Let me clarify - please use generic node names, as asked by Devicetree
-> specification (2.2.1. Node Name Requirements). There is also list of
-> some examples in the spec, but you can use some other generic node name.
->
-> Several bindings also require it.
+diff --git a/drivers/gpu/drm/meson/meson_encoder_cvbs.c b/drivers/gpu/drm/meson/meson_encoder_cvbs.c
+index fd8db97ba8ba..8110a6e39320 100644
+--- a/drivers/gpu/drm/meson/meson_encoder_cvbs.c
++++ b/drivers/gpu/drm/meson/meson_encoder_cvbs.c
+@@ -238,6 +238,7 @@ int meson_encoder_cvbs_init(struct meson_drm *priv)
+ 	}
+ 
+ 	meson_encoder_cvbs->next_bridge = of_drm_find_bridge(remote);
++	of_node_put(remote);
+ 	if (!meson_encoder_cvbs->next_bridge) {
+ 		dev_err(priv->dev, "Failed to find CVBS Connector bridge\n");
+ 		return -EPROBE_DEFER;
+-- 
+2.25.1
 
-Do you mean something like this?
-ssm2603: audio-codec@1a {
-u80: gpio@21 {
-
-Regards,
-Pawe=C5=82

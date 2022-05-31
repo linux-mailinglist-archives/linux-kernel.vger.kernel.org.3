@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126655391BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B66DC5391BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344712AbiEaNVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
+        id S1344705AbiEaNVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344700AbiEaNV3 (ORCPT
+        with ESMTP id S1344699AbiEaNV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 31 May 2022 09:21:29 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7D4972A6;
-        Tue, 31 May 2022 06:21:28 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id m82so3421973oif.13;
-        Tue, 31 May 2022 06:21:28 -0700 (PDT)
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B355B97295;
+        Tue, 31 May 2022 06:21:27 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id r206so10177809oib.8;
+        Tue, 31 May 2022 06:21:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=e5hEwdVyk0aAkl6eSBNPLNwTk/gtSZtsZFRN5GRZ6bA=;
-        b=SLJnrAdPTX9gBHgCOIQUIvxYlWeUh/43uZIeHIbWXD6AgkZXfTsmVFN5/J1axleTgi
-         W0Cv4Udy3xf4gfrDaQJ2zz6HRNdIo4oe8Has8kF5a35m8cB6mvSeB6hLgb2wmGZ5fQ/h
-         MzL/WuStPns1a0DTMplSgAUK579dZESxCV+EFxyvFJ7Kco3zKrg3YmnHqJRJMUB2QrO7
-         1zYv9b9aqzsRFxxH06dMe8IDa/Z+qpPoVXzaBmIGqdUSVMwm86Cc0lArGHpgWeDfU6Ix
-         MUSRE+Vou+C6XSt13kYA72n4pHOWi49g/UKizwP2QyPexXgNkdJxd6X4vNc7m5Zhv1G+
-         g9Sw==
-X-Gm-Message-State: AOAM532+2SN84i6RIgO+cR5M+6d+3gCJf6AiuBP6cV46rMtmUPWGfRgB
-        xYlYGi0twYXqHrcOlpyJyQ==
-X-Google-Smtp-Source: ABdhPJwc9hEHIr4dNicEv2trxpFWfW7N9CStjs9nOb2xy+SSJhjlsZ6CBFELIq7Zjs0oQODGv2QlAg==
-X-Received: by 2002:a05:6808:f8c:b0:32a:e67f:d20e with SMTP id o12-20020a0568080f8c00b0032ae67fd20emr11509012oiw.88.1654003287818;
-        Tue, 31 May 2022 06:21:27 -0700 (PDT)
+        bh=sjiY+V80OL2DiZ6A4EsGgW9fJIH8AO134dDg8U/4y24=;
+        b=GQqS4YzL0CcrjWio8g1620mtdtIoIFhVjGmYTjOmnL7S20z6Uh/9AnEqD4WKXuDZZc
+         HSgpZhl70zIDubCokzfPjFmP+nEpjo7msu1sKYn58nH/7U+9ZmVRWOEJ7ughOagON/Vc
+         JW9G7oQK490sIscHOtp//QtsaxCIUwdZWLeY45E717pQqV75WcmW89SoMZYdRglPgDvH
+         mdqL6t8yyk0zrfaHnERuuFEBndWjiLbvWR+EeQu9E3pXLP1c+OhkgAzI4nIfGRR5JNhE
+         VIakFRjzfDoeM+hZxOIOxlIdW9qjWiH01RdR4bsU9RGumc+FnPhKcKyPlUP6JxyCRXGt
+         pCeg==
+X-Gm-Message-State: AOAM533Jl+2o86Ast5GkZ/xUWzKrJRIafJtRcokypeg6vANmWFIBRiAv
+        aX4F+jcIj6+bMQk+nrIZDQ==
+X-Google-Smtp-Source: ABdhPJyl1Zml7tK5z8UzPYsy0IRPoHHsY9ZbD0LO+NEm3SnMP5YpNvNvBFYMbygVSD+kwDaZAn8DAw==
+X-Received: by 2002:a05:6808:1510:b0:32a:ef6a:99b with SMTP id u16-20020a056808151000b0032aef6a099bmr12444054oiw.120.1654003286440;
+        Tue, 31 May 2022 06:21:26 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s31-20020a056830439f00b0060613c844adsm6307651otv.10.2022.05.31.06.21.26
+        by smtp.gmail.com with ESMTPSA id t6-20020a056870f20600b000e90544b79fsm5563380oao.41.2022.05.31.06.21.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 06:21:27 -0700 (PDT)
-Received: (nullmailer pid 1610161 invoked by uid 1000);
+        Tue, 31 May 2022 06:21:26 -0700 (PDT)
+Received: (nullmailer pid 1610155 invoked by uid 1000);
         Tue, 31 May 2022 13:21:25 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Puranjay Mohan <p-mohan@ti.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        robh+dt@kernel.org, edumazet@google.com, vigneshr@ti.com,
-        kishon@ti.com, afd@ti.com, davem@davemloft.net,
-        ssantosh@kernel.org, andrew@lunn.ch,
-        krzysztof.kozlowski+dt@linaro.org, grygorii.strashko@ti.com,
-        devicetree@vger.kernel.org, s-anna@ti.com, nm@ti.com,
-        rogerq@kernel.org, linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220531095108.21757-2-p-mohan@ti.com>
-References: <20220531095108.21757-1-p-mohan@ti.com> <20220531095108.21757-2-p-mohan@ti.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: net: Add ICSSG Ethernet Driver bindings
+To:     Fabien Parent <fparent@baylibre.com>
+Cc:     airlied@linux.ie, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, matthias.bgg@gmail.com,
+        chunkuang.hu@kernel.org, devicetree@vger.kernel.org,
+        jitao.shi@mediatek.com, ck.hu@mediatek.com, p.zabel@pengutronix.de,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, daniel@ffwll.ch,
+        robh+dt@kernel.org
+In-Reply-To: <20220530201436.902505-1-fparent@baylibre.com>
+References: <20220530201436.902505-1-fparent@baylibre.com>
+Subject: Re: [PATCH 1/7] dt-bindings: display: mediatek: dpi: add power-domains property
 Date:   Tue, 31 May 2022 08:21:25 -0500
-Message-Id: <1654003285.283793.1610159.nullmailer@robh.at.kernel.org>
+Message-Id: <1654003285.268526.1610147.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -64,22 +65,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 May 2022 15:21:07 +0530, Puranjay Mohan wrote:
-> Add a YAML binding document for the ICSSG Programmable real time unit
-> based Ethernet driver. This driver uses the PRU and PRUSS consumer APIs
-> to interface the PRUs and load/run the firmware for supporting ethernet
-> functionality.
+On Mon, 30 May 2022 22:14:30 +0200, Fabien Parent wrote:
+> DPI is part of the display / multimedia block in MediaTek SoCs, and
+> always have a power-domain (at least in the upstream device-trees).
+> Add the power-domains property to the binding documentation.
 > 
-> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
 > ---
-> v1: https://lore.kernel.org/all/20220506052433.28087-2-p-mohan@ti.com/
-> v1 -> v2:
-> * Addressed Rob's Comments
-> * It includes indentation, formatting, and other minor changes.
-> ---
->  .../bindings/net/ti,icssg-prueth.yaml         | 181 ++++++++++++++++++
->  1 file changed, 181 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
+>  .../devicetree/bindings/display/mediatek/mediatek,dpi.yaml  | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -88,12 +82,11 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/ti,icssg-prueth.example.dtb: pruss2_eth: False schema does not allow {'compatible': ['ti,am654-icssg-prueth'], 'pinctrl-names': ['default'], 'pinctrl-0': [[4294967295]], 'sram': [[4294967295]], 'ti,prus': [[4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295]], 'firmware-name': ['ti-pruss/am65x-pru0-prueth-fw.elf', 'ti-pruss/am65x-rtu0-prueth-fw.elf', 'ti-pruss/am65x-txpru0-prueth-fw.elf', 'ti-pruss/am65x-pru1-prueth-fw.elf', 'ti-pruss/am65x-rtu1-prueth-fw.elf', 'ti-pruss/am65x-txpru1-prueth-fw.elf'], 'ti,pruss-gp-mux-sel': [[2, 2, 2, 2, 2, 2]], 'ti,mii-g-rt': [[4294967295]], 'dmas': [[4294967295, 49920], [4294967295, 49921], [4294967295, 49922], [4294967295, 49923], [4294967295, 49924], [4294967295, 49925], [4294967295, 49926], [4294967295, 49927], [4294967295, 17152], [4294967295, 17153]], 'dma-names': ['tx0-0', 'tx0-1', 'tx0-2', 'tx0-3', 'tx1-0', 'tx1-1', 'tx1-2', 'tx1-3', 'rx0', 'rx1'], 'i
- nterrupts': [[24, 0, 2], [25, 1, 3]], 'interrupt-names': ['tx_ts0', 'tx_ts1'], 'ethernet-ports': {'#address-cells': [[1]], '#size-cells': [[0]], 'port@0': {'reg': [[0]], 'phy-handle': [[4294967295]], 'phy-mode': ['rgmii-rxid'], 'interrupts-extended': [[4294967295, 24]], 'ti,syscon-rgmii-delay': [[4294967295, 16672]], 'local-mac-address': [[0, 0, 0, 0, 0, 0]]}, 'port@1': {'reg': [[1]], 'phy-handle': [[4294967295]], 'phy-mode': ['rgmii-rxid'], 'interrupts-extended': [[4294967295, 25]], 'ti,syscon-rgmii-delay': [[4294967295, 16676]], 'local-mac-address': [[0, 0, 0, 0, 0, 0]]}}, '$nodename': ['pruss2_eth']}
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/ti,icssg-prueth.example.dtb: pruss2_eth: Unevaluated properties are not allowed ('firmware-name', 'ti,prus', 'ti,pruss-gp-mux-sel' were unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
+Error: Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.example.dts:29.35-36 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1401: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 

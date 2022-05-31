@@ -2,192 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2232538F62
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81798538FC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343655AbiEaK7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 06:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
+        id S243022AbiEaLVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 07:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237843AbiEaK7K (ORCPT
+        with ESMTP id S1343870AbiEaLUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 06:59:10 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C1698594;
-        Tue, 31 May 2022 03:59:08 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LC8Mh3VXzzDq60;
-        Tue, 31 May 2022 18:56:00 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 31 May 2022 18:59:05 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 31 May 2022 18:59:05 +0800
-Subject: Re: [PATCH -next v7 2/3] block, bfq: refactor the counting of
- 'num_groups_with_pending_reqs'
-To:     Jan Kara <jack@suse.cz>
-CC:     Paolo Valente <paolo.valente@unimore.it>,
-        Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
-        <cgroups@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220528095020.186970-1-yukuai3@huawei.com>
- <20220528095020.186970-3-yukuai3@huawei.com>
- <0D9355CE-F85B-4B1A-AEC3-F63DFC4B3A54@linaro.org>
- <b9a4ea60-28e5-b7aa-0154-ad7481eafbd3@huawei.com>
- <efe01dd1-0f99-dadf-956d-b0e80e1e602c@huawei.com>
- <1803FD7E-9FB1-4A1E-BD6D-D6657006589A@unimore.it>
- <a0d8452c-e421-45d3-b012-5355207fc0e1@huawei.com>
- <81214347-3806-4F54-B60F-3E5A1A5EC84D@unimore.it>
- <756631ee-6a85-303c-aca1-d60aaf477d0d@huawei.com>
- <20220531100101.pdnrpkxbapur5gsk@quack3.lan>
-From:   Yu Kuai <yukuai3@huawei.com>
-Message-ID: <0f3fb7e6-2f73-81bd-3930-e166b210a74e@huawei.com>
-Date:   Tue, 31 May 2022 18:59:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 31 May 2022 07:20:53 -0400
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EDE9CC80;
+        Tue, 31 May 2022 04:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1653996039; x=1685532039;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1AvcBprIOSQItFD8cn3+FAqAk16pR3Q+CjOoSzkn5lI=;
+  b=Bdoj1DaD51xFWm0sFBO6RbLLXj37THLg9PRqc+TIX467m8YkoaOuTXuE
+   pWM9mUdV9SnYEdjHZJ6ftup+w3RrOAjcyO6WxsMNrL+yAzjRwVaHDCOCX
+   f7+ZEozYlxwWEFBuaWkmFESS7FVIvN4jF6Lz3V/Y+gL8bkPcYyVw9c24O
+   c=;
+X-IronPort-AV: E=Sophos;i="5.91,265,1647302400"; 
+   d="scan'208";a="93329158"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-ca048aa0.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP; 31 May 2022 10:59:36 +0000
+Received: from EX13D33EUC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1d-ca048aa0.us-east-1.amazon.com (Postfix) with ESMTPS id CF7D38121F;
+        Tue, 31 May 2022 10:59:30 +0000 (UTC)
+Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
+ EX13D33EUC002.ant.amazon.com (10.43.164.234) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Tue, 31 May 2022 10:59:29 +0000
+Received: from dev-dsk-jalliste-1c-387c3ddf.eu-west-1.amazon.com
+ (10.13.250.64) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36 via Frontend Transport; Tue, 31 May 2022
+ 10:59:27 +0000
+From:   Jack Allister <jalliste@amazon.com>
+CC:     <jalliste@amazon.com>, <diapop@amazon.co.uk>,
+        <metikaya@amazon.co.uk>, Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>,
+        "Sean Christopherson" <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, <x86@kernel.org>,
+        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] KVM: VMX: CPU frequency scaling for intel x86_64 KVM guests
+Date:   Tue, 31 May 2022 10:59:25 +0000
+Message-ID: <20220531105925.27676-1-jalliste@amazon.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20220531100101.pdnrpkxbapur5gsk@quack3.lan>
-Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/05/31 18:01, Jan Kara 写道:
-> On Tue 31-05-22 17:33:25, Yu Kuai wrote:
->> 在 2022/05/31 17:19, Paolo Valente 写道:
->>>> Il giorno 31 mag 2022, alle ore 11:06, Yu Kuai <yukuai3@huawei.com> ha scritto:
->>>>
->>>> 在 2022/05/31 16:36, Paolo VALENTE 写道:
->>>>>> Il giorno 30 mag 2022, alle ore 10:40, Yu Kuai <yukuai3@huawei.com> ha scritto:
->>>>>>
->>>>>> 在 2022/05/30 16:34, Yu Kuai 写道:
->>>>>>> 在 2022/05/30 16:10, Paolo Valente 写道:
->>>>>>>>
->>>>>>>>
->>>>>>>>> Il giorno 28 mag 2022, alle ore 11:50, Yu Kuai <yukuai3@huawei.com> ha scritto:
->>>>>>>>>
->>>>>>>>> Currently, bfq can't handle sync io concurrently as long as they
->>>>>>>>> are not issued from root group. This is because
->>>>>>>>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
->>>>>>>>> bfq_asymmetric_scenario().
->>>>>>>>>
->>>>>>>>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
->>>>>>>>>
->>>>>>>>> Before this patch:
->>>>>>>>> 1) root group will never be counted.
->>>>>>>>> 2) Count if bfqg or it's child bfqgs have pending requests.
->>>>>>>>> 3) Don't count if bfqg and it's child bfqgs complete all the requests.
->>>>>>>>>
->>>>>>>>> After this patch:
->>>>>>>>> 1) root group is counted.
->>>>>>>>> 2) Count if bfqg have at least one bfqq that is marked busy.
->>>>>>>>> 3) Don't count if bfqg doesn't have any busy bfqqs.
->>>>>>>>
->>>>>>>> Unfortunately, I see a last problem here. I see a double change:
->>>>>>>> (1) a bfqg is now counted only as a function of the state of its child
->>>>>>>>        queues, and not of also its child bfqgs
->>>>>>>> (2) the state considered for counting a bfqg moves from having pending
->>>>>>>>        requests to having busy queues
->>>>>>>>
->>>>>>>> I'm ok with with (1), which is a good catch (you are lady explained
->>>>>>>> the idea to me some time ago IIRC).
->>>>>>>>
->>>>>>>> Yet I fear that (2) is not ok.  A bfqq can become non busy even if it
->>>>>>>> still has in-flight I/O, i.e.  I/O being served in the drive.  The
->>>>>>>> weight of such a bfqq must still be considered in the weights_tree,
->>>>>>>> and the group containing such a queue must still be counted when
->>>>>>>> checking whether the scenario is asymmetric.  Otherwise service
->>>>>>>> guarantees are broken.  The reason is that, if a scenario is deemed as
->>>>>>>> symmetric because in-flight I/O is not taken into account, then idling
->>>>>>>> will not be performed to protect some bfqq, and in-flight I/O may
->>>>>>>> steal bandwidth to that bfqq in an uncontrolled way.
->>>>>>> Hi, Paolo
->>>>>>> Thanks for your explanation.
->>>>>>> My orginal thoughts was using weights_tree insertion/removal, however,
->>>>>>> Jan convinced me that using bfq_add/del_bfqq_busy() is ok.
->>>>>>>   From what I see, when bfqq dispatch the last request,
->>>>>>> bfq_del_bfqq_busy() will not be called from __bfq_bfqq_expire() if
->>>>>>> idling is needed, and it will delayed to when such bfqq get scheduled as
->>>>>>> in-service queue again. Which means the weight of such bfqq should still
->>>>>>> be considered in the weights_tree.
->>>>>>> I also run some tests on null_blk with "irqmode=2
->>>>>>> completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
->>>>>>> that service guarantees are still preserved on slow device.
->>>>>>> Do you this is strong enough to cover your concern?
->>>>> Unfortunately it is not.  Your very argument is what made be believe
->>>>> that considering busy queues was enough, in the first place.  But, as
->>>>> I found out, the problem is caused by the queues that do not enjoy
->>>>> idling.  With your patch (as well as in my initial version) they are
->>>>> not counted when they remain without requests queued.  And this makes
->>>>> asymmetric scenarios be considered erroneously as symmetric.  The
->>>>> consequence is that idling gets switched off when it had to be kept
->>>>> on, and control on bandwidth is lost for the victim in-service queues.
->>>>
->>>> Hi，Paolo
->>>>
->>>> Thanks for your explanation, are you thinking that if bfqq doesn't enjoy
->>>> idling, then such bfqq will clear busy after dispatching the last
->>>> request?
->>>>
->>>> Please kindly correct me if I'm wrong in the following process:
->>>>
->>>> If there are more than one bfqg that is activatied, then bfqqs that are
->>>> not enjoying idle are still left busy after dispatching the last
->>>> request.
->>>>
->>>> details in __bfq_bfqq_expire:
->>>>
->>>>          if (RB_EMPTY_ROOT(&bfqq->sort_list) &&
->>>>          ┊   !(reason == BFQQE_PREEMPTED &&
->>>>          ┊     idling_needed_for_service_guarantees(bfqd, bfqq))) {
->>>> -> idling_needed_for_service_guarantees will always return true,
->>>
->>> It returns true only is the scenario is symmetric.  Not counting bfqqs
->>> with in-flight requests makes an asymmetric scenario be considered
->>> wrongly symmetric.  See function bfq_asymmetric_scenario().
->>
->> Hi, Paolo
->>
->> Do you mean this gap?
->>
->> 1. io1 is issued from bfqq1(from bfqg1)
->> 2. bfqq1 dispatched this io, it's busy is cleared
->> 3. *before io1 is completed*, io2 is issued from bfqq2(bfqg2)
-> 
-> Yes. So as far as I understand Paolo is concerned about this scenario.
-> 
->> 4. with this patchset, while dispatching io2 from bfqq2, the scenario
->> should be symmetric while it's considered wrongly asymmetric.
-> 
-> But with this patchset, we will consider this scenario symmetric because at
-> any point in time there is only one busy bfqq. Before, we considered this
-> scenario asymmetric because two different bfq groups have bfqq in their
-> weights_tree. So before this patchset
-> idling_needed_for_service_guarantees() returned true, after this patchset
-> the function returns false so we won't idle anymore and Paolo argues that
-> bfqq1 does not get adequate protection from bfqq2 as a result.
-> 
-> I agree with Paolo this seems possible. The fix is relatively simple though
-> - instead of changing how weights_tree is used for weight raised queues as
-> you did originally, I'd move the accounting of groups with pending requests
-> to bfq_add/del_bfqq_busy() and bfq_completed_request().
-> 
-> 								Honza
+A VMM can control a vCPU's CPU frequency by interfacing with KVM via
+the vCPU file descriptor to enable/set CPU frequency scaling for a
+guest. Instead of creating a separate IOCTL to this this, KVM capabil-
+ities are extended to include a capability called
+KVM_CAP_CPU_FREQ_SCALING.
 
-Thanks for your explanation, I'll send a new version.
+A generic set_cpu_freq interface is added to kvm_x86_ops
+to allow for architecture (AMD/Intel) independent CPU frequency
+scaling setting.
 
-Kuai
+For Intel platforms, Hardware-Controlled Performance States (HWP) are
+used to implement CPU scaling within the guest. Further information on
+this mechanism can be seen in Intel SDM Vol 3B (section 14.4). The CPU
+frequency is set as soon as this function is called and is kept running
+until explicitly reset or set again.
+
+Currently the AMD frequency setting interface is left unimplemented.
+
+Please note that CPU frequency scaling will have an effect on host
+processing in it's current form. To change back to full performance
+when running in host context an IOCTL with a frequency value of 0
+is needed to run back at uncapped speed.
+
+Signed-off-by: Jack Allister <jalliste@amazon.com>
+---
+ arch/x86/include/asm/kvm_host.h |  2 +
+ arch/x86/kvm/vmx/vmx.c          | 91 +++++++++++++++++++++++++++++++++
+ arch/x86/kvm/x86.c              | 16 ++++++
+ include/uapi/linux/kvm.h        |  1 +
+ 4 files changed, 110 insertions(+)
+
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index ae220f88f00d..d2efc2ce624f 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1169,6 +1169,8 @@ struct kvm_x86_ops {
+ 	bool (*rdtscp_supported)(void);
+ 	bool (*invpcid_supported)(void);
+ 
++	int (*set_cpu_freq_scaling)(struct kvm_vcpu *vcpu, u8 freq_100mhz);
++
+ 	void (*set_tdp_cr3)(struct kvm_vcpu *vcpu, unsigned long cr3);
+ 
+ 	void (*set_supported_cpuid)(u32 func, struct kvm_cpuid_entry2 *entry);
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 6499f371de58..beee39b57b13 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -1699,6 +1699,95 @@ static bool vmx_invpcid_supported(void)
+ 	return cpu_has_vmx_invpcid();
+ }
+ 
++static int vmx_query_cpu_freq_valid_freq(u8 freq)
++{
++#define MASK_PERF 0xFF
++#define CAP_HIGHEST_SHIFT 0
++#define CAP_LOWEST_SHIFT 24
++#define CAP_HIGHEST_MASK (MASK_PERF << CAP_HIGHEST_SHIFT)
++#define CAP_LOWEST_MASK (MASK_PERF << CAP_LOWEST_SHIFT)
++	u64 cap_msr;
++	u8 highest, lowest;
++
++	/* Query highest and lowest supported scaling. */
++	rdmsrl(MSR_HWP_CAPABILITIES, cap_msr);
++	highest = (u8)(cap_msr & CAP_HIGHEST_MASK);
++	lowest = (u8)((cap_msr & CAP_LOWEST_MASK) >> CAP_LOWEST_SHIFT);
++
++	if (freq < lowest || freq > highest)
++		return -EINVAL;
++
++	return 0;
++}
++
++static void vmx_set_cpu_freq_uncapped(void)
++{
++#define SHIFT_DESIRED_PERF 16
++#define SHIFT_MAX_PERF 8
++#define SHIFT_MIN_PERF 0
++
++	u64 cap_msr, req_msr;
++	u8 highest, lowest;
++
++	/* Query the capabilities. */
++	rdmsrl(MSR_HWP_CAPABILITIES, cap_msr);
++	highest = (u8)(cap_msr & CAP_HIGHEST_MASK);
++	lowest = (u8)((cap_msr & CAP_LOWEST_MASK) >> CAP_LOWEST_SHIFT);
++
++	/* Set the desired to highest performance. */
++	req_msr = ((highest & MASK_PERF) << SHIFT_DESIRED_PERF) |
++		((highest & MASK_PERF) << SHIFT_MAX_PERF) |
++		((lowest & MASK_PERF) << SHIFT_MIN_PERF);
++	wrmsrl(MSR_HWP_REQUEST, req_msr);
++}
++
++static void vmx_set_cpu_freq_capped(u8 freq_100mhz)
++{
++	u64 req_msr;
++
++	/* Populate the variable used for setting the HWP request. */
++	req_msr = ((freq_100mhz & MASK_PERF) << SHIFT_DESIRED_PERF) |
++		((freq_100mhz & MASK_PERF) << SHIFT_MAX_PERF) |
++		((freq_100mhz & MASK_PERF) << SHIFT_MIN_PERF);
++
++	wrmsrl(MSR_HWP_REQUEST, req_msr);
++}
++
++static int vmx_set_cpu_freq_scaling(struct kvm_vcpu *vcpu, u8 freq_100mhz)
++{
++	struct kvm *kvm = vcpu->kvm;
++	u64 pm_before, req_msr;
++	int rc;
++
++	/* Is HWP scaling supported? */
++	if (!this_cpu_has(X86_FEATURE_HWP))
++		return -ENODEV;
++
++	/*
++	 * HWP needs to be enabled to query & use capabilities.
++	 * This bit is W1Once so cannot be cleared after.
++	 */
++	rdmsrl(MSR_PM_ENABLE, pm_before);
++	if ((pm_before & 1) == 0)
++		wrmsrl(MSR_PM_ENABLE, pm_before | 1);
++
++	/*
++	 * Check if setting to a specific value, if being set
++	 * to zero this means return to uncapped frequency.
++	 */
++	if (freq_100mhz) {
++		rc = vmx_query_cpu_freq_valid_freq(freq_100mhz);
++
++		if (rc)
++			return rc;
++
++		vmx_set_cpu_freq_capped(freq_100mhz);
++	} else
++		vmx_set_cpu_freq_uncapped();
++
++	return 0;
++}
++
+ /*
+  * Swap MSR entry in host/guest MSR entry array.
+  */
+@@ -8124,6 +8213,8 @@ static struct kvm_x86_ops vmx_x86_ops __ro_after_init = {
+ 	.rdtscp_supported = vmx_rdtscp_supported,
+ 	.invpcid_supported = vmx_invpcid_supported,
+ 
++	.set_cpu_freq_scaling = vmx_set_cpu_freq_scaling,
++
+ 	.set_supported_cpuid = vmx_set_supported_cpuid,
+ 
+ 	.has_wbinvd_exit = cpu_has_vmx_wbinvd_exit,
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index c33423a1a13d..9ae2ab102e01 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3669,6 +3669,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_SET_VAR_MTRR_COUNT:
+ 	case KVM_CAP_X86_USER_SPACE_MSR:
+ 	case KVM_CAP_X86_MSR_FILTER:
++	case KVM_CAP_CPU_FREQ_SCALING:
+ 		r = 1;
+ 		break;
+ #ifdef CONFIG_KVM_XEN
+@@ -4499,6 +4500,19 @@ static int kvm_vcpu_ioctl_x86_set_xcrs(struct kvm_vcpu *vcpu,
+ 	return r;
+ }
+ 
++static int kvm_cap_set_cpu_freq(struct kvm_vcpu *vcpu,
++				       struct kvm_enable_cap *cap)
++{
++	u8 freq = (u8)cap->args[0];
++
++	/* Query whether this platform (Intel or AMD) support setting. */
++	if (!kvm_x86_ops.set_cpu_freq_scaling)
++		return -ENODEV;
++
++	/* Attempt to set to the frequency specified. */
++	return kvm_x86_ops.set_cpu_freq_scaling(vcpu, freq);
++}
++
+ /*
+  * kvm_set_guest_paused() indicates to the guest kernel that it has been
+  * stopped by the hypervisor.  This function will be called from the host only.
+@@ -4553,6 +4567,8 @@ static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
+ 		return kvm_x86_ops.enable_direct_tlbflush(vcpu);
+ 	case KVM_CAP_SET_VAR_MTRR_COUNT:
+ 		return kvm_mtrr_set_var_mtrr_count(vcpu, cap->args[0]);
++	case KVM_CAP_CPU_FREQ_SCALING:
++		return kvm_cap_set_cpu_freq(vcpu, cap);
+ 
+ 	default:
+ 		return -EINVAL;
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 831be0d2d5e4..273a3ab5590e 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -874,6 +874,7 @@ struct kvm_ppc_resize_hpt {
+ #define KVM_CAP_NO_POLL_ON_HLT 100003
+ #define KVM_CAP_MMU_USE_VMA_CAPMEM 100004
+ #define KVM_CAP_MMU_SUPPORT_DYNAMIC_CAPMEM 100005
++#define KVM_CAP_CPU_FREQ_SCALING 100006
+ 
+ #define KVM_CAP_IRQCHIP	  0
+ #define KVM_CAP_HLT	  1
+-- 
+2.32.0
+

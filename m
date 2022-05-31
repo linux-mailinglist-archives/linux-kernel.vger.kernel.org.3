@@ -2,97 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508D7539561
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBDE53957C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346501AbiEaRV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 13:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        id S1346577AbiEaRcq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 31 May 2022 13:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242921AbiEaRVy (ORCPT
+        with ESMTP id S1346565AbiEaRcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 13:21:54 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5145BE5B;
-        Tue, 31 May 2022 10:21:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654017713; x=1685553713;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=R5JfpM7H4eup/6oG0EDoqUqrbb8Ht/9aCZoxZVszKps=;
-  b=BRW4cyutBEpFzeXbC4E65vOXGWRIdG9PGI2ybmcjQmhrRncUYAlM5CI0
-   Eb/CaMeCZvL5IveeyrRvJB3xyI88z6+/AwOfAE+4xiLWKhpLh0V7xLHj4
-   fBHOsMzFSMLgefhDdxShDKhVMLzGfy/2tEIkBVsNFvO3QK6Edeo3z4V0o
-   4m5KpZH/RJmVkQF3oe7ZUWYbMjnDzY/OQvNDYV+aNEv+vstzFbrQAwsGM
-   +YVKk9RNK2QBN4ZgxBm5K0HEMMAzJqRsA8fbn2KFbDiPBUYDz6of4Bo4A
-   jIRQZJL+haIYOzjNNjc7G34P6Wy/KJtwq9NlsITaBZgcMuz9W7DD/BLsm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="262961166"
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="262961166"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 10:21:31 -0700
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="576504827"
-Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 10:21:31 -0700
-Date:   Tue, 31 May 2022 10:21:46 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     "Weiny, Ira" <ira.weiny@intel.com>
-Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "Verma, Vishal L" <vishal.l.verma@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Ben Widawsky <ben@bwidawsk.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V9 7/9] cxl/port: Introduce cxl_cdat_valid()
-Message-ID: <20220531172146.GB1457068@alison-desk>
-References: <20220531152632.1397976-1-ira.weiny@intel.com>
- <20220531152632.1397976-8-ira.weiny@intel.com>
+        Tue, 31 May 2022 13:32:42 -0400
+X-Greylist: delayed 630 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 May 2022 10:32:41 PDT
+Received: from smtp-out.adsn.gmessaging.net (smtp-out.adsn.gmessaging.net [194.2.205.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6641591573
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:32:41 -0700 (PDT)
+Received: from smtp.adsn.gmessaging.net (localhost.localdomain [127.0.0.1])
+        by localhost.adsn.gmessaging.net (Postfix) with SMTP id 4LCJxG2txQzCrjK;
+        Tue, 31 May 2022 19:22:10 +0200 (CEST)
+Received: from SRV-ANC.anc.local (unknown [10.10.255.5])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "srv-anc.anc.local", Issuer "srv-anc.anc.local" (not verified))
+        by smtp.adsn.gmessaging.net (Postfix) with ESMTPS id 4LCJxF6llZzCrhb;
+        Tue, 31 May 2022 19:22:09 +0200 (CEST)
+Received: from SRV-ANC.ANC.local (192.168.36.2) by SRV-ANC.ANC.local
+ (192.168.36.2) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.858.15; Tue, 31 May
+ 2022 19:21:54 +0200
+Received: from ogcb16c7f19.openstacklocal (103.104.169.173) by
+ SRV-ANC.ANC.local (62.210.8.79) with Microsoft SMTP Server id 15.2.858.15 via
+ Frontend Transport; Tue, 31 May 2022 19:21:53 +0200
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531152632.1397976-8-ira.weiny@intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: US Treasury Department Funds!!!
+To:     Recipients <test@poneytelecom.eu>
+From:   "Mr. Timothy Gribben" <test@poneytelecom.eu>
+Date:   Wed, 1 Jun 2022 01:22:10 +0800
+Reply-To: <usdepartmentfunds001@mail.com>
+Message-ID: <08c11152-1776-493f-b312-dc83f9620b3a@SRV-ANC.ANC.local>
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        HK_NAME_MR_MRS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 08:26:30AM -0700, Ira Weiny wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> The CDAT data is protected by a checksum and should be the proper
-> length.
-> 
-> Introduce cxl_cdat_valid() to validate the data.  While at it check and
-> store the sequence number.
-> 
-Store it for ?
+Good Day to you,
 
->  
-> +static bool cxl_cdat_valid(struct device *dev, struct cxl_cdat *cdat)
-> +{
+   How are you doing  I am writing to inform you that the IMF has taken over your transaction and they are willing to deliver your funds through an ATM Card Delivery through an agent Bar. Frank Daniel in the email below.
 
-snip
+Name: Barrister Frank Daniel's
+Email: frankdaniels001@email.com
+Contact Number: +1(205-953-8405)
 
-> +
-> +	seq = FIELD_GET(CDAT_HEADER_DW3_SEQUENCE, table[3]);
-> +	/* Store the sequence for now. */
-> +	if (cdat->seq != seq) {
-> +		dev_info(dev, "CDAT seq change %x -> %x\n", cdat->seq, seq);
-> +		cdat->seq = seq;
-> +	}
-> +
+Contact Barrister Frank Daniels immediately regarding your card and make you inform him this message was from I Mr. Timothy Gribben The Commissioner Debt Management Services Bureau of the Fiscal Service US Department of the Treasury with your name and phone number for the process of your funds in getting to you And ensure that you confirm as soon as have contacted Him.
 
-Wondering when does/will this sequence number come into play?
 
-> 
+Regards,
+Timothy Gribben
+Commissioner
+Debt Management Services
+Bureau of the Fiscal Service
+US Department of the Treasury

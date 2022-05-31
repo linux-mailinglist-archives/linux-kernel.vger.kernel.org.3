@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C70B538C4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8577A538C4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244640AbiEaHzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 03:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
+        id S244656AbiEaHzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 03:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242444AbiEaHzf (ORCPT
+        with ESMTP id S244649AbiEaHzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 03:55:35 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0053694B3
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:55:34 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id x3-20020a056e021bc300b002d1b0ccfca6so9790929ilv.11
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:55:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=cxpiXnK1IciwR0g2vIgtdnT2h0baAIafVhqTkrZDzaE=;
-        b=32aRInsSRPJcde/50J52C/3ucxghQ+RWxZmf9WgeJurhv01ibJtLSf1yGlrrSNrx4f
-         4sMW28uQ+URuRPHiuHsfgg6b4exH131/9mFoIQL06RLgl3HAyeF6ZO9ItyJ7dVlHEYb1
-         rPA3kY1disKv1TycNlJSN3F8l3DQJ3gUcUPnpA0HmhO69IORCdW6bNRUrSIpMgmyJjoI
-         OT671AGD5XECcWjZahoY3wDJsg+f4gnGawsvIo/2qWEucwslg5eXfDmafFrhxjA8W4jT
-         SXdcknidyahdOcPwVgwWqJPcgtHqPnucRm7t+0N7lkaa0RZGw6RjYtTIfUlYqNxgSf2K
-         CHog==
-X-Gm-Message-State: AOAM530kFWZNEAWFWqvPtvtNwKYM1n+ndx7MVL8QqDDRoa5FwXExtJoV
-        9rfpKCIcqR8aKHVaQRAK6UeSuCsTkM9uzwn6htYR2DxVIkgA
-X-Google-Smtp-Source: ABdhPJy7wpZl+xfY5dLEpG1T3xcfxloGUoCPapohjwDNaHJ9S9Y8qeR8R68SlXci3/iDZn2DIeYPq8IGMh6gjv2S2W43m45Zwsl5
+        Tue, 31 May 2022 03:55:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A48036B677
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:55:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653983747;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=tvCRh6wMybfz1jQ+oOGAFWgP9hwbhrbOUgkVnS4S7M0=;
+        b=XnMvhiJLjQhQSD+ZDtYpTo6e9kfg8h3FmL+5SnZtvt8erx0DXrlwgg6K/jPl9oSKS/rQPQ
+        ZrGidYshPIIdhlDg5YMazsZlY2fTbGrLe27AUr7ZTucf8SpdG7DFlkv27qajdLvB34OxRw
+        MC6L6u96NeHyjYmK4vlLla/bAbJtqVY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-191-sXXc57MwP_GSPXQrM3jxFw-1; Tue, 31 May 2022 03:55:44 -0400
+X-MC-Unique: sXXc57MwP_GSPXQrM3jxFw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C82ED101AA45;
+        Tue, 31 May 2022 07:55:43 +0000 (UTC)
+Received: from thuth.com (unknown [10.39.194.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C66302026D64;
+        Tue, 31 May 2022 07:55:42 +0000 (UTC)
+From:   Thomas Huth <thuth@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: Adjust the return type of kvm_vm_ioctl_check_extension_generic()
+Date:   Tue, 31 May 2022 09:55:40 +0200
+Message-Id: <20220531075540.14242-1-thuth@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:265:b0:32e:7811:af92 with SMTP id
- x5-20020a056638026500b0032e7811af92mr29831212jaq.169.1653983734180; Tue, 31
- May 2022 00:55:34 -0700 (PDT)
-Date:   Tue, 31 May 2022 00:55:34 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f0b26205e04a183b@google.com>
-Subject: [syzbot] UBSAN: array-index-out-of-bounds in io_submit_sqes
-From:   syzbot <syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,57 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+kvm_vm_ioctl_check_extension_generic() either returns small constant
+numbers or the result of kvm_vm_ioctl_check_extension() which is of type
+"int". Looking at the callers of kvm_vm_ioctl_check_extension_generic(),
+one stores the result in "int r", the other one in "long r", so the
+result has to fit in the smaller "int" in any case. Thus let's adjust
+the return value to "int" here so we have one less transition from
+"int" -> "long" -> "int" in case of the kvm_vm_ioctl() ->
+kvm_vm_ioctl_check_extension_generic() -> kvm_vm_ioctl_check_extension()
+call chain.
 
-syzbot found the following issue on:
-
-HEAD commit:    3b46e4e44180 Add linux-next specific files for 20220531
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=16e151f5f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ccb8d66fc9489ef
-dashboard link: https://syzkaller.appspot.com/bug?extid=b6c9b65b6753d333d833
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com
-
-================================================================================
-================================================================================
-UBSAN: array-index-out-of-bounds in fs/io_uring.c:8860:19
-index 75 is out of range for type 'io_op_def [47]'
-CPU: 0 PID: 10377 Comm: syz-executor.4 Not tainted 5.18.0-next-20220531-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
- __ubsan_handle_out_of_bounds.cold+0x62/0x6c lib/ubsan.c:283
- io_init_req fs/io_uring.c:8860 [inline]
- io_submit_sqe fs/io_uring.c:8987 [inline]
- io_submit_sqes+0x6f0e/0x8020 fs/io_uring.c:9143
- __do_sys_io_uring_enter+0x1112/0x2300 fs/io_uring.c:12077
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7fd28ac89109
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fd28be25168 EFLAGS: 00000246 ORIG_RAX: 00000000000001aa
-RAX: ffffffffffffffda RBX: 00007fd28ad9bf60 RCX: 00007fd28ac89109
-RDX: 0000000000000000 RSI: 00000000000001b9 RDI: 0000000000000003
-RBP: 00007fd28ace308d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe7683a70f R14: 00007fd28be25300 R15: 0000000000022000
- </TASK>
-================================================================================
-
-
+Signed-off-by: Thomas Huth <thuth@redhat.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ This patch is of very low importance - if you don't like it, please just
+ ignore. I just came across this nit while looking through the code and
+ thought that it might be somewhat nicer this way.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ virt/kvm/kvm_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 64ec2222a196..e911331fc620 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -4309,7 +4309,7 @@ static int kvm_ioctl_create_device(struct kvm *kvm,
+ 	return 0;
+ }
+ 
+-static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
++static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+ {
+ 	switch (arg) {
+ 	case KVM_CAP_USER_MEMORY:
+-- 
+2.31.1
+

@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5735394FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 18:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B905394FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 18:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346070AbiEaQb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 12:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
+        id S1346179AbiEaQbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 12:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236472AbiEaQbY (ORCPT
+        with ESMTP id S1346169AbiEaQb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 12:31:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8599C972AC
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 09:31:23 -0700 (PDT)
+        Tue, 31 May 2022 12:31:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D35A972AC
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 09:31:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AABC2B815D2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 16:31:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 846DDC385A9;
-        Tue, 31 May 2022 16:31:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D088DB815D2
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 16:31:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCDA5C385A9;
+        Tue, 31 May 2022 16:31:22 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2 1/2] irqchip: Adjust Kconfig for Loongson
-Date:   Wed,  1 Jun 2022 00:32:35 +0800
-Message-Id: <20220531163236.2109556-2-chenhuacai@loongson.cn>
+Subject: [PATCH V2 2/2] irqchip/loongson-liointc: Fix build error for LoongArch
+Date:   Wed,  1 Jun 2022 00:32:36 +0800
+Message-Id: <20220531163236.2109556-3-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220531163236.2109556-1-chenhuacai@loongson.cn>
 References: <20220531163236.2109556-1-chenhuacai@loongson.cn>
@@ -45,59 +45,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HTVEC will be shared by both MIPS-based and LoongArch-based Loongson
-processors (not only Loongson-3), so we adjust its description. HTPIC is
-only used by MIPS-based Loongson, so we add a MIPS dependency. PCH_PIC
-and PCH_MSI will have some arch-specific code, so we remove the COMPILE_
-TEST dependency to avoid build warnings.
+liointc driver is shared by MIPS and LoongArch, this patch adjust the
+code to fix build error for LoongArch.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- drivers/irqchip/Kconfig | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/irqchip/irq-loongson-liointc.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 44fb8843e80e..8401ee7fd7fa 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -557,7 +557,7 @@ config LOONGSON_LIOINTC
+diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+index 649c58391618..aed88857d90f 100644
+--- a/drivers/irqchip/irq-loongson-liointc.c
++++ b/drivers/irqchip/irq-loongson-liointc.c
+@@ -16,7 +16,11 @@
+ #include <linux/smp.h>
+ #include <linux/irqchip/chained_irq.h>
  
- config LOONGSON_HTPIC
- 	bool "Loongson3 HyperTransport PIC Controller"
--	depends on MACH_LOONGSON64
-+	depends on (MACH_LOONGSON64 && MIPS)
- 	default y
- 	select IRQ_DOMAIN
- 	select GENERIC_IRQ_CHIP
-@@ -565,16 +565,16 @@ config LOONGSON_HTPIC
- 	  Support for the Loongson-3 HyperTransport PIC Controller.
++#ifdef CONFIG_MIPS
+ #include <loongson.h>
++#else
++#include <asm/loongson.h>
++#endif
  
- config LOONGSON_HTVEC
--	bool "Loongson3 HyperTransport Interrupt Vector Controller"
-+	bool "Loongson HyperTransport Interrupt Vector Controller"
- 	depends on MACH_LOONGSON64
- 	default MACH_LOONGSON64
- 	select IRQ_DOMAIN_HIERARCHY
- 	help
--	  Support for the Loongson3 HyperTransport Interrupt Vector Controller.
-+	  Support for the Loongson HyperTransport Interrupt Vector Controller.
+ #define LIOINTC_CHIP_IRQ	32
+ #define LIOINTC_NUM_PARENT 4
+@@ -53,7 +57,7 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
+ 	struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
+ 	struct irq_chip *chip = irq_desc_get_chip(desc);
+ 	struct irq_chip_generic *gc = handler->priv->gc;
+-	int core = get_ebase_cpunum() % LIOINTC_NUM_CORES;
++	int core = cpu_logical_map(smp_processor_id()) % LIOINTC_NUM_CORES;
+ 	u32 pending;
  
- config LOONGSON_PCH_PIC
- 	bool "Loongson PCH PIC Controller"
--	depends on MACH_LOONGSON64 || COMPILE_TEST
-+	depends on MACH_LOONGSON64
- 	default MACH_LOONGSON64
- 	select IRQ_DOMAIN_HIERARCHY
- 	select IRQ_FASTEOI_HIERARCHY_HANDLERS
-@@ -583,7 +583,7 @@ config LOONGSON_PCH_PIC
- 
- config LOONGSON_PCH_MSI
- 	bool "Loongson PCH MSI Controller"
--	depends on MACH_LOONGSON64 || COMPILE_TEST
-+	depends on MACH_LOONGSON64
- 	depends on PCI
- 	default MACH_LOONGSON64
- 	select IRQ_DOMAIN_HIERARCHY
+ 	chained_irq_enter(chip, desc);
 -- 
 2.27.0
 

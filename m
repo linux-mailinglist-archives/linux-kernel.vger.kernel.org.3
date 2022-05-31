@@ -2,265 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0426539941
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D6353994E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348294AbiEaWBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 18:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
+        id S1348309AbiEaWD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 18:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348273AbiEaWBa (ORCPT
+        with ESMTP id S1348304AbiEaWDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 18:01:30 -0400
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D3653E36;
-        Tue, 31 May 2022 15:01:30 -0700 (PDT)
-Received: by mail-oi1-f173.google.com with SMTP id k11so189349oia.12;
-        Tue, 31 May 2022 15:01:30 -0700 (PDT)
+        Tue, 31 May 2022 18:03:22 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904DB9A9B7;
+        Tue, 31 May 2022 15:03:20 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id ew15so3562874qtb.2;
+        Tue, 31 May 2022 15:03:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=76lHBu9WeEtFRiB08o/XGso0/nY2CeLb14MdKI7nDao=;
+        b=mSchy28160Qp1NG35icMcuhuFgpkhU/7MC192l8/Hyp9OUXxeALvLW8Y+6qUgRwTGW
+         Iin0Utg6nhNW0kKHn7LkRsXHgeoCacHj73zLWz3+tGlxrQ4EqtugiXw2vsgoab0TofEs
+         AUyKdNBTKLAgCQFeAdrnM6CdJ2/xebsPQBf3cL8rRGQ1hzYWxTNK4TdsozgDlGfvJ7z9
+         gwOFHPMAMFH9LIp4N3zSuRZsPAF9fI/mqydKFQ4cAfrnVgOTaxrqmCsIo/sO6GSESjdZ
+         3RdRYgJJs5QTfjbiqqRxZUZijQQrm8/KxP1gani6jPQgtXeNuyhLASeQHXkbbY44j1XT
+         pS/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yTPYbOb0yMJHeBLqtKBwI7gKb2/0mzclqkzefPXu2vQ=;
-        b=SmaMPQCdkgzVkh0gg6F/sbpksuwfVrP/MkqfQKrETsW/lxJbCAlpzTnZOV5UshpXjt
-         ygEDTXzczEy8s4JaBzjuPNvjsg1nC+xE0vQNpoP3/SfY22WvlMdQwQ9DniYTxdIW4lk1
-         R9fBLBUmE6U3kJyXfGwb3AUbNrF1s29NfDyTdM3RLhk+MeBZi/svB0oygduaEJhBplib
-         VepHGVtSxUol/AxGU0ivuO2XIIV30g1qeXOdYk5/J9R/BeZELmauGHRDJwIZxr9mMKTH
-         Hi99rPW/NdHwDSiiSvOqJTDpzE9rglBMg4TzuyZr4YehCi1yb4tHbI5BptMLR0lJRmt2
-         3XdA==
-X-Gm-Message-State: AOAM532s3KIsrtw2rqVPRu5GrZlCmWPy2ZyP7mckHgnCiWl1gxQI/tiI
-        /vQOWj2GjNf0qtNXv3WB7Q==
-X-Google-Smtp-Source: ABdhPJzuQgTE6NkTx9TEe2Ykfufrbi4OVxPBBTw2CU6W/TAl7X0sCz/XqhpsuCdgWY0S037TF2IvSQ==
-X-Received: by 2002:aca:428a:0:b0:326:4b9d:7272 with SMTP id p132-20020aca428a000000b003264b9d7272mr13340608oia.30.1654034489255;
-        Tue, 31 May 2022 15:01:29 -0700 (PDT)
-Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id o18-20020a4a9592000000b0035eb4e5a6d6sm16746ooi.44.2022.05.31.15.01.28
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=76lHBu9WeEtFRiB08o/XGso0/nY2CeLb14MdKI7nDao=;
+        b=2mtWuFcrTjiVqq1IWFNw/vGBVdOUhV98L0BbcT3g58bdBEk1Rf/BuwWKL44YkjvtuH
+         p3AQ2mJwQ11MPwCtj7TYjO5i/M9a2AwebhW5VVBUf3JparyhupULO+xspFmFlCwW6Cjh
+         kXhDtsc5yiXzPFXv+nG+dPaCNYs3TC+hCMMJ/owiO5PbJ11bMczxc9VkFRorrlp4ONY/
+         BPNe/HLCK7qvUT/NPIBgA5cAY/HCf2ULKC64bBULV9oCM3C8aiMHwn1A3qj/TwZb0hjF
+         vC2UWAyygS4oyxtpVivcbGkeDGedS8Wfn5EwEp7MzQeQkxkdjQi+O+OL2w8RGZM19y10
+         l5Og==
+X-Gm-Message-State: AOAM532xD0qn2HmIof8uJqQY1hoIRvJzpFq9RU/ZpD1MKVeBAdi3OBBU
+        DRWzzSwx+CbffnyrKztgjw==
+X-Google-Smtp-Source: ABdhPJydyWA+tMa+1FNjiHYuTVl++dSGIMc4esAgaWez8ZmLAxIxTNZC9DCXZg5mioKbqao8dQsEEA==
+X-Received: by 2002:a05:622a:4cf:b0:2f9:373b:ef0 with SMTP id q15-20020a05622a04cf00b002f9373b0ef0mr36827931qtx.163.1654034599475;
+        Tue, 31 May 2022 15:03:19 -0700 (PDT)
+Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id g18-20020ac84812000000b002f93aeaf770sm9369618qtq.92.2022.05.31.15.03.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 15:01:28 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Marek Vasut <marex@denx.de>
-Cc:     Woojung Huh <Woojung.Huh@microchip.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] dt-bindings: net/dsa: Add spi-peripheral-props.yaml references
-Date:   Tue, 31 May 2022 17:01:18 -0500
-Message-Id: <20220531220122.2412711-1-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 31 May 2022 15:03:18 -0700 (PDT)
+Date:   Tue, 31 May 2022 18:03:16 -0400
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
+        rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, willy@infradead.org
+Subject: Re: [PATCH v2 01/28] lib/printbuf: New data structure for printing
+ strings
+Message-ID: <20220531220316.i7wl34puxy73zn46@moria.home.lan>
+References: <20220519172421.162394-1-kent.overstreet@gmail.com>
+ <20220519172421.162394-2-kent.overstreet@gmail.com>
+ <Yo+XZ4YtU9fN/sGE@alley>
+ <20220526152127.gw7gb4jnoikop4hl@moria.home.lan>
+ <YpCoADIEWi9flgSf@alley>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YpCoADIEWi9flgSf@alley>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SPI peripheral device bindings need to reference spi-peripheral-props.yaml
-in order to use various SPI controller specific properties. Otherwise,
-the unevaluatedProperties check will reject any controller specific
-properties.
+On Fri, May 27, 2022 at 12:29:20PM +0200, Petr Mladek wrote:
+> I would really like to keep the three APIs separated and easy to
+> distinguish. They are principally different:
+> 
+> 1. pr_*() API:
+> 
+>        + wrapper to printk(). They makes the messages available on
+> 	 console and for user-space log daemons while printf()
+> 
+>       + the various pr_*() variants are used to define kernel
+> 	specific features and behavior, for example:
+> 	loglevel, ratelimit, only once. deferred console handling.
+> 
+>        + uses implicit (system) buffer
+> 
+>        + The message format is defined by the 1st parameter. It
+> 	 is the same way as printf() in user-space.
+> 
+>        + It is inspired by printf() from user-space that prints
+> 	 the messages to the standard output.
+> 
+> 
+> 2. *s*printf() APIs:
+> 
+>        + basically duplicate the same user-space API. It supports
+> 	 some extra %p modifiers. There might be few more
+> 	 incompatibilities.
+> 
+>        + use simple "char *" buffer provided as the 1st parameter
+> 
+>        + the messages format is defined the same way as in
+> 	 the user-space counterparts.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-v3:
- - Drop duplicate 'allOf'
-v2:
- - Also add references in nxp,sja1105.yaml and brcm,b53.yaml as
-   pointed out by Vladimir Oltean
----
- .../devicetree/bindings/net/dsa/brcm,b53.yaml | 115 ++++++++++--------
- .../bindings/net/dsa/microchip,ksz.yaml       |   1 +
- .../bindings/net/dsa/nxp,sja1105.yaml         |   1 +
- .../devicetree/bindings/net/dsa/realtek.yaml  |   1 +
- 4 files changed, 68 insertions(+), 50 deletions(-)
+I'd like to get sprintf() style functions - anything that outputs to raw char *
+pointers - deprecated. That's going to mean a _lot_ of refactoring (so I don't
+know that I'll be the one to do it), but it's mostly easy refactoring.
 
-diff --git a/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml b/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
-index c3c938893ad9..23114d691d2a 100644
---- a/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
-@@ -6,9 +6,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Broadcom BCM53xx Ethernet switches
- 
--allOf:
--  - $ref: dsa.yaml#
--
- maintainers:
-   - Florian Fainelli <f.fainelli@gmail.com>
- 
-@@ -68,53 +65,71 @@ required:
-   - compatible
-   - reg
- 
--# BCM585xx/586xx/88312 SoCs
--if:
--  properties:
--    compatible:
--      contains:
--        enum:
--          - brcm,bcm58522-srab
--          - brcm,bcm58523-srab
--          - brcm,bcm58525-srab
--          - brcm,bcm58622-srab
--          - brcm,bcm58623-srab
--          - brcm,bcm58625-srab
--          - brcm,bcm88312-srab
--then:
--  properties:
--    reg:
--      minItems: 3
--      maxItems: 3
--    reg-names:
--      items:
--        - const: srab
--        - const: mux_config
--        - const: sgmii_config
--    interrupts:
--      minItems: 13
--      maxItems: 13
--    interrupt-names:
--      items:
--        - const: link_state_p0
--        - const: link_state_p1
--        - const: link_state_p2
--        - const: link_state_p3
--        - const: link_state_p4
--        - const: link_state_p5
--        - const: link_state_p7
--        - const: link_state_p8
--        - const: phy
--        - const: ts
--        - const: imp_sleep_timer_p5
--        - const: imp_sleep_timer_p7
--        - const: imp_sleep_timer_p8
--  required:
--    - interrupts
--else:
--  properties:
--    reg:
--      maxItems: 1
-+allOf:
-+  - $ref: dsa.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - brcm,bcm5325
-+              - brcm,bcm53115
-+              - brcm,bcm53125
-+              - brcm,bcm53128
-+              - brcm,bcm5365
-+              - brcm,bcm5395
-+              - brcm,bcm5397
-+              - brcm,bcm5398
-+    then:
-+      $ref: /schemas/spi/spi-peripheral-props.yaml
-+
-+    # BCM585xx/586xx/88312 SoCs
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - brcm,bcm58522-srab
-+              - brcm,bcm58523-srab
-+              - brcm,bcm58525-srab
-+              - brcm,bcm58622-srab
-+              - brcm,bcm58623-srab
-+              - brcm,bcm58625-srab
-+              - brcm,bcm88312-srab
-+    then:
-+      properties:
-+        reg:
-+          minItems: 3
-+          maxItems: 3
-+        reg-names:
-+          items:
-+            - const: srab
-+            - const: mux_config
-+            - const: sgmii_config
-+        interrupts:
-+          minItems: 13
-+          maxItems: 13
-+        interrupt-names:
-+          items:
-+            - const: link_state_p0
-+            - const: link_state_p1
-+            - const: link_state_p2
-+            - const: link_state_p3
-+            - const: link_state_p4
-+            - const: link_state_p5
-+            - const: link_state_p7
-+            - const: link_state_p8
-+            - const: phy
-+            - const: ts
-+            - const: imp_sleep_timer_p5
-+            - const: imp_sleep_timer_p7
-+            - const: imp_sleep_timer_p8
-+      required:
-+        - interrupts
-+    else:
-+      properties:
-+        reg:
-+          maxItems: 1
- 
- unevaluatedProperties: false
- 
-diff --git a/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml b/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
-index 184152087b60..6bbd8145b6c1 100644
---- a/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
-@@ -12,6 +12,7 @@ maintainers:
- 
- allOf:
-   - $ref: dsa.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
- 
- properties:
-   # See Documentation/devicetree/bindings/net/dsa/dsa.yaml for a list of additional
-diff --git a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-index 1ea0bd490473..1e26d876d146 100644
---- a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-@@ -14,6 +14,7 @@ description:
- 
- allOf:
-   - $ref: "dsa.yaml#"
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
- 
- maintainers:
-   - Vladimir Oltean <vladimir.oltean@nxp.com>
-diff --git a/Documentation/devicetree/bindings/net/dsa/realtek.yaml b/Documentation/devicetree/bindings/net/dsa/realtek.yaml
-index 99ee4b5b9346..4f99aff029dc 100644
---- a/Documentation/devicetree/bindings/net/dsa/realtek.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/realtek.yaml
-@@ -108,6 +108,7 @@ if:
-     - reg
- 
- then:
-+  $ref: /schemas/spi/spi-peripheral-props.yaml#
-   not:
-     required:
-       - mdc-gpios
--- 
-2.34.1
+> 3. printbuf API:
+> 
+>        + append messages into the given printbuf by small pieces
+> 
+>        + format defined by the suffix, for example, _char(),
+> 	 bytes(), units_64(), _tab(), indent()
+> 
+>        + allows to do special operations on the buffer,
+> 	 for example, _reset(), make_room(), atomic_inc()
+> 
+>        + it will be used as low-level API for vscnprinf()
+> 	 implementation, pretty printing API, or
+> 	 stand alone uses.
+> 
+>        + I wonder if there will be variant that will allow
+> 	 to pass the format in the printf() way, e.g.
+> 	 int pb_printf(printbuf *buf, const char *fmt, ...);
 
+Right now this is called pr_buf(). I suppose pr_printf()/pb_printf() makes sense
+:)
+
+> 
+>        + is there any user space counter part?
+> 
+> 
+> Now, it is clear that printfbuf API must be distinguished by another
+> prefix:
+> 
+>        + it must be clear that it stores the output into printbuf.
+> 	 It is similar to dprintf(), fprintf(), sprintf().
+> 
+>        + It can't be done by the suffix because it is already used
+> 	 to define format of the appended string or extra operation.
+> 
+>        + It must be clear what is low-level API used to implement
+> 	 vsprintf() and high-level API that uses vsprintf().
+> 	 I mean pb_char() vs. pb_printf().
+
+So there's more in the pr_* namespace than I realized - I guess you've convinced
+me on not reusing that. Which is a shame, because it rolls off the tongue so
+much easier than pb_* and I think otherwise makes more sense here - pr_foo for
+"print foo".
+
+However, I'm not going to put special operations on printbufs under the pb_
+prefix: I want that naming (whether pb_* or pr_*) to _just_ be for "print foo";
+this "print this" prefix should be the common prefix for _any_ pretty printer,
+unless it has another subsystem prefix - that means there's going to be a lot of
+functions with these prefix. So I'm going to keep "printbuf special operations"
+on the printbuf_ prefix.
+
+Also, how about prt_* instead of pb_*? I want something that sounds more like
+print, and prt_ isn't taken.

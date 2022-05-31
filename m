@@ -2,79 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B94538D8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 557FD538D93
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245119AbiEaJRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 05:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
+        id S245127AbiEaJTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 05:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234632AbiEaJRZ (ORCPT
+        with ESMTP id S245006AbiEaJTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 05:17:25 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C837462A03
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:17:22 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id gh17so25371481ejc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:17:22 -0700 (PDT)
+        Tue, 31 May 2022 05:19:23 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E827C62A26
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:19:20 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id q7so6831630wrg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:19:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yiRJZcsK8/nOtrVqAQkM8gdI+HHI5A3xNn9CKo9QNn8=;
-        b=U8u8oZFJb5MjAL4CVHJ0XH6H6VHERv5AKXW0csQS4cF0dlmO+NcS1uqX80UATzR1fF
-         CmC0GuYup9bescyRqQiynV5JGC3xop8YrJ3e5H7bXagVFBRLoJ0QVCrYp0sn8ahFBbyR
-         f+ZcwKl2ZZ+0Uq6GiLllGwaHomd/1gKSWYQq6KEIDILBMarV/IBil4FF6ypQRaaU+wzd
-         uK6vX20fNLwl2P5QhF/7cmX7BCJZWGgpVM65ClnHVvS+y+u7kAdMqhvzD42XEFUJ5srG
-         6l/y0MuLslXEVuXwlY0DiJQpNQyU+BWlljeb4EjQiErz3xI4BxBWHMQ3/GKmZ4LIwsOr
-         JO0w==
+        d=unimore.it; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=Z28jpdTmHxjV8ax9hyrwR2GnHy5t21qrhC5BIev/QD4=;
+        b=gWX/C7SZ5pkAEgdZVPyWOQRd80HLkperu2WPySC+MFUBohcpCWfcQJhtrVx2cKD3Ac
+         JRPrAgFIitnn2lwg4slAq0slLqBjXPHRniO179F9GrIr3S03rdsEgFt3ap46Wj/vVEi4
+         eEpfb/+ljdaC4s7oBibdVp+sUfEhSKrV/tBC4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yiRJZcsK8/nOtrVqAQkM8gdI+HHI5A3xNn9CKo9QNn8=;
-        b=3N3bOHAR6eU/8xCLN7tbALrJDOfyw17Aj04hwHd7ZeUP179UDwKHEhxV7kIXKCVIgv
-         L41c4Upu2uewj7hMhy0ekNBW3uRM0bR/0LsrVexqCo8pd1GiqTiRihKXUuTr97HbR/t2
-         xvYTxuaCTpsizXnsuLTodVRmbZBATGzgVMCjEn/tQLV1j+uplxj3VXHIrJ+a1Lc2Jtb5
-         dEXBwRoxoGyAPZCTf5JVW56jEQLs/qwEnMnhhyeuFdSJVOwzBqz4tH5E7Z+BGZAirxgl
-         9AJTG+iOj33qwezXVic1lj3/sQE+jtVGXBdBDJoSsQkMCFuwNCZYcspBiGO2xO6QxQ63
-         5hgQ==
-X-Gm-Message-State: AOAM532jFkkXMj8sRm2/4t/QmWJItP3JCBLv+HKNBcsUCaO4o4Jr3Lel
-        nH2CWiWwKsliuhTlmy1GE1NR/g==
-X-Google-Smtp-Source: ABdhPJzc1RUFRZ168BDePJCPLhMCHxR29p9KkUfaSl5CoTOvkdDU2r/8S/FdI4KzfVyR1qimbNJVjg==
-X-Received: by 2002:a17:907:7247:b0:6ff:f00:c4c with SMTP id ds7-20020a170907724700b006ff0f000c4cmr26918873ejc.261.1653988641426;
-        Tue, 31 May 2022 02:17:21 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id s4-20020a170906354400b006fe98c7c7a9sm4764288eja.85.2022.05.31.02.17.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 02:17:21 -0700 (PDT)
-Message-ID: <cd71f427-8db5-e908-bf25-0154e3006568@linaro.org>
-Date:   Tue, 31 May 2022 11:17:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/6] dt-bindings: phy: Add FSD UFS PHY bindings
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-phy@lists.infradead.org
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        avri.altman@wdc.com, bvanassche@acm.org,
-        martin.petersen@oracle.com, chanho61.park@samsung.com,
-        pankaj.dubey@samsung.com, linux-fsd@tesla.com,
-        Bharat Uppal <bharat.uppal@samsung.com>
-References: <20220531012220.80563-1-alim.akhtar@samsung.com>
- <CGME20220531012336epcas5p2fcafe14c90ad3e3a0901fccd62d15437@epcas5p2.samsung.com>
- <20220531012220.80563-2-alim.akhtar@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220531012220.80563-2-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=Z28jpdTmHxjV8ax9hyrwR2GnHy5t21qrhC5BIev/QD4=;
+        b=J6p1zsnlVBK6xV7lZUfQaZIBJtWZPyWTMPbWs8Wjj1m7VSRfSMNflZLAUtyBICdBzf
+         t7pzy5cIGBnn6bUYUETRTAeeZX4MaiT4Ub0R4+esd6hmkx8opuTsYaEw39ld9Wgr/k7Q
+         OvhxP7HFzwgLN1PEIlCS32pD32rqEPhHC4n2APzW57LiMeND3H4WAwLforIKqiTzJCbt
+         TFrQrevxn9ooZoerhxSVpUCXMJScEo4aOaZIZOx9U/QG7He8af2JoQPr+Lw+VGy1IXYw
+         GMTdH6JJanglon8/Ri3S6bdh6fhLgDjQr3F111sfkH3fsMl56gXO1oM+oAIgZTkSlQkR
+         /t0w==
+X-Gm-Message-State: AOAM531wLqENYwzbN/lqUWfxR0aLVBiyE3XNBRYHL9/CCkPrCOnEqT4/
+        /BFsh5H9f7jwBaaDZ68U72mP
+X-Google-Smtp-Source: ABdhPJyf+Jl8eEykVrUxJYOL8Y/SCADMLo00CH+/x2YvCQXrFNJ7xKn2D2EbeDgEsLItIgGysSc6mQ==
+X-Received: by 2002:a05:6000:1acd:b0:20f:dae8:569d with SMTP id i13-20020a0560001acd00b0020fdae8569dmr35229996wry.491.1653988759475;
+        Tue, 31 May 2022 02:19:19 -0700 (PDT)
+Received: from mbp-di-paolo.station (net-93-144-98-177.cust.vodafonedsl.it. [93.144.98.177])
+        by smtp.gmail.com with ESMTPSA id u1-20020adfae41000000b0020c5253d926sm11108335wrd.114.2022.05.31.02.19.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 31 May 2022 02:19:19 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH -next v7 2/3] block, bfq: refactor the counting of
+ 'num_groups_with_pending_reqs'
+From:   Paolo Valente <paolo.valente@unimore.it>
+In-Reply-To: <a0d8452c-e421-45d3-b012-5355207fc0e1@huawei.com>
+Date:   Tue, 31 May 2022 11:19:15 +0200
+Cc:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
+        Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <81214347-3806-4F54-B60F-3E5A1A5EC84D@unimore.it>
+References: <20220528095020.186970-1-yukuai3@huawei.com>
+ <20220528095020.186970-3-yukuai3@huawei.com>
+ <0D9355CE-F85B-4B1A-AEC3-F63DFC4B3A54@linaro.org>
+ <b9a4ea60-28e5-b7aa-0154-ad7481eafbd3@huawei.com>
+ <efe01dd1-0f99-dadf-956d-b0e80e1e602c@huawei.com>
+ <1803FD7E-9FB1-4A1E-BD6D-D6657006589A@unimore.it>
+ <a0d8452c-e421-45d3-b012-5355207fc0e1@huawei.com>
+To:     Yu Kuai <yukuai3@huawei.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,13 +78,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2022 03:22, Alim Akhtar wrote:
-> Adds tesla,fsd-ufs-phy compatible for Tesla FSD SoC
 
-s/Adds/Add/
-and a full stop at the end, please.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Il giorno 31 mag 2022, alle ore 11:06, Yu Kuai <yukuai3@huawei.com> ha =
+scritto:
+>=20
+> =E5=9C=A8 2022/05/31 16:36, Paolo VALENTE =E5=86=99=E9=81=93:
+>>> Il giorno 30 mag 2022, alle ore 10:40, Yu Kuai <yukuai3@huawei.com> =
+ha scritto:
+>>>=20
+>>> =E5=9C=A8 2022/05/30 16:34, Yu Kuai =E5=86=99=E9=81=93:
+>>>> =E5=9C=A8 2022/05/30 16:10, Paolo Valente =E5=86=99=E9=81=93:
+>>>>>=20
+>>>>>=20
+>>>>>> Il giorno 28 mag 2022, alle ore 11:50, Yu Kuai =
+<yukuai3@huawei.com> ha scritto:
+>>>>>>=20
+>>>>>> Currently, bfq can't handle sync io concurrently as long as they
+>>>>>> are not issued from root group. This is because
+>>>>>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+>>>>>> bfq_asymmetric_scenario().
+>>>>>>=20
+>>>>>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
+>>>>>>=20
+>>>>>> Before this patch:
+>>>>>> 1) root group will never be counted.
+>>>>>> 2) Count if bfqg or it's child bfqgs have pending requests.
+>>>>>> 3) Don't count if bfqg and it's child bfqgs complete all the =
+requests.
+>>>>>>=20
+>>>>>> After this patch:
+>>>>>> 1) root group is counted.
+>>>>>> 2) Count if bfqg have at least one bfqq that is marked busy.
+>>>>>> 3) Don't count if bfqg doesn't have any busy bfqqs.
+>>>>>=20
+>>>>> Unfortunately, I see a last problem here. I see a double change:
+>>>>> (1) a bfqg is now counted only as a function of the state of its =
+child
+>>>>>      queues, and not of also its child bfqgs
+>>>>> (2) the state considered for counting a bfqg moves from having =
+pending
+>>>>>      requests to having busy queues
+>>>>>=20
+>>>>> I'm ok with with (1), which is a good catch (you are lady =
+explained
+>>>>> the idea to me some time ago IIRC).
+>>>>>=20
+>>>>> Yet I fear that (2) is not ok.  A bfqq can become non busy even if =
+it
+>>>>> still has in-flight I/O, i.e.  I/O being served in the drive.  The
+>>>>> weight of such a bfqq must still be considered in the =
+weights_tree,
+>>>>> and the group containing such a queue must still be counted when
+>>>>> checking whether the scenario is asymmetric.  Otherwise service
+>>>>> guarantees are broken.  The reason is that, if a scenario is =
+deemed as
+>>>>> symmetric because in-flight I/O is not taken into account, then =
+idling
+>>>>> will not be performed to protect some bfqq, and in-flight I/O may
+>>>>> steal bandwidth to that bfqq in an uncontrolled way.
+>>>> Hi, Paolo
+>>>> Thanks for your explanation.
+>>>> My orginal thoughts was using weights_tree insertion/removal, =
+however,
+>>>> Jan convinced me that using bfq_add/del_bfqq_busy() is ok.
+>>>> =46rom what I see, when bfqq dispatch the last request,
+>>>> bfq_del_bfqq_busy() will not be called from __bfq_bfqq_expire() if
+>>>> idling is needed, and it will delayed to when such bfqq get =
+scheduled as
+>>>> in-service queue again. Which means the weight of such bfqq should =
+still
+>>>> be considered in the weights_tree.
+>>>> I also run some tests on null_blk with "irqmode=3D2
+>>>> completion_nsec=3D100000000(100ms) hw_queue_depth=3D1", and tests =
+show
+>>>> that service guarantees are still preserved on slow device.
+>>>> Do you this is strong enough to cover your concern?
+>> Unfortunately it is not.  Your very argument is what made be believe
+>> that considering busy queues was enough, in the first place.  But, as
+>> I found out, the problem is caused by the queues that do not enjoy
+>> idling.  With your patch (as well as in my initial version) they are
+>> not counted when they remain without requests queued.  And this makes
+>> asymmetric scenarios be considered erroneously as symmetric.  The
+>> consequence is that idling gets switched off when it had to be kept
+>> on, and control on bandwidth is lost for the victim in-service =
+queues.
+>=20
+> Hi=EF=BC=8CPaolo
+>=20
+> Thanks for your explanation, are you thinking that if bfqq doesn't =
+enjoy
+> idling, then such bfqq will clear busy after dispatching the last
+> request?
+>=20
+> Please kindly correct me if I'm wrong in the following process:
+>=20
+> If there are more than one bfqg that is activatied, then bfqqs that =
+are
+> not enjoying idle are still left busy after dispatching the last
+> request.
+>=20
+> details in __bfq_bfqq_expire:
+>=20
+>        if (RB_EMPTY_ROOT(&bfqq->sort_list) &&
+>        =E2=94=8A   !(reason =3D=3D BFQQE_PREEMPTED &&
+>        =E2=94=8A     idling_needed_for_service_guarantees(bfqd, =
+bfqq))) {
+> -> idling_needed_for_service_guarantees will always return true,
 
-Best regards,
-Krzysztof
+It returns true only is the scenario is symmetric.  Not counting bfqqs
+with in-flight requests makes an asymmetric scenario be considered
+wrongly symmetric.  See function bfq_asymmetric_scenario().
+
+Paolo
+
+> bfqq(whether or not enjoy idling) will stay busy.
+>                if (bfqq->dispatched =3D=3D 0)
+>                        /*
+>                        =E2=94=8A* Overloading budget_timeout field to =
+store
+>                        =E2=94=8A* the time at which the queue remains =
+with no
+>                        =E2=94=8A* backlog and no outstanding request; =
+used by
+>                        =E2=94=8A* the weight-raising mechanism.
+>                        =E2=94=8A*/
+>                        bfqq->budget_timeout =3D jiffies;
+>=20
+>                bfq_del_bfqq_busy(bfqd, bfqq, true);
+>=20
+> Thanks,
+> Kuai
+

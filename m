@@ -2,86 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289A053995E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445CD539961
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348329AbiEaWKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 18:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
+        id S1348336AbiEaWKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 18:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbiEaWKP (ORCPT
+        with ESMTP id S1348331AbiEaWKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 18:10:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A701712D8;
-        Tue, 31 May 2022 15:10:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22F0161411;
-        Tue, 31 May 2022 22:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7CB4FC3411C;
-        Tue, 31 May 2022 22:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654035013;
-        bh=NHduzSrHSTkUo6SczPZztFAfc6A9Ik98aFoaPiMWvi4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JuM1QIOPY+n2Teh9EVDZ5gXbDQ60zIFEMsSDrEyz6TaQNCGSrTUIL/rEvX1KcsRvm
-         VJiek5m3z+SwrCx8PfQQjY3bQAECivfJNXL9FiMgVpd/WQbAgsO1tJ2JAECXEfnSkQ
-         HFf3y92EgooLb5CcwfyBOJoXlMAFAbvJUKhba3TIIItwlDCkQgyRQBiKBdrGNDEITq
-         cQ2SZz1BPFMuDawrqbEyyxP6+yNgb0MKC2LONz8U8KdGLWHoZtIqHKto6dRtDLVI8C
-         lN80k5rWy+e2/BoaaVAbVall9DC3j5zaqcIOX9mJknzoVojWFWgq7UT/HPML7R5lic
-         gqFfJYOL/FAuw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 647D1F0383D;
-        Tue, 31 May 2022 22:10:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 31 May 2022 18:10:46 -0400
+Received: from mail.cybernetics.com (mail.cybernetics.com [173.71.130.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886EE9CF4F
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 15:10:41 -0700 (PDT)
+X-ASG-Debug-ID: 1654035038-1cf43917f334d340001-xx1T2L
+Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id pi5n3chlKhW5dG70; Tue, 31 May 2022 18:10:38 -0400 (EDT)
+X-Barracuda-Envelope-From: tonyb@cybernetics.com
+X-ASG-Whitelist: Client
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
+        bh=Pscrfy4zfmI9B2/f3RlaAfD71lZsuhWSoCA2Yk9IIwI=;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:Cc:To:
+        Content-Language:Subject:MIME-Version:Date:Message-ID; b=q5PB8adp564e7QMu+Y67
+        rqxW9A2//yQphTVtYoOJzENI1mQv1RQmgvsm7Lip7aY8a7rF+htFUguM3OldCVKcojJicdxPHrfCe
+        RfT8TUxLI1Q2o5QHc1BeFYM3K6ctZm0dHzpcsepgcE3x6eZwrBlQGNCsc3NwiuaJ4K8luj2hLA=
+Received: from [10.157.2.224] (HELO [192.168.200.1])
+  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
+  with ESMTPS id 11830524; Tue, 31 May 2022 18:10:38 -0400
+Message-ID: <803feeab-b27b-983d-45da-02a0daf0179a@cybernetics.com>
+Date:   Tue, 31 May 2022 18:10:38 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 10/10] dmapool: improve scalability of dma_pool_free
+Content-Language: en-US
+X-ASG-Orig-Subj: Re: [PATCH 10/10] dmapool: improve scalability of dma_pool_free
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org, kernel-team@fb.com,
+        Matthew Wilcox <willy@infradead.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tony Lindgren <tony@atomide.com>
+References: <9b08ab7c-b80b-527d-9adf-7716b0868fbc@cybernetics.com>
+ <801335ba-00f3-12ae-59e0-119d7d8fd8cd@cybernetics.com>
+ <YpaOj/C1SA8y1VCg@kbusch-mbp.dhcp.thefacebook.com>
+From:   Tony Battersby <tonyb@cybernetics.com>
+In-Reply-To: <YpaOj/C1SA8y1VCg@kbusch-mbp.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix test_run logic in fexit_stress.c
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165403501340.21268.15920693593241298541.git-patchwork-notify@kernel.org>
-Date:   Tue, 31 May 2022 22:10:13 +0000
-References: <20220521151329.648013-1-ytcoode@gmail.com>
-In-Reply-To: <20220521151329.648013-1-ytcoode@gmail.com>
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Barracuda-Connect: UNKNOWN[10.10.4.126]
+X-Barracuda-Start-Time: 1654035038
+X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at cybernetics.com
+X-Barracuda-Scan-Msg-Size: 989
+X-Barracuda-BRTS-Status: 1
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 5/31/22 17:54, Keith Busch wrote:
+> On Tue, May 31, 2022 at 02:23:44PM -0400, Tony Battersby wrote:
+>> dma_pool_free() scales poorly when the pool contains many pages because
+>> pool_find_page() does a linear scan of all allocated pages.  Improve its
+>> scalability by replacing the linear scan with a red-black tree lookup.
+>> In big O notation, this improves the algorithm from O(n^2) to O(n * log n).
+> The improvement should say O(n) to O(log n), right?
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+That would be the improvement for a single call to dma_pool_alloc or
+dma_pool_free, but I was going with the improvement for "n" calls
+instead, which is consistent with the improvement for the example in the
+cover letter for mpt3sas.  I would have to look up the convention to be
+sure of the proper notation in a situation like this, but I usually
+think "inserting N items takes N^2 time"; to me it makes less sense to
+say "inserting 1 item takes N time", because the N seems to come out of
+nowhere.
 
-On Sat, 21 May 2022 23:13:29 +0800 you wrote:
-> In the commit da00d2f117a0 ("bpf: Add test ops for BPF_PROG_TYPE_TRACING"),
-> the bpf_fentry_test1 function was moved into bpf_prog_test_run_tracing(),
-> which is the test_run function of the tracing BPF programs.
-> 
-> Thus calling 'bpf_prog_test_run_opts(filter_fd, &topts)' will not trigger
-> bpf_fentry_test1 function as filter_fd is a sk_filter BPF program.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Fix test_run logic in fexit_stress.c
-    https://git.kernel.org/bpf/bpf-next/c/960b8ef9609c
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Tony
 

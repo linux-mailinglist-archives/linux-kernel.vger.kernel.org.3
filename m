@@ -2,49 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E2B538A1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 05:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C699538A5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 06:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238988AbiEaDM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 23:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
+        id S243799AbiEaEQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 00:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbiEaDMX (ORCPT
+        with ESMTP id S232244AbiEaEQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 23:12:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7367369DB
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 20:12:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7FD9F23A;
-        Mon, 30 May 2022 20:12:21 -0700 (PDT)
-Received: from [10.162.41.9] (unknown [10.162.41.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 07A1B3F66F;
-        Mon, 30 May 2022 20:12:17 -0700 (PDT)
-Message-ID: <2455da92-6522-6842-6c9c-c153e97d6e27@arm.com>
-Date:   Tue, 31 May 2022 08:42:15 +0530
+        Tue, 31 May 2022 00:16:26 -0400
+Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11ED591566
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 21:16:23 -0700 (PDT)
+X-UUID: abb7c48168d341c5b76b13f5233e59cb-20220531
+X-Spam-Fingerprint: 0
+X-GW-Reason: 13103
+X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
+X-Content-Feature: ica/max.line-size 100
+        audit/email.address 1
+        meta/cnt.alert 1
+X-CPASD-INFO: a36877d0361348c9a228887ad17d70b1@qoNwWGRpkmBfVnN_g3uuc4FjYmhoZFe
+        wpmtXlGVgjlGVhH5xTWJsXVKBfG5QZWNdYVN_eGpQYl9gZFB5i3-XblBgXoZgUZB3sHVwWGdllA==
+X-CLOUD-ID: a36877d0361348c9a228887ad17d70b1
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:186.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:296.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
+        5,AUF:9,DUF:41853,ACD:300,DCD:402,SL:0,EISP:0,AG:0,CFC:0.817,CFSR:0.03,UAT:0,
+        RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0
+        ,EAF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: abb7c48168d341c5b76b13f5233e59cb-20220531
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: abb7c48168d341c5b76b13f5233e59cb-20220531
+X-User: huangbing@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by nksmu.kylinos.cn
+        (envelope-from <huangbing@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1892234530; Tue, 31 May 2022 11:15:50 +0800
+From:   Bing Huang <huangbing@kylinos.cn>
+To:     peterz@infradead.org
+Cc:     brauner@kernel.org, bristot@redhat.com, bsegall@google.com,
+        dietmar.eggemann@arm.com, juri.lelli@redhat.com,
+        linux-kernel@vger.kernel.org, mgorman@suse.de, mingo@redhat.com,
+        rostedt@goodmis.org, vincent.guittot@linaro.org
+Subject: [PATCH v2] sched/fair: static cpumasks for load balance
+Date:   Tue, 31 May 2022 11:12:55 +0800
+Message-Id: <20220531031255.30966-1-huangbing@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] mm: page_isolation: use compound_nr() correctly in
- isolate_single_pageblock()
-Content-Language: en-US
-To:     Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <20220531024450.2498431-1-zi.yan@sent.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220531024450.2498431-1-zi.yan@sent.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,38 +61,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The both cpu mask load_balance_mask and select_idle_mask just only used
+in fair.c, but allocation in core.c in CONFIG_CPUMASK_OFFSTACK=y case,
+and global via declare per cpu variations. More or less, it looks wired.
+
+Signed-off-by: Bing Huang <huangbing@kylinos.cn>
+---
+
+ v2: move load_balance_mask and select_idle_mask allocation from
+sched_init() to init_sched_fair_class()   
+
+ kernel/sched/core.c | 11 -----------
+ kernel/sched/fair.c | 14 ++++++++++++--
+ 2 files changed, 12 insertions(+), 13 deletions(-)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 696c6490bd5b..707df2aeebf8 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -9503,9 +9503,6 @@ LIST_HEAD(task_groups);
+ static struct kmem_cache *task_group_cache __read_mostly;
+ #endif
+ 
+-DECLARE_PER_CPU(cpumask_var_t, load_balance_mask);
+-DECLARE_PER_CPU(cpumask_var_t, select_idle_mask);
+-
+ void __init sched_init(void)
+ {
+ 	unsigned long ptr = 0;
+@@ -9549,14 +9546,6 @@ void __init sched_init(void)
+ 
+ #endif /* CONFIG_RT_GROUP_SCHED */
+ 	}
+-#ifdef CONFIG_CPUMASK_OFFSTACK
+-	for_each_possible_cpu(i) {
+-		per_cpu(load_balance_mask, i) = (cpumask_var_t)kzalloc_node(
+-			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
+-		per_cpu(select_idle_mask, i) = (cpumask_var_t)kzalloc_node(
+-			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
+-	}
+-#endif
+ 
+ 	init_rt_bandwidth(&def_rt_bandwidth, global_rt_period(), global_rt_runtime());
+ 
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 8c5b74f66bd3..377d908866ab 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -5843,8 +5843,8 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+ #ifdef CONFIG_SMP
+ 
+ /* Working cpumask for: load_balance, load_balance_newidle. */
+-DEFINE_PER_CPU(cpumask_var_t, load_balance_mask);
+-DEFINE_PER_CPU(cpumask_var_t, select_idle_mask);
++static DEFINE_PER_CPU(cpumask_var_t, load_balance_mask);
++static DEFINE_PER_CPU(cpumask_var_t, select_idle_mask);
+ 
+ #ifdef CONFIG_NO_HZ_COMMON
+ 
+@@ -11841,6 +11841,16 @@ void show_numa_stats(struct task_struct *p, struct seq_file *m)
+ __init void init_sched_fair_class(void)
+ {
+ #ifdef CONFIG_SMP
++
++#ifdef CONFIG_CPUMASK_OFFSTACK
++	for_each_possible_cpu(i) {
++		per_cpu(load_balance_mask, i) = (cpumask_var_t)kzalloc_node(
++			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
++		per_cpu(select_idle_mask, i) = (cpumask_var_t)kzalloc_node(
++			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
++	}
++#endif
++
+ 	open_softirq(SCHED_SOFTIRQ, run_rebalance_domains);
+ 
+ #ifdef CONFIG_NO_HZ_COMMON
+-- 
+2.25.1
 
 
-On 5/31/22 08:14, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> When compound_nr(page) was used, page was not guaranteed to be the head
-> of the compound page and it could cause an infinite loop. Fix it by calling
-> it on the head page.
-> 
-> Fixes: b2c9e2fbba32 ("mm: make alloc_contig_range work at pageblock granularity")
-> Reported-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> Link: https://lore.kernel.org/linux-mm/20220530115027.123341-1-anshuman.khandual@arm.com/
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-
-> ---
->  mm/page_isolation.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
-> index 6021f8444b5a..d200d41ad0d3 100644
-> --- a/mm/page_isolation.c
-> +++ b/mm/page_isolation.c
-> @@ -385,9 +385,9 @@ static int isolate_single_pageblock(unsigned long boundary_pfn, int flags,
->  		 * above do the rest. If migration is not possible, just fail.
->  		 */
->  		if (PageCompound(page)) {
-> -			unsigned long nr_pages = compound_nr(page);
->  			struct page *head = compound_head(page);
->  			unsigned long head_pfn = page_to_pfn(head);
-> +			unsigned long nr_pages = compound_nr(head);
->  
->  			if (head_pfn + nr_pages <= boundary_pfn) {
->  				pfn = head_pfn + nr_pages;
+No virus found
+		Checked by Hillstone Network AntiVirus

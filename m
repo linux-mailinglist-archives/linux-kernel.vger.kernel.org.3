@@ -2,122 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D875353974A
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D17C5396F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347486AbiEaTrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 15:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
+        id S238184AbiEaTYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 15:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347420AbiEaTrJ (ORCPT
+        with ESMTP id S231594AbiEaTYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 15:47:09 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4D8B1F8;
-        Tue, 31 May 2022 12:47:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=Y+q3Espln8Rodgx5Nn4tnLIErSJz4K4izMOM418Zr7I=;
-        b=lEC8kCdnsA4DxJ8w8cwM4Tvv+j6UloZEl/vusfYYoJphXIhgr7Tto5p9HIOPoCGbrV+Q2mGYaz11f
-         LjnmjmQEah0lkCi3p1/wGXxKf+lCJoDH6yzTf4BMoqi2P/RvqYfkUU+NqaGvDzVH27X0Rvx4JBdB+0
-         +Qi7gRwLoKlVHX47S9h52hl6eni0W3GsRRrOLtrQN0GTFZnRPZGdzgZY1hDDYbmCuX/I/K3tTuEMvX
-         4+px/j7HSYL3jJl+phglmZH6U+94o4plZ8FA3Z9nHs1DS8+skzLt681PNNRWb0VsuuVUnjh9IOn7Hk
-         DtO48lSgIqEQz31RVF4mcwxu5wPL/ZQ==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000009,0.008012)], BW: [Enabled, t: (0.000022,0.000001)], RTDA: [Enabled, t: (0.098664), Hit: No, Details: v2.39.0; Id: 15.52k335.1g4dqg6vl.4uee; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from localhost.localdomain ([178.70.36.174])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Tue, 31 May 2022 22:46:48 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, Conor.Dooley@microchip.com
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        system@metrotek.ru, Rob Herring <robh@kernel.org>
-Subject: [PATCH v14 3/3] dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
-Date:   Tue, 31 May 2022 22:23:44 +0300
-Message-Id: <20220531192344.23038-4-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220531192344.23038-1-i.bornyakov@metrotek.ru>
-References: <20220531192344.23038-1-i.bornyakov@metrotek.ru>
+        Tue, 31 May 2022 15:24:40 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4352E67D38
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:24:39 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id i185so60171pge.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:24:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=790ZGIWLu3M3fciHJnar3YBAhr4IOM5eNhb2rLFf0HQ=;
+        b=ZlDjvw3Ht/bFFf8r0sW6FLU2cNvq5PNson53ZKFZtoLckRqYPs6XKmwKUSlfBheNPO
+         9qDqCUTcvyoTfcE2Z9YxRa3Zx61lYn0c78qB+aSelPEiX/noLol7MJaf33lPvGph13mL
+         I6A/9bhVBjvaoD6M+4/IwGj7Nz6/mcx9KNgNk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=790ZGIWLu3M3fciHJnar3YBAhr4IOM5eNhb2rLFf0HQ=;
+        b=mHOHKSiJY1hN7SOw6vPwmWgJsLW1GiAjqYQ08UXZ1ZM+atvxgxmWBKn4cqcYVUMCEh
+         seJM9pBCMfNJeGw9bhQQUK4bGPrU+t8xR0CvoFq/i8jZm2M96wM81tti6ycfSu3XJce9
+         qn2wp19HKs+PjjHX2urbrzrDZSx9i7ybWgVWTvE4LFUGq6CX1J+WbMFy2WSS2rN0cCOk
+         ZEgeWYyn9RqaWBqZTHvuEEHqpWLX4z19oQi46omDGeB+3sljL4BGI7z9tZvGDIXWcWLs
+         ePAF/G2ysm/G7hjBJJdGnvP/EfY35v967k675GTGssZ+0LbbffKcmZJsDoBorVvGjZWs
+         3OVw==
+X-Gm-Message-State: AOAM530FE05xeSYv84VhDUcUPlOLyFuRwpH7GNToHYyGu68H6ADgDWKq
+        tejemsPiRi8FOEw3oQH6B9iMlQ==
+X-Google-Smtp-Source: ABdhPJwjahwm2XcxJzarB0bkFTPaJCZS6iCgNIpZLQNwb7hsy9A6fndnl0egtxKCatv7ANknoIeKrw==
+X-Received: by 2002:a65:404c:0:b0:3c6:4018:ffbf with SMTP id h12-20020a65404c000000b003c64018ffbfmr54323134pgp.408.1654025078759;
+        Tue, 31 May 2022 12:24:38 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id fs24-20020a17090af29800b001e02073474csm2305234pjb.36.2022.05.31.12.24.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 12:24:38 -0700 (PDT)
+Date:   Tue, 31 May 2022 12:24:37 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Laurent Vivier <laurent@vivier.eu>,
+        linux-fsdevel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Jann Horn <jannh@google.com>,
+        Henning Schild <henning.schild@siemens.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Matthew Bobrowski <repnop@google.com>,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        containers@lists.linux.dev,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: Re: [PATCH v2 2/2] binfmt_misc: enable sandboxed mounts
+Message-ID: <202205311219.725ED1C69@keescook>
+References: <20211216112659.310979-1-brauner@kernel.org>
+ <20211216112659.310979-2-brauner@kernel.org>
+ <20211226133140.GA8064@mail.hallyn.com>
+ <0e817424-51db-fe0b-a00e-ac7933e8ac1d@siemens.com>
+ <20220530081358.b3tvgvo63mq5o2oo@wittgenstein>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220530081358.b3tvgvo63mq5o2oo@wittgenstein>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
-slave SPI to load .dat formatted bitstream image.
+On Mon, May 30, 2022 at 10:13:58AM +0200, Christian Brauner wrote:
+> On Sun, May 29, 2022 at 09:35:40PM +0200, Jan Kiszka wrote:
+> > On 26.12.21 14:31, Serge E. Hallyn wrote:
+> > > On Thu, Dec 16, 2021 at 12:26:59PM +0100, Christian Brauner wrote:
+> > >> From: Christian Brauner <christian.brauner@ubuntu.com>
+> > >>
+> > >> Enable unprivileged sandboxes to create their own binfmt_misc mounts.
+> > >> This is based on Laurent's work in [1] but has been significantly
+> > >> reworked to fix various issues we identified in earlier versions.
+> > >>
+> > >> While binfmt_misc can currently only be mounted in the initial user
+> > >> namespace, binary types registered in this binfmt_misc instance are
+> > >> available to all sandboxes (Either by having them installed in the
+> > >> sandbox or by registering the binary type with the F flag causing the
+> > >> interpreter to be opened right away). So binfmt_misc binary types are
+> > >> already delegated to sandboxes implicitly.
+> > >>
+> > >> However, while a sandbox has access to all registered binary types in
+> > >> binfmt_misc a sandbox cannot currently register its own binary types
+> > >> in binfmt_misc. This has prevented various use-cases some of which were
+> > >> already outlined in [1] but we have a range of issues associated with
+> > >> this (cf. [3]-[5] below which are just a small sample).
+> > >>
+> > >> Extend binfmt_misc to be mountable in non-initial user namespaces.
+> > >> Similar to other filesystem such as nfsd, mqueue, and sunrpc we use
+> > >> keyed superblock management. The key determines whether we need to
+> > >> create a new superblock or can reuse an already existing one. We use the
+> > >> user namespace of the mount as key. This means a new binfmt_misc
+> > >> superblock is created once per user namespace creation. Subsequent
+> > >> mounts of binfmt_misc in the same user namespace will mount the same
+> > >> binfmt_misc instance. We explicitly do not create a new binfmt_misc
+> > >> superblock on every binfmt_misc mount as the semantics for
+> > >> load_misc_binary() line up with the keying model. This also allows us to
+> > >> retrieve the relevant binfmt_misc instance based on the caller's user
+> > >> namespace which can be done in a simple (bounded to 32 levels) loop.
+> > >>
+> > >> Similar to the current binfmt_misc semantics allowing access to the
+> > >> binary types in the initial binfmt_misc instance we do allow sandboxes
+> > >> access to their parent's binfmt_misc mounts if they do not have created
+> > >> a separate binfmt_misc instance.
+> > >>
+> > >> Overall, this will unblock the use-cases mentioned below and in general
+> > >> will also allow to support and harden execution of another
+> > >> architecture's binaries in tight sandboxes. For instance, using the
+> > >> unshare binary it possible to start a chroot of another architecture and
+> > >> configure the binfmt_misc interpreter without being root to run the
+> > >> binaries in this chroot and without requiring the host to modify its
+> > >> binary type handlers.
+> > >>
+> > >> Henning had already posted a few experiments in the cover letter at [1].
+> > >> But here's an additional example where an unprivileged container
+> > >> registers qemu-user-static binary handlers for various binary types in
+> > >> its separate binfmt_misc mount and is then seamlessly able to start
+> > >> containers with a different architecture without affecting the host:
+> > >>
+> > >> root    [lxc monitor] /var/snap/lxd/common/lxd/containers f1
+> > >> 1000000  \_ /sbin/init
+> > >> 1000000      \_ /lib/systemd/systemd-journald
+> > >> 1000000      \_ /lib/systemd/systemd-udevd
+> > >> 1000100      \_ /lib/systemd/systemd-networkd
+> > >> 1000101      \_ /lib/systemd/systemd-resolved
+> > >> 1000000      \_ /usr/sbin/cron -f
+> > >> 1000103      \_ /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+> > >> 1000000      \_ /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+> > >> 1000104      \_ /usr/sbin/rsyslogd -n -iNONE
+> > >> 1000000      \_ /lib/systemd/systemd-logind
+> > >> 1000000      \_ /sbin/agetty -o -p -- \u --noclear --keep-baud console 115200,38400,9600 vt220
+> > >> 1000107      \_ dnsmasq --conf-file=/dev/null -u lxc-dnsmasq --strict-order --bind-interfaces --pid-file=/run/lxc/dnsmasq.pid --liste
+> > >> 1000000      \_ [lxc monitor] /var/lib/lxc f1-s390x
+> > >> 1100000          \_ /usr/bin/qemu-s390x-static /sbin/init
+> > >> 1100000              \_ /usr/bin/qemu-s390x-static /lib/systemd/systemd-journald
+> > >> 1100000              \_ /usr/bin/qemu-s390x-static /usr/sbin/cron -f
+> > >> 1100103              \_ /usr/bin/qemu-s390x-static /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-ac
+> > >> 1100000              \_ /usr/bin/qemu-s390x-static /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+> > >> 1100104              \_ /usr/bin/qemu-s390x-static /usr/sbin/rsyslogd -n -iNONE
+> > >> 1100000              \_ /usr/bin/qemu-s390x-static /lib/systemd/systemd-logind
+> > >> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud console 115200,38400,9600 vt220
+> > >> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud pts/0 115200,38400,9600 vt220
+> > >> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud pts/1 115200,38400,9600 vt220
+> > >> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud pts/2 115200,38400,9600 vt220
+> > >> 1100000              \_ /usr/bin/qemu-s390x-static /sbin/agetty -o -p -- \u --noclear --keep-baud pts/3 115200,38400,9600 vt220
+> > >> 1100000              \_ /usr/bin/qemu-s390x-static /lib/systemd/systemd-udevd
+> > >>
+> > >> [1]: https://lore.kernel.org/all/20191216091220.465626-1-laurent@vivier.eu
+> > >> [2]: https://discuss.linuxcontainers.org/t/binfmt-misc-permission-denied
+> > >> [3]: https://discuss.linuxcontainers.org/t/lxd-binfmt-support-for-qemu-static-interpreters
+> > >> [4]: https://discuss.linuxcontainers.org/t/3-1-0-binfmt-support-service-in-unprivileged-guest-requires-write-access-on-hosts-proc-sys-fs-binfmt-misc
+> > >> [5]: https://discuss.linuxcontainers.org/t/qemu-user-static-not-working-4-11
+> > >>
+> > >> Link: https://lore.kernel.org/r/20191216091220.465626-2-laurent@vivier.eu (origin)
+> > >> Link: https://lore.kernel.org/r/20211028103114.2849140-2-brauner@kernel.org (v1)
+> > >> Cc: Sargun Dhillon <sargun@sargun.me>
+> > >> Cc: Serge Hallyn <serge@hallyn.com>
+> > > 
+> > > (one typo below)
+> > > 
+> > > Acked-by: Serge Hallyn <serge@hallyn.com>
+> > > 
+> > 
+> > What happened to this afterwards? Any remaining issues?
+> 
+> Not that we know. I plan to queue this up for 5.20.
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+Hello!
 
-diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-new file mode 100644
-index 000000000000..aee45cb15592
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/microchip,mpf-spi-fpga-mgr.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microchip Polarfire FPGA manager.
-+
-+maintainers:
-+  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+
-+description:
-+  Device Tree Bindings for Microchip Polarfire FPGA Manager using slave SPI to
-+  load the bitstream in .dat format.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - microchip,mpf-spi-fpga-mgr
-+
-+  reg:
-+    description: SPI chip select
-+    maxItems: 1
-+
-+  spi-max-frequency: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    spi {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            fpga_mgr@0 {
-+                    compatible = "microchip,mpf-spi-fpga-mgr";
-+                    spi-max-frequency = <20000000>;
-+                    reg = <0>;
-+            };
-+    };
+Thanks for the thread-ping -- I hadn't had a chance to read through this
+before, but since it's touching binfmt, it popped up on my radar. :)
+
+I like it overall, though I'd rather see it split up more (there's
+some refactoring built into the patches that would be nice to split out
+just to make review easier), but since others have already reviewed it,
+that's probably overkill.
+
+I'd really like to see some self-tests for this, though. Especially
+around the cred logic changes and the namespace fallback logic. I'd like
+to explicitly document and test what the expectations are around the
+mounts, etc.
+
+Finally, I'd prefer this went via the execve tree.
+
+-Kees
+
 -- 
-2.35.1
-
-
+Kees Cook

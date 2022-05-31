@@ -2,217 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3029538E13
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0C1538E18
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245391AbiEaJ5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 05:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
+        id S245394AbiEaJ7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 05:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240788AbiEaJ5A (ORCPT
+        with ESMTP id S240788AbiEaJ65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 05:57:00 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8285FC5;
-        Tue, 31 May 2022 02:56:52 -0700 (PDT)
-Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LC6zY07rdz67cpv;
-        Tue, 31 May 2022 17:53:29 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 31 May 2022 11:56:49 +0200
-Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 31 May
- 2022 10:56:49 +0100
-Date:   Tue, 31 May 2022 10:56:47 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Joe Talbott <joetalbott@gmail.com>, <linux-iio@vger.kernel.org>
-CC:     Jonathan Cameron <jic23@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] iio: Prefer octal over symbolic permissions.
-Message-ID: <20220531105647.00006c00@Huawei.com>
-In-Reply-To: <CAL7gdfeoRM8APfLL77bbGiWWBa0qOF8g0rza+=7hCdo+jaYNLQ@mail.gmail.com>
-References: <20220527185651.465204-1-joetalbott@gmail.com>
-        <20220528183405.22b55033@jic23-huawei>
-        <CAL7gdfeoRM8APfLL77bbGiWWBa0qOF8g0rza+=7hCdo+jaYNLQ@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 31 May 2022 05:58:57 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7281E5DD13
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:58:56 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id er5so16777338edb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1Lh//yTGUbJi03monU+zFrkUN9l3qrNWeiv0qwPR1KM=;
+        b=MVVRYI0ZN7SgTFaz8M/u06YGulvbFi62zDDqveL16HifTZgFBWaOwnMhkuxfYn8P+j
+         WL52gYI9/y2DnkaFxlP8h9zAg37ru7axcu6UoM/ppAFX8L6/lWuCtYx+alWRh28Zn1r7
+         dz54UR3QvN0NY3hkYETDMWeeWOhyhd19AENImdywvWb/Ie3thjvBTvm3EJPH9FhWpLCq
+         dLZedltAZfb6lOoh+5BJZZZKdY3W5dKwBIiNGa55u4xLFNyGBTVpeK54TRKAYJ9Jvrt8
+         QRWzktIT7LePgIAbsAvL6NGXISMzoBFmUsnrVz8uPk8IjcqjESaezNpttB0KjgY5NGqq
+         XXqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1Lh//yTGUbJi03monU+zFrkUN9l3qrNWeiv0qwPR1KM=;
+        b=DJ/Jd6X0Amehvn9WIjbCd8mYQxzzETfRj0S5iewoWtcyW6giMXBn8zJnLRlgzP3vTi
+         BZdIODWgL4YwZCOv+VNiD1WX/lnZtFk+aB6Q/MQ74HFnAg3GRSvmfByAJnikTJKMfFWS
+         UuMXrWDX2H9WSjGQaBVwYldtR/tLBDLk0fRBSOtY2V+2TAinHvhc//QJJtgxo/yXuW8b
+         BdnNURs6IJu+n3LuSqu5WveX08AFEo8JYLhEE3xkcrflcQeLeamDNInsdlxXMkdqIl2u
+         aLevJ5RUaSq9s4t5E/RHMV6q6B4KvmFa3o3kgVJFY7/BbVdx+hxPzeku2lbqECd195VD
+         /DNg==
+X-Gm-Message-State: AOAM530NsLsPURkKAQyOr50DwHWzspAxU8tnhWcVuixdk9/rRNXMGXVJ
+        Kgafh3L+x34K4wIIBj9kQ2JS+g==
+X-Google-Smtp-Source: ABdhPJy69vdQQFHMyE72a/U4IgyhyOR2N6lSQOXZujz+0wS6/e2q5DrHOVp8H/lzBSwKc7yAEfijLw==
+X-Received: by 2002:a05:6402:3705:b0:42a:ba63:18b7 with SMTP id ek5-20020a056402370500b0042aba6318b7mr62888334edb.296.1653991134894;
+        Tue, 31 May 2022 02:58:54 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id 24-20020a170906309800b006ff99e400f9sm1161939ejv.96.2022.05.31.02.58.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 02:58:54 -0700 (PDT)
+Message-ID: <d0904cb9-e765-f0f3-737e-bf365c1cf444@linaro.org>
+Date:   Tue, 31 May 2022 11:58:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 4/6] dt-bindings: ufs: exynos-ufs: add fsd compatible
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-phy@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        avri.altman@wdc.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, chanho61.park@samsung.com,
+        pankaj.dubey@samsung.com, linux-fsd@tesla.com,
+        Bharat Uppal <bharat.uppal@samsung.com>
+References: <20220531012220.80563-1-alim.akhtar@samsung.com>
+ <CGME20220531012351epcas5p389e28e28a48f9bb14a52fc81c417296d@epcas5p3.samsung.com>
+ <20220531012220.80563-5-alim.akhtar@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220531012220.80563-5-alim.akhtar@samsung.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhreml730-chm.china.huawei.com (10.201.108.81) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 29 May 2022 10:08:21 -0400
-Joe Talbott <joetalbott@gmail.com> wrote:
-
-> On Sat, May 28, 2022 at 1:25 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> >
-> > On Fri, 27 May 2022 14:56:52 -0400
-> > Joe Simmons-Talbott <joetalbott@gmail.com> wrote:
-> >  
-> > > As reported by checkpatch.pl use ocatl permissions rather than symbolic
-> > > permissions.
-> > >
-> > > Signed-off-by: Joe Simmons-Talbott <joetalbott@gmail.com>  
-> >
-> > Hi Joe,
-> >
-> > Why the resend?  Given change of description, I'm guessing this is v2
-> > because of feedback on a similar patch elsewhere. If so, please
-> > put the version number in the patch log and provide a changelog
-> > below the ---  
+On 31/05/2022 03:22, Alim Akhtar wrote:
+> Adds tesla,fsd-ufs compatible for Tesla FSD SoC.
 > 
-> 
-> I sent the patch again because I neglected to include linux-kernel and
-> you in the
-> original patch's recipients.  I wasn't sure if I should include the v2
-> but will in the future.
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Bharat Uppal <bharat.uppal@samsung.com>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-For that case, common choice is [RESEND PATCH ....
-with a brief note in the cover letter that you missed some to/cc
 
-> Should I use v3 for my updated patch?
-v2 is fine given v2 doesn't yet exist - v3 also fine though...
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Jonathan
 
-> 
-> Thanks,
-> Joe
-> 
-> >
-> >
-> > Hmm. I guess I don't really mind cleaning this up though it is
-> > some churn in core code which is usually something we try to avoid
-> > for fairly trivial style reasons.
-> >
-> > One request inline (though I suspect it applies in several places,
-> > I just haven't checked ;)
-> >
-> > Thanks,
-> >
-> > Jonathan
-> >  
-> > > ---
-> > >  drivers/iio/industrialio-buffer.c  | 12 ++++++------
-> > >  drivers/iio/industrialio-core.c    | 10 +++++-----
-> > >  drivers/iio/industrialio-trigger.c |  4 ++--
-> > >  3 files changed, 13 insertions(+), 13 deletions(-)
-> > >
-> > > diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
-> > > index b078eb2f3c9d..c27f74a3c0f3 100644
-> > > --- a/drivers/iio/industrialio-buffer.c
-> > > +++ b/drivers/iio/industrialio-buffer.c
-> > > @@ -1391,17 +1391,17 @@ static ssize_t direction_show(struct device *dev,
-> > >       }
-> > >  }
-> > >
-> > > -static DEVICE_ATTR(length, S_IRUGO | S_IWUSR, iio_buffer_read_length,
-> > > +static DEVICE_ATTR(length, 0644, iio_buffer_read_length,
-> > >                  iio_buffer_write_length);
-> > >  static struct device_attribute dev_attr_length_ro = __ATTR(length,
-> > > -     S_IRUGO, iio_buffer_read_length, NULL);
-> > > -static DEVICE_ATTR(enable, S_IRUGO | S_IWUSR,
-> > > +     0444, iio_buffer_read_length, NULL);
-> > > +static DEVICE_ATTR(enable, 0644,
-> > >                  iio_buffer_show_enable, iio_buffer_store_enable);
-> > > -static DEVICE_ATTR(watermark, S_IRUGO | S_IWUSR,
-> > > +static DEVICE_ATTR(watermark, 0644,
-> > >                  iio_buffer_show_watermark, iio_buffer_store_watermark);
-> > >  static struct device_attribute dev_attr_watermark_ro = __ATTR(watermark,
-> > > -     S_IRUGO, iio_buffer_show_watermark, NULL);
-> > > -static DEVICE_ATTR(data_available, S_IRUGO,
-> > > +     0444, iio_buffer_show_watermark, NULL);
-> > > +static DEVICE_ATTR(data_available, 0444,
-> > >               iio_dma_show_data_available, NULL);  
-> >
-> > a side effect of this change a slight shortening of how long the above
-> > two lines will be if combined into one.  It's now sub 80 chars
-> > I think, so please make them a single line.  Also check for similar
-> > cases elsewhere.
-> >
-> >  
-> > >  static DEVICE_ATTR_RO(direction);
-> > >
-> > > diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
-> > > index e1ed44dec2ab..35de348d686e 100644
-> > > --- a/drivers/iio/industrialio-core.c
-> > > +++ b/drivers/iio/industrialio-core.c
-> > > @@ -1114,12 +1114,12 @@ int __iio_device_attr_init(struct device_attribute *dev_attr,
-> > >       dev_attr->attr.name = name;
-> > >
-> > >       if (readfunc) {
-> > > -             dev_attr->attr.mode |= S_IRUGO;
-> > > +             dev_attr->attr.mode |= 0444;
-> > >               dev_attr->show = readfunc;
-> > >       }
-> > >
-> > >       if (writefunc) {
-> > > -             dev_attr->attr.mode |= S_IWUSR;
-> > > +             dev_attr->attr.mode |= 0200;
-> > >               dev_attr->store = writefunc;
-> > >       }
-> > >
-> > > @@ -1401,7 +1401,7 @@ static ssize_t iio_show_dev_name(struct device *dev,
-> > >       return sysfs_emit(buf, "%s\n", indio_dev->name);
-> > >  }
-> > >
-> > > -static DEVICE_ATTR(name, S_IRUGO, iio_show_dev_name, NULL);
-> > > +static DEVICE_ATTR(name, 0444, iio_show_dev_name, NULL);
-> > >
-> > >  static ssize_t iio_show_dev_label(struct device *dev,
-> > >                                struct device_attribute *attr,
-> > > @@ -1411,7 +1411,7 @@ static ssize_t iio_show_dev_label(struct device *dev,
-> > >       return sysfs_emit(buf, "%s\n", indio_dev->label);
-> > >  }
-> > >
-> > > -static DEVICE_ATTR(label, S_IRUGO, iio_show_dev_label, NULL);
-> > > +static DEVICE_ATTR(label, 0444, iio_show_dev_label, NULL);
-> > >
-> > >  static ssize_t iio_show_timestamp_clock(struct device *dev,
-> > >                                       struct device_attribute *attr,
-> > > @@ -1509,7 +1509,7 @@ int iio_device_register_sysfs_group(struct iio_dev *indio_dev,
-> > >       return 0;
-> > >  }
-> > >
-> > > -static DEVICE_ATTR(current_timestamp_clock, S_IRUGO | S_IWUSR,
-> > > +static DEVICE_ATTR(current_timestamp_clock, 0644,
-> > >                  iio_show_timestamp_clock, iio_store_timestamp_clock);
-> > >
-> > >  static int iio_device_register_sysfs(struct iio_dev *indio_dev)
-> > > diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
-> > > index f504ed351b3e..e22a35634f2c 100644
-> > > --- a/drivers/iio/industrialio-trigger.c
-> > > +++ b/drivers/iio/industrialio-trigger.c
-> > > @@ -54,7 +54,7 @@ static ssize_t iio_trigger_read_name(struct device *dev,
-> > >       return sysfs_emit(buf, "%s\n", trig->name);
-> > >  }
-> > >
-> > > -static DEVICE_ATTR(name, S_IRUGO, iio_trigger_read_name, NULL);
-> > > +static DEVICE_ATTR(name, 0444, iio_trigger_read_name, NULL);
-> > >
-> > >  static struct attribute *iio_trig_dev_attrs[] = {
-> > >       &dev_attr_name.attr,
-> > > @@ -494,7 +494,7 @@ static ssize_t iio_trigger_write_current(struct device *dev,
-> > >       return ret;
-> > >  }
-> > >
-> > > -static DEVICE_ATTR(current_trigger, S_IRUGO | S_IWUSR,
-> > > +static DEVICE_ATTR(current_trigger, 0644,
-> > >                  iio_trigger_read_current,
-> > >                  iio_trigger_write_current);
-> > >  
-> >  
-
+Best regards,
+Krzysztof

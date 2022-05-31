@@ -2,103 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F7453942C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B806539432
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345825AbiEaPlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 11:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47326 "EHLO
+        id S1345846AbiEaPoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 11:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237981AbiEaPlN (ORCPT
+        with ESMTP id S237200AbiEaPn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 11:41:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D44C8D693;
-        Tue, 31 May 2022 08:41:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 173D3B8121B;
-        Tue, 31 May 2022 15:41:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54AB8C385A9;
-        Tue, 31 May 2022 15:41:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654011669;
-        bh=xXpbhpbfZ8kiZjZmE9KLcjjyjFNVnBip9la8DxLREX0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DmyVHe+FWZ7CbCWTUHKtH1ut+HeK7SF8l2SP8OcjfvRP0Dt9y6p7C0hSSgLoMM7Sm
-         fv8UkaFAZv3Q6X/mb6gA/MbHRN6HofKeU7qjAcC5B+tI1KWRxmvrWpNrIpAaKam7tz
-         3iPZrkwIB/MvJAA8GuhXVx58xM47tU18ufa/pZrvaRrp9n+b60Jkw2Qx72esN8gzTO
-         SGUZXiVWJhJNC7esKsJ6WzwBHo74h1TFOity2aV+l7RN+yFRbsVVwCDU4XM3yz1fWU
-         P8hT2q68vBVmKSPzYxPOZUTNV+F8z80NCx1gC56leSVb4AvKvJcFQbriDiBxD6Xf3+
-         qFRpDXAH1+h5w==
-Date:   Tue, 31 May 2022 17:41:06 +0200
-From:   Mark Brown <broonie@kernel.org>
-To:     Prasad Sodagudi <quic_psodagud@quicinc.com>
-Cc:     linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        wsa@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Query] Looking for comments on CONFIG_SPI_SPIDEV and
- CONFIG_I2C_CHARDEV interfaces security
-Message-ID: <YpY3Er7F6hdzTfH1@sirena.org.uk>
-References: <78873437-3b35-0711-a1dc-219b9f316fac@quicinc.com>
+        Tue, 31 May 2022 11:43:59 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6F68CB0F
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:43:55 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1654011833;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=EsGrAYAp6IJFxcDVn2/7Z4jT50O8LabBUCsC9BUqAmM=;
+        b=OyKv/9vu83C6cPoIWuDakFsmRedCeZKvCIII2akA2b/S8BRjh0XhZO9edQQ7vbiaksKYKf
+        JzdcgfftpUVugLQ6wgeEAyFvidGF/JOVrQL+85GkRmvghOF3sdWTbe1YwC7y4atuN13CO3
+        ONr0AQNm0OiN7dhMVAGI73X0fd9rxfQ=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH 1/3] mm: rename kernel_init_free_pages to kernel_init_pages
+Date:   Tue, 31 May 2022 17:43:48 +0200
+Message-Id: <4c76a95aff79723de76df146a10888a5a9196faf.1654011120.git.andreyknvl@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YHoP3FmRhuNJL2Hv"
-Content-Disposition: inline
-In-Reply-To: <78873437-3b35-0711-a1dc-219b9f316fac@quicinc.com>
-X-Cookie: May your camel be as swift as the wind.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Andrey Konovalov <andreyknvl@google.com>
 
---YHoP3FmRhuNJL2Hv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Rename kernel_init_free_pages() to kernel_init_pages(). This function is
+not only used for free pages but also for pages that were just allocated.
 
-On Tue, May 31, 2022 at 08:25:26AM -0700, Prasad Sodagudi wrote:
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ mm/page_alloc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> I am working on an IoT solution and would like to understand security impact
-> of these two CONFIG_SPI_SPIDEV and CONFIG_I2C_CHARDEV interfaces of Linux.
-> If a driver is developed from userspace for  /dev/spiX.Y or /dev/i2c
-> interfaces,  are there any security concerns ?
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e008a3df0485..66ef8c310dce 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1296,7 +1296,7 @@ static inline bool should_skip_kasan_poison(struct page *page, fpi_t fpi_flags)
+ 	       PageSkipKASanPoison(page);
+ }
+ 
+-static void kernel_init_free_pages(struct page *page, int numpages)
++static void kernel_init_pages(struct page *page, int numpages)
+ {
+ 	int i;
+ 
+@@ -1396,7 +1396,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 			init = false;
+ 	}
+ 	if (init)
+-		kernel_init_free_pages(page, 1 << order);
++		kernel_init_pages(page, 1 << order);
+ 
+ 	/*
+ 	 * arch_free_page() can make the page's contents inaccessible.  s390
+@@ -2441,7 +2441,7 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
+ 	}
+ 	/* If memory is still not initialized, do it now. */
+ 	if (init)
+-		kernel_init_free_pages(page, 1 << order);
++		kernel_init_pages(page, 1 << order);
+ 	/* Propagate __GFP_SKIP_KASAN_POISON to page flags. */
+ 	if (kasan_hw_tags_enabled() && (gfp_flags & __GFP_SKIP_KASAN_POISON))
+ 		SetPageSkipKASanPoison(page);
+-- 
+2.25.1
 
-Well, you have to ensure that only userspace processes that you
-want to have access to the spidev and I2C interfaces actually
-have access to them which is something that could go wrong.  For
-I2C you IIRC don't have a mechanism to partition devices between
-different users since it all goes through /dev/i2c rather than
-per device userspace devices.
-
-> Userspace driver is to control external SPI slave on board. I heard that
-> these interfaces allows access to any of these type of devices on board.
-> How to avoid accessing any of these type of unwanted device access from
-> userspace ?  Can Selinux or any mechanism control access to other these type
-> of devices from user-space ?
-
-You can use all the usual permission mechanisms to control access
-to devices (probably using udev to set up permissions when things
-are instantiated).  I'd expect this to include SELinux.
-
---YHoP3FmRhuNJL2Hv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKWNw4ACgkQJNaLcl1U
-h9DCyAf+Jh2xvUruhba7MBz1fZX7Nqn6iCd4Dg7CjoD/4qU8z2hzyC/TGopE9+xS
-iliKnXtqDetY61SGAl0UyneFJ42uTbuu75PohuF1FRpoXbmg+QK/Si2Bx+xBRxWb
-SI+/NHy9FdlXo0MnAw5arF1v11wp/cUidxIQNHibz+ykZfhYJbtdC62QTTmRIYPk
-Jmfo074YTJa308/RjfYddqSeczvGl+/REjmfEK6775HzGbjR7Nk+gRaUyOAWyO0m
-6aGsEiEvshqIwQ6BpGBDuW02rQy1r4VPo5Xg4JTuDnv6HYeKrayvS3jM9IR/1z/D
-h+R7M1l/8s5UdMGXFTvEFGbpYDHOVA==
-=tTGU
------END PGP SIGNATURE-----
-
---YHoP3FmRhuNJL2Hv--

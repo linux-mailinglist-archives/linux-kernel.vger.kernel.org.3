@@ -2,60 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C455391D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BA35391E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344759AbiEaNfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
+        id S1344765AbiEaNjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiEaNfQ (ORCPT
+        with ESMTP id S1344762AbiEaNjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:35:16 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AC58FD79
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:35:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654004115; x=1685540115;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9OQLC9RyE8HpdeYC8gfXq1eTavuumgL3xY0hyE3MlXw=;
-  b=BNUli8q21Zu+dZMHLMyd58pirCWzc0lOwhfhEOmeiOkoqk10kMYJS+6H
-   sj+TQBjfeVmcxjD7vmDGbY+EHO5Ksz9EuFJtPf/shgrk6My243V8a68Dn
-   XP2uJB1YIYkNjDjkuYLDyJ9/WP7lBZ+iZiq9uYJPVdv/7ZJ/cCIGbP8lD
-   9Uocy/+HhM8kclFkobNuj5WrMD45ylMc+HH/01tyfe+0NlFbQanXCk+SW
-   oDB0y5Kk1YIxuPAMvFnj+M/nkacwT45swhWxOiQM1sn2Df+2ZkzC2lC4p
-   5Ya/qcomwcMNqgj7qXef4+Jvq0nLYkVXsQ/ZYRCd9oHIvR5NyW9VCZKpV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="275258597"
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="275258597"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 06:35:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="755004806"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 31 May 2022 06:35:13 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nw21h-0002kk-11;
-        Tue, 31 May 2022 13:35:13 +0000
-Date:   Tue, 31 May 2022 21:34:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 18/18]
- arch/arm64/include/asm/memory.h:311:9: error: call to undeclared function
- 'PHYS_PFN'; ISO C99 and later do not support implicit function declarations
-Message-ID: <202205312153.DcObRpN1-lkp@intel.com>
+        Tue, 31 May 2022 09:39:07 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C254A3FD
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:39:03 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 1so14701801ljp.8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:39:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rV+IwUnjJeMeaLuOoAuodxAXJv2e1zA8eKGCdKHN510=;
+        b=aK6SduPUBnymJsbjYP8iiifXthYMYLwOHK6Ld3DlMMKNkWarDDunHmUfEq5sqmy8GV
+         nRX7yuMXnhH6fyDaiQlcWx++J08xJYRPCWgVH9NQJyKN68AwWt9S14BKBk+vDtcVnAUA
+         ifwgXmWp5PajZLOGS4wIIe1C6saBSt6MonJ5T+AqjBzLximu8th6TDF+hVjKTOaiQCnv
+         pdGXti2Y5aLfwIYoByqBs4dVZYL+AkwdQnxB2vF0akc+16h5AViT2N4idnJJn61tvF3I
+         bz9AMs6+bqVfPmC/CyBlHRKzW4/vUaM2sboP8m1ymnAuOUurizkzERbk/YAOUMz4rf3b
+         xvLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rV+IwUnjJeMeaLuOoAuodxAXJv2e1zA8eKGCdKHN510=;
+        b=UlSMN1dngxCTjWdw3PHUVlQbscJqHrXE13NTGZSwJMws7v5/kAii6lHJu1vmMi3xLW
+         suafqv0s1RvqT7XwjnufLERDtUfQyJHQTgmXvhOha33l8edeKh5D6zVVqqmVqdy0cMzu
+         1RxuL2VHv2aAytYDC5k0fvxQ8B4yfiWY2YVLtnZDiChmvsi6fvSnDhNkdQtI9SlndRxa
+         xqLKpY2kYKaE5EsJjsXLPr9zoFBfXaiKgCD+eCZ9ECh0o1S/pL/XGJY7NXe11GZkruLI
+         VW3+oLVIwNuL61wU0UadYUtdfu1m6x9P5SxOaC4oMSzmZq9n9nHwGyPMR0uYjtSb3pOk
+         IYWA==
+X-Gm-Message-State: AOAM533ux+88o9J3mwFEXq2kdrLoc+//KBP54PoBk8yExYq/ltozwdow
+        wrxj1/0tYhwxgReteR8N4m7gqe655fJ92+pYmbYZRg==
+X-Google-Smtp-Source: ABdhPJxxSN08j36y9Nsvv/qbdQgjo0d1IK1+kmolxk6AXhFtn4SjzokuR/8mLpb+7H1Msqpw1zPPrGlDxcrRZV9GXWw=
+X-Received: by 2002:a2e:954c:0:b0:253:d9bf:9f55 with SMTP id
+ t12-20020a2e954c000000b00253d9bf9f55mr33323645ljh.300.1654004341321; Tue, 31
+ May 2022 06:39:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220504213251.264819-1-sebastian.reichel@collabora.com> <20220504213251.264819-10-sebastian.reichel@collabora.com>
+In-Reply-To: <20220504213251.264819-10-sebastian.reichel@collabora.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 31 May 2022 15:38:24 +0200
+Message-ID: <CAPDyKFoRmpX5Pwmu370=tzg6ZAEPNm3LLAooXVLs35z94JsycQ@mail.gmail.com>
+Subject: Re: [PATCHv2 09/21] mmc: sdhci-of-dwcmshc: add reset call back for
+ rockchip Socs
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,161 +78,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
-head:   a71d4962de17d9a95418e25f1f98e66ba910105a
-commit: a71d4962de17d9a95418e25f1f98e66ba910105a [18/18] arm64: memory: Make virt_to_pfn() a static inline
-config: arm64-randconfig-r036-20220531 (https://download.01.org/0day-ci/archive/20220531/202205312153.DcObRpN1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=a71d4962de17d9a95418e25f1f98e66ba910105a
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
-        git checkout a71d4962de17d9a95418e25f1f98e66ba910105a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+On Wed, 4 May 2022 at 23:33, Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+>
+> From: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+>
+> The reset function build in the SDHCI will not reset the logic
+> circuit related to the tuning function, which may cause data
+> reading errors. Resetting the complete SDHCI controller through
+> the reset controller fixes the issue.
+>
+> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+> [rebase, use optional variant of reset getter]
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Queued for v5.20 on the devel branch, thanks!
 
-All errors (new ones prefixed by >>):
-
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:13:
-   In file included from include/linux/irqdomain.h:35:
-   In file included from include/linux/of.h:17:
-   In file included from include/linux/kobject.h:20:
-   In file included from include/linux/sysfs.h:16:
-   In file included from include/linux/kernfs.h:11:
-   In file included from include/linux/mutex.h:17:
-   In file included from include/linux/lockdep.h:14:
-   In file included from include/linux/smp.h:110:
-   In file included from include/linux/preempt.h:78:
-   In file included from arch/arm64/include/asm/preempt.h:6:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/arm64/include/asm/thread_info.h:17:
->> arch/arm64/include/asm/memory.h:311:9: error: call to undeclared function 'PHYS_PFN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return PHYS_PFN(virt_to_phys(p));
-                  ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                           set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+Kind regards
+Uffe
 
 
-vim +/PHYS_PFN +311 arch/arm64/include/asm/memory.h
-
-   308	
-   309	static inline unsigned long virt_to_pfn(const void *p)
-   310	{
- > 311		return PHYS_PFN(virt_to_phys(p));
-   312	}
-   313	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  drivers/mmc/host/sdhci-of-dwcmshc.c | 26 +++++++++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> index bac874ab0b33..3a1b5ba36405 100644
+> --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
+> +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/reset.h>
+>  #include <linux/sizes.h>
+>
+>  #include "sdhci-pltfm.h"
+> @@ -63,6 +64,7 @@
+>  struct rk3568_priv {
+>         /* Rockchip specified optional clocks */
+>         struct clk_bulk_data rockchip_clks[RK3568_MAX_CLKS];
+> +       struct reset_control *reset;
+>         u8 txclk_tapnum;
+>  };
+>
+> @@ -255,6 +257,21 @@ static void dwcmshc_rk3568_set_clock(struct sdhci_host *host, unsigned int clock
+>         sdhci_writel(host, extra, DWCMSHC_EMMC_DLL_STRBIN);
+>  }
+>
+> +static void rk35xx_sdhci_reset(struct sdhci_host *host, u8 mask)
+> +{
+> +       struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> +       struct dwcmshc_priv *dwc_priv = sdhci_pltfm_priv(pltfm_host);
+> +       struct rk35xx_priv *priv = dwc_priv->priv;
+> +
+> +       if (mask & SDHCI_RESET_ALL && priv->reset) {
+> +               reset_control_assert(priv->reset);
+> +               udelay(1);
+> +               reset_control_deassert(priv->reset);
+> +       }
+> +
+> +       sdhci_reset(host, mask);
+> +}
+> +
+>  static const struct sdhci_ops sdhci_dwcmshc_ops = {
+>         .set_clock              = sdhci_set_clock,
+>         .set_bus_width          = sdhci_set_bus_width,
+> @@ -269,7 +286,7 @@ static const struct sdhci_ops sdhci_dwcmshc_rk3568_ops = {
+>         .set_bus_width          = sdhci_set_bus_width,
+>         .set_uhs_signaling      = dwcmshc_set_uhs_signaling,
+>         .get_max_clock          = sdhci_pltfm_clk_get_max_clock,
+> -       .reset                  = sdhci_reset,
+> +       .reset                  = rk35xx_sdhci_reset,
+>         .adma_write_desc        = dwcmshc_adma_write_desc,
+>  };
+>
+> @@ -292,6 +309,13 @@ static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc
+>         int err;
+>         struct rk3568_priv *priv = dwc_priv->priv;
+>
+> +       priv->reset = devm_reset_control_array_get_optional_exclusive(mmc_dev(host->mmc));
+> +       if (IS_ERR(priv->reset)) {
+> +               err = PTR_ERR(priv->reset);
+> +               dev_err(mmc_dev(host->mmc), "failed to get reset control %d\n", err);
+> +               return err;
+> +       }
+> +
+>         priv->rockchip_clks[0].id = "axi";
+>         priv->rockchip_clks[1].id = "block";
+>         priv->rockchip_clks[2].id = "timer";
+> --
+> 2.35.1
+>

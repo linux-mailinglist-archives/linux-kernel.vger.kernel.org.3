@@ -2,163 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF713539502
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 18:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254FF539506
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 18:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346193AbiEaQeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 12:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
+        id S1346168AbiEaQgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 12:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346076AbiEaQeX (ORCPT
+        with ESMTP id S241712AbiEaQgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 12:34:23 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB902986EA
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 09:34:21 -0700 (PDT)
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id B34351E70;
-        Tue, 31 May 2022 16:33:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1654014828;
-        bh=kS1z8ktvQI2j4Votf4ozgtuh7FSp49/EvnMv3zc10sg=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=FipMe0gXkT5KmM3JLynWLtdJFqyw/m8VpqOwqXC0dxMnE8k4XaMhzG/itZqUOhMhQ
-         pwCRjmz4qp8C0c6uilCSGVMAgINB7jiW87NXb/vv4Pa8+QKV27+Bl57yLoJHMOPHD+
-         omvKmOC7wlq3ocLhRtKEt1opLIbD0dWwHZjfTXhA=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 31 May 2022 19:34:19 +0300
-Message-ID: <e40981eb-8243-4bb1-44ef-5393cc464c03@paragon-software.com>
-Date:   Tue, 31 May 2022 19:34:19 +0300
+        Tue, 31 May 2022 12:36:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CFF10D9;
+        Tue, 31 May 2022 09:36:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C26160C92;
+        Tue, 31 May 2022 16:36:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 359F6C385A9;
+        Tue, 31 May 2022 16:36:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654015004;
+        bh=Jcf1LuIwLWTXb1UhNVq0s7bFhNLHcRBB6iSYLTBW6r8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KSUdPURNff9EOMnCrpAuHsisbAE06T/UFYIm/LLXzE73yoHFoGUuI+4Y9Xpz0LvOa
+         73bUC8f7imE8c/IhdCz+utlUwRSSUyLEwTJDNfHucgV+0464kkpZX1oMroDJBj5Lu8
+         Ni8j70RezIuXkkG0ZJEtyNSfHNVSj32aH0iQ0DDSBw9JNhN9jqeyR9/oP6K3sCHzzC
+         1trtk5oB0X9wu7YqVnVLhOlFyhDk/B/pU9zZgJ1VdaP8pARhYDIetGw/Lyk8FZ6JHh
+         FX6VwivaYatuK+qD9yykDNLFmyyVpm0VjNGNUnbJG8otTNbJRO1XX1Ze7v/IhsQALd
+         am/5S2QNwmIWw==
+Date:   Tue, 31 May 2022 19:36:30 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "adrian@lisas.de" <adrian@lisas.de>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "avagin@gmail.com" <avagin@gmail.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "dave.martin@arm.com" <dave.martin@arm.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+Message-ID: <YpZEDjxSPxUfMxDZ@kernel.org>
+References: <Yh0+9cFyAfnsXqxI@kernel.org>
+ <05df964f-552e-402e-981c-a8bea11c555c@www.fastmail.com>
+ <YiEZyTT/UBFZd6Am@kernel.org>
+ <CALCETrWacW8SC2tpPxQSaLtxsOXfXHueyuwLcXpNF4aG-0ZvhA@mail.gmail.com>
+ <fb7d6e4da58ae77be2c6321ee3f3487485b2886c.camel@intel.com>
+ <40a3500c-835a-60b0-15bf-40c6622ad013@kernel.org>
+ <YiZVbPwlgSFnhadv@kernel.org>
+ <CAMe9rOrSLPKdL2gL=yx84zrs-u6ch1AVvjk3oqUe3thR5ZD=dQ@mail.gmail.com>
+ <YpYDKVjMEYVlV6Ya@kernel.org>
+ <d0c94eed6e3c7f35b78bab3f00aadebd960ee0d8.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] fs/ntfs3: fix null pointer dereference in
- d_flags_for_inode
-Content-Language: en-US
-To:     =?UTF-8?B?57uD5Lqu5paM?= <jjm2473@gmail.com>
-CC:     <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-References: <20220506034656.50038-1-jjm2473@gmail.com>
- <14b2ae23-2f7b-401a-dcee-cc6114849022@paragon-software.com>
- <CAP_9mL7O7YyW56HBorZ7727m22NjbQcfcu_J4_XOBoXigQvGCg@mail.gmail.com>
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-In-Reply-To: <CAP_9mL7O7YyW56HBorZ7727m22NjbQcfcu_J4_XOBoXigQvGCg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d0c94eed6e3c7f35b78bab3f00aadebd960ee0d8.camel@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
-
-In the end of ntfs_read_mft function we must assign correct i_op:
-inode->i_op = &ntfs_dir_inode_operations;
-<...>
-inode->i_op = &ntfs_link_inode_operations;
-<...>
-inode->i_op = &ntfs_file_inode_operations;
-<...>
-inode->i_op = &ntfs_special_inode_operations;
-
-In this if .. else if .. else is an error:
-records in $Extend doesn't get correct i_op.
-This was fixed in my patch.
-
-Line in beginning of ntfs_read_mft function
-inode->i_op = NULL;
-triggered null pointer dereference because
-inode->i_op = &ntfs_file_inode_operations;
-is missing for records in $Extend.
-
-If I just remove inode->i_op = NULL,
-then in i_op will be some previous value.
-Sometimes this value is correct, sometimes it's not.
-
-I'm thankful, that you've spent time to find and debug this issue.
-This was reflected in line Reported-by: Liangbin Lian <jjm2473@gmail.com>
-I hope I've made more clear my previous message.
-
-
-On 5/28/22 16:42, 练亮斌 wrote:
-> Hello.
-> `inode->i_op` already initialized when inode alloc, this bug was
-> introduced by `inode->i_op = NULL;`, just delete this line.
-> Please check my patch, maybe it's a better one, I have tested it on my project.
+On Tue, May 31, 2022 at 04:25:13PM +0000, Edgecombe, Rick P wrote:
+> Mike,
 > 
-> On 5/26/22 18:23, Almaz Alexandrovich wrote:
->>
->> Hello.
->>
->> Thank you for reporting this bug.
->> The bug happens because we don't initialize i_op for records in $Extend.
->> We tested patch on our side, let me know if patch helps you too.
->>
->>       fs/ntfs3: Fix missing i_op in ntfs_read_mft
->>
->>       There is null pointer dereference because i_op == NULL.
->>       The bug happens because we don't initialize i_op for records in $Extend.
->>       Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
->>
->>       Reported-by: Liangbin Lian <jjm2473@gmail.com>
->>       Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
->>
->> diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
->> index 879952254071..b2cc1191be69 100644
->> --- a/fs/ntfs3/inode.c
->> +++ b/fs/ntfs3/inode.c
->> @@ -430,6 +430,7 @@ static struct inode *ntfs_read_mft(struct inode *inode,
->>           } else if (fname && fname->home.low == cpu_to_le32(MFT_REC_EXTEND) &&
->>                      fname->home.seq == cpu_to_le16(MFT_REC_EXTEND)) {
->>                   /* Records in $Extend are not a files or general directories. */
->> +               inode->i_op = &ntfs_file_inode_operations;
->>           } else {
->>                   err = -EINVAL;
->>                   goto out;
->>
->>
->> On 5/6/22 06:46, Liangbin Lian wrote:
->>> ntfs_read_mft may return inode with null i_op, cause null pointer dereference in d_flags_for_inode (inode->i_op->get_link).
->>> Reproduce:
->>>    - sudo mount -t ntfs3 -o loop ntfs.img ntfs
->>>    - ls ntfs/'$Extend/$Quota'
->>>
->>> The call trace is shown below (striped):
->>>    BUG: kernel NULL pointer dereference, address: 0000000000000008
->>>    CPU: 0 PID: 577 Comm: ls Tainted: G           OE     5.16.0-0.bpo.4-amd64 #1  Debian 5.16.12-1~bpo11+1
->>>    RIP: 0010:d_flags_for_inode+0x65/0x90
->>>    Call Trace:
->>>    ntfs_lookup
->>>    +--- dir_search_u
->>>    |    +--- ntfs_iget5
->>>    |         +--- ntfs_read_mft
->>>    +--- d_splice_alias
->>>         +--- __d_add
->>>              +--- d_flags_for_inode
->>>
->>> Signed-off-by: Liangbin Lian <jjm2473@gmail.com>
->>> ---
->>>    fs/ntfs3/inode.c | 1 -
->>>    1 file changed, 1 deletion(-)
->>>
->>> diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
->>> index 9eab11e3b..b68d26fa8 100644
->>> --- a/fs/ntfs3/inode.c
->>> +++ b/fs/ntfs3/inode.c
->>> @@ -45,7 +45,6 @@ static struct inode *ntfs_read_mft(struct inode *inode,
->>>        struct MFT_REC *rec;
->>>        struct runs_tree *run;
->>>
->>> -     inode->i_op = NULL;
->>>        /* Setup 'uid' and 'gid' */
->>>        inode->i_uid = sbi->options->fs_uid;
->>>        inode->i_gid = sbi->options->fs_gid;
+> Thanks for doing this. Glad to hear this is solvable with the current
+> paradigm.
+> 
+> On Tue, 2022-05-31 at 14:59 +0300, Mike Rapoport wrote:
+> > * add ability to unlock shadow stack features using ptrace. This is
+> > required because the current glibc (or at least in the version I used
+> > for
+> > tests) locks shadow stack state when it loads a program. This locking
+> > means
+> > that a process will either have shadow stack disabled without an
+> > ability to
+> > enable it or it will have shadow stack enabled with WRSS disabled and
+> > again, there is no way to re-enable WRSS. With that, ptrace looked
+> > like the
+> > most sensible interface to interfere with the shadow stack locking.
+> 
+> So whatever glibc you have lock's features even if it doesn't enable
+> shadow stack? Hmm, I've not encountered this. Which glibc is it?
+
+I use glibc from here:
+https://gitlab.com/x86-glibc/glibc/, commit b6f9a22a00c1f8ae8c0991886f0a714f2f5da002
+
+AFAIU, it's H.J cet work.
+
+ 
+> WRSS is a feature where you would usually want to lock it as disabled,
+> but WRSS cannot be enabled if shadow stack is not enabled. Locking
+> shadow stack and WRSS off together doesn't have any security benefits
+> in theory. so I'm thinking glibc doesn't need to do this. The kernel
+> could even refuse to lock WRSS without shadow stack being enabled.
+> Could we avoid the extra ptrace functionality then?
+
+What I see for is that a program can support shadow stack, glibc enables
+shadow stack, does not enable WRSS and than calls
+
+	arch_prctl(ARCH_X86_FEATURE_LOCK,
+		   LINUX_X86_FEATURE_SHSTK | LINUX_X86_FEATURE_WRSS);
+
+so that WRSS cannot be re-enabled.
+
+For the programs that do not support shadow stack, both SHSTK and WRSS are
+disabled, but still there is the same call to
+arch_prctl(ARCH_X86_FEATURE_LOCK, ...) and then neither shadow stack nor
+WRSS can be enabled.
+
+My original plan was to run CRIU with no shadow stack, enable shadow stack
+and WRSS in the restored tasks using arch_prct() and after the shadow stack
+contents is restored disable WRSS.
+
+Obviously, this didn't work with glibc I have :)
+
+On the bright side, having a ptrace call to unlock shadow stack and wrss
+allows running CRIU itself with shadow stack.
+ 
+> Rick
+
+-- 
+Sincerely yours,
+Mike.

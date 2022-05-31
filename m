@@ -2,111 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C69B539756
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C12553975C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347516AbiEaTse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 15:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
+        id S1344189AbiEaTtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 15:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241900AbiEaTsb (ORCPT
+        with ESMTP id S241900AbiEaTs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 15:48:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78945DF93
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:48:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4283523A;
-        Tue, 31 May 2022 12:48:30 -0700 (PDT)
-Received: from [10.57.81.38] (unknown [10.57.81.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B791E3F766;
-        Tue, 31 May 2022 12:48:28 -0700 (PDT)
-Message-ID: <b97645ed-b524-a505-2993-e04a37b50d35@arm.com>
-Date:   Tue, 31 May 2022 20:48:24 +0100
+        Tue, 31 May 2022 15:48:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80B93B2B8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:48:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F1DB61265
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 19:48:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09E0EC385A9;
+        Tue, 31 May 2022 19:48:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654026536;
+        bh=XuBOBa58dsKmshY9gO3+HghfNDzjaNi7Dw7jP7fbIYA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B2fUCmbDvMPx/fopsPyhGHj4LvZOpbcHrUuVvFUGF79SwaEJ7hr8FiW2h/Vbp3c8t
+         yT9R0glPYQOBsaphQiz8ZNGl+HdzzuZuiVZugSkls2SsmdHtfSjoGQ1tQal45GPMh8
+         QbSBBkA+s7DRZJ+hy8pmx9U6GcgQN4bAkP9UpRybb8PvwCINFXOt2BfmJtuTWSv1IE
+         uzZgbW29Hpl2+MAPDvYIugDNHeAGoITIA91p5zEPdkpWLTa/p6uqk93MgSON8stbkv
+         tbHR4bIKx4n0BgJRzDoTqeuG/4fXE6sfJHAEJjYtfV0LyN/3XnoBY6N1XRdS9GrdTN
+         CVqU57JwKG2Fw==
+Date:   Tue, 31 May 2022 12:48:49 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: vmlinux.o: warning: objtool: __fentry__+0x16: return with
+ modified stack frame
+Message-ID: <20220531194849.klpqt4fzpgql737d@treble>
+References: <202205310609.Rw55oP08-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 04/10] dmapool: improve accuracy of debug statistics
-Content-Language: en-GB
-To:     Tony Battersby <tonyb@cybernetics.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     iommu@lists.linux-foundation.org, kernel-team@fb.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Tony Lindgren <tony@atomide.com>
-References: <9b08ab7c-b80b-527d-9adf-7716b0868fbc@cybernetics.com>
- <a922c30f-d6d7-dde2-554f-254441290331@cybernetics.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <a922c30f-d6d7-dde2-554f-254441290331@cybernetics.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202205310609.Rw55oP08-lkp@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-31 19:17, Tony Battersby wrote:
-> The "total number of blocks in pool" debug statistic currently does not
-> take the boundary value into account, so it diverges from the "total
-> number of blocks in use" statistic when a boundary is in effect.  Add a
-> calculation for the number of blocks per allocation that takes the
-> boundary into account, and use it to replace the inaccurate calculation.
+On Tue, May 31, 2022 at 06:30:07AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   e11a93567d3f1e843300ed98ff049a4335db8015
+> commit: 72064474964724c59ddff58a581a31b1ede75cf9 objtool: Make stack validation frame-pointer-specific
+> date:   6 weeks ago
+> config: x86_64-buildonly-randconfig-r006-20220530 (https://download.01.org/0day-ci/archive/20220531/202205310609.Rw55oP08-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+> reproduce (this is a W=1 build):
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=72064474964724c59ddff58a581a31b1ede75cf9
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 72064474964724c59ddff58a581a31b1ede75cf9
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 > 
-> This depends on the patch "dmapool: fix boundary comparison" for the
-> calculated blks_per_alloc value to be correct.
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
-> ---
->   mm/dmapool.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
+> All warnings (new ones prefixed by >>):
 > 
-> diff --git a/mm/dmapool.c b/mm/dmapool.c
-> index 782143144a32..9e30f4425dea 100644
-> --- a/mm/dmapool.c
-> +++ b/mm/dmapool.c
-> @@ -47,6 +47,7 @@ struct dma_pool {		/* the pool */
->   	struct device *dev;
->   	unsigned int allocation;
->   	unsigned int boundary;
-> +	unsigned int blks_per_alloc;
->   	char name[32];
->   	struct list_head pools;
->   };
-> @@ -92,8 +93,7 @@ static ssize_t pools_show(struct device *dev, struct device_attribute *attr, cha
->   		/* per-pool info, no real statistics yet */
->   		temp = scnprintf(next, size, "%-16s %4zu %4zu %4u %2u\n",
+>    vmlinux.o: warning: objtool: ibt_selftest+0x11: sibling call from callable instruction with modified stack frame
+> >> vmlinux.o: warning: objtool: __fentry__+0x16: return with modified stack frame
 
-Nit: if we're tinkering with this, it's probably worth updating the 
-whole function to use sysfs_emit{_at}().
+Here's a fix for this warning.  Will post a proper patch tomorrow-ish.
 
->   				 pool->name, blocks,
-> -				 (size_t) pages *
-> -				 (pool->allocation / pool->size),
-> +				 (size_t) pages * pool->blks_per_alloc,
->   				 pool->size, pages);
->   		size -= temp;
->   		next += temp;
-> @@ -168,6 +168,9 @@ struct dma_pool *dma_pool_create(const char *name, struct device *dev,
->   	retval->size = size;
->   	retval->boundary = boundary;
->   	retval->allocation = allocation;
-> +	retval->blks_per_alloc =
-> +		(allocation / boundary) * (boundary / size) +
-> +		(allocation % boundary) / size;
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 03364dc40d8d..4c8b6ae802ac 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -36,10 +36,6 @@ KCSAN_SANITIZE := n
+ 
+ OBJECT_FILES_NON_STANDARD_test_nx.o			:= y
+ 
+-ifdef CONFIG_FRAME_POINTER
+-OBJECT_FILES_NON_STANDARD_ftrace_$(BITS).o		:= y
+-endif
+-
+ # If instrumentation of this dir is enabled, boot hangs during first second.
+ # Probably could be more selective here, but note that files related to irqs,
+ # boot, dumpstack/stacktrace, etc are either non-interesting or can lead to
+diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
+index 4ec13608d3c6..db7c396064ef 100644
+--- a/arch/x86/kernel/ftrace_64.S
++++ b/arch/x86/kernel/ftrace_64.S
+@@ -175,6 +175,7 @@ SYM_INNER_LABEL(ftrace_caller_end, SYM_L_GLOBAL)
+ 
+ 	jmp ftrace_epilogue
+ SYM_FUNC_END(ftrace_caller);
++STACK_FRAME_NON_STANDARD_FP(ftrace_caller)
+ 
+ SYM_FUNC_START(ftrace_epilogue)
+ /*
+@@ -282,6 +283,7 @@ SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
+ 	jmp	ftrace_epilogue
+ 
+ SYM_FUNC_END(ftrace_regs_caller)
++STACK_FRAME_NON_STANDARD_FP(ftrace_regs_caller)
+ 
+ 
+ #else /* ! CONFIG_DYNAMIC_FTRACE */
+@@ -311,6 +313,8 @@ trace:
+ 	jmp ftrace_stub
+ SYM_FUNC_END(__fentry__)
+ EXPORT_SYMBOL(__fentry__)
++STACK_FRAME_NON_STANDARD_FP(__fentry__)
++
+ #endif /* CONFIG_DYNAMIC_FTRACE */
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+diff --git a/include/linux/objtool.h b/include/linux/objtool.h
+index 6491fa8fba6d..15b940ec1eac 100644
+--- a/include/linux/objtool.h
++++ b/include/linux/objtool.h
+@@ -143,6 +143,12 @@ struct unwind_hint {
+ 	.popsection
+ .endm
+ 
++.macro STACK_FRAME_NON_STANDARD_FP func:req
++#ifdef CONFIG_FRAME_POINTER
++	STACK_FRAME_NON_STANDARD \func
++#endif
++.endm
++
+ .macro ANNOTATE_NOENDBR
+ .Lhere_\@:
+ 	.pushsection .discard.noendbr
+diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
+index 6491fa8fba6d..15b940ec1eac 100644
+--- a/tools/include/linux/objtool.h
++++ b/tools/include/linux/objtool.h
+@@ -143,6 +143,12 @@ struct unwind_hint {
+ 	.popsection
+ .endm
+ 
++.macro STACK_FRAME_NON_STANDARD_FP func:req
++#ifdef CONFIG_FRAME_POINTER
++	STACK_FRAME_NON_STANDARD \func
++#endif
++.endm
++
+ .macro ANNOTATE_NOENDBR
+ .Lhere_\@:
+ 	.pushsection .discard.noendbr
 
-Do we really need to store this? Sure, 4 divisions (which could possibly 
-be fewer given the constraints on boundary) isn't the absolute cheapest 
-calculation, but I still can't imagine anyone would be polling sysfs 
-stats hard enough to even notice.
-
-Thanks,
-Robin.
-
->   
->   	INIT_LIST_HEAD(&retval->pools);
->   

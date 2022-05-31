@@ -2,180 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3050539312
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B2F539317
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345226AbiEaOV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 10:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
+        id S1345169AbiEaOXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 10:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343829AbiEaOVW (ORCPT
+        with ESMTP id S234252AbiEaOXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 10:21:22 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6E070374;
-        Tue, 31 May 2022 07:21:21 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id w2-20020a17090ac98200b001e0519fe5a8so2416034pjt.4;
-        Tue, 31 May 2022 07:21:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=e+YRi5ZOr2MLW+Tle96gopRdE1XvQCieBzraMEv4iPs=;
-        b=qlzQcOrv+u1a2hYZ//w1+tZ6Dy4cC31GyL8IosNVbXW3FXt+tv4J3gZxP+pCTBOxDI
-         aFwGTKaeONPspS7qVC9m+lIAxmbIJqiYhNgoSIuvFGsSj6ql7OgJADCNbI6UH6zSAxrP
-         aJWqXmBPIYppJk5Vk1kqehP1d2ktTejHFM56usOroY2Xg4RUO0ukFGyCKOjXThBasFla
-         RQ+BnNx98JpUHvyGbotdlTKgnOTnScMPGGPlVaakWuZiJcOfzVDRmdFbL/e6OrcP1c17
-         lC73pLugdu7dcgwGvpLf/roMGgqxsFmNNAEfqES7rztep0NQg4yQJcocBM6uPnEEKco0
-         R6Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=e+YRi5ZOr2MLW+Tle96gopRdE1XvQCieBzraMEv4iPs=;
-        b=4ffr9vNGC2xQ7Vv0x+0gRtyN4YbhFO41k77Qs4W1jWAV32n9ZFEKT7s8EsKXITnBPm
-         EjgCexfJtxyMbXCrvBIY5Wt+4r9uYa0bx4JJRmKfpZ+a8MqPTzXywG93bJbBUHf9vEmm
-         L0dsdKtsAehG9oRmzkSYU2EGdy6rv05GpcTphmkt7y11d1TKJhg0f25tNyc1WxKUtR2E
-         A8O0AfdlVKsUhiBGfpds97YM/XeYX6dLPBUphVt+Siq23iI9jk8t2UkwEOFulmEEYCwT
-         iuk5lvWkc22nR7DnWVwoCG28VrqZJgxbFnNCUjddkE/y/HtmfUlnfEqI9zgOstvgekiW
-         VuLA==
-X-Gm-Message-State: AOAM533QJ4HmgNOiJRQyoItXocxSh4DHe6lsW1UUlXgQ8LqufhKlh03I
-        J1Uu/8ywkIgFLYA+p/rMSUs=
-X-Google-Smtp-Source: ABdhPJyS06IKdXhLxyEuL4sj0D6SwuYAGcAfDbedySLbvp8lIxmkfRHP6apMloK9eqlIHW1ubhXiSA==
-X-Received: by 2002:a17:90a:9318:b0:1e0:b957:ffda with SMTP id p24-20020a17090a931800b001e0b957ffdamr29338637pjo.199.1654006880917;
-        Tue, 31 May 2022 07:21:20 -0700 (PDT)
-Received: from [192.168.1.24] (1-162-164-147.dynamic-ip.hinet.net. [1.162.164.147])
-        by smtp.gmail.com with ESMTPSA id i10-20020a17090332ca00b0016156e0c3cbsm11378039plr.156.2022.05.31.07.21.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 07:21:20 -0700 (PDT)
-Message-ID: <a38b1409-f248-e059-0f99-fc76a82c840c@gmail.com>
-Date:   Tue, 31 May 2022 22:21:18 +0800
+        Tue, 31 May 2022 10:23:38 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2078.outbound.protection.outlook.com [40.107.223.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BDD7C174;
+        Tue, 31 May 2022 07:23:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oJxuvKNN3sOMdpsLkGCw3fHnWXVA1WhESuf2Sutejk2YUa3rdFmaDC/r0r0kiBWUPU/ihCkhdqcPWvPAspJlXAindDbFOmy88vHeCddQ/wyEOQRrMJXMnPuGW8yBAy1eRoKYIUogF3PuDKT35GDhIgYpug3kD8UYMs0i0zsts9rtoPe8bGvxgHxtHpsY7GHcM/k/Q+slFTkk0Hiy7b04m3cmBSbuh4x/oYzPukI61af16IkvrwlhJ7zZn7z2VQaL+fDkytEYehU+4yBNiYMJ3SpTxvxC4VKfWPAutrooahb7eY2xhC0ogeAx8cr/ClHfSc5y+w53G3OBXYuMWZ094w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q9gTRopLeEIwgJuGbroSNJ5D82pl7EhcG5yOOG7c2b0=;
+ b=AbCNVLNX+HpNjt9HitvTSfaXFmwduZgkefYc1PjzgrYmsjW3J86iiJJJOjHxkGStH5YymLt+U7Fa45dKiVbhH5cwCyvLT17vbbwgblremrueeK9urcx2fjw7QXiFuokBAB/y65vAATnm63oNifj8EktOsGt0yz2Ab3pX8TapmAfrgn18d3Y/DgVEueLDm/4Nte8OxP82QCMHNK9xHooWjZpRjOYdicRBHWk9bPbjXjEZVlcsvfa4p3t+vDX8CW5E0fKZBJS5Tus1vFmvgXr4xMCJkib4ip/v2Qh+wsDnAbmoFzl7MacgetlqOoGBLiVkPxnMQRHpS9oim/dti+zrWw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Q9gTRopLeEIwgJuGbroSNJ5D82pl7EhcG5yOOG7c2b0=;
+ b=Tj3aU1fdb/SIlnMH5WNPTYYJI384Qnn5QKALrejU8AUsXkaEn0cdpyA0Yko5ia+WVpJjpm3CfxHawAxsf5NtBFrcrlboYchvJSYJtOqKRJLh3j1dMWtaKqkqXcLWXwoa0g3CsI6hFiJiTSsdr3YqL+skV84vk68WejLYIrKsbJr6yoMo6uE45qixj1VV3zG6q8Tj4pnbwwEYN7N9oE9MD7kirKutIc1jIDXETEQmhRVc2iiO+WhjyEwhgG+MygE+24QMl7k5gf3yMH7bROyTvnkWXX4eV5SANB8HLZYz6Szd9MPZIgVet87HSiHIVCHSavf317+ri+ooUE6z/4phnQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by SN6PR12MB4735.namprd12.prod.outlook.com (2603:10b6:805:e5::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.17; Tue, 31 May
+ 2022 14:23:35 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::99d2:88e0:a9ae:8099]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::99d2:88e0:a9ae:8099%2]) with mapi id 15.20.5314.012; Tue, 31 May 2022
+ 14:23:35 +0000
+Date:   Tue, 31 May 2022 17:23:28 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+Message-ID: <YpYk4EIeH6sdRl+1@shredder>
+References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
+ <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
+ <Yo+LAj1vnjq0p36q@shredder>
+ <86sfov2w8k.fsf@gmail.com>
+ <YpCgxtJf9Qe7fTFd@shredder>
+ <86sfoqgi5e.fsf@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86sfoqgi5e.fsf@gmail.com>
+X-ClientProxiedBy: VI1P195CA0019.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:800:d0::29) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/1] aspeed: i2c: add manual clock setup feature
-Content-Language: en-US
-To:     Patrick Williams <patrick@stwcx.xyz>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Porin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20220530114056.8722-1-potin.lai.pt@gmail.com>
- <YpYcZn+Zsz3g7xl+@heinlein.stwcx.org.github.beta.tailscale.net>
-From:   Potin Lai <potin.lai.pt@gmail.com>
-In-Reply-To: <YpYcZn+Zsz3g7xl+@heinlein.stwcx.org.github.beta.tailscale.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4175dd8f-8fb2-4b30-ba0e-08da431125bd
+X-MS-TrafficTypeDiagnostic: SN6PR12MB4735:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR12MB47353876B33E2B81D44E2C7AB2DC9@SN6PR12MB4735.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SP8ZReIiZ/C5qygXRriQTGK2FeK2BEZmzsLjcgSj7r9ozKkAtjPY8jqj8VIub1A3hUzjnzVR4QELjoLhu4rc4nVOpCutP9Wv9rq1C8KWQBjTmCqvZhciQVISCo5aukQyRRvYi5/VVEqfxepRPin2Jkwom8IKEi5gCl/A6WopYU8w3S/g32bsOVXx8UZblhjhYhp13Nc0zW6iixjZ8uwvYgjKRIZw8FJ5gv+w6HDIYxcTg8znyi5eg73uLuU+CgGRtO9HUb0hQMd/RJnJV7kZlOUKHW2Ph3RfgtD45vZaiJTgJGCeuFRyrUw/eoezH1PtB1sO6wHIMP3Rp7zaKHFk4+BPQ9y2R/aY0xKelMK+YO36Vig5vd51ox9zRAsTAFBxno/p9JAZplaK5ZwmwHQdE4ndLJV4Yu82Y6kvcgHFbJWO89NkkhpCTUDZNGMxQ3MLtKWt+AYCsxReiLGYm6PTuvox2bA98nwAuLiXWg+k1OFuZet5qI5HOexSEG+qBeSTrvuQCNQSLvbWE7J7b17eOPViKa6wBrhNS2laZji8iyyCqsqMCqDW3rWifOSxCyPycn1vw0UiMd0xHe0KWn0JAYrO6v56Enp36Y+SnZx85ILmWJsl8r95tUyRp/CrvfNXv+4IOiNi3GV7bwsO16STdKvJ/z1V4bdUlzRsJpGXsoLntWgB86eAk66LQgs7SLTIu+2E0Ur9EzNpNeW4BxFdXQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(6666004)(6916009)(83380400001)(54906003)(38100700002)(508600001)(6506007)(8936002)(33716001)(5660300002)(66476007)(66556008)(86362001)(6486002)(26005)(7416002)(186003)(66946007)(8676002)(6512007)(9686003)(4326008)(2906002)(316002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8RtH7HT2/xkwWo5tAySTyizzOEfC5XbUG0MQOcH1bGqPqC1CPwrpOVg9DlUT?=
+ =?us-ascii?Q?MMtZubLyrH9kGN1ttknW/kwp98EWVCg1N1ug6dJPEMRzvgn8UFSr8Vo/5HdJ?=
+ =?us-ascii?Q?BQszI018T1epYNc5QrdBB0/n1iaVgq1M+wI3aCKZISDDyWvGLeWo1UrJObBS?=
+ =?us-ascii?Q?wpM4G4AGlt6W1Sr6yNc9kWYWaKIVbcwMOqiUQ93jWwY8i4TuzkDeOgDHj9Ms?=
+ =?us-ascii?Q?1KMICnEEGFdbEK3kdkzPhU6Fi4A2YS2EIe7l9xsycXqpkGRT32d3mmKBbJcb?=
+ =?us-ascii?Q?YKVXdh8rfv4rMBuqAbZ1G0/FsPAoyOC64qZ5UHbn1NFVvCeMZA744bHQQI0C?=
+ =?us-ascii?Q?O05TUzf3FsoEbSbC5oemCsPrUcwUC9mXjSis1xxQ+D+IHYbUl81sV+EOr7mG?=
+ =?us-ascii?Q?jCXxbm+5/j0rD+WEKWJdpQIkW3ldAjo3EcH41iBGktSHxFQv/Eb/TzQ3IlR/?=
+ =?us-ascii?Q?gPgr/e4ITmI0AsSfm1I2TcVErUslJ5uotecC9/T13eyv8/OKdrMvM+WodiHj?=
+ =?us-ascii?Q?4yTACLyC8zz1qXoglrecoNJECUDOS5yQ7q2thTYjPzc+xqm0zbv5BFNf4SYO?=
+ =?us-ascii?Q?xRcryZymujP1RgziKvlphC97TxckY1tYUr15jtLcpJjmbhwZKSKizEfFJmTP?=
+ =?us-ascii?Q?mU82LR8Bq8q6sGtOj1hLmHhOwkRoXHRhLIsZrQYjkvCxT/WUzlRyjjXvBtEE?=
+ =?us-ascii?Q?jjozMADYzkwyTyOliPMbmkaN3YrqZDOlRNomIhAVYCmEhcckOuVMIOkzq8rW?=
+ =?us-ascii?Q?SwI7QWJY7eyhs2rnWz1Qgc6MGHv72XUiVGFGwbOmMQ2wypxuxqBaHeuIPg5b?=
+ =?us-ascii?Q?jWYik3tqOIoNjpt8usT908rvl+H7nu3NFnnZKrDHura0hcX5o7Xopbcs5e8M?=
+ =?us-ascii?Q?I0shgXa0ZuPLNAWyt4TuCMYU7JKa4FVGYYUXaGp0BblM1RtFeyYAmrP3Sdr0?=
+ =?us-ascii?Q?X/+tQblNCUPvzY3AFPhHZUQ104DpI3gHvOpXSbk81+Ok/YUhDcu8giSJ0aP1?=
+ =?us-ascii?Q?mJR3VPCTZJEXqGZ7VQWtZ4e1gBSZboPspzrSmIP1pAtPhraJAsZr7qoOt0uq?=
+ =?us-ascii?Q?QqhEDjJGUJIhqBFMt99kqyh1ow1wLzxIXqPcx11MXb7ot7WUTmVvp1hsRDuw?=
+ =?us-ascii?Q?q0Zvbv3lzNRGftHeZBzDliqw7yxZ6rrlsw5uEFtnHspdGB5XkKVTGCagtZHF?=
+ =?us-ascii?Q?SN3XK3Emi4e2B3innDw3Lhjyo2o/l8hk+wW8bErbimPCgDRQBpqML7yZRlPa?=
+ =?us-ascii?Q?1WakZpLQZ53sa9LRdGSFThe8SOYt0bwVVd1sERZf/kN51MyyqqfkGEhfOSJh?=
+ =?us-ascii?Q?Os1bJjoIX/+7HvR5JXu/8KSL1S1ml0QEF9XSOnYym7H7Txw/oJvYqA762/HO?=
+ =?us-ascii?Q?1+e/ptlTqpSAS0DdJvHMl2xduBQuUw9NTai7/nzKD86jPJ5kO6CTS/bckeB7?=
+ =?us-ascii?Q?Dv7MCXAKzCjPSkTP4qFikF0a00XRjuAivhE8aaE3Sqn5W+fRRsIfLoZXWRFF?=
+ =?us-ascii?Q?qGRWYsGaofk/BzITT4v4F8T5KG3ZXo5YPKcotJfll/asCdlSlVU2L35uNa4H?=
+ =?us-ascii?Q?3rSuEK/8gZSN6xdSKWBlkAMTp204VB7UV2DCc1mZBi8mppZy0kxeF+jJhX4Y?=
+ =?us-ascii?Q?t5RZGi5iJpbJ/56Ru325glE1XZrMj1OYHjnLnz1T5rbzulwdzDC2P/NI4pfZ?=
+ =?us-ascii?Q?1QhQ/SY2pqNGu/QbEqpGtJGerjPYCSpIx28khMjJMYv842kOPQRtmI4+IZKv?=
+ =?us-ascii?Q?MhEd3XhTDw=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4175dd8f-8fb2-4b30-ba0e-08da431125bd
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2022 14:23:35.7729
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CYXphHZx9mUGnkQt7dmKpHSZJ+EJIthXeyGXRMFSk9pyMo4pH2B3qdJxTC3Ma4QCrYvjTHxmVSbcKdZFu+sosA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB4735
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 31, 2022 at 11:34:21AM +0200, Hans Schultz wrote:
+> > Just to give you another data point about how this works in other
+> > devices, I can say that at least in Spectrum this works a bit
+> > differently. Packets that ingress via a locked port and incur an FDB
+> > miss are trapped to the CPU where they should be injected into the Rx
+> > path so that the bridge will create the 'locked' FDB entry and notify it
+> > to user space. The packets are obviously rated limited as the CPU cannot
+> > handle billions of packets per second, unlike the ASIC. The limit is not
+> > per bridge port (or even per bridge), but instead global to the entire
+> > device.
+> 
+> Btw, will the bridge not create a SWITCHDEV_FDB_ADD_TO_DEVICE event
+> towards the switchcore in the scheme you mention and thus add an entry
+> that opens up for the specified mac address?
 
-Patrick Williams 於 31/05/2022 9:47 pm 寫道:
-> On Mon, May 30, 2022 at 07:40:56PM +0800, Potin Lai wrote:
->> From: Porin Lai <potin.lai.pt@gmail.com>
->>
->> Add properties for manual tuning i2c clock timing register.
->>
->> * aspeed,i2c-manual-clk: Enable aspeed i2c clock manual setup
->> * aspeed,i2c-base-clk-div: Base Clock divisor (tBaseClk)
->> * aspeed,i2c-clk-high-cycle: Cycles of clock-high pulse (tClkHigh)
->> * aspeed,i2c-clk-low-cycle: Cycles of clock-low pulse (tClkLow)
-> Do we need to add these to
-> Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml ?
-
-Sorry, I wasn't notice the yaml file, I will update the documentation in next version.
-
-Potin
-
->> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
->> ---
->>  drivers/i2c/busses/i2c-aspeed.c | 55 ++++++++++++++++++++++++++++++++-
->>  1 file changed, 54 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
->> index 67e8b97c0c95..1f4b5c4b5bf4 100644
->> --- a/drivers/i2c/busses/i2c-aspeed.c
->> +++ b/drivers/i2c/busses/i2c-aspeed.c
->> @@ -898,6 +898,56 @@ static int aspeed_i2c_init_clk(struct aspeed_i2c_bus *bus)
->>  	return 0;
->>  }
->>  
->> +/* precondition: bus.lock has been acquired. */
->> +static int aspeed_i2c_manual_clk_setup(struct aspeed_i2c_bus *bus)
->> +{
->> +	u32 divisor, clk_high, clk_low, clk_reg_val;
->> +
->> +	if (device_property_read_u32(bus->dev, "aspeed,i2c-base-clk-div",
->> +				     &divisor) != 0) {
->> +		dev_err(bus->dev, "Could not read aspeed,i2c-base-clk-div\n");
->> +		return -EINVAL;
->> +	} else if (divisor > ASPEED_I2CD_TIME_BASE_DIVISOR_MASK) {
->> +		dev_err(bus->dev, "Invalid aspeed,i2c-base-clk-div: %u\n",
->> +			divisor);
->> +		return -EINVAL;
->> +	}
->> +
->> +	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-high-cycle",
->> +				     &clk_high) != 0) {
->> +		dev_err(bus->dev, "Could not read aspeed,i2c-clk-high-cycle\n");
->> +		return -EINVAL;
->> +	} else if (clk_high > ASPEED_I2CD_TIME_SCL_REG_MAX) {
->> +		dev_err(bus->dev, "Invalid aspeed,i2c-clk-high-cycle: %u\n",
->> +			clk_high);
->> +		return -EINVAL;
->> +	}
->> +
->> +	if (device_property_read_u32(bus->dev, "aspeed,i2c-clk-low-cycle",
->> +				     &clk_low) != 0) {
->> +		dev_err(bus->dev, "Could not read aspeed,i2c-clk-low-cycle\n");
->> +		return -EINVAL;
->> +	} else if (clk_low > ASPEED_I2CD_TIME_SCL_REG_MAX) {
->> +		dev_err(bus->dev, "Invalid aspeed,i2c-clk-low-cycle: %u\n",
->> +			clk_low);
->> +		return -EINVAL;
->> +	}
->> +
->> +	clk_reg_val = readl(bus->base + ASPEED_I2C_AC_TIMING_REG1);
->> +	clk_reg_val &= (ASPEED_I2CD_TIME_TBUF_MASK |
->> +			ASPEED_I2CD_TIME_THDSTA_MASK |
->> +			ASPEED_I2CD_TIME_TACST_MASK);
->> +	clk_reg_val |= (divisor & ASPEED_I2CD_TIME_BASE_DIVISOR_MASK)
->> +			| ((clk_high << ASPEED_I2CD_TIME_SCL_HIGH_SHIFT)
->> +			   & ASPEED_I2CD_TIME_SCL_HIGH_MASK)
->> +			| ((clk_low << ASPEED_I2CD_TIME_SCL_LOW_SHIFT)
->> +			   & ASPEED_I2CD_TIME_SCL_LOW_MASK);
->> +	writel(clk_reg_val, bus->base + ASPEED_I2C_AC_TIMING_REG1);
->> +	writel(ASPEED_NO_TIMEOUT_CTRL, bus->base + ASPEED_I2C_AC_TIMING_REG2);
->> +
->> +	return 0;
->> +}
->> +
->>  /* precondition: bus.lock has been acquired. */
->>  static int aspeed_i2c_init(struct aspeed_i2c_bus *bus,
->>  			     struct platform_device *pdev)
->> @@ -908,7 +958,10 @@ static int aspeed_i2c_init(struct aspeed_i2c_bus *bus,
->>  	/* Disable everything. */
->>  	writel(0, bus->base + ASPEED_I2C_FUN_CTRL_REG);
->>  
->> -	ret = aspeed_i2c_init_clk(bus);
->> +	if (of_property_read_bool(pdev->dev.of_node, "aspeed,i2c-manual-clk"))
->> +		ret = aspeed_i2c_manual_clk_setup(bus);
->> +	else
->> +		ret = aspeed_i2c_init_clk(bus);
->>  	if (ret < 0)
->>  		return ret;
->>  
->> -- 
->> 2.17.1
->>
+It will, but the driver needs to ignore FDB entries that are notified
+with locked flag. I see that you extended 'struct
+switchdev_notifier_fdb_info' with the locked flag, but it's not
+initialized in br_switchdev_fdb_populate(). Can you add it in the next
+version?

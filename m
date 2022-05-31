@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563905396C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55EF45396DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346749AbiEaTPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 15:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
+        id S1347241AbiEaTS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 15:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346826AbiEaTPO (ORCPT
+        with ESMTP id S1347217AbiEaTSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 15:15:14 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08786B650
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:15:13 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id d129so13672258pgc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:15:13 -0700 (PDT)
+        Tue, 31 May 2022 15:18:54 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C36E66236
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:18:53 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id y24so8535806wmq.5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:18:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9LEQ/FAYXiOycH5Pgki0a9z4cyO6Zt9xfMoijJMruHE=;
-        b=aoYECPuBKU7Lwlucej90ckQ541ZhjI9tXfhwwrKcylKXIDWfCbS506NUkmQoPpFtjp
-         SxY2BDwXcLrnVWuj1tlKZZFXX3boTF7L4/UbiNTvLgRbtbDkTU4iJj5rlChLdWN+AXW9
-         /8uU6E9xZwRmy7lGao0XRqc/MNAqTYJl5P/hqXTOYZPGOYjzn/bAAgwSrZzoRfJDN/cT
-         SuEfeHBBPefKlsfPtsSVZxWgXtnCDoM36KPdTqy2nZJEgrImggnACjHpxleCCtC3++o9
-         yxDwtO9/7vBZwXZmJ1VhyZ/Ls48fokKREiBfE3hRzy/o9DlM+JugKxkM4Tz9Yq/hcS03
-         4NUg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QV/G4PVJExKY57XFucH9uGcNnMu76eJ/OVGsDYsOIxk=;
+        b=GcC+/wChmFe5D+lixU/ePQYx0vMtmjgY9jywtGC+tExjQD07sAc/uXheAhph4pvAzO
+         Sdv43qQhkTojoFFX+ZjxgmxVvX0+NMfOKTRPQv/Xt6Pf+BeM7pFrMuBoOUyGP7QXVVcf
+         s+RGAFxVlgrWtwQp6NAJofgTxsyG/3PZ3t/vPzWngz2jgePhEzYZMFJ07J6MCT6QTq4K
+         CSdYCUDuR3/QKpYgHLVjxtsuWsCI7UbUs1hc8zcQEOdN6xNkMd00NMQ+Xy9xkNlbQfv8
+         ewmYprJTuaWmqLiLgBW9BJeEqbwfx9wBu8injJinul0Kqwoyb/wRwoGqtv/VE93GzufG
+         4pWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9LEQ/FAYXiOycH5Pgki0a9z4cyO6Zt9xfMoijJMruHE=;
-        b=oDe0Qs2SuwsuKPw5fCJyNs0/W/gFyZB0gi6twU6frfzImPLFj1XEDlE46Xe5QHHFYP
-         DdEwWuw0046Vb20c50AhOn+TeCvt4632gKTGwAeY9caDhM8C8iB2ggnureCQNd3oJf3L
-         +eFtYNj0nt9KyKp7aTutYQ8S/GhPA0YKXhVB/BXQoMFKVml41pdSLfkUKdLPN/goVWk+
-         b545FBdBcgoZXeYJSJ4Y3FCryoxhnBan/t5JO5vbu3064fqBwFFyqxswpWtK3/3ry9iT
-         bUysVVKMQEEdnq4jTni386bdnlcPUY4Ayfjc14CfRGcYn0+TRBK8CVGJJnywJX3rj4Gs
-         4CxA==
-X-Gm-Message-State: AOAM530TZ2sHSDJNrzs2EeGfPaFQydqHK1XqeDy4DSAGF8IVo+51WwjK
-        LTdmgysws7ExaB3dsPRUmPGXDedmHuilkM2eIqiWyA==
-X-Google-Smtp-Source: ABdhPJxAPLjjLuJnMkOUKZFNo6VjJcW6gX615tv0A0PeV8j4hPGz6HEz6HuE5g9ZfRLMUWFpXLfK3l0Q4MwhwgPaQrE=
-X-Received: by 2002:a63:2ad6:0:b0:3f9:d9fa:2713 with SMTP id
- q205-20020a632ad6000000b003f9d9fa2713mr44449690pgq.512.1654024511581; Tue, 31
- May 2022 12:15:11 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QV/G4PVJExKY57XFucH9uGcNnMu76eJ/OVGsDYsOIxk=;
+        b=JJzNdjh7ncg33ZROlgIvGmYghuiJP4Z8s+9NSP4xNPty1LMH7GFcMqmDrK35C+3DKv
+         H3IS/fmnZFnkgFAcWowLlWlkYE7Q9ZDCWoEpgffPvz1+wF4BgaczGo9wvARxk3CCVfDi
+         qv8nfK+3ehdb1FFec2EWhxiWYWiKafNd7MxGuy8s1Zip9xd5rA7czVenwvDUJEjnY9Wk
+         pnTcdt3Nqf58w1eSbJPvPEAiIJfePKqmM1c7lELcdD4J7IY7ZLmniEa/bNKYSC6G927E
+         PPubIkkXOkF6ZLeOfeaODiOSc4Wy0aUKRDggWcExEYJIl5+0D50JLRUjgUsXmP2s1Bx+
+         7U6A==
+X-Gm-Message-State: AOAM530zPAHdcdbvuQCytR5mVsMeLqjzhHUMDuX3TmUJJe0syPhA79x1
+        Yl8TyJTGPHQSqkLP4VWJdmQCFBjExBdhqMQe
+X-Google-Smtp-Source: ABdhPJwcDNCyyGGF9tXLL+3yceqJNymcMQaqK1jcouWuFSM3hjbBb4FI5vkaGlcAkdKh3wggbP0MQA==
+X-Received: by 2002:a1c:c917:0:b0:399:26af:3d47 with SMTP id f23-20020a1cc917000000b0039926af3d47mr16751970wmb.143.1654024732108;
+        Tue, 31 May 2022 12:18:52 -0700 (PDT)
+Received: from ?IPV6:2a02:6b6a:b497:0:359:2800:e38d:e04f? ([2a02:6b6a:b497:0:359:2800:e38d:e04f])
+        by smtp.gmail.com with ESMTPSA id f8-20020a5d64c8000000b0020d07958bb3sm12632620wri.3.2022.05.31.12.18.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 12:18:51 -0700 (PDT)
+Message-ID: <7a311f7e-a404-4ebe-f90b-af9068bab2fc@bytedance.com>
+Date:   Tue, 31 May 2022 20:18:51 +0100
 MIME-Version: 1.0
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com> <20220519153713.819591-4-chao.p.peng@linux.intel.com>
-In-Reply-To: <20220519153713.819591-4-chao.p.peng@linux.intel.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Tue, 31 May 2022 12:15:00 -0700
-Message-ID: <CAGtprH8EMsPMMoOEzjRu0SMVKT0RqmkLk=n+6uXkBA6-wiRtUA@mail.gmail.com>
-Subject: Re: [PATCH v6 3/8] mm/memfd: Introduce MFD_INACCESSIBLE flag
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jun Nakajima <jun.nakajima@intel.com>, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [External] Re: [PATCH 0/5] io_uring: add opcodes for current
+ working directory
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com
+References: <20220531184125.2665210-1-usama.arif@bytedance.com>
+ <da4e94f7-94ce-ad57-ad15-c9117c4fef2d@kernel.dk>
+From:   Usama Arif <usama.arif@bytedance.com>
+In-Reply-To: <da4e94f7-94ce-ad57-ad15-c9117c4fef2d@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 8:41 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
->
-> Introduce a new memfd_create() flag indicating the content of the
-> created memfd is inaccessible from userspace through ordinary MMU
-> access (e.g., read/write/mmap). However, the file content can be
-> accessed via a different mechanism (e.g. KVM MMU) indirectly.
->
 
-SEV, TDX, pkvm and software-only VMs seem to have usecases to set up
-initial guest boot memory with the needed blobs.
-TDX already supports a KVM IOCTL to transfer contents to private
-memory using the TDX module but rest of the implementations will need
-to invent
-a way to do this.
 
-Is there a plan to support a common implementation for either allowing
-initial write access from userspace to private fd or adding a KVM
-IOCTL to transfer contents to such a file,
-as part of this series through future revisions?
+On 31/05/2022 19:58, Jens Axboe wrote:
+> On 5/31/22 12:41 PM, Usama Arif wrote:
+>> This provides consistency between io_uring and the respective I/O syscall
+>> and avoids having the user of liburing specify the cwd in sqe when working
+>> with current working directory, for e.g. the user can directly call with
+>> IORING_OP_RENAME instead of IORING_OP_RENAMEAT and providing AT_FDCWD in
+>> sqe->fd and sqe->len, similar to syscall interface.
+>>
+>> This is done for rename, unlink, mkdir, symlink and link in this
+>> patch-series.
+>>
+>> The tests for these opcodes in liburing are present at
+>> https://github.com/uarif1/liburing/tree/cwd_opcodes. If the patches are
+>> acceptable, I am happy to create a PR in above for the tests.
+> 
+> Can't we just provide prep helpers for them in liburing?
+> 
 
-Regards,
-Vishal
+We could add a io_uring_prep_unlink with IORING_OP_UNLINKAT and AT_FDCWD 
+in liburing. But i guess adding in kernel adds a more consistent 
+interface? and allows to make calls bypassing liburing (although i guess 
+people probably don't bypass liburing that much :))
+
+Making the changes in both kernel and liburing provides more of a 
+standard interface in my opinion so maybe it looks better. But happy to 
+just create a PR in liburing only with prep helpers as you suggested if 
+you think that is better?
+
+Thanks!

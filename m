@@ -2,92 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A28538BF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E32E2538BF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244505AbiEaH3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 03:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
+        id S244519AbiEaH3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 03:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242971AbiEaH3B (ORCPT
+        with ESMTP id S244507AbiEaH3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 03:29:01 -0400
-Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 415EE793A9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:28:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=NGUDH
-        gG8iVG5OQXyT3DJVTMbEFQi7F2v0GBzMtCTvKE=; b=J3Mp6mC4DOU8h8S0Dqecp
-        xeVldRi7P9WRfVXGRsZOZxwHLtfjN8gByg/SeujOzFfOS+TK6luQoSJT2/ZlRGHg
-        zzsKXB2PSgWtbCvzNy1iRyX62sjOW6R/KZCSJ2faYF/rgDLjCrJUJJRATELIdo0A
-        VR85OAoN+Z5mDIuDQS0pis=
-Received: from carlis (unknown [218.17.89.92])
-        by smtp7 (Coremail) with SMTP id C8CowACXyaCQw5Vi53O0FQ--.54171S2;
-        Tue, 31 May 2022 15:28:16 +0800 (CST)
-From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        dankamongmen@gmail.com, jcmvbkbc@gmail.com, siglesias@igalia.com,
-        zhangxuezhi1@coolpad.com, igormtorrente@gmail.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] tty: vt: convert sysfs snprintf to sysfs_emit
-Date:   Tue, 31 May 2022 07:28:14 +0000
-Message-Id: <20220531072814.34999-1-zhangxuezhi1@coolpad.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 31 May 2022 03:29:38 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4EF92D2B
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:29:36 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id i18so12429426pfk.7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:29:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ynHr+f3HdbTV3fIx5fiKz75mjaU0slPzyjQUZFWsNNE=;
+        b=3BSBjnH3ZVmWwEIVHzHXEhghdgZpFnAo+yvYtAzpgRfIXkbyBVhTXgf5d/xjNpaQHS
+         sz0UFZvQzv5e5HRgAt9iGDSpGTZx9tTCiezIhnMbEdJOAJ7K+A0IMSH0rp5jdGF1tm8K
+         EIrFKWV2qoxlzowMCVlAVqGHTETYK99rGlF5k+vSuVBHe/TdQ3E8MnxKfl9JfYEjOtJH
+         gnrlRHJsGlcnnMfhwsuKx9xFyDr/GEvdyf13nvjHmdiDKABo1mgxQFAJZxSAAZaNhZhd
+         NeqvDimuZDLbss4uGUDTImQXiGHwgXTn0NpL9vNjO1nvo7gCeAaXNnUrMKHbLulytSh2
+         JmIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ynHr+f3HdbTV3fIx5fiKz75mjaU0slPzyjQUZFWsNNE=;
+        b=59fCqR5e79NhWqGJ2tR3nwR1lL58ipGQ1lyJXQd7sJSuBHzbln3rG/ekLolfmBCIJt
+         cnw+HlTFpcxLmU+Ueft4homgQ1aZL1B5se3B9fxRPwDazAKjrJhL1p+JZJ/8InGlFv7c
+         wea6tqNuZwWb81y7pDmQsT0pvi2Rg468LvN15q2LcVwAbc0kB6XLYCvvDXt/djBqvCuG
+         h+WTaUQ7DTv+A3xutQS48EWSDfwsG/YleWnnb/7Zpgd2ahM3DmE+z6AyFngrGmMnmIuQ
+         JblyIcBcftr06SYR8ezcwxBfJ4lEBp73bARia9KB9+/kuO7Rsd8JXUdSd7eciUst/9r4
+         VQ0w==
+X-Gm-Message-State: AOAM531zi8irc3ln8hK+93sLSneGzwBzuWoQGoRA+bisDtdECbdU4oqA
+        g/CPrql+3vRIqPnrJeOH8DrNgg==
+X-Google-Smtp-Source: ABdhPJz+sPjbBPJuUyu8J0KCWi2CcYAAAGGaUdZO4DWuoXNJnb+8eFlVVZ9wEVss1F0lkZnI3TSv0A==
+X-Received: by 2002:a63:7156:0:b0:3fb:fa23:480e with SMTP id b22-20020a637156000000b003fbfa23480emr9579581pgn.553.1653982176034;
+        Tue, 31 May 2022 00:29:36 -0700 (PDT)
+Received: from localhost ([2408:8207:18da:2310:94c7:fca6:824f:4dab])
+        by smtp.gmail.com with ESMTPSA id j190-20020a6380c7000000b003fbea5453c5sm4901384pgd.9.2022.05.31.00.29.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 00:29:35 -0700 (PDT)
+Date:   Tue, 31 May 2022 15:29:27 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
+        shakeelb@google.com, akpm@linux-foundation.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com
+Subject: Re: [PATCH v5 00/11] Use obj_cgroup APIs to charge the LRU pages
+Message-ID: <YpXD12Qa51/5EUdy@FVFYT0MHHV2J.usts.net>
+References: <20220530074919.46352-1-songmuchun@bytedance.com>
+ <1ecec7cb-035c-a4aa-3918-1a00ba48c6f9@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: C8CowACXyaCQw5Vi53O0FQ--.54171S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZrWxKw1DKryUWFy5Xw13Jwb_yoWkCrc_C3
-        WxZrWfKF48ta1UA3ZrAr4avr9avF4vvF1UXw4qq3yfJrWq93Z7Zr9F9r9xtry5W3ykJFyU
-        Cws7ZFyfursrWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUnPku7UUUUU==
-X-Originating-IP: [218.17.89.92]
-Sender: llyz108@163.com
-X-CM-SenderInfo: xoo16iiqy6il2tof0z/xtbBORAShV-PNp6tOwAAsQ
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1ecec7cb-035c-a4aa-3918-1a00ba48c6f9@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warnings:
-drivers/tty/vt/vt.c:3942:8-16:
-WARNING: use scnprintf or sprintf
-drivers/tty/vt/vt.c:3950:8-16:
-WARNING: use scnprintf or sprintf
+On Mon, May 30, 2022 at 10:41:30PM -0400, Waiman Long wrote:
+> On 5/30/22 03:49, Muchun Song wrote:
+> > This version is rebased on v5.18.
+> > 
+> > Since the following patchsets applied. All the kernel memory are charged
+> > with the new APIs of obj_cgroup.
+> > 
+> > 	[v17,00/19] The new cgroup slab memory controller [1]
+> > 	[v5,0/7] Use obj_cgroup APIs to charge kmem pages [2]
+> > 
+> > But user memory allocations (LRU pages) pinning memcgs for a long time -
+> > it exists at a larger scale and is causing recurring problems in the real
+> > world: page cache doesn't get reclaimed for a long time, or is used by the
+> > second, third, fourth, ... instance of the same job that was restarted into
+> > a new cgroup every time. Unreclaimable dying cgroups pile up, waste memory,
+> > and make page reclaim very inefficient.
+> > 
+> > We can convert LRU pages and most other raw memcg pins to the objcg direction
+> > to fix this problem, and then the LRU pages will not pin the memcgs.
+> > 
+> > This patchset aims to make the LRU pages to drop the reference to memory
+> > cgroup by using the APIs of obj_cgroup. Finally, we can see that the number
+> > of the dying cgroups will not increase if we run the following test script.
+> > 
+> > ```bash
+> > #!/bin/bash
+> > 
+> > dd if=/dev/zero of=temp bs=4096 count=1
+> > cat /proc/cgroups | grep memory
+> > 
+> > for i in {0..2000}
+> > do
+> > 	mkdir /sys/fs/cgroup/memory/test$i
+> > 	echo $$ > /sys/fs/cgroup/memory/test$i/cgroup.procs
+> > 	cat temp >> log
+> > 	echo $$ > /sys/fs/cgroup/memory/cgroup.procs
+> > 	rmdir /sys/fs/cgroup/memory/test$i
+> > done
+> > 
+> > cat /proc/cgroups | grep memory
+> > 
+> > rm -f temp log
+> > ```
+> > 
+> > [1] https://lore.kernel.org/linux-mm/20200623015846.1141975-1-guro@fb.com/
+> > [2] https://lore.kernel.org/linux-mm/20210319163821.20704-1-songmuchun@bytedance.com/
+> > 
+> > v4: https://lore.kernel.org/all/20220524060551.80037-1-songmuchun@bytedance.com/
+> > v3: https://lore.kernel.org/all/20220216115132.52602-1-songmuchun@bytedance.com/
+> > v2: https://lore.kernel.org/all/20210916134748.67712-1-songmuchun@bytedance.com/
+> > v1: https://lore.kernel.org/all/20210814052519.86679-1-songmuchun@bytedance.com/
+> > RFC v4: https://lore.kernel.org/all/20210527093336.14895-1-songmuchun@bytedance.com/
+> > RFC v3: https://lore.kernel.org/all/20210421070059.69361-1-songmuchun@bytedance.com/
+> > RFC v2: https://lore.kernel.org/all/20210409122959.82264-1-songmuchun@bytedance.com/
+> > RFC v1: https://lore.kernel.org/all/20210330101531.82752-1-songmuchun@bytedance.com/
+> > 
+> > v5:
+> >   - Lots of improvements from Johannes, Roman and Waiman.
+> >   - Fix lockdep warning reported by kernel test robot.
+> >   - Add two new patches to do code cleanup.
+> >   - Collect Acked-by and Reviewed-by from Johannes and Roman.
+> >   - I didn't replace local_irq_disable/enable() to local_lock/unlock_irq() since
+> >     local_lock/unlock_irq() takes an parameter, it needs more thinking to transform
+> >     it to local_lock.  It could be an improvement in the future.
+> 
+> My comment about local_lock/unlock is just a note that
+> local_irq_disable/enable() have to be eventually replaced. However, we need
+> to think carefully where to put the newly added local_lock. It is perfectly
+> fine to keep it as is and leave the conversion as a future follow-up.
+>
 
-Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
----
- drivers/tty/vt/vt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Totally agree.
+ 
+> Thank you very much for your work on this patchset.
+>
 
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index f8c87c4d7399..7ea7d14e9271 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -3939,7 +3939,7 @@ static ssize_t show_bind(struct device *dev, struct device_attribute *attr,
- 	bind = con_is_bound(con->con);
- 	console_unlock();
- 
--	return snprintf(buf, PAGE_SIZE, "%i\n", bind);
-+	return sysfs_emit(buf, "%i\n", bind);
- }
- 
- static ssize_t show_name(struct device *dev, struct device_attribute *attr,
-@@ -3947,7 +3947,7 @@ static ssize_t show_name(struct device *dev, struct device_attribute *attr,
- {
- 	struct con_driver *con = dev_get_drvdata(dev);
- 
--	return snprintf(buf, PAGE_SIZE, "%s %s\n",
-+	return sysfs_emit(buf, "%s %s\n",
- 			(con->flag & CON_DRIVER_FLAG_MODULE) ? "(M)" : "(S)",
- 			 con->desc);
- 
--- 
-2.25.1
-
+Thanks.

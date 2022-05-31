@@ -2,106 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A410C53992A
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 23:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0049A539931
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348275AbiEaV63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 17:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
+        id S244841AbiEaWAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 18:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbiEaV6Y (ORCPT
+        with ESMTP id S1348378AbiEaWA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 17:58:24 -0400
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0A153A7C;
-        Tue, 31 May 2022 14:58:22 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id e11-20020a9d6e0b000000b0060afcbafa80so10530219otr.3;
-        Tue, 31 May 2022 14:58:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1/Zs+8PIbCd/OMJutphmUsMKeeLJ1n44XiDHBlBx9SE=;
-        b=R0Seg0l2OFv8MARmP0PX/6xzQqW1XiJnLxKYkFptg3gTUno2ySTL+XgI+J2tjnx7oK
-         yRoH4UjMikAgX3Qxevr9pVWdQeey0URK2sQW/FQhhDo6+XpewHL4PLhojS6rJXANJdvK
-         bDMeGkE6q2u1DtU/Mgy+VR1L2x/ithOgAnlVVsCAYcC+hAGb5mUIBpp9pou4n33+jddG
-         /nk0ddN4diP55q0QU16muPHz8HbuBGyHGm88lYWwyAXOxBLjfgDtyDUblx6efdhdtp39
-         +FIsBgZHPHA+geR+TjOBeqSbPbHIIrOazle8am2sIVf6UPHbPBglYwUZp6MLtWGZ7oyB
-         50yA==
-X-Gm-Message-State: AOAM531lXoCYtS3fXMFiQ0Pq9rnCDxQRIl+tjSfm5gPQpndAPkcdDaP8
-        1PKsve78mnyMU6noEcXc4g==
-X-Google-Smtp-Source: ABdhPJxyeE7fGrYd+mpu5nb8RXc+XXbSg7BvgtMO8yEOeQgTDcq7iq1QrsdD1Vs9boKb23ES8TGGxw==
-X-Received: by 2002:a9d:7093:0:b0:60b:6e32:d13a with SMTP id l19-20020a9d7093000000b0060b6e32d13amr6522046otj.85.1654034301727;
-        Tue, 31 May 2022 14:58:21 -0700 (PDT)
-Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id nx18-20020a056870be9200b000f2455e26acsm4029369oab.48.2022.05.31.14.58.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 14:58:21 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: PCI: apple: Add missing 'power-domains' property
-Date:   Tue, 31 May 2022 16:58:14 -0500
-Message-Id: <20220531215815.2408477-1-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 31 May 2022 18:00:26 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B006753B72;
+        Tue, 31 May 2022 15:00:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 773DC23A;
+        Tue, 31 May 2022 15:00:25 -0700 (PDT)
+Received: from [10.57.81.38] (unknown [10.57.81.38])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 640F93F66F;
+        Tue, 31 May 2022 15:00:24 -0700 (PDT)
+Message-ID: <39d1fa65-8e82-721c-171e-ef36bda1c561@arm.com>
+Date:   Tue, 31 May 2022 23:00:18 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] dma-debug: Make things less spammy under memory pressure
+Content-Language: en-GB
+To:     Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux-foundation.org>
+References: <20220531215106.192271-1-robdclark@gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220531215106.192271-1-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'unevaluatedProperties' schema checks is not fully working and doesn't
-catch some cases where there's a $ref to another schema. A fix is pending,
-but results in new warnings in examples.
+On 2022-05-31 22:51, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
+> 
+> Ratelimit the error msg to avoid flooding the console.
+> 
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>   kernel/dma/debug.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
+> index f8ff598596b8..683966f0247b 100644
+> --- a/kernel/dma/debug.c
+> +++ b/kernel/dma/debug.c
+> @@ -564,7 +564,7 @@ static void add_dma_entry(struct dma_debug_entry *entry, unsigned long attrs)
+>   
+>   	rc = active_cacheline_insert(entry);
+>   	if (rc == -ENOMEM) {
+> -		pr_err("cacheline tracking ENOMEM, dma-debug disabled\n");
+> +		pr_err_ratelimited("cacheline tracking ENOMEM, dma-debug disabled\n");
+>   		global_disable = true;
 
-The Apple PCIe host schema is missing 'power-domains' in the schema.
-The example has 3 power domains. However, this is wrong too as actual
-dts files have a single power domain and Sven confirmed 1 is correct.
+Given that it's supposed to disable itself entirely if it ever gets 
+here, just how spammy is it exactly?
 
-Cc: Sven Peter <sven@svenpeter.dev>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-v2:
- - Correct the power-domains to be 1 and update the example
----
- Documentation/devicetree/bindings/pci/apple,pcie.yaml | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Thanks,
+Robin.
 
-diff --git a/Documentation/devicetree/bindings/pci/apple,pcie.yaml b/Documentation/devicetree/bindings/pci/apple,pcie.yaml
-index daf602ac0d0f..aa38680aaaca 100644
---- a/Documentation/devicetree/bindings/pci/apple,pcie.yaml
-+++ b/Documentation/devicetree/bindings/pci/apple,pcie.yaml
-@@ -68,6 +68,9 @@ properties:
-   iommu-map: true
-   iommu-map-mask: true
- 
-+  power-domains:
-+    maxItems: 1
-+
- required:
-   - compatible
-   - reg
-@@ -134,7 +137,7 @@ examples:
-         ranges = <0x43000000 0x6 0xa0000000 0x6 0xa0000000 0x0 0x20000000>,
-                  <0x02000000 0x0 0xc0000000 0x6 0xc0000000 0x0 0x40000000>;
- 
--        power-domains = <&ps_apcie>, <&ps_apcie_gp>, <&ps_pcie_ref>;
-+        power-domains = <&ps_apcie_gp>;
-         pinctrl-0 = <&pcie_pins>;
-         pinctrl-names = "default";
- 
--- 
-2.34.1
-
+>   	} else if (rc == -EEXIST && !(attrs & DMA_ATTR_SKIP_CPU_SYNC)) {
+>   		err_printk(entry->dev, entry,

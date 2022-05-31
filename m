@@ -2,66 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE442539A19
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 01:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79339539A22
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 01:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348695AbiEaXnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 19:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
+        id S1348715AbiEaXor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 19:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241462AbiEaXnK (ORCPT
+        with ESMTP id S1346319AbiEaXop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 19:43:10 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9386C0CF;
-        Tue, 31 May 2022 16:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654040589; x=1685576589;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1RPTB2MbClkXo6d6NveMB2OujJGHsYe4JAnZGSgCbDw=;
-  b=K2K8JpnhNqctOPNgYYBsFJiVLT+aBFlb3C3ZKq2omZnjPUIpsEK7XR3s
-   kmxysuHX0AScJIBBTtAp1xc3nwjHjpMBQqxn2RbFjfFzeQpfU/qYt3YcB
-   wFCNvdaORefdUP03rYi2/u7dnWM8dP+uP7UT+0bf7vL2yiJwxjYACbsoW
-   XzcmRotap1WbgIuano0h4JZ9BIvmda5jDfECHNyLyHVlm099zwoEhoFBi
-   FZi/Pp967oW3F00XJbCfPU351H5Ax0zoQSSQMFxkps5IuhVhVhaRpp+Uc
-   Yz99nrZ6xTEQFHq0Rofhl/LP5+yU79OtmU7ms6pdfHVHKUZDv3lfAHYVy
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="263054015"
-X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="263054015"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 16:43:08 -0700
-X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="755369377"
-Received: from mdossant-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.154.135])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 16:43:06 -0700
+        Tue, 31 May 2022 19:44:45 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2052.outbound.protection.outlook.com [40.107.96.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170CC6EB27;
+        Tue, 31 May 2022 16:44:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HiuJlyJbWyfBqMuA/TSK9ooz7OazcYUvIGcnskbDEffJ+ZrDAlLtuW4NzsDs3ZPWVSVJS87EiO3FzupIUBnOdfWjvg2FtkcTHZh6tMLAkC/Mp4xOJDwzQ9WbLw+SAjC810y3QCWuEtnLc49/1/BfovNNbw4zjKvh4iVi2DtHfXXLuHFe5T1eFUaZ3l0ZrfDQnly//91MBP7dpv2Ylb61qc+iLBdwddXbHQE/CSEnLZv1iu+FFWxqOLR1Wp41BTD5GX9ZYK4SUoJGjJTdt0R0PpddZwmZ91LMiY52ATLofHvW7gcL4kI8uc4PlbTtkLnVtb4BFFpMcHlQzH3mdFRfEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dj9oWKF1PPc7hnlH4NxNkGQTjTaA2k5IR8pGZl8oEzw=;
+ b=jw9qlRJJbhaUk7Q7v65GIVen+ylIMghfvMgFnR/jGTd8NdHarN98kJsF6zuZ7A/q2EhsmeG4UDWuH/JIrKT0EP5F5SIUu2O3nEHT456VJFM3o+E/UWvQ4hQ6aUgkoEo7TtVnEFo0fVolOgCVLQqiAMzUEvWKtidaZVgS6lJBBpp3eryhr1Ciyi4J4F8YzWyuSI95qwR0mFznVpSUYfN41l4BqtfJv9ZXkb8p86sIneRwmt+hyPN1EGK7SpVpUycB89HhXp8g9clgJBHGfDhL5kHvEDJlDJkLOiiXy2t46PGPgX3Sh1+li5tzfu9rcBya5+IFwd6U3KoJHEsMyghsPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=lists.openampproject.org
+ smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dj9oWKF1PPc7hnlH4NxNkGQTjTaA2k5IR8pGZl8oEzw=;
+ b=oavpCC5XjY1C88csFgeWOFdemxXNz3/e+fbRQN8muWzxo39vjhzkhEn5+eiKqJhDEcmGHtxOV910ioni7PX+0BMeHu80tApm2Qj73qCf5uoo8TvgCmkNEh/4tDSRFAkKct52yCdS37JQxfGXEK2pHMVWB09onNEy2TcpVgrOq/w=
+Received: from BN9PR03CA0400.namprd03.prod.outlook.com (2603:10b6:408:111::15)
+ by MWHPR02MB2608.namprd02.prod.outlook.com (2603:10b6:300:43::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.16; Tue, 31 May
+ 2022 23:44:41 +0000
+Received: from BN1NAM02FT041.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:111:cafe::40) by BN9PR03CA0400.outlook.office365.com
+ (2603:10b6:408:111::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12 via Frontend
+ Transport; Tue, 31 May 2022 23:44:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT041.mail.protection.outlook.com (10.13.2.152) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5314.12 via Frontend Transport; Tue, 31 May 2022 23:44:40 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 31 May 2022 16:44:39 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 31 May 2022 16:44:39 -0700
+Envelope-to: openamp-system-reference@lists.openampproject.org,
+ bjorn.andersson@linaro.org,
+ mathieu.poirier@linaro.org,
+ robh+dt@kernel.org,
+ krzk+dt@kernel.org,
+ linux-remoteproc@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Received: from [172.19.3.14] (port=48904 helo=xsjtanmays50.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <tanmay.shah@xilinx.com>)
+        id 1nwBXT-0006jm-9J; Tue, 31 May 2022 16:44:39 -0700
+From:   Tanmay Shah <tanmay.shah@xilinx.com>
+To:     <openamp-system-reference@lists.openampproject.org>,
+        <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <michal.simek@xilinx.com>, <ben.levinsky@xilinx.com>,
+        <tanmay.shah@xilinx.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH v6 1/6] dt-bindings: remoteproc: Add Xilinx RPU subsystem bindings
 Date:   Tue, 31 May 2022 16:43:05 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V8 03/10] PCI: Create PCI library functions in support of
- DOE mailboxes.
-Message-ID: <YpaoCYcnuG1jLMWe@iweiny-desk3>
-References: <20220414203237.2198665-1-ira.weiny@intel.com>
- <20220414203237.2198665-4-ira.weiny@intel.com>
- <20220530190657.GA14765@wunner.de>
+Message-ID: <20220531234308.3317795-2-tanmay.shah@xilinx.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220531234308.3317795-1-tanmay.shah@xilinx.com>
+References: <20220531234308.3317795-1-tanmay.shah@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220530190657.GA14765@wunner.de>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5c985137-7026-4af8-9c67-08da435f87f5
+X-MS-TrafficTypeDiagnostic: MWHPR02MB2608:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR02MB2608F7F149AB9D0349762CD7CADC9@MWHPR02MB2608.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: d3wSEgwJBjh5iFQlpWIAZ4pncQqLalBEp5MexgiwgjPMZngc+uosX6z60NTeaIBKtE2zmRwmmWQW0MVCVWuYwuyIkVbv+EHWAIAjpfvL/jqkYk6WPNSIXgGq+Tr8bF9WoJcKIuqpa349hO2E+4I0Cv0AL/gFP0WFDMuPETtPDYHOq5Bvo60YfI7bLhKuneG9JVAgEYLlaGk+3XeYeh/o76qc+jHCGM8i7qyM7OI9h6RwRmjlyRL2wcPoxSTwD6H5SrKP/O1ydr5ACYgEl0nxCr+rQTyK9LN3KSwIerWeMrnts/+NwhQMmBaIYi924ZIBTnV6G+iI7ncdJlC2Rudm3hDP2jRy+ChiW/9AbWn+kCdBF1b4U8BUP8zLrakqsPkcHBq5hOX4TbmT7YrnU8LCsCZoT7dJQyN4pAQ/49eH84ZaURDWdM7zwYUUKoG8gHjx6ZyrX4jKVEZQoBu9kVD6rlQMBqfKscPzN3tHZtDnJhP41qgcujm1eCEH1dBgOWwXJWs4bKmxsTt9giLt3EoSRTD13EFks1N0nu01WSksBAGQGLfY3yjjNQtRVja8x9EAEM2WMxc/FpO8w345g5KtnxS/EqawfZ1rrVIdjEouep8wjJcZA51EuPNwnQ9KkGep7Io2jz6egWsEAhos1UcY73T+xLiYvypv/3jeJBaNnLxdZlsytU3Zm8AkaVGB53PAzCpRmI59PceHYtwjCG+ulb1bKmZrcZPu2iEJ0wDyV8JKmuPa2Yl/42eESLIzLgWLzjTZzgSxPiGxqK2qFXkt0ZSdNGeZgazk5ed1BpKbtz5av/PHTVOXaxvz70zgK+PCm9aGNFzjQm3ppsjadjz1rA==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(8936002)(4326008)(5660300002)(7049001)(83380400001)(47076005)(26005)(9786002)(8676002)(82310400005)(2906002)(70206006)(7696005)(6666004)(44832011)(70586007)(508600001)(36756003)(966005)(316002)(356005)(7636003)(110136005)(426003)(336012)(40460700003)(36860700001)(54906003)(186003)(2616005)(1076003)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2022 23:44:40.6914
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c985137-7026-4af8-9c67-08da435f87f5
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT041.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2608
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,309 +119,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 09:06:57PM +0200, Lukas Wunner wrote:
-> On Thu, Apr 14, 2022 at 01:32:30PM -0700, ira.weiny@intel.com wrote:
-> > +static int pci_doe_recv_resp(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
-> [...]
-> > +	pci_write_config_dword(pdev, offset + PCI_DOE_READ, 0);
-> > +	/* Read the second dword to get the length */
-> > +	pci_read_config_dword(pdev, offset + PCI_DOE_READ, &val);
-> > +	pci_write_config_dword(pdev, offset + PCI_DOE_READ, 0);
-> > +
-> > +	length = FIELD_GET(PCI_DOE_DATA_OBJECT_HEADER_2_LENGTH, val);
-> > +	if (length > SZ_1M || length < 2)
-> > +		return -EIO;
-> > +
-> 
-> This API requires consumers to know the size of the response in advance.
-> That's not always the case, as exemplified by SPDM VERSION responses.
-> Jonathan uses a kludge in his SPDM patch which submits a first request
-> with a fixed size of 2 versions and, if that turns out to be too small,
-> submits a second request.
-> 
-> It would be nice if consumers are allowed to set request_pl to NULL.
-> Then a payload can be allocated here in pci_doe_recv_resp() with the
-> size retrieved above.
-> 
-> A flag may be necessary to indicate that the response is heap-allocated
-> and needs to be freed upon destruction of the pci_doe_task.
+Xilinx ZynqMP platform has dual-core ARM Cortex R5 Realtime Processing
+Unit(RPU) subsystem. This patch adds dt-bindings for RPU subsystem
+(cluster).
 
-I'm not comfortable with PCI allocating memory.  Especially optionally
-allocating memory.  And I'm not sure this really saves the extra queries.  The
-PCI layer will have to query first to determine response length.
+Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
+---
 
-If the community does want PCI to allocate memory then I think the interface
-should be to always allocate it.
+Changes in v6:
+  - Add maxItems to sram and memory-region property
 
-> 
-> 
-> > +	/* First 2 dwords have already been read */
-> > +	length -= 2;
-> > +	/* Read the rest of the response payload */
-> > +	for (i = 0; i < min(length, task->response_pl_sz / sizeof(u32)); i++) {
-> > +		pci_read_config_dword(pdev, offset + PCI_DOE_READ,
-> > +				      &task->response_pl[i]);
-> > +		pci_write_config_dword(pdev, offset + PCI_DOE_READ, 0);
-> > +	}
-> 
-> You need to check the Data Object Ready bit.  The device may clear the
-> bit prematurely (e.g. as a result of a concurrent FLR or Conventional
-> Reset).  You'll continue reading zero dwords from the mailbox and
-> pretend success to the caller even though the response is truncated.
+Changes in v5:
+- Add constraints of the possible values of xlnx,cluster-mode property
+- fix description of power-domains property for r5 core
+- Remove reg, address-cells and size-cells properties as it is not required
+- Fix description of mboxes property
+- Add description of each memory-region and remove old .txt binding link
+  reference in the description
 
-If an FLR happens then truncation does not seem like a problem.
+Changes in v4:
+  - Add memory-region, mboxes and mbox-names properties in example
 
-> 
-> If you're concerned about performance when checking the bit on every
-> loop iteration, checking it only on the last but one iteration should
-> be sufficient to detect truncation.
+Changes in v3:
+  - None
 
-I'll review.  I don't think this is a fast path.
 
-> 
-> 
-> > +	*vid = FIELD_GET(PCI_DOE_DATA_OBJECT_DISC_RSP_3_VID, response_pl);
-> > +	*protocol = FIELD_GET(PCI_DOE_DATA_OBJECT_DISC_RSP_3_PROTOCOL,
-> > +			      response_pl);
-> > +	*index = FIELD_GET(PCI_DOE_DATA_OBJECT_DISC_RSP_3_NEXT_INDEX,
-> > +			   response_pl);
-> 
-> The fact that you need line breaks here is an indication that the
-> macros are too long.
-> 
-> 
-> > +/* DOE Data Object - note not actually registers */
-> > +#define PCI_DOE_DATA_OBJECT_HEADER_1_VID		0x0000ffff
-> > +#define PCI_DOE_DATA_OBJECT_HEADER_1_TYPE		0x00ff0000
-> > +#define PCI_DOE_DATA_OBJECT_HEADER_2_LENGTH		0x0003ffff
-> > +
-> > +#define PCI_DOE_DATA_OBJECT_DISC_REQ_3_INDEX		0x000000ff
-> > +#define PCI_DOE_DATA_OBJECT_DISC_RSP_3_VID		0x0000ffff
-> > +#define PCI_DOE_DATA_OBJECT_DISC_RSP_3_PROTOCOL		0x00ff0000
-> > +#define PCI_DOE_DATA_OBJECT_DISC_RSP_3_NEXT_INDEX	0xff000000
-> 
-> I'd get rid of "DATA_OBJECT_" everywhere, it's redundant with the
-> "Data Object" in "DOE".
+ .../bindings/remoteproc/xlnx,r5f-rproc.yaml   | 129 ++++++++++++++++++
+ include/dt-bindings/power/xlnx-zynqmp-power.h |   6 +
+ 2 files changed, 135 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
 
-I'm ok with renaming.  Jonathan chose the names and no one has complained yet.
+diff --git a/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
+new file mode 100644
+index 000000000000..cbff1c201a89
+--- /dev/null
++++ b/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
+@@ -0,0 +1,129 @@
++# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/remoteproc/xlnx,r5f-rproc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Xilinx R5F processor subsystem
++
++maintainers:
++  - Ben Levinsky <ben.levinsky@xilinx.com>
++  - Tanmay Shah <tanmay.shah@xilinx.com>
++
++description: |
++  The Xilinx platforms include a pair of Cortex-R5F processors (RPU) for
++  real-time processing based on the Cortex-R5F processor core from ARM.
++  The Cortex-R5F processor implements the Arm v7-R architecture and includes a
++  floating-point unit that implements the Arm VFPv3 instruction set.
++
++properties:
++  compatible:
++    const: xlnx,zynqmp-r5fss
++
++  xlnx,cluster-mode:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1, 2]
++    description: |
++      The RPU MPCore can operate in split mode(Dual-processor performance), Safety
++      lock-step mode(Both RPU cores execute the same code in lock-step,
++      clock-for-clock) or Single CPU mode (RPU core 0 can be held in reset while
++      core 1 runs normally). The processor does not support dynamic configuration.
++      Switching between modes is only permitted immediately after a processor reset.
++      If set to  1 then lockstep mode and if 0 then split mode.
++      If set to  2 then single CPU mode. When not defined, default will be lockstep mode.
++
++patternProperties:
++  "^r5f-[a-f0-9]+$":
++    type: object
++    description: |
++      The RPU is located in the Low Power Domain of the Processor Subsystem.
++      Each processor includes separate L1 instruction and data caches and
++      tightly coupled memories (TCM). System memory is cacheable, but the TCM
++      memory space is non-cacheable.
++
++      Each RPU contains one 64KB memory and two 32KB memories that
++      are accessed via the TCM A and B port interfaces, for a total of 128KB
++      per processor. In lock-step mode, the processor has access to 256KB of
++      TCM memory.
++
++    properties:
++      compatible:
++        const: xlnx,zynqmp-r5f
++
++      power-domains:
++        description: RPU core PM domain specifier
++        maxItems: 1
++
++      mboxes:
++        minItems: 1
++        items:
++          - description: mailbox channel to send data to RPU
++          - description: mailbox channel to receive data from RPU
++
++      mbox-names:
++        minItems: 1
++        items:
++          - const: tx
++          - const: rx
++
++      sram:
++        $ref: /schemas/types.yaml#/definitions/phandle-array
++        maxItems: 8
++        description: |
++          phandles to one or more reserved on-chip SRAM regions. Other than TCM,
++          the RPU can execute instructions and access data from, the OCM memory,
++          the main DDR memory, and other system memories.
++
++          The regions should be defined as child nodes of the respective SRAM
++          node, and should be defined as per the generic bindings in,
++          Documentation/devicetree/bindings/sram/sram.yaml
++
++      memory-region:
++        description: |
++          List of phandles to the reserved memory regions associated with the
++          remoteproc device. This is variable and describes the memories shared with
++          the remote processor (e.g. remoteproc firmware and carveouts, rpmsg
++          vrings, ...). This reserved memory region will be allocated on DDR memory.
++        minItems: 1
++        maxItems: 8
++        items:
++          - description: region used for RPU firmware image section
++          - description: vdev buffer
++          - description: vring0
++          - description: vring1
++        additionalItems: true
++
++    required:
++      - compatible
++      - power-domains
++
++    unevaluatedProperties: false
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    r5fss: r5fss {
++        compatible = "xlnx,zynqmp-r5fss";
++        xlnx,cluster-mode = <1>;
++
++        r5f-0 {
++            compatible = "xlnx,zynqmp-r5f";
++            power-domains = <&zynqmp_firmware 0x7>;
++            memory-region = <&rproc_0_fw_image>, <&rpu0vdev0buffer>, <&rpu0vdev0vring0>, <&rpu0vdev0vring1>;
++            mboxes = <&ipi_mailbox_rpu0 0>, <&ipi_mailbox_rpu0 1>;
++            mbox-names = "tx", "rx";
++        };
++
++        r5f-1 {
++            compatible = "xlnx,zynqmp-r5f";
++            power-domains = <&zynqmp_firmware 0x8>;
++            memory-region = <&rproc_1_fw_image>, <&rpu1vdev0buffer>, <&rpu1vdev0vring0>, <&rpu1vdev0vring1>;
++            mboxes = <&ipi_mailbox_rpu1 0>, <&ipi_mailbox_rpu1 1>;
++            mbox-names = "tx", "rx";
++        };
++    };
++...
+diff --git a/include/dt-bindings/power/xlnx-zynqmp-power.h b/include/dt-bindings/power/xlnx-zynqmp-power.h
+index 0d9a412fd5e0..618024cbb20d 100644
+--- a/include/dt-bindings/power/xlnx-zynqmp-power.h
++++ b/include/dt-bindings/power/xlnx-zynqmp-power.h
+@@ -6,6 +6,12 @@
+ #ifndef _DT_BINDINGS_ZYNQMP_POWER_H
+ #define _DT_BINDINGS_ZYNQMP_POWER_H
+ 
++#define		PD_RPU_0	7
++#define		PD_RPU_1	8
++#define		PD_R5_0_ATCM	15
++#define		PD_R5_0_BTCM	16
++#define		PD_R5_1_ATCM	17
++#define		PD_R5_1_BTCM	18
+ #define		PD_USB_0	22
+ #define		PD_USB_1	23
+ #define		PD_TTC_0	24
+-- 
+2.25.1
 
-> 
-> 
-> > +#define  PCI_DOE_STATUS_INT_STATUS		0x00000002  /* DOE Interrupt Status */
-> 
-> Another redundancy, I would get rid of the second "_STATUS".
-> 
-> 
-> > +#define  PCI_DOE_STATUS_DATA_OBJECT_READY	0x80000000  /* Data Object Ready */
-> 
-> I would shorten to PCI_DOE_STATUS_READY.
-> 
-> 
-> > 		Simplify submitting work to the mailbox
-> > 			Replace pci_doe_exchange_sync() with
-> > 			pci_doe_submit_task() Consumers of the mailbox
-> > 			are now responsible for setting up callbacks
-> > 			within a task object and submitting them to the
-> > 			mailbox to be processed.
-> 
-> I honestly think that's a mistake.  All consumers both in the CDAT
-> as well as in the SPDM series just want to wait for completion of
-> the task.  They have no need for an arbitrary callback and shouldn't
-> be burdended with providing one.  It just unnecessarily complicates
-> the API.
-> 
-> So only providing pci_doe_exchange_sync() and doing away with
-> pci_doe_submit_task() would seem like a more appropriate approach.
-
-This was discussed a couple of times and it was decided to keep the
-synchronicity out of the library functions and allow users to decide how to
-handle it.
-
-> 
-> 
-> > +/**
-> > + * pci_doe_for_each_off - Iterate each DOE capability
-> > + * @pdev: struct pci_dev to iterate
-> > + * @off: u16 of config space offset of each mailbox capability found
-> > + */
-> > +#define pci_doe_for_each_off(pdev, off) \
-> > +	for (off = pci_find_next_ext_capability(pdev, off, \
-> > +					PCI_EXT_CAP_ID_DOE); \
-> > +		off > 0; \
-> > +		off = pci_find_next_ext_capability(pdev, off, \
-> > +					PCI_EXT_CAP_ID_DOE))
-> > +
-> > +struct pci_doe_mb *pci_doe_create_mb(struct pci_dev *pdev, u16 cap_offset,
-> > +				     bool use_irq);
-> > +void pci_doe_destroy_mb(struct pci_doe_mb *doe_mb);
-> > +bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type);
-> 
-> Drivers should not be concerned with the intricacies of DOE
-> capabilities and mailboxes.
-
-I think it depends on which driver one is considering.
-
-> 
-> Moreover, the above API doesn't allow different drivers to access
-> the same DOE mailbox concurrently, e.g. if that mailbox supports
-> multiple protocols.  There's no locking to serialize access to the
-> mailbox by the drivers.
-
-Correct it is up to the higher level code to do this.
-
-> 
-> This should be moved to the PCI core instead:  In pci_init_capabilities(),
-> add a new call pci_doe_init() which enumerates all DOE capabilities.
-> Add a list_head to struct pci_dev and add each DOE instance found
-> to that list.  Destroy the list elements in pci_destroy_dev().
-> No locking needed for the list_head, you only ever modify the list
-> on device enumeration and destruction.
-> 
-> Then provide a pci_doe_find_mailbox() library function which drivers
-> call to retrieve the pci_doe_mb for a given pci_dev/vid/type tuple.
-> That avoids the need to traverse the list time and again.
-
-All that could be done above these calls.  I've abandoned the aux bus stuff
-after discussions with Dan.  So perhaps burring this away from the CXL drivers
-is a good idea.  But I still think this can serve as a base within the PCIe
-code.
-
-> 
-> 
-> > +/**
-> > + * struct pci_doe_mb - State for a single DOE mailbox
-> 
-> We generally use the same terms as the spec to make it easier for
-> readers to connect the language in the spec to the implementation.
-> 
-> The spec uniformly refers to "DOE instance".  I guess "mailbox"
-> is slightly more concise, so keep that, but please at least mention
-> the term "instance" in the struct's kernel-doc.
-> 
-> This implementation uses the term "task" for one request/response.
-> That term is not mentioned in the spec at all.  The spec refers to
-> "exchange" and "transfer" on several occasions, so I would have chosen
-> either one of those instead of the somewhat unfortunate "task".
-
-Again this was discussed and we settled on task.  I'm not married to the term
-and s/task/exchange/ is fine with me.  But IFRC Dan was not happy with
-exchange.
-
-> 
-> 
-> > + * This state is used to manage a single DOE mailbox capability.  All fields
-> > + * should be considered opaque to the consumers and the structure passed into
-> > + * the helpers below after being created by devm_pci_doe_create()
-> 
-> If the struct is considered opaque, why is it exposed in a public
-> header file?  Just use a forward declaration in the header
-> so that consumers can pass around pointers to the struct,
-> and hide the declaration proper in doe.c.
-
-I could do that.  It just did not seem important enough to make it that strict.
-
-> 
-> 
-> > + * @pdev: PCI device this belongs to mailbox belongs to
->                              ^^^^^^^^^^
-> Typo.
-
-oops... yea slipped by in v9 as well.
-
->
-> 
-> > + * @prots: Array of protocols supported on this DOE
-> > + * @num_prots: Size of prots array
-> 
-> Use @prots instead of prots everywhere in the kernel-doc.
-
-Ok.
-
-> 
-> 
-> > +	/*
-> > +	 * NOTE: doe_mb_prots is freed by pci_doe_free_mb automatically on
-> > +	 * error if pci_doe_cache_protocols() fails past this point.
-> > +	 */
-> 
-> s/doe_mb_prots/doe_mb->prots/
-> s/pci_doe_free_mb/pci_doe_free_mb()/
-
-This note has changed.
-
-> 
-> 
-> > +	/* DOE requests must be a whole number of DW */
-> > +	if (task->request_pl_sz % sizeof(u32))
-> > +		return -EINVAL;
-> 
-> It would be nice if this restriction could be lifted.  SPDM uses
-> requests which are not padded to dword-length.  It can run over other
-> transports which may not impose such restrictions.  The SPDM layer
-> should not need to worry about quirks of the transport layer.
-
-Are you suggesting that this layer PAD the request?  I hear your concern but
-users of this layer will need to understand this in the request payload
-allocated anyway.
-
-> 
-> 
-> > +static irqreturn_t pci_doe_irq_handler(int irq, void *data)
-> > +{
-> > +	struct pci_doe_mb *doe_mb = data;
-> > +	struct pci_dev *pdev = doe_mb->pdev;
-> > +	int offset = doe_mb->cap_offset;
-> > +	u32 val;
-> > +
-> > +	pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
-> > +
-> > +	/* Leave the error case to be handled outside IRQ */
-> > +	if (FIELD_GET(PCI_DOE_STATUS_ERROR, val)) {
-> > +		mod_delayed_work(system_wq, &doe_mb->statemachine, 0);
-> > +		return IRQ_HANDLED;
-> > +	}
-> > +
-> > +	if (FIELD_GET(PCI_DOE_STATUS_INT_STATUS, val)) {
-> > +		pci_write_config_dword(pdev, offset + PCI_DOE_STATUS,
-> > +					PCI_DOE_STATUS_INT_STATUS);
-> > +		mod_delayed_work(system_wq, &doe_mb->statemachine, 0);
-> > +		return IRQ_HANDLED;
-> > +	}
-> > +
-> > +	return IRQ_NONE;
-> > +}
-> 
-> PCIe 6.0, table 7-316 says that an interrupt is also raised when
-> "the DOE Busy bit has been Cleared", yet such an interrupt is
-> not handled here.  It is incorrectly treated as a spurious
-> interrupt by returning IRQ_NONE.  The right thing to do
-> is probably to wake the state machine in case it's polling
-> for the Busy flag to clear.
-
-I thought Jonathan and I had work through how this was correct.  I'll have to
-review those threads.
-
-> 
-> 
-> > +enum pci_doe_state {
-> > +	DOE_IDLE,
-> > +	DOE_WAIT_RESP,
-> > +	DOE_WAIT_ABORT,
-> > +	DOE_WAIT_ABORT_ON_ERR,
-> > +};
-> > +
-> > +#define PCI_DOE_FLAG_ABORT	0
-> > +#define PCI_DOE_FLAG_DEAD	1
-> 
-> That's all internal and should live in doe.c, not the header file.
-
-Sure if struct pci_doe_mb is moved.
-
-Lets see how V9 looks from other perspectives.  I've incorporated some of this
-feedback for V10.
-
-Ira
-
-> Thanks,
-> 
-> Lukas

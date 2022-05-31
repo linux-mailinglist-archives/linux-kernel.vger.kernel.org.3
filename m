@@ -2,147 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACF05398DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 23:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 604EE5398E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 23:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348044AbiEaVjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 17:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
+        id S1348068AbiEaVjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 17:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233809AbiEaVjN (ORCPT
+        with ESMTP id S242347AbiEaVj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 17:39:13 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E3E69296
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 14:39:12 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id rs12so29069863ejb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 14:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZSLV3GBQBnlAV5yFp3A4v28u1Gnmik85ogLelASJBlM=;
-        b=G6+2ri/VlQ8yFwFXj74MfREI3aG4EAj3Tv4RTyXriFCkuNZgqqsE6YEb+RI1MiiG6u
-         jUrvLmn+pmyEOMkFGPDQlwvGDysPypwMJAL+4flzyKzCAEFIQRRucXeADWRCWhYR2I6f
-         ciei005AA9QQiQXNIDi8ojvPdlBRv+7S4gA7I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZSLV3GBQBnlAV5yFp3A4v28u1Gnmik85ogLelASJBlM=;
-        b=XWwLLmFrQuZRbXJAkfNK4dEIgZdwTYN/8tNJuXa63T/Ezq9JgcFPDShpbSsSQ0OMKP
-         acjbhjStyGWWirKXKD1S7n0ywtJc8gfnPJW/uAdndwT7G2tvgNq8A5mn011F6+k7fmDP
-         HPvPYZ4LxjW6PuncAYAXc5MQj7fJ7YH8//CxnBdPoXhAzqNSCukLzb8WA7PnDFXN8dkU
-         UVf5tirJVyTTIfojKMu4QZEuZofWpnSYlCyAU5Ggcpv60du8J/zleP1tQBcRE/9CyTXs
-         BGFtS71QHZvlZXaaRF1RLznzOIK5S9dDlEIiO930ZkDeHQSTKHuZhMKnd//Q5pXHy+J3
-         yGJA==
-X-Gm-Message-State: AOAM5310X7619r8fqZuNFCTTQQBBs/IRf1UxGpWaG/cSFlTLT1K8cJoo
-        sFPIIz+mfpVo2u20kPqJ3jRskQFOEbyrx+W5
-X-Google-Smtp-Source: ABdhPJzToT45oaXFTpAWw0ToIHfDLX4owLXZjKrYE3q6vvQny1PLpW5IpXkgGD1WAgZu2IoHm1IjWw==
-X-Received: by 2002:a17:906:7954:b0:6fe:d9af:feb0 with SMTP id l20-20020a170906795400b006fed9affeb0mr39867804ejo.361.1654033150385;
-        Tue, 31 May 2022 14:39:10 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id g3-20020a1709063b0300b006feb3d65330sm5318223ejf.109.2022.05.31.14.39.07
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 14:39:08 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id q21so9137925wra.2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 14:39:07 -0700 (PDT)
-X-Received: by 2002:a05:6000:1548:b0:20f:c4e3:637a with SMTP id
- 8-20020a056000154800b0020fc4e3637amr41857017wry.513.1654033146812; Tue, 31
- May 2022 14:39:06 -0700 (PDT)
+        Tue, 31 May 2022 17:39:26 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FE17356A;
+        Tue, 31 May 2022 14:39:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654033166; x=1685569166;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+yFy6pGKjBGDEm6WBT//MXILBMPlN1TRcy5qtEEqe+Y=;
+  b=A+qsUG4QJYYFS3nBRP2gSaaF21qALcDeUfTCcXTeGKv6tNUhWJlw9v8e
+   WvB6ingOkm2j+wHv7uCb3fn6D2xFpkOL+uoq85BRcWDMeOh2+XGx69J28
+   Vpj2Vxr00qxg5U0kgYu5MmuNpJZa1shOnrgKMfTmG2y6RNj7/XYbvamHA
+   /ik1feLjn80jpeXYBdpXKfKR2AY9FgrPG/jzb0vlsRlDeNRDIISsD4zfi
+   KeTISESO3YZI1GKRqVCBF9P0Ycf2qklfbJYCbnH1Iwdb7wltpqOTuAmbd
+   X3k83FCLTCPi4enXxW11niq+hToOh0cUibLJNMfDl65Mb0ttsitt6ibzp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="300743936"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="300743936"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 14:39:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="904160591"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 31 May 2022 14:39:24 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 9B9F518B; Wed,  1 Jun 2022 00:39:26 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Alexandru Ardelean <aardelean@deviqon.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/2] iio: adc: nau7802: Convert driver to use ->probe_new()
+Date:   Wed,  1 Jun 2022 00:39:21 +0300
+Message-Id: <20220531213922.72992-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220531072757.1.Ie7f6d4bf8cce28131da31a43354727e417cae98d@changeid>
- <1ce24f74-3c9e-60ed-46ad-3ba714fb7c61@quicinc.com>
-In-Reply-To: <1ce24f74-3c9e-60ed-46ad-3ba714fb7c61@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 31 May 2022 14:38:54 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WP9-W-_rQMNbCb6JYrz9FT3wG1J1irwMZB_0ug4-jK9Q@mail.gmail.com>
-Message-ID: <CAD=FV=WP9-W-_rQMNbCb6JYrz9FT3wG1J1irwMZB_0ug4-jK9Q@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dpu: Move min BW request and full BW disable back
- to mdss
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Use the ->probe_new() callback.
 
-On Tue, May 31, 2022 at 2:29 PM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->
-> > @@ -136,6 +178,13 @@ static int msm_mdss_enable(struct msm_mdss *msm_mdss)
-> >   {
-> >       int ret;
-> >
-> > +     /*
-> > +      * Several components have AXI clocks that can only be turned on if
-> > +      * the interconnect is enabled (non-zero bandwidth). Let's make sure
-> > +      * that the interconnects are at least at a minimum amount.
-> > +      */
-> > +     msm_mdss_icc_request_bw(msm_mdss, MIN_IB_BW);
-> > +
->
-> This patch does two things :
->
-> 1) Move the min icc vote from the dpu_runtime_resume() path to the
-> msm_mdss_enable() so that while resuming, we add the min vote to the
-> parent device. We do need a min vote before turning on the AXI clk as
-> per this comment mentioned in c33b7c0389e1 (drm/msm/dpu: add support for
-> clk and bw scaling for display)
->
->
-> @@ -1101,8 +1129,15 @@ static int __maybe_unused
-> dpu_runtime_resume(struct device *dev)
->          struct drm_encoder *encoder;
->          struct drm_device *ddev;
->          struct dss_module_power *mp = &dpu_kms->mp;
-> +       int i;
->
->          ddev = dpu_kms->dev;
-> +
-> +       /* Min vote of BW is required before turning on AXI clk */
-> +       for (i = 0; i < dpu_kms->num_paths; i++)
-> +               icc_set_bw(dpu_kms->path[i], 0,
-> +                       dpu_kms->catalog->perf.min_dram_ib);
->
-> So I understand and I am fine with this part.
->
-> 2) Add a min vote in msm_mdss_init().
->
-> This is the part I am not able to fully follow.
->
-> If we only need to add the min vote before voting for the clocks, adding
-> it in mdss_mdss_enable() should be enough.
->
-> Do we need this part of adding the min vote to the msm_mdss_init()?
->
-> If so, why?
+The driver does not use const struct i2c_device_id * argument,
+so convert it to utilise the simplified I²C driver registration.
 
-Ah, good question. Mostly I was matching how things were done before
-commit a670ff578f1f ("drm/msm/dpu: always use mdp device to scale
-bandwidth"). Before that commit we used to put the min vote in the
-init path.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/iio/adc/nau7802.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-...but you're right, I don't see any good reason for it. I'll send a
-v2 removing that line from msm_mdss_init().
+diff --git a/drivers/iio/adc/nau7802.c b/drivers/iio/adc/nau7802.c
+index 976c235f3079..2d71cdbcd82f 100644
+--- a/drivers/iio/adc/nau7802.c
++++ b/drivers/iio/adc/nau7802.c
+@@ -407,8 +407,7 @@ static const struct iio_info nau7802_info = {
+ 	.attrs = &nau7802_attribute_group,
+ };
+ 
+-static int nau7802_probe(struct i2c_client *client,
+-			const struct i2c_device_id *id)
++static int nau7802_probe(struct i2c_client *client)
+ {
+ 	struct iio_dev *indio_dev;
+ 	struct nau7802_state *st;
+@@ -417,11 +416,6 @@ static int nau7802_probe(struct i2c_client *client,
+ 	u8 data;
+ 	u32 tmp = 0;
+ 
+-	if (!client->dev.of_node) {
+-		dev_err(&client->dev, "No device tree node available.\n");
+-		return -EINVAL;
+-	}
+-
+ 	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*st));
+ 	if (indio_dev == NULL)
+ 		return -ENOMEM;
+@@ -550,7 +544,7 @@ static const struct of_device_id nau7802_dt_ids[] = {
+ MODULE_DEVICE_TABLE(of, nau7802_dt_ids);
+ 
+ static struct i2c_driver nau7802_driver = {
+-	.probe = nau7802_probe,
++	.probe_new = nau7802_probe,
+ 	.id_table = nau7802_i2c_id,
+ 	.driver = {
+ 		   .name = "nau7802",
+-- 
+2.35.1
 
--Doug

@@ -2,78 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43EAD5389EE
+	by mail.lfdr.de (Postfix) with ESMTP id A081F5389EF
 	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243519AbiEaC3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 22:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
+        id S243600AbiEaCaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 22:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237359AbiEaC3s (ORCPT
+        with ESMTP id S243573AbiEaC3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 22:29:48 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720B09346C
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 19:29:47 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id r71so11608452pgr.0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 19:29:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yTMqOEWwFqPjCBnVwjlOgGC66EofdLuSUHGdwSY9I+8=;
-        b=ifK6uC52NIu+skSIrfHV4J0Njr/BqESkbdnpQzfXZBHNX484VlgcJ10oKykmGIxafE
-         0EDDPPYN4F8OVULDZIuwqS3yV0AF7gZ7Vpp9BgC/aWqaFBkVC/9BXmLFLceF7f2ufQx6
-         lSRznUnCv6gFoEqk6Dp8bGhBwn1/vD+QxF7bnz9kpitHp5WhwB3EHf7a/y0lrEeST0sZ
-         /zufRzC13BMCmsNSXP5+HnTefpCOWnzEXM/7Y0pyHUrDvUlnTGTIFlb7QPhEf9NBIJEu
-         d27c64bECTIj2R8mvRiNHgZqktfyZkNueqCLPBTnZiei9NBEepPd8Cu1UPLPb/Be11j2
-         LAtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yTMqOEWwFqPjCBnVwjlOgGC66EofdLuSUHGdwSY9I+8=;
-        b=pSry64PfdIt7PHnLeMpdg6Pru/IT31VTMSNm1+iJmdZBRjCCLzB4e8AhkaLhfZapON
-         DaNs/qbz/RsVeqve9yPO3MnOCM7xKZ7oJW8gjVNo303t57yYcXNQkbojxnbl9xMsCukf
-         KlmeYFD8gX8+JyMeIRyDTGNWu/JD513BYrVn1faG5yS3WYfp9k6DBg2BVjOA3l6iLcrT
-         v7w7XlgPar3BexdSKEUMonI2FAUNyqRMXPpIKFXV5k24zSRmm2WX9oJ642supKoN5bUz
-         Tfam3lbpv1q33rA9LLE+AAyz8Vf7TYY+ImNwmInusmuPL1QRsNci2pAM+h+J33XWwRhk
-         0/Sg==
-X-Gm-Message-State: AOAM53327PX+F6LfAOzBzELkwyFuKZ9VgoDF3JscsRJYIDkOklx3lpA4
-        W2aqErBAf2tpcuTDPTVmMkLIIaAAqM/3ng==
-X-Google-Smtp-Source: ABdhPJzahjwX8i93rNK2hQ9Yjfe9NmcWBos5aMcxAe2dGetSUWu3B4DPJ7deCw59XuI8/a5VaFZnRw==
-X-Received: by 2002:a63:688a:0:b0:3fa:a80c:a228 with SMTP id d132-20020a63688a000000b003faa80ca228mr28184578pgc.182.1653964187033;
-        Mon, 30 May 2022 19:29:47 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:7163:3a36:783f:6d4a])
-        by smtp.gmail.com with ESMTPSA id w3-20020a170902d10300b0016152774878sm3631059plw.176.2022.05.30.19.29.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 19:29:46 -0700 (PDT)
-Date:   Tue, 31 May 2022 10:29:41 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     sj@kernel.org, damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/damon: remove obsolete comments of kdamond_stop
-Message-ID: <YpV9lQ3IAMmIJFCw@FVFYT0MHHV2J.googleapis.com>
-References: <20220530022016.11771-1-zhouchengming@bytedance.com>
+        Mon, 30 May 2022 22:29:54 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14A99347D;
+        Mon, 30 May 2022 19:29:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=NJejcipX43D92rCsFofp6ci3+C5iED75p3tPH8Jiq24=; b=L3f1w/682QSIuD6mOi7ydQwiI2
+        6sExxLDpWf+ZHtI4sBWIaOagsxZwIYX/RbKBfgzGC4B91qcqFg4s1cenRnCPZuUcNPIJgUJn5b38I
+        Slw56bPPcas3FLjhi8muwwLbc2KHnuPyCvUSbPFcITNV51t3xxuFDxw3OFgYEwT7wqYxhcVGTYSNa
+        EFGD1evFF/XC+jbICJCMX6G1pfgthPYgj0P+tA74EByacCKzN2ugDUuJghS0yPTx5ev0hI11/Oq7J
+        4wnrKN4PAWm/kl9kb+tDsKD0iRviw07ChKJIETV61bDV7oeVObviROjrpGs09O2peQ6A7og5RZSwy
+        bSkYk4mA==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nvrdk-004yrX-F8; Tue, 31 May 2022 02:29:49 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Charles Mirabile <cmirabil@redhat.com>,
+        Daniel Bauman <dbauman@redhat.com>,
+        Mwesigwa Guma <mguma@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Subject: [PATCH -next] Input: joystick: Raspberry Pi Sense HAT depends on HAS_IOMEM
+Date:   Mon, 30 May 2022 19:29:42 -0700
+Message-Id: <20220531022942.16340-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220530022016.11771-1-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 10:20:16AM +0800, Chengming Zhou wrote:
-> Since commit 0f91d13366a4 ("mm/damon: simplify stop mechanism")
-> delete kdamond_stop and change to use kthread stop mechanism,
-> these obsolete comments should be removed accordingly.
-> 
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Since JOYSTICK_SENSEHAT selects MFD_SIMPLE_MFD_I2C and the latter
+depends on HAS_IOMEM, and since 'select' does not follow any
+dependency chains, JOYSTICK_SENSEHAT should also depend on HAS_IOMEM
+to prevent a kconfig warning and a build error:
 
-Acked-by: Muchun Song <songmuchun@bytedance.com>
+WARNING: unmet direct dependencies detected for MFD_SIMPLE_MFD_I2C
+  Depends on [n]: HAS_IOMEM [=n] && I2C [=y]
+  Selected by [y]:
+  - JOYSTICK_SENSEHAT [=y] && INPUT_JOYSTICK [=y] && INPUT [=y] && I2C [=y]
+
+s390-linux-ld: drivers/mfd/simple-mfd-i2c.o: in function `simple_mfd_i2c_probe':
+simple-mfd-i2c.c:(.text+0xc8): undefined reference to `devm_mfd_add_devices'
+
+Fixes: 41657514c796 ("Input: add Raspberry Pi Sense HAT joystick driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Charles Mirabile <cmirabil@redhat.com>
+Cc: Daniel Bauman <dbauman@redhat.com>
+Cc: Mwesigwa Guma <mguma@redhat.com>
+Cc: Joel Savitz <jsavitz@redhat.com>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: linux-input@vger.kernel.org
+---
+ drivers/input/joystick/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/drivers/input/joystick/Kconfig
++++ b/drivers/input/joystick/Kconfig
+@@ -402,6 +402,7 @@ config JOYSTICK_N64
+ config JOYSTICK_SENSEHAT
+ 	tristate "Raspberry Pi Sense HAT joystick"
+ 	depends on INPUT && I2C
++	depends on HAS_IOMEM
+ 	select MFD_SIMPLE_MFD_I2C
+ 	help
+ 	  Say Y here if you want to enable the driver for the

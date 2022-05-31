@@ -2,41 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A673539521
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 18:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B3D539523
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 18:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346245AbiEaQ6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 12:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
+        id S1346253AbiEaQ60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 12:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346248AbiEaQ5z (ORCPT
+        with ESMTP id S1346242AbiEaQ6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 12:57:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62C733E14
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 09:57:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F4AFB811BC
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 16:57:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22290C385A9;
-        Tue, 31 May 2022 16:57:46 +0000 (UTC)
-Date:   Tue, 31 May 2022 17:57:42 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Mark Brown <broonie@kernel.org>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: arch/arm64/kernel/fpsimd.c:1944:55: sparse: sparse: dereference
- of noderef expression
-Message-ID: <YpZJBoxqvaCLRQfX@arm.com>
-References: <202205280635.XKlMkfKD-lkp@intel.com>
+        Tue, 31 May 2022 12:58:24 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879922E6AC
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 09:58:22 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id s6so6477125lfo.13
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 09:58:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=y/aNKJXZWqRuqPNJq3hEjocGGUwSzRQP7BmWbTX4fYk=;
+        b=4fhxtldUto8lIjf5Vd/ncQaAJRtTe9kfVGUB4asPKmakTApkAdCaPdi7Bfcu0KbGjo
+         kD49uDvDW9Xzc41t6h1FLF1KalEudS0DGuprg5CxMTW99WTyFQ9rgeAEWNJSQ314icL2
+         uEiI2vAgVsL0gbqL/huVqVMIF1m2OMJQvdptH/2DFrK4SBICbnNytIj/nxHMm1P3Jwaa
+         EtldNWqKYWWlp3BKACGbSLZzh42nyIh//5qMl2jzMm3GlLAZAyHfdzVFFc9pl0Clt3ly
+         JgGXUV1y2Qz0h3WH1ginmZ2kzSEHRS1SRECRWsgWRGXq5Sy4YeqBiqrNF8ikQmg3Wlqx
+         gd/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=y/aNKJXZWqRuqPNJq3hEjocGGUwSzRQP7BmWbTX4fYk=;
+        b=Ilui+TJeaDMSUTVYIB23IWWx62n3ftidQzEs94hdaTkU9lJLU4gcsf5DSV4RQcH9pC
+         161c9UA+hzmavNoc8fUQPdIVBDtMObMix7E6Ar6w0mkQ8J1dLVCt0xH455LzpslYd8yC
+         Py7IGbYAxLgIKUzeMXbw1I6mB/rdUyBAS0zFJboQEVB4pFJbnmV+RAGj7xAabKliIx4S
+         Uc3Yf6CY8V7aPIXwUEgcO1tGJkCIMiKlt1oj4/bCRlOu6zz/OQOgSVOWP+8TAlldAyec
+         T1xktft9mGUkDo9yq0d/xmcShSo4Jn9kIYF7vmke9p2GJV26Bm1/Z5mnpuLVMiG5QLcm
+         k5DA==
+X-Gm-Message-State: AOAM530EDqErEFVAiIC0P1YjoTH4+EZhToSH8mIKXvQtE0IZrQl3lHlq
+        Re5t1rKbartpRLg50IcsDR2ljw==
+X-Google-Smtp-Source: ABdhPJz3Fl42XMGA34sRuK/Xk+fdkRg5ifvRHo3oEFZREdnnLYlDX9W+yUOzfRqB00pHmgu/BO3/Bw==
+X-Received: by 2002:a05:6512:a95:b0:478:82fb:7783 with SMTP id m21-20020a0565120a9500b0047882fb7783mr28720432lfu.471.1654016300830;
+        Tue, 31 May 2022 09:58:20 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.129])
+        by smtp.gmail.com with ESMTPSA id j5-20020a05651231c500b0047255d2115fsm3063876lfe.142.2022.05.31.09.58.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 09:58:20 -0700 (PDT)
+Message-ID: <c1676616-1405-5bcb-af02-c1e9cc83dace@openvz.org>
+Date:   Tue, 31 May 2022 19:58:18 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202205280635.XKlMkfKD-lkp@intel.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v5] tracing: add 'accounted' entry into output of
+ allocation tracepoints
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Matthew Wilcox <willy@infradead.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Muchun Song <songmuchun@bytedance.com>
+References: <c7f687a8-637c-b119-6e3a-7dacc885b851@suse.cz>
+ <80bcb043-3782-1d81-d8a2-4bdcb213cf30@openvz.org>
+ <YpYAL4H/L2ERQ9Fj@n2.us-central1-a.c.spheric-algebra-350919.internal>
+From:   Vasily Averin <vvs@openvz.org>
+In-Reply-To: <YpYAL4H/L2ERQ9Fj@n2.us-central1-a.c.spheric-algebra-350919.internal>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,80 +87,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 06:49:01AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   8291eaafed36f575f23951f3ce18407f480e9ecf
-> commit: e0838f6373e5cb72516fc4c26bba309097e2a80a arm64/sme: Save and restore streaming mode over EFI runtime calls
-> date:   5 weeks ago
-> config: arm64-randconfig-s032-20220527 (https://download.01.org/0day-ci/archive/20220528/202205280635.XKlMkfKD-lkp@intel.com/config)
-> compiler: aarch64-linux-gcc (GCC) 11.3.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # apt-get install sparse
->         # sparse version: v0.6.4-14-g5a0004b5-dirty
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0838f6373e5cb72516fc4c26bba309097e2a80a
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout e0838f6373e5cb72516fc4c26bba309097e2a80a
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+On 5/31/22 14:46, Hyeonggon Yoo wrote:
+> On Mon, May 30, 2022 at 10:47:26AM +0300, Vasily Averin wrote:
+> Looks good to me.
+> Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 > 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
+> a small comment:
+>>  
+>>  	TP_fast_assign(
+>> @@ -33,42 +35,46 @@ DECLARE_EVENT_CLASS(kmem_alloc,
+>>  		__entry->bytes_req	= bytes_req;
+>>  		__entry->bytes_alloc	= bytes_alloc;
+>>  		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
+>> +		__entry->accounted	= (gfp_flags & __GFP_ACCOUNT) ||
+>> +					  (s && s->flags & SLAB_ACCOUNT);
+>>  	),
+>>  
 > 
-> 
-> sparse warnings: (new ones prefixed by >>)
-> >> arch/arm64/kernel/fpsimd.c:1944:55: sparse: sparse: dereference of noderef expression
-> 
-> vim +1944 arch/arm64/kernel/fpsimd.c
-> 
->   1916	
->   1917	/*
->   1918	 * __efi_fpsimd_end(): clean up FPSIMD after an EFI runtime services call
->   1919	 */
->   1920	void __efi_fpsimd_end(void)
->   1921	{
->   1922		if (!system_supports_fpsimd())
->   1923			return;
->   1924	
->   1925		if (!__this_cpu_xchg(efi_fpsimd_state_used, false)) {
->   1926			kernel_neon_end();
->   1927		} else {
->   1928			if (system_supports_sve() &&
->   1929			    likely(__this_cpu_read(efi_sve_state_used))) {
->   1930				char const *sve_state = this_cpu_ptr(efi_sve_state);
->   1931				bool ffr = true;
->   1932	
->   1933				/*
->   1934				 * Restore streaming mode; EFI calls are
->   1935				 * normal function calls so should not return in
->   1936				 * streaming mode.
->   1937				 */
->   1938				if (system_supports_sme()) {
->   1939					if (__this_cpu_read(efi_sm_state)) {
->   1940						sysreg_clear_set_s(SYS_SVCR_EL0,
->   1941								   0,
->   1942								   SYS_SVCR_EL0_SM_MASK);
->   1943						if (!system_supports_fa64())
-> > 1944							ffr = efi_sm_state;
+> It doesn't make sense for SLOB to print accounted=true because SLOB does
+> not support object accounting.
 
-This looks wrong indeed. IIUC, something like below but waiting for Mark
-to confirm:
+Thank you very much for this comment.
+SLAB_ACCOUNT is not defined for SLOB, but __GFP_ACCOUNT really can incorrectly 
+set this field to true.
+I'll think how to handle this correctly.
 
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index 819979398127..ac521b3403d6 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -1965,7 +1965,7 @@ void __efi_fpsimd_end(void)
- 							   0,
- 							   SVCR_SM_MASK);
- 					if (!system_supports_fa64())
--						ffr = efi_sm_state;
-+						ffr = false;
- 				}
- 			}
- 
--- 
-Catalin
+Thank you,
+	Vasily Averin

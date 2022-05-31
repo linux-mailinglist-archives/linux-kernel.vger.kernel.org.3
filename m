@@ -2,62 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707C5539349
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7B553934C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345296AbiEaOqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 10:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
+        id S1345308AbiEaOrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 10:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345293AbiEaOqh (ORCPT
+        with ESMTP id S1345310AbiEaOr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 10:46:37 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981E813DC8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:46:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=X6kKnKntQ48Tyr/dRBbbaOB1m+G6xIdAgc/SePpDZCE=; b=bF+nbmO2AghBOU4v5iM7m7giuM
-        67Rrbjj1c8TlmEN6cMc8sNRy3RSTrMl0oYo6/DuFhCjql75uyiA8S3Y0BQsD2tKsUTQ6zrrAFe6Ap
-        wMBU+ch126RCEkb5iec4X+WFqjMI0DH7yQr/z0FPNWcZAhTEt1TKONEInOQoizM7g4tmpKt6uaYkG
-        6b51SY+Ph+y2IXdqO6Yy55mjpDJThlsymlFHOLDsrJ+Txgerj+b4qRaEzRb+VLefm/25akuGBGwjz
-        gnL0t8W8khFcFErJZvO9gjgyX3y2lsNn194sf0uvaXjTZk3fv5sEQ7Hg0zIIAVILAAF+StWSG4sGN
-        LB8mwAig==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nw38T-003TgV-SB; Tue, 31 May 2022 14:46:18 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8E34D3006C5;
-        Tue, 31 May 2022 16:46:16 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6BD9C2096428F; Tue, 31 May 2022 16:46:16 +0200 (CEST)
-Date:   Tue, 31 May 2022 16:46:16 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ming Wang <wangming01@loongson.cn>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] sched: there is no need to call switch_mm_irqs_off
- when sched between two user thread.
-Message-ID: <YpYqOC9Wx84oC2z5@hirez.programming.kicks-ass.net>
-References: <1653998201-10230-1-git-send-email-wangming01@loongson.cn>
+        Tue, 31 May 2022 10:47:29 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9471FCC0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:47:25 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-30c1b401711so78674497b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:47:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0/w36mR8lkluvb8r4zMg9iFSFRhtHLpPbTXMI17TU+0=;
+        b=LSLyPRCEhXwgNFtzrXoohD9b0LordUSKogzPD70Sspkp+qbF4XrKc4emGZDOqFhtZq
+         V9GMbd4oqskJ5yX/Onrv4xCdE2Hb19sjiQLd5lXz3isCADO36PQwBR+CqvHyIbovAct9
+         2Goq8LE+bgXwOcTIUbdiMiZ2/O7Hi0EY7NhlWgT4KL5DdcHjD+VfD4cw9dbk7afIZAlR
+         ajkQOPs+PJeB46bfEqAgEH6FVCR9dcpq36yDQx5eqH/udxd20DndGF/cTN1/b1XwmS1t
+         23sMUF4kMLrWJYOsmDZGqCXs7TLhu2OnlFf3HEPhJMHSsLvyuN9AswgDHGEJUjJUV0Ay
+         v9xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0/w36mR8lkluvb8r4zMg9iFSFRhtHLpPbTXMI17TU+0=;
+        b=ZT9CHWf3vxP1JvLohmScWPsFbM2WHNcON0hh1wh6cRWXwLAHRaG29ZACnYspTcJEp8
+         t/aqMF2yoVwESKpJYxJn7erEGNwNOvcJKoSJ9Vw4iRjFOkgdVGEKGuJajsOnRSIJP32/
+         W6HZ3MRyCzf1R5VVnQ+ncnpkz97XvqcmN/SLYYdymuDs/vyYxQY1ySziEC+7WNFmult1
+         YdWCOwpais4yLJhw65qhMPiwbwR4+0KHzuOQZYVlqEBEQ1b967hi2N+f9SD8mOeSXWuI
+         +FBulm29ewnFAoWoERLNiVFWEvia9WbIKxNvdTULXHlkNoo8SlR5fKtLJ3ckm2sIl7Id
+         25tQ==
+X-Gm-Message-State: AOAM5330DlftmQmOCrl5Wk6bjsHw6uSz+7j79+wHHEpUps253yNB0npQ
+        UPo7ANULi5080mAP2qI/5+gdoF/vpIZN37nBS3UMOA==
+X-Google-Smtp-Source: ABdhPJxalwaZgY7TBxR+rRUyZGByUKq8vkvMzwrupGRbsbPzVyQkfLLhgbl3SHj69aTFZUjOQDLsewD3X2l5ox/iwNk=
+X-Received: by 2002:a81:92cd:0:b0:30c:33ad:377e with SMTP id
+ j196-20020a8192cd000000b0030c33ad377emr14554771ywg.286.1654008444987; Tue, 31
+ May 2022 07:47:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1653998201-10230-1-git-send-email-wangming01@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20220530130839.120710-1-pan@semihalf.com> <20220530130839.120710-3-pan@semihalf.com>
+ <f789afb2-33c5-2b28-5ade-0c76ebb7206f@linaro.org> <CAHNYxRw00QraVW0085xO-qzgGJdZ2joukuSYzBQo+yjLnkD=Tw@mail.gmail.com>
+ <e4ef2056-c990-b308-a9d5-98f11ac0ba51@linaro.org>
+In-Reply-To: <e4ef2056-c990-b308-a9d5-98f11ac0ba51@linaro.org>
+From:   =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
+Date:   Tue, 31 May 2022 16:47:13 +0200
+Message-ID: <CAF9_jYR=sjP9wYW9wyfbrVYO4PDYTfMhjvyyh53U3a3+2Zyw=g@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dts: socfpga: Add Google Chameleon v3 devicetree
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alexandru M Stan <amstan@chromium.org>, SoC Team <soc@kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Dinh Nguyen <dinguyen@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,33 +77,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 07:56:41PM +0800, Ming Wang wrote:
-> When condition (prev->active_mm == next->mm && !prev->mm) is met,
-> the situation is as follows:
-> 
-> user thread -> user thread
-> 
-> There is not need switch_mm when sched between two user thread.
-> Because they share the mm_struct. This can provide better
-> performance when testing UnixBench.
-> 
-> Signed-off-by: Ming Wang <wangming01@loongson.cn>
-> ---
->  kernel/sched/core.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 696c649..9d7f6fb 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -5099,7 +5099,8 @@ asmlinkage __visible void schedule_tail(struct task_struct *prev)
->  		 * case 'prev->active_mm == next->mm' through
->  		 * finish_task_switch()'s mmdrop().
->  		 */
-> -		switch_mm_irqs_off(prev->active_mm, next->mm, next);
-> +		if ((prev->active_mm != next->mm) || (!prev->mm))
-> +			switch_mm_irqs_off(prev->active_mm, next->mm, next);
+On Tue, May 31, 2022 at 11:11 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 31/05/2022 03:20, Alexandru M Stan wrote:
+> > Hello Krzysztof
+> >
+> > On Mon, May 30, 2022 at 11:56 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 30/05/2022 15:08, Pawe=C5=82 Anikiel wrote:
+> >>> Add devicetree for the Google Chameleon v3 board.
+> >>>
+> >>> Signed-off-by: Pawe=C5=82 Anikiel <pan@semihalf.com>
+> >>> Signed-off-by: Alexandru M Stan <amstan@chromium.org>
+> >>
+> >> Your SoB chain looks odd. Who did what here?
+> >
+> > Sorry about this.
+> >
+> > It was mainly Pawel but I did some small changes at some point before
+> > it landed in our tree (particularly the GPIOs).
+>
+> Then usually Pawe=C5=82 should be the owner of the patch, not you.
+> Alternatively it could be also co-developed.
+>
+> >
+> >>
+> >>> ---
+> >>>  arch/arm/boot/dts/Makefile                    |  1 +
+> >>>  .../boot/dts/socfpga_arria10_chameleonv3.dts  | 90 +++++++++++++++++=
+++
+> >>>  2 files changed, 91 insertions(+)
+> >>>  create mode 100644 arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
+> >>>
+> >>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> >>> index 023c8b4ba45c..9417106d3289 100644
+> >>> --- a/arch/arm/boot/dts/Makefile
+> >>> +++ b/arch/arm/boot/dts/Makefile
+> >>> @@ -1146,6 +1146,7 @@ dtb-$(CONFIG_ARCH_S5PV210) +=3D \
+> >>>       s5pv210-torbreck.dtb
+> >>>  dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) +=3D \
+> >>>       socfpga_arria5_socdk.dtb \
+> >>> +     socfpga_arria10_chameleonv3.dtb \
+> >>>       socfpga_arria10_socdk_nand.dtb \
+> >>>       socfpga_arria10_socdk_qspi.dtb \
+> >>>       socfpga_arria10_socdk_sdmmc.dtb \
+> >>> diff --git a/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts b/arch=
+/arm/boot/dts/socfpga_arria10_chameleonv3.dts
+> >>> new file mode 100644
+> >>> index 000000000000..988cc445438e
+> >>> --- /dev/null
+> >>> +++ b/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
+> >>> @@ -0,0 +1,90 @@
+> >>> +// SPDX-License-Identifier: GPL-2.0
+> >>> +/*
+> >>> + * Copyright 2022 Google LLC
+> >>> + */
+> >>> +/dts-v1/;
+> >>> +#include "socfpga_arria10_mercury_aa1.dtsi"
+> >>> +
+> >>> +/ {
+> >>> +     model =3D "Google Chameleon V3";
+> >>> +     compatible =3D "google,chameleon-v3",
+> >>
+> >> You miss here enclustra compatible.
+> >
+> > Does this make sense? I don't expect this device tree to boot/work on
+> > an enclustra motherboard. It's only really compatible with a
+> > "chameleon-v3".
+>
+> You also do not expect it to boot on altr,socfpga, do you?
+>
+> If I understood correctly, this board has physically Mercury AA1 SoM, so
+> that compatible should be there.
 
-I think this needs to be inside switch_mm(). Architectures are free to
-play silly games with what the current active mm is (and iirc x86
-actually does this).
+Yes, you understood correctly.
+I looked at a similar device - the Cyclone V MCV (SoM) and the MCVEVK
+(base board):
+arch/arm/boot/dts/socfpga_cyclone5_mcv.dtsi
+arch/arm/boot/dts/socfpga_cyclone5_mcvevk.dts
+And there is no denx,mcv compatible anywhere, only denx,mcvevk.
+Also, devicetree bindings documentation lists denx,mcvevk under
+"Cyclone 5 boards", and, unless you consider the MCV to be a board,
+there isn't a good place to put denx,mcv (same story with mercury+
+aa1/chameleon).
+
+>
+> It's the same for every other SoM. Neither Google nor Enclustra are
+> special...
+>
+> >
+> >>
+> >>> +                  "altr,socfpga-arria10", "altr,socfpga";
+> >>> +
+> >>> +     aliases {
+> >>> +             serial0 =3D &uart0;
+> >>> +             i2c0 =3D &i2c0;
+> >>> +             i2c1 =3D &i2c1;
+> >>> +     };
+> >>> +};
+> >>> +
+> >>> +&gmac0 {
+> >>> +     status =3D "okay";
+> >>> +};
+> >>> +
+> >>> +&gpio0 {
+> >>> +     status =3D "okay";
+> >>> +};
+> >>> +
+> >>> +&gpio1 {
+> >>> +     status =3D "okay";
+> >>> +};
+> >>> +
+> >>> +&gpio2 {
+> >>> +     status =3D "okay";
+> >>> +};
+> >>> +
+> >>> +&i2c0 {
+> >>> +     status =3D "okay";
+> >>> +
+> >>> +     ssm2603: ssm2603@1a {
+> >>
+> >> Generic node names.
+> >
+> > Dumb question: what does this mean?
+> >
+> > Are you saying the name is too generic? As someone reading the
+> > schematics this would be immediately clear what chip it's talking
+> > about.
+>
+> Let me clarify - please use generic node names, as asked by Devicetree
+> specification (2.2.1. Node Name Requirements). There is also list of
+> some examples in the spec, but you can use some other generic node name.
+>
+> Several bindings also require it.
+
+Do you mean something like this?
+ssm2603: audio-codec@1a {
+u80: gpio@21 {
+
+Regards,
+Pawe=C5=82

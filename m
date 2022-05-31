@@ -2,164 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E233A538F56
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2882B538F5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343634AbiEaKyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 06:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
+        id S1343648AbiEaK4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 06:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244808AbiEaKyu (ORCPT
+        with ESMTP id S244808AbiEaK4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 06:54:50 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B310A9AE50
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:54:48 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-f2bb84f9edso17765017fac.10
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:54:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ufNUwZxQHasz8wDcoJok8yZozy9zrmIAnzBg9ziXQd8=;
-        b=Sxxow1SvLSan4Kqi2GYx50OX/A3QH6MCuAeQEVFiGJ5c/kSeYaQsZ0BgzaCwMMZdBV
-         h9taytanJmpZ6lWgNxHZqtH0aCe3bMHKik316TYpxwyQSDpS5iKG9oZxZoePiMOUeC/M
-         CtDwcWEckEtmJZ+7GcfI2YGze9N53WDPcq+4qilV0BTFphkT2oENkCYhIbndew8PJabn
-         +MvrrETdRIUyUkxHFKzC8eoMiNX2w5XdiOU/sVZM9XyYiy7hBICTLO0jnHA+Q1rFZQaS
-         k9skk0YuMhmejWopQkipK/UC9kDkPTculBzdxPkssguZK7KTRj12b8DcYMdj/CGI0TYw
-         8Qvw==
+        Tue, 31 May 2022 06:56:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9CEDB2ED45
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:56:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653994606;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5AMEdZHq6r8jK1K5fClop/kDp2DOnuh5RSKQmQhnlmo=;
+        b=C2eES+l/dXwru1vP0ZJTC8D2kkFc1fpGn4czJDV4moEQxNt5S/il66fhtQ1PjPoPSBxsXd
+        fsBuW35Hhr9GdLwzY5aq+txXqEw8HrtGXe5PuIUK6UHagdEqsRPWCkE0GFqpwWwnNyIC2T
+        o2Z+joTNtERN3YuoArSEH4QKsFQoMrA=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-321-Up5QtpTKPheGDT3Y6mBBhg-1; Tue, 31 May 2022 06:56:45 -0400
+X-MC-Unique: Up5QtpTKPheGDT3Y6mBBhg-1
+Received: by mail-lf1-f72.google.com with SMTP id br24-20020a056512401800b00477cb7c9a9dso6573109lfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:56:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ufNUwZxQHasz8wDcoJok8yZozy9zrmIAnzBg9ziXQd8=;
-        b=gDS1C9OtLaySTsMWdxn28QHC2jMIOq2zg+BhVWLh9U4wL2ULzmh9eoPIQPM/EzvvDu
-         8uLgMFNPuBQf1xAz2CJ+VT5/m8Tny++v/RpKwNr+XCwoVxJAC7MsYTc2aYoLcyGWQk5w
-         E3oT1TsRLDG7Qj99ESqzOZcgF62yarmsN1i3Wss2QrODe9QGNTIAkpwsxtyL7gZlISmv
-         d6Bh0HCUKKsViNDlqxNJIC3S3gd6yOEXrwfNzTCOJZugkCk16TPmrEDfp6FAotYLiSHj
-         2kOKoGn0Mww/j81or3hkSAeDFAXZ65edI8KZ4eWLtSD5nZig/YgH+StcobK6DDcXaFEj
-         2L+A==
-X-Gm-Message-State: AOAM530FUYPfZ74L1Cot19F/GdkxdUP1pG9b9ELJ6eNy51k99I4mAzye
-        tu37QgnZosKDtNoRZbF+C4Uxgg==
-X-Google-Smtp-Source: ABdhPJwQHsI5V8/7erQebGH5aYKlWhMPruEsL/IRgvQjhTGr4BKrzaU0srmYXruCxKeEaotAi3ti1Q==
-X-Received: by 2002:a05:6870:15cc:b0:ee:456f:c1e5 with SMTP id k12-20020a05687015cc00b000ee456fc1e5mr12469710oad.46.1653994486557;
-        Tue, 31 May 2022 03:54:46 -0700 (PDT)
-Received: from ?IPV6:2804:431:c7ca:e39c:980f:eaf1:7a30:10ef? ([2804:431:c7ca:e39c:980f:eaf1:7a30:10ef])
-        by smtp.gmail.com with ESMTPSA id 24-20020aca2818000000b0032c18f04800sm2334846oix.1.2022.05.31.03.54.44
+        bh=5AMEdZHq6r8jK1K5fClop/kDp2DOnuh5RSKQmQhnlmo=;
+        b=gN9yjATN7HTV0/Mmfo2tZjjVZfkh5gzckUQg6kFoGblQ5q7q7WhQ03OHGxVC7yVN2p
+         UQYDSsXufngsVUUzFS99bHqlZpO1BFUfV1RH3iCg4/4ae4vESqlfM5ypkPOswDUP2uPD
+         nVvTsFNZvWfK7kwxIT4XzRYEMiKZwqbhE+gvJysuco8V3HP/PrzKADVDnRaLhmZbfo0p
+         sUvbVlmrKoAmGVyFuTb5egpEMiI1rzYYF1m7F7Jk7x8/H1Wt2EeMd+YxLAoGcJWsbFEC
+         yhmJhuwkxYA6+EDXIghZZkO0Nf01vch1ImoOW2RboBnMG9fwxGkyM9eshyTQ21yTY0Uq
+         RpCw==
+X-Gm-Message-State: AOAM532/gbbh+902I9AYGrCQnwzuKBqbtb2SGI8kvBedQEzbYXpADTxs
+        HcghRhUISIqfWAJTOhhhJZJQfXAzZ8z5fA3pPxTCER3SzHyEOKyTR4PAf+4zFfEchtquxgzOpsN
+        p5UPnfZra/FvwMwMWVzeC+apz
+X-Received: by 2002:a2e:8958:0:b0:255:48a6:b34f with SMTP id b24-20020a2e8958000000b0025548a6b34fmr9086928ljk.32.1653994603708;
+        Tue, 31 May 2022 03:56:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzT/kJtZFCGg6vVnaOEu+TAnTzoEpR9/PyP/37VarQ8+j7ln571wRc5ni+laLwliCYrgww7xA==
+X-Received: by 2002:a2e:8958:0:b0:255:48a6:b34f with SMTP id b24-20020a2e8958000000b0025548a6b34fmr9086904ljk.32.1653994603496;
+        Tue, 31 May 2022 03:56:43 -0700 (PDT)
+Received: from [10.101.1.23] (ip-185-104-137-32.ptr.icomera.net. [185.104.137.32])
+        by smtp.gmail.com with ESMTPSA id s22-20020a2e9c16000000b0025567cf8633sm16866lji.85.2022.05.31.03.56.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 03:54:46 -0700 (PDT)
-Message-ID: <4b83ea18-e106-e7ec-d1d9-daa74aeaf990@linaro.org>
-Date:   Tue, 31 May 2022 07:54:43 -0300
+        Tue, 31 May 2022 03:56:42 -0700 (PDT)
+Message-ID: <5ba0b86a-fa9c-ed97-3b43-7814599deab5@redhat.com>
+Date:   Tue, 31 May 2022 12:56:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: PROBLEM: with daemon.c after y2038 on 32-bits Kernel
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v10 0/4] Separate panel orientation property creating and
+ value setting
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        =?UTF-8?Q?Arnaud_Pana=c3=afotis?= <arnaud.panaiotis@gmx.fr>
-Cc:     y2038@lists.linaro.org, libc-alpha@sourceware.org,
-        linux-kernel@vger.kernel.org
-References: <CAK8P3a0bmE03wJ_iELrAMyFvamwd_r5aLsFBH=6=5YaueO=-kg@mail.gmail.com>
- <CAK8P3a3m5E2-w4sewEnb4WK68T1wduChR6eSUzsaWPicYhKPHQ@mail.gmail.com>
-From:   Adhemerval Zanella <adhemerval.zanella@linaro.org>
-In-Reply-To: <CAK8P3a3m5E2-w4sewEnb4WK68T1wduChR6eSUzsaWPicYhKPHQ@mail.gmail.com>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Simon Ser <contact@emersion.fr>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+References: <20220530081910.3947168-1-hsinyi@chromium.org>
+ <a8d1fe13-e747-016a-2d45-bfb50f23f2d9@redhat.com>
+ <CAJMQK-iM-ip7edA2mBOhp-8maWKG5+kTceZUM5U6BOLLBq1H4Q@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAJMQK-iM-ip7edA2mBOhp-8maWKG5+kTceZUM5U6BOLLBq1H4Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 31/05/2022 05:33, Arnd Bergmann via Libc-alpha wrote:
-> (cc correct libc-alpha list, sorry for the typo)
+On 5/30/22 13:34, Hsin-Yi Wang wrote:
+> On Mon, May 30, 2022 at 4:53 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> Hi,
+>>
+>> On 5/30/22 10:19, Hsin-Yi Wang wrote:
+>>> Some drivers, eg. mtk_drm and msm_drm, rely on the panel to set the
+>>> orientation. Panel calls drm_connector_set_panel_orientation() to create
+>>> orientation property and sets the value. However, connector properties
+>>> can't be created after drm_dev_register() is called. The goal is to
+>>> separate the orientation property creation, so drm drivers can create it
+>>> earlier before drm_dev_register().
+>>
+>> Sorry for jumping in pretty late in the discussion (based on the v10
+>> I seem to have missed this before).
+>>
+>> This sounds to me like the real issue here is that drm_dev_register()
+>> is getting called too early?
+>>
+> Right.
 > 
-> On Tue, May 31, 2022 at 10:24 AM Arnd Bergmann <arnd@kernel.org> wrote:
->> On 17/05/2022 09:51, Arnaud Panaïotis wrote:
->>> I'm working for a client to generate embedded 32-bits Linux Kernel working after y2038 issue.
->>>
->>> I generated a 5.15 Kernel thought Buildroot with Coreutils 9.0, GCC 11.2.0, Binutils 2.37, Glibc 2.34-9 and CFLAGS  -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64  -D_TIME_BITS=64.
->>>
->>> I encounter an issue while working with OpenSSH (I initially contacted them before).
+>> To me it seems sensible to delay calling drm_dev_register() and
+>> thus allowing userspace to start detecting available displays +
+>> features until after the panel has been probed.
 >>
->> To clarify: did you build just openssh with  -D_TIME_BITS=64, or did
->> you build the entire user space this way?
->>
->>> After 2038, /usr/sbin/sshd does not create an error but it child does generate this one:
->>> daemon() failed: Value too large for defined data type
->>>
->>> This happend here in sshd.c:
->>>
->>> 2019         /*
->>> 2020          * If not in debugging mode, not started from inetd and not already
->>> 2021          * daemonized (eg re-exec via SIGHUP), disconnect from the controlling
->>> 2022          * terminal, and fork.  The original process exits.
->>> 2023          */
->>> 2024         already_daemon = daemonized();
->>> 2025         if (!(debug_flag || inetd_flag || no_daemon_flag || already_daemon)) {
->>> 2026
->>> 2027                 if (daemon(0, 0) == -1)
->>> 2028                         fatal("daemon() failed: %.200s", strerror(errno));
->>
->> My guess is that there are parts of glibc that are not fully
->> y2038-safe at the moment, but
->> merely provide the interfaces for time64 applications.
->>
->>
->> In the glibc code, I see
->>
->> int
->> daemon (int nochdir, int noclose)
->> {
->> ...
->>                 if ((fd = __open_nocancel(_PATH_DEVNULL, O_RDWR, 0)) != -1
->>                     && (__builtin_expect (__fstat64 (fd, &st), 0)
->>                         == 0)) {
->> ...
->>                              } else {
->>                         __close_nocancel_nostatus (fd);
->>                         return -1;
->>                 }
->>      return (0);
->> }
+> 
+> Most panels set this value very late, in .get_modes callback (since it
+> is when the connector is known), though the value was known during
+> panel probe.
 
-Thanks for catching it, I have opened a bug report for it [1] and I will fix
-and backport to 2.34 and 2.35.
+Hmm I would expect the main drm/kms driver to register the drm_connector
+object after probing the panel, right ?
 
-[1] https://sourceware.org/bugzilla/show_bug.cgi?id=29203
+So maybe this is a problem with the panel API? How about adding 
+separate callback to the panel API to get the orientation, which the
+main drm/kms driver can then call before registering the connector ?
 
+And then have the main drm/kms driver call
+drm_connector_set_panel_orientation() with the returned orientation
+on the connecter before registering it.
+
+The new get_orientation callback for the panel should of course
+be optional (IOW amy be NULL), so we probably want a small
+helper for drivers using panel (sub)drivers to take care of
+the process of getting the panel orientation from the panel
+(if supported) and then setting it on the connector.
+
+
+> I think we can also let drm check if they have remote panel nodes: If
+> there is a panel and the panel sets the orientation, let the drm read
+> this value and set the property. Does this workflow sound reasonable?
+> 
+> The corresponding patch to implement this:
+> https://patchwork.kernel.org/project/linux-mediatek/patch/20220530113033.124072-1-hsinyi@chromium.org/
+
+That is a suprisingly small patch (which is good). I guess that
+my suggestion to add a new panel driver callback to get
+the orientation would be a bit bigget then this. Still I think
+that that would be a bit cleaner, as it would also solve this
+for cases where the orientation comes from the panel itself
+(through say some EDID extenstion) rather then from devicetree.
+
+Still I think either way should be acceptable upstream.
+
+Opinions from other drm devs on the above are very much welcome!
+
+Your small patch nicely avoids the probe ordering problem,
+so it is much better then this patch series.
+
+Regards,
+
+Hans
+
+
+
+> 
+> Thanks
+> 
+>> I see a devicetree patch in this series, so I guess that the panel
+>> is described in devicetree. Especially in the case of devicetree
+>> I would expect the kernel to have enough info to do the right
+>> thing and make sure the panel is probed before calling
+>> drm_dev_register() ?
 >>
->> __fstatat64 (int fd, const char *file, struct stat64 *buf, int flags)
->> {
->>   struct __stat64_t64 st_t64;
->>   return __fstatat64_time64 (fd, file, &st_t64, flags)
->>          ?: __cp_stat64_t64_stat64 (&st_t64, buf);
->> }
+>> Regards,
 >>
->> If I'm reading this correctly, daemon() internally uses the time32
->> version of 'stat', which fails for files with out-of-range timestamps.
->> Are you able to rebuild the ssh binary (or your entire distro, if that's
->> easier) against musl-1.2.x instead of glibc to see if the same thing
->> happens there?
+>> Hans
 >>
->>        Arnd
 >>
->>> To reproduce:
+>>
+>>
 >>>
->>> # date -s "2040-05-12"
->>> # hwclock --systohc
->>> # reboot
->>> # /usr/sbin/sshd
+>>> After this series, drm_connector_set_panel_orientation() works like
+>>> before. It won't affect existing callers of
+>>> drm_connector_set_panel_orientation(). The only difference is that
+>>> some drm drivers can call drm_connector_init_panel_orientation_property()
+>>> earlier.
 >>>
->>> Note this error occurs only after the reboot, and setting a date before 2038 also require a reboot to remove the error.
+>>> Hsin-Yi Wang (4):
+>>>   gpu: drm: separate panel orientation property creating and value
+>>>     setting
+>>>   drm/mediatek: init panel orientation property
+>>>   drm/msm: init panel orientation property
+>>>   arm64: dts: mt8183: Add panel rotation
 >>>
->>> strace and gdb trace linked.
+>>>  .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  1 +
+>>>  drivers/gpu/drm/drm_connector.c               | 58 ++++++++++++++-----
+>>>  drivers/gpu/drm/mediatek/mtk_dsi.c            |  7 +++
+>>>  drivers/gpu/drm/msm/dsi/dsi_manager.c         |  4 ++
+>>>  include/drm/drm_connector.h                   |  2 +
+>>>  5 files changed, 59 insertions(+), 13 deletions(-)
 >>>
->>> Let me know if you need additional information.
+>>
+> 
+

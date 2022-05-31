@@ -2,84 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0C65392C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC385392CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344835AbiEaNzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
+        id S1344834AbiEaNzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345436AbiEaNyo (ORCPT
+        with ESMTP id S243620AbiEaNzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:54:44 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7F5DD4;
-        Tue, 31 May 2022 06:53:55 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id m82so3532380oif.13;
-        Tue, 31 May 2022 06:53:55 -0700 (PDT)
+        Tue, 31 May 2022 09:55:35 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC9CC73
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:55:33 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id hv24-20020a17090ae41800b001e33eebdb5dso1135363pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:55:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ja22+6JGi4Fw6cG9r+qZlGyNX9xX4a0a15S3HAE/TcU=;
+        b=jh1SxPxCjFoDs6Jrfq52420Fm/5GD8bQks9zwjw4yit43QDo5WERW5d+nYssrZDRdY
+         VW9oF8WpU+xlIEgp//5yokj8FVwNXpcxGvD57ECKpieLnXooOiJyl3ftTrJh+lCyYuUe
+         0TYQ7fM5I3jU18C1MUIIQQPJKiBi/GohQUl4+6IDKwfdjXu45ljVziR9Rz/vyPTsgKNL
+         LaeCJcrHVSBPmH8R9zaqoHjQx00NwxCz2sdfEAN6u+3HSQZHde2r7qjQUXuhcXtvEuEc
+         1LVO1xfl2TuZl1WTkTKPpKOOoznPObXJY4SJ1Ccam9YHgbKztWjXzOIdjlsczqOshuY1
+         v9qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4k3vq7qVFqQjuoYQtYlHJSa5PUcZKNyVP9mXHmGrUIY=;
-        b=sCkyZsMYgxJbK21qSrm6V4ft9aPyWPgl42Sp7CKHjwaIg5jcdZeiMuXyzVkUI4W74b
-         xIr36ykpWusW2BIDsktEW4ft9WEF9tNoX+kXHCpznESDEhU4ypxo1AM/bSn4IIrcw2MO
-         5xu6PzfCkzBwOw/figjSAQtG9wkKIPTyXUnpTJVfEZuMBRQYEbd0R6p4bBOco4vyYk0s
-         RB98RYMGfWUmTmomlR+at08Lv/1+w8r1PoODB6j2F6vJXdwT1G0H1AgeC/3pHlHN/7Dx
-         0nB8lN7ICzg1yNMHFdmFt5oXiTqqwd8w3LTjbAvd1H724x3Xyw16W7SgFSEi4Fnh7pYl
-         hPSw==
-X-Gm-Message-State: AOAM531DH2nPM4SaaasAcHXmI6dssXR9EIY4XUTw+AwUkAQDXM/dxcxb
-        ichXIoIEJmc6EySBJ2gl+F+9rMSdhw==
-X-Google-Smtp-Source: ABdhPJwQOjHoUBvDdB7j+dMl7MIS9ke/fwu3hFRc4UmLOTUpNablAae0T4QSsjIYR4rYw0RcXG9gBQ==
-X-Received: by 2002:a05:6808:e82:b0:322:4c17:2f61 with SMTP id k2-20020a0568080e8200b003224c172f61mr11749556oil.131.1654005235223;
-        Tue, 31 May 2022 06:53:55 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bm8-20020a0568081a8800b00325cda1ffabsm5676933oib.42.2022.05.31.06.53.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 06:53:54 -0700 (PDT)
-Received: (nullmailer pid 1657141 invoked by uid 1000);
-        Tue, 31 May 2022 13:53:54 -0000
-Date:   Tue, 31 May 2022 08:53:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: soc: qcom,smd: do not use pattern for
- simple rpm-requests string
-Message-ID: <20220531135354.GA1654151-robh@kernel.org>
-References: <20220524070408.39505-1-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ja22+6JGi4Fw6cG9r+qZlGyNX9xX4a0a15S3HAE/TcU=;
+        b=5z8jJYR121OPMlZijXBYsLue20su7NLg06xFnLk0SOutEipi8HHvgGmr6tCSE7lKOf
+         Nb5oqLK8ByVaJsBq5+iN3yqxH2xHLq86Y6LLwpkaLP+8/pdgFysxOdXsYQV+YGC9lx2K
+         6Zg1zWmC1YnHJ5Qr4YKeZandT+jH6s8KwSNb6EJajfUdiKMRx7ejK1WGS52lohNGbINf
+         oQ9nbHlEo/zQXMdIt7gg45bL3UbHxuxzZJsI87QN0fU+7+Ryxtq5D4+mSlX1An19U+ib
+         5mE+AXmp9zeBUxy3U097JTx6qfUiajUrv7xwkUqD5Nqwnx5UnywmfACjvmmuZ8c6AJGg
+         t2UA==
+X-Gm-Message-State: AOAM530QhQ5nFFqEASmkJbG2TF5JksrgPC5lOkFwWfqjf5BB1Vnyh+xd
+        10HworQL2vuajT2baA5x+Z9AZw==
+X-Google-Smtp-Source: ABdhPJxLwYtuT4vmWIQfmLCoFeGmwmvTfCgz7DIbOKDWEwiWcs8E3dOHmMUzEkSYr11zLhkCHhzWQQ==
+X-Received: by 2002:a17:902:ef43:b0:156:9c5d:b0fe with SMTP id e3-20020a170902ef4300b001569c5db0femr60960620plx.158.1654005332900;
+        Tue, 31 May 2022 06:55:32 -0700 (PDT)
+Received: from [10.4.211.178] ([139.177.225.231])
+        by smtp.gmail.com with ESMTPSA id j7-20020a17090276c700b0015e8d4eb26esm11165757plt.184.2022.05.31.06.55.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 06:55:32 -0700 (PDT)
+Message-ID: <270c2315-7ba5-4bbb-ee5c-38cc8a57e628@bytedance.com>
+Date:   Tue, 31 May 2022 21:55:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524070408.39505-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [External] Re: [PATCH v3 2/2] sched/fair: optimize and simplify
+ rq leaf_cfs_rq_list
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        odin@uged.al, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com
+References: <20220526103929.14976-1-zhouchengming@bytedance.com>
+ <20220526103929.14976-3-zhouchengming@bytedance.com>
+ <CAKfTPtADKqVSvUFmLRPCU_XGVvf3wme0EnnvPf1Q39HEs=VqRw@mail.gmail.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <CAKfTPtADKqVSvUFmLRPCU_XGVvf3wme0EnnvPf1Q39HEs=VqRw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 May 2022 09:04:08 +0200, Krzysztof Kozlowski wrote:
-> patternProperties should not be used for properties with a simple string
-> as name:
+Hi,
+
+On 2022/5/30 15:52, Vincent Guittot wrote:
+> On Thu, 26 May 2022 at 12:40, Chengming Zhou
+> <zhouchengming@bytedance.com> wrote:
+>>
+[...]
+>> @@ -11257,9 +11218,10 @@ static inline bool vruntime_normalized(struct task_struct *p)
+>>   */
+>>  static void propagate_entity_cfs_rq(struct sched_entity *se)
+>>  {
+>> -       struct cfs_rq *cfs_rq;
+>> +       struct cfs_rq *cfs_rq = cfs_rq_of(se);
+>>
+>> -       list_add_leaf_cfs_rq(cfs_rq_of(se));
+>> +       if (!throttled_hierarchy(cfs_rq))
+>> +               list_add_leaf_cfs_rq(cfs_rq);
+>>
+>>         /* Start to propagate at parent */
+>>         se = se->parent;
+>> @@ -11268,7 +11230,8 @@ static void propagate_entity_cfs_rq(struct sched_entity *se)
+>>                 cfs_rq = cfs_rq_of(se);
+>>
 > 
->   Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml: patternProperties:^(.*-edge|rpm)$:patternProperties:
->     '^rpm-requests$' should not be valid under {'pattern': '^\\^[a-zA-Z0-9,\\-._#]+\\$$'}
+>  you can break  if the cfs is throttled because it's sched_entity has
+> been dequeued. In this case we check if the cfs is throttled not if
+> the hierarchy is throttled
 > 
-> Fixes: 375eed5f51a8 ("dt-bindings: soc: qcom,smd: convert to dtschema")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> +               if (cfs_rq_throttled(cfs_rq))
+> +                       break;
 > 
 
-Now failing in Linus' tree and linux-next and no response, so I've 
-applied.
+This propagate part still make me confused. :-)
 
-Rob
+I wonder if you think we should change like this:
+
+static void propagate_entity_cfs_rq(struct sched_entity *se)
+{
+        struct cfs_rq *cfs_rq = cfs_rq_of(se);
+
+        if (cfs_rq_throttled(cfs_rq))			--> break if cfs is throttled
+                return;
+
+        if (!throttled_hierarchy(cfs_rq))
+                list_add_leaf_cfs_rq(cfs_rq);
+
+        /* Start to propagate at parent */
+        se = se->parent;
+
+        for_each_sched_entity(se) {
+                cfs_rq = cfs_rq_of(se);
+
+                if (cfs_rq_throttled(cfs_rq))		--> break if cfs is throttled
+                        break;
+
+                update_load_avg(cfs_rq, se, UPDATE_TG); --> throttled cfs_rq->prop not updated
+                if (!throttled_hierarchy(cfs_rq))
+                        list_add_leaf_cfs_rq(cfs_rq);
+        }
+}
+
+
+
+If I understand right, we should update_load_avg() until cfs_rq_throttled(),
+including that throttled cfs_rq? So we can go on propagating when unthrottle.
+
+Maybe like this?
+
+static void propagate_entity_cfs_rq(struct sched_entity *se)
+{
+        struct cfs_rq *cfs_rq = cfs_rq_of(se);
+
+        if (cfs_rq_throttled(cfs_rq))			--> break if cfs is throttled
+                return;
+
+        if (!throttled_hierarchy(cfs_rq))
+                list_add_leaf_cfs_rq(cfs_rq);
+
+        /* Start to propagate at parent */
+        se = se->parent;
+
+        for_each_sched_entity(se) {
+                cfs_rq = cfs_rq_of(se);
+
+                update_load_avg(cfs_rq, se, UPDATE_TG);	--> update throttled cfs_rq->prop
+
+                if (cfs_rq_throttled(cfs_rq))		--> break if cfs is throttled
+                        break;
+
+                if (!throttled_hierarchy(cfs_rq))
+                        list_add_leaf_cfs_rq(cfs_rq);
+        }
+}
+
+
+Thanks!
+
+
+>>                 update_load_avg(cfs_rq, se, UPDATE_TG);
+>> -               list_add_leaf_cfs_rq(cfs_rq);
+>> +               if (!throttled_hierarchy(cfs_rq))
+>> +                       list_add_leaf_cfs_rq(cfs_rq);
+>>         }
+>>  }
+>>  #else
+>> --
+>> 2.36.1
+>>

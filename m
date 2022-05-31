@@ -2,182 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE7353958C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100F2539592
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346670AbiEaRsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 13:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
+        id S1346674AbiEaRtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 13:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346633AbiEaRsN (ORCPT
+        with ESMTP id S243101AbiEaRtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 13:48:13 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85FC4EF7D
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:48:11 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LCKW94Bztz9sgg;
-        Tue, 31 May 2022 19:48:05 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id rW1eOGrN9BXY; Tue, 31 May 2022 19:48:05 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LCKW847bFz9sq5;
-        Tue, 31 May 2022 19:48:04 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 76BF68B7A9;
-        Tue, 31 May 2022 19:48:04 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id otwhE4al1nBl; Tue, 31 May 2022 19:48:04 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.5.212])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2C35B8B7A0;
-        Tue, 31 May 2022 19:48:04 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 24VHlt2e393864
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 19:47:55 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 24VHlsqu393863;
-        Tue, 31 May 2022 19:47:54 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Erhard Furtner <erhard_f@mailbox.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 2/2] powerpc/irq: Perform stack_overflow detection after switching to IRQ stack
-Date:   Tue, 31 May 2022 19:47:44 +0200
-Message-Id: <7d1162a4bfac0e4f64569bae8330b85749f3bfdc.1654019236.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <3e3b3135a59396debd091db9c63e61b24f4ad430.1654019236.git.christophe.leroy@csgroup.eu>
-References: <3e3b3135a59396debd091db9c63e61b24f4ad430.1654019236.git.christophe.leroy@csgroup.eu>
+        Tue, 31 May 2022 13:49:39 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AE09A9B7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:49:37 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id a63so7307955pge.12
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=up1pTeS33dg3ysfhUrkuWPpoOH7KplpGmQPpid3W8Mk=;
+        b=Z18B8MqFP+Ck/tneEl0C52IfN/HxS4s5lO8n20qYuAd1S4G/Vf2OmCpZmca1UUqOrh
+         QwMuPuU4Jsp7Mdnt6OhcTZhfz7C0eFfJ4053ttaB+cFMY8IseRTESyK/AdZx/2nYJ+EF
+         Hpng4JICoqaOApCdboSO5NIVOeoZAqy2yW2u9Jwf9ySMDxA1tE2Zwh6lXtnsX6xmHzm9
+         QetdRkNvYGcv7AsBFV9EqiK8S4LGpSYpgN8NHWxkJgV/vP4CteyJgXFOt+xeg8QROOVK
+         U3eje+iymL7gtqTOc7UsEPzlB6jYQW65VABczcItabSpV+T3t0hH4n7phq4VPv2+IEyx
+         BUzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=up1pTeS33dg3ysfhUrkuWPpoOH7KplpGmQPpid3W8Mk=;
+        b=qrUl87eI71CJlLpSoFHsn9oNGa/hu3ebJGWmvYSQvdk/q4Jfxr2UexkWQ3rFsA7RTO
+         IZIVvd/XhcPFeGohwZCpCpqe0Al0TaokbGPM36C565wI51w9vnsdfz9y4L6QF4xcysP2
+         408gNM7lBDPofff+EVhlPvlQ2N4SaJT8zFWsRhPkU16GN7yPOhi4UXgMMUaLXD5LQYUv
+         ja7af2Rq1ZvxAt/hHxRozClw6vQC824ZXBwlJhLVVbNSIbQRElmpl26tj8j6uXe4J0m2
+         sn0m0R09IxdvuHRfbyWkXindnx6QiGnTNsNEbJS18Z/fqb5Ut27kYK18pJoDIhl8xFss
+         k5EA==
+X-Gm-Message-State: AOAM530S0YzVKHaxm4OsVYHqvjthR+xOG/0oRhVw+/Ai92R4pGYm+wI8
+        /hj+U82YGUENC/NJB48SOwZS1g==
+X-Google-Smtp-Source: ABdhPJwPT21CMLBCqelroEoxkIzSU+nUsU7b6/bESsnttsjXfdDRTNO1bxbXetVBX87qNMSYP2eo6Q==
+X-Received: by 2002:a05:6a00:1792:b0:519:80a:9598 with SMTP id s18-20020a056a00179200b00519080a9598mr29316663pfg.10.1654019377442;
+        Tue, 31 May 2022 10:49:37 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id j16-20020a17090a7e9000b001e32824c452sm2147760pjl.40.2022.05.31.10.49.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 10:49:36 -0700 (PDT)
+Date:   Tue, 31 May 2022 11:49:33 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Bruce Ashfield <bruce.ashfield@xilinx.com>
+Subject: Re: [RFC PATCH v5 0/4] remoteproc: restructure the remoteproc VirtIO
+ device
+Message-ID: <20220531174933.GB531268@p14s>
+References: <20220406095446.1187968-1-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1654019262; l=4478; s=20211009; h=from:subject:message-id; bh=Gw99dhKFKxP8DW4aJTsMb+Y6JBkp44Z0H6pTFv95xgQ=; b=pmePwxLfqcYJ9BBsXAINSulbSk3lirbq++dd/Pk2TWgEb1GunzL69DJIG1viaaJTlcZiWtnd0fu+ iZ9YGKiaA2fM1XblKaB5StN6P3Ba1Da0awBszjpCUYnuvHgZJ3R6
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220406095446.1187968-1-arnaud.pouliquen@foss.st.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When KASAN is enabled, as shown by the Oops below, the 2k limit is not
-enough to allow stack dump after a stack overflow detection when
-CONFIG_DEBUG_STACKOVERFLOW is selected:
+I have started looking at this set.  Comments to follow in the coming days.
 
-	do_IRQ: stack overflow: 1984
-	CPU: 0 PID: 126 Comm: systemd-udevd Not tainted 5.18.0-gentoo-PMacG4 #1
-	Call Trace:
-	Oops: Kernel stack overflow, sig: 11 [#1]
-	BE PAGE_SIZE=4K MMU=Hash SMP NR_CPUS=2 PowerMac
-	Modules linked in: sr_mod cdrom radeon(+) ohci_pci(+) hwmon i2c_algo_bit drm_ttm_helper ttm drm_dp_helper snd_aoa_i2sbus snd_aoa_soundbus snd_pcm ehci_pci snd_timer ohci_hcd snd ssb ehci_hcd 8250_pci soundcore drm_kms_helper pcmcia 8250 pcmcia_core syscopyarea usbcore sysfillrect 8250_base sysimgblt serial_mctrl_gpio fb_sys_fops usb_common pkcs8_key_parser fuse drm drm_panel_orientation_quirks configfs
-	CPU: 0 PID: 126 Comm: systemd-udevd Not tainted 5.18.0-gentoo-PMacG4 #1
-	NIP:  c02e5558 LR: c07eb3bc CTR: c07f46a8
-	REGS: e7fe9f50 TRAP: 0000   Not tainted  (5.18.0-gentoo-PMacG4)
-	MSR:  00001032 <ME,IR,DR,RI>  CR: 44a14824  XER: 20000000
+Thanks,
+Mathieu
 
-	GPR00: c07eb3bc eaa1c000 c26baea0 eaa1c0a0 00000008 00000000 c07eb3bc eaa1c010
-	GPR08: eaa1c0a8 04f3f3f3 f1f1f1f1 c07f4c84 44a14824 0080f7e4 00000005 00000010
-	GPR16: 00000025 eaa1c154 eaa1c158 c0dbad64 00000020 fd543810 eaa1c0a0 eaa1c29e
-	GPR24: c0dbad44 c0db8740 05ffffff fd543802 eaa1c150 c0c9a3c0 eaa1c0a0 c0c9a3c0
-	NIP [c02e5558] kasan_check_range+0xc/0x2b4
-	LR [c07eb3bc] format_decode+0x80/0x604
-	Call Trace:
-	[eaa1c000] [c07eb3bc] format_decode+0x80/0x604 (unreliable)
-	[eaa1c070] [c07f4dac] vsnprintf+0x128/0x938
-	[eaa1c110] [c07f5788] sprintf+0xa0/0xc0
-	[eaa1c180] [c0154c1c] __sprint_symbol.constprop.0+0x170/0x198
-	[eaa1c230] [c07ee71c] symbol_string+0xf8/0x260
-	[eaa1c430] [c07f46d0] pointer+0x15c/0x710
-	[eaa1c4b0] [c07f4fbc] vsnprintf+0x338/0x938
-	[eaa1c550] [c00e8fa0] vprintk_store+0x2a8/0x678
-	[eaa1c690] [c00e94e4] vprintk_emit+0x174/0x378
-	[eaa1c6d0] [c00ea008] _printk+0x9c/0xc0
-	[eaa1c750] [c000ca94] show_stack+0x21c/0x260
-	[eaa1c7a0] [c07d0bd4] dump_stack_lvl+0x60/0x90
-	[eaa1c7c0] [c0009234] __do_IRQ+0x170/0x174
-	[eaa1c800] [c0009258] do_IRQ+0x20/0x34
-	[eaa1c820] [c00045b4] HardwareInterrupt_virt+0x108/0x10c
-...
-
-As the detection is asynchronously performed at IRQs, we could be long
-after the limit has been crossed, so increasing the limit would not
-solve the problem completely.
-
-In order to be sure that there is enough stack space for the stack
-dump, do it after the switch to the IRQ stack. That way it is sure
-that the stack is large enough, unless the IRQ stack has been
-overfilled in which case the end of life is close.
-
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/kernel/irq.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/arch/powerpc/kernel/irq.c b/arch/powerpc/kernel/irq.c
-index 370434f6c316..1de081db50be 100644
---- a/arch/powerpc/kernel/irq.c
-+++ b/arch/powerpc/kernel/irq.c
-@@ -184,10 +184,8 @@ u64 arch_irq_stat_cpu(unsigned int cpu)
- 	return sum;
- }
- 
--static inline void check_stack_overflow(void)
-+static inline void check_stack_overflow(unsigned long sp)
- {
--	long sp;
--
- 	if (!IS_ENABLED(CONFIG_DEBUG_STACKOVERFLOW))
- 		return;
- 
-@@ -221,12 +219,14 @@ static __always_inline void call_do_softirq(const void *sp)
- 
- DEFINE_STATIC_CALL_RET0(ppc_get_irq, *ppc_md.get_irq);
- 
--static void __do_irq(struct pt_regs *regs)
-+static void __do_irq(struct pt_regs *regs, unsigned long oldsp)
- {
- 	unsigned int irq;
- 
- 	trace_irq_entry(regs);
- 
-+	check_stack_overflow(oldsp);
-+
- 	/*
- 	 * Query the platform PIC for the interrupt & ack it.
- 	 *
-@@ -254,6 +254,7 @@ static __always_inline void call_do_irq(struct pt_regs *regs, void *sp)
- 	/* Temporarily switch r1 to sp, call __do_irq() then restore r1. */
- 	asm volatile (
- 		 PPC_STLU "	%%r1, %[offset](%[sp])	;"
-+		"mr		%%r4, %%r1		;"
- 		"mr		%%r1, %[sp]		;"
- 		"bl		%[callee]		;"
- 		 PPC_LL "	%%r1, 0(%%r1)		;"
-@@ -279,11 +280,9 @@ void __do_IRQ(struct pt_regs *regs)
- 	irqsp = hardirq_ctx[raw_smp_processor_id()];
- 	sirqsp = softirq_ctx[raw_smp_processor_id()];
- 
--	check_stack_overflow();
--
- 	/* Already there ? */
- 	if (unlikely(cursp == irqsp || cursp == sirqsp)) {
--		__do_irq(regs);
-+		__do_irq(regs, current_stack_pointer);
- 		set_irq_regs(old_regs);
- 		return;
- 	}
--- 
-2.35.3
-
+On Wed, Apr 06, 2022 at 11:54:42AM +0200, Arnaud Pouliquen wrote:
+> 1) Update from V4 [1]:
+> 
+> Minor updates based on Mathieu's comments.
+> Updates are listed in the commit message of each patch.
+> 
+> [1] https://lkml.org/lkml/2022/3/14/1177
+> 
+> 2) Patchset description:
+> 
+> This series is a part of the work initiated a long time ago in 
+> the series "remoteproc: Decorelate virtio from core"[2]
+> 
+> Objective of the work:
+> - Update the remoteproc VirtIO device creation (use platform device)
+> - Allow to declare remoteproc VirtIO device in DT
+>     - declare resources associated to a remote proc VirtIO
+>     - declare a list of VirtIO supported by the platform.
+> - Prepare the enhancement to more VirtIO devices (e.g I2C, audio, video, ...).
+>   For instance be able to declare a I2C device in a virtio-i2C node.
+> - Keep the legacy working!
+> - Try to improve the picture about concerns reported by Christoph Hellwing [3][4]
+> 
+> [2] https://lkml.org/lkml/2020/4/16/1817
+> [3] https://lkml.org/lkml/2021/6/23/607
+> [4] https://patchwork.kernel.org/project/linux-remoteproc/patch/AOKowLclCbOCKxyiJ71WeNyuAAj2q8EUtxrXbyky5E@cp7-web-042.plabs.ch/
+> 
+> In term of device tree this would result in such hierarchy (stm32mp1 example with 2 virtio RPMSG):
+> 
+> 	m4_rproc: m4@10000000 {
+> 		compatible = "st,stm32mp1-m4";
+> 		reg = <0x10000000 0x40000>,
+> 		      <0x30000000 0x40000>,
+> 		      <0x38000000 0x10000>;
+>         memory-region = <&retram>, <&mcuram>,<&mcuram2>;
+>         mboxes = <&ipcc 2>, <&ipcc 3>;
+>         mbox-names = "shutdown", "detach";
+>         status = "okay";
+> 
+>         #address-cells = <1>;
+>         #size-cells = <0>;
+>         
+>         vdev@0 {
+> 		compatible = "rproc-virtio";
+> 		reg = <0>;
+> 		virtio,id = <7>;  /* RPMSG */
+> 		memory-region = <&vdev0vring0>, <&vdev0vring1>, <&vdev0buffer>;
+> 		mboxes = <&ipcc 0>, <&ipcc 1>;
+> 		mbox-names = "vq0", "vq1";
+> 		status = "okay";
+>         };
+> 
+>         vdev@1 {
+> 		compatible = "rproc-virtio";
+> 		reg = <1>;
+> 		virtio,id = <7>;  /*RPMSG */
+> 		memory-region = <&vdev1vring0>, <&vdev1vring1>, <&vdev1buffer>;
+> 		mboxes = <&ipcc 4>, <&ipcc 5>;
+> 		mbox-names = "vq0", "vq1";
+> 		status = "okay";
+>         };
+> };
+> 
+> I have divided the work in 4 steps to simplify the review, This series implements only
+> the step 1:
+> step 1:  redefine the remoteproc VirtIO device as a platform device
+>   - migrate rvdev management in remoteproc virtio.c,
+>   - create a remotproc virtio config ( can be disabled for platform that not use VirtIO IPC.
+> step 2: add possibility to declare and probe a VirtIO sub node
+>   - VirtIO bindings declaration,
+>   - multi DT VirtIO devices support,
+>   - introduction of a remote proc virtio bind device mechanism ,
+> => https://github.com/arnopo/linux/commits/step2-virtio-in-DT
+> step 3: Add memory declaration in VirtIO subnode
+> => https://github.com/arnopo/linux/commits/step3-virtio-memories
+> step 4: Add mailbox declaration in VirtIO subnode
+> => https://github.com/arnopo/linux/commits/step4-virtio-mailboxes
+> 
+> Arnaud Pouliquen (4):
+>   remoteproc: core: Introduce virtio device add/remove functions
+>   remoteproc: core: Introduce rproc_register_rvdev function
+>   remoteproc: Move rproc_vdev management to remoteproc_virtio.c
+>   remoteproc: virtio: Create platform device for the remoteproc_virtio
+> 
+>  drivers/remoteproc/remoteproc_core.c     | 154 +++---------------
+>  drivers/remoteproc/remoteproc_internal.h |  23 ++-
+>  drivers/remoteproc/remoteproc_virtio.c   | 193 ++++++++++++++++++++---
+>  include/linux/remoteproc.h               |   6 +-
+>  4 files changed, 215 insertions(+), 161 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 

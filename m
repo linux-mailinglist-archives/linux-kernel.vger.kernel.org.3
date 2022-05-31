@@ -2,109 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508F2538B53
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 08:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30780538B54
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 08:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244233AbiEaGUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 02:20:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
+        id S244238AbiEaGUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 02:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236080AbiEaGUh (ORCPT
+        with ESMTP id S243856AbiEaGUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 02:20:37 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176558DDE4;
-        Mon, 30 May 2022 23:20:35 -0700 (PDT)
-Received: from mail-yb1-f182.google.com ([209.85.219.182]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MUok5-1oM4xf0f33-00Qje0; Tue, 31 May 2022 08:20:34 +0200
-Received: by mail-yb1-f182.google.com with SMTP id v106so15255754ybi.0;
-        Mon, 30 May 2022 23:20:33 -0700 (PDT)
-X-Gm-Message-State: AOAM532Lg2zvR74NfzminsBOx7Gky2HJfNQHF6zxz62udFQIk0xZFr31
-        EJl2SXC4565Cdz1S5T9XLTBwG090WB96jhgt49c=
-X-Google-Smtp-Source: ABdhPJyjJwXBPGiLFwJcPL8LpszFynK7r8RQeXSulMT/bC7rn948af4y1kE1ObqEbOMAyT3J0meiIKAhEtryxXOB8TY=
-X-Received: by 2002:a25:db8a:0:b0:65c:b04a:f612 with SMTP id
- g132-20020a25db8a000000b0065cb04af612mr13375290ybf.106.1653978032886; Mon, 30
- May 2022 23:20:32 -0700 (PDT)
+        Tue, 31 May 2022 02:20:47 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C4C95A3C
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 23:20:45 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LC2G32xV7z9sv3;
+        Tue, 31 May 2022 08:20:43 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id f76WrJdiz3om; Tue, 31 May 2022 08:20:43 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LC2G31wvpz9stt;
+        Tue, 31 May 2022 08:20:43 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2C6828B781;
+        Tue, 31 May 2022 08:20:43 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id nF9w4h9_WC7g; Tue, 31 May 2022 08:20:43 +0200 (CEST)
+Received: from [192.168.5.212] (unknown [192.168.5.212])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 99FA58B763;
+        Tue, 31 May 2022 08:20:42 +0200 (CEST)
+Message-ID: <c1e2cf35-2a8d-87e6-3a7e-7f144392db23@csgroup.eu>
+Date:   Tue, 31 May 2022 08:20:41 +0200
 MIME-Version: 1.0
-References: <20220406201523.243733-1-laurent@vivier.eu> <20220406201523.243733-5-laurent@vivier.eu>
- <3b783435-e734-5391-e758-d709e0462839@infradead.org> <64ce78bf-b81b-1eec-74f3-650a72f2874b@vivier.eu>
-In-Reply-To: <64ce78bf-b81b-1eec-74f3-650a72f2874b@vivier.eu>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 31 May 2022 08:20:15 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3mF9CuWC2Tw3VvDVGFgpjAwtMHSjoNa49bny7gMEw8sQ@mail.gmail.com>
-Message-ID: <CAK8P3a3mF9CuWC2Tw3VvDVGFgpjAwtMHSjoNa49bny7gMEw8sQ@mail.gmail.com>
-Subject: Re: [PATCH v16 4/4] m68k: introduce a virtual m68k machine
-To:     Laurent Vivier <laurent@vivier.eu>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-m68k@lists.linux-m68k.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alessandro Zummo <a.zummo@towertech.it>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:fWVDVDmwfvq9MFlZ28krXFaULaYGmlrGpPHwT141bFJQre1uJEK
- OBk+laHiPkf9Up47c++giO1iSu8ZmwM3gPEfj9z93WBFUUzkjpozJnnqAYeTvegM9KnRbZL
- kpJWYaUWaaO2g+4YCTWa03ZrzZbMSMuXrzyqNHsQuEcFF4488Bab/2JS3oHD05XIy7IPbUu
- 8V7VIl3cmOG4HaEctvraA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6CpOo7Bgy4I=:wKwx9FM1rhDcDw23KWTjYd
- nySXykUf8gwH2a4wN9K88SgSqC3Ot55fyR7iUF/4koSeHyh8BbSuoXP4cmoX6tYMRwCsnoEha
- eGuMEZOfEcTe2TAQL0Lipt9Sp0p0gr8GnfR+q5/Rjgndia/uWa0yAjipXedGBukB8aQKNsw8+
- HljNBjAXOpgrRS/Xd8ce5u6mb500FFDcx41t/JgxHzkzSrXsbDM/iaAIt7y3xrFzmGz8A6jrc
- zYHgtGJzrR8sloG3/0hOM2t8U+jjPG2MEv4CXvNWasBcqpCTTDVXu1rxHbvIjkhHhOM5j0RCs
- WfvUSE69p6MosecxMde1Xcka2UStTui96Zm/zcsUNnURZ4sxGdWz81FlJohm9YWW+8lAglOh6
- dzY4f3LedXo8JqkeDUkY6n4TCdnDiLZsLrJUgjhS5Qt5/A/UVDYdyMF992oxnk8hMVKMR60zI
- swWD0XUx+2iNenwvJkP2d+99yoqKg4z1PjCBXef5bBntiNIaoq6d6O9nsFFhXcu8dim0Uj3m7
- 3XQ2Aai1eqyT5bBywkIZV0PDlz5neFhPYOoKhP5zo7kyObqkbgbUwrXNxzzVuVjN6W1feXnhH
- +l9eicj4yfer0XCpqsJcmge83vMIJuU7c94RfPDLaERtj8DxNLDySFHxU0p2UtBn7EZggkix7
- FuRyMqxiLCPOCpaFnGeDwqrQUSN4U/UeU7oji6xqWgeauYb6bOAoPjJYzTx4ska8kAs4DiyIX
- wuiubSgIxNvVbdVo0PMXysbGmqe07G/LhSx6uuTXgqxlAWVCCA+B7pJFEQtR8NH/1pUUcE28x
- 04ivG7eqppRPmJuLg2cNuXBf8X8guY95MoyHhcUp107XiJYIrVTWekzKJxalfUgzold26hrC7
- ZpAcam5MYg6LFR8aYRjw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC PATCH 4/4] objtool/powerpc: Add --mcount specific
+ implementation
+Content-Language: fr-FR
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Sathvika Vasireddy <sv@linux.vnet.ibm.com>
+Cc:     "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>
+References: <20220523175548.922671-1-sv@linux.ibm.com>
+ <20220523175548.922671-5-sv@linux.ibm.com>
+ <6be5c941-07b0-64d5-7f36-fe5770fb5244@csgroup.eu>
+ <59170f18-1356-1140-70e3-30cb627f00bc@linux.vnet.ibm.com>
+ <578ec055-0d63-e579-0caa-ad57846b8995@csgroup.eu>
+ <f1decbb7-b441-a241-469a-4ba118e08212@csgroup.eu>
+In-Reply-To: <f1decbb7-b441-a241-469a-4ba118e08212@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 8:05 AM Laurent Vivier <laurent@vivier.eu> wrote:
-> > This select VIRTIO_MMIO can cause a kconfig warning:
-> >
-> > WARNING: unmet direct dependencies detected for VIRTIO_MMIO
-> >    Depends on [n]: VIRTIO_MENU [=n] && HAS_IOMEM [=y] && HAS_DMA [=y]
->
-> In my repo, VIRTIO_MMIO has no dependency on VIRTIO_MENU:
->
-> ./drivers/virtio/Kconfig
-> config VIRTIO_MMIO
->          tristate "Platform bus driver for memory mapped virtio devices"
->          depends on HAS_IOMEM && HAS_DMA
->
-> >    Selected by [y]:
-> >    - VIRT [=y] && M68KCLASSIC [=y] && MMU [=y]
->
-
-The dependency is expressed differently here, but this is the
-same as writing 'depends on VIRTIO_MENU':
-
-menuconfig VIRTIO_MENU
-        bool "Virtio drivers"
-        default y
-
-if VIRTIO_MENU
-
-config VIRTIO_MMIO
-        tristate "Platform bus driver for memory mapped virtio devices"
-
-endif
 
 
-        Arnd
+Le 25/05/2022 à 19:27, Christophe Leroy a écrit :
+> 
+> 
+> Le 24/05/2022 à 15:33, Christophe Leroy a écrit :
+>>
+>>
+>> Le 24/05/2022 à 13:00, Sathvika Vasireddy a écrit :
+>>>>
+>>>>> +{
+>>>>> +    switch (elf->ehdr.e_machine) {
+>>>>> +    case EM_X86_64:
+>>>>> +            return R_X86_64_64;
+>>>>> +    case EM_PPC64:
+>>>>> +            return R_PPC64_ADDR64;
+>>>>> +    default:
+>>>>> +            WARN("unknown machine...");
+>>>>> +            exit(-1);
+>>>>> +    }
+>>>>> +}
+>>>> Wouldn't it be better to make that function arch specific ?
+>>>
+>>> This is so that we can support cross architecture builds.
+>>>
+>>
+>>
+>> I'm not sure I follow you here.
+>>
+>> This is only based on the target, it doesn't depend on the build host so
+>> I can't the link with cross arch builds.
+>>
+>> The same as you have arch_decode_instruction(), you could have
+>> arch_elf_reloc_type_long()
+>> It would make sense indeed, because there is no point in supporting X86
+>> relocation when you don't support X86 instruction decoding.
+>>
+> 
+> Could simply be some macro defined in 
+> tools/objtool/arch/powerpc/include/arch/elf.h and 
+> tools/objtool/arch/x86/include/arch/elf.h
+> 
+> The x86 version would be:
+> 
+> #define R_ADDR(elf) R_X86_64_64
+> 
+> And the powerpc version would be:
+> 
+> #define R_ADDR(elf) (elf->ehdr.e_machine == EM_PPC64 ? R_PPC64_ADDR64 : 
+> R_PPC_ADDR32)
+> 
+
+Well, looking once more, and taking into account the patch from Chen 
+https://lore.kernel.org/lkml/20220531020744.236970-4-chenzhongjin@huawei.com/
+
+It would be easier to just define two macros:
+
+#define R_ABS64 R_PPC64_ADDR64
+#define R_ABS32 R_PPC_ADDR32
+
+And then in the caller, as we know the size, do something like
+
+	size == sizeof(u64) ? R_ABS64 : R_ABS32;
+
+Christophe

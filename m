@@ -2,138 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D503A539755
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C69B539756
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347518AbiEaTrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 15:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
+        id S1347516AbiEaTse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 15:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347484AbiEaTrM (ORCPT
+        with ESMTP id S241900AbiEaTsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 15:47:12 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D63DF93
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:47:10 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id bo5so14137140pfb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:47:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=YhC+hN49BuSzPA2eVA/U+rfjQum2PYL/Zemnrj3txh0=;
-        b=FhMngP+h/QliKbg6XS8bp+cpEhNKyESg7EWr5+H4hY/gbY3FNqrhlm/dll7peYP7GT
-         Uv3Tw3xiYKMIDT+AFnDYlkyG2udMgt/V71thYzb1cHkzIT1plDbOGQRmnFXHHEU4XTcg
-         rRA/SS2DEXu8N1+QhdBn4DOnx6Adgx2dUSuA40QHDFEm3hTTJRF8/fhzs9WEHdxQdkU3
-         myIzXNU50STTaLKoMLjsDUqK6U4LhDzO9iwItNPCaqOqUrEYA4ShoqTWIu709HDdShfg
-         GkgMIrS5lTvPeNjYEC/uksKmjVeQyy18mT7QATDjrSuRdIK1FdlsMzUkiaz1N0jnvAMV
-         8srw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=YhC+hN49BuSzPA2eVA/U+rfjQum2PYL/Zemnrj3txh0=;
-        b=abKrsB1ZTwh0mO60AFof4woxc+Y78wTYE5XHl3uywBlWM2ykWJe3anZZjv3H0w+V6O
-         Zsgd5gbd9Q3KYiVQpQCEun4khhjA4/olKzYwPOdk0jdjJvM1+u3rcq97c5I6HknsTIu7
-         q8AA/YEfo77wCBv+zcNjwIe9v2VvFRpN3iJZ92veX0B4lFu3aUqX4Z6otFjdJlhjZ/P6
-         L1nvgrPyhlbiSLRSxasa7+ml2qo3HjRBuP4PuWQQ4PHSlbvniP18VhUz2LfaodL+1x4r
-         zIaZc3aiQQUgzql5PtYVTjGPlTXOdnf1MiKPF8dh2uFyiBqQepne0cdeqfEoxPOCYYsd
-         XTqQ==
-X-Gm-Message-State: AOAM532JcgmCk2cVuqXua70Ls23fEQuABft9dfbmDEWv3Scu0sJjyCcs
-        AaPNejfH5EXwY3VfywxRtgA6Yg==
-X-Google-Smtp-Source: ABdhPJy4qIorEF0xR242+k5TYE62Ryzupn+gQ6zveoRl/R0+HKvtWCf2fZxT8WQGDcjy25T3Y8vAaA==
-X-Received: by 2002:a63:1543:0:b0:3fa:8e73:d7a5 with SMTP id 3-20020a631543000000b003fa8e73d7a5mr34189956pgv.160.1654026430233;
-        Tue, 31 May 2022 12:47:10 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m6-20020a635806000000b003c67e472338sm10741774pgb.42.2022.05.31.12.47.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 12:47:09 -0700 (PDT)
-Date:   Tue, 31 May 2022 19:47:06 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xiang wangx <wangxiang@cdjrlc.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: Add const to file_operations
-Message-ID: <YpZwum3FHCJKnWIQ@google.com>
-References: <20220530020857.2565-1-wangxiang@cdjrlc.com>
+        Tue, 31 May 2022 15:48:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78945DF93
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:48:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4283523A;
+        Tue, 31 May 2022 12:48:30 -0700 (PDT)
+Received: from [10.57.81.38] (unknown [10.57.81.38])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B791E3F766;
+        Tue, 31 May 2022 12:48:28 -0700 (PDT)
+Message-ID: <b97645ed-b524-a505-2993-e04a37b50d35@arm.com>
+Date:   Tue, 31 May 2022 20:48:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220530020857.2565-1-wangxiang@cdjrlc.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 04/10] dmapool: improve accuracy of debug statistics
+Content-Language: en-GB
+To:     Tony Battersby <tonyb@cybernetics.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     iommu@lists.linux-foundation.org, kernel-team@fb.com,
+        Matthew Wilcox <willy@infradead.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Tony Lindgren <tony@atomide.com>
+References: <9b08ab7c-b80b-527d-9adf-7716b0868fbc@cybernetics.com>
+ <a922c30f-d6d7-dde2-554f-254441290331@cybernetics.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <a922c30f-d6d7-dde2-554f-254441290331@cybernetics.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022, Xiang wangx wrote:
-> Struct file_operations should normally be const.
-
-Operative word being "should".  kvm_chardev_ops isn't constant because kvm_init()
-modifies the "owner".  The same was true for kvm_vcpu_fops and kvm_vm_fops until
-commit 70375c2d8fa3 ("Revert "KVM: set owner of cpu and vm file operations"").
-
-So, this patch is both stale, and completely broken when applied against current
-KVM as well as whatever old version of KVM it was generated with.
-
-arch/x86/kvm/../../../virt/kvm/kvm_main.c:4873:37: error: conflicting type qualifiers for ‘kvm_chardev_ops’
- 4873 | static const struct file_operations kvm_chardev_ops = {
-      |                                     ^~~~~~~~~~~~~~~
-arch/x86/kvm/../../../virt/kvm/kvm_main.c:120:31: note: previous declaration of ‘kvm_chardev_ops’ with type ‘struct file_operations’
-  120 | static struct file_operations kvm_chardev_ops;
-      |                               ^~~~~~~~~~~~~~~
-arch/x86/kvm/../../../virt/kvm/kvm_main.c: In function ‘kvm_init’:
-arch/x86/kvm/../../../virt/kvm/kvm_main.c:5777:31: error: assignment of member ‘owner’ in read-only object
- 5777 |         kvm_chardev_ops.owner = module;
-      |                               ^
-  CC      arch/x86/events/intel/p6.o
-make[3]: *** [scripts/Makefile.build:288: arch/x86/kvm/../../../virt/kvm/kvm_main.o] Error 1
-make[2]: *** [scripts/Makefile.build:550: arch/x86/kvm] Error 2
-
-
-> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+On 2022-05-31 19:17, Tony Battersby wrote:
+> The "total number of blocks in pool" debug statistic currently does not
+> take the boundary value into account, so it diverges from the "total
+> number of blocks in use" statistic when a boundary is in effect.  Add a
+> calculation for the number of blocks per allocation that takes the
+> boundary into account, and use it to replace the inaccurate calculation.
+> 
+> This depends on the patch "dmapool: fix boundary comparison" for the
+> calculated blks_per_alloc value to be correct.
+> 
+> Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
 > ---
->  virt/kvm/kvm_main.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>   mm/dmapool.c | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 3f6d450355f0..7dc2433f1b01 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -3550,7 +3550,7 @@ static int kvm_vcpu_release(struct inode *inode, struct file *filp)
->  	return 0;
->  }
->  
-> -static struct file_operations kvm_vcpu_fops = {
-> +static const struct file_operations kvm_vcpu_fops = {
->  	.release        = kvm_vcpu_release,
->  	.unlocked_ioctl = kvm_vcpu_ioctl,
->  	.mmap           = kvm_vcpu_mmap,
-> @@ -4599,7 +4599,7 @@ static long kvm_vm_compat_ioctl(struct file *filp,
->  }
->  #endif
->  
-> -static struct file_operations kvm_vm_fops = {
-> +static const struct file_operations kvm_vm_fops = {
->  	.release        = kvm_vm_release,
->  	.unlocked_ioctl = kvm_vm_ioctl,
->  	.llseek		= noop_llseek,
-> @@ -4701,7 +4701,7 @@ static long kvm_dev_ioctl(struct file *filp,
->  	return r;
->  }
->  
-> -static struct file_operations kvm_chardev_ops = {
-> +static const struct file_operations kvm_chardev_ops = {
->  	.unlocked_ioctl = kvm_dev_ioctl,
->  	.llseek		= noop_llseek,
->  	KVM_COMPAT(kvm_dev_ioctl),
-> -- 
-> 2.36.1
-> 
+> diff --git a/mm/dmapool.c b/mm/dmapool.c
+> index 782143144a32..9e30f4425dea 100644
+> --- a/mm/dmapool.c
+> +++ b/mm/dmapool.c
+> @@ -47,6 +47,7 @@ struct dma_pool {		/* the pool */
+>   	struct device *dev;
+>   	unsigned int allocation;
+>   	unsigned int boundary;
+> +	unsigned int blks_per_alloc;
+>   	char name[32];
+>   	struct list_head pools;
+>   };
+> @@ -92,8 +93,7 @@ static ssize_t pools_show(struct device *dev, struct device_attribute *attr, cha
+>   		/* per-pool info, no real statistics yet */
+>   		temp = scnprintf(next, size, "%-16s %4zu %4zu %4u %2u\n",
+
+Nit: if we're tinkering with this, it's probably worth updating the 
+whole function to use sysfs_emit{_at}().
+
+>   				 pool->name, blocks,
+> -				 (size_t) pages *
+> -				 (pool->allocation / pool->size),
+> +				 (size_t) pages * pool->blks_per_alloc,
+>   				 pool->size, pages);
+>   		size -= temp;
+>   		next += temp;
+> @@ -168,6 +168,9 @@ struct dma_pool *dma_pool_create(const char *name, struct device *dev,
+>   	retval->size = size;
+>   	retval->boundary = boundary;
+>   	retval->allocation = allocation;
+> +	retval->blks_per_alloc =
+> +		(allocation / boundary) * (boundary / size) +
+> +		(allocation % boundary) / size;
+
+Do we really need to store this? Sure, 4 divisions (which could possibly 
+be fewer given the constraints on boundary) isn't the absolute cheapest 
+calculation, but I still can't imagine anyone would be polling sysfs 
+stats hard enough to even notice.
+
+Thanks,
+Robin.
+
+>   
+>   	INIT_LIST_HEAD(&retval->pools);
+>   

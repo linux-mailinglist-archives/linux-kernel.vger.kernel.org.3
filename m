@@ -2,156 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C3C5394A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 18:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5CE5394B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 18:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345999AbiEaQDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 12:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
+        id S1346003AbiEaQEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 12:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238680AbiEaQDN (ORCPT
+        with ESMTP id S241158AbiEaQE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 12:03:13 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2076.outbound.protection.outlook.com [40.107.237.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3CCB7CC;
-        Tue, 31 May 2022 09:03:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=REgk9oWcmX0g6Tee/FbP9B+pBJV41Nk60bw+yTR2dx+OeeNiUjl2VOfFZiPzzToSS5gjSYIlgjG9gLSmkFfyP5E6B5q4bib9WHmbUucOQ8hY12gfw5SodaH0PEz0rBrV2oT3F9Co7rnhFvP7/v/mrRG0/v8Ex71Oggd9tyAfxz9Ytz9gzvVZyot0SR+JGAh8XTuMezcDcqvt/ER4aR/EHbnLTfkrVxeLn5ovRHB0rBurVmDOwP1oSzZWN7g0B8od06GKwV0GpdhQEzHrMXxWAOJPXikDEkwjAzddFh8P7GqgpizI1hBlgPPKAkmZ1RdwGZamqyfOSR2TTg7ju+QaGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hCcRjUPpmiNd7zDB3/L9bk8oboZifp99E1HGeLEDv/c=;
- b=Pgh1rPbmeUkrFONhxx4nhKAyDwDFbctX5ZPIUONLKHWP4aDSoAzMzsWv6Ar3haOGExb5VwTsj+Xg8Tn6IHeAqkTh6WszxntDTHMXCZkuKhqkPsxhhWjhM+ngEGscxRcGKw4khI9ITrFLc+fW6ReAxwyS9xL4X40PIb4EaOhtmUGBa3oCt7EYh6xuETFHd/zbUC0JftSdddUk8G5BWOK/usMWB/ooUVrnnzK0jYBifsQ2ivfnfTnZOLsHUz2W5UHX4hKXm7cRnFtGs13SYFCZAqilZchaNt47KkJoX3XYlsZRQagMWWOFjRFjcx6GfMx/MqT1lEogHlqwSQxLovgngQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hCcRjUPpmiNd7zDB3/L9bk8oboZifp99E1HGeLEDv/c=;
- b=mtPdqiBQU9wo/SRqO2GsZmftujJANtKUTdaWuXtRLu6qgMILaPdT2vN1fzubhU+SPzqgTzeqvI5Br03SMpploXBKBhHuMpTalL6vG/wQDpMcGNpWgBhktQ1+OZ0jqI8O/MGJPbYglISa3O6dpw+kXaFxOzClQUCdrb1qfCM4r8g5jtRV/TUTjZLJps8OC3zEszQfiIwmXw/gtk8EwUrxLfpp3yVlpWarLN4MeH0QyslFT896qlhGcSJpsRvlgyvcLVwIuy6g8NgrKtT7B2v2D/CdngoFEu+E9kP56SA4gWisKEyVf57pQdmC/L8luNO3SuOyKF9lPYe8IEN08b17Cg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MWHPR1201MB0224.namprd12.prod.outlook.com (2603:10b6:301:55::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Tue, 31 May
- 2022 16:03:10 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::2484:51da:d56f:f1a5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::2484:51da:d56f:f1a5%9]) with mapi id 15.20.5314.012; Tue, 31 May 2022
- 16:03:10 +0000
-Date:   Tue, 31 May 2022 13:03:09 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v4 1/6] iommu: Add a per domain PASID for DMA API
-Message-ID: <20220531160309.GG1343366@nvidia.com>
-References: <20220518182120.1136715-1-jacob.jun.pan@linux.intel.com>
- <20220518182120.1136715-2-jacob.jun.pan@linux.intel.com>
- <20220524135034.GU1343366@nvidia.com>
- <20220524081727.19c2dd6d@jacob-builder>
- <20220530122247.GY1343366@nvidia.com>
- <BN9PR11MB52768105FC4FB959298F8A188CDC9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <628aa885-dd12-8bcd-bfc6-446345bf69ed@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <628aa885-dd12-8bcd-bfc6-446345bf69ed@linux.intel.com>
-X-ClientProxiedBy: BL0PR0102CA0063.prod.exchangelabs.com
- (2603:10b6:208:25::40) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Tue, 31 May 2022 12:04:27 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466F7813D5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 09:04:26 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id y5-20020a056602048500b00668c8c406a6so2261385iov.23
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 09:04:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=pGVLzRimVA1xcBcn6YKbWot/T/LVmDAVCNsMSsRSgFk=;
+        b=4jtKnDfw3hH3DDMLuNfTGxRsOYI5lGnTgFOVfeW8147l4m8bW+Rinw0GsQks+YkX4a
+         OMvJ9PV7a61CSUkRJmia9tCnNWyZx0+WL/6joFnb3trEpWYewtIyAFHyCQxige5CNqpU
+         pvJ9+O4WQ73yor9Lh3cwiLioZPVUld9pXYvIDq+yRr47VcycaQEQvm4kjUv/sgDn5aNp
+         OvC/SS/Hvg3P92Oee3yiWAHqjtMya7d7EnqgSo2q2kmLw4EBvz5rEJzzy4o4jmeQxbo4
+         mo+gXVKgbhq4betXpkV6JlocK+bqfAh6awaRJe7BepXJf4e553uOpa51IkVisvLGLURr
+         wh0A==
+X-Gm-Message-State: AOAM5310bJyU/rs7X/NG7OHEOx4YhwmGia5Fws2jbweE7H7F68Mj7Npi
+        sU0NZO+HBIxyLzXOiNxYOnLrXfYHccKy7ah+U3Czh2+bx/IP
+X-Google-Smtp-Source: ABdhPJzUX0yRAY9hpyzvG8bMPPpBLjzXn0w9hWm4EBFLFkKEa6ZdaYacol/MsDR64540KhF1mhuJHEJ1d65UofT5zlkpXQgWCGQW
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a172d63d-d443-4dff-a978-08da431f0f40
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB0224:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR1201MB0224725C3C189EA1F4266B42C2DC9@MWHPR1201MB0224.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jqrCzchKhPB5+WtlhbkbZ6MsQOq4zfDzhyQtRTO+cT72fgVIYWBSNNDjUI6uy7LIlPTas+kwMmcLrt1VO2hERTNSS/FyROPNXTM4PWwapOOhLMTvR9izOAwiy0+97bFO39U5PyPabn3M73Bi1toIiCUlsYMm6zvW9YuK2w7OCgsCcWeYadNGBAiGPZUAMCDcfNRe9VqOJY7VOarvCY0R16EcpcpONYE6fwvQPjEKoYSkZvaRZNTRCIKvoH4RQWPXZMRUpIwqsgUlOJKuwtoxReTZJufwwwojWXu+XDSoU43dQgkpfcs/WXJp5OZcA11SS4jjzgGOR/a/GeKy0YaRqIIXPAt+Nw05AkC6vptStJGSoTXiEr0EHxb2s9ER73CZskwoLMYgzbnaPo2aDA0YlqDMa6USeVqahyFb+GL908bwejkYq5Ne5/Pjjne+bRvW/QUPiJ+Q5OAciWXBUyttKDnXSamPbBh60dYNKjsY7BCO8v8La2DmT/9lK2EIvjB4cqpg9PvHtYy4As6jtky3aBngbTFHdDPcnh1RNl3JaUA/SsjVw3X60N1PBMYLx+BecCeRgVQ1n72MlzdzCf28XolRBEhN5wnrkr5bF8ZPVKHce5KiYtnNqqY/hMEcMZ/pSnA+Nwm0Fv4BaRhdM2LRRg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(66556008)(2616005)(5660300002)(2906002)(86362001)(8676002)(4326008)(66946007)(186003)(36756003)(7416002)(6506007)(4744005)(6512007)(1076003)(26005)(33656002)(508600001)(8936002)(6486002)(316002)(38100700002)(6916009)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GtDn0KACArBfgAIUl7lKFQ5C+ajjc5ul/s+/Kjn2EVKxYJnRq+SFhmog5uIG?=
- =?us-ascii?Q?vMMiaks2mHRk4bzlJe50eIclrUfM+V2fgRnq+/icMExw6OEtwhbbBrEdKWnm?=
- =?us-ascii?Q?xNdz+CapEzg4c9gffEQA2neXn/2+HOsuWZRd5dtHK8UxXY2zH74On27tqvX8?=
- =?us-ascii?Q?O9Z0+9j0JbdHTcHLhisUNWVVS66ndWqMyxzMv2n1GfZ+1p26KDCDvICE+95d?=
- =?us-ascii?Q?Le3zeEBozaieP9FXEH90V4VJKY69uoHkUcD9hooLrB/IlyyVSX6Ufp/nEKvV?=
- =?us-ascii?Q?/VM0RLKXJbCEkZUQqrvPflE1MLkl6L1b5Vln1sK2FytMRBJxuUiX7xx2UYvl?=
- =?us-ascii?Q?5T767jAXAR32lTCHGSl7pFP4EHOb8E0K1b685LBlDYCUM9eUnWkbLGrhEFAp?=
- =?us-ascii?Q?rv34+1e7bSdxbvj+LYpcQW4+wQQu7Iy064GixJfQO+BdNL5iSxJdkmGVRv7Z?=
- =?us-ascii?Q?sxAyQ1WTjMeY0GjcMwo54AgfTUue1k6I423wza79GKJZtkcIPLFGELUYBV+Y?=
- =?us-ascii?Q?Zz2k44NY5Cl2kYY5lBMS7wdlSt/zB4oUsL16EsdDPR8T8DALONZOEc/wmveC?=
- =?us-ascii?Q?WgDFTp92jNPPGnc/IeAsiZQgCtX62SFpjyxbfKNMbZ4TsE9uxuUaKmQTXCeN?=
- =?us-ascii?Q?7XTqPj8bvMnTtMWgRhXgs9L/zaXzpLqrHm091dl4Y5xIJsYXGnoGKUkppZ2W?=
- =?us-ascii?Q?UrwIBSSlF2i2xyqbBpivufdu6Rs6fq4+1/BfCAwNuevolD1CoRoZanz6+125?=
- =?us-ascii?Q?sKpAQjlMn0jT2Z+paN8Sp92zqQabBDBdbmBiIVvahxe9wuWEpAKEu9YMtk0A?=
- =?us-ascii?Q?XAm4JISZJ70EqgHTP/i2hxrifQ98gkqvicGNys+SuU2uj0+EjwWK7pTsMqgu?=
- =?us-ascii?Q?F8bW9WHU1l6NxH9pHImr7f1K4Hn5r90G5ACCzk4J7UJoFiWgA6HaaiUnzPCf?=
- =?us-ascii?Q?wU3XtBFPJTYqz1IV1C6TPJl+2RR/Ri47hLySkAJfQqsOWnxXDJncwlSZoUip?=
- =?us-ascii?Q?vLrbQPbs4gdHD7//RYAWIAU+CCxTo0d6IoJJwkF6294kWrqlTR+8Ik5ogeZX?=
- =?us-ascii?Q?Lvi2WqBHw2CdV/stGoxSu2yhLBtPALnuM60J5VfKXE/TM5ePJx7y+4kvXbsR?=
- =?us-ascii?Q?FgZ7e+LLqoOvhKf0L+JVs69k34MmFeLZBQiLeVo1uLe1Ku5EkBb9CQdatBw1?=
- =?us-ascii?Q?uDDmK/tYnZrM0U+IpdIzDSK5gvdPxiz1CbN0vQoqHCbF4zklTUcqiU0AdAsl?=
- =?us-ascii?Q?jpv+fO8UkKaPeCrG3hiTNish7pRdMdUcO3YfR1iAFJY07wyvQ6W1qF2U+F4t?=
- =?us-ascii?Q?GcwiFv1kWI9o2m0GZqwqAR5sPwii30K+YfMSHPpP2lgRCOUHSIxHZbIPbxs2?=
- =?us-ascii?Q?OF6oNIszyf1jKr5tq6UBUoeDlWwTI9lRvDbZTuqiFDQJGP3iUSLEUSrBCqBJ?=
- =?us-ascii?Q?P/UKpUI+RiLIWmrGJgOM3FNyJMyw0Jt5rMIcS4AnamIGc7moKTm8981OAaSy?=
- =?us-ascii?Q?AdFOQ5WMFaTnzUFeMIiPoDB3rC2ab54UPCjRNlJKHhlzzfzVhs0UekM3c+7F?=
- =?us-ascii?Q?omtTn6STEgTCbMUKr2S3FJ0gq/nwLFQj4Ci4DP1++YPSiG5r3a+hfqcalupz?=
- =?us-ascii?Q?ZZvccyL7SdUHaXkFuLCyXpY5qyEEtmDGP5MT3VFVCeAr4GkY1R0rAambBvFN?=
- =?us-ascii?Q?Ud9cJNxxS/y21XScBOw6eWqUIk1DTppU85BefBfAvVhh1zVFonVw9U7Azuht?=
- =?us-ascii?Q?iTqZGNOzXw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a172d63d-d443-4dff-a978-08da431f0f40
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2022 16:03:10.6539
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HgtEsa9b+PzaDnCiS7B3kazOgnYcGk3rcckVRFnYYIj+RSlSCUMIq52LMZz2Bl14
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0224
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:9d8b:0:b0:663:9916:da83 with SMTP id
+ ay11-20020a5d9d8b000000b006639916da83mr19042830iob.116.1654013065624; Tue, 31
+ May 2022 09:04:25 -0700 (PDT)
+Date:   Tue, 31 May 2022 09:04:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003b02c205e050ed88@google.com>
+Subject: [syzbot] INFO: task hung in fuse_launder_folio
+From:   syzbot <syzbot+21f1723d24cb1430ec52@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 08:45:28PM +0800, Baolu Lu wrote:
+Hello,
 
-> My understanding is that device driver owns its PASID policy.
+syzbot found the following issue on:
 
-I'm not sure this is actually useful, the core code should provide the
-allocator as I can't think of any device that actually needs a special
-allocator.
+HEAD commit:    9d004b2f4fea Merge tag 'cxl-for-5.19' of git://git.kernel...
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=155cc833f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d5ef46f0e355ceff
+dashboard link: https://syzkaller.appspot.com/bug?extid=21f1723d24cb1430ec52
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1036d59df00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=110f21ddf00000
 
-> If ENQCMD is supported on the device, the PASIDs should be allocated
-> through ioasid_alloc(). Otherwise, the whole PASID pool is managed
-> by the device driver.
+Bisection is inconclusive: the issue happens on the oldest tested release.
 
-This is OK only if we know in-advance that the device needs a global
-PASID. ENQCMD is one reason, maybe there are others down the road.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=142f7fa7f00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=162f7fa7f00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=122f7fa7f00000
 
-Better to make this core code policy.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+21f1723d24cb1430ec52@syzkaller.appspotmail.com
 
-Jason
+INFO: task syz-executor149:3643 blocked for more than 143 seconds.
+      Not tainted 5.18.0-syzkaller-10643-g9d004b2f4fea #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor149 state:D stack:27656 pid: 3643 ppid:  3603 flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5116 [inline]
+ __schedule+0xa00/0x4b30 kernel/sched/core.c:6431
+ schedule+0xd2/0x1f0 kernel/sched/core.c:6503
+ fuse_wait_on_page_writeback fs/fuse/file.c:449 [inline]
+ fuse_wait_on_page_writeback+0x11e/0x170 fs/fuse/file.c:445
+ fuse_launder_folio fs/fuse/file.c:2361 [inline]
+ fuse_launder_folio+0xeb/0x130 fs/fuse/file.c:2351
+ folio_launder mm/truncate.c:614 [inline]
+ invalidate_inode_pages2_range+0x99a/0xde0 mm/truncate.c:680
+ fuse_finish_open+0x2fd/0x4d0 fs/fuse/file.c:217
+ fuse_open_common+0x2f0/0x500 fs/fuse/file.c:256
+ do_dentry_open+0x4a1/0x11f0 fs/open.c:824
+ do_open fs/namei.c:3477 [inline]
+ path_openat+0x1c71/0x2910 fs/namei.c:3610
+ do_filp_open+0x1aa/0x400 fs/namei.c:3637
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1254
+ do_sys_open fs/open.c:1270 [inline]
+ __do_sys_open fs/open.c:1278 [inline]
+ __se_sys_open fs/open.c:1274 [inline]
+ __x64_sys_open+0x119/0x1c0 fs/open.c:1274
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f7b892293c9
+RSP: 002b:00007f7b891b92f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007f7b892b84d8 RCX: 00007f7b892293c9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000100
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f7b892b84d0
+R13: 00007ffc24e5c05f R14: 00007f7b8928514c R15: 0030656c69662f2e
+ </TASK>
+INFO: task syz-executor149:3644 blocked for more than 143 seconds.
+      Not tainted 5.18.0-syzkaller-10643-g9d004b2f4fea #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor149 state:D stack:28224 pid: 3644 ppid:  3603 flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5116 [inline]
+ __schedule+0xa00/0x4b30 kernel/sched/core.c:6431
+ schedule+0xd2/0x1f0 kernel/sched/core.c:6503
+ io_schedule+0xba/0x130 kernel/sched/core.c:8618
+ folio_wait_bit_common+0x4f2/0xa90 mm/filemap.c:1324
+ __folio_lock mm/filemap.c:1690 [inline]
+ folio_lock include/linux/pagemap.h:942 [inline]
+ folio_lock include/linux/pagemap.h:938 [inline]
+ __filemap_get_folio+0xca5/0xf00 mm/filemap.c:1962
+ truncate_inode_pages_range+0x37d/0x1530 mm/truncate.c:378
+ truncate_inode_pages mm/truncate.c:452 [inline]
+ truncate_pagecache+0x63/0x90 mm/truncate.c:753
+ fuse_finish_open+0x39b/0x4d0 fs/fuse/file.c:213
+ fuse_open_common+0x2f0/0x500 fs/fuse/file.c:256
+ do_dentry_open+0x4a1/0x11f0 fs/open.c:824
+ do_open fs/namei.c:3477 [inline]
+ path_openat+0x1c71/0x2910 fs/namei.c:3610
+ do_filp_open+0x1aa/0x400 fs/namei.c:3637
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1254
+ do_sys_open fs/open.c:1270 [inline]
+ __do_sys_creat fs/open.c:1346 [inline]
+ __se_sys_creat fs/open.c:1340 [inline]
+ __x64_sys_creat+0xc9/0x120 fs/open.c:1340
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f7b892293c9
+RSP: 002b:00007f7b891982f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000055
+RAX: ffffffffffffffda RBX: 00007f7b892b84e8 RCX: 00007f7b892293c9
+RDX: 00007f7b892293c9 RSI: 0000000000000000 RDI: 00000000200001c0
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f7b892b84e0
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f7b892b84e0
+R13: 00007ffc24e5c05f R14: 00007f7b8928514c R15: 0030656c69662f2e
+ </TASK>
+
+Showing all locks held in the system:
+2 locks held by pr/ttyS0/16:
+1 lock held by khungtaskd/29:
+ #0: ffffffff8bd86860 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6491
+2 locks held by getty/3282:
+ #0: ffff88814bbdf098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:244
+ #1: ffffc90002cd62e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xcea/0x1230 drivers/tty/n_tty.c:2075
+2 locks held by syz-executor149/3644:
+ #0: ffff888074660460 (sb_writers#9){.+.+}-{0:0}, at: do_open fs/namei.c:3470 [inline]
+ #0: ffff888074660460 (sb_writers#9){.+.+}-{0:0}, at: path_openat+0x1b3c/0x2910 fs/namei.c:3610
+ #1: ffff888072ef9c50 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:741 [inline]
+ #1: ffff888072ef9c50 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: fuse_open_common+0x35d/0x500 fs/fuse/file.c:243
+
+=============================================
+
+NMI backtrace for cpu 0
+CPU: 0 PID: 29 Comm: khungtaskd Not tainted 5.18.0-syzkaller-10643-g9d004b2f4fea #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x1e6/0x230 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
+ watchdog+0xc22/0xf90 kernel/hung_task.c:378
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 16 Comm: pr/ttyS0 Not tainted 5.18.0-syzkaller-10643-g9d004b2f4fea #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:io_serial_in+0x83/0xa0 drivers/tty/serial/8250/8250_port.c:461
+Code: 53 1a fd 48 8d 7d 40 44 89 e1 48 b8 00 00 00 00 00 fc ff df 48 89 fa d3 e3 48 c1 ea 03 80 3c 02 00 75 16 66 03 5d 40 89 da ec <5b> 0f b6 c0 5d 41 5c c3 e8 20 10 67 fd eb a6 e8 49 10 67 fd eb e3
+RSP: 0018:ffffc90000157ac0 EFLAGS: 00000002
+RAX: dffffc0000000000 RBX: 00000000000003fd RCX: 0000000000000000
+RDX: 00000000000003fd RSI: ffffffff84601dcc RDI: ffffffff908cd3a0
+RBP: ffffffff908cd360 R08: 0000000000000001 R09: 000000000000001f
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: fffffbfff2119abf R14: fffffbfff2119a76 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffe2f39f108 CR3: 00000000237d6000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ serial_in drivers/tty/serial/8250/8250.h:115 [inline]
+ wait_for_xmitr+0x9a/0x210 drivers/tty/serial/8250/8250_port.c:2089
+ serial8250_console_putchar+0x1d/0x60 drivers/tty/serial/8250/8250_port.c:3310
+ uart_console_write+0x59/0x100 drivers/tty/serial/serial_core.c:1935
+ serial8250_console_write+0xa57/0xc30 drivers/tty/serial/8250/8250_port.c:3382
+ call_console_driver kernel/printk/printk.c:2075 [inline]
+ __console_emit_next_record+0x896/0xa60 kernel/printk/printk.c:2916
+ console_emit_next_record kernel/printk/printk.c:3721 [inline]
+ printk_kthread_func.cold+0x702/0x73d kernel/printk/printk.c:3837
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	53                   	push   %rbx
+   1:	1a fd                	sbb    %ch,%bh
+   3:	48 8d 7d 40          	lea    0x40(%rbp),%rdi
+   7:	44 89 e1             	mov    %r12d,%ecx
+   a:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  11:	fc ff df
+  14:	48 89 fa             	mov    %rdi,%rdx
+  17:	d3 e3                	shl    %cl,%ebx
+  19:	48 c1 ea 03          	shr    $0x3,%rdx
+  1d:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+  21:	75 16                	jne    0x39
+  23:	66 03 5d 40          	add    0x40(%rbp),%bx
+  27:	89 da                	mov    %ebx,%edx
+  29:	ec                   	in     (%dx),%al
+* 2a:	5b                   	pop    %rbx <-- trapping instruction
+  2b:	0f b6 c0             	movzbl %al,%eax
+  2e:	5d                   	pop    %rbp
+  2f:	41 5c                	pop    %r12
+  31:	c3                   	retq
+  32:	e8 20 10 67 fd       	callq  0xfd671057
+  37:	eb a6                	jmp    0xffffffdf
+  39:	e8 49 10 67 fd       	callq  0xfd671087
+  3e:	eb e3                	jmp    0x23
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

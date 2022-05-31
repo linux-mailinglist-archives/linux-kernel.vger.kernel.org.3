@@ -2,128 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338C053986A
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 23:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC57953986B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 23:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347809AbiEaVGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 17:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S1346371AbiEaVJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 17:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238177AbiEaVGv (ORCPT
+        with ESMTP id S235409AbiEaVJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 17:06:51 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8B7B499
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 14:06:49 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id h11so19164139eda.8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 14:06:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2D0n0MD9FVM5CduT1NCFZoyK1Wf+YfR32ZwltpKGpW0=;
-        b=ZQT68xf2h4yPB1aO3z6MMCxjgrGQxzK6GsAwKC4AbtmM7jt7hPu9NP/5/38W/CoGs4
-         /U426ZyODXRJ/hIK1zizXSQUiCeTA65NiXm2tba9pIlaxq1ArpOmj55sVibamQlHpil1
-         HXArJ8lpnCJ5gJjSUw7JSWNWLGFhmor2Mb+W4=
+        Tue, 31 May 2022 17:09:15 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6253AD10C
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 14:09:11 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id m82so20056oif.13
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 14:09:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2D0n0MD9FVM5CduT1NCFZoyK1Wf+YfR32ZwltpKGpW0=;
-        b=cWVkgL16lpp3lDRLOJJdht8Kok1JWUbzVBDDB5E/Py4yHF9reuXf/dJyaCa3/jWQce
-         qHOmXG5/Vb0S3mGjHIFbceQN/uaOgRahO/98/ZsetjV2SqBrBtdhSU5K6+3xH1IGUOvV
-         mgmS23NHI3gjNEAuv4vBfOtpOm4aFlOe6+lHGRXFmYXCLJAKUWMwOKtCQUmzoqjj2EH2
-         dj2+du1Aa8Xw24rGkfzfIRDcl0EEChqpPEZJIPCWBwqEguQTI4nqJgwNsAOi8j0N3TkA
-         vexS6tM9ZO7OWJqqkC4bg4AApRGIsOaIt9GVlAO4ZlaRp18R6t1yg4ko6Wy6Dtac63BW
-         RBiw==
-X-Gm-Message-State: AOAM532K+wav1PpyPuSITpp7X1eVC4JNTJpK5nILBzPs+51XhmeYJLLX
-        4A1YvZbHYzl1rSpiC/fJmMJ+R2AEO37+x/Sn
-X-Google-Smtp-Source: ABdhPJyJGY00vLHbK1Jz/xbIHAV4J9+uP/DLyU9KbzB4fvVKDWAJMjJTjVQwS+RdKhy2Dq+h+22vIA==
-X-Received: by 2002:a05:6402:2753:b0:423:3895:7031 with SMTP id z19-20020a056402275300b0042338957031mr65243982edd.170.1654031207674;
-        Tue, 31 May 2022 14:06:47 -0700 (PDT)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id l27-20020a50d6db000000b0042dc25fdf5bsm6083515edj.29.2022.05.31.14.06.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 14:06:46 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id r9-20020a1c4409000000b00397345f2c6fso1910621wma.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 14:06:46 -0700 (PDT)
-X-Received: by 2002:a05:600c:3d8e:b0:397:73e3:8c83 with SMTP id
- bi14-20020a05600c3d8e00b0039773e38c83mr25043368wmb.29.1654031205884; Tue, 31
- May 2022 14:06:45 -0700 (PDT)
+        bh=qb2wixBAjOfrO+JOD8eyJ0+vEIh8pCY+Kx7wsN+KSX4=;
+        b=OzDnQolDyMK1izGSIjT5nsZBludLaNcdoJg43sKfxNYGltjlC+/TDJ2D638nIeVJha
+         Xm2PRJOpBlLatOqcds304zOEJLM364xvcTBVAkMAzIz69KWVJ//6PLHocWQCH+4IEp8z
+         DMwFT1GN+HlNjPgHjj+TmwsTiHywgn9IaK7kI6XOcfxpLeL7KJDSy2pYI8HWTnh0p0+A
+         cLwBL3NsZkm0yfG0egBSwAW4TdUGlAhQ+z1B/0vk5NYSudigQ7c07cAl0MamS48/1vGl
+         1d7xeoYvBRKzfqsUH2ULMe/63M+qSc0p2CLfKUPrNzRwtyUGJG4/NevGLlN87cxqmbzu
+         xtIw==
+X-Gm-Message-State: AOAM530zy9Uj2JcpapimrYXcWs/Q0x91k7XmL64YyUoR7Y2IUTaT703s
+        +NH0h+/vK2KBB+V+KaIN38XAaNgHgRVsI2ceXgY=
+X-Google-Smtp-Source: ABdhPJw+4euKjCEAvccDRUS4y+xMPtwxJU5wejnlr96AdbSTKHx2aIGS4gpfGRf8fCwrzV3WgbQBSgH52YSUe5c9FaI=
+X-Received: by 2002:a05:6808:1a01:b0:32b:1f24:9213 with SMTP id
+ bk1-20020a0568081a0100b0032b1f249213mr12838802oib.92.1654031350741; Tue, 31
+ May 2022 14:09:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510192944.2408515-1-dianders@chromium.org>
- <20220510122726.v3.3.Iba4b9bf6c7a1ee5ea2835ad7bd5eaf84d7688520@changeid>
- <20220521091751.opeiqbmc5c2okdq6@houat> <CAD=FV=Wea0LT5umK4Xg87cDikim+dSuyLndfydO3_DnTujZr9Q@mail.gmail.com>
-In-Reply-To: <CAD=FV=Wea0LT5umK4Xg87cDikim+dSuyLndfydO3_DnTujZr9Q@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 31 May 2022 14:06:34 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XqJuPHxm7HYMvyHBL_zC-BBA_f0MBsZX-jHt7Pk9ngsQ@mail.gmail.com>
-Message-ID: <CAD=FV=XqJuPHxm7HYMvyHBL_zC-BBA_f0MBsZX-jHt7Pk9ngsQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] drm/bridge: Add devm_drm_bridge_add()
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Philip Chen <philipchen@chromium.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220427155241.26410-1-dave@stgolabs.net> <CAM9d7ciQnUcefR-hLBHSDhu6zZovxXvGYW-CdSBiub_GAOfAiA@mail.gmail.com>
+ <20220429184513.vftv4pj72fxzrpm2@offworld>
+In-Reply-To: <20220429184513.vftv4pj72fxzrpm2@offworld>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 31 May 2022 14:08:59 -0700
+Message-ID: <CAM9d7cjO2zXS3hcaGA+eanM3fDsG0sXgQFHDUC6fpBq5RpBorA@mail.gmail.com>
+Subject: Re: [PATCH] locking/rwsem: Teach contention tracing about optimistic spinning
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxime,
+Hi Davidlohr,
 
-On Mon, May 23, 2022 at 10:00 AM Doug Anderson <dianders@chromium.org> wrote:
+On Fri, Apr 29, 2022 at 11:56 AM Davidlohr Bueso <dave@stgolabs.net> wrote:
 >
-> Hi,
+> Sorry for the late reply.
 >
-> On Sat, May 21, 2022 at 2:17 AM Maxime Ripard <maxime@cerno.tech> wrote:
-> >
-> > Hi,
-> >
-> > On Tue, May 10, 2022 at 12:29:43PM -0700, Douglas Anderson wrote:
-> > > This adds a devm managed version of drm_bridge_add(). Like other
-> > > "devm" function listed in drm_bridge.h, this function takes an
-> > > explicit "dev" to use for the lifetime management. A few notes:
-> > > * In general we have a "struct device" for bridges that makes a good
-> > >   candidate for where the lifetime matches exactly what we want.
-> > > * The "bridge->dev->dev" device appears to be the encoder
-> > >   device. That's not the right device to use for lifetime management.
-> > >
-> > > Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> >
-> > If we are to introduce more managed helpers, I think it'd be wiser to
-> > introduce them as DRM-managed, and not device managed.
-> >
-> > Otherwise, you'll end up in a weird state when a device has been removed
-> > but the DRM device is still around.
+> On Wed, 27 Apr 2022, Namhyung Kim wrote:
 >
-> I'm kinda confused. In this case there is no DRM device for the bridge
-> and, as per my CL description, "bridge-dev->dev" appears to be the
-> encoder device. I wasn't personally involved in discussions about it,
-> but I was under the impression that this was expected / normal. Thus
-> we can't make this DRM-managed.
+> >Hi Davidlohr,
+> >
+> >On Wed, Apr 27, 2022 at 9:04 AM Davidlohr Bueso <dave@stgolabs.net> wrote:
+> >>
+> >> Similar to the mutex counterpart, we can further distinguish the
+> >> types of contention. Similarly this patch also introduces potentially
+> >> various _begin() tracepoints with a single respective _end().
+> >
+> >Thanks for doing this.  I was thinking about it as well.
+>
+> I really like your work on this. I've always wanted a low overhead
+> equivalent-ish of lock_stat, which could be used in production and
+> look forward to see these tracepoints put to good use.
+>
+> >> @@ -115,7 +116,8 @@ TRACE_EVENT(contention_begin,
+> >>                                 { LCB_F_WRITE,          "WRITE" },
+> >>                                 { LCB_F_RT,             "RT" },
+> >>                                 { LCB_F_PERCPU,         "PERCPU" },
+> >> -                               { LCB_F_MUTEX,          "MUTEX" }
+> >> +                               { LCB_F_MUTEX,          "MUTEX" },
+> >> +                               { LCB_F_RWSEM,          "RWSEM" }
+> >>                           ))
+> >>  );
+> >
+> >Well I'm ok with this but it'd be better if we can do this
+> >without adding a new flag.  Originally a mutex can be
+> >identified with 0, and a rwsem with either of READ or WRITE.
+> >
+> >The MUTEX flag was added to note optimistic spins
+> >on mutex and now we need something similar for
+> >rwsem.  Then can we change the MUTEX to OPTIMISTIC
+> >if it's not too late?
+>
+> Ok. Perhaps name it OSQ? I had thought of that but at the
+> time was also thinking about potentially the rtmutex and
+> rt spinlock spinning too - which don't use osq so the name
+> would fit in that sense.
+>
+> While not in Linus' tree, I wouldn't think it's too late.
 
-Since I didn't hear a reply, I'll assume that my response addressed
-your concerns. Assuming I get reviews for the other two patches in
-this series I'll plan to land this with Dmitry's review.
+Any updates?  It's now in Linus' tree so we should change
+this before the official release.  Or we can keep the current
+flags and then add one like in your original code.
 
--Doug
+
+>
+> >>         for (;;) {
+> >>                 if (rwsem_try_write_lock(sem, &waiter)) {
+> >> @@ -1161,18 +1167,25 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
+> >>                 if (waiter.handoff_set) {
+> >>                         enum owner_state owner_state;
+> >>
+> >> +                       trace_contention_begin(sem, LCB_F_RWSEM |
+> >> +                                              LCB_F_WRITE | LCB_F_SPIN);
+> >>                         preempt_disable();
+> >>                         owner_state = rwsem_spin_on_owner(sem);
+> >>                         preempt_enable();
+> >>
+> >> -                       if (owner_state == OWNER_NULL)
+> >> -                               goto trylock_again;
+> >> +                       if (owner_state == OWNER_NULL) {
+> >> +                               raw_spin_lock_irq(&sem->wait_lock);
+> >> +                               if (rwsem_try_write_lock(sem, &waiter))
+> >> +                                       break;
+> >> +                               raw_spin_unlock_irq(&sem->wait_lock);
+> >> +                       }
+> >> +
+> >> +                       trace_contention_begin(sem, LCB_F_RWSEM | LCB_F_WRITE);
+> >
+> >I'm afraid that it'd generate many contention_begin
+> >trace events for a single lock acquisition.
+>
+> You are right, lets just trace the "normal" optimistic spinning
+> at the start of the write slowpath.
+
+I have to admit that I overlooked the mutex code already
+has the same logic.  I still prefer having less number of
+events but you might want to have the same with the
+mutex for the precise tracking of the spins.
+
+Thanks,
+Namhyung

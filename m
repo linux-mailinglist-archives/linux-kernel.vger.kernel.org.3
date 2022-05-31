@@ -2,163 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D5C538B5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 08:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9419538B64
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 08:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244254AbiEaGYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 02:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
+        id S244274AbiEaG1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 02:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237554AbiEaGY3 (ORCPT
+        with ESMTP id S244265AbiEaG1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 02:24:29 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120049.outbound.protection.outlook.com [40.107.12.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70E9488A0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 23:24:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n0BYuwyy7HsMejwKEj5M+XoGXgl0S4HqAwxsIEZCa7O6z4z9DMbuQhxXyBq8A5eTyaePMRSjKQ3TkYBKfHp+aGxLgrGcfvBC0W0ApB5S+xDVl1GXznkflGUjdv/aDnl3p2TFX/13zsmI08qxx7hmkiSIVpgoGsBrOYd8dGX2Y280D6FFOquI7yqph2ptyuynrIKIN9PWmJ1elHhXGzDaamy3fsszdS1wKM1j0XgyzvDqpOmKVSRS/prHzA3ehyYi6Vf4PFdT9IObpDIi0TB9tkNCjrjtHzuYrS+epl8EIJTTPuulnSjEDv6k4WaEROnqP7NcIOsKEM1UATP0nbtRZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D7IIyLUL86BTNPUJzAtUA/NH4AoBrgT8V5n87+bHziM=;
- b=ARRp3bVtTDP9UM+GEKaW/FfMfGNH25yepNdF7YMvrmzxJwDF3pjvYwNYt6Y4cjEtGzThmkK9QrxDqyPUnq3IHjpaupIYYy1olPWCgHhoOoQHI1pfKxZMSwlSV+FPfFIgb1a1nyDOWpMPKXvfD6X4E5B1bAQV9IpAgg2cf0uGBe6nWt/jkMMKedxocR0T+kA+niHAHlMKG9Shu5ZcwCFi3Q7Ae0wHOfkuYHFq/lsD8tqezoCCLQoPHaoNhbYzBgHl8CAFRibUfvX2GEQvjGQSL9t5CVG5mYW1L729LkRydwUvJ5RlGl3kbq1z+syQWy1Nhf4EWHF6pbSaIyArWE6aNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB2356.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:35::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12; Tue, 31 May
- 2022 06:24:26 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356%5]) with mapi id 15.20.5293.019; Tue, 31 May 2022
- 06:24:26 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Ellerman <patch-notifications@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 0/4] Kill the time spent in patch_instruction()
-Thread-Topic: [PATCH v1 0/4] Kill the time spent in patch_instruction()
-Thread-Index: AQHYPgMuEw69Ny4KjUGygXqB4JUsF60gESMAgALl+4CAAGKkAIAVmFsA
-Date:   Tue, 31 May 2022 06:24:26 +0000
-Message-ID: <b5fb2df0-911b-ee84-9377-fc426c081adc@csgroup.eu>
-References: <cover.1647962456.git.christophe.leroy@csgroup.eu>
- <165261053687.1047019.4165741740473209888.b4-ty@ellerman.id.au>
- <f1481139-9ed6-3e00-e73e-87d4319c614d@csgroup.eu>
- <874k1opc6l.fsf@mpe.ellerman.id.au>
-In-Reply-To: <874k1opc6l.fsf@mpe.ellerman.id.au>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 24c47a93-e415-44e3-df28-08da42ce35ec
-x-ms-traffictypediagnostic: MR1P264MB2356:EE_
-x-microsoft-antispam-prvs: <MR1P264MB2356C4A939A1AD7BFB6B9AB8EDDC9@MR1P264MB2356.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: H9NzOXdP2BqB19tciOiIJNIGQI+mgT0/8B6cjbBsISFzU0WXTHZqUIlz55AIgZJpWhh4VOhTBXvM7bPxqHMkyhpBufg01URLz40b/CH1Z4h3dzBr4E8Bdmja/d4Yhs+TOZiUDGMqSF3DC/869r2yAzWJb9ENN0nMei0luOHwrMFn4Qz+YRP+qgUl13Sw8k9Sbqi1yxms+6CYyUlAKQp/P+6f13WtNmCMSErZIbxd1oQ7YKHJgH4YA/2YlGDW9bMQ5jd1X3S75XC/8C/ZikjbAaxUTg0FkoQOBnhyxQZogyoUsx2u4m4xwNwaxSKi5nmSOF8lUedH8hcW9z3tjmGsnGPo2Mbf19nptKoWfMfDOEhJX65iFzWAbS1d0CWsif3F8+68QYfJyDiLD/6fLLcHtbjdhqnaTl4BFy/CKEE0AcJVc9hoAKhkBXx6uJBcMQ6yDY4pxsRcfsODqAr5J3Gr3vVbmSCEZJYsC7YS2B726pIUgQSrqzJJYOoSv829KKnMRpK7vaOmZK2Bscd8a/KYNT4yQMfITeba9hSe1b0wtMIyCtJw7JfeJ3KpOvlEo0Kkb0NHStZJOAaMk3ZklIwazspB6dCOEJQk8MAnyF9+EkN1T1PuBDXgtCM28cbtcly+68OqG2Lzz9+PnNgwv79ByzbZAPWZxaU0lmGV9/9wQCZBWmM+7aDEf8zvG4XD8XrmmO1rxRbU1aaRMceX+UlnVpkg5dtwxtPdUZH8TtkvZm/TtjcE0JwCuRLe/+clYM5TMGaLiaeywcterVY8Ia+jCLiDuy2tyUEgVkm4Md0b5I2CrzCY9cJ4PRt2VdLjKLc7df24WmOshfru7UkQ7TPnPvHSKThGpa4s+Pe6QlQHMN0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(44832011)(6486002)(71200400001)(5660300002)(122000001)(508600001)(8936002)(6512007)(83380400001)(186003)(966005)(2616005)(66574015)(26005)(38070700005)(2906002)(86362001)(6506007)(31696002)(38100700002)(8676002)(4326008)(31686004)(76116006)(66476007)(66446008)(66946007)(316002)(66556008)(64756008)(91956017)(36756003)(54906003)(110136005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Tys2MjQ2NnBESEVOMFc2RkN3TThZVWVEL1dLekFPSDVQRkdTeWhuMHFqbksv?=
- =?utf-8?B?SUpZaUd6N2t1bGJoekxmeElleXduMk5kYjNvOExnd1RaRHZ0Z3hmTWNkaE5q?=
- =?utf-8?B?VDM2YVVHY1FRVDh4M2RCdFgzaVBmZ3hWNU0ydXA2aGlKRGZGK3RWdVRnUjZS?=
- =?utf-8?B?Mk1xQTBTZ1ZPWFAxWmZycElOdW9CYnFML2N2cmdnZzFmam43ZEF0UGV0cTlz?=
- =?utf-8?B?Q1JMWVlOK2F3TTVQdlJwWnUvS1RHTlRWTHFaeUhWdkhxL3BuNE5ScTVRL3hW?=
- =?utf-8?B?cEFtc2NiV3J5aVNLUE40bzcyYVBuMm4rb3Y0VFoyOVRFTDQvVmFtaHRsK1h6?=
- =?utf-8?B?R3JlNFpJRks0eStOL1NyWEdkdUFFeS9ma2NmWExkcC9NMWE4WVRzOGVRY2tq?=
- =?utf-8?B?d0JkNVJTRzR3QzJFSDc2dnZ0c0FQYlp4YmJObW9ZemFUUzRlUzVMUUQrSjIv?=
- =?utf-8?B?c01Sek9HdUI2NitTWGswK0JIRXYxQlFMUVlES0lDbW5KRUpvY1dMSXpNR1FW?=
- =?utf-8?B?a1hyUnMzQUZOeEoxbDRidUZNZDFMc1hlMkQzeUZ2eDJQZkZvRkVhL2RlY2t1?=
- =?utf-8?B?R2tVbFVQS01KVFJ2Qjl3QWVKNXZEQzFQeHM3TUpDbmVPelkrWDVpOG5VOXNS?=
- =?utf-8?B?S1lBWEkyMFBkUU1IVTcybEpRckYxcTU4OFppQ2NKaFNRSTY0S2tRdjVjcDNT?=
- =?utf-8?B?ajFWaW45VERiR01wQUFYc2ZxZVpaZnRZQUpUMTZETHpjaStsRTlSWFR6UTB1?=
- =?utf-8?B?MXNnYWYySEUxekNmTHN0Yjc4dlJjRGZZWXVxZ3ZvZjN3d2loNzRRMDRCbzMy?=
- =?utf-8?B?UGlkV1F3d0Z6c3dteUpMV0JSV0tjL1l2TnNlaFZBM3k0eGVmeSt0YkNBOFY3?=
- =?utf-8?B?NmVITEVYTGtESHY5V1d5aStEUGwxdWQ0UHdYWU1ra1RxejlNYU1qWlQ4aXM3?=
- =?utf-8?B?cDJrQ0Vqa2ZnQUErQXZpZHdWOEkrR3g5cE9Ca1dHbWg1QjZ0Mks4My9jY05K?=
- =?utf-8?B?TnNISHVQQUJkajdtMWJqaGZUN0RaZ0FlL0xIVEVQVHpJMnhSMkE3ejhjb2Iy?=
- =?utf-8?B?RkI0M1FQazh5YXZXSTdOc2tGeDN2dzI4bXU2Y3pHOGNMcUF1dWNlTEN5Z25G?=
- =?utf-8?B?MjkyMXFSZ3VnY2thMlZlNzIreDRGU2RZekU3blJKaElDL3RRaWo3dmplSWR4?=
- =?utf-8?B?eG9JVHVoWFA5NTV1Y05MSGJvM3ZERU0xWXYwSVZBRjNWZ2hESXFheTFxczJm?=
- =?utf-8?B?ZFlwQ24xd0tzVEdRTjBua00vMS9EZTdvdFBvZGJLb3NwbHFpeWw5ZUZteUFT?=
- =?utf-8?B?dFpYbHFPM3V0aUJQaHRLU2d0SW5QUlBIN2E2TFEySHpsUnhpRk84dkVnamp0?=
- =?utf-8?B?SGtOUk5uRWMwUEl5d1NsSDAzcVVudWVhREkya3VLVUdqTUhwU3IzNElnQUtU?=
- =?utf-8?B?dGpmbThlUjBBVGUvL2tuNnB1MnliQXdHY053V1ZMUFZtblZJQWJDaVVCaHhv?=
- =?utf-8?B?bkgwSFpqaWxSYnVVTDJTZWJIeEx6MmV2aE8rWWI1WGh3M3lVZ3JlZ25oVktW?=
- =?utf-8?B?cGJzMVl1Smphd2tTeWx2SUdadFRtQ1RrVW0ycFhmeXd1MWFMeGpVUFZFMmFj?=
- =?utf-8?B?RW1oRXJFQ0xORG5yMFp4UmRpL0VkNHhXZEpWQkt2Q2IwMVB4RWRsWmI2Rm1p?=
- =?utf-8?B?Q3NMZDZZMFFJbC9RTjYvSVE4NzlzYTIvN2dWd3o1VGRKOVNEMnd4dlpTa3hQ?=
- =?utf-8?B?OWNlWmd3Q3IvM2E1TjRISUVrN1VSa2l0RXZyejJUbW8rNDYyVXVkckJSUS9U?=
- =?utf-8?B?NE5OTit5MmVjR0JVOU9FUzRvTmlhbUpKUk1jaFdnMTZ2MDNOM21WS0d4a0RK?=
- =?utf-8?B?aXViMUlTYWhBYlpxQktDc2h4WW4vSkNUL2FRVEs2aGRQaDRrSjJNSW5JUHhm?=
- =?utf-8?B?VitKcGs0MEZmcCsvVzRGUnBZTEVzdVdMdmd4dG51alZUODR3Y3dVSHlEQWx0?=
- =?utf-8?B?QW1QZkRyZVk1WnBrbmNHN2NBUFdxcllSYTE4ZVlvRjh1VWpDaFpRV0gyQXNF?=
- =?utf-8?B?YkFnRnYrOHdCY1lpSkFLanR5L24zZ1UrYzBsdjBzU3ZaNHVJUVBTNzdqdzlV?=
- =?utf-8?B?bVh3WHBCV1BsS2NLNmhmNVIvRmRSVmsxaVBid0w0dVV0bk9sWWQ0SjhIVDRB?=
- =?utf-8?B?U0UrZEphUi9ycXFiaEE0eEM0MkgzSGJYT0NvaVllZlJTa0RMU0VtSkpLdXhm?=
- =?utf-8?B?cG1qTHpuYldSdmdKVWR3SnVXNFhmamZzdkg4UDVKOEtXbWd3aFJ6b0x3ZEtn?=
- =?utf-8?B?a2gzNitnVmF3dWYrdXNOUllRRnlwWGNGTWUzeHF5MlJwRDM5TkxOVkp1Y1M1?=
- =?utf-8?Q?PpCtLvq954L84aWCXhGDTievE9m1grD/pyYT1?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EE116EB281E33C439E0563849C715D6B@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24c47a93-e415-44e3-df28-08da42ce35ec
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 May 2022 06:24:26.1602
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YjobcJulx3KsDW2GoveXoyOHPYowRU5GLgyhvFlFJUFjjxdR775bik53s0eDPC48oppHyalPd/+DBGuxPeG4lexY5ZqI1Fz2c5Ff624oq8c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2356
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 31 May 2022 02:27:06 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26682AE5E
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 23:27:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=content-transfer-encoding:from:mime-version:subject:date:
+   message-id:references:cc:in-reply-to:to;
+  bh=q0Ly3VYEbjYqQhjsAGdFo317POmXxxJct8nswHWSNRc=;
+  b=Crq9x9JaUkBocQegHBPU2uNvvPdzl7EqK4zJYsHxWYYL5HcLcVQKBQhr
+   9tKuFo4YEJfEvBXWsmN1GfpzCc9ktKDJvTauHuIUpWxwmBLsgMis++m5C
+   Ba6RU42SUSSqvNgQInV27Hpf6StFB0/GJyvwCR0C7IBQj6mFE9YtEzGyK
+   c=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.91,264,1647298800"; 
+   d="scan'208";a="38688098"
+Received: from 193.92-254-62.static.virginmediabusiness.co.uk (HELO [172.16.3.59]) ([62.254.92.193])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 08:26:55 +0200
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+Mime-Version: 1.0 (1.0)
+Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID block count and size helpers")
+Date:   Tue, 31 May 2022 07:26:53 +0100
+Message-Id: <91E67F46-A3C7-4159-9E0C-C6C6306F3669@inria.fr>
+References: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
+Cc:     Jani Nikula <jani.nikula@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        =?utf-8?Q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        SoC Team <soc@kernel.org>
+In-Reply-To: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+X-Mailer: iPhone Mail (17A860)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE3LzA1LzIwMjIgw6AgMTQ6MzcsIE1pY2hhZWwgRWxsZXJtYW4gYSDDqWNyaXTCoDoN
-Cj4gQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1PiB3cml0ZXM6
-DQo+PiBMZSAxNS8wNS8yMDIyIMOgIDEyOjI4LCBNaWNoYWVsIEVsbGVybWFuIGEgw6ljcml0wqA6
-DQo+Pj4gT24gVHVlLCAyMiBNYXIgMjAyMiAxNjo0MDoxNyArMDEwMCwgQ2hyaXN0b3BoZSBMZXJv
-eSB3cm90ZToNCj4+Pj4gVGhpcyBzZXJpZXMgcmVkdWNlcyBieSA3MCUgdGhlIHRpbWUgcmVxdWly
-ZWQgdG8gYWN0aXZhdGUNCj4+Pj4gZnRyYWNlIG9uIGFuIDh4eCB3aXRoIENPTkZJR19TVFJJQ1Rf
-S0VSTkVMX1JXWC4NCj4+Pj4NCj4+Pj4gTWVhc3VyZSBpcyBwZXJmb3JtZWQgaW4gZnVuY3Rpb24g
-ZnRyYWNlX3JlcGxhY2VfY29kZSgpIHVzaW5nIG1mdGIoKQ0KPj4+PiBhcm91bmQgdGhlIGxvb3Au
-DQo+Pj4+DQo+Pj4+IFdpdGggdGhlIHNlcmllcywNCj4+Pj4gLSBXaXRob3V0IENPTkZJR19TVFJJ
-Q1RfS0VSTkVMX1JXWCwgNDE2MDAwIFRCIHRpY2tzIGFyZSBtZWFzdXJlZC4NCj4+Pj4gLSBXaXRo
-IENPTkZJR19TVFJJQ1RfS0VSTkVMX1JXWCwgNTQ2MDAwIFRCIHRpY2tzIGFyZSBtZWFzdXJlZC4N
-Cj4+Pj4NCj4+Pj4gWy4uLl0NCj4+Pg0KPj4+IFBhdGNoZXMgMSwgMyBhbmQgNCBhcHBsaWVkIHRv
-IHBvd2VycGMvbmV4dC4NCj4+Pg0KPj4+IFsxLzRdIHBvd2VycGMvY29kZS1wYXRjaGluZzogRG9u
-J3QgY2FsbCBpc192bWFsbG9jX29yX21vZHVsZV9hZGRyKCkgd2l0aG91dCBDT05GSUdfTU9EVUxF
-Uw0KPj4+ICAgICAgICAgaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wb3dlcnBjL2MvY2IzYWM0NTIx
-NGMwMzg1MjQzMDk3OWE0MzE4MDM3MWE0NGI3NDU5Ng0KPj4+IFszLzRdIHBvd2VycGMvY29kZS1w
-YXRjaGluZzogVXNlIGp1bXBfbGFiZWwgZm9yIHRlc3RpbmcgZnJlZWQgaW5pdG1lbQ0KPj4+ICAg
-ICAgICAgaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wb3dlcnBjL2MvYjAzMzc2Nzg0OGM0MTE1ZTQ4
-NmIxYTUxOTQ2ZGUzYmVlMmFjMGZhNg0KPj4+IFs0LzRdIHBvd2VycGMvY29kZS1wYXRjaGluZzog
-VXNlIGp1bXBfbGFiZWwgdG8gY2hlY2sgaWYgcG9raW5nX2luaXQoKSBpcyBkb25lDQo+Pj4gICAg
-ICAgICBodHRwczovL2dpdC5rZXJuZWwub3JnL3Bvd2VycGMvYy8xNzUxMjg5MjY4ZWY5NTlkYjY4
-YjBiNmY3OThkOTA0ZDY0MDMzMDlhDQo+Pj4NCj4+DQo+PiBQYXRjaCAyIHdhcyB0aGUga2V5c3Rv
-bmUgb2YgdGhpcyBzZXJpZXMuIFdoYXQgaGFwcGVuZWQgdG8gaXQgPw0KPiANCj4gSXQgYnJva2Ug
-b24gNjQtYml0LiBJIHRoaW5rIEkga25vdyB3aHkgYnV0IEkgaGF2ZW4ndCBoYWQgdGltZSB0byB0
-ZXN0DQo+IGl0LiBXaWxsIHRyeSBhbmQgZ2V0IGl0IGZpeGVkIGluIHRoZSBuZXh0IGRheSBvciB0
-d28uDQo+IA0KDQpZb3UgZGlkbid0IGZpbmQgYW55IHNvbHV0aW9uIGF0IHRoZSBlbmQsIG9yIGRp
-ZG4ndCBoYXZlIHRpbWUgPw0KDQpXaGF0IHdhcyB0aGUgcHJvYmxlbSBleGFjdGx5ID8gSSBtYWRl
-IGEgcXVpY2sgdHJ5IG9uIFFFTVUgYW5kIGl0IHdhcyANCndvcmtpbmcgYXMgZXhwZWN0ZWQuDQoN
-CkNocmlzdG9waGU=
+
+
+> On 30 May 2022, at 15:27, Arnd Bergmann <arnd@arndb.de> wrote:
+>=20
+> =EF=BB=BFOn Mon, May 30, 2022 at 4:08 PM Jani Nikula <jani.nikula@intel.co=
+m> wrote:
+>>> On Mon, 30 May 2022, Arnd Bergmann <arnd@arndb.de> wrote:
+>>> struct my_driver_priv {
+>>>       struct device dev;
+>>>       u8 causes_misalignment;
+>>>       spinlock_t lock;
+>>>       atomic_t counter;
+>>> } __packed; /* this annotation is harmful because it breaks the atomics *=
+/
+>>=20
+>> I wonder if this is something that could be caught with coccinelle. Or
+>> sparse. Are there any cases where this combo is necessary? (I can't
+>> think of any, but it's a low bar. ;)
+>>=20
+>> Cc: Julia.
+>=20
+> I think one would first have to make a list of data types that are not
+> meant to be in a packed structure. It could be a good start to
+> search for any packed aggregates with a pointer, atomic_t or spinlock_t
+> in them, but there are of course many more types that you won't
+> find in hardware structures.
+>=20
+>>> or if the annotation does not change the layout like
+>>>=20
+>>> struct my_dma_descriptor {
+>>>     __le64 address;
+>>>     __le64 length;
+>>> } __packed; /* does not change layout but makes access slow on some
+>>> architectures */
+>>=20
+>> Why is this the case, though? I'd imagine the compiler could figure this
+>> out.
+>=20
+> When you annotate the entire structure as __packed without an
+> extra __aligned() annotation, the compiler has to assume that the
+> structure itself is unaligned as well. On many of the older architectures,=
+
+> this will result in accessing the values one byte at a time. Marking
+> the structure as "__packed __aligned(8)" instead would be harmless.
+>=20
+> When I have a structure with a few misaligned members, I generally
+> prefer to only annotate the members that are not naturally aligned,
+> but this approach is not very common.
+
+Searching for specific types in a packed structure would be easy.
+
+Coccinelle could duplicate the structure without the packed and see if any o=
+ffsets change, using build bug on, but that would be architecture specific s=
+o maybe not useful.
+
+Julia
+
+
+
+>         Arnd
+

@@ -2,73 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EDDC5393A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A483E5393A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345517AbiEaPHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 11:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33850 "EHLO
+        id S1345470AbiEaPIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 11:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiEaPHa (ORCPT
+        with ESMTP id S1344598AbiEaPIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 11:07:30 -0400
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7682551E7C
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:07:29 -0700 (PDT)
-Received: by mail-vk1-xa35.google.com with SMTP id az25so5176429vkb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:07:29 -0700 (PDT)
+        Tue, 31 May 2022 11:08:36 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FC5522F6
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:08:35 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id z17so914115pff.7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:08:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=S9GnfEHaSBA3h8Z8c3Ga5zWpFlXSYvFHz3qXRMFx33A=;
-        b=RHaSGOpQtN8fHKsZoAdjCPk0ydta8EnxZfEIRUYF+QGxY7uMWVArGeqLiHv7alh+iQ
-         i5xgibjzMKCHru2f/jV7YNkrzuJbi4lEagEUwtbIXahnHixtkzXBl3uOAvxugCfg2PH3
-         r5qyxchTsFJgUfZ429zdcsgyHape4XS1G4i6LPol5ObgYMw9RniuKJS9HLHsuz4lehF8
-         LYlcDaEEqV2CJIDT8r54NnXoi0B0AAoVyD25J37i96IeiHyXVm+clE8vUOcFIZk8iFnN
-         w7YM4aa+GiHwh8wwbvZlV+ED6C8Wu6rW+8maOZj8PQVtrGN45xZVUKB/kEjs2pDbAqNC
-         k0RA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AtCLAKrrxmjphjB0BYwYyVIB4i2GvLJx2UtZm9gUnlU=;
+        b=TF2M/32Edn8t/rV3dSAIATQsHZuBGBzlo28InI+/KY9hjzD8pdGp8qTtJrjUOxPks0
+         Oud8wqyVZ9i0s6ZieFJ0Q7nO+ZwZhPxcCfgxklupP5AhE5l4MY319a01REFFFN5cM6LK
+         /YS9O92hdO2+bozphu/4LJG9d3wPzDPxN8gQ9MY9SSRCmbiiR7jl8Ft9Y0t1qt7XJwg0
+         YqQ5a89Bu7uBxOrLr3XOsIRN9LStSSGsEf4C24NLxgABVtgAzIJ7ihKH56ZMonzpSalC
+         ZQZEJnjF/vBQNGwE7NUTwHz6n2H1vbksT+PWhtoc8HmwVvHgPZtn2FPOhGNQbj1TdcES
+         Tb4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=S9GnfEHaSBA3h8Z8c3Ga5zWpFlXSYvFHz3qXRMFx33A=;
-        b=n7L40awSqzgPjRsKO+lZmmOVHsgd+3tPMr8Tg2bJQPP0H0IasX/KBitVMjnA9AXgpS
-         tOjWA5WcBVZXrU2phpm6m7l6+naT3guaKzGPaEAtAexqQLtCC2EKS49ib3rOXtpNy7qz
-         2+tfEa/JzzrN8BeBC/WUugKDq1b2nmoplftNrUKME9OIwVZmGKOZbouG1ebrR29Ye7qs
-         U9kCDF67ZeMorei4U5ibetsZgOAl28u4S8kWJp7S8KJLkFnelg9UNAdvrE1TUWBE5bD8
-         GjRQ+2t02jnu6vqcN1PvmvkTExMNxlpdUWNVCAOylSGE9P7A3pbln+lx4WiaJ9dpVXVB
-         +1Nw==
-X-Gm-Message-State: AOAM532C5sgJomb1xiSBWmmXqRdWGE/EM/hYKmTqE2aUqGXJZWP5lx4h
-        Az/UbahCdPSpkv4q6lr4M67pMa9kyBDSQM61XfY=
-X-Google-Smtp-Source: ABdhPJxkpe2eweO03GnAdVw6MTsZhaesQdgnccVMHj/rdeXRTqToErbZ8HpgVo4GMXEnS+x8MC4xe4DyBZ86efyJaCk=
-X-Received: by 2002:a05:6122:2089:b0:357:d4b4:e02f with SMTP id
- i9-20020a056122208900b00357d4b4e02fmr15592420vkd.35.1654009648432; Tue, 31
- May 2022 08:07:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AtCLAKrrxmjphjB0BYwYyVIB4i2GvLJx2UtZm9gUnlU=;
+        b=uJDXfw3Nbs7RWwddsbH3/jc+cSgz4X7OLExaVbki9ugT0rkoGi1gc5gCzw+kjS0I9U
+         EyCrIjFej8cNdxL+v/FXkfGrtGS1TxsmNjhaLWPdXtFDeWxiZOzhXcyImmLIhGhr9NMH
+         Z+/em4gkf4lPXLCQMEaYK+tF4Z7W9oI0XChyIDRzEAQ0l+Ap0TLC6BLqeKRqBzSOFFKI
+         RPcJQ5WsVXbt8EHNvSJ1MLlrXQf1WUt/HJCCqh/0KY8e056mtLr17ZQwV6H3TqpECm7+
+         YVkiOMeMWkhuwFhZudfiSSKGMk/cma1vlb1OR0+VLhdIrzckNdByeqcwjxoZaDIEqm//
+         7l8g==
+X-Gm-Message-State: AOAM530B1C25AxwFbSpNPF9rzHGea/t1CqKCTm2l3DVo80fbcMc1w8GR
+        OwQKDbHpCtk6LF/puk/ND+k=
+X-Google-Smtp-Source: ABdhPJySQbQrXw9IAMlZIL+zaMfuj2Xy8+0EBHV1FPz/ikjEX9ROzk1C/I7oAe0PDIzwgkIjcG6EWg==
+X-Received: by 2002:a05:6a00:996:b0:505:b6d2:abc8 with SMTP id u22-20020a056a00099600b00505b6d2abc8mr62215705pfg.11.1654009715299;
+        Tue, 31 May 2022 08:08:35 -0700 (PDT)
+Received: from localhost ([101.86.206.159])
+        by smtp.gmail.com with ESMTPSA id ij17-20020a170902ab5100b00163c0a1f718sm6133835plb.303.2022.05.31.08.08.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 08:08:35 -0700 (PDT)
+From:   Patrick Wang <patrick.wang.shcn@gmail.com>
+To:     catalin.marinas@arm.com, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        yee.lee@mediatek.com, patrick.wang.shcn@gmail.com
+Subject: [PATCH] mm: kmemleak: check boundary of objects allocated with physical address when scan
+Date:   Tue, 31 May 2022 23:08:23 +0800
+Message-Id: <20220531150823.1004101-1-patrick.wang.shcn@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220527032504.30341-1-yee.lee@mediatek.com> <CAGcnep9B+z8QG4f4kkW8NF+fM1Kgj=NOV=YRhLK4yK74jbqpAw@mail.gmail.com>
- <05cfaf936a0c5f37f2e7ba779a8a1b0a6252be96.camel@mediatek.com>
- <64281aab-0301-7237-d72c-b7ab41bf50e4@gmail.com> <YpTbO/z1n0UYswBf@arm.com>
-In-Reply-To: <YpTbO/z1n0UYswBf@arm.com>
-From:   patrick wang <patrick.wang.shcn@gmail.com>
-Date:   Tue, 31 May 2022 23:07:16 +0800
-Message-ID: <CAGcnep-d6+Np6+MK4XwOmpr_MA7VVSrhXv0p+GsJqENyCrTyAg@mail.gmail.com>
-Subject: Re: [PATCH] mm: kmemleak: Skip check in kmemleak_*_phys when pfn
- bound is not ready
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Yee Lee <yee.lee@mediatek.com>, linux-kernel@vger.kernel.org,
-        Kuan-Ying.lee@mediatek.com, Andrew.Yang@mediatek.com,
-        Sunny.Kao@mediatek.com, chinwen.chang@mediatek.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Ariel Marcovitch <arielmarcovitch@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -79,127 +68,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 10:57 PM Catalin Marinas
-<catalin.marinas@arm.com> wrote:
->
-> Hi Patrick,
->
-> On Mon, May 30, 2022 at 09:32:18PM +0800, Patrick Wang wrote:
-> > On 2022/5/30 10:27, Yee Lee wrote:
-> > > On Fri, 2022-05-27 at 21:39 +0800, patrick wang wrote:
-> > > > On Fri, May 27, 2022 at 11:25 AM <yee.lee@mediatek.com> wrote:
-> > > > > From: Yee Lee <yee.lee@mediatek.com>
-> > > > >
-> > > > > In some archs (arm64), memblock allocates memory in boot time whe=
-n
-> > > > > the pfn boundary (max_pfn/min_pfn) is not ready. The lowmen check=
-s in
-> > > > > kmemleak_*_phys() drop those blocks and cause some false leak ala=
-rms
-> > > > > on common kernel objects.
-> > > > >
-> > > > > Kmemleak output: (Qemu/arm64)
-> > > > > unreferenced object 0xffff0000c0170a00 (size 128):
-> > > > >    comm "swapper/0", pid 1, jiffies 4294892404 (age 126.208s)
-> > > > >    hex dump (first 32 bytes):
-> > > > >      62 61 73 65 00 00 00 00 00 00 00 00 00 00 00 00  base.......=
-.....
-> > > > >      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ...........=
-.....
-> > > > >    backtrace:
-> > > > >      [<(____ptrval____)>] __kmalloc_track_caller+0x1b0/0x2e4
-> > > > >      [<(____ptrval____)>] kstrdup_const+0x8c/0xc4
-> > > > >      [<(____ptrval____)>] kvasprintf_const+0xbc/0xec
-> > > > >      [<(____ptrval____)>] kobject_set_name_vargs+0x58/0xe4
-> > > > >      [<(____ptrval____)>] kobject_add+0x84/0x100
-> > > > >      [<(____ptrval____)>] __of_attach_node_sysfs+0x78/0xec
-> > > > >      [<(____ptrval____)>] of_core_init+0x68/0x104
-> > > > >      [<(____ptrval____)>] driver_init+0x28/0x48
-> > > > >      [<(____ptrval____)>] do_basic_setup+0x14/0x28
-> > > > >      [<(____ptrval____)>] kernel_init_freeable+0x110/0x178
-> > > > >      [<(____ptrval____)>] kernel_init+0x20/0x1a0
-> > > > >      [<(____ptrval____)>] ret_from_fork+0x10/0x20
-> > > > >
-> > > > > This patch relaxs the boundary checking in kmemleak_*_phys api
-> > > > > if max_low_pfn is uninitialzed.
-> > > > >
-> > > > > Fixes: 23c2d4 (mm: kmemleak: take a full lowmem check in kmemleak=
-_*_phy)
->
-> BTW, please use at least 12 characters for the git sha1, the above is
-> ambiguous.
->
-> > > > > Signed-off-by: Yee Lee <yee.lee@mediatek.com>
-> > > > > ---
-> > > > >   mm/kmemleak.c | 8 ++++----
-> > > > >   1 file changed, 4 insertions(+), 4 deletions(-)
-> > > > >
-> > > > > diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-> > > > > index a182f5ddaf68..6b2af544aa0f 100644
-> > > > > --- a/mm/kmemleak.c
-> > > > > +++ b/mm/kmemleak.c
-> > > > > @@ -1132,7 +1132,7 @@ EXPORT_SYMBOL(kmemleak_no_scan);
-> > > > >   void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, i=
-nt min_count,
-> > > > >                                 gfp_t gfp)
-> > > > >   {
-> > > > > -       if (PHYS_PFN(phys) >=3D min_low_pfn && PHYS_PFN(phys) < m=
-ax_low_pfn)
-> > > > > +       if (!max_low_pfn || (PHYS_PFN(phys) >=3D min_low_pfn && P=
-HYS_PFN(phys) < max_low_pfn))
-> > > >
-> > > > Just skip checking will bring the crash possibility back. Seems
-> > > > it's beyond these interfaces' handle scope for this situation,
-> > > > since "min_low_pfn" and "max_low_pfn" are depending on arches.
-> > >
-> > > Yes, for the cases beyond the pfn guard, users have to take care the
-> > > boundary by themselves.
-> >
-> > Could we record these early calling and deal with them when it's
-> > ready? Is this appropriate?
-> >
-> > I have an implementation based on this approach. Could you please
-> > help to have a test on your machine as well? And someone to take
-> > a look or review?
->
-> We had something similar until 5.4, removed by commit c5665868183f ("mm:
-> kmemleak: use the memory pool for early allocations"). It was a bit
-> painful as we never had the right buffer, so I'm not keen on adding it
-> back.
+The kmemleak_*_phys() interface uses "min_low_pfn" and
+"max_low_pfn" to check address. But on some architectures,
+kmemleak_*_phys() is called before those two variables
+initialized. Add OBJECT_PHYS flag for the objects allocated
+with physical address, and check the boundary when scan
+instead of in kmemleak_*_phys().
 
-Agreed.
+This commit will solve:
+https://lore.kernel.org/r/20220527032504.30341-1-yee.lee@mediatek.com
+https://lore.kernel.org/r/9dd08bb5-f39e-53d8-f88d-bec598a08c93@gmail.com
 
-> > From 82cae75dfaa78f414faf85bb49133e95159c041a Mon Sep 17 00:00:00 2001
-> > From: Patrick Wang <patrick.wang.shcn@gmail.com>
-> > Date: Mon, 30 May 2022 18:38:23 +0800
-> > Subject: [PATCH] mm: kmemleak: record early operations and handle later
-> >
-> > The kmemleak_*_phys() interface uses "min_low_pfn" and
-> > "max_low_pfn" to check address. But on some architectures,
-> > kmemleak_*_phys() is called before those two variables
-> > initialized. Record these early operations and handle them
-> > when kmemleak_*_phys() are ready.
->
-> Could we instead record everything (no checks) but later avoid scanning
-> if below min or above max_low_pfn? We can add an OBJECT_PHYS flag to all
-> objects allocated via kmemleak_*_phys() and always check the
-> virt_to_phys() boundaries at scan time. It may actually help with this
-> problem as well:
->
-> https://lore.kernel.org/r/9dd08bb5-f39e-53d8-f88d-bec598a08c93@gmail.com
+Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
+---
+ mm/kmemleak.c | 48 ++++++++++++++++++++++++++++++------------------
+ 1 file changed, 30 insertions(+), 18 deletions(-)
 
-Check in kmemleak_*_phys()  even recorded early operations, the condition
-still relies on archs somewhat and is not that clear. Checking at scan
-time should
-be a proper direction. So that kmemleak doesn't have to rely on archs.
+diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+index a182f5ddaf68..1e2f90db9850 100644
+--- a/mm/kmemleak.c
++++ b/mm/kmemleak.c
+@@ -172,6 +172,8 @@ struct kmemleak_object {
+ #define OBJECT_NO_SCAN		(1 << 2)
+ /* flag set to fully scan the object when scan_area allocation failed */
+ #define OBJECT_FULL_SCAN	(1 << 3)
++/* flag set for object allocated with physical address */
++#define OBJECT_PHYS		(1 << 4)
+ 
+ #define HEX_PREFIX		"    "
+ /* number of bytes to print per line; must be 16 or 32 */
+@@ -575,7 +577,8 @@ static int __save_stack_trace(unsigned long *trace)
+  * memory block and add it to the object_list and object_tree_root.
+  */
+ static struct kmemleak_object *create_object(unsigned long ptr, size_t size,
+-					     int min_count, gfp_t gfp)
++					     int min_count, gfp_t gfp,
++					     bool is_phys)
+ {
+ 	unsigned long flags;
+ 	struct kmemleak_object *object, *parent;
+@@ -595,7 +598,7 @@ static struct kmemleak_object *create_object(unsigned long ptr, size_t size,
+ 	INIT_HLIST_HEAD(&object->area_list);
+ 	raw_spin_lock_init(&object->lock);
+ 	atomic_set(&object->use_count, 1);
+-	object->flags = OBJECT_ALLOCATED;
++	object->flags = OBJECT_ALLOCATED | (is_phys ? OBJECT_PHYS : 0);
+ 	object->pointer = ptr;
+ 	object->size = kfence_ksize((void *)ptr) ?: size;
+ 	object->excess_ref = 0;
+@@ -729,10 +732,10 @@ static void delete_object_part(unsigned long ptr, size_t size)
+ 	end = object->pointer + object->size;
+ 	if (ptr > start)
+ 		create_object(start, ptr - start, object->min_count,
+-			      GFP_KERNEL);
++			      GFP_KERNEL, object->flags & OBJECT_PHYS);
+ 	if (ptr + size < end)
+ 		create_object(ptr + size, end - ptr - size, object->min_count,
+-			      GFP_KERNEL);
++			      GFP_KERNEL, object->flags & OBJECT_PHYS);
+ 
+ 	__delete_object(object);
+ }
+@@ -904,7 +907,7 @@ void __ref kmemleak_alloc(const void *ptr, size_t size, int min_count,
+ 	pr_debug("%s(0x%p, %zu, %d)\n", __func__, ptr, size, min_count);
+ 
+ 	if (kmemleak_enabled && ptr && !IS_ERR(ptr))
+-		create_object((unsigned long)ptr, size, min_count, gfp);
++		create_object((unsigned long)ptr, size, min_count, gfp, false);
+ }
+ EXPORT_SYMBOL_GPL(kmemleak_alloc);
+ 
+@@ -931,7 +934,7 @@ void __ref kmemleak_alloc_percpu(const void __percpu *ptr, size_t size,
+ 	if (kmemleak_enabled && ptr && !IS_ERR(ptr))
+ 		for_each_possible_cpu(cpu)
+ 			create_object((unsigned long)per_cpu_ptr(ptr, cpu),
+-				      size, 0, gfp);
++				      size, 0, gfp, false);
+ }
+ EXPORT_SYMBOL_GPL(kmemleak_alloc_percpu);
+ 
+@@ -953,7 +956,7 @@ void __ref kmemleak_vmalloc(const struct vm_struct *area, size_t size, gfp_t gfp
+ 	 * the virtual address of the vmalloc'ed block.
+ 	 */
+ 	if (kmemleak_enabled) {
+-		create_object((unsigned long)area->addr, size, 2, gfp);
++		create_object((unsigned long)area->addr, size, 2, gfp, false);
+ 		object_set_excess_ref((unsigned long)area,
+ 				      (unsigned long)area->addr);
+ 	}
+@@ -1132,8 +1135,13 @@ EXPORT_SYMBOL(kmemleak_no_scan);
+ void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int min_count,
+ 			       gfp_t gfp)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
+-		kmemleak_alloc(__va(phys), size, min_count, gfp);
++	pr_debug("%s(0x%p, %zu, %d)\n", __func__, __va(phys), size, min_count);
++
++	if (kmemleak_enabled && (unsigned long)__va(phys) >= PAGE_OFFSET &&
++	    !IS_ERR(__va(phys)))
++		/* create object with OBJECT_PHYS flag */
++		create_object((unsigned long)__va(phys), size, min_count,
++			      gfp, true);
+ }
+ EXPORT_SYMBOL(kmemleak_alloc_phys);
+ 
+@@ -1146,8 +1154,7 @@ EXPORT_SYMBOL(kmemleak_alloc_phys);
+  */
+ void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
+-		kmemleak_free_part(__va(phys), size);
++	kmemleak_free_part(__va(phys), size);
+ }
+ EXPORT_SYMBOL(kmemleak_free_part_phys);
+ 
+@@ -1158,8 +1165,7 @@ EXPORT_SYMBOL(kmemleak_free_part_phys);
+  */
+ void __ref kmemleak_not_leak_phys(phys_addr_t phys)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
+-		kmemleak_not_leak(__va(phys));
++	kmemleak_not_leak(__va(phys));
+ }
+ EXPORT_SYMBOL(kmemleak_not_leak_phys);
+ 
+@@ -1170,8 +1176,7 @@ EXPORT_SYMBOL(kmemleak_not_leak_phys);
+  */
+ void __ref kmemleak_ignore_phys(phys_addr_t phys)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
+-		kmemleak_ignore(__va(phys));
++	kmemleak_ignore(__va(phys));
+ }
+ EXPORT_SYMBOL(kmemleak_ignore_phys);
+ 
+@@ -1436,6 +1441,13 @@ static void kmemleak_scan(void)
+ 			dump_object_info(object);
+ 		}
+ #endif
++
++		/* outside lowmem, make it black */
++		if (object->flags & OBJECT_PHYS)
++			if (PHYS_PFN(__pa((void *)object->pointer)) < min_low_pfn ||
++			    PHYS_PFN(__pa((void *)object->pointer)) >= max_low_pfn)
++				__paint_it(object, KMEMLEAK_BLACK);
++
+ 		/* reset the reference count (whiten the object) */
+ 		object->count = 0;
+ 		if (color_gray(object) && get_object(object))
+@@ -1966,14 +1978,14 @@ void __init kmemleak_init(void)
+ 
+ 	/* register the data/bss sections */
+ 	create_object((unsigned long)_sdata, _edata - _sdata,
+-		      KMEMLEAK_GREY, GFP_ATOMIC);
++		      KMEMLEAK_GREY, GFP_ATOMIC, false);
+ 	create_object((unsigned long)__bss_start, __bss_stop - __bss_start,
+-		      KMEMLEAK_GREY, GFP_ATOMIC);
++		      KMEMLEAK_GREY, GFP_ATOMIC, false);
+ 	/* only register .data..ro_after_init if not within .data */
+ 	if (&__start_ro_after_init < &_sdata || &__end_ro_after_init > &_edata)
+ 		create_object((unsigned long)__start_ro_after_init,
+ 			      __end_ro_after_init - __start_ro_after_init,
+-			      KMEMLEAK_GREY, GFP_ATOMIC);
++			      KMEMLEAK_GREY, GFP_ATOMIC, false);
+ }
+ 
+ /*
+-- 
+2.25.1
 
-I have implemented it in this direction, and I believe it=E2=80=98s also
-helpful for the above
-false positive report.
-
-Thanks,
-Patrick
-
->
-> --
-> Catalin

@@ -2,47 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A042753970C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC5A539712
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347305AbiEaTdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 15:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
+        id S1347311AbiEaTjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 15:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347298AbiEaTdb (ORCPT
+        with ESMTP id S242211AbiEaTj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 15:33:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04E129AE7B
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:33:29 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72B3723A;
-        Tue, 31 May 2022 12:33:29 -0700 (PDT)
-Received: from [10.57.81.38] (unknown [10.57.81.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EDC683F766;
-        Tue, 31 May 2022 12:33:27 -0700 (PDT)
-Message-ID: <e5a97b61-6401-8a00-1088-5465a493a556@arm.com>
-Date:   Tue, 31 May 2022 20:33:23 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 08/10] dmapool: cleanup dma_pool_destroy
-Content-Language: en-GB
-To:     Tony Battersby <tonyb@cybernetics.com>, linux-mm@kvack.org,
+        Tue, 31 May 2022 15:39:29 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4FA4BFCC
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:39:28 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id i1so13733186plg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:39:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0mQPcYFy8mM+96zbgJ+oQhNhKHCc0LNt7c679Q5oveg=;
+        b=HVim7kJ0YdygiWIjmmBICcaMPf5sAua4KnHtdR/fKxfJngYaVKGxyI+LDLMkk3MTHr
+         XPkZyJu+/wzaX7gmgaON5ize1deoGJHKWzC3VrTmb4T9SufHiFrT038Js7qWlRR0kV21
+         xSQ58JOF9ciO2+oJznly9TQheRsRDuXG37YbYl18nwsuDOPG4IpDRwNylr/goahNyqWP
+         wUsRH8Aqe8bUrVnAia0hne2T4ZklAva/+mnAHwM+pHXY3McsEwDa5ROuhlhsLxdoRfCV
+         NcKA7Y3Sw9CIL0GAUMEF7oc+okKGxfm12ZIp0fFTGHXTlDYhRtiJGIR1DeG4915oE9HZ
+         89YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0mQPcYFy8mM+96zbgJ+oQhNhKHCc0LNt7c679Q5oveg=;
+        b=d93cP9RKSaEKzAFMeunssDk+jBVMw6teetQZjrcSlWpY/H5tfeAATXeSUqIUKH8kLU
+         y/3zm+BKNnDrfA4Mn5i7Hnqlt+i3kH2oLKOI/Yoi/KUzOmj31sITdvhg3Ny2Hk65drBv
+         ULNzixeKYwuSLs9PJnYjuL0uVS0h4yZPMpY/F0kocofV/JS8Tu5kwpk8Lfkauee+/c1x
+         rvywHaKT32HJi8l7HB4nelJytg6U0Q2n+rm8xByQH415BpURl9mhQovZRcyB31Qox1xS
+         gsVhPL47rHF2WgrqlCiEes1+5uZXProeVfY3LdVcSgahImGVcM3sehbZKX4kpfFlx7Z3
+         xzJQ==
+X-Gm-Message-State: AOAM530pLIFIzA90bud8SDU9kRYu5v+t+DvM0xdCVQAj53WHudrd3jXZ
+        mKzlDBAaE2m42gYT8xurJzWoaA==
+X-Google-Smtp-Source: ABdhPJxTZAcl7iQWstjSWF0N/wRDRXCsUc7sWdacq43Z0jno5vV7U/WPDqtvq3gvSrI/vtWY97E04w==
+X-Received: by 2002:a17:90a:ba11:b0:1df:2d09:1308 with SMTP id s17-20020a17090aba1100b001df2d091308mr29797604pjr.184.1654025967457;
+        Tue, 31 May 2022 12:39:27 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l26-20020a635b5a000000b003fc2411d5adsm4041184pgm.70.2022.05.31.12.39.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 12:39:27 -0700 (PDT)
+Date:   Tue, 31 May 2022 19:39:23 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Thomas Huth <thuth@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
         linux-kernel@vger.kernel.org
-Cc:     iommu@lists.linux-foundation.org, kernel-team@fb.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Tony Lindgren <tony@atomide.com>
-References: <9b08ab7c-b80b-527d-9adf-7716b0868fbc@cybernetics.com>
- <30fd23ae-7035-5ce3-5643-89a5956f1e79@cybernetics.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <30fd23ae-7035-5ce3-5643-89a5956f1e79@cybernetics.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Subject: Re: [PATCH] KVM: Adjust the return type of
+ kvm_vm_ioctl_check_extension_generic()
+Message-ID: <YpZu6/k+8EydfBKf@google.com>
+References: <20220531075540.14242-1-thuth@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531075540.14242-1-thuth@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,118 +72,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-31 19:22, Tony Battersby wrote:
-> Remove a small amount of code duplication between dma_pool_destroy() and
-> pool_free_page() in preparation for adding more code without having to
-> duplicate it.  No functional changes.
-> 
-> Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
+On Tue, May 31, 2022, Thomas Huth wrote:
+> kvm_vm_ioctl_check_extension_generic() either returns small constant
+> numbers or the result of kvm_vm_ioctl_check_extension() which is of type
+> "int". Looking at the callers of kvm_vm_ioctl_check_extension_generic(),
+> one stores the result in "int r", the other one in "long r", so the
+> result has to fit in the smaller "int" in any case. Thus let's adjust
+> the return value to "int" here so we have one less transition from
+> "int" -> "long" -> "int" in case of the kvm_vm_ioctl() ->
+> kvm_vm_ioctl_check_extension_generic() -> kvm_vm_ioctl_check_extension()
+> call chain.
+
+LOL, I was going to play devil's advocate and say that it would be just as easy
+to adjust kvm_vm_ioctl() to use "long r", but there's actually lurking bug, sort
+of.
+
+KVM_GET_NR_MMU_PAGES => kvm_vm_ioctl_get_nr_mmu_pages() returns an "unsigned long",
+and it very much can be a value larger than an "int" because KVM_SET_NR_MMU_PAGES
+allows setting an arbitrary value (it may also be possible for KVM's default to
+be that large, but I don't feel like doing math).
+
+But, the very original commit 82ce2c96831f ("KVM: Allow dynamic allocation of the
+mmu shadow cache size") only tracked and returned an "unsigned int".  It was the
+relatively recent commit bc8a3d8925a8 ("kvm: mmu: Fix overflow on kvm mmu page
+limit calculation") that bumped the internal tracking to "unsigned long" and
+overlooked the long/int mess.
+
+Looking at other architectures, kvm_vm_ioctl_create_spapr_tce() also returns a
+"long", but that's unnecessary as it only returns -errno or propagates "int" returns.
+
+Ditto for kvm_arch_vm_ioctl_hv(), kvm_arch_vm_ioctl_pr(), and
+kvm_vm_ioctl_mte_copy_tags().
+
+Ignoring KVM_GET_NR_MMU_PAGES for the moment, I like the change, but would rather
+phrase the justification along the lines of:
+
+  KVM uses "long" return values for functions that are wired up to
+  "struct file_operations", but otherwise uses "int" return values for
+  functions that can return 0/-errno in order to avoid unintentional
+  divergences between 32-bit and 64-bit kernels.
+
+and then make the same change to kvm_arch_vm_ioctl() and all its subordinates.
+
+As for KVM_GET_NR_MMU_PAGES, my vote would be just sweep it under the rug with a
+comment and blurb in the documentation that it's broken.  I highly doubt any VMM
+actually uses the ioctl() in any meaningful way as it was largely made obsolete by
+two-dimensional paging, e.g. neither QEMU nor our VMM use it.
+
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
 > ---
->   mm/dmapool.c | 34 ++++++++++++++++++++--------------
->   1 file changed, 20 insertions(+), 14 deletions(-)
+>  This patch is of very low importance - if you don't like it, please just
+>  ignore. I just came across this nit while looking through the code and
+>  thought that it might be somewhat nicer this way.
 > 
-> diff --git a/mm/dmapool.c b/mm/dmapool.c
-> index 8749a9d7927e..58c11dcaa4e4 100644
-> --- a/mm/dmapool.c
-> +++ b/mm/dmapool.c
-> @@ -250,14 +250,25 @@ static inline bool is_page_busy(struct dma_page *page)
->   	return page->in_use != 0;
->   }
->   
-> -static void pool_free_page(struct dma_pool *pool, struct dma_page *page)
-> +static void pool_free_page(struct dma_pool *pool,
-> +			   struct dma_page *page,
-> +			   bool destroying_pool)
->   {
-> +	void *vaddr = page->vaddr;
->   	dma_addr_t dma = page->dma;
->   
-> +	if (destroying_pool && is_page_busy(page)) {
-> +		dev_err(pool->dev,
-> +			"dma_pool_destroy %s, %p busy\n",
-> +			pool->name, vaddr);
-> +		/* leak the still-in-use consistent memory */
-> +	} else {
->   #ifdef	DMAPOOL_DEBUG
-> -	memset(page->vaddr, POOL_POISON_FREED, pool->allocation);
-> +		memset(vaddr, POOL_POISON_FREED, pool->allocation);
->   #endif
-> -	dma_free_coherent(pool->dev, pool->allocation, page->vaddr, dma);
-> +		dma_free_coherent(pool->dev, pool->allocation, vaddr, dma);
-> +	}
-> +
->   	list_del(&page->page_list);
-
-If we're tearing down the whole pool, surely we can skip this as well? 
-(Same for the second list in patch #9)
-
-In fact I think it might make more sense to refactor in the opposite 
-direction and just streamline this directly into dma_pool_destroy(), 
-more like:
-
-	list_for_each_entry_safe() {
-		if (is_page_busy()) {
-			dev_err();
-		} else {
-			dma_free_coherent();
-		}
-		kfree(page);
-	}
-
->   	kfree(page);
->   }
-> @@ -272,7 +283,7 @@ static void pool_free_page(struct dma_pool *pool, struct dma_page *page)
->    */
->   void dma_pool_destroy(struct dma_pool *pool)
->   {
-> -	struct dma_page *page, *tmp;
-> +	struct dma_page *page;
-
-Nit: you bring this back again in patch #10, so we may as well leave the 
-list_for_each_entry_safe() iterator in place until then as well, and 
-save a bit of churn in this patch.
-
->   	bool empty = false;
->   
->   	if (unlikely(!pool))
-> @@ -288,15 +299,10 @@ void dma_pool_destroy(struct dma_pool *pool)
->   		device_remove_file(pool->dev, &dev_attr_pools);
->   	mutex_unlock(&pools_reg_lock);
->   
-> -	list_for_each_entry_safe(page, tmp, &pool->page_list, page_list) {
-> -		if (is_page_busy(page)) {
-> -			dev_err(pool->dev, "%s %s, %p busy\n", __func__,
-> -				pool->name, page->vaddr);
-> -			/* leak the still-in-use consistent memory */
-> -			list_del(&page->page_list);
-> -			kfree(page);
-> -		} else
-> -			pool_free_page(pool, page);
-> +	while ((page = list_first_entry_or_null(&pool->page_list,
-> +						struct dma_page,
-> +						page_list))) {
-> +		pool_free_page(pool, page, true);
->   	}
->   
->   	kfree(pool);
-> @@ -469,7 +475,7 @@ void dma_pool_free(struct dma_pool *pool, void *vaddr, dma_addr_t dma)
->   	page->offset = offset;
->   	/*
->   	 * Resist a temptation to do
-> -	 *    if (!is_page_busy(page)) pool_free_page(pool, page);
-> +	 *    if (!is_page_busy(page)) pool_free_page(pool, page, false);
-
-Further to the above, even if we did retain a separate function, if an 
-argument is hard-coded at the one single callsite, and the only 
-reference to passing any other value is in a comment effectively saying 
-"don't do this", do we really need to pretend it's an argument at all? ;)
-
-FWIW I'd just reword the comment in more general terms, e.g. "Resist the 
-temptation to free unused pages immediately..."
-
-Thanks,
-Robin.
-
->   	 * Better have a few empty pages hang around.
->   	 */
->   	spin_unlock_irqrestore(&pool->lock, flags);
+>  virt/kvm/kvm_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 64ec2222a196..e911331fc620 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -4309,7 +4309,7 @@ static int kvm_ioctl_create_device(struct kvm *kvm,
+>  	return 0;
+>  }
+>  
+> -static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+> +static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+>  {
+>  	switch (arg) {
+>  	case KVM_CAP_USER_MEMORY:
+> -- 
+> 2.31.1
+> 

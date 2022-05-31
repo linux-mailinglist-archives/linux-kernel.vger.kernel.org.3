@@ -2,83 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C9F5391A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE5F539124
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344569AbiEaNT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
+        id S243790AbiEaMwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 08:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237966AbiEaNT0 (ORCPT
+        with ESMTP id S234793AbiEaMwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:19:26 -0400
-X-Greylist: delayed 1638 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 May 2022 06:19:24 PDT
-Received: from outgoing-stata.csail.mit.edu (outgoing-stata.csail.mit.edu [128.30.2.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDF3F8CCC4;
-        Tue, 31 May 2022 06:19:24 -0700 (PDT)
-Received: from ip4d17f91f.dynamic.kabel-deutschland.de ([77.23.249.31] helo=srivatsab-a02.vmware.com)
-        by outgoing-stata.csail.mit.edu with esmtpsa (TLS1.2:RSA_AES_128_CBC_SHA1:128)
-        (Exim 4.82)
-        (envelope-from <srivatsa@csail.mit.edu>)
-        id 1nw1Lp-000Lu4-Ri; Tue, 31 May 2022 08:51:58 -0400
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Shreenidhi Shedi <yesshedi@gmail.com>
-Cc:     amakhalov@vmware.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        virtualization@lists.linux-foundation.org, pv-drivers@vmware.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Shreenidhi Shedi <sshedi@vmware.com>
-References: <20220527175737.915284-1-sshedi@vmware.com>
- <YpIpL728ii08D9uK@worktop.programming.kicks-ass.net>
-From:   "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
-Subject: Re: [PATCH v3] x86/vmware: use unsigned integer for shifting
-Message-ID: <5dfc62d1-5778-ed94-3f3e-54e12ee5e4e6@csail.mit.edu>
-Date:   Tue, 31 May 2022 14:51:53 +0200
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.12.0
+        Tue, 31 May 2022 08:52:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843A473552
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:52:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AF0F60916
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 12:52:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A531C385A9;
+        Tue, 31 May 2022 12:52:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654001571;
+        bh=BgK5r/VJqTsmBomquLZzHoVkoWPmJmwZKJWnFVBtVXY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DoateXwG9MzCnbzwyP8eV6xrPLYE2RNW+9dF685B1U5RNwYa1QdibyEtIlZ8DIDQa
+         pu+aLBC8jirh4L/Ew+/9KeSW+7TkvFyLvLBmj7QRIS7gKz/gIzcqRJuSTn82KM6ljB
+         532yi9KdQzsu06yciAlFo5CE0W7gFqxhxyirLckekavyQ8Z0DiF1+fQDieQnZGtrxx
+         cUxhHK06DvC7Bw0x9JGCHvtBdkMhtjxTdjdlMRJs9qo3IOdoVEjugn9Boq+oMuVno5
+         v49B1j9u9OeVUJJnZgLsQTl3BlYmdvLzGaiwvndDfMuQ1Ar7FMIOjtIeX+xbUvDCQa
+         HHTPXGr7nTABQ==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nw1Mf-00El8I-2Y; Tue, 31 May 2022 13:52:49 +0100
 MIME-Version: 1.0
-In-Reply-To: <YpIpL728ii08D9uK@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 31 May 2022 13:52:48 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH 1/2] irqchip: Adjust Kconfig for Loongson
+In-Reply-To: <20220531115942.1686812-1-chenhuacai@loongson.cn>
+References: <20220531115942.1686812-1-chenhuacai@loongson.cn>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e7cf33a170d0b4e98e53744f60dbf922@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: chenhuacai@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, chenhuacai@gmail.com, jiaxun.yang@flygoat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/28/22 6:52 AM, Peter Zijlstra wrote:
-> On Fri, May 27, 2022 at 11:27:37PM +0530, Shreenidhi Shedi wrote:
->> From: Shreenidhi Shedi <sshedi@vmware.com>
->>
->> Shifting signed 32-bit value by 31 bits is implementation-defined
->> behaviour. Using unsigned is better option for this.
+On 2022-05-31 12:59, Huacai Chen wrote:
+> We are preparing to add new Loongson (based on LoongArch, not 
+> compatible
+> with old MIPS-based Loongson) support.
+
+Please drop this blurb from all your patches. It adds zero information.
+
+> HTVEC will be shared by both old
+> and new Loongson processors, so we adjust its description. HTPIC is 
+> only
+> used by MIPS-based Loongson, so we add a MIPS dependency. PCH_PIC and
+> PCH_MSI will have some arch-specific code, so we remove the 
+> COMPILE_TEST
+> dependency to avoid build warnings.
 > 
-> The kernel builds with -fno-strict-overflow and as such this behaviour
-> is well defined.
->
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 
-Ah, I see. Thank you, Peter!
- 
->> Fixes: 4cca6ea04d31 ("x86/apic: Allow x2apic without IR on VMware platform")
-> 
-> Nothing broken, therefore nothing fixed.
-> 
+No cover letter, no indication of what this applies on, no mention
+of how this relates to the ongoing irqchip review.
 
-Agreed.
+What do you want me to do with this?
 
-I think using the BIT() macro still provides a nice readability
-improvement. So, Shreenidhi, could you spin a new version of the patch
-with the same code changes but with a different commit message about
-using the BIT() macro to simplify the code, and also include a
-clarification as to why the existing code is correct (which Peter
-pointed out), please?
-
-Thank you!
-
-Regards,
-Srivatsa
-VMware Photon OS
+         M.
+-- 
+Jazz is not dead. It just smells funny...

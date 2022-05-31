@@ -2,72 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A8A5392F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D3B5392CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345144AbiEaOKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 10:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
+        id S1344859AbiEaNzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345105AbiEaOKU (ORCPT
+        with ESMTP id S244969AbiEaNzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 10:10:20 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EBB663D3;
-        Tue, 31 May 2022 07:10:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1654006220; x=1685542220;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=x2yPGrbQEvZ7qvzj6D7a5D6J1wQ2pUt6/iDyChuBM2A=;
-  b=DZGlgbCFgSG1gztyoX0pIi/XYYY7S46zvZ+GhGVNIYhls7XLwt1GJcBZ
-   GLCrPqDg3/lD+aP73Qe7+4dpEtOaqN5GrgnSfKHTNHtFhzqO3QHo8bINL
-   HOV1PCWM2DvcViVOdmtS3gleTW9Xnx1HvOAEYr7f9Zj3z8GYrsJTPR6Li
-   k=;
-X-IronPort-AV: E=Sophos;i="5.91,265,1647302400"; 
-   d="scan'208";a="223960787"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-7a21ed79.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 31 May 2022 14:02:46 +0000
-Received: from EX13D33EUC003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-7a21ed79.us-east-1.amazon.com (Postfix) with ESMTPS id 5B757220F0A;
-        Tue, 31 May 2022 14:02:40 +0000 (UTC)
-Received: from EX13MTAUEA002.ant.amazon.com (10.43.61.77) by
- EX13D33EUC003.ant.amazon.com (10.43.164.166) with Microsoft SMTP Server (TLS)
- id 15.0.1497.36; Tue, 31 May 2022 14:02:39 +0000
-Received: from dev-dsk-jalliste-1c-387c3ddf.eu-west-1.amazon.com
- (10.13.250.64) by mail-relay.amazon.com (10.43.61.169) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36 via Frontend Transport; Tue, 31 May 2022
- 14:02:36 +0000
-From:   Jack Allister <jalliste@amazon.com>
-To:     <peterz@infradead.org>
-CC:     <bp@alien8.de>, <diapop@amazon.co.uk>, <hpa@zytor.com>,
-        <jalliste@amazon.com>, <jmattson@google.com>, <joro@8bytes.org>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <metikaya@amazon.co.uk>, <mingo@redhat.com>, <pbonzini@redhat.com>,
-        <rkrcmar@redhat.com>, <sean.j.christopherson@intel.com>,
-        <tglx@linutronix.de>, <vkuznets@redhat.com>,
-        <wanpengli@tencent.com>, <x86@kernel.org>
-Subject: ...\n
-Date:   Tue, 31 May 2022 14:02:36 +0000
-Message-ID: <20220531140236.1435-1-jalliste@amazon.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <YpYaYK7a28DFT5Ne@hirez.programming.kicks-ass.net>
-References: <YpYaYK7a28DFT5Ne@hirez.programming.kicks-ass.net>
+        Tue, 31 May 2022 09:55:42 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA19CC64;
+        Tue, 31 May 2022 06:55:35 -0700 (PDT)
+Received: from kwepemi500017.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LCDJy5KwFz1JCT2;
+        Tue, 31 May 2022 21:53:54 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500017.china.huawei.com (7.221.188.110) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 31 May 2022 21:55:33 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 31 May
+ 2022 21:55:32 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <paolo.valente@linaro.org>, <jack@suse.cz>, <axboe@kernel.dk>,
+        <tj@kernel.org>
+CC:     <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH -next v8 0/4] support concurrent sync io for bfq on a specail occasion
+Date:   Tue, 31 May 2022 22:08:54 +0800
+Message-ID: <20220531140858.3324294-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-15.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reasoning behind this is that you may want to run a guest at a
-lower CPU frequency for the purposes of trying to match performance
-parity between a host of an older CPU type to a newer faster one.
+Changes in v8:
+ - Instead of using whether bfqq is busy, using whether bfqq has pending
+ requests. As Paolo pointed out the former way is problematic.
+
+Changes in v7:
+ - fix mismatch bfq_inc/del_busy_queues() and bfqq_add/del_bfqq_busy(),
+ also retest this patchset on v5.18 to make sure functionality is
+ correct.
+ - move the updating of 'bfqd->busy_queues' into new apis
+
+Changes in v6:
+ - add reviewed-by tag for patch 1
+
+Changes in v5:
+ - rename bfq_add_busy_queues() to bfq_inc_busy_queues() in patch 1
+ - fix wrong definition in patch 1
+ - fix spelling mistake in patch 2: leaset -> least
+ - update comments in patch 3
+ - add reviewed-by tag in patch 2,3
+
+Changes in v4:
+ - split bfq_update_busy_queues() to bfq_add/dec_busy_queues(),
+   suggested by Jan Kara.
+ - remove unused 'in_groups_with_pending_reqs',
+
+Changes in v3:
+ - remove the cleanup patch that is irrelevant now(I'll post it
+   separately).
+ - instead of hacking wr queues and using weights tree insertion/removal,
+   using bfq_add/del_bfqq_busy() to count the number of groups
+   (suggested by Jan Kara).
+
+Changes in v2:
+ - Use a different approch to count root group, which is much simple.
+
+Currently, bfq can't handle sync io concurrently as long as they
+are not issued from root group. This is because
+'bfqd->num_groups_with_pending_reqs > 0' is always true in
+bfq_asymmetric_scenario().
+
+The way that bfqg is counted into 'num_groups_with_pending_reqs':
+
+Before this patchset:
+ 1) root group will never be counted.
+ 2) Count if bfqg or it's child bfqgs have pending requests.
+ 3) Don't count if bfqg and it's child bfqgs complete all the requests.
+
+After this patchset:
+ 1) root group is counted.
+ 2) Count if bfqg have at least one bfqq that is marked busy.
+ 3) Don't count if bfqg doesn't have any busy bfqqs.
+
+The main reason to use busy state of bfqq instead of 'pending requests'
+is that bfqq can stay busy after dispatching the last request if idling
+is needed for service guarantees.
+
+With the above changes, concurrent sync io can be supported if only
+one group is activated.
+
+fio test script(startdelay is used to avoid queue merging):
+[global]
+filename=/dev/sda
+allow_mounted_write=0
+ioengine=psync
+direct=1
+ioscheduler=bfq
+offset_increment=10g
+group_reporting
+rw=randwrite
+bs=4k
+
+[test1]
+numjobs=1
+
+[test2]
+startdelay=1
+numjobs=1
+
+[test3]
+startdelay=2
+numjobs=1
+
+[test4]
+startdelay=3
+numjobs=1
+
+[test5]
+startdelay=4
+numjobs=1
+
+[test6]
+startdelay=5
+numjobs=1
+
+[test7]
+startdelay=6
+numjobs=1
+
+[test8]
+startdelay=7
+numjobs=1
+
+test result:
+running fio on root cgroup
+v5.18:	   112 Mib/s
+v5.18-patched: 112 Mib/s
+
+running fio on non-root cgroup
+v5.18:	   51.2 Mib/s
+v5.18-patched: 112 Mib/s
+
+Note that I also test null_blk with "irqmode=2
+completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
+that service guarantees are still preserved.
+
+Previous versions:
+RFC: https://lore.kernel.org/all/20211127101132.486806-1-yukuai3@huawei.com/
+v1: https://lore.kernel.org/all/20220305091205.4188398-1-yukuai3@huawei.com/
+v2: https://lore.kernel.org/all/20220416093753.3054696-1-yukuai3@huawei.com/
+v3: https://lore.kernel.org/all/20220427124722.48465-1-yukuai3@huawei.com/
+v4: https://lore.kernel.org/all/20220428111907.3635820-1-yukuai3@huawei.com/
+v5: https://lore.kernel.org/all/20220428120837.3737765-1-yukuai3@huawei.com/
+v6: https://lore.kernel.org/all/20220523131818.2798712-1-yukuai3@huawei.com/
+v7: https://lore.kernel.org/all/20220528095020.186970-1-yukuai3@huawei.com/
+
+Yu Kuai (4):
+  block, bfq: support to track if bfqq has pending requests
+  block, bfq: record how many queues have pending requests
+  block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
+  block, bfq: do not idle if only one group is activated
+
+ block/bfq-cgroup.c  |  1 +
+ block/bfq-iosched.c | 47 +++------------------------------------------
+ block/bfq-iosched.h | 20 ++++++++++---------
+ block/bfq-wf2q.c    | 47 ++++++++++++++++++++++++++++++---------------
+ 4 files changed, 47 insertions(+), 68 deletions(-)
+
+-- 
+2.31.1
 

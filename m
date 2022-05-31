@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 629BB538C45
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C70B538C4B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244643AbiEaHvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 03:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
+        id S244640AbiEaHzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 03:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237048AbiEaHu4 (ORCPT
+        with ESMTP id S242444AbiEaHzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 03:50:56 -0400
-Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2B6F322B07;
-        Tue, 31 May 2022 00:50:51 -0700 (PDT)
-Received: by ajax-webmail-mail-app2 (Coremail) ; Tue, 31 May 2022 15:50:38
- +0800 (GMT+08:00)
-X-Originating-IP: [106.117.80.109]
-Date:   Tue, 31 May 2022 15:50:38 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Kalle Valo" <kvalo@kernel.org>
-Cc:     linux-wireless@vger.kernel.org, pontus.fuchs@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH wireless] ar5523: Fix deadlock bugs caused by
- cancel_work_sync in ar5523_stop
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <877d63uuuj.fsf@kernel.org>
-References: <20220522133055.96405-1-duoming@zju.edu.cn>
- <877d63uuuj.fsf@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Tue, 31 May 2022 03:55:35 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0053694B3
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:55:34 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id x3-20020a056e021bc300b002d1b0ccfca6so9790929ilv.11
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:55:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=cxpiXnK1IciwR0g2vIgtdnT2h0baAIafVhqTkrZDzaE=;
+        b=32aRInsSRPJcde/50J52C/3ucxghQ+RWxZmf9WgeJurhv01ibJtLSf1yGlrrSNrx4f
+         4sMW28uQ+URuRPHiuHsfgg6b4exH131/9mFoIQL06RLgl3HAyeF6ZO9ItyJ7dVlHEYb1
+         rPA3kY1disKv1TycNlJSN3F8l3DQJ3gUcUPnpA0HmhO69IORCdW6bNRUrSIpMgmyJjoI
+         OT671AGD5XECcWjZahoY3wDJsg+f4gnGawsvIo/2qWEucwslg5eXfDmafFrhxjA8W4jT
+         SXdcknidyahdOcPwVgwWqJPcgtHqPnucRm7t+0N7lkaa0RZGw6RjYtTIfUlYqNxgSf2K
+         CHog==
+X-Gm-Message-State: AOAM530kFWZNEAWFWqvPtvtNwKYM1n+ndx7MVL8QqDDRoa5FwXExtJoV
+        9rfpKCIcqR8aKHVaQRAK6UeSuCsTkM9uzwn6htYR2DxVIkgA
+X-Google-Smtp-Source: ABdhPJy7wpZl+xfY5dLEpG1T3xcfxloGUoCPapohjwDNaHJ9S9Y8qeR8R68SlXci3/iDZn2DIeYPq8IGMh6gjv2S2W43m45Zwsl5
 MIME-Version: 1.0
-Message-ID: <666661b7.4331b.18119186503.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: by_KCgDH3EDOyJVidrcTAQ--.25771W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgIHAVZdtZ+JzwABsg
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:265:b0:32e:7811:af92 with SMTP id
+ x5-20020a056638026500b0032e7811af92mr29831212jaq.169.1653983734180; Tue, 31
+ May 2022 00:55:34 -0700 (PDT)
+Date:   Tue, 31 May 2022 00:55:34 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f0b26205e04a183b@google.com>
+Subject: [syzbot] UBSAN: array-index-out-of-bounds in io_submit_sqes
+From:   syzbot <syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,59 +53,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBNb24sIDMwIE1heSAyMDIyIDE0OjI0OjA0ICswMzAwIEthbGxlIFZhbG8gd3Jv
-dGU6Cgo+IER1b21pbmcgWmhvdSA8ZHVvbWluZ0B6anUuZWR1LmNuPiB3cml0ZXM6Cj4gCj4gPiBJ
-ZiB0aGUgd29yayBpdGVtIGlzIHJ1bm5pbmcsIHRoZSBjYW5jZWxfd29ya19zeW5jIGluIGFyNTUy
-M19zdG9wIHdpbGwKPiA+IG5vdCByZXR1cm4gdW50aWwgd29yayBpdGVtIGlzIGZpbmlzaGVkLiBJ
-ZiB3ZSBob2xkIG11dGV4X2xvY2sgYW5kIHVzZQo+ID4gY2FuY2VsX3dvcmtfc3luYyB0byB3YWl0
-IHRoZSB3b3JrIGl0ZW0gdG8gZmluaXNoLCB0aGUgd29yayBpdGVtIHN1Y2ggYXMKPiA+IGFyNTUy
-M190eF93ZF93b3JrIGFuZCBhcjU1MjNfdHhfd29yayBhbHNvIHJlcXVpcmUgbXV0ZXhfbG9jay4g
-QXMgYSByZXN1bHQsCj4gPiB0aGUgYXI1NTIzX3N0b3Agd2lsbCBiZSBibG9ja2VkIGZvcmV2ZXIu
-IE9uZSBvZiB0aGUgcmFjZSBjb25kaXRpb25zIGlzCj4gPiBzaG93biBiZWxvdzoKPiA+Cj4gPiAg
-ICAgKFRocmVhZCAxKSAgICAgICAgICAgICB8ICAgKFRocmVhZCAyKQo+ID4gYXI1NTIzX3N0b3Ag
-ICAgICAgICAgICAgICAgfAo+ID4gICBtdXRleF9sb2NrKCZhci0+bXV0ZXgpICAgfCBhcjU1MjNf
-dHhfd2Rfd29yawo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIG11dGV4X2xvY2so
-JmFyLT5tdXRleCkKPiA+ICAgY2FuY2VsX3dvcmtfc3luYyAgICAgICAgIHwgICAuLi4KPiA+Cj4g
-PiBUaGlzIHBhdGNoIG1vdmVzIGNhbmNlbF93b3JrX3N5bmMgb3V0IG9mIG11dGV4X2xvY2sgaW4g
-b3JkZXIgdG8gbWl0aWdhdGUKPiA+IGRlYWRsb2NrIGJ1Z3MuCj4gPgo+ID4gRml4ZXM6IGI3ZDU3
-MmUxODcxZCAoImFyNTUyMzogQWRkIG5ldyBkcml2ZXIiKQo+ID4gU2lnbmVkLW9mZi1ieTogRHVv
-bWluZyBaaG91IDxkdW9taW5nQHpqdS5lZHUuY24+Cj4gCj4gSSBhc3N1bWUgeW91IGhhdmUgZm91
-bmQgdGhpcyB3aXRoIGEgc3RhdGljIGNoZWNrZXIgdG9vbCwgaXQgd291bGQgYmUKPiBnb29kIGRv
-Y3VtZW50IHdoYXQgdG9vbCB5b3UgYXJlIHVzaW5nLiBBbmQgaWYgeW91IGhhdmUgbm90IHRlc3Rl
-ZCB0aGlzCj4gd2l0aCByZWFsIGhhcmR3YXJlIGNsZWFybHkgbWVudGlvbiB0aGF0IHdpdGggIkNv
-bXBpbGUgdGVzdGVkIG9ubHkiLgo+IAo+ID4gLS0tCj4gPiAgZHJpdmVycy9uZXQvd2lyZWxlc3Mv
-YXRoL2FyNTUyMy9hcjU1MjMuYyB8IDIgKysKPiA+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRp
-b25zKCspCj4gPgo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC9hcjU1
-MjMvYXI1NTIzLmMgYi9kcml2ZXJzL25ldC93aXJlbGVzcy9hdGgvYXI1NTIzL2FyNTUyMy5jCj4g
-PiBpbmRleCA5Y2FiZDM0MmQxNS4uOTlkNmIxM2ZmY2YgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJz
-L25ldC93aXJlbGVzcy9hdGgvYXI1NTIzL2FyNTUyMy5jCj4gPiArKysgYi9kcml2ZXJzL25ldC93
-aXJlbGVzcy9hdGgvYXI1NTIzL2FyNTUyMy5jCj4gPiBAQCAtMTA3MSw4ICsxMDcxLDEwIEBAIHN0
-YXRpYyB2b2lkIGFyNTUyM19zdG9wKHN0cnVjdCBpZWVlODAyMTFfaHcgKmh3KQo+ID4gIAlhcjU1
-MjNfY21kX3dyaXRlKGFyLCBXRENNU0dfVEFSR0VUX1NUT1AsIE5VTEwsIDAsIDApOwo+ID4gIAo+
-ID4gIAlkZWxfdGltZXJfc3luYygmYXItPnR4X3dkX3RpbWVyKTsKPiA+ICsJbXV0ZXhfdW5sb2Nr
-KCZhci0+bXV0ZXgpOwo+ID4gIAljYW5jZWxfd29ya19zeW5jKCZhci0+dHhfd2Rfd29yayk7Cj4g
-PiAgCWNhbmNlbF93b3JrX3N5bmMoJmFyLT5yeF9yZWZpbGxfd29yayk7Cj4gPiArCW11dGV4X2xv
-Y2soJmFyLT5tdXRleCk7Cj4gPiAgCWFyNTUyM19jYW5jZWxfcnhfYnVmcyhhcik7Cj4gPiAgCW11
-dGV4X3VubG9jaygmYXItPm11dGV4KTsKPiA+ICB9Cj4gCj4gUmVsZWFzaW5nIGEgbG9jayBhbmQg
-dGFraW5nIGl0IGFnYWluIGxvb2tzIGxpa2UgYSBoYWNrIHRvIG1lLiBQbGVhc2UKPiB0ZXN0IHdp
-dGggYSByZWFsIGRldmljZSBhbmQgdHJ5IHRvIGZpbmQgYSBiZXR0ZXIgc29sdXRpb24uCgpUaGUg
-Zm9sbG93aW5nIGlzIGEgbmV3IHNvbHV0aW9uOgoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dp
-cmVsZXNzL2F0aC9hcjU1MjMvYXI1NTIzLmMgYi9kcml2ZXJzL25ldC93aXJlbGVzcy9hdGgvYXI1
-NTIzL2FyNTUyMy5jCmluZGV4IDljYWJkMzQyZDE1Li44YWRhZTg1ZmNiOSAxMDA2NDQKLS0tIGEv
-ZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRoL2FyNTUyMy9hcjU1MjMuYworKysgYi9kcml2ZXJzL25l
-dC93aXJlbGVzcy9hdGgvYXI1NTIzL2FyNTUyMy5jCkBAIC05MTAsNyArOTEwLDExIEBAIHN0YXRp
-YyB2b2lkIGFyNTUyM190eF93ZF93b3JrKHN0cnVjdCB3b3JrX3N0cnVjdCAqd29yaykKICAgICAg
-ICAgKiByZWNvdmVyIHNlZW1zIHRvIGJlIHRvIHJlc2V0IHRoZSBkb25nbGUuCiAgICAgICAgICov
-CgotICAgICAgIG11dGV4X2xvY2soJmFyLT5tdXRleCk7CisgICAgICAgaWYoIW11dGV4X3RyeWxv
-Y2soJmFyLT5tdXRleCkpIHsKKyAgICAgICAgICAgICAgIGlmKHRlc3RfYml0KEFSNTUyM19IV19V
-UCwgJmFyLT5mbGFncykpCisgICAgICAgICAgICAgICAgICAgICAgIGllZWU4MDIxMV9xdWV1ZV93
-b3JrKGFyLT5odywgJmFyLT50eF93ZF93b3JrKTsKKyAgICAgICAgICAgICAgIHJldHVybjsKKyAg
-ICAgICB9CiAgICAgICAgYXI1NTIzX2VycihhciwgIlRYIHF1ZXVlIHN0dWNrICh0b3QgJWQgcGVu
-ZCAlZClcbiIsCiAgICAgICAgICAgICAgICAgICBhdG9taWNfcmVhZCgmYXItPnR4X25yX3RvdGFs
-KSwKICAgICAgICAgICAgICAgICAgIGF0b21pY19yZWFkKCZhci0+dHhfbnJfcGVuZGluZykpOwoK
-SWYgYXI1NTIzX3N0b3AoKSBoYXMgYWNxdWlyZWQgImFyLT5tdXRleCIgbG9jaywgdGhlIGFyNTUy
-M190eF93ZF93b3JrKCkgd2lsbCBkaXJlY3RseSByZXR1cm4uCklmICJhci0+bXV0ZXgiIGxvY2sg
-aGFzIGFjcXVpcmVkIGJ5IG90aGVyIGZ1bmN0aW9ucyBleGNlcHQgYXI1NTIzX3N0b3AoKSwgYXI1
-NTIzX3R4X3dkX3dvcmsoKQp3aWxsIHJlLXF1ZXVlIGl0c2VsZi4KClNvLCB0aGlzIHNvbHV0aW9u
-IGNvdWxkIG1pdGlnYXRlIHRoZSBkZWFkbG9jayBiZXR3ZWVuIGFyNTUyM19zdG9wKCkgYW5kIGFy
-NTUyM190eF93ZF93b3JrKCkuCgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQ==
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    3b46e4e44180 Add linux-next specific files for 20220531
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16e151f5f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ccb8d66fc9489ef
+dashboard link: https://syzkaller.appspot.com/bug?extid=b6c9b65b6753d333d833
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com
+
+================================================================================
+================================================================================
+UBSAN: array-index-out-of-bounds in fs/io_uring.c:8860:19
+index 75 is out of range for type 'io_op_def [47]'
+CPU: 0 PID: 10377 Comm: syz-executor.4 Not tainted 5.18.0-next-20220531-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
+ __ubsan_handle_out_of_bounds.cold+0x62/0x6c lib/ubsan.c:283
+ io_init_req fs/io_uring.c:8860 [inline]
+ io_submit_sqe fs/io_uring.c:8987 [inline]
+ io_submit_sqes+0x6f0e/0x8020 fs/io_uring.c:9143
+ __do_sys_io_uring_enter+0x1112/0x2300 fs/io_uring.c:12077
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7fd28ac89109
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fd28be25168 EFLAGS: 00000246 ORIG_RAX: 00000000000001aa
+RAX: ffffffffffffffda RBX: 00007fd28ad9bf60 RCX: 00007fd28ac89109
+RDX: 0000000000000000 RSI: 00000000000001b9 RDI: 0000000000000003
+RBP: 00007fd28ace308d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe7683a70f R14: 00007fd28be25300 R15: 0000000000022000
+ </TASK>
+================================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

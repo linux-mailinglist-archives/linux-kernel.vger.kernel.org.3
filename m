@@ -2,1085 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CDE0539380
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DCC539381
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345442AbiEaPBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 11:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
+        id S1345446AbiEaPCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 11:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345439AbiEaPBl (ORCPT
+        with ESMTP id S1345351AbiEaPCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 11:01:41 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9FA5C667
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:01:37 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id d26so13472431wrb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:01:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6oF+ac2RUCAJQthxWVufUBZPDuIYEm4QP9/MDCMgGPQ=;
-        b=B6Y5nFSdshQNJWu3PP3s96IHwuz4K9nULFh7O+Q7KnzPRD47YMoCSBjaNvMCNb/jpz
-         e4Zme7RnOGuRkTOHJcj1XreJz/F1j3syZwnVTLl5Eof7A12RWLReHESfUKbRwjMHe/FQ
-         mUnjo/bH52/4YPd999lCzKxcddXb4meFjuRVooarZzLZrqN5zVN1dxiuQX8+v888dUmh
-         j6gJy+3/Ad130E1tFZO3yLeOoFhc/G9SVH810POFD8H1PBtgoqFp9Jiiub26mhBB5uWj
-         rRVeMScJY2OYxtDHw9H3jVD8/oRKOTUPr5/28anwaXQkzki2xg/wuYh+IDlCJS7JH9yZ
-         60Nw==
+        Tue, 31 May 2022 11:02:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CBF76D957
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:02:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654009319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XzbU7ELZz1DevdyaqWCyXvdPZSvnXVBgYNGI/O7/oDA=;
+        b=jNKlpAqDeHzoe2MBMTK+Rad6BVow4WJCSF9o77msi9pbxzDG749VtCjqT2sef8go8hhidv
+        1DGep7O8lXkcfQXybWNqDMX+Epb9ak37+0nqgt1R+L4vWjuN4+Qy6ZsacbwayoGYvm4s0W
+        4Ht7aOjd1oZ0angU7YaZK0x7+HQnaEk=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-540-M_X3JBmoOc23kAy0H0MhXg-1; Tue, 31 May 2022 11:01:57 -0400
+X-MC-Unique: M_X3JBmoOc23kAy0H0MhXg-1
+Received: by mail-ej1-f71.google.com with SMTP id l2-20020a170906078200b006fed42bfeacso5376631ejc.16
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:01:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6oF+ac2RUCAJQthxWVufUBZPDuIYEm4QP9/MDCMgGPQ=;
-        b=Z7jHa1GJS3/9QbwQyYNvQVqZsWK6OVq0/kQ+CVZYXptYtIn6kyuTpKgEojnzzCVyIx
-         iIH40tYHDGSefjMccfdF0wzYPeIQRaKYJlG0mG2KEDOQSeboKveb7hhG0HC+twBDg9n8
-         1ikmadrdeUXwwOJSPD6oPzenJOB2kkatwPrH013piyaOa87CU5RsUIQrWnMRwRya2PWi
-         fqNxEIMbh44Kvgl5/YPUrt5gve2u9qhH4sLDYUCo3j4fUtYJingTAcEqMVtOHpsRnrEA
-         wIBiPdA+C+x2ZqIJVdB4tjj1eMTIx2PSpOkTRXYZ971Z3PN6sVUIMZrw3g7i6eqRLTOK
-         2wqg==
-X-Gm-Message-State: AOAM533rL0xnScMG7zvViS1UO8xzmXu0MhdclMgazEjN0BX4OL+T7rsh
-        ++IKd9/eP09ujMKpcNXYqS8wlS98cJCR0CnyzIZvuw==
-X-Google-Smtp-Source: ABdhPJyTKsCMdgkuWmBSCJvYu+0SB7g6GBnruruPQchmwOO6d7TA/5Cc6MrTmraWdjSt/NfRRVCcy94Qw2piB8svzNk=
-X-Received: by 2002:a05:6000:1acc:b0:20f:f12a:a535 with SMTP id
- i12-20020a0560001acc00b0020ff12aa535mr30843895wry.375.1654009295067; Tue, 31
- May 2022 08:01:35 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=XzbU7ELZz1DevdyaqWCyXvdPZSvnXVBgYNGI/O7/oDA=;
+        b=ygx7K9gxJUxlFKONqXSMyG9BhYTSgKqMvRaoBapHcqHnG9NvP5mC9r4CeesD7Gj2K0
+         /j1R7PgDQ8MXPhxDIZ/eTAujrmKLfokBGe6YJXRWcjIifvbqUDgwYH8ouDuxjAucS4Rj
+         1fb19Y+QraqdkZdc58GT7yqcfnM5HI4rWdhYiJtLNbv4E9L7VPWMdiWEBW7PuyHCIuIr
+         AhpLL75hut+qAaBk5vk2bLmxTpR6MDm/taaWJkyXKXyLVu3OZYLOkKCXS79OaCEAWiRr
+         tLPFLPQUymV3tbwC42L9XywyxTzqToH6kaYOUJ9Qvv7rR6DMOFJEMBJxUCU2FOUkyh4U
+         aaNg==
+X-Gm-Message-State: AOAM531YXSNC50zJfTmC+GM97oxbwYFACmjqabPin8sn7lweZn+HN6KZ
+        6MHZ0++bG4qNmSEtPsAT4j65RpsYhrIkY6tuOkuuCmLrYkQDLjdtVZdkP9QARw3q+0XUzCelZHA
+        4sC1CvUxn8G/lJeXLgAlk8hP5GwabWeYfO7M38adZtUFLKjPgTmt+hMXmlVjqnqby2PD//q9kp+
+        aB
+X-Received: by 2002:a17:906:7954:b0:6fe:d9af:feb0 with SMTP id l20-20020a170906795400b006fed9affeb0mr38471316ejo.361.1654009314277;
+        Tue, 31 May 2022 08:01:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwy32kSgQfcq9zj0CzflX76ppVk5rFcSqvYggQDREzzCFYr5AsPYwPoePhcHG2cNnUNcdRy1w==
+X-Received: by 2002:a17:906:7954:b0:6fe:d9af:feb0 with SMTP id l20-20020a170906795400b006fed9affeb0mr38471270ejo.361.1654009313938;
+        Tue, 31 May 2022 08:01:53 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id g3-20020a1709063b0300b006feb3d65330sm5046484ejf.109.2022.05.31.08.01.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 08:01:53 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Jack Allister <jalliste@amazon.com>
+Cc:     diapop@amazon.co.uk, metikaya@amazon.co.uk,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: VMX: CPU frequency scaling for intel x86_64 KVM
+ guests
+In-Reply-To: <20220531105925.27676-1-jalliste@amazon.com>
+References: <20220531105925.27676-1-jalliste@amazon.com>
+Date:   Tue, 31 May 2022 17:01:52 +0200
+Message-ID: <871qw9pwyn.fsf@redhat.com>
 MIME-Version: 1.0
-References: <20220531092706.1931503-1-tmricht@linux.ibm.com> <20220531092706.1931503-3-tmricht@linux.ibm.com>
-In-Reply-To: <20220531092706.1931503-3-tmricht@linux.ibm.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 31 May 2022 08:01:19 -0700
-Message-ID: <CAP-5=fV93hnqmuoGfpeD-rADt-wDc7aRwfGbLZD6zv-28wePFA@mail.gmail.com>
-Subject: Re: [PATCH 3/7] perf list: Update event description for IBM z13 to
- latest level
-To:     Thomas Richter <tmricht@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, svens@linux.ibm.com, gor@linux.ibm.com,
-        sumanthk@linux.ibm.com, hca@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 2:27 AM Thomas Richter <tmricht@linux.ibm.com> wrot=
-e:
->
-> Update IBM z13 event counter description to the latest level
-> as described in the documents
-> 1. SA23-2260-07:
->    "The Load-Program-Parameter and the CPU-Measurement Facilities."
->    released on May, 2022
-> for the following counter sets:
->   * Basic counter set
->   * Problem counter set
->   * Crypto counter set
->
-> 2. SA23-2261-07:
->    "The CPU-Measurement Facility Extended Counters Definition
->     for z10, z196/z114, zEC12/zBC12, z13/z13s, z14, z15 and z16"
->     released on April 29, 2022
-> for the following counter sets:
->   * Extended counter set
->   * MT-Diagnostic counter set
->
-> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-> Acked-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
+Jack Allister <jalliste@amazon.com> writes:
 
-Acked-by: Ian Rogers <irogers@google.com>
+> A VMM can control a vCPU's CPU frequency by interfacing with KVM via
+> the vCPU file descriptor to enable/set CPU frequency scaling for a
+> guest. Instead of creating a separate IOCTL to this this, KVM capabil-
+> ities are extended to include a capability called
+> KVM_CAP_CPU_FREQ_SCALING.
+>
+> A generic set_cpu_freq interface is added to kvm_x86_ops
+> to allow for architecture (AMD/Intel) independent CPU frequency
+> scaling setting.
+>
+> For Intel platforms, Hardware-Controlled Performance States (HWP) are
+> used to implement CPU scaling within the guest. Further information on
+> this mechanism can be seen in Intel SDM Vol 3B (section 14.4). The CPU
+> frequency is set as soon as this function is called and is kept running
+> until explicitly reset or set again.
+>
+> Currently the AMD frequency setting interface is left unimplemented.
+>
+> Please note that CPU frequency scaling will have an effect on host
+> processing in it's current form. To change back to full performance
+> when running in host context an IOCTL with a frequency value of 0
+> is needed to run back at uncapped speed.
 
-Thanks,
-Ian
+I may have missed something but it looks like it will also have an
+effect on other guests running on the same CPU. Also, nothing guarantees
+that the guest vCPU will not get migrated to another CPU. This looks
+like a very hard to use interface.
 
+What if you introduce a per-vCPU setting for the desired frequency and
+set it every time the vCPU is loaded on a pCPU and then restore back the
+original frequency when it is unloaded (and assuming nobody else touched
+it while the vCPU was running)?
+
+>
+> Signed-off-by: Jack Allister <jalliste@amazon.com>
 > ---
->  .../pmu-events/arch/s390/cf_z13/basic.json    |  48 ++++-----
->  .../pmu-events/arch/s390/cf_z13/crypto.json   |  64 +++++------
->  .../pmu-events/arch/s390/cf_z13/extended.json | 100 +++++++++---------
->  3 files changed, 106 insertions(+), 106 deletions(-)
+>  arch/x86/include/asm/kvm_host.h |  2 +
+>  arch/x86/kvm/vmx/vmx.c          | 91 +++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/x86.c              | 16 ++++++
+>  include/uapi/linux/kvm.h        |  1 +
+>  4 files changed, 110 insertions(+)
 >
-> diff --git a/tools/perf/pmu-events/arch/s390/cf_z13/basic.json b/tools/pe=
-rf/pmu-events/arch/s390/cf_z13/basic.json
-> index 783de7f1aeaa..9bd20a5f47af 100644
-> --- a/tools/perf/pmu-events/arch/s390/cf_z13/basic.json
-> +++ b/tools/perf/pmu-events/arch/s390/cf_z13/basic.json
-> @@ -3,84 +3,84 @@
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "0",
->                 "EventName": "CPU_CYCLES",
-> -               "BriefDescription": "CPU Cycles",
-> -               "PublicDescription": "Cycle Count"
-> +               "BriefDescription": "Cycle Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of CPU cycles, excluding the number of cycles while the CPU is in the wai=
-t state."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "1",
->                 "EventName": "INSTRUCTIONS",
-> -               "BriefDescription": "Instructions",
-> -               "PublicDescription": "Instruction Count"
-> +               "BriefDescription": "Instruction Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of instructions executed by the CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "2",
->                 "EventName": "L1I_DIR_WRITES",
-> -               "BriefDescription": "L1I Directory Writes",
-> -               "PublicDescription": "Level-1 I-Cache Directory Write Cou=
-nt"
-> +               "BriefDescription": "Level-1 I-Cache Directory Write Coun=
-t",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of level-1 instruction-cache or unified-cache directory writes."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "3",
->                 "EventName": "L1I_PENALTY_CYCLES",
-> -               "BriefDescription": "L1I Penalty Cycles",
-> -               "PublicDescription": "Level-1 I-Cache Penalty Cycle Count=
-"
-> +               "BriefDescription": "Level-1 I-Cache Penalty Cycle Count"=
-,
-> +               "PublicDescription": "This counter counts the total numbe=
-r of cache penalty cycles for level-1 instruction cache or unified cache."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "4",
->                 "EventName": "L1D_DIR_WRITES",
-> -               "BriefDescription": "L1D Directory Writes",
-> -               "PublicDescription": "Level-1 D-Cache Directory Write Cou=
-nt"
-> +               "BriefDescription": "Level-1 D-Cache Directory Write Coun=
-t",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of level-1 data-cache directory writes."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "5",
->                 "EventName": "L1D_PENALTY_CYCLES",
-> -               "BriefDescription": "L1D Penalty Cycles",
-> -               "PublicDescription": "Level-1 D-Cache Penalty Cycle Count=
-"
-> +               "BriefDescription": "Level-1 D-Cache Penalty Cycle Count"=
-,
-> +               "PublicDescription": "This counter counts the total numbe=
-r of cache penalty cycles for level-1 data cache."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "32",
->                 "EventName": "PROBLEM_STATE_CPU_CYCLES",
-> -               "BriefDescription": "Problem-State CPU Cycles",
-> -               "PublicDescription": "Problem-State Cycle Count"
-> +               "BriefDescription": "Problem-State Cycle Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of CPU cycles when the CPU is in the problem state, excluding the number =
-of cycles while the CPU is in the wait state."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "33",
->                 "EventName": "PROBLEM_STATE_INSTRUCTIONS",
-> -               "BriefDescription": "Problem-State Instructions",
-> -               "PublicDescription": "Problem-State Instruction Count"
-> +               "BriefDescription": "Problem-State Instruction Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of instructions executed by the CPU while in the problem state."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "34",
->                 "EventName": "PROBLEM_STATE_L1I_DIR_WRITES",
-> -               "BriefDescription": "Problem-State L1I Directory Writes",
-> -               "PublicDescription": "Problem-State Level-1 I-Cache Direc=
-tory Write Count"
-> +               "BriefDescription": "Problem-State Level-1 I-Cache Direct=
-ory Write Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of level-1 instruction-cache or unified-cache directory writes while the =
-CPU is in the problem state."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "35",
->                 "EventName": "PROBLEM_STATE_L1I_PENALTY_CYCLES",
-> -               "BriefDescription": "Problem-State L1I Penalty Cycles",
-> -               "PublicDescription": "Problem-State Level-1 I-Cache Penal=
-ty Cycle Count"
-> +               "BriefDescription": "Level-1 I-Cache Penalty Cycle Count"=
-,
-> +               "PublicDescription": "This counter counts the total numbe=
-r of penalty cycles for level-1 instruction cache or unified cache while th=
-e CPU is in the problem state."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "36",
->                 "EventName": "PROBLEM_STATE_L1D_DIR_WRITES",
-> -               "BriefDescription": "Problem-State L1D Directory Writes",
-> -               "PublicDescription": "Problem-State Level-1 D-Cache Direc=
-tory Write Count"
-> +               "BriefDescription": "Problem-State Level-1 D-Cache Direct=
-ory Write Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of level-1 data-cache directory writes while the CPU is in the problem st=
-ate."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "37",
->                 "EventName": "PROBLEM_STATE_L1D_PENALTY_CYCLES",
-> -               "BriefDescription": "Problem-State L1D Penalty Cycles",
-> -               "PublicDescription": "Problem-State Level-1 D-Cache Penal=
-ty Cycle Count"
-> +               "BriefDescription": "Problem-State Level-1 D-Cache Penalt=
-y Cycle Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of penalty cycles for level-1 data cache while the CPU is in the problem =
-state."
->         }
->  ]
-> diff --git a/tools/perf/pmu-events/arch/s390/cf_z13/crypto.json b/tools/p=
-erf/pmu-events/arch/s390/cf_z13/crypto.json
-> index 3f28007d3892..a8d391ddeb8c 100644
-> --- a/tools/perf/pmu-events/arch/s390/cf_z13/crypto.json
-> +++ b/tools/perf/pmu-events/arch/s390/cf_z13/crypto.json
-> @@ -3,112 +3,112 @@
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "64",
->                 "EventName": "PRNG_FUNCTIONS",
-> -               "BriefDescription": "PRNG Functions",
-> -               "PublicDescription": "Total number of the PRNG functions =
-issued by the CPU"
-> +               "BriefDescription": "PRNG Function Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of the pseudorandom-number-generation functions issued by the CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "65",
->                 "EventName": "PRNG_CYCLES",
-> -               "BriefDescription": "PRNG Cycles",
-> -               "PublicDescription": "Total number of CPU cycles when the=
- DEA/AES coprocessor is busy performing PRNG functions issued by the CPU"
-> +               "BriefDescription": "PRNG Cycle Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of CPU cycles when the DEA/AES/SHA coprocessor is busy performing the pse=
-udorandom- number-generation functions issued by the CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "66",
->                 "EventName": "PRNG_BLOCKED_FUNCTIONS",
-> -               "BriefDescription": "PRNG Blocked Functions",
-> -               "PublicDescription": "Total number of the PRNG functions =
-that are issued by the CPU and are blocked because the DEA/AES coprocessor =
-is busy performing a function issued by another CPU"
-> +               "BriefDescription": "PRNG Blocked Function Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of the pseudorandom-number-generation functions that are issued by the CP=
-U and are blocked because the DEA/AES/SHA coprocessor is busy performing a =
-function issued by another CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "67",
->                 "EventName": "PRNG_BLOCKED_CYCLES",
-> -               "BriefDescription": "PRNG Blocked Cycles",
-> -               "PublicDescription": "Total number of CPU cycles blocked =
-for the PRNG functions issued by the CPU because the DEA/AES coprocessor is=
- busy performing a function issued by another CPU"
-> +               "BriefDescription": "PRNG Blocked Cycle Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of CPU cycles blocked for the pseudorandom-number-generation functions is=
-sued by the CPU because the DEA/AES/SHA coprocessor is busy performing a fu=
-nction issued by another CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "68",
->                 "EventName": "SHA_FUNCTIONS",
-> -               "BriefDescription": "SHA Functions",
-> -               "PublicDescription": "Total number of SHA functions issue=
-d by the CPU"
-> +               "BriefDescription": "SHA Function Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of the SHA functions issued by the CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "69",
->                 "EventName": "SHA_CYCLES",
-> -               "BriefDescription": "SHA Cycles",
-> -               "PublicDescription": "Total number of CPU cycles when the=
- SHA coprocessor is busy performing the SHA functions issued by the CPU"
-> +               "BriefDescription": "SHA Cycle Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of CPU cycles when the SHA coprocessor is busy performing the SHA functio=
-ns issued by the CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "70",
->                 "EventName": "SHA_BLOCKED_FUNCTIONS",
-> -               "BriefDescription": "SHA Blocked Functions",
-> -               "PublicDescription": "Total number of the SHA functions t=
-hat are issued by the CPU and are blocked because the SHA coprocessor is bu=
-sy performing a function issued by another CPU"
-> +               "BriefDescription": "SHA Blocked Function Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of the SHA functions that are issued by the CPU and are blocked because t=
-he SHA coprocessor is busy performing a function issued by another CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "71",
->                 "EventName": "SHA_BLOCKED_CYCLES",
-> -               "BriefDescription": "SHA Bloced Cycles",
-> -               "PublicDescription": "Total number of CPU cycles blocked =
-for the SHA functions issued by the CPU because the SHA coprocessor is busy=
- performing a function issued by another CPU"
-> +               "BriefDescription": "SHA Blocked Cycle Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of CPU cycles blocked for the SHA functions issued by the CPU because the=
- SHA coprocessor is busy performing a function issued by another CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "72",
->                 "EventName": "DEA_FUNCTIONS",
-> -               "BriefDescription": "DEA Functions",
-> -               "PublicDescription": "Total number of the DEA functions i=
-ssued by the CPU"
-> +               "BriefDescription": "DEA Function Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of the DEA functions issued by the CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "73",
->                 "EventName": "DEA_CYCLES",
-> -               "BriefDescription": "DEA Cycles",
-> -               "PublicDescription": "Total number of CPU cycles when the=
- DEA/AES coprocessor is busy performing the DEA functions issued by the CPU=
-"
-> +               "BriefDescription": "DEA Cycle Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of CPU cycles when the DEA/AES coprocessor is busy performing the DEA fun=
-ctions issued by the CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "74",
->                 "EventName": "DEA_BLOCKED_FUNCTIONS",
-> -               "BriefDescription": "DEA Blocked Functions",
-> -               "PublicDescription": "Total number of the DEA functions t=
-hat are issued by the CPU and are blocked because the DEA/AES coprocessor i=
-s busy performing a function issued by another CPU"
-> +               "BriefDescription": "DEA Blocked Function Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of the DEA functions that are issued by the CPU and are blocked because t=
-he DEA/AES coprocessor is busy performing a function issued by another CPU.=
-"
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "75",
->                 "EventName": "DEA_BLOCKED_CYCLES",
-> -               "BriefDescription": "DEA Blocked Cycles",
-> -               "PublicDescription": "Total number of CPU cycles blocked =
-for the DEA functions issued by the CPU because the DEA/AES coprocessor is =
-busy performing a function issued by another CPU"
-> +               "BriefDescription": "DEA Blocked Cycle Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of CPU cycles blocked for the DEA functions issued by the CPU because the=
- DEA/AES coprocessor is busy performing a function issued by another CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "76",
->                 "EventName": "AES_FUNCTIONS",
-> -               "BriefDescription": "AES Functions",
-> -               "PublicDescription": "Total number of AES functions issue=
-d by the CPU"
-> +               "BriefDescription": "AES Function Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of the AES functions issued by the CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "77",
->                 "EventName": "AES_CYCLES",
-> -               "BriefDescription": "AES Cycles",
-> -               "PublicDescription": "Total number of CPU cycles when the=
- DEA/AES coprocessor is busy performing the AES functions issued by the CPU=
-"
-> +               "BriefDescription": "AES Cycle Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of CPU cycles when the DEA/AES coprocessor is busy performing the AES fun=
-ctions issued by the CPU."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "78",
->                 "EventName": "AES_BLOCKED_FUNCTIONS",
-> -               "BriefDescription": "AES Blocked Functions",
-> -               "PublicDescription": "Total number of AES functions that =
-are issued by the CPU and are blocked because the DEA/AES coprocessor is bu=
-sy performing a function issued by another CPU"
-> +               "BriefDescription": "AES Blocked Function Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of the AES functions that are issued by the CPU and are blocked because t=
-he DEA/AES coprocessor is busy performing a function issued by another CPU.=
-"
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "79",
->                 "EventName": "AES_BLOCKED_CYCLES",
-> -               "BriefDescription": "AES Blocked Cycles",
-> -               "PublicDescription": "Total number of CPU cycles blocked =
-for the AES functions issued by the CPU because the DEA/AES coprocessor is =
-busy performing a function issued by another CPU"
-> +               "BriefDescription": "AES Blocked Cycle Count",
-> +               "PublicDescription": "This counter counts the total numbe=
-r of CPU cycles blocked for the AES functions issued by the CPU because the=
- DEA/AES coprocessor is busy performing a function issued by another CPU."
->         }
->  ]
-> diff --git a/tools/perf/pmu-events/arch/s390/cf_z13/extended.json b/tools=
-/perf/pmu-events/arch/s390/cf_z13/extended.json
-> index 1a5e4f89c57e..99c1b93a7e36 100644
-> --- a/tools/perf/pmu-events/arch/s390/cf_z13/extended.json
-> +++ b/tools/perf/pmu-events/arch/s390/cf_z13/extended.json
-> @@ -11,7 +11,7 @@
->                 "EventCode": "129",
->                 "EventName": "DTLB1_WRITES",
->                 "BriefDescription": "DTLB1 Writes",
-> -               "PublicDescription": "A translation entry has been writte=
-n to the Level-1 Data Translation Lookaside Buffer"
-> +               "PublicDescription": "A translation entry has been writte=
-n to the Level-1 Data Translation Lookaside Buffer (DTLB1)."
->         },
->         {
->                 "Unit": "CPU-M-CF",
-> @@ -25,7 +25,7 @@
->                 "EventCode": "131",
->                 "EventName": "DTLB1_HPAGE_WRITES",
->                 "BriefDescription": "DTLB1 One-Megabyte Page Writes",
-> -               "PublicDescription": "A translation entry has been writte=
-n to the Level-1 Data Translation Lookaside Buffer for a one-megabyte page"
-> +               "PublicDescription": "A translation entry has been writte=
-n to the Level-1 Data Translation Lookaside Buffer for a one-megabyte page.=
-"
->         },
->         {
->                 "Unit": "CPU-M-CF",
-> @@ -39,63 +39,63 @@
->                 "EventCode": "133",
->                 "EventName": "L1D_L2D_SOURCED_WRITES",
->                 "BriefDescription": "L1D L2D Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from the Level=
--2 Data cache"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from the Level=
--2 Data cache."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "134",
->                 "EventName": "ITLB1_WRITES",
->                 "BriefDescription": "ITLB1 Writes",
-> -               "PublicDescription": "A translation entry has been writte=
-n to the Level-1 Instruction Translation Lookaside Buffer"
-> +               "PublicDescription": "A translation entry has been writte=
-n to the Level-1 Instruction Translation Lookaside Buffer (ITLB1)."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "135",
->                 "EventName": "ITLB1_MISSES",
->                 "BriefDescription": "ITLB1 Misses",
-> -               "PublicDescription": "Level-1 Instruction TLB miss in pro=
-gress. Incremented by one for every cycle an ITLB1 miss is in progress"
-> +               "PublicDescription": "Level-1 Instruction TLB miss in pro=
-gress. Incremented by one for every cycle an ITLB1 miss is in progress."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "136",
->                 "EventName": "L1I_L2I_SOURCED_WRITES",
->                 "BriefDescription": "L1I L2I Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from th=
-e Level-2 Instruction cache"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from th=
-e Level-2 Instruction cache."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "137",
->                 "EventName": "TLB2_PTE_WRITES",
->                 "BriefDescription": "TLB2 PTE Writes",
-> -               "PublicDescription": "A translation entry has been writte=
-n to the Level-2 TLB Page Table Entry arrays"
-> +               "PublicDescription": "A translation entry has been writte=
-n to the Level-2 TLB Page Table Entry arrays."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "138",
->                 "EventName": "TLB2_CRSTE_HPAGE_WRITES",
->                 "BriefDescription": "TLB2 CRSTE One-Megabyte Page Writes"=
-,
-> -               "PublicDescription": "A translation entry has been writte=
-n to the Level-2 TLB Combined Region Segment Table Entry arrays for a one-m=
-egabyte large page translation"
-> +               "PublicDescription": "A translation entry has been writte=
-n to the Level-2 TLB Combined Region Segment Table Entry arrays for a one-m=
-egabyte large page translation."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "139",
->                 "EventName": "TLB2_CRSTE_WRITES",
->                 "BriefDescription": "TLB2 CRSTE Writes",
-> -               "PublicDescription": "A translation entry has been writte=
-n to the Level-2 TLB Combined Region Segment Table Entry arrays"
-> +               "PublicDescription": "A translation entry has been writte=
-n to the Level-2 TLB Combined Region Segment Table Entry arrays."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "140",
->                 "EventName": "TX_C_TEND",
->                 "BriefDescription": "Completed TEND instructions in const=
-rained TX mode",
-> -               "PublicDescription": "A TEND instruction has completed in=
- a constrained transactional-execution mode"
-> +               "PublicDescription": "A TEND instruction has completed in=
- a constrained transactional-execution mode."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "141",
->                 "EventName": "TX_NC_TEND",
->                 "BriefDescription": "Completed TEND instructions in non-c=
-onstrained TX mode",
-> -               "PublicDescription": "A TEND instruction has completed in=
- a non-constrained transactional-execution mode"
-> +               "PublicDescription": "A TEND instruction has completed in=
- a non-constrained transactional-execution mode."
->         },
->         {
->                 "Unit": "CPU-M-CF",
-> @@ -109,273 +109,273 @@
->                 "EventCode": "144",
->                 "EventName": "L1D_ONCHIP_L3_SOURCED_WRITES",
->                 "BriefDescription": "L1D On-Chip L3 Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Chi=
-p Level-3 cache without intervention"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Chi=
-p Level-3 cache without intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "145",
->                 "EventName": "L1D_ONCHIP_L3_SOURCED_WRITES_IV",
->                 "BriefDescription": "L1D On-Chip L3 Sourced Writes with I=
-ntervention",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Chi=
-p Level-3 cache with intervention"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Chi=
-p Level-3 cache with intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "146",
->                 "EventName": "L1D_ONNODE_L4_SOURCED_WRITES",
->                 "BriefDescription": "L1D On-Node L4 Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Nod=
-e Level-4 cache"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Nod=
-e Level-4 cache."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "147",
->                 "EventName": "L1D_ONNODE_L3_SOURCED_WRITES_IV",
->                 "BriefDescription": "L1D On-Node L3 Sourced Writes with I=
-ntervention",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Nod=
-e Level-3 cache with intervention"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Nod=
-e Level-3 cache with intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "148",
->                 "EventName": "L1D_ONNODE_L3_SOURCED_WRITES",
->                 "BriefDescription": "L1D On-Node L3 Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Nod=
-e Level-3 cache without intervention"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Nod=
-e Level-3 cache without intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "149",
->                 "EventName": "L1D_ONDRAWER_L4_SOURCED_WRITES",
->                 "BriefDescription": "L1D On-Drawer L4 Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Dra=
-wer Level-4 cache"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Dra=
-wer Level-4 cache."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "150",
->                 "EventName": "L1D_ONDRAWER_L3_SOURCED_WRITES_IV",
->                 "BriefDescription": "L1D On-Drawer L3 Sourced Writes with=
- Intervention",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Dra=
-wer Level-3 cache with intervention"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Dra=
-wer Level-3 cache with intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "151",
->                 "EventName": "L1D_ONDRAWER_L3_SOURCED_WRITES",
->                 "BriefDescription": "L1D On-Drawer L3 Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Dra=
-wer Level-3 cache without intervention"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an On-Dra=
-wer Level-3 cache without intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "152",
->                 "EventName": "L1D_OFFDRAWER_SCOL_L4_SOURCED_WRITES",
->                 "BriefDescription": "L1D Off-Drawer Same-Column L4 Source=
-d Writes",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an Off-Dr=
-awer Same-Column Level-4 cache"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an Off-Dr=
-awer Same-Column Level-4 cache."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "153",
->                 "EventName": "L1D_OFFDRAWER_SCOL_L3_SOURCED_WRITES_IV",
->                 "BriefDescription": "L1D Off-Drawer Same-Column L3 Source=
-d Writes with Intervention",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an Off-Dr=
-awer Same-Column Level-3 cache with intervention"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an Off-Dr=
-awer Same-Column Level-3 cache with intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "154",
->                 "EventName": "L1D_OFFDRAWER_SCOL_L3_SOURCED_WRITES",
->                 "BriefDescription": "L1D Off-Drawer Same-Column L3 Source=
-d Writes",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an Off-Dr=
-awer Same-Column Level-3 cache without intervention"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an Off-Dr=
-awer Same-Column Level-3 cache without intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "155",
->                 "EventName": "L1D_OFFDRAWER_FCOL_L4_SOURCED_WRITES",
->                 "BriefDescription": "L1D Off-Drawer Far-Column L3 Sourced=
- Writes",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an Off-Dr=
-awer Far-Column Level-4 cache"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an Off-Dr=
-awer Far-Column Level-4 cache."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "156",
->                 "EventName": "L1D_OFFDRAWER_FCOL_L3_SOURCED_WRITES_IV",
->                 "BriefDescription": "L1D Off-Drawer Far-Column L3 Sourced=
- Writes with Intervention",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an Off-Dr=
-awer Far-Column Level-3 cache with intervention"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an Off-Dr=
-awer Far-Column Level-3 cache with intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "157",
->                 "EventName": "L1D_OFFDRAWER_FCOL_L3_SOURCED_WRITES",
->                 "BriefDescription": "L1D Off-Drawer Far-Column L3 Sourced=
- Writes",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an Off-Dr=
-awer Far-Column Level-3 cache without intervention"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from an Off-Dr=
-awer Far-Column Level-3 cache without intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "158",
->                 "EventName": "L1D_ONNODE_MEM_SOURCED_WRITES",
->                 "BriefDescription": "L1D On-Node Memory Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from On-Node m=
-emory"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from On-Node m=
-emory."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "159",
->                 "EventName": "L1D_ONDRAWER_MEM_SOURCED_WRITES",
->                 "BriefDescription": "L1D On-Drawer Memory Sourced Writes"=
-,
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from On-Drawer=
- memory"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from On-Drawer=
- memory."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "160",
->                 "EventName": "L1D_OFFDRAWER_MEM_SOURCED_WRITES",
->                 "BriefDescription": "L1D Off-Drawer Memory Sourced Writes=
-",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from On-Drawer=
- memory"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from Off-Drawe=
-r memory."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "161",
->                 "EventName": "L1D_ONCHIP_MEM_SOURCED_WRITES",
->                 "BriefDescription": "L1D On-Chip Memory Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from On-Chip m=
-emory"
-> +               "PublicDescription": "A directory write to the Level-1 Da=
-ta cache directory where the returned cache line was sourced from On-Chip m=
-emory."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "162",
->                 "EventName": "L1I_ONCHIP_L3_SOURCED_WRITES",
->                 "BriefDescription": "L1I On-Chip L3 Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Chip Level-3 cache without intervention"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Chip Level-3 cache without intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "163",
->                 "EventName": "L1I_ONCHIP_L3_SOURCED_WRITES_IV",
->                 "BriefDescription": "L1I On-Chip L3 Sourced Writes with I=
-ntervention",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On Chip Level-3 cache with intervention"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On Chip Level-3 cache with intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "164",
->                 "EventName": "L1I_ONNODE_L4_SOURCED_WRITES",
->                 "BriefDescription": "L1I On-Chip L4 Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Node Level-4 cache"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Node Level-4 cache."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "165",
->                 "EventName": "L1I_ONNODE_L3_SOURCED_WRITES_IV",
->                 "BriefDescription": "L1I On-Node L3 Sourced Writes with I=
-ntervention",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Node Level-3 cache with intervention"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Node Level-3 cache with intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "166",
->                 "EventName": "L1I_ONNODE_L3_SOURCED_WRITES",
->                 "BriefDescription": "L1I On-Node L3 Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Node Level-3 cache without intervention"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Node Level-3 cache without intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "167",
->                 "EventName": "L1I_ONDRAWER_L4_SOURCED_WRITES",
->                 "BriefDescription": "L1I On-Drawer L4 Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Drawer Level-4 cache"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Drawer Level-4 cache."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "168",
->                 "EventName": "L1I_ONDRAWER_L3_SOURCED_WRITES_IV",
->                 "BriefDescription": "L1I On-Drawer L3 Sourced Writes with=
- Intervention",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Drawer Level-3 cache with intervention"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Drawer Level-3 cache with intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "169",
->                 "EventName": "L1I_ONDRAWER_L3_SOURCED_WRITES",
->                 "BriefDescription": "L1I On-Drawer L3 Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Drawer Level-3 cache without intervention"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- On-Drawer Level-3 cache without intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "170",
->                 "EventName": "L1I_OFFDRAWER_SCOL_L4_SOURCED_WRITES",
->                 "BriefDescription": "L1I Off-Drawer Same-Column L4 Source=
-d Writes",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- Off-Drawer Same-Column Level-4 cache"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- Off-Drawer Same-Column Level-4 cache."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "171",
->                 "EventName": "L1I_OFFDRAWER_SCOL_L3_SOURCED_WRITES_IV",
->                 "BriefDescription": "L1I Off-Drawer Same-Column L3 Source=
-d Writes with Intervention",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- Off-Drawer Same-Column Level-3 cache with intervention"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- Off-Drawer Same-Column Level-3 cache with intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "172",
->                 "EventName": "L1I_OFFDRAWER_SCOL_L3_SOURCED_WRITES",
->                 "BriefDescription": "L1I Off-Drawer Same-Column L3 Source=
-d Writes",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- Off-Drawer Same-Column Level-3 cache without intervention"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- Off-Drawer Same-Column Level-3 cache without intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "173",
->                 "EventName": "L1I_OFFDRAWER_FCOL_L4_SOURCED_WRITES",
->                 "BriefDescription": "L1I Off-Drawer Far-Column L4 Sourced=
- Writes",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- Off-Drawer Far-Column Level-4 cache"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- Off-Drawer Far-Column Level-4 cache."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "174",
->                 "EventName": "L1I_OFFDRAWER_FCOL_L3_SOURCED_WRITES_IV",
->                 "BriefDescription": "L1I Off-Drawer Far-Column L3 Sourced=
- Writes with Intervention",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- Off-Drawer Far-Column Level-3 cache with intervention"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- Off-Drawer Far-Column Level-3 cache with intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "175",
->                 "EventName": "L1I_OFFDRAWER_FCOL_L3_SOURCED_WRITES",
->                 "BriefDescription": "L1I Off-Drawer Far-Column L3 Sourced=
- Writes",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- Off-Drawer Far-Column Level-3 cache without intervention"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from an=
- Off-Drawer Far-Column Level-3 cache without intervention."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "176",
->                 "EventName": "L1I_ONNODE_MEM_SOURCED_WRITES",
->                 "BriefDescription": "L1I On-Node Memory Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from On=
--Node memory"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from On=
--Node memory."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "177",
->                 "EventName": "L1I_ONDRAWER_MEM_SOURCED_WRITES",
->                 "BriefDescription": "L1I On-Drawer Memory Sourced Writes"=
-,
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from On=
--Drawer memory"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from On=
--Drawer memory."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "178",
->                 "EventName": "L1I_OFFDRAWER_MEM_SOURCED_WRITES",
->                 "BriefDescription": "L1I Off-Drawer Memory Sourced Writes=
-",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from On=
--Drawer memory"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from On=
--Drawer memory."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "179",
->                 "EventName": "L1I_ONCHIP_MEM_SOURCED_WRITES",
->                 "BriefDescription": "L1I On-Chip Memory Sourced Writes",
-> -               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from On=
--Chip memory"
-> +               "PublicDescription": "A directory write to the Level-1 In=
-struction cache directory where the returned cache line was sourced from On=
--Chip memory."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "218",
->                 "EventName": "TX_NC_TABORT",
->                 "BriefDescription": "Aborted transactions in non-constrai=
-ned TX mode",
-> -               "PublicDescription": "A transaction abort has occurred in=
- a non-constrained transactional-execution mode"
-> +               "PublicDescription": "A transaction abort has occurred in=
- a non-constrained transactional-execution mode."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "219",
->                 "EventName": "TX_C_TABORT_NO_SPECIAL",
->                 "BriefDescription": "Aborted transactions in constrained =
-TX mode not using special completion logic",
-> -               "PublicDescription": "A transaction abort has occurred in=
- a constrained transactional-execution mode and the CPU is not using any sp=
-ecial logic to allow the transaction to complete"
-> +               "PublicDescription": "A transaction abort has occurred in=
- a constrained transactional-execution mode and the CPU is not using any sp=
-ecial logic to allow the transaction to complete."
->         },
->         {
->                 "Unit": "CPU-M-CF",
->                 "EventCode": "220",
->                 "EventName": "TX_C_TABORT_SPECIAL",
->                 "BriefDescription": "Aborted transactions in constrained =
-TX mode using special completion logic",
-> -               "PublicDescription": "A transaction abort has occurred in=
- a constrained transactional-execution mode and the CPU is using special lo=
-gic to allow the transaction to complete"
-> +               "PublicDescription": "A transaction abort has occurred in=
- a constrained transactional-execution mode and the CPU is using special lo=
-gic to allow the transaction to complete."
->         },
->         {
->                 "Unit": "CPU-M-CF",
-> --
-> 2.36.1
->
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index ae220f88f00d..d2efc2ce624f 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1169,6 +1169,8 @@ struct kvm_x86_ops {
+>  	bool (*rdtscp_supported)(void);
+>  	bool (*invpcid_supported)(void);
+>  
+> +	int (*set_cpu_freq_scaling)(struct kvm_vcpu *vcpu, u8 freq_100mhz);
+> +
+>  	void (*set_tdp_cr3)(struct kvm_vcpu *vcpu, unsigned long cr3);
+>  
+>  	void (*set_supported_cpuid)(u32 func, struct kvm_cpuid_entry2 *entry);
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 6499f371de58..beee39b57b13 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -1699,6 +1699,95 @@ static bool vmx_invpcid_supported(void)
+>  	return cpu_has_vmx_invpcid();
+>  }
+>  
+> +static int vmx_query_cpu_freq_valid_freq(u8 freq)
+> +{
+> +#define MASK_PERF 0xFF
+> +#define CAP_HIGHEST_SHIFT 0
+> +#define CAP_LOWEST_SHIFT 24
+> +#define CAP_HIGHEST_MASK (MASK_PERF << CAP_HIGHEST_SHIFT)
+> +#define CAP_LOWEST_MASK (MASK_PERF << CAP_LOWEST_SHIFT)
+> +	u64 cap_msr;
+> +	u8 highest, lowest;
+> +
+> +	/* Query highest and lowest supported scaling. */
+> +	rdmsrl(MSR_HWP_CAPABILITIES, cap_msr);
+> +	highest = (u8)(cap_msr & CAP_HIGHEST_MASK);
+> +	lowest = (u8)((cap_msr & CAP_LOWEST_MASK) >> CAP_LOWEST_SHIFT);
+> +
+> +	if (freq < lowest || freq > highest)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static void vmx_set_cpu_freq_uncapped(void)
+> +{
+> +#define SHIFT_DESIRED_PERF 16
+> +#define SHIFT_MAX_PERF 8
+> +#define SHIFT_MIN_PERF 0
+> +
+> +	u64 cap_msr, req_msr;
+> +	u8 highest, lowest;
+> +
+> +	/* Query the capabilities. */
+> +	rdmsrl(MSR_HWP_CAPABILITIES, cap_msr);
+> +	highest = (u8)(cap_msr & CAP_HIGHEST_MASK);
+> +	lowest = (u8)((cap_msr & CAP_LOWEST_MASK) >> CAP_LOWEST_SHIFT);
+> +
+> +	/* Set the desired to highest performance. */
+> +	req_msr = ((highest & MASK_PERF) << SHIFT_DESIRED_PERF) |
+> +		((highest & MASK_PERF) << SHIFT_MAX_PERF) |
+> +		((lowest & MASK_PERF) << SHIFT_MIN_PERF);
+> +	wrmsrl(MSR_HWP_REQUEST, req_msr);
+> +}
+> +
+> +static void vmx_set_cpu_freq_capped(u8 freq_100mhz)
+> +{
+> +	u64 req_msr;
+> +
+> +	/* Populate the variable used for setting the HWP request. */
+> +	req_msr = ((freq_100mhz & MASK_PERF) << SHIFT_DESIRED_PERF) |
+> +		((freq_100mhz & MASK_PERF) << SHIFT_MAX_PERF) |
+> +		((freq_100mhz & MASK_PERF) << SHIFT_MIN_PERF);
+> +
+> +	wrmsrl(MSR_HWP_REQUEST, req_msr);
+> +}
+> +
+> +static int vmx_set_cpu_freq_scaling(struct kvm_vcpu *vcpu, u8 freq_100mhz)
+> +{
+> +	struct kvm *kvm = vcpu->kvm;
+> +	u64 pm_before, req_msr;
+> +	int rc;
+> +
+> +	/* Is HWP scaling supported? */
+> +	if (!this_cpu_has(X86_FEATURE_HWP))
+> +		return -ENODEV;
+> +
+> +	/*
+> +	 * HWP needs to be enabled to query & use capabilities.
+> +	 * This bit is W1Once so cannot be cleared after.
+> +	 */
+> +	rdmsrl(MSR_PM_ENABLE, pm_before);
+> +	if ((pm_before & 1) == 0)
+> +		wrmsrl(MSR_PM_ENABLE, pm_before | 1);
+> +
+> +	/*
+> +	 * Check if setting to a specific value, if being set
+> +	 * to zero this means return to uncapped frequency.
+> +	 */
+> +	if (freq_100mhz) {
+> +		rc = vmx_query_cpu_freq_valid_freq(freq_100mhz);
+> +
+> +		if (rc)
+> +			return rc;
+> +
+> +		vmx_set_cpu_freq_capped(freq_100mhz);
+> +	} else
+> +		vmx_set_cpu_freq_uncapped();
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Swap MSR entry in host/guest MSR entry array.
+>   */
+> @@ -8124,6 +8213,8 @@ static struct kvm_x86_ops vmx_x86_ops __ro_after_init = {
+>  	.rdtscp_supported = vmx_rdtscp_supported,
+>  	.invpcid_supported = vmx_invpcid_supported,
+>  
+> +	.set_cpu_freq_scaling = vmx_set_cpu_freq_scaling,
+> +
+>  	.set_supported_cpuid = vmx_set_supported_cpuid,
+>  
+>  	.has_wbinvd_exit = cpu_has_vmx_wbinvd_exit,
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index c33423a1a13d..9ae2ab102e01 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -3669,6 +3669,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	case KVM_CAP_SET_VAR_MTRR_COUNT:
+>  	case KVM_CAP_X86_USER_SPACE_MSR:
+>  	case KVM_CAP_X86_MSR_FILTER:
+> +	case KVM_CAP_CPU_FREQ_SCALING:
+>  		r = 1;
+>  		break;
+>  #ifdef CONFIG_KVM_XEN
+> @@ -4499,6 +4500,19 @@ static int kvm_vcpu_ioctl_x86_set_xcrs(struct kvm_vcpu *vcpu,
+>  	return r;
+>  }
+>  
+> +static int kvm_cap_set_cpu_freq(struct kvm_vcpu *vcpu,
+> +				       struct kvm_enable_cap *cap)
+> +{
+> +	u8 freq = (u8)cap->args[0];
+> +
+> +	/* Query whether this platform (Intel or AMD) support setting. */
+> +	if (!kvm_x86_ops.set_cpu_freq_scaling)
+> +		return -ENODEV;
+> +
+> +	/* Attempt to set to the frequency specified. */
+> +	return kvm_x86_ops.set_cpu_freq_scaling(vcpu, freq);
+> +}
+> +
+>  /*
+>   * kvm_set_guest_paused() indicates to the guest kernel that it has been
+>   * stopped by the hypervisor.  This function will be called from the host only.
+> @@ -4553,6 +4567,8 @@ static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
+>  		return kvm_x86_ops.enable_direct_tlbflush(vcpu);
+>  	case KVM_CAP_SET_VAR_MTRR_COUNT:
+>  		return kvm_mtrr_set_var_mtrr_count(vcpu, cap->args[0]);
+> +	case KVM_CAP_CPU_FREQ_SCALING:
+> +		return kvm_cap_set_cpu_freq(vcpu, cap);
+>  
+>  	default:
+>  		return -EINVAL;
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 831be0d2d5e4..273a3ab5590e 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -874,6 +874,7 @@ struct kvm_ppc_resize_hpt {
+>  #define KVM_CAP_NO_POLL_ON_HLT 100003
+>  #define KVM_CAP_MMU_USE_VMA_CAPMEM 100004
+>  #define KVM_CAP_MMU_SUPPORT_DYNAMIC_CAPMEM 100005
+> +#define KVM_CAP_CPU_FREQ_SCALING 100006
+>  
+>  #define KVM_CAP_IRQCHIP	  0
+>  #define KVM_CAP_HLT	  1
+
+-- 
+Vitaly
+

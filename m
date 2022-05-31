@@ -2,72 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BDF538964
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 03:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 773CB538969
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 03:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242826AbiEaBB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 21:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
+        id S240598AbiEaBIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 21:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238350AbiEaBBY (ORCPT
+        with ESMTP id S230005AbiEaBIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 21:01:24 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A16C70924;
-        Mon, 30 May 2022 18:01:24 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id t2so3919224pld.4;
-        Mon, 30 May 2022 18:01:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NJogN3IYLaA0/PYlQIBsunkdnH4gONu4lSZ4HSWPFBg=;
-        b=BXpzd1eUKcwVwUU83YwPDVhBhh3yJZK6vwP+l6BQ0eANXd4G4rGkMYGwVNG58g81TR
-         FRdBloytdVM9FuHTRCYWZxUFPIB+TwxM8AKv+L2jeO/7ul/Hn3QGFAwc/WKRILeAUZcH
-         pRIJUfCJCAzkXBvoWF1EMIwKRQEYNfCCsKCLiZHjLyKgU7eEYXodFIsGN/kDgQ7fVmdJ
-         4nrdNE7+rMKUSz9p0uajY72fJ0pD9laF02Sq+4yCUL0VoaTaVOHqHh4S72+Py6RwzTFp
-         EsQynD1EBpGZpOHXo2jLWQI70kH5AFlZkJjb6gOisOmAySgftbphAzvyC5JqgI2j78Rb
-         R4FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=NJogN3IYLaA0/PYlQIBsunkdnH4gONu4lSZ4HSWPFBg=;
-        b=p7dEgsVnkczHhzreJO50yL1N2qHKPsuYPHxMmAW/KnVE6qMA7/Cqaf3nEP9Lx0wUmN
-         yUeAU4ETaruey/zyKtg0gtSvWVmb5pSkpVqPP8aIJcGyv9XhFtTzDrX/dGgBmgqDCXix
-         DrMoYIE32VAz45AY9hphfgTdXk+eIGyXp7Ou7JigLLHVuNul5fUj7ErzGZFfdhCA8pZ8
-         l4p++2m+gbX+1dVJGDJlkys4ZOG497JhsYUpxeezR+nyhSiYdN6t+lYN0YB0Cq5EWKtU
-         LMxyZII9UY4BY1MRBvIJKkKP6+sFt+S7czrMKlZGyaRQKO6SKXwMHSQ8OaKNcH8yJEg9
-         BlLA==
-X-Gm-Message-State: AOAM532Y6kyXs+e9vtov6clz5Vgfx3Gyy71v9NFzscnaYF3L+85cf84t
-        MaFHtgcRWX0lEMdN1+/ONFo=
-X-Google-Smtp-Source: ABdhPJyzf7SA56LuaYJGbsLW9Jel0hQbWl2Ig9oQorCyi1+iZdXyshzcwokWBTRuaSl0qfn4G+ibhQ==
-X-Received: by 2002:a17:902:704a:b0:161:996e:bf4 with SMTP id h10-20020a170902704a00b00161996e0bf4mr57900290plt.118.1653958883862;
-        Mon, 30 May 2022 18:01:23 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id e23-20020a62ee17000000b0050dc76281e4sm9327678pfi.190.2022.05.30.18.01.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 18:01:23 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 30 May 2022 15:01:21 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Hongchen Zhang <zhanghongchen@loongson.cn>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cgroup: wait for css offline when rmdir
-Message-ID: <YpVo4XiIDu68w40Z@slm.duckdns.org>
-References: <1653619158-27607-1-git-send-email-zhanghongchen@loongson.cn>
- <YpCQZ5RRnxwh7fmK@slm.duckdns.org>
- <e74e03f1-cb54-b158-a085-2965fd088d1d@loongson.cn>
+        Mon, 30 May 2022 21:08:02 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FF2644DE;
+        Mon, 30 May 2022 18:08:00 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 24V17bXV2031448, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 24V17bXV2031448
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 31 May 2022 09:07:37 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Tue, 31 May 2022 09:07:37 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Tue, 31 May 2022 09:07:36 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
+ RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
+ 15.01.2308.021; Tue, 31 May 2022 09:07:36 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "neojou@gmail.com" <neojou@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>,
+        "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v2 10/10] rtw88: disable powersave modes for USB devices
+Thread-Topic: [PATCH v2 10/10] rtw88: disable powersave modes for USB devices
+Thread-Index: AQHYdDPI/ma2VkQlBE+TWL8Uknp8la03pxKA
+Date:   Tue, 31 May 2022 01:07:36 +0000
+Message-ID: <1493412d473614dfafd4c03832e71f86831fa43b.camel@realtek.com>
+References: <20220530135457.1104091-1-s.hauer@pengutronix.de>
+         <20220530135457.1104091-11-s.hauer@pengutronix.de>
+In-Reply-To: <20220530135457.1104091-11-s.hauer@pengutronix.de>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.1-2 
+x-originating-ip: [172.16.20.31]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzUvMzAg5LiL5Y2IIDEwOjE3OjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4D2C143BB3E8C14582EEC0B09CCBD37F@realtek.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e74e03f1-cb54-b158-a085-2965fd088d1d@loongson.cn>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,22 +82,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Mon, May 30, 2022 at 09:53:51AM +0800, Hongchen Zhang wrote:
->   When I test the LTP's memcg_test_3 testcase at 8 Node server,I get the
-> -ENOMEM error,which caused by no avaliable idr found in mem_cgroup_idr.
-> the reason is the use of idr in mem_cgroup_idr is too fast than the free.In
-> the specific case,the idr is used and freed cyclically,so when we rmdir one
-> cgroup dir, we can synchronize the idr free through wating for the memcg css
-> offlined,and then we can use it the next cycle.
-
-This is a micro benchmark specific problem and it doesn't make sense to
-change the overall behavior for this as the suggested change is neither
-desirable or logical. Maybe you can just incur the delay only after idr
-allocation fails and then retry?
-
-Thanks.
-
--- 
-tejun
+T24gTW9uLCAyMDIyLTA1LTMwIGF0IDE1OjU0ICswMjAwLCBTYXNjaGEgSGF1ZXIgd3JvdGU6DQo+
+IFRoZSBwb3dlcnNhdmUgbW9kZXMgZG8gbm90IHdvcmsgd2l0aCBVU0IgZGV2aWNlcyAodGVzdGVk
+IHdpdGggYQ0KPiBSVFc4ODIyQ1UpIHByb3Blcmx5LiBXaXRoIHBvd2Vyc2F2ZSBtb2RlcyBlbmFi
+bGVkIHRoZSBkcml2ZXIgaXNzdWVzDQo+IG1lc3NhZ2VzIGxpa2U6DQo+IA0KPiBydHdfODgyMmN1
+IDEtMToxLjI6IGZpcm13YXJlIGZhaWxlZCB0byBsZWF2ZSBscHMgc3RhdGUNCj4gcnR3Xzg4MjJj
+dSAxLTE6MS4yOiB0aW1lZCBvdXQgdG8gZmx1c2ggcXVldWUgMw0KDQpDb3VsZCB5b3UgdHJ5IG1v
+ZHVsZSBwYXJhbWV0ZXIgcnR3X2Rpc2FibGVfbHBzX2RlZXBfbW9kZT0xIHRvIHNlZQ0KaWYgaXQg
+Y2FuIHdvcms/DQoNCklmIGl0IHdvcmtzLCBJIHN1Z2dlc3QgdG8gYXBwbHkgYmVsb3cgY29kZTog
+DQoNCmRpZmYgLS1naXQgYS9tYWluLmMgYi9tYWluLmMNCmluZGV4IDNmN2E1ZDU0Li4zYmIwNzg5
+OCAxMDA2NDQNCi0tLSBhL21haW4uYw0KKysrIGIvbWFpbi5jDQpAQCAtMTM0NSw2ICsxMzQ1LDkg
+QEAgc3RhdGljIGVudW0gcnR3X2xwc19kZWVwX21vZGUgcnR3X3VwZGF0ZV9scHNfZGVlcF9tb2Rl
+KHN0cnVjdCBydHdfZGV2ICpydHdkZXYsDQogew0KICAgICAgICBzdHJ1Y3QgcnR3X2NoaXBfaW5m
+byAqY2hpcCA9IHJ0d2Rldi0+Y2hpcDsNCiANCisgICAgICAgaWYgKHJ0d19oY2lfdHlwZShydHdk
+ZXYpID09IFJUV19IQ0lfVFlQRV9VU0IpDQorICAgICAgICAgICAgICAgcmV0dXJuIExQU19ERUVQ
+X01PREVfTk9ORTsNCisNCiAgICAgICAgaWYgKHJ0d19kaXNhYmxlX2xwc19kZWVwX21vZGUgfHwg
+IWNoaXAtPmxwc19kZWVwX21vZGVfc3VwcG9ydGVkIHx8DQogICAgICAgICAgICAhZnctPmZlYXR1
+cmUpDQogICAgICAgICAgICAgICAgcmV0dXJuIExQU19ERUVQX01PREVfTk9ORTsNCg0KLS0NClBp
+bmctS2UNCg0KDQo=

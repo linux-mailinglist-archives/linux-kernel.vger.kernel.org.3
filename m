@@ -2,188 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC385392CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C4F5392D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344834AbiEaNzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
+        id S1345028AbiEaN4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243620AbiEaNzf (ORCPT
+        with ESMTP id S244883AbiEaNzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:55:35 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC9CC73
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:55:33 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id hv24-20020a17090ae41800b001e33eebdb5dso1135363pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:55:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ja22+6JGi4Fw6cG9r+qZlGyNX9xX4a0a15S3HAE/TcU=;
-        b=jh1SxPxCjFoDs6Jrfq52420Fm/5GD8bQks9zwjw4yit43QDo5WERW5d+nYssrZDRdY
-         VW9oF8WpU+xlIEgp//5yokj8FVwNXpcxGvD57ECKpieLnXooOiJyl3ftTrJh+lCyYuUe
-         0TYQ7fM5I3jU18C1MUIIQQPJKiBi/GohQUl4+6IDKwfdjXu45ljVziR9Rz/vyPTsgKNL
-         LaeCJcrHVSBPmH8R9zaqoHjQx00NwxCz2sdfEAN6u+3HSQZHde2r7qjQUXuhcXtvEuEc
-         1LVO1xfl2TuZl1WTkTKPpKOOoznPObXJY4SJ1Ccam9YHgbKztWjXzOIdjlsczqOshuY1
-         v9qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ja22+6JGi4Fw6cG9r+qZlGyNX9xX4a0a15S3HAE/TcU=;
-        b=5z8jJYR121OPMlZijXBYsLue20su7NLg06xFnLk0SOutEipi8HHvgGmr6tCSE7lKOf
-         Nb5oqLK8ByVaJsBq5+iN3yqxH2xHLq86Y6LLwpkaLP+8/pdgFysxOdXsYQV+YGC9lx2K
-         6Zg1zWmC1YnHJ5Qr4YKeZandT+jH6s8KwSNb6EJajfUdiKMRx7ejK1WGS52lohNGbINf
-         oQ9nbHlEo/zQXMdIt7gg45bL3UbHxuxzZJsI87QN0fU+7+Ryxtq5D4+mSlX1An19U+ib
-         5mE+AXmp9zeBUxy3U097JTx6qfUiajUrv7xwkUqD5Nqwnx5UnywmfACjvmmuZ8c6AJGg
-         t2UA==
-X-Gm-Message-State: AOAM530QhQ5nFFqEASmkJbG2TF5JksrgPC5lOkFwWfqjf5BB1Vnyh+xd
-        10HworQL2vuajT2baA5x+Z9AZw==
-X-Google-Smtp-Source: ABdhPJxLwYtuT4vmWIQfmLCoFeGmwmvTfCgz7DIbOKDWEwiWcs8E3dOHmMUzEkSYr11zLhkCHhzWQQ==
-X-Received: by 2002:a17:902:ef43:b0:156:9c5d:b0fe with SMTP id e3-20020a170902ef4300b001569c5db0femr60960620plx.158.1654005332900;
-        Tue, 31 May 2022 06:55:32 -0700 (PDT)
-Received: from [10.4.211.178] ([139.177.225.231])
-        by smtp.gmail.com with ESMTPSA id j7-20020a17090276c700b0015e8d4eb26esm11165757plt.184.2022.05.31.06.55.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 06:55:32 -0700 (PDT)
-Message-ID: <270c2315-7ba5-4bbb-ee5c-38cc8a57e628@bytedance.com>
-Date:   Tue, 31 May 2022 21:55:23 +0800
+        Tue, 31 May 2022 09:55:43 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C9BF4A
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:55:41 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 4DF151F8DD;
+        Tue, 31 May 2022 13:55:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1654005340; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=96gdteDUzSXFaiw09TQyKSUZDnPxYQyobsN4KOocFTk=;
+        b=PMZMDaoh4qTi0nLBENfogSINZwWs9wqI9DUnKLBQvZamYwh0Gsz8oJWstflVQQkLfdGSxG
+        UXDV1cCwBCSh5Ge4OLDY4zBEpc9Gy2nOg1yLr3HhwszIZv5UOOxc8UsfgXOy6RXzgAEd56
+        +D0keGdLGQ/JbUEuUnlDD4GqqYftUKw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1654005340;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=96gdteDUzSXFaiw09TQyKSUZDnPxYQyobsN4KOocFTk=;
+        b=38jtTiD6i28XAslPQXj7FGYto/UUW6DB9mMPmGIMiNxMO+qSaJm405kkSPgoTnwOtGFf6/
+        f/Md3FTv6QFbx1Bw==
+Received: from suse.de (unknown [10.163.43.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 6D9242C141;
+        Tue, 31 May 2022 13:55:39 +0000 (UTC)
+Date:   Tue, 31 May 2022 14:55:32 +0100
+From:   Mel Gorman <mgorman@suse.de>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     Tianchen Ding <dtcccc@linux.alibaba.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] sched: Queue task on wakelist in the same llc if the
+ wakee cpu is idle
+Message-ID: <20220531135532.GA3332@suse.de>
+References: <20220527090544.527411-1-dtcccc@linux.alibaba.com>
+ <xhsmhleuj7zve.mognet@vschneid.remote.csb>
+ <1d0eb8f4-e474-86a9-751a-7c2e1788df85@linux.alibaba.com>
+ <xhsmhilpl9azq.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-Subject: Re: [External] Re: [PATCH v3 2/2] sched/fair: optimize and simplify
- rq leaf_cfs_rq_list
-Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        odin@uged.al, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com
-References: <20220526103929.14976-1-zhouchengming@bytedance.com>
- <20220526103929.14976-3-zhouchengming@bytedance.com>
- <CAKfTPtADKqVSvUFmLRPCU_XGVvf3wme0EnnvPf1Q39HEs=VqRw@mail.gmail.com>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <CAKfTPtADKqVSvUFmLRPCU_XGVvf3wme0EnnvPf1Q39HEs=VqRw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <xhsmhilpl9azq.mognet@vschneid.remote.csb>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2022/5/30 15:52, Vincent Guittot wrote:
-> On Thu, 26 May 2022 at 12:40, Chengming Zhou
-> <zhouchengming@bytedance.com> wrote:
->>
-[...]
->> @@ -11257,9 +11218,10 @@ static inline bool vruntime_normalized(struct task_struct *p)
->>   */
->>  static void propagate_entity_cfs_rq(struct sched_entity *se)
->>  {
->> -       struct cfs_rq *cfs_rq;
->> +       struct cfs_rq *cfs_rq = cfs_rq_of(se);
->>
->> -       list_add_leaf_cfs_rq(cfs_rq_of(se));
->> +       if (!throttled_hierarchy(cfs_rq))
->> +               list_add_leaf_cfs_rq(cfs_rq);
->>
->>         /* Start to propagate at parent */
->>         se = se->parent;
->> @@ -11268,7 +11230,8 @@ static void propagate_entity_cfs_rq(struct sched_entity *se)
->>                 cfs_rq = cfs_rq_of(se);
->>
+On Tue, May 31, 2022 at 12:50:49PM +0100, Valentin Schneider wrote:
+> >> With all that in mind, I'm curious whether your patch is functionaly close
+> >> to the below.
+> >> 
+> >> ---
+> >> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> >> index 66c4e5922fe1..ffd43264722a 100644
+> >> --- a/kernel/sched/core.c
+> >> +++ b/kernel/sched/core.c
+> >> @@ -3836,7 +3836,7 @@ static inline bool ttwu_queue_cond(int cpu, int wake_flags)
+> >>   	 * the soon-to-be-idle CPU as the current CPU is likely busy.
+> >>   	 * nr_running is checked to avoid unnecessary task stacking.
+> >>   	 */
+> >> -	if ((wake_flags & WF_ON_CPU) && cpu_rq(cpu)->nr_running <= 1)
+> >> +	if (cpu_rq(cpu)->nr_running <= 1)
+> >>   		return true;
+> >>   
+> >>   	return false;
+> >
+> > It's a little different. This may bring extra IPIs when nr_running == 1 
+> > and the current task on wakee cpu is not the target wakeup task (i.e., 
+> > rq->curr == another_task && rq->curr != p). Then this another_task may 
+> > be disturbed by IPI which is not expected. So IMO the promise by 
+> > WF_ON_CPU is necessary.
 > 
->  you can break  if the cfs is throttled because it's sched_entity has
-> been dequeued. In this case we check if the cfs is throttled not if
-> the hierarchy is throttled
+> You're right, actually taking a second look at that WF_ON_CPU path,
+> shouldn't the existing condition be:
 > 
-> +               if (cfs_rq_throttled(cfs_rq))
-> +                       break;
+> 	if ((wake_flags & WF_ON_CPU) && !cpu_rq(cpu)->nr_running)
+> 
+> ? Per the p->on_rq and p->on_cpu ordering, if we have WF_ON_CPU here then
+> we must have !p->on_rq, so the deactivate has happened, thus the task
+> being alone on the rq implies nr_running==0.
+> 
+> @Mel, do you remember why you went for <=1 here? I couldn't find any clues
+> on the original posting.
 > 
 
-This propagate part still make me confused. :-)
+I don't recall exactly why I went with <= 1 there but I may not have
+considered the memory ordering of on_rq and nr_running and the comment
+above it is literally what I was thinking at the time. I think you're
+right and that check can be !cpu_rq(cpu)->nr_running.
 
-I wonder if you think we should change like this:
-
-static void propagate_entity_cfs_rq(struct sched_entity *se)
-{
-        struct cfs_rq *cfs_rq = cfs_rq_of(se);
-
-        if (cfs_rq_throttled(cfs_rq))			--> break if cfs is throttled
-                return;
-
-        if (!throttled_hierarchy(cfs_rq))
-                list_add_leaf_cfs_rq(cfs_rq);
-
-        /* Start to propagate at parent */
-        se = se->parent;
-
-        for_each_sched_entity(se) {
-                cfs_rq = cfs_rq_of(se);
-
-                if (cfs_rq_throttled(cfs_rq))		--> break if cfs is throttled
-                        break;
-
-                update_load_avg(cfs_rq, se, UPDATE_TG); --> throttled cfs_rq->prop not updated
-                if (!throttled_hierarchy(cfs_rq))
-                        list_add_leaf_cfs_rq(cfs_rq);
-        }
-}
-
-
-
-If I understand right, we should update_load_avg() until cfs_rq_throttled(),
-including that throttled cfs_rq? So we can go on propagating when unthrottle.
-
-Maybe like this?
-
-static void propagate_entity_cfs_rq(struct sched_entity *se)
-{
-        struct cfs_rq *cfs_rq = cfs_rq_of(se);
-
-        if (cfs_rq_throttled(cfs_rq))			--> break if cfs is throttled
-                return;
-
-        if (!throttled_hierarchy(cfs_rq))
-                list_add_leaf_cfs_rq(cfs_rq);
-
-        /* Start to propagate at parent */
-        se = se->parent;
-
-        for_each_sched_entity(se) {
-                cfs_rq = cfs_rq_of(se);
-
-                update_load_avg(cfs_rq, se, UPDATE_TG);	--> update throttled cfs_rq->prop
-
-                if (cfs_rq_throttled(cfs_rq))		--> break if cfs is throttled
-                        break;
-
-                if (!throttled_hierarchy(cfs_rq))
-                        list_add_leaf_cfs_rq(cfs_rq);
-        }
-}
-
-
-Thanks!
-
-
->>                 update_load_avg(cfs_rq, se, UPDATE_TG);
->> -               list_add_leaf_cfs_rq(cfs_rq);
->> +               if (!throttled_hierarchy(cfs_rq))
->> +                       list_add_leaf_cfs_rq(cfs_rq);
->>         }
->>  }
->>  #else
->> --
->> 2.36.1
->>
+-- 
+Mel Gorman
+SUSE Labs

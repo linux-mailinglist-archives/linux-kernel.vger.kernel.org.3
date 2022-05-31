@@ -2,143 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FCE538FEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8AD538FF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343725AbiEaLfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 07:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
+        id S1343762AbiEaLg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 07:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiEaLfg (ORCPT
+        with ESMTP id S1343661AbiEaLgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 07:35:36 -0400
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9220684A03;
-        Tue, 31 May 2022 04:35:33 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 6E6E7205E3;
-        Tue, 31 May 2022 13:35:31 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id P9-6MYtFaaTT; Tue, 31 May 2022 13:35:30 +0200 (CEST)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id E1E1B20265;
-        Tue, 31 May 2022 13:35:30 +0200 (CEST)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout2.secunet.com (Postfix) with ESMTP id D920A80004A;
-        Tue, 31 May 2022 13:35:30 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 31 May 2022 13:35:30 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 31 May
- 2022 13:35:30 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 208603183D61; Tue, 31 May 2022 13:35:30 +0200 (CEST)
-Date:   Tue, 31 May 2022 13:35:30 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Hangyu Hua <hbh25y@gmail.com>
-CC:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] xfrm: xfrm_input: fix a possible memory leak in
- xfrm_input()
-Message-ID: <20220531113530.GL2517843@gauss3.secunet.de>
-References: <20220530102046.41249-1-hbh25y@gmail.com>
- <20220530103734.GD2517843@gauss3.secunet.de>
- <17ce0028-cbf2-20cd-c9ae-16b37ed61924@gmail.com>
+        Tue, 31 May 2022 07:36:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 330589B1A4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:36:14 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1F6B23A;
+        Tue, 31 May 2022 04:36:13 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B8793F73D;
+        Tue, 31 May 2022 04:36:13 -0700 (PDT)
+Date:   Tue, 31 May 2022 12:36:07 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH 2/2] firmware: arm_scmi: Fix pointers arithmetic in Base
+ protocol
+Message-ID: <YpX9K3x2zoToVy+3@e120937-lin>
+References: <20220530115237.277077-1-cristian.marussi@arm.com>
+ <20220530115237.277077-2-cristian.marussi@arm.com>
+ <1cdf5131-a67b-7297-ad75-49b53f2da293@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <17ce0028-cbf2-20cd-c9ae-16b37ed61924@gmail.com>
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1cdf5131-a67b-7297-ad75-49b53f2da293@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 10:12:05AM +0800, Hangyu Hua wrote:
-> On 2022/5/30 18:37, Steffen Klassert wrote:
-> > On Mon, May 30, 2022 at 06:20:46PM +0800, Hangyu Hua wrote:
-> > > xfrm_input needs to handle skb internally. But skb is not freed When
-> > > xo->flags & XFRM_GRO == 0 and decaps == 0.
-> > > 
-> > > Fixes: 7785bba299a8 ("esp: Add a software GRO codepath")
-> > > Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> > > ---
-> > >   net/xfrm/xfrm_input.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/net/xfrm/xfrm_input.c b/net/xfrm/xfrm_input.c
-> > > index 144238a50f3d..6f9576352f30 100644
-> > > --- a/net/xfrm/xfrm_input.c
-> > > +++ b/net/xfrm/xfrm_input.c
-> > > @@ -742,7 +742,7 @@ int xfrm_input(struct sk_buff *skb, int nexthdr, __be32 spi, int encap_type)
-> > >   			gro_cells_receive(&gro_cells, skb);
-> > >   			return err;
-> > >   		}
-> > > -
-> > > +		kfree_skb(skb);
-> > >   		return err;
-> > >   	}
+On Tue, May 31, 2022 at 12:02:53PM +0100, Robin Murphy wrote:
+> On 2022-05-30 12:52, Cristian Marussi wrote:
+> > Fix a possible undefined behaviour involving pointer arithmetic in Base
+> > protocol scmi_base_implementation_list_get().
 > > 
-> > Did you test this? The function behind the 'afinfo->the transport_finish()'
-> > pointer handles this skb and frees it in that case.
+> > cppcheck complains with:
+> > 
+> > drivers/firmware/arm_scmi/base.c:190:19: warning: 't->rx.buf' is of type 'void *'. When using void pointers in calculations, the behaviour is undefined. [arithOperationsOnVoidPointer]
+> >   list = t->rx.buf + sizeof(*num_ret);
 > 
-> int xfrm4_transport_finish(struct sk_buff *skb, int async)
-> {
-> 	struct xfrm_offload *xo = xfrm_offload(skb);
-> 	struct iphdr *iph = ip_hdr(skb);
+> Except we use GNU C, where it is well-defined[1]. We use void pointer
+> arithmetic *all over* Linux, so there really isn't any valid argument that
+> it could be problematic. If this was a common SCMI library intended to be
+> portable then the patch would seem more reasonable, but in Linux-specific
+> driver code it's just pointless churn.
 > 
-> 	iph->protocol = XFRM_MODE_SKB_CB(skb)->protocol;
-> 
-> #ifndef CONFIG_NETFILTER
-> 	if (!async)
-> 		return -iph->protocol;		<--- [1]
-> #endif
-> ...
-> 	NF_HOOK(NFPROTO_IPV4, NF_INET_PRE_ROUTING,
-> 		dev_net(skb->dev), NULL, skb, skb->dev, NULL,
-> 		xfrm4_rcv_encap_finish);	<--- [2]
-> 	return 0;
-> }
-> 
-> int xfrm6_transport_finish(struct sk_buff *skb, int async)
-> {
-> 	struct xfrm_offload *xo = xfrm_offload(skb);
-> 	int nhlen = skb->data - skb_network_header(skb);
-> 
-> 	skb_network_header(skb)[IP6CB(skb)->nhoff] =
-> 		XFRM_MODE_SKB_CB(skb)->protocol;
-> 
-> #ifndef CONFIG_NETFILTER
-> 	if (!async)
-> 		return 1;			<--- [3]
-> #endif
-> ...
-> 	NF_HOOK(NFPROTO_IPV6, NF_INET_PRE_ROUTING,
-> 		dev_net(skb->dev), NULL, skb, skb->dev, NULL,
-> 		xfrm6_transport_finish2);
-> 	return 0;				<--- [4]
-> }
-> 
-> If transport_finish() return in [1] or [3], there will be a memory leak.
 
-No, even in that case there is no memleak. Look for instance at the
-IPv4 case, we return -iph->protocol here.
-Then look at ip_protocol_deliver_rcu(). If the ipprot->handler (xfrm)
-returns a negative value, this is interpreted as the protocol number
-and the packet is resubmitted to the next protocol handler.
+Hi Robin,
 
-Please test your patches before you submit them in the future.
+thanks for the correction, I'll drop this.
+
+Thanks,
+Cristian
+
+> Cheers,
+> Robin.
+> 
+> [1] https://gcc.gnu.org/onlinedocs/gcc/Pointer-Arith.html
+> 
+> > Fixes: b6f20ff8bd94 ("firmware: arm_scmi: add common infrastructure and support for base protocol")
+> > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > ---
+> >   drivers/firmware/arm_scmi/base.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/firmware/arm_scmi/base.c b/drivers/firmware/arm_scmi/base.c
+> > index 20fba7370f4e..6d6214d9e68c 100644
+> > --- a/drivers/firmware/arm_scmi/base.c
+> > +++ b/drivers/firmware/arm_scmi/base.c
+> > @@ -187,7 +187,7 @@ scmi_base_implementation_list_get(const struct scmi_protocol_handle *ph,
+> >   	num_skip = t->tx.buf;
+> >   	num_ret = t->rx.buf;
+> > -	list = t->rx.buf + sizeof(*num_ret);
+> > +	list = ((u8 *)t->rx.buf) + sizeof(*num_ret);
+> >   	do {
+> >   		size_t real_list_sz;

@@ -2,164 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0675389BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 03:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6225389BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 03:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243455AbiEaB5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 21:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
+        id S243466AbiEaB5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 21:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiEaB5b (ORCPT
+        with ESMTP id S243460AbiEaB5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 21:57:31 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBED24BD8
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 18:57:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653962249; x=1685498249;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ySX0o1a0NBK1KoPB58FGYm0+GQ6XT4BanItUrrpKDuo=;
-  b=jLUApV4vzFKmaDDJsDW4inFELpYgIgOUI0mGQxlUeiEiw14Uskrafnsm
-   tScHc+HXNrzcZOgEmw3FyPFBYv+e0gWyExTDjlvYEglaeW+O86TfSOBu0
-   k5rCqwNe44iI3YIFAB7erAx0GqH2tJ9WFOL3450jLPo337Q7L4JHSpU6F
-   mbyqekMIAiuBiY2mRckFsI5U2p1HNTnIX7meKcW8CH09z7UNCnBq6Z+Gi
-   W/fE46KxDpBPwvkTiXbUYNVD5GCobEe/BwqhSDvZRkU08T7DI9YwKtDv+
-   tscj3E7tXfHr/a7eHb81m+bmnXsGLAYGRFIhFBpzmbv5LCyZg+kfC1jgL
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="273919820"
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="273919820"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 18:57:29 -0700
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="605413674"
-Received: from quanliu1-mobl.ccr.corp.intel.com ([10.254.215.142])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 18:57:23 -0700
-Message-ID: <4456dc2520cf2d9368c320eb628e0043d59dfb2f.camel@intel.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces (v3)
-From:   Ying Huang <ying.huang@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     Wei Xu <weixugc@google.com>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>, Linux MM <linux-mm@kvack.org>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Date:   Tue, 31 May 2022 09:57:20 +0800
-In-Reply-To: <20220530135043.00001e88@Huawei.com>
-References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
-         <c453491b-6dc1-a008-d6f4-3c806eebd2ef@linux.ibm.com>
-         <CAAPL-u_NwJuxWe7Wfn3A1sut+QwEmoZh2QUBQKNPq4bU=NjybA@mail.gmail.com>
-         <1281d918c07b05ac82aee290018ad08d212e0aaa.camel@intel.com>
-         <20220530135043.00001e88@Huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Mon, 30 May 2022 21:57:49 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E00836E16;
+        Mon, 30 May 2022 18:57:48 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so976327pjl.4;
+        Mon, 30 May 2022 18:57:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=H1ALc2KclO05GRseCzU2tE4hpTR2Pi5sFXcUIZRtWsA=;
+        b=nkg6VtSJWfIsQTK9CgwNVULu5G6bwGzzn9A5VzEeP7noKoColCe6jkyWHlX07QFT9a
+         dWL8KXCS7wo5UPHNUS6jpGAS4zMJm6FY+SAFjP75kT99T/i7OHdX4NmD3EPWrZhMcm/W
+         I0bKq++5lbMB7mLnN72GHIE4vUCigvAonIak84pCla18pl43f0YxdisSOKfaryCtuoLH
+         iDlMV2PNN1ndtfc19tkAlOyhHj2ZCVpQAvwJVSi/an3hr9wCkg+kk5femcVzqeNPczTh
+         qeHUcUSh4Q9ZCJVTXST4GJhYXl6R6kzTfsWfsBFt5VDYBLGIv99o7TrBusId5sFxvK/o
+         y6fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=H1ALc2KclO05GRseCzU2tE4hpTR2Pi5sFXcUIZRtWsA=;
+        b=NCuBTpCpCsd8kKK0v7oagC2iM3MOKKcZgepbQyrIsxOjtwC2+smJh0jkxaKSfKsEI/
+         wzYrnoicpsKNtkGcxlmbnJ40Jh1FfsyMfKJG1s9rLsBrn+YiARL82//LSIa55jqJT4e9
+         pw/aUpEN2RfJZAhsKWG9KQV+zZEUEP0W9vu9D7I0C/w1Sdj9KO3Z+6wFzrTXNnhyHfUA
+         JK9tsNb/DPpmwL5/6TMoSLG7+WbkueGayc9lLDP2u6sGL0qzFlpSY3ocTpoOCVxsYYJR
+         bRfhXKCEfwfHR2yLYlVGB0sb55c9mmKgDaY3LRbnsfwBPyjwCZmvs83BwxRVn5akcR9T
+         OClw==
+X-Gm-Message-State: AOAM532B1K9sX+BGWh5R3eCyiXQ2Z0GVdvd2qfRgwtb4qtiageDNxdKx
+        XO+Rd52NjiSh/3NbqDtKkgw=
+X-Google-Smtp-Source: ABdhPJwdpGnajHkcJbGWtfM8aj7t5A5jw2tSO0CVE0zmMWS2r9LENG0uH1TBhjzoec6IN5FPItXKLg==
+X-Received: by 2002:a17:90b:224e:b0:1e2:754d:aeb with SMTP id hk14-20020a17090b224e00b001e2754d0aebmr22290797pjb.220.1653962267856;
+        Mon, 30 May 2022 18:57:47 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:fc02:c347:e06e:9518])
+        by smtp.gmail.com with ESMTPSA id r10-20020a170902ea4a00b00163cf7023edsm3738990plg.243.2022.05.30.18.57.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 18:57:46 -0700 (PDT)
+Date:   Mon, 30 May 2022 18:57:44 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Charles Mirabile <cmirabil@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Serge Schneider <serge@raspberrypi.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Mattias Brugger <mbrugger@suse.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, fedora-rpi@googlegroups.com,
+        linux-input@vger.kernel.org, Daniel Bauman <dbauman@redhat.com>,
+        Mwesigwa Guma <mguma@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>
+Subject: Re: [PATCH v9 2/6] drivers/input/joystick: sensehat: Raspberry Pi
+ Sense HAT joystick driver
+Message-ID: <YpV2GNAJQhag9Osu@google.com>
+References: <20220419205158.28088-1-cmirabil@redhat.com>
+ <20220419205158.28088-3-cmirabil@redhat.com>
+ <ecb3f627-3379-1b18-02c0-44782a2623d4@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ecb3f627-3379-1b18-02c0-44782a2623d4@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-30 at 13:50 +0100, Jonathan Cameron wrote:
-> On Sun, 29 May 2022 12:31:30 +0800
-> Ying Huang <ying.huang@intel.com> wrote:
-> 
-> > On Fri, 2022-05-27 at 09:30 -0700, Wei Xu wrote:
-> > > On Fri, May 27, 2022 at 6:41 AM Aneesh Kumar K V
-> > > <aneesh.kumar@linux.ibm.com> wrote:  
-> > > > 
-> > > > On 5/27/22 2:52 AM, Wei Xu wrote:
-> > > >   
-> > > > 
-> > > > 
-> > > > 
-> > > > >    The order of memory tiers is determined by their rank values, not by
-> > > > >    their memtier device names.
-> > > > > 
-> > > > >    - /sys/devices/system/memtier/possible
-> > > > > 
-> > > > >      Format: ordered list of "memtier(rank)"
-> > > > >      Example: 0(64), 1(128), 2(192)
-> > > > > 
-> > > > >      Read-only.  When read, list all available memory tiers and their
-> > > > >      associated ranks, ordered by the rank values (from the highest
-> > > > >       tier to the lowest tier).
-> > > > >   
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > 
-> > > > Did we discuss the need for this? I haven't done this in the patch
-> > > > series I sent across.  
-> > > 
-> > > The "possible" file is only needed if we decide to hide the
-> > > directories of memtiers that have no nodes.  We can remove this
-> > > interface and always show all memtier directories to keep things
-> > > simpler.  
-> > 
-> > When discussed offline, Tim Chen pointed out that with the proposed
-> > interface, it's unconvenient to know the position of a given memory tier
-> > in all memory tiers.  We must sort "rank" of all memory tiers to know
-> > that.  "possible" file can be used for that.  Although "possible" file
-> > can be generated with a shell script, it's more convenient to show it
-> > directly.
-> > 
-> > Another way to address the issue is to add memtierN/pos for each memory
-> > tier as suggested by Tim.  It's readonly and will show position of
-> > "memtierN" in all memory tiers.  It's even better to show the relative
-> > postion to the default memory tier (DRAM with CPU). That is, the
-> > position of DRAM memory tier is 0.
-> > 
-> > Unlike memory tier device ID or rank, the position is relative and
-> > dynamic.
-> 
-> Hi,
-> 
-> I'm unconvinced.  This is better done with a shell script than
-> by adding ABI we'll have to live with for ever..
-> 
-> I'm no good at shell scripting but this does the job 
-> grep "" tier*/rank | sort -n -k 2 -t : 
-> 
-> tier2/rank:50
-> tier0/rank:100
-> tier1/rank:200
-> tier3/rank:240
-> 
-> I'm sure someone more knowledgeable will do it in a simpler fashion still.
+Hi Randy,
 
-I am OK to leave this to be added later if we found that it's useful.
-
-Best Regards,
-Huang, Ying
-
-> Jonathan
+On Mon, May 30, 2022 at 06:26:26PM -0700, Randy Dunlap wrote:
+> Hi--
 > 
-> > 
-> > Best Regards,
-> > Huang, Ying
-> > 
-> > 
+> On 4/19/22 13:51, Charles Mirabile wrote:
+> > diff --git a/drivers/input/joystick/Kconfig b/drivers/input/joystick/Kconfig
+> > index 3b23078bc7b5..505a032e2786 100644
+> > --- a/drivers/input/joystick/Kconfig
+> > +++ b/drivers/input/joystick/Kconfig
+> > @@ -399,4 +399,15 @@ config JOYSTICK_N64
+> >  	  Say Y here if you want enable support for the four
+> >  	  built-in controller ports on the Nintendo 64 console.
+> >  
+> > +config JOYSTICK_SENSEHAT
+> > +	tristate "Raspberry Pi Sense HAT joystick"
+> > +	depends on INPUT && I2C
+> > +	select MFD_SIMPLE_MFD_I2C
 > 
+> Looks like this also needs
+> 	depends on HAS_IOMEM
+> 
+> since everything in drivers/mfd/Kconfig depends on HAS_IOMEM and
+> since this 'select' causes a kconfig warning when HAS_IOMEM is not set:
+> 
+> WARNING: unmet direct dependencies detected for MFD_SIMPLE_MFD_I2C
+>   Depends on [n]: HAS_IOMEM [=n] && I2C [=y]
+>   Selected by [y]:
+>   - JOYSTICK_SENSEHAT [=y] && INPUT_JOYSTICK [=y] && INPUT [=y] && I2C [=y]
 
+Do you mind sending a patch?
 
+Thanks.
+
+-- 
+Dmitry

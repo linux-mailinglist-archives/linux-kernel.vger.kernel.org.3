@@ -2,162 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0D5539647
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A74E55395E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347040AbiEaS1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 14:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S1346843AbiEaSLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 14:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347022AbiEaS1A (ORCPT
+        with ESMTP id S237803AbiEaSLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 14:27:00 -0400
-Received: from mail.cybernetics.com (mail.cybernetics.com [173.71.130.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765AF10FDA
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 11:26:59 -0700 (PDT)
-X-ASG-Debug-ID: 1654020677-1cf43917f334afa0001-xx1T2L
-Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id wbqVFrYsF9UO9ekk; Tue, 31 May 2022 14:11:17 -0400 (EDT)
-X-Barracuda-Envelope-From: tonyb@cybernetics.com
-X-ASG-Whitelist: Client
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
-        bh=QvvHI94cjVSZ3vyzLq0aE4IbkuwCS7vLvfKjrgG4UFU=;
-        h=Content-Transfer-Encoding:Content-Type:Cc:To:Subject:From:Content-Language:
-        MIME-Version:Date:Message-ID; b=cdHo3GAMcWDRJ0VGiCWvXlyIXhHwRhAR44nZK//A1tvRT
-        d2BjwWd9JShX2dFtLN6fSvPzVQCXgXil9PAdI8Wj2ZmL6SkzZRUPpYY3OSL3k3Ip8B7njnzSJgaZg
-        nIQyJjOiw0pjXEOVFlb1XTpA4pOl5WOwRUtj+NTaT5uO9KtoI=
-Received: from [10.157.2.224] (HELO [192.168.200.1])
-  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
-  with ESMTPS id 11829182; Tue, 31 May 2022 14:11:17 -0400
-Message-ID: <9b08ab7c-b80b-527d-9adf-7716b0868fbc@cybernetics.com>
-Date:   Tue, 31 May 2022 14:11:16 -0400
+        Tue, 31 May 2022 14:11:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 204691E5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 11:11:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654020698;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XMQEK/kjTo0pUfkHM6FfBJm4lgYJdNQsWtCnnztaaGk=;
+        b=KqHpJdly/rKBYvG61fz15rHLuZYzQwflK+ObDFoB7V5Ucug2C7Y0ztm1d3TMS+iSs0TAWp
+        qB+lpaZMhTM8+ouWszifUMPmPKxbIoS9j6xRrmfA1PBS7NoTCFBUJ6AvG/1kmlhC2aDMpT
+        4Sww2SccVf5tUX9alCDednjizazQPMQ=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-0Qq93t4iOReclPsLUOWmQQ-1; Tue, 31 May 2022 14:11:36 -0400
+X-MC-Unique: 0Qq93t4iOReclPsLUOWmQQ-1
+Received: by mail-ed1-f71.google.com with SMTP id o17-20020a50fd91000000b0042dbded81deso6714971edt.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 11:11:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=XMQEK/kjTo0pUfkHM6FfBJm4lgYJdNQsWtCnnztaaGk=;
+        b=AqKurfePNwfH5nUd7XgjJwaXDJAVdZA4DNHd6dQZDAkT9dJsqVumddyjxD/tmIr8Oi
+         ZD6THSqZAgBRcVF/828et2eyOdOzjVz1g4gD2UcF016Z67byxxx6Ct7nW0gBxJUSOPrt
+         +uMFwElbVhIPHLXRF4KIWQ1T2aJw7C5EmMEM3t4/tB/pojP1INQNHZmYTRnoDc1W1BV4
+         xapSI5kmvQvlXzpA3y82H5mHAgVX1GubwI/2Qp5s6t6WwdjarmRpysH6hEhZvStmdZ4O
+         msvYu2HPSYa8j6JaVZB57Sby3mk2e5qwU8LUDX05Br2IqCgTwOqO3nhyVu8tf+ZHunWn
+         36Dg==
+X-Gm-Message-State: AOAM532hODZFJPHLdllD/0x9IKlDuM2+f0KEQAXZhLy3LWM0g2j7dR12
+        4p1x28OcA6Ow2+ngiOHO/PmXe+fijLYcn6MGqO5tT0TYLd02jY6Cu83eeGjkNCHyaqYmSbSWbnT
+        0Wwsj4awdtpqsFtA/hRD94c39
+X-Received: by 2002:a17:906:6a0d:b0:6ff:15a8:acbf with SMTP id qw13-20020a1709066a0d00b006ff15a8acbfmr27459124ejc.143.1654020695314;
+        Tue, 31 May 2022 11:11:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy1ff2p+ikBQ55Lof6tEFQQIwQKvq0MZaz2IlORv4sb3mJO9fUCPL0TZ2jkvbnDaJnhq6pOwA==
+X-Received: by 2002:a17:906:6a0d:b0:6ff:15a8:acbf with SMTP id qw13-20020a1709066a0d00b006ff15a8acbfmr27459105ejc.143.1654020695066;
+        Tue, 31 May 2022 11:11:35 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id z5-20020a1709060ac500b00702d8b37a03sm740362ejf.17.2022.05.31.11.11.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 11:11:34 -0700 (PDT)
+Message-ID: <0194b22a-38a1-08a1-a576-de6463389ce4@redhat.com>
+Date:   Tue, 31 May 2022 20:11:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
+ Thunderbird/91.8.0
 Content-Language: en-US
-From:   Tony Battersby <tonyb@cybernetics.com>
-Subject: [PATCH 00/10] mpt3sas and dmapool scalability
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-X-ASG-Orig-Subj: [PATCH 00/10] mpt3sas and dmapool scalability
-Cc:     iommu@lists.linux-foundation.org, kernel-team@fb.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tony Lindgren <tony@atomide.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Metin Kaya <metikaya@amazon.co.uk>, jalliste@amazon.com
+Cc:     bp@alien8.de, diapop@amazon.co.uk, hpa@zytor.com,
+        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com, rkrcmar@redhat.com,
+        sean.j.christopherson@intel.com, tglx@linutronix.de,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+References: <20220531105925.27676-1-jalliste@amazon.com>
+ <20220531114333.29153-1-metikaya@amazon.co.uk>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH] KVM: VMX: CPU frequency scaling for intel x86_64 KVM
+ guests
+In-Reply-To: <20220531114333.29153-1-metikaya@amazon.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Barracuda-Connect: UNKNOWN[10.10.4.126]
-X-Barracuda-Start-Time: 1654020677
-X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at cybernetics.com
-X-Barracuda-Scan-Msg-Size: 3968
-X-Barracuda-BRTS-Status: 1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series improves dmapool scalability by replacing linear scans
-with red-black trees.
+On 5/31/22 13:43, Metin Kaya wrote:
+> Thanks, Jack.
+> 
+> Reviewed-by: Metin Kaya <metikaya@amazon.co.uk>
+> 
 
-History:
+Please try a bit harder.  "Reviewed-by" is neither "this matches what's 
+been forever in the Amazon kernel" nor "I guarantee that Jack is a nice 
+guy and doesn't screw up".  I'm sure he is but everybody screws up, and 
+in this case the patch:
 
-In 2018 this patch series made it through 4 versions.  v1 used red-black
-trees; v2 - v4 put the dma pool info directly into struct page and used
-virt_to_page() to get at it.  v4 made a brief appearance in linux-next,
-but it caused problems on non-x86 archs where virt_to_page() doesn't
-work with dma_alloc_coherent, so it was reverted.  I was too busy at the
-time to repost the red-black tree version, and I forgot about it until
-now.  This version is based on the red-black trees of v1, but addressing
-all the review comments I got at the time and with additional cleanup
-patches.
+- does not even *apply* to the upstream kernel, because it uses 
+(presumably Amazon-specific) CAP numbers above 10000
 
-Note that Keith Busch is also working on improving dmapool scalability,
-so for now I would recommend not merging my scalability patches until
-Keith's approach can be evaluated.  In the meantime, my patches can
-serve as a benchmark comparison.  I also have a number of cleanup
-patches in my series that could be useful on their own.
+- does not work if the vCPU is moved from one physical CPU to another
 
-References:
+- does not work if the intel_pstate driver writes to MSR_HWP_REQUEST
 
-v1
-https://lore.kernel.org/linux-mm/73ec1f52-d758-05df-fb6a-41d269e910d0@cybernetics.com/
+- does not include documentation for the new capability
 
-v2
-https://lore.kernel.org/linux-mm/ec701153-fdc9-37f3-c267-f056159b4606@cybernetics.com/
+- does not include a selftest
 
-v3
-https://lore.kernel.org/linux-mm/d48854ff-995d-228e-8356-54c141c32117@cybernetics.com/
+- is unacceptable anyway because, as mentioned in the cover letter, it 
+isn't undone when the process exits
 
-v4
-https://lore.kernel.org/linux-mm/88395080-efc1-4e7b-f813-bb90c86d0745@cybernetics.com/
+Jack, please understand that I am not really blaming you in any way, and 
+ask some of your colleagues with upstream kernel experience (Alex Graf, 
+David Woodhouse, Filippo Sironi, Jan Schoenherr, Amit Shah are the ones 
+I know) which patches could be good targets for including upstream.
 
-problem caused by virt_to_page()
-https://lore.kernel.org/linux-kernel/20181206013054.GI6707@atomide.com/
-
-Keith Busch's dmapool performance enhancements
-https://lore.kernel.org/linux-mm/20220428202714.17630-1-kbusch@kernel.org/
-
-Below is my original description of the motivation for these patches.
-
-drivers/scsi/mpt3sas is running into a scalability problem with the
-kernel's DMA pool implementation.  With a LSI/Broadcom SAS 9300-8i
-12Gb/s HBA and max_sgl_entries=256, during modprobe, mpt3sas does the
-equivalent of:
-
-chain_dma_pool = dma_pool_create(size = 128);
-for (i = 0; i < 373959; i++)
-    {
-    dma_addr[i] = dma_pool_alloc(chain_dma_pool);
-    }
-
-And at rmmod, system shutdown, or system reboot, mpt3sas does the
-equivalent of:
-
-for (i = 0; i < 373959; i++)
-    {
-    dma_pool_free(chain_dma_pool, dma_addr[i]);
-    }
-dma_pool_destroy(chain_dma_pool);
-
-With this usage, both dma_pool_alloc() and dma_pool_free() exhibit
-O(n^2) complexity, although dma_pool_free() is much worse due to
-implementation details.  On my system, the dma_pool_free() loop above
-takes about 9 seconds to run.  Note that the problem was even worse
-before commit 74522a92bbf0 ("scsi: mpt3sas: Optimize I/O memory
-consumption in driver."), where the dma_pool_free() loop could take ~30
-seconds.
-
-mpt3sas also has some other DMA pools, but chain_dma_pool is the only
-one with so many allocations:
-
-cat /sys/devices/pci0000:80/0000:80:07.0/0000:85:00.0/pools
-(manually cleaned up column alignment)
-poolinfo - 0.1
-reply_post_free_array pool  1      21     192     1
-reply_free pool             1      1      41728   1
-reply pool                  1      1      1335296 1
-sense pool                  1      1      970272  1
-chain pool                  373959 386048 128     12064
-reply_post_free pool        12     12     166528  12
-
-The patches in this series improve the scalability of the DMA pool
-implementation, which significantly reduces the running time of the
-DMA alloc/free loops.  With the patches applied, "modprobe mpt3sas",
-"rmmod mpt3sas", and system shutdown/reboot with mpt3sas loaded are
-significantly faster.  Here are some benchmarks (of DMA alloc/free
-only, not the entire modprobe/rmmod):
-
-dma_pool_create() + dma_pool_alloc() loop, size = 128, count = 373959
-  original:        350 ms ( 1x)
-  dmapool patches:  18 ms (19x)
-
-dma_pool_free() loop + dma_pool_destroy(), size = 128, count = 373959
-  original:        8901 ms (   1x)
-  dmapool patches:   19 ms ( 477x)
-
+Paolo
 

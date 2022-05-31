@@ -2,110 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E026538B7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 08:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C18538B7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 08:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244304AbiEaGkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 02:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
+        id S244320AbiEaGke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 02:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbiEaGkK (ORCPT
+        with ESMTP id S232025AbiEaGk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 02:40:10 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E35524948;
-        Mon, 30 May 2022 23:40:08 -0700 (PDT)
-Received: from kwepemi100018.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LC2cs0cBzzBrpZ;
-        Tue, 31 May 2022 14:37:01 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- kwepemi100018.china.huawei.com (7.221.188.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 31 May 2022 14:40:06 +0800
-Received: from [10.174.176.52] (10.174.176.52) by
- kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 31 May 2022 14:40:05 +0800
-Message-ID: <db55c8f7-6a6f-410e-74ca-4040364bd38a@huawei.com>
-Date:   Tue, 31 May 2022 14:40:04 +0800
+        Tue, 31 May 2022 02:40:29 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0712CDF5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 23:40:28 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id u3so17241075wrg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 23:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hWi8+sNMetrYMzLc34VlHt3OhXmn2b5I8FlnJI4POXE=;
+        b=UFL9N9JhTYW/Wh36Zwj142mdG1eXYyqsPf0pCsMhKDQtPljFB78+hO04ngET8qF0X9
+         wBE4eIGDlQomlKtwgY1OJ95nl9vGvsbherAOFGH4r6VmmAwv+HVQs5JtTVId3i/8nlVn
+         uzJqH8fYXZkT4XdCAT1+PZWz4eeumQaG1JwQJYdDVNip8v2nnvbxBDMAMp+ezPITWU07
+         2DLYCJSoyLsv7S+D6jM4CrHvzjhy4E0mf6lnuoFwHzvJ2JkT9vQr/kxPItKB1wdSF+HG
+         GCsFGYGbgUzDThj+IjDCjYo0gTsUhSppwHgE3rEE1brg69vYSwfmw2NmbJMJ0iyaMyvV
+         dIVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hWi8+sNMetrYMzLc34VlHt3OhXmn2b5I8FlnJI4POXE=;
+        b=wJdM9DKTp6DDEQ52yVbS/NO1eqO7WzPbCEHP2+Vsdo/RYv26oVr2i5k/rcx26ZrB8H
+         XGbp7zh/pdKcskbU0i35mOJK0tB6otY/3d+zHOLh7Mgf18tlfEzRR/sX1jg5RIqjWBB9
+         aEcOkvwMI3qLPDk6c06Pg7qH9mWXls36b9wgrydyUqX+JaqyOMNv3J4YNTuIrqpMmw8Q
+         l/i9BSPuBBWOZotQaXVyw7501Z8+NeyimIzq0SvKUGgNWuxGFqx3yEcZ7XdrPBR1DTRQ
+         5LBfrH3v/NvOoLnY52O/zXl7UPDTIaRXDTZBDgFjGI7fwssWH7FQolTc2srs+NngjKSL
+         wqZQ==
+X-Gm-Message-State: AOAM532oSWCCzSaGx7JL2LVFgtXJTJcPkQ2ngLamE3owFm0Lo6PnmwO0
+        m7yw/Iun+HAgguGD9N9TtCD8hpPQTFFSBSk7
+X-Google-Smtp-Source: ABdhPJwMqIF0KI6J8fO9BDzZJ9VYbRVfEIjt23H4x15ky9FdtzN9fcbpJxoV7hzlDtt3RwVHgKaJIQ==
+X-Received: by 2002:a5d:47a1:0:b0:20f:ecc4:7f6c with SMTP id 1-20020a5d47a1000000b0020fecc47f6cmr30560217wrb.236.1653979226621;
+        Mon, 30 May 2022 23:40:26 -0700 (PDT)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id l6-20020adff486000000b0020c5253d907sm10671844wro.83.2022.05.30.23.40.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 23:40:26 -0700 (PDT)
+Date:   Tue, 31 May 2022 07:40:24 +0100
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     Larry Finger <Larry.Finger@lwfinger.net>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH v3 0/2] Fix some compile warnings in v5.18+
+Message-ID: <YpW4WKxKIIgY0l7m@equinox>
+References: <20220531013103.2175-1-Larry.Finger@lwfinger.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH -next 0/2] fix nfsv4 bugs of opening with O_ACCMODE flag
-To:     Lyu Tao <tao.lyu@epfl.ch>
-CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bjschuma@netapp.com" <bjschuma@netapp.com>,
-        "anna@kernel.org" <anna@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        "liuyongqiang13@huawei.com" <liuyongqiang13@huawei.com>,
-        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
-        "zhangxiaoxu5@huawei.com" <zhangxiaoxu5@huawei.com>
-References: <20220329113208.2466000-1-chenxiaosong2@huawei.com>
- <68b65889-3b2c-fb72-a0a8-d0afc15a03e0@huawei.com>
- <e0c2d7ec62b447cabddbc8a9274be955@epfl.ch>
- <0b6546f7-8a04-9d6e-50c3-483c8a1a6591@huawei.com>
- <d73a51a2-6b63-b536-61e6-3d18563f027d@huawei.com>
- <3ee78045f18b4932b1651de776ee73c4@epfl.ch>
- <f927bec5-1078-dcb9-6f3e-a64d304efd5b@huawei.com>
- <55415e44b4b04bbfa66c42d5f2788384@epfl.ch>
- <88231dee-760f-b992-f1d1-81309076071e@huawei.com>
- <f794d0aaef654bffacda9159321d66e0@epfl.ch>
- <67d6a536-9027-1928-99b6-af512a36cd1a@huawei.com>
- <018da3c0453845329d5ae2ec8924af06@epfl.ch>
-From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
-In-Reply-To: <018da3c0453845329d5ae2ec8924af06@epfl.ch>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.52]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531013103.2175-1-Larry.Finger@lwfinger.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tao:
-
-"NVD Last Modified" date of 
-[CVE-2022-24448](https://nvd.nist.gov/vuln/detail/CVE-2022-24448) is 
-already updated to 05/12/2022, but the description of the cve is still 
-wrong, and the hyperlink of [unrelated patch: NFSv4: Handle case where 
-the lookup of a directory 
-fails](https://github.com/torvalds/linux/commit/ac795161c93699d600db16c1a8cc23a65a1eceaf) 
-is still shown in the web.
-
-There is two fix patches of the cve, the web just show one of my patches.
-
-one patch is already shown in the web: [Revert "NFSv4: Handle the 
-special Linux file open access 
-mode"](https://github.com/torvalds/linux/commit/ab0fc21bc7105b54bafd85bd8b82742f9e68898a)
-
-second patch is not shown in the web: [NFSv4: fix open failure with 
-O_ACCMODE 
-flag](https://github.com/torvalds/linux/commit/b243874f6f9568b2daf1a00e9222cacdc15e159c)
-
-在 2022/5/6 15:40, Lyu Tao 写道:
->> From: chenxiaosong (A) <chenxiaosong2@huawei.com>
->> Sent: Thursday, May 5, 2022 4:48 AM
->> To: Lyu Tao
->> Cc: linux-nfs@vger.kernel.org; linux-kernel@vger.kernel.org; bjschuma@netapp.com; anna@kernel.org; Trond Myklebust; liuyongqiang13@huawei.com; yi.zhang@huawei.com; zhangxiaoxu5@huawei.com
->> Subject: Re: [PATCH -next 0/2] fix nfsv4 bugs of opening with O_ACCMODE flag
->      
->> "NVD Last Modified" date of CVE-2022-24448 is updated as 04/29/2022, but the content of the cve is old.
->> https://nvd.nist.gov/vuln/detail/CVE-2022-24448
->   
-> Hi,
+On Mon, May 30, 2022 at 08:31:01PM -0500, Larry Finger wrote:
+> Building driver r8188eu in staging with -warray-bounds exposes two places
+> where arrays are too small.
 > 
-> Thanks for reaching out.
+> Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
+> ---
+> v2 - get proper To and Cc
+> v3 - Use Dan Carpenter's suggestion for correct patch.
 > 
-> I've requested to update the CVE description and they replied me that it would be updated yesterday. Maybe the system need some time to reflesh. Let's wait a few more days.
+> Larry Finger (2):
+>   staging: r8188eu: Fix undersized array in rtw_xmit.c
+>   staging: r8188eu: Fix warning of array overflow in ioctl_linux.c
 > 
-> Best,
-> Tao.
+>  drivers/staging/r8188eu/core/rtw_xmit.c      | 17 ++++-------------
+>  drivers/staging/r8188eu/os_dep/ioctl_linux.c |  2 +-
+>  2 files changed, 5 insertions(+), 14 deletions(-)
 > 
+> -- 
+> 2.36.1
+> 
+
+Hi Larry,
+
+Both patches look good to me, however I've already submitted a patch 10
+days ago that does exactly what your rtw_xmit.c patch does, in
+addition to fixing the changed error handling semantics for the relevant
+function (in f94b47c6bde6) which broke the driver.
+
+Regards,
+Phil

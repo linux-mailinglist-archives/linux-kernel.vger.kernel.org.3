@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66DC5391BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BAF5391BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344705AbiEaNVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
+        id S1344717AbiEaNVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344699AbiEaNV3 (ORCPT
+        with ESMTP id S1344691AbiEaNVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:21:29 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B355B97295;
-        Tue, 31 May 2022 06:21:27 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id r206so10177809oib.8;
-        Tue, 31 May 2022 06:21:27 -0700 (PDT)
+        Tue, 31 May 2022 09:21:31 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A232395DCE;
+        Tue, 31 May 2022 06:21:29 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id k187so13199844oif.1;
+        Tue, 31 May 2022 06:21:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=sjiY+V80OL2DiZ6A4EsGgW9fJIH8AO134dDg8U/4y24=;
-        b=GQqS4YzL0CcrjWio8g1620mtdtIoIFhVjGmYTjOmnL7S20z6Uh/9AnEqD4WKXuDZZc
-         HSgpZhl70zIDubCokzfPjFmP+nEpjo7msu1sKYn58nH/7U+9ZmVRWOEJ7ughOagON/Vc
-         JW9G7oQK490sIscHOtp//QtsaxCIUwdZWLeY45E717pQqV75WcmW89SoMZYdRglPgDvH
-         mdqL6t8yyk0zrfaHnERuuFEBndWjiLbvWR+EeQu9E3pXLP1c+OhkgAzI4nIfGRR5JNhE
-         VIakFRjzfDoeM+hZxOIOxlIdW9qjWiH01RdR4bsU9RGumc+FnPhKcKyPlUP6JxyCRXGt
-         pCeg==
-X-Gm-Message-State: AOAM533Jl+2o86Ast5GkZ/xUWzKrJRIafJtRcokypeg6vANmWFIBRiAv
-        aX4F+jcIj6+bMQk+nrIZDQ==
-X-Google-Smtp-Source: ABdhPJyl1Zml7tK5z8UzPYsy0IRPoHHsY9ZbD0LO+NEm3SnMP5YpNvNvBFYMbygVSD+kwDaZAn8DAw==
-X-Received: by 2002:a05:6808:1510:b0:32a:ef6a:99b with SMTP id u16-20020a056808151000b0032aef6a099bmr12444054oiw.120.1654003286440;
-        Tue, 31 May 2022 06:21:26 -0700 (PDT)
+        bh=n2YWFk0y3q/d7S62mzm/mupBj+kGA49hA3r4JP1ldJU=;
+        b=UqsmQS/PhlikB+EugfjiGGPxJwTfuBvKe2jER/nsjc57mx4xPj5HLoF1CHBopg693H
+         ac3hEBnR5zeGnGTgcjHjY/etY9fY8T2K/2rmycMu2YqC1a/QtWr1CrdrkOv/kkVrfwlT
+         Id9GMrwWI+bH5nNgbNpeuftaJKh1UjkJQmaRbe93RKpoyiwPrfVZedfCqhLO/K8mE9HY
+         PGtQLvOI0GrrG5Nb2Mc/AM1cAg9aUx8skQPhess86mtvkozKKcoKbDWmh7v11OSSsh/Q
+         uVi0vrSJzUxKzbDRO+gFzyIr2RdFSs8/i48Y4LMU1uUd2r1Q5oVFV5bwRJ+d4FMDFqkN
+         pJKw==
+X-Gm-Message-State: AOAM531R3t5D31yQh+W+kQa3tRLBHWXiMIzr6D5JeQK9/vNvxLfeiKN7
+        ab2PJ081+bzXdSfYZ9HqLw==
+X-Google-Smtp-Source: ABdhPJw/uns3WPs2X+MsfGF5nr1CcrWwKzdKVdZtYl2nRuFZii2epEbochmc6fHJTtwW1+OebjuDSA==
+X-Received: by 2002:a05:6808:10d1:b0:32b:a63b:fdda with SMTP id s17-20020a05680810d100b0032ba63bfddamr12450526ois.257.1654003288954;
+        Tue, 31 May 2022 06:21:28 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t6-20020a056870f20600b000e90544b79fsm5563380oao.41.2022.05.31.06.21.25
+        by smtp.gmail.com with ESMTPSA id w11-20020a0568080d4b00b0032b4ae1fc2csm5715934oik.21.2022.05.31.06.21.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 06:21:26 -0700 (PDT)
-Received: (nullmailer pid 1610155 invoked by uid 1000);
+        Tue, 31 May 2022 06:21:28 -0700 (PDT)
+Received: (nullmailer pid 1610158 invoked by uid 1000);
         Tue, 31 May 2022 13:21:25 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     airlied@linux.ie, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, matthias.bgg@gmail.com,
-        chunkuang.hu@kernel.org, devicetree@vger.kernel.org,
-        jitao.shi@mediatek.com, ck.hu@mediatek.com, p.zabel@pengutronix.de,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, daniel@ffwll.ch,
-        robh+dt@kernel.org
-In-Reply-To: <20220530201436.902505-1-fparent@baylibre.com>
-References: <20220530201436.902505-1-fparent@baylibre.com>
-Subject: Re: [PATCH 1/7] dt-bindings: display: mediatek: dpi: add power-domains property
+To:     Harsh Agarwal <quic_harshq@quicinc.com>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        quic_ppratap@quicinc.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        quic_jackp@quicinc.com
+In-Reply-To: <1653985217-20953-2-git-send-email-quic_harshq@quicinc.com>
+References: <1653985217-20953-1-git-send-email-quic_harshq@quicinc.com> <1653985217-20953-2-git-send-email-quic_harshq@quicinc.com>
+Subject: Re: [PATCH 1/3] dt-bindings: usb: dwc3: Add support for multiport related properties
 Date:   Tue, 31 May 2022 08:21:25 -0500
-Message-Id: <1654003285.268526.1610147.nullmailer@robh.at.kernel.org>
+Message-Id: <1654003285.276061.1610157.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -65,28 +66,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 May 2022 22:14:30 +0200, Fabien Parent wrote:
-> DPI is part of the display / multimedia block in MediaTek SoCs, and
-> always have a power-domain (at least in the upstream device-trees).
-> Add the power-domains property to the binding documentation.
+On Tue, 31 May 2022 13:50:15 +0530, Harsh Agarwal wrote:
+> Added support for multiport, mport, num-ssphy and num-hsphy
+> properties. These properties are used to support devices having
+> a multiport controller.
 > 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
 > ---
->  .../devicetree/bindings/display/mediatek/mediatek,dpi.yaml  | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:366:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:367:10: [warning] wrong indentation: expected 11 but found 9 (indentation)
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:369:11: [warning] wrong indentation: expected 11 but found 10 (indentation)
 
 dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.example.dts:29.35-36 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
+Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:86.27-89.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@1: node has a unit name, but no reg or ranges property
+Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:91.27-93.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@2: node has a unit name, but no reg or ranges property
+Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:95.27-97.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@3: node has a unit name, but no reg or ranges property
+Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:99.27-101.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@4: node has a unit name, but no reg or ranges property
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.example.dtb: usb@4a000000: multiport: 'mport' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
 
 doc reference errors (make refcheckdocs):
 

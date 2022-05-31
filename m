@@ -2,75 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839545395C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3175395CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346760AbiEaR7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 13:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48030 "EHLO
+        id S1346765AbiEaSAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 14:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245246AbiEaR7R (ORCPT
+        with ESMTP id S237702AbiEaSAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 13:59:17 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CDF8A33B
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:59:16 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f8398e99dcso121200197b3.9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:59:16 -0700 (PDT)
+        Tue, 31 May 2022 14:00:47 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AF38AE68;
+        Tue, 31 May 2022 11:00:46 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id f4so13507422pgf.4;
+        Tue, 31 May 2022 11:00:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=43It4tY6rrOkbTtcYBE6N6l07cvQ+0q2w708BzUCfdQ=;
-        b=cXZh0iB2YUeKYWSq/DnFCdl8EfWrduss4aKiLDcCamYQxpSehyBOr4Mc2Id9+hCYIK
-         pk3kI/d2LS9MbBzExeYMvn/w+d4BmVB0YXSZ+skDu8gCDQ3DefzaGupJW4tsBoH/0Tg+
-         itlbwwf2hGrxNFki2bplHtgCS3/hLVA8ID0F6auJlQRpeiZQCF8S7rUif4r9upjflXJL
-         tta6rNIuKi3PgSzLcLV7gdpXYPxvnG4I6+k00Zk93DDHs0fuyQHXktG7wVbOX3zpHbqC
-         rMlQDftQ/vo1M9BEP+YAucYerbdaEQaRjqsL2EpO/thbKjx2KFc7UlCDU1haZRZ2U9Vu
-         luaQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BbUxo4yAz2zldbWEi0GluCNfOnin3cth9gUswEAqzU8=;
+        b=hynBTbzO9rYY0qHxLkPOCSAV7PkFkMuKMQVwaYDYARYuWnM9o4kW+6rxRIYdspG+DS
+         J/rTMUxu4nnsZKopHh7CclvjRd+Z/b82662SEdMCD65Cd39uYVAGCiz7JRhBmcVVzQPI
+         QDeGJ+IBQiVFYn6Kzx7UMnvT4azS4kAVvyImB+arcqQ6/pihcplCHDY3QyiTllbucoFN
+         s+tofLkTZcKnWf2Wl+ZXzM76fOuLvkSS7kcLWWcadnYm+2q0cNkQYAh+4VhLz/wHaBTx
+         Ih6Bha6yH+VQl9q2yp7SlKX2ZvfKv5svKSOuMRR/wSv5RH2t4xvwUmZLACrz2ZwjXtqJ
+         w9IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=43It4tY6rrOkbTtcYBE6N6l07cvQ+0q2w708BzUCfdQ=;
-        b=Fv36H2E+0b8D9gWVCH8OwHfkF43WNC6ZGVokbwo8rvC2TVgQ+5p654Ozs4QGHWHyWK
-         8Z9i09su24v+es5whinPXYamhOnJV8N9uAfDvZwy6XAWgcx7T2qWwZcgPVY7KXiyL0Gc
-         6MVqSeLm4bdL9P+TcP7a8PDmTkh4yUOFwtAlPMT+62RgqnR3ZhD7+q9Jphd/3Iipu7Az
-         L8PY8r9qA7LDPAU41+m5VFaLsYMOcIEma/mWU/tCklzYS2B6xbMoJYDlOqN/vR1gl/D3
-         S0shJrTl8MJtuMmPVB9VPWyUzHNhXIKAe0NNZ67aXcsXRu7IOuArV8Cs9RV35QsOga4D
-         c+XQ==
-X-Gm-Message-State: AOAM532cGAuvc60jFxg2HB1F5choYGLECwqRJnQ/KSdwRCc+P+NqKls6
-        SB0+lzt+QGe19jEoIi3VvF7aAmTFXBC+fF8bhoI=
-X-Google-Smtp-Source: ABdhPJzYg2PfrP7VAcOIhffi51zcFsynl9sjjnou+I9ggql8TYO0BMoIPH151gDfL/0kxSkXR0y1Lgi6goCkxQD9zNE=
-X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:1067:12fc:51e8:95dc])
- (user=samitolvanen job=sendgmr) by 2002:a05:6902:13c2:b0:641:b6d:a151 with
- SMTP id y2-20020a05690213c200b006410b6da151mr59039298ybu.348.1654019955516;
- Tue, 31 May 2022 10:59:15 -0700 (PDT)
-Date:   Tue, 31 May 2022 10:59:10 -0700
-Message-Id: <20220531175910.890307-1-samitolvanen@google.com>
-Mime-Version: 1.0
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1904; h=from:subject;
- bh=3APPK7JF94JGhsLYsP/k0BDbTWmcKvSdC5cUDwc7HEc=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBilldu8L6b8RrGC/uxYEv0Gt9ac9FJ70jAIdFrFvYx
- EHOOhWyJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYpZXbgAKCRBMtfaEi7xW7kl4C/
- sGCz2eKwsUVqQBfjgycK9T1O2Q00Tu+HFofNAQbx4mkHJHNeWBFRwG6hwpCmtJsW1AQhMexHawitij
- pRuOxuW5Ao3CKRsq7h1iSypEEHTZS/6XWLZ4UxwcSb92I77OqdviGLpbXPcLemLi/A9xHEY8qGF59K
- 1I/dRgW2S2WNN/JKkJAmD2dGFd5o5rQ7VNSzkyE1DKve/bllIIPEenvR5Wep0d8UsmTmIlGzgIeceM
- e/ChPrDIOk5qG+Wu+IU8w7j3qutB0PEBfQ4q87dg2S1ig0AuZM+26vIplp3oRylAQXIVPDgFkRntua
- HCXqLh35oofnfgIshwTLivkIn6qKnQLkl0QTxTR0yaCSodf/LxrbqP2rMFFHKW4/Ez8KfYrbyTYKIi
- oYTzkdFvZILF1O7dNfDPlCfOWVDM8lu6KcdQjRJxGi88gu/WOymYVreOEvQCadOf161KxVBiPmrsba
- XlOq1MdW5ZjjeDMHq020MIhgpTiSklSjuh41GqNOyeM/w=
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH] cfi: Fix __cfi_slowpath_diag RCU usage with cpuidle
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Sami Tolvanen <samitolvanen@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BbUxo4yAz2zldbWEi0GluCNfOnin3cth9gUswEAqzU8=;
+        b=OxTvBpXQK2b2q4lqUFeCZ3BUEs8VOTMJm1+29sMYqcy7iZOSehVvrWfI3cdNrlkGFO
+         VwW7rXoGVR7e2QvVHtTx6zPqpp4JWRPkH4XDWT1R/5+aUVaKj61oLnCV8bgz2Uyg6LYx
+         s+LAlLrvU8XfxixokoxOwQHcEzFwCyxw7LmDHBRymJZ/ACm2JML6Sewd5vgIruEzsVhZ
+         bwFujBGYwMZltKXhj0c38s+uy+CC4/3gHRhGijXjXVdFrSAlsIblzo+Qi7aKvxCf/zMp
+         apV4kqnP+3jPxBVy7cbZCtheVfdSduTsIvl4+y2yieKW0/90QhOFYcJ3WdFiVHUmqUp3
+         SlHg==
+X-Gm-Message-State: AOAM5302ifVDr+/pa46HJf4xUH4JALRZsvWkn6QJ2Cxcpf1MJEA1crSk
+        /XsBOdDsyeKmFXXmNfZnhLAEM9JQ2Xx+psXId8U=
+X-Google-Smtp-Source: ABdhPJw72huO/7ofZw41/IrdbsJVshRqpIuB7v6o/MbZmah6cvF05hc9Bj6ASGuXAbQ+cjixMHZrrtyd3POkZdxlnbM=
+X-Received: by 2002:a63:2ad6:0:b0:3f9:d9fa:2713 with SMTP id
+ q205-20020a632ad6000000b003f9d9fa2713mr44235809pgq.512.1654020046159; Tue, 31
+ May 2022 11:00:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <Yh0+9cFyAfnsXqxI@kernel.org> <05df964f-552e-402e-981c-a8bea11c555c@www.fastmail.com>
+ <YiEZyTT/UBFZd6Am@kernel.org> <CALCETrWacW8SC2tpPxQSaLtxsOXfXHueyuwLcXpNF4aG-0ZvhA@mail.gmail.com>
+ <fb7d6e4da58ae77be2c6321ee3f3487485b2886c.camel@intel.com>
+ <40a3500c-835a-60b0-15bf-40c6622ad013@kernel.org> <YiZVbPwlgSFnhadv@kernel.org>
+ <CAMe9rOrSLPKdL2gL=yx84zrs-u6ch1AVvjk3oqUe3thR5ZD=dQ@mail.gmail.com>
+ <YpYDKVjMEYVlV6Ya@kernel.org> <d0c94eed6e3c7f35b78bab3f00aadebd960ee0d8.camel@intel.com>
+ <YpZEDjxSPxUfMxDZ@kernel.org> <7c637f729e14f03d0df744568800fc986542e33d.camel@intel.com>
+In-Reply-To: <7c637f729e14f03d0df744568800fc986542e33d.camel@intel.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Tue, 31 May 2022 11:00:10 -0700
+Message-ID: <CAMe9rOpctH-FQZH_5e=f17Ma7Ev0u9jiXap5bgqFyhLfsx102g@mail.gmail.com>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "rppt@kernel.org" <rppt@kernel.org>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "adrian@lisas.de" <adrian@lisas.de>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "avagin@gmail.com" <avagin@gmail.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "dave.martin@arm.com" <dave.martin@arm.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,70 +108,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RCU_NONIDLE usage during __cfi_slowpath_diag can result in an invalid
-RCU state in the cpuidle code path:
+On Tue, May 31, 2022 at 10:34 AM Edgecombe, Rick P
+<rick.p.edgecombe@intel.com> wrote:
+>
+> On Tue, 2022-05-31 at 19:36 +0300, Mike Rapoport wrote:
+> > > WRSS is a feature where you would usually want to lock it as
+> > > disabled,
+> > > but WRSS cannot be enabled if shadow stack is not enabled. Locking
+> > > shadow stack and WRSS off together doesn't have any security
+> > > benefits
+> > > in theory. so I'm thinking glibc doesn't need to do this. The
+> > > kernel
+> > > could even refuse to lock WRSS without shadow stack being enabled.
+> > > Could we avoid the extra ptrace functionality then?
+> >
+> > What I see for is that a program can support shadow stack, glibc
+> > enables
+> > shadow stack, does not enable WRSS and than calls
+> >
+> >         arch_prctl(ARCH_X86_FEATURE_LOCK,
+> >                    LINUX_X86_FEATURE_SHSTK | LINUX_X86_FEATURE_WRSS);
+>
+> I see the logic is glibc will lock SHSTK|IBT if either is enabled in
+> the elf header. I guess that is why I didn't see the locking happening
+> for me, because my manual enablement test doesn't have either set in
+> the header.
+>
+> It can't see where that glibc knows about WRSS though...
+>
+> The glibc logic seems wrong to me also, because shadow stack or IBT
+> could be force-disabled via glibc tunables. I don't see why the elf
+> header bit should exclusively control the feature locking. Or why both
+> should be locked if only one is in the header.
 
-  WARNING: CPU: 1 PID: 0 at kernel/rcu/tree.c:613 rcu_eqs_enter+0xe4/0x138
-  ...
-  Call trace:
-    rcu_eqs_enter+0xe4/0x138
-    rcu_idle_enter+0xa8/0x100
-    cpuidle_enter_state+0x154/0x3a8
-    cpuidle_enter+0x3c/0x58
-    do_idle.llvm.6590768638138871020+0x1f4/0x2ec
-    cpu_startup_entry+0x28/0x2c
-    secondary_start_kernel+0x1b8/0x220
-    __secondary_switched+0x94/0x98
+glibc locks SHSTK and IBT only if they are enabled at run-time. It doesn't
+enable/disable/lock WRSS at the moment.  If WRSS can be enabled
+via arch_prctl at any time, we can't lock it.  If WRSS should be locked early,
+how should it be enabled in application?  Also can WRSS be enabled
+from a dlopened object?
 
-Instead, call rcu_irq_enter/exit to wake up RCU only when needed and
-disable interrupts for the entire CFI shadow/module check when we do.
+> >
+> > so that WRSS cannot be re-enabled.
+> >
+> > For the programs that do not support shadow stack, both SHSTK and
+> > WRSS are
+> > disabled, but still there is the same call to
+> > arch_prctl(ARCH_X86_FEATURE_LOCK, ...) and then neither shadow stack
+> > nor
+> > WRSS can be enabled.
+> >
+> > My original plan was to run CRIU with no shadow stack, enable shadow
+> > stack
+> > and WRSS in the restored tasks using arch_prct() and after the shadow
+> > stack
+> > contents is restored disable WRSS.
+> >
+> > Obviously, this didn't work with glibc I have :)
+>
+> Were you disabling shadow stack via glibc tunnable? Or was the elf
+> header marked for IBT? If it was a plain old binary, the code looks to
+> me like it should not lock any features.
+>
+> >
+> > On the bright side, having a ptrace call to unlock shadow stack and
+> > wrss
+> > allows running CRIU itself with shadow stack.
+> >
+>
+> Yea, having something working is really great. My only hesitancy is
+> that, per a discussion on the LAM patchset, we are going to make this
+> enabling API CET only (same semantics for though). I suppose the
+> locking API arch_prctl() could still be support other arch features,
+> but it might be a second CET only regset. It's not the end of the
+> world.
+>
+> I guess the other consideration is tieing CRIU to glibc peculiarities.
+> Like even if we fix glibc, then CRIU may not work with some other libc
+> or app that force disables for some weird reason. Is it supposed to be
+> libc-agnostic?
+>
 
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
----
- kernel/cfi.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/cfi.c b/kernel/cfi.c
-index 9594cfd1cf2c..08102d19ec15 100644
---- a/kernel/cfi.c
-+++ b/kernel/cfi.c
-@@ -281,6 +281,8 @@ static inline cfi_check_fn find_module_check_fn(unsigned long ptr)
- static inline cfi_check_fn find_check_fn(unsigned long ptr)
- {
- 	cfi_check_fn fn = NULL;
-+	unsigned long flags;
-+	bool rcu_idle;
- 
- 	if (is_kernel_text(ptr))
- 		return __cfi_check;
-@@ -290,13 +292,21 @@ static inline cfi_check_fn find_check_fn(unsigned long ptr)
- 	 * the shadow and __module_address use RCU, so we need to wake it
- 	 * up if necessary.
- 	 */
--	RCU_NONIDLE({
--		if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
--			fn = find_shadow_check_fn(ptr);
-+	rcu_idle = !rcu_is_watching();
-+	if (rcu_idle) {
-+		local_irq_save(flags);
-+		rcu_irq_enter();
-+	}
-+
-+	if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
-+		fn = find_shadow_check_fn(ptr);
-+	if (!fn)
-+		fn = find_module_check_fn(ptr);
- 
--		if (!fn)
--			fn = find_module_check_fn(ptr);
--	});
-+	if (rcu_idle) {
-+		rcu_irq_exit();
-+		local_irq_restore(flags);
-+	}
- 
- 	return fn;
- }
 -- 
-2.36.1.255.ge46751e96f-goog
-
+H.J.

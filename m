@@ -2,98 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BDD45397B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 22:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D2D5397B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 22:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344124AbiEaUDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 16:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S1347651AbiEaUDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 16:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233062AbiEaUDg (ORCPT
+        with ESMTP id S233062AbiEaUDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 16:03:36 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C8A2FE4F
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 13:03:35 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id h11so18974630eda.8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 13:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VeXRYquwBdQ1dOZMflf5nsQE+opZ3d34q51TacEF7HA=;
-        b=XuZGseWjCdQCUpLS7SWx2X04gT9YVCZqwuF0O3a7BrK7scNXHX2Pml9WwshUdl5VkY
-         aIC0pGpDEEEg1XCkAz3YScYnYGWVcrZhAa01mvHgfLyWtgES/O8bj8YwxPaWHWiFG5RH
-         JpfoXo7eKL8C7fYzSGLdyfQp7ZXU7EO+3Qd3+Z+mUzaTeCxZNVZ4STp0XazAq2aZ5ohY
-         8u51PbmoCd8sbikiANJVhCKkhLhIxyNjPxg4H4aFnAekHmz0TwaXFs22aOt5vetk5pEb
-         a7KzE6z0jh43w3F2gnNfMAdv4T/h5fE54520BL7miy3XFym4oBBaf/qG/H8NOhsThB9A
-         e1Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VeXRYquwBdQ1dOZMflf5nsQE+opZ3d34q51TacEF7HA=;
-        b=ocGAWoUXkJDOCB6ken49M3GpRLxzwMuy77809jt7PI7XHNOCsBEP0/P3OEYhh74zYc
-         2DLjYdzbccMTWm46ajl0/yKOCZ6C5kX9QngphueXTmvLWMV+vycG99td2DwFg1Gy1CXf
-         nssPz4ngsEHprTm3CMlr45UWt+HUXCORQw4KjZXG5ItBpquAvKahWHI6tEvuuf9aZkfa
-         5k0zFxKGtQKfrJkKF4eTpkg52PwHDV1Vit1+Uz4m+ndvFUwFUACdRkmGVtEz/UYZbZ7w
-         8brky9iuuItIDzXig4D6MTELPKudEGlqLxiPcCsOkzPuOgiYk+WnVsN0dfOeN1R2R46L
-         oRVQ==
-X-Gm-Message-State: AOAM530RW0wpN0AMifCPa6HFX1vNB16NilOq3fZnti1Ts7ieIcL5dU/F
-        LYW0h3ChyOyVHu8W5rvWF+l8E4p+ntEVdtt0YW8=
-X-Google-Smtp-Source: ABdhPJwjVOUsvRdeo5FK73NryLg6a7micfi5ToPTE2Sq7rMy5xFF/f8eN3aQLibNcx6ds/c/F7VnYcaMymS5mq+P96A=
-X-Received: by 2002:a05:6402:254a:b0:42b:6c9a:c06c with SMTP id
- l10-20020a056402254a00b0042b6c9ac06cmr47415245edb.199.1654027413836; Tue, 31
- May 2022 13:03:33 -0700 (PDT)
+        Tue, 31 May 2022 16:03:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AED3BA7A;
+        Tue, 31 May 2022 13:03:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5886AB810F1;
+        Tue, 31 May 2022 20:03:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5054C385A9;
+        Tue, 31 May 2022 20:03:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654027426;
+        bh=Pfk28myHk/3Cvx3u7P+lbHGdGSulMgPmZyXSWfrF0qk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=WotY6DJAm+Qfsztc9Kj+2n9uGNuzFmnsxvOxOxOpTo3bck4G19bk0xzCrWUSGjYnd
+         FNptSvijMh56NRbulr+d4y/M0KGaQfFT3b+S8LIHEZLwq80ueGIHnMoHAR8ZHCeadr
+         gIFrMGhClQKhZfPU38kS1iq1w+WA5BxnINQ5j3QYFillDuWRrNI7G+uCYgAEtzuzaf
+         mCiM+cjxWIXrpo1bBgFSeNsUX0CzgKAP2hjunFaaoQ1pk4Abrwjb4sNC8EVJjky3ju
+         QpCwKE44aRO9Nwpu6jZzAuJ0yIpAOwvJEtZcbjK4MTXABMglcC678ZL7olTvytAEfN
+         BEvK3VWjWoI4w==
+Date:   Tue, 31 May 2022 15:03:44 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Update my email address to @kernel.org
+Message-ID: <20220531200344.GA778872@bhelgaas>
 MIME-Version: 1.0
-References: <20220531144818.26943-1-linmq006@gmail.com> <20220531144818.26943-2-linmq006@gmail.com>
-In-Reply-To: <20220531144818.26943-2-linmq006@gmail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 31 May 2022 22:03:23 +0200
-Message-ID: <CAFBinCANaU4Tk42j-GDBWwUDk39_XiCfeu4D9vGFjFc_G4PZGQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drm/meson: encoder_hdmi: Fix refcount leak in meson_encoder_hdmi_init
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220528151411.29810-1-lorenzo.pieralisi@arm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, May 28, 2022 at 04:14:11PM +0100, Lorenzo Pieralisi wrote:
+> I will soon lose my @arm.com email address, so to prevent any possible
+> issue let's update all kernel references (inclusive of .mailmap) to my
+> @kernel.org alias ahead of time.
+> 
+> My @arm.com address is still working and will likely resume to work at
+> some point in the future; nonetheless, it is safer to switch to the
+> @kernel.org alias from now onwards so that continuity is guaranteed.
+> 
+> Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
 
-first of all: thank you for spotting this and sending a patch!
+Applied to for-linus for v5.19, thanks!
 
-On Tue, May 31, 2022 at 4:49 PM Miaoqian Lin <linmq006@gmail.com> wrote:
-[...]
-> diff --git a/drivers/gpu/drm/meson/meson_encoder_hdmi.c b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-> index 5e306de6f485..f3341458f8b7 100644
-> --- a/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-> +++ b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-> @@ -363,6 +363,7 @@ int meson_encoder_hdmi_init(struct meson_drm *priv)
->         }
->
->         meson_encoder_hdmi->next_bridge = of_drm_find_bridge(remote);
-> +       of_node_put(remote);
-further down in the same function remote is used again:
-  pdev = of_find_device_by_node(remote);
-
-My understanding is that we should only use of_node_put() once we
-don't need to access the node (in this case the variable is "remote")
-anymore.
-
-
-Best regards,
-Martin
+> ---
+>  .mailmap    |  1 +
+>  MAINTAINERS | 16 ++++++++--------
+>  2 files changed, 9 insertions(+), 8 deletions(-)
+> 
+> diff --git a/.mailmap b/.mailmap
+> index 6d484937f901..9ba38a82aba4 100644
+> --- a/.mailmap
+> +++ b/.mailmap
+> @@ -236,6 +236,7 @@ Linus Lüssing <linus.luessing@c0d3.blue> <linus.luessing@web.de>
+>  <linux-hardening@vger.kernel.org> <kernel-hardening@lists.openwall.com>
+>  Li Yang <leoyang.li@nxp.com> <leoli@freescale.com>
+>  Li Yang <leoyang.li@nxp.com> <leo@zh-kernel.org>
+> +Lorenzo Pieralisi <lpieralisi@kernel.org> <lorenzo.pieralisi@arm.com>
+>  Lukasz Luba <lukasz.luba@arm.com> <l.luba@partner.samsung.com>
+>  Maciej W. Rozycki <macro@mips.com> <macro@imgtec.com>
+>  Maciej W. Rozycki <macro@orcam.me.uk> <macro@linux-mips.org>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 392467e9ab73..4fa6a8da4b83 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -382,7 +382,7 @@ F:	include/acpi/
+>  F:	tools/power/acpi/
+>  
+>  ACPI FOR ARM64 (ACPI/arm64)
+> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+>  M:	Hanjun Guo <guohanjun@huawei.com>
+>  M:	Sudeep Holla <sudeep.holla@arm.com>
+>  L:	linux-acpi@vger.kernel.org
+> @@ -2946,7 +2946,7 @@ N:	uniphier
+>  ARM/VERSATILE EXPRESS PLATFORM
+>  M:	Liviu Dudau <liviu.dudau@arm.com>
+>  M:	Sudeep Holla <sudeep.holla@arm.com>
+> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Maintained
+>  F:	*/*/*/vexpress*
+> @@ -5162,7 +5162,7 @@ F:	arch/x86/kernel/cpuid.c
+>  F:	arch/x86/kernel/msr.c
+>  
+>  CPUIDLE DRIVER - ARM BIG LITTLE
+> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+>  M:	Daniel Lezcano <daniel.lezcano@linaro.org>
+>  L:	linux-pm@vger.kernel.org
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> @@ -5182,7 +5182,7 @@ F:	drivers/cpuidle/cpuidle-exynos.c
+>  F:	include/linux/platform_data/cpuidle-exynos.h
+>  
+>  CPUIDLE DRIVER - ARM PSCI
+> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+>  M:	Sudeep Holla <sudeep.holla@arm.com>
+>  L:	linux-pm@vger.kernel.org
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> @@ -15289,7 +15289,7 @@ F:	drivers/pci/controller/pci-v3-semi.c
+>  
+>  PCI ENDPOINT SUBSYSTEM
+>  M:	Kishon Vijay Abraham I <kishon@ti.com>
+> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+>  R:	Krzysztof Wilczyński <kw@linux.com>
+>  L:	linux-pci@vger.kernel.org
+>  S:	Supported
+> @@ -15352,7 +15352,7 @@ F:	Documentation/devicetree/bindings/pci/xgene-pci-msi.txt
+>  F:	drivers/pci/controller/pci-xgene-msi.c
+>  
+>  PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS
+> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+>  R:	Rob Herring <robh@kernel.org>
+>  R:	Krzysztof Wilczyński <kw@linux.com>
+>  L:	linux-pci@vger.kernel.org
+> @@ -15905,7 +15905,7 @@ F:	include/linux/dtpm.h
+>  
+>  POWER STATE COORDINATION INTERFACE (PSCI)
+>  M:	Mark Rutland <mark.rutland@arm.com>
+> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Maintained
+>  F:	drivers/firmware/psci/
+> @@ -18277,7 +18277,7 @@ F:	drivers/net/ethernet/smsc/smc91x.*
+>  
+>  SECURE MONITOR CALL(SMC) CALLING CONVENTION (SMCCC)
+>  M:	Mark Rutland <mark.rutland@arm.com>
+> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+>  M:	Sudeep Holla <sudeep.holla@arm.com>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Maintained
+> -- 
+> 2.31.0
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

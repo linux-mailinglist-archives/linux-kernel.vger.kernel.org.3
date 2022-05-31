@@ -2,223 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084C5538A4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 05:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3303A538A51
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 06:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243758AbiEaD4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 23:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
+        id S243757AbiEaEIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 00:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238235AbiEaDz6 (ORCPT
+        with ESMTP id S232981AbiEaEIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 23:55:58 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033829399D
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 20:55:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653969357; x=1685505357;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MJi2GLQ5FZmsNTwYhBWvztF2fDdwP8JeUOSStlzG9UE=;
-  b=QVCtTE15FH89QCIEMs6Bp7YJzmF71OadykUl4e9DqTY2dUxkJuT3jcd2
-   ZCTT2zYqAFnxf30F4/kgVB9BdQ0VLGCczs6bdLliZeYKOAIPH37vYDQxG
-   MVdlg5Fj4u7r25zaMRZ50VOydQfy0tCQLKqXETMMBKOxCps1sMqJ63VER
-   RLuA1CQlE5gK0HeOafXx6oCFhSP0P1klmJDIVTbUruCIf42+j/E2jhjaS
-   TrU7SjxqhCQ9rNk/QePVteJXVO3Jcll4VUennRxhd2rYWGSNtYX+TB/TA
-   AgXkNeJIkhsuQT//qxUR1I/bZeCa0J6P6UwwXoL8tU3P1Bsl1OS2u93R5
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="273938129"
-X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
-   d="scan'208";a="273938129"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 20:55:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
-   d="scan'208";a="706386723"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 30 May 2022 20:55:55 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nvsz4-0002Im-AH;
-        Tue, 31 May 2022 03:55:54 +0000
-Date:   Tue, 31 May 2022 11:55:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 20/20]
- arch/arm64/include/asm/memory.h:311:9: error: call to undeclared function
- '__phys_to_pfn'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202205311114.5x4WyD2Y-lkp@intel.com>
+        Tue, 31 May 2022 00:08:45 -0400
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78969562D4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 21:08:43 -0700 (PDT)
+Received: by mail-vk1-xa2f.google.com with SMTP id d132so5722295vke.0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 21:08:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PQayHW7nNYqOEQz5hmBB6KPJg2gTvXgiY+h7JV2fOkA=;
+        b=AhkwopzBYexwfn2wdNQMPMJvXNbZpx/ruTfmIJ9yD2VsaE1ZYWfX9bpQJzLLHU5F0c
+         YegBb8BGCgPCOeSzLkcePOhvRMLjcQ4iwM86+QsGvjf/QeCOFb7YeXDW6oVuoNxPWmX4
+         SuJSUpFZ74ab/Xw/MVYfwX0m/IelcBcAOFrEr32HW51K9Qi+HOdzT+2A6sA79em+2g+B
+         0Ra12QVgC16zwJqqaZeJB0R+S2PHg4WyMF71Usm+EjWRTuGMeVgo9+4RlTIw0giMTPe2
+         /LLbW0OlcgzsOkfmHQc5GsFGYIJnbAMMcH16tlLTjc782HDRRhklxnUoLIBrpd1oyc1P
+         kB9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PQayHW7nNYqOEQz5hmBB6KPJg2gTvXgiY+h7JV2fOkA=;
+        b=OP7QxuAEAUpvKPUB9hDDuDrpxMDoJoeriNzIOK5RvpGqosMXI2VZJvEAw+G+ABLfis
+         72w3ZnHMT4pwK5cIF/xdWx/5l4S9ec6HNOz0IjTkKRWvx2bO8PDQeQqYbqgWstJIXhe+
+         HtEDAYUAE9E7Ca8Wxa/jsrRR5vf84W2meVRBOES25GAwIjlWy7Su/52iGuiDB1dEqBrA
+         umjwwmgrVJ8yE0CbgDRo5je9K/eGpNrGsCYPwBNi2+lY9k4Rgywe69UqEKgDmyx6vJVi
+         pqcozXcHaXjvS1e8wU9WKPTQ3Il+GnuEnIy+ZLmH204NoGF1v5nA1iJ0A7rOKlRZztsJ
+         h1YQ==
+X-Gm-Message-State: AOAM531PJ3IW1Na/Li9fOi6Gvu2mDQCQrqaFP0FJ3TdWpR/LE1qEqUax
+        fLrPPmBqUrKmmiifAjdW5ylD83Bz5qTBg8yoTgSjhQ==
+X-Google-Smtp-Source: ABdhPJw95u2k3azfz3MpOt9MeKzDgrOacpezxikhMNtQ5znHiZNuct59dPoCLpIWEyjPgIdqi0Y7Z8P/sEm2Xl8Akvc=
+X-Received: by 2002:a05:6122:7ca:b0:35c:966b:8729 with SMTP id
+ l10-20020a05612207ca00b0035c966b8729mr2534363vkr.27.1653970122433; Mon, 30
+ May 2022 21:08:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAPcxDJ5pduUyMA0rf+-aTjK_2eBvig05UTiTptX1nVkWE-_g8w@mail.gmail.com>
+ <Yo/I3oLkd9OU0ice@xz-m1.local> <24a95dea-9ea6-a904-7c0b-197961afa1d1@bytedance.com>
+ <0d266c61-605d-ce0c-4274-b0c7e10f845a@redhat.com> <4b0c3e37-b882-681a-36fc-16cee7e1fff0@bytedance.com>
+ <YpTngZ5Qr0KIvL0H@xz-m1.local>
+In-Reply-To: <YpTngZ5Qr0KIvL0H@xz-m1.local>
+From:   Jue Wang <juew@google.com>
+Date:   Mon, 30 May 2022 21:08:31 -0700
+Message-ID: <CAPcxDJ5UMfpys8KyLQVnkV9BPO1vaubxbhc7f4XC_TdNO7jr7g@mail.gmail.com>
+Subject: Re: Re: [PATCH 0/3] recover hardware corrupted page by virtio balloon
+To:     Peter Xu <peterx@redhat.com>, zhenwei pi <pizhenwei@bytedance.com>,
+        David Hildenbrand <david@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, jasowang@redhat.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, mst@redhat.com,
+        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>, qemu-devel@nongnu.org,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
-head:   eae5a86aafbe4bfbcb5c21b271073b014626a472
-commit: eae5a86aafbe4bfbcb5c21b271073b014626a472 [20/20] arm64: memory: Make virt_to_pfn() a static inline
-config: arm64-randconfig-r012-20220530 (https://download.01.org/0day-ci/archive/20220531/202205311114.5x4WyD2Y-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0776c48f9b7e69fa447bee57c7c0985caa856be9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=eae5a86aafbe4bfbcb5c21b271073b014626a472
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
-        git checkout eae5a86aafbe4bfbcb5c21b271073b014626a472
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+On Mon, May 30, 2022 at 8:49 AM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Mon, May 30, 2022 at 07:33:35PM +0800, zhenwei pi wrote:
+> > A VM uses RAM of 2M huge page. Once a MCE(@HVAy in [HVAx,HVAz)) occurs, the
+> > 2M([HVAx,HVAz)) of hypervisor becomes unaccessible, but the guest poisons 4K
+> > (@GPAy in [GPAx, GPAz)) only, it may hit another 511 MCE ([GPAx, GPAz)
+> > except GPAy). This is the worse case, so I want to add
+> >  '__le32 corrupted_pages' in struct virtio_balloon_config, it is used in the
+> > next step: reporting 512 * 4K 'corrupted_pages' to the guest, the guest has
+> > a chance to isolate the other 511 pages ahead of time. And the guest
+> > actually loses 2M, fixing 512*4K seems to help significantly.
+>
+> It sounds hackish to teach a virtio device to assume one page will always
+> be poisoned in huge page granule.  That's only a limitation to host kernel
+> not virtio itself.
+>
+> E.g. there're upstream effort ongoing with enabling doublemap on hugetlbfs
+> pages so hugetlb pages can be mapped in 4k with it.  It provides potential
+> possibility to do page poisoning with huge pages in 4k too.  When that'll
+> be ready the assumption can go away, and that does sound like a better
+> approach towards this problem.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
++1.
 
-All errors (new ones prefixed by >>):
+A hypervisor should always strive to minimize the guest memory loss.
 
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:13:
-   In file included from include/linux/irqdomain.h:35:
-   In file included from include/linux/of.h:17:
-   In file included from include/linux/kobject.h:20:
-   In file included from include/linux/sysfs.h:16:
-   In file included from include/linux/kernfs.h:11:
-   In file included from include/linux/mutex.h:17:
-   In file included from include/linux/lockdep.h:14:
-   In file included from include/linux/smp.h:110:
-   In file included from include/linux/preempt.h:78:
-   In file included from arch/arm64/include/asm/preempt.h:6:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/arm64/include/asm/thread_info.h:17:
->> arch/arm64/include/asm/memory.h:311:9: error: call to undeclared function '__phys_to_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return __phys_to_pfn(__virt_to_phys((unsigned long)(x)));
-                  ^
->> arch/arm64/include/asm/memory.h:311:54: error: use of undeclared identifier 'x'
-           return __phys_to_pfn(__virt_to_phys((unsigned long)(x)));
-                                                               ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                           set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+The HugeTLB double mapping enlightened memory poisoning behavior (only
+poison 4K out of a 2MB huge page and 4K in guest) is a much better
+solution here. To be completely transparent, it's not _strictly_
+required to poison the page (whatever the granularity it is) on the
+host side, as long as the following are true:
 
+1. A hypervisor can emulate the _minimized_ (e.g., 4K) the poison to the guest.
+2. The host page with the UC error is "isolated" (could be PG_HWPOISON
+or in some other way) and prevented from being reused by other
+processes.
 
-vim +/__phys_to_pfn +311 arch/arm64/include/asm/memory.h
+For #2, PG_HWPOISON and HugeTLB double mapping enlightened memory
+poisoning is a good solution.
 
-   308	
-   309	static inline unsigned long virt_to_pfn(const void *p)
-   310	{
- > 311		return __phys_to_pfn(__virt_to_phys((unsigned long)(x)));
-   312	}
-   313	
+>
+> >
+> > >
+> > > I assume when talking about "the performance memory drops a lot", you
+> > > imply that this patch set can mitigate that performance drop?
+> > >
+> > > But why do you see a performance drop? Because we might lose some
+> > > possible THP candidates (in the host or the guest) and you want to plug
+> > > does holes? I assume you'll see a performance drop simply because
+> > > poisoning memory is expensive, including migrating pages around on CE.
+> > >
+> > > If you have some numbers to share, especially before/after this change,
+> > > that would be great.
+> > >
+> >
+> > The CE storm leads 2 problems I have even seen:
+> > 1, the memory bandwidth slows down to 10%~20%, and the cycles per
+> > instruction of CPU increases a lot.
+> > 2, the THR (/proc/interrupts) interrupts frequently, the CPU has to use a
+> > lot time to handle IRQ.
+>
+> Totally no good knowledge on CMCI, but if 2) is true then I'm wondering
+> whether it's necessary to handle the interrupts that frequently.  When I
+> was reading the Intel CMCI vector handler I stumbled over this comment:
+>
+> /*
+>  * The interrupt handler. This is called on every event.
+>  * Just call the poller directly to log any events.
+>  * This could in theory increase the threshold under high load,
+>  * but doesn't for now.
+>  */
+> static void intel_threshold_interrupt(void)
+>
+> I think that matches with what I was thinking..  I mean for 2) not sure
+> whether it can be seen as a CMCI problem and potentially can be optimized
+> by adjust the cmci threshold dynamically.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+The CE storm caused performance drop is caused by the extra cycles
+spent by the ECC steps in memory controller, not in CMCI handling.
+This is observed in the Google fleet as well. A good solution is to
+monitor the CE rate closely in user space via /dev/mcelog and migrate
+all VMs to another host once the CE rate exceeds some threshold.
+
+CMCI is a _background_ interrupt that is not handled in the process
+execution context and its handler is setup to switch to poll (1 / 5
+min) mode if there are more than ~ a dozen CEs reported via CMCI per
+second.
+>
+> --
+> Peter Xu
+>

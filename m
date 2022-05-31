@@ -2,121 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC715389E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B42D5389E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243567AbiEaCWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 22:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43264 "EHLO
+        id S243587AbiEaCY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 22:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243563AbiEaCWV (ORCPT
+        with ESMTP id S243571AbiEaCYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 22:22:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 075309345C
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 19:22:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F95A23A;
-        Mon, 30 May 2022 19:22:19 -0700 (PDT)
-Received: from [10.162.41.9] (unknown [10.162.41.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DEAE3F66F;
-        Mon, 30 May 2022 19:22:17 -0700 (PDT)
-Message-ID: <c5f061b3-880c-3639-28dc-f478fe2dabb9@arm.com>
-Date:   Tue, 31 May 2022 07:52:14 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC] mm/page_isolation: Fix an infinite loop in
- isolate_single_pageblock()
-Content-Language: en-US
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Mon, 30 May 2022 22:24:55 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7713A9345C
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 19:24:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653963894; x=1685499894;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aR0PHKL++ulIC/jYDhmlRB/ENp4XVEkPyXmnkAx4ymI=;
+  b=ULdvquEwe5UPJgHkHBe2Abi2AwcFsQ6YyfVEDoaTcZCvm13da6K9ZCp4
+   i7l5lQoMuFvwInB6mjLSwfbxgHWmJItV1Ehj5+1TqAttdB01oaKyVwFDZ
+   BJrz7VyAFTnKwNq273JMnlWNQkNaN4sHRO2upiKpa9C5QIOF3QBEcfqBN
+   uP/ry1G0fFdylcIKnWqLPv9axcpG/8tz1guWBzSvjLKLiEn+smNA1WyAu
+   dtMkk8Jddl7ObHyTuwKMLMm3th4tmS/PvZURWJmLouiBAEoR9yM9EwZdW
+   FfqRmFYjkBW9eqfaCeFxPay8RhZOkcBO3Lmkz+DFYy4UsduSDHqPgKBxX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="361493421"
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="361493421"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 19:24:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="753612812"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 30 May 2022 19:24:51 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nvrYw-0002Dy-PS;
+        Tue, 31 May 2022 02:24:50 +0000
+Date:   Tue, 31 May 2022 10:24:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-References: <20220530115027.123341-1-anshuman.khandual@arm.com>
- <A4E55027-14D4-48ED-9986-3739CEDD7327@nvidia.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <A4E55027-14D4-48ED-9986-3739CEDD7327@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [peterz-queue:perf/wip.cleanup 9/10]
+ arch/x86/events/intel/core.c:2841:26: error: invalid operands to binary
+ expression ('unsigned long[1]' and 'unsigned long long')
+Message-ID: <202205311016.hS64MKjw-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.cleanup
+head:   d096f17be1e500e9b733118925230e46b4c3a14c
+commit: be787b9861afcf5c89dd697a71367a3b6aae6dca [9/10] perf/x86/intel: Optimize short PEBS counters
+config: x86_64-randconfig-a011-20220530 (https://download.01.org/0day-ci/archive/20220531/202205311016.hS64MKjw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0776c48f9b7e69fa447bee57c7c0985caa856be9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=be787b9861afcf5c89dd697a71367a3b6aae6dca
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue perf/wip.cleanup
+        git checkout be787b9861afcf5c89dd697a71367a3b6aae6dca
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/events/intel/core.c:2841:26: error: invalid operands to binary expression ('unsigned long[1]' and 'unsigned long long')
+           if (!(cpuc->active_mask & (1ULL << hwc->idx)))
+                 ~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-On 5/30/22 19:23, Zi Yan wrote:
-> On 30 May 2022, at 7:50, Anshuman Khandual wrote:
-> 
->> HugeTLB allocation (32MB pages on 4K base page) via sysfs on arm64 platform
->> is getting stuck in isolate_single_pageblock(), because of an infinite loop
->> Because head_pfn always evaluate the same, so does pfn, and the outer loop
->> never exits. Dropping the relevant code block, which seems redundant, makes
->> the problem go away.
-> 
-> Thanks for the report.
-> 
->>
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Cc: Zi Yan <ziy@nvidia.com>
->> Cc: linux-mm@kvack.org
->> Cc: linux-kernel@vger.kernel.org
->> Fixes: b2c9e2fbba32 ("mm: make alloc_contig_range work at pageblock granularity")
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->> I am not sure about this fix, and also did not find much time today to
->> debug any further. There are much code changes around this function in
->> recent days. This problem is present on latest mainline kernel.
->>
->> - Anshuman
->>
->>  mm/page_isolation.c | 4 ----
->>  1 file changed, 4 deletions(-)
->>
->> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
->> index 6021f8444b5a..b0922fee75c1 100644
->> --- a/mm/page_isolation.c
->> +++ b/mm/page_isolation.c
->> @@ -389,10 +389,6 @@ static int isolate_single_pageblock(unsigned long boundary_pfn, int flags,
->>  			struct page *head = compound_head(page);
->>  			unsigned long head_pfn = page_to_pfn(head);
->>
->> -			if (head_pfn + nr_pages <= boundary_pfn) {
->> -				pfn = head_pfn + nr_pages;
->> -				continue;
->> -			}
->>  #if defined CONFIG_COMPACTION || defined CONFIG_CMA
->>  			/*
->>  			 * hugetlb, lru compound (THP), and movable compound pages
->> -- 
->> 2.20.1
-> 
-> Can you try the patch below to see if it fixes the issue? Thanks.
-> 
-> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
-> index 6021f8444b5a..d200d41ad0d3 100644
-> --- a/mm/page_isolation.c
-> +++ b/mm/page_isolation.c
-> @@ -385,9 +385,9 @@ static int isolate_single_pageblock(unsigned long boundary_pfn, int flags,
->                  * above do the rest. If migration is not possible, just fail.
->                  */
->                 if (PageCompound(page)) {
-> -                       unsigned long nr_pages = compound_nr(page);
->                         struct page *head = compound_head(page);
->                         unsigned long head_pfn = page_to_pfn(head);
-> +                       unsigned long nr_pages = compound_nr(head);
-> 
->                         if (head_pfn + nr_pages <= boundary_pfn) {
->                                 pfn = head_pfn + nr_pages;
-> 
-> 
+vim +2841 arch/x86/events/intel/core.c
 
-Yes, this does solve the problem. I guess nr_pages should have been derived
-from the compound head itself for it be meaningful (i.e > 1). I assume you
-will send a fix patch with appropriate write up that describes this problem.
+  2834	
+  2835	static void intel_pmu_handle_short_pebs(struct perf_event *event)
+  2836	{
+  2837		struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+  2838		struct hw_perf_event *hwc = &event->hw;
+  2839	
+  2840		/* if the event is not enabled; intel_pmu_pebs_enable() DTRT */
+> 2841		if (!(cpuc->active_mask & (1ULL << hwc->idx)))
+  2842			return;
+  2843	
+  2844		WARN_ON_ONCE(cpuc->enabled);
+  2845	
+  2846		if (intel_pmu_is_short_pebs(event)) {
+  2847	
+  2848			/* stripped down intel_pmu_pebs_disable() */
+  2849			cpuc->pebs_enabled &= ~(1ULL << hwc->idx);
+  2850			hwc->config |= ARCH_PERFMON_EVENTSEL_INT;
+  2851	
+  2852			intel_pmu_update_config(event);
+  2853	
+  2854		} else if (!(cpuc->pebs_enabled & (1ULL << hwc->idx))) {
+  2855	
+  2856			/* stripped down intel_pmu_pebs_enable() */
+  2857			hwc->config &= ~ARCH_PERFMON_EVENTSEL_INT;
+  2858			cpuc->pebs_enabled |= (1ULL << hwc->idx);
+  2859	
+  2860			intel_pmu_update_config(event);
+  2861		}
+  2862	}
+  2863	
 
-- Anshuman
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

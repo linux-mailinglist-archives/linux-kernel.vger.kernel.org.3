@@ -2,121 +2,597 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C4F5392D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9F45392DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345028AbiEaN4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
+        id S1345063AbiEaN5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244883AbiEaNzn (ORCPT
+        with ESMTP id S243424AbiEaN5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:55:43 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C9BF4A
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:55:41 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4DF151F8DD;
-        Tue, 31 May 2022 13:55:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1654005340; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=96gdteDUzSXFaiw09TQyKSUZDnPxYQyobsN4KOocFTk=;
-        b=PMZMDaoh4qTi0nLBENfogSINZwWs9wqI9DUnKLBQvZamYwh0Gsz8oJWstflVQQkLfdGSxG
-        UXDV1cCwBCSh5Ge4OLDY4zBEpc9Gy2nOg1yLr3HhwszIZv5UOOxc8UsfgXOy6RXzgAEd56
-        +D0keGdLGQ/JbUEuUnlDD4GqqYftUKw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1654005340;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=96gdteDUzSXFaiw09TQyKSUZDnPxYQyobsN4KOocFTk=;
-        b=38jtTiD6i28XAslPQXj7FGYto/UUW6DB9mMPmGIMiNxMO+qSaJm405kkSPgoTnwOtGFf6/
-        f/Md3FTv6QFbx1Bw==
-Received: from suse.de (unknown [10.163.43.106])
+        Tue, 31 May 2022 09:57:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47641658B
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:57:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6D9242C141;
-        Tue, 31 May 2022 13:55:39 +0000 (UTC)
-Date:   Tue, 31 May 2022 14:55:32 +0100
-From:   Mel Gorman <mgorman@suse.de>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Tianchen Ding <dtcccc@linux.alibaba.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] sched: Queue task on wakelist in the same llc if the
- wakee cpu is idle
-Message-ID: <20220531135532.GA3332@suse.de>
-References: <20220527090544.527411-1-dtcccc@linux.alibaba.com>
- <xhsmhleuj7zve.mognet@vschneid.remote.csb>
- <1d0eb8f4-e474-86a9-751a-7c2e1788df85@linux.alibaba.com>
- <xhsmhilpl9azq.mognet@vschneid.remote.csb>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <xhsmhilpl9azq.mognet@vschneid.remote.csb>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58E98B80FD3
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 13:57:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A675FC385A9;
+        Tue, 31 May 2022 13:56:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654005420;
+        bh=VmCSR3Hd8Oc8//foDEo7JE0rfLWK4LliFcMKaKAbk8o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WUiZnpQep7naowkaes5/kLDWvH7kY0WZClL1O5OBwaYK2oAJdlGrrqA8ImaLYlhKi
+         dehviW8CRPPVrjwi9y5UCsdWQI/eBBZCmit3E4NX3ZlcRZW66kaSQAXMAvukHotJyF
+         va/nW3lBuTurv/5vTq/jtx+5vnxi1fLtSDxLM2HLACZKOqexRu6RFhrPv8IDS6WyUn
+         9SpY/T39KugMtTEkj9zBdv90ud1viwyB+QNf5gquw5o5rfomS+8oepP5WPN9UlFU+n
+         pvEfhzkB3asGuEmlLzjgRNbFXXqrlvUy646/mm1XSba6YhzTfpZZA9G83muo8PTbAv
+         Q2Pbb7LzmrQ6w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nw2Mj-00Eltf-3v; Tue, 31 May 2022 14:56:57 +0100
+Date:   Tue, 31 May 2022 14:56:56 +0100
+Message-ID: <87a6ax6c0n.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     =?UTF-8?B?5ZCV5bu65rCR?= <lvjianmin@loongson.cn>
+Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, "Xuefeng Li" <lixuefeng@loongson.cn>,
+        "Huacai Chen" <chenhuacai@gmail.com>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        "Huacai Chen" <chenhuacai@loongson.cn>
+Subject: Re: [PATCH RFC V2 02/10] irqchip: Add LoongArch CPU interrupt controller support
+In-Reply-To: <64990891.8322.18119c6d212.Coremail.lvjianmin@loongson.cn>
+References: <1653649335-11998-1-git-send-email-lvjianmin@loongson.cn>
+        <1653649335-11998-3-git-send-email-lvjianmin@loongson.cn>
+        <87bkvf56wg.wl-maz@kernel.org>
+        <64990891.8322.18119c6d212.Coremail.lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, chenhuacai@gmail.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 12:50:49PM +0100, Valentin Schneider wrote:
-> >> With all that in mind, I'm curious whether your patch is functionaly close
-> >> to the below.
-> >> 
-> >> ---
-> >> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> >> index 66c4e5922fe1..ffd43264722a 100644
-> >> --- a/kernel/sched/core.c
-> >> +++ b/kernel/sched/core.c
-> >> @@ -3836,7 +3836,7 @@ static inline bool ttwu_queue_cond(int cpu, int wake_flags)
-> >>   	 * the soon-to-be-idle CPU as the current CPU is likely busy.
-> >>   	 * nr_running is checked to avoid unnecessary task stacking.
-> >>   	 */
-> >> -	if ((wake_flags & WF_ON_CPU) && cpu_rq(cpu)->nr_running <= 1)
-> >> +	if (cpu_rq(cpu)->nr_running <= 1)
-> >>   		return true;
-> >>   
-> >>   	return false;
-> >
-> > It's a little different. This may bring extra IPIs when nr_running == 1 
-> > and the current task on wakee cpu is not the target wakeup task (i.e., 
-> > rq->curr == another_task && rq->curr != p). Then this another_task may 
-> > be disturbed by IPI which is not expected. So IMO the promise by 
-> > WF_ON_CPU is necessary.
-> 
-> You're right, actually taking a second look at that WF_ON_CPU path,
-> shouldn't the existing condition be:
-> 
-> 	if ((wake_flags & WF_ON_CPU) && !cpu_rq(cpu)->nr_running)
-> 
-> ? Per the p->on_rq and p->on_cpu ordering, if we have WF_ON_CPU here then
-> we must have !p->on_rq, so the deactivate has happened, thus the task
-> being alone on the rq implies nr_running==0.
-> 
-> @Mel, do you remember why you went for <=1 here? I couldn't find any clues
-> on the original posting.
-> 
+On Tue, 31 May 2022 12:01:09 +0100,
+=E5=90=95=E5=BB=BA=E6=B0=91 <lvjianmin@loongson.cn> wrote:
 
-I don't recall exactly why I went with <= 1 there but I may not have
-considered the memory ordering of on_rq and nr_running and the comment
-above it is literally what I was thinking at the time. I think you're
-right and that check can be !cpu_rq(cpu)->nr_running.
+Please fix your email setup. I've done some cleanup to be able read
+your email and reply to it, but it'd be better if it was clean the
+first place.
 
--- 
-Mel Gorman
-SUSE Labs
+>
+> > -----Original Messages-----
+> > From: "Marc Zyngier" <maz@kernel.org>
+> > Sent Time: 2022-05-31 00:20:31 (Tuesday)
+> > To: "Jianmin Lv" <lvjianmin@loongson.cn>
+> > Cc: "Thomas Gleixner" <tglx@linutronix.de>, linux-kernel@vger.kernel.or=
+g, "Xuefeng Li" <lixuefeng@loongson.cn>, "Huacai Chen" <chenhuacai@gmail.co=
+m>, "Jiaxun Yang" <jiaxun.yang@flygoat.com>, "Huacai Chen" <chenhuacai@loon=
+gson.cn>
+> > Subject: Re: [PATCH RFC V2 02/10] irqchip: Add LoongArch CPU interrupt =
+controller support
+> >=20
+> > On Fri, 27 May 2022 12:02:12 +0100,
+> > Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> > >=20
+> > > We are preparing to add new Loongson (based on LoongArch, not compati=
+ble
+> > > with old MIPS-based Loongson) support. This patch add the LoongArch C=
+PU
+> > > interrupt controller support.
+> >=20
+> > Please drop this paragraph, as it doesn't help at all.
+> >=20
+> Ok,thanks, I'll drop it.
+>=20
+> > >=20
+> > > LoongArch CPUINTC stands for CSR.ECFG/CSR.ESTAT and related interrupt
+> > > controller that described in Section 7.4 of "LoongArch Reference Manu=
+al,
+> > > Vol 1". For more information please refer Documentation/loongarch/irq-
+> > > chip-model.rst.
+> >=20
+> > Where is this the patch adding this document?
+> >=20
+> See https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.=
+html
+>
+
+I was referring to the irq-chip-mode.rst file. I don't see it as part
+of the series, while it would probably be useful.
+
+> > >=20
+> > > LoongArch CPUINTC has 13 interrupt sources: SWI0~1, HWI0~7, IPI, TI
+> > > (Timer) and PCOV (PMC). IRQ mappings of HWI0~7 are configurable (can =
+be
+> > > created from DT/ACPI), but IPI, TI (Timer) and PCOV (PMC) are hardcod=
+ed
+> > > bits, so we define get_xxx_irq() for them.
+> >=20
+> > Where are these functions? How are they used?
+> >=20
+> Sorry, these functions are implemented in previours version, and
+> they are deleted in current version because I changed to use legacy
+> irqdomain in this version so that we don't have to use these
+> functions to create irq mapping for IPI, PMC and TIMER. Of cause, if
+> you sugguest us to use linear irqdomain, I'll restore them to be
+> what like as last version.
+
+I'm not sure there is any need for them. Why does the irqchip care
+about the interrupt number of a function or the other? The hwirq->irq
+mapping is always a SW construct, and if the driver cannot extract the
+information from DT/ACPI, it can still pull the number from wherever
+it wants.
+
+>=20
+> > >=20
+> > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> > > ---
+> > >  drivers/irqchip/Kconfig                    |  10 ++
+> > >  drivers/irqchip/Makefile                   |   1 +
+> > >  drivers/irqchip/irq-loongarch-cpu.c        | 115 +++++++++++++++++
+> > >  drivers/irqchip/irq-loongarch-pic-common.c | 201 +++++++++++++++++++=
+++++++++++
+> >=20
+> > One patch per driver, please.
+> >=20
+> Ok, I'll split them to be seperate patch.
+>=20
+> > >  drivers/irqchip/irq-loongarch-pic-common.h |  44 +++++++
+> > >  5 files changed, 371 insertions(+)
+> > >  create mode 100644 drivers/irqchip/irq-loongarch-cpu.c
+> > >  create mode 100644 drivers/irqchip/irq-loongarch-pic-common.c
+> > >  create mode 100644 drivers/irqchip/irq-loongarch-pic-common.h
+> > >=20
+> > > diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> > > index 39d6be2..a596ee7 100644
+> > > --- a/drivers/irqchip/Kconfig
+> > > +++ b/drivers/irqchip/Kconfig
+> > > @@ -545,6 +545,16 @@ config EXYNOS_IRQ_COMBINER
+> > >  	  Say yes here to add support for the IRQ combiner devices embedded
+> > >  	  in Samsung Exynos chips.
+> > > =20
+> > > +config IRQ_LOONGARCH_CPU
+> > > +	bool
+> > > +	select GENERIC_IRQ_CHIP
+> > > +	select IRQ_DOMAIN
+> > > +	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
+> > > +	help
+> > > +	  Support for the LoongArch CPU Interrupt Controller. For details of
+> > > +	  irq chip hierarchy on LoongArch platforms please read the document
+> > > +	  Documentation/loongarch/irq-chip-model.rst.
+> > > +
+> > >  config LOONGSON_LIOINTC
+> > >  	bool "Loongson Local I/O Interrupt Controller"
+> > >  	depends on MACH_LOONGSON64
+> > > diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
+> > > index 160a1d8..736f030 100644
+> > > --- a/drivers/irqchip/Makefile
+> > > +++ b/drivers/irqchip/Makefile
+> > > @@ -105,6 +105,7 @@ obj-$(CONFIG_LS1X_IRQ)			+=3D irq-ls1x.o
+> > >  obj-$(CONFIG_TI_SCI_INTR_IRQCHIP)	+=3D irq-ti-sci-intr.o
+> > >  obj-$(CONFIG_TI_SCI_INTA_IRQCHIP)	+=3D irq-ti-sci-inta.o
+> > >  obj-$(CONFIG_TI_PRUSS_INTC)		+=3D irq-pruss-intc.o
+> > > +obj-$(CONFIG_IRQ_LOONGARCH_CPU)		+=3D irq-loongarch-cpu.o irq-loonga=
+rch-pic-common.o
+> > >  obj-$(CONFIG_LOONGSON_LIOINTC)		+=3D irq-loongson-liointc.o
+> > >  obj-$(CONFIG_LOONGSON_HTPIC)		+=3D irq-loongson-htpic.o
+> > >  obj-$(CONFIG_LOONGSON_HTVEC)		+=3D irq-loongson-htvec.o
+> > > diff --git a/drivers/irqchip/irq-loongarch-cpu.c b/drivers/irqchip/ir=
+q-loongarch-cpu.c
+> > > new file mode 100644
+> > > index 0000000..26f948f
+> > > --- /dev/null
+> > > +++ b/drivers/irqchip/irq-loongarch-cpu.c
+> > > @@ -0,0 +1,115 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > > + */
+> > > +
+> > > +#include <linux init.h=3D"">
+> > > +#include <linux kernel.h=3D"">
+> > > +#include <linux interrupt.h=3D"">
+> > > +#include <linux irq.h=3D"">
+> > > +#include <linux irqchip.h=3D"">
+> > > +#include <linux irqdomain.h=3D"">
+> > > +
+> > > +#include <asm loongarch.h=3D"">
+> > > +#include <asm setup.h=3D"">
+> > > +#include "irq-loongarch-pic-common.h"
+> > > +
+> > > +static struct irq_domain *irq_domain;
+> > > +
+> > > +static void mask_loongarch_irq(struct irq_data *d)
+> > > +{
+> > > +	clear_csr_ecfg(ECFGF(d->hwirq));
+> > > +}
+> > > +
+> > > +static void unmask_loongarch_irq(struct irq_data *d)
+> > > +{
+> > > +	set_csr_ecfg(ECFGF(d->hwirq));
+> > > +}
+> > > +
+> > > +static struct irq_chip cpu_irq_controller =3D {
+> > > +	.name		=3D "LoongArch",
+> > > +	.irq_mask	=3D mask_loongarch_irq,
+> > > +	.irq_unmask	=3D unmask_loongarch_irq,
+> > > +};
+> > > +
+> > > +static void handle_cpu_irq(struct pt_regs *regs)
+> > > +{
+> > > +	int hwirq;
+> > > +	unsigned int estat =3D read_csr_estat() &amp; CSR_ESTAT_IS;
+> > > +
+> > > +	while ((hwirq =3D ffs(estat))) {
+> > > +		estat &amp;=3D ~BIT(hwirq - 1);
+> > > +		generic_handle_domain_irq(irq_domain, hwirq - 1);
+> > > +	}
+> > > +}
+> > > +
+> > > +static int loongarch_cpu_intc_map(struct irq_domain *d, unsigned int=
+ irq,
+> > > +			     irq_hw_number_t hwirq)
+> > > +{
+> > > +	irq_set_noprobe(irq);
+> > > +	irq_set_chip_and_handler(irq, &amp;cpu_irq_controller, handle_percp=
+u_irq);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static const struct irq_domain_ops loongarch_cpu_intc_irq_domain_ops=
+ =3D {
+> > > +	.map =3D loongarch_cpu_intc_map,
+> > > +	.xlate =3D irq_domain_xlate_onecell,
+> > > +};
+> > > +
+> > > +struct irq_domain * __init loongarch_cpu_irq_init(void)
+> > > +{
+> > > +	/* Mask interrupts. */
+> > > +	clear_csr_ecfg(ECFG0_IM);
+> > > +	clear_csr_estat(ESTATF_IP);
+> > > +
+> > > +	irq_domain =3D irq_domain_add_legacy(NULL, EXCCODE_INT_NUM, 0, 0,
+> > > +						&amp;loongarch_cpu_intc_irq_domain_ops, NULL);
+> >=20
+> > I already commented on this in the past, and my position is still the
+> > same: this isn't a legacy architecture, you are not converting
+> > anything from a board file, so there is no reason why you get to use a
+> > legacy domain.
+> >=20
+> > Since you are using ACPI, irq_domain_add_*() really is the wrong API,
+> > as they take an of_node. Use irq_domain_create_linear(), and pass an
+> > actual fwnode there (there are plenty of examples in the tree).
+> >=20
+> Sorry, as I mentioned above, the only reason that I use legacy
+> irqdomain here is to avoid to export get_xxx_irq functions for
+> others(like arch files). As you recommend here, I'll recover them in
+> next version.
+>=20
+> > > +	if (!irq_domain)
+> > > +		panic("Failed to add irqdomain for LoongArch CPU");
+> > > +
+> > > +	set_handle_irq(&amp;handle_cpu_irq);
+> > > +
+> > > +	return irq_domain;
+> >=20
+> > What uses this irq_domain in the arch code?
+> >=20
+> Thanks, sure, there is no need to return irq_domain=EF=BC=8C and I'll
+> change it in next version.
+>=20
+> > > +}
+> > > +#ifdef CONFIG_ACPI
+> >=20
+> > Why the #ifdef? Isn't this system supposed to be ACPI only? There is
+> > no DT support anyway, so you should make the driver depend on ACPI and
+> > that's about it.
+> >=20
+> Yes, we'll support DT in future(in fatct, DT for the driver has been
+> supported in our internel repo for SOC products) for the driver as
+> other irqchip drivers. Should we delete it now and take it into
+> count later when adding DT supporting?
+
+Drop everything that isn't immediately useful. For example, who cares
+about suspend-resume, which is half of your series? Please focus on
+the bare minimal to get your system up and running.
+
+>=20
+> > > +static int __init
+> > > +liointc_parse_madt(union acpi_subtable_headers *header,
+> > > +		       const unsigned long end)
+> > > +{
+> > > +	struct acpi_madt_lio_pic *liointc_entry =3D (struct acpi_madt_lio_p=
+ic *)header;
+> > > +
+> > > +	return liointc_acpi_init(irq_domain, liointc_entry);
+> > > +}
+> > > +
+> > > +static int __init
+> > > +eiointc_parse_madt(union acpi_subtable_headers *header,
+> > > +		       const unsigned long end)
+> > > +{
+> > > +	struct acpi_madt_eio_pic *eiointc_entry =3D (struct acpi_madt_eio_p=
+ic *)header;
+> > > +
+> > > +	return eiointc_acpi_init(irq_domain, eiointc_entry);
+> > > +}
+> > > +static int __init acpi_cascade_irqdomain_init(void)
+> > > +{
+> > > +	acpi_table_parse_madt(ACPI_MADT_TYPE_LIO_PIC,
+> > > +			      liointc_parse_madt, 0);
+> > > +	acpi_table_parse_madt(ACPI_MADT_TYPE_EIO_PIC,
+> > > +			      eiointc_parse_madt, 0);
+> > > +	return 0;
+> > > +}
+> > > +static int __init coreintc_acpi_init_v1(union acpi_subtable_headers =
+*header,
+> > > +				   const unsigned long end)
+> > > +{
+> > > +	if (irq_domain)
+> > > +		return 0;
+> > > +
+> > > +	init_vector_parent_group();
+> > > +	loongarch_cpu_irq_init();
+> > > +	acpi_cascade_irqdomain_init();
+> > > +	return 0;
+> > > +}
+> > > +IRQCHIP_ACPI_DECLARE(coreintc_v1, ACPI_MADT_TYPE_CORE_PIC,
+> > > +		NULL, ACPI_MADT_CORE_PIC_VERSION_V1,
+> > > +		coreintc_acpi_init_v1);
+> > > +#endif
+> > > diff --git a/drivers/irqchip/irq-loongarch-pic-common.c b/drivers/irq=
+chip/irq-loongarch-pic-common.c
+> > > new file mode 100644
+> > > index 0000000..94437e4
+> > > --- /dev/null
+> > > +++ b/drivers/irqchip/irq-loongarch-pic-common.c
+> > > @@ -0,0 +1,201 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +/*
+> > > + * Copyright (C) 2022 Loongson Limited, All Rights Reserved.
+> > > + */
+> > > +
+> > > +#include <linux irq.h=3D"">
+> > > +#include <linux acpi.h=3D"">
+> > > +#include <linux pci.h=3D"">
+> > > +#include "irq-loongarch-pic-common.h"
+> > > +
+> > > +static struct acpi_vector_group vector_group[MAX_IO_PICS];
+> > > +struct acpi_madt_bio_pic *acpi_pchpic[MAX_IO_PICS];
+> > > +
+> > > +struct irq_domain *liointc_domain;
+> > > +struct irq_domain *pch_lpc_domain;
+> > > +struct irq_domain *pch_msi_domain[MAX_IO_PICS];
+> > > +struct irq_domain *pch_pic_domain[MAX_IO_PICS];
+> >=20
+> > Why isn't this static? If someone needs to know, why isn't there an
+> > accessor?
+> >=20
+> These irq_domains will be initialized in other irqchip
+> drivers(e.g. liointc_domain is set in liointc driver).
+
+Really, there shouldn't any need to keep domain references around at
+all. That's why we have fwnodes, to be able to retrive them from the
+list of existing domains. If you have to keep all these domain
+references around, you're doing something wrong.
+
+>=20
+> >=20
+> > > +
+> > > +static int find_pch_pic(u32 gsi)
+> > > +{
+> > > +	int i, start, end;
+> > > +
+> > > +	/* Find the PCH_PIC that manages this GSI. */
+> > > +	for (i =3D 0; i &lt; MAX_IO_PICS; i++) {
+> > > +		struct acpi_madt_bio_pic *irq_cfg =3D acpi_pchpic[i];
+> > > +
+> > > +		if (!irq_cfg)
+> > > +			return -1;
+> > > +
+> > > +		start =3D irq_cfg->gsi_base;
+> > > +		end   =3D irq_cfg->gsi_base + irq_cfg->size;
+> > > +		if (gsi >=3D start &amp;&amp; gsi &lt; end)
+> > > +			return i;
+> > > +	}
+> > > +
+> > > +	pr_err("ERROR: Unable to locate PCH_PIC for GSI %d\n", gsi);
+> > > +	return -1;
+> > > +}
+> > > +
+> > > +int pcibios_device_add(struct pci_dev *dev)
+> > > +{
+> > > +	int id =3D pci_domain_nr(dev->bus);
+> > > +
+> > > +	dev_set_msi_domain(&amp;dev->dev, pch_msi_domain[id]);
+> > > +
+> > > +	return 0;
+> > > +}
+> >=20
+> > This doesn't belong here at all. Please move it to the PCI code.
+> >=20
+> Ok, I'll put them into PCI code of arch directory.
+>=20
+> > > +
+> > > +int acpi_gsi_to_irq(u32 gsi, unsigned int *irqp)
+> > > +{
+> > > +	if (irqp !=3D NULL)
+> > > +		*irqp =3D acpi_register_gsi(NULL, gsi, -1, -1);
+> > > +	return (*irqp >=3D 0) ? 0 : -EINVAL;
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(acpi_gsi_to_irq);
+> > > +
+> > > +int acpi_isa_irq_to_gsi(unsigned int isa_irq, u32 *gsi)
+> > > +{
+> > > +	if (gsi)
+> > > +		*gsi =3D isa_irq;
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +/*
+> > > + * success: return IRQ number (>=3D0)
+> > > + * failure: return &lt; 0
+> > > + */
+> > > +int acpi_register_gsi(struct device *dev, u32 gsi, int trigger, int =
+polarity)
+> > > +{
+> > > +	int id;
+> > > +	struct irq_fwspec fwspec;
+> > > +
+> > > +	switch (gsi) {
+> > > +	case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
+> > > +		fwspec.fwnode =3D liointc_domain->fwnode;
+> > > +		fwspec.param[0] =3D gsi - GSI_MIN_CPU_IRQ;
+> > > +		fwspec.param_count =3D 1;
+> > > +
+> > > +		return irq_create_fwspec_mapping(&amp;fwspec);
+> > > +
+> > > +	case GSI_MIN_LPC_IRQ ... GSI_MAX_LPC_IRQ:
+> > > +		if (!pch_lpc_domain)
+> > > +			return -EINVAL;
+> > > +
+> > > +		fwspec.fwnode =3D pch_lpc_domain->fwnode;
+> > > +		fwspec.param[0] =3D gsi - GSI_MIN_LPC_IRQ;
+> > > +		fwspec.param[1] =3D acpi_dev_get_irq_type(trigger, polarity);
+> > > +		fwspec.param_count =3D 2;
+> > > +
+> > > +		return irq_create_fwspec_mapping(&amp;fwspec);
+> > > +
+> > > +	case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
+> > > +		id =3D find_pch_pic(gsi);
+> > > +		if (id &lt; 0)
+> > > +			return -EINVAL;
+> > > +
+> > > +		fwspec.fwnode =3D pch_pic_domain[id]->fwnode;
+> > > +		fwspec.param[0] =3D gsi - acpi_pchpic[id]->gsi_base;
+> > > +		fwspec.param[1] =3D IRQ_TYPE_LEVEL_HIGH;
+> > > +		fwspec.param_count =3D 2;
+> > > +
+> > > +		return irq_create_fwspec_mapping(&amp;fwspec);
+> > > +	}
+> >=20
+> > So all the complexity here seems to stem from the fact that you deal
+> > with three ranges of interrupts, managed by three different pieces of
+> > code?
+> >=20
+> Yes.
+>=20
+> > Other architectures have similar requirements, and don't require to
+> > re-implement a private version of the ACPI API. Instead, they expose a
+> > single irqdomain, and deal with the various ranges internally.
+> >=20
+> > Clearly, not being able to reuse drivers/acpi/irq.c *is* an issue.
+> >=20
+> Thanks, I agree, that sounds a good and reasonable suggestion, and
+> I'll reserach it further and reuse code from drivers/acpi/irq.c as
+> can as possible.
+>=20
+> > > +
+> > > +	return -EINVAL;
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(acpi_register_gsi);
+> > > +
+> > > +void acpi_unregister_gsi(u32 gsi)
+> > > +{
+> > > +	int id, irq, hw_irq;
+> > > +	struct irq_domain *d;
+> > > +
+> > > +	switch (gsi) {
+> > > +	case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
+> > > +		if (!liointc_domain)
+> > > +			return;
+> > > +		d =3D liointc_domain;
+> > > +		hw_irq =3D gsi - GSI_MIN_CPU_IRQ;
+> > > +		break;
+> > > +
+> > > +	case GSI_MIN_LPC_IRQ ... GSI_MAX_LPC_IRQ:
+> > > +		if (!pch_lpc_domain)
+> > > +			return;
+> > > +		d =3D pch_lpc_domain;
+> > > +		hw_irq =3D gsi - GSI_MIN_LPC_IRQ;
+> > > +		break;
+> > > +
+> > > +	case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
+> > > +		id =3D find_pch_pic(gsi);
+> > > +		if (id &lt; 0)
+> > > +			return;
+> > > +		if (!pch_pic_domain[id])
+> > > +			return;
+> > > +		d =3D pch_pic_domain[id];
+> > > +
+> > > +		hw_irq =3D gsi - acpi_pchpic[id]->gsi_base;
+> > > +		break;
+> > > +	}
+> > > +	irq =3D irq_find_mapping(d, hw_irq);
+> > > +	irq_dispose_mapping(irq);
+> > > +
+> > > +	return;
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(acpi_unregister_gsi);
+> > > +
+> > > +static int pci_mcfg_parse(struct acpi_table_header *header)
+> > > +{
+> > > +	struct acpi_table_mcfg *mcfg;
+> > > +	struct acpi_mcfg_allocation *mptr;
+> > > +	int i, n;
+> > > +
+> > > +	if (header->length &lt; sizeof(struct acpi_table_mcfg))
+> > > +		return -EINVAL;
+> > > +
+> > > +	n =3D (header->length - sizeof(struct acpi_table_mcfg)) /
+> > > +					sizeof(struct acpi_mcfg_allocation);
+> > > +	mcfg =3D (struct acpi_table_mcfg *)header;
+> > > +	mptr =3D (struct acpi_mcfg_allocation *) &amp;mcfg[1];
+> > > +
+> > > +	for (i =3D 0; i &lt; n; i++, mptr++)
+> > > +		vector_group[mptr->pci_segment].node =3D (mptr->address >> 44) &am=
+p; 0xf;
+> > > +
+> > > +	return 0;
+> > > +}
+> >=20
+> > Again, why can't you reuse drivers/acpi/pci_mcfg.c?
+> >=20
+> Yes, I really want to reuse code from pci_mcfg.c, but I found that
+> pci_mmcfg_late_init() is called from acpi_init during
+> subsys_initcall. vector_group entries here are needed initialzed
+> during irqchip_init flow before EIOINTC, PCH PIC and PCH MSI
+> initialization as I descripted info 'Example of irqchip topology in
+> a system with two chipsets' in [PATCH RFC V2 00/10].
+
+I'm not sure why this is needed. Can't this be done at a later time?
+Surely, no PCI device can come up without the ACPI resources having
+been populated. And if the PCI bus comes up before, you should be able
+to defer it.
+
+In any case, this doesn't seem to belong the an irqchip driver, and is
+much more a PCI thing.
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

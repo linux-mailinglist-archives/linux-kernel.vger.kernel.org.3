@@ -2,308 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 043A95395C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BF8539598
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346745AbiEaR6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 13:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S1346679AbiEaRwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 13:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239219AbiEaR6f (ORCPT
+        with ESMTP id S1343782AbiEaRwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 13:58:35 -0400
-Received: from mail.bwidawsk.net (mail.bwidawsk.net [107.170.211.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E8B62CF2;
-        Tue, 31 May 2022 10:58:33 -0700 (PDT)
-Received: by mail.bwidawsk.net (Postfix, from userid 5001)
-        id A159112328F; Tue, 31 May 2022 10:50:27 -0700 (PDT)
+        Tue, 31 May 2022 13:52:01 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675C353B64;
+        Tue, 31 May 2022 10:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654019520; x=1685555520;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=z9sgpsSPs9NDoq7xVy5L9QPtqJrdgsPFZQ+CXd/DLBo=;
+  b=n1X79n9fCFQcMfaIDqzrw6l/sfoPKoqBF20195aKwGnr4KCyerq4ZVTU
+   zWbqvqkUCpLAQDWgG5oxlkvAcszIEL8vs0RG7oH303IVq1JoHCgePycEa
+   IV1hCsTENyF2HpqQvayiOk7DuQfEg0lmfI5JU74lKIHn6+AU9dUQiJGfk
+   c=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 31 May 2022 10:52:00 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 10:51:59 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 31 May 2022 10:51:59 -0700
+Received: from [10.38.242.41] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 31 May
+ 2022 10:51:57 -0700
+Message-ID: <73f2e94b-daa5-b30e-4fa9-f6725ed1a686@quicinc.com>
+Date:   Tue, 31 May 2022 10:51:55 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/dpu: Fix pointer dereferenced before checking
+Content-Language: en-US
+To:     Haowen Bai <baihaowen@meizu.com>, Rob Clark <robdclark@gmail.com>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, "David Airlie" <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+References: <1653877196-23114-1-git-send-email-baihaowen@meizu.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <1653877196-23114-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-ASN:  
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from mail.bwidawsk.net (c-24-20-163-23.hsd1.or.comcast.net [24.20.163.23])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by mail.bwidawsk.net (Postfix) with ESMTPSA id 4D309120013;
-        Tue, 31 May 2022 10:50:22 -0700 (PDT)
-Date:   Tue, 31 May 2022 10:50:20 -0700
-From:   Ben Widawsky <ben@bwidawsk.net>
-To:     ira.weiny@intel.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V9 4/9] cxl/pci: Create PCI DOE mailbox's for memory
- devices
-Message-ID: <20220531175020.efqfth7ubbyhoubp@mail.bwidawsk.net>
-References: <20220531152632.1397976-1-ira.weiny@intel.com>
- <20220531152632.1397976-5-ira.weiny@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531152632.1397976-5-ira.weiny@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-05-31 08:26:27, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> DOE mailbox objects will be needed for various mailbox communications
-> with each memory device.
-> 
-> Iterate each DOE mailbox capability and create PCI DOE mailbox objects
-> as found.
-> 
-> It is not anticipated that this is the final resting place for the
-> iteration of the DOE devices.  The support of ports may drive this code
-> into the pcie side.  In this imagined architecture the CXL port driver
-> would then query into the PCI device for the DOE mailbox array.
 
-Not sure if direction has changed, but initially it would have been the cxl_pci
-driver who would query this and pass it along when the port driver probes.
-Personally, I've never had an issue with non cxl_pci drivers using PCI
-interfaces and semantics, but it is something we've taken specific care to
-avoid.
 
+On 5/29/2022 7:19 PM, Haowen Bai wrote:
+> The phys_enc->wb_idx is dereferencing before null checking, so move
+> it after checking.
 > 
-> For now this is good enough for the endpoints and the split is similar
-> to the envisioned architecture where getting the mailbox array is
-> separated from the various protocol needs.  For example, it is not
-> anticipated that the CDAT code will need to move because it is only
-> needed by the cxl_ports.
-> 
-> Likewise irq's are separated out in a similar design pattern to the
-> PCIe port driver.  But a much simpler irq enabling flag is used and only
-> DOE interrupts are supported.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+
+Fixes: d7d0e73f7de33 ("drm/msm/dpu: introduce the dpu_encoder_phys_* for 
+writeback")
+
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+
 > ---
-> Changes from V8:
-> 	Move PCI_DOE selection to CXL_BUS to support future patches
-> 	which move queries into the port code.
-> 	Remove Auxiliary device arch
-> 	Squash the functionality of the auxiliary driver into this
-> 	patch.
-> 	Split out the irq handling a bit.
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Changes from V7:
-> 	Minor code clean ups
-> 	Rebased on cxl-pending
-> 
-> Changes from V6:
-> 	Move all the auxiliary device stuff to the CXL layer
-> 
-> Changes from V5:
-> 	Split the CXL specific stuff off from the PCI DOE create
-> 	auxiliary device code.
-> ---
->  drivers/cxl/Kconfig  |   1 +
->  drivers/cxl/cxlmem.h |   6 +++
->  drivers/cxl/pci.c    | 111 +++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 118 insertions(+)
-> 
-> diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
-> index f64e3984689f..7adaaf80b302 100644
-> --- a/drivers/cxl/Kconfig
-> +++ b/drivers/cxl/Kconfig
-> @@ -2,6 +2,7 @@
->  menuconfig CXL_BUS
->  	tristate "CXL (Compute Express Link) Devices Support"
->  	depends on PCI
-> +	select PCI_DOE
->  	help
->  	  CXL is a bus that is electrically compatible with PCI Express, but
->  	  layers three protocols on that signalling (CXL.io, CXL.cache, and
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 60d10ee1e7fc..4d2764b865ab 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -191,6 +191,8 @@ struct cxl_endpoint_dvsec_info {
->   * @component_reg_phys: register base of component registers
->   * @info: Cached DVSEC information about the device.
->   * @serial: PCIe Device Serial Number
-> + * @doe_mbs: PCI DOE mailbox array
-> + * @num_mbs: Number of DOE mailboxes
->   * @mbox_send: @dev specific transport for transmitting mailbox commands
->   *
->   * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
-> @@ -224,6 +226,10 @@ struct cxl_dev_state {
->  	resource_size_t component_reg_phys;
->  	u64 serial;
->  
-> +	bool doe_use_irq;
-> +	struct pci_doe_mb **doe_mbs;
-> +	int num_mbs;
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+> index 4829d1ce0cf8..59da348ff339 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+> @@ -574,11 +574,11 @@ static void dpu_encoder_phys_wb_disable(struct dpu_encoder_phys *phys_enc)
+>    */
+>   static void dpu_encoder_phys_wb_destroy(struct dpu_encoder_phys *phys_enc)
+>   {
+> -	DPU_DEBUG("[wb:%d]\n", phys_enc->wb_idx - WB_0);
+> -
+>   	if (!phys_enc)
+>   		return;
+>   
+> +	DPU_DEBUG("[wb:%d]\n", phys_enc->wb_idx - WB_0);
 > +
->  	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
->  };
->  
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index 5a0ae46d4989..131f89dec8e7 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -8,6 +8,7 @@
->  #include <linux/mutex.h>
->  #include <linux/list.h>
->  #include <linux/pci.h>
-> +#include <linux/pci-doe.h>
->  #include <linux/io.h>
->  #include "cxlmem.h"
->  #include "cxlpci.h"
-> @@ -386,6 +387,113 @@ static int cxl_setup_regs(struct pci_dev *pdev, enum cxl_regloc_type type,
->  	return rc;
->  }
->  
-> +static void cxl_pci_free_irq_vectors(void *data)
-> +{
-> +	pci_free_irq_vectors(data);
-> +}
-> +
-> +static void cxl_doe_destroy_mb(void *ds)
-> +{
-> +	struct cxl_dev_state *cxlds = ds;
-> +	int i;
-> +
-> +	for (i = 0; i < cxlds->num_mbs; i++) {
-> +		if (cxlds->doe_mbs[i])
-> +			pci_doe_destroy_mb(cxlds->doe_mbs[i]);
-> +	}
-> +}
-> +
-> +static void cxl_alloc_irq_vectors(struct cxl_dev_state *cxlds)
-> +{
-> +	struct device *dev = cxlds->dev;
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	int num_irqs = 0;
-> +	int off = 0;
-> +	int rc;
-> +
-> +	/* Account for all the DOE vectors needed */
-> +	pci_doe_for_each_off(pdev, off) {
-> +		int irq = pci_doe_get_irq_num(pdev, off);
-> +
-> +		if (irq < 0)
-> +			continue;
-> +		num_irqs = max(num_irqs, irq + 1);
-
-This seems overly complicated. Isn't it just num_irqs++?
-
-> +	}
-> +
-> +	/*
-> +	 * Allocate enough vectors for the DOE's
-> +	 */
-> +	rc = pci_alloc_irq_vectors(pdev, num_irqs, num_irqs, PCI_IRQ_MSI |
-> +							     PCI_IRQ_MSIX);
-> +	if (rc != num_irqs) {
-> +		pci_err(pdev, "Not enough interrupts; use polling\n");
-> +		/* Some got allocated; clean them up */
-> +		if (rc > 0)
-> +			cxl_pci_free_irq_vectors(pdev);
-> +		cxlds->doe_use_irq = false;
-> +		return;
-> +	}
-> +
-> +	rc = devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
-> +	if (rc) {
-> +		cxlds->doe_use_irq = false;
-> +		return;
-> +	}
-> +
-> +	cxlds->doe_use_irq = true;
-
-If you named it doe_poll, you could avoid having to do anything at the end of
-the function... If you felt like it.
-
-if (failure)
-	return;
-if (other_failure)
-	return;
-
-cxld->do_use_poll = false;
-
-> +}
-> +
-> +/**
-> + * devm_cxl_pci_create_doe - Scan and set up DOE mailboxes
-> + *
-> + * @cxlds: The CXL device state
-> + *
-> + * RETURNS: 0 on success -ERRNO on failure.
-> + */
-> +static int devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
-> +{
-> +	struct device *dev = cxlds->dev;
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	u16 off = 0;
-> +	int num_mbs = 0;
-> +	int rc;
-> +
-> +	pci_doe_for_each_off(pdev, off)
-> +		num_mbs++;
-> +
-
-Do you want to bail here if num_mbs == 0?
-
-> +	cxlds->doe_mbs = devm_kcalloc(dev, num_mbs, sizeof(*cxlds->doe_mbs),
-> +				      GFP_KERNEL);
-> +	if (!cxlds->doe_mbs)
-> +		return -ENOMEM;
-> +
-> +	pci_doe_for_each_off(pdev, off) {
-> +		struct pci_doe_mb *doe_mb;
-> +		int irq = -1;
-> +
-> +		if (cxlds->doe_use_irq)
-> +			irq = pci_doe_get_irq_num(pdev, off);
-> +
-> +		doe_mb = pci_doe_create_mb(pdev, off, irq);
-> +		if (IS_ERR(doe_mb)) {
-> +			pci_err(pdev,
-> +				"Failed to create MB object for MB @ %x\n",
-> +				off);
-> +			doe_mb = NULL;
-> +		}
-> +
-> +		cxlds->doe_mbs[cxlds->num_mbs] = doe_mb;
-> +		cxlds->num_mbs++;
-> +	}
-> +
-> +	rc = devm_add_action_or_reset(dev, cxl_doe_destroy_mb, cxlds);
-> +	if (rc)
-> +		return rc;
-> +
-> +	pci_info(pdev, "Configured %d DOE mailbox's\n", cxlds->num_mbs);
-> +
-> +	return 0;
-> +}
-> +
->  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  {
->  	struct cxl_register_map map;
-> @@ -454,6 +562,9 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (IS_ERR(cxlmd))
->  		return PTR_ERR(cxlmd);
->  
-> +	cxl_alloc_irq_vectors(cxlds);
-> +	devm_cxl_pci_create_doe(cxlds);
-
-If you're not going to check the return value, just make the functions void.
-
-> +
->  	if (range_len(&cxlds->pmem_range) && IS_ENABLED(CONFIG_CXL_PMEM))
->  		rc = devm_cxl_add_nvdimm(&pdev->dev, cxlmd);
->  
-> -- 
-> 2.35.1
-> 
+>   	kfree(phys_enc);
+>   }
+>   

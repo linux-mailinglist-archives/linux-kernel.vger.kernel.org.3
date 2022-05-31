@@ -2,74 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEB3539997
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A678539998
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344977AbiEaWfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 18:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
+        id S1347144AbiEaWkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 18:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348491AbiEaWfG (ORCPT
+        with ESMTP id S238162AbiEaWj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 18:35:06 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8389E9DD;
-        Tue, 31 May 2022 15:35:05 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (lmontsouris-659-1-41-236.w92-154.abo.wanadoo.fr [92.154.76.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0A2B06F0;
-        Wed,  1 Jun 2022 00:35:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1654036503;
-        bh=5wGWNsYpV/rqdoGt8KcWqJ6na3ftVpXTTaFU84KJud4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eZMOsUcvBCXrCDZqZ5Vk1HZDEdCWQw5wJ6lkzg1wtZYwojhkvHDDKh/qS7rn6/Zqg
-         zlK9FjcoON8eLj0Uwfs8G9mHHrgs3/uKt3QaUV2tRqTY3GkWu+gbxn0bAHaDWWs8dM
-         bKm4Bwkbv6eWBtO1b5YwCZPZRLs6WPlTAJMlM/8k=
-Date:   Wed, 1 Jun 2022 01:34:58 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Rob Herring <robherring2@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the devicetree-fixes
- tree
-Message-ID: <YpaYEtWSEyD7WKCU@pendragon.ideasonboard.com>
-References: <20220601082959.2fefa1e7@canb.auug.org.au>
+        Tue, 31 May 2022 18:39:58 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA9C9E9EB
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 15:39:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654036798; x=1685572798;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nVgP5vSRgzfo4A3lRtG7QXD2JB7Ijr336pExyeOkV9g=;
+  b=Z+9M/z2JyP/f8NWSLvDL6BwsvN0R5raEER4XHz9mDzitGw5KSy96axLC
+   foCG2wDSTu6NZyJeusrLxTMVemNvb4eiFgdEZW/SbVJHj+lkPTRJDp3CX
+   YAuufxupuhHHFKyV8aWAQeakJfEcgKcyrHH/bMN3e3LKdqWhqvcuUFG7q
+   9IKlmgWB4I4N9y2xIlLRIuaEjmes3+CadMu7dfBCX2THOiYCyx2U1lPK7
+   LTlUKdzNNrZdNPC7luj7xR7iiMX0mmpTp8X5TUSRbuvCm1mr/iRrLI89K
+   hV637HKWdWvGRMgydHUGf+rVYe4T/58l6lJoRZtEQONU1CqP2WDtsFcVn
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="275412858"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="275412858"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 15:39:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="755325105"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 31 May 2022 15:39:29 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwAWP-0003AI-06;
+        Tue, 31 May 2022 22:39:29 +0000
+Date:   Wed, 1 Jun 2022 06:38:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chen Lin <chen45464546@163.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: mm/page_alloc.c:5662:23: error: 'fragz' undeclared; did you mean
+ 'fragsz'?
+Message-ID: <202206010617.PBI0ZWvr-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220601082959.2fefa1e7@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 08:29:59AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   adb97f9f8442 ("dt-bindings: soc: imx8mp-media-blk-ctrl: Fix DT example")
-> 
-> Fixes tag
-> 
->   Fixes: 584d6dd668e2 ("dt-bindings: soc: Add i.MX8MP media block control DT bindings")
-> 
-> has these problem(s):
-> 
->   - Target SHA1 does not exist
-> 
-> Maybe you meant
-> 
-> Fixes: 8b3dd27bfe47 ("dt-bindings: soc: Add i.MX8MP media block control DT bindings")
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220531-224555/Chen-Lin/mm-page_frag-Warn_on-when-frag_alloc-size-is-bigger-than-PAGE_SIZE/20220528-234129
+head:   21e940b5a66de64088e93248c21bce241c28a556
+commit: 21e940b5a66de64088e93248c21bce241c28a556 mm: page_frag: Warn_on when frag_alloc size is bigger than PAGE_SIZE
+date:   8 hours ago
+config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20220601/202206010617.PBI0ZWvr-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/21e940b5a66de64088e93248c21bce241c28a556
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220531-224555/Chen-Lin/mm-page_frag-Warn_on-when-frag_alloc-size-is-bigger-than-PAGE_SIZE/20220528-234129
+        git checkout 21e940b5a66de64088e93248c21bce241c28a556
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-My bad, that's the correct SHA1.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/asm-generic/bug.h:7,
+                    from arch/x86/include/asm/bug.h:87,
+                    from include/linux/bug.h:5,
+                    from include/linux/mmdebug.h:5,
+                    from include/linux/mm.h:6,
+                    from mm/page_alloc.c:19:
+   mm/page_alloc.c: In function 'page_frag_alloc_align':
+>> mm/page_alloc.c:5662:23: error: 'fragz' undeclared (first use in this function); did you mean 'fragsz'?
+    5662 |         if (WARN_ONCE(fragz > PAGE_SIZE,
+         |                       ^~~~~
+   include/linux/once_lite.h:15:41: note: in definition of macro 'DO_ONCE_LITE_IF'
+      15 |                 bool __ret_do_once = !!(condition);                     \
+         |                                         ^~~~~~~~~
+   mm/page_alloc.c:5662:13: note: in expansion of macro 'WARN_ONCE'
+    5662 |         if (WARN_ONCE(fragz > PAGE_SIZE,
+         |             ^~~~~~~~~
+   mm/page_alloc.c:5662:23: note: each undeclared identifier is reported only once for each function it appears in
+    5662 |         if (WARN_ONCE(fragz > PAGE_SIZE,
+         |                       ^~~~~
+   include/linux/once_lite.h:15:41: note: in definition of macro 'DO_ONCE_LITE_IF'
+      15 |                 bool __ret_do_once = !!(condition);                     \
+         |                                         ^~~~~~~~~
+   mm/page_alloc.c:5662:13: note: in expansion of macro 'WARN_ONCE'
+    5662 |         if (WARN_ONCE(fragz > PAGE_SIZE,
+         |             ^~~~~~~~~
+
+
+vim +5662 mm/page_alloc.c
+
+  5649	
+  5650	void *page_frag_alloc_align(struct page_frag_cache *nc,
+  5651			      unsigned int fragsz, gfp_t gfp_mask,
+  5652			      unsigned int align_mask)
+  5653	{
+  5654		unsigned int size = PAGE_SIZE;
+  5655		struct page *page;
+  5656		int offset;
+  5657	
+  5658		/*
+  5659		 * frag_alloc is not suitable for memory alloc which fragsz
+  5660		 * is bigger than PAGE_SIZE, use kmalloc or alloc_pages instead.
+  5661		 */
+> 5662		if (WARN_ONCE(fragz > PAGE_SIZE,
+  5663			      "alloc fragsz(%d) > PAGE_SIZE(%ld) not supported, alloc fail\n",
+  5664			      fragsz, PAGE_SIZE))
+  5665			return NULL;
+  5666	
+  5667		if (unlikely(!nc->va)) {
+  5668	refill:
+  5669			page = __page_frag_cache_refill(nc, gfp_mask);
+  5670			if (!page)
+  5671				return NULL;
+  5672	
 
 -- 
-Regards,
-
-Laurent Pinchart
+0-DAY CI Kernel Test Service
+https://01.org/lkp

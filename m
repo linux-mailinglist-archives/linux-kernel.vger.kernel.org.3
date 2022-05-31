@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924E0539355
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F167539357
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345328AbiEaOtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 10:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
+        id S1345333AbiEaOts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 10:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345299AbiEaOtj (ORCPT
+        with ESMTP id S1345299AbiEaOtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 10:49:39 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507DDF43
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:49:39 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id e24so5253274pjt.0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:49:39 -0700 (PDT)
+        Tue, 31 May 2022 10:49:47 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA2E1EAFF
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:49:46 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id e66so13045871pgc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:49:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NAOtSJQ0e7lMXAVSUZPZ1qHrCN9pnSWlg6iMnewBSfg=;
-        b=cV7Mz+wAIW+PUEe0iYCSMFq+uwxZ91W/LWcYZNEYSILqBIgtLaEyH4um2dlf1uimil
-         Hi01/2VYvnNhg5DSMEI7jjDXglilceVlkoiPmjoJ7T37eqTTua6KsZfxs7YJoqo9iVYF
-         ZBze3AfYyWmvNzLR0j+MK6mh8wov6wK65LrFma3m1bAzxLgSpHMraTJBX2Bx14ExdN3Q
-         p8kWMI3acpRst921i2EBqp2XK8bfYwjbpd4dNcxzRkq0pyMxVqQoxW3Et3XaRFHK9XGT
-         2OCdR5DusT0ZqUmE3AGkp7ntPwr7BoFNaUddygiHIKy4/LvF4KgYPvWivit4UnnS58j3
-         OWjQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ceYIzlL/twTH8Sr59LajLbKK1xxBDxgWw7CtT5vS84w=;
+        b=K0S/p3jRO0pqQZ0yw9hdVvC9iMKHlzc6CLAZtSMin3YKcxUYUj0ek3P+WGYNxDZl/h
+         9azmVFZ0uzK8PCDufF/Gjw66qtxTwQqzJdFJuIxxWUxF8ww4bqrf15X+U13iBBErU1fp
+         DX3oH+7ABnJSlbwItxycWDd41+OPp8j+1cKrlbFn39i5y4pgUCwGq499xs8oPoiRbGv/
+         bwfjPX/feLbTjyI0TiFgnStzne1oJOBmjMLEgxGWTeffJ/3xpVBhg6lwr/qhOoGdjBWq
+         JqCwX0CVSpdiZWifOYpTuacvZTwYd6lwx9r5/r0M8zr3ltCWRlJ2SukjjgtidI0y2BYS
+         Zzdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NAOtSJQ0e7lMXAVSUZPZ1qHrCN9pnSWlg6iMnewBSfg=;
-        b=8KR/Pg+gUgrS7Pykg6gdSWsin+p9Qcl4Q48e7g85xoImt6TmJxs2FduBNWzy4B0BSE
-         bIVKbf5t506HZmJsh7nK1Tb7vS7hDqeVl18iM0cs885OB5Hqh6Jou+KdWqlRWyGv7zHN
-         x0kzPNPdyUXQFBN3okDg0+yj7XoxlfqMGpKlcW2gFYNUxXMlBTrjiQes33T0+4RIkTxP
-         81UmL6C3RNvWqY4M4GJToe28oltS7j+OzZT1ogPFunmzsbdGm3vgxxK0CcBrd3uQgboh
-         xfZKYo0rmJjEKpCtaJmAfD9kPJCMNp1+ywInQNIQceD46wC5/IRe0piMU1ZXYZpAzRoG
-         OPdw==
-X-Gm-Message-State: AOAM533dViHQUaqHEhhdIVARKVe6fCLT8UPear7goUyLObXsFT4YdJ7g
-        26nowOzMP7oCmsdn4e+9ofs=
-X-Google-Smtp-Source: ABdhPJwp7L4klTmbrkke0YpYCLWkj2Vr73IGnj3X69pgKGLK4gcgENFTfpGqAgXHRx3n2vVZJlo34g==
-X-Received: by 2002:a17:902:e80c:b0:163:d222:60b7 with SMTP id u12-20020a170902e80c00b00163d22260b7mr12131714plg.54.1654008578559;
-        Tue, 31 May 2022 07:49:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ceYIzlL/twTH8Sr59LajLbKK1xxBDxgWw7CtT5vS84w=;
+        b=CDcNprzopwgzd3GPx+nYt6wE9mcUF2OyL0FG60nl1TuwoXCvczXIJwAuGv9ydaRrSu
+         j4gYPacsmf4c3P05xuc88utAFyOygMhWC9aHad89yHoZoD5nshGeo/QhGZFeZbSb+OVT
+         J0IoDWfh9IO9kiGFGD44F4DXTGXBVwPSHQVx/gKVCDrm0Fj+sCETASp3mHOMjsEsqLVk
+         OjUvUdJNH+gnUyeclorLqT7rg3gyb6kqAlsFOWtD4f2hNY6rohbsPTMJwNUU01KlRrFc
+         7PYip83YuviQWRPBDwGx+gCOG9tKA3RDKOsAjm3igfOizH8Idb1joKoP9lzkBo3LK7Xm
+         gtHA==
+X-Gm-Message-State: AOAM530hp2yWZyEPFh6Y8fSDvXce5AKOKCA0dA+RUpLkLhgTlc94Hkl7
+        mRdNNBGCA68K4aEBoNwt5E4=
+X-Google-Smtp-Source: ABdhPJzDSi4itj4Z6llVe4OArFqnAITyU34dFBtLDFQN+cm+fuixe6WVqtcPuXnd4vYgLmf0MRQtHA==
+X-Received: by 2002:a63:ef4e:0:b0:3f9:e8c4:b72d with SMTP id c14-20020a63ef4e000000b003f9e8c4b72dmr42409832pgk.328.1654008585955;
+        Tue, 31 May 2022 07:49:45 -0700 (PDT)
 Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id d3-20020a17090a8d8300b001e2d4ef6160sm2007215pjo.27.2022.05.31.07.49.33
+        by smtp.googlemail.com with ESMTPSA id d3-20020a17090a8d8300b001e2d4ef6160sm2007215pjo.27.2022.05.31.07.49.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 07:49:38 -0700 (PDT)
+        Tue, 31 May 2022 07:49:45 -0700 (PDT)
 From:   Miaoqian Lin <linmq006@gmail.com>
 To:     Neil Armstrong <narmstrong@baylibre.com>,
         David Airlie <airlied@linux.ie>,
@@ -59,10 +59,12 @@ To:     Neil Armstrong <narmstrong@baylibre.com>,
         dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     linmq006@gmail.com
-Subject: [PATCH 1/2] drm/meson: encoder_cvbs: Fix refcount leak in meson_encoder_cvbs_init
-Date:   Tue, 31 May 2022 18:48:15 +0400
-Message-Id: <20220531144818.26943-1-linmq006@gmail.com>
+Subject: [PATCH 2/2] drm/meson: encoder_hdmi: Fix refcount leak in meson_encoder_hdmi_init
+Date:   Tue, 31 May 2022 18:48:16 +0400
+Message-Id: <20220531144818.26943-2-linmq006@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220531144818.26943-1-linmq006@gmail.com>
+References: <20220531144818.26943-1-linmq006@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,23 +81,23 @@ of_graph_get_remote_node() returns remote device nodepointer with
 refcount incremented, we should use of_node_put() on it when done.
 Add missing of_node_put() to avoid refcount leak.
 
-Fixes: 318ba02cd8a8 ("drm/meson: encoder_cvbs: switch to bridge with ATTACH_NO_CONNECTOR")
+Fixes: e67f6037ae1b ("drm/meson: split out encoder from meson_dw_hdmi")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/gpu/drm/meson/meson_encoder_cvbs.c | 1 +
+ drivers/gpu/drm/meson/meson_encoder_hdmi.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/meson/meson_encoder_cvbs.c b/drivers/gpu/drm/meson/meson_encoder_cvbs.c
-index fd8db97ba8ba..8110a6e39320 100644
---- a/drivers/gpu/drm/meson/meson_encoder_cvbs.c
-+++ b/drivers/gpu/drm/meson/meson_encoder_cvbs.c
-@@ -238,6 +238,7 @@ int meson_encoder_cvbs_init(struct meson_drm *priv)
+diff --git a/drivers/gpu/drm/meson/meson_encoder_hdmi.c b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
+index 5e306de6f485..f3341458f8b7 100644
+--- a/drivers/gpu/drm/meson/meson_encoder_hdmi.c
++++ b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
+@@ -363,6 +363,7 @@ int meson_encoder_hdmi_init(struct meson_drm *priv)
  	}
  
- 	meson_encoder_cvbs->next_bridge = of_drm_find_bridge(remote);
+ 	meson_encoder_hdmi->next_bridge = of_drm_find_bridge(remote);
 +	of_node_put(remote);
- 	if (!meson_encoder_cvbs->next_bridge) {
- 		dev_err(priv->dev, "Failed to find CVBS Connector bridge\n");
+ 	if (!meson_encoder_hdmi->next_bridge) {
+ 		dev_err(priv->dev, "Failed to find HDMI transceiver bridge\n");
  		return -EPROBE_DEFER;
 -- 
 2.25.1

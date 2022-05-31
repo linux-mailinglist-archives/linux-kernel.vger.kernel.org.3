@@ -2,93 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8AD538FF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CB2539041
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343762AbiEaLg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 07:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
+        id S1344083AbiEaMDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 08:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343661AbiEaLgP (ORCPT
+        with ESMTP id S233781AbiEaMDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 07:36:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 330589B1A4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:36:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1F6B23A;
-        Tue, 31 May 2022 04:36:13 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B8793F73D;
-        Tue, 31 May 2022 04:36:13 -0700 (PDT)
-Date:   Tue, 31 May 2022 12:36:07 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH 2/2] firmware: arm_scmi: Fix pointers arithmetic in Base
- protocol
-Message-ID: <YpX9K3x2zoToVy+3@e120937-lin>
-References: <20220530115237.277077-1-cristian.marussi@arm.com>
- <20220530115237.277077-2-cristian.marussi@arm.com>
- <1cdf5131-a67b-7297-ad75-49b53f2da293@arm.com>
+        Tue, 31 May 2022 08:03:22 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752F76D3B5;
+        Tue, 31 May 2022 05:03:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
+  s=amazon201209; t=1653998602; x=1685534602;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Dq4CYzsKphsoAAKN9Kpa4vscL+m6IHrNrwW+RiUQ72E=;
+  b=Hai5WvByt8HE9nBaJbJEWQiKqvdg4gWhVMvN8/2m8UkbvR556TGIZpFC
+   xVLoqfk1/44xiizvwwriaSuOXz5y+CE7uNcRqta/2nL5Z/bsEZAXVW7Kg
+   iKIZsDSQxu8YJNWcmLfp5JR5jb2bdU4khe66lt7nzvYh0erTBEKlXoaO7
+   s=;
+X-IronPort-AV: E=Sophos;i="5.91,265,1647302400"; 
+   d="scan'208";a="223919707"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-6fd66c4a.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 31 May 2022 11:43:48 +0000
+Received: from EX13D33EUA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-6fd66c4a.us-west-2.amazon.com (Postfix) with ESMTPS id D3FEC815DE;
+        Tue, 31 May 2022 11:43:46 +0000 (UTC)
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D33EUA002.ant.amazon.com (10.43.165.38) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Tue, 31 May 2022 11:43:45 +0000
+Received: from dev-dsk-metikaya-1c-d447d167.eu-west-1.amazon.com
+ (10.13.250.103) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36 via Frontend Transport; Tue, 31 May 2022
+ 11:43:42 +0000
+From:   Metin Kaya <metikaya@amazon.co.uk>
+To:     <jalliste@amazon.com>
+CC:     <bp@alien8.de>, <diapop@amazon.co.uk>, <hpa@zytor.com>,
+        <jmattson@google.com>, <joro@8bytes.org>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <metikaya@amazon.co.uk>,
+        <mingo@redhat.com>, <pbonzini@redhat.com>, <rkrcmar@redhat.com>,
+        <sean.j.christopherson@intel.com>, <tglx@linutronix.de>,
+        <vkuznets@redhat.com>, <wanpengli@tencent.com>, <x86@kernel.org>
+Subject: Re: [PATCH] KVM: VMX: CPU frequency scaling for intel x86_64 KVM guests
+Date:   Tue, 31 May 2022 11:43:33 +0000
+Message-ID: <20220531114333.29153-1-metikaya@amazon.co.uk>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220531105925.27676-1-jalliste@amazon.com>
+References: <20220531105925.27676-1-jalliste@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1cdf5131-a67b-7297-ad75-49b53f2da293@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-15.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 12:02:53PM +0100, Robin Murphy wrote:
-> On 2022-05-30 12:52, Cristian Marussi wrote:
-> > Fix a possible undefined behaviour involving pointer arithmetic in Base
-> > protocol scmi_base_implementation_list_get().
-> > 
-> > cppcheck complains with:
-> > 
-> > drivers/firmware/arm_scmi/base.c:190:19: warning: 't->rx.buf' is of type 'void *'. When using void pointers in calculations, the behaviour is undefined. [arithOperationsOnVoidPointer]
-> >   list = t->rx.buf + sizeof(*num_ret);
-> 
-> Except we use GNU C, where it is well-defined[1]. We use void pointer
-> arithmetic *all over* Linux, so there really isn't any valid argument that
-> it could be problematic. If this was a common SCMI library intended to be
-> portable then the patch would seem more reasonable, but in Linux-specific
-> driver code it's just pointless churn.
-> 
+Thanks, Jack.
 
-Hi Robin,
-
-thanks for the correction, I'll drop this.
-
-Thanks,
-Cristian
-
-> Cheers,
-> Robin.
-> 
-> [1] https://gcc.gnu.org/onlinedocs/gcc/Pointer-Arith.html
-> 
-> > Fixes: b6f20ff8bd94 ("firmware: arm_scmi: add common infrastructure and support for base protocol")
-> > Cc: Sudeep Holla <sudeep.holla@arm.com>
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > ---
-> >   drivers/firmware/arm_scmi/base.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/firmware/arm_scmi/base.c b/drivers/firmware/arm_scmi/base.c
-> > index 20fba7370f4e..6d6214d9e68c 100644
-> > --- a/drivers/firmware/arm_scmi/base.c
-> > +++ b/drivers/firmware/arm_scmi/base.c
-> > @@ -187,7 +187,7 @@ scmi_base_implementation_list_get(const struct scmi_protocol_handle *ph,
-> >   	num_skip = t->tx.buf;
-> >   	num_ret = t->rx.buf;
-> > -	list = t->rx.buf + sizeof(*num_ret);
-> > +	list = ((u8 *)t->rx.buf) + sizeof(*num_ret);
-> >   	do {
-> >   		size_t real_list_sz;
+Reviewed-by: Metin Kaya <metikaya@amazon.co.uk>

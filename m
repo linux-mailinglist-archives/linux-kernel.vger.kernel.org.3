@@ -2,175 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E338538CF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382E5538D02
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244900AbiEaIg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 04:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
+        id S244904AbiEaIip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 04:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236113AbiEaIgV (ORCPT
+        with ESMTP id S244937AbiEaIik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 04:36:21 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B598C6F4BE
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:36:18 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id h62-20020a1c2141000000b0039aa4d054e2so793750wmh.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unimore.it; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=FIJm64zSOV70KcmATQ1QKKdd03bwiTpTbvXIZEBOtyU=;
-        b=XAUy8Fy8mFRUhRv9O+rzT5F0TRfZRlE1gqkce0PLn2tBFnDoJXg9NnOl20ZvpeBleX
-         Pd3EwavEBA+X5OJVCi9qFYtKXBjUT3kqUhLoWp78FP1WQEZ9oi6NW6tegoAj9TT5Mo+y
-         Z0LoNo7mtMgpknC7BukFxusRJyrrYBvSvY/I0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=FIJm64zSOV70KcmATQ1QKKdd03bwiTpTbvXIZEBOtyU=;
-        b=CRMH9u+SoTi8B2cWwSxcm0imqfx6eLbrlEbTED+vUUmuN6zRRxlkwgKIGPTC67FXO7
-         eHHye7Ut6cG44SBCuFFytW2HF6DpBzu/Rijst80iPSCGF8bOyxJmn4CHXxAvBURXf6AM
-         5zvHG3G/WaytvhgUUTsFUp7kEhHHx7S+I/Ev1vM3aU2QhwM8HzFuk3P/FUoeaOXzml/T
-         13wh9ZVUmHG4Y16veXeT+i5bW/XK+hE6zA8mza4TvI/zCIIHP1vkoYyKd5VhIzvIo7WZ
-         HLzmjSJfC5JzjCEAhTCa8JzliQWeeCLTe0HBun2FmHf/6/n5Ls83pbs3+VLPeclD+qF9
-         vPzA==
-X-Gm-Message-State: AOAM531bepuwJIRJ9z8Ohi5SsutxlOfZIZdGe6NMxscBTU+p07ktNOJ+
-        WSph9/Fy4tRhOp1n8EOKnrcf
-X-Google-Smtp-Source: ABdhPJzNhHkK2WK8mx9RSNqYXFEmnVc9sZGRQgQLoJwQ96U3iKwhVj3svUJUaruwq8uR6Pe8nE5LqQ==
-X-Received: by 2002:a1c:f208:0:b0:39c:1282:3d04 with SMTP id s8-20020a1cf208000000b0039c12823d04mr6744485wmc.26.1653986177218;
-        Tue, 31 May 2022 01:36:17 -0700 (PDT)
-Received: from mbp-di-paolo.station (net-93-144-98-177.cust.vodafonedsl.it. [93.144.98.177])
-        by smtp.gmail.com with ESMTPSA id az18-20020adfe192000000b0021020517639sm8392803wrb.102.2022.05.31.01.36.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 31 May 2022 01:36:16 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH -next v7 2/3] block, bfq: refactor the counting of
- 'num_groups_with_pending_reqs'
-From:   Paolo VALENTE <paolo.valente@unimore.it>
-In-Reply-To: <efe01dd1-0f99-dadf-956d-b0e80e1e602c@huawei.com>
-Date:   Tue, 31 May 2022 10:36:15 +0200
-Cc:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
-        Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <1803FD7E-9FB1-4A1E-BD6D-D6657006589A@unimore.it>
-References: <20220528095020.186970-1-yukuai3@huawei.com>
- <20220528095020.186970-3-yukuai3@huawei.com>
- <0D9355CE-F85B-4B1A-AEC3-F63DFC4B3A54@linaro.org>
- <b9a4ea60-28e5-b7aa-0154-ad7481eafbd3@huawei.com>
- <efe01dd1-0f99-dadf-956d-b0e80e1e602c@huawei.com>
-To:     Yu Kuai <yukuai3@huawei.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 31 May 2022 04:38:40 -0400
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A60F6339A;
+        Tue, 31 May 2022 01:38:28 -0700 (PDT)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4LC5Jv4Wfkz9sTd;
+        Tue, 31 May 2022 10:38:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mail.msdigital.de;
+        s=MBO0001; t=1653986303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xlLwFIVR/fLL8FKR1FZXvk/wLP3oPC0CsS041Mp0NLg=;
+        b=ec0zv5uYyNG/EkJXF3A7kB5BQRLt91zjL3Esia32991FBzYQBz8/E9QYo1AqX5pdG4VmoD
+        5E097DpYOd8N3wJEDb4MRp7oxxtDIPYFtYQKtTp/UYK2ZrX1EnavhnAVQncwWpGaiYKVu1
+        5tkqCMOfytFrUs5qK98pvYUjR7UkE3T4QnhN86ImrnjnZ0b75ZAmcz24c8P22QtZzcGzb8
+        2qak/3nStWCicp+Roo9lwWyKze/oG1cABphI4WOdMFulugvH9MpVIrfu76P2ouE9wGhhRP
+        oFIl6ymGjzJFHdBLJiCpa0zSyBOOhKjfX7O/fX+aMWAKVAVs+LECxojJBYtKew==
+Message-ID: <689d5b9d-3d1e-75be-ea0d-250e16b6d85c@mail.msdigital.de>
+Date:   Tue, 31 May 2022 10:38:21 +0200
+MIME-Version: 1.0
+Subject: Re: PROBLEM: No static MAC address for usb gadget ethernet via kernel
+ parameter any more.
+Content-Language: de-DE
+To:     Marian Postevca <posteuca@mutex.one>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <dfaa54ab-1b03-7aec-5927-d52a4233e56a@msdigital.de>
+ <6c0eb462-3fab-473d-8989-b56e5748e5f7@mutex.one>
+ <83b013eb-b320-f397-0ecc-f4824f3f45b9@msdigital.de>
+ <874k1htj8b.fsf@mutex.one>
+ <5ad210a8-a834-607e-351c-83ff23e23f5a@mail.msdigital.de>
+ <87tu9cpyv6.fsf@mutex.one>
+From:   Maximilian Senftleben <kernel@mail.msdigital.de>
+In-Reply-To: <87tu9cpyv6.fsf@mutex.one>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 4LC5Jv4Wfkz9sTd
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Just tested, the fix works for me.
 
-
-> Il giorno 30 mag 2022, alle ore 10:40, Yu Kuai <yukuai3@huawei.com> ha =
-scritto:
->=20
-> =E5=9C=A8 2022/05/30 16:34, Yu Kuai =E5=86=99=E9=81=93:
->> =E5=9C=A8 2022/05/30 16:10, Paolo Valente =E5=86=99=E9=81=93:
->>>=20
->>>=20
->>>> Il giorno 28 mag 2022, alle ore 11:50, Yu Kuai <yukuai3@huawei.com> =
-ha scritto:
->>>>=20
->>>> Currently, bfq can't handle sync io concurrently as long as they
->>>> are not issued from root group. This is because
->>>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
->>>> bfq_asymmetric_scenario().
->>>>=20
->>>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
->>>>=20
->>>> Before this patch:
->>>> 1) root group will never be counted.
->>>> 2) Count if bfqg or it's child bfqgs have pending requests.
->>>> 3) Don't count if bfqg and it's child bfqgs complete all the =
-requests.
->>>>=20
->>>> After this patch:
->>>> 1) root group is counted.
->>>> 2) Count if bfqg have at least one bfqq that is marked busy.
->>>> 3) Don't count if bfqg doesn't have any busy bfqqs.
->>>=20
->>> Unfortunately, I see a last problem here. I see a double change:
->>> (1) a bfqg is now counted only as a function of the state of its =
-child
->>>      queues, and not of also its child bfqgs
->>> (2) the state considered for counting a bfqg moves from having =
-pending
->>>      requests to having busy queues
->>>=20
->>> I'm ok with with (1), which is a good catch (you are lady explained
->>> the idea to me some time ago IIRC).
->>>=20
->>> Yet I fear that (2) is not ok.  A bfqq can become non busy even if =
-it
->>> still has in-flight I/O, i.e.  I/O being served in the drive.  The
->>> weight of such a bfqq must still be considered in the weights_tree,
->>> and the group containing such a queue must still be counted when
->>> checking whether the scenario is asymmetric.  Otherwise service
->>> guarantees are broken.  The reason is that, if a scenario is deemed =
-as
->>> symmetric because in-flight I/O is not taken into account, then =
-idling
->>> will not be performed to protect some bfqq, and in-flight I/O may
->>> steal bandwidth to that bfqq in an uncontrolled way.
->> Hi, Paolo
->> Thanks for your explanation.
->> My orginal thoughts was using weights_tree insertion/removal, =
-however,
->> Jan convinced me that using bfq_add/del_bfqq_busy() is ok.
->> =46rom what I see, when bfqq dispatch the last request,
->> bfq_del_bfqq_busy() will not be called from __bfq_bfqq_expire() if
->> idling is needed, and it will delayed to when such bfqq get scheduled =
-as
->> in-service queue again. Which means the weight of such bfqq should =
-still
->> be considered in the weights_tree.
->> I also run some tests on null_blk with "irqmode=3D2
->> completion_nsec=3D100000000(100ms) hw_queue_depth=3D1", and tests =
-show
->> that service guarantees are still preserved on slow device.
->> Do you this is strong enough to cover your concern?
-
-Unfortunately it is not.  Your very argument is what made be believe
-that considering busy queues was enough, in the first place.  But, as
-I found out, the problem is caused by the queues that do not enjoy
-idling.  With your patch (as well as in my initial version) they are
-not counted when they remain without requests queued.  And this makes
-asymmetric scenarios be considered erroneously as symmetric.  The
-consequence is that idling gets switched off when it had to be kept
-on, and control on bandwidth is lost for the victim in-service queues.
-
-Thanks,
-Paolo
-
->> Thanks,
->> Kuai
->>>=20
->>> I verified this also experimentally a few years ago, when I added =
-this
->>> weights_tree stuff.  That's the rationale behind the part of
->>> bfq_weights_tree_remove that this patch eliminates.  IOW,
->>> for a bfqq and its parent bfqg to be out of the count for symmetry,
->>> all bfqq's requests must also be completed.
->>>=20
->>> Thanks,
->>> Paolo
->=20
-> I forgot to cc Jan for this patchset... This is a reply for Jan.
-
+Am 26.05.2022 um 08:54 schrieb Marian Postevca:
+> Could you test if this patch fixes the issue for you?
+> Should apply without problems on kernel 5.17.
+> ---
+>   drivers/usb/gadget/function/u_ether.c | 12 ++++++++++--
+>   1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+> index 6f5d45ef2e39a..b5bf51cdc3c8f 100644
+> --- a/drivers/usb/gadget/function/u_ether.c
+> +++ b/drivers/usb/gadget/function/u_ether.c
+> @@ -775,9 +775,14 @@ struct eth_dev *gether_setup_name(struct usb_gadget *g,
+>   	dev->qmult = qmult;
+>   	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
+>   
+> -	if (get_ether_addr(dev_addr, addr))
+> +	if (get_ether_addr(dev_addr, addr)) {
+> +		net->addr_assign_type = NET_ADDR_RANDOM;
+>   		dev_warn(&g->dev,
+>   			"using random %s ethernet address\n", "self");
+> +	}
+> +	else {
+> +		net->addr_assign_type = NET_ADDR_SET;
+> +	}
+>   	eth_hw_addr_set(net, addr);
+>   	if (get_ether_addr(host_addr, dev->host_mac))
+>   		dev_warn(&g->dev,
+> @@ -835,6 +840,9 @@ struct net_device *gether_setup_name_default(const char *netname)
+>   	INIT_LIST_HEAD(&dev->tx_reqs);
+>   	INIT_LIST_HEAD(&dev->rx_reqs);
+>   
+> +	/* by default we always have a random MAC address */
+> +	net->addr_assign_type = NET_ADDR_RANDOM;
+> +
+>   	skb_queue_head_init(&dev->rx_frames);
+>   
+>   	/* network device setup */
+> @@ -871,7 +879,6 @@ int gether_register_netdev(struct net_device *net)
+>   	dev = netdev_priv(net);
+>   	g = dev->gadget;
+>   
+> -	net->addr_assign_type = NET_ADDR_RANDOM;
+>   	eth_hw_addr_set(net, dev->dev_mac);
+>   
+>   	status = register_netdev(net);
+> @@ -912,6 +919,7 @@ int gether_set_dev_addr(struct net_device *net, const char *dev_addr)
+>   	if (get_ether_addr(dev_addr, new_addr))
+>   		return -EINVAL;
+>   	memcpy(dev->dev_mac, new_addr, ETH_ALEN);
+> +	net->addr_assign_type = NET_ADDR_SET;
+>   	return 0;
+>   }
+>   EXPORT_SYMBOL_GPL(gether_set_dev_addr);

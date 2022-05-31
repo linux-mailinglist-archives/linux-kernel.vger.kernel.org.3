@@ -2,94 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56845389E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC715389E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243554AbiEaCUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 22:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S243567AbiEaCWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 22:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233954AbiEaCUc (ORCPT
+        with ESMTP id S243563AbiEaCWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 22:20:32 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D5D8CCE4;
-        Mon, 30 May 2022 19:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653963631; x=1685499631;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tsp2Js378HnMxOjZEQEeYwhoUZhRQiZFihQ/jcFVWAE=;
-  b=gybibPWplaO42sU9a4avqrQyfqPlpufxVALjBR70cmlKWJ6Ip0I3C724
-   6UvwDL5vvMlaHkmpFPFZqnLSSLLMsY+2Vf2Apuzj8LEk8jeylUgto9gTA
-   4v3Lpz4AppJryWcXGkxcy2EglatY/YNQZI9HzR/jgt/EbXooTBK4ZPW73
-   JV4HuUCgE/YoWAo23oCbUKcXH4aJRBX70s+hUkvBkV8a4yI4k/Vj8jhVu
-   ngpN4f5oYuDdd0aUQGcK2WGyFZoGV0vJBYcT7LIclCcipCXAI83hNqWxZ
-   o66ltQlXBdrgJU0ExDxAmHYMq8qtLn6vMf0O4L8JnzOgs5n8errAzsBJB
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="275202185"
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="275202185"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 19:20:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="720103698"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.90])
-  by fmsmga001.fm.intel.com with ESMTP; 30 May 2022 19:20:29 -0700
-From:   tien.sung.ang@intel.com
-To:     yilun.xu@intel.com
-Cc:     dinh.nguyen@intel.com, hao.wu@intel.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mdf@kernel.org, tien.sung.ang@intel.com, trix@redhat.com
-Subject: Re: [PATCH] fpga: altera-cvp: allow interrupt to continue next time
-Date:   Tue, 31 May 2022 10:20:04 +0800
-Message-Id: <20220531022004.2314963-1-tien.sung.ang@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220528120400.GA175058@yilunxu-OptiPlex-7050>
-References: <20220528120400.GA175058@yilunxu-OptiPlex-7050>
+        Mon, 30 May 2022 22:22:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 075309345C
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 19:22:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F95A23A;
+        Mon, 30 May 2022 19:22:19 -0700 (PDT)
+Received: from [10.162.41.9] (unknown [10.162.41.9])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DEAE3F66F;
+        Mon, 30 May 2022 19:22:17 -0700 (PDT)
+Message-ID: <c5f061b3-880c-3639-28dc-f478fe2dabb9@arm.com>
+Date:   Tue, 31 May 2022 07:52:14 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC] mm/page_isolation: Fix an infinite loop in
+ isolate_single_pageblock()
+Content-Language: en-US
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20220530115027.123341-1-anshuman.khandual@arm.com>
+ <A4E55027-14D4-48ED-9986-3739CEDD7327@nvidia.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <A4E55027-14D4-48ED-9986-3739CEDD7327@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> CFG_READY signal/bit may time-out due to firmware not responding
->> within the given time-out. This time varies due to numerous
->> factors like size of bitstream and others.
->> This time-out error does not impact the result of the CvP
->> previous transactions. The CvP driver shall then, respond with
 
->Do you mean the reprogramming is successful even if you find the time
->out in write_complete()? Then return 0 is better?
-Based on the information given by the Intel FPGA firmware team,
-CFG_READY is essential to indicate if the current FPGA 
-configuration session is indeed a success. There are 
-cases we test in the lab whereby, CFG_READY stays invalid and
-the tests performed subsequently to verify the FPGA functionality
-could not detect the failed session. A failed FPGA 
-configuration session means, the new bitstream wasn't 
-successfully configured and tests ran later will just be passing
-on the previous working bitstream version. In short, CFG_READY
-is esential, and an error indicating the time-out is a must.
-Another example, using an incorrect SOF/Design FPGA results
-in CFG_READY being invalid. The user must be informed of a 
-potential error. 
-I will correct the wordings i used earlier that says that
-the timoeut error does not impact the results of the CvP
-previous transactions. It may so if the firmware has some sort
-of error. 
 
->And could you specify what the time-out mean on write_init() phase?
-I could not really understand your question. We set huge 
-time-outs of ~10seconds. Every wait for the firmware to respond
-is potentially a hazard. The firmware CvP is has it's limitation
-unfortunately. 
+On 5/30/22 19:23, Zi Yan wrote:
+> On 30 May 2022, at 7:50, Anshuman Khandual wrote:
+> 
+>> HugeTLB allocation (32MB pages on 4K base page) via sysfs on arm64 platform
+>> is getting stuck in isolate_single_pageblock(), because of an infinite loop
+>> Because head_pfn always evaluate the same, so does pfn, and the outer loop
+>> never exits. Dropping the relevant code block, which seems redundant, makes
+>> the problem go away.
+> 
+> Thanks for the report.
+> 
+>>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: Zi Yan <ziy@nvidia.com>
+>> Cc: linux-mm@kvack.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Fixes: b2c9e2fbba32 ("mm: make alloc_contig_range work at pageblock granularity")
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>> I am not sure about this fix, and also did not find much time today to
+>> debug any further. There are much code changes around this function in
+>> recent days. This problem is present on latest mainline kernel.
+>>
+>> - Anshuman
+>>
+>>  mm/page_isolation.c | 4 ----
+>>  1 file changed, 4 deletions(-)
+>>
+>> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
+>> index 6021f8444b5a..b0922fee75c1 100644
+>> --- a/mm/page_isolation.c
+>> +++ b/mm/page_isolation.c
+>> @@ -389,10 +389,6 @@ static int isolate_single_pageblock(unsigned long boundary_pfn, int flags,
+>>  			struct page *head = compound_head(page);
+>>  			unsigned long head_pfn = page_to_pfn(head);
+>>
+>> -			if (head_pfn + nr_pages <= boundary_pfn) {
+>> -				pfn = head_pfn + nr_pages;
+>> -				continue;
+>> -			}
+>>  #if defined CONFIG_COMPACTION || defined CONFIG_CMA
+>>  			/*
+>>  			 * hugetlb, lru compound (THP), and movable compound pages
+>> -- 
+>> 2.20.1
+> 
+> Can you try the patch below to see if it fixes the issue? Thanks.
+> 
+> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
+> index 6021f8444b5a..d200d41ad0d3 100644
+> --- a/mm/page_isolation.c
+> +++ b/mm/page_isolation.c
+> @@ -385,9 +385,9 @@ static int isolate_single_pageblock(unsigned long boundary_pfn, int flags,
+>                  * above do the rest. If migration is not possible, just fail.
+>                  */
+>                 if (PageCompound(page)) {
+> -                       unsigned long nr_pages = compound_nr(page);
+>                         struct page *head = compound_head(page);
+>                         unsigned long head_pfn = page_to_pfn(head);
+> +                       unsigned long nr_pages = compound_nr(head);
+> 
+>                         if (head_pfn + nr_pages <= boundary_pfn) {
+>                                 pfn = head_pfn + nr_pages;
+> 
+> 
 
+Yes, this does solve the problem. I guess nr_pages should have been derived
+from the compound head itself for it be meaningful (i.e > 1). I assume you
+will send a fix patch with appropriate write up that describes this problem.
+
+- Anshuman

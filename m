@@ -2,110 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFDB45392FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0106D5392F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345167AbiEaOLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 10:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
+        id S1345180AbiEaOL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 10:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345209AbiEaOLq (ORCPT
+        with ESMTP id S1345005AbiEaOLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 10:11:46 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5916CD1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:11:41 -0700 (PDT)
+        Tue, 31 May 2022 10:11:23 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7719265422;
+        Tue, 31 May 2022 07:11:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654006302; x=1685542302;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jlWqAS9a8O9NkMkuZlVFXTKLAixuk0JanbpsgrmgyZM=;
-  b=SHq8wRSVmQiQqdNNXacgTtPXWJny5B6BiBXaE+evBxo65PZqf5kJWfJM
-   oE6Rzxa+0yg0ow01sWlJKwJA9nBKXebl7bZda1WwqLSRh4QZ1YgYNO99s
-   OkAKzIwk6o00Q0XwPnSXZTbzaQRPe93OcNK09jK1v3tAonTi7x6t9f0mN
-   3DK9jI8GrE0JQR74NLlYz7Xmzv0LS2PhA+/h0Ru5IpHiMlPfc/EanG9ya
-   vxFwq+b+DtDN3LAijFIFo7LQmXmFz7+zNvcvpHiKMqaTlqaNo1/04NEjJ
-   2tuOc2CE49EwuUg8VxmK2OPRt4JEyNc5v1XfLtTJ+ZmanEqTcBiF4+PAE
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="262895347"
+  t=1654006282; x=1685542282;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=K2Sm7KR4WlYANKzzxvSs11cMHFq39jJccsP/ycyK3bY=;
+  b=oHemOSvPp4APn+z/NUfMWYfS4mreiS17DozPYsGCaryUHbXA5Am3NyD6
+   4LQs5MNu1ggXWFPmRPmA65GhfI+oz71UZySQeFKBnJv9WHxJ4IcecWUD9
+   MOyYzA4ZfKHw/61y1l/Fe1grNEVGkm3f2ddKHxzznG1yhAtsPEua+UMpM
+   C5EWr64Q+f/b/26OuEDk9VnqxwMV8T7DT+jdYYOw/156wpl3RhqaE7+qe
+   wwzHezQOSFvmoHKjrU/ScSDu6CFuMM1bURYfjZ6XdQ74giA6EdvlKI7L4
+   uyy8q4FPgsj4qr9+Iu3XEZ23rNJpk2zh0J0X/qscJnLIOA2qgarzjvefy
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="272831554"
 X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="262895347"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 07:11:23 -0700
+   d="scan'208";a="272831554"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 07:11:22 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="605689795"
-Received: from peakwan.ccr.corp.intel.com (HELO [10.249.168.229]) ([10.249.168.229])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 07:11:20 -0700
-Message-ID: <60318d83-e22f-f922-436f-6c31bce24d59@linux.intel.com>
-Date:   Tue, 31 May 2022 22:11:18 +0800
+   d="scan'208";a="562335391"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 31 May 2022 07:11:20 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 5C9E2165; Tue, 31 May 2022 17:11:22 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/2] iio: adc: xilinx-xadc: Drop duplicate NULL check in xadc_parse_dt()
+Date:   Tue, 31 May 2022 17:11:18 +0300
+Message-Id: <20220531141118.64540-2-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220531141118.64540-1-andriy.shevchenko@linux.intel.com>
+References: <20220531141118.64540-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/12] iommu/vt-d: Use iommu_get_domain_for_dev() in
- debugfs
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220527063019.3112905-1-baolu.lu@linux.intel.com>
- <20220527063019.3112905-2-baolu.lu@linux.intel.com>
- <20220527145910.GQ1343366@nvidia.com>
- <eda4d688-257b-d12a-56c0-0f9d3a10ef8c@linux.intel.com>
- <20220530121412.GX1343366@nvidia.com>
- <42623a73-c288-1c0d-7021-93caff4ffb6f@linux.intel.com>
- <20220531131052.GD1343366@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220531131052.GD1343366@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/31 21:10, Jason Gunthorpe wrote:
-> On Tue, May 31, 2022 at 11:02:06AM +0800, Baolu Lu wrote:
-> 
->> For case 2, it is a bit weird. I tried to add a rwsem lock to make the
->> iommu_unmap() and dumping tables in debugfs exclusive. This does not
->> work because debugfs may depend on the DMA of the devices to work. It
->> seems that what we can do is to allow this race, but when we traverse
->> the page table in debugfs, we will check the validity of the physical
->> address retrieved from the page table entry. Then, the worst case is to
->> print some useless information.
-> 
-> Sounds horrible, don't you have locking around the IOPTEs of some
-> kind? How does updating them work reliably?
+The fwnode_for_each_child_node() is NULL-aware, no need to check
+its parameters outside. Drop duplicate NULL check in xadc_parse_dt().
 
-There's no locking around updating the IOPTEs. The basic assumption is
-that at any time, there's only a single thread manipulating the mappings
-of the range specified in iommu_map/unmap() APIs. Therefore, the race
-only exists when multiple ranges share some high-level IOPTEs. The IOMMU
-driver updates those IOPTEs using the compare-and-exchange atomic
-operation.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/iio/adc/xilinx-xadc-core.c | 38 ++++++++++++++----------------
+ 1 file changed, 18 insertions(+), 20 deletions(-)
 
-> 
-> It is just debugfs, so maybe it is not the end of the world, but
-> still..
+diff --git a/drivers/iio/adc/xilinx-xadc-core.c b/drivers/iio/adc/xilinx-xadc-core.c
+index e883f95f0cda..1b247722ba25 100644
+--- a/drivers/iio/adc/xilinx-xadc-core.c
++++ b/drivers/iio/adc/xilinx-xadc-core.c
+@@ -1247,30 +1247,28 @@ static int xadc_parse_dt(struct iio_dev *indio_dev, unsigned int *conf, int irq)
+ 	chan = &channels[9];
+ 
+ 	chan_node = device_get_named_child_node(dev, "xlnx,channels");
+-	if (chan_node) {
+-		fwnode_for_each_child_node(chan_node, child) {
+-			if (num_channels >= max_channels) {
+-				fwnode_handle_put(child);
+-				break;
+-			}
++	fwnode_for_each_child_node(chan_node, child) {
++		if (num_channels >= max_channels) {
++			fwnode_handle_put(child);
++			break;
++		}
+ 
+-			ret = fwnode_property_read_u32(child, "reg", &reg);
+-			if (ret || reg > 16)
+-				continue;
++		ret = fwnode_property_read_u32(child, "reg", &reg);
++		if (ret || reg > 16)
++			continue;
+ 
+-			if (fwnode_property_read_bool(child, "xlnx,bipolar"))
+-				chan->scan_type.sign = 's';
++		if (fwnode_property_read_bool(child, "xlnx,bipolar"))
++			chan->scan_type.sign = 's';
+ 
+-			if (reg == 0) {
+-				chan->scan_index = 11;
+-				chan->address = XADC_REG_VPVN;
+-			} else {
+-				chan->scan_index = 15 + reg;
+-				chan->address = XADC_REG_VAUX(reg - 1);
+-			}
+-			num_channels++;
+-			chan++;
++		if (reg == 0) {
++			chan->scan_index = 11;
++			chan->address = XADC_REG_VPVN;
++		} else {
++			chan->scan_index = 15 + reg;
++			chan->address = XADC_REG_VAUX(reg - 1);
+ 		}
++		num_channels++;
++		chan++;
+ 	}
+ 	fwnode_handle_put(chan_node);
+ 
+-- 
+2.35.1
 
-Fair enough. I think this is somewhat similar to that IOMMU hardware can
-traverse the page table at any time without considering when the CPUs
-update it. The IOMMU hardware will generate faults when it encounters
-failure during the traverse of page table. Similarly, perhaps debugfs
-could dump all-ones for an invalid IOPTE?
-
-Best regards,
-baolu

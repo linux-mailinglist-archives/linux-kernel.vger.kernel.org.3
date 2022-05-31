@@ -2,92 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64C35398CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 23:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33A25398D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 23:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348032AbiEaVar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 17:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
+        id S1348028AbiEaVfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 17:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346692AbiEaVap (ORCPT
+        with ESMTP id S233809AbiEaVfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 17:30:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FD39D4D5;
-        Tue, 31 May 2022 14:30:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A47B61309;
-        Tue, 31 May 2022 21:30:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06CABC3411C;
-        Tue, 31 May 2022 21:30:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654032644;
-        bh=dgKMOmPer7iKgCojd4nmuoUy3ULtSG1a8CWjkVRT/cU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WbRj7VYpyKzOjUQhYUviEB++FiWhTF5EDaAV86pQjN84wbUrnCUWGi5pbw+O8hG6G
-         dT9Zp3V6WViklchFXMiuZehiAw52rFGB90NixQ93WpDBUPjNjRzAEza/8ZAk05u3ds
-         gVDI17kNkuwAXOrlqmohzaFE1qjfXuJWzXx5wxLxmWY5MYoWnnq4PyWDeFkyoNGbmO
-         gm9HYXDmQCKqy+/WVFzdzPRyr+D4v4LCiSNZFgxoMepcTx/IOJb/4MRTiAF/Vjl1DC
-         B/BxHm15J0ySVGEVbs+4cfsl5xVW0cZEWVaSgEH4vrb6Rrjn7LwZ/uhEGA3/Qkjp/3
-         Wa4t3rbgNVOiA==
-Received: by mail-vs1-f54.google.com with SMTP id w10so14906983vsa.4;
-        Tue, 31 May 2022 14:30:43 -0700 (PDT)
-X-Gm-Message-State: AOAM532V6h3hfhzhyUUX6Bh/GdSDGv7b/NRK/TfoJ9n+y1GaaCfLpLen
-        7v746VC5xN/wAMmI2Ye3JmL5Yyd8aopzyBrwZQ==
-X-Google-Smtp-Source: ABdhPJwrsIDv4UJc5u6xTXBY/96ny0Alz0jVz/mRjD3IguJf2tCd0IZV0fcDQUb1XVM49IQ34zyFkt+/6Dy0JwDc6ic=
-X-Received: by 2002:a67:c118:0:b0:337:96d2:d624 with SMTP id
- d24-20020a67c118000000b0033796d2d624mr19823826vsj.26.1654032643023; Tue, 31
- May 2022 14:30:43 -0700 (PDT)
+        Tue, 31 May 2022 17:35:50 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619BF50E1F
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 14:35:49 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id s24so12996775wrb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 14:35:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=q7cPNpK/kLXhrzfLG8hpxXs2i5SQM9UbFaXm5pBmiWk=;
+        b=PV1FkrmCwNgQDmI8q8xLaJ2XXBLk0bNuhuDAAdA7z4qZycq5Kcw00mLFrAIu2AIerb
+         aJ4XncmF1wRGhrUBOJwYE2sY42AwXhyxj+2MGoQf+bXIPVUkYNW77hJDONwaiqlOTO9b
+         BtiMM4rWkZaUNlXNxA+N1HVP09ugDb+rIgPHBswnSKcLTO/PNaHzvTrV2tfuBryAVzBa
+         TwPLTSz7WrYluB/KbKVt7WUxqS/gOs8qZeglcJFpA9cw2QEShrMQ0vFQywI7rrt0gmmZ
+         htLEJNTq5WnH0e/YcE/ed7oZXgJxRwpxbG78X5YFRt1oKKpR+4Rj+cIHhSE8/puDCU6P
+         kQUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=q7cPNpK/kLXhrzfLG8hpxXs2i5SQM9UbFaXm5pBmiWk=;
+        b=H+IXInLLk+EkJV2pkSsjKSRDV+pgrSTU+AzWBpWxnghNXW+7nTvD4trR8unCfEfir+
+         +tfReHYp/Gyd9lJmMZ0ejLa9pIfge5gMzM9PLhwlJl+To5PQv0QRZQAJf33oOenlNRHy
+         bNQXN8JMGrOqbXUIyckCIhIg+Rubpl7gxzUpq9PAgj1pgrfqqh9wtADI+1tyRoP1yYuM
+         QCwin8092P0hGfPC7PRONY+Yi0hkpA+08JykaclyvcCCgfBO5e5RMSSMqePudmin/uz5
+         AJK2r3zqwlI+XHvshedWdMD9s+UlVh5BnlAUZ+zEe0sv5pxlFzwLnYhfNuqWkTPn7oY6
+         CGSg==
+X-Gm-Message-State: AOAM532+9PAiLRawwwJUYhj36EG/Mc2xVh+3vR2Xmkhdu77cVstU/mnN
+        XVs4q62pY0FiKzrJ/D81ed059A==
+X-Google-Smtp-Source: ABdhPJw4Mim9U84gjy0lO8KtDTbCtU1/Xmv0b6riP55K6OPLXzvaiil7aFdrqwfGiT3xnn8hZaBnYg==
+X-Received: by 2002:adf:d1ca:0:b0:210:1945:34c6 with SMTP id b10-20020adfd1ca000000b00210194534c6mr18528567wrd.334.1654032947950;
+        Tue, 31 May 2022 14:35:47 -0700 (PDT)
+Received: from ?IPV6:2a02:6b6a:b497:0:359:2800:e38d:e04f? ([2a02:6b6a:b497:0:359:2800:e38d:e04f])
+        by smtp.gmail.com with ESMTPSA id s14-20020a7bc38e000000b003942a244ee7sm3138190wmj.44.2022.05.31.14.35.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 14:35:47 -0700 (PDT)
+Message-ID: <f7a4cdf2-78f2-fead-5a10-713e3dc9ea34@bytedance.com>
+Date:   Tue, 31 May 2022 22:35:46 +0100
 MIME-Version: 1.0
-References: <20220531211018.2287964-1-robh@kernel.org>
-In-Reply-To: <20220531211018.2287964-1-robh@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 31 May 2022 16:30:31 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKnBHfvi9iec2sgoEs6sLUgxnPY0gzxaO+bevzO3DjcmQ@mail.gmail.com>
-Message-ID: <CAL_JsqKnBHfvi9iec2sgoEs6sLUgxnPY0gzxaO+bevzO3DjcmQ@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: net/dsa: Add spi-peripheral-props.yaml references
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Marek Vasut <marex@denx.de>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 0/5] io_uring: add opcodes for current working directory
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com
+References: <20220531184125.2665210-1-usama.arif@bytedance.com>
+ <da4e94f7-94ce-ad57-ad15-c9117c4fef2d@kernel.dk>
+ <7a311f7e-a404-4ebe-f90b-af9068bab2fc@bytedance.com>
+ <d466213e-81e0-4b0e-c1a4-824bcbe42f74@kernel.dk>
+From:   Usama Arif <usama.arif@bytedance.com>
+In-Reply-To: <d466213e-81e0-4b0e-c1a4-824bcbe42f74@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 4:10 PM Rob Herring <robh@kernel.org> wrote:
->
-> SPI peripheral device bindings need to reference spi-peripheral-props.yaml
-> in order to use various SPI controller specific properties. Otherwise,
-> the unevaluatedProperties check will reject any controller specific
-> properties.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> v2:
->  - Also add references in nxp,sja1105.yaml and brcm,b53.yaml as
->    pointed out by Vladimir Oltean
 
-Sigh, a bit too quick on this one. v3 coming.
 
-Rob
+On 31/05/2022 20:22, Jens Axboe wrote:
+> On 5/31/22 1:18 PM, Usama Arif wrote:
+>>
+>>
+>> On 31/05/2022 19:58, Jens Axboe wrote:
+>>> On 5/31/22 12:41 PM, Usama Arif wrote:
+>>>> This provides consistency between io_uring and the respective I/O syscall
+>>>> and avoids having the user of liburing specify the cwd in sqe when working
+>>>> with current working directory, for e.g. the user can directly call with
+>>>> IORING_OP_RENAME instead of IORING_OP_RENAMEAT and providing AT_FDCWD in
+>>>> sqe->fd and sqe->len, similar to syscall interface.
+>>>>
+>>>> This is done for rename, unlink, mkdir, symlink and link in this
+>>>> patch-series.
+>>>>
+>>>> The tests for these opcodes in liburing are present at
+>>>> https://github.com/uarif1/liburing/tree/cwd_opcodes. If the patches are
+>>>> acceptable, I am happy to create a PR in above for the tests.
+>>>
+>>> Can't we just provide prep helpers for them in liburing?
+>>>
+>>
+>> We could add a io_uring_prep_unlink with IORING_OP_UNLINKAT and
+>> AT_FDCWD in liburing. But i guess adding in kernel adds a more
+>> consistent interface? and allows to make calls bypassing liburing
+>> (although i guess people probably don't bypass liburing that much :))
+> 
+> I'm not really aware of much that doesn't use the library, and even
+> those would most likely use the liburing man pages as that's all we
+> have. The kernel API is raw. If you use that, I would expect you to know
+> that you can just use AT_FDCWD!
+> 
+>> Making the changes in both kernel and liburing provides more of a
+>> standard interface in my opinion so maybe it looks better. But happy
+>> to just create a PR in liburing only with prep helpers as you
+>> suggested if you think that is better?
+> 
+> I don't disagree with that, but it seems silly to waste 5 opcodes on
+> something that is a strict subset of something that is already there.
+> Hence my suggestion would be to just add io_uring_prep_link() etc
+> helpers to make it simpler to use, without having to add 5 extra
+> opcodes.
+> 
+
+Thanks, I have created a PR for it on 
+https://github.com/axboe/liburing/pull/588. We can review it there if it 
+makes sense!

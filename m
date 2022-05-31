@@ -2,86 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 409A15397EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 22:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4575397F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 22:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347712AbiEaUY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 16:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
+        id S1347723AbiEaU0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 16:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344033AbiEaUYZ (ORCPT
+        with ESMTP id S1347720AbiEaUZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 16:24:25 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E5F54692
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 13:24:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654028663; x=1685564663;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gMvhiu9RwOfwRcd3j1Wm5yOfM0CPUW06P8hcny6gDfY=;
-  b=Xj0JBtwHTkGGs4Bqyh9LP8MXb5aBM8e6EesPcUjB9pVb3377Va/fzNsG
-   vQiIbonXv0dV1Df5dwzzLsTWJyBjCM0cBngWYrYy0ETGbccqdsOP/x4IM
-   GfApFFR7ej96QJQ5vmLM4oyp0ge4hTf3I4vp/JNom4kUUZmDmTw4kAN04
-   kWtdSS6FfjGalKlzx3c8YdHGrEDxAP9TNblI6opy0dwZJLF19EzkumTw3
-   ig1lPhgjruvrC4+IA7jYH8PubLgS+80UlTsW05ydyyfs0bte+Q8ncu8QU
-   pVpTkdS2DPXuN/JHRy8zP2vb9Zo6vMH+Ve9GJEt8J21JIMv9nrlOuYJxR
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="361750611"
-X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="361750611"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 13:24:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="605869275"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 31 May 2022 13:24:05 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D965F18B; Tue, 31 May 2022 23:24:07 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee.jones@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] syscon: Use %pa to format the variable of resource_size_t type
-Date:   Tue, 31 May 2022 23:24:04 +0300
-Message-Id: <20220531202404.70282-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 31 May 2022 16:25:59 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A399956FB8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 13:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=Pi2zX9Fh1F2zwwd9lP/nv2QAiCHqPeUziLacnhOZdD4=; b=IRNliGkr/AD0ZcrTdMKn6G9E0L
+        zdIeG585w1UAmMBIdQszzKiivEQLlj2nLyPsN1bsPRO8PtdIUnEDqt60+0xM9iwK+PT66aETliVEI
+        QVf/TS7Mlb6T6zWOAfrKmERe2us4LxYCVD7qf0zoM2NdGBdkrgTbmzhvhXNcI4mR0Owfq0D3O+/dC
+        Pg0bjaJrQSkTBCYifX55iIN2UWRX4kJ+SMRQ3h6btZQ6oIyALg3x2elRvntaY50TQHMqnSENninBh
+        o2DVmPOdwogvYy0EwYezsJILSfQlT629JI7kQZ1KO8+52XwW4scAVvAzNb63PqnL2wQ3MZhExPHDe
+        y49fff+w==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nw8R9-005fl5-W5; Tue, 31 May 2022 20:25:56 +0000
+Message-ID: <d136df0c-34fc-d21c-1353-fa82deb62975@infradead.org>
+Date:   Tue, 31 May 2022 13:25:52 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: Kconfig rules (depends, imply)
+Content-Language: en-US
+To:     Muni Sekhar <munisekharrms@gmail.com>,
+        kernelnewbies <kernelnewbies@kernelnewbies.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <CAHhAz+gUpxzukjde1rMqRcPre8yMROBd3yQTCm89wMGb2zWriw@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAHhAz+gUpxzukjde1rMqRcPre8yMROBd3yQTCm89wMGb2zWriw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of explicit casting, use %pa specifier to format
-the variable of resource_size_t type.
+Hi--
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/mfd/syscon.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On 5/31/22 05:14, Muni Sekhar wrote:
+> Hi all,
+> 
+> menuconfig SOUNDWIRE
+>         tristate "SoundWire support"
+>         depends on ACPI || OF
+> 
+> "depends on ACPI || OF" mean, SOUNDWIRE depends on both ACPI and OF modules?
+> 
 
-diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
-index 191fdb87c424..bdb2ce7ff03b 100644
---- a/drivers/mfd/syscon.c
-+++ b/drivers/mfd/syscon.c
-@@ -101,8 +101,7 @@ static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
- 		}
- 	}
- 
--	syscon_config.name = kasprintf(GFP_KERNEL, "%pOFn@%llx", np,
--				       (u64)res.start);
-+	syscon_config.name = kasprintf(GFP_KERNEL, "%pOFn@%pa", np, &res.start);
- 	syscon_config.reg_stride = reg_io_width;
- 	syscon_config.val_bits = reg_io_width * 8;
- 	syscon_config.max_register = resource_size(&res) - reg_io_width;
+"||" is logical OR, so SOUNDWIRE depends on either ACPI or OF (or both
+of them can be enabled).
+
+
+> 
+> config SOUNDWIRE_QCOM
+>         tristate "Qualcomm SoundWire Master driver"
+>         imply SLIMBUS
+> 
+> What does "imply SLIMBUS" mean?
+
+See Documentation/kbuild/kconfig-language.rst:
+
+- weak reverse dependencies: "imply" <symbol> ["if" <expr>]
+
+  This is similar to "select" as it enforces a lower limit on another
+  symbol except that the "implied" symbol's value may still be set to n
+  from a direct dependency or with a visible prompt.
+
+So (in your example) SLIMBUS is desired but not required.
+That means that the code that is built for SOUNDWIRE_QCOM
+probably needs to use IS_REACHABLE(CONFIG_SLIMBUS) to
+see if that SLIMBUS code is available at build time.
+
+HTH.
 -- 
-2.35.1
-
+~Randy

@@ -2,175 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D2D5397B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 22:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B825F5397BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 22:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347651AbiEaUDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 16:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
+        id S1347648AbiEaUG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 16:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233062AbiEaUDt (ORCPT
+        with ESMTP id S233062AbiEaUGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 16:03:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AED3BA7A;
-        Tue, 31 May 2022 13:03:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5886AB810F1;
-        Tue, 31 May 2022 20:03:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5054C385A9;
-        Tue, 31 May 2022 20:03:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654027426;
-        bh=Pfk28myHk/3Cvx3u7P+lbHGdGSulMgPmZyXSWfrF0qk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=WotY6DJAm+Qfsztc9Kj+2n9uGNuzFmnsxvOxOxOpTo3bck4G19bk0xzCrWUSGjYnd
-         FNptSvijMh56NRbulr+d4y/M0KGaQfFT3b+S8LIHEZLwq80ueGIHnMoHAR8ZHCeadr
-         gIFrMGhClQKhZfPU38kS1iq1w+WA5BxnINQ5j3QYFillDuWRrNI7G+uCYgAEtzuzaf
-         mCiM+cjxWIXrpo1bBgFSeNsUX0CzgKAP2hjunFaaoQ1pk4Abrwjb4sNC8EVJjky3ju
-         QpCwKE44aRO9Nwpu6jZzAuJ0yIpAOwvJEtZcbjK4MTXABMglcC678ZL7olTvytAEfN
-         BEvK3VWjWoI4w==
-Date:   Tue, 31 May 2022 15:03:44 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Update my email address to @kernel.org
-Message-ID: <20220531200344.GA778872@bhelgaas>
+        Tue, 31 May 2022 16:06:23 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0800669B76;
+        Tue, 31 May 2022 13:06:21 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 913131C0B82; Tue, 31 May 2022 22:06:19 +0200 (CEST)
+Date:   Tue, 31 May 2022 22:06:19 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        jacek.anaszewski@gmail.com, linux-leds@vger.kernel.org
+Subject: [GIT PULL] LEDs changes for v5.19-rc1
+Message-ID: <20220531200619.GA8906@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="k+w/mQv8wyuph6w0"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220528151411.29810-1-lorenzo.pieralisi@arm.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 04:14:11PM +0100, Lorenzo Pieralisi wrote:
-> I will soon lose my @arm.com email address, so to prevent any possible
-> issue let's update all kernel references (inclusive of .mailmap) to my
-> @kernel.org alias ahead of time.
-> 
-> My @arm.com address is still working and will likely resume to work at
-> some point in the future; nonetheless, it is safer to switch to the
-> @kernel.org alias from now onwards so that continuity is guaranteed.
-> 
-> Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
 
-Applied to for-linus for v5.19, thanks!
+--k+w/mQv8wyuph6w0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  .mailmap    |  1 +
->  MAINTAINERS | 16 ++++++++--------
->  2 files changed, 9 insertions(+), 8 deletions(-)
-> 
-> diff --git a/.mailmap b/.mailmap
-> index 6d484937f901..9ba38a82aba4 100644
-> --- a/.mailmap
-> +++ b/.mailmap
-> @@ -236,6 +236,7 @@ Linus Lüssing <linus.luessing@c0d3.blue> <linus.luessing@web.de>
->  <linux-hardening@vger.kernel.org> <kernel-hardening@lists.openwall.com>
->  Li Yang <leoyang.li@nxp.com> <leoli@freescale.com>
->  Li Yang <leoyang.li@nxp.com> <leo@zh-kernel.org>
-> +Lorenzo Pieralisi <lpieralisi@kernel.org> <lorenzo.pieralisi@arm.com>
->  Lukasz Luba <lukasz.luba@arm.com> <l.luba@partner.samsung.com>
->  Maciej W. Rozycki <macro@mips.com> <macro@imgtec.com>
->  Maciej W. Rozycki <macro@orcam.me.uk> <macro@linux-mips.org>
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 392467e9ab73..4fa6a8da4b83 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -382,7 +382,7 @@ F:	include/acpi/
->  F:	tools/power/acpi/
->  
->  ACPI FOR ARM64 (ACPI/arm64)
-> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
->  M:	Hanjun Guo <guohanjun@huawei.com>
->  M:	Sudeep Holla <sudeep.holla@arm.com>
->  L:	linux-acpi@vger.kernel.org
-> @@ -2946,7 +2946,7 @@ N:	uniphier
->  ARM/VERSATILE EXPRESS PLATFORM
->  M:	Liviu Dudau <liviu.dudau@arm.com>
->  M:	Sudeep Holla <sudeep.holla@arm.com>
-> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  S:	Maintained
->  F:	*/*/*/vexpress*
-> @@ -5162,7 +5162,7 @@ F:	arch/x86/kernel/cpuid.c
->  F:	arch/x86/kernel/msr.c
->  
->  CPUIDLE DRIVER - ARM BIG LITTLE
-> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
->  M:	Daniel Lezcano <daniel.lezcano@linaro.org>
->  L:	linux-pm@vger.kernel.org
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> @@ -5182,7 +5182,7 @@ F:	drivers/cpuidle/cpuidle-exynos.c
->  F:	include/linux/platform_data/cpuidle-exynos.h
->  
->  CPUIDLE DRIVER - ARM PSCI
-> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
->  M:	Sudeep Holla <sudeep.holla@arm.com>
->  L:	linux-pm@vger.kernel.org
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> @@ -15289,7 +15289,7 @@ F:	drivers/pci/controller/pci-v3-semi.c
->  
->  PCI ENDPOINT SUBSYSTEM
->  M:	Kishon Vijay Abraham I <kishon@ti.com>
-> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
->  R:	Krzysztof Wilczyński <kw@linux.com>
->  L:	linux-pci@vger.kernel.org
->  S:	Supported
-> @@ -15352,7 +15352,7 @@ F:	Documentation/devicetree/bindings/pci/xgene-pci-msi.txt
->  F:	drivers/pci/controller/pci-xgene-msi.c
->  
->  PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS
-> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
->  R:	Rob Herring <robh@kernel.org>
->  R:	Krzysztof Wilczyński <kw@linux.com>
->  L:	linux-pci@vger.kernel.org
-> @@ -15905,7 +15905,7 @@ F:	include/linux/dtpm.h
->  
->  POWER STATE COORDINATION INTERFACE (PSCI)
->  M:	Mark Rutland <mark.rutland@arm.com>
-> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  S:	Maintained
->  F:	drivers/firmware/psci/
-> @@ -18277,7 +18277,7 @@ F:	drivers/net/ethernet/smsc/smc91x.*
->  
->  SECURE MONITOR CALL(SMC) CALLING CONVENTION (SMCCC)
->  M:	Mark Rutland <mark.rutland@arm.com>
-> -M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> +M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
->  M:	Sudeep Holla <sudeep.holla@arm.com>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  S:	Maintained
-> -- 
-> 2.31.0
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/ tags/=
+leds-5.19-rc1
+
+for you to fetch changes up to e98a860f65428a3cae7ed7b3e8ebcf6320d7fc5e:
+
+  leds: qcom-lpg: Require pattern to follow documentation (2022-05-24 22:08=
+:10 +0200)
+
+----------------------------------------------------------------
+LED updates for 5.19. Most significant here is driver for Qualcomm
+LPG. Apparently it drives backlight on some boards, so it is quite
+important for some people.
+
+----------------------------------------------------------------
+Bjorn Andersson (3):
+      dt-bindings: leds: Add Qualcomm Light Pulse Generator binding
+      leds: Add driver for Qualcomm LPG
+      leds: qcom-lpg: Require pattern to follow documentation
+
+Johan Hovold (1):
+      leds: qcom-lpg: add missing PWM dependency
+
+Linus Walleij (3):
+      dt-bindings: leds: Add regulator-led binding
+      leds: regulator: Add dev helper variable
+      leds: regulator: Make probeable from device tree
+
+Markuss Broks (3):
+      leds: ktd2692: Avoid duplicate error messages on probe deferral
+      dt-bindings: leds: convert ktd2692 bindings to yaml
+      leds: ktd2692: Make aux-gpios optional
+
+Satya Priya (2):
+      dt-bindings: leds: Add pm8350c pmic support
+      leds: Add pm8350c support to Qualcomm LPG driver
+
+Sven Schwermer (4):
+      dt-bindings: leds: Optional multi-led unit address
+      dt-bindings: leds: Add multicolor PWM LED bindings
+      leds: Add PWM multicolor driver
+      leds: Move pwm-multicolor driver into rgb directory
+
+Uwe Kleine-K=F6nig (3):
+      leds: pca9532: Make pca9532_destroy_devices() return void
+      leds: is31fl32xx: Improve error reporting in .remove()
+      leds: lp50xx: Remove duplicated error reporting in .remove()
+
+ .../devicetree/bindings/leds/kinetic,ktd2692.yaml  |   87 ++
+ .../bindings/leds/leds-class-multicolor.yaml       |    2 +-
+ .../devicetree/bindings/leds/leds-ktd2692.txt      |   50 -
+ .../bindings/leds/leds-pwm-multicolor.yaml         |   79 ++
+ .../devicetree/bindings/leds/leds-qcom-lpg.yaml    |  174 +++
+ .../devicetree/bindings/leds/regulator-led.yaml    |   55 +
+ Documentation/leds/leds-qcom-lpg.rst               |   78 ++
+ drivers/leds/Kconfig                               |    3 +
+ drivers/leds/Makefile                              |    3 +
+ drivers/leds/flash/leds-ktd2692.c                  |   15 +-
+ drivers/leds/leds-is31fl32xx.c                     |    8 +-
+ drivers/leds/leds-lp50xx.c                         |    4 +-
+ drivers/leds/leds-pca9532.c                        |   11 +-
+ drivers/leds/leds-regulator.c                      |   47 +-
+ drivers/leds/rgb/Kconfig                           |   29 +
+ drivers/leds/rgb/Makefile                          |    4 +
+ drivers/leds/rgb/leds-pwm-multicolor.c             |  186 +++
+ drivers/leds/rgb/leds-qcom-lpg.c                   | 1451 ++++++++++++++++=
+++++
+ 18 files changed, 2193 insertions(+), 93 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/kinetic,ktd2692.=
+yaml
+ delete mode 100644 Documentation/devicetree/bindings/leds/leds-ktd2692.txt
+ create mode 100644 Documentation/devicetree/bindings/leds/leds-pwm-multico=
+lor.yaml
+ create mode 100644 Documentation/devicetree/bindings/leds/leds-qcom-lpg.ya=
+ml
+ create mode 100644 Documentation/devicetree/bindings/leds/regulator-led.ya=
+ml
+ create mode 100644 Documentation/leds/leds-qcom-lpg.rst
+ create mode 100644 drivers/leds/rgb/Kconfig
+ create mode 100644 drivers/leds/rgb/Makefile
+ create mode 100644 drivers/leds/rgb/leds-pwm-multicolor.c
+ create mode 100644 drivers/leds/rgb/leds-qcom-lpg.c
+
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--k+w/mQv8wyuph6w0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYpZ1OwAKCRAw5/Bqldv6
+8kiMAJ0a5+dol+qNge3qehwHte/82RC65ACcCC28orvjHM1NNHDcod6ozzTEB3Q=
+=NHEq
+-----END PGP SIGNATURE-----
+
+--k+w/mQv8wyuph6w0--

@@ -2,179 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DEC539022
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D302953900D
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344002AbiEaL4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 07:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
+        id S1343950AbiEaLsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 07:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343989AbiEaL4F (ORCPT
+        with ESMTP id S243849AbiEaLss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 07:56:05 -0400
-X-Greylist: delayed 526 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 May 2022 04:56:03 PDT
-Received: from mailout1.rbg.tum.de (mailout1.rbg.tum.de [131.159.0.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64491880EE;
-        Tue, 31 May 2022 04:56:03 -0700 (PDT)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
-        by mailout1.rbg.tum.de (Postfix) with ESMTPS id 63DF0240;
-        Tue, 31 May 2022 13:47:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-        s=20220209; t=1653997635;
-        bh=9J6pD/CrhjbB1zdbQ/WsFZ5sMWMLDeoTX+MCbCnhM20=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cbtV7Ux4Fjo7XMm8Siy+aAHS0F7ijcSiKuOkoUZl1H66Y8YKUS3OfsisbgqKOcoaP
-         Rc8ueYVPuPaM0T3vWaB8tI7J2PhsbzPYyLFxbsE5yHOz0cbZRXkvuVpLAqmFe+QjVd
-         n/7BRKH7W8E/9Ih3kr8GqvdB4iBw5L1x/GvTBdzh8v/zLtIOEM+wn0LULECYQJ4V0h
-         KGuQRJir2lWVFmmwkL7bVLCWhVrTjipBgZlE75zZW3GqWrGhnXGnAfO9P0nJpv3yNk
-         RJwtOCkYp1NWhhoack46VVvitEdBldy05j1e7CgmIBzB/jF9ADwigRutNUlVSkNhkM
-         BfOjo0+XbmJ3Q==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id 6036B28B; Tue, 31 May 2022 13:47:15 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 3220328A;
-        Tue, 31 May 2022 13:47:15 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 2DE75286;
-        Tue, 31 May 2022 13:47:15 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id 29CBB4A038D; Tue, 31 May 2022 13:47:15 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id 4ED874A0367;
-        Tue, 31 May 2022 13:47:14 +0200 (CEST)
-        (Extended-Queue-bit xtech_rq@fff.in.tum.de)
-Date:   Tue, 31 May 2022 13:47:12 +0200
-From:   Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
-Message-ID: <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
-References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
- <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 31 May 2022 07:48:48 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF60980AE
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:48:47 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id n10so26106193ejk.5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:48:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7bhfywGiVfr9SKmJyu/pt4AMdz2eCKoqLhGa9Sh6I0M=;
+        b=gSo7aWDWhBewdtRYI6AhSZGPymEo/Hi7nqlGWSdSvP2WjCmWEIQ3dxM8zVn7wsiwBJ
+         f+utlV9IOq45T06qm0yXgSdPV6+0jHV7GxpoedmB2ryz5kWVoatw9I1bcvyhKFBLbA6N
+         Me7wv18JM2w/Dk7Q7sGIv4N9/DlnraPh0z4RFgtr9vdWsP/KlHpCQTaPyRtOdlPJJiHb
+         w+trMybFM2hrW6X5QUXniCFfJ8rld+V4gwBX7f/TGdkfXKvGnFSuvBAjV3qp4q5qeHYJ
+         4gNDfkijE5fRVqIKGGbrCICCmFtsrY537+Ra28E5TbZeITlrWordgRlbyIGzk6K3KP6q
+         MSCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7bhfywGiVfr9SKmJyu/pt4AMdz2eCKoqLhGa9Sh6I0M=;
+        b=qL3sDtgj+p0Yl93nnWKQpaW7WSIxJ++qR7qDKAPkZwDIY3dzN8dBLkUw3BOJSoOa6s
+         Mn35tjo+ksmDiT1/owwDbMVIyDM5DhjJ9ymnDtZv7u23jjOUPzMGqlOUys1yhmGW8b/I
+         EH/TuEyLToYcS07S67Is2vYmzEXPlC+MCLrsiXMemunbG7ndRxdeKeaIvJbTp4j8rsox
+         jN+59+o7A5ZEQG5zw5LI8mXMZJuNzTxOYahSw/KmEKiVTsL8jpE7/pEPHl222dKR+Bpq
+         YL8mjBvP94r1e8SFfv1F67bnHr3gTLFyaWoJnCQDNS2/1jlOICnLUZxd7sNlzqBdSbxq
+         2Prw==
+X-Gm-Message-State: AOAM531ulX9jwlmSbJR7MZ5NEXGsxf/X2XVJdZbC9lBmPRiIzBulzhjc
+        NOY/lAP3WCaItQzgxtCEcQ6NLg==
+X-Google-Smtp-Source: ABdhPJwcNLd9LnCiYZOXV8MwmtT3ra4raRUTYvS0GEN/xsJdOBcdPNqdR+hvE0rsqf7imJzUMUb6HQ==
+X-Received: by 2002:a17:907:2d06:b0:6fe:af0f:2fab with SMTP id gs6-20020a1709072d0600b006feaf0f2fabmr45791538ejc.324.1653997725953;
+        Tue, 31 May 2022 04:48:45 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id e6-20020a170906844600b006fee13caaeasm4878148ejy.190.2022.05.31.04.48.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 04:48:45 -0700 (PDT)
+Message-ID: <a47f5d18-9ecc-a679-b407-799e4a15c6cf@linaro.org>
+Date:   Tue, 31 May 2022 13:48:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: net: Add ICSSG Ethernet Driver
+ bindings
+Content-Language: en-US
+To:     Puranjay Mohan <p-mohan@ti.com>, linux-kernel@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com,
+        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, nm@ti.com, ssantosh@kernel.org,
+        s-anna@ti.com, linux-arm-kernel@lists.infradead.org,
+        rogerq@kernel.org, grygorii.strashko@ti.com, vigneshr@ti.com,
+        kishon@ti.com, robh+dt@kernel.org, afd@ti.com, andrew@lunn.ch
+References: <20220531095108.21757-1-p-mohan@ti.com>
+ <20220531095108.21757-2-p-mohan@ti.com>
+ <4ccba38a-ccde-83cd-195b-77db7a64477c@linaro.org>
+ <faff79c9-7e1e-a69b-f314-6c00dedf1722@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <faff79c9-7e1e-a69b-f314-6c00dedf1722@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 01:32:54PM -0700, Paul E. McKenney wrote:
-> On Fri, Apr 22, 2022 at 12:35:41PM +0200, Paul Heidekrüger wrote:
-> > Hi all, 
-> > 
-> > My dependency checker is flagging yet another broken dependency. For
-> > context, see [1].
-> > 
-> > Thankfully, it is fairly straight-forward to explain this time.
-> > 
-> > > stable_node = page_stable_node(page);
-> > 
-> > Line 2032 in mm/ksm.c::cmp_and_merge_page() sees the return value of a
-> > call to "page_stable_node()", which can depend on a "READ_ONCE()", being
-> > assigned to "stable_node".
-> > 
-> > > if (stable_node) {
-> > >         if (stable_node->head != &migrate_nodes &&
-> > >             get_kpfn_nid(READ_ONCE(stable_node->kpfn)) != 
-> > >             NUMA(stable_node->nid)) {
-> > >                 stable_node_dup_del(stable_node); ‣dup: stable_node
-> > >                 stable_node->head = &migrate_nodes;
-> > >                 list_add(&stable_node->list, stable_node->head);
-> > 
-> > The dependency chain then runs into the two following if's, through an
-> > assignment of "migrate_nodes" to "stable_node->head" (line 2038) and
-> > finally reaches a call to "list_add()" (line 2039) where
-> > "stable_node->head" gets passed as the second function argument. 
+On 31/05/2022 13:27, Puranjay Mohan wrote:
+>>> +examples:
+>>> +  - |
+>>> +
+>>> +    /* Example k3-am654 base board SR2.0, dual-emac */
+>>> +    pruss2_eth: pruss2_eth {
+>>> +            compatible = "ti,am654-icssg-prueth";
+>>
+>> Again missed Rob's comment.
 > 
-> Huh.
-> 
-> But migrate_nodes is nothing more or less than a list_head structure.
-> So one would expect that some other mechanism is protecting its ->prev
-> and ->next pointers.
-> 
-> > >         }
-> > > }
-> > > 
-> > > static inline void list_add(struct list_head *new, struct list_head *head)
-> > > {
-> > >         __list_add(new, head, head->next);
-> > > }
-> > > 
-> > > static inline void __list_add(struct list_head *new,
-> > >                               struct list_head *prev,
-> > >                               struct list_head *next)
-> > > {
-> > >         if (!__list_add_valid(new, prev, next))
-> > >                 return;
-> > > 
-> > >         next->prev = new;
-> > >         new->next = next;
-> > >         new->prev = prev;
-> > >         WRITE_ONCE(prev->next, new);
-> > > }
-> > 
-> > By being passed into "list_add()" via "stable_node->head", the
-> > dependency chain eventually reaches a "WRITE_ONCE()" in "__list_add()"
-> > whose destination address, "stable_node->head->next", is part of the
-> > dependency chain and therefore carries an address dependency. 
-> > 
-> > However, as a result of the assignment in line 2038, Clang knows that
-> > "stable_node->head" is "migrate_nodes" and replaces it, thereby breaking
-> > the dependency chain. 
-> > 
-> > What do you think?
-> 
-> Given that this is a non-atomic update, there had better be something
-> protecting it.  This something might be a lock, a decremented-to-zero
-> reference count, a rule about only one kthread being permitted to update
-> that list, and so on.  In all such cases, the code would not be relying
-> on the dependency, but rather on whatever was protecting that operation.
-> 
-> Or am I missing something here?
+> One of Rob's comment was to make the indentation as 4 which I have done.
 
-Nope, missing nothing, that was exactly it!
+I clearly do not see indentation of 4, but there is 8 instead.
 
-In ksm_scan_thread(), which calls ksm_do_scan(), which calls
-cmp_and_merge_page(), there is a mutex_lock() / mutex_unlock() pair,
-surrounding the dependency. 
+Let's count:
++    pruss2_eth: pruss2_eth {
++            compatible = "ti,am654-icssg-prueth";
+     12345678^
 
-Still keeping this as a trophy for our dependency checker though ;-)
-
-Many thanks,
-Paul
-
-PS Sorry for the late reply - been distracted ..
+It's 8...
 
 > 
-> 							Thanx, Paul
+> The second comment was about 'ti,prus'.
 > 
-> > Many thanks,
-> > Paul
-> > 
-> > --
-> > [1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/
-> > 
+> So, ti,prus , firmware-name, and ti,pruss-gp-mux-sel are a part of
+> remoteproc/ti,pru-consumer.yaml which I have included with
+> 
+> allOf:
+>   - $ref: /schemas/remoteproc/ti,pru-consumer.yaml#
+> 
+> So, I thought it is not required to add them again.
+> 
+> I will add it in next version, if that is how it should be done.
+I was referring to the indentation.
+
+Krzysztof

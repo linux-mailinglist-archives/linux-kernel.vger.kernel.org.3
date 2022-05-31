@@ -2,165 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 534B4538E7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60967538E80
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243670AbiEaKJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 06:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
+        id S245469AbiEaKKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 06:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235204AbiEaKJH (ORCPT
+        with ESMTP id S245400AbiEaKJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 06:09:07 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338D9880E2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:09:06 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id w27so10133020edl.7
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:09:06 -0700 (PDT)
+        Tue, 31 May 2022 06:09:50 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E68996AD;
+        Tue, 31 May 2022 03:09:48 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id k16so13642271wrg.7;
+        Tue, 31 May 2022 03:09:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=BDMy+QvuwpMJoJZmNlqonBPh8rUerQxjy9AQ0pCJoD0=;
-        b=bsHXPWMHEwqDEladOBAHwYSJDdQ4TQ2X65eASv93zj6cUOA9TJuK2ta0tgOzpFh8Tr
-         0VUOVCHVuuIxZVj8AXpO7I8rZbrKrAyvTh5LNDHyDIZs2wGv668t9fBbQxNqOAqH7+67
-         +8jTKNmhEf25i+0XpczMH/MVUZnm1Z50+c2CAOBZ40JjlxEcARj3uNDF+JS8xvdnp2cH
-         n+AIQlXBt/+Z1Eaz66/z8OYtdZTnrq0vGrSMyK80wq1DIugSoD3GoneXoVHHnhBOzHf4
-         DzWSO6G1Tt20n7uPaH3o94dqLbLgo1c9YC2Pa7Q1LU08xAWAHvjf+9naY9rfDm6NIy0F
-         6A/w==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PSCX4PHCAROocqljRy3ZnI/Dr3u/fImtm88PpfecH+0=;
+        b=hgL7i4XhVKnDz+kV6ZUE7M1I5YWxgyeFW2IZF2mSrdg4RvA1wzUpEjpZp0UL8CTzy4
+         +6zDKiJjI/xbhMEf/hdKbj+GEz7nQr3s94DqNwb4DnmCKFcUxk0OeQ9vQCKA6ez2anWb
+         QbVooWUWhpKl2Yn7AHI9HP6ngfob1aHHe5a9xbOSfuj2OmrK4N9X477rxL8O9b1OsD+g
+         PtUvha7RK1clPNKDMorU2IBsVZJQsvxfkCMkcfShi9SxTLwHDC7bnNoB0Lxi8+/+AkuR
+         HCru7e1wLgDwrbmJYV3oA2c3aN4+ehq1Vicg0eUYQqvQ1+C0RNIh4ob3SZt4spKW/PxT
+         i8Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=BDMy+QvuwpMJoJZmNlqonBPh8rUerQxjy9AQ0pCJoD0=;
-        b=EbbUwsaXQRXFpPulPiIpuTRr24U8OjOgldzVu1V9C7O87QqaoignvyFrLJV9/fC7pA
-         BS4AbWSjySHypc79a+G5Z9L58fkWwtdnMEy6T+l3vM59/KcjIZyD7LKswmPOlxvEWT7+
-         Tvoj4EpTNZpyTuTHUo0kswHSf8O0/2j2prfPIzPu2UEUPE1ckWYeUJ6taP8XzjOw3Een
-         Ee9aYCZ1/oUZpdH9iADLfEeZCZhVBASc/+1PTAQi+H9IbNBFhPTCg4nSur8WHUBfKJtd
-         m5kWzhvI7SQZfaNZLW8+KU8Jlgqu3KXAlNj0do3y/RK/Bvo5AhYrkz6DmNEIYR129Kg8
-         fjTg==
-X-Gm-Message-State: AOAM531XHCjfV45sSTNQCaziVFOZ02Ww+j1iD4o400Nlt37fot2frvBP
-        Befd7yLigexOZ3SyUInMwBg/6A==
-X-Google-Smtp-Source: ABdhPJxYrWO4cU6BubVeecPRztLNlr3PWrEQD2QBNVKkjOznU77Nqd6m6SzwBXLCLBE/Q6oRO30xeg==
-X-Received: by 2002:a05:6402:330:b0:42d:cd47:89f3 with SMTP id q16-20020a056402033000b0042dcd4789f3mr12175779edw.301.1653991744792;
-        Tue, 31 May 2022 03:09:04 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u10-20020a50950a000000b0042617ba63a5sm8019509eda.47.2022.05.31.03.09.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 03:09:04 -0700 (PDT)
-Message-ID: <a449d475-132e-f8b2-8822-69aa3ab6bf9c@linaro.org>
-Date:   Tue, 31 May 2022 12:09:03 +0200
+        bh=PSCX4PHCAROocqljRy3ZnI/Dr3u/fImtm88PpfecH+0=;
+        b=LZzoGtgAci/jXSpdWjGrhinc4o/sUt+cQXdag+rSLtNDMYiAuc2iQnHFJI3WEKRxO4
+         strcHSNd5+7myhZzJVg4ho7XCEWjaYMCJf7xf39NGtk4bmqn5gUlHKbpHZUEE5ezSHWg
+         3xfMb5qkAxQpAwTUOBmYZgTmv711zX+gY+xymVRKt0S4h9EBv89K/ELBKKLbCLnTmQfN
+         McXVr1ws15hSW/3g8XerGVj4KiV6aLl9rK5itdCOar+yu2ciEEMYKs1uFV7zS23123nt
+         0uovx2uwZVYCgbtf7XPP3Wso36jpM/s9/a3bT77ySqCqeC0PArWRelHEe1kbVBW25Nis
+         CChg==
+X-Gm-Message-State: AOAM533QdCfhHe4mtuCJTLst/RNiWMUnotfZgJN2Drrgn0POF/k7iglI
+        tWCtES4wkLVfvEf3afp6y4M=
+X-Google-Smtp-Source: ABdhPJzEABsFC0dAQtKAZa34WuskN0k+eNzR8nofFV3y4fHwJcykXVBdRQaxtQGc/Y72uF6IkW2opA==
+X-Received: by 2002:a05:6000:1542:b0:20f:f809:cf89 with SMTP id 2-20020a056000154200b0020ff809cf89mr27658582wry.361.1653991786933;
+        Tue, 31 May 2022 03:09:46 -0700 (PDT)
+Received: from baligh-ThinkCentre-M720q.iliad.local (freebox.vlq16.iliad.fr. [213.36.7.13])
+        by smtp.googlemail.com with ESMTPSA id n6-20020a05600c4f8600b0039b006bd6d9sm1975543wmq.6.2022.05.31.03.09.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 03:09:46 -0700 (PDT)
+From:   Baligh Gasmi <gasmibal@gmail.com>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Baligh Gasmi <gasmibal@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org (open list:MAC80211),
+        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [RFC PATCH v3 1/1] mac80211: use AQL airtime for expected throughput.
+Date:   Tue, 31 May 2022 12:09:22 +0200
+Message-Id: <20220531100922.491344-1-gasmibal@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 6/6] arm64: dts: fsd: add ufs device node
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-phy@lists.infradead.org
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        avri.altman@wdc.com, bvanassche@acm.org,
-        martin.petersen@oracle.com, chanho61.park@samsung.com,
-        pankaj.dubey@samsung.com, linux-fsd@tesla.com,
-        Bharat Uppal <bharat.uppal@samsung.com>
-References: <20220531012220.80563-1-alim.akhtar@samsung.com>
- <CGME20220531012400epcas5p1c30b75a928097bd19855dcd0d929ff10@epcas5p1.samsung.com>
- <20220531012220.80563-7-alim.akhtar@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220531012220.80563-7-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2022 03:22, Alim Akhtar wrote:
-> Adds FSD ufs device node and enable the same
-> for fsd board. This also adds the required
-> pin configuration for the same.
-> 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Bharat Uppal <bharat.uppal@samsung.com>
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  arch/arm64/boot/dts/tesla/fsd-evb.dts      |  4 +++
->  arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi | 14 +++++++++++
->  arch/arm64/boot/dts/tesla/fsd.dtsi         | 29 ++++++++++++++++++++++
->  3 files changed, 47 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> index 5af560c1b5e6..1db6ddf03f01 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> +++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> @@ -37,3 +37,7 @@ &fin_pll {
->  &serial_0 {
->  	status = "okay";
->  };
-> +
-> +&ufs {
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
-> index d4d0cb005712..387a41e251d5 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
-> +++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
-> @@ -50,6 +50,20 @@ gpf5: gpf5-gpio-bank {
->  		interrupt-controller;
->  		#interrupt-cells = <2>;
->  	};
-> +
-> +	ufs_rst_n: ufs-rst-n-pins {
-> +		samsung,pins = "gpf5-0";
-> +		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
-> +		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-> +		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV2>;
-> +	};
-> +
-> +	ufs_refclk_out: ufs-refclk-out-pins {
-> +		samsung,pins = "gpf5-1";
-> +		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
-> +		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-> +		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV2>;
-> +	};
->  };
->  
->  &pinctrl_peric {
-> diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> index af39655331de..a5972e9a2585 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
-> +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> @@ -740,6 +740,35 @@ timer@10040000 {
->  			clocks = <&fin_pll>, <&clock_imem IMEM_MCT_PCLK>;
->  			clock-names = "fin_pll", "mct";
->  		};
-> +
-> +		ufs: ufs@15120000 {
-> +			compatible = "tesla,fsd-ufs";
-> +			reg = <0x0  0x15120000 0x0 0x200>,  /* 0: HCI standard */
+Since the integration of AQL, packet TX airtime estimation is
+calculated and counted to be used for the dequeue limit.
 
-Double space after 0x0
+Use this estimated airtime to compute expected throughput for
+each station.
 
-> +				<0x0 0x15121100 0x0 0x200>,  /* 1: Vendor specified */
+It will be a generic mac80211 implementation. If the driver has
+get_expected_throughput implementation, it will be used instead.
 
-Please align with opening < in line before.
+Useful for L2 routing protocols, like B.A.T.M.A.N.
 
-> +				<0x0 0x15110000 0x0 0x8000>,  /* 2: UNIPRO */
-> +				<0x0 0x15130000 0x0 0x100>;  /* 3: UFS protector */
-> +			reg-names = "hci", "vs_hci", "unipro", "ufsp";
-> +			interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clock_fsys0 UFS0_TOP0_HCLK_BUS>,
-> +				<&clock_fsys0 UFS0_TOP0_CLK_UNIPRO>;
+Signed-off-by: Baligh Gasmi <gasmibal@gmail.com>
+---
+ net/mac80211/driver-ops.h |  2 ++
+ net/mac80211/sta_info.c   | 39 +++++++++++++++++++++++++++++++++++++++
+ net/mac80211/sta_info.h   | 11 +++++++++++
+ net/mac80211/status.c     |  2 ++
+ net/mac80211/tx.c         |  8 +++++++-
+ 5 files changed, 61 insertions(+), 1 deletion(-)
 
-Also align.
+diff --git a/net/mac80211/driver-ops.h b/net/mac80211/driver-ops.h
+index 4e2fc1a08681..fa9952154795 100644
+--- a/net/mac80211/driver-ops.h
++++ b/net/mac80211/driver-ops.h
+@@ -1142,6 +1142,8 @@ static inline u32 drv_get_expected_throughput(struct ieee80211_local *local,
+ 	trace_drv_get_expected_throughput(&sta->sta);
+ 	if (local->ops->get_expected_throughput && sta->uploaded)
+ 		ret = local->ops->get_expected_throughput(&local->hw, &sta->sta);
++	else
++		ret = ewma_avg_est_tp_read(&sta->deflink.status_stats.avg_est_tp);
+ 	trace_drv_return_u32(local, ret);
+ 
+ 	return ret;
+diff --git a/net/mac80211/sta_info.c b/net/mac80211/sta_info.c
+index e04a0905e941..201aab465234 100644
+--- a/net/mac80211/sta_info.c
++++ b/net/mac80211/sta_info.c
+@@ -1993,6 +1993,45 @@ void ieee80211_sta_update_pending_airtime(struct ieee80211_local *local,
+ 			       tx_pending, 0);
+ }
+ 
++void ieee80211_sta_update_tp(struct ieee80211_local *local,
++			     struct sta_info *sta,
++			     struct sk_buff *skb,
++			     u16 tx_time_est,
++			     bool ack, int retry)
++{
++	unsigned long diff;
++	struct rate_control_ref *ref = NULL;
++
++	if (!skb || !sta || !tx_time_est)
++		return;
++
++	if (test_sta_flag(sta, WLAN_STA_RATE_CONTROL))
++		ref = sta->rate_ctrl;
++
++	if (ref && ref->ops->get_expected_throughput)
++		return;
++
++	if (local->ops->get_expected_throughput)
++		return;
++
++	tx_time_est += ack ? 4 : 0;
++	tx_time_est += retry ? retry * 2 : 2;
++
++	sta->deflink.tx_stats.tp_tx_size += (skb->len * 8) * 1000;
++	sta->deflink.tx_stats.tp_tx_time_est += tx_time_est;
++
++	diff = jiffies - sta->deflink.status_stats.last_tp_update;
++	if (diff > HZ / 10) {
++		ewma_avg_est_tp_add(&sta->deflink.status_stats.avg_est_tp,
++				    sta->deflink.tx_stats.tp_tx_size /
++				    sta->deflink.tx_stats.tp_tx_time_est);
++
++		sta->deflink.tx_stats.tp_tx_size = 0;
++		sta->deflink.tx_stats.tp_tx_time_est = 0;
++		sta->deflink.status_stats.last_tp_update = jiffies;
++	}
++}
++
+ int sta_info_move_state(struct sta_info *sta,
+ 			enum ieee80211_sta_state new_state)
+ {
+diff --git a/net/mac80211/sta_info.h b/net/mac80211/sta_info.h
+index 35c390bedfba..4200856fefcd 100644
+--- a/net/mac80211/sta_info.h
++++ b/net/mac80211/sta_info.h
+@@ -123,6 +123,7 @@ enum ieee80211_sta_info_flags {
+ #define HT_AGG_STATE_STOP_CB		7
+ #define HT_AGG_STATE_SENT_ADDBA		8
+ 
++DECLARE_EWMA(avg_est_tp, 8, 16)
+ DECLARE_EWMA(avg_signal, 10, 8)
+ enum ieee80211_agg_stop_reason {
+ 	AGG_STOP_DECLINED,
+@@ -157,6 +158,12 @@ void ieee80211_register_airtime(struct ieee80211_txq *txq,
+ 
+ struct sta_info;
+ 
++void ieee80211_sta_update_tp(struct ieee80211_local *local,
++			     struct sta_info *sta,
++			     struct sk_buff *skb,
++			     u16 tx_time_est,
++			     bool ack, int retry);
++
+ /**
+  * struct tid_ampdu_tx - TID aggregation information (Tx).
+  *
+@@ -549,6 +556,8 @@ struct link_sta_info {
+ 		s8 last_ack_signal;
+ 		bool ack_signal_filled;
+ 		struct ewma_avg_signal avg_ack_signal;
++		struct ewma_avg_est_tp avg_est_tp;
++		unsigned long last_tp_update;
+ 	} status_stats;
+ 
+ 	/* Updated from TX path only, no locking requirements */
+@@ -558,6 +567,8 @@ struct link_sta_info {
+ 		struct ieee80211_tx_rate last_rate;
+ 		struct rate_info last_rate_info;
+ 		u64 msdu[IEEE80211_NUM_TIDS + 1];
++		u64 tp_tx_size;
++		u64 tp_tx_time_est;
+ 	} tx_stats;
+ 
+ 	enum ieee80211_sta_rx_bandwidth cur_max_bandwidth;
+diff --git a/net/mac80211/status.c b/net/mac80211/status.c
+index e69272139437..1fb93abc1709 100644
+--- a/net/mac80211/status.c
++++ b/net/mac80211/status.c
+@@ -1152,6 +1152,8 @@ void ieee80211_tx_status_ext(struct ieee80211_hw *hw,
+ 	ack_signal_valid =
+ 		!!(info->status.flags & IEEE80211_TX_STATUS_ACK_SIGNAL_VALID);
+ 
++	ieee80211_sta_update_tp(local, sta, skb, tx_time_est, acked, retry_count);
++
+ 	if (pubsta) {
+ 		struct ieee80211_sub_if_data *sdata = sta->sdata;
+ 
+diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
+index 0e4efc08c762..e58d89c108a4 100644
+--- a/net/mac80211/tx.c
++++ b/net/mac80211/tx.c
+@@ -3632,6 +3632,7 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee80211_hw *hw,
+ 	struct ieee80211_tx_data tx;
+ 	ieee80211_tx_result r;
+ 	struct ieee80211_vif *vif = txq->vif;
++	struct rate_control_ref *ref = NULL;
+ 
+ 	WARN_ON_ONCE(softirq_count() == 0);
+ 
+@@ -3790,8 +3791,13 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee80211_hw *hw,
+ encap_out:
+ 	IEEE80211_SKB_CB(skb)->control.vif = vif;
+ 
++	if (tx.sta && test_sta_flag(tx.sta, WLAN_STA_RATE_CONTROL))
++		ref = tx.sta->deflink.rate_ctrl;
++
+ 	if (vif &&
+-	    wiphy_ext_feature_isset(local->hw.wiphy, NL80211_EXT_FEATURE_AQL)) {
++	    ((!local->ops->get_expected_throughput &&
++	     (!ref || !ref->ops->get_expected_throughput)) ||
++	    wiphy_ext_feature_isset(local->hw.wiphy, NL80211_EXT_FEATURE_AQL))) {
+ 		bool ampdu = txq->ac != IEEE80211_AC_VO;
+ 		u32 airtime;
+ 
+-- 
+2.36.1
 
-
-Best regards,
-Krzysztof

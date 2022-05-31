@@ -2,84 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 030DD5389FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7B95389FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243623AbiEaCl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 22:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
+        id S243626AbiEaCll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 22:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237072AbiEaCl1 (ORCPT
+        with ESMTP id S243629AbiEaCli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 22:41:27 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AC36470E
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 19:41:26 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so1084488pju.1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 19:41:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WIykAolW8oD8LFPh4Udn9DG3dxOjaYMmjkMXBAWVxpo=;
-        b=CVvHshPmWe5jCs0Mr68BDf13AhiQ8GO1RiUsqz9ayy5G3PLHWwFT6IVjix8wcfVer0
-         Sr9uJ6gHPENKEjoYvdndsdMqjXN7xLl2X6LBKbXVBKy9Eo81FCqTxCj20I8tEbz5OiQ9
-         mHQEXfEXwCE+8oE69xMvQI+P4rjZIj9HnOYz/dl5FfacUWhjCfJ9FJDjlWQwpa5vuEaN
-         E17cHocwf2mruriEmThiB9TnOC3368ZoswnYDkhPRnNUbuYPS7s8/0KajLK5DmYuLtjI
-         GRtOsmafbjLyeaeH50XZGHpp5wPxbIzXuMyfUajM0D1TNm0S/o8JIGj16kRu8Wkp6g1p
-         ITpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WIykAolW8oD8LFPh4Udn9DG3dxOjaYMmjkMXBAWVxpo=;
-        b=lv4e8FVR1YA8OkYfav5SejSaB7RYLwSEEsWRFybxtPVNfrZeKH5b5nXeVMYgnS6LTp
-         Nzu+wEZw0VaTcV0S3aA+7+82Tpln/CMS6ANwFb5F/NxOg9yF3+ILffz0I+QxEZxynAoD
-         GsVTP0TgONSkHjZKwzKvPn5SvMSiaeavE4Wx2Y5xQ+olnrFOT86Dzq4tqUbH2KUx30SY
-         NNYDwAlND1v/77oicBhjxqOXP2bFoc5UVZwZOqXTAOdKE/18Z2+WHlO33ySx6ZlaBv3x
-         dcetbuwJtkmmmFgRO3PbXdGck03V6WtC9ao8ezTN03w5coeA4cWvrHUrSw6qaoO9BThX
-         bxiQ==
-X-Gm-Message-State: AOAM533PfjWelkusSKbUyLT1zCUg+UhIvLfUYRWhpt8zSMsKKY8PN3/q
-        NZ13RxV4EFOIgc4oWNj7NK4puQ==
-X-Google-Smtp-Source: ABdhPJxw1Wrte9hUOu30NisM+OaPV6N/2l5jqTiV5IBAcuZXje+ObEShiKQ+nAxZJCcnoNftzu0B0g==
-X-Received: by 2002:a17:903:2443:b0:162:223c:c0e9 with SMTP id l3-20020a170903244300b00162223cc0e9mr40921952pls.68.1653964886485;
-        Mon, 30 May 2022 19:41:26 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:7163:3a36:783f:6d4a])
-        by smtp.gmail.com with ESMTPSA id e7-20020a170903240700b0015e8d4eb2d3sm9872570plo.285.2022.05.30.19.41.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 19:41:25 -0700 (PDT)
-Date:   Tue, 31 May 2022 10:41:22 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     sxwjean@me.com
-Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Xiongwei Song <xiongwei.song@windriver.com>
-Subject: Re: [PATCH] mm/slub: Simplify __kmem_cache_alias()
-Message-ID: <YpWAUiwNPpO8l6yh@FVFYT0MHHV2J.googleapis.com>
-References: <20220531005550.10613-1-sxwjean@me.com>
+        Mon, 30 May 2022 22:41:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB29919B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 19:41:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653964893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dqGPJPGu5WN/i1V+mwA4aFt/oqbHUtth4ZkdMSpoL5A=;
+        b=FDiwaIDyEWxRWNxEOTvkJYB3DrWAEKpaDhMeWzxGDOtqi1jbSMQBcj2Qsgf+hIsR2Uq6xL
+        FPBow4V0OphqVhDVk0oAQqY/6tU1jac87vt8Uqepfuz/w36WF22kaKuCHRL+12LUZC0U91
+        fjk6G95/OSJpyZFKRlP9v9NPYJpeEi0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-665-Uu4laDedP6yfga6ESTEaeg-1; Mon, 30 May 2022 22:41:32 -0400
+X-MC-Unique: Uu4laDedP6yfga6ESTEaeg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 849121C01B33;
+        Tue, 31 May 2022 02:41:31 +0000 (UTC)
+Received: from [10.22.32.183] (unknown [10.22.32.183])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F22A6492C3B;
+        Tue, 31 May 2022 02:41:30 +0000 (UTC)
+Message-ID: <1ecec7cb-035c-a4aa-3918-1a00ba48c6f9@redhat.com>
+Date:   Mon, 30 May 2022 22:41:30 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531005550.10613-1-sxwjean@me.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v5 00/11] Use obj_cgroup APIs to charge the LRU pages
+Content-Language: en-US
+To:     Muchun Song <songmuchun@bytedance.com>, hannes@cmpxchg.org,
+        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
+        akpm@linux-foundation.org
+Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com
+References: <20220530074919.46352-1-songmuchun@bytedance.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220530074919.46352-1-songmuchun@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 08:55:50AM +0800, sxwjean@me.com wrote:
-> From: Xiongwei Song <xiongwei.song@windriver.com>
-> 
-> There is no need to do anything if sysfs_slab_alias() return nonzero
-> value after getting a mergeable cache.
-> 
-> Signed-off-by: Xiongwei Song <xiongwei.song@windriver.com>
+On 5/30/22 03:49, Muchun Song wrote:
+> This version is rebased on v5.18.
+>
+> Since the following patchsets applied. All the kernel memory are charged
+> with the new APIs of obj_cgroup.
+>
+> 	[v17,00/19] The new cgroup slab memory controller [1]
+> 	[v5,0/7] Use obj_cgroup APIs to charge kmem pages [2]
+>
+> But user memory allocations (LRU pages) pinning memcgs for a long time -
+> it exists at a larger scale and is causing recurring problems in the real
+> world: page cache doesn't get reclaimed for a long time, or is used by the
+> second, third, fourth, ... instance of the same job that was restarted into
+> a new cgroup every time. Unreclaimable dying cgroups pile up, waste memory,
+> and make page reclaim very inefficient.
+>
+> We can convert LRU pages and most other raw memcg pins to the objcg direction
+> to fix this problem, and then the LRU pages will not pin the memcgs.
+>
+> This patchset aims to make the LRU pages to drop the reference to memory
+> cgroup by using the APIs of obj_cgroup. Finally, we can see that the number
+> of the dying cgroups will not increase if we run the following test script.
+>
+> ```bash
+> #!/bin/bash
+>
+> dd if=/dev/zero of=temp bs=4096 count=1
+> cat /proc/cgroups | grep memory
+>
+> for i in {0..2000}
+> do
+> 	mkdir /sys/fs/cgroup/memory/test$i
+> 	echo $$ > /sys/fs/cgroup/memory/test$i/cgroup.procs
+> 	cat temp >> log
+> 	echo $$ > /sys/fs/cgroup/memory/cgroup.procs
+> 	rmdir /sys/fs/cgroup/memory/test$i
+> done
+>
+> cat /proc/cgroups | grep memory
+>
+> rm -f temp log
+> ```
+>
+> [1] https://lore.kernel.org/linux-mm/20200623015846.1141975-1-guro@fb.com/
+> [2] https://lore.kernel.org/linux-mm/20210319163821.20704-1-songmuchun@bytedance.com/
+>
+> v4: https://lore.kernel.org/all/20220524060551.80037-1-songmuchun@bytedance.com/
+> v3: https://lore.kernel.org/all/20220216115132.52602-1-songmuchun@bytedance.com/
+> v2: https://lore.kernel.org/all/20210916134748.67712-1-songmuchun@bytedance.com/
+> v1: https://lore.kernel.org/all/20210814052519.86679-1-songmuchun@bytedance.com/
+> RFC v4: https://lore.kernel.org/all/20210527093336.14895-1-songmuchun@bytedance.com/
+> RFC v3: https://lore.kernel.org/all/20210421070059.69361-1-songmuchun@bytedance.com/
+> RFC v2: https://lore.kernel.org/all/20210409122959.82264-1-songmuchun@bytedance.com/
+> RFC v1: https://lore.kernel.org/all/20210330101531.82752-1-songmuchun@bytedance.com/
+>
+> v5:
+>   - Lots of improvements from Johannes, Roman and Waiman.
+>   - Fix lockdep warning reported by kernel test robot.
+>   - Add two new patches to do code cleanup.
+>   - Collect Acked-by and Reviewed-by from Johannes and Roman.
+>   - I didn't replace local_irq_disable/enable() to local_lock/unlock_irq() since
+>     local_lock/unlock_irq() takes an parameter, it needs more thinking to transform
+>     it to local_lock.  It could be an improvement in the future.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+My comment about local_lock/unlock is just a note that 
+local_irq_disable/enable() have to be eventually replaced. However, we 
+need to think carefully where to put the newly added local_lock. It is 
+perfectly fine to keep it as is and leave the conversion as a future 
+follow-up.
 
-Thanks.
+Thank you very much for your work on this patchset.
+
+Cheers,
+Longman
+
+

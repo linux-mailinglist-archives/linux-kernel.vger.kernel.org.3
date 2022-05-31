@@ -2,228 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D480539100
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA8B539102
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344351AbiEaMp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 08:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        id S1344354AbiEaMqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 08:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239853AbiEaMpy (ORCPT
+        with ESMTP id S1344366AbiEaMqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 08:45:54 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000ED6EB22;
-        Tue, 31 May 2022 05:45:52 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4EEC720005;
-        Tue, 31 May 2022 12:45:49 +0000 (UTC)
-Date:   Tue, 31 May 2022 14:45:47 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Cc:     Quentin Schulz <foss+kernel@0leil.net>, shawnx.tu@intel.com,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 4/4] media: i2c: ov5675: add .get_selection support
-Message-ID: <20220531124547.vqfrqbs5d37l3z6h@uno.localdomain>
-References: <20220525145833.1165437-1-foss+kernel@0leil.net>
- <20220525145833.1165437-4-foss+kernel@0leil.net>
- <20220531105011.yxrosmwtw3mpaomb@uno.localdomain>
- <842dbd3c-856b-e5a8-e942-545ceb6741ca@theobroma-systems.com>
+        Tue, 31 May 2022 08:46:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAB41703CD
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654001169;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1Zn6MLya70ZcU9iC+dkrQ2V0ybC8+tbIlIVRcQTszCI=;
+        b=fBbBu4T+Rnf7z+vu8cIbu/8pVVptQnT+o5+O9XLI0QxsqTowe5hjaIocZmFGkO6j/3fa9i
+        b8WXfXZW31hJ5dyuekDkqy03fqC+M7sZqkXXOv5lFlcrBZHX0FdCUEk17kzgdcWpvU7cTf
+        lLC1BYVueYZsSDwDgMZkIARd4e05Pkg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-45-4_4enrFjPFOWqDYWfimTIQ-1; Tue, 31 May 2022 08:46:07 -0400
+X-MC-Unique: 4_4enrFjPFOWqDYWfimTIQ-1
+Received: by mail-wm1-f72.google.com with SMTP id o32-20020a05600c512000b0039c1c56e757so337249wms.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:46:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1Zn6MLya70ZcU9iC+dkrQ2V0ybC8+tbIlIVRcQTszCI=;
+        b=K+AdBiOCwDzf8w99HWiWyP3PHJu3+f/2ScQgGQm2IRM++ngafAZ2OUiFsN7dRLxaBq
+         FbvOTFmubBr+WTO79ONNqjTB3Apc166LvJxTVwEIm4zXXTcZA9ikhpKJ5MYHBYMsos1y
+         hnbVyvev7YkWURxwAeVYnAoRHsikbCLiP+55y12brGfESxvaX1kM6MXIhlmCvdmCj6Iy
+         2qGlK6CjB1YWKu5/M6CSWRbTViUxFnWs/Hb1xT2svmW0f8apFIGPou8snJ0KDZaPnpXt
+         SQ8UAvmIFD8vfo+FTdi0rEbHi7N1uxw79IyXWn8un0gIldVyT6olwYYLoc84mx0wkQ8k
+         pRIg==
+X-Gm-Message-State: AOAM530a5QDjAX4v8+KTzkCto40w6T7OB+0LRUHy3iZPeUXUSi/7c8FJ
+        Upcn1s2rQMf11IMWM39LhgWx0okOiPeXAuIiYh+zoevuLytxgGGbWIWOJRNKyYJAMuulQLea9pJ
+        qaMxiyyZJDL6b7O/l1JVgR1Nw
+X-Received: by 2002:adf:d18a:0:b0:210:414:ec4 with SMTP id v10-20020adfd18a000000b0021004140ec4mr13462709wrc.250.1654001166687;
+        Tue, 31 May 2022 05:46:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx1kiw481mMFAa3d4us5T2AirnJ+Rhn03hcvbb2cyLHAPEG9vGa9hCuyTE0lJO+6bKRJ4oNlA==
+X-Received: by 2002:adf:d18a:0:b0:210:414:ec4 with SMTP id v10-20020adfd18a000000b0021004140ec4mr13462695wrc.250.1654001166471;
+        Tue, 31 May 2022 05:46:06 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id o2-20020a5d62c2000000b00210335f7aaesm5793107wrv.35.2022.05.31.05.46.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 05:46:06 -0700 (PDT)
+Message-ID: <cbd99278-89ff-0742-a4cb-99723c397e6c@redhat.com>
+Date:   Tue, 31 May 2022 14:46:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <842dbd3c-856b-e5a8-e942-545ceb6741ca@theobroma-systems.com>
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 2/3] fat: add renameat2 RENAME_EXCHANGE flag support
+Content-Language: en-US
+To:     OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+Cc:     linux-kernel@vger.kernel.org,
+        Christian Kellner <ckellner@redhat.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        Alberto Ruiz <aruiz@redhat.com>,
+        Peter Jones <pjones@redhat.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        Colin Walters <walters@verbum.org>,
+        Chung-Chiang Cheng <cccheng@synology.com>
+References: <20220526134119.242182-1-javierm@redhat.com>
+ <20220526134119.242182-3-javierm@redhat.com>
+ <87ilpmows4.fsf@mail.parknet.co.jp>
+ <0ca7d264-2522-c820-d26e-19b6685d5016@redhat.com>
+ <87czftq3g6.fsf@mail.parknet.co.jp>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <87czftq3g6.fsf@mail.parknet.co.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Quentin
-
-On Tue, May 31, 2022 at 02:19:21PM +0200, Quentin Schulz wrote:
-> Hi Jacopo,
->
-> On 5/31/22 12:50, Jacopo Mondi wrote:
-> > Hi Quentin
-> >
-> > On Wed, May 25, 2022 at 04:58:33PM +0200, Quentin Schulz wrote:
-> > > From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> > >
-> > > The sensor has 2592*1944 active pixels, surrounded by 16 active dummy
-> > > pixels and there are an additional 24 black rows "at the bottom".
-> > >
-> > >                       [2624]
-> > >          +-----+------------------+-----+
-> > >          |     |     16 dummy     |     |
-> > >          +-----+------------------+-----+
-> > >          |     |                  |     |
-> > >          |     |     [2592]       |     |
-> > >          |     |                  |     |
-> > >          |16   |      valid       | 16  |[2000]
-> > >          |dummy|                  |dummy|
-> > >          |     |            [1944]|     |
-> > >          |     |                  |     |
-> > >          +-----+------------------+-----+
-> > >          |     |     16 dummy     |     |
-> > >          +-----+------------------+-----+
-> > >          |     |  24 black lines  |     |
-> > >          +-----+------------------+-----+
-> > >
-> > > The top-left coordinate is gotten from the registers specified in the
-> > > modes which are identical for both currently supported modes.
-> > >
-> > > Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> > > ---
-> > >
-> > > v4:
-> > >   - explicit a bit more the commit log,
-> > >   - added drawing in the commit log,
-> > >   - fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
-> > >
-> > > added in v3
-> > >
-> > >   drivers/media/i2c/ov5675.c | 33 +++++++++++++++++++++++++++++++++
-> > >   1 file changed, 33 insertions(+)
-> > >
-> > > diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
-> > > index c1f3c387afde0..384a9ea2372c3 100644
-> > > --- a/drivers/media/i2c/ov5675.c
-> > > +++ b/drivers/media/i2c/ov5675.c
-> > > @@ -1121,6 +1121,38 @@ static int ov5675_get_format(struct v4l2_subdev *sd,
-> > >   	return 0;
-> > >   }
-> > >
-> > > +static int ov5675_get_selection(struct v4l2_subdev *sd,
-> > > +				struct v4l2_subdev_state *state,
-> > > +				struct v4l2_subdev_selection *sel)
-> > > +{
-> > > +	struct ov5675 *ov5675 = to_ov5675(sd);
-> > > +
-> > > +	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
-> > > +		return -EINVAL;
-> > > +
-> > > +	switch (sel->target) {
-> > > +	case V4L2_SEL_TGT_CROP_BOUNDS:
-> > > +		sel->r.top = 0;
-> > > +		sel->r.left = 0;
-> > > +		sel->r.width = 2624;
-> > > +		sel->r.height = 2000;
-> > > +		return 0;
-> > > +	case V4L2_SEL_TGT_CROP:
-> > > +		sel->r.top = 16;
-> > > +		sel->r.left = 16;
-> > > +		sel->r.width = ov5675->cur_mode->width;
-> > > +		sel->r.height = ov5675->cur_mode->height;
-> > > +		return 0;
-> >
-> > I'm afraid this doesn't match exactly my understanding of the
-> > discussion we had.
-> >
-> > The driver defines the following modes
-> >
-> > /*
-> >   * OV5670 sensor supports following resolutions with full FOV:
-> >   * 4:3  ==> {2592x1944, 1296x972, 648x486}
-> >   * 16:9 ==> {2560x1440, 1280x720, 640x360}
-> >   */
-> > static const struct ov5670_mode supported_modes[] = {
-> > 	{
-> > 		.width = 2592,
-> > 		.height = 1944,
-> > 	},
-> > 	{
-> > 		.width = 1296,
-> > 		.height = 972,
-> > 	},
-> > 	{
-> > 		.width = 648,
-> > 		.height = 486,
-> > 	},
-> > 	{
-> > 		.width = 2560,
-> > 		.height = 1440,
-> > 	},
-> > 	{
-> > 		.width = 1280,
-> > 		.height = 720,
-> > 	},
-> > 	{
-> > 		.width = 640,
-> > 		.height = 360,
-> > 	}
-> > };
-> >
-> > The comment says all modes retain the "full FOV", which I assume it
-> > implies they are obtained by sub-sampling and not cropping.
-> >
-> > The first three modes (4:3) are indeed obtained by subsampling the
-> > full active pixel array:
-> >
-> >          (2592,1944) / 2 = (1296,972) / 2 = (648,486)
-> >
-> > The last three are obtained by subsampling a slightly cropped portion
-> > of the pixel array
-> >
-> >          (2560,1440) / 2 = (1280,720) / 2 = (640,360)
-> >
-> > If you set CROP = cur_mode->[width/height] you will instead report the
-> > visible width/height, which as said it's obtained by subsampling (of a
-> > slightly cropped portion of the pixel array for the last three ones)
-> >
-> > The CROP rectangle is then (2592, 1944) for the first three and (2560,
-> > 1440) for the last three.
-> >
-> > I would add a v4l2_rect to struct ov5670_mode where to record that and
-> > report it here.
-> >
->
-> That makes a lot of sense to me, thanks for your patience and explanations.
->
-> FYI, you're looking at the wrong driver (ov5670 vs ov5675; a mistake I make
-
-You know what's depressing ? -I- have a series out for ov5670 :(
-I'm so sorry, my brain got short-circuited by that probably...
-
-> every now and then too :) ). However, the datasheet does say that "The
-> OV5675 supports a binning mode to provide a lower resolution output while
-> maintaining the field of view.[...] The OV5675 supports 2x2 binning." so I
-> assume we're in the same scenario as you just explained.
->
-> Since the OV5675 modes currently supported by the drivers are 4/3 only and
-> the smaller size mode a result of subsampling, they both have the same CROP
-> rectangle.
+On 5/31/22 14:41, OGAWA Hirofumi wrote:
+> Javier Martinez Canillas <javierm@redhat.com> writes:
+> 
+>>> Main purpose of me is to consolidate helpers with vfat_rename(), and
+>>> tweak coding style to use existent fat codes.
+>>>
+>>
+>> Indeed. What do you think of the following plan for v4 ?
+>>
+>> 1) Keep patch "fat: add a vfat_rename2() and make existing .rename callback a helper"
+>>    as the first patch of the series.
+>> 2) Add a patch #2 with your authorship that adds the helper and use them in the
+>>    vfat_rename() function.
+>> 3) Make this patch "fat: add renameat2 RENAME_EXCHANGE flag support" to be patch #3
+>>    and use the helpers introduced in patch #2.
+>> 4) Make patch #4 to not only add a test for RENAME_EXCHANGE but also for renameat()
+>>    and renameat2(..., RENAME_NOREPLACE). That way it will also cover your changes in
+>>    patch #2.
+> 
+> I don't care much about it because whole is not big (in short, I'm ok
+> with even one patch), so the point is the patches should be able to
+> bisect easily if separated.
 >
 
-Thankfully the comment still applies to ov5675 then, and both modes
-have the same (2592, 1944) crop rectangle :)
-
-> > > +	case V4L2_SEL_TGT_CROP_DEFAULT:
-> > > +		sel->r.top = 16;
-> > > +		sel->r.left = 16;
-> > > +		sel->r.width = supported_modes[0].width;
-> > > +		sel->r.height = supported_modes[0].height;
-> > > +		return 0;
-> >
-> > You could also define these values instead of fishing in the
-> > supported_modes array, to protect against future changes to the array
-> > itself. Up to you.
-> >
+Yes, git bisect-ability is why I mentioned that we could do it in separate patches
+but I'll integrate your changes now and see what approach I take depending on how
+the code looks then.
+ 
+>>>> +	/* update inode version and timestamps */
+>>>> +	inode_inc_iversion(old_inode);
+>>>> +	inode_inc_iversion(new_inode);
+>>>
+>>> Why do we need to update iversion of those inodes? I couldn't get intent
+>>> of this.
+>>>
+>>
+>> To be honest, I wasn't sure about this either but I saw that the implementation
+>> of RENAME_EXCHANGE in other filesystems did. For example btrfs_rename_exchange().
+> 
+> Ok. If I'm not overlooking, it looks like only btrfs. Please remove
+> those inode_inc_iversion() for {new,old}_inode.
 >
-> Since there's no cropping involved in the current modes, I assume we could
-> just hardcode the width and height and tackle this limitation later, once we
-> add more modes or support for configuring cropping (this patch only adds the
-> getter and not the setter).
 
-Fine with me!
+Sure.
 
-Sorry again for the slip!
+-- 
+Best regards,
 
->
-> Cheers,
-> Quentin
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

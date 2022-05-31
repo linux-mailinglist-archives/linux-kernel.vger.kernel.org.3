@@ -2,157 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148AE539638
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0FB53963C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347011AbiEaSX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 14:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
+        id S1347019AbiEaSY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 14:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347012AbiEaSX5 (ORCPT
+        with ESMTP id S1346948AbiEaSY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 14:23:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 808059CCAF
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 11:23:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3012523A;
-        Tue, 31 May 2022 11:23:56 -0700 (PDT)
-Received: from [10.57.81.38] (unknown [10.57.81.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3D3183F766;
-        Tue, 31 May 2022 11:23:54 -0700 (PDT)
-Message-ID: <8a86ff8b-ea16-4004-82e4-d20e46501c75@arm.com>
-Date:   Tue, 31 May 2022 19:23:49 +0100
+        Tue, 31 May 2022 14:24:28 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3887A823;
+        Tue, 31 May 2022 11:24:27 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so3627736pjl.4;
+        Tue, 31 May 2022 11:24:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aASmjf/pnI60SUyA+vo4oipwPmuVquT6UTuMWtth16E=;
+        b=b0id0ljyEJ0A/BY68TcNQin8MFxEUP8/YY3UNzivhDGBEenqWTe/+aVQCXUF8mOaFa
+         YOO0EU29eTkoKmgRpmqlacunMUw0EUoR6CTK9iZruDkT2J2rlorxz5r6+eLgaMSUcCV6
+         ACYvJ+0bZWXhVxPwtNmTgxg5agQ5hhotR0skd6dDH1x2NIpYa+bHadXaCmklo+xSmQAp
+         3cDk1C7/OL4VRpAPQwYsTYJbu32wrZ1mfMznQhu3UidlC4xzZpX2Nh5WrtFGjxf5vzbe
+         RrU44InIpqTW71q+AT4Tz847CoAO23+wD1Kyri81QgGgK2fYkWGaZSJ1rtR8Hfq55JUh
+         JhFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=aASmjf/pnI60SUyA+vo4oipwPmuVquT6UTuMWtth16E=;
+        b=zjo2HXkixjWEU8uUWeOOGtul3esGOvjWHOXAh6Qr/nsCmbLRVLFMjx3HRlTxPgm8Uy
+         dbNMa3YtEz12SWH/1OAYwx7R7TAnl3HvWilhRdzMdfb3lfoCtqGD1u7VeR3KTEQb5cMA
+         zQJZO13hpL0xF4VAknNmcxMY4qIdutOA3Gx8UJSAgyxU8to3Q/3l/cyLM4Unr33VKtc6
+         pt1sdSKUE+vOKVstuo3OqQo0p/ZDOwuv0RL/9HHggg7NLOaqvViVakl5IPl9zk7qzBMz
+         rqbqvL55/ullGp7UB7kDRBIC8Xi9ou0DOZJNGtwf9SIdFhlQ9cmHentnz0MpFVFulDil
+         JeNA==
+X-Gm-Message-State: AOAM533S01kH6Xa7poM1mMNvpjcPB1YibjmMBVkLAKAzZNseyidsZLgg
+        5ju2vQuIaHj0N0tATqu3dddnbaLq6Gk=
+X-Google-Smtp-Source: ABdhPJwzDxVGmi3KE9VGnz8OLz53LiiQxmKtewnPo/T1sRhlbwVNGBuhYNslynstct/hP7p72Zy/FA==
+X-Received: by 2002:a17:902:7049:b0:162:962:5b04 with SMTP id h9-20020a170902704900b0016209625b04mr49934617plt.167.1654021466804;
+        Tue, 31 May 2022 11:24:26 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:987b])
+        by smtp.gmail.com with ESMTPSA id u1-20020a17090282c100b00163fbb2bae5sm2572448plz.209.2022.05.31.11.24.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 11:24:26 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 31 May 2022 08:24:24 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH] blk-cgroup: Optimize blkcg_rstat_flush()
+Message-ID: <YpZdWNGW1bTGnApp@slm.duckdns.org>
+References: <20220531181821.187834-1-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 01/10] dmapool: remove checks for dev == NULL
-Content-Language: en-GB
-To:     Tony Battersby <tonyb@cybernetics.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     iommu@lists.linux-foundation.org, kernel-team@fb.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Tony Lindgren <tony@atomide.com>
-References: <9b08ab7c-b80b-527d-9adf-7716b0868fbc@cybernetics.com>
- <7f6f9ff5-cdb9-e386-988d-fa013538dee7@cybernetics.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <7f6f9ff5-cdb9-e386-988d-fa013538dee7@cybernetics.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531181821.187834-1-longman@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-31 19:12, Tony Battersby wrote:
-> dmapool originally tried to support pools without a device because
-> dma_alloc_coherent() supports allocations without a device.  But nobody
-> ended up using dma pools without a device, so the current checks in
-> dmapool.c for pool->dev == NULL are both insufficient and causing bloat.
-> Remove them.
+Hello, Waiman.
 
-Furthermore, dma_pool_create() already dereferences the dev argument 
-unconditionally, so there's no way we could possibly get as far as these 
-checks even if a caller did ever pass NULL.
-
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-
-> Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
-> ---
->   mm/dmapool.c | 42 +++++++++++-------------------------------
->   1 file changed, 11 insertions(+), 31 deletions(-)
+On Tue, May 31, 2022 at 02:18:21PM -0400, Waiman Long wrote:
+> For a system with many CPUs and block devices, the time to do
+> blkcg_rstat_flush() from cgroup_rstat_flush() can be rather long. It
+> can be especially problematic as interrupt is disabled during the flush.
+> It was reported that it might take seconds in some extreme cases leading
+> to hard lockup messages.
 > 
-> diff --git a/mm/dmapool.c b/mm/dmapool.c
-> index a7eb5d0eb2da..0f89de408cbe 100644
-> --- a/mm/dmapool.c
-> +++ b/mm/dmapool.c
-> @@ -275,7 +275,7 @@ void dma_pool_destroy(struct dma_pool *pool)
->   	mutex_lock(&pools_reg_lock);
->   	mutex_lock(&pools_lock);
->   	list_del(&pool->pools);
-> -	if (pool->dev && list_empty(&pool->dev->dma_pools))
-> +	if (list_empty(&pool->dev->dma_pools))
->   		empty = true;
->   	mutex_unlock(&pools_lock);
->   	if (empty)
-> @@ -284,12 +284,8 @@ void dma_pool_destroy(struct dma_pool *pool)
->   
->   	list_for_each_entry_safe(page, tmp, &pool->page_list, page_list) {
->   		if (is_page_busy(page)) {
-> -			if (pool->dev)
-> -				dev_err(pool->dev, "%s %s, %p busy\n", __func__,
-> -					pool->name, page->vaddr);
-> -			else
-> -				pr_err("%s %s, %p busy\n", __func__,
-> -				       pool->name, page->vaddr);
-> +			dev_err(pool->dev, "%s %s, %p busy\n", __func__,
-> +				pool->name, page->vaddr);
->   			/* leak the still-in-use consistent memory */
->   			list_del(&page->page_list);
->   			kfree(page);
-> @@ -351,12 +347,8 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t mem_flags,
->   		for (i = sizeof(page->offset); i < pool->size; i++) {
->   			if (data[i] == POOL_POISON_FREED)
->   				continue;
-> -			if (pool->dev)
-> -				dev_err(pool->dev, "%s %s, %p (corrupted)\n",
-> -					__func__, pool->name, retval);
-> -			else
-> -				pr_err("%s %s, %p (corrupted)\n",
-> -					__func__, pool->name, retval);
-> +			dev_err(pool->dev, "%s %s, %p (corrupted)\n",
-> +				__func__, pool->name, retval);
->   
->   			/*
->   			 * Dump the first 4 bytes even if they are not
-> @@ -411,12 +403,8 @@ void dma_pool_free(struct dma_pool *pool, void *vaddr, dma_addr_t dma)
->   	page = pool_find_page(pool, dma);
->   	if (!page) {
->   		spin_unlock_irqrestore(&pool->lock, flags);
-> -		if (pool->dev)
-> -			dev_err(pool->dev, "%s %s, %p/%pad (bad dma)\n",
-> -				__func__, pool->name, vaddr, &dma);
-> -		else
-> -			pr_err("%s %s, %p/%pad (bad dma)\n",
-> -			       __func__, pool->name, vaddr, &dma);
-> +		dev_err(pool->dev, "%s %s, %p/%pad (bad dma)\n",
-> +			__func__, pool->name, vaddr, &dma);
->   		return;
->   	}
->   
-> @@ -426,12 +414,8 @@ void dma_pool_free(struct dma_pool *pool, void *vaddr, dma_addr_t dma)
->   #ifdef	DMAPOOL_DEBUG
->   	if ((dma - page->dma) != offset) {
->   		spin_unlock_irqrestore(&pool->lock, flags);
-> -		if (pool->dev)
-> -			dev_err(pool->dev, "%s %s, %p (bad vaddr)/%pad\n",
-> -				__func__, pool->name, vaddr, &dma);
-> -		else
-> -			pr_err("%s %s, %p (bad vaddr)/%pad\n",
-> -			       __func__, pool->name, vaddr, &dma);
-> +		dev_err(pool->dev, "%s %s, %p (bad vaddr)/%pad\n",
-> +			__func__, pool->name, vaddr, &dma);
->   		return;
->   	}
->   	{
-> @@ -442,12 +426,8 @@ void dma_pool_free(struct dma_pool *pool, void *vaddr, dma_addr_t dma)
->   				continue;
->   			}
->   			spin_unlock_irqrestore(&pool->lock, flags);
-> -			if (pool->dev)
-> -				dev_err(pool->dev, "%s %s, dma %pad already free\n",
-> -					__func__, pool->name, &dma);
-> -			else
-> -				pr_err("%s %s, dma %pad already free\n",
-> -				       __func__, pool->name, &dma);
-> +			dev_err(pool->dev, "%s %s, dma %pad already free\n",
-> +				__func__, pool->name, &dma);
->   			return;
->   		}
->   	}
+> As it is likely that not all the percpu blkg_iostat_set's has been
+> updated since the last flush, those stale blkg_iostat_set's don't need
+> to be flushed in this case. This patch optimizes blkcg_rstat_flush()
+> by checking the current sequence number against the one recorded since
+> the last flush and skip the blkg_iostat_set if the sequence number
+> hasn't changed. There is a slight chance that it may miss an update
+> that is being done in parallel, the new update will just have to wait
+> until the next flush.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  block/blk-cgroup.c | 18 +++++++++++++++---
+>  block/blk-cgroup.h |  1 +
+>  2 files changed, 16 insertions(+), 3 deletions(-)
+> 
+> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+> index 40161a3f68d0..79b89af61ef2 100644
+> --- a/block/blk-cgroup.c
+> +++ b/block/blk-cgroup.c
+> @@ -864,11 +864,23 @@ static void blkcg_rstat_flush(struct cgroup_subsys_state *css, int cpu)
+>  		unsigned long flags;
+>  		unsigned int seq;
+>  
+> +		seq = u64_stats_fetch_begin(&bisc->sync);
+> +		/*
+> +		 * If the sequence number hasn't been updated since the last
+> +		 * flush, we can skip this blkg_iostat_set though we may miss
+> +		 * an update that is happening in parallel.
+> +		 */
+> +		if (seq == bisc->last_seq)
+> +			continue;
+
+Is this a sufficient solution? The code assumes that there aren't too many
+blkgs for the cgroup, which can be wrong in some cases. Wouldn't it be
+better to create a list of updated blkg's per blkcg so that we don't walk
+all the dormant ones?
+
+Thanks.
+
+-- 
+tejun

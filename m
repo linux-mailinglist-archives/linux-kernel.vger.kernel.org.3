@@ -2,96 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0C1538E18
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A76538E3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245394AbiEaJ7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 05:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
+        id S245414AbiEaKAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 06:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240788AbiEaJ65 (ORCPT
+        with ESMTP id S240788AbiEaKAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 05:58:57 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7281E5DD13
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:58:56 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id er5so16777338edb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:58:56 -0700 (PDT)
+        Tue, 31 May 2022 06:00:13 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3266782170;
+        Tue, 31 May 2022 03:00:12 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id l19so7698191ejr.8;
+        Tue, 31 May 2022 03:00:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1Lh//yTGUbJi03monU+zFrkUN9l3qrNWeiv0qwPR1KM=;
-        b=MVVRYI0ZN7SgTFaz8M/u06YGulvbFi62zDDqveL16HifTZgFBWaOwnMhkuxfYn8P+j
-         WL52gYI9/y2DnkaFxlP8h9zAg37ru7axcu6UoM/ppAFX8L6/lWuCtYx+alWRh28Zn1r7
-         dz54UR3QvN0NY3hkYETDMWeeWOhyhd19AENImdywvWb/Ie3thjvBTvm3EJPH9FhWpLCq
-         dLZedltAZfb6lOoh+5BJZZZKdY3W5dKwBIiNGa55u4xLFNyGBTVpeK54TRKAYJ9Jvrt8
-         QRWzktIT7LePgIAbsAvL6NGXISMzoBFmUsnrVz8uPk8IjcqjESaezNpttB0KjgY5NGqq
-         XXqg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9n4cw6tJMuGq8sS9FRBgBhCHODwjr6qBUbzPf/1V2sg=;
+        b=IzX+BgNjUX84qtPBtVsu+ZQQ2nO4Huw6BvTBNd8rhiurCDNaaV5UMg4BXEj7C+GRmG
+         pLAlNrJvCnrtY74d5Bo/qYvdZdIp6QkYn6H+D4DPT+ND58p4F/z8e2zkIZQsRYdjuNP2
+         1DxX3EdJHY8KDTNcYKELGBk86yao2J8VuJlSo/c21/2arZjhHOW0lpAc7cG/anLi+GyZ
+         EIYmtu/053mPuutoapsZROblF0FdT729/3v6UpunSQlMe0lkJeQVmj9gHa/cACRiumXh
+         G4ykLDd0yxJynuBwQinr7e62C8Qnq4ExNeWx17W3s71BABDAerQSHOy+HAkfJOD712fC
+         cGtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=1Lh//yTGUbJi03monU+zFrkUN9l3qrNWeiv0qwPR1KM=;
-        b=DJ/Jd6X0Amehvn9WIjbCd8mYQxzzETfRj0S5iewoWtcyW6giMXBn8zJnLRlgzP3vTi
-         BZdIODWgL4YwZCOv+VNiD1WX/lnZtFk+aB6Q/MQ74HFnAg3GRSvmfByAJnikTJKMfFWS
-         UuMXrWDX2H9WSjGQaBVwYldtR/tLBDLk0fRBSOtY2V+2TAinHvhc//QJJtgxo/yXuW8b
-         BdnNURs6IJu+n3LuSqu5WveX08AFEo8JYLhEE3xkcrflcQeLeamDNInsdlxXMkdqIl2u
-         aLevJ5RUaSq9s4t5E/RHMV6q6B4KvmFa3o3kgVJFY7/BbVdx+hxPzeku2lbqECd195VD
-         /DNg==
-X-Gm-Message-State: AOAM530NsLsPURkKAQyOr50DwHWzspAxU8tnhWcVuixdk9/rRNXMGXVJ
-        Kgafh3L+x34K4wIIBj9kQ2JS+g==
-X-Google-Smtp-Source: ABdhPJy69vdQQFHMyE72a/U4IgyhyOR2N6lSQOXZujz+0wS6/e2q5DrHOVp8H/lzBSwKc7yAEfijLw==
-X-Received: by 2002:a05:6402:3705:b0:42a:ba63:18b7 with SMTP id ek5-20020a056402370500b0042aba6318b7mr62888334edb.296.1653991134894;
-        Tue, 31 May 2022 02:58:54 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id 24-20020a170906309800b006ff99e400f9sm1161939ejv.96.2022.05.31.02.58.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 02:58:54 -0700 (PDT)
-Message-ID: <d0904cb9-e765-f0f3-737e-bf365c1cf444@linaro.org>
-Date:   Tue, 31 May 2022 11:58:53 +0200
+        bh=9n4cw6tJMuGq8sS9FRBgBhCHODwjr6qBUbzPf/1V2sg=;
+        b=veFHBMChSxPX/Sxx5ZdURFIquiS2Vac0Pqqg/b2YpH+vmb+CtPvKa9Xk7jf5pORaHh
+         qoWXw576SBcVdoe6k1Tdyj7WYNG5XmqWkyi06pXjDewasGW38Fl3i/QB7aQAY7/dD+On
+         /zZ6bgq82JRx4CHAiX+OjYKN9C5qZdDz1tdHXPgSTvXI9ZeuY7dnPTXfkuU5gwgC+3b9
+         i7vKEawZAFcQqXKlkXDu9SilPQCPQpD1owxved299cf5PPc0NwDVrALaAS6n9gZpqcEi
+         Z+x0SHM1psHOXqpWkvRUAJoHGggqgteItvChGxYPZ+T71mfPTvY/ecN5N8QHou160cE8
+         GODw==
+X-Gm-Message-State: AOAM533s5oQMEPgddujTAQ5KAbk1OJSykK2TNfqB8alImmtF+wohldBv
+        CEOn8TCXT4KnG8fWb74ksmkdWysylPY=
+X-Google-Smtp-Source: ABdhPJwCJfAmChYPGSG1MS5K/vbZUKtFI7ycuya8OGZo2oGfMsdkIctwKWtBLMWRNLTmB2Z1/mcwZQ==
+X-Received: by 2002:a17:907:7d88:b0:6fe:d709:6735 with SMTP id oz8-20020a1709077d8800b006fed7096735mr38261002ejc.76.1653991210599;
+        Tue, 31 May 2022 03:00:10 -0700 (PDT)
+Received: from able.fritz.box (p5b0ea02f.dip0.t-ipconnect.de. [91.14.160.47])
+        by smtp.gmail.com with ESMTPSA id r13-20020a056402018d00b0042617ba6389sm582062edv.19.2022.05.31.03.00.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 03:00:10 -0700 (PDT)
+From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
+        <ckoenig.leichtzumerken@gmail.com>
+X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+Cc:     christian.koenig@amd.com, alexander.deucher@amd.com,
+        daniel@ffwll.ch, viro@zeniv.linux.org.uk,
+        akpm@linux-foundation.org, hughd@google.com,
+        andrey.grodzovsky@amd.com
+Subject: Per file OOM badness
+Date:   Tue, 31 May 2022 11:59:54 +0200
+Message-Id: <20220531100007.174649-1-christian.koenig@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 4/6] dt-bindings: ufs: exynos-ufs: add fsd compatible
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-phy@lists.infradead.org
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        avri.altman@wdc.com, bvanassche@acm.org,
-        martin.petersen@oracle.com, chanho61.park@samsung.com,
-        pankaj.dubey@samsung.com, linux-fsd@tesla.com,
-        Bharat Uppal <bharat.uppal@samsung.com>
-References: <20220531012220.80563-1-alim.akhtar@samsung.com>
- <CGME20220531012351epcas5p389e28e28a48f9bb14a52fc81c417296d@epcas5p3.samsung.com>
- <20220531012220.80563-5-alim.akhtar@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220531012220.80563-5-alim.akhtar@samsung.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2022 03:22, Alim Akhtar wrote:
-> Adds tesla,fsd-ufs compatible for Tesla FSD SoC.
-> 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Bharat Uppal <bharat.uppal@samsung.com>
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+Hello everyone, 
+
+To summarize the issue I'm trying to address here: Processes can allocate
+resources through a file descriptor without being held responsible for it.
+
+Especially for the DRM graphics driver subsystem this is rather
+problematic. Modern games tend to allocate huge amounts of system memory
+through the DRM drivers to make it accessible to GPU rendering.
+
+But even outside of the DRM subsystem this problem exists and it is
+trivial to exploit. See the following simple example of
+using memfd_create():
+
+         fd = memfd_create("test", 0);
+         while (1)
+                 write(fd, page, 4096);
+
+Compile this and you can bring down any standard desktop system within
+seconds.
+
+The background is that the OOM killer will kill every processes in the
+system, but just not the one which holds the only reference to the memory
+allocated by the memfd.
+
+Those problems where brought up on the mailing list multiple times now
+[1][2][3], but without any final conclusion how to address them. Since
+file descriptors are considered shared the process can not directly held
+accountable for allocations made through them. Additional to that file
+descriptors can also easily move between processes as well.
+
+So what this patch set does is to instead of trying to account the
+allocated memory to a specific process it adds a callback to struct
+file_operations which the OOM killer can use to query the specific OOM
+badness of this file reference. This badness is then divided by the
+file_count, so that every process using a shmem file, DMA-buf or DRM
+driver will get it's equal amount of OOM badness.
+
+Callbacks are then implemented for the two core users (memfd and DMA-buf)
+as well as 72 DRM based graphics drivers.
+
+The result is that the OOM killer can now much better judge if a process
+is worth killing to free up memory. Resulting a quite a bit better system
+stability in OOM situations, especially while running games.
+
+The only other possibility I can see would be to change the accounting of
+resources whenever references to the file structure change, but this would
+mean quite some additional overhead for a rather common operation.
+
+Additionally I think trying to limit device driver allocations using
+cgroups is orthogonal to this effort. While cgroups is very useful, it
+works on per process limits and tries to enforce a collaborative model on
+memory management while the OOM killer enforces a competitive model.
+
+Please comment and/or review, we have that problem flying around for years
+now and are not at a point where we finally need to find a solution for
+this.
+
+Regards,
+Christian.
+
+[1] https://lists.freedesktop.org/archives/dri-devel/2015-September/089778.html
+[2] https://lkml.org/lkml/2018/1/18/543
+[3] https://lkml.org/lkml/2021/2/4/799
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof

@@ -2,86 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FE753999B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E52C53999D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348444AbiEaWkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 18:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
+        id S1348497AbiEaWka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 18:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238162AbiEaWkO (ORCPT
+        with ESMTP id S1348490AbiEaWk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 18:40:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8773F9EB4A;
-        Tue, 31 May 2022 15:40:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23DAD61468;
-        Tue, 31 May 2022 22:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6F7EAC3411D;
-        Tue, 31 May 2022 22:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654036812;
-        bh=4cd7A12mmB7TOFG1oNOqmQmjZoSqWu2ThW8sKS2FhmY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ePU8nggokZOUGbrVKMRgoXk1AjyOxfFmbvGUNPTB+EKtObcTwS/DQ61tZNjOePdSt
-         7zivQqMyoBXVO/01C0juKlMB7YWZlZ3FR0BsWEs/HJT8IpMX8CaE17jWTgjB8rQd+I
-         0Ogv/AX1cBPppgI+pMZ5DDJMNzs/fXFa7LDko+7KNBhcfa+Gsw7Gih1wE+VLFb8X+F
-         WFsFmx3OkC+TPqvRGVtaeV2JpMHkJK/3E+f07nbNDRTUcdZVPgEuZg37vCn12qRC9M
-         s+2liPRW3TEQEkfzYODhQ4Uhur2KJXhNijZdfyD3wE6Ab2xvbwj5+0pT9WMYu3XI/P
-         xON7OBoyJfBhA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4D6A9F0394D;
-        Tue, 31 May 2022 22:40:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 31 May 2022 18:40:27 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4908E9EB48
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 15:40:26 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id v106so19376691ybi.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 15:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iSXfdXWQRyUCbk0G9o7KyBhlDTpNCnQev8nhR/I/TdY=;
+        b=HsksBcqdyPpSCCWP1DiXPiE1a14eVxR7MRHdI7Z5cpzZAy9lO7ruMphxUv9jF2C2sw
+         /pgCZCCeJVk9cxgvTdmK1FsevcWFWH/+i8JgrsxFWUScnpMihGH6PE+aKcXA03iPeJdj
+         dZ4Fy8JMSO77H9VgxNZVjTS2CE7+rjPwOQ1nkywPuJ4OjM7zlIgYglNeD5R5RdHU9TQd
+         ZGEbQvqw79MCww+sZgynuaRCvhUuCusnjWfYIg9yFNCv09hwSDywXkSSafnIp55ACSaP
+         7kfB7e7yTdJwIGcs5EiZYEHjSftx3J+hMbbAJxZGkLLhtDcVt5vIiRiCUs6uyPTV7LFu
+         JzIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iSXfdXWQRyUCbk0G9o7KyBhlDTpNCnQev8nhR/I/TdY=;
+        b=Wj3nO1tjVEzRLAfo9lfQj9KDFuofV7VSv4n6EnCN3Dpj4fojUELQardDod+13gT1dw
+         r5xUtFxpfZjoGO8NUn9HGgMTlrEsp4LCrX0WmCqp6dCGgK7/8MkGqDV2X2fxgRitiA67
+         M92ypgg+1VLHqWrd/qCsGQ0b2T5GaJeszVk8SQ1WtaLKSpKr5Kwzw0rEzeduZ4vkTdSa
+         eKN2h/JNaeJdpiEyL3ftsvh+7pBn/+NCX5yNCyZ6DZjiagCMI5+/sdt/UH46azzrD6O3
+         9z6VB7w28C5FDrMbjLJvG7tgNQlo1p1u07e995cEURSVx5MO3HRgzrB/MU/UYIKbMfpm
+         gyrg==
+X-Gm-Message-State: AOAM532sH1v5CxyhGqnknmqyH9OqJXlvEnbouae7aox8TqK+zCROSKwD
+        BMipaXQpkkMEq1pVTLc0Nv4e6GMbG/Jf/txHq94mRg==
+X-Google-Smtp-Source: ABdhPJzmrJqSRhhHz6N0GieGJg5FYLwCAVR0BwL5OtlM2bEaoCxd7rSGbpFZm9hJ3VmDFMNfIbaxRaCkI7t+1HHGplQ=
+X-Received: by 2002:a5b:411:0:b0:65c:d336:ddf7 with SMTP id
+ m17-20020a5b0411000000b0065cd336ddf7mr13814723ybp.321.1654036825375; Tue, 31
+ May 2022 15:40:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] Check for NULL ptr of btf in codegen_asserts
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165403681231.3395.15965102902497727563.git-patchwork-notify@kernel.org>
-Date:   Tue, 31 May 2022 22:40:12 +0000
-References: <20220523194917.igkgorco42537arb@jup>
-In-Reply-To: <20220523194917.igkgorco42537arb@jup>
-To:     Michael Mullin <masmullin@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-7-kirill.shutemov@linux.intel.com> <YnE4ZzzVrxUnr3Uv@zn.tnic>
+ <20220506153013.e6v4q2qhuhqumfiu@box.shutemov.name> <YnpGnMoviGoK4Ucq@zn.tnic>
+ <CAAH4kHYRxgUNnGRUO473q02q3akLzgiTvbA2qKEP5jq6jFV-uA@mail.gmail.com>
+ <Yn4ed1gupKmNz2jn@zn.tnic> <20220513144515.fx2cvo3rjued3vy5@black.fi.intel.com>
+ <PH0PR11MB5064B561086BE6350CC1DCDCC5CF9@PH0PR11MB5064.namprd11.prod.outlook.com>
+In-Reply-To: <PH0PR11MB5064B561086BE6350CC1DCDCC5CF9@PH0PR11MB5064.namprd11.prod.outlook.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Tue, 31 May 2022 15:40:14 -0700
+Message-ID: <CAAH4kHbU4FJ=veYQxncdpYD837M90vq2o2saVaUCJ6=pfuNRpA@mail.gmail.com>
+Subject: Re: [PATCHv5 06/12] x86/boot/compressed: Handle unaccepted memory
+To:     "Xu, Min M" <min.m.xu@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Gao, Jiaqi" <jiaqi.gao@intel.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rodel, Jorg" <jroedel@suse.de>, Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi y'all, I've made minimal changes to OVMF to prevalidate only up to
+4GB and leave the rest unaccepted, as Thomas Lendacky recommended
+https://github.com/AMDESE/ovmf/pull/4#issuecomment-1138606275 and ran
+a memtouch test to see if this change behaves as expected. One thing
+that struck me is that an 8GB machine reports 2044MB free with this
+change (free -k) whereas without it, I see 7089MB free. I think that
+unaccepted memory should be classified as free in meminfo, no? I'm not
+familiar enough with that code to say what specific change needs to be
+made.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Mon, 23 May 2022 15:49:17 -0400 you wrote:
-> bpf_object__btf() can return a NULL value.  If bpf_object__btf returns
-> null, do not progress through codegen_asserts(). This avoids a null ptr
-> dereference at the call btf__type_cnt() in the function find_type_for_map()
-> 
-> Signed-off-by: Michael Mullin <masmullin@gmail.com>
-> ---
->  tools/bpf/bpftool/gen.c | 3 +++
->  1 file changed, 3 insertions(+)
-
-Here is the summary with links:
-  - Check for NULL ptr of btf in codegen_asserts
-    https://git.kernel.org/bpf/bpf-next/c/d992a11f1171
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+(resent in text mode)
 
 
+On Sun, May 15, 2022 at 11:47 PM Xu, Min M <min.m.xu@intel.com> wrote:
+>
+> On May 13, 2022 10:45 PM, Kirill A. Shutemov wrote:
+> > On Fri, May 13, 2022 at 11:01:43AM +0200, Borislav Petkov wrote:
+> > > + mroth
+> > > - brijesh
+> > >
+> > > On Thu, May 12, 2022 at 10:34:02PM -0700, Dionna Amalie Glaze wrote:
+> > > > Kirill, I've been tracking these changes to see if we can handle th=
+e
+> > > > unaccepted memory type for SEV-SNP, but testing has been an issue.
+> > > > The proposed patch in Ovmf to introduce unaccepted memory seems to
+> > > > have stalled out last September
+> > > > (https://www.mail-archive.com/devel@edk2.groups.io/msg35842.html)
+> > > > and is particularly difficult to adapt to SEV-SNP since it doesn't
+> > > > follow the TDVF way of initializing all memory. Is there a differen=
+t
+> > > > development I might have missed so that we might test these cases?
+> > > > Without the UEFI introducing EFI_UNACCEPTED_MEMORY type, any
+> > kernel
+> > > > uses are essentially dead code.
+> >
+> > + Min, Jiaqi.
+> >
+> > I don't follow firmware development. Min, Jiaqi, could you comment?
+> >
+> We have prepared the patch for unaccepted memory and it is now working in=
+ our internal release.
+> But there is an obstacle to upstream it to edk2 master branch.
+> The patch-set depends on the definition of UEFI_RESOURCE_MEMORY_UNACCEPTE=
+D in PI spec. This is proposed in https://github.com/microsoft/mu_basecore/=
+pull/66/files#diff-b20a11152d1ce9249c691be5690b4baf52069efadf2e2546cdd2eb66=
+3d80c9e4R237, according to UEFI-Code-First. The proposal was approved in 20=
+21 in UEFI Mantis, and will be added to the new PI.next specification. (Til=
+l now it has not been added in the latest PI spec.)
+> So UEFI_RESOURCE_MEMORY_UNACCEPTED cannot be added in MdePkg which make i=
+t difficult to submit the patch to edk2 community for review. See this link=
+: https://edk2.groups.io/g/devel/message/87558
+>
+> Please be noted: UEFI_RESOURCE_MEMORY_UNACCEPTED (defined in PI spec) is =
+different from EFI_UNACCEPTED_MEMORY (defined in UEFI spec)
+>
+> I will submit the patch-set once the new definition is added in the new P=
+I.next spec.
+>
+> Thanks
+> Min
+
+
+
+--=20
+-Dionna Glaze, PhD (she/her)

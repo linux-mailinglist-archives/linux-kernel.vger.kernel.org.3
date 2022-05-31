@@ -2,50 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5519538DF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B32538DF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245249AbiEaJqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 05:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
+        id S245355AbiEaJrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 05:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233134AbiEaJqs (ORCPT
+        with ESMTP id S245298AbiEaJr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 05:46:48 -0400
-Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7741F1027;
-        Tue, 31 May 2022 02:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Jb8fs
-        wJyz/tr0acifTLtB81WMpjjXvlmzZ4UaNQJ10A=; b=aGKhtUP3+ez3q80NjBssk
-        ABEn4xhym4ua73jo9MTu/nFlNW9iwBo2qibqKFq+7pibtl4kqdPneH3pCwHhh39c
-        lOBYzW4f6aZ+9IU+aF/UW6nij5rocyj9WaJ+j8xPFBXSM3l99Cjp+dPbS096aCaL
-        t5SJyoSFbq/bO+VS7HMaFI=
-Received: from carlis (unknown [218.17.89.92])
-        by smtp13 (Coremail) with SMTP id EcCowACnBma845VigXrXFQ--.35010S2;
-        Tue, 31 May 2022 17:45:33 +0800 (CST)
-From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-To:     James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llyz108@163.com, Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-Subject: [PATCH] scsi: 53c700: convert sysfs snprintf to sysfs_emit
-Date:   Tue, 31 May 2022 09:45:30 +0000
-Message-Id: <20220531094530.101983-1-zhangxuezhi1@coolpad.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 31 May 2022 05:47:26 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1A748E5E;
+        Tue, 31 May 2022 02:47:25 -0700 (PDT)
+Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LC6qZ1gDDzjX4V;
+        Tue, 31 May 2022 17:46:34 +0800 (CST)
+Received: from huawei.com (10.67.174.157) by kwepemi500014.china.huawei.com
+ (7.221.188.232) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 31 May
+ 2022 17:47:23 +0800
+From:   Li Zhengyu <lizhengyu3@huawei.com>
+To:     <quic_tdas@quicinc.com>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] clk: qcom: clk-rpmh: Fix if statement to match comment
+Date:   Tue, 31 May 2022 17:45:39 +0800
+Message-ID: <20220531094539.252642-1-lizhengyu3@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EcCowACnBma845VigXrXFQ--.35010S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWruF1kAryDGF18Jw1kJF17Awb_yoW3Zrc_AF
-        40vw1Igr1ktwna9r1rAFsxZrZYvr40ga1q9rs5trWfZrWq9w4qvFWjvrn5try5WFW7AFy7
-        X3Z2qF1fAwnxGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUnk9N3UUUUU==
-X-Originating-IP: [218.17.89.92]
-Sender: llyz108@163.com
-X-CM-SenderInfo: xoo16iiqy6il2tof0z/1tbiFR0ShV5mK9bQZwAAst
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.157]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500014.china.huawei.com (7.221.188.232)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,28 +46,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warning:
-drivers/scsi/53c700.c:2074:8-16:
-WARNING: use scnprintf or sprintf
+(c->state) is u32, (enable) is bool. It returns false when
+(c->state) > 1 and (enable) is true. Convert (c->state) to bool.
 
-Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
 ---
- drivers/scsi/53c700.c | 2 +-
+ drivers/clk/qcom/clk-rpmh.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/53c700.c b/drivers/scsi/53c700.c
-index e1e4f9d10887..0406cb60916d 100644
---- a/drivers/scsi/53c700.c
-+++ b/drivers/scsi/53c700.c
-@@ -2071,7 +2071,7 @@ NCR_700_show_active_tags(struct device *dev, struct device_attribute *attr, char
- {
- 	struct scsi_device *SDp = to_scsi_device(dev);
+diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+index aed907982344..851e127432a9 100644
+--- a/drivers/clk/qcom/clk-rpmh.c
++++ b/drivers/clk/qcom/clk-rpmh.c
+@@ -196,7 +196,7 @@ static int clk_rpmh_aggregate_state_send_command(struct clk_rpmh *c,
+ 	int ret;
  
--	return snprintf(buf, 20, "%d\n", NCR_700_get_depth(SDp));
-+	return sysfs_emit(buf, "%d\n", NCR_700_get_depth(SDp));
- }
+ 	/* Nothing required to be done if already off or on */
+-	if (enable == c->state)
++	if (enable == !!c->state)
+ 		return 0;
  
- static struct device_attribute NCR_700_active_tags_attr = {
+ 	c->state = enable ? c->valid_state_mask : 0;
 -- 
-2.25.1
+2.17.1
 

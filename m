@@ -2,59 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAB1538EFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC3E538F05
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343492AbiEaKaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 06:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
+        id S1343519AbiEaKbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 06:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245757AbiEaKaR (ORCPT
+        with ESMTP id S1343521AbiEaKap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 06:30:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235B09A988;
-        Tue, 31 May 2022 03:30:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E7EBB810C0;
-        Tue, 31 May 2022 10:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 36F7EC34119;
-        Tue, 31 May 2022 10:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653993012;
-        bh=wg2sl+isk2wcIjHnymrtFl8X78UHFOBNSUf0axjQw+4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=anGJc+2cxPX+nosq2cib86B8rmiImOT6yNqZI9ynm+WEFBZFixNBfSbFcr9FSsCjC
-         ovlPkbCAJUEHsDgjvaaHIOrDpIEst72MkViW6yg3RKEue1Nm0AnA9YCyfi/JHhZWaH
-         xTNbIYI1OF/+DgRSx1WSQq7E4wKcSYLFzvYA8UV1ZhTE/Cq2Xcp0HIipJ+PuD2NS6T
-         fVpcciGbTJsRDhXsYpZAWfuFQnd34LWQbGLZxNjneA0sal3hYWAG2ehQn6InJQXgay
-         Tp11gCxYvHpZHjLUQ5qN2PJKxA+3/HRPlX44ZQd7m0/zmbRveFGNb1slnyORCCP5fk
-         TvCfTwYZf9JiQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 19DA7F0394D;
-        Tue, 31 May 2022 10:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 31 May 2022 06:30:45 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33089BAFA
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:30:31 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id o17so2091737pla.6
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:30:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=711b+vMSd9N7VItmuBp99caF8ivrK9rtXPChlUcTho4=;
+        b=vm230eWEdDbv5BiB4b54Jy/+ZGa1KmIMWM+yx/vWv5npwnAT8/kHBc2bKte22HQZOZ
+         SL+67MZwF7JfNdzCzGDEZ5Q9FM7k13iKe3s+dlPIALKauZO/acmVUXDdv+nbNUj1atlL
+         WCU80Jf5m6PxsCj3I6ALR0v+GPNou3Ju2KyElCiOvykJbA5X05gVpv/Y5jCFWBgBTvCY
+         wuAL5JxIry5IptvwNYnjLExrrcIIZfGVBsOYD+6tjvm4za8vyTEFrDj9/cZHm/YUgJVF
+         7d7xjo/WKFMmkCfcSkoEjJCYBrb3VH27l83f/kXihKjhrBldsIc9R8mmUTlYO/kp88tT
+         fImA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=711b+vMSd9N7VItmuBp99caF8ivrK9rtXPChlUcTho4=;
+        b=FMKaxz1quOyPzq+75BW1likUxYDh0r6++aUxDCUjYSdouJ0ajIXqdKZER68qJo/lfT
+         pnFwrPwhi6I7AMcACUiAJPw1LXCgDPdwX9B5yIUJDMBXjwaOLShEvYfMOJagDih8/7nV
+         SYN22mZs9kfyyX0nm/Nq5bblblRfaS1/OGcTlWQGEGTHSUObquOJ+huedYWNrN2EbrcL
+         jFhr8qq/xLU64MCdQSvNyxwMOsUNrrWv6LeZAlh6WjPpmdgcq/k5KsEt7PgC0szeiqc7
+         9goaA6GOLtq0JlXhQ4cA1d4PW2VY1lALPVWVFv7CobDCPTE/b4xm2tKLFXMOLq1/Y9uV
+         3SlQ==
+X-Gm-Message-State: AOAM533Z1Na+1VwRrpKqzqdB6NIM9Q37QGR32yuCIxbNDVekqHg7xckQ
+        C/8trVXzdA/lFNYhHQmHtTB1Vg==
+X-Google-Smtp-Source: ABdhPJytfEQGqw0/fi9ndEo5U6lc52PaAfW/t8oY9N5mCvL8FUAfI0qz9VezW/OEJpzmDIjzLd8p9w==
+X-Received: by 2002:a17:90a:d3c7:b0:1e0:d55e:35eb with SMTP id d7-20020a17090ad3c700b001e0d55e35ebmr27946118pjw.105.1653993031320;
+        Tue, 31 May 2022 03:30:31 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id i22-20020a63e916000000b003c14af50623sm9934652pgh.59.2022.05.31.03.30.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 03:30:30 -0700 (PDT)
+Date:   Tue, 31 May 2022 16:00:29 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
+Message-ID: <20220531103029.ntoypaafnd6447ag@vireshk-i7>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+ <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
+ <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
+ <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
+ <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
+ <20220511050643.hd5tcrojb3wkbg7t@vireshk-i7>
+ <20220518235708.1A04CC385A9@smtp.kernel.org>
+ <65a4c28d-6702-3a9f-f837-1ea69a428777@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3] net/ipv6: Expand and rename accept_unsolicited_na to
- accept_untracked_na
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165399301210.20049.4916718889396503878.git-patchwork-notify@kernel.org>
-Date:   Tue, 31 May 2022 10:30:12 +0000
-References: <20220530101414.65439-1-aajith@arista.com>
-In-Reply-To: <20220530101414.65439-1-aajith@arista.com>
-To:     Arun Ajith S <aajith@arista.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, dsahern@kernel.org,
-        bagasdotme@gmail.com, yoshfuji@linux-ipv6.org, kuba@kernel.org,
-        pabeni@redhat.com, prestwoj@gmail.com, corbet@lwn.net,
-        justin.iurman@uliege.be, edumazet@google.com, shuah@kernel.org,
-        gilligan@arista.com, noureddine@arista.com, gk@arista.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <65a4c28d-6702-3a9f-f837-1ea69a428777@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,31 +91,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 19-05-22, 10:03, Krzysztof Kozlowski wrote:
+> Yes, true. The clock frequencies are still changed with each gear, but
+> in general the UFS indeed operates on gear concept.
 
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+Hi Krzysztof,
 
-On Mon, 30 May 2022 10:14:14 +0000 you wrote:
-> RFC 9131 changes default behaviour of handling RX of NA messages when the
-> corresponding entry is absent in the neighbour cache. The current
-> implementation is limited to accept just unsolicited NAs. However, the
-> RFC is more generic where it also accepts solicited NAs. Both types
-> should result in adding a STALE entry for this case.
-> 
-> Expand accept_untracked_na behaviour to also accept solicited NAs to
-> be compliant with the RFC and rename the sysctl knob to
-> accept_untracked_na.
-> 
-> [...]
+I have redesigned the OPP core a bit (two patchsets until now) to make
+it easier to add multiple clock support going forward. I need some
+inputs from you before moving forward with it now. Will this work for
+your use case:
 
-Here is the summary with links:
-  - [net,v3] net/ipv6: Expand and rename accept_unsolicited_na to accept_untracked_na
-    https://git.kernel.org/netdev/net/c/3e0b8f529c10
+- Add support for multiple clocks, where none of them is primary.
 
-You are awesome, thank you!
+- Which means you won't be able to use dev_pm_opp_set_rate() but will
+  need something like dev_pm_opp_set_level(), will add it.
+
+- That is, your OPP table will need to implement levels (I think of
+  them as UFS gears) and then call dev_pm_opp_set_level() instead.
+
+- This new API will work just like dev_pm_opp_set_rate(), except that
+  it will find the target OPP based on level instead of freq and
+  support configuration of multiple clock frequencies.
+
+- Of course both these APIs will share most of the code.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+viresh

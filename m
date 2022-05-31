@@ -2,355 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD2E5396FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163135396FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 21:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347265AbiEaT1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 15:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
+        id S244105AbiEaT17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 15:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbiEaT1P (ORCPT
+        with ESMTP id S231594AbiEaT15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 15:27:15 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A72851324;
-        Tue, 31 May 2022 12:27:13 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24VHOgWb010757;
-        Tue, 31 May 2022 19:26:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=0i13K6S4RX30Jw1cMxVp7UgOOnAiK4TbUeW/yC0pBkA=;
- b=KdqLyJR9ZwgYsadrcAMw0khLnSkuiK5y1msC4M6tavbkT+bsOeck1bK5ROS7LDOAkRZG
- w0Xi0mvzd6dAoCNRg6lWJj0Wx+UBWQbfPrd83UVxj7S5lyYz8nEsh8ctepaH6R//7ZZG
- 6CoVf5GJAKcHUzJXGW9O8SLAAUqJRfxwe9ybQ3HTGUXxyHKe6qYctHpaxc49LZKxy3F4
- 1PjtUIR37fy3ktRYM4dZBfQVIBJAF5/zd6lKnTlAeYshJasXFGOskmESHWwerjvntUpI
- o0xum9XNWQ8owR/CdHC2wN4lSN024fj84owK3nuypVFnI0xtL1CUq1KritFg7bohrwr7 Rw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdq5gasfb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 19:26:24 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24VJQ0fb007764;
-        Tue, 31 May 2022 19:26:24 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdq5gases-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 19:26:24 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24VJKAO2007276;
-        Tue, 31 May 2022 19:26:22 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma01wdc.us.ibm.com with ESMTP id 3gbcbhx7ju-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 19:26:22 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24VJQLAv44958008
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 May 2022 19:26:21 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C665F2805E;
-        Tue, 31 May 2022 19:26:21 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6B60F28059;
-        Tue, 31 May 2022 19:26:21 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 31 May 2022 19:26:21 +0000 (GMT)
-Message-ID: <7e3f497e-fe51-bdc8-54c9-96b5e059935f@linux.ibm.com>
-Date:   Tue, 31 May 2022 15:26:21 -0400
+        Tue, 31 May 2022 15:27:57 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F077548E4A;
+        Tue, 31 May 2022 12:27:55 -0700 (PDT)
+Received: from mail-yb1-f174.google.com ([209.85.219.174]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MWzXd-1oKV5n0CHh-00XJVd; Tue, 31 May 2022 21:27:54 +0200
+Received: by mail-yb1-f174.google.com with SMTP id p13so14076781ybm.1;
+        Tue, 31 May 2022 12:27:53 -0700 (PDT)
+X-Gm-Message-State: AOAM532f4dg8HULohbX6nQcM4xAEDG8av11mec3SxxLIq1EMnmBgGVrh
+        SKJI7TDrIIrP+5s+889lTGQuaJ0ndxxsZQupSUA=
+X-Google-Smtp-Source: ABdhPJxyk421E9RkuQAkYxSldlpP0Sx5xvw/SZmoip5B1Zf2Fbf21hH68zXh6tR8O7vabTnD3t2ya1dr8dbyv7ZmpwY=
+X-Received: by 2002:a25:1209:0:b0:65d:63f9:e10a with SMTP id
+ 9-20020a251209000000b0065d63f9e10amr2750286ybs.480.1654025272658; Tue, 31 May
+ 2022 12:27:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v12 21/26] ima: Setup securityfs for IMA namespace
-Content-Language: en-US
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Christian Brauner <brauner@kernel.org>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-22-stefanb@linux.ibm.com>
- <20220530011610.GA7909@mail.hallyn.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220530011610.GA7909@mail.hallyn.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: NHXGye_mCzRaBmikV0hacZ0ZdkEbN1yC
-X-Proofpoint-ORIG-GUID: FlgReY-G9z2PI-PKjfNvet3Z688iMNMm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-05-31_07,2022-05-30_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 impostorscore=0 bulkscore=0 adultscore=0 spamscore=0
- suspectscore=0 clxscore=1015 malwarescore=0 priorityscore=1501 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2205310085
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220419211658.11403-1-apais@linux.microsoft.com>
+ <20220419211658.11403-2-apais@linux.microsoft.com> <CACRpkdZ2DFZRPHS1x0=M3_8zYvU-jpCG5Tm3863dXv51EhY+BA@mail.gmail.com>
+ <CAK8P3a0j_rziihsgHnG5bHMxmPbOkAhT6_+CCE4iFZy7HzQrLw@mail.gmail.com>
+ <YpCGePbo9B/Z7slV@matsya> <CAK8P3a2wD7=hgvqyS14X5p-eP+7Ajk4dFJOXgbOo8Z0r5UNYmg@mail.gmail.com>
+ <YpW8J40hKwc7jwQh@matsya> <0A9EDEDC-9E6C-47F8-89C0-48DCDD3F9DE3@linux.microsoft.com>
+ <CAK8P3a3vf_huJ5ysBvFDV=11E-=OxFGiDQ9ND04YKug8g6jV_A@mail.gmail.com> <708F627F-0F7D-477F-BDF7-274424501DA0@linux.microsoft.com>
+In-Reply-To: <708F627F-0F7D-477F-BDF7-274424501DA0@linux.microsoft.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 31 May 2022 21:27:35 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a314SxhTNy6psYr_MzarOPmkjv1_KKGdeVUPpBjVkC5nA@mail.gmail.com>
+Message-ID: <CAK8P3a314SxhTNy6psYr_MzarOPmkjv1_KKGdeVUPpBjVkC5nA@mail.gmail.com>
+Subject: Re: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
+To:     Allen Pais <apais@linux.microsoft.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        olivier.dautricourt@orolia.com, Stefan Roese <sr@denx.de>,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Eugeniy.Paltsev@synopsys.com,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Leo Li <leoyang.li@nxp.com>, zw@zh-kernel.org,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        green.wan@sifive.com, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Lyra Zhang <zhang.lyra@gmail.com>,
+        Patrice CHOTARD <patrice.chotard@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        dmaengine@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:B22oMGCygCRXUXUiRid2wa6+BPuoeRZrXYWJD0/ExzKDN6lwySO
+ xH8HbHRxnH1IlxNnE6ciDtBoQgfNtFTTGS72Pk666yGlIvC/wTZZXUc88QAqizrZ+9YsB+N
+ 1D+8hYbJxL7Umn93m51z6RurGdsgjA55XZcdFezzKurxbCBhT3/YRvHY2ku35E8C4tyhspf
+ FiDbX0/aJOhDOtD8eom5g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:aDK9dosKDUI=:qDjs0bR0Xz30Gn2NaW7Yrc
+ CW9vStNFFTN452LbNgA88uS2TixpgufC4Lvc421s0a/s1PM85Ba0a/eRunYQHQ56cuudv2qDK
+ MxkS1qqGUEyee/oBkXRYTSgM/A7CNVJgrUELiAR9hm8OW8fthTq8LqlqVR4i+yEhL1wR2M/G0
+ TaiYXU6PpLKkRBFFegR1fvNVI9mtrhkFs2+F8Sckeh/sT/25BR/uGMEVpIYCzTwidf++pHO8U
+ XnjKdgZMkLg7Fdmf5BgT2+WC7gdBuC4IIypurcdqx+rjJdeQ4Ho02hO+dVlKQmFbjfG7OSbIb
+ PDms623pJzX70HggVXajBASwiNMGktAbJjt2kvFalOLm1k7rCno77UnKY68zg/HL9q76GYD+j
+ Up5tYU6pUx1z/cuYMnTEO8Uigp2K6zS7HxgeuMojl7yKs3REqWws5nxY+tAj5IjYyfv0160xs
+ u/DbAdxY8MpXeKNKE6g6JPpk8qFPGk7uDkETHGA7NK0FdrOLalYp0gdczaW8zCTMQGb1W4Nji
+ RsqDvZmEaCPO2TusMI9bMNvkW77+O6qn3zY9oQvWAeygooAiQu4s0i3H6gt6GzNNiSu+K3bcF
+ nQ1xnGB3Jd43MTOKKxV5S92Yqp3vTccBCh8i2esC7Jo8ni4FbALwdXn3gCdYjNHmDBLDMJsYR
+ MLS301I8EFrAletx0HLKpf8ARqMIc31nT4kYaaheFZrPMhQKAVh8/Gh0bVUi4I4fEC7FvnQnB
+ ZNsJ9Plr8/S9uB6k4sfR6jiFOmt7njjUQJUwqKd7c8BK9S85XZ+OdxG+14yQguAo9G3kFFqhz
+ oD91QO6zS4Ln7SUpp9XTEiFxjDtrSZNUMwWJjnM/XJRT7V4t0ZG4GDKywjqJocQRtPb1NGp/O
+ 08/AR1B0XHi7XYPnGrsQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 31, 2022 at 8:19 PM Allen Pais <apais@linux.microsoft.com> wrote:
+> >>> That is a good idea, lot of drivers are waiting for completion which can
+> >>> be signalled from hardirq, this would also reduce the hops we have and
+> >>> help improve latency a bit. On the downside, some controllers provide
+> >>> error information, which would need to be dealt with.
+> >>
+> >>
+> >>   I am not an expert in dma subsystem, but by using completion from
+> >> Hardirq context be a concern? Especially with latency.
+> >
+> > I don't see how: to the task waiting for the completion, there should
+> > be no difference, and for the irq handler sending it, it just avoids
+> > a few cycles going into softirq context.
+>
+>   Thanks for clarification.
+>
+>   If I have understood it correctly, your suggestion is to move the current
+> Callback mechanism out to dmaengine as a generic helper function
+> And introduce completion in dma_async_tx_descriptor to handle what
+> Tasklets currently do.
 
+Right: around half the callbacks are a trivial version that does nothing
+other than calling complete(), so these will benefit from skipping the
+softirq, while the others still need the callback.
 
-On 5/29/22 21:16, Serge E. Hallyn wrote:
-> On Wed, Apr 20, 2022 at 10:06:28AM -0400, Stefan Berger wrote:
->> Setup securityfs with symlinks, directories, and files for IMA
->> namespacing support. The same directory structure that IMA uses on the
->> host is also created for the namespacing case.
->>
->> The securityfs file and directory ownerships cannot be set when the
->> IMA namespace is initialized. Therefore, delay the setup of the file
->> system to a later point when securityfs is in securityfs_fill_super.
->>
->> Introduce a variable ima_policy_removed in ima_namespace that is used to
->> remember whether the policy file has previously been removed and thus
->> should not be created again in case of unmounting and again mounting
->> securityfs inside an IMA namespace.
->>
->> This filesystem can now be mounted as follows:
->>
->> mount -t securityfs /sys/kernel/security/ /sys/kernel/security/
->>
->> The following directories, symlinks, and files are available
->> when IMA namespacing is enabled, otherwise it will be empty:
->>
->> $ ls -l sys/kernel/security/
->> total 0
->> lr--r--r--. 1 root root 0 Dec  2 00:18 ima -> integrity/ima
->> drwxr-xr-x. 3 root root 0 Dec  2 00:18 integrity
->>
->> $ ls -l sys/kernel/security/ima/
->> total 0
->> -r--r-----. 1 root root 0 Dec  2 00:18 ascii_runtime_measurements
->> -r--r-----. 1 root root 0 Dec  2 00:18 binary_runtime_measurements
->> -rw-------. 1 root root 0 Dec  2 00:18 policy
->> -r--r-----. 1 root root 0 Dec  2 00:18 runtime_measurements_count
->> -r--r-----. 1 root root 0 Dec  2 00:18 violations
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
->> Acked-by: Christian Brauner <brauner@kernel.org>
->> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> 
-> Acked-by: Serge Hallyn <serge@hallyn.com>
-> 
-> but a nit below
-
-Thanks for all the tags, I took all of them.
-Would I need to worry about the other reviewerss' tags regardig the nit 
-below? I'd rather leave it as-is otherwise.
-
-    Stefan
-
-
-> 
->>
->> ---
->>
->> v9:
->>   - rename policy_dentry_removed to ima_policy_removed
->> ---
->>   include/linux/ima.h             | 13 ++++++++++
->>   security/inode.c                |  6 ++++-
->>   security/integrity/ima/ima.h    |  1 +
->>   security/integrity/ima/ima_fs.c | 46 +++++++++++++++++++++++----------
->>   4 files changed, 52 insertions(+), 14 deletions(-)
->>
->> diff --git a/include/linux/ima.h b/include/linux/ima.h
->> index b9301e2aaa8b..0cbf0434bc93 100644
->> --- a/include/linux/ima.h
->> +++ b/include/linux/ima.h
->> @@ -41,6 +41,7 @@ extern int ima_measure_critical_data(const char *event_label,
->>   				     const char *event_name,
->>   				     const void *buf, size_t buf_len,
->>   				     bool hash, u8 *digest, size_t digest_len);
->> +extern int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root);
->>   
->>   #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
->>   extern void ima_appraise_parse_cmdline(void);
->> @@ -227,6 +228,12 @@ void free_ima_ns(struct user_namespace *ns);
->>   
->>   void ima_free_ns_status_list(struct list_head *head, rwlock_t *ns_list_lock);
->>   
->> +static inline int ima_securityfs_init(struct user_namespace *user_ns,
->> +				      struct dentry *root)
->> +{
->> +	return ima_fs_ns_init(user_ns, root);
->> +}
->> +
->>   #else
->>   
->>   static inline void free_ima_ns(struct user_namespace *user_ns)
->> @@ -238,6 +245,12 @@ static inline void ima_free_ns_status_list(struct list_head *head,
->>   {
->>   }
->>   
->> +static inline int ima_securityfs_init(struct user_namespace *ns,
->> +				      struct dentry *root)
->> +{
->> +	return 0;
->> +}
->> +
->>   #endif /* CONFIG_IMA_NS */
->>   
->>   #endif /* _LINUX_IMA_H */
->> diff --git a/security/inode.c b/security/inode.c
->> index 84c9396792a9..e81f55f054dc 100644
->> --- a/security/inode.c
->> +++ b/security/inode.c
->> @@ -16,6 +16,7 @@
->>   #include <linux/fs_context.h>
->>   #include <linux/mount.h>
->>   #include <linux/pagemap.h>
->> +#include <linux/ima.h>
->>   #include <linux/init.h>
->>   #include <linux/namei.h>
->>   #include <linux/security.h>
->> @@ -82,7 +83,10 @@ static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
->>   	sb->s_op = &securityfs_super_operations;
->>   	sb->s_root->d_inode->i_op = &securityfs_dir_inode_operations;
->>   
->> -	return 0;
->> +	if (ns != &init_user_ns)
->> +		error = ima_securityfs_init(ns, sb->s_root);
->> +
->> +	return error;
->>   }
->>   
->>   static int securityfs_get_tree(struct fs_context *fc)
->> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
->> index cb48fc1d5b80..801dc3c8bfde 100644
->> --- a/security/integrity/ima/ima.h
->> +++ b/security/integrity/ima/ima.h
->> @@ -152,6 +152,7 @@ struct ima_namespace {
->>   	int valid_policy;
->>   
->>   	struct dentry *ima_policy;
->> +	bool ima_policy_removed;
->>   
->>   	struct notifier_block ima_lsm_policy_notifier;
->>   } __randomize_layout;
->> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
->> index c41aa61b7393..84cd02a9e19b 100644
->> --- a/security/integrity/ima/ima_fs.c
->> +++ b/security/integrity/ima/ima_fs.c
->> @@ -21,6 +21,7 @@
->>   #include <linux/rcupdate.h>
->>   #include <linux/parser.h>
->>   #include <linux/vmalloc.h>
->> +#include <linux/ima.h>
->>   
->>   #include "ima.h"
->>   
->> @@ -433,6 +434,7 @@ static int ima_release_policy(struct inode *inode, struct file *file)
->>   #if !defined(CONFIG_IMA_WRITE_POLICY) && !defined(CONFIG_IMA_READ_POLICY)
->>   	securityfs_remove(ns->ima_policy);
->>   	ns->ima_policy = NULL;
->> +	ns->ima_policy_removed = true;
->>   #elif defined(CONFIG_IMA_WRITE_POLICY)
->>   	clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
->>   #elif defined(CONFIG_IMA_READ_POLICY)
->> @@ -449,9 +451,11 @@ static const struct file_operations ima_measure_policy_ops = {
->>   	.llseek = generic_file_llseek,
->>   };
->>   
->> -static int __init ima_fs_ns_init(struct ima_namespace *ns)
->> +int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
->>   {
->> -	struct dentry *ima_dir;
->> +	struct ima_namespace *ns = ima_ns_from_user_ns(user_ns);
->> +	struct dentry *int_dir;
->> +	struct dentry *ima_dir = NULL;
->>   	struct dentry *ima_symlink = NULL;
->>   	struct dentry *binary_runtime_measurements = NULL;
->>   	struct dentry *ascii_runtime_measurements = NULL;
->> @@ -459,11 +463,22 @@ static int __init ima_fs_ns_init(struct ima_namespace *ns)
->>   	struct dentry *violations = NULL;
->>   	int ret;
->>   
->> -	ima_dir = securityfs_create_dir("ima", integrity_dir);
->> -	if (IS_ERR(ima_dir))
->> -		return PTR_ERR(ima_dir);
->> +	/* FIXME: update when evm and integrity are namespaced */
->> +	if (user_ns != &init_user_ns) {
->> +		int_dir = securityfs_create_dir("integrity", root);
->> +		if (IS_ERR(int_dir))
->> +			return PTR_ERR(int_dir);
->> +	} else {
->> +		int_dir = integrity_dir;
->> +	}
->>   
->> -	ima_symlink = securityfs_create_symlink("ima", NULL, "integrity/ima",
->> +	ima_dir = securityfs_create_dir("ima", int_dir);
->> +	if (IS_ERR(ima_dir)) {
->> +		ret = PTR_ERR(ima_dir);
->> +		goto out;
->> +	}
->> +
->> +	ima_symlink = securityfs_create_symlink("ima", root, "integrity/ima",
->>   						NULL);
->>   	if (IS_ERR(ima_symlink)) {
->>   		ret = PTR_ERR(ima_symlink);
->> @@ -505,12 +520,15 @@ static int __init ima_fs_ns_init(struct ima_namespace *ns)
->>   		goto out;
->>   	}
->>   
->> -	ns->ima_policy = securityfs_create_file("policy", POLICY_FILE_FLAGS,
->> -						ima_dir, NULL,
->> -						&ima_measure_policy_ops);
->> -	if (IS_ERR(ns->ima_policy)) {
->> -		ret = PTR_ERR(ns->ima_policy);
->> -		goto out;
->> +	if (!ns->ima_policy_removed) {
-> 
-> It would be nicer to avoid this indent level by just doing
-> 
-> 	if (ns->ima_policy_removed)
-> 		return 0;
-> 
-> above the securityfs_create_file().
-> 
->> +		ns->ima_policy =
->> +		    securityfs_create_file("policy", POLICY_FILE_FLAGS,
->> +					   ima_dir, NULL,
->> +					   &ima_measure_policy_ops);
->> +		if (IS_ERR(ns->ima_policy)) {
->> +			ret = PTR_ERR(ns->ima_policy);
->> +			goto out;
->> +		}
->>   	}
->>   
->>   	return 0;
->> @@ -522,11 +540,13 @@ static int __init ima_fs_ns_init(struct ima_namespace *ns)
->>   	securityfs_remove(binary_runtime_measurements);
->>   	securityfs_remove(ima_symlink);
->>   	securityfs_remove(ima_dir);
->> +	if (user_ns != &init_user_ns)
->> +		securityfs_remove(int_dir);
->>   
->>   	return ret;
->>   }
->>   
->>   int __init ima_fs_init(void)
->>   {
->> -	return ima_fs_ns_init(&init_ima_ns);
->> +	return ima_fs_ns_init(&init_user_ns, NULL);
->>   }
->> -- 
->> 2.34.1
->>
+       Arnd

@@ -2,382 +2,482 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E4353903F
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E71539053
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344077AbiEaMCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 08:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        id S1344090AbiEaMI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 08:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbiEaMCu (ORCPT
+        with ESMTP id S1344073AbiEaMIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 08:02:50 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACBE5BE6C;
-        Tue, 31 May 2022 05:02:48 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24VADr19008901;
-        Tue, 31 May 2022 12:02:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=HAMbekByJXG5Ra0WnTNf1/wCwfvbw7mnCQYVB8/zg7I=;
- b=ch5uC3X18zYSIQJhIlGnzraA87txyYPEp/1fqLub7wsd0AbQ6/RIyFonXP1CUk/kMdrc
- jQaEJci7lVKFWTsPSMniRztpWON7B6ESfybB//S5Q8TwhrHowdX1s7LOPBbDrdR8Q5/f
- BtR9UJOX2lBCoZQna1+dB6EI2WUw82gKC1gjIY+/OXJNJYAY1ZG8ZkGFIFvC4bdOjD/O
- 46YJ5PJiP4EABgO5OP5N0Xqs+B2cAwvKrfQdNP5y2kMnE/Hxkv2BuS2w60pa3tOqlyTZ
- fgq+E8hiCum8F9mNNgvcC6ETSY0ovaGeTVTmG+61hhctQmego/19NwZ6S8eRLd7qzQHI kQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdh311wcc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 12:02:45 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24VBu7HH022666;
-        Tue, 31 May 2022 12:02:45 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdh311wc4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 12:02:45 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24VBno77002044;
-        Tue, 31 May 2022 12:02:44 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma02wdc.us.ibm.com with ESMTP id 3gbc92kude-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 12:02:44 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24VC2gDh12517744
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 May 2022 12:02:43 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DFA14AC05B;
-        Tue, 31 May 2022 12:02:42 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 37540AC060;
-        Tue, 31 May 2022 12:02:42 +0000 (GMT)
-Received: from [9.160.37.241] (unknown [9.160.37.241])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 31 May 2022 12:02:42 +0000 (GMT)
-Message-ID: <7e561de8-be73-4b62-ea7c-36e659d87788@linux.ibm.com>
-Date:   Tue, 31 May 2022 08:02:41 -0400
+        Tue, 31 May 2022 08:08:23 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2063.outbound.protection.outlook.com [40.107.92.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6D762A09
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:08:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WZMoc5xElSboU7q7JiRbO2LsFeqFD30XlZYPZV3ljNPSYDsQAdaVF3Hd1SYzMyL3RgA+bT+3KszzPKaNBzPojA6iwyUnVIo2KsOrA+C09Q7ifE7aqFLqv7E1ZJCUAGovjjVojKG4fOed/SVUowyjwOkuqXLV8LC9Sg7jHGla8aUpk5614hfwhfLqrDXp9cSupt/5Ua4ZPliQuxfp6u6tsPKYxSNfDijuNBenOdIlo/+AdO64KKf+M4xTUBwCrRY/FWGUDzo6LEeZA7umrCVEeI3BgIY+DXvL2z/E9GkkgHraFEeP7W/zd71GSM5F4cFV0BXv6mKhVXkeuhtg8A+Ftg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k+yiWdStfW+a7Hy0C9NIvL6dPHRp495Uo7hs7r/ynHk=;
+ b=hl9kqRYdaHml9+g8QmolMvnbYjPZfypDLpQCsFhyAfDDJfEu06n3fnYZ+2aUuO6PNT34EHeHa+kBxJ6/7JnkZkm5BJ6eVRPFNF7NvHUkKVnavg+F2pLdiQwFsQs0UWERXjC7TNer5pWXsL7dKXRx8jZs37Iy2RT/R3segs6j4KJ11/9QSNxD4iIKBblW8jNmXr/E106MAK1gMwy9ux6HCAAxiNV30RXvB7Cc7iVdDxR3KkRCRY5NdkLnUGSm8qXPNN5rIFHHBBx2pkBN6sDRDZLru6HB99eEPVb9u0ZBoXZZsEp0qMeKlWE8fUXse6h7Wh33S3VjF5IAKQh2UpqLGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k+yiWdStfW+a7Hy0C9NIvL6dPHRp495Uo7hs7r/ynHk=;
+ b=T9gpAlu0qnKGVZKULjr0V45nvrGDlUMiHzAPwrd2YS9ngI4EerYtV6UUY7a0DF+v8zVfi9G8sKRD6ehFppQKtw10paoPdVMqPBpOptI3qTM671EcVeEt2zuuHrX9jP7rtfs9MJAI/kHj7YhDKTNJKTamlVIAsxgr52VLFtM5PFA=
+Received: from BN9PR03CA0722.namprd03.prod.outlook.com (2603:10b6:408:110::7)
+ by CY4PR12MB1672.namprd12.prod.outlook.com (2603:10b6:910:11::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.17; Tue, 31 May
+ 2022 12:08:17 +0000
+Received: from BN8NAM11FT033.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:110:cafe::54) by BN9PR03CA0722.outlook.office365.com
+ (2603:10b6:408:110::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13 via Frontend
+ Transport; Tue, 31 May 2022 12:08:17 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT033.mail.protection.outlook.com (10.13.177.149) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5293.13 via Frontend Transport; Tue, 31 May 2022 12:08:17 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 31 May
+ 2022 07:08:10 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 31 May
+ 2022 07:08:10 -0500
+Received: from sof-System-Product-Name.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28
+ via Frontend Transport; Tue, 31 May 2022 07:07:59 -0500
+From:   V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <Vijendar.Mukunda@amd.com>, <Basavaraj.Hiregoudar@amd.com>,
+        <Sunil-kumar.Dommati@amd.com>, <ajitkumar.pandey@amd.com>,
+        "V sujith kumar Reddy" <Vsujithkumar.Reddy@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Ajit Kumar Pandey" <AjitKumar.Pandey@amd.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        "Jia-Ju Bai" <baijiaju1990@gmail.com>,
+        Bard Liao <bard.liao@intel.com>,
+        "Ranjani Sridharan" <ranjani.sridharan@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 1/2] ASoC: amd: acp: Add support for nau8825 and max98360 card
+Date:   Tue, 31 May 2022 17:38:11 +0530
+Message-ID: <20220531120813.47116-2-Vsujithkumar.Reddy@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220531120813.47116-1-Vsujithkumar.Reddy@amd.com>
+References: <20220531120813.47116-1-Vsujithkumar.Reddy@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v19 11/20] s390/vfio-ap: prepare for dynamic update of
- guest's APCB on queue probe/remove
-Content-Language: en-US
-To:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20220404221039.1272245-1-akrowiak@linux.ibm.com>
- <20220404221039.1272245-12-akrowiak@linux.ibm.com>
- <4d05a8f4-d2e9-bc54-3e9b-6becc3281f0f@linux.ibm.com>
-From:   Tony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <4d05a8f4-d2e9-bc54-3e9b-6becc3281f0f@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qY9zYATb8vh31k9OrCgD9mM1I9RIuhIX
-X-Proofpoint-GUID: ThUaaHt6ccLpvV0JtGLDKGRRWsKZF58c
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-05-31_04,2022-05-30_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- malwarescore=0 mlxlogscore=999 phishscore=0 bulkscore=0 spamscore=0
- impostorscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205310063
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cad5907e-5242-4cf9-a817-08da42fe3f12
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1672:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB16726471A4E9ECAD3CBB5D7892DC9@CY4PR12MB1672.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FXlfF6SJsMyP6Z840pPborDHwlZyGANsab+CgA1HLj6O2zQsKVcNjhZJl/EJbpwrNOINNkkuyM3cntqzNM4nC3wdzp6Zc+p642PegVyYwKhwoBaJUfqyVGJ3ow1nAQNhaQMkoGYq9GBMynlnzB7ASUV8/WmYXC7M+uemoAwqhp+irsZgS2YZ+h069C6wl+czhnnob6c6H3a4i31qXOJjuCjq80n+tgmVO6heeaO6CVsrPM0w+YcaiTGvwHBKApk9+f8SXS5UsHOCuhtMvWYe6j7Zisx0B+tGPdg9WQUam99qrU1qmvg8utZ2XB47bnJS7xo3fvVcoUiV/R24x5UsGI9zpwJ6Z9JtvvlGvaO3tevuvYlb9r9qfFM2DNs2noGHxMal0ot09+lhaz1s15+O7XYtQDAu8UOTuNB4gWopuzsL+I2Zfm4Lg+nOR161uoi/Qv0XjLmcnLNWe4FgTJnyUnuSZmOvAqwbBf26Q4mr31qbhLSdiw5eqJceWQL7Bp+8ADyGQbUb0YSLq3lYMx1JKFYTTQ7kVJK+sst66yKVX9mfestJsjlu9oRGtlKAdbMSeq7H3DSInfKhWsBDilopmxvUdnWtD4dS7LdGsTcydeeynciRkLG5pcLjwFKqnTInyUPN2aig2bJOaQUB7OrFve4EV7OBzIRplYvLNFa0TzLcjT7GIpWY4w0+mdQY7cP2sFYr1O+ehARMOdGxO7wpRA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(1076003)(2616005)(54906003)(2906002)(36756003)(316002)(82310400005)(26005)(40460700003)(110136005)(36860700001)(81166007)(70586007)(70206006)(186003)(5660300002)(7696005)(4326008)(8676002)(356005)(86362001)(6666004)(47076005)(83380400001)(426003)(336012)(8936002)(508600001)(7416002)(30864003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2022 12:08:17.3035
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cad5907e-5242-4cf9-a817-08da42fe3f12
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT033.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1672
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+We have new platform with nau8825 as a primary codec and max98360 as an
+amp codec. Add machine struct to register sof audio based sound card
+on such Chrome machine.
 
+Signed-off-by: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+---
+ sound/soc/amd/acp-config.c          |  21 ++++
+ sound/soc/amd/acp/Kconfig           |   1 +
+ sound/soc/amd/acp/acp-mach-common.c | 166 +++++++++++++++++++++++++++-
+ sound/soc/amd/acp/acp-mach.h        |   3 +
+ sound/soc/amd/acp/acp-sof-mach.c    |  15 +++
+ sound/soc/amd/mach-config.h         |   1 +
+ 6 files changed, 201 insertions(+), 6 deletions(-)
 
-On 5/27/22 9:50 AM, Jason J. Herne wrote:
-> On 4/4/22 18:10, Tony Krowiak wrote:
->> The callback functions for probing and removing a queue device must take
->> and release the locks required to perform a dynamic update of a guest's
->> APCB in the proper order.
->>
->> The proper order for taking the locks is:
->>
->>          matrix_dev->guests_lock => kvm->lock => matrix_dev->mdevs_lock
->>
->> The proper order for releasing the locks is:
->>
->>          matrix_dev->mdevs_lock => kvm->lock => matrix_dev->guests_lock
->>
->> A new helper function is introduced to be used by the probe callback to
->> acquire the required locks. Since the probe callback only has
->> access to a queue device when it is called, the helper function will 
->> find
->> the ap_matrix_mdev object to which the queue device's APQN is 
->> assigned and
->> return it so the KVM guest to which the mdev is attached can be 
->> dynamically
->> updated.
->>
->> Note that in order to find the ap_matrix_mdev (matrix_mdev) object, 
->> it is
->> necessary to search the matrix_dev->mdev_list. This presents a
->> locking order dilemma because the matrix_dev->mdevs_lock can't be 
->> taken to
->> protect against changes to the list while searching for the 
->> matrix_mdev to
->> which a queue device's APQN is assigned. This is due to the fact that 
->> the
->> proper locking order requires that the matrix_dev->mdevs_lock be taken
->> after both the matrix_mdev->kvm->lock and the matrix_dev->mdevs_lock.
->> Consequently, the matrix_dev->guests_lock will be used to protect 
->> against
->> removal of a matrix_mdev object from the list while a queue device is
->> being probed. This necessitates changes to the mdev probe/remove
->> callback functions to take the matrix_dev->guests_lock prior to removing
->> a matrix_mdev object from the list.
->>
->> A new macro is also introduced to acquire the locks required to 
->> dynamically
->> update the guest's APCB in the proper order when a queue device is
->> removed.
->>
->> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
->> ---
->>   drivers/s390/crypto/vfio_ap_ops.c | 126 +++++++++++++++++++++---------
->>   1 file changed, 88 insertions(+), 38 deletions(-)
->>
->> diff --git a/drivers/s390/crypto/vfio_ap_ops.c 
->> b/drivers/s390/crypto/vfio_ap_ops.c
->> index 2219b1069ceb..080a733f7cd2 100644
->> --- a/drivers/s390/crypto/vfio_ap_ops.c
->> +++ b/drivers/s390/crypto/vfio_ap_ops.c
->> @@ -116,6 +116,74 @@ static const struct vfio_device_ops 
->> vfio_ap_matrix_dev_ops;
->>       mutex_unlock(&matrix_dev->guests_lock);        \
->>   })
->>   +/**
->> + * vfio_ap_mdev_get_update_locks_for_apqn: retrieve the matrix mdev 
->> to which an
->> + *                       APQN is assigned and acquire the
->> + *                       locks required to update the APCB of
->> + *                       the KVM guest to which the mdev is
->> + *                       attached.
->> + *
->> + * @apqn: the APQN of a queue device.
->> + *
->> + * The proper locking order is:
->> + * 1. matrix_dev->guests_lock: required to use the KVM pointer to 
->> update a KVM
->> + *                   guest's APCB.
->> + * 2. matrix_mdev->kvm->lock:  required to update a guest's APCB
->> + * 3. matrix_dev->mdevs_lock:  required to access data stored in a 
->> matrix_mdev
->> + *
->> + * Note: If @apqn is not assigned to a matrix_mdev, the 
->> matrix_mdev->kvm->lock
->> + *     will not be taken.
->> + *
->> + * Return: the ap_matrix_mdev object to which @apqn is assigned or 
->> NULL if @apqn
->> + *       is not assigned to an ap_matrix_mdev.
->> + */
->> +static struct ap_matrix_mdev 
->> *vfio_ap_mdev_get_update_locks_for_apqn(int apqn)
->> +{
->> +    struct ap_matrix_mdev *matrix_mdev;
->> +
->> +    mutex_lock(&matrix_dev->guests_lock);
->> +
->> +    list_for_each_entry(matrix_mdev, &matrix_dev->mdev_list, node) {
->> +        if (test_bit_inv(AP_QID_CARD(apqn), matrix_mdev->matrix.apm) &&
->> +            test_bit_inv(AP_QID_QUEUE(apqn), 
->> matrix_mdev->matrix.aqm)) {
->> +            if (matrix_mdev->kvm)
->> +                mutex_lock(&matrix_mdev->kvm->lock);
->> +
->> +            mutex_lock(&matrix_dev->mdevs_lock);
->> +
->> +            return matrix_mdev;
->> +        }
->> +    }
->> +
->> +    mutex_lock(&matrix_dev->mdevs_lock);
->> +
->> +    return NULL;
->> +}
->> +
->> +/**
->> + * get_update_locks_for_queue: get the locks required to update the 
->> APCB of the
->> + *                   KVM guest to which the matrix mdev linked to a
->> + *                   vfio_ap_queue object is attached.
->> + *
->> + * @queue: a pointer to a vfio_ap_queue object.
->> + *
->> + * The proper locking order is:
->> + * 1. matrix_dev->guests_lock: required to use the KVM pointer to 
->> update a KVM
->> + *                guest's APCB.
->> + * 2. queue->matrix_mdev->kvm->lock: required to update a guest's APCB
->> + * 3. matrix_dev->mdevs_lock:    required to access data stored in a 
->> matrix_mdev
->> + *
->> + * Note: if @queue is not linked to an ap_matrix_mdev object, the 
->> KVM lock
->> + *      will not be taken.
->> + */
->> +#define get_update_locks_for_queue(queue) ({            \
->> +    struct ap_matrix_mdev *matrix_mdev = q->matrix_mdev; \
->> +    mutex_lock(&matrix_dev->guests_lock);            \
->> +    if (matrix_mdev && matrix_mdev->kvm) \
->> +        mutex_lock(&matrix_mdev->kvm->lock);        \
->> +    mutex_lock(&matrix_dev->mdevs_lock);            \
->> +})
->> +
->
->
-> One more comment I forgot to include before:
-> This macro is far too similar to existing macro, 
-> get_update_locks_for_mdev. And it is only called in one place. Let's 
-> remove this and replace the single invocation with:
->
-> get_update_locks_for_mdev(q->matrix_mdev);
-
-Yikes, I see another flaw in this macro! Either the input parameter 
-needs to be renamed to 'q' or the q->matrix_mdev needs to be changed to 
-queue->matrix_mdev. I think I'll go with the former since vfio_ap_queue 
-is referred to as 'q' everywhere else.
-
->
->
->>   /**
->>    * vfio_ap_mdev_get_queue - retrieve a queue with a specific APQN 
->> from a
->>    *                hash table of queues assigned to a matrix mdev
->> @@ -615,21 +683,18 @@ static int vfio_ap_mdev_probe(struct 
->> mdev_device *mdev)
->>       matrix_mdev->pqap_hook = handle_pqap;
->>       vfio_ap_matrix_init(&matrix_dev->info, &matrix_mdev->shadow_apcb);
->>       hash_init(matrix_mdev->qtable.queues);
->> -    mdev_set_drvdata(mdev, matrix_mdev);
->> -    mutex_lock(&matrix_dev->mdevs_lock);
->> -    list_add(&matrix_mdev->node, &matrix_dev->mdev_list);
->> -    mutex_unlock(&matrix_dev->mdevs_lock);
->>         ret = vfio_register_emulated_iommu_dev(&matrix_mdev->vdev);
->>       if (ret)
->>           goto err_list;
->> +    mdev_set_drvdata(mdev, matrix_mdev);
->> +    mutex_lock(&matrix_dev->mdevs_lock);
->> +    list_add(&matrix_mdev->node, &matrix_dev->mdev_list);
->> +    mutex_unlock(&matrix_dev->mdevs_lock);
->>       dev_set_drvdata(&mdev->dev, matrix_mdev);
->>       return 0;
->>     err_list:
->> -    mutex_lock(&matrix_dev->mdevs_lock);
->> -    list_del(&matrix_mdev->node);
->> -    mutex_unlock(&matrix_dev->mdevs_lock);
->>       vfio_uninit_group_dev(&matrix_mdev->vdev);
->>       kfree(matrix_mdev);
->>   err_dec_available:
->> @@ -692,11 +757,13 @@ static void vfio_ap_mdev_remove(struct 
->> mdev_device *mdev)
->>         vfio_unregister_group_dev(&matrix_mdev->vdev);
->>   +    mutex_lock(&matrix_dev->guests_lock);
->>       mutex_lock(&matrix_dev->mdevs_lock);
->>       vfio_ap_mdev_reset_queues(matrix_mdev);
->>       vfio_ap_mdev_unlink_fr_queues(matrix_mdev);
->>       list_del(&matrix_mdev->node);
->>       mutex_unlock(&matrix_dev->mdevs_lock);
->> +    mutex_unlock(&matrix_dev->guests_lock);
->>       vfio_uninit_group_dev(&matrix_mdev->vdev);
->>       kfree(matrix_mdev);
->>       atomic_inc(&matrix_dev->available_instances);
->> @@ -1665,49 +1732,30 @@ void vfio_ap_mdev_unregister(void)
->>       mdev_unregister_driver(&vfio_ap_matrix_driver);
->>   }
->>   -/*
->> - * vfio_ap_queue_link_mdev
->> - *
->> - * @q: The queue to link with the matrix mdev.
->> - *
->> - * Links @q with the matrix mdev to which the queue's APQN is assigned.
->> - */
->> -static void vfio_ap_queue_link_mdev(struct vfio_ap_queue *q)
->> -{
->> -    unsigned long apid = AP_QID_CARD(q->apqn);
->> -    unsigned long apqi = AP_QID_QUEUE(q->apqn);
->> -    struct ap_matrix_mdev *matrix_mdev;
->> -
->> -    list_for_each_entry(matrix_mdev, &matrix_dev->mdev_list, node) {
->> -        if (test_bit_inv(apid, matrix_mdev->matrix.apm) &&
->> -            test_bit_inv(apqi, matrix_mdev->matrix.aqm)) {
->> -            vfio_ap_mdev_link_queue(matrix_mdev, q);
->> -            break;
->> -        }
->> -    }
->> -}
->> -
->>   int vfio_ap_mdev_probe_queue(struct ap_device *apdev)
->>   {
->>       struct vfio_ap_queue *q;
->> +    struct ap_matrix_mdev *matrix_mdev;
->>       DECLARE_BITMAP(apm_delta, AP_DEVICES);
->>         q = kzalloc(sizeof(*q), GFP_KERNEL);
->>       if (!q)
->>           return -ENOMEM;
->> -    mutex_lock(&matrix_dev->mdevs_lock);
->>       q->apqn = to_ap_queue(&apdev->device)->qid;
->>       q->saved_isc = VFIO_AP_ISC_INVALID;
->> -    vfio_ap_queue_link_mdev(q);
->> -    if (q->matrix_mdev) {
->> +
->> +    matrix_mdev = vfio_ap_mdev_get_update_locks_for_apqn(q->apqn);
->> +
->> +    if (matrix_mdev) {
->> +        vfio_ap_mdev_link_queue(matrix_mdev, q);
->>           memset(apm_delta, 0, sizeof(apm_delta));
->>           set_bit_inv(AP_QID_CARD(q->apqn), apm_delta);
->>           vfio_ap_mdev_filter_matrix(apm_delta,
->> -                       q->matrix_mdev->matrix.aqm,
->> -                       q->matrix_mdev);
->> +                       matrix_mdev->matrix.aqm,
->> +                       matrix_mdev);
->>       }
->>       dev_set_drvdata(&apdev->device, q);
->> -    mutex_unlock(&matrix_dev->mdevs_lock);
->> +    release_update_locks_for_mdev(matrix_mdev);
->>         return 0;
->>   }
->> @@ -1716,11 +1764,13 @@ void vfio_ap_mdev_remove_queue(struct 
->> ap_device *apdev)
->>   {
->>       unsigned long apid;
->>       struct vfio_ap_queue *q;
->> +    struct ap_matrix_mdev *matrix_mdev;
->>   -    mutex_lock(&matrix_dev->mdevs_lock);
->>       q = dev_get_drvdata(&apdev->device);
->> +    get_update_locks_for_queue(q);
->> +    matrix_mdev = q->matrix_mdev;
->>   -    if (q->matrix_mdev) {
->> +    if (matrix_mdev) {
->>           vfio_ap_unlink_queue_fr_mdev(q);
->>             apid = AP_QID_CARD(q->apqn);
->> @@ -1731,5 +1781,5 @@ void vfio_ap_mdev_remove_queue(struct ap_device 
->> *apdev)
->>       vfio_ap_mdev_reset_queue(q, 1);
->>       dev_set_drvdata(&apdev->device, NULL);
->>       kfree(q);
->> -    mutex_unlock(&matrix_dev->mdevs_lock);
->> +    release_update_locks_for_mdev(matrix_mdev);
->>   }
->
->
+diff --git a/sound/soc/amd/acp-config.c b/sound/soc/amd/acp-config.c
+index 5cbc82eca4c9..3b9f851bf50d 100644
+--- a/sound/soc/amd/acp-config.c
++++ b/sound/soc/amd/acp-config.c
+@@ -130,4 +130,25 @@ struct snd_soc_acpi_mach snd_soc_acpi_amd_sof_machines[] = {
+ };
+ EXPORT_SYMBOL(snd_soc_acpi_amd_sof_machines);
+ 
++struct snd_soc_acpi_mach snd_soc_acpi_amd_rmb_sof_machines[] = {
++	{
++		.id = "AMDI1019",
++		.drv_name = "rmb-dsp",
++		.pdata = &acp_quirk_data,
++		.fw_filename = "sof-rmb.ri",
++		.sof_tplg_filename = "sof-acp-rmb.tplg",
++	},
++	{
++		.id = "10508825",
++		.drv_name = "nau8825-max",
++		.pdata = &acp_quirk_data,
++		.machine_quirk = snd_soc_acpi_codec_list,
++		.quirk_data = &amp_max,
++		.fw_filename = "sof-rmb.ri",
++		.sof_tplg_filename = "sof-rmb-nau8825-max98360.tplg",
++	},
++	{},
++};
++EXPORT_SYMBOL(snd_soc_acpi_amd_rmb_sof_machines);
++
+ MODULE_LICENSE("Dual BSD/GPL");
+diff --git a/sound/soc/amd/acp/Kconfig b/sound/soc/amd/acp/Kconfig
+index 9dae2719084c..7e56d2644105 100644
+--- a/sound/soc/amd/acp/Kconfig
++++ b/sound/soc/amd/acp/Kconfig
+@@ -49,6 +49,7 @@ config SND_SOC_AMD_MACH_COMMON
+ 	select SND_SOC_RT1019
+ 	select SND_SOC_MAX98357A
+ 	select SND_SOC_RT5682S
++	select SND_SOC_NAU8825
+ 	help
+ 	  This option enables common Machine driver module for ACP.
+ 
+diff --git a/sound/soc/amd/acp/acp-mach-common.c b/sound/soc/amd/acp/acp-mach-common.c
+index 6ae454bf60af..a03b396d96bb 100644
+--- a/sound/soc/amd/acp/acp-mach-common.c
++++ b/sound/soc/amd/acp/acp-mach-common.c
+@@ -24,6 +24,7 @@
+ #include "../../codecs/rt5682.h"
+ #include "../../codecs/rt1019.h"
+ #include "../../codecs/rt5682s.h"
++#include "../../codecs/nau8825.h"
+ #include "acp-mach.h"
+ 
+ #define PCO_PLAT_CLK 48000000
+@@ -175,7 +176,8 @@ static void acp_card_shutdown(struct snd_pcm_substream *substream)
+ 	struct snd_soc_card *card = rtd->card;
+ 	struct acp_card_drvdata *drvdata = card->drvdata;
+ 
+-	clk_disable_unprepare(drvdata->wclk);
++	if (!drvdata->soc_mclk)
++		clk_disable_unprepare(drvdata->wclk);
+ }
+ 
+ static const struct snd_soc_ops acp_card_rt5682_ops = {
+@@ -363,7 +365,7 @@ static int acp_card_amp_startup(struct snd_pcm_substream *substream)
+ 	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
+ 	struct snd_soc_card *card = rtd->card;
+ 	struct acp_card_drvdata *drvdata = card->drvdata;
+-	int ret;
++	int ret = 0;
+ 
+ 	runtime->hw.channels_max = DUAL_CHANNEL;
+ 	snd_pcm_hw_constraint_list(runtime, 0, SNDRV_PCM_HW_PARAM_CHANNELS,
+@@ -371,10 +373,13 @@ static int acp_card_amp_startup(struct snd_pcm_substream *substream)
+ 	snd_pcm_hw_constraint_list(runtime, 0, SNDRV_PCM_HW_PARAM_RATE,
+ 				      &constraints_rates);
+ 
+-	ret = acp_clk_enable(drvdata);
+-	if (ret < 0)
+-		dev_err(rtd->card->dev, "Failed to enable AMP clk: %d\n", ret);
+-
++	if (!drvdata->soc_mclk) {
++		ret = acp_clk_enable(drvdata);
++		if (ret < 0) {
++			dev_err(rtd->card->dev, "Failed to enable AMP clk: %d\n", ret);
++			return ret;
++		}
++	}
+ 	return ret;
+ }
+ 
+@@ -409,6 +414,104 @@ static const struct snd_soc_ops acp_card_maxim_ops = {
+ 	.shutdown = acp_card_shutdown,
+ };
+ 
++/* Declare nau8825 codec components */
++SND_SOC_DAILINK_DEF(nau8825,
++		    DAILINK_COMP_ARRAY(COMP_CODEC("i2c-10508825:00", "nau8825-hifi")));
++
++static const struct snd_soc_dapm_route nau8825_map[] = {
++	{ "Headphone Jack", NULL, "HPOL" },
++	{ "Headphone Jack", NULL, "HPOR" },
++};
++
++static int acp_card_nau8825_init(struct snd_soc_pcm_runtime *rtd)
++{
++	struct snd_soc_card *card = rtd->card;
++	struct acp_card_drvdata *drvdata = card->drvdata;
++	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
++	struct snd_soc_component *component = codec_dai->component;
++	unsigned int fmt;
++	int ret;
++
++	dev_info(rtd->dev, "codec dai name = %s\n", codec_dai->name);
++
++	if (drvdata->hs_codec_id != NAU8825)
++		return -EINVAL;
++
++	if (drvdata->soc_mclk)
++		fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF | SND_SOC_DAIFMT_CBC_CFC;
++	else
++		fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF | SND_SOC_DAIFMT_CBP_CFP;
++
++	ret =  snd_soc_dai_set_fmt(codec_dai, fmt);
++	if (ret < 0) {
++		dev_err(rtd->card->dev, "Failed to set dai fmt: %d\n", ret);
++		return ret;
++	}
++	ret = snd_soc_card_jack_new(card, "Headset Jack",
++					 SND_JACK_HEADSET | SND_JACK_LINEOUT |
++					 SND_JACK_BTN_0 | SND_JACK_BTN_1 |
++					 SND_JACK_BTN_2 | SND_JACK_BTN_3,
++					 &pco_jack);
++	if (ret) {
++		dev_err(card->dev, "HP jack creation failed %d\n", ret);
++		return ret;
++	}
++
++	snd_jack_set_key(pco_jack.jack, SND_JACK_BTN_0, KEY_PLAYPAUSE);
++	snd_jack_set_key(pco_jack.jack, SND_JACK_BTN_1, KEY_VOICECOMMAND);
++	snd_jack_set_key(pco_jack.jack, SND_JACK_BTN_2, KEY_VOLUMEUP);
++	snd_jack_set_key(pco_jack.jack, SND_JACK_BTN_3, KEY_VOLUMEDOWN);
++
++	ret = snd_soc_component_set_jack(component, &pco_jack, NULL);
++	if (ret) {
++		dev_err(rtd->dev, "Headset Jack call-back failed: %d\n", ret);
++		return ret;
++	}
++
++	return snd_soc_dapm_add_routes(&rtd->card->dapm, nau8825_map, ARRAY_SIZE(nau8825_map));
++}
++
++static int acp_nau8825_hw_params(struct snd_pcm_substream *substream,
++				 struct snd_pcm_hw_params *params)
++{
++	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
++	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
++	int ret;
++
++	ret = snd_soc_dai_set_sysclk(codec_dai, NAU8825_CLK_FLL_FS,
++				     (48000 * 256), SND_SOC_CLOCK_IN);
++	if (ret < 0)
++		dev_err(rtd->dev, "snd_soc_dai_set_sysclk err = %d\n", ret);
++
++	ret = snd_soc_dai_set_pll(codec_dai, 0, 0, params_rate(params),
++				  params_rate(params) * 256);
++	if (ret < 0) {
++		dev_err(rtd->dev, "can't set FLL: %d\n", ret);
++		return ret;
++	}
++
++	return ret;
++}
++
++static int acp_nau8825_startup(struct snd_pcm_substream *substream)
++{
++	struct snd_pcm_runtime *runtime = substream->runtime;
++
++	runtime->hw.channels_max = 2;
++	snd_pcm_hw_constraint_list(runtime, 0, SNDRV_PCM_HW_PARAM_CHANNELS,
++				   &constraints_channels);
++
++	runtime->hw.formats = SNDRV_PCM_FMTBIT_S16_LE;
++	snd_pcm_hw_constraint_list(runtime, 0,
++				   SNDRV_PCM_HW_PARAM_RATE, &constraints_rates);
++	return 0;
++}
++
++static const struct snd_soc_ops acp_card_nau8825_ops = {
++	.startup =  acp_nau8825_startup,
++	.hw_params = acp_nau8825_hw_params,
++};
++
+ /* Declare DMIC codec components */
+ SND_SOC_DAILINK_DEF(dmic_codec,
+ 		DAILINK_COMP_ARRAY(COMP_CODEC("dmic-codec", "dmic-hifi")));
+@@ -437,6 +540,8 @@ SND_SOC_DAILINK_DEF(i2s_sp,
+ 	DAILINK_COMP_ARRAY(COMP_CPU("acp-i2s-sp")));
+ SND_SOC_DAILINK_DEF(sof_sp,
+ 	DAILINK_COMP_ARRAY(COMP_CPU("acp-sof-sp")));
++SND_SOC_DAILINK_DEF(sof_hs,
++		    DAILINK_COMP_ARRAY(COMP_CPU("acp-sof-hs")));
+ SND_SOC_DAILINK_DEF(sof_dmic,
+ 	DAILINK_COMP_ARRAY(COMP_CPU("acp-sof-dmic")));
+ SND_SOC_DAILINK_DEF(pdm_dmic,
+@@ -491,6 +596,31 @@ int acp_sofdsp_dai_links_create(struct snd_soc_card *card)
+ 		i++;
+ 	}
+ 
++	if (drv_data->hs_cpu_id == I2S_HS) {
++		links[i].name = "acp-headset-codec";
++		links[i].id = HEADSET_BE_ID;
++		links[i].cpus = sof_hs;
++		links[i].num_cpus = ARRAY_SIZE(sof_hs);
++		links[i].platforms = sof_component;
++		links[i].num_platforms = ARRAY_SIZE(sof_component);
++		links[i].dpcm_playback = 1;
++		links[i].dpcm_capture = 1;
++		links[i].nonatomic = true;
++		links[i].no_pcm = 1;
++		if (!drv_data->hs_codec_id) {
++			/* Use dummy codec if codec id not specified */
++			links[i].codecs = dummy_codec;
++			links[i].num_codecs = ARRAY_SIZE(dummy_codec);
++		}
++		if (drv_data->hs_codec_id == NAU8825) {
++			links[i].codecs = nau8825;
++			links[i].num_codecs = ARRAY_SIZE(nau8825);
++			links[i].init = acp_card_nau8825_init;
++			links[i].ops = &acp_card_nau8825_ops;
++		}
++		i++;
++	}
++
+ 	if (drv_data->amp_cpu_id == I2S_SP) {
+ 		links[i].name = "acp-amp-codec";
+ 		links[i].id = AMP_BE_ID;
+@@ -523,6 +653,30 @@ int acp_sofdsp_dai_links_create(struct snd_soc_card *card)
+ 		i++;
+ 	}
+ 
++	if (drv_data->amp_cpu_id == I2S_HS) {
++		links[i].name = "acp-amp-codec";
++		links[i].id = AMP_BE_ID;
++		links[i].cpus = sof_hs;
++		links[i].num_cpus = ARRAY_SIZE(sof_hs);
++		links[i].platforms = sof_component;
++		links[i].num_platforms = ARRAY_SIZE(sof_component);
++		links[i].dpcm_playback = 1;
++		links[i].nonatomic = true;
++		links[i].no_pcm = 1;
++		if (!drv_data->amp_codec_id) {
++			/* Use dummy codec if codec id not specified */
++			links[i].codecs = dummy_codec;
++			links[i].num_codecs = ARRAY_SIZE(dummy_codec);
++		}
++		if (drv_data->amp_codec_id == MAX98360A) {
++			links[i].codecs = max98360a;
++			links[i].num_codecs = ARRAY_SIZE(max98360a);
++			links[i].ops = &acp_card_maxim_ops;
++			links[i].init = acp_card_maxim_init;
++		}
++		i++;
++	}
++
+ 	if (drv_data->dmic_cpu_id == DMIC) {
+ 		links[i].name = "acp-dmic-codec";
+ 		links[i].id = DMIC_BE_ID;
+diff --git a/sound/soc/amd/acp/acp-mach.h b/sound/soc/amd/acp/acp-mach.h
+index 5dc47cfbff10..c95ee1c52eb1 100644
+--- a/sound/soc/amd/acp/acp-mach.h
++++ b/sound/soc/amd/acp/acp-mach.h
+@@ -26,6 +26,7 @@ enum be_id {
+ 
+ enum cpu_endpoints {
+ 	NONE = 0,
++	I2S_HS,
+ 	I2S_SP,
+ 	I2S_BT,
+ 	DMIC,
+@@ -37,6 +38,7 @@ enum codec_endpoints {
+ 	RT1019,
+ 	MAX98360A,
+ 	RT5682S,
++	NAU8825,
+ };
+ 
+ struct acp_card_drvdata {
+@@ -49,6 +51,7 @@ struct acp_card_drvdata {
+ 	unsigned int dai_fmt;
+ 	struct clk *wclk;
+ 	struct clk *bclk;
++	bool soc_mclk;
+ };
+ 
+ int acp_sofdsp_dai_links_create(struct snd_soc_card *card);
+diff --git a/sound/soc/amd/acp/acp-sof-mach.c b/sound/soc/amd/acp/acp-sof-mach.c
+index d1531cdab110..adbae809f2aa 100644
+--- a/sound/soc/amd/acp/acp-sof-mach.c
++++ b/sound/soc/amd/acp/acp-sof-mach.c
+@@ -56,6 +56,16 @@ static struct acp_card_drvdata sof_rt5682s_max_data = {
+ 	.dmic_codec_id = DMIC,
+ };
+ 
++static struct acp_card_drvdata sof_nau8825_data = {
++	.hs_cpu_id = I2S_HS,
++	.amp_cpu_id = I2S_HS,
++	.dmic_cpu_id = DMIC,
++	.hs_codec_id = NAU8825,
++	.amp_codec_id = MAX98360A,
++	.dmic_codec_id = DMIC,
++	.soc_mclk = true,
++};
++
+ static const struct snd_kcontrol_new acp_controls[] = {
+ 	SOC_DAPM_PIN_SWITCH("Headphone Jack"),
+ 	SOC_DAPM_PIN_SWITCH("Headset Mic"),
+@@ -124,6 +134,10 @@ static const struct platform_device_id board_ids[] = {
+ 		.name = "rt5682s-rt1019",
+ 		.driver_data = (kernel_ulong_t)&sof_rt5682s_rt1019_data
+ 	},
++	{
++		.name = "nau8825-max",
++		.driver_data = (kernel_ulong_t)&sof_nau8825_data
++	},
+ 	{ }
+ };
+ static struct platform_driver acp_asoc_audio = {
+@@ -143,4 +157,5 @@ MODULE_ALIAS("platform:rt5682-rt1019");
+ MODULE_ALIAS("platform:rt5682-max");
+ MODULE_ALIAS("platform:rt5682s-max");
+ MODULE_ALIAS("platform:rt5682s-rt1019");
++MODULE_ALIAS("platform:nau8825-max");
+ MODULE_LICENSE("GPL v2");
+diff --git a/sound/soc/amd/mach-config.h b/sound/soc/amd/mach-config.h
+index 0a54567a2841..7b4c625da40d 100644
+--- a/sound/soc/amd/mach-config.h
++++ b/sound/soc/amd/mach-config.h
+@@ -19,6 +19,7 @@
+ #define ACP_PCI_DEV_ID			0x15E2
+ 
+ extern struct snd_soc_acpi_mach snd_soc_acpi_amd_sof_machines[];
++extern struct snd_soc_acpi_mach snd_soc_acpi_amd_rmb_sof_machines[];
+ 
+ struct config_entry {
+ 	u32 flags;
+-- 
+2.25.1
 

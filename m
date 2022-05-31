@@ -2,89 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A081F5389EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6A65389F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243600AbiEaCaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 22:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S243589AbiEaCcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 22:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243573AbiEaC3y (ORCPT
+        with ESMTP id S240962AbiEaCcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 22:29:54 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14A99347D;
-        Mon, 30 May 2022 19:29:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=NJejcipX43D92rCsFofp6ci3+C5iED75p3tPH8Jiq24=; b=L3f1w/682QSIuD6mOi7ydQwiI2
-        6sExxLDpWf+ZHtI4sBWIaOagsxZwIYX/RbKBfgzGC4B91qcqFg4s1cenRnCPZuUcNPIJgUJn5b38I
-        Slw56bPPcas3FLjhi8muwwLbc2KHnuPyCvUSbPFcITNV51t3xxuFDxw3OFgYEwT7wqYxhcVGTYSNa
-        EFGD1evFF/XC+jbICJCMX6G1pfgthPYgj0P+tA74EByacCKzN2ugDUuJghS0yPTx5ev0hI11/Oq7J
-        4wnrKN4PAWm/kl9kb+tDsKD0iRviw07ChKJIETV61bDV7oeVObviROjrpGs09O2peQ6A7og5RZSwy
-        bSkYk4mA==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nvrdk-004yrX-F8; Tue, 31 May 2022 02:29:49 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Charles Mirabile <cmirabil@redhat.com>,
-        Daniel Bauman <dbauman@redhat.com>,
-        Mwesigwa Guma <mguma@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Subject: [PATCH -next] Input: joystick: Raspberry Pi Sense HAT depends on HAS_IOMEM
-Date:   Mon, 30 May 2022 19:29:42 -0700
-Message-Id: <20220531022942.16340-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.35.3
+        Mon, 30 May 2022 22:32:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF795205F9
+        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 19:32:14 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 84CF423A;
+        Mon, 30 May 2022 19:32:14 -0700 (PDT)
+Received: from [10.162.41.9] (unknown [10.162.41.9])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 03CB83F66F;
+        Mon, 30 May 2022 19:32:08 -0700 (PDT)
+Message-ID: <a13e6456-4ec7-de5b-71a8-3693364fc01b@arm.com>
+Date:   Tue, 31 May 2022 08:02:06 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] arm64: enable THP_SWAP for arm64
+Content-Language: en-US
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5n?= =?UTF-8?Q?=29?= 
+        <zhangshiming@oppo.com>, =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
+        hanchuanhua <hanchuanhua@oppo.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Steven Price <steven.price@arm.com>,
+        Yang Shi <shy828301@gmail.com>
+References: <20220527100644.293717-1-21cnbao@gmail.com>
+ <b2694573-a696-8435-70eb-ebc9c06500a0@arm.com>
+ <CAGsJ_4yF_5DvBuvNfsUcywv8uzXHy2x9saVdhXz8xh=wvt01iA@mail.gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <CAGsJ_4yF_5DvBuvNfsUcywv8uzXHy2x9saVdhXz8xh=wvt01iA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since JOYSTICK_SENSEHAT selects MFD_SIMPLE_MFD_I2C and the latter
-depends on HAS_IOMEM, and since 'select' does not follow any
-dependency chains, JOYSTICK_SENSEHAT should also depend on HAS_IOMEM
-to prevent a kconfig warning and a build error:
 
-WARNING: unmet direct dependencies detected for MFD_SIMPLE_MFD_I2C
-  Depends on [n]: HAS_IOMEM [=n] && I2C [=y]
-  Selected by [y]:
-  - JOYSTICK_SENSEHAT [=y] && INPUT_JOYSTICK [=y] && INPUT [=y] && I2C [=y]
 
-s390-linux-ld: drivers/mfd/simple-mfd-i2c.o: in function `simple_mfd_i2c_probe':
-simple-mfd-i2c.c:(.text+0xc8): undefined reference to `devm_mfd_add_devices'
+On 5/30/22 15:23, Barry Song wrote:
+> On Mon, May 30, 2022 at 7:07 PM Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
+>>
+>> Hello Barry,
+> 
+> Hi Anshuman,
+> thanks!
+> 
+>>
+>> On 5/27/22 15:36, Barry Song wrote:
+>>> From: Barry Song <v-songbaohua@oppo.com>
+>>>
+>>> THP_SWAP has been proved to improve the swap throughput significantly
+>>> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
+>>> splitting THP after swapped out").
+>> It will be useful to run similar experiments on arm64 platform to
+>> demonstrate tangible benefit, else we might be just enabling this
+>> feature just because x86 has it. Do you have some data points ?
+>>
+>>> As long as arm64 uses 4K page size, it is quite similar with x86_64
+>>> by having 2MB PMD THP. So we are going to get similar improvement.
+>>
+>> This is an assumption without any data points (until now). Please
+>> do provide some results.
+> 
+> Fair enough though I believe THP_SWP is arch-independent. Our testing
+> will post data. Plus, we do need it for real use cases with some possible
+> out-of-tree code for this moment. so this patch does not originate only
+> because x86 has it :-)
 
-Fixes: 41657514c796 ("Input: add Raspberry Pi Sense HAT joystick driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Charles Mirabile <cmirabil@redhat.com>
-Cc: Daniel Bauman <dbauman@redhat.com>
-Cc: Mwesigwa Guma <mguma@redhat.com>
-Cc: Joel Savitz <jsavitz@redhat.com>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: linux-input@vger.kernel.org
----
- drivers/input/joystick/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
+I understand, but as you mentioned some data here will be helpful.
 
---- a/drivers/input/joystick/Kconfig
-+++ b/drivers/input/joystick/Kconfig
-@@ -402,6 +402,7 @@ config JOYSTICK_N64
- config JOYSTICK_SENSEHAT
- 	tristate "Raspberry Pi Sense HAT joystick"
- 	depends on INPUT && I2C
-+	depends on HAS_IOMEM
- 	select MFD_SIMPLE_MFD_I2C
- 	help
- 	  Say Y here if you want to enable the driver for the
+> 
+>>
+>>> For other page sizes such as 16KB and 64KB, PMD might be too large.
+>>> Negative side effects such as IO latency might be a problem. Thus,
+>>> we can only safely enable the counterpart of X86_64.
+>>
+>> Incorrect reasoning. Although sometimes it might be okay to enable
+>> a feature on platforms with possible assumptions about its benefits,
+>> but to claim 'similar improvement, safely, .. etc' while comparing
+>> against x86 4K page config without data points, is not very helpful.
+>>
+>>> A corner case is that MTE has an assumption that only base pages
+>>> can be swapped. We won't enable THP_SWP for ARM64 hardware with
+>>> MTE support until MTE is re-arched.
+>>
+>> re-arched ?? Did you imply that MTE is reworked to support THP ?
+> 
+> I think at least MTE should be able to coexist with THP_SWP though
+> I am not quite sure if MTE can be re-worked to fully support THP.
+
+Understood but I just wanted the wording above in the commit message
+to be changed to literally anything other than 're-arched'.

@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D17538C29
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDC0538C2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244601AbiEaHmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 03:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42100 "EHLO
+        id S244605AbiEaHnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 03:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244574AbiEaHmQ (ORCPT
+        with ESMTP id S244579AbiEaHm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 03:42:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F09F12D05
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653982934;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DCmQQueLOwkbEgp46cmJprml7a8eekESmBiIv7Un50A=;
-        b=R+4VdEQfpXZaspr7OS/5kmgd3k01bhb1rw9yLV/7/ZquCRyEjt4dscvD3p1vSA0gbjJNGY
-        nu6ytbXCanuiXvaIgF+y7c4pbDVufvkasfDvMp0p8P8v1rfFgCT01h5uXFGXROfxv+S47t
-        L1bPjVJD39zb2tKuLJQ/Ynx6fqT/l3Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-464-6c24Xha4PcWmzjofnbme1Q-1; Tue, 31 May 2022 03:42:13 -0400
-X-MC-Unique: 6c24Xha4PcWmzjofnbme1Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9BA2429AB3F9;
-        Tue, 31 May 2022 07:42:12 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 937EC40CFD0A;
-        Tue, 31 May 2022 07:42:12 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 24V7gCGx015524;
-        Tue, 31 May 2022 03:42:12 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 24V7gCMr015520;
-        Tue, 31 May 2022 03:42:12 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Tue, 31 May 2022 03:42:12 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     Borislav Petkov <bp@suse.de>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org
-Subject: Re: Warnings when suspending to disk
-In-Reply-To: <YpUcf19E+qgb6Eyu@kroah.com>
-Message-ID: <alpine.LRH.2.02.2205310324410.13770@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2205301145540.25840@file01.intranet.prod.int.rdu2.redhat.com> <YpUcf19E+qgb6Eyu@kroah.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        Tue, 31 May 2022 03:42:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CB649919
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 00:42:55 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nvwWb-0004H2-UK; Tue, 31 May 2022 09:42:45 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nvwWa-0008IW-1P; Tue, 31 May 2022 09:42:44 +0200
+Date:   Tue, 31 May 2022 09:42:44 +0200
+From:   "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+To:     Ping-Ke Shih <pkshih@realtek.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "neojou@gmail.com" <neojou@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>,
+        "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v2 10/10] rtw88: disable powersave modes for USB devices
+Message-ID: <20220531074244.GN1615@pengutronix.de>
+References: <20220530135457.1104091-1-s.hauer@pengutronix.de>
+ <20220530135457.1104091-11-s.hauer@pengutronix.de>
+ <1493412d473614dfafd4c03832e71f86831fa43b.camel@realtek.com>
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="185206533-923906028-1653982932=:13770"
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1493412d473614dfafd4c03832e71f86831fa43b.camel@realtek.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,109 +64,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---185206533-923906028-1653982932=:13770
-Content-Type: TEXT/PLAIN; charset=ISO-8859-7
-Content-Transfer-Encoding: 8BIT
-
-
-
-On Mon, 30 May 2022, Greg Kroah-Hartman wrote:
-
-> On Mon, May 30, 2022 at 12:16:24PM -0400, Mikulas Patocka wrote:
-> > Hi
+On Tue, May 31, 2022 at 01:07:36AM +0000, Ping-Ke Shih wrote:
+> On Mon, 2022-05-30 at 15:54 +0200, Sascha Hauer wrote:
+> > The powersave modes do not work with USB devices (tested with a
+> > RTW8822CU) properly. With powersave modes enabled the driver issues
+> > messages like:
 > > 
-> > The commit 7f99cb5e60392fc3494c610776e733b68784280c ("x86/CPU/AMD: Use 
-> > default_groups in kobj_type") causes the following warnings to be printed 
-> > during suspend to disk and resume from disk. There are many of these 
-> > warnings, 3 for each core.
+> > rtw_8822cu 1-1:1.2: firmware failed to leave lps state
+> > rtw_8822cu 1-1:1.2: timed out to flush queue 3
 > 
-> And if you revert that change it goes back to not warning?
-> 
-> that is odd.
+> Could you try module parameter rtw_disable_lps_deep_mode=1 to see
+> if it can work?
 
-If I revert this change on 5.18, I end up with non-compilable kernel - it 
-complains that ¡struct kobj_type¢ has no member named ¡default_attrs¢
+No, this module parameter doesn't seem to make any difference.
 
-However, I verified that the bug is present on commit 
-7f99cb5e60392fc3494c610776e733b68784280c and absent on its parent commit 
-26291c54e111ff6ba87a164d85d4a4e134b7315c.
+# cat /sys/module/rtw88_core/parameters/disable_lps_deep
+Y
 
-> > 
-> > The machine is two six-core Opterons 8435.
-> > 
-> > Mikulas
-> > 
-> > 
-> > [   31.349584] PM: hibernation: hibernation entry
-> > [   31.350319] Filesystems sync: 0.000 seconds
-> > [   31.350417] Freezing user space processes ... (elapsed 0.001 seconds) done.
-> > [   31.351994] OOM killer disabled.
-> > [   31.357889] PM: hibernation: Preallocating image memory
-> > [   34.791852] PM: hibernation: Allocated 735563 pages for snapshot
-> > [   34.792065] PM: hibernation: Allocated 2942252 kbytes in 3.43 seconds (857.79 MB/s)
-> > [   34.792296] Freezing remaining freezable tasks ... (elapsed 0.000 seconds) done.
-> > [   34.793791] printk: Suspending console(s) (use no_console_suspend to debug)
-> > [   34.795159] serial 00:03: disabled
-> > [   34.795248] serial 00:02: disabled
-> > [   34.824316] mptbase: ioc0: pci-suspend: pdev=0x00000000f4bc4e1a, slot=0000:02:06.0, Entering operating state [D3]
-> > [   35.470390] amdgpu 0000:07:00.0: amdgpu: BACO reset
-> > [   35.533783] Disabling non-boot CPUs ...
-> > [   35.535798] smpboot: CPU 1 is now offline
-> > [   35.537754] ------------[ cut here ]------------
-> > [   35.537764] kernfs: can not remove 'threshold_limit', no directory
-> 
-> Before you suspend, is this directory (and the other ones) really there?
+Still "firmware failed to leave lps state" and poor performance.
 
-The files are present both before the suspend and after the 
-suspend+resume. This is the list of files for one core:
+Any other ideas what may go wrong here?
 
-/sys/devices/system/machinecheck/machinecheck0
-/sys/devices/system/machinecheck/machinecheck0/bank0
-/sys/devices/system/machinecheck/machinecheck0/bank1
-/sys/devices/system/machinecheck/machinecheck0/bank2
-/sys/devices/system/machinecheck/machinecheck0/bank3
-/sys/devices/system/machinecheck/machinecheck0/bank4
-/sys/devices/system/machinecheck/machinecheck0/bank5
-/sys/devices/system/machinecheck/machinecheck0/cmci_disabled
-/sys/devices/system/machinecheck/machinecheck0/dont_log_ce
-/sys/devices/system/machinecheck/machinecheck0/check_interval
-/sys/devices/system/machinecheck/machinecheck0/ignore_ce
-/sys/devices/system/machinecheck/machinecheck0/monarch_timeout
-/sys/devices/system/machinecheck/machinecheck0/northbridge
-/sys/devices/system/machinecheck/machinecheck0/northbridge/dram
-/sys/devices/system/machinecheck/machinecheck0/northbridge/dram/error_count
-/sys/devices/system/machinecheck/machinecheck0/northbridge/dram/interrupt_enable
-/sys/devices/system/machinecheck/machinecheck0/northbridge/dram/threshold_limit
-/sys/devices/system/machinecheck/machinecheck0/northbridge/ht_links
-/sys/devices/system/machinecheck/machinecheck0/northbridge/ht_links/error_count
-/sys/devices/system/machinecheck/machinecheck0/northbridge/ht_links/interrupt_enable
-/sys/devices/system/machinecheck/machinecheck0/northbridge/ht_links/threshold_limit
-/sys/devices/system/machinecheck/machinecheck0/northbridge/l3_cache
-/sys/devices/system/machinecheck/machinecheck0/northbridge/l3_cache/error_count
-/sys/devices/system/machinecheck/machinecheck0/northbridge/l3_cache/interrupt_enable
-/sys/devices/system/machinecheck/machinecheck0/northbridge/l3_cache/threshold_limit
-/sys/devices/system/machinecheck/machinecheck0/power
-/sys/devices/system/machinecheck/machinecheck0/power/autosuspend_delay_ms
-/sys/devices/system/machinecheck/machinecheck0/power/control
-/sys/devices/system/machinecheck/machinecheck0/power/runtime_active_time
-/sys/devices/system/machinecheck/machinecheck0/power/runtime_status
-/sys/devices/system/machinecheck/machinecheck0/power/runtime_suspended_time
-/sys/devices/system/machinecheck/machinecheck0/print_all
-/sys/devices/system/machinecheck/machinecheck0/subsystem
-/sys/devices/system/machinecheck/machinecheck0/uevent
+Sascha
 
-> Are they not getting created now properly somehow?  Any warning messages
-> at boot time?
-
-There are no warnings on boot.
-
-> thanks,
-> 
-> greg k-h
-
-Mikulas
---185206533-923906028-1653982932=:13770--
-
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

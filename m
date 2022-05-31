@@ -2,117 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9A853910C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F8B539115
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344346AbiEaMs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 08:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
+        id S1344360AbiEaMuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 08:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiEaMs0 (ORCPT
+        with ESMTP id S233439AbiEaMuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 08:48:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18B036211B
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:48:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654001304;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EPrMSZovc8VHOvaBgoFEXFty7pLwDi2QHtnXl6KmPkE=;
-        b=bZf+nRMMGBY1Oqb+wquP7UPSoGz5Q85OyOyRYzab73Q8MvhL857aKmnbqlXhGLpoY47kUb
-        Hv6aQuDhDVnCMM6w0YOzqOWT1RtqV6HpyfMFzA6k4pDC1d+fEKrkpkEUIldKvj6eS8MZeg
-        YIpnJ4W7iHaUOUYp+YiZOzSY+Qdkd/g=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-642-IOf0MmWVNsSQIpFQSh3KaQ-1; Tue, 31 May 2022 08:48:23 -0400
-X-MC-Unique: IOf0MmWVNsSQIpFQSh3KaQ-1
-Received: by mail-wr1-f70.google.com with SMTP id s16-20020adfeb10000000b0020cc4e5e683so2029863wrn.6
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:48:22 -0700 (PDT)
+        Tue, 31 May 2022 08:50:20 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383366EC4D
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:50:18 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id d26so12940253wrb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:50:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=G2o8rrRm/rSsYSXsi2pnvW4ZzfymkwbyFEWUK4Ia2ho=;
+        b=mmybuscfa6Ot10NSXfgRNyJEo6QmiYe16/7mTMCQ4IfVJWm3g7EGt/bYQb8nzEUqti
+         fdhvuCvcwURHCsxHPuq5RG3n1v396Nw8/PEiKKM2PdzHY1jjMcpf55i/VxKgCRxzQ/ok
+         YjRBxW+pcBFayrVibnBNK29pmegCFP9i1kcIgP1duq46kPJFaw/qpxhT2VT9N+zzF0dh
+         HAmoE9EL5oC/lszYQPF1VZymU+WiPtilgcZx+DcjP183TX78bCYig8yUma0eEiUWWNSA
+         zcRw2ZRmOS79kQVLk2gKgBJAr5jn4m/opji5Ahe471OVPf4ZO9Vuno+pWUUqf0R9s+yS
+         iywQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=EPrMSZovc8VHOvaBgoFEXFty7pLwDi2QHtnXl6KmPkE=;
-        b=VS4ZNPgOO9rSSX1M7afTsAZMWh/BBwTedKjx9kpEfIYXomKvslEauqC01Bsbjs7IxT
-         /5fHYc2AOJan9MOZjjwqajyYs+E6P19e+BX/HOpX7jhJFIksqcY+iU+IXSNdhiLZEO+m
-         qxyaWowZH8iFzCVdf0S7ab2pEpXW+W20KprMqktK/yYPi1UMbatIOvopYL4Uu+ukO4k2
-         xRX9zDrJ8uPzu5bMwDJM7OA5F3nDLJHq+bjKlQ/zpOuxaht6rvxpB+ZT6GOm98RjaFIY
-         uq2RQs19LyooOr2748J4HZetAYfrRvTDFFbJKwxV8B/IbtoSAkhUIO0dY33M3hhYeyS7
-         NwqQ==
-X-Gm-Message-State: AOAM532jH0pU0JbY9orcjgvmtTOUui1ZamXR4Oo5ApJyrTs8IkIP6+Mg
-        tf2MfYO9fMhB3RSNcEx2DWm08OB36hZGdn6L4k9xjTKksKlKlV8ri8Amjc5uJLViDYNZz79uo10
-        qNq+iPvGvF7oVYSXDLwt3L8/W
-X-Received: by 2002:a05:600c:3b05:b0:397:54ce:896 with SMTP id m5-20020a05600c3b0500b0039754ce0896mr23468726wms.3.1654001301764;
-        Tue, 31 May 2022 05:48:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw3yBlVpu/2rIV/yUlL+sCnuhz1GmFj2iWNFe3ezeBDW/ktzwfQ3Xlkqb6JMZM4m2Fl8gnmXA==
-X-Received: by 2002:a05:600c:3b05:b0:397:54ce:896 with SMTP id m5-20020a05600c3b0500b0039754ce0896mr23468714wms.3.1654001301565;
-        Tue, 31 May 2022 05:48:21 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:f100:8096:9368:ba52:a341? (p200300cbc708f10080969368ba52a341.dip0.t-ipconnect.de. [2003:cb:c708:f100:8096:9368:ba52:a341])
-        by smtp.gmail.com with ESMTPSA id n9-20020a5d4009000000b0021022ecd0a7sm9479833wrp.74.2022.05.31.05.48.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 05:48:20 -0700 (PDT)
-Message-ID: <0e2005c7-8ccb-7d07-57ed-a04cfd7af369@redhat.com>
-Date:   Tue, 31 May 2022 14:48:20 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=G2o8rrRm/rSsYSXsi2pnvW4ZzfymkwbyFEWUK4Ia2ho=;
+        b=pVtNuG6DAgqIZXjOGRY4bNM0HkG0n/Q6ZA1/cfDoERz5d19ozRRFbGDCWZYryr3s3C
+         rcTUcBK8URquGzQ12DXf2EkLwcnlUDOFVYGL3c6SQG7tyZ/B57KmCoWstQHpHSlgi+n3
+         mxXFLwFXHy3/kgNm5zDCAhpTfQpgNLMJsOsRHNTKldB9dA2WmO0KATqi+488zmDI4sEy
+         xcdbjZtffnE6aLkSRGsuUBrf/GEupe4LK82WfxqLHFHGAC3oGRjdeo18ng25Kw6gQvP+
+         nOSUZmWm+xv2tQYdT/ZOhaTkgf+PI3kjk5k3+BhEGqhTqIjMYaWI38Pu+AfNZWAjxwCN
+         Y3Fw==
+X-Gm-Message-State: AOAM531M6dNct7yMY9x3C1CZtPkeJojthD8rqos8qJMDUsBylq3s9WBl
+        s2ufJLGOetC+v3uRUrrw+5s2lA==
+X-Google-Smtp-Source: ABdhPJxFrBY6CrE1EfSvbOblSOMd54KwCAB1UviagiC4WZn0SyFrkBQviZ7o1RhhD0SrbR5KG4VhEQ==
+X-Received: by 2002:a05:6000:2aa:b0:20f:c5da:d4e3 with SMTP id l10-20020a05600002aa00b0020fc5dad4e3mr41519505wry.510.1654001416707;
+        Tue, 31 May 2022 05:50:16 -0700 (PDT)
+Received: from helium.lan ([88.160.162.107])
+        by smtp.gmail.com with ESMTPSA id i13-20020adfaacd000000b0020fc40d006bsm11475019wrc.17.2022.05.31.05.50.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 05:50:16 -0700 (PDT)
+From:   Fabien Parent <fparent@baylibre.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Fabien Parent <fparent@baylibre.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/7] dt-bindings: mfd: mt6397: add binding for MT6357
+Date:   Tue, 31 May 2022 14:49:53 +0200
+Message-Id: <20220531124959.202787-2-fparent@baylibre.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220531124959.202787-1-fparent@baylibre.com>
+References: <20220531124959.202787-1-fparent@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] mm/memremap: fix missing call to untrack_pfn() in
- pagemap_range()
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     anshuman.khandual@arm.com, osalvador@suse.de, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220531122643.25249-1-linmiaohe@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220531122643.25249-1-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.05.22 14:26, Miaohe Lin wrote:
-> We forget to call untrack_pfn() to pair with track_pfn_remap() when range
-> is not allowed to hotplug. Fix it by jump err_kasan.
-> 
-> Fixes: bca3feaa0764 ("mm/memory_hotplug: prevalidate the address range being added with platform")
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  mm/memremap.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/memremap.c b/mm/memremap.c
-> index 2b92e97cb25b..b870a659eee6 100644
-> --- a/mm/memremap.c
-> +++ b/mm/memremap.c
-> @@ -214,7 +214,7 @@ static int pagemap_range(struct dev_pagemap *pgmap, struct mhp_params *params,
->  
->  	if (!mhp_range_allowed(range->start, range_len(range), !is_private)) {
->  		error = -EINVAL;
-> -		goto err_pfn_remap;
-> +		goto err_kasan;
->  	}
->  
->  	mem_hotplug_begin();
+Add binding documentation for the MT6357 PMIC.
 
-Thanks!
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+---
+ Documentation/devicetree/bindings/mfd/mt6397.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
+diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
+index 293db2a71ef2..31f2c6d253ca 100644
+--- a/Documentation/devicetree/bindings/mfd/mt6397.txt
++++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
+@@ -20,6 +20,7 @@ This document describes the binding for MFD device and its sub module.
+ Required properties:
+ compatible:
+ 	"mediatek,mt6323" for PMIC MT6323
++	"mediatek,mt6357" for PMIC MT6357
+ 	"mediatek,mt6358" for PMIC MT6358 and MT6366
+ 	"mediatek,mt6359" for PMIC MT6359
+ 	"mediatek,mt6397" for PMIC MT6397
 -- 
-Thanks,
-
-David / dhildenb
+2.36.1
 

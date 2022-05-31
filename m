@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B20538CF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E338538CF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244892AbiEaIfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 04:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
+        id S244900AbiEaIg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 04:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236113AbiEaIf3 (ORCPT
+        with ESMTP id S236113AbiEaIgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 04:35:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 172C46F4AF
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653986127;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1qKNyRC3W7GQfrKZjwEu/nMGpeq6NFxAtL9kib1O0QQ=;
-        b=iG7QxjWU2elwwgTr0jvvPk2o0PlVfbIJDIgbAO5bHc+y5vlFIGxeVIQ1p4cBFe8sIO1PxP
-        1i+k1y15Imsvbmccg/PhcCukvpqzcTl3PvYsOQ6wD8/RSXmigcKL37L+sWmYGYiG0sSC6d
-        M+y4ib4eRmmUOX8loUwLjy7lpzMpMG4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-568-1OYmHSJBMBaOXHyk4IzOgg-1; Tue, 31 May 2022 04:35:23 -0400
-X-MC-Unique: 1OYmHSJBMBaOXHyk4IzOgg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 26D733816840;
-        Tue, 31 May 2022 08:35:23 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4FD602166B26;
-        Tue, 31 May 2022 08:35:22 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <YnI7lgazkdi6jcve@rabbit.intern.cm-ag>
-References: <YnI7lgazkdi6jcve@rabbit.intern.cm-ag> <Yl75D02pXj71kQBx@rabbit.intern.cm-ag> <Yl7d++G25sNXIR+p@rabbit.intern.cm-ag> <YlWWbpW5Foynjllo@rabbit.intern.cm-ag> <507518.1650383808@warthog.procyon.org.uk> <509961.1650386569@warthog.procyon.org.uk> <705278.1650462934@warthog.procyon.org.uk>
-To:     Max Kellermann <mk@cm4all.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: fscache corruption in Linux 5.17?
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <263651.1653986121.1@warthog.procyon.org.uk>
-Date:   Tue, 31 May 2022 09:35:21 +0100
-Message-ID: <263652.1653986121@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Tue, 31 May 2022 04:36:21 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B598C6F4BE
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:36:18 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id h62-20020a1c2141000000b0039aa4d054e2so793750wmh.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unimore.it; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=FIJm64zSOV70KcmATQ1QKKdd03bwiTpTbvXIZEBOtyU=;
+        b=XAUy8Fy8mFRUhRv9O+rzT5F0TRfZRlE1gqkce0PLn2tBFnDoJXg9NnOl20ZvpeBleX
+         Pd3EwavEBA+X5OJVCi9qFYtKXBjUT3kqUhLoWp78FP1WQEZ9oi6NW6tegoAj9TT5Mo+y
+         Z0LoNo7mtMgpknC7BukFxusRJyrrYBvSvY/I0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=FIJm64zSOV70KcmATQ1QKKdd03bwiTpTbvXIZEBOtyU=;
+        b=CRMH9u+SoTi8B2cWwSxcm0imqfx6eLbrlEbTED+vUUmuN6zRRxlkwgKIGPTC67FXO7
+         eHHye7Ut6cG44SBCuFFytW2HF6DpBzu/Rijst80iPSCGF8bOyxJmn4CHXxAvBURXf6AM
+         5zvHG3G/WaytvhgUUTsFUp7kEhHHx7S+I/Ev1vM3aU2QhwM8HzFuk3P/FUoeaOXzml/T
+         13wh9ZVUmHG4Y16veXeT+i5bW/XK+hE6zA8mza4TvI/zCIIHP1vkoYyKd5VhIzvIo7WZ
+         HLzmjSJfC5JzjCEAhTCa8JzliQWeeCLTe0HBun2FmHf/6/n5Ls83pbs3+VLPeclD+qF9
+         vPzA==
+X-Gm-Message-State: AOAM531bepuwJIRJ9z8Ohi5SsutxlOfZIZdGe6NMxscBTU+p07ktNOJ+
+        WSph9/Fy4tRhOp1n8EOKnrcf
+X-Google-Smtp-Source: ABdhPJzNhHkK2WK8mx9RSNqYXFEmnVc9sZGRQgQLoJwQ96U3iKwhVj3svUJUaruwq8uR6Pe8nE5LqQ==
+X-Received: by 2002:a1c:f208:0:b0:39c:1282:3d04 with SMTP id s8-20020a1cf208000000b0039c12823d04mr6744485wmc.26.1653986177218;
+        Tue, 31 May 2022 01:36:17 -0700 (PDT)
+Received: from mbp-di-paolo.station (net-93-144-98-177.cust.vodafonedsl.it. [93.144.98.177])
+        by smtp.gmail.com with ESMTPSA id az18-20020adfe192000000b0021020517639sm8392803wrb.102.2022.05.31.01.36.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 31 May 2022 01:36:16 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH -next v7 2/3] block, bfq: refactor the counting of
+ 'num_groups_with_pending_reqs'
+From:   Paolo VALENTE <paolo.valente@unimore.it>
+In-Reply-To: <efe01dd1-0f99-dadf-956d-b0e80e1e602c@huawei.com>
+Date:   Tue, 31 May 2022 10:36:15 +0200
+Cc:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
+        Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <1803FD7E-9FB1-4A1E-BD6D-D6657006589A@unimore.it>
+References: <20220528095020.186970-1-yukuai3@huawei.com>
+ <20220528095020.186970-3-yukuai3@huawei.com>
+ <0D9355CE-F85B-4B1A-AEC3-F63DFC4B3A54@linaro.org>
+ <b9a4ea60-28e5-b7aa-0154-ad7481eafbd3@huawei.com>
+ <efe01dd1-0f99-dadf-956d-b0e80e1e602c@huawei.com>
+To:     Yu Kuai <yukuai3@huawei.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,17 +76,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Max Kellermann <mk@cm4all.com> wrote:
 
-> On 2022/04/20 15:55, David Howells <dhowells@redhat.com> wrote:
-> > I have a tentative patch for this - see attached.
-> 
-> Quick feedback: your patch has been running on our servers for two
-> weeks, and I have received no new complaints about corrupted files.
-> That doesn't prove the patch is correct or that it really solves my
-> problem, but anyway it's a good sign.  Thanks so far.
 
-Can I put that down as a Tested-by?
+> Il giorno 30 mag 2022, alle ore 10:40, Yu Kuai <yukuai3@huawei.com> ha =
+scritto:
+>=20
+> =E5=9C=A8 2022/05/30 16:34, Yu Kuai =E5=86=99=E9=81=93:
+>> =E5=9C=A8 2022/05/30 16:10, Paolo Valente =E5=86=99=E9=81=93:
+>>>=20
+>>>=20
+>>>> Il giorno 28 mag 2022, alle ore 11:50, Yu Kuai <yukuai3@huawei.com> =
+ha scritto:
+>>>>=20
+>>>> Currently, bfq can't handle sync io concurrently as long as they
+>>>> are not issued from root group. This is because
+>>>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+>>>> bfq_asymmetric_scenario().
+>>>>=20
+>>>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
+>>>>=20
+>>>> Before this patch:
+>>>> 1) root group will never be counted.
+>>>> 2) Count if bfqg or it's child bfqgs have pending requests.
+>>>> 3) Don't count if bfqg and it's child bfqgs complete all the =
+requests.
+>>>>=20
+>>>> After this patch:
+>>>> 1) root group is counted.
+>>>> 2) Count if bfqg have at least one bfqq that is marked busy.
+>>>> 3) Don't count if bfqg doesn't have any busy bfqqs.
+>>>=20
+>>> Unfortunately, I see a last problem here. I see a double change:
+>>> (1) a bfqg is now counted only as a function of the state of its =
+child
+>>>      queues, and not of also its child bfqgs
+>>> (2) the state considered for counting a bfqg moves from having =
+pending
+>>>      requests to having busy queues
+>>>=20
+>>> I'm ok with with (1), which is a good catch (you are lady explained
+>>> the idea to me some time ago IIRC).
+>>>=20
+>>> Yet I fear that (2) is not ok.  A bfqq can become non busy even if =
+it
+>>> still has in-flight I/O, i.e.  I/O being served in the drive.  The
+>>> weight of such a bfqq must still be considered in the weights_tree,
+>>> and the group containing such a queue must still be counted when
+>>> checking whether the scenario is asymmetric.  Otherwise service
+>>> guarantees are broken.  The reason is that, if a scenario is deemed =
+as
+>>> symmetric because in-flight I/O is not taken into account, then =
+idling
+>>> will not be performed to protect some bfqq, and in-flight I/O may
+>>> steal bandwidth to that bfqq in an uncontrolled way.
+>> Hi, Paolo
+>> Thanks for your explanation.
+>> My orginal thoughts was using weights_tree insertion/removal, =
+however,
+>> Jan convinced me that using bfq_add/del_bfqq_busy() is ok.
+>> =46rom what I see, when bfqq dispatch the last request,
+>> bfq_del_bfqq_busy() will not be called from __bfq_bfqq_expire() if
+>> idling is needed, and it will delayed to when such bfqq get scheduled =
+as
+>> in-service queue again. Which means the weight of such bfqq should =
+still
+>> be considered in the weights_tree.
+>> I also run some tests on null_blk with "irqmode=3D2
+>> completion_nsec=3D100000000(100ms) hw_queue_depth=3D1", and tests =
+show
+>> that service guarantees are still preserved on slow device.
+>> Do you this is strong enough to cover your concern?
 
-David
+Unfortunately it is not.  Your very argument is what made be believe
+that considering busy queues was enough, in the first place.  But, as
+I found out, the problem is caused by the queues that do not enjoy
+idling.  With your patch (as well as in my initial version) they are
+not counted when they remain without requests queued.  And this makes
+asymmetric scenarios be considered erroneously as symmetric.  The
+consequence is that idling gets switched off when it had to be kept
+on, and control on bandwidth is lost for the victim in-service queues.
+
+Thanks,
+Paolo
+
+>> Thanks,
+>> Kuai
+>>>=20
+>>> I verified this also experimentally a few years ago, when I added =
+this
+>>> weights_tree stuff.  That's the rationale behind the part of
+>>> bfq_weights_tree_remove that this patch eliminates.  IOW,
+>>> for a bfqq and its parent bfqg to be out of the count for symmetry,
+>>> all bfqq's requests must also be completed.
+>>>=20
+>>> Thanks,
+>>> Paolo
+>=20
+> I forgot to cc Jan for this patchset... This is a reply for Jan.
 

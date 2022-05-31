@@ -2,149 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F74539A00
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 01:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93393539A04
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 01:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348660AbiEaXSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 19:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
+        id S1348637AbiEaXXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 19:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244351AbiEaXSl (ORCPT
+        with ESMTP id S237601AbiEaXW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 19:18:41 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4849B712C9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 16:18:40 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id e2so48062wrc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 16:18:40 -0700 (PDT)
+        Tue, 31 May 2022 19:22:56 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697B8939D5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 16:22:55 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id u18so143910plb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 16:22:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LRyMk+Q6nFripHUkwYzBEVo5OLNNL8RHhRGhadNuFAU=;
-        b=ZGBDa3EuRBaYGJ4gg1MjnYswFFIWvsWMvvcw+7tZ5KlNyVMsdA4tLBTaRWZRXVoB5t
-         3WeyHiTygg2bxxV214rs0c9sd6ioAqIc5eVfhUMSOW5gFmE4V2RuYX5RHdQB4dTj6WqW
-         zDJ0tzn/AP+W7gs2iyYGYmclYf/E+N26CF1FQm4Ztrl36IuhzwV8FLrN4T67Yc4v8prx
-         xYeaKoKQaq7Ps8dz2cQ0lGKf12xnxror+nmhZ1h2vjtyV5SdPdDxPmV1r8rjT9xZOFWx
-         RVaU+o5gQO229dvOp+ec3Uu0XdiXSb0aK0+Ts+C8RsWwfxvBH1LpZ9J9l6w+ACWP+rpf
-         HNow==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FKa/exg80q3Okni/CqHYIJ750Grih4tzVzwD5wDdMrk=;
+        b=2jk4pcLua88t2dFrSqdSOuzeQo4JdMC8qT0jX+1K/Y2Hzl4X5eLNpSH18ruVc8z9IB
+         mmhTM6Ef0Qm8P5mW/fJTWwvOhi52djawAZ4l3SmHR2zhvP6W/N8FuIzoutR+P4CdGCtS
+         nWdRMMfoLy4nosxsd3Tr73cWuHnmsJ/oUloRNZnkIOpeoAr0CSl3m4o8CZqqfE/32jxV
+         8yl5fweKk4s+qFBVUkrz4X7EVgRZBhueE4qpzm9PQMlRtLscQEuj6Vx0SsPBG9R8G36V
+         RPr8LbAFjSGYZSRa1LQmO/HZy3G6Ge3bcPkm12VE0wrLVlNo+ohQEIueMLe0d1MLsQky
+         pGgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LRyMk+Q6nFripHUkwYzBEVo5OLNNL8RHhRGhadNuFAU=;
-        b=lnXzbQXbhjzp6KM7c8rOf44DAKj9zHwzPvrEsNzgv+VWyJztXUyFp5jdNK0TzbXz1Q
-         uBVKZgeQmIfHHN5XvwXaAy7N09z/o7s+jx2eJdgSE5N/JliBDKgD2owHLb17daLPWLo0
-         i6wLKW+vAEPe+aFm1qeHgnnDgTFDuGTiJPWWayTkR5tk1LMweBlMLzBE8SxuV1oP88mL
-         CIB/UBao+YH+onPwB/2J4YQZOmGs7d5r0kleqBFlggGnlJX7F1mrnFZkWMlDDZLw3UiM
-         JA96ENvKxq7WzlJcNJBsu73AydB/RouBVz2TxLFcDy0VRdy/LVszEXk3pltN3IZ7owi4
-         q2qw==
-X-Gm-Message-State: AOAM531UQV/M8JKVkBimKaS2eHSb+6D82AiBYdr+MMN6XnQI+vyWNV+K
-        38/eRSJK+L2rsk2K2lB2UW6F1MHkHRGafXogSoA+VQ==
-X-Google-Smtp-Source: ABdhPJx7J+5sVQEHLn65AdSYxEgsPuV+2WTc6LjsDQQLhS5QnnY/r+H2A4YaE2NX1JvdlPqLOjXF7fnw9q1YvmU19XY=
-X-Received: by 2002:a5d:598f:0:b0:20c:83c9:b05b with SMTP id
- n15-20020a5d598f000000b0020c83c9b05bmr52723432wri.343.1654039118562; Tue, 31
- May 2022 16:18:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220525053814.3265216-1-irogers@google.com> <20220525053814.3265216-3-irogers@google.com>
- <CAM9d7cgA4fr3G7wjpaTKyEPF1JuAsQO-Ucoe9Ahd56KMz5RNBw@mail.gmail.com> <CAP-5=fXcskdtN_dz5jcVywq8S1=pC5TdEN25LcEXzd0Gyk+o+w@mail.gmail.com>
-In-Reply-To: <CAP-5=fXcskdtN_dz5jcVywq8S1=pC5TdEN25LcEXzd0Gyk+o+w@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 31 May 2022 16:18:26 -0700
-Message-ID: <CAP-5=fXu5rSV6C=WCs3bkCuaXknoKZv6o0O5gGAJKeLcAFuVcA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] perf stat: Add JSON output option
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Claire Jensen <cjense@google.com>, Alyssa Ross <hi@alyssa.is>,
-        Like Xu <likexu@tencent.com>,
-        James Clark <james.clark@arm.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Claire Jensen <clairej735@gmail.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=FKa/exg80q3Okni/CqHYIJ750Grih4tzVzwD5wDdMrk=;
+        b=crzZFSeF4mN0aBJdtjrtKQ943r3CTjwi8gNBHGOY5jbydz7i88EFkYZenlUJpFFXPc
+         YqH5bpWE8vXsuDvZ/wSD41xpqlsc1mxPLjAMgW0lfB6jRxji22pQaI5S1NOaUSAI8KVs
+         I9YphaIb76k8IKy6B78aHswXCOEooj3EN31NGiVkUL2I2nl3cdMSVxz4IZW/srjl9H7s
+         CJJJzHESoAmkw+dtvQCQwrrJDnRiAkE3MP55VpdpPTTOvgwD+mxE3eaAI0F8OAnCwKOe
+         MjlCvHvOWiXo1gwunV9McrYvagTATTDub6TLxJQdHPZcwBUhnsBHsC2CtxUHsojtx7OV
+         qJ1Q==
+X-Gm-Message-State: AOAM531x0StoX9ftsgRAMnbNKsObII9I5T08HwNTaaP+bWTlHDKQyGoO
+        eXSjVHje4rvM9VXkol7OdknIwtywdRCbwg==
+X-Google-Smtp-Source: ABdhPJwrGZs7IUC2JzbLIn3lRMOLiBR0ER03E5PHcGqnVKAOPXe5sDdBTFXcvWVVpAurdfHRc7Y/2w==
+X-Received: by 2002:a17:90a:5c84:b0:1dc:9b42:f2cf with SMTP id r4-20020a17090a5c8400b001dc9b42f2cfmr30970168pji.123.1654039374887;
+        Tue, 31 May 2022 16:22:54 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id iz18-20020a170902ef9200b0016363b15acasm87280plb.112.2022.05.31.16.22.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 16:22:54 -0700 (PDT)
+Date:   Tue, 31 May 2022 16:22:54 -0700 (PDT)
+X-Google-Original-Date: Tue, 31 May 2022 16:22:51 PDT (-0700)
+Subject:     Re: [GIT PULL] RISC-V Patches for the 5.19 Merge Window, Part 1
+In-Reply-To: <CAHk-=whMTEAuBRAS7aonfVM9wgupOok4HO6gX9X0FBzE3Uv2sA@mail.gmail.com>
+CC:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Message-ID: <mhng-c2485265-8142-4d5e-9b9f-2b63d1e01647@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 4:13 PM Ian Rogers <irogers@google.com> wrote:
->
-> On Tue, May 31, 2022 at 3:46 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > Hi Ian,
-> >
-> > On Tue, May 24, 2022 at 10:38 PM Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > From: Claire Jensen <cjense@google.com>
-> > >
-> > > CSV output is tricky to format and column layout changes are susceptible
-> > > to breaking parsers. New JSON-formatted output has variable names to
-> > > identify fields that are consistent and informative, making
-> > > the output parseable.
-> > >
-> > > CSV output example:
-> > >
-> > > 1.20,msec,task-clock:u,1204272,100.00,0.697,CPUs utilized
-> > > 0,,context-switches:u,1204272,100.00,0.000,/sec
-> > > 0,,cpu-migrations:u,1204272,100.00,0.000,/sec
-> > > 70,,page-faults:u,1204272,100.00,58.126,K/sec
-> > >
-> > > JSON output example:
-> > >
-> > > {"counter-value" : "3805.723968", "unit" : "msec", "event" :
-> > > "cpu-clock", "event-runtime" : 3805731510100.00, "pcnt-running"
-> > > : 100.00, "metric-value" : 4.007571, "metric-unit" : "CPUs utilized"}
-> > > {"counter-value" : "6166.000000", "unit" : "", "event" :
-> > > "context-switches", "event-runtime" : 3805723045100.00, "pcnt-running"
-> > > : 100.00, "metric-value" : 1.620191, "metric-unit" : "K/sec"}
-> > > {"counter-value" : "466.000000", "unit" : "", "event" :
-> > > "cpu-migrations", "event-runtime" : 3805727613100.00, "pcnt-running"
-> > > : 100.00, "metric-value" : 122.447136, "metric-unit" : "/sec"}
-> > > {"counter-value" : "208.000000", "unit" : "", "event" :
-> > > "page-faults", "event-runtime" : 3805726799100.00, "pcnt-running"
-> > > : 100.00, "metric-value" : 54.654516, "metric-unit" : "/sec"}
-> > >
-> > > Also added documentation for JSON option.
-> > > There is some tidy up of CSV code including a potential memory over run
-> > > in the os.nfields set up. To facilitate this an AGGR_MAX value is added.
-> > >
-> > > Signed-off-by: Claire Jensen <cjense@google.com>
-> >
-> > Your sign-off as well?
->
-> Doh:
-> Signed-off-by: Ian Rogers <irogers@google.com>
->
-> Thanks,
-> Ian
++Arnd, who probably saw this already...
 
-Actually, this was fixed in V5:
-https://lore.kernel.org/lkml/20220526224515.4088240-1-irogers@google.com/
+On Tue, 31 May 2022 14:52:16 PDT (-0700), Linus Torvalds wrote:
+> On Tue, May 31, 2022 at 10:13 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>>
+>> I have a single manual resolution in the fe510 device tree, just the result of
+>> some conflicting fixes.  It's not showing up in my merge, but a bunch of other
+>> automatic resolutions are which is a bit worrisome on my end -- I don't usually
+>> touch other trees, but we had a handful of big cross-tree things this time.
+>
+> Gaah. I'd have normally preferred for things like this to go through
+> Arnd, but it looks like he at least ack'ed these things..
 
-Thanks,
-Ian
+Ya, makes sense -- I don't really like touching other peoples' trees, 
+it's a headache for everyone.  There is a bit of overhead involved in 
+doing one of the multi-tree merges, though, so I'm never quite sure 
+where to draw the line.  We did one for the spinlocks where it was 
+pretty clear that was the way to go, as it was used by a handful of 
+trees and didn't take that long to get the RISC-V bits cleaned up.
 
-> > Anyway, I think there are places to clean up this part of code
-> > more but that's not a part of the work.  Maybe I need to find
-> > some time to do that later.
-> >
-> > Acked-by: Namhyung Kim <namhyung@kernel.org>
-> >
-> > Thanks,
-> > Namhyung
+The compat stuff was a mess for a cycle or two, though, and RISC-V was 
+the only user of the new bits.  I always feel bad trying to dump messes 
+on other folks, so I figured it was easier to just fix it myself and by 
+the time that happened it looked like everyone else had stopped paying 
+attention.  I poked it a few times both before and after putting into my 
+for-next, but with the Acks I just took it.
+
+After seeing those conflicts I kind of wanted to push for it to get 
+merged a different way.  Had it not been both before some other 
+stuff and a persistent headache I probably would have just sent the PR 
+before that merge and asked folks again, but I guess I just wanted to 
+finally have this one done.
+
+Though now that I say that, merging something because it was a headache 
+is probably the wrong message to send folks... ;)
+
+> I've obviously pulled it, as you can see from the pr-tracker-bot reply
+> that already went out.
+
+Thanks, I'll try not to make a mess next time.

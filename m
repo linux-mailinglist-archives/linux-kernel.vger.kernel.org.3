@@ -2,240 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4647C538DD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2622A538DE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245308AbiEaJgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 05:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
+        id S245312AbiEaJjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 05:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238680AbiEaJgD (ORCPT
+        with ESMTP id S232814AbiEaJjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 05:36:03 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE9B50035
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:35:58 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id r206so9560233oib.8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:35:58 -0700 (PDT)
+        Tue, 31 May 2022 05:39:42 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9086B91589;
+        Tue, 31 May 2022 02:39:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=rNIUiIBXyDGvzHE+zEymfz2BuuwWa1afkL1Ck+gh5so=;
-        b=bUd/ibq+bmZUSmRa/qTzHSW6UPiz5wLoLGk3kS74svogQoGRP9EnEwUMFZQQx2Dtr4
-         6xZ/PXALBWBE7Wq3nYGo/doZcb2ASNxDtz1uDwfoYA0moFl/6d0BEl7f8UFyYp82szmJ
-         tzjFCMtOy9B3Rt6P+xaaL/FOThNkMjon01ZTazOeHw1qZv53Wq6+te8b84bErXZZXuCP
-         Z44t7iicNlvEnxEMmAuizTvVk4+Wkwx7V/CxgXq4JcoPrvb9VZqiz4m4A8ZMA8StTTQU
-         mgF5dVb7OTGEY6sHO00KEz99z7YFaEajC0N+NvcrIAa1KJsnXTA7wRU4bvzj08sYVcMQ
-         JibA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rNIUiIBXyDGvzHE+zEymfz2BuuwWa1afkL1Ck+gh5so=;
-        b=uU9SLuHbwOLeGisvIH4RoF7fqcEKmsV42qnWV3aW42WrQ5gWoqzLtIEeF5tyhkHRIQ
-         6cXBXywscwN82sHFEvI7GsYrm0Lak52yUHkbPj4kDLKgKbTRGI2U3IbI9/uTCyvOUdJ/
-         +ULHdWOCcL00IhJ6wARd61iaOp8bAUs6tGx6m4Hf10Ap2IhCQ0EuLEAyV5yLN4ddbmXj
-         uROJCvKCSMoQ/EWKG3JAXjpnPbKdZ6/0jbRM9Q5tI5mZ0/5RbdJIIj2CBa8rdaPIffMg
-         U4QfGogc0htfy47xC0DLD3Bj2g1thrqd3Wo6wfOgdziauTwsLXCQA6nYJua1wbGtdtyi
-         KNIQ==
-X-Gm-Message-State: AOAM532ecU8MoprJ5UReepxCPFTBsZOeCvzYSC1ALu0FDm0X9MEyAqTp
-        0GB8yn2DwLGr/Irabi1a7OuWONLJirGRGNqSJfEQCA==
-X-Google-Smtp-Source: ABdhPJxBNxkVY3rd7hL5fhkw0+H4Wgohxf2NOuEGwfG7qs2dWKUzMdr6nRKwgndZs0sFXNaAopWhP5rfACegYpbKokM=
-X-Received: by 2002:aca:ac93:0:b0:32a:e3b6:7c52 with SMTP id
- v141-20020acaac93000000b0032ae3b67c52mr11585107oie.294.1653989757860; Tue, 31
- May 2022 02:35:57 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653989981; x=1685525981;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=G9ySjORkNYB0PWVlf2LDGcVhJF/OQDgJg868ZMKx8YI=;
+  b=QuIx3EDU0J+XxSsLagGm8RYgO9sx3S9pKUBIInQrrSGA6/v7T7hP9/gN
+   c4YlBhxJkcNKQLyERVQHb9zIh4GFeKAgf5rUIMk5CgJok75Rgyvnsp1/a
+   DG0FEjmlhFKsOEQ98szpK+Kaw89z1y/85xAsyFNWYRgxs43qxW7HEsf8L
+   A=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 31 May 2022 02:39:41 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 02:39:41 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 31 May 2022 02:39:40 -0700
+Received: from hu-ylal-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 31 May 2022 02:39:38 -0700
+From:   Yogesh Lal <quic_ylal@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <quic_sibis@quicinc.com>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Yogesh Lal <quic_ylal@quicinc.com>
+Subject: [V3 0/2] Fallback to full coredump
+Date:   Tue, 31 May 2022 15:09:27 +0530
+Message-ID: <1653989969-26500-1-git-send-email-quic_ylal@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20220109132613.122912-1-guoheyi@linux.alibaba.com>
- <ad5e5438-4a3f-2447-4af3-7caa91e7252a@linux.alibaba.com> <CACPK8XcYp9iAD3fjBQCax41C-1UpA+1AQW3epyEooYzNLt7R5g@mail.gmail.com>
- <e62fba0b-ebb9-934a-d7cf-6da33ecc4335@linux.alibaba.com> <CACPK8Xc+v132vM-ytdAUFhywFXGpPF+uPSBWi68ROf_PLD4VQQ@mail.gmail.com>
- <0f5cd773-2d0a-b782-b967-ecbcec3de7b1@linux.alibaba.com>
-In-Reply-To: <0f5cd773-2d0a-b782-b967-ecbcec3de7b1@linux.alibaba.com>
-From:   Lei Yu <yulei.sh@bytedance.com>
-Date:   Tue, 31 May 2022 17:35:47 +0800
-Message-ID: <CAGm54UFUxNpwKjQyQnqtbys_nfgx2KcEEJt3-0nJWYjyjM9pvw@mail.gmail.com>
-Subject: Re: [PATCH] drivers/i2c-aspeed: avoid invalid memory reference after timeout
-To:     Heyi Guo <guoheyi@linux.alibaba.com>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I hit a similar problem that has a slightly different backtrace on a
-malfunctioning device.
-https://pastebin.com/TiWdkdrG
+Add support for full coredump as a fallback mechanism in
+absence of minidump support.
 
-With this patch, the kernel panic is gone and it gets below logs instead:
+V3:
+ * Add clear out dump segment before re-populating it. 
 
- aspeed-i2c-bus 1e78a180.i2c-bus: bus in unknown state. irq_status: 0x1
- aspeed-i2c-bus 1e78a180.i2c-bus: irq handled !=3D irq. expected
-0x00000001, but was 0x00000000
- aspeed-i2c-bus 1e78a180.i2c-bus: bus in unknown state. irq_status: 0x10
- aspeed-i2c-bus 1e78a180.i2c-bus: irq handled !=3D irq. expected
-0x00000010, but was 0x00000000
+Siddharth Gupta (2):
+  remoteproc: core: Export the rproc coredump APIs
+  remoteproc: qcom: Add full coredump fallback mechanism
 
-So I think this patch is good in that it prevents the kernel panic.
+ drivers/remoteproc/qcom_common.c         | 14 ++++++++++++--
+ drivers/remoteproc/qcom_q6v5_pas.c       |  1 +
+ drivers/remoteproc/remoteproc_coredump.c |  2 ++
+ drivers/remoteproc/remoteproc_internal.h |  4 ----
+ include/linux/remoteproc.h               |  4 ++++
+ 5 files changed, 19 insertions(+), 6 deletions(-)
 
-On Wed, Jan 19, 2022 at 11:00 AM Heyi Guo <guoheyi@linux.alibaba.com> wrote=
-:
->
->
-> =E5=9C=A8 2022/1/17 =E4=B8=8B=E5=8D=882:38, Joel Stanley =E5=86=99=E9=81=
-=93:
-> > On Fri, 14 Jan 2022 at 14:01, Heyi Guo <guoheyi@linux.alibaba.com> wrot=
-e:
-> >> Hi Joel,
-> >>
-> >>
-> >> =E5=9C=A8 2022/1/11 =E4=B8=8B=E5=8D=886:51, Joel Stanley =E5=86=99=E9=
-=81=93:
-> >>> On Tue, 11 Jan 2022 at 07:52, Heyi Guo <guoheyi@linux.alibaba.com> wr=
-ote:
-> >>>> Hi all,
-> >>>>
-> >>>> Any comments?
-> >>>>
-> >>>> Thanks,
-> >>>>
-> >>>> Heyi
-> >>>>
-> >>>> =E5=9C=A8 2022/1/9 =E4=B8=8B=E5=8D=889:26, Heyi Guo =E5=86=99=E9=81=
-=93:
-> >>>>> The memory will be freed by the caller if transfer timeout occurs,
-> >>>>> then it would trigger kernel panic if the peer device responds with
-> >>>>> something after timeout and triggers the interrupt handler of aspee=
-d
-> >>>>> i2c driver.
-> >>>>>
-> >>>>> Set the msgs pointer to NULL to avoid invalid memory reference afte=
-r
-> >>>>> timeout to fix this potential kernel panic.
-> >>> Thanks for the patch. How did you discover this issue? Do you have a
-> >>> test I can run to reproduce the crash?
-> >> We are using one i2c channel to communicate with another MCU by
-> >> implementing user space SSIF protocol, and the MCU may not respond in
-> >> time if it is busy. If it responds after timeout occurs, it will trigg=
-er
-> >> below kernel panic:
-> >>
-> > Thanks for the details. It looks like you've done some testing of
-> > this, which is good.
-> >
-> >> After applying this patch, we'll get below warning instead:
-> >>
-> >> "bus in unknown state. irq_status: 0x%x\n"
-> > Given we get to here in the irq handler, we've done these two tests:
-> >
-> >   - aspeed_i2c_is_irq_error()
-> >   - the state is not INACTIVE or PENDING
-> >
-> > but there's no buffer ready for us to use. So what has triggered the
-> > IRQ in this case? Do you have a record of the irq status bits?
-> >
-> > I am wondering if the driver should know that the transaction has
-> > timed out, instead of detecting this unknown state.
->
-> Yes, some drivers will try to abort the transaction before returning to
-> the caller, if timeout happens.
->
-> The irq status bits are not always the same; searching from the history
-> logs, I found some messages like below:
->
-> [  495.289499] aspeed-i2c-bus 1e78a680.i2c-bus: bus in unknown state.
-> irq_status: 0x2
-> [  495.298003] aspeed-i2c-bus 1e78a680.i2c-bus: bus in unknown state.
-> irq_status: 0x10
->
-> [   65.176761] aspeed-i2c-bus 1e78a680.i2c-bus: bus in unknown state.
-> irq_status: 0x15
->
-> Thanks,
->
-> Heyi
->
-> >
-> >
-> >>> Can you provide a Fixes tag?
-> >> I think the bug was introduced by the first commit of this file :(
-> >>
-> >> f327c686d3ba44eda79a2d9e02a6a242e0b75787
-> >>
-> >>
-> >>> Do other i2c master drivers do this? I took a quick look at the meson
-> >>> driver and it doesn't appear to clear it's pointer to msgs.
-> >> It is hard to say. It seems other drivers have some recover scheme lik=
-e
-> >> aborting the transfer, or loop each messages in process context and
-> >> don't do much in IRQ handler, which may disable interrupts or not reta=
-in
-> >> the buffer pointer before returning timeout.
-> > I think your change is okay to go in as it fixes the crash, but first
-> > I want to work out if there's some missing handling of a timeout
-> > condition that we should add as well.
-> >
-> >
-> >> Thanks,
-> >>
-> >> Heyi
-> >>
-> >>
-> >>>>> Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
-> >>>>>
-> >>>>> -------
-> >>>>>
-> >>>>> Cc: Brendan Higgins <brendanhiggins@google.com>
-> >>>>> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> >>>>> Cc: Joel Stanley <joel@jms.id.au>
-> >>>>> Cc: Andrew Jeffery <andrew@aj.id.au>
-> >>>>> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> >>>>> Cc: linux-i2c@vger.kernel.org
-> >>>>> Cc: openbmc@lists.ozlabs.org
-> >>>>> Cc: linux-arm-kernel@lists.infradead.org
-> >>>>> Cc: linux-aspeed@lists.ozlabs.org
-> >>>>> ---
-> >>>>>     drivers/i2c/busses/i2c-aspeed.c | 5 +++++
-> >>>>>     1 file changed, 5 insertions(+)
-> >>>>>
-> >>>>> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i=
-2c-aspeed.c
-> >>>>> index 67e8b97c0c950..3ab0396168680 100644
-> >>>>> --- a/drivers/i2c/busses/i2c-aspeed.c
-> >>>>> +++ b/drivers/i2c/busses/i2c-aspeed.c
-> >>>>> @@ -708,6 +708,11 @@ static int aspeed_i2c_master_xfer(struct i2c_a=
-dapter *adap,
-> >>>>>                 spin_lock_irqsave(&bus->lock, flags);
-> >>>>>                 if (bus->master_state =3D=3D ASPEED_I2C_MASTER_PEND=
-ING)
-> >>>>>                         bus->master_state =3D ASPEED_I2C_MASTER_INA=
-CTIVE;
-> >>>>> +             /*
-> >>>>> +              * All the buffers may be freed after returning to ca=
-ller, so
-> >>>>> +              * set msgs to NULL to avoid memory reference after f=
-reeing.
-> >>>>> +              */
-> >>>>> +             bus->msgs =3D NULL;
-> >>>>>                 spin_unlock_irqrestore(&bus->lock, flags);
-> >>>>>
-> >>>>>                 return -ETIMEDOUT;
+-- 
+2.7.4
 
-
-
---=20
-BRs,
-Lei YU

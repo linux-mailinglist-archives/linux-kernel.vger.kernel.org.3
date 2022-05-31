@@ -2,51 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD7E0539431
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74299539433
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345853AbiEaPoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 11:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S1345829AbiEaPp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 11:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345829AbiEaPoB (ORCPT
+        with ESMTP id S237200AbiEaPp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 11:44:01 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD878CB13
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:43:57 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1654011835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aKpEOAmZCRxRoXVhww36jQag5lkjQ3WmgRmPB/KuwNI=;
-        b=c59EypVaB2zGdyrfSQ3HAwEl/BbwwaHxKd6DMjfYAuxMDrVsjyp1KGSo7WhJqfW6IYPp6I
-        nE5jgnW5onO5dZuSkd1dI8hDnO24eKUJ73YEjDmcQQdIioGGMDovkWpOGVEvzdT69vuU31
-        +wPU4O05ZwI8fcXCG1DNNAShs/eTc1I=
-From:   andrey.konovalov@linux.dev
-To:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH 3/3] kasan: fix zeroing vmalloc memory with HW_TAGS
-Date:   Tue, 31 May 2022 17:43:50 +0200
-Message-Id: <bbc30451228f670abeaf1b8aad678b9f6dda4ad3.1654011120.git.andreyknvl@google.com>
-In-Reply-To: <4c76a95aff79723de76df146a10888a5a9196faf.1654011120.git.andreyknvl@google.com>
-References: <4c76a95aff79723de76df146a10888a5a9196faf.1654011120.git.andreyknvl@google.com>
-MIME-Version: 1.0
+        Tue, 31 May 2022 11:45:26 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B577F8CB1F
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:45:25 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id t2so5569962pld.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+jxnpPySjns9WZXtYAeSufhkP2YRQS3HOSHZmGEDZ04=;
+        b=5wcFHM/I1reVsJZKJ07bukcm1kBKagjnExNBI/xeoY/NTq2btN/4etr2hsEdw+VjFY
+         njuEiKUEWBstz3Z6YWlCe0XhV8VUAn9rD3Z1Hc+vOQAGnsh6wv2MBchoWxLBXBJaE/qi
+         aoo3RjfTDGBFAV2vbqK7AD515kHowYwxWU4UyOebqqWZLaY6QrpHLZDdfv3yDGcQM6Bx
+         PP+VFt+dNd18lElH2Jv5oPozlWChl9bhqYU8fzaWwTGKDZY4eH3g+ZTGER3U9hER6/LM
+         GEIV0308TxjluKDt9+lZ2/En5R+cg8sZ1Gt4rrv5PeoY2axRbQSl1I1+CuVO4Ik3RvRF
+         AFJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=+jxnpPySjns9WZXtYAeSufhkP2YRQS3HOSHZmGEDZ04=;
+        b=fREXPqaZ2436+OIi6Mskg89MSJnI0P1zBVkIkOV44fYKCNerfVjhgtNraqU76QIKGa
+         n4OuPShED4sji3C/uiCk3Wv21sKz5DLbSKLts7z7xOMzNoGCI7Kx7j4onQNqU9+1Glam
+         wi+QSroKmsunO0bT6jjboy3Id1S0pY/XTaLyyDVKJooZ3s9ukqv7Wd93mRyzAbMGpx+k
+         9w/AQ/CVd+mQcPygE0INLhBe3zIG1LsJP/WoDh8kWCveo6j04G+u3u/JgDOqubz4PxJp
+         UmoVE7jgm99SIW2LFU6iYjPJ3ecz/T8vLBXf6Z7SxMyXSxxy/OFV2UHx+MEc/dJHEgq2
+         J/Uw==
+X-Gm-Message-State: AOAM5309U5lxe9kv5EIFVGL0M9AfoJ1IngrB11CiwsssZTQNHq4wMnKI
+        G/mLSBcWIJUkx6b7TP7NfSSo8Sd4YMADyA==
+X-Google-Smtp-Source: ABdhPJxpSEaugMAP2DG8fBB1Cjqi+Yfmbfthf/yUFY5TNAY8Ag43tjDRozyvkZZkXSXKmeZdbvfFyw==
+X-Received: by 2002:a17:90b:4d90:b0:1e3:3025:66fe with SMTP id oj16-20020a17090b4d9000b001e3302566femr5672640pjb.145.1654011925129;
+        Tue, 31 May 2022 08:45:25 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id q16-20020a170902eb9000b0015ea95948ebsm5318319plg.134.2022.05.31.08.45.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 08:45:24 -0700 (PDT)
+Date:   Tue, 31 May 2022 08:45:24 -0700 (PDT)
+X-Google-Original-Date: Tue, 31 May 2022 08:45:23 PDT (-0700)
+Subject:     Re: [PATCH] RISC-V: Prepare dropping week attribute from arch_kexec_apply_relocations[_add]
+In-Reply-To: <20220531055803.prq5fj6lajzqiiiu@pengutronix.de>
+CC:     wangkefeng.wang@huawei.com, guoren@linux.alibaba.com,
+        sunnanyong@huawei.com, jszhang@kernel.org, mick@ics.forth.gr,
+        linux-riscv@lists.infradead.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>, alex@ghiti.fr,
+        christophe.leroy@csgroup.eu, naveen.n.rao@linux.vnet.ibm.com,
+        lizhengyu3@huawei.com, aou@eecs.berkeley.edu,
+        liaochang1@huawei.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        Bjorn Topel <bjorn.topel@gmail.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, penberg@kernel.org,
+        ebiederm@xmission.com, kernel@pengutronix.de,
+        akpm@linux-foundation.org, linuxppc-dev@lists.ozlabs.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     u.kleine-koenig@pengutronix.de
+Message-ID: <mhng-29ba2a72-3ea8-4b27-8436-acde7976914f@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,124 +78,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+On Mon, 30 May 2022 22:58:03 PDT (-0700), u.kleine-koenig@pengutronix.de wrote:
+> On Mon, May 30, 2022 at 04:11:27PM -0700, Palmer Dabbelt wrote:
+>> On Mon, 30 May 2022 12:41:33 PDT (-0700), u.kleine-koenig@pengutronix.de wrote:
+>> > Hello,
+>> > 
+>> > On Mon, May 30, 2022 at 11:58:16AM -0700, Palmer Dabbelt wrote:
+>> > > On Mon, 30 May 2022 00:42:02 PDT (-0700), u.kleine-koenig@pengutronix.de wrote:
+>> > > > Without this change arch/riscv/kernel/elf_kexec.c fails to compile once
+>> > > > commit 233c1e6c319c ("kexec_file: drop weak attribute from
+>> > > > arch_kexec_apply_relocations[_add]") is also contained in the tree.
+>> > > > This currently happens in next-20220527.
+>> > > > > Prepare the RISC-V similar to the s390 adaption done in
+>> > > 233c1e6c319c.
+>> > > > This is safe to do on top of the riscv change even without the change to
+>> > > > arch_kexec_apply_relocations.
+>> > > > > Fixes: 838b3e28488f ("RISC-V: Load purgatory in kexec_file")
+>> > > > Looks-good-to: liaochang (A) <liaochang1@huawei.com>
+>> > > > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+>> > > > ---
+>> > > > > On Mon, May 30, 2022 at 09:43:26AM +0800, liaochang (A) wrote:
+>> > > > > > I can confirm that doing
+>> > > > > > > diff --git a/arch/riscv/include/asm/kexec.h
+>> > > > > b/arch/riscv/include/asm/kexec.h
+>> > > > > > index 206217b23301..eee260e8ab30 100644
+>> > > > > > --- a/arch/riscv/include/asm/kexec.h
+>> > > > > > +++ b/arch/riscv/include/asm/kexec.h
+>> > > > > > @@ -55,6 +55,13 @@ extern riscv_kexec_method riscv_kexec_norelocate;
+>> > > > > >  >  #ifdef CONFIG_KEXEC_FILE
+>> > > > > >  extern const struct kexec_file_ops elf_kexec_ops;
+>> > > > > > +
+>> > > > > > +struct purgatory_info;
+>> > > > > > +int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
+>> > > > > > +				     Elf_Shdr *section,
+>> > > > > > +				     const Elf_Shdr *relsec,
+>> > > > > > +				     const Elf_Shdr *symtab);
+>> > > > > > +#define arch_kexec_apply_relocations_add arch_kexec_apply_relocations_add
+>> > > > > >  #endif
+>> > > > > >  >  #endif
+>> > > > > > > LGTM, you could send a fixup patch to riscv, thanks.
+>> > > > > > > > > on top of 838b3e28488f results in a compilable tree. And
+>> > > when
+>> > > > > merging
+>> > > > > > 233c1e6c319c into this, it is still building.
+>> > > > > > > I'm not enough into kexec (and riscv) to judge if this is
+>> > > > > sensible, or
+>> > > > > > create a useful commit log but the obvious way forward is to apply the
+>> > > > > > above patch to the riscv tree before it hits Linus' tree.
+>> > > > > Ok, here comes a patch with a generic commit log.
+>> > > > > @riscv people: If you prefer, squash it into 838b3e28488f.
+>> > > 
+>> > > Sorry, just saw this after I sent my version of the fix.  They're the same,
+>> > > but do you mind sending a full-on patch so I can merge it?
+>> > 
+>> > Sorry, I don't understand your request. I found
+>> > https://lore.kernel.org/linux-riscv/20220530180408.16239-1-palmer@rivosinc.com/
+>> > 
+>> > but I don't know what a full-on patch is and what stops you merging my
+>> > patch.
+>> > 
+>> > Is it that it's in reply to a patch series and b4 fails to fetch the
+>> > right patch and you ask to send it in a new thread?
+>> 
+>> Ya, with the reply bits in there my mail merge (which unfortunately isn't
+>> b4, I haven't gotten around to converting yet) got tripped up.  It's kind of
+>> easy to for me to screw something up trying to pull bits out of replies and
+>> such, but I think this one was pretty simple (looks like maybe some PGP or
+>> MIME thing was the issue).
+>> 
+>> I just put <https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?h=for-next&id=7699f7aacf3ebfee51c670b6f796b2797f0f7487>
+>> on my staging branch, it looks OK to me but LMK if there's a problem.
+>
+> there is indeed a problem, but caused by me: If you are ready to rewrite
+> it, please do s/week/weak/ in the subject line. Otherwise looks good to
+> me.
 
-HW_TAGS KASAN skips zeroing page_alloc allocations backing vmalloc
-mappings via __GFP_SKIP_ZERO. Instead, these pages are zeroed via
-kasan_unpoison_vmalloc() by passing the KASAN_VMALLOC_INIT flag.
+Ah, sorry, I missed that too.  I was hoping to send a PR this morning, 
+I'd usually just rewrite and delay this one but given it's necessary to 
+make the post-merge build work I'm going to just send it up with the 
+spelling error.
 
-The problem is that __kasan_unpoison_vmalloc() does not zero pages
-when either kasan_vmalloc_enabled() or is_vmalloc_or_module_addr() fail.
-
-Thus:
-
-1. Change __vmalloc_node_range() to only set KASAN_VMALLOC_INIT when
-   __GFP_SKIP_ZERO is set.
-
-2. Change __kasan_unpoison_vmalloc() to always zero pages when the
-   KASAN_VMALLOC_INIT flag is set.
-
-3. Add WARN_ON() asserts to check that KASAN_VMALLOC_INIT cannot be set
-   in other early return paths of __kasan_unpoison_vmalloc().
-
-Also clean up the comment in __kasan_unpoison_vmalloc.
-
-Fixes: 23689e91fb22 ("kasan, vmalloc: add vmalloc tagging for HW_TAGS")
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- mm/kasan/hw_tags.c | 30 ++++++++++++++++++++++--------
- mm/vmalloc.c       | 10 +++++-----
- 2 files changed, 27 insertions(+), 13 deletions(-)
-
-diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-index 9e1b6544bfa8..c0ec01eadf20 100644
---- a/mm/kasan/hw_tags.c
-+++ b/mm/kasan/hw_tags.c
-@@ -263,21 +263,31 @@ void *__kasan_unpoison_vmalloc(const void *start, unsigned long size,
- 	u8 tag;
- 	unsigned long redzone_start, redzone_size;
- 
--	if (!kasan_vmalloc_enabled())
--		return (void *)start;
-+	if (!kasan_vmalloc_enabled() || !is_vmalloc_or_module_addr(start)) {
-+		struct page *page;
-+		const void *addr;
-+
-+		/* Initialize memory if required. */
-+
-+		if (!(flags & KASAN_VMALLOC_INIT))
-+			return (void *)start;
-+
-+		for (addr = start; addr < start + size; addr += PAGE_SIZE) {
-+			page = virt_to_page(addr);
-+			clear_highpage_tagged(page);
-+		}
- 
--	if (!is_vmalloc_or_module_addr(start))
- 		return (void *)start;
-+	}
- 
- 	/*
--	 * Skip unpoisoning and assigning a pointer tag for non-VM_ALLOC
--	 * mappings as:
-+	 * Don't tag non-VM_ALLOC mappings, as:
- 	 *
- 	 * 1. Unlike the software KASAN modes, hardware tag-based KASAN only
- 	 *    supports tagging physical memory. Therefore, it can only tag a
- 	 *    single mapping of normal physical pages.
- 	 * 2. Hardware tag-based KASAN can only tag memory mapped with special
--	 *    mapping protection bits, see arch_vmalloc_pgprot_modify().
-+	 *    mapping protection bits, see arch_vmap_pgprot_tagged().
- 	 *    As non-VM_ALLOC mappings can be mapped outside of vmalloc code,
- 	 *    providing these bits would require tracking all non-VM_ALLOC
- 	 *    mappers.
-@@ -289,15 +299,19 @@ void *__kasan_unpoison_vmalloc(const void *start, unsigned long size,
- 	 *
- 	 * For non-VM_ALLOC allocations, page_alloc memory is tagged as usual.
- 	 */
--	if (!(flags & KASAN_VMALLOC_VM_ALLOC))
-+	if (!(flags & KASAN_VMALLOC_VM_ALLOC)) {
-+		WARN_ON(flags & KASAN_VMALLOC_INIT);
- 		return (void *)start;
-+	}
- 
- 	/*
- 	 * Don't tag executable memory.
- 	 * The kernel doesn't tolerate having the PC register tagged.
- 	 */
--	if (!(flags & KASAN_VMALLOC_PROT_NORMAL))
-+	if (!(flags & KASAN_VMALLOC_PROT_NORMAL)) {
-+		WARN_ON(flags & KASAN_VMALLOC_INIT);
- 		return (void *)start;
-+	}
- 
- 	tag = kasan_random_tag();
- 	start = set_tag(start, tag);
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 07db42455dd4..0adf4aa1514d 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -3168,15 +3168,15 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
- 
- 	/*
- 	 * Mark the pages as accessible, now that they are mapped.
--	 * The init condition should match the one in post_alloc_hook()
--	 * (except for the should_skip_init() check) to make sure that memory
--	 * is initialized under the same conditions regardless of the enabled
--	 * KASAN mode.
-+	 * The condition for setting KASAN_VMALLOC_INIT should complement the
-+	 * one in post_alloc_hook() with regards to the __GFP_SKIP_ZERO check
-+	 * to make sure that memory is initialized under the same conditions.
- 	 * Tag-based KASAN modes only assign tags to normal non-executable
- 	 * allocations, see __kasan_unpoison_vmalloc().
- 	 */
- 	kasan_flags |= KASAN_VMALLOC_VM_ALLOC;
--	if (!want_init_on_free() && want_init_on_alloc(gfp_mask))
-+	if (!want_init_on_free() && want_init_on_alloc(gfp_mask) &&
-+	    (gfp_mask & __GFP_SKIP_ZERO))
- 		kasan_flags |= KASAN_VMALLOC_INIT;
- 	/* KASAN_VMALLOC_PROT_NORMAL already set if required. */
- 	area->addr = kasan_unpoison_vmalloc(area->addr, real_size, kasan_flags);
--- 
-2.25.1
-
+>
+> Best regards and thanks,
+> Uwe
+>
+> -- 
+> Pengutronix e.K.                           | Uwe Kleine-König            |
+> Industrial Linux Solutions                 | https://www.pengutronix.de/ |

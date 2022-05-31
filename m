@@ -2,210 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405AC5393E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F1653941C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345647AbiEaPXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 11:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
+        id S1345778AbiEaPim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 11:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345631AbiEaPXt (ORCPT
+        with ESMTP id S1345758AbiEaPik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 11:23:49 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D962FE4F;
-        Tue, 31 May 2022 08:23:47 -0700 (PDT)
-Received: from kwepemi500004.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LCGJR3c8TzDqXs;
-        Tue, 31 May 2022 23:23:35 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi500004.china.huawei.com (7.221.188.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 31 May 2022 23:23:45 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 31 May
- 2022 23:23:45 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <ebiederm@xmission.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH RFC] proc: Fix a dentry lock race between release_task and lookup
-Date:   Tue, 31 May 2022 23:37:08 +0800
-Message-ID: <20220531153708.3449446-1-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 31 May 2022 11:38:40 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCBC62A36
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:38:38 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VEvuo0x_1654011513;
+Received: from 192.168.0.205(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0VEvuo0x_1654011513)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 31 May 2022 23:38:34 +0800
+Message-ID: <d387ede1-d000-37aa-6ede-237b65b59ce5@linux.alibaba.com>
+Date:   Tue, 31 May 2022 23:38:32 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH v2] sched: Queue task on wakelist in the same llc if the
+ wakee cpu is idle
+Content-Language: en-US
+To:     Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+References: <20220527090544.527411-1-dtcccc@linux.alibaba.com>
+ <xhsmhleuj7zve.mognet@vschneid.remote.csb>
+ <1d0eb8f4-e474-86a9-751a-7c2e1788df85@linux.alibaba.com>
+ <xhsmhilpl9azq.mognet@vschneid.remote.csb> <20220531135532.GA3332@suse.de>
+From:   Tianchen Ding <dtcccc@linux.alibaba.com>
+In-Reply-To: <20220531135532.GA3332@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
-moved proc_flush_task() behind __exit_signal(). Then, process systemd
-can take long period high cpu usage during releasing task in following
-concurrent processes:
+On 2022/5/31 21:55, Mel Gorman wrote:
+> On Tue, May 31, 2022 at 12:50:49PM +0100, Valentin Schneider wrote:
+>>>> With all that in mind, I'm curious whether your patch is functionaly close
+>>>> to the below.
+>>>>
+>>>> ---
+>>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>>>> index 66c4e5922fe1..ffd43264722a 100644
+>>>> --- a/kernel/sched/core.c
+>>>> +++ b/kernel/sched/core.c
+>>>> @@ -3836,7 +3836,7 @@ static inline bool ttwu_queue_cond(int cpu, int wake_flags)
+>>>>    	 * the soon-to-be-idle CPU as the current CPU is likely busy.
+>>>>    	 * nr_running is checked to avoid unnecessary task stacking.
+>>>>    	 */
+>>>> -	if ((wake_flags & WF_ON_CPU) && cpu_rq(cpu)->nr_running <= 1)
+>>>> +	if (cpu_rq(cpu)->nr_running <= 1)
+>>>>    		return true;
+>>>>    
+>>>>    	return false;
+>>>
+>>> It's a little different. This may bring extra IPIs when nr_running == 1
+>>> and the current task on wakee cpu is not the target wakeup task (i.e.,
+>>> rq->curr == another_task && rq->curr != p). Then this another_task may
+>>> be disturbed by IPI which is not expected. So IMO the promise by
+>>> WF_ON_CPU is necessary.
+>>
+>> You're right, actually taking a second look at that WF_ON_CPU path,
+>> shouldn't the existing condition be:
+>>
+>> 	if ((wake_flags & WF_ON_CPU) && !cpu_rq(cpu)->nr_running)
+>>
+>> ? Per the p->on_rq and p->on_cpu ordering, if we have WF_ON_CPU here then
+>> we must have !p->on_rq, so the deactivate has happened, thus the task
+>> being alone on the rq implies nr_running==0.
+>>
+>> @Mel, do you remember why you went for <=1 here? I couldn't find any clues
+>> on the original posting.
+>>
+> 
+> I don't recall exactly why I went with <= 1 there but I may not have
+> considered the memory ordering of on_rq and nr_running and the comment
+> above it is literally what I was thinking at the time. I think you're
+> right and that check can be !cpu_rq(cpu)->nr_running.
+> 
 
-  systemd                                 ps
-kernel_waitid                 stat(/proc/pid)
-  do_wait                       filename_lookup
-    wait_consider_task            lookup_fast
-      release_task
-        __exit_signal
-          __unhash_process
-            detach_pid
-              __change_pid // remove task->pid_links
-                                     d_revalidate -> pid_revalidate  // 0
-                                     d_invalidate(/proc/pid)
-                                       shrink_dcache_parent(/proc/pid)
-                                         d_walk(/proc/pid)
-                                           spin_lock_nested(/proc/pid/fd)
-                                           // iterating opened fd
-        proc_flush_pid                                    |
-           d_invalidate (/proc/pid/fd)                    |
-              shrink_dcache_parent(/proc/pid/fd)          |
-                shrink_dentry_list(subdirs)               ↓
-                  shrink_lock_dentry(/proc/pid/fd) ---> race on dentry lock
-
-Function d_invalidate() will remove dentry from hash firstly, but why does
-proc_flush_pid() process dentry '/proc/pid/fd' before dentry '/proc/pid'?
-That's because proc_pid_make_inode() adds proc inode in reverse order by
-invoking hlist_add_head_rcu(). But proc should not add any inodes under
-'/proc/pid' except '/proc/pid/task/pid', fix it by adding inode into
-'pid->inodes' only if the inode is /proc/pid or /proc/pid/task/pid.
-
-Fixes: 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216054
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
----
- fs/proc/base.c       | 15 +++++++++------
- fs/proc/fd.c         |  4 ++--
- fs/proc/internal.h   |  3 ++-
- fs/proc/namespaces.c |  3 ++-
- 4 files changed, 15 insertions(+), 10 deletions(-)
-
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index c1031843cc6a..29c0f1175766 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -1886,7 +1886,8 @@ void proc_pid_evict_inode(struct proc_inode *ei)
- }
- 
- struct inode *proc_pid_make_inode(struct super_block * sb,
--				  struct task_struct *task, umode_t mode)
-+				  struct task_struct *task,
-+				  umode_t mode, bool add_inode)
- {
- 	struct inode * inode;
- 	struct proc_inode *ei;
-@@ -1914,7 +1915,7 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
- 
- 	/* Let the pid remember us for quick removal */
- 	ei->pid = pid;
--	if (S_ISDIR(mode)) {
-+	if (add_inode) {
- 		spin_lock(&pid->lock);
- 		hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
- 		spin_unlock(&pid->lock);
-@@ -2243,7 +2244,7 @@ proc_map_files_instantiate(struct dentry *dentry,
- 
- 	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFLNK |
- 				    ((mode & FMODE_READ ) ? S_IRUSR : 0) |
--				    ((mode & FMODE_WRITE) ? S_IWUSR : 0));
-+				    ((mode & FMODE_WRITE) ? S_IWUSR : 0), false);
- 	if (!inode)
- 		return ERR_PTR(-ENOENT);
- 
-@@ -2609,7 +2610,7 @@ static struct dentry *proc_pident_instantiate(struct dentry *dentry,
- 	struct inode *inode;
- 	struct proc_inode *ei;
- 
--	inode = proc_pid_make_inode(dentry->d_sb, task, p->mode);
-+	inode = proc_pid_make_inode(dentry->d_sb, task, p->mode, false);
- 	if (!inode)
- 		return ERR_PTR(-ENOENT);
- 
-@@ -3350,7 +3351,8 @@ static struct dentry *proc_pid_instantiate(struct dentry * dentry,
- {
- 	struct inode *inode;
- 
--	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
-+	inode = proc_pid_make_inode(dentry->d_sb, task,
-+				    S_IFDIR | S_IRUGO | S_IXUGO, true);
- 	if (!inode)
- 		return ERR_PTR(-ENOENT);
- 
-@@ -3649,7 +3651,8 @@ static struct dentry *proc_task_instantiate(struct dentry *dentry,
- 	struct task_struct *task, const void *ptr)
- {
- 	struct inode *inode;
--	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
-+	inode = proc_pid_make_inode(dentry->d_sb, task,
-+				    S_IFDIR | S_IRUGO | S_IXUGO, true);
- 	if (!inode)
- 		return ERR_PTR(-ENOENT);
- 
-diff --git a/fs/proc/fd.c b/fs/proc/fd.c
-index 913bef0d2a36..53365ebb4567 100644
---- a/fs/proc/fd.c
-+++ b/fs/proc/fd.c
-@@ -199,7 +199,7 @@ static struct dentry *proc_fd_instantiate(struct dentry *dentry,
- 	struct proc_inode *ei;
- 	struct inode *inode;
- 
--	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFLNK);
-+	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFLNK, false);
- 	if (!inode)
- 		return ERR_PTR(-ENOENT);
- 
-@@ -332,7 +332,7 @@ static struct dentry *proc_fdinfo_instantiate(struct dentry *dentry,
- 	struct proc_inode *ei;
- 	struct inode *inode;
- 
--	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFREG | S_IRUSR);
-+	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFREG | S_IRUSR, false);
- 	if (!inode)
- 		return ERR_PTR(-ENOENT);
- 
-diff --git a/fs/proc/internal.h b/fs/proc/internal.h
-index 06a80f78433d..9894a591a38c 100644
---- a/fs/proc/internal.h
-+++ b/fs/proc/internal.h
-@@ -162,7 +162,8 @@ extern int pid_getattr(struct user_namespace *, const struct path *,
- extern int pid_getattr(const struct path *, struct kstat *, u32, unsigned int);
- extern int proc_setattr(struct dentry *, struct iattr *);
- extern void proc_pid_evict_inode(struct proc_inode *);
--extern struct inode *proc_pid_make_inode(struct super_block *, struct task_struct *, umode_t);
-+extern struct inode *proc_pid_make_inode(struct super_block *,
-+					 struct task_struct *, umode_t, bool);
- extern void pid_update_inode(struct task_struct *, struct inode *);
- extern int pid_delete_dentry(const struct dentry *);
- extern int proc_pid_readdir(struct file *, struct dir_context *);
-diff --git a/fs/proc/namespaces.c b/fs/proc/namespaces.c
-index 8e159fc78c0a..c9006e3b36fc 100644
---- a/fs/proc/namespaces.c
-+++ b/fs/proc/namespaces.c
-@@ -102,7 +102,8 @@ static struct dentry *proc_ns_instantiate(struct dentry *dentry,
- 	struct inode *inode;
- 	struct proc_inode *ei;
- 
--	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFLNK | S_IRWXUGO);
-+	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFLNK | S_IRWXUGO,
-+				    false);
- 	if (!inode)
- 		return ERR_PTR(-ENOENT);
- 
--- 
-2.31.1
+If the check becomes !cpu_rq(cpu)->nr_running
+My patch would change, too.
+Shall we remove WF_ON_CPU completely?
 

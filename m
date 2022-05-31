@@ -2,247 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FAE8538C7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1836538C65
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244733AbiEaIDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 04:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
+        id S244702AbiEaIBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 04:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244720AbiEaIDT (ORCPT
+        with ESMTP id S235885AbiEaIBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 04:03:19 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7CC9155E;
-        Tue, 31 May 2022 01:03:14 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24V7pnxE010470;
-        Tue, 31 May 2022 07:59:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=fCDCNg9Fl0rDsWI5cVbkr7yPCpu4aY2vi3Um9DXKuyo=;
- b=TwuPNcBR4U1XYDHdlIDZYKqcL5KJT69oeeTAf0vy5m7ooDBj90SBRisXK63xMXHvK8l0
- Ov/cquTEsxXxBim+UukTU2rsQcn6NprZ4HWRN68SlwYgZXcr9qZgM89RGc6MwoI/bqEL
- o6GOS/aiaC9dqiy4ahWeqSt5T6xN5hmciCI34Qmd0QVrEU1vbyvV2QBCOIg+JzaMgATb
- 8jaFh0BsNFxNOHSjg3UgeRvf/2N2Wujv9geXH5fdOj7Ye52btvKTOJPDKvku8NHfDMem
- dO2O0Q0YLPZWYG0qyBQJvfeeNv5XIulDxvgh2q56ULI3MONZBMZ+0s0xvmHu5XqW+/Ip CA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdf0hr3k5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 07:59:47 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24V7qjhT012512;
-        Tue, 31 May 2022 07:59:46 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdf0hr3jn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 07:59:46 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24V7rKjg027282;
-        Tue, 31 May 2022 07:59:44 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3gbbynkrfp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 07:59:44 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24V7xfmo55443962
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 May 2022 07:59:41 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2FAF642041;
-        Tue, 31 May 2022 07:59:41 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B44A34203F;
-        Tue, 31 May 2022 07:59:38 +0000 (GMT)
-Received: from osiris (unknown [9.145.72.89])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 31 May 2022 07:59:38 +0000 (GMT)
-Date:   Tue, 31 May 2022 09:59:37 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, Stafford Horne <shorne@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Brian Cain <bcain@quicinc.com>, x86@kernel.org,
-        linux-parisc@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Richard Weinberger <richard@nod.at>,
-        linux-hexagon@vger.kernel.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-ia64@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Jonas Bonn <jonas@southpole.se>, sparclinux@vger.kernel.org,
-        linux-csky@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-um@lists.infradead.org,
-        Michal Simek <monstr@monstr.eu>,
-        Matt Turner <mattst88@gmail.com>,
-        linux-m68k@lists.linux-m68k.org, Paul Mackerras <paulus@samba.org>,
-        linux-xtensa@linux-xtensa.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        David Hildenbrand <david@redhat.com>,
-        openrisc@lists.librecores.org,
-        linux-arm-kernel@lists.infradead.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Chris Zankel <chris@zankel.net>,
-        Hugh Dickins <hughd@google.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Rich Felker <dalias@libc.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-snps-arc@lists.infradead.org, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [PATCH v5] mm: Avoid unnecessary page fault retires on shared
- memory types
-Message-ID: <YpXK6VO8y6ZQlimG@osiris>
-References: <20220530183450.42886-1-peterx@redhat.com>
+        Tue, 31 May 2022 04:01:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4529C7220A
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:01:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2238B80E20
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:01:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14DB1C34119;
+        Tue, 31 May 2022 08:01:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653984065;
+        bh=jDuI1OezqWtRhCv5nxYOoLBrXfUkFW5cSU8f621yeiU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hnncicVxHW86XI1aJOefhoU8I5MQu4f342W0L31+J4wjyHdqUCm7PYgbR4SI6I0rK
+         J6ZlOAdYhe1wIVE/1+qT9gMtP0Z3yb9IBug/M+NY/Gc0q18XW+d2P1zf5XzrHeg6cs
+         mNE+hrAXSeAeVwo2Hd0xCNf+hF9mhCDLSr7YQGUAC+iyYIKF6KMdcHTAvTPdUoDfK+
+         U2MRDCoQmoJHbmr7QPzDS7hBWRH1XOJudAL/nr3qM/9FIvTqvTV1Z948JqSHtiyI4l
+         L1JC+LKawmNUq1WmeLQpy3uxugeDZItIS8CIUooyGhvO5qqLxPSBwNQNxBkykHV3dZ
+         skS+W0hmvpODg==
+Message-ID: <fa3cbe36-1738-a811-ce03-dd5aaf8ea3d4@kernel.org>
+Date:   Tue, 31 May 2022 16:01:01 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220530183450.42886-1-peterx@redhat.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: RLhB66egEP1T9U1MkMA8rdmyk-WXjxeE
-X-Proofpoint-ORIG-GUID: ToZrP-uDPxbUpDXuMZf7xPxYmVzsS7TL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-05-31_02,2022-05-30_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- phishscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501 clxscore=1015
- impostorscore=0 adultscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2205310038
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4] f2fs: separate NOCoW and pinfile semantics
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
+References: <20220517032410.3564033-1-chao@kernel.org>
+ <YoPZh+vl68IH5loV@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <YoPZh+vl68IH5loV@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 02:34:50PM -0400, Peter Xu wrote:
-> I observed that for each of the shared file-backed page faults, we're very
-> likely to retry one more time for the 1st write fault upon no page.  It's
-> because we'll need to release the mmap lock for dirty rate limit purpose
-> with balance_dirty_pages_ratelimited() (in fault_dirty_shared_page()).
+On 2022/5/18 1:21, Jaegeuk Kim wrote:
+> On 05/17, Chao Yu wrote:
+>> Pinning a file is heavy, because skipping pinned files make GC
+>> running with heavy load or no effect.
+>>
+>> So that this patch proposes to separate nocow and pinfile semantics:
+>> - NOCoW flag can only be set on regular file.
+>> - NOCoW file will only trigger IPU at common writeback/flush.
+>> - NOCow file will do OPU during GC.
 > 
-> Then after that throttling we return VM_FAULT_RETRY.
+> How about adding
+>   - NOCow file will allocate 2MB-aligned space via fallocate.
 > 
-> We did that probably because VM_FAULT_RETRY is the only way we can return
-> to the fault handler at that time telling it we've released the mmap lock.
-> 
-> However that's not ideal because it's very likely the fault does not need
-> to be retried at all since the pgtable was well installed before the
-> throttling, so the next continuous fault (including taking mmap read lock,
-> walk the pgtable, etc.) could be in most cases unnecessary.
-> 
-> It's not only slowing down page faults for shared file-backed, but also add
-> more mmap lock contention which is in most cases not needed at all.
-> 
-> To observe this, one could try to write to some shmem page and look at
-> "pgfault" value in /proc/vmstat, then we should expect 2 counts for each
-> shmem write simply because we retried, and vm event "pgfault" will capture
-> that.
-> 
-> To make it more efficient, add a new VM_FAULT_COMPLETED return code just to
-> show that we've completed the whole fault and released the lock.  It's also
-> a hint that we should very possibly not need another fault immediately on
-> this page because we've just completed it.
-> 
-> This patch provides a ~12% perf boost on my aarch64 test VM with a simple
-> program sequentially dirtying 400MB shmem file being mmap()ed and these are
-> the time it needs:
-> 
->   Before: 650.980 ms (+-1.94%)
->   After:  569.396 ms (+-1.38%)
-> 
-> I believe it could help more than that.
-> 
-> We need some special care on GUP and the s390 pgfault handler (for gmap
-> code before returning from pgfault), the rest changes in the page fault
-> handlers should be relatively straightforward.
-> 
-> Another thing to mention is that mm_account_fault() does take this new
-> fault as a generic fault to be accounted, unlike VM_FAULT_RETRY.
-> 
-> I explicitly didn't touch hmm_vma_fault() and break_ksm() because they do
-> not handle VM_FAULT_RETRY even with existing code, so I'm literally keeping
-> them as-is.
-> 
-> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-> Acked-by: Vineet Gupta <vgupta@kernel.org>
-> Acked-by: Guo Ren <guoren@kernel.org>
-> Acked-by: Max Filippov <jcmvbkbc@gmail.com>
-> Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> Reviewed-by: Alistair Popple <apopple@nvidia.com>
-> Reviewed-by: Ingo Molnar <mingo@kernel.org>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
-...
->  arch/s390/mm/fault.c          | 12 ++++++++++++
-> diff --git a/arch/s390/mm/fault.c b/arch/s390/mm/fault.c
-> index e173b6187ad5..973dcd05c293 100644
-> --- a/arch/s390/mm/fault.c
-> +++ b/arch/s390/mm/fault.c
-> @@ -433,6 +433,17 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
->  			goto out_up;
->  		goto out;
->  	}
-> +
-> +	/* The fault is fully completed (including releasing mmap lock) */
-> +	if (fault & VM_FAULT_COMPLETED) {
-> +		if (gmap) {
-> +			mmap_read_lock(mm);
-> +			goto out_gmap;
-> +		}
-> +		fault = 0;
-> +		goto out;
-> +	}
-> +
->  	if (unlikely(fault & VM_FAULT_ERROR))
->  		goto out_up;
->  
-> @@ -452,6 +463,7 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
->  		mmap_read_lock(mm);
->  		goto retry;
->  	}
-> +out_gmap:
->  	if (IS_ENABLED(CONFIG_PGSTE) && gmap) {
->  		address =  __gmap_link(gmap, current->thread.gmap_addr,
->  				       address);
+> So, it'd be same as file pinning except allowing GCs. wdyt?
 
-FWIW:
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
+Well, it seems the segment-aligned allocation feature should not couple with
+pin_file or NoCow flag, what about introducing another ioctl for that? something
+like: F2FS_IOC_ALIGNMENT_PREALLOCATION w/ arg.alignment_start, arg.alignment_len,
+arg.total_len?
+
+Thanks,
+
+> 
+>>
+>> This flag can satisfying the demand of:
+>> 1) avoiding fragment of file's physical block
+>> 2) userspace doesn't want to pin file's physical address
+>>
+>> After commit 5d539245cb18 ("f2fs: export FS_NOCOW_FL flag to user"),
+>> Pin_file and NOCoW flags have already been twined closely. e.g.
+>> once we set pinfile flag in file, nocow flag will be shown; and after
+>> clearing pinfile flag, nocow flag will disappear.
+>>
+>> So, in order to keep backward compatibility, let use below semantics:
+>>
+>> f2fs_ioc_set_pin_file/f2fs_fileattr_set logic:
+>> 		pinfile			nocow
+>> set		set pinfile | nocow	set nocow
+>> clear		clear pinfile | nocow	clear nocow
+>>
+>> File Behaviors:
+>> w/ pinfile, w/ nocow:		use pinfile semantics
+>> w/ pinfile, w/o nocow:		use pinfile semantics
+>> w/o pinfile, w/ nocow:		use nocow semantics
+>> w/o pinfile, w/o nocow:		no pinfile or nocow semantics
+>>
+>> NOCoW can also be set on directory, and it will have no effect on
+>> directory, however, new files created in nocow directory will have the
+>> flag set.
+>>
+>> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+>> ---
+>> v4:
+>> - allow IPU only for NoCowed regular inode.
+>>   fs/f2fs/data.c |  3 +++
+>>   fs/f2fs/f2fs.h | 13 +++++++++++--
+>>   fs/f2fs/file.c | 18 +++++++++++++++++-
+>>   3 files changed, 31 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>> index 54a7a8ad994d..42d95ac6b508 100644
+>> --- a/fs/f2fs/data.c
+>> +++ b/fs/f2fs/data.c
+>> @@ -2498,6 +2498,9 @@ bool f2fs_should_update_inplace(struct inode *inode, struct f2fs_io_info *fio)
+>>   	if (f2fs_is_pinned_file(inode))
+>>   		return true;
+>>   
+>> +	if (S_ISREG(inode->i_mode) && F2FS_I(inode)->i_flags & F2FS_NOCOW_FL)
+>> +		return true;
+>> +
+>>   	/* if this is cold file, we should overwrite to avoid fragmentation */
+>>   	if (file_is_cold(inode))
+>>   		return true;
+>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>> index 492af5b96de1..5c67736000a7 100644
+>> --- a/fs/f2fs/f2fs.h
+>> +++ b/fs/f2fs/f2fs.h
+>> @@ -2916,13 +2916,15 @@ static inline void f2fs_change_bit(unsigned int nr, char *addr)
+>>   #define F2FS_NOCOMP_FL			0x00000400 /* Don't compress */
+>>   #define F2FS_INDEX_FL			0x00001000 /* hash-indexed directory */
+>>   #define F2FS_DIRSYNC_FL			0x00010000 /* dirsync behaviour (directories only) */
+>> +#define F2FS_NOCOW_FL			0x00800000 /* Do not cow file */
+>>   #define F2FS_PROJINHERIT_FL		0x20000000 /* Create with parents projid */
+>>   #define F2FS_CASEFOLD_FL		0x40000000 /* Casefolded file */
+>>   
+>>   /* Flags that should be inherited by new inodes from their parent. */
+>>   #define F2FS_FL_INHERITED (F2FS_SYNC_FL | F2FS_NODUMP_FL | F2FS_NOATIME_FL | \
+>>   			   F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
+>> -			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL)
+>> +			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL | \
+>> +			   F2FS_NOCOW_FL)
+>>   
+>>   /* Flags that are appropriate for regular files (all but dir-specific ones). */
+>>   #define F2FS_REG_FLMASK		(~(F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
+>> @@ -2954,9 +2956,16 @@ static inline void __mark_inode_dirty_flag(struct inode *inode,
+>>   		fallthrough;
+>>   	case FI_DATA_EXIST:
+>>   	case FI_INLINE_DOTS:
+>> -	case FI_PIN_FILE:
+>>   	case FI_COMPRESS_RELEASED:
+>>   		f2fs_mark_inode_dirty_sync(inode, true);
+>> +		break;
+>> +	case FI_PIN_FILE:
+>> +		if (set)
+>> +			F2FS_I(inode)->i_flags |= F2FS_NOCOW_FL;
+>> +		else
+>> +			F2FS_I(inode)->i_flags &= ~F2FS_NOCOW_FL;
+>> +		f2fs_mark_inode_dirty_sync(inode, true);
+>> +		break;
+>>   	}
+>>   }
+>>   
+>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+>> index 216081ea8c81..9e71ce8601f9 100644
+>> --- a/fs/f2fs/file.c
+>> +++ b/fs/f2fs/file.c
+>> @@ -1851,6 +1851,20 @@ static int f2fs_setflags_common(struct inode *inode, u32 iflags, u32 mask)
+>>   	if (IS_NOQUOTA(inode))
+>>   		return -EPERM;
+>>   
+>> +	if ((iflags ^ masked_flags) & F2FS_NOCOW_FL) {
+>> +		int ret;
+>> +
+>> +		if (!S_ISREG(inode->i_mode) && !S_ISDIR(inode->i_mode))
+>> +			return -EINVAL;
+>> +		if (S_ISREG(inode->i_mode)) {
+>> +			if (f2fs_should_update_outplace(inode, NULL))
+>> +				return -EINVAL;
+>> +			ret = f2fs_convert_inline_inode(inode);
+>> +			if (ret)
+>> +				return ret;
+>> +		}
+>> +	}
+>> +
+>>   	if ((iflags ^ masked_flags) & F2FS_CASEFOLD_FL) {
+>>   		if (!f2fs_sb_has_casefold(F2FS_I_SB(inode)))
+>>   			return -EOPNOTSUPP;
+>> @@ -1926,6 +1940,7 @@ static const struct {
+>>   	{ F2FS_NOCOMP_FL,	FS_NOCOMP_FL },
+>>   	{ F2FS_INDEX_FL,	FS_INDEX_FL },
+>>   	{ F2FS_DIRSYNC_FL,	FS_DIRSYNC_FL },
+>> +	{ F2FS_NOCOW_FL,	FS_NOCOW_FL },
+>>   	{ F2FS_PROJINHERIT_FL,	FS_PROJINHERIT_FL },
+>>   	{ F2FS_CASEFOLD_FL,	FS_CASEFOLD_FL },
+>>   };
+>> @@ -1957,7 +1972,8 @@ static const struct {
+>>   		FS_NOCOMP_FL |		\
+>>   		FS_DIRSYNC_FL |		\
+>>   		FS_PROJINHERIT_FL |	\
+>> -		FS_CASEFOLD_FL)
+>> +		FS_CASEFOLD_FL |	\
+>> +		FS_NOCOW_FL)
+>>   
+>>   /* Convert f2fs on-disk i_flags to FS_IOC_{GET,SET}FLAGS flags */
+>>   static inline u32 f2fs_iflags_to_fsflags(u32 iflags)
+>> -- 
+>> 2.25.1

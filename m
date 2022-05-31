@@ -2,84 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D275F538CB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F1E538CCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244827AbiEaIVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 04:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
+        id S244853AbiEaIYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 04:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244940AbiEaIVf (ORCPT
+        with ESMTP id S237273AbiEaIYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 04:21:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E8DB986E8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653985288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I2fPIOlCOM3E2ayUp2iBt+EP7fcwTmAstFfusjqDQsU=;
-        b=HIzsttLL1cqIPRTOYpfyEj7Tair5lPfy2WDn2+PpWZ9GfPDNsgJOp2mhpQJXSab5UNi3kG
-        K/jDbNLhp29hJ3V3JSEh9xjrJgtWJQddhzcfYBlbZS+yS6seLSlD0TVQqnYcFDqqdnd2cL
-        E1cT2giCdviURuPxpohz5nvLRmQy8G8=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-641-yEyC472UPBWPW9CGGnXfLA-1; Tue, 31 May 2022 04:21:26 -0400
-X-MC-Unique: yEyC472UPBWPW9CGGnXfLA-1
-Received: by mail-qv1-f72.google.com with SMTP id k6-20020a0cd686000000b004625db7d2aaso9655362qvi.7
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:21:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=I2fPIOlCOM3E2ayUp2iBt+EP7fcwTmAstFfusjqDQsU=;
-        b=k+rjykQlRdii905tt7gv6630fhCbPCr8BeX6HZheRDdgLRW2TLUnaSvhynXBlCvRon
-         PmKC1ZCZb4bjYMQ8DqzB7j8205RyKqQPPCZM5jema3+m9UAIWoB+BrnkseYsAEXxxEsF
-         GzziRiYUNTgEhags2bSR3FIYvaCKbtgLVLYUmeI8PYTNcEj5Qfx5A8LgVTFTVorsxRQ4
-         J8ZJEJsVD7rkyJMXpgKFNr9BkagGAV/ZZHmVjEAMa7KYPSOMov1H9Tj2MgazNLuBEwbh
-         fWkzX2GJ1I5H/7I/QngGHpJ9eRZZIzL3sgHqEjJ1lnJYryo8Crg5aPmypPNYQD8coekR
-         YP+g==
-X-Gm-Message-State: AOAM5333lcei3I2wK4pknfCqKogrO5dNr3dUU7jpwX/ZjE0Z24a3GTyX
-        6cLBzhivHCGMxDSXfScYasL+aqF4/SqjS9XiPKBgUPPNd9eSYNOyybbTzDaV/tPx1/sZxp+3XPp
-        NJxW74vst8a5jO33xJpFyrvLl
-X-Received: by 2002:a05:620a:48:b0:6a3:5595:9d1c with SMTP id t8-20020a05620a004800b006a355959d1cmr34608319qkt.246.1653985286349;
-        Tue, 31 May 2022 01:21:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy5Elviq8wkR7QEM12lazPriRbiYCkorY6f8q5VZxEiIzIY4yeGkiflwejzp+2iiEkHKHnqCQ==
-X-Received: by 2002:a05:620a:48:b0:6a3:5595:9d1c with SMTP id t8-20020a05620a004800b006a355959d1cmr34608311qkt.246.1653985286083;
-        Tue, 31 May 2022 01:21:26 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-112-184.dyn.eolo.it. [146.241.112.184])
-        by smtp.gmail.com with ESMTPSA id p20-20020ac84614000000b00301729af618sm4758636qtn.97.2022.05.31.01.21.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 01:21:25 -0700 (PDT)
-Message-ID: <48cb78ebd38dfe4ac05e337d5fb38623b7ee0e8f.camel@redhat.com>
-Subject: Re: [PATCH 1/2] net/ncsi: use proper "mellanox" DT vendor prefix
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Date:   Tue, 31 May 2022 10:21:19 +0200
-In-Reply-To: <20220529111017.181766-1-krzysztof.kozlowski@linaro.org>
-References: <20220529111017.181766-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 31 May 2022 04:24:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CB391572
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:24:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5398D6124A
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:24:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B09D4C36AE5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:24:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653985472;
+        bh=Tn7z3nP0AB8VEWe8KtQeBBbkA04IzbtNqyP/X5VlNx8=;
+        h=From:Date:Subject:To:Cc:From;
+        b=MLuPGyKJGX4aIxw5Pg23byqZWlVu9s3tbqs/8KR+Elo8k7ZxzyXE/qCGJqJuNO+Ok
+         S9TQiAbv9bspbFBNh4mmLNYftwSUnyzWiTIr9mlozqMmnoLKUq0ZSCaWceQmBCcWLY
+         fC+4b6+ECSVyLTz1tylsG88V53ZjLrJHu+mdhHqmJMB+gbtKUUh67+bvZOKHzDoaV0
+         fugIEkuIwywlnuo8Djy0sSKKPuV3Sv0a2CU24GomFyp9LFsfuw1jA5MCcxzajO8NaO
+         IcbAgy97nfxKfW7U1riYOZ+uUg+h5EdaD+XC4C9Mhn3QDyZoKj0REYBG4RIcDZRSFL
+         orLPhkU17MT2g==
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-3043b3f7d8fso121142297b3.8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:24:32 -0700 (PDT)
+X-Gm-Message-State: AOAM530vvwyxmwXIFYdomoM+z/AfzYIu3RxJh3yeuxUZHPgoCun2mJ8W
+        51RD5/kpAB7rl4o3NjlPx3iurYi3xAm0YGut+KE=
+X-Google-Smtp-Source: ABdhPJy1MqMs21iNFMm2vOhXzL0w8srBtX0g+meq/+8YXK+IdLf0E3RZiQtP9b1R+CHMTrViMePm/DPLqfWC/mU7jqk=
+X-Received: by 2002:a81:28b:0:b0:30c:5e57:fac3 with SMTP id
+ 133-20020a81028b000000b0030c5e57fac3mr8191201ywc.249.1653985471749; Tue, 31
+ May 2022 01:24:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 31 May 2022 10:24:15 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0bmE03wJ_iELrAMyFvamwd_r5aLsFBH=6=5YaueO=-kg@mail.gmail.com>
+Message-ID: <CAK8P3a0bmE03wJ_iELrAMyFvamwd_r5aLsFBH=6=5YaueO=-kg@mail.gmail.com>
+Subject: Re: PROBLEM: with daemon.c after y2038 on 32-bits Kernel
+To:     =?UTF-8?Q?Arnaud_Pana=C3=AFotis?= <arnaud.panaiotis@gmx.fr>
+Cc:     linux-kernel@vger.kernel.org, y2038@lists.linaro.org,
+        alpha@sourceware.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,36 +61,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 17/05/2022 09:51, Arnaud Pana=C3=AFotis wrote:
+> Hello,
+>
+> I'm working for a client to generate embedded 32-bits Linux Kernel workin=
+g after y2038 issue.
+>
+> I generated a 5.15 Kernel thought Buildroot with Coreutils 9.0, GCC 11.2.=
+0, Binutils 2.37, Glibc 2.34-9 and CFLAGS  -D_LARGEFILE_SOURCE -D_FILE_OFFS=
+ET_BITS=3D64  -D_TIME_BITS=3D64.
+>
+> I encounter an issue while working with OpenSSH (I initially contacted th=
+em before).
 
-On Sun, 2022-05-29 at 13:10 +0200, Krzysztof Kozlowski wrote:
-> "mlx" Devicetree vendor prefix is not documented and instead "mellanox"
-> should be used.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  net/ncsi/ncsi-manage.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/ncsi/ncsi-manage.c b/net/ncsi/ncsi-manage.c
-> index 78814417d753..80713febfac6 100644
-> --- a/net/ncsi/ncsi-manage.c
-> +++ b/net/ncsi/ncsi-manage.c
-> @@ -1803,7 +1803,8 @@ struct ncsi_dev *ncsi_register_dev(struct net_device *dev,
->  	pdev = to_platform_device(dev->dev.parent);
->  	if (pdev) {
->  		np = pdev->dev.of_node;
-> -		if (np && of_get_property(np, "mlx,multi-host", NULL))
-> +		if (np && (of_get_property(np, "mellanox,multi-host", NULL) ||
-> +			   of_get_property(np, "mlx,multi-host", NULL)))
->  			ndp->mlx_multi_host = true;
->  	}
-> 
+To clarify: did you build just openssh with  -D_TIME_BITS=3D64, or did
+you build the user space
+this way?
 
-I can't guess which tree are you targeting, devicetree? net-next? could
-you please specify?
+> After 2038, /usr/sbin/sshd does not create an error but it child does gen=
+erate this one:
+> daemon() failed: Value too large for defined data type
+>
+> This happend here in sshd.c:
+>
+> 2019         /*
+> 2020          * If not in debugging mode, not started from inetd and not =
+already
+> 2021          * daemonized (eg re-exec via SIGHUP), disconnect from the c=
+ontrolling
+> 2022          * terminal, and fork.  The original process exits.
+> 2023          */
+> 2024         already_daemon =3D daemonized();
+> 2025         if (!(debug_flag || inetd_flag || no_daemon_flag || already_=
+daemon)) {
+> 2026
+> 2027                 if (daemon(0, 0) =3D=3D -1)
+> 2028                         fatal("daemon() failed: %.200s", strerror(er=
+rno));
 
-thanks!
+My guess is that there are parts of glibc that are not fully
+y2038-safe at the moment, but
+merely provide the interfaces for time64 applications.
 
-Paolo
 
+In the glibc code, I see
+
+int
+daemon (int nochdir, int noclose)
+{
+...
+                if ((fd =3D __open_nocancel(_PATH_DEVNULL, O_RDWR, 0)) !=3D=
+ -1
+                    && (__builtin_expect (__fstat64 (fd, &st), 0)
+                        =3D=3D 0)) {
+...
+                             } else {
+                        __close_nocancel_nostatus (fd);
+                        return -1;
+                }
+     return (0);
+}
+
+__fstatat64 (int fd, const char *file, struct stat64 *buf, int flags)
+{
+  struct __stat64_t64 st_t64;
+  return __fstatat64_time64 (fd, file, &st_t64, flags)
+         ?: __cp_stat64_t64_stat64 (&st_t64, buf);
+}
+
+If I'm reading this correctly, daemon() internally uses the time32
+version of 'stat', which
+fails for files with out-of-range timestamps. Are you able to rebuild
+the ssh binary
+(or your entire distro, if that's easier) against musl-1.2.x instead
+of glibc to see if the
+same thing happens there?
+
+       Arnd
+
+> To reproduce:
+>
+> # date -s "2040-05-12"
+> # hwclock --systohc
+> # reboot
+> # /usr/sbin/sshd
+>
+> Note this error occurs only after the reboot, and setting a date before 2=
+038 also require a reboot to remove the error.
+>
+> strace and gdb trace linked.
+>
+> Let me know if you need additional information.

@@ -2,107 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F1653941C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E85ED539420
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 17:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345778AbiEaPim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 11:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
+        id S1345793AbiEaPjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 11:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345758AbiEaPik (ORCPT
+        with ESMTP id S242627AbiEaPjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 11:38:40 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCBC62A36
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 08:38:38 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VEvuo0x_1654011513;
-Received: from 192.168.0.205(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0VEvuo0x_1654011513)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 31 May 2022 23:38:34 +0800
-Message-ID: <d387ede1-d000-37aa-6ede-237b65b59ce5@linux.alibaba.com>
-Date:   Tue, 31 May 2022 23:38:32 +0800
+        Tue, 31 May 2022 11:39:42 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6CC8BD18;
+        Tue, 31 May 2022 08:39:41 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24VFdFJH004068
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 May 2022 11:39:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1654011558; bh=fTxdM4FSLoudm9qNGxkHMxJHzf43vLhFwNmW/rU7VTA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=KMkCQvG7tjlVWymzZpN13bzwSnBHf6sP9CXk0af4AXfcYb40gq0W3IadVs0L/CfZk
+         2W4S3DE2bNZHFbaRO3Kmj9txctBWNYjtjPg2RGCvsLE0CGmjZ8f8RZdRkyAFVz3nZP
+         nTFnKXlwqga67Yu6w0lk+LGYh3cVk/vD6Vdms22aJds9K0X2q64a0ONQBsgg00hwl2
+         Jfr2UIk8D8Q2V494kj3hXJZlv7sTBHTc0kJeTt7WrUiO+ORAN0S+SwROLrssrtS/so
+         anbbVYx6N5W0qTz+Pjwgf30dETyvvFJrIT/5lf5r6iUPvATZCJtAxkowqCZNFWr6fY
+         mFjYMTQYQuXyA==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 36EBF15C3E1F; Tue, 31 May 2022 11:39:15 -0400 (EDT)
+Date:   Tue, 31 May 2022 11:39:15 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Donald Buczek <buczek@molgen.mpg.de>
+Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, dm-devel@redhat.com,
+        it+linux@molgen.mpg.de,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: ext4_writepages: jbd2_start: 5120 pages, ino 11; err -5
+Message-ID: <YpY2o/GG8HWJHTdo@mit.edu>
+References: <4e83fb26-4d4a-d482-640c-8104973b7ebf@molgen.mpg.de>
+ <20220531103834.vhscyk3yzsocorco@quack3.lan>
+ <3bfd0ad9-d378-9631-310f-0a1a80d8e482@molgen.mpg.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-Subject: Re: [PATCH v2] sched: Queue task on wakelist in the same llc if the
- wakee cpu is idle
-Content-Language: en-US
-To:     Mel Gorman <mgorman@suse.de>,
-        Valentin Schneider <vschneid@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-References: <20220527090544.527411-1-dtcccc@linux.alibaba.com>
- <xhsmhleuj7zve.mognet@vschneid.remote.csb>
- <1d0eb8f4-e474-86a9-751a-7c2e1788df85@linux.alibaba.com>
- <xhsmhilpl9azq.mognet@vschneid.remote.csb> <20220531135532.GA3332@suse.de>
-From:   Tianchen Ding <dtcccc@linux.alibaba.com>
-In-Reply-To: <20220531135532.GA3332@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3bfd0ad9-d378-9631-310f-0a1a80d8e482@molgen.mpg.de>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/31 21:55, Mel Gorman wrote:
-> On Tue, May 31, 2022 at 12:50:49PM +0100, Valentin Schneider wrote:
->>>> With all that in mind, I'm curious whether your patch is functionaly close
->>>> to the below.
->>>>
->>>> ---
->>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->>>> index 66c4e5922fe1..ffd43264722a 100644
->>>> --- a/kernel/sched/core.c
->>>> +++ b/kernel/sched/core.c
->>>> @@ -3836,7 +3836,7 @@ static inline bool ttwu_queue_cond(int cpu, int wake_flags)
->>>>    	 * the soon-to-be-idle CPU as the current CPU is likely busy.
->>>>    	 * nr_running is checked to avoid unnecessary task stacking.
->>>>    	 */
->>>> -	if ((wake_flags & WF_ON_CPU) && cpu_rq(cpu)->nr_running <= 1)
->>>> +	if (cpu_rq(cpu)->nr_running <= 1)
->>>>    		return true;
->>>>    
->>>>    	return false;
->>>
->>> It's a little different. This may bring extra IPIs when nr_running == 1
->>> and the current task on wakee cpu is not the target wakeup task (i.e.,
->>> rq->curr == another_task && rq->curr != p). Then this another_task may
->>> be disturbed by IPI which is not expected. So IMO the promise by
->>> WF_ON_CPU is necessary.
->>
->> You're right, actually taking a second look at that WF_ON_CPU path,
->> shouldn't the existing condition be:
->>
->> 	if ((wake_flags & WF_ON_CPU) && !cpu_rq(cpu)->nr_running)
->>
->> ? Per the p->on_rq and p->on_cpu ordering, if we have WF_ON_CPU here then
->> we must have !p->on_rq, so the deactivate has happened, thus the task
->> being alone on the rq implies nr_running==0.
->>
->> @Mel, do you remember why you went for <=1 here? I couldn't find any clues
->> on the original posting.
->>
-> 
-> I don't recall exactly why I went with <= 1 there but I may not have
-> considered the memory ordering of on_rq and nr_running and the comment
-> above it is literally what I was thinking at the time. I think you're
-> right and that check can be !cpu_rq(cpu)->nr_running.
-> 
+Hmmm..... I think this patch should fix your issues.
 
-If the check becomes !cpu_rq(cpu)->nr_running
-My patch would change, too.
-Shall we remove WF_ON_CPU completely?
+If the journal has been aborted (which happens as part of the
+shutdown, we will never write out the commit block --- so it should be
+fine to skip the writeback of any dirty inodes in data=ordered mode.
+
+BTW, if you know that the file system is going to get nuked in this
+way all the time, so you never care about file system after it is shut
+down, you could mount the file system with the mount option
+data=writeback.
+
+       	      	      	    		- Ted
+
+
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 8ff4c6545a49..2e18211121f6 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -542,7 +542,10 @@ static int ext4_journalled_submit_inode_data_buffers(struct jbd2_inode *jinode)
+ static int ext4_journal_submit_inode_data_buffers(struct jbd2_inode *jinode)
+ {
+ 	int ret;
++	journal_t *journal = EXT4_SB(jinode->i_vfs_inode->i_sb)->s_journal;
+ 
++	if (!journal || is_journal_aborted(journal))
++		return 0;
+ 	if (ext4_should_journal_data(jinode->i_vfs_inode))
+ 		ret = ext4_journalled_submit_inode_data_buffers(jinode);
+ 	else
+@@ -554,7 +557,10 @@ static int ext4_journal_submit_inode_data_buffers(struct jbd2_inode *jinode)
+ static int ext4_journal_finish_inode_data_buffers(struct jbd2_inode *jinode)
+ {
+ 	int ret = 0;
++	journal_t *journal = EXT4_SB(jinode->i_vfs_inode->i_sb)->s_journal;
+ 
++	if (!journal || is_journal_aborted(journal))
++		return 0;
+ 	if (!ext4_should_journal_data(jinode->i_vfs_inode))
+ 		ret = jbd2_journal_finish_inode_data_buffers(jinode);
 

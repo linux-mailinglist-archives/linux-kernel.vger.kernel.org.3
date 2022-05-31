@@ -2,166 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D6353994E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E4F539954
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 00:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348309AbiEaWD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 18:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52670 "EHLO
+        id S1348226AbiEaWFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 18:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348304AbiEaWDW (ORCPT
+        with ESMTP id S243412AbiEaWFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 18:03:22 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904DB9A9B7;
-        Tue, 31 May 2022 15:03:20 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id ew15so3562874qtb.2;
-        Tue, 31 May 2022 15:03:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=76lHBu9WeEtFRiB08o/XGso0/nY2CeLb14MdKI7nDao=;
-        b=mSchy28160Qp1NG35icMcuhuFgpkhU/7MC192l8/Hyp9OUXxeALvLW8Y+6qUgRwTGW
-         Iin0Utg6nhNW0kKHn7LkRsXHgeoCacHj73zLWz3+tGlxrQ4EqtugiXw2vsgoab0TofEs
-         AUyKdNBTKLAgCQFeAdrnM6CdJ2/xebsPQBf3cL8rRGQ1hzYWxTNK4TdsozgDlGfvJ7z9
-         gwOFHPMAMFH9LIp4N3zSuRZsPAF9fI/mqydKFQ4cAfrnVgOTaxrqmCsIo/sO6GSESjdZ
-         3RdRYgJJs5QTfjbiqqRxZUZijQQrm8/KxP1gani6jPQgtXeNuyhLASeQHXkbbY44j1XT
-         pS/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=76lHBu9WeEtFRiB08o/XGso0/nY2CeLb14MdKI7nDao=;
-        b=2mtWuFcrTjiVqq1IWFNw/vGBVdOUhV98L0BbcT3g58bdBEk1Rf/BuwWKL44YkjvtuH
-         p3AQ2mJwQ11MPwCtj7TYjO5i/M9a2AwebhW5VVBUf3JparyhupULO+xspFmFlCwW6Cjh
-         kXhDtsc5yiXzPFXv+nG+dPaCNYs3TC+hCMMJ/owiO5PbJ11bMczxc9VkFRorrlp4ONY/
-         BPNe/HLCK7qvUT/NPIBgA5cAY/HCf2ULKC64bBULV9oCM3C8aiMHwn1A3qj/TwZb0hjF
-         vC2UWAyygS4oyxtpVivcbGkeDGedS8Wfn5EwEp7MzQeQkxkdjQi+O+OL2w8RGZM19y10
-         l5Og==
-X-Gm-Message-State: AOAM532xD0qn2HmIof8uJqQY1hoIRvJzpFq9RU/ZpD1MKVeBAdi3OBBU
-        DRWzzSwx+CbffnyrKztgjw==
-X-Google-Smtp-Source: ABdhPJydyWA+tMa+1FNjiHYuTVl++dSGIMc4esAgaWez8ZmLAxIxTNZC9DCXZg5mioKbqao8dQsEEA==
-X-Received: by 2002:a05:622a:4cf:b0:2f9:373b:ef0 with SMTP id q15-20020a05622a04cf00b002f9373b0ef0mr36827931qtx.163.1654034599475;
-        Tue, 31 May 2022 15:03:19 -0700 (PDT)
-Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id g18-20020ac84812000000b002f93aeaf770sm9369618qtq.92.2022.05.31.15.03.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 15:03:18 -0700 (PDT)
-Date:   Tue, 31 May 2022 18:03:16 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
-        rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, willy@infradead.org
-Subject: Re: [PATCH v2 01/28] lib/printbuf: New data structure for printing
- strings
-Message-ID: <20220531220316.i7wl34puxy73zn46@moria.home.lan>
-References: <20220519172421.162394-1-kent.overstreet@gmail.com>
- <20220519172421.162394-2-kent.overstreet@gmail.com>
- <Yo+XZ4YtU9fN/sGE@alley>
- <20220526152127.gw7gb4jnoikop4hl@moria.home.lan>
- <YpCoADIEWi9flgSf@alley>
+        Tue, 31 May 2022 18:05:31 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE029B1B0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 15:05:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654034730; x=1685570730;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GLTEccP2tod58Wa6O71k2ppOxftaIENVQo7iDOa2bBU=;
+  b=dY8IN3g2PDjCYn/tudqoWe6rUscJAEgS/Vm/kbHX1w4yTvo4i+/CnQBT
+   ST+Ag1Xd9WH32HEVsevbX1sb0HgfU+lIO9RnBvIf377hLRiwZlaNLrqjw
+   T3Ge6juUfOfLHhb1wyT7K35EuCoK42XXifihR9yEtzuf94z1oc3iIOnO9
+   mX2oOD75HbgUxkg744rUhnQGqKPxtskX+PSfCKEv9ftvY8Cb+BdWHf/PJ
+   IrF+98Y6VFnpm9uRMt//BS3HSWHQNU2Ys9uBe6tSiR/nao84pl2+x1yKx
+   cfNJKdLB29FTW38vexkde6pTTKuvhMODytH8cTi7VvME/dXBHQY+Z4Hdx
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="275479817"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="275479817"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 15:05:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="529786543"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 31 May 2022 15:05:28 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nw9zT-00038W-Sw;
+        Tue, 31 May 2022 22:05:27 +0000
+Date:   Wed, 1 Jun 2022 06:04:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:perf/wip.cleanup 9/10]
+ arch/x86/events/intel/core.c:2841:28: error: 'struct hw_perf_event' has no
+ member named 'indx'; did you mean 'idx'?
+Message-ID: <202206010539.5AhXIxwi-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YpCoADIEWi9flgSf@alley>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 12:29:20PM +0200, Petr Mladek wrote:
-> I would really like to keep the three APIs separated and easy to
-> distinguish. They are principally different:
-> 
-> 1. pr_*() API:
-> 
->        + wrapper to printk(). They makes the messages available on
-> 	 console and for user-space log daemons while printf()
-> 
->       + the various pr_*() variants are used to define kernel
-> 	specific features and behavior, for example:
-> 	loglevel, ratelimit, only once. deferred console handling.
-> 
->        + uses implicit (system) buffer
-> 
->        + The message format is defined by the 1st parameter. It
-> 	 is the same way as printf() in user-space.
-> 
->        + It is inspired by printf() from user-space that prints
-> 	 the messages to the standard output.
-> 
-> 
-> 2. *s*printf() APIs:
-> 
->        + basically duplicate the same user-space API. It supports
-> 	 some extra %p modifiers. There might be few more
-> 	 incompatibilities.
-> 
->        + use simple "char *" buffer provided as the 1st parameter
-> 
->        + the messages format is defined the same way as in
-> 	 the user-space counterparts.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.cleanup
+head:   7e88da7861a18513ec10118c915d6886a916587b
+commit: b1e1e07adc4ce6fc0c484ffa3fa718bc7ff144f6 [9/10] perf/x86/intel: Optimize short PEBS counters
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220601/202206010539.5AhXIxwi-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=b1e1e07adc4ce6fc0c484ffa3fa718bc7ff144f6
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue perf/wip.cleanup
+        git checkout b1e1e07adc4ce6fc0c484ffa3fa718bc7ff144f6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-I'd like to get sprintf() style functions - anything that outputs to raw char *
-pointers - deprecated. That's going to mean a _lot_ of refactoring (so I don't
-know that I'll be the one to do it), but it's mostly easy refactoring.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 3. printbuf API:
-> 
->        + append messages into the given printbuf by small pieces
-> 
->        + format defined by the suffix, for example, _char(),
-> 	 bytes(), units_64(), _tab(), indent()
-> 
->        + allows to do special operations on the buffer,
-> 	 for example, _reset(), make_room(), atomic_inc()
-> 
->        + it will be used as low-level API for vscnprinf()
-> 	 implementation, pretty printing API, or
-> 	 stand alone uses.
-> 
->        + I wonder if there will be variant that will allow
-> 	 to pass the format in the printf() way, e.g.
-> 	 int pb_printf(printbuf *buf, const char *fmt, ...);
+All errors (new ones prefixed by >>):
 
-Right now this is called pr_buf(). I suppose pr_printf()/pb_printf() makes sense
-:)
+   arch/x86/events/intel/core.c: In function 'intel_pmu_handle_short_pebs':
+>> arch/x86/events/intel/core.c:2841:28: error: 'struct hw_perf_event' has no member named 'indx'; did you mean 'idx'?
+    2841 |         if (!test_bit(hwc->indx, cpuc->active_mask))
+         |                            ^~~~
+         |                            idx
 
-> 
->        + is there any user space counter part?
-> 
-> 
-> Now, it is clear that printfbuf API must be distinguished by another
-> prefix:
-> 
->        + it must be clear that it stores the output into printbuf.
-> 	 It is similar to dprintf(), fprintf(), sprintf().
-> 
->        + It can't be done by the suffix because it is already used
-> 	 to define format of the appended string or extra operation.
-> 
->        + It must be clear what is low-level API used to implement
-> 	 vsprintf() and high-level API that uses vsprintf().
-> 	 I mean pb_char() vs. pb_printf().
 
-So there's more in the pr_* namespace than I realized - I guess you've convinced
-me on not reusing that. Which is a shame, because it rolls off the tongue so
-much easier than pb_* and I think otherwise makes more sense here - pr_foo for
-"print foo".
+vim +2841 arch/x86/events/intel/core.c
 
-However, I'm not going to put special operations on printbufs under the pb_
-prefix: I want that naming (whether pb_* or pr_*) to _just_ be for "print foo";
-this "print this" prefix should be the common prefix for _any_ pretty printer,
-unless it has another subsystem prefix - that means there's going to be a lot of
-functions with these prefix. So I'm going to keep "printbuf special operations"
-on the printbuf_ prefix.
+  2834	
+  2835	static void intel_pmu_handle_short_pebs(struct perf_event *event)
+  2836	{
+  2837		struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+  2838		struct hw_perf_event *hwc = &event->hw;
+  2839	
+  2840		/* if the event is not enabled; intel_pmu_pebs_enable() DTRT */
+> 2841		if (!test_bit(hwc->indx, cpuc->active_mask))
+  2842			return;
+  2843	
+  2844		WARN_ON_ONCE(cpuc->enabled);
+  2845	
+  2846		if (intel_pmu_is_short_pebs(event)) {
+  2847	
+  2848			/* stripped down intel_pmu_pebs_disable() */
+  2849			cpuc->pebs_enabled &= ~(1ULL << hwc->idx);
+  2850			hwc->config |= ARCH_PERFMON_EVENTSEL_INT;
+  2851	
+  2852			intel_pmu_update_config(event);
+  2853	
+  2854		} else if (!(cpuc->pebs_enabled & (1ULL << hwc->idx))) {
+  2855	
+  2856			/* stripped down intel_pmu_pebs_enable() */
+  2857			hwc->config &= ~ARCH_PERFMON_EVENTSEL_INT;
+  2858			cpuc->pebs_enabled |= (1ULL << hwc->idx);
+  2859	
+  2860			intel_pmu_update_config(event);
+  2861		}
+  2862	}
+  2863	
 
-Also, how about prt_* instead of pb_*? I want something that sounds more like
-print, and prt_ isn't taken.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

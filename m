@@ -2,244 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60967538E80
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F76538E7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245469AbiEaKKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 06:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
+        id S245398AbiEaKJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 06:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245400AbiEaKJu (ORCPT
+        with ESMTP id S243695AbiEaKJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 06:09:50 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E68996AD;
-        Tue, 31 May 2022 03:09:48 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id k16so13642271wrg.7;
-        Tue, 31 May 2022 03:09:48 -0700 (PDT)
+        Tue, 31 May 2022 06:09:35 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFFA880E2
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:09:33 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id gh17so25623735ejc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:09:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PSCX4PHCAROocqljRy3ZnI/Dr3u/fImtm88PpfecH+0=;
-        b=hgL7i4XhVKnDz+kV6ZUE7M1I5YWxgyeFW2IZF2mSrdg4RvA1wzUpEjpZp0UL8CTzy4
-         +6zDKiJjI/xbhMEf/hdKbj+GEz7nQr3s94DqNwb4DnmCKFcUxk0OeQ9vQCKA6ez2anWb
-         QbVooWUWhpKl2Yn7AHI9HP6ngfob1aHHe5a9xbOSfuj2OmrK4N9X477rxL8O9b1OsD+g
-         PtUvha7RK1clPNKDMorU2IBsVZJQsvxfkCMkcfShi9SxTLwHDC7bnNoB0Lxi8+/+AkuR
-         HCru7e1wLgDwrbmJYV3oA2c3aN4+ehq1Vicg0eUYQqvQ1+C0RNIh4ob3SZt4spKW/PxT
-         i8Ag==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=S1vJ4EQxgb8CxF/TZMOJh3j8ysKIcc1uWIaMM56tARY=;
+        b=MQ2r0968DRUUCPed8gMd5wzr3YkRRz4uHeMhTZbIGhCzNoB1A3RdIWdryLlNxvt3a+
+         l7ff7EW9HeZhPzAN2XuL/bKpsUEOokmmHHhpwrFtX1U9Bjnaudvoj1xClG84cAZA8etJ
+         1nEE7kHTxK8VU8u18lAP3Z09SH57smrqDwDzAA65jhjfK0R/UjRTepeFCtv0IcW6gbOB
+         loRlFL3oxNG/VOvaI+EoBfWcIJLZ7TMN0m68G3+6ik03oogf9RH5jBf3jd0RMewj4eRa
+         aIZSz3RUxXQbw2uDaB5MNMCmdVw79mbyma57bGWQIsPSe+eH+mTYSjUwlooAKgEPF45l
+         /HXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=PSCX4PHCAROocqljRy3ZnI/Dr3u/fImtm88PpfecH+0=;
-        b=LZzoGtgAci/jXSpdWjGrhinc4o/sUt+cQXdag+rSLtNDMYiAuc2iQnHFJI3WEKRxO4
-         strcHSNd5+7myhZzJVg4ho7XCEWjaYMCJf7xf39NGtk4bmqn5gUlHKbpHZUEE5ezSHWg
-         3xfMb5qkAxQpAwTUOBmYZgTmv711zX+gY+xymVRKt0S4h9EBv89K/ELBKKLbCLnTmQfN
-         McXVr1ws15hSW/3g8XerGVj4KiV6aLl9rK5itdCOar+yu2ciEEMYKs1uFV7zS23123nt
-         0uovx2uwZVYCgbtf7XPP3Wso36jpM/s9/a3bT77ySqCqeC0PArWRelHEe1kbVBW25Nis
-         CChg==
-X-Gm-Message-State: AOAM533QdCfhHe4mtuCJTLst/RNiWMUnotfZgJN2Drrgn0POF/k7iglI
-        tWCtES4wkLVfvEf3afp6y4M=
-X-Google-Smtp-Source: ABdhPJzEABsFC0dAQtKAZa34WuskN0k+eNzR8nofFV3y4fHwJcykXVBdRQaxtQGc/Y72uF6IkW2opA==
-X-Received: by 2002:a05:6000:1542:b0:20f:f809:cf89 with SMTP id 2-20020a056000154200b0020ff809cf89mr27658582wry.361.1653991786933;
-        Tue, 31 May 2022 03:09:46 -0700 (PDT)
-Received: from baligh-ThinkCentre-M720q.iliad.local (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.googlemail.com with ESMTPSA id n6-20020a05600c4f8600b0039b006bd6d9sm1975543wmq.6.2022.05.31.03.09.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 03:09:46 -0700 (PDT)
-From:   Baligh Gasmi <gasmibal@gmail.com>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     Baligh Gasmi <gasmibal@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org (open list:MAC80211),
-        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RFC PATCH v3 1/1] mac80211: use AQL airtime for expected throughput.
-Date:   Tue, 31 May 2022 12:09:22 +0200
-Message-Id: <20220531100922.491344-1-gasmibal@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        bh=S1vJ4EQxgb8CxF/TZMOJh3j8ysKIcc1uWIaMM56tARY=;
+        b=LAOQWS9d/zieys0Jiekuc0hC5sItOQBpT2tWW5tgC0rKCoYqTzktS/j2naKGw8hqsa
+         t1nX8g5DGOb6bCTueVt9kvukUPu0YGZrmnz9hhaE0xrg7IIMJUk7Z3K0DZ54YXF98es9
+         HWAJToTPrXpK09AByVoJ/luvFbnhJmFLLYP+J6QX1cmRaHAhhPmUKRR8qgkrD6PtcWXz
+         tCaULiT2Bruqfc1ENxyqphsJ8I7/gyaGKYR2CNDyzUS3DTI3ZQijOwA1cvyltA1hyoFC
+         AcpRdO+zzs8BhAAqR/Gsgie5P53rwUOvl3dWRtQNiwgoeDvM8GQEqj94wjyXnVky5fAX
+         tCMA==
+X-Gm-Message-State: AOAM533mshMKDrkSfBp+d4aUe0tLTHfvU9fyrQ/l+2u8JXK/Bh0xC6cQ
+        h6yTv/GC2UWJGSNFruNstmd9Lg==
+X-Google-Smtp-Source: ABdhPJx/50IRMlU00F/rYnkUzkndEh0B417cmSpGcaeV7ZCsrUR5344iDQbFh1kQrAGl+EU160hB1g==
+X-Received: by 2002:a17:906:a105:b0:6fe:9a27:85c7 with SMTP id t5-20020a170906a10500b006fe9a2785c7mr49413448ejy.315.1653991771939;
+        Tue, 31 May 2022 03:09:31 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id u5-20020a50a405000000b0042d6d8ec1d5sm6212220edb.60.2022.05.31.03.09.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 03:09:31 -0700 (PDT)
+Message-ID: <2a251708-b76c-17a9-4681-3c2c3c31beb0@linaro.org>
+Date:   Tue, 31 May 2022 12:09:30 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/6] phy: samsung-ufs: move cdr offset to drvdata
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-phy@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        avri.altman@wdc.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, chanho61.park@samsung.com,
+        pankaj.dubey@samsung.com, linux-fsd@tesla.com,
+        Bharat Uppal <bharat.uppal@samsung.com>
+References: <20220531012220.80563-1-alim.akhtar@samsung.com>
+ <CGME20220531012341epcas5p19b15b4916b210687ab6b46d6da0b2273@epcas5p1.samsung.com>
+ <20220531012220.80563-3-alim.akhtar@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220531012220.80563-3-alim.akhtar@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the integration of AQL, packet TX airtime estimation is
-calculated and counted to be used for the dequeue limit.
+On 31/05/2022 03:22, Alim Akhtar wrote:
+> Move CDR lock offset to drv data so that it can
+> be extended for other SoCs which are having CDR
+> lock at different register offset.
 
-Use this estimated airtime to compute expected throughput for
-each station.
+Line wrapping is too early
+https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
 
-It will be a generic mac80211 implementation. If the driver has
-get_expected_throughput implementation, it will be used instead.
 
-Useful for L2 routing protocols, like B.A.T.M.A.N.
-
-Signed-off-by: Baligh Gasmi <gasmibal@gmail.com>
----
- net/mac80211/driver-ops.h |  2 ++
- net/mac80211/sta_info.c   | 39 +++++++++++++++++++++++++++++++++++++++
- net/mac80211/sta_info.h   | 11 +++++++++++
- net/mac80211/status.c     |  2 ++
- net/mac80211/tx.c         |  8 +++++++-
- 5 files changed, 61 insertions(+), 1 deletion(-)
-
-diff --git a/net/mac80211/driver-ops.h b/net/mac80211/driver-ops.h
-index 4e2fc1a08681..fa9952154795 100644
---- a/net/mac80211/driver-ops.h
-+++ b/net/mac80211/driver-ops.h
-@@ -1142,6 +1142,8 @@ static inline u32 drv_get_expected_throughput(struct ieee80211_local *local,
- 	trace_drv_get_expected_throughput(&sta->sta);
- 	if (local->ops->get_expected_throughput && sta->uploaded)
- 		ret = local->ops->get_expected_throughput(&local->hw, &sta->sta);
-+	else
-+		ret = ewma_avg_est_tp_read(&sta->deflink.status_stats.avg_est_tp);
- 	trace_drv_return_u32(local, ret);
- 
- 	return ret;
-diff --git a/net/mac80211/sta_info.c b/net/mac80211/sta_info.c
-index e04a0905e941..201aab465234 100644
---- a/net/mac80211/sta_info.c
-+++ b/net/mac80211/sta_info.c
-@@ -1993,6 +1993,45 @@ void ieee80211_sta_update_pending_airtime(struct ieee80211_local *local,
- 			       tx_pending, 0);
- }
- 
-+void ieee80211_sta_update_tp(struct ieee80211_local *local,
-+			     struct sta_info *sta,
-+			     struct sk_buff *skb,
-+			     u16 tx_time_est,
-+			     bool ack, int retry)
-+{
-+	unsigned long diff;
-+	struct rate_control_ref *ref = NULL;
-+
-+	if (!skb || !sta || !tx_time_est)
-+		return;
-+
-+	if (test_sta_flag(sta, WLAN_STA_RATE_CONTROL))
-+		ref = sta->rate_ctrl;
-+
-+	if (ref && ref->ops->get_expected_throughput)
-+		return;
-+
-+	if (local->ops->get_expected_throughput)
-+		return;
-+
-+	tx_time_est += ack ? 4 : 0;
-+	tx_time_est += retry ? retry * 2 : 2;
-+
-+	sta->deflink.tx_stats.tp_tx_size += (skb->len * 8) * 1000;
-+	sta->deflink.tx_stats.tp_tx_time_est += tx_time_est;
-+
-+	diff = jiffies - sta->deflink.status_stats.last_tp_update;
-+	if (diff > HZ / 10) {
-+		ewma_avg_est_tp_add(&sta->deflink.status_stats.avg_est_tp,
-+				    sta->deflink.tx_stats.tp_tx_size /
-+				    sta->deflink.tx_stats.tp_tx_time_est);
-+
-+		sta->deflink.tx_stats.tp_tx_size = 0;
-+		sta->deflink.tx_stats.tp_tx_time_est = 0;
-+		sta->deflink.status_stats.last_tp_update = jiffies;
-+	}
-+}
-+
- int sta_info_move_state(struct sta_info *sta,
- 			enum ieee80211_sta_state new_state)
- {
-diff --git a/net/mac80211/sta_info.h b/net/mac80211/sta_info.h
-index 35c390bedfba..4200856fefcd 100644
---- a/net/mac80211/sta_info.h
-+++ b/net/mac80211/sta_info.h
-@@ -123,6 +123,7 @@ enum ieee80211_sta_info_flags {
- #define HT_AGG_STATE_STOP_CB		7
- #define HT_AGG_STATE_SENT_ADDBA		8
- 
-+DECLARE_EWMA(avg_est_tp, 8, 16)
- DECLARE_EWMA(avg_signal, 10, 8)
- enum ieee80211_agg_stop_reason {
- 	AGG_STOP_DECLINED,
-@@ -157,6 +158,12 @@ void ieee80211_register_airtime(struct ieee80211_txq *txq,
- 
- struct sta_info;
- 
-+void ieee80211_sta_update_tp(struct ieee80211_local *local,
-+			     struct sta_info *sta,
-+			     struct sk_buff *skb,
-+			     u16 tx_time_est,
-+			     bool ack, int retry);
-+
- /**
-  * struct tid_ampdu_tx - TID aggregation information (Tx).
-  *
-@@ -549,6 +556,8 @@ struct link_sta_info {
- 		s8 last_ack_signal;
- 		bool ack_signal_filled;
- 		struct ewma_avg_signal avg_ack_signal;
-+		struct ewma_avg_est_tp avg_est_tp;
-+		unsigned long last_tp_update;
- 	} status_stats;
- 
- 	/* Updated from TX path only, no locking requirements */
-@@ -558,6 +567,8 @@ struct link_sta_info {
- 		struct ieee80211_tx_rate last_rate;
- 		struct rate_info last_rate_info;
- 		u64 msdu[IEEE80211_NUM_TIDS + 1];
-+		u64 tp_tx_size;
-+		u64 tp_tx_time_est;
- 	} tx_stats;
- 
- 	enum ieee80211_sta_rx_bandwidth cur_max_bandwidth;
-diff --git a/net/mac80211/status.c b/net/mac80211/status.c
-index e69272139437..1fb93abc1709 100644
---- a/net/mac80211/status.c
-+++ b/net/mac80211/status.c
-@@ -1152,6 +1152,8 @@ void ieee80211_tx_status_ext(struct ieee80211_hw *hw,
- 	ack_signal_valid =
- 		!!(info->status.flags & IEEE80211_TX_STATUS_ACK_SIGNAL_VALID);
- 
-+	ieee80211_sta_update_tp(local, sta, skb, tx_time_est, acked, retry_count);
-+
- 	if (pubsta) {
- 		struct ieee80211_sub_if_data *sdata = sta->sdata;
- 
-diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
-index 0e4efc08c762..e58d89c108a4 100644
---- a/net/mac80211/tx.c
-+++ b/net/mac80211/tx.c
-@@ -3632,6 +3632,7 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee80211_hw *hw,
- 	struct ieee80211_tx_data tx;
- 	ieee80211_tx_result r;
- 	struct ieee80211_vif *vif = txq->vif;
-+	struct rate_control_ref *ref = NULL;
- 
- 	WARN_ON_ONCE(softirq_count() == 0);
- 
-@@ -3790,8 +3791,13 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee80211_hw *hw,
- encap_out:
- 	IEEE80211_SKB_CB(skb)->control.vif = vif;
- 
-+	if (tx.sta && test_sta_flag(tx.sta, WLAN_STA_RATE_CONTROL))
-+		ref = tx.sta->deflink.rate_ctrl;
-+
- 	if (vif &&
--	    wiphy_ext_feature_isset(local->hw.wiphy, NL80211_EXT_FEATURE_AQL)) {
-+	    ((!local->ops->get_expected_throughput &&
-+	     (!ref || !ref->ops->get_expected_throughput)) ||
-+	    wiphy_ext_feature_isset(local->hw.wiphy, NL80211_EXT_FEATURE_AQL))) {
- 		bool ampdu = txq->ac != IEEE80211_AC_VO;
- 		u32 airtime;
- 
--- 
-2.36.1
-
+Best regards,
+Krzysztof

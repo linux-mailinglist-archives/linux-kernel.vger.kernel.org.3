@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095605389E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4DBA5389DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 04:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243538AbiEaCO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 May 2022 22:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
+        id S243535AbiEaCOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 May 2022 22:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234705AbiEaCOx (ORCPT
+        with ESMTP id S234705AbiEaCOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 May 2022 22:14:53 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CD592D3E
-        for <linux-kernel@vger.kernel.org>; Mon, 30 May 2022 19:14:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653963292; x=1685499292;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FWVmcsxA2ui4raYa9LzBDvzmY+HcdfFqPCQKmRv4j1M=;
-  b=EY5KlbJlFkH+THeF6d9BZM3ytpjgP+oOh92GQH3fOJv9ZiVjeAtH5VLl
-   Vsfc4SHahUiou1EbqEEkd3uLyIWibLBlXU12GwM+LB2w/sJXFOnIC5+P3
-   xj/P1wjlFt/+serXVl4GwNBKUSBRh2eY2fseAbE3Dguam/UzvbUOUZdaK
-   +ZWOCAQEsZ8+E2R/QA/lhtH42SJPBD2Bbrm6gJqrKYilYpMeyIHnmRbW9
-   MBXoDxn4pE22ISVLG1OBagsSdUbRo1maaJYeMGyEX2FdoVRMpa185nH+F
-   gCWrzxEN3iRRbp5fFe/8Q6fI4Rpstd+E+HAwla+ER4GJDwUKoAIlLFpN3
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="254987977"
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="254987977"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 19:14:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="823059146"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 30 May 2022 19:14:51 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nvrPG-0002De-Fm;
-        Tue, 31 May 2022 02:14:50 +0000
-Date:   Tue, 31 May 2022 10:14:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [peterz-queue:perf/wip.cleanup 9/10]
- arch/x86/events/intel/core.c:2841:33: error: invalid operands to binary &
- (have 'long unsigned int *' and 'long long unsigned int')
-Message-ID: <202205311009.FeTWYwId-lkp@intel.com>
+        Mon, 30 May 2022 22:14:41 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37BE77F22;
+        Mon, 30 May 2022 19:14:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=MCE74GR5cd4AP/uMh3B09r7w3iqnVZmjXLrGDc0ll4E=; b=Sp8gIrzZmwjlDwR5gLvzxZlTob
+        3lUWElXFB0MMLAjtHo29QD2GCLRRwCdl40feohIHVpqAzHw55Car5/w/8M8myyGDnOu/0tPhIKafr
+        LaM26tWBClui7FElSgXvJXAWHOMY2j99Nkfo7OvaL/EPBKk+Ae9aHG4irS4Xh8P11o/ZTR0PvZlIS
+        qeIDZOaKwogWNJXWBLOzB8Jfasoj5siKHrCpxTCEUmnK0hM1fcR1M7ElGdev7Ur34ytz5MPozWF3Q
+        yHwlZnY9JxNSR9Gad/8mD20qOcH4PQLW4Zj8Q7JFaZA8jWWuxz/t+iehITJIlfud8+Ym5mtV7a0AX
+        iPQ/N86w==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nvrOx-003F1K-W7; Tue, 31 May 2022 02:14:32 +0000
+Message-ID: <d2db660d-edaf-c5a0-8c27-ac27f6232fed@infradead.org>
+Date:   Mon, 30 May 2022 19:14:23 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v9 2/6] drivers/input/joystick: sensehat: Raspberry Pi
+ Sense HAT joystick driver
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Charles Mirabile <cmirabil@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Serge Schneider <serge@raspberrypi.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Mattias Brugger <mbrugger@suse.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, fedora-rpi@googlegroups.com,
+        linux-input@vger.kernel.org, Daniel Bauman <dbauman@redhat.com>,
+        Mwesigwa Guma <mguma@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>
+References: <20220419205158.28088-1-cmirabil@redhat.com>
+ <20220419205158.28088-3-cmirabil@redhat.com>
+ <ecb3f627-3379-1b18-02c0-44782a2623d4@infradead.org>
+ <YpV2GNAJQhag9Osu@google.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <YpV2GNAJQhag9Osu@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,66 +66,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.cleanup
-head:   d096f17be1e500e9b733118925230e46b4c3a14c
-commit: be787b9861afcf5c89dd697a71367a3b6aae6dca [9/10] perf/x86/intel: Optimize short PEBS counters
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220531/202205311009.FeTWYwId-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=be787b9861afcf5c89dd697a71367a3b6aae6dca
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue perf/wip.cleanup
-        git checkout be787b9861afcf5c89dd697a71367a3b6aae6dca
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/x86/events/intel/core.c: In function 'intel_pmu_handle_short_pebs':
->> arch/x86/events/intel/core.c:2841:33: error: invalid operands to binary & (have 'long unsigned int *' and 'long long unsigned int')
-    2841 |         if (!(cpuc->active_mask & (1ULL << hwc->idx)))
-         |               ~~~~              ^ ~~~~~~~~~~~~~~~~~~
-         |               |                         |
-         |               long unsigned int *       long long unsigned int
 
 
-vim +2841 arch/x86/events/intel/core.c
+On 5/30/22 18:57, Dmitry Torokhov wrote:
+> Hi Randy,
+> 
+> On Mon, May 30, 2022 at 06:26:26PM -0700, Randy Dunlap wrote:
+>> Hi--
+>>
+>> On 4/19/22 13:51, Charles Mirabile wrote:
+>>> diff --git a/drivers/input/joystick/Kconfig b/drivers/input/joystick/Kconfig
+>>> index 3b23078bc7b5..505a032e2786 100644
+>>> --- a/drivers/input/joystick/Kconfig
+>>> +++ b/drivers/input/joystick/Kconfig
+>>> @@ -399,4 +399,15 @@ config JOYSTICK_N64
+>>>  	  Say Y here if you want enable support for the four
+>>>  	  built-in controller ports on the Nintendo 64 console.
+>>>  
+>>> +config JOYSTICK_SENSEHAT
+>>> +	tristate "Raspberry Pi Sense HAT joystick"
+>>> +	depends on INPUT && I2C
+>>> +	select MFD_SIMPLE_MFD_I2C
+>>
+>> Looks like this also needs
+>> 	depends on HAS_IOMEM
+>>
+>> since everything in drivers/mfd/Kconfig depends on HAS_IOMEM and
+>> since this 'select' causes a kconfig warning when HAS_IOMEM is not set:
+>>
+>> WARNING: unmet direct dependencies detected for MFD_SIMPLE_MFD_I2C
+>>   Depends on [n]: HAS_IOMEM [=n] && I2C [=y]
+>>   Selected by [y]:
+>>   - JOYSTICK_SENSEHAT [=y] && INPUT_JOYSTICK [=y] && INPUT [=y] && I2C [=y]
+> 
+> Do you mind sending a patch?
 
-  2834	
-  2835	static void intel_pmu_handle_short_pebs(struct perf_event *event)
-  2836	{
-  2837		struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-  2838		struct hw_perf_event *hwc = &event->hw;
-  2839	
-  2840		/* if the event is not enabled; intel_pmu_pebs_enable() DTRT */
-> 2841		if (!(cpuc->active_mask & (1ULL << hwc->idx)))
-  2842			return;
-  2843	
-  2844		WARN_ON_ONCE(cpuc->enabled);
-  2845	
-  2846		if (intel_pmu_is_short_pebs(event)) {
-  2847	
-  2848			/* stripped down intel_pmu_pebs_disable() */
-  2849			cpuc->pebs_enabled &= ~(1ULL << hwc->idx);
-  2850			hwc->config |= ARCH_PERFMON_EVENTSEL_INT;
-  2851	
-  2852			intel_pmu_update_config(event);
-  2853	
-  2854		} else if (!(cpuc->pebs_enabled & (1ULL << hwc->idx))) {
-  2855	
-  2856			/* stripped down intel_pmu_pebs_enable() */
-  2857			hwc->config &= ~ARCH_PERFMON_EVENTSEL_INT;
-  2858			cpuc->pebs_enabled |= (1ULL << hwc->idx);
-  2859	
-  2860			intel_pmu_update_config(event);
-  2861		}
-  2862	}
-  2863	
+OK, will do.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Randy

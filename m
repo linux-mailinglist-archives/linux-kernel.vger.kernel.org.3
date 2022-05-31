@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744D953959B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8DA5395A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346682AbiEaRwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 13:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
+        id S1346697AbiEaRy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 13:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343782AbiEaRwF (ORCPT
+        with ESMTP id S1346709AbiEaRyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 13:52:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0FF5A09C
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:52:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 31 May 2022 13:54:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE13678EF9
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654019692;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4CTeMGpnmFy2AIcAqh2t9B9146mxAOy+N2664s7TYyY=;
+        b=XI7c1iLyTcOYrLM2rtbY7Q2k8K/Xg4PuZby66QQurqVYVHS+kvy649zFiqWo0IZjQgdcX6
+        xmJA0pCmjyfztqUMzXS4LUx21JVTWmJ4veji+B6DzPYv3KroHq1MkdjRjyn+oYra4fr3ab
+        M/1l9ixwQbTmC3+vSovbl8q4J4pvH0Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-121-6_ISWZgJPdiQ6_sMLGiveA-1; Tue, 31 May 2022 13:54:51 -0400
+X-MC-Unique: 6_ISWZgJPdiQ6_sMLGiveA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C005BB8116B
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 17:52:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E06C385A9;
-        Tue, 31 May 2022 17:52:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1654019521;
-        bh=OEffCozNQpohIH5eyJLNtoMpjRKcnRWUeID9VGyaAnw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OxCWkOU/KlRTYWJIU77tH7DqxetqA3KFACMH/TOXjqVqEk57kgpF3O26zUfycCHWE
-         0XYuBliVm13YxzKcZun2fxq2A7DNTiLDxFBiJVJtOrM35PmN6mal9g9Pk4AOxBxEeq
-         QHLAVyMduwHx2dCypmsfubYv34RV1vZiaR6MK9HM=
-Date:   Tue, 31 May 2022 10:52:00 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: Re: [PATCH 2/3] mm: introduce clear_highpage_tagged
-Message-Id: <20220531105200.587db61db99f19e308a05c5e@linux-foundation.org>
-In-Reply-To: <d6ba060f18999a00052180c2c10536226b50438a.1654011120.git.andreyknvl@google.com>
-References: <4c76a95aff79723de76df146a10888a5a9196faf.1654011120.git.andreyknvl@google.com>
-        <d6ba060f18999a00052180c2c10536226b50438a.1654011120.git.andreyknvl@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E0C02801E80;
+        Tue, 31 May 2022 17:54:50 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C3C07C15E72;
+        Tue, 31 May 2022 17:54:50 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     likexu@tencent.com
+Subject: [PATCH 0/2] KVM: vmx, pmu: respect KVM_GET_MSR_INDEX_LIST/KVM_SET_MSR contracts
+Date:   Tue, 31 May 2022 13:54:48 -0400
+Message-Id: <20220531175450.295552-1-pbonzini@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,36 +57,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 May 2022 17:43:49 +0200 andrey.konovalov@linux.dev wrote:
+Whenever an MSR is part of KVM_GET_MSR_INDEX_LIST, it has to be always
+settable with KVM_SET_MSR.  Right now MSR_IA32_DS_AREA, MSR_ARCH_LBR_DEPTH
+and MSR_ARCH_LBR_CTL are not fulfilling this, resulting in selftests
+failures on <=Skylake processors.
 
-> From: Andrey Konovalov <andreyknvl@google.com>
-> 
-> Add a clear_highpage_tagged() helper that does clear_highpage() on a
-> page potentially tagged by KASAN.
+Fix this, and in general allow host-initiated writes of a default
+value for all PMU MSRs
 
-clear_highpage_kasan_tagged() would be a better name, no?
+Paolo Bonzini (2):
+  KVM: vmx, pmu: accept 0 for absent MSRs when host-initiated
+  KVM: x86: always allow host-initiated writes to PMU MSRs
 
---- a/include/linux/highmem.h~mm-introduce-clear_highpage_tagged-fix
-+++ a/include/linux/highmem.h
-@@ -243,7 +243,7 @@ static inline void clear_highpage(struct
- 	kunmap_local(kaddr);
- }
- 
--static inline void clear_highpage_tagged(struct page *page)
-+static inline void clear_highpage_kasan_tagged(struct page *page)
- {
- 	u8 tag;
- 
---- a/mm/page_alloc.c~mm-introduce-clear_highpage_tagged-fix
-+++ a/mm/page_alloc.c
-@@ -1311,7 +1311,7 @@ static void kernel_init_pages(struct pag
- 	/* s390's use of memset() could override KASAN redzones. */
- 	kasan_disable_current();
- 	for (i = 0; i < numpages; i++)
--		clear_highpage_tagged(page + i);
-+		clear_highpage_kasan_tagged(page + i);
- 	kasan_enable_current();
- }
- 
-_
+ arch/x86/kvm/pmu.c           |  4 ++--
+ arch/x86/kvm/pmu.h           |  4 ++--
+ arch/x86/kvm/svm/pmu.c       |  2 +-
+ arch/x86/kvm/vmx/pmu_intel.c | 42 +++++++++++++++++++++++++-----------
+ arch/x86/kvm/x86.c           | 10 ++++-----
+ 5 files changed, 39 insertions(+), 23 deletions(-)
+
+-- 
+2.31.1
 

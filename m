@@ -2,126 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5615B539012
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA3A539013
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242883AbiEaLvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 07:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
+        id S1343955AbiEaLvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 07:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiEaLvJ (ORCPT
+        with ESMTP id S241631AbiEaLvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 07:51:09 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542249AE57
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:51:08 -0700 (PDT)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24V9kRtf029119;
-        Tue, 31 May 2022 11:50:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=o52iNdoPgfNxtCXuGtUnTHxhtVjoQFXXfw2YyfadNQ4=;
- b=nxEFXMvwbp5pU0Q15dqBk8nlrxUJvvNntWb74U7wv4TcxEEzGjbqeANQIQIRz7z69ZA+
- Wb9ghs6u1/4s5bQCSRfixnR6s9JFATai5BN2swBMqPWmIk/iAYY5NLIP4OXyG6R7QEra
- a5hsTmE8zg75XBKD1Zb+7z+SRAEch0oEZVOvfx7OMXPgzm4qYV8nX1sUmoi430XnCd0Y
- 6jf0lVoHU1nY3Knq9EtIFE225BgUziSSC3I/LG9Ho7WPfBrzPZPOWa5FWGC2HkIeLATS
- DBYqbSA8H4Gs5P7ePqfSiK0XiWWZGXCjJkGS/9RalyUnSwQ3pZWYr8c07RN7Cmz7z5KE uA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdgp4a4jr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 11:50:53 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24VAjvWr026247;
-        Tue, 31 May 2022 11:50:53 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdgp4a4jn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 11:50:53 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24VBZnYh032334;
-        Tue, 31 May 2022 11:50:52 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma01dal.us.ibm.com with ESMTP id 3gcxt57s88-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 11:50:52 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24VBopEA25690410
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 May 2022 11:50:51 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9D681AE066;
-        Tue, 31 May 2022 11:50:51 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1E40CAE062;
-        Tue, 31 May 2022 11:50:45 +0000 (GMT)
-Received: from skywalker.linux.ibm.com (unknown [9.43.75.179])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 31 May 2022 11:50:44 +0000 (GMT)
-X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     Davidlohr Bueso <dave@stgolabs.net>, linux-mm@kvack.org,
-        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>
-Cc:     mhocko@kernel.org, akpm@linux-foundation.org, rientjes@google.com,
-        yosryahmed@google.com, hannes@cmpxchg.org, shakeelb@google.com,
-        dave.hansen@linux.intel.com, tim.c.chen@linux.intel.com,
-        roman.gushchin@linux.dev, gthelen@google.com,
-        a.manzanares@samsung.com, heekwon.p@samsung.com,
-        gim.jongmin@samsung.com, dave@stgolabs.net,
+        Tue, 31 May 2022 07:51:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 302B39969F
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:51:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653997869;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sp61j0jOxh675zEwHGRAuiHfrRaXXimDo3bMjlhAKxY=;
+        b=OAW4Rqb8pQmdLVEdBh98uxYvXxygQrn7z6v1Nkd2b3XuiSuxaBVZuATbv0YqsYNlwmw04+
+        oxMiMWpYyDVHWzWJT9xxKZN2G/JjLazi/ae/avBCfxpe+1r4khIf6JS9nvIrdHjBOAXwyP
+        fs75AukyUx/rYA1gjur3whLuPqFAeJY=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-497-1EHks0CWNJyMB8m5cGKi9Q-1; Tue, 31 May 2022 07:51:07 -0400
+X-MC-Unique: 1EHks0CWNJyMB8m5cGKi9Q-1
+Received: by mail-wr1-f71.google.com with SMTP id d6-20020adfe886000000b00210316ee45eso845139wrm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:51:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=sp61j0jOxh675zEwHGRAuiHfrRaXXimDo3bMjlhAKxY=;
+        b=DzLEPw0vnyJgbakfuDWl+QO/Dl82PMyloLoH2pwrR2zVcelpMYAglbyq+3Ov54wmQ0
+         1M/nIGf1+Gl3Xox+e9TzfYJXsJtDwhKPzv9GUeWX/FjbymLlLQLQC+pyVvaFdb350m7+
+         Vav54C7sZHPlHnJXFMsvddN38uB4RxyUKEUl+gj6PIwj89aKHnIRntaesSr7ifuu3eq8
+         4jdLMSXYjBkr4mVHGGKHoRPATeKor5tQZBPX78s3FDhjzl51G4BCIVKtwfiit4pemCoA
+         xWyXW74OnYKIYeALUtGlGQOR/Fn08pVpSDrt8nDzQVhfIyii9i2Mds8Sd1yCNu8DqCPb
+         cWFw==
+X-Gm-Message-State: AOAM533ssvwxm4CET/V0GdHbCV2FdfL8gUzYP17LPCXdxt1JESP/IkcU
+        kZ9Bmu3Da346LQF0+aA11c0L2zNU4YciDVLUKiXoFsgDSge2yAEhsTdaaPetlpNol5cSVI4jPnA
+        sjCtpQMVf3EracX/u5ptejuO6O1mrxfqIS9EJutVtXUYg6rskHhUr/luTXObb5nOJugpEL2aFsT
+        1a
+X-Received: by 2002:adf:ce03:0:b0:210:32ec:50fd with SMTP id p3-20020adfce03000000b0021032ec50fdmr8804148wrn.407.1653997866448;
+        Tue, 31 May 2022 04:51:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzUFDadQtEAW830R/53OnbX6GxA6MYGsy0Xd0Ict3qfIsNSiTbQk4A+/7hK8lbrXp+LCJlgPQ==
+X-Received: by 2002:adf:ce03:0:b0:210:32ec:50fd with SMTP id p3-20020adfce03000000b0021032ec50fdmr8804120wrn.407.1653997866117;
+        Tue, 31 May 2022 04:51:06 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id g12-20020adfd1ec000000b0020c5253d8f2sm8381245wrd.62.2022.05.31.04.51.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 04:51:05 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Tianchen Ding <dtcccc@linux.alibaba.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] mm/vmscan: use node_is_toptier helper in node_reclaim
-In-Reply-To: <20220416053902.68517-3-dave@stgolabs.net>
-References: <20220416053902.68517-1-dave@stgolabs.net>
- <20220416053902.68517-3-dave@stgolabs.net>
-Date:   Tue, 31 May 2022 17:20:42 +0530
-Message-ID: <87h755dip9.fsf@linux.ibm.com>
+Subject: Re: [PATCH v2] sched: Queue task on wakelist in the same llc if the
+ wakee cpu is idle
+In-Reply-To: <1d0eb8f4-e474-86a9-751a-7c2e1788df85@linux.alibaba.com>
+References: <20220527090544.527411-1-dtcccc@linux.alibaba.com>
+ <xhsmhleuj7zve.mognet@vschneid.remote.csb>
+ <1d0eb8f4-e474-86a9-751a-7c2e1788df85@linux.alibaba.com>
+Date:   Tue, 31 May 2022 12:50:49 +0100
+Message-ID: <xhsmhilpl9azq.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: hFaP5Wlngd4z14fDXM8_M7vK4N94Bcjo
-X-Proofpoint-GUID: 7RA_a--nVo-HGuKedV7RKWPYn2WNoNhL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-05-31_04,2022-05-30_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
- impostorscore=0 mlxscore=0 clxscore=1011 suspectscore=0 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205310059
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Davidlohr Bueso <dave@stgolabs.net> writes:
-
-> We have helpers for a reason.
+On 31/05/22 15:20, Tianchen Ding wrote:
+> On 2022/5/31 00:24, Valentin Schneider wrote:
+>> 
+>> This feels a bit like a generalization of
+>> 
+>>    2ebb17717550 ("sched/core: Offload wakee task activation if it the wakee is descheduling")
+>> 
+>> Given rq->curr is updated before prev->on_cpu is cleared, the waker
+>> executing ttwu_queue_cond() can observe:
+>> 
+>>    p->on_rq=0
+>>    p->on_cpu=1
+>>    rq->curr=swapper/x (aka idle task)
+>> 
+>> So your addition of available_idle_cpu() in ttwu_queue_cond() (sort of)
+>> matches that when invoked via:
+>> 
+>>          if (smp_load_acquire(&p->on_cpu) &&
+>>              ttwu_queue_wakelist(p, task_cpu(p), wake_flags | WF_ON_CPU))
+>>                  goto unlock;
+>> 
+>> but it also affects
+>> 
+>>          ttwu_queue(p, cpu, wake_flags);
+>> 
+>> at the tail end of try_to_wake_up().
 >
-> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
-> ---
->  mm/vmscan.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Yes. This part is what we mainly want to affect. The above WF_ON_CPU is 
+> not our point.
 >
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 1678802e03e7..cb583fcbf5bf 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -4750,7 +4750,7 @@ int node_reclaim(struct pglist_data *pgdat, gfp_t gfp_mask, unsigned int order)
->  	 * over remote processors and spread off node memory allocations
->  	 * as wide as possible.
->  	 */
-> -	if (node_state(pgdat->node_id, N_CPU) && pgdat->node_id != numa_node_id())
-> +	if (node_is_toptier(pgdat->node_id) && pgdat->node_id != numa_node_id())
->  		return NODE_RECLAIM_NOSCAN;
->  
->  	if (test_and_set_bit(PGDAT_RECLAIM_LOCKED, &pgdat->flags))
 
+Right.
 
-Are we really looking at the top tier in a tiered memory hierarchy here?
-The comment seems to suggest we are looking at local NUMA node?
+>> 
+>> With all that in mind, I'm curious whether your patch is functionaly close
+>> to the below.
+>> 
+>> ---
+>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>> index 66c4e5922fe1..ffd43264722a 100644
+>> --- a/kernel/sched/core.c
+>> +++ b/kernel/sched/core.c
+>> @@ -3836,7 +3836,7 @@ static inline bool ttwu_queue_cond(int cpu, int wake_flags)
+>>   	 * the soon-to-be-idle CPU as the current CPU is likely busy.
+>>   	 * nr_running is checked to avoid unnecessary task stacking.
+>>   	 */
+>> -	if ((wake_flags & WF_ON_CPU) && cpu_rq(cpu)->nr_running <= 1)
+>> +	if (cpu_rq(cpu)->nr_running <= 1)
+>>   		return true;
+>>   
+>>   	return false;
+>
+> It's a little different. This may bring extra IPIs when nr_running == 1 
+> and the current task on wakee cpu is not the target wakeup task (i.e., 
+> rq->curr == another_task && rq->curr != p). Then this another_task may 
+> be disturbed by IPI which is not expected. So IMO the promise by 
+> WF_ON_CPU is necessary.
 
+You're right, actually taking a second look at that WF_ON_CPU path,
+shouldn't the existing condition be:
 
--aneesh
+	if ((wake_flags & WF_ON_CPU) && !cpu_rq(cpu)->nr_running)
+
+? Per the p->on_rq and p->on_cpu ordering, if we have WF_ON_CPU here then
+we must have !p->on_rq, so the deactivate has happened, thus the task
+being alone on the rq implies nr_running==0.
+
+@Mel, do you remember why you went for <=1 here? I couldn't find any clues
+on the original posting.
+

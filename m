@@ -2,202 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FEC539676
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1548539678
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347104AbiEaSpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 14:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
+        id S1347130AbiEaSqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 14:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236530AbiEaSpD (ORCPT
+        with ESMTP id S236530AbiEaSqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 14:45:03 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064C7EA9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 11:45:02 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id s24so12528739wrb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 11:45:01 -0700 (PDT)
+        Tue, 31 May 2022 14:46:22 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8375EA9
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 11:46:21 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id y187so1860380pgd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 11:46:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Ufq4juBqH6XITsb+q5X7DDcR92uEar1MrrL/a6XKOUk=;
-        b=pcuXu6/u1DzbPyJqNaFZ/OQ0MblqkROjkYnB6xMQDrwHbAKj1+noWWb5/5mqG5zpwT
-         uYDHOpPbKIfZh53Q+UQZwxNpnjfiO3nkixi/TLmJuqFz/A8Jv1qQkBZXgQ8R1y9s+t7J
-         ZhAFCHFQ2Urr2b/iZNd6z3GTnf0iDVzgbosZ3U3LEs7C6RynAbep8I5UXeFI8P0zFicS
-         IFJVSnBa61TbBUiUMObA+UdfSCz7FVmCMfWLdO+0tazuoiCeFzwUSEtN+Ndl1cONWLsi
-         iNAPXBSJ5chrs6/FaQ/b+LJkKATnJvNT/WYq/XcK74mNxdVi8kl4RfNL7eWj/P8Q5y2q
-         22vA==
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=y7O7DMpobfoxFOoF0X6ZEf+S0WD2dkc4Cx0VPwZzwHo=;
+        b=ck34rn6yOsbCES55S47lpz7qi03ww82/yk+5+iavYVbdfnhwIUIc5HknwKX/ZShA/+
+         OKN2ZqsKwZC7sBKWqCWVRkROPERsrUNK9lju3njkfOXmYhPcrGN8uvN2snISVoae013p
+         d9rnIUaYzGZIar/xaM0Cnf7ENj4GgxhzxMQH8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Ufq4juBqH6XITsb+q5X7DDcR92uEar1MrrL/a6XKOUk=;
-        b=BKngjdWrYYrjHXCXOo1bgCw81onfYfzQgVSnuWhFAQeSBgM6l0jC7FKdCyOqg8KUmH
-         LlC2FIqu1snq9nizkIxVO8tg9Gg0Dam2vnKY7yGfe73l65MSVoB7sdER2qgEpZ4Gzd1M
-         Xz+5wQHKdC1yFttmz05OD1IHs1b2Hk8bN3NYkH15ZsPoxkIE2/eI5W/pKkbnpIqI67Ms
-         fFPEuzXfYhHC0cTmOoCYwIfaj5uawNPPpp9oJgCzVOh15r4aw7Tmea16ndt/ZSJXiLIn
-         mNjnSAvbH1J0IgKU6HBpZxjVPQFHRJsT0guVstfl3EBmeHwDvK4YOoWnzEYem29MwqLV
-         b7gw==
-X-Gm-Message-State: AOAM530j9PLWNhpg1KbkCr70YHDwB5ZPjCByA+OlHK2JZLxVZXCa34yl
-        NcVO/bjNNz4rjVSmrL28xQY=
-X-Google-Smtp-Source: ABdhPJzK59uQPpVU7uX5l5VrkSg9oqIF78rhBv5/YuQvWGjVXXtUKr8zDYdIXYDKlXWH9Mk2Kc/tzA==
-X-Received: by 2002:adf:f0cc:0:b0:20f:fa73:b668 with SMTP id x12-20020adff0cc000000b0020ffa73b668mr29414960wro.539.1654022700538;
-        Tue, 31 May 2022 11:45:00 -0700 (PDT)
-Received: from elementary ([94.73.36.128])
-        by smtp.gmail.com with ESMTPSA id n4-20020a1ca404000000b003973b9d0447sm3486816wme.36.2022.05.31.11.44.58
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=y7O7DMpobfoxFOoF0X6ZEf+S0WD2dkc4Cx0VPwZzwHo=;
+        b=tuhOUY4XznVPPoHWGp5YAqiQx14hBMyLw8Eu9ULrFK+K+dUo+AtU7fAuf3MUBWD6in
+         NYmPSepgDTxNUZPMiCmddh19T9bhkp6bUFQefJD0w8qTz6uDju/2pHZe26CxG3SZ3cgO
+         mEEFzBKjpXOTR3JtgW6X9hEmQ1UxLQMPLhbEvL43VgZBlUrmW1r9YrjXGz7sTBfFajDu
+         l0gz5ZMrDql2Fwv9LgvCiqkNF/pTCZ+ov2gO763qVH+xUxbwGQ7VYj+WmBw6qWe2FOtn
+         IgnayAIDfDtjUwhMxnv+iTKl14KdJgydEmF+cSZhRYl+GaT1ECs8W+5YuK8bhkWzJgiB
+         GD9g==
+X-Gm-Message-State: AOAM530BlJxlSwgdqZONhZsqm3dezojvJz8HghENKmsfvJAcVK/9rxiG
+        +nV6ZL+9UHLJGCV7R9TynMogNw==
+X-Google-Smtp-Source: ABdhPJy1Ab4yNc7YiFz/QVL5LwHQ3MFb0ztE2TYdBo7D03wZy7vEzqYRk1IFkx4AxA8eGsGpJLeFSQ==
+X-Received: by 2002:a05:6a00:23ce:b0:518:4115:170c with SMTP id g14-20020a056a0023ce00b005184115170cmr60552988pfc.76.1654022781032;
+        Tue, 31 May 2022 11:46:21 -0700 (PDT)
+Received: from linuxpc-ThinkServer-TS140.dhcp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id c7-20020a170902724700b00161a9df4de8sm11358272pll.145.2022.05.31.11.46.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 11:44:59 -0700 (PDT)
-Date:   Tue, 31 May 2022 20:44:54 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>, kunit-dev@googlegroups.com,
-        javierm@redhat.com, tzimmermann@suse.de,
-        maarten.lankhorst@linux.intel.com, airlied@linux.ie,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        Tue, 31 May 2022 11:46:19 -0700 (PDT)
+From:   Anand Gore <anand.gore@broadcom.com>
+To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
+        samyon.furman@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, florian.fainelli@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        Anand Gore <anand.gore@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/1] drm/format-helper: Add KUnit tests for
- drm_fb_xrgb8888_to_rgb332()
-Message-ID: <20220531184454.GA237621@elementary>
-References: <20220530102017.471865-1-jose.exposito89@gmail.com>
- <20220530102017.471865-2-jose.exposito89@gmail.com>
- <20220530131158.kqq2mohxoh52xpeg@penduick>
- <20220530162903.GA6546@elementary>
- <CAGS_qxpV2SsihEdgXZ6+7N0dxLmdRANq+qE4iUZ2aNrf6vuLYg@mail.gmail.com>
+Subject: [PATCH v2 0/3] arm64: bcmbca: add bcm6858 soc support
+Date:   Tue, 31 May 2022 11:46:12 -0700
+Message-Id: <20220531184615.2836433-1-anand.gore@broadcom.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGS_qxpV2SsihEdgXZ6+7N0dxLmdRANq+qE4iUZ2aNrf6vuLYg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000005645d505e0533075"
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+--0000000000005645d505e0533075
+Content-Transfer-Encoding: 8bit
 
-Thanks for looking into the patch and for your comments.
 
-On Mon, May 30, 2022 at 03:57:56PM -0700, Daniel Latypov wrote:
-> A few initial notes:
-> a) normally, `select`ing other kconfigs is discouraged. It's not
-> explicitly called out in
-> https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html#test-kconfig-entries
-> but this was the conclusion after  some debate on the mailing lists
-> earlier.
->
-> b) I see `dst` is allocated with kzalloc but not freed. Should we use
-> `kunit_kzalloc()` instead so it does get automatically freed?
+The initial support includes a bare-bone dts
+for quad core ARM v8  with a brcm6345 uart.
 
-Ooops yes, it was in my "I'll handle that once it works" list, but I
-forgot to fix it, thanks for pointing it out
- 
-> > > > ---
-> > > >  drivers/gpu/drm/Kconfig                  |  12 ++
-> > > >  drivers/gpu/drm/Makefile                 |   3 +
-> > > >  drivers/gpu/drm/drm_format_helper_test.c | 166 +++++++++++++++++++++++
-> > > >  3 files changed, 181 insertions(+)
-> > > >  create mode 100644 drivers/gpu/drm/drm_format_helper_test.c
-> > > >
-> > > > diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-> > > > index e88c497fa010..d92be6faef15 100644
-> > > > --- a/drivers/gpu/drm/Kconfig
-> > > > +++ b/drivers/gpu/drm/Kconfig
-> > > > @@ -76,6 +76,18 @@ config DRM_KMS_HELPER
-> > > >     help
-> > > >       CRTC helpers for KMS drivers.
-> > > >
-> > > > +config DRM_FORMAR_HELPER_TEST
-> > > > +   bool "drm_format_helper tests" if !KUNIT_ALL_TESTS
-> > > > +   depends on DRM && KUNIT=y
-> > > > +   select DRM_KMS_HELPER
-> 
-> From above, a)
-> Specifically here, it'd be encouraged to instead do
->   depends on DRM && KUNIT=y && DRM_KMS_HELPER
+Changes in v2:
+- Fix psci and GIC entries in dts
+- Remove extra empty lines
+- Simplify subject line
 
-My first attempt was to go with:
+Anand Gore (3):
+  ARM64: dts: add dts files for bcmbca SoC bcm6858
+  dt-bindings: arm64: add BCM6858 soc
+  MAINTAINERS: add bcm6858 to bcmbca arch entry
 
-	depends on KUNIT=y && DRM && DRM_KMS_HELPER
+ .../bindings/arm/bcm/brcm,bcmbca.yaml         |   7 +
+ MAINTAINERS                                   |   1 +
+ arch/arm64/boot/dts/broadcom/bcmbca/Makefile  |   3 +-
+ .../boot/dts/broadcom/bcmbca/bcm6858.dtsi     | 121 ++++++++++++++++++
+ .../boot/dts/broadcom/bcmbca/bcm96858.dts     |  30 +++++
+ 5 files changed, 161 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm6858.dtsi
+ create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm96858.dts
 
-However, when I try to run the tests I get this error:
+-- 
+2.25.1
 
-	$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm --arch=x86_64
-	Regenerating .config ...
-	Populating config with:
-	$ make ARCH=x86_64 olddefconfig O=.kunit
-	ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
-	This is probably due to unsatisfied dependencies.
-	Missing: CONFIG_DRM_KMS_HELPER=y, CONFIG_DRM_FORMAR_HELPER_TEST=y
 
-I wasn't able to figure out why that was happening, so I decided to use
-"select", which seems to solve the problem.
+--0000000000005645d505e0533075
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Do you know why this could be happening?
-
-> Ideally, using a .kunitconfig file would make it so having to select
-> DRM_KMS_HELPER manually isn't that annoying.
-> 
-> > > AFAIK, kunit test cases are supposed to have a .kunitconfig too to
-> > > enable the kunit tests easily.
-> > >
-> > > Maxime
-> >
-> > A .kuniconfig example is present in the cover letter. My understanding
-> > from the docs:
-> >
-> > https://docs.kernel.org/dev-tools/kunit/run_wrapper.html#create-a-kunitconfig-file
-> 
-> The bit of the documentation you're looking for is
-> https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips.html#defining-a-set-of-tests
-> You can create a drivers/gpu/drm/.kunitconfig file and run with
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm --arch=x86_86
-> 
-> The contents of that file would be just like
->   CONFIG_KUNIT=y
->   CONFIG_DRM=y
->   CONFIG_DRM_KMS_HELPER=y  # if no `select`
->   CONFIG_DRM_FORMAR_HELPER_TEST=y
-
-Noted, thanks a lot, I'll include it in the final version of the patch.
-
-By the way, I also included it in an unrelated patch, just in case you
-are wondering why I emailed you a random patch:
-https://lore.kernel.org/linux-input/20220531181246.190729-1-jose.exposito89@gmail.com/T/
-
-Thanks a lot for your help,
-José Expósito
-
-> Re "kunit test cases are supposed to have a .kunitconfig too"
-> As I noted in the docs:
->   This is a relatively new feature (5.12+) so we don’t have any
-> conventions yet about on what files should be checked in versus just
-> kept around locally. It’s up to you and your maintainer to decide if a
-> config is useful enough to submit (and therefore have to maintain).
-> 
-> So it's up to whatever people think works best/is worth it.
-> I think in this case, it makes sense to add the file.
-> 
-> > Is that, like the .config file, the .kunitconfig file is not meant to
-> > be included in git, but I'm sure someone else will clarify this point.
-> 
-> That bit of the docs needs to be rewritten.
-> You're recommended to check in a drivers/gpu/drm/.kunitconfig file into git.
-> 
-> Context: `kunit.py` used to use the "<root>/.kunitconfig" file.
-> Anytime you wanted to run more tests, you'd append to that file.
-> So we agreed that no one should check in that file specifically.
-> 
-> Now kunit.py
-> * uses "<build-dir>/.kunitconfig", by default: ".kunit/.kunitconfig"
-> * has the --kunitconfig flag so you can use different files
-> so it's no longer as relevant.
-> 
-> Hope that helps,
-> Daniel
+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
+dD3eNkKBkknQBWvFfBHcITIVdVccQg5YcIwowkVZhhA3NG0BXGI4l/3o+wjrl2BGO/t969dabQ5x
+/SxGBTK8Vyn6NG7U0Lrjb0VtnrFXgEdxFvJuEQIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
+MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
+dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
+HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
+bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
+Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
+gRdhbmFuZC5nb3JlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
+gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUH4HXhI4xxNPqnv0yfNL6is0cLFYwDQYJ
+KoZIhvcNAQELBQADggEBAAU15tMIqa2yrLdoPoNXMk6scL+6XJK/EVe0Lq0Uyq0SV8wpFV09ujno
+nLmSFYTz1RjmiKr1eu/pwyTImqMUj1JAXZ2zgE0rFS5SvchJsSlB8Nv3WeTaf5Lha5ZmRTaB0U/E
+eo7SFjA240UWLCGqXM69XCc5PHk6mWLNTsyDTgK2kLUKP1RVFswACNsI284fxiwA0qSCu2WnOEKE
+LiytE/NBFgzVtBcryeBtcMnhZgMo0PQYRl4O+58O1O703CD1jiO4/ikP+hUTdxWQiiWAzpE89YCH
+S0Pc2d2yC8RWARAiArr1jXHWA4+snG+TS3A1YVSPRZpboS5AXMutIIQ5YZQxggJtMIICaQIBATBr
+MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
+YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxzcZR0ocq9f8sVOu8wDQYJYIZI
+AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIECeBVSMlciWCUTN2CYqbD0njvIprRDt3LKgUpTZ
+xxZ4MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDUzMTE4NDYy
+MVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
+AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
+hkiG9w0BAQEFAASCAQBdLtZDBP3hxLMZG8gCg4I2nctGtd9nw+5Hav12BLnptKj4E3hXj2xqnkZ0
+OzgrhlzStS69gv8btQZsOnaaugCZQjVAwm7iWx2PnStI8oGm8oeiLdZE+opNtT5vEl13ridaD0+5
+jp1B0S/L/602TMBFWncV8iIUG1oKaL5KPTcLDvwIZ7tjPWzSqSmtQAS0jYhK11cumdbU4Q35ouQz
+YSn0xk5GsqKjmKkSu7XY5Tn8rHeariMXmdFmj0VHg0uTiqMKLzx9xgaA79Zc6WxQbJ/ZgxGdWMxB
+4zjqSBfGV7eipWsJ30jb6pmH5NAtUZnjD6beHNk0gHgmemb0OMC+mFkH
+--0000000000005645d505e0533075--

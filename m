@@ -2,119 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC3E538F05
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B7D538F18
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343519AbiEaKbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 06:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
+        id S245445AbiEaKcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 06:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343521AbiEaKap (ORCPT
+        with ESMTP id S239573AbiEaKcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 06:30:45 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33089BAFA
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:30:31 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id o17so2091737pla.6
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:30:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=711b+vMSd9N7VItmuBp99caF8ivrK9rtXPChlUcTho4=;
-        b=vm230eWEdDbv5BiB4b54Jy/+ZGa1KmIMWM+yx/vWv5npwnAT8/kHBc2bKte22HQZOZ
-         SL+67MZwF7JfNdzCzGDEZ5Q9FM7k13iKe3s+dlPIALKauZO/acmVUXDdv+nbNUj1atlL
-         WCU80Jf5m6PxsCj3I6ALR0v+GPNou3Ju2KyElCiOvykJbA5X05gVpv/Y5jCFWBgBTvCY
-         wuAL5JxIry5IptvwNYnjLExrrcIIZfGVBsOYD+6tjvm4za8vyTEFrDj9/cZHm/YUgJVF
-         7d7xjo/WKFMmkCfcSkoEjJCYBrb3VH27l83f/kXihKjhrBldsIc9R8mmUTlYO/kp88tT
-         fImA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=711b+vMSd9N7VItmuBp99caF8ivrK9rtXPChlUcTho4=;
-        b=FMKaxz1quOyPzq+75BW1likUxYDh0r6++aUxDCUjYSdouJ0ajIXqdKZER68qJo/lfT
-         pnFwrPwhi6I7AMcACUiAJPw1LXCgDPdwX9B5yIUJDMBXjwaOLShEvYfMOJagDih8/7nV
-         SYN22mZs9kfyyX0nm/Nq5bblblRfaS1/OGcTlWQGEGTHSUObquOJ+huedYWNrN2EbrcL
-         jFhr8qq/xLU64MCdQSvNyxwMOsUNrrWv6LeZAlh6WjPpmdgcq/k5KsEt7PgC0szeiqc7
-         9goaA6GOLtq0JlXhQ4cA1d4PW2VY1lALPVWVFv7CobDCPTE/b4xm2tKLFXMOLq1/Y9uV
-         3SlQ==
-X-Gm-Message-State: AOAM533Z1Na+1VwRrpKqzqdB6NIM9Q37QGR32yuCIxbNDVekqHg7xckQ
-        C/8trVXzdA/lFNYhHQmHtTB1Vg==
-X-Google-Smtp-Source: ABdhPJytfEQGqw0/fi9ndEo5U6lc52PaAfW/t8oY9N5mCvL8FUAfI0qz9VezW/OEJpzmDIjzLd8p9w==
-X-Received: by 2002:a17:90a:d3c7:b0:1e0:d55e:35eb with SMTP id d7-20020a17090ad3c700b001e0d55e35ebmr27946118pjw.105.1653993031320;
-        Tue, 31 May 2022 03:30:31 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id i22-20020a63e916000000b003c14af50623sm9934652pgh.59.2022.05.31.03.30.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 03:30:30 -0700 (PDT)
-Date:   Tue, 31 May 2022 16:00:29 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
-Message-ID: <20220531103029.ntoypaafnd6447ag@vireshk-i7>
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
- <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
- <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
- <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
- <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
- <20220511050643.hd5tcrojb3wkbg7t@vireshk-i7>
- <20220518235708.1A04CC385A9@smtp.kernel.org>
- <65a4c28d-6702-3a9f-f837-1ea69a428777@linaro.org>
+        Tue, 31 May 2022 06:32:18 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52827939DC;
+        Tue, 31 May 2022 03:32:17 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24V83rCr010010;
+        Tue, 31 May 2022 10:32:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Y6q79ERAMUaIpl0cMYd5kSnQ2wdZ0Y+PfO+20S65H48=;
+ b=HRqi5qBF7bRLOeE8wrs+coTUIfJkWBRF/t4b9RxxZti3Z6Xuvvf2E8qGFfvY9W0P1uJS
+ QbhdVGBMuLJTzf/spXDMV40QP+M26aevW91RLkbkyBUZv9dsBRFkg0qpyPN3bmoaoybg
+ zVz5NNb3ADLrKqNmJKNPKPko/nuQueDqqd1/ViuXqpkhX1lGtwnh6ZErn1gd+ZPg1/L4
+ /wFb6knSBBdKeQDmvm850R68x2Ybqo7SLQnmHF7ZowGm1VeXpI7YW/OO3A7fNKVC8VI+
+ ruSW8Q7YK/+j44F7R537MSxe1vF9QzRdDvjaG0qeZRE1/eencstwVby9hg1Wh2jrBzGa Lw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gd95krrc7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 May 2022 10:32:15 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24VAQGl4031983;
+        Tue, 31 May 2022 10:32:14 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gd95krrc2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 May 2022 10:32:14 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24VAJlcX019014;
+        Tue, 31 May 2022 10:32:14 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma03wdc.us.ibm.com with ESMTP id 3gbc9vbctx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 May 2022 10:32:14 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24VAWDqE27853092
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 May 2022 10:32:13 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 45242AC059;
+        Tue, 31 May 2022 10:32:13 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A6C4AAC060;
+        Tue, 31 May 2022 10:32:12 +0000 (GMT)
+Received: from [9.160.37.241] (unknown [9.160.37.241])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 31 May 2022 10:32:12 +0000 (GMT)
+Message-ID: <94c8947f-4186-e399-a79f-6f94e91ed8b9@linux.ibm.com>
+Date:   Tue, 31 May 2022 06:32:12 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <65a4c28d-6702-3a9f-f837-1ea69a428777@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v19 10/20] s390/vfio-ap: prepare for dynamic update of
+ guest's APCB on assign/unassign
+Content-Language: en-US
+To:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+References: <20220404221039.1272245-1-akrowiak@linux.ibm.com>
+ <20220404221039.1272245-11-akrowiak@linux.ibm.com>
+ <67f17a73-28e2-d458-a052-2782e16fe96d@linux.ibm.com>
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <67f17a73-28e2-d458-a052-2782e16fe96d@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Xm_4Jh3m-fOdP9d4n_ntP69PtqDpAiNq
+X-Proofpoint-ORIG-GUID: 7L5msjg_n1UU24_CNKU4PS-uh8wr2QK8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-05-31_03,2022-05-30_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ spamscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015
+ mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205310052
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19-05-22, 10:03, Krzysztof Kozlowski wrote:
-> Yes, true. The clock frequencies are still changed with each gear, but
-> in general the UFS indeed operates on gear concept.
 
-Hi Krzysztof,
 
-I have redesigned the OPP core a bit (two patchsets until now) to make
-it easier to add multiple clock support going forward. I need some
-inputs from you before moving forward with it now. Will this work for
-your use case:
+On 5/27/22 9:18 AM, Jason J. Herne wrote:
+> On 4/4/22 18:10, Tony Krowiak wrote:
+>> The functions backing the matrix mdev's sysfs attribute interfaces to
+>> assign/unassign adapters, domains and control domains must take and
+>> release the locks required to perform a dynamic update of a guest's APCB
+>> in the proper order.
+>>
+>> The proper order for taking the locks is:
+>>
+>> matrix_dev->guests_lock => kvm->lock => matrix_dev->mdevs_lock
+>>
+>> The proper order for releasing the locks is:
+>>
+>> matrix_dev->mdevs_lock => kvm->lock => matrix_dev->guests_lock
+>>
+>> Two new macros are introduced for this purpose: One to take the locks 
+>> and
+>> the other to release the locks. These macros will be used by the
+>> assignment/unassignment functions to prepare for dynamic update of
+>> the KVM guest's APCB.
+>>
+>> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
+>> ---
+>>   drivers/s390/crypto/vfio_ap_ops.c | 69 +++++++++++++++++++++++++------
+>>   1 file changed, 57 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/s390/crypto/vfio_ap_ops.c 
+>> b/drivers/s390/crypto/vfio_ap_ops.c
+>> index 757bbf449b04..2219b1069ceb 100644
+>> --- a/drivers/s390/crypto/vfio_ap_ops.c
+>> +++ b/drivers/s390/crypto/vfio_ap_ops.c
+>> @@ -71,6 +71,51 @@ static const struct vfio_device_ops 
+>> vfio_ap_matrix_dev_ops;
+>>       mutex_unlock(&matrix_dev->guests_lock);    \
+>>   })
+>>   +/**
+>> + * get_update_locks_for_mdev: Acquire the locks required to 
+>> dynamically update a
+>> + *                  KVM guest's APCB in the proper order.
+>> + *
+>> + * @matrix_mdev: a pointer to a struct ap_matrix_mdev object 
+>> containing the AP
+>> + *         configuration data to use to update a KVM guest's APCB.
+>> + *
+>> + * The proper locking order is:
+>> + * 1. matrix_dev->guests_lock: required to use the KVM pointer to 
+>> update a KVM
+>> + *                   guest's APCB.
+>> + * 2. matrix_mdev->kvm->lock:  required to update a guest's APCB
+>> + * 3. matrix_dev->mdevs_lock:  required to access data stored in a 
+>> matrix_mdev
+>> + *
+>> + * Note: If @matrix_mdev is NULL or is not attached to a KVM guest, 
+>> the KVM
+>> + *     lock will not be taken.
+>> + */
+>
+> Perhaps the locking order should be documented once at the top of all 
+> of the locking
+> functions instead of in each comment. The current method seems 
+> needlessly verbose.
 
-- Add support for multiple clocks, where none of them is primary.
+Perhaps, but I surmise this comment was motivated by the fact you are 
+reviewing the
+locking macros/functions en masse. On the other hand, someone debugging 
+the code
+may miss the locking order comments if their debug thread leads them to 
+a locking
+macro/function that does not have said comments. I think the value of 
+leaving the
+comments in place outweighs the value of limiting them as you suggested.
 
-- Which means you won't be able to use dev_pm_opp_set_rate() but will
-  need something like dev_pm_opp_set_level(), will add it.
+>
+>> +#define get_update_locks_for_mdev(matrix_mdev) ({    \
+>> +    mutex_lock(&matrix_dev->guests_lock);        \
+>> +    if (matrix_mdev && matrix_mdev->kvm)        \
+>> +        mutex_lock(&matrix_mdev->kvm->lock);    \
+>> +    mutex_lock(&matrix_dev->mdevs_lock);        \
+>> +})
+>
+> It does not make sense to reference matrix_dev on the first line of 
+> this macro and
+> then check it for a null value on the next line. If it can be null 
+> then the check
+> needs to come before the usage. If it cannot be null, then we can 
+> remove the check.
+> Same comment for the release macro.
 
-- That is, your OPP table will need to implement levels (I think of
-  them as UFS gears) and then call dev_pm_opp_set_level() instead.
+You must have misread the code. The second line checks the value of 
+matrix_mdev
+for NULL, not matrix_dev. There are definitely cases where matrix_mdev 
+can be
+passed as NULL.
 
-- This new API will work just like dev_pm_opp_set_rate(), except that
-  it will find the target OPP based on level instead of freq and
-  support configuration of multiple clock frequencies.
+>
+>> +/**
+>> + * release_update_locks_for_mdev: Release the locks used to 
+>> dynamically update a
+>> + *                  KVM guest's APCB in the proper order.
+>> + *
+>> + * @matrix_mdev: a pointer to a struct ap_matrix_mdev object 
+>> containing the AP
+>> + *         configuration data to use to update a KVM guest's APCB.
+>> + *
+>> + * The proper unlocking order is:
+>> + * 1. matrix_dev->mdevs_lock
+>> + * 2. matrix_mdev->kvm->lock
+>> + * 3. matrix_dev->guests_lock
+>> + *
+>> + * Note: If @matrix_mdev is NULL or is not attached to a KVM guest, 
+>> the KVM
+>> + *     lock will not be released.
+>> + */
+>> +#define release_update_locks_for_mdev(matrix_mdev) ({    \
+>> +    mutex_unlock(&matrix_dev->mdevs_lock);        \
+>> +    if (matrix_mdev && matrix_mdev->kvm)        \
+>> +        mutex_unlock(&matrix_mdev->kvm->lock); \
+>> +    mutex_unlock(&matrix_dev->guests_lock);        \
+>> +})
+>> +
 
-- Of course both these APIs will share most of the code.
-
--- 
-viresh

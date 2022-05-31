@@ -2,55 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063075395C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A00D5395C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346756AbiEaR6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 13:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
+        id S1346768AbiEaR73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 13:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346751AbiEaR6r (ORCPT
+        with ESMTP id S1346765AbiEaR7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 13:58:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 133B27A468
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:58:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654019926;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0yvmTc+va7v0gJ9E75BePB+PuwLz7P/ysZIrz/OtMrE=;
-        b=TN3J+KpCFzfBwMzqIpXgvL00e+up2rw974HqLM/FC4f1ibDMTq414eDokC6NCCoOqaEHzJ
-        N6xxlGfQhRtqTe0I/QrBx1t6SkQUEJOOeVnrS6Jxi/THEAq7tNo0UDPFnT74OoyxIRNvDS
-        I2m7xrqX4qxqkYBoAv+XZSBCsJSqV10=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-456-5WHS6iSOPR2ZC3znAz-5_A-1; Tue, 31 May 2022 13:58:43 -0400
-X-MC-Unique: 5WHS6iSOPR2ZC3znAz-5_A-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 986E2101AA45;
-        Tue, 31 May 2022 17:58:37 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7582E492C3B;
-        Tue, 31 May 2022 17:58:37 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH] KVM: x86: SVM: fix nested PAUSE filtering when L0 intercepts PAUSE
-Date:   Tue, 31 May 2022 13:58:37 -0400
-Message-Id: <20220531175837.295988-1-pbonzini@redhat.com>
+        Tue, 31 May 2022 13:59:24 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0EF8AE62;
+        Tue, 31 May 2022 10:59:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654019963; x=1685555963;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=b6mwshQJi0+lvKDxPFp5xJiYo27cGUYqQ874eJ6J3JA=;
+  b=KJq+hDlCO1ErmqqM7W9sgA/oSl7Fz98cUVF7U4WEeMbxJwDh/sfzJKPF
+   CYlJELH1bnGIfQRWey+bfl5CJ6zAl3B+3r2j6j/Zm/vksQEQt0iD+EH+9
+   cwFwsPtV2DFchWCij2rEkPEYTMNl0ne0fHryXpCYrKIezDeWmKYbKeRJu
+   nftB2dSYxkJ7zQq02X7sUVmQA1kv/5GRKT/CIHAZhWHAwRfSKaI+zkijE
+   ELP0H0YRZtlWEDCBj5P33ovF+39LreZTNgtd+BcvtQo6C2glix4wNI39y
+   K+WGBFwNJAZDkEy3biB/k8QkIrwUrh1e74yoErKzFjr+KTiTd/fSZsIO2
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="255208930"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="255208930"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 10:59:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="605802463"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 31 May 2022 10:59:20 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nw69H-0002w6-VR;
+        Tue, 31 May 2022 17:59:19 +0000
+Date:   Wed, 1 Jun 2022 01:58:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: Re: [PATCH 4/4] serial: max310x: implement I2C support
+Message-ID: <202206010102.px37QPmH-lkp@intel.com>
+References: <20220530221429.1248083-4-demonsingur@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220530221429.1248083-4-demonsingur@gmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,134 +67,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 74fd41ed16fd ("KVM: x86: nSVM: support PAUSE filtering when L0
-doesn't intercept PAUSE") introduced passthrough support for nested pause
-filtering, (when the host doesn't intercept PAUSE) (either disabled with
-kvm module param, or disabled with '-overcommit cpu-pm=on')
+Hi Cosmin,
 
-Before this commit, L1 KVM didn't intercept PAUSE at all; afterwards,
-the feature was exposed as supported by KVM cpuid unconditionally, thus
-if L1 could try to use it even when the L0 KVM can't really support it.
+I love your patch! Perhaps something to improve:
 
-In this case the fallback caused KVM to intercept each PAUSE instruction;
-in some cases, such intercept can slow down the nested guest so much
-that it can fail to boot.  Instead, before the problematic commit KVM
-was already setting both thresholds to 0 in vmcb02, but after the first
-userspace VM exit shrink_ple_window was called and would reset the
-pause_filter_count to the default value.
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on usb/usb-testing v5.18 next-20220531]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-To fix this, change the fallback strategy - ignore the guest threshold
-values, but use/update the host threshold values unless the guest
-specifically requests disabling PAUSE filtering (either simple or
-advanced).
+url:    https://github.com/intel-lab-lkp/linux/commits/Cosmin-Tanislav/serial-max310x-use-regmap-methods-for-SPI-batch-operations/20220531-061619
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220601/202206010102.px37QPmH-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/6c293b95fc5654df5353ba273a9bbd08f1cd3f3a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Cosmin-Tanislav/serial-max310x-use-regmap-methods-for-SPI-batch-operations/20220531-061619
+        git checkout 6c293b95fc5654df5353ba273a9bbd08f1cd3f3a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/tty/serial/
 
-Also fix a minor bug: on nested VM exit, when PAUSE filter counter
-were copied back to vmcb01, a dirty bit was not set.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks a lot to Suravee Suthikulpanit for debugging this!
+All warnings (new ones prefixed by >>):
 
-Fixes: 74fd41ed16fd ("KVM: x86: nSVM: support PAUSE filtering when L0 doesn't intercept PAUSE")
-Reported-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Tested-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Co-developed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Message-Id: <20220518072709.730031-1-mlevitsk@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/svm/nested.c | 39 +++++++++++++++++++++------------------
- arch/x86/kvm/svm/svm.c    |  4 ++--
- 2 files changed, 23 insertions(+), 20 deletions(-)
+>> drivers/tty/serial/max310x.c:1658:1: warning: unused label 'err_i2c_register' [-Wunused-label]
+   err_i2c_register:
+   ^~~~~~~~~~~~~~~~~
+   1 warning generated.
 
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index 6d0233a2469e..88da8edbe1e1 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -642,6 +642,8 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
- 	struct kvm_vcpu *vcpu = &svm->vcpu;
- 	struct vmcb *vmcb01 = svm->vmcb01.ptr;
- 	struct vmcb *vmcb02 = svm->nested.vmcb02.ptr;
-+	u32 pause_count12;
-+	u32 pause_thresh12;
- 
- 	/*
- 	 * Filled at exit: exit_code, exit_code_hi, exit_info_1, exit_info_2,
-@@ -721,27 +723,25 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
- 	if (!nested_vmcb_needs_vls_intercept(svm))
- 		vmcb02->control.virt_ext |= VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK;
- 
-+	pause_count12 = svm->pause_filter_enabled ? svm->nested.ctl.pause_filter_count : 0;
-+	pause_thresh12 = svm->pause_threshold_enabled ? svm->nested.ctl.pause_filter_thresh : 0;
- 	if (kvm_pause_in_guest(svm->vcpu.kvm)) {
--		/* use guest values since host doesn't use them */
--		vmcb02->control.pause_filter_count =
--				svm->pause_filter_enabled ?
--				svm->nested.ctl.pause_filter_count : 0;
-+		/* use guest values since host doesn't intercept PAUSE */
-+		vmcb02->control.pause_filter_count = pause_count12;
-+		vmcb02->control.pause_filter_thresh = pause_thresh12;
- 
--		vmcb02->control.pause_filter_thresh =
--				svm->pause_threshold_enabled ?
--				svm->nested.ctl.pause_filter_thresh : 0;
--
--	} else if (!vmcb12_is_intercept(&svm->nested.ctl, INTERCEPT_PAUSE)) {
--		/* use host values when guest doesn't use them */
-+	} else {
-+		/* start from host values otherwise */
- 		vmcb02->control.pause_filter_count = vmcb01->control.pause_filter_count;
- 		vmcb02->control.pause_filter_thresh = vmcb01->control.pause_filter_thresh;
--	} else {
--		/*
--		 * Intercept every PAUSE otherwise and
--		 * ignore both host and guest values
--		 */
--		vmcb02->control.pause_filter_count = 0;
--		vmcb02->control.pause_filter_thresh = 0;
-+
-+		/* ... but ensure filtering is disabled if so requested.  */
-+		if (vmcb12_is_intercept(&svm->nested.ctl, INTERCEPT_PAUSE)) {
-+			if (!pause_count12)
-+				vmcb02->control.pause_filter_count = 0;
-+			if (!pause_thresh12)
-+				vmcb02->control.pause_filter_thresh = 0;
-+		}
- 	}
- 
- 	nested_svm_transition_tlb_flush(vcpu);
-@@ -1003,8 +1003,11 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
- 	vmcb12->control.event_inj         = svm->nested.ctl.event_inj;
- 	vmcb12->control.event_inj_err     = svm->nested.ctl.event_inj_err;
- 
--	if (!kvm_pause_in_guest(vcpu->kvm) && vmcb02->control.pause_filter_count)
-+	if (!kvm_pause_in_guest(vcpu->kvm)) {
- 		vmcb01->control.pause_filter_count = vmcb02->control.pause_filter_count;
-+		vmcb_mark_dirty(vmcb01, VMCB_INTERCEPTS);
-+
-+	}
- 
- 	nested_svm_copy_common_state(svm->nested.vmcb02.ptr, svm->vmcb01.ptr);
- 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 1bd42e7dfa36..4aea82f668fb 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -956,7 +956,7 @@ static void grow_ple_window(struct kvm_vcpu *vcpu)
- 	struct vmcb_control_area *control = &svm->vmcb->control;
- 	int old = control->pause_filter_count;
- 
--	if (kvm_pause_in_guest(vcpu->kvm) || !old)
-+	if (kvm_pause_in_guest(vcpu->kvm))
- 		return;
- 
- 	control->pause_filter_count = __grow_ple_window(old,
-@@ -977,7 +977,7 @@ static void shrink_ple_window(struct kvm_vcpu *vcpu)
- 	struct vmcb_control_area *control = &svm->vmcb->control;
- 	int old = control->pause_filter_count;
- 
--	if (kvm_pause_in_guest(vcpu->kvm) || !old)
-+	if (kvm_pause_in_guest(vcpu->kvm))
- 		return;
- 
- 	control->pause_filter_count =
+
+vim +/err_i2c_register +1658 drivers/tty/serial/max310x.c
+
+  1652	
+  1653		return 0;
+  1654	
+  1655	err_spi_register:
+  1656		spi_unregister_driver(&max310x_spi_driver);
+  1657	
+> 1658	err_i2c_register:
+  1659		uart_unregister_driver(&max310x_uart);
+  1660	
+  1661		return ret;
+  1662	}
+  1663	module_init(max310x_uart_init);
+  1664	
+
 -- 
-2.31.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

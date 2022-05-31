@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8E6538C04
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4D1538C05
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 09:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244528AbiEaHfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 03:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53966 "EHLO
+        id S244537AbiEaHf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 03:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244517AbiEaHfF (ORCPT
+        with ESMTP id S244516AbiEaHfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 31 May 2022 03:35:05 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5820D82172;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5831185EF2;
         Tue, 31 May 2022 00:34:53 -0700 (PDT)
-Date:   Tue, 31 May 2022 07:34:49 -0000
+Date:   Tue, 31 May 2022 07:34:50 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653982490;
+        s=2020; t=1653982491;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MKjc1ott4nliLMZ5rP684FS2s1uy73yIZ5lLMoWVCvI=;
-        b=t1Zijdb8tKvNB72tlH87nB54Uwy7Ez6EXpzsN+hBll1eLkHsp03lZ3YhfWPmyThZzoBRy2
-        FjrGF4mgUelUyX/MYvDWBIZYDpzKiS1VtwQz2LgMwBSsfy+Yn4PxoPnO9YHYYtnWuaNswH
-        xf9IwScrEROgKKJxzC+BIqNxGn3ROkhYzon4ReSMLzgY0ybxoWv9GeMLMW8X57E3lfMdME
-        6THkwrOb9LICgbd5SfFvpjXZ5U3nDzIfKs1JwisUDUQKF3PMZ2j9DP9/pjQJ+bB/a1Yt9T
-        5j1ayVTsUThdkqjpXjYPj7y1jUMupATHK/LHJ3Cmq6fv5AYPulWD0ik0vrYymQ==
+        bh=wSX9PuBMAshW58B3hNBClnnwEmHeNYQRsjR5UbWLhPI=;
+        b=ebJjmXHW5FydZ1Z3ds9OngR/4bdYBAximI6aLVDzk1ezmjJ5e3MEqYLMY1KTJf8nVS5Ecl
+        wDww4bayFCIa/nE3GjzwEWLK88fEGfarjpaIY4fy5vmC3oxWYG5NgEVJ2AIPBqw5Wy5bjt
+        msseCl7+BE8FOYaUyc4vv2vro2sZiCeQpA4Fbt8jt5KOQGLYgw5lb9VjBrjXSUHuIBdirA
+        Iq0kbHp+9Xq9vt1wFxoAwjmhpzQdspsjMszkub471vXUBJ4p3OeRuT+fbJVx8qh1vZ7G+e
+        /HbzoEuxN/wQ9ROWLYGJy/VDl48fKvdudy762tPLToau6yebLUEw06j+ZpXfpg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653982490;
+        s=2020e; t=1653982491;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MKjc1ott4nliLMZ5rP684FS2s1uy73yIZ5lLMoWVCvI=;
-        b=oCYFR/ninVASyT0KNBW+FDlWHmYA/VXNFIxP/r4NBvZHqyUefPwkIXcr+cgGFTwqcIFika
-        mnpSYesbrCXqeZCg==
+        bh=wSX9PuBMAshW58B3hNBClnnwEmHeNYQRsjR5UbWLhPI=;
+        b=HvTlQ9vBewHnc5aizs5LskmS4V67NWx6rNi6GrNlYgBlIJWcLAS0VX91QZOrd9tstabKot
+        OT5f5+TgTjIlKeCg==
 From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/microcode] x86/microcode: Default-disable late loading
+Subject: [tip: x86/microcode] x86/microcode: Rip out the OLD_INTERFACE
 Cc:     Borislav Petkov <bp@suse.de>, Thomas Gleixner <tglx@linutronix.de>,
         x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220525161232.14924-3-bp@alien8.de>
-References: <20220525161232.14924-3-bp@alien8.de>
+In-Reply-To: <20220525161232.14924-2-bp@alien8.de>
+References: <20220525161232.14924-2-bp@alien8.de>
 MIME-Version: 1.0
-Message-ID: <165398248963.4207.4617963203135266046.tip-bot2@tip-bot2>
+Message-ID: <165398249057.4207.3408104855886446576.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,107 +66,171 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/microcode branch of tip:
 
-Commit-ID:     a77a94f86273ce42a39cb479217dd8d68acfe0ff
-Gitweb:        https://git.kernel.org/tip/a77a94f86273ce42a39cb479217dd8d68acfe0ff
+Commit-ID:     181b6f40e9ea80c76756d4d0cdeed396016c487e
+Gitweb:        https://git.kernel.org/tip/181b6f40e9ea80c76756d4d0cdeed396016c487e
 Author:        Borislav Petkov <bp@suse.de>
-AuthorDate:    Wed, 25 May 2022 18:12:30 +02:00
+AuthorDate:    Wed, 25 May 2022 18:12:29 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Tue, 31 May 2022 09:31:19 +02:00
 
-x86/microcode: Default-disable late loading
+x86/microcode: Rip out the OLD_INTERFACE
 
-It is dangerous and it should not be used anyway - there's a nice early
-loading already.
+Everything should be using the early initrd loading by now.
 
-Requested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20220525161232.14924-3-bp@alien8.de
+Link: https://lore.kernel.org/r/20220525161232.14924-2-bp@alien8.de
+
 ---
- arch/x86/Kconfig                     | 11 +++++++++++
- arch/x86/kernel/cpu/common.c         |  2 ++
- arch/x86/kernel/cpu/microcode/core.c |  7 ++++++-
- 3 files changed, 19 insertions(+), 1 deletion(-)
+ arch/x86/Kconfig                     |  12 +---
+ arch/x86/kernel/cpu/microcode/core.c | 100 +--------------------------
+ 2 files changed, 112 deletions(-)
 
 diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f423a2d..976309d 100644
+index 762a0b6..f423a2d 100644
 --- a/arch/x86/Kconfig
 +++ b/arch/x86/Kconfig
-@@ -1350,6 +1350,17 @@ config MICROCODE_AMD
+@@ -1350,18 +1350,6 @@ config MICROCODE_AMD
  	  If you select this option, microcode patch loading support for AMD
  	  processors will be enabled.
  
-+config MICROCODE_LATE_LOADING
-+	bool "Late microcode loading (DANGEROUS)"
-+	default n
-+	depends on MICROCODE
-+	help
-+	  Loading microcode late, when the system is up and executing instructions
-+	  is a tricky business and should be avoided if possible. Just the sequence
-+	  of synchronizing all cores and SMT threads is one fragile dance which does
-+	  not guarantee that cores might not softlock after the loading. Therefore,
-+	  use this at your own risk. Late loading taints the kernel too.
-+
+-config MICROCODE_OLD_INTERFACE
+-	bool "Ancient loading interface (DEPRECATED)"
+-	default n
+-	depends on MICROCODE
+-	help
+-	  DO NOT USE THIS! This is the ancient /dev/cpu/microcode interface
+-	  which was used by userspace tools like iucode_tool and microcode.ctl.
+-	  It is inadequate because it runs too late to be able to properly
+-	  load microcode on a machine and it needs special tools. Instead, you
+-	  should've switched to the early loading method with the initrd or
+-	  builtin microcode by now: Documentation/x86/microcode.rst
+-
  config X86_MSR
  	tristate "/dev/cpu/*/msr - Model-specific register support"
  	help
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 2e91427..c296cb1 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -2222,6 +2222,7 @@ void cpu_init_secondary(void)
- }
- #endif
- 
-+#ifdef CONFIG_MICROCODE_LATE_LOADING
- /*
-  * The microcode loader calls this upon late microcode load to recheck features,
-  * only when microcode has been updated. Caller holds microcode_mutex and CPU
-@@ -2251,6 +2252,7 @@ void microcode_check(void)
- 	pr_warn("x86/CPU: CPU features have changed after loading microcode, but might not take effect.\n");
- 	pr_warn("x86/CPU: Please consider either early loading through initrd/built-in or a potential BIOS update.\n");
- }
-+#endif
- 
- /*
-  * Invoked from core CPU hotplug code after hotplug operations
 diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index b72c413..c717db6 100644
+index 239ff5f..b72c413 100644
 --- a/arch/x86/kernel/cpu/microcode/core.c
 +++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -376,6 +376,7 @@ static int apply_microcode_on_target(int cpu)
- /* fake device for request_firmware */
- static struct platform_device	*microcode_pdev;
- 
-+#ifdef CONFIG_MICROCODE_LATE_LOADING
- /*
-  * Late loading dance. Why the heavy-handed stomp_machine effort?
-  *
-@@ -543,6 +544,9 @@ put:
+@@ -373,98 +373,6 @@ static int apply_microcode_on_target(int cpu)
  	return ret;
  }
  
-+static DEVICE_ATTR_WO(reload);
-+#endif
-+
- static ssize_t version_show(struct device *dev,
- 			struct device_attribute *attr, char *buf)
- {
-@@ -559,7 +563,6 @@ static ssize_t pf_show(struct device *dev,
- 	return sprintf(buf, "0x%x\n", uci->cpu_sig.pf);
- }
+-#ifdef CONFIG_MICROCODE_OLD_INTERFACE
+-static int do_microcode_update(const void __user *buf, size_t size)
+-{
+-	int error = 0;
+-	int cpu;
+-
+-	for_each_online_cpu(cpu) {
+-		struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
+-		enum ucode_state ustate;
+-
+-		if (!uci->valid)
+-			continue;
+-
+-		ustate = microcode_ops->request_microcode_user(cpu, buf, size);
+-		if (ustate == UCODE_ERROR) {
+-			error = -1;
+-			break;
+-		} else if (ustate == UCODE_NEW) {
+-			apply_microcode_on_target(cpu);
+-		}
+-	}
+-
+-	return error;
+-}
+-
+-static int microcode_open(struct inode *inode, struct file *file)
+-{
+-	return capable(CAP_SYS_RAWIO) ? stream_open(inode, file) : -EPERM;
+-}
+-
+-static ssize_t microcode_write(struct file *file, const char __user *buf,
+-			       size_t len, loff_t *ppos)
+-{
+-	ssize_t ret = -EINVAL;
+-	unsigned long nr_pages = totalram_pages();
+-
+-	if ((len >> PAGE_SHIFT) > nr_pages) {
+-		pr_err("too much data (max %ld pages)\n", nr_pages);
+-		return ret;
+-	}
+-
+-	cpus_read_lock();
+-	mutex_lock(&microcode_mutex);
+-
+-	if (do_microcode_update(buf, len) == 0)
+-		ret = (ssize_t)len;
+-
+-	if (ret > 0)
+-		perf_check_microcode();
+-
+-	mutex_unlock(&microcode_mutex);
+-	cpus_read_unlock();
+-
+-	return ret;
+-}
+-
+-static const struct file_operations microcode_fops = {
+-	.owner			= THIS_MODULE,
+-	.write			= microcode_write,
+-	.open			= microcode_open,
+-	.llseek		= no_llseek,
+-};
+-
+-static struct miscdevice microcode_dev = {
+-	.minor			= MICROCODE_MINOR,
+-	.name			= "microcode",
+-	.nodename		= "cpu/microcode",
+-	.fops			= &microcode_fops,
+-};
+-
+-static int __init microcode_dev_init(void)
+-{
+-	int error;
+-
+-	error = misc_register(&microcode_dev);
+-	if (error) {
+-		pr_err("can't misc_register on minor=%d\n", MICROCODE_MINOR);
+-		return error;
+-	}
+-
+-	return 0;
+-}
+-
+-static void __exit microcode_dev_exit(void)
+-{
+-	misc_deregister(&microcode_dev);
+-}
+-#else
+-#define microcode_dev_init()	0
+-#define microcode_dev_exit()	do { } while (0)
+-#endif
+-
+ /* fake device for request_firmware */
+ static struct platform_device	*microcode_pdev;
  
--static DEVICE_ATTR_WO(reload);
- static DEVICE_ATTR(version, 0444, version_show, NULL);
- static DEVICE_ATTR(processor_flags, 0444, pf_show, NULL);
+@@ -856,10 +764,6 @@ static int __init microcode_init(void)
+ 		goto out_driver;
+ 	}
  
-@@ -712,7 +715,9 @@ static int mc_cpu_down_prep(unsigned int cpu)
- }
+-	error = microcode_dev_init();
+-	if (error)
+-		goto out_ucode_group;
+-
+ 	register_syscore_ops(&mc_syscore_ops);
+ 	cpuhp_setup_state_nocalls(CPUHP_AP_MICROCODE_LOADER, "x86/microcode:starting",
+ 				  mc_cpu_starting, NULL);
+@@ -870,10 +774,6 @@ static int __init microcode_init(void)
  
- static struct attribute *cpu_root_microcode_attrs[] = {
-+#ifdef CONFIG_MICROCODE_LATE_LOADING
- 	&dev_attr_reload.attr,
-+#endif
- 	NULL
- };
+ 	return 0;
  
+- out_ucode_group:
+-	sysfs_remove_group(&cpu_subsys.dev_root->kobj,
+-			   &cpu_root_microcode_group);
+-
+  out_driver:
+ 	cpus_read_lock();
+ 	mutex_lock(&microcode_mutex);

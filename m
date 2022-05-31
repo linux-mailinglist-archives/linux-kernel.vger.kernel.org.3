@@ -2,83 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA3A539013
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D8B539016
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343955AbiEaLvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 07:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
+        id S1343962AbiEaLwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 07:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241631AbiEaLvL (ORCPT
+        with ESMTP id S241631AbiEaLwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 07:51:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 302B39969F
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:51:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653997869;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sp61j0jOxh675zEwHGRAuiHfrRaXXimDo3bMjlhAKxY=;
-        b=OAW4Rqb8pQmdLVEdBh98uxYvXxygQrn7z6v1Nkd2b3XuiSuxaBVZuATbv0YqsYNlwmw04+
-        oxMiMWpYyDVHWzWJT9xxKZN2G/JjLazi/ae/avBCfxpe+1r4khIf6JS9nvIrdHjBOAXwyP
-        fs75AukyUx/rYA1gjur3whLuPqFAeJY=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-497-1EHks0CWNJyMB8m5cGKi9Q-1; Tue, 31 May 2022 07:51:07 -0400
-X-MC-Unique: 1EHks0CWNJyMB8m5cGKi9Q-1
-Received: by mail-wr1-f71.google.com with SMTP id d6-20020adfe886000000b00210316ee45eso845139wrm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:51:07 -0700 (PDT)
+        Tue, 31 May 2022 07:52:19 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126B32229E
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:52:18 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id x62so5323981ede.10
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:52:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pgwp2VdYx+Vpnhun4TNi+eC2topHBL0Uwk1ptGJfZcE=;
+        b=iS5jhowOcF/lfXAMYJ1n2lLpF7hUtwsQikH8pir763iCnTkaHoMbpuD2JWonqpofGu
+         qjyArBVFBAgZQ9fQpr/S/sNnTQgp1XR5p/rqsj3MhdJ+R24/EaY9Jbv7/STxX0BhfOae
+         vvpJfMMcFbUtqlhICqYrW8DyeWTZfTB31dRM0WNqVaDsLbFsSSYIr3kJMkl8EIu8eyG0
+         IjQQuD7laFKec1PktUnxtrsiM3a+rYcN+wihWCwjJw7hyQww5pG4m0uXI4PcjIotDFcu
+         f+NP9XC8R9LGUd3NPhygDtKFvwynWln1GjMt/3m1CHmsTLxPB1Nv/M1Gb8i3wsWht7ok
+         zmHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=sp61j0jOxh675zEwHGRAuiHfrRaXXimDo3bMjlhAKxY=;
-        b=DzLEPw0vnyJgbakfuDWl+QO/Dl82PMyloLoH2pwrR2zVcelpMYAglbyq+3Ov54wmQ0
-         1M/nIGf1+Gl3Xox+e9TzfYJXsJtDwhKPzv9GUeWX/FjbymLlLQLQC+pyVvaFdb350m7+
-         Vav54C7sZHPlHnJXFMsvddN38uB4RxyUKEUl+gj6PIwj89aKHnIRntaesSr7ifuu3eq8
-         4jdLMSXYjBkr4mVHGGKHoRPATeKor5tQZBPX78s3FDhjzl51G4BCIVKtwfiit4pemCoA
-         xWyXW74OnYKIYeALUtGlGQOR/Fn08pVpSDrt8nDzQVhfIyii9i2Mds8Sd1yCNu8DqCPb
-         cWFw==
-X-Gm-Message-State: AOAM533ssvwxm4CET/V0GdHbCV2FdfL8gUzYP17LPCXdxt1JESP/IkcU
-        kZ9Bmu3Da346LQF0+aA11c0L2zNU4YciDVLUKiXoFsgDSge2yAEhsTdaaPetlpNol5cSVI4jPnA
-        sjCtpQMVf3EracX/u5ptejuO6O1mrxfqIS9EJutVtXUYg6rskHhUr/luTXObb5nOJugpEL2aFsT
-        1a
-X-Received: by 2002:adf:ce03:0:b0:210:32ec:50fd with SMTP id p3-20020adfce03000000b0021032ec50fdmr8804148wrn.407.1653997866448;
-        Tue, 31 May 2022 04:51:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzUFDadQtEAW830R/53OnbX6GxA6MYGsy0Xd0Ict3qfIsNSiTbQk4A+/7hK8lbrXp+LCJlgPQ==
-X-Received: by 2002:adf:ce03:0:b0:210:32ec:50fd with SMTP id p3-20020adfce03000000b0021032ec50fdmr8804120wrn.407.1653997866117;
-        Tue, 31 May 2022 04:51:06 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id g12-20020adfd1ec000000b0020c5253d8f2sm8381245wrd.62.2022.05.31.04.51.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 04:51:05 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Tianchen Ding <dtcccc@linux.alibaba.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] sched: Queue task on wakelist in the same llc if the
- wakee cpu is idle
-In-Reply-To: <1d0eb8f4-e474-86a9-751a-7c2e1788df85@linux.alibaba.com>
-References: <20220527090544.527411-1-dtcccc@linux.alibaba.com>
- <xhsmhleuj7zve.mognet@vschneid.remote.csb>
- <1d0eb8f4-e474-86a9-751a-7c2e1788df85@linux.alibaba.com>
-Date:   Tue, 31 May 2022 12:50:49 +0100
-Message-ID: <xhsmhilpl9azq.mognet@vschneid.remote.csb>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pgwp2VdYx+Vpnhun4TNi+eC2topHBL0Uwk1ptGJfZcE=;
+        b=qw4jnnMkDpcYtSJWCsm/t7y1HFDggxOm3jlA+NELqnSNxaea5UFFDhYF/aaRuGZBsC
+         eM7VWHsWIGFO2CCZnrncHL4Cg0x+/RPzRyR06gX69/aGKNH9S1c6rOSE6moQx33IlHgx
+         StfMhJZ3dPu+4GtCpOx7ClP1vUVldr1QH/Pc1sbgI+PNJqHpnMaF3J0aFtk/woCdT4ep
+         3xPQL7vWTxhSuq7UJ9KAcvI6rre4wPnYUD0ia7QJxpJVvtH+W8UdVMpgjYU6J8MFx3E0
+         soSqqgtb+/lMazRyhm1dxWvgVORmzoyXoR0NQd0iiDFWmH4cxY/B7r4ALhSbQK9pVNX3
+         qXKA==
+X-Gm-Message-State: AOAM530HJLfFxFMBIHxoTtlF5BDE/dmy1TRepZh6+Ph1q93wnxOmoqBA
+        SSfUM/M9rgmjci4h9B63143S8Q==
+X-Google-Smtp-Source: ABdhPJzLoz1xLJgBhIhIcXu/CVKt7lUZqurHOJkAtVo1mU8l+2AAQXVVLJ65/yyrjl+Cx6OqWRo0rg==
+X-Received: by 2002:aa7:c852:0:b0:42d:70d8:2864 with SMTP id g18-20020aa7c852000000b0042d70d82864mr19815609edt.379.1653997936660;
+        Tue, 31 May 2022 04:52:16 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id c13-20020a50d64d000000b0042617ba63cfsm8278497edj.89.2022.05.31.04.52.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 04:52:16 -0700 (PDT)
+Message-ID: <15eef004-74c7-0eb5-3f87-86e164ef70ff@linaro.org>
+Date:   Tue, 31 May 2022 13:52:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V3 5/8] dt-bindings: Add xen,grant-dma IOMMU description
+ for xen-grant DMA ops
+Content-Language: en-US
+To:     Oleksandr Tyshchenko <olekstysh@gmail.com>,
+        xen-devel@lists.xenproject.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org
+Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <1653944417-17168-1-git-send-email-olekstysh@gmail.com>
+ <1653944417-17168-6-git-send-email-olekstysh@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1653944417-17168-6-git-send-email-olekstysh@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,73 +86,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/22 15:20, Tianchen Ding wrote:
-> On 2022/5/31 00:24, Valentin Schneider wrote:
->> 
->> This feels a bit like a generalization of
->> 
->>    2ebb17717550 ("sched/core: Offload wakee task activation if it the wakee is descheduling")
->> 
->> Given rq->curr is updated before prev->on_cpu is cleared, the waker
->> executing ttwu_queue_cond() can observe:
->> 
->>    p->on_rq=0
->>    p->on_cpu=1
->>    rq->curr=swapper/x (aka idle task)
->> 
->> So your addition of available_idle_cpu() in ttwu_queue_cond() (sort of)
->> matches that when invoked via:
->> 
->>          if (smp_load_acquire(&p->on_cpu) &&
->>              ttwu_queue_wakelist(p, task_cpu(p), wake_flags | WF_ON_CPU))
->>                  goto unlock;
->> 
->> but it also affects
->> 
->>          ttwu_queue(p, cpu, wake_flags);
->> 
->> at the tail end of try_to_wake_up().
->
-> Yes. This part is what we mainly want to affect. The above WF_ON_CPU is 
-> not our point.
->
+On 30/05/2022 23:00, Oleksandr Tyshchenko wrote:
+> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-Right.
+Thank you for your patch. There is something to discuss/improve.
 
->> 
->> With all that in mind, I'm curious whether your patch is functionaly close
->> to the below.
->> 
->> ---
->> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->> index 66c4e5922fe1..ffd43264722a 100644
->> --- a/kernel/sched/core.c
->> +++ b/kernel/sched/core.c
->> @@ -3836,7 +3836,7 @@ static inline bool ttwu_queue_cond(int cpu, int wake_flags)
->>   	 * the soon-to-be-idle CPU as the current CPU is likely busy.
->>   	 * nr_running is checked to avoid unnecessary task stacking.
->>   	 */
->> -	if ((wake_flags & WF_ON_CPU) && cpu_rq(cpu)->nr_running <= 1)
->> +	if (cpu_rq(cpu)->nr_running <= 1)
->>   		return true;
->>   
->>   	return false;
->
-> It's a little different. This may bring extra IPIs when nr_running == 1 
-> and the current task on wakee cpu is not the target wakeup task (i.e., 
-> rq->curr == another_task && rq->curr != p). Then this another_task may 
-> be disturbed by IPI which is not expected. So IMO the promise by 
-> WF_ON_CPU is necessary.
+> diff --git a/Documentation/devicetree/bindings/iommu/xen,grant-dma.yaml b/Documentation/devicetree/bindings/iommu/xen,grant-dma.yaml
+> new file mode 100644
+> index 00000000..ab5765c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iommu/xen,grant-dma.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iommu/xen,grant-dma.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xen specific IOMMU for virtualized devices (e.g. virtio)
+> +
+> +maintainers:
+> +  - Stefano Stabellini <sstabellini@kernel.org>
+> +
+> +description:
+> +  The reference to Xen specific IOMMU node using "iommus" property indicates
+> +  that Xen grant mappings need to be enabled for the device, and it specifies
+> +  the ID of the domain where the corresponding backend resides.
+> +  The binding is required to restrict memory access using Xen grant mappings.
+> +
+> +properties:
+> +  compatible:
+> +    const: xen,grant-dma
+> +
+> +  '#iommu-cells':
+> +    const: 1
+> +    description:
+> +      Xen specific IOMMU is multiple-master IOMMU device.
+> +      The single cell describes the domid (domain ID) of the domain where
+> +      the backend is running.
+> +
+> +required:
+> +  - compatible
+> +  - "#iommu-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    xen_iommu {
 
-You're right, actually taking a second look at that WF_ON_CPU path,
-shouldn't the existing condition be:
+No underscores in node names, generic node names, so this looks like
+"iommu".
 
-	if ((wake_flags & WF_ON_CPU) && !cpu_rq(cpu)->nr_running)
+> +        compatible = "xen,grant-dma";
+> +        #iommu-cells = <1>;
+> +    };
+> +
+> +    virtio@3000 {
+> +        compatible = "virtio,mmio";
+> +        reg = <0x3000 0x100>;
+> +        interrupts = <41>;
+> +
+> +        /* The backend is located in Xen domain with ID 1 */
+> +        iommus = <&xen_iommu 1>;
 
-? Per the p->on_rq and p->on_cpu ordering, if we have WF_ON_CPU here then
-we must have !p->on_rq, so the deactivate has happened, thus the task
-being alone on the rq implies nr_running==0.
+There is no need usually to give consumer examples in provider binding.
+If there is nothing specific here (looks exactly like every IOMMU
+consumer in Linux kernel), drop the consumer.
 
-@Mel, do you remember why you went for <=1 here? I couldn't find any clues
-on the original posting.
+> +    };
 
+
+Best regards,
+Krzysztof

@@ -2,102 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E9F538D1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA82538D22
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244946AbiEaIpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 04:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
+        id S244955AbiEaIrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 04:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244959AbiEaIpI (ORCPT
+        with ESMTP id S244908AbiEaIrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 04:45:08 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECA18B0B9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:45:07 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id k19so9482409wrd.8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 01:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=/soQX7cHnl5XSUE5+d9yllfat2BblKyTnOMUTVdeXJ8=;
-        b=cVTpXzFeNKwIU2APW6nE3zAk2am+rmChC4nFgSpQJd8KEnBDtUL9zDCDMTJs6JUovG
-         zuXt0h5SJ2XgSvbd3/Jclq7pF1HFpKFaD59UjHjeavLp7cxAPLRbddByosb4brOI/aNT
-         mKuIy5bn/zewUzH3+Gc1b0uqvUCc1bNgt3tMJukDJVNH4lapzr14cH5CeZW3A/XLXqjR
-         SgHGv1GFycnNlHDVt9kXhEGqtfGceNcWW6u7raLQ98tsf+Hpi6WMsxe9OEri07P3mrLk
-         NVOgsYmHOozbkEKH/0jVDfhlyKjRKXo33dpvy+/Qbr+TxCKdZS+M3khLhOuaGH5Gy32h
-         b+Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/soQX7cHnl5XSUE5+d9yllfat2BblKyTnOMUTVdeXJ8=;
-        b=wnty+NgGT3iQRoje+twOheU1xDQ6BAZ2h+2Hf/7bP/eWcwXT8GAPxyhVkSIDWKJoEN
-         Mx4mMJ7f5vLSX3Oh/CRol3uz2zaIKkfoEvLnoiwheNVa+ZKnXew3ydN68z2+QGE8G0D7
-         BKIkl+LftmeF3X4TsaK+w1dp7nSBAO/SuyPjGhAcj9ujqfIQq9taOzcZp/doPpM8Ytaw
-         zk6RditMXP0NxOpXRNpRyAPW+SCXmiJJ7In6RqzlRt8MHWzKrIpDMZTOwvgdMtOJeZ71
-         dLVpd4gBjFn92gC37ESR89XzzDsDHtRi7SKH0sTDpD+ONE3iXq5Xa7k5T2whieCczWqJ
-         C6dw==
-X-Gm-Message-State: AOAM531xJslycMh3gsmYFbdb6C8tNioSPtQXQbDoLE9SZTGKzEwT8tKX
-        Xs/GuYqswmqlk4YIo1N6/+sHUg==
-X-Google-Smtp-Source: ABdhPJwiWzJyxo/ze8C7NGWY9vQThUxotc53evucPB2F/Sz4ZoZc7yO/z/VH9oDIhZKAXjskijrpeA==
-X-Received: by 2002:a5d:6c64:0:b0:20f:f413:8af8 with SMTP id r4-20020a5d6c64000000b0020ff4138af8mr27888592wrz.129.1653986705746;
-        Tue, 31 May 2022 01:45:05 -0700 (PDT)
-Received: from [10.188.163.71] (cust-east-parth2-46-193-73-98.wb.wifirst.net. [46.193.73.98])
-        by smtp.gmail.com with ESMTPSA id e15-20020adfe38f000000b00210326c4a90sm5291477wrm.49.2022.05.31.01.45.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 01:45:05 -0700 (PDT)
-Message-ID: <3d3c6b5f-84cd-cb25-812e-dac77e02ddbf@kernel.dk>
-Date:   Tue, 31 May 2022 02:45:04 -0600
+        Tue, 31 May 2022 04:47:09 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6C217AB6;
+        Tue, 31 May 2022 01:47:03 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LC5Tw5swWzjX4r;
+        Tue, 31 May 2022 16:46:12 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 31 May 2022 16:47:01 +0800
+Received: from [10.174.176.52] (10.174.176.52) by
+ kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 31 May 2022 16:47:01 +0800
+Message-ID: <7e1c6bd7-e97e-7a94-662d-481d94c0d1d9@huawei.com>
+Date:   Tue, 31 May 2022 16:47:00 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [syzbot] UBSAN: array-index-out-of-bounds in io_submit_sqes
-Content-Language: en-US
-To:     syzbot <syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000f0b26205e04a183b@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <000000000000f0b26205e04a183b@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH -next 0/2] fix nfsv4 bugs of opening with O_ACCMODE flag
+To:     Lyu Tao <tao.lyu@epfl.ch>
+CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bjschuma@netapp.com" <bjschuma@netapp.com>,
+        "anna@kernel.org" <anna@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        "liuyongqiang13@huawei.com" <liuyongqiang13@huawei.com>,
+        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
+        "zhangxiaoxu5@huawei.com" <zhangxiaoxu5@huawei.com>
+References: <20220329113208.2466000-1-chenxiaosong2@huawei.com>
+ <68b65889-3b2c-fb72-a0a8-d0afc15a03e0@huawei.com>
+ <e0c2d7ec62b447cabddbc8a9274be955@epfl.ch>
+ <0b6546f7-8a04-9d6e-50c3-483c8a1a6591@huawei.com>
+ <d73a51a2-6b63-b536-61e6-3d18563f027d@huawei.com>
+ <3ee78045f18b4932b1651de776ee73c4@epfl.ch>
+ <f927bec5-1078-dcb9-6f3e-a64d304efd5b@huawei.com>
+ <55415e44b4b04bbfa66c42d5f2788384@epfl.ch>
+ <88231dee-760f-b992-f1d1-81309076071e@huawei.com>
+ <f794d0aaef654bffacda9159321d66e0@epfl.ch>
+ <67d6a536-9027-1928-99b6-af512a36cd1a@huawei.com>
+ <018da3c0453845329d5ae2ec8924af06@epfl.ch>
+ <db55c8f7-6a6f-410e-74ca-4040364bd38a@huawei.com>
+ <0a0ed6d1f34f49a9b847cb2891876d27@epfl.ch>
+From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
+In-Reply-To: <0a0ed6d1f34f49a9b847cb2891876d27@epfl.ch>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.52]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/22 1:55 AM, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    3b46e4e44180 Add linux-next specific files for 20220531
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16e151f5f00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=ccb8d66fc9489ef
-> dashboard link: https://syzkaller.appspot.com/bug?extid=b6c9b65b6753d333d833
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com
-> 
-> ================================================================================
-> ================================================================================
-> UBSAN: array-index-out-of-bounds in fs/io_uring.c:8860:19
-> index 75 is out of range for type 'io_op_def [47]'
+I do not know other ways to update the description, you can try to send 
+email to CVE-Request@mitre.org again.
 
-'def' is just set here, it's not actually used after 'opcode' has been
-verified.
-
--- 
-Jens Axboe
-
+在 2022/5/31 16:16, Lyu Tao 写道:
+> Hi Xiaosong,
+> 
+> I sent the first email on 05.05.2022 to CVE-Request@mitre.org to require them update the description with the following information. They replied that they will update the information within that day. However, they didn't updated the description and then I sent the second email and they didn't reply me.
+> 
+> Do you know any other ways to update the description.
+> 
+> 
+> "I need to update the CVE description as below:
+> After secondly opening a file with O_ACCMODE|O_DIRECT flags, nfs4_valid_open_stateid() will dereference NULL nfs4_state when lseek().
+> And its references should be updated as this:
+> https://github.com/torvalds/linux/commit/ab0fc21bc7105b54bafd85bd8b82742f9e68898a "
+> 
+> Best,
+> Tao
+> 
+>> From: chenxiaosong (A) <chenxiaosong2@huawei.com>
+>> Sent: Tuesday, May 31, 2022 8:40 AM
+>> To: Lyu Tao
+>> Cc: linux-nfs@vger.kernel.org; linux-kernel@vger.kernel.org; bjschuma@netapp.com; anna@kernel.org; Trond Myklebust; liuyongqiang13@huawei.com; yi.zhang@huawei.com; zhangxiaoxu5@huawei.com
+>> Subject: Re: [PATCH -next 0/2] fix nfsv4 bugs of opening with O_ACCMODE flag
+>>     
+>> Hi Tao:
+>>
+>> "NVD Last Modified" date of
+>> [CVE-2022-24448](https://nvd.nist.gov/vuln/detail/CVE-2022-24448) is
+>> already updated to 05/12/2022, but the description of the cve is still
+>> wrong, and the hyperlink of [unrelated patch: NFSv4: Handle case where
+>> the lookup of a directory
+>> fails](https://github.com/torvalds/linux/commit/ac795161c93699d600db16c1a8cc23a65a1eceaf)
+>> is still shown in the web.
+>>
+>> There is two fix patches of the cve, the web just show one of my patches.
+>>
+>> one patch is already shown in the web: [Revert "NFSv4: Handle the
+>> special Linux file open access
+>> mode"](https://github.com/torvalds/linux/commit/ab0fc21bc7105b54bafd85bd8b82742f9e68898a)
+>>
+>> second patch is not shown in the web: [NFSv4: fix open failure with
+>> O_ACCMODE
+>> flag](https://github.com/torvalds/linux/commit/b243874f6f9568b2daf1a00e9222cacdc15e159c)
+>>
+>> 在 2022/5/6 15:40, Lyu Tao 写道:
+>>>> From: chenxiaosong (A) <chenxiaosong2@huawei.com>
+>>>> Sent: Thursday, May 5, 2022 4:48 AM
+>>>> To: Lyu Tao
+>>>> Cc: linux-nfs@vger.kernel.org; linux-kernel@vger.kernel.org; bjschuma@netapp.com; anna@kernel.org; Trond Myklebust; liuyongqiang13@huawei.com; yi.zhang@huawei.com; zhangxiaoxu5@huawei.com
+>>>> Subject: Re: [PATCH -next 0/2] fix nfsv4 bugs of opening with O_ACCMODE flag
+>>>       
+>>>> "NVD Last Modified" date of CVE-2022-24448 is updated as 04/29/2022, but the content of the cve is old.
+>>>> https://nvd.nist.gov/vuln/detail/CVE-2022-24448
+>>>    
+>>> Hi,
+>>>
+>>> Thanks for reaching out.
+>>>
+>>> I've requested to update the CVE description and they replied me that it would be updated yesterday. Maybe the system need some time to reflesh. Let's wait a few more days.
+>>>
+>>> Best,
+>>> Tao.
+>>>
+> 
+> 
+> 
+> 
+> 
+> 
+>      .
+> 

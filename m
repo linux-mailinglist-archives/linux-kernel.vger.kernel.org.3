@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA0E6538CB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C0A538CAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244872AbiEaIVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 04:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
+        id S244802AbiEaIUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 04:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244886AbiEaIVA (ORCPT
+        with ESMTP id S244790AbiEaIUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 04:21:00 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5824E980B1;
-        Tue, 31 May 2022 01:20:56 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24ULPn32014522;
-        Tue, 31 May 2022 01:20:53 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=rr23qW5dZEJ991XM9xThrXeWgmUmY9cQy0IAfXk1qyg=;
- b=R1SHy1uAwx6tau8ZkuJ9DPXShxg9gyQODodDopAG474oqzaJLrOyPvlakiviC+A8kPGQ
- FcpU3SEzUmCBkqq3vGCYP4ID4RV8ZS1QF3y6ZvvLjJsJNRLDcV/esGvYFVIqg2oSaO43
- wpPIkaBDEwJvfaB4/Tsi5Y/7v7ZnorBbMwdH2fLH8ZyRyot+DcPwY3WRR+NDzwrzP8jt
- DwW0VDi8NkK8cnhj4pg6CijRidIuB7AKsZ5HrQPiz3MXvLq0wCXccA09hvC72gtnGD98
- 70/FCZWCp9C/MyW1jKeJ4ex4pV914SzEf7JAXIvBLe4FLKFWRKjyKgKA3WziJTiP35EY ug== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3gbk8n8cch-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 01:20:53 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 31 May
- 2022 01:20:50 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 31 May 2022 01:20:50 -0700
-Received: from localhost.localdomain (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id DABCB3F704B;
-        Tue, 31 May 2022 01:20:50 -0700 (PDT)
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <rric@kernel.org>, <wsa@kernel.org>, <sgarapati@marvell.com>,
-        <cchavva@marvell.com>, Piyush Malgujar <pmalgujar@marvell.com>
-Subject: [PATCH v2 2/2] drivers: i2c: thunderx: Add support for High speed mode
-Date:   Tue, 31 May 2022 01:19:34 -0700
-Message-ID: <20220531081934.29238-3-pmalgujar@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220531081934.29238-1-pmalgujar@marvell.com>
-References: <20220531081934.29238-1-pmalgujar@marvell.com>
+        Tue, 31 May 2022 04:20:31 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DBC9399D;
+        Tue, 31 May 2022 01:20:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653985230; x=1685521230;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=71XG4ZmwJ09OcgbOEPiZ9EnPHO86FepcH2+AFt4DG3A=;
+  b=xj0laKrzcJ5t6csilCoHHz9k3xGxS9Pm8kbg1bjj2WF4wkZXp5c6K9ds
+   Jt5rYH0lEbVsCHVsKqCWd4JEhCNZqyc/NeDpRVU+P7JWHEekqyhy7txnZ
+   pv+WW5QRQ45q1h2xvBMcBLkgq/PWmkcSI14WjKCJNtH7mx0foJTkPW7/D
+   A=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 31 May 2022 01:20:30 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 01:20:29 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 31 May 2022 01:20:28 -0700
+Received: from hu-harshq-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 31 May 2022 01:20:24 -0700
+From:   Harsh Agarwal <quic_harshq@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        Harsh Agarwal <quic_harshq@quicinc.com>
+Subject: [PATCH 0/3] Add support for multiport controller 
+Date:   Tue, 31 May 2022 13:50:14 +0530
+Message-ID: <1653985217-20953-1-git-send-email-quic_harshq@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: mWDPWHopwqPApIVh4negQ3sOFmRzcdhC
-X-Proofpoint-GUID: mWDPWHopwqPApIVh4negQ3sOFmRzcdhC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-05-31_02,2022-05-30_03,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,168 +67,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support High speed mode clock setup for OcteonTX2 platforms.
+Currently the DWC3 driver supports only single port controller which 
+requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
+DWC3 controller with multiple ports that can operate in host mode. Some of
+the port supports both SS+HS and other port supports only HS mode.
 
-Signed-off-by: Suneel Garapati <sgarapati@marvell.com>
-Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
----
- drivers/i2c/busses/i2c-octeon-core.c     | 64 +++++++++++++++---------
- drivers/i2c/busses/i2c-octeon-core.h     |  3 ++
- drivers/i2c/busses/i2c-thunderx-pcidrv.c |  3 +-
- 3 files changed, 46 insertions(+), 24 deletions(-)
+This change refactors the PHY logic to support multiport controller. The 
+implementation has been tested with Generic PHYs as well.
 
-diff --git a/drivers/i2c/busses/i2c-octeon-core.c b/drivers/i2c/busses/i2c-octeon-core.c
-index 49d07a63a01f0b0711f4fa7a5d13d684935e5cbc..1588d9186b198bfe6ae78626829b3f221d51b8d9 100644
---- a/drivers/i2c/busses/i2c-octeon-core.c
-+++ b/drivers/i2c/busses/i2c-octeon-core.c
-@@ -608,25 +608,27 @@ int octeon_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
- 	struct octeon_i2c *i2c = i2c_get_adapdata(adap);
- 	int i, ret = 0;
- 
--	if (num == 1) {
--		if (msgs[0].len > 0 && msgs[0].len <= 8) {
--			if (msgs[0].flags & I2C_M_RD)
--				ret = octeon_i2c_hlc_read(i2c, msgs);
--			else
--				ret = octeon_i2c_hlc_write(i2c, msgs);
--			goto out;
--		}
--	} else if (num == 2) {
--		if ((msgs[0].flags & I2C_M_RD) == 0 &&
--		    (msgs[1].flags & I2C_M_RECV_LEN) == 0 &&
--		    msgs[0].len > 0 && msgs[0].len <= 2 &&
--		    msgs[1].len > 0 && msgs[1].len <= 8 &&
--		    msgs[0].addr == msgs[1].addr) {
--			if (msgs[1].flags & I2C_M_RD)
--				ret = octeon_i2c_hlc_comp_read(i2c, msgs);
--			else
--				ret = octeon_i2c_hlc_comp_write(i2c, msgs);
--			goto out;
-+	if (IS_LS_FREQ(i2c->twsi_freq)) {
-+		if (num == 1) {
-+			if (msgs[0].len > 0 && msgs[0].len <= 8) {
-+				if (msgs[0].flags & I2C_M_RD)
-+					ret = octeon_i2c_hlc_read(i2c, msgs);
-+				else
-+					ret = octeon_i2c_hlc_write(i2c, msgs);
-+				goto out;
-+			}
-+		} else if (num == 2) {
-+			if ((msgs[0].flags & I2C_M_RD) == 0 &&
-+			    (msgs[1].flags & I2C_M_RECV_LEN) == 0 &&
-+			    msgs[0].len > 0 && msgs[0].len <= 2 &&
-+			    msgs[1].len > 0 && msgs[1].len <= 8 &&
-+			    msgs[0].addr == msgs[1].addr) {
-+				if (msgs[1].flags & I2C_M_RD)
-+					ret = octeon_i2c_hlc_comp_read(i2c, msgs);
-+				else
-+					ret = octeon_i2c_hlc_comp_write(i2c, msgs);
-+				goto out;
-+			}
- 		}
- 	}
- 
-@@ -665,10 +667,13 @@ void octeon_i2c_set_clock(struct octeon_i2c *i2c)
- 	 * Find divisors to produce target frequency, start with large delta
- 	 * to cover wider range of divisors, note thp = TCLK half period.
- 	 */
--	int thp = 0x18, mdiv = 2, ndiv = 0, delta_hz = huge_delta;
-+	int ds = 10, thp = 0x18, mdiv = 2, ndiv = 0, delta_hz = huge_delta;
- 
--	if (octeon_i2c_is_otx2(to_pci_dev(i2c->dev)))
-+	if (octeon_i2c_is_otx2(to_pci_dev(i2c->dev))) {
- 		thp = 0x3;
-+		if (!IS_LS_FREQ(i2c->twsi_freq))
-+			ds = 15;
-+	}
- 
- 	for (ndiv_idx = 0; ndiv_idx < 8 && delta_hz != 0; ndiv_idx++) {
- 		/*
-@@ -680,7 +685,7 @@ void octeon_i2c_set_clock(struct octeon_i2c *i2c)
- 			 * For given ndiv and mdiv values check the
- 			 * two closest thp values.
- 			 */
--			tclk = i2c->twsi_freq * (mdiv_idx + 1) * 10;
-+			tclk = i2c->twsi_freq * (mdiv_idx + 1) * ds;
- 			tclk *= (1 << ndiv_idx);
- 			if (octeon_i2c_is_otx2(to_pci_dev(i2c->dev)))
- 				thp_base = (i2c->sys_freq / tclk) - 2;
-@@ -698,7 +703,9 @@ void octeon_i2c_set_clock(struct octeon_i2c *i2c)
- 					foscl = i2c->sys_freq /
- 						(2 * (thp_idx + 1));
- 				foscl = foscl / (1 << ndiv_idx);
--				foscl = foscl / (mdiv_idx + 1) / 10;
-+				foscl = foscl / (mdiv_idx + 1) / ds;
-+				if (foscl > i2c->twsi_freq)
-+					continue;
- 				diff = abs(foscl - i2c->twsi_freq);
- 				/* Use it if smaller diff from target */
- 				if (diff < delta_hz) {
-@@ -712,6 +719,17 @@ void octeon_i2c_set_clock(struct octeon_i2c *i2c)
- 	}
- 	octeon_i2c_reg_write(i2c, SW_TWSI_OP_TWSI_CLK, thp);
- 	octeon_i2c_reg_write(i2c, SW_TWSI_EOP_TWSI_CLKCTL, (mdiv << 3) | ndiv);
-+	if (octeon_i2c_is_otx2(to_pci_dev(i2c->dev))) {
-+		u64 mode;
-+
-+		mode = __raw_readq(i2c->twsi_base + MODE(i2c));
-+		/* Set REFCLK_SRC and HS_MODE in TWSX_MODE register */
-+		if (!IS_LS_FREQ(i2c->twsi_freq))
-+			mode |= BIT(4) | BIT(0);
-+		else
-+			mode &= ~(BIT(4) | BIT(0));
-+		octeon_i2c_writeq_flush(mode, i2c->twsi_base + MODE(i2c));
-+	}
- }
- 
- int octeon_i2c_init_lowlevel(struct octeon_i2c *i2c)
-diff --git a/drivers/i2c/busses/i2c-octeon-core.h b/drivers/i2c/busses/i2c-octeon-core.h
-index 8a0033c94a8a291fb255b0da03858274035c46f4..89d7d3bb8e30bd5787978d17d5a9b20ab0d41e22 100644
---- a/drivers/i2c/busses/i2c-octeon-core.h
-+++ b/drivers/i2c/busses/i2c-octeon-core.h
-@@ -93,11 +93,13 @@ struct octeon_i2c_reg_offset {
- 	unsigned int sw_twsi;
- 	unsigned int twsi_int;
- 	unsigned int sw_twsi_ext;
-+	unsigned int mode;
- };
- 
- #define SW_TWSI(x)	(x->roff.sw_twsi)
- #define TWSI_INT(x)	(x->roff.twsi_int)
- #define SW_TWSI_EXT(x)	(x->roff.sw_twsi_ext)
-+#define MODE(x)		(x->roff.mode)
- 
- struct octeon_i2c {
- 	wait_queue_head_t queue;
-@@ -212,6 +214,7 @@ static inline void octeon_i2c_write_int(struct octeon_i2c *i2c, u64 data)
- 	octeon_i2c_writeq_flush(data, i2c->twsi_base + TWSI_INT(i2c));
- }
- 
-+#define IS_LS_FREQ(twsi_freq) ((twsi_freq) <= 400000)
- #define PCI_SUBSYS_DEVID_9XXX 0xB
- /**
-  * octeon_i2c_is_otx2 - check for chip ID
-diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-index eecd27f9f1730e522dcccafc9f12ea891a3b59ef..3dd5a4d798f99e9b5282360cf9d5840042fc8dcc 100644
---- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -165,6 +165,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
- 	i2c->roff.sw_twsi = 0x1000;
- 	i2c->roff.twsi_int = 0x1010;
- 	i2c->roff.sw_twsi_ext = 0x1018;
-+	i2c->roff.mode = 0x1038;
- 
- 	i2c->dev = dev;
- 	pci_set_drvdata(pdev, i2c);
-@@ -209,7 +210,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
- 	 * For OcteonTX2 chips, set reference frequency to 100MHz
- 	 * as refclk_src in TWSI_MODE register defaults to 100MHz.
- 	 */
--	if (octeon_i2c_is_otx2(pdev))
-+	if (octeon_i2c_is_otx2(pdev) && IS_LS_FREQ(i2c->twsi_freq))
- 		i2c->sys_freq = 100000000;
- 	octeon_i2c_set_clock(i2c);
- 
+For any multiport controller we would define a new node "multiport" inside
+dwc3 and then add subsequent "mport" nodes inside it for individual ports
+that it supports. Now each individual "mport" node defines their own PHYs.
+
+e.g.
+Consider a Dual port controller where each port supports HS+SS 
+
+multiport {
+	mp_1: mport@1 {
+		usb-phy = <usb2_phy0>, <usb3_phy0>;
+        /* Can define Generic PHYs also */  
+	};	
+	mp_2: mport@2 {
+		usb-phy = <usb2_phy1>, <usb3_phy1>;
+	};	
+
+Harsh Agarwal (3):
+  dt-bindings: usb: dwc3: Add support for multiport related properties
+  usb: phy: Add devm_of_usb_get_phy_by_phandle
+  usb: dwc3: Refactor PHY logic to support Multiport Controller
+
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |  55 +++
+ drivers/usb/dwc3/core.c                            | 400 +++++++++++++++------
+ drivers/usb/dwc3/core.h                            |  12 +-
+ drivers/usb/dwc3/drd.c                             |  16 +-
+ drivers/usb/dwc3/gadget.c                          |   4 +-
+ drivers/usb/phy/phy.c                              |  34 ++
+ include/linux/usb/phy.h                            |   8 +
+ 7 files changed, 402 insertions(+), 127 deletions(-)
+
 -- 
-2.17.1
+2.7.4
 

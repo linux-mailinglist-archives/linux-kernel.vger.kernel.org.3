@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52736538E83
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB3C538E84
 	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 12:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245491AbiEaKKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 06:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
+        id S245550AbiEaKKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 06:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245461AbiEaKKV (ORCPT
+        with ESMTP id S245554AbiEaKKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 06:10:21 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31669996B0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:10:20 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id y187so634851pgd.3
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:10:20 -0700 (PDT)
+        Tue, 31 May 2022 06:10:25 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051B599804
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:10:23 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id s14so12413458plk.8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 03:10:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=coONZgGzVl+ts87B3n9/T4bQl890pWmuXnplgV/C9Qg=;
-        b=Qa7hl/jpCBUOw+kvcg30HuQhWAvp/zpkTKCuIfskarK5euPwihSjNOzWf7CUYn2IdY
-         rbc+MXsZfPguvuAqzrjjCEYrnwsguKIv7EyMruUjtkyhQShfM4XMQHt0nGyf1utKruqZ
-         ObQnT3hw1xetdBZfuY1C7nVpN6vaUaKnrZdnU3J1VQ2zaphGuqvjMxn3YcVcGGtJylbv
-         Fc5cymUqI1pOCcY9IfiOvNsSN+ucRtxqOcCV3ynkkdCJ0lwo4CKHfpybyfvlKepjaqK2
-         P3SlPLG8mv4pA8DU3htg91lg3E1o80C7VkX/eeHgQrByz0fSUkECg0cDrf6FVt/fdSG8
-         c7ag==
+        bh=YyUyg3polV3O3U+GfR+R8JOfYv9TQjwFgBv3/tKFoOo=;
+        b=Sr3ItoKPRjamyvCKHzR9XNPAHzYYBZieCF+M0MW4T0/N/fo1Fk5nZ6n/ZLQ0M+uIZW
+         LyTAQXP+Rw4vstbqTLz2yjp2TgdUkhXrynJTqeLpPYazaQzgWYwrVg70LcL+Mq1xqV0E
+         JR+7DPTA6MgZiyfLM4N1/4ElqKJBMuY+31qWY5PwZWggWJKkrjMH24uiYgLAKK3fm51C
+         HWY9XuJ5jjQZwuEExFvMysJTGoxRJlbrGIlag3IOrTzeLxuRdiWJi6FjMjph/KxDPwPl
+         sxPvUkIztZ0/DTHR+s+l8FKpLrVtQZTFzL4/KFUOPGOZ7SbGd+SN6XQzaSou3XvaNn9M
+         YWZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=coONZgGzVl+ts87B3n9/T4bQl890pWmuXnplgV/C9Qg=;
-        b=aJRjySYBb3yxD9Ck+HtdJ+n+viuO4++2y05P81ZtA6KwnGl0CS2byXSpTzinpZeW85
-         vHbKtZXXy6Ysj7Zy7hGi1X+PJ9UR2chttA9F+0gsjA7KkiG/l+r68TrxiFfZoasSbXVr
-         LMUvwtJiJ8RZJIfhdgAhu7QVALBCYRbSJ0tltdyinOIqXyiNM+tJIiC4ZepL8k5pZxPU
-         4VGeJdwoY0BVZy4Dme8qVg8XxomIcdBVrQShT7pfjMRtofEqoEA7gKLdvdIGVyPE3qw9
-         f8GxTCUZCAcw4zf1YXvEStLYl8gUiQE84oguFlsEJKMnp5zsay0/RytEyunFO0PjiuTt
-         POWA==
-X-Gm-Message-State: AOAM530xiyw7AayhULrOWGfvfZFW7uR0ydgXXic5PCYxEnV7mjZ/px3M
-        OBFRRoYvW3QmTWq61cRKweOUdi11eqKTKg==
-X-Google-Smtp-Source: ABdhPJyBkBo9gqfY3r46DA7I2O+W5n1W3xh3U7PbVLcmjOmAEVH68r2SqZtJjTU+hxUdFInwHElEUA==
-X-Received: by 2002:a65:5886:0:b0:3fb:a6ea:b741 with SMTP id d6-20020a655886000000b003fba6eab741mr17416708pgu.502.1653991819634;
-        Tue, 31 May 2022 03:10:19 -0700 (PDT)
+        bh=YyUyg3polV3O3U+GfR+R8JOfYv9TQjwFgBv3/tKFoOo=;
+        b=fPq49oqfW6PUnJOVeoAKsteDwm2Nl+O2XL/8uVNFkffc1gdNV1e9UOzdN7tM8dCoey
+         BvqYbOWiq72JI5iVgxF1tNKbOQK88EW8RzLaZ/ZfE8KC/5+mveup27wSTVuSfy0E3NiN
+         FOIAI+LJUNd+c1Uf3LDCv8yKTZNHJLH4xZne86ZTnCBu5wrTOz4oe0wAnkGdmiUqJuDd
+         av5qa3z2WD6DiqzxcYJ0/pEgEGd+2R3kYo7BA5m2zoZWiNsMuiakNizXera4TSSOv3Lo
+         SBYTu2B3yxWu/WKtDaJSvoNa1YQ3LPNjLtCfIwd7CQ13ZDVgPNlMwHo/hZuuiz5531OY
+         KdLw==
+X-Gm-Message-State: AOAM532hOE5WEAHKf0iHn9lqoT5PAAs9xu5ai50a5bDfQdQKrqHlqhW5
+        GfkPuCmdA83H3GabIA0Q1vvMWg==
+X-Google-Smtp-Source: ABdhPJw8TkORQQRhDtHEl2r0rvyG1TzTesdGYRyFPHaSYsY70jPU0SdKG2Sc63FedMuwtLWqfugVuA==
+X-Received: by 2002:a17:90a:4417:b0:1ca:a861:3fbf with SMTP id s23-20020a17090a441700b001caa8613fbfmr28142580pjg.80.1653991822433;
+        Tue, 31 May 2022 03:10:22 -0700 (PDT)
 Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id g13-20020aa7874d000000b0050dc762816fsm10267850pfo.73.2022.05.31.03.10.19
+        by smtp.gmail.com with ESMTPSA id ch12-20020a056a00288c00b004fa743ba3f9sm10217427pfb.2.2022.05.31.03.10.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 03:10:19 -0700 (PDT)
+        Tue, 31 May 2022 03:10:22 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Keerthy <j-keerthy@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
+        Stephen Boyd <sboyd@kernel.org>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/5] OPP: Add support for config_regulators() helper
-Date:   Tue, 31 May 2022 15:40:00 +0530
-Message-Id: <17e3f49303a738605b0b6e2b835578c55f3fe82c.1653991004.git.viresh.kumar@linaro.org>
+Subject: [PATCH 2/5] OPP: Make _generic_set_opp_regulator() a config_regulators() interface
+Date:   Tue, 31 May 2022 15:40:01 +0530
+Message-Id: <3720e177d6cb3924a2ea111cf1787898a2c743d1.1653991004.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1653991004.git.viresh.kumar@linaro.org>
 References: <cover.1653991004.git.viresh.kumar@linaro.org>
@@ -75,170 +75,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend the dev_pm_opp_set_config() interface to allow adding
-config_regulators() helpers. This helper will be called to set the
-voltages of the regulators from the regular path in _set_opp(), while we
-are trying to change the OPP.
+In order to reuse the same code path, i.e. clk_set_rate() from
+_set_opp(), migrate _generic_set_opp_regulator() to implement a
+config_regulators() interface.
 
-This will eventually replace the custom set_opp() helper.
+It is renamed to _opp_config_regulator_single() and is set as the
+preferred config_regulators() interface whenever we have a single
+regulator available.
+
+Note that this also drops code responsible for restoring the
+voltage/freq in case of errors. We aren't handling that properly
+currently, restoring only some of the resources while leaving others out
+(like bandwidth and required OPPs). It is better to drop all of it
+instead of partial restoration.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/opp/core.c     | 63 ++++++++++++++++++++++++++++++++++++++++++
- drivers/opp/opp.h      |  2 ++
- include/linux/pm_opp.h |  5 ++++
- 3 files changed, 70 insertions(+)
+ drivers/opp/core.c | 51 +++++++++++-----------------------------------
+ 1 file changed, 12 insertions(+), 39 deletions(-)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 62c5d4308e01..bac91d078cbb 100644
+index bac91d078cbb..2f76442845be 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -1181,6 +1181,15 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
- 			dev_err(dev, "Failed to set bw: %d\n", ret);
- 			return ret;
- 		}
-+
-+		if (opp_table->config_regulators) {
-+			ret = opp_table->config_regulators(dev, old_opp, opp, opp_table->regulators,
-+							   opp_table->regulator_count);
-+			if (ret) {
-+				dev_err(dev, "Failed to set regulator voltages: %d\n", ret);
-+				return ret;
-+			}
-+		}
- 	}
- 
- 	if (opp_table->set_opp) {
-@@ -1198,6 +1207,15 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
- 
- 	/* Scaling down? Configure required OPPs after frequency */
- 	if (scaling_down) {
-+		if (opp_table->config_regulators) {
-+			ret = opp_table->config_regulators(dev, old_opp, opp, opp_table->regulators,
-+							   opp_table->regulator_count);
-+			if (ret) {
-+				dev_err(dev, "Failed to set regulator voltages: %d\n", ret);
-+				return ret;
-+			}
-+		}
-+
- 		ret = _set_opp_bw(opp_table, opp, dev);
- 		if (ret) {
- 			dev_err(dev, "Failed to set bw: %d\n", ret);
-@@ -2237,6 +2255,43 @@ static void _opp_unregister_set_opp_helper(struct opp_table *opp_table)
- 	}
+@@ -892,62 +892,34 @@ static inline int _generic_set_opp_clk_only(struct device *dev, struct clk *clk,
+ 	return ret;
  }
  
-+/**
-+ * _opp_set_config_regulators_helper() - Register custom set regulator helper.
-+ * @dev: Device for which the helper is getting registered.
-+ * @config_regulators: Custom set regulator helper.
-+ *
-+ * This is useful to support platforms with multiple regulators per device.
-+ *
-+ * This must be called before any OPPs are initialized for the device.
-+ */
-+static int _opp_set_config_regulators_helper(struct opp_table *opp_table, struct device *dev,
-+					     config_regulators_t config_regulators)
-+{
-+	/* Another CPU that shares the OPP table has set the helper ? */
-+	if (!opp_table->config_regulators) {
-+		mutex_lock(&opp_table->lock);
-+		opp_table->config_regulators = config_regulators;
-+		mutex_unlock(&opp_table->lock);
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * _opp_put_config_regulators_helper() - Releases resources blocked for config_regulators helper.
-+ * @opp_table: OPP table returned from _opp_set_config_regulators_helper().
-+ *
-+ * Release resources blocked for platform specific config_regulators helper.
-+ */
-+static void _opp_put_config_regulators_helper(struct opp_table *opp_table)
-+{
-+	if (opp_table->config_regulators) {
-+		mutex_lock(&opp_table->lock);
-+		opp_table->config_regulators = NULL;
-+		mutex_unlock(&opp_table->lock);
-+	}
-+}
-+
- static void _detach_genpd(struct opp_table *opp_table)
+-static int _generic_set_opp_regulator(struct opp_table *opp_table,
+-				      struct device *dev,
+-				      struct dev_pm_opp *opp,
+-				      unsigned long freq,
+-				      int scaling_down)
++static int _opp_config_regulator_single(struct device *dev, struct dev_pm_opp *old_opp,
++					struct dev_pm_opp *new_opp, struct regulator **regulators,
++					unsigned int count)
  {
- 	int index;
-@@ -2404,6 +2459,13 @@ struct opp_table *dev_pm_opp_set_config(struct device *dev,
- 			goto err;
+-	struct regulator *reg = opp_table->regulators[0];
+-	struct dev_pm_opp *old_opp = opp_table->current_opp;
++	struct regulator *reg = regulators[0];
+ 	int ret;
+ 
+ 	/* This function only supports single regulator per device */
+-	if (WARN_ON(opp_table->regulator_count > 1)) {
++	if (WARN_ON(count > 1)) {
+ 		dev_err(dev, "multiple regulators are not supported\n");
+ 		return -EINVAL;
  	}
  
-+	/* Configure config_regulators helper */
-+	if (config->config_regulators) {
-+		ret = _opp_set_config_regulators_helper(opp_table, dev, config->config_regulators);
-+		if (ret)
-+			goto err;
-+	}
-+
- 	/* Configure supported hardware */
- 	if (config->supported_hw) {
- 		ret = _opp_set_supported_hw(opp_table, config->supported_hw,
-@@ -2458,6 +2520,7 @@ void dev_pm_opp_clear_config(struct opp_table *opp_table)
- 	_opp_detach_genpd(opp_table);
- 	_opp_put_regulators(opp_table);
- 	_opp_put_supported_hw(opp_table);
-+	_opp_put_config_regulators_helper(opp_table);
- 	_opp_unregister_set_opp_helper(opp_table);
- 	_opp_put_prop_name(opp_table);
- 	_opp_put_clkname(opp_table);
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 9e1cfcb0ea98..4695d315e7f9 100644
---- a/drivers/opp/opp.h
-+++ b/drivers/opp/opp.h
-@@ -151,6 +151,7 @@ enum opp_table_access {
-  * @prop_name: A name to postfix to many DT properties, while parsing them.
-  * @clk_configured: Clock name is configured by the platform.
-  * @clk: Device's clock handle
-+ * @config_regulators: Platform specific config_regulators() callback.
-  * @regulators: Supply regulators
-  * @regulator_count: Number of power supply regulators. Its value can be -1
-  * (uninitialized), 0 (no opp-microvolt property) or > 0 (has opp-microvolt
-@@ -203,6 +204,7 @@ struct opp_table {
- 	const char *prop_name;
- 	bool clk_configured;
- 	struct clk *clk;
-+	config_regulators_t config_regulators;
- 	struct regulator **regulators;
- 	int regulator_count;
- 	struct icc_path **paths;
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index 6cf1bbc71ed2..7e7986106274 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -90,11 +90,15 @@ struct dev_pm_set_opp_data {
- 	struct device *dev;
- };
+-	/* Scaling up? Scale voltage before frequency */
+-	if (!scaling_down) {
+-		ret = _set_opp_voltage(dev, reg, opp->supplies);
+-		if (ret)
+-			goto restore_voltage;
+-	}
+-
+-	/* Change frequency */
+-	ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
++	ret = _set_opp_voltage(dev, reg, new_opp->supplies);
+ 	if (ret)
+-		goto restore_voltage;
+-
+-	/* Scaling down? Scale voltage after frequency */
+-	if (scaling_down) {
+-		ret = _set_opp_voltage(dev, reg, opp->supplies);
+-		if (ret)
+-			goto restore_freq;
+-	}
++		return ret;
  
-+typedef int (*config_regulators_t)(struct device *dev, struct dev_pm_opp *old_opp,
-+				   struct dev_pm_opp *new_opp, struct regulator **regulators,
-+				   unsigned int count);
- /**
-  * struct dev_pm_opp_config - Device OPP configuration values
-  * @clk_name: Clk name.
-  * @prop_name: Name to postfix to properties.
-  * @set_opp: Custom set OPP helper.
-+ * @config_regulators: Custom set regulator helper.
-  * @supported_hw: Array of hierarchy of versions to match.
-  * @supported_hw_count: Number of elements in the array.
-  * @regulator_names: Array of pointers to the names of the regulator.
-@@ -108,6 +112,7 @@ struct dev_pm_opp_config {
- 	const char *clk_name;
- 	const char *prop_name;
- 	int (*set_opp)(struct dev_pm_set_opp_data *data);
-+	config_regulators_t config_regulators;
- 	unsigned int *supported_hw;
- 	unsigned int supported_hw_count;
- 	const char * const *regulator_names;
+ 	/*
+ 	 * Enable the regulator after setting its voltages, otherwise it breaks
+ 	 * some boot-enabled regulators.
+ 	 */
+-	if (unlikely(!opp_table->enabled)) {
++	if (unlikely(!new_opp->opp_table->enabled)) {
+ 		ret = regulator_enable(reg);
+ 		if (ret < 0)
+ 			dev_warn(dev, "Failed to enable regulator: %d", ret);
+ 	}
+ 
+ 	return 0;
+-
+-restore_freq:
+-	if (_generic_set_opp_clk_only(dev, opp_table->clk, old_opp->rate))
+-		dev_err(dev, "%s: failed to restore old-freq (%lu Hz)\n",
+-			__func__, old_opp->rate);
+-restore_voltage:
+-	/* This shouldn't harm even if the voltages weren't updated earlier */
+-	_set_opp_voltage(dev, reg, old_opp->supplies);
+-
+-	return ret;
+ }
+ 
+ static int _set_opp_bw(const struct opp_table *opp_table,
+@@ -1194,9 +1166,6 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
+ 
+ 	if (opp_table->set_opp) {
+ 		ret = _set_opp_custom(opp_table, dev, opp, freq);
+-	} else if (opp_table->regulators) {
+-		ret = _generic_set_opp_regulator(opp_table, dev, opp, freq,
+-						 scaling_down);
+ 	} else {
+ 		/* Only frequency scaling */
+ 		ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
+@@ -2103,6 +2072,10 @@ static int _opp_set_regulators(struct opp_table *opp_table, struct device *dev,
+ 		opp_table->set_opp_data->old_opp.supplies = supplies;
+ 		opp_table->set_opp_data->new_opp.supplies = supplies + count;
+ 	}
++
++	/* Set generic config_regulators() for single regulators here */
++	if (count == 1)
++		opp_table->config_regulators = _opp_config_regulator_single;
+ 	mutex_unlock(&opp_table->lock);
+ 
+ 	return 0;
 -- 
 2.31.1.272.g89b43f80a514
 

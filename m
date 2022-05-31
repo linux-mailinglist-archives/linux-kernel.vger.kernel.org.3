@@ -2,193 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52F75395AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063075395C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 19:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346726AbiEaR5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 13:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S1346756AbiEaR6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 13:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239219AbiEaR51 (ORCPT
+        with ESMTP id S1346751AbiEaR6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 13:57:27 -0400
-X-Greylist: delayed 415 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 May 2022 10:57:24 PDT
-Received: from mail.bwidawsk.net (mail.bwidawsk.net [107.170.211.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7402D33A13;
-        Tue, 31 May 2022 10:57:22 -0700 (PDT)
-Received: by mail.bwidawsk.net (Postfix, from userid 5001)
-        id 1E599123291; Tue, 31 May 2022 10:57:22 -0700 (PDT)
+        Tue, 31 May 2022 13:58:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 133B27A468
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 10:58:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654019926;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0yvmTc+va7v0gJ9E75BePB+PuwLz7P/ysZIrz/OtMrE=;
+        b=TN3J+KpCFzfBwMzqIpXgvL00e+up2rw974HqLM/FC4f1ibDMTq414eDokC6NCCoOqaEHzJ
+        N6xxlGfQhRtqTe0I/QrBx1t6SkQUEJOOeVnrS6Jxi/THEAq7tNo0UDPFnT74OoyxIRNvDS
+        I2m7xrqX4qxqkYBoAv+XZSBCsJSqV10=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-456-5WHS6iSOPR2ZC3znAz-5_A-1; Tue, 31 May 2022 13:58:43 -0400
+X-MC-Unique: 5WHS6iSOPR2ZC3znAz-5_A-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 986E2101AA45;
+        Tue, 31 May 2022 17:58:37 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7582E492C3B;
+        Tue, 31 May 2022 17:58:37 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: [PATCH] KVM: x86: SVM: fix nested PAUSE filtering when L0 intercepts PAUSE
+Date:   Tue, 31 May 2022 13:58:37 -0400
+Message-Id: <20220531175837.295988-1-pbonzini@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-ASN:  
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from mail.bwidawsk.net (c-24-20-163-23.hsd1.or.comcast.net [24.20.163.23])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by mail.bwidawsk.net (Postfix) with ESMTPSA id B0F00120013;
-        Tue, 31 May 2022 10:57:17 -0700 (PDT)
-Date:   Tue, 31 May 2022 10:57:16 -0700
-From:   Ben Widawsky <ben@bwidawsk.net>
-To:     ira.weiny@intel.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V9 5/9] cxl/port: Find a DOE mailbox which supports CDAT
-Message-ID: <20220531175716.jlkwu7aerxh5ucte@mail.bwidawsk.net>
-References: <20220531152632.1397976-1-ira.weiny@intel.com>
- <20220531152632.1397976-6-ira.weiny@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531152632.1397976-6-ira.weiny@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-05-31 08:26:28, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> Each CXL device may have multiple DOE mailbox capabilities and each
-> mailbox may support multiple protocols.  CXL port devices need to query
-> the CDAT information specifically.
-> 
-> Search the DOE mailboxes for one which supports the CDAT protocol.
-> Cache that mailbox to be used for future queries.
-> 
-> Only support memory devices at this time.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> ---
-> Changes from V8
-> 	Incorporate feedback from Jonathan
-> 	Move all this to the cxl_port object
-> 
-> Changes from V7
-> 	Minor code clean ups
-> 
-> Changes from V6
-> 	Adjust for aux devices being a CXL only concept
-> 	Update commit msg.
-> 	Ensure devices iterated by auxiliary_find_device() are checked
-> 		to be DOE devices prior to checking for the CDAT
-> 		protocol
-> 	From Ben
-> 		Ensure reference from auxiliary_find_device() is dropped
-> ---
->  drivers/cxl/core/pci.c  | 28 ++++++++++++++++++++++++++++
->  drivers/cxl/core/port.c |  2 ++
->  drivers/cxl/cxl.h       |  2 ++
->  drivers/cxl/cxlpci.h    |  1 +
->  4 files changed, 33 insertions(+)
-> 
-> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
-> index c4c99ff7b55e..5497a65bdcf3 100644
-> --- a/drivers/cxl/core/pci.c
-> +++ b/drivers/cxl/core/pci.c
-> @@ -4,11 +4,14 @@
->  #include <linux/device.h>
->  #include <linux/delay.h>
->  #include <linux/pci.h>
-> +#include <linux/pci-doe.h>
->  #include <cxlpci.h>
->  #include <cxlmem.h>
->  #include <cxl.h>
->  #include "core.h"
->  
-> +#define CXL_DOE_PROTOCOL_TABLE_ACCESS 2
-> +
->  /**
->   * DOC: cxl core pci
->   *
-> @@ -458,3 +461,28 @@ int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm)
->  	return 0;
->  }
->  EXPORT_SYMBOL_NS_GPL(cxl_hdm_decode_init, CXL);
-> +
-> +void cxl_find_cdat_mb(struct cxl_port *port)
+Commit 74fd41ed16fd ("KVM: x86: nSVM: support PAUSE filtering when L0
+doesn't intercept PAUSE") introduced passthrough support for nested pause
+filtering, (when the host doesn't intercept PAUSE) (either disabled with
+kvm module param, or disabled with '-overcommit cpu-pm=on')
 
-kdoc would be good for exported symbols IMO. Also if you can come up with a
-better verb than "find" for something that mutates the port's state, I think
-that would be beneficial.
+Before this commit, L1 KVM didn't intercept PAUSE at all; afterwards,
+the feature was exposed as supported by KVM cpuid unconditionally, thus
+if L1 could try to use it even when the L0 KVM can't really support it.
 
-I'm not sure why this is exported yet, but I suppose I'll see soon :-)
+In this case the fallback caused KVM to intercept each PAUSE instruction;
+in some cases, such intercept can slow down the nested guest so much
+that it can fail to boot.  Instead, before the problematic commit KVM
+was already setting both thresholds to 0 in vmcb02, but after the first
+userspace VM exit shrink_ple_window was called and would reset the
+pause_filter_count to the default value.
 
-> +{
-> +	struct device *dev = port->uport;
-> +	struct cxl_memdev *cxlmd;
-> +	struct cxl_dev_state *cxlds;
-> +	int i;
-> +
-> +	if (!is_cxl_memdev(dev))
-> +		return;
-> +
-> +	cxlmd = to_cxl_memdev(dev);
-> +	cxlds = cxlmd->cxlds;
-> +
-> +	for (i = 0; i < cxlds->num_mbs; i++) {
-> +		struct pci_doe_mb *cur = cxlds->doe_mbs[i];
-> +
-> +		if (pci_doe_supports_prot(cur, PCI_DVSEC_VENDOR_ID_CXL,
-> +					  CXL_DOE_PROTOCOL_TABLE_ACCESS)) {
-> +			port->cdat_mb = cur;
-> +			return;
-> +		}
-> +	}
-> +}
-> +EXPORT_SYMBOL_NS_GPL(cxl_find_cdat_mb, CXL);
-> diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
-> index ea60abda6500..2e2bd65c1024 100644
-> --- a/drivers/cxl/core/port.c
-> +++ b/drivers/cxl/core/port.c
-> @@ -461,6 +461,8 @@ struct cxl_port *devm_cxl_add_port(struct device *host, struct device *uport,
->  	if (IS_ERR(port))
->  		return port;
->  
-> +	cxl_find_cdat_mb(port);
-> +
->  	dev = &port->dev;
->  	if (is_cxl_memdev(uport))
->  		rc = dev_set_name(dev, "endpoint%d", port->id);
-> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> index 140dc3278cde..0a86be589ffc 100644
-> --- a/drivers/cxl/cxl.h
-> +++ b/drivers/cxl/cxl.h
-> @@ -267,6 +267,7 @@ struct cxl_nvdimm {
->   * @component_reg_phys: component register capability base address (optional)
->   * @dead: last ep has been removed, force port re-creation
->   * @depth: How deep this port is relative to the root. depth 0 is the root.
-> + * @cdat_mb: Mailbox which supports the CDAT protocol
->   */
->  struct cxl_port {
->  	struct device dev;
-> @@ -278,6 +279,7 @@ struct cxl_port {
->  	resource_size_t component_reg_phys;
->  	bool dead;
->  	unsigned int depth;
-> +	struct pci_doe_mb *cdat_mb;
->  };
->  
->  /**
-> diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-> index fce1c11729c2..366b21bd1a01 100644
-> --- a/drivers/cxl/cxlpci.h
-> +++ b/drivers/cxl/cxlpci.h
-> @@ -74,4 +74,5 @@ static inline resource_size_t cxl_regmap_to_base(struct pci_dev *pdev,
->  int devm_cxl_port_enumerate_dports(struct cxl_port *port);
->  struct cxl_dev_state;
->  int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm);
-> +void cxl_find_cdat_mb(struct cxl_port *port);
->  #endif /* __CXL_PCI_H__ */
-> -- 
-> 2.35.1
-> 
+To fix this, change the fallback strategy - ignore the guest threshold
+values, but use/update the host threshold values unless the guest
+specifically requests disabling PAUSE filtering (either simple or
+advanced).
+
+Also fix a minor bug: on nested VM exit, when PAUSE filter counter
+were copied back to vmcb01, a dirty bit was not set.
+
+Thanks a lot to Suravee Suthikulpanit for debugging this!
+
+Fixes: 74fd41ed16fd ("KVM: x86: nSVM: support PAUSE filtering when L0 doesn't intercept PAUSE")
+Reported-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Tested-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Co-developed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Message-Id: <20220518072709.730031-1-mlevitsk@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+ arch/x86/kvm/svm/nested.c | 39 +++++++++++++++++++++------------------
+ arch/x86/kvm/svm/svm.c    |  4 ++--
+ 2 files changed, 23 insertions(+), 20 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index 6d0233a2469e..88da8edbe1e1 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -642,6 +642,8 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
+ 	struct kvm_vcpu *vcpu = &svm->vcpu;
+ 	struct vmcb *vmcb01 = svm->vmcb01.ptr;
+ 	struct vmcb *vmcb02 = svm->nested.vmcb02.ptr;
++	u32 pause_count12;
++	u32 pause_thresh12;
+ 
+ 	/*
+ 	 * Filled at exit: exit_code, exit_code_hi, exit_info_1, exit_info_2,
+@@ -721,27 +723,25 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
+ 	if (!nested_vmcb_needs_vls_intercept(svm))
+ 		vmcb02->control.virt_ext |= VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK;
+ 
++	pause_count12 = svm->pause_filter_enabled ? svm->nested.ctl.pause_filter_count : 0;
++	pause_thresh12 = svm->pause_threshold_enabled ? svm->nested.ctl.pause_filter_thresh : 0;
+ 	if (kvm_pause_in_guest(svm->vcpu.kvm)) {
+-		/* use guest values since host doesn't use them */
+-		vmcb02->control.pause_filter_count =
+-				svm->pause_filter_enabled ?
+-				svm->nested.ctl.pause_filter_count : 0;
++		/* use guest values since host doesn't intercept PAUSE */
++		vmcb02->control.pause_filter_count = pause_count12;
++		vmcb02->control.pause_filter_thresh = pause_thresh12;
+ 
+-		vmcb02->control.pause_filter_thresh =
+-				svm->pause_threshold_enabled ?
+-				svm->nested.ctl.pause_filter_thresh : 0;
+-
+-	} else if (!vmcb12_is_intercept(&svm->nested.ctl, INTERCEPT_PAUSE)) {
+-		/* use host values when guest doesn't use them */
++	} else {
++		/* start from host values otherwise */
+ 		vmcb02->control.pause_filter_count = vmcb01->control.pause_filter_count;
+ 		vmcb02->control.pause_filter_thresh = vmcb01->control.pause_filter_thresh;
+-	} else {
+-		/*
+-		 * Intercept every PAUSE otherwise and
+-		 * ignore both host and guest values
+-		 */
+-		vmcb02->control.pause_filter_count = 0;
+-		vmcb02->control.pause_filter_thresh = 0;
++
++		/* ... but ensure filtering is disabled if so requested.  */
++		if (vmcb12_is_intercept(&svm->nested.ctl, INTERCEPT_PAUSE)) {
++			if (!pause_count12)
++				vmcb02->control.pause_filter_count = 0;
++			if (!pause_thresh12)
++				vmcb02->control.pause_filter_thresh = 0;
++		}
+ 	}
+ 
+ 	nested_svm_transition_tlb_flush(vcpu);
+@@ -1003,8 +1003,11 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
+ 	vmcb12->control.event_inj         = svm->nested.ctl.event_inj;
+ 	vmcb12->control.event_inj_err     = svm->nested.ctl.event_inj_err;
+ 
+-	if (!kvm_pause_in_guest(vcpu->kvm) && vmcb02->control.pause_filter_count)
++	if (!kvm_pause_in_guest(vcpu->kvm)) {
+ 		vmcb01->control.pause_filter_count = vmcb02->control.pause_filter_count;
++		vmcb_mark_dirty(vmcb01, VMCB_INTERCEPTS);
++
++	}
+ 
+ 	nested_svm_copy_common_state(svm->nested.vmcb02.ptr, svm->vmcb01.ptr);
+ 
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 1bd42e7dfa36..4aea82f668fb 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -956,7 +956,7 @@ static void grow_ple_window(struct kvm_vcpu *vcpu)
+ 	struct vmcb_control_area *control = &svm->vmcb->control;
+ 	int old = control->pause_filter_count;
+ 
+-	if (kvm_pause_in_guest(vcpu->kvm) || !old)
++	if (kvm_pause_in_guest(vcpu->kvm))
+ 		return;
+ 
+ 	control->pause_filter_count = __grow_ple_window(old,
+@@ -977,7 +977,7 @@ static void shrink_ple_window(struct kvm_vcpu *vcpu)
+ 	struct vmcb_control_area *control = &svm->vmcb->control;
+ 	int old = control->pause_filter_count;
+ 
+-	if (kvm_pause_in_guest(vcpu->kvm) || !old)
++	if (kvm_pause_in_guest(vcpu->kvm))
+ 		return;
+ 
+ 	control->pause_filter_count =
+-- 
+2.31.1
+

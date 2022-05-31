@@ -2,211 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F9D538D50
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 10:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DA1538D7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245054AbiEaI6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 04:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        id S245093AbiEaJIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 05:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233830AbiEaI6r (ORCPT
+        with ESMTP id S235570AbiEaJIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 04:58:47 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C02BC36;
-        Tue, 31 May 2022 01:58:44 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 163C25C0178;
-        Tue, 31 May 2022 04:58:41 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 31 May 2022 04:58:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1653987521; x=
-        1654073921; bh=oo43um3ROPuCPfC/KF7MzWcIrCP9C5yRfhjmYx4w5Bk=; b=N
-        hhpvJx3+mrLCx5kBTPw04hgqsM8qeNe20J/ISTHZzSyOiKLuOFtJ8JJOZWZqLw/e
-        g3BfrWbGhC+7dX0J4FszaINTCshzB56lFdN/WFLhJucJ9lZj3g01n6i+JzkHhenF
-        bk6aPcyhNwMmCa+r5DGUG+uMVhih5L0ouOJaN73VUjhNHIshT+IdAK0h30Cu2pD7
-        thubFBdmtTYAxGZUq2QpRvBsXYyJAsmjc0JTsJZxRnpoM/wGD1BEaE2S+4i5WViF
-        gDEKgP6Vawu+Q6GXH/1JQbi2/QWr4aBu09Lm22pYnHAs0WnToWko/fUXWIjZlrhe
-        X1Nb8XpYLkqoDzAUZSSrw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:date:feedback-id:feedback-id:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm1; t=1653987521; x=1654073921; bh=o
-        o43um3ROPuCPfC/KF7MzWcIrCP9C5yRfhjmYx4w5Bk=; b=iH35DW97Ah1NSmTkb
-        tVz2iBYatAt4nAvefd9g/wzaBT3wtQ5MMi+4dFUm7NzpR6MYCHUJl6qvPS1pYLCK
-        hq0hyiLO+YeIbUv3p4113AzEMc/4UUeDuybshE6UO7lrkHDTw8EhliDO7BIt1685
-        cm8U2/f7vWlGFggl1pjvKsH3zzxwdfIn7RBhJHVpbANY4D5iBP2Rb6sYzaRTV7D8
-        rbkgdnN5Ytherw5mWfOPpLcIPAmINdEBW2CksTkcbf/K9H1GVtAo8THWZo31/Msj
-        78Pwui8jvgAVRwVFny1oG9vMLMTc9IXT4qetkgObXQEREAiMcq6Hrhlvl6Ccj9UV
-        W+CjA==
-X-ME-Sender: <xms:v9iVYm9brSS65NNHeTKa2aSAGuMhNuV_q02NqitHKIflWnyskPm93Q>
-    <xme:v9iVYmvEPzIa6t8R0DpvIt20T_x2F-CuvHUh5PhWnDzhF2bxhd3KZmVzY2jSFMPHc
-    rVf6sZAi_bHYy9zAN0>
-X-ME-Received: <xmr:v9iVYsAbo4OglaOhlIdmxiDh4TkGUQLy0JQ-DnyspWLuS2cSVjWUV6VEFA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeekgddutdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepgfejtedtjefggfffvdetuedthedtheegheeuteekfeeghfdtteejkeeludeg
-    vddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:v9iVYue8RPFp1z-n5TDYcwmL08SVETCWBoiOkGM0Sj6DVf0ap9EGoQ>
-    <xmx:v9iVYrO8My_Z2Um84Ljo0zAf5qBuSDu7j1Yhzm_MSrHcpsLPN30f3Q>
-    <xmx:v9iVYonGekT-cC8ZcFo5elxoAmfC0a5p63TnPymE-i5SQLIN4aRP-Q>
-    <xmx:wdiVYl0RpjWOCUCQSxgWM6t29uxM_f_xUVVu5CeL80V0FPNXRfX-7A>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 31 May 2022 04:58:38 -0400 (EDT)
-Date:   Tue, 31 May 2022 10:58:35 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Samuel Holland <samuel@sholland.org>,
-        Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        Sandy Huang <hjc@rock-chips.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-rockchip@lists.infradead.org,
-        Alistair Francis <alistair@alistair23.me>,
-        =?utf-8?Q?Ond=C5=99ej?= Jirman <x@xff.cz>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        David Airlie <airlied@linux.ie>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Liang Chen <cl@rock-chips.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/16] drm/rockchip: Rockchip EBC ("E-Book
- Controller") display driver
-Message-ID: <20220531085835.grw5nt4vyofis3po@penduick>
-References: <20220413221916.50995-1-samuel@sholland.org>
- <20220414085018.ayjvscgdkoen5nw5@houat>
- <Yo5kz/9cSd6ewC5f@phenom.ffwll.local>
+        Tue, 31 May 2022 05:08:23 -0400
+X-Greylist: delayed 470 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 May 2022 02:08:22 PDT
+Received: from pv50p00im-ztbu10011701.me.com (pv50p00im-ztbu10011701.me.com [17.58.6.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3B655354
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:08:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+        s=1a1hai; t=1653987629;
+        bh=YoMvvnFy7lQ2o505i+lUJxUjQt62DbIV+yUB4JeZdsc=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=bBHViiyom6RSqB/K6YUJJxjhK6SjoNMIFuT2eiX8vlslzbYyJlBvPfU7F5ViA7G0q
+         dBaS1rZCHnpJarDyhRz1rTVairsrbCGLwyTH31KAtCBsEqMgztT1AaEGgDxqcgsdXJ
+         Dsb+J2Qr4weejmgrCpXlWUJwyOtMjn9LIv6gr3DmlNlt09/9w4wZdtaV84tToWduWI
+         1utb1blDWhy6qm8exMQMBXCAA5aXKG8FAhUulpcevlAqJGl/IwtLCsfAG58A7I5S3y
+         iXgCUGk5AExJgJly246AZywIp/+16GGblpcOC3yNPeYBDrngasFzZXMvClw+6wwiI4
+         LmfDyPqCmAhxA==
+Received: from [10.97.63.88] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+        by pv50p00im-ztbu10011701.me.com (Postfix) with ESMTPSA id 19CEBB40348;
+        Tue, 31 May 2022 09:00:26 +0000 (UTC)
+Message-ID: <e0867860-12c6-e958-07de-cfbcf644b9fe@icloud.com>
+Date:   Tue, 31 May 2022 17:00:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <Yo5kz/9cSd6ewC5f@phenom.ffwll.local>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [syzbot] UBSAN: array-index-out-of-bounds in io_submit_sqes
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>,
+        syzbot <syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000f0b26205e04a183b@google.com>
+ <3d3c6b5f-84cd-cb25-812e-dac77e02ddbf@kernel.dk>
+From:   Hao Xu <haoxu.linux@icloud.com>
+In-Reply-To: <3d3c6b5f-84cd-cb25-812e-dac77e02ddbf@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
+ definitions=2022-05-31_03:2022-05-30,2022-05-31 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 clxscore=1011 mlxscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-2009150000 definitions=main-2205310047
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On 5/31/22 16:45, Jens Axboe wrote:
+> On 5/31/22 1:55 AM, syzbot wrote:
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    3b46e4e44180 Add linux-next specific files for 20220531
+>> git tree:       linux-next
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=16e151f5f00000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=ccb8d66fc9489ef
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=b6c9b65b6753d333d833
+>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>>
+>> Unfortunately, I don't have any reproducer for this issue yet.
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com
+>>
+>> ================================================================================
+>> ================================================================================
+>> UBSAN: array-index-out-of-bounds in fs/io_uring.c:8860:19
+>> index 75 is out of range for type 'io_op_def [47]'
+> 
+> 'def' is just set here, it's not actually used after 'opcode' has been
+> verified.
+> 
 
-Thanks for your feedback
+Maybe we can move it to be below the opcode check to comfort UBSAN.
 
-On Wed, May 25, 2022 at 07:18:07PM +0200, Daniel Vetter wrote:
-> > > VBLANK Events and Asynchronous Commits
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > When should the VBLANK event complete? When the pixels have been blit=
-ted
-> > > to the kernel's shadow buffer? When the first frame of the waveform is
-> > > sent to the panel? When the last frame is sent to the panel?
-> > >=20
-> > > Currently, the driver is taking the first option, letting
-> > > drm_atomic_helper_fake_vblank() send the VBLANK event without waiting=
- on
-> > > the refresh thread. This is the only way I was able to get good
-> > > performance with existing userspace.
-> >=20
-> > I've been having the same kind of discussions in private lately, so I'm
-> > interested by the answer as well :)
-> >=20
-> > It would be worth looking into the SPI/I2C panels for this, since it's
-> > basically the same case.
->=20
-> So it's maybe a bit misnamed and maybe kerneldocs aren't super clear (pls
-> help improve them), but there's two modes:
->=20
-> - drivers which have vblank, which might be somewhat variable (VRR) or
->   become simulated (self-refresh panels), but otherwise is a more-or-less
->   regular clock. For this case the atomic commit event must match the
->   vblank events exactly (frame count and timestamp)
-
-Part of my interrogation there is do we have any kind of expectation
-on whether or not, when we commit, the next vblank is going to be the
-one matching that commit or we're allowed to defer it by an arbitrary
-number of frames (provided that the frame count and timestamps are
-correct) ?
-
-> - drivers which don't have vblank at all, mostly these are i2c/spi panels
->   or virtual hw and stuff like that. In this case the event simply happens
->   when the driver is done with refresh/upload, and the frame count should
->   be zero (since it's meaningless).
->=20
-> Unfortuantely the helper to dtrt has fake_vblank in it's name, maybe
-> should be renamed to no_vblank or so (the various flags that control it
-> are a bit better named).
->=20
-> Again the docs should explain it all, but maybe we should clarify them or
-> perhaps rename that helper to be more meaningful.
->=20
-> > > Blitting/Blending in Software
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-> > > There are multiple layers to this topic (pun slightly intended):
-> > >  1) Today's userspace does not expect a grayscale framebuffer.
-> > >     Currently, the driver advertises XRGB8888 and converts to Y4
-> > >     in software. This seems to match other drivers (e.g. repaper).
-> > >
-> > >  2) Ignoring what userspace "wants", the closest existing format is
-> > >     DRM_FORMAT_R8. Geert sent a series[4] adding DRM_FORMAT_R1 through
-> > >     DRM_FORMAT_R4 (patch 9), which I believe are the "correct" formats
-> > >     to use.
-> > >=20
-> > >  3) The RK356x SoCs have an "RGA" hardware block that can do the
-> > >     RGB-to-grayscale conversion, and also RGB-to-dithered-monochrome
-> > >     which is needed for animation/video. Currently this is exposed wi=
-th
-> > >     a V4L2 platform driver. Can this be inserted into the pipeline in=
- a
-> > >     way that is transparent to userspace? Or must some userspace libr=
-ary
-> > >     be responsible for setting up the RGA =3D> EBC pipeline?
-> >=20
-> > I'm very interested in this answer as well :)
-> >=20
-> > I think the current consensus is that it's up to userspace to set this
-> > up though.
->=20
-> Yeah I think v4l mem2mem device is the answer for these, and then
-> userspace gets to set it all up.
-
-I think the question wasn't really about where that driver should be,
-but more about who gets to set it up, and if the kernel could have
-some component to expose the formats supported by the converter, but
-whenever a commit is being done pipe that to the v4l2 device before
-doing a page flip.
-
-We have a similar use-case for the RaspberryPi where the hardware
-codec will produce a framebuffer format that isn't standard. That
-format is understood by the display pipeline, and it can do
-writeback.
-
-However, some people are using a separate display (like a SPI display
-supported by tinydrm) and we would still like to be able to output the
-decoded frames there.
-
-Is there some way we could plumb things to "route" that buffer through
-the writeback engine to perform a format conversion before sending it
-over to the SPI display automatically?
-
-Maxime

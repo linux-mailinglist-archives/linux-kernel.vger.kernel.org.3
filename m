@@ -2,184 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E19753967E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D91B539682
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 20:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347174AbiEaSqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 14:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
+        id S1347151AbiEaSrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 14:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347151AbiEaSq2 (ORCPT
+        with ESMTP id S1347201AbiEaSqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 14:46:28 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D945C86B
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 11:46:26 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id y189so13978508pfy.10
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 11:46:26 -0700 (PDT)
+        Tue, 31 May 2022 14:46:51 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C13B1175;
+        Tue, 31 May 2022 11:46:43 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id y29so3580297ljd.7;
+        Tue, 31 May 2022 11:46:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version;
-        bh=na358Q+S8LLDExvIeETKF8wosIMPE0GB4fHPeLov++w=;
-        b=HXXyo7s7Fu4MZHMERLCUPFisb+zqcQJRVEqmc2pJ93/NrSaJe4tjWWHkUjtpgdx+He
-         /9a/PvjHtwtwHHB/Sj5nnLkbNEXEkw6taXXs4VVqdQsEqV3JiCt3eUMzAc4MQpBAvx03
-         rjLj79LQabXA/GVgjjYpvM/F9wAAotVKqa1N8=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pYLrlpHfpjK5+IAmOmjhXaE42XnKgq9/aa4sTaB0Sto=;
+        b=LkCBpGmLD/fON8HMvhAtHFdO+tE1QJ+xN7dhpkmbe4nS8clUjR4bdXrA5OpAbEu8O+
+         HT81jcJWwXYywCQlstlz2pFLgT9caxTp6rl0T/yBG+1kM98saqmSq94KAV2pOjKQKKQM
+         VwOnksuobIuYIwcEhMy4xMKaxiRScpxXFGdChkb+vznRz0kyygYfChUiAsDxlsovV5HD
+         di8kmaEmqm8p5ECMCumwZLRbj810bPgrcRMY5LIaHkDJBZ21PPiVIyfACBnl+tYpCBxG
+         W1F+JBdMsEAzb6QqM86iJ74Hbhqb5LKHk3B/cd5DC0Y6WPk8Q8WGNrmE+rvZ2hx18eHK
+         Q99Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version;
-        bh=na358Q+S8LLDExvIeETKF8wosIMPE0GB4fHPeLov++w=;
-        b=NRawmlAFqqoxerOom/C53GNRuxWXbue3YpFtKRAzchCg3BwRwFvPZG4IVbYhg+Bwmc
-         j6WK99wzCwJ3lu2/tgcnx6mFBdUXbleD3K8u8uZPKMHBynOChydSHl6npvIe2yoaY06x
-         ee3ElpIHc4SAr9GNOXbPnyNWwbrITsn3mKPQtDKLyu/gc9lBs0OKu0FoIQ3aLCA/Qlzy
-         186hhr39dAKJwP6iIGOR1mSYWigKR1cLSIuI5I17nltVbXf/kTwZz04N0VdXiwcXNtCn
-         ByQXQsdEgbu/kwV9Wb0ImTwWhQfsBgja90VfbYGsLFosboNToUyTnKIcGKJgD232ycy+
-         54EA==
-X-Gm-Message-State: AOAM531KticGeOEb9k73f4KCUwKf0bAax7eYVQb+QMQr4Yev6c9zKYUk
-        iEi+7C8XL1Lb5RbMoXDoyTwRrA==
-X-Google-Smtp-Source: ABdhPJw0zdAR7Iih9SCHLC5NFzxVaED0hwK9o2qw2dJX9QUM2XDdQDkSvKo4WP3Ku3rm8rNKUyoBdQ==
-X-Received: by 2002:a65:6852:0:b0:3fa:9371:9de with SMTP id q18-20020a656852000000b003fa937109demr34546860pgt.413.1654022785708;
-        Tue, 31 May 2022 11:46:25 -0700 (PDT)
-Received: from linuxpc-ThinkServer-TS140.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id c7-20020a170902724700b00161a9df4de8sm11358272pll.145.2022.05.31.11.46.24
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pYLrlpHfpjK5+IAmOmjhXaE42XnKgq9/aa4sTaB0Sto=;
+        b=SG3rkSHnXFm9kwIaAl/AK4aOcMviDjNEQeTJPaJ6wTtP2b3K0VN81gv5o8tyNlXoNa
+         r4nZkN8dHuyUxCZ3SUXwZXtPNpDb9L1pwC4GkYETdUqn4c3wYDbatTHiaPeFInuBIE/2
+         duMyA4N8gwVeQ8ds7RybH7Dc2XqZjNHI9N8//KAtwxwrsPOCXFr+u04KhvVEgbkQdIvw
+         9YiGxLVvsNpKFXqqf+z7TF5UpeP2BwWo/vzduPkGOlnsyzkXWnLDcML4bgeoOrvkMUPj
+         XQtnUAHL6ARJdfd+KrZCV6p5kN7N4kxaSU9hdoZPYDgtTjbmeBeLtXxPv90xCEX00LMe
+         SXaA==
+X-Gm-Message-State: AOAM530nHbzHJaasVMpH1CO/UMzoB4MaYCHWIWoRzsAbV5FTUnNedgjL
+        aR9MzktQE99pNz2uTn9qpjY=
+X-Google-Smtp-Source: ABdhPJxLRX1fJ+aOwDjmrVu3nmD2kpmroqYVAMk8Wh/WRxiSF6pLAkh2bLmH+k1wnLjvCXZzYGbU6Q==
+X-Received: by 2002:a2e:9a91:0:b0:253:deff:909d with SMTP id p17-20020a2e9a91000000b00253deff909dmr32936436lji.314.1654022801450;
+        Tue, 31 May 2022 11:46:41 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id 9-20020ac24d49000000b0047255d211a6sm3109025lfp.213.2022.05.31.11.46.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 11:46:25 -0700 (PDT)
-From:   Anand Gore <anand.gore@broadcom.com>
-To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
-        samyon.furman@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, florian.fainelli@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Anand Gore <anand.gore@broadcom.com>,
+        Tue, 31 May 2022 11:46:40 -0700 (PDT)
+Date:   Tue, 31 May 2022 21:46:38 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] MAINTAINERS: add bcm6858 to bcmbca arch entry
-Date:   Tue, 31 May 2022 11:46:15 -0700
-Message-Id: <20220531114551.v2.3.I4e0b51b0d29f3286eea811a57bdd7e0ff6d7439c@changeid>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220531184615.2836433-1-anand.gore@broadcom.com>
-References: <20220531184615.2836433-1-anand.gore@broadcom.com>
+Subject: Re: [PATCH v3 02/13] PCI: dwc: Don't use generic IO-ops for
+ DBI-space access
+Message-ID: <20220531184638.5ksxaz2ewtc2iq73@mobilestation>
+References: <20220517125058.18488-1-Sergey.Semin@baikalelectronics.ru>
+ <20220517125058.18488-3-Sergey.Semin@baikalelectronics.ru>
+ <20220526212930.GN54904-robh@kernel.org>
+ <20220527160551.dh6fb5n6xbmtjpaa@mobilestation>
+ <20220527173953.c4aqlw5jz3xfd727@mobilestation>
+ <20220531160907.GA1808817-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000009d569f05e0533046"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531160907.GA1808817-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000009d569f05e0533046
-Content-Transfer-Encoding: 8bit
+On Tue, May 31, 2022 at 11:09:07AM -0500, Rob Herring wrote:
+> On Fri, May 27, 2022 at 08:39:53PM +0300, Serge Semin wrote:
+> > On Fri, May 27, 2022 at 07:05:55PM +0300, Serge Semin wrote:
+> > > On Thu, May 26, 2022 at 04:29:30PM -0500, Rob Herring wrote:
+> > > > On Tue, May 17, 2022 at 03:50:47PM +0300, Serge Semin wrote:
+> > > > > Commit c2b0c098fbd1 ("PCI: dwc: Use generic config accessors") replaced
+> > > > > the locally defined DW PCIe host controller config-space accessors with
+> > > > > the generic methods pci_generic_config_read() and
+> > > > > pci_generic_config_write(). It was intended that the corresponding
+> > > > > bus-mapping callback returned a correct virtual address of the passed PCI
+> > > > > config-space register. The problem of the proposed solution was that it
+> > > > > didn't take into account the way the host config-space is accessed on the
+> > > > > DW PCIe. Depending on the DW PCIe IP-core synthesize parameters different
+> > > > > interfaces can be used to access the host and peripheral config/memory
+> > > > > spaces. The former one can be accessed via the DBI interface, while the
+> > > > > later ones is reached via the AHB/AXI application bus. In case if the DW
+> > > > > PCIe controller is configured to have a dedicated DBI interface, the way
+> > > > > it is mapped into the IO-memory turns to be platform-specific. For such
+> > > > > setups the DWC PCIe driver provides a set of the callbacks
+> > > > > dw_pcie_ops.{read_dbi,write_dbi} so the platforms glue-drivers would be
+> > > > > able to take into account the DBI bus IO peculiarities. Since
+> > > > > commit c2b0c098fbd1 ("PCI: dwc: Use generic config accessors") these
+> > > > > methods haven't been utilized during the generic host initialization
+> > > > > performed by the PCIe subsystem code.
+> > > > > 
+> > > > > I don't really know how come there have been no problems spotted for the
+> > > > > Histb/Exynos/Kirin PCIe controllers so far, but in our case with dword
+> > > > 
+> > > 
+> > > > Because they implement their own pci_ops for the root bus. You should 
+> > > > too.
+> > > 
+> > > Right. I should, but I would do that in a more generic way. Please see
+> > > the next comment.
+> > > 
+> > > > 
+> > > > Who is 'our case'? 
+> > > > 
+> > > > > aligned IO requirement the generic config-space accessors can't be
+> > > > > utilized for the host config-space. Thus in order to make sure the host
+> > > > > config-space is properly accessed via the DBI bus let's get back the
+> > > > > dw_pcie_rd_own_conf() and dw_pcie_wr_own_conf() methods. They are going to
+> > > > > be just wrappers around the already defined
+> > > > > dw_pcie_read_dbi()/dw_pcie_write_dbi() functions with proper arguments
+> > > > > conversion. These methods perform the platform-specific config-space IO if
+> > > > > the DBI accessors are specified, otherwise they call normal MMIO
+> > > > > operations.
+> > > > 
+> > > 
+> > > > The idea was for DWC to not define its own way to have different 
+> > > > read/write for root bus vs. child bus as many PCI host bridges need the 
+> > > > same thing. So the host bridge struct now has 2 pci_ops pointers. And 
+> > > > the mess of function pointer indirection is gone.
+> > > 
+> > > Thanks for clarification. I should have investigated the problem more
+> > > thoroughly. Now I see what was the reason of that change.  It was
+> > > indeed wrong to blame the commit c2b0c098fbd1 ("PCI: dwc: Use generic
+> > > config accessors") that something was done incorrectly. After a more
+> > > thorough commit inspection I realized that you just replaced the
+> > > dw_pcie_rd_own_conf() and dw_pcie_wr_own_conf() with the generic
+> > > pci_generic_config_read and pci_generic_config_write() as they had
+> > > been equivalent anyway.  I thought they didn't have the same semantic
+> > > by confusing the dw_pcie_{read,write}() and dw_pcie_{read,write}_dbi()
+> > > methods usage (see the _dbi suffix) in the original own PCI
+> > > config-space accessors. So to speak I'll need to drop the Fixes tag
+> > > with your commit hash from the patch.
+> > > 
+> > > Getting back to the own-bus accessors. DW PCIe RP/EP own-config space
+> > > is accessed over the DBI-bus. If the particular platform is designed
+> > > in a way so the DBI MMIO space access has some non-specific
+> > > peculiarities then that platform implements its own read_dbi/write_dbi
+> > > accessors. In case if these callbacks are defined, the driver must
+> > > use them for all DBI MMIO accesses including for the ones performed
+> > > from the subsystem core in the framework of the host own config-space
+> > > setups. As I mentioned in the patch log currently the only platforms
+> > > with such requirement happen to be Histb, Exynos and Kirin DW PCIe. As
+> > > such we can freely get back the generic dw_pcie_rd_own_conf() and
+> > > dw_pcie_wr_own_conf() methods but use the dw_pcie_{read,write}_dbi()
+> > > methods in there in the same way as it is done in the Histb, Exynos
+> > > and Kirin DW PCIe drivers (see their own PCI config-space accessors
+> > > match). Due to that we can drop the pci_ops redefinition from these
+> > > platforms and just use the own-config space accessors for all such
+> > > platforms as it's suggested in this patch. So this modification can be
+> > > re-qualified to the cleanup one then:
+> > > 1) Create the generic own config-space accessors (more portable as
+> > > the DBI-bus access specifics must be always taken into account) as it
+> > > is suggested in this patch already.
+> 
 
-Add bcm6858 related files to BCMBCA ARCH maintainer list entry
+> That is the wrong direction IMO. The idea is that well behaved cases 
+> just use the generic code and avoid any driver specific code. The DWC 
+> common code is not generic code. It's also keeping with the "don't 
+> create mid layers" philosophy.
 
-Signed-off-by: Anand Gore <anand.gore@broadcom.com>
+Got it. Thanks for clarification. So far I has been sure that re-using
+the locally implemented specifics was more preferable. It was so
+obvious for me that I missed there can be the PCI common code requirements.
+Though it would be nice to have it described somewhere in the kernel
+docs.
 
----
+> 
+> We have generic 32-bit only accessors too (even though that's broken 
+> h/w, it's broken so often we needed generic accessors), so if that's 
+> your restriction, then use those. That way, it is very clear which 
+> drivers (all of them, not just DWC) use generic accessors, have 
+> alignment restrictions, or something completely custom.
 
-(no changes since v1)
+Oh, I didn't know about them. Thanks for pointing out on those
+methods. I'll use them in my driver then.
 
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+> 
+> > > 2) Drop the Kirin, Exynos, Histb own config-space re-definition.
+> 
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4b263753f1f9..3ab33d0aeabf 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3766,6 +3766,7 @@ T:	git git://github.com/broadcom/stblinux.git
- F:	Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
- N:	bcmbca
- N:	bcm[9]?47622
-+N:	bcm[9]?6858
- N:	bcm[9]?63178
- 
- BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE
--- 
-2.25.1
+> Those drivers are special. They get to keep their special code.
 
+It seems to me my driver will be another special case. But instead of
+re-implementing the pci_ops.{read,write} accessors it will use the
+dword-aligned generic config read/write functions.
 
---0000000000009d569f05e0533046
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+-Sergey
 
-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
-dD3eNkKBkknQBWvFfBHcITIVdVccQg5YcIwowkVZhhA3NG0BXGI4l/3o+wjrl2BGO/t969dabQ5x
-/SxGBTK8Vyn6NG7U0Lrjb0VtnrFXgEdxFvJuEQIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
-MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
-dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
-HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
-bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
-Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
-gRdhbmFuZC5nb3JlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
-gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUH4HXhI4xxNPqnv0yfNL6is0cLFYwDQYJ
-KoZIhvcNAQELBQADggEBAAU15tMIqa2yrLdoPoNXMk6scL+6XJK/EVe0Lq0Uyq0SV8wpFV09ujno
-nLmSFYTz1RjmiKr1eu/pwyTImqMUj1JAXZ2zgE0rFS5SvchJsSlB8Nv3WeTaf5Lha5ZmRTaB0U/E
-eo7SFjA240UWLCGqXM69XCc5PHk6mWLNTsyDTgK2kLUKP1RVFswACNsI284fxiwA0qSCu2WnOEKE
-LiytE/NBFgzVtBcryeBtcMnhZgMo0PQYRl4O+58O1O703CD1jiO4/ikP+hUTdxWQiiWAzpE89YCH
-S0Pc2d2yC8RWARAiArr1jXHWA4+snG+TS3A1YVSPRZpboS5AXMutIIQ5YZQxggJtMIICaQIBATBr
-MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
-YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxzcZR0ocq9f8sVOu8wDQYJYIZI
-AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIbAuFEeJzlaHshQF9RsUzo/E0asC8V2SWAAUPv/
-KNggMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDUzMTE4NDYy
-NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
-AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
-hkiG9w0BAQEFAASCAQBSlATr3Uo7eB+gbCk+C9Ph1/1B/QNTFUylbbPiNvKKIYDC5BkCYLVXbNnz
-q6XwpBh1hOaTpUuFc4vFvOixwuFxZ+4olkfAfV2jzK1MrfUZDslQ/dsBjrRamUXRyCokwRsJMKPP
-NcmFEytAcFfeK/8Gi0qpQoP8sj3oNCqtjSplZfzUkPqVT6DSK/Y6eq/Rvp1xYMTyLiCRUYbMoJre
-xQqhidAiN36Qkx7NNl8iltbczecE5JJraJPHdO91Rcc3mIO5Hv/I+1Ia0nRVWUs+gcLDWjn22MNF
-DuOiWy4nrAD++ZFlanMxbubnuVvmZRgFThh/XAExHpy8uLm/x65sTn/a
---0000000000009d569f05e0533046--
+> 
+> > > 3) Drop the dw_pcie_read_dbi() and dw_pcie_write_dbi() methods exporting.
+> > 
+> > Alas this can't be implemented. I forgot about the inliners defined in the
+> > pcie-designware.h file. But the rest of the denoted above cleanups still
+> > can be (Kirin under question though).

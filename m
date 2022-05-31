@@ -2,118 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107AB5391ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8BFA5391EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 15:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241120AbiEaNjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 09:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
+        id S1344845AbiEaNjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 09:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344791AbiEaNjU (ORCPT
+        with ESMTP id S1344860AbiEaNjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 09:39:20 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BB24A3FD
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:39:14 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id br17so21529362lfb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 06:39:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Woo8oKshTzh9S1tak5uSOyrCGP/mtqNmhpMc/8wYggk=;
-        b=OFDvFn31/wu3lfug6gv87ucAtyVKBEO1I/1Waqyh6F/j07OSi00oe9ClePLZr0WYLg
-         zQhIMZivQm3z839Yi58bpaO1eRHB0x1WEjHxLeF0jIw0IW8SRCJvovpfJyg5b1jL8LJ3
-         y8LbfXr13DKxczo+6XDURGzTbhgPmR1BKmkJFRpv2nAYnRzG20EykhRe3301dYV3bRr/
-         +F7kSINIQUlyoD4LI7WBkEOEIgQXy+Zae5Van3EdCeQdh+Bpg76eBdbjmxcgAIxQd0LD
-         it7KiUWsght1Sg99iMODMylbXiiYmb/DJlmslxA2w/0hRZwD2ry4DSneh98C0pL9jpwR
-         B1sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Woo8oKshTzh9S1tak5uSOyrCGP/mtqNmhpMc/8wYggk=;
-        b=1LcMTLp5nYsq8AHbPvS5ZE8SvyaSt3KpcrioGCCNDk+yj4udlNzXJWqzatUap6DY6m
-         QBWcmjuSYhfSM6/vqZ/YhmDz3l25Syl7u8eG6JTDK2kAVYUt93NXPTDhEBf5gw8fjff4
-         u6Uiac8cFyw41ZCFCaLP05whT5yPWPmPwI2CS8Dx5KA7LSrA4w1mZk5EVbjLDp1TriN7
-         8gBnEmpe1jYY/lJ3E/+MU5Py5gnI3x/fwRXhjwHnJ6mNKXr4+nxDKr4MRLHa25GVHCla
-         NfDqiyMJrhXaMZF0/0d7lJFR5xbrc61BXWr7u/Y2H+HcEUGh2/asHRGJ7/pcpjaG5gkW
-         NtPg==
-X-Gm-Message-State: AOAM532P0Xb20xaMyoK4mf22OD9Nie9zc+TF/qz3H3QBQwhfn/JfK0t2
-        RusteUFyOVKoK7pgfsgMBqrT3KMh2nHOPK+Vd63Z4w==
-X-Google-Smtp-Source: ABdhPJxn1r3MgXJ2C/wc5i1LUO0VYa92fq0hsD61WN7c9DWQuUy4e52MgQnLD+H3DWIDUT8Kmcg4eTj8+At65oR2rc8=
-X-Received: by 2002:a05:6512:3b0e:b0:478:7c53:4d0a with SMTP id
- f14-20020a0565123b0e00b004787c534d0amr28793645lfv.373.1654004354233; Tue, 31
- May 2022 06:39:14 -0700 (PDT)
+        Tue, 31 May 2022 09:39:35 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E2F986D1;
+        Tue, 31 May 2022 06:39:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=k8+0kfbh15DqVWqmUPPXqZdwpqwvfa3/efB+Um28rcA=; b=UuX0SRaS1swoA6ODqc2CXz3ZXz
+        +87aNOIPluPRRrIt5Qjh/RnrRiSPO0UJzukTRFNHhAZUWnN9xVhi9ElcMEoEVuiTZky3ZTleab2K7
+        LP4o72J4GK3V0rlEi5c1FJQzKwpuPeJyMDIjMVMYfWl7d7MBXxkZibkzKiJ3OsKFetKq5fxBq8jSY
+        w3UiOqZzaykYkG50Ksp91LqxhuFw+4xF/DdG2r7UCoMVfUzn8W/GNl+NxUnRxhWccT+8DBhQ/pBA7
+        xUhB+NcqVT6UcSKlv/G+P+Jq40MtS6SYWagvMLG1NFISorW8tSe/RiwFyOg6GFenMZyBXPOav3o9V
+        srcjQW8Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nw255-005PYu-FN; Tue, 31 May 2022 13:38:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3F7A83001F7;
+        Tue, 31 May 2022 15:38:40 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2BA6D2097B8EF; Tue, 31 May 2022 15:38:40 +0200 (CEST)
+Date:   Tue, 31 May 2022 15:38:40 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jack Allister <jalliste@amazon.com>
+Cc:     diapop@amazon.co.uk, metikaya@amazon.co.uk,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: VMX: CPU frequency scaling for intel x86_64 KVM
+ guests
+Message-ID: <YpYaYK7a28DFT5Ne@hirez.programming.kicks-ass.net>
+References: <20220531105925.27676-1-jalliste@amazon.com>
 MIME-Version: 1.0
-References: <20220520114242.150235-1-benchuanggli@gmail.com>
-In-Reply-To: <20220520114242.150235-1-benchuanggli@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 31 May 2022 15:38:37 +0200
-Message-ID: <CAPDyKFoQP=4OSwcjj6bJOxDXvrWjqwi-MpvpMe4L5ftWwkEhFQ@mail.gmail.com>
-Subject: Re: [RESEND, PATCH] mmc: sdhci-pci-gli: Fix GL9763E runtime PM when
- the system resumes from suspend
-To:     Ben Chuang <benchuanggli@gmail.com>
-Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, greg.tu@genesyslogic.com.tw,
-        ben.chuang@genesyslogic.com.tw, SeanHY.Chen@genesyslogic.com.tw,
-        jason.lai@genesyslogic.com.tw, victor.shih@genesyslogic.com.tw,
-        kane.chen@intel.corp-partner.google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531105925.27676-1-jalliste@amazon.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 May 2022 at 13:43, Ben Chuang <benchuanggli@gmail.com> wrote:
->
-> When the system resumes from suspend (S3 or S4), the power mode is
-> MMC_POWER_OFF. In this status, gl9763e_runtime_resume() should not enable
-> PLL. Add a condition to this function to enable PLL only when the power
-> mode is MMC_POWER_ON.
->
-> Fixes: d607667bb8fa (mmc: sdhci-pci-gli: Add runtime PM for GL9763E)
-> Signed-off-by: Ben Chuang <benchuanggli@gmail.com>
+On Tue, May 31, 2022 at 10:59:25AM +0000, Jack Allister wrote:
+> A VMM can control a vCPU's CPU frequency by interfacing with KVM via
+> the vCPU file descriptor to enable/set CPU frequency scaling for a
+> guest. Instead of creating a separate IOCTL to this this, KVM capabil-
+> ities are extended to include a capability called
+> KVM_CAP_CPU_FREQ_SCALING.
+> 
+> A generic set_cpu_freq interface is added to kvm_x86_ops
+> to allow for architecture (AMD/Intel) independent CPU frequency
+> scaling setting.
+> 
+> For Intel platforms, Hardware-Controlled Performance States (HWP) are
+> used to implement CPU scaling within the guest. Further information on
+> this mechanism can be seen in Intel SDM Vol 3B (section 14.4). The CPU
+> frequency is set as soon as this function is called and is kept running
+> until explicitly reset or set again.
+> 
+> Currently the AMD frequency setting interface is left unimplemented.
+> 
+> Please note that CPU frequency scaling will have an effect on host
+> processing in it's current form. To change back to full performance
+> when running in host context an IOCTL with a frequency value of 0
+> is needed to run back at uncapped speed.
 
-Sorry for the delay, I have been out traveling. Unfortunately this
-didn't make it for v5.18, although I have queued it up for v5.19 and
-added a stable tag.
-
-Thanks and kind regards
-Uffe
-
-
-> ---
-> Hi,
->
-> Sorry, resend this patch because typo two email addresses.
-> Sorry for Adrian and Kane.
->
-> Best regards,
-> Ben
-> ---
->  drivers/mmc/host/sdhci-pci-gli.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
-> index d09728c37d03..d81e5dc90e15 100644
-> --- a/drivers/mmc/host/sdhci-pci-gli.c
-> +++ b/drivers/mmc/host/sdhci-pci-gli.c
-> @@ -972,6 +972,9 @@ static int gl9763e_runtime_resume(struct sdhci_pci_chip *chip)
->         struct sdhci_host *host = slot->host;
->         u16 clock;
->
-> +       if (host->mmc->ios.power_mode != MMC_POWER_ON)
-> +               return 0;
-> +
->         clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
->
->         clock |= SDHCI_CLOCK_PLL_EN;
-> --
-> 2.36.0
->
+Nowhere does this explain *WHY* we would want to do this?

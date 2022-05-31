@@ -2,141 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514B5538FDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD9A538FDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343834AbiEaL3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 07:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
+        id S1343838AbiEaLbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 07:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235213AbiEaL3c (ORCPT
+        with ESMTP id S235213AbiEaLbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 07:29:32 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4815956FBE;
-        Tue, 31 May 2022 04:29:31 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24VADnwf008819;
-        Tue, 31 May 2022 11:29:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=MWJNEvmLnQ7b1SoYG+r2ZoWJVqcH6a53P8JH4dFdcvg=;
- b=EeAI+GU2aeitzyymDENs4vP/E/C4Xlo5EPydGcBJk90GDkYafGNJJuMYb8nMweaCw6JR
- 8neJFL/fLusTwUuM0O2ZT3fhQ7GmJg8ivkHkKJB1nZINz6gQzx5cFHkv9zggGdQzXCf/
- ZWQDyb4rTPfSNataZpij8/qPNmiA3AupVErHFKoNtuuJGvaxv0n3XHbMYRYESQf84ICL
- xUwVlJgiRv9Iw5JJEXRkgDt8apgRqMNfPfEi2t4ATUlukhh8zLxuKguGjiXLvGn7WYwd
- EeY6TWsvm0VNCYY8g31OBkXPkecz17AXtJgGN5hDggPx2xI7ONRS/9d7gQqy4tyNq98U tg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdh3118up-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 11:29:28 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24VAFmgE018942;
-        Tue, 31 May 2022 11:29:27 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdh3118u9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 11:29:27 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24VBLkol022481;
-        Tue, 31 May 2022 11:29:25 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06fra.de.ibm.com with ESMTP id 3gbcb7k1xn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 May 2022 11:29:25 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24VBTMXb47644982
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 May 2022 11:29:22 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 24280A405B;
-        Tue, 31 May 2022 11:29:22 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 87F3EA4054;
-        Tue, 31 May 2022 11:29:21 +0000 (GMT)
-Received: from [9.171.36.152] (unknown [9.171.36.152])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 31 May 2022 11:29:21 +0000 (GMT)
-Message-ID: <a1b60913-c261-f8f0-d8bc-a536dcb64c52@linux.ibm.com>
-Date:   Tue, 31 May 2022 13:29:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 0/4] KVM: s390: selftests: Provide TAP output in tests
-Content-Language: en-US
-To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-References: <20220531101554.36844-1-thuth@redhat.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20220531101554.36844-1-thuth@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: j5mIJ4VbVYQWbpKnQvweuT8s-MBOBH7c
-X-Proofpoint-GUID: 9YIdFaTq2U7r2UXf7Hy5Ab5caIFuWj2i
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 31 May 2022 07:31:33 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C577B56FBE;
+        Tue, 31 May 2022 04:31:32 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24VBVGFF044912;
+        Tue, 31 May 2022 06:31:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1653996676;
+        bh=15TvHxwZmkBImPUYw0cYQeU2mzoHVYOnrEHB80/kkUA=;
+        h=From:To:CC:Subject:Date;
+        b=ibqbci39T+a6fTZhPnrfYwBEfgjL0pzHhgV8wilqSSkuhtvqmvqUv3op0hx8zTc9D
+         URdbgjB1mwRyviTzhxCcz9Kj4DRpCGJY8Z3O9PHiMvSdj4HoujJfojFFcU5vWyFA8l
+         +XkHjwNQsQchqz//bB6a/kXY6EnG6BABjmTMNjrY=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24VBVGU4017478
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 31 May 2022 06:31:16 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 31
+ May 2022 06:31:15 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 31 May 2022 06:31:15 -0500
+Received: from ula0492258.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24VBV92o064165;
+        Tue, 31 May 2022 06:31:10 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
+        <vladimir.oltean@nxp.com>, <grygorii.strashko@ti.com>,
+        <vigneshr@ti.com>, <nsekhar@ti.com>
+CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kishon@ti.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>
+Subject: [PATCH 0/3] Add support for QSGMII mode to am65-cpsw driver
+Date:   Tue, 31 May 2022 17:00:55 +0530
+Message-ID: <20220531113058.23708-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-05-31_04,2022-05-30_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- malwarescore=0 mlxlogscore=999 phishscore=0 bulkscore=0 spamscore=0
- impostorscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205310058
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 31.05.22 um 12:15 schrieb Thomas Huth:
-> This patch series is motivated by Shuah's suggestion here:
-> 
->   https://lore.kernel.org/kvm/d576d8f7-980f-3bc6-87ad-5a6ae45609b8@linuxfoundation.org/
-> 
-> Many s390x KVM selftests do not output any information about which
-> tests have been run, so it's hard to say whether a test binary
-> contains a certain sub-test or not. To improve this situation let's
-> add some TAP output via the kselftest.h interface to these tests,
-> so that it easier to understand what has been executed or not.
-> 
-> v4:
->   - Rebased to include test_termination() now in the memop test
->   - Reworked the extension capability check in the memop test
-> 
-> v3:
->   - Added comments / fixed cosmetics according to Janosch's and
->     Janis' reviews of the v2 series
->   - Added Reviewed-by tags from the v2 series
-> 
-> v2:
->   - Reworked the extension checking in the first patch
->   - Make sure to always print the TAP 13 header in the second patch
->   - Reworked the SKIP printing in the third patch
-> 
-> Thomas Huth (4):
->    KVM: s390: selftests: Use TAP interface in the memop test
->    KVM: s390: selftests: Use TAP interface in the sync_regs test
->    KVM: s390: selftests: Use TAP interface in the tprot test
->    KVM: s390: selftests: Use TAP interface in the reset test
-> 
->   tools/testing/selftests/kvm/s390x/memop.c     | 95 +++++++++++++++----
->   tools/testing/selftests/kvm/s390x/resets.c    | 38 ++++++--
->   .../selftests/kvm/s390x/sync_regs_test.c      | 87 +++++++++++++----
->   tools/testing/selftests/kvm/s390x/tprot.c     | 29 +++++-
->   4 files changed, 197 insertions(+), 52 deletions(-)
-> 
+Add support for QSGMII mode to am65-cpsw driver.
 
-Thanks applied and queued.
+For full functionality of QSGMII mode in am65-cpsw driver, phy-gmii-sel
+driver has to be configured. This has been implemented in another series
+at:
+https://lore.kernel.org/r/20220531111221.22963-1-s-vadapalli@ti.com
+
+There is no direct dependency on the above series being merged.
+
+Siddharth Vadapalli (3):
+  dt-bindings: net: ti: k3-am654-cpsw-nuss: Update bindings for J7200
+    CPSW5G
+  net: ethernet: ti: am65-cpsw: Add support for QSGMII mode
+  net: ethernet: ti: am65-cpsw: Move phy_set_mode_ext() to correct
+    location
+
+ .../bindings/net/ti,k3-am654-cpsw-nuss.yaml   |  4 ++--
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c      | 22 ++++++++++++++-----
+ drivers/net/ethernet/ti/am65-cpsw-nuss.h      |  1 +
+ 3 files changed, 19 insertions(+), 8 deletions(-)
+
+-- 
+2.36.1
+

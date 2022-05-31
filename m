@@ -2,75 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E97A8538D88
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA61B538D8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245102AbiEaJNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 05:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
+        id S245112AbiEaJOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 05:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235570AbiEaJNf (ORCPT
+        with ESMTP id S234632AbiEaJOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 05:13:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 360818A071
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:13:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653988413;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2jlUopi4YBm49oTnK+gs+DTUpSL7wCA5tJxPfgHvoDA=;
-        b=J7i1l3P1oE9p3tTIpswV+Thbf/s8gizxy/Kw7gHGzilD+h4rVYJWkVMoT12Tcihgl6El0U
-        aI9uu6mlRWCd8ejna3h7AnyJowYpDVlmJaexKo1HY+Ad1SaynpJc0rwbFBDD+f289dqS6h
-        cSDva1NSl9exAgFz/eYQD9GX9fl9DCY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-168-4WBjroF3OJuCd2WhFKekYQ-1; Tue, 31 May 2022 05:13:27 -0400
-X-MC-Unique: 4WBjroF3OJuCd2WhFKekYQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5BECE85A5BC;
-        Tue, 31 May 2022 09:13:27 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A4B3FC27E98;
-        Tue, 31 May 2022 09:13:26 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <YpXUrclhwN+oOlfj@rabbit.intern.cm-ag>
-References: <YpXUrclhwN+oOlfj@rabbit.intern.cm-ag> <YnI7lgazkdi6jcve@rabbit.intern.cm-ag> <Yl75D02pXj71kQBx@rabbit.intern.cm-ag> <Yl7d++G25sNXIR+p@rabbit.intern.cm-ag> <YlWWbpW5Foynjllo@rabbit.intern.cm-ag> <507518.1650383808@warthog.procyon.org.uk> <509961.1650386569@warthog.procyon.org.uk> <705278.1650462934@warthog.procyon.org.uk> <263652.1653986121@warthog.procyon.org.uk>
-To:     Max Kellermann <mk@cm4all.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: fscache corruption in Linux 5.17?
+        Tue, 31 May 2022 05:14:18 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4238A328
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:14:17 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id m26so3247029ljb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2OVCYgnsO9VXl16r4mJF3rP7SyoUZlqXKC/WkfdR69g=;
+        b=IxMvO2t21VERLlSdrkYYqyhbafynN+JdXxRfPRaHs6HlX74d9/yOVOADN5kTCiot21
+         0IMp6fqZVuZMS0IEunaEfFezW/0I+sNne8Mrko8HpoQRlYPolzW1q8eShNKCmsDIyJN/
+         GQIvYIRJiiaunondXzFA8/WVkbiu4GYCG7/ewtlBZLs4wakX719AbAtsOQCyUoDFCW1a
+         eeG3gfAnSx5rSelHxnEPKg+9X2u/jJhbYfTm08NsFDhhmM5kH//WSdNTrJ3A6zvwzHTX
+         h5Tv35LSNgGm8wd/Qpnywp3VHpX6i1LesCW1Fl+AuUwLY84vScRuasvZDmzEka69CBbM
+         Srcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2OVCYgnsO9VXl16r4mJF3rP7SyoUZlqXKC/WkfdR69g=;
+        b=Xw2be++NOPxSBpwD3zAcB4DfvY78dIRQJjZnuk0J/dQvxd44kFhk6/3KGsTAbRsBxM
+         mEAtjrySLUU85bumQQob1xYpqyhqTF0IfRfe5yjZZJuUt8PbqgGMw/q8mqdyLDJ+t8zZ
+         87/SjlpYeRq687RVFW5zXkFmGpjf7kunzkXgay+Lj4oSc+LNjoiD5SSNwj+hNt+lJus/
+         X2niQTcG9UC5kbGCIsXvG4OcLEmEqo04V4+fts6IwKRakJsatsvuMuxDFXKYXe+N/xD3
+         0BFdVFJuUh0qgcwVSl4AKL8PDL8uO3k/Or8Zb15xKptmBO37Q45cutIVMnWlICjXSxOg
+         wrHA==
+X-Gm-Message-State: AOAM5314ic3wwOjCaSMXnahYWaIcjGXEx1zKw8tQ0YBKQpROPS6se+b1
+        ZdItRNHNJkTdG7y1vrgp9cnKQGNzloMERrSUeSlp+g==
+X-Google-Smtp-Source: ABdhPJyuV+gxkk4LkVlziu4ujj3riLftL53ZxueuE2wl3swI6nn1fiyJkXzEaqwLINDRRBA/HoxZ3LJA6Yom9ycDV4Y=
+X-Received: by 2002:a2e:90da:0:b0:255:4d38:f21e with SMTP id
+ o26-20020a2e90da000000b002554d38f21emr6842287ljg.92.1653988455515; Tue, 31
+ May 2022 02:14:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <325230.1653988405.1@warthog.procyon.org.uk>
-Date:   Tue, 31 May 2022 10:13:25 +0100
-Message-ID: <325231.1653988405@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <000000000000f0b26205e04a183b@google.com> <3d3c6b5f-84cd-cb25-812e-dac77e02ddbf@kernel.dk>
+ <e0867860-12c6-e958-07de-cfbcf644b9fe@icloud.com> <bcac089a-36e5-0d85-1ec3-b683dac68b4f@kernel.dk>
+ <CACT4Y+aqriNp1F5CJofqaxNMM+-3cxNR2nY0tHEtb4YDqDuHtg@mail.gmail.com> <7c582099-0eef-6689-203a-606cb2f69391@kernel.dk>
+In-Reply-To: <7c582099-0eef-6689-203a-606cb2f69391@kernel.dk>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 31 May 2022 11:14:04 +0200
+Message-ID: <CACT4Y+bEKD7fREyiTst2oA7rjTz3u3LWLe23QmSBAQ=Piir3Ww@mail.gmail.com>
+Subject: Re: [syzbot] UBSAN: array-index-out-of-bounds in io_submit_sqes
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Hao Xu <haoxu.linux@icloud.com>,
+        syzbot <syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Max Kellermann <mk@cm4all.com> wrote:
+On Tue, 31 May 2022 at 11:07, Jens Axboe <axboe@kernel.dk> wrote:
+>
+> On 5/31/22 3:05 AM, Dmitry Vyukov wrote:
+> > On Tue, 31 May 2022 at 11:01, Jens Axboe <axboe@kernel.dk> wrote:
+> >>
+> >> On 5/31/22 3:00 AM, Hao Xu wrote:
+> >>> On 5/31/22 16:45, Jens Axboe wrote:
+> >>>> On 5/31/22 1:55 AM, syzbot wrote:
+> >>>>> Hello,
+> >>>>>
+> >>>>> syzbot found the following issue on:
+> >>>>>
+> >>>>> HEAD commit:    3b46e4e44180 Add linux-next specific files for 20220531
+> >>>>> git tree:       linux-next
+> >>>>> console output: https://syzkaller.appspot.com/x/log.txt?x=16e151f5f00000
+> >>>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=ccb8d66fc9489ef
+> >>>>> dashboard link: https://syzkaller.appspot.com/bug?extid=b6c9b65b6753d333d833
+> >>>>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> >>>>>
+> >>>>> Unfortunately, I don't have any reproducer for this issue yet.
+> >>>>>
+> >>>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> >>>>> Reported-by: syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com
+> >>>>>
+> >>>>> ================================================================================
+> >>>>> ================================================================================
+> >>>>> UBSAN: array-index-out-of-bounds in fs/io_uring.c:8860:19
+> >>>>> index 75 is out of range for type 'io_op_def [47]'
+> >>>>
+> >>>> 'def' is just set here, it's not actually used after 'opcode' has been
+> >>>> verified.
+> >>>>
+> >>>
+> >>> Maybe we can move it to be below the opcode check to comfort UBSAN.
+> >>
+> >> Yeah that's what I did, just rebased it to get rid of it:
+> >>
+> >> https://git.kernel.dk/cgit/linux-block/commit/?h=io_uring-5.19&id=fcde59feb1affb6d56aecadc3868df4631480da5
+> >
+> > If you are rebasing it, please add the following tag so that the bug
+> > is closed later:
+> >
+> > Tested-by: syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com
+>
+> Sorry, missed that, would be a bit confusing?
 
-> > Can I put that down as a Tested-by?
-> 
-> Yes.  A month later, still no new corruption.
+Why confusing? It tested it, no?
 
-Thanks!
+> 5.20 branch is rebased
+> on top of that too. Can we just do:
+>
+> #syz fix: io_uring: add io_op_defs 'def' pointer in req init and issue
+>
+> ?
 
-David
-
+In most cases it will work. However, there is no way to distinguish
+unfixed and fixed versions of the patch based on the title.
+So if the unfixed version manages to reach all syzbot builds, it will
+close the bug at that point. And then can start reporting duplicates
+since the bug is still present. But practically unlikely to happen.
+The tag allows to distinguish unfixed and fixed versions of the patch,
+so it will work reliably w/o possible duplicates.

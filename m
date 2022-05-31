@@ -2,157 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DB3538E0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F384538E11
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 11:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245369AbiEaJxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 05:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        id S245368AbiEaJ43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 05:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240624AbiEaJxU (ORCPT
+        with ESMTP id S243635AbiEaJ4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 05:53:20 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E8513C
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:53:18 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id c5-20020a1c3505000000b0038e37907b5bso933543wma.0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:53:17 -0700 (PDT)
+        Tue, 31 May 2022 05:56:24 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E665039BA4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:56:22 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id m20so25465189ejj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 02:56:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4rKprNNec0+8a+HzIgH8CQphH+rVeuEGy0qnazrjUTg=;
-        b=3Seb/Sz+CcptZDi7CfLb3KgZbKncX0COAHsXhzL6CjsKPWirp71M6Djsn1k5YpLrUG
-         VQmKsc7E3EDMcXZEvGY91Q6SictNYrMkxRuIXbyAp1RpudQjeex0/Ieta/SlDbjdVz8J
-         SXJMcYiQ6TLjKCNjKMlVSvDXlauq5dZv8FqIKd0MG59IvzGlk5PNPq0raHqwjXYDRavn
-         oBYFg14YHtKehznVGuxqRwVAC7AfYV5pnZaCclLqUynw/UBRGBmgd80N1DF4Ec2f07aF
-         fxzEaWglThg0celts2sOV2kSSy1+pMH38+LXiHUdZ8lGjwa1EsuOuRLGlARu4mVETmb5
-         NdDw==
+        bh=IjUcMygO4GTAkhw44QoQ4UMULc/veIYWgYx1C+Vi5DI=;
+        b=DrO53+KoaAbpjvnulJ4LTgaRPx/eeEbBZXLaOoN2g5+l9BDpVsZsXr/R2ddAmikqpp
+         l2GtpHPLgkG7swp63Ht0PeK5wwPj2mg+o+W5LKEizccre+g6h9zzkscRUqJa8hNuWZVJ
+         U+GBvers5NHvax767zsSt1O1Vacx7rkQ7znGZXrjB3vuTPa4h5A9VvKkb25f/SvxlklE
+         LoQtSII7rAllU0bWi66hlmw+xYOqF1WJRS5pbC/f7/qyGx10Mi4CSKaRUxco5qaZ8r6p
+         /F20RUaKv2ZafTD57+WfBP3EA3felTPvkpHjczoHvPNL3HdFAXzm549kjdpUm8cfye9S
+         pBzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=4rKprNNec0+8a+HzIgH8CQphH+rVeuEGy0qnazrjUTg=;
-        b=k0PEvgOY0+qRV3VVTSbRLH+jyaVyxaR4cggMmJxDYxJCb7G+7qVY5XSKqxXCV4uwj/
-         2eHFw60/6b0R4vzAjvxXZlGxXCFs4niYC5HJeN74jEKTvExqLMxpu7fwhXp9btn9bloK
-         rH33xHzUkenKfFCsxDsusHH8Ap6NE3zDW0gh3OGBucgv9G7Nlj+oc8sFGDtPu3GpEuht
-         xg36S+LDLrLQXWvQTK8S+JUCF1G3ILz/wnZpWcWtsgptg1iXzwMWaJIDMADurrgaIrHY
-         fNldtwQjN3vz+A6WR5SAnTdoWDb0iy7o3ay/RUeB0axkmr0KC5l0xAT5x54NyoOo3loi
-         IZwA==
-X-Gm-Message-State: AOAM532rA1625YLqCz5//2nfMpzy6gMxlZ0J3pTl0RbpzxbovWXbxkGW
-        CAD8E/KYeEjTIjArEUUib2N8R3FIMa8ep1J0
-X-Google-Smtp-Source: ABdhPJz4iKVZtuI6VdmVfTbaq3GSasW7F19Y+f9LGbY0oSiZSm87O7p9bz2yRLBqIKan1k/zSSDqmg==
-X-Received: by 2002:a05:600c:4f0c:b0:397:6a3a:d3f9 with SMTP id l12-20020a05600c4f0c00b003976a3ad3f9mr22904723wmq.103.1653990796546;
-        Tue, 31 May 2022 02:53:16 -0700 (PDT)
-Received: from [10.188.163.71] (cust-east-parth2-46-193-73-98.wb.wifirst.net. [46.193.73.98])
-        by smtp.gmail.com with ESMTPSA id c18-20020a5d5292000000b0020ff3a2a925sm13236509wrv.63.2022.05.31.02.53.15
+        bh=IjUcMygO4GTAkhw44QoQ4UMULc/veIYWgYx1C+Vi5DI=;
+        b=bCvSw2W/WOMbLR1nemSu+C04DSFkjP8Fhz6Ne2aHSgmurU/nB/xIdicdn1OTqSn6nD
+         uCOwfVsKSuM6prGfRKKK8xlbjfSaANhz/uuG8iXURNCIkQh76yS9Oh5uqVxgV60CiXlV
+         mCYcp8/wTSAp66MUEl1a5a3RKdrgA5CeuStVRiJkXrOSLcGCrOTNPlnAfbIMD2GF0teL
+         IvQd7LYMXkLEJdU3t9mNZlibI3l7DSB+h8TWKpoDfeGa1W3lQhLv3Uf+Q5ecv4M87i+R
+         rcTYhtYJzD4HTodDfx/FVnuyZ9m8cw7MxQgbi29CgxGvCNtaw+XAiPijGok8d6fUvuKR
+         Stzg==
+X-Gm-Message-State: AOAM5327aeCYTpPrRslBgCUvVX5pi0RaX8+6QRmbzZU2rafgtvB+rnv9
+        YX9ga0Fp9QlebTRgLmsmCr3S8A==
+X-Google-Smtp-Source: ABdhPJwByf9S4EVKSk87YILqPFVu3WlNurAiBi0GrfnAmMVvKxUAQqaXetU6Xqd1cWv6fejDbS9ddA==
+X-Received: by 2002:a17:906:6bd3:b0:6fe:8c20:f218 with SMTP id t19-20020a1709066bd300b006fe8c20f218mr52262411ejs.32.1653990981278;
+        Tue, 31 May 2022 02:56:21 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id ay21-20020a170906d29500b006feba4ef020sm4728945ejb.180.2022.05.31.02.56.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 02:53:15 -0700 (PDT)
-Message-ID: <7b07cce6-b8a8-7f0b-f4ab-285a9369ef0a@kernel.dk>
-Date:   Tue, 31 May 2022 03:53:14 -0600
+        Tue, 31 May 2022 02:56:20 -0700 (PDT)
+Message-ID: <e92618c0-056c-5854-9bb3-5fba90a82d96@linaro.org>
+Date:   Tue, 31 May 2022 11:56:19 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [syzbot] UBSAN: array-index-out-of-bounds in io_submit_sqes
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/6] phy: samsung-ufs: move cdr offset to drvdata
 Content-Language: en-US
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Hao Xu <haoxu.linux@icloud.com>,
-        syzbot <syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000f0b26205e04a183b@google.com>
- <3d3c6b5f-84cd-cb25-812e-dac77e02ddbf@kernel.dk>
- <e0867860-12c6-e958-07de-cfbcf644b9fe@icloud.com>
- <bcac089a-36e5-0d85-1ec3-b683dac68b4f@kernel.dk>
- <CACT4Y+aqriNp1F5CJofqaxNMM+-3cxNR2nY0tHEtb4YDqDuHtg@mail.gmail.com>
- <7c582099-0eef-6689-203a-606cb2f69391@kernel.dk>
- <CACT4Y+bEKD7fREyiTst2oA7rjTz3u3LWLe23QmSBAQ=Piir3Ww@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CACT4Y+bEKD7fREyiTst2oA7rjTz3u3LWLe23QmSBAQ=Piir3Ww@mail.gmail.com>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-phy@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        avri.altman@wdc.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, chanho61.park@samsung.com,
+        pankaj.dubey@samsung.com, linux-fsd@tesla.com,
+        Bharat Uppal <bharat.uppal@samsung.com>
+References: <20220531012220.80563-1-alim.akhtar@samsung.com>
+ <CGME20220531012341epcas5p19b15b4916b210687ab6b46d6da0b2273@epcas5p1.samsung.com>
+ <20220531012220.80563-3-alim.akhtar@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220531012220.80563-3-alim.akhtar@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/22 3:14 AM, Dmitry Vyukov wrote:
-> On Tue, 31 May 2022 at 11:07, Jens Axboe <axboe@kernel.dk> wrote:
->>
->> On 5/31/22 3:05 AM, Dmitry Vyukov wrote:
->>> On Tue, 31 May 2022 at 11:01, Jens Axboe <axboe@kernel.dk> wrote:
->>>>
->>>> On 5/31/22 3:00 AM, Hao Xu wrote:
->>>>> On 5/31/22 16:45, Jens Axboe wrote:
->>>>>> On 5/31/22 1:55 AM, syzbot wrote:
->>>>>>> Hello,
->>>>>>>
->>>>>>> syzbot found the following issue on:
->>>>>>>
->>>>>>> HEAD commit:    3b46e4e44180 Add linux-next specific files for 20220531
->>>>>>> git tree:       linux-next
->>>>>>> console output: https://syzkaller.appspot.com/x/log.txt?x=16e151f5f00000
->>>>>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=ccb8d66fc9489ef
->>>>>>> dashboard link: https://syzkaller.appspot.com/bug?extid=b6c9b65b6753d333d833
->>>>>>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->>>>>>>
->>>>>>> Unfortunately, I don't have any reproducer for this issue yet.
->>>>>>>
->>>>>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->>>>>>> Reported-by: syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com
->>>>>>>
->>>>>>> ================================================================================
->>>>>>> ================================================================================
->>>>>>> UBSAN: array-index-out-of-bounds in fs/io_uring.c:8860:19
->>>>>>> index 75 is out of range for type 'io_op_def [47]'
->>>>>>
->>>>>> 'def' is just set here, it's not actually used after 'opcode' has been
->>>>>> verified.
->>>>>>
->>>>>
->>>>> Maybe we can move it to be below the opcode check to comfort UBSAN.
->>>>
->>>> Yeah that's what I did, just rebased it to get rid of it:
->>>>
->>>> https://git.kernel.dk/cgit/linux-block/commit/?h=io_uring-5.19&id=fcde59feb1affb6d56aecadc3868df4631480da5
->>>
->>> If you are rebasing it, please add the following tag so that the bug
->>> is closed later:
->>>
->>> Tested-by: syzbot+b6c9b65b6753d333d833@syzkaller.appspotmail.com
->>
->> Sorry, missed that, would be a bit confusing?
+On 31/05/2022 03:22, Alim Akhtar wrote:
+> Move CDR lock offset to drv data so that it can
+> be extended for other SoCs which are having CDR
+> lock at different register offset.
 > 
-> Why confusing? It tested it, no?
-
-Usually I'd use that tag if it's a separate commit that fixes an issue,
-and someone (or a bot) has tested it. I think we both agree that the
-change will fix it, but not really tested at that point. Or maybe it is
-now :)
-
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Bharat Uppal <bharat.uppal@samsung.com>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> ---
+>  drivers/phy/samsung/phy-exynos7-ufs.c      | 3 +++
+>  drivers/phy/samsung/phy-exynosautov9-ufs.c | 2 ++
+>  drivers/phy/samsung/phy-samsung-ufs.c      | 3 ++-
+>  drivers/phy/samsung/phy-samsung-ufs.h      | 2 +-
+>  4 files changed, 8 insertions(+), 2 deletions(-)
 > 
->> 5.20 branch is rebased
->> on top of that too. Can we just do:
->>
->> #syz fix: io_uring: add io_op_defs 'def' pointer in req init and issue
->>
->> ?
-> 
-> In most cases it will work. However, there is no way to distinguish
-> unfixed and fixed versions of the patch based on the title.
-> So if the unfixed version manages to reach all syzbot builds, it will
-> close the bug at that point. And then can start reporting duplicates
-> since the bug is still present. But practically unlikely to happen.
-> The tag allows to distinguish unfixed and fixed versions of the patch,
-> so it will work reliably w/o possible duplicates.
+> diff --git a/drivers/phy/samsung/phy-exynos7-ufs.c b/drivers/phy/samsung/phy-exynos7-ufs.c
+> index 7c9008e163db..d1a37273cb1f 100644
+> --- a/drivers/phy/samsung/phy-exynos7-ufs.c
+> +++ b/drivers/phy/samsung/phy-exynos7-ufs.c
+> @@ -11,6 +11,8 @@
+>  #define EXYNOS7_EMBEDDED_COMBO_PHY_CTRL_MASK	0x1
+>  #define EXYNOS7_EMBEDDED_COMBO_PHY_CTRL_EN	BIT(0)
+>  
+> +#define PHY_CDR_LOCK_STATUS    0x5e
 
-Gotcha. Usually I don't rebase anyway, but easier in this case.
+This should be now renamed to match other defines here, so
+EXYNOS7_EMBEDDED_COMBO_PHY_CDR_LOCK_STATUS
 
--- 
-Jens Axboe
 
+Best regards,
+Krzysztof

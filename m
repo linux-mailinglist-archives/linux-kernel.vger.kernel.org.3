@@ -2,60 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C4C539011
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5615B539012
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 13:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242593AbiEaLut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 07:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
+        id S242883AbiEaLvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 07:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiEaLuq (ORCPT
+        with ESMTP id S230080AbiEaLvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 07:50:46 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16359809E;
-        Tue, 31 May 2022 04:50:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=EaX3DGUPmHHCP5bGL2k/AhkjGQklNLSjDKLEp7C+0Go=; b=anR5n6PAL/h5Aqw7nUNlUXMZ24
-        SejeHE5cl1VljKLimUmyGRznnSgZZ8D0hU3397nRGumAc4jWiziLvrS8W4wJcIWP510glOYTqlBuO
-        As5QW8KPgoti56A7eZ5g5ki+Elg2HuQUeq+cV5GViFbEBCnNpwC6CNTiIwU+nBsjtWGUqgE37BY+5
-        7r+L0vZwrlD2PQsaaYirCaZ+LHG1E2A4ZWWQer10P/58q9OMlYSCWDoenEpcyGLlcY64T5Uip10Zg
-        DyD0636qWCYbQWJUlXMrBLRYK9tGzCxN2bWoITzCTKZFq1VynB5EXGpelOMtIhBUo5MlBrGUjPLIf
-        lmeGADeg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60900)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nw0OQ-0004te-MQ; Tue, 31 May 2022 12:50:34 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nw0OM-0002Ma-Pg; Tue, 31 May 2022 12:50:30 +0100
-Date:   Tue, 31 May 2022 12:50:30 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vladimir.oltean@nxp.com,
-        grygorii.strashko@ti.com, vigneshr@ti.com, nsekhar@ti.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kishon@ti.com
-Subject: Re: [PATCH 2/3] net: ethernet: ti: am65-cpsw: Add support for QSGMII
- mode
-Message-ID: <YpYBBp8Io116bBwM@shell.armlinux.org.uk>
-References: <20220531113058.23708-1-s-vadapalli@ti.com>
- <20220531113058.23708-3-s-vadapalli@ti.com>
+        Tue, 31 May 2022 07:51:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542249AE57
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 04:51:08 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24V9kRtf029119;
+        Tue, 31 May 2022 11:50:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=o52iNdoPgfNxtCXuGtUnTHxhtVjoQFXXfw2YyfadNQ4=;
+ b=nxEFXMvwbp5pU0Q15dqBk8nlrxUJvvNntWb74U7wv4TcxEEzGjbqeANQIQIRz7z69ZA+
+ Wb9ghs6u1/4s5bQCSRfixnR6s9JFATai5BN2swBMqPWmIk/iAYY5NLIP4OXyG6R7QEra
+ a5hsTmE8zg75XBKD1Zb+7z+SRAEch0oEZVOvfx7OMXPgzm4qYV8nX1sUmoi430XnCd0Y
+ 6jf0lVoHU1nY3Knq9EtIFE225BgUziSSC3I/LG9Ho7WPfBrzPZPOWa5FWGC2HkIeLATS
+ DBYqbSA8H4Gs5P7ePqfSiK0XiWWZGXCjJkGS/9RalyUnSwQ3pZWYr8c07RN7Cmz7z5KE uA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdgp4a4jr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 May 2022 11:50:53 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24VAjvWr026247;
+        Tue, 31 May 2022 11:50:53 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gdgp4a4jn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 May 2022 11:50:53 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24VBZnYh032334;
+        Tue, 31 May 2022 11:50:52 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma01dal.us.ibm.com with ESMTP id 3gcxt57s88-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 May 2022 11:50:52 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24VBopEA25690410
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 May 2022 11:50:51 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9D681AE066;
+        Tue, 31 May 2022 11:50:51 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1E40CAE062;
+        Tue, 31 May 2022 11:50:45 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.75.179])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 31 May 2022 11:50:44 +0000 (GMT)
+X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Davidlohr Bueso <dave@stgolabs.net>, linux-mm@kvack.org,
+        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>
+Cc:     mhocko@kernel.org, akpm@linux-foundation.org, rientjes@google.com,
+        yosryahmed@google.com, hannes@cmpxchg.org, shakeelb@google.com,
+        dave.hansen@linux.intel.com, tim.c.chen@linux.intel.com,
+        roman.gushchin@linux.dev, gthelen@google.com,
+        a.manzanares@samsung.com, heekwon.p@samsung.com,
+        gim.jongmin@samsung.com, dave@stgolabs.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/6] mm/vmscan: use node_is_toptier helper in node_reclaim
+In-Reply-To: <20220416053902.68517-3-dave@stgolabs.net>
+References: <20220416053902.68517-1-dave@stgolabs.net>
+ <20220416053902.68517-3-dave@stgolabs.net>
+Date:   Tue, 31 May 2022 17:20:42 +0530
+Message-ID: <87h755dip9.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531113058.23708-3-s-vadapalli@ti.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: hFaP5Wlngd4z14fDXM8_M7vK4N94Bcjo
+X-Proofpoint-GUID: 7RA_a--nVo-HGuKedV7RKWPYn2WNoNhL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-05-31_04,2022-05-30_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
+ impostorscore=0 mlxscore=0 clxscore=1011 suspectscore=0 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205310059
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,21 +96,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 05:00:57PM +0530, Siddharth Vadapalli wrote:
->  static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned int mode,
->  				      const struct phylink_link_state *state)
->  {
-> -	/* Currently not used */
-> +	struct am65_cpsw_slave_data *slave = container_of(config, struct am65_cpsw_slave_data,
-> +							  phylink_config);
-> +	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
-> +
-> +	if (state->interface == PHY_INTERFACE_MODE_QSGMII)
-> +		writel(AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
-> +		       port->sgmii_base + AM65_CPSW_SGMII_CONTROL_REG);
+Davidlohr Bueso <dave@stgolabs.net> writes:
 
-What about writing this register when the interface mode isn't QSGMII?
+> We have helpers for a reason.
+>
+> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
+> ---
+>  mm/vmscan.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 1678802e03e7..cb583fcbf5bf 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -4750,7 +4750,7 @@ int node_reclaim(struct pglist_data *pgdat, gfp_t gfp_mask, unsigned int order)
+>  	 * over remote processors and spread off node memory allocations
+>  	 * as wide as possible.
+>  	 */
+> -	if (node_state(pgdat->node_id, N_CPU) && pgdat->node_id != numa_node_id())
+> +	if (node_is_toptier(pgdat->node_id) && pgdat->node_id != numa_node_id())
+>  		return NODE_RECLAIM_NOSCAN;
+>  
+>  	if (test_and_set_bit(PGDAT_RECLAIM_LOCKED, &pgdat->flags))
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+
+Are we really looking at the top tier in a tiered memory hierarchy here?
+The comment seems to suggest we are looking at local NUMA node?
+
+
+-aneesh

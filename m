@@ -2,201 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED92C539328
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B32539332
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 16:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345268AbiEaO2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 10:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
+        id S1345269AbiEaOdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 10:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244389AbiEaO2u (ORCPT
+        with ESMTP id S244389AbiEaOdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 10:28:50 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 867AA8A329
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 07:28:48 -0700 (PDT)
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9DCC020BE49E;
-        Tue, 31 May 2022 07:28:47 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9DCC020BE49E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1654007328;
-        bh=ryNbELSrN1UgeAm1L5RK1KAe6rt4cp/z+pMhBtO69Bc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IT38DGMfxOc0gs/w6HpQF+GUYMrKwnWz1ZY0U2y8afLHLGsV08aw/xB5pnutYT0VW
-         lkDCSUIL1xZzUOC8Jv4kuloC2otZyj2qSHj5E940cbnsVbCkOYn7bMREOm5cmF4V94
-         mizwZNF8eBBqob3iQ/nYyvV1bSIoU4wyr2lW2lUs=
-Date:   Tue, 31 May 2022 09:28:29 -0500
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jianyong Wu <jianyong.wu@arm.com>,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] 9p: Fix refcounting during full path walks for
- fid lookups
-Message-ID: <20220531142829.GA6868@sequoia>
-References: <20220527000003.355812-1-tyhicks@linux.microsoft.com>
- <20220527000003.355812-2-tyhicks@linux.microsoft.com>
- <43525959.9j6oIFhYhY@silver>
+        Tue, 31 May 2022 10:33:46 -0400
+Received: from mail.boiledscript.com (unknown [192.151.158.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921583B574;
+        Tue, 31 May 2022 07:33:45 -0700 (PDT)
+Received: from localhost (unknown [192.168.203.1])
+        by mail.boiledscript.com (Postfix) with ESMTP id EEB8C300A0B;
+        Tue, 31 May 2022 14:33:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ultrarare.space;
+        s=dkim; t=1654007624;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WeyBJFxfzhp6yVpjOleBwXM4j2bOSsmFV0MaQsQ8qHo=;
+        b=YXuIG7y2FUa0CFSBfxStiTJOU2Cq4t+F2LzfScfeNU0rqkygF9+L4ooRjbhCXzH6C21edz
+        oD2gO+525vU715u1cKNnO7r7SEtEMDFuo4qenbGaIq0VPSE5TEaJ8A1qMOpxn6elIuicP8
+        9a0xtNYwUJdM1CsLjApXzFUX8GHnp8kLMBi01ZlneZCZJLysN2TYYBaDShSkfyUa9VaiTv
+        LuqtyHeNxB+7fRqKTSq3aNONl+xjaycoDr/ULz6JyMbOf4XH6d/7iOK6gJT/z1vxS9zEWH
+        ON+n993qIDeJxcJqjZJDDCI06Ge7MaUfJW540A36asYIIX2nOelzwCOXjFmS7g==
+Date:   Tue, 31 May 2022 22:33:30 +0800
+From:   Hilton Chain <hako@ultrarare.space>
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     bryancain3@gmail.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH v2] HID: apple: Workaround for non-Apple keyboards
+Message-ID: <20220531223330.3d63e2fe@ultrarare.space>
+In-Reply-To: <20220531221102.7bd7da7d@ultrarare.space>
+References: <20220529180230.17e9a0f9@ultrarare.space>
+        <20220529182036.10226-1-jose.exposito89@gmail.com>
+        <20220530083752.1973a905@ultrarare.space>
+        <20220530061812.GA10391@elementary>
+        <20220531221102.7bd7da7d@ultrarare.space>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <43525959.9j6oIFhYhY@silver>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Bar: +
+Authentication-Results: mail.boiledscript.com;
+        none
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-30 19:14:43, Christian Schoenebeck wrote:
-> On Freitag, 27. Mai 2022 01:59:59 CEST Tyler Hicks wrote:
-> > Decrement the refcount of the parent dentry's fid after walking
-> > each path component during a full path walk for a lookup. Failure to do
-> > so can lead to fids that are not clunked until the filesystem is
-> > unmounted, as indicated by this warning:
-> > 
-> >  9pnet: found fid 3 not clunked
-> 
-> That explains why I saw so many fids not being clunked with recent Linux 
-> kernel versions while doing some 9p protocol debugging with QEMU recently.
+There's a bunch of non-Apple keyboard misuses Apple's vendor and product
+id, causing hid_apple to be served for them. However they can't handle the
+default fnmode.
 
-In addition to this refcounting bug, there's another one that I noticed
-while running fstests. My series does not fix it and I haven't had a
-chance to look into it more. The generic/531 test triggers it.
+This commit adds an array of non-Apple keyboards' device names, together
+with a function apple_is_non_apple_keyboard() to identify and create
+exception for them.
 
- https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/tree/tests/generic/531
+Signed-off-by: Hilton Chain <hako@ultrarare.space>
+---
+ drivers/hid/hid-apple.c | 40 ++++++++++++++++++++++++++++++++++------
+ 1 file changed, 34 insertions(+), 6 deletions(-)
 
-> 
-> > The improper refcounting after walking resulted in open(2) returning
-> > -EIO on any directories underneath the mount point when using the virtio
-> > transport. When using the fd transport, there's no apparent issue until
-> > the filesytem is unmounted and the warning above is emitted to the logs.
-> 
-> Actually I never saw that open() = -EIO error. Do you have a reproducer?
+diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+index 42a568902f49..4429b25ae3d8 100644
+--- a/drivers/hid/hid-apple.c
++++ b/drivers/hid/hid-apple.c
+@@ -36,7 +36,7 @@
+ #define APPLE_NUMLOCK_EMULATION	BIT(8)
+ #define APPLE_RDESC_BATTERY	BIT(9)
+ #define APPLE_BACKLIGHT_CTL	BIT(10)
+-#define APPLE_IS_KEYCHRON	BIT(11)
++#define APPLE_IS_NON_APPLE	BIT(11)
+ 
+ #define APPLE_FLAG_FKEY		0x01
+ 
+@@ -65,6 +65,10 @@ MODULE_PARM_DESC(swap_fn_leftctrl, "Swap the Fn and left Control keys. "
+ 		"(For people who want to keep PC keyboard muscle memory. "
+ 		"[0] = as-is, Mac layout, 1 = swapped, PC layout)");
+ 
++struct apple_non_apple_keyboard {
++	char *name;
++};
++
+ struct apple_sc_backlight {
+ 	struct led_classdev cdev;
+ 	struct hid_device *hdev;
+@@ -313,6 +317,29 @@ static const struct apple_key_translation swapped_fn_leftctrl_keys[] = {
+ 	{ }
+ };
+ 
++static const struct apple_non_apple_keyboard non_apple_keyboards[] = {
++	{ "SONiX USB DEVICE" },
++	{ "Keychron" },
++	{ }
++};
++
++static bool apple_is_non_apple_keyboard(struct hid_device *hdev)
++{
++	unsigned long i;
++	unsigned long non_apple_total = sizeof(non_apple_keyboards) /
++					sizeof(struct apple_non_apple_keyboard);
++
++	for (i = 0; i < non_apple_total; i++) {
++		char *non_apple = non_apple_keyboards[i].name;
++
++		if (non_apple && strlen(non_apple) &&
++				strncmp(hdev->name, non_apple, strlen(non_apple)) == 0)
++			return true;
++	}
++
++	return false;
++}
++
+ static inline void apple_setup_key_translation(struct input_dev *input,
+ 		const struct apple_key_translation *table)
+ {
+@@ -363,7 +390,7 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
+ 	}
+ 
+ 	if (fnmode == 3) {
+-		real_fnmode = (asc->quirks & APPLE_IS_KEYCHRON) ? 2 : 1;
++		real_fnmode = (asc->quirks & APPLE_IS_NON_APPLE) ? 2 : 1;
+ 	} else {
+ 		real_fnmode = fnmode;
+ 	}
+@@ -667,11 +694,12 @@ static int apple_input_configured(struct hid_device *hdev,
+ 	if ((asc->quirks & APPLE_HAS_FN) && !asc->fn_found) {
+ 		hid_info(hdev, "Fn key not found (Apple Wireless Keyboard clone?), disabling Fn key handling\n");
+ 		asc->quirks &= ~APPLE_HAS_FN;
+-	}
+ 
+-	if (strncmp(hdev->name, "Keychron", 8) == 0) {
+-		hid_info(hdev, "Keychron keyboard detected; function keys will default to fnmode=2 behavior\n");
+-		asc->quirks |= APPLE_IS_KEYCHRON;
++		if (apple_is_non_apple_keyboard(hdev)) {
++			hid_info(hdev,
++				"Non-apple keyboard detected; function keys will default to fnmode=2 behavior\n");
++			asc->quirks |= APPLE_IS_NON_APPLE;
++		}
+ 	}
+ 
+ 	return 0;
 
-The reproducer that I have is binary only (fairly large and runs a bunch
-of different tests) and is used to regression test the Windows Subsystem
-for Linux 2 (WSL2) host <-> guest filesystem sharing. Now that I think
-about it, I'm not sure if the open() = -EIO error happens with other 9p
-servers.
+base-commit: 8ab2afa23bd197df47819a87f0265c0ac95c5b6a
+-- 
+2.36.1
 
-I can try to tease out the exact sequence of filesystem operations from
-this test binary but it might take me a bit. It looks like it has to do
-with switching UIDs, which could make sense because different users may
-not be connected to the filesystem yet (the conditional block that does
-p9_client_attach() and v9fs_fid_add()).
-
-> 
-> > In some cases, the user may not yet be attached to the filesystem and a
-> > new root fid, associated with the user, is created and attached to the
-> > root dentry before the full path walk is performed. Increment the new
-> > root fid's refcount to two in that situation so that it can be safely
-> > decremented to one after it is used for the walk operation. The new fid
-> > will still be attached to the root dentry when
-> > v9fs_fid_lookup_with_uid() returns so a final refcount of one is
-> > correct/expected.
-> > 
-> > Fixes: 6636b6dcc3db ("9p: add refcount to p9_fid struct")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> > ---
-> >  fs/9p/fid.c | 17 +++++------------
-> >  1 file changed, 5 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/fs/9p/fid.c b/fs/9p/fid.c
-> > index 79df61fe0e59..5a469b79c1ee 100644
-> > --- a/fs/9p/fid.c
-> > +++ b/fs/9p/fid.c
-> > @@ -152,7 +152,7 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct
-> > dentry *dentry, const unsigned char **wnames, *uname;
-> >  	int i, n, l, clone, access;
-> >  	struct v9fs_session_info *v9ses;
-> > -	struct p9_fid *fid, *old_fid = NULL;
-> > +	struct p9_fid *fid, *old_fid;
-> > 
-> >  	v9ses = v9fs_dentry2v9ses(dentry);
-> >  	access = v9ses->flags & V9FS_ACCESS_MASK;
-> > @@ -194,13 +194,12 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct
-> > dentry *dentry, if (IS_ERR(fid))
-> >  			return fid;
-> > 
-> > +		refcount_inc(&fid->count);
-> >  		v9fs_fid_add(dentry->d_sb->s_root, fid);
-> >  	}
-> >  	/* If we are root ourself just return that */
-> > -	if (dentry->d_sb->s_root == dentry) {
-> > -		refcount_inc(&fid->count);
-> > +	if (dentry->d_sb->s_root == dentry)
-> >  		return fid;
-> > -	}
-> 
-> Hmm, wouldn't it then be possible that the root fid is returned with refcount 
-> being 2 here?
-
-Yes and I think that's correct. One refcount taken for adding the root
-fid to the root dentry and another refcount taken for the original
-purpose of the lookup.
-
-Reverting this portion of the change and re-testing with the reproducer
-triggers a refcount underflow.
-
-> 
-> >  	/*
-> >  	 * Do a multipath walk with attached root.
-> >  	 * When walking parent we need to make sure we
-> > @@ -212,6 +211,7 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct
-> > dentry *dentry, fid = ERR_PTR(n);
-> >  		goto err_out;
-> >  	}
-> > +	old_fid = fid;
-> >  	clone = 1;
-> >  	i = 0;
-> >  	while (i < n) {
-> > @@ -221,15 +221,8 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct
-> > dentry *dentry, * walk to ensure none of the patch component change
-> >  		 */
-> >  		fid = p9_client_walk(fid, l, &wnames[i], clone);
-> > +		p9_client_clunk(old_fid);
-> >  		if (IS_ERR(fid)) {
-> > -			if (old_fid) {
-> > -				/*
-> > -				 * If we fail, clunk fid which are 
-> mapping
-> > -				 * to path component and not the last 
-> component
-> > -				 * of the path.
-> > -				 */
-> > -				p9_client_clunk(old_fid);
-> > -			}
-> >  			kfree(wnames);
-> >  			goto err_out;
-> >  		}
-> 
-> So this is the actual fix mentioned in the commit log. Makes sense.
-
-I think the refcount_inc() change for the root fid is an important and
-required part of the fix.
-
-> Nitpicking: Wouldn't it be a bit cleaner to set old_fid solely within the 
-> while loop and just before overwriting fid? And as we now have bumped to
-> -std=C11, probably making old_fid a local variable within loop scope only?
-
-You're right that it would be cleaner for the purposes of this single
-patch. In a followup patch in this series, I start tracking the root fid
-with a root_fid variable and that requires "old_fid = root_fid" before
-we enter the loop and then "old_fid = fid" inside of the loop.
-
-Tyler
-
-> 
-> Best regards,
-> Christian Schoenebeck
-> 
-> 
-> 

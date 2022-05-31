@@ -2,352 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256775390E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B055390E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 May 2022 14:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344323AbiEaMhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 08:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
+        id S1344333AbiEaMiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 08:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243424AbiEaMhu (ORCPT
+        with ESMTP id S1344322AbiEaMh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 08:37:50 -0400
-Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF7E3526F
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:37:47 -0700 (PDT)
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id 212264FE; Tue, 31 May 2022 14:37:45 +0200 (CEST)
-Date:   Tue, 31 May 2022 14:37:42 +0200
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux-foundation.org
-Subject: [git pull] IOMMU Updates for Linux v5.19
-Message-ID: <YpYMFlGhQQOt914S@8bytes.org>
+        Tue, 31 May 2022 08:37:56 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8843A3BA58
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 05:37:54 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LCBd23WFmzDqZk;
+        Tue, 31 May 2022 20:37:42 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 31 May 2022 20:37:52 +0800
+Subject: Re: [PATCH v2 2/4] mm/migration: remove unneeded lock page and
+ PageMovable check
+To:     David Hildenbrand <david@redhat.com>
+CC:     <ying.huang@intel.com>, <hch@lst.de>, <dhowells@redhat.com>,
+        <cl@linux.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
+        <mike.kravetz@oracle.com>, <naoya.horiguchi@nec.com>,
+        Minchan Kim <minchan@kernel.org>
+References: <20220425132723.34824-1-linmiaohe@huawei.com>
+ <20220425132723.34824-3-linmiaohe@huawei.com>
+ <525298ad-5e6a-2f8d-366d-4dcb7eebd093@redhat.com>
+ <f5f933dc-450c-f3ac-34e6-d6dc1d901efd@huawei.com>
+ <4cf144a9-fff5-d993-4fcb-7f2dfa6e71bb@redhat.com>
+ <924de987-202b-a97e-e6d2-6bdab530f190@huawei.com>
+ <c566dc2c-fc70-e410-5272-767fa28cbba4@redhat.com>
+ <025d0dc8-a446-b720-14a8-97c041055f48@huawei.com>
+ <143ab5dd-85a9-3338-53b7-e46c9060b20e@redhat.com>
+ <6ba7e2bd-28c1-53ff-a6b7-072c79714dee@huawei.com>
+ <0724b4c4-15f6-e429-f945-f57c619c7270@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <7ca676a9-1f51-47f7-0245-d041d075a440@huawei.com>
+Date:   Tue, 31 May 2022 20:37:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zPPHnwUiWBRWLSRR"
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <0724b4c4-15f6-e429-f945-f57c619c7270@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/5/31 19:59, David Hildenbrand wrote:
+> Sorry for the late reply, was on vacation.
 
---zPPHnwUiWBRWLSRR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+That's all right. Hope you have a great time. ;)
 
-Hi Linus,
+> 
+>>>>
+>>>> But for isolated page, PageLRU is cleared. So when the isolated page is released, __clear_page_lru_flags
+>>>> won't be called. So we have to clear the PG_active and PG_unevictable here manully. So I think
+>>>> this code block works. Or am I miss something again?
+>>>
+>>> Let's assume the following: page as freed by the owner and we enter
+>>> unmap_and_move().
+>>>
+>>>
+>>> #1: enter unmap_and_move() // page_count is 1
+>>> #2: enter isolate_movable_page() // page_count is 1
+>>> #2: get_page_unless_zero() // page_count is now 2
+>>> #1: if (page_count(page) == 1) { // does not trigger
+>>> #2: put_page(page); // page_count is now 1
+>>> #1: put_page(page); // page_count is now 0 -> freed
+>>>
+>>>
+>>> #1 will trigger __put_page() -> __put_single_page() ->
+>>> __page_cache_release() will not clear the flags because it's not an LRU
+>>> page at that point in time, right (-> isolated)?
+>>
+>> Sorry, you're right. I thought the old page will be freed via putback_lru_page which will
+>> set PageLRU back instead of put_page directly. So if the above race occurs, PG_active and
+>> PG_unevictable will remain set while page goes to the buddy and check_free_page will complain
+>> about it. But it seems this is never witnessed?
+> 
+> Maybe
+> 
+> a) we were lucky so far and didn't trigger it
+> b) the whole code block is dead code because we are missing something
+> c) we are missing something else :)
 
-Apologies for the late pull request, I know you prefer the main stuff in
-the first week. Some vacation and a public holiday came in between here.
+I think I found the things we missed in another email [1].
+[1]: https://lore.kernel.org/all/948ea45e-3b2b-e16c-5b8c-4c34de0ea593@huawei.com/
 
-So here are the IOMMU updates for 5.19. Some patches are probably
-arleady merged via the VFIO tree, namely everyting from the
-vfio-notifier-fix topic branch.
+Paste the main content of [1] here:
 
-Also, there will be a merge conflict in MAINTAINERS and
-drivers/iommu/amd/iommu.c. The latter one is resolved by removing the
-function in question, for the former I attached my resolution.
+"
+There are 3 cases in unmap_and_move:
 
-With that in mind:
+1.page is freed through "if (page_count(page) == 1)" code block. This works
+as PG_active and PG_unevictable are cleared here.
 
-The following changes since commit 42226c989789d8da4af1de0c31070c96726d990c:
+2. Failed to migrate the page. The page won't be release so we don't care about it.
 
-  Linux 5.18-rc7 (2022-05-15 18:08:58 -0700)
+3. The page is migrated successfully. The PG_active and PG_unevictable are cleared
+via folio_migrate_flags():
 
-are available in the Git repository at:
+	if (folio_test_clear_active(folio)) {
+		VM_BUG_ON_FOLIO(folio_test_unevictable(folio), folio);
+		folio_set_active(newfolio);
+	} else if (folio_test_clear_unevictable(folio))
+		folio_set_unevictable(newfolio);
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-updates-v5.19
+For the above race case, the page won't be freed through "if (page_count(page) == 1)" code block.
+It will just be migrated and freed via put_page() after folio_migrate_flags() having cleared PG_active
+and PG_unevictable.
+"
+Or Am I miss something again? :)
 
-for you to fetch changes up to b0dacee202efbf1a5d9f5cdfd82049e8b5b085d2:
+> 
+>>
+>>>
+>>> We did not run that code block that would clear PG_active and
+>>> PG_unevictable.
+>>>
+>>> Which still leaves the questions:
+>>>
+>>> a) If PG_active and PG_unevictable was cleared, where?
+>>
+>> For LRU pages, PG_active and PG_unevictable are cleared via __page_cache_release. And for isolated
+>> (LRU) pages, PG_active and PG_unevictable should be cleared ourselves?
+>>
+>>> b) Why is that code block that conditionally clears the flags of any
+>>> value and why can't we simply drop it?
+>>>
+>>
+>> To fix the issue, should we clear PG_active and PG_unevictable unconditionally here?
+> 
+> I wonder if we should simply teach actual freeing code to simply clear
+> both flags when freeing an isolated page? IOW, to detect "isolated LRU"
+> is getting freed and fixup?
 
-  Merge branches 'apple/dart', 'arm/mediatek', 'arm/msm', 'arm/smmu', 'ppc/pamu', 'x86/vt-d', 'x86/amd' and 'vfio-notifier-fix' into next (2022-05-20 12:27:17 +0200)
+IMHO, clearing both flags are done by the caller indeed. Another example I found when I
+read the khugepaged code recently is pasted below:
 
-----------------------------------------------------------------
-IOMMU Updates for Linux v5.19
+collapse_file
+	...
+	page_ref_unfreeze(page, 1);
+	ClearPageActive(page);
+	ClearPageUnevictable(page);
+	unlock_page(page);
+	put_page(page);
+	index++;
+	...
 
-Including:
+Thanks!
 
-	- Intel VT-d driver updates
-	  - Domain force snooping improvement.
-	  - Cleanups, no intentional functional changes.
-
-	- ARM SMMU driver updates
-	  - Add new Qualcomm device-tree compatible strings
-	  - Add new Nvidia device-tree compatible string for Tegra234
-	  - Fix UAF in SMMUv3 shared virtual addressing code
-	  - Force identity-mapped domains for users of ye olde SMMU
-	    legacy binding
-	  - Minor cleanups
-
-	- Patches to fix a BUG_ON in the vfio_iommu_group_notifier
-	  - Groundwork for upcoming iommufd framework
-	  - Introduction of DMA ownership so that an entire IOMMU group
-	    is either controlled by the kernel or by user-space
-
-	- MT8195 and MT8186 support in the Mediatek IOMMU driver
-
-	- Patches to make forcing of cache-coherent DMA more coherent
-	  between IOMMU drivers
-
-	- Fixes for thunderbolt device DMA protection
-
-	- Various smaller fixes and cleanups
-
-----------------------------------------------------------------
-Bjorn Andersson (2):
-      dt-bindings: arm-smmu: Add compatible for Qualcomm SC8280XP
-      iommu/arm-smmu-qcom: Add SC8280XP support
-
-Christophe Leroy (1):
-      iommu/fsl_pamu: Prepare cleanup of powerpc's asm/prom.h
-
-Jason Gunthorpe (5):
-      vfio: Delete the unbound_list
-      iommu: Introduce the domain op enforce_cache_coherency()
-      vfio: Move the Intel no-snoop control off of IOMMU_CACHE
-      iommu: Redefine IOMMU_CAP_CACHE_COHERENCY as the cap flag for IOMMU_CACHE
-      vfio: Require that devices support DMA cache coherence
-
-Jason Gunthorpe via iommu (1):
-      iommu: iommu_group_claim_dma_owner() must always assign a domain
-
-Jean-Philippe Brucker (1):
-      iommu/arm-smmu-v3-sva: Fix mm use-after-free
-
-Joerg Roedel (4):
-      Merge tag 'arm-smmu-updates' of git://git.kernel.org/pub/scm/linux/kernel/git/will/linux into arm/smmu
-      iommu/amd: Increase timeout waiting for GA log enablement
-      Merge tag 'v5.18-rc7' into arm/smmu
-      Merge branches 'apple/dart', 'arm/mediatek', 'arm/msm', 'arm/smmu', 'ppc/pamu', 'x86/vt-d', 'x86/amd' and 'vfio-notifier-fix' into next
-
-Lu Baolu (17):
-      iommu: Add DMA ownership management interfaces
-      driver core: Add dma_cleanup callback in bus_type
-      amba: Stop sharing platform_dma_configure()
-      bus: platform,amba,fsl-mc,PCI: Add device DMA ownership management
-      PCI: pci_stub: Set driver_managed_dma
-      PCI: portdrv: Set driver_managed_dma
-      vfio: Set DMA ownership for VFIO devices
-      vfio: Remove use of vfio_group_viable()
-      vfio: Remove iommu group notifier
-      iommu: Remove iommu group changes notifier
-      iommu/vt-d: Change return type of dmar_insert_one_dev_info()
-      iommu/vt-d: Fold dmar_insert_one_dev_info() into its caller
-      iommu/vt-d: Size Page Request Queue to avoid overflow condition
-      iommu/vt-d: Block force-snoop domain attaching if no SC support
-      iommu/vt-d: Check domain force_snooping against attached devices
-      iommu/vt-d: Remove domain_update_iommu_snooping()
-      iommu/vt-d: Remove hard coding PGSNP bit in PASID entries
-
-Mario Limonciello (3):
-      iommu/amd: Enable swiotlb in all cases
-      dma-iommu: Check that swiotlb is active before trying to use it
-      iommu/amd: Indicate whether DMA remap support is enabled
-
-Matthew Rosato (1):
-      iommu/s390: Tolerate repeat attach_dev calls
-
-Miles Chen (1):
-      iommu/mediatek: Fix NULL pointer dereference when printing dev_name
-
-Muhammad Usama Anjum (1):
-      iommu/vt-d: Remove unneeded validity check on dev
-
-Rob Herring (1):
-      dt-bindings: iommu: Drop client node in examples
-
-Robin Murphy (5):
-      iommu: Introduce device_iommu_capable()
-      iommu: Add capability for pre-boot DMA protection
-      thunderbolt: Make iommu_dma_protection more accurate
-      iommu/arm-smmu: Force identity domains for legacy binding
-      iommu/dma: Explicitly sort PCI DMA windows
-
-Rohit Agarwal (1):
-      dt-bindings: arm-smmu: Add binding for SDX65 SMMU
-
-Suravee Suthikulpanit (1):
-      iommu/amd: Do not call sleep while holding spinlock
-
-Sven Peter (1):
-      MAINTAINERS: Merge DART into ARM/APPLE MACHINE
-
-Thierry Reding (3):
-      dt-bindings: arm-smmu: Document nvidia,memory-controller property
-      dt-bindings: arm-smmu: Add compatible for Tegra234 SOC
-      iommu/arm-smmu: Support Tegra234 SMMU
-
-Vasant Hegde via iommu (1):
-      iommu/amd: Remove redundant check
-
-Xiaoke Wang (1):
-      iommu/msm: Add a check for the return of kzalloc()
-
-Xiaomeng Tong (1):
-      iommu/msm: Fix an incorrect NULL check on list iterator
-
-Yang Yingliang (2):
-      iommu/arm-smmu: fix possible null-ptr-deref in arm_smmu_device_probe()
-      iommu/arm-smmu-v3: check return value after calling platform_get_resource()
-
-Yong Wu (36):
-      dt-bindings: mediatek: mt8195: Add binding for MM IOMMU
-      dt-bindings: mediatek: mt8195: Add binding for infra IOMMU
-      dt-bindings: mediatek: mt8186: Add binding for MM iommu
-      iommu/mediatek: Fix 2 HW sharing pgtable issue
-      iommu/mediatek: Add list_del in mtk_iommu_remove
-      iommu/mediatek: Remove clk_disable in mtk_iommu_remove
-      iommu/mediatek: Add mutex for m4u_group and m4u_dom in data
-      iommu/mediatek: Add mutex for data in the mtk_iommu_domain
-      iommu/mediatek: Adapt sharing and non-sharing pgtable case
-      iommu/mediatek: Add 12G~16G support for multi domains
-      iommu/mediatek: Add a flag DCM_DISABLE
-      iommu/mediatek: Add a flag STD_AXI_MODE
-      iommu/mediatek: Remove the granule in the tlb flush
-      iommu/mediatek: Always enable output PA over 32bits in isr
-      iommu/mediatek: Add SUB_COMMON_3BITS flag
-      iommu/mediatek: Add IOMMU_TYPE flag
-      iommu/mediatek: Contain MM IOMMU flow with the MM TYPE
-      iommu/mediatek: Adjust device link when it is sub-common
-      iommu/mediatek: Allow IOMMU_DOMAIN_UNMANAGED for PCIe VFIO
-      iommu/mediatek: Add a PM_CLK_AO flag for infra iommu
-      iommu/mediatek: Add infra iommu support
-      iommu/mediatek: Add PCIe support
-      iommu/mediatek: Add mt8195 support
-      iommu/mediatek: Only adjust code about register base
-      iommu/mediatek: Just move code position in hw_init
-      iommu/mediatek: Separate mtk_iommu_data for v1 and v2
-      iommu/mediatek: Remove mtk_iommu.h
-      iommu/mediatek-v1: Just rename mtk_iommu to mtk_iommu_v1
-      iommu/mediatek: Add mtk_iommu_bank_data structure
-      iommu/mediatek: Initialise bank HW for each a bank
-      iommu/mediatek: Change the domid to iova_region_id
-      iommu/mediatek: Get the proper bankid for multi banks
-      iommu/mediatek: Initialise/Remove for multi bank dev
-      iommu/mediatek: Backup/restore regsiters for multi banks
-      iommu/mediatek: mt8195: Enable multi banks for infra iommu
-      iommu/mediatek: Add mt8186 iommu support
-
-Yunfei Wang (1):
-      iommu/dma: Fix iova map result check bug
-
- .../devicetree/bindings/iommu/arm,smmu.yaml        |  25 +-
- .../devicetree/bindings/iommu/mediatek,iommu.yaml  |  34 +-
- .../devicetree/bindings/iommu/samsung,sysmmu.yaml  |  10 -
- MAINTAINERS                                        |  10 +-
- drivers/amba/bus.c                                 |  37 +-
- drivers/base/dd.c                                  |   5 +
- drivers/base/platform.c                            |  21 +-
- drivers/bus/fsl-mc/fsl-mc-bus.c                    |  24 +-
- drivers/iommu/amd/amd_iommu_types.h                |   4 +
- drivers/iommu/amd/init.c                           |   8 +-
- drivers/iommu/amd/iommu.c                          |  16 +-
- drivers/iommu/amd/iommu_v2.c                       |  12 +-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c    |  13 +-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c        |   2 +
- drivers/iommu/arm/arm-smmu/arm-smmu-impl.c         |   3 +-
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         |   1 +
- drivers/iommu/arm/arm-smmu/arm-smmu.c              |   8 +-
- drivers/iommu/dma-iommu.c                          |  25 +-
- drivers/iommu/fsl_pamu.c                           |   3 +
- drivers/iommu/fsl_pamu_domain.c                    |   1 +
- drivers/iommu/intel/iommu.c                        | 216 ++---
- drivers/iommu/intel/pasid.c                        |  45 +-
- drivers/iommu/intel/pasid.h                        |   2 +
- drivers/iommu/iommu.c                              | 354 +++++---
- drivers/iommu/msm_iommu.c                          |  22 +-
- drivers/iommu/mtk_iommu.c                          | 980 +++++++++++++++------
- drivers/iommu/mtk_iommu.h                          | 101 ---
- drivers/iommu/mtk_iommu_v1.c                       | 242 ++---
- drivers/iommu/s390-iommu.c                         |  15 +-
- drivers/pci/of.c                                   |   8 +-
- drivers/pci/pci-driver.c                           |  18 +
- drivers/pci/pci-stub.c                             |   1 +
- drivers/pci/pcie/portdrv_pci.c                     |   2 +
- drivers/thunderbolt/domain.c                       |  12 +-
- drivers/thunderbolt/nhi.c                          |  44 +
- drivers/vfio/fsl-mc/vfio_fsl_mc.c                  |   1 +
- drivers/vfio/pci/vfio_pci.c                        |   1 +
- drivers/vfio/platform/vfio_amba.c                  |   1 +
- drivers/vfio/platform/vfio_platform.c              |   1 +
- drivers/vfio/vfio.c                                | 252 +-----
- drivers/vfio/vfio_iommu_type1.c                    |  30 +-
- include/dt-bindings/memory/mt8186-memory-port.h    | 217 +++++
- include/dt-bindings/memory/mt8195-memory-port.h    | 408 +++++++++
- include/dt-bindings/memory/mtk-memory-port.h       |   2 +
- include/linux/amba/bus.h                           |   8 +
- include/linux/device/bus.h                         |   3 +
- include/linux/fsl/mc.h                             |   8 +
- include/linux/intel-iommu.h                        |   3 +-
- include/linux/intel-svm.h                          |   2 +-
- include/linux/iommu.h                              |  69 +-
- include/linux/pci.h                                |   8 +
- include/linux/platform_device.h                    |  10 +-
- include/linux/thunderbolt.h                        |   2 +
- 53 files changed, 2317 insertions(+), 1033 deletions(-)
- delete mode 100644 drivers/iommu/mtk_iommu.h
- create mode 100644 include/dt-bindings/memory/mt8186-memory-port.h
- create mode 100644 include/dt-bindings/memory/mt8195-memory-port.h
-
-Please pull.
-
-Thanks,
-
-	Joerg
-
-diff --cc MAINTAINERS
-index b85ee59e808b,1f4f4ba84c2e..f1b4b77daa5f
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -1834,9 -1829,8 +1826,10 @@@ F:	Documentation/devicetree/bindings/ar
-  F:	Documentation/devicetree/bindings/clock/apple,nco.yaml
-  F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-  F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
-+ F:	Documentation/devicetree/bindings/iommu/apple,dart.yaml
- +F:	Documentation/devicetree/bindings/iommu/apple,sart.yaml
-  F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
- +F:	Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml
-  F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
-  F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
-  F:	Documentation/devicetree/bindings/power/apple*
-@@@ -1845,9 -1839,9 +1838,10 @@@ F:	arch/arm64/boot/dts/apple
-  F:	drivers/clk/clk-apple-nco.c
-  F:	drivers/i2c/busses/i2c-pasemi-core.c
-  F:	drivers/i2c/busses/i2c-pasemi-platform.c
-+ F:	drivers/iommu/apple-dart.c
-  F:	drivers/irqchip/irq-apple-aic.c
-  F:	drivers/mailbox/apple-mailbox.c
- +F:	drivers/nvme/host/apple.c
-  F:	drivers/pinctrl/pinctrl-apple-gpio.c
-  F:	drivers/soc/apple/*
-  F:	drivers/watchdog/apple_wdt.c
-
---zPPHnwUiWBRWLSRR
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmKWDBMACgkQK/BELZcB
-GuP9QhAAziT3t/hlzTkHEK9gwHYXCjl8j6WBSIgBivtFiby/kdCF1jFxkHEptI8p
-IaK946Obu8ccyBpZebH+82xQeZn0B7mBQs4oa/HYdI7dWZgvrQ0gv1hf4U9ThA3O
-sqqrSTQkuKpt17+99gvkJbazf0mceqdlRasnOzclAhH431aXKQMtZYPCha4Jzno6
-EXPf4IGtQX8Myq/7iV2A8NvibH8jXGi+UEKfugichh5wdh11goS/kHsq52SVzuco
-PJS498c0vfFldwegMr4gBoiPdFkc/DIhMe8i+juXO0CRclLkSOft4zgAfdwC++ZX
-Bp/RvCI+1Hom2UWTLvJP460qwZZcEhl5VU/dQjyXnO6B4D+inpgEYrqWzY9fPBXm
-xZq8fPQYZixZ59/+cx64hOBn1b4qhQmCTl66wBukutNM6zpv38pJj86drJiN/1Hi
-88d95qWuOPj1Jnr4xH/LqYX/DQhthD0VvllOzBofqUjyogn1WDhoHYOslOHAFyS1
-VMjUfCz++ey9zZ+q1vVUFCR1009W+k0PyLa9k20DziAUCeJGAuzUIIPwew+Gv2sd
-BA3G2gId6L9Di9wSL3c/cSwfp1jLOagqBVdA9HeHYm6BWwOh5IZFPb4PFRn7UGI3
-ftKoDbCdExbY1CjpHoxQVo5MCgbJejDpI2DL0TVGjLfkRIZu18c=
-=i1nP
------END PGP SIGNATURE-----
-
---zPPHnwUiWBRWLSRR--
+> 

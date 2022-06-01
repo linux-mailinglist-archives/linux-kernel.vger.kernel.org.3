@@ -2,156 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE31A539E2D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46015539E33
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350114AbiFAH00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 03:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
+        id S1350104AbiFAH1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 03:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345538AbiFAH0V (ORCPT
+        with ESMTP id S1344886AbiFAH1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 03:26:21 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8595FF1C
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:26:16 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id t5so957501edc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 00:26:15 -0700 (PDT)
+        Wed, 1 Jun 2022 03:27:47 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6995E174;
+        Wed,  1 Jun 2022 00:27:46 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id c196so1201764pfb.1;
+        Wed, 01 Jun 2022 00:27:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yFS3Rnzfb0unp6UI0nuTf8G/mfgDKJWNbf+GB8d9uhI=;
-        b=yzkX1bG3uR7Qmo+F7Qn+hD60uiQC931MBqEyL6CGfUOrTBWOWU+fSEZRlHsxL+o36H
-         DaqBipXoh9uvBx5bddczFUvjkjeXBBibFH//xj8nkC6+BldNDlqO97uoNDCMjCR2tpbh
-         iXPv3e4OV0sFLNf+AQh/N2HDdJtQ+bcBqcEhEHrumECnJcXgYb0c9sI5pRHJ8gOZ+I4j
-         RKTmx02GpCBTx63+I8GebWfp/M1OilGCQSjE68nmPHe2DS2B4ln1SMWm5hTC543D1aM4
-         c1kvAk/OltrRUqX0oU3syh9MOBrJ4FDVR9It+1wYbKDr/j4x1mN/vt4gTx3gFDbEUdsS
-         MqPQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eMeA/fqvYZU6vrSiCnNJA0sstC2+T/rmbcmFof3BR34=;
+        b=Ve/MDQjVQ36HEHc3RKBr36SX9I68T1b4706XRvOHxHRgDsEzn3JOnjpOjtHXaFBlaE
+         5sKBR5xf0pwoFavEKOjpPGC+XjnBihHNbZG+Shi+XCMgIzx6OXcZAAqI9y/pFOAv6OJk
+         TYwI4uyqOG/3HWq0jJQ3LeYVHTfwsp/ylK+2Fvn9+AQTOFCCVboUB2IldBbynyw5F+68
+         1Lkz3GjBIqDCp2v04ZbG9Eh5biTPgCosHS2Kv3LvfXxCabp2AxUB60JM3j6HTz4UhJpd
+         B9Tq8YCUVg0SaKQI9UeErLNPGiL7bjX8DaO9Yp5sDidUQ+RsNOytfGbCqOD90Zi8gCk+
+         /ovg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yFS3Rnzfb0unp6UI0nuTf8G/mfgDKJWNbf+GB8d9uhI=;
-        b=KWmczbVb8uUIrMW4PnpR5pfripZ1Pxd9dUdNQRVRyYrrkuXN/Jsn8hnSQouo4p851w
-         Hm6uhPAOu6K2nVGmd+aCE8jn6tTiEYaehaxZp+9x5KWXsc0IN6gtrwWnjgHnz96d1BZ7
-         282lxkOEd+QWkx5zx8viMp525Fiw5tVNrLv0tq0irAtPTRLaXSaufRtGNUWsGx9rQY8q
-         7D514POfpksUoYr/hu61NDeNYflpk+ZVm9BjkxfzA75ZZQK9wnLg+LarukTXyDXA/Odl
-         pvXOAGATX5e/QOmqnZ3NsOAHffDcu7Q85QbkD/EgIpF6G9mlwVm2jD89fFGW4X6iydaH
-         KPPw==
-X-Gm-Message-State: AOAM532piP1vSnp4BspOhgX9Xcx3fMmrbBmAJj3k2JEXpEsgX4zuPJkv
-        2wdt+WxoyTafaHxT45zdBwadIw==
-X-Google-Smtp-Source: ABdhPJyfhUlStTcZTz+Ssrs2TvVIfO4c18Qt7HTJuB/uTfvjqG5vQ05BQvumt+AGIXmDE9LMcb26HA==
-X-Received: by 2002:a05:6402:40ce:b0:42b:9d1:96e6 with SMTP id z14-20020a05640240ce00b0042b09d196e6mr66557011edb.262.1654068374634;
-        Wed, 01 Jun 2022 00:26:14 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id h15-20020a170906110f00b006fe98c7c7a9sm359838eja.85.2022.06.01.00.26.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 00:26:14 -0700 (PDT)
-Message-ID: <1f349852-34a7-ff27-3c34-462128802340@linaro.org>
-Date:   Wed, 1 Jun 2022 09:26:12 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eMeA/fqvYZU6vrSiCnNJA0sstC2+T/rmbcmFof3BR34=;
+        b=HYrEk30N/RNCZERlsTzh4oWloZH5ykH8XWqyRUUjInDZD4fZQBkEl1TMdS+KRS167k
+         mw9QNvW3QSxVMqie6OOPZZ9y9/g9Z0dqy+CdhfT7VtWNl4X9+5ufujjIcvhunjjFmqza
+         RrHcD24OGgPzDx0eGH5gc1AQxOVE5kzvaE2ReJNxnCIFqrho1NCkxTj+gk8EJUSRA7vV
+         trBjWEi3oZmwQuxyrwzOXYr2FODVfDTgMUtCWp95BTh7X9QmsYtUQZON+y5+C7osolZd
+         xW8xC5kYb3wAiO2A5WLFubaDJEzDq+ZE9ko8eJPMog1EwfUO5U0/HfPwZDXa6yqjyH+n
+         VbGA==
+X-Gm-Message-State: AOAM532WMBjx9qx4iiZZkOG0by0I12iQzEx64DrS69pu8M5Cgmv4Cv7a
+        PtyjPPJDOooTsy/veUsMsY9yVZwvwIUPxA==
+X-Google-Smtp-Source: ABdhPJzncNVm9JEdvzWZ/WJX8rZD6Uc3eyRjjE+e9aLdBHmlkh2N+ra6ix7Phl7ZYouz3tV5tJAaCQ==
+X-Received: by 2002:a05:6a00:1d8e:b0:518:87e7:db00 with SMTP id z14-20020a056a001d8e00b0051887e7db00mr52648703pfw.84.1654068465543;
+        Wed, 01 Jun 2022 00:27:45 -0700 (PDT)
+Received: from localhost (subs02-180-214-232-26.three.co.id. [180.214.232.26])
+        by smtp.gmail.com with ESMTPSA id gn1-20020a17090ac78100b001df82551cf2sm650434pjb.44.2022.06.01.00.27.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 00:27:44 -0700 (PDT)
+Date:   Wed, 1 Jun 2022 14:27:42 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-doc@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Nikolai Kondrashov <spbnick@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        llvm@lists.linux.dev, stable@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] HID: uclogic: properly format kernel-doc comment for
+ hid_dbg() wrappers
+Message-ID: <YpcU7qeOtShFx8xR@debian.me>
+References: <20220531092817.13894-1-bagasdotme@gmail.com>
+ <3995c3d8-395a-bd39-eebc-370bd1fca09c@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 09/14] dt-bindings: usb: Add Mediatek MT6370 TCPC binding
- documentation
-Content-Language: en-US
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de
-Cc:     cy_huang@richtek.com, alice_chen@richtek.com,
-        chiaen_wu@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org
-References: <20220531102809.11976-1-peterwu.pub@gmail.com>
- <20220531102809.11976-10-peterwu.pub@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220531102809.11976-10-peterwu.pub@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3995c3d8-395a-bd39-eebc-370bd1fca09c@infradead.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2022 12:28, ChiaEn Wu wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
+> One note (nit) below:
 > 
-> Add Mediatek MT6370 TCPC binding documentation.
+> >  drivers/hid/hid-uclogic-params.c | 24 ++++++++++++++----------
+> >  1 file changed, 14 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
+> > index db838f16282d64..647bbd3e000e2f 100644
+> > --- a/drivers/hid/hid-uclogic-params.c
+> > +++ b/drivers/hid/hid-uclogic-params.c
+> > @@ -23,11 +23,11 @@
+> >  /**
+> >   * uclogic_params_pen_inrange_to_str() - Convert a pen in-range reporting type
+> >   *                                       to a string.
+> > - *
+> >   * @inrange:	The in-range reporting type to convert.
+> >   *
+> > - * Returns:
+> > - *	The string representing the type, or NULL if the type is unknown.
+> > + * Return:
+> > + * * The string representing the type, or
+> > + * * NULL if the type is unknown.
 > 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
->  .../bindings/usb/mediatek,mt6370-tcpc.yaml    | 35 +++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/mediatek,mt6370-tcpc.yaml
+>         %NULL
+> would be better here, but not required.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mt6370-tcpc.yaml b/Documentation/devicetree/bindings/usb/mediatek,mt6370-tcpc.yaml
-> new file mode 100644
-> index 000000000000..49316633f92f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/mediatek,mt6370-tcpc.yaml
-> @@ -0,0 +1,35 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/mediatek,mt6370-tcpc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Mediatek MT6370 Type-C Port Switch and Power Delivery controller DT bindings
 
-s/DT bindings//
+Hi Randy,
 
-> +
-> +maintainers:
-> +  - ChiYuan Huang <cy_huang@richtek.com>
-> +
-> +description: |
-> +  Mediatek MT6370 is a multi-functional device. It integrates charger, ADC, flash, RGB indicators,
-> +  regulators (DSV/VIBLDO), and TypeC Port Switch with Power Delivery controller.
-> +  This document only describes MT6370 Type-C Port Switch and Power Delivery controller.
+I don't see %NULL in Documentation/ (I git-grep-ed it but none found).
+What should I do when I have to explain NULL in Return: section of
+kernel-doc comment?
 
-These lines do not look like wrapped at 80.
-
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt6370-tcpc
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  connector:
-> +    type: object
-> +    $ref: /schemas/connector/usb-connector.yaml#
-
-You need unevaluatedProperties:false within connector.
-
-> +    description:
-> +      Properties for usb c connector.
-
-Skip description, it's not helpful.
-
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - interrupts
-
-
-Best regards,
-Krzysztof
+-- 
+An old man doll... just what I always wanted! - Clara

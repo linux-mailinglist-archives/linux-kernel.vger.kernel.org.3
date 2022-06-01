@@ -2,81 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF8453A280
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 12:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 050AF53A281
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 12:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351853AbiFAKZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 06:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
+        id S1352034AbiFAK0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 06:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352058AbiFAKZN (ORCPT
+        with ESMTP id S1344810AbiFAK0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 06:25:13 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CC46A42B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 03:25:11 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id bo5so1574255pfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 03:25:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DlxLGMBD2rycrdizEoUgUGGKpKnTn88LsuKtd1elSBw=;
-        b=IfmRzoxe0DV+Wou8Wfa3BPaoSuV4IAqkwM1FX7dDImx76yCiNL6EUZdXOQBqKEqsd5
-         PwQp/1TKcU+tPb78/erhcqCch1d3RhKA1vmIvZvvKmXw8PF/rvsfEHc16c+mrqys82TY
-         PehglRNgcn0q7TW4dzT8AGZfpr8Z6cLx9hrqpb6wDAZ5GHIfHcXTuPQ/IQl+myp9u8dL
-         U/lGlXAXd0UGIndUKa/vTJuBmarhFMqKtDLZ4dnPyeNFnVbm31t2rJq0cQj6LOtF9WmP
-         kmu4TDSLOsFUM/x3jFhZuNlBXYaNGTQk16b8L7cn+O/abuKjjhFLGhulCWFcJweNUkad
-         tG/w==
+        Wed, 1 Jun 2022 06:26:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD9326A06B
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 03:26:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654079194;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oayruzY1g/yMYaOhPxizJIHK23v1X//M7rw4aeHmAXs=;
+        b=F+s0qEjpfo4mrprhWOse/3NyW+IGGy2G9k8LRzbfgkiVoNwphT8FguSJngl/UrTii4CSsk
+        JV3LMCaLClEGj0JW+9Vhmfr3wR+wc4ByNEdBLF4SSZD765vMpGHZvgdGXTjxlWU44PNdFe
+        SncXXpOfl5bBCDQ0Dw2OJulXLdXmFj8=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-41-NWstEUU4Md6Sc7Qaew_4mQ-1; Wed, 01 Jun 2022 06:26:33 -0400
+X-MC-Unique: NWstEUU4Md6Sc7Qaew_4mQ-1
+Received: by mail-ed1-f69.google.com with SMTP id q29-20020a056402249d00b0042d90fd98deso953791eda.12
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 03:26:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DlxLGMBD2rycrdizEoUgUGGKpKnTn88LsuKtd1elSBw=;
-        b=NUUPPbaXmFjx+/9yO+OX35bgeQu4nKS+/D16KR1KzGOGhe4534gWdjCEDPDFQm/CD3
-         oiR2QMp8YPwOZU+/jD9GClKePdRuPukJ/bwa/XGReQCW/0Ed8j7hLWnkqAC7oYdOBaB+
-         3gM2kYpUCjK7g/5ADBEo2cyBv08KNn+yXLSuF49P0rdq+vDQeYWf7WnMG6Jl2XnRceHx
-         B+fr260keygIwDlWNSxAjWLNT16O7OtiMAKJJNSFnKczK/HWbABmaf8AlsbGjwEco2LK
-         TgN0MALAq7UD1OdtDBcKMm7YRJQhyShTXQ3iAF38wo62huoUdcsh5MZbOLtW/VGAuSh7
-         Q09g==
-X-Gm-Message-State: AOAM532cSOvroefVq2Qjt44DTSFmGqwuJJaCXDFHqGKAu32zv0ZkD8bK
-        DQoFvimvj3ZMyHo5GSFI9oVecA==
-X-Google-Smtp-Source: ABdhPJxC2r0nqh8Vxi0xek24UWJ1cmZY58t3GL5MaluqP9APToMZmLh27YEyHyqv0EJsLyzjTq5Wgg==
-X-Received: by 2002:a63:e504:0:b0:3fc:596d:31c1 with SMTP id r4-20020a63e504000000b003fc596d31c1mr6726918pgh.550.1654079111214;
-        Wed, 01 Jun 2022 03:25:11 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (n058152077182.netvigator.com. [58.152.77.182])
-        by smtp.gmail.com with ESMTPSA id f16-20020aa782d0000000b0051b291c2778sm1075508pfn.134.2022.06.01.03.25.06
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=oayruzY1g/yMYaOhPxizJIHK23v1X//M7rw4aeHmAXs=;
+        b=thSBftbP85Ii4o9HDxUdvGmR8/Thcl8G8QWjf5ugZEV85AnoGjb5jUwI9g+bhtyK7s
+         qSOeH7LStwhthnOElDR9vqq/LcgjUWX+demlZNny6pHxEGFOVFPeGTGZ6NELX2k+usOk
+         rxWCu9aDOAqxxH+xJOBQzlqmuDtDxeS1SZqhmLcHlYKSlD/lMndUWyRhrRgPp9Rm069c
+         XBJru70W2+BA4g6Zn12mijORfZRC79nn2hfaUdj9QUFbP+uUxF7E+JsYDhWkcQ6Wmzjw
+         +Efhj3CSKi7WzUp7OvbPdAWXS9tuy7HD7WhG3C1KlEZALrxeXqSrqRxhD4eKPJokV6yl
+         LAgQ==
+X-Gm-Message-State: AOAM5326uhfncWJdIVQN8zupY32RLBRg1tDjN3CgHMek7BMV5GakryNh
+        u1K/YqVYkFYYMektVTSbk79uvIH5S3j0X8I1cmaK4IXRMku8heZMEc9hB5zASYv/8TX/W1oOL0S
+        XOuZt62Ebfr+7RXD6WRN41N3O
+X-Received: by 2002:a17:907:3ea0:b0:6ff:7d7a:480d with SMTP id hs32-20020a1709073ea000b006ff7d7a480dmr12363284ejc.750.1654079191110;
+        Wed, 01 Jun 2022 03:26:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJykWnDpg5av86qrft7TWzZN23lyKHi+FN9xzjJ7M/SxQ+5JHcpYM6HweEsgZtSiptAKLBfYWg==
+X-Received: by 2002:a17:907:3ea0:b0:6ff:7d7a:480d with SMTP id hs32-20020a1709073ea000b006ff7d7a480dmr12363252ejc.750.1654079190735;
+        Wed, 01 Jun 2022 03:26:30 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id me3-20020a170906aec300b006ff01fbb7ccsm545676ejb.40.2022.06.01.03.26.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 03:25:10 -0700 (PDT)
-Date:   Wed, 1 Jun 2022 18:25:05 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Joe Mario <jmario@redhat.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, Alyssa Ross <hi@alyssa.is>,
-        Ian Rogers <irogers@google.com>, Like Xu <likexu@tencent.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Li Huafei <lihuafei1@huawei.com>,
-        Adam Li <adam.li@amperecomputing.com>,
-        German Gomez <german.gomez@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Ali Saidi <alisaidi@amazon.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 00/12] perf c2c: Support display for Arm64
-Message-ID: <20220601102505.GA408721@leoy-ThinkPad-X240s>
-References: <20220530114036.3225544-1-leo.yan@linaro.org>
- <57a826ad-5ceb-ba1d-b80c-452f72720889@redhat.com>
+        Wed, 01 Jun 2022 03:26:29 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id AE4574051C9; Wed,  1 Jun 2022 12:26:27 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: Re: kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes
+ address space '__rcu' of expression
+In-Reply-To: <20220601003834.ilvx2pik672yxuxt@mail>
+References: <202205222029.xpW3PM1y-lkp@intel.com> <87y1yspmmh.fsf@toke.dk>
+ <20220601003834.ilvx2pik672yxuxt@mail>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Wed, 01 Jun 2022 12:26:27 +0200
+Message-ID: <87h7547k8c.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <57a826ad-5ceb-ba1d-b80c-452f72720889@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,81 +84,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joe,
+Luc Van Oostenryck <luc.vanoostenryck@gmail.com> writes:
 
-On Tue, May 31, 2022 at 02:44:07PM -0400, Joe Mario wrote:
-
-[...]
-
-> Hi Leo:
-> I built a new perf with your patches and ran it on a 2-numa node Neoverse platform.
-> I then ran my simple test that creates reader and writer threads to tug on the same cacheline.
-> The c2c output is appended below.
+> On Mon, May 23, 2022 at 12:30:14PM +0200, Toke H=C3=B8iland-J=C3=B8rgense=
+n wrote:
+>> kernel test robot <lkp@intel.com> writes:
+>>=20
+>> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux=
+.git master
+>> > head:   eaea45fc0e7b6ae439526b4a41d91230c8517336
+>> > commit: 782347b6bcad07ddb574422e01e22c92e05928c8 xdp: Add proper __rcu=
+ annotations to redirect map entries
+>> > date:   11 months ago
+>> > config: ia64-randconfig-s031-20220522 (https://download.01.org/0day-ci=
+/archive/20220522/202205222029.xpW3PM1y-lkp@intel.com/config)
+>> > compiler: ia64-linux-gcc (GCC) 11.3.0
+>>=20
+>> Hmm, so this is ia64-only? Some kind of macro breakage? Paul, any ideas?
 >
-> The output looks good, especially where you've broken out the (average) cycles for local and remote peer loads.  
-> And I'm glad to see you fixed the "Node" column.  I use that a lot to help detect remote node accesses.  
+> Hi,
+>
+> It's surely IA64's cmpxchg() which contains lines like:
+> 	_r_ =3D ia64_cmpxchg8_##sem((__u64 *) ptr, new, _o_);=20
 
-Thanks a lot for your testing and suggestions, which are really helpful!
+Oh, right. Hmm, well, if the cmpxchg does an internal cast that
+complicates things a bit. My immediate thought was to move the
+unrcu_pointer() inside the calls to cmpxchg(), like:
 
-> And the "PA cnt" field is working as well,  which is important to see if numa_balance is moving the data around.
+diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+index 980f8928e977..3b6dc6d34177 100644
+--- a/kernel/bpf/devmap.c
++++ b/kernel/bpf/devmap.c
+@@ -1098,7 +1098,7 @@ static int dev_map_notification(struct notifier_block=
+ *notifier,
+                                dev =3D rcu_dereference(dtab->netdev_map[i]=
+);
+                                if (!dev || netdev !=3D dev->dev)
+                                        continue;
+-                               odev =3D unrcu_pointer(cmpxchg(&dtab->netde=
+v_map[i], RCU_INITIALIZER(dev), NULL));
++                               odev =3D cmpxchg(unrcu_pointer(&dtab->netde=
+v_map[i]), dev, NULL);
+                                if (dev =3D=3D odev)
+                                        call_rcu(&dev->rcu,
+                                                 __dev_map_entry_free);
 
-Good to know this.  To be honest, before I didn't note for "PA cnt"
-metric, I checked a bit for the code, this metrics is very useful to
-understand how it's severe that a cache line is accessed from different
-addresses, so we can get sense how a cache line is hammered.
 
-> =================================================
->            Shared Data Cache Line Table
-> =================================================
-> #
-> #        ----------- Cacheline ----------     Peer  ------- Load Peer -------    Total    Total    Total  --------- Stores --------  ----- Core Load Hit -----  - LLC Load Hit --  - RMT Load Hit --  --- Load Dram ----
-> # Index             Address  Node  PA cnt    Snoop    Total    Local   Remote  records    Loads   Stores    L1Hit   L1Miss      N/A       FB       L1       L2    LclHit  LclHitm    RmtHit  RmtHitm       Lcl       Rmt
-> # .....  ..................  ....  ......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  ........  .......  ........  .......  ........  ........
-> #
->       0            0x422140     0    6904   74.86%      137      131        6   148008   144970     3038        0        0     3038        0   144833      120        11        0         6        0         0         0
->       1  0xffffd976e63ae5c0     1       6    3.83%        7        7        0       15       15        0        0        0        0        0        8        4         3        0         0        0         0         0
->       2  0xffff07ffbf290980     0       5    2.19%        4        2        2       14       14        0        0        0        0        0       10        1         1        0         2        0         0         0
->       3  0xffffd976e57275c0     1       1    0.55%        1        1        0        1        1        0        0        0        0        0        0        1         0        0         0        0         0         0
->       4  0xffffd976e6071c00     1       3    0.55%        1        0        1        4        4        0        0        0        0        0        3        0         0        0         1        0         0         0
->      [snip]
-> =================================================
->       Shared Cache Line Distribution Pareto
-> =================================================
-> #
-> #        -- Peer Snoop --  ------- Store Refs ------  --------- Data address ---------                      ---------- cycles ----------    Total       cpu                               Shared
-> #   Num      Rmt      Lcl   L1 Hit  L1 Miss      N/A              Offset  Node  PA cnt        Code address  rmt peer  lcl peer      load  records       cnt                      Symbol   Object                Source:Line  Node
-> # .....  .......  .......  .......  .......  .......  ..................  ....  ......  ..................  ........  ........  ........  .......  ........  ..........................  .......  .........................  ....
-> #
->   ----------------------------------------------------------------------
->       0        6      131        0        0     3038            0x422140
->   ----------------------------------------------------------------------
->            0.00%    0.00%    0.00%    0.00%   52.60%                 0x8     0       1            0x400e6c         0         0         0     1598         4  [.] writer                  tugtest  tugtest.c:152               0 1
->            0.00%    0.00%    0.00%    0.00%   47.40%                0x10     0       1            0x400e7c         0         0         0     1440         4  [.] writer                  tugtest  tugtest.c:153               0 1
->           33.33%   75.57%    0.00%    0.00%    0.00%                0x20     0       1            0x401018      4095      3803      3419      409         4  [.] reader                  tugtest  tugtest.c:187               0 1
->           66.67%   24.43%    0.00%    0.00%    0.00%                0x28     0       1            0x401034      4095      3470      3643      413         4  [.] reader                  tugtest  tugtest.c:187               0 1
-> 
->   ----------------------------------------------------------------------
->       1        0        7        0        0        0  0xffffd976e63ae5c0
->   ----------------------------------------------------------------------
->            0.00%   57.14%    0.00%    0.00%    0.00%                 0x0     1       1  0xffffd976e4815fbc         0      1333         0        4         2  [k] ktime_get                   [kernel.kallsyms]  seqlock.h:276          1                   
->            0.00%   14.29%    0.00%    0.00%    0.00%                 0x0     1       1  0xffffd976e4816d10         0       266       794        4         3  [k] ktime_get_update_offsets_n  [kernel.kallsyms]  seqlock.h:276        0 1
->            0.00%   28.57%    0.00%    0.00%    0.00%                0x30     1       1  0xffffd976e4816d20         0        87       150        4         3  [k] ktime_get_update_offsets_n  [kernel.kallsyms]  timekeeping.c:2298   0 1
->   
->   ----------------------------------------------------------------------     
->       2        2        2        0        0        0  0xffff07ffbf290980
->   ----------------------------------------------------------------------
->           50.00%  100.00%    0.00%    0.00%    0.00%                 0x4     0       1  0xffffd976e47d2bdc      1217      1600      1147        4         3  [k] queued_spin_lock_slowpath  [kernel.kallsyms]  qspinlock.c:511    0 1
->           50.00%    0.00%    0.00%    0.00%    0.00%                 0x4     0       1  0xffffd976e47d2a2c      4033         0         0        1         1  [k] queued_spin_lock_slowpath  [kernel.kallsyms]  qspinlock.c:382    0 1
->   
->   ----------------------------------------------------------------------     
-> 
-> Thanks for doing this.  It looks good.
+But that seems to confuse sparse because these are ptr-to-ptr
+constructs:
 
-You are welcome!  And very appreicate your helping to mature the code.
+kernel/bpf/devmap.c:1101:40: error: incompatible types in comparison expres=
+sion (different address spaces):
+kernel/bpf/devmap.c:1101:40:    struct bpf_dtab_netdev [noderef] __rcu *[no=
+deref] __rcu *
+kernel/bpf/devmap.c:1101:40:    struct bpf_dtab_netdev [noderef] __rcu **
+kernel/bpf/devmap.c:1101:40: error: incompatible types in comparison expres=
+sion (different address spaces):
+kernel/bpf/devmap.c:1101:40:    struct bpf_dtab_netdev [noderef] __rcu *[no=
+deref] __rcu *
+kernel/bpf/devmap.c:1101:40:    struct bpf_dtab_netdev [noderef] __rcu **
 
-> I'll assume someone else is reviewing your code changes.
+which I'm not sure how to fix. And not really sure if it's the
+semantically right thing to do either in this case...
 
-Yeah, let's give a bit more time for reviewing.
+-Toke
 
-Thanks,
-Leo

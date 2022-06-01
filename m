@@ -2,100 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D31553AAA7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC7C53AAAA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355957AbiFAQCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 12:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
+        id S1355964AbiFAQDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 12:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355949AbiFAQC2 (ORCPT
+        with ESMTP id S1348848AbiFAQC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 12:02:28 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F3135274;
-        Wed,  1 Jun 2022 09:02:24 -0700 (PDT)
-Received: from mail-yb1-f169.google.com ([209.85.219.169]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MtfRv-1nf1hg15eJ-00v4pu; Wed, 01 Jun 2022 18:02:23 +0200
-Received: by mail-yb1-f169.google.com with SMTP id h75so3728550ybg.4;
-        Wed, 01 Jun 2022 09:02:22 -0700 (PDT)
-X-Gm-Message-State: AOAM53108KG6iiqKAualLgD4qXUEQ+1v7Jcd0CuhJeZhkOV5ystJH0zO
-        XZTuC7mBR03nWpXD/GJ1J7ejo0Lmj24iHh+B8ok=
-X-Google-Smtp-Source: ABdhPJxXBt6t9Kpb18+45Z/4gGcabfaHsQkc7yNqpiwzF/WmyhE92OTDPGbAW+JZrCLtodw8qttgNxuQpK4z7UBz8ME=
-X-Received: by 2002:a25:1209:0:b0:65d:63f9:e10a with SMTP id
- 9-20020a251209000000b0065d63f9e10amr453686ybs.480.1654099341931; Wed, 01 Jun
- 2022 09:02:21 -0700 (PDT)
+        Wed, 1 Jun 2022 12:02:58 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7199035274;
+        Wed,  1 Jun 2022 09:02:57 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: benjamin.gaignard)
+        with ESMTPSA id 2B4D71F4104F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654099375;
+        bh=QstXEK7vK9peaXuxwekF4t4rKyDGtTDzVurNPkvZNRU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bdRflAAGzQHFImM59JNtJ14nwKlXDWazj5QOV2ETaiLTpb2k/9J8u3r9Q5bGn8Qdw
+         FC4bX0OMU0Y6K5p4xrIjBMciBTuirqvcXSNPkQx/lKv9+lVnim8QB4OUl9/E0/glqi
+         64l71Rs9K5i+dVo8LibUxoP0iwXOYpuooJ1hpeXLtWvw3R/PYHL7keG0PZvOWka0BS
+         j+BkhVmKdBGpV07VDbzUzsflGoJZ1vgTOM0EFHWKSbp5NXogW58iSE4+ZcMIglwIX9
+         PfH0zADgzTol8Agsap2/mYLdR3/YjcSPDAjolLhoN0r6520Yt1CUp44gr0+Xt0kC4Q
+         rLucgpnxOH9sA==
+Message-ID: <aa6eaada-ad4e-9d47-62e8-2a709e5f190f@collabora.com>
+Date:   Wed, 1 Jun 2022 18:02:52 +0200
 MIME-Version: 1.0
-References: <20220601100005.2989022-1-chenhuacai@loongson.cn>
- <20220601100005.2989022-8-chenhuacai@loongson.cn> <ddf17a99-5c68-4be9-d073-124538b9d51e@infradead.org>
-In-Reply-To: <ddf17a99-5c68-4be9-d073-124538b9d51e@infradead.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 1 Jun 2022 18:02:05 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3j1h2h_yWN7oaBPx7Z-WaJs-rMupWo3Q4UUTAi2m3tqQ@mail.gmail.com>
-Message-ID: <CAK8P3a3j1h2h_yWN7oaBPx7Z-WaJs-rMupWo3Q4UUTAi2m3tqQ@mail.gmail.com>
-Subject: Re: [PATCH V12 07/24] LoongArch: Add build infrastructure
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        WANG Xuerui <git@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:BnZSg9eP17vALy19M2awOWIxYR0CHSN2wN9tVTWraj70vTg7PDz
- 5jBCc0CvVUjRqX2arSMKOyJUhsaUaqT0ZXy2B0NFFfprFlrsGJN2RLFwkHb5LHgzlu2jVTR
- uan3XtADusSD5xIOuzWTtXg5GmPHGqXnncQO9lO6+uXIqu+sW0oFslEWFQM97Ae9x1hg3UO
- v0709KNMn6xVBVGouiyIA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xqQ1xqz9yt0=:h+mWvQkrrAW4wJnju2cd4X
- QC0/D2jjFnn9AmEZBkBwfPfc560lzeCKoiS/JOatuaxOQwP9w4gnwuIW7a/IMqIUWtfjteWAQ
- xL0e4SsT88Spk6jqzSJRDVityxj43JyiednDwFfV8wHC6tpuqLv2uR1hlJqy+lwAwk4mryIGA
- NY5kk5lnviqA+buxefNgJSIgTn1/ISkQFqi5AS/6xkvTskIFUb/cxzIEqYPDvKfdhIoHJq79s
- HqX0JGjZsCPz0l60Co6Sk21DNAdyGlXvYFFhjDj1eRTyux6fAt9k4alGVWMCZqGBYljNao0sF
- BOSbY/mCXOqBwWzeXffUxEpm4QKVSl6dGVVp0eHZ8BitCDEVaBdonLP4Y2ks7Fa1UgxDMBF4t
- 6Fhd6qhJTWB7FGrBs/RzOPgc/hAN2iMcuq1A6HHCABcXEuLMmBeN+X95dT6rLJflyPPalvTPI
- eI1F5pIokoDWxWHWyKtj474sSRr4dsO1IJt1ap1qoKyoWC5Paryn6xJV6F+Dk4t4dezIS5vMQ
- swXymtE1JvkArm1yUMlAYx4kkwFFEqEHFM2iKhExzibzYS3ZTWrLAJlCL2nB9l9z8zAZ+6OXa
- +6AK6fyVe9kiqYhLIFCNpqgMYlTMRGI368ETn2o1U7CWe+r+PHFkVg6Vy+1a6XD6Y6erKqMXC
- oDlOg2sKZ8vH9AMfSnwNUncM3q0XDjwaNxO7o4bDsSBnz+Jact96T4zKh86P0HHoFvKkeR2d+
- 0utV9DRqJX4rjZ8+LVrS0IPve41grQw2AzcNPw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6 09/17] media: uapi: HEVC: Define
+ V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a dynamic array
+Content-Language: en-US
+To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        mchehab@kernel.org, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+References: <20220527143134.3360174-1-benjamin.gaignard@collabora.com>
+ <20220527143134.3360174-10-benjamin.gaignard@collabora.com>
+ <2630478.mvXUDI8C0e@kista> <8069971.T7Z3S40VBb@kista>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <8069971.T7Z3S40VBb@kista>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 5:47 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Hi--
->
-> On 6/1/22 02:59, Huacai Chen wrote:
-> > +config 32BIT
-> > +     bool
-> > +
-> > +config 64BIT
-> > +     def_bool y
-> > +
->
-> I don't see a way to set (enable) 32BIT.
-> Please explain how to do that.
 
-It can't be enabled at the moment, but support is planned for a future release.
-There are remnants of the 32-bit support in various places of the codebase,
-but removing those just to add them back later does not seem too important.
+Le 01/06/2022 à 17:43, Jernej Škrabec a écrit :
+> Dne nedelja, 29. maj 2022 ob 11:19:12 CEST je Jernej Škrabec napisal(a):
+>> Dne petek, 27. maj 2022 ob 16:31:26 CEST je Benjamin Gaignard napisal(a):
+>>> Make explicit that V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control is
+>>> a dynamic array control type.
+>>> Some drivers may be able to receive multiple slices in one control
+>>> to improve decoding performance.
+>>>
+>>> Define the max size of the dynamic that can driver can set in .dims = {}.
+>>>
+>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>> ---
+>>> version 6:
+>>> - Set V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag automatically when using
+>>>    V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control.
+>>> - Add a define for max slices count
+>>>
+>>>   Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 2 ++
+>>>   drivers/media/v4l2-core/v4l2-ctrls-defs.c                 | 1 +
+>>>   include/media/hevc-ctrls.h                                | 5 +++++
+>>>   3 files changed, 8 insertions(+)
+>>>
+>>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/
+>> Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>> index 06b967de140c..0796b1563daa 100644
+>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>> @@ -2986,6 +2986,8 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>>       These bitstream parameters are defined according to :ref:`hevc`.
+>>>       They are described in section 7.4.7 "General slice segment header
+>>>       semantics" of the specification.
+>>> +    This control is a dynamically sized 1-dimensional array,
+>>> +    V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
+>>>   
+>>>   .. c:type:: v4l2_ctrl_hevc_slice_params
+>>>   
+>>> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/
+> v4l2-
+>> core/v4l2-ctrls-defs.c
+>>> index 9f55503cd3d6..d594efbcbb93 100644
+>>> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>>> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>>> @@ -1510,6 +1510,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum
+>> v4l2_ctrl_type *type,
+>>>   		break;
+>>>   	case V4L2_CID_STATELESS_HEVC_SLICE_PARAMS:
+>>>   		*type = V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS;
+>>> +		*flags |= V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
+>> This change breaks Cedrus. I'll check what needs to be changed.
+> Please include the change bellow to keep Cedrus working. I'll expand support
+> for more slices later.
 
-         Arnd
+That will be in version 7. Thanks.
+I will wait for more reviews on the others patches before send it.
+
+Regards,
+Benjamin
+
+>
+>   Best regards,
+>   Jernej
+>
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> @@ -178,6 +178,7 @@ static const struct cedrus_control cedrus_controls[] = {
+>          {
+>                  .cfg = {
+>                          .id     = V4L2_CID_STATELESS_HEVC_SLICE_PARAMS,
+> +                       .dims   = { 1 },
+>                  },
+>                  .codec          = CEDRUS_CODEC_H265,
+>          },
+>   
+>>>   		break;
+>>>   	case V4L2_CID_STATELESS_HEVC_SCALING_MATRIX:
+>>>   		*type = V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX;
+>>> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+>>> index 0dbd5d681c28..140151609c96 100644
+>>> --- a/include/media/hevc-ctrls.h
+>>> +++ b/include/media/hevc-ctrls.h
+>>> @@ -311,9 +311,14 @@ struct v4l2_hevc_pred_weight_table {
+>>>   #define
+> V4L2_HEVC_SLICE_PARAMS_FLAG_SLICE_LOOP_FILTER_ACROSS_SLICES_ENABLED
+>> (1ULL << 8)
+>>>   #define V4L2_HEVC_SLICE_PARAMS_FLAG_DEPENDENT_SLICE_SEGMENT	(1ULL <<
+>> 9)
+>>>   
+>>> +#define V4L2_HEVC_SLICE_MAX_COUNT	600
+>>> +
+>>>   /**
+>>>    * v4l2_ctrl_hevc_slice_params - HEVC slice parameters
+>>>    *
+>>> + * This control is a dynamically sized 1-dimensional array,
+>>> + * V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
+>>> + *
+>>>    * @bit_size: size (in bits) of the current slice data
+>>>    * @data_bit_offset: offset (in bits) to the video data in the current
+> slice
+>> data
+>>>    * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+>>> -- 
+>>> 2.32.0
+>>>
+>>>
+>>
+>>
+>

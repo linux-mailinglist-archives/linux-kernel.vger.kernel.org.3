@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3941653AEBD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5811553B049
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbiFAU53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 16:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
+        id S230476AbiFAU6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 16:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiFAU52 (ORCPT
+        with ESMTP id S230410AbiFAU6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 16:57:28 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C32B14E2C8
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 13:57:26 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 35A911C0B9B; Wed,  1 Jun 2022 22:57:24 +0200 (CEST)
-Date:   Wed, 1 Jun 2022 22:57:23 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "joel@jms.id.au" <joel@jms.id.au>, "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v7 1/8] ARM: hpe: Introduce the HPE GXP architecture
-Message-ID: <20220601205723.GA10927@duo.ucw.cz>
-References: <20220506191339.78617-1-nick.hawkins@hpe.com>
- <20220530070626.GD1363@bug>
- <DM4PR84MB19274FE59381E204CBCFE55888DF9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+        Wed, 1 Jun 2022 16:58:13 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9565C21A569
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 13:58:10 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id q1so6158732ejz.9
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 13:58:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0oRhRRXkS4gcQY3huiGBgzO1+1XDsVvPhPhivTE45IY=;
+        b=LHqRAl3FERSqJvk9zPmSajjXej4l4jl2TW9I10C88w4KuygJWujPAfRvILHZ47nKyu
+         BjOeeHCsp14sFGSYpt7YTrpH87BsFokU8MaDhXvFbMFNA3dVM3zM747cl5wlm48NPlVG
+         uOzpSlMGCWdFl5Ctv2NCvWcZno1WdbKJ6zVAU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0oRhRRXkS4gcQY3huiGBgzO1+1XDsVvPhPhivTE45IY=;
+        b=8NZIy8sK/Qi7U7JaSDdwABkpHcpk9tMGQ07j28JgHXBzImLzaIxOWambWL02XbgsaS
+         4G0j+nW3T3vaWcKSJp7SMTTGaeN5qakTaeNOc3948TXiiT5h5esVdNVDvXSNjbc3Wabe
+         i9BOm0peTFrKmWr4TL4BxkdeDYjZDhYRy5aiYrvorQCQ5I7q1+O5qR17+zH/aLkZRtKC
+         jvPnNpDBU9uh3ipFRNcuIVRhDhJu1cTgoU06ZQECdqDrE8VauRysSUbdYt+S92PHi6BW
+         kGDR5WsX0NshCbicPZnd93A1MMu7Er9cLKvsUlV1ucCXl5f5THXtG4iB45H9/rTESPMl
+         zG3w==
+X-Gm-Message-State: AOAM53119yBvXREu6doRWdSHelxKQOWTilBdR3AYtqA3Lgxvm3smbZoW
+        k4OnygxofnnjLpT/MT93EpzCmvj6/m6KGHi5
+X-Google-Smtp-Source: ABdhPJxtIr9OQhsk3cIxXYdLq+B7cSFaQc9Ampxnqu2AiaIhfFaY3HIZmJdXC4KTlCZgarHrQz4hEQ==
+X-Received: by 2002:a17:907:7d8a:b0:6fe:dccb:cf4c with SMTP id oz10-20020a1709077d8a00b006fedccbcf4cmr1330663ejc.714.1654117089235;
+        Wed, 01 Jun 2022 13:58:09 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id m16-20020a170906259000b006f3ef214daesm1083306ejb.20.2022.06.01.13.58.08
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 13:58:08 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id q21so3940498wra.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 13:58:08 -0700 (PDT)
+X-Received: by 2002:a05:6000:1605:b0:210:307a:a94a with SMTP id
+ u5-20020a056000160500b00210307aa94amr977501wrb.97.1654117088304; Wed, 01 Jun
+ 2022 13:58:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="PEIAKu/WMn1b1Hv9"
-Content-Disposition: inline
-In-Reply-To: <DM4PR84MB19274FE59381E204CBCFE55888DF9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220601111128.7bf85da0.alex.williamson@redhat.com>
+In-Reply-To: <20220601111128.7bf85da0.alex.williamson@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 1 Jun 2022 13:57:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi9QJsTw-Ob5z8-ioaHqzOXQd3qqUfOd3Meyq-eXM5kMg@mail.gmail.com>
+Message-ID: <CAHk-=wi9QJsTw-Ob5z8-ioaHqzOXQd3qqUfOd3Meyq-eXM5kMg@mail.gmail.com>
+Subject: Re: [GIT PULL] VFIO updates for v5.19-rc1
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---PEIAKu/WMn1b1Hv9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed 2022-06-01 14:14:33, Hawkins, Nick wrote:
-> > > From: Nick Hawkins <nick.hawkins@hpe.com>
-> > >=20
-> > > The GXP is the HPE BMC SoC that is used in the majority of current=20
-> > > generation HPE servers. Traditionally the asic will last multiple=20
-> > > generations of server before being replaced.
-> > >=20
-> > > Info about SoC:
->=20
-> > Normally, 1/7 goes into the same thread as 0/7 mail.
->=20
-> Hello Pavel,
->=20
-> Thank you for the feedback. I believe the code is already in the process =
-of being merged upstream in version v8. For future reference can you elabor=
-ate on what you mean?
+On Wed, Jun 1, 2022 at 10:11 AM Alex Williamson
+<alex.williamson@redhat.com> wrote:
 >
+> I'm not sure where git pull-request is getting the diffstat below, the
+> diff of the actual merge of this against mainline looks far less scary.
+> If I've botched something, please let me know.
 
-You used separate email threads for 0/7 and the rest of the
-patches. Normally, they should go to single email thread.
+It's all normal, and due to you having merges in your tree and
+multiple merge bases.
 
-Best regards,
-								Pavel
+See
 
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+    Documentation/maintainer/messy-diffstat.rst
 
---PEIAKu/WMn1b1Hv9
-Content-Type: application/pgp-signature; name="signature.asc"
+for details (yay, Jonathan scrounged together docs so that I don't end
+up having to write a long email explanation any more, and there are
+links to some of my previous explanations on lore).
 
------BEGIN PGP SIGNATURE-----
+That also has a suggested remedy, ie just do a temporary merge and use
+the diffstat from that one instead.
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYpfSswAKCRAw5/Bqldv6
-8gkWAJ0YPqczN+Qa+zX28qAf0KvTwg7HvwCgprtfLyRCUtYDlDhejFp1+VWiENw=
-=NR4r
------END PGP SIGNATURE-----
+But I can also re-create that messy diffstat (and thus verify that
+what you sent me matches what I got) here locally too.
 
---PEIAKu/WMn1b1Hv9--
+So while the diffstat is messy and not very useful for a "this is what
+changed" angle (because it has a lot of other changes mixed in), even
+that messy diffstat is actually useful for my secondary reason, namely
+as a verification that yes, I got what you were trying to send and
+just didn't document very clearly because of those multiple merge
+bases.
+
+I can (and do) also check the shortlog, since the actual log doesn't
+have any issues with merges, it's only "diff" that needs a single
+well-defined <start,end> tuple.
+
+                 Linus

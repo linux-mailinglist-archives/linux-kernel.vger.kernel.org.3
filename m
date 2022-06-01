@@ -2,202 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783B653A92D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D1353A936
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354949AbiFAO2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
+        id S1354943AbiFAO3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354839AbiFAO1z (ORCPT
+        with ESMTP id S1354945AbiFAO2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:27:55 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBC62C105;
-        Wed,  1 Jun 2022 07:23:28 -0700 (PDT)
-Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LCrrg3xmHz685x5;
-        Wed,  1 Jun 2022 22:20:03 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 1 Jun 2022 16:23:26 +0200
-Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
- 2022 15:23:25 +0100
-Date:   Wed, 1 Jun 2022 15:23:23 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Lukas Wunner <lukas@wunner.de>
-CC:     Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        Wed, 1 Jun 2022 10:28:51 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266E130542
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:27:36 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id z17so2142052pff.7
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 07:27:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=1kEmR6X4i/nh+b6VMavBDubG9LMGPY4F+6d16NUM+gg=;
+        b=mzH/QSAKngGq4V8ihQYKENupPuzAZLcXExKUCzkD7wVNpc9ZhtZ9SHvU7A/Wtsjk5p
+         u8kr0G8Dxjuyhpjuqw3LG5uYEJBVyjeqJdOgUCIYXBdjvv7C4kZJqrt481urixeIGVCQ
+         6Bk5quC5jGzL+SmIzDU43ncWqQdAVI/I0jUgQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=1kEmR6X4i/nh+b6VMavBDubG9LMGPY4F+6d16NUM+gg=;
+        b=R8NYK327IenvQpoLUdrDodFBfR/M8TVamTj3Q/sjphJQz61zgfpDLMTRNcFHQvgQAN
+         lzvCYSk+wVTy9e9p6BQ03s18XLbvwwWs7oAWdYgdE22/C2HdmqmwiIjOL8fTX4K2R9RV
+         HNFBAzbCmIp+yN7WkcM0IGBZMS+RAeOSIrzA6gyo8RS6I6JXhGw5EJHDLOF+wPsoZmnG
+         ylozG19X1SGXMxPHcuP9iT+XJAx2rMsxyMhaJigCs0yhmqW9180Upp8HupzRIfvhtIRb
+         De9AaN/hEc0rOedIeV+5udUgz1W/cNguxXLC/ziBOM+MY0x89p0TClca367D6oEUVFuK
+         xWnw==
+X-Gm-Message-State: AOAM531qy6DsbQvZ9rW2D/m0TZtJlcdrBCaiQrO8H8AJoS2euhkfT8Qz
+        TZwXZkeBIxWs9BPCW0vSBxm1MQ==
+X-Google-Smtp-Source: ABdhPJx1bs4rZIm3ygpokZwXwCX7e324N+HICM85x+DBIaCNTNO14kwZs2t/7lNxNBCdLuDn6WabZQ==
+X-Received: by 2002:a05:6a00:a01:b0:51b:51d8:3c2a with SMTP id p1-20020a056a000a0100b0051b51d83c2amr152799pfh.68.1654093656292;
+        Wed, 01 Jun 2022 07:27:36 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:ec3a:4b49:34bc:e5b4])
+        by smtp.gmail.com with ESMTPSA id 2-20020a170902c24200b00162523fdb8fsm1589163plg.252.2022.06.01.07.27.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 07:27:35 -0700 (PDT)
+Date:   Wed, 1 Jun 2022 23:27:30 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
         Christoph Hellwig <hch@infradead.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V8 03/10] PCI: Create PCI library functions in support
- of DOE mailboxes.
-Message-ID: <20220601152323.00004b9e@Huawei.com>
-In-Reply-To: <20220601071808.GA19924@wunner.de>
-References: <20220414203237.2198665-1-ira.weiny@intel.com>
-        <20220414203237.2198665-4-ira.weiny@intel.com>
-        <20220530190657.GA14765@wunner.de>
-        <20220531113350.0000421e@Huawei.com>
-        <YpbWCYujYDEkMm1B@iweiny-desk3>
-        <20220601071808.GA19924@wunner.de>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+Subject: Re: [Linaro-mm-sig] Re: [PATCH] dma-fence: allow dma fence to have
+ their own lock
+Message-ID: <Ypd3Us3a93aLonqT@google.com>
+References: <20220530142232.2871634-1-senozhatsky@chromium.org>
+ <7eee4274-bd69-df8d-9067-771366217804@amd.com>
+ <YpWCvniLzJfcp684@google.com>
+ <33aba213-b6ad-4a15-9272-c62f5dfb1fb7@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <33aba213-b6ad-4a15-9272-c62f5dfb1fb7@gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Jun 2022 09:18:08 +0200
-Lukas Wunner <lukas@wunner.de> wrote:
+On (22/06/01 14:45), Christian König wrote:
+> Am 31.05.22 um 04:51 schrieb Sergey Senozhatsky:
+> > On (22/05/30 16:55), Christian König wrote:
+> > > Am 30.05.22 um 16:22 schrieb Sergey Senozhatsky:
+> > > > [SNIP]
+> > > > So the `lock` should have at least same lifespan as the DMA fence
+> > > > that borrows it, which is impossible to guarantee in our case.
+> > > Nope, that's not correct. The lock should have at least same lifespan as the
+> > > context of the DMA fence.
+> > How does one know when it's safe to release the context? DMA fence
+> > objects are still transparently refcount-ed and "live their own lives",
+> > how does one synchronize lifespans?
+> 
+> Well, you don't.
+> 
+> If you have a dynamic context structure you need to reference count that as
+> well. In other words every time you create a fence in your context you need
+> to increment the reference count and every time a fence is release you
+> decrement it.
 
-> On Tue, May 31, 2022 at 07:59:21PM -0700, Ira Weiny wrote:
-> > On Tue, May 31, 2022 at 11:33:50AM +0100, Jonathan Cameron wrote:  
-> > > On Mon, 30 May 2022 21:06:57 +0200 Lukas Wunner <lukas@wunner.de> wrote:  
-> > > > On Thu, Apr 14, 2022 at 01:32:30PM -0700, ira.weiny@intel.com wrote:  
-> > > > > +	/* First 2 dwords have already been read */
-> > > > > +	length -= 2;
-> > > > > +	/* Read the rest of the response payload */
-> > > > > +	for (i = 0; i < min(length, task->response_pl_sz / sizeof(u32)); i++) {
-> > > > > +		pci_read_config_dword(pdev, offset + PCI_DOE_READ,
-> > > > > +				      &task->response_pl[i]);
-> > > > > +		pci_write_config_dword(pdev, offset + PCI_DOE_READ, 0);
-> > > > > +	}    
-> > > > 
-> > > > You need to check the Data Object Ready bit.  The device may clear the
-> > > > bit prematurely (e.g. as a result of a concurrent FLR or Conventional
-> > > > Reset).  You'll continue reading zero dwords from the mailbox and
-> > > > pretend success to the caller even though the response is truncated.
-> > > > 
-> > > > If you're concerned about performance when checking the bit on every
-> > > > loop iteration, checking it only on the last but one iteration should
-> > > > be sufficient to detect truncation.  
-> > > 
-> > > Good catch - I hate corner cases.  Thankfully this one is trivial to
-> > > check for.  
-> > 
-> > Ok looking at the spec:  Strictly speaking this needs to happen multiple
-> > times both in doe_statemachine_work() and inside pci_doe_recv_resp();
-> > not just in this loop.  :-(
-> > 
-> > This is because, the check in doe_statemachine_work() only covers the
-> > 1st dword read IIUC.  
-> 
-> The spec says "this bit indicates the DOE instance has a *data object*
-> available to be read by system firmware/software".
-> 
-> So, the entire object is available for reading, not just one dword.
+OK then fence release should be able to point back to its "context"
+structure. Either a "private" data in dma fence or we need to "embed"
+fence into another object (refcounted) that owns the lock and provide
+dma fence ops->release callback, which can container_of() to the object
+that dma fence is embedded into.
 
-Agreed
+I think you are suggesting the latter. Thanks for clarifications.
 
-> 
-> You've already got checks in place for the first two dwords which
-> cover reading an "all zeroes" response.  No need to amend them.
-> 
-> You only need to re-check the Data Object Ready bit on the last-but-one
-> dword in case the function was reset concurrently.  Per sec. 6.30.2,
-> "An FLR to a Function must result in the aborting of any DOE transfer
-> in progress."
+The limiting factor of this approach is that now our ops->release() is
+under the same "pressure" as dma_fence_put()->dma_fence_release() are.
+dma_fence_put() and dma_fence_release() can be called from any context,
+as far as I understand, e.g. IRQ, however our normal object ->release
+can schedule, we do things like synchronize_rcu() and so on. Nothing is
+impossible, just saying that even this approach is not 100% perfect and
+may need additional workarounds.
 
-Ouch, isn't that racy as you can only check it slightly before reading the
-last dword and a reset could occur in between?
+> If you have a static context structure like most drivers have then you must
+> make sure that all fences at least signal before you unload your driver. We
+> still somewhat have a race when you try to unload a driver and the fence_ops
+> structure suddenly disappear, but we currently live with that.
 
-> 
-> 
-> > > > > +static irqreturn_t pci_doe_irq_handler(int irq, void *data)
-> > > > > +{
-> > > > > +	struct pci_doe_mb *doe_mb = data;
-> > > > > +	struct pci_dev *pdev = doe_mb->pdev;
-> > > > > +	int offset = doe_mb->cap_offset;
-> > > > > +	u32 val;
-> > > > > +
-> > > > > +	pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
-> > > > > +
-> > > > > +	/* Leave the error case to be handled outside IRQ */
-> > > > > +	if (FIELD_GET(PCI_DOE_STATUS_ERROR, val)) {
-> > > > > +		mod_delayed_work(system_wq, &doe_mb->statemachine, 0);
-> > > > > +		return IRQ_HANDLED;
-> > > > > +	}
-> > > > > +
-> > > > > +	if (FIELD_GET(PCI_DOE_STATUS_INT_STATUS, val)) {
-> > > > > +		pci_write_config_dword(pdev, offset + PCI_DOE_STATUS,
-> > > > > +					PCI_DOE_STATUS_INT_STATUS);
-> > > > > +		mod_delayed_work(system_wq, &doe_mb->statemachine, 0);
-> > > > > +		return IRQ_HANDLED;
-> > > > > +	}
-> > > > > +
-> > > > > +	return IRQ_NONE;
-> > > > > +}    
-> > > > 
-> > > > PCIe 6.0, table 7-316 says that an interrupt is also raised when
-> > > > "the DOE Busy bit has been Cleared", yet such an interrupt is
-> > > > not handled here.  It is incorrectly treated as a spurious
-> > > > interrupt by returning IRQ_NONE.  The right thing to do
-> > > > is probably to wake the state machine in case it's polling
-> > > > for the Busy flag to clear.  
-> > > 
-> > > Ah. I remember testing this via a lot of hacking on the QEMU code
-> > > to inject the various races that can occur (it was really ugly to do).
-> > > 
-> > > Guess we lost the handling at some point.  I think your fix
-> > > is the right one.  
-> > 
-> > Perhaps I am missing something but digging into this more.  I disagree
-> > that the handler fails to handle this case.  If I read the spec correctly
-> > DOE Interrupt Status must be set when an interrupt is generated.
-> > The handler wakes the state machine in that case.  The state machine
-> > then checks for busy if there is work to be done.  
-> 
-> Right, I was mistaken, sorry for the noise.
+Hmm, indeed... I didn't consider fence_ops case.
 
-Ah. Makes sense - managed to confuse me too ;)
-I really don't like the absence of a status bit for the DOE busy bit has
-cleared interrupt source, but glad we did handle it.
+> Apart from that you are right, fences can live forever and we need to deal
+> with that.
 
-> 
-> 
-> > Normally we would not even need to check for status error.  But that is
-> > special cased because clearing that status is left to the state machine.  
-> 
-> That however looks wrong because the DOE Interrupt Status bit is never
-> cleared after a DOE Error is signaled.  The state machine performs an
-> explicit abort upon an error by setting the DOE Abort bit, but that
-> doesn't seem to clear DOE Interrupt Status:
-> 
-> Per section 6.30.2, "At any time, the system firmware/software is
-> permitted to set the DOE Abort bit in the DOE Control Register,
-> and the DOE instance must Clear the Data Object Ready bit,
-> if not already Clear, and Clear the DOE Error bit, if already Set,
-> in the DOE Status Register, within 1 second."
-> 
-> No mention of the DOE Interrupt Status bit, so we cannot assume that
-> it's cleared by a DOE Abort and we must clear it explicitly.
-
-Gah.
-
-Jonathan
-
-> 
-> Thanks,
-> 
-> Lukas
-> 
-
+OK. I see.

@@ -2,180 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DE053A5C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF20453A5CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353166AbiFANSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 09:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        id S1353186AbiFANTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 09:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242413AbiFANSO (ORCPT
+        with ESMTP id S1353169AbiFANTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 09:18:14 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9C29FF7;
-        Wed,  1 Jun 2022 06:18:13 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 9AC8621ADB;
-        Wed,  1 Jun 2022 13:18:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1654089492; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XlDIaOdMh++5TaTNkEqP7Z+0BP2y4tj9ghae6D/SYZ4=;
-        b=gJ8P+L0egLun2U4orfffIleneGyLzcb0nvFFjoIh9nX10gj0nf00pmZSEv7YCtWpP+fP8X
-        OBT5DAF02ElKH6ruRtP0Xb8moMWhZARCbVHKNqDeGHN9gOa50OaJ1r5ZZIApuzRIhvjsHK
-        X1blH5INrkMj3wfNgfME6dveXH5usdI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1654089492;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XlDIaOdMh++5TaTNkEqP7Z+0BP2y4tj9ghae6D/SYZ4=;
-        b=vbc5jBV9j8HjUhgDLh7LRZCB2EFp6umMm1CuQgzSicrmsinShWGcQ0bcPnTa+JPEuYBwgE
-        rWIVMANGhGgQjIAg==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
+        Wed, 1 Jun 2022 09:19:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA84E13D19;
+        Wed,  1 Jun 2022 06:19:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 86B382C141;
-        Wed,  1 Jun 2022 13:18:12 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 7CE3DA0633; Wed,  1 Jun 2022 15:18:06 +0200 (CEST)
-Date:   Wed, 1 Jun 2022 15:18:06 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     paolo.valente@linaro.org, jack@suse.cz, tj@kernel.org,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next v9 2/4] block, bfq: record how many queues have
- pending requests
-Message-ID: <20220601131806.gs3txjgvhhbn5ign@quack3.lan>
-References: <20220601114340.949953-1-yukuai3@huawei.com>
- <20220601114340.949953-3-yukuai3@huawei.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B4E861593;
+        Wed,  1 Jun 2022 13:19:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AE54C385A5;
+        Wed,  1 Jun 2022 13:19:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654089578;
+        bh=AB7EZgXlN9wIn76rEJlVjIqNkZbMCh4G/EPQNV4hDR8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=RmH1k1IdRE52GGhRi6NwB/MUQcH15odU8MF6mBRtcHhq6b5eInXHD47F/E4obFqIN
+         Nm7y0FRyStwxrARgI4gSk3QyGCsZaGxdBibmuLjl4yVNZHhl6bUaLpPXLov5/Gq1od
+         cRJVdUAeLleeiAaGDGgWqGfiOfuMQT4hN/SVxL9zRUBLvKehwdJRsKJZ9h8rtYH32l
+         V3fIUMiPfaZqxn6czqK9RN8CtP+i3b7Ev8jhm1ge1uN6RVFtmShMdev4+JGLLE0k20
+         WPkvpyLthHchAwCxYajAF/7etV36lh4cpE2BH78R2vbxQO9Fnt8gwWx2tiNVEUOQNR
+         IXj0GM7xPHx+g==
+From:   Mark Brown <broonie@kernel.org>
+To:     hsin-hsiung.wang@mediatek.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
+        matthias.bgg@gmail.com, fparent@baylibre.com
+Cc:     linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+In-Reply-To: <20220529154613.337559-1-fparent@baylibre.com>
+References: <20220529154613.337559-1-fparent@baylibre.com>
+Subject: Re: [PATCH] dt-bindings: regulator: mt6315-regulator: fix invalid allowed mode
+Message-Id: <165408957615.3063838.14643425310508733291.b4-ty@kernel.org>
+Date:   Wed, 01 Jun 2022 15:19:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220601114340.949953-3-yukuai3@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 01-06-22 19:43:38, Yu Kuai wrote:
-> Prepare to refactor the counting of 'num_groups_with_pending_reqs'.
+On Sun, 29 May 2022 17:46:13 +0200, Fabien Parent wrote:
+> In the binding example, the regulator mode 4 is shown as a valid mode,
+> but the driver actually only support mode 0 to 2:
 > 
-> Add a counter in bfq_group, update it while tracking if bfqq have pending
-> requests and when bfq_bfqq_move() is called.
+> This generates an error in dmesg when copy/pasting the binding example:
+> [    0.306080] vbuck1: invalid regulator-allowed-modes element 4
+> [    0.307290] vbuck2: invalid regulator-allowed-modes element 4
 > 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> [...]
 
-Looks good. Feel free to add:
+Applied to
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+   broonie/regulator.git for-linus
 
-								Honza
+Thanks!
 
+[1/1] dt-bindings: regulator: mt6315-regulator: fix invalid allowed mode
+      commit: 28cbc2d4c54c09a427b18a1604740efb6b2cc2d6
 
-> ---
->  block/bfq-cgroup.c  | 10 ++++++++++
->  block/bfq-iosched.h |  1 +
->  block/bfq-wf2q.c    | 12 ++++++++++--
->  3 files changed, 21 insertions(+), 2 deletions(-)
-> 
-> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-> index 09574af83566..88c0c320ddf3 100644
-> --- a/block/bfq-cgroup.c
-> +++ b/block/bfq-cgroup.c
-> @@ -557,6 +557,7 @@ static void bfq_pd_init(struct blkg_policy_data *pd)
->  				   */
->  	bfqg->bfqd = bfqd;
->  	bfqg->active_entities = 0;
-> +	bfqg->num_queues_with_pending_reqs = 0;
->  	bfqg->online = true;
->  	bfqg->rq_pos_tree = RB_ROOT;
->  }
-> @@ -646,6 +647,7 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  {
->  	struct bfq_entity *entity = &bfqq->entity;
->  	struct bfq_group *old_parent = bfqq_group(bfqq);
-> +	bool has_pending_reqs = false;
->  
->  	/*
->  	 * No point to move bfqq to the same group, which can happen when
-> @@ -666,6 +668,11 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  	 */
->  	bfqq->ref++;
->  
-> +	if (entity->in_groups_with_pending_reqs) {
-> +		has_pending_reqs = true;
-> +		bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
-> +	}
-> +
->  	/* If bfqq is empty, then bfq_bfqq_expire also invokes
->  	 * bfq_del_bfqq_busy, thereby removing bfqq and its entity
->  	 * from data structures related to current group. Otherwise we
-> @@ -693,6 +700,9 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  	/* pin down bfqg and its associated blkg  */
->  	bfqg_and_blkg_get(bfqg);
->  
-> +	if (has_pending_reqs)
-> +		bfq_add_bfqq_in_groups_with_pending_reqs(bfqq);
-> +
->  	if (bfq_bfqq_busy(bfqq)) {
->  		if (unlikely(!bfqd->nonrot_with_queueing))
->  			bfq_pos_tree_add_move(bfqd, bfqq);
-> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-> index 69c7d15417e5..de2446a9b7ab 100644
-> --- a/block/bfq-iosched.h
-> +++ b/block/bfq-iosched.h
-> @@ -943,6 +943,7 @@ struct bfq_group {
->  	struct bfq_entity *my_entity;
->  
->  	int active_entities;
-> +	int num_queues_with_pending_reqs;
->  
->  	struct rb_root rq_pos_tree;
->  
-> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
-> index 5704a0315cf2..6f36f3fe5cc8 100644
-> --- a/block/bfq-wf2q.c
-> +++ b/block/bfq-wf2q.c
-> @@ -1651,16 +1651,24 @@ void bfq_add_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
->  {
->  	struct bfq_entity *entity = &bfqq->entity;
->  
-> -	if (!entity->in_groups_with_pending_reqs)
-> +	if (!entity->in_groups_with_pending_reqs) {
->  		entity->in_groups_with_pending_reqs = true;
-> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
-> +		bfqq_group(bfqq)->num_queues_with_pending_reqs++;
-> +#endif
-> +	}
->  }
->  
->  void bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
->  {
->  	struct bfq_entity *entity = &bfqq->entity;
->  
-> -	if (entity->in_groups_with_pending_reqs)
-> +	if (entity->in_groups_with_pending_reqs) {
->  		entity->in_groups_with_pending_reqs = false;
-> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
-> +		bfqq_group(bfqq)->num_queues_with_pending_reqs--;
-> +#endif
-> +	}
->  }
->  
->  /*
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

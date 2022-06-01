@@ -2,142 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A671A539E0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1F9539E25
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350249AbiFAHTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 03:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
+        id S1344580AbiFAHYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 03:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350234AbiFAHTX (ORCPT
+        with ESMTP id S236045AbiFAHYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 03:19:23 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645C14DF4A;
-        Wed,  1 Jun 2022 00:19:21 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LCgW02QC4zDqYc;
-        Wed,  1 Jun 2022 15:19:08 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 1 Jun 2022 15:19:19 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 1 Jun 2022 15:19:18 +0800
-Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
- specail occasion
-To:     Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>
-CC:     <paolo.valente@linaro.org>, <tj@kernel.org>,
-        <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220428120837.3737765-1-yukuai3@huawei.com>
- <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
- <61b67d5e-829c-8130-7bda-81615d654829@huawei.com>
- <81411289-e13c-20f5-df63-c059babca57a@huawei.com>
- <d5a90a08-1ac6-587a-e900-0436bd45543a@kernel.dk>
- <55919e29-1f22-e8aa-f3d2-08c57d9e1c22@huawei.com>
- <20220523085902.wmxoebyq3crerecr@quack3.lan>
- <25f6703e-9e10-75d9-a893-6df1e6b75254@kernel.dk>
- <20220523152516.7sr247i3bzwhr44w@quack3.lan>
- <13ad158e-7859-ca61-209e-7d1fe99d0bdb@huawei.com>
- <03b3a6bc-586a-2b45-a60c-5ab81076bf13@kernel.dk>
-From:   Yu Kuai <yukuai3@huawei.com>
-Message-ID: <3e2bc90f-464d-f80d-a624-5337af420ec9@huawei.com>
-Date:   Wed, 1 Jun 2022 15:19:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 1 Jun 2022 03:24:44 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882EF4EA3A;
+        Wed,  1 Jun 2022 00:24:41 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 1 Jun
+ 2022 15:24:41 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 1 Jun
+ 2022 15:24:38 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Haowen Bai <baihaowen@meizu.com>, <netdev@vger.kernel.org>,
+        <linux-parisc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] net: tulip: de4x5: remove unused variable
+Date:   Wed, 1 Jun 2022 15:24:36 +0800
+Message-ID: <1654068277-6691-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <03b3a6bc-586a-2b45-a60c-5ab81076bf13@kernel.dk>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/06/01 14:16, Jens Axboe 写道:
-> On 5/23/22 7:13 PM, Yu Kuai wrote:
->> ? 2022/05/23 23:25, Jan Kara ??:
->>> On Mon 23-05-22 06:36:58, Jens Axboe wrote:
->>>> On 5/23/22 2:59 AM, Jan Kara wrote:
->>>>> On Mon 23-05-22 09:10:38, yukuai (C) wrote:
->>>>>> ? 2022/05/21 20:21, Jens Axboe ??:
->>>>>>> On 5/21/22 1:22 AM, yukuai (C) wrote:
->>>>>>>> ? 2022/05/14 17:29, yukuai (C) ??:
->>>>>>>>> ? 2022/05/05 9:00, yukuai (C) ??:
->>>>>>>>>> Hi, Paolo
->>>>>>>>>>
->>>>>>>>>> Can you take a look at this patchset? It has been quite a long time
->>>>>>>>>> since we spotted this problem...
->>>>>>>>>>
->>>>>>>>>
->>>>>>>>> friendly ping ...
->>>>>>>> friendly ping ...
->>>>>>>
->>>>>>> I can't speak for Paolo, but I've mentioned before that the majority
->>>>>>> of your messages end up in my spam. That's still the case, in fact
->>>>>>> I just marked maybe 10 of them as not spam.
->>>>>>>
->>>>>>> You really need to get this issued sorted out, or you will continue
->>>>>>> to have patches ignore because folks may simply not see them.
->>>>>>>
->>>>>> Hi,
->>>>>>
->>>>>> Thanks for your notice.
->>>>>>
->>>>>> Is it just me or do you see someone else's messages from *huawei.com
->>>>>> end up in spam? I tried to seek help from our IT support, however, they
->>>>>> didn't find anything unusual...
->>>>>
->>>>> So actually I have noticed that a lot of (valid) email from huawei.com (not
->>>>> just you) ends up in the spam mailbox. For me direct messages usually pass
->>>>> (likely matching SPF records for originating mail server save the email
->>>>> from going to spam) but messages going through mailing lists are flagged as
->>>>> spam because the emails are missing valid DKIM signature but huawei.com
->>>>> DMARC config says there should be DKIM signature (even direct messages are
->>>>> missing DKIM so this does not seem as a mailing list configuration issue).
->>>>> So this seems as some misconfiguration of the mails on huawei.com side
->>>>> (likely missing DKIM signing of outgoing email).
->>>>
->>>> SPF/DKIM was indeed a problem earlier for yukaui patches, but I don't
->>>> see that anymore. Maybe it's still an issue for some emails, from them
->>>> or Huawei in general?
->>>
->>> Hum, for me all emails from Huawei I've received even today fail the DKIM
->>> check. After some more digging there is interesting inconsistency in DMARC
->>> configuration for huawei.com domain. There is DMARC record for huawei.com
->>> like:
->>>
->>> huawei.com.        600    IN    TXT    "v=DMARC1;p=none;rua=mailto:dmarc@edm.huawei.com"
->>>
->>> which means no DKIM is required but _dmarc.huawei.com has:
->>>
->>> _dmarc.huawei.com.    600    IN    TXT    "v=DMARC1;p=quarantine;ruf=mailto:dmarc@huawei.com;rua=mailto:dmarc@huawei.com"
->>>
->>> which says that DKIM is required. I guess this inconsistency may be the
->>> reason why there are problems with DKIM validation for senders from
->>> huawei.com. Yu Kuai, can you perhaps take this to your IT support to fix
->>> this? Either make sure huawei.com emails get properly signed with DKIM or
->>> remove the 'quarantine' record from _dmarc.huawei.com. Thanks!
->> Of course, I'll try to contact our IT support.
-> 
-> I second that, pretty much every email has been going into spam since, I
-> guess you just had a few lucky ones. Looks like Jan is right, it's a
-> server side configuration error that's causing this, and it's still
-> happening
-> 
+The variable imr is initialized but never used otherwise.
 
-Thanks for your response 😄
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ drivers/net/ethernet/dec/tulip/de4x5.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-I aready contack our IT support, and hopefully this can be solved
-soon...
+diff --git a/drivers/net/ethernet/dec/tulip/de4x5.c b/drivers/net/ethernet/dec/tulip/de4x5.c
+index 71730ef4cd57..40a54827d599 100644
+--- a/drivers/net/ethernet/dec/tulip/de4x5.c
++++ b/drivers/net/ethernet/dec/tulip/de4x5.c
+@@ -3817,10 +3817,9 @@ de4x5_setup_intr(struct net_device *dev)
+ {
+     struct de4x5_private *lp = netdev_priv(dev);
+     u_long iobase = dev->base_addr;
+-    s32 imr, sts;
++    s32 sts;
+ 
+     if (inl(DE4X5_OMR) & OMR_SR) {   /* Only unmask if TX/RX is enabled */
+-	imr = 0;
+ 	UNMASK_IRQs;
+ 	sts = inl(DE4X5_STS);        /* Reset any pending (stale) interrupts */
+ 	outl(sts, DE4X5_STS);
+-- 
+2.7.4
+

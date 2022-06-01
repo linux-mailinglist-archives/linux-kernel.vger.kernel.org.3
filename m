@@ -2,222 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F6B539B7F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42339539B81
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349269AbiFADFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 23:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
+        id S1349262AbiFADOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 23:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349263AbiFADFP (ORCPT
+        with ESMTP id S235209AbiFADOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 23:05:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1A98D6A3
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:05:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7C42B81765
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 03:05:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 579E5C385A9;
-        Wed,  1 Jun 2022 03:05:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654052711;
-        bh=FL4trFaVlrtgGhxl6RfunZqzu7ydSpuIPCmAbrVFlJk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=tWHXJzs6FWyLAuZxGqbf9O7WNu+Xu4HYr/3MxyjRSOxldvM7Z7GT5BiQnnEHJrA5a
-         A1XT+R5O7+RxWypHf4ARPbcXlPVjICKJeYzbF93z3cB76IC6wZUqRj2YKMeNPy5BoX
-         ies9gOD3hhsNJoMGnEkWaTOgGXr8rHuI0JSxGEo3w6m69/ahTD7SAllUP+jez2WtyZ
-         myJq1sOKdeYT4tedWJAaAAxr+psM/kMImFzDcYvJzz9z+ba9hBpW/KTdzo4qO64Xd0
-         TpJmhG4vNeLrowC7Ouo98g/mkf4TvO9CqCl7TnfU0uh9vgQlPI2Ta97JBA1EEF0xUR
-         hcMyuQgaB+92A==
-Message-ID: <7ea1c35f-e176-1a17-f3ed-14d4118d3c21@kernel.org>
-Date:   Wed, 1 Jun 2022 11:05:07 +0800
+        Tue, 31 May 2022 23:14:34 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 558569155F;
+        Tue, 31 May 2022 20:14:32 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 2513CsXI026442;
+        Wed, 1 Jun 2022 05:12:54 +0200
+Date:   Wed, 1 Jun 2022 05:12:54 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Vegard Nossum <vegard.nossum@oracle.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Shah <aams@amazon.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Jiri Kosina <jkosina@suse.cz>,
+        Kees Cook <keescook@chromium.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Solar Designer <solar@openwall.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Tyler Hicks <tyhicks@canonical.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] Documentation/security-bugs: overhaul
+Message-ID: <20220601031254.GB26318@1wt.eu>
+References: <20220531230309.9290-1-vegard.nossum@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4] f2fs: separate NOCoW and pinfile semantics
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
-References: <20220517032410.3564033-1-chao@kernel.org>
- <YoPZh+vl68IH5loV@google.com>
- <fa3cbe36-1738-a811-ce03-dd5aaf8ea3d4@kernel.org>
- <YpZ4MxH3bkWbTPvI@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <YpZ4MxH3bkWbTPvI@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531230309.9290-1-vegard.nossum@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/1 4:18, Jaegeuk Kim wrote:
-> On 05/31, Chao Yu wrote:
->> On 2022/5/18 1:21, Jaegeuk Kim wrote:
->>> On 05/17, Chao Yu wrote:
->>>> Pinning a file is heavy, because skipping pinned files make GC
->>>> running with heavy load or no effect.
->>>>
->>>> So that this patch proposes to separate nocow and pinfile semantics:
->>>> - NOCoW flag can only be set on regular file.
->>>> - NOCoW file will only trigger IPU at common writeback/flush.
->>>> - NOCow file will do OPU during GC.
->>>
->>> How about adding
->>>    - NOCow file will allocate 2MB-aligned space via fallocate.
->>>
->>> So, it'd be same as file pinning except allowing GCs. wdyt?
->>
->> Well, it seems the segment-aligned allocation feature should not couple with
->> pin_file or NoCow flag, what about introducing another ioctl for that? something
->> like: F2FS_IOC_ALIGNMENT_PREALLOCATION w/ arg.alignment_start, arg.alignment_len,
->> arg.total_len?
+Hello Vegard,
+
+On Wed, Jun 01, 2022 at 01:03:09AM +0200, Vegard Nossum wrote:
+> The current instructions for reporting security vulnerabilities in the
+> kernel are not clear enough, in particular the process of disclosure
+> and requesting CVEs, and what the roles of the different lists are and
+> how exactly to report to each of them.
 > 
-> We should allocate 2MB to pin the file, since android is using it.
+> Let's give this document an overhaul. Goals are stated as a comment at
+> the top of the document itself (these will not appear in the rendered
+> document).
 
-I mean we can use nocow + new ioctl instead of pinfile, thoughts?
+Thanks for working on this, I'm having a few comments below.
 
-Thanks,
+> +Linux kernel security team at security@kernel.org, henceforth "the
+> +security list". This is a closed list of trusted developers who will
+> +help verify the bug report and develop a patch.
 
-> 
->>
->> Thanks,
->>
->>>
->>>>
->>>> This flag can satisfying the demand of:
->>>> 1) avoiding fragment of file's physical block
->>>> 2) userspace doesn't want to pin file's physical address
->>>>
->>>> After commit 5d539245cb18 ("f2fs: export FS_NOCOW_FL flag to user"),
->>>> Pin_file and NOCoW flags have already been twined closely. e.g.
->>>> once we set pinfile flag in file, nocow flag will be shown; and after
->>>> clearing pinfile flag, nocow flag will disappear.
->>>>
->>>> So, in order to keep backward compatibility, let use below semantics:
->>>>
->>>> f2fs_ioc_set_pin_file/f2fs_fileattr_set logic:
->>>> 		pinfile			nocow
->>>> set		set pinfile | nocow	set nocow
->>>> clear		clear pinfile | nocow	clear nocow
->>>>
->>>> File Behaviors:
->>>> w/ pinfile, w/ nocow:		use pinfile semantics
->>>> w/ pinfile, w/o nocow:		use pinfile semantics
->>>> w/o pinfile, w/ nocow:		use nocow semantics
->>>> w/o pinfile, w/o nocow:		no pinfile or nocow semantics
->>>>
->>>> NOCoW can also be set on directory, and it will have no effect on
->>>> directory, however, new files created in nocow directory will have the
->>>> flag set.
->>>>
->>>> Signed-off-by: Chao Yu <chao.yu@oppo.com>
->>>> ---
->>>> v4:
->>>> - allow IPU only for NoCowed regular inode.
->>>>    fs/f2fs/data.c |  3 +++
->>>>    fs/f2fs/f2fs.h | 13 +++++++++++--
->>>>    fs/f2fs/file.c | 18 +++++++++++++++++-
->>>>    3 files changed, 31 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
->>>> index 54a7a8ad994d..42d95ac6b508 100644
->>>> --- a/fs/f2fs/data.c
->>>> +++ b/fs/f2fs/data.c
->>>> @@ -2498,6 +2498,9 @@ bool f2fs_should_update_inplace(struct inode *inode, struct f2fs_io_info *fio)
->>>>    	if (f2fs_is_pinned_file(inode))
->>>>    		return true;
->>>> +	if (S_ISREG(inode->i_mode) && F2FS_I(inode)->i_flags & F2FS_NOCOW_FL)
->>>> +		return true;
->>>> +
->>>>    	/* if this is cold file, we should overwrite to avoid fragmentation */
->>>>    	if (file_is_cold(inode))
->>>>    		return true;
->>>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
->>>> index 492af5b96de1..5c67736000a7 100644
->>>> --- a/fs/f2fs/f2fs.h
->>>> +++ b/fs/f2fs/f2fs.h
->>>> @@ -2916,13 +2916,15 @@ static inline void f2fs_change_bit(unsigned int nr, char *addr)
->>>>    #define F2FS_NOCOMP_FL			0x00000400 /* Don't compress */
->>>>    #define F2FS_INDEX_FL			0x00001000 /* hash-indexed directory */
->>>>    #define F2FS_DIRSYNC_FL			0x00010000 /* dirsync behaviour (directories only) */
->>>> +#define F2FS_NOCOW_FL			0x00800000 /* Do not cow file */
->>>>    #define F2FS_PROJINHERIT_FL		0x20000000 /* Create with parents projid */
->>>>    #define F2FS_CASEFOLD_FL		0x40000000 /* Casefolded file */
->>>>    /* Flags that should be inherited by new inodes from their parent. */
->>>>    #define F2FS_FL_INHERITED (F2FS_SYNC_FL | F2FS_NODUMP_FL | F2FS_NOATIME_FL | \
->>>>    			   F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
->>>> -			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL)
->>>> +			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL | \
->>>> +			   F2FS_NOCOW_FL)
->>>>    /* Flags that are appropriate for regular files (all but dir-specific ones). */
->>>>    #define F2FS_REG_FLMASK		(~(F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
->>>> @@ -2954,9 +2956,16 @@ static inline void __mark_inode_dirty_flag(struct inode *inode,
->>>>    		fallthrough;
->>>>    	case FI_DATA_EXIST:
->>>>    	case FI_INLINE_DOTS:
->>>> -	case FI_PIN_FILE:
->>>>    	case FI_COMPRESS_RELEASED:
->>>>    		f2fs_mark_inode_dirty_sync(inode, true);
->>>> +		break;
->>>> +	case FI_PIN_FILE:
->>>> +		if (set)
->>>> +			F2FS_I(inode)->i_flags |= F2FS_NOCOW_FL;
->>>> +		else
->>>> +			F2FS_I(inode)->i_flags &= ~F2FS_NOCOW_FL;
->>>> +		f2fs_mark_inode_dirty_sync(inode, true);
->>>> +		break;
->>>>    	}
->>>>    }
->>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
->>>> index 216081ea8c81..9e71ce8601f9 100644
->>>> --- a/fs/f2fs/file.c
->>>> +++ b/fs/f2fs/file.c
->>>> @@ -1851,6 +1851,20 @@ static int f2fs_setflags_common(struct inode *inode, u32 iflags, u32 mask)
->>>>    	if (IS_NOQUOTA(inode))
->>>>    		return -EPERM;
->>>> +	if ((iflags ^ masked_flags) & F2FS_NOCOW_FL) {
->>>> +		int ret;
->>>> +
->>>> +		if (!S_ISREG(inode->i_mode) && !S_ISDIR(inode->i_mode))
->>>> +			return -EINVAL;
->>>> +		if (S_ISREG(inode->i_mode)) {
->>>> +			if (f2fs_should_update_outplace(inode, NULL))
->>>> +				return -EINVAL;
->>>> +			ret = f2fs_convert_inline_inode(inode);
->>>> +			if (ret)
->>>> +				return ret;
->>>> +		}
->>>> +	}
->>>> +
->>>>    	if ((iflags ^ masked_flags) & F2FS_CASEFOLD_FL) {
->>>>    		if (!f2fs_sb_has_casefold(F2FS_I_SB(inode)))
->>>>    			return -EOPNOTSUPP;
->>>> @@ -1926,6 +1940,7 @@ static const struct {
->>>>    	{ F2FS_NOCOMP_FL,	FS_NOCOMP_FL },
->>>>    	{ F2FS_INDEX_FL,	FS_INDEX_FL },
->>>>    	{ F2FS_DIRSYNC_FL,	FS_DIRSYNC_FL },
->>>> +	{ F2FS_NOCOW_FL,	FS_NOCOW_FL },
->>>>    	{ F2FS_PROJINHERIT_FL,	FS_PROJINHERIT_FL },
->>>>    	{ F2FS_CASEFOLD_FL,	FS_CASEFOLD_FL },
->>>>    };
->>>> @@ -1957,7 +1972,8 @@ static const struct {
->>>>    		FS_NOCOMP_FL |		\
->>>>    		FS_DIRSYNC_FL |		\
->>>>    		FS_PROJINHERIT_FL |	\
->>>> -		FS_CASEFOLD_FL)
->>>> +		FS_CASEFOLD_FL |	\
->>>> +		FS_NOCOW_FL)
->>>>    /* Convert f2fs on-disk i_flags to FS_IOC_{GET,SET}FLAGS flags */
->>>>    static inline u32 f2fs_iflags_to_fsflags(u32 iflags)
->>>> -- 
->>>> 2.25.1
++ "in case none was already proposed".
+
+There's indeed recently a tendency on the list to get a lot of first-time
+reports from individuals showing that some work was done trying to make
+some code parts fail, but no effort was made to try to figure how these
+ought to be addressed, and that costs a lot of time, because once the
+analysis was done, the person who knows best about the problem and how
+to fix it is the reporter, and we must absolutely encourage that the
+work is finished and a candidate patch is proposed. Usually, returning
+reporters propose patches, so I think they understand the value in doing
+the work properly, which makes me think that we just don't make that
+obvious enough from the rules. It's also possible that many reporters
+are not used to working with OSS projects and imagine it's inappropriate
+of them to propose a fix. But the question that's the most commonly
+asked on the list is "do you have a patch for this?".
+
+Overall it seems that reporters are willing to do their best but that
+it's never easy to engage in such a bug disclosure process which may
+involve short times, and that it can be stressful for the reporters
+who forget to do a lot of the parts they would do for more regular
+bugs.
+
+> +While the security list is closed, the security team may bring in
+> +extra help from the relevant maintainers to understand and fix the
+> +security vulnerability.
+> +
+> +Note that the main interest of the kernel security list is in getting
+> +bugs fixed; CVE assignment, disclosure to distributions, and public
+> +disclosure happens on different lists with different people.
+
+I think it's also important to explain that sometimes some patches may
+be merged ASAP to plug a hole and let them flow to stable branches,
+while letting the reporter deal with the full disclosure once they
+consider that enough time has elapsed. The recent "dirty pipe" fix was
+one of the best examples of a report that went smoothly and allowed the
+reporter to work on a nice description of the problem:
+
+    https://dirtypipe.cm4all.com/
+
+There's always this gray area between getting a fix merged and disclosing
+all the details of the bug. A bug indeed becomes public once the fix is
+merged, but that doesn't mean that all the details are shared, so the
+reporter still has the opportunity to write their story about it. The
+reporter must only understand that it's only a matter of time between
+the merge of a fix and the moment someone will understand how to exploit
+the bug and publish about it.
+
+> +Here is a quick overview of the various lists:
+> +
+> +.. list-table::
+> +   :widths: 35 10 20 35
+> +   :header-rows: 1
+> +
+> +   * - List address
+> +     - Open?
+> +     - Purpose
+> +     - Members
+> +   * - security@kernel.org
+> +     - Closed
+> +     - Reporting; patch development
+> +     - Trusted kernel developers
+> +   * - linux-distros@vs.openwall.org
+> +     - Closed
+> +     - Coordination; CVE assignment; patch development, testing, and backporting
+> +     - Linux distribution representatives
+> +   * - oss-security@lists.openwall.com
+> +     - Public
+> +     - Disclosure
+> +     - General public
+
+While this part renders well on your HTML version, I'm afraid it's totally
+unreadable here in the text version, and this document is supposed to be
+the one reporters will use. I suggest to try again with an item list
+instead of a table.
+
+> +**Disclosure.** The security list prefers to merge fixes into the
+> +appropriate public git repository as soon as they become available.
+> +However, you or an affected party may request that the patch be
+> +withheld for up to 7 calendar days from the availability of the patch,
+> +with an exceptional extension to 14 calendar days if it is agreed that
+> +the bug is critical enough to warrant more time. The only valid reason
+> +for deferring the publication of a fix is to accommodate the logistics
+> +of QA and large scale rollouts which require release coordination.
+
+I'm still having an issue here. Originally it was something along "up
+to 5 days if there's a really compelling reason". Then it was extended
+to 7 days in order to better match the tuesday-to-thursday range. Then
+"up to 14 days" for exceptional cases (i.e. hopefully never). But the
+wording tends to make all reporters think that asking for 7 days is
+normal. We really need to make it even clearer that:
+  - the default is no embargo
+
+  - if there is a *really compelling reason* (that has to be justified
+    by the reporter), it may reach *up to 7 days*
+
+  - in exceptional cases (the bug-of-the-year with a risk of massive
+    exploitation requiring coordination) it may be extended to 14 days
+
+  - "I already contacted this or that list so you must respect THEIR
+    embargo" is NOT a valid justification to withhold a fix
+
+  - dealing with embargoes is a pain, a withheld patch risks to be
+    forgotten or confused with a previous version of the patch that
+    appeared in discussions, it's difficult to synchronize stable
+    and mainline, and the risk that it leaks by accident grows with
+    time and with the number of participants in a discussion.
+
+Just my two cents.
+Willy

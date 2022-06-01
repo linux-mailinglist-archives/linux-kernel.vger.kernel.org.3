@@ -2,154 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEA8539FFD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4D4539FF9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350988AbiFAJAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 05:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        id S239184AbiFAI73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351024AbiFAI74 (ORCPT
+        with ESMTP id S1347947AbiFAI71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:59:56 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39081606D6
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:59:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654073995; x=1685609995;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=j2b6wLutuvOHJH7VhblS925xsyPTQ7csiUF93TuRYkU=;
-  b=l/xJrKTQzF8zbjEqQM06FVVWWEkoRJp+dKFhyb6kuFuONE6mzy9ruQGX
-   kBEMDw59rni4ROpJ28YbzDGcWQgvZTqfgmqpWCWJK5wLx6laqipWIRXqL
-   1+ZcDEeD9Gz6rgxDHieLIh7pmPUwTDPpWEGEzYKKW2DoxsrQm6TwyHPcc
-   EuTqfWrJ80tJ8MwlPp7YnLrzkTeAQ62/dXD5+ivm8FaDisH+V1Ms4AaU+
-   g32qyv8Qjs6salCwIbC/qLx0ZaAnPWfKre0upBLIreVQQpVV6wFFg/cvH
-   /eSWSKnnw1L1XewZPYuJ4oiRiwaJojgXx0qT87xlrXcrHpaKLt5l/OtEC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="300873592"
-X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="300873592"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 01:59:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="755804973"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 Jun 2022 01:59:53 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwKCm-0003mB-Q2;
-        Wed, 01 Jun 2022 08:59:52 +0000
-Date:   Wed, 1 Jun 2022 16:59:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev 77/78]
- kernel/rcu/tasks.h:1231:12: warning: variable 'realnew' set but not used
-Message-ID: <202206011656.3Ab9OjRb-lkp@intel.com>
+        Wed, 1 Jun 2022 04:59:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71BA26BFE7
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:59:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654073965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uzxCOihBBp2MvYCnWOOgAbyz9Dw1/OZ2iZqah66p3+o=;
+        b=EXOjlnKQirydQ4DGET0xbN2cNa7Z4L70epX6LmNKhu9loYdD15pyTETP25xHGuxCuJVG7A
+        4XIiqBTwMdBcx6IAxe/0BSkmgiMyA/pS5eAPF2CpRmbuhi14SWtJYPqCZ4ZByJjpE7lVF2
+        nQE8rwCdnsiYKtQWG2S6MN5nYYfmGvw=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-131-CLrASgcsNEyjDov6QsFk5Q-1; Wed, 01 Jun 2022 04:59:24 -0400
+X-MC-Unique: CLrASgcsNEyjDov6QsFk5Q-1
+Received: by mail-ed1-f71.google.com with SMTP id g7-20020a056402424700b0042dee9d11d0so812658edb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 01:59:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uzxCOihBBp2MvYCnWOOgAbyz9Dw1/OZ2iZqah66p3+o=;
+        b=WpqtDLPDNZjrOX03/ygc8KxZQa1TnKDlqG++0Ko9AzAweHhdcnFI5YkAAdoIt7Q1Mf
+         Oy24OOSfBKYmfXoO0S20WqfOQv+H3ZJ0v6MkAYyj6woB9E7cjPPlGA/n6kQeDwvsXRFh
+         WYDHapcDWQWFrDoz9OvWTFwOQ41XgWJGeK+3td2luG7SwNCrTNi0354Ch5ZeeubdSMdA
+         PhqqlrtkxLIF5EKgrBSDSl+/z414ZASiZQqR42ODsOItBY4CS2S5cIp2M1uRmuMllqw1
+         vMQoMhTpAU8gA3/TaXFBcA3qwW97mHNcaojm5ZqBr+qhJ7kDIw0SaxvJ4b8GOYztVc3g
+         51nQ==
+X-Gm-Message-State: AOAM531U6LfvQAC+iXVTT17BLufWdDrJQ2s/8PNrVXpsF6ze6w4TPa04
+        EPeWLuCwFOE5dQuHADKiE0pGu1m6zQXM22AdveMrNviNjoRL5UUkt+N5Hf1CPs0SrhtqxJKa7OU
+        R1oU5ZQtDAwP6I7q5o9EdzPud
+X-Received: by 2002:a50:ea8b:0:b0:428:7d05:eb7e with SMTP id d11-20020a50ea8b000000b004287d05eb7emr66994806edo.185.1654073963162;
+        Wed, 01 Jun 2022 01:59:23 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzcZzdAmqTqAOV48EeckvF3+BiTMXPZ6japnr184Gq8Eqzb54YOTFyRdX28qRg+QRUvnZvVOA==
+X-Received: by 2002:a50:ea8b:0:b0:428:7d05:eb7e with SMTP id d11-20020a50ea8b000000b004287d05eb7emr66994790edo.185.1654073962970;
+        Wed, 01 Jun 2022 01:59:22 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id cx12-20020a05640222ac00b0042bd6630a14sm644395edb.87.2022.06.01.01.59.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 01:59:22 -0700 (PDT)
+Message-ID: <b9238c07-68a7-31fa-c654-d8111a1e2d4b@redhat.com>
+Date:   Wed, 1 Jun 2022 10:59:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: ...\n
+Content-Language: en-US
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "Durrant, Paul" <pdurrant@amazon.co.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Allister, Jack" <jalliste@amazon.com>
+Cc:     "bp@alien8.de" <bp@alien8.de>,
+        "diapop@amazon.co.uk" <diapop@amazon.co.uk>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "metikaya@amazon.co.uk" <metikaya@amazon.co.uk>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rkrcmar@redhat.com" <rkrcmar@redhat.com>,
+        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "x86@kernel.org" <x86@kernel.org>
+References: <YpYaYK7a28DFT5Ne@hirez.programming.kicks-ass.net>
+ <20220531140236.1435-1-jalliste@amazon.com>
+ <YpYpxzt4rmG+LFy9@hirez.programming.kicks-ass.net>
+ <059ab3327ac440479ecfdf49fa054347@EX13D32EUC003.ant.amazon.com>
+ <307f19cc-322e-c900-2894-22bdee1e248a@redhat.com> <87tu94olyd.fsf@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <87tu94olyd.fsf@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
-head:   19abca3f9f9095e58c46e2f169543705bd92cf35
-commit: 4b3564b0807387c66b80b24095019479584039c9 [77/78] rcu-tasks: Manual revert of 4b2a6af8fe31e85fb2754b8da5072041a4dea471
-config: m68k-defconfig (https://download.01.org/0day-ci/archive/20220601/202206011656.3Ab9OjRb-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/4b3564b0807387c66b80b24095019479584039c9
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
-        git checkout 4b3564b0807387c66b80b24095019479584039c9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash kernel/
+On 6/1/22 09:57, Vitaly Kuznetsov wrote:
+>>> I'll bite... What's ludicrous about wanting to run a guest at a lower CPU freq to minimize observable change in whatever workload it is running?
+>> Well, the right API is cpufreq, there's no need to make it a KVM
+>> functionality.
+> KVM may probably use the cpufreq API to run each vCPU at the desired
+> frequency: I don't quite see how this can be done with a VMM today when
+> it's not a 1-vCPU-per-1-pCPU setup.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+True, but then there's also a policy issue, in that KVM shouldn't be 
+allowed to *bump* the frequency if userspace would ordinarily not have 
+access to the cpufreq files in sysfs.
 
-All warnings (new ones prefixed by >>):
+All in all, I think it's simpler to let privileged userspace (which 
+knows when it has a 1:1 mapping of vCPU to pCPU) handle it with cpufreq.
 
-   In file included from kernel/rcu/update.c:606:
-   kernel/rcu/tasks.h: In function 'rcu_trc_cmpxchg_need_qs':
-   kernel/rcu/tasks.h:1239:9: error: aggregate value used where an integer was expected
-    1239 |         ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
-         |         ^~~
-   kernel/rcu/tasks.h:1239:9: error: aggregate value used where an integer was expected
-   In file included from arch/m68k/include/asm/cmpxchg.h:131,
-                    from arch/m68k/include/asm/atomic.h:7,
-                    from include/linux/atomic.h:7,
-                    from include/linux/cpumask.h:13,
-                    from include/linux/smp.h:13,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/spinlock.h:62,
-                    from kernel/rcu/update.c:23:
-   include/asm-generic/cmpxchg.h:92:10: error: cast to union type from type not present in union
-      92 |         ((__typeof__(*(ptr)))__generic_cmpxchg_local((ptr), (unsigned long)(o), \
-         |          ^
-   include/asm-generic/cmpxchg.h:105:33: note: in expansion of macro 'generic_cmpxchg_local'
-     105 | #define arch_cmpxchg_local      generic_cmpxchg_local
-         |                                 ^~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/cmpxchg.h:112:33: note: in expansion of macro 'arch_cmpxchg_local'
-     112 | #define arch_cmpxchg            arch_cmpxchg_local
-         |                                 ^~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:1916:9: note: in expansion of macro 'arch_cmpxchg'
-    1916 |         arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-         |         ^~~~~~~~~~~~
-   kernel/rcu/tasks.h:1239:15: note: in expansion of macro 'cmpxchg'
-    1239 |         ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
-         |               ^~~~~~~
-   In file included from kernel/rcu/update.c:606:
->> kernel/rcu/tasks.h:1231:12: warning: variable 'realnew' set but not used [-Wunused-but-set-variable]
-    1231 |         u8 realnew;
-         |            ^~~~~~~
+Paolo
 
-
-vim +/realnew +1231 kernel/rcu/tasks.h
-
-122db3cac94c0b Paul E. McKenney 2022-05-23  1223  
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1224  /*
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1225   * Do a cmpxchg() on ->trc_reader_special.b.need_qs, allowing for
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1226   * the four-byte operand-size restriction of some platforms.
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1227   * Returns the old value, which is often ignored.
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1228   */
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1229  u8 rcu_trc_cmpxchg_need_qs(struct task_struct *t, u8 old, u8 new)
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1230  {
-2b23adb3446ac4 Paul E. McKenney 2022-05-25 @1231  	u8 realnew;
-2b23adb3446ac4 Paul E. McKenney 2022-05-25  1232  	union rcu_special ret;
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1233  	union rcu_special trs_old = READ_ONCE(t->trc_reader_special);
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1234  	union rcu_special trs_new = trs_old;
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1235  
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1236  	if (trs_old.b.need_qs != old)
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1237  		return trs_old.b.need_qs;
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1238  	trs_new.b.need_qs = new;
-2b23adb3446ac4 Paul E. McKenney 2022-05-25  1239  	ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
-2b23adb3446ac4 Paul E. McKenney 2022-05-25  1240  	realnew = READ_ONCE(t->trc_reader_special.b.need_qs);
-2b23adb3446ac4 Paul E. McKenney 2022-05-25  1241  	return ret.b.need_qs;
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1242  }
-0f7cb0c989a98c Paul E. McKenney 2022-05-24  1243  
-
-:::::: The code at line 1231 was first introduced by commit
-:::::: 2b23adb3446ac4098c17dee98414df6fca07f6c9 squash! rcu-tasks: Atomically update .b.need_qs to obviate count
-
-:::::: TO: Paul E. McKenney <paulmck@kernel.org>
-:::::: CC: Paul E. McKenney <paulmck@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,136 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A618E53A470
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF7653A476
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351513AbiFALzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 07:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
+        id S1351448AbiFAL4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 07:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242108AbiFALzW (ORCPT
+        with ESMTP id S242108AbiFAL4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:55:22 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633AA6CA9C
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 04:55:21 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id u12so3227549eja.8
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 04:55:21 -0700 (PDT)
+        Wed, 1 Jun 2022 07:56:40 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E5B6B7C0
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 04:56:37 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id c14so1661773pgu.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 04:56:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4OpO3uKfRtKodys5+/EnMixlHpVSJs70BVrbM2XAtfI=;
-        b=XLNphxDHaRzoOejyaPEbUl7phZ+HXq507aC+nEXNk7/SBkgJdljf+/nio0hIa05Ewz
-         HlhdlQTrN66hw0qiQ79JNN37F72one4RmyfdykzPzFeA4bO8il8W88lB+RHmYwinEXl2
-         6GfA6Mmvo3aZMeMmhATm/jKwGiZNTE/kx7MMu2j7yA+6nD4Rw4DC9CjSQhUbqlRVL/CL
-         K1KtuC4RppDslOJl9J9CynIBTW2qogpgK9cEvGI946Ncg6XrCb5ZAKDjPcyLNdVkmBO9
-         XVyvetr7WhsV4HBjZCO3OZsDuzmd3S3abCO6paJ/2I0o7lKRC/DhjLdDJVrw/0sJjSy8
-         R8Og==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pR6VzLoG/n8Hl9GbCmfWr6M9WLjiGWY3XL3BO0710dM=;
+        b=w6WHPfiAa2BV+6s2Aq+bTPDlC3usBQQMUEzBNO9v68Ym/XmdcCTaiut0SFHNA5JtEs
+         PeDc1Jch6hPTLaX+2tZxz9rxEFnVL3qAYPGJWp9krdPas0eTy+o+2BUe5cJaAAY24dU4
+         3tSkFPc+dG9/uLbT+Of1zSZ+S/AQv6OP/H+1pKxQ7sJmXR80+gwIe1rabajINc9aRrly
+         3eSpIw8dDhQvYURe8U06jgFjHGg1lC8nF8/RapYfjKXYKZkZH9kcLTVlP37U4L+qIw86
+         D+pxNhJxwpgJlN9aNw/ZhFWcJwtMJSsz+B9I0kM0OfR4ywm9IYjUAb9Wrldo9qxs5qFh
+         8SQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4OpO3uKfRtKodys5+/EnMixlHpVSJs70BVrbM2XAtfI=;
-        b=6FHKgwDuu5rw4vwIFqfrH5vCog6lum/HRNI0WWY3HDkUNR1GdQUwlXU6tevt2byQi8
-         TcvTBkQAkbCkCpqSzxqS1kSFFoqTmGMfPDR1YyqGkehsIjCnoBdkcwKm/u1zzSK/DjgR
-         2NQUmmi6Gsdo+SJmRkfWrJdrpA2Ev6Zoo7Znlex4ZXSptezzOGsdU98NXbcthcsKqErs
-         BNYQR22Fq2oTAGPNz0WO6RbKVTbLOAptQ9u5nxmYlZpCC+R88jYAl+s7U24dRmLd8NNR
-         5oFni0PjjVo1w23C/NLlE/75DtwyzsxD56VkyLZTDwWC9L5E842yOaMUkAEMeM0DzzHP
-         +6nA==
-X-Gm-Message-State: AOAM530brKuc2A5ghI2Sv6MPUa+v/yKRf/gbLo+q1R73xIS1mhhChQjc
-        ZKTVNpo8KscO0Me6kxjLXyYBrQ==
-X-Google-Smtp-Source: ABdhPJzQpW3tl8/Gt3VogC+OWYGOrWx5aQpwt6DckwkqC0AbGuziXMIS9ExL1uGEI1ZQQd6JRPuIlw==
-X-Received: by 2002:a17:906:e87:b0:6df:8602:5801 with SMTP id p7-20020a1709060e8700b006df86025801mr57845149ejf.140.1654084519977;
-        Wed, 01 Jun 2022 04:55:19 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o13-20020a17090608cd00b006fedcb78854sm624896eje.164.2022.06.01.04.55.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 04:55:19 -0700 (PDT)
-Message-ID: <cf90d9aa-1ba9-9619-35b7-8c2de436fc12@linaro.org>
-Date:   Wed, 1 Jun 2022 13:55:18 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pR6VzLoG/n8Hl9GbCmfWr6M9WLjiGWY3XL3BO0710dM=;
+        b=TQ5HKMdZxtJr376D13dbL9FpVorLRaGZ2rdcL78gK3hN6m5lVAMMW+5+iGQPYH0eN+
+         0x7toekz9Y9zf7tOPQAG1CM9EfK1hC/Y68wheDGwdxIwFqYXeAXQRblsTMeyq1FWQny1
+         EZ9HEFmZPiApPO6r7VpG2R80avce/kGXUphsIF677Dvxp3imoXV1VKBgQkDPqgFfsGCW
+         Eghg5n4rM0WmmAqj5d3VWIyjmTWhDScoJlICsXerRBy7ya1jgCI+tf7d9G74Br77cGda
+         muRefhxHBB0KiF361vM+G5CxrIqSDVdKBa0xfnn9IehW5iHN5KIL8ebLP+rzUeyX7b9Y
+         Qf5g==
+X-Gm-Message-State: AOAM533hKaB021OCQqNiTc0yV9ABphPhP6o4lSm66vnLPse1PrqahIK6
+        tIUW0bztawQpOmnxo3cu3kx3jA==
+X-Google-Smtp-Source: ABdhPJwSk3VUFjJDwUrgUxbBIoYw9ZfLI5bPXe34CUD6GqwF15lJ0NA1xUR3OJNC13SbIdMmemLHEQ==
+X-Received: by 2002:a05:6a00:994:b0:518:6f30:502d with SMTP id u20-20020a056a00099400b005186f30502dmr59379307pfg.68.1654084597086;
+        Wed, 01 Jun 2022 04:56:37 -0700 (PDT)
+Received: from localhost ([2408:8207:18da:2310:f9bc:fb5f:5b66:a80e])
+        by smtp.gmail.com with ESMTPSA id g29-20020aa79ddd000000b0050dc762819esm1264305pfq.120.2022.06.01.04.56.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 04:56:36 -0700 (PDT)
+Date:   Wed, 1 Jun 2022 19:56:31 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        smuchun@bytedance.com
+Subject: Re: [PATCH 3/3] mm: hugetlb_vmemmap: cleanup
+ CONFIG_HUGETLB_PAGE_FREE_VMEMMAP*
+Message-ID: <YpdT756zYIaMzsN3@FVFYT0MHHV2J.googleapis.com>
+References: <20220404074652.68024-1-songmuchun@bytedance.com>
+ <20220404074652.68024-4-songmuchun@bytedance.com>
+ <ba64cd1b-c8ee-a4eb-f0cd-e16c26777d46@redhat.com>
+ <Ypc3OquA5MZUl5iw@FVFYT0MHHV2J.googleapis.com>
+ <ecc076e6-562e-cb5d-6c92-295dde07f657@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/8] dt-bindings: interconnect: imx8m: Add bindings for
- imx8mp noc
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        abel.vesa@nxp.com, abailon@baylibre.com, l.stach@pengutronix.de,
-        laurent.pinchart@ideasonboard.com, marex@denx.de,
-        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
-        aford173@gmail.com
-Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-References: <20220601094156.3388454-1-peng.fan@oss.nxp.com>
- <20220601094156.3388454-2-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220601094156.3388454-2-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ecc076e6-562e-cb5d-6c92-295dde07f657@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2022 11:41, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Wed, Jun 01, 2022 at 12:10:29PM +0200, David Hildenbrand wrote:
+> On 01.06.22 11:54, Muchun Song wrote:
+> > On Wed, Jun 01, 2022 at 11:32:37AM +0200, David Hildenbrand wrote:
+> >> On 04.04.22 09:46, Muchun Song wrote:
+> >>> The word of "free" is not expressive enough to express the feature of optimizing
+> >>> vmemmap pages associated with each HugeTLB, rename this keywork to "optimeze".
+> >>> In this patch , cheanup configs to make code more expressive.
+> >>
+> >> Nit: why not simply CONFIG_HUGETLB_OPTIMIZE_VMEMMAP if we're touching
+> >> this already? At least I don't see value in the additional "PAGE" :)
+> >>
+> > 
+> > I thought it keep consistent with CONFIG_HUGETLB_PAGE.  If you think
+> > CONFIG_HUGETLB_OPTIMIZE_VMEMMAP is a better name, maybe we need to
+> > another separate patch since this series is already on mm-stable branch.
 > 
-> i.MX8MP features same NoC/NIC as i.MX8MM/N/Q, and use two compatible
-> strings.
+> I see, makes sense then.
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml     | 6 ++++++
->  1 file changed, 6 insertions(+)
+> >>>
+> >>> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> >>> ---
+> >>>  Documentation/admin-guide/kernel-parameters.txt |  4 ++--
+> >>>  Documentation/admin-guide/mm/hugetlbpage.rst    |  2 +-
+> >>>  arch/arm64/Kconfig                              |  2 +-
+> >>>  arch/arm64/mm/flush.c                           |  2 +-
+> >>>  arch/x86/Kconfig                                |  2 +-
+> >>>  arch/x86/mm/init_64.c                           |  2 +-
+> >>>  fs/Kconfig                                      | 16 ++++++++--------
+> >>>  include/linux/hugetlb.h                         |  2 +-
+> >>>  include/linux/mm.h                              |  2 +-
+> >>>  include/linux/page-flags.h                      |  6 +++---
+> >>>  mm/Makefile                                     |  2 +-
+> >>>  mm/hugetlb_vmemmap.c                            |  4 ++--
+> >>>  mm/hugetlb_vmemmap.h                            |  4 ++--
+> >>>  mm/sparse-vmemmap.c                             |  4 ++--
+> >>>  14 files changed, 27 insertions(+), 27 deletions(-)
+> >>>
+> >>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> >>> index 56edbe3f458f..89a58ac49d5f 100644
+> >>> --- a/Documentation/admin-guide/kernel-parameters.txt
+> >>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> >>> @@ -1660,7 +1660,7 @@
+> >>>  			Format: size[KMG]
+> >>>  
+> >>>  	hugetlb_free_vmemmap=
+> >>
+> >> We didn't change the parameter name in #2, correct?
+> >>
+> > 
+> > I think this is a interface to users. Is it correct to
+> > change it?
 > 
-> diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-> index b8204ed22dd5..0923cd28d6c6 100644
-> --- a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-> @@ -26,16 +26,22 @@ properties:
->      oneOf:
->        - items:
->            - enum:
-> +              - fsl,imx8mp-nic
+> I guess so ... I was just wanted to confirm that this is still correct :)
+>
 
-Please order the entries alphabetically, so 8mp goes after 8mm.
+Well, I think it is not correct to change it since it
+could change behavior to users. :-)
 
->                - fsl,imx8mn-nic
->                - fsl,imx8mm-nic
->                - fsl,imx8mq-nic
->            - const: fsl,imx8m-nic
->        - items:
->            - enum:
-> +              - fsl,imx8mp-noc
-
-ditto
-
->                - fsl,imx8mn-noc
->                - fsl,imx8mm-noc
->                - fsl,imx8mq-noc
->            - const: fsl,imx8m-noc
-> +      - items:
-> +          - const: fsl,imx8mp-noc
-> +          - const: fsl,imx8m-noc
-> +          - const: syscon
-
-This is a bit confusing - why this is also fallbacked as syscon?
-
->        - const: fsl,imx8m-nic
->  
->    reg:
-
-
-Best regards,
-Krzysztof
+Thanks.

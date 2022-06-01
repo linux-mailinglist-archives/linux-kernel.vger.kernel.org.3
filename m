@@ -2,105 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F027253A4D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 14:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C5853A4D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 14:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345207AbiFAMXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 08:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
+        id S1352334AbiFAMXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 08:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350269AbiFAMXi (ORCPT
+        with ESMTP id S1352193AbiFAMXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Jun 2022 08:23:38 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA393C721
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 05:23:34 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-f2bb84f9edso2431629fac.10
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 05:23:34 -0700 (PDT)
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3591A3E5F9
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 05:23:37 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so1905347pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 05:23:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2ZeeMPsVq/F2kMhsR41ridh7qdYgsJ3WBnG/douuUrE=;
-        b=LhBaRrG1fxI90fUlzneUqaVvc+fkDfCztkgs5q9MatvTuiEqmSvtYMbnAwd52xAe3I
-         zRg+odQHSeRcWScWnjEEPEspwgMwqc57zsBgANK9qxcR/kC6iYapF9+qayx00vxc6wRv
-         /Vs+8vxLR4eTTSluzg1B77+eIiHTEkyV1GgUGpqLmiizynYkKvNDJCCE+vFjmMqVTJEi
-         lUue1Ca/NSvQBtbgV2UvUWvXgLYjD3MUFRwP9F0iEint4G1qw2QDf0xThtXF9qdZezFG
-         uj5IRomooli3fEPqh78YSdz6Du36gS0MQaqPb/AG6dZ/m4p+E12JPifC7VfvwLg3+++o
-         VVYA==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=eE/RQgZbAsioeXGGDhy3YNOxe1f8/kg9fI5Pln+oa7c=;
+        b=Z5Bxt2UsMbfXUsxvbJm9ljG3YeKEKbr9TosAoG4UPi0JVK0tRKPEhGaxUmrzLr1B8b
+         6ZxfKNKH0nHwqmWlj25fI1/vBjKkt37HiQVan0O2eR7z0McEr8N1I+by+eLMqASOeLim
+         eGgefDQfbiUHszqDnuPqjZp1ByiFc1eBQlEw88xNvP9U0cAVGUpx0Ix+ZWcrR2iPiykT
+         zrPuyhXI8AwZwX/rBUdNZUvKvNzoEdMeof/N6rmcXU/G6/VmJvMFt35beeJ2QfF26HU+
+         SOzOIUP3ImI3scmHr6WyvtBPx8po5YOMcfnonGG5OUI6o0+FRoZITzEz5qeik4Tr3mbw
+         mMcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2ZeeMPsVq/F2kMhsR41ridh7qdYgsJ3WBnG/douuUrE=;
-        b=OcTRPtND6DX3AVAuqlhsmPifQwlJ7e/Y9wMFQ5VL4YtVRuTtFRsj3RV5K4Ty7IWK0e
-         bCO8OF7uJIz6aw1IIxM+Mv2QCqNNQ2o/yXsqJqMML0ZxXfuKkLDOb2Sw0OYiH7vyfkX3
-         aFmwyYpWio7JfX2uo9MNnqk6Bob3NwGdbM0cs+5jv0utCL1xVjLHk0XUj9EMo0yqCAbs
-         vjFtW45U5ifTw4CdIxpeGYf70pS9DZxrbRtjKfLOHoAczWRt5nrdEQ2HWBBvDJ8u9ikD
-         W7uRrjhMOYucHOcCj13bwRWg8JB0HQD4NuLJbdYN7yQFfQ5G7CxdgXGAUEUvWOqqzzei
-         VuNw==
-X-Gm-Message-State: AOAM533fmivGDwiCCt4h2rWVRNZVMVfhhUxJrGjBj64qojtv2qnl+yfh
-        7HkUJCqcPjc5lHJv0OGfQ1IAxw==
-X-Google-Smtp-Source: ABdhPJwsy06DtmIXDK6TBLlB20wpUQ7qEftOU5W93iRILKFthhSU/xOYgS9iXHJc+MH8bri2mp3d9A==
-X-Received: by 2002:a05:6870:891f:b0:f3:3811:3e30 with SMTP id i31-20020a056870891f00b000f338113e30mr8652915oao.269.1654086213813;
-        Wed, 01 Jun 2022 05:23:33 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id u2-20020a9d7202000000b00606387601a2sm685418otj.34.2022.06.01.05.23.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 05:23:33 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: [GIT PULL] rpmsg updates for v5.19
-Date:   Wed,  1 Jun 2022 07:23:32 -0500
-Message-Id: <20220601122332.536516-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=eE/RQgZbAsioeXGGDhy3YNOxe1f8/kg9fI5Pln+oa7c=;
+        b=xY7doh5aVAARw+QFxZTdU+P6uQiM4x8BGl7zr4SbTd6Y6g2jjsdKPiByIsJhSi6pif
+         WrpEtfgqvrWpWq5Ar1/VjS/+V44lm45A3bEqcItCmTFGOkPscIQfHXQ8auj/npOnAkXC
+         LOdQKaR2Ae4/WVZsZomIJcsq6by7cm2VaMUQ9bOHH5uvJS7iCgBg1/C083UIgYgwEqQH
+         tsMx87YhX7gMaHGfJkStx6G6Gkz7Ys+IyQEXzr/AJzp5i2poZ0Ye3U/tOrnv3rUH8g84
+         qz25ts1+p6K0oSl2JVxCbqSX6vQ2kNXAzWUqO9KX7QijmAH84pPv9nuGpYkpZvrHBxLp
+         XiNw==
+X-Gm-Message-State: AOAM53396bhyMq1WbDrj3BXIQ9BERJdzSSyHHDhfQ2eq8LoXPQ+PU4qp
+        JN9fanNhOYTxXTXXe8r7O8s741IRFTLEKJZ8EAg=
+X-Google-Smtp-Source: ABdhPJwyecfdv1ZmTLbvb1N7aEx5LZEV/YyudSt+F5/QZLgnyaUMzTf+KyitPNuAmgJxvxq7ih+lcZtWbJvGbtGqUvs=
+X-Received: by 2002:a17:902:f60c:b0:156:82c9:e44b with SMTP id
+ n12-20020a170902f60c00b0015682c9e44bmr65994468plg.106.1654086216532; Wed, 01
+ Jun 2022 05:23:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7022:6282:b0:40:5c05:c05a with HTTP; Wed, 1 Jun 2022
+ 05:23:36 -0700 (PDT)
+Reply-To: pau1deedee@yandex.com
+From:   Paul Deedee <deedeepaul21@gmail.com>
+Date:   Wed, 1 Jun 2022 14:23:36 +0200
+Message-ID: <CAL-_JaEGRJfhD2ztG-1zPSaxz5ycAHo6QwerN=TE-5V-XXEE5A@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,DEAR_BENEFICIARY,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FORM_SHORT,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:102b listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5001]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [deedeepaul21[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [deedeepaul21[at]gmail.com]
+        *  0.0 DEAR_BENEFICIARY BODY: Dear Beneficiary:
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
+        *      information
+        *  0.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
+        *  0.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
+Dear email beneficiary.......Your email has been selected for a donation.
 
-  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
+This is to officially inform you that we have been having a meeting
+for the past Months now which has already ended with Mr.Antonio
+Guterres Secretary-General of United Nations, Mr. David R.Malpass the
+World Bank President and,  Your ( e-mail address ) appeared among
+those people to be compensated.
 
-are available in the Git repository at:
+You have been compensated with the sum of ($750,000.00) by United
+Nations and the World Bank Group because of this Coronavirus pandemic,
+which has been terrorizing all over the world.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rpmsg-v5.19
+This money is to empower you to start a business, the payment will be
+issued through ATM VISA  CARD and sent to you from our representative
+Rev. David Wood, we need Your Full Name Home Address and Your Phone
+Numbers.
 
-for you to fetch changes up to 59d6f72f6f9c92fec8757d9e29527da828e9281f:
+Contact  Rev. David Wood with this email.id ( davidwood2019@yandex.com
+) or you send your details to me. I will be the one to send your
+details to him.
 
-  rpmsg: qcom_smd: Fix returning 0 if irq_of_parse_and_map() fails (2022-04-28 14:32:15 -0500)
-
-----------------------------------------------------------------
-rpmsg updates for v5.19
-
-This corrects the check for irq_of_parse_and_map() failures in the
-Qualcomm SMD driver and fixes unregistration and a couple of double free
-in the virtio rpmsg driver.
-
-----------------------------------------------------------------
-Arnaud Pouliquen (1):
-      rpmsg: virtio: Fix the unregistration of the device rpmsg_ctrl
-
-Hangyu Hua (2):
-      rpmsg: virtio: Fix possible double free in rpmsg_probe()
-      rpmsg: virtio: Fix possible double free in rpmsg_virtio_add_ctrl_dev()
-
-Krzysztof Kozlowski (2):
-      rpmsg: qcom_smd: Fix irq_of_parse_and_map() return value
-      rpmsg: qcom_smd: Fix returning 0 if irq_of_parse_and_map() fails
-
- drivers/rpmsg/qcom_smd.c         | 4 ++--
- drivers/rpmsg/virtio_rpmsg_bus.c | 9 ++++-----
- 2 files changed, 6 insertions(+), 7 deletions(-)
+Thanks.
+Tel:  1 513 452 4395.
+Tatiana Valovaya Director-General of the United Nations Office.
+CC:  Mr. David R.Malpass the World Bank President

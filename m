@@ -2,192 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E4953AAD9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE5D53AADC
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356045AbiFAQRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 12:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
+        id S1356051AbiFAQRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 12:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240224AbiFAQRK (ORCPT
+        with ESMTP id S240224AbiFAQRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 12:17:10 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4842BB3E;
-        Wed,  1 Jun 2022 09:17:09 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id f9so4887104ejc.0;
-        Wed, 01 Jun 2022 09:17:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pWC762eypj2bjNl4hQW+7FNPu195AwmDMFJhzzFNCpM=;
-        b=G3f5RaE8elRiEIhW7E9mRL9MCs3ZC4+jrYnG816uzfgX2ibjozqeMY/uXuI4lIos4x
-         y+haneV4Vg0pwa3FJZiUB7B1Z0sS146wVEUHjctJCEIx/1Zyty50DgZgc4gZrkO26e2W
-         xTRPwkOT9metOf3XxWdUBjq+ruxGbqY0aELegGMHqPfPl78LnR6QX6fYP1+aCP7cRf6D
-         sqMR+wATpGqL64B15POXcxgVMhdkzRpiLk6RLpOCw3Kn7OrGmAnmyD/ANhJbvqnl5zJE
-         upjkNhx9QBAx3RXsdWNzXVegLrbhKEEBvT7/KaxZ3voxIs6xWDx7oX4t16xJ2NQXZXqk
-         vjdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pWC762eypj2bjNl4hQW+7FNPu195AwmDMFJhzzFNCpM=;
-        b=b1imjn19ZPDa9MIgV1a9SYah+thy3iAkqYp7mockARpifzrGzeiqQ1D3zEvdYZJanc
-         D0NXZef7hzAEpIbiqpHjCbQJ12cLij8hNL7psIgrSD/qR+IGBvNfh8gmd/SK8j7uOfrP
-         as6zYMv9nZMo92C+BO+XJkZWrlN0N9Ln5goxwghV10ysAvASfIHIjOGnUBxhsOxszCHP
-         NfJ6TnrRneGkV35Z7MEw09qlQlQuNBUDiXpXziP7hf34VidwYb6QzewdJo563S9LGHvV
-         3i73ye7AlH5R3sY3c1i3u3cEWkFuqvBTC9MAgdKYMCPhQelijry10bhuKugXprok+xfm
-         6fbg==
-X-Gm-Message-State: AOAM53329mXf8bptC35lJBemO+T2ATsKyEuVLsWUeJy1lBQcTOH5pWfD
-        F0lIgO9bxBRH/akE0+dRSbI=
-X-Google-Smtp-Source: ABdhPJxUrWuyQnIx8N3FchlVvwbKdGrhbP5RG/Nnspz9UY5pBWWqSdVuyXoKdi3JoFOTDlmH5LOARg==
-X-Received: by 2002:a17:906:7948:b0:6f7:d5a3:3b91 with SMTP id l8-20020a170906794800b006f7d5a33b91mr292819ejo.354.1654100227631;
-        Wed, 01 Jun 2022 09:17:07 -0700 (PDT)
-Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id f1-20020a056402160100b0042de839eb2csm1164086edv.27.2022.06.01.09.17.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 09:17:07 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: Re: Re: [PATCH v6 16/17] media: uapi: Change data_bit_offset definition
-Date:   Wed, 01 Jun 2022 18:17:05 +0200
-Message-ID: <7385576.EvYhyI6sBW@kista>
-In-Reply-To: <3175529.44csPzL39Z@kista>
-References: <20220527143134.3360174-1-benjamin.gaignard@collabora.com> <20220527143134.3360174-17-benjamin.gaignard@collabora.com> <3175529.44csPzL39Z@kista>
+        Wed, 1 Jun 2022 12:17:49 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE7357175;
+        Wed,  1 Jun 2022 09:17:47 -0700 (PDT)
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LCvNZ3Xdqz67ZHP;
+        Thu,  2 Jun 2022 00:14:22 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 1 Jun 2022 18:17:44 +0200
+Received: from [10.47.88.115] (10.47.88.115) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
+ 2022 17:17:42 +0100
+Message-ID: <d9056bc2-f640-f676-2599-c283479376a4@huawei.com>
+Date:   Wed, 1 Jun 2022 17:17:41 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 0/3] Rewrite jevents program in python
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        "Felix Fietkau" <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
+        Like Xu <likexu@tencent.com>, <linux-kernel@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>,
+        Nick Forrington <nick.forrington@arm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <ananth.narayan@amd.com>, <ravi.bangoria@amd.com>,
+        <santosh.shukla@amd.com>, <sandipan.das@amd.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Kshipra Bopardikar <kshipra.bopardikar@intel.com>
+CC:     Stephane Eranian <eranian@google.com>
+References: <20220527185426.240235-1-irogers@google.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220527185426.240235-1-irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.88.115]
+X-ClientProxiedBy: lhreml730-chm.china.huawei.com (10.201.108.81) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne nedelja, 29. maj 2022 ob 08:45:57 CEST je Jernej =C5=A0krabec napisal(a=
-):
-> Dne petek, 27. maj 2022 ob 16:31:33 CEST je Benjamin Gaignard napisal(a):
-> > 'F.7.3.6.1 General slice segment header syntax' section of HEVC
-> > specification describes that a slice header always end aligned on
-> > byte boundary, therefore we only need to provide the data offset in byt=
-es.
-> >=20
-> > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> > ---
-> >  Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 4 ++--
-> >  drivers/staging/media/sunxi/cedrus/cedrus_h265.c          | 2 +-
-> >  include/media/hevc-ctrls.h                                | 4 ++--
-> >  3 files changed, 5 insertions(+), 5 deletions(-)
-> >=20
-> > diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst =
-b/
-> Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> > index 48a8825a001b..37079581c661 100644
-> > --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> > +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> > @@ -3008,8 +3008,8 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-> >        - ``bit_size``
-> >        - Size (in bits) of the current slice data.
-> >      * - __u32
-> > -      - ``data_bit_offset``
-> > -      - Offset (in bits) to the video data in the current slice data.
-> > +      - ``data_byte_offset``
-> > +      - Offset (in bytes) to the video data in the current slice data.
-> >      * - __u32
-> >        - ``num_entry_point_offsets``
-> >        - Specifies the number of entry point offset syntax elements in =
-the=20
-> slice header.
-> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/
-> staging/media/sunxi/cedrus/cedrus_h265.c
-> > index 411601975124..835454239f73 100644
-> > --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> > @@ -405,7 +405,7 @@ static void cedrus_h265_setup(struct cedrus_ctx *ct=
-x,
-> >  	/* Initialize bitstream access. */
-> >  	cedrus_write(dev, VE_DEC_H265_TRIGGER,=20
-> VE_DEC_H265_TRIGGER_INIT_SWDEC);
-> > =20
-> > -	cedrus_h265_skip_bits(dev, slice_params->data_bit_offset);
-> > +	cedrus_h265_skip_bits(dev, slice_params->data_byte_offset * 8);
->=20
-> While it's true that actual data starts on 8-bit aligned address, Cedrus =
-for=20
-> some reason needs offset which points at the end of the header, before=20
-> alignment. There is very simple way to determine that, but unfortunately=
-=20
-this=20
-> means reading source buffer.
->=20
-> In short, above code won't work. I'll provide a fix.
+On 27/05/2022 19:54, Ian Rogers wrote:
+> New architectures bring new complexity, such as Intel's hybrid
+> models. jevents provides an alternative to specifying events in the
+> kernel and exposing them through sysfs, however, it is difficult to
+> work with. For example, an error in the json input would yield an
+> error message but no json file or location. It is also a challenge to
+> update jsmn.c given its forked nature.
+> 
+> The changes here switch from jevents.c to a rewrite in python called
+> jevents.py. This means there is a build time dependency on python, but
+> such a dependency already exists for asciidoc (used to generate perf's
+> man pages). If the build detects that python isn't present or is older
+> than version 3.6 (released Dec. 2016) then an empty file is
+> substituted for the generated one.
+> 
+> A challenge with this code is in avoiding regressions. For this reason
+> the jevents.py produces identical output to jevents.c, validated with a
+> test script and build target.
+> 
 
-Please include following fix http://ix.io/3Z8x otherwise Cedrus will fail t=
-o=20
-decode slice.
+Hi Ian,
 
-Other than fix in previous e-mail and this one, code looks good and I'll be=
-=20
-able to add missing functionality to Cedrus without much trouble in follow =
-up=20
-series.
+I still see this:
 
-Best regards,
-Jernej
+...
+Makefile.config:906: Python interpreter too old (older than 3.6) 
+disabling jevent generation
+Makefile.config:939: Old version of libbfd/binutils things like PE 
+executable profiling will not be available
+Makefile.config:1127: No openjdk development package found, please 
+install JDK package, e.g. openjdk-8-jdk, java-1.8.0-openjdk-devel
 
->=20
-> > =20
-> >  	/* Bitstream parameters. */
-> > =20
-> > diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-> > index 9abca1a75bd4..936ff693967b 100644
-> > --- a/include/media/hevc-ctrls.h
-> > +++ b/include/media/hevc-ctrls.h
-> > @@ -312,7 +312,7 @@ struct v4l2_hevc_pred_weight_table {
-> >   * V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
-> >   *
-> >   * @bit_size: size (in bits) of the current slice data
-> > - * @data_bit_offset: offset (in bits) to the video data in the current=
-=20
-slice=20
-> data
-> > + * @data_byte_offset: offset (in bytes) to the video data in the curre=
-nt=20
-> slice data
-> >   * @num_entry_point_offsets: specifies the number of entry point offse=
-t=20
-syntax
-> >   *			     elements in the slice header.
-> >   * @nal_unit_type: specifies the coding type of the slice (B, P or I)
-> > @@ -356,7 +356,7 @@ struct v4l2_hevc_pred_weight_table {
-> >   */
-> >  struct v4l2_ctrl_hevc_slice_params {
-> >  	__u32	bit_size;
-> > -	__u32	data_bit_offset;
-> > +	__u32	data_byte_offset;
-> >  	__u32	num_entry_point_offsets;
-> >  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
-> >  	__u8	nal_unit_type;
-> > --=20
-> > 2.32.0
-> >=20
-> >=20
->=20
->=20
->=20
+Auto-detecting system features:
+...                         dwarf: [ on  ]
+...            dwarf_getlocations: [ on  ]
+...                         glibc: [ on  ]
+...                        libbfd: [ OFF ]
+...                libbfd-buildid: [ OFF ]
+...                        libcap: [ on  ]
+...                        libelf: [ on  ]
+...                       libnuma: [ on  ]
+...        numa_num_possible_cpus: [ on  ]
+...                       libperl: [ on  ]
+...                     libpython: [ on  ]
+...                     libcrypto: [ on  ]
+...                     libunwind: [ on  ]
+...            libdw-dwarf-unwind: [ on  ]
+...                          zlib: [ on  ]
+...                          lzma: [ on  ]
+...                     get_cpuid: [ on  ]
+...                           bpf: [ on  ]
+...                        libaio: [ on  ]
+...                       libzstd: [ on  ]
+...        disassembler-four-args: [ on  ]
 
+
+make[3]: Nothing to be done for 'install_headers'.
+john@localhost:~/acme/tools/perf> python --version
+Python 3.6.12
+
+I need to figure out what is going wrong...
+
+Thanks,
+John
+
+> v3. Updates the patches for merged changes (on
+>      acme/tmp.perf/core). Re-runs all comparisons to make sure the
+>      generated pmu-events.c isn't altered at all by this change. Adds
+>      the jevents.c ExtSel fix in:
+>      https://lore.kernel.org/lkml/20220525140410.1706851-1-zhengjun.xing@linux.intel.com/
+>      Bumps the python version from 3.5 to 3.6, as f-strings weren't
+>      introduced until 3.6.
+> 
+> v2. Fixes the build for architectures that don't have pmu-events json
+>      (Suggested-by: John Garry <john.garry@huawei.com>) and fixes the
+>      build for python not being present or too old (Suggested-by: Peter
+>      Zijlstra <peterz@infradead.org>/John Garry <john.garry@huawei.com>).
+> 
+> Ian Rogers (3):
+>    perf jevents: Add python converter script
+>    perf jevents: Switch build to use jevents.py
+>    perf jevents: Remove jevents.c
+> 
+>   tools/perf/Makefile.config               |   19 +
+>   tools/perf/Makefile.perf                 |   16 +-
+>   tools/perf/pmu-events/Build              |   15 +-
+>   tools/perf/pmu-events/empty-pmu-events.c |   21 +
+>   tools/perf/pmu-events/jevents.c          | 1342 ----------------------
+>   tools/perf/pmu-events/jevents.py         |  392 +++++++
+>   tools/perf/pmu-events/jsmn.h             |   68 --
+>   tools/perf/pmu-events/json.c             |  162 ---
+>   tools/perf/pmu-events/json.h             |   39 -
+>   9 files changed, 444 insertions(+), 1630 deletions(-)
+>   create mode 100644 tools/perf/pmu-events/empty-pmu-events.c
+>   delete mode 100644 tools/perf/pmu-events/jevents.c
+>   create mode 100755 tools/perf/pmu-events/jevents.py
+>   delete mode 100644 tools/perf/pmu-events/jsmn.h
+>   delete mode 100644 tools/perf/pmu-events/json.c
+>   delete mode 100644 tools/perf/pmu-events/json.h
+> 
 

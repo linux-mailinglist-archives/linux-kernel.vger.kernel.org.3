@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665BE539C60
+	by mail.lfdr.de (Postfix) with ESMTP id B20CA539C61
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 06:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349591AbiFAEtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 00:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55170 "EHLO
+        id S241538AbiFAExy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 00:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234905AbiFAEtI (ORCPT
+        with ESMTP id S229831AbiFAExv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 00:49:08 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D9152B31;
-        Tue, 31 May 2022 21:49:07 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id b5so675396plx.10;
-        Tue, 31 May 2022 21:49:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xQQdqLGDEyEaJ0q3XFvWz51XQwcwBB1gnP9grs45a0A=;
-        b=l0N4Jd8kgXKz6N4pPkce+78dFAQxuAbgMSVylHnUGhpEqPXBAVOiY0OoZwRy5c+IkW
-         xB5+7Z7sSTibAAqsd7xVrOEMfm+H5pjtwKLOra+t1UhalNkdExB1AJI7wg+LtrywJL2J
-         6BJ9617aJ/gmk/K+56QdPBx1Tod7f1z9qvoFmmrJkDLbTcc+IMnjp/gRKbF9dfuTKc4Y
-         pU7p8gDqZGCsW+6GQxDEu6Hr5+aexGgCW9ZbewgZMBWSmtSeIKb+598CNaU+TPuviGfl
-         vMsoxFcvkd8XFj6gWz/pNEhNAZEUUt0MaU0xa038JYJD4NRoRhhrN3r4O0nk1rxkhw05
-         cmQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xQQdqLGDEyEaJ0q3XFvWz51XQwcwBB1gnP9grs45a0A=;
-        b=urj3kinUDPUjP2MFuEOOaV/8pQ7O/03P+5uJvz3RSKgfsECdbpjqXlp0iSFRsX39d6
-         tyAlBICh7iyxvZ/3yUGRf19hqP7UxoxSitdhdCTAoZAtocwFICMzSXYy7MvBa4BJFyOl
-         QAyjaL3oub+zvbo4sdqDZBl+HwoAZn7+iJeEcYYSXjYpb5GY+XFByeBOgIs2K3O/N58I
-         jTr8vldYvU8GUgxQ01NGlDZffslBd2VuagnT0hlx9DWmb90pAoIiGg8POT/MOooGs6yf
-         nbhe56fqB2RMUbtaelhAIxNHerNY0zcO2noeawsKCtVFy/dakFYSqBw7V0POSGyhGQot
-         MoPA==
-X-Gm-Message-State: AOAM530qnRMC5YDTGWaPYKAkB27dhu7vR1UiPEWS4LI7Y3HdqDH7IViH
-        43amG644Pm/4OKp+QQZcKaw=
-X-Google-Smtp-Source: ABdhPJxaDmfiU+rYQUhJxxGHahVE4aT3yrHtc2NV7ORrbgG83abmkaleOSY268WQG3kwgqwvVdi5zw==
-X-Received: by 2002:a17:90a:de0b:b0:1e3:33e9:6665 with SMTP id m11-20020a17090ade0b00b001e333e96665mr7862047pjv.27.1654058947423;
-        Tue, 31 May 2022 21:49:07 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id p126-20020a622984000000b0050dc76281e4sm315672pfp.190.2022.05.31.21.49.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 21:49:07 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] ARM: OMAP2+: Fix refcount leak in omapdss_init_of
-Date:   Wed,  1 Jun 2022 08:48:58 +0400
-Message-Id: <20220601044858.3352-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 1 Jun 2022 00:53:51 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BEF9D06A;
+        Tue, 31 May 2022 21:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654059230; x=1685595230;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q2BPmfI7+VWxsW5xSu/b2ZDNOg6Dpg5wYC/5y7r5YRU=;
+  b=h/lpOwb2KcUeQDeOo0cLgN3QgChP+EjKbVNym5MViqZYdb/k/SdGdcKe
+   ADYZITfrkt/+LGNxfm4uMfuPjUe+x+kXV5qfH8LX3uQZw9GvbRuRahw5G
+   c+dwOmCS87YvpAhHdEk2AcH3XZcFoqXm0poSgH2sy4hrTZIvPrnsRMz+k
+   jdEgEfrTAPIdFijL+7bL20gH3v/n5WUt6HCDSHTcisSYwi1MVaVRpMiq6
+   KN/owp6lOezE0KSGIJKApXB1ek9R1ZxT6ihiqB3hR+IA7WchoTE0QvWur
+   YwPkVOLykacArRX9yJmMVpQLAx7C2eprIE94LMgCLkgtnB0byKso3yJbi
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="275481252"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="275481252"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 21:53:50 -0700
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="576753246"
+Received: from mdossant-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.154.135])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 21:53:50 -0700
+Date:   Tue, 31 May 2022 21:53:49 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <ben@bwidawsk.net>, linux-kernel@vger.kernel.org,
+        linux-cxl@vger.kernel.org, linux-pci@vger.kernel.org,
+        a.manzanares@samsung.com
+Subject: Re: [PATCH v9 3/9] PCI: Create PCI library functions in support of
+ DOE mailboxes.
+Message-ID: <Ypbw3d/vUyMHGcBW@iweiny-desk3>
+References: <20220531152632.1397976-1-ira.weiny@intel.com>
+ <20220531152632.1397976-4-ira.weiny@intel.com>
+ <20220531172507.5ert5tgwellpe7fx@offworld>
+ <20220531175652.qog7xaqmypy36whu@offworld>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531175652.qog7xaqmypy36whu@offworld>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-omapdss_find_dss_of_node() calls of_find_compatible_node() to get device
-node. of_find_compatible_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() in later error path and normal path.
+On Tue, May 31, 2022 at 10:56:52AM -0700, Davidlohr Bueso wrote:
+> On Tue, 31 May 2022, Davidlohr Bueso wrote:
+> 
+> > On Tue, 31 May 2022, ira.weiny@intel.com wrote:
+> > 
+> > > +static void doe_statemachine_work(struct work_struct *work)
+> > > +{
+> > > +	struct delayed_work *w = to_delayed_work(work);
+> > > +	struct pci_doe_mb *doe_mb = container_of(w, struct pci_doe_mb,
+> > > +						 statemachine);
+> > > +	struct pci_dev *pdev = doe_mb->pdev;
+> > > +	int offset = doe_mb->cap_offset;
+> > > +	struct pci_doe_task *task;
+> > > +	u32 val;
+> > > +	int rc;
+> > > +
+> > > +	mutex_lock(&doe_mb->task_lock);
+> > > +	task = doe_mb->cur_task;
+> > > +	mutex_unlock(&doe_mb->task_lock);
+> > 
+> > Instead of a mutex, would it be better to use a rwsem here to protect
+> > the state machine and allow for concurrent reads for the work callback?
+> > It is a general interface and a trivial change, but not sure how much
+> > performance is cared about.
+> 
+> Actually why is this a sleeping lock at all? Afaict all critical regions
+> are short and just deal with loads and stores of oe_mb->task_lock (and
+> pci_doe_submit_task also checks the doe_mb->flags with the lock held).
+> This could be a spinlock or similarly a rwlock.
 
-Fixes: e0c827aca0730 ("drm/omap: Populate DSS children in omapdss driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- arch/arm/mach-omap2/display.c | 2 ++
- 1 file changed, 2 insertions(+)
+This is a good point...  My only excuse is that task_lock used to lock more
+than just the cur_task so I suspect that I just kept it as a mutex after a
+rework at some point with out thinking about this deeper.
 
-diff --git a/arch/arm/mach-omap2/display.c b/arch/arm/mach-omap2/display.c
-index 21413a9b7b6c..ed2cb2649cf6 100644
---- a/arch/arm/mach-omap2/display.c
-+++ b/arch/arm/mach-omap2/display.c
-@@ -259,11 +259,13 @@ static int __init omapdss_init_of(void)
- 
- 	if (!pdev) {
- 		pr_err("Unable to find DSS platform device\n");
-+		of_node_put(node);
- 		return -ENODEV;
- 	}
- 
- 	r = of_platform_populate(node, NULL, NULL, &pdev->dev);
- 	put_device(&pdev->dev);
-+	of_node_put(node);
- 	if (r) {
- 		pr_err("Unable to populate DSS submodule devices\n");
- 		return r;
--- 
-2.25.1
+Thinking about it I don't see a benefit to a rwlock.  We don't have multiple
+readers.
 
+But I've just looked at this code again and I'm not sure that the exclusion is
+correct with regard to the state machine.  I think the state needs to be IDLE
+before retire_cur_task() is called or the state machine could be in an invalid
+state when the next task runs.  I think there is a bug in the DOE_WAIT_ABORT*
+cases when not error and not busy.  In that case there is a race with the next
+task getting run the state being DOE_WAIT_ABORT*.  In the timeout case we will
+call the mailbox dead.
+
+I can't remember if Jonathan originally locked the state machine or the
+task or both.
+
+I think I have fixed it but, I'll look at it again in the morning.
+
+Thanks,
+Ira
+
+> 
+> Thanks,
+> Davidlohr

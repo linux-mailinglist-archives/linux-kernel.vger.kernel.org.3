@@ -2,96 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 528C053AC0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 19:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02E753AC0C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 19:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356393AbiFARev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 13:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
+        id S1354306AbiFARff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 13:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356377AbiFARen (ORCPT
+        with ESMTP id S1352260AbiFARfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 13:34:43 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08838B095;
-        Wed,  1 Jun 2022 10:34:41 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6F1281F8F6;
-        Wed,  1 Jun 2022 17:34:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654104880; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GjM3NNyZi+mdyAAgbPoVYQ4gLBCkOnK/73Cw9/lkEMA=;
-        b=fMgAUfgOUjfloaDS4p8wAJAzvluuJQWZvnxiAi6ShSWltsPq3megQImODM+d9HSmLxJwFW
-        MPWNEw2VE8jdwfgtsn50e1wTFaVQCwr62zTR8vifW9Q6K6zdvBem445A38lxWHjrF3MLUd
-        99BaPGC4eSxt1lgF0sZWfxXLV2fja2o=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 357AE1330F;
-        Wed,  1 Jun 2022 17:34:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vwgcDDCjl2LpaQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 01 Jun 2022 17:34:40 +0000
-Date:   Wed, 1 Jun 2022 19:34:38 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
-        shakeelb@google.com, akpm@linux-foundation.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        longman@redhat.com
-Subject: Re: [PATCH v5 09/11] mm: memcontrol: use obj_cgroup APIs to charge
- the LRU pages
-Message-ID: <20220601173438.GC2434@blackbody.suse.cz>
-References: <20220530074919.46352-1-songmuchun@bytedance.com>
- <20220530074919.46352-10-songmuchun@bytedance.com>
+        Wed, 1 Jun 2022 13:35:30 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964A4A5014
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 10:35:29 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id v9so2754852lja.12
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 10:35:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NTLfADh8lSfx6tLN8KBP3kdlF2/kw53HzSdkGJeezGo=;
+        b=X4a0J2xdOaYaLyoglRcy+IjmYCqytQ1InubXGIgs1o/lCAUt07elZ+wctYLphPcvrg
+         m57WjaEYd1NRbsT5XAACUuansZuvtzQzj/z/CBmPrAQ9DtjwA5RRoLtxxak8M3HiBUY6
+         TfMw0Z1S25638qgsrTmJ4/gmNs9i7WFK5I0ZPlcCX7tBcgCmDFhh2/zry8jQPUp+J91D
+         H8BKtNGeBrHp95UTfZ130N6x7KPm8c1fTHLmJ6TGckZip9+2OlhAOAble8kdvPVLUEAj
+         LMvt4V9gAa53NlQMBy28aWrisBQFIFmRxchIhRyKLTqagmCxuyHTe4PNpW/UwhX8saJe
+         1yBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NTLfADh8lSfx6tLN8KBP3kdlF2/kw53HzSdkGJeezGo=;
+        b=WWylPbFOLn9sZOzw//oANGbluOiPy49K4++O21/E1INMsoQCmPD2OJI1Jf0QsUXyKR
+         Zx0Wr3Jj/WOsNONsWZ3zZA9wW+Tx6kViegCUbXSLVwjJdQyTg2RDGHbC96cigZAUVO+d
+         6rufQk4HmaZBIrEpxJ9P3kzHaPPhOxLzo1laYHU0HA2QdpNIZxIxL/XzfA/A88gXqdQM
+         LEIeiyydmoPk8ASzsEH0Ni+UIUOTXgefFMwn/3Y7xwtIJ533SFhVvTeMIFWqXFwofVg4
+         +Sq1X26mbhhTenBoL3xWVCymMT0CcGpcnwqJ5h8vsCSNUivTZ/IfIaHfXDc/p1yUQkdA
+         3dmw==
+X-Gm-Message-State: AOAM531JTSsveGAlBp7I7D/JFXw8vVA+ZkXKKrCqxP3F8PXMqm7rfNFl
+        AvMnyGdOwCyBSzxjswYF2avEcUYVlZ/mZA6uHXqD+w==
+X-Google-Smtp-Source: ABdhPJwkrwRQMBlasTORNG2O4r97fBgmL3eOhBAi7bv5kQLU/MeO8uLXOQk9UI/HWYjGUFw+9aM2H9wIt1fppNQhRQo=
+X-Received: by 2002:a05:651c:179a:b0:247:d37b:6ec5 with SMTP id
+ bn26-20020a05651c179a00b00247d37b6ec5mr37984487ljb.112.1654104927772; Wed, 01
+ Jun 2022 10:35:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220530074919.46352-10-songmuchun@bytedance.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220601010017.2639048-1-cmllamas@google.com> <CAK7LNARjJJfEUhfs8_5Jw3ADg6kKSP=u10=dg4URS10hRk4tsQ@mail.gmail.com>
+In-Reply-To: <CAK7LNARjJJfEUhfs8_5Jw3ADg6kKSP=u10=dg4URS10hRk4tsQ@mail.gmail.com>
+From:   Todd Kjos <tkjos@google.com>
+Date:   Wed, 1 Jun 2022 10:35:16 -0700
+Message-ID: <CAHRSSEwMvw2A6N-su40Odbs7AH4EjQ1nVWrrG49aFKUC1PpFug@mail.gmail.com>
+Subject: Re: [PATCH] binder: fix sender_euid type in uapi header
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Carlos Llamas <cmllamas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Todd Kjos <tkjos@android.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christopher Ferris <cferris@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Muchun.
+On Wed, Jun 1, 2022 at 9:53 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Wed, Jun 1, 2022 at 10:00 AM Carlos Llamas <cmllamas@google.com> wrote:
+> >
+> > The {pid,uid}_t fields of struct binder_transaction were recently
+> > replaced to use kernel types in commit 169adc2b6b3c ("android/binder.h:
+> > add linux/android/binder(fs).h to UAPI compile-test coverage").
+> >
+> > However, using __kernel_uid_t here breaks backwards compatibility in
+> > architectures using 16-bits for this type, since glibc and some others
+> > still expect a 32-bit uid_t. Instead, let's use __kernel_uid32_t which
+> > avoids this compatibility problem.
+> >
+> > Fixes: 169adc2b6b3c ("android/binder.h: add linux/android/binder(fs).h to UAPI compile-test coverage")
+> > Reported-by: Christopher Ferris <cferris@google.com>
+> > Signed-off-by: Carlos Llamas <cmllamas@google.com>
+> > ---
+>
+> Ahhh, good catch.
+>
+> Thank you for fixing this!
+>
+>  Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
 
-On Mon, May 30, 2022 at 03:49:17PM +0800, Muchun Song <songmuchun@bytedance.com> wrote:
-> +static inline bool obj_cgroup_is_root(struct obj_cgroup *objcg)
-> +{
-> +	return objcg == root_obj_cgroup;
-> +}
+Acked-by: Todd Kjos <tkjos@google.com>
 
-Admittedly, this predicate alone caught my eye, why it did not also
-check root_mem_cgroup->objcg_list.
-However, deeper look reveals it's purpose is to avoid missing uncharges
-of pages that were charged in non-root memcg and later re-associated
-upwards after reparenting.
-So it's like obj_cgroup_root_origin() (I'm not suggesting a rename, just
-illustrating the understanding).
-
-get_obj_cgroup_from_current() gains some complexity but it still holds
-that in root memcg neither kernel objects nor LRU pages are charged.
-At the same time, reparented kernel objects or LRU pages are properly
-uncharged.
-
-These parts are 
-Reviewed-by: Michal Koutný <mkoutny@suse.com>
-
-(I did not look into the locking guarantees with the new API though.)
-
+>
+>
+> >  include/uapi/linux/android/binder.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
+> > index 11157fae8a8e..688bcdaeed53 100644
+> > --- a/include/uapi/linux/android/binder.h
+> > +++ b/include/uapi/linux/android/binder.h
+> > @@ -289,7 +289,7 @@ struct binder_transaction_data {
+> >         /* General information about the transaction. */
+> >         __u32           flags;
+> >         __kernel_pid_t  sender_pid;
+> > -       __kernel_uid_t  sender_euid;
+> > +       __kernel_uid32_t        sender_euid;
+> >         binder_size_t   data_size;      /* number of bytes of data */
+> >         binder_size_t   offsets_size;   /* number of bytes of offsets */
+> >
+> > --
+> > 2.36.1.255.ge46751e96f-goog
+> >
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada

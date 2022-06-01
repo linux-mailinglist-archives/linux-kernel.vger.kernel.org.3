@@ -2,81 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F4F53A94B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D3953A94D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354854AbiFAOi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S229602AbiFAOje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiFAOi4 (ORCPT
+        with ESMTP id S1354947AbiFAOj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:38:56 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2100B31233;
-        Wed,  1 Jun 2022 07:38:55 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id f7-20020a1c3807000000b0039c1a10507fso1215854wma.1;
-        Wed, 01 Jun 2022 07:38:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nEz+76T79tFW0RCrZGZI21N3hxWVslYlXYg2VKXX6II=;
-        b=MaD8PwmnHt8a09T+peqTHwVOA9ZMJagO1K5G+SyV6SZNU5n+F08WpEiHeJK3218K7q
-         TpMa2jHtVr6XzwZz/ZwmfQLeBpaol/DjLjdCgPEuGdts3zI+eeo5NBCLcFvgL1ZP7RD6
-         ioO/06Cr9tKOOMtD7GD9rb96R+083ZmEC0FgFh49pdInij8WyfudEHMhbbnzxvPO0cnl
-         NAsd2tz/9kZ9GjmlRo3jIZcOE2UrxK0mZt2K0ezbG16koclnfi0uXizmzNTmgP1BeCrB
-         gD3TN7uQWiJjBDB+QcU6rgIeiE87c2Uf8tumpI6vGFZpEp5j6HBVnKe/wAZaAMVzCe3d
-         oc4w==
+        Wed, 1 Jun 2022 10:39:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B06B338BC
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654094362;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qlU0tkzpCjcg/jU3LgCOcXpRFl3qkGqk9lVl6FW9S+g=;
+        b=T3lLK89+tCok2oiaNJSiZBSncEZtYjmnOl/e5+nrPhcmiStbyNe6+A8ok7E25fl3Eda3rA
+        BajBq/dTwZTasUz5zrBJdCWoIXS/xgiWYlnwNqH1NL2JPfq2Yp9F8tS33Zf4nrisPs+FZF
+        Lm+gX7CljDof55uNm1A5TwfTTiFz8Dk=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-615-bbHG5tH7NnK2htDUV0xOGA-1; Wed, 01 Jun 2022 10:39:20 -0400
+X-MC-Unique: bbHG5tH7NnK2htDUV0xOGA-1
+Received: by mail-wr1-f72.google.com with SMTP id p10-20020adfaa0a000000b0020c4829af5fso344618wrd.16
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 07:39:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=nEz+76T79tFW0RCrZGZI21N3hxWVslYlXYg2VKXX6II=;
-        b=eTF03sv0XModlC2rUL8sAzXAjCnLIndCsmoIO8Lx9KgUE/RhbdrFkj0RXOhQmlRAIP
-         Uo72rqefn2pa7Qw3pq2MGcOwDikxWa7I1GSbK2TxPGbmS8ThtSkQz5l2audYPuP43xIN
-         gBb1HySLSxbZ24sbX0FE0Ngvxz634WekORjbsJ3wFTriHvtrjnEfd2Rj/izt7+m+//or
-         WJdosRErNnC1Go++rKrwjFQMOYT5lyXu0QoH9d8lXYujewjDPwulZyIC0Ax/L2dc2ryY
-         SRvQCucaDpGd8ScOvD486kzj/VOorbUSYjnVUh50kt2x8nHxPs2r4IgxrRhcWpm997mZ
-         nzww==
-X-Gm-Message-State: AOAM532VBVmRTBSIZsBT5PG+7vfjs8TT50cxNs5oqh9gHug86eY/Ywlr
-        HrJsMVcmdsKQPaMHo+EeKek=
-X-Google-Smtp-Source: ABdhPJxFJm/fvrtPm0Q76kR0LnUENBqB8SBsBwD/wEAz7gTa4nHm3tJgWR7y3ldaWLBOVk3IV9s8LQ==
-X-Received: by 2002:a7b:cb91:0:b0:397:3225:244 with SMTP id m17-20020a7bcb91000000b0039732250244mr28954441wmi.68.1654094333691;
-        Wed, 01 Jun 2022 07:38:53 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1256:79a0:d1fb:e1e4:e193:e55f? ([2a02:908:1256:79a0:d1fb:e1e4:e193:e55f])
-        by smtp.gmail.com with ESMTPSA id u12-20020adfdb8c000000b002119c1a03e4sm503684wri.31.2022.06.01.07.38.51
+        bh=qlU0tkzpCjcg/jU3LgCOcXpRFl3qkGqk9lVl6FW9S+g=;
+        b=LmHflgZPJTpZyukkKXgJTdCTAFPXCzxlCgct+Dr2Q0YZet1BVG6NCcwloXK7KN0IVz
+         O/5zORPZVE6BsomgrFxVf83C+F0an+DvoSCfEL/5YAX7Z+NoJdoQHBvz9Xnsu1RHPLge
+         fw8k8BMQ0qr5b5uBUMiSjTqxW3BWDVpAhBbdGiun8b2tc9v9sA3qOMghlARcEP9uSR1Z
+         49dDibYPQ0gM2sCP2a6h0Dwmzf68ZnVHknaxYlBU/sBmuy7VBlsua4RDCMHijwGnOvjl
+         631nZhod0U81JqpGIX653/pLAEYbQlsf+z9MEaGLLsS08wQ8SY/Xq87W7hh8iWGJuGrp
+         PUyw==
+X-Gm-Message-State: AOAM5302IeZ9FxKqBUEu63cxMKWfKMt70IcYTP0ZJvCRAf+c5XQVv3V5
+        rQY/LwpIoLKprhfQ98q/ysKp9oh98ZnjWkuAyt3uNOqpzHvM+lKBTSN2LPrnNVYHy53lthlBrUy
+        rMcWokIF2RXQxjDVp9nMjR4zF
+X-Received: by 2002:a05:600c:1d99:b0:397:482b:429 with SMTP id p25-20020a05600c1d9900b00397482b0429mr28614916wms.130.1654094359707;
+        Wed, 01 Jun 2022 07:39:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwZmvS/ySSMSACfcbs5N8wx4zgU89IJgDAitfH9pT2OXqot4AKsgn1nc41biOJdFJqGw1r+Pw==
+X-Received: by 2002:a05:600c:1d99:b0:397:482b:429 with SMTP id p25-20020a05600c1d9900b00397482b0429mr28614883wms.130.1654094359401;
+        Wed, 01 Jun 2022 07:39:19 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:2600:951d:63df:c091:3b45? (p200300cbc7052600951d63dfc0913b45.dip0.t-ipconnect.de. [2003:cb:c705:2600:951d:63df:c091:3b45])
+        by smtp.gmail.com with ESMTPSA id t22-20020a05600c41d600b00397550b387bsm2720288wmh.23.2022.06.01.07.39.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 07:38:52 -0700 (PDT)
-Message-ID: <a009c207-a5fa-af1e-b961-8083b48360bf@gmail.com>
-Date:   Wed, 1 Jun 2022 16:38:51 +0200
+        Wed, 01 Jun 2022 07:39:18 -0700 (PDT)
+Message-ID: <116f7be4-7b75-a83b-899b-c23b52534b30@redhat.com>
+Date:   Wed, 1 Jun 2022 16:39:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [Linaro-mm-sig] Re: [PATCH] dma-fence: allow dma fence to have
- their own lock
+ Thunderbird/91.9.0
+Subject: Re: [PATCHv6 03/15] efi/x86: Get full memory map in allocate_e820()
 Content-Language: en-US
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220530142232.2871634-1-senozhatsky@chromium.org>
- <7eee4274-bd69-df8d-9067-771366217804@amd.com> <YpWCvniLzJfcp684@google.com>
- <33aba213-b6ad-4a15-9272-c62f5dfb1fb7@gmail.com>
- <Ypd3Us3a93aLonqT@google.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <Ypd3Us3a93aLonqT@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>, marcelo.cerri@canonical.com,
+        tim.gardner@canonical.com, khalid.elmously@canonical.com,
+        philip.cox@canonical.com, x86@kernel.org, linux-mm@kvack.org,
+        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220517153444.11195-1-kirill.shutemov@linux.intel.com>
+ <20220517153444.11195-4-kirill.shutemov@linux.intel.com>
+ <b9a0eb0a-ce27-5306-a12f-79d196445254@redhat.com>
+ <20220601143515.iavmtysdchirbtel@box.shutemov.name>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220601143515.iavmtysdchirbtel@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,62 +108,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 01.06.22 um 16:27 schrieb Sergey Senozhatsky:
-> On (22/06/01 14:45), Christian König wrote:
->> Am 31.05.22 um 04:51 schrieb Sergey Senozhatsky:
->>> On (22/05/30 16:55), Christian König wrote:
->>>> Am 30.05.22 um 16:22 schrieb Sergey Senozhatsky:
->>>>> [SNIP]
->>>>> So the `lock` should have at least same lifespan as the DMA fence
->>>>> that borrows it, which is impossible to guarantee in our case.
->>>> Nope, that's not correct. The lock should have at least same lifespan as the
->>>> context of the DMA fence.
->>> How does one know when it's safe to release the context? DMA fence
->>> objects are still transparently refcount-ed and "live their own lives",
->>> how does one synchronize lifespans?
->> Well, you don't.
+On 01.06.22 16:35, Kirill A. Shutemov wrote:
+> On Wed, Jun 01, 2022 at 11:00:23AM +0200, David Hildenbrand wrote:
+>> On 17.05.22 17:34, Kirill A. Shutemov wrote:
+>>> Currently allocate_e820() only interested in the size of map and size of
+>>> memory descriptor to determine how many e820 entries the kernel needs.
+>>>
+>>> UEFI Specification version 2.9 introduces a new memory type --
+>>> unaccepted memory. To track unaccepted memory kernel needs to allocate
+>>> a bitmap. The size of the bitmap is dependent on the maximum physical
+>>> address present in the system. A full memory map is required to find
+>>> the maximum address.
+>>>
+>>> Modify allocate_e820() to get a full memory map.
 >>
->> If you have a dynamic context structure you need to reference count that as
->> well. In other words every time you create a fence in your context you need
->> to increment the reference count and every time a fence is release you
->> decrement it.
-> OK then fence release should be able to point back to its "context"
-> structure. Either a "private" data in dma fence or we need to "embed"
-> fence into another object (refcounted) that owns the lock and provide
-> dma fence ops->release callback, which can container_of() to the object
-> that dma fence is embedded into.
->
-> I think you are suggesting the latter. Thanks for clarifications.
+>> Usually we use max_pfn, if we want to know the maximum pfn that's
+>> present in the system (well, IIRC, excluding hotunplug).
+>>
+>> How exactly will this (different?) maximum from UEFI for the bitmap
+>> interact with
+>>
+>> max_pfn = e820__end_of_ram_pfn();
+>>
+>> from e820 in existing code
+>>
+>> ?
+> 
+> I'm not sure I understand the question.
 
-Daniel might hurt me for this, but if you really only need a pointer to 
-your context then we could say that using a pointer value for the 
-context field is ok as well.
+Essentially, if the PFN you calculate here for the bitmap size will
+essentially match later max_pfn.
 
-That should be fine as well as long as you can guarantee that it will be 
-unique during the lifetime of all it's fences.
+> 
+> On EFI system, E820 is constructed based on EFI memory map and size of
+> bitmap calculated based of EFI memmap will always be enough to address all
+> memory. e820__end_of_ram_pfn() can be smaller than what what we calculate
+> as size of memory here, if kernel reserve very top of the memory, but it
+> will never be larger.
+> 
+> Later during the boot we use e820__end_of_ram_pfn() to infer size of
+> bitmap and it is safe.
+> 
 
-We would just have to adjust the documentation a bit.
 
-> The limiting factor of this approach is that now our ops->release() is
-> under the same "pressure" as dma_fence_put()->dma_fence_release() are.
-> dma_fence_put() and dma_fence_release() can be called from any context,
-> as far as I understand, e.g. IRQ, however our normal object ->release
-> can schedule, we do things like synchronize_rcu() and so on. Nothing is
-> impossible, just saying that even this approach is not 100% perfect and
-> may need additional workarounds.
+-- 
+Thanks,
 
-Well just use a work item for release.
-
-Regards,
-Christian.
-
->> If you have a static context structure like most drivers have then you must
->> make sure that all fences at least signal before you unload your driver. We
->> still somewhat have a race when you try to unload a driver and the fence_ops
->> structure suddenly disappear, but we currently live with that.
-> Hmm, indeed... I didn't consider fence_ops case.
->
->> Apart from that you are right, fences can live forever and we need to deal
->> with that.
-> OK. I see.
+David / dhildenb
 

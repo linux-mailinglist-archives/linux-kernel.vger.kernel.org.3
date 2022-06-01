@@ -2,80 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB4153A131
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B4153A139
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351002AbiFAJsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 05:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
+        id S1351477AbiFAJtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 05:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240188AbiFAJsg (ORCPT
+        with ESMTP id S1351500AbiFAJtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 05:48:36 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1951A801;
-        Wed,  1 Jun 2022 02:48:34 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id s24so1534175wrb.10;
-        Wed, 01 Jun 2022 02:48:34 -0700 (PDT)
+        Wed, 1 Jun 2022 05:49:39 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DE55FF2D;
+        Wed,  1 Jun 2022 02:49:35 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u12so2589267eja.8;
+        Wed, 01 Jun 2022 02:49:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kTxZMWwr7LUEOg9gLWY8x2sIMUf/wxDHxQjaJvq6sZs=;
-        b=HnN0rG4S5mQsx2SRWTyF3ZRhYMFJl7qu0PR+TBLcYCKeWGnMSHRdqJL1WFVSqoDzb1
-         NLCtTfI8d5Mdf0WVuCMIbjUU7RUaNe9sCpVBiqW/qT7sZ/MIntlNb3fLB7ijxFd6uqAd
-         zP0xyIYvFGW1znEw/iJteZLHfe1XRfEQVZnuN7O4dfTvuAJ1EOl241eU5imHEG4Jl0k6
-         laDLO5j8OIY5K/QWB8lL2+Z/hhdWEDByZIX42vwfHOPTmdLd9RNH3FoTFhu4yNRhsP2L
-         wdYO4Wh/9ChRS3P3alfXyEQ0ImhdsfM0hIheQFnPw9s+kYzKFQopPDyea2xMOQRhbFev
-         yfHA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=27PUTNb2UH1CaFlaB6o+qtISHhMqVYpnRcYCFuMiVv4=;
+        b=RLZe4nVv/Ic2Sv7cEK7VnKNh8dqoPXLpxnLc7UHjGVmmaOPOdprU9K/lDH3Kr6SBBs
+         6QDIiqyi6WSTTNbbOkaJZQxy8YW00WXStF0ZngoQO8N9wcquuUTE85nb3APbRA0XivHe
+         pRiLCDAis4jbIvybxugAxhkZlTL8NK/7VRcrLnDf0uEQG2evVEh8fmhzHI46goYAy/Rj
+         q8Bbbjx+gKvOdjejX68tjSajQP70rVeZpFFv49Ib8lN+kErMrJya6+9vsV7cGjxOYuDc
+         3XgnvxTdqukRyUlMaSwf9b5Yn8Xatlmpk1zSwUk3glp21S87SI0Q0DdcTQbIgVdEgv4s
+         sXUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kTxZMWwr7LUEOg9gLWY8x2sIMUf/wxDHxQjaJvq6sZs=;
-        b=hcrCQ/4G9EAs451wlzSpiwKn9hDEpgyrZTEiTyPnM0COyakzgP9i46LSTdrDO/1Jiz
-         XPOZKNS1Eo3pp9f81WyG6bmvJNBQtsZD5wO55uoviPAE69tOxgBpIGNvqUNSxvskIPVq
-         lCeSqgcFYCmh5vY17NtYG/R8wZxHT2i8KsZn0FxyUSCuav/Y/CMaTSYkp6TzHsDW+vKN
-         TwslWFnn7nnuG8pMcQEXWXK+hUvpQOjT50d5YsYRq9btdTVnsKNeifpDDyxgtgGN58xz
-         pG2dmuY/1iSs9xyfst8fhMgP+PzqUnf8vBS89bQBKiOVX+7ixdHtVZcPRJxUiUBMfsjk
-         RFQQ==
-X-Gm-Message-State: AOAM532tn3I0Je4B96YU3Tn3BgYoW43IQzThEf3F8ibX3RyjWPU8uZpD
-        denj4+N3xYAGQSuRrRF/Oo0=
-X-Google-Smtp-Source: ABdhPJzZQ7As7AYR1AUIoIrQDAE/gC+kQTWnltJD/9G4pF5VDKlt5ClNiaHaof5EJuvmaHkS+gF6iw==
-X-Received: by 2002:a05:6000:1869:b0:211:7f25:89da with SMTP id d9-20020a056000186900b002117f2589damr688495wri.696.1654076913365;
-        Wed, 01 Jun 2022 02:48:33 -0700 (PDT)
-Received: from [192.168.1.101] ([160.177.66.137])
-        by smtp.gmail.com with ESMTPSA id i6-20020a05600c290600b00397470a8226sm1382068wmd.15.2022.06.01.02.48.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 02:48:32 -0700 (PDT)
-Message-ID: <654d35fb-c2e8-630f-be52-3369ea355d3c@gmail.com>
-Date:   Wed, 1 Jun 2022 02:48:35 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=27PUTNb2UH1CaFlaB6o+qtISHhMqVYpnRcYCFuMiVv4=;
+        b=1C2x9Xdwy4Bs1peBFTJh47LRDOmAW7RdTOTF00nUKHQHyTwO2x1ywzNNOfLt35eSZp
+         QjoGnRBdlIxHJvXGYdTl5RayGjXsne7RthNEYtPlHcVwc82/A+0VsdlZH5Osof6jly0b
+         CJ1vqbEZOZ2EG4BzVgsxQuJDGkmn9b42Q0xZuAXT5T0Pw50ZY1PpQBy0qdvM2oK3jtTA
+         MV2LxuAne6Ws5zObDmjeR5oGQRFlzPch9Npm5Mv+9ew/XiEA62UDnFyEXZxZbDHUL4o1
+         fSyQRxnr49TGwVGaHuLJ0EcDMD31HJpeSfyV3ikbKuZAfbIUXTNO2UgBYszmYwBEsvLo
+         V9Qw==
+X-Gm-Message-State: AOAM530s4pfkYNdTuSt7i4dm/7TsXS8Np5KB77YWsPGd90gYbwrgweoA
+        A0hGavHcYgZGCWDAVAOQYZU9aZKWYrHn2/mNXFM=
+X-Google-Smtp-Source: ABdhPJyRwbLQFMmfl3jzbmPNjvUrFSOgiS+i5wMk8MNJphpsSnNZ8UtMTX/OTZ0ronnNTUPtL2vf7d9XmnEYugvrfuk=
+X-Received: by 2002:a17:907:6e1a:b0:6fe:f357:3837 with SMTP id
+ sd26-20020a1709076e1a00b006fef3573837mr40896205ejc.44.1654076974098; Wed, 01
+ Jun 2022 02:49:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/3] ARM64: dts: add dts files for bcmbca SoC bcm6858
-Content-Language: en-US
-To:     Anand Gore <anand.gore@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
-        samyon.furman@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+References: <20220531102809.11976-1-peterwu.pub@gmail.com> <20220531102809.11976-7-peterwu.pub@gmail.com>
+In-Reply-To: <20220531102809.11976-7-peterwu.pub@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 1 Jun 2022 11:48:58 +0200
+Message-ID: <CAHp75Vd8taco19vsDmBcCv8euV1SvwSiY5=P9oMkA6zWsjwXxg@mail.gmail.com>
+Subject: Re: [PATCH 06/14] leds: mt6370: Add Mediatek MT6370 Indicator support
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220531184615.2836433-1-anand.gore@broadcom.com>
- <20220531114551.v2.1.I66ae43da75911b704f02a759f70d66bc7e542885@changeid>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220531114551.v2.1.I66ae43da75911b704f02a759f70d66bc7e542885@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>, cy_huang@richtek.com,
+        alice_chen@richtek.com, chiaen_wu@richtek.com,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,26 +92,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 31, 2022 at 1:16 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+>
+> From: Alice Chen <alice_chen@richtek.com>
+
+All below comments are applicable to the rest of the series as well
+(one way or another), so please fix all your patches where it's
+appropriate.
+
+>
+> Add Mediatek MT6370 Indicator support
+
+What indicator?
+Please also keep attention on English punctuation (missed period).
+
+...
+
+> +       help
+> +         Support 4 channels and reg/pwm/breath mode.
+> +         Isink4 can also use as a CHG_VIN power good Indicator.
+
+be used
+
+> +         Say Y here to enable support for
+> +         MT6370_RGB_LED device.
+
+...
+
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/platform_device.h>
+
+> +#include <linux/of.h>
+
+Are you sure this is the correct header? Seems you need
+mod_devicetable.h instead.
+
+> +#include <linux/property.h>
+> +#include <linux/regmap.h>
+
+...
+
+> +struct mt6370_priv {
+> +       struct mutex lock;
+
+Do you use regmap locking?
+
+> +       struct device *dev;
+
+> +       struct regmap *regmap;
+
+> +       struct regmap_field *fields[F_MAX_FIELDS];
+> +       const struct reg_field *reg_fields;
+> +       const struct linear_range *ranges;
+> +       struct reg_cfg *reg_cfgs;
+> +       unsigned int leds_count;
+> +       unsigned int leds_active;
+> +       bool is_mt6372;
+> +       struct mt6370_led leds[];
+> +};
+
+...
+
+> +static const unsigned int common_tfreqs[] = {
+> +       10000, 5000, 2000, 1000, 500, 200, 5, 1
+
+Leave a comma at the end.
+
+> +};
+> +
+> +static const unsigned int mt6372_tfreqs[] = {
+> +       8000, 4000, 2000, 1000, 500, 250, 8, 4
+
+Ditto.
+
+> +};
 
 
-On 5/31/2022 11:46 AM, Anand Gore wrote:
-> Add dts for ARMv8 based broadband SoC BCM6858.
-> bcm6858.dtsi is the SoC description dts header
-> and bcm96858.dts is a simple dts file for Broadcom
-> BCM96858 Reference board that only enables the UART port.
-> 
-> Signed-off-by: Anand Gore <anand.gore@broadcom.com>
-> 
-> ---
-[snip]
-
-> +	axi@81000000 {
-> +		compatible = "simple-bus";
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-
-See my comment to William, I don't think this is quite what you want, 
-you should use #address-cells and #size-cells = 1 here and adjust the 
-reg nodes accordingly.
 -- 
-Florian
+With Best Regards,
+Andy Shevchenko

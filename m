@@ -2,75 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510B553A7C2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF51353A837
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354290AbiFAOCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
+        id S1355187AbiFAOFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354394AbiFAOAU (ORCPT
+        with ESMTP id S1354546AbiFAOAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:00:20 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D93A5006;
-        Wed,  1 Jun 2022 06:56:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654091800; x=1685627800;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jUqZ7w2WMAE0tbVZTXI0Gl8U5/1ENzxvvW17y8aE7po=;
-  b=ethjiQYobhnk61a7Yk0v7zoeTr2OtGogxpgd91NLxNWZVfYdxjkERoDy
-   QeiTFQgA8wpa/fsffOozwoEUKPisGhELr84uiIJLAA2c2ZcTzpKm8gjhh
-   0h1Kg8Ve86oQTtYaZJumMezZ5dVQMAAX1exV7M6zurkR7yDNkcRirz5H9
-   ytsmkrHjKmBvffWVtTu8n1hkbIQMkohXLP5lDeBx8U8CqCuT64g8QX5xg
-   ed0mlnleB3VTBNfanIEe+NdGTCprvob3yrctDbQZW/0IAYEpDy8jaDdyB
-   jQHBqG3E3P1RSyxYy15wRfNPlPE8ergTUaw7JUd/PkUD5fuBmHAAxMlnG
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275604135"
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="275604135"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 06:55:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="530068655"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga003.jf.intel.com with ESMTP; 01 Jun 2022 06:55:36 -0700
-Received: from [10.252.214.178] (kliang2-MOBL.ccr.corp.intel.com [10.252.214.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Wed, 1 Jun 2022 10:00:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609AD10FF5;
+        Wed,  1 Jun 2022 06:57:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 66EBD580514;
-        Wed,  1 Jun 2022 06:55:33 -0700 (PDT)
-Message-ID: <9fa06966-ceec-e48b-677c-c8f2dc8ab20a@linux.intel.com>
-Date:   Wed, 1 Jun 2022 09:55:31 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE15E6160E;
+        Wed,  1 Jun 2022 13:56:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F4E2C3411D;
+        Wed,  1 Jun 2022 13:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654091785;
+        bh=Io4HhJb+Cz16sRUnVJbOtBv6IWiQnhJuRY59WG07j+s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I7A5nLZMKYXpbZb1QJHxcS049h13VY7fF5Osn/gcBujNd/KTWMGy9116J5GNSej7c
+         fX0Y4jrwckeiTZkLTJtWCBCL8jSRC71XdVk+6wxGghto6tYLgzTvjCRPSkLOP4KIZ6
+         pO3Svcj+ejPwYiOa+2AKe9O/iQx+Wv+qaPlroUYpiatvphlV7ERU9UvpYt/V2pRFUT
+         cio1toR1hGV/F6i5OiNwXqYNe6QVn+rtlaJgf0WhYZxOd64cie5jFAKDthoJS2ZbEQ
+         Byar09f2LvajKJ88obyDaYCm4U1qBnOeECsPgPjYTX5q78oeOzMXPE+jsvGx2JnfFL
+         CsRCqcNUO/z4w==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Niels Dossche <dossche.niels@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>,
+        dennis.dalessandro@cornelisnetworks.com, linux-rdma@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 01/37] IB/rdmavt: add missing locks in rvt_ruc_loopback
+Date:   Wed,  1 Jun 2022 09:55:46 -0400
+Message-Id: <20220601135622.2003939-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 2/8] perf tool: Parse pmu caps sysfs only once
-Content-Language: en-US
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, jolsa@kernel.org, irogers@google.com,
-        peterz@infradead.org, rrichter@amd.com, mingo@redhat.com,
-        mark.rutland@arm.com, namhyung@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, james.clark@arm.com, leo.yan@linaro.org,
-        ak@linux.intel.com, eranian@google.com, like.xu.linux@gmail.com,
-        x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com
-References: <20220601032608.1034-1-ravi.bangoria@amd.com>
- <20220601032608.1034-3-ravi.bangoria@amd.com>
- <47584a6b-20b9-9a3d-3125-d9fe848cea54@linux.intel.com>
- <0c795f97-c582-8059-fcf8-82b43239f0d1@amd.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <0c795f97-c582-8059-fcf8-82b43239f0d1@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,35 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Niels Dossche <dossche.niels@gmail.com>
 
+[ Upstream commit 22cbc6c2681a0a4fe76150270426e763d52353a4 ]
 
-On 6/1/2022 9:51 AM, Ravi Bangoria wrote:
-> Hi Kan,
-> 
-> [...]
-> 
->>> diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
->>> index 541889fa9f9c..4b45fd8da5a3 100644
->>> --- a/tools/perf/util/pmu.h
->>> +++ b/tools/perf/util/pmu.h
->>> @@ -46,6 +46,8 @@ struct perf_pmu {
->>>        struct perf_cpu_map *cpus;
->>>        struct list_head format;  /* HEAD struct perf_pmu_format -> list */
->>>        struct list_head aliases; /* HEAD struct perf_pmu_alias -> list */
->>> +    bool caps_initialized;
->>> +    u32 nr_caps;
->>
->> If they are just used for the cache purpose, I don't think we need to add the variables in the struct perf_pmu.
->>
->> A static variable should be good enough. See sysctl__nmi_watchdog_enabled().
-> 
-> These fields are per pmu. Static variable won't help :) And they are
-> used in subsequent patches as well.
-> 
+The documentation of the function rvt_error_qp says both r_lock and
+s_lock need to be held when calling that function.
+It also asserts using lockdep that both of those locks are held.
+rvt_error_qp is called form rvt_send_cq, which is called from
+rvt_qp_complete_swqe, which is called from rvt_send_complete, which is
+called from rvt_ruc_loopback in two places. Both of these places do not
+hold r_lock. Fix this by acquiring a spin_lock of r_lock in both of
+these places.
+The r_lock acquiring cannot be added in rvt_qp_complete_swqe because
+some of its other callers already have r_lock acquired.
 
-Ah, I see. Then the patch looks good to me.
+Link: https://lore.kernel.org/r/20220228195144.71946-1-dossche.niels@gmail.com
+Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/infiniband/sw/rdmavt/qp.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+diff --git a/drivers/infiniband/sw/rdmavt/qp.c b/drivers/infiniband/sw/rdmavt/qp.c
+index 8ef112f883a7..3acab569fbb9 100644
+--- a/drivers/infiniband/sw/rdmavt/qp.c
++++ b/drivers/infiniband/sw/rdmavt/qp.c
+@@ -2775,7 +2775,7 @@ void rvt_qp_iter(struct rvt_dev_info *rdi,
+ EXPORT_SYMBOL(rvt_qp_iter);
+ 
+ /*
+- * This should be called with s_lock held.
++ * This should be called with s_lock and r_lock held.
+  */
+ void rvt_send_complete(struct rvt_qp *qp, struct rvt_swqe *wqe,
+ 		       enum ib_wc_status status)
+@@ -3134,7 +3134,9 @@ void rvt_ruc_loopback(struct rvt_qp *sqp)
+ 	rvp->n_loop_pkts++;
+ flush_send:
+ 	sqp->s_rnr_retry = sqp->s_rnr_retry_cnt;
++	spin_lock(&sqp->r_lock);
+ 	rvt_send_complete(sqp, wqe, send_status);
++	spin_unlock(&sqp->r_lock);
+ 	if (local_ops) {
+ 		atomic_dec(&sqp->local_ops_pending);
+ 		local_ops = 0;
+@@ -3188,7 +3190,9 @@ void rvt_ruc_loopback(struct rvt_qp *sqp)
+ 	spin_unlock_irqrestore(&qp->r_lock, flags);
+ serr_no_r_lock:
+ 	spin_lock_irqsave(&sqp->s_lock, flags);
++	spin_lock(&sqp->r_lock);
+ 	rvt_send_complete(sqp, wqe, send_status);
++	spin_unlock(&sqp->r_lock);
+ 	if (sqp->ibqp.qp_type == IB_QPT_RC) {
+ 		int lastwqe;
+ 
+-- 
+2.35.1
 
-Thanks,
-Kan

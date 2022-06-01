@@ -2,102 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6BB53A5AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DBB053A5B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353129AbiFANLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 09:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
+        id S1353133AbiFANO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 09:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236589AbiFANLV (ORCPT
+        with ESMTP id S1351588AbiFANOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 09:11:21 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EB26325
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 06:11:16 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id w3so1732316plp.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 06:11:16 -0700 (PDT)
+        Wed, 1 Jun 2022 09:14:25 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C1D3CA4B;
+        Wed,  1 Jun 2022 06:14:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F5AH1U5SHVaxYK5U6wHZI+Uf8T98VsEerOgnBwZfGkY=;
-        b=EpxDjcS2RtaVPEIL1O7MH8Fxfp1XUV05k/MHV3xIY/cvhJPTlS11OnBx6jymbxzO5q
-         7+B1tF07vGxCCrKoyNw0Zz67BWtpT+SLqzm+gzCmTVZ8F9iLgwgmgqGo9qgdVqTwKeOH
-         F5o9kx/dsC+k8w+dwSgWYUSUHYrIMCA2SDNiatPRim9X/0u8HlsrCchloeiTZREAy9cs
-         Mg4R2gdSjJxVmZL27P92S26ncG4XgWJ3Fimq6YJUJPZoPV7O5vg3wSjT1gSOWAtr92iB
-         4ILlyGZCMyy/sSgaXAreCLGheGep9d4s68G9Y4tadj28m1irbmyTVBHSIz+ByXTj4ocg
-         /Dlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F5AH1U5SHVaxYK5U6wHZI+Uf8T98VsEerOgnBwZfGkY=;
-        b=60N7pByuvo4Jp6hTWMo4V9EQLoK/5SCPd/m4jERAMFoPQoSjsFyCgZoPPc8mqnPo9q
-         KXDeAvnFsFkD7S4u2KGRtahcCDUxZdZ7G1JqZckpXV8E2We632oYmTqf02Cd82NJQTbd
-         q8dmPFMhf+X6BYSg2CfWz2A+eb2xlpekEmFvMILSTs5Ywyr9cxED88G16xFou79gbbdX
-         ipdwCd94dXl1r1xlorq+jQXRWftzTbGIhgbn/GKkOMI9jpClSqh/49bQBL2YGoDWMvZB
-         +aqQCWdKQvGIGgdkwk60pQuYHnGsSEef5yYYfgo0B90OCT1dnqeHwUzdmBYPKacRGDAk
-         9Plg==
-X-Gm-Message-State: AOAM53180XYnyFN1vck1Ax7L1VE/qab1o8VSuQcxvp/YyWeOw58rsUx+
-        HjIpcucWkZXOL7yUDxPAp6o=
-X-Google-Smtp-Source: ABdhPJynog34wOL325DVkpBKhAu32exXyCxMUiCFCtcQ7QP9ZOrSBHoR6U9gj57/QtV+cI3GseFmAQ==
-X-Received: by 2002:a17:902:c2d2:b0:166:303b:56ec with SMTP id c18-20020a170902c2d200b00166303b56ecmr1710581pla.83.1654089076345;
-        Wed, 01 Jun 2022 06:11:16 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id gd20-20020a17090b0fd400b001d954837197sm3862654pjb.22.2022.06.01.06.11.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 06:11:15 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] psci: Fix refcount leak in psci_dt_init
-Date:   Wed,  1 Jun 2022 17:11:07 +0400
-Message-Id: <20220601131107.18743-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654089263; x=1685625263;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=dqVezMSCCdxjIXBoNBJGF1g26ZpD3xFCE0ZdxtLFCk4=;
+  b=jwmjyWHb/BiAVsNLJavNJZORLtzmPbR5vNIJYtRMC3P2iWiRc50j6LHw
+   FHwWjMLjHmujE7JD1MuPdaKPbEbggDTAiUgjDbwyzik2Ft7LhbGaN6SE1
+   Ym1ibSC9Et1q25CjiVDigow1IRbISrvxALMPW3gnAbtaFPPqwFKwnE+VQ
+   g=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Jun 2022 06:14:23 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 06:14:23 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 1 Jun 2022 06:14:23 -0700
+Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 1 Jun 2022
+ 06:14:20 -0700
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
+Subject: [PATCH 0/1] drivers/thermal/thermal_of: Add critical/hot ops support for thermal_of sensor
+Date:   Wed, 1 Jun 2022 18:43:59 +0530
+Message-ID: <20220601131400.24627-1-quic_manafm@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_matching_node_and_match() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-When of_device_is_available() fails, call of_node_put() to release the
-refcount. And of_node_put() will checks NULL pointer.
+Add support for critical and hot trip violation notification ops in
+thermal_of interface.
 
-Fixes: d09a0011ec0d ("drivers: psci: Allow PSCI node to be disabled")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/firmware/psci/psci.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Manaf Meethalavalappu Pallikunhi (1):
+  drivers/thermal/thermal_of: Add critical/hot ops support for
+    thermal_of sensor
 
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index cfb448eabdaa..ec888aba57ff 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -619,8 +619,10 @@ int __init psci_dt_init(void)
- 
- 	np = of_find_matching_node_and_match(NULL, psci_of_match, &matched_np);
- 
--	if (!np || !of_device_is_available(np))
-+	if (!np || !of_device_is_available(np)) {
-+		of_node_put(np);
- 		return -ENODEV;
-+	}
- 
- 	init_fn = (psci_initcall_t)matched_np->data;
- 	ret = init_fn(np);
--- 
-2.25.1
+ drivers/thermal/thermal_of.c | 21 +++++++++++++++++++++
+ include/linux/thermal.h      |  6 ++++++
+ 2 files changed, 27 insertions(+)
 
+base-commit: 268db333b561c77dee3feb6831806412293b4a7e

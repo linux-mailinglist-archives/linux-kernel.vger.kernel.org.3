@@ -2,172 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492F2539DFD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396E6539E0C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350119AbiFAHSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 03:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        id S1350202AbiFAHUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 03:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349941AbiFAHST (ORCPT
+        with ESMTP id S1350413AbiFAHUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 03:18:19 -0400
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEFE30572;
-        Wed,  1 Jun 2022 00:18:15 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 229E71002A013;
-        Wed,  1 Jun 2022 09:18:09 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id F2FF5118737; Wed,  1 Jun 2022 09:18:08 +0200 (CEST)
-Date:   Wed, 1 Jun 2022 09:18:08 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V8 03/10] PCI: Create PCI library functions in support of
- DOE mailboxes.
-Message-ID: <20220601071808.GA19924@wunner.de>
-References: <20220414203237.2198665-1-ira.weiny@intel.com>
- <20220414203237.2198665-4-ira.weiny@intel.com>
- <20220530190657.GA14765@wunner.de>
- <20220531113350.0000421e@Huawei.com>
- <YpbWCYujYDEkMm1B@iweiny-desk3>
+        Wed, 1 Jun 2022 03:20:13 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96DE6461
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:20:11 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id c2so988421plh.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 00:20:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MC41gEQuVXDAqpv4xe0itsDAYcLiXNNvtLvOXnYJomI=;
+        b=gdRCXYyPwtL93x7erslFonthTsqPPXlZ0UgsTR8AVRJYsOq8MvZJPvbLGsreKshXqi
+         fz7DK3PEIiNHGy/PPfhuZMFta+U3NxNCsPdWrmEdCA9aRfFfM1n8S6izYx7QmllKgDFF
+         XEv/ilDs9dvvhochneQ7KZzX3YiAaDv2QMwEhLbFk2IIlSU3jkA4pTjO0ga/ScryjxcX
+         qdA3PHCX0cJpLHPVE0cNpCX84fdZI7L5T2iKWpg1cAhGbAKZ6t8tfRbLijKjDL3HsBl9
+         0oK77ctPv47PahAHbsMhjm7HAOBF4xXzRZWxlyam2MN6mQRR5wxMxaK2zbxza7kt1oO0
+         133A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MC41gEQuVXDAqpv4xe0itsDAYcLiXNNvtLvOXnYJomI=;
+        b=atuyDNvVrLlftHrg+mgxBOkCr42Zx/7zTLq86JMhrUMKaxLzNJhWzk9MbEoaZnIXJT
+         TcNlguWRhw5Nsed6ZNgrr3C9+kio7+mkay82RBjb+mEzoBcZP5ibAmwkXRtZoY257xjA
+         KLBdoLsLR6pRDAsPN/NSLGIR0OF/wjuhzVtasMgMeml8ruFSGMUnDyNgAay7MtBtO0Z1
+         O7eNWvyUZAh2Q3iKSWYaN9zYkiF+wWCDa7N7SoNoyYLU2eJxVB+M0N2Loyr9t9k0eQV3
+         2Qrp52ZQ7pw2ksTZXXYT/ZJhw1Zb+h4XaJVfvY6aPBLRBbfs5iEAXbygSsLsB22aFBz5
+         M3Yg==
+X-Gm-Message-State: AOAM530tJsfAtaPefXcaxQ9rn1nAHinzqWLguIgOamK4gYPtutxkoNc0
+        UbNE9rU/CESYbQVUJ5eet2VK+YR7POs=
+X-Google-Smtp-Source: ABdhPJytqL76MOI+aqc7h42RwJx2/Icf5zWS/KnylCaqAGDVX70Bn3WD3b9VofJvcmvhZ6MH2bXQ4w==
+X-Received: by 2002:a17:902:8c92:b0:161:e861:861f with SMTP id t18-20020a1709028c9200b00161e861861fmr61330746plo.33.1654068010907;
+        Wed, 01 Jun 2022 00:20:10 -0700 (PDT)
+Received: from Vostro-5471.. ([2001:288:7001:2708:d63b:41f9:65b2:fe0d])
+        by smtp.gmail.com with ESMTPSA id f1-20020a170902684100b001637fd08a75sm471297pln.63.2022.06.01.00.20.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 00:20:10 -0700 (PDT)
+From:   Jui-Tse Huang <juitse.huang@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jui-Tse Huang <juitse.huang@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Bruno Randolf <br1@einfach.org>,
+        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>
+Subject: [PATCH v2] average: Clarify the restrictions
+Date:   Wed,  1 Jun 2022 15:19:06 +0800
+Message-Id: <20220601071907.22070-1-juitse.huang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YpbWCYujYDEkMm1B@iweiny-desk3>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 07:59:21PM -0700, Ira Weiny wrote:
-> On Tue, May 31, 2022 at 11:33:50AM +0100, Jonathan Cameron wrote:
-> > On Mon, 30 May 2022 21:06:57 +0200 Lukas Wunner <lukas@wunner.de> wrote:
-> > > On Thu, Apr 14, 2022 at 01:32:30PM -0700, ira.weiny@intel.com wrote:
-> > > > +	/* First 2 dwords have already been read */
-> > > > +	length -= 2;
-> > > > +	/* Read the rest of the response payload */
-> > > > +	for (i = 0; i < min(length, task->response_pl_sz / sizeof(u32)); i++) {
-> > > > +		pci_read_config_dword(pdev, offset + PCI_DOE_READ,
-> > > > +				      &task->response_pl[i]);
-> > > > +		pci_write_config_dword(pdev, offset + PCI_DOE_READ, 0);
-> > > > +	}  
-> > > 
-> > > You need to check the Data Object Ready bit.  The device may clear the
-> > > bit prematurely (e.g. as a result of a concurrent FLR or Conventional
-> > > Reset).  You'll continue reading zero dwords from the mailbox and
-> > > pretend success to the caller even though the response is truncated.
-> > > 
-> > > If you're concerned about performance when checking the bit on every
-> > > loop iteration, checking it only on the last but one iteration should
-> > > be sufficient to detect truncation.
-> > 
-> > Good catch - I hate corner cases.  Thankfully this one is trivial to
-> > check for.
-> 
-> Ok looking at the spec:  Strictly speaking this needs to happen multiple
-> times both in doe_statemachine_work() and inside pci_doe_recv_resp();
-> not just in this loop.  :-(
-> 
-> This is because, the check in doe_statemachine_work() only covers the
-> 1st dword read IIUC.
+There is several restrictions in the EWMA helper macro that the
+developers should take care of, but the comment does not mentioned yet,
+thus, this patch clarify the restrictions.
 
-The spec says "this bit indicates the DOE instance has a *data object*
-available to be read by system firmware/software".
+Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
+---
 
-So, the entire object is available for reading, not just one dword.
+Notes:
+    v2: fix spelling and wording (Bruno Randolf)
 
-You've already got checks in place for the first two dwords which
-cover reading an "all zeroes" response.  No need to amend them.
+ include/linux/average.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-You only need to re-check the Data Object Ready bit on the last-but-one
-dword in case the function was reset concurrently.  Per sec. 6.30.2,
-"An FLR to a Function must result in the aborting of any DOE transfer
-in progress."
+diff --git a/include/linux/average.h b/include/linux/average.h
+index a1a8f09631ce..ff0953ba2820 100644
+--- a/include/linux/average.h
++++ b/include/linux/average.h
+@@ -13,6 +13,9 @@
+  * precision and fall-off coefficient determined at compile-time
+  * and built into the generated helper funtions.
+  *
++ * This implementation supports up to 30 bits of precition, and only
++ * the API for fetching non-fractional part is provided for now.
++ *
+  * The first argument to the macro is the name that will be used
+  * for the struct and helper functions.
+  *
+-- 
+2.34.1
 
-
-> > > > +static irqreturn_t pci_doe_irq_handler(int irq, void *data)
-> > > > +{
-> > > > +	struct pci_doe_mb *doe_mb = data;
-> > > > +	struct pci_dev *pdev = doe_mb->pdev;
-> > > > +	int offset = doe_mb->cap_offset;
-> > > > +	u32 val;
-> > > > +
-> > > > +	pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
-> > > > +
-> > > > +	/* Leave the error case to be handled outside IRQ */
-> > > > +	if (FIELD_GET(PCI_DOE_STATUS_ERROR, val)) {
-> > > > +		mod_delayed_work(system_wq, &doe_mb->statemachine, 0);
-> > > > +		return IRQ_HANDLED;
-> > > > +	}
-> > > > +
-> > > > +	if (FIELD_GET(PCI_DOE_STATUS_INT_STATUS, val)) {
-> > > > +		pci_write_config_dword(pdev, offset + PCI_DOE_STATUS,
-> > > > +					PCI_DOE_STATUS_INT_STATUS);
-> > > > +		mod_delayed_work(system_wq, &doe_mb->statemachine, 0);
-> > > > +		return IRQ_HANDLED;
-> > > > +	}
-> > > > +
-> > > > +	return IRQ_NONE;
-> > > > +}  
-> > > 
-> > > PCIe 6.0, table 7-316 says that an interrupt is also raised when
-> > > "the DOE Busy bit has been Cleared", yet such an interrupt is
-> > > not handled here.  It is incorrectly treated as a spurious
-> > > interrupt by returning IRQ_NONE.  The right thing to do
-> > > is probably to wake the state machine in case it's polling
-> > > for the Busy flag to clear.
-> > 
-> > Ah. I remember testing this via a lot of hacking on the QEMU code
-> > to inject the various races that can occur (it was really ugly to do).
-> > 
-> > Guess we lost the handling at some point.  I think your fix
-> > is the right one.
-> 
-> Perhaps I am missing something but digging into this more.  I disagree
-> that the handler fails to handle this case.  If I read the spec correctly
-> DOE Interrupt Status must be set when an interrupt is generated.
-> The handler wakes the state machine in that case.  The state machine
-> then checks for busy if there is work to be done.
-
-Right, I was mistaken, sorry for the noise.
-
-
-> Normally we would not even need to check for status error.  But that is
-> special cased because clearing that status is left to the state machine.
-
-That however looks wrong because the DOE Interrupt Status bit is never
-cleared after a DOE Error is signaled.  The state machine performs an
-explicit abort upon an error by setting the DOE Abort bit, but that
-doesn't seem to clear DOE Interrupt Status:
-
-Per section 6.30.2, "At any time, the system firmware/software is
-permitted to set the DOE Abort bit in the DOE Control Register,
-and the DOE instance must Clear the Data Object Ready bit,
-if not already Clear, and Clear the DOE Error bit, if already Set,
-in the DOE Status Register, within 1 second."
-
-No mention of the DOE Interrupt Status bit, so we cannot assume that
-it's cleared by a DOE Abort and we must clear it explicitly.
-
-Thanks,
-
-Lukas

@@ -2,185 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A42D539CDF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7860D539D1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349794AbiFAGBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 02:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S1349760AbiFAGSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 02:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344119AbiFAGBr (ORCPT
+        with ESMTP id S243882AbiFAGSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 02:01:47 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B685C1007;
-        Tue, 31 May 2022 23:01:43 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25161Zak111534;
-        Wed, 1 Jun 2022 01:01:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654063295;
-        bh=+aCCojRMiq5xMMa2smOMLWywfcMjA8WBVUZc2agFKro=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=zLvqwmLzLBFdgDsmYNrzpfTjIocb1yyGcJIcj2XS9wPqywSh6iznmIQliBc9LVtiP
-         YKhguYdLs+0A9P9hqUE+dEH47aHFXf6Jj5fqNipHNz/zJzr3XGsdCP4NWQNNkGN84u
-         df5Wq0tiluRWgwEM7U2t3Wbo8N1kRJ4U+KMEbXLc=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25161ZPT018041
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 1 Jun 2022 01:01:35 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 1
- Jun 2022 01:01:34 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 1 Jun 2022 01:01:34 -0500
-Received: from [172.24.222.108] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25161TfB020842;
-        Wed, 1 Jun 2022 01:01:30 -0500
-Message-ID: <b5353c06-c8b4-c065-3843-28b2a34e1867@ti.com>
-Date:   Wed, 1 Jun 2022 11:31:29 +0530
+        Wed, 1 Jun 2022 02:18:18 -0400
+X-Greylist: delayed 830 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 May 2022 23:18:17 PDT
+Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970006A066
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 23:18:17 -0700 (PDT)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9d:7e00:0:0:0:1])
+        (authenticated bits=0)
+        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 25163bpO1194431
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Wed, 1 Jun 2022 07:03:38 +0100
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9d:7e02:9be5:c549:1a72:4709])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 25163VY73277715
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Wed, 1 Jun 2022 08:03:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1654063412; bh=Z8VQepQywpNhUdP9sxuS8hnvH4ZlltBtmsUuhQTli2c=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=fod5sVP1nRIUCLjzh5U/9k1uJkaqhtnrbBpk9XMMyVd9rS53i36+NN5b3jvPIqmjE
+         6ODblHo1JzsyA1n42cglXvZw8FJoMgVVvkO5ha2kZ66mD2WZXrEuNbGmrKnp+jpdFI
+         uY5Dxv/K2gzDJWEYyS1pNIqfODeBOoQUJ8Xrop3c=
+Received: (nullmailer pid 1032539 invoked by uid 1000);
+        Wed, 01 Jun 2022 06:03:31 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: qmi_wwan: Add support for Cinterion MV31 with
+ new baseline
+Organization: m
+References: <20220601040531.6016-1-slark_xiao@163.com>
+Date:   Wed, 01 Jun 2022 08:03:31 +0200
+In-Reply-To: <20220601040531.6016-1-slark_xiao@163.com> (Slark Xiao's message
+        of "Wed, 1 Jun 2022 12:05:31 +0800")
+Message-ID: <87o7zcly30.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/2] dt-bindings: phy: ti: phy-gmii-sel: Add bindings for
- J7200
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>, <robh+dt@kernel.org>,
-        <lee.jones@linaro.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <kishon@ti.com>, <vkoul@kernel.org>, <dan.carpenter@oracle.com>,
-        <grygorii.strashko@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>
-References: <20220531111221.22963-1-s-vadapalli@ti.com>
- <20220531111221.22963-2-s-vadapalli@ti.com>
- <26603540-8887-ef8d-8f4d-26f2f33d2a6f@kernel.org>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <26603540-8887-ef8d-8f4d-26f2f33d2a6f@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.5 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Roger,
+Slark Xiao <slark_xiao@163.com> writes:
 
-On 31/05/22 17:15, Roger Quadros wrote:
-> Hi Siddharth,
-> 
-> On 31/05/2022 14:12, Siddharth Vadapalli wrote:
->> TI's J7200 SoC supports additional PHY modes like QSGMII and SGMII
->> that are not supported on earlier SoCs. Add a compatible for it.
->>
->> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->> ---
->>  .../mfd/ti,j721e-system-controller.yaml       |  5 ++++
->>  .../bindings/phy/ti,phy-gmii-sel.yaml         | 24 ++++++++++++++++++-
->>  2 files changed, 28 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
->> index fa86691ebf16..e381ba62a513 100644
->> --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
->> +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
->> @@ -48,6 +48,11 @@ patternProperties:
->>      description:
->>        This is the SERDES lane control mux.
->>  
->> +  "phy@[0-9a-f]+$":
->> +    type: object
->> +    description:
->> +      This is the register to set phy mode through phy-gmii-sel driver.
->> +
-> 
-> Is this really required? The system controller has 100s of different such registers and it is not practical to mention about all.
+> Adding support for Cinterion device MV31 with Qualcomm
+> new baseline. Use different PIDs to separate it from
+> previous base line products.
+> All interfaces settings keep same as previous.
+>
+> T:  Bus=3D03 Lev=3D01 Prnt=3D01 Port=3D00 Cnt=3D01 Dev#=3D  7 Spd=3D480 M=
+xCh=3D 0
+> D:  Ver=3D 2.10 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
+> P:  Vendor=3D1e2d ProdID=3D00b9 Rev=3D04.14
+> S:  Manufacturer=3DCinterion
+> S:  Product=3DCinterion PID 0x00B9 USB Mobile Broadband
+> S:  SerialNumber=3D90418e79
+> C:  #Ifs=3D 4 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
+> I:  If#=3D0x0 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D50 Drive=
+r=3Dqmi_wwan
+> I:  If#=3D0x1 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D40 Drive=
+r=3Doption
+> I:  If#=3D0x2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D60 Drive=
+r=3Doption
+> I:  If#=3D0x3 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3D30 Drive=
+r=3Doption
+>
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
 
-The property has to be mentioned in order to pass: make dtbs_check.
+Thanks
 
-> 
->>  required:
->>    - compatible
->>    - reg
->> diff --git a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
->> index ff8a6d9eb153..7427758451e7 100644
->> --- a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
->> +++ b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
->> @@ -53,12 +53,21 @@ properties:
->>        - ti,am43xx-phy-gmii-sel
->>        - ti,dm814-phy-gmii-sel
->>        - ti,am654-phy-gmii-sel
->> +      - ti,j7200-cpsw5g-phy-gmii-sel
-> 
-> Why not just "ti,j7200-phy-gmii-sel" so it is consistent naming.
-
-In TI's J7200 device, there are two CPSW MACs, namely CPSW2G and CPSW5G. While
-CPSW5G supports QSGMII mode, CPSW2G does not. Hence, the compatible being added
-with the extra mode (QSGMII) enabled is applicable only for CPSW5G and not for
-CPSW2G. Thus, to highlight this, the word "CPSW5G" has been included in the name
-of the compatible.
-
-> 
->>  
->>    reg:
->>      maxItems: 1
->>  
->>    '#phy-cells': true
->>  
->> +  ti,enet-ctrl-qsgmii:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description: |
->> +      Required only for QSGMII mode. Bitmask to select the port for
->> +      QSGMII main mode. Rest of the ports are selected as QSGMII_SUB
->> +      ports automatically. Any of the 4 CPSW5G ports can act as the
->> +      main port with the rest of them being the QSGMII_SUB ports.
->> +
-> 
-> This is weird way of doing things.
-> 
-> The Ethernet controller driver already knows which mode the port is
-> supposed to operate.
-
-From the ethernet driver perspective, there is no difference between the QSGMII
-or QSGMII-SUB modes and both are treated the same. However, the phy-gmii-sel
-driver configures CPSW MAC registers differently depending on the mode being
-QSGMII or QSGMII-SUB. Hence, the ti,enet-ctrl-qsgmii property is used to
-identify the QSGMII main port and the rest are configured in CPSW MAC as
-QSGMII-SUB ports.
-
-> 
-> e.g.
-> +&cpsw0_port1 {
-> +	phy-handle = <&cpsw5g_phy0>;
-> +	phy-mode = "qsgmii";
-> +	mac-address = [00 00 00 00 00 00];
-> +	phys = <&cpsw0_phy_gmii_sel 1>;
-> +};
-> +
-> +&cpsw0_port2 {
-> +	phy-handle = <&cpsw5g_phy1>;
-> +	phy-mode = "qsgmii-sub";
-> +	mac-address = [00 00 00 00 00 00];
-> +	phys = <&cpsw0_phy_gmii_sel 2>;
-> 
-> And it can convey the mode to the PHY driver via phy_ops->set_mode.
-> So you should be depending on that instead of adding this new property.
-
-QSGMII-SUB is not a standard mode in the Linux kernel. In order to proceed with
-the suggested implementation, a new phy mode named PHY_INTERFACE_MODE_QSGMII_SUB
-has to be introduced to the kernel. Additionally, all existing phy drivers will
-have to be updated to recognize the new phy mode.
-
-Since the QSGMII-SUB mode is TI specific, it was decided that it would be better
-to add a new property in TI specific files for identifying the QSGMII main port
-and treating the rest as QSGMII-SUB ports.
-
-Thanks,
-Siddharth.
+Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>

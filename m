@@ -2,102 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67B2539D5A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 047CE539D5E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349896AbiFAGp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 02:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
+        id S232114AbiFAGqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 02:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347079AbiFAGp0 (ORCPT
+        with ESMTP id S230331AbiFAGqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 02:45:26 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3145195A3A
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 23:45:25 -0700 (PDT)
-Received: from [10.180.13.187] (unknown [10.180.13.187])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT0_yCpdiYT0LAA--.3609S3;
-        Wed, 01 Jun 2022 14:45:06 +0800 (CST)
-Subject: Re: [PATCH v1] sched: there is no need to call switch_mm_irqs_off
- when sched between two user thread.
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org
-References: <1653998201-10230-1-git-send-email-wangming01@loongson.cn>
- <YpYqOC9Wx84oC2z5@hirez.programming.kicks-ass.net>
-From:   Ming Wang <wangming01@loongson.cn>
-Message-ID: <a89053c6-ee36-e5a6-3c8f-c1cb64f54d93@loongson.cn>
-Date:   Wed, 1 Jun 2022 14:45:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 1 Jun 2022 02:46:42 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905D71C1;
+        Tue, 31 May 2022 23:46:39 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id s12so951993plp.0;
+        Tue, 31 May 2022 23:46:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EFwOnU1Z5Ynw8a8Slm95HzIXY1s77XJoGiJeg0kO+kQ=;
+        b=Cs03CyEhzJTXOOzlVXoWHibVtcRQ3FmgE1pyF+gSoPQ8xzmO4D4JlLsWpKtvvt1W7m
+         EP+taoO3udGuU5QeWPPQdvAMwU5HaA3DQIU4unrjoz61NX3TwstjKqhvUDpd8YJPNSA+
+         Ihvpc8LOhZ+c4doCvFDgqDMv5+I4JXr1PJTkeKB08/Y6aD9FFYPa0xiTdRBS2P3BGq8Z
+         Ha6ycIeWPQR2+TdeWlgFjAol3iKyac/U8MGrjEQG4xUKH5OTDwJodSck2++izkc8H1Sx
+         gJlRtMH/5aGYo+yMDjgnHz9fIoy/6b7wFHzV3C23psc1ejof58bnKXQHThSoXJLctTKv
+         Py5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EFwOnU1Z5Ynw8a8Slm95HzIXY1s77XJoGiJeg0kO+kQ=;
+        b=bWNrY8FvW7ahDs2QdwO0ZOYfd9a3fJz8kv7kTMxx95v1kXl/dG9zbR9h6ZJD8uedTR
+         YlWQ6uCH+gll5+8c3uX3a5WZo0rlWLLLmHC+tvEQODATntvWujBTEbSu+62hxUEgOimw
+         5mnnZbK0iRkTaQpmvaMBXMhqye/HnPeYrI9kZ06nTvHj7Dx3F0C9x2R+nzBFhth2UqUB
+         Xk/zjCD7pjM10Vdzbz76QGY97JiMaxaCjaLONgteGuoWxAU1Glf05iCuCe9gLt5mNd0B
+         9jCSe5WPmNIJlHgf6/hq28vM+eHcxWIsreSb4h2vvtccNZdYQKGZ5CnOboLtvQAzCc5r
+         3zQQ==
+X-Gm-Message-State: AOAM533ZXjtyN25vTSLH/3fmwNiaKIkEbbJMpVr4Gr8uIhLNWd9HgFya
+        1/lplsXzTP1rnt5E6bEkknA=
+X-Google-Smtp-Source: ABdhPJy/Wm5LAWAsuLyUNVvfF0queZvYjtDyGTp62nQAE2KJu1zk3S6BuIIsvGwwral8AeKV6ndFfg==
+X-Received: by 2002:a17:903:240b:b0:14b:1100:aebc with SMTP id e11-20020a170903240b00b0014b1100aebcmr65529691plo.133.1654065998914;
+        Tue, 31 May 2022 23:46:38 -0700 (PDT)
+Received: from localhost.localdomain ([103.84.139.165])
+        by smtp.gmail.com with ESMTPSA id ij7-20020a170902ab4700b0015e8d4eb1fasm682332plb.68.2022.05.31.23.46.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 23:46:38 -0700 (PDT)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, timo.teras@iki.fi
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH v2] xfrm: xfrm_policy: fix a possible double xfrm_pols_put() in xfrm_bundle_lookup()
+Date:   Wed,  1 Jun 2022 14:46:25 +0800
+Message-Id: <20220601064625.26414-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <YpYqOC9Wx84oC2z5@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf9DxT0_yCpdiYT0LAA--.3609S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7KryxJF4xAry7Kw45JrWUurg_yoW8Jw1kp3
-        yDJFy7GFnrua4jkay3Xwn5uryruws0gF47GFn0kFZ3JF98Kwn5Kr1rX3W3uFyIvr4fKrWa
-        vr40v34IqFyUCaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBmb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x0
-        82IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXw
-        Av7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4II
-        rI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21lc2xSY4AK6svPMxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI
-        42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
-        8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU7F1vUUUUU
-X-CM-SenderInfo: 5zdqwzxlqjiio6or00hjvr0hdfq/
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+xfrm_policy_lookup() will call xfrm_pol_hold_rcu() to get a refcount of
+pols[0]. This refcount can be dropped in xfrm_expand_policies() when
+xfrm_expand_policies() return error. pols[0]'s refcount is balanced in
+here. But xfrm_bundle_lookup() will also call xfrm_pols_put() with
+num_pols == 1 to drop this refcount when xfrm_expand_policies() return
+error.
 
-On 2022/5/31 下午10:46, Peter Zijlstra wrote:
-> On Tue, May 31, 2022 at 07:56:41PM +0800, Ming Wang wrote:
->> When condition (prev->active_mm == next->mm && !prev->mm) is met,
->> the situation is as follows:
->>
->> user thread -> user thread
->>
->> There is not need switch_mm when sched between two user thread.
->> Because they share the mm_struct. This can provide better
->> performance when testing UnixBench.
->>
->> Signed-off-by: Ming Wang <wangming01@loongson.cn>
->> ---
->>   kernel/sched/core.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->> index 696c649..9d7f6fb 100644
->> --- a/kernel/sched/core.c
->> +++ b/kernel/sched/core.c
->> @@ -5099,7 +5099,8 @@ asmlinkage __visible void schedule_tail(struct task_struct *prev)
->>   		 * case 'prev->active_mm == next->mm' through
->>   		 * finish_task_switch()'s mmdrop().
->>   		 */
->> -		switch_mm_irqs_off(prev->active_mm, next->mm, next);
->> +		if ((prev->active_mm != next->mm) || (!prev->mm))
->> +			switch_mm_irqs_off(prev->active_mm, next->mm, next);
-> I think this needs to be inside switch_mm(). Architectures are free to
-> play silly games with what the current active mm is (and iirc x86
-> actually does this).
-ok, thanks! And I will do it in architecture code.
+This patch also fix an illegal address access. pols[0] will save a error
+point when xfrm_policy_lookup fails. This lead to xfrm_pols_put to resolve
+an illegal address in xfrm_bundle_lookup's error path.
+
+Fix these by setting num_pols = 0 in xfrm_expand_policies()'s error path.
+
+Fixes: 80c802f3073e ("xfrm: cache bundles instead of policies for outgoing flows")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+
+v2:
+Fix an illegal address access.
+
+An log about illegal address access:
+[  444.538191] BUG: kernel NULL pointer dereference, address: 000000000000002f
+[  444.538200] #PF: supervisor write access in kernel mode
+[  444.538204] #PF: error_code(0x0002) - not-present page
+[  444.538208] PGD 0 P4D 0 
+[  444.538215] Oops: 0002 [#1] SMP NOPTI
+[  444.538220] CPU: 0 PID: 729 Comm: systemd-resolve Tainted: G             L    5.10.0-1044-oem #46-Ubuntu
+[  444.538222] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 07/22/2020
+[  444.538226] watchdog: BUG: soft lockup - CPU#1 stuck for 34s! [in:imklog:838]
+[  444.538232] RIP: 0010:xfrm_lookup_with_ifid+0x6b5/0xa00
+[  444.538236] Code: c1 e1 03 4c 8d 64 35 b8 4c 8d 3c 30 49 29 cc eb 0d 85 c9 7e 4e 49 83 ef 08 4d 39 fc 74 24 49 8b 3f b9 ff ff ff ff 4c 8d 47 30 <f0> 0f c1 4f 30 83 f9 01 75 dd e8 ec 98 ff ff 49 83 ef 08 4d 39 fc
+[  444.538237] RSP: 0018:ffffc900016af9f8 EFLAGS: 00010286
+[  444.538241] Modules linked in:
+[  444.538243] RAX: ffffc900016afa30 RBX: 00000000ffffffff RCX: 00000000ffffffff
+[  444.538244]  rfcomm bnep ipmi_devintf
+[  444.538248] RDX: 0000000000035f40 RSI: 0000000000000000 RDI: ffffffffffffffff
+[  444.538251] RBP: ffffc900016afa70 R08: 000000000000002f R09: 0000000000000002
+[  444.538252]  ipmi_msghandler vsock_loopback
+[  444.538255] R10: 0000000080000000 R11: 000000007f000001 R12: ffffc900016afa28
+[  444.538257] R13: ffff888100e07500 R14: ffffffff828ee1c0 R15: ffffc900016afa30
+[  444.538258]  vmw_vsock_virtio_transport_common vmw_vsock_vmci_transport
+[  444.538262] FS:  00007fa7fb14cb80(0000) GS:ffff888139e00000(0000) knlGS:0000000000000000
+[  444.538264] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  444.538267] CR2: 000000000000002f CR3: 00000001066f2003 CR4: 0000000000770ef0
+[  444.538268]  vsock nls_iso8859_1 intel_rapl_msr snd_ens1371 snd_ac97_codec gameport ac97_bus intel_rapl_common crct10dif_pclmul snd_pcm ghash_clmulni_intel aesni_intel vmw_balloon crypto_simd
+[  444.538282] PKRU: 55555554
+[  444.538284] Call Trace:
+[  444.538286]  snd_seq_midi cryptd glue_helper snd_seq_midi_event snd_rawmidi joydev
+[  444.538293]  xfrm_lookup_route+0x23/0xa0
+[  444.538294]  input_leds serio_raw btusb btrtl
+[  444.538301]  ip_route_output_flow+0x58/0x60
+[  444.538304]  udp_sendmsg+0x9ee/0xe30
+[  444.538308]  ? put_cmsg+0x13e/0x170
+[  444.538311]  ? ip_reply_glue_bits+0x50/0x50
+[  444.538312]  btbcm btintel
+[  444.538316]  ? skb_consume_udp+0x3f/0xd0
+[  444.538319]  ? udp_recvmsg+0x1f7/0x5b0
+[  444.538324]  ? __check_object_size+0x4d/0x150
+[  444.538326]  ? __check_object_size+0x4d/0x150
+[  444.538327]  snd_seq bluetooth ecdh_generic
+[  444.538332]  ? _cond_resched+0x19/0x30
+[  444.538338]  ? aa_sk_perm+0x43/0x1b0
+[  444.538339]  ecc snd_seq_device snd_timer
+[  444.538343]  inet_sendmsg+0x65/0x70
+[  444.538346]  ? inet_sendmsg+0x65/0x70
+[  444.538350]  sock_sendmsg+0x5e/0x70
+[  444.538352]  ____sys_sendmsg+0x218/0x290
+[  444.538355]  ? copy_msghdr_from_user+0x5c/0x90
+[  444.538357]  ___sys_sendmsg+0x81/0xc0
+[  444.538361]  ? kmem_cache_free+0x3c5/0x410
+[  444.538362]  snd soundcore
+[  444.538366]  ? dentry_free+0x37/0x70
+[  444.538368]  vmw_vmci
+[  444.538370]  ? mntput_no_expire+0x4c/0x260
+[  444.538374]  ? __seccomp_filter+0x7f/0x670
+[  444.538376]  __sys_sendmsg+0x62/0xb0
+[  444.538378]  ? __secure_computing+0x42/0xe0
+[  444.538381]  __x64_sys_sendmsg+0x1f/0x30
+[  444.538382]  mac_hid sch_fq_codel vmwgfx
+[  444.538386]  do_syscall_64+0x38/0x90
+[  444.538390]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[  444.538391]  ttm drm_kms_helper
+[  444.538395] RIP: 0033:0x7fa7fc3f4617
+
+
+ net/xfrm/xfrm_policy.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
+index f1876ea61fdc..f1a0bab920a5 100644
+--- a/net/xfrm/xfrm_policy.c
++++ b/net/xfrm/xfrm_policy.c
+@@ -2678,8 +2678,10 @@ static int xfrm_expand_policies(const struct flowi *fl, u16 family,
+ 		*num_xfrms = 0;
+ 		return 0;
+ 	}
+-	if (IS_ERR(pols[0]))
++	if (IS_ERR(pols[0])) {
++		*num_pols = 0;
+ 		return PTR_ERR(pols[0]);
++	}
+ 
+ 	*num_xfrms = pols[0]->xfrm_nr;
+ 
+@@ -2694,6 +2696,7 @@ static int xfrm_expand_policies(const struct flowi *fl, u16 family,
+ 		if (pols[1]) {
+ 			if (IS_ERR(pols[1])) {
+ 				xfrm_pols_put(pols, *num_pols);
++				*num_pols = 0;
+ 				return PTR_ERR(pols[1]);
+ 			}
+ 			(*num_pols)++;
+-- 
+2.25.1
 

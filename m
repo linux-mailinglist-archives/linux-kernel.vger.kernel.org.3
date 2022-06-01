@@ -2,137 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D781753AF91
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453AB53AED7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbiFAVoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S231842AbiFAVp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbiFAVoA (ORCPT
+        with ESMTP id S231779AbiFAVpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:44:00 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B4233A3C;
-        Wed,  1 Jun 2022 14:43:56 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 34BC6100006;
-        Wed,  1 Jun 2022 21:43:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654119835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=QNra6cYe7rAZmodYJlA+KCX2uI9roIVccpwi/1khbXY=;
-        b=M3lBkn8EIlwxc0Jkj0TmAnQ7Gep9ftMoNCAkF7PJGS76XF9RgSN8UMRAPH1l5VxcnoNV97
-        B61zMQCx1J4+MzlibcyrY0E3VYq/iaII/6EOqiIrJAXQLz6icy0Rgs35xQ9SEZuorHpNRa
-        PUgEZJaczzC4CFSMvbbrwEhYBN/OEh2PItjPhnVKmKyoDuUZ/mh+o7KAg9lPb/d/nbaexy
-        INaBsgp2gsJa+nMHO8z4owBOn275jxNH1beCwll/Wxq2cfg3vEWNxWkwQ/9/ftiaAemNR6
-        SsyGsAGwNZRR4zPQRUJASQr1roEmTYMtt0BxdoTm51KVRlpbpsrdNWRJohP3CA==
-Date:   Wed, 1 Jun 2022 23:43:54 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RTC for 5.19
-Message-ID: <Ypfdmml1GWU+gYzP@mail.local>
+        Wed, 1 Jun 2022 17:45:21 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E067A455;
+        Wed,  1 Jun 2022 14:45:20 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id s14so2914058plk.8;
+        Wed, 01 Jun 2022 14:45:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fZXF7GPcAcaOPScOAplIm+VORKBsYKZ17YpBBud/XGc=;
+        b=cglP+0SLTIabqtnre/RPxQwVASYfan1tRkC3a/xHKvzzcQ4zJkgkk/DO+wTxzyHp2w
+         sS8j3NL7AinwOMUiJylKl1FX+vx1p6YiNM8/2Z1XMI2ceczdnhrQX07a+yMJ11N3mCb4
+         byUjIzK6oRruE52OOjVpRmgqQtM8d45cBEj6hBXRJuHMKyGi+c6dHd8F4lXmBOumWkMc
+         vaGXS1rowJTmumxKI0Ev9ngKWPSDrHqkAr5TrM8INGMzFYhd511sUTyzpXnDhLQkA9fS
+         uJ7U1cewiMaSc2YTtgG6VKDAxX8oRa2M1iOIKMIEeFB4QZeBqFaDYWqrXoSV12cFhiTe
+         GX8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fZXF7GPcAcaOPScOAplIm+VORKBsYKZ17YpBBud/XGc=;
+        b=KSMMtDWu89gBdPOO/OHHM44Q7XFj7HRXig/k9P4eYME80U8AWz3ihaKUYd0ktoZIyS
+         V3zQT8tzb2D/zL2Yp69qz+R0RdIvjnbukXj528yCexVeB/rlAHE+jcejJsk0k/dt4EUV
+         Ogb9lLPVZycsKpptwhPwFcraBFQXBDDnVElkE7iU6Z7a5FX6DrtMrq64QWjIbzyFu8sD
+         3kXzOr22sUhHvjob4gzozk9x29/8EdLpQ1TPhI58Wdk2V883gaeUui+WImebLhm0jPwf
+         yb3ITIgGT468RW82vWXr7ZwgZQM1WBV0xo1Okvp4Y91OeBu9VUpm2M2pcc+hOBFW4JCL
+         xBlg==
+X-Gm-Message-State: AOAM532lyrc+LzyRbAex6/tulxnXAeJIMUa8N0lmjVksrHmnPLqjBqeP
+        kJwcREWRWkFgcOxtmu0gs7WZzJnmmY8h9eBJmhw=
+X-Google-Smtp-Source: ABdhPJySKb591WiK5yBnvRM3WULITW2hegH76WE1JdVYYBbOG6RaJ5hNdMH8s4JKilAocELskGoumioo5HP+Dx/UkHk=
+X-Received: by 2002:a17:903:244f:b0:162:4daf:f8bb with SMTP id
+ l15-20020a170903244f00b001624daff8bbmr1525626pls.20.1654119919850; Wed, 01
+ Jun 2022 14:45:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220601151115.1.Ia503b15be0f366563b4e7c9f93cbec5e756bb0ae@changeid>
+In-Reply-To: <20220601151115.1.Ia503b15be0f366563b4e7c9f93cbec5e756bb0ae@changeid>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Wed, 1 Jun 2022 14:45:08 -0700
+Message-ID: <CABBYNZK8=RCC0bS3KVyn8y93nW_rSR0DDb=Yyp6CgFLaJGz5bA@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: clear the temporary linkkey in hci_conn_cleanup
+To:     Alain Michaud <alainmichaud@google.com>
+Cc:     "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        ChromeOS Bluetooth Upstreaming 
+        <chromeos-bluetooth-upstreaming@chromium.org>,
+        Alain Michaud <alainm@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+Hi Alain,
 
-Here is the pull request for the RTC subsystem. A new driver represents
-the bulk of the changes and then we get the usual small fixes.
+On Wed, Jun 1, 2022 at 8:12 AM Alain Michaud <alainmichaud@google.com> wrote:
+>
+> From: Alain Michaud <alainm@chromium.org>
+>
+> If a hardware error occurs and the connections are flushed without a
+> disconnection_complete event being signaled, the temporary linkkeys are
+> not flushed.
+>
+> This change ensures that any outstanding flushable linkkeys are flushed
+> when the connection are flushed from the hash table.
+>
+> Signed-off-by: Alain Michaud <alainm@chromium.org>
+>
+> ---
+>
+>  net/bluetooth/hci_conn.c  | 3 +++
+>  net/bluetooth/hci_event.c | 4 +++-
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
+> index 352d7d612128..85dc1af90fcb 100644
+> --- a/net/bluetooth/hci_conn.c
+> +++ b/net/bluetooth/hci_conn.c
+> @@ -118,6 +118,9 @@ static void hci_conn_cleanup(struct hci_conn *conn)
+>         if (test_bit(HCI_CONN_PARAM_REMOVAL_PEND, &conn->flags))
+>                 hci_conn_params_del(conn->hdev, &conn->dst, conn->dst_type);
+>
+> +       if (test_bit(HCI_CONN_FLUSH_KEY, &conn->flags))
+> +               hci_remove_link_key(hdev, &conn->dst);
+> +
+>         hci_chan_list_flush(conn);
+>
+>         hci_conn_hash_del(hdev, conn);
+> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> index 6b83f9b0082c..09f4ff71e747 100644
+> --- a/net/bluetooth/hci_event.c
+> +++ b/net/bluetooth/hci_event.c
+> @@ -3372,8 +3372,10 @@ static void hci_disconn_complete_evt(struct hci_dev *hdev, void *data,
+>                                 reason, mgmt_connected);
+>
+>         if (conn->type == ACL_LINK) {
+> -               if (test_bit(HCI_CONN_FLUSH_KEY, &conn->flags))
+> +               if (test_bit(HCI_CONN_FLUSH_KEY, &conn->flags)) {
+>                         hci_remove_link_key(hdev, &conn->dst);
+> +                       clear_bit(HCI_CONN_FLUSH_KEY, &conn->flags);
+> +               }
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+Could we use test_and_clean_bit instead? In theory there could be
+other threads trying to clean up so I guess it would be safer to
+reduce the risk of having concurrency problems although hci_dev_lock
+would prevent that, better to be safe than sorry.
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+>                 hci_req_update_scan(hdev);
+>         }
+> --
+> 2.36.1.255.ge46751e96f-goog
+>
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.19
-
-for you to fetch changes up to f78e3d407a339ffdd2620140300f821ea41118f4:
-
-  rtc: mxc: Silence a clang warning (2022-06-01 23:19:17 +0200)
-
-----------------------------------------------------------------
-RTC for 5.19
-
-New driver:
- - Renesas RZN1 rtc
-
-Drivers:
- - sun6i: Add nvmem support
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      rtc: rzn1: Fix error code in probe
-
-Fabio Estevam (3):
-      dt-binding: pcf85063: Add an entry for pca85073a
-      rtc: pcf85063: Add a compatible entry for pca85073a
-      rtc: mxc: Silence a clang warning
-
-Miaoqian Lin (1):
-      rtc: ftrtc010: Fix error handling in ftrtc010_rtc_probe
-
-Michel Pollet (1):
-      rtc: rzn1: Add new RTC driver
-
-Minghao Chi (1):
-      rtc: simplify the return expression of rx8025_set_offset()
-
-Miquel Raynal (6):
-      dt-bindings: rtc: rzn1: Describe the RZN1 RTC
-      rtc: rzn1: Add alarm support
-      rtc: rzn1: Add oscillator offset support
-      MAINTAINERS: Add myself as maintainer of the RZN1 RTC driver
-      rtc: rzn1: Avoid mixing variables
-      rtc: rzn1: Fix a variable type
-
-Nobuhiro Iwamatsu (1):
-      rtc: meson: Fix email address in MODULE_AUTHOR
-
-Samuel Holland (1):
-      rtc: sun6i: Add NVMEM provider
-
-Yang Li (1):
-      rtc: rzn1: fix platform_no_drv_owner.cocci warning
-
-Yang Yingliang (1):
-      rtc: mt6397: check return value after calling platform_get_resource()
-
-Yuan Can (1):
-      rtc: gamecube: Add missing iounmap in gamecube_rtc_read_offset_from_sram
-
- .../devicetree/bindings/rtc/nxp,pcf85063.txt       |   1 +
- .../devicetree/bindings/rtc/renesas,rzn1-rtc.yaml  |  70 ++++
- MAINTAINERS                                        |   8 +
- drivers/rtc/Kconfig                                |   7 +
- drivers/rtc/Makefile                               |   1 +
- drivers/rtc/rtc-ftrtc010.c                         |  34 +-
- drivers/rtc/rtc-gamecube.c                         |   1 +
- drivers/rtc/rtc-meson.c                            |   2 +-
- drivers/rtc/rtc-mt6397.c                           |   2 +
- drivers/rtc/rtc-mxc.c                              |   2 +-
- drivers/rtc/rtc-pcf85063.c                         |   2 +
- drivers/rtc/rtc-rx8025.c                           |   7 +-
- drivers/rtc/rtc-rzn1.c                             | 418 +++++++++++++++++++++
- drivers/rtc/rtc-sun6i.c                            |  42 +++
- 14 files changed, 579 insertions(+), 18 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
- create mode 100644 drivers/rtc/rtc-rzn1.c
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Luiz Augusto von Dentz

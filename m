@@ -2,102 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCDB53AF7E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D10553AEF4
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbiFAVR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        id S231300AbiFAVSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbiFAVRz (ORCPT
+        with ESMTP id S231192AbiFAVSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:17:55 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E1D6A06E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 14:17:53 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CCCCD1BF204;
-        Wed,  1 Jun 2022 21:17:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654118272;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=yDUhBv6XHVz7aAD1gbDoff/7ZzVY1tgq3gAseNLUe94=;
-        b=cfJTjSQnibUPOy+Jo5Lb1kxrzIWavxaygTiwI6e6wMGZFBVDEHdUgpVRy23KU2hZtq/Tng
-        8YwRpNPDVwH6UMe9XRFyKvyy2ih+uWYo/qlrh5pEa0zTPNphrh+Iqk2lovSf9T1cso6zIn
-        7Eh4iMVRnJ7QbXxHEDFO3VVbtn6Pm85itJFkGX8atoQjWW6y0VwXCyZNGkDVtm5ZhaeZHG
-        m9VGbX78KuuRWfmLK67dw6G4ShjsQQub0TZZXxeD+Q4PNrpa57LeS8bkgJ++Uob3lrukQ7
-        /Rk9boN2O0+XW17Sti1ssucCjXch7OmwL0Cmn/S6nOdIBsgUb7tGubcTrNc95g==
-Date:   Wed, 1 Jun 2022 23:17:51 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] I3C changes for 5.19
-Message-ID: <YpfXf/unhrWZkE3j@mail.local>
+        Wed, 1 Jun 2022 17:18:05 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6F16AA65;
+        Wed,  1 Jun 2022 14:18:04 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-f2a4c51c45so4373356fac.9;
+        Wed, 01 Jun 2022 14:18:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wB6dT/XCvf3C+B5FfUFc5pk+O7AJqhAY3bJMVvBLmO0=;
+        b=aivA3m5Yvlpyl+pUHy+dBjTYLnfd7E+Dt70VezxgPXuUF9IxWRpNZVLhAQfQa0/Fjq
+         27m/F6gcRt7nU+7qfLiWK5AEkAS9VxFSBCCSwz8dg0iRJeUbwoEGGS5lgGHl+eCT0yAO
+         V5yvFUYAcIkPm0pJMPBx8Sa/IyIlEoDQXHb4VkkiowtaKQB/UQ/47KopEmQ41HhgU8x+
+         aW/rDHzmOnTNn9bgAkEYPnFHgr1sWHLUFi7Xwbccu/eYrTio86CDK92UJ+e7i1r7rIKx
+         OeKBqKcalUdcBfk6ZPcZ+xwM6DnsF5d0kQ6kMODvekRi1BKapTqt3eOh4ZZRZlV6PgUK
+         IiyA==
+X-Gm-Message-State: AOAM532KZedaMs9LsgoPuf54wfOhRv5D1CEYPvD/xwo5qftGasxQ3ij0
+        HrNIVpsXFmlLzwHbPpv9FQ==
+X-Google-Smtp-Source: ABdhPJyK7+g+68SDuh+gdaVuR1iTT6Wt141GPzQP3A1z+JoOYLQVSfSPqgb5fY0eBo6C+3xfL+BLrQ==
+X-Received: by 2002:a05:6870:8888:b0:e9:a3eb:a52d with SMTP id m8-20020a056870888800b000e9a3eba52dmr904142oam.181.1654118283911;
+        Wed, 01 Jun 2022 14:18:03 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o27-20020a9d411b000000b0060b469fa02dsm1344521ote.20.2022.06.01.14.18.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 14:18:03 -0700 (PDT)
+Received: (nullmailer pid 472063 invoked by uid 1000);
+        Wed, 01 Jun 2022 21:18:02 -0000
+Date:   Wed, 1 Jun 2022 16:18:02 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-mtd@lists.infradead.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH v4 2/2] dt-bindings: mtd: qcom_nandc: document
+ qcom,boot-pages binding
+Message-ID: <20220601211802.GA472030-robh@kernel.org>
+References: <20220519190112.6344-1-ansuelsmth@gmail.com>
+ <20220519190112.6344-3-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220519190112.6344-3-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+On Thu, 19 May 2022 21:01:12 +0200, Ansuel Smith wrote:
+> Document new qcom,boot-pages binding used to apply special
+> read/write configuration to boot pages.
+> 
+> QCOM apply a special configuration where spare data is not protected
+> by ECC for some special pages (used for boot partition). Add
+> Documentation on how to declare these special pages.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../devicetree/bindings/mtd/qcom,nandc.yaml   | 26 +++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
 
-Here is the pull request for the i3c subsystem. Only clean ups and no
-functional change this cycle.
-
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
-
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/i3c/linux.git tags/i3c/for-5.19
-
-for you to fetch changes up to 66ed42caf286a7aaeb6f1db4b2995dd9416226c2:
-
-  MAINTAINERS: rectify entries for some i3c drivers after dt conversion (2022-06-01 22:46:58 +0200)
-
-----------------------------------------------------------------
-I3C for 5.19
-
-Subsystem:
- - yaml conversion of the DT bindings
-
-----------------------------------------------------------------
-Guo Zhengkui (1):
-      i3c: master: svc: fix returnvar.cocci warning
-
-Lukas Bulwahn (1):
-      MAINTAINERS: rectify entries for some i3c drivers after dt conversion
-
-Minghao Chi (1):
-      i3c/master: simplify the return expression of i3c_hci_remove()
-
-Rob Herring (2):
-      dt-bindings: i3c: Convert cdns,i3c-master to DT schema
-      dt-bindings: i3c: Convert snps,dw-i3c-master to DT schema
-
- .../devicetree/bindings/i3c/cdns,i3c-master.txt    | 43 ----------------
- .../devicetree/bindings/i3c/cdns,i3c-master.yaml   | 60 ++++++++++++++++++++++
- .../devicetree/bindings/i3c/snps,dw-i3c-master.txt | 41 ---------------
- .../bindings/i3c/snps,dw-i3c-master.yaml           | 52 +++++++++++++++++++
- MAINTAINERS                                        |  4 +-
- drivers/i3c/master/mipi-i3c-hci/core.c             |  7 +--
- drivers/i3c/master/svc-i3c-master.c                |  3 +-
- 7 files changed, 116 insertions(+), 94 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i3c/cdns,i3c-master.txt
- create mode 100644 Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
- delete mode 100644 Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.txt
- create mode 100644 Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.yaml
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Reviewed-by: Rob Herring <robh@kernel.org>

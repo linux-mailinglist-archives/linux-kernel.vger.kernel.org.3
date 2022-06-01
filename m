@@ -2,122 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8096753A414
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C4053A42B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352738AbiFALaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 07:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
+        id S1352789AbiFALb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 07:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351526AbiFALaO (ORCPT
+        with ESMTP id S243810AbiFALbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:30:14 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBD16FA02;
-        Wed,  1 Jun 2022 04:30:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1654083010; bh=c3qS0n8n88+tT/EbA//3xsAM4TxufqzUUQRbFEJfV+w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EywJLnYe7A8R/LTmgK3yGO7e6PNUeSyCjGLs1zzawBDPsZMKW/8UH5ABYC91HPm6h
-         IpcFYqkr/Qr2DnAv99qf6UVCE3CBdZuKWPtweb5POzDav/njGFp0wWL0czl7CQ9RLo
-         qDSDMdommChrpsrNhpJL4PZGLt1I2wjki+xbPPME=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 69B7B60104;
-        Wed,  1 Jun 2022 19:30:10 +0800 (CST)
-Message-ID: <fe537ea1-01a0-d963-ec8b-f73788e049b3@xen0n.name>
-Date:   Wed, 1 Jun 2022 19:30:10 +0800
+        Wed, 1 Jun 2022 07:31:23 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845BA7035E;
+        Wed,  1 Jun 2022 04:31:22 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id n185so794072wmn.4;
+        Wed, 01 Jun 2022 04:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=8m5w0VP4J7yp0Tfw5vI1hU7tdi7anvKhoAsyYAE5VPU=;
+        b=N994epOtFhDoj3ZPMMDoAZHkX3EoRIKLXRDzZwp+t0E6osKalIPMlP+cvmXi5MYVBu
+         x5hM8D7fXmDwHhz/sGqWSee+ELg1CNUs0Jgy0NUhcQM+q5tx3Ot4tV33TvcjGtj4+2am
+         WpY26WmNPYd4TLHRo7eUnTNX/9s/oWlzojs8uMp0P4Y8pNABP9Bbv5ha13Pk23ABpzND
+         d6ei+PSo//An+YtCLE76ypmA/9x+GSNUfNEriXQIOK5mrJ/k4ttjOLuYFEyp2t0gJSaC
+         9YQmQA/CBMShbtWTUyW0nCXgzMJaZ1TdPL5a+h7m5qHPs2CDeSRu8euDyQNOksb1R/+m
+         7Q2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=8m5w0VP4J7yp0Tfw5vI1hU7tdi7anvKhoAsyYAE5VPU=;
+        b=6IfS547KbmFw8Rt+sJlUt1U0hRPUanPw6vmjDzgcfCiH9DozHBaoJwjBT6VXsq/W4u
+         WeBa4rVtb7PeZDL5SCXhVvW0nDAzZFw9ewgzhhefeOg31QdIj0ncFIRoq8CPG8wK3P6t
+         P4OtUHpHt85K3AAhcavr6+ApbwRNFrHLl0z69elIttc6BR/JwgMcu/8midTKEt6grt6Q
+         hqpRRsP7Pz4EnpFznub7G3O3TjScyj8ECkgylT+3MRATPvWSBhzTCi6DKnE78H3pYJ6A
+         2jYdVwIq2Itoo9qMZXHhDoOqDIRG5rEAID2Z0jquf0TNbDibL9gI3QajOCHNAIdn43IJ
+         sVXg==
+X-Gm-Message-State: AOAM530rKP0YzEiHVij8H4AUGsg0bzjnPolIEYEG4+WMEc5apHyMOTqJ
+        FV1Bi2xF7RFiI76By5llBpk=
+X-Google-Smtp-Source: ABdhPJyBKTFfBtnQ+y6h1hy7sPwwdWf3Q3fF+kHhgmrXnf0hnFooHIh9bxlAkXs6nnPXrAJ38MBfqQ==
+X-Received: by 2002:a05:600c:4fd2:b0:39c:1586:a2e0 with SMTP id o18-20020a05600c4fd200b0039c1586a2e0mr10873557wmq.62.1654083080751;
+        Wed, 01 Jun 2022 04:31:20 -0700 (PDT)
+Received: from debian (host-2-98-37-191.as13285.net. [2.98.37.191])
+        by smtp.gmail.com with ESMTPSA id h1-20020a5d4fc1000000b0020fc4cd81f6sm1303439wrw.60.2022.06.01.04.31.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 04:31:20 -0700 (PDT)
+Date:   Wed, 1 Jun 2022 12:31:18 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org
+Subject: mainline build failure due to f292d875d0dc ("modpost: extract symbol
+ versions from *.cmd files")
+Message-ID: <YpdOBmEmkG0AaOX0@debian>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101
- Thunderbird/103.0a1
-Subject: Re: [PATCH V12 00/24] arch: Add basic LoongArch support
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-References: <20220601100005.2989022-1-chenhuacai@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20220601100005.2989022-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/22 17:59, Huacai Chen wrote:
-> <snip>
->
-> Huacai Chen(24):
->   irqchip: Adjust Kconfig for Loongson.
->   irqchip/loongson-liointc: Fix build error for LoongArch.
->   Documentation: LoongArch: Add basic documentations.
->   Documentation/zh_CN: Add basic LoongArch documentations.
->   LoongArch: Add elf-related definitions.
->   LoongArch: Add writecombine support for drm.
->   LoongArch: Add build infrastructure.
->   LoongArch: Add CPU definition headers.
->   LoongArch: Add atomic/locking headers.
->   LoongArch: Add other common headers.
->   LoongArch: Add boot and setup routines.
->   LoongArch: Add exception/interrupt handling.
->   LoongArch: Add process management.
->   LoongArch: Add memory management.
->   LoongArch: Add system call support.
->   LoongArch: Add signal handling support.
->   LoongArch: Add elf and module support.
->   LoongArch: Add misc common routines.
->   LoongArch: Add some library functions.
->   LoongArch: Add PCI controller support.
->   LoongArch: Add VDSO and VSYSCALL support.
->   LoongArch: Add multi-processor (SMP) support.
->   LoongArch: Add Non-Uniform Memory Access (NUMA) support.
->   LoongArch: Add Loongson-3 default config file.
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Hi All,
 
-I have gone through every of these patches, and they now all look good 
-to me. Thanks for all the revisions and cooperation!
+The latest mainline kernel branch fails to build for csky allmodconfig
+with the error:
 
-I remember several more people have left comments on the v11 code; Eric 
-commented on the signal handling bits and Ard may have something to say 
-on the UEFI part. The first two cleanup patches to irqchip are 
-previously sent in a separate series, and they are already trivial 
-enough, but Marc may want to give the ack here too, for the patches to 
-go in via the asm-generic tree.
+._divsi3.o.cmd: No such file or directory
+make[1]: *** [scripts/Makefile.modpost:59: vmlinux.symvers] Error 1
+make: *** [Makefile:1160: vmlinux] Error 2
 
-At this time, although the port currently cannot work on any real 
-hardware, the value is mostly for unblocking downstream development 
-starting from the libc's, as the userspace ABI has been stable for 
-several months already and there's probably no point in delaying even 
-further. I've been working on the Gentoo/LoongArch port since August 
-2021 and experienced every ABI break since then, so I probably know 
-enough to make this statement.
+git bisect pointed to f292d875d0dc ("modpost: extract symbol versions from *.cmd files")
 
-I think, with the userspace ABI effectively stable already, and other 
-implementation details available for continued improvement, we could 
-make it into this merge window after all. People, please take a final 
-quick look at this; your opinions and/or review and acks are appreciated.
+I will be happy to test any patch or provide any extra log if needed.
 
+
+--
+Regards
+Sudip

@@ -2,156 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3F2539BCB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF93539BCD
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349489AbiFADt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 23:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
+        id S1349492AbiFADvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 23:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233702AbiFADtX (ORCPT
+        with ESMTP id S233702AbiFADvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 23:49:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01855E6B
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654055360;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1ZG0/fOlftf51d/HCO+fdLg9BUlxBwfKtSrN1+VicIE=;
-        b=aVK7kQaoq7c0ON9grjL8ZgxkQ3FlDdViWirbt2995lA826iBJR6lnAghToRFFZP6lFJCcP
-        PsiLycsvKC4RGDpv/vpICBHsNQ8f8I2P8i49dc9JpBAUWFfB11A8xuMSSbqmafULBOTkxe
-        76yuMswJhH2AkAUiiOBlsbNypmNTG2M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-614-76I8nYocM8SXstKquykPdQ-1; Tue, 31 May 2022 23:49:17 -0400
-X-MC-Unique: 76I8nYocM8SXstKquykPdQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 469F7107EA01;
-        Wed,  1 Jun 2022 03:49:16 +0000 (UTC)
-Received: from [10.72.12.91] (ovpn-12-91.pek2.redhat.com [10.72.12.91])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 22985492C3B;
-        Wed,  1 Jun 2022 03:49:10 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v3 00/16] arch_topology: Updates to add socket support and
- fix cluster ids
-To:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
-References: <20220525081416.3306043-1-sudeep.holla@arm.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <5258e7c2-7829-af20-6416-1a40a09d1917@redhat.com>
-Date:   Wed, 1 Jun 2022 11:49:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Tue, 31 May 2022 23:51:47 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9A36351
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:51:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654055505; x=1685591505;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LiEkjX4N1vdnbHmjpR+CLTsoDmY7Jy5fEGVgFts5Ufc=;
+  b=FAdwf2RQnS764VZhZgVOzw1MME4dBUVj482/uWfTBiexst/iBvO/P5oD
+   H+QBxalorVqv0p/M19IfUf2qiizLu8rW3YcJuykENV4fc6ScpzQBCGXpG
+   Ej4mcsyNPD2dCkaGM8vzFkj7R8DcHQQlZg+TgJHzVdw+Ov4ynZ7rrbieA
+   N0LfMoQgyYbdSueJaX51uILiEKtWEV/ilj9glWuRoW5m9ovFw4QPZO9GH
+   IkXLfJGoPIbam8ZphJLTooYjupW01CN94EZo70W6rQSn1bRTCRDi7u3zJ
+   XkkrlQZpDT/HOX8oyOzIlIvAT2pVH+nVJuskIgZWIvQkyrOHlPiseZtkS
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="255938785"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="255938785"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 20:51:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="529888872"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 31 May 2022 20:51:42 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwFOY-0003US-8J;
+        Wed, 01 Jun 2022 03:51:42 +0000
+Date:   Wed, 1 Jun 2022 11:51:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 422/422]
+ arch/x86/kvm/mmu/mmu.c:4546:13: error: implicit declaration of function
+ 'get_user_page_fast'; did you mean 'get_user_pages_fast'?
+Message-ID: <202206011134.9CrAT8m1-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220525081416.3306043-1-sudeep.holla@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudeep,
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   4e487b52e144ed36e4ae202e7103e63679710095
+commit: 4e487b52e144ed36e4ae202e7103e63679710095 [422/422] KVM: x86/mmu: Use get_user_page_fast instead of get_user_page_fast_only
+config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220601/202206011134.9CrAT8m1-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/4e487b52e144ed36e4ae202e7103e63679710095
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout 4e487b52e144ed36e4ae202e7103e63679710095
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
 
-On 5/25/22 4:14 PM, Sudeep Holla wrote:
-> This version updates cacheinfo to populate and use the information from
-> there for all the cache topology. Sorry for posting in the middle of
-> merge window but better to get this tested earlier so that it is ready
-> for next merge window.
-> 
-> This series intends to fix some discrepancies we have in the CPU topology
-> parsing from the device tree /cpu-map node. Also this diverges from the
-> behaviour on a ACPI enabled platform. The expectation is that both DT
-> and ACPI enabled systems must present consistent view of the CPU topology.
-> 
-> Currently we assign generated cluster count as the physical package identifier
-> for each CPU which is wrong. The device tree bindings for CPU topology supports
-> sockets to infer the socket or physical package identifier for a given CPU.
-> Also we don't check if all the cores/threads belong to the same cluster before
-> updating their sibling masks which is fine as we don't set the cluster id yet.
-> 
-> These changes also assigns the cluster identifier as parsed from the device tree
-> cluster nodes within /cpu-map without support for nesting of the clusters.
-> Finally, it also add support for socket nodes in /cpu-map. With this the
-> parsing of exact same information from ACPI PPTT and /cpu-map DT node
-> aligns well.
-> 
-> The only exception is that the last level cache id information can be
-> inferred from the same ACPI PPTT while we need to parse CPU cache nodes
-> in the device tree.
-> 
-> P.S: I have not cc-ed Greg and Rafael so that all the users of arch_topology
-> agree with the changes first before we include them.
-> 
-> v2[2]->v3:
-> 	- Dropped support to get the device node for the CPU's LLC
-> 	- Updated cacheinfo to support calling of detect_cache_attributes
-> 	  early in smp_prepare_cpus stage
-> 	- Added support to check if LLC is valid and shared in the cacheinfo
-> 	- Used the same in arch_topology
-> 
-> v1[1]->v2[2]:
-> 	- Updated ID validity check include all non-negative value
-> 	- Added support to get the device node for the CPU's last level cache
-> 	- Added support to build llc_sibling on DT platforms
-> 
-> [1] https://lore.kernel.org/lkml/20220513095559.1034633-1-sudeep.holla@arm.com
-> [2] https://lore.kernel.org/lkml/20220518093325.2070336-1-sudeep.holla@arm.com
-> 
-> Sudeep Holla (16):
->    cacheinfo: Use of_cpu_device_node_get instead cpu_dev->of_node
->    cacheinfo: Add helper to access any cache index for a given CPU
->    cacheinfo: Move cache_leaves_are_shared out of CONFIG_OF
->    cacheinfo: Add support to check if last level cache(LLC) is valid or shared
->    cacheinfo: Allow early detection and population of cache attributes
->    arch_topology: Add support to parse and detect cache attributes
->    arch_topology: Use the last level cache information from the cacheinfo
->    arm64: topology: Remove redundant setting of llc_id in CPU topology
->    arch_topology: Drop LLC identifier stash from the CPU topology
->    arch_topology: Set thread sibling cpumask only within the cluster
->    arch_topology: Check for non-negative value rather than -1 for IDs validity
->    arch_topology: Avoid parsing through all the CPUs once a outlier CPU is found
->    arch_topology: Don't set cluster identifier as physical package identifier
->    arch_topology: Drop unnecessary check for uninitialised package_id
->    arch_topology: Set cluster identifier in each core/thread from /cpu-map
->    arch_topology: Add support for parsing sockets in /cpu-map
-> 
->   arch/arm64/kernel/topology.c  |  14 -----
->   drivers/base/arch_topology.c  |  92 +++++++++++++++++----------
->   drivers/base/cacheinfo.c      | 114 +++++++++++++++++++++-------------
->   include/linux/arch_topology.h |   1 -
->   include/linux/cacheinfo.h     |   3 +
->   5 files changed, 135 insertions(+), 89 deletions(-)
-> 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I tried this series on virtual machine where ACPI is enabled and looks good.
-Especially for PATCH[10], resolving the issue I have. So I provided my tested-by
-tag for it. Besides, I checked the changes related to ACPI part and looks to
-me either after the mentioned nits fixed. I leave the changes related to device-tree
-to be reviewed by the experts :)
+All errors (new ones prefixed by >>):
 
-Thanks,
-Gavin
+   In file included from include/linux/kvm_host.h:47,
+                    from arch/x86/kvm/irq.h:15,
+                    from arch/x86/kvm/mmu/mmu.c:18:
+   include/linux/memfile_notifier.h:87:57: error: unknown type name 'flags'
+      87 | static int memfile_register_notifier(struct file *file, flags,
+         |                                                         ^~~~~
+   arch/x86/kvm/mmu/mmu.c: In function 'kvm_faultin_pfn_private_mapped':
+>> arch/x86/kvm/mmu/mmu.c:4546:13: error: implicit declaration of function 'get_user_page_fast'; did you mean 'get_user_pages_fast'? [-Werror=implicit-function-declaration]
+    4546 |         if (get_user_page_fast(hva, FOLL_WRITE, page))
+         |             ^~~~~~~~~~~~~~~~~~
+         |             get_user_pages_fast
+   In file included from include/linux/kvm_host.h:47,
+                    from arch/x86/kvm/irq.h:15,
+                    from arch/x86/kvm/mmu/mmu.c:18:
+   At top level:
+   include/linux/memfile_notifier.h:93:13: warning: 'memfile_unregister_notifier' defined but not used [-Wunused-function]
+      93 | static void memfile_unregister_notifier(struct memfile_notifier *notifier)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/memfile_notifier.h:82:13: warning: 'memfile_notifier_invalidate' defined but not used [-Wunused-function]
+      82 | static void memfile_notifier_invalidate(struct memfile_node *node,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/memfile_notifier.h:77:13: warning: 'memfile_notifier_populate' defined but not used [-Wunused-function]
+      77 | static void memfile_notifier_populate(struct memfile_node *node,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/memfile_notifier.h:72:12: warning: 'memfile_node_set_flags' defined but not used [-Wunused-function]
+      72 | static int memfile_node_set_flags(struct file *file, unsigned long flags)
+         |            ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/memfile_notifier.h:68:13: warning: 'memfile_register_backing_store' defined but not used [-Wunused-function]
+      68 | static void memfile_register_backing_store(struct memfile_backing_store *bs)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
+
+vim +4546 arch/x86/kvm/mmu/mmu.c
+
+  4527	
+  4528	/*
+  4529	 * Private page can't be release on mmu_notifier without losing page contents.
+  4530	 * The help, callback, from backing store is needed to allow page migration.
+  4531	 * For now, pin the page.
+  4532	 */
+  4533	static int kvm_faultin_pfn_private_mapped(struct kvm_vcpu *vcpu,
+  4534					    struct kvm_page_fault *fault)
+  4535	{
+  4536		hva_t hva = gfn_to_hva_memslot(fault->slot, fault->gfn);
+  4537		struct page *page[1];
+  4538	
+  4539		fault->map_writable = false;
+  4540		fault->pfn = KVM_PFN_ERR_FAULT;
+  4541		if (hva == KVM_HVA_ERR_RO_BAD || hva == KVM_HVA_ERR_BAD)
+  4542			return RET_PF_INVALID;
+  4543	
+  4544		/* TDX allows only RWX.  Read-only isn't supported. */
+  4545		WARN_ON_ONCE(!fault->write);
+> 4546		if (get_user_page_fast(hva, FOLL_WRITE, page))
+  4547			return RET_PF_INVALID;
+  4548	
+  4549		fault->map_writable = true;
+  4550		fault->pfn = page_to_pfn(page[0]);
+  4551		return RET_PF_CONTINUE;
+  4552	}
+  4553	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,85 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B89853AD66
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 21:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A91753AE48
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbiFATsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 15:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
+        id S229603AbiFAUn5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Jun 2022 16:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiFATsQ (ORCPT
+        with ESMTP id S229567AbiFAUnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 15:48:16 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E05F11CA17;
-        Wed,  1 Jun 2022 12:43:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4Ozc3WmHm81wghcNONugG5hk9vFuG2z5HhSD0Snaras=; b=i+++ReQnDqzP0P6p8kS4NN2U7O
-        ojdpFSmBOMPcjzwyy2Q3sniEbBJQOupIthIpOhs4EWUAdBdzhgj5kwCbSnp8dZUuO+NDQDrSaDLIK
-        AeGjtgP+9RXIl5ERC7FiHris096j7auGtitS7vSZxp1EQIiJmHYdPyQ0gBla8DcHt2Yh2XHJvvkRV
-        EfawBfVZV6nhbOgvVPRevzk596tgaHebq9zlysJ1jzSqwp6MBJFcqU+giDMT8J4XZJaH7Tr9QzW7U
-        6O/yH44QGbNDIFLpEjDSu8o89ELFU7Eb8ffiTx6/9erZq8ZNmjVfa4ymjf2niy3dFZnfJYS911QPN
-        HWIyFqwg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwTy4-006Y6S-Te; Wed, 01 Jun 2022 19:25:20 +0000
-Date:   Wed, 1 Jun 2022 20:25:20 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alexey Gladkov <legion@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Containers <containers@lists.linux.dev>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Vasily Averin <vvs@virtuozzo.com>
-Subject: Re: [RFC PATCH 1/4] sysctl: API extension for handling sysctl
-Message-ID: <Ype9ILKm+8WLOq9W@casper.infradead.org>
-References: <CAHk-=whi2SzU4XT_FsdTCAuK2qtYmH+-hwi1cbSdG8zu0KXL=g@mail.gmail.com>
- <cover.1654086665.git.legion@kernel.org>
- <5ec6759ab3b617f9c12449a9606b6f0b5a7582d0.1654086665.git.legion@kernel.org>
- <Ype7skNJzEQ1W96v@casper.infradead.org>
- <CAHk-=wiTtYMia0FR4h7_nV2RZ5pq=wR-7oMMK3o8o=EgAxMsmg@mail.gmail.com>
+        Wed, 1 Jun 2022 16:43:25 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8401C1DB1F9;
+        Wed,  1 Jun 2022 13:25:36 -0700 (PDT)
+Received: from mail-yw1-f173.google.com ([209.85.128.173]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Ml3ym-1nX03Z0AV2-00lX9C; Wed, 01 Jun 2022 21:26:33 +0200
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-300628e76f3so29516767b3.12;
+        Wed, 01 Jun 2022 12:26:32 -0700 (PDT)
+X-Gm-Message-State: AOAM5323KY4YjOzYaTS7yWk0mvibF1G8urcieeLacxWOujJ0WNcBFaU4
+        mBTtL13CaIYwEUDAJWFTCmK0UHhzZuJoWBwseYE=
+X-Google-Smtp-Source: ABdhPJz0JApbo0Qv67wndhuM17KjFiRygdVF6IoIIcQ65oBNOgfkV7dKkoHQPvHnC/sJqYfjVswl/2RhIyt72lCR3vQ=
+X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
+ 206-20020a810ad7000000b002e684de3223mr1208726ywk.209.1654111591816; Wed, 01
+ Jun 2022 12:26:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiTtYMia0FR4h7_nV2RZ5pq=wR-7oMMK3o8o=EgAxMsmg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220601154647.80071-1-pan@semihalf.com>
+In-Reply-To: <20220601154647.80071-1-pan@semihalf.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 1 Jun 2022 21:26:14 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2TXUd6JjSiXSZix1xL+bO-fVAbLWht-zNQV8r_Kn05Zg@mail.gmail.com>
+Message-ID: <CAK8P3a2TXUd6JjSiXSZix1xL+bO-fVAbLWht-zNQV8r_Kn05Zg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] Add Chameleon v3 devicetree
+To:     =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
+Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, olof@lixom.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, amstan@chromium.org,
+        upstream@semihalf.com, Dinh Nguyen <dinguyen@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:zhaHhEGjIFru1VL46j0+tZGVaWHAQkcciH1GX2cZnvcAcHfn5M+
+ Y+DCGLK6/9KjL7JM/R+qEU6PNETBlCWCFMRUwRdIsHzE4YI4OVCMBhDbKyeK60Ah5S9+Kyj
+ 3mgfAYbHE1dh6t94PWR6y7oPLEI4hxroOxyj5xz/nhLy0XN+wg21ltzB2Rr/mRVnOLtt2OH
+ SztwIPBUDKVyb4odgF42g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Qwpp7sOFPDg=:lS18uBZzeJ2sFdNI9fhC/y
+ +w1OWV/C6BGT1peIMYlENFqXTnSZmLsi7khdAxeoQ2xHv1ySNVeDTicW6pglKhk+53jGjqHpM
+ DoRHc3WfwrigUK9PmvaxfTU8m8mcPCivvDilzlqSuUMMXfiqR0nkbtreFjvAjr3+3pwNE3BNx
+ aypmegiG69pabkgUTtxO+Ks/zRUgQHwXxSTTzSPUq9bwubR87C+0LSbMVfD/ISG5qqTj5E6yY
+ rIMC7+FmKiy4A+y8bvMOtqFINPakAg5XtV1UZEL2E5tSjFi2rCEAdhJVIWc4Q+Ah7UIvRsBJ9
+ 47FbibD8A/0FGTQ/bL8Ac6iAtqsf9l0ozMCaoZtAdrJJPnvy6Eu4scBvsrGqqKOhyIQExRugZ
+ iMsDZSiT097uVGMPbTLJM8mbSz/F3mucO2MJK2WAFn/+UaFV/XD4tXEHPCVXZFvWC/Muuugvr
+ +JjQ4BmvQ998TGwNI4YoDGhxnSAA5S5hq4NPfThgmJnGrXJigTllD6nQDoVJdnS9n6O+rlzdv
+ uFdiwXnOBMtFv+lgMqRxVtQreYbDVlLR4GUu+9AtznAwT58vrUVhq98BxFEVlZL7oihybDQja
+ k0OsJ88BxZM4QlhPPH1qVpCXy71TCU9mOCCiMzjYmUflyFmaDbmry7cL1hhArb8Gv9ko45dpV
+ iGYI2d7rLeq8pQxomYTuq5kpVYkdQ7zPoh0hv1ciZOmdFuSfKFmSujoINxSAcDcvnvSKdUf9G
+ NPaRf4b0h55SDnofwwWGiAxdUihID5fKZluTHw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 12:23:06PM -0700, Linus Torvalds wrote:
-> On Wed, Jun 1, 2022 at 12:19 PM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > Why not pass the iocb in ->read and ->write?  We're still regretting not
-> > doing that with file_operations.
-> 
-> No, all the actual "io" is done by the caller.
-> 
-> There is no way in hell I want the sysctl callbacks to actually
-> possibly do user space accesses etc.
-> 
-> They get a kernel buffer that has already been set up. There is no
-> iocb or iovec left for them.
+On Wed, Jun 1, 2022 at 5:46 PM Paweł Anikiel <pan@semihalf.com> wrote:
+>
+> The Google Chameleon v3 is a board made for testing both video and audio
+> interfaces of external devices. It acts as a base board for the
+> Mercury+ AA1 module.
+>
+> socfpga_arria10_mercury_aa1.dtsi and socfpga_arria10_chameleonv3.dts
+> have also been sent to u-boot:
+> https://lists.denx.de/pipermail/u-boot/2022-May/485107.html
+> https://lists.denx.de/pipermail/u-boot/2022-May/485111.html
 
-I wasn't suggesting the iovec.  Just the iocb, instead of passing in the
-ki_filp and the ki_pos.
+Hi Paweł,
 
-> (That also means that they can take whatever locks they need,
-> including spinlocks, because there's not going to be any random user
-> accesses or complex pipe buffer lookups or whatever).
-> 
->                 Linus
+The patches look ok to me, but I think you should be sending them to
+Dinh Nguyen for merging through the socfpga tree instead of directly
+going to soc@kernel.org.
+
+      Arnd

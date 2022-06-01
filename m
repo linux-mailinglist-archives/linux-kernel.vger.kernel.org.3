@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA45D53A6FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA1653A659
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353921AbiFAN50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 09:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
+        id S1353424AbiFANwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 09:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353915AbiFAN4g (ORCPT
+        with ESMTP id S1347954AbiFANwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 09:56:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237C9996BB;
-        Wed,  1 Jun 2022 06:54:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF8A5615D1;
-        Wed,  1 Jun 2022 13:54:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE10C3411E;
-        Wed,  1 Jun 2022 13:54:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654091660;
-        bh=MmQJDZApS8UaiRibxxFyjqlEdDr50z7x4JFT5HUt8A4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LaBnTp+HtTl8IPX7DHPHYcmSWklJWIDeaTbPg0sOYh1ZUQwV5DTOacWy+aZ1npyhJ
-         bvHGk/Obiv+vsx5P0BCkTz3c3xugLGQmZI2f8nbKdRawUcGIW9CEpZS2ymW9a886tI
-         AUwTqA8r1qAT8BGcTFO8vzcBxV2bacWAQ93A5terPg+g0NCCTsMaxk6dlfglOwJ6gV
-         uU8P4LzMTAstaZMoeUtqHHA33QqkJRGQLizJWFyCIqO+esz5IusmR5oBYHSLCnLHzG
-         enV7dut/+Boiyh+jxiMQBVUbHC7bYdyTNUMvgTRrgkpWj9jBh3ynbFvA6rQrmncnui
-         zsAahQSTp7liQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sasha Levin <sashal@kernel.org>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 5.18 49/49] drm: fix EDID struct for old ARM OABI format
-Date:   Wed,  1 Jun 2022 09:52:13 -0400
-Message-Id: <20220601135214.2002647-49-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220601135214.2002647-1-sashal@kernel.org>
-References: <20220601135214.2002647-1-sashal@kernel.org>
+        Wed, 1 Jun 2022 09:52:34 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECE933345
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 06:52:31 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id q1so3899669ejz.9
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 06:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ek6pdeO0DB1Tm5mlcz1RuofuiBWoeBBusgfA8BxgA/s=;
+        b=LSkJbr+iy1alMRbMgu9/LZ3vGR3Qm7OChQM2qhsH3NtSJQCjaH28qtAAURfD9sOCho
+         EqmRJ3OazVa8XsRrtzqhYMl6MKqExGjA+TQrDZ+LXWp9byAJyO55kMxZaRFgjBTPZQ4W
+         N1ma8mXg+0eEKdpXyBxjA+2/KcXLpXliIQ/cxFHpWqo32slgmTrvVLegolg1csZL/hYw
+         gwgixwTCwQRUKJLviwktNacbTv6kocTGdcZjOdi9R+xDxvokD2xd98fdjkDhsQDg0u+E
+         UgGTgdkLZQYCfo0ffxTO7atN0rpVvpNw9CvsZlumWxc3wtqxWm6lGXCTNLXOpXuxt5Id
+         o7Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ek6pdeO0DB1Tm5mlcz1RuofuiBWoeBBusgfA8BxgA/s=;
+        b=iEmhaeCjNogaOytjAlrYy9okKIpPsLEtpKnlrcUg9hL+MWzXWSNcB/e2/GFDp1KxKR
+         lXsr9qWgVAOVW04Rt7d9PSBCZgU8K2MSxUmndA11lc2TRjVyIxITtXbvcr/tUsQ7i6qF
+         At/r03sQ2HgOQKqSq5IFcDJss29tJgab0mxpReApM728utpeyoh3xMOBpkrZfKmg0QOd
+         FqmjmffsGUw7/sc0oZhxhToZsRQ7HZMW+kFWD4n7tCcOkubrrgboVnHVUbTcez3Nsu7m
+         sku4tMwdmyQRyGLkAwzt/WL5dcUm1Pmm0+Clmu05cXYd3mSqH+6a9pP8sUx/f+LCSMNb
+         S4Tw==
+X-Gm-Message-State: AOAM530LRGhPKjGtR5mKRrE3hEl9yHA4XLwgLIjlzPupcRt85y+5+FX8
+        09zN1KQ4uVNR+Mlv0vQGxPMlrA==
+X-Google-Smtp-Source: ABdhPJzUUcAgrI+YNY0uHpRqZh3IJeveL77dKpHjyDMdSa25aTO+oKqZHM/pDVbAQh83xS/7W8GMmA==
+X-Received: by 2002:a17:907:8a1a:b0:6fe:b42f:749a with SMTP id sc26-20020a1709078a1a00b006feb42f749amr52199639ejc.451.1654091550060;
+        Wed, 01 Jun 2022 06:52:30 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id si28-20020a170906cedc00b006f3ef214e0csm753070ejb.114.2022.06.01.06.52.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 06:52:29 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] dt-bindings: vendor-prefixes: document deprecated Atheros
+Date:   Wed,  1 Jun 2022 15:52:22 +0200
+Message-Id: <20220601135222.205035-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,112 +69,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+Two old boards use "atheros" prefix instead of already documented "qca".
+Document it as deprecated to fix warnings like:
 
-[ Upstream commit 47f15561b69e226bfc034e94ff6dbec51a4662af ]
+  at91-gatwick.dtb: atheros@0: 'atheros,board-id' does not match any of the regexes
 
-When building the kernel for arm with the "-mabi=apcs-gnu" option, gcc
-will force alignment of all structures and unions to a word boundary
-(see also STRUCTURE_SIZE_BOUNDARY and the "-mstructure-size-boundary=XX"
-option if you're a gcc person), even when the members of said structures
-do not want or need said alignment.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-This completely messes up the structure alignment of 'struct edid' on
-those targets, because even though all the embedded structures are
-marked with "__attribute__((packed))", the unions that contain them are
-not.
-
-This was exposed by commit f1e4c916f97f ("drm/edid: add EDID block count
-and size helpers"), but the bug is pre-existing.  That commit just made
-the structure layout problem cause a build failure due to the addition
-of the
-
-        BUILD_BUG_ON(sizeof(*edid) != EDID_LENGTH);
-
-sanity check in drivers/gpu/drm/drm_edid.c:edid_block_data().
-
-This legacy union alignment should probably not be used in the first
-place, but we can fix the layout by adding the packed attribute to the
-union entries even when each member is already packed and it shouldn't
-matter in a sane build environment.
-
-You can see this issue with a trivial test program:
-
-  union {
-	struct {
-		char c[5];
-	};
-	struct {
-		char d;
-		unsigned e;
-	} __attribute__((packed));
-  } a = { "1234" };
-
-where building this with a normal "gcc -S" will result in the expected
-5-byte size of said union:
-
-	.type	a, @object
-	.size	a, 5
-
-but with an ARM compiler and the old ABI:
-
-    arm-linux-gnu-gcc -mabi=apcs-gnu -mfloat-abi=soft -S t.c
-
-you get
-
-	.type	a, %object
-	.size	a, 8
-
-instead, because even though each member of the union is packed, the
-union itself still gets aligned.
-
-This was reported by Sudip for the spear3xx_defconfig target.
-
-Link: https://lore.kernel.org/lkml/YpCUzStDnSgQLNFN@debian/
-Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/drm/drm_edid.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/drm/drm_edid.h b/include/drm/drm_edid.h
-index 144c495b99c4..d6b2aeb34211 100644
---- a/include/drm/drm_edid.h
-+++ b/include/drm/drm_edid.h
-@@ -121,7 +121,7 @@ struct detailed_data_monitor_range {
- 			u8 supported_scalings;
- 			u8 preferred_refresh;
- 		} __attribute__((packed)) cvt;
--	} formula;
-+	} __attribute__((packed)) formula;
- } __attribute__((packed));
- 
- struct detailed_data_wpindex {
-@@ -154,7 +154,7 @@ struct detailed_non_pixel {
- 		struct detailed_data_wpindex color;
- 		struct std_timing timings[6];
- 		struct cvt_timing cvt[4];
--	} data;
-+	} __attribute__((packed)) data;
- } __attribute__((packed));
- 
- #define EDID_DETAIL_EST_TIMINGS 0xf7
-@@ -172,7 +172,7 @@ struct detailed_timing {
- 	union {
- 		struct detailed_pixel_timing pixel_data;
- 		struct detailed_non_pixel other_data;
--	} data;
-+	} __attribute__((packed)) data;
- } __attribute__((packed));
- 
- #define DRM_EDID_INPUT_SERRATION_VSYNC (1 << 0)
+Changes since v1:
+1. Rebase on Rob's dt/next branch.
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 113ff50eb46e..cba1d02dfec7 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -143,6 +143,9 @@ patternProperties:
+     description: ASPEED Technology Inc.
+   "^asus,.*":
+     description: AsusTek Computer Inc.
++  "^atheros,.*":
++    description: Qualcomm Atheros, Inc. (deprecated, use qca)
++    deprecated: true
+   "^atlas,.*":
+     description: Atlas Scientific LLC
+   "^atmel,.*":
 -- 
-2.35.1
+2.34.1
 

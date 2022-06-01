@@ -2,211 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DACB539AC4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 03:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 606F8539AC8
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 03:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348988AbiFABd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 21:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        id S1349000AbiFABeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 21:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348990AbiFABd0 (ORCPT
+        with ESMTP id S244972AbiFABeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 21:33:26 -0400
-Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679C35BD0F
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 18:33:24 -0700 (PDT)
-Date:   Wed, 01 Jun 2022 01:33:17 +0000
+        Tue, 31 May 2022 21:34:07 -0400
+Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8789A5B3F9;
+        Tue, 31 May 2022 18:34:06 -0700 (PDT)
+Date:   Wed, 01 Jun 2022 01:34:00 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
-        s=protonmail2; t=1654047202; x=1654306402;
-        bh=gWZwJ0vSlMOQQoD3z6An/JWhDG/x94l/Y2E99sI8m5Q=;
-        h=Date:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=TVYnfLU3iEfSwtx08oziBvUPleoNWi9HKyzDwVjVo/WY0ZjYLHTfQNEZwjlm4E8xO
-         8OK/SFdo3Qqq9uzQ1eQCRIejKPkMNNZA25qdMbjR2bFeVkE4n7mALrdSeU8jfiQhxH
-         jTFmVPFwtDYTHXvjsny2NS8Wm6R5PVMNq7/ICo03JgKtmdfJqwG9ybFGCAnZ+h3QH0
-         uLOLWUI+0332pzxeqO1FRp5Wq/Kb0m/8FbwRNZWkR8Due3fQYHWVw0acnMZjQPXxTy
-         Ros5pA2pqyH2UdNPob+CdHL6i3YuOx+jutr4owYqX+Ld8BoUIfskEaCo1sMgLx7Ptk
-         Pwqae07S3nM5g==
-From:   Adam Wujek <dev_public@wujek.eu>
-Cc:     Adam Wujek <dev_public@wujek.eu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        s=protonmail2; t=1654047244; x=1654306444;
+        bh=HNyDEZPUiD5WQaSU7ZB0ohB0dUGEd+n30NevK73Q/eI=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
+         Feedback-ID:Message-ID;
+        b=umXE7fDg9UuUBFZhWph6ZfofMERBm05Gjwtrwv8u/71VhAYOt5IP6X+Ak3y69SKpC
+         Cqy+GMIiGV00jDMMsXQ96f/nev0j6CJC0y5uX6yCEIsYGYfykGmZsYsoi21Rsb+XMQ
+         CZ/O/8FXfaldufSLQL2Q+aIoTo3QZbRX3GqenNFmPRcHxVRD6sxwAwY8XvGqFlbRXP
+         bx2KEyJoHfmRFmTGt+Rxf4hf89XmTZHgjXSkKV/umnXuYYaIIlhWQ07PPPq510AJoN
+         IfRF/mnTPagHtAobrvM1DuFOxYnsJ5ZV/nsDEklwcGdAILWSpBUoTC/gHCOhxEirGu
+         4MmxbHDxmE7bQ==
+To:     Guenter Roeck <linux@roeck-us.net>
+From:   wujek dev <dev_public@wujek.eu>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Reply-To: Adam Wujek <dev_public@wujek.eu>
-Subject: [PATCH v3 2/2] hwmon: (pmbus) add MFR_* registers to debugfs
-Message-ID: <20220601013232.801133-2-dev_public@wujek.eu>
-In-Reply-To: <20220601013232.801133-1-dev_public@wujek.eu>
-References: <20220601013232.801133-1-dev_public@wujek.eu>
+Reply-To: wujek dev <dev_public@wujek.eu>
+Subject: Re: [PATCH v2 1/2] hwmon: (pmbus) add a function to check the presence of a block register
+Message-ID: <WVehAlzjh6tqHumVgSPQaBJ2HyS2440oKiqR96qmMbXIv1Z0h_HQuGZf-6xh1KgeCXIGFmTg1Vym3ekryjnKUB8pEN3Hdm-PJBVakHg1FDo=@wujek.eu>
+In-Reply-To: <e0bfc3c0-d15f-f19e-5355-03a76ffa71ee@roeck-us.net>
+References: <20220524104307.272806-1-dev_public@wujek.eu> <e0bfc3c0-d15f-f19e-5355-03a76ffa71ee@roeck-us.net>
 Feedback-ID: 23425257:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add registers to debugfs:
-PMBUS_MFR_ID
-PMBUS_MFR_MODEL
-PMBUS_MFR_REVISION
-PMBUS_MFR_LOCATION
-PMBUS_MFR_DATE
-PMBUS_MFR_SERIAL
 
-To reduce the number of debugfs entries, only values from page 0 are
-reported. It is assumed that values of these registers are the same for
-all pages. Please note that the PMBUS standard allows added registers to
-be page-specific.
+On Tuesday, May 24th, 2022 at 15:32, Guenter Roeck <linux@roeck-us.net> wro=
+te:
 
-Signed-off-by: Adam Wujek <dev_public@wujek.eu>
----
-  - This is a reworked patch to report the registers only once (for page 0)
-  Changes in v2:
-    - no changes
-  Changes in v3:
-    - Change last paragraph od the commit message
-    - fix formating in the comment
- drivers/hwmon/pmbus/pmbus_core.c | 99 +++++++++++++++++++++++++++++++-
- 1 file changed, 97 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_c=
-ore.c
-index a1c70877ae68..9c55b0cf1511 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2659,6 +2659,34 @@ static int pmbus_debugfs_get_status(void *data, u64 =
-*val)
- DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_get_statu=
-s,
- =09=09=09 NULL, "0x%04llx\n");
-
-+static ssize_t pmbus_debugfs_mfr_read(struct file *file, char __user *buf,
-+=09=09=09=09       size_t count, loff_t *ppos)
-+{
-+=09int rc;
-+=09struct pmbus_debugfs_entry *entry =3D file->private_data;
-+=09char data[I2C_SMBUS_BLOCK_MAX + 2] =3D { 0 };
-+
-+=09rc =3D pmbus_read_block_data(entry->client, entry->page, entry->reg,
-+=09=09=09=09   data);
-+=09if (rc < 0)
-+=09=09return rc;
-+
-+=09/* Add newline at the end of a read data */
-+=09data[rc] =3D '\n';
-+
-+=09/* Include newline into the length */
-+=09rc +=3D 1;
-+
-+=09return simple_read_from_buffer(buf, count, ppos, data, rc);
-+}
-+
-+static const struct file_operations pmbus_debugfs_ops_mfr =3D {
-+=09.llseek =3D noop_llseek,
-+=09.read =3D pmbus_debugfs_mfr_read,
-+=09.write =3D NULL,
-+=09.open =3D simple_open,
-+};
-+
- static int pmbus_debugfs_get_pec(void *data, u64 *val)
- {
- =09struct i2c_client *client =3D data;
-@@ -2723,9 +2751,13 @@ static int pmbus_init_debugfs(struct i2c_client *cli=
-ent,
- =09=09return -ENODEV;
- =09}
-
--=09/* Allocate the max possible entries we need. */
-+=09/*
-+=09 * Allocate the max possible entries we need.
-+=09 * 6 entries device-specific
-+=09 * 10 entries page-specific
-+=09 */
- =09entries =3D devm_kcalloc(data->dev,
--=09=09=09       data->info->pages * 10, sizeof(*entries),
-+=09=09=09       6 + data->info->pages * 10, sizeof(*entries),
- =09=09=09       GFP_KERNEL);
- =09if (!entries)
- =09=09return -ENOMEM;
-@@ -2733,6 +2765,69 @@ static int pmbus_init_debugfs(struct i2c_client *cli=
-ent,
- =09debugfs_create_file("pec", 0664, data->debugfs, client,
- =09=09=09    &pmbus_debugfs_ops_pec);
-
-+=09/*
-+=09 * Add device-specific entries.
-+=09 * Please note that the PMBUS standard allows all registers to be
-+=09 * page-specific.
-+=09 * To reduce the number of debugfs entries for devices with many pages
-+=09 * assume that values of the following registers are the same for all
-+=09 * pages and report values only for page 0.
-+=09 */
-+=09if (pmbus_check_block_register(client, 0, PMBUS_MFR_ID)) {
-+=09=09entries[idx].client =3D client;
-+=09=09entries[idx].page =3D 0;
-+=09=09entries[idx].reg =3D PMBUS_MFR_ID;
-+=09=09debugfs_create_file("mfr_id", 0444, data->debugfs,
-+=09=09=09=09    &entries[idx++],
-+=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09}
-+
-+=09if (pmbus_check_block_register(client, 0, PMBUS_MFR_MODEL)) {
-+=09=09entries[idx].client =3D client;
-+=09=09entries[idx].page =3D 0;
-+=09=09entries[idx].reg =3D PMBUS_MFR_MODEL;
-+=09=09debugfs_create_file("mfr_model", 0444, data->debugfs,
-+=09=09=09=09    &entries[idx++],
-+=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09}
-+
-+=09if (pmbus_check_block_register(client, 0, PMBUS_MFR_REVISION)) {
-+=09=09entries[idx].client =3D client;
-+=09=09entries[idx].page =3D 0;
-+=09=09entries[idx].reg =3D PMBUS_MFR_REVISION;
-+=09=09debugfs_create_file("mfr_revision", 0444, data->debugfs,
-+=09=09=09=09    &entries[idx++],
-+=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09}
-+
-+=09if (pmbus_check_block_register(client, 0, PMBUS_MFR_LOCATION)) {
-+=09=09entries[idx].client =3D client;
-+=09=09entries[idx].page =3D 0;
-+=09=09entries[idx].reg =3D PMBUS_MFR_LOCATION;
-+=09=09debugfs_create_file("mfr_location", 0444, data->debugfs,
-+=09=09=09=09    &entries[idx++],
-+=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09}
-+
-+=09if (pmbus_check_block_register(client, 0, PMBUS_MFR_DATE)) {
-+=09=09entries[idx].client =3D client;
-+=09=09entries[idx].page =3D 0;
-+=09=09entries[idx].reg =3D PMBUS_MFR_DATE;
-+=09=09debugfs_create_file("mfr_date", 0444, data->debugfs,
-+=09=09=09=09    &entries[idx++],
-+=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09}
-+
-+=09if (pmbus_check_block_register(client, 0, PMBUS_MFR_SERIAL)) {
-+=09=09entries[idx].client =3D client;
-+=09=09entries[idx].page =3D 0;
-+=09=09entries[idx].reg =3D PMBUS_MFR_SERIAL;
-+=09=09debugfs_create_file("mfr_serial", 0444, data->debugfs,
-+=09=09=09=09    &entries[idx++],
-+=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09}
-+
-+=09/* Add page specific entries */
- =09for (i =3D 0; i < data->info->pages; ++i) {
- =09=09/* Check accessibility of status register if it's not page 0 */
- =09=09if (!i || pmbus_check_status_register(client, i)) {
---
-2.17.1
-
+>
+>
+> On 5/24/22 03:43, Adam Wujek wrote:
+>
+> > Other functions (like pmbus_check_byte_register) cannot be used to chec=
+k
+> > the presence of a block register, because it will generate error when P=
+EC
+> > is used.
+> >
+> > Signed-off-by: Adam Wujek dev_public@wujek.eu
+> > ---
+> > Notes:
+> > Changes in v2:
+> > - Use Phase 0xff when setting the page
+> >
+> > drivers/hwmon/pmbus/pmbus_core.c | 26 ++++++++++++++++++++++++++
+> > 1 file changed, 26 insertions(+)
+> >
+> > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmb=
+us_core.c
+> > index acf78d0829d9..2ff66f133d95 100644
+> > --- a/drivers/hwmon/pmbus/pmbus_core.c
+> > +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> > @@ -421,6 +421,18 @@ static int _pmbus_read_byte_data(struct i2c_client=
+ *client, int page, int reg)
+> > return pmbus_read_byte_data(client, page, reg);
+> > }
+> >
+> > +static int pmbus_read_block_data(struct i2c_client *client, int page, =
+u8 reg,
+> > + char *data_buf)
+> > +{
+> > + int rv;
+> > +
+> > + rv =3D pmbus_set_page(client, page, 0xff);
+> > + if (rv < 0)
+> > + return rv;
+> > +
+> > + return i2c_smbus_read_block_data(client, reg, data_buf);
+> > +}
+> > +
+> > static struct pmbus_sensor *pmbus_find_sensor(struct pmbus_data *data, =
+int page,
+> > int reg)
+> > {
+> > @@ -558,6 +570,20 @@ bool pmbus_check_word_register(struct i2c_client *=
+client, int page, int reg)
+> > }
+> > EXPORT_SYMBOL_NS_GPL(pmbus_check_word_register, PMBUS);
+> >
+> > +static bool pmbus_check_block_register(struct i2c_client *client, int =
+page,
+> > + int reg)
+> > +{
+> > + int rv;
+> > + struct pmbus_data *data =3D i2c_get_clientdata(client);
+> > + char data_buf[I2C_SMBUS_BLOCK_MAX + 2] =3D { 0 };
+>
+>
+> Unnecessary initialization.
+Agree
+>
+> > +
+> > + rv =3D pmbus_read_block_data(client, page, reg, data_buf);
+> > + if (rv >=3D 0 && !(data->flags & PMBUS_SKIP_STATUS_CHECK))
+> > + rv =3D pmbus_check_status_cml(client);
+>
+>
+> How about PMBUS_READ_STATUS_AFTER_FAILED_CHECK ?
+added in the next version
+>
+> Thanks,
+> Guenter
+BR,
+Adam
+>
+> > + pmbus_clear_fault_page(client, -1);
+> > + return rv >=3D 0;
+> > +}
+> > +
+> > const struct pmbus_driver_info *pmbus_get_driver_info(struct i2c_client=
+ *client)
+> > {
+> > struct pmbus_data *data =3D i2c_get_clientdata(client);
+> > --
+> > 2.17.1

@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854CA539B90
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96221539B8D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349310AbiFADTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 23:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
+        id S1349313AbiFADUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 23:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349284AbiFADTh (ORCPT
+        with ESMTP id S1349284AbiFADUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 23:19:37 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA558B0A7;
-        Tue, 31 May 2022 20:19:35 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id h1so523841plf.11;
-        Tue, 31 May 2022 20:19:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7+1EA6A/6RNV2QBUrRVFqjIksxe9LFHPVmVbTjKWy98=;
-        b=RAxMiTTID2eCzjoSn3227yQkq6kWGgPAz4Vxzhpno5au8ao8ekcvbvoBIQVJ47cmXS
-         Bwb4SUEsFHx0lu0Mm5+js0xv1voJcY1tTDDv2crsqbY/Nwi0k9ThysQ5uykPyz4ACBFX
-         y8rgvpMSbM5T35Soge+8MxNZjsHByeQRpYLpYTHJ2FW0iK0GY/1FTIICfZJ9M31m2dBU
-         zVGMjhI/+eBCjo95970rvpp+/oqLZnNCerIWUcFw/xHTPmPsRjuGczkVnYvoB+wDZ2cx
-         /bn+3PhKH0t1TZ6Z21yAvDdZ8L35rhmeMsau0ZLiz9YYseJrZQhTlfJMB3mAEpnM8knY
-         +EYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7+1EA6A/6RNV2QBUrRVFqjIksxe9LFHPVmVbTjKWy98=;
-        b=nLeh00RSb6ZdGnYL2dZ1mlh9ygQ7kk7FA6FI639EGcRqhs+J3ss1QiMEraStiTPEu9
-         uM2whf3ut66gvvmYt7y3s3HzDzFt5AVaT1W+uPlyq+XMRRWz080t6i+X3czyiFDxUBXL
-         cJeJMcp7sC52DyL6bwnS3Q50lKNcBG+qHcsUrAW9LWlc34i4nNlSbNEuy28hVKED0SFQ
-         ioUMF+sHIsYgXNyWCvaDLKoxZPqojSCpHI4FZc7/Tbb4BXo3KPdgxLDkw3hnV04TvB5a
-         Kg8mZOughDmXiak0TS9jQYCxAYwPULfSrHkw+qXZVtpLmpNh5rn8YlM1wSQ+98mz7e8D
-         5n4w==
-X-Gm-Message-State: AOAM5311UQ2d1udgSHekyuFiFEHwQWW9eQuBEHDWUTa8VQ584C1TiE+7
-        wf2e1Wswj+BbKzCa0sE8KXg=
-X-Google-Smtp-Source: ABdhPJwx/TQ1fyWBUhEBxzMKoDjXWgi81xMb6vE02IzLHAAtZ0sg03nyELtVs+yiIX/y1qsOzS3FUw==
-X-Received: by 2002:a17:90b:4f47:b0:1e3:38c7:70b5 with SMTP id pj7-20020a17090b4f4700b001e338c770b5mr7215818pjb.32.1654053575187;
-        Tue, 31 May 2022 20:19:35 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.23])
-        by smtp.gmail.com with ESMTPSA id i13-20020a056a00004d00b0050dc76281d3sm184691pfk.173.2022.05.31.20.19.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 20:19:34 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] KVM: x86/pmu: Avoid exposing Intel BTS feature
-Date:   Wed,  1 Jun 2022 11:19:25 +0800
-Message-Id: <20220601031925.59693-3-likexu@tencent.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220601031925.59693-1-likexu@tencent.com>
-References: <20220601031925.59693-1-likexu@tencent.com>
+        Tue, 31 May 2022 23:20:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 978268B0B6
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:20:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654053629;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YBZo/5acJzjtkfbN0zPOUXTmooXsDFbwGkdumr2Rppw=;
+        b=Cfc+tS+HvuC3/mK4nJa9EobrGl5VotDasG71zmWOTs43qXTxZFuX1pD+ph6N5oJqyhB4ps
+        k0OK4IyVYBaYEzjIYgc8bIwC1+kU6s3VNBHuvlCu2IJJttmLW4kQywYpSTLssiqTM7YLCb
+        nDEAbZ0FI0yFkSlcNFzY9+xv4EJLbUw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-441-TIkAbRDJPAKi2hnHaoJ0_w-1; Tue, 31 May 2022 23:20:22 -0400
+X-MC-Unique: TIkAbRDJPAKi2hnHaoJ0_w-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82E0E811E7A;
+        Wed,  1 Jun 2022 03:20:21 +0000 (UTC)
+Received: from [10.72.12.91] (ovpn-12-91.pek2.redhat.com [10.72.12.91])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3DB8A1731B;
+        Wed,  1 Jun 2022 03:20:15 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v3 04/16] cacheinfo: Add support to check if last level
+ cache(LLC) is valid or shared
+To:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
+References: <20220525081416.3306043-1-sudeep.holla@arm.com>
+ <20220525081416.3306043-2-sudeep.holla@arm.com>
+ <20220525081416.3306043-3-sudeep.holla@arm.com>
+ <20220525081416.3306043-4-sudeep.holla@arm.com>
+ <20220525081416.3306043-5-sudeep.holla@arm.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <bf63ca22-944d-b709-242f-fd09c66ff519@redhat.com>
+Date:   Wed, 1 Jun 2022 11:20:12 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220525081416.3306043-5-sudeep.holla@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,90 +77,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+Hi Sudeep,
 
-The BTS feature (including the ability to set the BTS and BTINT
-bits in the DEBUGCTL MSR) is currently unsupported on KVM.
+On 5/25/22 4:14 PM, Sudeep Holla wrote:
+> It is useful to have helper to check if the given two CPUs share last level
+> cache. We can do that check by comparing fw_token or by comparing the cache
+> ID. Currently we check just for fw_token as the cache ID is optional.
+> 
+> This helper can be used to build the llc_sibling during arch specific
+> topology parsing and feeding information to the sched_domains. This also
+> helps to get rid of llc_id in the CPU topology as it is sort of duplicate
+> information.
+> 
+> Also add helper to check if the llc information in cacheinfo is valid or not.
+> 
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>   drivers/base/cacheinfo.c  | 26 ++++++++++++++++++++++++++
+>   include/linux/cacheinfo.h |  2 ++
+>   2 files changed, 28 insertions(+)
+> 
 
-But we may try using the BTS facility on a PEBS enabled guest like this:
-    perf record -e branches:u -c 1 -d ls
-and then we would encounter the following call trace:
+With below nits fixed:
 
- [] unchecked MSR access error: WRMSR to 0x1d9 (tried to write 0x00000000000003c0)
-        at rIP: 0xffffffff810745e4 (native_write_msr+0x4/0x20)
- [] Call Trace:
- []  intel_pmu_enable_bts+0x5d/0x70
- []  bts_event_add+0x54/0x70
- []  event_sched_in+0xee/0x290
+Reviewed-by: Gavin Shan <gshan@redhat.com>
 
-As it lacks any CPUID indicator or perf_capabilities valid bit
-fields to prompt for this information, the platform would hint
-the Intel BTS feature unavailable to guest by setting the
-BTS_UNAVAIL bit in the IA32_MISC_ENABLE.
+> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
+> index 417e1ebf5525..ed74db18468f 100644
+> --- a/drivers/base/cacheinfo.c
+> +++ b/drivers/base/cacheinfo.c
+> @@ -47,6 +47,32 @@ static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
+>   	return sib_leaf->fw_token == this_leaf->fw_token;
+>   }
+>   
+> +bool last_level_cache_is_valid(unsigned int cpu)
+> +{
+> +	struct cacheinfo *llc;
+> +
+> +	if (!cache_leaves(cpu))
+> +		return false;
+> +
+> +	llc = per_cpu_cacheinfo_idx(cpu, cache_leaves(cpu) - 1);
+> +
+> +	return llc->fw_token;
+> +}
+> +
 
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- arch/x86/kvm/pmu.h           | 3 +++
- arch/x86/kvm/vmx/pmu_intel.c | 4 +++-
- arch/x86/kvm/x86.c           | 6 +++---
- 3 files changed, 9 insertions(+), 4 deletions(-)
+	return !!llc->fw_token;
 
-diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-index 8fbce2bc06d9..c1b61671ba1e 100644
---- a/arch/x86/kvm/pmu.h
-+++ b/arch/x86/kvm/pmu.h
-@@ -8,6 +8,9 @@
- #define pmu_to_vcpu(pmu)  (container_of((pmu), struct kvm_vcpu, arch.pmu))
- #define pmc_to_pmu(pmc)   (&(pmc)->vcpu->arch.pmu)
- 
-+#define MSR_IA32_MISC_ENABLE_PMU_RO_MASK (MSR_IA32_MISC_ENABLE_PEBS_UNAVAIL |	\
-+					  MSR_IA32_MISC_ENABLE_BTS_UNAVAIL)
-+
- /* retrieve the 4 bits for EN and PMI out of IA32_FIXED_CTR_CTRL */
- #define fixed_ctrl_field(ctrl_reg, idx) (((ctrl_reg) >> ((idx)*4)) & 0xf)
- 
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index ddf837130d1f..967fd2e15815 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -634,6 +634,9 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 	pmu->pebs_enable_mask = ~0ull;
- 	pmu->pebs_data_cfg_mask = ~0ull;
- 
-+	vcpu->arch.ia32_misc_enable_msr |= (MSR_IA32_MISC_ENABLE_BTS_UNAVAIL |
-+					    MSR_IA32_MISC_ENABLE_PEBS_UNAVAIL);
-+
- 	entry = kvm_find_cpuid_entry(vcpu, 0xa, 0);
- 	if (!entry || !vcpu->kvm->arch.enable_pmu)
- 		return;
-@@ -725,7 +728,6 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 				~((1ull << pmu->nr_arch_gp_counters) - 1);
- 		}
- 	} else {
--		vcpu->arch.ia32_misc_enable_msr |= MSR_IA32_MISC_ENABLE_PEBS_UNAVAIL;
- 		vcpu->arch.perf_capabilities &= ~PERF_CAP_PEBS_MASK;
- 	}
- 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 7460b9a77d9a..22c3c576fbc2 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3565,12 +3565,12 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		break;
- 	case MSR_IA32_MISC_ENABLE: {
- 		u64 old_val = vcpu->arch.ia32_misc_enable_msr;
--		u64 pmu_mask = MSR_IA32_MISC_ENABLE_EMON |
--			MSR_IA32_MISC_ENABLE_PEBS_UNAVAIL;
-+		u64 pmu_mask = MSR_IA32_MISC_ENABLE_PMU_RO_MASK |
-+			MSR_IA32_MISC_ENABLE_EMON;
- 
- 		/* RO bits */
- 		if (!msr_info->host_initiated &&
--		    ((old_val ^ data) & MSR_IA32_MISC_ENABLE_PEBS_UNAVAIL))
-+		    ((old_val ^ data) & MSR_IA32_MISC_ENABLE_PMU_RO_MASK))
- 			return 1;
- 
- 		/*
--- 
-2.36.1
+> +bool last_level_cache_is_shared(unsigned int cpu_x, unsigned int cpu_y)
+> +{
+> +	struct cacheinfo *llc_x, *llc_y;
+> +
+> +	if (!last_level_cache_is_valid(cpu_x) ||
+> +	    !last_level_cache_is_valid(cpu_y))
+> +		return false;
+> +
+> +	llc_x = per_cpu_cacheinfo_idx(cpu_x, cache_leaves(cpu_x) - 1);
+> +	llc_y = per_cpu_cacheinfo_idx(cpu_y, cache_leaves(cpu_y) - 1);
+> +
+> +	return cache_leaves_are_shared(llc_x, llc_y);
+> +}
+> +
+>   #ifdef CONFIG_OF
+>   /* OF properties to query for a given cache type */
+>   struct cache_type_info {
+> diff --git a/include/linux/cacheinfo.h b/include/linux/cacheinfo.h
+> index 4ff37cb763ae..7e429bc5c1a4 100644
+> --- a/include/linux/cacheinfo.h
+> +++ b/include/linux/cacheinfo.h
+> @@ -82,6 +82,8 @@ struct cpu_cacheinfo *get_cpu_cacheinfo(unsigned int cpu);
+>   int init_cache_level(unsigned int cpu);
+>   int populate_cache_leaves(unsigned int cpu);
+>   int cache_setup_acpi(unsigned int cpu);
+> +bool last_level_cache_is_valid(unsigned int cpu);
+> +bool last_level_cache_is_shared(unsigned int cpu_x, unsigned int cpu_y);
+>   #ifndef CONFIG_ACPI_PPTT
+>   /*
+>    * acpi_find_last_cache_level is only called on ACPI enabled
+> 
+
+Thanks,
+Gavin
 

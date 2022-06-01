@@ -2,64 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45D9539DAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBC6539DE6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350178AbiFAHEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 03:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
+        id S1344420AbiFAHI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 03:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348130AbiFAHEk (ORCPT
+        with ESMTP id S1344462AbiFAHHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 03:04:40 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCA98BD3F
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:04:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=KYbdBtVVDGcmnK4PU+VMDFfZ6GKxbpQfLKErQkJk4D8=; b=SbweQnXKdT/sczeuAinciZhi07
-        e9c5igZa03bIvcPB2Y6l/6m/SxFe2DzS7Kpz5CBgRnjTp4D6KUmuAnqqs7XdoO3PCuY6Cf/DrGAy4
-        2kMCj0Mx/QVswOssTjtDQbfrdMqVGuiekEWC4ZOOIrHqKJwdAuEtYisPNbfFvPQte5/x9j45n48UP
-        nvgpi1q54Mmi+E4RRdTEWJFf3IslQovv6j3ycXhVyTAi3kMx8lOOlBosgqu6NlFTUfuA8B2hX3NFx
-        gOJjSpBLUqyn2X3cD0Uo5L6otg6TfvGH6Kx0+dGikqBa7XET02f/Rmax426swFM5lUYJ0J55n3S3q
-        3lSKO+dA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwIPA-00EJXM-18; Wed, 01 Jun 2022 07:04:32 +0000
-Date:   Wed, 1 Jun 2022 00:04:32 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        syzbot <syzbot+3ba551855046ba3b3806@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in dma_map_sgtable (2)
-Message-ID: <YpcPgLQlNis0FOT1@infradead.org>
-References: <00000000000011e14605e03a125d@google.com>
- <20220530144542.4382-1-hdanton@sina.com>
- <20220530151044.GQ2146@kadam>
- <20220531090418.4552-1-hdanton@sina.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531090418.4552-1-hdanton@sina.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Jun 2022 03:07:15 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FCE6FD36
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:07:12 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d11-20020a170902cecb00b00163fe890197so679212plg.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 00:07:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Mk17D+aOzb7UCdNS2oz9IAwDr5MmRg+quCipw6fx4RQ=;
+        b=hQa0JnnmV2cX05wxogayF7DAeIwm91UA5DD4Pd0261qK2nG5mlRfb8p0PwXRgLwmcG
+         6gimTBEfRJnzqCBPwGFDLXwY23Jge7qCK5EKBtDVk+4ZHueBZe2ScEh2abiJOXvqClXF
+         aItT2KKmdUihJqxg6KlMJQ+n9hDQfaXwUgpDUXId5vW641rUWKofWrnrujEe72Sytvnk
+         iXsC3g9D+PkO64XwFNhsJCy/xgMMwq44IzwR510vfqTBnn54+HA0yDiVcTK99umRrrcq
+         KawtwQ3E7vKCwmO2izMB9zQh9evWd8zx74HbqExwInwGL34iXnuFQ1QqmbkBW7qSDv5A
+         GPbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Mk17D+aOzb7UCdNS2oz9IAwDr5MmRg+quCipw6fx4RQ=;
+        b=C0ZhekrfwOCUzSzy80dNoNfZlVwQvksrWaZ5v7sTV+Zf7xyAwXJz1JkASzfrTYm7mE
+         5YW2lL4X+fmGyqWO4+0+4orrtFtB/TPks3Mc+4ajFdzfF+pufE96TNA7JOgfxqKAtA4y
+         0av00PSgf+hq3dAdLiKSM3/j1VHBvlJCubv8rIFoNoVb/NcWvo0y3n9S7oiS6CKT9rxd
+         hGtHgKB+eAuT8mbhUD6Y03DBOJAEfTCB65UKnP3LsTbNuxQXSaOlBCN6xucydNAmoSj2
+         gCAtitdX4vZYxgw6a1MrdY3LhoqewHGTCUkIXQcpXCLCD3XRBBCqe2vraWqi63JHPC6b
+         8YnA==
+X-Gm-Message-State: AOAM533Z8JnX+25SYDkoHeexoecj/rvy5p6Ll5sOi2/7/r19/5mnPJaz
+        fSIq7EEUN0bf5AVAnVlouvobm6H66tns5KE=
+X-Google-Smtp-Source: ABdhPJwo0w/Ul81l80Uz+X1lE0Knuok5VeKXEtMoQ0Yzewr/LH6PL8JE3PUvMoXQAWKjDKNKYDX9hXZkKLb6+II=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:f3aa:cafe:c20a:e136])
+ (user=saravanak job=sendgmr) by 2002:a17:902:da8e:b0:164:537:d910 with SMTP
+ id j14-20020a170902da8e00b001640537d910mr7067516plx.75.1654067231712; Wed, 01
+ Jun 2022 00:07:11 -0700 (PDT)
+Date:   Wed,  1 Jun 2022 00:06:56 -0700
+Message-Id: <20220601070707.3946847-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+Subject: [PATCH v2 0/9] deferred_probe_timeout logic clean up
+From:   Saravana Kannan <saravanak@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>
+Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 05:04:18PM +0800, Hillf Danton wrote:
-> You are right. Thanks for taking a look.
-> 
-> And IMO we can do less on the exporter side as the udmabuf misc device
-> is different from those that for instance are dma capable on the PCI bus.
-> Regular dma games go only on the importer side.
+This series is based on linux-next + these 2 small patches applies on top:
+https://lore.kernel.org/lkml/20220526034609.480766-1-saravanak@google.com/
 
-I think you need the relevant maintainers here, this is above my
-paygrade.
+A lot of the deferred_probe_timeout logic is redundant with
+fw_devlink=on.  Also, enabling deferred_probe_timeout by default breaks
+a few cases.
+
+This series tries to delete the redundant logic, simplify the frameworks
+that use driver_deferred_probe_check_state(), enable
+deferred_probe_timeout=10 by default, and fixes the nfsroot failure
+case.
+
+The overall idea of this series is to replace the global behavior of
+driver_deferred_probe_check_state() where all devices give up waiting on
+supplier at the same time with a more granular behavior:
+
+1. Devices with all their suppliers successfully probed by late_initcall
+   probe as usual and avoid unnecessary deferred probe attempts.
+
+2. At or after late_initcall, in cases where boot would break because of
+   fw_devlink=on being strict about the ordering, we
+
+   a. Temporarily relax the enforcement to probe any unprobed devices
+      that can probe successfully in the current state of the system.
+      For example, when we boot with a NFS rootfs and no network device
+      has probed.
+   b. Go back to enforcing the ordering for any devices that haven't
+      probed.
+
+3. After deferred probe timeout expires, we permanently give up waiting
+   on supplier devices without drivers. At this point, whatever devices
+   can probe without some of their optional suppliers end up probing.
+
+In the case where module support is disabled, it's fairly
+straightforward and all device probes are completed before the initcalls
+are done.
+
+Patches 1 to 3 are fairly straightforward and can probably be applied
+right away.
+
+Patches 4 to 6 are for fixing the NFS rootfs issue and setting the
+default deferred_probe_timeout back to 10 seconds when modules are
+enabled.
+
+Patches 7 to 9 are further clean up of the deferred_probe_timeout logic
+so that no framework has to know/care about deferred_probe_timeout.
+
+Yoshihiro/Geert,
+
+If you can test this patch series and confirm that the NFS root case
+works, I'd really appreciate that.
+
+Thanks,
+Saravana
+
+v1 -> v2:
+Rewrote the NFS rootfs fix to be a lot less destructive on the
+fw_devlink ordering for devices that don't end up probing during the
+"best effort" attempt at probing all devices needed for a network rootfs
+
+Saravana Kannan (9):
+  PM: domains: Delete usage of driver_deferred_probe_check_state()
+  pinctrl: devicetree: Delete usage of
+    driver_deferred_probe_check_state()
+  net: mdio: Delete usage of driver_deferred_probe_check_state()
+  driver core: Add wait_for_init_devices_probe helper function
+  net: ipconfig: Relax fw_devlink if we need to mount a network rootfs
+  Revert "driver core: Set default deferred_probe_timeout back to 0."
+  driver core: Set fw_devlink.strict=1 by default
+  iommu/of: Delete usage of driver_deferred_probe_check_state()
+  driver core: Delete driver_deferred_probe_check_state()
+
+ drivers/base/base.h            |   1 +
+ drivers/base/core.c            | 102 ++++++++++++++++++++++++++++++---
+ drivers/base/dd.c              |  54 ++++++-----------
+ drivers/base/power/domain.c    |   2 +-
+ drivers/iommu/of_iommu.c       |   2 +-
+ drivers/net/mdio/fwnode_mdio.c |   4 +-
+ drivers/pinctrl/devicetree.c   |   2 +-
+ include/linux/device/driver.h  |   2 +-
+ net/ipv4/ipconfig.c            |   6 ++
+ 9 files changed, 126 insertions(+), 49 deletions(-)
+
+-- 
+2.36.1.255.ge46751e96f-goog
+

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE8553A0A3
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA2753A0B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351255AbiFAJgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 05:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S1347569AbiFAJhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 05:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351254AbiFAJgA (ORCPT
+        with ESMTP id S1351287AbiFAJgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 05:36:00 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C7B9155E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 02:35:58 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id f9so2618324ejc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 02:35:58 -0700 (PDT)
+        Wed, 1 Jun 2022 05:36:42 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA639E9FA
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 02:36:35 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id q21so2567937ejm.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 02:36:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=80TA4biEL75JpwIy1s29sYa6y3k0xQC7PWeNV9LgrvQ=;
-        b=tKtvsZK+FpDanzSTRFw0YIjrVyEJrG72uSqb0z+4vkE/CmrtUfaW7U2SdbLzLJ2PQr
-         B81ViPqRk2Er7c00KN6OcOuV+VAAWhQXDS5qqmn59IAxUvfaNdLXuqqK6tY4ygbfPb6q
-         tYV+Nxi5wEZf8fDRUT+7nP4JwSQcvGWx+5Fspvp5ZulhHt8EvsXsMLgtOZSjbB8fO1xG
-         Gwgf0nZ2BJiCKvegpIzHvjJSEgUZgqEY2hLTHW13Ovwno4zk7n6/vIKZTKuhblXdPurq
-         PJxjvEV6jtjisq0Rk3V9r00Qvso7tGD9biCoactt/Q1DrpwJUiCsHMVqgyXbXMNFUD1V
-         RrmQ==
+        bh=SXy2jxkQQlSv6Zx0OkI1k2j7NF0aEo6KqD+T9sPY7WM=;
+        b=OdjBPtg23WUxhKUm9hU2NUXHqwMlxMRYyzulQr63FTEhuJ5jj1zz5lOlc37ZWJDHx1
+         yBhSh0WzM7/4DEHCvoa6AK6vkRMAI1J0tLHVOSHX/9b1IGLPHsOtweDVsk/MZajf+cXT
+         8Et9FDg8ZIst859pqWHpcvZmU9M3p5yefD+06N0IwXhF9bXrgnSdfuFiyHhHPzdrsz8/
+         Meq3v3nRKuI+9gdizaNXVVyWj5YJorA5MYEZQNkWpT10S6gKi7Dy4KckdtGAIdDn+Ix6
+         iJA5aaf1/tkVvNhO5A06NtSALO1K/Qgd9Anjuo4M2n15L5wGPW2I1dqtQglKf4EcZ5fR
+         X0mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=80TA4biEL75JpwIy1s29sYa6y3k0xQC7PWeNV9LgrvQ=;
-        b=na+CWChDzBXShYiWRwGhiMZdYhq48BlEqdpLUuElvUoRC2EwQivP8MLwJAPYeNd1Yu
-         nmg29SYQn5TuJZTVjS87+rBsk4GVTjNSe4ENOUPyCpub7mZF/8x2qQBFk4275+AU6LEV
-         YC7Gh8JhVvamlltJStRvqolloZsY+zmys/6tJUtoI54I9b8hwLYEO2f3fBOOyhYeIufH
-         ecu0tg6J5Sgvw0vkqAURGHfjqTjtMCTvEtD+mUwAoflDOcvEzX9zCYkffIy/lOTnQTqx
-         sAhpdslLKyxAGMV9VC7gpuEmeR8F7MuPnc6+xBNnj3j5MxuicwAiOt05UIWMOKxNzojL
-         bxNA==
-X-Gm-Message-State: AOAM533IbZ1jz/MPhaDZ06T/KiyVHCF4/ouBS8JY4ohR0LqBjcW3q8LZ
-        WoFkh/7f/oDTaBEAxj65y4/ZuA==
-X-Google-Smtp-Source: ABdhPJxHNluoQgYzcVZlXvHgthHPUvCjucaP5txH3zIrCUu4kNf9JIOOTe88nyi6ufuCZ4jETDxlaA==
-X-Received: by 2002:a17:907:908b:b0:703:9e42:3d07 with SMTP id ge11-20020a170907908b00b007039e423d07mr5211375ejb.748.1654076156968;
-        Wed, 01 Jun 2022 02:35:56 -0700 (PDT)
+        bh=SXy2jxkQQlSv6Zx0OkI1k2j7NF0aEo6KqD+T9sPY7WM=;
+        b=3wz+pZNN8/LDLXT0va4wPjKty+37y5JaC2KC5Bb/4+0FgmJLOKf/4DKZruKQA2REMN
+         RVF4k3OI/IW4sqkwgVQsjf/1kVVKFK2gEWiP0SAO3y5SKovoWy2d+iQMUeEYjY5iAZU0
+         BawcY49RBLB3eARLLyJWNoFNdoBocwT5SntnioHTEHh4Q9Tdy/zh9QbATIU/jwqkzQ0L
+         QT6Dy3a9cK8MyPOuoQ0+P5wF3BeCemzVpNir0u2qZQptmIg9x6vYpMZPo5CZTlWHWHwJ
+         NI+VUZSHYtUwuKnI7DBqMHQm/VOcyU6YtKkVkBckUGp22bvtCdynxA2uNUhvOkBS5C2a
+         /qAw==
+X-Gm-Message-State: AOAM530l/Wk8eTpbhzgqh2boVX3CG03qL9PhnPrJrD7LT6Xe+A0LrUcf
+        lNw+wVT5ojTEa7cBFRGojgNUZg==
+X-Google-Smtp-Source: ABdhPJwjWC7FIS5LNCO1EphF1UnMztgGaShcktFcPPwtjGiwFhZCxmDcyHE8hBBzwAedsIdemtVCQw==
+X-Received: by 2002:a17:907:8688:b0:707:926e:ea44 with SMTP id qa8-20020a170907868800b00707926eea44mr1377732ejc.547.1654076193885;
+        Wed, 01 Jun 2022 02:36:33 -0700 (PDT)
 Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q1-20020a1709066ac100b006feed212f50sm482860ejs.184.2022.06.01.02.35.55
+        by smtp.gmail.com with ESMTPSA id w12-20020a1709064a0c00b007066283fdfesm474720eju.111.2022.06.01.02.36.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 02:35:56 -0700 (PDT)
-Message-ID: <35389032-c4c5-8bb5-3a78-52ff6ee004b5@linaro.org>
-Date:   Wed, 1 Jun 2022 11:35:54 +0200
+        Wed, 01 Jun 2022 02:36:33 -0700 (PDT)
+Message-ID: <8f695677-a45c-7117-6659-c2778cbc221a@linaro.org>
+Date:   Wed, 1 Jun 2022 11:36:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH 03/17] dt-bindings: mmc: mtk-sd: add bindings for MT8365
- SoC
+Subject: Re: [PATCH 04/17] dt-bindings: arm: mediatek: Add binding for
+ mt8365-evk board
 Content-Language: en-US
 To:     Fabien Parent <fparent@baylibre.com>, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
@@ -63,7 +63,7 @@ To:     Fabien Parent <fparent@baylibre.com>, robh+dt@kernel.org,
         chaotian.jing@mediatek.com, ulf.hansson@linaro.org,
         srinivas.kandagatla@linaro.org, chunfeng.yun@mediatek.com,
         broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        Wenbin Mei <wenbin.mei@mediatek.com>
+        Sean Wang <sean.wang@mediatek.com>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
@@ -72,9 +72,9 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
 References: <20220531135026.238475-1-fparent@baylibre.com>
- <20220531135026.238475-4-fparent@baylibre.com>
+ <20220531135026.238475-5-fparent@baylibre.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220531135026.238475-4-fparent@baylibre.com>
+In-Reply-To: <20220531135026.238475-5-fparent@baylibre.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,28 +88,46 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 31/05/2022 15:50, Fabien Parent wrote:
-> Add MMC bindings for MT8365 bindings.
+> Add binding documentation for the MT8365-EVK board. The MT8365 EVK board
+> has the following IOs:
+> * DPI <-> HDMI bridge and HDMI connector.
+> * 2 audio jack
+> * 1 USB Type-A Host port
+> * 2 UART to USB port
+> * 1 battery connector
+> * 1 eMMC
+> * 1 SD card
+> * 2 camera connectors
+> * 1 M.2 slot for connectivity
+> * 1 DSI connector + touchscreen connector
+> * RPI compatible header
+> * 1 Ethernet port
 > 
 > Signed-off-by: Fabien Parent <fparent@baylibre.com>
 > ---
->  Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+>  Documentation/devicetree/bindings/arm/mediatek.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> index 2a2e9fa8c188..3195b80ef057 100644
-> --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> @@ -38,6 +38,9 @@ properties:
->        - items:
->            - const: mediatek,mt8195-mmc
->            - const: mediatek,mt8183-mmc
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
+> index 4a2bd9759c47..a4b1288fa837 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
+> +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
+> @@ -216,6 +216,10 @@ properties:
+>            - enum:
+>                - mediatek,mt8516-pumpkin
+>            - const: mediatek,mt8516
+
+Blank line here
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 > +      - items:
-> +          - const: mediatek,mt8365-mmc
-
-You code it so inconsistently... It's one patchset but each patch doing
-the same thing differently.
-
-Please put it under enum in entry above.
+> +          - enum:
+> +              - mediatek,mt8365-evk
+> +          - const: mediatek,mt8365
+>  
+>  additionalProperties: true
+>  
 
 
 Best regards,

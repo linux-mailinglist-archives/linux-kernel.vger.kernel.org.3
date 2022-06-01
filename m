@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C58853B013
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6166753AEDA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbiFAVxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
+        id S231887AbiFAVxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbiFAVxF (ORCPT
+        with ESMTP id S231966AbiFAVxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Jun 2022 17:53:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C5318B11;
-        Wed,  1 Jun 2022 14:53:04 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1175E248D0
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 14:53:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 335676123E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90E88614A0
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 21:53:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 01C3DC34119;
         Wed,  1 Jun 2022 21:53:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 994D5C385A5;
-        Wed,  1 Jun 2022 21:53:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654120383;
-        bh=VBrz3puA8qiyKjjOmVr0zveL0DfoJYY+7reDC2rlSbs=;
+        s=k20201202; t=1654120384;
+        bh=A3Y/hhUIu9rwXN92/CQd7PyYC9u6dgXtTgA+FUAIEeE=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=k8VV3eV4eY7sapqWdH2+Up8hbtRoWL8lLsoxasSe3G+MIBA9TDY7pPam/ONoijmi9
-         2hbO4s2l+njQRtjrMn2X2sBKButxsD8mL42KT4UZKcR1RN7l5OtzQt7KrtWLG/OEjt
-         J1DbD7Rxbn/JV+KKw7EpuFRcQcY3+RzbsC+uIW5ke0XhX4H53TP212SaRs8NiFQpZ1
-         hoHq7Y+uMHZkbY1Gg6M4sr6jj9rv/coHM9cXWP3wNl/THINQ/NorHATQrtft/uCcaD
-         dBCnFBa6l+8bB2r4N3C6cdb5jOaHcb0cagInEliQR/iiB7JiimwE+S3iD+CrK+TKFJ
-         BXYnw4Kusju6w==
+        b=hq34C+22to9uUSz1dgZgysCia0AvkocB1xdFtqsvWXOpwUf0xI8ofCGRuLRDsnxfD
+         bS54mc/1FeZY11RS+FhJxU70066LoFKTVDdgHvNqIZppBiEofImh3UU25qTwCi0KuE
+         hr4oD+3ZEtnVh4zwf/F9a2VKUSwUjiPn1DoNQvKq5Wl/dfcpp7f8Ziq14tb3U0W6/y
+         qCAgUxoiTWFv5f8tMz1+evOG3tDzdlEIQj0MAnqXrYjrRLazgeF2s/6A/qcmc9JxFi
+         OiTHRBqqwfu8BapgAQmdgh0WA3OxmFoPMPrstjyvj99mfiIUg73y74MoQxjpGZ5nd8
+         Ad7w+SG1PAV/g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 88CC5EAC081;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0CE7F03950;
         Wed,  1 Jun 2022 21:53:03 +0000 (UTC)
-Subject: Re: [GIT PULL] VFIO updates for v5.19-rc1
+Subject: Re: [GIT PULL] I3C changes for 5.19
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220601111128.7bf85da0.alex.williamson@redhat.com>
-References: <20220601111128.7bf85da0.alex.williamson@redhat.com>
+In-Reply-To: <YpfXf/unhrWZkE3j@mail.local>
+References: <YpfXf/unhrWZkE3j@mail.local>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220601111128.7bf85da0.alex.williamson@redhat.com>
-X-PR-Tracked-Remote: https://github.com/awilliam/linux-vfio.git tags/vfio-v5.19-rc1
-X-PR-Tracked-Commit-Id: 421cfe6596f6cb316991c02bf30a93bd81092853
+X-PR-Tracked-Message-Id: <YpfXf/unhrWZkE3j@mail.local>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/i3c/linux.git tags/i3c/for-5.19
+X-PR-Tracked-Commit-Id: 66ed42caf286a7aaeb6f1db4b2995dd9416226c2
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 176882156ae6d63a81fe7f01ea6fe65ab6b52105
-Message-Id: <165412038355.5556.16078386325749571594.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 55fe92179058406fe00bff2167c94443a7b2e07a
+Message-Id: <165412038391.5556.7245944693656757925.pr-tracker-bot@kernel.org>
 Date:   Wed, 01 Jun 2022 21:53:03 +0000
-To:     Alex Williamson <alex.williamson@redhat.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+        linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 1 Jun 2022 11:11:28 -0600:
+The pull request you sent on Wed, 1 Jun 2022 23:17:51 +0200:
 
-> https://github.com/awilliam/linux-vfio.git tags/vfio-v5.19-rc1
+> git://git.kernel.org/pub/scm/linux/kernel/git/i3c/linux.git tags/i3c/for-5.19
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/176882156ae6d63a81fe7f01ea6fe65ab6b52105
+https://git.kernel.org/torvalds/c/55fe92179058406fe00bff2167c94443a7b2e07a
 
 Thank you!
 

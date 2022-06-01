@@ -2,48 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17496539B38
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5905C539B54
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349153AbiFACXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 22:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
+        id S235074AbiFACmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 22:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349133AbiFACXE (ORCPT
+        with ESMTP id S233771AbiFACmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 22:23:04 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3785C6D19E;
-        Tue, 31 May 2022 19:23:02 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LCXvP3pk0z1K981;
-        Wed,  1 Jun 2022 10:21:21 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 1 Jun 2022 10:23:00 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
- 2022 10:23:00 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <ebiederm@xmission.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH v3] proc: Fix a dentry lock race between release_task and lookup
-Date:   Wed, 1 Jun 2022 10:36:22 +0800
-Message-ID: <20220601023622.4191510-1-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 31 May 2022 22:42:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C81A15AA56
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 19:42:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654051353;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WB1eoNVPIkOVFlU558AybWrSuZCEkhfGeXbR5VK67Ks=;
+        b=NHE1ikkm1SqttpepD2MDmc585dJinB41vZ2tcwdaEv/sI4gKKMlAOMAj4HkI/XTDhmh4bg
+        KkdFI+ut/FHtSVA6Rir9TgGpwlnpCsEZ/pDH/XcGjaXf3JlSlR/plmvBU+i/BWJoQzSQOn
+        QBWgA7giRS1YmYwx+gsQEf1ZoExpOIQ=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-180-iMikUp3UOfm6UmrQ0LTtFA-1; Tue, 31 May 2022 22:42:29 -0400
+X-MC-Unique: iMikUp3UOfm6UmrQ0LTtFA-1
+Received: by mail-lf1-f69.google.com with SMTP id c6-20020a056512104600b00477b25bfdf8so212195lfb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 19:42:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WB1eoNVPIkOVFlU558AybWrSuZCEkhfGeXbR5VK67Ks=;
+        b=VDY5D6vtmef/6jiMh58XSod3KYgeW02iIroxI2qIEQIyyqyud0dEVJAJnk27CxS/MJ
+         USB8igiBp6jR5S35wUbsYjhi4A0XsvxOsfnQKxNy52fwIvlLe8oJSAU7bBcJuz9xGF7T
+         lNGfyQcIwPTXGSPF4KG8ti7CC3q4CpU+ux0cpcRIuOwF5s9Jlk8n+mv3DingpDZqCubE
+         +KKBKMN4F+A9mQ0343jR6weGd7ujATHdDD+oMs7ROSbqAioVX8creL0aJ3tFdwhiQW+X
+         lKAvtKddmuFMMq/qZBRcyamT/osfbWNwuK+hkdzVoc114k1rkXc1+wWsudWZqF/AkQ7N
+         EAjw==
+X-Gm-Message-State: AOAM533Cfeko871Sj6kVJ3ycEcZizgidVVCLETrWmgSwnfuP3mjGbR0F
+        YJrvlfKRLv7nUtUemepqFhMdWxu+TXC9HZM03KEJ0J/iKRXk+uq9FgpcLwzOypkyMh4YqBtLCYP
+        8dBQnqT5L9mEHDtXKEBtNrRSjMKEvvJGc3YW4VhNh
+X-Received: by 2002:a05:6512:c0e:b0:478:5a91:20bb with SMTP id z14-20020a0565120c0e00b004785a9120bbmr39100842lfu.587.1654051344057;
+        Tue, 31 May 2022 19:42:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxmBp820NSJHDcSD2dOZzrKRPNlKlD6GwXH3X8zApWh8utE/CuOZMV9CsZAbAB4NHKmtcInCEEIporstHBP+gc=
+X-Received: by 2002:a05:6512:c0e:b0:478:5a91:20bb with SMTP id
+ z14-20020a0565120c0e00b004785a9120bbmr39100798lfu.587.1654051343791; Tue, 31
+ May 2022 19:42:23 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220526124338.36247-1-eperezma@redhat.com> <PH0PR12MB54819C6C6DAF6572AEADC1AEDCD99@PH0PR12MB5481.namprd12.prod.outlook.com>
+ <20220527065442-mutt-send-email-mst@kernel.org> <CACGkMEubfv_OJOsJ_ROgei41Qx4mPO0Xz8rMVnO8aPFiEqr8rA@mail.gmail.com>
+ <PH0PR12MB5481695930E7548BAAF1B0D9DCDC9@PH0PR12MB5481.namprd12.prod.outlook.com>
+In-Reply-To: <PH0PR12MB5481695930E7548BAAF1B0D9DCDC9@PH0PR12MB5481.namprd12.prod.outlook.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 1 Jun 2022 10:42:12 +0800
+Message-ID: <CACGkMEsSKF_MyLgFdzVROptS3PCcp1y865znLWgnzq9L7CpFVQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Implement vdpasim stop operation
+To:     Parav Pandit <parav@nvidia.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "martinh@xilinx.com" <martinh@xilinx.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "martinpo@xilinx.com" <martinpo@xilinx.com>,
+        "lvivier@redhat.com" <lvivier@redhat.com>,
+        "pabloc@xilinx.com" <pabloc@xilinx.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zhang Min <zhang.min9@zte.com.cn>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        "Piotr.Uminski@intel.com" <Piotr.Uminski@intel.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
+        "gautam.dawar@amd.com" <gautam.dawar@amd.com>,
+        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
+        "tanuj.kamde@amd.com" <tanuj.kamde@amd.com>,
+        "hanand@xilinx.com" <hanand@xilinx.com>,
+        "dinang@xilinx.com" <dinang@xilinx.com>,
+        Longpeng <longpeng2@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,137 +103,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
-moved proc_flush_task() behind __exit_signal(). Then, process systemd
-can take long period high cpu usage during releasing task in following
-concurrent processes:
+On Wed, Jun 1, 2022 at 4:19 AM Parav Pandit <parav@nvidia.com> wrote:
+>
+>
+> > From: Jason Wang <jasowang@redhat.com>
+> > Sent: Sunday, May 29, 2022 11:39 PM
+> >
+> > On Fri, May 27, 2022 at 6:56 PM Michael S. Tsirkin <mst@redhat.com> wro=
+te:
+> > >
+> > > On Thu, May 26, 2022 at 12:54:32PM +0000, Parav Pandit wrote:
+> > > >
+> > > >
+> > > > > From: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> > > > > Sent: Thursday, May 26, 2022 8:44 AM
+> > > >
+> > > > > Implement stop operation for vdpa_sim devices, so vhost-vdpa will
+> > > > > offer
+> > > > >
+> > > > > that backend feature and userspace can effectively stop the devic=
+e.
+> > > > >
+> > > > >
+> > > > >
+> > > > > This is a must before get virtqueue indexes (base) for live
+> > > > > migration,
+> > > > >
+> > > > > since the device could modify them after userland gets them. Ther=
+e
+> > > > > are
+> > > > >
+> > > > > individual ways to perform that action for some devices
+> > > > >
+> > > > > (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but
+> > there
+> > > > > was no
+> > > > >
+> > > > > way to perform it for any vhost device (and, in particular, vhost=
+-vdpa).
+> > > > >
+> > > > >
+> > > > >
+> > > > > After the return of ioctl with stop !=3D 0, the device MUST finis=
+h
+> > > > > any
+> > > > >
+> > > > > pending operations like in flight requests. It must also preserve
+> > > > > all
+> > > > >
+> > > > > the necessary state (the virtqueue vring base plus the possible
+> > > > > device
+> > > > >
+> > > > > specific states) that is required for restoring in the future. Th=
+e
+> > > > >
+> > > > > device must not change its configuration after that point.
+> > > > >
+> > > > >
+> > > > >
+> > > > > After the return of ioctl with stop =3D=3D 0, the device can cont=
+inue
+> > > > >
+> > > > > processing buffers as long as typical conditions are met (vq is
+> > > > > enabled,
+> > > > >
+> > > > > DRIVER_OK status bit is enabled, etc).
+> > > >
+> > > > Just to be clear, we are adding vdpa level new ioctl() that doesn=
+=E2=80=99t map to
+> > any mechanism in the virtio spec.
+> > > >
+> > > > Why can't we use this ioctl() to indicate driver to start/stop the =
+device
+> > instead of driving it through the driver_ok?
+> > > > This is in the context of other discussion we had in the LM series.
+> > >
+> > > If there's something in the spec that does this then let's use that.
+> >
+> > Actually, we try to propose a independent feature here:
+> >
+> > https://lists.oasis-open.org/archives/virtio-dev/202111/msg00020.html
+> >
+> This will stop the device for all the operations.
 
-  systemd                                 ps
-kernel_waitid                 stat(/proc/tgid)
-  do_wait                       filename_lookup
-    wait_consider_task            lookup_fast
-      release_task
-        __exit_signal
-          __unhash_process
-            detach_pid
-              __change_pid // remove task->pid_links
-                                     d_revalidate -> pid_revalidate  // 0
-                                     d_invalidate(/proc/tgid)
-                                       shrink_dcache_parent(/proc/tgid)
-                                         d_walk(/proc/tgid)
-                                           spin_lock_nested(/proc/tgid/fd)
-                                           // iterating opened fd
-        proc_flush_pid                                    |
-           d_invalidate (/proc/tgid/fd)                   |
-              shrink_dcache_parent(/proc/tgid/fd)         |
-                shrink_dentry_list(subdirs)               ↓
-                  shrink_lock_dentry(/proc/tgid/fd) --> race on dentry lock
+Well, the ability to query the virtqueue state was proposed as another
+feature (Eugenio, please correct me). This should be sufficient for
+making virtio-net to be live migrated.
 
-Function d_invalidate() will remove dentry from hash firstly, but why does
-proc_flush_pid() process dentry '/proc/tgid/fd' before dentry '/proc/tgid'?
-That's because proc_pid_make_inode() adds proc inode in reverse order by
-invoking hlist_add_head_rcu(). But proc should not add any inodes under
-'/proc/tgid' except '/proc/tgid/task/pid', fix it by adding inode into
-'pid->inodes' only if the inode is /proc/tgid or /proc/tgid/task/pid.
+https://lists.oasis-open.org/archives/virtio-comment/202103/msg00008.html
 
-Performance regression:
-Create 200 tasks, each task open one file for 50,000 times. Kill all
-tasks when opened files exceed 10,000,000 (cat /proc/sys/fs/file-nr).
+> Once the device is stopped, its state cannot be queried further as device=
+ won't respond.
+> It has limited use case.
+> What we need is to stop non admin queue related portion of the device.
 
-Before fix:
-$ time killall -wq aa
-  real    4m40.946s   # During this period, we can see 'ps' and 'systemd'
-			taking high cpu usage.
+See above.
 
-After fix:
-$ time killall -wq aa
-  real    1m20.732s   # During this period, we can see 'systemd' taking
-			high cpu usage.
+Thanks
 
-Fixes: 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216054
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
----
- v1->v2: Add new helper proc_pid_make_base_inode that performs the extra
-	 work of adding to the pid->list.
- v2->v3: Add performance regression in commit message.
- fs/proc/base.c | 34 ++++++++++++++++++++++++++--------
- 1 file changed, 26 insertions(+), 8 deletions(-)
-
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index c1031843cc6a..f22fad3bf7f0 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -1885,7 +1885,7 @@ void proc_pid_evict_inode(struct proc_inode *ei)
- 	put_pid(pid);
- }
- 
--struct inode *proc_pid_make_inode(struct super_block * sb,
-+struct inode *proc_pid_make_inode(struct super_block *sb,
- 				  struct task_struct *task, umode_t mode)
- {
- 	struct inode * inode;
-@@ -1914,11 +1914,6 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
- 
- 	/* Let the pid remember us for quick removal */
- 	ei->pid = pid;
--	if (S_ISDIR(mode)) {
--		spin_lock(&pid->lock);
--		hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
--		spin_unlock(&pid->lock);
--	}
- 
- 	task_dump_owner(task, 0, &inode->i_uid, &inode->i_gid);
- 	security_task_to_inode(task, inode);
-@@ -1931,6 +1926,27 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
- 	return NULL;
- }
- 
-+struct inode *proc_pid_make_base_inode(struct super_block *sb,
-+				       struct task_struct *task, umode_t mode)
-+{
-+	struct inode *inode;
-+	struct proc_inode *ei;
-+	struct pid *pid;
-+
-+	inode = proc_pid_make_inode(sb, task, mode);
-+	if (!inode)
-+		return NULL;
-+
-+	/* Let proc_flush_pid find this directory inode */
-+	ei = PROC_I(inode);
-+	pid = ei->pid;
-+	spin_lock(&pid->lock);
-+	hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
-+	spin_unlock(&pid->lock);
-+
-+	return inode;
-+}
-+
- int pid_getattr(struct user_namespace *mnt_userns, const struct path *path,
- 		struct kstat *stat, u32 request_mask, unsigned int query_flags)
- {
-@@ -3350,7 +3366,8 @@ static struct dentry *proc_pid_instantiate(struct dentry * dentry,
- {
- 	struct inode *inode;
- 
--	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
-+	inode = proc_pid_make_base_inode(dentry->d_sb, task,
-+					 S_IFDIR | S_IRUGO | S_IXUGO);
- 	if (!inode)
- 		return ERR_PTR(-ENOENT);
- 
-@@ -3649,7 +3666,8 @@ static struct dentry *proc_task_instantiate(struct dentry *dentry,
- 	struct task_struct *task, const void *ptr)
- {
- 	struct inode *inode;
--	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
-+	inode = proc_pid_make_base_inode(dentry->d_sb, task,
-+					 S_IFDIR | S_IRUGO | S_IXUGO);
- 	if (!inode)
- 		return ERR_PTR(-ENOENT);
- 
--- 
-2.31.1
+>
+> > Does it make sense to you?
+> >
+> > Thanks
+> >
+> > > Unfortunately the LM series seems to be stuck on moving bits around
+> > > with the admin virtqueue ...
+> > >
+> > > --
+> > > MST
+> > >
+>
 

@@ -2,88 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303F953B0B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE24653B0AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232657AbiFAX5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 19:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
+        id S232666AbiFAX5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 19:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbiFAX47 (ORCPT
+        with ESMTP id S232655AbiFAX5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 19:56:59 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A8124E1ED
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 16:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654127816; x=1685663816;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YCpSo2LjWpnUaC0ljVavOADFNQHGCUn7ASovaagsnNo=;
-  b=SGPWAJGkx/iKdWRCQ2xWqCFqz4PSSfPJozNVJ21XtVZ5336BEh45QxXt
-   f4NKIouEVYnNnrnqmchIMagLE01hJPZLrmPHrdUuirMNyz6CUfs1XJkx/
-   SJuI4gXBebsawl952rCFsW2CUTCZxHT7GRqBEglRcF1eNUomg5jKCsAkc
-   8GcH225QGCb79b8fOn/3sWrqMnVZ3iwvtt3OOe07wdR5KnHl4VDUreUmR
-   D54EyoD+B2xo9CN8sKFCXmaYps3xZF2CFUY4S/pIRw0ZlkxAiBVI6YbpJ
-   17TW0ZTIfbZAkGVX6BToQGotLu2PtKsYdWoENNhdAAn2etnX3+JeW4fLR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="255637067"
-X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="255637067"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 16:56:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="563036712"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 01 Jun 2022 16:56:55 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwYCs-0004YG-Bj;
-        Wed, 01 Jun 2022 23:56:54 +0000
-Date:   Thu, 2 Jun 2022 07:56:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 36/59] ERROR:
- modpost: "fscache_begin_cache_operation" [fs/ceph/ceph.ko] undefined!
-Message-ID: <202206020747.ZdNsGuNi-lkp@intel.com>
+        Wed, 1 Jun 2022 19:57:46 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED67280F2C
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 16:57:45 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id c2so3146307plh.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 16:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2XYIiNyPAxUCbPTW69gSeTjEEL/1p7bXfOfkRP2R+fc=;
+        b=AnVtflFbxLoXdOq9BIgNzWOJWX5MjLy5hTpl10niEjW/MiLfkhVpK/bYI4PNqt+hXL
+         CndBf+09kS+cPl/8TKkLg1gCenAXWq7DZXfTDhyfmBw1f2r9AZ7TnlxY2owMbEg7vIuX
+         eZBe+mDq7MnY2egmLsIh/foumg7cvgUEOX36FX01x9dUIsgpY1sD/10/K45uSuLxS5Xl
+         oFqSvLV9R6p24dJ5kBOhFU4Z/DlNGgijY4aPr7Z72wgUFxfe2/LwZY4SEjeg6X3h3Fw+
+         AB34r+vkLrWYYnCTT7Iv0Bg49Aa3hxHQZGDpnrBG1tMSUscRxjT0FG6abSwGLZsK5CtJ
+         NSbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2XYIiNyPAxUCbPTW69gSeTjEEL/1p7bXfOfkRP2R+fc=;
+        b=SuQ0odTLCDasopI50IAjRjBjYFAytEwQDptt7tofpT1GbwZ24xgCyngFEKSfxgQDQ5
+         PYc/RXEbi7+wXT7QG2Xk+oGN6zJCtFNyAK5wiDwGpQirKIZLEUGGmr2e30tRuQloYcI7
+         LJxp/nSZ2mlZ7A1JjBTjfHVlH1NA1etcIT73PNnsQq30Y5mb3MVYQ9WdKxJfnmraYfqI
+         UNsrpu/qw5t/T4J3zeJb0VyFvXmdT4f9l9fSkTK1xWpnxRubkgjZEbNCwAx+Pz//C1Dh
+         cKbvEwJOc7xOkZ4iSBXOeXAY+cHTfbIpGY0n5hTlSJ2zJjYy1JNEf9WrWXAYm8jP4x87
+         ilUg==
+X-Gm-Message-State: AOAM530FDNa0JdYgd7RT5B3DrCafpYmmnpRI0aPsAnxLa6y95dRJkd1k
+        1/PhRxDwN/7nAo+vPETgZxgreg/NtVlX/Q==
+X-Google-Smtp-Source: ABdhPJyZ89NVGJO9n6rvyH2+UnhVOjm73j5+UWD3ThnWFMT8FpPVXYSUW9vfwDtLfITlXb6Ggo/ykQ==
+X-Received: by 2002:a17:90a:6441:b0:1e0:b413:c290 with SMTP id y1-20020a17090a644100b001e0b413c290mr36860926pjm.179.1654127864974;
+        Wed, 01 Jun 2022 16:57:44 -0700 (PDT)
+Received: from ?IPV6:2409:8a28:e67:690:38d5:dec6:94e6:8d4b? ([2409:8a28:e67:690:38d5:dec6:94e6:8d4b])
+        by smtp.gmail.com with ESMTPSA id t17-20020a62ea11000000b0051874318772sm2018554pfh.201.2022.06.01.16.57.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 16:57:44 -0700 (PDT)
+Message-ID: <cd11d854-31c4-57a4-4732-ecb7999d672c@bytedance.com>
+Date:   Thu, 2 Jun 2022 07:57:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH 2/2] blk-iocost: only flush wait and indebt stat deltas
+ when needed
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220601122007.1057-1-zhouchengming@bytedance.com>
+ <20220601122007.1057-2-zhouchengming@bytedance.com>
+ <YpeSct3LJcBjnZ2x@slm.duckdns.org>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <YpeSct3LJcBjnZ2x@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
-head:   22ecc2fcdab4616e624408911ec1d54644e82030
-commit: e761d039ea17aeaa3a5642e428b713473606798b [36/59] fscache: Add a function to begin an cache op from a netfslib request
-config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20220602/202206020747.ZdNsGuNi-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/e761d039ea17aeaa3a5642e428b713473606798b
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
-        git checkout e761d039ea17aeaa3a5642e428b713473606798b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On 2022/6/2 00:23, Tejun Heo wrote:
+> On Wed, Jun 01, 2022 at 08:20:07PM +0800, Chengming Zhou wrote:
+>> We only need to flush wait and indebt stat deltas when the iocg
+>> is in these status.
+> 
+> Hey, so, I'm not seeing any actual benefits of the suggested patches and
+> none of them has actual justifications. For the time being, I'm gonna be
+> ignoring these patches.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hi, the current code will flush wait and indebt stat deltas even for idle
+iocgs, which seems strange. This patch only do that for iocgs that are in
+wait or indebt status, so it's a performance and code improvements, although
+it's minor.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Thanks.
 
->> ERROR: modpost: "fscache_begin_cache_operation" [fs/ceph/ceph.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> Thanks.
+> 

@@ -2,155 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD48539C09
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 06:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1444B539C0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 06:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233499AbiFAESJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 00:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
+        id S239312AbiFAESe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 00:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbiFAER7 (ORCPT
+        with ESMTP id S235163AbiFAESa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 00:17:59 -0400
-Received: from mail.boiledscript.com (unknown [192.151.158.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D41359309;
-        Tue, 31 May 2022 21:17:55 -0700 (PDT)
-Received: from localhost (unknown [192.168.203.1])
-        by mail.boiledscript.com (Postfix) with ESMTP id 36CFE3009A2;
-        Wed,  1 Jun 2022 04:17:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ultrarare.space;
-        s=dkim; t=1654057071;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K4Kmtj4OM7QQbqFP23FXz1JgoSMHn9EgQTNFStFmzTQ=;
-        b=3+lXtOWmEVMDxXhPx43OVR3CR67u7gxONsjZja2XU6rsoDbKJA3a6H3nPInDQWXfdvENST
-        Q0R8clIORD598ZJMkYYO89Xm5K+OPRdWveIyZVyiPBEvodpNpRDFjae9ux0t+8JKz4q2NF
-        2tJt7cGl3v9iX4zyc2e1gnvvzBWNicMUhusagIgKi1goMIlSqTqRnKPG9vS6y/a925y4hC
-        lptdhghXNiiGe4SFy9FzqYKCcnga5n8pBM3G0tnZwhZaDsYp/HGGOg+mX6e62QR63vjZ2L
-        RZp3ObwIMEq+CPdoTmGU3BM0yNXM4XJwtjIg1zMNJ+5e7A8PatPeTvgG7k4a4A==
-Date:   Wed, 1 Jun 2022 12:17:37 +0800
-From:   Hilton Chain <hako@ultrarare.space>
-To:     "=?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?=" <jose.exposito89@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH v4] HID: apple: Properly handle function keys on non-Apple
- keyboard
-Message-ID: <20220601121737.1226ffea@ultrarare.space>
-In-Reply-To: <20220601072651.242ce08a@ultrarare.space>
-References: <20220529180230.17e9a0f9@ultrarare.space>
-        <20220529182036.10226-1-jose.exposito89@gmail.com>
-        <20220530083752.1973a905@ultrarare.space>
-        <20220530061812.GA10391@elementary>
-        <20220531221102.7bd7da7d@ultrarare.space>
-        <20220531223330.3d63e2fe@ultrarare.space>
-        <20220531172053.GA10651@elementary>
-        <CAPnXWxG8gbe1arQK9kBtwM1Xcta+wreTN742kgtBBr1v0ewKug@mail.gmail.com>
-        <7f67ac07b8bd37d5817cd151674cc6b0@ultrarare.space>
-        <20220601072651.242ce08a@ultrarare.space>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Authentication-Results: mail.boiledscript.com;
-        none
-X-Spamd-Bar: /
+        Wed, 1 Jun 2022 00:18:30 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DBB5931F;
+        Tue, 31 May 2022 21:18:28 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id gi33so1238007ejc.3;
+        Tue, 31 May 2022 21:18:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=RSw8k1d0PMD6wj66n+1hU8B9FRDPkW1CFpjiF9rIWpo=;
+        b=TrjwgnTl3ploNX8zp6ORq5aPD3FqDvLo44Q/ZISeWjgM9LzKROEkGRYve2Aw1eG9i0
+         bSsVkwTt3Q/6UxVCLBY3LvzMdzxs7gGQBwE8zZx4/g5BcYgS1tZNun5uhrmI+J/rGAsY
+         Hpgcezyg6qs7qwlyvuf5l8c0UaJdiN9e+YItj1Z7MvD1UOVjQY1ZQbTqk5YlFvMulQai
+         cQRtbuvXCwZZTYBpJ8cpL24BqRqj2flVyj6FgcEjJdpoyam20SSW0WqWT4RXOxsOGqsi
+         gfYoTo45CiLzohoTeFnVcEzE9/YlcnSjis36EqgKLPvQmgDzXKtYGPDGg2w48IlD9OGq
+         CvRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=RSw8k1d0PMD6wj66n+1hU8B9FRDPkW1CFpjiF9rIWpo=;
+        b=1iJitOcItwMo7LD9WBwymqbAGz5/xMx/HlNnmWewgx4okfrXzXJ2p7XZrHaQ2t549h
+         /ASS/bjmB+Xvs4n+wFpw1TSA95DEm37o/FiwjZT0qBQtXARgRBUCVF4T5osABi9xPERW
+         JftddGlUx6XAca8uk5yU2vElAzSHdOMAjDMpaIgqooHxaC4OPO1q4NOiDmnyOvW6l9Tu
+         lREKYHbBNhSoWV8bG6EmQMagFlKIA04MQS3ujDFuFE355arubzZhx7QYYkQ01YnevGQd
+         WSqk5kxJjNX0LqtfjzIL24ceRdWyPTRH8uzHjErx4RBYqHw6zUUlxuSrF1crmijYTr3e
+         fGWw==
+X-Gm-Message-State: AOAM531rMUlpbNcuci1626HA4tZ+NuATUuuRXHmuudFnzXuSKab7nikT
+        H3YV2yvlWaoZTc0VcykgqiY=
+X-Google-Smtp-Source: ABdhPJwgyhU+ZXDOZckYUwEphewTltQH7fIGAK729jV57SMSjG84XZZdUm4VashgG42xtDimZYYf/A==
+X-Received: by 2002:a17:906:9749:b0:6f5:38d:d4d8 with SMTP id o9-20020a170906974900b006f5038dd4d8mr57000119ejy.405.1654057106397;
+        Tue, 31 May 2022 21:18:26 -0700 (PDT)
+Received: from felia.fritz.box (200116b82620c00028af88788fa7d286.dip.versatel-1u1.de. [2001:16b8:2620:c000:28af:8878:8fa7:d286])
+        by smtp.gmail.com with ESMTPSA id t4-20020a056402020400b0042ab1735552sm279952edv.66.2022.05.31.21.18.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 21:18:25 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Liviu Dudau <liviu.dudau@arm.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        James Wang <james.qian.wang@arm.com>,
+        Mihail Atanassov <mihail.atanassov@arm.com>,
+        Brian Starkey <brian.starkey@arm.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, malidp@foss.arm.com,
+        kernel-janitors@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: rectify entries for ARM DRM DRIVERS after dt conversion
+Date:   Wed,  1 Jun 2022 06:17:46 +0200
+Message-Id: <20220601041746.22986-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit extends fa33382c7f74 ("HID: apple: Properly handle function
-keys on Keychron keyboards") by adding an array of known non-Apple
-keyboards' device names, and the function apple_is_non_apple_keyboard()
-to identify and create exception for them.
+The three commits:
 
-Signed-off-by: Hilton Chain <hako@ultrarare.space>
+  36fd2a65bcaf ("dt-bindings: display: convert Arm HDLCD to DT schema")
+  0f6983509ea1 ("dt-bindings: display: convert Arm Komeda to DT schema")
+  2c8b082a3ab1 ("dt-bindings: display: convert Arm Mali-DP to DT schema")
+
+convert the arm display dt-bindings, arm,*.txt to arm,*.yaml, but miss to
+adjust its reference in MAINTAINERS.
+
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about
+broken references.
+
+Repair these file references in ARM HDLCD DRM DRIVER, ARM KOMEDA DRM-KMS
+DRIVER and ARM MALI-DP DRM DRIVER.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
+Andre, please ack.
+Rob, Krzysztof, please pick this minor non-urgent clean-up patch in
+your -next dt tree.
 
-V3 -> V4: Removed unnecessary strlen()
+ MAINTAINERS | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- drivers/hid/hid-apple.c | 33 ++++++++++++++++++++++++++++-----
- 1 file changed, 28 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
-index 42a568902f49..4ec39c5e762a 100644
---- a/drivers/hid/hid-apple.c
-+++ b/drivers/hid/hid-apple.c
-@@ -36,7 +36,7 @@
- #define APPLE_NUMLOCK_EMULATION	BIT(8)
- #define APPLE_RDESC_BATTERY	BIT(9)
- #define APPLE_BACKLIGHT_CTL	BIT(10)
--#define APPLE_IS_KEYCHRON	BIT(11)
-+#define APPLE_IS_NON_APPLE	BIT(11)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ae685aaf8850..58e751b9346e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1510,7 +1510,7 @@ F:	drivers/clocksource/arm_arch_timer.c
+ ARM HDLCD DRM DRIVER
+ M:	Liviu Dudau <liviu.dudau@arm.com>
+ S:	Supported
+-F:	Documentation/devicetree/bindings/display/arm,hdlcd.txt
++F:	Documentation/devicetree/bindings/display/arm,hdlcd.yaml
+ F:	drivers/gpu/drm/arm/hdlcd_*
  
- #define APPLE_FLAG_FKEY		0x01
+ ARM INTEGRATOR, VERSATILE AND REALVIEW SUPPORT
+@@ -1545,7 +1545,7 @@ M:	Mihail Atanassov <mihail.atanassov@arm.com>
+ L:	Mali DP Maintainers <malidp@foss.arm.com>
+ S:	Supported
+ T:	git git://anongit.freedesktop.org/drm/drm-misc
+-F:	Documentation/devicetree/bindings/display/arm,komeda.txt
++F:	Documentation/devicetree/bindings/display/arm,komeda.yaml
+ F:	Documentation/gpu/komeda-kms.rst
+ F:	drivers/gpu/drm/arm/display/include/
+ F:	drivers/gpu/drm/arm/display/komeda/
+@@ -1567,7 +1567,7 @@ M:	Brian Starkey <brian.starkey@arm.com>
+ L:	Mali DP Maintainers <malidp@foss.arm.com>
+ S:	Supported
+ T:	git git://anongit.freedesktop.org/drm/drm-misc
+-F:	Documentation/devicetree/bindings/display/arm,malidp.txt
++F:	Documentation/devicetree/bindings/display/arm,malidp.yaml
+ F:	Documentation/gpu/afbc.rst
+ F:	drivers/gpu/drm/arm/
  
-@@ -65,6 +65,10 @@ MODULE_PARM_DESC(swap_fn_leftctrl, "Swap the Fn and left Control keys. "
- 		"(For people who want to keep PC keyboard muscle memory. "
- 		"[0] = as-is, Mac layout, 1 = swapped, PC layout)");
- 
-+struct apple_non_apple_keyboard {
-+	char *name;
-+};
-+
- struct apple_sc_backlight {
- 	struct led_classdev cdev;
- 	struct hid_device *hdev;
-@@ -313,6 +317,25 @@ static const struct apple_key_translation swapped_fn_leftctrl_keys[] = {
- 	{ }
- };
- 
-+static const struct apple_non_apple_keyboard non_apple_keyboards[] = {
-+	{ "SONiX USB DEVICE" },
-+	{ "Keychron" },
-+};
-+
-+static bool apple_is_non_apple_keyboard(struct hid_device *hdev)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(non_apple_keyboards); i++) {
-+		char *non_apple = non_apple_keyboards[i].name;
-+
-+		if (strncmp(hdev->name, non_apple, strlen(non_apple)) == 0)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- static inline void apple_setup_key_translation(struct input_dev *input,
- 		const struct apple_key_translation *table)
- {
-@@ -363,7 +386,7 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
- 	}
- 
- 	if (fnmode == 3) {
--		real_fnmode = (asc->quirks & APPLE_IS_KEYCHRON) ? 2 : 1;
-+		real_fnmode = (asc->quirks & APPLE_IS_NON_APPLE) ? 2 : 1;
- 	} else {
- 		real_fnmode = fnmode;
- 	}
-@@ -669,9 +692,9 @@ static int apple_input_configured(struct hid_device *hdev,
- 		asc->quirks &= ~APPLE_HAS_FN;
- 	}
- 
--	if (strncmp(hdev->name, "Keychron", 8) == 0) {
--		hid_info(hdev, "Keychron keyboard detected; function keys will default to fnmode=2 behavior\n");
--		asc->quirks |= APPLE_IS_KEYCHRON;
-+	if (apple_is_non_apple_keyboard(hdev)) {
-+		hid_info(hdev, "Non-apple keyboard detected; function keys will default to fnmode=2 behavior\n");
-+		asc->quirks |= APPLE_IS_NON_APPLE;
- 	}
- 
- 	return 0;
-
-base-commit: 700170bf6b4d773e328fa54ebb70ba444007c702
 -- 
-2.36.1
+2.17.1
 

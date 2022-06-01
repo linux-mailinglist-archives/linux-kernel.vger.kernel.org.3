@@ -2,44 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5FE53AEE7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F332F53AE61
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbiFAUwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 16:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
+        id S230342AbiFAUvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 16:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbiFAUwP (ORCPT
+        with ESMTP id S231145AbiFAUuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 16:52:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E792004F5;
-        Wed,  1 Jun 2022 13:51:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBF196119E;
-        Wed,  1 Jun 2022 20:51:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BF2BC385A5;
-        Wed,  1 Jun 2022 20:51:33 +0000 (UTC)
-From:   Clark Williams <williams@redhat.com>
-Subject: [ANNOUNCE] 5.15.44-rt46
-Date:   Wed, 01 Jun 2022 20:46:43 -0000
-Message-ID: <165411640340.626197.12029562400290292841@puck.lan>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Pavel Machek <pavel@denx.de>
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_ENVFROM,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 1 Jun 2022 16:50:11 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6311EC550
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 13:46:57 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id e4so3227446ljb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 13:46:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fj9HtRIX4+M0EdDnghqxhr6GHQmpAm8s/XdenW9yup0=;
+        b=WjRHLkgwCSWAlphNr9xuVVKYEGPDefIDXa8vtmj6h2K4iVHM8CaH0cyKh8/b2pU7oL
+         04g6nvj+ijgHp8BUpa+zZhO+h0wje7fT5ZpxGla7N/gc9nSxuemkwDTZm2sU+E8gheIl
+         lcSwrUkHewNgnVDmX8xCnqI66SEdC8AV+cvo+s8gm6i5cIHRjzh0iwboTcCSzSrb4UkS
+         qh84i8eQatdMSnl44dhsjqBB9rQCgxlwKxlXRi2a1ajTT13maFRIUyRQoIAV9USm5xEF
+         CItZYLYEb9drifjhDbJHByDwfMd0WwusljT+rG/4pmJVL1F26KP5vuH+t929KHSGunBB
+         0kfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fj9HtRIX4+M0EdDnghqxhr6GHQmpAm8s/XdenW9yup0=;
+        b=Xbz+znEnEvgsU+KWKAvV4lYzgdRaPAo+qtTox3PBjB8jtYT9yEg3ams+Fnz3kedZfR
+         UQkPf0kEenNJijuDdwJ1pB9dY6g0xuptHK4XeQpK69UklsuvwtQQ0E/mXB7wQVrsyGFm
+         LE5rzsf5Yr94eaNun9ASc7fzej5MIJBlPEQ5VEC8/Ktw/tOQhOL69cyFLxgHwTUMWs0b
+         NJHoI/orCVGnQflgVrbpKrMKCDliPJJveQJAWbnv+iYPFlKaI6YrYgNAjsGq6xLB419V
+         5u4W5OHtr8DKHIbF1G2Yc6SEWPfZlofFO7UF2o9lnoGcO7wfdvBoqu3vx4YeywSNNbPE
+         +IiA==
+X-Gm-Message-State: AOAM531weGqf/8RpTQ0nKBjPUy5T/VL3iI0rm5zS6ss/zQW0wKRdCFRr
+        N0nes1Rz3g5zpageN7MS+uS9UA==
+X-Google-Smtp-Source: ABdhPJxaKLcEkkU4GB/4Q1C4XrI6PGY70nBZOBslqQa/9byzq+gv3CmXYlcwJG2qlo5+RfiL+/eYJg==
+X-Received: by 2002:a2e:9e41:0:b0:253:c37c:378b with SMTP id g1-20020a2e9e41000000b00253c37c378bmr39695585ljk.202.1654116415632;
+        Wed, 01 Jun 2022 13:46:55 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id k8-20020a2ea288000000b0024f3d1dae99sm509610lja.33.2022.06.01.13.46.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 13:46:54 -0700 (PDT)
+Message-ID: <f415aa0c-edf8-94de-bde8-faf151f5f530@linaro.org>
+Date:   Wed, 1 Jun 2022 23:46:54 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 4/4] drm/bridge: parade-ps8640: Handle DP AUX more
+ properly
+Content-Language: en-GB
+To:     Douglas Anderson <dianders@chromium.org>,
+        dri-devel@lists.freedesktop.org
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-kernel@vger.kernel.org
+References: <20220510192944.2408515-1-dianders@chromium.org>
+ <20220510122726.v3.4.Ia6324ebc848cd40b4dbd3ad3289a7ffb5c197779@changeid>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220510122726.v3.4.Ia6324ebc848cd40b4dbd3ad3289a7ffb5c197779@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,292 +90,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+On 10/05/2022 22:29, Douglas Anderson wrote:
+> While it works, for the most part, to assume that the panel has
+> finished probing when devm_of_dp_aux_populate_ep_devices() returns,
+> it's a bit fragile. This is talked about at length in commit
+> a1e3667a9835 ("drm/bridge: ti-sn65dsi86: Promote the AUX channel to
+> its own sub-dev").
+> 
+> When reviewing the ps8640 code, I managed to convince myself that it
+> was OK not to worry about it there and that maybe it wasn't really
+> _that_ fragile. However, it turns out that it really is. Simply
+> hardcoding panel_edp_probe() to return -EPROBE_DEFER was enough to put
+> the boot process into an infinite loop. I believe this manages to trip
+> the same issues that we used to trip with the main MSM code where
+> something about our actions trigger Linux to re-probe previously
+> deferred devices right away and each time we try again we re-trigger
+> Linux to re-probe.
+> 
+> Let's fix this using the callback introduced in the patch ("drm/dp:
+> Callbacks to make it easier for drivers to use DP AUX bus properly").
+> When using the new callback, we have to be a little careful. The
+> probe_done() callback is no longer always called in the context of
+> our probe routine. That means we can't rely on being able to return
+> -EPROBE_DEFER from it. We re-jigger the order of things a bit to
+> account for that.
+> 
+> With this change, the device still boots (though obviously the panel
+> doesn't come up) if I force panel-edp to always return
+> -EPROBE_DEFER. If I fake it and make the panel probe exactly once it
+> also works.
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-I'm pleased to announce the 5.15.44-rt46 stable release.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Note that this is a pretty big update of the /dev/random driver that took a bit
-longer to eyeball than a lot of other stable updates. If you are a heavy user
-of /dev/random please check your results and let us know if you see problems.
+> ---
+> 
+> Changes in v3:
+> - Adapt to v3 changes in aux bus.
+> - Use devm_drm_bridge_add() to simplify.
+> 
+> Changes in v2:
+> - Rewrote atop new method introduced by patch #1.
+> 
+>   drivers/gpu/drm/bridge/parade-ps8640.c | 74 ++++++++++++++++----------
+>   1 file changed, 46 insertions(+), 28 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
+> index e2467e58b5b7..ff4227f6d800 100644
+> --- a/drivers/gpu/drm/bridge/parade-ps8640.c
+> +++ b/drivers/gpu/drm/bridge/parade-ps8640.c
+> @@ -537,7 +537,7 @@ static const struct drm_bridge_funcs ps8640_bridge_funcs = {
+>   	.pre_enable = ps8640_pre_enable,
+>   };
+>   
+> -static int ps8640_bridge_host_attach(struct device *dev, struct ps8640 *ps_bridge)
+> +static int ps8640_bridge_get_dsi_resources(struct device *dev, struct ps8640 *ps_bridge)
+>   {
+>   	struct device_node *in_ep, *dsi_node;
+>   	struct mipi_dsi_device *dsi;
+> @@ -576,13 +576,40 @@ static int ps8640_bridge_host_attach(struct device *dev, struct ps8640 *ps_bridg
+>   	dsi->format = MIPI_DSI_FMT_RGB888;
+>   	dsi->lanes = NUM_MIPI_LANES;
+>   
+> -	return devm_mipi_dsi_attach(dev, dsi);
+> +	return 0;
+> +}
+> +
+> +static int ps8640_bridge_link_panel(struct drm_dp_aux *aux)
+> +{
+> +	struct ps8640 *ps_bridge = aux_to_ps8640(aux);
+> +	struct device *dev = aux->dev;
+> +	struct device_node *np = dev->of_node;
+> +	int ret;
+> +
+> +	/*
+> +	 * NOTE about returning -EPROBE_DEFER from this function: if we
+> +	 * return an error (most relevant to -EPROBE_DEFER) it will only
+> +	 * be passed out to ps8640_probe() if it called this directly (AKA the
+> +	 * panel isn't under the "aux-bus" node). That should be fine because
+> +	 * if the panel is under "aux-bus" it's guaranteed to have probed by
+> +	 * the time this function has been called.
+> +	 */
+> +
+> +	/* port@1 is ps8640 output port */
+> +	ps_bridge->panel_bridge = devm_drm_of_get_bridge(dev, np, 1, 0);
+> +	if (IS_ERR(ps_bridge->panel_bridge))
+> +		return PTR_ERR(ps_bridge->panel_bridge);
+> +
+> +	ret = devm_drm_bridge_add(dev, &ps_bridge->bridge);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return devm_mipi_dsi_attach(dev, ps_bridge->dsi);
+>   }
+>   
+>   static int ps8640_probe(struct i2c_client *client)
+>   {
+>   	struct device *dev = &client->dev;
+> -	struct device_node *np = dev->of_node;
+>   	struct ps8640 *ps_bridge;
+>   	int ret;
+>   	u32 i;
+> @@ -623,6 +650,14 @@ static int ps8640_probe(struct i2c_client *client)
+>   	if (!ps8640_of_panel_on_aux_bus(&client->dev))
+>   		ps_bridge->bridge.ops = DRM_BRIDGE_OP_EDID;
+>   
+> +	/*
+> +	 * Get MIPI DSI resources early. These can return -EPROBE_DEFER so
+> +	 * we want to get them out of the way sooner.
+> +	 */
+> +	ret = ps8640_bridge_get_dsi_resources(&client->dev, ps_bridge);
+> +	if (ret)
+> +		return ret;
+> +
+>   	ps_bridge->page[PAGE0_DP_CNTL] = client;
+>   
+>   	ps_bridge->regmap[PAGE0_DP_CNTL] = devm_regmap_init_i2c(client, ps8640_regmap_config);
+> @@ -665,35 +700,19 @@ static int ps8640_probe(struct i2c_client *client)
+>   	if (ret)
+>   		return ret;
+>   
+> -	devm_of_dp_aux_populate_ep_devices(&ps_bridge->aux);
+> +	ret = devm_of_dp_aux_populate_bus(&ps_bridge->aux, ps8640_bridge_link_panel);
+>   
+> -	/* port@1 is ps8640 output port */
+> -	ps_bridge->panel_bridge = devm_drm_of_get_bridge(dev, np, 1, 0);
+> -	if (IS_ERR(ps_bridge->panel_bridge))
+> -		return PTR_ERR(ps_bridge->panel_bridge);
+> -
+> -	drm_bridge_add(&ps_bridge->bridge);
+> -
+> -	ret = ps8640_bridge_host_attach(dev, ps_bridge);
+> -	if (ret)
+> -		goto err_bridge_remove;
+> -
+> -	return 0;
+> +	/*
+> +	 * If devm_of_dp_aux_populate_bus() returns -ENODEV then it's up to
+> +	 * usa to call ps8640_bridge_link_panel() directly. NOTE: in this case
+> +	 * the function is allowed to -EPROBE_DEFER.
+> +	 */
+> +	if (ret == -ENODEV)
+> +		return ps8640_bridge_link_panel(&ps_bridge->aux);
+>   
+> -err_bridge_remove:
+> -	drm_bridge_remove(&ps_bridge->bridge);
+>   	return ret;
+>   }
+>   
+> -static int ps8640_remove(struct i2c_client *client)
+> -{
+> -	struct ps8640 *ps_bridge = i2c_get_clientdata(client);
+> -
+> -	drm_bridge_remove(&ps_bridge->bridge);
+> -
+> -	return 0;
+> -}
+> -
+>   static const struct of_device_id ps8640_match[] = {
+>   	{ .compatible = "parade,ps8640" },
+>   	{ }
+> @@ -702,7 +721,6 @@ MODULE_DEVICE_TABLE(of, ps8640_match);
+>   
+>   static struct i2c_driver ps8640_driver = {
+>   	.probe_new = ps8640_probe,
+> -	.remove = ps8640_remove,
+>   	.driver = {
+>   		.name = "ps8640",
+>   		.of_match_table = ps8640_match,
 
-That being said, I do feel confident of the update.
 
-You can get this release via the git tree at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
-
-  branch: v5.15-rt
-  Head SHA1: dd1275d9e897e9d8d76fefa6e08ababe083e2a24
-
-Or to build 5.15.44-rt46 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.15.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.15.44.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/patch-5.15.44-rt46.patch.xz
-
-
-Enjoy!
-Clark
-
-Changes from v5.15.43-rt45:
----
-
-Basavaraj Natikar (1):
-      HID: amd_sfh: Add support for sensor discovery
-
-Clark Williams (2):
-      Merge tag 'v5.15.44' into v5.15-rt
-      'Linux 5.15.44-rt46'
-
-Dominik Brodowski (7):
-      random: harmonize "crng init done" messages
-      random: early initialization of ChaCha constants
-      random: continually use hwgenerator randomness
-      random: access primary_pool directly rather than through pointer
-      random: only call crng_finalize_init() for primary_crng
-      random: fix locking in crng_fast_load()
-      random: fix locking for crng_init in crng_reseed()
-
-Edward Matijevic (1):
-      ALSA: ctxfi: Add SB046x PCI ID
-
-Eric Biggers (1):
-      random: remove use_input_pool parameter from crng_reseed()
-
-Greg Kroah-Hartman (1):
-      Linux 5.15.44
-
-Jan Varho (1):
-      random: do not split fast init input in add_hwgenerator_randomness()
-
-Jann Horn (2):
-      random: don't reset crng_init_cnt on urandom_read()
-      random: check for signal_pending() outside of need_resched() check
-
-Jason A. Donenfeld (123):
-      MAINTAINERS: co-maintain random.c
-      MAINTAINERS: add git tree for random.c
-      lib/crypto: blake2s: include as built-in
-      lib/crypto: blake2s: move hmac construction into wireguard
-      lib/crypto: sha1: re-roll loops to reduce code size
-      lib/crypto: blake2s: avoid indirect calls to compression function for Clang CFI
-      random: use BLAKE2s instead of SHA1 in extraction
-      random: do not sign extend bytes for rotation when mixing
-      random: do not re-init if crng_reseed completes before primary init
-      random: mix bootloader randomness into pool
-      random: use IS_ENABLED(CONFIG_NUMA) instead of ifdefs
-      random: avoid superfluous call to RDRAND in CRNG extraction
-      random: cleanup poolinfo abstraction
-      random: cleanup integer types
-      random: remove incomplete last_data logic
-      random: remove unused extract_entropy() reserved argument
-      random: rather than entropy_store abstraction, use global
-      random: remove unused OUTPUT_POOL constants
-      random: de-duplicate INPUT_POOL constants
-      random: prepend remaining pool constants with POOL_
-      random: cleanup fractional entropy shift constants
-      random: access input_pool_data directly rather than through pointer
-      random: selectively clang-format where it makes sense
-      random: simplify arithmetic function flow in account()
-      random: use computational hash for entropy extraction
-      random: simplify entropy debiting
-      random: use linear min-entropy accumulation crediting
-      random: always wake up entropy writers after extraction
-      random: make credit_entropy_bits() always safe
-      random: remove batched entropy locking
-      random: use RDSEED instead of RDRAND in entropy extraction
-      random: get rid of secondary crngs
-      random: inline leaves of rand_initialize()
-      random: ensure early RDSEED goes through mixer on init
-      random: do not xor RDRAND when writing into /dev/random
-      random: absorb fast pool into input pool after fast load
-      random: use simpler fast key erasure flow on per-cpu keys
-      random: use hash function for crng_slow_load()
-      random: make more consistent use of integer types
-      random: remove outdated INT_MAX >> 6 check in urandom_read()
-      random: zero buffer after reading entropy from userspace
-      random: tie batched entropy generation to base_crng generation
-      random: remove ifdef'd out interrupt bench
-      random: remove unused tracepoints
-      random: add proper SPDX header
-      random: deobfuscate irq u32/u64 contributions
-      random: introduce drain_entropy() helper to declutter crng_reseed()
-      random: remove useless header comment
-      random: remove whitespace and reorder includes
-      random: group initialization wait functions
-      random: group crng functions
-      random: group entropy extraction functions
-      random: group entropy collection functions
-      random: group userspace read/write functions
-      random: group sysctl functions
-      random: rewrite header introductory comment
-      random: defer fast pool mixing to worker
-      random: do not take pool spinlock at boot
-      random: unify early init crng load accounting
-      random: check for crng_init == 0 in add_device_randomness()
-      random: pull add_hwgenerator_randomness() declaration into random.h
-      random: clear fast pool, crng, and batches in cpuhp bring up
-      random: round-robin registers as ulong, not u32
-      random: only wake up writers after zap if threshold was passed
-      random: cleanup UUID handling
-      random: unify cycles_t and jiffies usage and types
-      random: do crng pre-init loading in worker rather than irq
-      random: give sysctl_random_min_urandom_seed a more sensible value
-      random: don't let 644 read-only sysctls be written to
-      random: replace custom notifier chain with standard one
-      random: use SipHash as interrupt entropy accumulator
-      random: make consistent usage of crng_ready()
-      random: reseed more often immediately after booting
-      random: check for signal and try earlier when generating entropy
-      random: skip fast_init if hwrng provides large chunk of entropy
-      random: treat bootloader trust toggle the same way as cpu trust toggle
-      random: re-add removed comment about get_random_{u32,u64} reseeding
-      random: mix build-time latent entropy into pool at init
-      random: do not allow user to keep crng key around on stack
-      random: check for signals every PAGE_SIZE chunk of /dev/[u]random
-      random: allow partial reads if later user copies fail
-      random: make random_get_entropy() return an unsigned long
-      random: document crng_fast_key_erasure() destination possibility
-      random: fix sysctl documentation nits
-      init: call time_init() before rand_initialize()
-      ia64: define get_cycles macro for arch-override
-      s390: define get_cycles macro for arch-override
-      parisc: define get_cycles macro for arch-override
-      alpha: define get_cycles macro for arch-override
-      powerpc: define get_cycles macro for arch-override
-      timekeeping: Add raw clock fallback for random_get_entropy()
-      m68k: use fallback for random_get_entropy() instead of zero
-      riscv: use fallback for random_get_entropy() instead of zero
-      mips: use fallback for random_get_entropy() instead of just c0 random
-      arm: use fallback for random_get_entropy() instead of zero
-      nios2: use fallback for random_get_entropy() instead of zero
-      x86/tsc: Use fallback for random_get_entropy() instead of zero
-      um: use fallback for random_get_entropy() instead of zero
-      sparc: use fallback for random_get_entropy() instead of zero
-      xtensa: use fallback for random_get_entropy() instead of zero
-      random: insist on random_get_entropy() existing in order to simplify
-      random: do not use batches when !crng_ready()
-      random: use first 128 bits of input as fast init
-      random: do not pretend to handle premature next security model
-      random: order timer entropy functions below interrupt functions
-      random: do not use input pool from hard IRQs
-      random: help compiler out with fast_mix() by using simpler arguments
-      siphash: use one source of truth for siphash permutations
-      random: use symbolic constants for crng_init states
-      random: avoid initializing twice in credit race
-      random: move initialization out of reseeding hot path
-      random: remove ratelimiting for in-kernel unseeded randomness
-      random: use proper jiffies comparison macro
-      random: handle latent entropy and command line from random_init()
-      random: credit architectural init the exact amount
-      random: use static branch for crng_ready()
-      random: remove extern from functions in header
-      random: use proper return types on get_random_{int,long}_wait()
-      random: make consistent use of buf and len
-      random: move initialization functions out of hot pages
-      random: move randomize_page() into mm where it belongs
-      random: unify batched entropy implementations
-      random: check for signals after page of pool writes
-
-Jens Axboe (3):
-      random: convert to using fops->read_iter()
-      random: convert to using fops->write_iter()
-      random: wire up fops->splice_{read,write}_iter()
-
-Lorenzo Pieralisi (1):
-      ACPI: sysfs: Fix BERT error region memory mapping
-
-Magnus Karlsson (1):
-      ice: fix crash at allocation failure
-
-Mark Brown (1):
-      random: document add_hwgenerator_randomness() with other input functions
-
-Paolo Bonzini (1):
-      KVM: x86/mmu: fix NULL pointer dereference on guest INVPCID
-
-Schspa Shi (1):
-      random: fix typo in comments
-
-Sebastian Andrzej Siewior (1):
-      random: remove unused irq_flags argument from add_interrupt_randomness()
----
-Documentation/admin-guide/kernel-parameters.txt |    6 +
- Documentation/admin-guide/sysctl/kernel.rst     |   22 +-
- MAINTAINERS                                     |    2 +
- Makefile                                        |    2 +-
- arch/alpha/include/asm/timex.h                  |    1 +
- arch/arm/crypto/Makefile                        |    4 +-
- arch/arm/crypto/blake2s-core.S                  |    8 +-
- arch/arm/crypto/blake2s-glue.c                  |   73 +-
- arch/arm/crypto/blake2s-shash.c                 |   75 +
- arch/arm/include/asm/timex.h                    |    1 +
- arch/ia64/include/asm/timex.h                   |    1 +
- arch/m68k/include/asm/timex.h                   |    2 +-
- arch/mips/include/asm/timex.h                   |   17 +-
- arch/nios2/include/asm/timex.h                  |    3 +
- arch/parisc/include/asm/timex.h                 |    3 +-
- arch/powerpc/include/asm/timex.h                |    1 +
- arch/riscv/include/asm/timex.h                  |    2 +-
- arch/s390/include/asm/timex.h                   |    1 +
- arch/sparc/include/asm/timex_32.h               |    4 +-
- arch/um/include/asm/timex.h                     |    9 +-
- arch/x86/crypto/Makefile                        |    4 +-
- arch/x86/crypto/blake2s-glue.c                  |   68 +-
- arch/x86/crypto/blake2s-shash.c                 |   77 +
- arch/x86/include/asm/timex.h                    |    9 +
- arch/x86/include/asm/tsc.h                      |    7 +-
- arch/x86/kernel/cpu/mshyperv.c                  |    3 +-
- arch/x86/kvm/mmu/mmu.c                          |    6 +-
- arch/xtensa/include/asm/timex.h                 |    6 +-
- crypto/Kconfig                                  |    3 +-
- crypto/blake2s_generic.c                        |    4 +-
- crypto/drbg.c                                   |   17 +-
- drivers/acpi/sysfs.c                            |   25 +-
- drivers/char/Kconfig                            |    3 +-
- drivers/char/hw_random/core.c                   |    1 +
- drivers/char/random.c                           | 3009 +++++++++--------------
- drivers/hid/amd-sfh-hid/amd_sfh_client.c        |   11 +
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.c          |    7 +
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.h          |    4 +
- drivers/hv/hyperv_vmbus.h                       |    1 -
- drivers/hv/vmbus_drv.c                          |    5 +-
- drivers/net/Kconfig                             |    1 -
- drivers/net/ethernet/intel/ice/ice_xsk.c        |    2 +-
- drivers/net/wireguard/noise.c                   |   45 +-
- include/crypto/blake2s.h                        |    3 -
- include/crypto/chacha.h                         |   15 +-
- include/crypto/drbg.h                           |    2 +-
- include/crypto/internal/blake2s.h               |   46 +-
- include/linux/cpuhotplug.h                      |    2 +
- include/linux/hw_random.h                       |    2 -
- include/linux/irqdesc.h                         |    1 -
- include/linux/mm.h                              |    1 +
- include/linux/prandom.h                         |   23 +-
- include/linux/random.h                          |  100 +-
- include/linux/siphash.h                         |   28 +
- include/linux/timex.h                           |   10 +-
- include/trace/events/random.h                   |  247 --
- init/main.c                                     |   13 +-
- kernel/cpu.c                                    |   11 +
- kernel/irq/handle.c                             |   10 +-
- kernel/irq/manage.c                             |    6 -
- kernel/time/timekeeping.c                       |   15 +
- lib/Kconfig.debug                               |    3 +-
- lib/crypto/Kconfig                              |   23 +-
- lib/crypto/Makefile                             |    9 +-
- lib/crypto/blake2s-generic.c                    |    6 +-
- lib/crypto/blake2s-selftest.c                   |   31 -
- lib/crypto/blake2s.c                            |   47 +-
- lib/random32.c                                  |   16 +-
- lib/sha1.c                                      |   95 +-
- lib/siphash.c                                   |   32 +-
- lib/vsprintf.c                                  |   10 +-
- localversion-rt                                 |    2 +-
- mm/util.c                                       |   32 +
- sound/pci/ctxfi/ctatc.c                         |    2 +
- sound/pci/ctxfi/cthardware.h                    |    3 +-
- 75 files changed, 1684 insertions(+), 2717 deletions(-)
----
+-- 
+With best wishes
+Dmitry

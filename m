@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26EE453A453
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2B753A463
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352843AbiFALtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 07:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
+        id S1352987AbiFALvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 07:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiFALtb (ORCPT
+        with ESMTP id S1352970AbiFALuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:49:31 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC03B57163
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 04:49:28 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 1 Jun
- 2022 19:49:28 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 1 Jun
- 2022 19:49:26 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <gregkh@linuxfoundation.org>
-CC:     <baihaowen@meizu.com>, <larry.finger@lwfinger.net>,
-        <linux-kernel@vger.kernel.org>, <linux-staging@lists.linux.dev>,
-        <phil@philpotter.co.uk>
-Subject: [PATCH V3] staging: r8188eu: Drop redundant memset overwritten by memcpy
-Date:   Wed, 1 Jun 2022 19:49:24 +0800
-Message-ID: <1654084164-10869-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <Ypc89GXegCft+vEq@kroah.com>
-References: <Ypc89GXegCft+vEq@kroah.com>
+        Wed, 1 Jun 2022 07:50:51 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E69F57163;
+        Wed,  1 Jun 2022 04:50:50 -0700 (PDT)
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 251BoWtW017272;
+        Wed, 1 Jun 2022 20:50:33 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 251BoWtW017272
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1654084233;
+        bh=NATsHGCbKK8PLdAiZ14t0wK1RPAlU5XauGOgv25vz2Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FcxrU9gUfili9Q5SstEgSpxLaaV0nz3bM0Yy8fKMH+6R5J9RfiQpf1/ZY4iK/bACG
+         3Zo4oft8Ri09tR/v9CCnUC2XE7okwtkz6yDTqIu/65BmCH1mI2sYtf1ObBXfQq8NWj
+         v+Hmjv90XiAnPyVNjujZHJMojQedtPzYuFMKfCytuWqRfrmclK5auD2V78EpUYTBWV
+         7d3rt94Jl0LsWysMIZEv34HH3S8k/TQ9/xYum6sK9jxDAq06z7EBp0O1zOzRGkFxZ3
+         stFvI1HjNwnUs+96Oh4rs2l2OJy3B/6Eih4MrlVIOa3+ETT9C4bPn9iG62kK6LiAJR
+         /a2+s4Rm85JvQ==
+X-Nifty-SrcIP: [209.85.214.173]
+Received: by mail-pl1-f173.google.com with SMTP id i1so1561459plg.7;
+        Wed, 01 Jun 2022 04:50:32 -0700 (PDT)
+X-Gm-Message-State: AOAM532y68Wi9imx6VZfx5b9EKrWwYV7LfM8pKvJpGPcd8OWaSFzRKa0
+        Nfdid7wgqDfEOhwqyHTHMXBH4JFFFB1cr/Wa06k=
+X-Google-Smtp-Source: ABdhPJyuQ86Chu9+Z6HG3rMD5E8egdmdsP1qvRPB7VUu7U3nrj9aJIk50Z/W4oqMDRDJ4D05ERPURs1SKzSx1NIG6WY=
+X-Received: by 2002:a17:902:f68f:b0:162:23c6:e61b with SMTP id
+ l15-20020a170902f68f00b0016223c6e61bmr48058326plg.136.1654084232131; Wed, 01
+ Jun 2022 04:50:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <YpdOBmEmkG0AaOX0@debian>
+In-Reply-To: <YpdOBmEmkG0AaOX0@debian>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 1 Jun 2022 20:49:55 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATjJ-n2FM28FvK6iof=DDs073MJ_fDmvgVGymQvRQj_gw@mail.gmail.com>
+Message-ID: <CAK7LNATjJ-n2FM28FvK6iof=DDs073MJ_fDmvgVGymQvRQj_gw@mail.gmail.com>
+Subject: Re: mainline build failure due to f292d875d0dc ("modpost: extract
+ symbol versions from *.cmd files")
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Nicolas Schier <nicolas@fjasle.eu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The region set by the call to memset is immediately overwritten by the
-subsequent call to memcpy. So we drop redundant memset.
+On Wed, Jun 1, 2022 at 8:31 PM Sudip Mukherjee
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> Hi All,
+>
+> The latest mainline kernel branch fails to build for csky allmodconfig
+> with the error:
+>
+> ._divsi3.o.cmd: No such file or directory
+> make[1]: *** [scripts/Makefile.modpost:59: vmlinux.symvers] Error 1
+> make: *** [Makefile:1160: vmlinux] Error 2
+>
+> git bisect pointed to f292d875d0dc ("modpost: extract symbol versions from *.cmd files")
+>
+> I will be happy to test any patch or provide any extra log if needed.
+>
+>
+> --
+> Regards
+> Sudip
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
-V1->V2: change title for unique subjects.
-V2->V3: merge 1 patch with both changes.
+A patch exists, and is already queued up in linux-next.
 
- drivers/staging/r8188eu/core/rtw_ioctl_set.c | 1 -
- drivers/staging/r8188eu/core/rtw_mlme.c      | 2 --
- 2 files changed, 3 deletions(-)
+https://patchwork.kernel.org/project/linux-kbuild/patch/20220529042318.2630379-1-masahiroy@kernel.org/
 
-diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-index 7ba75f73e47e..17f6bcbeebf4 100644
---- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-+++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-@@ -71,7 +71,6 @@ u8 rtw_do_join(struct adapter *padapter)
- 
- 				pibss = padapter->registrypriv.dev_network.MacAddress;
- 
--				memset(&pdev_network->Ssid, 0, sizeof(struct ndis_802_11_ssid));
- 				memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(struct ndis_802_11_ssid));
- 
- 				rtw_update_registrypriv_dev_network(padapter);
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index 5a815642c3f6..56c8bd5f4c60 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -676,7 +676,6 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
- 
- 					_clr_fwstate_(pmlmepriv, _FW_UNDER_SURVEY);
- 
--					memset(&pdev_network->Ssid, 0, sizeof(struct ndis_802_11_ssid));
- 					memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(struct ndis_802_11_ssid));
- 
- 					rtw_update_registrypriv_dev_network(adapter);
-@@ -1253,7 +1252,6 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
- 
- 			memcpy(pdev_network, &tgt_network->network, get_wlan_bssid_ex_sz(&tgt_network->network));
- 
--			memset(&pdev_network->Ssid, 0, sizeof(struct ndis_802_11_ssid));
- 			memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(struct ndis_802_11_ssid));
- 
- 			rtw_update_registrypriv_dev_network(adapter);
+I will send a pull request this week.
+
+
 -- 
-2.7.4
-
+Best Regards
+Masahiro Yamada

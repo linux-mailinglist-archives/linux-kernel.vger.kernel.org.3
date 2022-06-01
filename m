@@ -2,91 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C575D53A385
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E1153A38B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352466AbiFALD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 07:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
+        id S1350337AbiFALGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 07:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352237AbiFALD5 (ORCPT
+        with ESMTP id S1345782AbiFALGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:03:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2019181486
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 04:03:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654081435;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tgtl50+cOg4p6sNpA44wE53+ToNHu8zqxjdgIaqTCDg=;
-        b=aAhzwjTkKYodb0zmFBJvBoaDvEd5XIdcvFcPfxRwrpBFE9vDMjncl+Ld5oqPrB93bJTrzh
-        DSyrEkhZoof4v+wZw4iceOpMYvZevD9qeJ+RE9ckllgiGtV/p0+uWnvS4EISnYDyJc9NR1
-        UNZUPpngvxeLqTzcL9P7JlR1NJfg20I=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-259-LjKGJvO4NOKKPqW9uYDcng-1; Wed, 01 Jun 2022 07:03:54 -0400
-X-MC-Unique: LjKGJvO4NOKKPqW9uYDcng-1
-Received: by mail-wm1-f71.google.com with SMTP id c187-20020a1c35c4000000b003970013833aso752115wma.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 04:03:53 -0700 (PDT)
+        Wed, 1 Jun 2022 07:06:07 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EB3880C1
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 04:06:05 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id fd25so1672806edb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 04:06:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zmUkWzeg4eeXLMNd3lfhrjjKEKVUaxqNRQUp3Ckt2Z4=;
+        b=qocjSTMUZH9T2IQW3/obAwuW9pk070LbB8GfsSOVnRtrD9fopdPRvwtZ/JfC2x2L4J
+         s5/HxRxzngbaSRGdruiCod/zCu5dVCoKc7Njqlylpz7FZev1Vq0oO8Ob0TDA/S9e0fyw
+         jPZaEZBDl9f10zp324+0LbUUd6G1CNhCgcyGBGJtqyelHCqjhjGgm7MobkfDjJGItaHW
+         0cVEkxV9zabA0mHtS1vCKHvyUb173mglxwrPfO/75smUNJEHUn4ROWpiZ5pwtUKt5Oik
+         hd6Zz89OHoU3KlvkUQe5g9svtxh4Al9HXjzYeelvrQKXepE9z3xt6+d99zSfaPQzBsCI
+         BOMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Tgtl50+cOg4p6sNpA44wE53+ToNHu8zqxjdgIaqTCDg=;
-        b=oJ6aay+X5LpDyZIysmOvFs3oeWnotNE1kW9GR99g0CeIz7VVja9xkcHMzChLkB0cO5
-         5lXfXD9oiqmCU+C09swwEPaaDPFbedW38GCw5sQZZwytGrEGLcmJ851QWVk/DH3jaD9D
-         1dwRlx7zbxrsuiGT8l8BhhCEbivcrXAp9MEaZk5GNpnIcYdLMa/qtcvGvpVZ+9SOBdNS
-         KUXvXoK0MzMjhJj9tTl1qD5+mptJf64kz7CDohFtRUE7l+2Nu92MU1d1IQrEwD65Fpkv
-         dWtG+6YZP1x14OtiS+Si29iGomD2sgXKJ0V8EaWbqKUPZHwgK5VIQzDJei5hDFVrCr+T
-         A02A==
-X-Gm-Message-State: AOAM533R8JAfC1oAJaTQK+snlJfQLzNtFysdfxyzVBB2lEodmCALLe40
-        InQ55a+0VK+4ArNB6Xoo+cf7L+jDZICj3k6QM2UN2xK84iwZ/h3KwtPC84CIPwTCoJrrvMHOgNN
-        LKJTGxMVyg6J94hA36tjac1r0
-X-Received: by 2002:a5d:5145:0:b0:210:55c:4790 with SMTP id u5-20020a5d5145000000b00210055c4790mr26849898wrt.714.1654081432924;
-        Wed, 01 Jun 2022 04:03:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzgKD3kkMJ5yY3Qc/mDpdOAlutZgyiyXLasWfkgGa3quLXJOeNWzJU9s8z4oSyg2SRWcOUapA==
-X-Received: by 2002:a5d:5145:0:b0:210:55c:4790 with SMTP id u5-20020a5d5145000000b00210055c4790mr26849873wrt.714.1654081432646;
-        Wed, 01 Jun 2022 04:03:52 -0700 (PDT)
-Received: from redhat.com ([2.52.157.68])
-        by smtp.gmail.com with ESMTPSA id q15-20020adff50f000000b002102e6b757csm1518657wro.90.2022.06.01.04.03.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 04:03:51 -0700 (PDT)
-Date:   Wed, 1 Jun 2022 07:03:44 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        netdev@vger.kernel.org, martinh@xilinx.com,
-        Stefano Garzarella <sgarzare@redhat.com>, martinpo@xilinx.com,
-        lvivier@redhat.com, pabloc@xilinx.com,
-        Parav Pandit <parav@nvidia.com>, Eli Cohen <elic@nvidia.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>, lulu@redhat.com,
-        Zhu Lingshan <lingshan.zhu@intel.com>, Piotr.Uminski@intel.com,
-        Si-Wei Liu <si-wei.liu@oracle.com>, ecree.xilinx@gmail.com,
-        gautam.dawar@amd.com, habetsm.xilinx@gmail.com,
-        tanuj.kamde@amd.com, hanand@xilinx.com, dinang@xilinx.com,
-        Longpeng <longpeng2@huawei.com>
-Subject: Re: [PATCH v4 3/4] vhost-vdpa: uAPI to stop the device
-Message-ID: <20220601070303-mutt-send-email-mst@kernel.org>
-References: <20220526124338.36247-1-eperezma@redhat.com>
- <20220526124338.36247-4-eperezma@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zmUkWzeg4eeXLMNd3lfhrjjKEKVUaxqNRQUp3Ckt2Z4=;
+        b=g+vjefyY8bvjzvnKVr9wrm5CwmBam49X1x/1X4nenROf3KukuRh3ynfryOzwJpyBGA
+         IWhqgmiMhOx5pZ3f1B1wgpE1lvp5TMHMJqzPSfAIQ83FglZMrGKf9c+8KzdhCYMDZ5d7
+         wsb8hXPt2+t14IcS1w+s5J7OpmlvVNf7iqwCOjGoXjLvChjpRsYpYBZXEM3XUUqdA1eF
+         ZnthT8Dm9JqaXnyPTMMy9lpXeqTvpSJdN60gJLbfbdP23iZgA08Ku+5bt5DwoPYS3C15
+         TuVq+7yZH+6tNKIsfLiulBpLnb0QctIDhHMlGL72QAEOW95CeqsFhFrxA13xlc7iyT4g
+         MpOA==
+X-Gm-Message-State: AOAM532iWiqztJijr/12BBf+BKdFA25RRFS2Yw5/Mn5mSXruRTPLawZ+
+        OocGapLiWp/un+d88jAtzHh3rQ==
+X-Google-Smtp-Source: ABdhPJxGZfvPCA32qvZADlQLYkYuCMi7rvAeDhPjUHEigzmSsilnTNVK6tD84n4NNi8pnBGkqXJV0Q==
+X-Received: by 2002:a05:6402:2553:b0:42a:ef31:4444 with SMTP id l19-20020a056402255300b0042aef314444mr69111155edb.46.1654081564014;
+        Wed, 01 Jun 2022 04:06:04 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id bk2-20020a170906b0c200b006fef557bb7asm572545ejb.80.2022.06.01.04.06.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 04:06:03 -0700 (PDT)
+Message-ID: <3389a816-0f51-ab83-1026-2201017a2f12@linaro.org>
+Date:   Wed, 1 Jun 2022 13:06:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220526124338.36247-4-eperezma@redhat.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 08/11] ARM: dts: qcom: sdx65-mtp: Increase the vmalloc
+ size
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wim@linux-watchdog.org,
+        linux@roeck-us.net
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        manivannan.sadhasivam@linaro.org
+References: <1654080312-5408-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1654080312-5408-9-git-send-email-quic_rohiagar@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1654080312-5408-9-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,80 +80,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 02:43:37PM +0200, Eugenio Pérez wrote:
-> The ioctl adds support for stop the device from userspace.
+On 01/06/2022 12:45, Rohit Agarwal wrote:
+> Increase the size of vmalloc using the bootargs in sdx65
+> mtp board.
+> It is failing to alloacte the size needed for firmware and
+> giving the error logs due to actual vmalloc region lesser than requested.
 > 
-> Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
+> cat /proc/meminfo shows the size of VmallocTotal as 245760 kB.
+> 
+> [ 10.980356] vmap allocation for size 268439552 failed: use vmalloc=<size> to increase size
+> [ 10.980505] qcom_q6v5_pas 4080000.remoteproc: unable to map memory region: 0x90800000+10000000
+> [ 10.988542] In adsp alloc memory: adsp_probe 482
+> [ 10.988592] remoteproc remoteproc0: releasing 4080000.remoteproc
+> [ 11.001598] qcom_q6v5_pas: probe of 4080000.remoteproc failed with error -16
+> 
+> Thus, increasing the size to 300000000 as modem is not the only one using vmalloc region.
+> 
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
 > ---
->  drivers/vhost/vdpa.c       | 18 ++++++++++++++++++
->  include/uapi/linux/vhost.h | 14 ++++++++++++++
->  2 files changed, 32 insertions(+)
+>  arch/arm/boot/dts/qcom-sdx65-mtp.dts | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 32713db5831d..d1d19555c4b7 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -478,6 +478,21 @@ static long vhost_vdpa_get_vqs_count(struct vhost_vdpa *v, u32 __user *argp)
->  	return 0;
->  }
+> diff --git a/arch/arm/boot/dts/qcom-sdx65-mtp.dts b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+> index 85ea02d..966385f 100644
+> --- a/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+> +++ b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+> @@ -21,6 +21,7 @@
 >  
-> +static long vhost_vdpa_stop(struct vhost_vdpa *v, u32 __user *argp)
-> +{
-> +	struct vdpa_device *vdpa = v->vdpa;
-> +	const struct vdpa_config_ops *ops = vdpa->config;
-> +	int stop;
-> +
-> +	if (!ops->stop)
-> +		return -EOPNOTSUPP;
-> +
-> +	if (copy_from_user(&stop, argp, sizeof(stop)))
-> +		return -EFAULT;
-> +
-> +	return ops->stop(vdpa, stop);
-> +}
-> +
->  static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned int cmd,
->  				   void __user *argp)
->  {
-> @@ -650,6 +665,9 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
->  	case VHOST_VDPA_GET_VQS_COUNT:
->  		r = vhost_vdpa_get_vqs_count(v, argp);
->  		break;
-> +	case VHOST_VDPA_STOP:
-> +		r = vhost_vdpa_stop(v, argp);
-> +		break;
->  	default:
->  		r = vhost_dev_ioctl(&v->vdev, cmd, argp);
->  		if (r == -ENOIOCTLCMD)
-> diff --git a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h
-> index cab645d4a645..c7e47b29bf61 100644
-> --- a/include/uapi/linux/vhost.h
-> +++ b/include/uapi/linux/vhost.h
-> @@ -171,4 +171,18 @@
->  #define VHOST_VDPA_SET_GROUP_ASID	_IOW(VHOST_VIRTIO, 0x7C, \
->  					     struct vhost_vring_state)
->  
-> +/* Stop or resume a device so it does not process virtqueue requests anymore
-> + *
-> + * After the return of ioctl with stop != 0, the device must finish any
-> + * pending operations like in flight requests. It must also preserve all
-> + * the necessary state (the virtqueue vring base plus the possible device
-> + * specific states) that is required for restoring in the future. The
-> + * device must not change its configuration after that point.
-> + *
-> + * After the return of ioctl with stop == 0, the device can continue
-> + * processing buffers as long as typical conditions are met (vq is enabled,
-> + * DRIVER_OK status bit is enabled, etc).
-> + */
-> +#define VHOST_VDPA_STOP			_IOW(VHOST_VIRTIO, 0x7D, int)
-> +
->  #endif
+>  	chosen {
+>  		stdout-path = "serial0:115200n8";
+> +		bootargs = "vmalloc=300000000";
 
-I wonder how does this interact with the admin vq idea.
-I.e. if we stop all VQs then apparently admin vq can't
-work either ...
-Thoughts?
+I understand that issue comes from SoC-related driver but this is not a
+property of the hardware. This could be added by bootloader if needed,
+but in regular case this is a system setup parameter, so it does not
+belong to DTS.
 
-> -- 
-> 2.31.1
-
+Best regards,
+Krzysztof

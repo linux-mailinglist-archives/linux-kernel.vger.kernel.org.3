@@ -2,135 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FD0539FFE
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BB553A006
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351009AbiFAJAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 05:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        id S1350917AbiFAJEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 05:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351151AbiFAJAa (ORCPT
+        with ESMTP id S244708AbiFAJEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 05:00:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97F175FF2F
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 02:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654074028;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=47e42rnIYaU6sJqvrI7HnnRd2dfzcghd2QGgfknq5Gw=;
-        b=B4GOV2DVy+ciGbiEMpmzQvXARh+SkwiEXKF6Ydh8qPq0k0f7/ecGcFzI7uzS4fEItMxP++
-        nF59PnZ2sJsXxDaeUzde4iHE0df2W1Zt9gLMsC9bCdJ3oQ35UkrTZ7ANRx/SQCSML2jtRG
-        rkMXdhlcF0zVYqx/1TXhmDljKdxrDH8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-633-_UUTAGXbNdOvBnu29rQLKA-1; Wed, 01 Jun 2022 05:00:26 -0400
-X-MC-Unique: _UUTAGXbNdOvBnu29rQLKA-1
-Received: by mail-wm1-f72.google.com with SMTP id c187-20020a1c35c4000000b003970013833aso616185wma.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 02:00:26 -0700 (PDT)
+        Wed, 1 Jun 2022 05:04:50 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F6B8E1BF;
+        Wed,  1 Jun 2022 02:04:48 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id k19so1383830wrd.8;
+        Wed, 01 Jun 2022 02:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=wtRkBI0Hmgo17iTt9HbMbkovhjGDzKXn4k4Ag8EmbDs=;
+        b=T9Jr30mV5o1fZ7eMzur41l8EhcmpgIPdBv+q33WhNs2fEKVUPIB5j5nWZrYp2WrO86
+         UfGGszHKPJ5yYdbRLC57TflFi0LD2KPDyC3B27J3jDCJr5FJ2oh54Qvqh4Yhjk22T+xk
+         opbwMtMlp729F4Eicp066HeW5L8woINBY7uQHHUpBL1eY4sdEZeS/ImdWD9n6H+2H/nM
+         204OfFqY4OPRohx8Qsa8vp7P3/RB/yh4r70xZVHCLiO8io1JxvKJUHQyyd9JjS7FwAeo
+         bEjEM7cqZQDkTjuuj0QFlHdGF4ajthX4RF2zn3M0uXbkixzvAdAtgoOQd+1/RMHrloy9
+         r36A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=47e42rnIYaU6sJqvrI7HnnRd2dfzcghd2QGgfknq5Gw=;
-        b=me4ojuXstbE6TsAC8eHGstpN7K2aar3IbJRk7n8YkS2mMFTGwBMEvhgGEjfNC70qGY
-         L/LkHaiC9rI8whvwy9OiwtDZTbdsgr+9/lxkkJXhmqSgemYyyU8JvMjTSgAnBlZLOG4R
-         3oAWCJRuDVWlSZlbW2Jx0cd2YB7aife73djALOIpWPcCM/mY0SaIV61bQKeilqHawO9Z
-         vLfrWe1O2yR2HxHJj8OIeIuhAQ/Ky1ilAUfIRuFiWQfDsv+qHDPtzULbPmiiI2ccHdmT
-         ahWnCjeOEwGVYPDJjoUJT0cIPKpiyJE7ZJa1z4WhaH1WVaAFPwdaoO7t5HW8cUlyi7eT
-         IpIg==
-X-Gm-Message-State: AOAM532DUQmgj5W+J1w1sAyU8ukbIVBe0a99Z62CcJy37/+TvGbJfk4i
-        +Mk8lS1ucvLxVM6J3kFNziPaJu2z2MeMDF6bts1wCRwjY96f0q9s582nfneomVSZIIeaF/EapSx
-        RkQoQrQODuD+pHQsgPygguYUk
-X-Received: by 2002:a5d:6d0a:0:b0:20f:ecc9:2819 with SMTP id e10-20020a5d6d0a000000b0020fecc92819mr34366327wrq.666.1654074025593;
-        Wed, 01 Jun 2022 02:00:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwJFJMguj1HytJIpfb+YPwV4xImpt7pcmIEp7Y330tAofv7dZyg6rYBGjWbJBVTyfbKbEYsog==
-X-Received: by 2002:a5d:6d0a:0:b0:20f:ecc9:2819 with SMTP id e10-20020a5d6d0a000000b0020fecc92819mr34366292wrq.666.1654074025277;
-        Wed, 01 Jun 2022 02:00:25 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:2600:951d:63df:c091:3b45? (p200300cbc7052600951d63dfc0913b45.dip0.t-ipconnect.de. [2003:cb:c705:2600:951d:63df:c091:3b45])
-        by smtp.gmail.com with ESMTPSA id h1-20020a056000000100b0020c5253d8casm992951wrx.22.2022.06.01.02.00.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 02:00:24 -0700 (PDT)
-Message-ID: <b9a0eb0a-ce27-5306-a12f-79d196445254@redhat.com>
-Date:   Wed, 1 Jun 2022 11:00:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>, marcelo.cerri@canonical.com,
-        tim.gardner@canonical.com, khalid.elmously@canonical.com,
-        philip.cox@canonical.com, x86@kernel.org, linux-mm@kvack.org,
-        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220517153444.11195-1-kirill.shutemov@linux.intel.com>
- <20220517153444.11195-4-kirill.shutemov@linux.intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCHv6 03/15] efi/x86: Get full memory map in allocate_e820()
-In-Reply-To: <20220517153444.11195-4-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=wtRkBI0Hmgo17iTt9HbMbkovhjGDzKXn4k4Ag8EmbDs=;
+        b=72SoNtOMLNJUXG5GZlN3c6DGZF/YJH2KCF2XXekT4oyJKZbFUEzMaBvOqBqx+aTUMA
+         aeuMll9CEv71Us2EdTsFfmJezFiw3ircEsKAhZgjijo7ksGb/BkUUrnLSchQlRq8wCLX
+         okpK+LxWDR0MSrSowQL9RTXzX6ZD9+KfpyHwxxSfU9gMjYLzp+D5+w3RP+v716Zldi2g
+         wmFapNX0lTSPsS2pLf1Qf5N5zkOKDPIOyNceH2YqksI961CyT2LhPBXHLavu9HEhkyM2
+         oGZK7ZVGY5jmJanSL/pLDSZZHA79LFQfJx+NuS+s7eeyJFQteg+spmtzo0358V/qiTDF
+         RSmQ==
+X-Gm-Message-State: AOAM531/1PrsvsmqEkgDBSqh1QudErGkFLvSklTv2S4/pIdo5quH+3Cl
+        BTjShS7g9xqJWzfta2jw1Qs=
+X-Google-Smtp-Source: ABdhPJzw4+VssDVUfhNUnSXMWr3ktT/G2G5DrywiGpRcQRiNV7zxmOhjBFlm4Dremch2DVHG/302TQ==
+X-Received: by 2002:a05:6000:1812:b0:210:2eb1:4606 with SMTP id m18-20020a056000181200b002102eb14606mr14551109wrh.593.1654074287103;
+        Wed, 01 Jun 2022 02:04:47 -0700 (PDT)
+Received: from felia.fritz.box (200116b82620c00028af88788fa7d286.dip.versatel-1u1.de. [2001:16b8:2620:c000:28af:8878:8fa7:d286])
+        by smtp.gmail.com with ESMTPSA id i23-20020a1c5417000000b00394708a3d7dsm4528458wmb.15.2022.06.01.02.04.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 02:04:46 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: update file entries after arm multi-platform rework
+Date:   Wed,  1 Jun 2022 11:04:29 +0200
+Message-Id: <20220601090429.4697-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.05.22 17:34, Kirill A. Shutemov wrote:
-> Currently allocate_e820() only interested in the size of map and size of
-> memory descriptor to determine how many e820 entries the kernel needs.
-> 
-> UEFI Specification version 2.9 introduces a new memory type --
-> unaccepted memory. To track unaccepted memory kernel needs to allocate
-> a bitmap. The size of the bitmap is dependent on the maximum physical
-> address present in the system. A full memory map is required to find
-> the maximum address.
-> 
-> Modify allocate_e820() to get a full memory map.
+In the work of Arnd's arm multi-platform support, various files in arch/arm
+are moved:
 
-Usually we use max_pfn, if we want to know the maximum pfn that's
-present in the system (well, IIRC, excluding hotunplug).
+  Files in arch/arm/mach-ep93xx/include/mach/ are made local:
+    arch/arm/{mach-ep93xx/include/mach/uncompress.h => boot/compressed/misc-ep93xx.h}
+    arch/arm/mach-ep93xx/{include/mach => }/ep93xx-regs.h
+    arch/arm/mach-ep93xx/{include/mach => }/mach/irqs.h
 
-How exactly will this (different?) maximum from UEFI for the bitmap
-interact with
+  Files in arch/arm/mach-vexpress/ are moved to mach-versatile.
 
-max_pfn = e820__end_of_ram_pfn();
+  Files in arch/arm/plat-omap/ are split into arch/arm/mach-omap{1,2}/.
 
-from e820 in existing code
+  Files in arch/arm/mach-pxa/include/mach/ are made local.
 
-?
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about some
+broken references.
 
+Correct all those references accordingly after this refactoring.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Arnd, please pick this minor non-urgent clean-up patch.
+
+ MAINTAINERS | 24 ++++++++----------------
+ 1 file changed, 8 insertions(+), 16 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a8eee9d2aea5..1d0249e2acfc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1952,8 +1952,8 @@ M:	Hartley Sweeten <hsweeten@visionengravers.com>
+ M:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
++F:	arch/arm/boot/compressed/misc-ep93xx.h
+ F:	arch/arm/mach-ep93xx/
+-F:	arch/arm/mach-ep93xx/include/mach/
+ 
+ ARM/CLKDEV SUPPORT
+ M:	Russell King <linux@armlinux.org.uk>
+@@ -2114,8 +2114,7 @@ M:	Philipp Zabel <philipp.zabel@gmail.com>
+ M:	Paul Parsons <lost.distance@yahoo.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+-F:	arch/arm/mach-pxa/hx4700.c
+-F:	arch/arm/mach-pxa/include/mach/hx4700.h
++F:	arch/arm/mach-pxa/hx4700.[ch]
+ F:	sound/soc/pxa/hx4700.c
+ 
+ ARM/HISILICON SOC SUPPORT
+@@ -2508,14 +2507,11 @@ M:	Marek Vasut <marek.vasut@gmail.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+ W:	http://hackndev.com
+-F:	arch/arm/mach-pxa/include/mach/palmld.h
+-F:	arch/arm/mach-pxa/include/mach/palmtc.h
+-F:	arch/arm/mach-pxa/include/mach/palmtx.h
+-F:	arch/arm/mach-pxa/palmld.c
++F:	arch/arm/mach-pxa/palmld.*
+ F:	arch/arm/mach-pxa/palmt5.*
+-F:	arch/arm/mach-pxa/palmtc.c
++F:	arch/arm/mach-pxa/palmtc.*
+ F:	arch/arm/mach-pxa/palmte2.*
+-F:	arch/arm/mach-pxa/palmtx.c
++F:	arch/arm/mach-pxa/palmtx.*
+ 
+ ARM/PALMZ72 SUPPORT
+ M:	Sergey Lapin <slapin@ossfans.org>
+@@ -2968,7 +2964,7 @@ S:	Maintained
+ F:	*/*/*/vexpress*
+ F:	*/*/vexpress*
+ F:	arch/arm/boot/dts/vexpress*
+-F:	arch/arm/mach-vexpress/
++F:	arch/arm/mach-versatile/
+ F:	arch/arm64/boot/dts/arm/
+ F:	drivers/clk/versatile/clk-vexpress-osc.c
+ F:	drivers/clocksource/timer-versatile.c
+@@ -2985,8 +2981,7 @@ ARM/VOIPAC PXA270 SUPPORT
+ M:	Marek Vasut <marek.vasut@gmail.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+-F:	arch/arm/mach-pxa/include/mach/vpac270.h
+-F:	arch/arm/mach-pxa/vpac270.c
++F:	arch/arm/mach-pxa/vpac270*
+ 
+ ARM/VT8500 ARM ARCHITECTURE
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+@@ -3009,8 +3004,7 @@ ARM/ZIPIT Z2 SUPPORT
+ M:	Marek Vasut <marek.vasut@gmail.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+-F:	arch/arm/mach-pxa/include/mach/z2.h
+-F:	arch/arm/mach-pxa/z2.c
++F:	arch/arm/mach-pxa/z2.[ch]
+ 
+ ARM/ZYNQ ARCHITECTURE
+ M:	Michal Simek <michal.simek@xilinx.com>
+@@ -14554,7 +14548,6 @@ Q:	http://patchwork.kernel.org/project/linux-omap/list/
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
+ F:	arch/arm/configs/omap1_defconfig
+ F:	arch/arm/mach-omap1/
+-F:	arch/arm/plat-omap/
+ F:	drivers/i2c/busses/i2c-omap.c
+ F:	include/linux/platform_data/ams-delta-fiq.h
+ F:	include/linux/platform_data/i2c-omap.h
+@@ -14569,7 +14562,6 @@ Q:	http://patchwork.kernel.org/project/linux-omap/list/
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
+ F:	arch/arm/configs/omap2plus_defconfig
+ F:	arch/arm/mach-omap2/
+-F:	arch/arm/plat-omap/
+ F:	drivers/bus/ti-sysc.c
+ F:	drivers/i2c/busses/i2c-omap.c
+ F:	drivers/irqchip/irq-omap-intc.c
 -- 
-Thanks,
-
-David / dhildenb
+2.17.1
 

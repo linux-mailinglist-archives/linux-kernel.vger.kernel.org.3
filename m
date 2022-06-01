@@ -2,171 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0861A53A511
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 14:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE6753A576
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 14:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352893AbiFAMck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 08:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
+        id S1353088AbiFAMsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 08:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351258AbiFAMcj (ORCPT
+        with ESMTP id S238006AbiFAMso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 08:32:39 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900BB3FD80
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 05:32:37 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so6076328pjl.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 05:32:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=aNiEaNz3PE8EusgnD+3ibkIGrbwL5BaMxt0546m/AT0=;
-        b=7LFoWcKWkG9OxI3/dLi7p9o3QifvcD7DXsD+OPVitSZbZ+T2UyHOHk5v3bBfRhyRZo
-         hXpFPnPNnifxYROZmf3HvRaSmMING8uX8pqc3yvviDrLbqj5V6FlhErC7FjfPZapbhde
-         6ggTFVVuFNQZTWcWhPU01mptOwUELhAqHQGdUM7hRUyhoqdDu/gjAUymuJrqDrQRSjPP
-         ej1GZRJm5JIMAHm39fCbQzPs4+F5GJjYIDd2agQlmkoXBjv/ibFeJw9rYjMUmO5Q/VD8
-         Pyck5Ea9JibWRUnR3Ndo5h7x2xcGg0PQ+3On5OKwCanHoRq+R6xZwdOOsWq+zfya1VaW
-         Nwag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=aNiEaNz3PE8EusgnD+3ibkIGrbwL5BaMxt0546m/AT0=;
-        b=mkOLFdLnjHx0SobsK4BrbeXMpfcemelIIs75qcbjj8fDT9JSiJadK0vRvdAvk+FCae
-         cswpNqsAoV4HBEvViXQMbEePeZDFBQPcwYCB+9jhQHNNrJ8mekhptyzvypP+CPHh8FnI
-         ku5WMe2Vwo/OUHw6ekhdx6TkepjSKZk/cPQkCt5eNkgK6xy8xbOtuaaTLBJaaHUDYE1N
-         zboAK8c3hUuhrbCZcItMwXDfHL4FalOU75MN1qo+NtRyNAu4B7pnIeHJM7Fkqd49bdel
-         mdRx6DSbBtoZXWwYzWt+6zjKM+AI7uF5VoGSMoMSECLdwUJRw9H7Eny9oTRrfOwTTtFK
-         PsBw==
-X-Gm-Message-State: AOAM530qZHpisbiSOYO+n+GxT7VkEhvnLyncYMqAgFfPB13iDheFVF50
-        b9E1Ngac14ga26UZ99Zk6n+dzA==
-X-Google-Smtp-Source: ABdhPJwUKBFlsa9ecDKitfTCWR3Frt6/fJqwij4Dl0w7nYOx8kQQEFrF1dIIZ7O90+SsdC/CYwQa3g==
-X-Received: by 2002:a17:90a:d58d:b0:1e0:adde:a7f8 with SMTP id v13-20020a17090ad58d00b001e0addea7f8mr34225334pju.74.1654086757120;
-        Wed, 01 Jun 2022 05:32:37 -0700 (PDT)
-Received: from [10.4.211.178] ([139.177.225.231])
-        by smtp.gmail.com with ESMTPSA id e13-20020aa798cd000000b0050dc76281b8sm1438328pfm.146.2022.06.01.05.32.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 05:32:36 -0700 (PDT)
-Message-ID: <08dac681-6877-1323-9394-ffe812c07934@bytedance.com>
-Date:   Wed, 1 Jun 2022 20:32:32 +0800
+        Wed, 1 Jun 2022 08:48:44 -0400
+X-Greylist: delayed 936 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Jun 2022 05:48:41 PDT
+Received: from m1322.mail.163.com (m1322.mail.163.com [220.181.13.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E84C1145A;
+        Wed,  1 Jun 2022 05:48:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=NFBlK
+        pRDQs1uQ60u0KwM3jZAk4g2SpACH5FI7TLBoX0=; b=Y60/vm9hOGmDOw3gFFTyW
+        xkvGhGDCieHMsy2MY9yFPc+PGBU27jRCea5hbIlPTqM/Ft1Q5B5lNDTI1WgQlclz
+        Hj5TAkkk+MEZuOA1BF+pOiHs0H3gjreTSXWHMjclPmm06BGXcjr6xMM9yUEG2yoO
+        +AgDTPIYubFScaVNDoE+cQ=
+Received: from chen45464546$163.com ( [171.221.150.250] ) by
+ ajax-webmail-wmsvr22 (Coremail) ; Wed, 1 Jun 2022 20:32:48 +0800 (CST)
+X-Originating-IP: [171.221.150.250]
+Date:   Wed, 1 Jun 2022 20:32:48 +0800 (CST)
+From:   =?GBK?B?097K9w==?= <chen45464546@163.com>
+To:     "Alexander Duyck" <alexander.duyck@gmail.com>
+Cc:     "Jakub Kicinski" <kuba@kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>
+Subject: Re:Re: [PATCH v2] mm: page_frag: Warn_on when frag_alloc size is
+ bigger than PAGE_SIZE
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <CAKgT0UfQsbAzsJ1e__irHY2xBRevpB9m=FBYDis3C1fMua+Zag@mail.gmail.com>
+References: <20220531081412.22db88cc@kernel.org>
+ <1654011382-2453-1-git-send-email-chen45464546@163.com>
+ <20220531084704.480133fa@kernel.org>
+ <CAKgT0UfQsbAzsJ1e__irHY2xBRevpB9m=FBYDis3C1fMua+Zag@mail.gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-Subject: Re: [PATCH] blk-iocost: fix false positive lagging
-Content-Language: en-US
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     tj@kernel.org, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220526133554.21079-1-zhouchengming@bytedance.com>
- <c76ee7e2-3dfe-b645-c32f-4f061b22ebc9@bytedance.com>
-In-Reply-To: <c76ee7e2-3dfe-b645-c32f-4f061b22ebc9@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <3498989.c69f.1811f41186e.Coremail.chen45464546@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: FsGowAD3tDpwXJdiGSsdAA--.33056W
+X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/xtbBdhUTnmDknYJ7SQABsG
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/28 16:17, Chengming Zhou wrote:
-> On 2022/5/26 21:35, Chengming Zhou wrote:
->> I found many false positive lagging during iocost test.
->>
->> Since iocg->vtime will be advanced to (vnow - margins.target)
->> in hweight_after_donation(), which called throw away excess,
->> the iocg->done_vtime will also be advanced that much.
->>
->>        period_at_vtime  <--period_vtime-->  vnow
->>               |                              |
->>   --------------------------------------------------->
->>         |<--->|
->>      margins.target
->>         |->
->>   vtime, done_vtime
->>
->> If that iocg has some inflight io when vnow, but its done_vtime
->> is before period_at_vtime, ioc_timer_fn() will think it has
->> lagging io, even these io maybe issued just before now.
->>
->> This patch change the condition to check if vdone is before
->> (period_at_vtime - margins.target) instead of period_at_vtime.
->>
->> But there is another problem that this patch doesn't fix.
->> Since vtime will be advanced, we can't check if vtime is
->> after (vnow - MAX_LAGGING_PERIODS * period_vtime) to tell
->> whether this iocg pin lagging for too long.
->>
->> Maybe we can add lagging_periods in iocg to record how many
->> periods this iocg pin lagging, but I don't know when to clean it.
-> 
-> Hello tejun, I add lagging_periods in iocg based on the original patch,
-> to record how many periods this iocg pin lagging. So we can use it to
-> avoid letting cmds which take a very long time pin lagging for too long.
-> 
-> Thanks.
-> 
-> 
-> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-> index 33a11ba971ea..998bb38ffb37 100644
-> --- a/block/blk-iocost.c
-> +++ b/block/blk-iocost.c
-> @@ -541,6 +541,8 @@ struct ioc_gq {
->         u64                             indebt_since;
->         u64                             indelay_since;
-> 
-> +       int                             lagging_periods;
-> +
->         /* this iocg's depth in the hierarchy and ancestors including self */
->         int                             level;
->         struct ioc_gq                   *ancestors[];
-> @@ -2257,10 +2259,13 @@ static void ioc_timer_fn(struct timer_list *timer)
->                 if ((ppm_rthr != MILLION || ppm_wthr != MILLION) &&
->                     !atomic_read(&iocg_to_blkg(iocg)->use_delay) &&
->                     time_after64(vtime, vdone) &&
-> -                   time_after64(vtime, now.vnow -
-> -                                MAX_LAGGING_PERIODS * period_vtime) &&
-> -                   time_before64(vdone, now.vnow - period_vtime))
-> -                       nr_lagging++;
-> +                   time_before64(vdone, ioc->period_at_vtime - ioc->margins.target)) {
-> +                       if (iocg->lagging_periods < MAX_LAGGING_PERIODS) {
-> +                               nr_lagging++;
-> +                               iocg->lagging_periods++;
-> +                       }
-> +               } else if (iocg->lagging_periods)
-> +                       iocg->lagging_periods = 0;
-> 
->                 /*
->                  * Determine absolute usage factoring in in-flight IOs to avoid
-> 
-
-Hi, I tested with this version, previous false laggings are gone. So I wonder
-if I should send v2 for review?
-
-Thanks!
-
-> 
->>
->> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
->> ---
->>  block/blk-iocost.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
->> index 33a11ba971ea..42e301b7527b 100644
->> --- a/block/blk-iocost.c
->> +++ b/block/blk-iocost.c
->> @@ -2259,7 +2259,7 @@ static void ioc_timer_fn(struct timer_list *timer)
->>  		    time_after64(vtime, vdone) &&
->>  		    time_after64(vtime, now.vnow -
->>  				 MAX_LAGGING_PERIODS * period_vtime) &&
->> -		    time_before64(vdone, now.vnow - period_vtime))
->> +		    time_before64(vdone, ioc->period_at_vtime - ioc->margins.target))
->>  			nr_lagging++;
->>  
->>  		/*
+QXQgMjAyMi0wNi0wMSAwMToyODo1OSwgIkFsZXhhbmRlciBEdXljayIgPGFsZXhhbmRlci5kdXlj
+a0BnbWFpbC5jb20+IHdyb3RlOgo+T24gVHVlLCBNYXkgMzEsIDIwMjIgYXQgODo0NyBBTSBKYWt1
+YiBLaWNpbnNraSA8a3ViYUBrZXJuZWwub3JnPiB3cm90ZToKPj4KPj4gT24gVHVlLCAzMSBNYXkg
+MjAyMiAyMzozNjoyMiArMDgwMCBDaGVuIExpbiB3cm90ZToKPj4gPiBBdCAyMDIyLTA1LTMxIDIy
+OjE0OjEyLCAiSmFrdWIgS2ljaW5za2kiIDxrdWJhQGtlcm5lbC5vcmc+IHdyb3RlOgo+PiA+ID5P
+biBUdWUsIDMxIE1heSAyMDIyIDIyOjQxOjEyICswODAwIENoZW4gTGluIHdyb3RlOgo+PiA+ID4+
+IFRoZSBzYW1wbGUgY29kZSBhYm92ZSBjYW5ub3QgY29tcGxldGVseSBzb2x2ZSB0aGUgY3VycmVu
+dCBwcm9ibGVtLgo+PiA+ID4+IEZvciBleGFtcGxlLCB3aGVuIGZyYWdzeiBpcyBncmVhdGVyIHRo
+YW4gUEFHRV9GUkFHX0NBQ0hFX01BWF9TSVpFKDMyNzY4KSwKPj4gPiA+PiBfX3BhZ2VfZnJhZ19j
+YWNoZV9yZWZpbGwgd2lsbCByZXR1cm4gYSBtZW1vcnkgb2Ygb25seSAzMjc2OCBieXRlcywgc28K
+Pj4gPiA+PiBzaG91bGQgd2UgY29udGludWUgdG8gZXhwYW5kIHRoZSBQQUdFX0ZSQUdfQ0FDSEVf
+TUFYX1NJWkU/IE1heWJlIG1vcmUKPj4gPiA+PiB3b3JrIG5lZWRzIHRvIGJlIGRvbmUKPj4gPiA+
+Cj4+ID4gPlJpZ2h0LCBidXQgSSBjYW4gdGhpbmsgb2YgdHdvIGRyaXZlcnMgb2ZmIHRoZSB0b3Ag
+b2YgbXkgaGVhZCB3aGljaCB3aWxsCj4+ID4gPmFsbG9jYXRlIDw9MzJrIGZyYWdzIGJ1dCBub25l
+IHdoaWNoIHdpbGwgYWxsb2NhdGUgbW9yZS4KPj4gPgo+PiA+IEluIGZhY3QsIGl0IGlzIHJhcmUg
+dG8gYXBwbHkgZm9yIG1vcmUgdGhhbiBvbmUgcGFnZSwgc28gaXMgaXQgbmVjZXNzYXJ5IHRvCj4+
+ID4gY2hhbmdlIGl0IHRvIHN1cHBvcnQ/Cj4+Cj4+IEkgZG9uJ3QgcmVhbGx5IGNhcmUgaWYgaXQn
+cyBzdXBwb3J0ZWQgVEJILCBidXQgSSBkaXNsaWtlIGFkZGluZwo+PiBhIGJyYW5jaCB0byB0aGUg
+ZmFzdCBwYXRoIGp1c3QgdG8gY2F0Y2ggb25lIG9yIHR3byBlc290ZXJpYyBiYWQKPj4gY2FsbGVy
+cy4KPj4KPj4gTWF5YmUgeW91IGNhbiB3cmFwIHRoZSBjaGVjayB3aXRoIHNvbWUgZGVidWcgQ09O
+RklHXyBzbyBpdCB3b24ndAo+PiBydW4gb24gcHJvZHVjdGlvbiBidWlsZHM/Cj4KPkFsc28gdGhl
+IGV4YW1wbGUgdXNlZCBoZXJlIHRvIGRlZmluZSB3aGF0IGlzIHRyaWdnZXJpbmcgdGhlIGJlaGF2
+aW9yCj5pcyBzZXJpb3VzbHkgZmxhd2VkLiBUaGUgY29kZSBpdHNlbGYgaXMgbWVhbnQgdG8gYWxs
+b3cgZm9yIG9yZGVyMCBwYWdlCj5yZXVzZSwgYW5kIHRoZSAzMksgcGFnZSB3YXMganVzdCBhbiBv
+cHRpbWl6YXRpb24uIFNvIHRoZSBhc3N1bXB0aW9uCj50aGF0IHlvdSBjb3VsZCByZXF1ZXN0IG1v
+cmUgdGhhbiA0ayBpcyBhIGJhZCBhc3N1bXB0aW9uIGluIHRoZSBkcml2ZXIKPnRoYXQgaXMgbWFr
+aW5nIHRoaXMgY2FsbC4KPgo+U28gSSBhbSBpbiBhZ3JlZW1lbnQgd2l0aCBLdWJhLiBXZSBzaG91
+bGRuJ3QgYmUgbmVlZGluZyB0byBhZGQgY29kZSBpbgo+dGhlIGZhc3QgcGF0aCB0byB0ZWxsIHVz
+ZXJzIG5vdCB0byBzaG9vdCB0aGVtc2VsdmVzIGluIHRoZSBmb290Lgo+Cj5XZSBhbHJlYWR5IGhh
+dmUgY29kZSBpbiBwbGFjZSBpbiBfX25ldGRldl9hbGxvY19za2IgdGhhdCBpcyBjYWxsaW5nCj50
+aGUgc2xhYiBhbGxvY2F0b3IgaWYgImxlbiA+IFNLQl9XSVRIX09WRVJIRUFEKFBBR0VfU0laRSki
+LiBXZSBjb3VsZAo+cHJvYmFibHkganVzdCBhZGQgYSBERUJVRyB3cmFwcGVkIEJVR19PTiB0byBj
+YXB0dXJlIHRob3NlIGNhc2VzIHdoZXJlCj5hIGRyaXZlciBpcyBtYWtpbmcgdGhhdCBtaXN0YWtl
+IHdpdGggX19uZXRkZXZfYWxsb2NfZnJhZ19hbGlnbi4KClRoYW5rcyBmb3IgdGhlIGNsZWFyIGV4
+cGxhbmF0aW9uLiAKVGhlIHJlYWxpdHkgaXMgdGhhdCBpdCBpcyBub3QgZWFzeSB0byBjYXB0dXJl
+IHRoZSBkcml2ZXJzIHRoYXQgbWFrZSBzdWNoIG1pc3Rha2UuCkJlY2F1c2UgbWVtb3J5IGNvcnJ1
+cHRpb24gdXN1YWxseSBsZWFkcyB0byBlcnJvcnMgb24gb3RoZXIgdW5yZWxhdGVkIG1vZHVsZXMu
+IApOb3QgbG9uZyBhZ28sIHdlIGhhdmUgc3BlbnQgYSBsb3Qgb2YgdGltZSBhbmQgZWZmb3J0IHRv
+IGxvY2F0ZSBhIGlzc3VlIHRoYXQgCm9jY2FzaW9uYWxseSBvY2N1cnMgaW4gZGlmZmVyZW50IGtl
+cm5lbCBtb2R1bGVzLCBhbmQgZmluYWxseSBmaW5kIHRoZSByb290IGNhdXNlIGlzCnRoZSBpbXBy
+b3BlciB1c2Ugb2YgdGhpcyBuZXRkZXZfYWxsb2NfZnJhZyBpbnRlcmZhY2UgaW4gRFBBQSBuZXQg
+ZHJpdmVyIGZyb20gTlhQLiAKSXQncyBhIG1pc2VyYWJsZSBwcm9jZXNzLgoKSSBhbHNvIGZvdW5k
+IHRoYXQgc29tZSBuZXQgZHJpdmVycyBpbiB0aGUgbGF0ZXN0IExpbnV4IHZlcnNpb24gaGF2ZSB0
+aGlzIGlzc3VlLgpMaWtlOgoxLiBuZXRkZXZfYWxsb2NfZnJhZyAibGVuIiBtYXkgbGFyZ2VyIHRo
+YW4gUEFHRV9TSVpFCiNlbGlmIChQQUdFX1NJWkUgPj0gRTEwMDBfUlhCVUZGRVJfNDA5NikKICAg
+ICAgICAgICAgICAgIGFkYXB0ZXItPnJ4X2J1ZmZlcl9sZW4gPSBQQUdFX1NJWkU7CiNlbmRpZgoK
+c3RhdGljIHVuc2lnbmVkIGludCBlMTAwMF9mcmFnX2xlbihjb25zdCBzdHJ1Y3QgZTEwMDBfYWRh
+cHRlciAqYSkKewogICAgICAgIHJldHVybiBTS0JfREFUQV9BTElHTihhLT5yeF9idWZmZXJfbGVu
+ICsgRTEwMDBfSEVBRFJPT00pICsKICAgICAgICAgICAgICAgIFNLQl9EQVRBX0FMSUdOKHNpemVv
+ZihzdHJ1Y3Qgc2tiX3NoYXJlZF9pbmZvKSk7Cn0KCnN0YXRpYyB2b2lkICplMTAwMF9hbGxvY19m
+cmFnKGNvbnN0IHN0cnVjdCBlMTAwMF9hZGFwdGVyICphKQp7CiAgICAgICAgdW5zaWduZWQgaW50
+IGxlbiA9IGUxMDAwX2ZyYWdfbGVuKGEpOwogICAgICAgIHU4ICpkYXRhID0gbmV0ZGV2X2FsbG9j
+X2ZyYWcobGVuKTsKfQoiLi9kcml2ZXJzL25ldC9ldGhlcm5ldC9pbnRlbC9lMTAwMC9lMTAwMF9t
+YWluLmMiIDUzMTYgIC0tMzglLS0gCgoyLiBuZXRkZXZfYWxsb2NfZnJhZyAicmluZy0+ZnJhZ19z
+aXplIiBtYXkgbGFyZ2VyIHRoYW4gKDQwOTYgKiAzKQoKI2RlZmluZSBNVEtfTUFYX0xST19SWF9M
+RU5HVEggICAgICAgICAgICg0MDk2ICogMykKICAgICAgICBpZiAocnhfZmxhZyA9PSBNVEtfUlhf
+RkxBR1NfSFdMUk8pIHsKICAgICAgICAgICAgICAgIHJ4X2RhdGFfbGVuID0gTVRLX01BWF9MUk9f
+UlhfTEVOR1RIOwogICAgICAgICAgICAgICAgcnhfZG1hX3NpemUgPSBNVEtfSFdfTFJPX0RNQV9T
+SVpFOwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgICAgICByeF9kYXRhX2xlbiA9IEVUSF9E
+QVRBX0xFTjsKICAgICAgICAgICAgICAgIHJ4X2RtYV9zaXplID0gTVRLX0RNQV9TSVpFOwogICAg
+ICAgIH0KCiAgICAgICAgcmluZy0+ZnJhZ19zaXplID0gbXRrX21heF9mcmFnX3NpemUocnhfZGF0
+YV9sZW4pOwogICAgICAgIAogICAgICAgIGZvciAoaSA9IDA7IGkgPCByeF9kbWFfc2l6ZTsgaSsr
+KSB7CiAgICAgICAgICAgICAgICByaW5nLT5kYXRhW2ldID0gbmV0ZGV2X2FsbG9jX2ZyYWcocmlu
+Zy0+ZnJhZ19zaXplKTsKICAgICAgICAgICAgICAgIGlmICghcmluZy0+ZGF0YVtpXSkKICAgICAg
+ICAgICAgICAgICAgICAgICAgcmV0dXJuIC1FTk9NRU07CiAgICAgICAgfQoiZHJpdmVycy9uZXQv
+ZXRoZXJuZXQvbWVkaWF0ZWsvbXRrX2V0aF9zb2MuYyIgMzM0NCAgLS01MCUtLSAKCkkgd2lsbCB0
+cnkgdG8gZml4IHRoZXNlIGRyaXZlcnMgbGF0ZXIuCgpFdmVuIGV4cGVyaWVuY2VkIGRyaXZlciBl
+bmdpbmVlcnMgbWF5IHVzZSB0aGlzIG5ldGRldl9hbGxvY19mcmFnIAppbnRlcmZhY2UgaW5jb3Jy
+ZWN0bHkuIApTbyBJIHRob3VnaHQgaXQgaXMgYmVzdCB0byBwcm92aWRlIHNvbWUgcHJvbXB0IGlu
+Zm9ybWF0aW9uIG9mIHVzYWdlIAplcnJvciBpbnNpZGUgdGhlIG5ldGRldl9hbGxvY19mcmFnLCBv
+ciBpdCdzIE9LIHRvIHJlcG9ydCBzdWNoIG1pc3Rha2UgCmR1cmluZyBzeXN0ZW0gcnVubmluZyB3
+aGljaCBtYXkgY2F1c2VkIGJ5IGZyYWdzeiB2YXJpZXMoZXhjZWVkZWQgcGFnZSBzaXplKS4KCk5v
+dywgYXMgeW91IGFuZCBLdWJhIG1lbnRpb25lZCBlYXJsaWVyLCAiZG8gbm90IGFkZCBjb2RlIGlu
+IGZhc3QgcGF0aCIuCgpDYW4gd2UganVzdCBhZGQgY29kZSB0byB0aGUgcmVsYXRpdmVseSBzbG93
+IHBhdGggdG8gY2FwdHVyZSB0aGUgbWlzdGFrZQpiZWZvcmUgaXQgbGVhZCB0byBtZW1vcnkgY29y
+cnVwdGlvbj8gCkxpa2U6CmRpZmYgLS1naXQgYS9tbS9wYWdlX2FsbG9jLmMgYi9tbS9wYWdlX2Fs
+bG9jLmMKaW5kZXggZTZmMjExZC4uYWM2MGE5NyAxMDA2NDQKLS0tIGEvbW0vcGFnZV9hbGxvYy5j
+CisrKyBiL21tL3BhZ2VfYWxsb2MuYwpAQCAtNTU4MCw2ICs1NTgwLDcgQEAgdm9pZCAqcGFnZV9m
+cmFnX2FsbG9jX2FsaWduKHN0cnVjdCBwYWdlX2ZyYWdfY2FjaGUgKm5jLAogICAgICAgICAgICAg
+ICAgLyogcmVzZXQgcGFnZSBjb3VudCBiaWFzIGFuZCBvZmZzZXQgdG8gc3RhcnQgb2YgbmV3IGZy
+YWcgKi8KICAgICAgICAgICAgICAgIG5jLT5wYWdlY250X2JpYXMgPSBQQUdFX0ZSQUdfQ0FDSEVf
+TUFYX1NJWkUgKyAxOwogICAgICAgICAgICAgICAgb2Zmc2V0ID0gc2l6ZSAtIGZyYWdzejsKKyAg
+ICAgICAgICAgICAgIEJVR19PTihvZmZzZXQgPCAwKTsKICAgICAgICB9CgogICAgICAgIG5jLT5w
+YWdlY250X2JpYXMtLTsKCgpBZGRpdGlvbmFsLCB3ZSBtYXkgbW9kaWZ5IGRvY3VtZW50IHRvIGNs
+ZWFybHkgaW5kaWNhdGUgdGhlIGxpbWl0cyBvZiB0aGUgCmlucHV0IHBhcmFtZXRlciBmcmFnc3ou
+Ckxpa2U6CmRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3ZtL3BhZ2VfZnJhZ3MucnN0IGIvRG9j
+dW1lbnRhdGlvbi92bS9wYWdlX2ZyYWdzLnJzdAppbmRleCA3ZDZmOTM4Li42MWIyODA1IDEwMDY0
+NAotLS0gYS9Eb2N1bWVudGF0aW9uL3ZtL3BhZ2VfZnJhZ3MucnN0CisrKyBiL0RvY3VtZW50YXRp
+b24vdm0vcGFnZV9mcmFncy5yc3QKQEAgLTQsNyArNCw3IEBACiBQYWdlIGZyYWdtZW50cwogPT09
+PT09PT09PT09PT0KCi1BIHBhZ2UgZnJhZ21lbnQgaXMgYW4gYXJiaXRyYXJ5LWxlbmd0aCBhcmJp
+dHJhcnktb2Zmc2V0IGFyZWEgb2YgbWVtb3J5CitBIHBhZ2UgZnJhZ21lbnQgaXMgYW4gYXJiaXRy
+YXJ5LWxlbmd0aChtdXN0IDw9IFBBR0VfU0laRSkgYXJiaXRyYXJ5LW9mZnNldCBhcmVhIG9mIG1l
+bW9yeQogd2hpY2ggcmVzaWRlcyB3aXRoaW4gYSAwIG9yIGhpZ2hlciBvcmRlciBjb21wb3VuZCBw
+YWdlLiAKClRoYW5rcwo=

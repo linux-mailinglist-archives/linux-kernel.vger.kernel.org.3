@@ -2,133 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD08539BF1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 06:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C65539C01
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 06:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232168AbiFAEN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 00:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
+        id S232627AbiFAERr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 00:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiFAENU (ORCPT
+        with ESMTP id S232248AbiFAERo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 00:13:20 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867942F033;
-        Tue, 31 May 2022 21:13:17 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id nn3-20020a17090b38c300b001e0e091cf03so2980235pjb.1;
-        Tue, 31 May 2022 21:13:17 -0700 (PDT)
+        Wed, 1 Jun 2022 00:17:44 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA1550010;
+        Tue, 31 May 2022 21:17:43 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so4962793pju.1;
+        Tue, 31 May 2022 21:17:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ilrv2fsQ1oyZr4Sxgimv3HjgUAGGQatiiqNbcEA0JFU=;
-        b=im8+dOhyrYsZgyqm/2nx3dBhLfzOI7x5+GXKwk4veel/e3dCK2Lt2Ri/gyxKSDlOtG
-         8rhg+YkF1ktZU6A9sosvKcMFf+/uZnko/TESgmA1vwUr4nM/S9+o0tM3KvTTN0vY6zYR
-         a9CvDXgQvas+3Mox/NUQb/SO/p2/mqhhygeGrMnWUQdiDityjaCjgVLYMGdIJtR3lw92
-         0fZprUZLdxYbEEX9kFeVbuDJ+F6/TdLvQU+G9Zhi29Q2a8gMEoGh6skDN7qQ7jOZcgPA
-         7iz8OUwUzw+lLNXk2YP9aEOhqTVkAs6BNfvcKUjA2iF1ev4Q9qXN+g5BFWvBlmSJNf4g
-         1Ktw==
+        h=from:to:cc:subject:date:message-id;
+        bh=o/u+GQMNh/HAcOKl3CZKj/1opnd127HV5unYt41+gbI=;
+        b=gnORif3Tpzt3B3qkKnNDkan4+1Zfo4v4jceA3/xRP7EuZGLzL6fIgFLxSezG+RjFix
+         PXLDQIxh56zWN2y4QzD1Q4LpD39iErA3AvKF874hsa/RnPyrEwCBH5VkHuE/jAaQM9bt
+         gR5TzF9COueiSqhm2MGTkIz2TyxozaukKm6tbXpKA5zqB+s1aIH2bBvJPQKgbgpQqJ2i
+         4RjyVWEHXtIF62jSHUdLkbHHbNPEqXiUOeJ2AgNGB5o0tuMa7KgYpyma+QF+S/KPD8ZU
+         CSyFXYku6245mQeQQMnbxjfli3vMAYnE6dN9UopmI3h8EiobA+m+UhTDcLvOQe0GUrBc
+         taYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ilrv2fsQ1oyZr4Sxgimv3HjgUAGGQatiiqNbcEA0JFU=;
-        b=Ns9Apj0Q2J9A7Yo9qGdKofvZF7XKQUePYgsYNTsv7JsSijNJDZcvZAd0TxYkPulfXq
-         pzMo4VOMAAEihZVJv9ydvLatxDYpOz+NbTNqxauODBH/VCgvZ8YRcDbaphn/CyH+ldlV
-         QGacf44f3kpbGBMVEPDA0a/qzyLCE7AmUBrat/zlAHKvfW1I+s2QwDU8yE0HCac2nSDb
-         VKcgV6E0KAT2hY53zKthc13bBwBuyOoaS4rMkvbVmBypbzAUZ8p1g+8OdC8qONwyQwjs
-         8GV0CD748usDZ3fQp/5R10D8Eg1t8VZioR4h3E7qy9pwV/Ovds89CZ3LUVTocRPxerzi
-         324g==
-X-Gm-Message-State: AOAM532BSISpb80rpjHXqrOaiRVRf0xEFjJ2OjeIX2ZYqIe/2cv+V9Cz
-        wDcltSYBo/CgDxxO+9NlmCs=
-X-Google-Smtp-Source: ABdhPJyPvtXzWJO2RmYHgPiZUTuVpyzAZyIlZ53x15if6PBizKnZr1JaSDXzPfVBdWGswbimTAuoHg==
-X-Received: by 2002:a17:902:ef48:b0:159:51d:f725 with SMTP id e8-20020a170902ef4800b00159051df725mr65758050plx.47.1654056796365;
-        Tue, 31 May 2022 21:13:16 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id d17-20020a17090abf9100b001df68146a20sm2714564pjs.56.2022.05.31.21.13.10
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=o/u+GQMNh/HAcOKl3CZKj/1opnd127HV5unYt41+gbI=;
+        b=GYg5SwN6iAxpgrB4LsVntgR0mdFXVNlJJp4Rw5gG1nICo6r1+pT3CxLslPkGa0yWQn
+         Mx1Wjs7mdUG5INurSlq88d4ricl/ObKrLRBjazmXaUv4frxazbqxZJDePGOv3wtwTiTd
+         HEQZsdkpJx2iwPB7IQ2OQYlKr1EDqKrQYfOGzv+o35HXbVRxyhCr3SOvc8GZcIpkQzTx
+         Px66d5BCB5m17rAQKyIUVA6rAG18igO2zZZ1isV2Cyz6SEOFoGupVItlFsyPkK2nY8dV
+         jGmiouMfiDI34wQTcKDda16UafL5KvGIxFBZwS0jzHVbiIHmASgs+VExYMV9bZgVzk/Q
+         bnOg==
+X-Gm-Message-State: AOAM530FsYKUx48cFotICd4gMONFtChJMFqH8O0nHi6FvRlFDCjwFTuH
+        ke7ynb9ahHEuLaa5Gx7ejI0=
+X-Google-Smtp-Source: ABdhPJyMfMNtPn/D13pgx8ooxUQkCNfMvFyZXZjYayYzm8HCzqrk4SeQsJCDASAy3EEwakR32Lzm2A==
+X-Received: by 2002:a17:90a:b797:b0:1e0:ad13:ef39 with SMTP id m23-20020a17090ab79700b001e0ad13ef39mr32233871pjr.8.1654057062682;
+        Tue, 31 May 2022 21:17:42 -0700 (PDT)
+Received: from potin-quanta.dhcpserver.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
+        by smtp.gmail.com with ESMTPSA id u11-20020a63d34b000000b003c14af505f6sm290749pgi.14.2022.05.31.21.17.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 21:13:15 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     miles.chen@mediatek.com, Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH v3] PCI: mediatek-gen3: Fix refcount leak in mtk_pcie_init_irq_domains
-Date:   Wed,  1 Jun 2022 08:12:58 +0400
-Message-Id: <20220601041259.56185-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 31 May 2022 21:17:42 -0700 (PDT)
+From:   Potin Lai <potin.lai.pt@gmail.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rayn Chen <rayn_chen@aspeedtech.com>
+Cc:     Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Potin Lai <potin.lai.pt@gmail.com>
+Subject: [PATCH v2 0/2] Add i2c clock manual tuning feature for aspeed-i2c driver
+Date:   Wed,  1 Jun 2022 12:15:10 +0800
+Message-Id: <20220601041512.21484-1-potin.lai.pt@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_get_child_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+Current aspeed-i2c driver could calculate a suited clock divisor and
+high/low cycles automatically, and it try to assign high/low periods with
+close number of cycles.
 
-Fixes: 814cceebba9b ("PCI: mediatek-gen3: Add INTx support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-changes in v2:
-- move of_node_put(intc_node) right after irq_domain_add_linear to cover
-normal path and error paths.
----
-changes in v3:
-- call of_node_put() in error paths with goto, and call of_node_put() before
-  return 0 in normal path. Since this function has a goto part to handle
-  resources, so put them together, as suggested by Miles Chen <miles.chen@mediatek.com>
+Because of board schematic design, sometimes we need to manual tune i2c
+clock timing register to get longer high clock cycle to match hardware 
+requirement, which is not supportted in current driver.
 
-v1 link: https://lore.kernel.org/all/20220526110246.53502-1-linmq006@gmail.com/
-v2 link: https://lore.kernel.org/all/20220530064807.34534-1-linmq006@gmail.com/
----
- drivers/pci/controller/pcie-mediatek-gen3.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+In this patch series, we add new properties for manually assigning clock
+divisor, high clock cycles and low clock cycles.
 
-diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
-index 3e8d70bfabc6..bceed28446ed 100644
---- a/drivers/pci/controller/pcie-mediatek-gen3.c
-+++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-@@ -600,7 +600,8 @@ static int mtk_pcie_init_irq_domains(struct mtk_gen3_pcie *pcie)
- 						  &intx_domain_ops, pcie);
- 	if (!pcie->intx_domain) {
- 		dev_err(dev, "failed to create INTx IRQ domain\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto out_put_node;
- 	}
- 
- 	/* Setup MSI */
-@@ -623,13 +624,15 @@ static int mtk_pcie_init_irq_domains(struct mtk_gen3_pcie *pcie)
- 		goto err_msi_domain;
- 	}
- 
-+	of_node_put(intc_node);
- 	return 0;
- 
- err_msi_domain:
- 	irq_domain_remove(pcie->msi_bottom_domain);
- err_msi_bottom_domain:
- 	irq_domain_remove(pcie->intx_domain);
--
-+out_put_node:
-+	of_node_put(intc_node);
- 	return ret;
- }
- 
+LINK: [v1] https://lore.kernel.org/all/20220530114056.8722-1-potin.lai.pt@gmail.com/
+
+changes v1 --> v2:
+* update bt-bindings documentation
+* use meaningful values for properties instead of acture value in register
+
+Potin Lai (1):
+  aspeed: i2c: add manual clock setting feature
+
+Potin Lai (1):
+  dt-bindings: aspeed-i2c: add properties for manual clock setting
+
+ .../devicetree/bindings/i2c/aspeed,i2c.yaml   | 44 ++++++++++++++
+ drivers/i2c/busses/i2c-aspeed.c               | 57 ++++++++++++++++++-
+ 2 files changed, 100 insertions(+), 1 deletion(-)
+
 -- 
-2.25.1
+2.17.1
 

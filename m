@@ -2,117 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A95B53A927
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5194653A929
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353556AbiFAO1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
+        id S1348773AbiFAO1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355044AbiFAO0z (ORCPT
+        with ESMTP id S1354928AbiFAO11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:26:55 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4619865BC;
-        Wed,  1 Jun 2022 07:21:48 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id c197so1380872qke.12;
-        Wed, 01 Jun 2022 07:21:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qrASeeoMBWlckEV00ZNAT86iUYmYHAG/1QJtuQ7vhsQ=;
-        b=ohu+s7qgiXPXl5GzU0nViruYGWQqaFjfsU5JSGJdfT9G6azp3Ra3BFmEjtA5dodBwt
-         nQkV+ysfOaNSlKDIa8EgC+aQ+7FoMe9j3enjHi0HuGZcSCB196ZyyG6dMMin3I4Em7tr
-         XZXL63flh4PEQ/8caN4pXkFSOo3o6UvCHDlrAJDiv2lJ0mQY7YL0sb2yEu95mD2yf+Bg
-         G8LGoW5JHmQL2imrxcplObolasPQEv3/s+E4gv2Nb0/3G3z1RtnrnXEHLH4ciURlLO03
-         9Q1Pzjpr8RY56I4iuIdA86UoA754q+KSE7TJVRbbHrhzMQNZA5+TAAaBAp9QGTUblGmf
-         Vu0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qrASeeoMBWlckEV00ZNAT86iUYmYHAG/1QJtuQ7vhsQ=;
-        b=hXMOlVfZGia0/60BUw5uPVe/na34sqG31NPGlr2i2IpSp1cYaqy+eV6UVN1mo64LnX
-         J4RIaCgZLX3YDVMbBmdPTv+PwHynHyJF6P1TvNSQh3wV82yB493Xbx/SruXzrTzpdXdi
-         xxnLLS6JEX9/ov16iU2S8xlc1eUkCYkxsU+qGhJNfppeLCvfxVU1DHUJrGYpSvR8U1VU
-         ddj9nrGXZ+ZBxKRjGMsVlDvKIbjatfm1C8FkSrfHft7ROdLnd8Nzft3h8ag0UFI9dNTx
-         m4hdZgP+zw1zVtOjypdonatJfSKy905kDWsUrBdAk/R/PmBXg2jP21kxdTUh757jkFzS
-         vZlg==
-X-Gm-Message-State: AOAM530EbyjI6rN1mB2P1qejBEYjZHEN12xlsICJJ3lid+sBrxIGecas
-        rvCKG6c0PaZnlGrjGhi2aezK0I1kQquXSA==
-X-Google-Smtp-Source: ABdhPJzqSJtF8CQVzG219yTKRwbvqj+v4SGGCw5/ICo4f1twSeWtgokshw6/KWUqhIaZaO/B6CXgZA==
-X-Received: by 2002:a05:620a:2950:b0:6a3:a838:ad70 with SMTP id n16-20020a05620a295000b006a3a838ad70mr243737qkp.14.1654093307307;
-        Wed, 01 Jun 2022 07:21:47 -0700 (PDT)
-Received: from shaak.. (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
-        by smtp.gmail.com with ESMTPSA id x23-20020ac86b57000000b002f93760e4cfsm1159895qts.26.2022.06.01.07.21.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 07:21:46 -0700 (PDT)
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     liambeguin@gmail.com, jic23@kernel.org, rdunlap@infradead.org
-Cc:     peda@axentia.se, masahiroy@kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: [PATCH 1/1] iio: test: fix missing MODULE_LICENSE for IIO_RESCALE=m
-Date:   Wed,  1 Jun 2022 10:21:38 -0400
-Message-Id: <20220601142138.3331278-1-liambeguin@gmail.com>
-X-Mailer: git-send-email 2.35.1.4.g5d01301f2b86
+        Wed, 1 Jun 2022 10:27:27 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6508A5026;
+        Wed,  1 Jun 2022 07:22:15 -0700 (PDT)
+Date:   Wed, 1 Jun 2022 07:22:05 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1654093333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7dTK8lZD+GRn5W6XhroTWtrQIr3FWONSOpLntw7o9P8=;
+        b=NUkC82D4ypjqicXuOoWVCuRX+YRDU1QRJrivMJisaz2muYJDPR914lptcXqx2oVqxcfwc3
+        c1xEX6QGnV9xKfvdvIs10qjbmQ7rRL8g6itonmvlcVeG1PWh7/qnyL4C3/JkNBDTa8y+rb
+        YUBb0WPjtf+QZOOqvtdwNWwTCxdsFdA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vasily Averin <vvs@openvz.org>,
+        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Shakeel Butt <shakeelb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
+Subject: Re: [PATCH mm v3 0/9] memcg: accounting for objects allocated by
+ mkdir cgroup
+Message-ID: <Ypd2DW7id4M3KJJW@carbon>
+References: <3e1d6eab-57c7-ba3d-67e1-c45aa0dfa2ab@openvz.org>
+ <YpSwvii5etfnOYC9@dhcp22.suse.cz>
+ <ef9f7516-853d-ffe4-9a7a-5e87556bdbbe@openvz.org>
+ <YpTTL3Ys35kgYyAW@dhcp22.suse.cz>
+ <3a1d8554-755f-7976-1e00-a0e7fb62c86e@openvz.org>
+ <YpXA35F33hvrxNLf@dhcp22.suse.cz>
+ <118bcb39-1281-0d1d-b163-3f6bcc99c3e2@openvz.org>
+ <20220601091543.GA21320@blackbody.suse.cz>
+ <YpcyKdZkdkwUOzuy@dhcp22.suse.cz>
+ <YpdkHrbT/xkdx+Qb@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YpdkHrbT/xkdx+Qb@dhcp22.suse.cz>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When IIO_RESCALE_KUNIT_TEST=y and IIO_RESCALE=m,
-drivers/iio/afe/iio-rescale.o is built twice causing the
-MODULE_LICENSE() to be lost, as shown by:
+On Wed, Jun 01, 2022 at 03:05:34PM +0200, Michal Hocko wrote:
+> On Wed 01-06-22 11:32:26, Michal Hocko wrote:
+> > On Wed 01-06-22 11:15:43, Michal Koutny wrote:
+> > > On Wed, Jun 01, 2022 at 06:43:27AM +0300, Vasily Averin <vvs@openvz.org> wrote:
+> > > > CT-901 /# cat /sys/fs/cgroup/memory/cgroup.subgroups_limit 
+> > > > 512
+> > > > CT-901 /# echo 3333 > /sys/fs/cgroup/memory/cgroup.subgroups_limit 
+> > > > -bash: echo: write error: Operation not permitted
+> > > > CT-901 /# echo 333 > /sys/fs/cgroup/memory/cgroup.subgroups_limit 
+> > > > -bash: echo: write error: Operation not permitted
+> > > > 
+> > > > I doubt this way can be accepted in upstream, however for OpenVz
+> > > > something like this it is mandatory because it much better
+> > > > than nothing.
+> > > 
+> > > Is this customization of yours something like cgroup.max.descendants on
+> > > the unified (v2) hierarchy? (Just curious.)
+> > > 
+> > > (It can be made inaccessible from within the subtree either with cgroup
+> > > ns or good old FS permissions.)
+> > 
+> > So we already do have a limit to prevent somebody from running away with
+> > the number of cgroups. Nice!
 
-	ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
+Yes, we do!
 
-Rework the build configuration to have the dependency specified in the
-Kconfig.
+> > I was not aware of that and I guess this
+> > looks like the right thing to do. So do we need more control and
+> > accounting that this?
+> 
+> I have checked the actual implementation and noticed that cgroups are
+> uncharged when offlined (rmdir-ed) which means that an adversary could
+> still trick the limit and runaway while still consuming resources.
+> 
+> Roman, I guess the reason for this implementation was to avoid limit to
+> trigger on setups with memcgs which can take quite some time to die?
+> Would it make sense to make the implementation more strict to really act
+> as gate against potential cgroups count runways?
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Fixes: 8e74a48d17d5 ("iio: test: add basic tests for the iio-rescale driver")
-Signed-off-by: Liam Beguin <liambeguin@gmail.com>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
----
- drivers/iio/test/Kconfig  | 2 +-
- drivers/iio/test/Makefile | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The reasoning was that in many cases a user can't do much about dying cgroups,
+so it's not clear how they should/would handle getting -EAGAIN on creating a
+new cgroup (retrying will not help, obviously). Live cgroups can be easily
+deleted, dying cgroups - not always.
 
-diff --git a/drivers/iio/test/Kconfig b/drivers/iio/test/Kconfig
-index 56ca0ad7e77a..4c66c3f18c34 100644
---- a/drivers/iio/test/Kconfig
-+++ b/drivers/iio/test/Kconfig
-@@ -6,7 +6,7 @@
- # Keep in alphabetical order
- config IIO_RESCALE_KUNIT_TEST
- 	bool "Test IIO rescale conversion functions"
--	depends on KUNIT=y && !IIO_RESCALE
-+	depends on KUNIT=y && IIO_RESCALE=y
- 	default KUNIT_ALL_TESTS
- 	help
- 	  If you want to run tests on the iio-rescale code say Y here.
-diff --git a/drivers/iio/test/Makefile b/drivers/iio/test/Makefile
-index f15ae0a6394f..880360f8d02c 100644
---- a/drivers/iio/test/Makefile
-+++ b/drivers/iio/test/Makefile
-@@ -4,6 +4,6 @@
- #
- 
- # Keep in alphabetical order
--obj-$(CONFIG_IIO_RESCALE_KUNIT_TEST) += iio-test-rescale.o ../afe/iio-rescale.o
-+obj-$(CONFIG_IIO_RESCALE_KUNIT_TEST) += iio-test-rescale.o
- obj-$(CONFIG_IIO_TEST_FORMAT) += iio-test-format.o
- CFLAGS_iio-test-format.o += $(DISABLE_STRUCTLEAK_PLUGIN)
--- 
-2.35.1.4.g5d01301f2b86
-
+I'm not sure about switching the semantics. I'd wait till Muchun's lru page
+reparenting will be landed (could be within 1-2 releases, I guess) and then we
+can check whether the whole problem is mostly gone. Honestly, I think we might
+need to fix few another things, but it might be not that hard (in comparison
+to what we already did).

@@ -2,193 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64137539E48
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB07539E44
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350351AbiFAHf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 03:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
+        id S1350396AbiFAHff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 03:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350342AbiFAHfL (ORCPT
+        with ESMTP id S1350335AbiFAHf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 03:35:11 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCE9719C3
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:35:10 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 2B2AE68AFE; Wed,  1 Jun 2022 09:35:06 +0200 (CEST)
-Date:   Wed, 1 Jun 2022 09:35:05 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     kbusch@kernel.org, axboe@fb.com, hch@lst.de, sagi@grimberg.me,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        caroline.subramoney@microsoft.com, riwurd@microsoft.com,
-        nathan.obr@microsoft.com
-Subject: Re: [PATCH 2/2] nvme-pci: handle persistent internal error AER
- from NVMe controller
-Message-ID: <20220601073505.GA24875@lst.de>
-References: <1654056747-40143-1-git-send-email-mikelley@microsoft.com> <1654056747-40143-2-git-send-email-mikelley@microsoft.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1654056747-40143-2-git-send-email-mikelley@microsoft.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 1 Jun 2022 03:35:27 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064C673563;
+        Wed,  1 Jun 2022 00:35:26 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id z7so943964edm.13;
+        Wed, 01 Jun 2022 00:35:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=7+lEh+59GUTlIgrygAE5T9rpW2NdEWdsFcmPjl4IHoM=;
+        b=G5ekiN7OwTibpzVIId2YhAQzVch8b0pybutep43fc17FBZQUJpVwiweqO3ttbcwFcp
+         bchU2u3DzN2bWtELdIBJ3kxBpdWML2qd7At0oemzpm6h0ZMD+TQ7/IG12RT2b1surrxt
+         avK806/Itm5tSSluh8BSwReWr4/Hr2f362DIXJSTFfCsNZlc4T/K+k1VvgpqlESsO51o
+         Ao90Vh5dLF+D9VBUHC7OZsODMuwPWbcnpp5uxd6c30yb0mvZKiMx4BgSIlJhTIwBq649
+         JPu8u4APnckejI8rex7phyBY2PZhc3AWL0BDWgvCSPXs8k7mser7Vmemer1oKa+25exu
+         iSIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=7+lEh+59GUTlIgrygAE5T9rpW2NdEWdsFcmPjl4IHoM=;
+        b=zHloSwmhRkh1nHZv5uMGGNJr+xk+/bHIgEy+2LczFbN5RZFxfKoO0dAEQxtjnbFcA/
+         B1/xmcu/J4FeLwmJbf/lbPydCJNJQYn12Z0dhUmG8/RrVwg8gi3ynohaAl4hfLpG/ZOZ
+         afXQ3YxoX9FGmPAgJ4eSYhZVMN+tyVb0kddN6EEU0PhMpiAgf4IF49Pi7OROJJo9Wnl3
+         QpTBQqxTZ5V7m8HW1xCVn/bHZ94sLOgnD697ZRwjPT2ZoehwnSC8eYAN7dCIF1zNfMCx
+         pE2v4NFNniR06OYsBj9SXDKNO6+KoNjHGne69YcBU8WVH4gnzmLmemy/DCWtmIibsHf2
+         UPhw==
+X-Gm-Message-State: AOAM532ZVATxAWuGxMWvjeLTxqbt2H35/6zYRvVtp30KY5NZbX64xCRY
+        LQVfyuGjP0lCxVSlWBpWk5BsXQzhaig=
+X-Google-Smtp-Source: ABdhPJzYvYDrGNixQaKbbDBnwt4B7btkj+BrcX3UcW2XEHd/bEH3x5hy3eCddd4YFji6o1z9XneCUQ==
+X-Received: by 2002:a05:6402:1941:b0:413:2822:9c8 with SMTP id f1-20020a056402194100b00413282209c8mr70130779edz.13.1654068924456;
+        Wed, 01 Jun 2022 00:35:24 -0700 (PDT)
+Received: from felia.fritz.box (200116b82620c00028af88788fa7d286.dip.versatel-1u1.de. [2001:16b8:2620:c000:28af:8878:8fa7:d286])
+        by smtp.gmail.com with ESMTPSA id qu19-20020a170907111300b006fe960c5c5asm365239ejb.126.2022.06.01.00.35.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 00:35:24 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: adjust file entry for max77693 dt after merge conflict mess-up
+Date:   Wed,  1 Jun 2022 09:35:11 +0200
+Message-Id: <20220601073511.15721-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This really belongs into common code.  See the untested patch below
-of how I'd do it.  The nvme_should_reset would be a separate prep
-patch again.
+Commit b38213c6118b ("dt-bindings: mfd: maxim,max77693: Convert to
+dtschema") converts max77693.txt to maxim,max77693.yaml and adjusts the
+file entry in MAINTAINERS accordingly.
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 72f7c955c7078..b8b8e9ee04120 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -171,6 +171,24 @@ static inline void nvme_stop_failfast_work(struct nvme_ctrl *ctrl)
- 	clear_bit(NVME_CTRL_FAILFAST_EXPIRED, &ctrl->flags);
- }
- 
-+bool nvme_should_reset(struct nvme_ctrl *ctrl, u32 csts)
-+{
-+	/* If there is a reset/reinit ongoing, we shouldn't reset again. */
-+	switch (ctrl->state) {
-+	case NVME_CTRL_RESETTING:
-+	case NVME_CTRL_CONNECTING:
-+		return false;
-+	default:
-+		break;
-+	}
-+
-+	/*
-+	 * We shouldn't reset unless the controller is on fatal error state or
-+	 * if we lost the communication with it.
-+	 */
-+	return (csts & NVME_CSTS_CFS) ||
-+		(ctrl->subsystem && (csts & NVME_CSTS_NSSRO));
-+}
- 
- int nvme_reset_ctrl(struct nvme_ctrl *ctrl)
- {
-@@ -4537,24 +4555,41 @@ static void nvme_handle_aen_notice(struct nvme_ctrl *ctrl, u32 result)
- 	}
- }
- 
-+static void nvme_handle_aen_persistent_error(struct nvme_ctrl *ctrl)
-+{
-+	u32 csts;
-+
-+	if (ctrl->ops->reg_read32(ctrl, NVME_REG_CSTS, &csts) < 0 ||
-+	    nvme_should_reset(ctrl, csts)) {
-+		dev_warn(ctrl->device, "resetting due to AEN\n");
-+		nvme_reset_ctrl(ctrl);
-+	}
-+}
-+
- void nvme_complete_async_event(struct nvme_ctrl *ctrl, __le16 status,
- 		volatile union nvme_result *res)
- {
- 	u32 result = le32_to_cpu(res->u32);
--	u32 aer_type = result & 0x07;
-+	u32 aen_type = result & 0x07;
-+	u32 aen_subtype = (result & 0xff00) >> 8;
- 
- 	if (le16_to_cpu(status) >> 1 != NVME_SC_SUCCESS)
- 		return;
- 
--	switch (aer_type) {
-+	switch (aen_type) {
- 	case NVME_AER_NOTICE:
- 		nvme_handle_aen_notice(ctrl, result);
- 		break;
- 	case NVME_AER_ERROR:
-+		if (aen_subtype == NVME_AER_ERROR_PERSIST_INT_ERR) {
-+			nvme_handle_aen_persistent_error(ctrl);
-+			break;
-+		}
-+		fallthrough;
- 	case NVME_AER_SMART:
- 	case NVME_AER_CSS:
- 	case NVME_AER_VS:
--		trace_nvme_async_event(ctrl, aer_type);
-+		trace_nvme_async_event(ctrl, aen_type);
- 		ctrl->aen_result = result;
- 		break;
- 	default:
-diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
-index 9b72b6ecf33c9..0d7e9ac52d25a 100644
---- a/drivers/nvme/host/nvme.h
-+++ b/drivers/nvme/host/nvme.h
-@@ -762,6 +762,7 @@ int nvme_get_features(struct nvme_ctrl *dev, unsigned int fid,
- 		      u32 *result);
- int nvme_set_queue_count(struct nvme_ctrl *ctrl, int *count);
- void nvme_stop_keep_alive(struct nvme_ctrl *ctrl);
-+bool nvme_should_reset(struct nvme_ctrl *ctrl, u32 csts);
- int nvme_reset_ctrl(struct nvme_ctrl *ctrl);
- int nvme_reset_ctrl_sync(struct nvme_ctrl *ctrl);
- int nvme_try_sched_reset(struct nvme_ctrl *ctrl);
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 5a98a7de09642..c57023d98f8f3 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -1293,31 +1293,6 @@ static void abort_endio(struct request *req, blk_status_t error)
- 	blk_mq_free_request(req);
- }
- 
--static bool nvme_should_reset(struct nvme_dev *dev, u32 csts)
--{
--	/* If true, indicates loss of adapter communication, possibly by a
--	 * NVMe Subsystem reset.
--	 */
--	bool nssro = dev->subsystem && (csts & NVME_CSTS_NSSRO);
--
--	/* If there is a reset/reinit ongoing, we shouldn't reset again. */
--	switch (dev->ctrl.state) {
--	case NVME_CTRL_RESETTING:
--	case NVME_CTRL_CONNECTING:
--		return false;
--	default:
--		break;
--	}
--
--	/* We shouldn't reset unless the controller is on fatal error state
--	 * _or_ if we lost the communication with it.
--	 */
--	if (!(csts & NVME_CSTS_CFS) && !nssro)
--		return false;
--
--	return true;
--}
--
- static void nvme_warn_reset(struct nvme_dev *dev, u32 csts)
- {
- 	/* Read a config register to help see what died. */
-@@ -1355,7 +1330,7 @@ static enum blk_eh_timer_return nvme_timeout(struct request *req, bool reserved)
- 	/*
- 	 * Reset immediately if the controller is failed
- 	 */
--	if (nvme_should_reset(dev, csts)) {
-+	if (nvme_should_reset(&dev->ctrl, csts)) {
- 		nvme_warn_reset(dev, csts);
- 		nvme_dev_disable(dev, false);
- 		nvme_reset_ctrl(&dev->ctrl);
-diff --git a/include/linux/nvme.h b/include/linux/nvme.h
-index 29ec3e3481ff6..8ced2439f1f34 100644
---- a/include/linux/nvme.h
-+++ b/include/linux/nvme.h
-@@ -711,6 +711,10 @@ enum {
- 	NVME_AER_VS			= 7,
- };
- 
-+enum {
-+	NVME_AER_ERROR_PERSIST_INT_ERR	= 0x03,
-+};
-+
- enum {
- 	NVME_AER_NOTICE_NS_CHANGED	= 0x00,
- 	NVME_AER_NOTICE_FW_ACT_STARTING = 0x01,
+Unfortunately, the merge commit afb67df31a8c ("Merge branches [...] into
+ibs-for-mfd-merged") resolves some conflict in MAINTAINERS in such a way
+that the file entry for the converted text file max77693.txt, removed in
+the commit above, is added back into MAINTAINERS.
+
+Remove the file entry to this converted text file in MAXIM PMIC AND MUIC
+DRIVERS FOR EXYNOS BASED BOARDS.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Lee, please pick this minor non-urgent clean-up patch. Thanks.
+
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8ccdd7727840..01e276fa6476 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12117,7 +12117,6 @@ F:	Documentation/devicetree/bindings/*/maxim,max77686.yaml
+ F:	Documentation/devicetree/bindings/*/maxim,max77693.yaml
+ F:	Documentation/devicetree/bindings/*/maxim,max77843.yaml
+ F:	Documentation/devicetree/bindings/clock/maxim,max77686.txt
+-F:	Documentation/devicetree/bindings/mfd/max77693.txt
+ F:	drivers/*/*max77843.c
+ F:	drivers/*/max14577*.c
+ F:	drivers/*/max77686*.c
+-- 
+2.17.1
+

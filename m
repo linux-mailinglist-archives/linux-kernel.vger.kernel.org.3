@@ -2,184 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DE753A056
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF72353A057
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350520AbiFAJ2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 05:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
+        id S1351019AbiFAJ3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 05:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350221AbiFAJ2K (ORCPT
+        with ESMTP id S1350682AbiFAJ2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 05:28:10 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA853FBC4
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 02:28:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654075689; x=1685611689;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=vLG4MWGefkwyyCJmkbNqYH3/dtWX0kcbAFR2OOw+zLU=;
-  b=FCvHI3r3eK9cYTRBk3cZbmGU2mSPXnfUZgdLvvNExm4zWomZqYM+shjg
-   K/L4fZZWGtAEQBWLnkt/jD69eS6tq1MUvsoK1pBnmkf1oNTq1nc1x5CrO
-   OUWdm3pFa3hz0EaXioX7OFYVxgHWkV8LQ11MZ0pAbe8MSMSnHLfvBWkKc
-   nY4LwdtP/gTmYO34jKLxBNz9oYQ+5tW5MqBA5dcTV1K/5U4gzPupnBAnt
-   bKAKYXDhPNOED2Ny/fEKn4XsusJG8QiLrtMvRhQLaFpdKGauqw1xPrHvg
-   yzFM11N/LsIa5jZb9iNDgomSvbo0yh4AfxozC9KEBGWegJ5JHuZZXcGxF
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="255399913"
-X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="255399913"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 02:28:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="680009890"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Jun 2022 02:28:07 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 1 Jun 2022 02:28:07 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Wed, 1 Jun 2022 02:28:07 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.172)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Wed, 1 Jun 2022 02:28:06 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IJlW/7kugZKDHmSEzrGhnvHByF6Re4pIR29dtLYGTZWOiAiRcXBfTqWkOIxRcCjuDkbewL2OCgiFNDAdoUKoIOPJHGKAL0FVs8uO9xA56CGVPc+XI92TE5ymoNy+6FD7NNU+8ybB/b+PDU9rxZqAlXLCWurR+k+HKgcZI+NEBvJtFgx1dIqr6+74mHaw94Jc9snpIKpS2RNY8JcPTXESbe6clOddGHtWqa3LYIj9/MQQRK4ubeAMmF1T28vD5svIGtQSz/PXwcoZ57XLdKZllrYKhkGa/GD4wv0ldCrVX5JRJVpcGI3xT19ZolOAFj40QnVRXhYMiXtv5MuP2lS+Gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=K/LZVGa2sA/Rn7jeQCFe/sW84kBzWrBzV7n7HLSBa24=;
- b=Blvqq6FTOQf4VYzWWQw29kX9yo5oSeJVweJWDoePtSXmZR7OzdKHyRy7hoF/v3Xa8SMCytcJoxfdlG3z81eENpqpp/b3/HJ3MQoAzrrwcvjdw3NINmK58O7ippeEnr5c9YPunHC8cGZ9qNV/9ar9IYx1qFzW7wFOAqnXHgtVixy6NhA2IMfTXIXlGWlDOUfgiofAuycaAzMwWGIfjoIfCxffrvlj0uFk5Xfx6ou119OoH6EgHljvf4bG8zFfzyxuvgwjmaQ9KTYo5ggUmTFwCVtzY8SVvAtiqQV27CY7Qs9AlKlq4cwsJ4f1mW2d0GsecNG5B4Vr+mvdbj5FKxPbuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BN6PR11MB1475.namprd11.prod.outlook.com (2603:10b6:405:9::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.16; Wed, 1 Jun
- 2022 09:28:05 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::a1cb:c445:9900:65c8]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::a1cb:c445:9900:65c8%7]) with mapi id 15.20.5314.012; Wed, 1 Jun 2022
- 09:28:05 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Jason Gunthorpe" <jgg@nvidia.com>
-CC:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 09/12] iommu/vt-d: Check device list of domain in domain
- free path
-Thread-Topic: [PATCH 09/12] iommu/vt-d: Check device list of domain in domain
- free path
-Thread-Index: AQHYcZPVYxDxhgtiEEikhmCfUbpnPa06TxHg
-Date:   Wed, 1 Jun 2022 09:28:05 +0000
-Message-ID: <BN9PR11MB5276C3D7134CCE64D88F6F048CDF9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220527063019.3112905-1-baolu.lu@linux.intel.com>
- <20220527063019.3112905-10-baolu.lu@linux.intel.com>
-In-Reply-To: <20220527063019.3112905-10-baolu.lu@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e5ca830e-3850-46f1-780c-08da43b1082b
-x-ms-traffictypediagnostic: BN6PR11MB1475:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BN6PR11MB147585BF7AE2648C0AD86D828CDF9@BN6PR11MB1475.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XfdW3rM/Z71lhGa+wsq8D89cLxiTwwUxCrT41wKZEaZ9bAQ5H/+5wcAKndVgcOavGNbuA33PtSS8rOvvv6jJu6urahJn8g+oEDUg9ZJAcvAqsVm8kgPTMaBFLm7ChW8FmCJOmKauTTkqt+Y4eMDdqYEZy70Bw0jrGrMoZn0L8Zm8ZM/7bGYGRkpQ6645SDdHGvpPQRFxqVzHT/s67N0eTmF9DIY3Jxsu3GZ+REtENkvs6yUHLDGhWHG8dRxSOv9ewPf5OwK0QJ0W2R40MJgC2WnY29/QHgShDUlEw4KgLQqggP2mXh2RmE673UZ+Yz9T1/07IVXKyx0Fl2R28YetoN4ZIbwLkRu+YW7sZWcOP2yz8E829t/ddMPex8wGYDbOUc5SxVb2lLUPa+woG/hRbzcCkz39eG2mPBYitCxjon6WMlv8P854+HhLqKI1dmPjnORjs/sbYBjkJMbyGBBMqq6lv88udG5r2C6T1/8Qq5uzOkz3t3jlvw7n3zNYJCWIj4bxnOCBG6PNinLM5sKZycoOzi4Y0Lx5p1hvXWP8Fi0Gim8sL7WoC8FxkHpcF9Vbw1B4fBptKl1XGsG7NReWPtCIQpUrRTWccS4MXpPOCId6xMULl6t18SVf1VaAjk2yQ2iZmSlV0LWF4kMDF5azlilbuvqpOiI6ZCLJYa7iShHncn888nmD/E1ZYtjKaxKRvRiZZSOxdmO6llwW3+lMlQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6506007)(4744005)(82960400001)(38070700005)(110136005)(316002)(7696005)(54906003)(2906002)(55016003)(86362001)(8936002)(508600001)(64756008)(66446008)(66476007)(66556008)(5660300002)(4326008)(8676002)(186003)(66946007)(33656002)(71200400001)(76116006)(83380400001)(9686003)(122000001)(38100700002)(52536014)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1IAdX7tgi3EPJVuRq3RvUV0Abl/yL28e8nsBxgrIhpd9XaL26ttdwwYCaCnw?=
- =?us-ascii?Q?sAvRvwBkDGSWGaYUhxqIDG/wyD6yabi4SdTZA0CTX+BUExKZlAt9GQVxbCi+?=
- =?us-ascii?Q?5OVwYhTkgBSDPcalWz0/8jBcx7vOEi1EJxLAXLW71O0rXtPFeWpkw6FTfTVm?=
- =?us-ascii?Q?sNR9xejzO0j54T0J9A3dsRfebjvvsDWjndoy2L+CxzszK5LFWcfVyTj8FYMF?=
- =?us-ascii?Q?RXUTnimc8sYFTV/FNI2r5jZtaI50Qs6HWVCpEjn0nVlGvWjDCtFELcsDdvjC?=
- =?us-ascii?Q?oYmjGa/S7piInRNwZanyytWPdDv2LePVWEC7A/5hYXYWnEk2shqaqW+NRwTV?=
- =?us-ascii?Q?61RZl+pg0Erf6L5WFeTRl+3C7Vez0HWSylrRuzLH8ezThvbebkjeJ3YoBqWP?=
- =?us-ascii?Q?6EnOEADWig3b65tfMRT9K4M45dBWjpT4NZ8mwk4HxsouEec2TAT7qf7/Bu9i?=
- =?us-ascii?Q?EdZzov9nH5gTGLuMIAuRPXjuoAYxv2G4r/WOLSD0t7eRHlCEGjxqyzmPti4Z?=
- =?us-ascii?Q?1EoFd7IqkLGe6YJaSHh3mAHaLHtHTlrTM72Hjy6Hh4rqP6aoVwjOSPghaiti?=
- =?us-ascii?Q?OaFVNf9jHAeNzqnCaVVWArlIT4x+bxfRBCT0vVnNuQ+h4hM3W3C7cHiHJen9?=
- =?us-ascii?Q?KCLxeEocjzCJc6yLAifhsz8LwBlDrqLwuyul5VOUMT34DlN93rwOdcCgUPCB?=
- =?us-ascii?Q?gO3JQGylF8wwm2lSAZMyy34adxjozQ6tNr5jMju9g+U6AGR3fu0eNmeqChsK?=
- =?us-ascii?Q?ggvynmbwCOQSLFG3nRwCvmdVnVkSoOdne2DgH978/SvBSS5sh9GU3purY3bM?=
- =?us-ascii?Q?d+roAwq+jS3lQRhjkkAfZ72YSzqyG5R3sg8jalaL5FLrrYXdtCOA/MXJHYv8?=
- =?us-ascii?Q?YlMGsQ/8qEtcU/i5+KSBVMXTYM6SNZ8TvtE+wuSTnz7QZIhojHTjD3LbYjUV?=
- =?us-ascii?Q?NmHLJhcKNxDcGCtGRbJTn81pkrozH1lJgnHcnFXrGR/XWVnB+ngMqWwblbnR?=
- =?us-ascii?Q?443iIRpkis3l8D/1MeJ/dHShvt3ZXz/ZB+qYpuiBUnPkp2qnSPQ046NLK8cH?=
- =?us-ascii?Q?krkdh90Hfadk6zkzOO4F71s2SD3/A/WOuPO7PYrltKW45CA1Hoio3i1H8pmw?=
- =?us-ascii?Q?c95zaWTgV+nag0TWYTg15VTSFhEIzWgMUIiPDErhPyrXRezzHv2/BWBGtHWH?=
- =?us-ascii?Q?sZGJD53k4Rqjv2SLygv3uRVe8yq0rNCeo5D8cWsnAZEPUUQpYeuleykUko9d?=
- =?us-ascii?Q?kM/s22s/pq8i3s+/n1wfcMD/Bt0pzTi87f9eLAtqNXq0CYLNQkZ1Bbhq4Vr4?=
- =?us-ascii?Q?208gvk8ZYSHylIQMyOiIDwv2jWg7jaA/HepF0oGCoZt8XFyW8KeLvdaE2zRz?=
- =?us-ascii?Q?N3q3XD3hASrwgOQRsv+zg+W6I6gf11JlW8YH0tL3BQ2/WdjZW4vCutxigg4x?=
- =?us-ascii?Q?zQahDE7pvP7PnJuaK0Uxf+28SxE+5yfMmpEkNebd6dKVynlvcpVJg0/fn6Tp?=
- =?us-ascii?Q?D16Kjo3fQ1M8Jp9Q72kWX5cWqYJXhMBfEtNv9kNy5VkjOhaBfpKffQZEnmCV?=
- =?us-ascii?Q?UVyV66kwLeXmBxTir5u3I9p9c3thTYCATjXFHL5l/oAOPUrNFSVY7BSQN8FE?=
- =?us-ascii?Q?5rz6dkny0mjD7Wq8m9DqRxyHQq/0DfWIDCgqUpiKmiO5pLhboyhEs7ueJref?=
- =?us-ascii?Q?JO6w1ErL/NyPMAzBe0b2UL2LiJ/1/vowlEnEt+GBOpww6l2GBzT7PHmUraDT?=
- =?us-ascii?Q?WS3H/tjSqA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 1 Jun 2022 05:28:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE87C81485
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 02:28:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654075729;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CZ/lvSCNGKwkVe2wsWpi8yI8USf1ro7j7LezDFEoQgQ=;
+        b=CkqwVHx42NhfexwyQuWv4NvQSlVaGN1DrL9KfJ3e1DdTa7m6MVD9kgPcYiR6fZDjZp46tC
+        atE8V6boHW4+Vl/JvOSu4GsNjXp5TJ0ewRseAAow0EjH6V8JTEaHL3y581yYxMhdN6ebzH
+        Cy0mVnIdMNDlFACWgr33FDeDzAmasgQ=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-115-ArtyUR24N5mkN-SPbti5Cg-1; Wed, 01 Jun 2022 05:28:47 -0400
+X-MC-Unique: ArtyUR24N5mkN-SPbti5Cg-1
+Received: by mail-wm1-f70.google.com with SMTP id v126-20020a1cac84000000b00396fe5959d2so639187wme.8
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 02:28:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=CZ/lvSCNGKwkVe2wsWpi8yI8USf1ro7j7LezDFEoQgQ=;
+        b=UtC+U1cws7X3Up8Odzsjsc+SgwNg4m2vPwMfCl7Vg1iVWw3i9mHTOv8dk1GL1AFJo1
+         rvAIS+fBpKKABzyHhiLI0SL0Yv7M5SmkVudxBIbDUxZv4+e0DNz+nf8rN/+kS34UGcLF
+         NWNsSO6FfCUjjkDWEdGIgsm2dRnMJaqrKiUljA3jJlJwb4vdtXNVafuQ7OPOp+9/7uEO
+         kwTumjUhhyby2jBBZSOnpwWcwVnK9w3hdDtclZ9+0UwzODkjb+9gLBe/j5obCjws2IK0
+         QpXdJHP1U/olX39MegvVuNU4hGZJMgjCIbzze0s+6AyaM58QRZaSYlP+SVXN+TNCKYv9
+         9EzA==
+X-Gm-Message-State: AOAM530LW6ZoTZUFLjhCcoD4KKn8+o9rystwwpmiygmujiHGTrH453ki
+        bLvMbeLmTfUg7o2NurTt+oCGS/GP/qXQglhho4ERzZM0rOwuYw3TgZevnmfBb/GQbm2Dl8+/cA9
+        ltLxbWo1sqE06jZpReeEpzW+m
+X-Received: by 2002:adf:f110:0:b0:210:78bd:7ea5 with SMTP id r16-20020adff110000000b0021078bd7ea5mr1516588wro.459.1654075726652;
+        Wed, 01 Jun 2022 02:28:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxwHC46RTpBbXTxs+XEWWNK3dgFTWEHhLja0iruHFAge2nPCDwffOVtRLUjv6aul8gfXQkFmQ==
+X-Received: by 2002:adf:f110:0:b0:210:78bd:7ea5 with SMTP id r16-20020adff110000000b0021078bd7ea5mr1516575wro.459.1654075726403;
+        Wed, 01 Jun 2022 02:28:46 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:2600:951d:63df:c091:3b45? (p200300cbc7052600951d63dfc0913b45.dip0.t-ipconnect.de. [2003:cb:c705:2600:951d:63df:c091:3b45])
+        by smtp.gmail.com with ESMTPSA id o34-20020a05600c512200b003944821105esm1592684wms.2.2022.06.01.02.28.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 02:28:45 -0700 (PDT)
+Message-ID: <087817e3-98ce-09f6-9ae9-68e544f43775@redhat.com>
+Date:   Wed, 1 Jun 2022 11:28:44 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5ca830e-3850-46f1-780c-08da43b1082b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2022 09:28:05.1529
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PMYHbN1sLsRpx9EpmoG4+UHFhHBpxS9rC8kG9nsmZHm6myvVaqLNIqfk576+YnQ98A8C+MTFVh4P3aZvcZADXw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1475
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Muchun Song <songmuchun@bytedance.com>, mike.kravetz@oracle.com,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        smuchun@bytedance.com
+References: <20220404074652.68024-1-songmuchun@bytedance.com>
+ <20220404074652.68024-2-songmuchun@bytedance.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 1/3] mm: hugetlb_vmemmap: cleanup hugetlb_vmemmap related
+ functions
+In-Reply-To: <20220404074652.68024-2-songmuchun@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Lu Baolu <baolu.lu@linux.intel.com>
-> Sent: Friday, May 27, 2022 2:30 PM
->=20
-> When the IOMMU domain is about to be freed, it should not be set on any
-> device. Instead of silently dealing with some bug cases, it's better to
-> trigger a warning to report and fix any potential bugs at the first time.
->=20
+On 04.04.22 09:46, Muchun Song wrote:
+> The word of "free" is not expressive enough to express the feature of optimizing
+> vmemmap pages associated with each HugeTLB, rename this keywork to "optimeze".
+> And some function names are prefixed with "huge_page" instead of "hugetlb", it is
+> easily to be confused with THP.  In this patch , cheanup related functions to make
+> code more clear and expressive.
+
+No strong opinion (I remember I kicked of the discussion), but I was
+wondering if instead of alloc vs. free we could be using something like
+optimize vs. restore/rollback.
+
+E.g., hugetlb_vmemmap_optimize() vs. hugetlb_vmemmap_restore().
 
 
->  static void domain_exit(struct dmar_domain *domain)
+Maybe there are other suggestions?
+
+> 
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> ---
+>  include/linux/hugetlb.h |  2 +-
+>  mm/hugetlb.c            | 10 +++++-----
+>  mm/hugetlb_vmemmap.c    | 42 ++++++++++++++++++++----------------------
+>  mm/hugetlb_vmemmap.h    | 20 ++++++++++----------
+>  4 files changed, 36 insertions(+), 38 deletions(-)
+> 
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index 53c1b6082a4c..c16fbb1228a3 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -618,7 +618,7 @@ struct hstate {
+>  	unsigned int free_huge_pages_node[MAX_NUMNODES];
+>  	unsigned int surplus_huge_pages_node[MAX_NUMNODES];
+>  #ifdef CONFIG_HUGETLB_PAGE_FREE_VMEMMAP
+> -	unsigned int nr_free_vmemmap_pages;
+> +	unsigned int optimize_vmemmap_pages;
+
+I suggest converting that into a bool and just calling it
+
+"bool optimize_vmemmap_pages".
+
+You can easily compute what hugetlb_vmemmap_init() at runtime from the
+page and RESERVE_VMEMMAP_NR, right?
+
+At least the calculation in alloc_huge_page_vmemmap() and
+free_huge_page_vmemmap() become *less* weird for me if the magic value
+RESERVE_VMEMMAP_NR isn't used explicitly for vmemmap_addr but implicitly
+for vmemmap_end.
+
+>  #endif
+>  #ifdef CONFIG_CGROUP_HUGETLB
+>  	/* cgroup control files */
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index dd642cfc538b..1f9fbdddc86b 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -1540,7 +1540,7 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
+>  	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
+>  		return;
+>  
+> -	if (alloc_huge_page_vmemmap(h, page)) {
+> +	if (hugetlb_vmemmap_alloc(h, page)) {
+>  		spin_lock_irq(&hugetlb_lock);
+>  		/*
+>  		 * If we cannot allocate vmemmap pages, just refuse to free the
+> @@ -1617,7 +1617,7 @@ static DECLARE_WORK(free_hpage_work, free_hpage_workfn);
+>  
+>  static inline void flush_free_hpage_work(struct hstate *h)
 >  {
-> -
-> -	/* Remove associated devices and clear attached or cached domains
-> */
-> -	domain_remove_dev_info(domain);
-> +	if (WARN_ON(!list_empty(&domain->devices)))
-> +		return;
->=20
+> -	if (free_vmemmap_pages_per_hpage(h))
+> +	if (hugetlb_optimize_vmemmap_pages(h))
 
-warning is good but it doesn't mean the driver shouldn't deal with
-that situation to make it safer e.g. blocking DMA from all attached
-device...
+It might be reasonable to call that hugetlb_should_optimize_vmemmap()
+then, letting it return a bool.
+
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

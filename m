@@ -2,226 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A89353A941
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2CE53A943
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352608AbiFAOgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
+        id S1353341AbiFAOgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235282AbiFAOgI (ORCPT
+        with ESMTP id S1353323AbiFAOgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:36:08 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3679D2409F;
-        Wed,  1 Jun 2022 07:36:05 -0700 (PDT)
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LCs610H4kz67xBN;
-        Wed,  1 Jun 2022 22:31:37 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Wed, 1 Jun 2022 16:36:02 +0200
-Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
- 2022 15:36:01 +0100
-Date:   Wed, 1 Jun 2022 15:35:59 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Ben Widawsky <ben@bwidawsk.net>
-CC:     <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Dave Jiang" <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V9 4/9] cxl/pci: Create PCI DOE mailbox's for memory
- devices
-Message-ID: <20220601153559.0000273b@Huawei.com>
-In-Reply-To: <20220531175020.efqfth7ubbyhoubp@mail.bwidawsk.net>
-References: <20220531152632.1397976-1-ira.weiny@intel.com>
-        <20220531152632.1397976-5-ira.weiny@intel.com>
-        <20220531175020.efqfth7ubbyhoubp@mail.bwidawsk.net>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Wed, 1 Jun 2022 10:36:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 174CB24F2D
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654094180;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ndVFt2OYBW8cSRXpIjiijVDbpZaQ/wTXyFWQt9Vv3wA=;
+        b=NUs4K+sujqm0Hp5wL9cp92l9FzTX7FxnIZTwyoAhtaxDZFNodE6lNQYDQptucIfKqoOGgB
+        d0TKwG5k53Xj9GCylOM4dcZqUy648OXGxeOVSUFO/EgG8Rwr9aM+FRCutSkl2BHKbjyGbW
+        RDTUeK0LwpWQYOtQllJdolxQHb8FZ+k=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-42--b8YmqQVPEGMZEsrePbtHw-1; Wed, 01 Jun 2022 10:36:19 -0400
+X-MC-Unique: -b8YmqQVPEGMZEsrePbtHw-1
+Received: by mail-ed1-f69.google.com with SMTP id y13-20020a056402358d00b0042dfb820070so1152931edc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 07:36:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ndVFt2OYBW8cSRXpIjiijVDbpZaQ/wTXyFWQt9Vv3wA=;
+        b=UCQP+f8n8G8UV81mnwC4NCYeHVDTv9pYanmvr8SStENJ8mp4rO0MqwXB2Ba7BgIByr
+         uv4J1TYCt97zCF90Hvc8s1H/dw+Zk+teyuo2PzCisqsUZZ1rxO/NG+DDhVUly5WbqOlr
+         4XCyx/BNH1CT6Otr3QSCN0fxY0VAjiiUW+lOsOmxUXJgypLXVTWmuMh8Il/39IFmg9Nn
+         qgVOlCA9SHVdA0vrn2rmzMb1ebFTs9dKsNGmTrGCEQpGvoLszNyLoai60SWlPwj+8aoo
+         76X87uMVd1YdWgMlJM7vTyCRvrIjakhCzPRzmcXhKLZj+/5oPaRgXDJXG6krqzx9rdqB
+         1ZUA==
+X-Gm-Message-State: AOAM530vCWohoDQga2f1woIS2j+tdCUBgk0izU3ZSSjCUaDH2bsngNvR
+        7wLqYMFzEcAqNqzoMxB6LSihG1ibuMTMctXPhlmXfaQk5kB8L669TRDo0XBK23jwuHtvzSW/65P
+        H2ak1Fki+xXXCpJdTO1SsW3F9MHyAdgyZyCxHGXsN
+X-Received: by 2002:a05:6402:6cc:b0:42d:bd2d:9f82 with SMTP id n12-20020a05640206cc00b0042dbd2d9f82mr237692edy.59.1654094177794;
+        Wed, 01 Jun 2022 07:36:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyFh8H56y/l8Ke6nyDbJQA0j9RiyCmE3CPbXmuv5QhyDCmnY54KlRZlTjdvlq4rdEAuPxbDDSvggkS7C+zAZow=
+X-Received: by 2002:a05:6402:6cc:b0:42d:bd2d:9f82 with SMTP id
+ n12-20020a05640206cc00b0042dbd2d9f82mr237650edy.59.1654094177475; Wed, 01 Jun
+ 2022 07:36:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <388098b2c03fbf0a732834fc01b2d875c335bc49.1642170196.git.lucien.xin@gmail.com>
+In-Reply-To: <388098b2c03fbf0a732834fc01b2d875c335bc49.1642170196.git.lucien.xin@gmail.com>
+From:   Maurizio Lombardi <mlombard@redhat.com>
+Date:   Wed, 1 Jun 2022 16:36:06 +0200
+Message-ID: <CAFL455m6BZW-KVNOkJPo3BSeEK39Vq597F-b5XvQJmU3mrPmZA@mail.gmail.com>
+Subject: Re: [PATCH] mm: slub: fix a deadlock warning in kmem_cache_destroy
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Antoine Tenart <atenart@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 May 2022 10:50:20 -0700
-Ben Widawsky <ben@bwidawsk.net> wrote:
+p=C3=A1 14. 1. 2022 v 15:23 odes=C3=ADlatel Xin Long <lucien.xin@gmail.com>=
+ napsal:
+>
+> cpus_read_lock() is introduced into kmem_cache_destroy() by
+> commit 5a836bf6b09f ("mm: slub: move flush_cpu_slab() invocations
+> __free_slab() invocations out of IRQ context"), and it could cause
+> a deadlock.
 
-> On 22-05-31 08:26:27, ira.weiny@intel.com wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > DOE mailbox objects will be needed for various mailbox communications
-> > with each memory device.
-> > 
-> > Iterate each DOE mailbox capability and create PCI DOE mailbox objects
-> > as found.
-> > 
-> > It is not anticipated that this is the final resting place for the
-> > iteration of the DOE devices.  The support of ports may drive this code
-> > into the pcie side.  In this imagined architecture the CXL port driver
-> > would then query into the PCI device for the DOE mailbox array.  
-> 
-> Not sure if direction has changed, but initially it would have been the cxl_pci
-> driver who would query this and pass it along when the port driver probes.
-> Personally, I've never had an issue with non cxl_pci drivers using PCI
-> interfaces and semantics, but it is something we've taken specific care to
-> avoid.
-> 
-> > 
-> > For now this is good enough for the endpoints and the split is similar
-> > to the envisioned architecture where getting the mailbox array is
-> > separated from the various protocol needs.  For example, it is not
-> > anticipated that the CDAT code will need to move because it is only
-> > needed by the cxl_ports.
-> > 
-> > Likewise irq's are separated out in a similar design pattern to the
-> > PCIe port driver.  But a much simpler irq enabling flag is used and only
-> > DOE interrupts are supported.
-> > 
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > ---
-> > Changes from V8:
-> > 	Move PCI_DOE selection to CXL_BUS to support future patches
-> > 	which move queries into the port code.
-> > 	Remove Auxiliary device arch
-> > 	Squash the functionality of the auxiliary driver into this
-> > 	patch.
-> > 	Split out the irq handling a bit.
-> > 
-> > Changes from V7:
-> > 	Minor code clean ups
-> > 	Rebased on cxl-pending
-> > 
-> > Changes from V6:
-> > 	Move all the auxiliary device stuff to the CXL layer
-> > 
-> > Changes from V5:
-> > 	Split the CXL specific stuff off from the PCI DOE create
-> > 	auxiliary device code.
-> > ---
-> >  drivers/cxl/Kconfig  |   1 +
-> >  drivers/cxl/cxlmem.h |   6 +++
-> >  drivers/cxl/pci.c    | 111 +++++++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 118 insertions(+)
-> > 
-> > diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
-> > index f64e3984689f..7adaaf80b302 100644
-> > --- a/drivers/cxl/Kconfig
-> > +++ b/drivers/cxl/Kconfig
-> > @@ -2,6 +2,7 @@
-> >  menuconfig CXL_BUS
-> >  	tristate "CXL (Compute Express Link) Devices Support"
-> >  	depends on PCI
-> > +	select PCI_DOE
-> >  	help
-> >  	  CXL is a bus that is electrically compatible with PCI Express, but
-> >  	  layers three protocols on that signalling (CXL.io, CXL.cache, and
-> > diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> > index 60d10ee1e7fc..4d2764b865ab 100644
-> > --- a/drivers/cxl/cxlmem.h
-> > +++ b/drivers/cxl/cxlmem.h
-> > @@ -191,6 +191,8 @@ struct cxl_endpoint_dvsec_info {
-> >   * @component_reg_phys: register base of component registers
-> >   * @info: Cached DVSEC information about the device.
-> >   * @serial: PCIe Device Serial Number
-> > + * @doe_mbs: PCI DOE mailbox array
-> > + * @num_mbs: Number of DOE mailboxes
-> >   * @mbox_send: @dev specific transport for transmitting mailbox commands
-> >   *
-> >   * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
-> > @@ -224,6 +226,10 @@ struct cxl_dev_state {
-> >  	resource_size_t component_reg_phys;
-> >  	u64 serial;
-> >  
-> > +	bool doe_use_irq;
-> > +	struct pci_doe_mb **doe_mbs;
-> > +	int num_mbs;
-> > +
-> >  	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
-> >  };
-> >  
-> > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> > index 5a0ae46d4989..131f89dec8e7 100644
-> > --- a/drivers/cxl/pci.c
-> > +++ b/drivers/cxl/pci.c
-> > @@ -8,6 +8,7 @@
-> >  #include <linux/mutex.h>
-> >  #include <linux/list.h>
-> >  #include <linux/pci.h>
-> > +#include <linux/pci-doe.h>
-> >  #include <linux/io.h>
-> >  #include "cxlmem.h"
-> >  #include "cxlpci.h"
-> > @@ -386,6 +387,113 @@ static int cxl_setup_regs(struct pci_dev *pdev, enum cxl_regloc_type type,
-> >  	return rc;
-> >  }
-> >  
-> > +static void cxl_pci_free_irq_vectors(void *data)
-> > +{
-> > +	pci_free_irq_vectors(data);
-> > +}
-> > +
-> > +static void cxl_doe_destroy_mb(void *ds)
-> > +{
-> > +	struct cxl_dev_state *cxlds = ds;
-> > +	int i;
-> > +
-> > +	for (i = 0; i < cxlds->num_mbs; i++) {
-> > +		if (cxlds->doe_mbs[i])
-> > +			pci_doe_destroy_mb(cxlds->doe_mbs[i]);
-> > +	}
-> > +}
-> > +
-> > +static void cxl_alloc_irq_vectors(struct cxl_dev_state *cxlds)
-> > +{
-> > +	struct device *dev = cxlds->dev;
-> > +	struct pci_dev *pdev = to_pci_dev(dev);
-> > +	int num_irqs = 0;
-> > +	int off = 0;
-> > +	int rc;
-> > +
-> > +	/* Account for all the DOE vectors needed */
-> > +	pci_doe_for_each_off(pdev, off) {
-> > +		int irq = pci_doe_get_irq_num(pdev, off);
-> > +
-> > +		if (irq < 0)
-> > +			continue;
-> > +		num_irqs = max(num_irqs, irq + 1);  
-> 
-> This seems overly complicated. Isn't it just num_irqs++?
+FYI,
 
-nope.  
+I received a bug report from one of our customers, he complains that
+his system (with nvmefc boot from SAN) hangs when rebooting.
+He runs a RHEL-9 kernel based on version 5.14.0.
 
-There is no guarantee the irq values are near zero or contiguous.
+What is interesting is that, according to him, after reverting commit
+5a836bf6b09f
+("mm: slub: move flush_cpu_slab() invocations __free_slab()
+invocations out of IRQ context")
+the reboot operation doesn't hang anymore.
 
-If irq is 33 for example, it pretty much implies that there are 34 or more irq
-vectors used for something on this device, but we don't know what the rest are for.
+The call trace seems to point to a possible problem due to the fact that
+nvme_delete_ctrl_work is allocated with the WQ_MEM_RECLAIM bit set.
 
-Trick is used in portdrv to deal with enabling all the irqs needed for the various
-supported services, which might not be all the irqs the hardware provides.
+[  453.012078] ------------[ cut here ]------------
+[  453.016744] workqueue: WQ_MEM_RECLAIM
+nvme-delete-wq:nvme_delete_ctrl_work [nvme_core] is flushing
+!WQ_MEM_RECLAIM events:flush_cpu_slab
+[  453.016789] WARNING: CPU: 37 PID: 410 at kernel/workqueue.c:2637
+check_flush_dependency+0x10a/0x120
+[...]
+[  453.262125] Call Trace:
+[  453.264582]  __flush_work.isra.0+0xbf/0x220
+[  453.268775]  ? __queue_work+0x1dc/0x420
+[  453.272623]  flush_all_cpus_locked+0xfb/0x120
+[  453.276992]  __kmem_cache_shutdown+0x2b/0x320
+[  453.281361]  kmem_cache_destroy+0x49/0x100
+[  453.285465]  bioset_exit+0x143/0x190
+[  453.289052]  blk_release_queue+0xb9/0x100
+[  453.293075]  kobject_cleanup+0x37/0x130
+[  453.296922]  nvme_fc_ctrl_free+0xc6/0x150 [nvme_fc]
+[  453.302397]  nvme_free_ctrl+0x1ac/0x2b0 [nvme_core]
+[  453.307818]  device_release+0x31/0x90
+[  453.312005]  kobject_cleanup+0x37/0x130
+[  453.316369]  process_one_work+0x1e5/0x3c0
+[  453.320895]  worker_thread+0x50/0x3b0
+[  453.325074]  ? rescuer_thread+0x370/0x370
+[  453.329592]  kthread+0x146/0x170
+[  453.333322]  ? set_kthread_struct+0x40/0x40
+[  453.338027]  ret_from_fork+0x1f/0x30
+[  453.342082] ---[ end trace 8c9cdd85adbbfc4f ]---
 
-Maybe worth renaming num_irqs as max_irq or something like that and postpone the +1 to
-where it is used?
+Maurizio Lombardi
 
-Jonathan
-
-> 
-> > +	}

@@ -2,317 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F13053AED3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A9153AF93
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbiFAWA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 18:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S232290AbiFAWCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 18:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbiFAWAE (ORCPT
+        with ESMTP id S232276AbiFAWCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 18:00:04 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95789AE6B;
-        Wed,  1 Jun 2022 15:00:02 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251KCgMr024213;
-        Wed, 1 Jun 2022 21:59:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : in-reply-to : references : date : message-id : content-type :
- mime-version; s=corp-2021-07-09;
- bh=IoAe1lf4dENRWX+DMSHRFsbMT8f6nPQ6XzMSWFlo1SY=;
- b=f7871M1DOrZiZAbR5qmgeDcNIQLna5Z2HDbypvohJkUJiiZGDwvGFm+z1fMhq8qzCAFJ
- 5GhfOQBDM57OTFIfj8SUsQelbRlV8i/LQtsM1RqVilnWqqxJjfr4UTFDaIvwgeneLvp6
- yyK4V6RChimvD7zCtteJOllkRZT11/FYRsF8gI1uJdb11G8b2qlfp2Sojuab/eGqH3Z7
- 6X0DNmUleCXKzKHV0emmtmftF9gocaSiixjgSvmj87Z707todDg2zgUkC6Y3oxAObbVA
- AhUx3Rln5kcajWzEsGQBULbn2BGdqEvbprtPWXfeL8EU2s+Vjl7jHgmFUbWlZX5t79rl MQ== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gbc6x8yb8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 01 Jun 2022 21:59:56 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 251Lu92h029622;
-        Wed, 1 Jun 2022 21:59:55 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2046.outbound.protection.outlook.com [104.47.51.46])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gc8p49mj3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 01 Jun 2022 21:59:55 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cGXM5KzD+OLOJin/C+p0RPdky7s90gc2s4M8PQFYKWRKdx7z6+fr6M6xnVGSPo6moMyBOG5ffdO2A/bJS1fY1dfxSBzIjf0Xx1y4v0jc2VVwI19zGWaPpUHEy1PhCSiYfjNBI4GRc33Dz/O2ev6SgkSDITNOud44LRpZydOMSXRg9Xq5BLBsFxdA6U10BuXdDz9aBjmdW7wslkdkKRFKf//EdWKLzahkIIRbc5AIecCkQAKPznZwJ5Ekhw8+o/iSLQcb2PMO1uT/cUFiH3ls1AO/esOQZSEUirJEbnge4RfYeaZw2TnQ6f3y1kcQgQHWmOQRB3GSbI6/JH6zY8sHfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IoAe1lf4dENRWX+DMSHRFsbMT8f6nPQ6XzMSWFlo1SY=;
- b=E4r3CWqjE5BKWb1x0GyJ3JLnAFDQrrEohm7DQWMs9rpuHvE+WM20nFPaf0V3XlHLblfiKRL216X/6SGEvYqJLHpkDGRYOkJQrNyDel8G4lV97vam4QvOZ/OwazDy3NtU3hpLEUNzffwPbNC+worRG/MZP73ks1BcSiD0OIxFzG/8Fk1FVXmp7w+OdzpflfqeVg5o+7yVdsyhSzXsHzHjHlhtj3PkLvPyrXI8XO/GEW++UNdS2OmDk4fa8j+q3krUkTiTXAb+TSXkQO7gQXoMyEMfQm80g9qbN80PqpMYukJwIBDL6LnEXl/pigz5r0iZwyHh80+c9a7jGgGbPllBIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IoAe1lf4dENRWX+DMSHRFsbMT8f6nPQ6XzMSWFlo1SY=;
- b=yijfYLF3jCfZAyQgcjMXccNhLr343yod/ywMKY80fdA2tWG67YjEyKdI5olTgTgz3TUZpqMZlZvuX6/SYGS/M5rCnfqO2fkIJQUiF8tNy02vssbZc91QnI4ZVeuxCnM0PDAXqhR5IIypkATVbUY5ZEOjnrLqSTO/rskvAHRIlxM=
-Received: from MN2PR10MB4173.namprd10.prod.outlook.com (2603:10b6:208:1d1::19)
- by CY5PR10MB6012.namprd10.prod.outlook.com (2603:10b6:930:27::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.18; Wed, 1 Jun
- 2022 21:59:50 +0000
-Received: from MN2PR10MB4173.namprd10.prod.outlook.com
- ([fe80::1869:f3c4:f33a:916d]) by MN2PR10MB4173.namprd10.prod.outlook.com
- ([fe80::1869:f3c4:f33a:916d%7]) with mapi id 15.20.5314.013; Wed, 1 Jun 2022
- 21:59:50 +0000
-From:   Stephen Brennan <stephen.s.brennan@oracle.com>
-To:     David Howells <dhowells@redhat.com>, torvalds@linux-foundation.org
-Cc:     stable@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        keyrings@vger.kernel.org, dhowells@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] assoc_array: Fix BUG_ON during garbage collect
-In-Reply-To: <165295023086.3361286.8662079860706628540.stgit@warthog.procyon.org.uk>
-References: <165295023086.3361286.8662079860706628540.stgit@warthog.procyon.org.uk>
-Date:   Wed, 01 Jun 2022 14:59:47 -0700
-Message-ID: <8735go11v0.fsf@stepbren-lnx.us.oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR08CA0039.namprd08.prod.outlook.com
- (2603:10b6:a03:117::16) To MN2PR10MB4173.namprd10.prod.outlook.com
- (2603:10b6:208:1d1::19)
+        Wed, 1 Jun 2022 18:02:41 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494A2B842;
+        Wed,  1 Jun 2022 15:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654120960; x=1685656960;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TTojbk3zhQLGZQY5ZUmuvOKg1nRm4x/zxYu3AiWIBHA=;
+  b=HD8/O/JXngM1pZQO0wu/NbV9NVYGHPxHRO8TCIUsjbMELpHG0Ln3fqYN
+   WtUnvLwZ/XBsOtSYB+0pwMidYQMM1Z8Tfe90AJg5Ri6umRXzS5iX/JTSF
+   7dw3w0Vr1M3fnxbc+gSzEXaRsEixSrqgbM9K4GDrkeXG1pMQadyT4b5aV
+   Uhz8yfzWc8tCXJcm/4Q4Ye7wxQx4DaqRncbKL/V3EhfxrIee4gnfmDTdW
+   7xbKhmg8JNawJHnFOIbF3YYXW8+UjK2AHlZawGvrsCXcRtPYPFIo1pDzR
+   AIISsdRoCwGkWFGj4WgSFzXzsiM/33ygmo3wxp/ZezJBgurxWC4mMAuaj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="255614614"
+X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
+   d="scan'208";a="255614614"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 15:02:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
+   d="scan'208";a="707266896"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 01 Jun 2022 15:02:24 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwWQ4-0004SU-38;
+        Wed, 01 Jun 2022 22:02:24 +0000
+Date:   Thu, 2 Jun 2022 06:01:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Song Liu <song@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kernel-team@fb.com, rostedt@goodmis.org,
+        jolsa@kernel.org, Song Liu <song@kernel.org>
+Subject: Re: [PATCH bpf-next 3/5] ftrace: introduce
+ FTRACE_OPS_FL_SHARE_IPMODIFY
+Message-ID: <202206020533.bBh0IXx6-lkp@intel.com>
+References: <20220601175749.3071572-4-song@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7444b9c1-bb33-4088-81fb-08da441a0cad
-X-MS-TrafficTypeDiagnostic: CY5PR10MB6012:EE_
-X-Microsoft-Antispam-PRVS: <CY5PR10MB6012CE34285287E8C49CFBEBDBDF9@CY5PR10MB6012.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5R6LmMAwG04aBRDIKL+rIRKqYXzsE87LTfcvaXttQgt8F/VR9WJsJWqoLRDO366dWRodetemsR3tNMKBCUcBYcXIJA4n7i4dJ6Zq+PURIJhceOuNL0jrjqO1eEKAi530eRWgmVDKkedi7Z3x9t1GBaVlcjx0nRm2qQj3Xe14AgMtUx3gAtao0U3jZvlVKf+G3x/V7brWUJaoL42/R6Fx9iQCVnpTPe3JIn3U822gYNkOHtbIOfxLb7VcuCWBF+B927XOAIP05tYBXTa83qS+3k2aplRY8R9Z4p/PzEh2C7mFgiKKuJg8moJ8fi554PKe0G0PE1Od4yh+gJtgvQLr6RMR9WsVaJ8IdkhUTiqzjG2YVSEDPS0HUSuCtczar7lhyHqmXLNikd6SCFSqFGDvQT4eVNVJqiTrCMfuGBE1rg9O46/bK/XhQPIRrS6FFsYu+n9X8Flrrc6trL0xQ8o8c3bVvT2GKqkkfN2pR7Yv8pC5fh47mGUN+W3iqYbFJrqyLyqkQYOCjsqZUr3Do1eTqswp0uJvUy6eJL/Q+YCGtNOyZqAyRzwhhTDAbkUyWNuQnVutuTq6OYVq92bqOe8SF/JPnAvkHrCMaw4BNxVX00FBMsa2d+Tt9GtEDT+DbjzTa6KKPOnS92Mb/s0BT/aWiSwVs95dqNW9KJ91MW9Hy0gXnpekAfYQUavccDdCAW3z3rsB/7njwNOker1wADDz4512Z8Uq1rA6LPJtdwIhC+xiD43Lmlhmf76uznXjhTgV9sq+uPNnpoVWgimPA/vmsa6DnuunGfUawvx3RG6Jb9UhIu8rADc15dpM6HIahZID
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR10MB4173.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(52116002)(86362001)(66946007)(66556008)(4326008)(8676002)(66476007)(5660300002)(6506007)(966005)(6486002)(508600001)(186003)(83380400001)(6666004)(8936002)(316002)(38100700002)(2906002)(26005)(6512007)(54906003)(38350700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?z7tigjCRxFvXy6prxpWWqzHdHlVZMDrKeiP1EOV239PjbEVM/oCsvBrPyOXY?=
- =?us-ascii?Q?yfhY79O2r/jg2knJ0X9sGdapmQ8U9whtuQIMiCPEGjE/iBZ/GCdSabyiBV36?=
- =?us-ascii?Q?WjuFVSbdg+Y2FuXXD54CHCST1tOQKtJfLKT70R9IiS8ZkTPikXaqMU87UYjE?=
- =?us-ascii?Q?w87VNhMUCHyxrkHV6e+EYla9/6lg8eILehQqqVcnBDEUQEblyMgaZxqs0yE4?=
- =?us-ascii?Q?X096DwY6jizQAbfBR3E/Zpc/GqNSXt3FdGG0mCUBAJwAseMhgSmGOcsOXOa+?=
- =?us-ascii?Q?lMMvPngzma/oyMORUJZ7vLzrQNmDPbYqCdA6sJ66Hx+MokpsGP+ELVxU8I9Z?=
- =?us-ascii?Q?GmQRIpGKG2GTsIjEQYAupxQy9m7+RMgnNfS9cwPhhBgdkPGLfk3TS56o9oE2?=
- =?us-ascii?Q?4kF8ZrK2OmEIHkScoPw8ICqQ23i0u+RpaICYGHcdEd1KXThq/u9oJCDSSXqq?=
- =?us-ascii?Q?1f0NKelRTqf3OFcEQgDTqmuF6Ywu8vMEOifiMKIS7SuT6Xiq4XFfEByG38HR?=
- =?us-ascii?Q?2i480bA7DLdZ3zo1hrSNpIq0nq9excGsiLZm3bt6KPdlXjcD/UkFnsAqLuJO?=
- =?us-ascii?Q?g4vOa3iFFxa/TE94NYLt0pHuMVIQrJ8OV2UIIaLPnjbNuQ/DijRzrtHEHQ2C?=
- =?us-ascii?Q?udueLNBFy2RSfp4xIU3Pd625j6wL3ymt15LHvQnLqVe1gOTL15C7RouqSD0w?=
- =?us-ascii?Q?hIxidCzQ/9tWEW07dcV20Q3PejRjOGsEIcrnkQLmafXyLShlHn20VlN0YLZ4?=
- =?us-ascii?Q?U52/8QaSvZFbMeqFQYp1EmNksN5kwIhKYT8VOAqePe7nvL/iXMIus0t9FkR0?=
- =?us-ascii?Q?sR+YZhmcnwlRLWzdRoS+/v2S1ahywtCJtrkJmVFhXAlpjtX+EuMOp0KAssuX?=
- =?us-ascii?Q?j4/hxlN6saCPR+B+/Nvx7pXpRTgnqLz7zxLKBScfzj4YKxtauuHmOwNyDkk0?=
- =?us-ascii?Q?9SGdL5RPp46nq2RzDCFUsr8+m26y4Mckeu7v8+wtFrB6YURQHtJKlC9Z7BPx?=
- =?us-ascii?Q?nUDPEF2hvhcdaeVjP10PSXoe1a/hcAKYRq20Q4PitdFRDpS2hTAzvAgaLIEN?=
- =?us-ascii?Q?dvH8M9vHrUawI0QzL9yfmwSTVPp/2MPkvtm5IClm4jFd0Wvh/c8joYyf4Xfe?=
- =?us-ascii?Q?ejSNsoJ08szSggs4qo9M59o1tHyhme9PXCq+J5Y/6G6gYxoSJQ3YDGh1Pp1E?=
- =?us-ascii?Q?jW8Dcx5qTeiX8SzdxUttVARV+lCQnwpDyLSzweJC9C1HmvBM883dxkHu4D7V?=
- =?us-ascii?Q?AC4tvk5bpm6eOHSwgllnJaaQaj/4/nwwBZn8vkoN9LOgXCwYmvjVxZ2CeeOU?=
- =?us-ascii?Q?3lGkgTiJ7VUfC3YAjyIta9fCEeaNKs7y+a7h7iUw8hHDPZQWl+d9ASl2gyuq?=
- =?us-ascii?Q?8VXHFIBgClWMYki+zZ3Xi9kQLh1V/wHIQ83Ugi2gyhEZGyIm8Ik71NlDEJFB?=
- =?us-ascii?Q?PQtIqaJNFgkzYIa4EstWWJW2HXPrb959QjuktyuzzcdbO6siYRzlja49Z8NA?=
- =?us-ascii?Q?dANYe2O+Nhwp6jv/YRO8rBPDCZy5BtzDKsDIqXCK26c08LmsdMx+tMDnUEwQ?=
- =?us-ascii?Q?6Bf6/0K5zJqEJoDbqbOtQJgm3+A65/UtG7kKqX3js3vGYNGJcW3yJuniPi37?=
- =?us-ascii?Q?DBnvPuHRLfZn4uonUGAZYJ54p4nozodUIspuNaFYY7m3+/8cqLLqQ58eVYOg?=
- =?us-ascii?Q?e62LN6OcItIs3fKX3mYcwPT1sl8vA/Sm7KfPoOmrP0ZyUsOmp7YulQymqUTC?=
- =?us-ascii?Q?UpfDKnvZY9UL5w8pdzx5uCgPFKCijEk=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7444b9c1-bb33-4088-81fb-08da441a0cad
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR10MB4173.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2022 21:59:50.1694
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M/M7NH85RR9jYI6eXoiuUadwgyU3+5ziL3jkXnC7orVswUW68o6Nr5WZX8dYHbdj03H4Te1QtPM0GILjH90zPW9yYtD/hqCiZ695RbMtP/4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR10MB6012
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
- definitions=2022-06-01_08:2022-06-01,2022-06-01 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- phishscore=0 suspectscore=0 malwarescore=0 mlxscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206010087
-X-Proofpoint-GUID: 5YlPiVfY1QwXo06vp1PmO9ZUv_GVlZ-h
-X-Proofpoint-ORIG-GUID: 5YlPiVfY1QwXo06vp1PmO9ZUv_GVlZ-h
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601175749.3071572-4-song@kernel.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Howells <dhowells@redhat.com> writes:
-> From: Stephen Brennan <stephen.s.brennan@oracle.com>
->
-> A rare BUG_ON triggered in assoc_array_gc:
->
->     [3430308.818153] kernel BUG at lib/assoc_array.c:1609!
->
-> Which corresponded to the statement currently at line 1593 upstream:
->
->     BUG_ON(assoc_array_ptr_is_meta(p));
->
-> Using the data from the core dump, I was able to generate a userspace
-> reproducer[1] and determine the cause of the bug.
->
-> [1]: https://github.com/brenns10/kernel_stuff/tree/master/assoc_array_gc
->
-> After running the iterator on the entire branch, an internal tree node
-> looked like the following:
->
->     NODE (nr_leaves_on_branch: 3)
->       SLOT [0] NODE (2 leaves)
->       SLOT [1] NODE (1 leaf)
->       SLOT [2..f] NODE (empty)
->
-> In the userspace reproducer, the pr_devel output when compressing this
-> node was:
->
->     -- compress node 0x5607cc089380 --
->     free=0, leaves=0
->     [0] retain node 2/1 [nx 0]
->     [1] fold node 1/1 [nx 0]
->     [2] fold node 0/1 [nx 2]
->     [3] fold node 0/2 [nx 2]
->     [4] fold node 0/3 [nx 2]
->     [5] fold node 0/4 [nx 2]
->     [6] fold node 0/5 [nx 2]
->     [7] fold node 0/6 [nx 2]
->     [8] fold node 0/7 [nx 2]
->     [9] fold node 0/8 [nx 2]
->     [10] fold node 0/9 [nx 2]
->     [11] fold node 0/10 [nx 2]
->     [12] fold node 0/11 [nx 2]
->     [13] fold node 0/12 [nx 2]
->     [14] fold node 0/13 [nx 2]
->     [15] fold node 0/14 [nx 2]
->     after: 3
->
-> At slot 0, an internal node with 2 leaves could not be folded into the
-> node, because there was only one available slot (slot 0). Thus, the
-> internal node was retained. At slot 1, the node had one leaf, and was
-> able to be folded in successfully. The remaining nodes had no leaves,
-> and so were removed. By the end of the compression stage, there were 14
-> free slots, and only 3 leaf nodes. The tree was ascended and then its
-> parent node was compressed. When this node was seen, it could not be
-> folded, due to the internal node it contained.
->
-> The invariant for compression in this function is: whenever
-> nr_leaves_on_branch < ASSOC_ARRAY_FAN_OUT, the node should contain all
-> leaf nodes. The compression step currently cannot guarantee this, given
-> the corner case shown above.
->
-> To fix this issue, retry compression whenever we have retained a node,
-> and yet nr_leaves_on_branch < ASSOC_ARRAY_FAN_OUT. This second
-> compression will then allow the node in slot 1 to be folded in,
-> satisfying the invariant. Below is the output of the reproducer once the
-> fix is applied:
->
->     -- compress node 0x560e9c562380 --
->     free=0, leaves=0
->     [0] retain node 2/1 [nx 0]
->     [1] fold node 1/1 [nx 0]
->     [2] fold node 0/1 [nx 2]
->     [3] fold node 0/2 [nx 2]
->     [4] fold node 0/3 [nx 2]
->     [5] fold node 0/4 [nx 2]
->     [6] fold node 0/5 [nx 2]
->     [7] fold node 0/6 [nx 2]
->     [8] fold node 0/7 [nx 2]
->     [9] fold node 0/8 [nx 2]
->     [10] fold node 0/9 [nx 2]
->     [11] fold node 0/10 [nx 2]
->     [12] fold node 0/11 [nx 2]
->     [13] fold node 0/12 [nx 2]
->     [14] fold node 0/13 [nx 2]
->     [15] fold node 0/14 [nx 2]
->     internal nodes remain despite enough space, retrying
->     -- compress node 0x560e9c562380 --
->     free=14, leaves=1
->     [0] fold node 2/15 [nx 0]
->     after: 3
->
-> Changes
-> =======
-> DH:
->  - Use false instead of 0.
->  - Reorder the inserted lines in a couple of places to put retained before
->    next_slot.
->
-> ver #2)
->  - Fix typo in pr_devel, correct comparison to "<="
->
->
-> Fixes: 3cb989501c26 ("Add a generic associative array implementation.")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Jarkko Sakkinen <jarkko@kernel.org>
-> cc: Andrew Morton <akpm@linux-foundation.org>
-> cc: keyrings@vger.kernel.org
-> Link: https://lore.kernel.org/r/20220511225517.407935-1-stephen.s.brennan@oracle.com/ # v1
-> Link: https://lore.kernel.org/r/20220512215045.489140-1-stephen.s.brennan@oracle.com/ # v2
-> ---
->
->  lib/assoc_array.c |    8 ++++++++
->  1 file changed, 8 insertions(+)
+Hi Song,
 
-Hi,
+I love your patch! Yet something to improve:
 
-Just wanted to check on this patch as the 5.19 window closes. David, are
-you planning on taking this through a particular tree, or is the ask for
-Linus to pick it directly?
+[auto build test ERROR on bpf-next/master]
 
-Thanks,
-Stephen
+url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220602-020112
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: parisc-randconfig-r005-20220531 (https://download.01.org/0day-ci/archive/20220602/202206020533.bBh0IXx6-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a710d92bb10a7a0376af57af15208ea1b4396545
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220602-020112
+        git checkout a710d92bb10a7a0376af57af15208ea1b4396545
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash kernel/trace/
 
->
-> diff --git a/lib/assoc_array.c b/lib/assoc_array.c
-> index 079c72e26493..ca0b4f360c1a 100644
-> --- a/lib/assoc_array.c
-> +++ b/lib/assoc_array.c
-> @@ -1461,6 +1461,7 @@ int assoc_array_gc(struct assoc_array *array,
->  	struct assoc_array_ptr *cursor, *ptr;
->  	struct assoc_array_ptr *new_root, *new_parent, **new_ptr_pp;
->  	unsigned long nr_leaves_on_tree;
-> +	bool retained;
->  	int keylen, slot, nr_free, next_slot, i;
->  
->  	pr_devel("-->%s()\n", __func__);
-> @@ -1536,6 +1537,7 @@ int assoc_array_gc(struct assoc_array *array,
->  		goto descend;
->  	}
->  
-> +retry_compress:
->  	pr_devel("-- compress node %p --\n", new_n);
->  
->  	/* Count up the number of empty slots in this node and work out the
-> @@ -1553,6 +1555,7 @@ int assoc_array_gc(struct assoc_array *array,
->  	pr_devel("free=%d, leaves=%lu\n", nr_free, new_n->nr_leaves_on_branch);
->  
->  	/* See what we can fold in */
-> +	retained = false;
->  	next_slot = 0;
->  	for (slot = 0; slot < ASSOC_ARRAY_FAN_OUT; slot++) {
->  		struct assoc_array_shortcut *s;
-> @@ -1602,9 +1605,14 @@ int assoc_array_gc(struct assoc_array *array,
->  			pr_devel("[%d] retain node %lu/%d [nx %d]\n",
->  				 slot, child->nr_leaves_on_branch, nr_free + 1,
->  				 next_slot);
-> +			retained = true;
->  		}
->  	}
->  
-> +	if (retained && new_n->nr_leaves_on_branch <= ASSOC_ARRAY_FAN_OUT) {
-> +		pr_devel("internal nodes remain despite enough space, retrying\n");
-> +		goto retry_compress;
-> +	}
->  	pr_devel("after: %lu\n", new_n->nr_leaves_on_branch);
->  
->  	nr_leaves_on_tree = new_n->nr_leaves_on_branch;
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   kernel/trace/ftrace.c: In function 'prepare_direct_functions_for_ipmodify':
+   kernel/trace/ftrace.c:8005:21: error: 'direct_mutex' undeclared (first use in this function); did you mean 'event_mutex'?
+    8005 |         mutex_lock(&direct_mutex);
+         |                     ^~~~~~~~~~~~
+         |                     event_mutex
+   kernel/trace/ftrace.c:8005:21: note: each undeclared identifier is reported only once for each function it appears in
+>> kernel/trace/ftrace.c:8007:19: error: 'struct ftrace_ops' has no member named 'func_hash'
+    8007 |         hash = ops->func_hash->filter_hash;
+         |                   ^~
+>> kernel/trace/ftrace.c:8020:37: error: implicit declaration of function 'ops_references_ip' [-Werror=implicit-function-declaration]
+    8020 |                                 if (ops_references_ip(op, ip)) {
+         |                                     ^~~~~~~~~~~~~~~~~
+>> kernel/trace/ftrace.c:8028:40: error: 'struct ftrace_ops' has no member named 'ops_func'
+    8028 |                                 if (!op->ops_func) {
+         |                                        ^~
+   kernel/trace/ftrace.c:8032:41: error: 'struct ftrace_ops' has no member named 'ops_func'
+    8032 |                                 ret = op->ops_func(op, FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY);
+         |                                         ^~
+   kernel/trace/ftrace.c: In function 'register_ftrace_function':
+   kernel/trace/ftrace.c:8084:31: error: 'direct_mutex' undeclared (first use in this function); did you mean 'event_mutex'?
+    8084 |                 mutex_unlock(&direct_mutex);
+         |                               ^~~~~~~~~~~~
+         |                               event_mutex
+   cc1: some warnings being treated as errors
+
+
+vim +8007 kernel/trace/ftrace.c
+
+  7974	
+  7975	/*
+  7976	 * When registering ftrace_ops with IPMODIFY (not direct), it is necessary
+  7977	 * to make sure it doesn't conflict with any direct ftrace_ops. If there is
+  7978	 * existing direct ftrace_ops on a kernel function being patched, call
+  7979	 * FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY on it to enable sharing.
+  7980	 *
+  7981	 * @ops:     ftrace_ops being registered.
+  7982	 *
+  7983	 * Returns:
+  7984	 *         0 - @ops does have IPMODIFY or @ops itself is DIRECT, no change
+  7985	 *             needed;
+  7986	 *         1 - @ops has IPMODIFY, hold direct_mutex;
+  7987	 *         -EBUSY - currently registered DIRECT ftrace_ops does not support
+  7988	 *                  SHARE_IPMODIFY, we need to abort the register.
+  7989	 *         -EAGAIN - cannot make changes to currently registered DIRECT
+  7990	 *                   ftrace_ops at the moment, but we can retry later. This
+  7991	 *                   is needed to avoid potential deadlocks.
+  7992	 */
+  7993	static int prepare_direct_functions_for_ipmodify(struct ftrace_ops *ops)
+  7994		__acquires(&direct_mutex)
+  7995	{
+  7996		struct ftrace_func_entry *entry;
+  7997		struct ftrace_hash *hash;
+  7998		struct ftrace_ops *op;
+  7999		int size, i, ret;
+  8000	
+  8001		if (!(ops->flags & FTRACE_OPS_FL_IPMODIFY) ||
+  8002		    (ops->flags & FTRACE_OPS_FL_DIRECT))
+  8003			return 0;
+  8004	
+  8005		mutex_lock(&direct_mutex);
+  8006	
+> 8007		hash = ops->func_hash->filter_hash;
+  8008		size = 1 << hash->size_bits;
+  8009		for (i = 0; i < size; i++) {
+  8010			hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+  8011				unsigned long ip = entry->ip;
+  8012				bool found_op = false;
+  8013	
+  8014				mutex_lock(&ftrace_lock);
+  8015				do_for_each_ftrace_op(op, ftrace_ops_list) {
+  8016					if (!(op->flags & FTRACE_OPS_FL_DIRECT))
+  8017						continue;
+  8018					if (op->flags & FTRACE_OPS_FL_SHARE_IPMODIFY)
+  8019						break;
+> 8020					if (ops_references_ip(op, ip)) {
+  8021						found_op = true;
+  8022						break;
+  8023					}
+  8024				} while_for_each_ftrace_op(op);
+  8025				mutex_unlock(&ftrace_lock);
+  8026	
+  8027				if (found_op) {
+> 8028					if (!op->ops_func) {
+  8029						ret = -EBUSY;
+  8030						goto err_out;
+  8031					}
+  8032					ret = op->ops_func(op, FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY);
+  8033					if (ret)
+  8034						goto err_out;
+  8035				}
+  8036			}
+  8037		}
+  8038	
+  8039		/*
+  8040		 * Didn't find any overlap with any direct function, or the direct
+  8041		 * function can share with ipmodify. Hold direct_mutex to make sure
+  8042		 * this doesn't change until we are done.
+  8043		 */
+  8044		return 1;
+  8045	
+  8046	err_out:
+  8047		mutex_unlock(&direct_mutex);
+  8048		return ret;
+  8049	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

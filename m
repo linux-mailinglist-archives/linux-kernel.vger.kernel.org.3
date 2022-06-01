@@ -2,109 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8339F53A02A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C627953A030
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350147AbiFAJTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 05:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
+        id S1351001AbiFAJVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 05:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350089AbiFAJTN (ORCPT
+        with ESMTP id S1350194AbiFAJVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 05:19:13 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034B917E32
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 02:19:11 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id y19so2447972ejq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 02:19:10 -0700 (PDT)
+        Wed, 1 Jun 2022 05:21:17 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCBD5642F;
+        Wed,  1 Jun 2022 02:21:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=w0q7w7agqeVzeJoFI0aW/0pLwg+C1kvsWYmBalugg8Q=;
-        b=VixWWPTJ2XezaiMDn6QH/mc8juwDFuC9uioDoU9V+mrWz6fabTxHi48gVF79fLkNZI
-         CAEjE4jKF00zgp2R4UuRtTGQ/V2DI9Wa6gfA8F0TkWEPQA58c1oHeIwhZFYibE4CuRTN
-         50joB2Zrq8ilMbr0GLmGfkchBBwuKjG/57DOTnBEr0zMiRcYrofNk933/tjhE6RX1A7x
-         bLhyouUfCQCxLBhzjHo7kDDau9QgFwxecgC1mSCpMa12H5P+EdtH9vNDg2PcVGvxwDeu
-         y3dptNbRzcQ1FMT4qajLIVJTLchACkZhMaHHabSNjF/6TCbkzeoi4pCduF/NGL07I2nF
-         x/DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=w0q7w7agqeVzeJoFI0aW/0pLwg+C1kvsWYmBalugg8Q=;
-        b=AhMHXFE7sxGX/kyLpsq0t4L7MyDepUExDk4UkvCiSohnyZ/TuD4sfYk+GsVoIbMlzw
-         tyQePFq2gCf7TNFqXVxHNZ7r8Mp3UCDnmdE3srlossw/DsSP8zw7xGglIZfsto8ANyH3
-         gCPJ0QA4UTLaYtjFzViEeP/UV3CO64W08GPEkEW06TLaxWobEe1GqxRJ+7Jtc6paRhyD
-         9aytdvINBAtxS4q75MOG/5pySjr2FTkpQ/XKxN3ca67sF2eKkVOXlAco61isIlnmuUrk
-         7QKNbM2L4rhaQ7hfJsyhy5yd8oULYR7EyY0kRSS/RZvfzHQ/pgBKmsYCU4lMlVOOT8QD
-         iMTw==
-X-Gm-Message-State: AOAM531F/TrG2mZhzHS10KOBNQDSntFIoTw+ruKYp6scCdJuDWDfQNeo
-        aSOE9wi8hbHPvJBotv+jj+Kn+qqwoN31Q4zu
-X-Google-Smtp-Source: ABdhPJxIz5yKljtZ01n/8e8Iqvz6i01vdsc3Tj+8YIjD1XxI182o5dWwgzHRLoMv1YfZoH7CLyT2yA==
-X-Received: by 2002:a17:907:7f20:b0:6fe:f0c8:8e6f with SMTP id qf32-20020a1709077f2000b006fef0c88e6fmr40303647ejc.453.1654075149570;
-        Wed, 01 Jun 2022 02:19:09 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u9-20020aa7d889000000b0042b5cf75d6esm630769edq.97.2022.06.01.02.19.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 02:19:09 -0700 (PDT)
-Message-ID: <d1ffbc04-0c80-369e-a1dc-e47e50f52340@linaro.org>
-Date:   Wed, 1 Jun 2022 11:19:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 4/5] dt-bindings: crypto: add documentation for aspeed
- hace
+  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
+  s=amazon201209; t=1654075276; x=1685611276;
+  h=from:to:cc:date:message-id:references:in-reply-to:
+   content-transfer-encoding:mime-version:subject;
+  bh=jW7h6+CGuvQNzV1y+ZZYmfWxXfIVM8X7oDJPmxBnKYI=;
+  b=Ekxx59Pz25aUW6/jZMQRgexLtmA33qKJJ7CG4NP1UeFt2X2YZghnchEG
+   bQnDC9Z3RTUgh5TTcm2D+YHXCcVcsfyxEqBYgTvMTzLZ/9qGHsSeTRmhO
+   Ay1cgSLP9AeZlwA0kYhi2rkvJM5Qw3B+YfJVTt/0hdej2RHy7nU1VkXBb
+   k=;
+X-IronPort-AV: E=Sophos;i="5.91,266,1647302400"; 
+   d="scan'208";a="224274785"
+Subject: RE: ...\n
+Thread-Topic: ...\n
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 01 Jun 2022 09:21:01 +0000
+Received: from EX13D33EUC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com (Postfix) with ESMTPS id 9FA70A27E0;
+        Wed,  1 Jun 2022 09:21:00 +0000 (UTC)
+Received: from EX13D32EUC003.ant.amazon.com (10.43.164.24) by
+ EX13D33EUC001.ant.amazon.com (10.43.164.13) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Wed, 1 Jun 2022 09:20:59 +0000
+Received: from EX13D32EUC003.ant.amazon.com ([10.43.164.24]) by
+ EX13D32EUC003.ant.amazon.com ([10.43.164.24]) with mapi id 15.00.1497.036;
+ Wed, 1 Jun 2022 09:20:59 +0000
+From:   "Durrant, Paul" <pdurrant@amazon.co.uk>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     "Allister, Jack" <jalliste@amazon.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "diapop@amazon.co.uk" <diapop@amazon.co.uk>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "metikaya@amazon.co.uk" <metikaya@amazon.co.uk>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rkrcmar@redhat.com" <rkrcmar@redhat.com>,
+        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Thread-Index: AQHYdPhkNX+wk5QumkS6hY2ybmOpva05D+WAgAABcbCAAQ0lgIAAE6AAgAALn5CAAAOKgIAABfXw
+Date:   Wed, 1 Jun 2022 09:20:58 +0000
+Message-ID: <b0a029b784fe4648b1351042fdca6e11@EX13D32EUC003.ant.amazon.com>
+References: <YpYaYK7a28DFT5Ne@hirez.programming.kicks-ass.net>
+ <20220531140236.1435-1-jalliste@amazon.com>
+ <YpYpxzt4rmG+LFy9@hirez.programming.kicks-ass.net>
+ <059ab3327ac440479ecfdf49fa054347@EX13D32EUC003.ant.amazon.com>
+ <YpcMw2TgNWzrcoRm@worktop.programming.kicks-ass.net>
+ <87r148olol.fsf@redhat.com>
+ <48edf12807254a2b86e339b26873bf00@EX13D32EUC003.ant.amazon.com>
+ <2bdfde74-da27-667d-d1c4-3b17147cecce@redhat.com>
+In-Reply-To: <2bdfde74-da27-667d-d1c4-3b17147cecce@redhat.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Johnny Huang <johnny_huang@aspeedtech.com>
-Cc:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220601054204.1522976-1-neal_liu@aspeedtech.com>
- <20220601054204.1522976-5-neal_liu@aspeedtech.com>
- <dca283db-0b2e-1fc1-bc76-811c4c918fb5@linaro.org>
- <HK0PR06MB3202D6A6C66480BF60ED829080DF9@HK0PR06MB3202.apcprd06.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <HK0PR06MB3202D6A6C66480BF60ED829080DF9@HK0PR06MB3202.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.43.164.66]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-15.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2022 10:01, Neal Liu wrote:
->>> +  clocks:
->>> +    maxItems: 1
->>> +
->>> +  clock-names:
->>> +    maxItems: 1
->>
->> You need to list clock names, however usually it does not make sense to have
->> names for just one main device clock.
->>
-> I think list clock-names is optional, I'll remove it from required list.
-
-I actually suggest to remove the clock-names property entirely, if is
-has one generic entry called "clk" (or "vclk" - the same). Do you
-already expect adding here more clocks?
-
-
-Best regards,
-Krzysztof
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBQYW9sbyBCb256aW5pIDxwYm9u
+emluaUByZWRoYXQuY29tPg0KPiBTZW50OiAwMSBKdW5lIDIwMjIgMDk6NTcNCj4gVG86IER1cnJh
+bnQsIFBhdWwgPHBkdXJyYW50QGFtYXpvbi5jby51az47IFZpdGFseSBLdXpuZXRzb3YgPHZrdXpu
+ZXRzQHJlZGhhdC5jb20+OyBQZXRlciBaaWpsc3RyYQ0KPiA8cGV0ZXJ6QGluZnJhZGVhZC5vcmc+
+DQo+IENjOiBBbGxpc3RlciwgSmFjayA8amFsbGlzdGVAYW1hem9uLmNvbT47IGJwQGFsaWVuOC5k
+ZTsgZGlhcG9wQGFtYXpvbi5jby51azsgaHBhQHp5dG9yLmNvbTsNCj4gam1hdHRzb25AZ29vZ2xl
+LmNvbTsgam9yb0A4Ynl0ZXMub3JnOyBrdm1Admdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxA
+dmdlci5rZXJuZWwub3JnOw0KPiBtZXRpa2F5YUBhbWF6b24uY28udWs7IG1pbmdvQHJlZGhhdC5j
+b207IHJrcmNtYXJAcmVkaGF0LmNvbTsgc2Vhbi5qLmNocmlzdG9waGVyc29uQGludGVsLmNvbTsN
+Cj4gdGdseEBsaW51dHJvbml4LmRlOyB3YW5wZW5nbGlAdGVuY2VudC5jb207IHg4NkBrZXJuZWwu
+b3JnDQo+IFN1YmplY3Q6IFJFOiBbRVhURVJOQUxdLi4uXG4NCj4gDQo+IENBVVRJT046IFRoaXMg
+ZW1haWwgb3JpZ2luYXRlZCBmcm9tIG91dHNpZGUgb2YgdGhlIG9yZ2FuaXphdGlvbi4gRG8gbm90
+IGNsaWNrIGxpbmtzIG9yIG9wZW4NCj4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSBjYW4gY29uZmly
+bSB0aGUgc2VuZGVyIGFuZCBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUuDQo+IA0KPiANCj4gDQo+
+IE9uIDYvMS8yMiAxMDo1NCwgRHVycmFudCwgUGF1bCB3cm90ZToNCj4gPiBUaGF0IGlzIGV4YWN0
+bHkgdGhlIGNhc2UuIFRoaXMgaXMgbm90ICdzb21lIGhhcmUtYnJhaW5lZCBtb25leQ0KPiA+IHNj
+aGVtZSc7IHRoZXJlIGlzIGdlbnVpbmUgY29uY2VybiB0aGF0IG1vdmluZyBhIFZNIGZyb20gb2xk
+IGgvdyB0bw0KPiA+IG5ldyBoL3cgbWF5IGNhdXNlIGl0IHRvIHJ1biAndG9vIGZhc3QnLCBicmVh
+a2luZyBhbnkgc3VjaCBjYWxpYnJhdGlvbg0KPiA+IGRvbmUgYnkgdGhlIGd1ZXN0IE9TL2FwcGxp
+Y2F0aW9uLiBJIGFsc28gZG9uJ3QgaGF2ZSBhbnkgcmVhbC13b3JsZA0KPiA+IGV4YW1wbGVzLCBi
+dXQgYnVncyBtYXkgd2VsbCBiZSByZXBvcnRlZCBhbmQgaGF2aW5nIGEgbGV2ZXIgdG8gYWRkcmVz
+cw0KPiA+IHRoZW0gaXMgSU1PIGEgZ29vZCBpZGVhLiBIb3dldmVyLCBJIGFsc28gYWdyZWUgd2l0
+aCBQYW9sbyB0aGF0IEtWTQ0KPiA+IGRvZXNuJ3QgcmVhbGx5IG5lZWQgdG8gYmUgZG9pbmcgdGhp
+cyB3aGVuIHRoZSBWTU0gY291bGQgZG8gdGhlIGpvYg0KPiA+IHVzaW5nIGNwdWZyZXEsIHNvIHdl
+J2xsIHB1cnN1ZSB0aGF0IG9wdGlvbiBpbnN0ZWFkLiAoRldJVyB0aGUgcmVhc29uDQo+ID4gZm9y
+IGludm9sdmluZyBLVk0gd2FzIHRvIGRvIHRoZSBmcmVxIGFkanVzdG1lbnQgcmlnaHQgYmVmb3Jl
+IGVudGVyaW5nDQo+ID4gdGhlIGd1ZXN0IGFuZCB0aGVuIHJlbW92ZSB0aGUgY2FwIHJpZ2h0IGFm
+dGVyIFZNRVhJVCkuDQo+IA0KPiBCdXQgaWYgc28sIHlvdSBzdGlsbCB3b3VsZCBzdWJtaXQgdGhl
+IGZ1bGwgZmVhdHVyZSwgd291bGRuJ3QgeW91Pw0KPiANCg0KWWVzOyB0aGUgY29tbWl0IG1lc3Nh
+Z2Ugc2hvdWxkIGhhdmUgYXQgbGVhc3Qgc2FpZCB0aGF0IHdlJ2QgZm9sbG93IHVwLi4uIGJ1dCBh
+IGZ1bGwgc2VyaWVzIHdvdWxkIGhhdmUgYmVlbiBhIGJldHRlciBpZGVhLg0KDQo+IFBhdWwsIHRo
+YW5rcyBmb3IgY2hpbWluZyBpbiwgYW5kIHNvcnJ5IGZvciBsZWF2aW5nIHlvdSBvdXQgb2YgdGhl
+IGxpc3QNCj4gb2YgcGVvcGxlIHRoYXQgY2FuIGhlbHAgSmFjayB3aXRoIGhpcyB1cHN0cmVhbWlu
+ZyBlZmZvcnRzLiAgOikNCj4gDQoNCk5QLg0KDQogIFBhdWwNCg0KPiBQYW9sbw0KDQo=

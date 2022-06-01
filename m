@@ -2,131 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A56053A443
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 469E153A41E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351289AbiFALiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 07:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
+        id S1352696AbiFALag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 07:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiFALiM (ORCPT
+        with ESMTP id S1352625AbiFALaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:38:12 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FAD1402B;
-        Wed,  1 Jun 2022 04:38:11 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id u12so3138708eja.8;
-        Wed, 01 Jun 2022 04:38:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lgS1YFKqi2uJamBMChe9mVllG2N97UqDarRjzfMsUHA=;
-        b=k3AZWD76xz4xvkaZhjc5Lihx1Q8j5csqqFFCXPOgzynZ/ZJfptD505c242PQNC/kHo
-         G1c1IrXEAY+ON8jBfBf6OK0vsb/SYYrdXMv0TXuj1TgnC10vaCfYWOH5tBiFcfIqXPP9
-         NP0L4l7Xyb+NrOnJF69Be+jLaHTnHXhHLD7wDfoOx44uvVvMhvUdaI4pAwNIwV4gmbSL
-         pvHKj63AaYFegrF10wTl//I4FSdbbuK2tKGjdg4QB7mvdDeSqAW5lttLAm5oi/QFapIM
-         XyjBye5KnRWmXfqzNsn7dL1y80T6M/t11gwfsE20rgtN2FLUMB9o7ZAPALLB3cgU0kGb
-         +sjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lgS1YFKqi2uJamBMChe9mVllG2N97UqDarRjzfMsUHA=;
-        b=RQyiuZNTyQ/nfd+MYIOMoqQPLYeSKx+FKFjJvxiUEEycyviyPL9/1lf5cTWmZo92KG
-         Wd0U9H+x3rXjFZYJET4nRB+rgbHATbAAav/v29Xu/GXFrpk2T2JrqxrkRNsghnDwG1KX
-         cOudNG43ZikL8uWwTud+VJivRFiiLExvzHr3lqlrsEo2ewKcZ+l+eXB4k+fp63WMlJzD
-         x/ukGLwwQ3o2lfd4HPffpC3ebej0bM8hGGZyd3pRGPH6irGhW5KR5xByGT+Z3MssqbRM
-         0a6en+PSnULioCkzmyH4JkJMxBjKk5cdu9hcohQvnjmtT4UgDYVUTbGwKS95m8tvdL+t
-         3vgA==
-X-Gm-Message-State: AOAM530HbIJTMkYlaaTQYBQVhPFse8moH1RmHzXoPuHlRbmogWCQhNh1
-        3gMkViBZy306M6NNAo3slQLZHuCsxPh9+JfO6TE=
-X-Google-Smtp-Source: ABdhPJzpyud0gjdD8atnNWym6HYdwiRdif+39wJ5pJ94vMsLOYcyoez7mgdupUeOn085sMyyJKlTcdmzLABlsLkb3QQ=
-X-Received: by 2002:a17:907:7da5:b0:6fe:d818:ee49 with SMTP id
- oz37-20020a1709077da500b006fed818ee49mr44795116ejc.58.1654083489501; Wed, 01
- Jun 2022 04:38:09 -0700 (PDT)
+        Wed, 1 Jun 2022 07:30:25 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBE56FA10;
+        Wed,  1 Jun 2022 04:30:18 -0700 (PDT)
+Received: from kwepemi100016.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LCn2s1ktnz1K99V;
+        Wed,  1 Jun 2022 19:28:37 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100016.china.huawei.com (7.221.188.123) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 1 Jun 2022 19:30:16 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
+ 2022 19:30:15 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <paolo.valente@linaro.org>, <jack@suse.cz>, <tj@kernel.org>,
+        <axboe@kernel.dk>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH -next v9 0/4] support concurrent sync io for bfq on a specail occasion
+Date:   Wed, 1 Jun 2022 19:43:36 +0800
+Message-ID: <20220601114340.949953-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220601084149.13097-1-zhoufeng.zf@bytedance.com>
- <20220601084149.13097-3-zhoufeng.zf@bytedance.com> <CAADnVQ+qmvYK_Ttsjgo49Ga7paghicFg_O3=1sYZKbdps4877Q@mail.gmail.com>
- <041465f0-0fd3-fd39-0dac-8093a1c98c00@bytedance.com>
-In-Reply-To: <041465f0-0fd3-fd39-0dac-8093a1c98c00@bytedance.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 1 Jun 2022 13:37:57 +0200
-Message-ID: <CAADnVQ+cCoH=DAoyLGtJ5HvdNVgFBgTW=wCHs1wvFQuwyhcWOw@mail.gmail.com>
-Subject: Re: Re: [PATCH v4 2/2] selftest/bpf/benchs: Add bpf_map benchmark
-To:     Feng Zhou <zhoufeng.zf@bytedance.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 1:17 PM Feng Zhou <zhoufeng.zf@bytedance.com> wrote:
->
-> =E5=9C=A8 2022/6/1 =E4=B8=8B=E5=8D=885:53, Alexei Starovoitov =E5=86=99=
-=E9=81=93:
-> > On Wed, Jun 1, 2022 at 10:42 AM Feng zhou <zhoufeng.zf@bytedance.com> w=
-rote:
-> >> +struct {
-> >> +       __uint(type, BPF_MAP_TYPE_HASH);
-> >> +       __type(key, u32);
-> >> +       __type(value, u64);
-> >> +       __uint(max_entries, MAX_ENTRIES);
-> >> +} hash_map_bench SEC(".maps");
-> >> +
-> >> +u64 __attribute__((__aligned__(256))) percpu_time[256];
-> > aligned 256 ?
-> > What is the point?
->
-> I didn't think too much about it here, just referenced it from
-> tools/testing/selftests/bpf/progs/bloom_filter_bench.c
->
-> >
-> >> +u64 nr_loops;
-> >> +
-> >> +static int loop_update_callback(__u32 index, u32 *key)
-> >> +{
-> >> +       u64 init_val =3D 1;
-> >> +
-> >> +       bpf_map_update_elem(&hash_map_bench, key, &init_val, BPF_ANY);
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +SEC("fentry/" SYS_PREFIX "sys_getpgid")
-> >> +int benchmark(void *ctx)
-> >> +{
-> >> +       u32 key =3D bpf_get_prandom_u32() % MAX_ENTRIES + MAX_ENTRIES;
-> > What is the point of random ?
-> > just key =3D MAX_ENTRIES would be the same, no?
-> > or key =3D -1 ?
->
-> If all threads on different cpu trigger sys_getpgid and lookup the same
-> key, it will cause
-> "ret =3D htab_lock_bucket(htab, b, hash, &flags); "
-> the lock competition here is fierce, and unnecessary overhead is
-> introduced,
-> and I don't want it to interfere with the test.
+Changes in v9:
+ - also update how many bfqqs have pending_reqs bfq_bfqq_move().
+ - fix one language in patch 4
+ - Add reviewed-tag for patch 1,3,4
 
-I see.
-but using random leaves it to chance.
-Use cpu+max_entries then?
+Changes in v8:
+ - Instead of using whether bfqq is busy, using whether bfqq has pending
+ requests. As Paolo pointed out the former way is problematic.
+
+Changes in v7:
+ - fix mismatch bfq_inc/del_busy_queues() and bfqq_add/del_bfqq_busy(),
+ also retest this patchset on v5.18 to make sure functionality is
+ correct.
+ - move the updating of 'bfqd->busy_queues' into new apis
+
+Changes in v6:
+ - add reviewed-by tag for patch 1
+
+Changes in v5:
+ - rename bfq_add_busy_queues() to bfq_inc_busy_queues() in patch 1
+ - fix wrong definition in patch 1
+ - fix spelling mistake in patch 2: leaset -> least
+ - update comments in patch 3
+ - add reviewed-by tag in patch 2,3
+
+Changes in v4:
+ - split bfq_update_busy_queues() to bfq_add/dec_busy_queues(),
+   suggested by Jan Kara.
+ - remove unused 'in_groups_with_pending_reqs',
+
+Changes in v3:
+ - remove the cleanup patch that is irrelevant now(I'll post it
+   separately).
+ - instead of hacking wr queues and using weights tree insertion/removal,
+   using bfq_add/del_bfqq_busy() to count the number of groups
+   (suggested by Jan Kara).
+
+Changes in v2:
+ - Use a different approch to count root group, which is much simple.
+
+Currently, bfq can't handle sync io concurrently as long as they
+are not issued from root group. This is because
+'bfqd->num_groups_with_pending_reqs > 0' is always true in
+bfq_asymmetric_scenario().
+
+The way that bfqg is counted into 'num_groups_with_pending_reqs':
+
+Before this patchset:
+ 1) root group will never be counted.
+ 2) Count if bfqg or it's child bfqgs have pending requests.
+ 3) Don't count if bfqg and it's child bfqgs complete all the requests.
+
+After this patchset:
+ 1) root group is counted.
+ 2) Count if bfqg has pending requests.
+ 3) Don't count if bfqg complete all the requests.
+
+With the above changes, concurrent sync io can be supported if only
+one group is activated.
+
+fio test script(startdelay is used to avoid queue merging):
+[global]
+filename=/dev/sda
+allow_mounted_write=0
+ioengine=psync
+direct=1
+ioscheduler=bfq
+offset_increment=10g
+group_reporting
+rw=randwrite
+bs=4k
+
+[test1]
+numjobs=1
+
+[test2]
+startdelay=1
+numjobs=1
+
+[test3]
+startdelay=2
+numjobs=1
+
+[test4]
+startdelay=3
+numjobs=1
+
+[test5]
+startdelay=4
+numjobs=1
+
+[test6]
+startdelay=5
+numjobs=1
+
+[test7]
+startdelay=6
+numjobs=1
+
+[test8]
+startdelay=7
+numjobs=1
+
+test result:
+running fio on root cgroup
+v5.18:	   112 Mib/s
+v5.18-patched: 112 Mib/s
+
+running fio on non-root cgroup
+v5.18:	   51.2 Mib/s
+v5.18-patched: 112 Mib/s
+
+Note that I also test null_blk with "irqmode=2
+completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
+that service guarantees are still preserved.
+
+Previous versions:
+RFC: https://lore.kernel.org/all/20211127101132.486806-1-yukuai3@huawei.com/
+v1: https://lore.kernel.org/all/20220305091205.4188398-1-yukuai3@huawei.com/
+v2: https://lore.kernel.org/all/20220416093753.3054696-1-yukuai3@huawei.com/
+v3: https://lore.kernel.org/all/20220427124722.48465-1-yukuai3@huawei.com/
+v4: https://lore.kernel.org/all/20220428111907.3635820-1-yukuai3@huawei.com/
+v5: https://lore.kernel.org/all/20220428120837.3737765-1-yukuai3@huawei.com/
+v6: https://lore.kernel.org/all/20220523131818.2798712-1-yukuai3@huawei.com/
+v7: https://lore.kernel.org/all/20220528095020.186970-1-yukuai3@huawei.com/
+
+
+Yu Kuai (4):
+  block, bfq: support to track if bfqq has pending requests
+  block, bfq: record how many queues have pending requests
+  block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
+  block, bfq: do not idle if only one group is activated
+
+ block/bfq-cgroup.c  | 10 ++++++++++
+ block/bfq-iosched.c | 47 +++------------------------------------------
+ block/bfq-iosched.h | 21 +++++++++++---------
+ block/bfq-wf2q.c    | 47 ++++++++++++++++++++++++++++++---------------
+ 4 files changed, 57 insertions(+), 68 deletions(-)
+
+-- 
+2.31.1
+

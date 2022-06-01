@@ -2,95 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88932539B62
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453E8539B5E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349231AbiFACtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 22:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
+        id S1349243AbiFACwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 22:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344480AbiFACta (ORCPT
+        with ESMTP id S234485AbiFACv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 22:49:30 -0400
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5345C6A070
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 19:49:28 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAAXOBd305ZiUEb2Cw--.1380S2;
-        Wed, 01 Jun 2022 10:48:24 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, maxime@cerno.tech, sam@ravnborg.org,
-        alsi@bang-olufsen.dk, jagan@amarulasolutions.com,
-        biju.das.jz@bp.renesas.com, l.stach@pengutronix.de
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] drm: bridge: adv7511: Add check for mipi_dsi_driver_register
-Date:   Wed,  1 Jun 2022 10:48:22 +0800
-Message-Id: <20220601024822.2804516-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 31 May 2022 22:51:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B87F26338E
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 19:51:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654051914;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nZz1I+wyn0aWj3S3QoNUnvvCym824eLN41CHiYsQFi0=;
+        b=W/ODVZQeSE0HS/S3PSCcxzKLifgyKFsmOWWBqBScBXlPHjg4BcDgWWL+FOTTwfQAVPhNG2
+        UN34bmFpRHA/NyvNMhPkfiNljtxi77AsPuSW3Y7cFQE37YTYTHKltQxdWtqPC/A7W7dJTR
+        AhYOk3b7DEUrcPfglcsCUOsKiXcPLic=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-537-oR2SFYhPMnq0oHhTpTxB8w-1; Tue, 31 May 2022 22:51:50 -0400
+X-MC-Unique: oR2SFYhPMnq0oHhTpTxB8w-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4ADC9858EED;
+        Wed,  1 Jun 2022 02:51:50 +0000 (UTC)
+Received: from [10.72.12.91] (ovpn-12-91.pek2.redhat.com [10.72.12.91])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5A5D7492C3B;
+        Wed,  1 Jun 2022 02:51:44 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v3 03/16] cacheinfo: Move cache_leaves_are_shared out of
+ CONFIG_OF
+To:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
+References: <20220525081416.3306043-1-sudeep.holla@arm.com>
+ <20220525081416.3306043-2-sudeep.holla@arm.com>
+ <20220525081416.3306043-3-sudeep.holla@arm.com>
+ <20220525081416.3306043-4-sudeep.holla@arm.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <81bc47a8-ded7-be55-60c2-73bd1d363fd2@redhat.com>
+Date:   Wed, 1 Jun 2022 10:51:41 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAAXOBd305ZiUEb2Cw--.1380S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZr43Kw13Zry7JF1xZry3twb_yoWDKrXE9F
-        13Zr9rXr45C3Zak3W7ArWYvry2k3WUZrZ3u3W3ta9xtw43Ar10g34UZryDJF1UWF4jyFnr
-        Kw1DZFWfAry2kjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3kFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-        8cxan2IY04v7MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1U
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
-        VFxhVjvjDU0xZFpf9x0JUmLvtUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220525081416.3306043-4-sudeep.holla@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As mipi_dsi_driver_register could return error if fails,
-it should be better to check the return value and return error
-if fails.
+Hi Sudeep,
 
-Fixes: 1e4d58cd7f88 ("drm/bridge: adv7533: Create a MIPI DSI device")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+On 5/25/22 4:14 PM, Sudeep Holla wrote:
+> cache_leaves_are_shared is already used even with ACPI and PPTT. It checks
+> if the cache leaves are the shared based on fw_token pointer. However it is
+> defined conditionally only if CONFIG_OF is enabled which is wrong.
+> 
+> Move the function cache_leaves_are_shared out of CONFIG_OF and keep it
+> generic. It also handles the case where both OF and ACPI is not defined.
+> 
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>   drivers/base/cacheinfo.c | 20 +++++++++-----------
+>   1 file changed, 9 insertions(+), 11 deletions(-)
+> 
 
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-index 5bb9300040dd..795855b41eb2 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-@@ -1392,8 +1392,13 @@ static struct i2c_driver adv7511_driver = {
- 
- static int __init adv7511_init(void)
- {
--	if (IS_ENABLED(CONFIG_DRM_MIPI_DSI))
--		mipi_dsi_driver_register(&adv7533_dsi_driver);
-+	int ret;
-+
-+	if (IS_ENABLED(CONFIG_DRM_MIPI_DSI)) {
-+		ret = mipi_dsi_driver_register(&adv7533_dsi_driver);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	return i2c_add_driver(&adv7511_driver);
- }
--- 
-2.25.1
+With below nits fixed:
+
+Reviewed-by: Gavin Shan <gshan@redhat.com>
+
+> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
+> index c4547d8ac6f3..417e1ebf5525 100644
+> --- a/drivers/base/cacheinfo.c
+> +++ b/drivers/base/cacheinfo.c
+> @@ -33,13 +33,21 @@ struct cpu_cacheinfo *get_cpu_cacheinfo(unsigned int cpu)
+>   	return ci_cacheinfo(cpu);
+>   }
+>   
+> -#ifdef CONFIG_OF
+>   static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
+>   					   struct cacheinfo *sib_leaf)
+>   {
+> +	/*
+> +	 * For non DT/ACPI systems, assume unique level 1 caches,
+> +	 * system-wide shared caches for all other levels. This will be used
+> +	 * only if arch specific code has not populated shared_cpu_map
+> +	 */
+> +	if (!IS_ENABLED(CONFIG_OF) && !(IS_ENABLED(CONFIG_ACPI)))
+> +		return !(this_leaf->level == 1);
+> +
+>   	return sib_leaf->fw_token == this_leaf->fw_token;
+>   }
+>   
+
+	if (!IS_ENABLED(CONFIG_OF) && !IS_ENABLED(CONFIG_ACPI))
+
+         or
+
+	if (!(IS_ENABLED(CONFIG_OF) || IS_ENABLED(CONFIG_ACPI)))
+
+> +#ifdef CONFIG_OF
+>   /* OF properties to query for a given cache type */
+>   struct cache_type_info {
+>   	const char *size_prop;
+> @@ -193,16 +201,6 @@ static int cache_setup_of_node(unsigned int cpu)
+>   }
+>   #else
+>   static inline int cache_setup_of_node(unsigned int cpu) { return 0; }
+> -static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
+> -					   struct cacheinfo *sib_leaf)
+> -{
+> -	/*
+> -	 * For non-DT/ACPI systems, assume unique level 1 caches, system-wide
+> -	 * shared caches for all other levels. This will be used only if
+> -	 * arch specific code has not populated shared_cpu_map
+> -	 */
+> -	return !(this_leaf->level == 1);
+> -}
+>   #endif
+>   
+>   int __weak cache_setup_acpi(unsigned int cpu)
+> 
+
+Thanks,
+Gavin
 

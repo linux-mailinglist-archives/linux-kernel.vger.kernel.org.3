@@ -2,119 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E0253AC26
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 19:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E72A53AC2F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 19:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356422AbiFARnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 13:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
+        id S1355997AbiFARsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 13:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356403AbiFARnp (ORCPT
+        with ESMTP id S233130AbiFARsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 13:43:45 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5B16FD0C;
-        Wed,  1 Jun 2022 10:43:43 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id d5-20020a05600c34c500b0039776acee62so2587290wmq.1;
-        Wed, 01 Jun 2022 10:43:43 -0700 (PDT)
+        Wed, 1 Jun 2022 13:48:10 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719D66A02F;
+        Wed,  1 Jun 2022 10:48:09 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso2772260pjg.0;
+        Wed, 01 Jun 2022 10:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7cbknEZGUGD2cxU937ieJPI9qyLodJRcbX0FPdvitY4=;
-        b=ifBZEtRLIZDgnjgCirPIRbDpD4+2k0ji6YiTOqqGf3vyBHkTGgWU2FrXcQ65T2Nv6E
-         LY/qQy0xpRocxt2MjbXIYNEzJ5ZIbgr8eTQtVAtSoW0BMfJq0KRJGhn615hQkdbri0zQ
-         J4oMNV2moa3q/9jdiTR/9qVYAwv34VDvnA+b7Nb0aYmKo41fEnWhToQzLiAG3RAG8Jo5
-         2VA9+UXbujviKWjeHig9tJohVjITD6sctW6AlJ/tglBmib/ME5dB1G7nHe4FYASNaTOo
-         OCCI2o7RMJeTcCEgRKYNnNhJKsKpHmpDmIZnH8q8UkySlK0gc8Mbf4q2rkJpPrWkXmIi
-         ZnfQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i0RZ8l73WFDDzM6Aj8EMNY9HnT718p+wPtqJImpAAXg=;
+        b=S3qixs5BU1PZ015xxJdsdLuFlKjPKLu5LQhK9EbUs3wNr7hohaemHdXqaFP38FJxhS
+         NOdL63FvglE0nVP/ytYaAQ8/SI+xisMk8kKFHjOr3Ms4MaIECDFfFugdb/7zdQw4gIfu
+         z4jL2kM1LV6bt8zgoBPQ90Y2K7oI8ROA5R7kA49kP+DzTSQyhU/yk5JoliBZbvJUGjj0
+         QXmS7mjQGFEewCudnT6f/JBAKstnLrbMznCYT9p4iZQKD35NI/VAH+GllJr6xxbwAkXh
+         fZW4CRltCagOkCaM9d1YSvrCzLQisoFLpHHzeI/j9BQ32TzG4soMEMqy2Gf1po7c/nvH
+         RDXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7cbknEZGUGD2cxU937ieJPI9qyLodJRcbX0FPdvitY4=;
-        b=VIXfzlOZUnRhA8XL6w/h2qNY7igHEAUO/5MDEwG1UcCNfTrkY3s8K3eiJWBfrXgQj5
-         4tgpRDmiFGFSWxLYd965xeW3U76oe/XKX0ecZFgr7nNZwXm+p6v7Ibr4O7UCX/PQnQl+
-         QiUtoPkFf6y2bhwn8Hf1FXHH8g/JKQteuqI/pP3i5G+KYGHOrexoTOvxswxeCG+n5XbN
-         d3TSarKda17yrJEt3sikKRlKJPBVmGKW9NPcQO9Uxml030swLSFpTmmZ0lJOP1OeHy6k
-         IX9AXX1Fz0bvf8+dqA1Rtb7vRDHteDMmL1COunambumI8e6zbZpdcSj4jiEO6CQtHm/p
-         r+Nw==
-X-Gm-Message-State: AOAM531KW7T8Xk5IQUh0sOV/v7RddKYV08Ta28+4O7hGD1F2YW84ufkJ
-        6jDLbfwD2qkwrN9RXrd2rdDjkzBGvK4=
-X-Google-Smtp-Source: ABdhPJwLxV/v4JoM4W2W2dE7sIidkESeRh7JcIp8hPqVguQXHIYFoQQsNd4zVoXzYP27YjKcYKfeGw==
-X-Received: by 2002:a05:600c:1f0e:b0:397:707f:5a60 with SMTP id bd14-20020a05600c1f0e00b00397707f5a60mr463432wmb.3.1654105422243;
-        Wed, 01 Jun 2022 10:43:42 -0700 (PDT)
-Received: from localhost.localdomain ([197.57.182.33])
-        by smtp.gmail.com with ESMTPSA id az29-20020a05600c601d00b00398d2f6b5d8sm2940824wmb.4.2022.06.01.10.43.40
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=i0RZ8l73WFDDzM6Aj8EMNY9HnT718p+wPtqJImpAAXg=;
+        b=27L9/7sGGzydvfO3PrjYXprlCNd+01tdzS/cr/m687kcfLJcLUQhIu/2FACdAwMk8w
+         HiVZVP1XWWB96zUIgQCHz0LkDfkeHbYIe1cMCl428Bp5cpuq7ZOimTyOaNoQ03ZK89iF
+         NCrg2fpCNPlUpvGF9BNwfZSx4g+6YLZw/+a+HmDWvlwgdopnbKW232r+6TAns8IbDj63
+         1TX+pR3RC3aVF6axTApME/kxwQgH8gnTcF38t9Ed46JrwH3yeDZD5AY/Vt9p5mYLJwQi
+         00pcGncd3q6b1dCb5ZP52COjbHDy69allNfyWvYCk6kL1zdShiIvHlq/5mE2dZjGmZHd
+         W/Cw==
+X-Gm-Message-State: AOAM531IJwiX+YEC/gUqqbuq3DpfmgQSkek0LVkCDy8nrsQLWe5yHe+m
+        QPsYIRtJwN1sy01o75EXdqbP/wcLqBw=
+X-Google-Smtp-Source: ABdhPJxZ0uPByzaE81WrLrAl6/5NjIv/VzL+/GMbIeHfQK4VDBfF+GX9JxV39g3M9z/PFCeU37nCVQ==
+X-Received: by 2002:a17:90b:1d0a:b0:1e0:c34d:8c9c with SMTP id on10-20020a17090b1d0a00b001e0c34d8c9cmr544436pjb.238.1654105688741;
+        Wed, 01 Jun 2022 10:48:08 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id 84-20020a621857000000b0050dc7628158sm1766629pfy.50.2022.06.01.10.48.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 10:43:41 -0700 (PDT)
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     outreachy@lists.linux.dev, roopa@nvidia.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        eng.alaamohamedsoliman.am@gmail.com
-Subject: [PATCH net-next v2] selftests: net: fib_rule_tests: fix support for running individual tests
-Date:   Wed,  1 Jun 2022 19:43:16 +0200
-Message-Id: <20220601174316.4278-1-eng.alaamohamedsoliman.am@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 01 Jun 2022 10:48:07 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 1 Jun 2022 07:48:06 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH v2 2/2] blk-cgroup: Optimize blkcg_rstat_flush()
+Message-ID: <YpemVpvaPomwH7mt@slm.duckdns.org>
+References: <20220601165324.60892-1-longman@redhat.com>
+ <20220601165324.60892-2-longman@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601165324.60892-2-longman@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-parsing and usage of -t got missed in the previous patch.
-this patch fixes it
+Hello,
 
-Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
----
-changes in v2:
-	edit commit subject and message.
----
- tools/testing/selftests/net/fib_rule_tests.sh | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+On Wed, Jun 01, 2022 at 12:53:24PM -0400, Waiman Long wrote:
+> +static struct llist_node llist_last;	/* Last sentinel node of llist */
 
-diff --git a/tools/testing/selftests/net/fib_rule_tests.sh b/tools/testing/selftests/net/fib_rule_tests.sh
-index bbe3b379927a..c245476fa29d 100755
---- a/tools/testing/selftests/net/fib_rule_tests.sh
-+++ b/tools/testing/selftests/net/fib_rule_tests.sh
-@@ -303,6 +303,29 @@ run_fibrule_tests()
- 	log_section "IPv6 fib rule"
- 	fib_rule6_test
- }
-+################################################################################
-+# usage
-+
-+usage()
-+{
-+	cat <<EOF
-+usage: ${0##*/} OPTS
-+
-+        -t <test>   Test(s) to run (default: all)
-+                    (options: $TESTS)
-+EOF
-+}
-+
-+################################################################################
-+# main
-+
-+while getopts ":t:h" opt; do
-+	case $opt in
-+		t) TESTS=$OPTARG;;
-+		h) usage; exit 0;;
-+		*) usage; exit 1;;
-+	esac
-+done
- 
- if [ "$(id -u)" -ne 0 ];then
- 	echo "SKIP: Need root privileges"
+Can you please add comment explaining why we need the special sentinel and
+empty helper?
+
+> +static inline bool blkcg_llist_empty(struct llist_head *lhead)
+> +{
+> +	return lhead->first == &llist_last;
+> +}
+> +
+> +static inline void init_blkcg_llists(struct blkcg *blkcg)
+> +{
+> +	int cpu;
+> +
+> +	for_each_possible_cpu(cpu)
+> +		per_cpu_ptr(blkcg->lhead, cpu)->first = &llist_last;
+> +}
+> +
+> +static inline struct llist_node *
+> +fetch_delete_blkcg_llist(struct llist_head *lhead)
+> +{
+> +	return xchg(&lhead->first, &llist_last);
+> +}
+> +
+> +/*
+> + * The retrieved blkg_iostat_set is immediately marked as not in the
+> + * lockless list by clearing its node->next pointer. It could be put
+> + * back into the list by a parallel update before the iostat's are
+> + * finally flushed. So being in the list doesn't always mean it has new
+> + * iostat's to be flushed.
+> + */
+
+Isn't the above true for any sort of mechanism which tracking pending state?
+You gotta clear the pending state before consuming so that you don't miss
+the events which happen while data is being consumed.
+
+> +#define blkcg_llist_for_each_entry_safe(pos, node, nxt)			\
+> +	for (; (node != &llist_last) &&					\
+> +	       (pos = llist_entry(node, struct blkg_iostat_set, lnode),	\
+> +		nxt = node->next, node->next = NULL, true);		\
+> +		node = nxt)
+> +
+>  /**
+>   * blkcg_css - find the current css
+>   *
+...
+> @@ -852,17 +888,26 @@ static void blkg_iostat_sub(struct blkg_iostat *dst, struct blkg_iostat *src)
+>  static void blkcg_rstat_flush(struct cgroup_subsys_state *css, int cpu)
+>  {
+>  	struct blkcg *blkcg = css_to_blkcg(css);
+> -	struct blkcg_gq *blkg;
+> +	struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
+> +	struct llist_node *lnode, *lnext;
+> +	struct blkg_iostat_set *bisc;
+>  
+>  	/* Root-level stats are sourced from system-wide IO stats */
+>  	if (!cgroup_parent(css->cgroup))
+>  		return;
+>  
+> -	rcu_read_lock();
+> +	if (blkcg_llist_empty(lhead))
+> +		return;
+>  
+> -	hlist_for_each_entry_rcu(blkg, &blkcg->blkg_list, blkcg_node) {
+> +	lnode = fetch_delete_blkcg_llist(lhead);
+> +
+> +	/*
+> +	 * No RCU protection is needed as it is assumed that blkg_iostat_set's
+> +	 * in the percpu lockless list won't go away until the flush is done.
+> +	 */
+
+Can you please elaborate on why this is safe?
+
+> +	blkcg_llist_for_each_entry_safe(bisc, lnode, lnext) {
+> +		struct blkcg_gq *blkg = bisc->blkg;
+>  		struct blkcg_gq *parent = blkg->parent;
+> -		struct blkg_iostat_set *bisc = per_cpu_ptr(blkg->iostat_cpu, cpu);
+>  		struct blkg_iostat cur, delta;
+>  		unsigned long flags;
+>  		unsigned int seq;
+
+Overall, looks fantastic to me. Thanks a lot for working on it.
+
 -- 
-2.25.1
-
+tejun

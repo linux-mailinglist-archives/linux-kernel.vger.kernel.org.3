@@ -2,178 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEFF53B0AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FBA53AF58
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbiFAXhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 19:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35458 "EHLO
+        id S231701AbiFAVj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiFAXhV (ORCPT
+        with ESMTP id S231625AbiFAVj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 19:37:21 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21251090
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 16:37:19 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso3436170pjg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 16:37:19 -0700 (PDT)
+        Wed, 1 Jun 2022 17:39:26 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037F9522D5;
+        Wed,  1 Jun 2022 14:39:26 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id f9so6434529ejc.0;
+        Wed, 01 Jun 2022 14:39:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=TEAUJ/ucXI4eKAlLgmvtjNFHQlDUXBOnD+LHuiraz3w=;
-        b=g+g2a/h5fj4ekdhiBZVoem39IesHnm9DOBXVdr0u+GBT1FfE/6soJZwVcANNucrA2v
-         9gLc+e6E0h/HUqewW/gcDTlpIKOE9B/nvi5VkwCdzUboCkGQ8HoHp+k1nY6S6no+hpdd
-         R85LIIF3A+LnmFfmdZrp2gXNHbADZQMBIqyAxaLPbFeBYC7LfXf05cPAIJ/HB+YxrG8+
-         0AuR6f8wWikFigxTB9vlidalsm5Ip4SDKp+5Jve4ENy8SNmi3hitf5WMdN1FvdBjp6dE
-         WbwdwFOlfOUbT+9ZoCMY9tktSqMUi4+SKtRo1qnmshxELME/PknA+zT+oXorZKxdTZtk
-         ymBw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KdQRrKNDo19m2xpYGSP742X+VIY6LKYcB4+u45tKW1U=;
+        b=AEnMo2AndmNDxu10Z4tyH3GAQLF70+buQB/9jGPKB+m1UUvYQfR8zQJmFOCBATkSsw
+         jfT9YtlkKaD13r+1Kr0WHR4rrEOSpfC15JVViccurKGaZGQ5E79p1FrSj5aZ8SIZzd/+
+         kC+wd1rDb0K0+ET34tIoH3+ca6tba9R5E+NZ62fSRs32R8LgDA7kDMcL+J7Q9bjpHw2b
+         UTjNkZnhKqRvdgQ/ZF9u8Vn8m3MT9Q2vPZaTfqdp7rwNIn52kWN/5O/onkYOLpm1a8rk
+         nYvsdYNB1F6nGV+J73SBnHhHigh+UEGjLHbBqWrQ/ZaQWW3RMfyg01by0P+J8L7lRbQF
+         /Vug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=TEAUJ/ucXI4eKAlLgmvtjNFHQlDUXBOnD+LHuiraz3w=;
-        b=xkuWuJvkNKt02b0yIP8iGQS2P4nZVFxFfYE8Hzz69Qtdrc4pMs5iInJgoPTzJuUuG/
-         AjBJYdJI1xmn7PELp2171jedWfKeLaqP5Hk1uU9cSSQhbIV0dUCPtKyuYvwBhlQiCK6H
-         LiozbTyVD3eRf1Xlp2H2qIe+TeYgZZ3huFucJHX4MXKAMfhmgoMxpJmIHr5/xhdbTsWN
-         H7WORHQEdmCXg/x4rsl8Quj9bLR94kDGq2SC9TSGVYiZ1Tt5CmaJf1lFMcu/vy49YN+r
-         +0uvQbvzZLmwpIMc4wsBTBGePtLKkwkelx3uBzbwS9sZJ0WwDgjwNSZhaL8SJqgNGcrH
-         9m7g==
-X-Gm-Message-State: AOAM5307BS28m5tdz9Vq8u3YuRhNCqU96kAXcgN7qJz3kYbZPWIlKy//
-        Yim+IZlbqqKrQH6W1SXgTkufgQ==
-X-Google-Smtp-Source: ABdhPJxRcI0rOEy0a+1EGjMyyqZA4sVfPwmdJmtXQ5oiGumpZyXXmdfYhUWDpjvuwdBKxvnlMNG4FQ==
-X-Received: by 2002:a17:902:7594:b0:15e:bbac:8d49 with SMTP id j20-20020a170902759400b0015ebbac8d49mr1856801pll.124.1654126639097;
-        Wed, 01 Jun 2022 16:37:19 -0700 (PDT)
-Received: from [192.168.254.36] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id m11-20020a62f20b000000b0050dc76281fasm1976744pfh.212.2022.06.01.16.37.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 16:37:18 -0700 (PDT)
-Message-ID: <1fb4d8d7-ccc0-b020-715e-38c2dfd94c23@linaro.org>
-Date:   Wed, 1 Jun 2022 16:37:17 -0700
+        bh=KdQRrKNDo19m2xpYGSP742X+VIY6LKYcB4+u45tKW1U=;
+        b=oNuzDJCEkUFbyBJHM1fNRwCk/1J+BiEW95+rdDRfP5WZnJXA2NNDyUM/N75eu+c/cp
+         hzP1Z7pCgZVpfoxpNZS0K0D20SJ1PBIfu+3/IXzpns++RJtRpxmJcA4qxfN1MIOh0JCn
+         Yyydfi/IJdR7H00ElMLsRzjpqd/0HaWVEeVj9ndDLYgRXKGJKcb4GKOZIgur1yp9Gtom
+         h5/Rb7J4CqI2SgxHRvKrtRQ03x3EJaCiXfNnKcpJ3msNF25S66EBwU0Uiu+ldFQ1HIAp
+         SUPA83vw0l0rRwbrsI68nzowVahTkClDwZvYy1kIML2la2x6Q9dJHDJDaHn+s9I98N69
+         RjMg==
+X-Gm-Message-State: AOAM533j28BwgVml14XyiMEehiyCV3h3v47JPRndJ3VVG2lEZecJ9MQt
+        Q/yz3XgaoD2FR0V5Q+sp1oqzfZtYGhztkjvq
+X-Google-Smtp-Source: ABdhPJyFr+vMn4IaLj8ptljaopu5wmDjNOyvpwokjWn6WwAgEzGdw8AqR37AImPDd+WxcBhnK0OxYA==
+X-Received: by 2002:a17:907:6e29:b0:6ff:4f5d:8dc7 with SMTP id sd41-20020a1709076e2900b006ff4f5d8dc7mr1393952ejc.415.1654119564481;
+        Wed, 01 Jun 2022 14:39:24 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:ab88:368f:2080:5d6e:322:57b6:5f03])
+        by smtp.googlemail.com with ESMTPSA id a14-20020a170906368e00b006fec5cef701sm1099080ejc.197.2022.06.01.14.39.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 14:39:23 -0700 (PDT)
+From:   David Virag <virag.david003@gmail.com>
+Cc:     phone-devel@vger.kernel.org,
+        David Virag <virag.david003@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] Bring up internal eMMC on Samsung Galaxy A8 (2018)
+Date:   Thu,  2 Jun 2022 01:37:38 +0200
+Message-Id: <20220601233743.56317-1-virag.david003@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Bui Quang Minh <minhquangbui99@gmail.com>
-References: <20220525151517.8430-1-mkoutny@suse.com>
- <20220525151517.8430-3-mkoutny@suse.com>
- <20220525161455.GA16134@blackbody.suse.cz> <Yo7KfEOz92kS2z5Y@blackbook>
- <Yo/DtjEU/kYr190u@slm.duckdns.org>
- <0babd7df-bdef-9edc-3682-1144bc0c2d2b@linaro.org>
- <Ypf0VnKUMiuRgZqT@slm.duckdns.org>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
-In-Reply-To: <Ypf0VnKUMiuRgZqT@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/22 16:20, Tejun Heo wrote:
-> On Wed, Jun 01, 2022 at 04:13:32PM -0700, Tadeusz Struk wrote:
->>> On Thu, May 26, 2022 at 11:56:34AM +0200, Michal Koutný wrote:
->>>> // ref=A: initial state
->>>> kill_css()
->>>>     css_get // ref+=F == A+F: fuse
->>>>     percpu_ref_kill_and_confirm
->>>>       __percpu_ref_switch_to_atomic
->>>>         percpu_ref_get
->>>>           // ref += 1 == A+F+1: atomic mode, self-protection
->>>>       percpu_ref_put
->>>>         // ref -= 1 == A+F: kill the base reference
->>>>     [via rcu]
->>>>     percpu_ref_switch_to_atomic_rcu
->>>>       percpu_ref_call_confirm_rcu
->>>>         css_killed_ref_fn == refcnt.confirm_switch
->>>>           queue_work(css->destroy_work)        (1)
->>>>                                                        [via css->destroy_work]
->>>>                                                        css_killed_work_fn == wq.func
->>>>                                                          offline_css() // needs fuse
->>>>                                                          css_put // ref -= F == A: de-fuse
->>>>         percpu_ref_put
->>>>           // ref -= 1 == A-1: remove self-protection
->>>>           css_release                                   // A <= 1 -> 2nd queue_work explodes!
->>>
->>> I'm not sure I'm following it but it's perfectly fine to re-use the work
->>> item at this point. The work item actually can be re-cycled from the very
->>> beginning of the work function. The only thing we need to make sure is that
->>> we don't css_put() prematurely to avoid it being freed while we're using it.
->>
->> Yes, it is ok to reuse a work struct, but it's not ok to have the same
->> work struct enqueued twice on the same WQ when list debug is enabled.
->> That's why we are getting this "BUG: corrupted list.."
-> 
-> The above scenario isn't that tho. Once the work item starts executing, wq
-> doesn't care about what happens to it and as killed_work_fn is holding a
-> reference, the release scheduling shouldn't happen before it starts
-> executing unless somebody is screwing up the refcnting.
-> 
->> That's right. Michal was on the right track for the kill_css() part.
->> What I think is going on is that once css_create() fails then
->> cgroup_subtree_control_write() ends up calling first kill_css() and
->> then css_put() on the same css, I think it's &cgrp->self of the kernfs_node.
->> The each_live_descendant_post() also iterates on the root.
->> Here is the call flow (sorry for long lines):
->>
->> cgroup_subtree_control_write(of)->cgroup_apply_control(cgrp)->cgroup_apply_control_enable(cgrp)->css_create() <- fails here and returns error
->>    |
->>    |-> cgroup_finalize_control(cgrp)->cgroup_apply_control_disable(cgrp)->each_live_descendant_post(cgrp)->kill_css()->percpu_ref_kill_and_confirm(&css->refcnt, css_killed_ref_fn) <- this triggers css_killed_ref_fn() to be called
->>    |
->>    |  css_killed_ref_fn() <- first css->destroy_work enqueue
->>    |    |
->>    |    |->  INIT_WORK(&css->destroy_work, css_killed_work_fn); queue_work(cgroup_destroy_wq, &css->destroy_work);
->>    |
->>    |
->>    |-> goto out_unlock;
->>    |     |
->>    |     |-> cgroup_kn_unlock(kernfs_node)->cgroup_put(cgrp)->css_put(&cgrp->self)->percpu_ref_put(&css->refcnt) <- this triggers css_release() to be called
->>    |
->>    |
->>       css_release(percpu_ref) <- second css->destroy_work enqueue
->>         |
->>         |->  INIT_WORK(&css->destroy_work, css_release_work_fn); queue_work(cgroup_destroy_wq, &css->destroy_work) <- and it fails here with BUG: corrupted list in insert_work; list_add corruption.
->>
->>
->> What seems to work for me as the simplest fix is to prevent enqueuing a dying
->> css in css_release() as below. Please let me know if that makes sense to you.
->>
->> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
->> index 1779ccddb734..5618211487cc 100644
->> --- a/kernel/cgroup/cgroup.c
->> +++ b/kernel/cgroup/cgroup.c
->> @@ -5210,8 +5210,10 @@ static void css_release(struct percpu_ref *ref)
->>   	struct cgroup_subsys_state *css =
->>   		container_of(ref, struct cgroup_subsys_state, refcnt);
->> -	INIT_WORK(&css->destroy_work, css_release_work_fn);
->> -	queue_work(cgroup_destroy_wq, &css->destroy_work);
->> +	if (!(css->flags & CSS_DYING)) {
->> +		INIT_WORK(&css->destroy_work, css_release_work_fn);
->> +		queue_work(cgroup_destroy_wq, &css->destroy_work);
->> +	}
-> 
-> When the problem is ref imbalance, how can above be the solution? Of course
-> release path won't cause an issue if they don't run, but we still need to
-> free the thing, right?
+This set adds support to the internal eMMC storage found on the Samsung
+Galaxy A8 (2018) (jackpotlte). It seems to work reliably for reads and
+writes. postmarketOS is able to boot off of it.
 
-Yes, but as far as I can see the percpu_ref_kill_and_confirm(&css->refcnt, css_killed_ref_fn)
-doesn't change the value of the refcnt, it just causes the css_killed_ref_fn() to be called
-on it. Only css_get() & css_put() modify the refcnt value.
-And for the "free the thing" the css_killed_work_fn() does that.
-It calls offline_css(css) and css_put(css) for the whole css hierarchy.
+The original kernel from samsung sets pinctrl options at runtime
+changing pin-drv levels automatically. Without this code, mmc seems to
+work the best with the lv3 setting on jackpotlte.
+
+David Virag (5):
+  dt-bindings: clock: Add bindings for Exynos7885 CMU_FSYS
+  dt-bindings: clock: Add indices for Exynos7885 TREX clocks
+  clk: samsung: exynos7885: Implement CMU_FSYS domain
+  clk: samsung: exynos7885: Add TREX clocks
+  arm64: dts: exynos: Add internal eMMC support to jackpotlte
+
+ .../clock/samsung,exynos7885-clock.yaml       |  27 +++
+ .../boot/dts/exynos/exynos7885-jackpotlte.dts |  20 ++
+ arch/arm64/boot/dts/exynos/exynos7885.dtsi    |  32 +++
+ drivers/clk/samsung/clk-exynos7885.c          | 207 +++++++++++++++++-
+ include/dt-bindings/clock/exynos7885.h        |  54 ++++-
+ 5 files changed, 324 insertions(+), 16 deletions(-)
 
 -- 
-Thanks,
-Tadeusz
+2.36.1
+

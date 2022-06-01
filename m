@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3927539F2D
+	by mail.lfdr.de (Postfix) with ESMTP id 57A98539F2C
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350567AbiFAISy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 04:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
+        id S1350596AbiFAIS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348447AbiFAISk (ORCPT
+        with ESMTP id S1348784AbiFAISn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:18:40 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F4628720
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:18:39 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id a10so1326358pju.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 01:18:39 -0700 (PDT)
+        Wed, 1 Jun 2022 04:18:43 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BB83EF15
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:18:42 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id i185so1236977pge.4
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 01:18:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wmbEut7AQ7/Bf3HWTLDsZtp4DOqAEomrHS3HpyZ9OO4=;
-        b=igURx3teJeErCLwWW62RZUsTiA0yqJqs5g1N0ySEf7hYZ0aQu17UQuOLGN0K/bQkFv
-         oIayxg9GbTmWrLSfdAVeYA/N/zIJ+CTzhRi6uQdSzkNPBbyiIFACjzza0SYrv17UUtQv
-         aeGqsnM/aIpZfOz7ZST/lSBoAilfn+Kv/UZw0=
+        bh=ZXVJXoTliTs9PH6H4bJtRqk079LoRX34taoZ9SWcFs0=;
+        b=UExVF+t0yo+CUF2U9NAgRgv1F5D/5gLH7m1BIMgAkp9BcaghU1VJRCg+9tTux1uS7p
+         GooLVoefjUwi/Wrx57PtSiJASyS+d4Ci5wz5l5KeokvzcojAPYUOE8G6TY7CFUX1ZfS9
+         GLZf2eHTn+ISk0qXAjhx+ohsQOjgmPIjWeWms=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wmbEut7AQ7/Bf3HWTLDsZtp4DOqAEomrHS3HpyZ9OO4=;
-        b=kCRR2lGQbnERs/1faILfUKJ+FUPsoypeRKYmFxE5HsKleJi5UljKOAsFn+OTro51tk
-         YJoICOyp5b/lnkFsTTt7msrb6YHOCrWVKz6FmAFVqAHgQulbc6blwQ88Z8XzEWF3tep8
-         5TVScRKXIWp5mgnmk8BmEZb0/izAfuHCykH9ZUh70OXx/k9kz/WTOKPEj2UlHkBP/FdG
-         iq9VuGDV6WUhnDI8p1Q2+LZZHDb55uHhrR+h//OhVMay1kd3vL34yWfVG/lBxARV/Vw6
-         aYenDqgjN4i0or946sSinylIIsaH2uz90byNTQzG3tPQQerX3Gt78UILb/WQzQVxNN/Z
-         yXcA==
-X-Gm-Message-State: AOAM531y7g12+w5smht6RYKxVU9073BXBTXvVNUMGUgYh1qdS0EWKZVH
-        hfY20UqWF6FLmO0s7O0CcPysxQ==
-X-Google-Smtp-Source: ABdhPJzAOTg2fw10j7HFjvrblLTUzc60T5jBHgR4OhGqZldKydmmJeCI6jBogTpq8SWmmOAAjGhg6w==
-X-Received: by 2002:a17:90b:4f44:b0:1e4:b161:f9f6 with SMTP id pj4-20020a17090b4f4400b001e4b161f9f6mr3465677pjb.43.1654071518643;
-        Wed, 01 Jun 2022 01:18:38 -0700 (PDT)
+        bh=ZXVJXoTliTs9PH6H4bJtRqk079LoRX34taoZ9SWcFs0=;
+        b=Qifu7XX0BCA+jSpTTPrmW8ZSemSv4mrQEE33JyvpQGlZTDCQIK79S3QpnKH9dr5ffj
+         2FcKUYVX9Gma1jSoR/r4GRWJ7MhOIBLaJYBnVUApkX29LbQB11s8q2em8lo62jq/nv4K
+         END1MYC7dlUX7rLyh79yWxwgTo9qyRgVYRb7HvK67vvGkbrfvubnyZ+IISBtklNwO/gs
+         42VCqaW/vK7r1A/7R22t4sjIMy1axiFdGHM9lRdfrvdxAe3D2QcBtD0xX4Z5o2gcs+Wp
+         27ZR847iejy4PXdGi9T0aUIdXv/mU7YgDYlgLq9ugvKGHG3k1U/DlBW8bAi7EA98Kg5B
+         5KCQ==
+X-Gm-Message-State: AOAM531O7uV/wAT+g/AsMAHski+cVRwKxw20tZ2l6RcQwhqBnaGRf/B8
+        Q/v66uwp1pGrj8at4nf1DVV0RQ==
+X-Google-Smtp-Source: ABdhPJxQ9eCDaf4dvRJZI6lO8kC3TdeHI0Lqsx36TI7SwrRFIzm9uahMlqRrBMTjw3p/O2lQbj6Fcg==
+X-Received: by 2002:a05:6a00:218e:b0:51b:2c21:26f7 with SMTP id h14-20020a056a00218e00b0051b2c2126f7mr19812855pfi.62.1654071522073;
+        Wed, 01 Jun 2022 01:18:42 -0700 (PDT)
 Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:dc30:e75c:ae95:f2d6])
-        by smtp.gmail.com with ESMTPSA id c3-20020aa78803000000b0050dc7628182sm824680pfo.92.2022.06.01.01.18.35
+        by smtp.gmail.com with ESMTPSA id c3-20020aa78803000000b0050dc7628182sm824680pfo.92.2022.06.01.01.18.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 01:18:38 -0700 (PDT)
+        Wed, 01 Jun 2022 01:18:41 -0700 (PDT)
 From:   Hsin-Yi Wang <hsinyi@chromium.org>
 To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
 Cc:     Hans de Goede <hdegoede@redhat.com>,
@@ -64,9 +64,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Douglas Anderson <dianders@chromium.org>,
         Rob Herring <robh+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/8] drm/panel: boe-tv101wum-nl6: Implement .get_orientation callback
-Date:   Wed,  1 Jun 2022 16:18:17 +0800
-Message-Id: <20220601081823.1038797-3-hsinyi@chromium.org>
+Subject: [PATCH 3/8] drm/panel: panel-edp: Implement .get_orientation callback
+Date:   Wed,  1 Jun 2022 16:18:18 +0800
+Message-Id: <20220601081823.1038797-4-hsinyi@chromium.org>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 In-Reply-To: <20220601081823.1038797-1-hsinyi@chromium.org>
 References: <20220601081823.1038797-1-hsinyi@chromium.org>
@@ -86,33 +86,35 @@ To return the orientation property to drm/kms driver.
 
 Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
 ---
- drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c | 8 ++++++++
+ drivers/gpu/drm/panel/panel-edp.c | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-index 1be150ac758f..0f1c9b685da3 100644
---- a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-+++ b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-@@ -1516,11 +1516,19 @@ static int boe_panel_get_modes(struct drm_panel *panel,
- 	return 1;
+diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+index 1732b4f56e38..a2133581a72d 100644
+--- a/drivers/gpu/drm/panel/panel-edp.c
++++ b/drivers/gpu/drm/panel/panel-edp.c
+@@ -609,6 +609,13 @@ static int panel_edp_get_timings(struct drm_panel *panel,
+ 	return p->desc->num_timings;
  }
  
-+static enum drm_panel_orientation boe_panel_get_orientation(struct drm_panel *panel)
++static enum drm_panel_orientation panel_edp_get_orientation(struct drm_panel *panel)
 +{
-+	struct boe_panel *boe = to_boe_panel(panel);
++	struct panel_edp *p = to_panel_edp(panel);
 +
-+	return boe->orientation;
++       return p->orientation;
 +}
 +
- static const struct drm_panel_funcs boe_panel_funcs = {
- 	.unprepare = boe_panel_unprepare,
- 	.prepare = boe_panel_prepare,
- 	.enable = boe_panel_enable,
- 	.get_modes = boe_panel_get_modes,
-+	.get_orientation = boe_panel_get_orientation,
+ static int detected_panel_show(struct seq_file *s, void *data)
+ {
+ 	struct drm_panel *panel = s->private;
+@@ -637,6 +644,7 @@ static const struct drm_panel_funcs panel_edp_funcs = {
+ 	.prepare = panel_edp_prepare,
+ 	.enable = panel_edp_enable,
+ 	.get_modes = panel_edp_get_modes,
++	.get_orientation = panel_edp_get_orientation,
+ 	.get_timings = panel_edp_get_timings,
+ 	.debugfs_init = panel_edp_debugfs_init,
  };
- 
- static int boe_panel_add(struct boe_panel *boe)
 -- 
 2.36.1.255.ge46751e96f-goog
 

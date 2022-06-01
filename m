@@ -2,103 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B75539AA8
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 03:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C16539AAA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 03:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348930AbiFABMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 21:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S1348935AbiFABMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 21:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348910AbiFABMJ (ORCPT
+        with ESMTP id S240650AbiFABMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 21:12:09 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39B91A3A1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 18:12:06 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2ec42eae76bso2709127b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 18:12:06 -0700 (PDT)
+        Tue, 31 May 2022 21:12:43 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E663EF2D;
+        Tue, 31 May 2022 18:12:42 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso580909pjg.0;
+        Tue, 31 May 2022 18:12:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a87IcC9urf+k/BpqnG3OjFGgMumKd7iQpHu0ssOaiic=;
-        b=KQ6xfJ2MAx8t5MCYwFKqlYdylzl0qF96ue+1TQyTzPIVqA1MdgUob06UcOoIjKW79i
-         wsE4ILBjjsv/D1JUbtoib1/KfZ7P54OcZCrSadx67qPJ+3OGSTxgFodRzydg3MfH2xZ+
-         D08AjOQmDAsg9claFvSgYRGipck7i4+lJsGc0=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xIc8vKaLouPdrAGwycSV3iqi6uAw0jqRjpdZCe8jdQg=;
+        b=KayP+NHs68NgsnxUicSOzNeWi2rMsI2wtWd4yhq33x3aepkDohE9rvkva9Gt0XXrtK
+         O9cjq/7kM300WT3PFxPKW9heT0cj8m3swZ5S3hdNzitKUcA0Dsf4kfINoynKEV2RO43F
+         Zhizy/zTsImROeHVlVRRjqjRq3MHi7W+m2db1JFjP9na4Ynp+DvNgsDkXl7rQMA+3xUT
+         Umn0AkdjEj/FCIVlm7Zarn3zcrt2Ry53KBclQ1DBgKO5EhETUsJHMlki+fyar0ZX5uE+
+         03CXcgf0KnZvWjYCTVSeEKixYWjf1cEp5WN5iSRpHDQgC2gjP6ewbs8zAWmhjd8KWAqR
+         rxQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a87IcC9urf+k/BpqnG3OjFGgMumKd7iQpHu0ssOaiic=;
-        b=0GlWZ3ZQAeG5bkQqCLw/E122fzjcwpCBEFms8dmdhproG+w9zy0+rsYQfbLO5eICdx
-         ozumlBU3pdd14Xtva3UrshMUqvZrjv5ooH+ay5UF94ZFh2VkNtAqqFOPy4YgR2nLrH92
-         ZEUhXMLAd1cP+MCN6I5RZWwk3I/StMXlDDX5w7N/UdWm/EE8YLBiSO2U5SkpfzM1gFqw
-         bNpHJOixDKwDYFQcsk/Kq9WMLiqzz+oVnr6TM5JsPQ23PsyD5VHr6MdR1VAEK91GYR3B
-         sRGxAihBgn5407PHhsX1hgn6jAqER7xwRYP7+bxTzKQGvQrTb5orqh7hF/gYIduz68xk
-         hcgQ==
-X-Gm-Message-State: AOAM531RrlACH/VRTQ2hG8r3Tsg+pAYQuEaOUwZB0DCFu1ZH2ObTo4aV
-        ekDJfgvtGFtxwEUNolN7Pbh3+DSQN74P+bIaMjrJHw==
-X-Google-Smtp-Source: ABdhPJxN8CFFftQdSRWB+oFw+/9K6wx0YHUNqX3WYh3HcxuMASW/AiqGynB9Key4qJsp58N1ju6u+fPv+2562H6cc8Q=
-X-Received: by 2002:a81:848c:0:b0:30c:4684:3b6 with SMTP id
- u134-20020a81848c000000b0030c468403b6mr15060632ywf.77.1654045926104; Tue, 31
- May 2022 18:12:06 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xIc8vKaLouPdrAGwycSV3iqi6uAw0jqRjpdZCe8jdQg=;
+        b=wjBP1fkWkOBko393QvKMtej37vRFre/dXW8L0cPwRlHNXXkvv0Pb66bFYerg/8wl6t
+         4jIVbTaLmeaL8NKaWhLWJ7TZorK0oBE+RMQXcAQJsu24WFD4G7GCSfGNJnaBBL7Okv4+
+         bkEIkEJKL4XsLFLSE9kSm5hP4eNyroWLDauOQfk7UjA2iqNYQhevIUG3KiHrE7uZTJBl
+         N9TftP2raJ/0FTMPqv4vbLwH46fgPPIr4MSmYcz3XW+Js9CV46AghOjpSRSWts6FCqVe
+         /u+SsuIO1fP3aaQPnV7W3Kpwj/mzqdd8ZNcyHp9SyjGwyw6qS7K9lRomvq0d1jFJx1BK
+         hb9g==
+X-Gm-Message-State: AOAM530CNniRLAyIE5VZ/ZRWLjw4hy3ULBKU+V6Ko5OPh1+XI9krct2M
+        bh5PYQ+cHjUI4XOaoOPvSzbYeURTbGAC+A==
+X-Google-Smtp-Source: ABdhPJzBTm4jFwx1uFy6txMaheAyzpdXKcH/GVIw5nFjJ++9zCM9cTMObQ97iryt8E828tJkrXeLbg==
+X-Received: by 2002:a17:90b:4c8c:b0:1df:c760:e4af with SMTP id my12-20020a17090b4c8c00b001dfc760e4afmr31820843pjb.78.1654045961262;
+        Tue, 31 May 2022 18:12:41 -0700 (PDT)
+Received: from [192.168.255.10] ([203.205.141.24])
+        by smtp.gmail.com with ESMTPSA id cj5-20020a056a00298500b0050dc7628180sm79891pfb.90.2022.05.31.18.12.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 18:12:40 -0700 (PDT)
+Message-ID: <32d83b5d-fda2-ee98-abcb-514459b1af03@gmail.com>
+Date:   Wed, 1 Jun 2022 09:12:36 +0800
 MIME-Version: 1.0
-References: <20220530013958.577941-1-dlunev@chromium.org> <20220530113953.v3.1.I0e579520b03aa244906b8fe2ef1ec63f2ab7eecf@changeid>
- <YpXCt14eL2edq6IB@infradead.org>
-In-Reply-To: <YpXCt14eL2edq6IB@infradead.org>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Wed, 1 Jun 2022 11:11:55 +1000
-Message-ID: <CAONX=-dQuiG26gCp7FVfZk83au=RXXcnTWJO8+Ygep0iVqvnxA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] fs/super: function to prevent super re-use
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, miklos@szeredi.hu,
-        viro@zeniv.linux.org.uk, tytso@mit.edu,
-        fuse-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH 2/2] KVM: x86: always allow host-initiated writes to PMU
+ MSRs
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>
+References: <20220531175450.295552-1-pbonzini@redhat.com>
+ <20220531175450.295552-3-pbonzini@redhat.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <20220531175450.295552-3-pbonzini@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for your comments. Uploaded v4 with requested changes.
---Daniil
+On 1/6/2022 1:54 am, Paolo Bonzini wrote:
+>   	switch (msr) {
+>   	case MSR_CORE_PERF_FIXED_CTR_CTRL:
+>   	case MSR_CORE_PERF_GLOBAL_STATUS:
+>   	case MSR_CORE_PERF_GLOBAL_CTRL:
+>   	case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
+> -		ret = pmu->version > 1;
+> +		if (host_initiated)
+> +			return true;
+> +		return pmu->version > 1;
 
-On Tue, May 31, 2022 at 5:24 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Mon, May 30, 2022 at 11:39:57AM +1000, Daniil Lunev wrote:
-> > +void retire_super(struct super_block *sb)
-> > +{
-> > +     down_write(&sb->s_umount);
-> > +     if (sb->s_bdi != &noop_backing_dev_info) {
-> > +             if (sb->s_iflags & SB_I_PERSB_BDI && !(sb->s_iflags & SB_I_RETIRED))
->
-> SB_I_PERSB_BDI can't be set for noop_backing_dev_info, so that check
-> should not be needed.  Which also conveniently fixes the overly long
-> line.
->
-> Also this should clear SB_I_PERSB_BDI as the only place that checks
-> it is the unregistration.
->
-> >       spin_lock(&sb_lock);
-> > -     /* should be initialized for __put_super_and_need_restart() */
->
-> This is a completely unrelated change.  While the function is gone
-> it might be worth to check what it got renamed to or folded in, or
-> if the initialization is still needed.  But all that is for a separate
-> patch.
->
-> >       up_write(&sb->s_umount);
-> >       if (sb->s_bdi != &noop_backing_dev_info) {
-> > -             if (sb->s_iflags & SB_I_PERSB_BDI)
-> > +             /* retire should have already unregistered bdi */
-> > +             if (sb->s_iflags & SB_I_PERSB_BDI && !(sb->s_iflags & SB_I_RETIRED))
-> >                       bdi_unregister(sb->s_bdi);
-> >               bdi_put(sb->s_bdi);
->
-> And once SB_I_PERSB_BDI is dropped when retiring we don't need this
-> change.
+I was shocked not to see this style of code:
+
+	return host_initiated || other-else;
+
+>   		break;
+>   	case MSR_IA32_PEBS_ENABLE:
+> -		ret = perf_capabilities & PERF_CAP_PEBS_FORMAT;
+> +		if (host_initiated)
+> +			return true;
+> +		return perf_capabilities & PERF_CAP_PEBS_FORMAT;
+>   		break;
+>   	case MSR_IA32_DS_AREA:
+> -		ret = guest_cpuid_has(vcpu, X86_FEATURE_DS);
+> +		if (host_initiated)
+> +			return true;
+> +		return guest_cpuid_has(vcpu, X86_FEATURE_DS);
+>   		break;
+>   	case MSR_PEBS_DATA_CFG:
+> -		ret = (perf_capabilities & PERF_CAP_PEBS_BASELINE) &&
+> +		if (host_initiated)
+> +			return true;
+> +		return (perf_capabilities & PERF_CAP_PEBS_BASELINE) &&
+>   			((perf_capabilities & PERF_CAP_PEBS_FORMAT) > 3);
+>   		break;
+>   	default:
+> -		ret = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0) ||
+> +		if (host_initiated)
+> +			return true;
+
+All default checks will fall in here.
+
+Considering the MSR addresses of different groups are contiguous,
+how about separating this part of the mixed statement may look even clearer:
+
++       case MSR_IA32_PERFCTR0 ... (MSR_IA32_PERFCTR0 + INTEL_PMC_MAX_GENERIC - 1):
++               return host_initiated || get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0);
++       case MSR_IA32_PMC0 ... (MSR_IA32_PMC0 + INTEL_PMC_MAX_GENERIC -1 ):
++               return host_initiated || get_fw_gp_pmc(pmu, msr);
++       case MSR_P6_EVNTSEL0 ... (MSR_P6_EVNTSEL0 + INTEL_PMC_MAX_GENERIC - 1):
++                       return host_initiated || get_gp_pmc(pmu, msr, 
+MSR_P6_EVNTSEL0);
++       case MSR_CORE_PERF_FIXED_CTR0 ... (MSR_CORE_PERF_FIXED_CTR0 + 
+KVM_PMC_MAX_FIXED - 1):
++               return host_initiated || get_fixed_pmc(pmu, msr);
+
+> +		return get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0) ||
+>   			get_gp_pmc(pmu, msr, MSR_P6_EVNTSEL0) ||
+>   			get_fixed_pmc(pmu, msr) || get_fw_gp_pmc(pmu, msr) ||
+>   			intel_pmu_is_valid_lbr_msr(vcpu, msr);
+>   		break;
+>   	}

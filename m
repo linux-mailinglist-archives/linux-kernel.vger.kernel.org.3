@@ -2,85 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870C5539B23
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF17539B11
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349118AbiFACLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 22:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
+        id S1349094AbiFACE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 22:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbiFACLU (ORCPT
+        with ESMTP id S1345940AbiFACEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 22:11:20 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF2090CE8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 19:11:19 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LCXfR73jyzjWvV;
-        Wed,  1 Jun 2022 10:10:07 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+        Tue, 31 May 2022 22:04:25 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D9E72E18;
+        Tue, 31 May 2022 19:04:22 -0700 (PDT)
+Received: from kwepemi100012.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LCXTs42RczgYMX;
+        Wed,  1 Jun 2022 10:02:41 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi100012.china.huawei.com (7.221.188.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 1 Jun 2022 10:11:17 +0800
-Subject: Re: [PATCH 2/3] mm/swapfile: avoid confusing swap cache statistics
-To:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220527092626.31883-1-linmiaohe@huawei.com>
- <20220527092626.31883-3-linmiaohe@huawei.com>
- <20220530160409.c9b17085adb6112d8580f37d@linux-foundation.org>
- <c7d6fec7-039d-2f54-c3b3-95deb7417a73@huawei.com>
- <33d6aec8-b4fc-aa37-27f4-f33984ea33d3@redhat.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <c7d0d606-61ba-9cfc-3c2a-961a88b6c3e5@huawei.com>
-Date:   Wed, 1 Jun 2022 10:11:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ 15.1.2375.24; Wed, 1 Jun 2022 10:04:21 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
+ 2022 10:04:20 +0800
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <ebiederm@xmission.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH v2] proc: Fix a dentry lock race between release_task and lookup
+Date:   Wed, 1 Jun 2022 10:17:42 +0800
+Message-ID: <20220601021742.4163063-1-chengzhihao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <33d6aec8-b4fc-aa37-27f4-f33984ea33d3@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/31 20:58, David Hildenbrand wrote:
-> On 31.05.22 04:55, Miaohe Lin wrote:
->> On 2022/5/31 7:04, Andrew Morton wrote:
->>> On Fri, 27 May 2022 17:26:25 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
->>>
->>>> At swapoff time, we're going to swap in the pages continuously. So calling
->>>> lookup_swap_cache would confuse statistics. We should use find_get_page
->>>> directly here.
->>>
->>> Why is the existing behaviour wrong?  swapoff() has to swap stuff in to
->>> be able to release the swap device.  Why do you believe that this
->>> swapin activity should not be accounted?
->>
->> IMHO, statistics, e.g. swap_cache_info.find_success, are used to show the effectiveness
->> of the swap cache activity. So they should only reflect the memory accessing activity
->> of the user. I think swapoff can't reflect the effectiveness of the swap cache activity
->> because it just swaps in pages one by one. Or statistics should reflect all the activity
->> of the user including swapoff?
-> 
-> I'm wondering who cares and why?
+Commit 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
+moved proc_flush_task() behind __exit_signal(). Then, process systemd
+can take long period high cpu usage during releasing task in following
+concurrent processes:
 
-I thought it's used to show the effectiveness of the swapcache readahead algorithm. If nobody
-ever cares about it now, I'm fine to drop this patch. And could these statistics be removed
-since nobody cares about it?
+  systemd                                 ps
+kernel_waitid                 stat(/proc/tgid)
+  do_wait                       filename_lookup
+    wait_consider_task            lookup_fast
+      release_task
+        __exit_signal
+          __unhash_process
+            detach_pid
+              __change_pid // remove task->pid_links
+                                     d_revalidate -> pid_revalidate  // 0
+                                     d_invalidate(/proc/tgid)
+                                       shrink_dcache_parent(/proc/tgid)
+                                         d_walk(/proc/tgid)
+                                           spin_lock_nested(/proc/tgid/fd)
+                                           // iterating opened fd
+        proc_flush_pid                                    |
+           d_invalidate (/proc/tgid/fd)                   |
+              shrink_dcache_parent(/proc/tgid/fd)         |
+                shrink_dentry_list(subdirs)               ↓
+                  shrink_lock_dentry(/proc/tgid/fd) --> race on dentry lock
 
-Thanks!
+Function d_invalidate() will remove dentry from hash firstly, but why does
+proc_flush_pid() process dentry '/proc/tgid/fd' before dentry '/proc/tgid'?
+That's because proc_pid_make_inode() adds proc inode in reverse order by
+invoking hlist_add_head_rcu(). But proc should not add any inodes under
+'/proc/tgid' except '/proc/tgid/task/pid', fix it by adding inode into
+'pid->inodes' only if the inode is /proc/tgid or /proc/tgid/task/pid.
 
-> 
-> 
+Fixes: 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216054
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+---
+ v1->v2: Add new helper proc_pid_make_base_inode that performs the extra
+	 work of adding to the pid->list
+ fs/proc/base.c | 34 ++++++++++++++++++++++++++--------
+ 1 file changed, 26 insertions(+), 8 deletions(-)
+
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index c1031843cc6a..f22fad3bf7f0 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -1885,7 +1885,7 @@ void proc_pid_evict_inode(struct proc_inode *ei)
+ 	put_pid(pid);
+ }
+ 
+-struct inode *proc_pid_make_inode(struct super_block * sb,
++struct inode *proc_pid_make_inode(struct super_block *sb,
+ 				  struct task_struct *task, umode_t mode)
+ {
+ 	struct inode * inode;
+@@ -1914,11 +1914,6 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
+ 
+ 	/* Let the pid remember us for quick removal */
+ 	ei->pid = pid;
+-	if (S_ISDIR(mode)) {
+-		spin_lock(&pid->lock);
+-		hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
+-		spin_unlock(&pid->lock);
+-	}
+ 
+ 	task_dump_owner(task, 0, &inode->i_uid, &inode->i_gid);
+ 	security_task_to_inode(task, inode);
+@@ -1931,6 +1926,27 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
+ 	return NULL;
+ }
+ 
++struct inode *proc_pid_make_base_inode(struct super_block *sb,
++				       struct task_struct *task, umode_t mode)
++{
++	struct inode *inode;
++	struct proc_inode *ei;
++	struct pid *pid;
++
++	inode = proc_pid_make_inode(sb, task, mode);
++	if (!inode)
++		return NULL;
++
++	/* Let proc_flush_pid find this directory inode */
++	ei = PROC_I(inode);
++	pid = ei->pid;
++	spin_lock(&pid->lock);
++	hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
++	spin_unlock(&pid->lock);
++
++	return inode;
++}
++
+ int pid_getattr(struct user_namespace *mnt_userns, const struct path *path,
+ 		struct kstat *stat, u32 request_mask, unsigned int query_flags)
+ {
+@@ -3350,7 +3366,8 @@ static struct dentry *proc_pid_instantiate(struct dentry * dentry,
+ {
+ 	struct inode *inode;
+ 
+-	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
++	inode = proc_pid_make_base_inode(dentry->d_sb, task,
++					 S_IFDIR | S_IRUGO | S_IXUGO);
+ 	if (!inode)
+ 		return ERR_PTR(-ENOENT);
+ 
+@@ -3649,7 +3666,8 @@ static struct dentry *proc_task_instantiate(struct dentry *dentry,
+ 	struct task_struct *task, const void *ptr)
+ {
+ 	struct inode *inode;
+-	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
++	inode = proc_pid_make_base_inode(dentry->d_sb, task,
++					 S_IFDIR | S_IRUGO | S_IXUGO);
+ 	if (!inode)
+ 		return ERR_PTR(-ENOENT);
+ 
+-- 
+2.31.1
 

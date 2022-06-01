@@ -2,101 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C91453A01A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6D053A01F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242086AbiFAJM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 05:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S1344501AbiFAJN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 05:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234768AbiFAJM4 (ORCPT
+        with ESMTP id S234768AbiFAJN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 05:12:56 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D039038791;
-        Wed,  1 Jun 2022 02:12:53 -0700 (PDT)
+        Wed, 1 Jun 2022 05:13:56 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715A338791
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 02:13:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654074773; x=1685610773;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6zRdvDgL69wDK3vvy0WkoxuVG15R6Byox2N3ddAF4wY=;
-  b=PwRttoiFzUltmorvZhlAmzXmTrwcmXlj+CjKNsmdhJbHrgeNtuaVGnKB
-   lo/O1eL0Wt+mpXTJpMKxOL2yqfFXAwio3IETfbjWEjXi22OirB2xLf39P
-   jGXFrrfg1Bjqk6nsZ5/PUIRCa340KaJkhhC5XvauHNA5K85qInbZv9GN7
-   HlwPHaFVa4Q4jEUu65SS9qhUXvVtvQkGX/jOYlYwXNyAq+yTqB+kUkvNq
-   WzJFBjOxC+n/0AAmT3LrNgaplK/ns61Vzh138/XOyEpnr58Lwd7ieIUOo
-   UTrJapK1FFm1/JYjZXyzDS6N3b3KeCOyYWx+PywjIbQz8d1FWvV7d+CkT
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="336182146"
+  t=1654074835; x=1685610835;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2iRND0sR2JrAd5jopntHy39jQB2cI4jEtYJQYCcb5o8=;
+  b=Cw6gM7CB5HlfnKR+OG3ANOvdlG6ZrU9rVE0tuL8QaoemvQMxya+S13Uf
+   AL6XFylej2jJWQpmM74IOEOleRYEXFzX1lxA6bqEMHrOgyriZsM9vuEJj
+   83WBph8aOAjJlwNmL1HwpMD1r+8HNSu+qqk5Wy/c5TCbPeADE/WpHqq3m
+   p+E4ms29K4PGljFW5noanne8w39/HnySC3P+6bubcRvgmUFkSJUs2Qcyr
+   /y2ZY+ru/1wKG3FLM5FHTQZNdKZw8vTeOkCQb8l9ZlTkyTKlwnoWLF8ES
+   YOPUGwqxAfL+UuaZEjFpBG1xGsSe6FaT+w6FIoiSjWRTcVAhQqDNyouY1
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="338571740"
 X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="336182146"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 02:12:53 -0700
+   d="scan'208";a="338571740"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 02:13:55 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="606161990"
-Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.255.29.254]) ([10.255.29.254])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 02:12:50 -0700
-Message-ID: <2b3be388-400e-7871-7d73-aba50d49a9b7@intel.com>
-Date:   Wed, 1 Jun 2022 17:12:42 +0800
+   d="scan'208";a="612241710"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 01 Jun 2022 02:13:54 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwKQL-0003n2-Em;
+        Wed, 01 Jun 2022 09:13:53 +0000
+Date:   Wed, 1 Jun 2022 17:13:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:sched/idle 13/19] vmlinux.o: warning: objtool:
+ tick_check_broadcast_expired+0x2f: call to __kasan_check_read() leaves
+ .noinstr.text section
+Message-ID: <202206011749.IenKXuNb-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/2] KVM: vmx, pmu: accept 0 for absent MSRs when
- host-initiated
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        likexu@tencent.com
-References: <20220531175450.295552-1-pbonzini@redhat.com>
- <20220531175450.295552-2-pbonzini@redhat.com> <YpZgU+vfjkRuHZZR@google.com>
- <4b59b1c0-112b-5e07-e613-607220c3b597@redhat.com>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <4b59b1c0-112b-5e07-e613-607220c3b597@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/idle
+head:   800e96de10eefe4eca5bb5f4492a77dac04b52dc
+commit: 998ebff7327f7dfd547abe683c254fe949e2336c [13/19] idle: Fix rcu_idle_*() usage
+config: x86_64-randconfig-a014-20211121 (https://download.01.org/0day-ci/archive/20220601/202206011749.IenKXuNb-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=998ebff7327f7dfd547abe683c254fe949e2336c
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/idle
+        git checkout 998ebff7327f7dfd547abe683c254fe949e2336c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-On 6/1/2022 4:54 PM, Paolo Bonzini wrote:
-> On 5/31/22 20:37, Sean Christopherson wrote:
->>> +
->>>           /*
->>>            * Writing depth MSR from guest could either setting the
->>>            * MSR or resetting the LBR records with the side-effect.
->>> @@ -535,6 +542,8 @@ static int intel_pmu_set_msr(struct kvm_vcpu 
->>> *vcpu, struct msr_data *msr_info)
->>>       case MSR_ARCH_LBR_CTL:
->>>           if (!arch_lbr_ctl_is_valid(vcpu, data))
->>>               break;
->>> +        if (!guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
->>> +            return 0;
->>
->> Similar bug here.
->>
->> Can we just punt this out of kvm/queue until its been properly reviewed?
->
-> Yes, I agree.  I have started making some changes and pushed the 
-> result to kvm/arch-lbr-for-weijiang.
->
-> Most of the MSR handling is rewritten (and untested).
->
-> The nested VMX handling was also completely broken so I just removed 
-> it.  Instead, KVM should be adjusted so that it does not whine.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Noted, I'll run tests based on it, thanks a lot!
+All warnings (new ones prefixed by >>):
 
-Has the branch been pushed? I cannot see it.
+   vmlinux.o: warning: objtool: exc_nmi+0x109: call to static_key_count.constprop.0() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_page_fault+0x34: call to static_key_count() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: tick_check_broadcast_expired+0x2f: call to __kasan_check_read() leaves .noinstr.text section
 
->
-> Paolo
->
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

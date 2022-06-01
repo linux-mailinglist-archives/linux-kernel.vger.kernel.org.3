@@ -2,83 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075B353B0C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF0C53B0C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbiFAXGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 19:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
+        id S232516AbiFAXNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 19:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232448AbiFAXGu (ORCPT
+        with ESMTP id S230099AbiFAXNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 19:06:50 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CF8BA6
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 16:06:47 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id y32so5112505lfa.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 16:06:47 -0700 (PDT)
+        Wed, 1 Jun 2022 19:13:36 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D205EE35
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 16:13:35 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id n10so3347746pjh.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 16:13:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KOEHJ1T37zM5xlWs1LipYicxcxGtvpS/3oUJ/DRgAlY=;
-        b=aGUaLH3Rhfc0J26KPUCtW6I5dPP4YMqPvEqoJdITS60MTVJ9kShEsX6ULMNEsSib76
-         DYRloz1/Y5wl27t9UGoq43sp41jsLwjY8ndedq499Oxj1aWsY+Ijfn/YCNTbpbYFnPin
-         UqWGa2SCgkIZkqVMexW91HgvfR6D7lbWrW0p6x8HfVnho6B/TukviYtrLcmmyzuArily
-         IxMdkInYX8HHvnk3677Kr3C8Mk33K6Jg9glQRYOlue7s4moGnW+9Zw6fVP2tw6/ANRGu
-         a4ZB3TduJDS435ne+3+zYD6reeBhRHEGDLedC8gJQbtm4v9Os8/w+lFzGh7C6z/QL8L+
-         H/BQ==
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=avJEEUv9TwoQxp5JDkd8KBVEKkaG/hcczSaXXKCQTHE=;
+        b=h6rYPumu3aj7CwpyNNPdUBXXKfiKD8gGz3B045bl8MP0WngMSGl8ix8vfn1QpNRDcP
+         Ac1tUfpAbNsIYSozT3egxW8Gs72wfXxjoR414paoffvEDq2yomjCnROY+FnfRXriMFaV
+         3zqE0L/mXRymN13gHNbzn+4Qlhh5f+QVP9Ab2rKwsxos1HFwstgJUYtfWX1v/n1IMSP4
+         9utIf6WHEWywo8eukE6uJOVedlTD0LRCllXWYs5bDUzrmQp3o0xF7rL2ZXa2P24qXL6Y
+         OML1E941w/IBG/gK3vrnI/Cz/RhLiGAHokjs3WJfpVO92zUZ1NMNxQEzlRL8X1+pvuww
+         Z/Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=KOEHJ1T37zM5xlWs1LipYicxcxGtvpS/3oUJ/DRgAlY=;
-        b=8RHFHmu/Uj1ItZ2UToZ9DxuKwbZc5B+LvD6sI07K0Z8gfALVx3/zXyFjDxly3qkr1U
-         qddnQmk+v5YKkfp4jGWTz63d4l2UIafkcCAEvUbavVuTiOjLHPgij/IZu6M4kFkAjt5U
-         lUT0wwjPXfgAnOYqU7OYVIhpSlTdhUaIBwYuOmFeqyVwICa0T7u3Xt6G8ETLdhXKa+34
-         v9rRWtZ9KBmMZ+fppOQ1es4kpiZxJ2q3J5tQE5h9+UFGXAPjCyG201q7mPY/qdjoXH9Z
-         Se9WEIk5JNi1vhaHicTiXZQHc+yYZeUK2OgkXr1x7n8NlCDZQqVgv74xlSBYWK0KXVS5
-         gz0g==
-X-Gm-Message-State: AOAM5325knUrGktsmr13ur4jQCiwS2ZiQAejWsgbKi/W30j9BPKQoL26
-        BzX4LYgMHggq6hiCJLYhRDMrYw==
-X-Google-Smtp-Source: ABdhPJxZBGF04MQO6RefpeGzCEwsGgWf1QC+WPwzQw3El7mz+KE+d8Txue3R49e7MwfvVJ9WPGbCFw==
-X-Received: by 2002:a05:6512:12c9:b0:477:c583:ed10 with SMTP id p9-20020a05651212c900b00477c583ed10mr1257719lfg.20.1654124806171;
-        Wed, 01 Jun 2022 16:06:46 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id a19-20020ac25213000000b004786332a849sm633541lfl.41.2022.06.01.16.06.45
+        bh=avJEEUv9TwoQxp5JDkd8KBVEKkaG/hcczSaXXKCQTHE=;
+        b=IkVF/i2KQ+uCOeMi/UlwupJfQ8Js2hFy3gVN5FO1M+nmtPpIyAawCjMiv1c6KmOUMR
+         GW/ZfQG2YKmDe//0xtDJ1sNSGdqlIDfcVuEJOzMOJn9nXb6K/nCTpP/5Aanw6gwIkaB+
+         qqQ4oxLnwpIK3nngNOtr38DzqVGNXAKO6KuVbJUWaGTELqFh3UIb0TsskayQD6QjVK+1
+         s8JOnlylKIpDyTpUvuc22NGjvGy9kxx/fAk7YpXlZ1xvf6OkiNPs9DwEDtMkO94p+twY
+         P1W4WkabS3ujy432cEkZgwEYc1d2ano7jgEqSHQS5Z6yN2XTgsKghHbvraxKeKQL9cj6
+         zHiA==
+X-Gm-Message-State: AOAM530uYJDTr/IKsDj8jTH+GLzwqQRiv5dMH/LWiAX/5HY4I5p7A1aI
+        6wbMBsVzNyzWKQghTdui7f2QQg==
+X-Google-Smtp-Source: ABdhPJz3o+kcqv8ytM/orIzvAU3q3jZGB5/OAzGm4ATZu+1ZtKJJUD5PZCVNbotdbNumkSDu9J1KJA==
+X-Received: by 2002:a17:902:bd42:b0:164:bea:65bf with SMTP id b2-20020a170902bd4200b001640bea65bfmr1745502plx.111.1654125214527;
+        Wed, 01 Jun 2022 16:13:34 -0700 (PDT)
+Received: from [192.168.254.36] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id n19-20020aa78a53000000b0051bb0be7109sm1990292pfa.78.2022.06.01.16.13.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 16:06:45 -0700 (PDT)
-Message-ID: <7028ce0d-2c12-0b00-73c9-3bb39499ce3b@linaro.org>
-Date:   Thu, 2 Jun 2022 02:06:45 +0300
+        Wed, 01 Jun 2022 16:13:33 -0700 (PDT)
+Message-ID: <0babd7df-bdef-9edc-3682-1144bc0c2d2b@linaro.org>
+Date:   Wed, 1 Jun 2022 16:13:32 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2] drm/msm/dpu: Move min BW request and full BW disable
- back to mdss
-Content-Language: en-GB
-To:     Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220531160059.v2.1.Ie7f6d4bf8cce28131da31a43354727e417cae98d@changeid>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220531160059.v2.1.Ie7f6d4bf8cce28131da31a43354727e417cae98d@changeid>
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Bui Quang Minh <minhquangbui99@gmail.com>
+References: <20220525151517.8430-1-mkoutny@suse.com>
+ <20220525151517.8430-3-mkoutny@suse.com>
+ <20220525161455.GA16134@blackbody.suse.cz> <Yo7KfEOz92kS2z5Y@blackbook>
+ <Yo/DtjEU/kYr190u@slm.duckdns.org>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
+In-Reply-To: <Yo/DtjEU/kYr190u@slm.duckdns.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,244 +80,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2022 02:01, Douglas Anderson wrote:
-> In commit a670ff578f1f ("drm/msm/dpu: always use mdp device to scale
-> bandwidth") we fully moved interconnect stuff to the DPU driver. This
-> had no change for sc7180 but _did_ have an impact for other SoCs. It
-> made them match the sc7180 scheme.
+On 5/26/22 11:15, Tejun Heo wrote:
+> Hello, Michal.
 > 
-> Unfortunately, the sc7180 scheme seems like it was a bit broken.
-> Specifically the interconnect needs to be on for more than just the
-> DPU driver's AXI bus. In the very least it also needs to be on for the
-> DSI driver's AXI bus. This can be seen fairly easily by doing this on
-> a ChromeOS sc7180-trogdor class device:
+> On Thu, May 26, 2022 at 11:56:34AM +0200, Michal Koutný wrote:
+>> // ref=A: initial state
+>> kill_css()
+>>    css_get // ref+=F == A+F: fuse
+>>    percpu_ref_kill_and_confirm
+>>      __percpu_ref_switch_to_atomic
+>>        percpu_ref_get
+>>          // ref += 1 == A+F+1: atomic mode, self-protection
+>>      percpu_ref_put
+>>        // ref -= 1 == A+F: kill the base reference
+>>    [via rcu]
+>>    percpu_ref_switch_to_atomic_rcu
+>>      percpu_ref_call_confirm_rcu
+>>        css_killed_ref_fn == refcnt.confirm_switch
+>>          queue_work(css->destroy_work)        (1)
+>>                                                       [via css->destroy_work]
+>>                                                       css_killed_work_fn == wq.func
+>>                                                         offline_css() // needs fuse
+>>                                                         css_put // ref -= F == A: de-fuse
+>>        percpu_ref_put
+>>          // ref -= 1 == A-1: remove self-protection
+>>          css_release                                   // A <= 1 -> 2nd queue_work explodes!
 > 
->    set_power_policy --ac_screen_dim_delay=5 --ac_screen_off_delay=10
->    sleep 10
->    cd /sys/bus/platform/devices/ae94000.dsi/power
->    echo on > control
-> 
-> When you do that, you'll get a warning splat in the logs about
-> "gcc_disp_hf_axi_clk status stuck at 'off'".
-> 
-> One could argue that perhaps what I have done above is "illegal" and
-> that it can't happen naturally in the system because in normal system
-> usage the DPU is pretty much always on when DSI is on. That being
-> said:
-> * In official ChromeOS builds (admittedly a 5.4 kernel with backports)
->    we have seen that splat at bootup.
-> * Even though we don't use "autosuspend" for these components, we
->    don't use the "put_sync" variants. Thus plausibly the DSI could stay
->    "runtime enabled" past when the DPU is enabled. Techncially we
->    shouldn't do that if the DPU's suspend ends up yanking our clock.
-> 
-> Let's change things such that the "bare minimum" request for the
-> interconnect happens in the mdss driver again. That means that all of
-> the children can assume that the interconnect is on at the minimum
-> bandwidth. We'll then let the DPU request the higher amount that it
-> wants.
-> 
-> It should be noted that this isn't as hacky of a solution as it might
-> initially appear. Specifically:
-> * Since MDSS and DPU individually get their own references to the
->    interconnect then the framework will actually handle aggregating
->    them. The two drivers are _not_ clobbering each other.
-> * When the Qualcomm interconnect driver aggregates it takes the max of
->    all the peaks. Thus having MDSS request a peak, as we're doing here,
->    won't actually change the total interconnect bandwidth (it won't be
->    added to the request for the DPU). This perhaps explains why the
->    "average" requested in MDSS was historically 0 since that one
->    _would_ be added in.
-> 
-> NOTE also that in the downstream ChromeOS 5.4 and 5.15 kernels, we're
-> also seeing some RPMH hangs that are addressed by this fix. These
-> hangs are showing up in the field and on _some_ devices with enough
-> stress testing of suspend/resume. Specifically right at suspend time
-> with a stack crawl that looks like this (from chromeos-5.15 tree):
->    rpmh_write_batch+0x19c/0x240
->    qcom_icc_bcm_voter_commit+0x210/0x420
->    qcom_icc_set+0x28/0x38
->    apply_constraints+0x70/0xa4
->    icc_set_bw+0x150/0x24c
->    dpu_runtime_resume+0x50/0x1c4
->    pm_generic_runtime_resume+0x30/0x44
->    __genpd_runtime_resume+0x68/0x7c
->    genpd_runtime_resume+0x12c/0x20c
->    __rpm_callback+0x98/0x138
->    rpm_callback+0x30/0x88
->    rpm_resume+0x370/0x4a0
->    __pm_runtime_resume+0x80/0xb0
->    dpu_kms_enable_commit+0x24/0x30
->    msm_atomic_commit_tail+0x12c/0x630
->    commit_tail+0xac/0x150
->    drm_atomic_helper_commit+0x114/0x11c
->    drm_atomic_commit+0x68/0x78
->    drm_atomic_helper_disable_all+0x158/0x1c8
->    drm_atomic_helper_suspend+0xc0/0x1c0
->    drm_mode_config_helper_suspend+0x2c/0x60
->    msm_pm_prepare+0x2c/0x40
->    pm_generic_prepare+0x30/0x44
->    genpd_prepare+0x80/0xd0
->    device_prepare+0x78/0x17c
->    dpm_prepare+0xb0/0x384
->    dpm_suspend_start+0x34/0xc0
-> 
-> We don't completely understand all the mechanisms in play, but the
-> hang seemed to come and go with random factors. It's not terribly
-> surprising that the hang is gone after this patch since the line of
-> code that was failing is no longer present in the kernel.
-> 
-> Fixes: a670ff578f1f ("drm/msm/dpu: always use mdp device to scale bandwidth")
-> Fixes: c33b7c0389e1 ("drm/msm/dpu: add support for clk and bw scaling for display")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
-> Changes in v2:
-> - Don't set bandwidth in init.
+> I'm not sure I'm following it but it's perfectly fine to re-use the work
+> item at this point. The work item actually can be re-cycled from the very
+> beginning of the work function. The only thing we need to make sure is that
+> we don't css_put() prematurely to avoid it being freed while we're using it.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Yes, it is ok to reuse a work struct, but it's not ok to have the same
+work struct enqueued twice on the same WQ when list debug is enabled.
+That's why we are getting this "BUG: corrupted list.."
 
+> For the sharing to be a problem, we should be queueing the release work item
+> while the destroy instance is still pending, and if that is the case, it
+> doesn't really matter whether we use two separate work items or not. We're
+> already broken and would just be shifting the problem to explode elsewhere.
 > 
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c |  8 ----
->   drivers/gpu/drm/msm/msm_mdss.c          | 57 +++++++++++++++++++++++++
->   2 files changed, 57 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index 2b9d931474e0..3025184053e0 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -49,8 +49,6 @@
->   #define DPU_DEBUGFS_DIR "msm_dpu"
->   #define DPU_DEBUGFS_HWMASKNAME "hw_log_mask"
->   
-> -#define MIN_IB_BW	400000000ULL /* Min ib vote 400MB */
-> -
->   static int dpu_kms_hw_init(struct msm_kms *kms);
->   static void _dpu_kms_mmu_destroy(struct dpu_kms *dpu_kms);
->   
-> @@ -1303,15 +1301,9 @@ static int __maybe_unused dpu_runtime_resume(struct device *dev)
->   	struct dpu_kms *dpu_kms = to_dpu_kms(priv->kms);
->   	struct drm_encoder *encoder;
->   	struct drm_device *ddev;
-> -	int i;
->   
->   	ddev = dpu_kms->dev;
->   
-> -	WARN_ON(!(dpu_kms->num_paths));
-> -	/* Min vote of BW is required before turning on AXI clk */
-> -	for (i = 0; i < dpu_kms->num_paths; i++)
-> -		icc_set_bw(dpu_kms->path[i], 0, Bps_to_icc(MIN_IB_BW));
-> -
->   	rc = clk_bulk_prepare_enable(dpu_kms->num_clocks, dpu_kms->clocks);
->   	if (rc) {
->   		DPU_ERROR("clock enable failed rc:%d\n", rc);
-> diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
-> index 0454a571adf7..e13c5c12b775 100644
-> --- a/drivers/gpu/drm/msm/msm_mdss.c
-> +++ b/drivers/gpu/drm/msm/msm_mdss.c
-> @@ -5,6 +5,7 @@
->   
->   #include <linux/clk.h>
->   #include <linux/delay.h>
-> +#include <linux/interconnect.h>
->   #include <linux/irq.h>
->   #include <linux/irqchip.h>
->   #include <linux/irqdesc.h>
-> @@ -25,6 +26,8 @@
->   #define UBWC_CTRL_2			0x150
->   #define UBWC_PREDICTION_MODE		0x154
->   
-> +#define MIN_IB_BW	400000000UL /* Min ib vote 400MB */
-> +
->   struct msm_mdss {
->   	struct device *dev;
->   
-> @@ -36,8 +39,47 @@ struct msm_mdss {
->   		unsigned long enabled_mask;
->   		struct irq_domain *domain;
->   	} irq_controller;
-> +	struct icc_path *path[2];
-> +	u32 num_paths;
->   };
->   
-> +static int msm_mdss_parse_data_bus_icc_path(struct device *dev,
-> +					    struct msm_mdss *msm_mdss)
-> +{
-> +	struct icc_path *path0 = of_icc_get(dev, "mdp0-mem");
-> +	struct icc_path *path1 = of_icc_get(dev, "mdp1-mem");
-> +
-> +	if (IS_ERR_OR_NULL(path0))
-> +		return PTR_ERR_OR_ZERO(path0);
-> +
-> +	msm_mdss->path[0] = path0;
-> +	msm_mdss->num_paths = 1;
-> +
-> +	if (!IS_ERR_OR_NULL(path1)) {
-> +		msm_mdss->path[1] = path1;
-> +		msm_mdss->num_paths++;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void msm_mdss_put_icc_path(void *data)
-> +{
-> +	struct msm_mdss *msm_mdss = data;
-> +	int i;
-> +
-> +	for (i = 0; i < msm_mdss->num_paths; i++)
-> +		icc_put(msm_mdss->path[i]);
-> +}
-> +
-> +static void msm_mdss_icc_request_bw(struct msm_mdss *msm_mdss, unsigned long bw)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < msm_mdss->num_paths; i++)
-> +		icc_set_bw(msm_mdss->path[i], 0, Bps_to_icc(bw));
-> +}
-> +
->   static void msm_mdss_irq(struct irq_desc *desc)
->   {
->   	struct msm_mdss *msm_mdss = irq_desc_get_handler_data(desc);
-> @@ -136,6 +178,13 @@ static int msm_mdss_enable(struct msm_mdss *msm_mdss)
->   {
->   	int ret;
->   
-> +	/*
-> +	 * Several components have AXI clocks that can only be turned on if
-> +	 * the interconnect is enabled (non-zero bandwidth). Let's make sure
-> +	 * that the interconnects are at least at a minimum amount.
-> +	 */
-> +	msm_mdss_icc_request_bw(msm_mdss, MIN_IB_BW);
-> +
->   	ret = clk_bulk_prepare_enable(msm_mdss->num_clocks, msm_mdss->clocks);
->   	if (ret) {
->   		dev_err(msm_mdss->dev, "clock enable failed, ret:%d\n", ret);
-> @@ -178,6 +227,7 @@ static int msm_mdss_enable(struct msm_mdss *msm_mdss)
->   static int msm_mdss_disable(struct msm_mdss *msm_mdss)
->   {
->   	clk_bulk_disable_unprepare(msm_mdss->num_clocks, msm_mdss->clocks);
-> +	msm_mdss_icc_request_bw(msm_mdss, 0);
->   
->   	return 0;
->   }
-> @@ -271,6 +321,13 @@ static struct msm_mdss *msm_mdss_init(struct platform_device *pdev, bool is_mdp5
->   
->   	dev_dbg(&pdev->dev, "mapped mdss address space @%pK\n", msm_mdss->mmio);
->   
-> +	ret = msm_mdss_parse_data_bus_icc_path(&pdev->dev, msm_mdss);
-> +	if (ret)
-> +		return ERR_PTR(ret);
-> +	ret = devm_add_action_or_reset(&pdev->dev, msm_mdss_put_icc_path, msm_mdss);
-> +	if (ret)
-> +		return ERR_PTR(ret);
-> +
->   	if (is_mdp5)
->   		ret = mdp5_mdss_parse_clock(pdev, &msm_mdss->clocks);
->   	else
+> The only possibility that I can think of is that somehow we're ending up
+> with an extra css_put() somewhere thus triggering the release path
+> prematurely. If that's the case, we'll prolly need to trace get/puts to find
+> out who's causing the ref imbalance.
 
+That's right. Michal was on the right track for the kill_css() part.
+What I think is going on is that once css_create() fails then
+cgroup_subtree_control_write() ends up calling first kill_css() and
+then css_put() on the same css, I think it's &cgrp->self of the kernfs_node.
+The each_live_descendant_post() also iterates on the root.
+Here is the call flow (sorry for long lines):
+
+cgroup_subtree_control_write(of)->cgroup_apply_control(cgrp)->cgroup_apply_control_enable(cgrp)->css_create() <- fails here and returns error
+   |
+   |-> cgroup_finalize_control(cgrp)->cgroup_apply_control_disable(cgrp)->each_live_descendant_post(cgrp)->kill_css()->percpu_ref_kill_and_confirm(&css->refcnt, css_killed_ref_fn) <- this triggers css_killed_ref_fn() to be called
+   |
+   |  css_killed_ref_fn() <- first css->destroy_work enqueue
+   |    |
+   |    |->  INIT_WORK(&css->destroy_work, css_killed_work_fn); queue_work(cgroup_destroy_wq, &css->destroy_work);
+   |
+   |
+   |-> goto out_unlock;
+   |     |
+   |     |-> cgroup_kn_unlock(kernfs_node)->cgroup_put(cgrp)->css_put(&cgrp->self)->percpu_ref_put(&css->refcnt) <- this triggers css_release() to be called
+   |
+   |
+      css_release(percpu_ref) <- second css->destroy_work enqueue
+        |
+        |->  INIT_WORK(&css->destroy_work, css_release_work_fn); queue_work(cgroup_destroy_wq, &css->destroy_work) <- and it fails here with BUG: corrupted list in insert_work; list_add corruption.
+
+
+What seems to work for me as the simplest fix is to prevent enqueuing a dying
+css in css_release() as below. Please let me know if that makes sense to you.
+
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 1779ccddb734..5618211487cc 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -5210,8 +5210,10 @@ static void css_release(struct percpu_ref *ref)
+  	struct cgroup_subsys_state *css =
+  		container_of(ref, struct cgroup_subsys_state, refcnt);
+  
+-	INIT_WORK(&css->destroy_work, css_release_work_fn);
+-	queue_work(cgroup_destroy_wq, &css->destroy_work);
++	if (!(css->flags & CSS_DYING)) {
++		INIT_WORK(&css->destroy_work, css_release_work_fn);
++		queue_work(cgroup_destroy_wq, &css->destroy_work);
++	}
+  }
+  
+  static void init_and_link_css(struct cgroup_subsys_state *css,
 
 -- 
-With best wishes
-Dmitry
+Thanks,
+Tadeusz

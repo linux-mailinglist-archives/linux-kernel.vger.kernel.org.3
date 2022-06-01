@@ -2,123 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A022D53A3F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7581B53A3F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351906AbiFALY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 07:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
+        id S1351199AbiFALZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 07:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348576AbiFALYv (ORCPT
+        with ESMTP id S1352643AbiFALZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:24:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0225843AD8
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 04:24:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654082690;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L4PUs9ob3rFRXOUJ6pAeCT9mkJKPX7P0n2Y5sGg8O1A=;
-        b=g1aQKsadw8svg0bl1MIbUypk500VMOAOZcL7BtjnPAickCZEryRVVCgtQzCQVbtDm7wvCu
-        yOpmpfa7eLaZ0N5cFfZ1w0dNPWwrgjxa+wRUiS5LtInTO6NJnBMzAjpJ9geXOLWX1Wyqg9
-        Tg+vvBW2wFowXu0pELGf2XbGpNf+Jx0=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-673-nW7EATt6PnuTStIH1ULTVg-1; Wed, 01 Jun 2022 07:24:41 -0400
-X-MC-Unique: nW7EATt6PnuTStIH1ULTVg-1
-Received: by mail-ed1-f69.google.com with SMTP id k7-20020aa7d8c7000000b0042dd4a5a393so1049838eds.11
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 04:24:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=L4PUs9ob3rFRXOUJ6pAeCT9mkJKPX7P0n2Y5sGg8O1A=;
-        b=YXWqJAUa8pPApb+DTtTA0wmFZNvCJu0wOfmJcmQPulu31aZ3bEpHUji8s/2t0C2T9Y
-         fX6QcYp0GJWNn4h2NdDZoASlOc4N+7EeiNh0rlbtxJDz3UoKyif5dwkgRhRo1eX8N6Rl
-         UU14PRnwu/R9QS6tmLlFL7Au1qgR2eDTpeNBvKTvaT+o9lqo0E6wfKv2lvyF5kWv8eGu
-         mGFiJeep5tN6W4U48nDZper1DJax395FoUXB5UUh6ROJ6csA1pHb34X74+Oe5oOFptKa
-         jP3T2KkTb/UCCzeSxK3e3WkuqQrryY1FKGf6M6okDN9jqItl4qykZTdctHXXEk54zVM+
-         gCbg==
-X-Gm-Message-State: AOAM531910g9oTUVnOU1+TIAurNVnNz5lmk3IojF1Qz3hV17eBQFI9Z4
-        JFpQ6UPeXoKqxWSZd1INRY9RC1abwNjfT5Bwd5UtQS6hMznCVbJpa6PX0iYcrsvDunBMExEYQW2
-        BR01Eq1xB039QrHV2cx9rBwoB
-X-Received: by 2002:a17:907:8a1a:b0:6fe:b42f:749a with SMTP id sc26-20020a1709078a1a00b006feb42f749amr51574668ejc.451.1654082680324;
-        Wed, 01 Jun 2022 04:24:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyn52Ijj5hP478lDBchZorMAll8IKCqIKjCbJOb16jqi9eSneK8Ys/MFnMax8iBFrJNBl0dVw==
-X-Received: by 2002:a17:907:8a1a:b0:6fe:b42f:749a with SMTP id sc26-20020a1709078a1a00b006feb42f749amr51574658ejc.451.1654082680140;
-        Wed, 01 Jun 2022 04:24:40 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id my16-20020a1709065a5000b006fecf74395bsm606230ejc.8.2022.06.01.04.24.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 04:24:39 -0700 (PDT)
-Message-ID: <bb40cfa3-0125-c733-e4fd-da861c068f2c@redhat.com>
-Date:   Wed, 1 Jun 2022 13:24:37 +0200
+        Wed, 1 Jun 2022 07:25:01 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3FC4664A;
+        Wed,  1 Jun 2022 04:24:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654082695; x=1685618695;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oU0TXYjoeSYGvAnbOhKPOk9x41DF16IWFxcwFwX4/jk=;
+  b=BXXzCvkAVE+x1nrWk9cm8K/wneNJ905rcBpZiGet47nVQpErtLsJXMu1
+   m6JD+3MgqSF/0jIGf3vUswoXXLtsBxCUzjeQkxOBnim2CS3ZTzq7Sof1u
+   5HYl5NjclljtE+lR7Yx6Kz/IhUae5aTGJalB6Zmw4+B6Sl0lx3Se9eBbv
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Jun 2022 04:24:55 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 04:24:55 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 1 Jun 2022 04:24:54 -0700
+Received: from [10.216.8.63] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 1 Jun 2022
+ 04:24:51 -0700
+Message-ID: <ff029402-f90c-096a-7366-b58f53555ace@quicinc.com>
+Date:   Wed, 1 Jun 2022 16:54:48 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] x86: events: Do not return bogus capabilities if PMU is
- broken
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
-        Like Xu <likexu@tencent.com>
-References: <20220601094256.362047-1-pbonzini@redhat.com>
- <YpdIgm8c5YEFLCCH@worktop.programming.kicks-ass.net>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YpdIgm8c5YEFLCCH@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [V4] serial: core: Do stop_rx in suspend path for console if
+ console_suspend is disabled
+Content-Language: en-CA
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <quic_msavaliy@quicinc.com>, <dianders@chromium.org>,
+        <mka@chromium.org>, <swboyd@chromium.org>
+References: <1652692810-31148-1-git-send-email-quic_vnivarth@quicinc.com>
+ <bf7eec57-6ad6-2c1a-ea61-0e1d06fc77f5@samsung.com>
+ <CGME20220524115408eucas1p1ddda7aae4db0a65a7d67d6f8c59d404b@eucas1p1.samsung.com>
+ <3866c083-0064-ac9a-4587-91a83946525d@samsung.com>
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+In-Reply-To: <3866c083-0064-ac9a-4587-91a83946525d@samsung.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/22 13:07, Peter Zijlstra wrote:
-> On Wed, Jun 01, 2022 at 05:42:56AM -0400, Paolo Bonzini wrote:
->> From: Like Xu <likexu@tencent.com>
+Hi,
+
+On 5/24/2022 5:24 PM, Marek Szyprowski wrote:
+> On 23.05.2022 23:32, Marek Szyprowski wrote:
+>> Hi,
 >>
->> If the PMU is broken due to firmware issues, check_hw_exists() will return
->> false but perf_get_x86_pmu_capability() will still return data from x86_pmu.
->> Likewise if some of the hotplug callbacks cannot be installed the contents
->> of x86_pmu will not be reverted.
+>> On 16.05.2022 11:20, Vijaya Krishna Nivarthi wrote:
+>>> For the case of console_suspend disabled, if back to back suspend/resume
+>>> test is executed, at the end of test, sometimes console would appear to
+>>> be frozen not responding to input. This would happen because, during
+>>> resume, rx transactions can come in before system is ready, malfunction
+>>> of rx happens in turn resulting in console appearing to be stuck.
+>>>
+>>> Do a stop_rx in suspend sequence to prevent this.
+>>>
+>>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+>>> ---
+>>> v4: moved the change to serial core to apply for all drivers
+>>> v3: swapped the order of conditions to be more human readable
+>>> v2: restricted patch to contain only stop_rx in suspend sequence
+>>> v1: intial patch contained 2 additional unrelated changes in vicinity
+>>> ---
+>> This patch landed recently in linux-next as commit c9d2325cdb92
+>> ("serial: core: Do stop_rx in suspend path for console if
+>> console_suspend is disabled").
 >>
->> Handle the failure in both cases by clearing x86_pmu if init_hw_perf_events()
->> or reverts to software events only.
+>> Unfortunately it breaks console operation on my test systems after
+>> system suspend/resume cycle if 'no_console_suspend' kernel parameter
+>> is present. System properly resumes from suspend, the console displays
+>> all the messages and even command line prompt, but then doesn't react
+>> on any input. If I remove the 'no_console_suspend' parameter, the
+>> console is again operational after system suspend/resume cycle. Before
+>> this patch it worked fine regardless the 'no_console_suspend' parameter.
 >>
->> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> 
-> No SoB from Like,
+>> If this matters, the test system is ARM 32bit Samsung Exynos5422-based
+>> Odroid XU3lite board.
+>
+> One more information. This issue can be easily reproduced with QEMU. It
+> happens both on ARM 32bit and ARM 64bit QEMU's 'virt' machines when
+> 'no_console_suspend' is added to kernel's cmdline.
+>
+Ideally, as comments indicate, the set_termios should have done stop_rx 
+at begin and start_rx at end to take care of this issue.
 
-And hardly any code from him either except for a single memset, :) but 
-I'll add
+This is probably missing in your driver. Can we check if this can be 
+fixed? OR other option is
 
-	Signed-off-by: Like Xu <likexu@tencent.com>
-	Co-developed-by: Like Xu <likexu@tencent.com>
+Add a start_rx in uart_resume_port after call to set_termios to handle 
+this scenario for other drivers.
 
-(I have hooks that notice this when pushing, but they don't help with 
-git-send-email...).
+Please let me know if there are any concerns for this options.
 
-
->> @@ -2982,6 +2985,11 @@ unsigned long perf_misc_flags(struct pt_regs *regs)
->>   
->>   void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap)
->>   {
->> +	if (!x86_pmu.name) {
-> 
-> We have x86_pmu_initialized(), the implementation is a bit daft, but
-> might as well use it here too, no?
-
-Yes, thanks.
-
-Paolo
-
+>>>    drivers/tty/serial/serial_core.c | 11 +++++++++--
+>>>    1 file changed, 9 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/tty/serial/serial_core.c
+>>> b/drivers/tty/serial/serial_core.c
+>>> index 82a1770..9a85b41 100644
+>>> --- a/drivers/tty/serial/serial_core.c
+>>> +++ b/drivers/tty/serial/serial_core.c
+>>> @@ -2211,9 +2211,16 @@ int uart_suspend_port(struct uart_driver *drv,
+>>> struct uart_port *uport)
+>>>        }
+>>>        put_device(tty_dev);
+>>>    -    /* Nothing to do if the console is not suspending */
+>>> -    if (!console_suspend_enabled && uart_console(uport))
+>>> +    /*
+>>> +     * Nothing to do if the console is not suspending
+>>> +     * except stop_rx to prevent any asynchronous data
+>>> +     * over RX line. Re-start_rx, when required, is
+>>> +     * done by set_termios in resume sequence
+>>> +     */
+>>> +    if (!console_suspend_enabled && uart_console(uport)) {
+>>> +        uport->ops->stop_rx(uport);
+>>>            goto unlock;
+>>> +    }
+>>>          uport->suspended = 1;
+>> Best regards
+> Best regards
+Thank you.

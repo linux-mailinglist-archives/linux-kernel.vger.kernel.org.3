@@ -2,100 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA4E53A33D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 12:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F002953A338
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 12:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352400AbiFAKtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 06:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
+        id S1344121AbiFAKtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 06:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352292AbiFAKtI (ORCPT
+        with ESMTP id S1352292AbiFAKtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 06:49:08 -0400
+        Wed, 1 Jun 2022 06:49:00 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC90027B28
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 03:49:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8FE282155
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 03:48:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654080545;
+        s=mimecast20190719; t=1654080533;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=T5n9A4eLifr47qhHLRf9Kq7hYcEBfD03DgfdoZ0OcNA=;
-        b=Uk1uvFgUXEo7skN5DF4HSeE4BQl9i3HmwsuRPo0FBTd8uH236zDXBSAA0C3JwMqLi9Ti5d
-        3wL5XqhxO+jyEmbiYw0oZHox7OOEsEadhYucimV9lNum3W0UUjwtVG2c10ETkHlGh/K0vu
-        1ubdZx0bRI2n4M6aNCgDvtQNet5flhs=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=hrH+2QAikayivhZwVSMboNGmELij4yc/hiwsqHY23jQ=;
+        b=jUPo+16xlx3rXbDoqshhdDwwStThAk3TIY8eHgteyHiGhjwVZAFEWzDkgAV1PJk+fn4E6u
+        vJH6jJT+GFTEz+ZPF3twkG1kTFvcHww9QtN5YJFxuN1G1FLORartaUVgMU0+7t01E+n5tW
+        W4Aoq5mU73xunsax1lIwESkwJ6cfS88=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-54-taVFllKxMz2rI8Ujyg5ZYA-1; Wed, 01 Jun 2022 06:49:04 -0400
-X-MC-Unique: taVFllKxMz2rI8Ujyg5ZYA-1
-Received: by mail-qv1-f71.google.com with SMTP id x17-20020a0cfe11000000b004645917e45cso1089340qvr.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 03:49:04 -0700 (PDT)
+ us-mta-478-cvQ4Fq35P_eWrTnnUxQ7vQ-1; Wed, 01 Jun 2022 06:48:50 -0400
+X-MC-Unique: cvQ4Fq35P_eWrTnnUxQ7vQ-1
+Received: by mail-pg1-f199.google.com with SMTP id f9-20020a636a09000000b003c61848e622so886794pgc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 03:48:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=T5n9A4eLifr47qhHLRf9Kq7hYcEBfD03DgfdoZ0OcNA=;
-        b=wJIvbwU03tOBw/VdCxz4rpJEhKMly/vxRvZQE+djnYZu8VCCV+mHK6XdpGjRSZnkSn
-         210/K99fdU4U2qvA8QwZusPbpPI/8Z+0Xqu4SF4TXd7lh6DfwMS7KGQDQZT+JfzHLt4/
-         8NTln2CoETmoIe1eRqEhhO2f3xR4CZQylVdPyFavStbfEJl65CZN/n+BV4Th1p8ur3r8
-         FIDqahZ/Pj0FJ0myFzxeRYulyUQGXYsh2u2dZ4hv5VansDSO5v6TzaEt4ng70SLdAIvH
-         CtMUI7vsHC46cmpPiaIYw9lglalv5UTckQgur5HvkGwiPtSyv1Q6jO/5UvdEYScEngE4
-         SP8Q==
-X-Gm-Message-State: AOAM533L1M6NZLX8E0J0GxRZfrk935jr/+8XXQSedjHXTY6uTTf+jcbA
-        EhjgcFs0adWOmfblDX6tzw5GASJk67wDr1uByJ+OITiEhVm+v9PiWAN20tKHgp60mMFb2ArrpKS
-        y3jhWX/N+Vqo2aLV1J9epTitDMLmW42aCsHloR5qr
-X-Received: by 2002:a0c:fe48:0:b0:462:6a02:a17d with SMTP id u8-20020a0cfe48000000b004626a02a17dmr27671525qvs.108.1654080544238;
-        Wed, 01 Jun 2022 03:49:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJydnMnL2CGtfHvsmGsOMtRegKBWrDanbK1aFihPp/xsHxn9Wq3Oqc+JoLCDAIVDJM7yrsBugSDtOndvdK+IpM0=
-X-Received: by 2002:a0c:fe48:0:b0:462:6a02:a17d with SMTP id
- u8-20020a0cfe48000000b004626a02a17dmr27671514qvs.108.1654080544026; Wed, 01
- Jun 2022 03:49:04 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=hrH+2QAikayivhZwVSMboNGmELij4yc/hiwsqHY23jQ=;
+        b=aNCz86XKBgQ1xxosZIqBryURzPq0KYQgPxbbaMD0nokynqGmk0qqmB5yfzRdw0LDWY
+         QNWfzaRS481oxfCvlm+iBGYf05lRjPcrx4OuBv2fEcEIGVfL3GK0biSYeA/o3PJbpy8I
+         QTD1N6RGFovza2PTKOFcrFFNKwXYEe24xMDCYWPAtPBmhtLQvpIHdc8jrQDAXF/KzQ/G
+         8MZNJvDd82QAUGN57OeBpJdeSpW/2X3e5bVe5NXqx1hq+aQ9ZgOMy/5vM9X7c2ajXJgz
+         DxCjR7bf2lpm9PptkOEBTuOiKubpQ/NpXasysjwqzWjpwbH6pyhXbFehNiQPLIF7ixla
+         h1kQ==
+X-Gm-Message-State: AOAM533D1M5RukOn6Gb6j706+Wej3Z1VXqtt4LkaWCy/qHoyBxX5mitz
+        VSkA9KOhrA0GV1E2Jg/6PMhzx98+PYj3/PVyhVgo/A42F+rm/XsAN8jlvGy31UZdyB9bNEHSw+V
+        Xu2JQ3Q2Sh8CdcE7M/9SAvOlM54an+HRCqkg4Lkyu
+X-Received: by 2002:a17:902:7c0e:b0:161:f9f6:be5b with SMTP id x14-20020a1709027c0e00b00161f9f6be5bmr55846790pll.156.1654080529835;
+        Wed, 01 Jun 2022 03:48:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw8Z/R1QPBiL3zZ58Z7WbyHv1cLTETgAEl2rVhWxKGRnsk8bKpXpXQqWNnB+kkOIRq0CkwtBCtdW6dm6n516Mg=
+X-Received: by 2002:a17:902:7c0e:b0:161:f9f6:be5b with SMTP id
+ x14-20020a1709027c0e00b00161f9f6be5bmr55846774pll.156.1654080529546; Wed, 01
+ Jun 2022 03:48:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220526124338.36247-1-eperezma@redhat.com> <PH0PR12MB54819C6C6DAF6572AEADC1AEDCD99@PH0PR12MB5481.namprd12.prod.outlook.com>
- <CACGkMEu1YenjBHAssP=FvKX6WxDQ5Aa50r-BsnkfR4zqNTk6hg@mail.gmail.com>
- <CAJaqyWfzoORc7V=xqdyLsdRPRYGNJBvWaPcZDhOb1vJWhbixoA@mail.gmail.com> <PH0PR12MB54813940FE5AC483C4676F24DCDC9@PH0PR12MB5481.namprd12.prod.outlook.com>
-In-Reply-To: <PH0PR12MB54813940FE5AC483C4676F24DCDC9@PH0PR12MB5481.namprd12.prod.outlook.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Wed, 1 Jun 2022 12:48:27 +0200
-Message-ID: <CAJaqyWejR8M1sgNtJmWbDGKp2rMZO2rHZP_syqqJxVMiHfXLUQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Implement vdpasim stop operation
-To:     Parav Pandit <parav@nvidia.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "martinh@xilinx.com" <martinh@xilinx.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "martinpo@xilinx.com" <martinpo@xilinx.com>,
-        "lvivier@redhat.com" <lvivier@redhat.com>,
-        "pabloc@xilinx.com" <pabloc@xilinx.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        "Piotr.Uminski@intel.com" <Piotr.Uminski@intel.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
-        "gautam.dawar@amd.com" <gautam.dawar@amd.com>,
-        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
-        "tanuj.kamde@amd.com" <tanuj.kamde@amd.com>,
-        "hanand@xilinx.com" <hanand@xilinx.com>,
-        "dinang@xilinx.com" <dinang@xilinx.com>,
-        Longpeng <longpeng2@huawei.com>
+References: <20220531075540.14242-1-thuth@redhat.com> <YpZu6/k+8EydfBKf@google.com>
+In-Reply-To: <YpZu6/k+8EydfBKf@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Date:   Wed, 1 Jun 2022 12:48:38 +0200
+Message-ID: <CABgObfZ8LipJXh28xjRxqZPyNX1muP=_fYdmH=a9hvQh7eq32w@mail.gmail.com>
+Subject: Re: [PATCH] KVM: Adjust the return type of kvm_vm_ioctl_check_extension_generic()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Thomas Huth <thuth@redhat.com>, kvm <kvm@vger.kernel.org>,
+        "Kernel Mailing List, Linux" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,143 +72,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 10:26 PM Parav Pandit <parav@nvidia.com> wrote:
->
->
->
-> > From: Eugenio Perez Martin <eperezma@redhat.com>
-> > Sent: Friday, May 27, 2022 3:55 AM
-> >
-> > On Fri, May 27, 2022 at 4:26 AM Jason Wang <jasowang@redhat.com> wrote:
-> > >
-> > > On Thu, May 26, 2022 at 8:54 PM Parav Pandit <parav@nvidia.com> wrote=
-:
-> > > >
-> > > >
-> > > >
-> > > > > From: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> > > > > Sent: Thursday, May 26, 2022 8:44 AM
-> > > >
-> > > > > Implement stop operation for vdpa_sim devices, so vhost-vdpa will
-> > > > > offer
-> > > > >
-> > > > > that backend feature and userspace can effectively stop the devic=
-e.
-> > > > >
-> > > > >
-> > > > >
-> > > > > This is a must before get virtqueue indexes (base) for live
-> > > > > migration,
-> > > > >
-> > > > > since the device could modify them after userland gets them. Ther=
-e
-> > > > > are
-> > > > >
-> > > > > individual ways to perform that action for some devices
-> > > > >
-> > > > > (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but
-> > there
-> > > > > was no
-> > > > >
-> > > > > way to perform it for any vhost device (and, in particular, vhost=
--vdpa).
-> > > > >
-> > > > >
-> > > > >
-> > > > > After the return of ioctl with stop !=3D 0, the device MUST finis=
-h
-> > > > > any
-> > > > >
-> > > > > pending operations like in flight requests. It must also preserve
-> > > > > all
-> > > > >
-> > > > > the necessary state (the virtqueue vring base plus the possible
-> > > > > device
-> > > > >
-> > > > > specific states) that is required for restoring in the future. Th=
-e
-> > > > >
-> > > > > device must not change its configuration after that point.
-> > > > >
-> > > > >
-> > > > >
-> > > > > After the return of ioctl with stop =3D=3D 0, the device can cont=
-inue
-> > > > >
-> > > > > processing buffers as long as typical conditions are met (vq is
-> > > > > enabled,
-> > > > >
-> > > > > DRIVER_OK status bit is enabled, etc).
-> > > >
-> > > > Just to be clear, we are adding vdpa level new ioctl() that doesn=
-=E2=80=99t map to
-> > any mechanism in the virtio spec.
-> > >
-> > > We try to provide forward compatibility to VIRTIO_CONFIG_S_STOP. That
-> > > means it is expected to implement at least a subset of
-> > > VIRTIO_CONFIG_S_STOP.
-> > >
-> >
-> > Appending a link to the proposal, just for reference [1].
-> >
-> > > >
-> > > > Why can't we use this ioctl() to indicate driver to start/stop the =
-device
-> > instead of driving it through the driver_ok?
-> > >
-> >
-> > Parav, I'm not sure I follow you here.
-> >
-> > By the proposal, the resume of the device is (From qemu POV):
-> > 1. To configure all data vqs and cvq (addr, num, ...) 2. To enable only=
- CVQ, not
-> > data vqs 3. To send DRIVER_OK 4. Wait for all buffers of CVQ to be used=
- 5. To
-> > enable all others data vqs (individual ioctl at the moment)
-> >
-> > Where can we fit the resume (as "stop(false)") here? If the device is s=
-topped
-> > (as if we send stop(true) before DRIVER_OK), we don't read CVQ first. I=
-f we
-> > send it right after (or instead) DRIVER_OK, data buffers can reach data=
- vqs
-> > before configuring RSS.
-> >
-> It doesn=E2=80=99t make sense with currently proposed way of using cvq to=
- replay the config.
+On Tue, May 31, 2022 at 9:39 PM Sean Christopherson <seanjc@google.com> wrote:
+> As for KVM_GET_NR_MMU_PAGES, my vote would be just sweep it under the rug with a
+> comment and blurb in the documentation that it's broken.  I highly doubt any VMM
+> actually uses the ioctl() in any meaningful way as it was largely made obsolete by
+> two-dimensional paging, e.g. neither QEMU nor our VMM use it.
 
-The stop/resume part is not intended to restore the config through the
-CVQ. The stop call is issued to be able to retrieve the vq status
-(base, in vhost terminology). The symmetric operation (resume) was
-added on demand, it was never intended to be part neither of the
-config restore or the virtqueue state restore workflow.
+I think we can just remove it, or return 0.
 
-The configuration restore workflow was modelled after the device
-initialization, so each part needed to add the less things the better,
-and only qemu needed to be changed. From the device POV, there is no
-need to learn new tricks for this. The support of .set_vq_ready and
-.get_vq_ready is already in the kernel in every vdpa backend driver.
-
-> Need to continue with currently proposed temporary method that subsequent=
-ly to be replaced with optimized flow as we discussed.
-
-Back then, it was noted by you that enabling each data vq individually
-after DRIVER_OK is slow on mlx5 devices. The solution was to batch
-these enable calls accounting in the kernel, achieving no growth in
-the vdpa uAPI layer. The proposed solution did not involve the resume
-operation.
-
-After that, you proposed in this thread "Why can't we use this ioctl()
-to indicate driver to start/stop the device instead of driving it
-through the driver_ok?". As I understand, that is a mistake, since it
-requires the device, the vdpa layer, etc... to learn new tricks. It
-requires qemu to duplicate the initialization layer (it's now common
-for start and restore config). But I might have not seen the whole
-picture, missing advantages of using the resume call for this
-workflow. Can you describe the workflow you have in mind? How does
-that new workflow affect this proposal?
-
-I'm ok to change the proposal as long as we find we obtain a net gain.
-
-Thanks!
+Paolo
 

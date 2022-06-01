@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E48C539F19
+	by mail.lfdr.de (Postfix) with ESMTP id 121F5539F18
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350599AbiFAIMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 04:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
+        id S1350562AbiFAIMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350568AbiFAIME (ORCPT
+        with ESMTP id S1350622AbiFAIMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:12:04 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0FA255A7
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:11:59 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id s68so1198204pgs.10
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 01:11:59 -0700 (PDT)
+        Wed, 1 Jun 2022 04:12:08 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94D8C3F
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:12:06 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id b135so1256898pfb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 01:12:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=CjxfEwNZAv/Ns2YjhAVktI1vfhpKFNGdsrqBv+NvOkk=;
-        b=aKhB0zYrAcHE9EQYEKT2g7DsA3648OnKR/M8ytLi01NrDKBfQOWtxZ0GlOwRXPWShx
-         8X3OUs/gp80cLKaoNhpPXvuvrdxOQw7cpf+jK0webG1TA85XOEfve62vpkGjXVOkid2+
-         6UL51qe0apR+nNwdNVXcSeY83YA5GKWB8H6meLszdRK8DIkJHe13oLACV4sQvvQqcSQB
-         RcDaxRIkVlA8g1ym8drygJvmSLNOwhtQuLCtmb4jhLNFwrMgHRQuF2u0UtTcmGShGOpI
-         7SreIHf38Ouddqe27CWE6Te3i0BxNVWqHQE4qw3F69h6z4TIn36NR2ZEMhYyy/U6OvyS
-         BZxw==
+        bh=yDHLNk2lC1y820Hnctg510Z3pMFH42mdXU5O+qRYKas=;
+        b=arrmauLcCxQndylaqkIA9fZ0VPxT810s39+vQWP3F3WnNMGOPYnIZ3hBSdBdD3B4Ej
+         s4prptJWPl5/vqxaSc/fUl7y70PfQACoZzJj61xE4n30EZTA4BV4Bi6r8rZ/YZOu10m5
+         IEZQNt7MGu79BotcQeQ/3OQzBG4QJ8dSxtfWeYoOJErGMKP2lkkn/N/yB8RJtvRUYDZ5
+         G181GMNlHoon+ht/Fm5HLrPRYysHkMFSa+cVNFwoaiNsnh4ZXRZhEBAyIpvUf4L4w7YP
+         A2EWDdpUHRMH0407FM/jMRqzvQ6HA4EzsmKSWiTwENCwBvriwJau1SMYxSfaign62Kae
+         LL0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CjxfEwNZAv/Ns2YjhAVktI1vfhpKFNGdsrqBv+NvOkk=;
-        b=xVWtMBekaySKys63Go2a2iU6qFK5tPKkcbJMzD0MWHL+VXO3H2cTpwM6fXvjTuTToM
-         YjNlb+/Vi5C8QuaUI3MhF9c1XNg4dVsvamaejRy4QSC4aausjK5Kc5lnZSsh7d/6E0Jw
-         Z1o+khgtt0lEloNfCg1wMzIN3YZMe1T937JZKTf6/0lJgeItnhfWe9y6/SP/sk3kdilA
-         bt71AxyGpaQZ9v7BeJPcq8G+SuNMdSMPrucY/Nl81DxVdKVBWK7jaBFbnJqlMt4/tff8
-         KOgJRa1fro3xn0x7/Cv+ES3Lgnd0NLwMlv/UJRSxuQfdbDLxd6Ee+zZN9jyuR4tH5LPw
-         N64g==
-X-Gm-Message-State: AOAM533vG5GpfBwXaLWKT3TVzN6thsc7JArWn2GrESdjDAqkSnQqLfIQ
-        51uMKjkHycYYLpk1heMs7Z4=
-X-Google-Smtp-Source: ABdhPJxjBIdiCetN9iBXLJVU/D5c4YBixW5Uqour1lmH8glwsFGvDrj0ZkgjEyCEoOM6tS+5L/X6GQ==
-X-Received: by 2002:a63:184d:0:b0:3fb:74ce:effa with SMTP id 13-20020a63184d000000b003fb74ceeffamr23908491pgy.621.1654071119384;
-        Wed, 01 Jun 2022 01:11:59 -0700 (PDT)
+        bh=yDHLNk2lC1y820Hnctg510Z3pMFH42mdXU5O+qRYKas=;
+        b=vpiqhlj27iysdm+OhWMEiRbDiPrcRgVB/bbbUnS98k78iLT3KMMNyfLK7A/V0p3BP4
+         CjEX1i1Cng/++Mlr6mEeerE6r4v19YA+AeMkof93y4fCuZc3iKDxzVEyr++tbmF+FABC
+         OdsiN/IiYaiKgefvMPWE9gw+3on8e4LDJaXwQJo1Ont+uLL1xcIDVXwMVaSi1xyKRm1w
+         VA/VCCoMLsikgjYVgBzWfOaxLYW/zL+eoGZ6t1Iy5GtZGBoEJ8aifxPYzm9wlvY6cv/D
+         8DQ28+O9p/RTz1Fq0favYe3pTDOEi48+u6pJvyz3roPWb2fZ/UgeCZakMKGyPIViZA83
+         Tt+A==
+X-Gm-Message-State: AOAM533WhRWK6XwiYQ5PMzJ6Y2d2SF94CrybTa3szbE4+ieoV9COXXrs
+        0K9xp0xIYer/l3a8jV+KGBo=
+X-Google-Smtp-Source: ABdhPJw4BidUZQTAmV3LJkHDKE7X1qt6fzaWbucahjUCngpbzdX11O/YdU3Uf72mxrMRfIb6Tt5WQA==
+X-Received: by 2002:a63:69c5:0:b0:3fb:a606:819a with SMTP id e188-20020a6369c5000000b003fba606819amr22251860pgc.81.1654071126469;
+        Wed, 01 Jun 2022 01:12:06 -0700 (PDT)
 Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id y1-20020a17090ad0c100b001e2f3831102sm792288pjw.17.2022.06.01.01.11.54
+        by smtp.googlemail.com with ESMTPSA id y1-20020a17090ad0c100b001e2f3831102sm792288pjw.17.2022.06.01.01.12.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 01:11:58 -0700 (PDT)
+        Wed, 01 Jun 2022 01:12:05 -0700 (PDT)
 From:   Miaoqian Lin <linmq006@gmail.com>
 To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
@@ -59,9 +59,9 @@ To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
         Bert Vermeulen <bert@biot.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Miaoqian Lin <linmq006@gmail.com>
-Subject: [PATCH 4/6] irqchip/gic-v3: Fix error handling in gic_populate_ppi_partitions
-Date:   Wed,  1 Jun 2022 12:09:28 +0400
-Message-Id: <20220601080930.31005-5-linmq006@gmail.com>
+Subject: [PATCH 5/6] irqchip/gic-v3: Fix refcount leak in gic_populate_ppi_partitions
+Date:   Wed,  1 Jun 2022 12:09:29 +0400
+Message-Id: <20220601080930.31005-6-linmq006@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220601080930.31005-1-linmq006@gmail.com>
 References: <20220601080930.31005-1-linmq006@gmail.com>
@@ -77,30 +77,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_get_child_by_name() returns a node pointer with refcount
+of_find_node_by_phandle() returns a node pointer with refcount
 incremented, we should use of_node_put() on it when not need anymore.
-When kcalloc fails, it missing of_node_put() and results in refcount
-leak. Fix this by goto out_put_node label.
+Add missing of_node_put() to avoid refcount leak.
 
-Fixes: 52085d3f2028 ("irqchip/gic-v3: Dynamically allocate PPI partition descriptors")
+Fixes: e3825ba1af3a ("irqchip/gic-v3: Add support for partitioned PPIs")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/irqchip/irq-gic-v3.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/irqchip/irq-gic-v3.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index 2be8dea6b6b0..1d5b4755a27e 100644
+index 1d5b4755a27e..5c1cf907ee68 100644
 --- a/drivers/irqchip/irq-gic-v3.c
 +++ b/drivers/irqchip/irq-gic-v3.c
-@@ -1932,7 +1932,7 @@ static void __init gic_populate_ppi_partitions(struct device_node *gic_node)
+@@ -1973,12 +1973,15 @@ static void __init gic_populate_ppi_partitions(struct device_node *gic_node)
+ 				continue;
  
- 	gic_data.ppi_descs = kcalloc(gic_data.ppi_nr, sizeof(*gic_data.ppi_descs), GFP_KERNEL);
- 	if (!gic_data.ppi_descs)
--		return;
-+		goto out_put_node;
+ 			cpu = of_cpu_node_to_id(cpu_node);
+-			if (WARN_ON(cpu < 0))
++			if (WARN_ON(cpu < 0)) {
++				of_node_put(cpu_node);
+ 				continue;
++			}
  
- 	nr_parts = of_get_child_count(parts_node);
+ 			pr_cont("%pOF[%d] ", cpu_node, cpu);
  
+ 			cpumask_set_cpu(cpu, &part->mask);
++			of_node_put(cpu_node);
+ 		}
+ 
+ 		pr_cont("}\n");
 -- 
 2.25.1
 

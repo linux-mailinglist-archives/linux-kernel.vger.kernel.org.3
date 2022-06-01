@@ -2,74 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E955539CE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492ED539CD3
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 07:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349801AbiFAGDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 02:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
+        id S1349736AbiFAFyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 01:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243177AbiFAGDT (ORCPT
+        with ESMTP id S1348452AbiFAFyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 02:03:19 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C4864D0D;
-        Tue, 31 May 2022 23:03:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1654062778; bh=+SQ/0eJGKRfUjrv0y7MBl6u9+aie9yNgtn9zXiJXatQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MPrVk57osmnSJSH8usd6C0hOYOQnqvMfimKla8SPTKb1b3p7S7z4TV3QbmJvgi8wz
-         QvqDrG+EPygWMfJumqmcMARAyrD4yUYS9QesvYMzOhDspws14XkxFR1mG0+D9SYk4H
-         PbOG71wY9849hZUFfXVpJ1HsxE8Qs6miB8t2TYJA=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 9FFC260104;
-        Wed,  1 Jun 2022 13:52:57 +0800 (CST)
-Message-ID: <832c3ae8-6c68-db2c-2c7f-0a5cd3071543@xen0n.name>
-Date:   Wed, 1 Jun 2022 13:52:57 +0800
+        Wed, 1 Jun 2022 01:54:41 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEF1941B4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 22:54:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R491e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VF-zUIj_1654062873;
+Received: from 30.32.89.99(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0VF-zUIj_1654062873)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 01 Jun 2022 13:54:34 +0800
+Message-ID: <a5d04748-b34b-3b92-fb1d-bf85c2019cc3@linux.alibaba.com>
+Date:   Wed, 1 Jun 2022 13:54:33 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101
- Thunderbird/103.0a1
-Subject: Re: [musl] Re: [GIT PULL] asm-generic changes for 5.19
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH v2] sched: Queue task on wakelist in the same llc if the
+ wakee cpu is idle
 Content-Language: en-US
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     musl@lists.openwall.com, WANG Xuerui <kernel@xen0n.name>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        GNU C Library <libc-alpha@sourceware.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
+To:     Valentin Schneider <vschneid@redhat.com>,
+        Mel Gorman <mgorman@suse.de>
+Cc:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>
-References: <CAK8P3a2_52JPnBWNvTTkFVwLxPAa7=NaQ4whwC1UeH_NYHeUKQ@mail.gmail.com>
- <CAK8P3a0SpU1n+29KQxzKnPRvzmDE=L0V9RUpKxhemv=74kevcQ@mail.gmail.com>
- <df5c406c-eec6-c340-2847-49670b7fe8bf@xen0n.name>
- <CAK8P3a3awFdB1-G65DC38NBuSTvo6SvFTaS0m9YBxunHjHjQvQ@mail.gmail.com>
- <CAAhV-H6sNr-yo8brBFtzziH6k9Tby0dFp7yehK55SfH5HjZ8hQ@mail.gmail.com>
- <358025d1-28e6-708b-d23d-3f22ae12a800@xen0n.name>
- <CAK8P3a1ge2bZS13ahm_LdO3jEcbtR4w3do-gLjggKvppqnBDkw@mail.gmail.com>
- <CAAhV-H5NCUpR6aBtR9d7c9vW2KiHpk3iFQxj7BeTSS0boMz8PQ@mail.gmail.com>
- <CAK8P3a2JgrW5a7_udCUWen-gOnJgVeRV2oAd-uq4VSuYkFUqNQ@mail.gmail.com>
- <CAAhV-H6wfmdcV=a4L43dcabsvO+JbOebCX3_6PV+p85NjA9qhQ@mail.gmail.com>
- <CAK8P3a0c_tbHov_b6cz-_Tj6VD3OWLwpGJf_2rj-nitipSKdYQ@mail.gmail.com>
- <CAAhV-H4_qqQtTp2=mJF=OV+qcKzA0j8SPWKRMR-LJgC0zNfatQ@mail.gmail.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <CAAhV-H4_qqQtTp2=mJF=OV+qcKzA0j8SPWKRMR-LJgC0zNfatQ@mail.gmail.com>
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+References: <20220527090544.527411-1-dtcccc@linux.alibaba.com>
+ <xhsmhleuj7zve.mognet@vschneid.remote.csb>
+ <1d0eb8f4-e474-86a9-751a-7c2e1788df85@linux.alibaba.com>
+ <xhsmhilpl9azq.mognet@vschneid.remote.csb> <20220531135532.GA3332@suse.de>
+ <xhsmhfskp8zlg.mognet@vschneid.remote.csb>
+From:   Tianchen Ding <dtcccc@linux.alibaba.com>
+In-Reply-To: <xhsmhfskp8zlg.mognet@vschneid.remote.csb>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,56 +58,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/22 00:01, Huacai Chen wrote:
-> https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/log/?h=loongarch-next
-> has been updated. Now this branch droped irqchip drivers and pci
-> drivers. But the existing irqchip drivers need some small adjustment
-> to avoid build errors [1], and I hope Marc can give an Acked-by.
-> Thanks.
->
-> This branch can be built with defconfig and allmodconfig (except
-> drivers/platform/surface/aggregator/controller.c, because it requires
-> 8bit/16bit cmpxchg, which I was told to remove their support).
->
-> [1] https://lore.kernel.org/lkml/e7cf33a170d0b4e98e53744f60dbf922@kernel.org/T/#t
+On 2022/5/31 23:56, Valentin Schneider wrote:
 
-I see the loongarch-next HEAD has been updated and it's now purely arch 
-changes aside from the two trivial irqchip cleanups. Some other changes 
-to the v11 patchset [1] are included, but arguably minor enough to not 
-invalidate previous Reviewed-by tags.
+> Thanks!
+> 
+> So I'm thinking we could first make that into
+> 
+> 	if ((wake_flags & WF_ON_CPU) && !cpu_rq(cpu)->nr_running)
+> 
+> Then building on this, we can generalize using the wakelist to any remote
+> idle CPU (which on paper isn't as much as a clear win as just WF_ON_CPU,
+> depending on how deeply idle the CPU is...)
+> 
+> We need the cpu != this_cpu check, as that's currently served by the
+> WF_ON_CPU check (AFAIU we can only observe p->on_cpu in there for remote
+> tasks).
+> 
+> ---
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 66c4e5922fe1..60038743f2f1 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -3830,13 +3830,20 @@ static inline bool ttwu_queue_cond(int cpu, int wake_flags)
+>   	if (!cpus_share_cache(smp_processor_id(), cpu))
+>   		return true;
+>   
+> +	if (cpu == smp_processor_id())
+> +		return false;
+> +
+>   	/*
+>   	 * If the task is descheduling and the only running task on the
+>   	 * CPU then use the wakelist to offload the task activation to
+>   	 * the soon-to-be-idle CPU as the current CPU is likely busy.
+>   	 * nr_running is checked to avoid unnecessary task stacking.
+> +	 *
+> +	 * Note that we can only get here with (wakee) p->on_rq=0,
+> +	 * p->on_cpu can be whatever, we've done the dequeue, so
+> +	 * the wakee has been accounted out of ->nr_running
+>   	 */
+> -	if ((wake_flags & WF_ON_CPU) && cpu_rq(cpu)->nr_running <= 1)
+> +	if (!cpu_rq(cpu)->nr_running)
+>   		return true;
+>   
+>   	return false;
 
-After some small tweaks:
+Hi Valentin. I've done a simple unixbench test (Pipe-based Context 
+Switching) on my x86 machine with full threads (104).
 
-- adding "#include <asm/irqflags.h>" to arch/loongarch/include/asm/ptrace.h,
-- adding an arch/loongarch/include/uapi/asm/bpf_perf_event.h with the 
-same content as arch/arm64's, and
-- adding "depends on ARM64 || X86" to 
-drivers/platform/surface/aggregator/Kconfig,
+              old            patch1           patch1+patch2
+score       7825.4     7500(more)-8000          9061.6
 
-the current loongarch-next HEAD (commit 
-36552a24f70d21b7d63d9ef490561dbdc13798d7) now passes allmodconfig build 
-(with CONFIG_WERROR disabled; my Gentoo-flavored gcc-12 seems to emit 
-warnings on a few drivers).
+patch1: use !cpu_rq(cpu)->nr_running instead of cpu_rq(cpu)->nr_running <= 1
+patch2: ignore WF_ON_CPU check
 
-The majority of userspace ABI has been stable for a few months already, 
-after the addition of orig_a0 and removal of newfstatat; the necessary 
-changes to switch to statx are already reviewed [2] / merged [3], and 
-have been integrated into the LoongArch port of Gentoo for a while. Eric 
-looked at the v11 and gave comments, and changes were made according to 
-the suggestions, but it'd probably better to get a proper Reviewed-by.
+The score of patch1 is not stable. I've tested for many times and the 
+score is floating between about 7500-8000 (more at 7500).
 
-Among the rest of patches, I think maybe the EFI/boot protocol part 
-still need approval/ack from the EFI maintainer. However because the 
-current port isn't going to be able to run on any real hardware, maybe 
-that part could be done later; I'm not sure if the unacknowledged EFI 
-bits should be removed as well.
+patch1 means more strict limit on using wakelist. But it may cause 
+performance regression.
 
-Arnd, what do you think about the current branch's status? Do Huacai 
-need to send a quick final v12 to gather tags?
+It seems that, using wakelist properly can help improve wakeup 
+performance, but using it too much may cause more IPIs. It's a trade-off 
+about how strict the ttwu_queue_cond() is.
 
-
-[1]: 
-https://lore.kernel.org/all/20220518092619.1269111-1-chenhuacai@loongson.cn/
-[2]: https://sourceware.org/pipermail/libc-alpha/2022-May/139127.html
-[3]: https://go-review.googlesource.com/c/go/+/407694
-
+Anyhow, I think patch2 should be a pure improvement. What's your idea?

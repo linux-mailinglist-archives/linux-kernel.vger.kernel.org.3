@@ -2,251 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FA753A975
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C21953A97A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243576AbiFAO6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S1344767AbiFAO7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiFAO6c (ORCPT
+        with ESMTP id S230072AbiFAO7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:58:32 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E63579BF
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:58:28 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id q7so2729632wrg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 07:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bcxJZOoEGdj9HHyfjULCcOOxYPoZGRjHpoFm81lNVOs=;
-        b=P+A7Ep4P+FL+NTqEOtoX8UyZXTOoMsHDrPThvBn0p2XBWcLvNZFCRF7csyce5aJIgC
-         /9J8TqZFKIKxg2L9BWSFt0+g/QdglYWeGwGr9vBpkG6lvUtwe24zixvQnaVAwqK2LTTw
-         1epOyxU982uVJ8EcAUJAU6U9HLFl24Deyae4kvazM0NpvT9iCnL1FaKKzMmKp4f/M2Cf
-         KtruZqQI5Mxe/3mT8Qb8rfG3YG75gK3bweRHBCVUOlHWwTfHTMSj3dbyzs0XWy9/z5XF
-         jQKHq1dd7J3P8yVThLPD9s+w3k5yM1y6Z2oMhGM33BXvo/V2LfUPw0tyLQzHiaLK66HC
-         0syg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bcxJZOoEGdj9HHyfjULCcOOxYPoZGRjHpoFm81lNVOs=;
-        b=h8eb1ugjMn8fSHV5U7yAxklO0l5tQU2bCWlLn8ML9T0u4YM16foc9VJjLoPxvBzXkH
-         kH7XPMMNtTB3kXJDcjOM7Lh/oBBlmQco7I8Hxw580yIp1QPfNu+SjnQ9Bj91rBFOrXlh
-         qyd0F39ekZpJkkBX6o/blaiuNgoHAQga7N6CCTv12iDcRHv5+Oeo87uOSDcu/1na9Phz
-         tA++u89JpSpdOePjrMQKeDWPRPfED+0ndwqdvgw87lkOpsTKmLWS4zL26DxrtCEI8h/N
-         YuSFGSI99DcPgYEp5qY/XSM3BrAzNN6E9vAUOr8RYUOXGRMMN5gdDJGNHtdN4b7cNvmz
-         NJ6Q==
-X-Gm-Message-State: AOAM533+kU/bZxvBxNLFURaEKS4c3ECZE2ek0t1ITF4NaIFcsCgzjX0K
-        UqHwS+7MULyUPL6BKPXFzv145uG2sRU2eoMZur7HGQ==
-X-Google-Smtp-Source: ABdhPJwGBhJdLWicc8l4yIAJBeULOWR4YtzFjOWhqpz0EB4Y0mtAJ7jVfp5UnN5oAyj8L/4fmel35fvjSN1Ws9Bq2yA=
-X-Received: by 2002:a05:6000:71b:b0:20e:ed96:e976 with SMTP id
- bs27-20020a056000071b00b0020eed96e976mr178409wrb.500.1654095506747; Wed, 01
- Jun 2022 07:58:26 -0700 (PDT)
+        Wed, 1 Jun 2022 10:59:12 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636FD6C56D;
+        Wed,  1 Jun 2022 07:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654095551; x=1685631551;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=t02FFnqc6Y8S/GCyagVu8pZZE5QyASWhUXTr1q1i5K0=;
+  b=dZFHALMHQZWIULn2c5ezCZoB+LG8nRa+KA7LMkqzBQ1xC7XWMQObp909
+   RQZ2lViECiYmMdpFEUJz7gaYXGJIu892Oolk3IYwsugz3F05TzR3ioSid
+   sC31lxxkm9oTJo5EN/DaThlPUKAGS5jP+jxyjwgXnhnBAXpkulu44juK+
+   H8WPo8RQATXv+mc3lQ48KHpxJ3fTE8fqqG2ibuwK1B31HA0JoPjws6wov
+   OkAvJZ0CAVT3HKtyLKX8l6FDe1hqykgYCuTGtDdcUpjFkHx/UaeXWRHMr
+   235Tp9GXMwxhOxsd/6aGydM6e3lMC2427ZnZAA13oqNxkTF6v4H4DQAdy
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275625370"
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="275625370"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 07:59:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="606308020"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 01 Jun 2022 07:59:05 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwPoP-00045W-6Q;
+        Wed, 01 Jun 2022 14:59:05 +0000
+Date:   Wed, 1 Jun 2022 22:58:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        abel.vesa@nxp.com, abailon@baylibre.com, l.stach@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, marex@denx.de,
+        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
+        aford173@gmail.com
+Cc:     kbuild-all@lists.01.org, kernel@pengutronix.de,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 2/8] interconnect: add device managed bulk API
+Message-ID: <202206012228.VPwcFQ5b-lkp@intel.com>
+References: <20220601094156.3388454-3-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-References: <20220531212521.1231133-1-kaleshsingh@google.com>
- <20220531212521.1231133-2-kaleshsingh@google.com> <78efbada-6dd5-ead7-fc10-38b5e1e92fc5@amd.com>
-In-Reply-To: <78efbada-6dd5-ead7-fc10-38b5e1e92fc5@amd.com>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Wed, 1 Jun 2022 07:58:15 -0700
-Message-ID: <CAC_TJve6CTA-ssG9zJm2_=MJqRhCqV7Bwgz1YiSH7RVVy+pg4g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] procfs: Add 'size' to /proc/<pid>/fdinfo/
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Ioannis Ilkos <ilkos@google.com>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601094156.3388454-3-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 6:55 AM Christian K=C3=B6nig <christian.koenig@amd.c=
-om> wrote:
->
-> Am 31.05.22 um 23:25 schrieb Kalesh Singh:
-> > To be able to account the amount of memory a process is keeping pinned
-> > by open file descriptors add a 'size' field to fdinfo output.
-> >
-> > dmabufs fds already expose a 'size' field for this reason, remove this
-> > and make it a common field for all fds. This allows tracking of
-> > other types of memory (e.g. memfd and ashmem in Android).
-> >
-> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
->
-> At least for the DMA-buf part feel free to add an Reviewed-by: Christian
-> K=C3=B6nig <christian.koenig@amd.com> for this.
+Hi "Peng,
 
-Thanks for the review, Christian.
+Thank you for the patch! Perhaps something to improve:
 
---Kalesh
+[auto build test WARNING on shawnguo/for-next]
+[also build test WARNING on robh/for-next linus/master v5.18 next-20220601]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
->
-> Regards,
-> Christian.
->
-> > ---
-> >
-> > Changes from rfc:
-> >    - Split adding 'size' and 'path' into a separate patches, per Christ=
-ian
-> >    - Split fdinfo seq_printf into separate lines, per Christian
-> >    - Fix indentation (use tabs) in documentaion, per Randy
-> >
-> >   Documentation/filesystems/proc.rst | 12 ++++++++++--
-> >   drivers/dma-buf/dma-buf.c          |  1 -
-> >   fs/proc/fd.c                       |  9 +++++----
-> >   3 files changed, 15 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesys=
-tems/proc.rst
-> > index 1bc91fb8c321..779c05528e87 100644
-> > --- a/Documentation/filesystems/proc.rst
-> > +++ b/Documentation/filesystems/proc.rst
-> > @@ -1886,13 +1886,14 @@ if precise results are needed.
-> >   3.8 /proc/<pid>/fdinfo/<fd> - Information about opened file
-> >   ---------------------------------------------------------------
-> >   This file provides information associated with an opened file. The re=
-gular
-> > -files have at least four fields -- 'pos', 'flags', 'mnt_id' and 'ino'.
-> > +files have at least five fields -- 'pos', 'flags', 'mnt_id', 'ino', an=
-d 'size'.
-> > +
-> >   The 'pos' represents the current offset of the opened file in decimal
-> >   form [see lseek(2) for details], 'flags' denotes the octal O_xxx mask=
- the
-> >   file has been created with [see open(2) for details] and 'mnt_id' rep=
-resents
-> >   mount ID of the file system containing the opened file [see 3.5
-> >   /proc/<pid>/mountinfo for details]. 'ino' represents the inode number=
- of
-> > -the file.
-> > +the file, and 'size' represents the size of the file in bytes.
-> >
-> >   A typical output is::
-> >
-> > @@ -1900,6 +1901,7 @@ A typical output is::
-> >       flags:  0100002
-> >       mnt_id: 19
-> >       ino:    63107
-> > +     size:   0
-> >
-> >   All locks associated with a file descriptor are shown in its fdinfo t=
-oo::
-> >
-> > @@ -1917,6 +1919,7 @@ Eventfd files
-> >       flags:  04002
-> >       mnt_id: 9
-> >       ino:    63107
-> > +     size:   0
-> >       eventfd-count:  5a
-> >
-> >   where 'eventfd-count' is hex value of a counter.
-> > @@ -1930,6 +1933,7 @@ Signalfd files
-> >       flags:  04002
-> >       mnt_id: 9
-> >       ino:    63107
-> > +     size:   0
-> >       sigmask:        0000000000000200
-> >
-> >   where 'sigmask' is hex value of the signal mask associated
-> > @@ -1944,6 +1948,7 @@ Epoll files
-> >       flags:  02
-> >       mnt_id: 9
-> >       ino:    63107
-> > +     size:   0
-> >       tfd:        5 events:       1d data: ffffffffffffffff pos:0 ino:6=
-1af sdev:7
-> >
-> >   where 'tfd' is a target file descriptor number in decimal form,
-> > @@ -1962,6 +1967,7 @@ For inotify files the format is the following::
-> >       flags:  02000000
-> >       mnt_id: 9
-> >       ino:    63107
-> > +     size:   0
-> >       inotify wd:3 ino:9e7e sdev:800013 mask:800afce ignored_mask:0 fha=
-ndle-bytes:8 fhandle-type:1 f_handle:7e9e0000640d1b6d
-> >
-> >   where 'wd' is a watch descriptor in decimal form, i.e. a target file
-> > @@ -1985,6 +1991,7 @@ For fanotify files the format is::
-> >       flags:  02
-> >       mnt_id: 9
-> >       ino:    63107
-> > +     size:   0
-> >       fanotify flags:10 event-flags:0
-> >       fanotify mnt_id:12 mflags:40 mask:38 ignored_mask:40000003
-> >       fanotify ino:4f969 sdev:800013 mflags:0 mask:3b ignored_mask:4000=
-0000 fhandle-bytes:8 fhandle-type:1 f_handle:69f90400c275b5b4
-> > @@ -2010,6 +2017,7 @@ Timerfd files
-> >       flags:  02
-> >       mnt_id: 9
-> >       ino:    63107
-> > +     size:   0
-> >       clockid: 0
-> >       ticks: 0
-> >       settime flags: 01
-> > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> > index 32f55640890c..5f2ae38c960f 100644
-> > --- a/drivers/dma-buf/dma-buf.c
-> > +++ b/drivers/dma-buf/dma-buf.c
-> > @@ -378,7 +378,6 @@ static void dma_buf_show_fdinfo(struct seq_file *m,=
- struct file *file)
-> >   {
-> >       struct dma_buf *dmabuf =3D file->private_data;
-> >
-> > -     seq_printf(m, "size:\t%zu\n", dmabuf->size);
-> >       /* Don't count the temporary reference taken inside procfs seq_sh=
-ow */
-> >       seq_printf(m, "count:\t%ld\n", file_count(dmabuf->file) - 1);
-> >       seq_printf(m, "exp_name:\t%s\n", dmabuf->exp_name);
-> > diff --git a/fs/proc/fd.c b/fs/proc/fd.c
-> > index 913bef0d2a36..464bc3f55759 100644
-> > --- a/fs/proc/fd.c
-> > +++ b/fs/proc/fd.c
-> > @@ -54,10 +54,11 @@ static int seq_show(struct seq_file *m, void *v)
-> >       if (ret)
-> >               return ret;
-> >
-> > -     seq_printf(m, "pos:\t%lli\nflags:\t0%o\nmnt_id:\t%i\nino:\t%lu\n"=
-,
-> > -                (long long)file->f_pos, f_flags,
-> > -                real_mount(file->f_path.mnt)->mnt_id,
-> > -                file_inode(file)->i_ino);
-> > +     seq_printf(m, "pos:\t%lli\n", (long long)file->f_pos);
-> > +     seq_printf(m, "flags:\t0%o\n", f_flags);
-> > +     seq_printf(m, "mnt_id:\t%i\n", real_mount(file->f_path.mnt)->mnt_=
-id);
-> > +     seq_printf(m, "ino:\t%lu\n", file_inode(file)->i_ino);
-> > +     seq_printf(m, "size:\t%lli\n", (long long)file_inode(file)->i_siz=
-e);
-> >
-> >       /* show_fd_locks() never deferences files so a stale value is saf=
-e */
-> >       show_fd_locks(m, file, files);
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/interconnect-support-i-MX8MP/20220601-174431
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
+config: parisc-randconfig-r014-20220531 (https://download.01.org/0day-ci/archive/20220601/202206012228.VPwcFQ5b-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/23ecbba75b21962f25975cb014cf981a0420dae1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Peng-Fan-OSS/interconnect-support-i-MX8MP/20220601-174431
+        git checkout 23ecbba75b21962f25975cb014cf981a0420dae1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/opp/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/opp/opp.h:15,
+                    from drivers/opp/core.c:22:
+>> include/linux/interconnect.h:120:5: warning: no previous prototype for 'devm_of_icc_bulk_get' [-Wmissing-prototypes]
+     120 | int devm_of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths)
+         |     ^~~~~~~~~~~~~~~~~~~~
+
+
+vim +/devm_of_icc_bulk_get +120 include/linux/interconnect.h
+
+   119	
+ > 120	int devm_of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths)
+   121	{
+   122		return 0;
+   123	}
+   124	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

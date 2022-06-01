@@ -2,171 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF17539B11
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77476539B31
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349094AbiFACE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 22:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
+        id S1349137AbiFACWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 22:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345940AbiFACEZ (ORCPT
+        with ESMTP id S240621AbiFACV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 22:04:25 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D9E72E18;
-        Tue, 31 May 2022 19:04:22 -0700 (PDT)
-Received: from kwepemi100012.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LCXTs42RczgYMX;
-        Wed,  1 Jun 2022 10:02:41 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi100012.china.huawei.com (7.221.188.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 1 Jun 2022 10:04:21 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
- 2022 10:04:20 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <ebiederm@xmission.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH v2] proc: Fix a dentry lock race between release_task and lookup
-Date:   Wed, 1 Jun 2022 10:17:42 +0800
-Message-ID: <20220601021742.4163063-1-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 31 May 2022 22:21:59 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6FE25C54
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 19:21:56 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id g205so616124pfb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 19:21:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2okyrQI7zzxx6armVnSyvWo3k8iS+WCjiSoArjw0fEE=;
+        b=lNtCXz826IraqgepKCt/0lBy+mvMAaE2ivM/1NtE1GDoY942T5NsfhN91WTgx4ANjM
+         0xSVtO126oHxAM52jRDdWZORous5WBraQcL6dZQ8Ia53sJcte67lY7MPex9Z5MtwU/t3
+         gxaV3/h3l0sz5h8It0hfiUZ5SYwVEdE3yMgblQkT9Y7FDq3ZPzr1CjWqoNE8KqzydtL7
+         /271RuA8uiEl61xA0JyyHu0VZm0P0a/V1g89g4LrVnV+p4AgH0064N0SDE9eU5hfMl7g
+         VE5X+2RmPw9fzhPqM6nWyZPLMWd+FDtQhwGBuRG5GGmVbXw2C45XfOEmviQBpXcD90GI
+         aq4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2okyrQI7zzxx6armVnSyvWo3k8iS+WCjiSoArjw0fEE=;
+        b=V4s1L+OLfLcbn5yBIIK8nks6hxUbaR/yljRpwtX8FAtUWoZvaNoLLrDpZw0NanbmAJ
+         yh43dyxnnOG9FHg1akvKFX8487foSCG9nfkGFIl/24vhJmJ1PP7AzDxdsB48jsc8n9TV
+         NSD0G8ZAXVaK80uNRfzSkecM6Sln97J3HIY6bzxWCJwU/y7HQpXWSqsDfC8wbY1/BdwF
+         eOtJJw411kxblCmE3dD6V5XtUFL5jcmS+gRbVQwR0dgik/hfHwTba/8kAbfcXLtPsaJM
+         o9in36hwmgiBEpKAK8rhkmP6kVBD7h+GLkv9JbjRdvRcGCZrPXg0yGiyvPJezgPiQQ/p
+         Bqsw==
+X-Gm-Message-State: AOAM532CIG8+JjI8sLDKB/qLhpmsQDniL1buyaSB8Jy/WOTiLw4T6GiO
+        XBGECxdpRkeQQEosblSDXM3Vew==
+X-Google-Smtp-Source: ABdhPJzW0LFXWu1OWiBefZkXNcr/MWs15wzhND3amhX9Ouk0RYJnIvws91AeF3f0YhsM1ih2w98Iwg==
+X-Received: by 2002:a05:6a00:23ce:b0:50d:823f:981 with SMTP id g14-20020a056a0023ce00b0050d823f0981mr65646297pfc.10.1654050116005;
+        Tue, 31 May 2022 19:21:56 -0700 (PDT)
+Received: from [10.255.89.136] ([139.177.225.233])
+        by smtp.gmail.com with ESMTPSA id r4-20020a170902ea4400b001641a68f1c7sm190180plg.273.2022.05.31.19.21.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 19:21:55 -0700 (PDT)
+Message-ID: <5f622a65-8348-8825-a167-414f2a8cd2eb@bytedance.com>
+Date:   Wed, 1 Jun 2022 10:17:54 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: Re: Re: [PATCH 0/3] recover hardware corrupted page by virtio
+ balloon
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+Cc:     Peter Xu <peterx@redhat.com>, Jue Wang <juew@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, jasowang@redhat.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, mst@redhat.com,
+        qemu-devel@nongnu.org, virtualization@lists.linux-foundation.org
+References: <CAPcxDJ5pduUyMA0rf+-aTjK_2eBvig05UTiTptX1nVkWE-_g8w@mail.gmail.com>
+ <Yo/I3oLkd9OU0ice@xz-m1.local>
+ <24a95dea-9ea6-a904-7c0b-197961afa1d1@bytedance.com>
+ <0d266c61-605d-ce0c-4274-b0c7e10f845a@redhat.com>
+ <4b0c3e37-b882-681a-36fc-16cee7e1fff0@bytedance.com>
+ <YpTngZ5Qr0KIvL0H@xz-m1.local>
+ <CAPcxDJ5UMfpys8KyLQVnkV9BPO1vaubxbhc7f4XC_TdNO7jr7g@mail.gmail.com>
+From:   zhenwei pi <pizhenwei@bytedance.com>
+In-Reply-To: <CAPcxDJ5UMfpys8KyLQVnkV9BPO1vaubxbhc7f4XC_TdNO7jr7g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
-moved proc_flush_task() behind __exit_signal(). Then, process systemd
-can take long period high cpu usage during releasing task in following
-concurrent processes:
+On 5/31/22 12:08, Jue Wang wrote:
+> On Mon, May 30, 2022 at 8:49 AM Peter Xu <peterx@redhat.com> wrote:
+>>
+>> On Mon, May 30, 2022 at 07:33:35PM +0800, zhenwei pi wrote:
+>>> A VM uses RAM of 2M huge page. Once a MCE(@HVAy in [HVAx,HVAz)) occurs, the
+>>> 2M([HVAx,HVAz)) of hypervisor becomes unaccessible, but the guest poisons 4K
+>>> (@GPAy in [GPAx, GPAz)) only, it may hit another 511 MCE ([GPAx, GPAz)
+>>> except GPAy). This is the worse case, so I want to add
+>>>   '__le32 corrupted_pages' in struct virtio_balloon_config, it is used in the
+>>> next step: reporting 512 * 4K 'corrupted_pages' to the guest, the guest has
+>>> a chance to isolate the other 511 pages ahead of time. And the guest
+>>> actually loses 2M, fixing 512*4K seems to help significantly.
+>>
+>> It sounds hackish to teach a virtio device to assume one page will always
+>> be poisoned in huge page granule.  That's only a limitation to host kernel
+>> not virtio itself.
+>>
+>> E.g. there're upstream effort ongoing with enabling doublemap on hugetlbfs
+>> pages so hugetlb pages can be mapped in 4k with it.  It provides potential
+>> possibility to do page poisoning with huge pages in 4k too.  When that'll
+>> be ready the assumption can go away, and that does sound like a better
+>> approach towards this problem.
+> 
+> +1.
+> 
+> A hypervisor should always strive to minimize the guest memory loss.
+> 
+> The HugeTLB double mapping enlightened memory poisoning behavior (only
+> poison 4K out of a 2MB huge page and 4K in guest) is a much better
+> solution here. To be completely transparent, it's not _strictly_
+> required to poison the page (whatever the granularity it is) on the
+> host side, as long as the following are true:
+> 
+> 1. A hypervisor can emulate the _minimized_ (e.g., 4K) the poison to the guest.
+> 2. The host page with the UC error is "isolated" (could be PG_HWPOISON
+> or in some other way) and prevented from being reused by other
+> processes.
+> 
+> For #2, PG_HWPOISON and HugeTLB double mapping enlightened memory
+> poisoning is a good solution.
+> 
+>>
+>>>
+>>>>
+>>>> I assume when talking about "the performance memory drops a lot", you
+>>>> imply that this patch set can mitigate that performance drop?
+>>>>
+>>>> But why do you see a performance drop? Because we might lose some
+>>>> possible THP candidates (in the host or the guest) and you want to plug
+>>>> does holes? I assume you'll see a performance drop simply because
+>>>> poisoning memory is expensive, including migrating pages around on CE.
+>>>>
+>>>> If you have some numbers to share, especially before/after this change,
+>>>> that would be great.
+>>>>
+>>>
+>>> The CE storm leads 2 problems I have even seen:
+>>> 1, the memory bandwidth slows down to 10%~20%, and the cycles per
+>>> instruction of CPU increases a lot.
+>>> 2, the THR (/proc/interrupts) interrupts frequently, the CPU has to use a
+>>> lot time to handle IRQ.
+>>
+>> Totally no good knowledge on CMCI, but if 2) is true then I'm wondering
+>> whether it's necessary to handle the interrupts that frequently.  When I
+>> was reading the Intel CMCI vector handler I stumbled over this comment:
+>>
+>> /*
+>>   * The interrupt handler. This is called on every event.
+>>   * Just call the poller directly to log any events.
+>>   * This could in theory increase the threshold under high load,
+>>   * but doesn't for now.
+>>   */
+>> static void intel_threshold_interrupt(void)
+>>
+>> I think that matches with what I was thinking..  I mean for 2) not sure
+>> whether it can be seen as a CMCI problem and potentially can be optimized
+>> by adjust the cmci threshold dynamically.
+> 
+> The CE storm caused performance drop is caused by the extra cycles
+> spent by the ECC steps in memory controller, not in CMCI handling.
+> This is observed in the Google fleet as well. A good solution is to
+> monitor the CE rate closely in user space via /dev/mcelog and migrate
+> all VMs to another host once the CE rate exceeds some threshold.
+> 
+> CMCI is a _background_ interrupt that is not handled in the process
+> execution context and its handler is setup to switch to poll (1 / 5
+> min) mode if there are more than ~ a dozen CEs reported via CMCI per
+> second.
+>>
+>> --
+>> Peter Xu
+>>
 
-  systemd                                 ps
-kernel_waitid                 stat(/proc/tgid)
-  do_wait                       filename_lookup
-    wait_consider_task            lookup_fast
-      release_task
-        __exit_signal
-          __unhash_process
-            detach_pid
-              __change_pid // remove task->pid_links
-                                     d_revalidate -> pid_revalidate  // 0
-                                     d_invalidate(/proc/tgid)
-                                       shrink_dcache_parent(/proc/tgid)
-                                         d_walk(/proc/tgid)
-                                           spin_lock_nested(/proc/tgid/fd)
-                                           // iterating opened fd
-        proc_flush_pid                                    |
-           d_invalidate (/proc/tgid/fd)                   |
-              shrink_dcache_parent(/proc/tgid/fd)         |
-                shrink_dentry_list(subdirs)               ↓
-                  shrink_lock_dentry(/proc/tgid/fd) --> race on dentry lock
+Hi, Andrew, David, Naoya
 
-Function d_invalidate() will remove dentry from hash firstly, but why does
-proc_flush_pid() process dentry '/proc/tgid/fd' before dentry '/proc/tgid'?
-That's because proc_pid_make_inode() adds proc inode in reverse order by
-invoking hlist_add_head_rcu(). But proc should not add any inodes under
-'/proc/tgid' except '/proc/tgid/task/pid', fix it by adding inode into
-'pid->inodes' only if the inode is /proc/tgid or /proc/tgid/task/pid.
+According to the suggestions, I'd give up the improvement of memory 
+failure on huge page in this series.
 
-Fixes: 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216054
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
----
- v1->v2: Add new helper proc_pid_make_base_inode that performs the extra
-	 work of adding to the pid->list
- fs/proc/base.c | 34 ++++++++++++++++++++++++++--------
- 1 file changed, 26 insertions(+), 8 deletions(-)
+Is it worth recovering corrupted pages for the guest kernel? I'd follow 
+your decision.
 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index c1031843cc6a..f22fad3bf7f0 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -1885,7 +1885,7 @@ void proc_pid_evict_inode(struct proc_inode *ei)
- 	put_pid(pid);
- }
- 
--struct inode *proc_pid_make_inode(struct super_block * sb,
-+struct inode *proc_pid_make_inode(struct super_block *sb,
- 				  struct task_struct *task, umode_t mode)
- {
- 	struct inode * inode;
-@@ -1914,11 +1914,6 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
- 
- 	/* Let the pid remember us for quick removal */
- 	ei->pid = pid;
--	if (S_ISDIR(mode)) {
--		spin_lock(&pid->lock);
--		hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
--		spin_unlock(&pid->lock);
--	}
- 
- 	task_dump_owner(task, 0, &inode->i_uid, &inode->i_gid);
- 	security_task_to_inode(task, inode);
-@@ -1931,6 +1926,27 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
- 	return NULL;
- }
- 
-+struct inode *proc_pid_make_base_inode(struct super_block *sb,
-+				       struct task_struct *task, umode_t mode)
-+{
-+	struct inode *inode;
-+	struct proc_inode *ei;
-+	struct pid *pid;
-+
-+	inode = proc_pid_make_inode(sb, task, mode);
-+	if (!inode)
-+		return NULL;
-+
-+	/* Let proc_flush_pid find this directory inode */
-+	ei = PROC_I(inode);
-+	pid = ei->pid;
-+	spin_lock(&pid->lock);
-+	hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
-+	spin_unlock(&pid->lock);
-+
-+	return inode;
-+}
-+
- int pid_getattr(struct user_namespace *mnt_userns, const struct path *path,
- 		struct kstat *stat, u32 request_mask, unsigned int query_flags)
- {
-@@ -3350,7 +3366,8 @@ static struct dentry *proc_pid_instantiate(struct dentry * dentry,
- {
- 	struct inode *inode;
- 
--	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
-+	inode = proc_pid_make_base_inode(dentry->d_sb, task,
-+					 S_IFDIR | S_IRUGO | S_IXUGO);
- 	if (!inode)
- 		return ERR_PTR(-ENOENT);
- 
-@@ -3649,7 +3666,8 @@ static struct dentry *proc_task_instantiate(struct dentry *dentry,
- 	struct task_struct *task, const void *ptr)
- {
- 	struct inode *inode;
--	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
-+	inode = proc_pid_make_base_inode(dentry->d_sb, task,
-+					 S_IFDIR | S_IRUGO | S_IXUGO);
- 	if (!inode)
- 		return ERR_PTR(-ENOENT);
- 
 -- 
-2.31.1
-
+zhenwei pi

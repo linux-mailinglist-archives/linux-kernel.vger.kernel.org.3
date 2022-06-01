@@ -2,220 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE42D53AFDE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7328953AF56
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbiFAWnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 18:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
+        id S232422AbiFAWpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 18:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232270AbiFAWnU (ORCPT
+        with ESMTP id S232409AbiFAWpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 18:43:20 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C454F272292
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 15:43:17 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id d5-20020a05600c34c500b0039776acee62so2846682wmq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 15:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ueFC+LvqFygOP10zEfNVhZImk5CYtklcaahJeEGQyww=;
-        b=s/fgii38Q2RsuREY8SfMqmJzcjK7/LZ3uGL30SZPtTAzk0e8YtfF67J0SI/e0RGvks
-         F0pNBtNOYDfIDWKqQ/+9LVtzY22bdQPDS3996v6Ry2B4fX7QHs+hVOQ6VUMtQFKlTjtI
-         hV3i0Mcobwj2CoKFdFLo7VUx7theyqzdLfh/e6cOaQQtroxsXWjbD5o5c7xzwiewxnIK
-         e5N4ryNnniZ3xqyLyuVcy0AAxherlU46uudB1jbD6c4CJkcODhrBnlwFoONvTUU4ZaP/
-         wVpAQAmpccH1FX+PF3zXBuMF+5WQmfXLoLRmHE6LigtM6Hry8bcbn0aQb4C1JwiguKyi
-         5e5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ueFC+LvqFygOP10zEfNVhZImk5CYtklcaahJeEGQyww=;
-        b=njMopiF2G1b3HcKZlFhYlaeLFyPy4sF0S1hLB2bwU7uQn+dr066JYryU+OuNtpXHSl
-         CRDaAqTcSgRwX2tmcqBeW7ovvf/RrEnhpCTKkzGpGznxOpjh7q/Yk4Rs65NmVaXSlraY
-         4zZfCmPqUpzGcvooHdpS1Kjq/7bwZ825zQyKvDzcYTztx4EAi/P1ctxPSLIhFYysPmeF
-         4Q4Z0/AodFYYrS/FkDXAy24FHrDuDeirm5a2RV3qLhC07IIibdLRyZpHPGwDEvMAi/G1
-         HDNVn0weRsz6/JeJXPY7Xkt4bK+kGEtbx1qRHMPfRwq3jHXO1b6ksOL7p1bhc5a+JsFi
-         B22g==
-X-Gm-Message-State: AOAM533LgamVg7nt+Z5V0z8l/iQPqxg5emWSsShXbpQuyeptOnM9EcIk
-        TiM5lr0f0P173Y38tX69m8LolIvT3zi24ov68nTINw==
-X-Google-Smtp-Source: ABdhPJz7qOR70i7hJV0S8+GOTJYwbj1cA/fCmO1+VHTcagC4lWJh2umRmEfdqXDnbeQxSroNXKhhefMCFjFWpZ9yVN0=
-X-Received: by 2002:a05:600c:2305:b0:397:44a4:d3cb with SMTP id
- 5-20020a05600c230500b0039744a4d3cbmr29951063wmo.115.1654123395989; Wed, 01
- Jun 2022 15:43:15 -0700 (PDT)
+        Wed, 1 Jun 2022 18:45:31 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64554281860;
+        Wed,  1 Jun 2022 15:45:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654123530; x=1685659530;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=smkMhl7SsLCvV8F21B6h6yHB6om4C/Bmm9M+s7xMgFs=;
+  b=oC3R54YH7KpP6anGlcRpgoBObGC0UAHryK9cvqHrtBBg1Eq6VPQdWHUQ
+   Lo+az2D2znNGVdR54a+yrKQpJ0JjbVNlqqTH8lmfiLEMohAzGOyIzXrIa
+   K/27vk8uvFXRLkfqxaTfeVZ3BExw/oE+p2raA1oymfhdtnsFLE4/QHyeI
+   cuR7RUn1IuDREX5CXCc6RPra9TA3zT+fS3Y1jOLWyIpiR7Oco8nYP/BOL
+   Fk87tLBWnu8GatIjUDLGarL7l/wTLCNB48HRtjqHBNrHF62S7Lad4oKYh
+   /ZoczDsQ13x8OFCDCvee5we2LNkzKTy6+pVX5uz3xDDKNi+ONefq1EF+U
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="362129073"
+X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
+   d="scan'208";a="362129073"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 15:45:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
+   d="scan'208";a="581805052"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Jun 2022 15:45:27 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwX5j-0004UY-14;
+        Wed, 01 Jun 2022 22:45:27 +0000
+Date:   Thu, 2 Jun 2022 06:44:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Song Liu <song@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org, jolsa@kernel.org, Song Liu <song@kernel.org>
+Subject: Re: [PATCH bpf-next 5/5] bpf: trampoline: support
+ FTRACE_OPS_FL_SHARE_IPMODIFY
+Message-ID: <202206020622.HnFjEObo-lkp@intel.com>
+References: <20220601175749.3071572-6-song@kernel.org>
 MIME-Version: 1.0
-References: <20220527185426.240235-1-irogers@google.com> <d9056bc2-f640-f676-2599-c283479376a4@huawei.com>
-In-Reply-To: <d9056bc2-f640-f676-2599-c283479376a4@huawei.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 1 Jun 2022 15:43:03 -0700
-Message-ID: <CAP-5=fU8Wn8wV0whYOraU+5tGf+kKUk73gSwOg+LHp19vzua3A@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] Rewrite jevents program in python
-To:     John Garry <john.garry@huawei.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Felix Fietkau <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
-        Like Xu <likexu@tencent.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Nick Forrington <nick.forrington@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com, sandipan.das@amd.com,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601175749.3071572-6-song@kernel.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 9:17 AM John Garry <john.garry@huawei.com> wrote:
->
-> On 27/05/2022 19:54, Ian Rogers wrote:
-> > New architectures bring new complexity, such as Intel's hybrid
-> > models. jevents provides an alternative to specifying events in the
-> > kernel and exposing them through sysfs, however, it is difficult to
-> > work with. For example, an error in the json input would yield an
-> > error message but no json file or location. It is also a challenge to
-> > update jsmn.c given its forked nature.
-> >
-> > The changes here switch from jevents.c to a rewrite in python called
-> > jevents.py. This means there is a build time dependency on python, but
-> > such a dependency already exists for asciidoc (used to generate perf's
-> > man pages). If the build detects that python isn't present or is older
-> > than version 3.6 (released Dec. 2016) then an empty file is
-> > substituted for the generated one.
-> >
-> > A challenge with this code is in avoiding regressions. For this reason
-> > the jevents.py produces identical output to jevents.c, validated with a
-> > test script and build target.
-> >
->
-> Hi Ian,
->
-> I still see this:
->
-> ...
-> Makefile.config:906: Python interpreter too old (older than 3.6)
-> disabling jevent generation
-> Makefile.config:939: Old version of libbfd/binutils things like PE
-> executable profiling will not be available
-> Makefile.config:1127: No openjdk development package found, please
-> install JDK package, e.g. openjdk-8-jdk, java-1.8.0-openjdk-devel
->
-> Auto-detecting system features:
-> ...                         dwarf: [ on  ]
-> ...            dwarf_getlocations: [ on  ]
-> ...                         glibc: [ on  ]
-> ...                        libbfd: [ OFF ]
-> ...                libbfd-buildid: [ OFF ]
-> ...                        libcap: [ on  ]
-> ...                        libelf: [ on  ]
-> ...                       libnuma: [ on  ]
-> ...        numa_num_possible_cpus: [ on  ]
-> ...                       libperl: [ on  ]
-> ...                     libpython: [ on  ]
-> ...                     libcrypto: [ on  ]
-> ...                     libunwind: [ on  ]
-> ...            libdw-dwarf-unwind: [ on  ]
-> ...                          zlib: [ on  ]
-> ...                          lzma: [ on  ]
-> ...                     get_cpuid: [ on  ]
-> ...                           bpf: [ on  ]
-> ...                        libaio: [ on  ]
-> ...                       libzstd: [ on  ]
-> ...        disassembler-four-args: [ on  ]
->
->
-> make[3]: Nothing to be done for 'install_headers'.
-> john@localhost:~/acme/tools/perf> python --version
-> Python 3.6.12
->
-> I need to figure out what is going wrong...
+Hi Song,
 
-Thanks for testing John! Could you try adding something like this:
-```
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 9538d737d655..c23f39e21a70 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -901,6 +901,8 @@ ifneq ($(NO_JEVENTS),1)
-    NO_JEVENTS := 1
-  else
-    # jevents.py uses f-strings present in Python 3.6 released in Dec. 2016.
-+    PYTHON_VERSION=$(shell $(PYTHON) -c 'import sys;print(sys.version_info)')
-+    $(error $(PYTHON_VERSION))
-    JEVENTS_PYTHON_GOOD := $(shell $(PYTHON) -c 'import sys;print("1"
-if(sys.version_info.major >=
-3 and sys.version_info.minor >= 6) else "0")')
-    ifneq ($(JEVENTS_PYTHON_GOOD), 1)
-      $(warning Python interpreter too old (older than 3.6) disabling
-jevent generation)
-```
-You can also specify which python you want on the make command line,
-for example adding PYTHON=`which python` at the end of your make
-command.
+I love your patch! Perhaps something to improve:
 
-Thanks,
-Ian
+[auto build test WARNING on bpf-next/master]
 
-> Thanks,
-> John
->
-> > v3. Updates the patches for merged changes (on
-> >      acme/tmp.perf/core). Re-runs all comparisons to make sure the
-> >      generated pmu-events.c isn't altered at all by this change. Adds
-> >      the jevents.c ExtSel fix in:
-> >      https://lore.kernel.org/lkml/20220525140410.1706851-1-zhengjun.xing@linux.intel.com/
-> >      Bumps the python version from 3.5 to 3.6, as f-strings weren't
-> >      introduced until 3.6.
-> >
-> > v2. Fixes the build for architectures that don't have pmu-events json
-> >      (Suggested-by: John Garry <john.garry@huawei.com>) and fixes the
-> >      build for python not being present or too old (Suggested-by: Peter
-> >      Zijlstra <peterz@infradead.org>/John Garry <john.garry@huawei.com>).
-> >
-> > Ian Rogers (3):
-> >    perf jevents: Add python converter script
-> >    perf jevents: Switch build to use jevents.py
-> >    perf jevents: Remove jevents.c
-> >
-> >   tools/perf/Makefile.config               |   19 +
-> >   tools/perf/Makefile.perf                 |   16 +-
-> >   tools/perf/pmu-events/Build              |   15 +-
-> >   tools/perf/pmu-events/empty-pmu-events.c |   21 +
-> >   tools/perf/pmu-events/jevents.c          | 1342 ----------------------
-> >   tools/perf/pmu-events/jevents.py         |  392 +++++++
-> >   tools/perf/pmu-events/jsmn.h             |   68 --
-> >   tools/perf/pmu-events/json.c             |  162 ---
-> >   tools/perf/pmu-events/json.h             |   39 -
-> >   9 files changed, 444 insertions(+), 1630 deletions(-)
-> >   create mode 100644 tools/perf/pmu-events/empty-pmu-events.c
-> >   delete mode 100644 tools/perf/pmu-events/jevents.c
-> >   create mode 100755 tools/perf/pmu-events/jevents.py
-> >   delete mode 100644 tools/perf/pmu-events/jsmn.h
-> >   delete mode 100644 tools/perf/pmu-events/json.c
-> >   delete mode 100644 tools/perf/pmu-events/json.h
-> >
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220602-020112
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220602/202206020622.HnFjEObo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7edcf1c49617641579f2bc36b86c7d59bea20aef
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220602-020112
+        git checkout 7edcf1c49617641579f2bc36b86c7d59bea20aef
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/bpf/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/trampoline.c:30:66: warning: declaration of 'enum ftrace_ops_cmd' will not be visible outside of this function [-Wvisibility]
+   static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *op, enum ftrace_ops_cmd cmd);
+                                                                    ^
+   kernel/bpf/trampoline.c:92:21: error: invalid application of 'sizeof' to an incomplete type 'struct ftrace_ops'
+           tr->fops = kzalloc(sizeof(struct ftrace_ops), GFP_KERNEL);
+                              ^     ~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
+   struct ftrace_ops;
+          ^
+   kernel/bpf/trampoline.c:100:10: error: incomplete definition of type 'struct ftrace_ops'
+           tr->fops->private = tr;
+           ~~~~~~~~^
+   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
+   struct ftrace_ops;
+          ^
+   kernel/bpf/trampoline.c:101:10: error: incomplete definition of type 'struct ftrace_ops'
+           tr->fops->ops_func = bpf_tramp_ftrace_ops_func;
+           ~~~~~~~~^
+   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
+   struct ftrace_ops;
+          ^
+   kernel/bpf/trampoline.c:397:11: error: incomplete definition of type 'struct ftrace_ops'
+                   tr->fops->flags |= FTRACE_OPS_FL_SHARE_IPMODIFY;
+                   ~~~~~~~~^
+   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
+   struct ftrace_ops;
+          ^
+   kernel/bpf/trampoline.c:397:22: error: use of undeclared identifier 'FTRACE_OPS_FL_SHARE_IPMODIFY'
+                   tr->fops->flags |= FTRACE_OPS_FL_SHARE_IPMODIFY;
+                                      ^
+   kernel/bpf/trampoline.c:415:11: error: incomplete definition of type 'struct ftrace_ops'
+                   tr->fops->func = NULL;
+                   ~~~~~~~~^
+   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
+   struct ftrace_ops;
+          ^
+   kernel/bpf/trampoline.c:416:11: error: incomplete definition of type 'struct ftrace_ops'
+                   tr->fops->trampoline = 0;
+                   ~~~~~~~~^
+   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
+   struct ftrace_ops;
+          ^
+   kernel/bpf/trampoline.c:431:67: warning: declaration of 'enum ftrace_ops_cmd' will not be visible outside of this function [-Wvisibility]
+   static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
+                                                                     ^
+   kernel/bpf/trampoline.c:431:12: error: conflicting types for 'bpf_tramp_ftrace_ops_func'
+   static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
+              ^
+   kernel/bpf/trampoline.c:30:12: note: previous declaration is here
+   static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *op, enum ftrace_ops_cmd cmd);
+              ^
+   kernel/bpf/trampoline.c:431:82: error: variable has incomplete type 'enum ftrace_ops_cmd'
+   static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
+                                                                                    ^
+   kernel/bpf/trampoline.c:431:67: note: forward declaration of 'enum ftrace_ops_cmd'
+   static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
+                                                                     ^
+   kernel/bpf/trampoline.c:433:33: error: incomplete definition of type 'struct ftrace_ops'
+           struct bpf_trampoline *tr = ops->private;
+                                       ~~~^
+   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
+   struct ftrace_ops;
+          ^
+   kernel/bpf/trampoline.c:448:7: error: use of undeclared identifier 'FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY'
+           case FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY:
+                ^
+   kernel/bpf/trampoline.c:452:7: error: use of undeclared identifier 'FTRACE_OPS_CMD_DISABLE_SHARE_IPMODIFY'
+           case FTRACE_OPS_CMD_DISABLE_SHARE_IPMODIFY:
+                ^
+   kernel/bpf/trampoline.c:454:11: error: incomplete definition of type 'struct ftrace_ops'
+                   tr->fops->flags &= ~FTRACE_OPS_FL_SHARE_IPMODIFY;
+                   ~~~~~~~~^
+   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
+   struct ftrace_ops;
+          ^
+   kernel/bpf/trampoline.c:454:23: error: use of undeclared identifier 'FTRACE_OPS_FL_SHARE_IPMODIFY'
+                   tr->fops->flags &= ~FTRACE_OPS_FL_SHARE_IPMODIFY;
+                                       ^
+   2 warnings and 14 errors generated.
+
+
+vim +30 kernel/bpf/trampoline.c
+
+    29	
+  > 30	static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *op, enum ftrace_ops_cmd cmd);
+    31	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

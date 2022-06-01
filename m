@@ -2,71 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A1453A40B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D033653A40F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352675AbiFAL1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 07:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
+        id S1352685AbiFAL2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 07:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352634AbiFAL1f (ORCPT
+        with ESMTP id S1352644AbiFAL2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:27:35 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643573BBC7;
-        Wed,  1 Jun 2022 04:27:31 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 251BRIUD011398;
-        Wed, 1 Jun 2022 06:27:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654082838;
-        bh=o9D86qzvXd10JMqGORrMWHfGaInhUb1BMDlgZjbpg74=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=wpyMCZ5WBYKKSjFz/6FgAXAbEy1dXQvdVlVTrABbJEoRs3f/5a6oO2JwjvU7+1rSv
-         z1wQaLM70OT4CuGdjgl9TUBu1wz3yCEWVq847v0sI565QoxI6dxAj8jsimHyfkON5o
-         rVakqRBaHVzUzRdBIC1feXD4E3PGcQZ5Rp8r3YqY=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 251BRIwZ098987
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 1 Jun 2022 06:27:18 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 1
- Jun 2022 06:27:18 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 1 Jun 2022 06:27:18 -0500
-Received: from [172.24.222.108] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 251BRCU0093180;
-        Wed, 1 Jun 2022 06:27:13 -0500
-Message-ID: <985ab302-17aa-c0de-ccac-63525589918a@ti.com>
-Date:   Wed, 1 Jun 2022 16:57:12 +0530
+        Wed, 1 Jun 2022 07:28:35 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4648E5C879
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 04:28:33 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-30c143c41e5so15013077b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 04:28:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tDA6PuH6NICvxSpkxUN08aIv7E1lLbWtwbYMOmp3DFc=;
+        b=qZ4wk7dYHXk+svmWhmtwD5F01nOrHanF/nZcd2rNt/sATC0umgD7nFxlyirkk7t7yt
+         /5NSe+GKx657K37eu29ixICiLnZ+U5EhmxLGckjho8BnQPOSc1PytOmMl6dueOaOkRfp
+         DK5IdYHqNZRD8IyzEHTH+X04qE9G9cXrdrwM7Gd2ldpCMdWe/bhKK0FJ+oJcIm+1NXnd
+         1c5MqLPnhnJ3tz9ErQexOBcfjZPLSbQweY61tDKiErca+u+a4dbYtfvmsF3W9dTrjtkf
+         9GPnypBdkQvxxu/eYpcMAJS42Y+VITDDdkbpWf4+uiNiaR6Na/D7SpKNUJAX1i+IgkSv
+         VNvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tDA6PuH6NICvxSpkxUN08aIv7E1lLbWtwbYMOmp3DFc=;
+        b=g8+uMjNL5i5Cb0cuVQxPUrJjm3jvx/D2KCipit9Rza0jOTi1xiXue1Fso4R8bu/Gdl
+         HWe4/kbbAmt08FHCqhg3r8veDhqtVXhpDUtHiHsSg4qjRBaEqe4xC56HtjwwETjYaDmD
+         mNsEawuCiolfHumrRlOF9asz4SdwNj9z0l0dWeGkKZhKO0Z2JRJBA22qaS9DF/3JZS7a
+         hw4edpdpuMV2VQLgcrMDaAoOzn9a8X31/KIlXPIQUD1o93H5EZc5KABMj40UKAPwBpA3
+         UtgJSfKWKHgHKQItgV1UWuCJvjzmOeRJUkR4q1y6KYsyvpZQscV+byDTurVsARfM/7wT
+         1VVw==
+X-Gm-Message-State: AOAM5325cxC3x6Yfvt66RNQCKJKAQxV9PYRJnSLV0OQOmGw5cNkLY/tN
+        tRlDdUfqsFUI8AdpsvA5+FXWi2qqYSLVFb5wjjGm/A==
+X-Google-Smtp-Source: ABdhPJyo22i6mb4t9rd8RWOXkFixboX4VLMr4JB+/qGQCmpcDVlUNjyMNUrEjFthhS3/evNm77t2vXH8qRIY3ppOfOY=
+X-Received: by 2002:a81:1f8b:0:b0:2f8:5846:445e with SMTP id
+ f133-20020a811f8b000000b002f85846445emr69247959ywf.50.1654082912126; Wed, 01
+ Jun 2022 04:28:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/2] dt-bindings: phy: ti: phy-gmii-sel: Add bindings for
- J7200
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>, <robh+dt@kernel.org>,
-        <lee.jones@linaro.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <kishon@ti.com>, <vkoul@kernel.org>, <dan.carpenter@oracle.com>,
-        <grygorii.strashko@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <s-vadapalli@ti.com>
-References: <20220531111221.22963-1-s-vadapalli@ti.com>
- <20220531111221.22963-2-s-vadapalli@ti.com>
- <26603540-8887-ef8d-8f4d-26f2f33d2a6f@kernel.org>
- <b5353c06-c8b4-c065-3843-28b2a34e1867@ti.com>
- <a7754c31-bfc6-6451-8340-5d3aa671e3c4@kernel.org>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <a7754c31-bfc6-6451-8340-5d3aa671e3c4@kernel.org>
+References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-29-glider@google.com>
+ <87a6c6y7mg.ffs@tglx> <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
+ <87y1zjlhmj.ffs@tglx> <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
+ <878rrfiqyr.ffs@tglx> <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
+ <87k0ayhc43.ffs@tglx> <CAG_fn=UpcXMqJiZvho6_G3rjvjQA-3Ax6X8ONVO0D+4Pttc9dA@mail.gmail.com>
+ <87h762h5c2.ffs@tglx> <CAG_fn=UroTgp0jt77X_E-b1DPJ+32Cye6dRL4DOZ8MRf+XSokg@mail.gmail.com>
+ <871qx2r09k.ffs@tglx> <CAG_fn=VtQw1gL_UVONHi=OJakOuMa3wKfkzP0jWcuvGQEmV9Vw@mail.gmail.com>
+ <87h75uvi7s.ffs@tglx> <87ee0yvgrd.ffs@tglx>
+In-Reply-To: <87ee0yvgrd.ffs@tglx>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 1 Jun 2022 13:27:56 +0200
+Message-ID: <CAG_fn=XP9uFKA+zvCp_txBO_xGwH10=hhF9FDQL107b4YUh6sA@mail.gmail.com>
+Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
+ uninstrumented code
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,153 +104,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Roger,
+On Thu, May 12, 2022 at 6:48 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Thu, May 12 2022 at 18:17, Thomas Gleixner wrote:
+> > On Thu, May 12 2022 at 14:24, Alexander Potapenko wrote:
+> >> We could try to figure out the places in idtentry code where normal
+> >> kmsan_unpoison_memory() can be called in IRQ context, but as far as I
+> >> can see it will depend on the type of the entry point.
+> >
+> > NMI is covered as it increments before it invokes the unpoison().
+> >
+> > Let me figure out why we increment the preempt count late for
+> > interrupts. IIRC it's for symmetry reasons related to softirq processing
+> > on return, but let me double check.
+>
+> It's even documented:
+>
+>  https://www.kernel.org/doc/html/latest/core-api/entry.html#interrupts-and-regular-exceptions
+>
+> But who reads documentation? :)
+>
+> So, I think the simplest and least intrusive solution is to have special
+> purpose unpoison functions. See the patch below for illustration.
 
-On 01/06/22 15:08, Roger Quadros wrote:
-> Siddharth,
-> 
-> On 01/06/2022 09:01, Siddharth Vadapalli wrote:
->> Hello Roger,
->>
->> On 31/05/22 17:15, Roger Quadros wrote:
->>> Hi Siddharth,
->>>
->>> On 31/05/2022 14:12, Siddharth Vadapalli wrote:
->>>> TI's J7200 SoC supports additional PHY modes like QSGMII and SGMII
->>>> that are not supported on earlier SoCs. Add a compatible for it.
->>>>
->>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->>>> ---
->>>>  .../mfd/ti,j721e-system-controller.yaml       |  5 ++++
->>>>  .../bindings/phy/ti,phy-gmii-sel.yaml         | 24 ++++++++++++++++++-
->>>>  2 files changed, 28 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
->>>> index fa86691ebf16..e381ba62a513 100644
->>>> --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
->>>> +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
->>>> @@ -48,6 +48,11 @@ patternProperties:
->>>>      description:
->>>>        This is the SERDES lane control mux.
->>>>  
->>>> +  "phy@[0-9a-f]+$":
->>>> +    type: object
->>>> +    description:
->>>> +      This is the register to set phy mode through phy-gmii-sel driver.
->>>> +
->>>
->>> Is this really required? The system controller has 100s of different such registers and it is not practical to mention about all.
->>
->> The property has to be mentioned in order to pass: make dtbs_check.
->>
->>>
->>>>  required:
->>>>    - compatible
->>>>    - reg
->>>> diff --git a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
->>>> index ff8a6d9eb153..7427758451e7 100644
->>>> --- a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
->>>> +++ b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
->>>> @@ -53,12 +53,21 @@ properties:
->>>>        - ti,am43xx-phy-gmii-sel
->>>>        - ti,dm814-phy-gmii-sel
->>>>        - ti,am654-phy-gmii-sel
->>>> +      - ti,j7200-cpsw5g-phy-gmii-sel
->>>
->>> Why not just "ti,j7200-phy-gmii-sel" so it is consistent naming.
->>
->> In TI's J7200 device, there are two CPSW MACs, namely CPSW2G and CPSW5G. While
->> CPSW5G supports QSGMII mode, CPSW2G does not. Hence, the compatible being added
->> with the extra mode (QSGMII) enabled is applicable only for CPSW5G and not for
->> CPSW2G. Thus, to highlight this, the word "CPSW5G" has been included in the name
->> of the compatible.
-> 
-> Here we are talking about the PHY driver (phy-gmii-sel) and not the MAC (CPSW2G / CPSW5G)
-> Does this PHY on J7200 always support QSGMII mode? if yes then embedding "cpsw5g" in compatible is wrong.
+This patch works well and I am going to adopt it for my series.
+But the problem with occasional calls of instrumented functions from
+noinstr still persists: if there is a noinstr function foo() and an
+instrumented function bar() called from foo() with one or more
+arguments, bar() must wipe its kmsan_context_state before using the
+arguments.
 
-The PHY on J7200 is part of the Add-On Ethernet card. It is possible to connect
-RGMII, QSGMII and SGMII PHY. The CPSW5G MAC supports all these modes. With the
-current patch, I am adding just QSGMII mode as an extra mode, but in a future
-patch, I will be adding SGMII also as an extra mode. For this reason, CPSW5G is
-being mentioned in the compatible name, to differentiate supported modes for
-CPSW2G and CPSW5G. Also, the phy-gmii-sel driver actually configures CPSW MAC
-registers and not the PHY.
+I have a solution for this problem described in https://reviews.llvm.org/D126385
+The plan is to pass __builtin_return_address(0) to
+__msan_get_context_state_caller() at the beginning of each
+instrumented function.
+Then KMSAN runtime can check the passed return address and wipe the
+context if it belongs to the .noinstr code section.
 
-> 
-> You need to use a different compatible in CPSW driver and make sure CPSW2G doesn't initiate QSGMII mode.
+Alternatively, we could employ MSan's -fsanitize-memory-param-retval
+flag, that will report supplying uninitialized parameters when calling
+functions.
+Doing so is currently allowed in the kernel, but Clang aggressively
+applies the noundef attribute (see https://llvm.org/docs/LangRef.html)
+to function arguments, which effectively makes passing uninit values
+as function parameters an UB.
+So if we make KMSAN detect such cases as well, we can ultimately get
+rid of all cases when uninits are passed to functions.
+As a result, kmsan_context_state will become unnecessary, because it
+will never contain nonzero values.
 
-Yes, I will add a check there too by using a different compatible in the CPSW
-driver, but shouldn't the phy-gmii-sel driver also have a check to ensure that
-it doesn't try configuring QSGMII mode for CPSW2G?
 
-> 
->>
->>>
->>>>  
->>>>    reg:
->>>>      maxItems: 1
->>>>  
->>>>    '#phy-cells': true
->>>>  
->>>> +  ti,enet-ctrl-qsgmii:
->>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>> +    description: |
->>>> +      Required only for QSGMII mode. Bitmask to select the port for
->>>> +      QSGMII main mode. Rest of the ports are selected as QSGMII_SUB
->>>> +      ports automatically. Any of the 4 CPSW5G ports can act as the
->>>> +      main port with the rest of them being the QSGMII_SUB ports.
->>>> +
->>>
->>> This is weird way of doing things.
->>>
->>> The Ethernet controller driver already knows which mode the port is
->>> supposed to operate.
->>
->> From the ethernet driver perspective, there is no difference between the QSGMII
->> or QSGMII-SUB modes and both are treated the same. However, the phy-gmii-sel
->> driver configures CPSW MAC registers differently depending on the mode being
->> QSGMII or QSGMII-SUB. Hence, the ti,enet-ctrl-qsgmii property is used to
->> identify the QSGMII main port and the rest are configured in CPSW MAC as
->> QSGMII-SUB ports.
->>
->>>
->>> e.g.
->>> +&cpsw0_port1 {
->>> +	phy-handle = <&cpsw5g_phy0>;
->>> +	phy-mode = "qsgmii";
->>> +	mac-address = [00 00 00 00 00 00];
->>> +	phys = <&cpsw0_phy_gmii_sel 1>;
->>> +};
->>> +
->>> +&cpsw0_port2 {
->>> +	phy-handle = <&cpsw5g_phy1>;
->>> +	phy-mode = "qsgmii-sub";
->>> +	mac-address = [00 00 00 00 00 00];
->>> +	phys = <&cpsw0_phy_gmii_sel 2>;
->>>
->>> And it can convey the mode to the PHY driver via phy_ops->set_mode.
->>> So you should be depending on that instead of adding this new property.
->>
->> QSGMII-SUB is not a standard mode in the Linux kernel. In order to proceed with
->> the suggested implementation, a new phy mode named PHY_INTERFACE_MODE_QSGMII_SUB
->> has to be introduced to the kernel. Additionally, all existing phy drivers will
->> have to be updated to recognize the new phy mode.
->>
->> Since the QSGMII-SUB mode is TI specific, it was decided that it would be better
->> to add a new property in TI specific files for identifying the QSGMII main port
->> and treating the rest as QSGMII-SUB ports.
-> 
-> Who decides which port should be MAIN and which should be SUB? Can all ports be MAIN?
-> Can all ports be SUB or there has to be at least one MAIN?
-
-All 4 ports in CPSW5G have the capability to be the MAIN port, with the only
-restriction being that only one of them should be the MAIN port at a time. The
-role of the CPSW5G ports is decided based on what PHY port each of the CPSW5G
-ports connects to.
-
-MAIN port of CPSW5G MAC is responsible for auto-negotiation with the PHY port on
-the PHY which supports auto-negotiation. Thus, there can and should be only one
-MAIN port.
-
-Thanks,
-Siddharth.
+> The reasons why I used specific ones:
+>
+>   1) User entry
+>
+>      Whether that's a syscall or interrupt/exception does not
+>      matter. It's always on the task stack and your machinery cannot be
+>      running at that point because it came from user space.
+>
+>   2) Interrupt/exception/NMI entry kernel
+>
+>      Those can nest into an already active context, so you really want
+>      to unpoison @regs.
+>
+>      Also while regular interrupts cannot nest because of interrupts
+>      staying disabled, exceptions triggered in the interrupt handler and
+>      NMIs can nest.
+>
+>      -> device interrupt()
+>            irqentry_enter(regs)
+>
+>         -> NMI()
+>            irqentry_nmi_enter(regs)
+>
+>            -> fault()
+>               irqentry_enter(regs)
+>
+>               --> debug_exception()
+>                   irqentry_nmi_enter(regs)
+>
+>      Soft interrupt processing on return from interrupt makes it more
+>      interesting:
+>
+>      interrupt()
+>        handler()
+>        do_softirq()
+>          local_irq_enable()
+>             interrupt()
+>               NMI
+>                 ....
+>
+>      And everytime you get a new @regs pointer to deal with.
+>
+> Wonderful, isn't it?
+>
+> Thanks,
+>
+>         tglx
+>

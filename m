@@ -2,292 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCD3539F3B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08623539F25
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348654AbiFAIUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 04:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
+        id S1346586AbiFAISj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350651AbiFAITs (ORCPT
+        with ESMTP id S230302AbiFAISf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:19:48 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437B18B0B6;
-        Wed,  1 Jun 2022 01:19:45 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6811C240003;
-        Wed,  1 Jun 2022 08:19:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654071584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tB6r1mPxpov1adaPZ1h7raILSPvWQ3E2xUlUW/ShjM8=;
-        b=RywiZGXMK2m3+oYhil8bcSVInVSjw/Ke0fHQpexcrcl/PAkbfle88RKr5oZsrQkfjIkR9N
-        z7HK1FZGRaLI0pICBOqM4ngQ1XME6IrUC+z5x5oPDHWPh79VMRvUWt1dArspsdcZ1xQ2BU
-        xPRJBV66cNxksVeDGS+F6FZt4cFw5w3IH+4L6yBBilJWe9jPXjF9ywhvp6N4CaNntvXfiH
-        oKESBLi3Rw0m4JVCwiEtyNOSHiDXpQ3gwkhKK2fJ8fM0AY809WSNTDe4gR3V9IeJow2bPy
-        54ofwHQMkvWL59q+lszAVmjphaNTLOc41sS9QVoy/dXs7X/p/Htvej1stMV/dg==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
+        Wed, 1 Jun 2022 04:18:35 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABE624F07
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:18:31 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id d12-20020a17090abf8c00b001e2eb431ce4so1374803pjs.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 01:18:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GemiEwLCjqeqzreRXrlIOTn/YyLsal6nhhhXl7NXlqk=;
+        b=fUCScFzCpuzwgyHn7xrFQ7LGQY1FA++dCWMbhVb83r3eKHVpLa283g3v7wU3WUEKzm
+         JGCGzFjgej+HQwWcdTNenFSje7ses1XT25cOmGt+ACU0UKCpvDLhllWBp1y2kuWuZGLT
+         jy0QT+usJUmu/D0p+bU7o518zh0ElhfJMicpk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GemiEwLCjqeqzreRXrlIOTn/YyLsal6nhhhXl7NXlqk=;
+        b=W4Vn6SH1c5hnjdbaO+8cTr4g3V3Y97FAb8ByPTQqYbTen4W6MdmML47B5rgBw+f5Lv
+         6dK4O7DFjMttoAD7Zny9Cdbu3S5Z0JB8OjLfcLdmwyIa4d2LuuqRypZlHRKXnBDErOA5
+         3/CkkMNi6UejJ6SOvH65CRJNcbCEzaChIZHZQF2Zuhq7rn1Oc02tQL/hdHTdoOoie7I9
+         xRUXcyxW8K+uMK2hBYM8AKA6VFpyJbAANeOSHqB/KhIg+xDORmPbl+AIia5drfuXbN9J
+         0KJ+0IDubSKWhAjRRrq14okm2VjRA27K6QOGOBVXCHxcXv77DntjxaWYEXZ08OT6gMfs
+         1gKQ==
+X-Gm-Message-State: AOAM532AeG5IrSpJXC++Tanp/xqq3rn15HKit97deuR1sNJdNW3w6/8K
+        71ZKtBhGTHAYPVAg1jvS6QgJ5A==
+X-Google-Smtp-Source: ABdhPJyLFVUlLgJ+84lYTY5lEbCVVe3v3IQgMn9ywuY3YaByw8oDrtX0EITnzMoe+Ibd0yBMOKH7fA==
+X-Received: by 2002:a17:902:a705:b0:156:9cc5:1d6f with SMTP id w5-20020a170902a70500b001569cc51d6fmr64614112plq.66.1654071510782;
+        Wed, 01 Jun 2022 01:18:30 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:dc30:e75c:ae95:f2d6])
+        by smtp.gmail.com with ESMTPSA id c3-20020aa78803000000b0050dc7628182sm824680pfo.92.2022.06.01.01.18.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 01:18:30 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        Rob Clark <robdclark@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Daniel Henrique Barboza <danielhb413@gmail.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Ohhoon Kwon <ohoono.kwon@samsung.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        YueHaibing <yuehaibing@huawei.com>
-Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Lizhi Hou <lizhi.hou@xilinx.com>
-Subject: [PATCH v2 4/4] powerpc/pseries: use of_property_alloc/free() and of_node_alloc()
-Date:   Wed,  1 Jun 2022 10:18:01 +0200
-Message-Id: <20220601081801.348571-5-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220601081801.348571-1-clement.leger@bootlin.com>
-References: <20220601081801.348571-1-clement.leger@bootlin.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/8] Add a panel API to return panel orientation
+Date:   Wed,  1 Jun 2022 16:18:15 +0800
+Message-Id: <20220601081823.1038797-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use of_property_alloc/free() and of_node_alloc() to create and free
-device-tree nodes and properties.
+Panels usually call drm_connector_set_panel_orientation(), which is
+later than drm/kms driver calling drm_dev_register(). This leads to a
+WARN()[1].
 
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
----
- arch/powerpc/platforms/pseries/dlpar.c        | 51 +++----------------
- .../platforms/pseries/hotplug-memory.c        | 21 +-------
- arch/powerpc/platforms/pseries/reconfig.c     | 45 +++++-----------
- 3 files changed, 21 insertions(+), 96 deletions(-)
+The orientation property is known earlier. For example, some panels
+parse the property through device tree during probe.
 
-diff --git a/arch/powerpc/platforms/pseries/dlpar.c b/arch/powerpc/platforms/pseries/dlpar.c
-index 498d6efcb5ae..5a04566e98a4 100644
---- a/arch/powerpc/platforms/pseries/dlpar.c
-+++ b/arch/powerpc/platforms/pseries/dlpar.c
-@@ -38,61 +38,25 @@ struct cc_workarea {
- 	__be32	prop_offset;
- };
- 
--void dlpar_free_cc_property(struct property *prop)
--{
--	kfree(prop->name);
--	kfree(prop->value);
--	kfree(prop);
--}
--
- static struct property *dlpar_parse_cc_property(struct cc_workarea *ccwa)
- {
--	struct property *prop;
--	char *name;
--	char *value;
--
--	prop = kzalloc(sizeof(*prop), GFP_KERNEL);
--	if (!prop)
--		return NULL;
-+	int length;
-+	char *name, *value;
- 
- 	name = (char *)ccwa + be32_to_cpu(ccwa->name_offset);
--	prop->name = kstrdup(name, GFP_KERNEL);
--	if (!prop->name) {
--		dlpar_free_cc_property(prop);
--		return NULL;
--	}
--
--	prop->length = be32_to_cpu(ccwa->prop_length);
-+	length = be32_to_cpu(ccwa->prop_length);
- 	value = (char *)ccwa + be32_to_cpu(ccwa->prop_offset);
--	prop->value = kmemdup(value, prop->length, GFP_KERNEL);
--	if (!prop->value) {
--		dlpar_free_cc_property(prop);
--		return NULL;
--	}
- 
--	return prop;
-+	return of_property_alloc(name, value, length, GFP_KERNEL);
- }
- 
- static struct device_node *dlpar_parse_cc_node(struct cc_workarea *ccwa)
- {
--	struct device_node *dn;
- 	const char *name;
- 
--	dn = kzalloc(sizeof(*dn), GFP_KERNEL);
--	if (!dn)
--		return NULL;
--
- 	name = (const char *)ccwa + be32_to_cpu(ccwa->name_offset);
--	dn->full_name = kstrdup(name, GFP_KERNEL);
--	if (!dn->full_name) {
--		kfree(dn);
--		return NULL;
--	}
- 
--	of_node_set_flag(dn, OF_DYNAMIC);
--	of_node_init(dn);
--
--	return dn;
-+	return of_node_alloc(name, GFP_KERNEL);
- }
- 
- static void dlpar_free_one_cc_node(struct device_node *dn)
-@@ -102,11 +66,10 @@ static void dlpar_free_one_cc_node(struct device_node *dn)
- 	while (dn->properties) {
- 		prop = dn->properties;
- 		dn->properties = prop->next;
--		dlpar_free_cc_property(prop);
-+		of_property_free(prop);
- 	}
- 
--	kfree(dn->full_name);
--	kfree(dn);
-+	of_node_put(dn);
- }
- 
- void dlpar_free_cc_nodes(struct device_node *dn)
-diff --git a/arch/powerpc/platforms/pseries/hotplug-memory.c b/arch/powerpc/platforms/pseries/hotplug-memory.c
-index 2e3a317722a8..2ddf2a0ba048 100644
---- a/arch/powerpc/platforms/pseries/hotplug-memory.c
-+++ b/arch/powerpc/platforms/pseries/hotplug-memory.c
-@@ -69,33 +69,16 @@ unsigned long pseries_memory_block_size(void)
- 	return memblock_size;
- }
- 
--static void dlpar_free_property(struct property *prop)
--{
--	kfree(prop->name);
--	kfree(prop->value);
--	kfree(prop);
--}
--
- static struct property *dlpar_clone_property(struct property *prop,
- 					     u32 prop_size)
- {
--	struct property *new_prop;
--
--	new_prop = kzalloc(sizeof(*new_prop), GFP_KERNEL);
-+	struct property *new_prop = of_property_alloc(prop->name, NULL,
-+						      prop_size, GFP_KERNEL);
- 	if (!new_prop)
- 		return NULL;
- 
--	new_prop->name = kstrdup(prop->name, GFP_KERNEL);
--	new_prop->value = kzalloc(prop_size, GFP_KERNEL);
--	if (!new_prop->name || !new_prop->value) {
--		dlpar_free_property(new_prop);
--		return NULL;
--	}
--
- 	memcpy(new_prop->value, prop->value, prop->length);
--	new_prop->length = prop_size;
- 
--	of_property_set_flag(new_prop, OF_DYNAMIC);
- 	return new_prop;
- }
- 
-diff --git a/arch/powerpc/platforms/pseries/reconfig.c b/arch/powerpc/platforms/pseries/reconfig.c
-index cad7a0c93117..f1a364995e82 100644
---- a/arch/powerpc/platforms/pseries/reconfig.c
-+++ b/arch/powerpc/platforms/pseries/reconfig.c
-@@ -24,17 +24,9 @@ static int pSeries_reconfig_add_node(const char *path, struct property *proplist
- 	struct device_node *np;
- 	int err = -ENOMEM;
- 
--	np = kzalloc(sizeof(*np), GFP_KERNEL);
-+	np = of_node_alloc(kbasename(path), GFP_KERNEL);
- 	if (!np)
--		goto out_err;
--
--	np->full_name = kstrdup(kbasename(path), GFP_KERNEL);
--	if (!np->full_name)
--		goto out_err;
--
--	np->properties = proplist;
--	of_node_set_flag(np, OF_DYNAMIC);
--	of_node_init(np);
-+		return -ENOMEM;
- 
- 	np->parent = pseries_of_derive_parent(path);
- 	if (IS_ERR(np->parent)) {
-@@ -55,8 +47,7 @@ static int pSeries_reconfig_add_node(const char *path, struct property *proplist
- out_err:
- 	if (np) {
- 		of_node_put(np->parent);
--		kfree(np->full_name);
--		kfree(np);
-+		of_node_put(np);
- 	}
- 	return err;
- }
-@@ -91,9 +82,7 @@ static void release_prop_list(const struct property *prop)
- 	struct property *next;
- 	for (; prop; prop = next) {
- 		next = prop->next;
--		kfree(prop->name);
--		kfree(prop->value);
--		kfree(prop);
-+		of_property_free(prop);
- 	}
- 
- }
-@@ -167,27 +156,17 @@ static char * parse_next_property(char *buf, char *end, char **name, int *length
- static struct property *new_property(const char *name, const int length,
- 				     const unsigned char *value, struct property *last)
- {
--	struct property *new = kzalloc(sizeof(*new), GFP_KERNEL);
-+	struct property *prop;
- 
--	if (!new)
-+	prop = of_property_alloc(name, NULL, length + 1, GFP_KERNEL);
-+	if (!prop)
- 		return NULL;
- 
--	if (!(new->name = kstrdup(name, GFP_KERNEL)))
--		goto cleanup;
--	if (!(new->value = kmalloc(length + 1, GFP_KERNEL)))
--		goto cleanup;
--
--	memcpy(new->value, value, length);
--	*(((char *)new->value) + length) = 0;
--	new->length = length;
--	new->next = last;
--	return new;
--
--cleanup:
--	kfree(new->name);
--	kfree(new->value);
--	kfree(new);
--	return NULL;
-+	memcpy(prop->value, value, length);
-+	*(((char *)prop->value) + length) = 0;
-+	prop->next = last;
-+
-+	return prop;
- }
- 
- static int do_add_node(char *buf, size_t bufsize)
+The series add a panel API drm_panel_get_orientation() for drm/kms
+drivers. The drivers can use the API to get panel's orientation, so they
+can call drm_connector_set_panel_orientation() before drm_dev_register().
+
+Panel needs to implement .get_orientation callback to return the property.
+
+[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220530081910.3947168-2-hsinyi@chromium.org/
+
+Hsin-Yi Wang (8):
+  drm/panel: Add an API drm_panel_get_orientation() to return panel
+    orientation
+  drm/panel: boe-tv101wum-nl6: Implement .get_orientation callback
+  drm/panel: panel-edp: Implement .get_orientation callback
+  drm/panel: lvds: Implement .get_orientation callback
+  drm/panel: panel-simple: Implement .get_orientation callback
+  drm/panel: ili9881c: Implement .get_orientation callback
+  drm/panel: elida-kd35t133: Implement .get_orientation callback
+  drm/mediatek: Config orientation property if panel provides it
+
+ drivers/gpu/drm/drm_panel.c                    |  8 ++++++++
+ drivers/gpu/drm/mediatek/mtk_dsi.c             | 14 ++++++++++++++
+ drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c |  8 ++++++++
+ drivers/gpu/drm/panel/panel-edp.c              |  8 ++++++++
+ drivers/gpu/drm/panel/panel-elida-kd35t133.c   |  8 ++++++++
+ drivers/gpu/drm/panel/panel-ilitek-ili9881c.c  |  8 ++++++++
+ drivers/gpu/drm/panel/panel-lvds.c             |  8 ++++++++
+ drivers/gpu/drm/panel/panel-simple.c           |  9 +++++++++
+ include/drm/drm_panel.h                        | 10 ++++++++++
+ 9 files changed, 81 insertions(+)
+
 -- 
-2.36.0
+2.36.1.255.ge46751e96f-goog
 

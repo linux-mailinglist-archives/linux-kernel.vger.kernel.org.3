@@ -2,192 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657EE53A29F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 12:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0D453A2A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 12:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352074AbiFAKbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 06:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
+        id S1352018AbiFAKdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 06:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346150AbiFAKbb (ORCPT
+        with ESMTP id S232851AbiFAKdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 06:31:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 582075676B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 03:31:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654079489;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QV+5ETvQygEH5YoBYyqkv1Jl7HiCxiIOPVVbXZ9TGXg=;
-        b=VqtcO/mOOoMVcd8DJYkK5jCrRNegzv5pfxQH+0QA+ixvC79/3YdOhAvFGVzZm1QLW0D/kd
-        hhl+HCEbF390UMJjDEo272z957xAbxWPoQW6W6lFdlSAMeUbBm4TaAZVDLHAwKWanmRXcZ
-        hwmfTWI4w99Sk2tV0cXufKodt5HofBM=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-647-myaACGGlN0KSHsSAEzCcyQ-1; Wed, 01 Jun 2022 06:31:28 -0400
-X-MC-Unique: myaACGGlN0KSHsSAEzCcyQ-1
-Received: by mail-wr1-f71.google.com with SMTP id n3-20020a5d5983000000b0021021e3036eso209177wri.19
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 03:31:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=QV+5ETvQygEH5YoBYyqkv1Jl7HiCxiIOPVVbXZ9TGXg=;
-        b=5MjTl/vXOE6/f0dch+koN4UVsex4z/4Ml8n/uxLLgvQrbQlXVQ48+Oq1O42ssp0a2B
-         3x0FK0l3L03T7qr63ikXabPgJxSmcWN6VeP+F+LwQI3AYOe4ZsNMSyfVCih6UlA4nnDQ
-         Luc+R36W6i8sDymU6TGj0616PLDS7+21cpXOQe9GKFu0ldR+4T+LAvmbm+xw+KsNs/cw
-         bmg9pEy2r9uB0KzN0RlpYfQzltaYQLg/LaqMiQ6kgfAZK3s6VMrxRVnkdCs82heL57kD
-         wbDDLecgNKHGmhx/1TB3i6xC3au/e8S1htwh2f7IGxyRLAFLiIjJy2ZlG2hYYYseypSB
-         hMLA==
-X-Gm-Message-State: AOAM530BMHpf5rfqqKc2h+aYqHUBAavgxpVcsyi/6hTMLqKaSAxjj87l
-        jey4osyXc/2syIQDYRlILQbM6Bk2dLk8gt3QAcVcCuRXKR9sXd3b/tYTUAWTu7yo+fiSUjuPUtS
-        0QEgVotM3OAZ1KUAgq89LK/TQ
-X-Received: by 2002:a05:6000:18ae:b0:211:40df:c00e with SMTP id b14-20020a05600018ae00b0021140dfc00emr1245210wri.304.1654079487106;
-        Wed, 01 Jun 2022 03:31:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyKaAL5669d7n89Du4yPCoMqisp9fOjuBI3hStSpyNY7+GUkvOSlya1tZPe+MXRfnCZ5OcBjg==
-X-Received: by 2002:a05:6000:18ae:b0:211:40df:c00e with SMTP id b14-20020a05600018ae00b0021140dfc00emr1245183wri.304.1654079486840;
-        Wed, 01 Jun 2022 03:31:26 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:2600:951d:63df:c091:3b45? (p200300cbc7052600951d63dfc0913b45.dip0.t-ipconnect.de. [2003:cb:c705:2600:951d:63df:c091:3b45])
-        by smtp.gmail.com with ESMTPSA id d17-20020a056000115100b0020d0c9c95d3sm1206791wrx.77.2022.06.01.03.31.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 03:31:26 -0700 (PDT)
-Message-ID: <f6eb98ae-965b-d705-6f7d-c2ee69ce5141@redhat.com>
-Date:   Wed, 1 Jun 2022 12:31:25 +0200
+        Wed, 1 Jun 2022 06:33:44 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3415A69CFD;
+        Wed,  1 Jun 2022 03:33:42 -0700 (PDT)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LClnX0p3Rz1K98Z;
+        Wed,  1 Jun 2022 18:32:00 +0800 (CST)
+Received: from dggpeml500026.china.huawei.com (7.185.36.106) by
+ canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 1 Jun 2022 18:33:39 +0800
+Received: from dggpeml500026.china.huawei.com ([7.185.36.106]) by
+ dggpeml500026.china.huawei.com ([7.185.36.106]) with mapi id 15.01.2375.024;
+ Wed, 1 Jun 2022 18:33:39 +0800
+From:   shaozhengchao <shaozhengchao@huawei.com>
+To:     =?utf-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kafai@fb.com" <kafai@fb.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "yhs@fb.com" <yhs@fb.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>
+CC:     "weiyongjun (A)" <weiyongjun1@huawei.com>,
+        yuehaibing <yuehaibing@huawei.com>
+Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0ggdjQsYnBmLW5leHRdIHNhbXBsZXMvYnBmOiBjaGVj?=
+ =?utf-8?Q?k_detach_prog_exist_or_not_in_xdp=5Ffwd?=
+Thread-Topic: [PATCH v4,bpf-next] samples/bpf: check detach prog exist or not
+ in xdp_fwd
+Thread-Index: AQHYdOeYthSV0XjomkS2wUDhrYtil605wyQAgACYzaA=
+Date:   Wed, 1 Jun 2022 10:33:39 +0000
+Message-ID: <6c5bdb8886784d1298cc954a7b1027bf@huawei.com>
+References: <20220531121804.194901-1-shaozhengchao@huawei.com>
+ <87pmjs7n1z.fsf@toke.dk>
+In-Reply-To: <87pmjs7n1z.fsf@toke.dk>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.178.66]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     ying.huang@intel.com, hch@lst.de, dhowells@redhat.com,
-        cl@linux.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        naoya.horiguchi@nec.com, Minchan Kim <minchan@kernel.org>
-References: <20220425132723.34824-1-linmiaohe@huawei.com>
- <20220425132723.34824-3-linmiaohe@huawei.com>
- <525298ad-5e6a-2f8d-366d-4dcb7eebd093@redhat.com>
- <f5f933dc-450c-f3ac-34e6-d6dc1d901efd@huawei.com>
- <4cf144a9-fff5-d993-4fcb-7f2dfa6e71bb@redhat.com>
- <924de987-202b-a97e-e6d2-6bdab530f190@huawei.com>
- <c566dc2c-fc70-e410-5272-767fa28cbba4@redhat.com>
- <025d0dc8-a446-b720-14a8-97c041055f48@huawei.com>
- <143ab5dd-85a9-3338-53b7-e46c9060b20e@redhat.com>
- <6ba7e2bd-28c1-53ff-a6b7-072c79714dee@huawei.com>
- <0724b4c4-15f6-e429-f945-f57c619c7270@redhat.com>
- <7ca676a9-1f51-47f7-0245-d041d075a440@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 2/4] mm/migration: remove unneeded lock page and
- PageMovable check
-In-Reply-To: <7ca676a9-1f51-47f7-0245-d041d075a440@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.05.22 14:37, Miaohe Lin wrote:
-> On 2022/5/31 19:59, David Hildenbrand wrote:
->> Sorry for the late reply, was on vacation.
-> 
-> That's all right. Hope you have a great time. ;)
-> 
->>
->>>>>
->>>>> But for isolated page, PageLRU is cleared. So when the isolated page is released, __clear_page_lru_flags
->>>>> won't be called. So we have to clear the PG_active and PG_unevictable here manully. So I think
->>>>> this code block works. Or am I miss something again?
->>>>
->>>> Let's assume the following: page as freed by the owner and we enter
->>>> unmap_and_move().
->>>>
->>>>
->>>> #1: enter unmap_and_move() // page_count is 1
->>>> #2: enter isolate_movable_page() // page_count is 1
->>>> #2: get_page_unless_zero() // page_count is now 2
->>>> #1: if (page_count(page) == 1) { // does not trigger
->>>> #2: put_page(page); // page_count is now 1
->>>> #1: put_page(page); // page_count is now 0 -> freed
->>>>
->>>>
->>>> #1 will trigger __put_page() -> __put_single_page() ->
->>>> __page_cache_release() will not clear the flags because it's not an LRU
->>>> page at that point in time, right (-> isolated)?
->>>
->>> Sorry, you're right. I thought the old page will be freed via putback_lru_page which will
->>> set PageLRU back instead of put_page directly. So if the above race occurs, PG_active and
->>> PG_unevictable will remain set while page goes to the buddy and check_free_page will complain
->>> about it. But it seems this is never witnessed?
->>
->> Maybe
->>
->> a) we were lucky so far and didn't trigger it
->> b) the whole code block is dead code because we are missing something
->> c) we are missing something else :)
-> 
-> I think I found the things we missed in another email [1].
-> [1]: https://lore.kernel.org/all/948ea45e-3b2b-e16c-5b8c-4c34de0ea593@huawei.com/
-> 
-> Paste the main content of [1] here:
-> 
-> "
-> There are 3 cases in unmap_and_move:
-> 
-> 1.page is freed through "if (page_count(page) == 1)" code block. This works
-> as PG_active and PG_unevictable are cleared here.
-> 
-> 2. Failed to migrate the page. The page won't be release so we don't care about it.
-
-Right, page is un-isolated.
-
-> 
-> 3. The page is migrated successfully. The PG_active and PG_unevictable are cleared
-> via folio_migrate_flags():
-> 
-> 	if (folio_test_clear_active(folio)) {
-> 		VM_BUG_ON_FOLIO(folio_test_unevictable(folio), folio);
-> 		folio_set_active(newfolio);
-> 	} else if (folio_test_clear_unevictable(folio))
-> 		folio_set_unevictable(newfolio);
-
-Right.
-
-> 
-> For the above race case, the page won't be freed through "if (page_count(page) == 1)" code block.
-> It will just be migrated and freed via put_page() after folio_migrate_flags() having cleared PG_active
-> and PG_unevictable.
-> "
-> Or Am I miss something again? :)
-
-For #1, I'm still not sure what would happen on a speculative reference.
-
-It's worth summarizing that
-
-a) free_pages_prepare() will clear both flags via page->flags &=
-~PAGE_FLAGS_CHECK_AT_PREP;
-
-b) free_pages_prepare() will bail out if any flag is set in
-check_free_page().
-
-As we've never seen b) in the wild, this certainly has low priority, and
-maybe it really cannot happen right now.
-
-However, maybe really allowing these flags to be set when freeing the
-page and removing the "page_count(page) == 1" case from migration code
-would be the clean thing to do.
-
--- 
-Thanks,
-
-David / dhildenb
-
+DQotLS0tLemCruS7tuWOn+S7ti0tLS0tDQrlj5Hku7bkuro6IFRva2UgSMO4aWxhbmQtSsO4cmdl
+bnNlbiBbbWFpbHRvOnRva2VAa2VybmVsLm9yZ10gDQrlj5HpgIHml7bpl7Q6IDIwMjLlubQ25pyI
+MeaXpSAxNzoyNQ0K5pS25Lu25Lq6OiBzaGFvemhlbmdjaGFvIDxzaGFvemhlbmdjaGFvQGh1YXdl
+aS5jb20+OyBicGZAdmdlci5rZXJuZWwub3JnOyBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBsaW51
+eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBhc3RAa2VybmVsLm9yZzsgZGFuaWVsQGlvZ2VhcmJv
+eC5uZXQ7IGRhdmVtQGRhdmVtbG9mdC5uZXQ7IGt1YmFAa2VybmVsLm9yZzsgaGF3a0BrZXJuZWwu
+b3JnOyBqb2huLmZhc3RhYmVuZEBnbWFpbC5jb207IGFuZHJpaUBrZXJuZWwub3JnOyBrYWZhaUBm
+Yi5jb207IHNvbmdsaXVicmF2aW5nQGZiLmNvbTsgeWhzQGZiLmNvbTsga3BzaW5naEBrZXJuZWwu
+b3JnDQrmioTpgIE6IHdlaXlvbmdqdW4gKEEpIDx3ZWl5b25nanVuMUBodWF3ZWkuY29tPjsgc2hh
+b3poZW5nY2hhbyA8c2hhb3poZW5nY2hhb0BodWF3ZWkuY29tPjsgeXVlaGFpYmluZyA8eXVlaGFp
+YmluZ0BodWF3ZWkuY29tPg0K5Li76aKYOiBSZTogW1BBVENIIHY0LGJwZi1uZXh0XSBzYW1wbGVz
+L2JwZjogY2hlY2sgZGV0YWNoIHByb2cgZXhpc3Qgb3Igbm90IGluIHhkcF9md2QNCg0KWmhlbmdj
+aGFvIFNoYW8gPHNoYW96aGVuZ2NoYW9AaHVhd2VpLmNvbT4gd3JpdGVzOg0KDQo+IEJlZm9yZSBk
+ZXRhY2ggdGhlIHByb2csIHdlIHNob3VsZCBjaGVjayBkZXRhY2ggcHJvZyBleGlzdCBvciBub3Qu
+DQo+DQo+IFNpZ25lZC1vZmYtYnk6IFpoZW5nY2hhbyBTaGFvIDxzaGFvemhlbmdjaGFvQGh1YXdl
+aS5jb20+DQoNClRoZSBsb2dpYyBsb29rcyBnb29kIG5vdywganVzdCBzcG90dGVkIG9uZSBpc3N1
+ZSB3aXRoIHRoZSB1c2Ugb2YgJ3JldHVybiBlcnJubycgKHdoaWNoIEkganVzdCByZWFsaXNlZCBJ
+IHN1Z2dlc3RlZCBvbiB0aGUgbGFzdCB2ZXJzaW9uLCBzb3JyeSBhYm91dCB0aGF0KS4NCg0KPiAg
+c2FtcGxlcy9icGYveGRwX2Z3ZF91c2VyLmMgfCA2MiANCj4gKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKystLS0tLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCA1MyBpbnNlcnRpb25zKCspLCA5
+IGRlbGV0aW9ucygtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvc2FtcGxlcy9icGYveGRwX2Z3ZF91c2Vy
+LmMgYi9zYW1wbGVzL2JwZi94ZHBfZndkX3VzZXIuYyANCj4gaW5kZXggMTgyODQ4N2JhZTlhLi5h
+NGJhNTM4OTE2NTMgMTAwNjQ0DQo+IC0tLSBhL3NhbXBsZXMvYnBmL3hkcF9md2RfdXNlci5jDQo+
+ICsrKyBiL3NhbXBsZXMvYnBmL3hkcF9md2RfdXNlci5jDQo+IEBAIC00NywxNyArNDcsNjEgQEAg
+c3RhdGljIGludCBkb19hdHRhY2goaW50IGlkeCwgaW50IHByb2dfZmQsIGludCBtYXBfZmQsIGNv
+bnN0IGNoYXIgKm5hbWUpDQo+ICAJcmV0dXJuIGVycjsNCj4gIH0NCj4gIA0KPiAtc3RhdGljIGlu
+dCBkb19kZXRhY2goaW50IGlkeCwgY29uc3QgY2hhciAqbmFtZSkNCj4gK3N0YXRpYyBpbnQgZG9f
+ZGV0YWNoKGludCBpZmluZGV4LCBjb25zdCBjaGFyICppZm5hbWUsIGNvbnN0IGNoYXIgDQo+ICsq
+YXBwX25hbWUpDQo+ICB7DQo+IC0JaW50IGVycjsNCj4gKwlMSUJCUEZfT1BUUyhicGZfeGRwX2F0
+dGFjaF9vcHRzLCBvcHRzKTsNCj4gKwlzdHJ1Y3QgYnBmX3Byb2dfaW5mbyBwcm9nX2luZm8gPSB7
+fTsNCj4gKwljaGFyIHByb2dfbmFtZVtCUEZfT0JKX05BTUVfTEVOXTsNCj4gKwlfX3UzMiBpbmZv
+X2xlbiwgY3Vycl9wcm9nX2lkOw0KPiArCWludCBwcm9nX2ZkOw0KPiArCWludCBlcnIgPSAxOw0K
+PiArDQo+ICsJaWYgKGJwZl94ZHBfcXVlcnlfaWQoaWZpbmRleCwgeGRwX2ZsYWdzLCAmY3Vycl9w
+cm9nX2lkKSkgew0KPiArCQlwcmludGYoIkVSUk9SOiBicGZfeGRwX3F1ZXJ5X2lkIGZhaWxlZCAo
+JXMpXG4iLA0KPiArCQkgICAgICAgc3RyZXJyb3IoZXJybm8pKTsNCj4gKwkJcmV0dXJuIC1lcnJu
+bzsNCg0KVGhlIHByaW50ZiBhYm92ZSBtYXkgb3ZlcnJpZGUgZXJybm8sIHNvIHRoaXMgY291bGQg
+cmV0dXJuIDA7IHRoZSBhY3R1YWwgcmV0dXJuIHZhbHVlIGlzIG5vdCByZWFsbHkgdXNlZCBieSB0
+aGUgY2FsbGVyLCBzbyB5b3UgY291bGQganVzdCBhbHdheXMgJ3JldHVybiAtMScgb3IgJ3JldHVy
+biBlcnInLg0KDQo+ICsJfQ0KPiArDQo+ICsJaWYgKCFjdXJyX3Byb2dfaWQpIHsNCj4gKwkJcHJp
+bnRmKCJFUlJPUjogZmxhZ3MoMHgleCkgeGRwIHByb2cgaXMgbm90IGF0dGFjaGVkIHRvICVzXG4i
+LA0KPiArCQkgICAgICAgeGRwX2ZsYWdzLCBpZm5hbWUpOw0KPiArCQlnb3RvIGVycl9vdXQ7DQoN
+CkRvZXNuJ3QgcmVhbGx5IG5lZWQgYSBsYWJlbCwganVzdCBkbyBhIGRpcmVjdCByZXR1cm4gaGVy
+ZSBhcyB3ZWxsLg0KDQo+ICsJfQ0KPiAgDQo+IC0JZXJyID0gYnBmX3hkcF9kZXRhY2goaWR4LCB4
+ZHBfZmxhZ3MsIE5VTEwpOw0KPiAtCWlmIChlcnIgPCAwKQ0KPiAtCQlwcmludGYoIkVSUk9SOiBm
+YWlsZWQgdG8gZGV0YWNoIHByb2dyYW0gZnJvbSAlc1xuIiwgbmFtZSk7DQo+ICsJaW5mb19sZW4g
+PSBzaXplb2YocHJvZ19pbmZvKTsNCj4gKwlwcm9nX2ZkID0gYnBmX3Byb2dfZ2V0X2ZkX2J5X2lk
+KGN1cnJfcHJvZ19pZCk7DQo+ICsJaWYgKHByb2dfZmQgPCAwKSB7DQo+ICsJCXByaW50ZigiRVJS
+T1I6IGJwZl9wcm9nX2dldF9mZF9ieV9pZCBmYWlsZWQgKCVzKVxuIiwNCj4gKwkJICAgICAgIHN0
+cmVycm9yKGVycm5vKSk7DQo+ICsJCXJldHVybiAtZXJybm87DQoNClNhbWUgaXNzdWUgYXMgYWJv
+dmUgd2l0aCBlcnJubyBiZWluZyBvdmVyd3JpdHRlbi4NCg0KPiArCX0NCj4gKw0KPiArCWVyciA9
+IGJwZl9vYmpfZ2V0X2luZm9fYnlfZmQocHJvZ19mZCwgJnByb2dfaW5mbywgJmluZm9fbGVuKTsN
+Cj4gKwlpZiAoZXJyKSB7DQo+ICsJCXByaW50ZigiRVJST1I6IGJwZl9vYmpfZ2V0X2luZm9fYnlf
+ZmQgZmFpbGVkICglcylcbiIsDQo+ICsJCSAgICAgICBzdHJlcnJvcihlcnJubykpOw0KPiArCQln
+b3RvIGNsb3NlX291dDsNCj4gKwl9DQo+ICsJc25wcmludGYocHJvZ19uYW1lLCBzaXplb2YocHJv
+Z19uYW1lKSwgIiVzX3Byb2ciLCBhcHBfbmFtZSk7DQo+ICsJcHJvZ19uYW1lW0JQRl9PQkpfTkFN
+RV9MRU4gLSAxXSA9ICdcMCc7DQo+ICsNCj4gKwlpZiAoc3RyY21wKHByb2dfaW5mby5uYW1lLCBw
+cm9nX25hbWUpKSB7DQo+ICsJCXByaW50ZigiRVJST1I6ICVzIGlzbid0IGF0dGFjaGVkIHRvICVz
+XG4iLCBhcHBfbmFtZSwgaWZuYW1lKTsNCj4gKwkJZXJyID0gMTsNCj4gKwl9IGVsc2Ugew0KDQpZ
+b3UgY2FuIHNhdmUgYSBsZXZlbCBvZiBpbmRlbnRhdGlvbiBieSBhZGRpbmcgYSAnZ290byBjbG9z
+ZV9vdXQnIGFmdGVyICdlcnI9MScgaW5zdGVhZCBvZiB1c2luZyBhbiAnZWxzZScgYmxvY2suDQoN
+Cj4gKwkJb3B0cy5vbGRfcHJvZ19mZCA9IHByb2dfZmQ7DQo+ICsJCWVyciA9IGJwZl94ZHBfZGV0
+YWNoKGlmaW5kZXgsIHhkcF9mbGFncywgJm9wdHMpOw0KPiArCQlpZiAoZXJyIDwgMCkNCj4gKwkJ
+CXByaW50ZigiRVJST1I6IGZhaWxlZCB0byBkZXRhY2ggcHJvZ3JhbSBmcm9tICVzICglcylcbiIs
+DQo+ICsJCQkgICAgICAgaWZuYW1lLCBzdHJlcnJvcihlcnJubykpOw0KPiArCQkvKiBUT0RPOiBS
+ZW1lbWJlciB0byBjbGVhbnVwIG1hcCwgd2hlbiBhZGRpbmcgdXNlIG9mIHNoYXJlZCBtYXANCj4g
+KwkJICogIGJwZl9tYXBfZGVsZXRlX2VsZW0oKG1hcF9mZCwgJmlkeCk7DQo+ICsJCSAqLw0KPiAr
+CX0NCj4gIA0KPiAtCS8qIFRPRE86IFJlbWVtYmVyIHRvIGNsZWFudXAgbWFwLCB3aGVuIGFkZGlu
+ZyB1c2Ugb2Ygc2hhcmVkIG1hcA0KPiAtCSAqICBicGZfbWFwX2RlbGV0ZV9lbGVtKChtYXBfZmQs
+ICZpZHgpOw0KPiAtCSAqLw0KPiArY2xvc2Vfb3V0Og0KPiArCWNsb3NlKHByb2dfZmQpOw0KPiAr
+ZXJyX291dDoNCg0KZG9uJ3QgbmVlZCB0aGUgZXJyX291dCBsYWJlbCwgc2VlIGFib3ZlLg0KDQot
+VG9rZQ0KDQpIaSBUb2tlOg0KCVRoYW5rIHlvdSBmb3IgeW91ciByZXBseS4gSSB3aWxsIGZpeCBp
+dCBpbiBuZXh0IHBhdGNoLg0KDQpaaGVuZ2NoYW8gU2hhbw0KDQo=

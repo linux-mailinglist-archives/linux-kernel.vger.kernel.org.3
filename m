@@ -2,159 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDA253A05F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE9953A06F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351069AbiFAJbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 05:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
+        id S1351079AbiFAJcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 05:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351056AbiFAJbA (ORCPT
+        with ESMTP id S1351081AbiFAJcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 05:31:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3890B87201;
-        Wed,  1 Jun 2022 02:30:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A601323A;
-        Wed,  1 Jun 2022 02:30:58 -0700 (PDT)
-Received: from [10.57.38.89] (unknown [10.57.38.89])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2A7803F66F;
-        Wed,  1 Jun 2022 02:30:56 -0700 (PDT)
-Message-ID: <006b7edd-20d2-3165-7c83-352b7fb312e7@arm.com>
-Date:   Wed, 1 Jun 2022 10:30:54 +0100
+        Wed, 1 Jun 2022 05:32:11 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A3F8A075
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 02:32:09 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id z7so1321876edm.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 02:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9rLHj//9k/15fypiFbMELs3ChxXWRGpeQMJrEmUMxUs=;
+        b=QIpbmzzYJ0HAltV9KIinq7hcn1/hnXtpRXtMmZG9J7qu9J+yvPLSDMoa7T1mF07mXK
+         H0apr2OZxGQd0U1WCKeMv8lb+Fm0H/mDYSMtRdWizypZAKluo8iAZmIxB1zzo1cgkxVD
+         8FqROBoannHWns4ltnEoaFMetuFzZVnMg34x8TBZHDiL1S+h+agEWmJXOJBPr45zEleE
+         wIN4pLzhGLnCkSJ6swE6lcLnjUX895KzSJg8xs9oTGRBgvcXRQgxWZs0dfq2tVdBw1lA
+         e+iovxTxiCiSptWs6zjF6xpsc90sU1LjwN9TwlBSRUrniu3cN+/+/2A8nwrc4UNO1Pv1
+         qyIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9rLHj//9k/15fypiFbMELs3ChxXWRGpeQMJrEmUMxUs=;
+        b=pnsdG5k8EYmcV+Kne6HAYopw5c1e1eqXp2CEjhy8gny4NXltdcyrymcd+RLSKttN9g
+         YGvzKCPVXSOb34Oohe5+/XYunAPWRD+dzxZaT06AKsc61zSDXFDW9T/hpRXm714kgMrz
+         cceAmcbjOq1o+lK5IWLLCT4JIa5U1dqlHm6xYLAeWwIonzMlLFW2aXb+HEGamhy+FMDg
+         dxVe/23XPjyMLTCiQvG2bGIGF6SL/0h7KAfzz30qBQwTnWCOSdS86TT/6tL7EALCTInw
+         Qv9rtLDbv0K0HdyHXignnFrb2lYEnT3pyCkgN1KpctYamGOOci303Ifb5HrV2gC+duaV
+         Pccw==
+X-Gm-Message-State: AOAM5310y3aH5jRnQ9qFqCXGXQ9Eu6SpNxx4V/StFGyxbODSLkrCqA3B
+        +2rEZsIvsauAxcGv4bu0Dbb3hA==
+X-Google-Smtp-Source: ABdhPJxIaNQdmdCizYbGGHKjK+me0jgNnS5X6cMWDDf2h3DFwSO74zQhHh65gXy+skv8i/8hh9yGoQ==
+X-Received: by 2002:a05:6402:e9f:b0:41c:df21:b113 with SMTP id h31-20020a0564020e9f00b0041cdf21b113mr69039921eda.217.1654075928172;
+        Wed, 01 Jun 2022 02:32:08 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i23-20020a1709061e5700b00708a2ae7620sm102525ejj.67.2022.06.01.02.32.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 02:32:07 -0700 (PDT)
+Message-ID: <efdbb151-8213-d1e7-a935-0e857947d450@linaro.org>
+Date:   Wed, 1 Jun 2022 11:32:06 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-Subject: Re: [PATCH v7 02/10] Coresight: Add coresight TPDM source driver
-To:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220509133947.20987-1-quic_jinlmao@quicinc.com>
- <20220509133947.20987-3-quic_jinlmao@quicinc.com>
- <38bb1ec9-56bc-0cdf-6c46-d448a46ec886@arm.com>
- <ea720e1a-c0d2-84b0-8dbc-bb5031d32208@quicinc.com>
- <7d6b2e24-21f4-eef1-a722-23cdcd1d8a88@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <7d6b2e24-21f4-eef1-a722-23cdcd1d8a88@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 00/17] Add support for MT8365 EVK board
+Content-Language: en-US
+To:     Fabien Parent <fparent@baylibre.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        qii.wang@mediatek.com, matthias.bgg@gmail.com, jic23@kernel.org,
+        chaotian.jing@mediatek.com, ulf.hansson@linaro.org,
+        srinivas.kandagatla@linaro.org, chunfeng.yun@mediatek.com,
+        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20220531135026.238475-1-fparent@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220531135026.238475-1-fparent@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2022 10:21, Jinlong Mao wrote:
-> Hi Suzuki,
+On 31/05/2022 15:50, Fabien Parent wrote:
+> This patch series adds support for the MT8365 EVK board.
 > 
-> On 5/24/2022 3:00 PM, Jinlong Mao wrote:
->> Hi Suzuki,
->>
->> Thank you for the review.
->>
->> On 5/23/2022 4:57 PM, Suzuki K Poulose wrote:
->>> Hi
->>>
->>> On 09/05/2022 14:39, Mao Jinlong wrote:
->>>> Add driver to support Coresight device TPDM (Trace, Profiling and
->>>> Diagnostics Monitor). TPDM is a monitor to collect data from
->>>> different datasets. This change is to add probe/enable/disable
->>>> functions for tpdm source.
->>>>
->>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->>>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
->>>> ---
->>>>   drivers/hwtracing/coresight/Kconfig          |  13 ++
->>>>   drivers/hwtracing/coresight/Makefile         |   1 +
->>>>   drivers/hwtracing/coresight/coresight-core.c |   5 +-
->>>>   drivers/hwtracing/coresight/coresight-tpdm.c | 146 
->>>> +++++++++++++++++++
->>>>   drivers/hwtracing/coresight/coresight-tpdm.h |  26 ++++
->>>>   include/linux/coresight.h                    |   1 +
->>>>   6 files changed, 191 insertions(+), 1 deletion(-)
->>>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
->>>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
->>>>
-> 
->>>> +/**
->>>> + * struct tpdm_drvdata - specifics associated to an TPDM component
->>>> + * @base:       memory mapped base address for this component.
->>>> + * @dev:        The device entity associated to this component.
->>>> + * @csdev:      component vitals needed by the framework.
->>>> + * @lock:       lock for the enable value.
->>>> + * @enable:     enable status of the component.
->>>> + */
->>>> +
->>>> +struct tpdm_drvdata {
->>>> +    void __iomem        *base;
->>>> +    struct device        *dev;
->>>> +    struct coresight_device    *csdev;
->>>> +    struct mutex        lock;
->>>
->>> Why mutex lock ? Couldn't this be a spinlock ?
->> 1. There is no irq for TPDM
->> 2. As there are 7 dataset types, there will be some FOR loop to configure
->> tpdm registers which may cause some time.
+> This series has dependencies on the following series:
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646256
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646091
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646083
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646081
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646076
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646068
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646020
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646052
+> https://lore.kernel.org/r/20220504091923.2219-2-rex-bc.chen@mediatek.com 
+> https://lore.kernel.org/r/20220512062622.31484-2-chunfeng.yun@mediatek.com 
+> https://lore.kernel.org/r/20220512062622.31484-1-chunfeng.yun@mediatek.com
+> https://lore.kernel.org/r/20220524115019.97246-1-angelogioacchino.delregno@collabora.com
+> https://lore.kernel.org/all/20220127015857.9868-1-biao.huang@mediatek.com/
 
-How long does it take to configure ? Is it too long enough to trigger
-RCU stalls ? as long as we don't do any sleeping/blocking operations
-we should be fine with a spinlock.
+Eh... and how we are supposed to test or apply this? Such dependencies
+could mean none of automated tools will pick it up, so your patchset has
+to wait till dependencies got merged.
 
-Suzuki
 
->>
-> I think we can use mutex lock here. Do you have any more comments for 
-> this ?
-
-> 
-> Thanks
-> Jinlong Mao
->>>
->>>> +    bool            enable;
->>>> +};
->>>> +
->>>> +#endif  /* _CORESIGHT_CORESIGHT_TPDM_H */
->>>> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
->>>> index 247147c11231..a9efac55029d 100644
->>>> --- a/include/linux/coresight.h
->>>> +++ b/include/linux/coresight.h
->>>> @@ -61,6 +61,7 @@ enum coresight_dev_subtype_source {
->>>>       CORESIGHT_DEV_SUBTYPE_SOURCE_PROC,
->>>>       CORESIGHT_DEV_SUBTYPE_SOURCE_BUS,
->>>>       CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE,
->>>> +    CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY,
->>>
->>> super minor nit: I find the choice of name a bit odd.
->>> We could simply make it something like :
->>>
->>>     CORESIGHT_DEV_SUBTYPE_SOURCE_OTHERS:
->>>
->>> Suzuki
->> I will check and update.
->>>
->>>>   };
->>>>     enum coresight_dev_subtype_helper {
->>>
->>> _______________________________________________
->>> CoreSight mailing list -- coresight@lists.linaro.org
->>> To unsubscribe send an email to coresight-leave@lists.linaro.org
->> _______________________________________________
->> CoreSight mailing list -- coresight@lists.linaro.org
->> To unsubscribe send an email to coresight-leave@lists.linaro.org
-
+Best regards,
+Krzysztof

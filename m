@@ -2,131 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A084B53A96A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B8953A96D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353670AbiFAOww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
+        id S1351764AbiFAOzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353461AbiFAOwt (ORCPT
+        with ESMTP id S241149AbiFAOzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:52:49 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0EA3D1F8
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:52:48 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so6515223pju.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 07:52:48 -0700 (PDT)
+        Wed, 1 Jun 2022 10:55:40 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8F3674E6
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:55:39 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-d39f741ba0so2992985fac.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 07:55:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=f+l3Hk+6FFyk8vfmjX/U6HXz2Y13gVkjD8RbjyOHnBg=;
-        b=T5QqxGoUWNlBhCvVCWar98KbLBlFh2IAuojNaK8vvjKwgDeliiAt4f3t71WOdr8+Py
-         HHMOe73t4gfkGJiwHy+Hm70Yy7VauFSTuriqV7I5dLMxENsXS5NHU703r5zm8sGzuyvW
-         ERZjD24VHVXiLLmqN1EGXjLw6PBs9QKqmrdhw=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gCLIA0GHMP+fHAx0HQaAHDI5dyXjR0CAfhrBwLepBPA=;
+        b=TJVEE8jGHwkbEkPwlhCrEQz8ZVMyrOWNzrwTyarVu0HrPdBvwl0hoERVxWAFbPdzSK
+         bJIfNV040zcfrrjpKBOeyLHFoHv3DMTJhDTsxXpupSCszGYyQ/7NHf/yUALMklBGE+0/
+         ayLQW8qZxu+RveMIoRYyNZBQTVhhJiw0U+QzEYBhLPiC9vjyPebBXzGFoFR1N5F09bhF
+         rEiTZmLPgGw0sdUj/RcyzwHv2LB+0YKUo/BiGGi2YGAmYx7Q8wrDqKcKQVsUVOsjTenY
+         2iYUB96K/5v8wLMSdxVQ9L4PyjKfeIFs2COTzrbhyCf40RhMfGVrDkvkcriMJcGE7he7
+         //9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=f+l3Hk+6FFyk8vfmjX/U6HXz2Y13gVkjD8RbjyOHnBg=;
-        b=z3R55QwCoXbtn9BjP1Fs402nE5oyIyKLfEn7tCOr1Cr3zEBtc4OLQdld89S93NmU0o
-         VsV7jPLMquTTcQNcKLTe/OUHCuXHcbzXvYlqr1ESb3Ji/gWInuyL5EVENLPjqTLdK4Sq
-         DXBu15AhgiUquvQ1f6yR8Q+Ugnh07B12AIZWvzNc7T1lz+hCRyOy6PVvF26xlzpvMm9m
-         eiuQeehe33vd+1G4+9ZGO7joDdO6cYMAJNjoJv9Nyw11ExlkxDf6BgAIRf+IUwdRqBqQ
-         h+cZ+VLHYWttR9hqwH1N4odJYap2Tov+QvoBd3kDsE9yqSVFfvTNRg++tQHimyW/ck2B
-         L+GQ==
-X-Gm-Message-State: AOAM532E+U1NzUGFl2QqHGDXYtpsga7GXuTFo/EN0yMzXAR5JGpUWszi
-        Y7/AQfIx0pXeWwEzkjataaVXGQ==
-X-Google-Smtp-Source: ABdhPJzKbPPwilL4Mlo2lBLeWQY4KScURQiGlR+yz2oCKIOnCppVLjpaiJcEObTKUBj8vtB6Oz8esg==
-X-Received: by 2002:a17:902:d2c1:b0:165:d4cd:e118 with SMTP id n1-20020a170902d2c100b00165d4cde118mr125029plc.4.1654095168205;
-        Wed, 01 Jun 2022 07:52:48 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:ec3a:4b49:34bc:e5b4])
-        by smtp.gmail.com with ESMTPSA id u79-20020a627952000000b0051ba7515e0dsm1629431pfc.54.2022.06.01.07.52.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 07:52:47 -0700 (PDT)
-Date:   Wed, 1 Jun 2022 23:52:41 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [Linaro-mm-sig] Re: [PATCH] dma-fence: allow dma fence to have
- their own lock
-Message-ID: <Ypd9OSqMtGMVKYZ0@google.com>
-References: <20220530142232.2871634-1-senozhatsky@chromium.org>
- <7eee4274-bd69-df8d-9067-771366217804@amd.com>
- <YpWCvniLzJfcp684@google.com>
- <33aba213-b6ad-4a15-9272-c62f5dfb1fb7@gmail.com>
- <Ypd3Us3a93aLonqT@google.com>
- <a009c207-a5fa-af1e-b961-8083b48360bf@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gCLIA0GHMP+fHAx0HQaAHDI5dyXjR0CAfhrBwLepBPA=;
+        b=zoPJXzurWSNlPUiAR+yFo9oMmw5B7FCVLyCGZFNjvcZDSY6OR8rXsZ78WnwXbI+SIe
+         ORGVfPkdqNPux9zspkz1FFPBSRswqi/u1NRdCw6BE/yFFivClaSp20NvhWHkx+Te4rUQ
+         Skh5ZqoENIS9ZiSCvRwwySSxqfUCMfWqWYPesNEZZ6KC0d+IY1RPaeECJB3W5iR8o6yJ
+         0r4BCmPc/bmFJsACd71nGBjkbQAn+MoiNDlcGPcyZXG2zYpy9g0xmdHIhLYiU+cqxqRM
+         KB640YcXjQrZAIyUEFt/nD1ssJfib9mQf8pvFV0RH17qz6lzVZ4JwHBlAFxsUj6kVfUK
+         TLbg==
+X-Gm-Message-State: AOAM533ks5z3Z6fjxJd/er7w/tRayMGpnJeYIXzuQRa1AZqcXUWg9Zex
+        tnlurscvpKl7fhs8HZt3FjFkeS20d9q7CwfPUfc=
+X-Google-Smtp-Source: ABdhPJyN8wl9WYxOg8teVzGniYWLuSPtmHG+gVLKy1ll2nnIhUO67te72dw5fPtfUl5x6479YoilRtzYU2h8tdBoPEg=
+X-Received: by 2002:a05:6870:d683:b0:de:eaa2:3550 with SMTP id
+ z3-20020a056870d68300b000deeaa23550mr42477oap.253.1654095338886; Wed, 01 Jun
+ 2022 07:55:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a009c207-a5fa-af1e-b961-8083b48360bf@gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220527090039.pdrazo5e6mwgo3d3@lion.mk-sys.cz> <20220527124459.mfo4tjdsjohamsvy@lion.mk-sys.cz>
+In-Reply-To: <20220527124459.mfo4tjdsjohamsvy@lion.mk-sys.cz>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 1 Jun 2022 10:55:28 -0400
+Message-ID: <CADnq5_PHR3NMhMAWDLy3SGyzn4bHedWDerXVmaFANbooYhZE0w@mail.gmail.com>
+Subject: Re: (REGRESSION bisected) Re: amdgpu errors (VM fault / GPU fault
+ detected) with 5.19 merge window snapshots
+To:     Michal Kubecek <mkubecek@suse.cz>,
+        "Yang, Philip" <Philip.Yang@amd.com>
+Cc:     amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/06/01 16:38), Christian König wrote:
-> > > Well, you don't.
-> > > 
-> > > If you have a dynamic context structure you need to reference count that as
-> > > well. In other words every time you create a fence in your context you need
-> > > to increment the reference count and every time a fence is release you
-> > > decrement it.
-> > OK then fence release should be able to point back to its "context"
-> > structure. Either a "private" data in dma fence or we need to "embed"
-> > fence into another object (refcounted) that owns the lock and provide
-> > dma fence ops->release callback, which can container_of() to the object
-> > that dma fence is embedded into.
-> > 
-> > I think you are suggesting the latter. Thanks for clarifications.
-> 
-> Daniel might hurt me for this, but if you really only need a pointer to your
-> context then we could say that using a pointer value for the context field
-> is ok as well.
-> 
-> That should be fine as well as long as you can guarantee that it will be
-> unique during the lifetime of all it's fences.
+On Fri, May 27, 2022 at 8:58 AM Michal Kubecek <mkubecek@suse.cz> wrote:
+>
+> On Fri, May 27, 2022 at 11:00:39AM +0200, Michal Kubecek wrote:
+> > Hello,
+> >
+> > while testing 5.19 merge window snapshots (commits babf0bb978e3 and
+> > 7e284070abe5), I keep getting errors like below. I have not seen them
+> > with 5.18 final or older.
+> >
+> > ------------------------------------------------------------------------
+> > [  247.150333] gmc_v8_0_process_interrupt: 46 callbacks suppressed
+> > [  247.150336] amdgpu 0000:0c:00.0: amdgpu: GPU fault detected: 147 0x00020802 for process firefox pid 6101 thread firefox:cs0 pid 6116
+> > [  247.150339] amdgpu 0000:0c:00.0: amdgpu:   VM_CONTEXT1_PROTECTION_FAULT_ADDR   0x00107800
+> > [  247.150340] amdgpu 0000:0c:00.0: amdgpu:   VM_CONTEXT1_PROTECTION_FAULT_STATUS 0x0D008002
+> > [  247.150341] amdgpu 0000:0c:00.0: amdgpu: VM fault (0x02, vmid 6, pasid 32780) at page 1079296, write from 'TC2' (0x54433200) (8)
+> [...]
+> > [  249.925909] amdgpu 0000:0c:00.0: amdgpu: IH ring buffer overflow (0x000844C0, 0x00004A00, 0x000044D0)
+> > [  250.434986] [drm] Fence fallback timer expired on ring sdma0
+> > [  466.621568] gmc_v8_0_process_interrupt: 122 callbacks suppressed
+> [...]
+> > ------------------------------------------------------------------------
+> >
+> > There does not seem to be any apparent immediate problem with graphics
+> > but when running commit babf0bb978e3, there seemed to be a noticeable
+> > lag in some operations, e.g. when moving a window or repainting large
+> > part of the terminal window in konsole (no idea if it's related).
+> >
+> > My GPU is Radeon Pro WX 2100 (1002:6995). What other information should
+> > I collect to help debugging the issue?
+>
+> Bisected to commit 5255e146c99a ("drm/amdgpu: rework TLB flushing").
+> There seem to be later commits depending on it so I did not test
+> a revert on top of current mainline.
+>
 
-I think we can guarantee that. Object that creates fence is kmalloc-ed and
-it sticks around until dma_fence_release() calls ops->release() and kfree-s
-it. We *probably* can even do something like it now, by re-purposing dma_fence
-context member:
+@Christian Koenig, @Yang, Philip Any ideas?  I think there were some
+fix ups for this.  Maybe those just haven't hit the tree yet?
 
-        dma_fence_init(obj->fence,
-                       &fence_ops,
-                       &obj->fence_lock,
-                       (u64)obj,                             <<   :/
-                       atomic64_inc_return(&obj->seqno));
+Alex
 
-I'd certainly refrain from being creative here and doing things that
-are not documented/common. DMA fence embedding should work for us.
 
-> > The limiting factor of this approach is that now our ops->release() is
-> > under the same "pressure" as dma_fence_put()->dma_fence_release() are.
-> > dma_fence_put() and dma_fence_release() can be called from any context,
-> > as far as I understand, e.g. IRQ, however our normal object ->release
-> > can schedule, we do things like synchronize_rcu() and so on. Nothing is
-> > impossible, just saying that even this approach is not 100% perfect and
-> > may need additional workarounds.
-> 
-> Well just use a work item for release.
-
-Yup, that's the plan.
+> I should also mention that most commits tested as "bad" during the
+> bisect did behave much worse than current mainline (errors starting as
+> early as with sddm, visibly damaged screen content, sometimes even
+> crashes). But all of them issued messages similar to those above into
+> kernel log.
+>
+> Michal Kubecek

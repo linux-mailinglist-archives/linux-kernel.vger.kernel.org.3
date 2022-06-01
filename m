@@ -2,98 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D54853AD0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 20:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0646253AD15
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 20:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbiFASvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 14:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
+        id S231681AbiFASxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 14:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiFASv2 (ORCPT
+        with ESMTP id S229497AbiFASw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 14:51:28 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7351B13275E;
-        Wed,  1 Jun 2022 11:51:27 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id h188so3830015oia.2;
-        Wed, 01 Jun 2022 11:51:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=M2ZNwqKjItGDpeZxDzTcGrjLej9RBlHgjiNO+wPf9u0=;
-        b=15yKPCx6b/81D4UyxkRv3vXyFI/CDsU7luQH9HUH7uY8b6i3ubb7nbbanWcAftcyGL
-         BTCMhXvvl5g5eBKRkDIZu7T3IpErw0rtEi4C3VthVt8TDIMNceTzuDTtZ+epi8B42dy5
-         xeHV0ZSoiF4iXFdrMj6G6MSAmPVut/5luy3+7x49kkmbFdY4kPc4jdMXZhVcc4j8FM1r
-         n7Azx9GkRV2lRFnHyadS2++In7/KOug/G32p973lNYQgZRBy0MlsT5LLvEjTGe3AXI4B
-         SykESyD2ilk80WzqrhKgsS9L9B6i7u+aCj3QeZXaOlZGxbiJgnNkOwxCGJgijpvVpOR8
-         1QDQ==
-X-Gm-Message-State: AOAM532FcRo4gWwLx6yqm7SrI8wjQhgI+lwfptZFPlgXbEy9xkZxObam
-        +QhBOdvYODvNzpkoKpVYOg==
-X-Google-Smtp-Source: ABdhPJwQFmyslgS5FHA+5KgsaoiseVIbZoReYgt/VB1UM4o0OIKiCyq+xA7b97+mzLJmmb3w5CRzLw==
-X-Received: by 2002:a05:6808:10d4:b0:32b:1230:5cbd with SMTP id s20-20020a05680810d400b0032b12305cbdmr15489565ois.70.1654109486200;
-        Wed, 01 Jun 2022 11:51:26 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id lv21-20020a056871439500b000f28a948dd2sm981576oab.21.2022.06.01.11.51.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 11:51:25 -0700 (PDT)
-Received: (nullmailer pid 215762 invoked by uid 1000);
-        Wed, 01 Jun 2022 18:51:25 -0000
-Date:   Wed, 1 Jun 2022 13:51:25 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     agross@kernel.org, devicetree@vger.kernel.org,
-        mturquette@baylibre.com, jonathan@marek.ca,
-        linux-arm-msm@vger.kernel.org, krzk+dt@kernel.org,
-        linux-clk@vger.kernel.org, sboyd@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        robh+dt@kernel.org, bjorn.andersson@linaro.org
-Subject: Re: [PATCH v4 5/6] dt-bindings: clock: Add Qcom SM8350 DISPCC
- bindings
-Message-ID: <20220601185125.GA215573-robh@kernel.org>
-References: <20220601124250.60968-1-robert.foss@linaro.org>
- <20220601124250.60968-6-robert.foss@linaro.org>
+        Wed, 1 Jun 2022 14:52:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D03DB1455AF
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 11:52:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654109574;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=23W9sVLSI1R9gyjHi/xhjrSHqXfJ+ljK3ctft/U12GA=;
+        b=b1SlC9hJytQitRSVp0Y0rwnEmjpL5K4aedbhK1EupISGA+9LzxhGs/XD8MRtW8zfMGRx0w
+        eJ2COMJi2SCQWULd3wDjE42OK2B9LK0XikWa81EKlHu8Beg5bOvqBa63/2GNkIy/P8VDHb
+        yIMbMypCIWhb7v2A7E5zSNjCDnftr28=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-643-SB65AArwOOGGFynUaqRX-g-1; Wed, 01 Jun 2022 14:52:51 -0400
+X-MC-Unique: SB65AArwOOGGFynUaqRX-g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C53E185A79C;
+        Wed,  1 Jun 2022 18:52:51 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 098DE40CF8EB;
+        Wed,  1 Jun 2022 18:52:51 +0000 (UTC)
+Message-ID: <bca31669-7107-ebe4-7fbf-2449940a5cc8@redhat.com>
+Date:   Wed, 1 Jun 2022 14:52:50 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220601124250.60968-6-robert.foss@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 2/2] blk-cgroup: Optimize blkcg_rstat_flush()
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>
+References: <20220601165324.60892-1-longman@redhat.com>
+ <20220601165324.60892-2-longman@redhat.com>
+ <YpemVpvaPomwH7mt@slm.duckdns.org>
+ <ca091a5c-4ae1-e973-403e-4086d4527102@redhat.com>
+ <YpexWFptr/l2Y0rU@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YpexWFptr/l2Y0rU@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 01 Jun 2022 14:42:49 +0200, Robert Foss wrote:
-> Add sm8350 DISPCC bindings, while these bindings are similar
-> to the sm8x50 bindings, the way clocks are represented has changed
-> in ABI incompatible ways.
-> 
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> ---
-> 
-> hanges since v2
->  - Add my SoB - Bjorn
-> 
-> Changes since v3
->  - Separate from qcom,dispcc-sm8x50
->  - Remove clock-names
->  - Make example sm8350 based
->  - Changed author to me due to size of changes
-> 
-> 
->  .../bindings/clock/qcom,dispcc-sm8350.yaml    | 104 ++++++++++++++++++
->  .../bindings/clock/qcom,dispcc-sm8x50.yaml    |   4 +-
->  .../dt-bindings/clock/qcom,dispcc-sm8350.h    |   1 +
->  3 files changed, 107 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,dispcc-sm8350.yaml
->  create mode 120000 include/dt-bindings/clock/qcom,dispcc-sm8350.h
-> 
+On 6/1/22 14:35, Tejun Heo wrote:
+> Hello,
+>
+> On Wed, Jun 01, 2022 at 02:15:46PM -0400, Waiman Long wrote:
+>> It was mentioned in the commit log, but I will add a comment to repeat that.
+>> It is because lnode.next is used as a flag to indicate its presence in the
+>> lockless list. By default, the first one that go into the lockless list will
+>> have a NULL value in its next pointer. So I have to put a sentinel node that
+>> to make sure that the next pointer is always non-NULL.
+> Oh yeah, I noticed that in the commit log, but I think it really warrants an
+> inline comment.
+>
+>>>> + * The retrieved blkg_iostat_set is immediately marked as not in the
+>>>> + * lockless list by clearing its node->next pointer. It could be put
+>>>> + * back into the list by a parallel update before the iostat's are
+>>>> + * finally flushed. So being in the list doesn't always mean it has new
+>>>> + * iostat's to be flushed.
+>>>> + */
+>>> Isn't the above true for any sort of mechanism which tracking pending state?
+>>> You gotta clear the pending state before consuming so that you don't miss
+>>> the events which happen while data is being consumed.
+>> That is true. I was about thinking what race conditions can happen with
+>> these changes. The above comment is for the race that can happen which is
+>> benign. I am remove it if you think it is necessary.
+> I don't have too strong an opinion. It just felt a bit disproportionate for
+> it to be sticking out like that. Maybe toning it down a little bit would
+> help?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Will do.
+
+
+>>>> +	/*
+>>>> +	 * No RCU protection is needed as it is assumed that blkg_iostat_set's
+>>>> +	 * in the percpu lockless list won't go away until the flush is done.
+>>>> +	 */
+>>> Can you please elaborate on why this is safe?
+>> You are right that the comment is probably not quite right. I will put the
+>> rcu_read_lock/unlock() back in. However, we don't have a rcu iterator for
+>> the lockless list. On the other hand, blkcg_rstat_flush() is now called with
+>> irq disabled. So rcu_read_lock() is not technically needed.
+> Maybe we just need an rcu_read_lock_held() - does that cover irq being
+> disabled? I'm not sure what the rules are since the different rcu variants
+> got merged. Anyways, the right thing to do would be asserting and
+> documenting that the section is RCU protected.
+
+I will leave rcu_read_lock() in for now. We can worry about the proper 
+way to remove it or document it later on.
+
+
+>
+> As for llist not having rcu iterators. The llists aren't RCU protected or
+> assigned. What's RCU protected is the lifetime of the elements. That said,
+> we'd need an rmb after fetching llist_head to guarantee that the flusher
+> sees all the updates which took place before the node got added to the
+> llist, right?
+
+Fetching of llist head is done by an atomic xchg(). So it has all the 
+necessary barrier.
+
+Iterating the nodes of the llist and clearing them are not atomic. That 
+is the reason I put a comment previously about a possible race. However 
+that race is benign. Making it atomic does not eliminate the race as the 
+iostat update data themselves are synchronized separately with sequence 
+lock.
+
+> Can you also add an explanation on how the pending llist is synchronized
+> against blkg destructions?
+
+Sure. I will need to think about that and put a proper comment there.
+
+Cheers,
+Longman
+

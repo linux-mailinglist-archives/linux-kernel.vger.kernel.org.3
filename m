@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B409B539D47
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139B4539D51
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349891AbiFAGd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 02:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
+        id S1349931AbiFAGjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 02:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349887AbiFAGd0 (ORCPT
+        with ESMTP id S1349858AbiFAGjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 02:33:26 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4693123B
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 23:33:25 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id u23so1123347lfc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 23:33:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P0Xr/Fd9GfBK15ltB/N2CHCzT7+ewsuClkQQSJZqHtc=;
-        b=aQ1r6OuBcEQh/Zfkd0fVtZoce3M2+shUJb2nsWPjY2p+p4SjwgYlan9v2jwSgDXlRU
-         zwW1nZ880mcEhC7zy80rZwexRn2UjfCBjnoIxN65fJWUL7RfU4Q2Q3mBCkXRgxlR7T91
-         U6l8RQZkED6r/nMMFPMpyiu6VtO77u/Jp+pSPiH7sFgIaFiP82hL9RKABNJ8R7FUhRYA
-         YuBSKrQ4NzMXm2OvIId2q2j4L/yZvwnJBd4w11cBm6hzhcI9OMpMOIWgHxIW66wEbrf/
-         6E6EqkOFNgnAxLhfq76YXAF4ZXYV/NqyallAKDLbxzc12ugTi0vMmsIpwLHacowHzNkT
-         Rr2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P0Xr/Fd9GfBK15ltB/N2CHCzT7+ewsuClkQQSJZqHtc=;
-        b=4B73lovm6rhSGgLKkeKfbJWkZYkIAjlf3EeXIjeP/s4sgaS43hJw/sN2Tg+OEcRe3+
-         6MOqb/R6UfSLyh8Fp9jL8w47JdOyQeKUOS3OcE1laisfN4YDa+N7+SGZTpddXhxQJAx8
-         ESqvv+l/DeDsy4w3WkknqT3ASRrOyXbhrf85w8etkpvqmVNbelwpcXAMDFEXxYZ0MUv9
-         ArHuaHH63dOg51mCZ12vsvGPbFJhO6hf0XrWh/f9QtDKZUQq8/S/vdK78JHo5pV2r2I0
-         sxvCp6N4tiOGrnB3oYaiB4cutDye6PgiXv7GQ6iC9RoE8AI8cAs0CuIh9smH5sZ+Ku+h
-         Y9Aw==
-X-Gm-Message-State: AOAM531reYACGajuIqKFIlAZXy3i2F1yebQ1Nj2IJLFmi1yGybxa4mFq
-        TtF22p9W75Sd/A7t5JEXXRhCu16xYHsFcwIcnon+sxB3
-X-Google-Smtp-Source: ABdhPJzFeAJJI/rILPyINLxIrgVGJYG5vV52I5qMzSpCUwxQ8GE2rhI9aguft4Ds5Q9rWmSIy6gfEsxhxnwBDeUGk30=
-X-Received: by 2002:ac2:4c22:0:b0:478:7c35:a023 with SMTP id
- u2-20020ac24c22000000b004787c35a023mr32234471lfq.484.1654065203454; Tue, 31
- May 2022 23:33:23 -0700 (PDT)
+        Wed, 1 Jun 2022 02:39:20 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB76941AE
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 23:39:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654065559; x=1685601559;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NTe1lvhDhuLR2ENfcohwPccU6QLRUxsLG1PgvvGRWbs=;
+  b=IwmCQ5Q5vQteVwbEnQ55J3fbAwsk7iu0oMcwiEIE8uM5i1V9pjLo0Zec
+   9kZ8t0hSxIybPYzA7+2Q5wZhWYNI52mqA1ypPQ39hYq7J9WTwsDwAXAnC
+   fQaivHW2E3cmKFvIeSgYCkhAtk+e66FJv6c3H54xATzEXczrOLmt/23GA
+   UmAOn2y3PjnsC6I7jcdv8MqfJSNnFrKO3dWKsdAT4GNxSK6MAAS0P5Hd6
+   +IgKo5xZpAulPzmqjl13Jt75KmwOF4Nv5PbUiRjFygrQ2ObBbp8EjrgTj
+   nfXAns01wSTnsAGhKWAyak4/hWNmnS+IAmWO+0zKy5wVUn79IMfMg89RV
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="361863234"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="361863234"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 23:39:19 -0700
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="706925259"
+Received: from hej1-mobl.ccr.corp.intel.com (HELO [10.255.28.123]) ([10.255.28.123])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 23:39:16 -0700
+Message-ID: <dafc1451-d3f9-150a-2d95-12bc4616f3bc@linux.intel.com>
+Date:   Wed, 1 Jun 2022 14:39:14 +0800
 MIME-Version: 1.0
-References: <CAHhAz+gUpxzukjde1rMqRcPre8yMROBd3yQTCm89wMGb2zWriw@mail.gmail.com>
- <d136df0c-34fc-d21c-1353-fa82deb62975@infradead.org>
-In-Reply-To: <d136df0c-34fc-d21c-1353-fa82deb62975@infradead.org>
-From:   Muni Sekhar <munisekharrms@gmail.com>
-Date:   Wed, 1 Jun 2022 12:03:11 +0530
-Message-ID: <CAHhAz+iFHqaDZRZr9K80o9NY4SC+t2-BnngAnXxrhkPzw+FyWg@mail.gmail.com>
-Subject: Re: Kconfig rules (depends, imply)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     kernelnewbies <kernelnewbies@kernelnewbies.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Will Deacon <will@kernel.org>, Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/12] iommu/vt-d: Use iommu_get_domain_for_dev() in
+ debugfs
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>
+References: <20220530121412.GX1343366@nvidia.com>
+ <42623a73-c288-1c0d-7021-93caff4ffb6f@linux.intel.com>
+ <20220531131052.GD1343366@nvidia.com>
+ <60318d83-e22f-f922-436f-6c31bce24d59@linux.intel.com>
+ <20220531145301.GE1343366@nvidia.com>
+ <a7d6d830-cb06-e0d7-0688-028f9af900e5@arm.com>
+ <20220531151332.GF1343366@nvidia.com>
+ <b66a2e3b-9adc-5150-fe00-d68b141b1c28@arm.com>
+ <20220531162152.GH1343366@nvidia.com>
+ <10f16c13-c50d-892c-a20d-979b2135c953@arm.com>
+ <20220531185110.GJ1343366@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220531185110.GJ1343366@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for the clarification.
+On 2022/6/1 02:51, Jason Gunthorpe wrote:
+>> Oh, I've spent the last couple of weeks hacking up horrible things
+>> manipulating entries in init_mm, and never realised that that was actually
+>> the special case. Oh well, live and learn.
+> The init_mm is sort of different, it doesn't have zap in quite the
+> same way, for example. I was talking about the typical process mm.
+> 
+> Anyhow, the right solution is to use RCU as I described before, Baolu
+> do you want to try?
 
-On Wed, Jun 1, 2022 at 1:55 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Hi--
->
-> On 5/31/22 05:14, Muni Sekhar wrote:
-> > Hi all,
-> >
-> > menuconfig SOUNDWIRE
-> >         tristate "SoundWire support"
-> >         depends on ACPI || OF
-> >
-> > "depends on ACPI || OF" mean, SOUNDWIRE depends on both ACPI and OF modules?
-> >
->
-> "||" is logical OR, so SOUNDWIRE depends on either ACPI or OF (or both
-> of them can be enabled).
->
->
-> >
-> > config SOUNDWIRE_QCOM
-> >         tristate "Qualcomm SoundWire Master driver"
-> >         imply SLIMBUS
-> >
-> > What does "imply SLIMBUS" mean?
->
-> See Documentation/kbuild/kconfig-language.rst:
->
-> - weak reverse dependencies: "imply" <symbol> ["if" <expr>]
->
->   This is similar to "select" as it enforces a lower limit on another
->   symbol except that the "implied" symbol's value may still be set to n
->   from a direct dependency or with a visible prompt.
->
-> So (in your example) SLIMBUS is desired but not required.
-> That means that the code that is built for SOUNDWIRE_QCOM
-> probably needs to use IS_REACHABLE(CONFIG_SLIMBUS) to
-> see if that SLIMBUS code is available at build time.
->
-> HTH.
-> --
-> ~Randy
+Yes, of course.
 
+Your discussion with Robin gave me a lot of inspiration. Very
+appreciated! I want to use a separate patch to solve this debugfs
+problem, because it has exceeded the original intention of this series.
 
-
--- 
-Thanks,
-Sekhar
+Best regards,
+baolu

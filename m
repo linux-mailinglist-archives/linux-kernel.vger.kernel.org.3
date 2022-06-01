@@ -2,129 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574EB53AA82
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1F553AA88
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355872AbiFAPxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 11:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
+        id S1355895AbiFAPyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 11:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353707AbiFAPxm (ORCPT
+        with ESMTP id S1347876AbiFAPyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 11:53:42 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEDA46B1F
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 08:53:41 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251FIpl4014497;
-        Wed, 1 Jun 2022 15:53:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=jsLDmPDsk+qdaGoUTUSLT3GvdwIT5bYRmXivIPthmfA=;
- b=S+X8s+PVYXe5WE+Ub6RPD/h9q2NQwpdBephA4PX3cZ9OQji4You8BNRDxdId7G8lAInr
- HFguuzonLTxvq7ydIHBpmtl0e1y/1ONFc5wrrg+3oSDucKcpdJXTO6xpZDQOzUljI/Pq
- kcjZuLp9UntgLL0hfYMvs0NV4keR83zo64yZQG9nK2D7SW/ikz9qY4Z5oaJWp0TYg8Pc
- pYBUgSGUu7B2brEuCWueDFBfo/JO9clXOQere1XPw5N4K6xNNhQlrsCbU0OBYFIy2V8I
- 9kA4dXN9LuzevfokMjIuUsPsNTMtopj1iNhdbFHzW3manyjvXIEq8Fs6X4taDq5lxrXg qA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gean2rq35-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jun 2022 15:53:24 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 251FKaEU022434;
-        Wed, 1 Jun 2022 15:53:24 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gean2rq2a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jun 2022 15:53:24 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 251Fdi2n025567;
-        Wed, 1 Jun 2022 15:53:21 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3gbc97ve7n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jun 2022 15:53:21 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 251FrIto14877074
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Jun 2022 15:53:18 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3CE9A4203F;
-        Wed,  1 Jun 2022 15:53:18 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CB80542041;
-        Wed,  1 Jun 2022 15:53:17 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.145.172.57])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Jun 2022 15:53:17 +0000 (GMT)
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-To:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        nathanl@linux.ibm.com, haren@linux.vnet.ibm.com, npiggin@gmail.com
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] powerpc/mobility: disabling hard lockup watchdog during LPM
-Date:   Wed,  1 Jun 2022 17:53:15 +0200
-Message-Id: <20220601155315.35109-3-ldufour@linux.ibm.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220601155315.35109-1-ldufour@linux.ibm.com>
-References: <20220601155315.35109-1-ldufour@linux.ibm.com>
+        Wed, 1 Jun 2022 11:54:17 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3006F4D62A
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 08:54:16 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id m26so2519617ljb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 08:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=DfuNNrg3LnuPaFBzeGNj9xFXiRXwcq80wlotU2s1MKk=;
+        b=iKOGLIYIBkSMiqOKetuFOM02OtNPYLzBGX3GhsuJKyqnt+TAQ592s0jUCEurn/GS/b
+         DJ831dJJqkdykzYk2NH5yjdMpFToLyo7HsR4lO7uJJVEuOHOnK7Jcc5f27MI8Hu1U5Sk
+         zGVVQI3hPl7gykXn/0UF0jk73188v+bwKpMTnIOVVKjufwkdfmzMhFAsvnjk8rZU4AhC
+         c+f2b6fjf/B/kLPQbiAr5ah0tsncajXqgafcYJ54k70I3YRfkFMK1d8EqDmWkIgFnaxk
+         CaGau2r1Sd+ehjqU583+5QafYI5FxI/uukYsGh6kSE8YbziZBT94Oa538LuYVW18oQvo
+         65ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=DfuNNrg3LnuPaFBzeGNj9xFXiRXwcq80wlotU2s1MKk=;
+        b=1JDLCMA4gkaLbhhQ452XQA/rXovAXj7bE8NmJR98OP0ug8mZiK9VzSirmDdtUpB6n0
+         fKQmDlNfs28ErYBzZc4k0FULHD7M/DXKOqGjAlmjJguUIjKiDcj5bXBSPnJjbvJjmtHS
+         wv3X9GFNxzMxiHwdyyIvg47IPPZSuDnfoBSR+2CU0n3Z12paqemGRjACCM0AewP3Z2fk
+         KfqiCIOf8ZOAntyJeBecYQgSkRW2sk8DGBgtMR88Uoj6P2W/whF4+btBN9uIhz4F/rPo
+         poUrE+gUKljeaZaSKSZJ+ZYcmyhOH0PP5VAy37Qh6bzOqIkiIhE0ryWFmeDE0QIJIMsd
+         iYTQ==
+X-Gm-Message-State: AOAM533dXCbzs3EIw5KdGHfpfp4HmCzkxKMlYtk+E8jMvWKM68F7XFkR
+        yzL2C0HtX5aVB0hkLBaOBN0H5eG+sK61IR4xkg==
+X-Google-Smtp-Source: ABdhPJxzb2DihUcOu8ENYFa39rOJmvMntGdpR2fwpsBt8Q9rtTxNXGLaVujOiH/2JIo99jv1mofLS3y0hpugin8oVeQ=
+X-Received: by 2002:a2e:a796:0:b0:255:485d:49b with SMTP id
+ c22-20020a2ea796000000b00255485d049bmr12783247ljf.215.1654098854268; Wed, 01
+ Jun 2022 08:54:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xep8JDT63SigspQwgRFfKLLYdkYHtMg3
-X-Proofpoint-GUID: QO-v4BNXcXW_gatijIjXKflVaEcBSWWh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-01_05,2022-06-01_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=764
- impostorscore=0 adultscore=0 priorityscore=1501 spamscore=0 malwarescore=0
- phishscore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206010072
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6520:4410:b0:1e5:1864:63b0 with HTTP; Wed, 1 Jun 2022
+ 08:54:13 -0700 (PDT)
+From:   RHONDA MILLLER <mahoneypatricia55@gmail.com>
+Date:   Wed, 1 Jun 2022 17:54:13 +0200
+Message-ID: <CAMj9NgCrY52x+fCXJJ5w3af=OHwuoRyZER6UHV0ndQrWZLBvgw@mail.gmail.com>
+Subject: =?UTF-8?Q?Your_reward_Covid=2D19_stimulation_compensation_of_=E2=82=AC?=
+        =?UTF-8?Q?1=2E500=2C000=2E00=2E?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.2 required=5.0 tests=ADVANCE_FEE_2_NEW_FORM,
+        BAYES_80,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        DKIM_VALID_EF,FILL_THIS_FORM,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_LOAN,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Disabling the Hard Lockup Watchdog until the memory transfer is complete.
+ Attention  Beneficiary:
 
-This avoids hard lockup seen while the memory is still in progress when the
-system is heavily loaded and a lot of pages are still not transferred on
-the arrival side.
+We hereby inform you that the UN Compensation Committee has decided to
+compensate you. You have been selected to receive the UN Covid-19
+Incentive Compensation Package worth =E2=82=AC1.500,000.00 in the ATM VISA
+CARD.
 
-Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
----
- arch/powerpc/platforms/pseries/mobility.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+The selection process was performed using a computerized United
+Nations (UN)email selection system from a database of more than
+79,980,000 e-mail addresses from all continents of the world from
+which your e-mail address was selected. Therefore, we recommend that
+you contact our grant using the contact information below to receive
+your Covid-19 Incentive Package worth =E2=82=AC1.500,000.00.
 
-diff --git a/arch/powerpc/platforms/pseries/mobility.c b/arch/powerpc/platforms/pseries/mobility.c
-index 55612a1b07d6..061d4faefefb 100644
---- a/arch/powerpc/platforms/pseries/mobility.c
-+++ b/arch/powerpc/platforms/pseries/mobility.c
-@@ -701,6 +701,9 @@ static int pseries_migrate_partition(u64 handle)
- 
- 	vas_migration_handler(VAS_SUSPEND);
- 
-+	pr_debug("Disabling the NMI watchdog\n");
-+	watchdog_nmi_stop();
-+
- 	ret = pseries_suspend(handle);
- 	if (ret == 0) {
- 		post_mobility_fixup();
-@@ -708,6 +711,9 @@ static int pseries_migrate_partition(u64 handle)
- 	} else
- 		pseries_cancel_migration(handle, ret);
- 
-+	pr_debug("Enabling the NMI watchdog again\n");
-+	watchdog_nmi_start();
-+
- 	vas_migration_handler(VAS_RESUME);
- 
- 	return ret;
--- 
-2.36.1
+Contact person: Mrs.Rhonda Miller
+EMAIL: (ronmiller1@indamail.hu)
+Be sure to include your details below as required:
 
+1. Your full name:
+2. Your address:
+3. Your phone:
+4. Your country / occupation:
+
+Thanks
+Mrs. Belinda Hart
+Director of the Center for Disease Control and Prevention

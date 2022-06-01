@@ -2,74 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D03853AF98
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1FC53AEED
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbiFAVxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
+        id S232040AbiFAV5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbiFAVxI (ORCPT
+        with ESMTP id S232026AbiFAV5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:53:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204E2DF34;
-        Wed,  1 Jun 2022 14:53:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 1 Jun 2022 17:57:18 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E521F263F;
+        Wed,  1 Jun 2022 14:57:15 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4DD2B81CF2;
-        Wed,  1 Jun 2022 21:53:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2B5CCC3411F;
-        Wed,  1 Jun 2022 21:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654120384;
-        bh=fy2k+9SNmeFa7RMilH9Quvxcu/tBFoqghx87e4ljg5k=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=WYuBsXCQLhN8OfYqrK3LtMdNalrjb8LG/OmmH/DC3fGbMJlaCzv05Fws9rD1JQIJs
-         WcwDT7THmhQnFANbMcqjh8NgpNUl9OgOlcaEtKVdDy26uMoVtHT1fgHarr8rmW5PgU
-         gXXrE97LSKqdbBLkrxhU16WNUJl0fE8Wt12akYsHHKHtO5VlNUw9nPtWRTWPgk0gGk
-         b00sFjwSHQfgcca36kiUik+rKln2bRCRqcEbXwklM4ciIiScxCGr92hxWEa3aeqFx8
-         sHxTlbKKFtZfUMYB16VRjuywbthXOYB8jU1gF5hysEb2lnrFghYu9mMm5ebXBrh5cm
-         PoAYF065FWx4g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 13122F0394E;
-        Wed,  1 Jun 2022 21:53:04 +0000 (UTC)
-Subject: Re: [GIT PULL] RTC for 5.19
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Ypfdmml1GWU+gYzP@mail.local>
-References: <Ypfdmml1GWU+gYzP@mail.local>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Ypfdmml1GWU+gYzP@mail.local>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.19
-X-PR-Tracked-Commit-Id: f78e3d407a339ffdd2620140300f821ea41118f4
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 54eb8462f21fb170a05ad64620f0d8d0cf2b7fb5
-Message-Id: <165412038407.5556.8682390648447535620.pr-tracker-bot@kernel.org>
-Date:   Wed, 01 Jun 2022 21:53:04 +0000
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LD3071zltz4xD8;
+        Thu,  2 Jun 2022 07:57:11 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654120631;
+        bh=yvSCr6+mFfHoPs0BMYIjNhhHwb+zbDE6id+dGN/jzt4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sagrtn97riSgqBd8d/TMOFq26SJnMxboIi/+YmCbItktfpN/rca5W0KQQUiT2EbVa
+         hm3sVFG2xUYletebdKhcFyS3oX7OVpoXSTqF+JgEujse6VDRuBrcs4jg4kzhkD236T
+         CeiWV+ie96LOddX2mfwGmdrKLvpG5QzpOP6j6BHpR57t+uAWOn657aTvfX0vkEcsNs
+         5bRxmPZGmdxNuc/7C3sm3CvYxv5LMVrpZZ7cLZY5vfe/3x6Z6Tu+jL9pC6tlTq3rYO
+         ZWxxECtYAL/u2eKwvoiJrPrS4goZkj7fkJ8oLfn/KToX0iH74owYTQ5MQUo1kW/8Lt
+         A33UVQgnq2LXA==
+Date:   Thu, 2 Jun 2022 07:57:09 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Dillon Varone <dillon.varone@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the amdgpu tree
+Message-ID: <20220602075709.65484abe@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/qvRlcWE8f3OGIrdx6TsDbC6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 1 Jun 2022 23:43:54 +0200:
+--Sig_/qvRlcWE8f3OGIrdx6TsDbC6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.19
+Hi all,
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/54eb8462f21fb170a05ad64620f0d8d0cf2b7fb5
+Commit
 
-Thank you!
+  bd92bf3976c6 ("drm/amd/display: Ensure that DMCUB fw in use is loaded by =
+DC and not VBIOS")
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+is missing a Signed-off-by from its author.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qvRlcWE8f3OGIrdx6TsDbC6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKX4LUACgkQAVBC80lX
+0GyY/ggApQQ36pUu41eM/9FnYE/DXVZeT8ZOvlEstvxPlPNfqN7Mjv0yHZ6k6roC
+JLMjLcRCvFZCG7+X0UcZPBIRKNaZ7oC3mZVaEGMUZ8NbFUo/UiqnSxcPRab3P10r
+LXug2O7u0/FVgtS8kF3vhoFJK00qF5bQgKrlTG9DuQS3QZ95yodhMgPbH+gRQns8
+CAO78AsGLohJ0f8XY0b0RjPkSvgRvIiFKxC1cne/VxjkBHY7myiSMa5EbmOlYuzU
+XalkYPbavMdxZOpnwANKxoFAtXxoRU/65soorCUZeb7iXrLSRq9b/Ac0IE+rkQg6
+Xn/qRJN9YcUpNkWZYrDwbGTOqnJhSw==
+=3ew8
+-----END PGP SIGNATURE-----
+
+--Sig_/qvRlcWE8f3OGIrdx6TsDbC6--

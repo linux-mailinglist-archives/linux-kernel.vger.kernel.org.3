@@ -2,154 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3E8539BFF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 06:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD48539C09
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 06:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbiFAER4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 00:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S233499AbiFAESJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 00:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232968AbiFAERv (ORCPT
+        with ESMTP id S233073AbiFAER7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 00:17:51 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B460B57175;
-        Tue, 31 May 2022 21:17:48 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 187so821886pfu.9;
-        Tue, 31 May 2022 21:17:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=DQ+FCy1HGI3Ies4LEu7xbJ8vvBaBXxmKzVnykcfWgYc=;
-        b=cz3+YUGhugwCO8sy3yMoeG9UKTe6cXoNB5HsquXRcM1x8kO4l2SB2p5lA3nEn7WHWa
-         vR2BzibqnYCojzjoHn+4fh4xjPWlRVY+rwgWhDLd7ZnQmBsP69280m3iSRgGt+9jutJv
-         G9Llp2q7NwZL/JNUf2bMttPSk+928J91kB9mWKKvkUK57YIozSOy84Laj8iLBbTzixp1
-         ydZx6tkcdIeO49cwUT6epL0z5+oxO0+UFwZtffi9aras6j6qIvE9QEPVOm8OvxW2DxTY
-         ErKdgi+a1t90qzQlL5P5BwJ4oYrjaFEMectidaqmmDN1fWzDcCcbm3RViAZr7/yUncms
-         XUrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=DQ+FCy1HGI3Ies4LEu7xbJ8vvBaBXxmKzVnykcfWgYc=;
-        b=x2KOuCfqjJVcnVwhKAC3LD+plhAwWKThQWIhKduwoXFqRpUlbikUGOH7hZ8CD4TxId
-         jAnJSP7x1drFNanLWlQ6mW8SkBSQ2iSH4pKCPqF/P0PTSpgHO89Df40ML40RX3yCRRDT
-         rTqSxM7rFwmtdOPKIuB1h49Q17E5H48Ugo5NkxtWS1aSWx81/qjy0mpRfv73LAZZZjlQ
-         OWJImP6JCmVBe8GE7tHn/eV0oori401+Y8S9av+kJWYWQlUfq7kasfbZHyDrNpHwqRSG
-         gUWmg4ceX7kKWGPYVwN0Ad5BKHJbC1sJOR37DKDqZFLMr4Kl5bxv1owbNvXxPhx2lgy3
-         kJ2Q==
-X-Gm-Message-State: AOAM530VJjNouHolB9zWfHj7OJ5h8p5ye1zMLLkhr1ep9sUKo0J4v8VH
-        nUT7Eq1lN+8QrdPziByZs6w=
-X-Google-Smtp-Source: ABdhPJxuABQQ5nnDs9x6ucPra80+mc4j7aUfsFQDxn8DBnNB6maVVyCDmZ2Lamz55ogHhWOIjy1jkw==
-X-Received: by 2002:a63:a0f:0:b0:3fa:95b9:8c70 with SMTP id 15-20020a630a0f000000b003fa95b98c70mr36216628pgk.385.1654057068274;
-        Tue, 31 May 2022 21:17:48 -0700 (PDT)
-Received: from potin-quanta.dhcpserver.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id u11-20020a63d34b000000b003c14af505f6sm290749pgi.14.2022.05.31.21.17.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 21:17:47 -0700 (PDT)
-From:   Potin Lai <potin.lai.pt@gmail.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rayn Chen <rayn_chen@aspeedtech.com>
-Cc:     Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Potin Lai <potin.lai.pt@gmail.com>
-Subject: [PATCH v2 2/2] dt-bindings: aspeed-i2c: add properties for manual clock setting
-Date:   Wed,  1 Jun 2022 12:15:12 +0800
-Message-Id: <20220601041512.21484-3-potin.lai.pt@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220601041512.21484-1-potin.lai.pt@gmail.com>
-References: <20220601041512.21484-1-potin.lai.pt@gmail.com>
+        Wed, 1 Jun 2022 00:17:59 -0400
+Received: from mail.boiledscript.com (unknown [192.151.158.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D41359309;
+        Tue, 31 May 2022 21:17:55 -0700 (PDT)
+Received: from localhost (unknown [192.168.203.1])
+        by mail.boiledscript.com (Postfix) with ESMTP id 36CFE3009A2;
+        Wed,  1 Jun 2022 04:17:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ultrarare.space;
+        s=dkim; t=1654057071;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K4Kmtj4OM7QQbqFP23FXz1JgoSMHn9EgQTNFStFmzTQ=;
+        b=3+lXtOWmEVMDxXhPx43OVR3CR67u7gxONsjZja2XU6rsoDbKJA3a6H3nPInDQWXfdvENST
+        Q0R8clIORD598ZJMkYYO89Xm5K+OPRdWveIyZVyiPBEvodpNpRDFjae9ux0t+8JKz4q2NF
+        2tJt7cGl3v9iX4zyc2e1gnvvzBWNicMUhusagIgKi1goMIlSqTqRnKPG9vS6y/a925y4hC
+        lptdhghXNiiGe4SFy9FzqYKCcnga5n8pBM3G0tnZwhZaDsYp/HGGOg+mX6e62QR63vjZ2L
+        RZp3ObwIMEq+CPdoTmGU3BM0yNXM4XJwtjIg1zMNJ+5e7A8PatPeTvgG7k4a4A==
+Date:   Wed, 1 Jun 2022 12:17:37 +0800
+From:   Hilton Chain <hako@ultrarare.space>
+To:     "=?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?=" <jose.exposito89@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [PATCH v4] HID: apple: Properly handle function keys on non-Apple
+ keyboard
+Message-ID: <20220601121737.1226ffea@ultrarare.space>
+In-Reply-To: <20220601072651.242ce08a@ultrarare.space>
+References: <20220529180230.17e9a0f9@ultrarare.space>
+        <20220529182036.10226-1-jose.exposito89@gmail.com>
+        <20220530083752.1973a905@ultrarare.space>
+        <20220530061812.GA10391@elementary>
+        <20220531221102.7bd7da7d@ultrarare.space>
+        <20220531223330.3d63e2fe@ultrarare.space>
+        <20220531172053.GA10651@elementary>
+        <CAPnXWxG8gbe1arQK9kBtwM1Xcta+wreTN742kgtBBr1v0ewKug@mail.gmail.com>
+        <7f67ac07b8bd37d5817cd151674cc6b0@ultrarare.space>
+        <20220601072651.242ce08a@ultrarare.space>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Authentication-Results: mail.boiledscript.com;
+        none
+X-Spamd-Bar: /
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add following properties for manual tuning clock divisor and cycle of
-hign/low pulse witdh.
+This commit extends fa33382c7f74 ("HID: apple: Properly handle function
+keys on Keychron keyboards") by adding an array of known non-Apple
+keyboards' device names, and the function apple_is_non_apple_keyboard()
+to identify and create exception for them.
 
-* aspeed,i2c-manual-clk: Enable aspeed i2c clock manual setting
-* aspeed,i2c-base-clk-div: Base Clock divisor (tBaseClk)
-* aspeed,i2c-clk-high-cycle: Cycles of clock-high pulse (tClkHigh)
-* aspeed,i2c-clk-low-cycle: Cycles of clock-low pulse (tClkLow)
-
-Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+Signed-off-by: Hilton Chain <hako@ultrarare.space>
 ---
- .../devicetree/bindings/i2c/aspeed,i2c.yaml   | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-index ea643e6c3ef5..e2f67fe2aa0c 100644
---- a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-@@ -12,6 +12,28 @@ maintainers:
- allOf:
-   - $ref: /schemas/i2c/i2c-controller.yaml#
+V3 -> V4: Removed unnecessary strlen()
+
+ drivers/hid/hid-apple.c | 33 ++++++++++++++++++++++++++++-----
+ 1 file changed, 28 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+index 42a568902f49..4ec39c5e762a 100644
+--- a/drivers/hid/hid-apple.c
++++ b/drivers/hid/hid-apple.c
+@@ -36,7 +36,7 @@
+ #define APPLE_NUMLOCK_EMULATION	BIT(8)
+ #define APPLE_RDESC_BATTERY	BIT(9)
+ #define APPLE_BACKLIGHT_CTL	BIT(10)
+-#define APPLE_IS_KEYCHRON	BIT(11)
++#define APPLE_IS_NON_APPLE	BIT(11)
  
-+  - if:
-+      properties:
-+        compatible:
-+          const: st,stm32-uart
-+
-+    then:
-+      properties:
-+        aspeed,i2c-clk-high-cycle:
-+          maximum: 8
-+        aspeed,i2c-clk-low-cycle:
-+          maximum: 8
-+
-+  - if:
-+      required:
-+        - aspeed,i2c-manual-clk
-+
-+    then:
-+      required:
-+        - aspeed,i2c-base-clk-div
-+        - aspeed,i2c-clk-high-cycle
-+        - aspeed,i2c-clk-low-cycle
-+
- properties:
-   compatible:
-     enum:
-@@ -49,6 +71,28 @@ properties:
-     description:
-       states that there is another master active on this bus
+ #define APPLE_FLAG_FKEY		0x01
  
-+  aspeed,i2c-manual-clk:
-+    type: boolean
-+    description: enable manual clock setting
+@@ -65,6 +65,10 @@ MODULE_PARM_DESC(swap_fn_leftctrl, "Swap the Fn and left Control keys. "
+ 		"(For people who want to keep PC keyboard muscle memory. "
+ 		"[0] = as-is, Mac layout, 1 = swapped, PC layout)");
+ 
++struct apple_non_apple_keyboard {
++	char *name;
++};
 +
-+  aspeed,i2c-base-clk-div:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192,
-+           16384, 32768]
-+    description: base clock divisor
+ struct apple_sc_backlight {
+ 	struct led_classdev cdev;
+ 	struct hid_device *hdev;
+@@ -313,6 +317,25 @@ static const struct apple_key_translation swapped_fn_leftctrl_keys[] = {
+ 	{ }
+ };
+ 
++static const struct apple_non_apple_keyboard non_apple_keyboards[] = {
++	{ "SONiX USB DEVICE" },
++	{ "Keychron" },
++};
 +
-+  aspeed,i2c-clk-high-cycle:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 1
-+    maximum: 16
-+    description: cycles of master clock-high pulse width
++static bool apple_is_non_apple_keyboard(struct hid_device *hdev)
++{
++	int i;
 +
-+  aspeed,i2c-clk-low-cycle:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 1
-+    maximum: 16
-+    description: cycles of master clock-low pulse width
++	for (i = 0; i < ARRAY_SIZE(non_apple_keyboards); i++) {
++		char *non_apple = non_apple_keyboards[i].name;
 +
- required:
-   - reg
-   - compatible
++		if (strncmp(hdev->name, non_apple, strlen(non_apple)) == 0)
++			return true;
++	}
++
++	return false;
++}
++
+ static inline void apple_setup_key_translation(struct input_dev *input,
+ 		const struct apple_key_translation *table)
+ {
+@@ -363,7 +386,7 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
+ 	}
+ 
+ 	if (fnmode == 3) {
+-		real_fnmode = (asc->quirks & APPLE_IS_KEYCHRON) ? 2 : 1;
++		real_fnmode = (asc->quirks & APPLE_IS_NON_APPLE) ? 2 : 1;
+ 	} else {
+ 		real_fnmode = fnmode;
+ 	}
+@@ -669,9 +692,9 @@ static int apple_input_configured(struct hid_device *hdev,
+ 		asc->quirks &= ~APPLE_HAS_FN;
+ 	}
+ 
+-	if (strncmp(hdev->name, "Keychron", 8) == 0) {
+-		hid_info(hdev, "Keychron keyboard detected; function keys will default to fnmode=2 behavior\n");
+-		asc->quirks |= APPLE_IS_KEYCHRON;
++	if (apple_is_non_apple_keyboard(hdev)) {
++		hid_info(hdev, "Non-apple keyboard detected; function keys will default to fnmode=2 behavior\n");
++		asc->quirks |= APPLE_IS_NON_APPLE;
+ 	}
+ 
+ 	return 0;
+
+base-commit: 700170bf6b4d773e328fa54ebb70ba444007c702
 -- 
-2.17.1
+2.36.1
 

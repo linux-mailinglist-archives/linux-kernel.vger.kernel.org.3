@@ -2,143 +2,392 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0646253AD15
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 20:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC7453AD18
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 20:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbiFASxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 14:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S231512AbiFASyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 14:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiFASw6 (ORCPT
+        with ESMTP id S230179AbiFASyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 14:52:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D03DB1455AF
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 11:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654109574;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=23W9sVLSI1R9gyjHi/xhjrSHqXfJ+ljK3ctft/U12GA=;
-        b=b1SlC9hJytQitRSVp0Y0rwnEmjpL5K4aedbhK1EupISGA+9LzxhGs/XD8MRtW8zfMGRx0w
-        eJ2COMJi2SCQWULd3wDjE42OK2B9LK0XikWa81EKlHu8Beg5bOvqBa63/2GNkIy/P8VDHb
-        yIMbMypCIWhb7v2A7E5zSNjCDnftr28=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-643-SB65AArwOOGGFynUaqRX-g-1; Wed, 01 Jun 2022 14:52:51 -0400
-X-MC-Unique: SB65AArwOOGGFynUaqRX-g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C53E185A79C;
-        Wed,  1 Jun 2022 18:52:51 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 098DE40CF8EB;
-        Wed,  1 Jun 2022 18:52:51 +0000 (UTC)
-Message-ID: <bca31669-7107-ebe4-7fbf-2449940a5cc8@redhat.com>
-Date:   Wed, 1 Jun 2022 14:52:50 -0400
+        Wed, 1 Jun 2022 14:54:43 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336AF150B42;
+        Wed,  1 Jun 2022 11:54:38 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id b11so2113147qvv.4;
+        Wed, 01 Jun 2022 11:54:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jp79uiNkitewXJJEA0IFePL2JbWC/ni1AeZZA9Y4DhU=;
+        b=LI53a8ZqfqMxPwpL9LSjEQXpzzOaEPFL5w7NqSpfTkm9zdFTc5xxLqaDiK+yN8G4Pn
+         jVE7fINvcr9d8EiqFTkcQTopf8gLhI9fFhySbUoZqGW+VuVPOF8N7+wb/TIU+l3f7u9W
+         InOzcdIY87L0HkcuCCeAxEAhydun4wVshTuUV/xtH1HLITfY6vIT5mLZAaX4SNkk22VB
+         YzBVrMJPacfWBLdsC2a/1H766iCsCC3YtlaM0dPFWla/fWmzs48os0d0tC3ogGKO7mxv
+         SSAhFcqQi5muFZir+4urFPwDZCVfvi1Twzdb4bkMtEa6RRGerPURY1NkuEyLZHIMGGgv
+         /8Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jp79uiNkitewXJJEA0IFePL2JbWC/ni1AeZZA9Y4DhU=;
+        b=n4HuUTtfM7pQ4FbMh+w0x4m4Ic3Pul9XOE1EUIwzgl1x+d1p/rDR8EFzWh6Y++2sKt
+         JY9r5n40+45eD7Evy3MKYdsKe2kkWOllZ29QcO8gkiQjO59zHhUApvEJx4Ahg5cCTN2Q
+         NJpI6GHB2dFM+FIeDgsiL1lldjMmbuS/JqmoIY1UotVOgBu5aAZ7Y7SlEz0PnDRhZljb
+         rHkGkZ3aLKGC626R462zcpOYJwAlo9/RH1NQRvHmrHLvfa2LCqBmPNKndz/ztqMuc0Nr
+         wGEu/+G+WX9KfyYKM31dHY10ZGrSXJTXrEfin40dWVRMI5jdkphDPqsMfpMhUgM0tHfG
+         fBRQ==
+X-Gm-Message-State: AOAM533LI9nbojaGDsEcVAj0ZHAGIe6kP5lb7kqMF0lRlZ1X8Vh2BIuP
+        O2Pmm/LImkogJNzJF++XVWY=
+X-Google-Smtp-Source: ABdhPJyH2sCVLycxrwYa1KUpY40TTIUVsUJFikvu9o2P0WviiVEF3BIlVQUIrIHs+ZNeHp1+zJ9pNg==
+X-Received: by 2002:a05:6214:29cd:b0:464:4ffa:bfb8 with SMTP id gh13-20020a05621429cd00b004644ffabfb8mr14129486qvb.34.1654109677091;
+        Wed, 01 Jun 2022 11:54:37 -0700 (PDT)
+Received: from spruce.. (c-71-206-142-238.hsd1.va.comcast.net. [71.206.142.238])
+        by smtp.gmail.com with ESMTPSA id t194-20020a3746cb000000b006a371ba1fa5sm1755961qka.32.2022.06.01.11.54.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 11:54:36 -0700 (PDT)
+From:   Joe Simmons-Talbott <joetalbott@gmail.com>
+To:     jic23@kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Joe Simmons-Talbott <joetalbott@gmail.com>,
+        Joe Perches <joe@perches.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH v3] iio: Use octal permissions and DEVICE_ATTR_{RO,RW}.
+Date:   Wed,  1 Jun 2022 14:54:14 -0400
+Message-Id: <20220601185414.251571-1-joetalbott@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 2/2] blk-cgroup: Optimize blkcg_rstat_flush()
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ming Lei <ming.lei@redhat.com>
-References: <20220601165324.60892-1-longman@redhat.com>
- <20220601165324.60892-2-longman@redhat.com>
- <YpemVpvaPomwH7mt@slm.duckdns.org>
- <ca091a5c-4ae1-e973-403e-4086d4527102@redhat.com>
- <YpexWFptr/l2Y0rU@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YpexWFptr/l2Y0rU@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/22 14:35, Tejun Heo wrote:
-> Hello,
->
-> On Wed, Jun 01, 2022 at 02:15:46PM -0400, Waiman Long wrote:
->> It was mentioned in the commit log, but I will add a comment to repeat that.
->> It is because lnode.next is used as a flag to indicate its presence in the
->> lockless list. By default, the first one that go into the lockless list will
->> have a NULL value in its next pointer. So I have to put a sentinel node that
->> to make sure that the next pointer is always non-NULL.
-> Oh yeah, I noticed that in the commit log, but I think it really warrants an
-> inline comment.
->
->>>> + * The retrieved blkg_iostat_set is immediately marked as not in the
->>>> + * lockless list by clearing its node->next pointer. It could be put
->>>> + * back into the list by a parallel update before the iostat's are
->>>> + * finally flushed. So being in the list doesn't always mean it has new
->>>> + * iostat's to be flushed.
->>>> + */
->>> Isn't the above true for any sort of mechanism which tracking pending state?
->>> You gotta clear the pending state before consuming so that you don't miss
->>> the events which happen while data is being consumed.
->> That is true. I was about thinking what race conditions can happen with
->> these changes. The above comment is for the race that can happen which is
->> benign. I am remove it if you think it is necessary.
-> I don't have too strong an opinion. It just felt a bit disproportionate for
-> it to be sticking out like that. Maybe toning it down a little bit would
-> help?
+As reported by checkpatch.pl.  Where possible use DEVICE_ATTR_RO(),
+DEVICE_ATTR_RW(), and __ATTR_RO().  Change function names to be
+<var>_show() for read and <var>_store() for write.
 
-Will do.
+Suggested-by: Joe Perches <joe@perches.com>
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Joe Simmons-Talbott <joetalbott@gmail.com>
+---
 
+Changes in v3:
+  - Use __ATTR_RO() and add parens to DEVICE_ATTR_{RW,RO} in description
+    as suggested by Andy Shevchenko <andy.shevchenko@gmail.com>
 
->>>> +	/*
->>>> +	 * No RCU protection is needed as it is assumed that blkg_iostat_set's
->>>> +	 * in the percpu lockless list won't go away until the flush is done.
->>>> +	 */
->>> Can you please elaborate on why this is safe?
->> You are right that the comment is probably not quite right. I will put the
->> rcu_read_lock/unlock() back in. However, we don't have a rcu iterator for
->> the lockless list. On the other hand, blkcg_rstat_flush() is now called with
->> irq disabled. So rcu_read_lock() is not technically needed.
-> Maybe we just need an rcu_read_lock_held() - does that cover irq being
-> disabled? I'm not sure what the rules are since the different rcu variants
-> got merged. Anyways, the right thing to do would be asserting and
-> documenting that the section is RCU protected.
+Changes in v2:
+  - Use DEVICE_ATTR_RO() and DEVICE_ATTR_RW() rather than octal permissions
+	where applicable.  Rename functions to <var>-show() and
+	<var>-store().  Based on review by Joe Perches <joe@perches.com>
 
-I will leave rcu_read_lock() in for now. We can worry about the proper 
-way to remove it or document it later on.
+ drivers/iio/industrialio-buffer.c  | 64 ++++++++++++++----------------
+ drivers/iio/industrialio-core.c    | 35 ++++++++--------
+ drivers/iio/industrialio-trigger.c | 32 +++++++--------
+ 3 files changed, 61 insertions(+), 70 deletions(-)
 
-
->
-> As for llist not having rcu iterators. The llists aren't RCU protected or
-> assigned. What's RCU protected is the lifetime of the elements. That said,
-> we'd need an rmb after fetching llist_head to guarantee that the flusher
-> sees all the updates which took place before the node got added to the
-> llist, right?
-
-Fetching of llist head is done by an atomic xchg(). So it has all the 
-necessary barrier.
-
-Iterating the nodes of the llist and clearing them are not atomic. That 
-is the reason I put a comment previously about a possible race. However 
-that race is benign. Making it atomic does not eliminate the race as the 
-iostat update data themselves are synchronized separately with sequence 
-lock.
-
-> Can you also add an explanation on how the pending llist is synchronized
-> against blkg destructions?
-
-Sure. I will need to think about that and put a proper comment there.
-
-Cheers,
-Longman
+diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
+index b078eb2f3c9d..80121b1ac554 100644
+--- a/drivers/iio/industrialio-buffer.c
++++ b/drivers/iio/industrialio-buffer.c
+@@ -630,18 +630,18 @@ static int iio_buffer_add_channel_sysfs(struct iio_dev *indio_dev,
+ 	return ret;
+ }
+ 
+-static ssize_t iio_buffer_read_length(struct device *dev,
+-				      struct device_attribute *attr,
+-				      char *buf)
++static ssize_t length_show(struct device *dev,
++			   struct device_attribute *attr,
++			   char *buf)
+ {
+ 	struct iio_buffer *buffer = to_iio_dev_attr(attr)->buffer;
+ 
+ 	return sysfs_emit(buf, "%d\n", buffer->length);
+ }
+ 
+-static ssize_t iio_buffer_write_length(struct device *dev,
+-				       struct device_attribute *attr,
+-				       const char *buf, size_t len)
++static ssize_t length_store(struct device *dev,
++			    struct device_attribute *attr,
++			    const char *buf, size_t len)
+ {
+ 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+ 	struct iio_buffer *buffer = to_iio_dev_attr(attr)->buffer;
+@@ -672,9 +672,9 @@ static ssize_t iio_buffer_write_length(struct device *dev,
+ 	return ret ? ret : len;
+ }
+ 
+-static ssize_t iio_buffer_show_enable(struct device *dev,
+-				      struct device_attribute *attr,
+-				      char *buf)
++static ssize_t enable_show(struct device *dev,
++			   struct device_attribute *attr,
++			   char *buf)
+ {
+ 	struct iio_buffer *buffer = to_iio_dev_attr(attr)->buffer;
+ 
+@@ -1289,10 +1289,10 @@ void iio_disable_all_buffers(struct iio_dev *indio_dev)
+ 	iio_buffer_deactivate_all(indio_dev);
+ }
+ 
+-static ssize_t iio_buffer_store_enable(struct device *dev,
+-				       struct device_attribute *attr,
+-				       const char *buf,
+-				       size_t len)
++static ssize_t enable_store(struct device *dev,
++			    struct device_attribute *attr,
++			    const char *buf,
++			    size_t len)
+ {
+ 	int ret;
+ 	bool requested_state;
+@@ -1322,19 +1322,19 @@ static ssize_t iio_buffer_store_enable(struct device *dev,
+ 	return (ret < 0) ? ret : len;
+ }
+ 
+-static ssize_t iio_buffer_show_watermark(struct device *dev,
+-					 struct device_attribute *attr,
+-					 char *buf)
++static ssize_t watermark_show(struct device *dev,
++			      struct device_attribute *attr,
++			      char *buf)
+ {
+ 	struct iio_buffer *buffer = to_iio_dev_attr(attr)->buffer;
+ 
+ 	return sysfs_emit(buf, "%u\n", buffer->watermark);
+ }
+ 
+-static ssize_t iio_buffer_store_watermark(struct device *dev,
+-					  struct device_attribute *attr,
+-					  const char *buf,
+-					  size_t len)
++static ssize_t watermark_store(struct device *dev,
++			       struct device_attribute *attr,
++			       const char *buf,
++			       size_t len)
+ {
+ 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+ 	struct iio_buffer *buffer = to_iio_dev_attr(attr)->buffer;
+@@ -1366,9 +1366,9 @@ static ssize_t iio_buffer_store_watermark(struct device *dev,
+ 	return ret ? ret : len;
+ }
+ 
+-static ssize_t iio_dma_show_data_available(struct device *dev,
+-						struct device_attribute *attr,
+-						char *buf)
++static ssize_t data_available_show(struct device *dev,
++				   struct device_attribute *attr,
++				   char *buf)
+ {
+ 	struct iio_buffer *buffer = to_iio_dev_attr(attr)->buffer;
+ 
+@@ -1391,18 +1391,12 @@ static ssize_t direction_show(struct device *dev,
+ 	}
+ }
+ 
+-static DEVICE_ATTR(length, S_IRUGO | S_IWUSR, iio_buffer_read_length,
+-		   iio_buffer_write_length);
+-static struct device_attribute dev_attr_length_ro = __ATTR(length,
+-	S_IRUGO, iio_buffer_read_length, NULL);
+-static DEVICE_ATTR(enable, S_IRUGO | S_IWUSR,
+-		   iio_buffer_show_enable, iio_buffer_store_enable);
+-static DEVICE_ATTR(watermark, S_IRUGO | S_IWUSR,
+-		   iio_buffer_show_watermark, iio_buffer_store_watermark);
+-static struct device_attribute dev_attr_watermark_ro = __ATTR(watermark,
+-	S_IRUGO, iio_buffer_show_watermark, NULL);
+-static DEVICE_ATTR(data_available, S_IRUGO,
+-		iio_dma_show_data_available, NULL);
++static DEVICE_ATTR_RW(length);
++static struct device_attribute dev_attr_length_ro = __ATTR_RO(length);
++static DEVICE_ATTR_RW(enable);
++static DEVICE_ATTR_RW(watermark);
++static struct device_attribute dev_attr_watermark_ro = __ATTR_RO(watermark);
++static DEVICE_ATTR_RO(data_available);
+ static DEVICE_ATTR_RO(direction);
+ 
+ /*
+diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+index e1ed44dec2ab..bb1dd00b99ac 100644
+--- a/drivers/iio/industrialio-core.c
++++ b/drivers/iio/industrialio-core.c
+@@ -1114,12 +1114,12 @@ int __iio_device_attr_init(struct device_attribute *dev_attr,
+ 	dev_attr->attr.name = name;
+ 
+ 	if (readfunc) {
+-		dev_attr->attr.mode |= S_IRUGO;
++		dev_attr->attr.mode |= 0444;
+ 		dev_attr->show = readfunc;
+ 	}
+ 
+ 	if (writefunc) {
+-		dev_attr->attr.mode |= S_IWUSR;
++		dev_attr->attr.mode |= 0200;
+ 		dev_attr->store = writefunc;
+ 	}
+ 
+@@ -1393,29 +1393,29 @@ void iio_free_chan_devattr_list(struct list_head *attr_list)
+ 	}
+ }
+ 
+-static ssize_t iio_show_dev_name(struct device *dev,
+-				 struct device_attribute *attr,
+-				 char *buf)
++static ssize_t name_show(struct device *dev,
++			 struct device_attribute *attr,
++			 char *buf)
+ {
+ 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+ 	return sysfs_emit(buf, "%s\n", indio_dev->name);
+ }
+ 
+-static DEVICE_ATTR(name, S_IRUGO, iio_show_dev_name, NULL);
++static DEVICE_ATTR_RO(name);
+ 
+-static ssize_t iio_show_dev_label(struct device *dev,
+-				 struct device_attribute *attr,
+-				 char *buf)
++static ssize_t label_show(struct device *dev,
++			  struct device_attribute *attr,
++			  char *buf)
+ {
+ 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+ 	return sysfs_emit(buf, "%s\n", indio_dev->label);
+ }
+ 
+-static DEVICE_ATTR(label, S_IRUGO, iio_show_dev_label, NULL);
++static DEVICE_ATTR_RO(label);
+ 
+-static ssize_t iio_show_timestamp_clock(struct device *dev,
+-					struct device_attribute *attr,
+-					char *buf)
++static ssize_t current_timestamp_clock_show(struct device *dev,
++					    struct device_attribute *attr,
++					    char *buf)
+ {
+ 	const struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+ 	const clockid_t clk = iio_device_get_clock(indio_dev);
+@@ -1459,9 +1459,9 @@ static ssize_t iio_show_timestamp_clock(struct device *dev,
+ 	return sz;
+ }
+ 
+-static ssize_t iio_store_timestamp_clock(struct device *dev,
+-					 struct device_attribute *attr,
+-					 const char *buf, size_t len)
++static ssize_t current_timestamp_clock_store(struct device *dev,
++					     struct device_attribute *attr,
++					     const char *buf, size_t len)
+ {
+ 	clockid_t clk;
+ 	int ret;
+@@ -1509,8 +1509,7 @@ int iio_device_register_sysfs_group(struct iio_dev *indio_dev,
+ 	return 0;
+ }
+ 
+-static DEVICE_ATTR(current_timestamp_clock, S_IRUGO | S_IWUSR,
+-		   iio_show_timestamp_clock, iio_store_timestamp_clock);
++static DEVICE_ATTR_RW(current_timestamp_clock);
+ 
+ static int iio_device_register_sysfs(struct iio_dev *indio_dev)
+ {
+diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
+index f504ed351b3e..21f113c0ee96 100644
+--- a/drivers/iio/industrialio-trigger.c
++++ b/drivers/iio/industrialio-trigger.c
+@@ -37,7 +37,7 @@ static LIST_HEAD(iio_trigger_list);
+ static DEFINE_MUTEX(iio_trigger_list_lock);
+ 
+ /**
+- * iio_trigger_read_name() - retrieve useful identifying name
++ * name_show() - retrieve useful identifying name
+  * @dev:	device associated with the iio_trigger
+  * @attr:	pointer to the device_attribute structure that is
+  *		being processed
+@@ -46,15 +46,15 @@ static DEFINE_MUTEX(iio_trigger_list_lock);
+  * Return: a negative number on failure or the number of written
+  *	   characters on success.
+  */
+-static ssize_t iio_trigger_read_name(struct device *dev,
+-				     struct device_attribute *attr,
+-				     char *buf)
++static ssize_t name_show(struct device *dev,
++			 struct device_attribute *attr,
++			 char *buf)
+ {
+ 	struct iio_trigger *trig = to_iio_trigger(dev);
+ 	return sysfs_emit(buf, "%s\n", trig->name);
+ }
+ 
+-static DEVICE_ATTR(name, S_IRUGO, iio_trigger_read_name, NULL);
++static DEVICE_ATTR_RO(name);
+ 
+ static struct attribute *iio_trig_dev_attrs[] = {
+ 	&dev_attr_name.attr,
+@@ -395,7 +395,7 @@ void iio_dealloc_pollfunc(struct iio_poll_func *pf)
+ EXPORT_SYMBOL_GPL(iio_dealloc_pollfunc);
+ 
+ /**
+- * iio_trigger_read_current() - trigger consumer sysfs query current trigger
++ * current_trigger_show() - trigger consumer sysfs query current trigger
+  * @dev:	device associated with an industrial I/O device
+  * @attr:	pointer to the device_attribute structure that
+  *		is being processed
+@@ -407,9 +407,9 @@ EXPORT_SYMBOL_GPL(iio_dealloc_pollfunc);
+  * Return: a negative number on failure, the number of characters written
+  *	   on success or 0 if no trigger is available
+  */
+-static ssize_t iio_trigger_read_current(struct device *dev,
+-					struct device_attribute *attr,
+-					char *buf)
++static ssize_t current_trigger_show(struct device *dev,
++				    struct device_attribute *attr,
++				    char *buf)
+ {
+ 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+ 
+@@ -419,7 +419,7 @@ static ssize_t iio_trigger_read_current(struct device *dev,
+ }
+ 
+ /**
+- * iio_trigger_write_current() - trigger consumer sysfs set current trigger
++ * current_trigger_store() - trigger consumer sysfs set current trigger
+  * @dev:	device associated with an industrial I/O device
+  * @attr:	device attribute that is being processed
+  * @buf:	string buffer that holds the name of the trigger
+@@ -432,10 +432,10 @@ static ssize_t iio_trigger_read_current(struct device *dev,
+  * Return: negative error code on failure or length of the buffer
+  *	   on success
+  */
+-static ssize_t iio_trigger_write_current(struct device *dev,
+-					 struct device_attribute *attr,
+-					 const char *buf,
+-					 size_t len)
++static ssize_t current_trigger_store(struct device *dev,
++				     struct device_attribute *attr,
++				     const char *buf,
++				     size_t len)
+ {
+ 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+ 	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
+@@ -494,9 +494,7 @@ static ssize_t iio_trigger_write_current(struct device *dev,
+ 	return ret;
+ }
+ 
+-static DEVICE_ATTR(current_trigger, S_IRUGO | S_IWUSR,
+-		   iio_trigger_read_current,
+-		   iio_trigger_write_current);
++static DEVICE_ATTR_RW(current_trigger);
+ 
+ static struct attribute *iio_trigger_consumer_attrs[] = {
+ 	&dev_attr_current_trigger.attr,
+-- 
+2.35.3
 

@@ -2,54 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AA753A5DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B8753A5E1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353233AbiFANVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 09:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41392 "EHLO
+        id S1347557AbiFANWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 09:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353202AbiFANVF (ORCPT
+        with ESMTP id S242201AbiFANW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 09:21:05 -0400
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [207.211.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30FF54EA2E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 06:21:03 -0700 (PDT)
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-vLc6cXEvNsOpYsXD4FreTw-1; Wed, 01 Jun 2022 09:20:55 -0400
-X-MC-Unique: vLc6cXEvNsOpYsXD4FreTw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1C6001C0F68A;
-        Wed,  1 Jun 2022 13:20:55 +0000 (UTC)
-Received: from comp-core-i7-2640m-0182e6.redhat.com (unknown [10.36.110.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 01B4B414A7E9;
-        Wed,  1 Jun 2022 13:20:52 +0000 (UTC)
-From:   Alexey Gladkov <legion@kernel.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Containers <containers@lists.linux.dev>,
-        linux-fsdevel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Vasily Averin <vvs@virtuozzo.com>
-Subject: [RFC PATCH 4/4] sysctl: mqueue: Do not use dynamic memory
-Date:   Wed,  1 Jun 2022 15:20:32 +0200
-Message-Id: <e0576f541687d52de6c1053360a1895b58179f33.1654086665.git.legion@kernel.org>
-In-Reply-To: <cover.1654086665.git.legion@kernel.org>
-References: <CAHk-=whi2SzU4XT_FsdTCAuK2qtYmH+-hwi1cbSdG8zu0KXL=g@mail.gmail.com> <cover.1654086665.git.legion@kernel.org>
+        Wed, 1 Jun 2022 09:22:27 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CE04FC40
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 06:22:25 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2ef5380669cso18070777b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 06:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VhusuxvebQeqIphuHKHIUuQtEdSN4sp1zhl3QpbUxns=;
+        b=YVxD9TPOCfh1WNfBWubBysJ8IwakpXPCIrSFx+JDGiMo41+fexBw54QsiegVVeULTa
+         NRyH2RMc4g1/XmDyCiJfnU4nRVD5jl9XeCmsQSx6Yf1e4I83h7I8XMXwvDQerk4iRMop
+         FrSSFm85U6rXhVd0NFs+inKQUtiXr5aWqz3i83D4VtjKdA3rnMnB9pwZx9m+tqKVfgey
+         phqHSwsGphl4ens97yGIWYIdRDkLVnMZZGl7nqD9PpJmaEcwqc3r/4ugaEXG/eXC5kKC
+         5Tw/8QU5QdRhTN9Dhaii+4f/ojJ83Ah4zFPfqNPt9Bb1DJo0Dj2/V+nWR3PA7nzlygba
+         9I1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VhusuxvebQeqIphuHKHIUuQtEdSN4sp1zhl3QpbUxns=;
+        b=rbhMmMSB7To+tAHZZHTUGrLSHRkM4cq8/cdoe+C/R8c9YLWOJvaxQpEta6YKKJCuvG
+         V8ANzLpcFOYToykqy1Wt+9FOKT5lijq0+ZqPzAb1DClXprBIoaTjzzGdYlnyripESgC0
+         5mlqWcP3jTmegLpWY+HvmRdFhH5owAiaCv6iMT6iCdFmTX6jGv2/YxOFIG/9/MDZkk2+
+         Qjx1zBDQHwD+szpe27jmTp/PAEUCBOviz3OpZ6vBvS0wcA1wTCcPb9toAF40G0Jr3SCc
+         B772fZml+h23P6aMNW/ZcnjAgojYe7N5hC894/Q5Y1Iq32UIQKyMtu80nS/w3P2Uehje
+         xRLg==
+X-Gm-Message-State: AOAM531+b7kxJhoJiLsGK8gpwLUkNLW72/p24YZXUky+RboEO8PE+q1i
+        xZ4lLVi45ePnQuYTNwTZRmn3VweyJe1vtVDIJIH5SA==
+X-Google-Smtp-Source: ABdhPJwJkD2o+tUMBt3iBFEPAW7htjoMwWR0vQrC/Lhd9n5ey4SmVO9dop14EBdFhurPVkN4pnK4mQ8SMFdy15dYahs=
+X-Received: by 2002:a81:6189:0:b0:2eb:deb5:9f63 with SMTP id
+ v131-20020a816189000000b002ebdeb59f63mr66706723ywb.319.1654089744536; Wed, 01
+ Jun 2022 06:22:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220601021848.76943-1-zhouchengming@bytedance.com>
+In-Reply-To: <20220601021848.76943-1-zhouchengming@bytedance.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 1 Jun 2022 15:22:12 +0200
+Message-ID: <CAKfTPtBTj4u-NW4NDUORdWfdxsHwoMxzqEO4jAKVZDjyCKxL4w@mail.gmail.com>
+Subject: Re: [PATCH v4] sched/fair: optimize and simplify rq leaf_cfs_rq_list
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, zhengqi.arch@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,287 +69,235 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dynamic memory allocation is needed to modify .data and specify the
-per namespace parameter. The new sysctl API is allowed to get rid of
-the need for such modification.
+On Wed, 1 Jun 2022 at 04:19, Chengming Zhou <zhouchengming@bytedance.com> wrote:
+>
+> We notice the rq leaf_cfs_rq_list has two problems when do bugfix
+> backports and some test profiling.
+>
+> 1. cfs_rqs under throttled subtree could be added to the list, and
+>    make their fully decayed ancestors on the list, even though not needed.
+>
+> 2. #1 also make the leaf_cfs_rq_list management complex and error prone,
+>    this is the list of related bugfix so far:
+>
+>    commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
+>    commit fe61468b2cbc ("sched/fair: Fix enqueue_task_fair warning")
+>    commit b34cb07dde7c ("sched/fair: Fix enqueue_task_fair() warning some more")
+>    commit 39f23ce07b93 ("sched/fair: Fix unthrottle_cfs_rq() for leaf_cfs_rq list")
+>    commit 0258bdfaff5b ("sched/fair: Fix unfairness caused by missing load decay")
+>    commit a7b359fc6a37 ("sched/fair: Correctly insert cfs_rq's to list on unthrottle")
+>    commit fdaba61ef8a2 ("sched/fair: Ensure that the CFS parent is added after unthrottling")
+>    commit 2630cde26711 ("sched/fair: Add ancestors of unthrottled undecayed cfs_rq")
+>
+> commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
+> delete every cfs_rq under throttled subtree from rq->leaf_cfs_rq_list,
+> and delete the throttled_hierarchy() test in update_blocked_averages(),
+> which optimized update_blocked_averages().
+>
+> But those later bugfix add cfs_rqs under throttled subtree back to
+> rq->leaf_cfs_rq_list again, with their fully decayed ancestors, for
+> the integrity of rq->leaf_cfs_rq_list.
+>
+> This patch takes another method, skip all cfs_rqs under throttled
+> hierarchy when list_add_leaf_cfs_rq(), to completely make cfs_rqs
+> under throttled subtree off the leaf_cfs_rq_list.
+>
+> So we don't need to consider throttled related things in
+> enqueue_entity(), unthrottle_cfs_rq() and enqueue_task_fair(),
+> which simplify the code a lot. Also optimize update_blocked_averages()
+> since cfs_rqs under throttled hierarchy and their ancestors
+> won't be on the leaf_cfs_rq_list.
+>
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 
-Signed-off-by: Alexey Gladkov <legion@kernel.org>
----
- include/linux/ipc_namespace.h |  17 -----
- ipc/mq_sysctl.c               | 138 +++++++++++++++++++---------------
- ipc/mqueue.c                  |   5 --
- ipc/namespace.c               |   6 --
- 4 files changed, 79 insertions(+), 87 deletions(-)
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 
-diff --git a/include/linux/ipc_namespace.h b/include/linux/ipc_namespace.h
-index 51c2c247c447..d20753093a2c 100644
---- a/include/linux/ipc_namespace.h
-+++ b/include/linux/ipc_namespace.h
-@@ -174,21 +174,4 @@ static inline void put_ipc_ns(struct ipc_namespace *ns)
- }
- #endif
- 
--#ifdef CONFIG_POSIX_MQUEUE_SYSCTL
--
--void retire_mq_sysctls(struct ipc_namespace *ns);
--bool setup_mq_sysctls(struct ipc_namespace *ns);
--
--#else /* CONFIG_POSIX_MQUEUE_SYSCTL */
--
--static inline void retire_mq_sysctls(struct ipc_namespace *ns)
--{
--}
--
--static inline bool setup_mq_sysctls(struct ipc_namespace *ns)
--{
--	return true;
--}
--
--#endif /* CONFIG_POSIX_MQUEUE_SYSCTL */
- #endif
-diff --git a/ipc/mq_sysctl.c b/ipc/mq_sysctl.c
-index fbf6a8b93a26..08ff7dfb721c 100644
---- a/ipc/mq_sysctl.c
-+++ b/ipc/mq_sysctl.c
-@@ -13,6 +13,45 @@
- #include <linux/capability.h>
- #include <linux/slab.h>
- 
-+static inline void *data_from_ns(struct ctl_context *ctx, struct ctl_table *table);
-+
-+static int mq_sys_open(struct ctl_context *ctx, struct inode *inode, struct file *file)
-+{
-+	ctx->ctl_data = current->nsproxy->ipc_ns;
-+	return 0;
-+}
-+
-+static ssize_t mq_sys_read(struct ctl_context *ctx, struct file *file,
-+		     char *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	struct ctl_table table = *ctx->table;
-+	table.data = data_from_ns(ctx, ctx->table);
-+	return table.proc_handler(&table, 0, buffer, lenp, ppos);
-+}
-+
-+static ssize_t mq_sys_write(struct ctl_context *ctx, struct file *file,
-+		      char *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	struct ctl_table table = *ctx->table;
-+	table.data = data_from_ns(ctx, ctx->table);
-+	return table.proc_handler(&table, 1, buffer, lenp, ppos);
-+}
-+
-+static struct ctl_fops mq_sys_fops = {
-+	.open	= mq_sys_open,
-+	.read	= mq_sys_read,
-+	.write	= mq_sys_write,
-+};
-+
-+enum {
-+	MQ_SYSCTL_QUEUES_MAX,
-+	MQ_SYSCTL_MSG_MAX,
-+	MQ_SYSCTL_MSGSIZE_MAX,
-+	MQ_SYSCTL_MSG_DEFAULT,
-+	MQ_SYSCTL_MSGSIZE_DEFAULT,
-+	MQ_SYSCTL_COUNTS
-+};
-+
- static int msg_max_limit_min = MIN_MSGMAX;
- static int msg_max_limit_max = HARD_MSGMAX;
- 
-@@ -20,14 +59,15 @@ static int msg_maxsize_limit_min = MIN_MSGSIZEMAX;
- static int msg_maxsize_limit_max = HARD_MSGSIZEMAX;
- 
- static struct ctl_table mq_sysctls[] = {
--	{
-+	[MQ_SYSCTL_QUEUES_MAX] = {
- 		.procname	= "queues_max",
- 		.data		= &init_ipc_ns.mq_queues_max,
- 		.maxlen		= sizeof(int),
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec,
-+		.ctl_fops	= &mq_sys_fops,
- 	},
--	{
-+	[MQ_SYSCTL_MSG_MAX] = {
- 		.procname	= "msg_max",
- 		.data		= &init_ipc_ns.mq_msg_max,
- 		.maxlen		= sizeof(int),
-@@ -35,8 +75,9 @@ static struct ctl_table mq_sysctls[] = {
- 		.proc_handler	= proc_dointvec_minmax,
- 		.extra1		= &msg_max_limit_min,
- 		.extra2		= &msg_max_limit_max,
-+		.ctl_fops	= &mq_sys_fops,
- 	},
--	{
-+	[MQ_SYSCTL_MSGSIZE_MAX] = {
- 		.procname	= "msgsize_max",
- 		.data		= &init_ipc_ns.mq_msgsize_max,
- 		.maxlen		= sizeof(int),
-@@ -44,8 +85,9 @@ static struct ctl_table mq_sysctls[] = {
- 		.proc_handler	= proc_dointvec_minmax,
- 		.extra1		= &msg_maxsize_limit_min,
- 		.extra2		= &msg_maxsize_limit_max,
-+		.ctl_fops	= &mq_sys_fops,
- 	},
--	{
-+	[MQ_SYSCTL_MSG_DEFAULT] = {
- 		.procname	= "msg_default",
- 		.data		= &init_ipc_ns.mq_msg_default,
- 		.maxlen		= sizeof(int),
-@@ -53,8 +95,9 @@ static struct ctl_table mq_sysctls[] = {
- 		.proc_handler	= proc_dointvec_minmax,
- 		.extra1		= &msg_max_limit_min,
- 		.extra2		= &msg_max_limit_max,
-+		.ctl_fops	= &mq_sys_fops,
- 	},
--	{
-+	[MQ_SYSCTL_MSGSIZE_DEFAULT] = {
- 		.procname	= "msgsize_default",
- 		.data		= &init_ipc_ns.mq_msgsize_default,
- 		.maxlen		= sizeof(int),
-@@ -62,70 +105,47 @@ static struct ctl_table mq_sysctls[] = {
- 		.proc_handler	= proc_dointvec_minmax,
- 		.extra1		= &msg_maxsize_limit_min,
- 		.extra2		= &msg_maxsize_limit_max,
-+		.ctl_fops	= &mq_sys_fops,
- 	},
- 	{}
- };
- 
--static struct ctl_table_set *set_lookup(struct ctl_table_root *root)
-+static inline void *data_from_ns(struct ctl_context *ctx, struct ctl_table *table)
- {
--	return &current->nsproxy->ipc_ns->mq_set;
-+	struct ipc_namespace *ns = ctx->ctl_data;
-+
-+	switch (ctx->table - mq_sysctls) {
-+		case MQ_SYSCTL_QUEUES_MAX:      return &ns->mq_queues_max;
-+		case MQ_SYSCTL_MSG_MAX:         return &ns->mq_msg_max;
-+		case MQ_SYSCTL_MSGSIZE_MAX:     return &ns->mq_msgsize_max;
-+		case MQ_SYSCTL_MSG_DEFAULT:     return &ns->mq_msg_default;
-+		case MQ_SYSCTL_MSGSIZE_DEFAULT: return &ns->mq_msgsize_default;
-+	}
-+	return NULL;
- }
- 
--static int set_is_seen(struct ctl_table_set *set)
--{
--	return &current->nsproxy->ipc_ns->mq_set == set;
--}
-+static struct ctl_table mq_sysctl_dir[] = {
-+	{
-+		.procname       = "mqueue",
-+		.mode           = 0555,
-+		.child          = mq_sysctls,
-+	},
-+	{}
-+};
- 
--static struct ctl_table_root set_root = {
--	.lookup = set_lookup,
-+static struct ctl_table mq_sysctl_root[] = {
-+	{
-+		.procname       = "fs",
-+		.mode           = 0555,
-+		.child          = mq_sysctl_dir,
-+	},
-+	{}
- };
- 
--bool setup_mq_sysctls(struct ipc_namespace *ns)
-+static int __init mq_sysctl_init(void)
- {
--	struct ctl_table *tbl;
--
--	setup_sysctl_set(&ns->mq_set, &set_root, set_is_seen);
--
--	tbl = kmemdup(mq_sysctls, sizeof(mq_sysctls), GFP_KERNEL);
--	if (tbl) {
--		int i;
--
--		for (i = 0; i < ARRAY_SIZE(mq_sysctls); i++) {
--			if (tbl[i].data == &init_ipc_ns.mq_queues_max)
--				tbl[i].data = &ns->mq_queues_max;
--
--			else if (tbl[i].data == &init_ipc_ns.mq_msg_max)
--				tbl[i].data = &ns->mq_msg_max;
--
--			else if (tbl[i].data == &init_ipc_ns.mq_msgsize_max)
--				tbl[i].data = &ns->mq_msgsize_max;
--
--			else if (tbl[i].data == &init_ipc_ns.mq_msg_default)
--				tbl[i].data = &ns->mq_msg_default;
--
--			else if (tbl[i].data == &init_ipc_ns.mq_msgsize_default)
--				tbl[i].data = &ns->mq_msgsize_default;
--			else
--				tbl[i].data = NULL;
--		}
--
--		ns->mq_sysctls = __register_sysctl_table(&ns->mq_set, "fs/mqueue", tbl);
--	}
--	if (!ns->mq_sysctls) {
--		kfree(tbl);
--		retire_sysctl_set(&ns->mq_set);
--		return false;
--	}
--
--	return true;
-+	register_sysctl_table(mq_sysctl_root);
-+	return 0;
- }
- 
--void retire_mq_sysctls(struct ipc_namespace *ns)
--{
--	struct ctl_table *tbl;
--
--	tbl = ns->mq_sysctls->ctl_table_arg;
--	unregister_sysctl_table(ns->mq_sysctls);
--	retire_sysctl_set(&ns->mq_set);
--	kfree(tbl);
--}
-+device_initcall(mq_sysctl_init);
-diff --git a/ipc/mqueue.c b/ipc/mqueue.c
-index c0f24cc9f619..ffb79a24d70b 100644
---- a/ipc/mqueue.c
-+++ b/ipc/mqueue.c
-@@ -1711,11 +1711,6 @@ static int __init init_mqueue_fs(void)
- 	if (mqueue_inode_cachep == NULL)
- 		return -ENOMEM;
- 
--	if (!setup_mq_sysctls(&init_ipc_ns)) {
--		pr_warn("sysctl registration failed\n");
--		return -ENOMEM;
--	}
--
- 	error = register_filesystem(&mqueue_fs_type);
- 	if (error)
- 		goto out_sysctl;
-diff --git a/ipc/namespace.c b/ipc/namespace.c
-index f760243ca685..ae83f0f2651b 100644
---- a/ipc/namespace.c
-+++ b/ipc/namespace.c
-@@ -59,10 +59,6 @@ static struct ipc_namespace *create_ipc_ns(struct user_namespace *user_ns,
- 	if (err)
- 		goto fail_put;
- 
--	err = -ENOMEM;
--	if (!setup_mq_sysctls(ns))
--		goto fail_put;
--
- 	sem_init_ns(ns);
- 	msg_init_ns(ns);
- 	shm_init_ns(ns);
-@@ -129,8 +125,6 @@ static void free_ipc_ns(struct ipc_namespace *ns)
- 	msg_exit_ns(ns);
- 	shm_exit_ns(ns);
- 
--	retire_mq_sysctls(ns);
--
- 	dec_ipc_namespaces(ns->ucounts);
- 	put_user_ns(ns->user_ns);
- 	ns_free_inum(&ns->ns);
--- 
-2.33.3
-
+> ---
+> v4:
+>  - make sure the attach/detach is propagated down up to
+>    the throttled cfs_rq. Thanks Vincent.
+>
+> v3:
+>  - fix !CONFIG_FAIR_GROUP_SCHED build error, reported by
+>    kernel test robot <lkp@intel.com>
+>
+> v2:
+>  - move throttled_hierarchy() outside list_add_leaf_cfs_rq(),
+>    suggested by Vincent.
+> ---
+>  kernel/sched/fair.c | 92 ++++++++++++++-------------------------------
+>  1 file changed, 28 insertions(+), 64 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 77b2048a9326..b3371fa40548 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -3144,6 +3144,8 @@ void reweight_task(struct task_struct *p, int prio)
+>         load->inv_weight = sched_prio_to_wmult[prio];
+>  }
+>
+> +static inline int throttled_hierarchy(struct cfs_rq *cfs_rq);
+> +
+>  #ifdef CONFIG_FAIR_GROUP_SCHED
+>  #ifdef CONFIG_SMP
+>  /*
+> @@ -3254,8 +3256,6 @@ static long calc_group_shares(struct cfs_rq *cfs_rq)
+>  }
+>  #endif /* CONFIG_SMP */
+>
+> -static inline int throttled_hierarchy(struct cfs_rq *cfs_rq);
+> -
+>  /*
+>   * Recomputes the group entity based on the current state of its group
+>   * runqueue.
+> @@ -4368,16 +4368,11 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+>                 __enqueue_entity(cfs_rq, se);
+>         se->on_rq = 1;
+>
+> -       /*
+> -        * When bandwidth control is enabled, cfs might have been removed
+> -        * because of a parent been throttled but cfs->nr_running > 1. Try to
+> -        * add it unconditionally.
+> -        */
+> -       if (cfs_rq->nr_running == 1 || cfs_bandwidth_used())
+> -               list_add_leaf_cfs_rq(cfs_rq);
+> -
+> -       if (cfs_rq->nr_running == 1)
+> +       if (cfs_rq->nr_running == 1) {
+>                 check_enqueue_throttle(cfs_rq);
+> +               if (!throttled_hierarchy(cfs_rq))
+> +                       list_add_leaf_cfs_rq(cfs_rq);
+> +       }
+>  }
+>
+>  static void __clear_buddies_last(struct sched_entity *se)
+> @@ -4992,11 +4987,18 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
+>         /* update hierarchical throttle state */
+>         walk_tg_tree_from(cfs_rq->tg, tg_nop, tg_unthrottle_up, (void *)rq);
+>
+> -       /* Nothing to run but something to decay (on_list)? Complete the branch */
+>         if (!cfs_rq->load.weight) {
+> -               if (cfs_rq->on_list)
+> -                       goto unthrottle_throttle;
+> -               return;
+> +               if (!cfs_rq->on_list)
+> +                       return;
+> +               /*
+> +                * Nothing to run but something to decay (on_list)?
+> +                * Complete the branch.
+> +                */
+> +               for_each_sched_entity(se) {
+> +                       if (list_add_leaf_cfs_rq(cfs_rq_of(se)))
+> +                               break;
+> +               }
+> +               goto unthrottle_throttle;
+>         }
+>
+>         task_delta = cfs_rq->h_nr_running;
+> @@ -5034,31 +5036,12 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
+>                 /* end evaluation on encountering a throttled cfs_rq */
+>                 if (cfs_rq_throttled(qcfs_rq))
+>                         goto unthrottle_throttle;
+> -
+> -               /*
+> -                * One parent has been throttled and cfs_rq removed from the
+> -                * list. Add it back to not break the leaf list.
+> -                */
+> -               if (throttled_hierarchy(qcfs_rq))
+> -                       list_add_leaf_cfs_rq(qcfs_rq);
+>         }
+>
+>         /* At this point se is NULL and we are at root level*/
+>         add_nr_running(rq, task_delta);
+>
+>  unthrottle_throttle:
+> -       /*
+> -        * The cfs_rq_throttled() breaks in the above iteration can result in
+> -        * incomplete leaf list maintenance, resulting in triggering the
+> -        * assertion below.
+> -        */
+> -       for_each_sched_entity(se) {
+> -               struct cfs_rq *qcfs_rq = cfs_rq_of(se);
+> -
+> -               if (list_add_leaf_cfs_rq(qcfs_rq))
+> -                       break;
+> -       }
+> -
+>         assert_list_leaf_cfs_rq(rq);
+>
+>         /* Determine whether we need to wake up potentially idle CPU: */
+> @@ -5713,13 +5696,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+>                 /* end evaluation on encountering a throttled cfs_rq */
+>                 if (cfs_rq_throttled(cfs_rq))
+>                         goto enqueue_throttle;
+> -
+> -               /*
+> -                * One parent has been throttled and cfs_rq removed from the
+> -                * list. Add it back to not break the leaf list.
+> -                */
+> -               if (throttled_hierarchy(cfs_rq))
+> -                       list_add_leaf_cfs_rq(cfs_rq);
+>         }
+>
+>         /* At this point se is NULL and we are at root level*/
+> @@ -5743,21 +5719,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+>                 update_overutilized_status(rq);
+>
+>  enqueue_throttle:
+> -       if (cfs_bandwidth_used()) {
+> -               /*
+> -                * When bandwidth control is enabled; the cfs_rq_throttled()
+> -                * breaks in the above iteration can result in incomplete
+> -                * leaf list maintenance, resulting in triggering the assertion
+> -                * below.
+> -                */
+> -               for_each_sched_entity(se) {
+> -                       cfs_rq = cfs_rq_of(se);
+> -
+> -                       if (list_add_leaf_cfs_rq(cfs_rq))
+> -                               break;
+> -               }
+> -       }
+> -
+>         assert_list_leaf_cfs_rq(rq);
+>
+>         hrtick_update(rq);
+> @@ -11287,9 +11248,13 @@ static inline bool vruntime_normalized(struct task_struct *p)
+>   */
+>  static void propagate_entity_cfs_rq(struct sched_entity *se)
+>  {
+> -       struct cfs_rq *cfs_rq;
+> +       struct cfs_rq *cfs_rq = cfs_rq_of(se);
+> +
+> +       if (cfs_rq_throttled(cfs_rq))
+> +               return;
+>
+> -       list_add_leaf_cfs_rq(cfs_rq_of(se));
+> +       if (!throttled_hierarchy(cfs_rq))
+> +               list_add_leaf_cfs_rq(cfs_rq);
+>
+>         /* Start to propagate at parent */
+>         se = se->parent;
+> @@ -11297,14 +11262,13 @@ static void propagate_entity_cfs_rq(struct sched_entity *se)
+>         for_each_sched_entity(se) {
+>                 cfs_rq = cfs_rq_of(se);
+>
+> -               if (!cfs_rq_throttled(cfs_rq)){
+> -                       update_load_avg(cfs_rq, se, UPDATE_TG);
+> -                       list_add_leaf_cfs_rq(cfs_rq);
+> -                       continue;
+> -               }
+> +               update_load_avg(cfs_rq, se, UPDATE_TG);
+>
+> -               if (list_add_leaf_cfs_rq(cfs_rq))
+> +               if (cfs_rq_throttled(cfs_rq))
+>                         break;
+> +
+> +               if (!throttled_hierarchy(cfs_rq))
+> +                       list_add_leaf_cfs_rq(cfs_rq);
+>         }
+>  }
+>  #else
+> --
+> 2.36.1
+>

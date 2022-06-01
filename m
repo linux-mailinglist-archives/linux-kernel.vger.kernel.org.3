@@ -2,163 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCD7539EC0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 873CE539EC2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347741AbiFAHw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 03:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40290 "EHLO
+        id S1347942AbiFAHxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 03:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234967AbiFAHwy (ORCPT
+        with ESMTP id S1347620AbiFAHxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 03:52:54 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2135.outbound.protection.outlook.com [40.107.215.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B75459312;
-        Wed,  1 Jun 2022 00:52:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MZlfKI9WYTlhyttHAXZ78Hq9TeAfNeS+TP7IIPIFCqet85EpKwJmUS+N4qXyi6/84MHLQaPUJnzq5xdQ6LINw2zQsp3fRoKQHeHneH829hHn/m+1rGmNKsClhR4sp+QlC2HmPZT/rziX1nPTu/FTVgHR75c2TbiAG4X8xVP/tuGErUZxSVOWoFy3UDBlMuma4OIwfRXepgnRaKdmpioBuHSY1IqCSV9xKMDANJBRfCb4y8IVxbK7K4/JVaWuf/BDcMdW3cdEu5l4xWLeFTMmMzuEhpn7xPpMzLw3i2ybpAamxDCV0VUVNSEwlSIEba4EKyc2IY9hGl/yZPEfCmq2bA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5kGg4ITzUgCXE9l4DNEE6sxfeKDCN1pNy5aHUljywnk=;
- b=YezJm+UKaR8n8JQg2rt3SpLYqM8QR5qSMHBGncrikQAlWzlX6TXcq8+oQbXwNZ/N3DIzR3cRnXugnQ5ilWGk7wKIvwlmiD43X7KQw3LrK90LbNq2HgHRM3bkWe8vtMmmi0jQfdRU1n0Xvg/aMT1Bq9KM9pT1t5begrmsPIiFmPfTrblRTLO7UwHjYaWolRgnLmxBTFNhTlxzH39zOjqHdHDi4YbTywUHc/UasdmJF+A2UEcBxatMa1ZOmnCHnli97rIa7OBQPghZ7aDFBNZk+TP3/9Y4e9O64DNz3ZEKYuD8YeNxeeA+a7zKdh/Ee58TLZdcu2ZYngvJmqZPmo8Q8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5kGg4ITzUgCXE9l4DNEE6sxfeKDCN1pNy5aHUljywnk=;
- b=Rqoh5dX0yIwraBWM9ukmTk/uyNjG1uFlzHRhqlkCcX8+kE2NytyDf37ZOr9a8OBGtNqZBcIC1SJcQPD8sD7scvyeRneZ2GXjjb/+piLP/IemYiyMLVIGeQP5Mm1tVG7r3Z5Umil9c0ESpyn54oF/7EhD/Nqv6P2vG9dF6ySwi5U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- TYAPR06MB2094.apcprd06.prod.outlook.com (2603:1096:404:20::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5293.16; Wed, 1 Jun 2022 07:52:49 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::ccb7:f612:80b2:64d5]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::ccb7:f612:80b2:64d5%4]) with mapi id 15.20.5293.019; Wed, 1 Jun 2022
- 07:52:48 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     Pavel Machek <pavel@ucw.cz>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Wan Jiabing <wanjiabing@vivo.com>, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] leds: Add of_node_put() before return
-Date:   Wed,  1 Jun 2022 15:52:03 +0800
-Message-Id: <20220601075211.2117596-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.36.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR06CA0015.apcprd06.prod.outlook.com
- (2603:1096:202:2e::27) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        Wed, 1 Jun 2022 03:53:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6AA615A0BB
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654069990;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WfTQV2dw8hYxGglp3MNiBHOFQe8P3zuj5Ixn98HI0Bs=;
+        b=ghJYqy5xw8yLiUPLTWkFZZCzyVF8pO61wWZt/TsalDftxLHEz3skt7WQoRVnfbWoqhVVaq
+        pQDaR2HRFBSUFeqk22GKqckzNL2cw/oiUISL5i0CpO9pqUZxOuHK06g+lEy2+8DJerFzad
+        ynyFkVzz69VCuAxtlTlFjXWKNNZsCSA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-331-iOoDj4t7OrSJTJkAF1TsZw-1; Wed, 01 Jun 2022 03:53:09 -0400
+X-MC-Unique: iOoDj4t7OrSJTJkAF1TsZw-1
+Received: by mail-wm1-f71.google.com with SMTP id c125-20020a1c3583000000b003978decffedso2922908wma.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 00:53:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=WfTQV2dw8hYxGglp3MNiBHOFQe8P3zuj5Ixn98HI0Bs=;
+        b=GHZ4NvuiiPMxTW+2gJA4+naRLCIR5WgD5s53RMCFzr25IhJuSK7SbHT+kyA8Yc4tp2
+         l6bpvwSgbsXwdg7YIvKexk5VM/eyCBYm+WWjICcBvinu/DgAeP5aVWLVPsOW3xBdtiBa
+         U9KxXE0KJ2edFhLu1ggLqN2B7LxADlr9pGrY/o3qRdkJ6GVLcX9UE+EZ33jURXT1F+2O
+         SnOjzJz/6ROQ/FIBCRPkH81p6iEBHC09hcJopFmHzwXiS0MXegtw9n1wvoHZCB3GIif/
+         JzbQkpR/19ddz9oInxdIjjoVGlA14G9KHcQwXT8htQjJCTaKSOKO6ZtxZ74+x37Z/HVT
+         Ae7Q==
+X-Gm-Message-State: AOAM530YlhDuRfyQSwELvXmBh9X2GpUzoya7yknPHmlSQ0mlSu7mgeRj
+        MHMsqNKl2UaLqVt0NVtwaOrW+RgDW1iu7Y2hHeygJ/bOJbLH989u+zQys/hgll8q0RTI9utM15n
+        zb86MjKEcQ0Hmb12vZCOShbN6
+X-Received: by 2002:a05:600c:3b20:b0:397:6311:c0c7 with SMTP id m32-20020a05600c3b2000b003976311c0c7mr26773654wms.69.1654069988551;
+        Wed, 01 Jun 2022 00:53:08 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzIP/IShrFh9WxWIxXWGHraxlb9iB2vLncW/DvU4dVpsiNbC+hBWi5Buj/lRSq8+rr+RmMzCA==
+X-Received: by 2002:a05:600c:3b20:b0:397:6311:c0c7 with SMTP id m32-20020a05600c3b2000b003976311c0c7mr26773635wms.69.1654069988286;
+        Wed, 01 Jun 2022 00:53:08 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:2600:951d:63df:c091:3b45? (p200300cbc7052600951d63dfc0913b45.dip0.t-ipconnect.de. [2003:cb:c705:2600:951d:63df:c091:3b45])
+        by smtp.gmail.com with ESMTPSA id q16-20020a5d61d0000000b0020d110bc39esm810922wrv.64.2022.06.01.00.53.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 00:53:07 -0700 (PDT)
+Message-ID: <f30cb41f-474c-91f2-4912-37387b8b3782@redhat.com>
+Date:   Wed, 1 Jun 2022 09:53:06 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b6631bca-0049-405a-c9be-08da43a3b898
-X-MS-TrafficTypeDiagnostic: TYAPR06MB2094:EE_
-X-Microsoft-Antispam-PRVS: <TYAPR06MB209489CD477972E8D1D2CC8FABDF9@TYAPR06MB2094.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SsxMrdZJqgeTib2f+jwoX+d/FzX80/038CJzv2tK3paBUCy7+xXx6HAtE393h8uCPSlVgOMb20c6e0n/EONW6cxBtAAEQeD7MAAQ1ijesu+CDpscdfRqZvuhcde7yqby9WB+Dq5kzkrPHEVIpPTxXCug0KIQYBPO7V5Mq5TMDFwZf2j2U/nq6DTN0T6BMz06uqlrJTwA2B5yydeUkvHoz5dfscwcuh88bs1jhBvMcl2Fcv+qDF1/hVdvu2PFGXZ4OWhQctD5Z0pEqNUQKBOk6KQYsfHaaskuvK/eucNnKKD7X6Ea2CXII36MN5g0SgSdvn2ZnmS9dRytkgRXt3G6xSBG+gBuhTHfTKjMuhjG0oy6tDPI551xBa66DZNVN+ivyEr0bSoQkawY6Q0Ue6gg3wVnk204DuJmK33mn05ezpItEBPPxhaQhwpRRhBP77KjmzNY9OrlfmA01gPkhiGbToxot2s1e9WaezpH7C4VdtU7HqJGVmA/YYl2H6+aH9iyK3FnlOJ7h8OdsJyrdGOJPklaLgJAaj0ZquzX1Si7P4t87g5ctw6egeu7dlRu57LG3BjNde4j+jL0LHWAQ5ZVmpGhLyRfvJw4aMD1MolCs45ZHJ5oBLXHyLMiNyZ4wMrnCJ4pe57JiaL0NngqZPgD3Wp1F6kzvyANRM+sNu/UsRNxRY/X+Xm/NGPAJ1QrNY0NQiU5Msdi3lKeXD9vqOt6Og==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(316002)(52116002)(2906002)(5660300002)(83380400001)(66476007)(66556008)(66946007)(2616005)(1076003)(38350700002)(38100700002)(8676002)(8936002)(186003)(508600001)(6666004)(110136005)(36756003)(6486002)(6506007)(26005)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0emmY5vg7t7qbckatmpqC8vXTtq2nFITdx5jmcBYEYZZxL508D+9Fgh1Zx97?=
- =?us-ascii?Q?b3i70CXbSTUZDu0u2sUqq6PtpnJvcrvMVjlLHWYi7dKkdmt/6U0NeyTmQGkB?=
- =?us-ascii?Q?fajUOfvbqlObPqWvz2Kl8tKvOu5MyLe28hKtznYzj8BJ89qzK8LeqP6PsURo?=
- =?us-ascii?Q?SieTzvDt+sUMz1598G+N6yN0MAEGtzdL6unyVqB7z+0kKqwWz5UbQb4R0Wsg?=
- =?us-ascii?Q?F4U11lOtijDaeR+dop11hiD3U03PPw83BWkBbeOkPLVYPPmsEjpIimzSYta/?=
- =?us-ascii?Q?gAPo7vVRZkjkzo0lOzmb+c8src2XWGnrZTAX7zFHyVt/wm8mH3GZQOLP71El?=
- =?us-ascii?Q?GPQVeqQH7c5hUOTiZSMOoZSUcf2yOb9g0CyqV3IQKzE/DHsUsWa7xbKlAcR3?=
- =?us-ascii?Q?2kcTz52lDYmbP+d3maT3NtCwqAOoh5X08c/imyX8hjuG8jcb0QAjWlqkr7Eh?=
- =?us-ascii?Q?8/UbJUjs61xUPWJ0qi4prKQnqIob0cW3Ro544Rb6whgZwUVnG8X46AyYMytD?=
- =?us-ascii?Q?1i/Jbu2wj8x8JYtSCLI9gemv9rzxbkzdMaqK+ZvaSwrv0B5WpRu8Lpm1aFPQ?=
- =?us-ascii?Q?Xl4qsaZUPxeeERL2AjcR4ftFhJ+wendJjMO0V57B5xDMrN8YpASC2LCxnCR2?=
- =?us-ascii?Q?2p0Yy7fxrbf22lhY/DSJ8YJEceslh7ELyH7TeXNaigQEIs/xcjfASnGoEkaH?=
- =?us-ascii?Q?S0BSkZMQ+MU1JlXUtJlVYseXTJO1GiKyT+bGEJCNs3UtXANPFcnMj4dEXld7?=
- =?us-ascii?Q?zOb8fTzLFPSz+Pp3uce3ZYF5UWItOKNaTosmHHyI1VJA2RrOtSqEN0ilKv5l?=
- =?us-ascii?Q?AWEg6uF7ZjX6HNiA1l7lG0ZT77bZhG8OxdDBXIxb1II/0gZ/90c/eW5unjWE?=
- =?us-ascii?Q?SJI4ac5WHsVkVKm/5EdT7cZZaMW5QU7stwPoVBp0u773Gj3g3CZHfj6nEXTT?=
- =?us-ascii?Q?35eHpYbO1iCzF0MnMuKR/yDXICcUx06Say3/HmEtGbtWA5541LTAct4YMESX?=
- =?us-ascii?Q?cZJtcLvS3xz6oC1jEb3oolfm3z++gKPUrG0qs2OdliPK4SOKuxfjowDABAYA?=
- =?us-ascii?Q?p2mZ3nVGYioVNci9xk9104gJ1U14fFJMTJHKS5jMyGJ1MuZ0CoJQJCJ4aZ2c?=
- =?us-ascii?Q?2g5zBhvV/R5AGnhRhSWNgbrvHWZ7hi/eXIvgOIySso/JE4OFVx2K/mEdAYjs?=
- =?us-ascii?Q?vIWq/JFzPrx79q3hS1ogcCQqOQX8vQFl4WUt/KNH5g5OsvJCEFmh6uHGalmn?=
- =?us-ascii?Q?ut7aBSVJagdYmQw3M3C0IqyZeFQvCcJMu4PC8AcjyqTMDFX13lIFfOUxL49R?=
- =?us-ascii?Q?2lPxEbNgJOK2EOL4rn1URzQHK9Om/lemP2hW4zXtNeaiHDOFT1LjlfIIgkVM?=
- =?us-ascii?Q?z7b3pwvH77wXmhZfnK8bVekZmwGDVn+G4Mz6KTtDcPEqh+7+kP6AQB7pOX+r?=
- =?us-ascii?Q?7xMfLbvszAX8n8K2oBdCZGbzNPdcJxzUdJCgPNZ7orRszUuzcNWF4h/Q1TsC?=
- =?us-ascii?Q?05FwdbSiFYb5ZGAOfwVfi5o+aAdsubHsiEeTkcrEhvHRfaVbdlB6OU8+uZlL?=
- =?us-ascii?Q?iQf6SoaIrMHhAiTGHPxVnzWvqrgy/hLvKgX6FZ1dBHblglYFz3g/Y3lzeoHO?=
- =?us-ascii?Q?fgQvuaXWO0DXOFH+1hiNU9uQl515sx+zeFZPyDRS76IUB0AYsL+ba6yN5mxL?=
- =?us-ascii?Q?q3QJsoNAT2crDPusDfgOR2NjQ+271R3CicDfYXUECu0oS9QuxeagEAa8pPQ4?=
- =?us-ascii?Q?E2AY36hvEw=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6631bca-0049-405a-c9be-08da43a3b898
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2022 07:52:48.5378
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: c7F4AByb1ev5By3qpnlebvR8gy8tjNmQKYcDr+qldgAM1d+HCH+Bv1+hiRuuzgktPeNfsWIUT+MI+xWJBD4p0g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR06MB2094
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>
+References: <20220527092626.31883-1-linmiaohe@huawei.com>
+ <20220527092626.31883-3-linmiaohe@huawei.com>
+ <20220530160409.c9b17085adb6112d8580f37d@linux-foundation.org>
+ <c7d6fec7-039d-2f54-c3b3-95deb7417a73@huawei.com>
+ <33d6aec8-b4fc-aa37-27f4-f33984ea33d3@redhat.com>
+ <c7d0d606-61ba-9cfc-3c2a-961a88b6c3e5@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 2/3] mm/swapfile: avoid confusing swap cache statistics
+In-Reply-To: <c7d0d606-61ba-9cfc-3c2a-961a88b6c3e5@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following coccicheck warning:
-drivers/leds/rgb/leds-qcom-lpg.c:1107:2-34: WARNING: Function for_each_available_child_of_node should have of_node_put() before return around line 1110.
-drivers/leds/rgb/leds-qcom-lpg.c:1286:1-33: WARNING: Function for_each_available_child_of_node should have of_node_put() before return around line 1289.
+On 01.06.22 04:11, Miaohe Lin wrote:
+> On 2022/5/31 20:58, David Hildenbrand wrote:
+>> On 31.05.22 04:55, Miaohe Lin wrote:
+>>> On 2022/5/31 7:04, Andrew Morton wrote:
+>>>> On Fri, 27 May 2022 17:26:25 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+>>>>
+>>>>> At swapoff time, we're going to swap in the pages continuously. So calling
+>>>>> lookup_swap_cache would confuse statistics. We should use find_get_page
+>>>>> directly here.
+>>>>
+>>>> Why is the existing behaviour wrong?  swapoff() has to swap stuff in to
+>>>> be able to release the swap device.  Why do you believe that this
+>>>> swapin activity should not be accounted?
+>>>
+>>> IMHO, statistics, e.g. swap_cache_info.find_success, are used to show the effectiveness
+>>> of the swap cache activity. So they should only reflect the memory accessing activity
+>>> of the user. I think swapoff can't reflect the effectiveness of the swap cache activity
+>>> because it just swaps in pages one by one. Or statistics should reflect all the activity
+>>> of the user including swapoff?
+>>
+>> I'm wondering who cares and why?
+> 
+> I thought it's used to show the effectiveness of the swapcache readahead algorithm. If nobody
+> ever cares about it now, I'm fine to drop this patch. And could these statistics be removed
+> since nobody cares about it?
 
-Early exits from for_each_available_child_of_node should decrement the
-node reference counter.
+IIUC, they are printed (via show_swap_cache_info()), which is called via
+show_free_areas() -- primarily used via show_mem(). show_mem() is
+primarily used when OOM, when allocation fails and we warn, from the OOM
+killer, on panic().
 
-Fixes: 24e2d05d1b68 ("leds: Add driver for Qualcomm LPG")
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
----
- drivers/leds/rgb/leds-qcom-lpg.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+I am not sure how useful for (OOM ?) debugging the find_success vs.
+find_total stats are at all. They are from ancient times. In
+bb63be0a091c ("tmpfs: move swap_state stats update") we removed other
+statistics that are "are relics of my 2.4.11 testing". Maybe
+find_success and find_total can be similarly removed.
 
-diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
-index 02f51cc61837..05f064543444 100644
---- a/drivers/leds/rgb/leds-qcom-lpg.c
-+++ b/drivers/leds/rgb/leds-qcom-lpg.c
-@@ -1106,8 +1106,10 @@ static int lpg_add_led(struct lpg *lpg, struct device_node *np)
- 		i = 0;
- 		for_each_available_child_of_node(np, child) {
- 			ret = lpg_parse_channel(lpg, child, &led->channels[i]);
--			if (ret < 0)
-+			if (ret < 0) {
-+				of_node_put(child);
- 				return ret;
-+			}
- 
- 			info[i].color_index = led->channels[i]->color;
- 			info[i].intensity = 0;
-@@ -1285,8 +1287,10 @@ static int lpg_probe(struct platform_device *pdev)
- 
- 	for_each_available_child_of_node(pdev->dev.of_node, np) {
- 		ret = lpg_add_led(lpg, np);
--		if (ret)
-+		if (ret) {
-+			of_node_put(np);
- 			return ret;
-+		}
- 	}
- 
- 	for (i = 0; i < lpg->num_channels; i++)
+data_race() indicates to me that these stats are somewhat best-effort
+already.
+
 -- 
-2.36.1
+Thanks,
+
+David / dhildenb
 

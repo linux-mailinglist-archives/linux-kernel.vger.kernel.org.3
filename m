@@ -2,182 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93C153AABB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9676C53AAC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356013AbiFAQLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 12:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
+        id S1356031AbiFAQMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 12:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349045AbiFAQLL (ORCPT
+        with ESMTP id S1356018AbiFAQMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 12:11:11 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B86A502D
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 09:11:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654099869; x=1685635869;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=26YWsW3yM1+zsK31KPcT4uJ3P+X/vv2kYM1UOFXZJDY=;
-  b=X4Z5+9HVqqfeFe2ZS2nSU7TCgSixzRL15qFEPe6Nz8HTkzSzPhUoVH32
-   0oMLieEOVW6TmVZm2awbfBfj6vyZIqjc/Ot81u0udOWkyPRR71w8+IiKx
-   Zcy/ovjqzyxuVv6zA3J9efs/xh2NmZdZIU6xaGjce1f4QemxVNtgWhGhL
-   pDdzkH4sPwCpQzkOPgbSf9wNVVTi3fi6rLBFPywv8NxhXkg5DzPU6Bgs3
-   i30iB5UIgoj9wXRdQqE5DqM3zllYNwNDd+vcuNB1loQ+w10EnUmaYNgZR
-   eiwj+k9QVHITNuWSjWWAuiTrmjV5fS6LCs/l1BuP2iCMG0J1kW23mzwXd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="274442855"
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="274442855"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 09:11:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="633601679"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Jun 2022 09:11:08 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwQw7-00049g-Pi;
-        Wed, 01 Jun 2022 16:11:07 +0000
-Date:   Thu, 2 Jun 2022 00:10:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mark:arm64/ftrace/minimal-regs 5/6]
- arch/x86/include/asm/ftrace.h:47:32: error: initialization of 'struct
- pt_regs *' from 'int' makes pointer from integer without a cast
-Message-ID: <202206020032.Mu3eiis7-lkp@intel.com>
+        Wed, 1 Jun 2022 12:12:33 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A1C34654
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 09:12:32 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id r71so2370881pgr.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 09:12:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=MVLrEwZ4p8ZiMLFIiGZ5MBCO2DCADZBwmIVkqey2RUc=;
+        b=a456sQS6yzyqveCJT2jJJslPJsV5eYz4PeXNgBTecQw3nrYwwZVtO2Ii+MAJaR0IUR
+         /Hyb5P6aI9HTgnqVICWEAhF5FbYfrIkBcAaEAAddUcde3YaZEOyhxlvzp91xkO87RSa3
+         f8xsSmuM53q8e1EPuIIy/i5PH9PevEwLAbj5KmkL7/k2Z0ZNQTnPR4ZXucCoyeEvxkGs
+         Z7wdnOiU6QJy2BPlJoAhAXttwHGi7y1P8HYa7HfsbAK2WdM5L/OezAmtfCF9XaQD+xf7
+         SJKvT8AETJr17AIMyvbq6R38FlmmfWvk5dD/2NIOSp9wbwoR2UzSA3zRo+NZn9lbkVfu
+         uSMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=MVLrEwZ4p8ZiMLFIiGZ5MBCO2DCADZBwmIVkqey2RUc=;
+        b=aAku9srSfNHugw3MjQCbPPQGk3crD1L7SUJ7cNB9dkPCAxFJSqzgc51Z1I/qgTFAjh
+         xo0PCIabGzkAm4nsWn6je7yXyMRuC3WuZSbptIVxyTqi7pOpVeTdHHY8uFF6ec9ls+n2
+         MF4ao93pXpQFoYTL/4vPcoqoFx9wW5gZdXD9Yliyopr/lKwWGdl7u0dNFUmoQWFaqsog
+         q3ybDa9NjlPkMla3aHoodDtoHzLV++6BBtHRIDW9C8FPEtkxsVseCskJO4pox3mN5udk
+         tjN7oagPnG7t/DW40fuccfyG8ZtbKrQ0dYG3T1vxuWDSxbrdmhqoSrFqmQgSAnkxrkof
+         PbAw==
+X-Gm-Message-State: AOAM533PrCrCdL1BuY4gQtEuF607gD/6y6q3prXfoz+JH9tvaL1uJm2p
+        4rpr7GG2S/+1DTvUMk3xiYECBi6TV+g9LtPj2/Y=
+X-Google-Smtp-Source: ABdhPJwPcZvkjEPZNDcdP3cV6fKqX+GhFUL/lUzwi2B7kSVhNRuiq2TvvMfXtPkNiaBt+B55KDZ04SKKRvclR5FcmX8=
+X-Received: by 2002:a62:8101:0:b0:51b:b859:7043 with SMTP id
+ t1-20020a628101000000b0051bb8597043mr297745pfd.25.1654099951799; Wed, 01 Jun
+ 2022 09:12:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a10:b751:b0:2a1:349f:69f3 with HTTP; Wed, 1 Jun 2022
+ 09:12:31 -0700 (PDT)
+Reply-To: mrschantelhermans@gmail.com
+From:   Mrs Chantel Hermans <eliaspeterson2024@gmail.com>
+Date:   Wed, 1 Jun 2022 09:12:31 -0700
+Message-ID: <CACCA4VvMXsZyt6Pxo101CbVqxbtXzJ2+PdTdc4t=q5J8H7Ocmg@mail.gmail.com>
+Subject: ATTENTION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ATTENTION,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:532 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5118]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [eliaspeterson2024[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [eliaspeterson2024[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.5 SUBJ_ATTENTION ATTENTION in Subject
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/ftrace/minimal-regs
-head:   b0741d059a9f19a1aa1191833140f53e41f1775a
-commit: c694698df7f633bcbdf8bc0edb94f4a70ed0d092 [5/6] ftrace: pass fregs to arch_ftrace_set_direct_caller()
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220602/202206020032.Mu3eiis7-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=c694698df7f633bcbdf8bc0edb94f4a70ed0d092
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark arm64/ftrace/minimal-regs
-        git checkout c694698df7f633bcbdf8bc0edb94f4a70ed0d092
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/ftrace.h:23,
-                    from include/linux/kprobes.h:28,
-                    from include/linux/kgdb.h:19,
-                    from include/drm/drm_util.h:36,
-                    from drivers/gpu/drm/i915/display/intel_display.h:28,
-                    from drivers/gpu/drm/i915/display/intel_cdclk.h:11,
-                    from <command-line>:
-   arch/x86/include/asm/ftrace.h:45:57: error: 'struct ftrace_regs' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
-      45 | static inline void arch_ftrace_set_direct_caller(struct ftrace_regs *fregs, unsigned long addr)
-         |                                                         ^~~~~~~~~~~
-   arch/x86/include/asm/ftrace.h: In function 'arch_ftrace_set_direct_caller':
-   arch/x86/include/asm/ftrace.h:47:32: error: implicit declaration of function 'ftrace_get_regs' [-Werror=implicit-function-declaration]
-      47 |         struct pt_regs *regs = ftrace_get_regs(fregs);
-         |                                ^~~~~~~~~~~~~~~
->> arch/x86/include/asm/ftrace.h:47:32: error: initialization of 'struct pt_regs *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
-   In file included from include/linux/kprobes.h:28,
-                    from include/linux/kgdb.h:19,
-                    from include/drm/drm_util.h:36,
-                    from drivers/gpu/drm/i915/display/intel_display.h:28,
-                    from drivers/gpu/drm/i915/display/intel_cdclk.h:11,
-                    from <command-line>:
-   include/linux/ftrace.h: At top level:
-   include/linux/ftrace.h:121:40: error: conflicting types for 'ftrace_get_regs'; have 'struct pt_regs *(struct ftrace_regs *)'
-     121 | static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs)
-         |                                        ^~~~~~~~~~~~~~~
-   In file included from include/linux/ftrace.h:23,
-                    from include/linux/kprobes.h:28,
-                    from include/linux/kgdb.h:19,
-                    from include/drm/drm_util.h:36,
-                    from drivers/gpu/drm/i915/display/intel_display.h:28,
-                    from drivers/gpu/drm/i915/display/intel_cdclk.h:11,
-                    from <command-line>:
-   arch/x86/include/asm/ftrace.h:47:32: note: previous implicit declaration of 'ftrace_get_regs' with type 'int()'
-      47 |         struct pt_regs *regs = ftrace_get_regs(fregs);
-         |                                ^~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
---
-   In file included from include/linux/ftrace.h:23,
-                    from include/linux/kprobes.h:28,
-                    from include/linux/kgdb.h:19,
-                    from include/drm/drm_util.h:36,
-                    from include/drm/drm_connector.h:32,
-                    from drivers/gpu/drm/i915/i915_drv.h:37,
-                    from drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:14:
-   arch/x86/include/asm/ftrace.h:45:57: error: 'struct ftrace_regs' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
-      45 | static inline void arch_ftrace_set_direct_caller(struct ftrace_regs *fregs, unsigned long addr)
-         |                                                         ^~~~~~~~~~~
-   arch/x86/include/asm/ftrace.h: In function 'arch_ftrace_set_direct_caller':
-   arch/x86/include/asm/ftrace.h:47:32: error: implicit declaration of function 'ftrace_get_regs' [-Werror=implicit-function-declaration]
-      47 |         struct pt_regs *regs = ftrace_get_regs(fregs);
-         |                                ^~~~~~~~~~~~~~~
->> arch/x86/include/asm/ftrace.h:47:32: error: initialization of 'struct pt_regs *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
-   In file included from include/linux/kprobes.h:28,
-                    from include/linux/kgdb.h:19,
-                    from include/drm/drm_util.h:36,
-                    from include/drm/drm_connector.h:32,
-                    from drivers/gpu/drm/i915/i915_drv.h:37,
-                    from drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:14:
-   include/linux/ftrace.h: At top level:
-   include/linux/ftrace.h:121:40: error: conflicting types for 'ftrace_get_regs'; have 'struct pt_regs *(struct ftrace_regs *)'
-     121 | static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs)
-         |                                        ^~~~~~~~~~~~~~~
-   In file included from include/linux/ftrace.h:23,
-                    from include/linux/kprobes.h:28,
-                    from include/linux/kgdb.h:19,
-                    from include/drm/drm_util.h:36,
-                    from include/drm/drm_connector.h:32,
-                    from drivers/gpu/drm/i915/i915_drv.h:37,
-                    from drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:14:
-   arch/x86/include/asm/ftrace.h:47:32: note: previous implicit declaration of 'ftrace_get_regs' with type 'int()'
-      47 |         struct pt_regs *regs = ftrace_get_regs(fregs);
-         |                                ^~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:61:6: error: no previous prototype for 'intel_pxp_debugfs_register' [-Werror=missing-prototypes]
-      61 | void intel_pxp_debugfs_register(struct intel_pxp *pxp, struct dentry *gt_root)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
-
-
-vim +47 arch/x86/include/asm/ftrace.h
-
-    37	
-    38	/*
-    39	 * When a ftrace registered caller is tracing a function that is
-    40	 * also set by a register_ftrace_direct() call, it needs to be
-    41	 * differentiated in the ftrace_caller trampoline. To do this, we
-    42	 * place the direct caller in the ORIG_AX part of pt_regs. This
-    43	 * tells the ftrace_caller that there's a direct caller.
-    44	 */
-    45	static inline void arch_ftrace_set_direct_caller(struct ftrace_regs *fregs, unsigned long addr)
-    46	{
-  > 47		struct pt_regs *regs = ftrace_get_regs(fregs);
-    48	
-    49		/* Emulate a call */
-    50		regs->orig_ax = addr;
-    51	}
-    52	
-
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+ATTENTION
+
+You have been compensated with the sum of 1.7 million dollars in this
+United Nation the payment will be issue into ATM Visa Card,
+
+ and send to you from the Santander Bank of Spain we need your
+Address,Passport and your whatsapp number.
+
+
+THANKS
+Mrs Chantel Hermans

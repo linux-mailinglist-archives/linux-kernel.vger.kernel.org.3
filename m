@@ -2,125 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20C953A7F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C857453A67E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354489AbiFAOEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S238043AbiFANyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 09:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354862AbiFAOA7 (ORCPT
+        with ESMTP id S1353562AbiFANxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:00:59 -0400
-Received: from condef-10.nifty.com (condef-10.nifty.com [202.248.20.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D745647389;
-        Wed,  1 Jun 2022 06:57:23 -0700 (PDT)
-Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-10.nifty.com with ESMTP id 251DroRc014704;
-        Wed, 1 Jun 2022 22:53:50 +0900
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 251DrHXv027234;
-        Wed, 1 Jun 2022 22:53:17 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 251DrHXv027234
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1654091597;
-        bh=T0jniup0tdMhgXOVsaKHUqsHbruaPRstgNPuoFLQ+pc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ajuAOjVhvv07LABF+8ROyRe/wmobxoWCeF+GBjGsv3BNypwdUeUg6McGwAz7bNhIK
-         4ZZK/6ScCItnAHovrWEiOgl4K7feWIPxM7JPZUKhIyKlLOZtfv9iokhck/g56lsjQ0
-         7pCd5u9YAsd2HIy9QosDc4hLBPasM7LYTye6z9tXadY+HrJuAqLqxEsNxJDkumPGyF
-         jQKKyu1v/bZvvo31xslo0a/64JfjDHkqdIjlBEO587igis0fStzgshgrhTNR7lzuRD
-         MOYRGPUz34jV5A9jTRwvzvcQpUyYbABnxstkMylyCeDAGUdTwbB8u9zgdkXXNJ+DZc
-         ONI9K0yXitALg==
-X-Nifty-SrcIP: [209.85.216.54]
-Received: by mail-pj1-f54.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so2130406pjf.5;
-        Wed, 01 Jun 2022 06:53:17 -0700 (PDT)
-X-Gm-Message-State: AOAM532KUQ3U9cNBzHbt/t6gT7tS1QMXmiC4Hj5XY05WhVA2V4sOKTxK
-        NBRnVWYMkI+p/B3SXOsVpH/2qxcjVZIraX3al+I=
-X-Google-Smtp-Source: ABdhPJy07hu/OahBY3VJHSQdem7BDQ3c4Qu2+hwvYIGknJt0lPvMr2/KyufRbe4Ma0UKT+AqOzywxd7C0LHddmfLNl4=
-X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
- l5-20020a170903120500b0015e8cbcfd2bmr66483581plh.99.1654091596577; Wed, 01
- Jun 2022 06:53:16 -0700 (PDT)
+        Wed, 1 Jun 2022 09:53:55 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21614090D;
+        Wed,  1 Jun 2022 06:53:22 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id f23-20020a7bcc17000000b003972dda143eso3078265wmh.3;
+        Wed, 01 Jun 2022 06:53:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=Gkqx8uNGHQMl7//wICbhrmo/07INDVRlCWrBKZDsclM=;
+        b=Ve12/IxpNSBPttcoaHlRlZrHm92pIFyNWIzGp4j9wwkTa8iHtIBw8dcwytxiJU8E9B
+         cFQ8hZrytmwx2s4f2UuEwjOO9UIJ6Dm1r3s9CpXENWPhIN6j5t/DO8piLQudyplqOCei
+         SqfMGdd7Kv1zkZBObq7ReXs/cDEdX3dmrr4qSk/Hat5dBCjKpV+0gQ48ir6mweiNWHZP
+         Lpp/B+T5YF9t93Pw1FEd0hUK8VsfRdwGHO8yXJIhiHP+KLwzpcdvaHNY8Qjt4hWjaGhc
+         lRY3O9gyGScMsaYLgihxPTpmmW1O3KnfbzzvT3tOGJChyuY4aVaclh9t6SI3BjcCyOgI
+         gmvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Gkqx8uNGHQMl7//wICbhrmo/07INDVRlCWrBKZDsclM=;
+        b=ew1rDMT25/gQzAaL6JYwB4EUiglBMhO9x/WbNze2vGau/rzMmo1F30Ef6+t9E+CAsx
+         ZDoHCDJhvXK/jvSzvKXA4I5hy+G+g+LHpK/JUw/+HR8030lC3Pmr6dTG3O02K5FHhAjr
+         1h8xBWBJL31W7QneOpIn9gsphFd945W5cRPs1T0CDMpvYjsLnQTwsdtg8/RnPpAZ1Rw9
+         82diH4e7+sdFpkcLKD0+7eIVtABoM0TxDU5s/bP/v1pHeaKqkSyDeb3ELlPU2M+MlmhC
+         OLDgs/uoR/PlZTosjdnLxqOMB+a6OwBnngZOss4ifqkWNoijqCvQikbQznXeeY3n3gzg
+         iN7w==
+X-Gm-Message-State: AOAM531K7FZXyj/BPYixnQdPDCCVdLW4yFkEa34+W7qgl8757lyDR/ts
+        QWRqoTUkKjK9dfMxDcYcEl144qxaF3I=
+X-Google-Smtp-Source: ABdhPJwbZYR808yKUqN3/m85GcP2QTKQJSBiDQBR3SnLiJ67wdJ3ufk1zAMFeaXfFzxf1FgkOaYUlA==
+X-Received: by 2002:a05:600c:414e:b0:397:55aa:ccc0 with SMTP id h14-20020a05600c414e00b0039755aaccc0mr29543460wmm.51.1654091576305;
+        Wed, 01 Jun 2022 06:52:56 -0700 (PDT)
+Received: from ?IPV6:2a02:908:1256:79a0:d1fb:e1e4:e193:e55f? ([2a02:908:1256:79a0:d1fb:e1e4:e193:e55f])
+        by smtp.gmail.com with ESMTPSA id c16-20020a7bc850000000b003942a244f48sm5240824wml.33.2022.06.01.06.52.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 06:52:55 -0700 (PDT)
+Message-ID: <ab42ca92-70e3-ec82-c52c-0fc41d5b4a53@gmail.com>
+Date:   Wed, 1 Jun 2022 15:52:53 +0200
 MIME-Version: 1.0
-References: <20220601130819.11171-1-isak01@gmail.com>
-In-Reply-To: <20220601130819.11171-1-isak01@gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 1 Jun 2022 22:52:39 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAReo0ACB_TbcCXu76OPeK6UQhWtAWOxGq=L88GZB5Tv8g@mail.gmail.com>
-Message-ID: <CAK7LNAReo0ACB_TbcCXu76OPeK6UQhWtAWOxGq=L88GZB5Tv8g@mail.gmail.com>
-Subject: Re: [PATCH] scripts: kconfig: nconf: make nconfig accept jk keybindings
-To:     Isak Ellmer <isak01@gmail.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [Linaro-mm-sig] Re: [PATCH] dma-fence: allow dma fence to have
+ their own lock
+Content-Language: en-US
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220530142232.2871634-1-senozhatsky@chromium.org>
+ <7eee4274-bd69-df8d-9067-771366217804@amd.com> <YpWCvniLzJfcp684@google.com>
+ <33aba213-b6ad-4a15-9272-c62f5dfb1fb7@gmail.com>
+ <YpdoEzLmlBfJks3q@phenom.ffwll.local>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <YpdoEzLmlBfJks3q@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 10:08 PM Isak Ellmer <isak01@gmail.com> wrote:
+Am 01.06.22 um 15:22 schrieb Daniel Vetter:
+> On Wed, Jun 01, 2022 at 02:45:42PM +0200, Christian König wrote:
+>> Am 31.05.22 um 04:51 schrieb Sergey Senozhatsky:
+>>> On (22/05/30 16:55), Christian König wrote:
+>>>> Am 30.05.22 um 16:22 schrieb Sergey Senozhatsky:
+>>>>> [SNIP]
+>>>>> So the `lock` should have at least same lifespan as the DMA fence
+>>>>> that borrows it, which is impossible to guarantee in our case.
+>>>> Nope, that's not correct. The lock should have at least same lifespan as the
+>>>> context of the DMA fence.
+>>> How does one know when it's safe to release the context? DMA fence
+>>> objects are still transparently refcount-ed and "live their own lives",
+>>> how does one synchronize lifespans?
+>> Well, you don't.
+>>
+>> If you have a dynamic context structure you need to reference count that as
+>> well. In other words every time you create a fence in your context you need
+>> to increment the reference count and every time a fence is release you
+>> decrement it.
+>>
+>> If you have a static context structure like most drivers have then you must
+>> make sure that all fences at least signal before you unload your driver. We
+>> still somewhat have a race when you try to unload a driver and the fence_ops
+>> structure suddenly disappear, but we currently live with that.
+>>
+>> Apart from that you are right, fences can live forever and we need to deal
+>> with that.
+> Yeah this entire thing is a bit an "oops we might have screwed up" moment.
+> I think the cleanest way is to essentially do what the drm/sched codes
+> does, which is split the gpu job into the public dma_fence (which can live
+> forever) and the internal job fence (which has to deal with all the
+> resource refcounting issues). And then make sure that only ever the public
+> fence escapes to places where the fence can live forever (dma_resv,
+> drm_syncobj, sync_file as our uapi container objects are the prominent
+> cases really).
 >
-> Make nconfig accept jk keybindings for movement in addition to arrow
-> keys.
->
-> Signed-off-by: Isak Ellmer <isak01@gmail.com>
-> ---
+> It sucks a bit.
 
-Applied to linux-kbuild.
-Thanks.
+It's actually not that bad.
 
+See after signaling the dma_fence_ops is mostly used for debugging I 
+think, e.g. timeline name etc...
 
+Christian.
 
->  scripts/kconfig/nconf.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/scripts/kconfig/nconf.c b/scripts/kconfig/nconf.c
-> index 7b371bd7fb36..3ba8b1af390f 100644
-> --- a/scripts/kconfig/nconf.c
-> +++ b/scripts/kconfig/nconf.c
-> @@ -52,8 +52,8 @@ static const char nconf_global_help[] =
->  "\n"
->  "Menu navigation keys\n"
->  "----------------------------------------------------------------------\n"
-> -"Linewise up                 <Up>\n"
-> -"Linewise down               <Down>\n"
-> +"Linewise up                 <Up>    <k>\n"
-> +"Linewise down               <Down>  <j>\n"
->  "Pagewise up                 <Page Up>\n"
->  "Pagewise down               <Page Down>\n"
->  "First entry                 <Home>\n"
-> @@ -1105,9 +1105,11 @@ static void conf(struct menu *menu)
->                                 break;
->                         switch (res) {
->                         case KEY_DOWN:
-> +                       case 'j':
->                                 menu_driver(curses_menu, REQ_DOWN_ITEM);
->                                 break;
->                         case KEY_UP:
-> +                       case 'k':
->                                 menu_driver(curses_menu, REQ_UP_ITEM);
->                                 break;
->                         case KEY_NPAGE:
-> @@ -1287,9 +1289,11 @@ static void conf_choice(struct menu *menu)
->                                 break;
->                         switch (res) {
->                         case KEY_DOWN:
-> +                       case 'j':
->                                 menu_driver(curses_menu, REQ_DOWN_ITEM);
->                                 break;
->                         case KEY_UP:
-> +                       case 'k':
->                                 menu_driver(curses_menu, REQ_UP_ITEM);
->                                 break;
->                         case KEY_NPAGE:
-> --
-> 2.35.1
->
+> -Daniel
 
-
--- 
-Best Regards
-Masahiro Yamada

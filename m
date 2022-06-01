@@ -2,118 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B1D53A561
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 14:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3586C53A56B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 14:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353030AbiFAMpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 08:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
+        id S1352858AbiFAMrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 08:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243984AbiFAMpt (ORCPT
+        with ESMTP id S1347894AbiFAMqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 08:45:49 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F325003E;
-        Wed,  1 Jun 2022 05:45:47 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id gi33so3536424ejc.3;
-        Wed, 01 Jun 2022 05:45:47 -0700 (PDT)
+        Wed, 1 Jun 2022 08:46:51 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E3F654B
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 05:46:50 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id t25so2545501lfg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 05:46:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3gXXAFCIgEtF+YzTyCewnTjN33A3GV3iuvrjUd27wQQ=;
-        b=gta6eDw43Uu7sglXZL/Vx2eKNZv/oPKGubWeykfGXP6+d5MRPMny64oKmMnBVj1ov2
-         WBL+iirMwlra8edJZnYxIOoIQ+8fT9uqyc0vdTXiddtI5+dqrGKxPTEgZzRaq7luDAgW
-         Xbes5Fr0LjMEQOnXST9oMj7xnFY4gwNGyBwYzLwh3XRe3rysTNoaTaIJkSEtAtcG52IY
-         j7zMyk3iHiwwhxX7XXJeotHqR/xNBwJwhjlLqqwdHbJMW0Q6Ah3hCeYIQXfzX5inb5tu
-         NWNJLs72EwPyi5ZAzHA+k5531RYCDHMCs7XtmvxEfrpgZgFOXJFeJv1Uj0wa5qdZEjAh
-         wRxw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ypan38TB2QoAzYWO+fMPZfJPmZAF9oC38F8TiawwsKI=;
+        b=QKLl9jqzOPmCnoTtwZwwMFVM597CPkRIzsC7zl/r8egWnTpbQxRvlGisNM+FCgz6zq
+         SzgGWfUjzldk9oesTJJ3pTNq2j0gQyWLBsTGI7TZsYGyzpEJO0skbzN8wwUT+JBhexmD
+         QRHtDOHBCPRrU4J1Z7EQfEZFVmbIrGWPsvlqdv1bV2JnALQp4eu8vjDC7sdZBdvsuZx/
+         Xqb1C1C7ULHIWYxfSuee1JQm+EMyl9Tg7gKE5IyXbcTgrVvTdj5a+6RPMNXcxsJRvU9j
+         toEZm6RcHXYkeIEMDDh9JcsViH4cOfp337Zy731WcU6doRnwxz7AvaAtyGL736ULW/R3
+         EMAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3gXXAFCIgEtF+YzTyCewnTjN33A3GV3iuvrjUd27wQQ=;
-        b=0RXi64uLfvqRkQWhz7APJFHjXjJE+8mKXx2JaHIJKMQdW6EDTgOdFSY5blIOxyOzWa
-         V6Kd+gjmSC9doVTDCUPDyjJq2IyY7gCjhsHuqxEHGgTJOdXPd6+MyM7NJIxFLkbQDScl
-         ZEWwRbz8wDvxIl+0Tf2nv2xPWq0z2sdYXe2QJxiqty6b+dUJAZwpoqHFaBLUQF319eOA
-         jHSvvZU0SZMKXp7h+GPHswCTPQpBlOnY1juafRIOxcCC0QNgRc2+mmzTZ59nxGPvBHgZ
-         1Z9YC8UB0E34XGOh3kYkxhcLUi9dmKdmqtLpU6fLcv5XPwhvFcVGnP2sm2Iwq8HMvoXR
-         1uGA==
-X-Gm-Message-State: AOAM532Uysx7UVi0MijWuveKCSVzfBg6Er85/aAaNPCf1+Qp+Tq1j0D1
-        Jz390vsi/dFxR8BaBUpOR2I=
-X-Google-Smtp-Source: ABdhPJw2hNXssU1Die826uY3QfwCGMNWy9eIR9jcXgxN1q7weKBiW4r00uIvzYLOojrC71wHndfrzQ==
-X-Received: by 2002:a17:906:2416:b0:6fe:a0be:91d5 with SMTP id z22-20020a170906241600b006fea0be91d5mr54759460eja.132.1654087544558;
-        Wed, 01 Jun 2022 05:45:44 -0700 (PDT)
-Received: from [192.168.178.21] (p5b0ea02f.dip0.t-ipconnect.de. [91.14.160.47])
-        by smtp.gmail.com with ESMTPSA id gk2-20020a17090790c200b006febce7081esm677798ejb.177.2022.06.01.05.45.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 05:45:43 -0700 (PDT)
-Message-ID: <33aba213-b6ad-4a15-9272-c62f5dfb1fb7@gmail.com>
-Date:   Wed, 1 Jun 2022 14:45:42 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ypan38TB2QoAzYWO+fMPZfJPmZAF9oC38F8TiawwsKI=;
+        b=cB49RLz3m/o3KHG/Jat/QfzIZL8nJi+YYs4xs2+N/2nWLLC/rw7iw84+lJ+BtHXnZY
+         KAgROOPEtwwg6bVJi7BXyTUr/u8yO/raoIJJn8xAqQaGlfOT00Hv+j5uWRuvgZJACQYn
+         b41yQlI0ifr8XpbdTF7zMG5oZmhptGr1p8M9mFtz9YIgV1MR2LoPXkogqbIOditSPH8r
+         NrmchVFh6I7jOPZbkkuLQaEHZOcWO/ecae4HLzSQjNiadOeLLRarRscBJgxUu7nqll28
+         rBVXzfJLTvwhUe7+BI0qWl6/rHzWgvO7rqfRqBBI+HOWSjwWOhKfsjHBAJEI1WE//r7N
+         g8kg==
+X-Gm-Message-State: AOAM531+5aI0rtFh4y800q0M0990g+jHklKJ4GQ1VoF0AHcB5qxQmcQO
+        JrK2ws6bNC7wFAnZMsilgEDVe4GGc+4uKY0ryZ13hg==
+X-Google-Smtp-Source: ABdhPJzsrIu9md7U7n1zgj7u1cLuExn4AAVdSQM0L62PSHkBkuz5iBlGUZBgl32ya7QNulKtLODAF2LpeKSeB6JV/Cs=
+X-Received: by 2002:a05:6512:e93:b0:478:70ed:6dfb with SMTP id
+ bi19-20020a0565120e9300b0047870ed6dfbmr33055330lfb.358.1654087608721; Wed, 01
+ Jun 2022 05:46:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [Linaro-mm-sig] Re: [PATCH] dma-fence: allow dma fence to have
- their own lock
-Content-Language: en-US
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220530142232.2871634-1-senozhatsky@chromium.org>
- <7eee4274-bd69-df8d-9067-771366217804@amd.com> <YpWCvniLzJfcp684@google.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <YpWCvniLzJfcp684@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220523144255.10310-1-linmq006@gmail.com>
+In-Reply-To: <20220523144255.10310-1-linmq006@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 1 Jun 2022 14:46:12 +0200
+Message-ID: <CAPDyKFrtNLRT8prMuVXx9RBVfVuj_yj=KTj9nHaUg0t6euxUDg@mail.gmail.com>
+Subject: Re: [PATCH] mmc: sdhci-of-esdhc: Fix refcount leak in esdhc_signal_voltage_switch
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        yangbo lu <yangbo.lu@nxp.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 31.05.22 um 04:51 schrieb Sergey Senozhatsky:
-> On (22/05/30 16:55), Christian König wrote:
->> Am 30.05.22 um 16:22 schrieb Sergey Senozhatsky:
->>> [SNIP]
->>> So the `lock` should have at least same lifespan as the DMA fence
->>> that borrows it, which is impossible to guarantee in our case.
->> Nope, that's not correct. The lock should have at least same lifespan as the
->> context of the DMA fence.
-> How does one know when it's safe to release the context? DMA fence
-> objects are still transparently refcount-ed and "live their own lives",
-> how does one synchronize lifespans?
+On Mon, 23 May 2022 at 16:43, Miaoqian Lin <linmq006@gmail.com> wrote:
+>
+> of_find_matching_node() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when not need anymore.
+> Add missing of_node_put() to avoid refcount leak.
+> of_node_put() checks null pointer.
+>
+> Fixes: ea35645a3c66 ("mmc: sdhci-of-esdhc: add support for signal voltage switch")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-Well, you don't.
+Queued for v5.20 on the devel branch, thanks!
 
-If you have a dynamic context structure you need to reference count that 
-as well. In other words every time you create a fence in your context 
-you need to increment the reference count and every time a fence is 
-release you decrement it.
+Kind regards
+Uffe
 
-If you have a static context structure like most drivers have then you 
-must make sure that all fences at least signal before you unload your 
-driver. We still somewhat have a race when you try to unload a driver 
-and the fence_ops structure suddenly disappear, but we currently live 
-with that.
 
-Apart from that you are right, fences can live forever and we need to 
-deal with that.
-
-Regards,
-Christian.
-
-> _______________________________________________
-> Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
-> To unsubscribe send an email to linaro-mm-sig-leave@lists.linaro.org
-
+> ---
+>  drivers/mmc/host/sdhci-of-esdhc.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/mmc/host/sdhci-of-esdhc.c b/drivers/mmc/host/sdhci-of-esdhc.c
+> index d9dc41143bb3..8b3d8119f388 100644
+> --- a/drivers/mmc/host/sdhci-of-esdhc.c
+> +++ b/drivers/mmc/host/sdhci-of-esdhc.c
+> @@ -904,6 +904,7 @@ static int esdhc_signal_voltage_switch(struct mmc_host *mmc,
+>                 scfg_node = of_find_matching_node(NULL, scfg_device_ids);
+>                 if (scfg_node)
+>                         scfg_base = of_iomap(scfg_node, 0);
+> +               of_node_put(scfg_node);
+>                 if (scfg_base) {
+>                         sdhciovselcr = SDHCIOVSELCR_TGLEN |
+>                                        SDHCIOVSELCR_VSELVAL;
+> --
+> 2.25.1
+>

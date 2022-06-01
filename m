@@ -2,93 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9571539DAA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B36539DF2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350166AbiFAHD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 03:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
+        id S1350232AbiFAHOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 03:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241833AbiFAHDz (ORCPT
+        with ESMTP id S1350298AbiFAHOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 03:03:55 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2CA8BD3F;
-        Wed,  1 Jun 2022 00:03:53 -0700 (PDT)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LCg7Q5gDFz1K97R;
-        Wed,  1 Jun 2022 15:02:10 +0800 (CST)
-Received: from huawei.com (10.67.174.157) by kwepemi500014.china.huawei.com
- (7.221.188.232) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
- 2022 15:03:49 +0800
-From:   Li Zhengyu <lizhengyu3@huawei.com>
-To:     <rdunlap@infradead.org>, <palmer@rivosinc.com>, <mick@ics.forth.gr>
-CC:     <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
-        <liaochang1@huawei.com>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>, <linux-next@vger.kernel.org>
-Subject: [PATCH] RISC-V: kexec: Fix build error without CONFIG_KEXEC
-Date:   Wed, 1 Jun 2022 15:02:04 +0800
-Message-ID: <20220601070204.26882-1-lizhengyu3@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 1 Jun 2022 03:14:40 -0400
+X-Greylist: delayed 593 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Jun 2022 00:14:22 PDT
+Received: from postler.einfach.org (postler.einfach.org [IPv6:2a01:4f8:151:8388::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07087996B6
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:14:21 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by postler.einfach.org (Postfix) with ESMTP id DA471364FEFB;
+        Wed,  1 Jun 2022 07:04:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=einfach.org; s=mail;
+        t=1654067065; bh=8YCkdC30YH1NQT1nteqzBL0uHfjNN9j3pN+keJRnp5M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=T/vUQp3FYLmSw+MK35Jbb5ePJGNvgq92AhaXsgcj5qpymTW/N3bNNXpfEnW6gvYvP
+         NFKwafLb4PN3VkDiPwSXx/a36naci8YhFey3cOW8TiepT0ERoUnDpOTu6nJ0XGeVtU
+         XKOSD2TPBNPQgfop1gLyxq94eJbaiNlaiZodQ/RE=
+X-Virus-Scanned: amavisd-new at postler.einfach.org
+Received: from postler.einfach.org ([127.0.0.1])
+        by localhost (postler.einfach.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id y_pkQy3yqosu; Wed,  1 Jun 2022 07:04:25 +0000 (UTC)
+Received: from [IPV6:2001:8a0:eece:d600:d02:7d0e:76a1:908b] (unknown [IPv6:2001:8a0:eece:d600:d02:7d0e:76a1:908b])
+        by postler.einfach.org (Postfix) with ESMTPSA id 15D3C3616726;
+        Wed,  1 Jun 2022 07:04:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=einfach.org; s=mail;
+        t=1654067065; bh=8YCkdC30YH1NQT1nteqzBL0uHfjNN9j3pN+keJRnp5M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=T/vUQp3FYLmSw+MK35Jbb5ePJGNvgq92AhaXsgcj5qpymTW/N3bNNXpfEnW6gvYvP
+         NFKwafLb4PN3VkDiPwSXx/a36naci8YhFey3cOW8TiepT0ERoUnDpOTu6nJ0XGeVtU
+         XKOSD2TPBNPQgfop1gLyxq94eJbaiNlaiZodQ/RE=
+Message-ID: <e3ba1b78-5047-3bb3-e1af-988c718c075b@einfach.org>
+Date:   Wed, 1 Jun 2022 08:04:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.157]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500014.china.huawei.com (7.221.188.232)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] average: Clarify the restrictions
+Content-Language: en-US
+To:     Jui-Tse Huang <juitse.huang@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>
+References: <20220601065746.18426-1-juitse.huang@gmail.com>
+From:   Bruno Randolf <br1@einfach.org>
+In-Reply-To: <20220601065746.18426-1-juitse.huang@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_KEXEC_FILE=y but CONFIG_KEXEC is not set:
+On 01/06/2022 07:57, Jui-Tse Huang wrote:
+> There is several restrictions in the EWMA helper macro that the
+> developers should take care of, but the comment does not mentioned yet,
+> thus, this patch clarify the restrictions.
+> 
+> Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
+> ---
+>   include/linux/average.h | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/include/linux/average.h b/include/linux/average.h
+> index a1a8f09631ce..1618f6519c3d 100644
+> --- a/include/linux/average.h
+> +++ b/include/linux/average.h
+> @@ -13,6 +13,10 @@
+>    * precision and fall-off coefficient determined at compile-time
+>    * and built into the generated helper funtions.
+>    *
+> + * This implementation supports upto 30 bits of precition, and for
 
-kernel/kexec_core.o: In function `kimage_free':
-kexec_core.c:(.text+0xa0c): undefined reference to `machine_kexec_cleanup'
-kernel/kexec_core.o: In function `.L0 ':
-kexec_core.c:(.text+0xde8): undefined reference to `machine_crash_shutdown'
-kexec_core.c:(.text+0xdf4): undefined reference to `machine_kexec'
-kernel/kexec_core.o: In function `.L231':
-kexec_core.c:(.text+0xe1c): undefined reference to `riscv_crash_save_regs'
-kernel/kexec_core.o: In function `.L0 ':
-kexec_core.c:(.text+0x119e): undefined reference to `machine_shutdown'
-kernel/kexec_core.o: In function `.L312':
-kexec_core.c:(.text+0x11b2): undefined reference to `machine_kexec'
-kernel/kexec_file.o: In function `.L0 ':
-kexec_file.c:(.text+0xb84): undefined reference to `machine_kexec_prepare'
-kernel/kexec_file.o: In function `.L177':
-kexec_file.c:(.text+0xc5a): undefined reference to `machine_kexec_prepare'
-Makefile:1160: recipe for target 'vmlinux' failed
-make: *** [vmlinux] Error 1
+spelling: up to ... precision
 
-These symbols should depend on CONFIG_KEXEC_CORE rather than CONFIG_KEXEC
-when kexec_file has been implemented on RISC-V, like the other archs have
-done.
+> + * usage concern, only the api of fetching non-fractional part is
+> + * provided for now.
 
-Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
----
- arch/riscv/kernel/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+spelling: "API for"
 
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index c71d6591d539..33bb60a354cd 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -78,7 +78,7 @@ obj-$(CONFIG_SMP) += cpu_ops_sbi.o
- endif
- obj-$(CONFIG_HOTPLUG_CPU)	+= cpu-hotplug.o
- obj-$(CONFIG_KGDB)		+= kgdb.o
--obj-$(CONFIG_KEXEC)		+= kexec_relocate.o crash_save_regs.o machine_kexec.o
-+obj-$(CONFIG_KEXEC_CORE)	+= kexec_relocate.o crash_save_regs.o machine_kexec.o
- obj-$(CONFIG_KEXEC_FILE)	+= elf_kexec.o machine_kexec_file.o
- obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
- 
--- 
-2.17.1
+wording: remove "and for usage concern", just ", and only the API for" 
+would be enough.
 
+Thank you,
+bruno

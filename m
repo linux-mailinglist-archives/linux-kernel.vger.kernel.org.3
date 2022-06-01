@@ -2,111 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D227D53AB55
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2AE53AB59
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353102AbiFAQx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 12:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
+        id S1345985AbiFAQxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 12:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343763AbiFAQx1 (ORCPT
+        with ESMTP id S1353308AbiFAQxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 12:53:27 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64721B797
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 09:53:25 -0700 (PDT)
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 251GrB0V013766
-        for <linux-kernel@vger.kernel.org>; Thu, 2 Jun 2022 01:53:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 251GrB0V013766
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1654102392;
-        bh=3NKQ+J3mzt26WVeE86BqFNJ9+iqJLoZtenf097yyYe4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ULej1WToW/U7kHpiFTAlHr7SmsxH2jVcbm1DCPMRb0hYM2dBBu/V59Rj4o2qPGCZt
-         aQzSMtWANhX+9E0LUBjNrlwQ2OkAKr2OpHyuMu5ltTvhmVCj6EM3r4AwtJkFaEMrUU
-         n1Ei+DYyJZu0Of3CaBNrgYAFg1TI/LB5W6/3cOuEVP5Lh4PD7MfjTt4na51uNw1Zpg
-         vi1JUTBrKONiH7AqDcdFUbEXAIIgYXhR60s0UuDkB/+wjUoVfBhrnBqP6VZcCK/ru/
-         LJCgZ9sLq2Ukp8fEq7cpSvjTbxkJ1HERqc3B73cKMugPv/bEzUHvDPuIS83Sps+YbY
-         NjSp05CInRw+g==
-X-Nifty-SrcIP: [209.85.214.176]
-Received: by mail-pl1-f176.google.com with SMTP id i1so2321724plg.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 09:53:11 -0700 (PDT)
-X-Gm-Message-State: AOAM530JabizqbdhfxuVsuQ0QXaKg8f6+yTJBDrw40VzJGmiHGJkfJFD
-        PTdKwvj/t/Q6AKzxm2gfz3ft32g7ct2n43w1sho=
-X-Google-Smtp-Source: ABdhPJxhsJ0yvfOfuO3coLIJWFOt3V5F/7NjPqiVQQUCpJ+4KU1HKIWEydX7/88qEsknlnrnKrn+feViD2SNnFCqpPY=
-X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
- l5-20020a170903120500b0015e8cbcfd2bmr333667plh.99.1654102391009; Wed, 01 Jun
- 2022 09:53:11 -0700 (PDT)
+        Wed, 1 Jun 2022 12:53:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64D22985BD
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 09:53:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654102420;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nFWeyQp+SrczfCg3mcRu+wFEKALhsOXDeSMtjftZhiE=;
+        b=Xs1ebKPaO2+Xj+LeTibRrTI/FbdHs9naJy6oMYh/jhIMwzbuiAK/glrkU0OlVrJeuudqfI
+        LCEFRnvVvDXPXx+f0pyZDaYxqX9J8R58aRsuROx3dXzgWpEf8a1arUFMbojXqzyWvdB070
+        3OKm4s86b6xWARBthi93HMoKiSQHCog=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-12-UVh5-t9sNqO4A_FIvhKgRQ-1; Wed, 01 Jun 2022 12:53:39 -0400
+X-MC-Unique: UVh5-t9sNqO4A_FIvhKgRQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CB8F18032E5;
+        Wed,  1 Jun 2022 16:53:38 +0000 (UTC)
+Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7574E1731B;
+        Wed,  1 Jun 2022 16:53:38 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v2 1/2] blk-cgroup: Correctly free percpu iostat_cpu in blkg on error exit
+Date:   Wed,  1 Jun 2022 12:53:23 -0400
+Message-Id: <20220601165324.60892-1-longman@redhat.com>
 MIME-Version: 1.0
-References: <20220601010017.2639048-1-cmllamas@google.com>
-In-Reply-To: <20220601010017.2639048-1-cmllamas@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 2 Jun 2022 01:52:34 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARjJJfEUhfs8_5Jw3ADg6kKSP=u10=dg4URS10hRk4tsQ@mail.gmail.com>
-Message-ID: <CAK7LNARjJJfEUhfs8_5Jw3ADg6kKSP=u10=dg4URS10hRk4tsQ@mail.gmail.com>
-Subject: Re: [PATCH] binder: fix sender_euid type in uapi header
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Todd Kjos <tkjos@android.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christopher Ferris <cferris@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 10:00 AM Carlos Llamas <cmllamas@google.com> wrote:
->
-> The {pid,uid}_t fields of struct binder_transaction were recently
-> replaced to use kernel types in commit 169adc2b6b3c ("android/binder.h:
-> add linux/android/binder(fs).h to UAPI compile-test coverage").
->
-> However, using __kernel_uid_t here breaks backwards compatibility in
-> architectures using 16-bits for this type, since glibc and some others
-> still expect a 32-bit uid_t. Instead, let's use __kernel_uid32_t which
-> avoids this compatibility problem.
->
-> Fixes: 169adc2b6b3c ("android/binder.h: add linux/android/binder(fs).h to UAPI compile-test coverage")
-> Reported-by: Christopher Ferris <cferris@google.com>
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
-> ---
+Commit f73316482977 ("blk-cgroup: reimplement basic IO stats using cgroup
+rstat") changes block cgroup IO stats to use the rstat APIs. It added
+a new percpu iostat_cpu field into blkg. The blkg_alloc() was modified
+to allocate the new percpu iostat_cpu but didn't free it when an error
+happened. Fix this by freeing the percpu iostat_cpu on error exit.
 
-Ahhh, good catch.
+Fixes: f73316482977 ("blk-cgroup: reimplement basic IO stats using cgroup rstat")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ block/blk-cgroup.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Thank you for fixing this!
-
- Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
-
-
->  include/uapi/linux/android/binder.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
-> index 11157fae8a8e..688bcdaeed53 100644
-> --- a/include/uapi/linux/android/binder.h
-> +++ b/include/uapi/linux/android/binder.h
-> @@ -289,7 +289,7 @@ struct binder_transaction_data {
->         /* General information about the transaction. */
->         __u32           flags;
->         __kernel_pid_t  sender_pid;
-> -       __kernel_uid_t  sender_euid;
-> +       __kernel_uid32_t        sender_euid;
->         binder_size_t   data_size;      /* number of bytes of data */
->         binder_size_t   offsets_size;   /* number of bytes of offsets */
->
-> --
-> 2.36.1.255.ge46751e96f-goog
->
-
-
+diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+index 40161a3f68d0..acd9b0aa8dc8 100644
+--- a/block/blk-cgroup.c
++++ b/block/blk-cgroup.c
+@@ -219,11 +219,11 @@ static struct blkcg_gq *blkg_alloc(struct blkcg *blkcg, struct request_queue *q,
+ 		return NULL;
+ 
+ 	if (percpu_ref_init(&blkg->refcnt, blkg_release, 0, gfp_mask))
+-		goto err_free;
++		goto err_free_blkg;
+ 
+ 	blkg->iostat_cpu = alloc_percpu_gfp(struct blkg_iostat_set, gfp_mask);
+ 	if (!blkg->iostat_cpu)
+-		goto err_free;
++		goto err_free_blkg;
+ 
+ 	if (!blk_get_queue(q))
+ 		goto err_free;
+@@ -259,6 +259,9 @@ static struct blkcg_gq *blkg_alloc(struct blkcg *blkcg, struct request_queue *q,
+ 	return blkg;
+ 
+ err_free:
++	free_percpu(blkg->iostat_cpu);
++
++err_free_blkg:
+ 	blkg_free(blkg);
+ 	return NULL;
+ }
 -- 
-Best Regards
-Masahiro Yamada
+2.31.1
+

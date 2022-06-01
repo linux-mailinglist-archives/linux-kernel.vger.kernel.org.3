@@ -2,51 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E1153A423
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C44353A447
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240813AbiFALaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 07:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
+        id S1352743AbiFALoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 07:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352718AbiFALaZ (ORCPT
+        with ESMTP id S229979AbiFALol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:30:25 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D566FD38;
-        Wed,  1 Jun 2022 04:30:21 -0700 (PDT)
-Received: from kwepemi100012.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LCn2w3P3fz1K9Cd;
-        Wed,  1 Jun 2022 19:28:40 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100012.china.huawei.com (7.221.188.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 1 Jun 2022 19:30:20 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
- 2022 19:30:19 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <paolo.valente@linaro.org>, <jack@suse.cz>, <tj@kernel.org>,
-        <axboe@kernel.dk>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH -next v9 4/4] block, bfq: do not idle if only one group is activated
-Date:   Wed, 1 Jun 2022 19:43:40 +0800
-Message-ID: <20220601114340.949953-5-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220601114340.949953-1-yukuai3@huawei.com>
-References: <20220601114340.949953-1-yukuai3@huawei.com>
+        Wed, 1 Jun 2022 07:44:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D2B873788
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 04:44:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654083878;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jGXSzcUQXbxx0guRGMm9JRFmLU6j0niXFq1+iTNVfGw=;
+        b=QnhK+n25ragZkhbOJDtDBuKGPUoq2s2V+k8oMdEDfoMN6KsKWRBCmvsmfa5TllT/Hgp2l3
+        5l0sUwYka/kCw3wBaQu/rwTpzax0H2KImveWWUkxvktnIEDKAXVP9kdysHEVYhURSGnT3W
+        nOV53OTSLx59QrjS6zQ+nOAafUi8Tik=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-433-IFYPvtXWOWK8WPlwlCGO1Q-1; Wed, 01 Jun 2022 07:44:34 -0400
+X-MC-Unique: IFYPvtXWOWK8WPlwlCGO1Q-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 086DD294EDED;
+        Wed,  1 Jun 2022 11:44:34 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 881931121314;
+        Wed,  1 Jun 2022 11:44:33 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        Lei Wang <lei4.wang@intel.com>
+Subject: Re: [PATCH v2 0/2] KVM: VMX: Sanitize VM-Entry/VM-Exit pairs during setup
+Date:   Wed,  1 Jun 2022 07:44:22 -0400
+Message-Id: <20220601114421.395602-1-pbonzini@redhat.com>
+In-Reply-To: <20220527170658.3571367-1-seanjc@google.com>
+References: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,41 +65,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that root group is counted into 'num_groups_with_pending_reqs',
-'num_groups_with_pending_reqs > 0' is always true in
-bfq_asymmetric_scenario(). Thus change the condition to '> 1'.
+Queued, thanks (minus the LBR part).
 
-On the other hand, this change can enable concurrent sync io if only
-one group is activated.
+Paolo
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
----
- block/bfq-iosched.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 03b04892440c..a2aa243505dc 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -820,7 +820,7 @@ bfq_pos_tree_add_move(struct bfq_data *bfqd, struct bfq_queue *bfqq)
-  * much easier to maintain the needed state:
-  * 1) all active queues have the same weight,
-  * 2) all active queues belong to the same I/O-priority class,
-- * 3) there are no active groups.
-+ * 3) there are is at most one active group.
-  * In particular, the last condition is always true if hierarchical
-  * support or the cgroups interface are not enabled, thus no state
-  * needs to be maintained in this case.
-@@ -852,7 +852,7 @@ static bool bfq_asymmetric_scenario(struct bfq_data *bfqd,
- 
- 	return varied_queue_weights || multiple_classes_busy
- #ifdef CONFIG_BFQ_GROUP_IOSCHED
--	       || bfqd->num_groups_with_pending_reqs > 0
-+	       || bfqd->num_groups_with_pending_reqs > 1
- #endif
- 		;
- }
--- 
-2.31.1
 

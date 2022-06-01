@@ -2,191 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D751053AEFE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5E453B092
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbiFAWOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 18:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
+        id S232641AbiFAXqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 19:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbiFAWOf (ORCPT
+        with ESMTP id S232625AbiFAXqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 18:14:35 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 663585F9B;
-        Wed,  1 Jun 2022 15:14:34 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id A46FA5EC461;
-        Thu,  2 Jun 2022 08:14:32 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nwWbn-001YiB-8s; Thu, 02 Jun 2022 08:14:31 +1000
-Date:   Thu, 2 Jun 2022 08:14:31 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandeen@sandeen.net, djwong@kernel.org
-Subject: [GIT PULL] xfs: changes for 5.19-rc1 [2nd set]
-Message-ID: <20220601221431.GG227878@dread.disaster.area>
+        Wed, 1 Jun 2022 19:46:03 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D743526C;
+        Wed,  1 Jun 2022 16:45:56 -0700 (PDT)
+X-UUID: d56c0ad4ca4d417bbaa2d4d01dd99fb1-20220602
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:5ec6251a-a20b-46e3-b4d5-c55df9cc1787,OB:0,LO
+        B:10,IP:0,URL:25,TC:0,Content:3,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:82
+X-CID-INFO: VERSION:1.1.5,REQID:5ec6251a-a20b-46e3-b4d5-c55df9cc1787,OB:0,LOB:
+        10,IP:0,URL:25,TC:0,Content:3,EDM:0,RT:0,SF:54,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:82
+X-CID-META: VersionHash:2a19b09,CLOUDID:bca1820d-3a0d-4bbe-9d72-0e5d26d57423,C
+        OID:c0bd4adc9736,Recheck:0,SF:28|16|19|48,TC:nil,Content:3,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: d56c0ad4ca4d417bbaa2d4d01dd99fb1-20220602
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 576863483; Thu, 02 Jun 2022 07:45:53 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
+ Wed, 1 Jun 2022 23:44:56 +0000
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 2 Jun 2022 06:23:23 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 2 Jun 2022 06:23:23 +0800
+From:   <sean.wang@mediatek.com>
+To:     <dev@pschenker.ch>
+CC:     <deren.wu@mediatek.com>, <kvalo@kernel.org>,
+        <linux-wireless@vger.kernel.org>, <nbd@nbd.name>,
+        <linux@leemhuis.info>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <lorenzo.bianconi83@gmail.com>, <matthias.bgg@gmail.com>,
+        <pabeni@redhat.com>, <ryder.lee@mediatek.com>,
+        <sean.wang@mediatek.com>, <shayne.chen@mediatek.com>,
+        <yn.chen@mediatek.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <netdev@vger.kernel.org>
+Subject: Re: [PATCH] Revert "mt76: mt7921: enable aspm by default"
+Date:   Thu, 2 Jun 2022 06:23:23 +0800
+Message-ID: <1654122203-26090-1-git-send-email-sean.wang@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <e93aef5c9f8a97efe23cfb5892f78f919ce328e7.camel@pschenker.ch--annotate>
+References: <e93aef5c9f8a97efe23cfb5892f78f919ce328e7.camel@pschenker.ch--annotate>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=6297e4c9
-        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
-        a=kj9zAlcOel0A:10 a=JPEYwPQDsx4A:10 a=VwQbUJbxAAAA:8 a=7-415B0cAAAA:8
-        a=cXHwiYC6wMMmn7TOMiUA:9 a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22
-        a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+From: Sean Wang <sean.wang@mediatek.com>
 
-Can you please pull the XFS updates for 5.19 from the tag listed
-below? It merges cleanly with the TOT kernel I just pulled a couple
-of minutes ago, with no difference in the diffstat below this time.
+>On Tue, 2022-04-12 at 19:06 +0800, Deren Wu wrote:
+>> On Tue, 2022-04-12 at 12:37 +0300, Kalle Valo wrote:
+>> > Philippe Schenker <dev@pschenker.ch> writes:
+>> >
+>> > > This reverts commit bf3747ae2e25dda6a9e6c464a717c66118c588c8.
+>> > >
+>> > > This commit introduces a regression on some systems where the
+>> > > kernel is crashing in different locations after a reboot was
+>> > > issued.
+>> > >
+>> > > This issue was bisected on a Thinkpad P14s Gen2 (AMD) with latest
+>> > > firmware.
+>> > >
+>> > > Link:
+>> > > https://urldefense.com/v3/__https://lore.kernel.org/linux-wireless
+>> > > /5077a953487275837e81bdf1808ded00b9676f9f.camel@pschenker.ch/__;!!
+>> > > CTRNKA9wMg0ARbw!09tjyaQlMci3fVI3yiNiDJKUW_qwNA_CbVhoAraeIX96B99Q14
+>> > > J4iDycWA9cq36Y$
+>> > >
+>> > > Signed-off-by: Philippe Schenker <dev@pschenker.ch>
+>> >
+>> > Can I take this to wireless tree? Felix, ack?
+>> >
+>> > I'll also add:
+>> >
+>> > Fixes: bf3747ae2e25 ("mt76: mt7921: enable aspm by default")
+>> >
+>>
+>> Hi Kalle,
+>>
+>> We have a patch for a similar problem. Can you wait for the
+>> verification by Philippe?
+>> Commit 602cc0c9618a81 ("mt76: mt7921e: fix possible probe failure
+>> after
+>> reboot")
+>> Link:
+>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kerne
+>> l/git/torvalds/linux.git/commit/drivers/net/wireless/mediatek/mt76?id=
+>> 602cc0c9618a819ab00ea3c9400742a0ca318380__;!!CTRNKA9wMg0ARbw!3N9I3iKwS
+>> 3XCNAb4LuhbFqt_el1yiOaJzSdUjaJsTaxRCHiWhXnEgbk3bOqYTy6T$
+>>
+>> I can reproduce the problem in my v5.16-rc5 desktop. And the issue can
+>> be fixed when the patch applied.
+>>
+>>
+>> Hi Philippe,
+>>
+>> Can you please help to check the patch in your platform?
+>
+>Hi Kalle and Deren,
+>
+>I just noticed on my system and mainline v5.18 reboots do now work however Bluetooth is no longer accessible after a reboot.
+>
+>Reverting commit bf3747ae2e25dda6a9e6c464a717c66118c588c8 on top of
+>v5.18 solves this problem for me.
+>
+>@Deren are you aware of this bug?
+>@Kalle Is there a bugtracker somewhere I can submit this?
 
-This update is largely bug fixes and cleanups for all the code
-merged in the first pull request. The majority of them are to the
-new logged attribute code, but there are also a couple of fixes for
-other log recovery and memory leaks that have recently been found.
+Hi Philippe,
 
-Some of the code in the tree predates that pull request, so there is
-still a couple of empty merge commit messages. All the branches
-merged since the last pull request have descriptions and SOB tags in
-the merge commits to explain what was merged and where it came from.
+Could you try the latest firmware to see if it can help with the issue you reported here ?
 
-If there's any problems with the tree, let me know and I'll fix it
-up as needed.
+Please check out https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/mediatek
+and replace the following three files in /lib/firmware/mediatek on your target and reboot
+1) BT_RAM_CODE_MT7961_1_2_hdr.bin
+2) WIFI_MT7961_patch_mcu_1_2_hdr.bin
+3) WIFI_RAM_CODE_MT7961_1.bin
 
-Cheers,
+	Sean
 
-Dave.
------
-The following changes since commit efd409a4329f6927795be5ae080cd3ec8c014f49:
-
-  Merge branch 'xfs-5.19-quota-warn-remove' into xfs-5.19-for-next (2022-05-12 15:23:07 +1000)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.19-for-linus-2
-
-for you to fetch changes up to 7146bda743e6f543af60584fad2cfbb6ce83d8ac:
-
-  Merge branch 'guilt/xfs-5.19-larp-cleanups' into xfs-5.19-for-next (2022-05-30 10:58:59 +1000)
-
-----------------------------------------------------------------
-xfs: Changes for 5.19-rc1 [2nd set]
-
-This update includes:
-- fix refcount leak in xfs_ifree()
-- fix xfs_buf_cancel structure leaks in log recovery
-- fix dquot leak after failed quota check
-- fix a couple of problematic ASSERTS
-- fix small aim7 perf regression in from new btree sibling
-  validation
-- clean up log incompat feature marking for new logged attribute
-  feature
-- disallow logged attributes on legacy V4 filesystem formats.
-- fix da state leak when freeing attr intents
-- improve validation of the attr log items in recovery
-- use slab caches for commonly used attr structures
-- fix leaks of attr name/value buffer and reduce copying overhead
-  during intent logging
-- remove some dead debug code from log recovery
-
-----------------------------------------------------------------
-Brian Foster (1):
-      xfs: fix xfs_ifree() error handling to not leak perag ref
-
-Darrick J. Wong (25):
-      xfs: don't leak da state when freeing the attr intent item
-      xfs: don't leak the retained da state when doing a leaf to node conversion
-      xfs: reject unknown xattri log item operation flags during recovery
-      xfs: reject unknown xattri log item filter flags during recovery
-      xfs: validate xattr name earlier in recovery
-      xfs: free xfs_attrd_log_items correctly
-      xfs: clean up xfs_attr_node_hasname
-      xfs: put the xattr intent item op flags in their own namespace
-      xfs: use a separate slab cache for deferred xattr work state
-      xfs: remove struct xfs_attr_item.xattri_flags
-      xfs: put attr[id] log item cache init with the others
-      xfs: clean up state variable usage in xfs_attr_node_remove_attr
-      xfs: rename struct xfs_attr_item to xfs_attr_intent
-      xfs: do not use logged xattr updates on V4 filesystems
-      xfs: share xattr name and value buffers when logging xattr updates
-      xfs: purge dquots after inode walk fails during quotacheck
-      xfs: don't leak btree cursor when insrec fails after a split
-      xfs: refactor buffer cancellation table allocation
-      xfs: don't leak xfs_buf_cancel structures when recovery fails
-      xfs: convert buf_cancel_table allocation to kmalloc_array
-      xfs: don't log every time we clear the log incompat flags
-      xfs: implement per-mount warnings for scrub and shrink usage
-      xfs: warn about LARP once per mount
-      xfs: move xfs_attr_use_log_assist out of xfs_log.c
-      xfs: move xfs_attr_use_log_assist usage out of libxfs
-
-Dave Chinner (6):
-      Merge branch 'guilt/xfs-5.19-misc-3' into xfs-5.19-for-next
-      xfs: avoid unnecessary runtime sibling pointer endian conversions
-      xfs: don't assert fail on perag references on teardown
-      xfs: assert in xfs_btree_del_cursor should take into account error
-      Merge branch 'guilt/xfs-5.19-recovery-buf-cancel' into xfs-5.19-for-next
-      Merge branch 'guilt/xfs-5.19-larp-cleanups' into xfs-5.19-for-next
-
-Jiapeng Chong (2):
-      xfs: Remove dead code
-      xfs: Remove duplicate include
-
-Julia Lawall (1):
-      xfs: fix typo in comment
-
-Kaixu Xia (1):
-      xfs: reduce IOCB_NOWAIT judgment for retry exclusive unaligned DIO
-
- fs/xfs/libxfs/xfs_ag.c             |   3 +-
- fs/xfs/libxfs/xfs_attr.c           | 198 +++++++++++++++++++++++---------------------------
- fs/xfs/libxfs/xfs_attr.h           |  63 ++++++++--------
- fs/xfs/libxfs/xfs_attr_remote.c    |   6 +-
- fs/xfs/libxfs/xfs_attr_remote.h    |   6 +-
- fs/xfs/libxfs/xfs_btree.c          |  63 +++++++++++-----
- fs/xfs/libxfs/xfs_da_btree.c       |  11 +++
- fs/xfs/libxfs/xfs_da_btree.h       |   1 +
- fs/xfs/libxfs/xfs_defer.c          |  67 ++++++++++++-----
- fs/xfs/libxfs/xfs_log_format.h     |  18 +++--
- fs/xfs/libxfs/xfs_log_recover.h    |  14 ++--
- fs/xfs/libxfs/xfs_symlink_remote.c |   2 +-
- fs/xfs/scrub/scrub.c               |  17 +----
- fs/xfs/xfs_acl.c                   |   3 +-
- fs/xfs/xfs_attr_item.c             | 364 +++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------------
- fs/xfs/xfs_attr_item.h             |  22 ++++--
- fs/xfs/xfs_buf_item_recover.c      |  66 +++++++++++++++++
- fs/xfs/xfs_file.c                  |   2 +-
- fs/xfs/xfs_fsops.c                 |   7 +-
- fs/xfs/xfs_inode.c                 |   2 +-
- fs/xfs/xfs_ioctl.c                 |   3 +-
- fs/xfs/xfs_iops.c                  |   3 +-
- fs/xfs/xfs_log.c                   |  41 -----------
- fs/xfs/xfs_log.h                   |   7 ++
- fs/xfs/xfs_log_priv.h              |   3 -
- fs/xfs/xfs_log_recover.c           |  93 +++---------------------
- fs/xfs/xfs_message.h               |   6 ++
- fs/xfs/xfs_mount.c                 |   1 -
- fs/xfs/xfs_mount.h                 |  18 ++++-
- fs/xfs/xfs_qm.c                    |   9 ++-
- fs/xfs/xfs_super.c                 |  20 ++++++
- fs/xfs/xfs_super.h                 |   1 -
- fs/xfs/xfs_xattr.c                 |  79 +++++++++++++++++++-
- fs/xfs/xfs_xattr.h                 |  13 ++++
- 34 files changed, 719 insertions(+), 513 deletions(-)
- create mode 100644 fs/xfs/xfs_xattr.h
-
--- 
-Dave Chinner
-david@fromorbit.com
+>
+>Thanks,
+>Philippe
+>
+>>
+>>
+>> Regards,
+>> Deren
+>>
+>
+>
+>

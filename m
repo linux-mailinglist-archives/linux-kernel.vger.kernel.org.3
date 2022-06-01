@@ -2,90 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587FB53AC43
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 19:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD5853AC51
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 19:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356475AbiFAR5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 13:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
+        id S1345431AbiFAR6L convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Jun 2022 13:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356532AbiFAR46 (ORCPT
+        with ESMTP id S245473AbiFAR6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 13:56:58 -0400
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914E36574;
-        Wed,  1 Jun 2022 10:56:49 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id E68A830002502;
-        Wed,  1 Jun 2022 19:56:47 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id DB547350DAF; Wed,  1 Jun 2022 19:56:47 +0200 (CEST)
-Date:   Wed, 1 Jun 2022 19:56:47 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V8 03/10] PCI: Create PCI library functions in support of
- DOE mailboxes.
-Message-ID: <20220601175647.GA21509@wunner.de>
-References: <20220414203237.2198665-1-ira.weiny@intel.com>
- <20220414203237.2198665-4-ira.weiny@intel.com>
- <20220530190657.GA14765@wunner.de>
- <20220531113350.0000421e@Huawei.com>
- <YpbWCYujYDEkMm1B@iweiny-desk3>
- <20220601071808.GA19924@wunner.de>
- <Ypee328j+l6ZdbUT@iweiny-desk3>
+        Wed, 1 Jun 2022 13:58:09 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF046A420
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 10:58:07 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 2519G4Wk020913
+        for <linux-kernel@vger.kernel.org>; Wed, 1 Jun 2022 10:58:07 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3ge5atu5tj-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 10:58:06 -0700
+Received: from twshared19572.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 1 Jun 2022 10:58:05 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id 05F078603CAF; Wed,  1 Jun 2022 10:57:56 -0700 (PDT)
+From:   Song Liu <song@kernel.org>
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kernel-team@fb.com>, <rostedt@goodmis.org>, <jolsa@kernel.org>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH bpf-next 0/5] ftrace: host klp and bpf trampoline together
+Date:   Wed, 1 Jun 2022 10:57:44 -0700
+Message-ID: <20220601175749.3071572-1-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ypee328j+l6ZdbUT@iweiny-desk3>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: Es_T9npr57JFBI5sJR4Df3TGGj3GQ72p
+X-Proofpoint-ORIG-GUID: Es_T9npr57JFBI5sJR4Df3TGGj3GQ72p
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-01_06,2022-06-01_01,2022-02-23_01
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 10:16:15AM -0700, Ira Weiny wrote:
-> On Wed, Jun 01, 2022 at 09:18:08AM +0200, Lukas Wunner wrote:
-> > You only need to re-check the Data Object Ready bit on the last-but-one
-> > dword in case the function was reset concurrently.  Per sec. 6.30.2,
-> > "An FLR to a Function must result in the aborting of any DOE transfer
-> > in progress."
-> 
-> I think I disagree.  Even if we do that and an FLR comes before the last read
-> the last read could be 0's.
+Kernel Live Patch (livepatch, or klp) and bpf trampoline are important
+features for modern systems. This set allows the two to work on the same
+kernel function as the same time.
 
-PCIe r6.0, Table 7-316 says:
+live patch uses ftrace with IPMODIFY, while bpf trampoline use direct
+ftrace. Existing policy does not allow the two to attach to the same kernel
+function. This is changed by fine tuning ftrace IPMODIFY policy, and allows
+one non-DIRECT IPMODIFY ftrace_ops and one non-IPMODIFY DIRECT ftrace_ops
+on the same kernel function at the same time. Please see 3/5 for more
+details on this.
 
-  "If there is no additional data object ready for transfer, the
-   DOE instance must clear this bit after the entire data object has been
-   transferred, as indicated by software writing to the DOE Read Data
-   Mailbox Register after reading the final DW of the data object."
+Note that, one of the constraint here is to let bpf trampoline use direct
+call when it is not working on the same function as live patch. This is
+achieved by allowing ftrace code to ask bpf trampoline to make changes.
 
-Remember that you *read* a dword from the mailbox and then acknowledge
-reception to the mailbox by *writing* a dword to the mailbox.
+Jiri Olsa (1):
+  bpf, x64: Allow to use caller address from stack
 
-So you check that the Data Object Ready bit is set before acknowledging
-the final dword with a register write.  That's race-free.
+Song Liu (4):
+  ftrace: allow customized flags for ftrace_direct_multi ftrace_ops
+  ftrace: add modify_ftrace_direct_multi_nolock
+  ftrace: introduce FTRACE_OPS_FL_SHARE_IPMODIFY
+  bpf: trampoline: support FTRACE_OPS_FL_SHARE_IPMODIFY
 
-(I realize me talking about the "last-but-one dword" above was quite
-unclear, sorry about that.)
+ arch/x86/net/bpf_jit_comp.c |  13 +-
+ include/linux/bpf.h         |   8 ++
+ include/linux/ftrace.h      |  79 +++++++++++
+ kernel/bpf/trampoline.c     | 100 ++++++++++++--
+ kernel/trace/ftrace.c       | 269 +++++++++++++++++++++++++++++++-----
+ 5 files changed, 416 insertions(+), 53 deletions(-)
 
-Thanks,
-
-Lukas
+--
+2.30.2

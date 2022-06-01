@@ -2,74 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88479539C91
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 07:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB2B539C94
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 07:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345048AbiFAFXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 01:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37628 "EHLO
+        id S1349611AbiFAFYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 01:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233773AbiFAFXO (ORCPT
+        with ESMTP id S233773AbiFAFYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 01:23:14 -0400
-Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8A62F38A
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 22:23:13 -0700 (PDT)
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id 3C31E201362;
-        Wed,  1 Jun 2022 05:23:09 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id C1D8080129; Wed,  1 Jun 2022 07:23:03 +0200 (CEST)
-Date:   Wed, 1 Jun 2022 07:23:03 +0200
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] pcmcia updates for v5.19
-Message-ID: <Ypb3t6HB1D51+hfU@owl.dominikbrodowski.net>
+        Wed, 1 Jun 2022 01:24:45 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615CC9808E;
+        Tue, 31 May 2022 22:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654061084; x=1685597084;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=xQX06L/jjtHWDY6RNz/MSNPKBx6FjSI+BucvNOskFdQ=;
+  b=WNGmPGOiy8HZnVKi5EgYf2dEGDICid/2pP52DOoxVHl3P71nH1C4qRqm
+   zlxTAQ27/AoS5Et8lE2Pp2TlU9KXT/0bGyST10+v58VfzmY5adMY7KcQ+
+   Et6Qi5Xw71fHfr0LXzJsEypZQsY43I7aZlModN82LXavXpPxLlGh4uMoA
+   o2UhyXCQEjH0pQqNn0x6kEvigrHPS78UxWahgoYJ1CqIT1dUvuJDaeC9e
+   ILyzryrp8etSr0ufvoI5/GlgI+qfzddOPvBhR8VvhIGJolWShRlHzZI7a
+   sycGHzU6kTUt3++60NCj8sgddAM8o9WzQFrXgEekKYY0yn9OVtD6bijGS
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="275556165"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="275556165"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 22:24:44 -0700
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="606070502"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.44.223])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 22:24:40 -0700
+Message-ID: <d3038c9e-c9ec-16e9-bad4-8b1de5e23ba6@intel.com>
+Date:   Wed, 1 Jun 2022 08:24:36 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH] scsi: ufs: add a quirk to disable FUA support
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Can Guo <cang@codeaurora.org>
+References: <20220531201053.3300018-1-jaegeuk@kernel.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220531201053.3300018-1-jaegeuk@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On 31/05/22 23:10, Jaegeuk Kim wrote:
+> UFS stack shows very low performance of FUA comparing to write and cache_flush.
+> Let's add a quirk to adjust it.
+> 
+> E.g., average latency according to the chunk size of write
+> 
+> Write(us/KB)	4	64	256	1024	2048
+> FUA		873.792	754.604	995.624	1011.67	1067.99
+> CACHE_FLUSH	824.703	712.98	800.307	1019.5	1037.37
 
-A few PCMCIA changes since commit 0457e5153e0e8420134f60921349099e907264ca:
+Wouldn't it depend on how much data might be in the cache?
+Do you have real-world use-cases where the difference is measurable?
 
-  Merge tag 'for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma (2022-02-04 16:28:11 -0800)
+> 
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> ---
+>  drivers/scsi/ufs/ufshcd.c | 3 +++
+>  drivers/scsi/ufs/ufshcd.h | 5 +++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index 3f9caafa91bf..811f3467879c 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -5035,6 +5035,9 @@ static int ufshcd_slave_configure(struct scsi_device *sdev)
+>  	 */
+>  	sdev->silence_suspend = 1;
+>  
+> +	if (hba->quirks & UFSHCD_QUIRK_BROKEN_FUA)
+> +		sdev->broken_fua = 1;
+> +
+>  	ufshcd_crypto_register(hba, q);
+>  
+>  	return 0;
+> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+> index 94f545be183a..6c480c6741d6 100644
+> --- a/drivers/scsi/ufs/ufshcd.h
+> +++ b/drivers/scsi/ufs/ufshcd.h
+> @@ -602,6 +602,11 @@ enum ufshcd_quirks {
+>  	 * support physical host configuration.
+>  	 */
+>  	UFSHCD_QUIRK_SKIP_PH_CONFIGURATION		= 1 << 16,
+> +
+> +	/*
+> +	 * This quirk disables FUA support.
+> +	 */
+> +	UFSHCD_QUIRK_BROKEN_FUA				= 1 << 17,
 
-are available in the Git repository at:
+Wouldn't it be more appropriate to make it a UFS_DEVICE_QUIRK_
+since it presumably depends on the UFS device not the host controller?
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/brodo/linux.git pcmcia-next
+Also, as already commented by others, there needs to be a user of
+the quirk
 
-for you to fetch changes up to 2ef4bb24ff39ae4af89b80bcc5d516f55368e8ae:
+>  };
+>  
+>  enum ufshcd_caps {
 
-  pcmcia: Use platform_get_irq() to get the interrupt (2022-05-28 09:25:31 +0200)
-
-
-A few odd cleanups and fixes, including a Kconfig fix to add a
-required dependency on MIPS.
-
-
-----------------------------------------------------------------
-Minghao Chi (1):
-      pcmcia: Use platform_get_irq() to get the interrupt
-
-Randy Dunlap (1):
-      pcmcia: db1xxx_ss: restrict to MIPS_DB1XXX boards
-
-tangmeng (1):
-      drivers/pcmcia: Fix typo in comment
-
- drivers/pcmcia/Kconfig          | 2 +-
- drivers/pcmcia/bcm63xx_pcmcia.c | 9 +++++----
- drivers/pcmcia/rsrc_nonstatic.c | 2 +-
- 3 files changed, 7 insertions(+), 6 deletions(-)

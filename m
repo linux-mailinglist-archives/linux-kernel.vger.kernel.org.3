@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F1153AA95
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A33153AA96
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355916AbiFAP6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 11:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41538 "EHLO
+        id S1355922AbiFAP6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 11:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352622AbiFAP6J (ORCPT
+        with ESMTP id S1355130AbiFAP6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 11:58:09 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809024CD51
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 08:58:07 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id b11-20020a92340b000000b002d3dbbc7b15so870155ila.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 08:58:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=/bHD/FuAjdY2ao8m12sbxeU2qcCCHETq+g1NgUkJaNQ=;
-        b=oGBUkYetDR1TVeTLqoVp94aoe2xKtrCLCDpj6asVpuKjGs/ONFjzzGfo9+seY1imFD
-         3FNT7SbOM3RkNiuwSA5cCn5LA7itMg5cW2LMh9AqrsgkEtBUT2ISuD491Zl8yYfVpvds
-         gYbBgKRn4FGOxq1M0FEzEWhKarFBjO6VqX35/0e4o1ON9R3lRqeZxH1vUdMsm5NeviZf
-         FF6GB2YlM2OUGrmPyyN6tCdfV/E2p87ND9hX9GiJ5rSUG5P4oYIIkjCJ25AbzenQyFRk
-         wU0YTF1WzGyDtF1o5Uz4Qf+uTk3EJBYtbcvOxPX2nIm1iW3jz3C5dJ0lEuhrL1D+DT0C
-         8T+w==
-X-Gm-Message-State: AOAM530IJAmaDEhNm5UJL708hTo9OH3vDs4TAQbD4JeEaF/mnfvaKfby
-        NI6E2vwdM5vGu4fMQCG/gR3Q7HyyaTIZs+p4Ni8rLASodkVV
-X-Google-Smtp-Source: ABdhPJxGwjcJDqDfdqzmiTi8eQ7MujZOMvTBnwf+hUYjUTjZZIST4yDzfuznUJVhsY5oim7jxHK+8j/fXdr4hS1PDUtWKSuY7urg
+        Wed, 1 Jun 2022 11:58:45 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF08753B61
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 08:58:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=5g7mL7uWIJ9U3AKROL2hqbNL1sPeqZc3VNfONGwhli8=; b=ZZ10t6IyLYmEH7s1H1rQGy56nR
+        tWSUVFU8J1jTdOhjDhh+Q2uoWbdjeVA58P4O3EyTXf/lM1ndjVU43Gq6Sb2rIx/2EKbmHADFNpGP7
+        hsz3XAW9Fe3vJ/IyLy72dC5AOR/7BPj48DI+upjhFXcE/KHvAFbGOXFvAr4Z5FYAoLW7PE903FTMf
+        BTvKlO7Ig7UyhgmvINVp4locg1gGsT+qZ8cRQQ5Xa6uhfX5oKYc6PnWvE1HcRp6XtpQ8ay1G+dh1V
+        78scY+MRrL+DNB9uie4xGd0DG9JCi5IKYXtLYX8U7zSIbnQCvBC6V/V0lK9jbJQ4kiyXyyH9WxGgD
+        2O134i+w==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nwQjp-003pF2-8o; Wed, 01 Jun 2022 15:58:26 +0000
+Message-ID: <97352295-6527-f146-6f55-c4577a80f3a2@infradead.org>
+Date:   Wed, 1 Jun 2022 08:58:20 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3052:b0:317:79e1:8b7f with SMTP id
- u18-20020a056638305200b0031779e18b7fmr301825jak.239.1654099086907; Wed, 01
- Jun 2022 08:58:06 -0700 (PDT)
-Date:   Wed, 01 Jun 2022 08:58:06 -0700
-In-Reply-To: <20220601140527.4708-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007f9d0005e064f4df@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in snd_rawmidi_transmit
-From:   syzbot <syzbot+39e3268af9968f153591@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] average: Clarify the restrictions
+Content-Language: en-US
+To:     Jui-Tse Huang <juitse.huang@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Bruno Randolf <br1@einfach.org>,
+        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>
+References: <20220601071907.22070-1-juitse.huang@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220601071907.22070-1-juitse.huang@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,19 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Reported-and-tested-by: syzbot+39e3268af9968f153591@syzkaller.appspotmail.com
+On 6/1/22 00:19, Jui-Tse Huang wrote:
+> There is several restrictions in the EWMA helper macro that the
+> developers should take care of, but the comment does not mentioned yet,
+> thus, this patch clarify the restrictions.
+> 
+> Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
+> ---
+> 
+> Notes:
+>     v2: fix spelling and wording (Bruno Randolf)
+> 
+>  include/linux/average.h | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/include/linux/average.h b/include/linux/average.h
+> index a1a8f09631ce..ff0953ba2820 100644
+> --- a/include/linux/average.h
+> +++ b/include/linux/average.h
+> @@ -13,6 +13,9 @@
+>   * precision and fall-off coefficient determined at compile-time
+>   * and built into the generated helper funtions.
 
-Tested on:
+                                          functions.
+>   *
+> + * This implementation supports up to 30 bits of precition, and only
 
-commit:         2a5699b0 Merge tag 'leds-5.19-rc1' of git://git.kernel..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f915857c44e13980
-dashboard link: https://syzkaller.appspot.com/bug?extid=39e3268af9968f153591
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1578ed47f00000
+                                                    precision,
 
-Note: testing is done by a robot and is best-effort only.
+> + * the API for fetching non-fractional part is provided for now.
+> + *
+>   * The first argument to the macro is the name that will be used
+>   * for the struct and helper functions.
+>   *
+
+-- 
+~Randy

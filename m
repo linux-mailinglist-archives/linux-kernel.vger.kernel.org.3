@@ -2,351 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F63553B0BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB54C53B0C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232495AbiFAXCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 19:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43064 "EHLO
+        id S232498AbiFAXDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 19:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232487AbiFAXCD (ORCPT
+        with ESMTP id S232460AbiFAXD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 19:02:03 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578B35DD0B;
-        Wed,  1 Jun 2022 16:01:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654124521; x=1685660521;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oi2jkSGPrFS1UBjfoVd4uU8KXe2HD/zSiJtdnwRKxh8=;
-  b=FpdStbt1PQdq3SDXdY63l1GHZLTb5cyPiLFtVnk0RpkMMnScxD38YrsR
-   +E/xgEET5LhzChARV6D1GuknkeGN8hyQFyVALFOkeUdCeVyw6+iSc8AaZ
-   xtcBxzXvaat/NXxb6NErCgxFW7ff9SWGIvgP2ImpmJVB/r3NW9tllqPkm
-   WBbMosMrXwfI/0iFeF8FeAED3t5ZsuLDxt3DQ8oP8U+nHPjif4Z50Zfso
-   5zN3FGRIz9TcA7A9+dhsSjvCN5ZkI3DZpy4GyTOeuZP3cAkMdsonueP3B
-   IhQjGsUZ3EdT72fd88zfYMJeO+cWmDRn/lFtoIJhEbqBg5EiQQNiW7fBN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="263394050"
-X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="263394050"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 16:01:59 -0700
-X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="577189437"
-Received: from cwmurphy-mobl2.amr.corp.intel.com (HELO localhost) ([10.212.32.23])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 16:01:58 -0700
-Date:   Wed, 1 Jun 2022 16:01:57 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Ben Widawsky <ben@bwidawsk.net>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V9 4/9] cxl/pci: Create PCI DOE mailbox's for memory
- devices
-Message-ID: <Ypfv5WIRL9+0kafj@iweiny-desk3>
-References: <20220531152632.1397976-1-ira.weiny@intel.com>
- <20220531152632.1397976-5-ira.weiny@intel.com>
- <20220531175020.efqfth7ubbyhoubp@mail.bwidawsk.net>
+        Wed, 1 Jun 2022 19:03:26 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6F862A1A;
+        Wed,  1 Jun 2022 16:03:24 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251KLwL9025661;
+        Wed, 1 Jun 2022 23:03:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : in-reply-to : references : date : message-id : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=n5j4gEi5kfoTTA3JMFqHnY+n9K+EboHc+pFBE6k23uA=;
+ b=g5gxI4V+z1oHUYNMj6HWYXZVON+YYk3xehNatWtZBtEzF05eTHafR53ZPxbn432PhIp8
+ aZpPgYCZ8VmlhBCamndiLcRO41Gnzn+YlT0PAyEjbIlPWMGpvJ9Z8aDSHKE2AzMqAWAy
+ jm9zolN3ztbWKxh4bxs65Txa9Cp+rQEW2dJoeGuxFJ27SyeB1OYtEnlrOfMvQj0bdFeu
+ N/pHPq+atssiiE9PMzbagMx7XMyoiiqnA7c2k0AhHphSNlVLLy0NuUa8Z1Xw0ucvBkt0
+ IHUdgEZfHKTCTxyuJBkt4+cfPFrb8p33viT0TNP+llWgSaoePctc80HYEnLCSTW3lDus xA== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gbc7krrxu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 01 Jun 2022 23:03:19 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 251Ma9tl002010;
+        Wed, 1 Jun 2022 23:03:18 GMT
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2040.outbound.protection.outlook.com [104.47.56.40])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gc8p4arav-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 01 Jun 2022 23:03:18 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eKO4ocPMkM+RbBD7A9SZkineK2HfdFXAPhXho/mphLVeYhGBkJjSp5oZCT3lV/qbhc3cNoeQfAFiXxzx8VoBTtjBhLE8m0hslfXNdA4lb7Lp/xO5U+WylWOMuCbG9wymtvxLX7pGaaynXPbf3ccbcL/4bJcUkvyp4DiqpTUKuVIZoYLRcNWOyEMSD40NeAIikvxkINhX+q2uVQcOzKVHlaWBM/9TLlxQbNGy4X5/sZy5ycfaYFSf27fQwBWkxGSTGZPorzfiLWpB351xLQtAX5SjWma247UOjdH6RL1D2BYO06nqS9ZW2XQNXF24to/3a2NoVwsX3WB/m2oelPp1RA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n5j4gEi5kfoTTA3JMFqHnY+n9K+EboHc+pFBE6k23uA=;
+ b=nD+80w1Mh4JiBM8mlXfVZKuSK/o4E/EBOW8Sp8xbY2Iz8mhPDOMLd9SRmN+TXz6FD7uDcohrxxxUNsjpOb5E1lxzR9Rpcr2BeC4TPrlkZ8d7JpbIbynC8EeHr2UfD7yb8FmcK9loJRLdUASMGRaNtsGiWgtwYVbbeKRFKfeAstnV+HFq9Z9RWiXUpesZ+WrDdLgHnE4gjrQtYx2f8P87Olc/feqoxE4vmoOH03qGirmTqYfPbk6ccc+6LBn6T2Dg4nIbvH3zdXI88h/rpRpeMpTRh17Ijuha0pJTMD/GPpF+y/iT5h56GrVRXAdCJbWsPVVgWVvXRgo0oEfzrFwNCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n5j4gEi5kfoTTA3JMFqHnY+n9K+EboHc+pFBE6k23uA=;
+ b=KrCDeMTpuYsysafSoT93fvISSXIA0vYlTm9C5v77KihtwSzSCK6LQV5TaNOHLHLJZg7VY1vYdQWTtK4WgBCamxDoXorgi2AJAocuEZGZraZFJYD82IAciXBWC2vP7YI2E0PXnAeFwe9b+AYPiwrwlvPrhCyAB+7FzvoESeTMHkE=
+Received: from CH2PR10MB4166.namprd10.prod.outlook.com (2603:10b6:610:78::20)
+ by BYAPR10MB2600.namprd10.prod.outlook.com (2603:10b6:a02:aa::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.19; Wed, 1 Jun
+ 2022 23:03:15 +0000
+Received: from CH2PR10MB4166.namprd10.prod.outlook.com
+ ([fe80::4421:897e:e867:679c]) by CH2PR10MB4166.namprd10.prod.outlook.com
+ ([fe80::4421:897e:e867:679c%9]) with mapi id 15.20.5314.013; Wed, 1 Jun 2022
+ 23:03:15 +0000
+From:   Stephen Brennan <stephen.s.brennan@oracle.com>
+To:     Eric Biggers <ebiggers@kernel.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     torvalds@linux-foundation.org, stable@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] assoc_array: Fix BUG_ON during garbage collect
+In-Reply-To: <YpfrLUknlmcvwNzY@sol.localdomain>
+References: <165295023086.3361286.8662079860706628540.stgit@warthog.procyon.org.uk>
+ <YpfrLUknlmcvwNzY@sol.localdomain>
+Date:   Wed, 01 Jun 2022 16:03:12 -0700
+Message-ID: <87y1ygyojz.fsf@stepbren-lnx.us.oracle.com>
+Content-Type: text/plain
+X-ClientProxiedBy: SN2PR01CA0006.prod.exchangelabs.com (2603:10b6:804:2::16)
+ To CH2PR10MB4166.namprd10.prod.outlook.com (2603:10b6:610:78::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531175020.efqfth7ubbyhoubp@mail.bwidawsk.net>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bb5fe377-efb4-4b35-bcc5-08da4422e8ee
+X-MS-TrafficTypeDiagnostic: BYAPR10MB2600:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR10MB2600788B068A23F561CFCA4DDBDF9@BYAPR10MB2600.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hrl8mIMdtI5GEqAgk2RTaLMh10rRSQwXlEFoGksiPNnu7KWwS8bdiImyumgl5wIgKHO7qWuMCGLFj8tIOiDjfNM0Oc8DUQ99k42Q+kkv3FA2532fmi2G2zFdY+IoR00Fj04WpXUWUx1HWjGqQAu/8hoVm27/xU3nJLX/L5n9AXvvqB8eqp3rGb8tVRoNdrOB4rRarCRuECIhVV4+Xv36+EWCidNobzPINQyv7nMcc1/p1dyNKgfbgRNo8MEGq3nZRJpXXVkc4FNuPFzjFpzjZV+WR5Vhh8knm9dRmJ88WfCfDazLi8+15Sfc3C065FtkhLiq0pst/WczMlRXJy0PAIxZF6ffKbhK+EEhk9tnv5Rm0ZMiKx1cbSzUmZwEpEhc7KP1lrmTw5HKpkA5uLRzcHPp7c+ToQCqh+yHrT+SnKgb3mDnRuRumPoom8sgfte34R4HuSP9ttEF17uItI2q3L6owhEOLwUGfoHdcRQvOohwGgjmXJG+9NxU4Fb+/rAKXDxZ2xNdgYKBGdjLuYc0wLZthYUDbrAtrMgVtWltL+TWHbuotJluL756e8tJN5y4RBtv0mEEmQPAOMnbFz2Z/wxNEHCpLVPw++ItCB3p+m9patnevqOTuWkq7vGqv2lMxVgbCND+c7L/YNhRIBf9xdvsXn9s1SsCVa/xwqvNOuuHXGrOPLayiEHECZx8A3VWpMT7IJtoV9EfjgDmtmcbpw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4166.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(6506007)(54906003)(52116002)(26005)(6512007)(86362001)(186003)(38100700002)(508600001)(5660300002)(6486002)(8936002)(8676002)(4326008)(2906002)(66476007)(110136005)(66556008)(83380400001)(6666004)(66946007)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YsbEV83xGj8Vei3llKacBI2Oq3YF+fnVPc2JhiVcF8y6M5qMJMZTlk7Bq2pr?=
+ =?us-ascii?Q?RGt5XhTpbunwKAGOCxyc8GhnJn784bDQd/zOSytvqDR9sCSR+MStJOJ/2xiH?=
+ =?us-ascii?Q?HWHICYgzLlfFeeyTljgo9YpmS9HRTaFFwpE2JJR/WbSDrgDV91tyyNaYL2Iq?=
+ =?us-ascii?Q?UW3R4PJVdKb9SREji0OYpVhGC5mApcBK1rYczIBEw/aWevq9YlJQq+01wWEg?=
+ =?us-ascii?Q?0JVTh3ww8DB/ZqJR9ZGUkKuFqNICMlg0dkzv3jSXS36W3CDMGaZiUHVlfZ9V?=
+ =?us-ascii?Q?hxRam9xRs43KR4L0FT7Akdo+uUoGr0m6UMKBOgxo8QmJp6o3J5z8Er42U27B?=
+ =?us-ascii?Q?FcA1t4swDDfNYCqBWT4C7SoW+zNMl4RVwz53zTcc3Gf0GS1qchcf+u8YjbJ9?=
+ =?us-ascii?Q?J1Y9Qxg2bN23g5U4hz+vi0uUOvIUz6zu+gH02GjVYmk6WoynAfNcwglZr/ii?=
+ =?us-ascii?Q?aU7JNrfJ7nNacQgaO1/PNiss0UG9NlwTRoxhbNdLI1fXVG0TZImnVpfeTZ21?=
+ =?us-ascii?Q?Y2Lqbp5CPMNymX7gCjO5LBg/uMT3TA+vFqRXUD/MELw16xH9KHS4DfiRKE1z?=
+ =?us-ascii?Q?CkD4cB9psQTm22lDZiDvr4xsSUaq/HoeUzqGxo9Wfhq2UuvNJJ+NK7mYVuUs?=
+ =?us-ascii?Q?+/T0C4S1XOn/6XGQdwQWbaYMgIbhBWfwkCM8TLiIUhazijGMwvaAHDeG8Ai9?=
+ =?us-ascii?Q?EoR4iGzgq/qopzjLbBDFbwhDmrHZCRh2NdrVDP+FiR2luLgkQpAs8gejFL5Z?=
+ =?us-ascii?Q?77IT+WFajo4ix8YsYqX74pR1ROqoqYkkSdEsfNOGMwotTE4u7145AVsCIH8o?=
+ =?us-ascii?Q?hlxIy6t4sFzxIj/3hoe5XdZHRdZHrCQqsfrpcaghrT1/6zQzM251oS8Kwak5?=
+ =?us-ascii?Q?HcJt1zUxXBAAHJtAlq8QBjmkd+y5tnnzU9HUEt3AEOO1hvJLFdxjdKdGRs0Z?=
+ =?us-ascii?Q?AxxZXxDCp69rJQThN8LYW/CQwym0b5TqG3/X3kn8RO8nHsfbuJak/IuIpozI?=
+ =?us-ascii?Q?aJnt+oAD3vsUQy9Z67N++dFXtdEKcXCEGlzpUlw0rYm95vpu/mXWuAMLcQOe?=
+ =?us-ascii?Q?gkBZyl4zhdbGM/SuiMFN/bdce08lUmga4vT8xcYHJykdaoX2+dMgEHoms2Si?=
+ =?us-ascii?Q?FaFBeC9ShlhpFJEyV36RQwckMipbpdIRe8XJrbmvZqSimuPAQDgplBblZYx4?=
+ =?us-ascii?Q?nWF1d7NwfVjCokqangtDtKCNYfzq8KA7ayRfAPlDbT+Mz7YpSsfqrzjCL6w6?=
+ =?us-ascii?Q?DhIl356a9coSeTdjKspSKWNcZfJAuIEuBAl3tRV4R0dmw52v9wEf2l3pdQnT?=
+ =?us-ascii?Q?2aRUJvQ0gBItNTfH6GtzGfeC5YCIf9/AcYc+Xn2MGYYhptltV07nMJUzsCTN?=
+ =?us-ascii?Q?guYWn6uXLqYWfSxxdhj/njMG8AD/0yAcYl+H+eM4hYq+0GyEXj4n+H8Uemql?=
+ =?us-ascii?Q?S60/7uXVfCZkIb139U8Fm0DZ420s2tTuN7ytYAp7IDwkxesocopr43qw4AqM?=
+ =?us-ascii?Q?iwUpyyAHfBMi5pCnwQUAmvb/oWMb8uS+J1MQ0nyhmsQaAZre1bVEJ+G6W652?=
+ =?us-ascii?Q?Ffu6OGQuxTAkkLT9voi0fYQ3rHE4Hw3UPBG6fZ4xC0+hN4GyhYm9cMLnrdzR?=
+ =?us-ascii?Q?tmS3opmnVVQMLtgwvZUvL7xV9cmWU/ETFnqNQx7Pw+9LNP72fkqvFJi/Me2g?=
+ =?us-ascii?Q?ML1XsisEWxjs2c+upvvbr55sl5hRAsndewiF+yrM0k/uIyUkwz+utXOR9/D5?=
+ =?us-ascii?Q?dbFCSYgG7D3EAVEEAMVc5+lcAK805Ug=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb5fe377-efb4-4b35-bcc5-08da4422e8ee
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4166.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2022 23:03:15.6226
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /P46uT0Kvq/tpIyUAGXjdR/JHFdfL3wx+VHjSSG+GP5JhAYx+NusYBbEN0stqUu381YU7sFhETMNaUFPm5qbVA3y/+izGtfauntZ6jpN6cA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB2600
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
+ definitions=2022-06-01_09:2022-06-01,2022-06-01 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
+ phishscore=0 suspectscore=0 malwarescore=0 mlxscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206010090
+X-Proofpoint-GUID: hGfOJK9zUoZLC2XcBU0gCZ2Th3lJ3dCr
+X-Proofpoint-ORIG-GUID: hGfOJK9zUoZLC2XcBU0gCZ2Th3lJ3dCr
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 10:50:20AM -0700, Ben Widawsky wrote:
-> On 22-05-31 08:26:27, ira.weiny@intel.com wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > DOE mailbox objects will be needed for various mailbox communications
-> > with each memory device.
-> > 
-> > Iterate each DOE mailbox capability and create PCI DOE mailbox objects
-> > as found.
-> > 
-> > It is not anticipated that this is the final resting place for the
-> > iteration of the DOE devices.  The support of ports may drive this code
-> > into the pcie side.  In this imagined architecture the CXL port driver
-> > would then query into the PCI device for the DOE mailbox array.
-> 
-> Not sure if direction has changed, but initially it would have been the cxl_pci
-> driver who would query this and pass it along when the port driver probes.
-> Personally, I've never had an issue with non cxl_pci drivers using PCI
-> interfaces and semantics, but it is something we've taken specific care to
-> avoid.
+Eric Biggers <ebiggers@kernel.org> writes:
 
-I really struggled with this and this is why the comment above was added.  I
-agree with you but I think this actually belongs somewhere in the PCI code
-eventually and the cxl_port should be grabbing the CDAT mailbox from there.
+> On Thu, May 19, 2022 at 09:50:30AM +0100, David Howells wrote:
+>> diff --git a/lib/assoc_array.c b/lib/assoc_array.c
+>> index 079c72e26493..ca0b4f360c1a 100644
+>> --- a/lib/assoc_array.c
+>> +++ b/lib/assoc_array.c
+>
+> Where are the tests for this file?
 
-I really think that having the PCIe port driver iterate the DOE mailboxes and
-then having either CXL or PCIe find the mailboxes they are interested in is the
-way to go.
+As of today there are none:
 
-But this supports mailbox end points for now.
+$ grep -lr assoc_array
+lib/assoc_array.c
+lib/Makefile
+lib/Kconfig
+arch/powerpc/mm/numa.c
+arch/powerpc/platforms/pseries/hotplug-memory.c
+Documentation/core-api/index.rst
+Documentation/core-api/assoc_array.rst
+Documentation/translations/zh_CN/core-api/index.rst
+Documentation/translations/zh_CN/core-api/assoc_array.rst
+include/linux/assoc_array.h
+include/linux/key.h
+include/linux/assoc_array_priv.h
+include/keys/keyring-type.h
+security/keys/internal.h
+security/keys/key.c
+security/keys/keyring.c
+security/keys/request_key.c
 
-> 
-> > 
-> > For now this is good enough for the endpoints and the split is similar
-> > to the envisioned architecture where getting the mailbox array is
-> > separated from the various protocol needs.  For example, it is not
-> > anticipated that the CDAT code will need to move because it is only
-> > needed by the cxl_ports.
-> > 
-> > Likewise irq's are separated out in a similar design pattern to the
-> > PCIe port driver.  But a much simpler irq enabling flag is used and only
-> > DOE interrupts are supported.
-> > 
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > ---
-> > Changes from V8:
-> > 	Move PCI_DOE selection to CXL_BUS to support future patches
-> > 	which move queries into the port code.
-> > 	Remove Auxiliary device arch
-> > 	Squash the functionality of the auxiliary driver into this
-> > 	patch.
-> > 	Split out the irq handling a bit.
-> > 
-> > Changes from V7:
-> > 	Minor code clean ups
-> > 	Rebased on cxl-pending
-> > 
-> > Changes from V6:
-> > 	Move all the auxiliary device stuff to the CXL layer
-> > 
-> > Changes from V5:
-> > 	Split the CXL specific stuff off from the PCI DOE create
-> > 	auxiliary device code.
-> > ---
-> >  drivers/cxl/Kconfig  |   1 +
-> >  drivers/cxl/cxlmem.h |   6 +++
-> >  drivers/cxl/pci.c    | 111 +++++++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 118 insertions(+)
-> > 
-> > diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
-> > index f64e3984689f..7adaaf80b302 100644
-> > --- a/drivers/cxl/Kconfig
-> > +++ b/drivers/cxl/Kconfig
-> > @@ -2,6 +2,7 @@
-> >  menuconfig CXL_BUS
-> >  	tristate "CXL (Compute Express Link) Devices Support"
-> >  	depends on PCI
-> > +	select PCI_DOE
-> >  	help
-> >  	  CXL is a bus that is electrically compatible with PCI Express, but
-> >  	  layers three protocols on that signalling (CXL.io, CXL.cache, and
-> > diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> > index 60d10ee1e7fc..4d2764b865ab 100644
-> > --- a/drivers/cxl/cxlmem.h
-> > +++ b/drivers/cxl/cxlmem.h
-> > @@ -191,6 +191,8 @@ struct cxl_endpoint_dvsec_info {
-> >   * @component_reg_phys: register base of component registers
-> >   * @info: Cached DVSEC information about the device.
-> >   * @serial: PCIe Device Serial Number
-> > + * @doe_mbs: PCI DOE mailbox array
-> > + * @num_mbs: Number of DOE mailboxes
-> >   * @mbox_send: @dev specific transport for transmitting mailbox commands
-> >   *
-> >   * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
-> > @@ -224,6 +226,10 @@ struct cxl_dev_state {
-> >  	resource_size_t component_reg_phys;
-> >  	u64 serial;
-> >  
-> > +	bool doe_use_irq;
-> > +	struct pci_doe_mb **doe_mbs;
-> > +	int num_mbs;
-> > +
-> >  	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
-> >  };
-> >  
-> > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> > index 5a0ae46d4989..131f89dec8e7 100644
-> > --- a/drivers/cxl/pci.c
-> > +++ b/drivers/cxl/pci.c
-> > @@ -8,6 +8,7 @@
-> >  #include <linux/mutex.h>
-> >  #include <linux/list.h>
-> >  #include <linux/pci.h>
-> > +#include <linux/pci-doe.h>
-> >  #include <linux/io.h>
-> >  #include "cxlmem.h"
-> >  #include "cxlpci.h"
-> > @@ -386,6 +387,113 @@ static int cxl_setup_regs(struct pci_dev *pdev, enum cxl_regloc_type type,
-> >  	return rc;
-> >  }
-> >  
-> > +static void cxl_pci_free_irq_vectors(void *data)
-> > +{
-> > +	pci_free_irq_vectors(data);
-> > +}
-> > +
-> > +static void cxl_doe_destroy_mb(void *ds)
-> > +{
-> > +	struct cxl_dev_state *cxlds = ds;
-> > +	int i;
-> > +
-> > +	for (i = 0; i < cxlds->num_mbs; i++) {
-> > +		if (cxlds->doe_mbs[i])
-> > +			pci_doe_destroy_mb(cxlds->doe_mbs[i]);
-> > +	}
-> > +}
-> > +
-> > +static void cxl_alloc_irq_vectors(struct cxl_dev_state *cxlds)
-> > +{
-> > +	struct device *dev = cxlds->dev;
-> > +	struct pci_dev *pdev = to_pci_dev(dev);
-> > +	int num_irqs = 0;
-> > +	int off = 0;
-> > +	int rc;
-> > +
-> > +	/* Account for all the DOE vectors needed */
-> > +	pci_doe_for_each_off(pdev, off) {
-> > +		int irq = pci_doe_get_irq_num(pdev, off);
-> > +
-> > +		if (irq < 0)
-> > +			continue;
-> > +		num_irqs = max(num_irqs, irq + 1);
-> 
-> This seems overly complicated. Isn't it just num_irqs++?
+The assoc_array code is easy to get up and running in userspace (see the
+reproducer for this bug). So testing it would be feasible with some sort
+of userspace runner (KUnit?). Seems it hasn't been done yet.
 
-See Jonathan's comment.  But I'll change it to 'max_irqs'.
+Stephen
 
-> 
-> > +	}
-> > +
-> > +	/*
-> > +	 * Allocate enough vectors for the DOE's
-> > +	 */
-> > +	rc = pci_alloc_irq_vectors(pdev, num_irqs, num_irqs, PCI_IRQ_MSI |
-> > +							     PCI_IRQ_MSIX);
-> > +	if (rc != num_irqs) {
-> > +		pci_err(pdev, "Not enough interrupts; use polling\n");
-> > +		/* Some got allocated; clean them up */
-> > +		if (rc > 0)
-> > +			cxl_pci_free_irq_vectors(pdev);
-> > +		cxlds->doe_use_irq = false;
-> > +		return;
-> > +	}
-> > +
-> > +	rc = devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
-> > +	if (rc) {
-> > +		cxlds->doe_use_irq = false;
-> > +		return;
-> > +	}
-> > +
-> > +	cxlds->doe_use_irq = true;
-> 
-> If you named it doe_poll, you could avoid having to do anything at the end of
-> the function... If you felt like it.
-> 
-> if (failure)
-> 	return;
-> if (other_failure)
-> 	return;
-> 
-> cxld->do_use_poll = false;
-
-Actually I could just set false at the top and return on error.
-
-Thanks for the suggestion.
-
-> 
-> > +}
-> > +
-> > +/**
-> > + * devm_cxl_pci_create_doe - Scan and set up DOE mailboxes
-> > + *
-> > + * @cxlds: The CXL device state
-> > + *
-> > + * RETURNS: 0 on success -ERRNO on failure.
-> > + */
-> > +static int devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
-> > +{
-> > +	struct device *dev = cxlds->dev;
-> > +	struct pci_dev *pdev = to_pci_dev(dev);
-> > +	u16 off = 0;
-> > +	int num_mbs = 0;
-> > +	int rc;
-> > +
-> > +	pci_doe_for_each_off(pdev, off)
-> > +		num_mbs++;
-> > +
-> 
-> Do you want to bail here if num_mbs == 0?
-
-I do!  Thanks.  I need to skip using irq's above if none are found too.
-
-> 
-> > +	cxlds->doe_mbs = devm_kcalloc(dev, num_mbs, sizeof(*cxlds->doe_mbs),
-> > +				      GFP_KERNEL);
-> > +	if (!cxlds->doe_mbs)
-> > +		return -ENOMEM;
-> > +
-> > +	pci_doe_for_each_off(pdev, off) {
-> > +		struct pci_doe_mb *doe_mb;
-> > +		int irq = -1;
-> > +
-> > +		if (cxlds->doe_use_irq)
-> > +			irq = pci_doe_get_irq_num(pdev, off);
-> > +
-> > +		doe_mb = pci_doe_create_mb(pdev, off, irq);
-> > +		if (IS_ERR(doe_mb)) {
-> > +			pci_err(pdev,
-> > +				"Failed to create MB object for MB @ %x\n",
-> > +				off);
-> > +			doe_mb = NULL;
-> > +		}
-> > +
-> > +		cxlds->doe_mbs[cxlds->num_mbs] = doe_mb;
-> > +		cxlds->num_mbs++;
-> > +	}
-> > +
-> > +	rc = devm_add_action_or_reset(dev, cxl_doe_destroy_mb, cxlds);
-> > +	if (rc)
-> > +		return rc;
-> > +
-> > +	pci_info(pdev, "Configured %d DOE mailbox's\n", cxlds->num_mbs);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> >  {
-> >  	struct cxl_register_map map;
-> > @@ -454,6 +562,9 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> >  	if (IS_ERR(cxlmd))
-> >  		return PTR_ERR(cxlmd);
-> >  
-> > +	cxl_alloc_irq_vectors(cxlds);
-> > +	devm_cxl_pci_create_doe(cxlds);
-> 
-> If you're not going to check the return value, just make the functions void.
-
-Yea too much rework and I forgot this.
-
-Thanks,
-Ira
-
-> 
-> > +
-> >  	if (range_len(&cxlds->pmem_range) && IS_ENABLED(CONFIG_CXL_PMEM))
-> >  		rc = devm_cxl_add_nvdimm(&pdev->dev, cxlmd);
-> >  
-> > -- 
-> > 2.35.1
-> > 
+>
+> - Eric

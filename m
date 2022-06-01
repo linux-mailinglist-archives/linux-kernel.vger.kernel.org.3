@@ -2,164 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C3E53AE42
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06C053AE27
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiFAUqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 16:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        id S230189AbiFAUqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 16:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiFAUpj (ORCPT
+        with ESMTP id S229787AbiFAUpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 16:45:39 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAA51D106A;
-        Wed,  1 Jun 2022 13:34:18 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id h5so3904263wrb.0;
-        Wed, 01 Jun 2022 13:34:18 -0700 (PDT)
+        Wed, 1 Jun 2022 16:45:24 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9271CA5EB
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 13:32:47 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id c8so2076662qtj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 13:32:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kfsG9LUOEPEKQ9LxxRuVY9iWrZQoJ7F8ml1zzQN1q0o=;
-        b=TV/JmovXx25zTSTxidCJIrIjB3J+6yovker1IPrJ45jkhZb0ZPkm/US+DsSNJ9OLQ1
-         x9L8kANnTgqmES1a/+y8c49aceJjSpf1T9prbrqFPMJlTUFuXUwDqMs92xFUAt4FrVD+
-         9hgDSm9pt07EkY8X3V+0TC+8MhEs0SQWTKG6PRjJAR+FQ+Q1k0ex0nEYGl4Z+flyzzAR
-         fG2wOLBo96n4dJdULvBRi3nzPk/HFjNfGIwMSGRrC1vdl/HKdin9jvMq+WCJpZkYD9oI
-         7UmQ3hh1HniIvM1moToPZwbhaEH9cZYx8rvVEIC7b5TmCRQ3Zqe12CpmtbL0Fyx0lVqy
-         9h5A==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WqzzjZ/+YoAfsOt70hJSK1v4NOwUp//67c0gdA4z8gE=;
+        b=o+8DoKQbuB6vo34q94PbCmoOZ1E42JHaRrsMzhV2F/ynt8Q+VdQtnDeWLT592DvZ7t
+         AeMy3LYefWHmvgfCUohLgLa0KCbaal0aw7qMTAwwLRq6xfqCUug5WfT+u86M35AjoI91
+         Emy6jxRdlsMSGIG6vRz8kwjnFKa3jFTpW1+pvaVa/+/LwfGm1MYRZQ/+BK+yeUtO5WUL
+         mEQMcYZVBuDTpS2uWVEdGM6Xk19p34D75EanhUz/tcJ6SHYj4qcW5her+JqRSnS93jQC
+         Baxr0ZA84v+AOXMoYiwB2Zcw7cV3bhjrdqtXX+iJaz0V12UJ4K8O75k0rjJOOUi9AFs7
+         x/TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kfsG9LUOEPEKQ9LxxRuVY9iWrZQoJ7F8ml1zzQN1q0o=;
-        b=p8fJEno81WfyZ0/2a1JMCWfwtiJO8eCt4tR9NVt++hC4Fr6guFEUsxDihSTey4xoPO
-         /rlAkeBg/8pLKn2WcMd3xW8rNfr+TcU9MB3QEQ6ydhl6/P4Yk+zooq26wWh13/pOfDLT
-         fmnLIXWAWvzHSUkgG4QbEUGtaXWGt9ePGZz6EY/FRQn4aUD8pVI+cFMh25waRmqsA0fM
-         Gh+uB2YfwbXL2S0BXIkedAeI+QiaAb+NrE75+1bYli1BvdUBUHFJJ7phY8dEx9JaCq39
-         /ujQNlOC5hL4H/xdcoFh5LBq/fba00u3ygt214ziwUVzETVNT0u8S3/33tMLvRJdpdjQ
-         dtuA==
-X-Gm-Message-State: AOAM530CvT04qwpDuWEFy+vvgHJPvEZsWiSA232SEemfEBC69VA3fvdy
-        lZerfdRjiwjKpjCaqoZ0B2PXD+qROE8=
-X-Google-Smtp-Source: ABdhPJx8MtWjiK3wPxQOfSWBDFZSlPWAUYVHkks7Qq/MkfVuM0OyvqCuGvG//AVEkW+7IRAj5J57ig==
-X-Received: by 2002:a17:907:9809:b0:6f5:1be8:5b13 with SMTP id ji9-20020a170907980900b006f51be85b13mr1069498ejc.412.1654113452261;
-        Wed, 01 Jun 2022 12:57:32 -0700 (PDT)
-Received: from opensuse.localnet (host-79-55-12-155.retail.telecomitalia.it. [79.55.12.155])
-        by smtp.gmail.com with ESMTPSA id rl7-20020a170907216700b006f3ef214e27sm1042428ejb.141.2022.06.01.12.57.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 12:57:31 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Chris Mason <chris.mason@fusionio.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 3/3] btrfs: Replace kmap() with kmap_local_page() in zlib.c
-Date:   Wed, 01 Jun 2022 21:57:28 +0200
-Message-ID: <3146770.aV6nBDHxoP@opensuse>
-In-Reply-To: <202206010437.EX5Nj7cu-lkp@intel.com>
-References: <20220531145335.13954-4-fmdefrancesco@gmail.com> <202206010437.EX5Nj7cu-lkp@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WqzzjZ/+YoAfsOt70hJSK1v4NOwUp//67c0gdA4z8gE=;
+        b=0Kvh2via8Bvlgv2lzLd8KSzLoz9Xcc9M7EBePkxQ75po/2Ya98M8IoXiVvMb20IGLk
+         tWekzZoAu1I2D81pmvBnGVydnA4bXHGibazIe/QGNySU97DZcLCSwJwtq+O8NfmXk3OR
+         EwRB85yE+aE4/21aNWdL9Ov+XtEpjc81QOorP3pgTrQ6RD8RItxaq1HTumK1vaQ/iRhf
+         OrtpaRF7UoSzFyHS5h6c57ykncCR0vIasc1dBLjNuW3KP1nl7Lznmf/VopRJQU5arbSr
+         IUeazQ+a/XJaPGF20xmjacegUPPcLPexvgIhXzbKu8tVfcQMeIXHBxKcAgANOjgfP1Bq
+         PsWg==
+X-Gm-Message-State: AOAM531L8+Y26Pqmj5m3sZmaC2wjfHT0d0insjhm5kv3SeuVSg9qM7EZ
+        K4OD34gAFQF7KqRlXEOpqCDo+fp2HKKe95I+MqwqcvInlz8=
+X-Google-Smtp-Source: ABdhPJx4nAJPu/OXd+0EBsy6h9EWGrczLq7bqqCKi8jtBPrQeHOAUACKV0KVNp25KQQV9tdKC24tm1njoXJQNx7sc1A=
+X-Received: by 2002:a37:582:0:b0:6a3:2ce4:3c72 with SMTP id
+ 124-20020a370582000000b006a32ce43c72mr913331qkf.203.1654113500549; Wed, 01
+ Jun 2022 12:58:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+References: <20220531160059.v2.1.Ie7f6d4bf8cce28131da31a43354727e417cae98d@changeid>
+ <CAA8EJpqp64eDmXPN1qMTZ78My8BKPUcu7zKunZV1SJpzjSRDuQ@mail.gmail.com> <f8d5e4a7-bba8-ca51-41f7-885ce14a55fe@quicinc.com>
+In-Reply-To: <f8d5e4a7-bba8-ca51-41f7-885ce14a55fe@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 1 Jun 2022 22:58:09 +0300
+Message-ID: <CAA8EJpp5v3qR2M-6Jms=3GgrzUeMOiMzQtgvQc_LPVE78aE=aw@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/msm/dpu: Move min BW request and full BW disable
+ back to mdss
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Kalyan Thota <quic_kalyant@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=C3=AC 31 maggio 2022 22:35:30 CEST kernel test robot wrote:
-> Hi "Fabio,
->=20
-> Thank you for the patch! Perhaps something to improve:
->=20
+On Wed, 1 Jun 2022 at 20:18, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+> On 6/1/2022 3:04 AM, Dmitry Baryshkov wrote:
+> > On Wed, 1 Jun 2022 at 02:01, Douglas Anderson <dianders@chromium.org> wrote:
+> >>
+> >> In commit a670ff578f1f ("drm/msm/dpu: always use mdp device to scale
+> >> bandwidth") we fully moved interconnect stuff to the DPU driver. This
+> >> had no change for sc7180 but _did_ have an impact for other SoCs. It
+> >> made them match the sc7180 scheme.
+> >
+> > [skipped the description]
+> >
+> >>
+> >> Changes in v2:
+> >> - Don't set bandwidth in init.
+> >>
+> >>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c |  8 ----
+> >>   drivers/gpu/drm/msm/msm_mdss.c          | 57 +++++++++++++++++++++++++
+> >>   2 files changed, 57 insertions(+), 8 deletions(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> >> index 2b9d931474e0..3025184053e0 100644
+> >> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> >> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> >> @@ -49,8 +49,6 @@
+> >>   #define DPU_DEBUGFS_DIR "msm_dpu"
+> >>   #define DPU_DEBUGFS_HWMASKNAME "hw_log_mask"
+> >>
+> >> -#define MIN_IB_BW      400000000ULL /* Min ib vote 400MB */
+> >> -
+> >>   static int dpu_kms_hw_init(struct msm_kms *kms);
+> >>   static void _dpu_kms_mmu_destroy(struct dpu_kms *dpu_kms);
+> >>
+> >
+> > [skipped]
+> >
+> >> diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
+> >> index 0454a571adf7..e13c5c12b775 100644
+> >> --- a/drivers/gpu/drm/msm/msm_mdss.c
+> >> +++ b/drivers/gpu/drm/msm/msm_mdss.c
+> >> @@ -5,6 +5,7 @@
+> >>
+> >>   #include <linux/clk.h>
+> >>   #include <linux/delay.h>
+> >> +#include <linux/interconnect.h>
+> >>   #include <linux/irq.h>
+> >>   #include <linux/irqchip.h>
+> >>   #include <linux/irqdesc.h>
+> >> @@ -25,6 +26,8 @@
+> >>   #define UBWC_CTRL_2                    0x150
+> >>   #define UBWC_PREDICTION_MODE           0x154
+> >>
+> >> +#define MIN_IB_BW      400000000UL /* Min ib vote 400MB */
+> >
+> > As msm_mdss is now used for both DPU and MDP5 devices, could you
+> > please confirm that this value is valid for older devices too? E.g.
+> > db410c or 8974
+> >
+> I need to check with Kalyan on this value (400MB) as I am unable to find
+> documentation on this. Will update this thread when I do.
+>
+> So prior to this change 627dc55c273da ("drm/msm/disp/dpu1: icc path
+> needs to be set before dpu runtime resume"), this value was coming from
+> the hw catalog
+>
+> @@ -1191,10 +1193,10 @@ static int __maybe_unused
+> dpu_runtime_resume(struct device *dev)
+>
+>          ddev = dpu_kms->dev;
+>
+> +       WARN_ON(!(dpu_kms->num_paths));
+>          /* Min vote of BW is required before turning on AXI clk */
+>          for (i = 0; i < dpu_kms->num_paths; i++)
+> -               icc_set_bw(dpu_kms->path[i], 0,
+> -                       dpu_kms->catalog->perf.min_dram_ib);
+> +               icc_set_bw(dpu_kms->path[i], 0, Bps_to_icc(MIN_IB_BW));
+>
+> After this, we moved to a hard-coded value, I am not sure why.
+>
+> So nothing wrong with this change as such, the only question is whether
+> this value is correct for older chips.
+>
+> But the question here is, are older chips even using icc.
+>
+> It seems like only sc7180, RB3/RB5 are unless i am mistaken.
 
-[snip]
+We are not using it for msm8916 (but we should most probably). And for
+the msm8996 the icc patches were by Yassine.
 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All warnings (new ones prefixed by >>):
->=20
-> >> fs/btrfs/zlib.c:125:6: warning: variable 'data_in' is used=20
-uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->            if (out_page =3D=3D NULL) {
->                ^~~~~~~~~~~~~~~~
->    fs/btrfs/zlib.c:270:6: note: uninitialized use occurs here
->            if (data_in) {
->                ^~~~~~~
->    fs/btrfs/zlib.c:125:2: note: remove the 'if' if its condition is=20
-always false
->            if (out_page =3D=3D NULL) {
->            ^~~~~~~~~~~~~~~~~~~~~~~
->    fs/btrfs/zlib.c:115:6: warning: variable 'data_in' is used=20
-uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->            if (Z_OK !=3D zlib_deflateInit(&workspace->strm, workspace-
->level)) {
->               =20
-^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/zlib.h:148:25: note: expanded from macro 'Z_OK'
->    #define Z_OK            0
->                            ^
->    fs/btrfs/zlib.c:270:6: note: uninitialized use occurs here
->            if (data_in) {
->                ^~~~~~~
->    fs/btrfs/zlib.c:115:2: note: remove the 'if' if its condition is=20
-always false
->            if (Z_OK !=3D zlib_deflateInit(&workspace->strm, workspace-
->level)) {
->           =20
-^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    fs/btrfs/zlib.c:100:15: note: initialize the variable 'data_in' to=20
-silence this warning
->            char *data_in;
->                         ^
->                          =3D NULL
-> >> fs/btrfs/zlib.c:125:6: warning: variable 'cpage_out' is used=20
-uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->            if (out_page =3D=3D NULL) {
->                ^~~~~~~~~~~~~~~~
->    fs/btrfs/zlib.c:267:6: note: uninitialized use occurs here
->            if (cpage_out)
->                ^~~~~~~~~
->    fs/btrfs/zlib.c:125:2: note: remove the 'if' if its condition is=20
-always false
->            if (out_page =3D=3D NULL) {
->            ^~~~~~~~~~~~~~~~~~~~~~~
->    fs/btrfs/zlib.c:115:6: warning: variable 'cpage_out' is used=20
-uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->            if (Z_OK !=3D zlib_deflateInit(&workspace->strm, workspace-
->level)) {
->               =20
-^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/zlib.h:148:25: note: expanded from macro 'Z_OK'
->    #define Z_OK            0
->                            ^
->    fs/btrfs/zlib.c:267:6: note: uninitialized use occurs here
->            if (cpage_out)
->                ^~~~~~~~~
->    fs/btrfs/zlib.c:115:2: note: remove the 'if' if its condition is=20
-always false
->            if (Z_OK !=3D zlib_deflateInit(&workspace->strm, workspace-
->level)) {
->           =20
-^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    fs/btrfs/zlib.c:101:17: note: initialize the variable 'cpage_out' to=20
-silence this warning
->            char *cpage_out;
->                           ^
->                            =3D NULL
->    4 warnings generated.
+> So is there really any impact to the older chips with this change.
+>
+> If not, we should probably let this one go ahead and move back to
+> catalog based approach while extending ICC for older chips.
 
-I'll initialize these variables in v2.
+Let's get this sorted out. I'm fine with 400 MBps, if that works for
+all chipsets.
 
-Thanks,
-
-=46abio
-
-
+-- 
+With best wishes
+Dmitry

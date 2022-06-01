@@ -2,245 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA2C53AF5C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D468453AF22
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbiFAVuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S231979AbiFAVxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbiFAVut (ORCPT
+        with ESMTP id S231810AbiFAVxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:50:49 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4AE1F534E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 14:50:47 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-30c143c41e5so33331257b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 14:50:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V2c5KZSTmxXQrpvpAM6krL/bdTDL9iGs/yrOSXAOkHE=;
-        b=Zxd8G2f19XHgztHt4ZgJMNX09jvQqWXX1lOCSq3jIoGGJF4cBrM+hsAdrvwP6KJrbW
-         pJVjT3S8964Vt9NX3uETPkh54hTWRZjnL4GbMXUhE4K0762Yr8LOUTgyni27wpx0rfUw
-         h8M6eDggflQOAlwRLQfw/SdRFplKBwBiM/0OlG46jqg8KrvWYM15xLJzSegf3L0grLRx
-         YNQdPJ40IqYek0JS1TkXR6cSEPmNx9kyLS8yuA29uSl1AF/vxrsgdMEw6CjwNmOWZ02x
-         xeBgLBEOJ7szsQgRq3TyT4MhYsim99tw1RfkX78xqvEU9IjQGvka+aqaTT+JdoRu5yWz
-         QYng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V2c5KZSTmxXQrpvpAM6krL/bdTDL9iGs/yrOSXAOkHE=;
-        b=G2CgMZSvaF5Yno5rhXtCoyKoJI0gBlLLSc/Afrz4Y6sjUGy0R8vBtCm2ZCuQbuHz55
-         4xOQeAb9QIj1jM3yRsFyWt9j6PA4Kc2HmSGCija757FEweks+oCsDT+6u5vo1LkCQTlw
-         +qw5EA6P+Wa1anQiTQtaRq1/DXnQzy0E4YdxQY6NKNZ4d7h8TWWf4jx1iCbKloU6siBo
-         cuLKv6mL9gWY6SnOcVw+fV1E9cRY83Cx0LLb2GsCHfgdjSCgT6B65g8rCTYZKXdiXl6w
-         Uh3lha9ELf5bsCXudqwbH4HlB6zxpXUw3qWrZr8mCkw7K7AbJ7YdCpHlQ5hSd0Mit9IE
-         tRKA==
-X-Gm-Message-State: AOAM530jVe4iB65Ctx1zVijtYX4jwchLDHawb5iKgo3euVsPCdFJCxtb
-        uOY5tOwBlVjUWph0zvFjfF/mOwmxxuqG0Zle2vox4w==
-X-Google-Smtp-Source: ABdhPJwEnloc72S43okVisaWCAnv9UPaAsbRkEkg4MHEPP2WE001s9UvzgzGBn6Xy+6GZjZjsevfDoSFU/KNb3S2wBw=
-X-Received: by 2002:a81:990f:0:b0:2f8:c347:d11a with SMTP id
- q15-20020a81990f000000b002f8c347d11amr1832577ywg.507.1654120246169; Wed, 01
- Jun 2022 14:50:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220531223100.510392-1-surenb@google.com> <20220601143638.9e78c470d2c980053cc8059a@linux-foundation.org>
- <CAJuCfpHcPhDYTpLj8Vo+W9Q6KkWdT_BOTaEfJW6_PDCPx5kD-A@mail.gmail.com>
-In-Reply-To: <CAJuCfpHcPhDYTpLj8Vo+W9Q6KkWdT_BOTaEfJW6_PDCPx5kD-A@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 1 Jun 2022 14:50:35 -0700
-Message-ID: <CAJuCfpH5Y-DnJgep2SPuX8TwJR7SUr=B0Tp3jkre_en8xQjKaQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2 1/2] mm: drop oom code from exit_mmap
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        kernel-team <kernel-team@android.com>,
-        Liam Howlett <liam.howlett@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Jun 2022 17:53:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D882E18B11;
+        Wed,  1 Jun 2022 14:53:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89E95B81CF0;
+        Wed,  1 Jun 2022 21:53:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 31B45C34119;
+        Wed,  1 Jun 2022 21:53:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654120380;
+        bh=zMCuPfsZ3FXBOJ+/RPBXt20WYRcWOUCEsnMPpWGksVs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=LMJP0qvQJp5FiRCTaOQDEblFfhMhuFUiH4xfkdj+3sEkFLaMyxTCkEVGquAx67vjQ
+         MSPaDyiT7Aw9bj4d6Wfe8Dja/9rrVKgbIaqb0j8FyljZ/8ptsbjEgCYHRITCUE5bQ6
+         U15bACp0fSpnWq9ZXeH3X+hfheSiUEfg0SpgFy1PWrQVqig/TC2yy6PQDQ6+6GWR9D
+         FgB6UhMRBr4g1FcTQDfhyiuHkFc6EAIVHspBe+n/sr2+1ind+LXECFrqWTGClpb2AF
+         bcm3UMCYaFjhluf3czKqrgO5v0Ohu+ytgQdmwYiKc0P9DHfkZAALakld+KQKmWxCXl
+         +MPdGiSum5bVg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 20DE9F0394E;
+        Wed,  1 Jun 2022 21:53:00 +0000 (UTC)
+Subject: Re: [GIT PULL] power-supply changes for 5.19
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220601201404.nc66eejtt4tuvre6@mercury.elektranox.org>
+References: <20220601201404.nc66eejtt4tuvre6@mercury.elektranox.org>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220601201404.nc66eejtt4tuvre6@mercury.elektranox.org>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.19
+X-PR-Tracked-Commit-Id: da50aad6d86716aa48a2b8463c85caea77c0355f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c7993147519ca970ad4af17e0eac9d683e7721b9
+Message-Id: <165412038013.5556.17117490936906222974.pr-tracker-bot@kernel.org>
+Date:   Wed, 01 Jun 2022 21:53:00 +0000
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 2:47 PM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Wed, Jun 1, 2022 at 2:36 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Tue, 31 May 2022 15:30:59 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
-> >
-> > > The primary reason to invoke the oom reaper from the exit_mmap path used
-> > > to be a prevention of an excessive oom killing if the oom victim exit
-> > > races with the oom reaper (see [1] for more details). The invocation has
-> > > moved around since then because of the interaction with the munlock
-> > > logic but the underlying reason has remained the same (see [2]).
-> > >
-> > > Munlock code is no longer a problem since [3] and there shouldn't be
-> > > any blocking operation before the memory is unmapped by exit_mmap so
-> > > the oom reaper invocation can be dropped. The unmapping part can be done
-> > > with the non-exclusive mmap_sem and the exclusive one is only required
-> > > when page tables are freed.
-> > >
-> > > Remove the oom_reaper from exit_mmap which will make the code easier to
-> > > read. This is really unlikely to make any observable difference although
-> > > some microbenchmarks could benefit from one less branch that needs to be
-> > > evaluated even though it almost never is true.
-> > >
-> > > [1] 212925802454 ("mm: oom: let oom_reap_task and exit_mmap run concurrently")
-> > > [2] 27ae357fa82b ("mm, oom: fix concurrent munlock and oom reaper unmap, v3")
-> > > [3] a213e5cf71cb ("mm/munlock: delete munlock_vma_pages_all(), allow oomreap")
-> > >
-> >
-> > I've just reinstated the mapletree patchset so there are some
-> > conflicting changes.
-> >
-> > > --- a/include/linux/oom.h
-> > > +++ b/include/linux/oom.h
-> > > @@ -106,8 +106,6 @@ static inline vm_fault_t check_stable_address_space(struct mm_struct *mm)
-> > >       return 0;
-> > >  }
-> > >
-> > > -bool __oom_reap_task_mm(struct mm_struct *mm);
-> > > -
-> > >  long oom_badness(struct task_struct *p,
-> > >               unsigned long totalpages);
-> > >
-> > > diff --git a/mm/mmap.c b/mm/mmap.c
-> > > index 2b9305ed0dda..b7918e6bb0db 100644
-> > > --- a/mm/mmap.c
-> > > +++ b/mm/mmap.c
-> > > @@ -3110,30 +3110,13 @@ void exit_mmap(struct mm_struct *mm)
-> > >       /* mm's last user has gone, and its about to be pulled down */
-> > >       mmu_notifier_release(mm);
-> > >
-> > > -     if (unlikely(mm_is_oom_victim(mm))) {
-> > > -             /*
-> > > -              * Manually reap the mm to free as much memory as possible.
-> > > -              * Then, as the oom reaper does, set MMF_OOM_SKIP to disregard
-> > > -              * this mm from further consideration.  Taking mm->mmap_lock for
-> > > -              * write after setting MMF_OOM_SKIP will guarantee that the oom
-> > > -              * reaper will not run on this mm again after mmap_lock is
-> > > -              * dropped.
-> > > -              *
-> > > -              * Nothing can be holding mm->mmap_lock here and the above call
-> > > -              * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
-> > > -              * __oom_reap_task_mm() will not block.
-> > > -              */
-> > > -             (void)__oom_reap_task_mm(mm);
-> > > -             set_bit(MMF_OOM_SKIP, &mm->flags);
-> > > -     }
-> > > -
-> > > -     mmap_write_lock(mm);
-> > > +     mmap_read_lock(mm);
-> >
-> > Unclear why this patch fiddles with the mm_struct locking in this
-> > fashion - changelogging that would have been helpful.
->
-> Yeah, I should have clarified this in the description. Everything up
-> to unmap_vmas() can be done under mmap_read_lock and that way
-> oom-reaper and process_mrelease can do the unmapping in parallel with
-> exit_mmap. That's the reason we take mmap_read_lock, unmap the vmas,
-> mark the mm with MMF_OOM_SKIP and take the mmap_write_lock to execute
-> free_pgtables. I think maple trees do not change that except there is
-> no mm->mmap anymore, so the line at the end of exit_mmap where we
-> reset mm->mmap to NULL can be removed (I show that line below).
+The pull request you sent on Wed, 1 Jun 2022 22:14:04 +0200:
 
-In the current changelog I have this explanation:
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.19
 
-"The unmapping part can be done with the non-exclusive mmap_sem and
-the exclusive one is only required when page tables are freed."
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c7993147519ca970ad4af17e0eac9d683e7721b9
 
-should I resend a v3 with a more detailed explanation for these
-mmap_lock manipulations?
+Thank you!
 
->
-> >
-> > But iirc mapletree wants to retain a write_lock here, so I ended up with
-> >
-> > void exit_mmap(struct mm_struct *mm)
-> > {
-> >         struct mmu_gather tlb;
-> >         struct vm_area_struct *vma;
-> >         unsigned long nr_accounted = 0;
-> >         MA_STATE(mas, &mm->mm_mt, 0, 0);
-> >         int count = 0;
-> >
-> >         /* mm's last user has gone, and its about to be pulled down */
-> >         mmu_notifier_release(mm);
-> >
-> >         mmap_write_lock(mm);
-> >         arch_exit_mmap(mm);
-> >
-> >         vma = mas_find(&mas, ULONG_MAX);
-> >         if (!vma) {
-> >                 /* Can happen if dup_mmap() received an OOM */
-> >                 mmap_write_unlock(mm);
-> >                 return;
-> >         }
-> >
-> >         lru_add_drain();
-> >         flush_cache_mm(mm);
-> >         tlb_gather_mmu_fullmm(&tlb, mm);
-> >         /* update_hiwater_rss(mm) here? but nobody should be looking */
-> >         /* Use ULONG_MAX here to ensure all VMAs in the mm are unmapped */
-> >         unmap_vmas(&tlb, &mm->mm_mt, vma, 0, ULONG_MAX);
-> >
-> >         /*
-> >          * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
-> >          * because the memory has been already freed. Do not bother checking
-> >          * mm_is_oom_victim because setting a bit unconditionally is cheaper.
-> >          */
-> >         set_bit(MMF_OOM_SKIP, &mm->flags);
-> >         free_pgtables(&tlb, &mm->mm_mt, vma, FIRST_USER_ADDRESS,
-> >                       USER_PGTABLES_CEILING);
-> >         tlb_finish_mmu(&tlb);
-> >
-> >         /*
-> >          * Walk the list again, actually closing and freeing it, with preemption
-> >          * enabled, without holding any MM locks besides the unreachable
-> >          * mmap_write_lock.
-> >          */
-> >         do {
-> >                 if (vma->vm_flags & VM_ACCOUNT)
-> >                         nr_accounted += vma_pages(vma);
-> >                 remove_vma(vma);
-> >                 count++;
-> >                 cond_resched();
-> >         } while ((vma = mas_find(&mas, ULONG_MAX)) != NULL);
-> >
-> >         BUG_ON(count != mm->map_count);
-> >
-> >         trace_exit_mmap(mm);
-> >         __mt_destroy(&mm->mm_mt);
-> >         mm->mmap = NULL;
->
-> ^^^ this line above needs to be removed when the patch is applied over
-> the maple tree patchset.
->
->
-> >         mmap_write_unlock(mm);
-> >         vm_unacct_memory(nr_accounted);
-> > }
-> >
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

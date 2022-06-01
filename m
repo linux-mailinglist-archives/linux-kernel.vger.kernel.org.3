@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB0353AF12
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E4553AFA1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbiFAVTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        id S230174AbiFAUww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 16:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbiFAVTt (ORCPT
+        with ESMTP id S230469AbiFAUwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:19:49 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59A3A76E7;
-        Wed,  1 Jun 2022 14:19:38 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.96.91]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MnJUy-1nUtIA27Iy-00jLcz; Wed, 01 Jun 2022 21:49:58 +0200
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id ABFE93C09F;
-        Wed,  1 Jun 2022 21:49:56 +0200 (CEST)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 694BF27B9; Wed,  1 Jun 2022 21:49:55 +0200 (CEST)
-Date:   Wed, 1 Jun 2022 21:49:55 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Michal Marek <michal.lkml@markovi.net>
-Subject: Re: [PATCH 2/4] kbuild: clean .tmp_* pattern by make clean
-Message-ID: <YpfC42gQGDJiMMNT@bergen.fjasle.eu>
-References: <20220528154704.2576290-1-masahiroy@kernel.org>
- <20220528154704.2576290-2-masahiroy@kernel.org>
+        Wed, 1 Jun 2022 16:52:17 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CCF65E4;
+        Wed,  1 Jun 2022 13:52:04 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-f33f0f5b1dso4295949fac.8;
+        Wed, 01 Jun 2022 13:52:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gn5G0sk6V7ansC6nBxDu6+mXNt9uJIpkYkYkuE5zjDs=;
+        b=WyUKnG4lGjxLKBmD82qOADKFTT/PT9SIY8RJQQYPlMlQ91NR1NXyF9daoejumGt2i/
+         IJ87DJC2b24QBJXy50gBn8et3d9g/4JunBK+5jkc+pRNSsbeCLh8+oS3W4f2fqwQ+p3+
+         cUJ4+Eo9o/u1NLSrSDTsW2r6WjLMlJ/cV/yCIalaJQ3wKgFB+Je02BRS3wGsP9QPfjpU
+         19jaUV6n+I4SyLOn7vmOEdO7yZ8WsUpxf74MrhkMbSFQqQ0RVsUx5P0O1zSO0dZiBbTY
+         BbREAfUt6T+iv0wq7JW1EXkHNCRtZ/B4+YLnedTns49z+0L4YuURaF7dlkFaGOZfIE3I
+         x5Rw==
+X-Gm-Message-State: AOAM5305WkJK2Ux4SNZpyMuCmX+OacvafIeahwwriIL/xaetzGupaDNj
+        QymyU0UrpnD5LLnrB0nVsdhGOhNAxQ==
+X-Google-Smtp-Source: ABdhPJwAJpzi0PcdaldTmKtUN95zZ7XXm0EePIpfGX5LC4bNAZ845Iwj0Rw0ZOPMk6mqDxpbS339oA==
+X-Received: by 2002:aca:f143:0:b0:32b:dc40:c1c4 with SMTP id p64-20020acaf143000000b0032bdc40c1c4mr12678221oih.293.1654113065824;
+        Wed, 01 Jun 2022 12:51:05 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bc32-20020a05682016a000b0035eb4e5a6dasm1361259oob.48.2022.06.01.12.51.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 12:51:05 -0700 (PDT)
+Received: (nullmailer pid 320227 invoked by uid 1000);
+        Wed, 01 Jun 2022 19:51:04 -0000
+Date:   Wed, 1 Jun 2022 14:51:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Liang Yang <liang.yang@amlogic.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>
+Subject: Re: [PATCH v5 1/4] dt-bindings: nand: meson: fix meson nfc clock
+Message-ID: <20220601195104.GA320194-robh@kernel.org>
+References: <20220513123404.48513-1-liang.yang@amlogic.com>
+ <20220513123404.48513-2-liang.yang@amlogic.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220528154704.2576290-2-masahiroy@kernel.org>
-Jabber-ID: nicolas@jabber.no
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:iWTC9Fl0s+F1OypqFKLOqkbj83zsZ//QByOdoNj6YEXh0YX+PLt
- E+b8wieuJIY9Pkg98zqSC18mjpdoK4pyi9a5/4uSSDKUtftd2fq2C2LiTV07y8JNsaxzqaj
- GB/9oxbZmIDmvq/mlhF+qVBhsHO9ABu0fjWIkWlAxZAdknuX3r5RYsyQ/PjWIgpbBV3zHM1
- ++MOmZ4ncIN9Woa/yjNlg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:HPgegc6THJM=:e24xwd5frNJbGKgbys85Fo
- oKM78EGdhZ0oSrl+2blQX6alQJjIUVIBR7tXSHg/lUWWXIjrWzFhkNi6JgJAq7X2Bpv5LPIoY
- D7q51XWHJMnNcmPlq6s0JG6wBS/wPPqafkesWdRLKbPnTqQoOGOZ7gjCQnEgeVA+UfSbcseF1
- 73A/KkWd2lMaMqX6/EGI76Wone4slykcugSfBAjZydDU9tndfUC0hr29kAHwCgh8lZhUxLk23
- l9TFmISMiMfZgkWdti6+dC2HWI6TbarbYBrvjFUGaiUAGYJg7+GIFa9x+SnHfEAbGBdfAro7z
- ilWmcPw0otrgfzmSJkOJvR8JwL/wo+SzXXJJltCFB2OgKuIMo7NX6xwPSMk8HL3Z/WeLJHp3B
- xuMRVE6QfKpqDKdauYLx3zu6NmTe76lJyu9LoRoUA64VlqHFpP1nNAZxVEqe6fVgDUFzjkCVq
- f/zxkbWKYqA1ksiI9DqmmPvXhXUkRCk/icJB1bMDLoau3+DFrPCo5zQsm3MqE7KZepREe9GPZ
- F7QBkKH/K2nx+oUsvAn3IZZBYeN0Xu4Q202qahzdHfzntCJLqEGcKZFSXLNwPWiitQXc2UMib
- nIirUb0tc7SgHknTQkflU0ymxAmaDJR5ZAFJVIL9NwH7FnCFotvq8jPwrtxUNs6c8uIBATCDQ
- e9lZKPyeRGu/igg4hkyWPf8/kdd5Hg+/Eg8IGMjSNqlpiPBlL8CJ3wLi9AM7I9iqBXnXea43g
- 0PvJ7Pd/L2BwYfMXmJcR8oM0O8wRMdAKkJlrdA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220513123404.48513-2-liang.yang@amlogic.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,37 +79,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 29 May 2022 00:47:02 +0900, Masahiro Yamada wrote:
-> Change the "make clean" rule to remove all the .tmp_* files.
+On Fri, 13 May 2022 20:34:01 +0800, Liang Yang wrote:
+> EMMC and NAND have the same clock control register named 'SD_EMMC_CLOCK'
+> which is defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is
+> the divider and bit6~7 is the mux for fix pll and xtal. At the beginning,
+> a common MMC and NAND sub-clock was discussed and planed to be implemented
+> as NFC clock provider, but now this series of patches of a common MMC and
+> NAND sub-clock are never being accepted and the current binding was never
+> valid. the reasons are:
+> 1. EMMC and NAND, which are mutually exclusive anyway
+> 2. coupling the EMMC and NAND.
+> 3. it seems that a common MMC and NAND sub-clock is over engineered.
+> and let us see the link for more information:
+> https://lore.kernel.org/all/20220121074508.42168-5-liang.yang@amlogic.com
+> so The meson nfc can't work now, let us rework the clock.
 > 
-> .tmp_objdiff is the only exception, which should be removed by
-> "make mrproper".
-> 
-> Rename the record directory of objdiff, .tmp_objdiff to .objdiff to
-> avoid the removal by "make clean".
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
 > ---
+>  .../bindings/mtd/amlogic,meson-nand.txt       | 29 ++++++++-----------
+>  1 file changed, 12 insertions(+), 17 deletions(-)
 > 
->  Makefile                | 4 ++--
->  scripts/link-vmlinux.sh | 3 ---
->  scripts/objdiff         | 2 +-
->  3 files changed, 3 insertions(+), 6 deletions(-)
-> 
-...
-> diff --git a/scripts/objdiff b/scripts/objdiff
-> index 72b0b63c3fe1..68b8d74e5c6f 100755
-> --- a/scripts/objdiff
-> +++ b/scripts/objdiff
-> @@ -32,7 +32,7 @@ if [ -z "$SRCTREE" ]; then
->  	exit 1
->  fi
->  
-> -TMPD=$SRCTREE/.tmp_objdiff
-> +TMPD=$SRCTREE/.objdiff
->  
->  usage() {
->  	echo >&2 "Usage: $0 <command> <args>"
 
-scripts/objdiff still has two occurrences of .tmp_objdiff (in the 
-comment block at the top).
+Acked-by: Rob Herring <robh@kernel.org>

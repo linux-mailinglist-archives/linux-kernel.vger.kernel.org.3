@@ -2,196 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD91B53A944
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC7C53A949
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353956AbiFAOh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S1354899AbiFAOjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiFAOhw (ORCPT
+        with ESMTP id S229602AbiFAOjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:37:52 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542F131233
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:37:51 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:39050)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nwPTm-003wch-Kk; Wed, 01 Jun 2022 08:37:46 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:47918 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nwPTk-00ASIR-BF; Wed, 01 Jun 2022 08:37:46 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Ying Huang <ying.huang@intel.com>, <peterx@redhat.com>,
-        <apopple@nvidia.com>, <osalvador@suse.de>,
-        <mike.kravetz@oracle.com>, <songmuchun@bytedance.com>,
-        <hch@lst.de>, <dhowells@redhat.com>, <cl@linux.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
-References: <20220530113016.16663-1-linmiaohe@huawei.com>
-        <20220530113016.16663-2-linmiaohe@huawei.com>
-        <bbc060ca6e967790423e0a3ca940d1e700447554.camel@intel.com>
-        <b2ddcd64-2779-ede9-3615-ad5bc90a3bc1@huawei.com>
-        <87bkvdfzvm.fsf@email.froward.int.ebiederm.org>
-        <e10023d7-3d19-1edf-86af-4cb79071b78f@huawei.com>
-Date:   Wed, 01 Jun 2022 09:37:21 -0500
-In-Reply-To: <e10023d7-3d19-1edf-86af-4cb79071b78f@huawei.com> (Miaohe Lin's
-        message of "Wed, 1 Jun 2022 14:33:02 +0800")
-Message-ID: <87y1yga1r2.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 1 Jun 2022 10:39:15 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B1F31233;
+        Wed,  1 Jun 2022 07:39:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654094354; x=1685630354;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kgeZ5dHKGAmvtm2SI9klD7xeCUa8LmfIDO8LskDbpCY=;
+  b=MyuPw3nzSlQyeCaTmkm7Ejw6KJHsH675eqa5SmbWap7jFNJ/xMaYJDqT
+   LcG5mXaQwjwZTpl3btRS16ja0lzt3brAE2pkcGnCa+H5YaGJJsZg/uYMt
+   rifWWALy9MFPYaDKDwg+sMrx3kDu/iAgkTZRjfYKxXnLMZSfsq+AjgvS8
+   5QStByOq5thYnnAcjfm3VW0QqCWk/vK0fu/G5YuaEfqeAtAt+dbpE8kvc
+   tM9DeShSxR+0pB/CGmcQEmEO4SxdmohNxwGq+hVZG16A1fMerHoxsDnRQ
+   14cM7nsGN0lOtB8N4oL+XWK7KClFKQBPmTEwpEa7gprXfSfu1CnNDZBTN
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="338656201"
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="338656201"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 07:39:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="581611535"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Jun 2022 07:39:10 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwPV2-00044e-Nc;
+        Wed, 01 Jun 2022 14:39:04 +0000
+Date:   Wed, 1 Jun 2022 22:38:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Haowen Bai <baihaowen@meizu.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        netdev@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
+        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: tulip: de4x5: remove unused variable
+Message-ID: <202206012206.rmnA2Zg6-lkp@intel.com>
+References: <1654068277-6691-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nwPTk-00ASIR-BF;;;mid=<87y1yga1r2.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX19dRjWhftz57Cs5rYGnFs7Ohp6QmfecC1w=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1654068277-6691-1-git-send-email-baihaowen@meizu.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Miaohe Lin <linmiaohe@huawei.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1647 ms - load_scoreonly_sql: 0.10 (0.0%),
-        signal_user_changed: 12 (0.7%), b_tie_ro: 10 (0.6%), parse: 1.61
-        (0.1%), extract_message_metadata: 17 (1.0%), get_uri_detail_list: 3.8
-        (0.2%), tests_pri_-1000: 8 (0.5%), tests_pri_-950: 1.43 (0.1%),
-        tests_pri_-900: 1.08 (0.1%), tests_pri_-90: 71 (4.3%), check_bayes: 70
-        (4.2%), b_tokenize: 11 (0.7%), b_tok_get_all: 12 (0.7%), b_comp_prob:
-        3.8 (0.2%), b_tok_touch_all: 38 (2.3%), b_finish: 1.02 (0.1%),
-        tests_pri_0: 1513 (91.8%), check_dkim_signature: 0.71 (0.0%),
-        check_dkim_adsp: 2.9 (0.2%), poll_dns_idle: 0.94 (0.1%), tests_pri_10:
-        3.4 (0.2%), tests_pri_500: 15 (0.9%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v4 1/4] mm: reduce the rcu lock duration
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miaohe Lin <linmiaohe@huawei.com> writes:
+Hi Haowen,
 
-> On 2022/6/1 0:09, Eric W. Biederman wrote:
->> Miaohe Lin <linmiaohe@huawei.com> writes:
-> snip
->>>
->>> "
->>> Commit 3268c63eded4 ("mm: fix move/migrate_pages() race on task struct")
->>> extends the period of the rcu_read_lock until after the permissions checks
->>> are done because it suspects the permissions checks are not safe unless
->>> performed under both rcu_read_lock and task_lock to ensure the task<->mm
->>> association does not change on us while we are working [1]. But extended
->>> rcu read lock does not add much value. Because after permission checking
->>> the permission may still be changed. There's no much difference. So it's
->>> unnecessary to extend the period of the rcu_read_lock. Release the rcu
->>> lock after task refcount is successfully grabbed to reduce the rcu holding
->>> time.
->>>
->>> [1] https://lore.kernel.org/lkml/87sjhzun47.fsf@xmission.com/
->>> "
->> 
->> It doesn't make sense to me.
->> 
->> I don't see any sleeping functions called from find_mm_struct or
->> kernel_migrate_pages in the area kernel_migrate_pages in the area of the
->> code protected by get_task_struct.  So at a very basic level I see a
->> justification for dirtying a cache line twice with get_task_struct and
->> put_task_struct to reduce rcu_read_lock hold times.
->> 
->> I would contend that a reasonable cleanup based up on the current state
->> of the code would be to extend the rcu_read_lock over get_task_mm so
->
-> If so, security_task_movememory will be called inside rcu lock. It might
-> call sleeping functions, e.g. smack_log(). I think it's not a good
-> idea.
+Thank you for the patch! Yet something to improve:
 
-In general the security functions are not allowed to sleep.
-The audit mechanism typically preallocates memory so it does
-not need to sleep.  From a quick skim through the code I don't
-see smack_log sleeping.
+[auto build test ERROR on horms-ipvs/master]
+[also build test ERROR on v5.18]
+[cannot apply to net-next/master net/master linus/master next-20220601]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Certainly the security hooks are not supposed to be inserted into the
-code that they prevent reasonable implementation decisions.
+url:    https://github.com/intel-lab-lkp/linux/commits/Haowen-Bai/net-tulip-de4x5-remove-unused-variable/20220601-152922
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git master
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220601/202206012206.rmnA2Zg6-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/98c118e28527e7ff29469521c68414943a7cfc3a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Haowen-Bai/net-tulip-de4x5-remove-unused-variable/20220601-152922
+        git checkout 98c118e28527e7ff29469521c68414943a7cfc3a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Which is to say if there is a good (non-security hook reason) for
-supporting sleeping deal with it.  Otherwise the security hooks has a
-bug and needs to get fixed/removed.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->> that a reference to task_struct does not need to be taken.  That has
->> the potential to reduce contention and reduce lock hold times.
->> 
->> 
->> The code is missing a big fat comment with the assertion that it is ok
->> if the permission checks are racy because the race is small, and the
->> worst case thing that happens is the page is migrated to another
->> numa node.
->> 
->> 
->> Given that the get_mm_task takes task_lock the cost of dirtying the
->> cache line is already being paid.  Perhaps not extending task_lock hold
->> times a little bit is justified, but I haven't seen that case made.
->> 
->> This seems like code that is called little enough it would be better for
->> it to be correct, and not need big fat comments explaining why it
->> doesn't matter that they code is deliberately buggy.
->> 
->
-> Agree. A big fat comments will make code hard to follow.
+All errors (new ones prefixed by >>):
 
-No.
+>> drivers/net/ethernet/dec/tulip/de4x5.c:3823:2: error: use of undeclared identifier 'imr'
+           UNMASK_IRQs;
+           ^
+   drivers/net/ethernet/dec/tulip/de4x5.c:694:5: note: expanded from macro 'UNMASK_IRQs'
+       imr |= lp->irq_mask;\
+       ^
+>> drivers/net/ethernet/dec/tulip/de4x5.c:3823:2: error: use of undeclared identifier 'imr'
+   drivers/net/ethernet/dec/tulip/de4x5.c:695:10: note: expanded from macro 'UNMASK_IRQs'
+       outl(imr, DE4X5_IMR);               /* Unmask the IRQs */\
+            ^
+   drivers/net/ethernet/dec/tulip/de4x5.c:3826:2: error: use of undeclared identifier 'imr'
+           ENABLE_IRQs;
+           ^
+   drivers/net/ethernet/dec/tulip/de4x5.c:683:5: note: expanded from macro 'ENABLE_IRQs'
+       imr |= lp->irq_en;\
+       ^
+   drivers/net/ethernet/dec/tulip/de4x5.c:3826:2: error: use of undeclared identifier 'imr'
+   drivers/net/ethernet/dec/tulip/de4x5.c:684:10: note: expanded from macro 'ENABLE_IRQs'
+       outl(imr, DE4X5_IMR);               /* Enable the IRQs */\
+            ^
+   4 errors generated.
 
-The code is impossible to follow currently.
 
-The code either requires a comment pointing out that it is deliberately
-racy, or the code needs to be fixed.
+vim +/imr +3823 drivers/net/ethernet/dec/tulip/de4x5.c
 
-Clever and subtle code always requires a comment if for no other
-reason then to alert the reader that something a typical is going on.
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3814  
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3815  static void
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3816  de4x5_setup_intr(struct net_device *dev)
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3817  {
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3818      struct de4x5_private *lp = netdev_priv(dev);
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3819      u_long iobase = dev->base_addr;
+98c118e28527e7 drivers/net/ethernet/dec/tulip/de4x5.c Haowen Bai     2022-06-01  3820      s32 sts;
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3821  
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3822      if (inl(DE4X5_OMR) & OMR_SR) {   /* Only unmask if TX/RX is enabled */
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16 @3823  	UNMASK_IRQs;
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3824  	sts = inl(DE4X5_STS);        /* Reset any pending (stale) interrupts */
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3825  	outl(sts, DE4X5_STS);
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3826  	ENABLE_IRQs;
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3827      }
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3828  }
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3829  
 
->> In short it does not make sense to me to justify a patch for performance
->> reasons when it appears that extending the rcu_read_lock hold time and
->> not touch the task reference count would stop dirtying a cache line and
->> likely have more impact.
->
-> IMHO, incremented task refcount should make code works correctly. And extending
-> the rcu_read_lock over get_task_mm will break the things because sleeping functions
-> might be called while holding rcu lock.
-
-Which sleeping functions?
-
-I can't find any.  In particular smack_task_movememory calls
-smk_curacc_on_task which is the same function called by
-security_task_getpgid.  security_task_getpgid is called
-under rcu_read_lock.  So smack won't sleep.
-
-> Does the patch itself makes sense for you? Should I rephase the commit log further?
-> I'm afraid I didn't get your point correctly.
-
-The patch makes no sense to me because I don't see it doing anything
-worth doing.
-
-get/put_task_struct both dirty a cache line and are expensive especially
-when contended.  Dirtying a cache line that is contended is the pretty
-much the most expensive native cpu operation.  In pathological scenarios
-I have seen it take up to 1s.  Realistically in a cache cold scenario
-(which is not as bad as a contended scenario) you are looking at 100ns
-or more just to execute get_task_struct/put_task_struct.  That is the
-kind of cost it would be nice to avoid all together (even if the
-pathological case never comes up).
-
-So I see two pieces of code where we could use the cheap operation
-rcu_read_lock/rcu_read_unlock to remove the expensive operation
-get_task_struct/put_task_struct.  Instead I see people removing
-rcu_read_lock/rcu_read_unlock.
-
-That makes no sense.  Especially as your implied reason for making this
-change is to make the code have better performance.  Improving
-performance is the reason for making critical sections smaller isn't it?
-
-Eric
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

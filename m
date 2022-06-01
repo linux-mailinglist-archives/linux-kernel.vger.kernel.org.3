@@ -2,51 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B28853A938
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B9453A93D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354851AbiFAO33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
+        id S1347380AbiFAOdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354673AbiFAO3Q (ORCPT
+        with ESMTP id S242256AbiFAOdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:29:16 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A778AF599
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:28:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=7cBQ5UAi34wf6hVucTSFDDQUv/4kX0jsV9pUciZ6rdI=; b=v/Oug87JxQcoMZTq3LO5us+JPV
-        3kAT9ABt6auUcZ2aaPD7rpo39mgPpZgel1sOdkfx9PO2Z9TsJCUMa+7QJneNadzG2E3d8Oe2lVYmQ
-        09l1oS8AX0ksw0sHQN5Hjq5vCtfhtFOibWgqS53lIGYAh7zkLIZtQe8E+fZuRInWfLjk0wUAYv4cv
-        U8SNd58hPLmxua+mGLhJarCB1RVjI35R5ec9OheLiKLz+B475BbYrshD+isfSMzQooixfKz2YbLZK
-        oqYz0Hs7AvGkeoMJm/cPiCtSc6G+qQVQmGFji+dRDhh5CEd2yYGABpheeoXZo8DOyRSUkrTR7ow3r
-        8nZP1F+5Qj3sxQ+yBsQaB9t67MNOzg90yA9Dg1ehiAhoe689MF3Li8y9/HMV8fjfSOMsW2k8pnlQg
-        tttTPqfEHElnMb0/WreuE2VsF5ohnugk8shS8E5NvYa18XeD0WJCBs2rBQIIO425yZHDKLN+e0UTc
-        GFSwZVrpCI5CsZBXWe1GV+mJiAiPsj7qdLmvLmtzIcxmyxlk3RSLBgnsJ/NgjA4ma+VhXSHprMUlB
-        Y3T00gV6PjEyyBuPOHMYAF27b0TcWuakKDz2DTZ1c5DWcXAruiueGfWH3b1Fh1rE8vwts1os4ConN
-        ErRRwlqM77qI6b8CVzTQKUQhguvEJFJlCqdGZqNYM=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jianyong Wu <jianyong.wu@arm.com>,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] 9p: Fix refcounting during full path walks for fid lookups
-Date:   Wed, 01 Jun 2022 16:28:49 +0200
-Message-ID: <1849605.JvGbLJQp6r@silver>
-In-Reply-To: <20220531142829.GA6868@sequoia>
-References: <20220527000003.355812-1-tyhicks@linux.microsoft.com>
- <43525959.9j6oIFhYhY@silver> <20220531142829.GA6868@sequoia>
+        Wed, 1 Jun 2022 10:33:19 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1809C222BA
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:33:18 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id g25so2184044ljm.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 07:33:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZCSZBRlbrl+wVf2rxucv5zcNIA855Ca5kZwzalOYvb0=;
+        b=VVLJD0NAQILvJHfkfQdPPcZQYLPIvuU383slFb0XqyUhc32YzHWh5sxJyXBVFHQYJy
+         J92H5Fw4LbWBvdWB1iS6I3yvfJJWHZw8bqQDOC6b44r7JyavcgRc2mBCUj6eeznjSuDk
+         nyIxkcatYhb+zHY7xIfeQHW+2ukP9E+RdX9pYQ/ykkIXmvJS9ayfu/0ACvyDq232jvYe
+         SeMxgVf6YbK4Dc0/HecM5JX7ykfd2b36y1SR6Q6Szo5lJNS5UckHGL7PzNDLGZF4Hv2p
+         M18Yixf8P1Cs2Qz2tWaphg/Rz3oQ7A+VQVQtbOGBofEaAAzm/2V2dk8Dql19ozH6RH8U
+         GKhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZCSZBRlbrl+wVf2rxucv5zcNIA855Ca5kZwzalOYvb0=;
+        b=OXbIUoIQ7jQZ5Ns4BTuEJbflRf/163kv9hxLpyREmYLHynIecxaD3Vo6ZaAH4n7GWz
+         zBmxOoZ/sE2jolPg6XLlcU07X3b+3VzjpumB3I1HbQ+Uf58cl+JZmvSrj2TRrVqH69Y4
+         d/evfOqNEFbcLP9mhalZnbwQCHV0shThU+X+lYsHeu/hjQTE0VH8lRTy7dXkjxNFU/TT
+         xfY+F4TGTCH8w6rQICr3BLhkbzJJSaIYnqLuI32wBTSfu4sVfp5k5efr7YIkB9RzRERq
+         xWqhw5jYDDekeOaz6iNRNHRyQRRN9zXiL4y3vQyhBuaZpQkYwcbJZQfzWvOTi404zpF5
+         JsZA==
+X-Gm-Message-State: AOAM5329oWvfLTQGf5Y/iJbD7u7/FlZvaQ+IkRL7uJVWDdwHIeyT3QJx
+        7tVkL0+c8zzybw9EBsMne6Rhuw==
+X-Google-Smtp-Source: ABdhPJxwZgIPL7egdv7c+WP6CgrkdcITk/oDwU0+MJ0tE1U4J5QLdAPVS/TIaa7FdZYS+ZxQQIntVA==
+X-Received: by 2002:a2e:920f:0:b0:255:4f66:956 with SMTP id k15-20020a2e920f000000b002554f660956mr9356579ljg.191.1654093996359;
+        Wed, 01 Jun 2022 07:33:16 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id o8-20020a056512230800b00478feae4f24sm388181lfu.268.2022.06.01.07.33.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 07:33:15 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 0A26E109789; Wed,  1 Jun 2022 17:35:15 +0300 (+03)
+Date:   Wed, 1 Jun 2022 17:35:15 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>, marcelo.cerri@canonical.com,
+        tim.gardner@canonical.com, khalid.elmously@canonical.com,
+        philip.cox@canonical.com, x86@kernel.org, linux-mm@kvack.org,
+        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv6 03/15] efi/x86: Get full memory map in allocate_e820()
+Message-ID: <20220601143515.iavmtysdchirbtel@box.shutemov.name>
+References: <20220517153444.11195-1-kirill.shutemov@linux.intel.com>
+ <20220517153444.11195-4-kirill.shutemov@linux.intel.com>
+ <b9a0eb0a-ce27-5306-a12f-79d196445254@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b9a0eb0a-ce27-5306-a12f-79d196445254@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,186 +96,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Dienstag, 31. Mai 2022 16:28:29 CEST Tyler Hicks wrote:
-> On 2022-05-30 19:14:43, Christian Schoenebeck wrote:
-> > On Freitag, 27. Mai 2022 01:59:59 CEST Tyler Hicks wrote:
-> > > Decrement the refcount of the parent dentry's fid after walking
-> > > each path component during a full path walk for a lookup. Failure to do
-> > > so can lead to fids that are not clunked until the filesystem is
-> > > 
-> > > unmounted, as indicated by this warning:
-> > >  9pnet: found fid 3 not clunked
+On Wed, Jun 01, 2022 at 11:00:23AM +0200, David Hildenbrand wrote:
+> On 17.05.22 17:34, Kirill A. Shutemov wrote:
+> > Currently allocate_e820() only interested in the size of map and size of
+> > memory descriptor to determine how many e820 entries the kernel needs.
 > > 
-> > That explains why I saw so many fids not being clunked with recent Linux
-> > kernel versions while doing some 9p protocol debugging with QEMU recently.
-> 
-> In addition to this refcounting bug, there's another one that I noticed
-> while running fstests. My series does not fix it and I haven't had a
-> chance to look into it more. The generic/531 test triggers it.
-> 
->  https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/tree/tests/generic/5
-> 31
-> > > The improper refcounting after walking resulted in open(2) returning
-> > > -EIO on any directories underneath the mount point when using the virtio
-> > > transport. When using the fd transport, there's no apparent issue until
-> > > the filesytem is unmounted and the warning above is emitted to the logs.
+> > UEFI Specification version 2.9 introduces a new memory type --
+> > unaccepted memory. To track unaccepted memory kernel needs to allocate
+> > a bitmap. The size of the bitmap is dependent on the maximum physical
+> > address present in the system. A full memory map is required to find
+> > the maximum address.
 > > 
-> > Actually I never saw that open() = -EIO error. Do you have a reproducer?
+> > Modify allocate_e820() to get a full memory map.
 > 
-> The reproducer that I have is binary only (fairly large and runs a bunch
-> of different tests) and is used to regression test the Windows Subsystem
-> for Linux 2 (WSL2) host <-> guest filesystem sharing. Now that I think
-> about it, I'm not sure if the open() = -EIO error happens with other 9p
-> servers.
+> Usually we use max_pfn, if we want to know the maximum pfn that's
+> present in the system (well, IIRC, excluding hotunplug).
 > 
-> I can try to tease out the exact sequence of filesystem operations from
-> this test binary but it might take me a bit. It looks like it has to do
-> with switching UIDs, which could make sense because different users may
-> not be connected to the filesystem yet (the conditional block that does
-> p9_client_attach() and v9fs_fid_add()).
+> How exactly will this (different?) maximum from UEFI for the bitmap
+> interact with
 > 
-> > > In some cases, the user may not yet be attached to the filesystem and a
-> > > new root fid, associated with the user, is created and attached to the
-> > > root dentry before the full path walk is performed. Increment the new
-> > > root fid's refcount to two in that situation so that it can be safely
-> > > decremented to one after it is used for the walk operation. The new fid
-> > > will still be attached to the root dentry when
-> > > v9fs_fid_lookup_with_uid() returns so a final refcount of one is
-> > > correct/expected.
-> > > 
-> > > Fixes: 6636b6dcc3db ("9p: add refcount to p9_fid struct")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> > > ---
-> > > 
-> > >  fs/9p/fid.c | 17 +++++------------
-> > >  1 file changed, 5 insertions(+), 12 deletions(-)
-> > > 
-> > > diff --git a/fs/9p/fid.c b/fs/9p/fid.c
-> > > index 79df61fe0e59..5a469b79c1ee 100644
-> > > --- a/fs/9p/fid.c
-> > > +++ b/fs/9p/fid.c
-> > > @@ -152,7 +152,7 @@ static struct p9_fid
-> > > *v9fs_fid_lookup_with_uid(struct
-> > > dentry *dentry, const unsigned char **wnames, *uname;
-> > > 
-> > >  	int i, n, l, clone, access;
-> > >  	struct v9fs_session_info *v9ses;
-> > > 
-> > > -	struct p9_fid *fid, *old_fid = NULL;
-> > > +	struct p9_fid *fid, *old_fid;
-> > > 
-> > >  	v9ses = v9fs_dentry2v9ses(dentry);
-> > >  	access = v9ses->flags & V9FS_ACCESS_MASK;
-> > > 
-> > > @@ -194,13 +194,12 @@ static struct p9_fid
-> > > *v9fs_fid_lookup_with_uid(struct
-> > > dentry *dentry, if (IS_ERR(fid))
-> > > 
-> > >  			return fid;
-> > > 
-> > > +		refcount_inc(&fid->count);
-> > > 
-> > >  		v9fs_fid_add(dentry->d_sb->s_root, fid);
-> > >  	
-> > >  	}
-> > >  	/* If we are root ourself just return that */
-> > > 
-> > > -	if (dentry->d_sb->s_root == dentry) {
-> > > -		refcount_inc(&fid->count);
-> > > +	if (dentry->d_sb->s_root == dentry)
-> > > 
-> > >  		return fid;
-> > > 
-> > > -	}
-> > 
-> > Hmm, wouldn't it then be possible that the root fid is returned with
-> > refcount being 2 here?
+> max_pfn = e820__end_of_ram_pfn();
 > 
-> Yes and I think that's correct. One refcount taken for adding the root
-> fid to the root dentry and another refcount taken for the original
-> purpose of the lookup.
+> from e820 in existing code
 > 
-> Reverting this portion of the change and re-testing with the reproducer
-> triggers a refcount underflow.
+> ?
 
-Right, I still have some knowledge gaps in the kernel's 9p code base. I was 
-actually rather confused about p9_client_clunk() which I just realized 
-actually does the refcount decrement and then conditionally sends out the 
-'Tclunk' message on refcount zero only.
+I'm not sure I understand the question.
 
-So yes, it looks fine to me:
+On EFI system, E820 is constructed based on EFI memory map and size of
+bitmap calculated based of EFI memmap will always be enough to address all
+memory. e820__end_of_ram_pfn() can be smaller than what what we calculate
+as size of memory here, if kernel reserve very top of the memory, but it
+will never be larger.
 
-Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+Later during the boot we use e820__end_of_ram_pfn() to infer size of
+bitmap and it is safe.
 
-> > >  	/*
-> > >  	
-> > >  	 * Do a multipath walk with attached root.
-> > >  	 * When walking parent we need to make sure we
-> > > 
-> > > @@ -212,6 +211,7 @@ static struct p9_fid
-> > > *v9fs_fid_lookup_with_uid(struct
-> > > dentry *dentry, fid = ERR_PTR(n);
-> > > 
-> > >  		goto err_out;
-> > >  	
-> > >  	}
-> > > 
-> > > +	old_fid = fid;
-> > > 
-> > >  	clone = 1;
-> > >  	i = 0;
-> > >  	while (i < n) {
-> > > 
-> > > @@ -221,15 +221,8 @@ static struct p9_fid
-> > > *v9fs_fid_lookup_with_uid(struct
-> > > dentry *dentry, * walk to ensure none of the patch component change
-> > > 
-> > >  		 */
-> > >  		
-> > >  		fid = p9_client_walk(fid, l, &wnames[i], clone);
-> > > 
-> > > +		p9_client_clunk(old_fid);
-> > > 
-> > >  		if (IS_ERR(fid)) {
-> > > 
-> > > -			if (old_fid) {
-> > > -				/*
-> > > -				 * If we fail, clunk fid which are
-> > 
-> > mapping
-> > 
-> > > -				 * to path component and not the last
-> > 
-> > component
-> > 
-> > > -				 * of the path.
-> > > -				 */
-> > > -				p9_client_clunk(old_fid);
-> > > -			}
-> > > 
-> > >  			kfree(wnames);
-> > >  			goto err_out;
-> > >  		
-> > >  		}
-> > 
-> > So this is the actual fix mentioned in the commit log. Makes sense.
-> 
-> I think the refcount_inc() change for the root fid is an important and
-> required part of the fix.
-> 
-> > Nitpicking: Wouldn't it be a bit cleaner to set old_fid solely within the
-> > while loop and just before overwriting fid? And as we now have bumped to
-> > -std=C11, probably making old_fid a local variable within loop scope only?
-> 
-> You're right that it would be cleaner for the purposes of this single
-> patch. In a followup patch in this series, I start tracking the root fid
-> with a root_fid variable and that requires "old_fid = root_fid" before
-> we enter the loop and then "old_fid = fid" inside of the loop.
-
-s/while/for/ would do the trick I guess. Not a big deal though.
-
-Best regards,
-Christian Schoenebeck
-
-
+-- 
+ Kirill A. Shutemov

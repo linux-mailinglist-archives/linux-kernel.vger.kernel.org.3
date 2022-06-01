@@ -2,113 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9ECE539C64
+	by mail.lfdr.de (Postfix) with ESMTP id 52E01539C62
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 06:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242634AbiFAEyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 00:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
+        id S1349604AbiFAE56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 00:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241589AbiFAEyr (ORCPT
+        with ESMTP id S1347921AbiFAE5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 00:54:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F29B9D06A;
-        Tue, 31 May 2022 21:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654059286; x=1685595286;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aKg84/s6yFHRdNM0DCpugLBZclSxYw6qIlvYCF8pQgo=;
-  b=A9fIvJ/YIe6IGmu0ItXBGPw9IJCf1uKTu/1VJU7z1l6XZboI9fTBLbbG
-   fkS+tmB5lx5L2c9wenRTGYuYy15WboAUUfhTOsmc/3heMPJ+RgzGlu6Jk
-   BBduOA2U7EruRLcQpVaAZxvSCVM8TUGcsZv11ktG6t2afN8fejOj1VVfe
-   1hv5y3P5AGPVu+epRpHl5qG1eSVa/wDVQhXjtq/rMbSAI9S8vXaqMpRdM
-   8O4wuRQDJJdVplbotW/yvjlkdsMj0b+OeRHqfNnqcY7G5F8bJbPo52Mp4
-   bqrukeNmWUNFuREukBYitvIJC7JvAoKsRa9+4a1gPJDhodtlRJfgj/beb
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="275481349"
-X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="275481349"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 21:54:45 -0700
-X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="645329689"
-Received: from mdossant-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.154.135])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 21:54:45 -0700
-Date:   Tue, 31 May 2022 21:54:44 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Alison Schofield <alison.schofield@intel.com>
-Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "Verma, Vishal L" <vishal.l.verma@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Ben Widawsky <ben@bwidawsk.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V9 8/9] cxl/port: Retry reading CDAT on failure
-Message-ID: <YpbxFL4hhZMT2eIW@iweiny-desk3>
-References: <20220531152632.1397976-1-ira.weiny@intel.com>
- <20220531152632.1397976-9-ira.weiny@intel.com>
- <20220531170743.GA1457068@alison-desk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531170743.GA1457068@alison-desk>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 1 Jun 2022 00:57:53 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C662369CB;
+        Tue, 31 May 2022 21:57:51 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id c5-20020a1c3505000000b0038e37907b5bso2339049wma.0;
+        Tue, 31 May 2022 21:57:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=l/WpQ47qC66FQkGPOa6v5NluTq5zQ5/G7omwoIbA6Tc=;
+        b=d6p6RSKWoGa4vbJhb/Ddqm/C2B6MjpoOy78vjoGpdh63ppuCLqeBTuaNA8QREaaOWw
+         kvhq+lJzy3kL7fj57Sv/kBgwZW3wYlqJp0KnlSqgzwDF5g2q/ySOMQhoW2TjUJbqOmhk
+         yGKcsR9QO2xKVEjNDmelo2/10Y/HCvrDQi539ShiJ8GA2utsMBqC4EWK4w9lRXe37qb9
+         XrbQP/7eGm8lAL27Ud+iG7n8edsP2iR5vk6taacS3e87OddCFh289RA2hQYFBB2QgA89
+         0IUmrWoezUFs0KeCpo0cZODyhx628wHqH/zZc9ZVVlfsOE9dPVWos0Xx25VZvdIQ8Rk+
+         1rUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=l/WpQ47qC66FQkGPOa6v5NluTq5zQ5/G7omwoIbA6Tc=;
+        b=6KPwkcIbUK0qIvv+ub7THDUZIyzRTCkXGdl4yeOzJQOmKispj8TXb2jxX7BCpLX8eQ
+         ZIrTWSXojyrfaLR7HGOiVCGmTvYlsnfsb/ijEpjtbl9G+VsJ042T5/Owot3BULIgLJJ4
+         178cM3yefTWh9N5C7Y7Gkfl7940+KDxpHUghTu7QMiFtusybQpAKt79nmJpIneN7DBm3
+         YUZ7Xlc5ICuMG0aXQJKzTGwhG4Zf9dl4ckKHWxElEXvrqAfKy1Bmra8bSHtF5ZEw5d/B
+         Z5LXvZTNA75wUWsO6uec21wcCdzJ5Hm5lnTbxoDxEWm0fpbWCwbZmOg63dqHNCsqhAKC
+         TEhg==
+X-Gm-Message-State: AOAM533lQ3aTA/3fc9Xg86cdZP0kwqfaGUNguYqu5866JYaddn7nWxY2
+        83W9JCxKBUyRLck38hy6W2E=
+X-Google-Smtp-Source: ABdhPJyhzfkkwWM99a36mxqyxLyHI0ThAxMU6LO/2L2usEKWdjTIoUp/aSohfy2cIs0zkBdUdbqKnA==
+X-Received: by 2002:a05:600c:3595:b0:399:fd8f:2c00 with SMTP id p21-20020a05600c359500b00399fd8f2c00mr17660148wmq.97.1654059469983;
+        Tue, 31 May 2022 21:57:49 -0700 (PDT)
+Received: from felia.fritz.box (200116b82620c00028af88788fa7d286.dip.versatel-1u1.de. [2001:16b8:2620:c000:28af:8878:8fa7:d286])
+        by smtp.gmail.com with ESMTPSA id u18-20020a5d5152000000b0020cdcb0efa2sm443372wrt.34.2022.05.31.21.57.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 21:57:49 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Leon Romanovsky <leonro@nvidia.com>
+Cc:     Boris Pismenny <borisp@nvidia.com>, netdev@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: adjust MELLANOX ETHERNET INNOVA DRIVERS to TLS support removal
+Date:   Wed,  1 Jun 2022 06:57:38 +0200
+Message-Id: <20220601045738.19608-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 10:07:43AM -0700, Alison Schofield wrote:
-> On Tue, May 31, 2022 at 08:26:31AM -0700, Ira Weiny wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > The CDAT read may fail for a number of reasons but mainly it is possible
-> > to get different parts of a valid state.  The checksum in the CDAT table
-> > protects against this.
-> > 
-> > Now that the cdat data is validated issue a retries if the CDAT read
-> > fails.  For now 5 retries are implemented.
-> > 
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > ---
-> 
-> snip
-> 
-> > +
-> > +void read_cdat_data(struct cxl_port *port)
-> > +{
-> > +	int retries = 5;
-> > +	int rc;
-> > +
-> > +	while (retries--) {
-> > +		rc = __read_cdat_data(port);
-> > +		if (!rc)
-> > +			break;
-> > +		dev_err(&port->dev,
-> > +			"CDAT data read error rc=%d (retries %d)\n",
-> > +			rc, retries);
-> > +	}
-> 
-> Perhaps dev_dbg() on retries and dev_err() only when retries are exhausted.
+Commit 40379a0084c2 ("net/mlx5_fpga: Drop INNOVA TLS support") removes all
+files in the directory drivers/net/ethernet/mellanox/mlx5/core/accel/, but
+misses to adjust its reference in MAINTAINERS.
 
-Yes thanks!
-Ira
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+broken reference.
 
-> 
-> 
-> >  }
-> >  EXPORT_SYMBOL_NS_GPL(read_cdat_data, CXL);
-> > -- 
-> > 2.35.1
-> > 
+Remove the file entry to the removed directory in MELLANOX ETHERNET INNOVA
+DRIVERS.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Leon, please pick this minor non-urgent clean-up patch on top of the commit
+above.
+
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 88fdf39e6bb4..8ccdd7727840 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12695,7 +12695,6 @@ L:	netdev@vger.kernel.org
+ S:	Supported
+ W:	http://www.mellanox.com
+ Q:	https://patchwork.kernel.org/project/netdevbpf/list/
+-F:	drivers/net/ethernet/mellanox/mlx5/core/accel/*
+ F:	drivers/net/ethernet/mellanox/mlx5/core/en_accel/*
+ F:	drivers/net/ethernet/mellanox/mlx5/core/fpga/*
+ F:	include/linux/mlx5/mlx5_ifc_fpga.h
+-- 
+2.17.1
+

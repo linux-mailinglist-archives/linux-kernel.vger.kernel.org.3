@@ -2,79 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A398753AFAC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D03853AF98
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbiFAVxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S232030AbiFAVxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbiFAVxF (ORCPT
+        with ESMTP id S231987AbiFAVxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:53:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C599021270;
-        Wed,  1 Jun 2022 14:53:04 -0700 (PDT)
+        Wed, 1 Jun 2022 17:53:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204E2DF34;
+        Wed,  1 Jun 2022 14:53:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 638546135F;
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4DD2B81CF2;
+        Wed,  1 Jun 2022 21:53:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2B5CCC3411F;
         Wed,  1 Jun 2022 21:53:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C9F8BC385B8;
-        Wed,  1 Jun 2022 21:53:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654120383;
-        bh=2ef3IVdlKcVfrNV1wmzB14KcX264rHauUU7I1DoOyjQ=;
+        s=k20201202; t=1654120384;
+        bh=fy2k+9SNmeFa7RMilH9Quvxcu/tBFoqghx87e4ljg5k=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=WiFyOVlwugMVfCb4Lu9oeF2o3pnYumCIrgPYM0fzgfVGW8Vx4vj2uR61K63dxflsn
-         ERgVpaY5bsjVJ0V2Fd9Ck9Y+UyLhV2rdpCV8aq37sZKcaRSnkvWcrV+mtkRAK2hZuh
-         T1DSjkNnmiRX20McC1DaRm2hl6U8TTkeoOFQNZ4Iqp2b2RuBZT4NLrLodmBVkNFq0b
-         +GybdCqaXlvULVrCyT6K3bfisaZ4EivZxKyKBR90UG9wLHP8rM6bYU6TbR0dLy1eSm
-         7o/QReeEmYJ82aAYCRhM1b7C2ZXFRhKFqbCtdlthvKs3I+UidDupOVxv9UYtw2eQTo
-         UGr06fCnUvMVw==
+        b=WYuBsXCQLhN8OfYqrK3LtMdNalrjb8LG/OmmH/DC3fGbMJlaCzv05Fws9rD1JQIJs
+         WcwDT7THmhQnFANbMcqjh8NgpNUl9OgOlcaEtKVdDy26uMoVtHT1fgHarr8rmW5PgU
+         gXXrE97LSKqdbBLkrxhU16WNUJl0fE8Wt12akYsHHKHtO5VlNUw9nPtWRTWPgk0gGk
+         b00sFjwSHQfgcca36kiUik+rKln2bRCRqcEbXwklM4ciIiScxCGr92hxWEa3aeqFx8
+         sHxTlbKKFtZfUMYB16VRjuywbthXOYB8jU1gF5hysEb2lnrFghYu9mMm5ebXBrh5cm
+         PoAYF065FWx4g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B4300F0394E;
-        Wed,  1 Jun 2022 21:53:03 +0000 (UTC)
-Subject: Re: [GIT PULL REQUEST] watchdog - v5.19 Merge window
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 13122F0394E;
+        Wed,  1 Jun 2022 21:53:04 +0000 (UTC)
+Subject: Re: [GIT PULL] RTC for 5.19
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220601164751.GA15198@www.linux-watchdog.org>
-References: <20220601164751.GA15198@www.linux-watchdog.org>
+In-Reply-To: <Ypfdmml1GWU+gYzP@mail.local>
+References: <Ypfdmml1GWU+gYzP@mail.local>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220601164751.GA15198@www.linux-watchdog.org>
-X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.19-rc1
-X-PR-Tracked-Commit-Id: 5d24df3d690809952528e7a19a43d84bc5b99d44
+X-PR-Tracked-Message-Id: <Ypfdmml1GWU+gYzP@mail.local>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.19
+X-PR-Tracked-Commit-Id: f78e3d407a339ffdd2620140300f821ea41118f4
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 96752be4d7b443e6f1e322428d61f777d7d8bd4d
-Message-Id: <165412038373.5556.14925725235196892855.pr-tracker-bot@kernel.org>
-Date:   Wed, 01 Jun 2022 21:53:03 +0000
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+X-PR-Merge-Commit-Id: 54eb8462f21fb170a05ad64620f0d8d0cf2b7fb5
+Message-Id: <165412038407.5556.8682390648447535620.pr-tracker-bot@kernel.org>
+Date:   Wed, 01 Jun 2022 21:53:04 +0000
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrej Picej <andrej.picej@norik.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        David Heidelberg <david@ixit.cz>,
-        Eliav Farber <farbere@amazon.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Liu Xinpeng <liuxp11@chinatelecom.cn>,
-        Miaoqian Lin <linmq006@gmail.com>, Peng Fan <peng.fan@nxp.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Primoz Fiser <primoz.fiser@norik.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Runyang Chen <runyang.chen@mediatek.com>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Xiantao Hu <xt.hu@cqplus1.com>
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -85,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 1 Jun 2022 18:47:51 +0200:
+The pull request you sent on Wed, 1 Jun 2022 23:43:54 +0200:
 
-> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.19-rc1
+> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.19
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/96752be4d7b443e6f1e322428d61f777d7d8bd4d
+https://git.kernel.org/torvalds/c/54eb8462f21fb170a05ad64620f0d8d0cf2b7fb5
 
 Thank you!
 

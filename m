@@ -2,329 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B57AC53AEE1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D5E53AFC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbiFAWiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 18:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
+        id S232345AbiFAWgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 18:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbiFAWiV (ORCPT
+        with ESMTP id S232334AbiFAWgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 18:38:21 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5903C495;
-        Wed,  1 Jun 2022 15:38:20 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251MJbsO028661;
-        Wed, 1 Jun 2022 22:37:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=TYrs4KwLj3iyXDTxkTg7YpQitDN7Z+0E50+OFC5Exdc=;
- b=EqvxgOumIV/ytX03pg9ACclOn1Sy9X5xSQqJEz/y3MA5xGAYq0OdHFDWog/OZqkhXDTS
- OgA9B+ubLf01LUtzcalOeD0E79N48EzhioZn2TWeM3fN9lDsvkdS8cm4EJpKk0Lw5MhU
- aA9jmfPQ+s2YC7dILgfpa55wJwT2n4wbUmAbOs0fo2X/9g+I/SF9vRrDruLYmBdZ5icl
- 9z669N3B6FmEtYAiUEzOv3xnwY9drg4sp4vUcf0hUCDramXSxGAEOhj0uR6WoeZLTfQW
- s89tDMbI/WgCP8wDPRWZCeD9LS6RAg6Um+0KdfWigFnXV2670oazk3YObNwLwojAU6TF Dg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gegtd87rf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jun 2022 22:37:39 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 251MKA2i031014;
-        Wed, 1 Jun 2022 22:37:38 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gegtd87r8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jun 2022 22:37:38 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 251MMEOS000524;
-        Wed, 1 Jun 2022 22:32:37 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma01wdc.us.ibm.com with ESMTP id 3gbcbj6hkp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jun 2022 22:32:37 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 251MWaxL25624986
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Jun 2022 22:32:36 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 45D426E052;
-        Wed,  1 Jun 2022 22:32:36 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8D8A06E04E;
-        Wed,  1 Jun 2022 22:32:30 +0000 (GMT)
-Received: from [9.160.56.145] (unknown [9.160.56.145])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Jun 2022 22:32:30 +0000 (GMT)
-Message-ID: <4b92277e-5133-2362-8d3a-fa82b0c7a045@linux.ibm.com>
-Date:   Wed, 1 Jun 2022 15:32:29 -0700
+        Wed, 1 Jun 2022 18:36:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3376E258;
+        Wed,  1 Jun 2022 15:36:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C279AB81CED;
+        Wed,  1 Jun 2022 22:36:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A10FC3411D;
+        Wed,  1 Jun 2022 22:36:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654123000;
+        bh=nHKNB4lpsJXuYXe21iUdgN6lhM5qGZOEhI64aR3yITQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nG9MHsaab+wXkAUwf5xfzdJ8HdnOZva5+0JNJPgHbdjSTuW6jnHTJkRWOHz9/CrbQ
+         YsMVqLReDDuUDpKG9Hueae9mPtGlD/Uvob31OAulcrTxZ08nXEfK8s1uUc5rJXJzKs
+         fR7Hvp3/cB5P+RJKm3PEV1ohPNfVh9b7GCBmSPCG0J1DpVCSsuH6g6XPe5+1SMb30P
+         /LQDQ/LGn1USbMeulwBiCZTTYaSTs50leFGt5NX+NGff7RRD417vA6x4fDBywGWlLZ
+         ac5DOID/FSyTVbcUUm27OmonAkncQEzchzHuklJRw4zqvA21rpQGg0oldC5c05/+U0
+         wwz94VwR4QVxw==
+Received: by mail-yb1-f176.google.com with SMTP id v106so5422846ybi.0;
+        Wed, 01 Jun 2022 15:36:40 -0700 (PDT)
+X-Gm-Message-State: AOAM5307NZnsj5L4Cqjv4YiDom7ienn++X3F0UvZN4dumUw+kPLK5/G7
+        8VXDKU7PEDehJyJWbT21KkqTPI3wE9kyHRaRAWQ=
+X-Google-Smtp-Source: ABdhPJxjXgS70z2rd+D/8e2uDI5lK4OCbmnkVMo2ylGOx/Z2W+ilq5g0eGJ/b/MVxPWjPsysA+IYEMLkdAxwF6HfkDo=
+X-Received: by 2002:a25:a242:0:b0:651:a78d:4636 with SMTP id
+ b60-20020a25a242000000b00651a78d4636mr2199197ybi.9.1654122999274; Wed, 01 Jun
+ 2022 15:36:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 2/4] of: dynamic: add of_property_alloc() and
- of_property_free()
-Content-Language: en-US
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Daniel Henrique Barboza <danielhb413@gmail.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Ohhoon Kwon <ohoono.kwon@samsung.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        YueHaibing <yuehaibing@huawei.com>
-Cc:     devicetree@vger.kernel.org,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        linux-kernel@vger.kernel.org, Lizhi Hou <lizhi.hou@xilinx.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-References: <20220601081801.348571-1-clement.leger@bootlin.com>
- <20220601081801.348571-3-clement.leger@bootlin.com>
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-In-Reply-To: <20220601081801.348571-3-clement.leger@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: lp1lz0Ycy_VhvZvngQ-kC3mx69So2XOK
-X-Proofpoint-ORIG-GUID: tDkVIUJVMxoHgLwaUNNq7pUNKqT5ZcMY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-01_08,2022-06-01_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- phishscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 mlxscore=0 clxscore=1011 adultscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206010090
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220526163604.32736-1-logang@deltatee.com> <20220526163604.32736-13-logang@deltatee.com>
+ <YpRdL+2e7gngOYPa@infradead.org> <c59d233a-c0d1-a3cc-3dad-0a5af449ff83@deltatee.com>
+In-Reply-To: <c59d233a-c0d1-a3cc-3dad-0a5af449ff83@deltatee.com>
+From:   Song Liu <song@kernel.org>
+Date:   Wed, 1 Jun 2022 15:36:28 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW56YAwByRKnYDpkbBk1pi01Wdx3NL9yLY2sADWfMmTMeQ@mail.gmail.com>
+Message-ID: <CAPhsuW56YAwByRKnYDpkbBk1pi01Wdx3NL9yLY2sADWfMmTMeQ@mail.gmail.com>
+Subject: Re: [PATCH v2 12/17] md/raid5-cache: Move struct r5l_log definition
+ to raid5-log.h
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        Donald Buczek <buczek@molgen.mpg.de>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Xiao Ni <xni@redhat.com>, Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/22 01:17, Clément Léger wrote:
-> Add function which allows to dynamically allocate and free properties.
-> Use this function internally for all code that used the same logic
-> (mainly __of_prop_dup()).
-> 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> ---
->  drivers/of/dynamic.c    | 82 ++++++++++++++++++++++++-----------------
->  drivers/of/of_private.h | 21 ++++++++++-
->  include/linux/of.h      | 14 +++++++
->  3 files changed, 82 insertions(+), 35 deletions(-)
-> 
-> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
-> index cd3821a6444f..c0dcbea31d28 100644
-> --- a/drivers/of/dynamic.c
-> +++ b/drivers/of/dynamic.c
-> @@ -313,9 +313,7 @@ static void property_list_free(struct property *prop_list)
-> 
->  	for (prop = prop_list; prop != NULL; prop = next) {
->  		next = prop->next;
-> -		kfree(prop->name);
-> -		kfree(prop->value);
-> -		kfree(prop);
-> +		of_property_free(prop);
->  	}
->  }
-> 
-> @@ -367,48 +365,66 @@ void of_node_release(struct kobject *kobj)
->  }
-> 
->  /**
-> - * __of_prop_dup - Copy a property dynamically.
-> - * @prop:	Property to copy
-> + * of_property_free - Free a property allocated dynamically.
-> + * @prop:	Property to be freed
-> + */
-> +void of_property_free(const struct property *prop)
-> +{
-> +	if (!of_property_check_flag(prop, OF_DYNAMIC))
-> +		return;
-> +
+On Mon, May 30, 2022 at 8:48 AM Logan Gunthorpe <logang@deltatee.com> wrote=
+:
+>
+>
+>
+> On 2022-05-29 23:59, Christoph Hellwig wrote:
+> > On Thu, May 26, 2022 at 10:35:59AM -0600, Logan Gunthorpe wrote:
+> >> Move struct r5l_log definition to raid5-log.h. While this reduces
+> >> encapsulation, it is necessary for the definition of r5l_log to be
+> >> public so that rcu_access_pointer() can be used on conf-log in the
+> >> next patch.
+> >>
+> >> rcu_access_pointer(p) doesn't technically dereference the log pointer
+> >> however, it does use typeof(*p) and some older GCC versions (anything
+> >> earlier than gcc-10) will wrongly try to dereference the structure:
+> >>
+> >>     include/linux/rcupdate.h:384:9: error: dereferencing pointer to
+> >>                  incomplete type =E2=80=98struct r5l_log=E2=80=99
+> >>
+> >>       typeof(*p) *local =3D (typeof(*p) *__force)READ_ONCE(p); \
+> >>            ^
+> >>
+> >>     include/linux/rcupdate.h:495:31: note: in expansion of
+> >>                   macro =E2=80=98__rcu_access_pointer=E2=80=99
+> >>
+> >>        #define rcu_access_pointer(p) __rcu_access_pointer((p),
+> >>        __UNIQUE_ID(rcu), __rcu)
+> >>
+> >> To prevent this, simply provide the definition where
+> >> rcu_access_pointer() may be used.
+> >
+> > What about just moving any code that does the rcu_access_pointer on
+> > conf->log to raid5-cache.c and doing an out of line call for it
+> > instead?
+>
+> I guess we could do that. All the inline functions in raid5-log.h are
+> there to choose between the r5l or the ppl implementaiton. So it that
+> would mean the r5l implementation would probably be inlined and ppl
+> would be doing a second out of line call. Not sure if that matters, but
+> it seems a little odd.
 
-This looks wrong to me. From what I understand the value data is allocated as
-trailing memory that is part of the property allocation itself. (ie. prop =
-kzalloc(sizeof(*prop) + len, allocflags)). So, kfree(prop) should also take care
-of the trailing value data. Calling kfree(prop->value) is bogus since
-prop->value wasn't dynamically allocated on its own.
+I like the current version better. raid5-log.h is not used in many files an=
+yway.
 
-Also, this condition will always fail. You explicitly set prop->value = prop + 1
-in alloc.
-
-Maybe I need to go back and look at v1 again.
-
--Tyrel
-
-> +	if (prop->value != prop + 1)
-> +		kfree(prop->value);
-> +
-> +	kfree(prop->name);
-> +	kfree(prop);
-> +}
-> +EXPORT_SYMBOL(of_property_free);
-> +
-> +/**
-> + * of_property_alloc - Allocate a property dynamically.
-> + * @name:	Name of the new property
-> + * @value:	Value that will be copied into the new property value or NULL
-> + *		if only @len allocation is needed.
-> + * @len:	Length of new property value and if @value is provided, the
-> + * 		length of the value to be copied
->   * @allocflags:	Allocation flags (typically pass GFP_KERNEL)
->   *
-> - * Copy a property by dynamically allocating the memory of both the
-> + * Create a property by dynamically allocating the memory of both the
->   * property structure and the property name & contents. The property's
->   * flags have the OF_DYNAMIC bit set so that we can differentiate between
->   * dynamically allocated properties and not.
->   *
->   * Return: The newly allocated property or NULL on out of memory error.
->   */
-> -struct property *__of_prop_dup(const struct property *prop, gfp_t allocflags)
-> +struct property *of_property_alloc(const char *name, const void *value,
-> +				   size_t len, gfp_t allocflags)
->  {
-> -	struct property *new;
-> +	struct property *prop;
-> 
-> -	new = kzalloc(sizeof(*new), allocflags);
-> -	if (!new)
-> +	prop = kzalloc(sizeof(*prop) + len, allocflags);
-> +	if (!prop)
->  		return NULL;
-> 
-> -	/*
-> -	 * NOTE: There is no check for zero length value.
-> -	 * In case of a boolean property, this will allocate a value
-> -	 * of zero bytes. We do this to work around the use
-> -	 * of of_get_property() calls on boolean values.
-> -	 */
-> -	new->name = kstrdup(prop->name, allocflags);
-> -	new->value = kmemdup(prop->value, prop->length, allocflags);
-> -	new->length = prop->length;
-> -	if (!new->name || !new->value)
-> -		goto err_free;
-> -
-> -	/* mark the property as dynamic */
-> -	of_property_set_flag(new, OF_DYNAMIC);
-> -
-> -	return new;
-> -
-> - err_free:
-> -	kfree(new->name);
-> -	kfree(new->value);
-> -	kfree(new);
-> +	prop->name = kstrdup(name, allocflags);
-> +	if (!prop->name)
-> +		goto out_err;
-> +
-> +	prop->value = prop + 1;
-> +	if (value)
-> +		memcpy(prop->value, value, len);
-> +
-> +	prop->length = len;
-> +	of_property_set_flag(prop, OF_DYNAMIC);
-> +
-> +	return prop;
-> +
-> +out_err:
-> +	of_property_free(prop);
-> +
->  	return NULL;
->  }
-> +EXPORT_SYMBOL(of_property_alloc);
-> 
->  /**
->   * __of_node_dup() - Duplicate or create an empty device node dynamically.
-> @@ -447,9 +463,7 @@ struct device_node *__of_node_dup(const struct device_node *np,
->  			if (!new_pp)
->  				goto err_prop;
->  			if (__of_add_property(node, new_pp)) {
-> -				kfree(new_pp->name);
-> -				kfree(new_pp->value);
-> -				kfree(new_pp);
-> +				of_property_free(new_pp);
->  				goto err_prop;
->  			}
->  		}
-> diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
-> index 9324483397f6..1d6459bf705d 100644
-> --- a/drivers/of/of_private.h
-> +++ b/drivers/of/of_private.h
-> @@ -115,7 +115,26 @@ extern void *__unflatten_device_tree(const void *blob,
->   * without taking node references, so you either have to
->   * own the devtree lock or work on detached trees only.
->   */
-> -struct property *__of_prop_dup(const struct property *prop, gfp_t allocflags);
-> +
-> +/**
-> + * __of_prop_dup - Copy a property dynamically.
-> + * @prop:	Property to copy
-> + * @allocflags:	Allocation flags (typically pass GFP_KERNEL)
-> + *
-> + * Copy a property by dynamically allocating the memory of both the
-> + * property structure and the property name & contents. The property's
-> + * flags have the OF_DYNAMIC bit set so that we can differentiate between
-> + * dynamically allocated properties and not.
-> + *
-> + * Return: The newly allocated property or NULL on out of memory error.
-> + */
-> +static inline
-> +struct property *__of_prop_dup(const struct property *prop, gfp_t allocflags)
-> +{
-> +	return of_property_alloc(prop->name, prop->value, prop->length,
-> +				 allocflags);
-> +}
-> +
->  struct device_node *__of_node_dup(const struct device_node *np,
->  				  const char *full_name);
-> 
-> diff --git a/include/linux/of.h b/include/linux/of.h
-> index d74fd82a6963..f1966f3c3847 100644
-> --- a/include/linux/of.h
-> +++ b/include/linux/of.h
-> @@ -1464,6 +1464,10 @@ enum of_reconfig_change {
->  };
-> 
->  #ifdef CONFIG_OF_DYNAMIC
-> +struct property *of_property_alloc(const char *name, const void *value,
-> +				   size_t len, gfp_t allocflags);
-> +void of_property_free(const struct property *prop);
-> +
->  extern int of_reconfig_notifier_register(struct notifier_block *);
->  extern int of_reconfig_notifier_unregister(struct notifier_block *);
->  extern int of_reconfig_notify(unsigned long, struct of_reconfig_data *rd);
-> @@ -1508,6 +1512,16 @@ static inline int of_changeset_update_property(struct of_changeset *ocs,
->  	return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, prop);
->  }
->  #else /* CONFIG_OF_DYNAMIC */
-> +
-> +static inline
-> +struct property *of_property_alloc(const char *name, const void *value,
-> +				   size_t len, gfp_t allocflags)
-> +{
-> +	return NULL;
-> +}
-> +
-> +static inline  void of_property_free(const struct property *prop) {}
-> +
->  static inline int of_reconfig_notifier_register(struct notifier_block *nb)
->  {
->  	return -EINVAL;
-
+Thanks,
+Song

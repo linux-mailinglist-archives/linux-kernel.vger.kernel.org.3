@@ -2,137 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578A753A5E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D42D53A5EC
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351186AbiFANWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 09:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
+        id S1353242AbiFAN0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 09:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353201AbiFANWe (ORCPT
+        with ESMTP id S236812AbiFAN0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 09:22:34 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F8850000
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 06:22:32 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id p10so2326553wrg.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 06:22:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=grujjgVk78/kTeNAsYLCQutjse2S4qIjwux8s5I8vnE=;
-        b=lbp9nbUHl8ofN+dxS0sdOLugDeZaytx+OeJ/NUuXNjLXcor8DTOBLfkafd9Ko2hYX8
-         495GS2cLePb2F5knyThcbWf3wiId5H9lTMY9NZabHJK5EZ3R9hCa++G7oLq2EYPVKmNI
-         +UytFWz/nCngyWhhtdQW0HcQWOK9ikTgTBhTk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=grujjgVk78/kTeNAsYLCQutjse2S4qIjwux8s5I8vnE=;
-        b=4Xfy+bKo4v85XSAKTFJmPi/RFQqPrIke48NRlXS8BUW7MYJtW/Ka6+FriZCEE7RrGT
-         B7msNaCYFuKlQnMX9sPzw5xGv+0drXaEZZUj4FjhdXek9oA+A1lJ+GedRxZadtr+1bgj
-         OZOm0DOFUzQmxNx3QwbqaJscjnRtNQYwUW40WGkOFMjXng6Ab83g6pjP4CNrNHnc5zWX
-         LZBywYRtcMioftYpqrTItXCP1Qac6r/UhJEG72AXSvlwg/aCp63hzkS1nDa1VtkaZUWq
-         fUIjegAkuchMPzv4HtYZzMf3hogt9igStKPOXyPdKAYjnDX+yYs3W8Y690MYuukTI9oz
-         HhlQ==
-X-Gm-Message-State: AOAM533FeHcttY+qliwkYL0P6Ve/LMpuFYl23XBFMdQI8r/wz2aRahv9
-        LlQjAZvWOlg2u+/X6F1Jm3PILg==
-X-Google-Smtp-Source: ABdhPJwoJDsjkQSbDgWTJ7sUm3syg4hR/7CZJ/cx7MS5hpu1nj4Bt5HyEIhy7EmDZ7ZNnjRnexBFog==
-X-Received: by 2002:a5d:4646:0:b0:210:3e3c:86dc with SMTP id j6-20020a5d4646000000b002103e3c86dcmr2982159wrs.277.1654089751161;
-        Wed, 01 Jun 2022 06:22:31 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id d13-20020adfef8d000000b0020fc40d006bsm1609106wro.17.2022.06.01.06.22.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 06:22:30 -0700 (PDT)
-Date:   Wed, 1 Jun 2022 15:22:27 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [Linaro-mm-sig] Re: [PATCH] dma-fence: allow dma fence to have
- their own lock
-Message-ID: <YpdoEzLmlBfJks3q@phenom.ffwll.local>
-Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-References: <20220530142232.2871634-1-senozhatsky@chromium.org>
- <7eee4274-bd69-df8d-9067-771366217804@amd.com>
- <YpWCvniLzJfcp684@google.com>
- <33aba213-b6ad-4a15-9272-c62f5dfb1fb7@gmail.com>
+        Wed, 1 Jun 2022 09:26:13 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749014FC47;
+        Wed,  1 Jun 2022 06:26:12 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251ATMAL020279;
+        Wed, 1 Jun 2022 15:25:47 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=wVUW8uMPP13aja6CCJEYa/t1b7jdtRgdhj/8bybOLRI=;
+ b=RYa0r5uLW243c+5XQmONqfSkyZius11Ye1xpMzBNKqdFR1bH8fXU+7/o/ywGzkXC3hR0
+ X2KxH6/f4MqvAPuBcLOQfpIuwzzkp9L7SsE7M7JOPBy85WqgFAunY3nalQjasI5kim+g
+ zBZ8uThDIioNa1r4jLNL9anXa+2DhGz6TovfzemC4YYW8XpWzZpdSnedvKdf/Pqjk9cQ
+ NPQkUfEcptyfJL+uydFhccPmiwLcfd+rYxwLtu/h9Ix96g1VBD25A3jPAOLQsIk/DwPq
+ M0dS2x7jcqHJZeGqe3UaV5wismWgEJyF4cm+/ElNWXHFSho/Hr9YTwJXeoQ8SUVxiwFS Tg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gbc93rp68-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Jun 2022 15:25:47 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DB5F910003A;
+        Wed,  1 Jun 2022 15:25:44 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B1D6A22A6FC;
+        Wed,  1 Jun 2022 15:25:44 +0200 (CEST)
+Received: from [10.211.9.37] (10.75.127.45) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 1 Jun
+ 2022 15:25:43 +0200
+Message-ID: <c497e1ef-5a62-d956-4516-87e7b53a6001@foss.st.com>
+Date:   Wed, 1 Jun 2022 15:25:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <33aba213-b6ad-4a15-9272-c62f5dfb1fb7@gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3] arm64: defconfig: Config that had RPMSG_CHAR now gets
+ RPMSG_CTRL
+Content-Language: en-US
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
+References: <20220405161114.1107745-1-arnaud.pouliquen@foss.st.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+In-Reply-To: <20220405161114.1107745-1-arnaud.pouliquen@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-01_03,2022-06-01_01,2022-02-23_01
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 02:45:42PM +0200, Christian König wrote:
-> Am 31.05.22 um 04:51 schrieb Sergey Senozhatsky:
-> > On (22/05/30 16:55), Christian König wrote:
-> > > Am 30.05.22 um 16:22 schrieb Sergey Senozhatsky:
-> > > > [SNIP]
-> > > > So the `lock` should have at least same lifespan as the DMA fence
-> > > > that borrows it, which is impossible to guarantee in our case.
-> > > Nope, that's not correct. The lock should have at least same lifespan as the
-> > > context of the DMA fence.
-> > How does one know when it's safe to release the context? DMA fence
-> > objects are still transparently refcount-ed and "live their own lives",
-> > how does one synchronize lifespans?
-> 
-> Well, you don't.
-> 
-> If you have a dynamic context structure you need to reference count that as
-> well. In other words every time you create a fence in your context you need
-> to increment the reference count and every time a fence is release you
-> decrement it.
-> 
-> If you have a static context structure like most drivers have then you must
-> make sure that all fences at least signal before you unload your driver. We
-> still somewhat have a race when you try to unload a driver and the fence_ops
-> structure suddenly disappear, but we currently live with that.
-> 
-> Apart from that you are right, fences can live forever and we need to deal
-> with that.
+Hello,
 
-Yeah this entire thing is a bit an "oops we might have screwed up" moment.
-I think the cleanest way is to essentially do what the drm/sched codes
-does, which is split the gpu job into the public dma_fence (which can live
-forever) and the internal job fence (which has to deal with all the
-resource refcounting issues). And then make sure that only ever the public
-fence escapes to places where the fence can live forever (dma_resv,
-drm_syncobj, sync_file as our uapi container objects are the prominent
-cases really).
+Gentle reminder.
+Please notice that Mathieu replied with a "Reviewed-by".
 
-It sucks a bit.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks,
+Arnaud
+
+On 4/5/22 18:11, Arnaud Pouliquen wrote:
+> In the commit 617d32938d1b ("rpmsg: Move the rpmsg control device
+> from rpmsg_char to rpmsg_ctrl"), we split the rpmsg_char driver in two.
+> By default give everyone who had the old driver enabled the rpmsg_ctrl
+> driver too.
+> 
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> ---
+> 
+> This patch is extracted from the series [1] that has been partially
+> integrated in the Linux Kernel 5.18-rc1.
+> 
+> Update vs previous version:
+> - Add missing "---" separation marker after "Signed-off-by".
+> 
+> [1]https://lore.kernel.org/lkml/15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com/T/
+> [2]https://lore.kernel.org/linux-arm-kernel/CANLsYky1_b80qPbgOaLGVYD-GEr21V6C653iGEB7VCU=GbGvAQ@mail.gmail.com/T/
+> ---
+>  arch/arm64/configs/defconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index 50aa3d75ab4f..3f8906b8a2ca 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -1053,6 +1053,7 @@ CONFIG_QCOM_Q6V5_PAS=m
+>  CONFIG_QCOM_SYSMON=m
+>  CONFIG_QCOM_WCNSS_PIL=m
+>  CONFIG_RPMSG_CHAR=m
+> +CONFIG_RPMSG_CTRL=m
+>  CONFIG_RPMSG_QCOM_GLINK_RPM=y
+>  CONFIG_RPMSG_QCOM_GLINK_SMEM=m
+>  CONFIG_RPMSG_QCOM_SMD=y

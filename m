@@ -2,81 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC82853A466
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B57C253A46D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345158AbiFALw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 07:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        id S1348514AbiFALz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 07:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243564AbiFALwy (ORCPT
+        with ESMTP id S233840AbiFALzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:52:54 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58C362129
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 04:52:53 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id n10so3230045ejk.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 04:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0AglY+1+Y6nT5tUGbirs2CVjYEPSqR8ctpG8KYL1ge4=;
-        b=FI2JqFwBnVkQXCxczdrEtJeFFev4XkicqMbur0gVHJqUK+t0fWlK7500VhKo60XhBh
-         uroIJmwO/oB+MO810EYP3Q3WoyS3qpBIjOkSl1u6V3rwTHXjIgd9S3sTcdH8+ecus5Eq
-         RRGO/O1kV/q4DkxdF4D4Pmwe8MlGTeFGA2cC55SSlCz/2DLtqyzFAfmasUQxVoo8mWsg
-         r5gCbQ2me/G5AD1GRdVrxrCBHCHqNmzyOpOCvFlY3CpzQvCH3T6sS2pJSJTFcZ9C2Q6r
-         7BQpXM5wWo7J/R2QY0zpsmg+bL45QHFC+wWfAAS6fPdL2iVtMmzp2NpcSKSGpDpO/i/I
-         SOiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0AglY+1+Y6nT5tUGbirs2CVjYEPSqR8ctpG8KYL1ge4=;
-        b=EYdSQchuiLbrHHprR7CHBqxOVmkMWBbhdX1nVXLgF4Vem1k4SMV3XGR1hxNas46BSR
-         GvfLg/r8mHuuhBkDFrZ9uvhaTtjtROf+IpMOSfCVlgla9d3UH7gXCvZle9kYV6wdd+c7
-         CJKKEvdYCMBw7D0QEVCGUoj4+dDyU0JFcuMqYMNZZQCouy0O1KtzMkc3bla7KjOFBNdY
-         ZXVAb+6mTzA/jKH+mIFdcARzjNDyPOtepgEpwnQx+izFx1+oDUEoy14I3Im3ZIi7r1Cp
-         Ump774NGuQ2Kq36GzBapzRUj8lEsZJBGnDkHlS8nQsL9ZuZkkKaMrGmqyNNF45F4QeTQ
-         Btcg==
-X-Gm-Message-State: AOAM530TTfAXr4hdvLm3DMNS7H+nYiN7Ap0oWGuf6ZfbGH6IgW5OfYH0
-        9196mimKlRH1mn70aOZsykpskw==
-X-Google-Smtp-Source: ABdhPJzcHqbLNZZnX7RgY3FztZmfteRZ5qeFecs5cZpTfofuYQdpVGoGRjira252J7iyp4ia7DFfTg==
-X-Received: by 2002:a17:907:6d1f:b0:6fe:e53b:7f53 with SMTP id sa31-20020a1709076d1f00b006fee53b7f53mr42448923ejc.375.1654084372371;
-        Wed, 01 Jun 2022 04:52:52 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ff4-20020a1709069c0400b006f3ef214e62sm609153ejc.200.2022.06.01.04.52.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 04:52:51 -0700 (PDT)
-Message-ID: <5c754795-e569-1dfb-7474-658ccc3dc7a9@linaro.org>
-Date:   Wed, 1 Jun 2022 13:52:50 +0200
+        Wed, 1 Jun 2022 07:55:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 135D76B7C0
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 04:55:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654084519;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=A1XdIemq8frjYfv4a28xhmhvY/SFwVpocirLnr3lxtY=;
+        b=cKkjtT7ASb9L5OQE1eqFNtozHBzeXYLPiSycPsBeFJM6Ai3KYghEHQBmAD/UuAhQSCcEby
+        DDPwXzLfzI0bCqPNt6wYo5c6TLU8+638OBUNgWT3M0OMo1POYMV6X9Gs87E+2d3WxWLt3c
+        fISFhpsL0Jnl5vvbUhQkiyJxQVfrgfM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-644-AwrvSifIOhi-RiCzV8sH6w-1; Wed, 01 Jun 2022 07:55:13 -0400
+X-MC-Unique: AwrvSifIOhi-RiCzV8sH6w-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 481E22949BA3;
+        Wed,  1 Jun 2022 11:55:09 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8A37CC23DBF;
+        Wed,  1 Jun 2022 11:55:08 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] afs: Fix dynamic root getattr
+From:   David Howells <dhowells@redhat.com>
+To:     marc.dionne@auristor.com
+Cc:     linux-afs@lists.infradead.org, dhowells@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 01 Jun 2022 12:55:07 +0100
+Message-ID: <165408450783.1031787.7941404776393751186.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 3/8] dt-bindings: soc: imx: add interconnect property for
- i.MX8MP hsio blk ctrl
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        abel.vesa@nxp.com, abailon@baylibre.com, l.stach@pengutronix.de,
-        laurent.pinchart@ideasonboard.com, marex@denx.de,
-        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
-        aford173@gmail.com
-Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-References: <20220601094537.3390127-1-peng.fan@oss.nxp.com>
- <20220601094537.3390127-4-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220601094537.3390127-4-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,16 +63,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2022 11:45, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Add interconnect property for i.MX8MP hsio blk ctrl
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+The recent patch to make afs_getattr consult the server didn't account for
+the pseudo-inodes employed by the dynamic root-type afs superblock not
+having a volume or a server to access, and thus an oops occurs if such a
+directory is stat'd.
+
+Fix this by checking to see if the vnode->volume pointer actually points
+anywhere before following it in afs_getattr().
+
+This can be tested by stat'ing a directory in /afs.  It may be sufficient
+just to do "ls /afs" and the oops looks something like:
+
+	BUG: kernel NULL pointer dereference, address: 0000000000000020
+	...
+	RIP: 0010:afs_getattr+0x8b/0x14b
+	...
+	Call Trace:
+	 <TASK>
+	 vfs_statx+0x79/0xf5
+	 vfs_fstatat+0x49/0x62
+
+Fixes: 2aeb8c86d499 ("afs: Fix afs_getattr() to refetch file status if callback break occurred")
+Reported-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-afs@lists.infradead.org
+---
+
+ fs/afs/inode.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fs/afs/inode.c b/fs/afs/inode.c
+index 30b066299d39..33ecbfea0199 100644
+--- a/fs/afs/inode.c
++++ b/fs/afs/inode.c
+@@ -745,7 +745,8 @@ int afs_getattr(struct user_namespace *mnt_userns, const struct path *path,
+ 
+ 	_enter("{ ino=%lu v=%u }", inode->i_ino, inode->i_generation);
+ 
+-	if (!(query_flags & AT_STATX_DONT_SYNC) &&
++	if (vnode->volume &&
++	    !(query_flags & AT_STATX_DONT_SYNC) &&
+ 	    !test_bit(AFS_VNODE_CB_PROMISED, &vnode->flags)) {
+ 		key = afs_request_key(vnode->volume->cell);
+ 		if (IS_ERR(key))
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof

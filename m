@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A42B53AAA0
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE1A53AA9F
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355934AbiFAQAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 12:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        id S1355950AbiFAQAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 12:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355958AbiFAQAa (ORCPT
+        with ESMTP id S1353330AbiFAQAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 12:00:30 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1DEA502F
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 09:00:25 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id r129so1228048wmr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 09:00:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ilg3wcyDSklsbMz1TOa+dWOz/hKRqF3HJGEzPGq8bYo=;
-        b=HOiMEkgpdNnA+ZD3OrPYUyF8xH4aDp15CJPEqDtp+QJBleiSHldAWCZ1yslxpKWG3z
-         88CSduSitINIy/SYSYDuptvzaIO0R+DO8yflCUQIFJ2aV3hFP82hglfJJ0uGv/ath+gX
-         Gcj+4yGLmw4rJX9bsqx1RiGGc9XITbD64hw1JaRKnWDMyxBSNq2tRw1RIgIiuSeNdcnO
-         rbQ9y8V4pJQYkkCij4XJA+OY7Pu+WhpHATj4mhveiz1daZUvwHuqumns5q/8PdYw5JYc
-         Z+mvcdWXFRWnQ08VGqdNY8gFP0sUQpJ4TioLukq6jIu5e03eO0qc21xf4IU88bhB9jiz
-         00TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ilg3wcyDSklsbMz1TOa+dWOz/hKRqF3HJGEzPGq8bYo=;
-        b=xCAAn1uUVkKIZlfVm4iuj+YOc6wrzrX62WtqZGOld3qJzb/7thBXqcc2NXUtMYe7dr
-         GB8wOlA5aGnqHBJT25Qw1Ok72ZqSHJbiHwG3aKHAhppZ2ThIs+LoPF5+uqmFG1MtafzP
-         jD5STCqAgKptx+FpBDT6trrSU92EG2598q2erl5wFVhF7GKyT0+YRskLfKN3kx5YQYZD
-         KfVOR0AoZmg5nvJbrWxHp20ZRmKl3pbB7mypxpAFdHy/eavc/ywiSasEyACvBYEu7imd
-         8TD+uCRY+g+Qmn6pKRmSEacOo3kmVx41rCrn8MKP0Ujd+L3JnkdwTCyeEX0fkY+pPBpd
-         teMQ==
-X-Gm-Message-State: AOAM531UahSRWp3kmSZMSteQ2sdF5TFmpwpJzFyKJK0PuNuOei4x7uis
-        SKNlHdbNrvzB+x1bt+jFTg8ec36nGXKMnNXzoFqM1A==
-X-Google-Smtp-Source: ABdhPJwkqbqV0lH2o1ExtTdCA3sCWX+p1zKDtordwsnzyOYY3zAENjHRD7FY4ca6ZZrOHJYjnLZwxgjmf7cj18e5/T0=
-X-Received: by 2002:a05:600c:19cb:b0:397:51db:446f with SMTP id
- u11-20020a05600c19cb00b0039751db446fmr29353291wmq.182.1654099223774; Wed, 01
- Jun 2022 09:00:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220601152544.1842447-1-zhengjun.xing@linux.intel.com>
-In-Reply-To: <20220601152544.1842447-1-zhengjun.xing@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 1 Jun 2022 09:00:10 -0700
-Message-ID: <CAP-5=fWTKLFuuDL6uCn1y3DrmDnq8zvReTpjZL+dW+eRQ8=MtQ@mail.gmail.com>
-Subject: Re: [PATCH] perf evlist: Extend arch_evsel__must_be_in_group to
- support hybrid systems
-To:     zhengjun.xing@linux.intel.com
-Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@redhat.com,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        adrian.hunter@intel.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Jun 2022 12:00:48 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35339AE6B;
+        Wed,  1 Jun 2022 09:00:46 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id A04C85C0194;
+        Wed,  1 Jun 2022 12:00:45 -0400 (EDT)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Wed, 01 Jun 2022 12:00:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1654099245; x=
+        1654185645; bh=ZYH3e3AgsGaCCagzNdu3Jkw0DftFDdw0eqZmZz620FY=; b=h
+        rhLyaFAsAk33UB/oN3XtNLwDt9df2T2yFMjiX+UtxljZY+RtO4N6LNy7OriLZgxt
+        C6m87CPGqJaCNEgU2+Ue9YGq3TVTHuSHGtp7mdIG/U/CDRwUwnI11GCN4qw+kNOd
+        HKYWWXwCyMihOmp9n0XbkKhWtwX6qs6F01FhR1uhsqFGGM+Sjw6owectHumA6Ave
+        UL31N1mO2+rUaivIJ//S/JOycQc2PpVb4qpiiu5EADnJRt7qtS8Y2+q+kgGbcncN
+        87xl6RRuqjtUl5vRM7jSParz8iEE0oM28P2+5+CuibFlkM79abyzYs4Asafg0qEy
+        pg+aZH/4+v9zLKWLox8vw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1654099245; x=
+        1654185645; bh=ZYH3e3AgsGaCCagzNdu3Jkw0DftFDdw0eqZmZz620FY=; b=o
+        lfBoW3j//UwVE763/l0acB/7KF3NJ/Qhkw0cBJ/vreTKo+4pHz0oClg0OMRQGPZj
+        GBm4u8rT8/uwsjKSFJlDxYzzrOKgYnuZtUPmpQhpXVm2uISkVxP7uhWPsNwLYTWZ
+        dHuiUpVdT+plohMGRbk4cr51ZeQvETgXKHHNqYcCHdkhQBv8V20WQbJ/IFYybYma
+        YDLZS7ZiAc3+69DSSaHiWQd1kGrszu0j/IQq7KxJyVcrVT2hLVjadJiEsAWYjhwM
+        XfNhwRWMM6jjtjTl8CJNRSal7VzEf9XrqSJlLmrWvu7pIE3TGafgdQQJ84GzIU9e
+        fCs0uRgKDEiNMhpV/YbMw==
+X-ME-Sender: <xms:LI2XYhOpCGuL7clCVLSlkrFl2vEYNGgBrtupc3CB-igEaOT_2I65yQ>
+    <xme:LI2XYj8rEfoNjCx8EQVSflx7o8_99q_pqPAMtNA32WQuDz4Eqfv6e5TKUfK6RzWRb
+    AT_3WM3Ul95gHK8GEc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrledtgdelgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhhmtderreejnecuhfhrohhmpedfufhv
+    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
+    grthhtvghrnhepgfevveetfeevkeetfffhjefgveehteffjeeghefgjeefteeltdejgeff
+    jeeuhfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:LI2XYgRcnl00r3EUy_LYnwLJlRqnj8nvVoo_DH430PGgaxb9CxO3SA>
+    <xmx:LI2XYtsxrLP7QIEo3bk3vPEsv5JATke3IEDPuBYP5Ut1zf_es6Ad_g>
+    <xmx:LI2XYpfAQ1Ht4EuBWNMUTOaBRaYxRoTc_uQQYhBlLmv9-IYsgvwoTw>
+    <xmx:LY2XYjsDqMtLfR-h-Ax0sBOjRkza02uxaS8vXQHPonxUBPpulCM_fg>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 550D4A60072; Wed,  1 Jun 2022 12:00:44 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-591-gfe6c3a2700-fm-20220427.001-gfe6c3a27
+Mime-Version: 1.0
+Message-Id: <9F092ADE-6890-40A0-8506-D19B4C49BB5F@svenpeter.dev>
+In-Reply-To: <20220531215815.2408477-1-robh@kernel.org>
+References: <20220531215815.2408477-1-robh@kernel.org>
+Date:   Wed, 01 Jun 2022 18:00:44 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Rob Herring" <robh@kernel.org>
+Cc:     "Hector Martin" <marcan@marcan.st>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Mark Kettenis" <kettenis@openbsd.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: PCI: apple: Add missing 'power-domains' property
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 8:25 AM <zhengjun.xing@linux.intel.com> wrote:
->
-> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
->
-> For the hybrid system, the "slots" event changes to "cpu_core/slots/", need
-> extend API arch_evsel__must_be_in_group() to support hybrid systems.
->
-> In the origin code, for hybrid system event "cpu_core/slots/", the output
-> of the API arch_evsel__must_be_in_group() is "false" (in fact,it should be
-> "true"). Currently only one API evsel__remove_from_group() calls it. In
-> evsel__remove_from_group(), it adds the second condition to check, so the
-> output of evsel__remove_from_group() still is correct. That's the reason
-> why there isn't an instant error. I'd like to fix the issue found in API
-> arch_evsel__must_be_in_group() in case someone else using the function in
-> the other place.
->
-> Fixes: d98079c05b5a ("perf evlist: Keep topdown counters in weak group")
-> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> On 31. May 2022, at 23:58, Rob Herring <robh@kernel.org> wrote:
+>=20
+> =EF=BB=BFThe 'unevaluatedProperties' schema checks is not fully workin=
+g and doesn't
+> catch some cases where there's a $ref to another schema. A fix is pend=
+ing,
+> but results in new warnings in examples.
+>=20
+> The Apple PCIe host schema is missing 'power-domains' in the schema.
+> The example has 3 power domains. However, this is wrong too as actual
+> dts files have a single power domain and Sven confirmed 1 is correct.
+>=20
+> Cc: Sven Peter <sven@svenpeter.dev>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Acked-by: Ian Rogers <irogers@google.com>
-
-Thanks,
-Ian
-
-> ---
->  tools/perf/arch/x86/util/evsel.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/arch/x86/util/evsel.c b/tools/perf/arch/x86/util/evsel.c
-> index 88306183d629..ff4561b7b600 100644
-> --- a/tools/perf/arch/x86/util/evsel.c
-> +++ b/tools/perf/arch/x86/util/evsel.c
-> @@ -57,6 +57,6 @@ bool arch_evsel__must_be_in_group(const struct evsel *evsel)
->                 return false;
->
->         return evsel->name &&
-> -               (!strcasecmp(evsel->name, "slots") ||
-> +               (strcasestr(evsel->name, "slots") ||
->                  strcasestr(evsel->name, "topdown"));
->  }
-> --
-> 2.25.1
->
+Reviewed-by: Sven Peter <sven@svenpeter.dev>

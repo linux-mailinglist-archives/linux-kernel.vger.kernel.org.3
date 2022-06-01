@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891F4539A77
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 02:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3AA6539A7B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 02:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348881AbiFAAnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 20:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+        id S1348843AbiFAAok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 20:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348849AbiFAAng (ORCPT
+        with ESMTP id S243000AbiFAAoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 20:43:36 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456352F01D
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 17:43:34 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so502490pjq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 17:43:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version;
-        bh=VTS2BJOiZdVfc4HWRBKopWrjNxtr1f8DhfWOL0sQDOU=;
-        b=dKX3WeVuWHWFXCr8vpEhqGHD7EqT7itYwhE00TlDhUTnQIjPE6ru1zXmeU+Bc6BBgM
-         48XVYW6ICA2SbeDJkirhBDZyJccHlj+7cnYIIPc6zlvpwOJxHoj/uaBBR+ktgCJgnMdm
-         sGal4/hQ7z1lxhGzOVHj2ItgmyKpih7RsmnhM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version;
-        bh=VTS2BJOiZdVfc4HWRBKopWrjNxtr1f8DhfWOL0sQDOU=;
-        b=Bq/YvsSuAC8hysHiY7saPPbw1wLtwlYjlggyenA8txcyAbyIFshJ//PnXq5NdaJ1/v
-         FvDHjAH+FqpyK9gu9dzHWk8/RpyAWWjNfiNLvUDy1cbB1+OR8vYgLYWAYW6bxBR7cC1C
-         lUvtLDYXuo7xel6U+1BbTYr50XKZ1jYYRv44QwAUlYd/0kFXCJ9SKQaVzNEJejLaIrSe
-         KDE5tD/4YnPtWDMXQ4XcUMhHUIZrax3kqJdxRXq/KUsxyWjxjY1ujrtEeQY7p+TyzqqU
-         2Idh1zaLBMS9YLt/DUFhZ8ldadtpPY/S10mK/3MnMoPz/mGE1YwDXij6ZE3oOALEBd4b
-         nNZw==
-X-Gm-Message-State: AOAM5310aEh+/Vw1Fx7oxnUYAKkbjTWTUH9lCDbJauysQtmaVGgzxi3e
-        y6BiYqMevi+KQi+tDXMBXaL2XQ==
-X-Google-Smtp-Source: ABdhPJxz7UWy23cDc1DSG1A+o/eVAIinBNP4/Q4Pd0egPwsBycI3626uU+X6VQ2BXdZjk55gMY6aRw==
-X-Received: by 2002:a17:902:8687:b0:161:f0ac:723a with SMTP id g7-20020a170902868700b00161f0ac723amr56866067plo.128.1654044213847;
-        Tue, 31 May 2022 17:43:33 -0700 (PDT)
-Received: from T3500-3.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id cb5-20020a056a00430500b005190ce21500sm54237pfb.110.2022.05.31.17.43.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 17:43:33 -0700 (PDT)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     dan.beygelman@broadcom.com, philippe.reynes@softathome.com,
-        anand.gore@broadcom.com, florian.fainelli@broadcom.com,
-        tomer.yacoby@broadcom.com, samyon.furman@broadcom.com,
-        kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] MAINTAINERS: add bcm4912 to bcmbca arch entry
-Date:   Tue, 31 May 2022 17:42:44 -0700
-Message-Id: <20220601004244.27394-4-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220601004244.27394-1-william.zhang@broadcom.com>
-References: <20220601004244.27394-1-william.zhang@broadcom.com>
+        Tue, 31 May 2022 20:44:38 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5EC8D69D;
+        Tue, 31 May 2022 17:44:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654044277; x=1685580277;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Edfpulig+ThWc0bbiQuZikx3D/q8pZAAGANvXImqB7M=;
+  b=cyIuT93ZHseURS5e5aue8hnMr9BNUPOsBgH8cuDCdmCFtSFPUTUsOdwF
+   DUky9M/fOcubqWuzbBx3Rd4ZF+C0gordV0NQUKAuGTgeoIc/hkt8MMqNM
+   tIQVuLrD9FjDjVMTwwFu3Drty/YycZN8ElA0glJwL4e5CF33zE5y+k7Lu
+   kgNhJI9q1KZMM1Xd6jqnQ5C014hnnpG34eyXxsgZPT3HeWF2Lg/eCdNpD
+   g05Q+f6R7LB9hOuLMcyfCjh6l7iNQdDISIzLwwun9Y86MYDHDK8O6lz6S
+   7AvRFpiXdLJlWiOtIiYi2paYgnT3pHQDCeY/sOgyx5Dy38UGHDE0VcM87
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="272995977"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="272995977"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 17:44:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="720549427"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 31 May 2022 17:44:35 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwCTS-0003Ie-Gz;
+        Wed, 01 Jun 2022 00:44:34 +0000
+Date:   Wed, 1 Jun 2022 08:44:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH v1 3/3] iio: adc: meson_saradc: Use temporary variable
+ for struct device
+Message-ID: <202206010812.Xy2yMeXw-lkp@intel.com>
+References: <20220531211842.71998-3-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d3a53405e0582deb"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531211842.71998-3-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,114 +71,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000d3a53405e0582deb
-Content-Transfer-Encoding: 8bit
+Hi Andy,
 
-Add bcm4912 related files to BCMBCA ARCH maintainer list entry
+I love your patch! Perhaps something to improve:
 
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on v5.18 next-20220531]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
----
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/iio-adc-meson_saradc-Convert-to-use-dev_err_probe/20220601-052117
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220601/202206010812.Xy2yMeXw-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d2d128394df620a157f32fab808d46e5983f73e5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/iio-adc-meson_saradc-Convert-to-use-dev_err_probe/20220601-052117
+        git checkout d2d128394df620a157f32fab808d46e5983f73e5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/iio/
 
-(no changes since v1)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+All warnings (new ones prefixed by >>):
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 164d1f3bedf8..f68258a590ff 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3779,6 +3779,7 @@ F:	arch/arm/boot/dts/bcm947622.dts
- F:	arch/arm64/boot/dts/broadcom/bcmbca/*
- N:	bcmbca
- N:	bcm[9]?47622
-+N:	bcm[9]?4912
- N:	bcm[9]?63158
- 
- BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE
+   drivers/iio/adc/meson_saradc.c: In function 'meson_sar_adc_clk_init':
+>> drivers/iio/adc/meson_saradc.c:652:24: warning: 'dev' is used uninitialized [-Wuninitialized]
+     652 |         struct device *dev = dev->parent;
+         |                        ^~~
+
+
+vim +/dev +652 drivers/iio/adc/meson_saradc.c
+
+   646	
+   647	static int meson_sar_adc_clk_init(struct iio_dev *indio_dev,
+   648					  void __iomem *base)
+   649	{
+   650		struct meson_sar_adc_priv *priv = iio_priv(indio_dev);
+   651		struct device *idev = &indio_dev->dev;
+ > 652		struct device *dev = dev->parent;
+   653		struct clk_init_data init;
+   654		const char *clk_parents[1];
+   655	
+   656		init.name = devm_kasprintf(idev, GFP_KERNEL, "%s#adc_div", dev_name(dev));
+   657		if (!init.name)
+   658			return -ENOMEM;
+   659	
+   660		init.flags = 0;
+   661		init.ops = &clk_divider_ops;
+   662		clk_parents[0] = __clk_get_name(priv->clkin);
+   663		init.parent_names = clk_parents;
+   664		init.num_parents = 1;
+   665	
+   666		priv->clk_div.reg = base + MESON_SAR_ADC_REG3;
+   667		priv->clk_div.shift = MESON_SAR_ADC_REG3_ADC_CLK_DIV_SHIFT;
+   668		priv->clk_div.width = MESON_SAR_ADC_REG3_ADC_CLK_DIV_WIDTH;
+   669		priv->clk_div.hw.init = &init;
+   670		priv->clk_div.flags = 0;
+   671	
+   672		priv->adc_div_clk = devm_clk_register(idev, &priv->clk_div.hw);
+   673		if (WARN_ON(IS_ERR(priv->adc_div_clk)))
+   674			return PTR_ERR(priv->adc_div_clk);
+   675	
+   676		init.name = devm_kasprintf(idev, GFP_KERNEL, "%s#adc_en", dev_name(dev));
+   677		if (!init.name)
+   678			return -ENOMEM;
+   679	
+   680		init.flags = CLK_SET_RATE_PARENT;
+   681		init.ops = &clk_gate_ops;
+   682		clk_parents[0] = __clk_get_name(priv->adc_div_clk);
+   683		init.parent_names = clk_parents;
+   684		init.num_parents = 1;
+   685	
+   686		priv->clk_gate.reg = base + MESON_SAR_ADC_REG3;
+   687		priv->clk_gate.bit_idx = __ffs(MESON_SAR_ADC_REG3_CLK_EN);
+   688		priv->clk_gate.hw.init = &init;
+   689	
+   690		priv->adc_clk = devm_clk_register(idev, &priv->clk_gate.hw);
+   691		if (WARN_ON(IS_ERR(priv->adc_clk)))
+   692			return PTR_ERR(priv->adc_clk);
+   693	
+   694		return 0;
+   695	}
+   696	
+
 -- 
-2.36.1
-
-
---000000000000d3a53405e0582deb
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJ9/BHFE5bzUn/t1uAZ4m30QRx74
-DcYoh7mVVHkhDoBkMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDYwMTAwNDMzNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCUxAj+oK2Jz6bILmzhFsKbQSL6OtHCJidv/3YV9hZU2zf0
-id9iGDTsP8IMi3adoZ7mTl6ELkBqBooLnez+7O9UthuPyvqiXkSV4LweniK3pGxx0TPBUG4t29l4
-8ZCC8j8PJKBIo1AoYNCfGKNSrpteR9b3qrNNEmqRf1r3R7kwDFjNMly79HBw334ZAHkJdExOfKs9
-MTQqksXFsPJnRsfszRl4QKN1YJtMf3HcjfyB/3tz8OOiXs9j2+EeSIuYp7lK1gqAqSeE6Ll7i+5r
-L/dCCx6b0v9aZcgHZKdenJvpiZdxUuVoattZZAmjE0QWKA3GaUsK2T39ZEAIIHA9s+hj
---000000000000d3a53405e0582deb--
+0-DAY CI Kernel Test Service
+https://01.org/lkp

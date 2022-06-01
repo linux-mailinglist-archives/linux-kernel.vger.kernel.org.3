@@ -2,297 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D6553AAFF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF9953AB02
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356126AbiFAQWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 12:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
+        id S1353383AbiFAQX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 12:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356150AbiFAQWK (ORCPT
+        with ESMTP id S1356214AbiFAQXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 12:22:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA7213EF28
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 09:21:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654100518;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fe+RsC/wSV/MG/FY2/4emdTM3FVFwNmxL22TSRT9qK4=;
-        b=PlD4LXB/5naHPf5yE34HSg8j6oRoBmyklZnYzgBI3LVavSp4BVowfBLI+dgymPj9LQpYxj
-        0a2ld+NmSE3yYiOy4yQsNtc3LKfSNrMeZP3tZf4I8CT4GuLsnwn1+cb3wV8t6KXRJah3cG
-        SUKgD/9RrrCxmbJOZdlr2DfuoLaoTSU=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-546-Oi5Dw6NsMpSWClqLdPQQgw-1; Wed, 01 Jun 2022 12:21:57 -0400
-X-MC-Unique: Oi5Dw6NsMpSWClqLdPQQgw-1
-Received: by mail-il1-f199.google.com with SMTP id i16-20020a056e021d1000b002d3bbe39232so1492702ila.20
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 09:21:53 -0700 (PDT)
+        Wed, 1 Jun 2022 12:23:20 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764DD3D4B1;
+        Wed,  1 Jun 2022 09:23:17 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id e11so2429638pfj.5;
+        Wed, 01 Jun 2022 09:23:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TXmcbpS90c6cPs5yYXuKNTVjXQN/kwuO3h1E2mahOJQ=;
+        b=OIIziShah+SIqCYkZ2hpQ8ztiPri03CRgwsAgzGoGc+gCBV4WnTZanGCwO3ZAVwOkp
+         iAnyq90+hw53VI5qPY2cnSSKWEWSSrtfNc6lUxPjLcLlRFKysQh1Fluo6hgqKfLmY/1P
+         TIkH5+HLNH5t1cynBxuwQq+Tg0qvYLXw2/jEIrkOtjoWD91xo6tWLkS6yZIVrIKkSQKc
+         l9ggoB1W4xvrn3wztxxMPH1SUf3HKSMa7YSNtZx/GLSa2prG1x6euAU1SYqaL+bpl72L
+         w5rdbS4Lsyumr2J2WMUZknwQher3KfxIqauU7HbW/o7TXPTWVxLusThAPXFeNN/W99tu
+         Z8oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=fe+RsC/wSV/MG/FY2/4emdTM3FVFwNmxL22TSRT9qK4=;
-        b=26wT9phpI8TCGbg1VBg9BWYY0dhnGFiDlS8SbXpbCWB+Xn/fpDDQ2RSsxrF6F3WrTG
-         Oas0bHTtfo7ULGM2njJ9L+XK4tXjgQRURXi6iJqC7VVIchxgixbm6KqLSn8A3o2HIodb
-         tpUeD1puuK4hbkM/fssTvfuraGjlPjlnR9VIBOi1HdrPae70FA/yfU6G9hdH99wyNg41
-         opN+vOfwMvyWBXWs6wCkMcOFk69Mtv8xzn2xc131cmkwumnk8kylkWZ5X7P6yzLpQijL
-         RnGTjDfoWB3KXec3YT+NOi00fbUBUa+tt+4mMSnKJwKB1XPyn9sTv7V05FAZjwpuvh/R
-         hCXQ==
-X-Gm-Message-State: AOAM530vsvSNmomuKk0URr2s28KSQ7pEuAeBKyhJmfIRM9rC/nwHup3L
-        +crMvVqMLzOfA01neUIaNcynsenHQJGyXu7V5CZsjLdepy8PlwLb58kunVbL9rINY/vPuXvobYp
-        xhq6aqn4DUK48XKJGLF0D8IvZ
-X-Received: by 2002:a92:cd87:0:b0:2d3:ce9a:f9a5 with SMTP id r7-20020a92cd87000000b002d3ce9af9a5mr447723ilb.76.1654100513059;
-        Wed, 01 Jun 2022 09:21:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzuKE3Kbv0zQEPQZ0sShHluFx5fjyQhKbRSTEtrQYLxVTW6PYTPfo2kvTuCDmBnyaJy15fmJA==
-X-Received: by 2002:a92:cd87:0:b0:2d3:ce9a:f9a5 with SMTP id r7-20020a92cd87000000b002d3ce9af9a5mr447695ilb.76.1654100512776;
-        Wed, 01 Jun 2022 09:21:52 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id e37-20020a022125000000b0032e2996cadesm557032jaa.66.2022.06.01.09.21.51
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=TXmcbpS90c6cPs5yYXuKNTVjXQN/kwuO3h1E2mahOJQ=;
+        b=WraE6+BLDi06oQD63EmD//F478awz10R6kfIAdaA/C3DMNJlAPB1IvWbNeDtrnv2ac
+         SriSAmJJlTrRKHFrZl5NSWh0UNbWREsEqCM9Up1vebJSjwpG7YG8jtr1hb0hURmD6nYb
+         RSPEW4jYrVdu3dC6d/3AuInLXZc3Yk3UMYz6GlZua1eS4+mdEBC8q/8VTbmsxJVoZK9K
+         Q40wEA+TKxg0RcC0zfcUF4BTwWKruL4cy06hPPNltCfNFOcrmFE0haOuk092kgwFnJIa
+         8jBC7EByC4XY2Ixr/yJEfXaKXfEJji/jRYOy4ncxR3umExzF40XAz4NKGyXsaJEmpJpx
+         +fvA==
+X-Gm-Message-State: AOAM533xoaoyNUznaAZSXrfy4Z6a0x6F6YsIwShID0/LGorjwlPtKtnN
+        h32vjeDN9zjX9jDs/gQdRjk=
+X-Google-Smtp-Source: ABdhPJy5NaAJAwcdBWVbCBE+v8EFNGENmF1xslwE7g06Df/I2ptaJbXFWoeRD2wxbrsIkxUK+xDC6A==
+X-Received: by 2002:a05:6a00:24c1:b0:518:c52f:f5 with SMTP id d1-20020a056a0024c100b00518c52f00f5mr347753pfv.15.1654100596743;
+        Wed, 01 Jun 2022 09:23:16 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id k7-20020aa79987000000b005104c6d7941sm1750753pfh.31.2022.06.01.09.23.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 09:21:52 -0700 (PDT)
-Date:   Wed, 1 Jun 2022 10:21:51 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v3 8/8] vfio/pci: Add the support for PCI D3cold state
-Message-ID: <20220601102151.75445f6a.alex.williamson@redhat.com>
-In-Reply-To: <00b6e380-ecf4-1eaf-f950-2c418bdb6cac@nvidia.com>
-References: <20220425092615.10133-1-abhsahu@nvidia.com>
-        <20220425092615.10133-9-abhsahu@nvidia.com>
-        <20220504134551.70d71bf0.alex.williamson@redhat.com>
-        <9e44e9cc-a500-ab0d-4785-5ae26874b3eb@nvidia.com>
-        <20220509154844.79e4915b.alex.williamson@redhat.com>
-        <68463d9b-98ee-b9ec-1a3e-1375e50a2ad2@nvidia.com>
-        <42518bd5-da8b-554f-2612-80278b527bf5@nvidia.com>
-        <20220530122546.GZ1343366@nvidia.com>
-        <c73d537b-a653-bf79-68cd-ddc8f0f62a25@nvidia.com>
-        <20220531194304.GN1343366@nvidia.com>
-        <20220531165209.1c18854f.alex.williamson@redhat.com>
-        <00b6e380-ecf4-1eaf-f950-2c418bdb6cac@nvidia.com>
-Organization: Red Hat
+        Wed, 01 Jun 2022 09:23:16 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 1 Jun 2022 06:23:14 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] blk-iocost: only flush wait and indebt stat deltas
+ when needed
+Message-ID: <YpeSct3LJcBjnZ2x@slm.duckdns.org>
+References: <20220601122007.1057-1-zhouchengming@bytedance.com>
+ <20220601122007.1057-2-zhouchengming@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601122007.1057-2-zhouchengming@bytedance.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Jun 2022 15:19:07 +0530
-Abhishek Sahu <abhsahu@nvidia.com> wrote:
+On Wed, Jun 01, 2022 at 08:20:07PM +0800, Chengming Zhou wrote:
+> We only need to flush wait and indebt stat deltas when the iocg
+> is in these status.
 
-> On 6/1/2022 4:22 AM, Alex Williamson wrote:
-> > On Tue, 31 May 2022 16:43:04 -0300
-> > Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >  =20
-> >> On Tue, May 31, 2022 at 05:44:11PM +0530, Abhishek Sahu wrote: =20
-> >>> On 5/30/2022 5:55 PM, Jason Gunthorpe wrote:   =20
-> >>>> On Mon, May 30, 2022 at 04:45:59PM +0530, Abhishek Sahu wrote:
-> >>>>    =20
-> >>>>>  1. In real use case, config or any other ioctl should not come alo=
-ng
-> >>>>>     with VFIO_DEVICE_FEATURE_POWER_MANAGEMENT ioctl request.
-> >>>>> =20
-> >>>>>  2. Maintain some 'access_count' which will be incremented when we
-> >>>>>     do any config space access or ioctl.   =20
-> >>>>
-> >>>> Please don't open code locks - if you need a lock then write a proper
-> >>>> lock. You can use the 'try' variants to bail out in cases where that
-> >>>> is appropriate.
-> >>>>
-> >>>> Jason   =20
-> >>>
-> >>>  Thanks Jason for providing your inputs.
-> >>>
-> >>>  In that case, should I introduce new rw_semaphore (For example
-> >>>  power_lock) and move =E2=80=98platform_pm_engaged=E2=80=99 under =E2=
-=80=98power_lock=E2=80=99 ?   =20
-> >>
-> >> Possibly, this is better than an atomic at least
-> >> =20
-> >>>  1. At the beginning of config space access or ioctl, we can take the
-> >>>     lock
-> >>> =20
-> >>>      down_read(&vdev->power_lock);   =20
-> >>
-> >> You can also do down_read_trylock() here and bail out as you were
-> >> suggesting with the atomic.
-> >>
-> >> trylock doesn't have lock odering rules because it can't sleep so it
-> >> gives a bit more flexability when designing the lock ordering.
-> >>
-> >> Though userspace has to be able to tolerate the failure, or never make
-> >> the request.
-> >> =20
->=20
->  Thanks Alex and Jason for providing your inputs.
->=20
->  Using down_read_trylock() along with Alex suggestion seems fine.
->  In real use case, config space access should not happen when the
->  device is in low power state so returning error should not
->  cause any issue in this case.
->=20
-> >>>          down_write(&vdev->power_lock);
-> >>>          ...
-> >>>          switch (vfio_pm.low_power_state) {
-> >>>          case VFIO_DEVICE_LOW_POWER_STATE_ENTER:
-> >>>                  ...
-> >>>                          vfio_pci_zap_and_down_write_memory_lock(vdev=
-);
-> >>>                          vdev->power_state_d3 =3D true;
-> >>>                          up_write(&vdev->memory_lock);
-> >>>
-> >>>          ...
-> >>>          up_write(&vdev->power_lock);   =20
-> >>
-> >> And something checks the power lock before allowing the memor to be
-> >> re-enabled?
-> >> =20
-> >>>  4.  For ioctl access, as mentioned previously I need to add two
-> >>>      callbacks functions (one for start and one for end) in the struct
-> >>>      vfio_device_ops and call the same at start and end of ioctl from
-> >>>      vfio_device_fops_unl_ioctl().   =20
-> >>
-> >> Not sure I followed this.. =20
-> >=20
-> > I'm kinda lost here too. =20
->=20
->=20
->  I have summarized the things below
->=20
->  1. In the current patch (v3 8/8), if config space access or ioctl was
->     being made by the user when the device is already in low power state,
->     then it was waking the device. This wake up was happening with
->     pm_runtime_resume_and_get() API in vfio_pci_config_rw() and
->     vfio_device_fops_unl_ioctl() (with patch v3 7/8 in this patch series).
->=20
->  2. Now, it has been decided to return error instead of waking the
->     device if the device is already in low power state.
->=20
->  3. Initially I thought to add following code in config space path
->     (and similar in ioctl)
->=20
->         vfio_pci_config_rw() {
->             ...
->             down_read(&vdev->memory_lock);
->             if (vdev->platform_pm_engaged)
->             {
->                 up_read(&vdev->memory_lock);
->                 return -EIO;
->             }
->             ...
->         }
->=20
->      And then there was a possibility that the physical config happens
->      when the device in D3cold in case of race condition.
->=20
->  4.  So, I wanted to add some mechanism so that the low power entry
->      ioctl will be serialized with other ioctl or config space. With this
->      if low power entry gets scheduled first then config/other ioctls will
->      get failure, otherwise low power entry will wait.
->=20
->  5.  For serializing this access, I need to ensure that lock is held
->      throughout the operation. For config space I can add the code in
->      vfio_pci_config_rw(). But for ioctls, I was not sure what is the best
->      way since few ioctls (VFIO_DEVICE_FEATURE_MIGRATION,
->      VFIO_DEVICE_FEATURE_MIG_DEVICE_STATE etc.) are being handled in the
->      vfio core layer itself.
->=20
->  The memory_lock and the variables to track low power in specific to
->  vfio-pci so I need some mechanism by which I add low power check for
->  each ioctl. For serialization, I need to call function implemented in
->  vfio-pci before vfio core layer makes the actual ioctl to grab the
->  locks. Similarly, I need to release the lock once vfio core layer
->  finished the actual ioctl. I have mentioned about this problem in the
->  above point (point 4 in my earlier mail).
->=20
-> > A couple replies back there was some concern
-> > about race scenarios with multiple user threads accessing the device.
-> > The ones concerning non-deterministic behavior if a user is
-> > concurrently changing power state and performing other accesses are a
-> > non-issue, imo.   =20
->=20
->  What does non-deterministic behavior here mean.
->  Is it for user side that user will see different result
->  (failure or success) during race condition or in the kernel side
->  (as explained in point 3 above where physical config access
->  happens when the device in D3cold) ? My concern here is for later
->  part where this config space access in D3cold can cause fatal error
->  on the system side as we have seen for memory disablement.
+Hey, so, I'm not seeing any actual benefits of the suggested patches and
+none of them has actual justifications. For the time being, I'm gonna be
+ignoring these patches.
 
-Yes, our only concern should be to prevent such an access.  The user
-seeing non-deterministic behavior, such as during concurrent power
-control and config space access, all combinations of success/failure
-are possible, is par for the course when we decide to block accesses
-across the life of the low power state.
-=20
-> > I think our goal is only to expand the current
-> > memory_lock to block accesses, including config space, while the device
-> > is in low power, or some approximation bounded by the entry/exit ioctl.
-> >=20
-> > I think the remaining issues is how to do that relative to the fact
-> > that config space access can change the memory enable state and would
-> > therefore need to upgrade the memory_lock read-lock to a write-lock.
-> > For that I think we can simply drop the read-lock, acquire the
-> > write-lock, and re-test the low power state.  If it has changed, that
-> > suggests the user has again raced changing power state with another
-> > access and we can simply drop the lock and return -EIO.
-> >  =20
->=20
->  Yes. This looks better option. So, just to confirm, I can take the
->  memory_lock read-lock at the starting of vfio_pci_config_rw() and
->  release it just before returning from vfio_pci_config_rw() and
->  for memory related config access, we will release this lock and
->  re-aquiring again write version of this. Once memory write happens,
->  then we can downgrade this write lock to read lock ?
+Thanks.
 
-We only need to lock for the device access, so if you've finished that
-access after acquiring the write-lock, there'd be no point to then
-downgrade that to a read-lock.  The access should be finished by that
-point.
-=20
->  Also, what about IOCTLs. How can I take and release memory_lock for
->  ioctl. is it okay to go with Patch 7 where we call
->  pm_runtime_resume_and_get() before each ioctl or we need to do the
->  same low power check for ioctl also ?
->  In Later case, I am not sure how should I do the implementation so
->  that all other ioctl are covered from vfio core layer itself.
-
-Some ioctls clearly cannot occur while the device is in low power, such
-as resets and interrupt control, but even less obvious things like
-getting region info require device access.  Migration also provides a
-channel to device access.  Do we want to manage a list of ioctls that
-are allowed in low power, or do we only want to allow the ioctl to exit
-low power?
-
-I'm also still curious how we're going to handle devices that cannot
-return to low power such as the self-refresh mode on the GPU.  We can
-potentially prevent any wake-ups from the vfio device interface, but
-that doesn't preclude a wake-up via an external lspci.  I think we need
-to understand how we're going to handle such devices before we can
-really complete the design.  AIUI, we cannot disable the self-refresh
-sleep mode without imposing unreasonable latency and memory
-requirements on the guest and we cannot retrigger the self-refresh
-low-power mode without non-trivial device specific code.  Thanks,
-
-Alex
-
+-- 
+tejun

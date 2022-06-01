@@ -2,91 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04FB53A347
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 12:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46F153A34E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 12:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351244AbiFAKwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 06:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
+        id S1352452AbiFAK4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 06:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351042AbiFAKwZ (ORCPT
+        with ESMTP id S1352202AbiFAK4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 06:52:25 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB119527C2
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 03:52:21 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id rs12so2864502ejb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 03:52:21 -0700 (PDT)
+        Wed, 1 Jun 2022 06:56:00 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27CF546AD;
+        Wed,  1 Jun 2022 03:55:59 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso1743380pjg.0;
+        Wed, 01 Jun 2022 03:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=iMh1IyTG2d9en/ELE4xi4Q/xuh2OZdfW6JgVzXFlyN4=;
-        b=oGe9Hcn98WvrZaT0jedFKgGxU2uNih6RFdmKu7nXQSE/RI5BKB4BqB1x0GBgCVDuV4
-         /7KAA2IE9eo9WkUCOb+Nyx0tyEmzIcySMVICgBnYrJv5DPh8a2AYUlCcsQr00WqpTUMt
-         RZIIuf7Qk0CZDzLyAN9T+o7jCI+Em86PBLOsQ1/AppLbJR4LHAZwn4Hrp3XmkvmXa5CT
-         mMRRZfDM1Mvm/YYI1qp+KCIJjLTORf4ubhUkoOUq5Xl7V9Je6D3GJ0fec+yD87zOCFy4
-         Hy2rv8huGAgv6MlNjeKt1jJMbkc1F0UJkvRiuyzvWKsIY90n/5pJPKiz0P8gU5iIADy4
-         ksMg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cQYlXoGDywk+3GdfKjepz9XHgwe5hFSMlVKeZfjQrNE=;
+        b=hTQgEKWKGjIVhZCCo2lCFCkMpMrcK+x/YoAhVD6QE7lAop6icY0EQq1dOWZnG1mXV5
+         fKGPzRcEvXeryt4fWSXWWRZC+bL2qf67zW1M0ETZ5qagUu+/Y+1YmWtkqtLfuNzkgXRx
+         k4AyUYGau5T0ig9rTHdNkvpfwTwJgytG+UFSJs643ZZCN7wHnWHNseai7ZbMyAlUBn1R
+         LMso3hSfGcg8/jy2PcTsDluW8BOeE9eUxsKiYRLzuGizl8KyoodcRK8qbf1YjGE/6BlZ
+         fuyvJDig73OFMG2iYCTMEYmrk1/kRMlrg5uLza7BOZg4pCHz5qHZL0jad7YBbDur8z5T
+         ykMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=iMh1IyTG2d9en/ELE4xi4Q/xuh2OZdfW6JgVzXFlyN4=;
-        b=S4mltQs+FT1bQjxQye8ypib+kToG967fQZ2agXx3kACzXDVTPT138Q2cuhHZ+cu/p7
-         Wr0uoFUPCvAd2ek3clWpbQ666aquwf4J3QZenxWlGu1mjBkiiZO8HBLMop+A2NHefzB4
-         KEKM5MtMdoCeEL2li6humhhBndRGBn89R1beAyJx9qFzo7Hj4wAOadOtpPWHGWUcGumF
-         jcizzAtyWvcjNL2SsgUtdFKgau8JCtCDUEfSXHME4LRyKSodNo/bx2NtC2YJQHPBjnU9
-         NArOFn4H+25i+uTJswpiAmK6Dc/2gmbcRzNm+AHfYp36fViIV0rOt3+U62ejbD8FkF6r
-         kpiQ==
-X-Gm-Message-State: AOAM530iJks2OWsybTw/hHdkozLGKrIFzoHp4+WULGfcw8R7GW8oE0pl
-        Pt3pY6Jkn52M184Tbx/VguUDRA==
-X-Google-Smtp-Source: ABdhPJwfrKKwsWAmFAlvmE33P2IfYMGV+b5KQgaK5GFfabKtS77U+iiNLrnlD9WSmBqm3Ul/6KDZcQ==
-X-Received: by 2002:a17:907:8a0a:b0:6fe:cede:95d8 with SMTP id sc10-20020a1709078a0a00b006fecede95d8mr44626804ejc.59.1654080740174;
-        Wed, 01 Jun 2022 03:52:20 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id gi6-20020a1709070c8600b006fecf62536asm549266ejc.188.2022.06.01.03.52.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 03:52:19 -0700 (PDT)
-Message-ID: <9f44c7bb-f403-7009-4b1c-8508d37e44fd@linaro.org>
-Date:   Wed, 1 Jun 2022 12:52:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] mfd: max77620: Fix refcount leak in
- max77620_initialise_fps
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mallikarjun Kasoju <mkasoju@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
+        bh=cQYlXoGDywk+3GdfKjepz9XHgwe5hFSMlVKeZfjQrNE=;
+        b=JqddhPnyXMIaD5bZWG4v74skYlM/w7Pq2GJeu5uXXlQZNbHHcvAC/2mcYhZSK8b8F4
+         yTJltq2cWP7nYwBSk0X1Sl1jBHu5D3sJ4MF8MlueQ0XLeOhy63xrBT9fcNphDmcJK73s
+         /yQZV+DEhfU4L56sGjFv51ikJXqmpQYlyVcbdPQ8XwL98st4CZI8E27c4H7BAY6DgVvB
+         9QbXYMayoafrtZOXaQcL85Z5kKnscczKSSt78iCf+0FKLfJ7au1CM1u2+xL3oNH/ONVJ
+         hHOJk1NiQnuNo6ULj6VVUWE2UwSNi1dhRPUCNtiUolDkaxxL9TRfmrKr7Oqqo88Pwyqa
+         +Fpw==
+X-Gm-Message-State: AOAM533GEUB6gTBC/JyMfYWRnbo8qOZ8uPruXbQ3RSrg/BEkcc0FWzP4
+        QgfJaqGJPnO2G5CM0WKZ858=
+X-Google-Smtp-Source: ABdhPJym1X3sQfx6g0N+7PgV1oBquYAy8tkYdP4yj0xMzPVDty8AZe+/sHkSTzU65Y386lntfJbcWw==
+X-Received: by 2002:a17:902:f686:b0:163:d8c9:18f3 with SMTP id l6-20020a170902f68600b00163d8c918f3mr15466340plg.64.1654080959295;
+        Wed, 01 Jun 2022 03:55:59 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id l12-20020a170903004c00b00161929fb1adsm1235268pla.54.2022.06.01.03.55.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 03:55:58 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     dave.jiang@intel.com, Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220601043222.64441-1-linmq006@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220601043222.64441-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     linmq006@gmail.com
+Subject: [PATCH v2] dmaengine: ti: Fix refcount leak in ti_dra7_xbar_route_allocate
+Date:   Wed,  1 Jun 2022 14:55:46 +0400
+Message-Id: <20220601105546.53068-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2022 06:32, Miaoqian Lin wrote:
-> of_get_child_by_name() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when not need anymore.
-> Add missing of_node_put() to avoid refcount leak.
-> 
-> Fixes: 327156c59360 ("mfd: max77620: Add core driver for MAX77620/MAX20024")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not needed anymore.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Add missing of_node_put() in to fix this.
 
+Fixes: ec9bfa1e1a79 ("dmaengine: ti-dma-crossbar: dra7: Use bitops instead of idr")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+- split v1 into two patches.
+v1 link: https://lore.kernel.org/r/20220512051815.11946-1-linmq006@gmail.com
+---
+ drivers/dma/ti/dma-crossbar.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/dma/ti/dma-crossbar.c b/drivers/dma/ti/dma-crossbar.c
+index 71d24fc07c00..e34cfb50d241 100644
+--- a/drivers/dma/ti/dma-crossbar.c
++++ b/drivers/dma/ti/dma-crossbar.c
+@@ -268,6 +268,7 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
+ 		mutex_unlock(&xbar->mutex);
+ 		dev_err(&pdev->dev, "Run out of free DMA requests\n");
+ 		kfree(map);
++		of_node_put(dma_spec->np);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 	set_bit(map->xbar_out, xbar->dma_inuse);
+-- 
+2.25.1
+

@@ -2,232 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262A2539F9F
+	by mail.lfdr.de (Postfix) with ESMTP id 725B0539FA0
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245286AbiFAIhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 04:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
+        id S1350862AbiFAIhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233209AbiFAIhJ (ORCPT
+        with ESMTP id S243815AbiFAIhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:37:09 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C2621819
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:37:06 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id v25so1166042eda.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 01:37:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XZXVqu+h9NXbHvrC2CE+JHc/yJMidzZ16AsBJPRrJPE=;
-        b=V0iPmt+kTBJH5ivwrDvWTMPC9WwYqethXf9BHUztx9gbkHKvHcvpU6Ty1cRNR4mHPd
-         sy43RmmEcF13bNjbgYbYDMygYypovBn5LwM4kIw4hq/ucZuP7/72mTjQIg9seBTTX4iP
-         iN7Gtk0gAfuRXlU6PqGiHGz7dupYyUlAQXeHY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XZXVqu+h9NXbHvrC2CE+JHc/yJMidzZ16AsBJPRrJPE=;
-        b=Mk0gQs5Bt3/M5BmlKhuXFfgfSrqCDdE6c2ISsZsQRW8PGS6MkCZbocCuN0/udIKPXk
-         inGe87EOVrw8FZAaVSab7cA4GlBjW/liXiMNNewU8mP9Xb8thAOMcWOdmHmE7dL7fUCH
-         iK3YFB6iOZK4wfqxX5rDUu+AJYfquTZ39CFFp8DdyjgwmdlZIbLyLKHShzbVKfyGaGlY
-         NuAKqsRjlWglin97TisSnzhOs6+Q3gl+y5Mxs7EqjQgeNUs9/5VptJSQXKQBhGEtcpMs
-         i0Nj2TSsJR11DSY/A+/l/PTH99ZHRG5Srsv3MPwjea8X1gMvLfx8CXwGvHBm+Re/Slxy
-         bzaQ==
-X-Gm-Message-State: AOAM533f6BjZ72GZReFNBXmAUn+Pt8zuYzeMj6J5R1rDC8mVyehj7Lt7
-        mP3+vRbr9rs6XbxtQ42IBAG1KzqC3IOSTBIevEG6Bg==
-X-Google-Smtp-Source: ABdhPJymQSOKf855e7dfllaefJZ/lv3bCjmLAxuMnHWvIuClKGxEYglMyqZaP4fn7g0f7+FddB96W87/zPbulc5iUYc=
-X-Received: by 2002:a05:6402:f1b:b0:42d:e92f:c924 with SMTP id
- i27-20020a0564020f1b00b0042de92fc924mr1936092eda.389.1654072625416; Wed, 01
- Jun 2022 01:37:05 -0700 (PDT)
+        Wed, 1 Jun 2022 04:37:11 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDE323150;
+        Wed,  1 Jun 2022 01:37:08 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id DC28E21AF8;
+        Wed,  1 Jun 2022 08:37:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1654072626; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HsHgnzZUQPIXtk0+5x5Y0MiDzi5+zpU3dD5UO6P7azE=;
+        b=tQE4kgyC8B3pZXt11XfuyK82X/5feUuBNHwL+8dg5HMNvmpXCGBpSPvteJU6hH/3GBBXJR
+        UNCEg0DLkssqp6sxTNga2BJgUWjI1MOaVbMu+0KSxy0455Ghf1wXrviZi5wbx4D9MnmE3o
+        gjV6lZtMZgdUtYNr70lnGWesSMScA4k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1654072626;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HsHgnzZUQPIXtk0+5x5Y0MiDzi5+zpU3dD5UO6P7azE=;
+        b=QxveskwwdgtZYejPcdFPOgLJ5eL4XOPjQGiLcnY0lM3/m2Pw/YT9gRZgQ+TBqrqT5hGJGw
+        bP/ijgYAgB/w43AA==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C34F82C141;
+        Wed,  1 Jun 2022 08:37:06 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 8909FA0633; Wed,  1 Jun 2022 10:37:06 +0200 (CEST)
+Date:   Wed, 1 Jun 2022 10:37:06 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     paolo.valente@linaro.org, jack@suse.cz, axboe@kernel.dk,
+        tj@kernel.org, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next v8 3/4] block, bfq: refactor the counting of
+ 'num_groups_with_pending_reqs'
+Message-ID: <20220601083706.mnpb2ue6o25fqrrl@quack3.lan>
+References: <20220531140858.3324294-1-yukuai3@huawei.com>
+ <20220531140858.3324294-4-yukuai3@huawei.com>
 MIME-Version: 1.0
-References: <20220523065909.883444-1-hsinyi@chromium.org> <20220523065909.883444-4-hsinyi@chromium.org>
- <20220531134740.91ae4dcea1e06640ba1bfc12@linux-foundation.org> <e4de2e23-bbb8-369f-fa3b-4f4e296ab494@squashfs.org.uk>
-In-Reply-To: <e4de2e23-bbb8-369f-fa3b-4f4e296ab494@squashfs.org.uk>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Wed, 1 Jun 2022 16:36:39 +0800
-Message-ID: <CAJMQK-iAZARENZsOxjBvxHJw5DJOjpL_zkzW19_cA9BsHc6SGQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] squashfs: implement readahead
-To:     Phillip Lougher <phillip@squashfs.org.uk>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Xiongwei Song <Xiongwei.Song@windriver.com>,
-        Zheng Liang <zhengliang6@huawei.com>,
-        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
-        Miao Xie <miaoxie@huawei.com>,
-        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
-        "squashfs-devel @ lists . sourceforge . net" 
-        <squashfs-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531140858.3324294-4-yukuai3@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 9:08 AM Phillip Lougher <phillip@squashfs.org.uk> wrote:
->
-> On 31/05/2022 21:47, Andrew Morton wrote:
-> > On Mon, 23 May 2022 14:59:13 +0800 Hsin-Yi Wang <hsinyi@chromium.org> wrote:
-> >
-> >> Implement readahead callback for squashfs. It will read datablocks
-> >> which cover pages in readahead request. For a few cases it will
-> >> not mark page as uptodate, including:
-> >> - file end is 0.
-> >> - zero filled blocks.
-> >> - current batch of pages isn't in the same datablock or not enough in a
-> >>    datablock.
-> >> - decompressor error.
-> >> Otherwise pages will be marked as uptodate. The unhandled pages will be
-> >> updated by readpage later.
-> >>
-> >> ...
-> >>
-> >
-> > The choice of types seems somewhat confused.
-> >
-> >> @@ -495,7 +496,95 @@ static int squashfs_read_folio(struct file *file, struct folio *folio)
-> >>      return 0;
-> >>   }
-> >>
-> >> +static void squashfs_readahead(struct readahead_control *ractl)
-> >> +{
-> >> +    struct inode *inode = ractl->mapping->host;
-> >> +    struct squashfs_sb_info *msblk = inode->i_sb->s_fs_info;
-> >> +    size_t mask = (1UL << msblk->block_log) - 1;
-> >> +    size_t shift = msblk->block_log - PAGE_SHIFT;
-> >
-> > block_log is unsigned short.  Why size_t?
+On Tue 31-05-22 22:08:57, Yu Kuai wrote:
+> Currently, bfq can't handle sync io concurrently as long as they
+> are not issued from root group. This is because
+> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+> bfq_asymmetric_scenario().
+> 
+> The way that bfqg is counted into 'num_groups_with_pending_reqs':
+> 
+> Before this patch:
+>  1) root group will never be counted.
+>  2) Count if bfqg or it's child bfqgs have pending requests.
+>  3) Don't count if bfqg and it's child bfqgs complete all the requests.
+> 
+> After this patch:
+>  1) root group is counted.
+>  2) Count if bfqg have pending requests.
+>  3) Don't count if bfqg complete all the requests.
+> 
+> With this change, the occasion that only one group is activated can be
+> detected, and next patch will support concurrent sync io in the
+> occasion.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-Will update in the next version.
+Looks good. Feel free to add:
 
-> >
-> >> +    loff_t start = readahead_pos(ractl) &~ mask;
-> >> +    size_t len = readahead_length(ractl) + readahead_pos(ractl) - start;
-> >> +    struct squashfs_page_actor *actor;
-> >> +    unsigned int nr_pages = 0;
-> >
-> > OK.
-> >
-> >> +    struct page **pages;
-> >> +    u64 block = 0;
-> >> +    int bsize, res, i, index, bytes, expected;
-> >
-> > `res' could be local to the inner loop.
-> >
-> > `i' is used in situations where an unsigned type would be more
-> > appropriate.  If it is made unsigned then `i' is no longer a suitable
-> > identifier.  Doesn't matter much.
-> >
-> > `index' is from page.index, which is pgoff_t.
-> >
-> > `bytes' could be local to the innermost loop.
-> >
-> > `expected' is inappropriately a signed type and could be local to the
-> > inner loop.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Will update them in the next version.
-> >
-> >> +    int file_end = i_size_read(inode) >> msblk->block_log;
-> >> +    unsigned int max_pages = 1UL << shift;
-> >> +    void *pageaddr;
-> >> +
->
-> pageaddr could be made local to the innermost scope.
->
-Will update them in the next version.
+								Honza
 
-Thanks for your comments.
-
-> Apart from that the patch and updated error handling looks
-> good.
->
-> Phillip
->
-> >> +    readahead_expand(ractl, start, (len | mask) + 1);
-> >> +
-> >> +    if (file_end == 0)
-> >> +            return;
-> >> +
-> >> +    pages = kmalloc_array(max_pages, sizeof(void *), GFP_KERNEL);
-> >> +    if (!pages)
-> >> +            return;
-> >> +
-> >> +    actor = squashfs_page_actor_init_special(pages, max_pages, 0);
-> >> +    if (!actor)
-> >> +            goto out;
-> >> +
-> >> +    for (;;) {
-> >> +            nr_pages = __readahead_batch(ractl, pages, max_pages);
-> >> +            if (!nr_pages)
-> >> +                    break;
-> >> +
-> >> +            if (readahead_pos(ractl) >= i_size_read(inode) ||
-> >> +                nr_pages < max_pages)
-> >> +                    goto skip_pages;
-> >> +
-> >> +            index = pages[0]->index >> shift;
-> >> +            if ((pages[nr_pages - 1]->index >> shift) != index)
-> >> +                    goto skip_pages;
-> >> +
-> >> +            expected = index == file_end ?
-> >> +                       (i_size_read(inode) & (msblk->block_size - 1)) :
-> >> +                        msblk->block_size;
-> >> +
-> >> +            bsize = read_blocklist(inode, index, &block);
-> >> +            if (bsize == 0)
-> >> +                    goto skip_pages;
-> >> +
-> >> +            res = squashfs_read_data(inode->i_sb, block, bsize, NULL,
-> >> +                                     actor);
-> >> +
-> >> +            if (res == expected) {
-> >> +                    /* Last page may have trailing bytes not filled */
-> >> +                    bytes = res % PAGE_SIZE;
-> >> +                    if (bytes) {
-> >> +                            pageaddr = kmap_atomic(pages[nr_pages - 1]);
-> >> +                            memset(pageaddr + bytes, 0, PAGE_SIZE - bytes);
-> >> +                            kunmap_atomic(pageaddr);
-> >> +                    }
-> >> +
-> >> +                    for (i = 0; i < nr_pages; i++)
-> >> +                            SetPageUptodate(pages[i]);
-> >> +            }
-> >
-> > res == -EIO is unhandled?
-> >
-> >> +            for (i = 0; i < nr_pages; i++) {
-> >> +                    unlock_page(pages[i]);
-> >> +                    put_page(pages[i]);
-> >> +            }
-> >> +    }
-> >> +
-> >> +    kfree(actor);
-> >> +    kfree(pages);
-> >> +    return;
-> >> +
-> >> +skip_pages:
-> >> +    for (i = 0; i < nr_pages; i++) {
-> >> +            unlock_page(pages[i]);
-> >> +            put_page(pages[i]);
-> >> +    }
-> >> +
-> >> +    kfree(actor);
-> >> +out:
-> >> +    kfree(pages);
-> >> +}
-> >>
-> >>   const struct address_space_operations squashfs_aops = {
-> >> -    .read_folio = squashfs_read_folio
-> >> +    .read_folio = squashfs_read_folio,
-> >> +    .readahead = squashfs_readahead
-> >>   };
-> >
->
+> ---
+>  block/bfq-iosched.c | 42 ------------------------------------------
+>  block/bfq-iosched.h | 18 +++++++++---------
+>  block/bfq-wf2q.c    | 19 ++++---------------
+>  3 files changed, 13 insertions(+), 66 deletions(-)
+> 
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 0ec21018daba..03b04892440c 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -970,48 +970,6 @@ void __bfq_weights_tree_remove(struct bfq_data *bfqd,
+>  void bfq_weights_tree_remove(struct bfq_data *bfqd,
+>  			     struct bfq_queue *bfqq)
+>  {
+> -	struct bfq_entity *entity = bfqq->entity.parent;
+> -
+> -	for_each_entity(entity) {
+> -		struct bfq_sched_data *sd = entity->my_sched_data;
+> -
+> -		if (sd->next_in_service || sd->in_service_entity) {
+> -			/*
+> -			 * entity is still active, because either
+> -			 * next_in_service or in_service_entity is not
+> -			 * NULL (see the comments on the definition of
+> -			 * next_in_service for details on why
+> -			 * in_service_entity must be checked too).
+> -			 *
+> -			 * As a consequence, its parent entities are
+> -			 * active as well, and thus this loop must
+> -			 * stop here.
+> -			 */
+> -			break;
+> -		}
+> -
+> -		/*
+> -		 * The decrement of num_groups_with_pending_reqs is
+> -		 * not performed immediately upon the deactivation of
+> -		 * entity, but it is delayed to when it also happens
+> -		 * that the first leaf descendant bfqq of entity gets
+> -		 * all its pending requests completed. The following
+> -		 * instructions perform this delayed decrement, if
+> -		 * needed. See the comments on
+> -		 * num_groups_with_pending_reqs for details.
+> -		 */
+> -		if (entity->in_groups_with_pending_reqs) {
+> -			entity->in_groups_with_pending_reqs = false;
+> -			bfqd->num_groups_with_pending_reqs--;
+> -		}
+> -	}
+> -
+> -	/*
+> -	 * Next function is invoked last, because it causes bfqq to be
+> -	 * freed if the following holds: bfqq is not in service and
+> -	 * has no dispatched request. DO NOT use bfqq after the next
+> -	 * function invocation.
+> -	 */
+>  	__bfq_weights_tree_remove(bfqd, bfqq,
+>  				  &bfqd->queue_weights_tree);
+>  }
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index a5f7c0c1a3b3..ec8195900b3a 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -496,27 +496,27 @@ struct bfq_data {
+>  	struct rb_root_cached queue_weights_tree;
+>  
+>  	/*
+> -	 * Number of groups with at least one descendant process that
+> +	 * Number of groups with at least one process that
+>  	 * has at least one request waiting for completion. Note that
+>  	 * this accounts for also requests already dispatched, but not
+>  	 * yet completed. Therefore this number of groups may differ
+>  	 * (be larger) than the number of active groups, as a group is
+>  	 * considered active only if its corresponding entity has
+> -	 * descendant queues with at least one request queued. This
+> +	 * queues with at least one request queued. This
+>  	 * number is used to decide whether a scenario is symmetric.
+>  	 * For a detailed explanation see comments on the computation
+>  	 * of the variable asymmetric_scenario in the function
+>  	 * bfq_better_to_idle().
+>  	 *
+>  	 * However, it is hard to compute this number exactly, for
+> -	 * groups with multiple descendant processes. Consider a group
+> -	 * that is inactive, i.e., that has no descendant process with
+> +	 * groups with multiple processes. Consider a group
+> +	 * that is inactive, i.e., that has no process with
+>  	 * pending I/O inside BFQ queues. Then suppose that
+>  	 * num_groups_with_pending_reqs is still accounting for this
+> -	 * group, because the group has descendant processes with some
+> +	 * group, because the group has processes with some
+>  	 * I/O request still in flight. num_groups_with_pending_reqs
+>  	 * should be decremented when the in-flight request of the
+> -	 * last descendant process is finally completed (assuming that
+> +	 * last process is finally completed (assuming that
+>  	 * nothing else has changed for the group in the meantime, in
+>  	 * terms of composition of the group and active/inactive state of child
+>  	 * groups and processes). To accomplish this, an additional
+> @@ -525,7 +525,7 @@ struct bfq_data {
+>  	 * we resort to the following tradeoff between simplicity and
+>  	 * accuracy: for an inactive group that is still counted in
+>  	 * num_groups_with_pending_reqs, we decrement
+> -	 * num_groups_with_pending_reqs when the first descendant
+> +	 * num_groups_with_pending_reqs when the first
+>  	 * process of the group remains with no request waiting for
+>  	 * completion.
+>  	 *
+> @@ -533,12 +533,12 @@ struct bfq_data {
+>  	 * carefulness: to avoid multiple decrements, we flag a group,
+>  	 * more precisely an entity representing a group, as still
+>  	 * counted in num_groups_with_pending_reqs when it becomes
+> -	 * inactive. Then, when the first descendant queue of the
+> +	 * inactive. Then, when the first queue of the
+>  	 * entity remains with no request waiting for completion,
+>  	 * num_groups_with_pending_reqs is decremented, and this flag
+>  	 * is reset. After this flag is reset for the entity,
+>  	 * num_groups_with_pending_reqs won't be decremented any
+> -	 * longer in case a new descendant queue of the entity remains
+> +	 * longer in case a new queue of the entity remains
+>  	 * with no request waiting for completion.
+>  	 */
+>  	unsigned int num_groups_with_pending_reqs;
+> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+> index b533e17e9f0c..427af70f6760 100644
+> --- a/block/bfq-wf2q.c
+> +++ b/block/bfq-wf2q.c
+> @@ -984,19 +984,6 @@ static void __bfq_activate_entity(struct bfq_entity *entity,
+>  		entity->on_st_or_in_serv = true;
+>  	}
+>  
+> -#ifdef CONFIG_BFQ_GROUP_IOSCHED
+> -	if (!bfq_entity_to_bfqq(entity)) { /* bfq_group */
+> -		struct bfq_group *bfqg =
+> -			container_of(entity, struct bfq_group, entity);
+> -		struct bfq_data *bfqd = bfqg->bfqd;
+> -
+> -		if (!entity->in_groups_with_pending_reqs) {
+> -			entity->in_groups_with_pending_reqs = true;
+> -			bfqd->num_groups_with_pending_reqs++;
+> -		}
+> -	}
+> -#endif
+> -
+>  	bfq_update_fin_time_enqueue(entity, st, backshifted);
+>  }
+>  
+> @@ -1654,7 +1641,8 @@ static void bfq_add_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+>  	if (!entity->in_groups_with_pending_reqs) {
+>  		entity->in_groups_with_pending_reqs = true;
+>  #ifdef CONFIG_BFQ_GROUP_IOSCHED
+> -		bfqq_group(bfqq)->num_queues_with_pending_reqs++;
+> +		if (!(bfqq_group(bfqq)->num_queues_with_pending_reqs++))
+> +			bfqq->bfqd->num_groups_with_pending_reqs++;
+>  #endif
+>  	}
+>  }
+> @@ -1666,7 +1654,8 @@ void bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+>  	if (entity->in_groups_with_pending_reqs) {
+>  		entity->in_groups_with_pending_reqs = false;
+>  #ifdef CONFIG_BFQ_GROUP_IOSCHED
+> -		bfqq_group(bfqq)->num_queues_with_pending_reqs--;
+> +		if (!(--bfqq_group(bfqq)->num_queues_with_pending_reqs))
+> +			bfqq->bfqd->num_groups_with_pending_reqs--;
+>  #endif
+>  	}
+>  }
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3664B539A89
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 02:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0A4539A8F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 02:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348837AbiFAAxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 20:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S1348865AbiFAAzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 20:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiFAAxw (ORCPT
+        with ESMTP id S229849AbiFAAzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 20:53:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5975874DCD
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 17:53:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB082614AD
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:53:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ADDDC385A9;
-        Wed,  1 Jun 2022 00:53:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654044829;
-        bh=EQ7y3MecILqxCm4jEd/aUGty8mqg6Pqf5GSMHZ3CV4A=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=iT2Hr0gEyj9nwHnMgGrg5ZFexC2dH48t7hzBN1IDF9PAB6qUaRSinConRCTu8BtPE
-         R1tuk/hLs/JgCcKEnZF5j9oLorGTg7DzoDSvFqO/vBKtO/JRHkeam7mqEoA2a+djs4
-         lKbMCzYh91dyRR5NW1X38ykgpdgx6O1b5QyzaXy7k0yyZYx/WtqiKC/ahl+i0FE+8W
-         GtN/07/8TzuFpbJcmZTqbfjai2y1dAUNiTnch5ddRsKJIMmFMqsD4VF61FuxALvEZZ
-         9PkilrXJ03elxU2G0UwJs/nlGnXPscuyIx7TkTVve2azJnESxMwH6ccexp8qW2NAFK
-         tbfL7jOR/49tg==
-Date:   Tue, 31 May 2022 17:53:47 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH V3 7/8] xen/grant-dma-ops: Retrieve the ID of backend's
- domain for DT devices
-In-Reply-To: <1653944417-17168-8-git-send-email-olekstysh@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2205311741470.1905099@ubuntu-linux-20-04-desktop>
-References: <1653944417-17168-1-git-send-email-olekstysh@gmail.com> <1653944417-17168-8-git-send-email-olekstysh@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Tue, 31 May 2022 20:55:19 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A22F93989;
+        Tue, 31 May 2022 17:55:17 -0700 (PDT)
+Received: from [10.180.13.185] (unknown [10.180.13.185])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD0_tuJZivdEKAA--.2819S3;
+        Wed, 01 Jun 2022 08:55:09 +0800 (CST)
+Subject: Re: [PATCH] MIPS: fix pmd_mkinvalid
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Zhaolong Zhang <zhangzl2013@126.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1653971769-14152-1-git-send-email-zhanghongchen@loongson.cn>
+ <e8cca5c1-2db1-840e-609b-4ae98791ba80@flygoat.com>
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+Message-ID: <a87c5693-a26c-a6a9-7149-74e94425703e@loongson.cn>
+Date:   Wed, 1 Jun 2022 08:55:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <e8cca5c1-2db1-840e-609b-4ae98791ba80@flygoat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxD0_tuJZivdEKAA--.2819S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr45Jr18Cr4kAF4UJr1kZrb_yoW8WrW5pa
+        n3CFW8CFZ8KFn7Cay3JrWSgFyaywsxKFZ5trn8G34DJas8KFykJFn3Kr4Yq34kXF4vyF4r
+        ZrWagr4UuF4Iy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvFb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487
+        MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_
+        Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvj
+        xU2rcTDUUUU
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,176 +63,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/5/31 下午11:40, Jiaxun Yang wrote:
+> 
+> 
+> 在 2022/5/31 5:36, Hongchen Zhang 写道:
+>> pmd_mkinvalid should not clear dirty flag,otherwise the pmd
+>> dirty flag,it's ok to just clear _PAGE_VALID.
+> Hi Hongcheng,
+> 
+> Sorry, what is meant by "otherwise the pmd dirty flag"? Could you please
+> elaborate?
+> In my humble opinion _PAGE_PRESENT must be cleared in mkinvalid as it
+> nolonger present here. And thus it lose the dirty status.
+> 
+> Thanks
+> - Jiaxun
+> 
+>> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+>> ---
+>>   arch/mips/include/asm/pgtable.h | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/mips/include/asm/pgtable.h 
+>> b/arch/mips/include/asm/pgtable.h
+>> index 374c632..d30a186 100644
+>> --- a/arch/mips/include/asm/pgtable.h
+>> +++ b/arch/mips/include/asm/pgtable.h
+>> @@ -698,7 +698,7 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t 
+>> newprot)
+>>   static inline pmd_t pmd_mkinvalid(pmd_t pmd)
+>>   {
+>> -    pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID | _PAGE_DIRTY);
+>> +    pmd_val(pmd) &= ~_PAGE_VALID;
+>>       return pmd;
+>>   }
+Hi Jiaxun,
 
+Refer to [ https://lkml.org/lkml/2018/10/17/231 ],Andrea said "
+The clear of the real present bit during pmd (virtual) splitting is
+done with pmdp_invalidate, that is created specifically to keeps
+pmd_trans_huge=true, pmd_present=true despite the present bit is not
+set. ". So it's wrong to clear _PAGE_PRESENT,because this will make 
+pmd_present=false.
 
-On Tue, 31 May 2022, Oleksandr Tyshchenko wrote:
+On the other hand, There is no need to clear dirty flag too.
 
-> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> 
-> Use the presence of "iommus" property pointed to the IOMMU node with
-> recently introduced "xen,grant-dma" compatible as a clear indicator
-> of enabling Xen grant mappings scheme for that device and read the ID
-> of Xen domain where the corresponding backend is running. The domid
-> (domain ID) is used as an argument to the Xen grant mapping APIs.
-> 
-> To avoid the deferred probe timeout which takes place after reusing
-> generic IOMMU device tree bindings (because the IOMMU device never
-> becomes available) enable recently introduced stub IOMMU driver by
-> selecting XEN_GRANT_DMA_IOMMU.
-> 
-> Also introduce xen_is_grant_dma_device() to check whether xen-grant
-> DMA ops need to be set for a passed device.
-> 
-> Remove the hardcoded domid 0 in xen_grant_setup_dma_ops().
-> 
-> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Thanks.
 
-Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
-
-
-> ---
-> Changes RFC -> V1:
->    - new patch, split required changes from commit:
->     "[PATCH 4/6] virtio: Various updates to xen-virtio DMA ops layer"
->    - update checks in xen_virtio_setup_dma_ops() to only support
->      DT devices for now
->    - remove the "virtio,mmio" check from xen_is_virtio_device()
->    - remane everything according to the new naming scheme:
->      s/virtio/grant_dma
-> 
-> Changes V1 -> V2:
->    - remove dev_is_pci() check in xen_grant_setup_dma_ops()
->    - remove EXPORT_SYMBOL_GPL(xen_is_grant_dma_device);
-> 
-> Changes V2 -> V3:
->    - Stefano already gave his Reviewed-by, I dropped it due to the changes (significant)
->    - update commit description
->    - reuse generic IOMMU device tree bindings, select XEN_GRANT_DMA_IOMMU
->      to avoid the deferred probe timeout
-> ---
->  drivers/xen/Kconfig         |  1 +
->  drivers/xen/grant-dma-ops.c | 48 ++++++++++++++++++++++++++++++++++++++-------
->  include/xen/xen-ops.h       |  5 +++++
->  3 files changed, 47 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
-> index 35d20d9..bfd5f4f 100644
-> --- a/drivers/xen/Kconfig
-> +++ b/drivers/xen/Kconfig
-> @@ -347,6 +347,7 @@ config XEN_VIRTIO
->  	bool "Xen virtio support"
->  	depends on VIRTIO
->  	select XEN_GRANT_DMA_OPS
-> +	select XEN_GRANT_DMA_IOMMU if OF
->  	help
->  	  Enable virtio support for running as Xen guest. Depending on the
->  	  guest type this will require special support on the backend side
-> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-> index 44659f4..6586152 100644
-> --- a/drivers/xen/grant-dma-ops.c
-> +++ b/drivers/xen/grant-dma-ops.c
-> @@ -55,11 +55,6 @@ static struct xen_grant_dma_data *find_xen_grant_dma_data(struct device *dev)
->   * Such a DMA address is formed by using the grant reference as a frame
->   * number and setting the highest address bit (this bit is for the backend
->   * to be able to distinguish it from e.g. a mmio address).
-> - *
-> - * Note that for now we hard wire dom0 to be the backend domain. In order
-> - * to support any domain as backend we'd need to add a way to communicate
-> - * the domid of this backend, e.g. via Xenstore, via the PCI-device's
-> - * config space or DT/ACPI.
->   */
->  static void *xen_grant_dma_alloc(struct device *dev, size_t size,
->  				 dma_addr_t *dma_handle, gfp_t gfp,
-> @@ -275,9 +270,26 @@ static const struct dma_map_ops xen_grant_dma_ops = {
->  	.dma_supported = xen_grant_dma_supported,
->  };
->  
-> +bool xen_is_grant_dma_device(struct device *dev)
-> +{
-> +	struct device_node *iommu_np;
-> +	bool has_iommu;
-> +
-> +	/* XXX Handle only DT devices for now */
-> +	if (!dev->of_node)
-> +		return false;
-> +
-> +	iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
-> +	has_iommu = iommu_np && of_device_is_compatible(iommu_np, "xen,grant-dma");
-> +	of_node_put(iommu_np);
-> +
-> +	return has_iommu;
-> +}
-> +
->  void xen_grant_setup_dma_ops(struct device *dev)
->  {
->  	struct xen_grant_dma_data *data;
-> +	struct of_phandle_args iommu_spec;
->  
->  	data = find_xen_grant_dma_data(dev);
->  	if (data) {
-> @@ -285,12 +297,34 @@ void xen_grant_setup_dma_ops(struct device *dev)
->  		return;
->  	}
->  
-> +	/* XXX ACPI device unsupported for now */
-> +	if (!dev->of_node)
-> +		goto err;
-> +
-> +	if (of_parse_phandle_with_args(dev->of_node, "iommus", "#iommu-cells",
-> +			0, &iommu_spec)) {
-> +		dev_err(dev, "Cannot parse iommus property\n");
-> +		goto err;
-> +	}
-> +
-> +	if (!of_device_is_compatible(iommu_spec.np, "xen,grant-dma") ||
-> +			iommu_spec.args_count != 1) {
-> +		dev_err(dev, "Incompatible IOMMU node\n");
-> +		of_node_put(iommu_spec.np);
-> +		goto err;
-> +	}
-> +
-> +	of_node_put(iommu_spec.np);
-> +
->  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
->  	if (!data)
->  		goto err;
->  
-> -	/* XXX The dom0 is hardcoded as the backend domain for now */
-> -	data->backend_domid = 0;
-> +	/*
-> +	 * The endpoint ID here means the ID of the domain where the corresponding
-> +	 * backend is running
-> +	 */
-> +	data->backend_domid = iommu_spec.args[0];
->  
->  	if (xa_err(xa_store(&xen_grant_dma_devices, (unsigned long)dev, data,
->  			GFP_KERNEL))) {
-> diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
-> index 4f9fad5..62be9dc 100644
-> --- a/include/xen/xen-ops.h
-> +++ b/include/xen/xen-ops.h
-> @@ -223,10 +223,15 @@ static inline void xen_preemptible_hcall_end(void) { }
->  
->  #ifdef CONFIG_XEN_GRANT_DMA_OPS
->  void xen_grant_setup_dma_ops(struct device *dev);
-> +bool xen_is_grant_dma_device(struct device *dev);
->  #else
->  static inline void xen_grant_setup_dma_ops(struct device *dev)
->  {
->  }
-> +static inline bool xen_is_grant_dma_device(struct device *dev)
-> +{
-> +	return false;
-> +}
->  #endif /* CONFIG_XEN_GRANT_DMA_OPS */
->  
->  #endif /* INCLUDE_XEN_OPS_H */
-> -- 
-> 2.7.4
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 

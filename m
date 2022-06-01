@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED0D53A8F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9069653A909
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355518AbiFAOPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
+        id S1355226AbiFAORt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354974AbiFAOKi (ORCPT
+        with ESMTP id S1356216AbiFAOQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:10:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078EA1276C;
-        Wed,  1 Jun 2022 07:01:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5CF6B81AEB;
-        Wed,  1 Jun 2022 14:01:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFFE1C3411D;
-        Wed,  1 Jun 2022 14:01:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654092088;
-        bh=Bf5QOHaJpiVUqhHBRSN35OBw5iZVamMzadF9hlHiv/U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cpf7T/vUb1d4hvMoZxdKAUVcD5z+daL9PaQrq3n59KP52Ah0AVVs15A2Dc8HP95Qj
-         MdhL3McM3oQQwWWLDXr/0EbPebL+fapUJzrBBylw0jUALOUZb9pti8ijOAFzz0y/vr
-         LedDlpx4IjuH7bgxbMeUTGaxzHOi434cphgx2K/DHy+dAVh4pwnZtAc/1KmSndqYk4
-         Tmz4jRLl6zS9mfANuEO2QiNEG/zG2Wqf1fsZ8vbHHJ1hoVx3pM/XQRm9+Bqr43Kyzr
-         HUuXzSmWjVliSjceG2GTkb7R0+dh/h7WturgdyrQbMUr2T3K96LdIzK9wME7hxxbk9
-         jQCTd7ao28YEg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sasha Levin <sashal@kernel.org>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 4.9 11/11] drm: fix EDID struct for old ARM OABI format
-Date:   Wed,  1 Jun 2022 10:01:00 -0400
-Message-Id: <20220601140100.2005469-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220601140100.2005469-1-sashal@kernel.org>
-References: <20220601140100.2005469-1-sashal@kernel.org>
+        Wed, 1 Jun 2022 10:16:11 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E2FC3D08;
+        Wed,  1 Jun 2022 07:04:31 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id s188so2782635oie.4;
+        Wed, 01 Jun 2022 07:04:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=W+gSZQW06c2J9Vc4RXJEh/UwV2q2eY7fbWj2w4Xp+OA=;
+        b=3pkvJD9bhrEI9E+M3kLHM7NbiPH2JDV0fgSDIkZ/38XeQJA/KTjYU1SZmZTK7CX3NS
+         vOT4fEwFgVNBPOoAQP62V8HGZPErp26zL2l79/QbHgrpWGT86hGBflL1qk1rxkWU8D+D
+         S7tWPo+pcEYJ8AZFGhOsUnZspVqpe6Rpvj09XTpm0nj7qUt8UrsS2qL6LDURouu440Kh
+         aNEyvmEKbj1oFXiD37e9ODGp+WmV9x497QAh3AbX9UgNyptaUc1Awp/bjM9n1+/Dw5A4
+         lE7EHRRDSXUxM14rUjylLbr43dC4jmtqEMMD3S3pY85BnifI1+WnzrxkPhxorBijRbXe
+         Wp/w==
+X-Gm-Message-State: AOAM530wgMX15kUxw6TIhcafKItyfPRrKYyqJ617qiQ5fKfrr8nMchdX
+        N80ldmplE6iMdz+8o3ptOA==
+X-Google-Smtp-Source: ABdhPJzeZmIg6Eaxk/FFSJ7MRleaTDeX9X05UQX/nUSrA/9ETpZVpo1P14wSbRMgFSBe8n1csBuYlQ==
+X-Received: by 2002:a05:6808:b04:b0:32b:8fc2:46e4 with SMTP id s4-20020a0568080b0400b0032b8fc246e4mr3165oij.54.1654092270390;
+        Wed, 01 Jun 2022 07:04:30 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g9-20020a4a7549000000b0035eb4e5a6d3sm938894oof.41.2022.06.01.07.04.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 07:04:30 -0700 (PDT)
+Received: (nullmailer pid 3915391 invoked by uid 1000);
+        Wed, 01 Jun 2022 14:04:29 -0000
+Date:   Wed, 1 Jun 2022 09:04:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Hu Ziji <huziji@marvell.com>, Al Cooper <alcooperx@gmail.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: mmc: Fix unevaluatedProperties warnings in
+ examples
+Message-ID: <20220601140429.GA3909718-robh@kernel.org>
+References: <20220526014204.2873107-1-robh@kernel.org>
+ <CAPDyKFoh5FyRDxr22XnkOd76MG4YjkvqL039=+qHGZKwfdFquw@mail.gmail.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFoh5FyRDxr22XnkOd76MG4YjkvqL039=+qHGZKwfdFquw@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,112 +69,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+On Wed, Jun 01, 2022 at 02:46:21PM +0200, Ulf Hansson wrote:
+> On Thu, 26 May 2022 at 03:42, Rob Herring <robh@kernel.org> wrote:
+> >
+> > The 'unevaluatedProperties' schema checks is not fully working and doesn't
+> > catch some cases where there's a $ref to another schema. A fix is pending,
+> > but results in new warnings in examples. Fix the warnings by removing
+> > spurious properties or adding a missing property to the schema.
+> >
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> 
+> Queued for v5.20 on the devel branch, thanks!
 
-[ Upstream commit 47f15561b69e226bfc034e94ff6dbec51a4662af ]
+Can you take for 5.19 instead so I can enable this in dtschema sooner 
+rather than later?
 
-When building the kernel for arm with the "-mabi=apcs-gnu" option, gcc
-will force alignment of all structures and unions to a word boundary
-(see also STRUCTURE_SIZE_BOUNDARY and the "-mstructure-size-boundary=XX"
-option if you're a gcc person), even when the members of said structures
-do not want or need said alignment.
-
-This completely messes up the structure alignment of 'struct edid' on
-those targets, because even though all the embedded structures are
-marked with "__attribute__((packed))", the unions that contain them are
-not.
-
-This was exposed by commit f1e4c916f97f ("drm/edid: add EDID block count
-and size helpers"), but the bug is pre-existing.  That commit just made
-the structure layout problem cause a build failure due to the addition
-of the
-
-        BUILD_BUG_ON(sizeof(*edid) != EDID_LENGTH);
-
-sanity check in drivers/gpu/drm/drm_edid.c:edid_block_data().
-
-This legacy union alignment should probably not be used in the first
-place, but we can fix the layout by adding the packed attribute to the
-union entries even when each member is already packed and it shouldn't
-matter in a sane build environment.
-
-You can see this issue with a trivial test program:
-
-  union {
-	struct {
-		char c[5];
-	};
-	struct {
-		char d;
-		unsigned e;
-	} __attribute__((packed));
-  } a = { "1234" };
-
-where building this with a normal "gcc -S" will result in the expected
-5-byte size of said union:
-
-	.type	a, @object
-	.size	a, 5
-
-but with an ARM compiler and the old ABI:
-
-    arm-linux-gnu-gcc -mabi=apcs-gnu -mfloat-abi=soft -S t.c
-
-you get
-
-	.type	a, %object
-	.size	a, 8
-
-instead, because even though each member of the union is packed, the
-union itself still gets aligned.
-
-This was reported by Sudip for the spear3xx_defconfig target.
-
-Link: https://lore.kernel.org/lkml/YpCUzStDnSgQLNFN@debian/
-Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/drm/drm_edid.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/include/drm/drm_edid.h b/include/drm/drm_edid.h
-index c3a7d440bc11..514a02095983 100644
---- a/include/drm/drm_edid.h
-+++ b/include/drm/drm_edid.h
-@@ -114,7 +114,7 @@ struct detailed_data_monitor_range {
- 			u8 supported_scalings;
- 			u8 preferred_refresh;
- 		} __attribute__((packed)) cvt;
--	} formula;
-+	} __attribute__((packed)) formula;
- } __attribute__((packed));
- 
- struct detailed_data_wpindex {
-@@ -147,7 +147,7 @@ struct detailed_non_pixel {
- 		struct detailed_data_wpindex color;
- 		struct std_timing timings[6];
- 		struct cvt_timing cvt[4];
--	} data;
-+	} __attribute__((packed)) data;
- } __attribute__((packed));
- 
- #define EDID_DETAIL_EST_TIMINGS 0xf7
-@@ -165,7 +165,7 @@ struct detailed_timing {
- 	union {
- 		struct detailed_pixel_timing pixel_data;
- 		struct detailed_non_pixel other_data;
--	} data;
-+	} __attribute__((packed)) data;
- } __attribute__((packed));
- 
- #define DRM_EDID_INPUT_SERRATION_VSYNC (1 << 0)
--- 
-2.35.1
-
+Rob

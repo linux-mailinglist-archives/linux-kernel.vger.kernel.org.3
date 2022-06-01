@@ -2,103 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D28539E4B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17731539E45
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350326AbiFAHeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 03:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
+        id S1350332AbiFAHfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 03:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345986AbiFAHea (ORCPT
+        with ESMTP id S1345986AbiFAHe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 03:34:30 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377C5712D8;
-        Wed,  1 Jun 2022 00:34:29 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (lmontsouris-659-1-41-236.w92-154.abo.wanadoo.fr [92.154.76.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0C97C6D1;
-        Wed,  1 Jun 2022 09:34:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1654068867;
-        bh=LSmcQuI3jEWMS6JTLThQMDkjOJsgG4H2onu8Xq7U+5k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VJ0EOR9F0ZtkgJzZhBapc0/H18KI8HSuG3Ax375crZw5beOTwriCy1EXG81j/q+gc
-         oxZUbUH8T2BXTkDzDKxyguoXfeA8ZCJps7j+0mvd3CWGnlhRdwtCA8XAilY3ts5kx1
-         6zyBYMPQBcLscs61M9ugIPGiKJhrBrHzasW0LjcQ=
-Date:   Wed, 1 Jun 2022 10:34:23 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Hyun Kwon <hyun.kwon@xilinx.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Radhey Shyam Pandey <radheys@xilinx.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] v4l: xilinx-vipp: Fix refcount leak in
- xvip_graph_dma_init
-Message-ID: <YpcWf46fAJcfIgIt@pendragon.ideasonboard.com>
-References: <20220601042514.61780-1-linmq006@gmail.com>
+        Wed, 1 Jun 2022 03:34:59 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BF2813D2
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:34:57 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id fd25so978835edb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 00:34:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UkKpNYLV+QZV53hwWfH5fNHVrBq7gV6/OoYtJa/OWHg=;
+        b=rMnrfEU0hqxNbgO3Ngd4aiEKTa1atj5Akph4RlI7CZIaOcu1EO+hnB5M0SZ23e/3z2
+         rN7OEJEvscZpeWlRG7rWq53GkfQjm3Gq7tRIKXdTgw7OU0jszTjSXI/x/abDIi4/YrLW
+         y6D4ObKimOf5l5JILct6SzrdKI//yM3Xd3wezrz3e0Jgf6E/GnN4jlSR2xoDvzSA3cEe
+         r7+Z2Y2HxfKsW1IK7UxozvJkgXuUlooXD0+gnyqDqslcPpTu3yAt36QJjN/yef+m0H6Z
+         5WYBQb3lILHrheefyEo1M+ENIANP5hCJ55qRPEphBhEQNSaOv5FqsoWn1cmcw4pbaHzg
+         g/lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UkKpNYLV+QZV53hwWfH5fNHVrBq7gV6/OoYtJa/OWHg=;
+        b=PoBZROW7Ah3k4G0RZBw86MKWgLTy1OCadZT3bO7jPNESg0ylYzjm52VacfrjZehaSd
+         WNUTsr27NPg+SnmPwF+YURTmfDd5ahjqO/dLbsvAws0FitIikejKt/rNta7m4FLK8SY5
+         ZOTR8rEJsNwtjCABGz7bs7y3Z6A6gn9Cv8BmhyilmQf7Xc240E7Ix9H1QR7z2d2UJR9I
+         cXPoktpEOWH39TJWptOVMlt2YYTHQhJlg4/qeRoNruPhtRKAJMom20Vk1S+jHEOxmCz8
+         OjwLGFit69k+ruKxVdVQ9MtbUGvo9jFG25RBOKwoNihugz8WyVSVQ2EhTl+PKeP/g0/u
+         gJ6g==
+X-Gm-Message-State: AOAM530uQeAPrIh9g/XY2EAlgt0G6s7shavjUlGbBt5+oUUeAurw8In5
+        wRa4mw3zvwk53KsDKWtF06drGw==
+X-Google-Smtp-Source: ABdhPJz96yqdhicWuQ/1oz1BY3Wwhy9jxY/RrbCB45rlVIhHe75cCdPoQVOlyJGi8PCpDIpC7VcczQ==
+X-Received: by 2002:a05:6402:518f:b0:42b:4404:63d4 with SMTP id q15-20020a056402518f00b0042b440463d4mr56379750edd.177.1654068896097;
+        Wed, 01 Jun 2022 00:34:56 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id k11-20020a056402048b00b0042ab02e3485sm509213edv.44.2022.06.01.00.34.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 00:34:55 -0700 (PDT)
+Message-ID: <6227bc72-fe7c-561a-073d-bd5e6debc68f@linaro.org>
+Date:   Wed, 1 Jun 2022 09:34:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220601042514.61780-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 13/14] dt-bindings: backlight: Add Mediatek MT6370
+ backlight binding documentation
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de
+Cc:     cy_huang@richtek.com, alice_chen@richtek.com,
+        chiaen_wu@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org
+References: <20220531102809.11976-1-peterwu.pub@gmail.com>
+ <20220531102809.11976-14-peterwu.pub@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220531102809.11976-14-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lin,
-
-Thank you for the patch.
-
-On Wed, Jun 01, 2022 at 08:25:14AM +0400, Miaoqian Lin wrote:
-> of_get_child_by_name() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when not need anymore.
-> Add missing of_node_put() to avoid refcount leak.
+On 31/05/2022 12:28, ChiaEn Wu wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> Fixes: df3305156f98 ("[media] v4l: xilinx: Add Xilinx Video IP core")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> Add mt6370 backlight binding documentation.
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 > ---
->  drivers/media/platform/xilinx/xilinx-vipp.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../backlight/mediatek,mt6370-backlight.yaml  | 110 ++++++++++++++++++
+>  1 file changed, 110 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/leds/backlight/mediatek,mt6370-backlight.yaml
 > 
-> diff --git a/drivers/media/platform/xilinx/xilinx-vipp.c b/drivers/media/platform/xilinx/xilinx-vipp.c
-> index f34f8b077e03..415579b63737 100644
-> --- a/drivers/media/platform/xilinx/xilinx-vipp.c
-> +++ b/drivers/media/platform/xilinx/xilinx-vipp.c
-> @@ -483,10 +483,12 @@ static int xvip_graph_dma_init(struct xvip_composite_device *xdev)
->  		ret = xvip_graph_dma_init_one(xdev, port);
->  		if (ret < 0) {
->  			of_node_put(port);
-> +			of_node_put(ports);
->  			return ret;
->  		}
->  	}
->  
-> +	of_node_put(ports);
+> diff --git a/Documentation/devicetree/bindings/leds/backlight/mediatek,mt6370-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/mediatek,mt6370-backlight.yaml
+> new file mode 100644
+> index 000000000000..81d72ed44be4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/leds/backlight/mediatek,mt6370-backlight.yaml
+> @@ -0,0 +1,110 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/leds/backlight/mediatek,mt6370-backlight.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek MT6370 Backlight
+> +
+> +maintainers:
+> +  - ChiaEn Wu <chiaen_wu@richtek.com>
+> +
+> +description: |
+> +  MT6370 is a highly-integrated smart power management IC, which includes a
+> +  single cell Li-Ion/Li-Polymer switching battery charger, a USB Type-C &
+> +  Power Delivery (PD) controller, dual flash LED current sources, a RGB LED
+> +  driver, a backlight WLED driver, a display bias driver and a general LDO for
+> +  portable devices.
 
-We could possibly simplify this a little bit by initializing ret to 0
-when declaring it, replacing the "return ret" above by a break, and
-returning ret below. This would remove the need for the first
-of_node_put(ports) call above.
+Do not repeat entire device description, but describe only this part.
+Your other pieces of MFD were doing it correctly, so why here it is
+different?
 
-If you think that's a good idea I can make that change when applying
-this patch to my tree, otherwise I'll take it as-is.
+> +
+> +  For the LCD backlight, it can provide 4 channel WLED driving capability.
+> +  Each channel driving current is up to 30mA
+> +
+> +allOf:
+> +  - $ref: common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt6370-backlight
+> +
+> +  default-brightness:
+> +    minimum: 0
+> +    maximum: 2048
+> +
+> +  max-brightness:
+> +    minimum: 0
+> +    maximum: 2048
+> +
+> +  enable-gpios:
+> +    description: External backlight 'enable' pin
+> +    maxItems: 1
+> +
+> +  mediatek,bled-pwm-enable:
+> +    description: |
+> +      Enable external PWM input for backlight dimming
+> +    type: boolean
+> +
+> +  mediatek,bled-pwm-hys-enable:
+> +    description: |
+> +      Enable the backlight input-hysteresis for PWM mode
+> +    type: boolean
+> +
+> +  mediatek,bled-pwm-hys-sel:
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    enum: [0, 1, 2, 3]
+> +    description: |
+> +      Backlight PWM hysteresis input level selection.
+> +      value mapping:
+> +        - 0: 1bit
+> +        - 1: 2bit
+> +        - 2: 4bit
+> +        - 3: 6bit
 
-In either case,
+Please explain what is this input level and what is the meaning of
+6bit... In any case you cannot have values mapping, but instead you
+should use the logical values (so 1, 2, 4, and 6).
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+If "sel" is shortcut of "selection" please drop it.
 
->  	return 0;
->  }
->  
+> +
+> +  mediatek,bled-ovp-shutdown:
+> +    description: |
+> +      Enable the backlight shutdown when OVP level triggered
+> +    type: boolean
+> +
+> +  mediatek,bled-ovp-level-sel:
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    enum: [0, 1, 2, 3]
+> +    description: |
+> +      Backlight OVP level selection.
+> +      value mapping:
+> +        - 0: 17V
+> +        - 1: 21V
+> +        - 2: 25V
+> +        - 3: 29V
 
--- 
-Regards,
+Logical values in microvolts. Name it according to unit suffices and
+drop any useless parts of property name like "level selection". It is
+simply - mediatek,bled-ovp-microvolt.
 
-Laurent Pinchart
+> +
+> +  mediatek,bled-ocp-shutdown:
+> +    description: |
+> +      Enable the backlight shutdown when OCP level triggerred.
+> +    type: boolean
+> +
+> +  mediatek,bled-ocp-level-sel:
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    enum: [0, 1, 2, 3]
+> +    description: |
+> +      Backlight OC level selection.
+> +      value mapping:
+> +        - 0: 900mA
+> +        - 1: 1200mA
+> +        - 2: 1500mA
+> +        - 3: 1800mA
+
+Same comments.
+
+> +
+> +  mediatek,bled-channel-use:
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    description: |
+> +      Backlight LED channel to be used.
+> +      Each bit mapping to:
+> +        - 0: CH4
+> +        - 1: CH3
+> +        - 2: CH2
+> +        - 3: CH1> +    minimum: 1
+> +    maximum: 15
+> +
+> +required:
+> +  - compatible
+> +  - mediatek,bled-channel-use
+> +
+> +additionalProperties: false
+
+
+Best regards,
+Krzysztof

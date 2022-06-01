@@ -2,118 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D5E53AFC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C96853AFB2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbiFAWgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 18:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
+        id S232369AbiFAWi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 18:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbiFAWgo (ORCPT
+        with ESMTP id S232334AbiFAWi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 18:36:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3376E258;
-        Wed,  1 Jun 2022 15:36:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C279AB81CED;
-        Wed,  1 Jun 2022 22:36:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A10FC3411D;
-        Wed,  1 Jun 2022 22:36:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654123000;
-        bh=nHKNB4lpsJXuYXe21iUdgN6lhM5qGZOEhI64aR3yITQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nG9MHsaab+wXkAUwf5xfzdJ8HdnOZva5+0JNJPgHbdjSTuW6jnHTJkRWOHz9/CrbQ
-         YsMVqLReDDuUDpKG9Hueae9mPtGlD/Uvob31OAulcrTxZ08nXEfK8s1uUc5rJXJzKs
-         fR7Hvp3/cB5P+RJKm3PEV1ohPNfVh9b7GCBmSPCG0J1DpVCSsuH6g6XPe5+1SMb30P
-         /LQDQ/LGn1USbMeulwBiCZTTYaSTs50leFGt5NX+NGff7RRD417vA6x4fDBywGWlLZ
-         ac5DOID/FSyTVbcUUm27OmonAkncQEzchzHuklJRw4zqvA21rpQGg0oldC5c05/+U0
-         wwz94VwR4QVxw==
-Received: by mail-yb1-f176.google.com with SMTP id v106so5422846ybi.0;
-        Wed, 01 Jun 2022 15:36:40 -0700 (PDT)
-X-Gm-Message-State: AOAM5307NZnsj5L4Cqjv4YiDom7ienn++X3F0UvZN4dumUw+kPLK5/G7
-        8VXDKU7PEDehJyJWbT21KkqTPI3wE9kyHRaRAWQ=
-X-Google-Smtp-Source: ABdhPJxjXgS70z2rd+D/8e2uDI5lK4OCbmnkVMo2ylGOx/Z2W+ilq5g0eGJ/b/MVxPWjPsysA+IYEMLkdAxwF6HfkDo=
-X-Received: by 2002:a25:a242:0:b0:651:a78d:4636 with SMTP id
- b60-20020a25a242000000b00651a78d4636mr2199197ybi.9.1654122999274; Wed, 01 Jun
- 2022 15:36:39 -0700 (PDT)
+        Wed, 1 Jun 2022 18:38:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D75705521E
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 15:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654123104;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ceGgR5cdPBLP1zNOzwY1AoGqwuSAXgokhvZyfTTzqKM=;
+        b=hGQCymQyn127JCFNdXWXVlq4huWwE/5oBZtYNEJbgQ+JRirkDBU5qNi6FSgyQYsoEXniaE
+        kXfXyF22NxmOhe/qRmkoQxroj/b5OSmtSnN2d0SnhQ/09jHUd3suU1Ff0IctSa9AN23juQ
+        M9ZZ+XzFnQpR8ER3vDiNZf6JtKMGEXk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-336-xXeussbfO1mlJb-Iom_raQ-1; Wed, 01 Jun 2022 18:38:21 -0400
+X-MC-Unique: xXeussbfO1mlJb-Iom_raQ-1
+Received: by mail-wm1-f71.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so1843821wmj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 15:38:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ceGgR5cdPBLP1zNOzwY1AoGqwuSAXgokhvZyfTTzqKM=;
+        b=Sl7/Ai5G5xOk3WRX4ZOmW0HOEcKabhbSm0lHZBRYZwyjU394KCZMzGM0AnH4eojUpl
+         M2B9CvPWr71qiQDe4f23ZGcB2YwSItYrRLI5djwQLplbLGIgpeTSzGZpz5W4zSFviadv
+         TiJ3SFRPLqjPWw69IAKhrrNJ1iI0ijdQtzpyIlsrPYrQeCltrsOfRwMBug+ybfZFbqap
+         begCde7Qbto/DEy+uOucNQz+N8SStnUaDTzrzF6V+DG8lYOJc5ibgIX34LZmySV7ElS4
+         cB6fUUO2eXFWGemxVhK/5yM8AvHvFL4wEpCv+PFT2oCtbZWiHzHlUBM+L45DpIFY0AaE
+         FP5Q==
+X-Gm-Message-State: AOAM530wDaMArMlA6GWi9sLpFChQzdDPd2Z8dw9ZvXVyFqXJL5O4uZ7k
+        LL5gaXxk4JzGwB4Qw3+l+Erbt0itmUy1WPuZSIowczijk3GqSpFKcHhNFn/81wYbPyG1LAIuMl6
+        zxysjrcRLNKhLGoah7WSKCQbU
+X-Received: by 2002:a5d:4e86:0:b0:210:1f1d:978e with SMTP id e6-20020a5d4e86000000b002101f1d978emr1275356wru.172.1654123100321;
+        Wed, 01 Jun 2022 15:38:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJybB2S2p1Gb9EF9Cn2Pz8DdIgk8Ji4oxYM9kOIXJbYDoOLRWYoYt21HP+1xDltDqbRQf1deZQ==
+X-Received: by 2002:a5d:4e86:0:b0:210:1f1d:978e with SMTP id e6-20020a5d4e86000000b002101f1d978emr1275340wru.172.1654123100032;
+        Wed, 01 Jun 2022 15:38:20 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id a21-20020a05600c349500b003958af7d0c8sm3166647wmq.45.2022.06.01.15.38.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 15:38:19 -0700 (PDT)
+Message-ID: <a4cf5b0f-40df-467a-e606-9a7d7eafba11@redhat.com>
+Date:   Thu, 2 Jun 2022 00:38:18 +0200
 MIME-Version: 1.0
-References: <20220526163604.32736-1-logang@deltatee.com> <20220526163604.32736-13-logang@deltatee.com>
- <YpRdL+2e7gngOYPa@infradead.org> <c59d233a-c0d1-a3cc-3dad-0a5af449ff83@deltatee.com>
-In-Reply-To: <c59d233a-c0d1-a3cc-3dad-0a5af449ff83@deltatee.com>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 1 Jun 2022 15:36:28 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW56YAwByRKnYDpkbBk1pi01Wdx3NL9yLY2sADWfMmTMeQ@mail.gmail.com>
-Message-ID: <CAPhsuW56YAwByRKnYDpkbBk1pi01Wdx3NL9yLY2sADWfMmTMeQ@mail.gmail.com>
-Subject: Re: [PATCH v2 12/17] md/raid5-cache: Move struct r5l_log definition
- to raid5-log.h
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-raid <linux-raid@vger.kernel.org>,
-        Donald Buczek <buczek@molgen.mpg.de>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Xiao Ni <xni@redhat.com>, Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] drm/ssd130x: Only define a SPI device ID table when built
+ as a module
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20220530140246.742469-1-javierm@redhat.com>
+ <YpYv8islaEySOEtg@dev-arch.thelio-3990X>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <YpYv8islaEySOEtg@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 8:48 AM Logan Gunthorpe <logang@deltatee.com> wrote=
-:
->
->
->
-> On 2022-05-29 23:59, Christoph Hellwig wrote:
-> > On Thu, May 26, 2022 at 10:35:59AM -0600, Logan Gunthorpe wrote:
-> >> Move struct r5l_log definition to raid5-log.h. While this reduces
-> >> encapsulation, it is necessary for the definition of r5l_log to be
-> >> public so that rcu_access_pointer() can be used on conf-log in the
-> >> next patch.
-> >>
-> >> rcu_access_pointer(p) doesn't technically dereference the log pointer
-> >> however, it does use typeof(*p) and some older GCC versions (anything
-> >> earlier than gcc-10) will wrongly try to dereference the structure:
-> >>
-> >>     include/linux/rcupdate.h:384:9: error: dereferencing pointer to
-> >>                  incomplete type =E2=80=98struct r5l_log=E2=80=99
-> >>
-> >>       typeof(*p) *local =3D (typeof(*p) *__force)READ_ONCE(p); \
-> >>            ^
-> >>
-> >>     include/linux/rcupdate.h:495:31: note: in expansion of
-> >>                   macro =E2=80=98__rcu_access_pointer=E2=80=99
-> >>
-> >>        #define rcu_access_pointer(p) __rcu_access_pointer((p),
-> >>        __UNIQUE_ID(rcu), __rcu)
-> >>
-> >> To prevent this, simply provide the definition where
-> >> rcu_access_pointer() may be used.
-> >
-> > What about just moving any code that does the rcu_access_pointer on
-> > conf->log to raid5-cache.c and doing an out of line call for it
-> > instead?
->
-> I guess we could do that. All the inline functions in raid5-log.h are
-> there to choose between the r5l or the ppl implementaiton. So it that
-> would mean the r5l implementation would probably be inlined and ppl
-> would be doing a second out of line call. Not sure if that matters, but
-> it seems a little odd.
+On 5/31/22 17:10, Nathan Chancellor wrote:
+> On Mon, May 30, 2022 at 04:02:46PM +0200, Javier Martinez Canillas wrote:
+>> The kernel test robot reports a compile warning due the ssd130x_spi_table
+>> variable being defined but not used. This happen when ssd130x-spi driver
+>> is built-in instead of being built as a module, i.e:
+>>
+>>   CC      drivers/gpu/drm/solomon/ssd130x-spi.o
+>>   AR      drivers/base/firmware_loader/built-in.a
+>>   AR      drivers/base/built-in.a
+>>   CC      kernel/trace/trace.o
+>> drivers/gpu/drm/solomon/ssd130x-spi.c:155:35: warning: ‘ssd130x_spi_table’ defined but not used [-Wunused-const-variable=]
+>>   155 | static const struct spi_device_id ssd130x_spi_table[] = {
+>>       |                                   ^~~~~~~~~~~~~~~~~
+>>
+>> The driver shouldn't need a SPI device ID table and only have an OF device
+>> ID table, but the former is needed to workaround an issue in the SPI core.
+>> This always reports a MODALIAS of the form "spi:<device>" even for devices
+>> registered through Device Trees.
+>>
+>> But the table is only needed when the driver built as a module to populate
+>> the .ko alias info. It's not needed when the driver is built-in the kernel.
+>>
+>> Fixes: 74373977d2ca ("drm/solomon: Add SSD130x OLED displays SPI support")
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> 
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> 
+Thanks! Pushed this to drm-misc (drm-misc-next).
 
-I like the current version better. raid5-log.h is not used in many files an=
-yway.
+-- 
+Best regards,
 
-Thanks,
-Song
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

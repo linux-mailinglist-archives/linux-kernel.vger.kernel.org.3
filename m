@@ -2,91 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2A853AD7F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 21:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D5053AE34
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiFATsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 15:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
+        id S229608AbiFAUpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 16:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiFATsO (ORCPT
+        with ESMTP id S229637AbiFAUpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 15:48:14 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703DE1CF14A;
-        Wed,  1 Jun 2022 12:42:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=Wkd+qK1A5XBz5WZBnQIdi6DW33K+oMosCMS+4sZy/cs=; b=AGVDXW8/nu43WRDD1uEPuOrwI9
-        QhL8aaFxX8SyDpgfEbqrvquPDhrASGgMBINTb5sv+WrH7Xh1sDd+n5Agn78lUIaSslsWWcG+aDLRX
-        58d0g5oAaZy8W/AHowNwVTzGv9KWJrSjhiPqUKaiwj2IbyUal9XsN2TUZY0LiW9ZmMGJNHUdgT6CL
-        SBccDuSyXo4Bk96TwW7Le6bBfgHn12WoBvV6qqqhr1tCnkFiJ927xRMQDxKQlDSjMjbksTP3TWZk/
-        rTsCrcf9n+FtYzXV3GDBCUG2yI+aicquUJWjcO5Ph84LXWBe+qfoMoObnSkPW0dybPx/KvY6mBwVF
-        MfoIpimw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwU71-006YNd-JO; Wed, 01 Jun 2022 19:34:35 +0000
-Message-ID: <fa512bb1-bf3d-fbf3-69da-1796653ec5bf@infradead.org>
-Date:   Wed, 1 Jun 2022 12:34:24 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCHv5 06/12] x86/boot/compressed: Handle unaccepted memory
-Content-Language: en-US
-To:     Dionna Amalie Glaze <dionnaglaze@google.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Cc:     "Xu, Min M" <min.m.xu@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Gao, Jiaqi" <jiaqi.gao@intel.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Rodel, Jorg" <jroedel@suse.de>, Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
- <20220425033934.68551-7-kirill.shutemov@linux.intel.com>
- <YnE4ZzzVrxUnr3Uv@zn.tnic>
- <20220506153013.e6v4q2qhuhqumfiu@box.shutemov.name>
- <YnpGnMoviGoK4Ucq@zn.tnic>
- <CAAH4kHYRxgUNnGRUO473q02q3akLzgiTvbA2qKEP5jq6jFV-uA@mail.gmail.com>
- <Yn4ed1gupKmNz2jn@zn.tnic>
- <20220513144515.fx2cvo3rjued3vy5@black.fi.intel.com>
- <PH0PR11MB5064B561086BE6350CC1DCDCC5CF9@PH0PR11MB5064.namprd11.prod.outlook.com>
- <CAAH4kHbU4FJ=veYQxncdpYD837M90vq2o2saVaUCJ6=pfuNRpA@mail.gmail.com>
- <0c545c5f-3540-1441-7a7d-359b6795f43a@amd.com>
- <CAAH4kHYj9WOKngeXYL=KnNb1fXa-MaFGTBGZcBX726Od858Q3A@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAAH4kHYj9WOKngeXYL=KnNb1fXa-MaFGTBGZcBX726Od858Q3A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 1 Jun 2022 16:45:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA821203F7;
+        Wed,  1 Jun 2022 13:31:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A011DB81C4B;
+        Wed,  1 Jun 2022 19:34:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2D86CC385A5;
+        Wed,  1 Jun 2022 19:34:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654112083;
+        bh=R/eV2ESj5TDDvndftPdRemnhTK/jSqQR+Fabf7jBK/E=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Xg7DmQUsEU4JP/Pt5W8H8j7WmzRjKP80FV3/b0IQWc9YMIFzKSUrOU4kLfEgv/eKj
+         EMT8vkBis7Nov3rzv4yz4fizJRdBPCQE0rlmkHy0GXK/2PavlXnsRpnxlTlrCjmNig
+         C6/xi8aRRftfF/RbP8DL8NFLFeuuUkwjiAUNOsc/SCYoKfGLgw0Kk5baCP/lbb5kAe
+         O5Y6Mc2ihwLZMaslzHsMXNsP1YzXDUE5wiuwfLoiCktT62ouo7iMW6GbnR/nd8hwS7
+         EEFVXslSSje+BFK5/zMLhe0FSgFBKK19F7pWw8rx2J2gm2lAz3Bbae/4vXbtW5/2bf
+         yA+irNDhsYgJw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1B343F03944;
+        Wed,  1 Jun 2022 19:34:43 +0000 (UTC)
+Subject: Re: [GIT PULL] ksmbd server fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAH2r5ms4eeQy-2bu_5BxFAW=GUR7T4VWM9khi7F0Hc-RSb8Uew@mail.gmail.com>
+References: <CAH2r5ms4eeQy-2bu_5BxFAW=GUR7T4VWM9khi7F0Hc-RSb8Uew@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAH2r5ms4eeQy-2bu_5BxFAW=GUR7T4VWM9khi7F0Hc-RSb8Uew@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/5.19-rc-ksmbd-server-fixes
+X-PR-Tracked-Commit-Id: 621433b7e25d6d42e5f75bd8c4a62d6c7251511b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e5b0208713326cdd3f0a83540e31f9b6f280da38
+Message-Id: <165411208308.25874.13836131531452728780.pr-tracker-bot@kernel.org>
+Date:   Wed, 01 Jun 2022 19:34:43 +0000
+To:     Steve French <smfrench@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,38 +63,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+The pull request you sent on Wed, 1 Jun 2022 01:20:28 -0500:
 
-On 6/1/22 09:20, Dionna Amalie Glaze wrote:
-> The memory accounting in Linux is probably the issue. Both times I ran
-> the test were from a freshly booted VM. The test parses the output of
-> $(free -k) to determine the amount of free memory it should allocate
-> and write/read from, with a given stride of pages to skip before
-> touching the next page.
-> 
-> We grab the third column of numbers from the Mem output that looks like this
-> 
->                total        used        free      shared  buff/cache   available
-> Mem:        65856604     4128688    48558952       11208    13168964    60942928
-> Swap:        1953788      118124     1835664
-> 
-> So my workstation has 48558952 free bytes. We take that, give it to
-> memtouch to allocate that much anonymous memory rounded down to the
-> nearest MB with mmap and randomly read/write the buffer.
-> 
-> For an 8GB machine, the UEFI will have the initial 0-0xA000 memory and
-> 0x10_0000 to 0xC00_0000 (beginning of mmio hole) prevalidated. The
-> next 5GB is classified as the UEFI v2.9 memory type
-> EFI_RESOURCE_MEMORY_UNACCEPTED, 0x1_4000_000 to 0x2_0000_0000.
-> The Linux e820 map should see that range as unaccepted rather than
-> EFI_CONVENTIONAL_MEMORY (i.e., EDK2's EFI_RESOURCE_SYSTEM_MEMORY), but
-> I think it needs to be accounted as free conventional memory.
-> 
-> So when I see 2044MB free vs 7089MB free in my VMs, the two are
-> roughly 5GB different.
+> git://git.samba.org/ksmbd.git tags/5.19-rc-ksmbd-server-fixes
 
-Please see/read/use
-  https://people.kernel.org/tglx/notes-about-netiquette
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e5b0208713326cdd3f0a83540e31f9b6f280da38
+
+Thank you!
 
 -- 
-~Randy
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

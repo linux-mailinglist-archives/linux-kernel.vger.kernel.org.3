@@ -2,68 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C267539EDA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CCB539EAB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350463AbiFAH7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 03:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
+        id S1350482AbiFAHp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 03:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350456AbiFAH7u (ORCPT
+        with ESMTP id S1350467AbiFAHpo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 03:59:50 -0400
-X-Greylist: delayed 437 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Jun 2022 00:59:49 PDT
-Received: from mail.forindustry.pl (mail.forindustry.pl [37.187.225.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674B38B089
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:59:48 -0700 (PDT)
-Received: by mail.forindustry.pl (Postfix, from userid 1002)
-        id EF35DA4B4B; Wed,  1 Jun 2022 07:46:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=forindustry.pl;
-        s=mail; t=1654069688;
-        bh=Vw5jk5D1DE7WK/GNf/MxRQNyAyPYcC0rMJLibxKTj58=;
-        h=Date:From:To:Subject:From;
-        b=PUdO0llMHp6VAzbPr6ti6VBJlFPVE9VbgCug+BHFed0nxcMF9GNxQVuOwxx0Bgx3n
-         hGZp4h2JjcXq2/adCrSeAbmQngqCRUoG2qhN6Bygnla7WWxG1Wl4SI82ub5EM08ssS
-         y/QmxFzbdo+zPYghODbfIgyKxwfXDHq7Uzbgo8Blf5bhFmL/8oXqL6WtJYz6ybPLDR
-         6pTQQoFn7bntx2SUrZgY2+pY3RiYhE1DKFVm0acPlycYPWhDx+M2Wbf0G6G6rkMpSJ
-         J7n2WtxLRtqRllvJ6x1W+Zifpji5ZlixkO0CHzkovVUmdY2lzAFf+3Kply4qpCWwC/
-         llZwE2PlR7NMw==
-Received: by mail.forindustry.pl for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:45:30 GMT
-Message-ID: <20220601064501-0.1.3k.lmgv.0.e6rj2lr7b4@forindustry.pl>
-Date:   Wed,  1 Jun 2022 07:45:30 GMT
-From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
-        <arkadiusz.sokolowski@forindustry.pl>
-To:     <linux-kernel@vger.kernel.org>
-Subject: Koszty instalacji fotowoltaicznej
-X-Mailer: mail.forindustry.pl
+        Wed, 1 Jun 2022 03:45:44 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB5B9D043
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:45:39 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id gi33so2001947ejc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 00:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=icaxq30mttf79C4R9dYRsj76DdZgYPdfcBXzW0d+jXk=;
+        b=qhdsg4Ya4YN7Vaxx4KRqhrWlzhNNHdf0PVdqfG2J6C64ZYh4eb930sm0pQWNlvi5fz
+         e8MtDtNaaVfEvSo2ezzPWrRLXro7Sqa26fIPFSbaCr+rJ0K5llS8sj1WuXS0ZDeTRMW1
+         Lla3hXfeN1OxJw12hVjMokIA+Gg3SyEJ/1OccTNwV4hxjUV6DOmLxRNU0yqHr1WBheJA
+         DKAN/4VPGv+Rrlo/v4AXp1Snc9fqApNwGr7Sp7dRydFF6Uesn3rngsZOtwm7jmbM10Py
+         IXF8drlRGeO2+SbhjYcSN+V7StztXVXY7g8jUAjlpSxc7L9HE7C7byGXkP65BsiWnwF1
+         DWqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=icaxq30mttf79C4R9dYRsj76DdZgYPdfcBXzW0d+jXk=;
+        b=RHdlzO/OwDjWQtrPU9z6TiZ2sMhwgy7uHwlQiaFnj8HS9sCbQJ/mgVt3TRdmdhSUsl
+         AS/QVZbZGuqbwEQ04DUyFeYYBwH1EwU3YZdPWKsgrcwah8nCMApzdf7msJ1vPRodb1Xg
+         aLe29vPdv3RHbq2e6iL6UCkK8sIQI9puog8NmMD7Qu9Bsp/scRQeUiJhUGeQJuUIe5QU
+         bwZvAXyy49uLAowxgdQ62uccZHh4Dc/79N0QtfJNgjQi0fzM/DwvqZ9QFVY93Ztxj31y
+         gLVYjTsWt/xRgy3t8K87qC/7KNFC8jnS3HvHRWqRM0p0mfpZbA0AoxB24zCAprWfUktb
+         IUTA==
+X-Gm-Message-State: AOAM533/4UM82wMKqlB9yNZ7RwQ0RY0F9/Ks1E/Oi4tu2bBITwU9Imiq
+        ug//ZsvQD7shlVcnxOCFZmtt1Q==
+X-Google-Smtp-Source: ABdhPJxtNxlX3e7jclB2CRDTCFsHDIgFhYwHQFha34skmH3sd1hturimO7g/4A+a4S/XrA/j28pXsQ==
+X-Received: by 2002:a17:907:7f06:b0:6fe:b81f:f885 with SMTP id qf6-20020a1709077f0600b006feb81ff885mr48271947ejc.621.1654069537754;
+        Wed, 01 Jun 2022 00:45:37 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id e20-20020a056402149400b0042bd75c53casm517464edv.83.2022.06.01.00.45.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 00:45:37 -0700 (PDT)
+Message-ID: <c2f1621e-21d0-3836-6bb2-c1fb038856c5@linaro.org>
+Date:   Wed, 1 Jun 2022 09:45:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/5] dt-bindings: clock: Add AST2600 HACE reset definition
+Content-Language: en-US
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Johnny Huang <johnny_huang@aspeedtech.com>
+Cc:     linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220601054204.1522976-1-neal_liu@aspeedtech.com>
+ <20220601054204.1522976-3-neal_liu@aspeedtech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220601054204.1522976-3-neal_liu@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On 01/06/2022 07:42, Neal Liu wrote:
+> Add HACE reset bit definition for ast2600.
+> 
+> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> Signed-off-by: Johnny Huang <johnny_huang@aspeedtech.com>
 
-stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
- obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99.
 
-Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
-acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
-ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
-=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
-=2E
 
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
 
-Pozdrawiam,
-Arkadiusz Soko=C5=82owski
+Best regards,
+Krzysztof

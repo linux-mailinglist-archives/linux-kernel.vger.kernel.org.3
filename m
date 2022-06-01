@@ -2,145 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD41953AC98
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 20:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D604F53ACB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 20:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356230AbiFASP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 14:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
+        id S1356594AbiFASWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 14:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353446AbiFASP4 (ORCPT
+        with ESMTP id S232776AbiFASWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 14:15:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 976CA95A2F
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 11:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654107351;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8lnhgnSWwHutqtYkh7EtY0e4ON7IRphJYIb523UmDxM=;
-        b=gV/qqw1SwOLntwNjgwGSjwMO59S7Jzdx10x0qARGpwevRr6yJVuOlRgAu23H6O2uAho8mU
-        L6jdmKkORhD4LhywR6/653GBld/iJvPOA35hX0gboa63Brg/Kr9avNWj9IodRX75oAZy6w
-        a6Oladznh7NQ71fCI/b/HVc4Hmk1ycE=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-MKe-zbBiOniEwcVGhuJ7Sg-1; Wed, 01 Jun 2022 14:15:50 -0400
-X-MC-Unique: MKe-zbBiOniEwcVGhuJ7Sg-1
-Received: by mail-io1-f71.google.com with SMTP id ay41-20020a5d9da9000000b006685ce50214so1346746iob.22
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 11:15:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=8lnhgnSWwHutqtYkh7EtY0e4ON7IRphJYIb523UmDxM=;
-        b=SV68Pt+7R3XVIuqcMHi0Hv3qgffBAmVwCeoMowyRCllxoCOGmZMhyY1uOYWN0ilKTk
-         +BjB6qEngysYE79n+DH6mhXCw8vkc8Mltd/moD0koC2oaLXAyV9ORrhVv2CVfSJ6OP6W
-         bdjNtQlUkJcifzZQ0EaduXoYiY6TH21lvu7Agv13ubLWaDN6y79E1FgqrwDawhhTE6TO
-         TEXJsJQC8tUSc7cR2kCMYzqqqgbd0KRR7aUcCovgyM/C+1/9uf9rZqEElHL1x5UICc53
-         gHpHTR2sDCQHYrIQHRvF+xmTPuphpg0mC9sI3YS1g1RdrQJLsFdUmhzEvNIov1YpLKSX
-         dJAA==
-X-Gm-Message-State: AOAM532TWXru/0ibfNXbKanPDTSPpdM5GegB/98a0gOdgpk9X/SG0uK+
-        zKmjSIWzpOpjkX/my9B6F8FTX02b/5z4huD2GzDLoWwGe6qVrhyiAUKrzJ50oo075zaI+hAViKk
-        dmRwCWSB+VFLBzAr+vO5NbIPa
-X-Received: by 2002:a05:6638:1909:b0:32e:d7f1:9072 with SMTP id p9-20020a056638190900b0032ed7f19072mr799190jal.261.1654107349221;
-        Wed, 01 Jun 2022 11:15:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxtWWYwIifn8Zm9fGxaP3UsiArl+84D6kY0AJluqcAh0yFl+n2OY1BLZaHw5+41MWCfjqu8Fw==
-X-Received: by 2002:a05:6638:1909:b0:32e:d7f1:9072 with SMTP id p9-20020a056638190900b0032ed7f19072mr799178jal.261.1654107349017;
-        Wed, 01 Jun 2022 11:15:49 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id i12-20020a926d0c000000b002d39ae9918asm719208ilc.54.2022.06.01.11.15.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 11:15:48 -0700 (PDT)
-Date:   Wed, 1 Jun 2022 12:15:47 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Abhishek Sahu <abhsahu@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v3 8/8] vfio/pci: Add the support for PCI D3cold state
-Message-ID: <20220601121547.03ebbf64.alex.williamson@redhat.com>
-In-Reply-To: <20220601173054.GS1343366@nvidia.com>
-References: <9e44e9cc-a500-ab0d-4785-5ae26874b3eb@nvidia.com>
-        <20220509154844.79e4915b.alex.williamson@redhat.com>
-        <68463d9b-98ee-b9ec-1a3e-1375e50a2ad2@nvidia.com>
-        <42518bd5-da8b-554f-2612-80278b527bf5@nvidia.com>
-        <20220530122546.GZ1343366@nvidia.com>
-        <c73d537b-a653-bf79-68cd-ddc8f0f62a25@nvidia.com>
-        <20220531194304.GN1343366@nvidia.com>
-        <20220531165209.1c18854f.alex.williamson@redhat.com>
-        <00b6e380-ecf4-1eaf-f950-2c418bdb6cac@nvidia.com>
-        <20220601102151.75445f6a.alex.williamson@redhat.com>
-        <20220601173054.GS1343366@nvidia.com>
-Organization: Red Hat
+        Wed, 1 Jun 2022 14:22:33 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Jun 2022 11:22:32 PDT
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF7D4B1CB;
+        Wed,  1 Jun 2022 11:22:32 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-07.nifty.com with ESMTP id 251IJkAQ014364;
+        Thu, 2 Jun 2022 03:19:47 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 251IJkAQ014364
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1654107588;
+        bh=1RpBGGftTVY4f1Th6jTQ5+KvJS9jZPLe7SVIWfT+mGI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=xTkhr0bxDTEhtAk049KwrvCmJ8PmfLMOvfNqYQv6N1GGs+1JIoRe9bq32+GbKo7xo
+         6xLmO4yTpuIDczaOmrBiVYnxsQX9ze7wx8Xihc/Tcx23X8J3wMoBdOJCUFP9eFDmhC
+         FLqI2bfsMUORfZV3101r6VtWVpZsDX8rnIxwYLBvY03REIrUkBZWLcQCswwMBRrxRd
+         Xlh6JNyLIDBImFMen49QIfM1KpjSpV3QeKr+FWvAAUiMgafbPC1fcdl62ZM7GFbGW1
+         Z9hnHTrCa+k2Ll6r9C5vBROZCNUUBwBNzl0fbSRa81NuSX4cPQOeHO//MqIg9pzNBW
+         5PwU3IW5gfyUQ==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Carlos Llamas <cmllamas@google.com>,
+        Christopher Ferris <cferris@google.com>,
+        Todd Kjos <tkjos@android.com>, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org
+Subject: [PATCH 0/3] asm-generic: fix misconversion of {uid,gid}_t
+Date:   Thu,  2 Jun 2022 03:19:38 +0900
+Message-Id: <20220601181941.3706832-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Jun 2022 14:30:54 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+I accidentally broke android binder.h:
+  https://lore.kernel.org/all/20220601010017.2639048-1-cmllamas@google.com/
 
-> On Wed, Jun 01, 2022 at 10:21:51AM -0600, Alex Williamson wrote:
-> 
-> > Some ioctls clearly cannot occur while the device is in low power, such
-> > as resets and interrupt control, but even less obvious things like
-> > getting region info require device access.  Migration also provides a
-> > channel to device access.    
-> 
-> I wonder what power management means in a case like that.
-> 
-> For the migration drivers they all rely on a PF driver that is not
-> VFIO, so it should be impossible for power management to cause the PF
-> to stop working.
-> 
-> I would expect any sane design of power management for a VF to not
-> cause any harm to the migration driver..
+I checked my previous conversions, and found some more.
+(at least, the sparc one seems fatal.)
 
-Is there even a significant benefit or use case for power management
-for VFs?  The existing D3hot support should be ok, but I imagine to
-support D3cold, all the VFs and the PF would need to move to low power.
-It might be safe to simply exclude VFs from providing this feature for
-now.
 
-> > I'm also still curious how we're going to handle devices that cannot
-> > return to low power such as the self-refresh mode on the GPU.  We can
-> > potentially prevent any wake-ups from the vfio device interface, but
-> > that doesn't preclude a wake-up via an external lspci.  I think we need
-> > to understand how we're going to handle such devices before we can
-> > really complete the design.  AIUI, we cannot disable the self-refresh
-> > sleep mode without imposing unreasonable latency and memory
-> > requirements on the guest and we cannot retrigger the self-refresh
-> > low-power mode without non-trivial device specific code.  
-> 
-> It begs the question if power management should be something that only
-> a device-specific drivers should allow?
 
-Yes, but that's also penalizing devices that require no special
-support, for the few that do.  I'm not opposed to some sort of
-vfio-pci-nvidia-gpu variant driver to provide that device specific
-support, but I'd think the device table for such a driver might just be
-added to the exclusion list for power management support in vfio-pci.
-vfio-pci-core would need some way for drivers to opt-out/in for power
-management.  Thanks,
+Masahiro Yamada (3):
+  mips: use __kernel_{uid,gid}32_t in uapi/asm/stat.h
+  powerpc: use __kernel_{uid,gid}32_t in uapi/asm/stat.h
+  sparc: fix mis-use of __kernel_{uid,gid}_t in uapi/asm/stat.h
 
-Alex
+ arch/mips/include/uapi/asm/stat.h    | 12 ++++++------
+ arch/powerpc/include/uapi/asm/stat.h |  4 ++--
+ arch/sparc/include/uapi/asm/stat.h   |  4 ++--
+ 3 files changed, 10 insertions(+), 10 deletions(-)
+
+-- 
+2.32.0
 

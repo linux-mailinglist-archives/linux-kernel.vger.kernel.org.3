@@ -2,170 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545F1539F8B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EB4539F8F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350852AbiFAIcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 04:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S1350686AbiFAIdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245286AbiFAIcC (ORCPT
+        with ESMTP id S1344920AbiFAIdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:32:02 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CE425C59;
-        Wed,  1 Jun 2022 01:31:59 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 71B411F8C2;
-        Wed,  1 Jun 2022 08:31:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1654072318; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N+sBqa5KqKk9l80H2r4a0EQswvDm6hf4uMYYGP+soqU=;
-        b=UxNmGl10x6Mtb4IZHTscIz8gWRW6HgF7JeSkIFA3/SMZ5MwO0itfPzFfdXeKigeq6uDjFv
-        4bN0nY9B+vKQGrWWuPqxBwF5Z497j6B5lQghIy91xnE+J+DE61r32CWreN75yDmIIi/rxx
-        YqGgm/bp0Nehl08MPwXkSt/rXYKsbtM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1654072318;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N+sBqa5KqKk9l80H2r4a0EQswvDm6hf4uMYYGP+soqU=;
-        b=Vs/bVFe2dUMiW8BMd3aoA58GmzvJhI2Br3qV3wc/S6BZRK+F80A/62NZGf4xz6rrZK0LnZ
-        x5Ym+gWftWBAPUBA==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5C3822C141;
-        Wed,  1 Jun 2022 08:31:58 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CF690A0633; Wed,  1 Jun 2022 10:31:54 +0200 (CEST)
-Date:   Wed, 1 Jun 2022 10:31:54 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     paolo.valente@linaro.org, jack@suse.cz, axboe@kernel.dk,
-        tj@kernel.org, linux-block@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next v8 1/4] block, bfq: support to track if bfqq has
- pending requests
-Message-ID: <20220601083154.5ip7r6w7kjb3bof2@quack3.lan>
-References: <20220531140858.3324294-1-yukuai3@huawei.com>
- <20220531140858.3324294-2-yukuai3@huawei.com>
+        Wed, 1 Jun 2022 04:33:01 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C068C590BC;
+        Wed,  1 Jun 2022 01:32:59 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id nn3-20020a17090b38c300b001e0e091cf03so3359251pjb.1;
+        Wed, 01 Jun 2022 01:32:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wYKrercWjjwhVcq5zwRz95bnyrViR728O6OmqX4hnKc=;
+        b=jChRG5M+RIX7K5ln36MT/cnUVEnd4wFwyPwT0OluWvMa5hrBJNs+M0+WCsfgXKow7O
+         QNcD9y4BXQmJbLFRNWuLlw6Z5pzLOgpsPH0brJ8FLmpKEV0tevpleWMYek3ZzI9iALJM
+         bIO0yIbzWMZmBfgODAoQlrxtpNMfND1StkhLQeC63u3lObVM/JH22DQj7qRRXURzQ6L2
+         6Hau+v76Cc65gtLw/tHtxaqMKWx+vP2MrNUh0EBQfrPVDuRohg9nsPeZRr0cg2o7cPkB
+         6/+nSgLTEGZ/iXcdSA6tSgXsSQZhgudTS+0QK0yFdyblYPWKmdqyBhKf2Kx1gNXSf62k
+         kPSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wYKrercWjjwhVcq5zwRz95bnyrViR728O6OmqX4hnKc=;
+        b=rAAY13u0XSnZWLu5CbDBRG8ukDF2gxj3UB8htl7IDIYVxtAKL43VdoJ8m8A2OBOINd
+         8e+VWqMQdLVwaP88cYb/tOkGHk/tikgfW3JI7Krdzk0h2TU3sPzIX72paqNU+Fu91/yk
+         OJE/cM6L2ZbzzZIaFasuIbjPOW57+NbxrLUbepMfIyueQtx67TKEBr49O0SPbSGebNQ3
+         Xskp4WT99+Fmxj/K9ZII3ECAEWxFHUHoDMo6LF0jKL3o2Yxll//tUFD4d2u3aczX72hS
+         3UuETrBfusSh/2OlHebExO0clh5Q0fADgSVUV7nOZBo+vV6+oJhkY1zVQ3gU+8dV/Jji
+         S0NQ==
+X-Gm-Message-State: AOAM533HwFd+631D2bT389GVKjfGiVHFo0VcFe8D7e7P84cCcCJiplfn
+        liT+tytqnc4jaOcV3B5T2gV9Pvbpq6k0CcOI
+X-Google-Smtp-Source: ABdhPJw8n510jrR/IrcT0pJGTXpYydR0zo1E7nsV1+TzjU7/bNiHq7F1xyds6O/jydFgysFav3c0Mg==
+X-Received: by 2002:a17:90b:3803:b0:1e0:da02:b903 with SMTP id mq3-20020a17090b380300b001e0da02b903mr33041377pjb.125.1654072379055;
+        Wed, 01 Jun 2022 01:32:59 -0700 (PDT)
+Received: from [172.16.4.4] ([106.39.150.114])
+        by smtp.gmail.com with ESMTPSA id h26-20020a62b41a000000b0051843980605sm837388pfn.181.2022.06.01.01.32.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 01:32:57 -0700 (PDT)
+Message-ID: <a2076725-acc6-c84c-91d5-acabd138264b@gmail.com>
+Date:   Wed, 1 Jun 2022 16:32:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531140858.3324294-2-yukuai3@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] v4l: xilinx-vipp: Fix refcount leak in
+ xvip_graph_dma_init
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Hyun Kwon <hyun.kwon@xilinx.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Radhey Shyam Pandey <radheys@xilinx.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>
+References: <20220601042514.61780-1-linmq006@gmail.com>
+ <YpcWf46fAJcfIgIt@pendragon.ideasonboard.com>
+From:   Miaoqian Lin <linmq006@gmail.com>
+In-Reply-To: <YpcWf46fAJcfIgIt@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 31-05-22 22:08:55, Yu Kuai wrote:
-> If entity belongs to bfqq, then entity->in_groups_with_pending_reqs
-> is not used currently. This patch use it to track if bfqq has pending
-> requests through callers of weights_tree insertion and removal.
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Hi, Laurent
 
-Looks good. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  block/bfq-iosched.c |  1 +
->  block/bfq-iosched.h |  1 +
->  block/bfq-wf2q.c    | 24 ++++++++++++++++++++++--
->  3 files changed, 24 insertions(+), 2 deletions(-)
-> 
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index 0d46cb728bbf..0ec21018daba 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -6263,6 +6263,7 @@ static void bfq_completed_request(struct bfq_queue *bfqq, struct bfq_data *bfqd)
->  		 */
->  		bfqq->budget_timeout = jiffies;
->  
-> +		bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
->  		bfq_weights_tree_remove(bfqd, bfqq);
->  	}
->  
-> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-> index ca8177d7bf7c..3b9b1a0e7c1c 100644
-> --- a/block/bfq-iosched.h
-> +++ b/block/bfq-iosched.h
-> @@ -1080,6 +1080,7 @@ void bfq_requeue_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  void bfq_del_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  		       bool expiration);
->  void bfq_add_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq);
-> +void bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq);
->  
->  /* --------------- end of interface of B-WF2Q+ ---------------- */
->  
-> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
-> index f8eb340381cf..12d20f26ad69 100644
-> --- a/block/bfq-wf2q.c
-> +++ b/block/bfq-wf2q.c
-> @@ -1647,6 +1647,22 @@ void bfq_requeue_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  				    bfqq == bfqd->in_service_queue, expiration);
->  }
->  
-> +static void bfq_add_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
-> +{
-> +	struct bfq_entity *entity = &bfqq->entity;
-> +
-> +	if (!entity->in_groups_with_pending_reqs)
-> +		entity->in_groups_with_pending_reqs = true;
-> +}
-> +
-> +void bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
-> +{
-> +	struct bfq_entity *entity = &bfqq->entity;
-> +
-> +	if (entity->in_groups_with_pending_reqs)
-> +		entity->in_groups_with_pending_reqs = false;
-> +}
-> +
->  /*
->   * Called when the bfqq no longer has requests pending, remove it from
->   * the service tree. As a special case, it can be invoked during an
-> @@ -1668,8 +1684,10 @@ void bfq_del_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  
->  	bfq_deactivate_bfqq(bfqd, bfqq, true, expiration);
->  
-> -	if (!bfqq->dispatched)
-> +	if (!bfqq->dispatched) {
-> +		bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
->  		bfq_weights_tree_remove(bfqd, bfqq);
-> +	}
->  }
->  
->  /*
-> @@ -1684,10 +1702,12 @@ void bfq_add_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq)
->  	bfq_mark_bfqq_busy(bfqq);
->  	bfqd->busy_queues[bfqq->ioprio_class - 1]++;
->  
-> -	if (!bfqq->dispatched)
-> +	if (!bfqq->dispatched) {
-> +		bfq_add_bfqq_in_groups_with_pending_reqs(bfqq);
->  		if (bfqq->wr_coeff == 1)
->  			bfq_weights_tree_add(bfqd, bfqq,
->  					     &bfqd->queue_weights_tree);
-> +	}
->  
->  	if (bfqq->wr_coeff > 1)
->  		bfqd->wr_busy_queues++;
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+On 2022/6/1 15:34, Laurent Pinchart wrote:
+> Hi Lin,
+>
+> Thank you for the patch.
+>
+> On Wed, Jun 01, 2022 at 08:25:14AM +0400, Miaoqian Lin wrote:
+>> of_get_child_by_name() returns a node pointer with refcount
+>> incremented, we should use of_node_put() on it when not need anymore.
+>> Add missing of_node_put() to avoid refcount leak.
+>>
+>> Fixes: df3305156f98 ("[media] v4l: xilinx: Add Xilinx Video IP core")
+>> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+>> ---
+>>  drivers/media/platform/xilinx/xilinx-vipp.c | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/media/platform/xilinx/xilinx-vipp.c b/drivers/media/platform/xilinx/xilinx-vipp.c
+>> index f34f8b077e03..415579b63737 100644
+>> --- a/drivers/media/platform/xilinx/xilinx-vipp.c
+>> +++ b/drivers/media/platform/xilinx/xilinx-vipp.c
+>> @@ -483,10 +483,12 @@ static int xvip_graph_dma_init(struct xvip_composite_device *xdev)
+>>  		ret = xvip_graph_dma_init_one(xdev, port);
+>>  		if (ret < 0) {
+>>  			of_node_put(port);
+>> +			of_node_put(ports);
+>>  			return ret;
+>>  		}
+>>  	}
+>>  
+>> +	of_node_put(ports);
+> We could possibly simplify this a little bit by initializing ret to 0
+> when declaring it, replacing the "return ret" above by a break, and
+> returning ret below. This would remove the need for the first
+> of_node_put(ports) call above.
+>
+> If you think that's a good idea I can make that change when applying
+> this patch to my tree, otherwise I'll take it as-is.
+Thanks for your review, I think your idea is good, we can do that to simplify code.
+> In either case,
+>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>
+>>  	return 0;
+>>  }
+>>  

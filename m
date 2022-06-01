@@ -2,134 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4B2539F93
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E0C539F95
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350811AbiFAIev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 04:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
+        id S1350720AbiFAIfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239960AbiFAIes (ORCPT
+        with ESMTP id S1350823AbiFAIfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:34:48 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344AC5537F;
-        Wed,  1 Jun 2022 01:34:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654072487; x=1685608487;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=x5nMSSI5/humEcyp6BGP5MXHhmWKZK8ljqf5CpFlbKg=;
-  b=fe1gVsH0qRH7EbcUP6rMO8/aw+W0sSlUzeWJ771tokHEgPc326CwrtGz
-   V5PWuRhZECcGUUEE+zZtMEFCYyyXzoQihem6sjdN9LyD0mLmWIEtob7kK
-   5TA8uRT2xHAdQnLrJYqne+KzEkWGEiJHmb3O/ldxzFwr5hQoSJAS0puMz
-   k=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Jun 2022 01:34:46 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 01:34:46 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 1 Jun 2022 01:34:45 -0700
-Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 1 Jun 2022
- 01:34:43 -0700
-Subject: Re: [PATCH v2] remoteproc: qcom_q6v5_mss: map/unmap metadata region
- before/after use
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     <bjorn.andersson@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <sboyd@kernel.org>,
-        <agross@kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        <mathieu.poirier@linaro.org>, <mka@chromium.org>
-References: <1652248625-990-1-git-send-email-quic_sibis@quicinc.com>
- <CAK8P3a2b05w3uRjXhx7CgdLEHL78ZHRjgOYoG_SR0SyDxcLDMg@mail.gmail.com>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-Message-ID: <08778603-4f15-0fb7-687d-4cf42c8ddbd3@quicinc.com>
-Date:   Wed, 1 Jun 2022 14:04:39 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 1 Jun 2022 04:35:32 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E82B5A2C1;
+        Wed,  1 Jun 2022 01:35:31 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 0304B1F8C2;
+        Wed,  1 Jun 2022 08:35:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1654072530; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZgDe2eXlhB42LN+QI5BZWIRc4kyPQuFvdb59+D3ByMQ=;
+        b=bV70JBnMBSgY94pQahRNjPumE6SgHGja6J+fLoGZJ9eClDYKyM6NQvJD0tf0hovyu6n+BB
+        /ivw96PkjmnPwGablQxiwPnrsd/LeMcmKhvDePXVtA+PSK+pqm1YExM+ZtznQ7+cyGiBB+
+        U2JqupjlBJ3c+xiH9bgd5t4wukBQxCk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1654072530;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZgDe2eXlhB42LN+QI5BZWIRc4kyPQuFvdb59+D3ByMQ=;
+        b=rHP/WFvK2JmjuczkrX0+8NAVEE++a9lq4iv8fPBYMTFjHZdt9JXZydlvUU34LsCarDNPTm
+        2y9AXdwb/V2MZaCA==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E91AE2C142;
+        Wed,  1 Jun 2022 08:35:29 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id B021CA0633; Wed,  1 Jun 2022 10:35:29 +0200 (CEST)
+Date:   Wed, 1 Jun 2022 10:35:29 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     paolo.valente@linaro.org, jack@suse.cz, axboe@kernel.dk,
+        tj@kernel.org, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next v8 2/4] block, bfq: record how many queues have
+ pending requests
+Message-ID: <20220601083529.oz26s6jefxz6fnyg@quack3.lan>
+References: <20220531140858.3324294-1-yukuai3@huawei.com>
+ <20220531140858.3324294-3-yukuai3@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a2b05w3uRjXhx7CgdLEHL78ZHRjgOYoG_SR0SyDxcLDMg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531140858.3324294-3-yukuai3@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Arnd,
-Thanks for taking time to review the patch.
+On Tue 31-05-22 22:08:56, Yu Kuai wrote:
+> Prepare to refactor the counting of 'num_groups_with_pending_reqs'.
+> 
+> Add a counter in bfq_group, and update it while tracking if bfqq have
+> pending requests.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-On 5/30/22 9:41 PM, Arnd Bergmann wrote:
-> On Wed, May 11, 2022 at 7:57 AM Sibi Sankar <quic_sibis@quicinc.com> wrote:
->>
->> The application processor accessing the dynamically assigned metadata
->> region after assigning it to the remote Q6 would lead to an XPU violation.
->> Fix this by un-mapping the metadata region post firmware header copy. The
->> metadata region is freed only after the modem Q6 is done with fw header
->> authentication.
->>
->> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> 
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> Sorry for the late reply, this looks reasonable overall. Just two
-> small comments:
-> 
->>
->> -       memcpy(ptr, metadata, size);
->> +       count = PAGE_ALIGN(size) >> PAGE_SHIFT;
->> +       pages = kmalloc_array(count, sizeof(struct page *), GFP_KERNEL);
->> +       if (!pages) {
->> +               ret = -ENOMEM;
->> +               goto free_dma_attrs;
->> +       }
-> 
-> If you know a fixed upper bound for the array size, it might be easier to
-> put it on the stack.
+Looks good, except I think that we also need to update the counters
+'num_groups_with_pending_reqs' in bfq_move_bfqq()?
 
-The metadata consists of the 32bit elf header and SoC dependent variable
-number of program headers. Arriving at the upper bound from the spec
-seemed futile since the max program headers supported could be > 0xffff.
-The best I can do is get the max size of metadata of all the QC SoCs
-supported upstream for putting the pages on stack and leave "count" as
-the min between the dynamic calculation and upper bound. Would that be
-good enough?
+								Honza
 
+> ---
+>  block/bfq-cgroup.c  |  1 +
+>  block/bfq-iosched.h |  1 +
+>  block/bfq-wf2q.c    | 12 ++++++++++--
+>  3 files changed, 12 insertions(+), 2 deletions(-)
 > 
->> +
->> +       for (i = 0; i < count; i++)
->> +               pages[i] = nth_page(page, i);
->> +
->> +       vaddr = vmap(pages, count, flags, pgprot_dmacoherent(PAGE_KERNEL));
+> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+> index 09574af83566..0954a258a107 100644
+> --- a/block/bfq-cgroup.c
+> +++ b/block/bfq-cgroup.c
+> @@ -557,6 +557,7 @@ static void bfq_pd_init(struct blkg_policy_data *pd)
+>  				   */
+>  	bfqg->bfqd = bfqd;
+>  	bfqg->active_entities = 0;
+> +	bfqg->num_queues_with_pending_reqs = 0;
+>  	bfqg->online = true;
+>  	bfqg->rq_pos_tree = RB_ROOT;
+>  }
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index 3b9b1a0e7c1c..a5f7c0c1a3b3 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -943,6 +943,7 @@ struct bfq_group {
+>  	struct bfq_entity *my_entity;
+>  
+>  	int active_entities;
+> +	int num_queues_with_pending_reqs;
+>  
+>  	struct rb_root rq_pos_tree;
+>  
+> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+> index 12d20f26ad69..b533e17e9f0c 100644
+> --- a/block/bfq-wf2q.c
+> +++ b/block/bfq-wf2q.c
+> @@ -1651,16 +1651,24 @@ static void bfq_add_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+>  {
+>  	struct bfq_entity *entity = &bfqq->entity;
+>  
+> -	if (!entity->in_groups_with_pending_reqs)
+> +	if (!entity->in_groups_with_pending_reqs) {
+>  		entity->in_groups_with_pending_reqs = true;
+> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+> +		bfqq_group(bfqq)->num_queues_with_pending_reqs++;
+> +#endif
+> +	}
+>  }
+>  
+>  void bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+>  {
+>  	struct bfq_entity *entity = &bfqq->entity;
+>  
+> -	if (entity->in_groups_with_pending_reqs)
+> +	if (entity->in_groups_with_pending_reqs) {
+>  		entity->in_groups_with_pending_reqs = false;
+> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+> +		bfqq_group(bfqq)->num_queues_with_pending_reqs--;
+> +#endif
+> +	}
+>  }
+>  
+>  /*
+> -- 
+> 2.31.1
 > 
-> I was a bit unsure about this part, as I don't know how portable this is.
-> If the CPU bypasses the cache with pgprot_dmacoherent(), then the
-> other side should not use a cacheable access either, but that is a property
-> of the hardware that is normally hidden from the driver interface.
-> 
-> It's probably ok here, since the pages are not mapped anywhere else
-> and should have no active cache lines.
-
-yup we make sure the other side can access the region only after no
-cache lines are active (that's the main problem that we are trying
-to solve through this patch).
-
--Sibi
-
-> 
->         Arnd
-> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

@@ -2,119 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D842539BC3
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF80539BC5
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349462AbiFADlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 23:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
+        id S1349469AbiFADnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 23:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240631AbiFADlB (ORCPT
+        with ESMTP id S231940AbiFADn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 23:41:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55EB99CC8E
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:41:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654054859;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/3TFHPDS/Psbk4AS6KoK5nXO/Qj1s0kWFsftf23bfkE=;
-        b=b9GpTysLsNljVSuMvmfvudV21iW5tlVInbjtx4BIwM4u/Ervnvz5Pyr+hkIF2EnfMS9Obe
-        FSJVxPQDXy1CBEgTimRRemWz9UyeIdzMBt1fZsmO1njr6vdOcM4dVbAnvWLF+3N2Y8S5o0
-        N2NL/dE4dWxoh2UMWmIGJw0Mi/UpCMc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-250-IE20Dqp_Mq6dex4EbkNGhw-1; Tue, 31 May 2022 23:40:52 -0400
-X-MC-Unique: IE20Dqp_Mq6dex4EbkNGhw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 31 May 2022 23:43:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786D384A01;
+        Tue, 31 May 2022 20:43:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2263D3C0D850;
-        Wed,  1 Jun 2022 03:40:52 +0000 (UTC)
-Received: from [10.72.12.91] (ovpn-12-91.pek2.redhat.com [10.72.12.91])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CD10E8287E;
-        Wed,  1 Jun 2022 03:40:46 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v3 12/16] arch_topology: Avoid parsing through all the
- CPUs once a outlier CPU is found
-To:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
-References: <20220525081416.3306043-1-sudeep.holla@arm.com>
- <20220525081416.3306043-2-sudeep.holla@arm.com>
- <20220525081416.3306043-3-sudeep.holla@arm.com>
- <20220525081416.3306043-4-sudeep.holla@arm.com>
- <20220525081416.3306043-5-sudeep.holla@arm.com>
- <20220525081416.3306043-6-sudeep.holla@arm.com>
- <20220525081416.3306043-7-sudeep.holla@arm.com>
- <20220525081416.3306043-8-sudeep.holla@arm.com>
- <20220525081416.3306043-9-sudeep.holla@arm.com>
- <20220525081416.3306043-10-sudeep.holla@arm.com>
- <20220525081416.3306043-11-sudeep.holla@arm.com>
- <20220525081416.3306043-12-sudeep.holla@arm.com>
- <20220525081416.3306043-13-sudeep.holla@arm.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <6270a109-85b8-b2d2-d32f-6e24be84448b@redhat.com>
-Date:   Wed, 1 Jun 2022 11:40:43 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9DA161139;
+        Wed,  1 Jun 2022 03:43:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26860C385B8;
+        Wed,  1 Jun 2022 03:43:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654055006;
+        bh=OWd2/VzGcHSJVAYzt1o0X8eGieTIiCjDOqFC4+fczqc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ahdP1rMHIBgY+/vGYg9zJDWrhhOqu1UYy19CTBGEt2+Aaxns2K1svmgRXQAwHj8lF
+         /fvX15gm4GZcK0DH+hPLuhEhdRKgwAbyeyy4lSoPjv/ck50IfBoy/QK74627Fb2SDx
+         WwPFx9yG3SeA3gkR5L7Deljunzi4URdVOxvFdiJ7xvkEWFaX9fYO2Fu/Q/e1r1loos
+         AOFYxqdrlrLLbVoPsb4tnx7Q1p6OPIfmZqsf4ArLJguI6laJKEzwSzsifxIhw+7L4W
+         HGZT4Og4o4MM+TEfQFVoyTFQDkFLN6EOiLy98Snarc1j3jKcq0nfIvntKDLEPLzM5G
+         LS9oRdtxuOCGA==
+Date:   Tue, 31 May 2022 20:43:25 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     Menglong Dong <imagedong@tencent.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH net-next v2 2/3] net: skb: use auto-generation to
+ convert skb drop reason to string
+Message-ID: <20220531204325.5ba1362f@kernel.org>
+In-Reply-To: <CADxym3bQ96s_tsQeE_1_TFNafTvzQfRr9WLB40urZCgn4a2C0A@mail.gmail.com>
+References: <20220530081201.10151-1-imagedong@tencent.com>
+        <20220530081201.10151-3-imagedong@tencent.com>
+        <20220530131311.40914ab7@kernel.org>
+        <CADxym3bQ96s_tsQeE_1_TFNafTvzQfRr9WLB40urZCgn4a2C0A@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220525081416.3306043-13-sudeep.holla@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/22 4:14 PM, Sudeep Holla wrote:
-> There is no point in looping through all the CPU's physical package
-> identifier to check if it is valid or not once a CPU which is outside
-> the topology(i.e. outlier CPU) is found.
+On Wed, 1 Jun 2022 11:27:41 +0800 Menglong Dong wrote:
+> > > +#include <linux/kernel.h>  
+> >
+> > Why?  
 > 
-> Let us just break out of the loop early in such case.
-> 
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->   drivers/base/arch_topology.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
+> Oh, you noticed it. To simplify the code in dropreason_str.c, as
+> EXPORT_SYMBOL() is used. Okay, I'll move it to the generation
+> part.
 
-Reviewed-by: Gavin Shan <gshan@redhat.com>
-
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index f73a5e669e42..6ae450ca68bb 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -637,8 +637,10 @@ static int __init parse_dt_topology(void)
->   	 * only mark cores described in the DT as possible.
->   	 */
->   	for_each_possible_cpu(cpu)
-> -		if (cpu_topology[cpu].package_id < 0)
-> +		if (cpu_topology[cpu].package_id < 0) {
->   			ret = -EINVAL;
-> +			break;
-> +		}
->   
->   out_map:
->   	of_node_put(map);
-> 
-
+IMHO you can move the EXPORT_SYMBOL() to skbuff.c, with a comment
+saying that the array itself is in an auto-generated source.
+Avoid avoid to "echo" both the EXPORT and the include.

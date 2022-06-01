@@ -2,70 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFBF53A5AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6BB53A5AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353119AbiFANKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 09:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
+        id S1353129AbiFANLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 09:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236589AbiFANKm (ORCPT
+        with ESMTP id S236589AbiFANLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 09:10:42 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7796325
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 06:10:40 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id v22so2821071ybd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 06:10:40 -0700 (PDT)
+        Wed, 1 Jun 2022 09:11:21 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EB26325
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 06:11:16 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id w3so1732316plp.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 06:11:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=RZq7zJW68AsB2c8MQdTOdMV2RE0j/waEnaPxwlHywbM=;
-        b=S5N+aNmBEdBGrzNGLFwPofhO6cTzGAO1YIrXr2uEhjAVeggA/vcwxRNUpIiXPlpym1
-         gq8bf8mORMx9dj3AKadS1mcmI3yYKL3dfbDCLniw7NIum28+rOY4dGPAKpt25o0acF90
-         76mVwal/MFpuswdY5k9gstc6JridoylMEPjIwSUIovJAAeFsdMHOp82h4IMjct6Y6OvK
-         LwRxAgNFXHZ1u09tdKXWFlWBBwX8z4wX4tKF1TfdojyN+KN56JYg1CJXGcBw6K2NyOhU
-         2u48woXfHcODxx2sgSlbJQmAusNMlf/W8WkaF118XP/x9Y7yiZJuHZw3tCfVAJ3/8SlM
-         Jffw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F5AH1U5SHVaxYK5U6wHZI+Uf8T98VsEerOgnBwZfGkY=;
+        b=EpxDjcS2RtaVPEIL1O7MH8Fxfp1XUV05k/MHV3xIY/cvhJPTlS11OnBx6jymbxzO5q
+         7+B1tF07vGxCCrKoyNw0Zz67BWtpT+SLqzm+gzCmTVZ8F9iLgwgmgqGo9qgdVqTwKeOH
+         F5o9kx/dsC+k8w+dwSgWYUSUHYrIMCA2SDNiatPRim9X/0u8HlsrCchloeiTZREAy9cs
+         Mg4R2gdSjJxVmZL27P92S26ncG4XgWJ3Fimq6YJUJPZoPV7O5vg3wSjT1gSOWAtr92iB
+         4ILlyGZCMyy/sSgaXAreCLGheGep9d4s68G9Y4tadj28m1irbmyTVBHSIz+ByXTj4ocg
+         /Dlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=RZq7zJW68AsB2c8MQdTOdMV2RE0j/waEnaPxwlHywbM=;
-        b=2unO2m8zqsE1e4zwh0s2Of+fy7FZxKeAHdLYMM0ZdpSf3YK5xpU/DquHlMtXEZWkXS
-         Nu+bTH1iE2Ewfp7SgkTsEXsfa1HEqAMz1X7/tqVGfJ3iuEFuOfw7eokFcvt9shUJdPr8
-         H9bSAykMFkfbKjUioj8ZN4WQTaM070/Pk2qUH3CEGWTmBx61YD5Z4mBvG17ajN1qEsJj
-         9IHzFQIaiE1NtNM2fpa9pFzZIhrmpeC6GxyusY5o3S9nhMrvCZ0HO8P36Ugl+HeMOGtH
-         2c4WztqOZ4Wyzuqueoicoza8Uj52aEpID/IKC3HypxeDT7/cj4s70hInQvyxHHW+HakE
-         rmLg==
-X-Gm-Message-State: AOAM533tuTzRY5N9Bz7N4caeY6D5Cm4gw2LW2zklTJ9Ifr+SVv+zMark
-        2CH9piD5t6rZ9qNwjW5zJ0tk06VF28QCABUbMjE=
-X-Google-Smtp-Source: ABdhPJxJFkXZIbZ5/v1IVkM8gLozWkzwZwIXSgLl6Yz50Jxw194DeHV0bnuOvHVF3b3uFiqTrEciYIgTwsxdWmEdowU=
-X-Received: by 2002:a25:1dd7:0:b0:65d:4a5a:86dd with SMTP id
- d206-20020a251dd7000000b0065d4a5a86ddmr7965556ybd.602.1654089039485; Wed, 01
- Jun 2022 06:10:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F5AH1U5SHVaxYK5U6wHZI+Uf8T98VsEerOgnBwZfGkY=;
+        b=60N7pByuvo4Jp6hTWMo4V9EQLoK/5SCPd/m4jERAMFoPQoSjsFyCgZoPPc8mqnPo9q
+         KXDeAvnFsFkD7S4u2KGRtahcCDUxZdZ7G1JqZckpXV8E2We632oYmTqf02Cd82NJQTbd
+         q8dmPFMhf+X6BYSg2CfWz2A+eb2xlpekEmFvMILSTs5Ywyr9cxED88G16xFou79gbbdX
+         ipdwCd94dXl1r1xlorq+jQXRWftzTbGIhgbn/GKkOMI9jpClSqh/49bQBL2YGoDWMvZB
+         +aqQCWdKQvGIGgdkwk60pQuYHnGsSEef5yYYfgo0B90OCT1dnqeHwUzdmBYPKacRGDAk
+         9Plg==
+X-Gm-Message-State: AOAM53180XYnyFN1vck1Ax7L1VE/qab1o8VSuQcxvp/YyWeOw58rsUx+
+        HjIpcucWkZXOL7yUDxPAp6o=
+X-Google-Smtp-Source: ABdhPJynog34wOL325DVkpBKhAu32exXyCxMUiCFCtcQ7QP9ZOrSBHoR6U9gj57/QtV+cI3GseFmAQ==
+X-Received: by 2002:a17:902:c2d2:b0:166:303b:56ec with SMTP id c18-20020a170902c2d200b00166303b56ecmr1710581pla.83.1654089076345;
+        Wed, 01 Jun 2022 06:11:16 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id gd20-20020a17090b0fd400b001d954837197sm3862654pjb.22.2022.06.01.06.11.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 06:11:15 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] psci: Fix refcount leak in psci_dt_init
+Date:   Wed,  1 Jun 2022 17:11:07 +0400
+Message-Id: <20220601131107.18743-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:7010:178c:b0:2b2:8275:30ba with HTTP; Wed, 1 Jun 2022
- 06:10:39 -0700 (PDT)
-Reply-To: sgtkaylam28@gmail.com
-From:   sgt kayla manthey <assanaigbo@gmail.com>
-Date:   Wed, 1 Jun 2022 07:10:39 -0600
-Message-ID: <CACMOR7MerNtc93W_hQBw91G4GJCh_Xs=izwJsA3ZaJ=4g2pxQA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+of_find_matching_node_and_match() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+When of_device_is_available() fails, call of_node_put() to release the
+refcount. And of_node_put() will checks NULL pointer.
+
+Fixes: d09a0011ec0d ("drivers: psci: Allow PSCI node to be disabled")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/firmware/psci/psci.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+index cfb448eabdaa..ec888aba57ff 100644
+--- a/drivers/firmware/psci/psci.c
++++ b/drivers/firmware/psci/psci.c
+@@ -619,8 +619,10 @@ int __init psci_dt_init(void)
+ 
+ 	np = of_find_matching_node_and_match(NULL, psci_of_match, &matched_np);
+ 
+-	if (!np || !of_device_is_available(np))
++	if (!np || !of_device_is_available(np)) {
++		of_node_put(np);
+ 		return -ENODEV;
++	}
+ 
+ 	init_fn = (psci_initcall_t)matched_np->data;
+ 	ret = init_fn(np);
 -- 
-Greetings,
-Please did you receive my previous message? write me back
+2.25.1
+

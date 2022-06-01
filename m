@@ -2,105 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5CD539C43
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 06:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A04539C49
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 06:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346538AbiFAEZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 00:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        id S239764AbiFAE2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 00:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240934AbiFAEZZ (ORCPT
+        with ESMTP id S232222AbiFAE2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 00:25:25 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3169E9E1;
-        Tue, 31 May 2022 21:25:24 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id a10so850732pju.3;
-        Tue, 31 May 2022 21:25:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qV/kQWWE5TCXDtwtIihkerreiew7iWC6lBTWJeucJIg=;
-        b=ReFoyD6+1Lqkr/R2pf+8AKWuf/SU8Gfa83eXY5S/LG50yi/hKWMyX/3OPwn6aJ1F59
-         ib9E9yb2Y+S9tgbMqi2DzZfsCNhEUZGbxD4oOkub/0tFfsfKT9wVkM86/SQIFsLo3BVz
-         e5cJitqsmzcKoJtU0zDAoJXxB/Z2c3YRZcfczyZeN6rgZiFxc0z9YfjrHcMfrDOIzBxV
-         u+rLPDPpIMOH6r2OBg5TTdGimLpRzbSuCskm47LvrMHkT2LLciV2MPVfHVIrOC8nH7HR
-         MEYS9/U+HJ6ikAALq2hyIwzab4ExehXGsmHSgM3JQxIvPbHiKj0rK4M0VnW+6Qi4/aq1
-         vRWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qV/kQWWE5TCXDtwtIihkerreiew7iWC6lBTWJeucJIg=;
-        b=1gJ7emSOgzsu5MHw1jXlb2eYKy2oTyMZIGlkaEgkRGi7vj2PYQKErkU8G18zIYPSAz
-         87YYHPomCIi4kS+blzK/S5OtphQm+jxkh+8Z411Z9GSo7kcP5SUudiRrjQCQ8PjdlqpB
-         5d9o2Kf+UBZZkSqsKEwr91lSSZrHQFdvvHtJxple+rpOn0n1/oQKAff7RoVEG+oTY6fK
-         mF+lZBv+Dfu3TeiHU04LFRbCFfkT0bYzgX+W1gPgbl5th7gqQEUerW26Z+KMD0rysz7x
-         8ovo/VraERsobG77GBndy5dw3u0A5javWcKJ2ckgKYJj2E3sxNxD7nylU5T42i+iiQmH
-         OsFw==
-X-Gm-Message-State: AOAM531ErYb6T1iAFg/QI24HQu1Qq2Ex+TsO/FFo7ITmeMw+Vdc/nYyQ
-        Q52IkR8g0mtDOyQKJYwdzu8=
-X-Google-Smtp-Source: ABdhPJzhh0v5mf83CiChYoplV/aivC7HiUkv4hOQhbwi4NqjR/XvCvK6+eyWrEazVoETOiYVO01X8A==
-X-Received: by 2002:a17:902:e54e:b0:162:4b8b:f2be with SMTP id n14-20020a170902e54e00b001624b8bf2bemr38630727plf.5.1654057524096;
-        Tue, 31 May 2022 21:25:24 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id fz21-20020a17090b025500b001df51e34036sm337111pjb.0.2022.05.31.21.25.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 21:25:23 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Hyun Kwon <hyun.kwon@xilinx.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Radhey Shyam Pandey <radheys@xilinx.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] v4l: xilinx-vipp: Fix refcount leak in xvip_graph_dma_init
-Date:   Wed,  1 Jun 2022 08:25:14 +0400
-Message-Id: <20220601042514.61780-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 1 Jun 2022 00:28:39 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD01703E2;
+        Tue, 31 May 2022 21:28:38 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2514SJpU021566;
+        Tue, 31 May 2022 23:28:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1654057699;
+        bh=KbZKDXzQGEXPk884xfQumdqLoPxcqGcV2srHXN4o3L0=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Y/yJKyYNTWuJOl38I7Fd9WjhGOggmWNA4n0FCtzP+pMJ1U8kv13ksCB/Du9sFH/yb
+         auVQq9dNrYTwbzDsURmunqii9jljrDjhSQ/rJ3+xtWC11rsXcaoXPzMkF87o8hdPsk
+         LQLSr8OMD1/QdCCqfaEqdkjbZmvcewa3B+vIrI5o=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2514SJOE085085
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 31 May 2022 23:28:19 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 31
+ May 2022 23:28:19 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 31 May 2022 23:28:19 -0500
+Received: from [172.24.220.119] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2514SB9T050639;
+        Tue, 31 May 2022 23:28:12 -0500
+Message-ID: <1cf7ddd2-a6e0-8f00-953e-faf0e88074bf@ti.com>
+Date:   Wed, 1 Jun 2022 09:58:11 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: net: Add ICSSG Ethernet Driver
+ bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <nm@ti.com>, <ssantosh@kernel.org>,
+        <s-anna@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <rogerq@kernel.org>, <grygorii.strashko@ti.com>, <vigneshr@ti.com>,
+        <kishon@ti.com>, <robh+dt@kernel.org>, <afd@ti.com>,
+        <andrew@lunn.ch>
+References: <20220531095108.21757-1-p-mohan@ti.com>
+ <20220531095108.21757-2-p-mohan@ti.com>
+ <4ccba38a-ccde-83cd-195b-77db7a64477c@linaro.org>
+ <faff79c9-7e1e-a69b-f314-6c00dedf1722@ti.com>
+ <a47f5d18-9ecc-a679-b407-799e4a15c6cf@linaro.org>
+ <c13f79c9-ffca-d81d-8904-95c424dd19bc@ti.com>
+ <ec9991e3-71b0-3671-8975-292287714f95@linaro.org>
+From:   Puranjay Mohan <p-mohan@ti.com>
+In-Reply-To: <ec9991e3-71b0-3671-8975-292287714f95@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_get_child_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+Hi Krzysztof,
 
-Fixes: df3305156f98 ("[media] v4l: xilinx: Add Xilinx Video IP core")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/media/platform/xilinx/xilinx-vipp.c | 2 ++
- 1 file changed, 2 insertions(+)
+On 31/05/22 17:31, Krzysztof Kozlowski wrote:
+> On 31/05/2022 13:59, Puranjay Mohan wrote:
+>> Hi Krzysztof,
+>>
+>> On 31/05/22 17:18, Krzysztof Kozlowski wrote:
+>>> On 31/05/2022 13:27, Puranjay Mohan wrote:
+>>>>>> +examples:
+>>>>>> +  - |
+>>>>>> +
+>>>>>> +    /* Example k3-am654 base board SR2.0, dual-emac */
+>>>>>> +    pruss2_eth: pruss2_eth {
+>>>>>> +            compatible = "ti,am654-icssg-prueth";
+>>>>>
+>>>>> Again missed Rob's comment.
+>>>>
+>>>> One of Rob's comment was to make the indentation as 4 which I have done.
+>>>
+>>> I clearly do not see indentation of 4, but there is 8 instead.
+>>
+>> I changed the indentation at the wrong place.
+>>
+>>>
+>>> Let's count:
+>>> +    pruss2_eth: pruss2_eth {
+>> ^ here, it was 8 in v1 so, I changed it to 4
+>>
+>>> +            compatible = "ti,am654-icssg-prueth";
+>>>      12345678^
+>>>
+>>
+>> Compatible is the child of pruss2_eth, so, It should have 4+4 = 8?
+> 
+> Yes. Indentation of four means first block is indented with 4 spaces.
+> The next block 4+4. The next one 4+4+4.
 
-diff --git a/drivers/media/platform/xilinx/xilinx-vipp.c b/drivers/media/platform/xilinx/xilinx-vipp.c
-index f34f8b077e03..415579b63737 100644
---- a/drivers/media/platform/xilinx/xilinx-vipp.c
-+++ b/drivers/media/platform/xilinx/xilinx-vipp.c
-@@ -483,10 +483,12 @@ static int xvip_graph_dma_init(struct xvip_composite_device *xdev)
- 		ret = xvip_graph_dma_init_one(xdev, port);
- 		if (ret < 0) {
- 			of_node_put(port);
-+			of_node_put(ports);
- 			return ret;
- 		}
- 	}
- 
-+	of_node_put(ports);
- 	return 0;
- }
- 
--- 
-2.25.1
+Thanks for clearing my misunderstanding. I will fix all this in the next
+version.
 
+Thanks,
+Puranjay
+
+> 
+> Best regards,
+> Krzysztof

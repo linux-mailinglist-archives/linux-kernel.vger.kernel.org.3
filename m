@@ -2,116 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80320539F82
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB20539F7E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350791AbiFAI3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 04:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
+        id S1350776AbiFAI3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349252AbiFAI3q (ORCPT
+        with ESMTP id S1350766AbiFAI3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:29:46 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88C04B86B;
-        Wed,  1 Jun 2022 01:29:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=hUcYa8u6coeEqMUwnvlLzfUj34eb1m5imtA8bKADKGY=; b=CjtD9x0IC7BZ2I0RCGMwMpYUA1
-        UifYNmQLjK9EOCJGtNDfeqX0Zio+3tm4Zoq/mqT1yOWmBbxZXhhoj5WM41VJYJmMBHz2wMy6HHY6X
-        X7nKiZC1RVRhxCitUovdQ32VLT9KUYnvQeGeD2C6fEDKjX0DjoKAIHWimZEWxX6atXV+JhqjCKsRi
-        gvswIn0V1tTbExn4irwLbMPVZ6zxCRlTcFyNtdPHcRcZlRGywL3kP6Hnd7FLneZ+cqDwMDChYnU5w
-        lzzQXex+lQ8+KdJSNa9fixC0q1n30XEY/YBjOD8cUn2Z6sZtlIKzvaSGzYCTAzOn0jINqSA9XN1NR
-        lJVoA5Sw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60916)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nwJjP-0005ls-4h; Wed, 01 Jun 2022 09:29:31 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nwJjM-0003Jb-FF; Wed, 01 Jun 2022 09:29:28 +0100
-Date:   Wed, 1 Jun 2022 09:29:28 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vladimir.oltean@nxp.com,
-        grygorii.strashko@ti.com, vigneshr@ti.com, nsekhar@ti.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kishon@ti.com
-Subject: Re: [PATCH 3/3] net: ethernet: ti: am65-cpsw: Move
- phy_set_mode_ext() to correct location
-Message-ID: <YpcjaOdXHC+uYJ2J@shell.armlinux.org.uk>
-References: <20220531113058.23708-1-s-vadapalli@ti.com>
- <20220531113058.23708-4-s-vadapalli@ti.com>
- <YpYCJv2SIExL+VHs@shell.armlinux.org.uk>
- <9f531f8d-9ff2-2ec9-504f-eed324ba86c6@ti.com>
+        Wed, 1 Jun 2022 04:29:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAAF24BFE3
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:29:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654072174;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eYHc8MFYSzdCoe/K1c8WWYjHXxoxdvsTfd+zWYaMPWE=;
+        b=LtOhIhBARSk3wWJotrgvh8x4/oELkA0tsj2rjPA/rSwEIU3b6Jo6JA73vncTdfpUTekyoF
+        cZ9aNGxoudPU05FH1huJXb2+1oM6/9qRAwZ7GEU01ifEb3U69y57kHPnCJZdCC5d0stG57
+        IuPGJ58vNm9QpsvbH5JGoNcbpFAmiDo=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-57-RXWEit2tPbC5rRNT8asufQ-1; Wed, 01 Jun 2022 04:29:32 -0400
+X-MC-Unique: RXWEit2tPbC5rRNT8asufQ-1
+Received: by mail-ej1-f70.google.com with SMTP id k7-20020a1709062a4700b006fe92440164so555018eje.23
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 01:29:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=eYHc8MFYSzdCoe/K1c8WWYjHXxoxdvsTfd+zWYaMPWE=;
+        b=pNJxSbA5Py1ykLj5uGDcquOH82fClamMCATWaZ5HqIcKOEtS0YYFzhyIIeRdXbLJb3
+         IKpcZz62CcGqjIOl+ImAONwJb+kGjPHpsiirsA7cS/OUSNoKHN5btpF2ZREOgEr7mxkw
+         2/VM+/9KtM488K4QwfUw1nQKWpbw1wX5kiHjYOfATVIfUsabOIsgc8cTmQHfQtgszQEb
+         e58fEGxTYtra3O2uCHSt4NoXjUeA/DD9HEa+x3C5BGGaprpbLYpGhpludYUUAAZp5Bp8
+         5UbdO4XVsFROeCgjNAejUDlIMkI+yUbiOWIRXHuqPyYzQjosemzrCDGIngmDjp+yVPr5
+         lsIA==
+X-Gm-Message-State: AOAM531y7jxwE7vMQR3GsJdJcLgfz6w9JUYO9chNba8BmWK0hp4GgzL8
+        gZAvPLvrMiLQ04pYscN9xSutSGJNZnJXQLggx5CJoDtKs9vOah1F98iW+0TmF5K+0OzNrcWOKPb
+        nITh9SFxc4cOq9SKURyfRyLCG
+X-Received: by 2002:a05:6402:500a:b0:42d:d109:b7da with SMTP id p10-20020a056402500a00b0042dd109b7damr16226316eda.289.1654072171794;
+        Wed, 01 Jun 2022 01:29:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyD6nPqYLx+Nc693yDBowHp2HcbQByU14BxAf1JV4Xeqyk+5VgxXIcx8URHxJNllz9jSMIj8g==
+X-Received: by 2002:a05:6402:500a:b0:42d:d109:b7da with SMTP id p10-20020a056402500a00b0042dd109b7damr16226300eda.289.1654072171560;
+        Wed, 01 Jun 2022 01:29:31 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id j22-20020a1709066dd600b006fea2705d18sm403105ejt.210.2022.06.01.01.29.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 01:29:31 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Robert Dinse <nanook@eskimo.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v2 6/8] KVM: x86: Bug the VM if the emulator accesses a
+ non-existent GPR
+In-Reply-To: <20220526210817.3428868-7-seanjc@google.com>
+References: <20220526210817.3428868-1-seanjc@google.com>
+ <20220526210817.3428868-7-seanjc@google.com>
+Date:   Wed, 01 Jun 2022 10:29:30 +0200
+Message-ID: <87o7zcokgl.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f531f8d-9ff2-2ec9-504f-eed324ba86c6@ti.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 11:39:57AM +0530, Siddharth Vadapalli wrote:
-> Hello Russell,
-> 
-> On 31/05/22 17:25, Russell King (Oracle) wrote:
-> > On Tue, May 31, 2022 at 05:00:58PM +0530, Siddharth Vadapalli wrote:
-> >> In TI's J7200 SoC CPSW5G ports, each of the 4 ports can be configured
-> >> as a QSGMII main or QSGMII-SUB port. This configuration is performed
-> >> by phy-gmii-sel driver on invoking the phy_set_mode_ext() function.
-> >>
-> >> It is necessary for the QSGMII main port to be configured before any of
-> >> the QSGMII-SUB interfaces are brought up. Currently, the QSGMII-SUB
-> >> interfaces come up before the QSGMII main port is configured.
-> >>
-> >> Fix this by moving the call to phy_set_mode_ext() from
-> >> am65_cpsw_nuss_ndo_slave_open() to am65_cpsw_nuss_init_slave_ports(),
-> >> thereby ensuring that the QSGMII main port is configured before any of
-> >> the QSGMII-SUB ports are brought up.
-> > 
-> > This sounds like "if we're configured via port->slave.phy_if to be in
-> > QSGMII mode, then the serdes PHY needs to be configured before any of
-> > the QSGMII ports are used". Doesn't that mean that if
-> > port->slave.phy_if is QSGMII, then the port _only_ supports QSGMII
-> > mode, and conversely, the port doesn't support QSGMII unless firmware
-> > said it could be.
-> > 
-> > So, doesn't that mean am65_cpsw_nuss_init_port_ndev() should indicate
-> > only QSGMII, or only the RGMII modes, but never both together?
-> 
-> The phy-gmii-sel driver called by phy_set_mode_ext() configures the CPSW5G MAC
-> rather than the SerDes Phy. In the CPSW5G MAC, the QSGMII mode is further split
-> up as two modes that are TI SoC specific, namely QSGMII main and QSGMII-SUB. Of
-> the 4 ports present in CPSW5G (4 external ports), only one can be the main port
-> while the rest are the QSGMII-SUB ports. Only the QSGMII main interface is
-> responsible for auto-negotiation between the MAC and PHY. For this reason, the
-> writes to the CPSW5G MAC, mentioning which of the interfaces is the QSGMII main
-> interface and which ones are the QSGMII-SUB interfaces has to be done before any
-> of the interfaces are brought up. Otherwise, it would result in a QSGMII-SUB
-> interface being brought up before the QSGMII main interface is determined,
-> resulting in the failure of auto-negotiation process, thereby making the
-> QSGMII-SUB interfaces non-functional.
+Sean Christopherson <seanjc@google.com> writes:
 
-That confirms my suspicion - if an interface is in QSGMII mode, then
-RGMII should not be marked as a supported interface to phylink. If the
-"QSGMII main interface" were to be switched to RGMII mode, then this
-would break the other ports. So RGMII isn't supported if in QSGMII
-mode.
+> Bug the VM, i.e. kill it, if the emulator accesses a non-existent GPR,
+> i.e. generates an out-of-bounds GPR index.  Continuing on all but
+> gaurantees some form of data corruption in the guest, e.g. even if KVM
+> were to redirect to a dummy register, KVM would be incorrectly read zeros
+> and drop writes.
+>
+> Note, bugging the VM doesn't completely prevent data corruption, e.g. the
+> current round of emulation will complete before the vCPU bails out to
+> userspace.  But, the very act of killing the guest can also cause data
+> corruption, e.g. due to lack of file writeback before termination, so
+> taking on additional complexity to cleanly bail out of the emulator isn't
+> justified, the goal is purely to stem the bleeding and alert userspace
+> that something has gone horribly wrong, i.e. to avoid _silent_ data
+> corruption.
+
+Thanks, I agree wholeheartedly :-)
+
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/emulate.c     |  4 ++--
+>  arch/x86/kvm/kvm_emulate.h | 10 ++++++++++
+>  arch/x86/kvm/x86.c         |  9 +++++++++
+>  3 files changed, 21 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 77161f57c8d3..70a8e0cd9fdc 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -247,7 +247,7 @@ enum x86_transfer_type {
+>  
+>  static ulong reg_read(struct x86_emulate_ctxt *ctxt, unsigned nr)
+>  {
+> -	if (WARN_ON_ONCE(nr >= NR_EMULATOR_GPRS))
+> +	if (KVM_EMULATOR_BUG_ON(nr >= NR_EMULATOR_GPRS, ctxt))
+>  		nr &= NR_EMULATOR_GPRS - 1;
+>  
+>  	if (!(ctxt->regs_valid & (1 << nr))) {
+> @@ -259,7 +259,7 @@ static ulong reg_read(struct x86_emulate_ctxt *ctxt, unsigned nr)
+>  
+>  static ulong *reg_write(struct x86_emulate_ctxt *ctxt, unsigned nr)
+>  {
+> -	if (WARN_ON_ONCE(nr >= NR_EMULATOR_GPRS))
+> +	if (KVM_EMULATOR_BUG_ON(nr >= NR_EMULATOR_GPRS, ctxt))
+>  		nr &= NR_EMULATOR_GPRS - 1;
+>  
+>  	BUILD_BUG_ON(sizeof(ctxt->regs_dirty) * BITS_PER_BYTE < NR_EMULATOR_GPRS);
+> diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
+> index 034c845b3c63..89246446d6aa 100644
+> --- a/arch/x86/kvm/kvm_emulate.h
+> +++ b/arch/x86/kvm/kvm_emulate.h
+> @@ -89,6 +89,7 @@ struct x86_instruction_info {
+>  #define X86EMUL_INTERCEPTED     6 /* Intercepted by nested VMCB/VMCS */
+>  
+>  struct x86_emulate_ops {
+> +	void (*vm_bugged)(struct x86_emulate_ctxt *ctxt);
+>  	/*
+>  	 * read_gpr: read a general purpose register (rax - r15)
+>  	 *
+> @@ -383,6 +384,15 @@ struct x86_emulate_ctxt {
+>  	bool is_branch;
+>  };
+>  
+> +#define KVM_EMULATOR_BUG_ON(cond, ctxt)		\
+> +({						\
+> +	int __ret = (cond);			\
+> +						\
+> +	if (WARN_ON_ONCE(__ret))		\
+> +		ctxt->ops->vm_bugged(ctxt);	\
+> +	unlikely(__ret);			\
+> +})
+> +
+>  /* Repeat String Operation Prefix */
+>  #define REPE_PREFIX	0xf3
+>  #define REPNE_PREFIX	0xf2
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 7460b9a77d9a..e60badfbbc42 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -7887,7 +7887,16 @@ static int emulator_set_xcr(struct x86_emulate_ctxt *ctxt, u32 index, u64 xcr)
+>  	return __kvm_set_xcr(emul_to_vcpu(ctxt), index, xcr);
+>  }
+>  
+> +static void emulator_vm_bugged(struct x86_emulate_ctxt *ctxt)
+> +{
+> +	struct kvm *kvm = emul_to_vcpu(ctxt)->kvm;
+> +
+> +	if (!kvm->vm_bugged)
+> +		kvm_vm_bugged(kvm);
+> +}
+> +
+>  static const struct x86_emulate_ops emulate_ops = {
+> +	.vm_bugged           = emulator_vm_bugged,
+>  	.read_gpr            = emulator_read_gpr,
+>  	.write_gpr           = emulator_write_gpr,
+>  	.read_std            = emulator_read_std,
+
+Is it actually "vm_bugged" or "kvm_bugged"? :-)
+
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Vitaly
+

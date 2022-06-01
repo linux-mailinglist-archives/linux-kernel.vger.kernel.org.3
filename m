@@ -2,95 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D82953A025
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE0153A026
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349908AbiFAJPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 05:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
+        id S1350011AbiFAJQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 05:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346234AbiFAJPr (ORCPT
+        with ESMTP id S1346234AbiFAJQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 05:15:47 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0561403DA;
-        Wed,  1 Jun 2022 02:15:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 53DBE1F93E;
-        Wed,  1 Jun 2022 09:15:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654074945; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yUzM6SCTjaU1mIdMVCprAWHtHI7nDAT4AcyKtphheFU=;
-        b=sepJCSScSco/ygJugTWsZ6WDsOVoPXEAXUJWsBt1nE7P68p+7hhw14Ir0wKgMPbTy6rfz2
-        uJoz2n6eIokFP4GbMKS4omn+EwCMNr51JNoG7uqDjtuvMQboSxieTjGqWXdvPY23kte/BX
-        JNH8XgJ/JPc4f6ZESPn8deR8utON5ZI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1B8F113A8F;
-        Wed,  1 Jun 2022 09:15:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id D/KqBUEul2JoagAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 01 Jun 2022 09:15:45 +0000
-Date:   Wed, 1 Jun 2022 11:15:43 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
-Subject: Re: [PATCH mm v3 0/9] memcg: accounting for objects allocated by
- mkdir cgroup
-Message-ID: <20220601091543.GA21320@blackbody.suse.cz>
-References: <06505918-3b8a-0ad5-5951-89ecb510138e@openvz.org>
- <3e1d6eab-57c7-ba3d-67e1-c45aa0dfa2ab@openvz.org>
- <YpSwvii5etfnOYC9@dhcp22.suse.cz>
- <ef9f7516-853d-ffe4-9a7a-5e87556bdbbe@openvz.org>
- <YpTTL3Ys35kgYyAW@dhcp22.suse.cz>
- <3a1d8554-755f-7976-1e00-a0e7fb62c86e@openvz.org>
- <YpXA35F33hvrxNLf@dhcp22.suse.cz>
- <118bcb39-1281-0d1d-b163-3f6bcc99c3e2@openvz.org>
+        Wed, 1 Jun 2022 05:16:25 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD738427FC
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 02:16:24 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id y18-20020a927d12000000b002d3dd2a5d53so74312ilc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 02:16:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=beK/RyAk6JMkokDhacR9sWsAak3KfcE5cJn8YM9YfXo=;
+        b=ADG1BH5IIp1tzwiIiHb1Lmw1T9OrRG5bspUOHfm1OBT0reA403W2u7V2R9WKrcDbwW
+         aPmaAs36xsx0bDZ7M08kj1McNh/FnMcWfZkBhyEbG9p2Xxw4TZw0bNZm6v0PYC4LPsjo
+         Ub1xmKuhaHxjO3Af3HXtzGyXM+N1SYK6YMOwPPZwe4NT2Mgo0YH1j1fWZY83AOktx6eF
+         CBJOlnW13cvtzZXjTt67sW0e3sLSKuHgZPVpDD77e8aP2mkKKxPZfoAtnbeNrFhjH5rM
+         YBjGZ2mEXWVSxR2DfXfzEoj4zAgZNoCmlUr2NzT7xbs721o87lFN87rnGKEXpEp60eKy
+         w9Iw==
+X-Gm-Message-State: AOAM532JAhF8MOp3jI/89GpByW7mtfbkPKrRfip9w7qYslNIKTrmpBln
+        e2B74w6XV/lnIjHmxvYfM6LA6KmDbYAjWKo0yxqF1MKkT1Ge
+X-Google-Smtp-Source: ABdhPJx1LL8AZ73Jqh9VOj9UlGKgQV+jKWbLhyOzcUBGZ0Dtl7G1jyvg+xSnTxpPRL3nAHlkmb8e7vAr7Vj2Yew8Js/X4rb1woHc
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <118bcb39-1281-0d1d-b163-3f6bcc99c3e2@openvz.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:2124:0:b0:32d:beca:e5ab with SMTP id
+ e36-20020a022124000000b0032dbecae5abmr33364107jaa.119.1654074982798; Wed, 01
+ Jun 2022 02:16:22 -0700 (PDT)
+Date:   Wed, 01 Jun 2022 02:16:22 -0700
+In-Reply-To: <000000000000f2b07b05d5dc87cc@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c81ea805e05f571c@google.com>
+Subject: Re: [syzbot] general protection fault in fscache_free_cookie
+From:   syzbot <syzbot+5b129e8586277719bab3@syzkaller.appspotmail.com>
+To:     dhowells@redhat.com, linux-cachefs-bounces@redhat.com,
+        linux-cachefs-owner@redhat.com, linux-cachefs@redhat.com,
+        linux-kernel@vger.kernel.org, mudongliangabcd@gmail.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 06:43:27AM +0300, Vasily Averin <vvs@openvz.org> wrote:
-> CT-901 /# cat /sys/fs/cgroup/memory/cgroup.subgroups_limit 
-> 512
-> CT-901 /# echo 3333 > /sys/fs/cgroup/memory/cgroup.subgroups_limit 
-> -bash: echo: write error: Operation not permitted
-> CT-901 /# echo 333 > /sys/fs/cgroup/memory/cgroup.subgroups_limit 
-> -bash: echo: write error: Operation not permitted
-> 
-> I doubt this way can be accepted in upstream, however for OpenVz
-> something like this it is mandatory because it much better
-> than nothing.
-
-Is this customization of yours something like cgroup.max.descendants on
-the unified (v2) hierarchy? (Just curious.)
-
-(It can be made inaccessible from within the subtree either with cgroup
-ns or good old FS permissions.)
-
-Michal
+This bug is marked as fixed by commit:
+fscache: fix GPF in fscache_free_cookie
+But I can't find it in any tested tree for more than 90 days.
+Is it a correct commit? Please update it by replying:
+#syz fix: exact-commit-title
+Until then the bug is still considered open and
+new crashes with the same signature are ignored.

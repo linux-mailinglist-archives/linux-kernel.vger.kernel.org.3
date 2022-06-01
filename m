@@ -2,230 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E688539B96
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CDB8539B9D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349377AbiFADXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 23:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
+        id S1349349AbiFADZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 23:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349361AbiFADWz (ORCPT
+        with ESMTP id S244006AbiFADZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 23:22:55 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EA392D30
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:22:54 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1654053773;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+        Tue, 31 May 2022 23:25:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE16D45787
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:25:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654053950;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Th/G/GnauDQeh1cYY41JZtKc4PEijgbu6oDv0O70UpA=;
-        b=MMtO8Jikk44fCzGqvw150A1nOGQg4PGepNusBnu+mTn2p9smgoC+ORF4+2YR0CeHgbdXIi
-        BWnV5ROcUKL2qmbrhk6WeaSFgt4p93S/VZ9SkscEUp0PLuVc75YAkazUrwBjbkT30+nWoo
-        /ccvWPOCzKPUqgENv6fQB1MXBTV9xoA=
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     Dave Chinner <dchinner@redhat.com>, linux-kernel@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Subject: [PATCH v5 6/6] mm: shrinkers: add scan interface for shrinker debugfs
-Date:   Tue, 31 May 2022 20:22:27 -0700
-Message-Id: <20220601032227.4076670-7-roman.gushchin@linux.dev>
-In-Reply-To: <20220601032227.4076670-1-roman.gushchin@linux.dev>
-References: <20220601032227.4076670-1-roman.gushchin@linux.dev>
+        bh=Yw63QfWJQqdPMs+HUkEhZ4GyLV/0EROyC/4c4l7tFAA=;
+        b=TH9qgj/xLznyGMi0ftpkAg2ikTlNVZIRsrj22Hi0nFRQ5R6HrjqNF4G5m5eh9i7mp+HaC4
+        QkRhdmUIFz5UZ0K+OYnilCqeykViBySZPhshJAzxKUNXFnIcWr2+oEUR5HUUrUB9Vug0YC
+        XbupRztn6HD3zKf54Bzc8eGyfmeJuEo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-661-3AIUhQgvPnSFwiEiofBCjg-1; Tue, 31 May 2022 23:25:47 -0400
+X-MC-Unique: 3AIUhQgvPnSFwiEiofBCjg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8393B3C0CD42;
+        Wed,  1 Jun 2022 03:25:46 +0000 (UTC)
+Received: from [10.72.12.91] (ovpn-12-91.pek2.redhat.com [10.72.12.91])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 477A32166B26;
+        Wed,  1 Jun 2022 03:25:40 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v3 05/16] cacheinfo: Allow early detection and population
+ of cache attributes
+To:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
+References: <20220525081416.3306043-1-sudeep.holla@arm.com>
+ <20220525081416.3306043-2-sudeep.holla@arm.com>
+ <20220525081416.3306043-3-sudeep.holla@arm.com>
+ <20220525081416.3306043-4-sudeep.holla@arm.com>
+ <20220525081416.3306043-5-sudeep.holla@arm.com>
+ <20220525081416.3306043-6-sudeep.holla@arm.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <f8c39072-df60-ee9e-e05c-b85ebf328362@redhat.com>
+Date:   Wed, 1 Jun 2022 11:25:37 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220525081416.3306043-6-sudeep.holla@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a scan interface which allows to trigger scanning of a particular
-shrinker and specify memcg and numa node. It's useful for testing,
-debugging and profiling of a specific scan_objects() callback.
-Unlike alternatives (creating a real memory pressure and dropping
-caches via /proc/sys/vm/drop_caches) this interface allows to interact
-with only one shrinker at once. Also, if a shrinker is misreporting
-the number of objects (as some do), it doesn't affect scanning.
+Hi Sudeep,
 
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-Acked-by: Muchun Song <songmuchun@bytedance.com>
----
- .../admin-guide/mm/shrinker_debugfs.rst       | 39 +++++++++-
- mm/shrinker_debug.c                           | 74 +++++++++++++++++++
- 2 files changed, 109 insertions(+), 4 deletions(-)
+On 5/25/22 4:14 PM, Sudeep Holla wrote:
+> Some architecture/platforms may need to setup cache properties very
+> early in the boot along with other cpu topologies so that all these
+> information can be used to build sched_domains which is used by the
+> scheduler.
+> 
+> Allow detect_cache_attributes to be called quite early during the boot.
+> 
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>   drivers/base/cacheinfo.c  | 45 ++++++++++++++++++++++++---------------
+>   include/linux/cacheinfo.h |  1 +
+>   2 files changed, 29 insertions(+), 17 deletions(-)
+> 
 
-diff --git a/Documentation/admin-guide/mm/shrinker_debugfs.rst b/Documentation/admin-guide/mm/shrinker_debugfs.rst
-index 1e0e5bdb8179..3887f0b294fe 100644
---- a/Documentation/admin-guide/mm/shrinker_debugfs.rst
-+++ b/Documentation/admin-guide/mm/shrinker_debugfs.rst
-@@ -5,14 +5,16 @@ Shrinker Debugfs Interface
- ==========================
- 
- Shrinker debugfs interface provides a visibility into the kernel memory
--shrinkers subsystem and allows to get information about individual shrinkers.
-+shrinkers subsystem and allows to get information about individual shrinkers
-+and interact with them.
- 
- For each shrinker registered in the system a directory in **<debugfs>/shrinker/**
- is created. The directory's name is composed from the shrinker's name and an
- unique id: e.g. *kfree_rcu-0* or *sb-xfs:vda1-36*.
- 
--Each shrinker directory contains the **count** file, which allows to trigger
--the *count_objects()* callback for each memcg and numa node (if applicable).
-+Each shrinker directory contains **count** and **scan** files, which allow to
-+trigger *count_objects()* and *scan_objects()* callbacks for each memcg and
-+numa node (if applicable).
- 
- Usage:
- ------
-@@ -43,7 +45,7 @@ Usage:
- 
-     $ cd sb-btrfs\:vda2-24/
-     $ ls
--    count
-+    count            scan
- 
- 3. *Count objects*
- 
-@@ -102,3 +104,32 @@ Usage:
-     2877 84 0
-     293 1 0
-     735 8 0
-+
-+4. *Scan objects*
-+
-+  The expected input format::
-+
-+    <cgroup inode id> <numa id> <number of objects to scan>
-+
-+  For a non-memcg-aware shrinker or on a system with no memory
-+  cgrups **0** should be passed as cgroup id.
-+  ::
-+
-+    $ cd /sys/kernel/debug/shrinker/
-+    $ cd sb-btrfs\:vda2-24/
-+
-+    $ cat count | head -n 5
-+    1 212 0
-+    21 97 0
-+    55 802 5
-+    2367 2 0
-+    225 13 0
-+
-+    $ echo "55 0 200" > scan
-+
-+    $ cat count | head -n 5
-+    1 212 0
-+    21 96 0
-+    55 752 5
-+    2367 2 0
-+    225 13 0
-diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
-index 781ecbd3d608..e25114e0c41c 100644
---- a/mm/shrinker_debug.c
-+++ b/mm/shrinker_debug.c
-@@ -99,6 +99,78 @@ static int shrinker_debugfs_count_show(struct seq_file *m, void *v)
- }
- DEFINE_SHOW_ATTRIBUTE(shrinker_debugfs_count);
- 
-+static int shrinker_debugfs_scan_open(struct inode *inode, struct file *file)
-+{
-+	file->private_data = inode->i_private;
-+	return nonseekable_open(inode, file);
-+}
-+
-+static ssize_t shrinker_debugfs_scan_write(struct file *file,
-+					   const char __user *buf,
-+					   size_t size, loff_t *pos)
-+{
-+	struct shrinker *shrinker = file->private_data;
-+	unsigned long nr_to_scan = 0, ino;
-+	struct shrink_control sc = {
-+		.gfp_mask = GFP_KERNEL,
-+	};
-+	struct mem_cgroup *memcg = NULL;
-+	int nid;
-+	char kbuf[72];
-+	int read_len = size < (sizeof(kbuf) - 1) ? size : (sizeof(kbuf) - 1);
-+	ssize_t ret;
-+
-+	if (copy_from_user(kbuf, buf, read_len))
-+		return -EFAULT;
-+	kbuf[read_len] = '\0';
-+
-+	if (sscanf(kbuf, "%lu %d %lu", &ino, &nid, &nr_to_scan) < 2)
-+		return -EINVAL;
-+
-+	if (nid < 0 || nid >= nr_node_ids)
-+		return -EINVAL;
-+
-+	if (nr_to_scan == 0)
-+		return size;
-+
-+	if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
-+		memcg = mem_cgroup_get_from_ino(ino);
-+		if (!memcg || IS_ERR(memcg))
-+			return -ENOENT;
-+
-+		if (!mem_cgroup_online(memcg)) {
-+			mem_cgroup_put(memcg);
-+			return -ENOENT;
-+		}
-+	} else if (ino != 0) {
-+		return -EINVAL;
-+	}
-+
-+	ret = down_read_killable(&shrinker_rwsem);
-+	if (ret) {
-+		mem_cgroup_put(memcg);
-+		return ret;
-+	}
-+
-+	sc.nid = nid;
-+	sc.memcg = memcg;
-+	sc.nr_to_scan = nr_to_scan;
-+	sc.nr_scanned = nr_to_scan;
-+
-+	shrinker->scan_objects(shrinker, &sc);
-+
-+	up_read(&shrinker_rwsem);
-+	mem_cgroup_put(memcg);
-+
-+	return size;
-+}
-+
-+static const struct file_operations shrinker_debugfs_scan_fops = {
-+	.owner	 = THIS_MODULE,
-+	.open	 = shrinker_debugfs_scan_open,
-+	.write	 = shrinker_debugfs_scan_write,
-+};
-+
- int shrinker_debugfs_add(struct shrinker *shrinker)
- {
- 	struct dentry *entry;
-@@ -128,6 +200,8 @@ int shrinker_debugfs_add(struct shrinker *shrinker)
- 
- 	debugfs_create_file("count", 0220, entry, shrinker,
- 			    &shrinker_debugfs_count_fops);
-+	debugfs_create_file("scan", 0440, entry, shrinker,
-+			    &shrinker_debugfs_scan_fops);
- 	return 0;
- }
- 
--- 
-2.35.3
+With the comments improved, as below:
+
+Reviewed-by: Gavin Shan <gshan@redhat.com>
+
+
+> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
+> index ed74db18468f..976142f3e81d 100644
+> --- a/drivers/base/cacheinfo.c
+> +++ b/drivers/base/cacheinfo.c
+> @@ -193,14 +193,8 @@ static int cache_setup_of_node(unsigned int cpu)
+>   {
+>   	struct device_node *np;
+>   	struct cacheinfo *this_leaf;
+> -	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
+>   	unsigned int index = 0;
+>   
+> -	/* skip if fw_token is already populated */
+> -	if (this_cpu_ci->info_list->fw_token) {
+> -		return 0;
+> -	}
+> -
+>   	np = of_cpu_device_node_get(cpu);
+>   	if (!np) {
+>   		pr_err("Failed to find cpu%d device node\n", cpu);
+> @@ -236,6 +230,18 @@ int __weak cache_setup_acpi(unsigned int cpu)
+>   
+>   unsigned int coherency_max_size;
+>   
+> +static int cache_setup_properties(unsigned int cpu)
+> +{
+> +	int ret = 0;
+> +
+> +	if (of_have_populated_dt())
+> +		ret = cache_setup_of_node(cpu);
+> +	else if (!acpi_disabled)
+> +		ret = cache_setup_acpi(cpu);
+> +
+> +	return ret;
+> +}
+> +
+>   static int cache_shared_cpu_map_setup(unsigned int cpu)
+>   {
+>   	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
+> @@ -246,21 +252,21 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
+>   	if (this_cpu_ci->cpu_map_populated)
+>   		return 0;
+>   
+> -	if (of_have_populated_dt())
+> -		ret = cache_setup_of_node(cpu);
+> -	else if (!acpi_disabled)
+> -		ret = cache_setup_acpi(cpu);
+> -
+> -	if (ret)
+> -		return ret;
+> +	/*
+> +	 * skip setting up cache properties if LLC is valid, just need
+> +	 * to update the shared cpu_map if the cache attributes were
+> +	 * populated early before all the cpus are brought online
+> +	 */
+> +	if (!last_level_cache_is_valid(cpu)) {
+> +		ret = cache_setup_properties(cpu);
+> +		if (ret)
+> +			return ret;
+> +	}
+>   
+>   	for (index = 0; index < cache_leaves(cpu); index++) {
+>   		unsigned int i;
+>   
+>   		this_leaf = per_cpu_cacheinfo_idx(cpu, index);
+> -		/* skip if shared_cpu_map is already populated */
+> -		if (!cpumask_empty(&this_leaf->shared_cpu_map))
+> -			continue;
+>   
+>   		cpumask_set_cpu(cpu, &this_leaf->shared_cpu_map);
+>   		for_each_online_cpu(i) {
+> @@ -330,10 +336,13 @@ int __weak populate_cache_leaves(unsigned int cpu)
+>   	return -ENOENT;
+>   }
+>   
+> -static int detect_cache_attributes(unsigned int cpu)
+> +int detect_cache_attributes(unsigned int cpu)
+>   {
+>   	int ret;
+>   
+> +	if (per_cpu_cacheinfo(cpu)) /* Already setup */
+> +		goto update_cpu_map;
+> +
+>   	if (init_cache_level(cpu) || !cache_leaves(cpu))
+>   		return -ENOENT;
+>  
+
+Here it might be worthy to explain when CPU's cache info has been
+populated, by mentioning CPU info can be populated at booting
+and hot-add time.
+  
+> @@ -349,6 +358,8 @@ static int detect_cache_attributes(unsigned int cpu)
+>   	ret = populate_cache_leaves(cpu);
+>   	if (ret)
+>   		goto free_ci;
+> +
+> +update_cpu_map:
+>   	/*
+>   	 * For systems using DT for cache hierarchy, fw_token
+>   	 * and shared_cpu_map will be set up here only if they are
+> diff --git a/include/linux/cacheinfo.h b/include/linux/cacheinfo.h
+> index 7e429bc5c1a4..00b7a6ae8617 100644
+> --- a/include/linux/cacheinfo.h
+> +++ b/include/linux/cacheinfo.h
+> @@ -84,6 +84,7 @@ int populate_cache_leaves(unsigned int cpu);
+>   int cache_setup_acpi(unsigned int cpu);
+>   bool last_level_cache_is_valid(unsigned int cpu);
+>   bool last_level_cache_is_shared(unsigned int cpu_x, unsigned int cpu_y);
+> +int detect_cache_attributes(unsigned int cpu);
+>   #ifndef CONFIG_ACPI_PPTT
+>   /*
+>    * acpi_find_last_cache_level is only called on ACPI enabled
+> 
+
+Thanks,
+Gavin
 

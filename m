@@ -2,106 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362C353AFEE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B0D53AFCD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbiFAVbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
+        id S231589AbiFAVcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbiFAVbm (ORCPT
+        with ESMTP id S231491AbiFAVcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:31:42 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BEB1B6FEE;
-        Wed,  1 Jun 2022 14:31:40 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-f2cbceefb8so4396592fac.11;
-        Wed, 01 Jun 2022 14:31:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VEbVkK2s1dx1I733B0KjgcXb+wOYev+2UVEaoJXI8eM=;
-        b=m/NIyF83h/mGZ0z8tueOeoS8o64Mdtosbamfbua8lRFll+RuOMiewctJ6uDTWsbzqA
-         uZ4rDDxJyxHcbR6TweQtkzNyOsyT30QZnPGxPYRlzCiwh7sxygfeK4/lnC+LfIB8uie+
-         +3jjO56osucNAFLIa6w+N46VkRHhUO3iH28OFzUkf3YYRh3q0CVzJD98+EWbiphe7VaG
-         Wl7H470qtQ1oIXnChc46gqpwctMPO6IsJPCxYEuoJ4g5MJqB7Z4vUiA7uBrsN94As+7/
-         IhmZoYrG3R+sjBOY/zWdQvGz1Yk0hlvKJ+PEqkfFopvE9RdWYPHOPh9fxnbQAZILAMDC
-         gOHQ==
-X-Gm-Message-State: AOAM532RVaiLYWzrwHJjOWp0BPaQrPfRuVmiZAn/RYfOQ6Rt5dx8cL9W
-        SjXD34DTNvVKBXAIpCGw1w==
-X-Google-Smtp-Source: ABdhPJwGMf8v2YTPcJ/X9dmPhH+sCdV5KMAkFhLog+ZqoQtoHIigpK8SF/AVRx09qZ0e/AgHrPL/3w==
-X-Received: by 2002:a05:6870:6491:b0:f3:4ec4:8cfe with SMTP id cz17-20020a056870649100b000f34ec48cfemr943133oab.66.1654119099994;
-        Wed, 01 Jun 2022 14:31:39 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w17-20020a4ae4d1000000b0035eb4e5a6b1sm1423674oov.7.2022.06.01.14.31.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 14:31:39 -0700 (PDT)
-Received: (nullmailer pid 495183 invoked by uid 1000);
-        Wed, 01 Jun 2022 21:31:39 -0000
-Date:   Wed, 1 Jun 2022 16:31:39 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Robert Foss <robert.foss@linaro.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, krzk+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v1] dt-bindings: clock: qcom: Relicense to GPL2 + BSD
-Message-ID: <20220601213139.GA478939-robh@kernel.org>
-References: <20220520124447.31289-1-robert.foss@linaro.org>
- <YofgAd/nAejaATli@gerhold.net>
+        Wed, 1 Jun 2022 17:32:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B680D1C4F02
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 14:32:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654119134;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kydqna2S/fNnNfFhR9vYtc6J6licD3U6v9tlZqx3JCg=;
+        b=NjBbrw4kgt24+PkpMR5XfqpQjJSv6OUnBsxeBYMEfbqD63HCvIo1xrZetZY/mKKwJlDjnR
+        NNmGegA40UTsuWL/AAllEkthficX+WmEnc5oVXRAtY9hJVloOfx+HWGmRPZbwBsAThvynl
+        pVUSE39yj/d1UfnzzTt+b4ulUNcJvio=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-503-nxe11axJOkGj6dRd8brr-A-1; Wed, 01 Jun 2022 17:32:12 -0400
+X-MC-Unique: nxe11axJOkGj6dRd8brr-A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8BA2383328C;
+        Wed,  1 Jun 2022 21:32:11 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A81FCC23DBF;
+        Wed,  1 Jun 2022 21:32:11 +0000 (UTC)
+Message-ID: <6734ae25-27eb-0024-8524-ab8885a5fae0@redhat.com>
+Date:   Wed, 1 Jun 2022 17:32:11 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YofgAd/nAejaATli@gerhold.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 2/2] blk-cgroup: Optimize blkcg_rstat_flush()
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>
+References: <20220601165324.60892-1-longman@redhat.com>
+ <20220601165324.60892-2-longman@redhat.com>
+ <YpemVpvaPomwH7mt@slm.duckdns.org>
+ <ca091a5c-4ae1-e973-403e-4086d4527102@redhat.com>
+ <YpexWFptr/l2Y0rU@slm.duckdns.org>
+ <bca31669-7107-ebe4-7fbf-2449940a5cc8@redhat.com>
+ <c26f153c-304c-e109-6626-bb8b79a2e2ad@redhat.com>
+ <YpfaC+wB5Th4tLDY@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YpfaC+wB5Th4tLDY@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 08:37:53PM +0200, Stephan Gerhold wrote:
-> On Fri, May 20, 2022 at 02:44:47PM +0200, Robert Foss wrote:
-> > Qualcomm has given permission for all the dt-bindings to be dual
-> > licensed. All of the Linaro authored bindings are easy to change, in
-> > terms of the permissions & copyrights, so they've been bundled in this
-> > commit.
-> > 
-> > Additionally clean up the syntax of some of the copyright statements.
-> > 
-> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> > ---
-> > 
-> > There are more Qcom bindings that should have the license updated
-> > to GPL2+BSD, but since they haven't been authored or copyrighted
-> > by Linaro, I think I'll have to hunt down the authors individually.
-> > 
-> >  include/dt-bindings/clock/qcom,gcc-msm8998.h          | 2 +-
-> >  include/dt-bindings/clock/qcom,rpmcc.h                | 2 +-
-> >  include/dt-bindings/clock/qcom,rpmh.h                 | 6 ++++--
-> > 
-> 
-> At least these 3 have contributors outside Qualcomm and Linaro.
-> Doesn't this mean you would still need to contact all of them
-> and see if they are fine with relicensing their contribution?
 
-Yes. Though I think you could draw the line at some number of lines. 
-This is what I use to get # of lines by email:
+On 6/1/22 17:28, Tejun Heo wrote:
+> On Wed, Jun 01, 2022 at 05:25:53PM -0400, Waiman Long wrote:
+>> I think the best way to protect against blkg destruction is to get a percpu
+>> reference when put into lockless list and put it back when removed.
+>>
+>> BTW, when I ran a test that continuously create and destroy containers, the
+>> total number of blkcg's kept on increasing. There are some freeing of
+>> blkcg's but no freeing of blkg's at all. Maybe we have a similar dying
+>> blkcg's problem here. I will take a further look at that when I have time.
+> They get pinned by per-cgroup writebacks which gets pinned by lingering page
+> cache and other remaining accounted memory areas, so I think they can hang
+> around if there's no memory pressure. But, yeah, it'd be great to verify
+> that they actually go away under memory pressure.
+>
+> Thanks.
+>
+Thanks for the explanation. It makes sense to me.
 
-git blame -e include/dt-bindings/clock/qcom,rpmcc.h | sed -e 's/.*<\(.*\)>.*/\1/' | sort | uniq -c | sort -n
+Cheers,
+Longman
 
-> I don't want to make this more complicated than necessary, but it's
-> probably better to be careful when it comes to licensing stuff...
-> 
-> (Although personally I think it feels a bit weird to discuss copyright
->  for a bunch of "numbered names"...)
-
-Indeed.
-
-Rob

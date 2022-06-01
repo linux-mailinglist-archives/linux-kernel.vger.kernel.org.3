@@ -2,101 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4B453A47B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5E253A47E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 14:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351668AbiFAL72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 07:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        id S1351756AbiFAMAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 08:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242752AbiFAL7Z (ORCPT
+        with ESMTP id S237306AbiFAMAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:59:25 -0400
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03511DC;
-        Wed,  1 Jun 2022 04:59:25 -0700 (PDT)
-Received: by mail-pj1-f46.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so2837104pjm.2;
-        Wed, 01 Jun 2022 04:59:24 -0700 (PDT)
+        Wed, 1 Jun 2022 08:00:17 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E18EA5;
+        Wed,  1 Jun 2022 05:00:16 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id f21so3227442ejh.11;
+        Wed, 01 Jun 2022 05:00:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=UL5PH5i+xuc8loEy0ATOPtr6G7svIoI4YSCb5ptBF3g=;
+        b=ATdhMQpSXZWzXWLgUPNrpleqYwKgREEnQCofQlEELE9GqvuT/+Vyc5EhnKa48tRJ8K
+         JdSkqVCvr/+dwwelxUkpLeS7BgWyDXRjUW9sDeLaTDs4BgvGMYQocBcQxKO+wjzTggfO
+         PllPOu8sMS78tRO/kPY/1Q16PQj25jt7we+DqYIojCxzPMWRJosQMEHuu5NfSKNpG60Z
+         5ub2RVJbsolsY1Q7LeJUXKFzGLN/hrDlxdYUpHN4ZfDOvFReLqEMePnlMkXag/qA2vSm
+         eMEtDfoYFh6BabE0pmDYfx6+V8dBdY0LoodgY1iU+SNIviDjfm+5YXKHJbiF7CJ5vyMP
+         jS5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=91WLR4x8N/d2cket7T0sGmDgmfSOOo4AlCpi1uelSJQ=;
-        b=2vsfxYncFGzy3UrerWDSSGzAPtD/KbV//vSD78g27SvlfIetTW1uTxTCcaFfmtiH+P
-         I7uYCUU5ta99J6wq1oLe3maxdjpqqqm2IYhNbqEV0czeJNIZDYyxR3XkXzVgeJQmXG8e
-         oXBmdK/YF6t73yC/v/C9dkI5pTW14+SG3ea2yja+Y4Qhgdjy5ZX5lK4DMbFq2gnX8g4t
-         iq5L94BfBRShtA2zbnhqPtiBqBxNQfTQxX9x6OqO7spDnouKFmu+rQ3r6g1zlxhW2S4o
-         3maEOI/hpBSHsHPdHpqTxf9UZa1Y6z/vMwccQqoCmP2YlwqLFGvEuc+xT/+6zyWWtL+m
-         Tz2Q==
-X-Gm-Message-State: AOAM532lJ8vYVH2oZAkzctKetfU9fDjHVx0Cs3cqa+p86OJfJRQ0pBKD
-        5SHPgWecTsfuuvcHGMsPsXk=
-X-Google-Smtp-Source: ABdhPJweKR88zivyopAagwRyJq5cAohZJGhAoFHTGP98fE/n2Sm4S9u+0euiL7ATQulF17osCuVMbQ==
-X-Received: by 2002:a17:902:f54c:b0:163:f64a:612c with SMTP id h12-20020a170902f54c00b00163f64a612cmr11180686plf.22.1654084764256;
-        Wed, 01 Jun 2022 04:59:24 -0700 (PDT)
-Received: from [192.168.51.14] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id bb7-20020a170902bc8700b001624dab05edsm1398513plb.8.2022.06.01.04.59.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 04:59:23 -0700 (PDT)
-Message-ID: <3e13bf8f-060c-fc81-4405-e7d5820518cc@acm.org>
-Date:   Wed, 1 Jun 2022 04:59:22 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=UL5PH5i+xuc8loEy0ATOPtr6G7svIoI4YSCb5ptBF3g=;
+        b=h/TzRiMpXpUMQ8aI2WkSY0E/giO5T9/0xD9AOFtb23S1uP+4WQukGmOJXWD0KwxI3x
+         XxiweriDPzMudj1SjVIROyrwj+/IvWaNXcdDGcLcDmcPqubfD770l7RijoeOJAGGfz2C
+         51zJXYMTiF65qPzDDBIuXou31oEHQe6jpKaDK3x7LPU+Wl6qws2DCkzu0GiVjtdOz3Ev
+         Q6FDarbxcQEfX9Lh5hX0cf0RRoA/mOUAEghBHjZjUQM1wQAdcDdKabP8GyM9Jsf4E9TX
+         XMP0D1sklybRlfvFVs/w278YS5PfpZmNWu3XWdeW/gvCX5VusUWc24+xa/ZwB2ck+ywI
+         RLdg==
+X-Gm-Message-State: AOAM533fAwE6M9iZarsvbom0aGM60o/7IjWDIjn7NrbdcTspLxWFEdpG
+        G09lr5sFcfrp/eK1oAB8hZI=
+X-Google-Smtp-Source: ABdhPJyNXEn8aIfSas+HfoTrWtTtH/NVy/28V6xdWptELRxLACgmc0IFaUXuYNbLmh57/Kxnd3yJ/w==
+X-Received: by 2002:a17:907:971e:b0:6fe:b652:7d51 with SMTP id jg30-20020a170907971e00b006feb6527d51mr50437482ejc.356.1654084814668;
+        Wed, 01 Jun 2022 05:00:14 -0700 (PDT)
+Received: from mail (239.125-180-91.adsl-dyn.isp.belgacom.be. [91.180.125.239])
+        by smtp.gmail.com with ESMTPSA id r7-20020aa7d147000000b0042dd792b3e8sm879353edo.50.2022.06.01.05.00.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 05:00:14 -0700 (PDT)
+Date:   Wed, 1 Jun 2022 14:00:13 +0200
+From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        linux-ia64@vger.kernel.org
+Subject: Re: kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes
+ address space '__rcu' of expression
+Message-ID: <20220601120013.bq5a3ynbkc3hngm5@mail>
+References: <202205222029.xpW3PM1y-lkp@intel.com>
+ <87y1yspmmh.fsf@toke.dk>
+ <20220601003834.ilvx2pik672yxuxt@mail>
+ <87h7547k8c.fsf@toke.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] scsi: ufs: add a quirk to disable FUA support
-Content-Language: en-US
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Can Guo <cang@codeaurora.org>
-References: <20220531201053.3300018-1-jaegeuk@kernel.org>
- <d3038c9e-c9ec-16e9-bad4-8b1de5e23ba6@intel.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <d3038c9e-c9ec-16e9-bad4-8b1de5e23ba6@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87h7547k8c.fsf@toke.dk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/22 22:24, Adrian Hunter wrote:
-> On 31/05/22 23:10, Jaegeuk Kim wrote:
->> +	/*
->> +	 * This quirk disables FUA support.
->> +	 */
->> +	UFSHCD_QUIRK_BROKEN_FUA				= 1 << 17,
+On Wed, Jun 01, 2022 at 12:26:27PM +0200, Toke Høiland-Jørgensen wrote:
+> Luc Van Oostenryck <luc.vanoostenryck@gmail.com> writes:
 > 
-> Wouldn't it be more appropriate to make it a UFS_DEVICE_QUIRK_
-> since it presumably depends on the UFS device not the host controller?
+> > On Mon, May 23, 2022 at 12:30:14PM +0200, Toke Høiland-Jørgensen wrote:
+> >> kernel test robot <lkp@intel.com> writes:
+> >> 
+> >> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> >> > head:   eaea45fc0e7b6ae439526b4a41d91230c8517336
+> >> > commit: 782347b6bcad07ddb574422e01e22c92e05928c8 xdp: Add proper __rcu annotations to redirect map entries
+> >> > date:   11 months ago
+> >> > config: ia64-randconfig-s031-20220522 (https://download.01.org/0day-ci/archive/20220522/202205222029.xpW3PM1y-lkp@intel.com/config)
+> >> > compiler: ia64-linux-gcc (GCC) 11.3.0
+> >> 
+> >> Hmm, so this is ia64-only? Some kind of macro breakage? Paul, any ideas?
+> >
+> > Hi,
+> >
+> > It's surely IA64's cmpxchg() which contains lines like:
+> > 	_r_ = ia64_cmpxchg8_##sem((__u64 *) ptr, new, _o_); 
 > 
-> Also, as already commented by others, there needs to be a user of
-> the quirk
+> Oh, right. Hmm, well, if the cmpxchg does an internal cast that
+> complicates things a bit. My immediate thought was to move the
+> unrcu_pointer() inside the calls to cmpxchg(), like:
+ 
+> But that seems to confuse sparse because these are ptr-to-ptr
+> constructs:
 
-Another possibility is to use the generic SCSI blacklist mechanism. See 
-also the scsi_static_device_list array. See also /proc/scsi/device_info. 
- From scsi_devinfo.c:
+Yes, that can't work because it applies on the wrong level (same difference as
+between "int const ** ptr" and "int * const * ptr").
 
-/*
-  * proc_scsi_dev_info_write - allow additions to scsi_dev_info_list via
-  * /proc.
-  *
-  * Description: Adds a black/white list entry for vendor and model with
-  * an integer value of flag to the scsi device info list.
-  * To use, echo "vendor:model:flag" > /proc/scsi/device_info
-  */
+I've taken a quick look and the problem is really to be solved in IA64's
+macros for cmpxchg() and friends. Two things need to be done:
+1) avoid casts like the "(__u64 *) ptr" here above (ideally no cast would
+   be needed but a "(__u64 __force *) ptr" would be pefectly acceptable in
+   such macros.
+2) the value returned by these macros must match the type of the pointer
+   and the old/new values. For example, on x86 such macros are written as:
+	({
+		__typeof__ (*(ptr)) __ret = (arg);
+		switch (sizeof(*(ptr))) { 
+		case ...
+			... use ptr without dropping the address space ..
 
-Thanks,
+		__ret;
+	)}
 
-Bart.
+See, for example, arch/x86/include/asm/cmpxchg.h
+
+-- Luc

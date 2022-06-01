@@ -2,178 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CB3539D79
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8C1539D95
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349942AbiFAGyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 02:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
+        id S1350023AbiFAG4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 02:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344194AbiFAGx6 (ORCPT
+        with ESMTP id S231705AbiFAG43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 02:53:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44CC0483B4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 23:53:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654066436;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MWmZwzFVpRksBO4BOLojz9NUjcykvBgvkXhMFxoUwY0=;
-        b=SUvqI2yud/hJezmgwK7tLL5n1BprhNBblapWRuco7yEV1EOZHnJXQq4jVGoyHL0D3Nv++D
-        DZ+9lJ2/vRzG/Ysdket+MWYcgCFXSkofMxHofgDZLUsDeB+67e9bpZ7C/B62KpmsTKGPJs
-        kaQrhiGKNJJoZOYpAgmRJTe1y1bxRWE=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-510-GTiykojcNo6de0JThg55Ww-1; Wed, 01 Jun 2022 02:53:55 -0400
-X-MC-Unique: GTiykojcNo6de0JThg55Ww-1
-Received: by mail-qv1-f72.google.com with SMTP id i6-20020a0cd846000000b0046262337c65so726923qvj.20
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 23:53:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=MWmZwzFVpRksBO4BOLojz9NUjcykvBgvkXhMFxoUwY0=;
-        b=Lniagw2WEU9wQ/DiMDgtglNC3SuHEvdCbkPbqgUHjulwQvtzfv3jOZWXQcgUTgsejG
-         MsyYSP9M+LYQ9KzGmx/KmxBKOUL3qgWAFkI/dMiNFbDK68Gyl7OHqG8SMMxFpQ87t3IY
-         AP+xcr4EIhqc4SuFqVxN41jACtNS/aA2Q+ctHAZy7BG28m7bmNR0mkmke8yq8TGGotMH
-         zCp2l3tvXJ6Cz/G+xXNLSQFaSydgR7Rph9bp8NZ3ZaWr3Oz6KHMfPbFvd7z43duoE2Ea
-         506+933CVHAyfMngWOMK4OhNecsdWTJYej4I5V6YPbiUBMxPhVVl1WkdJZ0qrUpArDuo
-         JIUg==
-X-Gm-Message-State: AOAM533R11lexkQu2xDZBcYkF7bB7JqGZQYD1RSvpOWI+G4YwcSKImB0
-        s8pnF5yc8fA+GvHYTmcnCD6A6F3qs+khCYUivslpiQYfWHj88c1OXDBxWoONBNr7kmNtR5sbSTK
-        MvVhWXnAgqCxDxQYRy+k3/gVunCWySIr1P37d1B4K
-X-Received: by 2002:ac8:5ad0:0:b0:2f3:e37a:e768 with SMTP id d16-20020ac85ad0000000b002f3e37ae768mr50097551qtd.592.1654066435028;
-        Tue, 31 May 2022 23:53:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwfPCaM1Mb2ZZ2MmLFAvNODRxUeZ4/DdHaMTc0SpE9AKwfijcq0lYwmMmaTnm8BsgB2V8pYGab8IEx/HQXQOwg=
-X-Received: by 2002:ac8:5ad0:0:b0:2f3:e37a:e768 with SMTP id
- d16-20020ac85ad0000000b002f3e37ae768mr50097535qtd.592.1654066434799; Tue, 31
- May 2022 23:53:54 -0700 (PDT)
+        Wed, 1 Jun 2022 02:56:29 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DE95641F;
+        Tue, 31 May 2022 23:56:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654066588; x=1685602588;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=LJQybaBM/F7Bf/W5JS+iZAoLpoQv+yfMRgTyPAvu6vg=;
+  b=yJkN00j73m4naK14768529ZViuFoC0iR6XBAnjLIv48pC/iLdvyb01rh
+   WJp8LC4n3Yl5nKU/rpHLNQOREIdKeJ473oV9bisk/h6vDAwI1P/Y2IjkU
+   510M4A0EGMKKrR9GtiVGq5qJ4WjL4azywXR5g5ug0xT5VMpjw7J+gyRIQ
+   Q=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 31 May 2022 23:56:28 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 23:56:27 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 31 May 2022 23:56:13 -0700
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 31 May 2022 23:56:08 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Doug Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH v8 0/3] Add QCOM SNPS PHY overriding params support
+Date:   Wed, 1 Jun 2022 12:26:01 +0530
+Message-ID: <1654066564-20518-1-git-send-email-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20220526124338.36247-1-eperezma@redhat.com> <20220526124338.36247-2-eperezma@redhat.com>
- <DM8PR12MB5400573627EEB71D774892C4ABDF9@DM8PR12MB5400.namprd12.prod.outlook.com>
-In-Reply-To: <DM8PR12MB5400573627EEB71D774892C4ABDF9@DM8PR12MB5400.namprd12.prod.outlook.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Wed, 1 Jun 2022 08:53:18 +0200
-Message-ID: <CAJaqyWfHLtcFokus3PB1K+19gcD1yeazox426Ur0LoMqOPy7FQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/4] vdpa: Add stop operation
-To:     Eli Cohen <elic@nvidia.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "martinh@xilinx.com" <martinh@xilinx.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "martinpo@xilinx.com" <martinpo@xilinx.com>,
-        "lvivier@redhat.com" <lvivier@redhat.com>,
-        "pabloc@xilinx.com" <pabloc@xilinx.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        "Piotr.Uminski@intel.com" <Piotr.Uminski@intel.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
-        "gautam.dawar@amd.com" <gautam.dawar@amd.com>,
-        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
-        "tanuj.kamde@amd.com" <tanuj.kamde@amd.com>,
-        "hanand@xilinx.com" <hanand@xilinx.com>,
-        "dinang@xilinx.com" <dinang@xilinx.com>,
-        Longpeng <longpeng2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 7:35 AM Eli Cohen <elic@nvidia.com> wrote:
->
-> > From: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> > Sent: Thursday, May 26, 2022 3:44 PM
-> > To: Michael S. Tsirkin <mst@redhat.com>; kvm@vger.kernel.org; virtualiz=
-ation@lists.linux-foundation.org; linux-kernel@vger.kernel.org;
-> > Jason Wang <jasowang@redhat.com>; netdev@vger.kernel.org
-> > Cc: martinh@xilinx.com; Stefano Garzarella <sgarzare@redhat.com>; marti=
-npo@xilinx.com; lvivier@redhat.com; pabloc@xilinx.com;
-> > Parav Pandit <parav@nvidia.com>; Eli Cohen <elic@nvidia.com>; Dan Carpe=
-nter <dan.carpenter@oracle.com>; Xie Yongji
-> > <xieyongji@bytedance.com>; Christophe JAILLET <christophe.jaillet@wanad=
-oo.fr>; Zhang Min <zhang.min9@zte.com.cn>; Wu Zongyong
-> > <wuzongyong@linux.alibaba.com>; lulu@redhat.com; Zhu Lingshan <lingshan=
-.zhu@intel.com>; Piotr.Uminski@intel.com; Si-Wei Liu <si-
-> > wei.liu@oracle.com>; ecree.xilinx@gmail.com; gautam.dawar@amd.com; habe=
-tsm.xilinx@gmail.com; tanuj.kamde@amd.com;
-> > hanand@xilinx.com; dinang@xilinx.com; Longpeng <longpeng2@huawei.com>
-> > Subject: [PATCH v4 1/4] vdpa: Add stop operation
-> >
-> > This operation is optional: It it's not implemented, backend feature bi=
-t
-> > will not be exposed.
-> >
-> > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> > ---
-> >  include/linux/vdpa.h | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-> > index 15af802d41c4..ddfebc4e1e01 100644
-> > --- a/include/linux/vdpa.h
-> > +++ b/include/linux/vdpa.h
-> > @@ -215,6 +215,11 @@ struct vdpa_map_file {
-> >   * @reset:                   Reset device
-> >   *                           @vdev: vdpa device
-> >   *                           Returns integer: success (0) or error (< =
-0)
-> > + * @stop:                    Stop or resume the device (optional, but =
-it must
-> > + *                           be implemented if require device stop)
-> > + *                           @vdev: vdpa device
-> > + *                           @stop: stop (true), not stop (false)
-> > + *                           Returns integer: success (0) or error (< =
-0)
->
-> I assume after successful "stop" the device is guaranteed to stop process=
-ing descriptors and after resume it may process descriptors?
-> If that is so, I think it should be clear in the change log.
->
+Added support for overriding tuning parameters in QCOM SNPS PHY
+from device tree. This parameter tuning is required to tune the
+hs signal on dp/dm lines for electrical compliance to be successful.
 
-Yes.
+changes in v8:
+Fixed nitpick in driver code.
 
-It's better described in the changelog of vdpa sim change, maybe it's
-better to move here.
+changes in v7:
+Fixed nitpick in driver code and dtsi file.
 
-Thanks!
+changes in v6:
+Fixed errors in dt-bindings.
+Fixed nitpick in driver code.
 
-> >   * @get_config_size:         Get the size of the configuration space i=
-ncludes
-> >   *                           fields that are conditional on feature bi=
-ts.
-> >   *                           @vdev: vdpa device
-> > @@ -316,6 +321,7 @@ struct vdpa_config_ops {
-> >       u8 (*get_status)(struct vdpa_device *vdev);
-> >       void (*set_status)(struct vdpa_device *vdev, u8 status);
-> >       int (*reset)(struct vdpa_device *vdev);
-> > +     int (*stop)(struct vdpa_device *vdev, bool stop);
-> >       size_t (*get_config_size)(struct vdpa_device *vdev);
-> >       void (*get_config)(struct vdpa_device *vdev, unsigned int offset,
-> >                          void *buf, unsigned int len);
-> > --
-> > 2.31.1
->
+changes in v5:
+Fixed nitpicks in code.
+Added minimum and maximum for each parameter added in dt-bindings.
+Added proper suffixes to each parameter as per dtschema.
+
+changes in v4:
+Fixed nitpicks in code.
+Initial compliance test results showed overshoot in the middle of eye
+diagram. The current dt values were put in place to correct it and fix
+overshoot issue.
+
+changes in v3:
+Added support for phy tuning parameters to be represented in bps and
+corresponding register values to be written are obtained by traversing
+through data map declared in the driver.
+
+changes in v2:
+Reading the individual fields in each overriding register from
+device tree.
+
+Krishna Kurapati (2):
+  phy: qcom-snps: Add support for overriding phy tuning parameters
+  arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280 IDP device
+
+Sandeep Maheswaram (1):
+  dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy override params
+    bindings
+
+ .../bindings/phy/qcom,usb-snps-femto-v2.yaml       |  96 ++++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |   6 +
+ drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c      | 267 ++++++++++++++++++++-
+ 3 files changed, 367 insertions(+), 2 deletions(-)
+
+-- 
+2.7.4
 

@@ -2,153 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453E8539B5E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8F4539B67
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349243AbiFACwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 22:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
+        id S1349246AbiFACwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 22:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234485AbiFACv5 (ORCPT
+        with ESMTP id S234485AbiFACwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 22:51:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B87F26338E
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 19:51:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654051914;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nZz1I+wyn0aWj3S3QoNUnvvCym824eLN41CHiYsQFi0=;
-        b=W/ODVZQeSE0HS/S3PSCcxzKLifgyKFsmOWWBqBScBXlPHjg4BcDgWWL+FOTTwfQAVPhNG2
-        UN34bmFpRHA/NyvNMhPkfiNljtxi77AsPuSW3Y7cFQE37YTYTHKltQxdWtqPC/A7W7dJTR
-        AhYOk3b7DEUrcPfglcsCUOsKiXcPLic=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-537-oR2SFYhPMnq0oHhTpTxB8w-1; Tue, 31 May 2022 22:51:50 -0400
-X-MC-Unique: oR2SFYhPMnq0oHhTpTxB8w-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4ADC9858EED;
-        Wed,  1 Jun 2022 02:51:50 +0000 (UTC)
-Received: from [10.72.12.91] (ovpn-12-91.pek2.redhat.com [10.72.12.91])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5A5D7492C3B;
-        Wed,  1 Jun 2022 02:51:44 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v3 03/16] cacheinfo: Move cache_leaves_are_shared out of
- CONFIG_OF
-To:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
-References: <20220525081416.3306043-1-sudeep.holla@arm.com>
- <20220525081416.3306043-2-sudeep.holla@arm.com>
- <20220525081416.3306043-3-sudeep.holla@arm.com>
- <20220525081416.3306043-4-sudeep.holla@arm.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <81bc47a8-ded7-be55-60c2-73bd1d363fd2@redhat.com>
-Date:   Wed, 1 Jun 2022 10:51:41 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Tue, 31 May 2022 22:52:39 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373826C0E8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 19:52:38 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id cx11so712028pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 19:52:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=U/LdHjgkKQR9c1pFdxPe1+kCYGuz8uBK8l8SqH25EJM=;
+        b=m2EycO58iayRzm1kxcDcgLFV/MdZgoflZpYXSA0ZfhwhxpCTavWaM0gh3j2JZV6W1c
+         xL7nRq7aVa+GWYj4en6mQdbEpGGWwW3HL+OAkNfymgnaEBpwXBxMN+l+wiphH832r0LT
+         LfNyDitFlnCe5AgSF4v6NNNpy8zJKDZa9e3UqlEPgyviQGXWDvwq5/B6/T/WU+w3KhM9
+         ygDP/cDK1ftGXwj9naDxci0M6BeWMBw6A4nIc7SXOq5EtlrHrYe2mFhns8PLgjvIAO2W
+         iVjBetYLFw9ZDCdG8/clSe3n27+tzSAnWydXMrxy1XiR9gmzfCEQwvysAGvcjR2rRXGJ
+         lWNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=U/LdHjgkKQR9c1pFdxPe1+kCYGuz8uBK8l8SqH25EJM=;
+        b=DKbunAYdi4qApWxSBn7Vk3SA8K4RwvXjtmFw+xaEPXRH+wR2ENh243Z3XQPVbbmbS9
+         lkvU8V4d9vMjMs6KFIjeBPLnZ0xgTsunyfAJJnCTB23s5NaJOMQwkklSgkTFzmQerUAG
+         V6fxP4P+q8yEvq9klG09Ad2qVJ6Z569G88/WqFTpXgTi3urGZCHWHhOgTlmztgyBgT1y
+         OX9cTsXPXZXL6V0FopzmZPuNjQRFfI6awFvJi8xT7E0cOZh79qt0EnEMmam/IHeewUwX
+         jomK15Xjgs/04dEQ61Zbpbz2YSNS0qR/rASYkTy7l/Z9XLFUJUIEGlGrOGt86fqdPXSM
+         gVfQ==
+X-Gm-Message-State: AOAM530xc+kiLk4YNOevvzgEu5m1oh9S38JCd7lqO70y8CePnZnDtW7e
+        x2p4koZ7ot+avKxjdG4ksTnKaUASzgOj6w==
+X-Google-Smtp-Source: ABdhPJw5IjFkfq3yuClWAbbZR66c4eyol+5MN1bA/Z6B327STKtSZf99CoUQ1q12TsI/tLvLh5qWOA==
+X-Received: by 2002:a17:902:a981:b0:156:229d:6834 with SMTP id bh1-20020a170902a98100b00156229d6834mr62118025plb.128.1654051957670;
+        Tue, 31 May 2022 19:52:37 -0700 (PDT)
+Received: from localhost (subs03-180-214-233-86.three.co.id. [180.214.233.86])
+        by smtp.gmail.com with ESMTPSA id e12-20020a170902ed8c00b0015e8d4eb278sm225762plj.194.2022.05.31.19.52.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 19:52:36 -0700 (PDT)
+Date:   Wed, 1 Jun 2022 09:52:32 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linuxppc-dev@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: outside array bounds error on ppc64_defconfig, GCC 12.1.0
+Message-ID: <YpbUcPrm61RLIiZF@debian.me>
 MIME-Version: 1.0
-In-Reply-To: <20220525081416.3306043-4-sudeep.holla@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudeep,
+Hi,
 
-On 5/25/22 4:14 PM, Sudeep Holla wrote:
-> cache_leaves_are_shared is already used even with ACPI and PPTT. It checks
-> if the cache leaves are the shared based on fw_token pointer. However it is
-> defined conditionally only if CONFIG_OF is enabled which is wrong.
-> 
-> Move the function cache_leaves_are_shared out of CONFIG_OF and keep it
-> generic. It also handles the case where both OF and ACPI is not defined.
-> 
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->   drivers/base/cacheinfo.c | 20 +++++++++-----------
->   1 file changed, 9 insertions(+), 11 deletions(-)
-> 
+I'm trying to verify Drop ppc_inst_as_str() patch on [1] by performing
+ppc64_defconfig build with powerpc64-unknown-linux-gnu-gcc (GCC 12.1.0).
+The patch is applied on top of powerpc tree, next branch.
 
-With below nits fixed:
+I got outside array bounds error:
 
-Reviewed-by: Gavin Shan <gshan@redhat.com>
+  CC      arch/powerpc/kernel/dbell.o
+In function 'do_byte_reverse',
+    inlined from 'do_vec_store' at arch/powerpc/lib/sstep.c:722:3,
+    inlined from 'emulate_loadstore' at arch/powerpc/lib/sstep.c:3509:9:
+arch/powerpc/lib/sstep.c:286:25: error: array subscript [3, 4] is outside array bounds of 'union <anonymous>[1]' [-Werror=array-bounds]
+  286 |                 up[0] = byterev_8(up[3]);
+      |                         ^~~~~~~~~~~~~~~~
+arch/powerpc/lib/sstep.c: In function 'emulate_loadstore':
+arch/powerpc/lib/sstep.c:708:11: note: at offset [24, 39] into object 'u' of size 16
+  708 |         } u;
+      |           ^
+In function 'do_byte_reverse',
+    inlined from 'do_vec_store' at arch/powerpc/lib/sstep.c:722:3,
+    inlined from 'emulate_loadstore' at arch/powerpc/lib/sstep.c:3509:9:
+arch/powerpc/lib/sstep.c:287:23: error: array subscript [3, 4] is outside array bounds of 'union <anonymous>[1]' [-Werror=array-bounds]
+  287 |                 up[3] = tmp;
+      |                 ~~~~~~^~~~~
+arch/powerpc/lib/sstep.c: In function 'emulate_loadstore':
+arch/powerpc/lib/sstep.c:708:11: note: at offset [24, 39] into object 'u' of size 16
+  708 |         } u;
+      |           ^
+In function 'do_byte_reverse',
+    inlined from 'do_vec_store' at arch/powerpc/lib/sstep.c:722:3,
+    inlined from 'emulate_loadstore' at arch/powerpc/lib/sstep.c:3509:9:
+arch/powerpc/lib/sstep.c:288:23: error: array subscript 2 is outside array bounds of 'union <anonymous>[1]' [-Werror=array-bounds]
+  288 |                 tmp = byterev_8(up[2]);
+      |                       ^~~~~~~~~~~~~~~~
+arch/powerpc/lib/sstep.c: In function 'emulate_loadstore':
+arch/powerpc/lib/sstep.c:708:11: note: at offset 16 into object 'u' of size 16
+  708 |         } u;
+      |           ^
+In function 'do_byte_reverse',
+    inlined from 'do_vec_store' at arch/powerpc/lib/sstep.c:722:3,
+    inlined from 'emulate_loadstore' at arch/powerpc/lib/sstep.c:3509:9:
+arch/powerpc/lib/sstep.c:289:23: error: array subscript 2 is outside array bounds of 'union <anonymous>[1]' [-Werror=array-bounds]
+  289 |                 up[2] = byterev_8(up[1]);
+      |                 ~~~~~~^~~~~~~~~~~~~~~~~~
+arch/powerpc/lib/sstep.c: In function 'emulate_loadstore':
+arch/powerpc/lib/sstep.c:708:11: note: at offset 16 into object 'u' of size 16
+  708 |         } u;
+      |           ^
+In function 'do_byte_reverse',
+    inlined from 'do_vec_load' at arch/powerpc/lib/sstep.c:691:3,
+    inlined from 'emulate_loadstore' at arch/powerpc/lib/sstep.c:3438:9:
+arch/powerpc/lib/sstep.c:286:25: error: array subscript [3, 4] is outside array bounds of 'u8[16]' {aka 'unsigned char[16]'} [-Werror=array-bounds]
+  286 |                 up[0] = byterev_8(up[3]);
+      |                         ^~~~~~~~~~~~~~~~
+arch/powerpc/lib/sstep.c: In function 'emulate_loadstore':
+arch/powerpc/lib/sstep.c:681:11: note: at offset [24, 39] into object 'u' of size 16
+  681 |         } u = {};
+      |           ^
+arch/powerpc/lib/sstep.c:681:11: note: at offset [24, 39] into object 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset [24, 39] into object 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset [24, 39] into object 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset [24, 39] into object 'u' of size 16
+In function 'do_byte_reverse',
+    inlined from 'do_vec_load' at arch/powerpc/lib/sstep.c:691:3,
+    inlined from 'emulate_loadstore' at arch/powerpc/lib/sstep.c:3438:9:
+arch/powerpc/lib/sstep.c:287:23: error: array subscript [3, 4] is outside array bounds of 'u8[16]' {aka 'unsigned char[16]'} [-Werror=array-bounds]
+  287 |                 up[3] = tmp;
+      |                 ~~~~~~^~~~~
+arch/powerpc/lib/sstep.c: In function 'emulate_loadstore':
+arch/powerpc/lib/sstep.c:681:11: note: at offset [24, 39] into object 'u' of size 16
+  681 |         } u = {};
+      |           ^
+arch/powerpc/lib/sstep.c:681:11: note: at offset [24, 39] into object 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset [24, 39] into object 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset [24, 39] into object 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset [24, 39] into object 'u' of size 16
+In function 'do_byte_reverse',
+    inlined from 'do_vec_load' at arch/powerpc/lib/sstep.c:691:3,
+    inlined from 'emulate_loadstore' at arch/powerpc/lib/sstep.c:3438:9:
+arch/powerpc/lib/sstep.c:288:23: error: array subscript 2 is outside array bounds of 'u8[16]' {aka 'unsigned char[16]'} [-Werror=array-bounds]
+  288 |                 tmp = byterev_8(up[2]);
+      |                       ^~~~~~~~~~~~~~~~
+arch/powerpc/lib/sstep.c: In function 'emulate_loadstore':
+arch/powerpc/lib/sstep.c:681:11: note: at offset 16 into object 'u' of size 16
+  681 |         } u = {};
+      |           ^
+arch/powerpc/lib/sstep.c:681:11: note: at offset 16 into object 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset 16 into object 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset 16 into object 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset 16 into object 'u' of size 16
+In function 'do_byte_reverse',
+    inlined from 'do_vec_load' at arch/powerpc/lib/sstep.c:691:3,
+    inlined from 'emulate_loadstore' at arch/powerpc/lib/sstep.c:3438:9:
+arch/powerpc/lib/sstep.c:289:23: error: array subscript 2 is outside array bounds of 'u8[16]' {aka 'unsigned char[16]'} [-Werror=array-bounds]
+  289 |                 up[2] = byterev_8(up[1]);
+      |                 ~~~~~~^~~~~~~~~~~~~~~~~~
+arch/powerpc/lib/sstep.c: In function 'emulate_loadstore':
+arch/powerpc/lib/sstep.c:681:11: note: at offset 16 into object 'u' of size 16
+  681 |         } u = {};
+      |           ^
+arch/powerpc/lib/sstep.c:681:11: note: at offset 16 into object 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset 16 into object 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset 16 into object 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset 16 into object 'u' of size 16
+  CC      arch/powerpc/kernel/jump_label.o
+cc1: all warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:271: arch/powerpc/lib/sstep.o] Error 1
 
-> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
-> index c4547d8ac6f3..417e1ebf5525 100644
-> --- a/drivers/base/cacheinfo.c
-> +++ b/drivers/base/cacheinfo.c
-> @@ -33,13 +33,21 @@ struct cpu_cacheinfo *get_cpu_cacheinfo(unsigned int cpu)
->   	return ci_cacheinfo(cpu);
->   }
->   
-> -#ifdef CONFIG_OF
->   static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
->   					   struct cacheinfo *sib_leaf)
->   {
-> +	/*
-> +	 * For non DT/ACPI systems, assume unique level 1 caches,
-> +	 * system-wide shared caches for all other levels. This will be used
-> +	 * only if arch specific code has not populated shared_cpu_map
-> +	 */
-> +	if (!IS_ENABLED(CONFIG_OF) && !(IS_ENABLED(CONFIG_ACPI)))
-> +		return !(this_leaf->level == 1);
-> +
->   	return sib_leaf->fw_token == this_leaf->fw_token;
->   }
->   
+These errors above are unrelated to the patch.
 
-	if (!IS_ENABLED(CONFIG_OF) && !IS_ENABLED(CONFIG_ACPI))
+[1]: https://lore.kernel.org/linuxppc-dev/20220531065936.3674348-1-mpe@ellerman.id.au/
 
-         or
+Thanks.
 
-	if (!(IS_ENABLED(CONFIG_OF) || IS_ENABLED(CONFIG_ACPI)))
-
-> +#ifdef CONFIG_OF
->   /* OF properties to query for a given cache type */
->   struct cache_type_info {
->   	const char *size_prop;
-> @@ -193,16 +201,6 @@ static int cache_setup_of_node(unsigned int cpu)
->   }
->   #else
->   static inline int cache_setup_of_node(unsigned int cpu) { return 0; }
-> -static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
-> -					   struct cacheinfo *sib_leaf)
-> -{
-> -	/*
-> -	 * For non-DT/ACPI systems, assume unique level 1 caches, system-wide
-> -	 * shared caches for all other levels. This will be used only if
-> -	 * arch specific code has not populated shared_cpu_map
-> -	 */
-> -	return !(this_leaf->level == 1);
-> -}
->   #endif
->   
->   int __weak cache_setup_acpi(unsigned int cpu)
-> 
-
-Thanks,
-Gavin
-
+-- 
+An old man doll... just what I always wanted! - Clara

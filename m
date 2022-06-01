@@ -2,99 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D7E53AB48
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D227D53AB55
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356203AbiFAQsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 12:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S1353102AbiFAQx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 12:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234144AbiFAQsa (ORCPT
+        with ESMTP id S1343763AbiFAQx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 12:48:30 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE96A2042;
-        Wed,  1 Jun 2022 09:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654102109; x=1685638109;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=00iMzNpl4nVdOEC1GABzCwR9itIjYCdYxTEgVqgNnCQ=;
-  b=KiWN7X+eNAX667k1LzNMCNthvwcQDqb6TPduY+FzmHlSZQ0fUPXtmC9w
-   g6tfo7QvDNJq6+13MH8pOj4GpRI/dw+kxLwyZiRF1ylE+yXUBCoOt5fXk
-   2MeBCRg37R/zz0rcRZfn0pZ/hXKjRsIylgSY7iI5tGvLZfUjwve7clyJH
-   RjynBwZdaF7Uc1+ULHZHbZKAJcmH6Aez18zglHkLZfLAEbT0lodwsg5LA
-   8+znuN3gCZAUMCIDLpMsRMWdc4WJDKlQrEAQXgTGr+79AHK6Jn4nVzl46
-   SBpil7QvFY+EKvK/ethE2ampdIKMaC/5V6XJeMRYQmpRf+O2uCb8l0xu6
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="338698165"
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="338698165"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 09:48:29 -0700
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="756351737"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 09:48:27 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nwRWC-000QqK-Kt;
-        Wed, 01 Jun 2022 19:48:24 +0300
-Date:   Wed, 1 Jun 2022 19:48:24 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v1 1/1] gpio: wcove: make irq_chip immutable
-Message-ID: <YpeYWKpD+ls2DMm5@smile.fi.intel.com>
-References: <20220601154833.2173-1-andriy.shevchenko@linux.intel.com>
- <e965160d-08d1-f148-6452-f759053e7e99@linux.intel.com>
- <YpePLa0jbTLusGU9@smile.fi.intel.com>
+        Wed, 1 Jun 2022 12:53:27 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64721B797
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 09:53:25 -0700 (PDT)
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 251GrB0V013766
+        for <linux-kernel@vger.kernel.org>; Thu, 2 Jun 2022 01:53:11 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 251GrB0V013766
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1654102392;
+        bh=3NKQ+J3mzt26WVeE86BqFNJ9+iqJLoZtenf097yyYe4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ULej1WToW/U7kHpiFTAlHr7SmsxH2jVcbm1DCPMRb0hYM2dBBu/V59Rj4o2qPGCZt
+         aQzSMtWANhX+9E0LUBjNrlwQ2OkAKr2OpHyuMu5ltTvhmVCj6EM3r4AwtJkFaEMrUU
+         n1Ei+DYyJZu0Of3CaBNrgYAFg1TI/LB5W6/3cOuEVP5Lh4PD7MfjTt4na51uNw1Zpg
+         vi1JUTBrKONiH7AqDcdFUbEXAIIgYXhR60s0UuDkB/+wjUoVfBhrnBqP6VZcCK/ru/
+         LJCgZ9sLq2Ukp8fEq7cpSvjTbxkJ1HERqc3B73cKMugPv/bEzUHvDPuIS83Sps+YbY
+         NjSp05CInRw+g==
+X-Nifty-SrcIP: [209.85.214.176]
+Received: by mail-pl1-f176.google.com with SMTP id i1so2321724plg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 09:53:11 -0700 (PDT)
+X-Gm-Message-State: AOAM530JabizqbdhfxuVsuQ0QXaKg8f6+yTJBDrw40VzJGmiHGJkfJFD
+        PTdKwvj/t/Q6AKzxm2gfz3ft32g7ct2n43w1sho=
+X-Google-Smtp-Source: ABdhPJxhsJ0yvfOfuO3coLIJWFOt3V5F/7NjPqiVQQUCpJ+4KU1HKIWEydX7/88qEsknlnrnKrn+feViD2SNnFCqpPY=
+X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
+ l5-20020a170903120500b0015e8cbcfd2bmr333667plh.99.1654102391009; Wed, 01 Jun
+ 2022 09:53:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YpePLa0jbTLusGU9@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220601010017.2639048-1-cmllamas@google.com>
+In-Reply-To: <20220601010017.2639048-1-cmllamas@google.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 2 Jun 2022 01:52:34 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARjJJfEUhfs8_5Jw3ADg6kKSP=u10=dg4URS10hRk4tsQ@mail.gmail.com>
+Message-ID: <CAK7LNARjJJfEUhfs8_5Jw3ADg6kKSP=u10=dg4URS10hRk4tsQ@mail.gmail.com>
+Subject: Re: [PATCH] binder: fix sender_euid type in uapi header
+To:     Carlos Llamas <cmllamas@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Todd Kjos <tkjos@android.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christopher Ferris <cferris@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 07:09:17PM +0300, Andy Shevchenko wrote:
-> On Wed, Jun 01, 2022 at 08:51:03AM -0700, Sathyanarayanan Kuppuswamy wrote:
-> > On 6/1/22 8:48 AM, Andy Shevchenko wrote:
-> > > Since recently, the kernel is nagging about mutable irq_chips:
-> > > 
-> > >     "not an immutable chip, please consider fixing it!"
-> > > 
-> > > Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
-> > > helper functions and call the appropriate gpiolib functions.
-> > > 
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > 
-> > Looks good to me
-> > 
-> > Reviewed-by: Kuppuswamy Sathyanarayanan
-> > <sathyanarayanan.kuppuswamy@linux.intel.com>
-> 
-> Thanks!
-> 
-> Please fix your tools so it won't split tag line and `b4` may automatically test it.
+On Wed, Jun 1, 2022 at 10:00 AM Carlos Llamas <cmllamas@google.com> wrote:
+>
+> The {pid,uid}_t fields of struct binder_transaction were recently
+> replaced to use kernel types in commit 169adc2b6b3c ("android/binder.h:
+> add linux/android/binder(fs).h to UAPI compile-test coverage").
+>
+> However, using __kernel_uid_t here breaks backwards compatibility in
+> architectures using 16-bits for this type, since glibc and some others
+> still expect a 32-bit uid_t. Instead, let's use __kernel_uid32_t which
+> avoids this compatibility problem.
+>
+> Fixes: 169adc2b6b3c ("android/binder.h: add linux/android/binder(fs).h to UAPI compile-test coverage")
+> Reported-by: Christopher Ferris <cferris@google.com>
+> Signed-off-by: Carlos Llamas <cmllamas@google.com>
+> ---
+
+Ahhh, good catch.
+
+Thank you for fixing this!
+
+ Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
 
 
-Pushed to my review and testing queue, thanks!
+>  include/uapi/linux/android/binder.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
+> index 11157fae8a8e..688bcdaeed53 100644
+> --- a/include/uapi/linux/android/binder.h
+> +++ b/include/uapi/linux/android/binder.h
+> @@ -289,7 +289,7 @@ struct binder_transaction_data {
+>         /* General information about the transaction. */
+>         __u32           flags;
+>         __kernel_pid_t  sender_pid;
+> -       __kernel_uid_t  sender_euid;
+> +       __kernel_uid32_t        sender_euid;
+>         binder_size_t   data_size;      /* number of bytes of data */
+>         binder_size_t   offsets_size;   /* number of bytes of offsets */
+>
+> --
+> 2.36.1.255.ge46751e96f-goog
+>
+
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Best Regards
+Masahiro Yamada

@@ -2,56 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850F653A531
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 14:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199BB53A536
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 14:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352860AbiFAMjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 08:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
+        id S1353002AbiFAMkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 08:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347353AbiFAMjF (ORCPT
+        with ESMTP id S1345417AbiFAMkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 08:39:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5979D6F4AF;
-        Wed,  1 Jun 2022 05:39:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03007B81A1F;
-        Wed,  1 Jun 2022 12:39:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014C5C385A5;
-        Wed,  1 Jun 2022 12:38:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654087141;
-        bh=oz8sdc7YaS+FFTgKgy6l95sNhmT8mhsukKDSp5YTO+E=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=Q6V8+TDacXi+hfE0nCA8Pfr3DoocD4CpoV6wnc7O9MAix/RSZ/py2Sq0HpzbEv+aa
-         sd3CTq1nwwGllq5NRbvYKNY3pxTBFmSoA6UZn/kBqRmdRCpA6fs69SqFCHxKZyzYui
-         F1OdZr6/u3xQAr/aLuaIFgXnlPJ3OAnF2bwJMWFP77R//Pc1aRz2aal9VPPhcrScwt
-         uHSYS8Dd3DFpsAmprYO17DihetBLvzmyVL653vDqdlqYibs98OW5WLWIrf1iYqggaX
-         VcQIS1voPUapva66DDJPDncoHoN+XwKEh2l6Z5wts7JD5w5yPsSKX6anh2OlWfDKax
-         xkXscJTSDJwMA==
-From:   Mark Brown <broonie@kernel.org>
-To:     tiwai@suse.com, quic_srivasam@quicinc.com,
-        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
-        judyhsiao@chromium.org, bjorn.andersson@linaro.org,
-        swboyd@chromium.org, perex@perex.cz, linux-kernel@vger.kernel.org,
-        bgoswami@quicinc.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, quic_plai@quicinc.com,
-        lgirdwood@gmail.com, quic_rohkumar@quicinc.com,
-        linux-arm-msm@vger.kernel.org, agross@kernel.org
-In-Reply-To: <1653660608-27245-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1653660608-27245-1-git-send-email-quic_srivasam@quicinc.com>
-Subject: Re: [PATCH] ASoC: qcom: lpass-platform: Update VMA access permissions in mmap callback
-Message-Id: <165408713769.3032499.9376939250680150345.b4-ty@kernel.org>
-Date:   Wed, 01 Jun 2022 14:38:57 +0200
+        Wed, 1 Jun 2022 08:40:20 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19EC6F4BE
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 05:40:18 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id k16so2182813wrg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 05:40:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2BLb3a/bKK8JSZ8nleWjYNhcYmYYgG/wy6R6ErsL1i8=;
+        b=i2bfN+y0JLz22po/eL3Lw0qDgyhBAkJl6ewZX3EQMlGvvCs7Mntt2aiRKICHfvX4iV
+         YPr9HwJ9nHvKHXaRqJsSlYNbAxo4NEEqps8N8PPgy9Z1wTXqE2F1lOKPj0tkaAHn/GJD
+         nbWqPo8Enig167z9slg0Biu2LWGF+423jDsao=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=2BLb3a/bKK8JSZ8nleWjYNhcYmYYgG/wy6R6ErsL1i8=;
+        b=K+bRXOP0BvUgDsMOK8FpIrUkmZd70NgC9hHwMjzDpoeK8apK+jVyKNvGQNzzAkh8pA
+         x0zbdJcnZGArHIGduE6syZZ/cbCSnvQVzeV014BrvVzdIH5+GzLpzxiCyKd/Fbrkc2q2
+         cnGzNQqphbERxWVLgIyVD+V557XeeAD99Z+Wqiz5AjKWK9ySxn38ZOLZQXNQd4atCJ9N
+         xn8yNiNH2nVDgTQcsDRZBATWOJbSHHPz2Kl5pXjxKi0dwt4FBkI34pjkZy6J4XDWrRSB
+         XbqJjjqJVrSsOuhuHGBWJqcIm/UmXn8NQntKMz+wiODzulgqfmbRo6NtjC/vgVxPHv7w
+         bGtg==
+X-Gm-Message-State: AOAM531vwqoK8X7YEwdevV17XNuakJlAkRHD+03MMkQns5MsEzo6a7Jz
+        aAD9pUC3XbgXfhnOL1tIs5GKLA==
+X-Google-Smtp-Source: ABdhPJzJHzc9OdTZBqvz/Ub5yA/mOJC3JvFEGfzcdAppFu9qrZLd+lPSu+/84/nYDyRM4+PKm6iNPw==
+X-Received: by 2002:adf:f38f:0:b0:210:30cf:6e4a with SMTP id m15-20020adff38f000000b0021030cf6e4amr14338402wro.676.1654087217380;
+        Wed, 01 Jun 2022 05:40:17 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id j37-20020a05600c1c2500b0039c235fb6a5sm1703467wms.8.2022.06.01.05.40.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 05:40:16 -0700 (PDT)
+Date:   Wed, 1 Jun 2022 14:40:14 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     "T.J. Mercier" <tjmercier@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Greg Kroah-Hartman <gregkh@google.com>,
+        John Stultz <jstultz@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: Re: [PATCH v2] dma-buf: Move sysfs work out of DMA-BUF export path
+Message-ID: <YpdeLrJzmCA7OozT@phenom.ffwll.local>
+Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "T.J. Mercier" <tjmercier@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Greg Kroah-Hartman <gregkh@google.com>,
+        John Stultz <jstultz@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220516171315.2400578-1-tjmercier@google.com>
+ <175c5af3-9224-9c8e-0784-349dad9a2954@amd.com>
+ <CABdmKX2GcgCs1xANYPBp8OEtk9qqH7AvCzpdppj9rHXvMqWSAw@mail.gmail.com>
+ <0875fa95-3a25-a354-1433-201fca81ed3e@amd.com>
+ <CABdmKX1+VYfdzyVYOS5MCsr4ptGTygmuUP9ikyh-vW6DgKk2kg@mail.gmail.com>
+ <YoM9BAwybcjG7K/H@kroah.com>
+ <Yo4/XhWQkACWaPIh@phenom.ffwll.local>
+ <CABdmKX2dC0fkFrCedjhzmheYiDVP4PnKBMeGkX3_bgrLjOiYOg@mail.gmail.com>
+ <38da6dcd-b395-f32f-5a47-6a8f2c6a4331@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <38da6dcd-b395-f32f-5a47-6a8f2c6a4331@amd.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,38 +101,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 May 2022 19:40:08 +0530, Srinivasa Rao Mandadapu wrote:
-> Replace page protection permissions from noncashed to writecombine,
-> in lpass codec DMA path mmp callabck, to support 64 bit chromeOS.
-> Avoid SIGBUS error in userspace caused by noncached permissions in
-> 64 bit chromeOS.
+On Mon, May 30, 2022 at 08:12:16AM +0200, Christian König wrote:
+> Am 25.05.22 um 23:05 schrieb T.J. Mercier:
+> > On Wed, May 25, 2022 at 7:38 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > > On Tue, May 17, 2022 at 08:13:24AM +0200, Greg Kroah-Hartman wrote:
+> > > > On Mon, May 16, 2022 at 05:08:05PM -0700, T.J. Mercier wrote:
+> > > > > On Mon, May 16, 2022 at 12:21 PM Christian König
+> > > > > <christian.koenig@amd.com> wrote:
+> > > > > > Am 16.05.22 um 20:08 schrieb T.J. Mercier:
+> > > > > > > On Mon, May 16, 2022 at 10:20 AM Christian König
+> > > > > > > <christian.koenig@amd.com> wrote:
+> > > > > > > > Am 16.05.22 um 19:13 schrieb T.J. Mercier:
+> > > > > > > > > Recently, we noticed an issue where a process went into direct reclaim
+> > > > > > > > > while holding the kernfs rw semaphore for sysfs in write (exclusive)
+> > > > > > > > > mode. This caused processes who were doing DMA-BUF exports and releases
+> > > > > > > > > to go into uninterruptible sleep since they needed to acquire the same
+> > > > > > > > > semaphore for the DMA-BUF sysfs entry creation/deletion. In order to avoid
+> > > > > > > > > blocking DMA-BUF export for an indeterminate amount of time while
+> > > > > > > > > another process is holding the sysfs rw semaphore in exclusive mode,
+> > > > > > > > > this patch moves the per-buffer sysfs file creation to the default work
+> > > > > > > > > queue. Note that this can lead to a short-term inaccuracy in the dmabuf
+> > > > > > > > > sysfs statistics, but this is a tradeoff to prevent the hot path from
+> > > > > > > > > being blocked. A work_struct is added to dma_buf to achieve this, but as
+> > > > > > > > > it is unioned with the kobject in the sysfs_entry, dma_buf does not
+> > > > > > > > > increase in size.
+> > > > > > > > I'm still not very keen of this approach as it strongly feels like we
+> > > > > > > > are working around shortcoming somewhere else.
+> > > > > > > > 
+> > > > > > > My read of the thread for the last version is that we're running into
+> > > > > > > a situation where sysfs is getting used for something it wasn't
+> > > > > > > originally intended for, but we're also stuck with this sysfs
+> > > > > > > functionality for dmabufs.
+> > > > > > > 
+> > > > > > > > > Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BUF stats in sysfs")
+> > > > > > > > > Originally-by: Hridya Valsaraju <hridya@google.com>
+> > > > > > > > > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > > > > > > > > 
+> > > > > > > > > ---
+> > > > > > > > > See the originally submitted patch by Hridya Valsaraju here:
+> > > > > > > > > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2022%2F1%2F4%2F1066&amp;data=05%7C01%7Cchristian.koenig%40amd.com%7C8f00afd44b9744c45f5708da3e926503%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637891095771223650%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=pubWqUyqhCWpXHhJHsoqarc3GLtB6IFB1rhgfsL4a1M%3D&amp;reserved=0
+> > > > > > > > > 
+> > > > > > > > > v2 changes:
+> > > > > > > > > - Defer only sysfs creation instead of creation and teardown per
+> > > > > > > > > Christian König
+> > > > > > > > > 
+> > > > > > > > > - Use a work queue instead of a kthread for deferred work per
+> > > > > > > > > Christian König
+> > > > > > > > > ---
+> > > > > > > > >     drivers/dma-buf/dma-buf-sysfs-stats.c | 56 ++++++++++++++++++++-------
+> > > > > > > > >     include/linux/dma-buf.h               | 14 ++++++-
+> > > > > > > > >     2 files changed, 54 insertions(+), 16 deletions(-)
+> > > > > > > > > 
+> > > > > > > > > diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-buf/dma-buf-sysfs-stats.c
+> > > > > > > > > index 2bba0babcb62..67b0a298291c 100644
+> > > > > > > > > --- a/drivers/dma-buf/dma-buf-sysfs-stats.c
+> > > > > > > > > +++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
+> > > > > > > > > @@ -11,6 +11,7 @@
+> > > > > > > > >     #include <linux/printk.h>
+> > > > > > > > >     #include <linux/slab.h>
+> > > > > > > > >     #include <linux/sysfs.h>
+> > > > > > > > > +#include <linux/workqueue.h>
+> > > > > > > > > 
+> > > > > > > > >     #include "dma-buf-sysfs-stats.h"
+> > > > > > > > > 
+> > > > > > > > > @@ -168,10 +169,46 @@ void dma_buf_uninit_sysfs_statistics(void)
+> > > > > > > > >         kset_unregister(dma_buf_stats_kset);
+> > > > > > > > >     }
+> > > > > > > > > 
+> > > > > > > > > +static void sysfs_add_workfn(struct work_struct *work)
+> > > > > > > > > +{
+> > > > > > > > > +     struct dma_buf_sysfs_entry *sysfs_entry =
+> > > > > > > > > +             container_of(work, struct dma_buf_sysfs_entry, sysfs_add_work);
+> > > > > > > > > +     struct dma_buf *dmabuf = sysfs_entry->dmabuf;
+> > > > > > > > > +
+> > > > > > > > > +     /*
+> > > > > > > > > +      * A dmabuf is ref-counted via its file member. If this handler holds the only
+> > > > > > > > > +      * reference to the dmabuf, there is no need for sysfs kobject creation. This is an
+> > > > > > > > > +      * optimization and a race; when the reference count drops to 1 immediately after
+> > > > > > > > > +      * this check it is not harmful as the sysfs entry will still get cleaned up in
+> > > > > > > > > +      * dma_buf_stats_teardown, which won't get called until the final dmabuf reference
+> > > > > > > > > +      * is released, and that can't happen until the end of this function.
+> > > > > > > > > +      */
+> > > > > > > > > +     if (file_count(dmabuf->file) > 1) {
+> > > > > > > > Please completely drop that. I see absolutely no justification for this
+> > > > > > > > additional complexity.
+> > > > > > > > 
+> > > > > > > This case gets hit around 5% of the time in my testing so the else is
+> > > > > > > not a completely unused branch.
+> > > > > > Well I can only repeat myself: This means that your userspace is
+> > > > > > severely broken!
+> > > > > > 
+> > > > > > DMA-buf are meant to be long living objects
+> > > > > This patch addresses export *latency* regardless of how long-lived the
+> > > > > object is. Even a single, long-lived export will benefit from this
+> > > > > change if it would otherwise be blocked on adding an object to sysfs.
+> > > > > I think attempting to improve this latency still has merit.
+> > > > Fixing the latency is nice, but as it's just pushing the needed work off
+> > > > to another code path, it will take longer overall for the sysfs stuff to
+> > > > be ready for userspace to see.
+> > > > 
+> > > > Perhaps we need to step back and understand what this code is supposed
+> > > > to be doing.  As I recall, it was created because some systems do not
+> > > > allow debugfs anymore, and they wanted the debugging information that
+> > > > the dmabuf code was exposing to debugfs on a "normal" system.  Moving
+> > > > that logic to sysfs made sense, but now I am wondering why we didn't see
+> > > > these issues in the debugfs code previously?
+> > > > 
+> > > > Perhaps we should go just one step further and make a misc device node
+> > > > for dmabug debugging information to be in and just have userspace
+> > > > poll/read on the device node and we spit the info that used to be in
+> > > > debugfs out through that?  That way this only affects systems when they
+> > > > want to read the information and not normal code paths?  Yeah that's a
+> > > > hack, but this whole thing feels overly complex now.
+> > > A bit late on this discussion, but just wanted to add my +1 that we should
+> > > either redesign the uapi, or fix the underlying latency issue in sysfs, or
+> > > whatever else is deemed the proper fix.
+> > > 
+> > > Making uapi interfaces async in ways that userspace can't discover is a
+> > > hack that we really shouldn't consider, at least for upstream. All kinds
+> > > of hilarious things might start to happen when an object exists, but not
+> > > consistently in all the places where it should be visible. There's a
+> > > reason sysfs has all these neat property groups so that absolutely
+> > > everything is added atomically. Doing stuff later on just because usually
+> > > no one notices that the illusion falls apart isn't great.
+> > > 
+> > > Unfortunately I don't have a clear idea here what would be the right
+> > > solution :-/ One idea perhaps: Should we dynamically enumerate the objects
+> > > when userspace does a readdir()? That's absolutely not how sysfs works,
+> > > but procfs works like that and there's discussions going around about
+> > > moving these optimizations to other kernfs implementations. At least there
+> > > was a recent lwn article on this:
+> > > 
+> > > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flwn.net%2FArticles%2F895111%2F&amp;data=05%7C01%7Cchristian.koenig%40amd.com%7C8f00afd44b9744c45f5708da3e926503%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637891095771223650%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=Q58OZi79vmKMCZLL0pY7NniIW6hmSqyWjlEaZgqzYtM%3D&amp;reserved=0
+> > > 
+> > > But that would be serious amounts of work I guess.
+> > > -Daniel
+> > > --
+> > > Daniel Vetter"
+> > > Software Engineer, Intel Corporation
+> > > https://nam11.safelinks.protection.outlook.com/?url=http%3A%2F%2Fblog.ffwll.ch%2F&amp;data=05%7C01%7Cchristian.koenig%40amd.com%7C8f00afd44b9744c45f5708da3e926503%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637891095771223650%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=pOIl5yszzak4TPqjBYyL0mHjj%2F1nYRfNJbNPQTXBhbA%3D&amp;reserved=0
+> > Hi Daniel,
+> > 
+> > My team has been discussing this, and I think we're approaching a
+> > consensus on a way forward that involves deprecating the existing
+> > uapi.
+> > 
+> > I actually proposed a similar (but less elegant) idea to the readdir()
+> > one. A new "dump_dmabuf_data" sysfs file that a user would write to,
+> > which would cause a one-time creation of the per-buffer files. These
+> > could be left around to become stale, or get cleaned up after first
+> > read. However to me it seems impossible to correctly deal with
+> > multiple simultaneous users with this technique. We're not currently
+> > planning to pursue this.
+> > 
+> > Thanks for the link to the article. That on-demand creation sounds
+> > like it would allow us to keep the existing structure and files for
+> > DMA-buf, assuming there is not a similar lock contention issue when
+> > adding a new node to the virtual tree. :)
 > 
-> 
+> I think that this on demand creation is even worse than the existing ideas,
+> but if you can get Greg to accept the required sysfs changes than that's at
+> least outside of my maintenance domain any more :)
 
-Applied to
-
-   broonie/sound.git for-linus
-
-Thanks!
-
-[1/1] ASoC: qcom: lpass-platform: Update VMA access permissions in mmap callback
-      commit: ef8d89b83bf453ea9cc3c4873a84b50ff334f797
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+I think doing it cleanly in sysfs without changing the current uapi sounds
+pretty good. The hand-rolled "touch a magic file to force update all the
+files into existence" sounds like a horror show to me :-) Plus I don't see
+how you can actually avoid the locking pain with that since once the files
+are created, you have to remove them synchronously again, plus you get to
+deal with races on top (and likely some locking inversion fun on top).
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

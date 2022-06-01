@@ -2,175 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3672753B0AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC1E53B0BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbiFAXR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 19:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
+        id S232615AbiFAXVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 19:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiFAXRY (ORCPT
+        with ESMTP id S232601AbiFAXU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 19:17:24 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2079.outbound.protection.outlook.com [40.107.223.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10D61A15CC;
-        Wed,  1 Jun 2022 16:17:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZfekCytYgomXVnkXShCzZ2QopIeKtyZS1psiktF/TkiMN1TM92UPTRSOtsw8MycQBR2k2P9WecZtoWe8Qw6Fe9RgZ/EReB0DQx38WW/Zq0KY3+LwtuXbWUjKV9ycPWa52xFWTHlzyI4rKLSLtz5JiL+B0dUxt0kbKCDmP5sO3FMFG/tTdDXEkEg2bES6aUu0DORVl2Pb4/PjUWiRA1WPTV1PVzclCZDAZxDEnqRQOWrIIb1PXdG/HTzP62jmswJRyeLXc2iZwtUdJkHq7GqJyLnapwX2ni5C7l+w0zJJWtTa4L0PXvHzuB5H6+r8szbn97GRA95HmPBogKfNBptO6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GPB7WwVmMpiLiRSEAmdXPsuWBZxYigYQtB3pm+esYDc=;
- b=Mu8C2KyhVNl/f0LslYOLrJrykIGkEnVj7UQma8qiglnqDySNXslMY0Mm5jTg3I38yK8v5hKkrP/wXNvntewvKiVXHVMOKvgh5iGCpFkqM05xlRSzlyaCsvaZs4SIL0Ju7/pkJyMgr8+uFVqA6BnXZkqWuaFI6cCJV6jXPrGcgDICu5+RpyVM+W9feuM8Xj5wcoEdgw4lXUtt+iTxAvXAz0EBI4/ZupXemDTStHhlgLLtFVDWh+FXVTuzCKKeXXem8theBlJRBGP5VaT3afMSqOvYWZVPYHzQ8V3ax5sjzPXVgmbumRHL4evxNfA/mWDfbjJx8G+42SObtImapep1AA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GPB7WwVmMpiLiRSEAmdXPsuWBZxYigYQtB3pm+esYDc=;
- b=j4cf79EEyjiQwSKrSU02Hxr0cdAr5kJqPSIX8CVhfnOBlV2jk7plsr0C2ORJJH3Ic0NeVp/sa/pDKnw/5Cyu/jqD3UndsdooB3Y6LvifaWOr6Z2nHNIU0bu4TDjhUO5aKRUWFK5x2cjAQASPZMyQJBvtZxLYukvOeGl2JW+LS2JsaKQUpyZ0+Kb9GVQobjwWmuQ6tWAC3GnIpoClkYBP7xY4UOCMswEmnxjz7cB8+ockIrh6OAd5LwGQukhLoVVZ3prtiJ6y/pz736AFYlILnxPBgZY+DVYsqim/4OcvSPnxbx45VyLsshHjkbmCYe6YHAQJaYwCbAOF8tPQFZacMg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BN8PR12MB2961.namprd12.prod.outlook.com (2603:10b6:408:65::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Wed, 1 Jun
- 2022 23:17:21 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::2484:51da:d56f:f1a5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::2484:51da:d56f:f1a5%9]) with mapi id 15.20.5314.013; Wed, 1 Jun 2022
- 23:17:21 +0000
-Date:   Wed, 1 Jun 2022 20:17:20 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     Abhishek Sahu <abhsahu@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v3 8/8] vfio/pci: Add the support for PCI D3cold state
-Message-ID: <20220601231720.GT1343366@nvidia.com>
-References: <68463d9b-98ee-b9ec-1a3e-1375e50a2ad2@nvidia.com>
- <42518bd5-da8b-554f-2612-80278b527bf5@nvidia.com>
- <20220530122546.GZ1343366@nvidia.com>
- <c73d537b-a653-bf79-68cd-ddc8f0f62a25@nvidia.com>
- <20220531194304.GN1343366@nvidia.com>
- <20220531165209.1c18854f.alex.williamson@redhat.com>
- <00b6e380-ecf4-1eaf-f950-2c418bdb6cac@nvidia.com>
- <20220601102151.75445f6a.alex.williamson@redhat.com>
- <20220601173054.GS1343366@nvidia.com>
- <20220601121547.03ebbf64.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220601121547.03ebbf64.alex.williamson@redhat.com>
-X-ClientProxiedBy: BL0PR02CA0124.namprd02.prod.outlook.com
- (2603:10b6:208:35::29) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Wed, 1 Jun 2022 19:20:58 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534431B4344;
+        Wed,  1 Jun 2022 16:20:57 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so3383293pjq.2;
+        Wed, 01 Jun 2022 16:20:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=36roVZgMS1TrHEl/hciT9eVdk9tIyXzVYQtLf5keg5w=;
+        b=as+c6RbTd6/t+lttkVFCmzXeOCYASpRwEFg4XfRTRrS2LdV5Un0pnO7xYF0y27WzpT
+         5d+ZZTK7hm/ZiZAp/FOFqeiC3CU+m+e/lPWNrSeEvzRT8LBgYIAiOt0CpMkvczf2LAfX
+         8jEmfXgghu2pN7ieABMzqzEow559x5Of29y5klmNBKj/OlxZBype6Q5wtU1A5Mi+K+cG
+         BXqjH410uz2PLbvHehC41ilcRkVRDYFJ1tHLuW/lVUnBCc5eyBVXjwU9x6QtwaI9bOqS
+         NDhqpD5PAM9ymzyvcBv7BxGor0gIUwWeut1J3dXnqaX02GYRwO3X5cWCgXi3I3of7UvP
+         UzoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=36roVZgMS1TrHEl/hciT9eVdk9tIyXzVYQtLf5keg5w=;
+        b=RYNJvMZfXyHHIxkIFofDXYOT4YdvMM1uh1V1ipWpODBwNE1ZwR9NaVSIawaloDxOyE
+         N+WUM/N7iLkGJE6YfBotDHg0gaHzGpslPsvV3hsxH7ldeNAMaMAAv5lqr2SnDIAN3ydB
+         T4gq6pVt3B3kUIfXkf+wd9U58+vxfrj5PiW/A7hvqNQiHkZvfCsooZwebJgp1ruFSe/4
+         bIKXchZD69Kn8T2DR9NJl5jLbeD7rj5YSLUDRGuZbLGFYCnMdCnYlwc982juY/piVwqQ
+         5BrhAO7qSi961nbHaKYPOW0NeVfOR5EnWdjyqYOQ1L4t+Q69OZOr95Vm+tKEpRLrbPGs
+         58BQ==
+X-Gm-Message-State: AOAM533ZQEgzq6BhE2+eSr0mR0KQekolQgBsd1A+37AghzzO8SeUb6ra
+        IFxidqFEmGmm3+R5DWvcoSA=
+X-Google-Smtp-Source: ABdhPJxT7BH4lX65PiGp5rSDj1Q9H7sqxS3DJrU6IvB8+JntDvJvEbEoeWUCDHHWSUWvIYBQuCbtwg==
+X-Received: by 2002:a17:903:215:b0:15e:cae9:7622 with SMTP id r21-20020a170903021500b0015ecae97622mr1857738plh.28.1654125656631;
+        Wed, 01 Jun 2022 16:20:56 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id p16-20020a17090ad31000b001e2afd35791sm1916085pju.18.2022.06.01.16.20.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 16:20:56 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 1 Jun 2022 13:20:54 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Bui Quang Minh <minhquangbui99@gmail.com>
+Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
+Message-ID: <Ypf0VnKUMiuRgZqT@slm.duckdns.org>
+References: <20220525151517.8430-1-mkoutny@suse.com>
+ <20220525151517.8430-3-mkoutny@suse.com>
+ <20220525161455.GA16134@blackbody.suse.cz>
+ <Yo7KfEOz92kS2z5Y@blackbook>
+ <Yo/DtjEU/kYr190u@slm.duckdns.org>
+ <0babd7df-bdef-9edc-3682-1144bc0c2d2b@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d57344bf-511b-403c-0bba-08da4424e116
-X-MS-TrafficTypeDiagnostic: BN8PR12MB2961:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB2961514A5818C697D2D97FA7C2DF9@BN8PR12MB2961.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CoIO6tXD7u9OhcaCoYnpzO5FHtyGb4qQ1Eaiu4SPubUeS3V6w9aKwU39dPS0r0DhNrOxXwh+WGpr9n40aY6qfqoGL1CueUhuj29L8zFIXPTnymIl29FVFpN7F2Pz76Zkjkr87bG6ngYTF4uxtbg/b+qvfKHiAjmQoeIaYLJFOoRdkJGFBElW+3IR1sQ49NH7PH2DKb1vDuH/avBjY4b95tg+2l+YMkh9cj9z8Jc3vFssO3KxjMINhTk06sTojwAQyVbiYVo65a/jC6G0kwjYxu4Y7GFchSTZZMO7D24vyid9bZY9f3CZQlU2C4Iu2cE+6ZRrTEZ/wIJgMs0NKGOQlKUSs/dVmCbEKfO7TirRlI18DY0j1UkNmH2mnh1qwE5BXNBqWJa7wdhECKWBBCWNV5vMComr/EEh+v2qKCxZRotkqGlfONmVLTNdfG2lXOvMtjMp9LxruBMvGCO/eU+pKwfeKj1hpT5o4ExKuFFlqam0TsoDGY7No1xRvaT19fabUZUPy+GMDuqnQYhYZuFH/hPL2McgbBakxtAn/XeYZvG7S5NBlZUQt6YuChXdAO9Q7knS5r15DDZsAGE24tZL5YQKDL/k+f1kaeiTS9ngl9dXbC5RmInAjfiGCizEDuJB8QlCi9Q2FPLrdSqHzgXO6UL1uDtQshxKs0bmr3AG4jLm56RfKQRSx4L/H9EI4+uQdvXNB3kVJKyODr4Dc04Q+Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(8676002)(86362001)(66476007)(66946007)(66556008)(316002)(38100700002)(6916009)(54906003)(508600001)(5660300002)(186003)(2616005)(1076003)(6512007)(2906002)(26005)(6506007)(8936002)(33656002)(36756003)(83380400001)(7416002)(6486002)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GLkTqOdsaZt85s7EIPafH/pr4kvqL5CQ9Gko/a1cMzj/n8miiePsfwEjucbv?=
- =?us-ascii?Q?E5rgRHzHFwfJi3R16g8Fs9ZVM60EN4OfTYAXxsvsd8wOLFPVVJ8taFdYKr19?=
- =?us-ascii?Q?N7AFZWH0ag7Jf6FbBGHvZZ5k2iH0PD9mqKRJUtp2vEYnKmhpB5I1LIwglqSM?=
- =?us-ascii?Q?Hhh2pkoct/vtmR9hsNgKyh9ooCtkDSuyYuzDK7875L1HBRaZyylxcRU56dPV?=
- =?us-ascii?Q?Nv3PsZ7sq6hGoDtkt9ioONn0gEjB0xpXRBRhoDNf4UrY/s99RDjqDwGZUaCc?=
- =?us-ascii?Q?bBwP4yHVbwVAvU9JsTpWeglXsybdKJcIOOYz5OzG6xQ79cmvVfB0OUc505aO?=
- =?us-ascii?Q?EOKI5fTUFjVgco7crlulk0oXNR+RwYE1izm2aA+1sR69599/WH1qofdSoPjz?=
- =?us-ascii?Q?NGikVw+yb18PXiDojaIpQ3BgfjddQpP7ZOiBB+qEt6/TLVxdisWSfuDlBDMQ?=
- =?us-ascii?Q?MQVmXle2AKlAnlB2m9+y6hk3yyRRJQus7PuR1X94l7EUetEr4xMggOLHk2Qs?=
- =?us-ascii?Q?7I5l7Qx1QjWAemMqG4zKGbZO4pXEWBViDnzGJ7wSBVZN9wEF3GYQ8LE4C7to?=
- =?us-ascii?Q?d5u+X1JRKnzS+OLr5V2dP/f6rcsNsIcvpf9gcFNEtM1QI1+jgIGPnMEfcMpL?=
- =?us-ascii?Q?jV0Kpr6M57txb7vMY8bnDiEGmKtgUF/qJx8Sj3KNPooT+9lb8QRsg/r9C1Oh?=
- =?us-ascii?Q?iPGXioshh5QORbwyMN1rCGvyrKt1J/HuPfVfHyEixKayrLMuQejey4NGIMZa?=
- =?us-ascii?Q?U6+IaxiELBZMW3ORJSkxeLOFyLrOMqYqmMFcA7zJdQv61i3lSGY9DBNDL4iB?=
- =?us-ascii?Q?7y4kacUvcL7nwbi1xkF2IzCVuLA52HK0M94iOO4ONNZTtgEeD4ZBiDzxOTS/?=
- =?us-ascii?Q?o6jGTAoaHhYIwSleomZHVCh2saHsTSgCef19uMofyEYKLXYDZzXNZqDXjHYG?=
- =?us-ascii?Q?5ZhBZxvi4BlnkUODcm7ZGyGMLWmPmmL4pLaoCZLadq1fl4rvOIomSVh/IVrJ?=
- =?us-ascii?Q?YCVVBDyccH9EJy48VUbXErlDqg2LAY4lOl3x2YhE4aOQOpXE4gWjCS9eiu7a?=
- =?us-ascii?Q?EYcpo9QqU1ETNcJJkA2Mp8QPOleXK6AUkCm+R0COkzcWNdnjmgXKOBCkHHQY?=
- =?us-ascii?Q?kaw35Htp4Im9HyTljqlxUSXz53t3vKJJGQ5VyPJNgM6xq3Yzys66AOKUnTeB?=
- =?us-ascii?Q?O5XeAub8R0oDLnq/cGd5yLG4X+aNrqUYXtWTZHEdjkCDErEvjJoLiQsLbXV9?=
- =?us-ascii?Q?BnmU0h+jLirT83Sj9zUNud8Ihqi682+xkrIzWY/aroEGma5Sz2kcvFJm+SWy?=
- =?us-ascii?Q?KlhwOWCFCDljNgdmVCF0WIZw2n+kph7graRFd0hInRNIsR+ereudXEVu+GRn?=
- =?us-ascii?Q?7oM9gVj3VpjBuBy0w5pWk3ylzGI7JWXG6wW5lQxosLY1c1BfADGJ6z3YbbL+?=
- =?us-ascii?Q?IxsK0Obp5LNJmaT9sD6T9mD1fRULg2DS/8v81Oek4NfcblMP8iYt3Hvhv4XP?=
- =?us-ascii?Q?JBdp02x83enKyXOlwmmGiNEP+ciU160hRS4nNcDKVCltPMcOWfcZQ6Gbr7MX?=
- =?us-ascii?Q?HeIMaRcrMRPaLnZoqLBTOUPNKJ23smfX4F4Kt2+io6Uamv/p3FvIPv2847dK?=
- =?us-ascii?Q?kEqXfy39/gCF5w6eR2EqlmOoCMRRoUCEib8lr5IewdfnOIkayeAIjgcAkO86?=
- =?us-ascii?Q?uuz3rwrkLybMFCOhbR6wT0EQexY3Z7r71T+HNUw/3f1KYjqDDFGZuGzo5i3U?=
- =?us-ascii?Q?7em6LuxSJg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d57344bf-511b-403c-0bba-08da4424e116
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2022 23:17:21.4219
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Z3dXal2lwGJUs9dySq0xlsm/+Ny8LVu4l5MMiewlL5rHvYljLF3PtQz584ZbVpD2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB2961
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0babd7df-bdef-9edc-3682-1144bc0c2d2b@linaro.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 12:15:47PM -0600, Alex Williamson wrote:
-> On Wed, 1 Jun 2022 14:30:54 -0300
-> Jason Gunthorpe <jgg@nvidia.com> wrote:
+On Wed, Jun 01, 2022 at 04:13:32PM -0700, Tadeusz Struk wrote:
+> > On Thu, May 26, 2022 at 11:56:34AM +0200, Michal Koutný wrote:
+> > > // ref=A: initial state
+> > > kill_css()
+> > >    css_get // ref+=F == A+F: fuse
+> > >    percpu_ref_kill_and_confirm
+> > >      __percpu_ref_switch_to_atomic
+> > >        percpu_ref_get
+> > >          // ref += 1 == A+F+1: atomic mode, self-protection
+> > >      percpu_ref_put
+> > >        // ref -= 1 == A+F: kill the base reference
+> > >    [via rcu]
+> > >    percpu_ref_switch_to_atomic_rcu
+> > >      percpu_ref_call_confirm_rcu
+> > >        css_killed_ref_fn == refcnt.confirm_switch
+> > >          queue_work(css->destroy_work)        (1)
+> > >                                                       [via css->destroy_work]
+> > >                                                       css_killed_work_fn == wq.func
+> > >                                                         offline_css() // needs fuse
+> > >                                                         css_put // ref -= F == A: de-fuse
+> > >        percpu_ref_put
+> > >          // ref -= 1 == A-1: remove self-protection
+> > >          css_release                                   // A <= 1 -> 2nd queue_work explodes!
+> > 
+> > I'm not sure I'm following it but it's perfectly fine to re-use the work
+> > item at this point. The work item actually can be re-cycled from the very
+> > beginning of the work function. The only thing we need to make sure is that
+> > we don't css_put() prematurely to avoid it being freed while we're using it.
 > 
-> > On Wed, Jun 01, 2022 at 10:21:51AM -0600, Alex Williamson wrote:
-> > 
-> > > Some ioctls clearly cannot occur while the device is in low power, such
-> > > as resets and interrupt control, but even less obvious things like
-> > > getting region info require device access.  Migration also provides a
-> > > channel to device access.    
-> > 
-> > I wonder what power management means in a case like that.
-> > 
-> > For the migration drivers they all rely on a PF driver that is not
-> > VFIO, so it should be impossible for power management to cause the PF
-> > to stop working.
-> > 
-> > I would expect any sane design of power management for a VF to not
-> > cause any harm to the migration driver..
+> Yes, it is ok to reuse a work struct, but it's not ok to have the same
+> work struct enqueued twice on the same WQ when list debug is enabled.
+> That's why we are getting this "BUG: corrupted list.."
+
+The above scenario isn't that tho. Once the work item starts executing, wq
+doesn't care about what happens to it and as killed_work_fn is holding a
+reference, the release scheduling shouldn't happen before it starts
+executing unless somebody is screwing up the refcnting.
+
+> That's right. Michal was on the right track for the kill_css() part.
+> What I think is going on is that once css_create() fails then
+> cgroup_subtree_control_write() ends up calling first kill_css() and
+> then css_put() on the same css, I think it's &cgrp->self of the kernfs_node.
+> The each_live_descendant_post() also iterates on the root.
+> Here is the call flow (sorry for long lines):
 > 
-> Is there even a significant benefit or use case for power management
-> for VFs?  The existing D3hot support should be ok, but I imagine to
-> support D3cold, all the VFs and the PF would need to move to low power.
-> It might be safe to simply exclude VFs from providing this feature for
-> now.
+> cgroup_subtree_control_write(of)->cgroup_apply_control(cgrp)->cgroup_apply_control_enable(cgrp)->css_create() <- fails here and returns error
+>   |
+>   |-> cgroup_finalize_control(cgrp)->cgroup_apply_control_disable(cgrp)->each_live_descendant_post(cgrp)->kill_css()->percpu_ref_kill_and_confirm(&css->refcnt, css_killed_ref_fn) <- this triggers css_killed_ref_fn() to be called
+>   |
+>   |  css_killed_ref_fn() <- first css->destroy_work enqueue
+>   |    |
+>   |    |->  INIT_WORK(&css->destroy_work, css_killed_work_fn); queue_work(cgroup_destroy_wq, &css->destroy_work);
+>   |
+>   |
+>   |-> goto out_unlock;
+>   |     |
+>   |     |-> cgroup_kn_unlock(kernfs_node)->cgroup_put(cgrp)->css_put(&cgrp->self)->percpu_ref_put(&css->refcnt) <- this triggers css_release() to be called
+>   |
+>   |
+>      css_release(percpu_ref) <- second css->destroy_work enqueue
+>        |
+>        |->  INIT_WORK(&css->destroy_work, css_release_work_fn); queue_work(cgroup_destroy_wq, &css->destroy_work) <- and it fails here with BUG: corrupted list in insert_work; list_add corruption.
+> 
+> 
+> What seems to work for me as the simplest fix is to prevent enqueuing a dying
+> css in css_release() as below. Please let me know if that makes sense to you.
+> 
+> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> index 1779ccddb734..5618211487cc 100644
+> --- a/kernel/cgroup/cgroup.c
+> +++ b/kernel/cgroup/cgroup.c
+> @@ -5210,8 +5210,10 @@ static void css_release(struct percpu_ref *ref)
+>  	struct cgroup_subsys_state *css =
+>  		container_of(ref, struct cgroup_subsys_state, refcnt);
+> -	INIT_WORK(&css->destroy_work, css_release_work_fn);
+> -	queue_work(cgroup_destroy_wq, &css->destroy_work);
+> +	if (!(css->flags & CSS_DYING)) {
+> +		INIT_WORK(&css->destroy_work, css_release_work_fn);
+> +		queue_work(cgroup_destroy_wq, &css->destroy_work);
+> +	}
 
-I know of no use case, I think it would be a good idea to exclude VFs.
+When the problem is ref imbalance, how can above be the solution? Of course
+release path won't cause an issue if they don't run, but we still need to
+free the thing, right?
 
-> Yes, but that's also penalizing devices that require no special
-> support, for the few that do.  I'm not opposed to some sort of
-> vfio-pci-nvidia-gpu variant driver to provide that device specific
-> support, but I'd think the device table for such a driver might just be
-> added to the exclusion list for power management support in vfio-pci.
-> vfio-pci-core would need some way for drivers to opt-out/in for power
-> management. 
+Thanks.
 
-If you think it can be done generically with a small exclusion list
-then that probably makes sense.
-
-Jason
+-- 
+tejun

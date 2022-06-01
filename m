@@ -2,121 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B2453A5F2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5036753A5F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353257AbiFAN3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 09:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
+        id S1353269AbiFANcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 09:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245537AbiFAN31 (ORCPT
+        with ESMTP id S242653AbiFANcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 09:29:27 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1ABB4FC46;
-        Wed,  1 Jun 2022 06:29:25 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251AUsn6017988;
-        Wed, 1 Jun 2022 15:29:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=b2S5IXgspUK8egzdQzb9LTEDhdR8tCzLN95i1lLnZkY=;
- b=RZLhYFWkxBva8PxnAt59zjnn+u1hwXhiqzyOESgr0ovoE/NV41jAdH64VjUu95ZDsR0F
- Ldm4du69dnyE7EbiVQLIZr8gaDIBa/M+uzpjVk/XX4YOVYJLbZE2Eov8Q2kkq92+2mE5
- kWgjnOu92WmTcIClnD6Vk0z744sI2lM/VVJRB6yaVOnHF/cn491Ept4XROygg9ANEinZ
- 1YGjSl6yQCsUkKyWrDaiy2q2MIyZ+JDlIHYbmfKsOpZPjQLF4RSCzBJb5jsozgIJTaHy
- 46uM1RK59MjlkTBDufFqEDyHdfHbB3ff/Jtt0nIRSstGxM8ircO0PpFzKDVcGuYf0GCA 9Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gbc2vs50f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jun 2022 15:29:00 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BF5F4100039;
-        Wed,  1 Jun 2022 15:28:58 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id ADB3D22AFEF;
-        Wed,  1 Jun 2022 15:28:58 +0200 (CEST)
-Received: from [10.211.9.37] (10.75.127.45) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 1 Jun
- 2022 15:28:58 +0200
-Message-ID: <b301b3f5-f0be-47b7-4789-f9914497b819@foss.st.com>
-Date:   Wed, 1 Jun 2022 15:28:57 +0200
+        Wed, 1 Jun 2022 09:32:09 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680502018E;
+        Wed,  1 Jun 2022 06:32:07 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id s6so2735825lfo.13;
+        Wed, 01 Jun 2022 06:32:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=6AmNd1uoVJElSSIZ5NcicKz1NijvWaHzL3bjyTaCTH4=;
+        b=ldSt7vIuRD+IuLgBfjyNqBye32eNJ62ST9orWrrQ7xCyXt5nToDaIro4j7IujIzZIw
+         zgZ8vXfHbYGORoIsxAJLQvjkcc6sykEM9L1EyLORHH6oaIcpSY1IUyFUk03VKLCwnPN6
+         +6LwGg/O5yk6KhmJNaozXZv2nmZ9jjdhr218OF8Xzfva6FguxwE3Hdd8DrotuQXxODYV
+         ocw8FcfH9d/LPrBKVlTYvsTkJqyYatVMDZ+6eGYRZc3e5wOgbRaPB/gd6lX7imnGwALe
+         3Zrzu6o06WNYbgVRgdyOI4ykt7Tb46alUg5IEUKgeCqhd4Re1nl50dMdjR8kh7X+CtQR
+         trgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=6AmNd1uoVJElSSIZ5NcicKz1NijvWaHzL3bjyTaCTH4=;
+        b=khSzIF+p2RkSJH3faaZyLi0Ehzh02gQ85m10JzB6ZG29DC0OYsMXTkWUbLasd3+duB
+         GY4WZRYohyEJ6C9twjXE5nS1U9uwjhpzcDCS32fPeclW8aiWz5MURB3jwas8SphbJ0ma
+         fvEncNN6W6a+DUHpuBp8dnqlJ5+YCIY5iCafJjjO8WF7i4QUDuABMuhkGZnJhmKYND9v
+         devyBzJEvCUBUpeRBvQAg87RR9nn9o/s4O6iVr/BlNwiWRb52KD5agscpbPDpWgQ6TX9
+         y4tHUg7pTfDOxt92RrVYi6n6QU60Nyd98jNtFqq05er5xfg+fT6q/ZAKVkrikhaw/yaV
+         hGVw==
+X-Gm-Message-State: AOAM5307QuNk5hi3JHU3m9/AKdNyWjSveQ+jxbCWlSutLBEp6LBZEZn+
+        wl4++Se8gIuRjqZW4KOzW1k=
+X-Google-Smtp-Source: ABdhPJxB3fNJrJkKRrllMC2ycuvNXzvXlHnLWls/OtCzWnm+TxujSRcM7FqomSJRwMxSqo/CEZZNhg==
+X-Received: by 2002:a05:6512:1041:b0:478:afc6:5846 with SMTP id c1-20020a056512104100b00478afc65846mr24643051lfb.132.1654090325618;
+        Wed, 01 Jun 2022 06:32:05 -0700 (PDT)
+Received: from [192.168.1.7] ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id d20-20020a05651233d400b0047255d2115csm366642lfg.139.2022.06.01.06.32.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 06:32:05 -0700 (PDT)
+Subject: Re: [PATCH V3 5/8] dt-bindings: Add xen,grant-dma IOMMU description
+ for xen-grant DMA ops
+To:     Stefano Stabellini <sstabellini@kernel.org>
+Cc:     xen-devel@lists.xenproject.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <1653944417-17168-1-git-send-email-olekstysh@gmail.com>
+ <1653944417-17168-6-git-send-email-olekstysh@gmail.com>
+ <alpine.DEB.2.22.394.2205311726000.1905099@ubuntu-linux-20-04-desktop>
+From:   Oleksandr <olekstysh@gmail.com>
+Message-ID: <31c21ef0-3847-a896-a387-c2e1cc0f9467@gmail.com>
+Date:   Wed, 1 Jun 2022 16:32:03 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] arm: configs: Configs that had RPMSG_CHAR now get
- RPMSG_CTRL
-Content-Language: en-US
-To:     Russell King <linux@armlinux.org.uk>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
-References: <20220405115236.1019955-1-arnaud.pouliquen@foss.st.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-In-Reply-To: <20220405115236.1019955-1-arnaud.pouliquen@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <alpine.DEB.2.22.394.2205311726000.1905099@ubuntu-linux-20-04-desktop>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-01_03,2022-06-01_01,2022-02-23_01
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Language: en-US
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-Gentle reminder.
-Please notice that Mathieu replied with a "Reviewed-by".
+On 01.06.22 03:34, Stefano Stabellini wrote:
 
-Thanks,
-Arnaud
+Hello Stefano
+
+> On Tue, 31 May 2022, Oleksandr Tyshchenko wrote:
+>> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+>>
+>> The main purpose of this binding is to communicate Xen specific
+>> information using generic IOMMU device tree bindings (which is
+>> a good fit here) rather than introducing a custom property.
+>>
+>> Introduce Xen specific IOMMU for the virtualized device (e.g. virtio)
+>> to be used by Xen grant DMA-mapping layer in the subsequent commit.
+>>
+>> The reference to Xen specific IOMMU node using "iommus" property
+>> indicates that Xen grant mappings need to be enabled for the device,
+>> and it specifies the ID of the domain where the corresponding backend
+>> resides. The domid (domain ID) is used as an argument to the Xen grant
+>> mapping APIs.
+>>
+>> This is needed for the option to restrict memory access using Xen grant
+>> mappings to work which primary goal is to enable using virtio devices
+>> in Xen guests.
+>>
+>> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+>> ---
+>> Changes RFC -> V1:
+>>     - update commit subject/description and text in description
+>>     - move to devicetree/bindings/arm/
+>>
+>> Changes V1 -> V2:
+>>     - update text in description
+>>     - change the maintainer of the binding
+>>     - fix validation issue
+>>     - reference xen,dev-domid.yaml schema from virtio/mmio.yaml
+>>
+>> Change V2 -> V3:
+>>     - Stefano already gave his Reviewed-by, I dropped it due to the changes (significant)
+>>     - use generic IOMMU device tree bindings instead of custom property
+>>       "xen,dev-domid"
+>>     - change commit subject and description, was
+>>       "dt-bindings: Add xen,dev-domid property description for xen-grant DMA ops"
+>> ---
+>>   .../devicetree/bindings/iommu/xen,grant-dma.yaml   | 49 ++++++++++++++++++++++
+>>   1 file changed, 49 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/iommu/xen,grant-dma.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/iommu/xen,grant-dma.yaml b/Documentation/devicetree/bindings/iommu/xen,grant-dma.yaml
+>> new file mode 100644
+>> index 00000000..ab5765c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/iommu/xen,grant-dma.yaml
+>> @@ -0,0 +1,49 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/iommu/xen,grant-dma.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Xen specific IOMMU for virtualized devices (e.g. virtio)
+>> +
+>> +maintainers:
+>> +  - Stefano Stabellini <sstabellini@kernel.org>
+>> +
+>> +description:
+>> +  The reference to Xen specific IOMMU node using "iommus" property indicates
+>> +  that Xen grant mappings need to be enabled for the device, and it specifies
+>> +  the ID of the domain where the corresponding backend resides.
+>> +  The binding is required to restrict memory access using Xen grant mappings.
+> I think this is OK and in line with the discussion we had on the list. I
+> propose the following wording instead:
+>
+> """
+> The Xen IOMMU represents the Xen grant table interface. Grant mappings
+> are to be used with devices connected to the Xen IOMMU using the
+> "iommus" property, which also specifies the ID of the backend domain.
+> The binding is required to restrict memory access using Xen grant
+> mappings.
+> """
+>
+>
+>> +properties:
+>> +  compatible:
+>> +    const: xen,grant-dma
+>> +
+>> +  '#iommu-cells':
+>> +    const: 1
+>> +    description:
+>> +      Xen specific IOMMU is multiple-master IOMMU device.
+>> +      The single cell describes the domid (domain ID) of the domain where
+>> +      the backend is running.
+> Here I would say:
+>
+> """
+> The single cell is the domid (domain ID) of the domain where the backend
+> is running.
+> """
+>
+> With the two wording improvements:
+
+I am happy with proposed wording improvements, will update.
 
 
-On 4/5/22 13:52, Arnaud Pouliquen wrote:
-> In the commit 617d32938d1b ("rpmsg: Move the rpmsg control device
-> from rpmsg_char to rpmsg_ctrl"), we split the rpmsg_char driver in two.
-> By default give everyone who had the old driver enabled the rpmsg_ctrl
-> driver too.
-> 
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> ---
-> 
-> This patch is extracted from the series [1] that has been partially
-> integrated in the Linux Kernel 5.18-rc1.
-> 
-> Update vs previous version:
-> - remove "Fixes:" tag in commit, requested by Mathieu Poirier in [2]
-> 
-> [1]https://lore.kernel.org/lkml/15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com/T/
-> [2]https://lore.kernel.org/linux-arm-kernel/CANLsYky1_b80qPbgOaLGVYD-GEr21V6C653iGEB7VCU=GbGvAQ@mail.gmail.com/T/
-> ---
->  arch/arm/configs/qcom_defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
-> index 9981566f2096..2e7e9a4f31f6 100644
-> --- a/arch/arm/configs/qcom_defconfig
-> +++ b/arch/arm/configs/qcom_defconfig
-> @@ -241,6 +241,7 @@ CONFIG_QCOM_Q6V5_PAS=y
->  CONFIG_QCOM_Q6V5_PIL=y
->  CONFIG_QCOM_WCNSS_PIL=y
->  CONFIG_RPMSG_CHAR=y
-> +CONFIG_RPMSG_CTRL=y
->  CONFIG_RPMSG_QCOM_GLINK_SMEM=y
->  CONFIG_RPMSG_QCOM_SMD=y
->  CONFIG_QCOM_COMMAND_DB=y
+>
+> Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
+
+Thanks!
+
+
+>
+>
+>> +required:
+>> +  - compatible
+>> +  - "#iommu-cells"
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    xen_iommu {
+>> +        compatible = "xen,grant-dma";
+>> +        #iommu-cells = <1>;
+>> +    };
+>> +
+>> +    virtio@3000 {
+>> +        compatible = "virtio,mmio";
+>> +        reg = <0x3000 0x100>;
+>> +        interrupts = <41>;
+>> +
+>> +        /* The backend is located in Xen domain with ID 1 */
+>> +        iommus = <&xen_iommu 1>;
+>> +    };
+>> -- 
+>> 2.7.4
+>>
+>>
+>> _______________________________________________
+>> linux-arm-kernel mailing list
+>> linux-arm-kernel@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>>
+-- 
+Regards,
+
+Oleksandr Tyshchenko
+

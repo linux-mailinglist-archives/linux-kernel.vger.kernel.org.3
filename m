@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A695153AD0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 20:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D54853AD0F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 20:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbiFASvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 14:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S231636AbiFASvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 14:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiFASvV (ORCPT
+        with ESMTP id S229497AbiFASv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 14:51:21 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB92C1312A0;
-        Wed,  1 Jun 2022 11:51:19 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id w130so3872476oig.0;
-        Wed, 01 Jun 2022 11:51:19 -0700 (PDT)
+        Wed, 1 Jun 2022 14:51:28 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7351B13275E;
+        Wed,  1 Jun 2022 11:51:27 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id h188so3830015oia.2;
+        Wed, 01 Jun 2022 11:51:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=O4z4N6i9xomFIEVTjR+Dhz8QGgdya/AgUb+aDwmZcCs=;
-        b=MyFatKo3CeuR1NuZWvTj496NhmbpLlhFtApebhVT+O3Kp320O54nT0NgqMaWm5dTra
-         8d7wWQiNBoA7npEHeCP7pcceSq3tzuYxohqLGvOEpCWddo2mYc7wxaN72nTmrLwYHRxq
-         MLlYYMy3Ym+KYbIdlf8w8JSnKFiG0iplZzVy6HqjPY6jfaFjon2XZaXPKEjzd4q4qd3v
-         QsBKfJ/MRbCHg6Zm84pTSzpHzmbZG2VtUEzUuBjeVqGWOKZV2qHbCF5pCqdi0zhzsZwS
-         Dv5m5fDkxyTyHgGiqYcW/HaPxEUZD8ady45bVc4Ccq60SSw6NAAnsz8gEOFb3XkxEnT6
-         n7mw==
-X-Gm-Message-State: AOAM531xO+YZ8EQJodSu/ygHAsrYOyo1vbLBvy5O9J+cKSqEWlJY76r0
-        M74Xl1cJZ/mc+XZh/7gvhA==
-X-Google-Smtp-Source: ABdhPJwkkTU9SfqBYEX0qew2XvLefev6XgeAjr4IaPvilbM4y/HGxZWgiQlKzhPkscCe0k2lk5WE6w==
-X-Received: by 2002:a05:6808:3084:b0:32b:14f8:1ab with SMTP id bl4-20020a056808308400b0032b14f801abmr16038012oib.223.1654109478925;
-        Wed, 01 Jun 2022 11:51:18 -0700 (PDT)
+        bh=M2ZNwqKjItGDpeZxDzTcGrjLej9RBlHgjiNO+wPf9u0=;
+        b=15yKPCx6b/81D4UyxkRv3vXyFI/CDsU7luQH9HUH7uY8b6i3ubb7nbbanWcAftcyGL
+         BTCMhXvvl5g5eBKRkDIZu7T3IpErw0rtEi4C3VthVt8TDIMNceTzuDTtZ+epi8B42dy5
+         xeHV0ZSoiF4iXFdrMj6G6MSAmPVut/5luy3+7x49kkmbFdY4kPc4jdMXZhVcc4j8FM1r
+         n7Azx9GkRV2lRFnHyadS2++In7/KOug/G32p973lNYQgZRBy0MlsT5LLvEjTGe3AXI4B
+         SykESyD2ilk80WzqrhKgsS9L9B6i7u+aCj3QeZXaOlZGxbiJgnNkOwxCGJgijpvVpOR8
+         1QDQ==
+X-Gm-Message-State: AOAM532FcRo4gWwLx6yqm7SrI8wjQhgI+lwfptZFPlgXbEy9xkZxObam
+        +QhBOdvYODvNzpkoKpVYOg==
+X-Google-Smtp-Source: ABdhPJwQFmyslgS5FHA+5KgsaoiseVIbZoReYgt/VB1UM4o0OIKiCyq+xA7b97+mzLJmmb3w5CRzLw==
+X-Received: by 2002:a05:6808:10d4:b0:32b:1230:5cbd with SMTP id s20-20020a05680810d400b0032b12305cbdmr15489565ois.70.1654109486200;
+        Wed, 01 Jun 2022 11:51:26 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id ay31-20020a056808301f00b00328c9e63389sm1352957oib.11.2022.06.01.11.51.17
+        by smtp.gmail.com with ESMTPSA id lv21-20020a056871439500b000f28a948dd2sm981576oab.21.2022.06.01.11.51.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 11:51:18 -0700 (PDT)
-Received: (nullmailer pid 215240 invoked by uid 1000);
-        Wed, 01 Jun 2022 18:51:17 -0000
-Date:   Wed, 1 Jun 2022 13:51:17 -0500
+        Wed, 01 Jun 2022 11:51:25 -0700 (PDT)
+Received: (nullmailer pid 215762 invoked by uid 1000);
+        Wed, 01 Jun 2022 18:51:25 -0000
+Date:   Wed, 1 Jun 2022 13:51:25 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     medadyoung@gmail.com
-Cc:     JJLIU0@nuvoton.com, venture@google.com, avifishman70@gmail.com,
-        devicetree@vger.kernel.org, YSCHU@nuvoton.com, yuenn@google.com,
-        ctcchien@nuvoton.com, openbmc@lists.ozlabs.org,
-        alexandre.belloni@bootlin.com, KFTING@nuvoton.com,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, tali.perry1@gmail.com, KWLIU@nuvoton.com,
-        a.zummo@towertech.it, tmaimon77@gmail.com, benjaminfair@google.com
-Subject: Re: [PATCH v3 1/3] dt-bindings: rtc: nuvoton: add NCT3018Y Real Time
- Clock
-Message-ID: <20220601185117.GA215023-robh@kernel.org>
-References: <20220527084647.30835-1-ctcchien@nuvoton.com>
- <20220527084647.30835-2-ctcchien@nuvoton.com>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     agross@kernel.org, devicetree@vger.kernel.org,
+        mturquette@baylibre.com, jonathan@marek.ca,
+        linux-arm-msm@vger.kernel.org, krzk+dt@kernel.org,
+        linux-clk@vger.kernel.org, sboyd@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        robh+dt@kernel.org, bjorn.andersson@linaro.org
+Subject: Re: [PATCH v4 5/6] dt-bindings: clock: Add Qcom SM8350 DISPCC
+ bindings
+Message-ID: <20220601185125.GA215573-robh@kernel.org>
+References: <20220601124250.60968-1-robert.foss@linaro.org>
+ <20220601124250.60968-6-robert.foss@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220527084647.30835-2-ctcchien@nuvoton.com>
+In-Reply-To: <20220601124250.60968-6-robert.foss@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -69,23 +70,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 May 2022 16:46:45 +0800, medadyoung@gmail.com wrote:
-> From: Medad CChien <ctcchien@nuvoton.com>
+On Wed, 01 Jun 2022 14:42:49 +0200, Robert Foss wrote:
+> Add sm8350 DISPCC bindings, while these bindings are similar
+> to the sm8x50 bindings, the way clocks are represented has changed
+> in ABI incompatible ways.
 > 
-> Document devicetree bindings for the Nuvoton NCT3018Y Real Time Clock.
-> 
-> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
 > ---
->  .../bindings/rtc/nuvoton,nct3018y.yaml        | 44 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
+> 
+> hanges since v2
+>  - Add my SoB - Bjorn
+> 
+> Changes since v3
+>  - Separate from qcom,dispcc-sm8x50
+>  - Remove clock-names
+>  - Make example sm8350 based
+>  - Changed author to me due to size of changes
+> 
+> 
+>  .../bindings/clock/qcom,dispcc-sm8350.yaml    | 104 ++++++++++++++++++
+>  .../bindings/clock/qcom,dispcc-sm8x50.yaml    |   4 +-
+>  .../dt-bindings/clock/qcom,dispcc-sm8350.h    |   1 +
+>  3 files changed, 107 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,dispcc-sm8350.yaml
+>  create mode 120000 include/dt-bindings/clock/qcom,dispcc-sm8350.h
 > 
 
-
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
-
-If a tag was not added on purpose, please state why and what changed.
-
+Reviewed-by: Rob Herring <robh@kernel.org>

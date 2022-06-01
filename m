@@ -2,129 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D8E539D24
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CAE539D06
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349768AbiFAGUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 02:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
+        id S1349849AbiFAGK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 02:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239823AbiFAGUm (ORCPT
+        with ESMTP id S1349824AbiFAGKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 02:20:42 -0400
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E472A6A066;
-        Tue, 31 May 2022 23:20:40 -0700 (PDT)
-Received: by mail-vk1-xa2f.google.com with SMTP id j11so412060vka.6;
-        Tue, 31 May 2022 23:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Cvoj+RO+skmK4uotN8SSFJtBNUiO3qHrHDUxMlyGe68=;
-        b=ReCnqqVWMgsH8NHsHeRUZMnyYPK+cJT2cJqru+YdqevmRTxovqxSK0UebMccFQOQ0g
-         iCiArqo1k58Tv4ZXshEHyJRXekOn7uiA1GepUNHb8844UO3lVOV63XbF4H29lgVce8a+
-         ZzF/mLA9/4HjtTFsw6zbGARUsuVs4J3krS4KrIdnVEOtiqxF+QFG2JKBeXyr4rFwOl7x
-         2G8dIodHNcWtmoSR47gL99e99qfnswMs85D7U8ocMJfNYcoaEwJlZofUeLPmt0ztQwA6
-         C74SSo3UQ92G44WDTfcVNpJiwQ34WdM6sd3bN3o520jHvuGXfhgDjCr4203ZsdI+TTRM
-         hNsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Cvoj+RO+skmK4uotN8SSFJtBNUiO3qHrHDUxMlyGe68=;
-        b=jpKryiXgtTl4fPH3ra4380KaLz6XkLD97sJuzSJPajndXSdv6rPBVdjo0+jR6Jm6IH
-         CpsDyM+IJclVz8dgKHSDiDM4vCjEx4Vs8pBRe1o0mCEsRMi+Nto2EqBK5oWdOd/EonH9
-         AqKeWcRhQR7tfex3gvHkMstc7W5/HK5PTHkUF2Dta8L8QL01IqobWHtNdLp56ZThCtUl
-         kJ0IdZuYh3HGVWvDDkrHA2nfF+bQc/o/Esc6CzSgm53RvXYg3gWvBsYEXbv1a9bodOHL
-         CzdMbt9n/HuG9+3YQtS7uQTsV4wcGAJT2X7m2ytUn3eeZJ2kM+MmhvRbUWgBjfoQhvrm
-         0ziA==
-X-Gm-Message-State: AOAM530wQEpCB+rS9jZTXIzdFL1B18Ny2FvarHT0g6t4lYOBWEf0c24i
-        4B4FiuRfFWga5GLwRUYQGGNkLunf5gQShgTd7xI=
-X-Google-Smtp-Source: ABdhPJwc2LZwvyEvJkHYDLJIbdgmwanNMcS6f8KRwVS1eR82zJxzIHucJWQhiJkwtRkxaMq3pnqZMmjSc8LEOTtsQ20=
-X-Received: by 2002:a05:6122:14e:b0:358:4f5b:f65c with SMTP id
- r14-20020a056122014e00b003584f5bf65cmr12758277vko.3.1654064439940; Tue, 31
- May 2022 23:20:39 -0700 (PDT)
+        Wed, 1 Jun 2022 02:10:22 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E1350E10;
+        Tue, 31 May 2022 23:10:21 -0700 (PDT)
+Received: from kwepemi100008.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LCdxh256MzgYJS;
+        Wed,  1 Jun 2022 14:08:40 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi100008.china.huawei.com (7.221.188.57) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 1 Jun 2022 14:10:19 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
+ 2022 14:10:19 +0800
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <ebiederm@xmission.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH v4] proc: Fix a dentry lock race between release_task and lookup
+Date:   Wed, 1 Jun 2022 14:23:32 +0800
+Message-ID: <20220601062332.232439-1-chengzhihao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Wed, 1 Jun 2022 01:20:28 -0500
-Message-ID: <CAH2r5ms4eeQy-2bu_5BxFAW=GUR7T4VWM9khi7F0Hc-RSb8Uew@mail.gmail.com>
-Subject: [GIT PULL] ksmbd server fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a:
+Commit 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
+moved proc_flush_task() behind __exit_signal(). Then, process systemd
+can take long period high cpu usage during releasing task in following
+concurrent processes:
 
-  Linux 5.18-rc6 (2022-05-08 13:54:17 -0700)
+  systemd                                 ps
+kernel_waitid                 stat(/proc/tgid)
+  do_wait                       filename_lookup
+    wait_consider_task            lookup_fast
+      release_task
+        __exit_signal
+          __unhash_process
+            detach_pid
+              __change_pid // remove task->pid_links
+                                     d_revalidate -> pid_revalidate  // 0
+                                     d_invalidate(/proc/tgid)
+                                       shrink_dcache_parent(/proc/tgid)
+                                         d_walk(/proc/tgid)
+                                           spin_lock_nested(/proc/tgid/fd)
+                                           // iterating opened fd
+        proc_flush_pid                                    |
+           d_invalidate (/proc/tgid/fd)                   |
+              shrink_dcache_parent(/proc/tgid/fd)         |
+                shrink_dentry_list(subdirs)               ↓
+                  shrink_lock_dentry(/proc/tgid/fd) --> race on dentry lock
 
-are available in the Git repository at:
+Function d_invalidate() will remove dentry from hash firstly, but why does
+proc_flush_pid() process dentry '/proc/tgid/fd' before dentry '/proc/tgid'?
+That's because proc_pid_make_inode() adds proc inode in reverse order by
+invoking hlist_add_head_rcu(). But proc should not add any inodes under
+'/proc/tgid' except '/proc/tgid/task/pid', fix it by adding inode into
+'pid->inodes' only if the inode is /proc/tgid or /proc/tgid/task/pid.
 
-  git://git.samba.org/ksmbd.git tags/5.19-rc-ksmbd-server-fixes
+Performance regression:
+Create 200 tasks, each task open one file for 50,000 times. Kill all
+tasks when opened files exceed 10,000,000 (cat /proc/sys/fs/file-nr).
 
-for you to fetch changes up to 621433b7e25d6d42e5f75bd8c4a62d6c7251511b:
+Before fix:
+$ time killall -wq aa
+  real    4m40.946s   # During this period, we can see 'ps' and 'systemd'
+			taking high cpu usage.
 
-  ksmbd: smbd: relax the count of sges required (2022-05-27 21:31:20 -0500)
+After fix:
+$ time killall -wq aa
+  real    1m20.732s   # During this period, we can see 'systemd' taking
+			high cpu usage.
 
-----------------------------------------------------------------
-fourteen smb3 server fixes:
-- 8 RDMA (smbdirect) fixes, cleanup and optimizations
-- crediting (flow control) fix for mounts from Windows client
-- ACL fix
-- 2 cleanup fix
-- Windows client query dir fix
-- Write validation fix
-----------------------------------------------------------------
-Hyunchul Lee (8):
-      ksmbd: smbd: change prototypes of RDMA read/write related functions
-      ksmbd: smbd: introduce read/write credits for RDMA read/write
-      ksmbd: smbd: simplify tracking pending packets
-      ksmbd: smbd: change the return value of get_sg_list
-      ksmbd: smbd: handle multiple Buffer descriptors
-      ksmbd: smbd: fix connection dropped issue
-      ksmbd: fix outstanding credits related bugs
-      ksmbd: smbd: relax the count of sges required
+Fixes: 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216054
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+---
+ v1->v2: Add new helper proc_pid_make_base_inode that performs the extra
+	 work of adding to the pid->list.
+ v2->v3: Add performance regression in commit message.
+ v3->v4: Make proc_pid_make_base_inode() static
+ fs/proc/base.c | 34 ++++++++++++++++++++++++++--------
+ 1 file changed, 26 insertions(+), 8 deletions(-)
 
-Marios Makassikis (1):
-      ksmbd: validate length in smb2_write()
-
-Namjae Jeon (3):
-      ksmbd: handle smb2 query dir request for OutputBufferLength that
-is too small
-      ksmbd: add smbd max io size parameter
-      ksmbd: fix wrong smbd max read/write size check
-
-Xin Xiong (1):
-      ksmbd: fix reference count leak in smb_check_perm_dacl()
-
-Yang Li (1):
-      ksmbd: Fix some kernel-doc comments
-
- fs/ksmbd/connection.c     |  22 ++--
- fs/ksmbd/connection.h     |  27 ++--
- fs/ksmbd/ksmbd_netlink.h  |   3 +-
- fs/ksmbd/misc.c           |  10 +-
- fs/ksmbd/smb2misc.c       |   2 +-
- fs/ksmbd/smb2pdu.c        | 126 ++++++++++---------
- fs/ksmbd/smb_common.c     |   4 +-
- fs/ksmbd/smbacl.c         |   1 +
- fs/ksmbd/transport_ipc.c  |   3 +
- fs/ksmbd/transport_rdma.c | 363
-++++++++++++++++++++++++++++++++----------------------
- fs/ksmbd/transport_rdma.h |   8 ++
- 11 files changed, 325 insertions(+), 244 deletions(-)
-
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index c1031843cc6a..d884933950fd 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -1885,7 +1885,7 @@ void proc_pid_evict_inode(struct proc_inode *ei)
+ 	put_pid(pid);
+ }
+ 
+-struct inode *proc_pid_make_inode(struct super_block * sb,
++struct inode *proc_pid_make_inode(struct super_block *sb,
+ 				  struct task_struct *task, umode_t mode)
+ {
+ 	struct inode * inode;
+@@ -1914,11 +1914,6 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
+ 
+ 	/* Let the pid remember us for quick removal */
+ 	ei->pid = pid;
+-	if (S_ISDIR(mode)) {
+-		spin_lock(&pid->lock);
+-		hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
+-		spin_unlock(&pid->lock);
+-	}
+ 
+ 	task_dump_owner(task, 0, &inode->i_uid, &inode->i_gid);
+ 	security_task_to_inode(task, inode);
+@@ -1931,6 +1926,27 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
+ 	return NULL;
+ }
+ 
++static struct inode *proc_pid_make_base_inode(struct super_block *sb,
++				struct task_struct *task, umode_t mode)
++{
++	struct inode *inode;
++	struct proc_inode *ei;
++	struct pid *pid;
++
++	inode = proc_pid_make_inode(sb, task, mode);
++	if (!inode)
++		return NULL;
++
++	/* Let proc_flush_pid find this directory inode */
++	ei = PROC_I(inode);
++	pid = ei->pid;
++	spin_lock(&pid->lock);
++	hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
++	spin_unlock(&pid->lock);
++
++	return inode;
++}
++
+ int pid_getattr(struct user_namespace *mnt_userns, const struct path *path,
+ 		struct kstat *stat, u32 request_mask, unsigned int query_flags)
+ {
+@@ -3350,7 +3366,8 @@ static struct dentry *proc_pid_instantiate(struct dentry * dentry,
+ {
+ 	struct inode *inode;
+ 
+-	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
++	inode = proc_pid_make_base_inode(dentry->d_sb, task,
++					 S_IFDIR | S_IRUGO | S_IXUGO);
+ 	if (!inode)
+ 		return ERR_PTR(-ENOENT);
+ 
+@@ -3649,7 +3666,8 @@ static struct dentry *proc_task_instantiate(struct dentry *dentry,
+ 	struct task_struct *task, const void *ptr)
+ {
+ 	struct inode *inode;
+-	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
++	inode = proc_pid_make_base_inode(dentry->d_sb, task,
++					 S_IFDIR | S_IRUGO | S_IXUGO);
+ 	if (!inode)
+ 		return ERR_PTR(-ENOENT);
+ 
 -- 
-Thanks,
+2.31.1
 
-Steve

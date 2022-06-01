@@ -2,84 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56F253AE43
+	by mail.lfdr.de (Postfix) with ESMTP id 88C3E53AE42
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiFAUp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 16:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S230009AbiFAUqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 16:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiFAUpW (ORCPT
+        with ESMTP id S230048AbiFAUpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 16:45:22 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5025426271D;
-        Wed,  1 Jun 2022 13:32:21 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id v22so4924389ybd.5;
-        Wed, 01 Jun 2022 13:32:21 -0700 (PDT)
+        Wed, 1 Jun 2022 16:45:39 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAA51D106A;
+        Wed,  1 Jun 2022 13:34:18 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id h5so3904263wrb.0;
+        Wed, 01 Jun 2022 13:34:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kfsG9LUOEPEKQ9LxxRuVY9iWrZQoJ7F8ml1zzQN1q0o=;
+        b=TV/JmovXx25zTSTxidCJIrIjB3J+6yovker1IPrJ45jkhZb0ZPkm/US+DsSNJ9OLQ1
+         x9L8kANnTgqmES1a/+y8c49aceJjSpf1T9prbrqFPMJlTUFuXUwDqMs92xFUAt4FrVD+
+         9hgDSm9pt07EkY8X3V+0TC+8MhEs0SQWTKG6PRjJAR+FQ+Q1k0ex0nEYGl4Z+flyzzAR
+         fG2wOLBo96n4dJdULvBRi3nzPk/HFjNfGIwMSGRrC1vdl/HKdin9jvMq+WCJpZkYD9oI
+         7UmQ3hh1HniIvM1moToPZwbhaEH9cZYx8rvVEIC7b5TmCRQ3Zqe12CpmtbL0Fyx0lVqy
+         9h5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Mi2KakMLN5Oolk1j9IuMk3Qtihd6Doqcyb4Wzf1iGb8=;
-        b=61Z+F7FfX1RTSXCWowX8VUIC3KzVuBfD3m75Cjl5bQltO0Fil4mRfmnTo0Ma5V4qfX
-         EUGQtT7wY/alYb72p/8asn23T25AzM+Lc5dCWeZ+HU2oE8+hgoSatWujwq5F5etLwTDN
-         IcDL76auIF23Fx53sZOwmeArmsy2b24aeSLN/Yti43TA6KtQDTLMk0z0fIX3ci/oSyxQ
-         tsTBiNa4riZNh93yb+fHzGoebmOXYG/0md/TUfxKra/28X95f3qQw1886NOtqUgKiW3g
-         2Tdx2XxU6kqpDitpkmLVVgfis5FF7lkfjJhHQSL8FDYiIkw+e5k5gUk5q6BLJYhdWpYH
-         zEHQ==
-X-Gm-Message-State: AOAM532w1UEJk5CU4x2IJvlfGkNlJ0P/BwZewF1Rdn6zkJEkD3OHDLMS
-        Qxm941MIh+PVqUknpcL0LOzq0MLVHQ==
-X-Google-Smtp-Source: ABdhPJwqckOQJ3oMBSt13P0tpXRYlnNBp7YUsO7ydUCg7j9OhqxwYVxJIbSGKXig+2EFQEhRTAc4tw==
-X-Received: by 2002:a05:6830:45:b0:60b:196a:c0d7 with SMTP id d5-20020a056830004500b0060b196ac0d7mr637703otp.314.1654113324745;
-        Wed, 01 Jun 2022 12:55:24 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v1-20020a056830090100b00605fd407259sm1228404ott.3.2022.06.01.12.55.24
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kfsG9LUOEPEKQ9LxxRuVY9iWrZQoJ7F8ml1zzQN1q0o=;
+        b=p8fJEno81WfyZ0/2a1JMCWfwtiJO8eCt4tR9NVt++hC4Fr6guFEUsxDihSTey4xoPO
+         /rlAkeBg/8pLKn2WcMd3xW8rNfr+TcU9MB3QEQ6ydhl6/P4Yk+zooq26wWh13/pOfDLT
+         fmnLIXWAWvzHSUkgG4QbEUGtaXWGt9ePGZz6EY/FRQn4aUD8pVI+cFMh25waRmqsA0fM
+         Gh+uB2YfwbXL2S0BXIkedAeI+QiaAb+NrE75+1bYli1BvdUBUHFJJ7phY8dEx9JaCq39
+         /ujQNlOC5hL4H/xdcoFh5LBq/fba00u3ygt214ziwUVzETVNT0u8S3/33tMLvRJdpdjQ
+         dtuA==
+X-Gm-Message-State: AOAM530CvT04qwpDuWEFy+vvgHJPvEZsWiSA232SEemfEBC69VA3fvdy
+        lZerfdRjiwjKpjCaqoZ0B2PXD+qROE8=
+X-Google-Smtp-Source: ABdhPJx8MtWjiK3wPxQOfSWBDFZSlPWAUYVHkks7Qq/MkfVuM0OyvqCuGvG//AVEkW+7IRAj5J57ig==
+X-Received: by 2002:a17:907:9809:b0:6f5:1be8:5b13 with SMTP id ji9-20020a170907980900b006f51be85b13mr1069498ejc.412.1654113452261;
+        Wed, 01 Jun 2022 12:57:32 -0700 (PDT)
+Received: from opensuse.localnet (host-79-55-12-155.retail.telecomitalia.it. [79.55.12.155])
+        by smtp.gmail.com with ESMTPSA id rl7-20020a170907216700b006f3ef214e27sm1042428ejb.141.2022.06.01.12.57.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 12:55:24 -0700 (PDT)
-Received: (nullmailer pid 328210 invoked by uid 1000);
-        Wed, 01 Jun 2022 19:55:23 -0000
-Date:   Wed, 1 Jun 2022 14:55:23 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        michals@xilinx.com, lorenzo.pieralisi@arm.com, bhelgaas@google.com,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: PCI: xilinx-cpm: Fix reg property order
-Message-ID: <20220601195523.GA328031-robh@kernel.org>
-References: <20220516102217.25960-1-bharat.kumar.gogada@xilinx.com>
+        Wed, 01 Jun 2022 12:57:31 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Chris Mason <chris.mason@fusionio.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Ira Weiny <ira.weiny@intel.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 3/3] btrfs: Replace kmap() with kmap_local_page() in zlib.c
+Date:   Wed, 01 Jun 2022 21:57:28 +0200
+Message-ID: <3146770.aV6nBDHxoP@opensuse>
+In-Reply-To: <202206010437.EX5Nj7cu-lkp@intel.com>
+References: <20220531145335.13954-4-fmdefrancesco@gmail.com> <202206010437.EX5Nj7cu-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516102217.25960-1-bharat.kumar.gogada@xilinx.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 May 2022 15:52:17 +0530, Bharat Kumar Gogada wrote:
-> All existing vendor DTSes are using "cpm_slcr" reg followed by "cfg" reg.
-> 
-> This order is also suggested by node name which is pcie@fca10000 which
-> suggests that cpm_slcr register should be the first.
-> 
-> Driver itself is using devm_platform_ioremap_resource_byname() for both
-> names that's why there is no functional change even on description which
-> are using current order.
-> 
-> But still prefer to change order to cover currently used description.
-> Fixes: e22fadb1d014 ("PCI: xilinx-cpm: Add YAML schemas for Versal CPM Root Port")
-> 
-> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-> ---
->  .../devicetree/bindings/pci/xilinx-versal-cpm.yaml     | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
+On marted=C3=AC 31 maggio 2022 22:35:30 CEST kernel test robot wrote:
+> Hi "Fabio,
+>=20
+> Thank you for the patch! Perhaps something to improve:
+>=20
 
-Applied, thanks!
+[snip]
+
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> All warnings (new ones prefixed by >>):
+>=20
+> >> fs/btrfs/zlib.c:125:6: warning: variable 'data_in' is used=20
+uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+>            if (out_page =3D=3D NULL) {
+>                ^~~~~~~~~~~~~~~~
+>    fs/btrfs/zlib.c:270:6: note: uninitialized use occurs here
+>            if (data_in) {
+>                ^~~~~~~
+>    fs/btrfs/zlib.c:125:2: note: remove the 'if' if its condition is=20
+always false
+>            if (out_page =3D=3D NULL) {
+>            ^~~~~~~~~~~~~~~~~~~~~~~
+>    fs/btrfs/zlib.c:115:6: warning: variable 'data_in' is used=20
+uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+>            if (Z_OK !=3D zlib_deflateInit(&workspace->strm, workspace-
+>level)) {
+>               =20
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/zlib.h:148:25: note: expanded from macro 'Z_OK'
+>    #define Z_OK            0
+>                            ^
+>    fs/btrfs/zlib.c:270:6: note: uninitialized use occurs here
+>            if (data_in) {
+>                ^~~~~~~
+>    fs/btrfs/zlib.c:115:2: note: remove the 'if' if its condition is=20
+always false
+>            if (Z_OK !=3D zlib_deflateInit(&workspace->strm, workspace-
+>level)) {
+>           =20
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    fs/btrfs/zlib.c:100:15: note: initialize the variable 'data_in' to=20
+silence this warning
+>            char *data_in;
+>                         ^
+>                          =3D NULL
+> >> fs/btrfs/zlib.c:125:6: warning: variable 'cpage_out' is used=20
+uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+>            if (out_page =3D=3D NULL) {
+>                ^~~~~~~~~~~~~~~~
+>    fs/btrfs/zlib.c:267:6: note: uninitialized use occurs here
+>            if (cpage_out)
+>                ^~~~~~~~~
+>    fs/btrfs/zlib.c:125:2: note: remove the 'if' if its condition is=20
+always false
+>            if (out_page =3D=3D NULL) {
+>            ^~~~~~~~~~~~~~~~~~~~~~~
+>    fs/btrfs/zlib.c:115:6: warning: variable 'cpage_out' is used=20
+uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+>            if (Z_OK !=3D zlib_deflateInit(&workspace->strm, workspace-
+>level)) {
+>               =20
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/zlib.h:148:25: note: expanded from macro 'Z_OK'
+>    #define Z_OK            0
+>                            ^
+>    fs/btrfs/zlib.c:267:6: note: uninitialized use occurs here
+>            if (cpage_out)
+>                ^~~~~~~~~
+>    fs/btrfs/zlib.c:115:2: note: remove the 'if' if its condition is=20
+always false
+>            if (Z_OK !=3D zlib_deflateInit(&workspace->strm, workspace-
+>level)) {
+>           =20
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    fs/btrfs/zlib.c:101:17: note: initialize the variable 'cpage_out' to=20
+silence this warning
+>            char *cpage_out;
+>                           ^
+>                            =3D NULL
+>    4 warnings generated.
+
+I'll initialize these variables in v2.
+
+Thanks,
+
+=46abio
+
+

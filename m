@@ -2,120 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B8953A96D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE1353A970
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351764AbiFAOzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
+        id S1353838AbiFAO4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241149AbiFAOzk (ORCPT
+        with ESMTP id S241149AbiFAO4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:55:40 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8F3674E6
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:55:39 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-d39f741ba0so2992985fac.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 07:55:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gCLIA0GHMP+fHAx0HQaAHDI5dyXjR0CAfhrBwLepBPA=;
-        b=TJVEE8jGHwkbEkPwlhCrEQz8ZVMyrOWNzrwTyarVu0HrPdBvwl0hoERVxWAFbPdzSK
-         bJIfNV040zcfrrjpKBOeyLHFoHv3DMTJhDTsxXpupSCszGYyQ/7NHf/yUALMklBGE+0/
-         ayLQW8qZxu+RveMIoRYyNZBQTVhhJiw0U+QzEYBhLPiC9vjyPebBXzGFoFR1N5F09bhF
-         rEiTZmLPgGw0sdUj/RcyzwHv2LB+0YKUo/BiGGi2YGAmYx7Q8wrDqKcKQVsUVOsjTenY
-         2iYUB96K/5v8wLMSdxVQ9L4PyjKfeIFs2COTzrbhyCf40RhMfGVrDkvkcriMJcGE7he7
-         //9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gCLIA0GHMP+fHAx0HQaAHDI5dyXjR0CAfhrBwLepBPA=;
-        b=zoPJXzurWSNlPUiAR+yFo9oMmw5B7FCVLyCGZFNjvcZDSY6OR8rXsZ78WnwXbI+SIe
-         ORGVfPkdqNPux9zspkz1FFPBSRswqi/u1NRdCw6BE/yFFivClaSp20NvhWHkx+Te4rUQ
-         Skh5ZqoENIS9ZiSCvRwwySSxqfUCMfWqWYPesNEZZ6KC0d+IY1RPaeECJB3W5iR8o6yJ
-         0r4BCmPc/bmFJsACd71nGBjkbQAn+MoiNDlcGPcyZXG2zYpy9g0xmdHIhLYiU+cqxqRM
-         KB640YcXjQrZAIyUEFt/nD1ssJfib9mQf8pvFV0RH17qz6lzVZ4JwHBlAFxsUj6kVfUK
-         TLbg==
-X-Gm-Message-State: AOAM533ks5z3Z6fjxJd/er7w/tRayMGpnJeYIXzuQRa1AZqcXUWg9Zex
-        tnlurscvpKl7fhs8HZt3FjFkeS20d9q7CwfPUfc=
-X-Google-Smtp-Source: ABdhPJyN8wl9WYxOg8teVzGniYWLuSPtmHG+gVLKy1ll2nnIhUO67te72dw5fPtfUl5x6479YoilRtzYU2h8tdBoPEg=
-X-Received: by 2002:a05:6870:d683:b0:de:eaa2:3550 with SMTP id
- z3-20020a056870d68300b000deeaa23550mr42477oap.253.1654095338886; Wed, 01 Jun
- 2022 07:55:38 -0700 (PDT)
+        Wed, 1 Jun 2022 10:56:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914DF1A0;
+        Wed,  1 Jun 2022 07:56:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30561B81B9D;
+        Wed,  1 Jun 2022 14:56:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A31F6C385B8;
+        Wed,  1 Jun 2022 14:56:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654095397;
+        bh=tFJMRsa1oK1XN1rTTucNDNSPNTxVk9Tt9GgcBYnt2k8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SnirSTJy/ElaX05FWkLlnBDhOlYKLzNlcuysXwsS6DwfoRRAJtrx10OVjyWwq9XPa
+         T9E6H/5ROFf7DEw41KyOCR6imsT9ineblfLmCIjPKkROVicDjYiymmfZdDuJu4qjQ6
+         PqDk6NY1cELnTYOhGuVVpEgQySwSIO0fRU8S5lzLGPYAuWn5T1/jWlglJP7d9OZRxW
+         whyJn32QEIXoiTzFIv5tgGvBiIjRvVUzf3xfA0AQ/jnUhnDSltQBeCwjpbhzAXPU5g
+         s58zR8+ZjE/omNigYieterbNdjvi/YriFiC3gMFg0VQnaAjg7g0poCaTN10k3NQ5lg
+         G8hZIRG+m/+kA==
+Received: by mail-ua1-f46.google.com with SMTP id l12so654975uan.5;
+        Wed, 01 Jun 2022 07:56:37 -0700 (PDT)
+X-Gm-Message-State: AOAM531Z/w4FMwQQE6zt4h7MYd8eqwmbfD6075yeDe57pjPy2yEDcKL3
+        ns0Jo2DS4vxRAS6WwBre1co1eRtZ1xnaM4FBjg8=
+X-Google-Smtp-Source: ABdhPJymxDAuPOMQkZwFFaw8OHs6paDEyKWLtYFrlsLGqgyiowwRz+CgTMyaafamSqSo8HkagBMfVgWrE1r2uO3vHJw=
+X-Received: by 2002:a05:6130:90:b0:362:891c:edef with SMTP id
+ x16-20020a056130009000b00362891cedefmr23919588uaf.106.1654095396587; Wed, 01
+ Jun 2022 07:56:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220527090039.pdrazo5e6mwgo3d3@lion.mk-sys.cz> <20220527124459.mfo4tjdsjohamsvy@lion.mk-sys.cz>
-In-Reply-To: <20220527124459.mfo4tjdsjohamsvy@lion.mk-sys.cz>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 1 Jun 2022 10:55:28 -0400
-Message-ID: <CADnq5_PHR3NMhMAWDLy3SGyzn4bHedWDerXVmaFANbooYhZE0w@mail.gmail.com>
-Subject: Re: (REGRESSION bisected) Re: amdgpu errors (VM fault / GPU fault
- detected) with 5.19 merge window snapshots
-To:     Michal Kubecek <mkubecek@suse.cz>,
-        "Yang, Philip" <Philip.Yang@amd.com>
-Cc:     amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220601100005.2989022-1-chenhuacai@loongson.cn>
+ <20220601100005.2989022-25-chenhuacai@loongson.cn> <cc1bae30-ff29-48c0-90c5-817b2320cbb6@www.fastmail.com>
+In-Reply-To: <cc1bae30-ff29-48c0-90c5-817b2320cbb6@www.fastmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 1 Jun 2022 22:56:25 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR4w1a15jK+Wh_r5c32-c7YsiXw=6d0q5v7_KyMM36zdg@mail.gmail.com>
+Message-ID: <CAJF2gTR4w1a15jK+Wh_r5c32-c7YsiXw=6d0q5v7_KyMM36zdg@mail.gmail.com>
+Subject: Re: [PATCH V12 24/24] MAINTAINERS: Add maintainer information for LoongArch
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        WANG Xuerui <git@xen0n.name>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 8:58 AM Michal Kubecek <mkubecek@suse.cz> wrote:
->
-> On Fri, May 27, 2022 at 11:00:39AM +0200, Michal Kubecek wrote:
-> > Hello,
-> >
-> > while testing 5.19 merge window snapshots (commits babf0bb978e3 and
-> > 7e284070abe5), I keep getting errors like below. I have not seen them
-> > with 5.18 final or older.
-> >
-> > ------------------------------------------------------------------------
-> > [  247.150333] gmc_v8_0_process_interrupt: 46 callbacks suppressed
-> > [  247.150336] amdgpu 0000:0c:00.0: amdgpu: GPU fault detected: 147 0x00020802 for process firefox pid 6101 thread firefox:cs0 pid 6116
-> > [  247.150339] amdgpu 0000:0c:00.0: amdgpu:   VM_CONTEXT1_PROTECTION_FAULT_ADDR   0x00107800
-> > [  247.150340] amdgpu 0000:0c:00.0: amdgpu:   VM_CONTEXT1_PROTECTION_FAULT_STATUS 0x0D008002
-> > [  247.150341] amdgpu 0000:0c:00.0: amdgpu: VM fault (0x02, vmid 6, pasid 32780) at page 1079296, write from 'TC2' (0x54433200) (8)
-> [...]
-> > [  249.925909] amdgpu 0000:0c:00.0: amdgpu: IH ring buffer overflow (0x000844C0, 0x00004A00, 0x000044D0)
-> > [  250.434986] [drm] Fence fallback timer expired on ring sdma0
-> > [  466.621568] gmc_v8_0_process_interrupt: 122 callbacks suppressed
-> [...]
-> > ------------------------------------------------------------------------
-> >
-> > There does not seem to be any apparent immediate problem with graphics
-> > but when running commit babf0bb978e3, there seemed to be a noticeable
-> > lag in some operations, e.g. when moving a window or repainting large
-> > part of the terminal window in konsole (no idea if it's related).
-> >
-> > My GPU is Radeon Pro WX 2100 (1002:6995). What other information should
-> > I collect to help debugging the issue?
->
-> Bisected to commit 5255e146c99a ("drm/amdgpu: rework TLB flushing").
-> There seem to be later commits depending on it so I did not test
-> a revert on top of current mainline.
->
+Cheers
 
-@Christian Koenig, @Yang, Philip Any ideas?  I think there were some
-fix ups for this.  Maybe those just haven't hit the tree yet?
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-Alex
-
-
-> I should also mention that most commits tested as "bad" during the
-> bisect did behave much worse than current mainline (errors starting as
-> early as with sddm, visibly damaged screen content, sometimes even
-> crashes). But all of them issued messages similar to those above into
-> kernel log.
+On Wed, Jun 1, 2022 at 8:35 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 >
-> Michal Kubecek
+>
+>
+> =E5=9C=A82022=E5=B9=B46=E6=9C=881=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8A=E5=
+=8D=8811:00=EF=BC=8CHuacai Chen=E5=86=99=E9=81=93=EF=BC=9A
+> > Add the maintainer information for the LoongArch (LA or LArch for short=
+)
+> > architecture.
+> >
+> > Signed-off-by: WANG Xuerui <git@xen0n.name>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>
+> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>
+> You guys deserve it.
+>
+> Thanks.
+>
+> > ---
+> >  MAINTAINERS | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index f1b4b77daa5f..3e592ea84557 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -11544,6 +11544,16 @@ S:   Maintained
+> >  F:   Documentation/devicetree/bindings/display/bridge/lontium,lt8912b.=
+yaml
+> >  F:   drivers/gpu/drm/bridge/lontium-lt8912b.c
+> >
+> > +LOONGARCH
+> > +M:   Huacai Chen <chenhuacai@kernel.org>
+> > +R:   WANG Xuerui <kernel@xen0n.name>
+> > +S:   Maintained
+> > +T:   git
+> > git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson=
+.git
+> > +F:   arch/loongarch/
+> > +F:   drivers/*/*loongarch*
+> > +F:   Documentation/loongarch/
+> > +F:   Documentation/translations/zh_CN/loongarch/
+> > +
+> >  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+> >  M:   Sathya Prakash <sathya.prakash@broadcom.com>
+> >  M:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+> > --
+> > 2.27.0
+>
+> --
+> - Jiaxun
+
+
+
+--=20
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

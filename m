@@ -2,161 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB1853A452
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26EE453A453
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352839AbiFALsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 07:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
+        id S1352843AbiFALtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 07:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiFALsE (ORCPT
+        with ESMTP id S229979AbiFALtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:48:04 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59321A394;
-        Wed,  1 Jun 2022 04:48:02 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 251BlQg6125756;
-        Wed, 1 Jun 2022 06:47:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654084046;
-        bh=Rnm7X2DBSI6XtsSy2/7nA/I9r/eUjb6iINN70jWdMCo=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=O+P0FuiV0inSOjxVvphfzlpR9GT1NDNbLGC5TUA+TkonHC3AXakxKG2HVmp9APK0B
-         p3v/9S/XFnp51ab1TAFh/DvHJc5r8E06v2VBC3OZGoGehtkeSnT59bGrLoYqNgUhPd
-         yO1u1EvVAd3nO1vCnlvuW7lDo5Gu8SRe8qqgX83I=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 251BlQan031626
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 1 Jun 2022 06:47:26 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 1
- Jun 2022 06:47:26 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 1 Jun 2022 06:47:25 -0500
-Received: from [172.24.222.108] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 251BlKWM121446;
-        Wed, 1 Jun 2022 06:47:21 -0500
-Message-ID: <b4921687-3bf1-4b35-3eb5-d022b9949574@ti.com>
-Date:   Wed, 1 Jun 2022 17:17:19 +0530
+        Wed, 1 Jun 2022 07:49:31 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC03B57163
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 04:49:28 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 1 Jun
+ 2022 19:49:28 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 1 Jun
+ 2022 19:49:26 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     <gregkh@linuxfoundation.org>
+CC:     <baihaowen@meizu.com>, <larry.finger@lwfinger.net>,
+        <linux-kernel@vger.kernel.org>, <linux-staging@lists.linux.dev>,
+        <phil@philpotter.co.uk>
+Subject: [PATCH V3] staging: r8188eu: Drop redundant memset overwritten by memcpy
+Date:   Wed, 1 Jun 2022 19:49:24 +0800
+Message-ID: <1654084164-10869-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <Ypc89GXegCft+vEq@kroah.com>
+References: <Ypc89GXegCft+vEq@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 3/3] net: ethernet: ti: am65-cpsw: Move phy_set_mode_ext()
- to correct location
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <vladimir.oltean@nxp.com>,
-        <grygorii.strashko@ti.com>, <vigneshr@ti.com>, <nsekhar@ti.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kishon@ti.com>
-References: <20220531113058.23708-1-s-vadapalli@ti.com>
- <20220531113058.23708-4-s-vadapalli@ti.com>
- <YpYCJv2SIExL+VHs@shell.armlinux.org.uk>
- <9f531f8d-9ff2-2ec9-504f-eed324ba86c6@ti.com>
- <YpcjaOdXHC+uYJ2J@shell.armlinux.org.uk>
- <41277985-28c9-9bf0-8b24-6acc40391ef2@ti.com>
- <Ypc3myH2SgGwUmMF@shell.armlinux.org.uk>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <Ypc3myH2SgGwUmMF@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Russell,
+The region set by the call to memset is immediately overwritten by the
+subsequent call to memcpy. So we drop redundant memset.
 
-On 01/06/22 15:25, Russell King (Oracle) wrote:
-> On Wed, Jun 01, 2022 at 02:59:47PM +0530, Siddharth Vadapalli wrote:
->> Hello Russell,
->>
->> On 01/06/22 13:59, Russell King (Oracle) wrote:
->>> On Wed, Jun 01, 2022 at 11:39:57AM +0530, Siddharth Vadapalli wrote:
->>>> Hello Russell,
->>>>
->>>> On 31/05/22 17:25, Russell King (Oracle) wrote:
->>>>> On Tue, May 31, 2022 at 05:00:58PM +0530, Siddharth Vadapalli wrote:
->>>>>> In TI's J7200 SoC CPSW5G ports, each of the 4 ports can be configured
->>>>>> as a QSGMII main or QSGMII-SUB port. This configuration is performed
->>>>>> by phy-gmii-sel driver on invoking the phy_set_mode_ext() function.
->>>>>>
->>>>>> It is necessary for the QSGMII main port to be configured before any of
->>>>>> the QSGMII-SUB interfaces are brought up. Currently, the QSGMII-SUB
->>>>>> interfaces come up before the QSGMII main port is configured.
->>>>>>
->>>>>> Fix this by moving the call to phy_set_mode_ext() from
->>>>>> am65_cpsw_nuss_ndo_slave_open() to am65_cpsw_nuss_init_slave_ports(),
->>>>>> thereby ensuring that the QSGMII main port is configured before any of
->>>>>> the QSGMII-SUB ports are brought up.
->>>>>
->>>>> This sounds like "if we're configured via port->slave.phy_if to be in
->>>>> QSGMII mode, then the serdes PHY needs to be configured before any of
->>>>> the QSGMII ports are used". Doesn't that mean that if
->>>>> port->slave.phy_if is QSGMII, then the port _only_ supports QSGMII
->>>>> mode, and conversely, the port doesn't support QSGMII unless firmware
->>>>> said it could be.
->>>>>
->>>>> So, doesn't that mean am65_cpsw_nuss_init_port_ndev() should indicate
->>>>> only QSGMII, or only the RGMII modes, but never both together?
->>>>
->>>> The phy-gmii-sel driver called by phy_set_mode_ext() configures the CPSW5G MAC
->>>> rather than the SerDes Phy. In the CPSW5G MAC, the QSGMII mode is further split
->>>> up as two modes that are TI SoC specific, namely QSGMII main and QSGMII-SUB. Of
->>>> the 4 ports present in CPSW5G (4 external ports), only one can be the main port
->>>> while the rest are the QSGMII-SUB ports. Only the QSGMII main interface is
->>>> responsible for auto-negotiation between the MAC and PHY. For this reason, the
->>>> writes to the CPSW5G MAC, mentioning which of the interfaces is the QSGMII main
->>>> interface and which ones are the QSGMII-SUB interfaces has to be done before any
->>>> of the interfaces are brought up. Otherwise, it would result in a QSGMII-SUB
->>>> interface being brought up before the QSGMII main interface is determined,
->>>> resulting in the failure of auto-negotiation process, thereby making the
->>>> QSGMII-SUB interfaces non-functional.
->>>
->>> That confirms my suspicion - if an interface is in QSGMII mode, then
->>> RGMII should not be marked as a supported interface to phylink. If the
->>
->> CPSW5G MAC supports both RGMII and QSGMII modes, so wouldn't it be correct to
->> mark both RGMII and QSGMII modes as supported? The mode is specified in the
->> device-tree and configured in CPSW5G MAC accordingly.
->>
->>> "QSGMII main interface" were to be switched to RGMII mode, then this
->>> would break the other ports. So RGMII isn't supported if in QSGMII
->>> mode.
->>
->> Yes, if the QSGMII main interface were to be switched to RGMII mode, then it
->> would break the other ports. However, the am65-cpsw driver currently has no
->> provision to dynamically change the port modes once the driver is initialized.
-> 
-> If there is no provision to change the port mode, then as far as
-> phylink is concerned, you should not advertise that it supports
-> anything but the current mode - because if phylink were to request
-> the driver change the mode, the driver can't do it.
-> 
-> So, you want there, at the very least:
-> 
-> 	if (phy_interface_mode_is_rgmii(port->slave.phy_if))
-> 		phy_interface_set_rgmii(port->slave.phylink_config.supported_interfaces);
-> 	else
-> 		__set_bit(PHY_INTERFACE_MODE_QSGMII, port->slave.phylink_config.supported_interfaces);
-> 
-> which will still ensure that port->slave.phy_if is either a RGMII
-> mode or QSGMII.
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+V1->V2: change title for unique subjects.
+V2->V3: merge 1 patch with both changes.
 
-Thank you for reviewing the patch. I will send v2 for this series implementing
-the fix suggested above.
+ drivers/staging/r8188eu/core/rtw_ioctl_set.c | 1 -
+ drivers/staging/r8188eu/core/rtw_mlme.c      | 2 --
+ 2 files changed, 3 deletions(-)
 
-Thanks,
-Siddharth.
+diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+index 7ba75f73e47e..17f6bcbeebf4 100644
+--- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
++++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+@@ -71,7 +71,6 @@ u8 rtw_do_join(struct adapter *padapter)
+ 
+ 				pibss = padapter->registrypriv.dev_network.MacAddress;
+ 
+-				memset(&pdev_network->Ssid, 0, sizeof(struct ndis_802_11_ssid));
+ 				memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(struct ndis_802_11_ssid));
+ 
+ 				rtw_update_registrypriv_dev_network(padapter);
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+index 5a815642c3f6..56c8bd5f4c60 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+@@ -676,7 +676,6 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
+ 
+ 					_clr_fwstate_(pmlmepriv, _FW_UNDER_SURVEY);
+ 
+-					memset(&pdev_network->Ssid, 0, sizeof(struct ndis_802_11_ssid));
+ 					memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(struct ndis_802_11_ssid));
+ 
+ 					rtw_update_registrypriv_dev_network(adapter);
+@@ -1253,7 +1252,6 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
+ 
+ 			memcpy(pdev_network, &tgt_network->network, get_wlan_bssid_ex_sz(&tgt_network->network));
+ 
+-			memset(&pdev_network->Ssid, 0, sizeof(struct ndis_802_11_ssid));
+ 			memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(struct ndis_802_11_ssid));
+ 
+ 			rtw_update_registrypriv_dev_network(adapter);
+-- 
+2.7.4
+

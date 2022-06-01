@@ -2,141 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DCB539D3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66770539D44
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349871AbiFAGcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 02:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        id S1349873AbiFAGdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 02:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244910AbiFAGcH (ORCPT
+        with ESMTP id S241485AbiFAGdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 02:32:07 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB7913EB1;
-        Tue, 31 May 2022 23:32:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654065125; x=1685601125;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=s9gUxig0ok1ngcEsz0djAAmFBWB9OcXhuz4rut5eERE=;
-  b=xvj9GQ+ysMFmkPY80QBQKQ3JYwGwXWccRZ9sdUry9UjXcO0YgNfdfkg8
-   joq5GwSSxaas3uMGERz2NM8/7HlPURZRBalUaqUOS9E9tMfH4/ISKG4JR
-   iz+hJ/Jbt9xVc2bjhndbdTickiVltQPC9NZ+h9bBLFbMcgPVDiRxJprz5
-   M=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 31 May 2022 23:32:05 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 23:32:05 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 31 May 2022 23:32:04 -0700
-Received: from [10.216.54.83] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 31 May
- 2022 23:31:58 -0700
-Message-ID: <4849065c-f743-884e-2afe-d802efde0a99@quicinc.com>
-Date:   Wed, 1 Jun 2022 12:01:54 +0530
+        Wed, 1 Jun 2022 02:33:06 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B14728738
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 23:33:05 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LCfQF2WqczRhTc;
+        Wed,  1 Jun 2022 14:29:57 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 1 Jun 2022 14:33:02 +0800
+Subject: Re: [PATCH v4 1/4] mm: reduce the rcu lock duration
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+CC:     Ying Huang <ying.huang@intel.com>, <peterx@redhat.com>,
+        <apopple@nvidia.com>, <osalvador@suse.de>,
+        <mike.kravetz@oracle.com>, <songmuchun@bytedance.com>,
+        <hch@lst.de>, <dhowells@redhat.com>, <cl@linux.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
+References: <20220530113016.16663-1-linmiaohe@huawei.com>
+ <20220530113016.16663-2-linmiaohe@huawei.com>
+ <bbc060ca6e967790423e0a3ca940d1e700447554.camel@intel.com>
+ <b2ddcd64-2779-ede9-3615-ad5bc90a3bc1@huawei.com>
+ <87bkvdfzvm.fsf@email.froward.int.ebiederm.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <e10023d7-3d19-1edf-86af-4cb79071b78f@huawei.com>
+Date:   Wed, 1 Jun 2022 14:33:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v7 2/3] phy: qcom-snps: Add support for overriding phy
- tuning parameters
+In-Reply-To: <87bkvdfzvm.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Doug Anderson" <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <quic_ppratap@quicinc.com>,
-        <quic_vpulyala@quicinc.com>
-References: <1654013693-21484-1-git-send-email-quic_kriskura@quicinc.com>
- <1654013693-21484-3-git-send-email-quic_kriskura@quicinc.com>
- <20220601020856.GA20979@hu-pkondeti-hyd.qualcomm.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20220601020856.GA20979@hu-pkondeti-hyd.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/6/1 0:09, Eric W. Biederman wrote:
+> Miaohe Lin <linmiaohe@huawei.com> writes:
+snip
+>>
+>> "
+>> Commit 3268c63eded4 ("mm: fix move/migrate_pages() race on task struct")
+>> extends the period of the rcu_read_lock until after the permissions checks
+>> are done because it suspects the permissions checks are not safe unless
+>> performed under both rcu_read_lock and task_lock to ensure the task<->mm
+>> association does not change on us while we are working [1]. But extended
+>> rcu read lock does not add much value. Because after permission checking
+>> the permission may still be changed. There's no much difference. So it's
+>> unnecessary to extend the period of the rcu_read_lock. Release the rcu
+>> lock after task refcount is successfully grabbed to reduce the rcu holding
+>> time.
+>>
+>> [1] https://lore.kernel.org/lkml/87sjhzun47.fsf@xmission.com/
+>> "
+> 
+> It doesn't make sense to me.
+> 
+> I don't see any sleeping functions called from find_mm_struct or
+> kernel_migrate_pages in the area kernel_migrate_pages in the area of the
+> code protected by get_task_struct.  So at a very basic level I see a
+> justification for dirtying a cache line twice with get_task_struct and
+> put_task_struct to reduce rcu_read_lock hold times.
+> 
+> I would contend that a reasonable cleanup based up on the current state
+> of the code would be to extend the rcu_read_lock over get_task_mm so
 
-On 6/1/2022 7:38 AM, Pavan Kondeti wrote:
-> On Tue, May 31, 2022 at 09:44:52PM +0530, Krishna Kurapati wrote:
->> Add support for overriding electrical signal tuning parameters for
->> SNPS HS Phy.
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c | 268 +++++++++++++++++++++++++-
->>   1 file changed, 266 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c b/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
->> index 5d20378..3a17216 100644
->> --- a/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
->> +++ b/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
->> @@ -52,6 +52,12 @@
->>   #define USB2_SUSPEND_N				BIT(2)
->>   #define USB2_SUSPEND_N_SEL			BIT(3)
->>   
-> <snip>
->
->> +static void qcom_snps_hsphy_override_param_update_val(
->> +			const struct override_param_map map,
->> +			s32 dt_val, struct phy_override_seq *seq_entry)
->> +{
->> +	int i;
->> +
->> +	/*
->> +	 * Param table for each param is in increasing order
->> +	 * of dt values. We need to iterate over the list to
->> +	 * select the entry that has equal or the next highest value.
->> +	 */
->> +	for (i = 0; i < map.table_size - 1; i++) {
->> +		if (map.param_table[i].value >= dt_val)
->> +			break;
->> +	}
->> +
->> +	seq_entry->need_update = true;
->> +	seq_entry->offset = map.reg_offset;
->> +	seq_entry->mask = map.param_mask;
->> +	seq_entry->value =  map.param_table[i].reg << __ffs(map.param_mask);
->> +}
->> +
->> +static void qcom_snps_hsphy_read_override_param_seq(struct device *dev)
->> +{
->> +	struct device_node *node = dev->of_node;
->> +	s32 val;
->> +	int ret, i;
->> +	struct qcom_snps_hsphy *hsphy;
->> +	const struct override_param_map *cfg =
->> +		(struct override_param_map *) of_device_get_match_data(dev);
-> As mentioned in the previous patch-set, the explicit typecast is not needed.
->
-> overall, looks good to me. After fixing the above, feel free to use
->
-> Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
->
-> Thanks,
-> Pavan
-My bad, Thanks for the review Pavan. Will fix it in the next patch.
+If so, security_task_movememory will be called inside rcu lock. It might
+call sleeping functions, e.g. smack_log(). I think it's not a good idea.
+
+> that a reference to task_struct does not need to be taken.  That has
+> the potential to reduce contention and reduce lock hold times.
+> 
+> 
+> The code is missing a big fat comment with the assertion that it is ok
+> if the permission checks are racy because the race is small, and the
+> worst case thing that happens is the page is migrated to another
+> numa node.
+> 
+> 
+> Given that the get_mm_task takes task_lock the cost of dirtying the
+> cache line is already being paid.  Perhaps not extending task_lock hold
+> times a little bit is justified, but I haven't seen that case made.
+> 
+> This seems like code that is called little enough it would be better for
+> it to be correct, and not need big fat comments explaining why it
+> doesn't matter that they code is deliberately buggy.
+> 
+
+Agree. A big fat comments will make code hard to follow.
+
+> 
+> In short it does not make sense to me to justify a patch for performance
+> reasons when it appears that extending the rcu_read_lock hold time and
+> not touch the task reference count would stop dirtying a cache line and
+> likely have more impact.
+
+IMHO, incremented task refcount should make code works correctly. And extending
+the rcu_read_lock over get_task_mm will break the things because sleeping functions
+might be called while holding rcu lock.
+
+Does the patch itself makes sense for you? Should I rephase the commit log further?
+I'm afraid I didn't get your point correctly.
+
+> 
+> Eric
+
+Thanks!
+
+> .
+> 
+

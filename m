@@ -2,137 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B61539B87
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A16539B8F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349281AbiFADQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 23:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
+        id S1349291AbiFADTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 23:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349273AbiFADQD (ORCPT
+        with ESMTP id S241329AbiFADTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 23:16:03 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25D991599
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:16:00 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id e25so457783wra.11
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:16:00 -0700 (PDT)
+        Tue, 31 May 2022 23:19:32 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17598B0A7;
+        Tue, 31 May 2022 20:19:30 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id n13-20020a17090a394d00b001e30a60f82dso4826167pjf.5;
+        Tue, 31 May 2022 20:19:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XrsyQG46hfKFpC/n788dnmSF1KyRFNfE0olCI8xti3o=;
-        b=Z8C8H3Bcb4sw+hLnFm6ELYF7JkRtcmHt94DEDN9dw/uoIgceQeex8GVkcxd/4b8Jr0
-         ZBlku+irMR14iNI4YO1P/E0Mw2/KX0ckK6Lf5w7U6QAG93USFKlNKX6g9LOnhVgAeCGd
-         cmpw0kGdcUh0zptQ/Bt1Lxxj1M//ah60M1kUrRDe52J428k3Y06m6zKcYlJExYsEuwCc
-         I/4Ib6mvkU4psj4mKfBpDsb85NaTdJb8LlJO8clLZZAWHyi3/gSSv+PfI9k8ssXhQYf0
-         3HJgPtPawFixAjMDjj7/GLWtnhrmsfZMJv4Qx7rSxZmiyhzrUnS3KHGlE3XdW5/ZQG21
-         nlmg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sKgI1HXiOEQjCz4KL5/iiLkMDmHzaI43i9dEIs2R6Zw=;
+        b=X2Hndi0YvAZG4nN2Dl8+vVDx1DqrFowIsK7MD1rwsCZpj9ZL+wKlTD8KG59KXzPM0Q
+         h2sy8Nf/EcYbfOl/AQ+8QLx2Gxkc6b7FRjYagm3D07AYLvNcA/k2W5r9u00EVInGfk8v
+         tcWNQCbPYEZWE/fH+IWk8DN1MluXLhPTqK+06ACEhDx34fS1soK3XU6lYeZmQ7zpjDXg
+         cYRnAY4D18rcpsSTKz9ExFrsYYJ1172J9jBeQ15qv2RUXcE8oQZKraVMJjEf+NI1/0L+
+         s8cE2U38sKa6JeVC6vdhZJo8nYoTdIUkOAlNv6wQeskkLdi5J1fEfwjiIovmU9dNApW3
+         6lbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=XrsyQG46hfKFpC/n788dnmSF1KyRFNfE0olCI8xti3o=;
-        b=ki7Yr5P7RuibESS4aHlb3wAezYcyIhqHX9cqkN/i4iYKm7VPLmFJw8xOdT9WeC+5Bt
-         E/ZpvNCnX5byFgGMbpoUCnyf0k6N+mKEV0o83R3FZltLuo+f13KTCZrPUpPS/TUcgi/7
-         D30e+RPskBIKV8btl1NACQ4c8uDKG8uZJDcSUUcxQkFH4Kt9ESuqqUhAvYpVbjPAfUyb
-         svqKwE5V1L3AVYqJbM6NOgTrZ7Ghl+5kiGLCTphQfm/iwkkuz/M+KoKfn70WYgnPWnqY
-         c81tOhcrhBDIemsscgQqUFWHRAOihKCnd3YiA/wOGVTO7czXZGPc3WSufHgx3cEnbm6Z
-         e9GQ==
-X-Gm-Message-State: AOAM532PycwTe2G5td78EMwbUOfP2fzMco6CmP9toIdy41qQUYdEtr9f
-        4L1xuJkyU6HJr2BjQ7SPx6SUSA==
-X-Google-Smtp-Source: ABdhPJzVqSzsO85fNJucH4i22uc4bYFUP8VAEP9et8+fEFwPeeaTZAcOP4+UZPL5mR4op3rPe3foYg==
-X-Received: by 2002:a5d:64e6:0:b0:20f:a608:9af9 with SMTP id g6-20020a5d64e6000000b0020fa6089af9mr48500273wri.171.1654053359412;
-        Tue, 31 May 2022 20:15:59 -0700 (PDT)
-Received: from [10.188.163.71] (cust-east-parth2-46-193-73-98.wb.wifirst.net. [46.193.73.98])
-        by smtp.gmail.com with ESMTPSA id k27-20020a05600c1c9b00b0039750c39fc5sm4588644wms.3.2022.05.31.20.15.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 20:15:58 -0700 (PDT)
-Message-ID: <a29a1649-5e50-4221-9f44-66a35fbdff80@kernel.dk>
-Date:   Tue, 31 May 2022 21:15:57 -0600
+        bh=sKgI1HXiOEQjCz4KL5/iiLkMDmHzaI43i9dEIs2R6Zw=;
+        b=6m+UCjxcbkJ0Zueo7tFjO3Fwf1+3t6Tvc0rgWO5kfekuYkZpF2myiMZX6lkL7/nFSD
+         UHJ70+Z/uoyeYM1ouJBQLNbxem8LWVvdTwxNEl07M21FpgUQq5Gsleuk4z1thFZhWc5D
+         Rs4TSPRLI/KurXEbJ9NCBloGQSx3vm/EGLesflQIeWeCFcdTvGG+K8PO3plIen1UDhoO
+         hLqdlt2XCO+BNjo3Fh97XR+x4JQWw+6R10MjNkV9VxUGOeyIfYgAvOq+d1Zliz2t9D5y
+         ZfGJ+xIa35R6jwIyEWEXW7H/QdegGGuWBeM1zhfFas5DLS45vaGn2OyWZpY3OKR5RO7w
+         W+9g==
+X-Gm-Message-State: AOAM531jPQPpsoaFNcdQIFRRRBy2uXnbTXUZLcCHPlpa3uqs5B3cI5IY
+        t1nbD1z9x6+Bu4c7yzMZYQI=
+X-Google-Smtp-Source: ABdhPJzldhxLu11cxwB2qP3x3UP18xW+MjJxmw4zBf2NdyVYkmoE12xWq8wIQGbpJ50NYA0DOT/uDA==
+X-Received: by 2002:a17:902:d58a:b0:164:f5d1:82e9 with SMTP id k10-20020a170902d58a00b00164f5d182e9mr2027183plh.3.1654053570422;
+        Tue, 31 May 2022 20:19:30 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.23])
+        by smtp.gmail.com with ESMTPSA id i13-20020a056a00004d00b0050dc76281d3sm184691pfk.173.2022.05.31.20.19.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 20:19:29 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] KVM: x86/pmu: Accept 0 for absent PMU MSRs when host-initiated if !enable_pmu
+Date:   Wed,  1 Jun 2022 11:19:23 +0800
+Message-Id: <20220601031925.59693-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RFC] coredump: Do not interrupt dump for TIF_NOTIFY_SIGNAL
-Content-Language: en-US
-To:     Olivier Langlois <olivier@trillion01.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        io-uring@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <192c9697e379bf084636a8213108be6c3b948d0b.camel@trillion01.com>
- <9692dbb420eef43a9775f425cb8f6f33c9ba2db9.camel@trillion01.com>
- <87h7i694ij.fsf_-_@disp2133> <1b519092-2ebf-3800-306d-c354c24a9ad1@gmail.com>
- <b3e43e07c68696b83a5bf25664a3fa912ba747e2.camel@trillion01.com>
- <13250a8d-1a59-4b7b-92e4-1231d73cbdda@gmail.com>
- <878rw9u6fb.fsf@email.froward.int.ebiederm.org>
- <303f7772-eb31-5beb-2bd0-4278566591b0@gmail.com>
- <87ilsg13yz.fsf@email.froward.int.ebiederm.org>
- <8218f1a245d054c940e25142fd00a5f17238d078.camel@trillion01.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <8218f1a245d054c940e25142fd00a5f17238d078.camel@trillion01.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/22 2:06 PM, Olivier Langlois wrote:
-> On Mon, 2022-03-14 at 18:58 -0500, Eric W. Biederman wrote:
->>
->> Thank you very much for this.  There were some bugs elsewhere I had
->> to
->> deal with so I am slower looking at this part of the code than I was
->> expecting.
->>
->> I have now reproduced this with the commit reverted on current
->> kernels
->> and the repro.c from the syzcaller report.  I am starting to look
->> into
->> how this interacts with my planned code changes in this area.
->>
->> In combination with my other planned changes I think all that needs
->> to
->> happen in do_coredump is to clear TIF_NOTIFY_SIGNAL along with
->> TIF_SIGPENDING to prevent io_uring interaction problems.  But we will
->> see.
->>
->> The deadlock you demonstrate here shows that it is definitely not
->> enough
->> to clear TIF_NOTIFY_SIGNAL (without other changes) so that
->> signal_pending returns false, which I was hoping was be the case.
->>
->> Eric
-> 
-> I have been away for some time but if this is not resoved yet, I just
-> want to remind that clearing TIF_NOTIFY_SIGNAL along with
-> TIF_SIGPENDING won't do it because io_uring may set them asynchronously
-> to report some io completion while do_coredump() is executing.
-> 
-> IMHO, just calling io_uring_task_cancel() from do_coredump() before
-> actually writing the dump, while maybe not the perfect solution, is the
-> simplest one.
-> 
-> Otherwise, maybe masking interrupts locally could work but I wouldn't
-> dare to explore this option personally...
+From: Like Xu <likexu@tencent.com>
 
-Eric, are you fine with doing the cancelation based patch for now? IMHO
-it's not the ideal approach, but it will resolve the issue. And it'd
-honestly be great to get some closure on this so we don't have truncated
-core dumps if they are interrupted by task_work.
+Whenever an MSR is part of KVM_GET_MSR_INDEX_LIST, as is the case for
+MSR_K7_EVNTSEL0 or MSR_F15H_PERF_CTL0, it has to be always retrievable
+and settable with KVM_GET_MSR and KVM_SET_MSR.
 
-The best solution would be to make the core dumps resilient to
-task_work, but a workable solution would be nice at this point...
+Accept a zero value for these MSRs to obey the contract.
 
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+Note, if !enable_pmu, it is easy to reproduce and verify it with selftest.
+
+ arch/x86/kvm/pmu.c     |  8 ++++++++
+ arch/x86/kvm/svm/pmu.c | 11 ++++++++++-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 7a74691de223..3575a3746bf9 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -439,11 +439,19 @@ static void kvm_pmu_mark_pmc_in_use(struct kvm_vcpu *vcpu, u32 msr)
+ 
+ int kvm_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ {
++	if (msr_info->host_initiated && !vcpu->kvm->arch.enable_pmu) {
++		msr_info->data = 0;
++		return 0;
++	}
++
+ 	return static_call(kvm_x86_pmu_get_msr)(vcpu, msr_info);
+ }
+ 
+ int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ {
++	if (msr_info->host_initiated && !vcpu->kvm->arch.enable_pmu)
++		return !!msr_info->data;
++
+ 	kvm_pmu_mark_pmc_in_use(vcpu, msr_info->index);
+ 	return static_call(kvm_x86_pmu_set_msr)(vcpu, msr_info);
+ }
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index 256244b8f89c..fe520b2649b5 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -182,7 +182,16 @@ static struct kvm_pmc *amd_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
+ static bool amd_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr, bool host_initiated)
+ {
+ 	/* All MSRs refer to exactly one PMC, so msr_idx_to_pmc is enough.  */
+-	return false;
++	if (!host_initiated)
++		return false;
++
++	switch (msr) {
++	case MSR_K7_EVNTSEL0 ... MSR_K7_PERFCTR3:
++	case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
++		return true;
++	default:
++		return false;
++	}
+ }
+ 
+ static struct kvm_pmc *amd_msr_idx_to_pmc(struct kvm_vcpu *vcpu, u32 msr)
 -- 
-Jens Axboe
+2.36.1
 

@@ -2,101 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A649453AA73
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852A953AA6D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354695AbiFAPsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 11:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49028 "EHLO
+        id S1347705AbiFAPso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 11:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355840AbiFAPss (ORCPT
+        with ESMTP id S1355870AbiFAPsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 11:48:48 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112EC38DB8;
-        Wed,  1 Jun 2022 08:48:47 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id fu3so3151967ejc.7;
-        Wed, 01 Jun 2022 08:48:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qIxjOQ/BiBvG7ilAoxDwbyOmhB12l869cvxwINlHsmg=;
-        b=myWKseZ3bCT/Zo6L4YCDOR0GLBuS6R7FoxRn50NIUFmA11sj/5pvlrHwwwClvb4+fM
-         hdp/bRAgfQ8an1AvgMaw4QNsh0iNUgvvS2YoZ4gzfvUl9Yx96O3PIZKgnmZOzBZdSg5E
-         E6PTK3jQNJdOMyrJGpwtn0kHQMN+p+RyNHLuA77PiqIqQQLETSTQFn12yE06Xoc8LOS3
-         OPPDVQfOHv08su2U5DWXk04u4FnI3Q3LIACAWD/86XAqTC099o//UMYSbk9q6HVjtQ9D
-         cIiMNSUtRHuGARWNY1NiTPNuPoNIJmVE69EW6HC/hNOg3PRM3rnbP2ip30MgubQAnlCy
-         9fgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qIxjOQ/BiBvG7ilAoxDwbyOmhB12l869cvxwINlHsmg=;
-        b=1fHLsaCeIbJuCQgT3FINalAcDMd5qrXKEFHR+XpdYTgIWrCc/KJpw8ONHpUHe68RBy
-         1y1uwMmZJoQb3j7TiCkl7N/4jJDSNWcKeTZZ+EDDL8Rq35JLIVErlgRl116NGLXPyAgW
-         3Oon+7XmJI2QzHd3Um0vOaMvU3Pvdt4o2qESJlkGRt1BDwIM5EaXA5C5s7Y0OrdGRSOt
-         NTHHZADxSIzUvxkQHe7Yh/htS/O5lLKpgL1IbmhNX8kIayOCwhV1Zl4Z9xTPBhUrLEET
-         GwAilWXE0M9rs1z8TnwkeJI2COJwdcqxlCUvG3XEHlYnfRpspOV3Nb9IKH/KX39IDf1t
-         E+Ww==
-X-Gm-Message-State: AOAM532m8F5dg/XBSZiDLBxuZa834vkwCJlEJy6ZzgLJdeburf5aJUGB
-        G5AjDAKnBLhjmT3M4qz+dGFqknHIALWtQJUyuv4=
-X-Google-Smtp-Source: ABdhPJyxXh9AA4ItjPVQT20iRsQvdAT0pJHmPQafvOpj6f9UF19skFjG5UQ4hC8SflSUtFx40H67qgT5QdoG+3WJHJg=
-X-Received: by 2002:a17:907:8a27:b0:707:cc50:e790 with SMTP id
- sc39-20020a1709078a2700b00707cc50e790mr132621ejc.77.1654098525425; Wed, 01
- Jun 2022 08:48:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220601150446.25866-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220601150446.25866-1-andriy.shevchenko@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 1 Jun 2022 17:48:08 +0200
-Message-ID: <CAHp75VdezsaTyhJxhun+HG8M=q9cOQJKvNSOdcv90fXcn2mu-Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] gpio: crystalcove: make irq_chip immutable
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
+        Wed, 1 Jun 2022 11:48:37 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB615A5026;
+        Wed,  1 Jun 2022 08:48:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654098515; x=1685634515;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+JUWCeXHDxrtBD2gmRVwSR4bH4BC9bWwvJ+0OSzAwRM=;
+  b=XRjgxirVHayDw1LK2qc7/EdvzU+bU9fp7so7MxRmyH+4dEhNeQT4tpx0
+   m0K/g8MXNFx6CLxuBxlbAs+dKEj5Hx4ki67nK3kBiz9GRQaCnVyMZ2i0l
+   4rSZRkYB47G0VXdnC6k9NjJjZDvBzNKsjLpLAxO7c18uZoDZyXTq9YcKy
+   S4u8vLUjqR6zgoVGpYtNf5THIGKFnecY4aZx+turTyBwLkhiOykFqWVd2
+   0uHzmOV4PebC+X/YU9wXxnW+T0nJm5myUq0jM2s4AGmHiYbGXWNXmYHr1
+   Hs65/CQtx2ApvfgG0RAAjveEbb4xSzvKTlWh6ptTz2UdH+/1RqAwhx9BL
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="263269175"
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="263269175"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 08:48:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="756252603"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 01 Jun 2022 08:48:33 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 2D611F8; Wed,  1 Jun 2022 18:48:35 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v1 1/1] gpio: wcove: make irq_chip immutable
+Date:   Wed,  1 Jun 2022 18:48:33 +0300
+Message-Id: <20220601154833.2173-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 5:04 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+Since recently, the kernel is nagging about mutable irq_chips:
 
-...
+   "not an immutable chip, please consider fixing it!"
 
-> +       gpiochip_enable_irq(gc, hwirq);
+Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
+helper functions and call the appropriate gpiolib functions.
 
-I think we do not need to do this for pins that we do not touch as
-IRQs (they are vGPIOs with GPE capabilities, AFAIR).
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/gpio/gpio-wcove.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-> -       if (data->hwirq < CRYSTALCOVE_GPIO_NUM) {
-> +       if (hwirq < CRYSTALCOVE_GPIO_NUM) {
->                 cg->set_irq_mask = false;
->                 cg->update |= UPDATE_IRQ_MASK;
->         }
-
-...
-
-> -       if (data->hwirq < CRYSTALCOVE_GPIO_NUM) {
-> +       if (hwirq < CRYSTALCOVE_GPIO_NUM) {
->                 cg->set_irq_mask = true;
->                 cg->update |= UPDATE_IRQ_MASK;
->         }
-> +
-> +       gpiochip_disable_irq(gc, hwirq);
-
-Ditto.
-
+diff --git a/drivers/gpio/gpio-wcove.c b/drivers/gpio/gpio-wcove.c
+index 16a0fae1e32e..c18b6b47384f 100644
+--- a/drivers/gpio/gpio-wcove.c
++++ b/drivers/gpio/gpio-wcove.c
+@@ -299,6 +299,8 @@ static void wcove_irq_unmask(struct irq_data *data)
+ 	if (gpio >= WCOVE_GPIO_NUM)
+ 		return;
+ 
++	gpiochip_enable_irq(chip, gpio);
++
+ 	wg->set_irq_mask = false;
+ 	wg->update |= UPDATE_IRQ_MASK;
+ }
+@@ -314,15 +316,19 @@ static void wcove_irq_mask(struct irq_data *data)
+ 
+ 	wg->set_irq_mask = true;
+ 	wg->update |= UPDATE_IRQ_MASK;
++
++	gpiochip_disable_irq(chip, gpio);
+ }
+ 
+-static struct irq_chip wcove_irqchip = {
++static const struct irq_chip wcove_irqchip = {
+ 	.name			= "Whiskey Cove",
+ 	.irq_mask		= wcove_irq_mask,
+ 	.irq_unmask		= wcove_irq_unmask,
+ 	.irq_set_type		= wcove_irq_type,
+ 	.irq_bus_lock		= wcove_bus_lock,
+ 	.irq_bus_sync_unlock	= wcove_bus_sync_unlock,
++	.flags			= IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+ };
+ 
+ static irqreturn_t wcove_gpio_irq_handler(int irq, void *data)
+@@ -452,7 +458,7 @@ static int wcove_gpio_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	girq = &wg->chip.irq;
+-	girq->chip = &wcove_irqchip;
++	gpio_irq_chip_set_chip(girq, &wcove_irqchip);
+ 	/* This will let us handle the parent IRQ in the driver */
+ 	girq->parent_handler = NULL;
+ 	girq->num_parents = 0;
 -- 
-With Best Regards,
-Andy Shevchenko
+2.35.1
+

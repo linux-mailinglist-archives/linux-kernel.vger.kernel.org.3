@@ -2,83 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F961539B4B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17496539B38
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349190AbiFAC2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 22:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
+        id S1349153AbiFACXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 22:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbiFAC2W (ORCPT
+        with ESMTP id S1349133AbiFACXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 22:28:22 -0400
-Received: from out199-7.us.a.mail.aliyun.com (out199-7.us.a.mail.aliyun.com [47.90.199.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C489A66C93;
-        Tue, 31 May 2022 19:28:19 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VEyjSoC_1654050495;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VEyjSoC_1654050495)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 01 Jun 2022 10:28:15 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     miklos@szeredi.hu
-Cc:     linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] ovl: Fix some kernel-doc comments
-Date:   Wed,  1 Jun 2022 10:28:14 +0800
-Message-Id: <20220601022814.122620-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 31 May 2022 22:23:04 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3785C6D19E;
+        Tue, 31 May 2022 19:23:02 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LCXvP3pk0z1K981;
+        Wed,  1 Jun 2022 10:21:21 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 1 Jun 2022 10:23:00 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
+ 2022 10:23:00 +0800
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <ebiederm@xmission.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH v3] proc: Fix a dentry lock race between release_task and lookup
+Date:   Wed, 1 Jun 2022 10:36:22 +0800
+Message-ID: <20220601023622.4191510-1-chengzhihao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove warnings found by running scripts/kernel-doc,
-which is caused by using 'make W=1'.
-fs/overlayfs/super.c:311: warning: Function parameter or member 'dentry'
-not described in 'ovl_statfs'
-fs/overlayfs/super.c:311: warning: Excess function parameter 'sb'
-description in 'ovl_statfs'
-fs/overlayfs/super.c:357: warning: Function parameter or member 'm' not
-described in 'ovl_show_options'
-fs/overlayfs/super.c:357: warning: Function parameter or member 'dentry'
-not described in 'ovl_show_options'
+Commit 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
+moved proc_flush_task() behind __exit_signal(). Then, process systemd
+can take long period high cpu usage during releasing task in following
+concurrent processes:
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+  systemd                                 ps
+kernel_waitid                 stat(/proc/tgid)
+  do_wait                       filename_lookup
+    wait_consider_task            lookup_fast
+      release_task
+        __exit_signal
+          __unhash_process
+            detach_pid
+              __change_pid // remove task->pid_links
+                                     d_revalidate -> pid_revalidate  // 0
+                                     d_invalidate(/proc/tgid)
+                                       shrink_dcache_parent(/proc/tgid)
+                                         d_walk(/proc/tgid)
+                                           spin_lock_nested(/proc/tgid/fd)
+                                           // iterating opened fd
+        proc_flush_pid                                    |
+           d_invalidate (/proc/tgid/fd)                   |
+              shrink_dcache_parent(/proc/tgid/fd)         |
+                shrink_dentry_list(subdirs)               ↓
+                  shrink_lock_dentry(/proc/tgid/fd) --> race on dentry lock
+
+Function d_invalidate() will remove dentry from hash firstly, but why does
+proc_flush_pid() process dentry '/proc/tgid/fd' before dentry '/proc/tgid'?
+That's because proc_pid_make_inode() adds proc inode in reverse order by
+invoking hlist_add_head_rcu(). But proc should not add any inodes under
+'/proc/tgid' except '/proc/tgid/task/pid', fix it by adding inode into
+'pid->inodes' only if the inode is /proc/tgid or /proc/tgid/task/pid.
+
+Performance regression:
+Create 200 tasks, each task open one file for 50,000 times. Kill all
+tasks when opened files exceed 10,000,000 (cat /proc/sys/fs/file-nr).
+
+Before fix:
+$ time killall -wq aa
+  real    4m40.946s   # During this period, we can see 'ps' and 'systemd'
+			taking high cpu usage.
+
+After fix:
+$ time killall -wq aa
+  real    1m20.732s   # During this period, we can see 'systemd' taking
+			high cpu usage.
+
+Fixes: 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216054
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
 ---
- fs/overlayfs/super.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ v1->v2: Add new helper proc_pid_make_base_inode that performs the extra
+	 work of adding to the pid->list.
+ v2->v3: Add performance regression in commit message.
+ fs/proc/base.c | 34 ++++++++++++++++++++++++++--------
+ 1 file changed, 26 insertions(+), 8 deletions(-)
 
-diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
-index e0a2e0468ee7..9282296dc4c9 100644
---- a/fs/overlayfs/super.c
-+++ b/fs/overlayfs/super.c
-@@ -301,7 +301,7 @@ static int ovl_sync_fs(struct super_block *sb, int wait)
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index c1031843cc6a..f22fad3bf7f0 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -1885,7 +1885,7 @@ void proc_pid_evict_inode(struct proc_inode *ei)
+ 	put_pid(pid);
+ }
  
- /**
-  * ovl_statfs
-- * @sb: The overlayfs super block
-+ * @dentry: The dentry to query
-  * @buf: The struct kstatfs to fill in with stats
-  *
-  * Get the filesystem statistics.  As writes always target the upper layer
-@@ -349,6 +349,8 @@ static inline int ovl_xino_def(void)
+-struct inode *proc_pid_make_inode(struct super_block * sb,
++struct inode *proc_pid_make_inode(struct super_block *sb,
+ 				  struct task_struct *task, umode_t mode)
+ {
+ 	struct inode * inode;
+@@ -1914,11 +1914,6 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
  
- /**
-  * ovl_show_options
-+ * @m: the seq_file handle
-+ * @dentry: The dentry to query
-  *
-  * Prints the mount options for a given superblock.
-  * Returns zero; does not fail.
+ 	/* Let the pid remember us for quick removal */
+ 	ei->pid = pid;
+-	if (S_ISDIR(mode)) {
+-		spin_lock(&pid->lock);
+-		hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
+-		spin_unlock(&pid->lock);
+-	}
+ 
+ 	task_dump_owner(task, 0, &inode->i_uid, &inode->i_gid);
+ 	security_task_to_inode(task, inode);
+@@ -1931,6 +1926,27 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
+ 	return NULL;
+ }
+ 
++struct inode *proc_pid_make_base_inode(struct super_block *sb,
++				       struct task_struct *task, umode_t mode)
++{
++	struct inode *inode;
++	struct proc_inode *ei;
++	struct pid *pid;
++
++	inode = proc_pid_make_inode(sb, task, mode);
++	if (!inode)
++		return NULL;
++
++	/* Let proc_flush_pid find this directory inode */
++	ei = PROC_I(inode);
++	pid = ei->pid;
++	spin_lock(&pid->lock);
++	hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
++	spin_unlock(&pid->lock);
++
++	return inode;
++}
++
+ int pid_getattr(struct user_namespace *mnt_userns, const struct path *path,
+ 		struct kstat *stat, u32 request_mask, unsigned int query_flags)
+ {
+@@ -3350,7 +3366,8 @@ static struct dentry *proc_pid_instantiate(struct dentry * dentry,
+ {
+ 	struct inode *inode;
+ 
+-	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
++	inode = proc_pid_make_base_inode(dentry->d_sb, task,
++					 S_IFDIR | S_IRUGO | S_IXUGO);
+ 	if (!inode)
+ 		return ERR_PTR(-ENOENT);
+ 
+@@ -3649,7 +3666,8 @@ static struct dentry *proc_task_instantiate(struct dentry *dentry,
+ 	struct task_struct *task, const void *ptr)
+ {
+ 	struct inode *inode;
+-	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
++	inode = proc_pid_make_base_inode(dentry->d_sb, task,
++					 S_IFDIR | S_IRUGO | S_IXUGO);
+ 	if (!inode)
+ 		return ERR_PTR(-ENOENT);
+ 
 -- 
-2.20.1.7.g153144c
+2.31.1
 

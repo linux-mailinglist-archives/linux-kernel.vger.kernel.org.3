@@ -2,118 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59FDA53A914
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F8853A8D2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355628AbiFAOXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S1347881AbiFAOM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355312AbiFAOXJ (ORCPT
+        with ESMTP id S1355833AbiFAOG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:23:09 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7273F506E;
-        Wed,  1 Jun 2022 07:12:39 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 43A4B6A259B;
-        Wed,  1 Jun 2022 14:12:35 +0000 (UTC)
-Received: from pdx1-sub0-mail-a312.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id B903E6A28B2;
-        Wed,  1 Jun 2022 14:12:34 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1654092754; a=rsa-sha256;
-        cv=none;
-        b=zvgdgSUGTwWUAEBXEtSBvYNZ7TtJIAtaRp5H6GYMGomhImSYKfinkKKKe3eVmEP+fSQ8qr
-        F71raoKMNSHN8E3mHNh03tU0eiCrxXrVuueBxIEB8A5/9fo5pZt/CRpAYBEOj8Kemh28ob
-        xV0R889ak7SZs2p8cIsOtRwd70Z4qi99RfbFNxuHnC3ed+luOS+m9BsOu9SmRR5PXMZBfV
-        3mEgESG4GeD40nSA1OaS0SgKLStjCtm27siCV0/nY4DVjJp/SkKFbyfSU5ZIIYYzcGkvAY
-        82cHXR9VgaurNVwLs6ue9TbI9dS2iy6qMbUNizTzZyO48zGkauzHWUk9GyMZrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1654092754;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=yLYJaL9ORR9PYZ13P2JQqpUzPce3UQH19Ih6BN8oryg=;
-        b=0909y5q2CRn5v5TR0y7rq6Jj2CwZJREDe79Es0ZI3qiWyB0Iqv3pTVQ9O7C3bDPzHwnAQh
-        Rv0V9ZVp6ymkChqy0LbzO7tGUIR4mDHV/HIevg16cPMZet1m/V75K6kVxUewxjkQAdVtUH
-        kccRSrBfr5Fkd+yGGph1w8l6CBJlkijkBvZRIczRXrE9i3imEXx0UBXWT9VRw2cKZroKje
-        vxaDPg90vy+u71LylIw0gQXgGNFOQdWx6PSKg3zjyQtacNAWm/qSkX1xN0e488NNT8XCGc
-        6kC5xtjJzS7/FIgj9NPUjG25w76ZJXxUF/KWvNc2tvRPDEUPs0vnS+8tKbLr4Q==
-ARC-Authentication-Results: i=1;
-        rspamd-54ff499d4f-g4gpm;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Celery-Illegal: 52844d101a27ad83_1654092754999_416677461
-X-MC-Loop-Signature: 1654092754999:3585670684
-X-MC-Ingress-Time: 1654092754999
-Received: from pdx1-sub0-mail-a312.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.116.106.119 (trex/6.7.1);
-        Wed, 01 Jun 2022 14:12:34 +0000
-Received: from offworld (unknown [104.36.31.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 1 Jun 2022 10:06:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331FEBA9BA;
+        Wed,  1 Jun 2022 07:00:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a312.dreamhost.com (Postfix) with ESMTPSA id 4LCrh11Kq1z2q;
-        Wed,  1 Jun 2022 07:12:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1654092754;
-        bh=uKVBDmeDT/2dQS6ktQaex3oOWU37YZa72inB1fxgwGI=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=jDlowyjFNsH2P2j4LwIiL0zuUbCC4TalwZm5TssLk3ms94qNuNDXlfZpJqx0Z0v3p
-         9V+p/9Ql3HLPxI98jmT3nzYESO4fE7LlIvgfVLQqeBfGq82y5otUfxSn3QJYyqrIn+
-         Yjna+xqGq/z+y5N34yK3eXMKIC5pVcM6owL9zWmVB0JRVZ9Ogu7WSV4BurE2JM8Xin
-         1tmSG+b0HChMdOALdXKlFMr2i6ZRQ0CVzdPVcHt/Ab2waTogOMQQje35x3T45F9FnP
-         LOsJqJqM4L/zZJx5t04n/DZupj6uX/TRDdG1FaC36ux+dge50eUZkJDd65eZCbg0MK
-         aotmCpXdBg5tw==
-Date:   Wed, 1 Jun 2022 06:59:09 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <ben@bwidawsk.net>, linux-kernel@vger.kernel.org,
-        linux-cxl@vger.kernel.org, linux-pci@vger.kernel.org,
-        a.manzanares@samsung.com
-Subject: Re: [PATCH v9 3/9] PCI: Create PCI library functions in support of
- DOE mailboxes.
-Message-ID: <20220601135909.mvnam4vvfmofpsdb@offworld>
-References: <20220531152632.1397976-1-ira.weiny@intel.com>
- <20220531152632.1397976-4-ira.weiny@intel.com>
- <20220531172507.5ert5tgwellpe7fx@offworld>
- <20220531175652.qog7xaqmypy36whu@offworld>
- <Ypbw3d/vUyMHGcBW@iweiny-desk3>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C25F6155E;
+        Wed,  1 Jun 2022 13:59:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E39CEC34119;
+        Wed,  1 Jun 2022 13:59:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654091994;
+        bh=cJFlLz+jFyLB/OFW6ZZBIAU34k0Q+vivDjWMB3mrnGI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BaQr74OVHhEguiDVV9MNq8c1hE9+qJc13C/u0jW01BTQCimWvCkTLkDfHHlRaOwLn
+         mXJ0Q3cuwK6LTm1q0I0C9+yu9w1o2v2uk4DdHUgIATK1A0RiKz27fFuxzanhCdmhTV
+         807cOwQOaPqwrU10AcbsD1Zitl+Rf2D67AmZ7RLbq7Y1RGHevjAIn+DmQFg/guHdld
+         oxXf0P4bBeFZOVmJyaHf+qPV+k3ugUB+MCQNg/K8+Khk5MBk4hF2w8z6287AarUh5V
+         OQ1IqnYsljnYLd494YgMjcXHpIcZe1qiXm6+ZafD840+Ubau7Ej3YyfCsaYTlcuLR5
+         wV6xSiGChTbPA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sasha Levin <sashal@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
+        devicetree@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 01/15] ARM: dts: ox820: align interrupt controller node name with dtschema
+Date:   Wed,  1 Jun 2022 09:59:36 -0400
+Message-Id: <20220601135951.2005085-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Ypbw3d/vUyMHGcBW@iweiny-desk3>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 May 2022, Ira Weiny wrote:
->Thinking about it I don't see a benefit to a rwlock.  We don't have multiple
->readers.
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-... but you have concurrent workqueues reading the value of cur_task.
+[ Upstream commit fbcd5ad7a419ad40644a0bb8b4152bc660172d8a ]
 
-Thanks,
-Davidlohr
+Fixes dtbs_check warnings like:
+
+  gic@1000: $nodename:0: 'gic@1000' does not match '^interrupt-controller(@[0-9a-f,]+)*$'
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220317115705.450427-1-krzysztof.kozlowski@canonical.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/arm/boot/dts/ox820.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/ox820.dtsi b/arch/arm/boot/dts/ox820.dtsi
+index f7dddfb01f81..d629caf8b98f 100644
+--- a/arch/arm/boot/dts/ox820.dtsi
++++ b/arch/arm/boot/dts/ox820.dtsi
+@@ -286,7 +286,7 @@ local-timer@600 {
+ 				clocks = <&armclk>;
+ 			};
+ 
+-			gic: gic@1000 {
++			gic: interrupt-controller@1000 {
+ 				compatible = "arm,arm11mp-gic";
+ 				interrupt-controller;
+ 				#interrupt-cells = <3>;
+-- 
+2.35.1
+

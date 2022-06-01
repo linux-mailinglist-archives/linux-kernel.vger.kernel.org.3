@@ -2,193 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C09539F56
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5749A539F5C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350622AbiFAIXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 04:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S1350615AbiFAIYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245162AbiFAIX0 (ORCPT
+        with ESMTP id S245162AbiFAIYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:23:26 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2092.outbound.protection.outlook.com [40.107.101.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA652722;
-        Wed,  1 Jun 2022 01:23:25 -0700 (PDT)
+        Wed, 1 Jun 2022 04:24:34 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12olkn2095.outbound.protection.outlook.com [40.92.21.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D272FD;
+        Wed,  1 Jun 2022 01:24:32 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aGLwLYuB32d+BAALlEm82yEtykFWaNDaBgBVlE/s5dXtYsT+lTfDzbKxrLF6nFgsFoMVmW2ZBhwiAAQZlx7o4f8inW2gApy4AykMfOdja0rpyo5ioC6SCMRdyKqKlOHAjdVZ/lFCN+C40BIC6eStlRRv0GDX6+++xbpaxh1q8q5vaiy0w48nWf3X6mb7fhGYI0Y9QjyXwj8G9v3+AtdoViCVUflZkmK0bVxI/jDYiXemIRB2Yvmz94ZVObbDdM7qaR9gcRPZo+RD9E+4OrteeMZXSITYtzhpXu0iHxeKjTekdTyANMFeaqRjQbyUKDEEZqOLULl1OdQAReUkX0Cm7g==
+ b=HavRjAlaaCHQZqc4hHIxYG6sfUILxBQztpy3gx3dYITi6QABK0g8zqmfDpn47Pc+Q4I3Wd+/1XjdtdY9tbjiW0acw7X99066Vzcbo/VKwD5OOO9QCZtgA14jUWo6Qwf/k7uKdLiAYXgDledbtjVvdswu9CsfzM+JC2ziLsDZlllvnGfttia30P7KMNouM5Cq7EB51ZUPCwVg8RtCAj08vRo6DwEBKU5JFBNSeNxyE47RmaUnHER76lyVTiQ51PS6usGmHx4mw4N3Uap0QpjUSCD4GcNQPTfMruaQxuafYnJv6+y6jyw8820OqKxW5a8E8srklHO+JjxwbXCS5MPnkA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rlVF0iMPrrmniy5l9kEFBl3woILxDoJb8sczYLSsWso=;
- b=Db5EBuccpkRyszpKjtM6b0k11mQOMdusUWxaQjMmHv722XAZ2Vl2ibrCdh4tQphi1JdYW6Yju4WSR/J4z3kQ/m0YksVubpzSiCiOqiwqaQfrAwrrxiP3nY//hy4ieIDm/i/pB1VbaDJfRjoNGrnsSwKUewuCG6xxadd9L2958hWZtlaEB1FyPWwrr9bBniQfHO7vWBszQIkVkY3oUgZmTdRK8BwtiZQoqoaEAJG5EMKK1ll7R9UxJ00l05Ae4IYsBPsCg24Va9e8zUBg7rFNr/gpbC//Zr6J0wl/s1VloK+Bxi5MH2iGpbAUIEJa0N+JYBQVZ+hsiTe1HvyNtGXC+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rlVF0iMPrrmniy5l9kEFBl3woILxDoJb8sczYLSsWso=;
- b=EMF01IqXgZkJVqdxdc9cwUYMzhThDdZsp1gASF6NZjGd8wJEmH2Q9lb7JI2t2qBfGxkQ7MliCsYZyKzr2t2+cQ3OjlH8MrpYzTKqn6D6ziNR69SGOi8xEkJK2ABbckZJqRO+o7TSeXTuXp2NuuzvvoU9pW+Sjq6yXgJ/6s3um1o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
- DM6PR01MB4922.prod.exchangelabs.com (2603:10b6:5:9::29) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5293.18; Wed, 1 Jun 2022 08:23:23 +0000
-Received: from SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::5514:7923:ceef:cb2e]) by SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::5514:7923:ceef:cb2e%3]) with mapi id 15.20.5293.019; Wed, 1 Jun 2022
- 08:23:23 +0000
-Message-ID: <ba084735-0781-7ca2-4d04-a70a4115729a@os.amperecomputing.com>
-Date:   Wed, 1 Jun 2022 15:23:11 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-Subject: Re: [Openipmi-developer] [PATCH v7 1/3] ipmi: ssif_bmc: Add SSIF BMC
- driver
-To:     minyard@acm.org
-Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        openbmc@lists.ozlabs.org,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kernel@vger.kernel.org,
-        Phong Vo <phong@os.amperecomputing.com>,
-        Wolfram Sang <wsa@kernel.org>,
+ bh=xqGdLFAzvjePfMfHM9s5YoGjwV4QexPwTUYQiypvDWA=;
+ b=cZWd6187KTqxpF0askSeLmZStAR5B4lbG7VA/yHprg3TmC2So7bgtb3+pCplzVR+tvukHsBvAyulKw4U9fsf6wRXx4N74WOtVf0oBoM1PGc2zNVgg/WR9gguOtI2oB9VGMC7J9cw2Y5YSg2Wai476/qGxyC95uChLOWAAhud6YVLQfcPyT7ocu7nJ7Fx+25E0D/QUw3B4fOQhkzcxBLXwk8tIwZsvFCwc+4L6T18dfQYweYvLe0nDpBptbMJX//7xAduxdbTwSGmkOfndGI1Z74V1reNyR+WImznA/4xqBarvlx7QDpEp3x6tC+IYjFwYEQ1xNbP7WvtVwkzNIoQnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com (2603:10b6:a03:236::13)
+ by DM6PR02MB5708.namprd02.prod.outlook.com (2603:10b6:5:7c::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.15; Wed, 1 Jun
+ 2022 08:24:31 +0000
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::e179:40c4:4269:70e]) by BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::e179:40c4:4269:70e%5]) with mapi id 15.20.5314.013; Wed, 1 Jun 2022
+ 08:24:31 +0000
+From:   Joel Selvaraj <jo@jsfamily.in>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Open Source Submission <patches@amperecomputing.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-References: <20220422040803.2524940-1-quan@os.amperecomputing.com>
- <20220422040803.2524940-2-quan@os.amperecomputing.com>
- <20220423015119.GE426325@minyard.net>
- <ec7b86ec-827f-da64-8fd2-eae09f802694@os.amperecomputing.com>
- <20220504120631.GE3767252@minyard.net>
-Content-Language: en-US
-In-Reply-To: <20220504120631.GE3767252@minyard.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0029.apcprd02.prod.outlook.com
- (2603:1096:3:18::17) To SJ0PR01MB7282.prod.exchangelabs.com
- (2603:10b6:a03:3f2::24)
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hao Fang <fanghao11@huawei.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Joel Selvaraj <jo@jsfamily.in>
+Subject: [PATCH v4 0/4] Introduce EBBG FT8719 DRM panel driver
+Date:   Wed,  1 Jun 2022 13:54:06 +0530
+Message-ID: <BY5PR02MB700961069804230B5AFC5E04D9DF9@BY5PR02MB7009.namprd02.prod.outlook.com>
+X-Mailer: git-send-email 2.36.1
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-TMN:  [UxYhGyN4r2QWaddhC8FxyygjajlImiEVO+i+u0XigaqnjVN5Chkd4gVvbVicufW6]
+X-ClientProxiedBy: BM1P287CA0002.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:b00:40::13) To BY5PR02MB7009.namprd02.prod.outlook.com
+ (2603:10b6:a03:236::13)
+X-Microsoft-Original-Message-ID: <20220601082410.55266-1-jo@jsfamily.in>
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7854af90-98dc-412d-67a4-08da43a7fe31
-X-MS-TrafficTypeDiagnostic: DM6PR01MB4922:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR01MB49229B1EEFEBA0D8628F430FF2DF9@DM6PR01MB4922.prod.exchangelabs.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
+X-MS-Office365-Filtering-Correlation-Id: 8f090ce7-ab57-4780-e915-08da43a8266c
+X-MS-TrafficTypeDiagnostic: DM6PR02MB5708:EE_
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uacUwK51QeJ+UbJd7eUlsGwYo23UznvWPzmKR2lTpXMwQFhPU8lRFUwQiKSf1hXwdo4QsChl1DieM+cmC/AWf8duAoeRPA92gTzsG+/FAPOKsQRTTnywWLkp8977+TeziYzYr9D205QvnJAwKuHvfrsqnRIn54B88zW+NzJ3GfeuaKHwRHhu3ywUj8xryjhAUhAgZRwfQ1gj7nVtbpEAmzFO7V+DWXaXsDyQiuyxJIJnFoGVyKrmAUx+9d6bQfbO7oSOJaY7h7HbSXvMg4keqx8Sx4uHWIaWhTBPs5VE2CNRjj51wUTao3cTKemk9ozXh7H3AAQU16kIFYAFGOC8nRxDH7NV6DqT3CMeEF5rZ7OC8qq3iybSWphF2jzRcc2uYWCWwZPACbwLUFNmgCX4LoVO7xy8Rqm7QfwCyuz+hT1JXDlsLWkcsPzYSa7MB+KhX//YwbHs7IpEZDvS4Bl+5yaDYpNA8c4IX6LqzvnZC4llcsEdV7YpAQxgLVkSa/TpazFrPsZpR/V415FJS6r0DQ+tqRGVgDFZw7d89ReXQsfUr+QBRYEIiqNYRWEz7etnZex5pfm2fLkKWv/LC0PDDN3heBJ4LmVj/gUczRuBWFqXH/WYDa19tndpzTvTpHb9GmCpADZM+VLZeaF7XX6uCYXFOptt/KgmWEpUQse9+6IBxaAxxb/KdwouL2Y10g/r6L6hQi5e8oIYvV6S8VssABWGlw3w+T9YRU2oYif/6WnTvuUjdbAj3S2+1Jblix4Y
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(2906002)(83380400001)(6486002)(54906003)(508600001)(31686004)(8676002)(316002)(66556008)(6666004)(66476007)(4326008)(66946007)(53546011)(6916009)(186003)(52116002)(7416002)(5660300002)(6506007)(2616005)(38100700002)(38350700002)(31696002)(8936002)(26005)(6512007)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 3aEl3NY7XSQWZt1LrQmOxvLmTypU7Yp6WrOC1dsJUtfd+kc7UceCrz2WV51c/8edmoaucZefacRqFjeKbdv7Mse0N0OhkTZM3t57nXFqi8HrEKn8JoM5fY4yBuH51cAcz67nwHD4XV9cXCLx/PF9bp3tO0u+JrYWEseFu/uzmPy9US+Dqs/fNIkP1V3PRIkzy7CdTmhV491xVQyhEJdxmcVX4Pbkj4JxD9HlaJ7xCLhxAfUbX56xSyYNpWdDyDPvVgghf5V+kPcVRR62w5kvYr4G+LmfOBLWlINUAdoOadBbJBO57fmk384gKqWrMMh7coRzgpASyb6LBrITms1rcyRU87PMWOPbP25yFBotG60zMqG6OTEKhL1P6pBMNmsopz9ibkJsJ19yXRrfBhbYkPiIO9YRDbiNcavoIgSAkRFQgFtlrovt36xXiEtXuDdKHGS0v2rthDvNuC1fjUq76fuctOWCjSlaAYkLvSn4iucSGK8Pj2hBfrH7qkJG/C8lE9+2AdJogLgkASvW0AeBKFyWmPlFYV9PAQkMw3vGkM9ZjE4F3fvGJab8DUOCXyGnQv5iVMs0YzmMYGRvsZWThkDVmnn0ok9SK0Y23YpkZlJl85TTUqVGugOx7VKpDcqz
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFRDMWsxdXo1TzRsa1JHZUw0WFNzMWx4d3NnWVJFZ2NLblloZ0Y0cGFnc2RH?=
- =?utf-8?B?Q1dQYXBqMFlsYWZOYzJ0aThPTTFmR1QzVkdRZ1hKditGRXV6dFcwR2llQ0t5?=
- =?utf-8?B?QURxQjY4T1pXd3Z3MFFiV3hOeWJjRngranFPdHJGcWJTZDVRdHdGN2V5Smht?=
- =?utf-8?B?UERGVGVjbG1WdlNBb2o2Y1hJTTRIc2RoakdlSXNCN3V4dmR1Nk5HMXRSbENi?=
- =?utf-8?B?M0ZwbWdFUi9GbFJQWWtsdEVRV0Faa0xmUVU5ZHlJOElBcVZTMTRyVStjcDkv?=
- =?utf-8?B?Q0lCWHBzNGN1aEVyRnkxNEJsY2o5dStJZ3dVYkJ0T1NoQVhuWWs5MU0vbjls?=
- =?utf-8?B?Ty8ra1B2VU43Uk5xcklIWFVsQVRlb0FOTk9NNzdPL0pVT003cUtPMXVqejdv?=
- =?utf-8?B?TnI5Z01jeUtJSEVQMmRKNHhtNFk5dEVkWENsZHlmK1hBWnBmbVB3anl0MStS?=
- =?utf-8?B?cis5eWV0YkxwMVVqWDlWTW5CS2MwbU9LVFhMeFJaYjhVVmg4bjJPZldxMTJZ?=
- =?utf-8?B?eXB6eDFEcURyWVJuMGRISVpKdC9sL2o0K1JURVFmanlJKzcyU3phU1FxOUFQ?=
- =?utf-8?B?ZnB6dWFGQ0ZzZG5PMVgxZkFqMTV2TEJ1WjlUcmJ0N0RJSS9HKzlXdEJlMGh6?=
- =?utf-8?B?SjNHdkpCbzZLUmVTUUFObEdRREl1YlpVcXFqUDYwVTNDQjJpWlJhN09Qcm9G?=
- =?utf-8?B?MUw3UHgyb0I5QmFMOWJJczl2cVJnT0dYRVhsQm9WUWRFL2hhVU5HSUt3TkQw?=
- =?utf-8?B?S08yWHc5TVlHcTl0Yk5hRE5YOE11TWg1aUp6RmEzMXJUcHNqK3lyTzRRMGVo?=
- =?utf-8?B?VkVMSGNyTU4vSzdlZ2hkOE9ucVAvZjhFckNYUkFpVStCNTh5dFJEYTN1TXZh?=
- =?utf-8?B?MExtK1hPUytadzUzYWNKZEFxTXpRVGZDM2dGTGczT1hhYmluWVZqYzlhV0kw?=
- =?utf-8?B?ZzlrYTdBS1JJUS9teUxwYTBOSUluV2Y3eG5nM2pRQ2hobG9ySjBHc1ZpVjNC?=
- =?utf-8?B?QkJ4cm1UUmRNMjF2UzR1ZFoydzFVcGF3OG4rMTQzVXVEbUNUUnBaS3pnVU9s?=
- =?utf-8?B?eFlQNmNoTGdyT1RKYmM5T3c0eUZ1Tm9wT2prYm5rem0wYkNoMWlwbkJ3RFRT?=
- =?utf-8?B?QStuMUc2VzdkTGRjM1hZSURiNW5xS3ZHRkVodlQxRFR4SnlYWXBFNlRJOHdz?=
- =?utf-8?B?d0hXTUVVMnF5eUxTN210a2VtenhqNUVWKzA2cGFOZGw3cDhVWTdUM2U2WmtH?=
- =?utf-8?B?aERTc1Bia21HcmIya3FIVnc0VDdoWExFWjdGczJLZjZvYVdZcVMwZFVzeEUw?=
- =?utf-8?B?QktaQWNPVitJWmR0Q2piUjN1TzlsUkRFbHVVSWJMa0kzQmo4Y29mVmZQZjB2?=
- =?utf-8?B?dUtmZVRrSnRDZ0Eycnpsck91dXJzRFVkN3N4dzNXMmhYQlFyZTl3aDl3ZGd0?=
- =?utf-8?B?TDlFaHRGUkI1SW9NZUpxRFg5a1VGenVTQStpRFAxUVNtbHdvRERtV2hibHc3?=
- =?utf-8?B?Yk0wSm5hTC8wOGViWWExenV2NVREbTQrMm95OG4vUnN4N3BCTTZacXhsKzBn?=
- =?utf-8?B?bmNJb2ZhS0dPV1g3dE9TN2JRcSsrQS9weEJFVndiTk1zSjBFQ3U5cDJqQVd4?=
- =?utf-8?B?azR1d2pPb1E5cHlSZkt0TGMvcnN1OWpIRjNHMkxHR0tYQVZrNEZMbTJPczJW?=
- =?utf-8?B?U25MdmpzWm5Xa1ZyQWYySnVRYzU0dUhNZUx6N1FtY2FKYStkQWJOS2EwSU9o?=
- =?utf-8?B?TnhnWGZDbFFlTlhHVFIrSXROSExPUXRMRlNVeEpHUyt3T2RhUmZqYzVlR2o5?=
- =?utf-8?B?Y0FsWTllSFBhNTZaby9FS3YzQlluTjY2Wm9IOHQ2eUFWZlJueXl5VENid05B?=
- =?utf-8?B?RjNML2NQUTFPbm9VRVlTSUxoaE5nMUJwOTR0QnlMbVFKMnBFUERrTDdyZzIw?=
- =?utf-8?B?a0pJT21jNHY5TG1BdXVTbkNkNlBoSzY2SHVKNjFIZy9MZGEreFFWNjhtNVBV?=
- =?utf-8?B?OTF1U2dQYnV2L20xQTFTRXVURC9IUlhGOVBndmEydGtTK2g2QlJ3WGtBZ0xl?=
- =?utf-8?B?TVdPUFByL2l3UEs0ZEUvcFBoTGsyK2Z2bVNiNTBvb2YzVnFhRTBmcUtZYUhh?=
- =?utf-8?B?ZndhanFDQ3dxai9mZis1Yk1Rd0ZvSEk2VVlkUURlRnJESjIrV21MZGJ1dktF?=
- =?utf-8?B?cDFKR3lJMk95Ym5RMzQwdDhkQ3huYk5aTXdpbmVrYlZTVXE5OVJsS015WllS?=
- =?utf-8?B?dGxjakU5bEVQWjg1eFF5dDR2QTNiNS9lNEFnSVJxekcwNzc3bDNZTUVEd0kx?=
- =?utf-8?B?TS9EZWkrU1dHbGRybGtWSFRVVEZ4dnNqWkpzckhHVVdjMG1RbDZMdVBFQ2FB?=
- =?utf-8?Q?285XYJw5DO4/YRvSTHRdLmznqyhv0hY8FAYna?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7854af90-98dc-412d-67a4-08da43a7fe31
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?q2Hbk5tUdynfMzjWxtOZGXxk8bwlM88MFVF5uh+ZH9DXKIimF/uMn8THul/K?=
+ =?us-ascii?Q?8aJft80nqi8HIoGs6NkJBr0sZJEqVK3Tu1MSfrA/Q1UbD1tP/zMCFnWZ1F4q?=
+ =?us-ascii?Q?me3+wpyupCqY36368EBCI0vjIZY+eOuLntd/TvHNU449cvoZxWJeublJR4o4?=
+ =?us-ascii?Q?zyPuG7eHu7z36G4rTi2ELNTWlBey+60fUN7QSQPPL1Y6JmBMXyYnNUjXM92S?=
+ =?us-ascii?Q?5NuyJtQXppe2hsr00SA9rgOqTi1/K2ogq3C25MQ5ni2aM+tlqglbi4YXx6Pk?=
+ =?us-ascii?Q?6an33ZBH847SmrD404GGHnlgAvIrrt+BgHutt7pO/25nL1pU3RVDehwEHuM0?=
+ =?us-ascii?Q?qwjsTvCkBSOkXIv7A7aBrKFBZekaEFxirpYA3zjndfXOzl+DXJe3K1WofrPN?=
+ =?us-ascii?Q?4qCy18lAqwxV7lVsffrK08DQ6nWY62JmJG88SEcZKh1s5Ktu6rK+HVQLvzC+?=
+ =?us-ascii?Q?VH/9NREuSLokUiWettkLtnQusGE0wY2EB6ctssmwLom7L3q/dT+26xZi9E65?=
+ =?us-ascii?Q?o9fKZkS2BuIZhU9kgMgoZomaOFAij4tsdsyYkuYzbrP975ZYzHTBkIJP7vZt?=
+ =?us-ascii?Q?+rsvNgrHMnx8mUCgRIRl9JxNgs1tM8BmXI044otcySOoYNgVJlMc6TJgPfL8?=
+ =?us-ascii?Q?TJnaG31CSWU8WrR+8x6ZZ9Nehe45ZK4JkSkrAx8biauMgDn5X8RC+D9nn8eN?=
+ =?us-ascii?Q?ZDlTl6WRpl529OLfrg08AdMxIbItvOwTUWW9QPmNXo7Zy7xtWhryLPosjOqL?=
+ =?us-ascii?Q?+73ysU+g3WdDhJfdi9eXx6uIUvpKd/QWTksrmESv8Q09A2LQl6hLfffmitS1?=
+ =?us-ascii?Q?QVoGp5JRMmiRNoq8Kv+Mg/7vQtBp5efC9V7OgaddkIPEoCRNlCJ563qz/aQB?=
+ =?us-ascii?Q?aJUzv9FygnFfvLmMULOCrcZ4ZIlUIDU6CETq5+eP/hmVGGTgH0noa8Mw2F6J?=
+ =?us-ascii?Q?TJqOlGns+1fPEDpNZQKV62d3NlYjkPTM76RbUi4hsOxcCxuuuiO+etGQYroQ?=
+ =?us-ascii?Q?UP/0m5WtAT3UlJNS/MhblrcLRhiwYCn1usX5nrPcwsFphHu8cx93bOTZZott?=
+ =?us-ascii?Q?oZzu7pisMBvvf0Q2E6RSIneUe4VY6jwRcipl72jfrCqlwk6lUoz0IyMBRqZB?=
+ =?us-ascii?Q?bHkV6AHuVFTokow3cfA2eqdSbK7ZUOIypqHWMEEJkMea8/Ls3eIyjMN2j+ul?=
+ =?us-ascii?Q?9gd5+iDt5Nf79lRUdnsOGSAREXjy6W2Wo3icUyDssB8PWZdQrlL2wev5kFw0?=
+ =?us-ascii?Q?wzHsUqDib2SE3RmouNq3C1+HmzwKcATSrv4capPIQ31ZQrHAhCiUCjWP9U6s?=
+ =?us-ascii?Q?F59/MJtP6Quc83IB+zq2M8UxtJnVRWMnu+JYUGs9b8R7Kb3rMz7CI244Jq2y?=
+ =?us-ascii?Q?OJfb1js+NPatwMoB647mJKrhTArHfELl2270KgtZNMRCAm0SA6OHVne2AfWb?=
+ =?us-ascii?Q?cyabvYbMDA1kmVl7wWl4nvCOuSUD7YvA9X6lmtSJAfp14Ae5HWWXVQ=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-99c3d.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f090ce7-ab57-4780-e915-08da43a8266c
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB7009.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2022 08:23:23.4126
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2022 08:24:31.0376
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: y78wvx6kbADT9p59H+Swm91Kp3hfhw2JvenNKLZiRbV8uFoSDSVYsaEUk07nZf2128xYua52JjSxuuezmJ9ND7q6mDtFq4SK8JAnyAT9KIE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB4922
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB5708
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2022 19:06, Corey Minyard wrote:
-> On Wed, May 04, 2022 at 01:45:03PM +0700, Quan Nguyen via Openipmi-developer wrote:
->>>
->>> I seem to remember mentioning this before, but there is no reason to
->>> pack the structures below.
->>>
->>
->> The packed structure is because we want to pick the len directly from user
->> space without worry about the padding byte.
->>
->> As we plan not to use the .h file in next version, I still would like to use
->> packed structure internally inside ssif_bmc.c file.
-> 
-> Packed doesn't matter for the userspace API.  If you look at other
-> structures in the userspace API, they are not packed, either.  The
-> compiler will do the right thing on both ends.
-> 
->>
->>> And second, the following is a userspace API structures, so it needs to
->>> be in its own file in include/uapi/linux, along with any supporting
->>> things that users will need to use.  And your userspace code should be
->>> using that file.
->>>
->>
->> Meantime, I'd like not to use .h as I see there is no demand for sharing the
->> data structure between kernel and user space yet. But we may do it in the
->> future.
-> 
-> If you have a userspace API, it needs to be in include/uapi/linux.
-> You may not be the only user of this code.  In fact, you probably won't
-> be.  You need to have a .h with the structures in it, you don't want the
-> same structure in two places if you can help it.
-> 
+Add bindings and DRM panel driver for EBBG FT8719 6.18" 2246x1080 DSI
+video mode panel, which can be found on some Xiaomi Poco F1 phones.
+The panel's backlight is managed through QCOM WLED driver.
 
-Dear Corey,
+The driver is built using linux-mdss-dsi-panel-driver-generator[1], and
+additionally support for handling regulators and linking external
+backlight is added.
 
-Is it OK to push the structure definition into the 
-include/uapi/linux/ipmi_bmc.h ?
+[1] https://github.com/msm8916-mainline/linux-mdss-dsi-panel-driver-generator
 
-Or should it need to be in separate new header file in uapi/linux ?
+Changes in v4: (Linus Walleij's Suggestion)
+ - Introduce mipi_dsi_dcs_write_seq macro in include/drm/drm_mipi_dsi.h
+ - Remove the driver specific dsi_dcs_write_seq macro
+ - Use the newly introduced mipi_dsi_dcs_write_seq macro instead
 
-Thank you,
-- Quan
+Changes in v3: (Mostly Linus Walleij's Suggestions)
+ - Removed ctx->prepared state variable as it's handled by the core
+ - Print error in dsi_dcs_write_seq macro if it fails to write
+ - Removed magic power on sequences as panel works fine without them
 
+Changes in v2: (Krzysztof Kozlowski's Suggestions)
+ - dt-bindings: specify maxItems for reg
+ - dt-bindings: cleanup and simplify the panel properties
+ - dt-bindings: in example change "|+" to "|' and "dsi0" to "dsi"
+
+Joel Selvaraj (4):
+  dt-bindings: vendor-prefixes: Add prefix for EBBG
+  dt-bindings: display: Add bindings for EBBG FT8719
+  drm/mipi-dsi: Introduce mipi_dsi_dcs_write_seq macro
+  drm/panel: introduce ebbg,ft8719 panel
+
+ .../bindings/display/panel/ebbg,ft8719.yaml   |  74 +++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   7 +
+ drivers/gpu/drm/panel/Kconfig                 |  11 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ drivers/gpu/drm/panel/panel-ebbg-ft8719.c     | 285 ++++++++++++++++++
+ include/drm/drm_mipi_dsi.h                    |  17 ++
+ 7 files changed, 397 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/ebbg,ft8719.yaml
+ create mode 100644 drivers/gpu/drm/panel/panel-ebbg-ft8719.c
+
+-- 
+2.36.1
 

@@ -2,122 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8899253AB6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C1F53AB6F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354250AbiFAQ6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 12:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
+        id S1356206AbiFAQ6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 12:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345508AbiFAQ6b (ORCPT
+        with ESMTP id S1354317AbiFAQ6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 12:58:31 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BAC313B1;
-        Wed,  1 Jun 2022 09:58:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654102709; x=1685638709;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gwfhI1oZGrbLaBNHLPYsrYeVXkiVePA59FrgD/UWM4k=;
-  b=hQSW0WHNJloSEkd+fBNg6x0D7FQwMvl1Suv+2dWGOEJpYpQ4CxA42Xq6
-   qoLY0h8sYiJLuykchPmzBw4+gYxjTAlF250nj05Y6Sd7euk0V/cHXAB6J
-   USNZdcbTYv7I0SthhZyVYkKSAYlfdJAEiE7ZjSloh8pnhwcxl6UOFG2Ef
-   e89nTdPbuy7Fe3HMIJQ0FgtRSb97ffHdc2iLOcalfVu4TkQuQ/m95xlz3
-   7IdXJbcqq5A/80LgAfsKHGUQVEX2XlhG6FEJO8VsyLjitY9RMiFCF/AQ2
-   zbxIvvldRj32SY1P6AiaYaVzouCJrhxogRr7A+ry11DDBeMxd+0ZxsMUf
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275734842"
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="275734842"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 09:58:29 -0700
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="530150781"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 09:58:24 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nwRfm-000QqW-EX;
-        Wed, 01 Jun 2022 19:58:18 +0300
-Date:   Wed, 1 Jun 2022 19:58:18 +0300
-From:   "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Dominik Kierner <dkierner@dh-electronics.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "maxime@cerno.tech" <maxime@cerno.tech>,
-        "noralf@tronnes.org" <noralf@tronnes.org>,
-        "sam@ravnborg.org" <sam@ravnborg.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH v6 3/6] drm: Add driver for Solomon SSD130x OLED displays
-Message-ID: <Ypeaqgc9r7TOiSbn@smile.fi.intel.com>
-References: <5d817ea54144414aa7865a72694b5811@dh-electronics.com>
- <536d4700-6f28-176d-7883-5793f5cd7c8e@redhat.com>
+        Wed, 1 Jun 2022 12:58:45 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E2284A0B;
+        Wed,  1 Jun 2022 09:58:41 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id C3F8D2C3;
+        Wed,  1 Jun 2022 16:58:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net C3F8D2C3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1654102720; bh=iM1gTdQgfAuBfQa3sOYlXR+O5U2vnXeo1TB17L2Db6I=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=WJ7QNIqSlBYZsXHKuPOyYrcBHyL2dlZgIShiNGRfYmN768mLEcpGGz192/jNlVdnt
+         wGKSFbB9nRmX16KFjSw/yuExh8g8aJebpskqT6ezPhrFr23xp2mnAw5kbwCIEmj2Il
+         m0QNUtjgoxIp2QEKgTbX9je2ZX2SSGpeHr00tzfSQwU71/0htsHItnZHfvPUapoLSJ
+         VYWwmN8XYWaImIeI6lromuZ0/eHAJ9BM/JbTpq9VgkmGw6xOkbuuQ3DA8CTnkgpDuM
+         fX6iqBuS1dkVmFhB5Tc7ik7yyCdHpkKSG8PlxS6u0wMLLxiEQFoQnuibDy1peoRmTg
+         ZuiKD9txUL2bw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Vegard Nossum <vegard.nossum@oracle.com>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Amit Shah <aams@amazon.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Jiri Kosina <jkosina@suse.cz>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Solar Designer <solar@openwall.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Will Deacon <will@kernel.org>, Willy Tarreau <w@1wt.eu>
+Subject: Re: [PATCH] Documentation/security-bugs: overhaul
+In-Reply-To: <20220531230309.9290-1-vegard.nossum@oracle.com>
+References: <20220531230309.9290-1-vegard.nossum@oracle.com>
+Date:   Wed, 01 Jun 2022 10:58:50 -0600
+Message-ID: <87fsko48xh.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <536d4700-6f28-176d-7883-5793f5cd7c8e@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 09:46:24PM +0200, Javier Martinez Canillas wrote:
-> On 3/10/22 14:11, Dominik Kierner wrote:
+Vegard Nossum <vegard.nossum@oracle.com> writes:
 
-...
+> The current instructions for reporting security vulnerabilities in the
+> kernel are not clear enough, in particular the process of disclosure
+> and requesting CVEs, and what the roles of the different lists are and
+> how exactly to report to each of them.
+>
+> Let's give this document an overhaul. Goals are stated as a comment at
+> the top of the document itself (these will not appear in the rendered
+> document).
 
-> > # DRM Mode Configuration via Device Tree
-> > 
-> > In the old fbdev driver, the display modes are hard-coded, which means
-> > for every new display configuration, a new patch needs to be mainlined,
-> > which slows down official Kernel support and
-> > puts burden on the maintainers.
-> > Additionally, with the DRM-subsystem supporting height and length
-> > information, for scaling, this opens up a lot of new combinations.
-> > The SSD1306 for example, is available in multiple resolutions like
-> > 128x64 and 96x16 and comes in different sizes per resolution as well.
-> > Just to name a few:
-> > * 128x64 0.96" (22x11mm)
-> > * 128x64 1.3" (30x15mm)
-> > * 96x16 0.69" (18x3mm)
-> >> Instead of hard-coding, I would suggest something along the lines of
-> > of_get_drm_display_mode().
-> > The displays won't need to support multiple modes at the same time,
-> > let alone support for switching between them,
-> > so the one-time invocation of this expensive function might be worth it. 
-> > maybe a new and simpler function that could be named:
-> > of_get_drm_display_mode_simple()
-> 
-> This makes sense to me as well.
+OK, some other thoughts...
 
-What about non-OF platforms? Please, do not spread OF-only interfaces,
-and use fwnode instead.
+[...]
 
-> > Providing a mode could later prove useful for a conversion to
-> > drm_panel, if that is feasible.
-> > 
-> > But for a function like this, I have to chicken out.
+> +Linux kernel security team at security@kernel.org, henceforth "the
+> +security list". This is a closed list of trusted developers who will
+> +help verify the bug report and develop a patch.
+> +
+> +While the security list is closed, the security team may bring in
+> +extra help from the relevant maintainers to understand and fix the
+> +security vulnerability.
+> +
+> +Note that the main interest of the kernel security list is in getting
+> +bugs fixed; CVE assignment, disclosure to distributions, and public
+> +disclosure happens on different lists with different people.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Adding "as described below" or some such might be helpful for readers
+who are mostly interested in those things.  
 
+> +Here is a quick overview of the various lists:
+> +
+> +.. list-table::
+> +   :widths: 35 10 20 35
+> +   :header-rows: 1
+> +
+> +   * - List address
+> +     - Open?
+> +     - Purpose
+> +     - Members
+> +   * - security@kernel.org
+> +     - Closed
+> +     - Reporting; patch development
+> +     - Trusted kernel developers
+> +   * - linux-distros@vs.openwall.org
+> +     - Closed
+> +     - Coordination; CVE assignment; patch development, testing, and backporting
+> +     - Linux distribution representatives
+> +   * - oss-security@lists.openwall.com
+> +     - Public
+> +     - Disclosure
+> +     - General public
 
+Please don't use list-table, that's totally unreadable in the plain-text
+format.  How about something like:
+
+ =============================== ===== ================= ===============
+ List address                    Open? Purpose           Members
+ =============================== ===== ================= ===============
+ security@kernel.org                no Reporting         Trusted kernel
+                                                         developers
+                                       Patch development
+ linux-distros@vs.openwall.org      no Coordination      Distribution 
+                                                         representatives
+                                       CVE assignment
+                                       Patch development
+                                       Testing
+                                       Backporting
+ oss-security@lists.openwall.com   yes Disclosure        General public
+ =============================== ===== ================= ===============
+
+(Note I haven't tried to format this, there's probably an error in there
+somewhere). 
+
+> +The following sections give a step-by-step guide to reporting and
+> +disclosure.
+> +
+> +Contacting the security list
+> +----------------------------
+> +
+> +As it is with any bug, the more information provided the easier it will
+> +be to diagnose and fix; please review the procedure outlined in
+> +Documentation/admin-guide/reporting-issues.rst if you are unclear about
+> +what information is helpful. Any exploit code is very helpful and will
+> +not be released without consent from the reporter unless it has already
+> +been made public.
+> +
+> +The security team does not assign CVEs, nor does it require them
+> +for reports or fixes. CVEs may be requested when the issue is reported to
+> +the linux-distros list.
+> +
+> +**Disclosure.** The security list prefers to merge fixes into the
+> +appropriate public git repository as soon as they become available.
+
+More to the point, the idea is to get *review attention* onto the
+patches, presumably before they are commited to some repo, right?
+That's my understanding from the oss-security discussion, anyway.  So
+the first disclosure may not be when it shows up in a repo, as suggested
+here. 
+
+[...]
+
+> +Once a patch has been developed, you are encouraged to contact the
+> +linux-distros list; see below.
+
+Nit: "see below" seems unnecessary when "below" is the next line down
+
+> +Contacting the linux-distros list
+> +---------------------------------
+> +
+> +Fixes for particularly sensitive bugs (such as those that might lead to
+> +privilege escalations) may need to be coordinated with the private
+> +linux-distros mailing list (linux-distros@vs.openwall.org) so that
+> +distribution vendors are well prepared to release a fixed kernel as soon
+> +as possible after the public disclosure of the upstream fix. This
+> +includes verifying the reported issue, testing proposed fixes,
+> +developing a fix (if none is known yet), and backporting to older kernels
+> +and other versions.
+> +
+> +The linux-distros list can also help with assigning a CVE for your issue.
+> +
+> +**Disclosure.** The linux-distros list has a strict policy of requiring
+> +reporters to post about the security issue on oss-security within 14 days
+> +of the list being contacted regardless of whether a patch is available or
+> +not. It is therefore preferable that you don't send your initial bug
+> +report to the linux-distros list unless you already have a patch for the
+> +issue.
+> +
+> +**List rules.** The main rules to be aware of when contacting the
+> +linux-distros list are:
+
+So this seems certain to go out of date when the other list's rules
+change.  I wonder if it would be better just to tell readers they need
+to be aware of that list's rules and give a pointer?
+
+Thanks,
+
+jon

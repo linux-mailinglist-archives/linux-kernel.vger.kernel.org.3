@@ -2,103 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27804539CDD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A42D539CDF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349786AbiFAGB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 02:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
+        id S1349794AbiFAGBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 02:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243355AbiFAGB1 (ORCPT
+        with ESMTP id S1344119AbiFAGBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 02:01:27 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3F32FFF1;
-        Tue, 31 May 2022 23:01:26 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id s188so1374649oie.4;
-        Tue, 31 May 2022 23:01:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3gQ5prNQvxNU5BCy8dGPEskxDYGkNMOicAPNaI2Vitw=;
-        b=I4MMCzJdhF/gPZ5ZBd3iS7EDKHDy3QSSkFjFc/fgwtrdAlWJJRxUj4XVtMc+fBY9Kq
-         zWf3MUsbI5oIJtuEs0A1mJgGJxt8ke0dyl6Aa1I0RqK78S4BCgUdCsUB+zOjjrQ3MBKz
-         wqf3kxyR+7MwK/YPEYWSuT5ASemOwsVdEhVTZ++VO7AkL91eArerrK94fbLYlR1g6Kgk
-         PJqaLceS/PrN9tDHFxN5gbc3m+kOlx9VkNY4XufZt2tcWqWrMz5IC2FZEimL+2lOjiow
-         SvbUcbisQA1EUYZoZjl7o/zRsbLB2fIzKyFjNcry7fJwdjE+iYyR8GOKj110NxclwfDx
-         OkFg==
-X-Gm-Message-State: AOAM532vnY/wIkTJbG88MDypDrWXxz9MHFe5HiniFhSAAwAvxpy+a+oZ
-        CNS7qqtazsnstHIK752wckPQP/j8myD5mVVrF9s=
-X-Google-Smtp-Source: ABdhPJwYo/SJBcdj28bukzhXOluCYEl/I07PSoNeX5qSgooxA7bKozLBhQW8UO8GP/5L7Y2QfNd3LlCmIV/uJe0vDMY=
-X-Received: by 2002:a05:6808:16ac:b0:2f9:52e5:da90 with SMTP id
- bb44-20020a05680816ac00b002f952e5da90mr14509606oib.5.1654063285559; Tue, 31
- May 2022 23:01:25 -0700 (PDT)
+        Wed, 1 Jun 2022 02:01:47 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B685C1007;
+        Tue, 31 May 2022 23:01:43 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25161Zak111534;
+        Wed, 1 Jun 2022 01:01:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1654063295;
+        bh=+aCCojRMiq5xMMa2smOMLWywfcMjA8WBVUZc2agFKro=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=zLvqwmLzLBFdgDsmYNrzpfTjIocb1yyGcJIcj2XS9wPqywSh6iznmIQliBc9LVtiP
+         YKhguYdLs+0A9P9hqUE+dEH47aHFXf6Jj5fqNipHNz/zJzr3XGsdCP4NWQNNkGN84u
+         df5Wq0tiluRWgwEM7U2t3Wbo8N1kRJ4U+KMEbXLc=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25161ZPT018041
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 1 Jun 2022 01:01:35 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 1
+ Jun 2022 01:01:34 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 1 Jun 2022 01:01:34 -0500
+Received: from [172.24.222.108] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25161TfB020842;
+        Wed, 1 Jun 2022 01:01:30 -0500
+Message-ID: <b5353c06-c8b4-c065-3843-28b2a34e1867@ti.com>
+Date:   Wed, 1 Jun 2022 11:31:29 +0530
 MIME-Version: 1.0
-References: <20220518224725.742882-1-namhyung@kernel.org> <20220518224725.742882-3-namhyung@kernel.org>
- <CAP-5=fX=fiuZ31O2XTSsAwyGD=c5uf9P_BzX9L1QG-q8cUvQYQ@mail.gmail.com>
-In-Reply-To: <CAP-5=fX=fiuZ31O2XTSsAwyGD=c5uf9P_BzX9L1QG-q8cUvQYQ@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 31 May 2022 23:01:14 -0700
-Message-ID: <CAM9d7cjT2o3xVUQf402shzirD4K2XoyomN+AL_R2WENKg6pwoQ@mail.gmail.com>
-Subject: Re: [PATCH 2/6] perf record: Enable off-cpu analysis with BPF
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Hao Luo <haoluo@google.com>, bpf <bpf@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Song Liu <songliubraving@fb.com>,
-        Milian Wolff <milian.wolff@kdab.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Blake Jones <blakejones@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/2] dt-bindings: phy: ti: phy-gmii-sel: Add bindings for
+ J7200
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>, <robh+dt@kernel.org>,
+        <lee.jones@linaro.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <kishon@ti.com>, <vkoul@kernel.org>, <dan.carpenter@oracle.com>,
+        <grygorii.strashko@ti.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>
+References: <20220531111221.22963-1-s-vadapalli@ti.com>
+ <20220531111221.22963-2-s-vadapalli@ti.com>
+ <26603540-8887-ef8d-8f4d-26f2f33d2a6f@kernel.org>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <26603540-8887-ef8d-8f4d-26f2f33d2a6f@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 5:00 PM Ian Rogers <irogers@google.com> wrote:
->
-> On Wed, May 18, 2022 at 3:47 PM Namhyung Kim <namhyung@kernel.org> wrote:
-[SNIP]
-> > +
-> > +/*
-> > + * Old kernel used to call it task_struct->state and now it's '__state'.
-> > + * Use BPF CO-RE "ignored suffix rule" to deal with it like below:
-> > + *
-> > + * https://nakryiko.com/posts/bpf-core-reference-guide/#handling-incompatible-field-and-type-changes
-> > + */
-> > +static inline int get_task_state(struct task_struct *t)
-> > +{
-> > +       if (bpf_core_field_exists(t->__state))
-> > +               return BPF_CORE_READ(t, __state);
-> > +
->
-> When building against a pre-5.14 kernel I'm running into a build issue here:
->
-> tools/perf/util/bpf_skel/off_cpu.bpf.c:96:31: error: no member named '__
-> state' in 'struct task_struct'; did you mean 'state'?
->        if (bpf_core_field_exists(t->__state))
->                                     ^~~~~~~
->                                     state
->
-> This isn't covered by Andrii's BPF CO-RE reference guide. I have an
-> #iffy workaround below,but this will be brittle if the 5.14+ kernel
-> code is backported. Suggestions welcomed :-)
+Hello Roger,
 
-Thanks for the fix.  I think we should not guess the field name
-in the current task struct and check both versions separately.
-I'm afraid the version check won't work with some backported
-kernels.  But do we care?
+On 31/05/22 17:15, Roger Quadros wrote:
+> Hi Siddharth,
+> 
+> On 31/05/2022 14:12, Siddharth Vadapalli wrote:
+>> TI's J7200 SoC supports additional PHY modes like QSGMII and SGMII
+>> that are not supported on earlier SoCs. Add a compatible for it.
+>>
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> ---
+>>  .../mfd/ti,j721e-system-controller.yaml       |  5 ++++
+>>  .../bindings/phy/ti,phy-gmii-sel.yaml         | 24 ++++++++++++++++++-
+>>  2 files changed, 28 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+>> index fa86691ebf16..e381ba62a513 100644
+>> --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+>> +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+>> @@ -48,6 +48,11 @@ patternProperties:
+>>      description:
+>>        This is the SERDES lane control mux.
+>>  
+>> +  "phy@[0-9a-f]+$":
+>> +    type: object
+>> +    description:
+>> +      This is the register to set phy mode through phy-gmii-sel driver.
+>> +
+> 
+> Is this really required? The system controller has 100s of different such registers and it is not practical to mention about all.
+
+The property has to be mentioned in order to pass: make dtbs_check.
+
+> 
+>>  required:
+>>    - compatible
+>>    - reg
+>> diff --git a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+>> index ff8a6d9eb153..7427758451e7 100644
+>> --- a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+>> +++ b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+>> @@ -53,12 +53,21 @@ properties:
+>>        - ti,am43xx-phy-gmii-sel
+>>        - ti,dm814-phy-gmii-sel
+>>        - ti,am654-phy-gmii-sel
+>> +      - ti,j7200-cpsw5g-phy-gmii-sel
+> 
+> Why not just "ti,j7200-phy-gmii-sel" so it is consistent naming.
+
+In TI's J7200 device, there are two CPSW MACs, namely CPSW2G and CPSW5G. While
+CPSW5G supports QSGMII mode, CPSW2G does not. Hence, the compatible being added
+with the extra mode (QSGMII) enabled is applicable only for CPSW5G and not for
+CPSW2G. Thus, to highlight this, the word "CPSW5G" has been included in the name
+of the compatible.
+
+> 
+>>  
+>>    reg:
+>>      maxItems: 1
+>>  
+>>    '#phy-cells': true
+>>  
+>> +  ti,enet-ctrl-qsgmii:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: |
+>> +      Required only for QSGMII mode. Bitmask to select the port for
+>> +      QSGMII main mode. Rest of the ports are selected as QSGMII_SUB
+>> +      ports automatically. Any of the 4 CPSW5G ports can act as the
+>> +      main port with the rest of them being the QSGMII_SUB ports.
+>> +
+> 
+> This is weird way of doing things.
+> 
+> The Ethernet controller driver already knows which mode the port is
+> supposed to operate.
+
+From the ethernet driver perspective, there is no difference between the QSGMII
+or QSGMII-SUB modes and both are treated the same. However, the phy-gmii-sel
+driver configures CPSW MAC registers differently depending on the mode being
+QSGMII or QSGMII-SUB. Hence, the ti,enet-ctrl-qsgmii property is used to
+identify the QSGMII main port and the rest are configured in CPSW MAC as
+QSGMII-SUB ports.
+
+> 
+> e.g.
+> +&cpsw0_port1 {
+> +	phy-handle = <&cpsw5g_phy0>;
+> +	phy-mode = "qsgmii";
+> +	mac-address = [00 00 00 00 00 00];
+> +	phys = <&cpsw0_phy_gmii_sel 1>;
+> +};
+> +
+> +&cpsw0_port2 {
+> +	phy-handle = <&cpsw5g_phy1>;
+> +	phy-mode = "qsgmii-sub";
+> +	mac-address = [00 00 00 00 00 00];
+> +	phys = <&cpsw0_phy_gmii_sel 2>;
+> 
+> And it can convey the mode to the PHY driver via phy_ops->set_mode.
+> So you should be depending on that instead of adding this new property.
+
+QSGMII-SUB is not a standard mode in the Linux kernel. In order to proceed with
+the suggested implementation, a new phy mode named PHY_INTERFACE_MODE_QSGMII_SUB
+has to be introduced to the kernel. Additionally, all existing phy drivers will
+have to be updated to recognize the new phy mode.
+
+Since the QSGMII-SUB mode is TI specific, it was decided that it would be better
+to add a new property in TI specific files for identifying the QSGMII main port
+and treating the rest as QSGMII-SUB ports.
 
 Thanks,
-Namhyung
+Siddharth.

@@ -2,95 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6CF53A399
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7CF53A39A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352481AbiFALHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 07:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
+        id S1352499AbiFALIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 07:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352474AbiFALHe (ORCPT
+        with ESMTP id S1352486AbiFALIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:07:34 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1FA17ABE
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 04:07:33 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id v19so1673064edd.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 04:07:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=H0ece/IDP7RdIvy51D5F2zJdLXLmLswCl9L/sPADS14=;
-        b=Gw2IkXH0AxoQW7eV/fyLtVJXgYNj3yp2/vDlyx3L992+MyWBLy201VqcAOHwG7mxge
-         ELtYHKv5BrHIaEwSYaYPCtKJNRQP/JI9TmS0Tl3JuEy9QmiPVPykG3VXalmU2tEhvrGT
-         loTE2guxJvC2opKPUauvpFgESwofZPRZiyAQyivxl9qkkJUIxVSzB/lruTWB9PvjzRmS
-         sr6/ilJQk50sNQ7KgZzUFYFkkVdvCgDkfOHwxTBIX4dMFMCnO1OJSmzKWeUiv7wrgUT/
-         ExLAs5kiWKrWoj+vETqnuFG4fMv5nqLrejtAIa9nnPSX+Yyo5mUwuB3lsT/cIt/aKIY3
-         RotQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=H0ece/IDP7RdIvy51D5F2zJdLXLmLswCl9L/sPADS14=;
-        b=dcTkDNTV8EtF/sDRv+Gj64N6vm3TNK4B4KplhB8faST62LyceFGgLllxQmNDyS9ks6
-         22F4+L2LoOd1Oy3Q06ipzkuA8KAyVQ5wxDmY8KYWdXJwyGXfAPUroZkeImGJfjlmD3hJ
-         ecnLUhAzO7Mu2GhZo0DGuhbLlyYCx9aLTl5+3cbq9e1aBjuPGFa/t4VqurMXGKKTSURk
-         PG/K2FodhPPpCT/av5wrYwolgDHXXQczTHGaZqgsWF0jAL0JwZFbWUU30UBAl9a0dYQn
-         ep0G0TOXNqK338wNQAskjxmIhHiwRLh+Sj+wF1zH4apeTf1ZFmKMrhyFy0mwHe3FEmgY
-         l1Pw==
-X-Gm-Message-State: AOAM530Xyom+Qa8wk+XwruJNrjj2uJPduFMBtkc0iHA5BUuyzni5RCIW
-        oDwAtlzOp07KRKd92msJdsUoJA==
-X-Google-Smtp-Source: ABdhPJxliq2zoQ7EY75YWWIwkNtBeKvlUu6ft5cqp9PCjRrmQSQdP2fZQajwIK1mJ3JRnyAOtaVuFw==
-X-Received: by 2002:a05:6402:3906:b0:42a:ad43:6477 with SMTP id fe6-20020a056402390600b0042aad436477mr69832096edb.20.1654081652247;
-        Wed, 01 Jun 2022 04:07:32 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f1-20020a056402160100b0042de839eb2csm778928edv.27.2022.06.01.04.07.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 04:07:31 -0700 (PDT)
-Message-ID: <fdbb08a7-393b-73e4-7b63-dd668c23874d@linaro.org>
-Date:   Wed, 1 Jun 2022 13:07:30 +0200
+        Wed, 1 Jun 2022 07:08:12 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA7387A1C;
+        Wed,  1 Jun 2022 04:08:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=n2Sxt1LsbbmYzOd9zbBmcIleJm+O56cbx5JKEChxuKo=; b=P4ht6QkPLQI0A3+22aIZ/FRtmc
+        wh+9jvIvULdQB2BOg4JxVu5zB788hW5qQI8OURFofkfDAcazQOhvb76dkvLop3Z0wCmMmuXi5Jkrq
+        Oo0USUtCczKW4pszpzTr9/BUqfup8aEgN2ntlCkEtDapdFeA1+3SaGgzy+xQN1wL/PT5RXIIV92cK
+        d5DXIVe69mkF5lIhTV9M62D7EPwzrvZusg5mdhe0cV/st6q+d58hjmzP7gJZg9/OJhS146c3Y7lX6
+        zR6z5RODBZgauY9AJ7Jg/lU2HHYv3XelwFafSmuj6aNuTIZuh7OQhjhLBp7G77mCEZlPhbmzuhHxP
+        cOoMbR2w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nwMCb-003krB-3i; Wed, 01 Jun 2022 11:07:49 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5687D98137D; Wed,  1 Jun 2022 13:07:46 +0200 (CEST)
+Date:   Wed, 1 Jun 2022 13:07:46 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
+        Like Xu <likexu@tencent.com>
+Subject: Re: [PATCH] x86: events: Do not return bogus capabilities if PMU is
+ broken
+Message-ID: <YpdIgm8c5YEFLCCH@worktop.programming.kicks-ass.net>
+References: <20220601094256.362047-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/2] dt-bindings: mfd: mt6397: Add compatibles for MT6331
- RTC and keys
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, lee.jones@linaro.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, johnson.wang@mediatek.com,
-        hsin-hsiung.wang@mediatek.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220520124617.228808-1-angelogioacchino.delregno@collabora.com>
- <20220520124617.228808-2-angelogioacchino.delregno@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220520124617.228808-2-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601094256.362047-1-pbonzini@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/05/2022 14:46, AngeloGioacchino Del Regno wrote:
-> MT6331 is a multifunction device, providing RTC, keys and more: add
-> the necessary compatibles to start implementing the basics.
+On Wed, Jun 01, 2022 at 05:42:56AM -0400, Paolo Bonzini wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> If the PMU is broken due to firmware issues, check_hw_exists() will return
+> false but perf_get_x86_pmu_capability() will still return data from x86_pmu.
+> Likewise if some of the hotplug callbacks cannot be installed the contents
+> of x86_pmu will not be reverted.
+> 
+> Handle the failure in both cases by clearing x86_pmu if init_hw_perf_events()
+> or reverts to software events only.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+
+No SoB from Like,
+
 > ---
->  Documentation/devicetree/bindings/mfd/mt6397.txt | 2 ++
+>  arch/x86/events/core.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+> index 99cf67d63cf3..d23f3821daf5 100644
+> --- a/arch/x86/events/core.c
+> +++ b/arch/x86/events/core.c
+> @@ -2095,14 +2095,15 @@ static int __init init_hw_perf_events(void)
+>  	}
+>  	if (err != 0) {
+>  		pr_cont("no PMU driver, software events only.\n");
+> -		return 0;
+> +		err = 0;
+> +		goto out_bad_pmu;
+>  	}
+>  
+>  	pmu_check_apic();
+>  
+>  	/* sanity check that the hardware exists or is emulated */
+>  	if (!check_hw_exists(&pmu, x86_pmu.num_counters, x86_pmu.num_counters_fixed))
+> -		return 0;
+> +		goto out_bad_pmu;
+>  
+>  	pr_cont("%s PMU driver.\n", x86_pmu.name);
+>  
+> @@ -2211,6 +2212,8 @@ static int __init init_hw_perf_events(void)
+>  	cpuhp_remove_state(CPUHP_AP_PERF_X86_STARTING);
+>  out:
+>  	cpuhp_remove_state(CPUHP_PERF_X86_PREPARE);
+> +out_bad_pmu:
+> +	memset(&x86_pmu, 0, sizeof(x86_pmu));
+>  	return err;
+>  }
+>  early_initcall(init_hw_perf_events);
+> @@ -2982,6 +2985,11 @@ unsigned long perf_misc_flags(struct pt_regs *regs)
+>  
+>  void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap)
+>  {
+> +	if (!x86_pmu.name) {
 
+We have x86_pmu_initialized(), the implementation is a bit daft, but
+might as well use it here too, no?
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> +		memset(cap, 0, sizeof(*cap));
+> +		return;
+> +	}
+> +
+>  	cap->version		= x86_pmu.version;
+>  	/*
+>  	 * KVM doesn't support the hybrid PMU yet.
 
-
-Best regards,
-Krzysztof
+Otherwise seems fine I suppose.

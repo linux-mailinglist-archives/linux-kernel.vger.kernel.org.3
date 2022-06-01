@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760FC53A98D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7001253A99E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353515AbiFAPEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 11:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49792 "EHLO
+        id S1352646AbiFAPHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 11:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354168AbiFAPEo (ORCPT
+        with ESMTP id S1354972AbiFAPFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 11:04:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A23E67D02;
-        Wed,  1 Jun 2022 08:04:40 -0700 (PDT)
+        Wed, 1 Jun 2022 11:05:00 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5970F64BE8;
+        Wed,  1 Jun 2022 08:04:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654095880; x=1685631880;
+  t=1654095897; x=1685631897;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=4K0ylCm3UtXK+4vAfaLYD+TBP2NmHn26LIgf5PcV+ac=;
-  b=DCP2uUddylYr8DmeW7eTsk/++ekf+WSCos6ay+5b97L3Ar24N3R9OXIl
-   N63HGEX1cRL/H+mZr4PmImZUoopQ5MCexqkvsQe9gjIPFcbLGTT4BYGH3
-   oBNbfZTJgtuPcAaj8Bn1YllE65n6u9R0ZABXeuVL73eo0EsVRgAegQM3g
-   pz7acwKzl0PK3ve+Swn52NKsmaj6bDNyVDY27Tv+WHMQQU0F0YP4pR6Y9
-   lrefad1o43Kg7/IKAafWrhiCiRk9t0wufqKG+tUcmzr2k8cHbD59/jFrC
-   8dwXblfaLte1c+WET6PewFpebbbrBum+chS9ldZJ5hYee4vF4J0PN9XLL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275341616"
+  bh=LqAg3ztRUMfLy5sWtIGmiUixains/oIwQqd9RH1G25E=;
+  b=d35+59d9AEcFmVbb5XKGnmLpCLt88Ip/w5FMm1lTvtGddm1gxZqhKfHg
+   HQms7Hx0VecSQ6YKGdKNlPqRlBuWCvFiYhUXroz9kFxxf9YQWWyGlD2iS
+   8OrwKhaFtMnhqX9s6dUECN5O1x7afy55HDp17CWg43El4UlofXJeQ0ZzR
+   OZdkfvpTvzBHdZiEGMSUG8K0H5cNwnHy8hZpSBTQ3Qf3h+fUDbclgGTPW
+   SBcSMD15iEHsi+P2vB2JOlu+nXis3/Tsu7p3ju/VVvOM8L1M7+osq5Z9n
+   QU4PkFWtgJnDqDOOzsnm/77hri1xiFg9Qn7u+rAaIa2t8XAwk7OID5pwj
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="257687421"
 X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="275341616"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 08:04:36 -0700
+   d="scan'208";a="257687421"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 08:04:48 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="606311758"
+   d="scan'208";a="720820049"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 01 Jun 2022 08:04:35 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 01 Jun 2022 08:04:46 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9EDFEF8; Wed,  1 Jun 2022 18:04:37 +0300 (EEST)
+        id E25CFF8; Wed,  1 Jun 2022 18:04:48 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] gpio: dln2: make irq_chip immutable
-Date:   Wed,  1 Jun 2022 18:04:36 +0300
-Message-Id: <20220601150436.25830-1-andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH v1 1/3] gpio: crystalcove: make irq_chip immutable
+Date:   Wed,  1 Jun 2022 18:04:44 +0300
+Message-Id: <20220601150446.25866-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,70 +70,78 @@ helper functions and call the appropriate gpiolib functions.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/gpio/gpio-dln2.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ drivers/gpio/gpio-crystalcove.c | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/gpio/gpio-dln2.c b/drivers/gpio/gpio-dln2.c
-index 08b9e2cf4f2d..71fa437b491f 100644
---- a/drivers/gpio/gpio-dln2.c
-+++ b/drivers/gpio/gpio-dln2.c
-@@ -46,7 +46,6 @@
- struct dln2_gpio {
- 	struct platform_device *pdev;
- 	struct gpio_chip gpio;
--	struct irq_chip irqchip;
+diff --git a/drivers/gpio/gpio-crystalcove.c b/drivers/gpio/gpio-crystalcove.c
+index b55c74a5e064..f40d3b133527 100644
+--- a/drivers/gpio/gpio-crystalcove.c
++++ b/drivers/gpio/gpio-crystalcove.c
+@@ -15,6 +15,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/seq_file.h>
++#include <linux/types.h>
  
- 	/*
- 	 * Cache pin direction to save us one transfer, since the hardware has
-@@ -306,6 +305,7 @@ static void dln2_irq_unmask(struct irq_data *irqd)
- 	struct dln2_gpio *dln2 = gpiochip_get_data(gc);
- 	int pin = irqd_to_hwirq(irqd);
+ #define CRYSTALCOVE_GPIO_NUM	16
+ #define CRYSTALCOVE_VGPIO_NUM	95
+@@ -238,10 +239,13 @@ static void crystalcove_bus_sync_unlock(struct irq_data *data)
  
-+	gpiochip_enable_irq(gc, pin);
- 	set_bit(pin, dln2->unmasked_irqs);
- }
- 
-@@ -316,6 +316,7 @@ static void dln2_irq_mask(struct irq_data *irqd)
- 	int pin = irqd_to_hwirq(irqd);
- 
- 	clear_bit(pin, dln2->unmasked_irqs);
-+	gpiochip_disable_irq(gc, pin);
- }
- 
- static int dln2_irq_set_type(struct irq_data *irqd, unsigned type)
-@@ -384,6 +385,17 @@ static void dln2_irq_bus_unlock(struct irq_data *irqd)
- 	mutex_unlock(&dln2->irq_lock);
- }
- 
-+static const struct irq_chip dln2_irqchip = {
-+	.name = "dln2-irq",
-+	.irq_mask = dln2_irq_mask,
-+	.irq_unmask = dln2_irq_unmask,
-+	.irq_set_type = dln2_irq_set_type,
-+	.irq_bus_lock = dln2_irq_bus_lock,
-+	.irq_bus_sync_unlock = dln2_irq_bus_unlock,
-+	.flags = IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
-+};
-+
- static void dln2_gpio_event(struct platform_device *pdev, u16 echo,
- 			    const void *data, int len)
+ static void crystalcove_irq_unmask(struct irq_data *data)
  {
-@@ -465,15 +477,8 @@ static int dln2_gpio_probe(struct platform_device *pdev)
- 	dln2->gpio.direction_output = dln2_gpio_direction_output;
- 	dln2->gpio.set_config = dln2_gpio_set_config;
+-	struct crystalcove_gpio *cg =
+-		gpiochip_get_data(irq_data_get_irq_chip_data(data));
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct crystalcove_gpio *cg = gpiochip_get_data(gc);
++	irq_hw_number_t hwirq = irqd_to_hwirq(data);
++
++	gpiochip_enable_irq(gc, hwirq);
  
--	dln2->irqchip.name = "dln2-irq",
--	dln2->irqchip.irq_mask = dln2_irq_mask,
--	dln2->irqchip.irq_unmask = dln2_irq_unmask,
--	dln2->irqchip.irq_set_type = dln2_irq_set_type,
--	dln2->irqchip.irq_bus_lock = dln2_irq_bus_lock,
--	dln2->irqchip.irq_bus_sync_unlock = dln2_irq_bus_unlock,
--
- 	girq = &dln2->gpio.irq;
--	girq->chip = &dln2->irqchip;
-+	gpio_irq_chip_set_chip(girq, &dln2_irqchip);
- 	/* The event comes from the outside so no parent handler */
+-	if (data->hwirq < CRYSTALCOVE_GPIO_NUM) {
++	if (hwirq < CRYSTALCOVE_GPIO_NUM) {
+ 		cg->set_irq_mask = false;
+ 		cg->update |= UPDATE_IRQ_MASK;
+ 	}
+@@ -249,23 +253,27 @@ static void crystalcove_irq_unmask(struct irq_data *data)
+ 
+ static void crystalcove_irq_mask(struct irq_data *data)
+ {
+-	struct crystalcove_gpio *cg =
+-		gpiochip_get_data(irq_data_get_irq_chip_data(data));
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct crystalcove_gpio *cg = gpiochip_get_data(gc);
++	irq_hw_number_t hwirq = irqd_to_hwirq(data);
+ 
+-	if (data->hwirq < CRYSTALCOVE_GPIO_NUM) {
++	if (hwirq < CRYSTALCOVE_GPIO_NUM) {
+ 		cg->set_irq_mask = true;
+ 		cg->update |= UPDATE_IRQ_MASK;
+ 	}
++
++	gpiochip_disable_irq(gc, hwirq);
+ }
+ 
+-static struct irq_chip crystalcove_irqchip = {
++static const struct irq_chip crystalcove_irqchip = {
+ 	.name			= "Crystal Cove",
+ 	.irq_mask		= crystalcove_irq_mask,
+ 	.irq_unmask		= crystalcove_irq_unmask,
+ 	.irq_set_type		= crystalcove_irq_type,
+ 	.irq_bus_lock		= crystalcove_bus_lock,
+ 	.irq_bus_sync_unlock	= crystalcove_bus_sync_unlock,
+-	.flags			= IRQCHIP_SKIP_SET_WAKE,
++	.flags			= IRQCHIP_SKIP_SET_WAKE | IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+ };
+ 
+ static irqreturn_t crystalcove_gpio_irq_handler(int irq, void *data)
+@@ -353,7 +361,7 @@ static int crystalcove_gpio_probe(struct platform_device *pdev)
+ 	cg->regmap = pmic->regmap;
+ 
+ 	girq = &cg->chip.irq;
+-	girq->chip = &crystalcove_irqchip;
++	gpio_irq_chip_set_chip(girq, &crystalcove_irqchip);
+ 	/* This will let us handle the parent IRQ in the driver */
  	girq->parent_handler = NULL;
  	girq->num_parents = 0;
 -- 

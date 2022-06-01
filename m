@@ -2,99 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46F153A34E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 12:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C91CA53A351
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 12:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352452AbiFAK4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 06:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41522 "EHLO
+        id S1350519AbiFAK6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 06:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352202AbiFAK4A (ORCPT
+        with ESMTP id S232401AbiFAK6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 06:56:00 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27CF546AD;
-        Wed,  1 Jun 2022 03:55:59 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso1743380pjg.0;
-        Wed, 01 Jun 2022 03:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cQYlXoGDywk+3GdfKjepz9XHgwe5hFSMlVKeZfjQrNE=;
-        b=hTQgEKWKGjIVhZCCo2lCFCkMpMrcK+x/YoAhVD6QE7lAop6icY0EQq1dOWZnG1mXV5
-         fKGPzRcEvXeryt4fWSXWWRZC+bL2qf67zW1M0ETZ5qagUu+/Y+1YmWtkqtLfuNzkgXRx
-         k4AyUYGau5T0ig9rTHdNkvpfwTwJgytG+UFSJs643ZZCN7wHnWHNseai7ZbMyAlUBn1R
-         LMso3hSfGcg8/jy2PcTsDluW8BOeE9eUxsKiYRLzuGizl8KyoodcRK8qbf1YjGE/6BlZ
-         fuyvJDig73OFMG2iYCTMEYmrk1/kRMlrg5uLza7BOZg4pCHz5qHZL0jad7YBbDur8z5T
-         ykMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cQYlXoGDywk+3GdfKjepz9XHgwe5hFSMlVKeZfjQrNE=;
-        b=JqddhPnyXMIaD5bZWG4v74skYlM/w7Pq2GJeu5uXXlQZNbHHcvAC/2mcYhZSK8b8F4
-         yTJltq2cWP7nYwBSk0X1Sl1jBHu5D3sJ4MF8MlueQ0XLeOhy63xrBT9fcNphDmcJK73s
-         /yQZV+DEhfU4L56sGjFv51ikJXqmpQYlyVcbdPQ8XwL98st4CZI8E27c4H7BAY6DgVvB
-         9QbXYMayoafrtZOXaQcL85Z5kKnscczKSSt78iCf+0FKLfJ7au1CM1u2+xL3oNH/ONVJ
-         hHOJk1NiQnuNo6ULj6VVUWE2UwSNi1dhRPUCNtiUolDkaxxL9TRfmrKr7Oqqo88Pwyqa
-         +Fpw==
-X-Gm-Message-State: AOAM533GEUB6gTBC/JyMfYWRnbo8qOZ8uPruXbQ3RSrg/BEkcc0FWzP4
-        QgfJaqGJPnO2G5CM0WKZ858=
-X-Google-Smtp-Source: ABdhPJym1X3sQfx6g0N+7PgV1oBquYAy8tkYdP4yj0xMzPVDty8AZe+/sHkSTzU65Y386lntfJbcWw==
-X-Received: by 2002:a17:902:f686:b0:163:d8c9:18f3 with SMTP id l6-20020a170902f68600b00163d8c918f3mr15466340plg.64.1654080959295;
-        Wed, 01 Jun 2022 03:55:59 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id l12-20020a170903004c00b00161929fb1adsm1235268pla.54.2022.06.01.03.55.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 03:55:58 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     dave.jiang@intel.com, Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH v2] dmaengine: ti: Fix refcount leak in ti_dra7_xbar_route_allocate
-Date:   Wed,  1 Jun 2022 14:55:46 +0400
-Message-Id: <20220601105546.53068-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 1 Jun 2022 06:58:07 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A169F81997;
+        Wed,  1 Jun 2022 03:58:04 -0700 (PDT)
+Received: from kwepemi100003.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LCmLc2MrVzjX9B;
+        Wed,  1 Jun 2022 18:57:12 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100003.china.huawei.com (7.221.188.122) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 1 Jun 2022 18:58:02 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 1 Jun 2022 18:58:01 +0800
+Subject: Re: [PATCH -next v8 2/4] block, bfq: record how many queues have
+ pending requests
+To:     Jan Kara <jack@suse.cz>
+CC:     <paolo.valente@linaro.org>, <axboe@kernel.dk>, <tj@kernel.org>,
+        <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220531140858.3324294-1-yukuai3@huawei.com>
+ <20220531140858.3324294-3-yukuai3@huawei.com>
+ <20220601083529.oz26s6jefxz6fnyg@quack3.lan>
+From:   Yu Kuai <yukuai3@huawei.com>
+Message-ID: <3ab7ab6e-474d-d5d7-a1c0-f75b3b092bbe@huawei.com>
+Date:   Wed, 1 Jun 2022 18:58:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20220601083529.oz26s6jefxz6fnyg@quack3.lan>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not needed anymore.
+ÔÚ 2022/06/01 16:35, Jan Kara Ð´µÀ:
+> On Tue 31-05-22 22:08:56, Yu Kuai wrote:
+>> Prepare to refactor the counting of 'num_groups_with_pending_reqs'.
+>>
+>> Add a counter in bfq_group, and update it while tracking if bfqq have
+>> pending requests.
+>>
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> 
+> Looks good, except I think that we also need to update the counters
+> 'num_groups_with_pending_reqs' in bfq_move_bfqq()?
+Yes, you're right. I'll do that in next version.
 
-Add missing of_node_put() in to fix this.
-
-Fixes: ec9bfa1e1a79 ("dmaengine: ti-dma-crossbar: dra7: Use bitops instead of idr")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-- split v1 into two patches.
-v1 link: https://lore.kernel.org/r/20220512051815.11946-1-linmq006@gmail.com
----
- drivers/dma/ti/dma-crossbar.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/dma/ti/dma-crossbar.c b/drivers/dma/ti/dma-crossbar.c
-index 71d24fc07c00..e34cfb50d241 100644
---- a/drivers/dma/ti/dma-crossbar.c
-+++ b/drivers/dma/ti/dma-crossbar.c
-@@ -268,6 +268,7 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
- 		mutex_unlock(&xbar->mutex);
- 		dev_err(&pdev->dev, "Run out of free DMA requests\n");
- 		kfree(map);
-+		of_node_put(dma_spec->np);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 	set_bit(map->xbar_out, xbar->dma_inuse);
--- 
-2.25.1
-
+Thanks,
+Kuai
+> 
+> 								Honza
+> 
+>> ---
+>>   block/bfq-cgroup.c  |  1 +
+>>   block/bfq-iosched.h |  1 +
+>>   block/bfq-wf2q.c    | 12 ++++++++++--
+>>   3 files changed, 12 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+>> index 09574af83566..0954a258a107 100644
+>> --- a/block/bfq-cgroup.c
+>> +++ b/block/bfq-cgroup.c
+>> @@ -557,6 +557,7 @@ static void bfq_pd_init(struct blkg_policy_data *pd)
+>>   				   */
+>>   	bfqg->bfqd = bfqd;
+>>   	bfqg->active_entities = 0;
+>> +	bfqg->num_queues_with_pending_reqs = 0;
+>>   	bfqg->online = true;
+>>   	bfqg->rq_pos_tree = RB_ROOT;
+>>   }
+>> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+>> index 3b9b1a0e7c1c..a5f7c0c1a3b3 100644
+>> --- a/block/bfq-iosched.h
+>> +++ b/block/bfq-iosched.h
+>> @@ -943,6 +943,7 @@ struct bfq_group {
+>>   	struct bfq_entity *my_entity;
+>>   
+>>   	int active_entities;
+>> +	int num_queues_with_pending_reqs;
+>>   
+>>   	struct rb_root rq_pos_tree;
+>>   
+>> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+>> index 12d20f26ad69..b533e17e9f0c 100644
+>> --- a/block/bfq-wf2q.c
+>> +++ b/block/bfq-wf2q.c
+>> @@ -1651,16 +1651,24 @@ static void bfq_add_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+>>   {
+>>   	struct bfq_entity *entity = &bfqq->entity;
+>>   
+>> -	if (!entity->in_groups_with_pending_reqs)
+>> +	if (!entity->in_groups_with_pending_reqs) {
+>>   		entity->in_groups_with_pending_reqs = true;
+>> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>> +		bfqq_group(bfqq)->num_queues_with_pending_reqs++;
+>> +#endif
+>> +	}
+>>   }
+>>   
+>>   void bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+>>   {
+>>   	struct bfq_entity *entity = &bfqq->entity;
+>>   
+>> -	if (entity->in_groups_with_pending_reqs)
+>> +	if (entity->in_groups_with_pending_reqs) {
+>>   		entity->in_groups_with_pending_reqs = false;
+>> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>> +		bfqq_group(bfqq)->num_queues_with_pending_reqs--;
+>> +#endif
+>> +	}
+>>   }
+>>   
+>>   /*
+>> -- 
+>> 2.31.1
+>>

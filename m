@@ -2,342 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890AB539FBC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F55539FC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343669AbiFAImX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 04:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
+        id S1350979AbiFAIpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348845AbiFAImQ (ORCPT
+        with ESMTP id S1350945AbiFAIpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:42:16 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12989694AF
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:42:14 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id n13-20020a17090a394d00b001e30a60f82dso5515699pjf.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 01:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=B9vwKfbKHzDOEY1WrU024PdJUi8+ydTG61v0lkvD1q4=;
-        b=nDKbEO4tZCSRRrSzh63hDu/iN425iuSK9EBeOyAKxNfyRH/f2IOm+NoRQDRvBCREVO
-         PaRk0fuPmkOM2XoCmt3ulyij1N/Wrq7ee5hpTaYj1D3wnxOi2+qZdY92EbCrrcPRkbzI
-         rxYow6zzLPDBClNz5/llPR7yXHPukzhuv6T4ANUlJVUhmXe+KU+Hk7gIMH5ozSGyYk05
-         g08oIUWKvs+S71KmJDx4CgEg/vOMbXnPuiviyZIPStoxVPAyHRV8woDEUiVBZ1WcI2II
-         lsLH3BEK++XLOpH7R958TXbBY9M53ykeS6W7vLCSe0WWesao4ZyfcktoCALqEpJStcAL
-         pygg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=B9vwKfbKHzDOEY1WrU024PdJUi8+ydTG61v0lkvD1q4=;
-        b=K+vXR8XD5bjYT3NP8eFdykLyvXGbIoKGaAURC6YTqFZ/ZQsfrBddtjsweiWIh5a70o
-         XxJzKm7cthYgT0rJDab2I9kOUZSliUSsSocLnUkaL6NfXFYoalZI8z5X4HS+EhN4jBW/
-         ismok7PBF2apIvCmsdMPsV3sz01wlsMTPbq9/v5Se8+2Y2VJzsg8T1Pbky9TEoc1rE5o
-         q6bgA3pyjaaQtHl/fLY4J2vxFG6IL4dojW3hQ3fQ9FxE8JVy6RFr6FmHU0orcxzfq2qc
-         /9y8sMkksQh4LFtUTXkrJkHyU9btH6vi0tsKNFlhMZ1nODBAeHYAVDSL5GCZkQHadD9k
-         l0Ww==
-X-Gm-Message-State: AOAM531OhgIqw2YpJWZ/t3+JI52JttHW5SoYAVYPhYufg2w7Pi2V4f66
-        v7msP9WWs/a1UL1ffVQsesL9Og==
-X-Google-Smtp-Source: ABdhPJzck7sBi084+4Z7YhNWh2YIjxwOSXzmOy4Ww6SR0trDAp44Jq1YQ+Xa9zQq40HcPjQJSdHY5Q==
-X-Received: by 2002:a17:902:7048:b0:15f:34c1:bae0 with SMTP id h8-20020a170902704800b0015f34c1bae0mr64511498plt.71.1654072934453;
-        Wed, 01 Jun 2022 01:42:14 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id u11-20020a63d34b000000b003c14af505f6sm827952pgi.14.2022.06.01.01.42.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Jun 2022 01:42:14 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
-        cong.wang@bytedance.com, zhouchengming@bytedance.com,
-        zhoufeng.zf@bytedance.com
-Subject: [PATCH v4 2/2] selftest/bpf/benchs: Add bpf_map benchmark
-Date:   Wed,  1 Jun 2022 16:41:49 +0800
-Message-Id: <20220601084149.13097-3-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20220601084149.13097-1-zhoufeng.zf@bytedance.com>
-References: <20220601084149.13097-1-zhoufeng.zf@bytedance.com>
+        Wed, 1 Jun 2022 04:45:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F1A569721
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:45:13 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 290DE23A;
+        Wed,  1 Jun 2022 01:45:13 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2A1233F73D;
+        Wed,  1 Jun 2022 01:45:11 -0700 (PDT)
+Message-ID: <b1c1bfa7-f1ba-8590-65fb-df6b8c0d1168@arm.com>
+Date:   Wed, 1 Jun 2022 10:45:00 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2] sched/fair: static cpumasks for load balance
+Content-Language: en-US
+To:     Bing Huang <huangbing@kylinos.cn>, peterz@infradead.org
+Cc:     brauner@kernel.org, bristot@redhat.com, bsegall@google.com,
+        juri.lelli@redhat.com, linux-kernel@vger.kernel.org,
+        mgorman@suse.de, mingo@redhat.com, rostedt@goodmis.org,
+        vincent.guittot@linaro.org
+References: <20220531031255.30966-1-huangbing@kylinos.cn>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20220531031255.30966-1-huangbing@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On 31/05/2022 05:12, Bing Huang wrote:
+> The both cpu mask load_balance_mask and select_idle_mask just only used
+> in fair.c, but allocation in core.c in CONFIG_CPUMASK_OFFSTACK=y case,
+> and global via declare per cpu variations. More or less, it looks wired.
+> 
+> Signed-off-by: Bing Huang <huangbing@kylinos.cn>
+> ---
+> 
+>  v2: move load_balance_mask and select_idle_mask allocation from
+> sched_init() to init_sched_fair_class()
 
-Add benchmark for hash_map to reproduce the worst case
-that non-stop update when map's free is zero.
+This would align CFS with RT (local_cpu_mask) and DL
+(local_cpu_mask_dl).
 
-before patch:
-Setting up benchmark 'bpf-hashmap-ful-update'...
-Benchmark 'bpf-hashmap-ful-update' started.
-1:hash_map_full_perf 107796 events per sec
-2:hash_map_full_perf 108072 events per sec
-3:hash_map_full_perf 112169 events per sec
-4:hash_map_full_perf 111423 events per sec
-5:hash_map_full_perf 110778 events per sec
-6:hash_map_full_perf 121336 events per sec
-7:hash_map_full_perf 98676 events per sec
-8:hash_map_full_perf 105860 events per sec
-9:hash_map_full_perf 109930 events per sec
-10:hash_map_full_perf 123434 events per sec
-11:hash_map_full_perf 125374 events per sec
-12:hash_map_full_perf 121979 events per sec
-13:hash_map_full_perf 123014 events per sec
-14:hash_map_full_perf 126219 events per sec
-15:hash_map_full_perf 104793 events per sec
+[...]
 
-after patch:
-Setting up benchmark 'bpf-hashmap-ful-update'...
-Benchmark 'bpf-hashmap-ful-update' started.
-0:hash_map_full_perf 1219230 events per sec
-1:hash_map_full_perf 1320256 events per sec
-2:hash_map_full_perf 1196550 events per sec
-3:hash_map_full_perf 1375684 events per sec
-4:hash_map_full_perf 1365551 events per sec
-5:hash_map_full_perf 1318432 events per sec
-6:hash_map_full_perf 1222007 events per sec
-7:hash_map_full_perf 1240786 events per sec
-8:hash_map_full_perf 1190005 events per sec
-9:hash_map_full_perf 1562336 events per sec
-10:hash_map_full_perf 1385241 events per sec
-11:hash_map_full_perf 1387909 events per sec
-12:hash_map_full_perf 1371877 events per sec
-13:hash_map_full_perf 1561836 events per sec
-14:hash_map_full_perf 1388895 events per sec
-15:hash_map_full_perf 1579054 events per sec
+> @@ -11841,6 +11841,16 @@ void show_numa_stats(struct task_struct *p, struct seq_file *m)
+>  __init void init_sched_fair_class(void)
+>  {
+>  #ifdef CONFIG_SMP
 
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- tools/testing/selftests/bpf/Makefile          |  4 +-
- tools/testing/selftests/bpf/bench.c           |  2 +
- .../benchs/bench_bpf_hashmap_full_update.c    | 96 +++++++++++++++++++
- .../run_bench_bpf_hashmap_full_update.sh      | 11 +++
- .../bpf/progs/bpf_hashmap_full_update_bench.c | 40 ++++++++
- 5 files changed, 152 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
- create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c
+    `int i` missing for DEBUG_PER_CPU_MAPS/CONFIG_CPUMASK_OFFSTACK case.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 3820608faf57..b968649c7aa1 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -549,6 +549,7 @@ $(OUTPUT)/bench_ringbufs.o: $(OUTPUT)/ringbuf_bench.skel.h \
- $(OUTPUT)/bench_bloom_filter_map.o: $(OUTPUT)/bloom_filter_bench.skel.h
- $(OUTPUT)/bench_bpf_loop.o: $(OUTPUT)/bpf_loop_bench.skel.h
- $(OUTPUT)/bench_strncmp.o: $(OUTPUT)/strncmp_bench.skel.h
-+$(OUTPUT)/bench_bpf_hashmap_full_update.o: $(OUTPUT)/bpf_hashmap_full_update_bench.skel.h
- $(OUTPUT)/bench.o: bench.h testing_helpers.h $(BPFOBJ)
- $(OUTPUT)/bench: LDLIBS += -lm
- $(OUTPUT)/bench: $(OUTPUT)/bench.o \
-@@ -560,7 +561,8 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_ringbufs.o \
- 		 $(OUTPUT)/bench_bloom_filter_map.o \
- 		 $(OUTPUT)/bench_bpf_loop.o \
--		 $(OUTPUT)/bench_strncmp.o
-+		 $(OUTPUT)/bench_strncmp.o \
-+		 $(OUTPUT)/bench_bpf_hashmap_full_update.o
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
+> +
+> +#ifdef CONFIG_CPUMASK_OFFSTACK
+> +	for_each_possible_cpu(i) {
+> +		per_cpu(load_balance_mask, i) = (cpumask_var_t)kzalloc_node(
+> +			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
+> +		per_cpu(select_idle_mask, i) = (cpumask_var_t)kzalloc_node(
+> +			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
+> +	}
+> +#endif
+> +
+
+What about:
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 98319b654788..9ef5133c72d6 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -11811,15 +11811,14 @@ void show_numa_stats(struct task_struct *p, struct seq_file *m)
+ __init void init_sched_fair_class(void)
+ {
+ #ifdef CONFIG_SMP
++       int i;
  
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index f973320e6dbf..35de886d9a05 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -397,6 +397,7 @@ extern const struct bench bench_hashmap_with_bloom;
- extern const struct bench bench_bpf_loop;
- extern const struct bench bench_strncmp_no_helper;
- extern const struct bench bench_strncmp_helper;
-+extern const struct bench bench_bpf_hashmap_full_update;
- 
- static const struct bench *benchs[] = {
- 	&bench_count_global,
-@@ -431,6 +432,7 @@ static const struct bench *benchs[] = {
- 	&bench_bpf_loop,
- 	&bench_strncmp_no_helper,
- 	&bench_strncmp_helper,
-+	&bench_bpf_hashmap_full_update,
- };
- 
- static void setup_benchmark()
-diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c b/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
-new file mode 100644
-index 000000000000..cec51e0ff4b8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
-@@ -0,0 +1,96 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Bytedance */
-+
-+#include <argp.h>
-+#include "bench.h"
-+#include "bpf_hashmap_full_update_bench.skel.h"
-+#include "bpf_util.h"
-+
-+/* BPF triggering benchmarks */
-+static struct ctx {
-+	struct bpf_hashmap_full_update_bench *skel;
-+} ctx;
-+
-+#define MAX_LOOP_NUM 10000
-+
-+static void validate(void)
-+{
-+	if (env.consumer_cnt != 1) {
-+		fprintf(stderr, "benchmark doesn't support multi-consumer!\n");
-+		exit(1);
-+	}
-+}
-+
-+static void *producer(void *input)
-+{
-+	while (true) {
-+		/* trigger the bpf program */
-+		syscall(__NR_getpgid);
-+	}
-+
-+	return NULL;
-+}
-+
-+static void *consumer(void *input)
-+{
-+	return NULL;
-+}
-+
-+static void measure(struct bench_res *res)
-+{
-+}
-+
-+static void setup(void)
-+{
-+	struct bpf_link *link;
-+	int map_fd, i, max_entries;
-+
-+	setup_libbpf();
-+
-+	ctx.skel = bpf_hashmap_full_update_bench__open_and_load();
-+	if (!ctx.skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		exit(1);
-+	}
-+
-+	ctx.skel->bss->nr_loops = MAX_LOOP_NUM;
-+
-+	link = bpf_program__attach(ctx.skel->progs.benchmark);
-+	if (!link) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+
-+	/* fill hash_map */
-+	map_fd = bpf_map__fd(ctx.skel->maps.hash_map_bench);
-+	max_entries = bpf_map__max_entries(ctx.skel->maps.hash_map_bench);
-+	for (i = 0; i < max_entries; i++)
-+		bpf_map_update_elem(map_fd, &i, &i, BPF_ANY);
-+}
-+
-+void hashmap_report_final(struct bench_res res[], int res_cnt)
-+{
-+	unsigned int nr_cpus = bpf_num_possible_cpus();
-+	int i;
-+
-+	for (i = 0; i < nr_cpus; i++) {
-+		u64 time = ctx.skel->bss->percpu_time[i];
-+
-+		if (!time)
-+			continue;
-+
-+		printf("%d:hash_map_full_perf %lld events per sec\n",
-+		       i, ctx.skel->bss->nr_loops * 1000000000ll / time);
-+	}
-+}
-+
-+const struct bench bench_bpf_hashmap_full_update = {
-+	.name = "bpf-hashmap-ful-update",
-+	.validate = validate,
-+	.setup = setup,
-+	.producer_thread = producer,
-+	.consumer_thread = consumer,
-+	.measure = measure,
-+	.report_progress = NULL,
-+	.report_final = hashmap_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh b/tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh
-new file mode 100755
-index 000000000000..1e2de838f9fa
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh
-@@ -0,0 +1,11 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ./benchs/run_common.sh
-+
-+set -eufo pipefail
-+
-+nr_threads=`expr $(cat /proc/cpuinfo | grep "processor"| wc -l) - 1`
-+summary=$($RUN_BENCH -p $nr_threads bpf-hashmap-ful-update)
-+printf "$summary"
-+printf "\n"
-diff --git a/tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c b/tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c
-new file mode 100644
-index 000000000000..aa93a03f961d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Bytedance */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#define MAX_ENTRIES 1000
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__type(key, u32);
-+	__type(value, u64);
-+	__uint(max_entries, MAX_ENTRIES);
-+} hash_map_bench SEC(".maps");
-+
-+u64 __attribute__((__aligned__(256))) percpu_time[256];
-+u64 nr_loops;
-+
-+static int loop_update_callback(__u32 index, u32 *key)
-+{
-+	u64 init_val = 1;
-+
-+	bpf_map_update_elem(&hash_map_bench, key, &init_val, BPF_ANY);
-+	return 0;
-+}
-+
-+SEC("fentry/" SYS_PREFIX "sys_getpgid")
-+int benchmark(void *ctx)
-+{
-+	u32 key = bpf_get_prandom_u32() % MAX_ENTRIES + MAX_ENTRIES;
-+	u32 cpu = bpf_get_smp_processor_id();
-+	u64 start_time = bpf_ktime_get_ns();
-+
-+	bpf_loop(nr_loops, loop_update_callback, &key, 0);
-+	percpu_time[cpu & 255] = bpf_ktime_get_ns() - start_time;
-+	return 0;
-+}
--- 
-2.20.1
+-#ifdef CONFIG_CPUMASK_OFFSTACK
+        for_each_possible_cpu(i) {
+-               per_cpu(load_balance_mask, i) = (cpumask_var_t)kzalloc_node(
+-                       cpumask_size(), GFP_KERNEL, cpu_to_node(i));
+-               per_cpu(select_idle_mask, i) = (cpumask_var_t)kzalloc_node(
+-                       cpumask_size(), GFP_KERNEL, cpu_to_node(i));
++               zalloc_cpumask_var_node(&per_cpu(load_balance_mask, i),
++                                       GFP_KERNEL, cpu_to_node(i));
++               zalloc_cpumask_var_node(&per_cpu(select_idle_mask, i),
++                                       GFP_KERNEL, cpu_to_node(i));
+        }
+-#endif
 
+to get rid of the #ifdef ? We do the same for RT (local_cpu_mask) and DL
+(local_cpu_mask_dl).
+
+[...]

@@ -2,218 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2565B53AB0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C3C53AB0F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355548AbiFAQ3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 12:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
+        id S1355949AbiFAQbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 12:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243359AbiFAQ3G (ORCPT
+        with ESMTP id S243359AbiFAQbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 12:29:06 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7C4941B9;
-        Wed,  1 Jun 2022 09:29:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 1 Jun 2022 12:31:08 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9903A985B2
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 09:31:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DDB4121A30;
-        Wed,  1 Jun 2022 16:29:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1654100941; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=w3DcqKkJjZxj1reVW9md3wTOs1U0Ns1YkJ/9eIz+FTI=;
-        b=eozbooOhLbLSsV1UMiNjKI8EpIKg9SC4AawqwCEDoCzhyU6N79FaTZhZNgTPJzvVHIC+xa
-        wXirF7cTj8Xa59y92XFjB/oslobwXVVkdU5sjYgSFiFAG+bqeU7K25wd91Hy4fKh0PMjZn
-        /5EYdNls6XwxMtwuhkXrxx2e2ZFgqXE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1654100941;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=w3DcqKkJjZxj1reVW9md3wTOs1U0Ns1YkJ/9eIz+FTI=;
-        b=KLyJKgMa36LedXK0gB6fZNcfjzp5i8mhuVkg6jmhjj17fAEM2kdMzU/EbB4OS7oSKlUa/L
-        fU4V0Oa4KBlKv1CQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6DD9813A8F;
-        Wed,  1 Jun 2022 16:29:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fD4LGM2Tl2IzUAAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Wed, 01 Jun 2022 16:29:01 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 5f5451d9;
-        Wed, 1 Jun 2022 16:29:40 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Gregory Farnum <gfarnum@redhat.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-Subject: [RFC PATCH v3] ceph: prevent a client from exceeding the MDS maximum xattr size
-Date:   Wed,  1 Jun 2022 17:29:39 +0100
-Message-Id: <20220601162939.12278-1-lhenriques@suse.de>
+        by sin.source.kernel.org (Postfix) with ESMTPS id E0B42CE1A31
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 16:31:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E81E7C385A5;
+        Wed,  1 Jun 2022 16:31:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654101064;
+        bh=Wd/2NFNek590H9keh7aFB7lvSPIhXat/8uywAb1mU1g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FJP87CbK7nOivETvw+t0Py2ks9O2+PhpEK2TzdOy/H1x9dX1nF3ggDdosgcdX5+13
+         Y0i/tMnO3otOmMEKYLv0tl+rA3kCWyF5e50n2OxyoyIZyq1mdyooukF3f3gKlbe/D4
+         LxsbjOJVATPhEgX/xF3dY6ofj0+dzbFBMxtv55bo0Stwjpm4c6SjU46WLp22ZF5KdP
+         VuoZTaEXXIVc0vIQugGb732vIjSNlaeKOe7Zb2pkbiTDmz7gC4dFZAeFUKvniTIRmX
+         azG59yOfKVFEHnTyCQ4zWBngB0CoLjtdq4Xwd15Dngr7yp3bcpCCNscIAK6R4z3UTy
+         sZ8wgte4gSRuw==
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] x86/ftrace: Fix objtool vmlinux.o __fentry__ warning
+Date:   Wed,  1 Jun 2022 09:30:53 -0700
+Message-Id: <ffbae3ed9384307a0f867a366ca9b5765355f4dd.1654101038.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MDS tries to enforce a limit on the total key/values in extended
-attributes.  However, this limit is enforced only if doing a synchronous
-operation (MDS_OP_SETXATTR) -- if we're buffering the xattrs, the MDS
-doesn't have a chance to enforce these limits.
+The 'save_mcount_regs' macro does funny things with the frame pointer,
+which objtool doesn't approve of.  So OBJECT_FILES_NON_STANDARD is used
+with CONFIG_FRAME_POINTER to tell objtool to skip the entire file when
+frame pointers are enabled.
 
-This patch adds support for decoding the xattrs maximum size setting that is
-distributed in the mdsmap.  Then, when setting an xattr, the kernel client
-will revert to do a synchronous operation if that maximum size is exceeded.
+However, the file-wide OBJECT_FILES_NON_STANDARD annotation is now
+deprecated, because it doesn't work for IBT, where objtool runs on
+vmlinux.o.  Use more fine-grained function-specific annotations
+instead.
 
-While there, fix a dout() that would trigger a printk warning:
+Fixes the following warning:
 
-[   98.718078] ------------[ cut here ]------------
-[   98.719012] precision 65536 too large
-[   98.719039] WARNING: CPU: 1 PID: 3755 at lib/vsprintf.c:2703 vsnprintf+0x5e3/0x600
-...
+  vmlinux.o: warning: objtool: __fentry__+0x16: return with modified stack frame
 
-URL: https://tracker.ceph.com/issues/55725
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
+Fixes: ed53a0d97192 ("x86/alternative: Use .ibt_endbr_seal to seal indirect calls")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- fs/ceph/mdsmap.c            | 27 +++++++++++++++++++++++----
- fs/ceph/xattr.c             | 12 ++++++++----
- include/linux/ceph/mdsmap.h |  1 +
- 3 files changed, 32 insertions(+), 8 deletions(-)
+ arch/x86/kernel/Makefile      | 4 ----
+ arch/x86/kernel/ftrace_64.S   | 4 ++++
+ include/linux/objtool.h       | 6 ++++++
+ tools/include/linux/objtool.h | 6 ++++++
+ 4 files changed, 16 insertions(+), 4 deletions(-)
 
-* Changes since v2
-
-Well, a lot has changed since v2!  Now the xattr max value setting is
-obtained through the mdsmap, which needs to be decoded, and the feature
-that was used in the previous revision was dropped.  The drawback is that
-the MDS isn't unable to know in advance if a client is aware of this xattr
-max value.
-
-* Changes since v1
-
-Added support for new feature bit to get the MDS max_xattr_pairs_size
-setting.
-
-Also note that this patch relies on a patch that hasn't been merged yet
-("ceph: use correct index when encoding client supported features"),
-otherwise the new feature bit won't be correctly encoded.
-
-diff --git a/fs/ceph/mdsmap.c b/fs/ceph/mdsmap.c
-index 30387733765d..36b2bc18ca2a 100644
---- a/fs/ceph/mdsmap.c
-+++ b/fs/ceph/mdsmap.c
-@@ -13,6 +13,12 @@
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 03364dc40d8d..4c8b6ae802ac 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -36,10 +36,6 @@ KCSAN_SANITIZE := n
  
- #include "super.h"
+ OBJECT_FILES_NON_STANDARD_test_nx.o			:= y
  
-+/*
-+ * Maximum size of xattrs the MDS can handle per inode by default.  This
-+ * includes the attribute name and 4+4 bytes for the key/value sizes.
-+ */
-+#define MDS_MAX_XATTR_SIZE (1<<16) /* 64K */
-+
- #define CEPH_MDS_IS_READY(i, ignore_laggy) \
- 	(m->m_info[i].state > 0 && ignore_laggy ? true : !m->m_info[i].laggy)
- 
-@@ -352,12 +358,10 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p, void *end, bool msgr2)
- 		__decode_and_drop_type(p, end, u8, bad_ext);
- 	}
- 	if (mdsmap_ev >= 8) {
--		u32 name_len;
- 		/* enabled */
- 		ceph_decode_8_safe(p, end, m->m_enabled, bad_ext);
--		ceph_decode_32_safe(p, end, name_len, bad_ext);
--		ceph_decode_need(p, end, name_len, bad_ext);
--		*p += name_len;
-+		/* fs_name */
-+		ceph_decode_skip_string(p, end, bad_ext);
- 	}
- 	/* damaged */
- 	if (mdsmap_ev >= 9) {
-@@ -370,6 +374,21 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p, void *end, bool msgr2)
- 	} else {
- 		m->m_damaged = false;
- 	}
-+	if (mdsmap_ev >= 17) {
-+		/* balancer */
-+		ceph_decode_skip_string(p, end, bad_ext);
-+		/* standby_count_wanted */
-+		ceph_decode_skip_32(p, end, bad_ext);
-+		/* old_max_mds */
-+		ceph_decode_skip_32(p, end, bad_ext);
-+		/* min_compat_client */
-+		ceph_decode_skip_8(p, end, bad_ext);
-+		/* required_client_features */
-+		ceph_decode_skip_set(p, end, 64, bad_ext);
-+		ceph_decode_64_safe(p, end, m->m_max_xattr_size, bad_ext);
-+	} else {
-+		m->m_max_xattr_size = MDS_MAX_XATTR_SIZE;
-+	}
- bad_ext:
- 	dout("mdsmap_decode m_enabled: %d, m_damaged: %d, m_num_laggy: %d\n",
- 	     !!m->m_enabled, !!m->m_damaged, m->m_num_laggy);
-diff --git a/fs/ceph/xattr.c b/fs/ceph/xattr.c
-index 8c2dc2c762a4..67f046dac35c 100644
---- a/fs/ceph/xattr.c
-+++ b/fs/ceph/xattr.c
-@@ -1086,7 +1086,7 @@ static int ceph_sync_setxattr(struct inode *inode, const char *name,
- 			flags |= CEPH_XATTR_REMOVE;
- 	}
- 
--	dout("setxattr value=%.*s\n", (int)size, value);
-+	dout("setxattr value size: %ld\n", size);
- 
- 	/* do request */
- 	req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
-@@ -1184,8 +1184,14 @@ int __ceph_setxattr(struct inode *inode, const char *name,
- 	spin_lock(&ci->i_ceph_lock);
- retry:
- 	issued = __ceph_caps_issued(ci, NULL);
--	if (ci->i_xattrs.version == 0 || !(issued & CEPH_CAP_XATTR_EXCL))
-+	required_blob_size = __get_required_blob_size(ci, name_len, val_len);
-+	if ((ci->i_xattrs.version == 0) || !(issued & CEPH_CAP_XATTR_EXCL) ||
-+	    (required_blob_size >= mdsc->mdsmap->m_max_xattr_size)) {
-+		dout("%s do sync setxattr: version: %llu size: %d max: %llu\n",
-+		     __func__, ci->i_xattrs.version, required_blob_size,
-+		     mdsc->mdsmap->m_max_xattr_size);
- 		goto do_sync;
-+	}
- 
- 	if (!lock_snap_rwsem && !ci->i_head_snapc) {
- 		lock_snap_rwsem = true;
-@@ -1201,8 +1207,6 @@ int __ceph_setxattr(struct inode *inode, const char *name,
- 	     ceph_cap_string(issued));
- 	__build_xattrs(inode);
- 
--	required_blob_size = __get_required_blob_size(ci, name_len, val_len);
+-ifdef CONFIG_FRAME_POINTER
+-OBJECT_FILES_NON_STANDARD_ftrace_$(BITS).o		:= y
+-endif
 -
- 	if (!ci->i_xattrs.prealloc_blob ||
- 	    required_blob_size > ci->i_xattrs.prealloc_blob->alloc_len) {
- 		struct ceph_buffer *blob;
-diff --git a/include/linux/ceph/mdsmap.h b/include/linux/ceph/mdsmap.h
-index 523fd0452856..4c3e0648dc27 100644
---- a/include/linux/ceph/mdsmap.h
-+++ b/include/linux/ceph/mdsmap.h
-@@ -25,6 +25,7 @@ struct ceph_mdsmap {
- 	u32 m_session_timeout;          /* seconds */
- 	u32 m_session_autoclose;        /* seconds */
- 	u64 m_max_file_size;
-+	u64 m_max_xattr_size;		/* maximum size for xattrs blob */
- 	u32 m_max_mds;			/* expected up:active mds number */
- 	u32 m_num_active_mds;		/* actual up:active mds number */
- 	u32 possible_max_rank;		/* possible max rank index */
+ # If instrumentation of this dir is enabled, boot hangs during first second.
+ # Probably could be more selective here, but note that files related to irqs,
+ # boot, dumpstack/stacktrace, etc are either non-interesting or can lead to
+diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
+index 4ec13608d3c6..db7c396064ef 100644
+--- a/arch/x86/kernel/ftrace_64.S
++++ b/arch/x86/kernel/ftrace_64.S
+@@ -175,6 +175,7 @@ SYM_INNER_LABEL(ftrace_caller_end, SYM_L_GLOBAL)
+ 
+ 	jmp ftrace_epilogue
+ SYM_FUNC_END(ftrace_caller);
++STACK_FRAME_NON_STANDARD_FP(ftrace_caller)
+ 
+ SYM_FUNC_START(ftrace_epilogue)
+ /*
+@@ -282,6 +283,7 @@ SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
+ 	jmp	ftrace_epilogue
+ 
+ SYM_FUNC_END(ftrace_regs_caller)
++STACK_FRAME_NON_STANDARD_FP(ftrace_regs_caller)
+ 
+ 
+ #else /* ! CONFIG_DYNAMIC_FTRACE */
+@@ -311,6 +313,8 @@ trace:
+ 	jmp ftrace_stub
+ SYM_FUNC_END(__fentry__)
+ EXPORT_SYMBOL(__fentry__)
++STACK_FRAME_NON_STANDARD_FP(__fentry__)
++
+ #endif /* CONFIG_DYNAMIC_FTRACE */
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+diff --git a/include/linux/objtool.h b/include/linux/objtool.h
+index 6491fa8fba6d..15b940ec1eac 100644
+--- a/include/linux/objtool.h
++++ b/include/linux/objtool.h
+@@ -143,6 +143,12 @@ struct unwind_hint {
+ 	.popsection
+ .endm
+ 
++.macro STACK_FRAME_NON_STANDARD_FP func:req
++#ifdef CONFIG_FRAME_POINTER
++	STACK_FRAME_NON_STANDARD \func
++#endif
++.endm
++
+ .macro ANNOTATE_NOENDBR
+ .Lhere_\@:
+ 	.pushsection .discard.noendbr
+diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
+index 6491fa8fba6d..15b940ec1eac 100644
+--- a/tools/include/linux/objtool.h
++++ b/tools/include/linux/objtool.h
+@@ -143,6 +143,12 @@ struct unwind_hint {
+ 	.popsection
+ .endm
+ 
++.macro STACK_FRAME_NON_STANDARD_FP func:req
++#ifdef CONFIG_FRAME_POINTER
++	STACK_FRAME_NON_STANDARD \func
++#endif
++.endm
++
+ .macro ANNOTATE_NOENDBR
+ .Lhere_\@:
+ 	.pushsection .discard.noendbr
+-- 
+2.34.3
+

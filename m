@@ -2,141 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2494953A3B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755C253A3B8
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 13:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352599AbiFALSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 07:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
+        id S1352607AbiFALTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 07:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351216AbiFALR5 (ORCPT
+        with ESMTP id S1350587AbiFALTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:17:57 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9426262A27
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 04:17:56 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id g205so1661378pfb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 04:17:56 -0700 (PDT)
+        Wed, 1 Jun 2022 07:19:05 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0A3A76FA;
+        Wed,  1 Jun 2022 04:19:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=zgtg5YY4jxLLXJWg7yCH0UX5NIavoSEKqMcQkwk1jy8=;
-        b=iVctfEk/aFz/ZdHQcUCWxtMjHH035La+UIBcOyoXJYzVxhVcfdCBsimFa2OeG10qXR
-         maNOi9bczGYUXgMLMcEvpBHDNXdTTs2rmLUjAM6ZLLjduXPmK/oUY8Pup6HWDJ5gNed7
-         TUN4TBaNb1xWmciQ9QgeJoExJCcLg81GwEhVJpn75RZN36wTHpre3s+P1z2cc3v9y8zn
-         6ICqbv33zoLhoCxChTilA+BxiYG24A3BIAMouwbclWo+G4vf/n5Bd8EWR0xyQa9sd64I
-         GFe7+1F84SQnvV4lk0zYEvy69QgDlI0+qv3xYFbPYQwVMlkqdJQ/1geI0vCl4v/9Klz7
-         X+Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zgtg5YY4jxLLXJWg7yCH0UX5NIavoSEKqMcQkwk1jy8=;
-        b=EoNyaAwW5Lq0GfAWlf71PhA2ZF6vQrfKF64TgXOMkhjwe/sH7PQqvCTliINAwH9XpW
-         Hzh0AxOcgtNbBDBK/nEVTfhn6ceBRJWhx4SoXi05jo+IiH+Rv2B6ZJSRaFxxamTAnToO
-         mu+QqRX0bncutGt4ghBY0ohJ5+dEzkIMIXJeboaL+Wp49+Zf122ymU4w1oLaqcLm048m
-         G81k0LUiNKaU2alciSQl788uMx+EMvmb2LoTgKiOTtmw77LIwfqAi+DdVUJkZVPwBx8B
-         PFce6bqcjj+66jj6iHWLfCObmeA/DhWXPC00yfaKF7G9zfZbB77WTLGNJ5HHKUX3Pi2H
-         FHOA==
-X-Gm-Message-State: AOAM533IEFnpxWYrPYjiNW511DpuCQz5EeQfUUxCXcfgdLplkSKyUHaj
-        9CwbYZholodo5UK+vjBKOKPU3A==
-X-Google-Smtp-Source: ABdhPJwM490RUsniubXRkmNYnyI+tr1XMJKqnGG0kO6Rq61B0Ohjjj9OD/juAWkW/qlOjvxAu8Ju7g==
-X-Received: by 2002:a05:6a00:cd2:b0:518:e103:7cee with SMTP id b18-20020a056a000cd200b00518e1037ceemr37788845pfv.67.1654082276096;
-        Wed, 01 Jun 2022 04:17:56 -0700 (PDT)
-Received: from [10.71.57.194] ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id x18-20020aa79ad2000000b0051bbbf14c6csm349622pfp.55.2022.06.01.04.17.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 04:17:55 -0700 (PDT)
-Message-ID: <041465f0-0fd3-fd39-0dac-8093a1c98c00@bytedance.com>
-Date:   Wed, 1 Jun 2022 19:17:48 +0800
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654082343; x=1685618343;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=j2WptiZFrMPVKC6oFMmIy8W8fAs1p7FSZjkRo4TZHV0=;
+  b=AIVtraew/9SX3q9818j9qKmyDg28YakAK5lNbC9tAJWoN1zI3HJtQT0N
+   lrVvJfOcRqQRLUGPMXGXJDl0Tuo+ozEVEGYhD4MCXBHuVVTLYQScHpA4w
+   vUJVHrCXP8OgVBzayHbKxvCPia48xDcEURlUUoYrpxMb15XLtJv7JHl3M
+   g=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Jun 2022 04:19:02 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 04:19:01 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 1 Jun 2022 04:19:01 -0700
+Received: from [10.50.27.146] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 1 Jun 2022
+ 04:18:55 -0700
+Message-ID: <def29b3f-b5a1-5f23-7727-1308f7033cff@quicinc.com>
+Date:   Wed, 1 Jun 2022 16:48:52 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: Re: [PATCH v4 2/2] selftest/bpf/benchs: Add bpf_map benchmark
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>
-References: <20220601084149.13097-1-zhoufeng.zf@bytedance.com>
- <20220601084149.13097-3-zhoufeng.zf@bytedance.com>
- <CAADnVQ+qmvYK_Ttsjgo49Ga7paghicFg_O3=1sYZKbdps4877Q@mail.gmail.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <CAADnVQ+qmvYK_Ttsjgo49Ga7paghicFg_O3=1sYZKbdps4877Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V13 7/9] regulator: Add a regulator driver for the PM8008
+ PMIC
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
+        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
+References: <1653043777-24003-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1653043777-24003-8-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n53WLYR1pjnr6wASVmXXQ7xTq5n2Q7GdeKOCkWf4H4n=0A@mail.gmail.com>
+ <e70aceba-02d5-15b5-46d0-d5ed5706e81a@quicinc.com>
+ <CAE-0n539gePyXhw7r+XcaHtooN98KfYsx_qwgDaFkJtMSg+80g@mail.gmail.com>
+ <4b9a2abe-c462-81d9-2098-d430da24f030@quicinc.com>
+ <CAE-0n529AD8OKrxbTpDNqR7Gw9SdCnJyWtiWvZAsADQKgj4kxQ@mail.gmail.com>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+In-Reply-To: <CAE-0n529AD8OKrxbTpDNqR7Gw9SdCnJyWtiWvZAsADQKgj4kxQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/6/1 下午5:53, Alexei Starovoitov 写道:
-> On Wed, Jun 1, 2022 at 10:42 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
->> +struct {
->> +       __uint(type, BPF_MAP_TYPE_HASH);
->> +       __type(key, u32);
->> +       __type(value, u64);
->> +       __uint(max_entries, MAX_ENTRIES);
->> +} hash_map_bench SEC(".maps");
->> +
->> +u64 __attribute__((__aligned__(256))) percpu_time[256];
-> aligned 256 ?
-> What is the point?
 
-I didn't think too much about it here, just referenced it from 
-tools/testing/selftests/bpf/progs/bloom_filter_bench.c
-
->
->> +u64 nr_loops;
->> +
->> +static int loop_update_callback(__u32 index, u32 *key)
->> +{
->> +       u64 init_val = 1;
->> +
->> +       bpf_map_update_elem(&hash_map_bench, key, &init_val, BPF_ANY);
->> +       return 0;
->> +}
->> +
->> +SEC("fentry/" SYS_PREFIX "sys_getpgid")
->> +int benchmark(void *ctx)
->> +{
->> +       u32 key = bpf_get_prandom_u32() % MAX_ENTRIES + MAX_ENTRIES;
-> What is the point of random ?
-> just key = MAX_ENTRIES would be the same, no?
-> or key = -1 ?
-
-If all threads on different cpu trigger sys_getpgid and lookup the same 
-key, it will cause
-"ret = htab_lock_bucket(htab, b, hash, &flags); "
-the lock competition here is fierce, and unnecessary overhead is 
-introduced,
-and I don't want it to interfere with the test.
-
->
->> +       u32 cpu = bpf_get_smp_processor_id();
->> +       u64 start_time = bpf_ktime_get_ns();
->> +
->> +       bpf_loop(nr_loops, loop_update_callback, &key, 0);
->> +       percpu_time[cpu & 255] = bpf_ktime_get_ns() - start_time;
->> +       return 0;
->> +}
->> --
->> 2.20.1
+On 6/1/2022 7:36 AM, Stephen Boyd wrote:
+> Quoting Satya Priya Kakitapalli (Temp) (2022-05-30 03:33:47)
+>> On 5/28/2022 2:32 AM, Stephen Boyd wrote:
+>>> Quoting Satya Priya Kakitapalli (Temp) (2022-05-27 01:24:19)
+>>>> On 5/21/2022 8:26 AM, Stephen Boyd wrote:
+>>>>           +       }
+>>>>           +
+>>>>           +       pm8008_reg->dev = dev;
+>>>>           +
+>>>>           +       rc = of_property_read_string(dev->of_node, "regulator-name", &name);
+>>>>           +       if (rc)
+>>>>           +               return rc;
+>>>>           +
+>>>>           +       /* get the required regulator data */
+>>>>           +       for (i = 0; i < ARRAY_SIZE(reg_data); i++)
+>>>>           +               if (strstr(name, reg_data[i].name))
+>>>>
+>>>>       Why not find this via reg/address instead? It would save storing the
+>>>>       regulator name in the reg_data table.
+>>>>
+>>>>
+>>>> You mean match this using base address? then we should add base address in the
+>>>> reg_data table. We will need the name to be stored in reg_data table anyway for
+>>>> the pm8008_reg->rdesc.of_match
+>>> Why? Now that this driver binds to each node individually the usage of
+>>> of_match doesn't make any sense to me. Can you set 'struct
+>>> regulator_config::dev' instead and not set of_match?
 >>
+>> Currently we are setting regulator_config::dev as dev->parent i.e.,
+>> pm8008@8, because the parent supplies are present under pm8008@8, to get
+>> the regulators mapped correctly to the parent supplies we are using
+>> dev->parent.
+>>
+>> If we do not set of_match in regulator descriptor,
+>> regulator_of_get_init_node() would return NULL, causing init_data to be
+>> NULL during regulator_register and regulators are not getting probed.
+>> This can be resolved, if we get the init_data during pm8008_probe
+>> itself. I'll do that in the next version.
+>>
+> Ok then it seems ok to leave it as is. I suspect getting init data
+> during probe is more code vs. having the node name and the address in
+> the table.
+
+
+Okay. If we are leaving it as is then, there is no need to add address 
+in the table.
 

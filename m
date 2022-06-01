@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118A853A2BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 12:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49A953A2B8
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 12:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345274AbiFAKhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 06:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
+        id S245009AbiFAKgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 06:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbiFAKhI (ORCPT
+        with ESMTP id S1350938AbiFAKg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 06:37:08 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDC556FA4;
-        Wed,  1 Jun 2022 03:37:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654079826; x=1685615826;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yRzXRhmweAXGfPI0innNsyhnWdgFvifkjj5F+obP+I4=;
-  b=aps6OuqhIRFBNAS1IZS7ztBmKH3sJ3szfc9HIia7Az+AKHyd/NKTUCmC
-   x21alCb21Awf6ux4NKPMhrk7U57tBa7u+Ub7s9hFu7ImADqhruM3Oj0ow
-   Rw85vQbjv3OCKpgEEIlQMM1/4OaBMgmh9ujniyGqia+BiHIVUCE4x/78o
-   7e1OBXtvDF1zBTh7umPElRI99iGWSWCjmfUht1KSg8sqls7xd7cpsyL/F
-   L9wwjKMH+L1otH4aWdlnK3T9gpVdMgrSqmr4kLlSYoPFP9YcuqxN9NyI3
-   uVMOgVmrIHUKtpB+xyl+P/MIJMwEE0Gwhernm0ZgYk1uphVpnO2Ow5yWL
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="273109712"
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="273109712"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 03:36:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="612264968"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 01 Jun 2022 03:36:56 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwLih-0003rO-OH;
-        Wed, 01 Jun 2022 10:36:55 +0000
-Date:   Wed, 1 Jun 2022 18:36:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/2] bpf, test_run: Add PROG_TEST_RUN support to
- kprobe
-Message-ID: <202206011814.9lsKlbB0-lkp@intel.com>
-References: <b544771c7bce102f2a97a34e2f5e7ebbb9ea0a24.1653861287.git.dxu@dxuuu.xyz>
+        Wed, 1 Jun 2022 06:36:27 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2447CDD0;
+        Wed,  1 Jun 2022 03:36:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1654079782; bh=Az6LaeM91P9NnWYSF0KdOPJoEbnukU3RI4Bg3h7Zqyw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ga7BVFJmTmsYIwgEi5aRccQn30NZX/8mXfj2P/c5DHANWGC2v4PPgwG2IrBtENNN+
+         bpSnk3X/YTUHJm+lvvvZi+0tS9OdaE+wymM46SB5wGbo8qSJIkEwTngNdD31tnKiwa
+         M7aLpoEiorGTgs/s5fuR7HYTCO40dLoSTmwW0Ea4=
+Received: from [192.168.9.172] (unknown [101.88.28.48])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 8F03C60104;
+        Wed,  1 Jun 2022 18:36:22 +0800 (CST)
+Message-ID: <92cb9e21-b48d-bf74-af71-b180600ad792@xen0n.name>
+Date:   Wed, 1 Jun 2022 18:36:22 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b544771c7bce102f2a97a34e2f5e7ebbb9ea0a24.1653861287.git.dxu@dxuuu.xyz>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101
+ Thunderbird/103.0a1
+Subject: Re: [PATCH V12 01/24] irqchip: Adjust Kconfig for Loongson
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20220601100005.2989022-1-chenhuacai@loongson.cn>
+ <20220601100005.2989022-2-chenhuacai@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <20220601100005.2989022-2-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On 6/1/22 17:59, Huacai Chen wrote:
+> HTVEC will be shared by both MIPS-based and LoongArch-based Loongson
+> processors (not only Loongson-3), so we adjust its description. HTPIC is
+> only used by MIPS-based Loongson, so we add a MIPS dependency.
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>   drivers/irqchip/Kconfig | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index 44fb8843e80e..1cb3967fe798 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -557,7 +557,7 @@ config LOONGSON_LIOINTC
+>   
+>   config LOONGSON_HTPIC
+>   	bool "Loongson3 HyperTransport PIC Controller"
+> -	depends on MACH_LOONGSON64
+> +	depends on (MACH_LOONGSON64 && MIPS)
+>   	default y
+>   	select IRQ_DOMAIN
+>   	select GENERIC_IRQ_CHIP
+> @@ -565,12 +565,12 @@ config LOONGSON_HTPIC
+>   	  Support for the Loongson-3 HyperTransport PIC Controller.
+>   
+>   config LOONGSON_HTVEC
+> -	bool "Loongson3 HyperTransport Interrupt Vector Controller"
+> +	bool "Loongson HyperTransport Interrupt Vector Controller"
+>   	depends on MACH_LOONGSON64
+>   	default MACH_LOONGSON64
+>   	select IRQ_DOMAIN_HIERARCHY
+>   	help
+> -	  Support for the Loongson3 HyperTransport Interrupt Vector Controller.
+> +	  Support for the Loongson HyperTransport Interrupt Vector Controller.
+>   
+>   config LOONGSON_PCH_PIC
+>   	bool "Loongson PCH PIC Controller"
 
-Thank you for the patch! Yet something to improve:
+The series passes allmodconfig build for ARCH={x86,mips,loongarch} with 
+this, it seems reasonable.
 
-[auto build test ERROR on bpf-next/master]
+Reviewed-by: WANG Xuerui <git@xen0n.name>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/Add-PROG_TEST_RUN-support-to-BPF_PROG_TYPE_KPROBE/20220530-060742
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: s390-randconfig-r002-20220531 (https://download.01.org/0day-ci/archive/20220601/202206011814.9lsKlbB0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/a547a4c795103fd002d3bbb5ee4d7141113716c0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Xu/Add-PROG_TEST_RUN-support-to-BPF_PROG_TYPE_KPROBE/20220530-060742
-        git checkout a547a4c795103fd002d3bbb5ee4d7141113716c0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: kernel/trace/bpf_trace.o:kernel/trace/bpf_trace.c:1365: undefined reference to `bpf_prog_test_run_kprobe'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

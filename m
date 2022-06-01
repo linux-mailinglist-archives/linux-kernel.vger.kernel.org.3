@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA63853AE07
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7F453ADD1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiFAUqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 16:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        id S230140AbiFAUp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 16:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiFAUo1 (ORCPT
+        with ESMTP id S229488AbiFAUpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 16:44:27 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AD32383DA
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 13:29:42 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id k187so4162902oif.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 13:29:42 -0700 (PDT)
+        Wed, 1 Jun 2022 16:45:03 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99AA258DF2
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 13:30:09 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id l13so1345839vsi.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 13:30:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version;
-        bh=nYwhXL0T2ODnS+1GX4ztX9T7qNRYGKmin9ME/ehLo/o=;
-        b=CuqVmXXRVMcMwz39X014iHp70UvuiaTWtDSSmpyYfQ/d5nVLlZmB5l/VhxiDngi+Fh
-         WO0jSw7C8OL+uFh+olkxc4TWKoKSMEMHjboF0eY4YMRodNtj1OA2EXnW5jLwyFrmbv36
-         scPYanQGuckmyTSNBVERka2K8kyZRUI8aU3rk=
+        bh=n1JKCZr9hRO6GFQiuzHCILyhCTzqUYflIwYZGidSrcE=;
+        b=LON/IQNv2/KOg/YY5MSBVFeudN+LPdw2tqw8nb741a+nIpQ9PkKWszBFDNoS+t+k0C
+         t9SL2JrWStUL0grIqChowUKWDtLaTT+YayNqrMkUxQbxTo23zzrHd/mF6XS26ab6td66
+         d9oTPhD6uVfJgZdnOfX+dvoD+9fTpotdx/bqI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version;
-        bh=nYwhXL0T2ODnS+1GX4ztX9T7qNRYGKmin9ME/ehLo/o=;
-        b=rWzp6rGup/u16zlnwzKi69u2jyc8h83FuCslzZsGtsccxcYIKpOuzxTanTWa6et0LJ
-         utqk5hAHLLqMBacj3H91+/tlDkdLK91V/aYRXFSMTOMWLXitGKmMvNMhoo5xLSpnn0ZM
-         O820PX3plN9sgDIHrxUYfqVyCVH79YDbmKCRDw+RhxbyZSPeHcPbrDFWtT1FmBm4Zt/L
-         QJWDGS9sspzmv7lqkBWMswFXLqX7OsSWeoqNPqq6kHRsXMTAg2inQWEeJI02TT60aJLf
-         8FkLd6Tmu3pSAW2evUpwlU0OviYWGv6KPD2i/jFevBSk2ObR6T9+FQ0EYLeDC70GJVsq
-         H0OA==
-X-Gm-Message-State: AOAM531lEcpv6w4jIRXCPgVydT0ViSgBGRaQmnIWl/fvdHe3VusoTA2W
-        ld+sAYKOkJx24cWCGPM7odzgJrDGTBOEaw==
-X-Google-Smtp-Source: ABdhPJwnR0St4e5dDnG+SpXdBVRA0fTjNx2euuFkEyiMajxuqvqP2cwXsOyHqK4c6AVvSMiKKKtXww==
-X-Received: by 2002:a17:90b:3c6:b0:1e2:e9fc:4e79 with SMTP id go6-20020a17090b03c600b001e2e9fc4e79mr20734332pjb.192.1654114804963;
-        Wed, 01 Jun 2022 13:20:04 -0700 (PDT)
+        bh=n1JKCZr9hRO6GFQiuzHCILyhCTzqUYflIwYZGidSrcE=;
+        b=jo2xgD+Hu862aQW7FsvPacuEY5Ems/uCyoBLxD3O/jLTtjuhPskGy/5TLR5EVq3woI
+         Scit6Bjr5OEUhadKYIrBZdubNFHhjj57NOIVTgHAJEhcE0Sc+XQUEC6AxKGDEOpbj0I4
+         Noq4wkqdSppPXu8y+00ey+8nnQgg1v9rSMaqPDLG9tv2HMHhtAktmGTcB57eHQ2bRSSl
+         9BB3Ht8SyW1qNsBkeSlWvj29fCUrl3qZmJ6EC/w0sD8NByJcfb7MMMVnc2GiC6pDf4o4
+         ZN0uHd8uQmZUmDVFYrFnlGITviXD+JtExW81M/sAo+A/Cr/dsNWBYhSmqaKafYjdh4K6
+         +u3g==
+X-Gm-Message-State: AOAM531eKBFquUaQyVqB5GXvJjoIduPaRXKopccyuX6stsM7MtajG+ou
+        PP+nErc5BVgytpTsFWDlbxy+CpqP/VFSfQ==
+X-Google-Smtp-Source: ABdhPJzLG5XSqGmt3+KWo2AwQKUSqUF9b90eukkfHBcuwXXu9rQC2+mR7YZbcmS9bJqr0L9+4MYPqQ==
+X-Received: by 2002:a05:6a00:1506:b0:518:bcdd:6a33 with SMTP id q6-20020a056a00150600b00518bcdd6a33mr1233649pfu.27.1654114806321;
+        Wed, 01 Jun 2022 13:20:06 -0700 (PDT)
 Received: from linuxpc-ThinkServer-TS140.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id i184-20020a6254c1000000b0051b6091c452sm1861376pfb.70.2022.06.01.13.20.03
+        by smtp.gmail.com with ESMTPSA id i184-20020a6254c1000000b0051b6091c452sm1861376pfb.70.2022.06.01.13.20.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 13:20:04 -0700 (PDT)
+        Wed, 01 Jun 2022 13:20:05 -0700 (PDT)
 From:   Anand Gore <anand.gore@broadcom.com>
 To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
 Cc:     kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
@@ -52,21 +52,16 @@ Cc:     kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
         florian.fainelli@broadcom.com, joel.peshkin@broadcom.com,
         samyon.furman@broadcom.com, dan.beygelman@broadcom.com,
         Anand Gore <anand.gore@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/3] dt-bindings: arm64: add BCM6858 soc
-Date:   Wed,  1 Jun 2022 13:19:57 -0700
-Message-Id: <20220601131944.v3.2.I2bc1418dd24a902e941c7073bbadab00568b4f5d@changeid>
+Subject: [PATCH v3 3/3] MAINTAINERS: add bcm6858 to bcmbca arch entry
+Date:   Wed,  1 Jun 2022 13:19:58 -0700
+Message-Id: <20220601131944.v3.3.I4e0b51b0d29f3286eea811a57bdd7e0ff6d7439c@changeid>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220601201958.3072173-1-anand.gore@broadcom.com>
 References: <20220601201958.3072173-1-anand.gore@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000c36fb905e068bf80"
+        boundary="00000000000061dbd905e068c19e"
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -77,48 +72,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000c36fb905e068bf80
+--00000000000061dbd905e068c19e
 Content-Transfer-Encoding: 8bit
 
-Add BCM6858 SOC device tree description to bcmbca binding document.
+Add bcm6858 related files to BCMBCA ARCH maintainer list entry
 
 Signed-off-by: Anand Gore <anand.gore@broadcom.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 ---
 
-(no changes since v2)
+(no changes since v1)
 
-Changes in v2:
-- Remove extra empty lines
-- Simplify subject line
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
- Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
-index 24357cf09888..97e5b1c4619e 100644
---- a/Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
-+++ b/Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
-@@ -35,6 +35,13 @@ properties:
-           - const: brcm,bcm63178
-           - const: brcm,bcmbca
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4b263753f1f9..3ab33d0aeabf 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3766,6 +3766,7 @@ T:	git git://github.com/broadcom/stblinux.git
+ F:	Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
+ N:	bcmbca
+ N:	bcm[9]?47622
++N:	bcm[9]?6858
+ N:	bcm[9]?63178
  
-+      - description: BCM6858 based boards
-+        items:
-+          - enum:
-+              - brcm,bcm96858
-+          - const: brcm,bcm6858
-+          - const: brcm,bcmbca
-+
- additionalProperties: true
- 
- ...
+ BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE
 -- 
 2.25.1
 
 
---000000000000c36fb905e068bf80
+--00000000000061dbd905e068c19e
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -189,13 +173,13 @@ LiytE/NBFgzVtBcryeBtcMnhZgMo0PQYRl4O+58O1O703CD1jiO4/ikP+hUTdxWQiiWAzpE89YCH
 S0Pc2d2yC8RWARAiArr1jXHWA4+snG+TS3A1YVSPRZpboS5AXMutIIQ5YZQxggJtMIICaQIBATBr
 MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
 YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxzcZR0ocq9f8sVOu8wDQYJYIZI
-AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPUhuTNaZCnGbOhWzIDy0DjHd3gqdBk+c+pdcKZv
-XxUoMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDYwMTIwMjk0
-MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
+AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIbAuFEeJzlaHshQF9RsUzo/E0asC8V2SWAAUPv/
+KNggMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDYwMTIwMzAw
+OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
 AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
-hkiG9w0BAQEFAASCAQAvpTvX2qiAsF+tUVjAvnUja2viRTaa1fYp12U98+srWrgiRQi1W6gPuLUI
-GdMkrj2O+c2z0jZGt3yoe4iJxNmjfZd6B9lJzGdNFvqgpKgiH+T4/TkPiM6qyrbY6pBwxOORAR/z
-Lh8jwtDH0XMrc7DJOyDzlSIq7IgucRdE+1u4wCwVQgpEAk9J6pzC/O0j0GltmZftSBrP2DoJdfcv
-t/eu1JTaFZPST/tfdP/lAC0/sBYY8d/BhRK5xOCEc+n4uzoy6ib5KKdf4H4edqn2k1G1yuMy7fQH
-bxvbreK58+N+FWWGvXPIsmQnXtseo/kEgJHQVaouNE+o2Hhpz3skSQQx
---000000000000c36fb905e068bf80--
+hkiG9w0BAQEFAASCAQBGxurL6zu43qadCT6UwPOPrxQFVQ0MpQP14mF2d5WRFPpu+4HJCCFrxUo0
+BZfZeOwv5ojFsP2VH9RebwplyAi7SlF10vdjhq7TPHRt8wd537+2dxssCt35PgLsZCzRPlDd40tJ
+WRWlRHfbhRPAUV/N6SjLxOtMLbaHW9hGJpSE4nS1MCYGDfqBWgPnYEbxMVL/ml2tXu7aBvrvjFKr
+YLZ+adSooq8eT6UavAX4UinOIt9yIRk0uW3TUoUl6L1xZlVYwBMcFj8Ds4H6luYK3zWqZkOFYjGS
+KYiXkhLkye4/91UBx4JNvhs/VUOhKcg7sfhRbq0DLP1JRMUqhc3EGCTu
+--00000000000061dbd905e068c19e--

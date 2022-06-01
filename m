@@ -2,64 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A91753AE48
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F7153ADD0
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiFAUn5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Jun 2022 16:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
+        id S229584AbiFAUmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 16:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiFAUnZ (ORCPT
+        with ESMTP id S229534AbiFAUmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 16:43:25 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8401C1DB1F9;
-        Wed,  1 Jun 2022 13:25:36 -0700 (PDT)
-Received: from mail-yw1-f173.google.com ([209.85.128.173]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Ml3ym-1nX03Z0AV2-00lX9C; Wed, 01 Jun 2022 21:26:33 +0200
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-300628e76f3so29516767b3.12;
-        Wed, 01 Jun 2022 12:26:32 -0700 (PDT)
-X-Gm-Message-State: AOAM5323KY4YjOzYaTS7yWk0mvibF1G8urcieeLacxWOujJ0WNcBFaU4
-        mBTtL13CaIYwEUDAJWFTCmK0UHhzZuJoWBwseYE=
-X-Google-Smtp-Source: ABdhPJz0JApbo0Qv67wndhuM17KjFiRygdVF6IoIIcQ65oBNOgfkV7dKkoHQPvHnC/sJqYfjVswl/2RhIyt72lCR3vQ=
-X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
- 206-20020a810ad7000000b002e684de3223mr1208726ywk.209.1654111591816; Wed, 01
- Jun 2022 12:26:31 -0700 (PDT)
+        Wed, 1 Jun 2022 16:42:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE33F1D5030;
+        Wed,  1 Jun 2022 13:23:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 296806167C;
+        Wed,  1 Jun 2022 19:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38913C385A5;
+        Wed,  1 Jun 2022 19:26:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654111579;
+        bh=kjzuy5OLcjNnr7n1+E35W4+dixKa9+A7A847BOlSHXQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=My9EOlOPXw6b1JIbY5dKxbfR4SKtNunO75fcat7yYSD2rPvReQ/OHt/WbAHOi4OiE
+         Jx7AEOsPKjE0VbDYtDvqCJr9saTAsCzjkDHFku5pQCBrvoQR0FcngJsHS89EYo1MlG
+         LYGG2hroi0tRrrLp5JAAxM2875plaZrnilWzm7piLsCi+e8IXBQ5m86+EEqVEuzgTc
+         ErfwqXxF+cIYudObD1Xqyp7W+78doqYtwqG4NXqQwnwgyIpForpKygIw6P9btdwlzd
+         qypamayShc3ATF0zx35OZfWhV+GoFZthqvSvscQMxGpIXIsI+gT3YvSiUzxy4EpDXh
+         3gkt8rNruVcjQ==
+Date:   Wed, 1 Jun 2022 12:26:18 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Leon Romanovsky <leonro@nvidia.com>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Boris Pismenny <borisp@nvidia.com>, <netdev@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Saeed Mahameed" <saeedm@nvidia.com>
+Subject: Re: [PATCH] MAINTAINERS: adjust MELLANOX ETHERNET INNOVA DRIVERS to
+ TLS support removal
+Message-ID: <20220601122618.78b93038@kernel.org>
+In-Reply-To: <YperBiCh1rkKDmSR@unreal>
+References: <20220601045738.19608-1-lukas.bulwahn@gmail.com>
+        <Ypc85O47YoNzUTr5@unreal>
+        <20220601103032.28d14fc4@kicinski-fedora-PC1C0HJN>
+        <YperBiCh1rkKDmSR@unreal>
 MIME-Version: 1.0
-References: <20220601154647.80071-1-pan@semihalf.com>
-In-Reply-To: <20220601154647.80071-1-pan@semihalf.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 1 Jun 2022 21:26:14 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2TXUd6JjSiXSZix1xL+bO-fVAbLWht-zNQV8r_Kn05Zg@mail.gmail.com>
-Message-ID: <CAK8P3a2TXUd6JjSiXSZix1xL+bO-fVAbLWht-zNQV8r_Kn05Zg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] Add Chameleon v3 devicetree
-To:     =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
-Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arnd@arndb.de, olof@lixom.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, amstan@chromium.org,
-        upstream@semihalf.com, Dinh Nguyen <dinguyen@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:zhaHhEGjIFru1VL46j0+tZGVaWHAQkcciH1GX2cZnvcAcHfn5M+
- Y+DCGLK6/9KjL7JM/R+qEU6PNETBlCWCFMRUwRdIsHzE4YI4OVCMBhDbKyeK60Ah5S9+Kyj
- 3mgfAYbHE1dh6t94PWR6y7oPLEI4hxroOxyj5xz/nhLy0XN+wg21ltzB2Rr/mRVnOLtt2OH
- SztwIPBUDKVyb4odgF42g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Qwpp7sOFPDg=:lS18uBZzeJ2sFdNI9fhC/y
- +w1OWV/C6BGT1peIMYlENFqXTnSZmLsi7khdAxeoQ2xHv1ySNVeDTicW6pglKhk+53jGjqHpM
- DoRHc3WfwrigUK9PmvaxfTU8m8mcPCivvDilzlqSuUMMXfiqR0nkbtreFjvAjr3+3pwNE3BNx
- aypmegiG69pabkgUTtxO+Ks/zRUgQHwXxSTTzSPUq9bwubR87C+0LSbMVfD/ISG5qqTj5E6yY
- rIMC7+FmKiy4A+y8bvMOtqFINPakAg5XtV1UZEL2E5tSjFi2rCEAdhJVIWc4Q+Ah7UIvRsBJ9
- 47FbibD8A/0FGTQ/bL8Ac6iAtqsf9l0ozMCaoZtAdrJJPnvy6Eu4scBvsrGqqKOhyIQExRugZ
- iMsDZSiT097uVGMPbTLJM8mbSz/F3mucO2MJK2WAFn/+UaFV/XD4tXEHPCVXZFvWC/Muuugvr
- +JjQ4BmvQ998TGwNI4YoDGhxnSAA5S5hq4NPfThgmJnGrXJigTllD6nQDoVJdnS9n6O+rlzdv
- uFdiwXnOBMtFv+lgMqRxVtQreYbDVlLR4GUu+9AtznAwT58vrUVhq98BxFEVlZL7oihybDQja
- k0OsJ88BxZM4QlhPPH1qVpCXy71TCU9mOCCiMzjYmUflyFmaDbmry7cL1hhArb8Gv9ko45dpV
- iGYI2d7rLeq8pQxomYTuq5kpVYkdQ7zPoh0hv1ciZOmdFuSfKFmSujoINxSAcDcvnvSKdUf9G
- NPaRf4b0h55SDnofwwWGiAxdUihID5fKZluTHw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,21 +60,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 5:46 PM Paweł Anikiel <pan@semihalf.com> wrote:
->
-> The Google Chameleon v3 is a board made for testing both video and audio
-> interfaces of external devices. It acts as a base board for the
-> Mercury+ AA1 module.
->
-> socfpga_arria10_mercury_aa1.dtsi and socfpga_arria10_chameleonv3.dts
-> have also been sent to u-boot:
-> https://lists.denx.de/pipermail/u-boot/2022-May/485107.html
-> https://lists.denx.de/pipermail/u-boot/2022-May/485111.html
+On Wed, 1 Jun 2022 21:08:06 +0300 Leon Romanovsky wrote:
+> On Wed, Jun 01, 2022 at 10:30:39AM -0700, Jakub Kicinski wrote:
+> > > Thanks, we will submit it once net-next will be open.  
+> > 
+> > It should go via net FWIW.  
+> 
+> I'm slightly confused here.
+> 
+> According to net policy, the patches that goes there should have Fixes
+> line, but Fixes lines are added for bugs [1].
+> 
+> This forgotten line in MAINTAINERS doesn't cause to any harm to
+> users/developers.
 
-Hi Paweł,
+Fair, maybe I worded it too strongly. I should have said something like
+"FWIW it's okay for MAINTAINERS updates to go via net".
 
-The patches look ok to me, but I think you should be sending them to
-Dinh Nguyen for merging through the socfpga tree instead of directly
-going to soc@kernel.org.
+Documentation/ patches and MAINTAINERS are special, they can go into
+net without a Fixes tag so that changes to get_maintainer output and
+https://www.kernel.org/doc/html/latest/ propagate quickly.
 
-      Arnd
+> So when should I put Fixes line in netdev?
+> 
+> [1] https://lore.kernel.org/netdev/20211208070842.0ace6747@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com/
+

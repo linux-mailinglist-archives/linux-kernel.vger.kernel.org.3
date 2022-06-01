@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDE653AFC9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994AC53B02E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbiFAVjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
+        id S231740AbiFAVjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbiFAVj3 (ORCPT
+        with ESMTP id S231714AbiFAVja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:39:29 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01F7139CA5;
-        Wed,  1 Jun 2022 14:39:27 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id x62so3905606ede.10;
-        Wed, 01 Jun 2022 14:39:27 -0700 (PDT)
+        Wed, 1 Jun 2022 17:39:30 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE2713AF1A;
+        Wed,  1 Jun 2022 14:39:29 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id m20so6310687ejj.10;
+        Wed, 01 Jun 2022 14:39:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=yyRNP3vGAFkKTHx9P93DagXSBKy3wcwKPWE0rVPLMZQ=;
-        b=Cp1BG+UT0jiWdXWNMLh7asA4vboh1p6H6p9xUrWnaJG5qf+CkZ7QZ67+kGw43H0WVv
-         2waiJUG+dd/KyBZZ6cZr7awwWKv73jPdTl5F4lMCUGL+pYeCfy0eib+zdJ58D/UJ37xQ
-         d3D86A1WEVYz0CdFspxQu0cQujAveHxspRgSuW8Ep8bZ+XqJSxt/b9MZZM19J8nuJ9mr
-         jeUKWRhp0rtoLNR45VH4/TR7aua9r4Tq98NdRxAMjKZaHtd+iWBXVJmWWPPBTd10nnzV
-         je+Dj/KHITynYZmGgZsCFK93k3RIlEtKbjy5YGqOVMxs4MJfyOJVbXZXLm17eMCw+uTq
-         UkFQ==
+        bh=YrD+JEX1Oyzn9nFf3iDdJCONtWaGtv1YVuVMGJJHK5Q=;
+        b=nOv8RtH0HFqY9i7kNtIoUlTj2rA2stFdVxrRngb+qGhR/TWT/rigMl54nX/AdF2EmJ
+         ZUbTEToOQZbKDzyqCylt7vvkZKKGNadgfTNQ+nswaoJhyKHyP8yPaSuDdqw7UJf5oDD4
+         Xp0PIDgaCddRZIB6ORNldu/wDv4AD3x7ixCO/35lJG94B3jQCOxS//xiu7Nl8csRmGDf
+         R2czBGSlouCmrJLCnfHQjbKNl1iVOlAfMtD9rNm0+AiuVLm6GzxJQvpf7xRDClQrMEeQ
+         IavsMhJlmiIj0XxDmC1w6b9yWUZCEeJvFkM2me8J6zBIE1cc0WDPo+Tal+Gfdf/ZECni
+         +3Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yyRNP3vGAFkKTHx9P93DagXSBKy3wcwKPWE0rVPLMZQ=;
-        b=8EYeY9XsSWtEXeSE6mzJM6QtSOSF9HxdlfRYAylLV6AIuhg5/GOUVtdAFE/AM2sWyR
-         ZyhRu6kggEEbk5R4JvCxBm//C5sFw9Lf2QRzK8Nhk5zLOKq3yFjAsJ2jJ++yFIS/R5Ve
-         W8tBzSpUhfvdtnc8IcpZKwwxfW8gsHYH5mczAF0XjvTn0n3PNbdtsJEEysVuR1XzLaLw
-         wlRlr9C1r1PHTZngqO41hd7kh1vwqYEMQYey1rvDF+4TIpmdvuQgRYVXC3BqLIBxCw7Z
-         TFUH/PjKpVrpyH56SPQtXNxk0jbsEbsh/mR1DysNN5dgRXTRNmRLljG9cvrVYw7zRl+h
-         3N8w==
-X-Gm-Message-State: AOAM533OCjRGtWaCF/jQd5Lewn1mtad6J2+IBLVpJj19QovcPlwPqMlB
-        l2OFvaTDgaO/QQQZtIji77wmXeI9HqBpdTp1
-X-Google-Smtp-Source: ABdhPJx3NKb4pQOtEt7auKhzjmSKlpcYRqJ8hAKswST+/NuQLaaDuoUyjRnlvZC+Y+XS0u70QJ8Hdg==
-X-Received: by 2002:a05:6402:440d:b0:412:9e8a:5e51 with SMTP id y13-20020a056402440d00b004129e8a5e51mr1936036eda.362.1654119566358;
-        Wed, 01 Jun 2022 14:39:26 -0700 (PDT)
+        bh=YrD+JEX1Oyzn9nFf3iDdJCONtWaGtv1YVuVMGJJHK5Q=;
+        b=7TtcwvBRIpq7HiJU03e0moYooSGYy/KRKzbaWPu1tdpntUvlUCgoyuONnUjRLCgUU0
+         Ik48zI8kIq4oW0a7DNxoWuoWTnrDQHWjzAXA1vw1BvOEji0AqDH1s328oudErvNDr8aM
+         Kj8H8xVROe23Yq4w9sW+pNJ+ajbBwNccZCrJMrpWUiLbHKn6QS6opX9HTcniR6UnJ0/4
+         I+lBgjfgvUF5/Dt1qJwX8Z7+upPiCV87K9nAlPHfyFdTLtIB7qeHArebhPb8iXu7lhWg
+         E3kTEYl53rh5VQd9XoPAA1shIErH7GnpyWWIC5qHx4+Pl7aFPpiraNiWax0Kd93R2EQf
+         gpoQ==
+X-Gm-Message-State: AOAM530Bv+c60aSzEaGh//M88GHE8ext5lY8XK9bQwNuv5/2YwJ3AyoL
+        xG668z3X8kJiFNA+3uc+44z7EjYI+QjcJI9O
+X-Google-Smtp-Source: ABdhPJyM3NgfnvqESXniyXc5csiFFzHjwGb/h5F6Rwnq8DGxDzv81rOML4H3v38fSxlsgdiQIEAr0w==
+X-Received: by 2002:a17:906:4b55:b0:6fe:c52c:68c9 with SMTP id j21-20020a1709064b5500b006fec52c68c9mr1439158ejv.491.1654119567976;
+        Wed, 01 Jun 2022 14:39:27 -0700 (PDT)
 Received: from localhost.localdomain ([2a02:ab88:368f:2080:5d6e:322:57b6:5f03])
-        by smtp.googlemail.com with ESMTPSA id a14-20020a170906368e00b006fec5cef701sm1099080ejc.197.2022.06.01.14.39.24
+        by smtp.googlemail.com with ESMTPSA id a14-20020a170906368e00b006fec5cef701sm1099080ejc.197.2022.06.01.14.39.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 14:39:25 -0700 (PDT)
+        Wed, 01 Jun 2022 14:39:27 -0700 (PDT)
 From:   David Virag <virag.david003@gmail.com>
 Cc:     phone-devel@vger.kernel.org,
         David Virag <virag.david003@gmail.com>,
@@ -62,9 +62,9 @@ Cc:     phone-devel@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/5] dt-bindings: clock: Add bindings for Exynos7885 CMU_FSYS
-Date:   Thu,  2 Jun 2022 01:37:39 +0200
-Message-Id: <20220601233743.56317-2-virag.david003@gmail.com>
+Subject: [PATCH 2/5] dt-bindings: clock: Add indices for Exynos7885 TREX clocks
+Date:   Thu,  2 Jun 2022 01:37:40 +0200
+Message-Id: <20220601233743.56317-3-virag.david003@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220601233743.56317-1-virag.david003@gmail.com>
 References: <20220601233743.56317-1-virag.david003@gmail.com>
@@ -81,109 +81,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CMU_FSYS clock domain provides clocks for MMC (MMC_CARD, MMC_EMBD,
-MMC_SDIO), and USB30DRD.
+TREX D Core and P core clocks seem to be related to the BTS (Bus Traffic
+Shaper) inside the Exynos7885 SoC, and are needed for the SoC to
+function correctly.
 
-Add clock indices and bindings documentation for CMU_FSYS domain.
+Add indices for these clocks.
 
 Signed-off-by: David Virag <virag.david003@gmail.com>
 ---
- .../clock/samsung,exynos7885-clock.yaml       | 27 ++++++++++++++++
- include/dt-bindings/clock/exynos7885.h        | 31 ++++++++++++++++++-
- 2 files changed, 57 insertions(+), 1 deletion(-)
+ include/dt-bindings/clock/exynos7885.h | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml b/Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml
-index 5073e569a47f..006d33a9e0f1 100644
---- a/Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml
-@@ -33,6 +33,7 @@ properties:
-     enum:
-       - samsung,exynos7885-cmu-top
-       - samsung,exynos7885-cmu-core
-+      - samsung,exynos7885-cmu-fsys
-       - samsung,exynos7885-cmu-peri
- 
-   clocks:
-@@ -88,6 +89,32 @@ allOf:
-             - const: dout_core_cci
-             - const: dout_core_g3d
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: samsung,exynos7885-cmu-fsys
-+
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: External reference clock (26 MHz)
-+            - description: CMU_FSYS bus clock (from CMU_TOP)
-+            - description: MMC_CARD clock (from CMU_TOP)
-+            - description: MMC_EMBD clock (from CMU_TOP)
-+            - description: MMC_SDIO clock (from CMU_TOP)
-+            - description: USB30DRD clock (from CMU_TOP)
-+
-+        clock-names:
-+          items:
-+            - const: oscclk
-+            - const: dout_fsys_bus
-+            - const: dout_fsys_mmc_card
-+            - const: dout_fsys_mmc_embd
-+            - const: dout_fsys_mmc_sdio
-+            - const: dout_fsys_usb30drd
-+
-   - if:
-       properties:
-         compatible:
 diff --git a/include/dt-bindings/clock/exynos7885.h b/include/dt-bindings/clock/exynos7885.h
-index 1f8701691d62..d2e1483f93e4 100644
+index d2e1483f93e4..8256e7430b63 100644
 --- a/include/dt-bindings/clock/exynos7885.h
 +++ b/include/dt-bindings/clock/exynos7885.h
-@@ -54,7 +54,22 @@
- #define CLK_GOUT_PERI_USI0		43
- #define CLK_GOUT_PERI_USI1		44
- #define CLK_GOUT_PERI_USI2		45
--#define TOP_NR_CLK			46
-+#define CLK_MOUT_FSYS_BUS		46
-+#define CLK_MOUT_FSYS_MMC_CARD		47
-+#define CLK_MOUT_FSYS_MMC_EMBD		48
-+#define CLK_MOUT_FSYS_MMC_SDIO		49
-+#define CLK_MOUT_FSYS_USB30DRD		50
-+#define CLK_DOUT_FSYS_BUS		51
-+#define CLK_DOUT_FSYS_MMC_CARD		52
-+#define CLK_DOUT_FSYS_MMC_EMBD		53
-+#define CLK_DOUT_FSYS_MMC_SDIO		54
-+#define CLK_DOUT_FSYS_USB30DRD		55
-+#define CLK_GOUT_FSYS_BUS		56
-+#define CLK_GOUT_FSYS_MMC_CARD		57
-+#define CLK_GOUT_FSYS_MMC_EMBD		58
-+#define CLK_GOUT_FSYS_MMC_SDIO		59
-+#define CLK_GOUT_FSYS_USB30DRD		60
-+#define TOP_NR_CLK			61
+@@ -72,14 +72,21 @@
+ #define TOP_NR_CLK			61
  
  /* CMU_CORE */
- #define CLK_MOUT_CORE_BUS_USER		1
-@@ -112,4 +127,18 @@
- #define CLK_GOUT_WDT1_PCLK		43
- #define PERI_NR_CLK			44
+-#define CLK_MOUT_CORE_BUS_USER		1
+-#define CLK_MOUT_CORE_CCI_USER		2
+-#define CLK_MOUT_CORE_G3D_USER		3
+-#define CLK_MOUT_CORE_GIC		4
+-#define CLK_DOUT_CORE_BUSP		5
+-#define CLK_GOUT_CCI_ACLK		6
+-#define CLK_GOUT_GIC400_CLK		7
+-#define CORE_NR_CLK			8
++#define CLK_MOUT_CORE_BUS_USER			1
++#define CLK_MOUT_CORE_CCI_USER			2
++#define CLK_MOUT_CORE_G3D_USER			3
++#define CLK_MOUT_CORE_GIC			4
++#define CLK_DOUT_CORE_BUSP			5
++#define CLK_GOUT_CCI_ACLK			6
++#define CLK_GOUT_GIC400_CLK			7
++#define CLK_GOUT_TREX_D_CORE_ACLK		8
++#define CLK_GOUT_TREX_D_CORE_GCLK		9
++#define CLK_GOUT_TREX_D_CORE_PCLK		10
++#define CLK_GOUT_TREX_P_CORE_ACLK_P_CORE	11
++#define CLK_GOUT_TREX_P_CORE_CCLK_P_CORE	12
++#define CLK_GOUT_TREX_P_CORE_PCLK		13
++#define CLK_GOUT_TREX_P_CORE_PCLK_P_CORE	14
++#define CORE_NR_CLK				15
  
-+/* CMU_FSYS */
-+#define CLK_MOUT_FSYS_BUS_USER		1
-+#define CLK_MOUT_FSYS_MMC_CARD_USER	2
-+#define CLK_MOUT_FSYS_MMC_EMBD_USER	3
-+#define CLK_MOUT_FSYS_MMC_SDIO_USER	4
-+#define CLK_MOUT_FSYS_USB30DRD_USER	4
-+#define CLK_GOUT_MMC_CARD_ACLK		5
-+#define CLK_GOUT_MMC_CARD_SDCLKIN	6
-+#define CLK_GOUT_MMC_EMBD_ACLK		7
-+#define CLK_GOUT_MMC_EMBD_SDCLKIN	8
-+#define CLK_GOUT_MMC_SDIO_ACLK		9
-+#define CLK_GOUT_MMC_SDIO_SDCLKIN	10
-+#define FSYS_NR_CLK			11
-+
- #endif /* _DT_BINDINGS_CLOCK_EXYNOS_7885_H */
+ /* CMU_PERI */
+ #define CLK_MOUT_PERI_BUS_USER		1
 -- 
 2.36.1
 

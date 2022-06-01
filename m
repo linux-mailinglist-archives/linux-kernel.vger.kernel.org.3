@@ -2,97 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C483853AF94
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E06753AF1D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbiFAVJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53274 "EHLO
+        id S231398AbiFAVKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiFAVJn (ORCPT
+        with ESMTP id S231183AbiFAVJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:09:43 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E228439689;
-        Wed,  1 Jun 2022 14:09:40 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-f33f0f5b1dso4350502fac.8;
-        Wed, 01 Jun 2022 14:09:40 -0700 (PDT)
+        Wed, 1 Jun 2022 17:09:57 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8EAB1181D
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 14:09:55 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2fb7bf98f1aso25850957b3.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 14:09:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=eoJzH/fmzFvACjVcvXMxe/8zwQW+mPMqokRQV/WBtz0=;
+        b=I4e1nXx9RXm7sY0HmftB536BjJPeFCp3BQy7eEqPUaXM9dJP5nxl/iX3HWy6ta8/po
+         aSntDJ87OZUR0FtlBzM4E3l1cBvHdn/FHX8nlxwNJxOL22ZrI6SfY23BjXbX1q0kvav3
+         xk9J2O1V7l+QEjeclGH2UOIg8sra7op/dGXQsjM8JyhYNakRkeSH7KTyXd9giDnge1CU
+         rclyMxF2ETuh7Oo61zDK5B5zsqJeq7XreghYR6/8bhFkca1C+bklF8YWphFZIi+G7CMp
+         yTvTw+o1tJwJeoGsNXDRp2XEs1aWOU+sdJ5VsjYnISHAHHVhMPpnN/p3IytQmXHpnaFA
+         NcGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lz9YkXmluzI1p168QLYr9xM1kRCaRjaM0/FGvCuSWY8=;
-        b=ApHmYzwBrnWG6LVxH/M/lR0INi2hZThiS4EvtczgX+lEEvZ2h88L1oL99Y3mBoBnb+
-         1FQpBm2QeIGkoHYOJaEoaDYClhliS1TYWspYFyHehq97WWleJ7b3yCP4QOSTL3s8NlVU
-         IGoQsal5GuMZpG3jRasGXYUEEVEtDdPGE38J1toLAm4Gk7zzjS+z1tzTFE+67LeokNEZ
-         5ry7lN5ZFg/W8zeX2CM4oR+fRspuPebxSHNSlseaIGDMgif9rw0lYqWqcH6FoPxHsGvc
-         x9u0F9XAEwhWPU2cXHhVD80sImN/u8a8l6bUOQmk/F/vPJNZuddt00QXRDfZ5f+rZvRf
-         /g1Q==
-X-Gm-Message-State: AOAM5329QLotnAEfov6yzxloEoa0+SiJonQQhrEHVsqoFTNyLn0PTZHi
-        eVUf1LvXwJSRNprM1NqIgw==
-X-Google-Smtp-Source: ABdhPJzrWF2c69+FrFYHc/YQUqCI9lL1oAgA5F5TgXFwkCpLR8CEM1a7l1cxJ8pd4y096o7Y6Bbn3w==
-X-Received: by 2002:a05:6870:f587:b0:f5:eee4:d01c with SMTP id eh7-20020a056870f58700b000f5eee4d01cmr2201713oab.117.1654117780078;
-        Wed, 01 Jun 2022 14:09:40 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q8-20020a056830440800b0060aeccf6b44sm1367078otv.41.2022.06.01.14.09.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 14:09:39 -0700 (PDT)
-Received: (nullmailer pid 457426 invoked by uid 1000);
-        Wed, 01 Jun 2022 21:09:38 -0000
-Date:   Wed, 1 Jun 2022 16:09:38 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Rob Herring <robh+dt@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v3] dt-bindings: display: bridge: sil,sii9022: Convert to
- json-schema
-Message-ID: <20220601210938.GA457343-robh@kernel.org>
-References: <2f8e12b4980a82788c1dd413ceedf8d144fdca91.1652967387.git.geert+renesas@glider.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2f8e12b4980a82788c1dd413ceedf8d144fdca91.1652967387.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=eoJzH/fmzFvACjVcvXMxe/8zwQW+mPMqokRQV/WBtz0=;
+        b=QceMYsjpsVUBgXMBBMTZVWsxf7kP3MKApXctCgDgl3tyuEP4z7lvus77aP/aYgczru
+         8wwk21B5ybry5xGsEEpNFihrqzA9mgBBmhySjI6pRzoil2OsF0+aiE9Szh7RKHiNhDLw
+         jxtL7CRub3eutYCaq6AhWkF0uNXeAJQyye9KaOT6pnFTBwbzRKyxerV/HhyAkqdNSO0B
+         gR+yqE0S2A2TjXe7xnMT4yvq1j0wCHBzWGxIoADK1whGXGC8DTI8RuaBqPwiQyf0hxsK
+         ANmy8P7kR5YhFVYHJHqoOyzlkUhXjFylxEWC2jbxLIiyO9cQvI+/zzVt0fLj+M9M4Gs9
+         PTUw==
+X-Gm-Message-State: AOAM532JcQE4h1yJg65Ee4iHxdiDge8KN5ty21s4NL4MoIBoL3TC9cXm
+        IAPl7ZanIEyXYAMT+f5x7bEpLK+ng+coYo2v8Dc/
+X-Google-Smtp-Source: ABdhPJxCWt56mzfA5CD6MeujZ27HxUTABufO/zQyWKERxfd0WM6O2BB0EgrhAOZyTRsf3KYc/T1JMlERUDmdwQvdDW0w
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:aaec:e358:9f0e:2b26])
+ (user=axelrasmussen job=sendgmr) by 2002:a81:4a02:0:b0:2fe:d277:2b47 with
+ SMTP id x2-20020a814a02000000b002fed2772b47mr1708755ywa.169.1654117794963;
+ Wed, 01 Jun 2022 14:09:54 -0700 (PDT)
+Date:   Wed,  1 Jun 2022 14:09:45 -0700
+Message-Id: <20220601210951.3916598-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+Subject: [PATCH v3 0/6] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Charan Teja Reddy <charante@codeaurora.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022 15:41:06 +0200, Geert Uytterhoeven wrote:
-> Convert the Silicon Image sii902x HDMI bridge Device Tree binding
-> documentation to json-schema.
-> 
-> Add missing sil,sii9022-cpi and sil,sii9022-tpi compatible values.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> v3:
->   - Add comments clarifying CPI/TPI,
->   - Improve wording,
->   - Drop port@2,
->   - Add port descriptions,
->   - Add schema references to individual ports.
-> 
-> v2:
->   - Rework sil,i2s-data-lanes,
->   - Add schema reference to ports.
-> ---
->  .../bindings/display/bridge/sii902x.txt       |  78 -----------
->  .../bindings/display/bridge/sil,sii9022.yaml  | 131 ++++++++++++++++++
->  2 files changed, 131 insertions(+), 78 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/bridge/sii902x.txt
->  create mode 100644 Documentation/devicetree/bindings/display/bridge/sil,sii9022.yaml
-> 
+This series is based on linux-next/akpm-base.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The series is split up like so:
+- Patch 1 is a simple fixup which we should take in any case (even by itself).
+- Patches 2-4 add the feature, basic support for it to the selftest, and docs.
+- Patches 5-6 make the selftest configurable, so you can test one or the other
+  instead of always both. If we decide this is overcomplicated, we could just
+  drop these two patches and take the rest of the series.
+
+Changelog:
+
+v2->v3:
+  - Rebased onto linux-next/akpm-base, in order to be based on top of the
+    run_vmtests.sh refactor which was merged previously.
+  - Picked up some Reviewed-by's.
+  - Fixed ioctl definition (_IO instead of _IOWR), and stopped using
+    compat_ptr_ioctl since it is unneeded for ioctls which don't take a pointer.
+  - Removed the "handle_kernel_faults" bool, simplifying the code. The result is
+    logically equivalent, but simpler.
+  - Fixed userfaultfd selftest so it returns KSFT_SKIP appropriately.
+  - Reworded documentation per Shuah's feedback on v2.
+  - Improved example usage for userfaultfd selftest.
+
+v1->v2:
+  - Add documentation update.
+  - Test *both* userfaultfd(2) and /dev/userfaultfd via the selftest.
+
+Axel Rasmussen (6):
+  selftests: vm: add hugetlb_shared userfaultfd test to run_vmtests.sh
+  userfaultfd: add /dev/userfaultfd for fine grained access control
+  userfaultfd: selftests: modify selftest to use /dev/userfaultfd
+  userfaultfd: update documentation to describe /dev/userfaultfd
+  userfaultfd: selftests: make /dev/userfaultfd testing configurable
+  selftests: vm: add /dev/userfaultfd test cases to run_vmtests.sh
+
+ Documentation/admin-guide/mm/userfaultfd.rst | 40 ++++++++++-
+ Documentation/admin-guide/sysctl/vm.rst      |  3 +
+ fs/userfaultfd.c                             | 76 ++++++++++++++++----
+ include/uapi/linux/userfaultfd.h             |  4 ++
+ tools/testing/selftests/vm/run_vmtests.sh    | 11 ++-
+ tools/testing/selftests/vm/userfaultfd.c     | 66 ++++++++++++++---
+ 6 files changed, 172 insertions(+), 28 deletions(-)
+
+--
+2.36.1.255.ge46751e96f-goog
+

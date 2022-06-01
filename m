@@ -2,127 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B0353A9E2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356EB53A9E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355322AbiFAPYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 11:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        id S1351094AbiFAPY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 11:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244971AbiFAPYJ (ORCPT
+        with ESMTP id S1355341AbiFAPYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 11:24:09 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD74B8AE68;
-        Wed,  1 Jun 2022 08:24:08 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 799FB21A8E;
-        Wed,  1 Jun 2022 15:24:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654097047; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aXHVZxPrCb1BC4QlFo14+VbIvXvZSlCAD3WV4pOVYmw=;
-        b=T922d8GC3bWNBspwD1NiXwCVli/WrJ0y2/jgveZXBNXPO7O3yjF0tFdgjr+1964bwIrTht
-        lGTss9VOc+v0i3QXzuRV0PR6KVNbLsEyx3g6iGuAJC4CA4ofjdFZabdwmryfiMjhH8Nmz4
-        e2Wd+pHLq9B9M2wntZflyZkR+kIrBeU=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D480F2C141;
-        Wed,  1 Jun 2022 15:24:06 +0000 (UTC)
-Date:   Wed, 1 Jun 2022 17:24:06 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Vasily Averin <vvs@openvz.org>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
-Subject: Re: [PATCH mm v3 0/9] memcg: accounting for objects allocated by
- mkdir cgroup
-Message-ID: <YpeElmN07SU9wcca@dhcp22.suse.cz>
-References: <YpSwvii5etfnOYC9@dhcp22.suse.cz>
- <ef9f7516-853d-ffe4-9a7a-5e87556bdbbe@openvz.org>
- <YpTTL3Ys35kgYyAW@dhcp22.suse.cz>
- <3a1d8554-755f-7976-1e00-a0e7fb62c86e@openvz.org>
- <YpXA35F33hvrxNLf@dhcp22.suse.cz>
- <118bcb39-1281-0d1d-b163-3f6bcc99c3e2@openvz.org>
- <20220601091543.GA21320@blackbody.suse.cz>
- <YpcyKdZkdkwUOzuy@dhcp22.suse.cz>
- <YpdkHrbT/xkdx+Qb@dhcp22.suse.cz>
- <Ypd2DW7id4M3KJJW@carbon>
+        Wed, 1 Jun 2022 11:24:24 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B2D95A04;
+        Wed,  1 Jun 2022 08:24:22 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z7so2642461edm.13;
+        Wed, 01 Jun 2022 08:24:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=S2s/uj8WC49ahrReqiF2/cgFexx1dmbjwYjSSVDIU/o=;
+        b=DjueV5cqkCLDw2hnrUIX33XWBicHukWnlU8JpsVLUQV/zDlLzVQKBgbMNSS3+8xeOM
+         T+iTK4xdP+7tuFtcpK6DOA67QPRsliVi5mURa/cM1Hzm4EdzPGQ/bFWGRfqJyE5NBLNW
+         cnIHg9s1YehEYz2oiwdr3U9LAsy0aA+QM3y+opUMH3mwWpDIsDnPDNPv63yg4/zJx5qz
+         T7TfUJ4OWBvAyJqWw0nG36keZ+u12AGDfSpAFYmozpdEDdlFSO93QFOvIe68iBNibIe3
+         YexlIZ5Z3gBC8iLu1+RwCX+/0c2G4GLXnpsTy6ipBevt7rGKrvvGoeL1dPo5uZWBEmzj
+         PvRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=S2s/uj8WC49ahrReqiF2/cgFexx1dmbjwYjSSVDIU/o=;
+        b=Wf5R+prjFvp/lFbc0RgeiI+XvXS3Jn9GmPtMIy9ffc86nDVV2CE48Jwboe5Pmfdw4K
+         Dyj/Mfxlop4OnPbJ14xFv9aqo8tu6B2/928J9ECemFPayeoBaP9H7rRY1r5p2MpDr3bH
+         MYuOH8eXd9JL21GwhXKCZgh9Ivaw1GJ3EG2q/YgI4mbdV9npbutMCNMiwNxzEgObWW0q
+         1E4sfwCm8C7/Dvd+CwXZ/dlByEcKGTarnGSP/1WVUnItBwXrhfMr+rLGYgqNrMv1xPw8
+         ns7dWrGMVF4AATRRj84cX7XvPwD2+S/ASlks2p0rNwxmxhN2MPoITkBaZuBqY6u/ENYE
+         I4ew==
+X-Gm-Message-State: AOAM533WPOuNGCyLpQ6zbQBO6T+zCzD73VfjqsMK5lzwQN154wQ//7Re
+        CMrx7P3s0jxASVL7g7WJvfk=
+X-Google-Smtp-Source: ABdhPJwDn4fYWychN9HWMd5ASr5v4eS7KmbuP60hlN+FSZkXniYTiTP0CoX3vAPP5IkPA4FBXuQgrg==
+X-Received: by 2002:a05:6402:2548:b0:42d:dd95:5bfe with SMTP id l8-20020a056402254800b0042ddd955bfemr205534edb.285.1654097060744;
+        Wed, 01 Jun 2022 08:24:20 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id bv15-20020a170906b1cf00b006f4c4330c49sm846072ejb.57.2022.06.01.08.24.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 08:24:20 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: Re: [PATCH 0/3] pinctrl: sunxi: Remove non-existent reset line references
+Date:   Wed, 01 Jun 2022 17:24:08 +0200
+Message-ID: <2828716.e9J7NaK4W3@kista>
+In-Reply-To: <48570ec3-8159-11ae-8069-7f001081fd56@sholland.org>
+References: <20220531053623.43851-1-samuel@sholland.org> <4400164.LvFx2qVVIh@kista> <48570ec3-8159-11ae-8069-7f001081fd56@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ypd2DW7id4M3KJJW@carbon>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 01-06-22 07:22:05, Roman Gushchin wrote:
-> On Wed, Jun 01, 2022 at 03:05:34PM +0200, Michal Hocko wrote:
-> > On Wed 01-06-22 11:32:26, Michal Hocko wrote:
-> > > On Wed 01-06-22 11:15:43, Michal Koutny wrote:
-> > > > On Wed, Jun 01, 2022 at 06:43:27AM +0300, Vasily Averin <vvs@openvz.org> wrote:
-> > > > > CT-901 /# cat /sys/fs/cgroup/memory/cgroup.subgroups_limit 
-> > > > > 512
-> > > > > CT-901 /# echo 3333 > /sys/fs/cgroup/memory/cgroup.subgroups_limit 
-> > > > > -bash: echo: write error: Operation not permitted
-> > > > > CT-901 /# echo 333 > /sys/fs/cgroup/memory/cgroup.subgroups_limit 
-> > > > > -bash: echo: write error: Operation not permitted
-> > > > > 
-> > > > > I doubt this way can be accepted in upstream, however for OpenVz
-> > > > > something like this it is mandatory because it much better
-> > > > > than nothing.
-> > > > 
-> > > > Is this customization of yours something like cgroup.max.descendants on
-> > > > the unified (v2) hierarchy? (Just curious.)
-> > > > 
-> > > > (It can be made inaccessible from within the subtree either with cgroup
-> > > > ns or good old FS permissions.)
-> > > 
-> > > So we already do have a limit to prevent somebody from running away with
-> > > the number of cgroups. Nice!
-> 
-> Yes, we do!
-> 
-> > > I was not aware of that and I guess this
-> > > looks like the right thing to do. So do we need more control and
-> > > accounting that this?
-> > 
-> > I have checked the actual implementation and noticed that cgroups are
-> > uncharged when offlined (rmdir-ed) which means that an adversary could
-> > still trick the limit and runaway while still consuming resources.
-> > 
-> > Roman, I guess the reason for this implementation was to avoid limit to
-> > trigger on setups with memcgs which can take quite some time to die?
-> > Would it make sense to make the implementation more strict to really act
-> > as gate against potential cgroups count runways?
-> 
-> The reasoning was that in many cases a user can't do much about dying cgroups,
-> so it's not clear how they should/would handle getting -EAGAIN on creating a
-> new cgroup (retrying will not help, obviously). Live cgroups can be easily
-> deleted, dying cgroups - not always.
-> 
-> I'm not sure about switching the semantics. I'd wait till Muchun's lru page
-> reparenting will be landed (could be within 1-2 releases, I guess) and then we
-> can check whether the whole problem is mostly gone. Honestly, I think we might
-> need to fix few another things, but it might be not that hard (in comparison
-> to what we already did).
+Dne sreda, 01. junij 2022 ob 06:42:34 CEST je Samuel Holland napisal(a):
+> Hi Jernej,
+>=20
+> On 5/31/22 10:22 AM, Jernej =C5=A0krabec wrote:
+> > Dne torek, 31. maj 2022 ob 07:36:20 CEST je Samuel Holland napisal(a):
+> >> I assume these properties came from a lack of documentation, and the
+> >> very reasonable assumption that where there's a clock gate bit in the
+> >> CCU, there's a reset bit. But the pin controllers are special and don't
+> >> have a module reset line. The only way to reset the pin controller is =
+to
+> >> reset the whole VDD_SYS power domain.
+> >>
+> >> This series is preparation for converting the PRCM MFD and legacy clock
+> >> drivers to a CCU clock/reset driver like all of the other Allwinner
+> >> SoCs. I don't plan to add reset lines that don't actually exist to the
+> >> new CCU driver. So we might as well get rid of the references now.
+> >> Technically this breaks devicetree compatibility, since the old drivers
+> >> expect the reset. But the CCU conversion will be a compatibility break
+> >> anyway, so it's a bit of a moot point.
+> >=20
+> > If I understand correclty, this would cause only DT forward compatibili=
+ty=20
+> > issue, which happens now and then anyway. Kernel would still be compati=
+ble=20
+> > with older DTs, it would just ignore that reset, right?
+>=20
+> Right, this only prevents older kernels from working with newer devicetre=
+es.=20
+I
+> brought it up because I'm generally trying to minimize how much we do tha=
+t.
 
-OK, thanks for the confirmation! Say we end up mitigating the
-too-easy-to-linger memcgs long standing issue. Do we still need an
-extended cgroup data structure accounting?
+All good then, this series is:
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
--- 
-Michal Hocko
-SUSE Labs
+Best regards,
+Jernej
+
+

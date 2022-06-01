@@ -2,95 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F45539B47
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F961539B4B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349188AbiFAC0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 22:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
+        id S1349190AbiFAC2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 22:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbiFAC0G (ORCPT
+        with ESMTP id S231981AbiFAC2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 22:26:06 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75ED58723D;
-        Tue, 31 May 2022 19:26:05 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id w10so341148vsa.4;
-        Tue, 31 May 2022 19:26:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YpXzXAPejgWgPrC0CnOM+GA27MWRTR2lw+J/3W1An1g=;
-        b=I9BZQdCtgWQDSRXmH2jzuW8s1CG3TtW/pYGutaIn6W9tvPPOkT46hdmcqp8IS/ewdy
-         OwQ/EB4rQgeSVkeWKX43xO+Xn4BHNUpWlBu9WgWw1OlSFwQgbk5ZpqlF/njkx5mCwj/v
-         sqeHpw8wYRne2V1AjCua/TiVpqvTV5I+mOQ8ed5Gw8qVlVUahIqn/ALQgN1/jhbBLUJv
-         NyQzIxMzp0Q5KrWGffdNjls1D0ggnyElBeV5J74qPMPU0qDN+yZKwaD5C4TYVFv0MBoJ
-         47XYatXLBQ/wo2U9cdmz7t16UMi6m3jOxqTLAw4LME4QczqmIwMhkuHtJ8EWue+i4+NO
-         KkDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YpXzXAPejgWgPrC0CnOM+GA27MWRTR2lw+J/3W1An1g=;
-        b=5Yqt3v8FHPhTXOXSzOJ/9BJCc/sd1y+IRPGSIz1i+7XGCtB3MJ5ENA3pM+HKs/d7RU
-         ZsZYxncipUa2BPjNhISiQu7hmN/qXiOnCT7rPLkzFdwRUUMq4Im+lmwx3DW6aHvS0P6u
-         HtTbXjxuCuoCc8s8x1E30nGbue0bNXZnyP5KDzp7pgww+hND7lRhE4oDH7nYaHBAt3vY
-         twIzHWckAzPR/WJ5U3DvsfXskgLeyuMQABnD8dW456KaoIB/cSP/m7uNVRo9S0HwB5v+
-         xpu1Dwub3fBXhl/tuzAhjHGMf2sfx04flsW53eN5M80B2kMKeNe+dCFkz54krLswMOX5
-         6ScA==
-X-Gm-Message-State: AOAM531PA77unKIUTC+bi/s2EVLaBXLRWhmEo14FBM1LbqY0cBkPi7Q5
-        tVfPTvCL7TWbvdKokqU4R4o82eisk7gHd+UkJuS9ieg=
-X-Google-Smtp-Source: ABdhPJzpkKT6PL/qsAp0D0vVWeqB7UAmy4qxR3oYi/Cz+vdxMyZWo7DiMN+/Lm0o1d50l06bPUt6Sv+Td1cnMp9jJbo=
-X-Received: by 2002:a05:6102:50a4:b0:335:bfc3:5cda with SMTP id
- bl36-20020a05610250a400b00335bfc35cdamr25255705vsb.85.1654050364452; Tue, 31
- May 2022 19:26:04 -0700 (PDT)
+        Tue, 31 May 2022 22:28:22 -0400
+Received: from out199-7.us.a.mail.aliyun.com (out199-7.us.a.mail.aliyun.com [47.90.199.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C489A66C93;
+        Tue, 31 May 2022 19:28:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VEyjSoC_1654050495;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VEyjSoC_1654050495)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 01 Jun 2022 10:28:15 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     miklos@szeredi.hu
+Cc:     linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] ovl: Fix some kernel-doc comments
+Date:   Wed,  1 Jun 2022 10:28:14 +0800
+Message-Id: <20220601022814.122620-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20220601082959.2fefa1e7@canb.auug.org.au> <YpaYEtWSEyD7WKCU@pendragon.ideasonboard.com>
-In-Reply-To: <YpaYEtWSEyD7WKCU@pendragon.ideasonboard.com>
-From:   Rob Herring <robherring2@gmail.com>
-Date:   Tue, 31 May 2022 21:25:53 -0500
-Message-ID: <CAL_Jsq+52mozs2-9kYerNPLQzQ+p0JR1aeDxkdB3fc4RTK2vKA@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the devicetree-fixes tree
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 5:35 PM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> On Wed, Jun 01, 2022 at 08:29:59AM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > In commit
-> >
-> >   adb97f9f8442 ("dt-bindings: soc: imx8mp-media-blk-ctrl: Fix DT example")
-> >
-> > Fixes tag
-> >
-> >   Fixes: 584d6dd668e2 ("dt-bindings: soc: Add i.MX8MP media block control DT bindings")
-> >
-> > has these problem(s):
-> >
-> >   - Target SHA1 does not exist
-> >
-> > Maybe you meant
-> >
-> > Fixes: 8b3dd27bfe47 ("dt-bindings: soc: Add i.MX8MP media block control DT bindings")
->
-> My bad, that's the correct SHA1.
+Remove warnings found by running scripts/kernel-doc,
+which is caused by using 'make W=1'.
+fs/overlayfs/super.c:311: warning: Function parameter or member 'dentry'
+not described in 'ovl_statfs'
+fs/overlayfs/super.c:311: warning: Excess function parameter 'sb'
+description in 'ovl_statfs'
+fs/overlayfs/super.c:357: warning: Function parameter or member 'm' not
+described in 'ovl_show_options'
+fs/overlayfs/super.c:357: warning: Function parameter or member 'dentry'
+not described in 'ovl_show_options'
 
-Now fixed.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ fs/overlayfs/super.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Rob
+diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
+index e0a2e0468ee7..9282296dc4c9 100644
+--- a/fs/overlayfs/super.c
++++ b/fs/overlayfs/super.c
+@@ -301,7 +301,7 @@ static int ovl_sync_fs(struct super_block *sb, int wait)
+ 
+ /**
+  * ovl_statfs
+- * @sb: The overlayfs super block
++ * @dentry: The dentry to query
+  * @buf: The struct kstatfs to fill in with stats
+  *
+  * Get the filesystem statistics.  As writes always target the upper layer
+@@ -349,6 +349,8 @@ static inline int ovl_xino_def(void)
+ 
+ /**
+  * ovl_show_options
++ * @m: the seq_file handle
++ * @dentry: The dentry to query
+  *
+  * Prints the mount options for a given superblock.
+  * Returns zero; does not fail.
+-- 
+2.20.1.7.g153144c
+

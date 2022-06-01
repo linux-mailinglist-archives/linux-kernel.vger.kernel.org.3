@@ -2,139 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96B053A125
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 471E453A12B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 11:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351470AbiFAJrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 05:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49740 "EHLO
+        id S1347160AbiFAJrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 05:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351508AbiFAJr0 (ORCPT
+        with ESMTP id S1351430AbiFAJr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Jun 2022 05:47:26 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2235000B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 02:47:12 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d22so1285969plr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 02:47:12 -0700 (PDT)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C969F4EA3B;
+        Wed,  1 Jun 2022 02:47:11 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id h5so1589592wrb.0;
+        Wed, 01 Jun 2022 02:47:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kFnswbSxGwrRy/NQADQjmmMBaytsFgRzRtZUq2P5fVw=;
-        b=ErjYVzHSMtL2UomTsVi7tibDCfhMwLbxBslThaP44wqh4DHChnKrN++NI5RhSZPYfC
-         Gm3RRstEdhV4L3kxlolN40Nsg9TYKbIF6sbCjvLhWMacNHii7EhOCl8zF8PssLNTP/fS
-         YGFNj0OxIkbV3RMUocdQHadyiWO87CoS4BxS8=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CKOCWfdmOOI9xdIls2//FVypVbNOjkaoePDp+LmHECs=;
+        b=bF66OCt1fmRCDaA+t4Tc507PLEIL5n22wKaPSZPBdiX9tCrzxa03BOfjkj3XwWUeoe
+         5AKv9GYjATj/PtsucfdqvJw4HTXAZorhMpdX1OFjbc0MwP5xhWjZGkd+2lBI2e6Kntn7
+         V3HosqigOpF+m9AFbukSpzI4ELDZZ/tArGScy2BoP1VPHm1CLszlKwRd6Ke2PhGiFDX7
+         HWO8tlKeds0V49+PMDQKhbyrvfKQk5gUb1LnqOPAqeKeluSEkv2kl+MFeIsM3F3YuKpY
+         kObCcW8gvera8uEaPBa17VFwPcCxv4iKWXeut+pXJharcOmyY0QEmgRGBCiy7HykIFNG
+         ekHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kFnswbSxGwrRy/NQADQjmmMBaytsFgRzRtZUq2P5fVw=;
-        b=4YyLxv1hd476923St5ba2+WGj8slARQAgrVkdceAqsvS1F2gZ1FOmZeaeFbU9FQ2T2
-         jhHhYVt6dKhr8Pgtj6fAEzimWHnNsOTWXXHkqGGjlGTTxjkgD5Qs6xbUb69iuM+XsNUn
-         mPmBstZ42In5TwFMiRj8QnTabicQMWwIOse2FPS11q8Ske0HKSJPiN7nWvEdiaUHzJx2
-         EpBlupW1Hy3FElJ3v2qzwjN2EIZdvz/1+TQP24czgWriUcQI0JMr2RAD7FTCftbw9txi
-         uwDzCW7rVmFr6XSq3iiwgPgblGxNU2jXcLkoduMkjC+bliS7YWxhZTf255v0jLmZgyI1
-         0WEA==
-X-Gm-Message-State: AOAM532o4yx4BJB8CDYdXYQG5Im2V83ZhvaSa8rwbxhRNzK70eAydTdd
-        EgkGGL1DAEP3kBIupM746bFynA==
-X-Google-Smtp-Source: ABdhPJxrRTUbKi5bPBa/fX0MOFI2Wb3mwKyCfpA3888E4QDVRu2YuRIzrg8baKhCW1q9srQYrEq3/w==
-X-Received: by 2002:a17:902:aa04:b0:163:c204:f41 with SMTP id be4-20020a170902aa0400b00163c2040f41mr17751950plb.172.1654076831401;
-        Wed, 01 Jun 2022 02:47:11 -0700 (PDT)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:dc30:e75c:ae95:f2d6])
-        by smtp.gmail.com with ESMTPSA id x42-20020a056a0018aa00b0050dc762815esm1039494pfh.56.2022.06.01.02.47.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 02:47:11 -0700 (PDT)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        Rob Clark <robdclark@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 8/8] drm/mediatek: Config orientation property if panel provides it
-Date:   Wed,  1 Jun 2022 17:46:37 +0800
-Message-Id: <20220601094637.1200634-9-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-In-Reply-To: <20220601094637.1200634-1-hsinyi@chromium.org>
-References: <20220601094637.1200634-1-hsinyi@chromium.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CKOCWfdmOOI9xdIls2//FVypVbNOjkaoePDp+LmHECs=;
+        b=BPPAWk9JcxjxnouTH5LMAKuXcmygOR4FjuBAHWV2/hXJsqtzA2Dzc8Gsdgwe9Y6xf8
+         rrqrzVJXNIbpK0DDjQrFRcDC3A2rtqBfWKQ2iDeXaAlULeKjbcbLUajWkNejjTueKUjy
+         C64qkJnwX1egLvna3Ft0HVNDIep14pIemwMkAnjVxwqXkaHOA2mfOG+uPpVTafHRP9P+
+         l5kuoWX6k5AqeglWi2tZn+pmE8goQdko+aL14A02LRNuVeWuE3mZS3nRKqVB+tFLMoic
+         bKH1xHLqUjUUqw3gaOM/WS4XhbxPpGGOkw3ZRnT2oI4Ay517lz9KbE/MWMVVpMnQf9N8
+         IECA==
+X-Gm-Message-State: AOAM531d1XP7uK4iS/X01sUQJZur71T9J55kcdaKYCLXlKHNq7ZwCeyL
+        P/vLMgaLUOQjx8SMDNFIRko=
+X-Google-Smtp-Source: ABdhPJzJw3e/qEJAYVU4JAED1FujPkMVrsu7b6xncg93Ro2/8ItNX0kIqnBW5tB+W+IbYS0vDNlbxg==
+X-Received: by 2002:a5d:6984:0:b0:210:e15:9a7b with SMTP id g4-20020a5d6984000000b002100e159a7bmr24357441wru.30.1654076830023;
+        Wed, 01 Jun 2022 02:47:10 -0700 (PDT)
+Received: from [192.168.1.101] ([160.177.66.137])
+        by smtp.gmail.com with ESMTPSA id o15-20020a5d4a8f000000b0020c5253d8edsm1078356wrq.57.2022.06.01.02.47.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 02:47:09 -0700 (PDT)
+Message-ID: <0b4abf17-f44d-dec4-56f4-0ae12e49b05b@gmail.com>
+Date:   Wed, 1 Jun 2022 02:47:06 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 2/3] arm64: dts: add dts files for bcmbca SoC bcm4912
+Content-Language: en-US
+To:     William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     dan.beygelman@broadcom.com, philippe.reynes@softathome.com,
+        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        samyon.furman@broadcom.com, kursad.oney@broadcom.com,
+        joel.peshkin@broadcom.com,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220601004244.27394-1-william.zhang@broadcom.com>
+ <20220601004244.27394-3-william.zhang@broadcom.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220601004244.27394-3-william.zhang@broadcom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Panel orientation property should be set before drm_dev_register().
-Mediatek drm driver calls drm_dev_register() in .bind(). However, most
-panels sets orientation property relatively late, mostly in .get_modes()
-callback, since this is when they are able to get the connector and
-binds the orientation property to it, though the value should be known
-when the panel is probed.
 
-Let the drm driver check if the remote end point is a panel and if it
-contains the orientation property. If it does, set it before
-drm_dev_register() is called.
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
----
-v1->v2: remove unused checks.
----
- drivers/gpu/drm/mediatek/mtk_dsi.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+On 5/31/2022 5:42 PM, William Zhang wrote:
+> Add dts for ARMv8 based broadband SoC BCM4912. bcm4912.dtsi is the
+> SoC description dts header and bcm94912.dts is a simple dts file for
+> Broadcom BCM94912 Reference board that only enable the UART port.
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> 
+> ---
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index bd3f5b485085..86613360d2d9 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -185,6 +185,7 @@ struct mtk_dsi {
- 	struct drm_encoder encoder;
- 	struct drm_bridge bridge;
- 	struct drm_bridge *next_bridge;
-+	struct drm_panel *panel;
- 	struct drm_connector *connector;
- 	struct phy *phy;
- 
-@@ -822,6 +823,12 @@ static int mtk_dsi_encoder_init(struct drm_device *drm, struct mtk_dsi *dsi)
- 		ret = PTR_ERR(dsi->connector);
- 		goto err_cleanup_encoder;
- 	}
-+
-+	/* Read panel orientation */
-+	if (dsi->panel)
-+		drm_connector_set_panel_orientation(dsi->connector,
-+				drm_panel_get_orientation(dsi->panel));
-+
- 	drm_connector_attach_encoder(dsi->connector, &dsi->encoder);
- 
- 	return 0;
-@@ -837,6 +844,9 @@ static int mtk_dsi_bind(struct device *dev, struct device *master, void *data)
- 	struct drm_device *drm = data;
- 	struct mtk_dsi *dsi = dev_get_drvdata(dev);
- 
-+	/* Get panel if existed */
-+	drm_of_find_panel_or_bridge(dev->of_node, 0, 0, &dsi->panel, NULL);
-+
- 	ret = mtk_dsi_encoder_init(drm, dsi);
- 	if (ret)
- 		return ret;
+[snip]
+
+> +
+> +	axi@81000000 {
+> +		compatible = "simple-bus";
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+
+See comment below for the ubus node.
+
+> +		ranges = <0x0 0x0 0x0 0x81000000 0x0 0x8000>;
+> +
+> +		gic: interrupt-controller@1000 {
+> +			compatible = "arm,gic-400";
+> +			#interrupt-cells = <3>;
+> +			interrupt-controller;
+> +			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+> +			reg = <0x0 0x1000 0x0 0x1000>,
+> +				<0x0 0x2000 0x0 0x2000>,
+> +				<0x0 0x4000 0x0 0x2000>,
+> +				<0x0 0x6000 0x0 0x2000>;
+> +		};
+> +	};
+> +
+> +	bus@ff800000 {
+> +		compatible = "simple-bus";
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+
+This does not quite make sense, as I doubt that this part of the bus is 
+64-bit capable, rather, I would expect to find both #address-cells and 
+#size-cells to be set to 1 and ... (see below)
+
+> +		ranges = <0x0 0x0 0x0 0xff800000 0x0 0x800000>;
+> +
+> +		uart0: serial@12000 {
+> +			compatible = "arm,pl011", "arm,primecell";
+> +			reg = <0x0 0x12000 0x0 0x1000>;
+
+... have this become simply:
+
+			reg = <0x12000 0x1000>:
+
+which also looks awfully big for an UART block, an entire 4KB worth of 
+register space?
 -- 
-2.36.1.255.ge46751e96f-goog
-
+Florian

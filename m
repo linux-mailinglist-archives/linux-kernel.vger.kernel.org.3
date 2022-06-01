@@ -2,220 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7CC539F70
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2D8539FA1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350678AbiFAI1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 04:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S1350870AbiFAIhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350621AbiFAI1K (ORCPT
+        with ESMTP id S1347154AbiFAIhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:27:10 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A54FDE99
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:27:04 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id u12so2173024eja.8
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 01:27:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=suGTguNgHNwFoVKJnInY/A0FAKDNS8MrOyf97TQ0XqE=;
-        b=Kz8kZXot4lBQ750zIIvzF3+bHcnNBQtqQzQ1b2o8YXiovCx4t37CQJaYYLktnNzNWJ
-         oiuAIk4+P0ht5DpbHp+/pH42JI/DYgbAj/NglXOGybp75vRdDPoI+c7MEl2u+BKuUcEg
-         G0ED2t7sW1NRpNK8E9QGxnmiTuZCCtBR+LrDM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=suGTguNgHNwFoVKJnInY/A0FAKDNS8MrOyf97TQ0XqE=;
-        b=P0tb/vJoWxlQO0B/OQ06ggoNT6YEcQiqYrF6pSSQ/i/J04wZRBsnXYhc6CprT0dxBo
-         PAd0UVch4sAdzBWEfPNWQmJRtU3x1FBAZ2wlCcxXTp4o8KwhXEFGjSlASx79tTUfjUdM
-         Wmd8PcZWf902ytxfvejm9cnPPrOJbcZ2wuKCaQ7H6iVVq83/oSgmb+zpXJzvBSDPiVeB
-         y9r5x0dEnpK9CCNHGJl5U/Db6Y9WkwANG4ktIBZEbV6sPhBqe8vcxThKzsflaOfXCQTP
-         /9ShCEsv7Ha+4ZEA5d34Gv4pVoBvgv23yElVy8MOwUozUDjym3X/FcgaCUoUwMNZZ6FF
-         Gi0A==
-X-Gm-Message-State: AOAM530dMaVZhKspdhCZtfctbTLdMuG0g6SQFwyjNy41sjjnY5Pkwwy6
-        mFifQddW1hooQbj7cN46Ctb5xutVBS0NE5zZZhkEfg==
-X-Google-Smtp-Source: ABdhPJzKyQ9RhDDQ9wnQwF0m5mvEJpb5dxyTIDWPhvbLIROaZRgzrB121HfZ6Kvw/3Mtkh8DpWUjMyD3cSjoY6y1xU0=
-X-Received: by 2002:a17:906:d7ba:b0:6fe:a119:c4ac with SMTP id
- pk26-20020a170906d7ba00b006fea119c4acmr54450591ejb.129.1654072023238; Wed, 01
- Jun 2022 01:27:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220530081910.3947168-1-hsinyi@chromium.org> <a8d1fe13-e747-016a-2d45-bfb50f23f2d9@redhat.com>
- <CAJMQK-iM-ip7edA2mBOhp-8maWKG5+kTceZUM5U6BOLLBq1H4Q@mail.gmail.com> <5ba0b86a-fa9c-ed97-3b43-7814599deab5@redhat.com>
-In-Reply-To: <5ba0b86a-fa9c-ed97-3b43-7814599deab5@redhat.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Wed, 1 Jun 2022 16:26:37 +0800
-Message-ID: <CAJMQK-iYy1ONRF-4Y5DriogsJX3F0MD_951pdKK0rpT3j=keYw@mail.gmail.com>
-Subject: Re: [PATCH v10 0/4] Separate panel orientation property creating and
- value setting
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Sean Paul <sean@poorly.run>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Wed, 1 Jun 2022 04:37:11 -0400
+X-Greylist: delayed 516 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Jun 2022 01:37:09 PDT
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc09])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C959721819
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:37:09 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4LCj3106knzMprL9;
+        Wed,  1 Jun 2022 10:28:29 +0200 (CEST)
+Received: from [10.0.0.141] (unknown [31.10.206.125])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4LCj300xmMzlhs7p;
+        Wed,  1 Jun 2022 10:28:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
+        s=20220412; t=1654072108;
+        bh=Mxe97A1GNK58/rOoNSBOXmeHmHULjXJ31P/mKWrLzv4=;
+        h=Subject:From:Reply-To:To:Cc:Date:In-Reply-To:References:From;
+        b=I+VDQNdDVJO53tsfUev2HYDDi2xbfy+3H92LPzqKmqJBf57b1oH/UVgYjGKgs4Pdb
+         wU0PTT2ybRQi5XSUqyvtb5AsTfFbuzSk7vdgjuDSSpSB2YqoIfjAWzqEYcQ/xBhJEP
+         ChW2tB1NS/RJdQL+nA3t7oXYxTR0ukB7FXRaO9c8=
+Message-ID: <e93aef5c9f8a97efe23cfb5892f78f919ce328e7.camel@pschenker.ch>
+Subject: Re: [PATCH] Revert "mt76: mt7921: enable aspm by default"
+From:   Philippe Schenker <dev@pschenker.ch>
+Reply-To: dev@pschenker.ch
+To:     Deren Wu <deren.wu@mediatek.com>, Kalle Valo <kvalo@kernel.org>
+Cc:     linux-wireless@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
+        linux@leemhuis.info, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Simon Ser <contact@emersion.fr>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
+        Paolo Abeni <pabeni@redhat.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        YN Chen <YN.Chen@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org
+Date:   Wed, 01 Jun 2022 10:28:27 +0200
+In-Reply-To: <668f1310cc78b17c24ce7be10f5f907d5578e280.camel@mediatek.com>
+References: <20220412090415.17541-1-dev@pschenker.ch>
+         <87y20aod5d.fsf@kernel.org>
+         <668f1310cc78b17c24ce7be10f5f907d5578e280.camel@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 6:56 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 5/30/22 13:34, Hsin-Yi Wang wrote:
-> > On Mon, May 30, 2022 at 4:53 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> >>
-> >> Hi,
-> >>
-> >> On 5/30/22 10:19, Hsin-Yi Wang wrote:
-> >>> Some drivers, eg. mtk_drm and msm_drm, rely on the panel to set the
-> >>> orientation. Panel calls drm_connector_set_panel_orientation() to create
-> >>> orientation property and sets the value. However, connector properties
-> >>> can't be created after drm_dev_register() is called. The goal is to
-> >>> separate the orientation property creation, so drm drivers can create it
-> >>> earlier before drm_dev_register().
-> >>
-> >> Sorry for jumping in pretty late in the discussion (based on the v10
-> >> I seem to have missed this before).
-> >>
-> >> This sounds to me like the real issue here is that drm_dev_register()
-> >> is getting called too early?
-> >>
-> > Right.
-> >
-> >> To me it seems sensible to delay calling drm_dev_register() and
-> >> thus allowing userspace to start detecting available displays +
-> >> features until after the panel has been probed.
-> >>
-> >
-> > Most panels set this value very late, in .get_modes callback (since it
-> > is when the connector is known), though the value was known during
-> > panel probe.
->
-> Hmm I would expect the main drm/kms driver to register the drm_connector
-> object after probing the panel, right ?
->
-> So maybe this is a problem with the panel API? How about adding
-> separate callback to the panel API to get the orientation, which the
-> main drm/kms driver can then call before registering the connector ?
->
-> And then have the main drm/kms driver call
-> drm_connector_set_panel_orientation() with the returned orientation
-> on the connecter before registering it.
->
-> The new get_orientation callback for the panel should of course
-> be optional (IOW amy be NULL), so we probably want a small
-> helper for drivers using panel (sub)drivers to take care of
-> the process of getting the panel orientation from the panel
-> (if supported) and then setting it on the connector.
->
+On Tue, 2022-04-12 at 19:06 +0800, Deren Wu wrote:
+> On Tue, 2022-04-12 at 12:37 +0300, Kalle Valo wrote:
+> > Philippe Schenker <dev@pschenker.ch> writes:
+> >=20
+> > > This reverts commit bf3747ae2e25dda6a9e6c464a717c66118c588c8.
+> > >=20
+> > > This commit introduces a regression on some systems where the
+> > > kernel is
+> > > crashing in different locations after a reboot was issued.
+> > >=20
+> > > This issue was bisected on a Thinkpad P14s Gen2 (AMD) with latest
+> > > firmware.
+> > >=20
+> > > Link:=20
+> > > https://urldefense.com/v3/__https://lore.kernel.org/linux-wireless/50=
+77a953487275837e81bdf1808ded00b9676f9f.camel@pschenker.ch/__;!!CTRNKA9wMg0A=
+Rbw!09tjyaQlMci3fVI3yiNiDJKUW_qwNA_CbVhoAraeIX96B99Q14J4iDycWA9cq36Y$
+> > > =C2=A0
+> > > Signed-off-by: Philippe Schenker <dev@pschenker.ch>
+> >=20
+> > Can I take this to wireless tree? Felix, ack?
+> >=20
+> > I'll also add:
+> >=20
+> > Fixes: bf3747ae2e25 ("mt76: mt7921: enable aspm by default")
+> >=20
+>=20
+> Hi Kalle,
+>=20
+> We have a patch for a similar problem. Can you wait for the
+> verification by Philippe?
+> Commit 602cc0c9618a81 ("mt76: mt7921e: fix possible probe failure
+> after
+> reboot")
+> Link:=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
+/drivers/net/wireless/mediatek/mt76?id=3D602cc0c9618a819ab00ea3c9400742a0ca=
+318380
+>=20
+> I can reproduce the problem in my v5.16-rc5 desktop. And the issue can
+> be fixed when the patch applied.
+>=20
+>=20
+> Hi Philippe,
+>=20
+> Can you please help to check the patch in your platform?
 
-Hi Hans,
+Hi Kalle and Deren,
 
-Thanks for the suggestion. I've sent a new version for this:
-https://patchwork.kernel.org/project/dri-devel/patch/20220601081823.1038797-2-hsinyi@chromium.org/
+I just noticed on my system and mainline v5.18 reboots do now work
+however Bluetooth is no longer accessible after a reboot.
 
-Panel can implement the optional callback to return the orientation
-property, while drm/kms driver will call a drm API to get the value
-then they can call drm_connector_set_panel_orientation().
-Panel .get_mode will still call drm_connector_set_panel_orientation()
-but now it will be a no-op as the value was set by drm/kms driver
-previously.
+Reverting commit bf3747ae2e25dda6a9e6c464a717c66118c588c8 on top of
+v5.18 solves this problem for me.
 
-This is similar to the small patch below:
-https://patchwork.kernel.org/project/linux-mediatek/patch/20220530113033.124072-1-hsinyi@chromium.org/
-But it's now using the panel API.
+@Deren are you aware of this bug?
+@Kalle Is there a bugtracker somewhere I can submit this?
 
->
-> > I think we can also let drm check if they have remote panel nodes: If
-> > there is a panel and the panel sets the orientation, let the drm read
-> > this value and set the property. Does this workflow sound reasonable?
-> >
-> > The corresponding patch to implement this:
-> > https://patchwork.kernel.org/project/linux-mediatek/patch/20220530113033.124072-1-hsinyi@chromium.org/
->
-> That is a suprisingly small patch (which is good). I guess that
-> my suggestion to add a new panel driver callback to get
-> the orientation would be a bit bigget then this. Still I think
-> that that would be a bit cleaner, as it would also solve this
-> for cases where the orientation comes from the panel itself
-> (through say some EDID extenstion) rather then from devicetree.
->
-> Still I think either way should be acceptable upstream.
->
-> Opinions from other drm devs on the above are very much welcome!
->
-> Your small patch nicely avoids the probe ordering problem,
-> so it is much better then this patch series.
->
+Thanks,
+Philippe
+
+>=20
+>=20
 > Regards,
->
-> Hans
->
->
->
-> >
-> > Thanks
-> >
-> >> I see a devicetree patch in this series, so I guess that the panel
-> >> is described in devicetree. Especially in the case of devicetree
-> >> I would expect the kernel to have enough info to do the right
-> >> thing and make sure the panel is probed before calling
-> >> drm_dev_register() ?
-> >>
-> >> Regards,
-> >>
-> >> Hans
-> >>
-> >>
-> >>
-> >>
-> >>>
-> >>> After this series, drm_connector_set_panel_orientation() works like
-> >>> before. It won't affect existing callers of
-> >>> drm_connector_set_panel_orientation(). The only difference is that
-> >>> some drm drivers can call drm_connector_init_panel_orientation_property()
-> >>> earlier.
-> >>>
-> >>> Hsin-Yi Wang (4):
-> >>>   gpu: drm: separate panel orientation property creating and value
-> >>>     setting
-> >>>   drm/mediatek: init panel orientation property
-> >>>   drm/msm: init panel orientation property
-> >>>   arm64: dts: mt8183: Add panel rotation
-> >>>
-> >>>  .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  1 +
-> >>>  drivers/gpu/drm/drm_connector.c               | 58 ++++++++++++++-----
-> >>>  drivers/gpu/drm/mediatek/mtk_dsi.c            |  7 +++
-> >>>  drivers/gpu/drm/msm/dsi/dsi_manager.c         |  4 ++
-> >>>  include/drm/drm_connector.h                   |  2 +
-> >>>  5 files changed, 59 insertions(+), 13 deletions(-)
-> >>>
-> >>
-> >
->
+> Deren
+>=20
+

@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6890E53B043
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A9153AF68
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbiFAV3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S231565AbiFAV33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbiFAV3m (ORCPT
+        with ESMTP id S231557AbiFAV31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:29:42 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E83025C64
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 14:29:40 -0700 (PDT)
+        Wed, 1 Jun 2022 17:29:27 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C0E188E46
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 14:29:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654118981; x=1685654981;
+  t=1654118963; x=1685654963;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XaUvMjPfT2W2aw+g9NxsIl0lvb5oDg2s1Bs/042+9Xo=;
-  b=UcwZw704/hObeAWbnBZltrjTKLQqqkvqPYElzywpiftxmeV/JWDOs/5m
-   /78/GOjyiF5xVlwxN3CtuZbQ45r052FaUVJLVF+xrgEbW1UnAXIBfSccp
-   IR+fm60zLeg++mn7fuJWSHzWMVU7OcbM8Lru4Caal5ksEBDWcSZYAkirz
-   SLToRgDPG47MX9kz3ambNQZLOMZTQZsB530Zv3TcRqbTGXID2fIsoV1Qg
-   ar86HMKWe8ffhyb445Plf8+ECMu90k36H2mpFye9BkpU6rfGNl1OpQspY
-   1Ctuo5nEKDzzBoHVzrkXkpLt46K55nLPa9bDRtYJSXJVxWhdzO9gZHjEs
+  bh=ozN0bpmL3RRXWdUyP9jFjhJ9AhuZNvpPXYlOb8sqBD4=;
+  b=TDLCBQmvcav0Yujj9eIOrpwRmOewGZWvnRRi3MbU4xsZMn6mxcxFZ5m9
+   L3oM05ZfscJQ2oPVR7cnc2ypdS2S6/Ph9qQbFML+6TR13te6NjlqDzRKB
+   kQTa79Ea5K94M0Kj3e7nPnWb7BCgXg7w3mIeXIs9PSiweMX4ZdeXTtQnu
+   opGBlc34t5Jskm15EqCvYy6RAGKx1QewxPSuhwPSS9hYRr8vuxOGrsOyY
+   IRl0UitemLveBfrpghfbVBn2Uw3aGxeD5yJzZffUEF6r7NKQtiHPiwwan
+   ddSNAw1fN5MFjeXqryeFeb1JBW8va2pmpA/m3LmCSrYOY4ULZgCZYYR3g
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="338781518"
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="256213377"
 X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="338781518"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 14:29:22 -0700
+   d="scan'208";a="256213377"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 14:29:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="904650091"
+   d="scan'208";a="562992536"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Jun 2022 14:29:21 -0700
+  by orsmga002.jf.intel.com with ESMTP; 01 Jun 2022 14:29:21 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nwVu4-0004QC-Lx;
+        id 1nwVu4-0004QA-LM;
         Wed, 01 Jun 2022 21:29:20 +0000
-Date:   Thu, 2 Jun 2022 05:28:56 +0800
+Date:   Thu, 2 Jun 2022 05:28:58 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 37/59]
- fs/netfs/output.c:274:32: warning: unused variable 'cookie'
-Message-ID: <202206020506.JJRuspb2-lkp@intel.com>
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 58/59]
+ fs/netfs/buffered_flush.c:408:16: warning: comparison of distinct pointer
+ types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof (1UL <<
+ __builtin_choose_expr(((!!(sizeof ((typeof (ctx->min_bshift) *)1 == (typeof
+ (ctx->crypto_bshift) *)1))) && ...
+Message-ID: <202206020559.wB4dxgKa-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -65,74 +68,293 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
 head:   22ecc2fcdab4616e624408911ec1d54644e82030
-commit: 5c1c3ba2afbf95dfbd1cb36cae7a28e20c4eaace [37/59] netfs: Dispatch write requests to process a writeback slice
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220602/202206020506.JJRuspb2-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+commit: ff509dc49891f934a7a774e277b87729018db753 [58/59] netfs: Use flush from afs_writeback
+config: hexagon-randconfig-r041-20220601 (https://download.01.org/0day-ci/archive/20220602/202206020559.wB4dxgKa-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
 reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/5c1c3ba2afbf95dfbd1cb36cae7a28e20c4eaace
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/ff509dc49891f934a7a774e277b87729018db753
         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
         git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
-        git checkout 5c1c3ba2afbf95dfbd1cb36cae7a28e20c4eaace
+        git checkout ff509dc49891f934a7a774e277b87729018db753
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/netfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/netfs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   fs/netfs/output.c: In function 'netfs_set_up_write_to_cache':
->> fs/netfs/output.c:274:32: warning: unused variable 'cookie' [-Wunused-variable]
-     274 |         struct fscache_cookie *cookie = netfs_i_cookie(wreq->inode);
-         |                                ^~~~~~
+>> fs/netfs/buffered_flush.c:408:16: warning: comparison of distinct pointer types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof (1UL << __builtin_choose_expr(((!!(sizeof ((typeof (ctx->min_bshift) *)1 == (typeof (ctx->crypto_bshift) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(ctx->min_bshift) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(ctx->crypto_bshift) * 0L)) : (int *)8))))), ((ctx->min_bshift) > (ctx->crypto_bshift) ? (ctx->min_bshift) : (ctx->crypto_bshift)), ({
+       typeof (ctx->min_bshift) __UNIQUE_ID___x275 = (ctx->min_bshift);
+       typeof (ctx->crypto_bshift) __UNIQUE_ID___y276 = (ctx->crypto_bshift);
+       ((__UNIQUE_ID___x275) > (__UNIQUE_ID___y276) ? (__UNIQUE_ID___x275) : (__UNIQUE_ID___y276));
+   }))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                   hard_align = max(hard_align,
+                                ^~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> fs/netfs/buffered_flush.c:411:16: warning: comparison of distinct pointer types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof ((1UL << 16) << ctx->cache_order) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                   hard_align = max(hard_align, PAGE_SIZE << ctx->cache_order);
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> fs/netfs/buffered_flush.c:413:10: warning: comparison of distinct pointer types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof ((1UL << (0 ? 4 : 6)) * (1UL << 16)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           align = min(hard_align, XA_CHUNK_SIZE * PAGE_SIZE);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> fs/netfs/buffered_flush.c:533:22: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
+           _leave(" ok [%zx]", wreq->last);
+                        ~~~    ^~~~~~~~~~
+                        %lx
+   fs/netfs/internal.h:299:65: note: expanded from macro '_leave'
+   #define _leave(FMT, ...) no_printk("<== %s()"FMT"", __func__, ##__VA_ARGS__)
+                                                ~~~                ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/netfs/buffered_flush.c:545:26: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
+           _leave(" cancel [%zx]", wreq->last);
+                            ~~~    ^~~~~~~~~~
+                            %lx
+   fs/netfs/internal.h:299:65: note: expanded from macro '_leave'
+   #define _leave(FMT, ...) no_printk("<== %s()"FMT"", __func__, ##__VA_ARGS__)
+                                                ~~~                ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/netfs/buffered_flush.c:348:33: warning: unused function 'netfs_find_writeback' [-Wunused-function]
+   static struct netfs_io_request *netfs_find_writeback(struct netfs_i_context *ctx,
+                                   ^
+   fs/netfs/buffered_flush.c:364:13: warning: unused function 'netfs_wait_for_writeback' [-Wunused-function]
+   static void netfs_wait_for_writeback(struct netfs_io_request *wreq,
+               ^
+   7 warnings generated.
 
 
-vim +/cookie +274 fs/netfs/output.c
+vim +408 fs/netfs/buffered_flush.c
 
-   266	
-   267	/*
-   268	 * Set up a op for writing to the cache.
-   269	 */
-   270	static void netfs_set_up_write_to_cache(struct netfs_io_request *wreq)
-   271	{
-   272		struct netfs_cache_resources *cres;
-   273		struct netfs_io_subrequest *subreq;
- > 274		struct fscache_cookie *cookie = netfs_i_cookie(wreq->inode);
-   275		loff_t start = wreq->first * PAGE_SIZE;
-   276		size_t len = (wreq->last - wreq->first + 1) * PAGE_SIZE;
-   277		int ret;
-   278	
-   279		if (!fscache_cookie_enabled(cookie)) {
-   280			clear_bit(NETFS_RREQ_WRITE_TO_CACHE, &wreq->flags);
-   281			return;
-   282		}
-   283	
-   284		_debug("write to cache");
-   285		subreq = netfs_create_write_request(wreq, NETFS_WRITE_TO_CACHE, start, len,
-   286						    netfs_write_to_cache_op_worker);
-   287		if (!subreq)
-   288			return;
-   289	
-   290		cres = &wreq->cache_resources;
-   291		ret = -ENOBUFS;
-   292		if (wreq->netfs_ops->begin_cache_operation)
-   293			ret = wreq->netfs_ops->begin_cache_operation(wreq);
-   294		if (ret < 0) {
-   295			netfs_write_subrequest_terminated(subreq, ret, false);
-   296			return;
-   297		}
-   298	
-   299		ret = cres->ops->prepare_write(cres, &start, &len, i_size_read(wreq->inode),
-   300					       true);
-   301		if (ret < 0) {
-   302			netfs_write_subrequest_terminated(subreq, ret, false);
-   303			return;
-   304		}
-   305	
-   306		netfs_queue_write_request(subreq);
-   307	}
-   308	
+   372	
+   373	/*
+   374	 * Extend the region to be written back to include subsequent contiguously
+   375	 * dirty pages if possible, but don't sleep while doing so.
+   376	 *
+   377	 * If this page holds new content, then we can include filler zeros in the
+   378	 * writeback.
+   379	 */
+   380	static void netfs_extend_writeback(struct netfs_io_request *wreq,
+   381					   struct writeback_control *wbc,
+   382					   struct netfs_i_context *ctx,
+   383					   struct netfs_dirty_region *region)
+   384	{
+   385		struct folio_batch fbatch;
+   386		struct folio *folio;
+   387		unsigned int i;
+   388		pgoff_t index = wreq->last + 1, stop_mask, stop_at, max_pages;
+   389		ssize_t max_size;
+   390		size_t align, hard_align;
+   391		bool stop = true, dirty;
+   392		int ret;
+   393	
+   394		XA_STATE(xas, &wreq->mapping->i_pages, index);
+   395	
+   396		_enter("%lx", index);
+   397	
+   398		/* We have a number of criteria by which we can decide where to stop
+   399		 * extension of this writeback:
+   400		 *
+   401		 *  1) The maximum I/O size (but wbacks can be subdivided)
+   402		 *  2) Boundaries within the filesystem (eg. ceph object size)
+   403		 *  3) Local boundaries (cache granules, VM radix node sizes)
+   404		 *  4) Content crypto/compression boundaries
+   405		 */
+   406		hard_align = PAGE_SIZE;
+   407		if (ctx->min_bshift || ctx->crypto_bshift)
+ > 408			hard_align = max(hard_align,
+   409					 1UL << max(ctx->min_bshift, ctx->crypto_bshift));
+   410		if (ctx->cache_order)
+ > 411			hard_align = max(hard_align, PAGE_SIZE << ctx->cache_order);
+   412	
+ > 413		align = min(hard_align, XA_CHUNK_SIZE * PAGE_SIZE);
+   414		if (wreq->alignment > align)
+   415			align = wreq->alignment;
+   416	
+   417		stop_mask = (align - 1) / PAGE_SIZE;
+   418	
+   419		max_size = XA_CHUNK_SIZE * PAGE_SIZE;
+   420		if (wreq->wsize > max_size)
+   421			max_size = roundup_pow_of_two(wreq->wsize);
+   422	
+   423		_debug("LIMITS al=%zx ha=%zx mx=%zx", align, hard_align, max_size);
+   424	
+   425		max_pages = max_size / PAGE_SIZE;
+   426		max_pages &= ~stop_mask;
+   427		_debug("MAX_PAGES %lx %lx", max_pages, stop_mask);
+   428		if (wreq->last - wreq->first + 1 >= max_pages) {
+   429			_leave(" [already hit wsize %lx %lx]",
+   430			       wreq->last - wreq->first + 1, max_pages);
+   431			return;
+   432		}
+   433	
+   434		stop_at = wreq->first + max_pages;
+   435		if (stop_at < wreq->first)
+   436			stop_at = ULONG_MAX;
+   437		else
+   438			stop_at = round_down(stop_at, align / PAGE_SIZE);
+   439		_debug("STOP_AT %lx (%lx %lx %lx)", stop_at, wreq->first, max_pages, align / PAGE_SIZE);
+   440	
+   441		if (index >= stop_at || wbc->nr_to_write <= 0 || wreq->len > max_size) {
+   442			_leave(" [prestop]");
+   443			return;
+   444		}
+   445	
+   446		do {
+   447			/* Firstly, we gather up a batch of contiguous dirty folios
+   448			 * under the RCU read lock - but we can't clear the dirty flags
+   449			 * there if any of those folios are mapped.
+   450			 */
+   451			folio_batch_init(&fbatch);
+   452			_debug("extend %lx %lx", index, xas.xa_index);
+   453			rcu_read_lock();
+   454	
+   455			xas_for_each(&xas, folio, ULONG_MAX) {
+   456				stop = true;
+   457				if (xas_retry(&xas, folio))
+   458					continue;
+   459				if (xa_is_value(folio))
+   460					break;
+   461				if (folio_index(folio) != index)
+   462					break;
+   463	
+   464				if (!folio_try_get_rcu(folio)) {
+   465					xas_reset(&xas);
+   466					continue;
+   467				}
+   468	
+   469				/* Has the folio moved or been split? */
+   470				if (unlikely(folio != xas_reload(&xas))) {
+   471					folio_put(folio);
+   472					break;
+   473				}
+   474	
+   475				if (!folio_trylock(folio)) {
+   476					folio_put(folio);
+   477					break;
+   478				}
+   479				if (!folio_test_dirty(folio) ||
+   480				    folio_test_writeback(folio)) {
+   481					folio_unlock(folio);
+   482					folio_put(folio);
+   483					break;
+   484				}
+   485	
+   486				wreq->len += folio_size(folio);
+   487				index += folio_nr_pages(folio);
+   488				stop = index >= stop_at || wbc->nr_to_write <= 0;
+   489	
+   490				if (!folio_batch_add(&fbatch, folio))
+   491					break;
+   492				if (stop)
+   493					break;
+   494			}
+   495	
+   496			if (!stop)
+   497				xas_pause(&xas);
+   498			rcu_read_unlock();
+   499	
+   500			/* Now, if we obtained any pages, we can shift them to being
+   501			 * writable and mark them for caching.
+   502			 */
+   503			if (!folio_batch_count(&fbatch))
+   504				break;
+   505	
+   506			for (i = 0; i < folio_batch_count(&fbatch); i++) {
+   507				folio = fbatch.folios[i];
+   508				//_debug("found [%x] %lx", i, folio->index);
+   509				trace_netfs_folio_dirty(wreq->mapping, folio,
+   510							netfs_folio_trace_store_ex);
+   511	
+   512				dirty = folio_clear_dirty_for_io(folio);
+   513				if (folio_start_writeback(folio)) {
+   514					_debug("! no wb");
+   515					goto nomem_redirty;
+   516				}
+   517	
+   518				ret = netfs_xa_store_and_mark(&wreq->buffer, folio->index, folio,
+   519							      true, true, dirty, GFP_NOFS);
+   520				if (ret < 0) {
+   521					_debug("! no buffer");
+   522					goto nomem_cancel_wb;
+   523				}
+   524				wbc->nr_to_write -= folio_nr_pages(folio);
+   525				index = folio_next_index(folio);
+   526				wreq->last = index - 1;
+   527				folio_unlock(folio);
+   528			}
+   529	
+   530			cond_resched();
+   531		} while (!stop);
+   532	
+ > 533		_leave(" ok [%zx]", wreq->last);
+   534		return;
+   535	
+   536	nomem_cancel_wb:
+   537		folio_end_writeback(folio);
+   538	nomem_redirty:
+   539		if (dirty)
+   540			folio_redirty_for_writepage(wbc, folio);
+   541		for (; i < folio_batch_count(&fbatch); i++) {
+   542			folio_unlock(folio);
+   543			folio_put(folio);
+   544		}
+   545		_leave(" cancel [%zx]", wreq->last);
+   546	}
+   547	
 
 -- 
 0-DAY CI Kernel Test Service

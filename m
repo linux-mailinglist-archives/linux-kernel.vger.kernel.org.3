@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3962053AA6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5DA53AA69
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355744AbiFAPsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 11:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
+        id S1355836AbiFAPsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 11:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354695AbiFAPrp (ORCPT
+        with ESMTP id S1355593AbiFAPrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 11:47:45 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6BC3123A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 08:47:44 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id i10so3499564lfj.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 08:47:44 -0700 (PDT)
+        Wed, 1 Jun 2022 11:47:46 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC0331229
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 08:47:45 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id t25so3429587lfg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 08:47:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=j+1GcNao+MpcpUVYncd1ScTVUmB5P8PxXyVNWxX2GeI=;
-        b=tnQNJHh2vEdrcbhYQuO5shlFnBSNoFpkKp6+nLw5kDyn26ZA6V+dT25LgW2GFD30j0
-         Btg5efvrHQE4di3DRW/bks8zTFoIoUxFiE8YTMmzm60Y9NlxPV9hfwFGEjQ+433TAnSi
-         INoWF4m/Qd7hbB6dhSz6LNtL6MDwjWAqSxxTgdJndcZsZEbPsDhwaItlMI2h5LnmwSfE
-         1NsY1GivAH1Kv/FRH1jxVbgQG83QKJi50lx2ToazfWCukd6oG7Tdm5bX/K6gk/9vafbp
-         qVFDJLmC6l1WOBYfcpK+1eXNLbmqm7CZ7213FdANP6gyTpj4znf7ox66XKMSBKf+2SCI
-         EcJw==
+        bh=4Ppw8UVo/qEPgt1AkXxmf7JhE2d9K4tKcX8rTq2VqM0=;
+        b=IfDJ6Y/LBiKfML25dHZi4KzD+/YqzPwyzQgsdy7RcT3HdhiSl4RyaHT64fsrU2OR2Y
+         DIFOnMYGWYS7CYmjEXgsmd7l6UJSqaDmY5lx/H0zTT0qjuFLG0THmztBb/2iPVhsoni5
+         veiEhaXzEtIohcXf31m1Yt67aq1W4MatJMkVihdhVKZbro75VxTkfSP5m9Vsu+6IO96T
+         iHRLH70w8Vev+mhIAMhPkJr45VIPXutbrU10nAng5cXVYvoT2cx34HTNreFMQqejf81I
+         CgpWUHVaJj4GeAbK4NN2xL9Ixjwyl3j6X5HCpS7Z8+hp8aXYdzv5szQ55ldoLPWE7SPt
+         jt8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=j+1GcNao+MpcpUVYncd1ScTVUmB5P8PxXyVNWxX2GeI=;
-        b=Ber+AE0V5Q7nA6MdEcDnw/tPWfwt4IbJxueUUPtght6simIX/X/98SY7tg6S84Nipb
-         gwTPzn4l04JKUkszWVeGfukAAf/FSphts1PjRqRD4oTSk9DhRe6kuOvJsel6pkTnRE/S
-         CwHPMuHis+/iID48N7/V1Cbg6T/fHgSvdPbPm2T7Bis+P9JAS5A6RLjfxFkHyqm5obuj
-         hzobbjePiKyNBBCGuLKmek5EdnibwMXnIn7ogpFObr3kr8llcPxxSy4fDD+Mq31f5MNZ
-         7nUrBqOMYv8zdfi7xV+mqVAiVvKuDxZQO3WTZ9M19d2efcdW8JkUdPQ1DJw/ska4GKlG
-         veTQ==
-X-Gm-Message-State: AOAM530vfpn4iDihwFqxauYmGKQc+nqczC9xHr9AX5spDLXKC6mZDasQ
-        VWkpEgGkJoyEpKgd++s9lk8PeQ==
-X-Google-Smtp-Source: ABdhPJxrvmdZIE50mE4LyGk8Q7U6bi5QRa+ZXwfv1N+HWB/5Nwi30SD46rFfuu/DH57WAEhFWv7iBQ==
-X-Received: by 2002:a05:6512:3c96:b0:477:e016:82a3 with SMTP id h22-20020a0565123c9600b00477e01682a3mr47737lfv.268.1654098462742;
-        Wed, 01 Jun 2022 08:47:42 -0700 (PDT)
+        bh=4Ppw8UVo/qEPgt1AkXxmf7JhE2d9K4tKcX8rTq2VqM0=;
+        b=LGVBOLFGbuci25vH4NQl5UA6Hc8Gtyx/0mEPIRxL1Lrp1lqWB48czDcIjIkROC6BWE
+         zX3efS7u9lnSarVeiMLwxHQgd/j47dv6STGUGPViyFsQigZul2u8g006+VI4Wj6lUieS
+         AKext3M2TWWncnShI2V0GKzZ5i5K9dE5ACABD0QzC49k6Nj6j4oA01PzQrHZC4n1CzKK
+         agt8lFz659byoIvjypMlNTjasdVo86R3b2YZTaZCVAQJAHpTSqnV1u5dCZrA8yUOJdxu
+         5o2tN1Rxtdrmlz6Qy73mpyxKWtdaiCH28VlqT5xkmiNetsDLP8u8rhf6iam5aMhTx2Vx
+         OciA==
+X-Gm-Message-State: AOAM530yVA6+dozu+Iw1QgpddXFGlnugKV7YyZDJweBwlNuLZp/eDYIN
+        asUoY9FLgqb64ejUOMer6C2Irw==
+X-Google-Smtp-Source: ABdhPJynYZi16/O8cBrcIt/J7dx1Ms13LA/nzWfRSH7AoMTjLNzcmzT5zdlPGWmMyk1MP9o2B/deOw==
+X-Received: by 2002:a05:6512:3054:b0:478:70d9:845f with SMTP id b20-20020a056512305400b0047870d9845fmr34389294lfb.201.1654098463785;
+        Wed, 01 Jun 2022 08:47:43 -0700 (PDT)
 Received: from panikiel.wifi.semihalf.net ([83.142.187.86])
-        by smtp.gmail.com with ESMTPSA id f10-20020a19380a000000b00478ad871b25sm431219lfa.145.2022.06.01.08.47.41
+        by smtp.gmail.com with ESMTPSA id f10-20020a19380a000000b00478ad871b25sm431219lfa.145.2022.06.01.08.47.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 08:47:42 -0700 (PDT)
+        Wed, 01 Jun 2022 08:47:43 -0700 (PDT)
 From:   =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
 To:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -55,9 +55,9 @@ Cc:     arnd@arndb.de, olof@lixom.net, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org,
         amstan@chromium.org, upstream@semihalf.com,
         =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
-Subject: [PATCH v2 2/5] ARM: dts: socfpga: Move sdmmc-ecc node to Arria 10 dts
-Date:   Wed,  1 Jun 2022 17:46:44 +0200
-Message-Id: <20220601154647.80071-3-pan@semihalf.com>
+Subject: [PATCH v2 3/5] ARM: dts: socfpga: Add atsha204a node to Mercury+ AA1 dts
+Date:   Wed,  1 Jun 2022 17:46:45 +0200
+Message-Id: <20220601154647.80071-4-pan@semihalf.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 In-Reply-To: <20220601154647.80071-1-pan@semihalf.com>
 References: <20220601154647.80071-1-pan@semihalf.com>
@@ -74,59 +74,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ecc manager is a part of the Arria 10 SoC, move it to the correct
-dts.
+Add atsha204a node to Mercury+ AA1 dts
 
 Signed-off-by: Paweł Anikiel <pan@semihalf.com>
 ---
- arch/arm/boot/dts/socfpga_arria10.dtsi             | 10 ++++++++++
- arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi | 12 ------------
- 2 files changed, 10 insertions(+), 12 deletions(-)
+ arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/socfpga_arria10.dtsi b/arch/arm/boot/dts/socfpga_arria10.dtsi
-index 26bda2557fe8..4370e3cbbb4b 100644
---- a/arch/arm/boot/dts/socfpga_arria10.dtsi
-+++ b/arch/arm/boot/dts/socfpga_arria10.dtsi
-@@ -736,6 +736,16 @@ emac0-tx-ecc@ff8c0c00 {
- 					     <37 IRQ_TYPE_LEVEL_HIGH>;
- 			};
- 
-+			sdmmca-ecc@ff8c2c00 {
-+				compatible = "altr,socfpga-sdmmc-ecc";
-+				reg = <0xff8c2c00 0x400>;
-+				altr,ecc-parent = <&mmc>;
-+				interrupts = <15 IRQ_TYPE_LEVEL_HIGH>,
-+					     <47 IRQ_TYPE_LEVEL_HIGH>,
-+					     <16 IRQ_TYPE_LEVEL_HIGH>,
-+					     <48 IRQ_TYPE_LEVEL_HIGH>;
-+			};
-+
- 			dma-ecc@ff8c8000 {
- 				compatible = "altr,socfpga-dma-ecc";
- 				reg = <0xff8c8000 0x400>;
 diff --git a/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi b/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
-index 4b21351f2694..b0d20101cd00 100644
+index b0d20101cd00..dd1bfa7e1a78 100644
 --- a/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
 +++ b/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
-@@ -23,18 +23,6 @@ chosen {
- 	};
+@@ -1,5 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+-
++/*
++ * Copyright 2022 Google LLC
++ */
+ #include "socfpga_arria10.dtsi"
+ 
+ / {
+@@ -54,6 +56,11 @@ phy3: ethernet-phy@3 {
  };
  
--&eccmgr {
--	sdmmca-ecc@ff8c2c00 {
--		compatible = "altr,socfpga-sdmmc-ecc";
--		reg = <0xff8c2c00 0x400>;
--		altr,ecc-parent = <&mmc>;
--		interrupts = <15 IRQ_TYPE_LEVEL_HIGH>,
--			     <47 IRQ_TYPE_LEVEL_HIGH>,
--			     <16 IRQ_TYPE_LEVEL_HIGH>,
--			     <48 IRQ_TYPE_LEVEL_HIGH>;
--	};
--};
--
- &gmac0 {
- 	phy-mode = "rgmii";
- 	phy-addr = <0xffffffff>; /* probe for phy addr */
+ &i2c1 {
++	atsha204a: crypto@64 {
++		compatible = "atmel,atsha204a";
++		reg = <0x64>;
++	};
++
+ 	isl12022: isl12022@6f {
+ 		compatible = "isil,isl12022";
+ 		reg = <0x6f>;
 -- 
 2.36.1.255.ge46751e96f-goog
 

@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C2A53AA50
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 116AE53AA52
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355739AbiFAPhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 11:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S1351279AbiFAPiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 11:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351279AbiFAPhk (ORCPT
+        with ESMTP id S1355740AbiFAPh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 11:37:40 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C184A3587F;
-        Wed,  1 Jun 2022 08:37:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654097849; x=1685633849;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IMV7FgsT0NHUVmOYXh7cvaQQcC4fnWUbm7XEhHmvcxM=;
-  b=hxusySzkXlsb/o9g7TY+O+JsSvLGWyl6wl6ge7PeKQWI2WvbF4nShoXL
-   x93OwmbMDhq0/weTky9/h7OQ0xAWjKuqN073uyzTd+wFUc+oHtXOPxBLv
-   I+HjneHaCacofmrYbBNn01kgOCZCHeOLtolb0qvZZO5aYuqptW1kc+mfL
-   72uNzOPOs0QUAy6u580QnxK8uW7tTUw0JSLsAjEFByA4yFTmWOhQC/c85
-   yhWE76SkGkvImvhyU3LWorqInEUjQQIwZisjtUw4H8LTI+QzK9Mpr4t2u
-   Co3ffVqQ1w5EeNbWrSOu34aID4+OwJAmIMNgKoA/bDXTFY3u/KxRYUqi3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="255500923"
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="255500923"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 08:37:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="530113964"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 01 Jun 2022 08:37:23 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 83806F8; Wed,  1 Jun 2022 18:37:25 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH v1 1/1] gpio: sch: make irq_chip immutable
-Date:   Wed,  1 Jun 2022 18:36:56 +0300
-Message-Id: <20220601153656.76454-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 1 Jun 2022 11:37:59 -0400
+Received: from mx1.uni-rostock.de (mx1.uni-rostock.de [139.30.22.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C17331506
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 08:37:53 -0700 (PDT)
+DKIM-Signature: v=1; c=relaxed/relaxed; d=uni-rostock.de; s=itmze; 
+ t=1654097871; bh=PKtd8/u8nWjPZdGzm0jz3lmh4Yz0PlPqWAloSXTo6Z8=; h=
+ "Subject:Subject:From:From:Date:Date:ReplyTo:ReplyTo:Cc:Cc:Message-Id:Message-Id"; 
+ a=ed25519-sha256; b=
+ 6kfXov/hiy58kWFWjSHXhI4vNABC6bffFqWOsJcg+b0W5QH9j9HjLZDfk+BvG5FaI6cSSPkz44NybJcB3Lk7CA==
+DKIM-Signature: v=1; c=relaxed/relaxed; d=uni-rostock.de; s=itmz; 
+ t=1654097871; bh=PKtd8/u8nWjPZdGzm0jz3lmh4Yz0PlPqWAloSXTo6Z8=; h=
+ "Subject:Subject:From:From:Date:Date:ReplyTo:ReplyTo:Cc:Cc:Message-Id:Message-Id"; 
+ a=rsa-sha256; b=
+ anI+lOJGOjXGhC67isOqDl7m7OBz99DhbhX0eZJv5RGWxX7l1CiI3okmtAhaQAP29mPm1D3CBL60qkag43ZO+lyHZpUXHdLd6ya4Dlkz+ylavx2Q1Pvl5rzPakRXe25wYsFcqa2r9aPdxhz1ash3anJdeTmyqEkzl2/DJGkidyA=
+Received: from 139.30.22.81 by mx1.uni-rostock.de (Tls12, Aes256, Sha384,
+ DiffieHellmanEllipticKey384); Wed, 01 Jun 2022 15:37:51 GMT
+Received: from meshdev.amd.e-technik.uni-rostock.de (139.30.202.94) by
+ email1.uni-rostock.de (139.30.22.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.9; Wed, 1 Jun 2022 17:37:50 +0200
+From:   Benjamin Beichler <benjamin.beichler@uni-rostock.de>
+To:     <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>
+CC:     Benjamin Beichler <benjamin.beichler@uni-rostock.de>,
+        Johannes Berg <johannes.berg@intel.com>,
+        <linux-um@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] um: read multiple msg from virtio slave request fd
+Date:   Wed, 1 Jun 2022 15:37:22 +0000
+Message-ID: <20220601153722.181427-1-benjamin.beichler@uni-rostock.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Originating-IP: [139.30.202.94]
+X-ClientProxiedBy: EMAIL2.uni-rostock.de (139.30.22.82) To
+ email1.uni-rostock.de (139.30.22.81)
+X-TM-SNTS-SMTP: 65432843B81598EC2F6963A9BD00A45E17CF9588109DE9673455B75DF549C1F72002:8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,94 +59,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since recently, the kernel is nagging about mutable irq_chips:
+If VHOST_USER_PROTOCOL_F_INBAND_NOTIFICATIONS is activated, the user mode
+linux virtio irq handler only read one msg from the corresponding socket.
+This creates issues, when the device emulation creates multiple call
+requests (e.g. for multiple virtqueues), as the socket buffer tend to fill
+up and the call requests are delayed.
 
-   "not an immutable chip, please consider fixing it!"
+This creates a deadlock situation, when the device simulation blocks,
+because of sending a msg and the kernel side blocks because of
+synchronously waiting for an acknowledge of kick request.
 
-Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
-helper functions and call the appropriate gpiolib functions.
+Actually inband notifications are meant to be used in combination with the
+time travel protocol, but it is not required, therefore this corner case
+needs to be handled.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Anyways, in general it seems to be more natural to consume always all
+messages from a socket, instead of only a single one.
+
+Fixes: 2cd097ba8c05 ("um: virtio: Implement VHOST_USER_PROTOCOL_F_SLAVE_REQ")
+Signed-off-by: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
 ---
- drivers/gpio/gpio-sch.c | 35 ++++++++++++++++++++++-------------
- 1 file changed, 22 insertions(+), 13 deletions(-)
+ arch/um/drivers/virtio_uml.c | 72 ++++++++++++++++++------------------
+ 1 file changed, 37 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/gpio/gpio-sch.c b/drivers/gpio/gpio-sch.c
-index acda4c5052d3..8a83f7bf4382 100644
---- a/drivers/gpio/gpio-sch.c
-+++ b/drivers/gpio/gpio-sch.c
-@@ -38,7 +38,6 @@
- 
- struct sch_gpio {
- 	struct gpio_chip chip;
--	struct irq_chip irqchip;
- 	spinlock_t lock;
- 	unsigned short iobase;
- 	unsigned short resume_base;
-@@ -218,11 +217,9 @@ static void sch_irq_ack(struct irq_data *d)
- 	spin_unlock_irqrestore(&sch->lock, flags);
- }
- 
--static void sch_irq_mask_unmask(struct irq_data *d, int val)
-+static void sch_irq_mask_unmask(struct gpio_chip *gc, irq_hw_number_t gpio_num, int val)
- {
--	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
- 	struct sch_gpio *sch = gpiochip_get_data(gc);
--	irq_hw_number_t gpio_num = irqd_to_hwirq(d);
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&sch->lock, flags);
-@@ -232,14 +229,32 @@ static void sch_irq_mask_unmask(struct irq_data *d, int val)
- 
- static void sch_irq_mask(struct irq_data *d)
- {
--	sch_irq_mask_unmask(d, 0);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	irq_hw_number_t gpio_num = irqd_to_hwirq(d);
-+
-+	sch_irq_mask_unmask(gc, gpio_num, 0);
-+	gpiochip_disable_irq(gc, gpio_num);
- }
- 
- static void sch_irq_unmask(struct irq_data *d)
- {
--	sch_irq_mask_unmask(d, 1);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	irq_hw_number_t gpio_num = irqd_to_hwirq(d);
-+
-+	gpiochip_enable_irq(gc, gpio_num);
-+	sch_irq_mask_unmask(gc, gpio_num, 1);
- }
- 
-+static const struct irq_chip sch_irqchip = {
-+	.name = "sch_gpio",
-+	.irq_ack = sch_irq_ack,
-+	.irq_mask = sch_irq_mask,
-+	.irq_unmask = sch_irq_unmask,
-+	.irq_set_type = sch_irq_type,
-+	.flags = IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
-+};
-+
- static u32 sch_gpio_gpe_handler(acpi_handle gpe_device, u32 gpe, void *context)
- {
- 	struct sch_gpio *sch = context;
-@@ -367,14 +382,8 @@ static int sch_gpio_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, sch);
- 
--	sch->irqchip.name = "sch_gpio";
--	sch->irqchip.irq_ack = sch_irq_ack;
--	sch->irqchip.irq_mask = sch_irq_mask;
--	sch->irqchip.irq_unmask = sch_irq_unmask;
--	sch->irqchip.irq_set_type = sch_irq_type;
+diff --git a/arch/um/drivers/virtio_uml.c b/arch/um/drivers/virtio_uml.c
+index ba562d68dc04..0c171dd11414 100644
+--- a/arch/um/drivers/virtio_uml.c
++++ b/arch/um/drivers/virtio_uml.c
+@@ -363,45 +363,47 @@ static irqreturn_t vu_req_read_message(struct virtio_uml_device *vu_dev,
+ 		struct vhost_user_msg msg;
+ 		u8 extra_payload[512];
+ 	} msg;
+-	int rc;
 -
- 	girq = &sch->chip.irq;
--	girq->chip = &sch->irqchip;
-+	gpio_irq_chip_set_chip(girq, &sch_irqchip);
- 	girq->num_parents = 0;
- 	girq->parents = NULL;
- 	girq->parent_handler = NULL;
+-	rc = vhost_user_recv_req(vu_dev, &msg.msg,
+-				 sizeof(msg.msg.payload) +
+-				 sizeof(msg.extra_payload));
+-
+-	if (rc)
+-		return IRQ_NONE;
+-
+-	switch (msg.msg.header.request) {
+-	case VHOST_USER_SLAVE_CONFIG_CHANGE_MSG:
+-		vu_dev->config_changed_irq = true;
+-		response = 0;
+-		break;
+-	case VHOST_USER_SLAVE_VRING_CALL:
+-		virtio_device_for_each_vq((&vu_dev->vdev), vq) {
+-			if (vq->index == msg.msg.payload.vring_state.index) {
+-				response = 0;
+-				vu_dev->vq_irq_vq_map |= BIT_ULL(vq->index);
+-				break;
++	irqreturn_t rc = IRQ_NONE;
++
++	while (1) {
++		if (vhost_user_recv_req(vu_dev, &msg.msg,
++					sizeof(msg.msg.payload)
++					+ sizeof(msg.extra_payload)))
++			break;
++
++		switch (msg.msg.header.request) {
++		case VHOST_USER_SLAVE_CONFIG_CHANGE_MSG:
++			vu_dev->config_changed_irq = true;
++			response = 0;
++			break;
++		case VHOST_USER_SLAVE_VRING_CALL:
++			virtio_device_for_each_vq((&vu_dev->vdev), vq) {
++				if (vq->index ==
++				    msg.msg.payload.vring_state.index) {
++					response = 0;
++					vu_dev->vq_irq_vq_map |=
++						BIT_ULL(vq->index);
++					break;
++				}
+ 			}
++			break;
++		case VHOST_USER_SLAVE_IOTLB_MSG:
++			/* not supported - VIRTIO_F_ACCESS_PLATFORM */
++		case VHOST_USER_SLAVE_VRING_HOST_NOTIFIER_MSG:
++			/* not supported - VHOST_USER_PROTOCOL_F_HOST_NOTIFIER */
++		default:
++			vu_err(vu_dev, "unexpected slave request %d\n",
++			       msg.msg.header.request);
+ 		}
+-		break;
+-	case VHOST_USER_SLAVE_IOTLB_MSG:
+-		/* not supported - VIRTIO_F_ACCESS_PLATFORM */
+-	case VHOST_USER_SLAVE_VRING_HOST_NOTIFIER_MSG:
+-		/* not supported - VHOST_USER_PROTOCOL_F_HOST_NOTIFIER */
+-	default:
+-		vu_err(vu_dev, "unexpected slave request %d\n",
+-		       msg.msg.header.request);
+-	}
+-
+-	if (ev && !vu_dev->suspended)
+-		time_travel_add_irq_event(ev);
+ 
+-	if (msg.msg.header.flags & VHOST_USER_FLAG_NEED_REPLY)
+-		vhost_user_reply(vu_dev, &msg.msg, response);
++		if (ev && !vu_dev->suspended)
++			time_travel_add_irq_event(ev);
+ 
+-	return IRQ_HANDLED;
++		if (msg.msg.header.flags & VHOST_USER_FLAG_NEED_REPLY)
++			vhost_user_reply(vu_dev, &msg.msg, response);
++		rc = IRQ_HANDLED;
++	}
++	return rc;
+ }
+ 
+ static irqreturn_t vu_req_interrupt(int irq, void *data)
 -- 
-2.35.1
-
+2.25.1

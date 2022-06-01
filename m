@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF93539BCD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D18539BD0
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349492AbiFADvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 23:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
+        id S1349497AbiFADws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 23:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233702AbiFADvr (ORCPT
+        with ESMTP id S232740AbiFADwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 23:51:47 -0400
+        Tue, 31 May 2022 23:52:46 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9A36351
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:51:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09CC52500
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:52:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654055505; x=1685591505;
+  t=1654055564; x=1685591564;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LiEkjX4N1vdnbHmjpR+CLTsoDmY7Jy5fEGVgFts5Ufc=;
-  b=FAdwf2RQnS764VZhZgVOzw1MME4dBUVj482/uWfTBiexst/iBvO/P5oD
-   H+QBxalorVqv0p/M19IfUf2qiizLu8rW3YcJuykENV4fc6ScpzQBCGXpG
-   Ej4mcsyNPD2dCkaGM8vzFkj7R8DcHQQlZg+TgJHzVdw+Ov4ynZ7rrbieA
-   N0LfMoQgyYbdSueJaX51uILiEKtWEV/ilj9glWuRoW5m9ovFw4QPZO9GH
-   IkXLfJGoPIbam8ZphJLTooYjupW01CN94EZo70W6rQSn1bRTCRDi7u3zJ
-   XkkrlQZpDT/HOX8oyOzIlIvAT2pVH+nVJuskIgZWIvQkyrOHlPiseZtkS
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="255938785"
+  bh=5sYnSlIIVdPP2zdbuBnA4XJS04JR2siOcATAPeqOdAw=;
+  b=PeIhXHqTopqgSwYGyRLddFlExpT1UnsAX7aYiKtDFT7He/5QrcglDAQ4
+   OV0XNtZEqGsfAyS7Cz193tTjq26M4cUshAm6rkSKXIa671vViIPvnyu8A
+   /7NUmb2z40a+x27Wsm3tnZMIrWoVHubJj2cYbf+RJof8HfZtG31n4gbQL
+   4Hsk+521Zu6GcJutb4liZT+SYa/LDsJPHGznwtqTfvwFoQF6GknGOWfnQ
+   vGIB14rzAYGJHWdQVsLOoC5VIUeEEkAd/KfwTr4rKmGEuuBF14f072OaB
+   2qne3hHgLzwT7iKpuGvnPWM9h7LbOwwadc0rxZ+gmq+wPJW9xP9oX8pfQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="255938870"
 X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="255938785"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 20:51:44 -0700
+   d="scan'208";a="255938870"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 20:52:44 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="529888872"
+   d="scan'208";a="720601224"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 31 May 2022 20:51:42 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 31 May 2022 20:52:42 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nwFOY-0003US-8J;
-        Wed, 01 Jun 2022 03:51:42 +0000
-Date:   Wed, 1 Jun 2022 11:51:40 +0800
+        id 1nwFPW-0003Ud-By;
+        Wed, 01 Jun 2022 03:52:42 +0000
+Date:   Wed, 1 Jun 2022 11:51:42 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>
-Subject: [intel-tdx:kvm-upstream-workaround 422/422]
- arch/x86/kvm/mmu/mmu.c:4546:13: error: implicit declaration of function
- 'get_user_page_fast'; did you mean 'get_user_pages_fast'?
-Message-ID: <202206011134.9CrAT8m1-lkp@intel.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: fs/ntfs/aops.c:378:12: warning: stack frame size (2224) exceeds
+ limit (1024) in 'ntfs_read_folio'
+Message-ID: <202206011125.JDinVito-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -63,87 +62,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   4e487b52e144ed36e4ae202e7103e63679710095
-commit: 4e487b52e144ed36e4ae202e7103e63679710095 [422/422] KVM: x86/mmu: Use get_user_page_fast instead of get_user_page_fast_only
-config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220601/202206011134.9CrAT8m1-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+Hi Matthew,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   700170bf6b4d773e328fa54ebb70ba444007c702
+commit: 933906f8e8e4110c56db9bddd1281e4e4983a2bb ntfs: Convert ntfs to read_folio
+date:   3 weeks ago
+config: hexagon-randconfig-r045-20220601 (https://download.01.org/0day-ci/archive/20220601/202206011125.JDinVito-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
 reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/4e487b52e144ed36e4ae202e7103e63679710095
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 4e487b52e144ed36e4ae202e7103e63679710095
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=933906f8e8e4110c56db9bddd1281e4e4983a2bb
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 933906f8e8e4110c56db9bddd1281e4e4983a2bb
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ntfs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/kvm_host.h:47,
-                    from arch/x86/kvm/irq.h:15,
-                    from arch/x86/kvm/mmu/mmu.c:18:
-   include/linux/memfile_notifier.h:87:57: error: unknown type name 'flags'
-      87 | static int memfile_register_notifier(struct file *file, flags,
-         |                                                         ^~~~~
-   arch/x86/kvm/mmu/mmu.c: In function 'kvm_faultin_pfn_private_mapped':
->> arch/x86/kvm/mmu/mmu.c:4546:13: error: implicit declaration of function 'get_user_page_fast'; did you mean 'get_user_pages_fast'? [-Werror=implicit-function-declaration]
-    4546 |         if (get_user_page_fast(hva, FOLL_WRITE, page))
-         |             ^~~~~~~~~~~~~~~~~~
-         |             get_user_pages_fast
-   In file included from include/linux/kvm_host.h:47,
-                    from arch/x86/kvm/irq.h:15,
-                    from arch/x86/kvm/mmu/mmu.c:18:
-   At top level:
-   include/linux/memfile_notifier.h:93:13: warning: 'memfile_unregister_notifier' defined but not used [-Wunused-function]
-      93 | static void memfile_unregister_notifier(struct memfile_notifier *notifier)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/memfile_notifier.h:82:13: warning: 'memfile_notifier_invalidate' defined but not used [-Wunused-function]
-      82 | static void memfile_notifier_invalidate(struct memfile_node *node,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/memfile_notifier.h:77:13: warning: 'memfile_notifier_populate' defined but not used [-Wunused-function]
-      77 | static void memfile_notifier_populate(struct memfile_node *node,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/memfile_notifier.h:72:12: warning: 'memfile_node_set_flags' defined but not used [-Wunused-function]
-      72 | static int memfile_node_set_flags(struct file *file, unsigned long flags)
-         |            ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/memfile_notifier.h:68:13: warning: 'memfile_register_backing_store' defined but not used [-Wunused-function]
-      68 | static void memfile_register_backing_store(struct memfile_backing_store *bs)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+>> fs/ntfs/aops.c:378:12: warning: stack frame size (2224) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
+   static int ntfs_read_folio(struct file *file, struct folio *folio)
+              ^
+   1 warning generated.
 
 
-vim +4546 arch/x86/kvm/mmu/mmu.c
+vim +/ntfs_read_folio +378 fs/ntfs/aops.c
 
-  4527	
-  4528	/*
-  4529	 * Private page can't be release on mmu_notifier without losing page contents.
-  4530	 * The help, callback, from backing store is needed to allow page migration.
-  4531	 * For now, pin the page.
-  4532	 */
-  4533	static int kvm_faultin_pfn_private_mapped(struct kvm_vcpu *vcpu,
-  4534					    struct kvm_page_fault *fault)
-  4535	{
-  4536		hva_t hva = gfn_to_hva_memslot(fault->slot, fault->gfn);
-  4537		struct page *page[1];
-  4538	
-  4539		fault->map_writable = false;
-  4540		fault->pfn = KVM_PFN_ERR_FAULT;
-  4541		if (hva == KVM_HVA_ERR_RO_BAD || hva == KVM_HVA_ERR_BAD)
-  4542			return RET_PF_INVALID;
-  4543	
-  4544		/* TDX allows only RWX.  Read-only isn't supported. */
-  4545		WARN_ON_ONCE(!fault->write);
-> 4546		if (get_user_page_fast(hva, FOLL_WRITE, page))
-  4547			return RET_PF_INVALID;
-  4548	
-  4549		fault->map_writable = true;
-  4550		fault->pfn = page_to_pfn(page[0]);
-  4551		return RET_PF_CONTINUE;
-  4552	}
-  4553	
+   359	
+   360	/**
+   361	 * ntfs_read_folio - fill a @folio of a @file with data from the device
+   362	 * @file:	open file to which the folio @folio belongs or NULL
+   363	 * @folio:	page cache folio to fill with data
+   364	 *
+   365	 * For non-resident attributes, ntfs_read_folio() fills the @folio of the open
+   366	 * file @file by calling the ntfs version of the generic block_read_full_folio()
+   367	 * function, ntfs_read_block(), which in turn creates and reads in the buffers
+   368	 * associated with the folio asynchronously.
+   369	 *
+   370	 * For resident attributes, OTOH, ntfs_read_folio() fills @folio by copying the
+   371	 * data from the mft record (which at this stage is most likely in memory) and
+   372	 * fills the remainder with zeroes. Thus, in this case, I/O is synchronous, as
+   373	 * even if the mft record is not cached at this point in time, we need to wait
+   374	 * for it to be read in before we can do the copy.
+   375	 *
+   376	 * Return 0 on success and -errno on error.
+   377	 */
+ > 378	static int ntfs_read_folio(struct file *file, struct folio *folio)
+   379	{
+   380		struct page *page = &folio->page;
+   381		loff_t i_size;
+   382		struct inode *vi;
+   383		ntfs_inode *ni, *base_ni;
+   384		u8 *addr;
+   385		ntfs_attr_search_ctx *ctx;
+   386		MFT_RECORD *mrec;
+   387		unsigned long flags;
+   388		u32 attr_len;
+   389		int err = 0;
+   390	
+   391	retry_readpage:
+   392		BUG_ON(!PageLocked(page));
+   393		vi = page->mapping->host;
+   394		i_size = i_size_read(vi);
+   395		/* Is the page fully outside i_size? (truncate in progress) */
+   396		if (unlikely(page->index >= (i_size + PAGE_SIZE - 1) >>
+   397				PAGE_SHIFT)) {
+   398			zero_user(page, 0, PAGE_SIZE);
+   399			ntfs_debug("Read outside i_size - truncated?");
+   400			goto done;
+   401		}
+   402		/*
+   403		 * This can potentially happen because we clear PageUptodate() during
+   404		 * ntfs_writepage() of MstProtected() attributes.
+   405		 */
+   406		if (PageUptodate(page)) {
+   407			unlock_page(page);
+   408			return 0;
+   409		}
+   410		ni = NTFS_I(vi);
+   411		/*
+   412		 * Only $DATA attributes can be encrypted and only unnamed $DATA
+   413		 * attributes can be compressed.  Index root can have the flags set but
+   414		 * this means to create compressed/encrypted files, not that the
+   415		 * attribute is compressed/encrypted.  Note we need to check for
+   416		 * AT_INDEX_ALLOCATION since this is the type of both directory and
+   417		 * index inodes.
+   418		 */
+   419		if (ni->type != AT_INDEX_ALLOCATION) {
+   420			/* If attribute is encrypted, deny access, just like NT4. */
+   421			if (NInoEncrypted(ni)) {
+   422				BUG_ON(ni->type != AT_DATA);
+   423				err = -EACCES;
+   424				goto err_out;
+   425			}
+   426			/* Compressed data streams are handled in compress.c. */
+   427			if (NInoNonResident(ni) && NInoCompressed(ni)) {
+   428				BUG_ON(ni->type != AT_DATA);
+   429				BUG_ON(ni->name_len);
+   430				return ntfs_read_compressed_block(page);
+   431			}
+   432		}
+   433		/* NInoNonResident() == NInoIndexAllocPresent() */
+   434		if (NInoNonResident(ni)) {
+   435			/* Normal, non-resident data stream. */
+   436			return ntfs_read_block(page);
+   437		}
+   438		/*
+   439		 * Attribute is resident, implying it is not compressed or encrypted.
+   440		 * This also means the attribute is smaller than an mft record and
+   441		 * hence smaller than a page, so can simply zero out any pages with
+   442		 * index above 0.  Note the attribute can actually be marked compressed
+   443		 * but if it is resident the actual data is not compressed so we are
+   444		 * ok to ignore the compressed flag here.
+   445		 */
+   446		if (unlikely(page->index > 0)) {
+   447			zero_user(page, 0, PAGE_SIZE);
+   448			goto done;
+   449		}
+   450		if (!NInoAttr(ni))
+   451			base_ni = ni;
+   452		else
+   453			base_ni = ni->ext.base_ntfs_ino;
+   454		/* Map, pin, and lock the mft record. */
+   455		mrec = map_mft_record(base_ni);
+   456		if (IS_ERR(mrec)) {
+   457			err = PTR_ERR(mrec);
+   458			goto err_out;
+   459		}
+   460		/*
+   461		 * If a parallel write made the attribute non-resident, drop the mft
+   462		 * record and retry the read_folio.
+   463		 */
+   464		if (unlikely(NInoNonResident(ni))) {
+   465			unmap_mft_record(base_ni);
+   466			goto retry_readpage;
+   467		}
+   468		ctx = ntfs_attr_get_search_ctx(base_ni, mrec);
+   469		if (unlikely(!ctx)) {
+   470			err = -ENOMEM;
+   471			goto unm_err_out;
+   472		}
+   473		err = ntfs_attr_lookup(ni->type, ni->name, ni->name_len,
+   474				CASE_SENSITIVE, 0, NULL, 0, ctx);
+   475		if (unlikely(err))
+   476			goto put_unm_err_out;
+   477		attr_len = le32_to_cpu(ctx->attr->data.resident.value_length);
+   478		read_lock_irqsave(&ni->size_lock, flags);
+   479		if (unlikely(attr_len > ni->initialized_size))
+   480			attr_len = ni->initialized_size;
+   481		i_size = i_size_read(vi);
+   482		read_unlock_irqrestore(&ni->size_lock, flags);
+   483		if (unlikely(attr_len > i_size)) {
+   484			/* Race with shrinking truncate. */
+   485			attr_len = i_size;
+   486		}
+   487		addr = kmap_atomic(page);
+   488		/* Copy the data to the page. */
+   489		memcpy(addr, (u8*)ctx->attr +
+   490				le16_to_cpu(ctx->attr->data.resident.value_offset),
+   491				attr_len);
+   492		/* Zero the remainder of the page. */
+   493		memset(addr + attr_len, 0, PAGE_SIZE - attr_len);
+   494		flush_dcache_page(page);
+   495		kunmap_atomic(addr);
+   496	put_unm_err_out:
+   497		ntfs_attr_put_search_ctx(ctx);
+   498	unm_err_out:
+   499		unmap_mft_record(base_ni);
+   500	done:
+   501		SetPageUptodate(page);
+   502	err_out:
+   503		unlock_page(page);
+   504		return err;
+   505	}
+   506	
 
 -- 
 0-DAY CI Kernel Test Service

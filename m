@@ -2,102 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA1653A659
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20C953A7F3
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353424AbiFANwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 09:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S1354489AbiFAOEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347954AbiFANwe (ORCPT
+        with ESMTP id S1354862AbiFAOA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 09:52:34 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECE933345
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 06:52:31 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id q1so3899669ejz.9
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 06:52:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ek6pdeO0DB1Tm5mlcz1RuofuiBWoeBBusgfA8BxgA/s=;
-        b=LSkJbr+iy1alMRbMgu9/LZ3vGR3Qm7OChQM2qhsH3NtSJQCjaH28qtAAURfD9sOCho
-         EqmRJ3OazVa8XsRrtzqhYMl6MKqExGjA+TQrDZ+LXWp9byAJyO55kMxZaRFgjBTPZQ4W
-         N1ma8mXg+0eEKdpXyBxjA+2/KcXLpXliIQ/cxFHpWqo32slgmTrvVLegolg1csZL/hYw
-         gwgixwTCwQRUKJLviwktNacbTv6kocTGdcZjOdi9R+xDxvokD2xd98fdjkDhsQDg0u+E
-         UgGTgdkLZQYCfo0ffxTO7atN0rpVvpNw9CvsZlumWxc3wtqxWm6lGXCTNLXOpXuxt5Id
-         o7Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ek6pdeO0DB1Tm5mlcz1RuofuiBWoeBBusgfA8BxgA/s=;
-        b=iEmhaeCjNogaOytjAlrYy9okKIpPsLEtpKnlrcUg9hL+MWzXWSNcB/e2/GFDp1KxKR
-         lXsr9qWgVAOVW04Rt7d9PSBCZgU8K2MSxUmndA11lc2TRjVyIxITtXbvcr/tUsQ7i6qF
-         At/r03sQ2HgOQKqSq5IFcDJss29tJgab0mxpReApM728utpeyoh3xMOBpkrZfKmg0QOd
-         FqmjmffsGUw7/sc0oZhxhToZsRQ7HZMW+kFWD4n7tCcOkubrrgboVnHVUbTcez3Nsu7m
-         sku4tMwdmyQRyGLkAwzt/WL5dcUm1Pmm0+Clmu05cXYd3mSqH+6a9pP8sUx/f+LCSMNb
-         S4Tw==
-X-Gm-Message-State: AOAM530LRGhPKjGtR5mKRrE3hEl9yHA4XLwgLIjlzPupcRt85y+5+FX8
-        09zN1KQ4uVNR+Mlv0vQGxPMlrA==
-X-Google-Smtp-Source: ABdhPJzUUcAgrI+YNY0uHpRqZh3IJeveL77dKpHjyDMdSa25aTO+oKqZHM/pDVbAQh83xS/7W8GMmA==
-X-Received: by 2002:a17:907:8a1a:b0:6fe:b42f:749a with SMTP id sc26-20020a1709078a1a00b006feb42f749amr52199639ejc.451.1654091550060;
-        Wed, 01 Jun 2022 06:52:30 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id si28-20020a170906cedc00b006f3ef214e0csm753070ejb.114.2022.06.01.06.52.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 06:52:29 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2] dt-bindings: vendor-prefixes: document deprecated Atheros
-Date:   Wed,  1 Jun 2022 15:52:22 +0200
-Message-Id: <20220601135222.205035-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 1 Jun 2022 10:00:59 -0400
+Received: from condef-10.nifty.com (condef-10.nifty.com [202.248.20.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D745647389;
+        Wed,  1 Jun 2022 06:57:23 -0700 (PDT)
+Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-10.nifty.com with ESMTP id 251DroRc014704;
+        Wed, 1 Jun 2022 22:53:50 +0900
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 251DrHXv027234;
+        Wed, 1 Jun 2022 22:53:17 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 251DrHXv027234
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1654091597;
+        bh=T0jniup0tdMhgXOVsaKHUqsHbruaPRstgNPuoFLQ+pc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ajuAOjVhvv07LABF+8ROyRe/wmobxoWCeF+GBjGsv3BNypwdUeUg6McGwAz7bNhIK
+         4ZZK/6ScCItnAHovrWEiOgl4K7feWIPxM7JPZUKhIyKlLOZtfv9iokhck/g56lsjQ0
+         7pCd5u9YAsd2HIy9QosDc4hLBPasM7LYTye6z9tXadY+HrJuAqLqxEsNxJDkumPGyF
+         jQKKyu1v/bZvvo31xslo0a/64JfjDHkqdIjlBEO587igis0fStzgshgrhTNR7lzuRD
+         MOYRGPUz34jV5A9jTRwvzvcQpUyYbABnxstkMylyCeDAGUdTwbB8u9zgdkXXNJ+DZc
+         ONI9K0yXitALg==
+X-Nifty-SrcIP: [209.85.216.54]
+Received: by mail-pj1-f54.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so2130406pjf.5;
+        Wed, 01 Jun 2022 06:53:17 -0700 (PDT)
+X-Gm-Message-State: AOAM532KUQ3U9cNBzHbt/t6gT7tS1QMXmiC4Hj5XY05WhVA2V4sOKTxK
+        NBRnVWYMkI+p/B3SXOsVpH/2qxcjVZIraX3al+I=
+X-Google-Smtp-Source: ABdhPJy07hu/OahBY3VJHSQdem7BDQ3c4Qu2+hwvYIGknJt0lPvMr2/KyufRbe4Ma0UKT+AqOzywxd7C0LHddmfLNl4=
+X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
+ l5-20020a170903120500b0015e8cbcfd2bmr66483581plh.99.1654091596577; Wed, 01
+ Jun 2022 06:53:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220601130819.11171-1-isak01@gmail.com>
+In-Reply-To: <20220601130819.11171-1-isak01@gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 1 Jun 2022 22:52:39 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAReo0ACB_TbcCXu76OPeK6UQhWtAWOxGq=L88GZB5Tv8g@mail.gmail.com>
+Message-ID: <CAK7LNAReo0ACB_TbcCXu76OPeK6UQhWtAWOxGq=L88GZB5Tv8g@mail.gmail.com>
+Subject: Re: [PATCH] scripts: kconfig: nconf: make nconfig accept jk keybindings
+To:     Isak Ellmer <isak01@gmail.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Two old boards use "atheros" prefix instead of already documented "qca".
-Document it as deprecated to fix warnings like:
+On Wed, Jun 1, 2022 at 10:08 PM Isak Ellmer <isak01@gmail.com> wrote:
+>
+> Make nconfig accept jk keybindings for movement in addition to arrow
+> keys.
+>
+> Signed-off-by: Isak Ellmer <isak01@gmail.com>
+> ---
 
-  at91-gatwick.dtb: atheros@0: 'atheros,board-id' does not match any of the regexes
+Applied to linux-kbuild.
+Thanks.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
----
 
-Changes since v1:
-1. Rebase on Rob's dt/next branch.
----
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+>  scripts/kconfig/nconf.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/scripts/kconfig/nconf.c b/scripts/kconfig/nconf.c
+> index 7b371bd7fb36..3ba8b1af390f 100644
+> --- a/scripts/kconfig/nconf.c
+> +++ b/scripts/kconfig/nconf.c
+> @@ -52,8 +52,8 @@ static const char nconf_global_help[] =
+>  "\n"
+>  "Menu navigation keys\n"
+>  "----------------------------------------------------------------------\n"
+> -"Linewise up                 <Up>\n"
+> -"Linewise down               <Down>\n"
+> +"Linewise up                 <Up>    <k>\n"
+> +"Linewise down               <Down>  <j>\n"
+>  "Pagewise up                 <Page Up>\n"
+>  "Pagewise down               <Page Down>\n"
+>  "First entry                 <Home>\n"
+> @@ -1105,9 +1105,11 @@ static void conf(struct menu *menu)
+>                                 break;
+>                         switch (res) {
+>                         case KEY_DOWN:
+> +                       case 'j':
+>                                 menu_driver(curses_menu, REQ_DOWN_ITEM);
+>                                 break;
+>                         case KEY_UP:
+> +                       case 'k':
+>                                 menu_driver(curses_menu, REQ_UP_ITEM);
+>                                 break;
+>                         case KEY_NPAGE:
+> @@ -1287,9 +1289,11 @@ static void conf_choice(struct menu *menu)
+>                                 break;
+>                         switch (res) {
+>                         case KEY_DOWN:
+> +                       case 'j':
+>                                 menu_driver(curses_menu, REQ_DOWN_ITEM);
+>                                 break;
+>                         case KEY_UP:
+> +                       case 'k':
+>                                 menu_driver(curses_menu, REQ_UP_ITEM);
+>                                 break;
+>                         case KEY_NPAGE:
+> --
+> 2.35.1
+>
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 113ff50eb46e..cba1d02dfec7 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -143,6 +143,9 @@ patternProperties:
-     description: ASPEED Technology Inc.
-   "^asus,.*":
-     description: AsusTek Computer Inc.
-+  "^atheros,.*":
-+    description: Qualcomm Atheros, Inc. (deprecated, use qca)
-+    deprecated: true
-   "^atlas,.*":
-     description: Atlas Scientific LLC
-   "^atmel,.*":
+
 -- 
-2.34.1
-
+Best Regards
+Masahiro Yamada

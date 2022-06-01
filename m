@@ -2,246 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5951853ADF2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B60953ADE6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiFAUsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 16:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
+        id S229902AbiFAUoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 16:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiFAUrp (ORCPT
+        with ESMTP id S229600AbiFAUni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 16:47:45 -0400
-Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBC1327C24F
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 13:44:51 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id wUjOnikly26JCwUjOn5OWJ; Wed, 01 Jun 2022 22:14:22 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Wed, 01 Jun 2022 22:14:22 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <dd525d8b-3cb3-e843-4a79-64f50c0fe8a7@wanadoo.fr>
-Date:   Wed, 1 Jun 2022 22:14:14 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/5] crypto: aspeed: Add HACE hash driver
-Content-Language: en-US
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Johnny Huang <johnny_huang@aspeedtech.com>
-Cc:     linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Wed, 1 Jun 2022 16:43:38 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1886D24C086;
+        Wed,  1 Jun 2022 13:27:01 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-f2bb84f9edso4200298fac.10;
+        Wed, 01 Jun 2022 13:27:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KWGUC4uO5PZbQJw1t/pJ6JrU01XaVoUwRy9nGcZRULo=;
+        b=aUOlrrniDEMMZvqGMeyUK8q56cUWcLRIjo6qsUV9fyEhgVmc2AVzTlji3AkuJkyKYB
+         q9s4DkMOqSx22igAxs5ULm0Bct3gWCsjoKfNdeQBo+F/SXYueQCMpmnBJE5n4TPs+rQP
+         EtCk2LiNy/xqWCiMZk1SoKj5p7iOdNoJG8TO+n5RT7RVTAN4FcxhswWNpOgZTcaMIjlX
+         jOKl08wYMvGLUGYgUz7FFJATsHNgSfgIMTswdU1JtvgFneRbl67tFP7t0ZiKjgdr0ggy
+         IXWxY4UvfTJ9cH2HtnaNjoePUHSoYr2TAdWdCy3MPC3yPas5j/DonvGMCuIExXyJ9vUH
+         pvCw==
+X-Gm-Message-State: AOAM530pOuFsg6YhDw/yq/+z66FsQafa2kk57uMsBKDIYE7rU9a2DrO1
+        Wl9V51+UeLH4yqVDyDFElGHmq2nzBg==
+X-Google-Smtp-Source: ABdhPJy46FwaV+/CuAdl76b9QW0BOahsGYFHA8hMlljpnhRVmZB5/xAKRzNhgVlrdw6+EL1l8OAIEg==
+X-Received: by 2002:a05:6808:1a8c:b0:32b:df97:b1fa with SMTP id bm12-20020a0568081a8c00b0032bdf97b1famr767976oib.184.1654114620054;
+        Wed, 01 Jun 2022 13:17:00 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r10-20020a4aa2ca000000b0035eb4e5a6cfsm1336181ool.37.2022.06.01.13.16.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 13:16:59 -0700 (PDT)
+Received: (nullmailer pid 365044 invoked by uid 1000);
+        Wed, 01 Jun 2022 20:16:58 -0000
+Date:   Wed, 1 Jun 2022 15:16:58 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Max Krummenacher <max.oss.09@gmail.com>
+Cc:     max.krummenacher@toradex.com, Marek Vasut <marex@denx.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-References: <20220601054204.1522976-1-neal_liu@aspeedtech.com>
- <20220601054204.1522976-2-neal_liu@aspeedtech.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220601054204.1522976-2-neal_liu@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 1/3] dt-bindings: display: add new bus-format property
+ for panel-dpi
+Message-ID: <20220601201658.GA342879-robh@kernel.org>
+References: <20220518115541.38407-1-max.oss.09@gmail.com>
+ <20220518115541.38407-2-max.oss.09@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518115541.38407-2-max.oss.09@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Le 01/06/2022 à 07:42, Neal Liu a écrit :
-> Hash and Crypto Engine (HACE) is designed to accelerate the
-> throughput of hash data digest, encryption, and decryption.
+On Wed, May 18, 2022 at 01:55:38PM +0200, Max Krummenacher wrote:
+> From: Max Krummenacher <max.krummenacher@toradex.com>
 > 
-> Basically, HACE can be divided into two independently engines
-> - Hash Engine and Crypto Engine. This patch aims to add HACE
-> hash engine driver for hash accelerator.
+> The property is used to set the enum bus_format and infer the bpc
+> for a panel defined by 'panel-dpi'.
+> This specifies how the panel is connected to the display interface.
 > 
-> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> Signed-off-by: Johnny Huang <johnny_huang@aspeedtech.com>
+> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+> 
 > ---
->   MAINTAINERS                              |    7 +
->   drivers/crypto/Kconfig                   |    1 +
->   drivers/crypto/Makefile                  |    1 +
->   drivers/crypto/aspeed/Kconfig            |   22 +
->   drivers/crypto/aspeed/Makefile           |    6 +
->   drivers/crypto/aspeed/aspeed-hace-hash.c | 1335 ++++++++++++++++++++++
->   drivers/crypto/aspeed/aspeed-hace.c      |  210 ++++
->   drivers/crypto/aspeed/aspeed-hace.h      |  179 +++
->   8 files changed, 1761 insertions(+)
->   create mode 100644 drivers/crypto/aspeed/Kconfig
->   create mode 100644 drivers/crypto/aspeed/Makefile
->   create mode 100644 drivers/crypto/aspeed/aspeed-hace-hash.c
->   create mode 100644 drivers/crypto/aspeed/aspeed-hace.c
->   create mode 100644 drivers/crypto/aspeed/aspeed-hace.h
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e8c52d0192a6..c020e0893eed 100644
+> Changes in v2:
+>     - Fix errors found by dt_binding_check
+> 
+>  .../bindings/display/panel/panel-dpi.yaml     | 11 +++++++++
+>  .../dt-bindings/display/dt-media-bus-format.h | 23 +++++++++++++++++++
+>  2 files changed, 34 insertions(+)
+>  create mode 100644 include/dt-bindings/display/dt-media-bus-format.h
+> 
+> diff --git a/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml b/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
+> index dae0676b5c6e..a20b5898941e 100644
+> --- a/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
+> @@ -21,6 +21,14 @@ properties:
+>        - {}
+>        - const: panel-dpi
+>  
+> +  bus-format:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 
-[...]
+Constraints?
 
-> +int aspeed_register_hace_hash_algs(struct aspeed_hace_dev *hace_dev)
-> +{
-> +	int rc, i;
-> +
-> +	AHASH_DBG(hace_dev, "\n");
-> +
-> +	for (i = 0; i < ARRAY_SIZE(aspeed_ahash_algs); i++) {
-> +		aspeed_ahash_algs[i].hace_dev = hace_dev;
-> +		rc = crypto_register_ahash(&aspeed_ahash_algs[i].alg.ahash);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
-> +	if (hace_dev->version != AST2600_VERSION)
-> +		return 0;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(aspeed_ahash_algs_g6); i++) {
-> +		aspeed_ahash_algs_g6[i].hace_dev = hace_dev;
-> +		rc = crypto_register_ahash(&aspeed_ahash_algs_g6[i].alg.ahash);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
-> +	return 0;
+> +    description: |
+> +      Describes how the display panel is connected to the display interface.
+> +      Valid values are defined in <dt-bindings/display/dt-media-bus-format.h>.
+> +      The mapping between the color/significance of the panel lines to the
+> +      parallel data lines are defined in [1].
 
-Should there be some kind of error handling here, in order to undo 
-things already done if an error occures?
+Just drop the [1] and use a colon.
 
+> +      [1] https://www.kernel.org/doc/html/v5.17/userspace-api/media/v4l/subdev-formats.html#packed-rgb-formats
 
-> +}
-> diff --git a/drivers/crypto/aspeed/aspeed-hace.c b/drivers/crypto/aspeed/aspeed-hace.c
+Why not just use the V4L number space rather than invent yet another 
+number space?
+
+Need a blank line here too.
+
+>    backlight: true
+>    enable-gpios: true
+>    height-mm: true
+> @@ -39,11 +47,14 @@ additionalProperties: false
+>  
+>  examples:
+>    - |
+> +    #include <dt-bindings/display/dt-media-bus-format.h>
+> +
+>      panel {
+>          compatible = "startek,startek-kd050c", "panel-dpi";
+>          label = "osddisplay";
+>          power-supply = <&vcc_supply>;
+>          backlight = <&backlight>;
+> +        bus-format = <DT_MEDIA_BUS_FMT_RGB888_1X24>;
+
+Other properties describing the interface have been put in the endpoint 
+node. This should too I think.
+
+>  
+>          port {
+>              lcd_in: endpoint {
+> diff --git a/include/dt-bindings/display/dt-media-bus-format.h b/include/dt-bindings/display/dt-media-bus-format.h
 > new file mode 100644
-> index 000000000000..f25b13d120e8
+> index 000000000000..c0f2a7b59aa1
 > --- /dev/null
-> +++ b/drivers/crypto/aspeed/aspeed-hace.c
-
-[...]
-
-> +static int aspeed_hace_probe(struct platform_device *pdev)
-> +{
-> +	const struct of_device_id *hace_dev_id;
-> +	struct aspeed_engine_hash *hash_engine;
-> +	struct aspeed_hace_dev *hace_dev;
-> +	struct resource *res;
-> +	int rc;
+> +++ b/include/dt-bindings/display/dt-media-bus-format.h
+> @@ -0,0 +1,23 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only OR MIT */
+> +/*
+> + * Copyright 2022 Max Krummenacher <max.krummenacher@toradex.com>
+> + */
 > +
-> +	hace_dev = devm_kzalloc(&pdev->dev, sizeof(struct aspeed_hace_dev),
-> +				GFP_KERNEL);
-> +	if (!hace_dev)
-> +		return -ENOMEM;
+> +#ifndef __DT_BINDINGS_DT_MEDIA_BUS_FORMAT_H
+> +#define __DT_BINDINGS_DT_MEDIA_BUS_FORMAT_H
 > +
-> +	hace_dev_id = of_match_device(aspeed_hace_of_matches, &pdev->dev);
-> +	if (!hace_dev_id) {
-> +		dev_err(&pdev->dev, "Failed to match hace dev id\n");
-> +		return -EINVAL;
-> +	}
+> +/*
+> + * Attention: Keep these macro names in sync with
+> + * include/uapi/linux/media-bus-format.h
+> + */
 > +
-> +	hace_dev->dev = &pdev->dev;
-> +	hace_dev->version = (unsigned long)hace_dev_id->data;
-> +	hash_engine = &hace_dev->hash_engine;
+> +#define DT_MEDIA_BUS_FMT_RGB565_1X16		1
+> +#define DT_MEDIA_BUS_FMT_RGB666_1X18		2
+> +#define DT_MEDIA_BUS_FMT_RBG888_1X24		3
+> +#define DT_MEDIA_BUS_FMT_RGB666_1X24_CPADHI	4
+> +#define DT_MEDIA_BUS_FMT_BGR888_1X24		5
+> +#define DT_MEDIA_BUS_FMT_GBR888_1X24		6
+> +#define DT_MEDIA_BUS_FMT_RGB888_1X24		7
+> +#define DT_MEDIA_BUS_FMT_RGB888_1X32_PADHI	8
 > +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +
-> +	platform_set_drvdata(pdev, hace_dev);
-> +
-> +	spin_lock_init(&hash_engine->lock);
-> +	tasklet_init(&hash_engine->done_task, aspeed_hace_hash_done_task,
-> +		     (unsigned long)hace_dev);
-> +	tasklet_init(&hash_engine->queue_task, aspeed_hace_hash_queue_task,
-> +		     (unsigned long)hace_dev);
-> +	crypto_init_queue(&hash_engine->queue, ASPEED_HASH_QUEUE_LENGTH);
-> +
-> +	hace_dev->regs = devm_ioremap_resource(&pdev->dev, res);
-> +	if (!hace_dev->regs) {
-> +		dev_err(&pdev->dev, "Failed to map resources\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	hace_dev->irq = platform_get_irq(pdev, 0);
-> +	if (!hace_dev->irq) {
-> +		dev_err(&pdev->dev, "Failed to get interrupt\n");
-> +		return -ENXIO;
-> +	}
-> +
-> +	rc = devm_request_irq(&pdev->dev, hace_dev->irq, aspeed_hace_irq, 0,
-> +			      dev_name(&pdev->dev), hace_dev);
-> +	if (rc) {
-> +		dev_err(&pdev->dev, "Failed to request interrupt\n");
-> +		return rc;
-> +	}
-> +
-> +	hace_dev->yclk = devm_clk_get(&pdev->dev, "yclk");
-> +	if (IS_ERR(hace_dev->yclk)) {
-> +		dev_err(&pdev->dev, "Failed to get yclk\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	rc = clk_prepare_enable(hace_dev->yclk);
-> +	if (rc) {
-> +		dev_err(&pdev->dev, "Failed to enable clock 0x%x\n", rc);
-> +		return rc;
-
-This is not undone, neither if an error occures after it, nor in the 
-.remove function.
-
-> +	}
-> +
-> +	hash_engine->ahash_src_addr =
-> +		dma_alloc_coherent(&pdev->dev,
-> +				   ASPEED_HASH_SRC_DMA_BUF_LEN,
-> +				   &hash_engine->ahash_src_dma_addr,
-> +				   GFP_KERNEL);
-> +	if (!hash_engine->ahash_src_addr) {
-> +		dev_err(&pdev->dev, "Failed to allocate dma buffer\n");
-> +		return -ENOMEM;
-> +	}
-
-Same here, this si not undone in the .remove function.
-
-> +
-> +	rc = aspeed_hace_register(hace_dev);
-> +	if (rc) {
-> +		dev_err(&pdev->dev, "Failed to register hash alg, rc:0x%x\n", rc);
-
-Is this really an error if finaly we continue and return 0 (success) at 
-the end?
-
-> +		rc = 0;
-> +	}
-> +
-> +	dev_info(&pdev->dev, "ASPEED Crypto Accelerator successfully registered\n");
-> +
-> +	return rc;
-> +}
-> +
-> +static int aspeed_hace_remove(struct platform_device *pdev)
-> +{
-> +	struct aspeed_hace_dev *hace_dev = platform_get_drvdata(pdev);
-> +	struct aspeed_engine_hash *hash_engine = &hace_dev->hash_engine;
-> +
-> +	aspeed_hace_unregister(hace_dev);
-
-Should this be done even if aspeed_hace_register() failed in the probe?
-
-Just my 2c,
-CJ
-
-
-> +
-> +	tasklet_kill(&hash_engine->done_task);
-> +	tasklet_kill(&hash_engine->queue_task);
-> +
-> +	return 0;
-> +}
-> +
-
-[...]
+> +#endif /* __DT_BINDINGS_DT_MEDIA_BUS_FORMAT_H */
+> -- 
+> 2.20.1
+> 
+> 

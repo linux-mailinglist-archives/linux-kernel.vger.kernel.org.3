@@ -2,121 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCCA2539EF1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F55539F6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350006AbiFAIDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 04:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
+        id S1350722AbiFAI1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347889AbiFAIDO (ORCPT
+        with ESMTP id S1350621AbiFAI1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:03:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E59414614A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 01:03:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654070591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xgdti+VwJR3VZPhJkWljxyzD9ChCNJZ2LKlv/SAahT4=;
-        b=LVgSnApf+ihxVDd7BIswWjH5nIJ788mIPyHsKBib8OPxeSOx6do1AuJRg9UWzzugKilRK+
-        tjxA93ZTHuArxY3XPTiK+SLJfPzuijHe8Phevtz/XEI3qpEtLkYWS3GNas+ipY/RdPTyHi
-        g7eIRAC+iSIix6gw6QKGdDX4GUQJ86U=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-626-uu0W-15tOreF66Y7z6KVRg-1; Wed, 01 Jun 2022 04:03:09 -0400
-X-MC-Unique: uu0W-15tOreF66Y7z6KVRg-1
-Received: by mail-ed1-f69.google.com with SMTP id q29-20020a056402249d00b0042d90fd98deso698407eda.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 01:03:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Xgdti+VwJR3VZPhJkWljxyzD9ChCNJZ2LKlv/SAahT4=;
-        b=mIqaIKzCbxK+GkT0TpBkWcWupJasf8rS0eIoZdLfOtOVELOgKkS6w5MuQ0u2t9vjcX
-         LnHBbkXeoFg50WEMH1YaXG4580k7QQpYqFTYfu0PN0Os7na2yZXNRzgTfQ1bgQ2jMVxL
-         crlCnAoPIOflMGzz30Yo9VQ1jtEPq1lsGo5Pm16mYu7SL7ZW+BJKcg+jLaJKcelSMQTH
-         duYQijE6Q7KtXOmtAXbfHeRjTgVf7/E/Vpj+wRVdv+V7ZHoSiGsym6ZXjkH5d8nPhB/+
-         IX9wd3C314jf5A7pDcj4sHr2N+7ryJGkFoW6qfKG2z07ldgo1jzuy3Nr/gKEnxOPbWHs
-         7F4w==
-X-Gm-Message-State: AOAM532igbCOEf5c0gBp8WL0sgcJnWUPjJ1Rc6ME1iJr6Zp7G/6PWcXo
-        BloJZsqKm0b/S3zJqktaXBHTuzY8pgYDjTEZJ9+TTm1+loRDs7BPHH2mBwFAIRbxIUQo33n8z/Y
-        duw58UJYSJZI7JjQsES66mQYu
-X-Received: by 2002:a05:6402:34c1:b0:42b:4047:20b8 with SMTP id w1-20020a05640234c100b0042b404720b8mr57064169edc.88.1654070588076;
-        Wed, 01 Jun 2022 01:03:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwgO9mu44S3VLlU3/wD7qn0U/ff1HsZNyCf5jYGov3NDArM7pwpMiurcfJY5MoE5bqD3r/3EA==
-X-Received: by 2002:a05:6402:34c1:b0:42b:4047:20b8 with SMTP id w1-20020a05640234c100b0042b404720b8mr57064153edc.88.1654070587868;
-        Wed, 01 Jun 2022 01:03:07 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id wj17-20020a170907051100b006fed9a0eb17sm388609ejb.187.2022.06.01.01.03.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 01:03:07 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        "Durrant, Paul" <pdurrant@amazon.co.uk>
-Cc:     "Allister, Jack" <jalliste@amazon.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "diapop@amazon.co.uk" <diapop@amazon.co.uk>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "metikaya@amazon.co.uk" <metikaya@amazon.co.uk>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "rkrcmar@redhat.com" <rkrcmar@redhat.com>,
-        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: ...\n
-In-Reply-To: <YpcMw2TgNWzrcoRm@worktop.programming.kicks-ass.net>
-References: <YpYaYK7a28DFT5Ne@hirez.programming.kicks-ass.net>
- <20220531140236.1435-1-jalliste@amazon.com>
- <YpYpxzt4rmG+LFy9@hirez.programming.kicks-ass.net>
- <059ab3327ac440479ecfdf49fa054347@EX13D32EUC003.ant.amazon.com>
- <YpcMw2TgNWzrcoRm@worktop.programming.kicks-ass.net>
-Date:   Wed, 01 Jun 2022 10:03:06 +0200
-Message-ID: <87r148olol.fsf@redhat.com>
+        Wed, 1 Jun 2022 04:27:34 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0928CDF83;
+        Wed,  1 Jun 2022 01:27:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=50cD+iAXnAyDsdbwmGD7FRwmVdHsOBuhM7VzSWfWv/c=;
+        b=mONxoWLc0dnmRAC/rqdhQApB6FiuPqzDTv7s+fmE77nRRrzq5mjh/7yeYYU5qufEdKuv0uj1os9Mu
+         detewmiW10ioee8RMehatZb0C1rur0SMmczGS+ONVyTk+YJZyU0Np6fJIjCs/sGoESb9tAve9zvhC0
+         gQ2lrGCEgLe9balM9LBOXD+qIYaUx7L8Hl8ZrtSttZmTHjxowMcc0pZeHwUS2aS9/ZHqNSZyyBIr/J
+         mBMq7G0i+G7q4EKSnnfXLsuXoxiIHsyokZiHQqf+HOOqy2r8WJpgBsBy7vm8hIlECvwpQ1uRMeKpZ3
+         Orv+Vu2k4PSwOdVUt5Pejzu4w1JsLSQ==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000009,0.020715)], BW: [Enabled, t: (0.000029,0.000001)], RTDA: [Enabled, t: (1.097317), Hit: No, Details: v3.19.0; Id: 15.52k2o7.1g4f60dc0.81025], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([178.70.36.174])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Wed, 1 Jun 2022 11:27:06 +0300
+Date:   Wed, 1 Jun 2022 11:04:55 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Conor.Dooley@microchip.com
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru
+Subject: Re: [PATCH v14 2/3] fpga: microchip-spi: add Microchip MPF FPGA
+ manager
+Message-ID: <20220601080455.hfi34aknvasbxz2q@x260>
+References: <20220531192344.23038-1-i.bornyakov@metrotek.ru>
+ <20220531192344.23038-3-i.bornyakov@metrotek.ru>
+ <7a350b92-d6a6-c0e1-95f7-ff711699f850@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7a350b92-d6a6-c0e1-95f7-ff711699f850@microchip.com>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra <peterz@infradead.org> writes:
+On Wed, Jun 01, 2022 at 07:49:48AM +0000, Conor.Dooley@microchip.com wrote:
+> On 31/05/2022 20:23, Ivan Bornyakov wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > Add support to the FPGA manager for programming Microchip Polarfire
+> > FPGAs over slave SPI interface with .dat formatted bitsream image.
+> > 
+> > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> 
+> Hey Ivan,
+> Could've kept at least the R-b tag from v13, but either way:
+> Tested-by: Conor Dooley <conor.dooley@microchip.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> I did have another look at Yiluns two questions.
+> The reason for the double status read effectively boils down
+> to the system controller potentially not having had enough
+> time to process the previous command/frame and update its
+> status yet.
+> 
+> And see below about the memcpy()...
+> 
+> > ---
+> >   drivers/fpga/Kconfig         |   9 +
+> >   drivers/fpga/Makefile        |   1 +
+> >   drivers/fpga/microchip-spi.c | 384 +++++++++++++++++++++++++++++++++++
+> >   3 files changed, 394 insertions(+)
+> >   create mode 100644 drivers/fpga/microchip-spi.c
+> > 
+> > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> > index 26025dbab353..75806ef5c9ea 100644
+> > --- a/drivers/fpga/Kconfig
+> > +++ b/drivers/fpga/Kconfig
+> > @@ -248,4 +248,13 @@ config FPGA_MGR_VERSAL_FPGA
+> >            configure the programmable logic(PL).
+> > 
+> >            To compile this as a module, choose M here.
+> > +
+> > +config FPGA_MGR_MICROCHIP_SPI
+> > +       tristate "Microchip Polarfire SPI FPGA manager"
+> > +       depends on SPI
+> > +       help
+> > +         FPGA manager driver support for Microchip Polarfire FPGAs
+> > +         programming over slave SPI interface with .dat formatted
+> > +         bitstream image.
+> > +
+> >   endif # FPGA
+> > diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> > index e32bfa90f968..5425a15892df 100644
+> > --- a/drivers/fpga/Makefile
+> > +++ b/drivers/fpga/Makefile
+> > @@ -19,6 +19,7 @@ obj-$(CONFIG_FPGA_MGR_XILINX_SPI)     += xilinx-spi.o
+> >   obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)       += zynq-fpga.o
+> >   obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)     += zynqmp-fpga.o
+> >   obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)     += versal-fpga.o
+> > +obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)   += microchip-spi.o
+> >   obj-$(CONFIG_ALTERA_PR_IP_CORE)                += altera-pr-ip-core.o
+> >   obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)   += altera-pr-ip-core-plat.o
+> > 
+> > diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
+> > new file mode 100644
+> > index 000000000000..413e5c364f68
+> ---8<---
+> > +
+> > +static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
+> > +{
+> > +       u8 tmp_buf[MPF_SPI_FRAME_SIZE + 1] = { MPF_SPI_FRAME, };
+> > +       struct mpf_priv *priv = mgr->priv;
+> > +       struct device *dev = &mgr->dev;
+> > +       struct spi_device *spi;
+> > +       int ret, i;
+> > +
+> > +       if (count % MPF_SPI_FRAME_SIZE) {
+> > +               dev_err(dev, "Bitstream size is not a multiple of %d\n",
+> > +                       MPF_SPI_FRAME_SIZE);
+> > +               return -EINVAL;
+> > +       }
+> > +
+> > +       spi = priv->spi;
+> > +
+> > +       for (i = 0; i < count / MPF_SPI_FRAME_SIZE; i++) {
+> > +               memcpy(tmp_buf + 1, buf + i * MPF_SPI_FRAME_SIZE,
+> > +                      MPF_SPI_FRAME_SIZE);
+> > +
+> > +               ret = mpf_spi_write(spi, tmp_buf, sizeof(tmp_buf));
+> > +               if (ret) {
+> > +                       dev_err(dev, "Failed to write bitstream frame %d/%zu\n",
+> > +                               i, count / MPF_SPI_FRAME_SIZE);
+> > +                       return ret;
+> > +               }
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> 
+> I was able to program with the following diff, which is effectively
+> the same as the one you sent (which also worked for me):
+> 
+> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
+> index 413e5c364f68..fa6220e8056a 100644
+> --- a/drivers/fpga/microchip-spi.c
+> +++ b/drivers/fpga/microchip-spi.c
+> @@ -268,7 +268,8 @@ static int mpf_ops_write_init(struct fpga_manager *mgr,
+>   
+>   static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
+>   {
+> -       u8 tmp_buf[MPF_SPI_FRAME_SIZE + 1] = { MPF_SPI_FRAME, };
+> +       u8 spi_frame_command = MPF_SPI_FRAME;
+> +       struct spi_transfer xfers[2] = { 0 };
+>          struct mpf_priv *priv = mgr->priv;
+>          struct device *dev = &mgr->dev;
+>          struct spi_device *spi;
+> @@ -282,11 +283,16 @@ static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count
+>   
+>          spi = priv->spi;
+>   
+> +       xfers[0].tx_buf = &spi_frame_command;
+> +       xfers[0].len = 1;
+> +
+>          for (i = 0; i < count / MPF_SPI_FRAME_SIZE; i++) {
+> -               memcpy(tmp_buf + 1, buf + i * MPF_SPI_FRAME_SIZE,
+> -                      MPF_SPI_FRAME_SIZE);
+> +               xfers[1].tx_buf = buf + i * MPF_SPI_FRAME_SIZE;
+> +               xfers[1].len = MPF_SPI_FRAME_SIZE;
+>   
+> -               ret = mpf_spi_write(spi, tmp_buf, sizeof(tmp_buf));
+> +               ret = mpf_poll_status(spi, 0);
+> +               if (ret >= 0)
+> +                       ret = spi_sync_transfer(spi, xfers, 2);
+>                  if (ret) {
+>                          dev_err(dev, "Failed to write bitstream frame %d/%zu\n",
+>                                  i, count / MPF_SPI_FRAME_SIZE);
+> 
+> Have you been able to look at a waveform of programming like this
+> on your hardware? Off the top of my head, I was wondering if your
+> spi controller releases CS between every xfer?
+> Mine is perfectly happy not to release it - which is why I noticed
+> the extra cs_change in mpf_read_status().
+> 
+> Thanks,
+> Conor.
+> 
 
-> On Tue, May 31, 2022 at 02:52:04PM +0000, Durrant, Paul wrote:
-
-...
-
->> 
->> I'll bite... What's ludicrous about wanting to run a guest at a lower
->> CPU freq to minimize observable change in whatever workload it is
->> running?
->
-> *why* would you want to do that? Everybody wants their stuff done
-> faster.
->
-
-FWIW, I can see a valid use-case: imagine you're running some software
-which calibrates itself in the beginning to run at some desired real
-time speed but then the VM running it has to be migrated to a host with
-faster (newer) CPUs. I don't have a real world examples out of top of my
-head but I remember some old DOS era games were impossible to play on
-newer CPUs because everything was happenning too fast. Maybe that's the
-case :-)
-
--- 
-Vitaly
+Thanks for the hint. I'll ask our HW folks if it's possible.
 

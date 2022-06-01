@@ -2,48 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3358D53AEDC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF47B53AFED
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231656AbiFAVoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
+        id S231687AbiFAVgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbiFAVoS (ORCPT
+        with ESMTP id S231578AbiFAVgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:44:18 -0400
-X-Greylist: delayed 479 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Jun 2022 14:44:16 PDT
-Received: from mail.stoffel.org (li1843-175.members.linode.com [172.104.24.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D615DD1E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 14:44:16 -0700 (PDT)
-Received: from quad.stoffel.org (068-116-170-226.res.spectrum.com [68.116.170.226])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 1 Jun 2022 17:36:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4339B1C2D79;
+        Wed,  1 Jun 2022 14:36:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.stoffel.org (Postfix) with ESMTPSA id 98DD7270B6;
-        Wed,  1 Jun 2022 17:36:16 -0400 (EDT)
-Received: by quad.stoffel.org (Postfix, from userid 1000)
-        id E147DA7C46; Wed,  1 Jun 2022 17:36:15 -0400 (EDT)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C97AF61331;
+        Wed,  1 Jun 2022 21:36:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DBA7C385A5;
+        Wed,  1 Jun 2022 21:36:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1654119400;
+        bh=N11gAQiSefrt49HoG+VdPLrSyzJ8gsx80XzIVHABxP8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Iptty91BhQzTEYnVSDH/IZ1dLjBE84XzIfhYEZ4yix6nJ70yTApfoXwFDuNibyU2c
+         OzOgEScmNBKLWnNjw2lL5oH5TiIqUDcpVFGkdmBwA2cc/Z9n1ZE8PTfvzwTwpqFg8I
+         xCQGqthWF9NNimTpr9X6/Oaf26/JBGAyITBOvO68=
+Date:   Wed, 1 Jun 2022 14:36:38 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
+        hannes@cmpxchg.org, guro@fb.com, minchan@kernel.org,
+        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
+        hch@infradead.org, oleg@redhat.com, david@redhat.com,
+        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
+        jhubbard@nvidia.com, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com,
+        Liam Howlett <liam.howlett@oracle.com>
+Subject: Re: [PATCH RESEND v2 1/2] mm: drop oom code from exit_mmap
+Message-Id: <20220601143638.9e78c470d2c980053cc8059a@linux-foundation.org>
+In-Reply-To: <20220531223100.510392-1-surenb@google.com>
+References: <20220531223100.510392-1-surenb@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-ID: <25239.56271.848372.965726@quad.stoffel.home>
-Date:   Wed, 1 Jun 2022 17:36:15 -0400
-From:   "John Stoffel" <john@stoffel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Heming Zhao <heming.zhao@suse.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Song Liu <song@kernel.org>, linux-raid@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.4 18/55] md/bitmap: don't set sb values if can't pass sanity check
-In-Reply-To: <20220530134701.1935933-18-sashal@kernel.org>
-References: <20220530134701.1935933-1-sashal@kernel.org>
-        <20220530134701.1935933-18-sashal@kernel.org>
-X-Mailer: VM 8.2.0b under 27.1 (x86_64-pc-linux-gnu)
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,167 +59,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>> "Sasha" == Sasha Levin <sashal@kernel.org> writes:
+On Tue, 31 May 2022 15:30:59 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
 
-Sasha> From: Heming Zhao <heming.zhao@suse.com>
-Sasha> [ Upstream commit e68cb83a57a458b01c9739e2ad9cb70b04d1e6d2 ]
+> The primary reason to invoke the oom reaper from the exit_mmap path used
+> to be a prevention of an excessive oom killing if the oom victim exit
+> races with the oom reaper (see [1] for more details). The invocation has
+> moved around since then because of the interaction with the munlock
+> logic but the underlying reason has remained the same (see [2]).
+> 
+> Munlock code is no longer a problem since [3] and there shouldn't be
+> any blocking operation before the memory is unmapped by exit_mmap so
+> the oom reaper invocation can be dropped. The unmapping part can be done
+> with the non-exclusive mmap_sem and the exclusive one is only required
+> when page tables are freed.
+> 
+> Remove the oom_reaper from exit_mmap which will make the code easier to
+> read. This is really unlikely to make any observable difference although
+> some microbenchmarks could benefit from one less branch that needs to be
+> evaluated even though it almost never is true.
+> 
+> [1] 212925802454 ("mm: oom: let oom_reap_task and exit_mmap run concurrently")
+> [2] 27ae357fa82b ("mm, oom: fix concurrent munlock and oom reaper unmap, v3")
+> [3] a213e5cf71cb ("mm/munlock: delete munlock_vma_pages_all(), allow oomreap")
+> 
 
-Sasha> If bitmap area contains invalid data, kernel will crash then mdadm
-Sasha> triggers "Segmentation fault".
-Sasha> This is cluster-md speical bug. In non-clustered env, mdadm will
+I've just reinstated the mapletree patchset so there are some
+conflicting changes.
 
-special
+> --- a/include/linux/oom.h
+> +++ b/include/linux/oom.h
+> @@ -106,8 +106,6 @@ static inline vm_fault_t check_stable_address_space(struct mm_struct *mm)
+>  	return 0;
+>  }
+>  
+> -bool __oom_reap_task_mm(struct mm_struct *mm);
+> -
+>  long oom_badness(struct task_struct *p,
+>  		unsigned long totalpages);
+>  
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 2b9305ed0dda..b7918e6bb0db 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -3110,30 +3110,13 @@ void exit_mmap(struct mm_struct *mm)
+>  	/* mm's last user has gone, and its about to be pulled down */
+>  	mmu_notifier_release(mm);
+>  
+> -	if (unlikely(mm_is_oom_victim(mm))) {
+> -		/*
+> -		 * Manually reap the mm to free as much memory as possible.
+> -		 * Then, as the oom reaper does, set MMF_OOM_SKIP to disregard
+> -		 * this mm from further consideration.  Taking mm->mmap_lock for
+> -		 * write after setting MMF_OOM_SKIP will guarantee that the oom
+> -		 * reaper will not run on this mm again after mmap_lock is
+> -		 * dropped.
+> -		 *
+> -		 * Nothing can be holding mm->mmap_lock here and the above call
+> -		 * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
+> -		 * __oom_reap_task_mm() will not block.
+> -		 */
+> -		(void)__oom_reap_task_mm(mm);
+> -		set_bit(MMF_OOM_SKIP, &mm->flags);
+> -	}
+> -
+> -	mmap_write_lock(mm);
+> +	mmap_read_lock(mm);
 
-All the commit messages need to be fixed from what I see.
+Unclear why this patch fiddles with the mm_struct locking in this
+fashion - changelogging that would have been helpful.
 
-Sasha> handle broken metadata case. In clustered array, only kernel space
-Sasha> handles bitmap slot info. But even this bug only happened in clustered
-Sasha> env, current sanity check is wrong, the code should be changed.
+But iirc mapletree wants to retain a write_lock here, so I ended up with
 
-Sasha> How to trigger: (faulty injection)
+void exit_mmap(struct mm_struct *mm)
+{
+	struct mmu_gather tlb;
+	struct vm_area_struct *vma;
+	unsigned long nr_accounted = 0;
+	MA_STATE(mas, &mm->mm_mt, 0, 0);
+	int count = 0;
 
-Sasha> dd if=/dev/zero bs=1M count=1 oflag=direct of=/dev/sda
-Sasha> dd if=/dev/zero bs=1M count=1 oflag=direct of=/dev/sdb
-Sasha> mdadm -C /dev/md0 -b clustered -e 1.2 -n 2 -l mirror /dev/sda /dev/sdb
-Sasha> mdadm -Ss
-Sasha> echo aaa > magic.txt
-Sasha>  == below modifying slot 2 bitmap data ==
-Sasha> dd if=magic.txt of=/dev/sda seek=16384 bs=1 count=3 <== destroy magic
-Sasha> dd if=/dev/zero of=/dev/sda seek=16436 bs=1 count=4 <== ZERO chunksize
-Sasha> mdadm -A /dev/md0 /dev/sda /dev/sdb
-Sasha>  == kernel crashes. mdadm outputs "Segmentation fault" ==
+	/* mm's last user has gone, and its about to be pulled down */
+	mmu_notifier_release(mm);
 
-Sasha> Reason of kernel crash:
+	mmap_write_lock(mm);
+	arch_exit_mmap(mm);
 
-Sasha> In md_bitmap_read_sb (called by md_bitmap_create), bad bitmap magic didn't
-Sasha> block chunksize assignment, and zero value made DIV_ROUND_UP_SECTOR_T()
-Sasha> trigger "divide error".
+	vma = mas_find(&mas, ULONG_MAX);
+	if (!vma) {
+		/* Can happen if dup_mmap() received an OOM */
+		mmap_write_unlock(mm);
+		return;
+	}
 
-Sasha> Crash log:
+	lru_add_drain();
+	flush_cache_mm(mm);
+	tlb_gather_mmu_fullmm(&tlb, mm);
+	/* update_hiwater_rss(mm) here? but nobody should be looking */
+	/* Use ULONG_MAX here to ensure all VMAs in the mm are unmapped */
+	unmap_vmas(&tlb, &mm->mm_mt, vma, 0, ULONG_MAX);
 
-Sasha> kernel: md: md0 stopped.
-Sasha> kernel: md/raid1:md0: not clean -- starting background reconstruction
-Sasha> kernel: md/raid1:md0: active with 2 out of 2 mirrors
-Sasha> kernel: dlm: ... ...
-Sasha> kernel: md-cluster: Joined cluster 44810aba-38bb-e6b8-daca-bc97a0b254aa slot 1
-Sasha> kernel: md0: invalid bitmap file superblock: bad magic
-Sasha> kernel: md_bitmap_copy_from_slot can't get bitmap from slot 2
-Sasha> kernel: md-cluster: Could not gather bitmaps from slot 2
-Sasha> kernel: divide error: 0000 [#1] SMP NOPTI
-Sasha> kernel: CPU: 0 PID: 1603 Comm: mdadm Not tainted 5.14.6-1-default
-Sasha> kernel: Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
-Sasha> kernel: RIP: 0010:md_bitmap_create+0x1d1/0x850 [md_mod]
-Sasha> kernel: RSP: 0018:ffffc22ac0843ba0 EFLAGS: 00010246
-Sasha> kernel: ... ...
-Sasha> kernel: Call Trace:
-Sasha> kernel:  ? dlm_lock_sync+0xd0/0xd0 [md_cluster 77fe..7a0]
-Sasha> kernel:  md_bitmap_copy_from_slot+0x2c/0x290 [md_mod 24ea..d3a]
-Sasha> kernel:  load_bitmaps+0xec/0x210 [md_cluster 77fe..7a0]
-Sasha> kernel:  md_bitmap_load+0x81/0x1e0 [md_mod 24ea..d3a]
-Sasha> kernel:  do_md_run+0x30/0x100 [md_mod 24ea..d3a]
-Sasha> kernel:  md_ioctl+0x1290/0x15a0 [md_mod 24ea....d3a]
-Sasha> kernel:  ? mddev_unlock+0xaa/0x130 [md_mod 24ea..d3a]
-Sasha> kernel:  ? blkdev_ioctl+0xb1/0x2b0
-Sasha> kernel:  block_ioctl+0x3b/0x40
-Sasha> kernel:  __x64_sys_ioctl+0x7f/0xb0
-Sasha> kernel:  do_syscall_64+0x59/0x80
-Sasha> kernel:  ? exit_to_user_mode_prepare+0x1ab/0x230
-Sasha> kernel:  ? syscall_exit_to_user_mode+0x18/0x40
-Sasha> kernel:  ? do_syscall_64+0x69/0x80
-Sasha> kernel:  entry_SYSCALL_64_after_hwframe+0x44/0xae
-Sasha> kernel: RIP: 0033:0x7f4a15fa722b
-Sasha> kernel: ... ...
-Sasha> kernel: ---[ end trace 8afa7612f559c868 ]---
-Sasha> kernel: RIP: 0010:md_bitmap_create+0x1d1/0x850 [md_mod]
+	/*
+	 * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
+	 * because the memory has been already freed. Do not bother checking
+	 * mm_is_oom_victim because setting a bit unconditionally is cheaper.
+	 */
+	set_bit(MMF_OOM_SKIP, &mm->flags);
+	free_pgtables(&tlb, &mm->mm_mt, vma, FIRST_USER_ADDRESS,
+		      USER_PGTABLES_CEILING);
+	tlb_finish_mmu(&tlb);
 
-Sasha> Reported-by: kernel test robot <lkp@intel.com>
-Sasha> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Sasha> Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
-Sasha> Signed-off-by: Heming Zhao <heming.zhao@suse.com>
-Sasha> Signed-off-by: Song Liu <song@kernel.org>
-Sasha> Signed-off-by: Sasha Levin <sashal@kernel.org>
-Sasha> ---
-Sasha>  drivers/md/md-bitmap.c | 44 ++++++++++++++++++++++--------------------
-Sasha>  1 file changed, 23 insertions(+), 21 deletions(-)
+	/*
+	 * Walk the list again, actually closing and freeing it, with preemption
+	 * enabled, without holding any MM locks besides the unreachable
+	 * mmap_write_lock.
+	 */
+	do {
+		if (vma->vm_flags & VM_ACCOUNT)
+			nr_accounted += vma_pages(vma);
+		remove_vma(vma);
+		count++;
+		cond_resched();
+	} while ((vma = mas_find(&mas, ULONG_MAX)) != NULL);
 
-Sasha> diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
-Sasha> index d7eef5292ae2..a95e20c3d0d4 100644
-Sasha> --- a/drivers/md/md-bitmap.c
-Sasha> +++ b/drivers/md/md-bitmap.c
-Sasha> @@ -642,14 +642,6 @@ static int md_bitmap_read_sb(struct bitmap *bitmap)
-Sasha>  	daemon_sleep = le32_to_cpu(sb->daemon_sleep) * HZ;
-Sasha>  	write_behind = le32_to_cpu(sb->write_behind);
-Sasha>  	sectors_reserved = le32_to_cpu(sb->sectors_reserved);
-Sasha> -	/* Setup nodes/clustername only if bitmap version is
-Sasha> -	 * cluster-compatible
-Sasha> -	 */
-Sasha> -	if (sb->version == cpu_to_le32(BITMAP_MAJOR_CLUSTERED)) {
-Sasha> -		nodes = le32_to_cpu(sb->nodes);
-Sasha> -		strlcpy(bitmap->mddev->bitmap_info.cluster_name,
-Sasha> -				sb->cluster_name, 64);
-Sasha> -	}
- 
-Sasha>  	/* verify that the bitmap-specific fields are valid */
-Sasha>  	if (sb->magic != cpu_to_le32(BITMAP_MAGIC))
-Sasha> @@ -671,6 +663,16 @@ static int md_bitmap_read_sb(struct bitmap *bitmap)
-Sasha>  		goto out;
-Sasha>  	}
- 
-Sasha> +	/*
-Sasha> +	 * Setup nodes/clustername only if bitmap version is
-Sasha> +	 * cluster-compatible
-Sasha> +	 */
-Sasha> +	if (sb->version == cpu_to_le32(BITMAP_MAJOR_CLUSTERED)) {
-Sasha> +		nodes = le32_to_cpu(sb->nodes);
-Sasha> +		strlcpy(bitmap->mddev->bitmap_info.cluster_name,
-Sasha> +				sb->cluster_name, 64);
-Sasha> +	}
-Sasha> +
-Sasha>  	/* keep the array size field of the bitmap superblock up to date */
-sb-> sync_size = cpu_to_le64(bitmap->mddev->resync_max_sectors);
- 
-Sasha> @@ -703,9 +705,9 @@ static int md_bitmap_read_sb(struct bitmap *bitmap)
- 
-Sasha>  out:
-Sasha>  	kunmap_atomic(sb);
-Sasha> -	/* Assigning chunksize is required for "re_read" */
-Sasha> -	bitmap->mddev->bitmap_info.chunksize = chunksize;
-Sasha>  	if (err == 0 && nodes && (bitmap->cluster_slot < 0)) {
-Sasha> +		/* Assigning chunksize is required for "re_read" */
-Sasha> +		bitmap->mddev->bitmap_info.chunksize = chunksize;
-Sasha>  		err = md_setup_cluster(bitmap->mddev, nodes);
-Sasha>  		if (err) {
-Sasha>  			pr_warn("%s: Could not setup cluster service (%d)\n",
-Sasha> @@ -716,18 +718,18 @@ static int md_bitmap_read_sb(struct bitmap *bitmap)
-Sasha>  		goto re_read;
-Sasha>  	}
- 
-Sasha> -
-Sasha>  out_no_sb:
-Sasha> -	if (test_bit(BITMAP_STALE, &bitmap->flags))
-Sasha> -		bitmap->events_cleared = bitmap->mddev->events;
-Sasha> -	bitmap->mddev->bitmap_info.chunksize = chunksize;
-Sasha> -	bitmap->mddev->bitmap_info.daemon_sleep = daemon_sleep;
-Sasha> -	bitmap->mddev->bitmap_info.max_write_behind = write_behind;
-Sasha> -	bitmap->mddev->bitmap_info.nodes = nodes;
-Sasha> -	if (bitmap->mddev->bitmap_info.space == 0 ||
-Sasha> -	    bitmap->mddev->bitmap_info.space > sectors_reserved)
-Sasha> -		bitmap->mddev->bitmap_info.space = sectors_reserved;
-Sasha> -	if (err) {
-Sasha> +	if (err == 0) {
-Sasha> +		if (test_bit(BITMAP_STALE, &bitmap->flags))
-Sasha> +			bitmap->events_cleared = bitmap->mddev->events;
-Sasha> +		bitmap->mddev->bitmap_info.chunksize = chunksize;
-Sasha> +		bitmap->mddev->bitmap_info.daemon_sleep = daemon_sleep;
-Sasha> +		bitmap->mddev->bitmap_info.max_write_behind = write_behind;
-Sasha> +		bitmap->mddev->bitmap_info.nodes = nodes;
-Sasha> +		if (bitmap->mddev->bitmap_info.space == 0 ||
-Sasha> +			bitmap->mddev->bitmap_info.space > sectors_reserved)
-Sasha> +			bitmap->mddev->bitmap_info.space = sectors_reserved;
-Sasha> +	} else {
-Sasha>  		md_bitmap_print_sb(bitmap);
-Sasha>  		if (bitmap->cluster_slot < 0)
-Sasha>  			md_cluster_stop(bitmap->mddev);
-Sasha> -- 
-Sasha> 2.35.1
+	BUG_ON(count != mm->map_count);
+
+	trace_exit_mmap(mm);
+	__mt_destroy(&mm->mm_mt);
+	mm->mmap = NULL;
+	mmap_write_unlock(mm);
+	vm_unacct_memory(nr_accounted);
+}
 

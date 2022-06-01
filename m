@@ -2,156 +2,467 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE6753A576
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 14:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F6853A514
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 14:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353088AbiFAMsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 08:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
+        id S1352906AbiFAMdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 08:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238006AbiFAMso (ORCPT
+        with ESMTP id S1352897AbiFAMdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 08:48:44 -0400
-X-Greylist: delayed 936 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Jun 2022 05:48:41 PDT
-Received: from m1322.mail.163.com (m1322.mail.163.com [220.181.13.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E84C1145A;
-        Wed,  1 Jun 2022 05:48:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=NFBlK
-        pRDQs1uQ60u0KwM3jZAk4g2SpACH5FI7TLBoX0=; b=Y60/vm9hOGmDOw3gFFTyW
-        xkvGhGDCieHMsy2MY9yFPc+PGBU27jRCea5hbIlPTqM/Ft1Q5B5lNDTI1WgQlclz
-        Hj5TAkkk+MEZuOA1BF+pOiHs0H3gjreTSXWHMjclPmm06BGXcjr6xMM9yUEG2yoO
-        +AgDTPIYubFScaVNDoE+cQ=
-Received: from chen45464546$163.com ( [171.221.150.250] ) by
- ajax-webmail-wmsvr22 (Coremail) ; Wed, 1 Jun 2022 20:32:48 +0800 (CST)
-X-Originating-IP: [171.221.150.250]
-Date:   Wed, 1 Jun 2022 20:32:48 +0800 (CST)
-From:   =?GBK?B?097K9w==?= <chen45464546@163.com>
-To:     "Alexander Duyck" <alexander.duyck@gmail.com>
-Cc:     "Jakub Kicinski" <kuba@kernel.org>,
+        Wed, 1 Jun 2022 08:33:42 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE509CC99;
+        Wed,  1 Jun 2022 05:33:40 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0DD5A5C02E7;
+        Wed,  1 Jun 2022 08:33:40 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute4.internal (MEProxy); Wed, 01 Jun 2022 08:33:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1654086820; x=
+        1654173220; bh=IReQZu40HMuKJt6G+/lDXOkEOlJDntVBO42UzEHC5Ko=; b=X
+        3nl7SndjvRvPN2UhU99txLk8Beb0pyY+mv3F5uR5GbxTJ8efcqzQvt62VXiNOjDz
+        jrCgaUyjlnFLVDW2zzPVQI6f8kjjYdmgEAqfQ4hDYEb4gFmGQg6ReTDwggyRJhZ4
+        T573tlnNeWq3uwURKCPg25/j+HzGGndQTm2+zlpu0g5qomyxJ+7vGjWFzdkgYuh7
+        B59yDr53UqFcHP79UhU/pQfIzOA1nwicl9u8X1H4hoQVP8vvTXlpyd63KH2v4gI5
+        DEOnZcBa4iUvnU6JOY/ezVODa3CVrhWBaZVZip7zuMR2Masg/0lXicEIaOVj9pFT
+        sHfOHi7WulofT38dBuCDQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1654086820; x=
+        1654173220; bh=IReQZu40HMuKJt6G+/lDXOkEOlJDntVBO42UzEHC5Ko=; b=i
+        oO6iTOxpX9D5FjEdD3VQPYzHtz2fvmmgGn4YxVCEEFE1CxOsCsdWYqmPxKwnBTDh
+        VpMpRadmFouKCVsvaWBMslcw1Ffxn5JgNcJFAZMea4tLz+jfGwTTLkOEqcXrVrBk
+        GIed3rn9hqgX2ozS0jSDP0p9TWVGPfGdJl+UJrsIUjHikqE3eM7vz8PWakQVCGev
+        IjD+hlD3mbjx4SsAvUofOWkhhS3kOvHcX3NvcF0Yfb0WkwUKB6KO69H/++u1pFD2
+        mwJbRhRPg+EvovMFFGm3SBWW+bEPFO5UKGhnBglI/+pX9POJydXOwxRCj+ge+AfP
+        ruZAJCKkeSpUQcsRTAOQg==
+X-ME-Sender: <xms:o1yXYjGdhGI80LO0nAbpwG6m5ZFIu5LXkndtqnRl-iBLjTVr1UHUEw>
+    <xme:o1yXYgUQ08YVy3hY2Clp9r3ddhKkBzZE7Yvlm-YyRzhgCh4LXwGrkj80KZ-60wKpz
+    Rre4AI_XOy-EEh_VQ4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrledtgdehfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepjefhleetteeludegleehhffgledvvddvleeujefghfet
+    heeftddugeelgfdukeegnecuffhomhgrihhnpehushgvrhdrshgsnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:o1yXYlKoPlo2FwTRHSSApuCjUW9RSU9hTdm_t1TfuUZ6wqPJofS1bQ>
+    <xmx:o1yXYhHDYkQ_n9acmqfpCVtwJrPiX5PY3kUSfAob_4GcwPqEu3Y_Hg>
+    <xmx:o1yXYpUYPqd1b8UoRYQI0yvmgkpeaUSlXbIwCSGfttbAe7EBgL9mAQ>
+    <xmx:pFyXYtnEUCW9KF6Q04qgjGzmfb2372e0dxk196-57lvsUTEpgXQ-1Q>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C163F36A006D; Wed,  1 Jun 2022 08:33:39 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-591-gfe6c3a2700-fm-20220427.001-gfe6c3a27
+Mime-Version: 1.0
+Message-Id: <29c5ec6f-5898-4212-afbb-75f76f5320ff@www.fastmail.com>
+In-Reply-To: <20220601100005.2989022-20-chenhuacai@loongson.cn>
+References: <20220601100005.2989022-1-chenhuacai@loongson.cn>
+ <20220601100005.2989022-20-chenhuacai@loongson.cn>
+Date:   Wed, 01 Jun 2022 13:33:18 +0100
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Huacai Chen" <chenhuacai@loongson.cn>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Peter Zijlstra" <peterz@infradead.org>,
         "Andrew Morton" <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>
-Subject: Re:Re: [PATCH v2] mm: page_frag: Warn_on when frag_alloc size is
- bigger than PAGE_SIZE
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <CAKgT0UfQsbAzsJ1e__irHY2xBRevpB9m=FBYDis3C1fMua+Zag@mail.gmail.com>
-References: <20220531081412.22db88cc@kernel.org>
- <1654011382-2453-1-git-send-email-chen45464546@163.com>
- <20220531084704.480133fa@kernel.org>
- <CAKgT0UfQsbAzsJ1e__irHY2xBRevpB9m=FBYDis3C1fMua+Zag@mail.gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
-MIME-Version: 1.0
-Message-ID: <3498989.c69f.1811f41186e.Coremail.chen45464546@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: FsGowAD3tDpwXJdiGSsdAA--.33056W
-X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/xtbBdhUTnmDknYJ7SQABsG
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        "David Airlie" <airlied@linux.ie>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "Xuefeng Li" <lixuefeng@loongson.cn>,
+        "Yanteng Si" <siyanteng@loongson.cn>,
+        "Huacai Chen" <chenhuacai@gmail.com>,
+        "Guo Ren" <guoren@kernel.org>, "Xuerui Wang" <kernel@xen0n.name>,
+        "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        "WANG Xuerui" <git@xen0n.name>
+Subject: Re: [PATCH V12 19/24] LoongArch: Add some library functions
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QXQgMjAyMi0wNi0wMSAwMToyODo1OSwgIkFsZXhhbmRlciBEdXljayIgPGFsZXhhbmRlci5kdXlj
-a0BnbWFpbC5jb20+IHdyb3RlOgo+T24gVHVlLCBNYXkgMzEsIDIwMjIgYXQgODo0NyBBTSBKYWt1
-YiBLaWNpbnNraSA8a3ViYUBrZXJuZWwub3JnPiB3cm90ZToKPj4KPj4gT24gVHVlLCAzMSBNYXkg
-MjAyMiAyMzozNjoyMiArMDgwMCBDaGVuIExpbiB3cm90ZToKPj4gPiBBdCAyMDIyLTA1LTMxIDIy
-OjE0OjEyLCAiSmFrdWIgS2ljaW5za2kiIDxrdWJhQGtlcm5lbC5vcmc+IHdyb3RlOgo+PiA+ID5P
-biBUdWUsIDMxIE1heSAyMDIyIDIyOjQxOjEyICswODAwIENoZW4gTGluIHdyb3RlOgo+PiA+ID4+
-IFRoZSBzYW1wbGUgY29kZSBhYm92ZSBjYW5ub3QgY29tcGxldGVseSBzb2x2ZSB0aGUgY3VycmVu
-dCBwcm9ibGVtLgo+PiA+ID4+IEZvciBleGFtcGxlLCB3aGVuIGZyYWdzeiBpcyBncmVhdGVyIHRo
-YW4gUEFHRV9GUkFHX0NBQ0hFX01BWF9TSVpFKDMyNzY4KSwKPj4gPiA+PiBfX3BhZ2VfZnJhZ19j
-YWNoZV9yZWZpbGwgd2lsbCByZXR1cm4gYSBtZW1vcnkgb2Ygb25seSAzMjc2OCBieXRlcywgc28K
-Pj4gPiA+PiBzaG91bGQgd2UgY29udGludWUgdG8gZXhwYW5kIHRoZSBQQUdFX0ZSQUdfQ0FDSEVf
-TUFYX1NJWkU/IE1heWJlIG1vcmUKPj4gPiA+PiB3b3JrIG5lZWRzIHRvIGJlIGRvbmUKPj4gPiA+
-Cj4+ID4gPlJpZ2h0LCBidXQgSSBjYW4gdGhpbmsgb2YgdHdvIGRyaXZlcnMgb2ZmIHRoZSB0b3Ag
-b2YgbXkgaGVhZCB3aGljaCB3aWxsCj4+ID4gPmFsbG9jYXRlIDw9MzJrIGZyYWdzIGJ1dCBub25l
-IHdoaWNoIHdpbGwgYWxsb2NhdGUgbW9yZS4KPj4gPgo+PiA+IEluIGZhY3QsIGl0IGlzIHJhcmUg
-dG8gYXBwbHkgZm9yIG1vcmUgdGhhbiBvbmUgcGFnZSwgc28gaXMgaXQgbmVjZXNzYXJ5IHRvCj4+
-ID4gY2hhbmdlIGl0IHRvIHN1cHBvcnQ/Cj4+Cj4+IEkgZG9uJ3QgcmVhbGx5IGNhcmUgaWYgaXQn
-cyBzdXBwb3J0ZWQgVEJILCBidXQgSSBkaXNsaWtlIGFkZGluZwo+PiBhIGJyYW5jaCB0byB0aGUg
-ZmFzdCBwYXRoIGp1c3QgdG8gY2F0Y2ggb25lIG9yIHR3byBlc290ZXJpYyBiYWQKPj4gY2FsbGVy
-cy4KPj4KPj4gTWF5YmUgeW91IGNhbiB3cmFwIHRoZSBjaGVjayB3aXRoIHNvbWUgZGVidWcgQ09O
-RklHXyBzbyBpdCB3b24ndAo+PiBydW4gb24gcHJvZHVjdGlvbiBidWlsZHM/Cj4KPkFsc28gdGhl
-IGV4YW1wbGUgdXNlZCBoZXJlIHRvIGRlZmluZSB3aGF0IGlzIHRyaWdnZXJpbmcgdGhlIGJlaGF2
-aW9yCj5pcyBzZXJpb3VzbHkgZmxhd2VkLiBUaGUgY29kZSBpdHNlbGYgaXMgbWVhbnQgdG8gYWxs
-b3cgZm9yIG9yZGVyMCBwYWdlCj5yZXVzZSwgYW5kIHRoZSAzMksgcGFnZSB3YXMganVzdCBhbiBv
-cHRpbWl6YXRpb24uIFNvIHRoZSBhc3N1bXB0aW9uCj50aGF0IHlvdSBjb3VsZCByZXF1ZXN0IG1v
-cmUgdGhhbiA0ayBpcyBhIGJhZCBhc3N1bXB0aW9uIGluIHRoZSBkcml2ZXIKPnRoYXQgaXMgbWFr
-aW5nIHRoaXMgY2FsbC4KPgo+U28gSSBhbSBpbiBhZ3JlZW1lbnQgd2l0aCBLdWJhLiBXZSBzaG91
-bGRuJ3QgYmUgbmVlZGluZyB0byBhZGQgY29kZSBpbgo+dGhlIGZhc3QgcGF0aCB0byB0ZWxsIHVz
-ZXJzIG5vdCB0byBzaG9vdCB0aGVtc2VsdmVzIGluIHRoZSBmb290Lgo+Cj5XZSBhbHJlYWR5IGhh
-dmUgY29kZSBpbiBwbGFjZSBpbiBfX25ldGRldl9hbGxvY19za2IgdGhhdCBpcyBjYWxsaW5nCj50
-aGUgc2xhYiBhbGxvY2F0b3IgaWYgImxlbiA+IFNLQl9XSVRIX09WRVJIRUFEKFBBR0VfU0laRSki
-LiBXZSBjb3VsZAo+cHJvYmFibHkganVzdCBhZGQgYSBERUJVRyB3cmFwcGVkIEJVR19PTiB0byBj
-YXB0dXJlIHRob3NlIGNhc2VzIHdoZXJlCj5hIGRyaXZlciBpcyBtYWtpbmcgdGhhdCBtaXN0YWtl
-IHdpdGggX19uZXRkZXZfYWxsb2NfZnJhZ19hbGlnbi4KClRoYW5rcyBmb3IgdGhlIGNsZWFyIGV4
-cGxhbmF0aW9uLiAKVGhlIHJlYWxpdHkgaXMgdGhhdCBpdCBpcyBub3QgZWFzeSB0byBjYXB0dXJl
-IHRoZSBkcml2ZXJzIHRoYXQgbWFrZSBzdWNoIG1pc3Rha2UuCkJlY2F1c2UgbWVtb3J5IGNvcnJ1
-cHRpb24gdXN1YWxseSBsZWFkcyB0byBlcnJvcnMgb24gb3RoZXIgdW5yZWxhdGVkIG1vZHVsZXMu
-IApOb3QgbG9uZyBhZ28sIHdlIGhhdmUgc3BlbnQgYSBsb3Qgb2YgdGltZSBhbmQgZWZmb3J0IHRv
-IGxvY2F0ZSBhIGlzc3VlIHRoYXQgCm9jY2FzaW9uYWxseSBvY2N1cnMgaW4gZGlmZmVyZW50IGtl
-cm5lbCBtb2R1bGVzLCBhbmQgZmluYWxseSBmaW5kIHRoZSByb290IGNhdXNlIGlzCnRoZSBpbXBy
-b3BlciB1c2Ugb2YgdGhpcyBuZXRkZXZfYWxsb2NfZnJhZyBpbnRlcmZhY2UgaW4gRFBBQSBuZXQg
-ZHJpdmVyIGZyb20gTlhQLiAKSXQncyBhIG1pc2VyYWJsZSBwcm9jZXNzLgoKSSBhbHNvIGZvdW5k
-IHRoYXQgc29tZSBuZXQgZHJpdmVycyBpbiB0aGUgbGF0ZXN0IExpbnV4IHZlcnNpb24gaGF2ZSB0
-aGlzIGlzc3VlLgpMaWtlOgoxLiBuZXRkZXZfYWxsb2NfZnJhZyAibGVuIiBtYXkgbGFyZ2VyIHRo
-YW4gUEFHRV9TSVpFCiNlbGlmIChQQUdFX1NJWkUgPj0gRTEwMDBfUlhCVUZGRVJfNDA5NikKICAg
-ICAgICAgICAgICAgIGFkYXB0ZXItPnJ4X2J1ZmZlcl9sZW4gPSBQQUdFX1NJWkU7CiNlbmRpZgoK
-c3RhdGljIHVuc2lnbmVkIGludCBlMTAwMF9mcmFnX2xlbihjb25zdCBzdHJ1Y3QgZTEwMDBfYWRh
-cHRlciAqYSkKewogICAgICAgIHJldHVybiBTS0JfREFUQV9BTElHTihhLT5yeF9idWZmZXJfbGVu
-ICsgRTEwMDBfSEVBRFJPT00pICsKICAgICAgICAgICAgICAgIFNLQl9EQVRBX0FMSUdOKHNpemVv
-ZihzdHJ1Y3Qgc2tiX3NoYXJlZF9pbmZvKSk7Cn0KCnN0YXRpYyB2b2lkICplMTAwMF9hbGxvY19m
-cmFnKGNvbnN0IHN0cnVjdCBlMTAwMF9hZGFwdGVyICphKQp7CiAgICAgICAgdW5zaWduZWQgaW50
-IGxlbiA9IGUxMDAwX2ZyYWdfbGVuKGEpOwogICAgICAgIHU4ICpkYXRhID0gbmV0ZGV2X2FsbG9j
-X2ZyYWcobGVuKTsKfQoiLi9kcml2ZXJzL25ldC9ldGhlcm5ldC9pbnRlbC9lMTAwMC9lMTAwMF9t
-YWluLmMiIDUzMTYgIC0tMzglLS0gCgoyLiBuZXRkZXZfYWxsb2NfZnJhZyAicmluZy0+ZnJhZ19z
-aXplIiBtYXkgbGFyZ2VyIHRoYW4gKDQwOTYgKiAzKQoKI2RlZmluZSBNVEtfTUFYX0xST19SWF9M
-RU5HVEggICAgICAgICAgICg0MDk2ICogMykKICAgICAgICBpZiAocnhfZmxhZyA9PSBNVEtfUlhf
-RkxBR1NfSFdMUk8pIHsKICAgICAgICAgICAgICAgIHJ4X2RhdGFfbGVuID0gTVRLX01BWF9MUk9f
-UlhfTEVOR1RIOwogICAgICAgICAgICAgICAgcnhfZG1hX3NpemUgPSBNVEtfSFdfTFJPX0RNQV9T
-SVpFOwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgICAgICByeF9kYXRhX2xlbiA9IEVUSF9E
-QVRBX0xFTjsKICAgICAgICAgICAgICAgIHJ4X2RtYV9zaXplID0gTVRLX0RNQV9TSVpFOwogICAg
-ICAgIH0KCiAgICAgICAgcmluZy0+ZnJhZ19zaXplID0gbXRrX21heF9mcmFnX3NpemUocnhfZGF0
-YV9sZW4pOwogICAgICAgIAogICAgICAgIGZvciAoaSA9IDA7IGkgPCByeF9kbWFfc2l6ZTsgaSsr
-KSB7CiAgICAgICAgICAgICAgICByaW5nLT5kYXRhW2ldID0gbmV0ZGV2X2FsbG9jX2ZyYWcocmlu
-Zy0+ZnJhZ19zaXplKTsKICAgICAgICAgICAgICAgIGlmICghcmluZy0+ZGF0YVtpXSkKICAgICAg
-ICAgICAgICAgICAgICAgICAgcmV0dXJuIC1FTk9NRU07CiAgICAgICAgfQoiZHJpdmVycy9uZXQv
-ZXRoZXJuZXQvbWVkaWF0ZWsvbXRrX2V0aF9zb2MuYyIgMzM0NCAgLS01MCUtLSAKCkkgd2lsbCB0
-cnkgdG8gZml4IHRoZXNlIGRyaXZlcnMgbGF0ZXIuCgpFdmVuIGV4cGVyaWVuY2VkIGRyaXZlciBl
-bmdpbmVlcnMgbWF5IHVzZSB0aGlzIG5ldGRldl9hbGxvY19mcmFnIAppbnRlcmZhY2UgaW5jb3Jy
-ZWN0bHkuIApTbyBJIHRob3VnaHQgaXQgaXMgYmVzdCB0byBwcm92aWRlIHNvbWUgcHJvbXB0IGlu
-Zm9ybWF0aW9uIG9mIHVzYWdlIAplcnJvciBpbnNpZGUgdGhlIG5ldGRldl9hbGxvY19mcmFnLCBv
-ciBpdCdzIE9LIHRvIHJlcG9ydCBzdWNoIG1pc3Rha2UgCmR1cmluZyBzeXN0ZW0gcnVubmluZyB3
-aGljaCBtYXkgY2F1c2VkIGJ5IGZyYWdzeiB2YXJpZXMoZXhjZWVkZWQgcGFnZSBzaXplKS4KCk5v
-dywgYXMgeW91IGFuZCBLdWJhIG1lbnRpb25lZCBlYXJsaWVyLCAiZG8gbm90IGFkZCBjb2RlIGlu
-IGZhc3QgcGF0aCIuCgpDYW4gd2UganVzdCBhZGQgY29kZSB0byB0aGUgcmVsYXRpdmVseSBzbG93
-IHBhdGggdG8gY2FwdHVyZSB0aGUgbWlzdGFrZQpiZWZvcmUgaXQgbGVhZCB0byBtZW1vcnkgY29y
-cnVwdGlvbj8gCkxpa2U6CmRpZmYgLS1naXQgYS9tbS9wYWdlX2FsbG9jLmMgYi9tbS9wYWdlX2Fs
-bG9jLmMKaW5kZXggZTZmMjExZC4uYWM2MGE5NyAxMDA2NDQKLS0tIGEvbW0vcGFnZV9hbGxvYy5j
-CisrKyBiL21tL3BhZ2VfYWxsb2MuYwpAQCAtNTU4MCw2ICs1NTgwLDcgQEAgdm9pZCAqcGFnZV9m
-cmFnX2FsbG9jX2FsaWduKHN0cnVjdCBwYWdlX2ZyYWdfY2FjaGUgKm5jLAogICAgICAgICAgICAg
-ICAgLyogcmVzZXQgcGFnZSBjb3VudCBiaWFzIGFuZCBvZmZzZXQgdG8gc3RhcnQgb2YgbmV3IGZy
-YWcgKi8KICAgICAgICAgICAgICAgIG5jLT5wYWdlY250X2JpYXMgPSBQQUdFX0ZSQUdfQ0FDSEVf
-TUFYX1NJWkUgKyAxOwogICAgICAgICAgICAgICAgb2Zmc2V0ID0gc2l6ZSAtIGZyYWdzejsKKyAg
-ICAgICAgICAgICAgIEJVR19PTihvZmZzZXQgPCAwKTsKICAgICAgICB9CgogICAgICAgIG5jLT5w
-YWdlY250X2JpYXMtLTsKCgpBZGRpdGlvbmFsLCB3ZSBtYXkgbW9kaWZ5IGRvY3VtZW50IHRvIGNs
-ZWFybHkgaW5kaWNhdGUgdGhlIGxpbWl0cyBvZiB0aGUgCmlucHV0IHBhcmFtZXRlciBmcmFnc3ou
-Ckxpa2U6CmRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3ZtL3BhZ2VfZnJhZ3MucnN0IGIvRG9j
-dW1lbnRhdGlvbi92bS9wYWdlX2ZyYWdzLnJzdAppbmRleCA3ZDZmOTM4Li42MWIyODA1IDEwMDY0
-NAotLS0gYS9Eb2N1bWVudGF0aW9uL3ZtL3BhZ2VfZnJhZ3MucnN0CisrKyBiL0RvY3VtZW50YXRp
-b24vdm0vcGFnZV9mcmFncy5yc3QKQEAgLTQsNyArNCw3IEBACiBQYWdlIGZyYWdtZW50cwogPT09
-PT09PT09PT09PT0KCi1BIHBhZ2UgZnJhZ21lbnQgaXMgYW4gYXJiaXRyYXJ5LWxlbmd0aCBhcmJp
-dHJhcnktb2Zmc2V0IGFyZWEgb2YgbWVtb3J5CitBIHBhZ2UgZnJhZ21lbnQgaXMgYW4gYXJiaXRy
-YXJ5LWxlbmd0aChtdXN0IDw9IFBBR0VfU0laRSkgYXJiaXRyYXJ5LW9mZnNldCBhcmVhIG9mIG1l
-bW9yeQogd2hpY2ggcmVzaWRlcyB3aXRoaW4gYSAwIG9yIGhpZ2hlciBvcmRlciBjb21wb3VuZCBw
-YWdlLiAKClRoYW5rcwo=
+
+
+=E5=9C=A82022=E5=B9=B46=E6=9C=881=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8A=E5=
+=8D=8811:00=EF=BC=8CHuacai Chen=E5=86=99=E9=81=93=EF=BC=9A
+> Add some library functions for LoongArch, including: delay, memset,
+> memcpy, memmove, copy_user, strncpy_user, strnlen_user and tlb dump
+> functions.
+>
+> Reviewed-by: WANG Xuerui <git@xen0n.name>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+I particularly love tlbdump function for MIPS. It=E2=80=99s a handy tool=
+ for mm debugging.
+Good job for LA one.
+
+Thanks.
+
+> ---
+>  arch/loongarch/include/asm/delay.h  |  26 +++++++
+>  arch/loongarch/include/asm/string.h |  12 +++
+>  arch/loongarch/lib/clear_user.S     |  43 +++++++++++
+>  arch/loongarch/lib/copy_user.S      |  47 ++++++++++++
+>  arch/loongarch/lib/delay.c          |  43 +++++++++++
+>  arch/loongarch/lib/dump_tlb.c       | 111 ++++++++++++++++++++++++++++
+>  6 files changed, 282 insertions(+)
+>  create mode 100644 arch/loongarch/include/asm/delay.h
+>  create mode 100644 arch/loongarch/include/asm/string.h
+>  create mode 100644 arch/loongarch/lib/clear_user.S
+>  create mode 100644 arch/loongarch/lib/copy_user.S
+>  create mode 100644 arch/loongarch/lib/delay.c
+>  create mode 100644 arch/loongarch/lib/dump_tlb.c
+>
+> diff --git a/arch/loongarch/include/asm/delay.h=20
+> b/arch/loongarch/include/asm/delay.h
+> new file mode 100644
+> index 000000000000..36d775191310
+> --- /dev/null
+> +++ b/arch/loongarch/include/asm/delay.h
+> @@ -0,0 +1,26 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +#ifndef _ASM_DELAY_H
+> +#define _ASM_DELAY_H
+> +
+> +#include <linux/param.h>
+> +
+> +extern void __delay(unsigned long cycles);
+> +extern void __ndelay(unsigned long ns);
+> +extern void __udelay(unsigned long us);
+> +
+> +#define ndelay(ns) __ndelay(ns)
+> +#define udelay(us) __udelay(us)
+> +
+> +/* make sure "usecs *=3D ..." in udelay do not overflow. */
+> +#if HZ >=3D 1000
+> +#define MAX_UDELAY_MS	1
+> +#elif HZ <=3D 200
+> +#define MAX_UDELAY_MS	5
+> +#else
+> +#define MAX_UDELAY_MS	(1000 / HZ)
+> +#endif
+> +
+> +#endif /* _ASM_DELAY_H */
+> diff --git a/arch/loongarch/include/asm/string.h=20
+> b/arch/loongarch/include/asm/string.h
+> new file mode 100644
+> index 000000000000..b07e60ded957
+> --- /dev/null
+> +++ b/arch/loongarch/include/asm/string.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +#ifndef _ASM_STRING_H
+> +#define _ASM_STRING_H
+> +
+> +extern void *memset(void *__s, int __c, size_t __count);
+> +extern void *memcpy(void *__to, __const__ void *__from, size_t __n);
+> +extern void *memmove(void *__dest, __const__ void *__src, size_t __n);
+> +
+> +#endif /* _ASM_STRING_H */
+> diff --git a/arch/loongarch/lib/clear_user.S=20
+> b/arch/loongarch/lib/clear_user.S
+> new file mode 100644
+> index 000000000000..25d9be5fbb19
+> --- /dev/null
+> +++ b/arch/loongarch/lib/clear_user.S
+> @@ -0,0 +1,43 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <asm/asm.h>
+> +#include <asm/asmmacro.h>
+> +#include <asm/export.h>
+> +#include <asm/regdef.h>
+> +
+> +.macro fixup_ex from, to, offset, fix
+> +.if \fix
+> +	.section .fixup, "ax"
+> +\to:	addi.d	a0, a1, \offset
+> +	jr	ra
+> +	.previous
+> +.endif
+> +	.section __ex_table, "a"
+> +	PTR	\from\()b, \to\()b
+> +	.previous
+> +.endm
+> +
+> +/*
+> + * unsigned long __clear_user(void *addr, size_t size)
+> + *
+> + * a0: addr
+> + * a1: size
+> + */
+> +SYM_FUNC_START(__clear_user)
+> +	beqz	a1, 2f
+> +
+> +1:	st.b	zero, a0, 0
+> +	addi.d	a0, a0, 1
+> +	addi.d	a1, a1, -1
+> +	bgt	a1, zero, 1b
+> +
+> +2:	move	a0, a1
+> +	jr	ra
+> +
+> +	fixup_ex 1, 3, 0, 1
+> +SYM_FUNC_END(__clear_user)
+> +
+> +EXPORT_SYMBOL(__clear_user)
+> diff --git a/arch/loongarch/lib/copy_user.S=20
+> b/arch/loongarch/lib/copy_user.S
+> new file mode 100644
+> index 000000000000..9ae507f851b5
+> --- /dev/null
+> +++ b/arch/loongarch/lib/copy_user.S
+> @@ -0,0 +1,47 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <asm/asm.h>
+> +#include <asm/asmmacro.h>
+> +#include <asm/export.h>
+> +#include <asm/regdef.h>
+> +
+> +.macro fixup_ex from, to, offset, fix
+> +.if \fix
+> +	.section .fixup, "ax"
+> +\to:	addi.d	a0, a2, \offset
+> +	jr	ra
+> +	.previous
+> +.endif
+> +	.section __ex_table, "a"
+> +	PTR	\from\()b, \to\()b
+> +	.previous
+> +.endm
+> +
+> +/*
+> + * unsigned long __copy_user(void *to, const void *from, size_t n)
+> + *
+> + * a0: to
+> + * a1: from
+> + * a2: n
+> + */
+> +SYM_FUNC_START(__copy_user)
+> +	beqz	a2, 3f
+> +
+> +1:	ld.b	t0, a1, 0
+> +2:	st.b	t0, a0, 0
+> +	addi.d	a0, a0, 1
+> +	addi.d	a1, a1, 1
+> +	addi.d	a2, a2, -1
+> +	bgt	a2, zero, 1b
+> +
+> +3:	move	a0, a2
+> +	jr	ra
+> +
+> +	fixup_ex 1, 4, 0, 1
+> +	fixup_ex 2, 4, 0, 0
+> +SYM_FUNC_END(__copy_user)
+> +
+> +EXPORT_SYMBOL(__copy_user)
+> diff --git a/arch/loongarch/lib/delay.c b/arch/loongarch/lib/delay.c
+> new file mode 100644
+> index 000000000000..5d856694fcfe
+> --- /dev/null
+> +++ b/arch/loongarch/lib/delay.c
+> @@ -0,0 +1,43 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +#include <linux/delay.h>
+> +#include <linux/export.h>
+> +#include <linux/smp.h>
+> +#include <linux/timex.h>
+> +
+> +#include <asm/compiler.h>
+> +#include <asm/processor.h>
+> +
+> +void __delay(unsigned long cycles)
+> +{
+> +	u64 t0 =3D get_cycles();
+> +
+> +	while ((unsigned long)(get_cycles() - t0) < cycles)
+> +		cpu_relax();
+> +}
+> +EXPORT_SYMBOL(__delay);
+> +
+> +/*
+> + * Division by multiplication: you don't have to worry about
+> + * loss of precision.
+> + *
+> + * Use only for very small delays ( < 1 msec).	Should probably use a
+> + * lookup table, really, as the multiplications take much too long wi=
+th
+> + * short delays.  This is a "reasonable" implementation, though (and=20
+> the
+> + * first constant multiplications gets optimized away if the delay is
+> + * a constant)
+> + */
+> +
+> +void __udelay(unsigned long us)
+> +{
+> +	__delay((us * 0x000010c7ull * HZ * lpj_fine) >> 32);
+> +}
+> +EXPORT_SYMBOL(__udelay);
+> +
+> +void __ndelay(unsigned long ns)
+> +{
+> +	__delay((ns * 0x00000005ull * HZ * lpj_fine) >> 32);
+> +}
+> +EXPORT_SYMBOL(__ndelay);
+> diff --git a/arch/loongarch/lib/dump_tlb.c=20
+> b/arch/loongarch/lib/dump_tlb.c
+> new file mode 100644
+> index 000000000000..cda2c6bc7f09
+> --- /dev/null
+> +++ b/arch/loongarch/lib/dump_tlb.c
+> @@ -0,0 +1,111 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + *
+> + * Derived from MIPS:
+> + * Copyright (C) 1994, 1995 by Waldorf Electronics, written by Ralf=20
+> Baechle.
+> + * Copyright (C) 1999 by Silicon Graphics, Inc.
+> + */
+> +#include <linux/kernel.h>
+> +#include <linux/mm.h>
+> +
+> +#include <asm/loongarch.h>
+> +#include <asm/page.h>
+> +#include <asm/pgtable.h>
+> +#include <asm/tlb.h>
+> +
+> +void dump_tlb_regs(void)
+> +{
+> +	const int field =3D 2 * sizeof(unsigned long);
+> +
+> +	pr_info("Index    : %0x\n", read_csr_tlbidx());
+> +	pr_info("PageSize : %0x\n", read_csr_pagesize());
+> +	pr_info("EntryHi  : %0*llx\n", field, read_csr_entryhi());
+> +	pr_info("EntryLo0 : %0*llx\n", field, read_csr_entrylo0());
+> +	pr_info("EntryLo1 : %0*llx\n", field, read_csr_entrylo1());
+> +}
+> +
+> +static void dump_tlb(int first, int last)
+> +{
+> +	unsigned long s_entryhi, entryhi, asid;
+> +	unsigned long long entrylo0, entrylo1, pa;
+> +	unsigned int index;
+> +	unsigned int s_index, s_asid;
+> +	unsigned int pagesize, c0, c1, i;
+> +	unsigned long asidmask =3D cpu_asid_mask(&current_cpu_data);
+> +	int pwidth =3D 11;
+> +	int vwidth =3D 11;
+> +	int asidwidth =3D DIV_ROUND_UP(ilog2(asidmask) + 1, 4);
+> +
+> +	s_entryhi =3D read_csr_entryhi();
+> +	s_index =3D read_csr_tlbidx();
+> +	s_asid =3D read_csr_asid();
+> +
+> +	for (i =3D first; i <=3D last; i++) {
+> +		write_csr_index(i);
+> +		tlb_read();
+> +		pagesize =3D read_csr_pagesize();
+> +		entryhi	 =3D read_csr_entryhi();
+> +		entrylo0 =3D read_csr_entrylo0();
+> +		entrylo1 =3D read_csr_entrylo1();
+> +		index =3D read_csr_tlbidx();
+> +		asid =3D read_csr_asid();
+> +
+> +		/* EHINV bit marks entire entry as invalid */
+> +		if (index & CSR_TLBIDX_EHINV)
+> +			continue;
+> +		/*
+> +		 * ASID takes effect in absence of G (global) bit.
+> +		 */
+> +		if (!((entrylo0 | entrylo1) & ENTRYLO_G) &&
+> +		    asid !=3D s_asid)
+> +			continue;
+> +
+> +		/*
+> +		 * Only print entries in use
+> +		 */
+> +		pr_info("Index: %2d pgsize=3D%x ", i, (1 << pagesize));
+> +
+> +		c0 =3D (entrylo0 & ENTRYLO_C) >> ENTRYLO_C_SHIFT;
+> +		c1 =3D (entrylo1 & ENTRYLO_C) >> ENTRYLO_C_SHIFT;
+> +
+> +		pr_cont("va=3D%0*lx asid=3D%0*lx",
+> +			vwidth, (entryhi & ~0x1fffUL), asidwidth, asid & asidmask);
+> +
+> +		/* NR/NX are in awkward places, so mask them off separately */
+> +		pa =3D entrylo0 & ~(ENTRYLO_NR | ENTRYLO_NX);
+> +		pa =3D pa & PAGE_MASK;
+> +		pr_cont("\n\t[");
+> +		pr_cont("ri=3D%d xi=3D%d ",
+> +			(entrylo0 & ENTRYLO_NR) ? 1 : 0,
+> +			(entrylo0 & ENTRYLO_NX) ? 1 : 0);
+> +		pr_cont("pa=3D%0*llx c=3D%d d=3D%d v=3D%d g=3D%d plv=3D%lld] [",
+> +			pwidth, pa, c0,
+> +			(entrylo0 & ENTRYLO_D) ? 1 : 0,
+> +			(entrylo0 & ENTRYLO_V) ? 1 : 0,
+> +			(entrylo0 & ENTRYLO_G) ? 1 : 0,
+> +			(entrylo0 & ENTRYLO_PLV) >> ENTRYLO_PLV_SHIFT);
+> +		/* NR/NX are in awkward places, so mask them off separately */
+> +		pa =3D entrylo1 & ~(ENTRYLO_NR | ENTRYLO_NX);
+> +		pa =3D pa & PAGE_MASK;
+> +		pr_cont("ri=3D%d xi=3D%d ",
+> +			(entrylo1 & ENTRYLO_NR) ? 1 : 0,
+> +			(entrylo1 & ENTRYLO_NX) ? 1 : 0);
+> +		pr_cont("pa=3D%0*llx c=3D%d d=3D%d v=3D%d g=3D%d plv=3D%lld]\n",
+> +			pwidth, pa, c1,
+> +			(entrylo1 & ENTRYLO_D) ? 1 : 0,
+> +			(entrylo1 & ENTRYLO_V) ? 1 : 0,
+> +			(entrylo1 & ENTRYLO_G) ? 1 : 0,
+> +			(entrylo1 & ENTRYLO_PLV) >> ENTRYLO_PLV_SHIFT);
+> +	}
+> +	pr_info("\n");
+> +
+> +	write_csr_entryhi(s_entryhi);
+> +	write_csr_tlbidx(s_index);
+> +	write_csr_asid(s_asid);
+> +}
+> +
+> +void dump_tlb_all(void)
+> +{
+> +	dump_tlb(0, current_cpu_data.tlbsize - 1);
+> +}
+> --=20
+> 2.27.0
+
+--=20
+- Jiaxun

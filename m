@@ -2,239 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C530353AAE4
+	by mail.lfdr.de (Postfix) with ESMTP id 7A00C53AAE3
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356067AbiFAQVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 12:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
+        id S1356071AbiFAQVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 12:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345836AbiFAQVI (ORCPT
+        with ESMTP id S1356059AbiFAQVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 12:21:08 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F42C7938A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 09:21:04 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ff7b90e635so24294387b3.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 09:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XM2sFuyFihZDnGzhAB4JxCOAcgDlpIBTgTnkAxWbr84=;
-        b=lMek/BkxQa8hv44N1om24qgTIDg1kFiuJlm9BKTspin+LuL4ZcpzeO6ef5+1JqRqzH
-         eTjspKdDLx/ESSKRsDegdO4tZmPBrz98/9xtEft/xG2KW2kHRTTsHTpy2Fc2izCOA1+X
-         B3eyiPdkcF1rnwhdgwUcnzUM3VGKnaTRDSaQ32D1xI5dsdXSrKFnJluFWWLZs1UvPFur
-         bfSx/59hLvwuGGyN1pkKW527TSj4j6efXx9ErI/0LpGQtxHY14S9699iONDheKf1OgMF
-         CAGaFxq9FsQu8kIKP6J9Gd6aDeqVcjTCM7nM5h1cgKZTaAV77V4x/7XwKVw/lGFyX3wY
-         wkyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XM2sFuyFihZDnGzhAB4JxCOAcgDlpIBTgTnkAxWbr84=;
-        b=yXS2U+br/O/3qGoKGAjRqoTjlIYiwrDly8zjoLPg81BQ6hzeVuzDoxqos4oRYETNvK
-         k9XY3Of3nM+YzvZCLN8gk7NIPNSg2gO8yKIGK9CCU9QjtrTSYFS7Os+ZeXi1p/S/Mam/
-         dplR0jkXCrZrxkzXz6hO5ovOfTQLf3U5OcAVr5oMWHvxjXT4HN/UatmqbuXPvmFlTWPr
-         lr4vcw9V/eNpTX8a5foSr2TzZXu1VpzoHCPBte80ouoecU+EDYONeCpDjp6sWqI2e5wM
-         FomF1QikiKXMHzu6vroCOFqcIYI9dcKsS3MiWLCLGPqtCn0kjmnqsA4/XFyEV8X4927A
-         9nyA==
-X-Gm-Message-State: AOAM53190wLZ4G15YzMxIAbe5VBZdTDBChoP6cMxjz46Tmt91hXMsaos
-        CBpvir1U6zuU5Vgc2Gpj07bToXMiPqY++3nFI2ngQA==
-X-Google-Smtp-Source: ABdhPJwWahlE3pqn9nKswr8nhVQBzIKT0sCXZaqjvrw9e9E/P3Zu7D+IQwJ8Ep2fzsFpY7MZhj3zfxcLdU0UER1lpF0=
-X-Received: by 2002:a0d:c484:0:b0:302:168f:6c15 with SMTP id
- g126-20020a0dc484000000b00302168f6c15mr260333ywd.490.1654100463103; Wed, 01
- Jun 2022 09:21:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
- <20220425033934.68551-7-kirill.shutemov@linux.intel.com> <YnE4ZzzVrxUnr3Uv@zn.tnic>
- <20220506153013.e6v4q2qhuhqumfiu@box.shutemov.name> <YnpGnMoviGoK4Ucq@zn.tnic>
- <CAAH4kHYRxgUNnGRUO473q02q3akLzgiTvbA2qKEP5jq6jFV-uA@mail.gmail.com>
- <Yn4ed1gupKmNz2jn@zn.tnic> <20220513144515.fx2cvo3rjued3vy5@black.fi.intel.com>
- <PH0PR11MB5064B561086BE6350CC1DCDCC5CF9@PH0PR11MB5064.namprd11.prod.outlook.com>
- <CAAH4kHbU4FJ=veYQxncdpYD837M90vq2o2saVaUCJ6=pfuNRpA@mail.gmail.com> <0c545c5f-3540-1441-7a7d-359b6795f43a@amd.com>
-In-Reply-To: <0c545c5f-3540-1441-7a7d-359b6795f43a@amd.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Wed, 1 Jun 2022 09:20:52 -0700
-Message-ID: <CAAH4kHYj9WOKngeXYL=KnNb1fXa-MaFGTBGZcBX726Od858Q3A@mail.gmail.com>
-Subject: Re: [PATCHv5 06/12] x86/boot/compressed: Handle unaccepted memory
-To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Cc:     "Xu, Min M" <min.m.xu@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Gao, Jiaqi" <jiaqi.gao@intel.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Rodel, Jorg" <jroedel@suse.de>, Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        Wed, 1 Jun 2022 12:21:09 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94967939B;
+        Wed,  1 Jun 2022 09:21:07 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id E62581F443BF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654100466;
+        bh=E4FJUmMAl8Mh7E9Z5cNlbSozATjPpKyz0sy+o9BoOYw=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=B8HOs0uWx/cB0v1FqSf8WnIOe1v4nUaBA7oS/8aP/HN5vTsdUjuQhtzKFwDYyQr33
+         3Rw+jhZtcpXoTP9f2vH+TZFE16VfPrIvaovjbRDcUC00s9H4t0IYN+PMQ+XWdQNq1b
+         9XbQojRLNl1tCKc7/2Tea4tbbWaXMsklluscD6qxM27AznZ8MSZHFQR7iJr7jbPUKn
+         YBAE7qvTPES/otVfp9O//OQXPj7ZFX2npCIu1AsFEqabRWEffFv5QyZHpMuZvBgovK
+         pXYb/PIO/SXXQZ/jBBWwu6kcomll2MSIruaUXuA2kzaQNfkJUCnUCv8DFlEOezXTLM
+         COX7FJW+RrsCA==
+Message-ID: <95261aa18425e8f5571888a41ee03d9dfd2814b9.camel@collabora.com>
+Subject: Re: Re: [PATCH v6 11/17] media: uapi: Add
+ V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Jernej =?UTF-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        samuel@sholland.org, andrzej.p@collabora.com,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+Date:   Wed, 01 Jun 2022 12:20:53 -0400
+In-Reply-To: <2102878.irdbgypaU6@kista>
+References: <20220527143134.3360174-1-benjamin.gaignard@collabora.com>
+         <5824953.lOV4Wx5bFT@kista>
+         <b398272b-daf8-7499-b4fd-8a6f2af30053@collabora.com>
+         <2102878.irdbgypaU6@kista>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory accounting in Linux is probably the issue. Both times I ran
-the test were from a freshly booted VM. The test parses the output of
-$(free -k) to determine the amount of free memory it should allocate
-and write/read from, with a given stride of pages to skip before
-touching the next page.
+Le mardi 31 mai 2022 =C3=A0 20:20 +0200, Jernej =C5=A0krabec a =C3=A9crit=
+=C2=A0:
+> Dne torek, 31. maj 2022 ob 08:58:46 CEST je Benjamin Gaignard napisal(a):
+> >=20
+> > Le 30/05/2022 =C3=A0 23:24, Jernej =C5=A0krabec a =C3=A9crit :
+> > > Dne ponedeljek, 30. maj 2022 ob 15:49:57 CEST je Hans Verkuil napisal=
+(a):
+> > > > On 30/05/2022 11:18, Hans Verkuil wrote:
+> > > > > On 29/05/2022 08:40, Jernej =C5=A0krabec wrote:
+> > > > > > Hi!
+> > > > > >=20
+> > > > > > This series looks very good and I plan to test it shortly on Ce=
+drus,=20
+> but
+> > > I
+> > > > > > have one major concern below.
+> > > > > >=20
+> > > > > > Dne petek, 27. maj 2022 ob 16:31:28 CEST je Benjamin Gaignard=
+=20
+> napisal(a):
+> > > > > > > The number of 'entry point offset' can be very variable.
+> > > > > > > Instead of using a large static array define a v4l2 dynamic a=
+rray
+> > > > > > > of U32 (V4L2_CTRL_TYPE_U32).
+> > > > > > > The number of entry point offsets is reported by the elems fi=
+eld
+> > > > > > > and in struct v4l2_ctrl_hevc_slice_params.num_entry_point_off=
+sets
+> > > > > > > field.
+> > > > > > Slice control by itself is variable length array, so you would =
+actually
+> > > need
+> > > > > > 2D variable array for entry points which is not supported. Howe=
+ver,=20
+> easy
+> > > > > > workaround for that is to flatten 2D array to 1D and either hav=
+e another
+> > > slice
+> > > > > > control field which would tell first entry point index for conv=
+enience or
+> > > let
+> > > > > > driver calculate it by adding up all num_entry_point_offsets of=
+ previous
+> > > > > > slices.
+> > > > > >=20
+> > > > > > Hans, what do you think?
+> > > > > If I would support 2D variable array sizes, wouldn't that be more=
+=20
+> elegant?
+> > > > >=20
+> > > > > The current implementation doesn't support that, but as the commi=
+t log=20
+> for
+> > > > > patch 1/17 says:
+> > > > >=20
+> > > > > "Currently dynamically sized arrays are limited to one dimensiona=
+l=20
+> arrays,
+> > > > > but that might change in the future if there is a need for it."
+> > > > >=20
+> > > > > Let me know if you agree, and I'll try to implement this. It's be=
+en a
+> > > while
+> > > > > since I last looked at this, so I'm not sure how much work it is,=
+ but it
+> > > is
+> > > > > probably worth a shot.
+> > > > Digging more into this made me realize that this doesn't actually h=
+elp=20
+> for
+> > > this
+> > > > particular case.
+> > > >=20
+> > > > I would lean towards your second suggestion of adding up all
+> > > num_entry_point_offsets
+> > > > of previous slices.
+> > > Just one question/clarification about dynamic arrays - does driver ne=
+ed to
+> > > reserve maximum amount of memory for dynamic array control at=20
+> initialization
+> > > time? If so, this would still be problematic, since there cound be a =
+huge
+> > > amount of entry points in theory.
+> >=20
+> > When adding the control the driver could set .dims field to specify
+> > the max number of accepted slices.
+> > I have added '#define V4L2_HEVC_SLICE_MAX_COUNT 600' that you could use
+> > for this field. It is the value we have found when using slices with RK=
+VDEC
+> > driver.
+>=20
+> Is this maximum value applicable only to RKVDEC or is universal? Anyway, =
+this=20
+> means maximum offset points control for Cedrus would be 600 * 1024 (max. =
+offset=20
+> points supported per slice) * 4 ~=3D 2.4 MB, which is a lot for one contr=
+ol, but=20
+> I can live with that...
 
-We grab the third column of numbers from the Mem output that looks like thi=
-s
+I believe its defined following "Table A.8 =E2=80=93 General tier and level=
+ limits".
+With the assumption there will never be a level 7 (which I think is fair). =
+If
+anyone saw other reasons for this limit, let me know.
 
-               total        used        free      shared  buff/cache   avai=
-lable
-Mem:        65856604     4128688    48558952       11208    13168964    609=
-42928
-Swap:        1953788      118124     1835664
+This is a worse case scenario, this is quite unlikely in practice, so while
+performance might be a disaster if your craft a stream for that case, I don=
+'t
+think it will ever happen in real life.
 
-So my workstation has 48558952 free bytes. We take that, give it to
-memtouch to allocate that much anonymous memory rounded down to the
-nearest MB with mmap and randomly read/write the buffer.
+>=20
+> Best regards,
+> Jernej
+>=20
+> >=20
+> > Regards,
+> > Benjamin
+> >=20
+> > >=20
+> > > Best regards,
+> > > Jernej
+> > >=20
+> > > > Regards,
+> > > >=20
+> > > > 	Hans
+> > > >=20
+> > > > > Regards,
+> > > > >=20
+> > > > > 	Hans
+> > > > >=20
+> > > > > > Note, it seems that H265 decoding on Cedrus still works without=
+ entry
+> > > points,
+> > > > > > so this problem can be solved later. I'm not sure what we lose =
+with=20
+> that
+> > > but
+> > > > > > it was suggested that this could influence speed or error resil=
+ience or
+> > > both.
+> > > > > > However, I think we're close to solve it, so I'd like to do tha=
+t now.
+> > > > > >=20
+> > > > > > Best regards,
+> > > > > > Jernej
+> > > > > >=20
+> > > > > > > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora=
+.com>
+> > > > > > > ---
+> > > > > > >   .../userspace-api/media/v4l/ext-ctrls-codec.rst       | 11 =
++++++++++
+> ++
+> > > > > > >   drivers/media/v4l2-core/v4l2-ctrls-defs.c             |  5 =
++++++
+> > > > > > >   include/media/hevc-ctrls.h                            |  5 =
+++++-
+> > > > > > >   3 files changed, 20 insertions(+), 1 deletion(-)
+> > > > > > >=20
+> > > > > > > diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-=
+codec.rst=20
+> b/
+> > > > > > Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> > > > > > > index 0796b1563daa..05228e280f66 100644
+> > > > > > > --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.r=
+st
+> > > > > > > +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.r=
+st
+> > > > > > > @@ -3010,6 +3010,9 @@ enum v4l2_mpeg_video_hevc_size_of_lengt=
+h_field -
+> > > > > > >       * - __u32
+> > > > > > >         - ``data_bit_offset``
+> > > > > > >         - Offset (in bits) to the video data in the current s=
+lice data.
+> > > > > > > +    * - __u32
+> > > > > > > +      - ``num_entry_point_offsets``
+> > > > > > > +      - Specifies the number of entry point offset syntax el=
+ements in=20
+> the
+> > > > > > slice header.
+> > > > > > >       * - __u8
+> > > > > > >         - ``nal_unit_type``
+> > > > > > >         - Specifies the coding type of the slice (B, P or I).
+> > > > > > > @@ -3150,6 +3153,14 @@ enum v4l2_mpeg_video_hevc_size_of_leng=
+th_field -
+> > > > > > >  =20
+> > > > > > >       \normalsize
+> > > > > > >  =20
+> > > > > > > +``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
+> > > > > > > +    Specifies entry point offsets in bytes.
+> > > > > > > +    This control is a dynamically sized array. The number of=
+ entry
+> > > point
+> > > > > > > +    offsets is reported by the ``elems`` field.
+> > > > > > > +    This bitstream parameter is defined according to :ref:`h=
+evc`.
+> > > > > > > +    They are described in section 7.4.7.1 "General slice seg=
+ment=20
+> header
+> > > > > > > +    semantics" of the specification.
+> > > > > > > +
+> > > > > > >   ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
+> > > > > > >       Specifies the HEVC scaling matrix parameters used for t=
+he scaling
+> > > > > > process
+> > > > > > >       for transform coefficients.
+> > > > > > > diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/driv=
+ers/media/
+> > > v4l2-
+> > > > > > core/v4l2-ctrls-defs.c
+> > > > > > > index d594efbcbb93..e22921e7ea61 100644
+> > > > > > > --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > > > > > > +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > > > > > > @@ -1188,6 +1188,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+> > > > > > >   	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:		return
+> > > > > > "HEVC Decode Parameters";
+> > > > > > >   	case V4L2_CID_STATELESS_HEVC_DECODE_MODE:		return
+> > > > > > "HEVC Decode Mode";
+> > > > > > >   	case V4L2_CID_STATELESS_HEVC_START_CODE:		return
+> > > > > > "HEVC Start Code";
+> > > > > > > +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:	return
+> > > > > > "HEVC Entry Point Offsets";
+> > > > > > >  =20
+> > > > > > >   	/* Colorimetry controls */
+> > > > > > >   	/* Keep the order of the 'case's the same as in v4l2-contr=
+ols.h!
+> > > > > > */
+> > > > > > > @@ -1518,6 +1519,10 @@ void v4l2_ctrl_fill(u32 id, const char=
+ **name,
+> > > enum
+> > > > > > v4l2_ctrl_type *type,
+> > > > > > >   	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:
+> > > > > > >   		*type =3D V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
+> > > > > > >   		break;
+> > > > > > > +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:
+> > > > > > > +		*type =3D V4L2_CTRL_TYPE_U32;
+> > > > > > > +		*flags |=3D V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
+> > > > > > > +		break;
+> > > > > > >   	case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR:
+> > > > > > >   		*type =3D V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR;
+> > > > > > >   		break;
+> > > > > > > diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-=
+ctrls.h
+> > > > > > > index a3c829ef531a..1319cb99ae3f 100644
+> > > > > > > --- a/include/media/hevc-ctrls.h
+> > > > > > > +++ b/include/media/hevc-ctrls.h
+> > > > > > > @@ -20,6 +20,7 @@
+> > > > > > >   #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS=09
+> (V4L2_CID_CODEC_BASE
+> > > > > > + 1012)
+> > > > > > >   #define V4L2_CID_STATELESS_HEVC_DECODE_MODE=09
+> (V4L2_CID_CODEC_BASE
+> > > + 1015)
+> > > > > > >   #define V4L2_CID_STATELESS_HEVC_START_CODE=09
+> (V4L2_CID_CODEC_BASE + 1016)
+> > > > > > > +#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS=20
+> (V4L2_CID_CODEC_BASE
+> > > +
+> > > > > > 1017)
+> > > > > > >  =20
+> > > > > > >   /* enum v4l2_ctrl_type type values */
+> > > > > > >   #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
+> > > > > > > @@ -318,6 +319,8 @@ struct v4l2_hevc_pred_weight_table {
+> > > > > > >    *
+> > > > > > >    * @bit_size: size (in bits) of the current slice data
+> > > > > > >    * @data_bit_offset: offset (in bits) to the video data in =
+the current
+> > > slice
+> > > > > > data
+> > > > > > > + * @num_entry_point_offsets: specifies the number of entry p=
+oint offset
+> > > syntax
+> > > > > > > + *			     elements in the slice header.
+> > > > > > >    * @nal_unit_type: specifies the coding type of the slice (=
+B, P or I)
+> > > > > > >    * @nuh_temporal_id_plus1: minus 1 specifies a temporal ide=
+ntifier for
+> > > the
+> > > > > > NAL unit
+> > > > > > >    * @slice_type: see V4L2_HEVC_SLICE_TYPE_{}
+> > > > > > > @@ -360,7 +363,7 @@ struct v4l2_hevc_pred_weight_table {
+> > > > > > >   struct v4l2_ctrl_hevc_slice_params {
+> > > > > > >   	__u32	bit_size;
+> > > > > > >   	__u32	data_bit_offset;
+> > > > > > > -
+> > > > > > > +	__u32	num_entry_point_offsets;
+> > > > > > >   	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
+> > > > > > >   	__u8	nal_unit_type;
+> > > > > > >   	__u8	nuh_temporal_id_plus1;
+> > > > > > > --=20
+> > > > > > > 2.32.0
+> > > > > > >=20
+> > > > > > >=20
+> > > > > >=20
+> > > >=20
+> > >=20
+> >=20
+>=20
+>=20
 
-For an 8GB machine, the UEFI will have the initial 0-0xA000 memory and
-0x10_0000 to 0xC00_0000 (beginning of mmio hole) prevalidated. The
-next 5GB is classified as the UEFI v2.9 memory type
-EFI_RESOURCE_MEMORY_UNACCEPTED, 0x1_4000_000 to 0x2_0000_0000.
-The Linux e820 map should see that range as unaccepted rather than
-EFI_CONVENTIONAL_MEMORY (i.e., EDK2's EFI_RESOURCE_SYSTEM_MEMORY), but
-I think it needs to be accounted as free conventional memory.
-
-So when I see 2044MB free vs 7089MB free in my VMs, the two are
-roughly 5GB different.
-
-On Wed, Jun 1, 2022 at 8:49 AM Gupta, Pankaj <pankaj.gupta@amd.com> wrote:
->
->
-> > Hi y'all, I've made minimal changes to OVMF to prevalidate only up to
-> > 4GB and leave the rest unaccepted, as Thomas Lendacky recommended
-> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit=
-hub.com%2FAMDESE%2Fovmf%2Fpull%2F4%23issuecomment-1138606275&amp;data=3D05%=
-7C01%7Cpankaj.gupta%40amd.com%7Cde8fd09ad93f4420bd7408da43568f68%7C3dd8961f=
-e4884e608e11a82d994e183d%7C0%7C0%7C637896336342540814%7CUnknown%7CTWFpbGZsb=
-3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C300=
-0%7C%7C%7C&amp;sdata=3DK93%2F1FrPOo4bIWcssHoisM8vDkOBjWh69bUWosT%2Bt0E%3D&a=
-mp;reserved=3D0 and ran
-> > a memtouch test to see if this change behaves as expected. One thing
-> > that struck me is that an 8GB machine reports 2044MB free with this
-> > change (free -k) whereas without it, I see 7089MB free. I think that
-> > unaccepted memory should be classified as free in meminfo, no? I'm not
-> > familiar enough with that code to say what specific change needs to be
-> > made.
-> >
->
-> Is it memory accounting issue when accepting all the memory at boot time
-> compared to 4GB:4GB preboot_acceptance:use_time_acceptance split?
->
-> You said you ran memtouch (don't know how it works, assuming it uses
-> memory)? Doesn't that mean most of the memory used and hence accepted?
-> So, free memory reduced?
->
-> Just trying to understand the issue.
->
-> Thanks,
-> Pankaj
-> >
-> >
-> > On Sun, May 15, 2022 at 11:47 PM Xu, Min M <min.m.xu@intel.com> wrote:
-> >>
-> >> On May 13, 2022 10:45 PM, Kirill A. Shutemov wrote:
-> >>> On Fri, May 13, 2022 at 11:01:43AM +0200, Borislav Petkov wrote:
-> >>>> + mroth
-> >>>> - brijesh
-> >>>>
-> >>>> On Thu, May 12, 2022 at 10:34:02PM -0700, Dionna Amalie Glaze wrote:
-> >>>>> Kirill, I've been tracking these changes to see if we can handle th=
-e
-> >>>>> unaccepted memory type for SEV-SNP, but testing has been an issue.
-> >>>>> The proposed patch in Ovmf to introduce unaccepted memory seems to
-> >>>>> have stalled out last September
-> >>>>> (https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%=
-2Fwww.mail-archive.com%2Fdevel%40edk2.groups.io%2Fmsg35842.html&amp;data=3D=
-05%7C01%7Cpankaj.gupta%40amd.com%7Cde8fd09ad93f4420bd7408da43568f68%7C3dd89=
-61fe4884e608e11a82d994e183d%7C0%7C0%7C637896336342540814%7CUnknown%7CTWFpbG=
-Zsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C=
-3000%7C%7C%7C&amp;sdata=3DHku8nQJGOg%2FdQqypHxw2eLFG0e%2FE6HoF5VXSIhMpmx0%3=
-D&amp;reserved=3D0)
-> >>>>> and is particularly difficult to adapt to SEV-SNP since it doesn't
-> >>>>> follow the TDVF way of initializing all memory. Is there a differen=
-t
-> >>>>> development I might have missed so that we might test these cases?
-> >>>>> Without the UEFI introducing EFI_UNACCEPTED_MEMORY type, any
-> >>> kernel
-> >>>>> uses are essentially dead code.
-> >>>
-> >>> + Min, Jiaqi.
-> >>>
-> >>> I don't follow firmware development. Min, Jiaqi, could you comment?
-> >>>
-> >> We have prepared the patch for unaccepted memory and it is now working=
- in our internal release.
-> >> But there is an obstacle to upstream it to edk2 master branch.
-> >> The patch-set depends on the definition of UEFI_RESOURCE_MEMORY_UNACCE=
-PTED in PI spec. This is proposed in https://nam11.safelinks.protection.out=
-look.com/?url=3Dhttps%3A%2F%2Fgithub.com%2Fmicrosoft%2Fmu_basecore%2Fpull%2=
-F66%2Ffiles%23diff-b20a11152d1ce9249c691be5690b4baf52069efadf2e2546cdd2eb66=
-3d80c9e4R237&amp;data=3D05%7C01%7Cpankaj.gupta%40amd.com%7Cde8fd09ad93f4420=
-bd7408da43568f68%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C6378963363425=
-40814%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6I=
-k1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3Dv7s68GZWXJfaXB7vfvXjAlTD2=
-KLOSghk%2Bj3GXF3FTVg%3D&amp;reserved=3D0, according to UEFI-Code-First. The=
- proposal was approved in 2021 in UEFI Mantis, and will be added to the new=
- PI.next specification. (Till now it has not been added in the latest PI sp=
-ec.)
-> >> So UEFI_RESOURCE_MEMORY_UNACCEPTED cannot be added in MdePkg which mak=
-e it difficult to submit the patch to edk2 community for review. See this l=
-ink: https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fed=
-k2.groups.io%2Fg%2Fdevel%2Fmessage%2F87558&amp;data=3D05%7C01%7Cpankaj.gupt=
-a%40amd.com%7Cde8fd09ad93f4420bd7408da43568f68%7C3dd8961fe4884e608e11a82d99=
-4e183d%7C0%7C0%7C637896336342540814%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjA=
-wMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sda=
-ta=3DWVIJ2yRRd2URwIF85Dp0WD4ovibZlsobijIGbN6MWZQ%3D&amp;reserved=3D0
-> >>
-> >> Please be noted: UEFI_RESOURCE_MEMORY_UNACCEPTED (defined in PI spec) =
-is different from EFI_UNACCEPTED_MEMORY (defined in UEFI spec)
-> >>
-> >> I will submit the patch-set once the new definition is added in the ne=
-w PI.next spec.
-> >>
-> >> Thanks
-> >> Min
-> >
-> >
-> >
->
-
-
---=20
--Dionna Glaze, PhD (she/her)

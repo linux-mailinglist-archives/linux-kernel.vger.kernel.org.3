@@ -2,153 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F37753AD76
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 21:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB0353AF12
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbiFATnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 15:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
+        id S231459AbiFAVTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiFATnO (ORCPT
+        with ESMTP id S231180AbiFAVTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 15:43:14 -0400
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DE12612B8;
-        Wed,  1 Jun 2022 12:41:16 -0700 (PDT)
-Received: by mail-ot1-f45.google.com with SMTP id t22-20020a0568301e3600b0060b333f7a1eso1990641otr.0;
-        Wed, 01 Jun 2022 12:41:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+v5j5ekx2Jgon4FWC0grFHHMjkCKNZHQytb0+MZZAWQ=;
-        b=Emeeb9+DM/HcvZnRMpwpOi0RxVpL67MnQw522F7NX0BAnwMdF8Ox/LAaAcFeeKOIaY
-         YZcjLzgyH5XfKmYPi425vZR0DZpOv6eonu7NuIKUoCsHcFP6ZXUyG/1XKaQBVtHJpLz3
-         Ft9VBtD1NtFmuBlgCdXAATsEer7pFT+U2Zz5xXAP63enx28FS/JEs4kxeeZ6NQTx1BIe
-         LZ5fySk3+Xb1zuWvNUeAI67N93INkt2gWvr2eFoBFONbFgppbnqGfQv6Jo8rdSmfo0w9
-         Ol/bQk2LOZ2wT3xwWeSzGB8Tqj71JcqJNTPCii7O6koAd8SRu0IkTqgQy232ro6QGhD7
-         5Y9A==
-X-Gm-Message-State: AOAM533VhaCHSCyttNHRdyGzNdwKKsTjz55rarEA75Y4+zxvOlCVT9VK
-        aXSrziIigQjV4GOGn00OdQbjrv+QKQ==
-X-Google-Smtp-Source: ABdhPJx/fJbMfVLJruJz1q5U9ewNqzGJeM1ex5DJpVTEeuXhhWvntCyhTm1jZcpILyQZakLjHaqNNw==
-X-Received: by 2002:a9d:694a:0:b0:60b:275f:fe2d with SMTP id p10-20020a9d694a000000b0060b275ffe2dmr621608oto.49.1654112397104;
-        Wed, 01 Jun 2022 12:39:57 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 63-20020aca0542000000b00325643bce40sm1386527oif.0.2022.06.01.12.39.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 12:39:56 -0700 (PDT)
-Received: (nullmailer pid 300162 invoked by uid 1000);
-        Wed, 01 Jun 2022 19:39:56 -0000
-Date:   Wed, 1 Jun 2022 14:39:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 0/1] dt-bindings: Add device-perms property description
-Message-ID: <20220601193956.GA234900-robh@kernel.org>
-References: <cover.1651749565.git.oleksii_moisieiev@epam.com>
+        Wed, 1 Jun 2022 17:19:49 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59A3A76E7;
+        Wed,  1 Jun 2022 14:19:38 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.96.91]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MnJUy-1nUtIA27Iy-00jLcz; Wed, 01 Jun 2022 21:49:58 +0200
+Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by leknes.fjasle.eu (Postfix) with ESMTPS id ABFE93C09F;
+        Wed,  1 Jun 2022 21:49:56 +0200 (CEST)
+Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+        id 694BF27B9; Wed,  1 Jun 2022 21:49:55 +0200 (CEST)
+Date:   Wed, 1 Jun 2022 21:49:55 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Michal Marek <michal.lkml@markovi.net>
+Subject: Re: [PATCH 2/4] kbuild: clean .tmp_* pattern by make clean
+Message-ID: <YpfC42gQGDJiMMNT@bergen.fjasle.eu>
+References: <20220528154704.2576290-1-masahiroy@kernel.org>
+ <20220528154704.2576290-2-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <cover.1651749565.git.oleksii_moisieiev@epam.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220528154704.2576290-2-masahiroy@kernel.org>
+Jabber-ID: nicolas@jabber.no
+X-Operating-System: Debian GNU/Linux bookworm/sid
+X-Provags-ID: V03:K1:iWTC9Fl0s+F1OypqFKLOqkbj83zsZ//QByOdoNj6YEXh0YX+PLt
+ E+b8wieuJIY9Pkg98zqSC18mjpdoK4pyi9a5/4uSSDKUtftd2fq2C2LiTV07y8JNsaxzqaj
+ GB/9oxbZmIDmvq/mlhF+qVBhsHO9ABu0fjWIkWlAxZAdknuX3r5RYsyQ/PjWIgpbBV3zHM1
+ ++MOmZ4ncIN9Woa/yjNlg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:HPgegc6THJM=:e24xwd5frNJbGKgbys85Fo
+ oKM78EGdhZ0oSrl+2blQX6alQJjIUVIBR7tXSHg/lUWWXIjrWzFhkNi6JgJAq7X2Bpv5LPIoY
+ D7q51XWHJMnNcmPlq6s0JG6wBS/wPPqafkesWdRLKbPnTqQoOGOZ7gjCQnEgeVA+UfSbcseF1
+ 73A/KkWd2lMaMqX6/EGI76Wone4slykcugSfBAjZydDU9tndfUC0hr29kAHwCgh8lZhUxLk23
+ l9TFmISMiMfZgkWdti6+dC2HWI6TbarbYBrvjFUGaiUAGYJg7+GIFa9x+SnHfEAbGBdfAro7z
+ ilWmcPw0otrgfzmSJkOJvR8JwL/wo+SzXXJJltCFB2OgKuIMo7NX6xwPSMk8HL3Z/WeLJHp3B
+ xuMRVE6QfKpqDKdauYLx3zu6NmTe76lJyu9LoRoUA64VlqHFpP1nNAZxVEqe6fVgDUFzjkCVq
+ f/zxkbWKYqA1ksiI9DqmmPvXhXUkRCk/icJB1bMDLoau3+DFrPCo5zQsm3MqE7KZepREe9GPZ
+ F7QBkKH/K2nx+oUsvAn3IZZBYeN0Xu4Q202qahzdHfzntCJLqEGcKZFSXLNwPWiitQXc2UMib
+ nIirUb0tc7SgHknTQkflU0ymxAmaDJR5ZAFJVIL9NwH7FnCFotvq8jPwrtxUNs6c8uIBATCDQ
+ e9lZKPyeRGu/igg4hkyWPf8/kdd5Hg+/Eg8IGMjSNqlpiPBlL8CJ3wLi9AM7I9iqBXnXea43g
+ 0PvJ7Pd/L2BwYfMXmJcR8oM0O8wRMdAKkJlrdA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 11:23:50AM +0000, Oleksii Moisieiev wrote:
-> Introduce device-perms property which is intended to set the device
-> permissions for the System Management interfaces.
-> An example of this interface is SCMI (System Control and Management
-> Interface) which controls clocks/power-domains/resets etc from the
-> Firmware. This property sets the device_id to set the device permissions
-> for the Fimware using BASE_SET_DEVICE_PERMISSIONS message (see 4.2.2.10 of [0]).
-
-Is that an exhaustive list of controls? Seems like there would be a 
-GET_DEVICE_PERMISSIONS.
-
-> Device permissions management described in DEN 0056, Section 4.2.2.10 [0].
-> Given parameter should set the device_id, needed to set device
-> permissions in the Firmware.
-> This property is used by trusted Agent to set permissions for the devices,
-> passed-through to the non-trusted Agents. Trusted Agent will use device-perms to
-> set the Device permissions for the Firmware (See Section 4.2.2.10 [0]
-> for details).
-> Agents concept is described in Section 4.2.1 [0].
-
-As I said on the call discussing this, this looks very similar to other 
-proposals wanting to control or check permissions on devices handled by 
-some provider. While the consumer of the binding is different in various 
-proposals, that doesn't really matter from a DT perspective. DT is just 
-describing some type of connection between nodes. So I'm looking for 
-collaboration here with folks that have made prior proposals. To put it 
-another way, for a new common binding like this, I want to see more than 
-one user. 
-
+On Sun 29 May 2022 00:47:02 +0900, Masahiro Yamada wrote:
+> Change the "make clean" rule to remove all the .tmp_* files.
 > 
-> device-perms in Device-tree node example:
-> usb@e6590000
-> {
->     device-perms = <&scmi 19>;
-
-Please follow typical design patterns. For example, all of these:
-
->     clocks = <&scmi_clock 3>, <&scmi_clock 2>;
->     resets = <&scmi_reset 10>, <&scmi_reset 9>;
->     power-domains = <&scmi_power 0>;
-
-The provider is what determines the number of cells and their meaning. 
-That's certainly the case here.
-
-> };
+> .tmp_objdiff is the only exception, which should be removed by
+> "make mrproper".
 > 
-> Given example shows the configuration of the hsusb node, which is using
-> scmi to contol clocks, resets and power-domains. device-perms links to
-> &scmi phandle and set the permission parameter 19, which should match
-> defined id for usb in the Firmware.
-
-See, the provider is what determines the meaning.
-
-> Current implementation defines Xen hypervisor as trusted Agent and OS
-> (Linux or other) as non-trusted Agent.
-> Trusted Agent will use device-perms to set the device permissions for
-> the Agents. Non-trusted Agent (OS) should not have an access to the permissions
-> settings, so no code to process device-perms was presented in Linux
-> kernel.
+> Rename the record directory of objdiff, .tmp_objdiff to .objdiff to
+> avoid the removal by "make clean".
 > 
-> We are currently contributing changes to Xen, which are intended to
-> mediate SCMI access from Guests to the Firmware. Xen uses device-perms to set
-> the permissions for the devices. See [1] thread for details.
-> 
-> [0] https://developer.arm.com/documentation/den0056/latest
-> [1] https://xen.markmail.org/message/mmi4fpb4qr6e3kad
-> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
-> Changes V1 -> V2:
->    - update parameter name, made it xen-specific
->    - add xen vendor bindings
 > 
-> Changes V2 -> V3:
->    - update parameter name, make it generic
->    - update parameter format, add link to controller
->    - do not include xen vendor bindings as already upstreamed
+>  Makefile                | 4 ++--
+>  scripts/link-vmlinux.sh | 3 ---
+>  scripts/objdiff         | 2 +-
+>  3 files changed, 3 insertions(+), 6 deletions(-)
 > 
-> Oleksii Moisieiev (1):
->   dt-bindings: Add device-perms property description
-> 
->  .../bindings/firmware/device-perms.yaml       | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/firmware/device-perms.yaml
-> 
-> -- 
-> 2.27.0
-> 
+...
+> diff --git a/scripts/objdiff b/scripts/objdiff
+> index 72b0b63c3fe1..68b8d74e5c6f 100755
+> --- a/scripts/objdiff
+> +++ b/scripts/objdiff
+> @@ -32,7 +32,7 @@ if [ -z "$SRCTREE" ]; then
+>  	exit 1
+>  fi
+>  
+> -TMPD=$SRCTREE/.tmp_objdiff
+> +TMPD=$SRCTREE/.objdiff
+>  
+>  usage() {
+>  	echo >&2 "Usage: $0 <command> <args>"
+
+scripts/objdiff still has two occurrences of .tmp_objdiff (in the 
+comment block at the top).

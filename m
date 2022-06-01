@@ -2,111 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8B153A940
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A89353A941
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351965AbiFAOfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
+        id S1352608AbiFAOgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235282AbiFAOfo (ORCPT
+        with ESMTP id S235282AbiFAOgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:35:44 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1592C222BA
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:35:43 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id l1so1596234qvh.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 07:35:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs.cmu.edu; s=google-2021;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PV8wB1DGk+ovpxW0ZzDEp3iwz6LskTQ2PLaIigSoOEc=;
-        b=cSdHfsPPQ0N3oKJI7iCBrmxP1LrZKyTUgBJ+MU8mYFCPVlXqZMm/O62CuGhF+6bf7U
-         +aRhSZuXjicqKdiwsN7l6iNBLVQ7suzO3ndC/FHqw240P48L8uR9HD399VfxsuponpAH
-         ZCkqGShCC2wXuXysdRgJqfc5cluXsvs4VOiRoPSt7B/nYxuhJoN2ok6p2GG8CbuFiv8C
-         jejpSZJ9oiBlvg51Rsj/62H+7jlczrnnRu5bi+O0gjGM4W79M+Q3quILTOs5iArUxJwp
-         0/Q0OZ8qbXr0vTnnfcfW9ziZQCWzpTAlk6oRc871Tilwf0YrexG/05OMntE7UK3WXCVq
-         RPYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PV8wB1DGk+ovpxW0ZzDEp3iwz6LskTQ2PLaIigSoOEc=;
-        b=5jIP0xzPbLXCZfsMJouL59uHaj12K2468YKJBySF0V4//ehkP686XjzfYlGswarUhO
-         ot8sgGCIzN794WB3ROM7tylYYz5HTFA8dXEuQcpHVFKOzJ2Y44TLZUu9HBScXjHQSVOF
-         sf07PmmW8roS9fvjK8ocmKNWpCg/owlEJgJm4Hn1Tt+nNbz5TR0czYmh7i/BPucBTmbC
-         5lkfdN2h8f7CIYdcEn/7/KHL8QEGXzKpFfzDNh95hNYEJ7/b6W0ccgl4BFgDoszEodhZ
-         SgfMTGFVvLE5tvIYLcF6Pu+0v02YJHP88Ca94KQJ7u29pwqJvcHN/7/wALbUkqfYICir
-         v8Pg==
-X-Gm-Message-State: AOAM531t4lofKyEZIZxX09N6qGPYx1Uhel/ExaX6/zaqMD1uYJwjFoE/
-        1fpsEgoJQzq7V85XNO8tc6Tq13rimYgiUA==
-X-Google-Smtp-Source: ABdhPJyTgpXeY8vG9pTLoy81tlD47fvDP5nCgZI+M73tdmCOWdXI+5a0gAGYPWQD+cSBfqea7t6rSA==
-X-Received: by 2002:a05:6214:3006:b0:462:5472:86d6 with SMTP id ke6-20020a056214300600b00462547286d6mr35739826qvb.43.1654094142180;
-        Wed, 01 Jun 2022 07:35:42 -0700 (PDT)
-Received: from cs.cmu.edu (tunnel29655-pt.tunnel.tserv13.ash1.ipv6.he.net. [2001:470:7:582::2])
-        by smtp.gmail.com with ESMTPSA id d27-20020a05620a205b00b0069fc13ce235sm1276028qka.102.2022.06.01.07.35.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 07:35:41 -0700 (PDT)
-Date:   Wed, 1 Jun 2022 10:35:38 -0400
-From:   Jan Harkes <jaharkes@cs.cmu.edu>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] coda: remove unused variable
-Message-ID: <20220601143538.e232rih7wndlofd7@cs.cmu.edu>
-References: <1654070283-7216-1-git-send-email-baihaowen@meizu.com>
+        Wed, 1 Jun 2022 10:36:08 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3679D2409F;
+        Wed,  1 Jun 2022 07:36:05 -0700 (PDT)
+Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LCs610H4kz67xBN;
+        Wed,  1 Jun 2022 22:31:37 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Wed, 1 Jun 2022 16:36:02 +0200
+Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
+ 2022 15:36:01 +0100
+Date:   Wed, 1 Jun 2022 15:35:59 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Ben Widawsky <ben@bwidawsk.net>
+CC:     <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH V9 4/9] cxl/pci: Create PCI DOE mailbox's for memory
+ devices
+Message-ID: <20220601153559.0000273b@Huawei.com>
+In-Reply-To: <20220531175020.efqfth7ubbyhoubp@mail.bwidawsk.net>
+References: <20220531152632.1397976-1-ira.weiny@intel.com>
+        <20220531152632.1397976-5-ira.weiny@intel.com>
+        <20220531175020.efqfth7ubbyhoubp@mail.bwidawsk.net>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1654070283-7216-1-git-send-email-baihaowen@meizu.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, but I cannot ack this patch.
+On Tue, 31 May 2022 10:50:20 -0700
+Ben Widawsky <ben@bwidawsk.net> wrote:
 
-Clearly there is a lack of clarity in this particular bit of code
-because this suggestion seems to reappear every few years,
-
-https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2269222.html
-
-The insize variable is in fact used by the UPARG macro that follows, and
-once this patch is applied you end up with an obvious compilation error.
-
-Jan
-
-
-On Wed, Jun 01, 2022 at 03:58:03PM +0800, Haowen Bai wrote:
-> The variable insize is initialized but never used otherwise.
+> On 22-05-31 08:26:27, ira.weiny@intel.com wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > DOE mailbox objects will be needed for various mailbox communications
+> > with each memory device.
+> > 
+> > Iterate each DOE mailbox capability and create PCI DOE mailbox objects
+> > as found.
+> > 
+> > It is not anticipated that this is the final resting place for the
+> > iteration of the DOE devices.  The support of ports may drive this code
+> > into the pcie side.  In this imagined architecture the CXL port driver
+> > would then query into the PCI device for the DOE mailbox array.  
 > 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
->  fs/coda/upcall.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> Not sure if direction has changed, but initially it would have been the cxl_pci
+> driver who would query this and pass it along when the port driver probes.
+> Personally, I've never had an issue with non cxl_pci drivers using PCI
+> interfaces and semantics, but it is something we've taken specific care to
+> avoid.
 > 
-> diff --git a/fs/coda/upcall.c b/fs/coda/upcall.c
-> index 59f6cfd06f96..c214b424426d 100644
-> --- a/fs/coda/upcall.c
-> +++ b/fs/coda/upcall.c
-> @@ -477,10 +477,9 @@ int venus_pioctl(struct super_block *sb, struct CodaFid *fid,
->  {
->          union inputArgs *inp;
->          union outputArgs *outp;  
-> -	int insize, outsize, error;
-> +	int outsize, error;
->  	int iocsize;
->  
-> -	insize = VC_MAXMSGSIZE;
->  	UPARG(CODA_IOCTL);
->  
->          /* build packet for Venus */
-> -- 
-> 2.7.4
+> > 
+> > For now this is good enough for the endpoints and the split is similar
+> > to the envisioned architecture where getting the mailbox array is
+> > separated from the various protocol needs.  For example, it is not
+> > anticipated that the CDAT code will need to move because it is only
+> > needed by the cxl_ports.
+> > 
+> > Likewise irq's are separated out in a similar design pattern to the
+> > PCIe port driver.  But a much simpler irq enabling flag is used and only
+> > DOE interrupts are supported.
+> > 
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > ---
+> > Changes from V8:
+> > 	Move PCI_DOE selection to CXL_BUS to support future patches
+> > 	which move queries into the port code.
+> > 	Remove Auxiliary device arch
+> > 	Squash the functionality of the auxiliary driver into this
+> > 	patch.
+> > 	Split out the irq handling a bit.
+> > 
+> > Changes from V7:
+> > 	Minor code clean ups
+> > 	Rebased on cxl-pending
+> > 
+> > Changes from V6:
+> > 	Move all the auxiliary device stuff to the CXL layer
+> > 
+> > Changes from V5:
+> > 	Split the CXL specific stuff off from the PCI DOE create
+> > 	auxiliary device code.
+> > ---
+> >  drivers/cxl/Kconfig  |   1 +
+> >  drivers/cxl/cxlmem.h |   6 +++
+> >  drivers/cxl/pci.c    | 111 +++++++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 118 insertions(+)
+> > 
+> > diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
+> > index f64e3984689f..7adaaf80b302 100644
+> > --- a/drivers/cxl/Kconfig
+> > +++ b/drivers/cxl/Kconfig
+> > @@ -2,6 +2,7 @@
+> >  menuconfig CXL_BUS
+> >  	tristate "CXL (Compute Express Link) Devices Support"
+> >  	depends on PCI
+> > +	select PCI_DOE
+> >  	help
+> >  	  CXL is a bus that is electrically compatible with PCI Express, but
+> >  	  layers three protocols on that signalling (CXL.io, CXL.cache, and
+> > diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> > index 60d10ee1e7fc..4d2764b865ab 100644
+> > --- a/drivers/cxl/cxlmem.h
+> > +++ b/drivers/cxl/cxlmem.h
+> > @@ -191,6 +191,8 @@ struct cxl_endpoint_dvsec_info {
+> >   * @component_reg_phys: register base of component registers
+> >   * @info: Cached DVSEC information about the device.
+> >   * @serial: PCIe Device Serial Number
+> > + * @doe_mbs: PCI DOE mailbox array
+> > + * @num_mbs: Number of DOE mailboxes
+> >   * @mbox_send: @dev specific transport for transmitting mailbox commands
+> >   *
+> >   * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
+> > @@ -224,6 +226,10 @@ struct cxl_dev_state {
+> >  	resource_size_t component_reg_phys;
+> >  	u64 serial;
+> >  
+> > +	bool doe_use_irq;
+> > +	struct pci_doe_mb **doe_mbs;
+> > +	int num_mbs;
+> > +
+> >  	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
+> >  };
+> >  
+> > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> > index 5a0ae46d4989..131f89dec8e7 100644
+> > --- a/drivers/cxl/pci.c
+> > +++ b/drivers/cxl/pci.c
+> > @@ -8,6 +8,7 @@
+> >  #include <linux/mutex.h>
+> >  #include <linux/list.h>
+> >  #include <linux/pci.h>
+> > +#include <linux/pci-doe.h>
+> >  #include <linux/io.h>
+> >  #include "cxlmem.h"
+> >  #include "cxlpci.h"
+> > @@ -386,6 +387,113 @@ static int cxl_setup_regs(struct pci_dev *pdev, enum cxl_regloc_type type,
+> >  	return rc;
+> >  }
+> >  
+> > +static void cxl_pci_free_irq_vectors(void *data)
+> > +{
+> > +	pci_free_irq_vectors(data);
+> > +}
+> > +
+> > +static void cxl_doe_destroy_mb(void *ds)
+> > +{
+> > +	struct cxl_dev_state *cxlds = ds;
+> > +	int i;
+> > +
+> > +	for (i = 0; i < cxlds->num_mbs; i++) {
+> > +		if (cxlds->doe_mbs[i])
+> > +			pci_doe_destroy_mb(cxlds->doe_mbs[i]);
+> > +	}
+> > +}
+> > +
+> > +static void cxl_alloc_irq_vectors(struct cxl_dev_state *cxlds)
+> > +{
+> > +	struct device *dev = cxlds->dev;
+> > +	struct pci_dev *pdev = to_pci_dev(dev);
+> > +	int num_irqs = 0;
+> > +	int off = 0;
+> > +	int rc;
+> > +
+> > +	/* Account for all the DOE vectors needed */
+> > +	pci_doe_for_each_off(pdev, off) {
+> > +		int irq = pci_doe_get_irq_num(pdev, off);
+> > +
+> > +		if (irq < 0)
+> > +			continue;
+> > +		num_irqs = max(num_irqs, irq + 1);  
 > 
+> This seems overly complicated. Isn't it just num_irqs++?
+
+nope.  
+
+There is no guarantee the irq values are near zero or contiguous.
+
+If irq is 33 for example, it pretty much implies that there are 34 or more irq
+vectors used for something on this device, but we don't know what the rest are for.
+
+Trick is used in portdrv to deal with enabling all the irqs needed for the various
+supported services, which might not be all the irqs the hardware provides.
+
+Maybe worth renaming num_irqs as max_irq or something like that and postpone the +1 to
+where it is used?
+
+Jonathan
+
 > 
+> > +	}

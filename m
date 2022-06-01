@@ -2,62 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD6D539F52
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C09539F56
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349033AbiFAIXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 04:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
+        id S1350622AbiFAIXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245162AbiFAIW7 (ORCPT
+        with ESMTP id S245162AbiFAIX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:22:59 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C79F29A;
-        Wed,  1 Jun 2022 01:22:57 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id d26so1217651wrb.13;
-        Wed, 01 Jun 2022 01:22:57 -0700 (PDT)
+        Wed, 1 Jun 2022 04:23:26 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2092.outbound.protection.outlook.com [40.107.101.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA652722;
+        Wed,  1 Jun 2022 01:23:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aGLwLYuB32d+BAALlEm82yEtykFWaNDaBgBVlE/s5dXtYsT+lTfDzbKxrLF6nFgsFoMVmW2ZBhwiAAQZlx7o4f8inW2gApy4AykMfOdja0rpyo5ioC6SCMRdyKqKlOHAjdVZ/lFCN+C40BIC6eStlRRv0GDX6+++xbpaxh1q8q5vaiy0w48nWf3X6mb7fhGYI0Y9QjyXwj8G9v3+AtdoViCVUflZkmK0bVxI/jDYiXemIRB2Yvmz94ZVObbDdM7qaR9gcRPZo+RD9E+4OrteeMZXSITYtzhpXu0iHxeKjTekdTyANMFeaqRjQbyUKDEEZqOLULl1OdQAReUkX0Cm7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rlVF0iMPrrmniy5l9kEFBl3woILxDoJb8sczYLSsWso=;
+ b=Db5EBuccpkRyszpKjtM6b0k11mQOMdusUWxaQjMmHv722XAZ2Vl2ibrCdh4tQphi1JdYW6Yju4WSR/J4z3kQ/m0YksVubpzSiCiOqiwqaQfrAwrrxiP3nY//hy4ieIDm/i/pB1VbaDJfRjoNGrnsSwKUewuCG6xxadd9L2958hWZtlaEB1FyPWwrr9bBniQfHO7vWBszQIkVkY3oUgZmTdRK8BwtiZQoqoaEAJG5EMKK1ll7R9UxJ00l05Ae4IYsBPsCg24Va9e8zUBg7rFNr/gpbC//Zr6J0wl/s1VloK+Bxi5MH2iGpbAUIEJa0N+JYBQVZ+hsiTe1HvyNtGXC+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=dad+Xnw9+BHlkOfkwEsvmsktADHpLQsOI8/Vmibic24=;
-        b=c98fkegfP4WbFEarCBtHXwEwdDPMnZVn39M8+BWshFOHcUHEJwReSogoazpYM0NxBv
-         FB/50t+bZUTZAHTpLPtHjUbO/+8CbvecVrEiIKekPQeohACMNOnK+533LH0I5J/tLduZ
-         gAlRsxTpBkbS6eEcqLd1ngVtg/dQqC4fo+Hy4ZvT/e19LpyZVANDdXT3yLK6suXGQYqm
-         7orH4/YY6aMgsvGAjQjRUMahnNmILEc4sx8wBlENpnSJIzo2XBjf4VY9x//AnA+OOTse
-         dgNO9yoxi7Q8Akv5kKk2FJ8Pz8KXc8pD4zlKSN2/Y2jRREtNG+bZycMDMYHIhTNrqaug
-         3qmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=dad+Xnw9+BHlkOfkwEsvmsktADHpLQsOI8/Vmibic24=;
-        b=ixKfNmXHpNKMHJTIiGkhEhiFPzqhj8Auyh8m7i4LEHwtSZ+hxez5F+rTUf/vRJOgpp
-         Akx3Izkgq9gydQT+FVkBXQ094SxkDa7yqa7RvZx0wQez6xCDAYBdZLvMa+C5zCEtJD+G
-         U2Lm+tfEXciIgj714SpfhWDjxFTjkPmFBJf7i28Kae8+GAe/zYyuQ7AEWMQiPW4RB1k+
-         PaeiABUdC8vUjayD6BD5UYoNhGYWrsxXngk7RfRoNvNBuVyT5336I60+ZuitHxF3JoXG
-         A+mKN2gIn0qNrID386nWJCkmA5eVIwVavxH0jwyVcRFA+LAlopzhSWZbw/jgC/KuE6ad
-         UR1Q==
-X-Gm-Message-State: AOAM531vefXV6pgDk139nu6ucMC1Kbc7E5AFMPHmpkw7Zski1ukKftJT
-        sJZrixtwVc30QCiBcdeCkwbZO6K17+Q=
-X-Google-Smtp-Source: ABdhPJyOalmR16SA5iW+2FehIi2Nvq77503ZWvxSfyIlOQ33ELNRszClzg8J/YrcJNnEkVK9KVdaCQ==
-X-Received: by 2002:a5d:5887:0:b0:20f:f354:981c with SMTP id n7-20020a5d5887000000b0020ff354981cmr33120018wrf.285.1654071775728;
-        Wed, 01 Jun 2022 01:22:55 -0700 (PDT)
-Received: from felia.fritz.box (200116b82620c00028af88788fa7d286.dip.versatel-1u1.de. [2001:16b8:2620:c000:28af:8878:8fa7:d286])
-        by smtp.gmail.com with ESMTPSA id d12-20020a5d4f8c000000b00210346cd0b7sm873957wru.101.2022.06.01.01.22.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 01:22:55 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: rectify entry for SYNOPSYS AXS10x RESET CONTROLLER DRIVER
-Date:   Wed,  1 Jun 2022 10:22:39 +0200
-Message-Id: <20220601082239.12009-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rlVF0iMPrrmniy5l9kEFBl3woILxDoJb8sczYLSsWso=;
+ b=EMF01IqXgZkJVqdxdc9cwUYMzhThDdZsp1gASF6NZjGd8wJEmH2Q9lb7JI2t2qBfGxkQ7MliCsYZyKzr2t2+cQ3OjlH8MrpYzTKqn6D6ziNR69SGOi8xEkJK2ABbckZJqRO+o7TSeXTuXp2NuuzvvoU9pW+Sjq6yXgJ/6s3um1o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ DM6PR01MB4922.prod.exchangelabs.com (2603:10b6:5:9::29) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5293.18; Wed, 1 Jun 2022 08:23:23 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::5514:7923:ceef:cb2e]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::5514:7923:ceef:cb2e%3]) with mapi id 15.20.5293.019; Wed, 1 Jun 2022
+ 08:23:23 +0000
+Message-ID: <ba084735-0781-7ca2-4d04-a70a4115729a@os.amperecomputing.com>
+Date:   Wed, 1 Jun 2022 15:23:11 +0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+Subject: Re: [Openipmi-developer] [PATCH v7 1/3] ipmi: ssif_bmc: Add SSIF BMC
+ driver
+To:     minyard@acm.org
+Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        openbmc@lists.ozlabs.org,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kernel@vger.kernel.org,
+        Phong Vo <phong@os.amperecomputing.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Open Source Submission <patches@amperecomputing.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+References: <20220422040803.2524940-1-quan@os.amperecomputing.com>
+ <20220422040803.2524940-2-quan@os.amperecomputing.com>
+ <20220423015119.GE426325@minyard.net>
+ <ec7b86ec-827f-da64-8fd2-eae09f802694@os.amperecomputing.com>
+ <20220504120631.GE3767252@minyard.net>
+Content-Language: en-US
+In-Reply-To: <20220504120631.GE3767252@minyard.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR02CA0029.apcprd02.prod.outlook.com
+ (2603:1096:3:18::17) To SJ0PR01MB7282.prod.exchangelabs.com
+ (2603:10b6:a03:3f2::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7854af90-98dc-412d-67a4-08da43a7fe31
+X-MS-TrafficTypeDiagnostic: DM6PR01MB4922:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR01MB49229B1EEFEBA0D8628F430FF2DF9@DM6PR01MB4922.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uacUwK51QeJ+UbJd7eUlsGwYo23UznvWPzmKR2lTpXMwQFhPU8lRFUwQiKSf1hXwdo4QsChl1DieM+cmC/AWf8duAoeRPA92gTzsG+/FAPOKsQRTTnywWLkp8977+TeziYzYr9D205QvnJAwKuHvfrsqnRIn54B88zW+NzJ3GfeuaKHwRHhu3ywUj8xryjhAUhAgZRwfQ1gj7nVtbpEAmzFO7V+DWXaXsDyQiuyxJIJnFoGVyKrmAUx+9d6bQfbO7oSOJaY7h7HbSXvMg4keqx8Sx4uHWIaWhTBPs5VE2CNRjj51wUTao3cTKemk9ozXh7H3AAQU16kIFYAFGOC8nRxDH7NV6DqT3CMeEF5rZ7OC8qq3iybSWphF2jzRcc2uYWCWwZPACbwLUFNmgCX4LoVO7xy8Rqm7QfwCyuz+hT1JXDlsLWkcsPzYSa7MB+KhX//YwbHs7IpEZDvS4Bl+5yaDYpNA8c4IX6LqzvnZC4llcsEdV7YpAQxgLVkSa/TpazFrPsZpR/V415FJS6r0DQ+tqRGVgDFZw7d89ReXQsfUr+QBRYEIiqNYRWEz7etnZex5pfm2fLkKWv/LC0PDDN3heBJ4LmVj/gUczRuBWFqXH/WYDa19tndpzTvTpHb9GmCpADZM+VLZeaF7XX6uCYXFOptt/KgmWEpUQse9+6IBxaAxxb/KdwouL2Y10g/r6L6hQi5e8oIYvV6S8VssABWGlw3w+T9YRU2oYif/6WnTvuUjdbAj3S2+1Jblix4Y
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(2906002)(83380400001)(6486002)(54906003)(508600001)(31686004)(8676002)(316002)(66556008)(6666004)(66476007)(4326008)(66946007)(53546011)(6916009)(186003)(52116002)(7416002)(5660300002)(6506007)(2616005)(38100700002)(38350700002)(31696002)(8936002)(26005)(6512007)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFRDMWsxdXo1TzRsa1JHZUw0WFNzMWx4d3NnWVJFZ2NLblloZ0Y0cGFnc2RH?=
+ =?utf-8?B?Q1dQYXBqMFlsYWZOYzJ0aThPTTFmR1QzVkdRZ1hKditGRXV6dFcwR2llQ0t5?=
+ =?utf-8?B?QURxQjY4T1pXd3Z3MFFiV3hOeWJjRngranFPdHJGcWJTZDVRdHdGN2V5Smht?=
+ =?utf-8?B?UERGVGVjbG1WdlNBb2o2Y1hJTTRIc2RoakdlSXNCN3V4dmR1Nk5HMXRSbENi?=
+ =?utf-8?B?M0ZwbWdFUi9GbFJQWWtsdEVRV0Faa0xmUVU5ZHlJOElBcVZTMTRyVStjcDkv?=
+ =?utf-8?B?Q0lCWHBzNGN1aEVyRnkxNEJsY2o5dStJZ3dVYkJ0T1NoQVhuWWs5MU0vbjls?=
+ =?utf-8?B?Ty8ra1B2VU43Uk5xcklIWFVsQVRlb0FOTk9NNzdPL0pVT003cUtPMXVqejdv?=
+ =?utf-8?B?TnI5Z01jeUtJSEVQMmRKNHhtNFk5dEVkWENsZHlmK1hBWnBmbVB3anl0MStS?=
+ =?utf-8?B?cis5eWV0YkxwMVVqWDlWTW5CS2MwbU9LVFhMeFJaYjhVVmg4bjJPZldxMTJZ?=
+ =?utf-8?B?eXB6eDFEcURyWVJuMGRISVpKdC9sL2o0K1JURVFmanlJKzcyU3phU1FxOUFQ?=
+ =?utf-8?B?ZnB6dWFGQ0ZzZG5PMVgxZkFqMTV2TEJ1WjlUcmJ0N0RJSS9HKzlXdEJlMGh6?=
+ =?utf-8?B?SjNHdkpCbzZLUmVTUUFObEdRREl1YlpVcXFqUDYwVTNDQjJpWlJhN09Qcm9G?=
+ =?utf-8?B?MUw3UHgyb0I5QmFMOWJJczl2cVJnT0dYRVhsQm9WUWRFL2hhVU5HSUt3TkQw?=
+ =?utf-8?B?S08yWHc5TVlHcTl0Yk5hRE5YOE11TWg1aUp6RmEzMXJUcHNqK3lyTzRRMGVo?=
+ =?utf-8?B?VkVMSGNyTU4vSzdlZ2hkOE9ucVAvZjhFckNYUkFpVStCNTh5dFJEYTN1TXZh?=
+ =?utf-8?B?MExtK1hPUytadzUzYWNKZEFxTXpRVGZDM2dGTGczT1hhYmluWVZqYzlhV0kw?=
+ =?utf-8?B?ZzlrYTdBS1JJUS9teUxwYTBOSUluV2Y3eG5nM2pRQ2hobG9ySjBHc1ZpVjNC?=
+ =?utf-8?B?QkJ4cm1UUmRNMjF2UzR1ZFoydzFVcGF3OG4rMTQzVXVEbUNUUnBaS3pnVU9s?=
+ =?utf-8?B?eFlQNmNoTGdyT1RKYmM5T3c0eUZ1Tm9wT2prYm5rem0wYkNoMWlwbkJ3RFRT?=
+ =?utf-8?B?QStuMUc2VzdkTGRjM1hZSURiNW5xS3ZHRkVodlQxRFR4SnlYWXBFNlRJOHdz?=
+ =?utf-8?B?d0hXTUVVMnF5eUxTN210a2VtenhqNUVWKzA2cGFOZGw3cDhVWTdUM2U2WmtH?=
+ =?utf-8?B?aERTc1Bia21HcmIya3FIVnc0VDdoWExFWjdGczJLZjZvYVdZcVMwZFVzeEUw?=
+ =?utf-8?B?QktaQWNPVitJWmR0Q2piUjN1TzlsUkRFbHVVSWJMa0kzQmo4Y29mVmZQZjB2?=
+ =?utf-8?B?dUtmZVRrSnRDZ0Eycnpsck91dXJzRFVkN3N4dzNXMmhYQlFyZTl3aDl3ZGd0?=
+ =?utf-8?B?TDlFaHRGUkI1SW9NZUpxRFg5a1VGenVTQStpRFAxUVNtbHdvRERtV2hibHc3?=
+ =?utf-8?B?Yk0wSm5hTC8wOGViWWExenV2NVREbTQrMm95OG4vUnN4N3BCTTZacXhsKzBn?=
+ =?utf-8?B?bmNJb2ZhS0dPV1g3dE9TN2JRcSsrQS9weEJFVndiTk1zSjBFQ3U5cDJqQVd4?=
+ =?utf-8?B?azR1d2pPb1E5cHlSZkt0TGMvcnN1OWpIRjNHMkxHR0tYQVZrNEZMbTJPczJW?=
+ =?utf-8?B?U25MdmpzWm5Xa1ZyQWYySnVRYzU0dUhNZUx6N1FtY2FKYStkQWJOS2EwSU9o?=
+ =?utf-8?B?TnhnWGZDbFFlTlhHVFIrSXROSExPUXRMRlNVeEpHUyt3T2RhUmZqYzVlR2o5?=
+ =?utf-8?B?Y0FsWTllSFBhNTZaby9FS3YzQlluTjY2Wm9IOHQ2eUFWZlJueXl5VENid05B?=
+ =?utf-8?B?RjNML2NQUTFPbm9VRVlTSUxoaE5nMUJwOTR0QnlMbVFKMnBFUERrTDdyZzIw?=
+ =?utf-8?B?a0pJT21jNHY5TG1BdXVTbkNkNlBoSzY2SHVKNjFIZy9MZGEreFFWNjhtNVBV?=
+ =?utf-8?B?OTF1U2dQYnV2L20xQTFTRXVURC9IUlhGOVBndmEydGtTK2g2QlJ3WGtBZ0xl?=
+ =?utf-8?B?TVdPUFByL2l3UEs0ZEUvcFBoTGsyK2Z2bVNiNTBvb2YzVnFhRTBmcUtZYUhh?=
+ =?utf-8?B?ZndhanFDQ3dxai9mZis1Yk1Rd0ZvSEk2VVlkUURlRnJESjIrV21MZGJ1dktF?=
+ =?utf-8?B?cDFKR3lJMk95Ym5RMzQwdDhkQ3huYk5aTXdpbmVrYlZTVXE5OVJsS015WllS?=
+ =?utf-8?B?dGxjakU5bEVQWjg1eFF5dDR2QTNiNS9lNEFnSVJxekcwNzc3bDNZTUVEd0kx?=
+ =?utf-8?B?TS9EZWkrU1dHbGRybGtWSFRVVEZ4dnNqWkpzckhHVVdjMG1RbDZMdVBFQ2FB?=
+ =?utf-8?Q?285XYJw5DO4/YRvSTHRdLmznqyhv0hY8FAYna?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7854af90-98dc-412d-67a4-08da43a7fe31
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2022 08:23:23.4126
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: y78wvx6kbADT9p59H+Swm91Kp3hfhw2JvenNKLZiRbV8uFoSDSVYsaEUk07nZf2128xYua52JjSxuuezmJ9ND7q6mDtFq4SK8JAnyAT9KIE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB4922
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,35 +147,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 820f722c05dd ("dt-bindings: reset: snps,axs10x-reset: Convert to
-yaml") converts snps,axs10x-reset.txt to yaml, but misses to adjust its
-reference in MAINTAINERS.
+On 04/05/2022 19:06, Corey Minyard wrote:
+> On Wed, May 04, 2022 at 01:45:03PM +0700, Quan Nguyen via Openipmi-developer wrote:
+>>>
+>>> I seem to remember mentioning this before, but there is no reason to
+>>> pack the structures below.
+>>>
+>>
+>> The packed structure is because we want to pick the len directly from user
+>> space without worry about the padding byte.
+>>
+>> As we plan not to use the .h file in next version, I still would like to use
+>> packed structure internally inside ssif_bmc.c file.
+> 
+> Packed doesn't matter for the userspace API.  If you look at other
+> structures in the userspace API, they are not packed, either.  The
+> compiler will do the right thing on both ends.
+> 
+>>
+>>> And second, the following is a userspace API structures, so it needs to
+>>> be in its own file in include/uapi/linux, along with any supporting
+>>> things that users will need to use.  And your userspace code should be
+>>> using that file.
+>>>
+>>
+>> Meantime, I'd like not to use .h as I see there is no demand for sharing the
+>> data structure between kernel and user space yet. But we may do it in the
+>> future.
+> 
+> If you have a userspace API, it needs to be in include/uapi/linux.
+> You may not be the only user of this code.  In fact, you probably won't
+> be.  You need to have a .h with the structures in it, you don't want the
+> same structure in two places if you can help it.
+> 
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+Dear Corey,
 
-Repair this file reference in SYNOPSYS AXS10x RESET CONTROLLER DRIVER.
+Is it OK to push the structure definition into the 
+include/uapi/linux/ipmi_bmc.h ?
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Philipp, please pick this minor non-urgent clean-up patch.
+Or should it need to be in separate new header file in uapi/linux ?
 
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you,
+- Quan
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cc12a3aaad45..36eab5ae237d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19232,7 +19232,7 @@ F:	arch/arc/plat-axs10x
- SYNOPSYS AXS10x RESET CONTROLLER DRIVER
- M:	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
- S:	Supported
--F:	Documentation/devicetree/bindings/reset/snps,axs10x-reset.txt
-+F:	Documentation/devicetree/bindings/reset/snps,axs10x-reset.yaml
- F:	drivers/reset/reset-axs10x.c
- 
- SYNOPSYS CREG GPIO DRIVER
--- 
-2.17.1
 

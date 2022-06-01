@@ -2,137 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4043E539CA2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 07:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB490539CA9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 07:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349655AbiFAFdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 01:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
+        id S1349662AbiFAFdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 01:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349634AbiFAFdB (ORCPT
+        with ESMTP id S1349634AbiFAFdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 01:33:01 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C936259313;
-        Tue, 31 May 2022 22:32:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 48569CE19F7;
-        Wed,  1 Jun 2022 05:32:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8DB0C385A5;
-        Wed,  1 Jun 2022 05:32:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654061574;
-        bh=iQER32CU/sUTRxMxTf/FVOO/vpKLn4BYxmNWOMU1Q5A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=py1GvzmMMyjfRNmngOj/y8UvpccVWhIIU9HkNDRPc+VIpmfUT5xzceY16Ml6a7YF8
-         JZpnQQC9kuU7m1I0xBjJK4+y2sjajb4kmqbZnZWACbXOvqMG2+ClNL6hOYaY/IgsQr
-         ZHnVKFYVypiskCsbyu8HcWz7G5bKq4uz1XcLLD4a4gHvRWsGOfDyA8BBRd7T+fips4
-         k2/fMrgoYK02fldXgqKnRL45L6ESGmYzNZNy+aQOj8V/LlviXvkKL8fkk8ICsnENsO
-         +PjLJ5Cc0sbGWQq1xnuVlCJPYgmKiyf3RHwHKcKEnifcbRKy0FlAMHIx3mCiO+8RBY
-         9EtQrISZve5rQ==
-Date:   Wed, 1 Jun 2022 11:02:49 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Jianjun Wang <jianjun.wang@mediatek.com>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Wei-Shun Chang <weishunc@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
-        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
-        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
-Subject: Re: [PATCH v9 0/2] phy: mediatek: Add PCIe PHY driver
-Message-ID: <Ypb6AS6oj2en/Roi@matsya>
-References: <20220520064920.27313-1-jianjun.wang@mediatek.com>
- <96f7cc90171bb6e088ce0ed88e10ad14f06a98bb.camel@mediatek.com>
+        Wed, 1 Jun 2022 01:33:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4772B9E9DD
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 22:33:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654061622; x=1685597622;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8H5F2NUfv7ermpA8eablQSAS3teC1dmJ9SzBQt0ppCM=;
+  b=g/d4ARoLBEsnQGNnfBFyevPcXWnPAGCOv2/z6E33r7eLlZVc80Aheb1G
+   bPscPR/L80zg1/j857CpQW8dsLycYLcM1hx2gDQvTmNZfuDveOVJPAhUH
+   sCcrlsp7azk6FC2ehdBOD3cO/OE/n8Fqn3Vtu5wyEN9OkG1UQn/7L9rCO
+   my+oCmRW1WxpziQqYlOIXDBTS1LaSmLUaHurxSBs789kXWmgOQf2uDb9S
+   ed+3hWZ+lFyZTcZ4eOGwWr3+A3MjdVCQh8wu7vXSVy9ZVxikGSXaLjGvr
+   LEtVBceJVSEgu+hxhRvWPrDQbeIzPKIGqZtIgeodizSvBoCKEnuObE670
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="263114723"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="263114723"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 22:33:41 -0700
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="706905410"
+Received: from hej1-mobl.ccr.corp.intel.com (HELO [10.255.28.123]) ([10.255.28.123])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 22:33:38 -0700
+Message-ID: <c9289db7-2d5b-4d1e-ca8b-261b12b264f3@linux.intel.com>
+Date:   Wed, 1 Jun 2022 13:33:36 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <96f7cc90171bb6e088ce0ed88e10ad14f06a98bb.camel@mediatek.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Will Deacon <will@kernel.org>, Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/12] iommu/vt-d: Use iommu_get_domain_for_dev() in
+ debugfs
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20220527063019.3112905-1-baolu.lu@linux.intel.com>
+ <20220527063019.3112905-2-baolu.lu@linux.intel.com>
+ <20220527145910.GQ1343366@nvidia.com>
+ <eda4d688-257b-d12a-56c0-0f9d3a10ef8c@linux.intel.com>
+ <20220530121412.GX1343366@nvidia.com>
+ <42623a73-c288-1c0d-7021-93caff4ffb6f@linux.intel.com>
+ <0b7bd793-a3c7-e7e7-8ef0-214dd5b98f05@arm.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <0b7bd793-a3c7-e7e7-8ef0-214dd5b98f05@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01-06-22, 10:21, Jianjun Wang wrote:
-> Hello Maintainers,
+Hi Robin,
+
+Thank you for the comments.
+
+On 2022/5/31 21:52, Robin Murphy wrote:
+> On 2022-05-31 04:02, Baolu Lu wrote:
+>> On 2022/5/30 20:14, Jason Gunthorpe wrote:
+>>> On Sun, May 29, 2022 at 01:14:46PM +0800, Baolu Lu wrote:
+
+[--snip--]
+
+>> diff --git a/drivers/iommu/intel/debugfs.c 
+>> b/drivers/iommu/intel/debugfs.c
+>> index d927ef10641b..e6f4835b8d9f 100644
+>> --- a/drivers/iommu/intel/debugfs.c
+>> +++ b/drivers/iommu/intel/debugfs.c
+>> @@ -333,25 +333,28 @@ static void pgtable_walk_level(struct seq_file 
+>> *m, struct dma_pte *pde,
+>>               continue;
+>>
+>>           path[level] = pde->val;
+>> -        if (dma_pte_superpage(pde) || level == 1)
+>> +        if (dma_pte_superpage(pde) || level == 1) {
+>>               dump_page_info(m, start, path);
+>> -        else
+>> -            pgtable_walk_level(m, phys_to_virt(dma_pte_addr(pde)),
+>> +        } else {
+>> +            unsigned long phys_addr;
+>> +
+>> +            phys_addr = (unsigned long)dma_pte_addr(pde);
+>> +            if (!pfn_valid(__phys_to_pfn(phys_addr)))
 > 
-> Gentle ping for this patch series, if there is anything I can do to get
-> these patches merged, please let me know.
+> Given that pte_present(pde) passed just above, it was almost certainly a 
+> valid entry, so it seems unlikely that the physical address it pointed 
+> to could have disappeared in the meantime. If you're worried about the 
+> potential case where we've been preempted during this walk for long 
+> enough that the page has already been freed by an unmap, reallocated, 
 
-Patience my friend patience. This was received very late in cycle and I
-will review after merge window closes..
+Yes. This is exactly what I am worried about and what this patch wants
+to solve.
 
+> and filled with someone else's data that happens to look like valid 
+> PTEs, this still isn't enough, since that data could just as well happen 
+> to look like valid physical addresses too.
+> I imagine that if you want to safely walk pagetables concurrently with 
+> them potentially being freed, you'd probably need to get RCU involved.
+
+I don't want to make the map/unmap interface more complex or inefficient
+because of a debugfs feature. I hope that the debugfs and map/unmap
+interfaces are orthogonal, just like the IOMMU hardware traversing the
+page tables, as long as the accessed physical address is valid and
+accessible. Otherwise, stop the traversal immediately. If we can't
+achieve this, I'd rather stop supporting this debugfs node.
 
 > 
-> Thanks.
+>> +                break;
+>> +            pgtable_walk_level(m, phys_to_virt(phys_addr),
 > 
-> On Fri, 2022-05-20 at 14:49 +0800, Jianjun Wang wrote:
-> > These series patches add support for PCIe PHY driver on MediaTek
-> > chipsets.
-> > 
-> > Changes in v9:
-> > 1. Check if the return value is -ENOMEM when reading efuse data
-> > fails.
-> > 
-> > Changes in v8:
-> > 1. Use "device_property_present()" to increase human readability;
-> > 2. Use "GPL" as recommended in commit bf7fbeeae6db ("module: Cure
-> >    the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity").
-> > 
-> > Changes in v7:
-> > 1. Add bitfield.h header to fix the build error on non-arm64
-> > platforms.
-> > 
-> > Changes in v6:
-> > 1. Remove unnecessary header files;
-> > 2. Use FILELD_PREP in bitfield.h to set value.
-> > 
-> > Changes in v5:
-> > 1. Fix typo in kerneldoc: "eFues" => "eFuse".
-> > 
-> > Changes in v4:
-> > 1. Fix no return when calling dev_err_probe.
-> > 
-> > Changes in v3:
-> > 1. Add introductions for structure members;
-> > 2. Add SoC dependent data;
-> > 3. Dynamically allocate efuse data;
-> > 4. Check return value if it's an -EPROBE_DEFER.
-> > 
-> > Changes in v2:
-> > 1. Add specific compatible name;
-> > 2. Read NVMEM data at probe time;
-> > 3. Fix typos.
-> > 
-> > Jianjun Wang (2):
-> >   dt-bindings: phy: mediatek: Add YAML schema for PCIe PHY
-> >   phy: mediatek: Add PCIe PHY driver
-> > 
-> >  .../bindings/phy/mediatek,pcie-phy.yaml       |  75 +++++
-> >  drivers/phy/mediatek/Kconfig                  |  11 +
-> >  drivers/phy/mediatek/Makefile                 |   1 +
-> >  drivers/phy/mediatek/phy-mtk-pcie.c           | 267
-> > ++++++++++++++++++
-> >  4 files changed, 354 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
-> >  create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
-> > 
+> Also, obligatory reminder that pfn_valid() only means that pfn_to_page() 
+> gets you a valid struct page. Whether that page is direct-mapped kernel 
+> memory or not is a different matter.
 
--- 
-~Vinod
+Perhaps I can check this from the page flags?
+
+> 
+>>                          level - 1, start, path);
+>> +        }
+>>           path[level] = 0;
+>>       }
+>>   }
+>>
+>> -static int show_device_domain_translation(struct device *dev, void 
+>> *data)
+>> +static int __show_device_domain_translation(struct device *dev, void 
+>> *data)
+>>   {
+>>       struct device_domain_info *info = dev_iommu_priv_get(dev);
+>>       struct dmar_domain *domain = info->domain;
+>>       struct seq_file *m = data;
+>>       u64 path[6] = { 0 };
+>>
+>> -    if (!domain)
+>> -        return 0;
+>> -
+>>       seq_printf(m, "Device %s @0x%llx\n", dev_name(dev),
+>>              (u64)virt_to_phys(domain->pgd));
+>>       seq_puts(m, 
+>> "IOVA_PFN\t\tPML5E\t\t\tPML4E\t\t\tPDPE\t\t\tPDE\t\t\tPTE\n");
+>> @@ -359,20 +362,27 @@ static int show_device_domain_translation(struct 
+>> device *dev, void *data)
+>>       pgtable_walk_level(m, domain->pgd, domain->agaw + 2, 0, path);
+>>       seq_putc(m, '\n');
+>>
+>> -    return 0;
+>> +    return 1;
+>>   }
+>>
+>> -static int domain_translation_struct_show(struct seq_file *m, void 
+>> *unused)
+>> +static int show_device_domain_translation(struct device *dev, void 
+>> *data)
+>>   {
+>> -    unsigned long flags;
+>> -    int ret;
+>> +    struct iommu_group *group;
+>>
+>> -    spin_lock_irqsave(&device_domain_lock, flags);
+>> -    ret = bus_for_each_dev(&pci_bus_type, NULL, m,
+>> -                   show_device_domain_translation);
+>> -    spin_unlock_irqrestore(&device_domain_lock, flags);
+>> +    group = iommu_group_get(dev);
+>> +    if (group) {
+>> +        iommu_group_for_each_dev(group, data,
+>> +                     __show_device_domain_translation);
+> 
+> Why group_for_each_dev?
+
+This will hold the group mutex when the callback is invoked. With the
+group mutex hold, the domain could not get changed.
+
+> If there *are* multiple devices in the group 
+> then by definition they should be attached to the same domain, so 
+> dumping that domain's mappings more than once seems pointless. 
+> Especially given that the outer bus_for_each_dev iteration will already 
+> visit each individual device anyway, so this would only make the 
+> redundancy even worse than it already is.
+
+__show_device_domain_translation() only dumps mappings once as it always
+returns 1.
+
+Best regards,
+baolu

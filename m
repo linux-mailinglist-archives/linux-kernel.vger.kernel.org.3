@@ -2,181 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B1753A951
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4EDC53A957
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354952AbiFAOj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
+        id S1353249AbiFAOne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354928AbiFAOjy (ORCPT
+        with ESMTP id S233844AbiFAOnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:39:54 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F9731233
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:39:52 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id h23so3112934lfe.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 07:39:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=31EA6vRKdwEKuRnjDw/ZYtreHn9B2KdDbzd1nRyYZOQ=;
-        b=uVWoHyvzgsqsVh284rkDPfCaL4cl8DXc+3JtebyZYXNFjjb1aE1cOGO5YW3d3b9k/N
-         a3ltGR3Y7zIGFrrS/RmfqjlGFcCB/CkOHIxJizEb9PrGL1PTkLMNOHTrSTpisovoaN4Y
-         KCbz/HRuA6d0ftXtT8uo8zptAsflNcNJN8UkjpkShiQC8oR9R1R1VOj52hJrV/BNFVZk
-         6TwTVl7LwVVGHdLYwk1fPaFlCMNqXftkg6X7Lrq0B72xuOah6kabVgQ2/PhVIj5Foway
-         dA59fZwUd4i+MY5O0zc0w3f4zQVGVOeYBwb0gvlPnmRkhkrVrcoG4Ocjk1Ddg0yelLl4
-         D9Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=31EA6vRKdwEKuRnjDw/ZYtreHn9B2KdDbzd1nRyYZOQ=;
-        b=ze3SsTqr1ApYn+XT3Ex+BQvsOf01qhy5qbh6D6Rd9kxmfGPo1jotRLVfe3fkk3FZNw
-         Ngc5Z2KPCHgA7AA71I4cWidh1jDl7PR2yL6O/yCRK9oPia2yqpC4j9sgGIvTg3ZvbuiV
-         nNjuv6rGooW4xFJhkGGzjz110e52ayqrEnvHq4Pyj6JQytPWAYIrjapi6hj9ElpRtOAt
-         F6w1F36DLYYoTZe6O+1Gnq+Ul3oEtaQED1pEMYWFI4HyjIMWsLxKfpYorWfv8KwQq+rf
-         zjvsaXAcHJk7FHKubm1w0bW4u1VvOPEsfLhNGDwDvicbyiiQWqqnitnF/M9CDLO4RSv7
-         UC9A==
-X-Gm-Message-State: AOAM531nxQJ5pKO9/Kt/0CL24iv0NHbILvIoz/xBJcp2eyq+U9CTqMea
-        BEX49njS/+7d0fqN15bvXQnJ6A==
-X-Google-Smtp-Source: ABdhPJytzV7/7pe53tLyOeHlbGNCloSYChNpAaJazKo2Ow7frOawx90Wzg5h4MwOnTDSTluYhB+amg==
-X-Received: by 2002:a05:6512:2255:b0:478:da8f:e2e3 with SMTP id i21-20020a056512225500b00478da8fe2e3mr43581lfu.50.1654094390799;
-        Wed, 01 Jun 2022 07:39:50 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id q23-20020a2e9157000000b002554d2a5ea1sm353365ljg.10.2022.06.01.07.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 07:39:50 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id A464F109789; Wed,  1 Jun 2022 17:41:48 +0300 (+03)
-Date:   Wed, 1 Jun 2022 17:41:48 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>, marcelo.cerri@canonical.com,
-        tim.gardner@canonical.com, khalid.elmously@canonical.com,
-        philip.cox@canonical.com, x86@kernel.org, linux-mm@kvack.org,
-        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv6 15/15] mm/vmstat: Add counter for memory accepting
-Message-ID: <20220601144148.2saee3gw7jgvusgt@box.shutemov.name>
-References: <20220517153444.11195-1-kirill.shutemov@linux.intel.com>
- <20220517153444.11195-16-kirill.shutemov@linux.intel.com>
- <76adccb2-2925-e102-db6f-529492d885c7@redhat.com>
+        Wed, 1 Jun 2022 10:43:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4DFA377CB
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654094609;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5oaA/9Elp8e0DDOKFrrXNfdudey8cnq8ZY7R8iT31qA=;
+        b=CVupCfYqyTTBNBfzJ9OPiQpuz772YVoDWirwDVmlPAp60p2Npce3S6KFmplNwuialwO95N
+        nUxxUtRBJUqBTY49cFquaEhW6ppvjzMcJtilDyvRirI08l1X7YNs428AM/4a0T7sW0acZP
+        CAWmJ5RdvpmX6+KXPTrEdyEUSw9mu/4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-107-WLXFyeubNDSqolgcwGfvcw-1; Wed, 01 Jun 2022 10:43:25 -0400
+X-MC-Unique: WLXFyeubNDSqolgcwGfvcw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F41C83C0F73C;
+        Wed,  1 Jun 2022 14:43:24 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.194.180])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 63EBF1410F36;
+        Wed,  1 Jun 2022 14:43:23 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: selftests: Make hyperv_clock selftest more stable
+Date:   Wed,  1 Jun 2022 16:43:22 +0200
+Message-Id: <20220601144322.1968742-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <76adccb2-2925-e102-db6f-529492d885c7@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 11:05:40AM +0200, David Hildenbrand wrote:
-> On 17.05.22 17:34, Kirill A. Shutemov wrote:
-> > The counter increased every time kernel accepts a memory region.
-> > 
-> > The counter allows to see if memory acceptation is still ongoing and
-> > contributes to memory allocation latency.
-> > 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > ---
-> >  arch/x86/mm/unaccepted_memory.c | 1 +
-> >  include/linux/vm_event_item.h   | 3 +++
-> >  mm/vmstat.c                     | 3 +++
-> >  3 files changed, 7 insertions(+)
-> > 
-> > diff --git a/arch/x86/mm/unaccepted_memory.c b/arch/x86/mm/unaccepted_memory.c
-> > index 6ecd79101922..fe1dabfae326 100644
-> > --- a/arch/x86/mm/unaccepted_memory.c
-> > +++ b/arch/x86/mm/unaccepted_memory.c
-> > @@ -74,6 +74,7 @@ void accept_memory(phys_addr_t start, phys_addr_t end)
-> >  		}
-> >  
-> >  		bitmap_clear(bitmap, range_start, len);
-> > +		count_vm_events(ACCEPT_MEMORY, len * PMD_SIZE / PAGE_SIZE);
-> >  
-> 
-> It's a bit weird that this is accounted from arch code
+hyperv_clock doesn't always give a stable test result, especially with
+AMD CPUs. The test compares Hyper-V MSR clocksource (acquired either
+with rdmsr() from within the guest or KVM_GET_MSRS from the host)
+against rdtsc(). To increase the accuracy, increase the measured delay
+(done with nop loop) by two orders of magnitude and take the mean rdtsc()
+value before and after rdmsr()/KVM_GET_MSRS.
 
-That's very serialization happens.
+Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ tools/testing/selftests/kvm/x86_64/hyperv_clock.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-We can do it in the core mm if we can tolerate sporious vmcount bump.
-Otherwise it has to happen under the lock in the arch code.
-
-> Also, I'm a bit
-> confused about the granularity here (PMD_SIZE).
-
-That's how we track it in x86. The count itself is in pages. Different
-arch can choose different granularity.
-
-> >  		/* In early boot nr_unaccepted is not yet initialized */
-> >  		if (nr_unaccepted) {
-> > diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
-> > index 16a0a4fd000b..6a468164a2f9 100644
-> > --- a/include/linux/vm_event_item.h
-> > +++ b/include/linux/vm_event_item.h
-> > @@ -136,6 +136,9 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
-> >  #ifdef CONFIG_X86
-> >  		DIRECT_MAP_LEVEL2_SPLIT,
-> >  		DIRECT_MAP_LEVEL3_SPLIT,
-> > +#endif
-> > +#ifdef CONFIG_UNACCEPTED_MEMORY
-> > +		ACCEPT_MEMORY,
-> >  #endif
-> >  		NR_VM_EVENT_ITEMS
-> >  };
-> > diff --git a/mm/vmstat.c b/mm/vmstat.c
-> > index b75b1a64b54c..4c9197f32406 100644
-> > --- a/mm/vmstat.c
-> > +++ b/mm/vmstat.c
-> > @@ -1397,6 +1397,9 @@ const char * const vmstat_text[] = {
-> >  	"direct_map_level2_splits",
-> >  	"direct_map_level3_splits",
-> >  #endif
-> > +#ifdef CONFIG_UNACCEPTED_MEMORY
-> > +	"accept_memory",
-> > +#endif
-> >  #endif /* CONFIG_VM_EVENT_COUNTERS || CONFIG_MEMCG */
-> >  };
-> >  #endif /* CONFIG_PROC_FS || CONFIG_SYSFS || CONFIG_NUMA || CONFIG_MEMCG */
-> 
-> How exactly would I be able to figure out if "memory acceptation is
-> still ongoing" if there is one last remaining page stuck at the tail of
-> the freelist?
-
-"still ongoing" in sense it is happening now, like if it increases system
-does memory accept.
-
-> Wouldn't it make more sense to actually count the number of unaccepted
-> pages in the buddy? Once that number drops to 0, one knows that there is
-> no unaccepted memory left in the buddy.
-
-Patch 10/15 does this, but not in buddy.
-
+diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
+index e0b2bb1339b1..3330fb183c68 100644
+--- a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
++++ b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
+@@ -44,7 +44,7 @@ static inline void nop_loop(void)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < 1000000; i++)
++	for (i = 0; i < 100000000; i++)
+ 		asm volatile("nop");
+ }
+ 
+@@ -56,12 +56,14 @@ static inline void check_tsc_msr_rdtsc(void)
+ 	tsc_freq = rdmsr(HV_X64_MSR_TSC_FREQUENCY);
+ 	GUEST_ASSERT(tsc_freq > 0);
+ 
+-	/* First, check MSR-based clocksource */
++	/* For increased accuracy, take mean rdtsc() before and afrer rdmsr() */
+ 	r1 = rdtsc();
+ 	t1 = rdmsr(HV_X64_MSR_TIME_REF_COUNT);
++	r1 = (r1 + rdtsc()) / 2;
+ 	nop_loop();
+ 	r2 = rdtsc();
+ 	t2 = rdmsr(HV_X64_MSR_TIME_REF_COUNT);
++	r2 = (r2 + rdtsc()) / 2;
+ 
+ 	GUEST_ASSERT(r2 > r1 && t2 > t1);
+ 
+@@ -181,12 +183,14 @@ static void host_check_tsc_msr_rdtsc(struct kvm_vm *vm)
+ 	tsc_freq = vcpu_get_msr(vm, VCPU_ID, HV_X64_MSR_TSC_FREQUENCY);
+ 	TEST_ASSERT(tsc_freq > 0, "TSC frequency must be nonzero");
+ 
+-	/* First, check MSR-based clocksource */
++	/* For increased accuracy, take mean rdtsc() before and afrer ioctl */
+ 	r1 = rdtsc();
+ 	t1 = vcpu_get_msr(vm, VCPU_ID, HV_X64_MSR_TIME_REF_COUNT);
++	r1 = (r1 + rdtsc()) / 2;
+ 	nop_loop();
+ 	r2 = rdtsc();
+ 	t2 = vcpu_get_msr(vm, VCPU_ID, HV_X64_MSR_TIME_REF_COUNT);
++	r2 = (r2 + rdtsc()) / 2;
+ 
+ 	TEST_ASSERT(t2 > t1, "Time reference MSR is not monotonic (%ld <= %ld)", t1, t2);
+ 
 -- 
- Kirill A. Shutemov
+2.35.3
+

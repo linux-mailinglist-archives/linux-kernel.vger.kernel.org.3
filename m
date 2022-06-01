@@ -2,92 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E2F539ED5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F263539EE6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 10:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350452AbiFAH73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 03:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
+        id S1350488AbiFAIBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 04:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244461AbiFAH7Y (ORCPT
+        with ESMTP id S1350476AbiFAIBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 03:59:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D65168A300
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:59:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654070361;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X57AV1JS1Mqn7vo0Jw9w21QgY8DunEV7ImYYwrtqE0c=;
-        b=bBt1PD2s7e3YcIw0NykXHCeXnwxaEL7LpkvPb5dwcuDBhnLLLpoLKel+/Gm5oPigL33Yfv
-        e++8NvhnL7P/fig3H5tHqtqW4DMkv+yxc/YXZZRpzEwqp51jlpncIfIena8fyWeXbRr7PV
-        e6QeKACXnCIRMgxA71nEMnom2BNX7MA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-411-JQlLufZaMCiV8y2roF9FpQ-1; Wed, 01 Jun 2022 03:59:19 -0400
-X-MC-Unique: JQlLufZaMCiV8y2roF9FpQ-1
-Received: by mail-wm1-f72.google.com with SMTP id bg40-20020a05600c3ca800b00394779649b1so2939431wmb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 00:59:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=X57AV1JS1Mqn7vo0Jw9w21QgY8DunEV7ImYYwrtqE0c=;
-        b=OeoGFq+G0HjKBm3w7XqZrsIB8p/UJ3VNOQ6TiCcx5Q5eE/8ItLMxgu0udU1rnFpCcY
-         g/5sTRBzqAMqL7v4oF7O27fKvmgLRjnGG2EvwIGICWBJCAiqIIdjMO+sMpNXeG/tgRTW
-         D6s16mu/u0PwXQLKxK+w7aXD17MTDIATR6aQTS1GZN1rIah+wxVNKn48WdNo9IOnB+lH
-         d+mGJroOT6CmrMsCZxFxmu0eQeBvTrIf0HDrqE6CxAsUIG51Dv9SN6AgMs7FOQUzxv2+
-         HrAZjxKHi5rQoOtfg5hMlybnMyex5msvTCWxfbf3S+l+1gRzXvE4oU6e8uIXl12O3AL5
-         QpUg==
-X-Gm-Message-State: AOAM532rLKXqwJ38ihcFj/d9/8oINOHmvNgvCQV4He/i92CxCKZwfESL
-        2q+hKiQERjXRp5yjfM5jCCTqKZGN05Hi3bm9TR+uC+W9teYm6N7HedskgZdraQIgXMqP6RzV9G5
-        o0TcN2hMZOELZ8MO2j0VDShYI
-X-Received: by 2002:a05:6000:1d86:b0:20f:fcae:57f8 with SMTP id bk6-20020a0560001d8600b0020ffcae57f8mr29128557wrb.262.1654070357986;
-        Wed, 01 Jun 2022 00:59:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwRXopFFdxewjiXZogv3wBRsP/bd8pMpOz5TV6kA8hkaTRFy4NC/B3PyodLYhUx84ns8W9osQ==
-X-Received: by 2002:a05:6000:1d86:b0:20f:fcae:57f8 with SMTP id bk6-20020a0560001d8600b0020ffcae57f8mr29128536wrb.262.1654070357654;
-        Wed, 01 Jun 2022 00:59:17 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:2600:951d:63df:c091:3b45? (p200300cbc7052600951d63dfc0913b45.dip0.t-ipconnect.de. [2003:cb:c705:2600:951d:63df:c091:3b45])
-        by smtp.gmail.com with ESMTPSA id z13-20020a5d44cd000000b0020e6c51f070sm818410wrr.112.2022.06.01.00.59.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 00:59:16 -0700 (PDT)
-Message-ID: <484546da-16cc-8070-2a2c-868717b8a75a@redhat.com>
-Date:   Wed, 1 Jun 2022 09:59:15 +0200
+        Wed, 1 Jun 2022 04:01:15 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2117.outbound.protection.outlook.com [40.107.255.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E57B95DF0;
+        Wed,  1 Jun 2022 01:01:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KM46PdQFo7frJWho+J3sopF+uXIwU6giU/RZdkV/9caM3qky1j5l1X9rNIuZCFolmOQSijucDi+PVRhhEzPXHOCYOPiXgeaZKfjUDlUe2IuuJzsilUPavLncRG1p6UJJE+di2qdleJYQ+hDjXBSYSGdt65JtY8bHBtkuXQwDaHNdj1jDg0EBnsAV01jXTOJfsxJSF2EEGNKfntu9RGDnVxWt7cj4Z9ZG1uTNlAw6QpKX32K0FbpPi8vbfWxtT95EkjSCAU+IBjjEddry2UNGbiuR4SbtCRONqxaeh+FeZsYHwcjZRBII4NwQsIrKmhKg3gylibSX9HZJIhyEKdxdfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=alGDkfdO1m/QvtJpueufTssFJzFdvbtMHYb4W3xTbCQ=;
+ b=jKsw67n1cOe/DkuEDhX9Xzyb6UxOJi5DoEAkHbm33d2s2qIX08QcQQXOxA58Mm5G7ot5zd0ixt95tje7TcJdraUMob8hsf6+nrCnrYsH2gvmY9iQz8mzZZhSTHrnhZy6Kt0bv5+OdTEm8ObsYhmj+7DWul6bE34iV/cGef3MU4QNwpGwgfgKEy4jJVSZVVDFu6erF5fZfq3RxxeELN8byUbI0set+oH4JsPZ3E+G9c2g0zER2x4DNCfTOG8kcxzysyaMOJopRaiuJ5m0/48xg/xRv0Y9Y0Qsa8c0eMwYN2+w1VgEDU2AID9VavHFbIGbWEWxhQqtpqmr9anU4xMV7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=alGDkfdO1m/QvtJpueufTssFJzFdvbtMHYb4W3xTbCQ=;
+ b=rI1KetiDcnNGJfbCjAQHHf+Zvie12GKKN7IHqFDH+plaC/XJLkK0pWQDEIkuo32CFsroQ5cVUzwQxP7ubvrQBwG97288QlnMtQBu/Y8dAhJPX0AculYFMLGks1hvtx/lrM7aCasdcclTKJlwogbgt/vePqTOvI1+KIxq5Kjl0L5Be9TUGsrnQWN+6lntd4HNVqsf8K6s12FWEhf3tjDEt9DWWUi/LssoCtkXg65jsa56Z+mIzfd1dwpGxCtP41E49sIMGHaaiPp411vHm2r8a/nOv2FE/dNXVRQHN4O/OPsMaIUVTXH9DGe64+Sv84GMM52hJqLZN9jkaKi2g5Zw5w==
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
+ by TY2PR06MB2525.apcprd06.prod.outlook.com (2603:1096:404:4e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.18; Wed, 1 Jun
+ 2022 08:01:05 +0000
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::7c42:9783:92c9:f237]) by HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::7c42:9783:92c9:f237%7]) with mapi id 15.20.5293.019; Wed, 1 Jun 2022
+ 08:01:05 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Johnny Huang <johnny_huang@aspeedtech.com>
+CC:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 4/5] dt-bindings: crypto: add documentation for aspeed
+ hace
+Thread-Topic: [PATCH 4/5] dt-bindings: crypto: add documentation for aspeed
+ hace
+Thread-Index: AQHYdXph6uXYRV5fyEGJ347eBg/o6K06K/0AgAADx6A=
+Date:   Wed, 1 Jun 2022 08:01:05 +0000
+Message-ID: <HK0PR06MB3202D6A6C66480BF60ED829080DF9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20220601054204.1522976-1-neal_liu@aspeedtech.com>
+ <20220601054204.1522976-5-neal_liu@aspeedtech.com>
+ <dca283db-0b2e-1fc1-bc76-811c4c918fb5@linaro.org>
+In-Reply-To: <dca283db-0b2e-1fc1-bc76-811c4c918fb5@linaro.org>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0b2a3412-10f7-455a-b917-08da43a4e0e1
+x-ms-traffictypediagnostic: TY2PR06MB2525:EE_
+x-microsoft-antispam-prvs: <TY2PR06MB25259681E60E8AEDAF366A7280DF9@TY2PR06MB2525.apcprd06.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xLsG4nqhQXE26v21IvJ/lozOE4jThUQfpJdKdhOhTBkuTwlPo3mH1Op08JT0UKSSeHaPoUo5WetUTqGhqJa8Wx99Fl217lbQkF3HNd8IDA5yoxzP+ipDOKS7mP+Fh8oGMuRsUD+Vn0KcvXsIuOopIVkBuerLbckCDi3zo1FkvUdiDV/gTTLP5uktNhwIBQtbpMo/6lSa31u80QNbXsuH0yrKdD1pufbPNO2/vgQAjY52u3XhrNUzdcI5yWHsrJe5hJje1tF1J3Ak1E1a/ozMBQBbfa2Gnnh76PsaXgYD0Y2/YY0dXesBAzc0GgjbKhHSQ0bTYD08I/cOh48cCBHAssCiHWa+cY3r/B8RGBG+K3bAYXu34IS4bf1eyxSTgp9RGO73liy/67mHZmeSTuFHhmGrea7444gBWPG4oqn9ifT2IISsZrstf+4OCtLg6rgUJEXikAyfpZ9ej6X0gQVTVRX33Obgx2MxPwkaAfF9Iva7aYhkNVaJUrTC/ck80oXyJB6NTJ5pApQQA69wtVOdeif3mON8tTlRRMxMxhjquVOeo505eTHrMpRmZA63DS364e4vTE19Y93tJa4U2d/VETbhL3ZcoIN1WT3Tnm9A+Vzb5utAgJjpoCKRefAn1yKZgQFBpF1XfZt/LX/ZaLIIKxqrrKjS0w1pvhyeZvMEdAVv0Z5p36lvNcgLJau1a4WOq/IM15SM60b4qH1xPuH3VIzBEcOh0sfU7TdCMpoxGr2DjOEQhRagAyTeZu5YlUIM54ZW+oFvZOiz5g6/Xvf8XM5uXfJSs7n3M6ut2uQUiWLSGiefQylMh3JSd2/EQmJIN1jp4GTvM6brXfkvsqHrLw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(122000001)(8936002)(53546011)(71200400001)(110136005)(55016003)(66446008)(64756008)(33656002)(6636002)(66476007)(8676002)(66946007)(316002)(76116006)(66556008)(4326008)(54906003)(86362001)(38100700002)(38070700005)(186003)(9686003)(7416002)(83380400001)(26005)(5660300002)(966005)(2906002)(508600001)(52536014)(6506007)(7696005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aDN5WUNCM3FpZk9PSitvdFJPWVRhUHM2UVlMbjNlN1BrNDQrNVlNaUpkU211?=
+ =?utf-8?B?YjluMWtTdm1oY3BvaGZJajlwbk1wV2toNnUwZ3hFT3NycEZqSWZlUm5SMWEz?=
+ =?utf-8?B?MVg4Yms5cHVSRytoR0pUVVlpZTBPUXFPL2dxZXR4d2JjcTFUbFpFQjVHU1Mx?=
+ =?utf-8?B?RFNUMkdOMUZ3dHVjUzgwa0FBbnQzQ2NqMm5nSUZmMjVxZmxvQURtc3A0YUJt?=
+ =?utf-8?B?akdpODJqb3lEUmhabEF5ZVR5TDVubmZVcnVMWXFzVU5DcUpWMVQ0YzJiaVpp?=
+ =?utf-8?B?bW1vRU9ncGpreGU3Sm9GOU5LckN0eXVOUHNycXJEUTNSelNXV1hVNUwxcnVW?=
+ =?utf-8?B?a1dZZUpieUlaVTFaSy9UN2NGNFl3ak1NVlVVY2tGTk00cGQ3K3dUVjdONU0x?=
+ =?utf-8?B?VGlEdDJFbzR5VTNqQnlqZTlvKzhJMCtXSlBCYjllVDZsU2NBMHFNRU5tTmJ3?=
+ =?utf-8?B?RGlyUUhJS1MweHpRZGNzYnVZNm9sbGxpNU5qZEhSbE1PQURHY3hsVGdkNU5S?=
+ =?utf-8?B?b2M5T0paSnZFN2pIVWdDcGt4RDRaL2JqZ3RqdEtUOThJcG9ING5GdjZCQ3hE?=
+ =?utf-8?B?WkFiN0luS1FpRmJjSHhoTjdNVEt6SnR0RXl5Y3Z4Ync4b0dCTjhiUFZEbE1R?=
+ =?utf-8?B?L2dkN2pjOG1QMmVoUTFxL3hydUxNaUxCNE9iSTRvdUt3Y1AxaEd1bHhyZGlu?=
+ =?utf-8?B?a1NKYzJVMGR0a0NISUZ5R29SRTBmaVk2WjhleXBheWdTRjJuZTRudTdPOURK?=
+ =?utf-8?B?UXh5K1R0d1IxTXhvRnhvUWhhRkMwKy96ZHozWGxZY2pHVUp5WXRGMnRTK2VC?=
+ =?utf-8?B?WVUyWkJvLzdYbVlKZUFaaVRLN09RSmVoVUV2UEVhSXg2dTBOcVdtMXRlUi92?=
+ =?utf-8?B?M2YxUlprb2NhcHlFV0UxUnh1TGJXSXVNSDFMaHRPVUluWSt4Rm8xR3lRTG82?=
+ =?utf-8?B?ZDZ5T0U3U1Bsa2RrUzl0SXFVcVExT0N3RlFDaUZuWG5kSEVyelAwWmRubDl5?=
+ =?utf-8?B?N0docG8wd0sybVhFOU5OeC96aXp6Zm4yVWE0b09odytncTZOVWpEUkpzYXIx?=
+ =?utf-8?B?OE80Tm1WRXM3cjA5c0lzRHBHZU9VKzVXbjhONGxVekNWdHRBRFI5WHVNbVdv?=
+ =?utf-8?B?UklUVDhMcU9BUlYvUXVVNnJNNXg0WlpEcUtqbmwwYkVNNjVMTVgwV3p5ODc2?=
+ =?utf-8?B?L3dPcWhVSjRQZjBLeG5EOUhzTkU5V1NtSVZBWEYzQ0ZUbGJtOEVYMmhDN1A1?=
+ =?utf-8?B?WFJDb1c3MmdJV1ZWQWtGNjcxa2s1NXZvVDhGM01MS1lsRlVMc2hQMmJISEpm?=
+ =?utf-8?B?RDQvOTN4R0Zob0xQVjUzL0ZxK0dqNnhGWmdUUmNMRFNIc0FmNC81bGFJVXZv?=
+ =?utf-8?B?YzU3QnZhSFhUQzVyNzRkdUwvUDZDS05DRjUwZjVxRTRLV09iMlMwbCtRZ2Vi?=
+ =?utf-8?B?bHNMdENJazlyZGNXdGVGMDJxbGduVEhSQzRvNzdOajZ2OVdQUk5COTJTYUR0?=
+ =?utf-8?B?dDVscDFzTFBRam5ZWVZ1RnVQSGJ2M2grWHlMVzlqR2JnRkpVNjhGVHBqY2Nq?=
+ =?utf-8?B?SlFtSDdPeW9XMkVHbGE1TW9PUXROdTErWXJHMVZXdlZJeGh2dkZRS0R6VUNt?=
+ =?utf-8?B?SlRXY284dEF4M2FsM0dDYSt6RFEyU1laUTEwU1I1UmpPU01YNSsrYTYwY0Jl?=
+ =?utf-8?B?Mm03TjUvNjBjbGZCLzQ2WkZmMTlFRGpvcHpzMXo0RFZtVUQ5eEd5N2t2ckxN?=
+ =?utf-8?B?dktmRXB4QXZwcy9QeUp6NkxCZ2lPTVZBMjh4MjEvb2V1TzdyNSsveUJydGk0?=
+ =?utf-8?B?YlJvbXpFWFdrY2Q4OHpqRlJPN3VBdU5qZXdXU1pxeXNzbVB4N2kwTzFCNGNR?=
+ =?utf-8?B?KzdSTDM5cTlBditQcElKU0tRamc1ZWxtdjRHaVdUV0IxTUZUeUdUczRPd1Av?=
+ =?utf-8?B?Wk5PMWVLVUxxUGhaamZuc05iZmtKa3FTbEVTdGpwK1lVaW9kNU1XdWlEemZn?=
+ =?utf-8?B?bDBhcmJGSGRnbTFqZ3B3NDMvWEUva2JzamJiRnB4bkZRaVRiR1lHVUM2ZEM2?=
+ =?utf-8?B?YkxwMGpxd1ZwenBIcThWRllKQU85V1RGRTNpNTcvOHlSajlQSk9nMkxxVkp3?=
+ =?utf-8?B?aitKd29zZE5PTnBORUhtOVh2SGJ4ZmFnMGxqS1BjaXdhckIvbW5FQlRVM0lk?=
+ =?utf-8?B?RjM4UjB2YjQ4WTZUR2JRcGJiZzZFU1lCbnJrNUhhSWFhSTdiRnpMbU9Kc0Zl?=
+ =?utf-8?B?d0ZOOW9vUTl6MGZVci9LTzgwZGdRdVIwUmFMU3dOL2dyajZCWXJCUTE0d1hj?=
+ =?utf-8?B?Z0FER0FOYnR6NnpPOXBwWWp0Q2sramdaZXVCeTkwMFRIRHVvVkE2dz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     zhenwei pi <pizhenwei@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-Cc:     Peter Xu <peterx@redhat.com>, Jue Wang <juew@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, jasowang@redhat.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, mst@redhat.com,
-        qemu-devel@nongnu.org, virtualization@lists.linux-foundation.org
-References: <CAPcxDJ5pduUyMA0rf+-aTjK_2eBvig05UTiTptX1nVkWE-_g8w@mail.gmail.com>
- <Yo/I3oLkd9OU0ice@xz-m1.local>
- <24a95dea-9ea6-a904-7c0b-197961afa1d1@bytedance.com>
- <0d266c61-605d-ce0c-4274-b0c7e10f845a@redhat.com>
- <4b0c3e37-b882-681a-36fc-16cee7e1fff0@bytedance.com>
- <YpTngZ5Qr0KIvL0H@xz-m1.local>
- <CAPcxDJ5UMfpys8KyLQVnkV9BPO1vaubxbhc7f4XC_TdNO7jr7g@mail.gmail.com>
- <5f622a65-8348-8825-a167-414f2a8cd2eb@bytedance.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 0/3] recover hardware corrupted page by virtio balloon
-In-Reply-To: <5f622a65-8348-8825-a167-414f2a8cd2eb@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b2a3412-10f7-455a-b917-08da43a4e0e1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2022 08:01:05.2620
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: VS3JoPNFvQZ/qBCj0X17NCPRthOYhvMveIg4RsQVjR3I94TIqjv8rs6tHbs854vuZyD1aOxxRYfm9TWn7jJsmg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR06MB2525
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,125 +144,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.06.22 04:17, zhenwei pi wrote:
-> On 5/31/22 12:08, Jue Wang wrote:
->> On Mon, May 30, 2022 at 8:49 AM Peter Xu <peterx@redhat.com> wrote:
->>>
->>> On Mon, May 30, 2022 at 07:33:35PM +0800, zhenwei pi wrote:
->>>> A VM uses RAM of 2M huge page. Once a MCE(@HVAy in [HVAx,HVAz)) occurs, the
->>>> 2M([HVAx,HVAz)) of hypervisor becomes unaccessible, but the guest poisons 4K
->>>> (@GPAy in [GPAx, GPAz)) only, it may hit another 511 MCE ([GPAx, GPAz)
->>>> except GPAy). This is the worse case, so I want to add
->>>>   '__le32 corrupted_pages' in struct virtio_balloon_config, it is used in the
->>>> next step: reporting 512 * 4K 'corrupted_pages' to the guest, the guest has
->>>> a chance to isolate the other 511 pages ahead of time. And the guest
->>>> actually loses 2M, fixing 512*4K seems to help significantly.
->>>
->>> It sounds hackish to teach a virtio device to assume one page will always
->>> be poisoned in huge page granule.  That's only a limitation to host kernel
->>> not virtio itself.
->>>
->>> E.g. there're upstream effort ongoing with enabling doublemap on hugetlbfs
->>> pages so hugetlb pages can be mapped in 4k with it.  It provides potential
->>> possibility to do page poisoning with huge pages in 4k too.  When that'll
->>> be ready the assumption can go away, and that does sound like a better
->>> approach towards this problem.
->>
->> +1.
->>
->> A hypervisor should always strive to minimize the guest memory loss.
->>
->> The HugeTLB double mapping enlightened memory poisoning behavior (only
->> poison 4K out of a 2MB huge page and 4K in guest) is a much better
->> solution here. To be completely transparent, it's not _strictly_
->> required to poison the page (whatever the granularity it is) on the
->> host side, as long as the following are true:
->>
->> 1. A hypervisor can emulate the _minimized_ (e.g., 4K) the poison to the guest.
->> 2. The host page with the UC error is "isolated" (could be PG_HWPOISON
->> or in some other way) and prevented from being reused by other
->> processes.
->>
->> For #2, PG_HWPOISON and HugeTLB double mapping enlightened memory
->> poisoning is a good solution.
->>
->>>
->>>>
->>>>>
->>>>> I assume when talking about "the performance memory drops a lot", you
->>>>> imply that this patch set can mitigate that performance drop?
->>>>>
->>>>> But why do you see a performance drop? Because we might lose some
->>>>> possible THP candidates (in the host or the guest) and you want to plug
->>>>> does holes? I assume you'll see a performance drop simply because
->>>>> poisoning memory is expensive, including migrating pages around on CE.
->>>>>
->>>>> If you have some numbers to share, especially before/after this change,
->>>>> that would be great.
->>>>>
->>>>
->>>> The CE storm leads 2 problems I have even seen:
->>>> 1, the memory bandwidth slows down to 10%~20%, and the cycles per
->>>> instruction of CPU increases a lot.
->>>> 2, the THR (/proc/interrupts) interrupts frequently, the CPU has to use a
->>>> lot time to handle IRQ.
->>>
->>> Totally no good knowledge on CMCI, but if 2) is true then I'm wondering
->>> whether it's necessary to handle the interrupts that frequently.  When I
->>> was reading the Intel CMCI vector handler I stumbled over this comment:
->>>
->>> /*
->>>   * The interrupt handler. This is called on every event.
->>>   * Just call the poller directly to log any events.
->>>   * This could in theory increase the threshold under high load,
->>>   * but doesn't for now.
->>>   */
->>> static void intel_threshold_interrupt(void)
->>>
->>> I think that matches with what I was thinking..  I mean for 2) not sure
->>> whether it can be seen as a CMCI problem and potentially can be optimized
->>> by adjust the cmci threshold dynamically.
->>
->> The CE storm caused performance drop is caused by the extra cycles
->> spent by the ECC steps in memory controller, not in CMCI handling.
->> This is observed in the Google fleet as well. A good solution is to
->> monitor the CE rate closely in user space via /dev/mcelog and migrate
->> all VMs to another host once the CE rate exceeds some threshold.
->>
->> CMCI is a _background_ interrupt that is not handled in the process
->> execution context and its handler is setup to switch to poll (1 / 5
->> min) mode if there are more than ~ a dozen CEs reported via CMCI per
->> second.
->>>
->>> --
->>> Peter Xu
->>>
-> 
-> Hi, Andrew, David, Naoya
-> 
-> According to the suggestions, I'd give up the improvement of memory 
-> failure on huge page in this series.
-> 
-> Is it worth recovering corrupted pages for the guest kernel? I'd follow 
-> your decision.
-
-Well, as I said, I am not sure if we really need/want this for a handful
-of 4k poisoned pages in a VM. As I suspected, doing so might primarily
-be interesting for some sort of de-fragmentation (allow again a higher
-order page to be placed at the affected PFNs), not because of the slight
-reduction of available memory. A simple VM reboot would get the job
-similarly done.
-
-As the poisoning refcount code is already a bit shaky as I learned
-recently in the context of memory offlining, I do wonder if we really
-want to expose the unpoisoning code outside of debugfs (hwpoison) usage.
-
-Interestingly, unpoison_memory() documents: "This is only done on the
-software-level, so it only works for linux injected failures, not real
-hardware failures" -- ehm?
-
--- 
-Thanks,
-
-David / dhildenb
-
+PiBPbiAwMS8wNi8yMDIyIDA3OjQyLCBOZWFsIExpdSB3cm90ZToNCj4gPiBBZGQgZGV2aWNlIHRy
+ZWUgYmluZGluZyBkb2N1bWVudGF0aW9uIGZvciB0aGUgQXNwZWVkIEhhc2ggYW5kIENyeXB0bw0K
+PiA+IEVuZ2luZXMgKEhBQ0UpIENvbnRyb2xsZXIuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBO
+ZWFsIExpdSA8bmVhbF9saXVAYXNwZWVkdGVjaC5jb20+DQo+ID4gU2lnbmVkLW9mZi1ieTogSm9o
+bm55IEh1YW5nIDxqb2hubnlfaHVhbmdAYXNwZWVkdGVjaC5jb20+DQo+ID4gLS0tDQo+ID4gIC4u
+Li9iaW5kaW5ncy9jcnlwdG8vYXNwZWVkLGhhY2UueWFtbCAgICAgICAgICB8IDU4DQo+ICsrKysr
+KysrKysrKysrKysrKysNCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDU4IGluc2VydGlvbnMoKykNCj4g
+PiAgY3JlYXRlIG1vZGUgMTAwNjQ0DQo+ID4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
+bmdzL2NyeXB0by9hc3BlZWQsaGFjZS55YW1sDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvRG9jdW1l
+bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2NyeXB0by9hc3BlZWQsaGFjZS55YW1sDQo+ID4g
+Yi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvY3J5cHRvL2FzcGVlZCxoYWNlLnlh
+bWwNCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDAwMDAwMDAwMDAwMC4uMzZi
+NGFkMGRjN2ZhDQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2
+aWNldHJlZS9iaW5kaW5ncy9jcnlwdG8vYXNwZWVkLGhhY2UueWFtbA0KPiANCj4gRmlsZW5hbWUg
+c2hvdWxkIGJlIHJhdGhlciBmcm9tIHRoZSBmaXJzdCBjb21wYXRpYmxlLCBzbw0KPiAiYXNwZWVk
+LGFzdDI1MDAtaGFjZS55YW1sIg0KPiANCkdvdCBpdCwgSSdsbCByZXZpc2UgaXQgYXMgeW91IHN1
+Z2dlc3RlZC4NCg0KPiA+IEBAIC0wLDAgKzEsNTggQEANCj4gPiArIyBTUERYLUxpY2Vuc2UtSWRl
+bnRpZmllcjogKEdQTC0yLjAtb25seSBPUiBCU0QtMi1DbGF1c2UpICVZQU1MIDEuMg0KPiA+ICst
+LS0NCj4gPiArJGlkOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9jcnlwdG8vYXNwZWVk
+LGhhY2UueWFtbCMNCj4gPiArJHNjaGVtYTogaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2No
+ZW1hcy9jb3JlLnlhbWwjDQo+ID4gKw0KPiA+ICt0aXRsZTogQVNQRUVEIEhBQ0UgaGFzaCBhbmQg
+Y3J5cHRvIEhhcmR3YXJlIEFjY2VsZXJhdG9yIERldmljZSBUcmVlDQo+ID4gK0JpbmRpbmdzDQo+
+IA0KPiBzL0RldmljZSBUcmVlIEJpbmRpbmdzLy8NCj4gDQpHb3QgaXQsIEknbGwgcmV2aXNlIGl0
+IGFzIHlvdSBzdWdnZXN0ZWQuDQoNCj4gPiArDQo+ID4gK21haW50YWluZXJzOg0KPiA+ICsgIC0g
+TmVhbCBMaXUgPG5lYWxfbGl1QGFzcGVlZHRlY2guY29tPg0KPiA+ICsNCj4gPiArZGVzY3JpcHRp
+b246IHwNCj4gPiArICBUaGUgSGFzaCBhbmQgQ3J5cHRvIEVuZ2luZSAoSEFDRSkgaXMgZGVzaWdu
+ZWQgdG8gYWNjZWxlcmF0ZSB0aGUNCj4gPiArdGhyb3VnaHB1dA0KPiA+ICsgIG9mIGhhc2ggZGF0
+YSBkaWdlc3QsIGVuY3J5cHRpb24sIGFuZCBkZWNyeXB0aW9uLiBCYXNpY2FsbHksIEhBQ0UNCj4g
+PiArY2FuIGJlDQo+ID4gKyAgZGl2aWRlZCBpbnRvIHR3byBpbmRlcGVuZGVudGx5IGVuZ2luZXMg
+LSBIYXNoIEVuZ2luZSBhbmQgQ3J5cHRvIEVuZ2luZS4NCj4gPiArDQo+ID4gK3Byb3BlcnRpZXM6
+DQo+ID4gKyAgY29tcGF0aWJsZToNCj4gPiArICAgIGVudW06DQo+ID4gKyAgICAgIC0gYXNwZWVk
+LGFzdDI1MDAtaGFjZQ0KPiA+ICsgICAgICAtIGFzcGVlZCxhc3QyNjAwLWhhY2UNCj4gPiArDQo+
+ID4gKyAgcmVnOg0KPiA+ICsgICAgbWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgY2xvY2tzOg0K
+PiA+ICsgICAgbWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgY2xvY2stbmFtZXM6DQo+ID4gKyAg
+ICBtYXhJdGVtczogMQ0KPiANCj4gWW91IG5lZWQgdG8gbGlzdCBjbG9jayBuYW1lcywgaG93ZXZl
+ciB1c3VhbGx5IGl0IGRvZXMgbm90IG1ha2Ugc2Vuc2UgdG8gaGF2ZQ0KPiBuYW1lcyBmb3IganVz
+dCBvbmUgbWFpbiBkZXZpY2UgY2xvY2suDQo+IA0KSSB0aGluayBsaXN0IGNsb2NrLW5hbWVzIGlz
+IG9wdGlvbmFsLCBJJ2xsIHJlbW92ZSBpdCBmcm9tIHJlcXVpcmVkIGxpc3QuDQoNCj4gPiArDQo+
+ID4gKyAgaW50ZXJydXB0czoNCj4gPiArICAgIG1heEl0ZW1zOiAxDQo+ID4gKw0KPiA+ICsgIHJl
+c2V0czoNCj4gPiArICAgIG1heEl0ZW1zOiAxDQo+ID4gKw0KPiA+ICtyZXF1aXJlZDoNCj4gPiAr
+ICAtIGNvbXBhdGlibGUNCj4gPiArICAtIHJlZw0KPiA+ICsgIC0gY2xvY2tzDQo+ID4gKyAgLSBj
+bG9jay1uYW1lcw0KPiA+ICsgIC0gaW50ZXJydXB0cw0KPiA+ICsgIC0gcmVzZXRzDQo+ID4gKw0K
+PiA+ICthZGRpdGlvbmFsUHJvcGVydGllczogZmFsc2UNCj4gPiArDQo+ID4gK2V4YW1wbGVzOg0K
+PiA+ICsgIC0gfA0KPiA+ICsgICAgI2luY2x1ZGUgPGR0LWJpbmRpbmdzL2Nsb2NrL2FzdDI2MDAt
+Y2xvY2suaD4NCj4gPiArICAgIGhhY2U6IGhhY2VAMWU2ZDAwMDAgew0KPiANCj4gR2VuZXJpYyBu
+b2RlIG5hbWVzIHNvICJjcnlwdG8iLg0KPiANCkdvdCBpdCwgSSdsbCByZXZpc2UgaXQgYXMgeW91
+IHN1Z2dlc3RlZC4NCg0KPiA+ICsgICAgICAgIGNvbXBhdGlibGUgPSAiYXNwZWVkLGFzdDI2MDAt
+aGFjZSI7DQo+ID4gKyAgICAgICAgcmVnID0gPDB4MWU2ZDAwMDAgMHgyMDA+Ow0KPiA+ICsgICAg
+ICAgIGludGVycnVwdHMgPSA8ND47DQo+ID4gKyAgICAgICAgY2xvY2tzID0gPCZzeXNjb24gQVNQ
+RUVEX0NMS19HQVRFX1lDTEs+Ow0KPiA+ICsgICAgICAgIGNsb2NrLW5hbWVzID0gInljbGsiOw0K
+PiA+ICsgICAgICAgIHJlc2V0cyA9IDwmc3lzY29uIEFTUEVFRF9SRVNFVF9IQUNFPjsNCj4gPiAr
+ICAgIH07DQo+IA0KPiANCj4gQmVzdCByZWdhcmRzLA0KPiBLcnp5c3p0b2YNCg==

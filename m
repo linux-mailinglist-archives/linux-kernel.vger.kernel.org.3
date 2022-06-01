@@ -2,102 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 396E6539E0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC45539E0F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350202AbiFAHUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 03:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        id S1350203AbiFAHTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 03:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350413AbiFAHUN (ORCPT
+        with ESMTP id S1350234AbiFAHT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 03:20:13 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96DE6461
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:20:11 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id c2so988421plh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 00:20:11 -0700 (PDT)
+        Wed, 1 Jun 2022 03:19:27 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0553E48398
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:19:26 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id gi33so1874118ejc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 00:19:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=MC41gEQuVXDAqpv4xe0itsDAYcLiXNNvtLvOXnYJomI=;
-        b=gdRCXYyPwtL93x7erslFonthTsqPPXlZ0UgsTR8AVRJYsOq8MvZJPvbLGsreKshXqi
-         fz7DK3PEIiNHGy/PPfhuZMFta+U3NxNCsPdWrmEdCA9aRfFfM1n8S6izYx7QmllKgDFF
-         XEv/ilDs9dvvhochneQ7KZzX3YiAaDv2QMwEhLbFk2IIlSU3jkA4pTjO0ga/ScryjxcX
-         qdA3PHCX0cJpLHPVE0cNpCX84fdZI7L5T2iKWpg1cAhGbAKZ6t8tfRbLijKjDL3HsBl9
-         0oK77ctPv47PahAHbsMhjm7HAOBF4xXzRZWxlyam2MN6mQRR5wxMxaK2zbxza7kt1oO0
-         133A==
+        bh=sFHTTgpzWh1X2kU61LH+ozniVe7avF1oD6MyUb1nFlw=;
+        b=JhClqqiGuZnkQDox/hUhOZMoOiJPzCcpVYaTRf4QcExfDNMhsi8myCeHESCpy+P4RS
+         Y6cOsPuEG06xmppycyjaPVYMhy4ak4Tbwh8vddqZd0Cf7JNtj4bVtxwjyZ2uOXC2qKRc
+         JAeRyS06bfesWcsWwbWMJUbzLldWxez+UxcGtqXD4Fdknd6JjTMGAA5hIQM1XAhdahYW
+         +AM6YLJ5Hs92H5zZiCKcdSEoe6uOaHQ9QEJ1fvOYCieqePDtySNsaAXAygrM9oEPRTjI
+         X6n0hYueQPCoQBYgn/urUM276E7cfonVUrwEy1ww41lI8jLfH8lAGh5FKdx6O+3B1zmr
+         FO6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=MC41gEQuVXDAqpv4xe0itsDAYcLiXNNvtLvOXnYJomI=;
-        b=atuyDNvVrLlftHrg+mgxBOkCr42Zx/7zTLq86JMhrUMKaxLzNJhWzk9MbEoaZnIXJT
-         TcNlguWRhw5Nsed6ZNgrr3C9+kio7+mkay82RBjb+mEzoBcZP5ibAmwkXRtZoY257xjA
-         KLBdoLsLR6pRDAsPN/NSLGIR0OF/wjuhzVtasMgMeml8ruFSGMUnDyNgAay7MtBtO0Z1
-         O7eNWvyUZAh2Q3iKSWYaN9zYkiF+wWCDa7N7SoNoyYLU2eJxVB+M0N2Loyr9t9k0eQV3
-         2Qrp52ZQ7pw2ksTZXXYT/ZJhw1Zb+h4XaJVfvY6aPBLRBbfs5iEAXbygSsLsB22aFBz5
-         M3Yg==
-X-Gm-Message-State: AOAM530tJsfAtaPefXcaxQ9rn1nAHinzqWLguIgOamK4gYPtutxkoNc0
-        UbNE9rU/CESYbQVUJ5eet2VK+YR7POs=
-X-Google-Smtp-Source: ABdhPJytqL76MOI+aqc7h42RwJx2/Icf5zWS/KnylCaqAGDVX70Bn3WD3b9VofJvcmvhZ6MH2bXQ4w==
-X-Received: by 2002:a17:902:8c92:b0:161:e861:861f with SMTP id t18-20020a1709028c9200b00161e861861fmr61330746plo.33.1654068010907;
-        Wed, 01 Jun 2022 00:20:10 -0700 (PDT)
-Received: from Vostro-5471.. ([2001:288:7001:2708:d63b:41f9:65b2:fe0d])
-        by smtp.gmail.com with ESMTPSA id f1-20020a170902684100b001637fd08a75sm471297pln.63.2022.06.01.00.20.08
+        bh=sFHTTgpzWh1X2kU61LH+ozniVe7avF1oD6MyUb1nFlw=;
+        b=IM97CJWF+aE0NlLkdAv7f4SdWRzALf/ASklROnMTFJdoRfE+xEIoqoIFa3Y8np1F56
+         /GJ0qkTlsuLog09jHHhXUf8H2ha1NOQ2ZZBQVhcztzGGh1UDr6zInHMFym0hoN2avUXL
+         TjvN/sBYdWbQQlb2oK1nqC05jN0yNcD7Z+sMRN4SrklKfHWZpOx/eBRWJyBj6il8kTql
+         97CLp9qejno3M+4/GzCOBX9TNzPPiOfDvtDmtrgS3ChyalFp1O+mNViA3pKNjtFqfPqV
+         D8+YUU1Yb6ASGYpPHQ4Kdqc2FphgWd9q/x7iWpBEI+9KT0cEUptv0KDZSbcROh3Kfgn2
+         4toQ==
+X-Gm-Message-State: AOAM533pCO4IV6QCFKE3toRnBLBkooCVM3gnLbOxJtyzL22a/z/6aUP5
+        eMqOw0zKvb8+ltPemoYi3NugOQ==
+X-Google-Smtp-Source: ABdhPJyfshPk80g9xKAbLEuToIc9ClZTMcVqk9A86vdPPGtI2sruppsVdMnmbEn3HqQneIpreEv3cA==
+X-Received: by 2002:a17:907:3f90:b0:6fe:cd08:dc21 with SMTP id hr16-20020a1709073f9000b006fecd08dc21mr44428596ejc.136.1654067964500;
+        Wed, 01 Jun 2022 00:19:24 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id f27-20020a17090624db00b006f3ef214dcdsm358486ejb.51.2022.06.01.00.19.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 00:20:10 -0700 (PDT)
-From:   Jui-Tse Huang <juitse.huang@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jui-Tse Huang <juitse.huang@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Bruno Randolf <br1@einfach.org>,
-        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>
-Subject: [PATCH v2] average: Clarify the restrictions
-Date:   Wed,  1 Jun 2022 15:19:06 +0800
-Message-Id: <20220601071907.22070-1-juitse.huang@gmail.com>
+        Wed, 01 Jun 2022 00:19:23 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        David Heidelberg <david@ixit.cz>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/4] dt-bindings: power: supply: bq24190: use regulator schema for child node
+Date:   Wed,  1 Jun 2022 09:19:08 +0200
+Message-Id: <20220601071911.6435-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is several restrictions in the EWMA helper macro that the
-developers should take care of, but the comment does not mentioned yet,
-thus, this patch clarify the restrictions.
+The 'usb-otg-vbus' child node is a regulator so reference the regulator
+schema for proper evaluation.
 
-Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
+ Documentation/devicetree/bindings/power/supply/bq24190.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Notes:
-    v2: fix spelling and wording (Bruno Randolf)
-
- include/linux/average.h | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/include/linux/average.h b/include/linux/average.h
-index a1a8f09631ce..ff0953ba2820 100644
---- a/include/linux/average.h
-+++ b/include/linux/average.h
-@@ -13,6 +13,9 @@
-  * precision and fall-off coefficient determined at compile-time
-  * and built into the generated helper funtions.
-  *
-+ * This implementation supports up to 30 bits of precition, and only
-+ * the API for fetching non-fractional part is provided for now.
-+ *
-  * The first argument to the macro is the name that will be used
-  * for the struct and helper functions.
-  *
+diff --git a/Documentation/devicetree/bindings/power/supply/bq24190.yaml b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+index 0d7cbbdf808b..402d9d2ed2b9 100644
+--- a/Documentation/devicetree/bindings/power/supply/bq24190.yaml
++++ b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+@@ -28,7 +28,7 @@ properties:
+     maxItems: 1
+ 
+   usb-otg-vbus:
+-    type: object
++    $ref: /schemas/regulator/regulator.yaml#
+     description: |
+       Regulator that is used to control the VBUS voltage direction for
+       either USB host mode or for charging on the OTG port
 -- 
 2.34.1
 

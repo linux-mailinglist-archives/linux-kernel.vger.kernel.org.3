@@ -2,113 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB24653AF8E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCDB53AF7E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiFAVOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
+        id S231249AbiFAVR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiFAVOd (ORCPT
+        with ESMTP id S231192AbiFAVRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:14:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E66633B9
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 14:14:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6827EB81C38
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 21:14:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E3DC385B8;
-        Wed,  1 Jun 2022 21:14:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654118069;
-        bh=YS5IOiL9dBi2zEpaewYYTodWjSpqUzZtFaSZlv5Z/II=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WRNSXd37nZ9tk86Gt+WreCXc4zZmfI3kf/OQ/NYetdgAL8OEIlpvS29IXI0OWjNxl
-         rlw8nDuBknvhcmezjQjF64NEMfgY4SAPntcYEvjylKdIe3Sv6ZcgG4ngTQHJmV8bp5
-         ECqMhRz10pP7y5ftF2Q5SDqOXzpHZ4zW2K8PrwJxLMRHpxNko24NLkfzRxavRtIhsg
-         57Rwfe4uvAzYMubjtb2EFxx+v3jgTnl0KxE2TaZfku5ibxG6Cp0EVygyPFRrRF5Wgz
-         pZyfjbFnH+B64Vwdhhf1h72NrhlmxXi+jeHboHrA7SW45H4DynjcAn96gldGFCHL8D
-         zIOsixA8i9qpA==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH] f2fs: attach inline_data after setting compression
-Date:   Wed,  1 Jun 2022 14:14:27 -0700
-Message-Id: <20220601211427.2345120-1-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+        Wed, 1 Jun 2022 17:17:55 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E1D6A06E
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 14:17:53 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id CCCCD1BF204;
+        Wed,  1 Jun 2022 21:17:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1654118272;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=yDUhBv6XHVz7aAD1gbDoff/7ZzVY1tgq3gAseNLUe94=;
+        b=cfJTjSQnibUPOy+Jo5Lb1kxrzIWavxaygTiwI6e6wMGZFBVDEHdUgpVRy23KU2hZtq/Tng
+        8YwRpNPDVwH6UMe9XRFyKvyy2ih+uWYo/qlrh5pEa0zTPNphrh+Iqk2lovSf9T1cso6zIn
+        7Eh4iMVRnJ7QbXxHEDFO3VVbtn6Pm85itJFkGX8atoQjWW6y0VwXCyZNGkDVtm5ZhaeZHG
+        m9VGbX78KuuRWfmLK67dw6G4ShjsQQub0TZZXxeD+Q4PNrpa57LeS8bkgJ++Uob3lrukQ7
+        /Rk9boN2O0+XW17Sti1ssucCjXch7OmwL0Cmn/S6nOdIBsgUb7tGubcTrNc95g==
+Date:   Wed, 1 Jun 2022 23:17:51 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] I3C changes for 5.19
+Message-ID: <YpfXf/unhrWZkE3j@mail.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes the below corruption.
+Hello Linus,
 
-[345393.335389] F2FS-fs (vdb): sanity_check_inode: inode (ino=6d0, mode=33206) should not have inline_data, run fsck to fix
+Here is the pull request for the i3c subsystem. Only clean ups and no
+functional change this cycle.
 
-Fixes: 677a82b44ebf ("f2fs: fix to do sanity check for inline inode")
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/namei.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
-index c549acb52ac4..a841abe6a071 100644
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@ -89,8 +89,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
- 	if (test_opt(sbi, INLINE_XATTR))
- 		set_inode_flag(inode, FI_INLINE_XATTR);
- 
--	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
--		set_inode_flag(inode, FI_INLINE_DATA);
- 	if (f2fs_may_inline_dentry(inode))
- 		set_inode_flag(inode, FI_INLINE_DENTRY);
- 
-@@ -107,10 +105,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
- 
- 	f2fs_init_extent_tree(inode, NULL);
- 
--	stat_inc_inline_xattr(inode);
--	stat_inc_inline_inode(inode);
--	stat_inc_inline_dir(inode);
--
- 	F2FS_I(inode)->i_flags =
- 		f2fs_mask_flags(mode, F2FS_I(dir)->i_flags & F2FS_FL_INHERITED);
- 
-@@ -127,6 +121,14 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
- 			set_compress_context(inode);
- 	}
- 
-+	/* Should enable inline_data after compression set */
-+	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
-+		set_inode_flag(inode, FI_INLINE_DATA);
-+
-+	stat_inc_inline_xattr(inode);
-+	stat_inc_inline_inode(inode);
-+	stat_inc_inline_dir(inode);
-+
- 	f2fs_set_inode_flags(inode);
- 
- 	trace_f2fs_new_inode(inode, 0);
-@@ -325,6 +327,8 @@ static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
- 		if (!is_extension_exist(name, ext[i], false))
- 			continue;
- 
-+		/* Do not use inline_data with compression */
-+		clear_inode_flag(inode, FI_INLINE_DATA);
- 		set_compress_context(inode);
- 		return;
- 	}
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/i3c/linux.git tags/i3c/for-5.19
+
+for you to fetch changes up to 66ed42caf286a7aaeb6f1db4b2995dd9416226c2:
+
+  MAINTAINERS: rectify entries for some i3c drivers after dt conversion (2022-06-01 22:46:58 +0200)
+
+----------------------------------------------------------------
+I3C for 5.19
+
+Subsystem:
+ - yaml conversion of the DT bindings
+
+----------------------------------------------------------------
+Guo Zhengkui (1):
+      i3c: master: svc: fix returnvar.cocci warning
+
+Lukas Bulwahn (1):
+      MAINTAINERS: rectify entries for some i3c drivers after dt conversion
+
+Minghao Chi (1):
+      i3c/master: simplify the return expression of i3c_hci_remove()
+
+Rob Herring (2):
+      dt-bindings: i3c: Convert cdns,i3c-master to DT schema
+      dt-bindings: i3c: Convert snps,dw-i3c-master to DT schema
+
+ .../devicetree/bindings/i3c/cdns,i3c-master.txt    | 43 ----------------
+ .../devicetree/bindings/i3c/cdns,i3c-master.yaml   | 60 ++++++++++++++++++++++
+ .../devicetree/bindings/i3c/snps,dw-i3c-master.txt | 41 ---------------
+ .../bindings/i3c/snps,dw-i3c-master.yaml           | 52 +++++++++++++++++++
+ MAINTAINERS                                        |  4 +-
+ drivers/i3c/master/mipi-i3c-hci/core.c             |  7 +--
+ drivers/i3c/master/svc-i3c-master.c                |  3 +-
+ 7 files changed, 116 insertions(+), 94 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i3c/cdns,i3c-master.txt
+ create mode 100644 Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
+ delete mode 100644 Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.txt
+ create mode 100644 Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.yaml
+
 -- 
-2.36.1.255.ge46751e96f-goog
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

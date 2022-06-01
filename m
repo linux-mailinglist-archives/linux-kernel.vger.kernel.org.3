@@ -2,89 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ACFC53AF7C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB24653AF8E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiFAVKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S231431AbiFAVOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbiFAVKT (ORCPT
+        with ESMTP id S231406AbiFAVOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:10:19 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A89FDF7A;
-        Wed,  1 Jun 2022 14:10:18 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-e656032735so4434542fac.0;
-        Wed, 01 Jun 2022 14:10:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zS8J0ClQ9ncsVxOr+NVUGTE71ygnVRFhlsutEE3bBag=;
-        b=zxMNNN7qaLW0MN1hGUb6HRMFBBOCvbYttomcUQAtgKYUtbryKNhMuBtLS2Q+dcr7uj
-         OCa7z+QHBJQN7Ze1MbGc/beJIg8z4P/aQdnXNarlTHtzT+Y1eJ70YRg9ZlaM8ryrtOn/
-         +Z+3pzERwFvi2aGbWeSLwm9qpLw10TLEJSUX1rQYDCIbJXb7jwysWHfsThidwo9bs/eA
-         L5Rg5SVrASRazMUOAL7FAWqRrfyD2dSgFS1OAbnjE9sD8OFPhj3N5MVCAlZobnRSdFHp
-         5+wvunPAdQkMXy2UezdxuVjzC8MW21tiCw4PNG72PNZHdS2CwsgsEyZIDon66UuWmpiu
-         Srww==
-X-Gm-Message-State: AOAM5308QXrp1QptcQGg3APXQTST7WOF0A97b0CHLzqbvHM6kBabBKMF
-        k7W6lFWfJO3pUCf+pqMcs4pNeu0whg==
-X-Google-Smtp-Source: ABdhPJySTKybAFaXLV7rHHqdLw4yAznMtl7MahmiSgkE2Og1CipW7OAc/4aJ+8aSCSSEgwAvvCKleg==
-X-Received: by 2002:a05:6870:1485:b0:f3:bd4:aab0 with SMTP id k5-20020a056870148500b000f30bd4aab0mr916727oab.229.1654117817386;
-        Wed, 01 Jun 2022 14:10:17 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id ec29-20020a0568708c1d00b000f1c2847f8csm1162395oab.32.2022.06.01.14.10.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 14:10:17 -0700 (PDT)
-Received: (nullmailer pid 458641 invoked by uid 1000);
-        Wed, 01 Jun 2022 21:10:16 -0000
-Date:   Wed, 1 Jun 2022 16:10:16 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     Allan.Nielsen@microchip.com, thomas.petazzoni@bootlin.com,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, Horatiu.Vultur@microchip.com,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next 2/6] dt-bindings: net: ethernet-controller: add
- QUSGMII mode
-Message-ID: <20220601211016.GA458579-robh@kernel.org>
-References: <20220519135647.465653-1-maxime.chevallier@bootlin.com>
- <20220519135647.465653-3-maxime.chevallier@bootlin.com>
+        Wed, 1 Jun 2022 17:14:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E66633B9
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 14:14:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6827EB81C38
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 21:14:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E3DC385B8;
+        Wed,  1 Jun 2022 21:14:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654118069;
+        bh=YS5IOiL9dBi2zEpaewYYTodWjSpqUzZtFaSZlv5Z/II=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WRNSXd37nZ9tk86Gt+WreCXc4zZmfI3kf/OQ/NYetdgAL8OEIlpvS29IXI0OWjNxl
+         rlw8nDuBknvhcmezjQjF64NEMfgY4SAPntcYEvjylKdIe3Sv6ZcgG4ngTQHJmV8bp5
+         ECqMhRz10pP7y5ftF2Q5SDqOXzpHZ4zW2K8PrwJxLMRHpxNko24NLkfzRxavRtIhsg
+         57Rwfe4uvAzYMubjtb2EFxx+v3jgTnl0KxE2TaZfku5ibxG6Cp0EVygyPFRrRF5Wgz
+         pZyfjbFnH+B64Vwdhhf1h72NrhlmxXi+jeHboHrA7SW45H4DynjcAn96gldGFCHL8D
+         zIOsixA8i9qpA==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH] f2fs: attach inline_data after setting compression
+Date:   Wed,  1 Jun 2022 14:14:27 -0700
+Message-Id: <20220601211427.2345120-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519135647.465653-3-maxime.chevallier@bootlin.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022 15:56:43 +0200, Maxime Chevallier wrote:
-> Add a new QUSGMII mode, standing for "Quad Universal Serial Gigabit
-> Media Independent Interface", a derivative of USGMII which, similarly to
-> QSGMII, allows to multiplex 4 1Gbps links to a Quad-PHY.
-> 
-> The main difference with QSGMII is that QUSGMII can include an extension
-> instead of the standard 7bytes ethernet preamble, allowing to convey
-> arbitrary data such as Timestamps.
-> 
-> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> ---
->  Documentation/devicetree/bindings/net/ethernet-controller.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+This fixes the below corruption.
 
-Acked-by: Rob Herring <robh@kernel.org>
+[345393.335389] F2FS-fs (vdb): sanity_check_inode: inode (ino=6d0, mode=33206) should not have inline_data, run fsck to fix
+
+Fixes: 677a82b44ebf ("f2fs: fix to do sanity check for inline inode")
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
+ fs/f2fs/namei.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
+index c549acb52ac4..a841abe6a071 100644
+--- a/fs/f2fs/namei.c
++++ b/fs/f2fs/namei.c
+@@ -89,8 +89,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+ 	if (test_opt(sbi, INLINE_XATTR))
+ 		set_inode_flag(inode, FI_INLINE_XATTR);
+ 
+-	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
+-		set_inode_flag(inode, FI_INLINE_DATA);
+ 	if (f2fs_may_inline_dentry(inode))
+ 		set_inode_flag(inode, FI_INLINE_DENTRY);
+ 
+@@ -107,10 +105,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+ 
+ 	f2fs_init_extent_tree(inode, NULL);
+ 
+-	stat_inc_inline_xattr(inode);
+-	stat_inc_inline_inode(inode);
+-	stat_inc_inline_dir(inode);
+-
+ 	F2FS_I(inode)->i_flags =
+ 		f2fs_mask_flags(mode, F2FS_I(dir)->i_flags & F2FS_FL_INHERITED);
+ 
+@@ -127,6 +121,14 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+ 			set_compress_context(inode);
+ 	}
+ 
++	/* Should enable inline_data after compression set */
++	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
++		set_inode_flag(inode, FI_INLINE_DATA);
++
++	stat_inc_inline_xattr(inode);
++	stat_inc_inline_inode(inode);
++	stat_inc_inline_dir(inode);
++
+ 	f2fs_set_inode_flags(inode);
+ 
+ 	trace_f2fs_new_inode(inode, 0);
+@@ -325,6 +327,8 @@ static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
+ 		if (!is_extension_exist(name, ext[i], false))
+ 			continue;
+ 
++		/* Do not use inline_data with compression */
++		clear_inode_flag(inode, FI_INLINE_DATA);
+ 		set_compress_context(inode);
+ 		return;
+ 	}
+-- 
+2.36.1.255.ge46751e96f-goog
+

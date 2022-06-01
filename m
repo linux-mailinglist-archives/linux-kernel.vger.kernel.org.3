@@ -2,78 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D013553AC42
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 19:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD8C53AC3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 19:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356518AbiFAR4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 13:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
+        id S1356538AbiFAR4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 13:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356456AbiFAR4C (ORCPT
+        with ESMTP id S1354322AbiFAR4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 13:56:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B524D95492;
-        Wed,  1 Jun 2022 10:56:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 515946165D;
-        Wed,  1 Jun 2022 17:56:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B673AC341CA;
-        Wed,  1 Jun 2022 17:56:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654106160;
-        bh=Xfn2HFEnZSxcXFkR8Prh9VtOycLBNOIm3UVfs78ul6I=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=EGFE48ZWfltGiZrI8TPycUBapJQP8LZb/kYKLFB8EkggUlqO5wh/gqZlKCZaAAwjX
-         gFFnmWiQTSBpO7S/WG24yg0S1NnyEJwJZIrHRyjpdHVa+errjd3tK7cPRd+EB68613
-         ekvMT+rwsDeRJ9OdEUHyhiLMc9VR63rlgzs1xahIAwlSSVNVvdEsZ63G/ZCp7lAJ4C
-         2e7mFoeh0uxJTQ/tQhrH1Hh00cURDNHt2+pxTMDJemb5ydaX23S8MoMer1BrGb7XqA
-         tFkvRyaILdtD18mXYOMNKjctmc1P25AlfzE+VEI+FHCqEHtZrC8bQIZPYB7vsHHbcc
-         rc3/ePGrnja0Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A31FCF03944;
-        Wed,  1 Jun 2022 17:56:00 +0000 (UTC)
-Subject: Re: [GIT PULL] rpmsg updates for v5.19
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220601122332.536516-1-bjorn.andersson@linaro.org>
-References: <20220601122332.536516-1-bjorn.andersson@linaro.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220601122332.536516-1-bjorn.andersson@linaro.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rpmsg-v5.19
-X-PR-Tracked-Commit-Id: 59d6f72f6f9c92fec8757d9e29527da828e9281f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 68e6134bb70ab20e9f7c36c1ae7dc96b8ed778ae
-Message-Id: <165410616065.7706.9186739503957755762.pr-tracker-bot@kernel.org>
-Date:   Wed, 01 Jun 2022 17:56:00 +0000
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 1 Jun 2022 13:56:23 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D630996BB
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 10:56:21 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id fu3so3837631ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 10:56:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UhCTn3B4dxAfM/2PE1MQ94TeLbKYYdaD0N5yaUHCbdM=;
+        b=aLtB+6frvE6/OlUJBCsU3xdGUDBTfuYWQJzE4Fo6zdDxBY1WCQ4mwsIxthXAm9ILbM
+         O4LZEcHrKNE4OsekZhjNBqVF8mWI15Z+Tcl7qvdjC/4KhOBvl0/kRjZElTWDaNfUSTgc
+         Hhy4t7UpjNymxjSo3QYi2eAji1ki003staViI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UhCTn3B4dxAfM/2PE1MQ94TeLbKYYdaD0N5yaUHCbdM=;
+        b=lnUwDXLnU2t3scvHRW6lbm1jX6/GL1Bp4e0K+2zn8v4EQK/gPbik+nohMiQjbk3Sk9
+         4J+zaHE9HA2qzschIspfDZuVlu+CcGpNFKw12aqmjsJPUNcTnU+n3NGVJXgPBxbdzi04
+         V3GisJR2gmWxChp952Q9r/CbZp/LB+0GIAW6A2yUFSGcNeCzyeiAPlNtd0OouaaUbuWt
+         t6h2ScoiJAWV+3jmxMdzYmhJdItnjJEzEo0bYNzPqZXpaaxjmK7twERYrEdMbPdwdsOn
+         /5T41wuMnQdcH/VrsZtzaRueuicOdw1r0uUj3y//hV0LgbruWTasGwVobayeFql59/yF
+         bgFw==
+X-Gm-Message-State: AOAM530N0/48kkn0XK+xebO7IflObYySy884wJXO3aQsu69f6i5nX17g
+        LsE1zkUPODvXi8qSZk+p6Rc3SERz7mFF9vKb
+X-Google-Smtp-Source: ABdhPJxBOkneFLVMMYQhlGCympssHuJkZBe3MJQOV/XxcacQ6+MSyQbSjQ2VZhy0YIP6GJoyEeXLEA==
+X-Received: by 2002:a17:906:9254:b0:708:cf8e:25a5 with SMTP id c20-20020a170906925400b00708cf8e25a5mr638240ejx.119.1654106179373;
+        Wed, 01 Jun 2022 10:56:19 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id c4-20020a170906694400b00703e09dd2easm961565ejs.147.2022.06.01.10.56.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 10:56:18 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id u3so3391249wrg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 10:56:18 -0700 (PDT)
+X-Received: by 2002:a5d:6da6:0:b0:20f:bc8a:9400 with SMTP id
+ u6-20020a5d6da6000000b0020fbc8a9400mr514986wrs.274.1654106178446; Wed, 01 Jun
+ 2022 10:56:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <Ypb3t6HB1D51+hfU@owl.dominikbrodowski.net>
+In-Reply-To: <Ypb3t6HB1D51+hfU@owl.dominikbrodowski.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 1 Jun 2022 10:56:02 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiebE8cTjAPy_UXHKBSWrat4xNfeu0Ekaf2joBZ4y3kzQ@mail.gmail.com>
+Message-ID: <CAHk-=wiebE8cTjAPy_UXHKBSWrat4xNfeu0Ekaf2joBZ4y3kzQ@mail.gmail.com>
+Subject: Re: [GIT PULL] pcmcia updates for v5.19
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed,  1 Jun 2022 07:23:32 -0500:
+On Tue, May 31, 2022 at 10:23 PM Dominik Brodowski
+<linux@dominikbrodowski.net> wrote:
+>
+> A few odd cleanups and fixes, including a Kconfig fix to add a
+> required dependency on MIPS.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rpmsg-v5.19
+This was also one of (very few) pull requests this merge window that
+weren't signed tags.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/68e6134bb70ab20e9f7c36c1ae7dc96b8ed778ae
+I realize that pcmcia is small, and no longer very relevant to most
+people these days, but I still wish that this pull request wouldn't
+have stood out that way...
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+                 Linus

@@ -2,209 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F57053ABDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 19:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AD853ABE1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 19:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356315AbiFAR15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 13:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
+        id S1356313AbiFAR34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 13:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355752AbiFAR1x (ORCPT
+        with ESMTP id S1345750AbiFAR3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 13:27:53 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B943562CF;
-        Wed,  1 Jun 2022 10:27:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654104471; x=1685640471;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=CC+J2414YNif4uweGXY3R4p1/UU8ZZRqs7s/cBhTrio=;
-  b=VXgzX8DkmVagYQ1bVDEW9FR+lE5s0ObpGHXtf9UWcpMBN8szWfuFrXa/
-   Qonf9fcLl90q05DoB9Np9H4WTOwsd7g04GsxjexGspCOQXvrh/6s0XA4U
-   f4PB/tYtkKcxRyGu/A5GOLfz+IyOE60XxCb8zRvt/uPQ2Y25i14Gpsi4N
-   fzW+yCt4qn2EQbgQOkbXenyDlZF+IVDehfmtCdg2GqwB7Zx95WTL4VAoO
-   CfppMOMsyg6MxML/frHDoEhtFsLGxPlocTFx1w1M7y+5c5oZhv3fN1GJo
-   NLuhJUb7GsE014LaM/w8gjDlwyFQ2HpWUAGW6KZZHeqOrFlR3Z5gGGF8+
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="274467627"
-X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="274467627"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 10:27:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="562900243"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga002.jf.intel.com with ESMTP; 01 Jun 2022 10:27:50 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 1 Jun 2022 10:27:49 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Wed, 1 Jun 2022 10:27:49 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.109)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Wed, 1 Jun 2022 10:27:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MODRdH/EHqGbYTyvIFFbmzZv3n+eOfI25jY9kmSpgrUKY0UMJbvtXAJJy+wKp4Iyzc5ivlLWpoGDYDCVLic7vREe3dCiRWiTAYLCTrQr2jJYqS6xbNWH89GN2PjYSviqn2N46hUTpXe1EKgMon0xquPBK+rgif7WF9/tfNkx5i8CEm8U+zuhzAAPmj3zwdYThGrkQuQjPfcYozAJ5qeB+831Mqou+o5ZI27Ecg8R4lVP60UN4TbiSDnXyloCPZu6ZszbG3Pu12WugJ1QHjCdN2/VF1XlLL9OFKocji98X0S7590Rpb04SMvGxhmbfpfO022HjELmDfibBrzrKoCaWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CC+J2414YNif4uweGXY3R4p1/UU8ZZRqs7s/cBhTrio=;
- b=BxaC+UNvhl4PKIDzraNMxYc3Nlwy7gpPB9Z4XNL9gY2mIbf3lb1f8uIxoGcg+MzSXf1NpcdzPUqUP7iRA9WVSphHiBRiSOJqYZcdtQVtaBiUkC4XSzyCAKvsNHhxDqM1dpvNaxUive2Gd4Bf/QH/VA5/QqAEhJLuv/8qDwN2u0ol99Eo9xnDrDLC9gGsq6RlpTAEXM13A3ZoHGtL7ai8ulu210GD8zsXo0RFcHxMxbzOXtKX8JksqOKzDmGt1D1MBws0etK/Q8XqVSbGzaYpC8tsJSZ4KPzMtXk36G4ZvBa2/Cd67550b/uSL15qEhEAJkdpYMvMpdG9hYF8kk/eOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by PH0PR11MB4983.namprd11.prod.outlook.com (2603:10b6:510:40::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Wed, 1 Jun
- 2022 17:27:45 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::34f6:8e1d:ac6b:6e03]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::34f6:8e1d:ac6b:6e03%12]) with mapi id 15.20.5293.019; Wed, 1 Jun 2022
- 17:27:45 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "hjl.tools@gmail.com" <hjl.tools@gmail.com>
-CC:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "adrian@lisas.de" <adrian@lisas.de>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "avagin@gmail.com" <avagin@gmail.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "dave.martin@arm.com" <dave.martin@arm.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-Thread-Topic: [PATCH 00/35] Shadow stacks for userspace
-Thread-Index: AQHYFh9orVaVUe6rNECZu4edjJzhZqyG5jiAgADTxwCAAJnkAIABGRSAgAADewCAAHMeAIAAC4MAgACbY4CAAZeygIAddLsAgAAA+YCAABC1gIAAF8EAgASAo4CAADfAgIAAKfMAgAEo6oCABLJcAIAAAt+AgIUewYCAAEo0AIAAAygAgAAQTACAAAcUAIABiUSA
-Date:   Wed, 1 Jun 2022 17:27:44 +0000
-Message-ID: <172310e1b8fcc78fca786f9ea7966f58dd93ff93.camel@intel.com>
-References: <Yh0+9cFyAfnsXqxI@kernel.org>
-         <05df964f-552e-402e-981c-a8bea11c555c@www.fastmail.com>
-         <YiEZyTT/UBFZd6Am@kernel.org>
-         <CALCETrWacW8SC2tpPxQSaLtxsOXfXHueyuwLcXpNF4aG-0ZvhA@mail.gmail.com>
-         <fb7d6e4da58ae77be2c6321ee3f3487485b2886c.camel@intel.com>
-         <40a3500c-835a-60b0-15bf-40c6622ad013@kernel.org>
-         <YiZVbPwlgSFnhadv@kernel.org>
-         <CAMe9rOrSLPKdL2gL=yx84zrs-u6ch1AVvjk3oqUe3thR5ZD=dQ@mail.gmail.com>
-         <YpYDKVjMEYVlV6Ya@kernel.org>
-         <d0c94eed6e3c7f35b78bab3f00aadebd960ee0d8.camel@intel.com>
-         <YpZEDjxSPxUfMxDZ@kernel.org>
-         <7c637f729e14f03d0df744568800fc986542e33d.camel@intel.com>
-         <CAMe9rOpctH-FQZH_5e=f17Ma7Ev0u9jiXap5bgqFyhLfsx102g@mail.gmail.com>
-In-Reply-To: <CAMe9rOpctH-FQZH_5e=f17Ma7Ev0u9jiXap5bgqFyhLfsx102g@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c87887ce-2c73-405e-2bf0-08da43f40a44
-x-ms-traffictypediagnostic: PH0PR11MB4983:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <PH0PR11MB49832F235ED0922637044B77C9DF9@PH0PR11MB4983.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FV5fkYpNUFAUpLsbAqSAWYneGZy9q/W5Lf3B5PnVBJaNKWkAM5MLjlUJKClvS0McIRxxBMYMY6WLU37unr5cCN56AdrtWavxgWUpvKhs46wvemqo+atbOtdUagmKKlajoEQQXKPkragIVO3j+FVCd83llTrTMZiSNyrC5aZv1KJyGbqN2V4LjBav7AnHttq3n764Sjf2alwSpxvZQKuXplG6JpLnyGQz1z/KpGZwus53ne5JU8adsBaTIPgPxHNffOGkBwy8vP+2IyR+qLbuasLKlqoP0ofpczpykyTrKOLo8yde4p03eFvGK229BRScoJyaEnQlVJ6MfOk2/NW+MF4CgqDb7Mb5QelhJmm4OLGXlmlM2+VmOBwA4HQth/g8v48sZiE8Bt5jwp8w/wLrztm2+kbcGfgo4kFFsMo1Wv1rfhCCjUwHRNFrEXLiigkeQ8QtXKSdwpj8GU3WghxYRCjlPBWZQ8dwfsfBDcDx+R4w3/3XlKTrzUL3RMPEI0YF1f1EKxuVjE5S7pPPs799wx7KqLEIEYZu7gpwon/6vgstGJ/5eab0/MTTjbene5KeJFDr9CgIgmJr3WD2OMDJi1UiX13tVgkWjjjQrh/Kk8aLH0+R6CslTOYrU9aSNUDcl9fvQS4O0vL0EteJzPbvADWJEYYRPj4Dk/+TwoE9sWbpTmNvMlNXZlfcEwHZBCWfDexo9npS5vMzXqUI9QcEX2Vj/JShJvZp2WMPOlGfxiM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(4326008)(8676002)(86362001)(66476007)(66446008)(66946007)(66556008)(64756008)(71200400001)(38070700005)(76116006)(122000001)(82960400001)(316002)(38100700002)(6916009)(54906003)(508600001)(5660300002)(186003)(2616005)(6512007)(2906002)(26005)(6506007)(4744005)(8936002)(36756003)(83380400001)(7416002)(7406005)(6486002)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZnhZWXVia2ZZMllHbzl6a1Z0ZDZCZlJsNVZodFBqbzVsZzZHQlVPNVpPN2FC?=
- =?utf-8?B?Tmlpd1J3N3FNWjBjQm55dm4wckZaNnVDZXRGLy9zNzZBRGU3TDU4RlNqRm42?=
- =?utf-8?B?bVZEVGlpV3c4OVgvQzRueGJpL2lXaVRjb3BYQWNDQk5pSmZHR01JbU5UVFBa?=
- =?utf-8?B?b3JLNk1EWTZkdzU2UE54b1ZsWU1zVWJUNUQ4b3MveUtFRVA0d0I1K2tZZjNa?=
- =?utf-8?B?UFB3WFAxOXUwcWlsWkFCWU5oYytMZWdmVm1zVlVtVlFvZlk2K3pmTTVpVUM5?=
- =?utf-8?B?V3hxanpHNG5NVG4vLzNrSFgxUEpxeW54WjJPSDZjanpWT0lLcjFhQW90MkdS?=
- =?utf-8?B?QVhnazdZcjZRbW5adFBQZ2RHdTA3UWIrWktsdnp5SHRHYWJOeVg1V1lHT2Vk?=
- =?utf-8?B?Q1YxbjZpa3BaMW9vb2hyU2FXRW00QzlQNkJHVXY4Rm9IWklvNG96SWdSUmJE?=
- =?utf-8?B?dlR3WTk0SytKTTZrU0pXdHFhSlczazZRQ1R1N1d1Z0ZFNmFLRVBXMDZNQW5y?=
- =?utf-8?B?MXJzcWcrM0NmcU5hN0pXUnE2aHJ6V3ZyZXplblhnc0JXTGdtN29DTHFIbmR3?=
- =?utf-8?B?NnRiZHFyWkhDTkJZeldkeUNna2s4N2g2cXNIYUF3aFh2L3E1eUJCazdudkpy?=
- =?utf-8?B?SHcwVnFBQmtlbkkzclhQTW9GRWcvZ1FoSmhRUnNZbC9DUE9vQ0JhUVdna1FF?=
- =?utf-8?B?SC9mcCtFVjNlS3dETFVWUWltZ3FUNkhyUnArOFhyb1BYY3pQcnhvSmx1OUd4?=
- =?utf-8?B?MFFBRm9nL3JSeVFKTXBBZDFXYWNiS01hTWY5YVE4TTRKeCtQNHMyS2pEM2xD?=
- =?utf-8?B?TTkvc2d0TnFMYmc4TGFYQWRHRkJjMS8zYzF5UmVUY3BiZjhzNHIwVW5LWkZH?=
- =?utf-8?B?d01ZMFo2ZmxqVnFUcTBobzdlQml5RTBKV3VOWGNKc3dmRGFJUEZ1bDBENjNN?=
- =?utf-8?B?cnFiY1hoeC8wdGFacmRQMUdiUnA1emU3emd3VjF5Q3JNOVhlZDdDcTJFQTg0?=
- =?utf-8?B?bzdabUZUQU9aMXgwWkI1SERXTkpSS3FBWmJtamJ2L2Yzb0VJUWhVTXJ2YTRO?=
- =?utf-8?B?ZHJYUHlzSFdpVHpHMFF0NzBKaWhqNWJJd0JPSW9VRW9uZlVNcW81WGdUcU9M?=
- =?utf-8?B?ckJ1cmpVNzA1VWR3NHdvMStRQUhvTmtubXNuTzg1d3VwUWxudjNxZDZCR1J1?=
- =?utf-8?B?ZkJLTW9rV29aNG5XeGF6S2pkR29OUG5sRm1yMThoRGJVQSt5bWpPZFBNTW93?=
- =?utf-8?B?S2lPVTNUdzdkZ3JhU2xlYVJnUXFFUDhKTHdndVF0THhhbnhSY29SbUcyVElO?=
- =?utf-8?B?MGtSL1loYk5uWHdTYnk4ZmkzSnYvK2orRlpKOWkrTndOT0FWOUtEVkdsam9Q?=
- =?utf-8?B?a3M3Vi9pR0E1Y1ViWG1oM0FGQXI0UTBacFJSVXMzZ215OEhiclpqZWNvc0dz?=
- =?utf-8?B?R1RrSXNGTXdnY3I3WEhDRFRQMldHSHAzMmkxL3NyalhvdGdoOWlnS2JOcjJv?=
- =?utf-8?B?QmYra3RvK1hnTFRWRGpoeStvWEt3a0xvRmpjM1pER3RhMUZ6SWlZRko4bDQ2?=
- =?utf-8?B?OE1pdGJaRm5ESjRpa3pmL3l3ZDVabSsxUXhHQ1Y2RmIvcVZUNTFrd0w3eFU0?=
- =?utf-8?B?Q0hWVG5MbURDd2J2anUwT0NOSXVTVVZ2L2pVdUF2bVpOdEJJbkJ6MXhxVjN4?=
- =?utf-8?B?bCtkYTBMQVhCSk51NzB5TGM2Z1liNnR6RjNKU3hZNkR2L042OXlGVmZjZ3RG?=
- =?utf-8?B?K1RpUE9pakdWekdBT1dnYjlkT2dscG0zWU1MeERTS2RNUGdNN215Nk95UEhy?=
- =?utf-8?B?UURBUGRnVEdxTXEzaUlvT1N6S0NGKytyUkJhS1A1N0VvTWJXbUwwT2U2MFV5?=
- =?utf-8?B?NVZQaXdzMkErSDBFWkg2VElwZDdxU01JZ09BbDBEVWxxc1RTenNTR1h4WE9t?=
- =?utf-8?B?UVlIL3Bvb3ExTXhBUzRYYzVqaVBMZmorU203MmtLTVBYMmNWWng4ZFRhaWN0?=
- =?utf-8?B?d3ZMZmVUVFZPZTlONUZ4cTFvSThSRkRsMDRvRXV5eTV6TXMza0h1cmFpVjdr?=
- =?utf-8?B?aThvdjMzMmhNVTdFaTJ6a0VRalpkRndUSnFGMDJMck9La2xzMDFxMGJzWEsy?=
- =?utf-8?B?QTg4ZUhRODNqakpWVmxacGNpbUJ5ZzJuZm5meXpUZXVwR0t6anVWVy92a3Uv?=
- =?utf-8?B?TGxmSjdQYURsN3FSem91SlFRUHVSS3BXaER2eTlHYjArb0NHaGs1d29BSSt1?=
- =?utf-8?B?Qm05VTQ5c00vN2RJOWFPWk1ZS1Z0cjF5bVllYWl3VGxlY2JwOURjZ1F4Vncw?=
- =?utf-8?B?Mjg3T1FjMVBNMWNCZGZGaWJ4WnRxTjhKd25yZEsyWHp3eFp6b2pZWk1hbjJZ?=
- =?utf-8?Q?iHrHsEMbkl8p8cxEasJZKU55H5T2uQbyWrGFy?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F71753B508D62644AE8D2CEED127A11C@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 1 Jun 2022 13:29:50 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1D978ED8
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 10:29:49 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id g184so2528610pgc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 10:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cPDRyKYxke7C0U9MtQ+XUuY/j8VRrOH1w2WNycKGe1w=;
+        b=WHiNmQmxAW1jpI5foCg0S4MMQr7/xsL6FoZ5NStKBokmilmEQ7VK0OLFDzG1K2zNz3
+         7XitB+Y3S0wrYhoDeRlLkRvnid1fbKzGwNPq2Xf8DtrycABJFJPn8mnGv05xW/X2oAiV
+         CdJOZHMVg/ptC00AXJVJWrirGCWBPbVAk0Ex5uLRygPjNQfFe61dY5kuc+kFKv9EYgAl
+         gVKCy7nXZ+Yxg0JkiZfGIe1wagC95KYlue/4vbbDxMHVxD0PUqMVR5R/3Z6s7lo+qkF7
+         IODVU7SyXaD0rn3scuPbCATUIOFv3UQ785RlhVvVzr6oq5CzLn+KSAxM1iYYiFRZt3gN
+         p7Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cPDRyKYxke7C0U9MtQ+XUuY/j8VRrOH1w2WNycKGe1w=;
+        b=2+w21fNSkmUkYLwn30gQMAItF9kh6TNNchgDZXqVpjCOpuMzVZZxkPfMoCy2yM6uzZ
+         70AKCrugOryxQwDC2fCmPxIyfT8Yz35r/V/zpiBhD5QrhxSpllhpxyMQu48NrEiV3x+N
+         DVcqYlaYupjOfDOOLJLrf49gzn7u9RcvrK7Z/mt/EXiTpji7CFKm9zYGdI9dwVeOmXAc
+         mi75gOqqFLziXEsst8kJ5jbnF7RACiGWIQZGah4alxmfedzEh6sgvEQwiRiT4b8/VCFG
+         0m370FgllRfTPMbU+GrAdatFLmaab5p4vw18IfxiAt2ceIVKBcWxDkjnagvowQVCcVPp
+         lTAQ==
+X-Gm-Message-State: AOAM531Gl61095hzemnt2s/v00O3vE2GlV/PGueQkPjD5wqZ8sXdzxou
+        uSl5dUTsUdMX0gEUe8RVUPQK5w==
+X-Google-Smtp-Source: ABdhPJz9/W4eOiOEkiY/h6/nAlXkQt+0+UDoOFDdEkbObqUQXFfSqwpZdy1K2s5eq/g0N1P/b8xysA==
+X-Received: by 2002:a63:83c1:0:b0:3fc:c022:a6ef with SMTP id h184-20020a6383c1000000b003fcc022a6efmr382559pge.413.1654104588831;
+        Wed, 01 Jun 2022 10:29:48 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id p26-20020a056a0026da00b005182d505389sm1726833pfw.72.2022.06.01.10.29.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 10:29:47 -0700 (PDT)
+Date:   Wed, 1 Jun 2022 11:29:45 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Bruce Ashfield <bruce.ashfield@xilinx.com>
+Subject: Re: [RFC PATCH v5 1/4] remoteproc: core: Introduce virtio device
+ add/remove functions
+Message-ID: <20220601172945.GC531268@p14s>
+References: <20220406095446.1187968-1-arnaud.pouliquen@foss.st.com>
+ <20220406095446.1187968-2-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c87887ce-2c73-405e-2bf0-08da43f40a44
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2022 17:27:44.9511
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vwXb3MS+MpDr+X2Kw+6U9uXuSXiojtEpL4k3BLHf1cLxiHbgFuE9YPOde2GaHCO7gjbpWkVUBxV+FOpGe5Ff6rVnF3BdOsbNdJO19IpbdA0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4983
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220406095446.1187968-2-arnaud.pouliquen@foss.st.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -212,18 +76,283 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTA1LTMxIGF0IDExOjAwIC0wNzAwLCBILkouIEx1IHdyb3RlOg0KPiA+IFRo
-ZSBnbGliYyBsb2dpYyBzZWVtcyB3cm9uZyB0byBtZSBhbHNvLCBiZWNhdXNlIHNoYWRvdyBzdGFj
-ayBvciBJQlQNCj4gPiBjb3VsZCBiZSBmb3JjZS1kaXNhYmxlZCB2aWEgZ2xpYmMgdHVuYWJsZXMu
-IEkgZG9uJ3Qgc2VlIHdoeSB0aGUgZWxmDQo+ID4gaGVhZGVyIGJpdCBzaG91bGQgZXhjbHVzaXZl
-bHkgY29udHJvbCB0aGUgZmVhdHVyZSBsb2NraW5nLiBPciB3aHkNCj4gPiBib3RoDQo+ID4gc2hv
-dWxkIGJlIGxvY2tlZCBpZiBvbmx5IG9uZSBpcyBpbiB0aGUgaGVhZGVyLg0KPiANCj4gZ2xpYmMg
-bG9ja3MgU0hTVEsgYW5kIElCVCBvbmx5IGlmIHRoZXkgYXJlIGVuYWJsZWQgYXQgcnVuLXRpbWUu
-DQoNCkl0J3Mgbm90IHdoYXQgSSBzYXcgaW4gdGhlIGNvZGUuIFNvbWVob3cgTWlrZSBzYXcgc29t
-ZXRoaW5nIGRpZmZlcmVudA0KYXMgd2VsbC4NCg0KPiAgSXQgZG9lc24ndA0KPiBlbmFibGUvZGlz
-YWJsZS9sb2NrIFdSU1MgYXQgdGhlIG1vbWVudC4gIElmIFdSU1MgY2FuIGJlIGVuYWJsZWQNCj4g
-dmlhIGFyY2hfcHJjdGwgYXQgYW55IHRpbWUsIHdlIGNhbid0IGxvY2sgaXQuICBJZiBXUlNTIHNo
-b3VsZCBiZQ0KPiBsb2NrZWQgZWFybHksDQo+IGhvdyBzaG91bGQgaXQgYmUgZW5hYmxlZCBpbiBh
-cHBsaWNhdGlvbj8gIEFsc28gY2FuIFdSU1MgYmUgZW5hYmxlZA0KPiBmcm9tIGEgZGxvcGVuZWQg
-b2JqZWN0Pw0KDQpJIHRoaW5rIGluIHRoZSBwYXN0IHdlIGRpc2N1c3NlZCBoYXZpbmcgYW5vdGhl
-ciBlbGYgaGVhZGVyIGJpdCB0aGF0DQpiZWhhdmVkIGRpZmZlcmVudGx5IChPUiB2cyBBTkQpLg0K
+On Wed, Apr 06, 2022 at 11:54:43AM +0200, Arnaud Pouliquen wrote:
+> In preparation of the migration of the management of rvdev in
+> remoteproc_virtio.c, this patch spins off new functions to manage the
+> remoteproc virtio device.
+>  - rproc_rvdev_add_device
+>  - rproc_rvdev_remove_device
+> 
+> The rproc_rvdev_add_device and rproc_rvdev_remove_device will be
+> moved to remoteproc_virtio.c.
+> 
+> The rproc_vdev_data structure is introduced to provide information for
+> the rvdev creation. This structure allows to manage the rvdev and vrings
+> allocation in the rproc_rvdev_add_device function.
+> 
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> ---
+>  drivers/remoteproc/remoteproc_core.c     | 157 +++++++++++++----------
+>  drivers/remoteproc/remoteproc_internal.h |  15 +++
+>  2 files changed, 106 insertions(+), 66 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index c510125769b9..3a469220ac73 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -484,74 +484,23 @@ static int copy_dma_range_map(struct device *to, struct device *from)
+>  	return 0;
+>  }
+>  
+> -/**
+> - * rproc_handle_vdev() - handle a vdev fw resource
+> - * @rproc: the remote processor
+> - * @ptr: the vring resource descriptor
+> - * @offset: offset of the resource entry
+> - * @avail: size of available data (for sanity checking the image)
+> - *
+> - * This resource entry requests the host to statically register a virtio
+> - * device (vdev), and setup everything needed to support it. It contains
+> - * everything needed to make it possible: the virtio device id, virtio
+> - * device features, vrings information, virtio config space, etc...
+> - *
+> - * Before registering the vdev, the vrings are allocated from non-cacheable
+> - * physically contiguous memory. Currently we only support two vrings per
+> - * remote processor (temporary limitation). We might also want to consider
+> - * doing the vring allocation only later when ->find_vqs() is invoked, and
+> - * then release them upon ->del_vqs().
+> - *
+> - * Note: @da is currently not really handled correctly: we dynamically
+> - * allocate it using the DMA API, ignoring requested hard coded addresses,
+> - * and we don't take care of any required IOMMU programming. This is all
+> - * going to be taken care of when the generic iommu-based DMA API will be
+> - * merged. Meanwhile, statically-addressed iommu-based firmware images should
+> - * use RSC_DEVMEM resource entries to map their required @da to the physical
+> - * address of their base CMA region (ouch, hacky!).
+> - *
+> - * Return: 0 on success, or an appropriate error code otherwise
+> - */
+> -static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+> -			     int offset, int avail)
+> +static struct rproc_vdev *
+> +rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
+>  {
+> -	struct fw_rsc_vdev *rsc = ptr;
+> -	struct device *dev = &rproc->dev;
+>  	struct rproc_vdev *rvdev;
+> -	int i, ret;
+> +	struct fw_rsc_vdev *rsc = rvdev_data->rsc;
+>  	char name[16];
+> -
+> -	/* make sure resource isn't truncated */
+> -	if (struct_size(rsc, vring, rsc->num_of_vrings) + rsc->config_len >
+> -			avail) {
+> -		dev_err(dev, "vdev rsc is truncated\n");
+> -		return -EINVAL;
+> -	}
+> -
+> -	/* make sure reserved bytes are zeroes */
+> -	if (rsc->reserved[0] || rsc->reserved[1]) {
+> -		dev_err(dev, "vdev rsc has non zero reserved bytes\n");
+> -		return -EINVAL;
+> -	}
+> -
+> -	dev_dbg(dev, "vdev rsc: id %d, dfeatures 0x%x, cfg len %d, %d vrings\n",
+> -		rsc->id, rsc->dfeatures, rsc->config_len, rsc->num_of_vrings);
+> -
+> -	/* we currently support only two vrings per rvdev */
+> -	if (rsc->num_of_vrings > ARRAY_SIZE(rvdev->vring)) {
+> -		dev_err(dev, "too many vrings: %d\n", rsc->num_of_vrings);
+> -		return -EINVAL;
+> -	}
+> +	int i, ret;
+>  
+>  	rvdev = kzalloc(sizeof(*rvdev), GFP_KERNEL);
+>  	if (!rvdev)
+> -		return -ENOMEM;
+> +		return ERR_PTR(-ENOMEM);
+>  
+>  	kref_init(&rvdev->refcount);
+>  
+> -	rvdev->id = rsc->id;
+> +	rvdev->id = rvdev_data->id;
+>  	rvdev->rproc = rproc;
+> -	rvdev->index = rproc->nb_vdev++;
+> +	rvdev->index = rvdev_data->index;
+>  
+>  	/* Initialise vdev subdevice */
+>  	snprintf(name, sizeof(name), "vdev%dbuffer", rvdev->index);
+> @@ -563,7 +512,7 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+>  	ret = device_register(&rvdev->dev);
+>  	if (ret) {
+>  		put_device(&rvdev->dev);
+> -		return ret;
+> +		return ERR_PTR(ret);
+>  	}
+>  
+>  	ret = copy_dma_range_map(&rvdev->dev, rproc->dev.parent);
+> @@ -576,7 +525,7 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+>  	ret = dma_coerce_mask_and_coherent(&rvdev->dev,
+>  					   dma_get_mask(rproc->dev.parent));
+>  	if (ret) {
+> -		dev_warn(dev,
+> +		dev_warn(&rvdev->dev,
+>  			 "Failed to set DMA mask %llx. Trying to continue... (%pe)\n",
+>  			 dma_get_mask(rproc->dev.parent), ERR_PTR(ret));
+>  	}
+> @@ -589,7 +538,7 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+>  	}
+>  
+>  	/* remember the resource offset*/
+> -	rvdev->rsc_offset = offset;
+> +	rvdev->rsc_offset = rvdev_data->rsc_offset;
+>  
+>  	/* allocate the vring resources */
+>  	for (i = 0; i < rsc->num_of_vrings; i++) {
+> @@ -605,21 +554,20 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+>  
+>  	rproc_add_subdev(rproc, &rvdev->subdev);
+>  
+> -	return 0;
+> +	return rvdev;
+>  
+>  unwind_vring_allocations:
+>  	for (i--; i >= 0; i--)
+>  		rproc_free_vring(&rvdev->vring[i]);
+>  free_rvdev:
+>  	device_unregister(&rvdev->dev);
+> -	return ret;
+> +	return ERR_PTR(ret);
+>  }
+>  
+> -void rproc_vdev_release(struct kref *ref)
+> +static void rproc_rvdev_remove_device(struct rproc_vdev *rvdev)
+>  {
+> -	struct rproc_vdev *rvdev = container_of(ref, struct rproc_vdev, refcount);
+> -	struct rproc_vring *rvring;
+>  	struct rproc *rproc = rvdev->rproc;
+> +	struct rproc_vring *rvring;
+>  	int id;
+>  
+>  	for (id = 0; id < ARRAY_SIZE(rvdev->vring); id++) {
+> @@ -632,6 +580,83 @@ void rproc_vdev_release(struct kref *ref)
+>  	device_unregister(&rvdev->dev);
+>  }
+>  
+> +/**
+> + * rproc_handle_vdev() - handle a vdev fw resource
+> + * @rproc: the remote processor
+> + * @ptr: the vring resource descriptor
+> + * @offset: offset of the resource entry
+> + * @avail: size of available data (for sanity checking the image)
+> + *
+> + * This resource entry requests the host to statically register a virtio
+> + * device (vdev), and setup everything needed to support it. It contains
+> + * everything needed to make it possible: the virtio device id, virtio
+> + * device features, vrings information, virtio config space, etc...
+> + *
+> + * Before registering the vdev, the vrings are allocated from non-cacheable
+> + * physically contiguous memory. Currently we only support two vrings per
+> + * remote processor (temporary limitation). We might also want to consider
+> + * doing the vring allocation only later when ->find_vqs() is invoked, and
+> + * then release them upon ->del_vqs().
+> + *
+> + * Note: @da is currently not really handled correctly: we dynamically
+> + * allocate it using the DMA API, ignoring requested hard coded addresses,
+> + * and we don't take care of any required IOMMU programming. This is all
+> + * going to be taken care of when the generic iommu-based DMA API will be
+> + * merged. Meanwhile, statically-addressed iommu-based firmware images should
+> + * use RSC_DEVMEM resource entries to map their required @da to the physical
+> + * address of their base CMA region (ouch, hacky!).
+> + *
+> + * Return: 0 on success, or an appropriate error code otherwise
+> + */
+> +static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+> +			     int offset, int avail)
+> +{
+> +	struct fw_rsc_vdev *rsc = ptr;
+> +	struct device *dev = &rproc->dev;
+> +	struct rproc_vdev *rvdev;
+> +	struct rproc_vdev_data rvdev_data;
+> +
+> +	/* make sure resource isn't truncated */
+> +	if (struct_size(rsc, vring, rsc->num_of_vrings) + rsc->config_len >
+> +			avail) {
+> +		dev_err(dev, "vdev rsc is truncated\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* make sure reserved bytes are zeroes */
+> +	if (rsc->reserved[0] || rsc->reserved[1]) {
+> +		dev_err(dev, "vdev rsc has non zero reserved bytes\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	dev_dbg(dev, "vdev rsc: id %d, dfeatures 0x%x, cfg len %d, %d vrings\n",
+> +		rsc->id, rsc->dfeatures, rsc->config_len, rsc->num_of_vrings);
+> +
+> +	/* we currently support only two vrings per rvdev */
+> +	if (rsc->num_of_vrings > ARRAY_SIZE(rvdev->vring)) {
+> +		dev_err(dev, "too many vrings: %d\n", rsc->num_of_vrings);
+> +		return -EINVAL;
+> +	}
+> +
+> +	rvdev_data.id = rsc->id;
+> +	rvdev_data.index = rproc->nb_vdev++;
+> +	rvdev_data.rsc_offset = offset;
+> +	rvdev_data.rsc = rsc;
+> +
+> +	rvdev = rproc_rvdev_add_device(rproc, &rvdev_data);
+> +	if (IS_ERR(rvdev))
+> +		return PTR_ERR(rvdev);
+> +
+> +	return 0;
+> +}
+> +
+> +void rproc_vdev_release(struct kref *ref)
+> +{
+> +	struct rproc_vdev *rvdev = container_of(ref, struct rproc_vdev, refcount);
+> +
+> +	rproc_rvdev_remove_device(rvdev);
+> +}
+> +
+>  /**
+>   * rproc_handle_trace() - handle a shared trace buffer resource
+>   * @rproc: the remote processor
+> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+> index 72d4d3d7d94d..99f2ff88079f 100644
+> --- a/drivers/remoteproc/remoteproc_internal.h
+> +++ b/drivers/remoteproc/remoteproc_internal.h
+> @@ -24,6 +24,21 @@ struct rproc_debug_trace {
+>  	struct rproc_mem_entry trace_mem;
+>  };
+>  
+> +/**
+> + * struct rproc_vdev_data - remoteproc virtio device data
+> + * @rsc_offset: offset of the vdev's resource entry
+> + * @id: virtio device id (as in virtio_ids.h)
+> + * @index: vdev position versus other vdev declared in resource table
+> + * @rsc: pointer to the vdev resource entry. Valid onlyduring vdev init as the resource can
+> + *       be cached by rproc.
+> + */
+> +struct rproc_vdev_data {
+> +	u32 rsc_offset;
+> +	unsigned int id;
+> +	unsigned int index;
+
+rvdev->index is a u32 so rproc_vdev_data::index should also be a u32.
+
+With the above:
+
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+
+
+> +	struct fw_rsc_vdev *rsc;
+> +};
+> +
+>  /* from remoteproc_core.c */
+>  void rproc_release(struct kref *kref);
+>  irqreturn_t rproc_vq_interrupt(struct rproc *rproc, int vq_id);
+> -- 
+> 2.25.1
+> 

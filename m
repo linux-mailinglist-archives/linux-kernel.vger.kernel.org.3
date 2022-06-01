@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEF253AB68
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8899253AB6C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356224AbiFAQ4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 12:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S1354250AbiFAQ6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 12:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346145AbiFAQz4 (ORCPT
+        with ESMTP id S1345508AbiFAQ6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 12:55:56 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91A9A26DD
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 09:55:54 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id q21so5040986ejm.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 09:55:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=XGUcPAyFYtUWMYO5tKtj4ZzzebuC3OQHKF+J/C0blWA=;
-        b=GQxwoPw23GqJlE6gUn46MyEfP7JNh6wCkSEKxcSX7K1ddZyD+BpZYSvwvX0ROjwxVU
-         OgDqpHNfBl4dTNoDphNPYHM1OWm1+R4gkxB2lvhnYEopNzlDsKLfSaA175A+wQMME484
-         7/Zv5PDmqKgNcdspwx7c/jPrbdb0QNnjJJ2lIUV0DFigZKq1gyaiHirVqWyAasVhxDqV
-         aLo6sGGfPZidfBrsFcgrG+KfvU8cRjCJsJcqblN6iEk1Zc7FnOvea67QupRS5K4hVZ/6
-         vCUACks2r1U7Oan/N7igIcnj2S+ezN6f3Z3Rj0g6XQEBUstGhb9i7hEsZG44CP6gYtyb
-         wYhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=XGUcPAyFYtUWMYO5tKtj4ZzzebuC3OQHKF+J/C0blWA=;
-        b=BjrYsicP2u6KbTG+WofydHf+h59ELSUWGMdC+OXbVKepJFp1Uox8Wot2xjmJr0lNei
-         Ij9a5FNaYl9Hlx78YhFj3+QZFHVVd5KfDq7RWSmct2x9c6fCJNKcAGX0lyE2TmcqnD64
-         z/+RGv8FRjiXx80MbwyWNssNWvgmPxrOdp2UVUdlSGvoUCoxeMdPJAVXr7xLbL5F96yx
-         VkbqxeI52nsmOh+tBlFNHIorK/sJan1Hz85z6+UBZhVf2IiTLDErPXB77PPWd4qqiDp4
-         ksnKtcL28MBw/PuwO8/pSsxjaIhvRy5ZbIxf5+FTCsSsCM6U5rZSC3b+sg+96sai5yy9
-         E/+g==
-X-Gm-Message-State: AOAM531Uce99BSCHKANnF1O65kGbZR7SGWgLOoV+VXncFl36nH//DYH8
-        j1XJv3bh4LGyJ9fhg7i4xi+5sj8NFUHRsr/kgtY=
-X-Google-Smtp-Source: ABdhPJxc1GdwAK56TDkqosW+LQcUI30GsRqjxNdMT9/gujLqWQw3ua0bZQLTFwjQEwAZNsNcJZsuhAaWDilS6rTfcMo=
-X-Received: by 2002:a17:907:3e0e:b0:6fe:b42f:db81 with SMTP id
- hp14-20020a1709073e0e00b006feb42fdb81mr442536ejc.516.1654102553356; Wed, 01
- Jun 2022 09:55:53 -0700 (PDT)
+        Wed, 1 Jun 2022 12:58:31 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BAC313B1;
+        Wed,  1 Jun 2022 09:58:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654102709; x=1685638709;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gwfhI1oZGrbLaBNHLPYsrYeVXkiVePA59FrgD/UWM4k=;
+  b=hQSW0WHNJloSEkd+fBNg6x0D7FQwMvl1Suv+2dWGOEJpYpQ4CxA42Xq6
+   qoLY0h8sYiJLuykchPmzBw4+gYxjTAlF250nj05Y6Sd7euk0V/cHXAB6J
+   USNZdcbTYv7I0SthhZyVYkKSAYlfdJAEiE7ZjSloh8pnhwcxl6UOFG2Ef
+   e89nTdPbuy7Fe3HMIJQ0FgtRSb97ffHdc2iLOcalfVu4TkQuQ/m95xlz3
+   7IdXJbcqq5A/80LgAfsKHGUQVEX2XlhG6FEJO8VsyLjitY9RMiFCF/AQ2
+   zbxIvvldRj32SY1P6AiaYaVzouCJrhxogRr7A+ry11DDBeMxd+0ZxsMUf
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275734842"
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="275734842"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 09:58:29 -0700
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="530150781"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 09:58:24 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nwRfm-000QqW-EX;
+        Wed, 01 Jun 2022 19:58:18 +0300
+Date:   Wed, 1 Jun 2022 19:58:18 +0300
+From:   "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Dominik Kierner <dkierner@dh-electronics.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "maxime@cerno.tech" <maxime@cerno.tech>,
+        "noralf@tronnes.org" <noralf@tronnes.org>,
+        "sam@ravnborg.org" <sam@ravnborg.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v6 3/6] drm: Add driver for Solomon SSD130x OLED displays
+Message-ID: <Ypeaqgc9r7TOiSbn@smile.fi.intel.com>
+References: <5d817ea54144414aa7865a72694b5811@dh-electronics.com>
+ <536d4700-6f28-176d-7883-5793f5cd7c8e@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:ab4:aa84:0:0:0:0:0 with HTTP; Wed, 1 Jun 2022 09:55:52 -0700 (PDT)
-Reply-To: isabeljffrsn@gmail.com
-From:   Isabela Jeferson <adamfat44@gmail.com>
-Date:   Wed, 1 Jun 2022 18:55:52 +0200
-Message-ID: <CAP63eHiVRyoZPsM23Cj+pmThXpvZThJstQ=SMF3Mo7q+EVGkqA@mail.gmail.com>
-Subject: HELLO.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,HK_RANDOM_REPLYTO,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:631 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5052]
-        *  1.0 HK_RANDOM_REPLYTO Reply-To username looks random
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [adamfat44[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [adamfat44[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <536d4700-6f28-176d-7883-5793f5cd7c8e@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 25, 2022 at 09:46:24PM +0200, Javier Martinez Canillas wrote:
+> On 3/10/22 14:11, Dominik Kierner wrote:
+
+...
+
+> > # DRM Mode Configuration via Device Tree
+> > 
+> > In the old fbdev driver, the display modes are hard-coded, which means
+> > for every new display configuration, a new patch needs to be mainlined,
+> > which slows down official Kernel support and
+> > puts burden on the maintainers.
+> > Additionally, with the DRM-subsystem supporting height and length
+> > information, for scaling, this opens up a lot of new combinations.
+> > The SSD1306 for example, is available in multiple resolutions like
+> > 128x64 and 96x16 and comes in different sizes per resolution as well.
+> > Just to name a few:
+> > * 128x64 0.96" (22x11mm)
+> > * 128x64 1.3" (30x15mm)
+> > * 96x16 0.69" (18x3mm)
+> >> Instead of hard-coding, I would suggest something along the lines of
+> > of_get_drm_display_mode().
+> > The displays won't need to support multiple modes at the same time,
+> > let alone support for switching between them,
+> > so the one-time invocation of this expensive function might be worth it. 
+> > maybe a new and simpler function that could be named:
+> > of_get_drm_display_mode_simple()
+> 
+> This makes sense to me as well.
+
+What about non-OF platforms? Please, do not spread OF-only interfaces,
+and use fwnode instead.
+
+> > Providing a mode could later prove useful for a conversion to
+> > drm_panel, if that is feasible.
+> > 
+> > But for a function like this, I have to chicken out.
+
 -- 
-How are you today? I hope everything is alright?
+With Best Regards,
+Andy Shevchenko
+
+

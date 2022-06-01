@@ -2,70 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8A853A910
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8CDD53A911
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354765AbiFAOVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:21:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
+        id S1351613AbiFAOWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356129AbiFAOUi (ORCPT
+        with ESMTP id S1355570AbiFAOVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:20:38 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D744E15EC;
-        Wed,  1 Jun 2022 07:09:28 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id c8so1230278qtj.1;
-        Wed, 01 Jun 2022 07:09:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dsbaIM6WigkoITIKWnOycXGrqyEVNssC8hn3uOsuVrc=;
-        b=Dqzj+615k9JDlf5h3LQiHgGSuWdTcb5des9J5Z7TdoUAYH+2EefV05woXSe+Y2WEPM
-         UORYWuyyctB9oXyqOhWQ+zPcnB1ixbKNXMjKVef9ibxdJ9hUfvbnDDIXFEml/EOOE+HU
-         gnpO7ODwFApHRqCmj536jbI7x8fyBzIhbkbcKWP7bIo0vlrCGUpTxJzR3t2Wxc3QC9kr
-         2EuEmz8TDdYUhw++hdJSEKDGgqzRHiw7BRGQ3GpDIRCBuN6dvcULQ4XH2k+tPsdezF1s
-         QGXqxZtyF2Gk2g9gpha6bRR0E6yZSMOFEs8cclpUZ8x/Gmh+0w8iDDqf8JJ4xB+JJ19y
-         RA3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dsbaIM6WigkoITIKWnOycXGrqyEVNssC8hn3uOsuVrc=;
-        b=2bpwMQQZPsWrvBiBx/qpeQklWQKWTVe/eElBH19GxVJ/isMYgZ4ImvDOG2pbyt0U+F
-         yfmstndw5DYi4ziN489X1U3YprKm/6DhPaYItxctzk4V+/pzAKnWH73njeO/WFBFF4/K
-         MBMGR5YEaz6iJr9TQXXMVGX19Wtu3NO0Abi+kGCYOB5/2pUx6Bu25I+dRl05TXaFcpfS
-         grcDk3gfA2dbSJEPoVkUbx+5RI52jyr8eIQsieT/EKRyjQFsdODbnQ9oZ3OGasH/27GE
-         di2Qbvm2cTX6vsJg+XstVh72WymcEgWH5rU4p+foKVz37EZ/qsDuj00ROnxvL3FL8xrd
-         xqAA==
-X-Gm-Message-State: AOAM533g2GXuhe4PHNNMjgOzBquJqWh9dfWPuhplQhftB9NbjOzA01eK
-        Gj42XVP5bpBHkTWmntzzUhY=
-X-Google-Smtp-Source: ABdhPJxm/bOXNFKIExhb1jHpxM6h1VcWwZT1kUP244ZKyQYrB6DaQ5SzA9F6Fhse+afxYAXGArEjaw==
-X-Received: by 2002:ac8:7f85:0:b0:303:8309:1cb6 with SMTP id z5-20020ac87f85000000b0030383091cb6mr12755649qtj.473.1654092565979;
-        Wed, 01 Jun 2022 07:09:25 -0700 (PDT)
-Received: from spruce (c-71-206-142-238.hsd1.va.comcast.net. [71.206.142.238])
-        by smtp.gmail.com with ESMTPSA id 2-20020a05620a040200b0069fd12a957bsm1314918qkp.17.2022.06.01.07.09.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 07:09:25 -0700 (PDT)
-Date:   Wed, 1 Jun 2022 10:09:23 -0400
-From:   Joe Simmons-Talbott <joetalbott@gmail.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] iio: Prefer octal over symbolic permissions.
-Message-ID: <YpdzExJGBI88Udzy@spruce>
-References: <20220527185651.465204-1-joetalbott@gmail.com>
- <20220528183405.22b55033@jic23-huawei>
- <CAL7gdfeoRM8APfLL77bbGiWWBa0qOF8g0rza+=7hCdo+jaYNLQ@mail.gmail.com>
- <20220531105647.00006c00@Huawei.com>
+        Wed, 1 Jun 2022 10:21:35 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2048.outbound.protection.outlook.com [40.107.212.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A3EEBAAC;
+        Wed,  1 Jun 2022 07:11:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ReWWjQrKUq7SP84B9QeUNNX/F5m0dWuIXG4OIsf2/gM6hNwofj8AX4rohJ7OslJ6Af9KHQwI83FFlY4l9YqUmFBu9PsvoVvB4YYB7jlDXKGQWYwJ+gi/EjImw3hpKpT4w7v//+9FPWkMuZmnLheW6GTKPQvadQayc2x1GlULDvScQ3qTrUsCUUqTTU7G+gkss0rbM0EXpWdp01IeO5qlmx7m51VIUkeAmrh4La8rVRxGyINMgU2YNI8UibS0wQ0xS6cKnF0pMK6yZUnqPD3xQ1o+hSjfqOy897059ZnVdpImr1TZUJC8Iq9G9bfY+T8PKSHDe0ub7DYFTAHksZqCeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8+fCwZ02qocdOza0qYcDOtF3Hfxd8734OjRyiKvCAyI=;
+ b=CInghpUQdOFtdmoJZlRP/KRprQV9H0OHN596m36+zRyUxNOaF1lKUWYd+QRAiSxq1Q03TUKE8TluuunFnRFY2t1WSvDfzu027M4H+QXliW46D5iqamOg9S5GuSMUUB41f33HAgm+7kRxz5cpy2mOtD7OTTQC8CCSeQgNwv0q50T+G2QdE4WPQezp7Y+8qFKlvAbC0dLjk2IGngWPyNfDW7hJEnK6Cu9t7fIe4JxfvM7SnzqS6Iub13oYRANhpw58tX2z3QmLb+62NbZmjDtR2Dwa0dIFxOqCYyOGf45Orxx89iAJ79KOXta4j07jvbUGwGKeulXsZ8fGFITafWo2Qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8+fCwZ02qocdOza0qYcDOtF3Hfxd8734OjRyiKvCAyI=;
+ b=K5v12x72yRJO4KK1ol00l5FQ2NuB/5TlnyFYLI/CvVn1dDaOrhrRJu3XzZ9jkUOhAv+irh0Xp/z1dJAncccj41J1acPOEqvgUNKycfbsxO4QRFBhVKEEBHNWFrTmcGAUELnHOOlaolIqJ6hviSDsID00y6IGk0NYE8nnyQ/2UBA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by BYAPR12MB3285.namprd12.prod.outlook.com (2603:10b6:a03:134::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Wed, 1 Jun
+ 2022 14:11:14 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::5044:b3eb:8442:fe92]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::5044:b3eb:8442:fe92%9]) with mapi id 15.20.5314.013; Wed, 1 Jun 2022
+ 14:11:14 +0000
+Message-ID: <637d24f2-75d4-d10c-9e08-05edb0c1a972@amd.com>
+Date:   Wed, 1 Jun 2022 19:40:54 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v5 0/8] perf/amd: Zen4 IBS extensions support (tool
+ changes)
+Content-Language: en-US
+To:     "Liang, Kan" <kan.liang@linux.intel.com>, acme@kernel.org
+Cc:     jolsa@kernel.org, irogers@google.com, peterz@infradead.org,
+        rrichter@amd.com, mingo@redhat.com, mark.rutland@arm.com,
+        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
+        james.clark@arm.com, leo.yan@linaro.org, ak@linux.intel.com,
+        eranian@google.com, like.xu.linux@gmail.com, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20220601032608.1034-1-ravi.bangoria@amd.com>
+ <e49505ea-5af2-41d3-23dc-8c01e20f91ee@linux.intel.com>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <e49505ea-5af2-41d3-23dc-8c01e20f91ee@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0027.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:25::32) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531105647.00006c00@Huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7fb847d8-3fe5-47f4-8a20-08da43d895f0
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3285:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB3285615E739D9F2DDBFFA16DE0DF9@BYAPR12MB3285.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: I07D4oyQ5xBWnomB30/hEWVrCt8AzT4LZtOIWr6XX09XVN9AsiRnCJT5HQdCo+qMGeR4B5gPEbTe0kXpPi8ZCZvYuOcJPIdk2HCbH8eYnWp7dd0nBkP9a78340ay5Ok7pQwQhgdC5EuseUW7pGm34sgQrXEo6UUrxisbiGAgKBHU3VvB40/plCip9pWCU6m9QXk9JudlKU3VFHcRyzvEtDbcnsWyc+iJIMLrYg96lZbYSNXNLxO76EWl+J2kUTuLX/36rLcLgdZ1EEuqR9NIbVqdWXwMJVjz6XTVjC4KhPOvrJ44LENtbpVS7PVzSTymIT3JuvT1/pEOCx9ihcBFXUZcS4DYwQUAYH0n02plKxO5U4qqwODRZP4lreAVFKo3hThdtB8M6QZARh+msCreTTkGMlmWkKkq4tc0AHNsKWXHC704m31+NNbZqk7nmxUx6oAwghD8lX8fw917pFauLKzph7ana5oMxfxNvuQ+Xd2T0uMjIn7A6lSxeUHjolFgIGXatpHDzrUWfNANyp1JXoIIBiizROfhIB6Tdv7d7tRxvS1Fp5DownKb93zsyA4VyaA4FWGp6ZuhjrjFfWyc5R56jBo7KMCZqACYmal1mm8VS3YPsKK0hZaCAfFt6j4Mzng9EksRazMiwinTqBE7mj4nwllqe/9xKIIOzvLuWdBxsZrIEIOXxCW1um+eatabpOrgVwYMAseuB7ipLySuyTz9BYv7ZLnSCanb9mh1j6Pbv8utrSVvgzUUxW+6gPMg
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(44832011)(2616005)(31696002)(66556008)(4326008)(31686004)(7416002)(186003)(5660300002)(6486002)(86362001)(6512007)(6506007)(8676002)(66476007)(38100700002)(66946007)(6666004)(53546011)(8936002)(316002)(2906002)(26005)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QzhTbHIyS1dQaFJTMUZHOVRJdmw3SExjVjVzL1BYdWZ6UFhxOW9yeGFvRE5Z?=
+ =?utf-8?B?Y3V1SFZoQzY4RDhleWVLRDYxT3Z2Yyt1Y21yWUJFMng2WVdkTUhnWGlPUEdo?=
+ =?utf-8?B?N3kwWTdTbjRRdnA2a2xCeCt2REVIOXhDTmIyZ2RSUkJ0Q0ZwTWZYOENSQ1F1?=
+ =?utf-8?B?dHpoUE9uNTJES3RqOWU0b2FwUmFmRkI2eG8yVXRrTnlwZGlTQzZROWZwcVYz?=
+ =?utf-8?B?R3h6NWhIaE05RmprMFkzU0ZOM1JyZVFJTW4wUUxYejZJYjN4K3dxTzAwUU9S?=
+ =?utf-8?B?R056SXkrRGRxN3VRQ0VQYzkxRzJxL0pNZWgwTC9kQ0cyTkRSMDB5Wkh2cHFV?=
+ =?utf-8?B?WFVCOEVVZzlaSnB2Qk5aSjhhWjN4bnhxRGlPdjZSckU2eFo1cVJMSUhKWVJo?=
+ =?utf-8?B?Vm03aWlZYVdienV5S2lVTytLQ1pIYy9FQ01zL084SGtPbjFnSkVUTVp0RUpu?=
+ =?utf-8?B?MHYxUHFiRDgrU1V5c2hacnZHeGl1VHlWQVVMMm5VT2dUNmd4b1hHK3FpdU8r?=
+ =?utf-8?B?SGE5QmNmelNvRUNGSnJVemVtUW41K0g0NTFKcE03U1NXRURwRmM0NURwUlht?=
+ =?utf-8?B?Tm5LODZqMHJsNWdvWmFGVVlLUnFvYjZBOFVPSVZWcldPeW1UNmkxTzdLME9v?=
+ =?utf-8?B?a20xa24zT2crSXd3MkhqSzRsRzN4Y3JuYlB4bmNiU3AzMDgwRzJHdmJkODQ5?=
+ =?utf-8?B?SU1PcG1Ib1VMcWlCbittUzhXR0JCYjd0bEhwdjdBRm43THJxb3lKMHpTWlRT?=
+ =?utf-8?B?WnVQbWdWVWh4L1JOT2FGT2NsZWtsK0IwajBpWlhad0lvZXpKOGFvWnZxTWhG?=
+ =?utf-8?B?UXNlQ0NWd3p2ZldUaVR1SXU2WUZkbGovaTR3RUQzSk5oR1NpMFZiWWh0dmFp?=
+ =?utf-8?B?WWt4UXp1MVpyalplYXdET3RlcmpPbGc1OGVXRVhKVTFzTlZEL3o4bHAxZzdy?=
+ =?utf-8?B?cTk0RGJLRTB0T0VBS2RYbjBSK3Q1T3AzZkwraWF5S2E3R24zaWdnZEI0M3FD?=
+ =?utf-8?B?bUNRMW5XelBhbmZKZlhCdWNwSXhCTkZ2N0FrSE01aURMQjJRTEZCSm5Pb053?=
+ =?utf-8?B?N0NaRFJ1REVSbWdreWd3UlAzMk91em15TnhjVE5yWlgzSmo4b0h5K1NtRmJ6?=
+ =?utf-8?B?dEVOdGZPMW1VNG93TWdWRHhzRm1oTTNNTlhQcURhck42dThxc2dNZlo4Rm10?=
+ =?utf-8?B?UnZVaEJYVVd2RURtNDhzaVpmQ1FDdEp0S3lCeE5sdURxVzM4eEErbFpYNy84?=
+ =?utf-8?B?OXEyNU1TbkIxbGg3cTlpZDFHSUNEemNjMTJLc2NnT2tqV3RTQUlRU1lRK1Uz?=
+ =?utf-8?B?bVhiM3oydkl0T0RLcFRDUm9LYndOZWxPY09tK0t3dnJUMFYwQWZjNzFqcHQy?=
+ =?utf-8?B?ajFnM21KeldrSDhCYUM5ZWw3M0lneEJJL3dHcGRQaERkWWdLaG5jaGtEakRr?=
+ =?utf-8?B?eEE2U250ZzNuVyttd05ISlZCYWNxbk40TkI0eEtYR0h0dVowWTRzcVpLN0p4?=
+ =?utf-8?B?N21XU3NOUTcvbm1KNTZLcVk0SzNqa1RGRkllR0JWcVgwSlpyT01hajZPeUJw?=
+ =?utf-8?B?R0k0UVkzbURHcVZKdWkySkdNSHF5cFYrd0g0bm9sWlJGYzdqVFVNOG1WZCt0?=
+ =?utf-8?B?UDVFZ2VkODhUYmVickFYbTV6clZHMmMvS0ZkQ01QZEYzS1RMUE94aWExZHFl?=
+ =?utf-8?B?QjZiUnB1MHpoQ2wyUytUOGxnOTREYUw5SVplMmQ0NVdnNWhFN2FHalVjWjVa?=
+ =?utf-8?B?Y1J5dEFUVFUvVUhGbXkwQWRxMXZVMHZubDV4VXFoeTNYdDkwUExZUUpIV0Zt?=
+ =?utf-8?B?QVhYeDRTSURzeFVYd053M0t4V2hyaVhUNktrN0tjMHRzZzMrbVFQUld0TEx0?=
+ =?utf-8?B?WCt1MFh6eENGakhyZWtUcXpiUDFqbXAzakx6dm1lekRCYVVWV1FqVW0xaGhl?=
+ =?utf-8?B?S3Q5UWY0dkNrbnBmeC9VVGJYZzNpVTB4blJXSzljQzJrQjlwTW55ZkptdDU2?=
+ =?utf-8?B?dnQyOVVQNWcvNSt3ZkM5UlJWMnJKR2dIcmxsMTRodHVLd2JBakVnbk9vUFNV?=
+ =?utf-8?B?YmJxK200OFRYeS9aOWpOT2RQOEIwbU1pNDhlSzBydVg1emlxQ2E2eEJNOGVD?=
+ =?utf-8?B?R21lbEt6ekd0ZnVzTGVwZkNtblRxYXNuYnRrZkk4amM3MVlFaFd4amlTVWhF?=
+ =?utf-8?B?V2NtUlNkZ2RIaU9wdzhnV3NNdDg3VzRhdGIrMi9sQWQzME8vNnNFT2ZWK1l0?=
+ =?utf-8?B?RTR5MU9vWHUwNWtybkFFekF2M2VBVGl5K0h5WkY5NWxzUU5QZUFjQ0VmT1VK?=
+ =?utf-8?B?MWdqZGRpc0lLYTlOU3hSOGlXMFQrZFZ6aDJtYWwzVGpTa0hOTVVXZz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7fb847d8-3fe5-47f4-8a20-08da43d895f0
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2022 14:11:13.8304
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LvwVfbuoB/Kx9sw69PUe6ER3DYZgNPn9ksSH+y4Qk2EqpzukGA8vEko0uakM2w1Js8Io3sE7ON3/bFKMdbKBcA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3285
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,172 +136,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 10:56:47AM +0100, Jonathan Cameron wrote:
-> On Sun, 29 May 2022 10:08:21 -0400
-> Joe Talbott <joetalbott@gmail.com> wrote:
-> 
-> > On Sat, May 28, 2022 at 1:25 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> > >
-> > > On Fri, 27 May 2022 14:56:52 -0400
-> > > Joe Simmons-Talbott <joetalbott@gmail.com> wrote:
-> > >  
-> > > > As reported by checkpatch.pl use ocatl permissions rather than symbolic
-> > > > permissions.
-> > > >
-> > > > Signed-off-by: Joe Simmons-Talbott <joetalbott@gmail.com>  
-> > >
-> > > Hi Joe,
-> > >
-> > > Why the resend?  Given change of description, I'm guessing this is v2
-> > > because of feedback on a similar patch elsewhere. If so, please
-> > > put the version number in the patch log and provide a changelog
-> > > below the ---  
-> > 
-> > 
-> > I sent the patch again because I neglected to include linux-kernel and
-> > you in the
-> > original patch's recipients.  I wasn't sure if I should include the v2
-> > but will in the future.
-> 
-> For that case, common choice is [RESEND PATCH ....
-> with a brief note in the cover letter that you missed some to/cc
-> 
-> > Should I use v3 for my updated patch?
-> v2 is fine given v2 doesn't yet exist - v3 also fine though...
 
-Thanks for the info.  I've resubmitted the patch as:
-[PATCH v2] iio: Use octal permissions and DEVICE_ATTR_{RO,RW}.
+On 01-Jun-22 7:34 PM, Liang, Kan wrote:
+> 
+> 
+> On 5/31/2022 11:26 PM, Ravi Bangoria wrote:
+>> Kernel side of changes have already been applied to linus/master
+>> (except amd-ibs.h header). This series contains perf tool changes.
+>>
+>> Kan, I don't have any machine with heterogeneou cpus. It would be
+>> helpful if you can check HEADER_PMU_CAPS on Intel ADL machine.
+>>
+> 
+> I tried the patch 2-5 on a hybrid machine. I didn't see any regression with perf report --header-only option.
+> 
+> Without the patch 2-5,
+> # perf report --header-only | grep capabilities
+> # cpu_core pmu capabilities: branches=32, max_precise=3, pmu_name=alderlake_hybrid
+> # cpu_atom pmu capabilities: branches=32, max_precise=3, pmu_name=alderlake_hybrid
+> 
+> With the patch 2-5,
+> # ./perf report --header-only | grep capabilities
+> # cpu_core pmu capabilities: branches=32, max_precise=3, pmu_name=alderlake_hybrid
+> # cpu_atom pmu capabilities: branches=32, max_precise=3, pmu_name=alderlake_hybrid
+> 
+
+Perfect! Thanks for testing, Kan.
+
+Arnaldo, since kernel patches are already applied to linus' tree for -rc1,
+would you be able to include this series in your -rc1 PR?
 
 Thanks,
-Joe
-> 
-> Jonathan
-> 
-> > 
-> > Thanks,
-> > Joe
-> > 
-> > >
-> > >
-> > > Hmm. I guess I don't really mind cleaning this up though it is
-> > > some churn in core code which is usually something we try to avoid
-> > > for fairly trivial style reasons.
-> > >
-> > > One request inline (though I suspect it applies in several places,
-> > > I just haven't checked ;)
-> > >
-> > > Thanks,
-> > >
-> > > Jonathan
-> > >  
-> > > > ---
-> > > >  drivers/iio/industrialio-buffer.c  | 12 ++++++------
-> > > >  drivers/iio/industrialio-core.c    | 10 +++++-----
-> > > >  drivers/iio/industrialio-trigger.c |  4 ++--
-> > > >  3 files changed, 13 insertions(+), 13 deletions(-)
-> > > >
-> > > > diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
-> > > > index b078eb2f3c9d..c27f74a3c0f3 100644
-> > > > --- a/drivers/iio/industrialio-buffer.c
-> > > > +++ b/drivers/iio/industrialio-buffer.c
-> > > > @@ -1391,17 +1391,17 @@ static ssize_t direction_show(struct device *dev,
-> > > >       }
-> > > >  }
-> > > >
-> > > > -static DEVICE_ATTR(length, S_IRUGO | S_IWUSR, iio_buffer_read_length,
-> > > > +static DEVICE_ATTR(length, 0644, iio_buffer_read_length,
-> > > >                  iio_buffer_write_length);
-> > > >  static struct device_attribute dev_attr_length_ro = __ATTR(length,
-> > > > -     S_IRUGO, iio_buffer_read_length, NULL);
-> > > > -static DEVICE_ATTR(enable, S_IRUGO | S_IWUSR,
-> > > > +     0444, iio_buffer_read_length, NULL);
-> > > > +static DEVICE_ATTR(enable, 0644,
-> > > >                  iio_buffer_show_enable, iio_buffer_store_enable);
-> > > > -static DEVICE_ATTR(watermark, S_IRUGO | S_IWUSR,
-> > > > +static DEVICE_ATTR(watermark, 0644,
-> > > >                  iio_buffer_show_watermark, iio_buffer_store_watermark);
-> > > >  static struct device_attribute dev_attr_watermark_ro = __ATTR(watermark,
-> > > > -     S_IRUGO, iio_buffer_show_watermark, NULL);
-> > > > -static DEVICE_ATTR(data_available, S_IRUGO,
-> > > > +     0444, iio_buffer_show_watermark, NULL);
-> > > > +static DEVICE_ATTR(data_available, 0444,
-> > > >               iio_dma_show_data_available, NULL);  
-> > >
-> > > a side effect of this change a slight shortening of how long the above
-> > > two lines will be if combined into one.  It's now sub 80 chars
-> > > I think, so please make them a single line.  Also check for similar
-> > > cases elsewhere.
-> > >
-> > >  
-> > > >  static DEVICE_ATTR_RO(direction);
-> > > >
-> > > > diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
-> > > > index e1ed44dec2ab..35de348d686e 100644
-> > > > --- a/drivers/iio/industrialio-core.c
-> > > > +++ b/drivers/iio/industrialio-core.c
-> > > > @@ -1114,12 +1114,12 @@ int __iio_device_attr_init(struct device_attribute *dev_attr,
-> > > >       dev_attr->attr.name = name;
-> > > >
-> > > >       if (readfunc) {
-> > > > -             dev_attr->attr.mode |= S_IRUGO;
-> > > > +             dev_attr->attr.mode |= 0444;
-> > > >               dev_attr->show = readfunc;
-> > > >       }
-> > > >
-> > > >       if (writefunc) {
-> > > > -             dev_attr->attr.mode |= S_IWUSR;
-> > > > +             dev_attr->attr.mode |= 0200;
-> > > >               dev_attr->store = writefunc;
-> > > >       }
-> > > >
-> > > > @@ -1401,7 +1401,7 @@ static ssize_t iio_show_dev_name(struct device *dev,
-> > > >       return sysfs_emit(buf, "%s\n", indio_dev->name);
-> > > >  }
-> > > >
-> > > > -static DEVICE_ATTR(name, S_IRUGO, iio_show_dev_name, NULL);
-> > > > +static DEVICE_ATTR(name, 0444, iio_show_dev_name, NULL);
-> > > >
-> > > >  static ssize_t iio_show_dev_label(struct device *dev,
-> > > >                                struct device_attribute *attr,
-> > > > @@ -1411,7 +1411,7 @@ static ssize_t iio_show_dev_label(struct device *dev,
-> > > >       return sysfs_emit(buf, "%s\n", indio_dev->label);
-> > > >  }
-> > > >
-> > > > -static DEVICE_ATTR(label, S_IRUGO, iio_show_dev_label, NULL);
-> > > > +static DEVICE_ATTR(label, 0444, iio_show_dev_label, NULL);
-> > > >
-> > > >  static ssize_t iio_show_timestamp_clock(struct device *dev,
-> > > >                                       struct device_attribute *attr,
-> > > > @@ -1509,7 +1509,7 @@ int iio_device_register_sysfs_group(struct iio_dev *indio_dev,
-> > > >       return 0;
-> > > >  }
-> > > >
-> > > > -static DEVICE_ATTR(current_timestamp_clock, S_IRUGO | S_IWUSR,
-> > > > +static DEVICE_ATTR(current_timestamp_clock, 0644,
-> > > >                  iio_show_timestamp_clock, iio_store_timestamp_clock);
-> > > >
-> > > >  static int iio_device_register_sysfs(struct iio_dev *indio_dev)
-> > > > diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
-> > > > index f504ed351b3e..e22a35634f2c 100644
-> > > > --- a/drivers/iio/industrialio-trigger.c
-> > > > +++ b/drivers/iio/industrialio-trigger.c
-> > > > @@ -54,7 +54,7 @@ static ssize_t iio_trigger_read_name(struct device *dev,
-> > > >       return sysfs_emit(buf, "%s\n", trig->name);
-> > > >  }
-> > > >
-> > > > -static DEVICE_ATTR(name, S_IRUGO, iio_trigger_read_name, NULL);
-> > > > +static DEVICE_ATTR(name, 0444, iio_trigger_read_name, NULL);
-> > > >
-> > > >  static struct attribute *iio_trig_dev_attrs[] = {
-> > > >       &dev_attr_name.attr,
-> > > > @@ -494,7 +494,7 @@ static ssize_t iio_trigger_write_current(struct device *dev,
-> > > >       return ret;
-> > > >  }
-> > > >
-> > > > -static DEVICE_ATTR(current_trigger, S_IRUGO | S_IWUSR,
-> > > > +static DEVICE_ATTR(current_trigger, 0644,
-> > > >                  iio_trigger_read_current,
-> > > >                  iio_trigger_write_current);
-> > > >  
-> > >  
-> 
+Ravi

@@ -2,94 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BCAF539C56
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 06:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56A8539C52
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 06:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349521AbiFAEmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 00:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
+        id S1349545AbiFAEnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 00:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235265AbiFAEmm (ORCPT
+        with ESMTP id S235265AbiFAEnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 00:42:42 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33DC50E37;
-        Tue, 31 May 2022 21:42:40 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 1004032000D7;
-        Wed,  1 Jun 2022 00:42:36 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 01 Jun 2022 00:42:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1654058556; x=
-        1654144956; bh=MqKm1T3VhwChELMNhJiWU54GYv7cli4AIoO4d1HHU5c=; b=S
-        Y2Br8phdarVHJQwnRRVFPncv2X41yg7BNw1dJtJuDkmGd2VLfm6djnXuehZGpThH
-        rNd+80nPqawM6MqN/hmhyoZ2VElogT2TtJ4lClVY19cnfBhb17MDMptHD2VoC7ys
-        RSE9LXMuwqoCyB8vLQCrp+Rna6qzwpB+GBT/Dhdv1Pwk9EMRT5qdgCUHqqgQJzT8
-        7c6kZHjQAvA+Zmelk13NAbV6M2uoAAOy5hr4yQjnk1TyhHcTYpyLWhTbLXaLHyCB
-        YTm4kOt7P0K/aX3A7Lw2XkL+mzlAQC/eKphRzdHgsCUMVmhqW+oj4BGKrhIMNbJQ
-        xkVt6Ee8JuoRroAYsQZUQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1654058556; x=
-        1654144956; bh=MqKm1T3VhwChELMNhJiWU54GYv7cli4AIoO4d1HHU5c=; b=g
-        zT88VczoX1HXe82zPqhmep4QQvouAYbfXpVOEYI0eCPhQS9fWzd4N7LF9GNlK8eo
-        PXD8vprEQFpDkMiQ69fCTrxIuXY4NerTmY1lhcpsXsA7OqzXgPDb0ZDOT4fQ0siR
-        L+wk6x4cOHHKKpYUTRDdnZ92tzlyp7djIr7d8TfpmP9wepKLIZLWBOUe0I17qKXT
-        Vq45BZGNM7aBQ1o9SQUSGm4Pu2oIYzvDArxqywwYopWExzmWoDo5ilq2v4m2XjR2
-        YqXT+DWfyr6CI5ge7D6jJ1pXAYAxZgAnxIZhP3C3MKY5DfUKNUrl6AEy5gvI70v4
-        J8Th/XuRPe2ObxdgDFnbQ==
-X-ME-Sender: <xms:O-6WYt7-s4pDVXWIi0jA72vLK2aiLZpGWz42jAgS_ptmaaQS1JkiYA>
-    <xme:O-6WYq4UPYbNjjdCDxMtF723cuNTxnW4hPbp-4yQX2rB0y1mcVueuDiDs9lB5W4B7
-    pziwa8bA7zzWeHeQA>
-X-ME-Received: <xmr:O-6WYkd6XvQ3lUKvQscJjVuNVsQUg2OO9TAx6-PiSpo2c8Z0WBOnmBDIlgfaU4jqvKy4RmeyK7Cf-rwXCuzxpyNR1Pu8oRHlX2cCxflL3KLhdZ-zB21Xqiyqiw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeelgdekgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfevfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnheptdevhfehhefgvdekteffleduueduheduuedvtdevleelkeevvdeu
-    vdeihfekueehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:O-6WYmJGbX4W8_HMxelFk3pY-tg1hd9YkjTfIdP0U3JU6BZ_2zDuPA>
-    <xmx:O-6WYhLIXhzd9gQDEWm2BnkVyVUSfJ6gzYvRZatWbig97jBqtXHQNA>
-    <xmx:O-6WYvz3mckQcAKb28DkX02-eNlOaJfcClbxiGB_1DWnd062uESwZA>
-    <xmx:PO6WYrwBzoC_VEB71MJXNEgTZF2Dioqsv-0xo6QxiircO4l-SLtoJQ>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 1 Jun 2022 00:42:35 -0400 (EDT)
-Subject: Re: [PATCH 0/3] pinctrl: sunxi: Remove non-existent reset line
- references
-To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-References: <20220531053623.43851-1-samuel@sholland.org>
- <4400164.LvFx2qVVIh@kista>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <48570ec3-8159-11ae-8069-7f001081fd56@sholland.org>
-Date:   Tue, 31 May 2022 23:42:34 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Wed, 1 Jun 2022 00:43:49 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA159C2FA
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 21:43:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654058628; x=1685594628;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=v83w+pcu1rKKOY5FjT6tu+qdUXMlHJHuYL50RQr/FiM=;
+  b=eGf5acefH+iHdTpq5/py8rblvjBIhzyq5g6urf7G/iCNDHhRuwNMmi1Q
+   6HCTOtbByBAVeUa8g465dyCM56T3RdGv43P9cIfMD/pLMhq5LPE7u/ntM
+   N2jkhP5z24plBtG6nybaNEM0ZhIx2NHZQE6vQRmhjMZLlw7ByM/mw7KGT
+   hwMrr3iW/7M5CLMF5ErTgUrQe0n4jKNIHuA6Jxwk/o+kf0y6bBUocOPNh
+   zOfNjU+LddnfonmzchajF5imtEvPdha3TTA4BrVKYRDtKj/rsG+K0PTe8
+   3A9WxPOYBTZAMzsp6tRbd73VJasX6dIf/lJAOZgz/wQyMHTnYI61/sUtK
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="336126269"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="336126269"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 21:43:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="667244876"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 31 May 2022 21:43:45 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwGCu-0003Y2-AR;
+        Wed, 01 Jun 2022 04:43:44 +0000
+Date:   Wed, 1 Jun 2022 12:42:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 422/422]
+ arch/x86/kvm/mmu/mmu.c:4546:6: error: call to undeclared function
+ 'get_user_page_fast'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202206011249.nbPtIS94-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <4400164.LvFx2qVVIh@kista>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,30 +65,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jernej,
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   4e487b52e144ed36e4ae202e7103e63679710095
+commit: 4e487b52e144ed36e4ae202e7103e63679710095 [422/422] KVM: x86/mmu: Use get_user_page_fast instead of get_user_page_fast_only
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220601/202206011249.nbPtIS94-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/4e487b52e144ed36e4ae202e7103e63679710095
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout 4e487b52e144ed36e4ae202e7103e63679710095
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
 
-On 5/31/22 10:22 AM, Jernej Škrabec wrote:
-> Dne torek, 31. maj 2022 ob 07:36:20 CEST je Samuel Holland napisal(a):
->> I assume these properties came from a lack of documentation, and the
->> very reasonable assumption that where there's a clock gate bit in the
->> CCU, there's a reset bit. But the pin controllers are special and don't
->> have a module reset line. The only way to reset the pin controller is to
->> reset the whole VDD_SYS power domain.
->>
->> This series is preparation for converting the PRCM MFD and legacy clock
->> drivers to a CCU clock/reset driver like all of the other Allwinner
->> SoCs. I don't plan to add reset lines that don't actually exist to the
->> new CCU driver. So we might as well get rid of the references now.
->> Technically this breaks devicetree compatibility, since the old drivers
->> expect the reset. But the CCU conversion will be a compatibility break
->> anyway, so it's a bit of a moot point.
-> 
-> If I understand correclty, this would cause only DT forward compatibility 
-> issue, which happens now and then anyway. Kernel would still be compatible 
-> with older DTs, it would just ignore that reset, right?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Right, this only prevents older kernels from working with newer devicetrees. I
-brought it up because I'm generally trying to minimize how much we do that.
+All errors (new ones prefixed by >>):
 
-Regards,
-Samuel
+   In file included from arch/x86/kvm/mmu/mmu.c:18:
+   In file included from arch/x86/kvm/irq.h:15:
+   In file included from include/linux/kvm_host.h:47:
+   include/linux/memfile_notifier.h:87:57: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   static int memfile_register_notifier(struct file *file, flags,
+                                                           ^
+                                                           int
+>> arch/x86/kvm/mmu/mmu.c:4546:6: error: call to undeclared function 'get_user_page_fast'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (get_user_page_fast(hva, FOLL_WRITE, page))
+               ^
+   arch/x86/kvm/mmu/mmu.c:4546:6: note: did you mean 'get_user_pages_fast'?
+   include/linux/mm.h:1931:5: note: 'get_user_pages_fast' declared here
+   int get_user_pages_fast(unsigned long start, int nr_pages,
+       ^
+   2 errors generated.
+
+
+vim +/get_user_page_fast +4546 arch/x86/kvm/mmu/mmu.c
+
+  4527	
+  4528	/*
+  4529	 * Private page can't be release on mmu_notifier without losing page contents.
+  4530	 * The help, callback, from backing store is needed to allow page migration.
+  4531	 * For now, pin the page.
+  4532	 */
+  4533	static int kvm_faultin_pfn_private_mapped(struct kvm_vcpu *vcpu,
+  4534					    struct kvm_page_fault *fault)
+  4535	{
+  4536		hva_t hva = gfn_to_hva_memslot(fault->slot, fault->gfn);
+  4537		struct page *page[1];
+  4538	
+  4539		fault->map_writable = false;
+  4540		fault->pfn = KVM_PFN_ERR_FAULT;
+  4541		if (hva == KVM_HVA_ERR_RO_BAD || hva == KVM_HVA_ERR_BAD)
+  4542			return RET_PF_INVALID;
+  4543	
+  4544		/* TDX allows only RWX.  Read-only isn't supported. */
+  4545		WARN_ON_ONCE(!fault->write);
+> 4546		if (get_user_page_fast(hva, FOLL_WRITE, page))
+  4547			return RET_PF_INVALID;
+  4548	
+  4549		fault->map_writable = true;
+  4550		fault->pfn = page_to_pfn(page[0]);
+  4551		return RET_PF_CONTINUE;
+  4552	}
+  4553	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

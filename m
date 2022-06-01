@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F32E539DF9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94DC1539DFE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 09:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350223AbiFAHQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 03:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
+        id S1344639AbiFAHSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 03:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350951AbiFAHQQ (ORCPT
+        with ESMTP id S1343803AbiFAHRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 03:16:16 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B1C9D076;
-        Wed,  1 Jun 2022 00:16:15 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2517GDPm002488;
-        Wed, 1 Jun 2022 02:16:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654067773;
-        bh=mpZtlGZNYZkzKrIar+gOtdyJV1Br8CEFg9AwOfSIA8I=;
-        h=From:To:CC:Subject:Date;
-        b=LcJvdYGHWq5GNJvZS+CX77ExQNj4i2IvmbJ18nlrQX2xWA/BJCSfz4iPu/+c40LXb
-         Be/ZV1Pz98/8zES/C4V4Dw4FUfEtceP9bnNEAaauEeVIE7jxLPXYzp52c0r39xu6FC
-         aY0uPhiofmT9Idvb2FDl9L4ieJ2CgLUmVdMO3PoM=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2517GDOn091123
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 1 Jun 2022 02:16:13 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 1
- Jun 2022 02:16:12 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 1 Jun 2022 02:16:12 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2517GBnC070231;
-        Wed, 1 Jun 2022 02:16:12 -0500
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-To:     <broonie@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>
-CC:     <vaishnav.a@ti.com>, <p.yadav@ti.com>, <vigneshr@ti.com>
-Subject: [PATCH -next] spi: cadence-quadspi: Remove spi_master_put() in probe failure path
-Date:   Wed, 1 Jun 2022 12:46:11 +0530
-Message-ID: <20220601071611.11853-1-vaishnav.a@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 1 Jun 2022 03:17:54 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDFA22BEA
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 00:17:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654067871; x=1685603871;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hNzVhC2BQ7v7qd4GJVYOzEzYCDinZY6da33WxAy5gMo=;
+  b=dJmCdOvkWzZ7fgGrxue8ary5Gwa/BJY7SyIdG14/qfQsJqKY/52eWTgB
+   W0bcggEEMTTPKKUQbwNbv2VXG/+UkYYLWfIPgEwkqFCZXZumXLi9WN3yz
+   PyZRFc5hss8t8yOx2iVaK/mDhOi2DFpla3ghaw8SvfCjU3K4gmbiBuKKH
+   IBtd/V7Hc1Ad5tmNfowXD5kAX6//h4qeZVoVgsPtEDGa1iJ1sRQmAtDjj
+   9FLI0yLBS1BtxHdJNl40c5DO2qlYf73M/eHGPbFMmkDaAKpVOOAHgi/B0
+   R/IdnKJ8nG3rS3RipL7kbe7CliIalhR4oUAArQo7rG3QsKj4F1b9KIJJ2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="274302049"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="274302049"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 00:17:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="755716160"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 Jun 2022 00:17:49 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwIc1-0003gA-0J;
+        Wed, 01 Jun 2022 07:17:49 +0000
+Date:   Wed, 1 Jun 2022 15:17:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-netfs 34/41]
+ fs/cifs/smb2ops.c:3965:34: sparse: sparse: incorrect type in argument 2
+ (different base types)
+Message-ID: <202206011525.hK4OI0FN-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,102 +64,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the spi_master is allocated by devm_spi_alloc_master()
-and devres core manages the deallocation, but in probe failure
-path spi_master_put() is being handled manually which causes
-"refcount underflow use-after-free" warning when probe failure happens
-after allocating spi_master.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-netfs
+head:   1fc71b6b30f6d2a981c163b77c9aee0aecaecb29
+commit: 4c67a0e88c041546f0a045d5034e045e0c404918 [34/41] cifs: Share server EOF pos with netfslib
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220601/202206011525.hK4OI0FN-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-14-g5a0004b5-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/4c67a0e88c041546f0a045d5034e045e0c404918
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-netfs
+        git checkout 4c67a0e88c041546f0a045d5034e045e0c404918
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash fs/cifs/
 
-Trimmed backtrace during failure:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-refcount_t: underflow; use-after-free.
-pc : refcount_warn_saturate+0xf4/0x144
-Call trace:
-refcount_warn_saturate
-kobject_put
-put_device
-devm_spi_release_controller
-devres_release_all
 
-This commit makes relevant changes to remove spi_master_put() from probe
-failure path.
+sparse warnings: (new ones prefixed by >>)
+>> fs/cifs/smb2ops.c:3965:34: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected long long [usertype] new_i_size @@     got restricted __le64 [addressable] [assigned] [usertype] eof @@
+   fs/cifs/smb2ops.c:3965:34: sparse:     expected long long [usertype] new_i_size
+   fs/cifs/smb2ops.c:3965:34: sparse:     got restricted __le64 [addressable] [assigned] [usertype] eof
+>> fs/cifs/smb2ops.c:3966:33: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected long long [usertype] newsize @@     got restricted __le64 [addressable] [assigned] [usertype] eof @@
+   fs/cifs/smb2ops.c:3966:33: sparse:     expected long long [usertype] newsize
+   fs/cifs/smb2ops.c:3966:33: sparse:     got restricted __le64 [addressable] [assigned] [usertype] eof
+>> fs/cifs/smb2ops.c:3967:57: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected long long [usertype] new_size @@     got restricted __le64 [addressable] [assigned] [usertype] eof @@
+   fs/cifs/smb2ops.c:3967:57: sparse:     expected long long [usertype] new_size
+   fs/cifs/smb2ops.c:3967:57: sparse:     got restricted __le64 [addressable] [assigned] [usertype] eof
+   fs/cifs/smb2ops.c:4752:39: sparse: sparse: incompatible types in comparison expression (different type sizes):
+   fs/cifs/smb2ops.c:4752:39: sparse:    unsigned int *
+   fs/cifs/smb2ops.c:4752:39: sparse:    unsigned long *
 
-Fixes: 606e5d408184 ("spi: cadence-quadspi: Handle spi_unregister_master() in remove()")
+vim +3965 fs/cifs/smb2ops.c
 
-Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
----
- drivers/spi/spi-cadence-quadspi.c | 19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
+  3932	
+  3933	static long smb3_collapse_range(struct file *file, struct cifs_tcon *tcon,
+  3934				    loff_t off, loff_t len)
+  3935	{
+  3936		int rc;
+  3937		unsigned int xid;
+  3938		struct inode *inode;
+  3939		struct cifsFileInfo *cfile = file->private_data;
+  3940		__le64 eof;
+  3941	
+  3942		xid = get_xid();
+  3943	
+  3944		inode = d_inode(cfile->dentry);
+  3945	
+  3946		if (off >= i_size_read(inode) ||
+  3947		    off + len >= i_size_read(inode)) {
+  3948			rc = -EINVAL;
+  3949			goto out;
+  3950		}
+  3951	
+  3952		rc = smb2_copychunk_range(xid, cfile, cfile, off + len,
+  3953					  i_size_read(inode) - off - len, off);
+  3954		if (rc < 0)
+  3955			goto out;
+  3956	
+  3957		eof = cpu_to_le64(i_size_read(inode) - len);
+  3958		rc = SMB2_set_eof(xid, tcon, cfile->fid.persistent_fid,
+  3959				  cfile->fid.volatile_fid, cfile->pid, &eof);
+  3960		if (rc < 0)
+  3961			goto out;
+  3962	
+  3963		rc = 0;
+  3964	
+> 3965		netfs_resize_file(inode, eof);
+> 3966		truncate_setsize(inode, eof);
+> 3967		fscache_resize_cookie(cifs_inode_cookie(inode), eof);
+  3968	 out:
+  3969		free_xid(xid);
+  3970		return rc;
+  3971	}
+  3972	
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 2b9fc8449a62..72b1a5a2298c 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1578,8 +1578,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 	ret = cqspi_of_get_pdata(cqspi);
- 	if (ret) {
- 		dev_err(dev, "Cannot get mandatory OF data.\n");
--		ret = -ENODEV;
--		goto probe_master_put;
-+		return -ENODEV;
- 	}
- 
- 	/* Obtain QSPI clock. */
-@@ -1587,7 +1586,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 	if (IS_ERR(cqspi->clk)) {
- 		dev_err(dev, "Cannot claim QSPI clock.\n");
- 		ret = PTR_ERR(cqspi->clk);
--		goto probe_master_put;
-+		return ret;
- 	}
- 
- 	/* Obtain and remap controller address. */
-@@ -1596,7 +1595,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 	if (IS_ERR(cqspi->iobase)) {
- 		dev_err(dev, "Cannot remap controller address.\n");
- 		ret = PTR_ERR(cqspi->iobase);
--		goto probe_master_put;
-+		return ret;
- 	}
- 
- 	/* Obtain and remap AHB address. */
-@@ -1605,7 +1604,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 	if (IS_ERR(cqspi->ahb_base)) {
- 		dev_err(dev, "Cannot remap AHB address.\n");
- 		ret = PTR_ERR(cqspi->ahb_base);
--		goto probe_master_put;
-+		return ret;
- 	}
- 	cqspi->mmap_phys_base = (dma_addr_t)res_ahb->start;
- 	cqspi->ahb_size = resource_size(res_ahb);
-@@ -1614,15 +1613,13 @@ static int cqspi_probe(struct platform_device *pdev)
- 
- 	/* Obtain IRQ line. */
- 	irq = platform_get_irq(pdev, 0);
--	if (irq < 0) {
--		ret = -ENXIO;
--		goto probe_master_put;
--	}
-+	if (irq < 0)
-+		return -ENXIO;
- 
- 	pm_runtime_enable(dev);
- 	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0)
--		goto probe_master_put;
-+		return ret;
- 
- 	ret = clk_prepare_enable(cqspi->clk);
- 	if (ret) {
-@@ -1716,8 +1713,6 @@ static int cqspi_probe(struct platform_device *pdev)
- probe_clk_failed:
- 	pm_runtime_put_sync(dev);
- 	pm_runtime_disable(dev);
--probe_master_put:
--	spi_master_put(master);
- 	return ret;
- }
- 
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

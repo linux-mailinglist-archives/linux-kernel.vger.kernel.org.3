@@ -2,105 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9C853AA59
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872A453AA5A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 17:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355783AbiFAPkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 11:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
+        id S1355790AbiFAPlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 11:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355775AbiFAPkj (ORCPT
+        with ESMTP id S245526AbiFAPlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 11:40:39 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9859B313BA
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 08:40:37 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-142-DSHN-KKLM6GbHo2KcEfAdg-1; Wed, 01 Jun 2022 16:40:34 +0100
-X-MC-Unique: DSHN-KKLM6GbHo2KcEfAdg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Wed, 1 Jun 2022 16:40:31 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Wed, 1 Jun 2022 16:40:31 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Kalesh Singh' <kaleshsingh@google.com>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>
-CC:     Ioannis Ilkos <ilkos@google.com>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?utf-8?B?Q2hyaXN0aWFuIEvDtm5pZw==?= <christian.koenig@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "David Hildenbrand" <david@redhat.com>,
-        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Colin Cross <ccross@google.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Paul Gortmaker" <paul.gortmaker@windriver.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Subject: RE: [PATCH 2/2] procfs: Add 'path' to /proc/<pid>/fdinfo/
-Thread-Topic: [PATCH 2/2] procfs: Add 'path' to /proc/<pid>/fdinfo/
-Thread-Index: AQHYdT4SWIJvIUraZkitA/0m2+WPZq06r6HA
-Date:   Wed, 1 Jun 2022 15:40:31 +0000
-Message-ID: <959b0495a90e45b9816bb9f25d76a8f9@AcuMS.aculab.com>
-References: <20220531212521.1231133-1-kaleshsingh@google.com>
- <20220531212521.1231133-3-kaleshsingh@google.com>
- <14f85d24-a9de-9706-32f0-30be4999c71c@oracle.com>
- <CAC_TJveDzDaYQKmuLSkGWpnuCW+gvrqdVJqq=wbzoTRjw4OoFw@mail.gmail.com>
-In-Reply-To: <CAC_TJveDzDaYQKmuLSkGWpnuCW+gvrqdVJqq=wbzoTRjw4OoFw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 1 Jun 2022 11:41:50 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C94A60FC
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 08:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XJzDY301yKt0VVZM0rmEuWKeLHCV2Vkb2sofs525OQs=; b=PLabB5OtHoIB/4frWGMNVWA00O
+        ZditpttdyZQWxCPoHckWtK0ija6YTapG5Q9NbpjWkhLjdkRjQBVxsiFHGUmoQAh3OU13xOKoS6CwS
+        SkbOwYG7AkmrrUPlPoSvn4ZzPj7xCpTRhthTFiKUDE44qe/1evcoyiz6EVk7qw6wN7ZEAhXw57Bo1
+        3CUIgr/3Wq021DYX1a1SBAFcwyH5pJSqLHeaUAaDe1obd89lKG5sWALX2etA4tYA+sinTRmsJm92B
+        IYIrdzx0d1ahPreFBt+8FPX28tHJQ3NcAApTvu8PpJW2xBC6VIMv5QBgFac6SoWvZbZ3/anTsI/bG
+        cQNuSsuQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nwQTS-003oym-7w; Wed, 01 Jun 2022 15:41:31 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7E8CE98137D; Wed,  1 Jun 2022 17:41:27 +0200 (CEST)
+Date:   Wed, 1 Jun 2022 17:41:27 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
+        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, zhengqi.arch@bytedance.com
+Subject: Re: [PATCH v4] sched/fair: optimize and simplify rq leaf_cfs_rq_list
+Message-ID: <YpeIp/Ljos6jNpKv@worktop.programming.kicks-ass.net>
+References: <20220601021848.76943-1-zhouchengming@bytedance.com>
+ <CAKfTPtBTj4u-NW4NDUORdWfdxsHwoMxzqEO4jAKVZDjyCKxL4w@mail.gmail.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtBTj4u-NW4NDUORdWfdxsHwoMxzqEO4jAKVZDjyCKxL4w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogS2FsZXNoIFNpbmdoDQo+IFNlbnQ6IDMxIE1heSAyMDIyIDIzOjMwDQouLi4NCj4gPiBG
-aWxlIHBhdGhzIGNhbiBjb250YWluIGZ1biBjaGFyYWN0ZXJzIGxpa2UgbmV3bGluZXMgb3IgY29s
-b25zLCB3aGljaA0KPiA+IGNvdWxkIG1ha2UgcGFyc2luZyBvdXQgZmlsZW5hbWVzIGluIHRoaXMg
-dGV4dCBmaWxlLi4uIGZ1bi4gSG93IHdvdWxkIHlvdXINCj4gPiB1c2Vyc3BhY2UgcGFyc2luZyBs
-b2dpYyBoYW5kbGUgIi9ob21lL3N0ZXBoZW4vZmlsZW5hbWVcbnNpemU6XHQ0MDk2Ij8gVGhlDQo+
-ID4gcmVhZGxpbmsoMikgQVBJIG1ha2VzIHRoYXQgZWFzeSBhbHJlYWR5Lg0KPiANCj4gSSB0aGlu
-ayBzaW5jZSB3ZSBoYXZlIGVzY2FwZWQgdGhlICJcbiIgKHNlcV9maWxlX3BhdGgobSwgZmlsZSwg
-IlxuIikpLA0KPiB0aGVuIHVzZXIgc3BhY2UgbWlnaHQgcGFyc2UgdGhpcyBsaW5lIGxpa2U6DQo+
-IA0KPiBpZiAoc3RybmNtcChsaW5lLCAicGF0aDpcdCIsIDYpID09IDApDQo+ICAgICAgICAgY2hh
-ciogcGF0aCA9IGxpbmUgKyA2Ow0KDQpUaGUgcmVhbCBhbm5veWFuY2UgaXMgb3RoZXIgdGhpbmdz
-IGRvaW5nIHNjYW5zIG9mIHRoZSBmaWxlc3lzdGVtDQp0aGF0IGFjY2lkZW50YWxseSAnYnVtcCBp
-bnRvJyBzdHJhbmdlIG5hbWVzLg0KDQpXaGlsZSBhbnl0aGluZyBzZXJpb3VzIHByb2JhYmx5IGdl
-dHMgaXQgcmlnaHQgaG93IG1hbnkgdGltZXMNCkRvIHlvdSBydW4gJ2ZpbmQnIHRvIHF1aWNrbHkg
-c2VhcmNoIGZvciBzb21ldGhpbmc/DQoNClNwYWNlcyBpbiBmaWxlbmFtZXMgKHBvcHVsYXJpc2Vk
-IGJ5IHNvbWUgb3RoZXIgb3MpIGFyZSBhIFBJVEEuDQpOb3QgdG8gbWVudGlvbiBsZWFkaW5nIGFu
-ZCB0cmFpbGluZyBzcGFjZXMhDQpBbnlvbmUgdXNpbmcgZmlsZW5hbWVzIHRoYXQgb25seSBjb250
-YWluIHNwYWNlcyBkb2VzIG5lZWQgc2hvb3RpbmcuDQoNCkRlbGliZXJhdGVseSBhZGRpbmcgbm9u
-LXByaW50YWJsZXMgaXNuJ3QgcmVhbGx5IGEgZ29vZCBpZGVhLg0KDQoJRGF2aWQNCg0KLQ0KUmVn
-aXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRv
-biBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Wed, Jun 01, 2022 at 03:22:12PM +0200, Vincent Guittot wrote:
+> On Wed, 1 Jun 2022 at 04:19, Chengming Zhou <zhouchengming@bytedance.com> wrote:
+> >
+> > We notice the rq leaf_cfs_rq_list has two problems when do bugfix
+> > backports and some test profiling.
+> >
+> > 1. cfs_rqs under throttled subtree could be added to the list, and
+> >    make their fully decayed ancestors on the list, even though not needed.
+> >
+> > 2. #1 also make the leaf_cfs_rq_list management complex and error prone,
+> >    this is the list of related bugfix so far:
+> >
+> >    commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
+> >    commit fe61468b2cbc ("sched/fair: Fix enqueue_task_fair warning")
+> >    commit b34cb07dde7c ("sched/fair: Fix enqueue_task_fair() warning some more")
+> >    commit 39f23ce07b93 ("sched/fair: Fix unthrottle_cfs_rq() for leaf_cfs_rq list")
+> >    commit 0258bdfaff5b ("sched/fair: Fix unfairness caused by missing load decay")
+> >    commit a7b359fc6a37 ("sched/fair: Correctly insert cfs_rq's to list on unthrottle")
+> >    commit fdaba61ef8a2 ("sched/fair: Ensure that the CFS parent is added after unthrottling")
+> >    commit 2630cde26711 ("sched/fair: Add ancestors of unthrottled undecayed cfs_rq")
+> >
+> > commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
+> > delete every cfs_rq under throttled subtree from rq->leaf_cfs_rq_list,
+> > and delete the throttled_hierarchy() test in update_blocked_averages(),
+> > which optimized update_blocked_averages().
+> >
+> > But those later bugfix add cfs_rqs under throttled subtree back to
+> > rq->leaf_cfs_rq_list again, with their fully decayed ancestors, for
+> > the integrity of rq->leaf_cfs_rq_list.
+> >
+> > This patch takes another method, skip all cfs_rqs under throttled
+> > hierarchy when list_add_leaf_cfs_rq(), to completely make cfs_rqs
+> > under throttled subtree off the leaf_cfs_rq_list.
+> >
+> > So we don't need to consider throttled related things in
+> > enqueue_entity(), unthrottle_cfs_rq() and enqueue_task_fair(),
+> > which simplify the code a lot. Also optimize update_blocked_averages()
+> > since cfs_rqs under throttled hierarchy and their ancestors
+> > won't be on the leaf_cfs_rq_list.
+> >
+> > Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> 
+> Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 
+Thanks!

@@ -2,150 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4557C53A5B6
+	by mail.lfdr.de (Postfix) with ESMTP id 9181A53A5B7
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 15:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353146AbiFANOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 09:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
+        id S1353151AbiFANOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 09:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351588AbiFANOb (ORCPT
+        with ESMTP id S1353147AbiFANOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 09:14:31 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C923CA46;
-        Wed,  1 Jun 2022 06:14:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654089267; x=1685625267;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=thV3dq7IP3pZFJ/eKrgaz8exm55qhJj7BG42P4ZLFS4=;
-  b=g8vqqojOIhfpgb6zTUBNH4QKI4yuyNwJ8Kh8qe2dab1QdXukEP1+ipPT
-   524lEDQsgfXPgLEsczpCCwtvvijBKQ7cdlwGoKZsVBnrtnen3MJV9bQis
-   AQoviHkYFntPSGysOLdm6SNPPibOjvsSOaeDHi8mBxjViiR8fldZDP/RX
-   I=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Jun 2022 06:14:27 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 06:14:27 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 1 Jun 2022 06:14:27 -0700
-Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 1 Jun 2022
- 06:14:24 -0700
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
-Subject: [PATCH 1/1] drivers/thermal/thermal_of: Add critical/hot ops support for thermal_of sensor
-Date:   Wed, 1 Jun 2022 18:44:00 +0530
-Message-ID: <20220601131400.24627-2-quic_manafm@quicinc.com>
+        Wed, 1 Jun 2022 09:14:49 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2100.outbound.protection.outlook.com [40.107.117.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1178C3CFDC
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 06:14:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FNF8/Xdhh8geNu2rWJlGa8B8lLtHyEGK9QbtHq2gA2nRPsFxZxgG4Gd6HWBmBJav8MuCM6z3eCbM72oIGd/W4QDslKw7TSyU2Y0DUnhgQjbJoEzzNTg1HJCTVJ60mb6OS2CpHM4eCWLSSF6rYdFlx1BHc+prOYmjMe7hur2UFZza3iaSeYq+UIWQ542KmpVRnxeFlPvHTKLEs9zC/lujZngk/a3uF9osOpanSOTUsep9qlUSxmEBg9/bTRJULhtXc4JrhjTGqE1xC6OlhIBNSBhYabVhRuZbWtyo+PhHuHAyTZl3BJxU2ckv55L6b+TuATAw0YUJSvuckFLAWSDO7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kHTah85rWBOUbG9SckPzdADENiGKeLbQF4354TiG8nM=;
+ b=YZUNKutyt79/X355IgTLTxqEz1jIjdw0CHyEJ4nP+VLXauP+fvNs4unbN7dubnXDCl4z+5PiZmqSZhcnW60KizX+LlJ40bR9t4yuEd5O42svnMIetHxUwd55z3H0eBP/WHw8vkQ84KjT/bj+CJFwjSAlj+ukTORbyMXoltOso7qqPNSWGEUOSLlkR+JSAKxU10dsGQqR5FIFkD924CNH90w5mvXCmsr1f+0g2W6oppuqNLn/eajxjQTif6x/NzR5uqJGGaReIvTAlFsCFJ+20FIrwjmXFvAqTVh2caOdySV9cTrcyJZ227Jf2Io/FM1s4m0DoVfjDNIVmNeir2QVJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kHTah85rWBOUbG9SckPzdADENiGKeLbQF4354TiG8nM=;
+ b=ei1rT3PBiLpw+wrqKXAwbVWCwINeNHutalH3UlR2u4wGI3/qsOGIUIbGTSlP54f8Vic58sdv1vVw58tOgyZsKfDQd3MR9zmZjIVIZV4C1oj5ranPjXczfpe1ov27va0NwRF21t26j4WmtSLCaZXg4uL02/gvcoQVK/bAX4W75H4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by SG2PR06MB3547.apcprd06.prod.outlook.com (2603:1096:4:9a::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.16; Wed, 1 Jun
+ 2022 13:14:42 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::a92b:6d92:5ad9:febb]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::a92b:6d92:5ad9:febb%9]) with mapi id 15.20.5314.012; Wed, 1 Jun 2022
+ 13:14:42 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH] ASoC: fsl: Check before clk_put() not needed
+Date:   Wed,  1 Jun 2022 06:14:29 -0700
+Message-Id: <20220601131429.9794-1-hanyihao@vivo.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220601131400.24627-1-quic_manafm@quicinc.com>
-References: <20220601131400.24627-1-quic_manafm@quicinc.com>
-MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: HK2PR02CA0149.apcprd02.prod.outlook.com
+ (2603:1096:202:16::33) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 17ff8070-a217-49eb-6ee0-08da43d0b072
+X-MS-TrafficTypeDiagnostic: SG2PR06MB3547:EE_
+X-Microsoft-Antispam-PRVS: <SG2PR06MB354785F5FBD62DB0AB30011AA2DF9@SG2PR06MB3547.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VZ8+WBQfRSdqCF0AE2jHeMWUQ95LpSFSvFIPhOlg96seR7LquK3yoc7A+Uj6BbYtnUgbOXd3q2fn3AhUUBgRP+1ehUe9e0pGxpS9TobSRP5uEEpqLqypbJxs0WpbWA/YhXKyoOAt8vDizptTpCbZQ2ue0Wb+CdlsiHoSR09l1C/kQADe76yV5mfodXIm2degVDNWvGDo6Hzci/egl79Supb3e6m6PG+e018dPpGzERl5gRfA6TG+emM5ACDyiPakLXeMCD+uf42LP2h2uFl1Ab+MLQBHeGjoydrt36xyon4IjxpM0OvC3FkTo44+ueOWAunih6cHFYpEuHtoa8RlS8bWulz/BEClNnMgfp8gHmY0135gDz2UAnWbT1MTKe/Azlubc4ayqYWl5a/TZGoOJf82j7JosTXmQ4qqvPfeJyd/gE2Yx4Klr+JlemPEpFq3z4IXCrYYQBsK7wP+qrQAIH41YC0G713L/h2XctYk6Mc4CxtQE/sSlNh9fBuHGtTffrF9n/mZqiQ+EYOFB/UAK5leu/z2ydcdI6tcsd9Qwg7WExCEyIY5ANk9jf1CJXr55SIs5x9hs3zaV1lVp3bhwEtkC6O5qWUqjS7qcuDuDM4o45PpWgmksN11IklNOIvtbdz0x05IUlHbHbRb8xemy5jYF0Kph5tO/tE7L/ucX9SmzfIGi3z2qgERAQD/mPIvboL3bIjU4kF3NYjhhbnP++ZFxFLLAKLd50Ux4siONIA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(110136005)(316002)(66556008)(66476007)(83380400001)(8676002)(66946007)(38350700002)(4326008)(921005)(38100700002)(7416002)(4744005)(107886003)(6486002)(86362001)(186003)(8936002)(6512007)(26005)(5660300002)(52116002)(2906002)(6666004)(6506007)(1076003)(2616005)(508600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?J6uSXer8Ee5OJP9Y7uettXELyc6FTd+BE0rI1XDYyBdRmLSTl5CeIeNDyfMt?=
+ =?us-ascii?Q?peecR2LRLrL22V4I3gZavcWd/6+TyNdCRZGNhMqyU/OxMEilnnsh9lKtxQZC?=
+ =?us-ascii?Q?S/x0U6qMHbHpavh8CCGTZiUdkcNSWQzwWFcaQbqA7oS83u4hxI/VYin1P62a?=
+ =?us-ascii?Q?K88HcJ/O91u0yHw4dEtjg0o5oADVFtBaOT10oX2OHQg9HS5Of3XhsjFvZKDN?=
+ =?us-ascii?Q?v/ipZEVYAj0T/FihebMY2l97EQLY7d6SDCcPNdSCmH4PGh3wT5BCOUcWeIOW?=
+ =?us-ascii?Q?zbVDHAvIotmNclpAVTZddLSQ4giA71RjWExibKVppOHGCplSOQmd3pzbsCnC?=
+ =?us-ascii?Q?HS6WjVXdmttxmrIWZxnbkwQWT2irwp+csyjyLr/5q+BujmbwXMTFIkXn21zv?=
+ =?us-ascii?Q?lx7Sl11cvnMh00c7MILkqHbitfhDBV6CdlkukH4Dj2Jyw+9JYfQ8O5SpKuoH?=
+ =?us-ascii?Q?Bxx6RZE40V6CHkn1Hgj4BXUhD4LaSt7UipUDnsgk0gkZnnMmJ/Pg5Uf+VJF8?=
+ =?us-ascii?Q?SU3lJrH97PUgWXNqOwtZNEwoabH4am0NJgiUW7yJoDH0GKw1to/o0dnot/NF?=
+ =?us-ascii?Q?s0nxhkiWAjqC3xsGjaWQAbgyEYctv93SM6cIlx3b/2k+mK42gf2p5oCfyp1v?=
+ =?us-ascii?Q?OMwEsqEMSPe3W3Gf/GRIjmr75p0JFRoGlzS0Ixb4D49Q9DmzX44fnOzZcZo/?=
+ =?us-ascii?Q?nNQe5a0dYVnMBwxAH7X/YfdNVpSU472mTsorBqtuXFxq86dC239yw+hVne5v?=
+ =?us-ascii?Q?IfbRP6Yipg6BfrlC/AhHyaEVz9zP7BQxAcmiMbJYS1ySKgVjEsSObF3t+qNf?=
+ =?us-ascii?Q?XDw1d1PnUIF4bGAsA0ElDzzziArQqVVP3uDucqnSq6ANlOtrtfiPYHVVmdPM?=
+ =?us-ascii?Q?wyOeX2g6t+6hdV40qIPCkzmTvbGHp4c668b3wt1Rl8Ij12mWYFHr1qfSEnb/?=
+ =?us-ascii?Q?Dx8slLHIfrR2qp4yhGsj7gGG2kwOj8sbP/U5l7s6MZ0d/XEHlTz7weJLkzDQ?=
+ =?us-ascii?Q?+SHu3rUbKpbGlhEEiTOGEuxcynEGtuM3uY/8VJRB2HByrWdStg17lTzlSxV6?=
+ =?us-ascii?Q?pxEaEYGCNaM+iGF3J95TiBSwqyDJ9JN7AWE5glcZ5La9lfAhzuhhohzrfP2L?=
+ =?us-ascii?Q?v2G1GMSakG++IPLd6+T/WCweMtBO4NNJya5OW5e2LbFjOe9WwMWnyo7Rv9bk?=
+ =?us-ascii?Q?5ZgMwgkMgHU+gF/eODcjzStbCp49hs2DoGX/4/tR3mFlOh4j9dCPqt+sTPrf?=
+ =?us-ascii?Q?D2vdjt07S2MnXKIt+0aQ+l2+5zuDkr4scsbJWVkwWPr8KTlaYZaysrlXAJ4m?=
+ =?us-ascii?Q?/te2dVDRIYPHTQYCQZtRZZ+YJid3JtCjY9EE9UXSw/KFZ4pu8Qo0vi9CFjmT?=
+ =?us-ascii?Q?0BN1k76LPXKjx+HCcocc48zqCQyMstAf2E9Cw14oB7DtvcB5LJcGwrckeBHi?=
+ =?us-ascii?Q?TJcH7suGtByzeQ7HAiwVgTxnUrPeMdb/X7hvIu1v9DSA5b4+M7nxO3bbdYjM?=
+ =?us-ascii?Q?N/pjfVMYE2tLY41HvFIKg0bnxa7wlbnhh/Fds8sQRG4Z0H01X6YmlP/WATVW?=
+ =?us-ascii?Q?2H8o/sarqDRIe4a5/zuMnr5rYGvjMSBH4j66gA9HbG3H2hFyiceQv5GECTZb?=
+ =?us-ascii?Q?/ZArfaNrLW0qiUrto7P6r/cGx2Q/3lbYWWjO2y/IrY5NM/TxoMWn7couBoem?=
+ =?us-ascii?Q?M9FnVAfE81h2tdeEgqj1s62LO4TN7QiWn+7IXQFVqSYcIw4Pk9BETU8VfjDx?=
+ =?us-ascii?Q?lZUU0sz6uQ=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 17ff8070-a217-49eb-6ee0-08da43d0b072
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2022 13:14:42.0615
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KXfDyTAxSZmQpuDD+k/8X51OE7eijmHXAt83Z22vgtW+zJ5XQvm5vjYaig6gFEFK1ahoPetZE7wQ20PaVjXYWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3547
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sensor driver which register through thermal_of interface doesn't
-have an option to get thermal zone critical, hot trip violation
-notification from thermal core.
+clk_put() already checks the clk ptr using !clk and IS_ERR()
+so there is no need to check it again before calling it.
 
-Add support for these ops in thermal_of interface so that sensor
-driver can use these ops.
-
-Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
 ---
- drivers/thermal/thermal_of.c | 21 +++++++++++++++++++++
- include/linux/thermal.h      |  6 ++++++
- 2 files changed, 27 insertions(+)
+ sound/soc/fsl/imx-sgtl5000.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index b65d435cb92f..65e1848cb1dd 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -211,6 +211,20 @@ static int of_thermal_change_mode(struct thermal_zone_device *tz,
- 	return data->ops->change_mode(data->sensor_data, mode);
- }
+diff --git a/sound/soc/fsl/imx-sgtl5000.c b/sound/soc/fsl/imx-sgtl5000.c
+index 580a0d963f0e..16a281820186 100644
+--- a/sound/soc/fsl/imx-sgtl5000.c
++++ b/sound/soc/fsl/imx-sgtl5000.c
+@@ -185,8 +185,7 @@ static int imx_sgtl5000_probe(struct platform_device *pdev)
+ put_device:
+ 	put_device(&codec_dev->dev);
+ fail:
+-	if (data && !IS_ERR(data->codec_clk))
+-		clk_put(data->codec_clk);
++	clk_put(data->codec_clk);
+ 	of_node_put(ssi_np);
+ 	of_node_put(codec_np);
  
-+static void of_thermal_hot_notify(struct thermal_zone_device *tz)
-+{
-+	struct __thermal_zone *data = tz->devdata;
-+
-+	data->ops->hot(data->sensor_data);
-+}
-+
-+static void of_thermal_critical_notify(struct thermal_zone_device *tz)
-+{
-+	struct __thermal_zone *data = tz->devdata;
-+
-+	data->ops->critical(data->sensor_data);
-+}
-+
- static int of_thermal_bind(struct thermal_zone_device *thermal,
- 			   struct thermal_cooling_device *cdev)
- {
-@@ -419,6 +433,11 @@ thermal_zone_of_add_sensor(struct device_node *zone,
- 	if (ops->change_mode)
- 		tzd->ops->change_mode = of_thermal_change_mode;
- 
-+	if (ops->hot)
-+		tzd->ops->hot = of_thermal_hot_notify;
-+
-+	if (ops->critical)
-+		tzd->ops->critical = of_thermal_critical_notify;
- 	mutex_unlock(&tzd->lock);
- 
- 	return tzd;
-@@ -581,6 +600,8 @@ void thermal_zone_of_sensor_unregister(struct device *dev,
- 	tzd->ops->get_trend = NULL;
- 	tzd->ops->set_emul_temp = NULL;
- 	tzd->ops->change_mode = NULL;
-+	tzd->ops->hot = NULL;
-+	tzd->ops->critical = NULL;
- 
- 	tz->ops = NULL;
- 	tz->sensor_data = NULL;
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 365733b428d8..920f7e5c80bb 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -301,6 +301,10 @@ struct thermal_zone_params {
-  *		   hardware.
-  * @change_mode: a pointer to a function that notifies the thermal zone
-  *		   mode change.
-+ * @hot:	 a pointer to a function that notifies the thermal zone
-+ *		   hot trip violation.
-+ * @critical: a pointer to a function that notifies the thermal zone
-+ *		   critical trip violation.
-  */
- struct thermal_zone_of_device_ops {
- 	int (*get_temp)(void *, int *);
-@@ -309,6 +313,8 @@ struct thermal_zone_of_device_ops {
- 	int (*set_emul_temp)(void *, int);
- 	int (*set_trip_temp)(void *, int, int);
- 	int (*change_mode) (void *, enum thermal_device_mode);
-+	void (*hot)(void *sensor_data);
-+	void (*critical)(void *sensor_data);
- };
- 
- /* Function declarations */
+-- 
+2.17.1
+

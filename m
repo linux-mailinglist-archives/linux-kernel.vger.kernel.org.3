@@ -2,160 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C12539B5F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 04:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F6B539B7F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349221AbiFACrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 22:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53764 "EHLO
+        id S1349269AbiFADFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 23:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349223AbiFACq4 (ORCPT
+        with ESMTP id S1349263AbiFADFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 May 2022 22:46:56 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14BFD7E
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 19:46:43 -0700 (PDT)
-Received: from kwepemi100011.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LCYQj4qv6zfZDX;
-        Wed,  1 Jun 2022 10:45:01 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi100011.china.huawei.com (7.221.188.134) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 1 Jun 2022 10:46:41 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
- 2022 10:46:40 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <richard@nod.at>, <miquel.raynal@bootlin.com>,
-        <kirill.shutemov@linux.intel.com>, <willy@infradead.org>,
-        <s.hauer@pengutronix.de>, <ext-adrian.hunter@nokia.com>,
-        <Artem.Bityutskiy@nokia.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>
-Subject: [PATCH v2 2/2] ubifs: ubifs_releasepage: Remove ubifs_assert(0) to valid this process
-Date:   Wed, 1 Jun 2022 11:00:00 +0800
-Message-ID: <20220601030000.49714-3-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220601030000.49714-1-chengzhihao1@huawei.com>
-References: <20220601030000.49714-1-chengzhihao1@huawei.com>
+        Tue, 31 May 2022 23:05:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1A98D6A3
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:05:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7C42B81765
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 03:05:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 579E5C385A9;
+        Wed,  1 Jun 2022 03:05:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654052711;
+        bh=FL4trFaVlrtgGhxl6RfunZqzu7ydSpuIPCmAbrVFlJk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=tWHXJzs6FWyLAuZxGqbf9O7WNu+Xu4HYr/3MxyjRSOxldvM7Z7GT5BiQnnEHJrA5a
+         A1XT+R5O7+RxWypHf4ARPbcXlPVjICKJeYzbF93z3cB76IC6wZUqRj2YKMeNPy5BoX
+         ies9gOD3hhsNJoMGnEkWaTOgGXr8rHuI0JSxGEo3w6m69/ahTD7SAllUP+jez2WtyZ
+         myJq1sOKdeYT4tedWJAaAAxr+psM/kMImFzDcYvJzz9z+ba9hBpW/KTdzo4qO64Xd0
+         TpJmhG4vNeLrowC7Ouo98g/mkf4TvO9CqCl7TnfU0uh9vgQlPI2Ta97JBA1EEF0xUR
+         hcMyuQgaB+92A==
+Message-ID: <7ea1c35f-e176-1a17-f3ed-14d4118d3c21@kernel.org>
+Date:   Wed, 1 Jun 2022 11:05:07 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4] f2fs: separate NOCoW and pinfile semantics
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
+References: <20220517032410.3564033-1-chao@kernel.org>
+ <YoPZh+vl68IH5loV@google.com>
+ <fa3cbe36-1738-a811-ce03-dd5aaf8ea3d4@kernel.org>
+ <YpZ4MxH3bkWbTPvI@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <YpZ4MxH3bkWbTPvI@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two states for ubifs writing pages:
-1. Dirty, Private
-2. Not Dirty, Not Private
+On 2022/6/1 4:18, Jaegeuk Kim wrote:
+> On 05/31, Chao Yu wrote:
+>> On 2022/5/18 1:21, Jaegeuk Kim wrote:
+>>> On 05/17, Chao Yu wrote:
+>>>> Pinning a file is heavy, because skipping pinned files make GC
+>>>> running with heavy load or no effect.
+>>>>
+>>>> So that this patch proposes to separate nocow and pinfile semantics:
+>>>> - NOCoW flag can only be set on regular file.
+>>>> - NOCoW file will only trigger IPU at common writeback/flush.
+>>>> - NOCow file will do OPU during GC.
+>>>
+>>> How about adding
+>>>    - NOCow file will allocate 2MB-aligned space via fallocate.
+>>>
+>>> So, it'd be same as file pinning except allowing GCs. wdyt?
+>>
+>> Well, it seems the segment-aligned allocation feature should not couple with
+>> pin_file or NoCow flag, what about introducing another ioctl for that? something
+>> like: F2FS_IOC_ALIGNMENT_PREALLOCATION w/ arg.alignment_start, arg.alignment_len,
+>> arg.total_len?
+> 
+> We should allocate 2MB to pin the file, since android is using it.
 
-The normal process cannot go to ubifs_releasepage() which means there
-exists pages being private but not dirty. Reproducer[1] shows that it
-could occur (which maybe related to [2]) with following process:
+I mean we can use nocow + new ioctl instead of pinfile, thoughts?
 
-     PA                     PB                    PC
-lock(page)[PA]
-ubifs_write_end
-  attach_page_private         // set Private
-  __set_page_dirty_nobuffers  // set Dirty
-unlock(page)
+Thanks,
 
-write_cache_pages[PA]
-  lock(page)
-  clear_page_dirty_for_io(page)	// clear Dirty
-  ubifs_writepage
-
-                        do_truncation[PB]
-			  truncate_setsize
-			    i_size_write(inode, newsize) // newsize = 0
-
-    i_size = i_size_read(inode)	// i_size = 0
-    end_index = i_size >> PAGE_SHIFT
-    if (page->index > end_index)
-      goto out // jump
-out:
-unlock(page)   // Private, Not Dirty
-
-						generic_fadvise[PC]
-						  lock(page)
-						  invalidate_inode_page
-						    try_to_release_page
-						      ubifs_releasepage
-						        ubifs_assert(c, 0)
-		                                        // bad assertion!
-						  unlock(page)
-			  truncate_pagecache[PB]
-
-Then we may get following assertion failed:
-  UBIFS error (ubi0:0 pid 1683): ubifs_assert_failed [ubifs]:
-  UBIFS assert failed: 0, in fs/ubifs/file.c:1513
-  UBIFS warning (ubi0:0 pid 1683): ubifs_ro_mode [ubifs]:
-  switched to read-only mode, error -22
-  CPU: 2 PID: 1683 Comm: aa Not tainted 5.16.0-rc5-00184-g0bca5994cacc-dirty #308
-  Call Trace:
-    dump_stack+0x13/0x1b
-    ubifs_ro_mode+0x54/0x60 [ubifs]
-    ubifs_assert_failed+0x4b/0x80 [ubifs]
-    ubifs_releasepage+0x67/0x1d0 [ubifs]
-    try_to_release_page+0x57/0xe0
-    invalidate_inode_page+0xfb/0x130
-    __invalidate_mapping_pages+0xb9/0x280
-    invalidate_mapping_pagevec+0x12/0x20
-    generic_fadvise+0x303/0x3c0
-    ksys_fadvise64_64+0x4c/0xb0
-
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=215373
-[2] https://linux-mtd.infradead.narkive.com/NQoBeT1u/patch-rfc-ubifs-fix-assert-failed-in-ubifs-set-page-dirty
-
-Fixes: 1e51764a3c2ac0 ("UBIFS: add new flash file system")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
----
- fs/ubifs/file.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
-
-diff --git a/fs/ubifs/file.c b/fs/ubifs/file.c
-index 264b0484ea56..bc2eaf331e56 100644
---- a/fs/ubifs/file.c
-+++ b/fs/ubifs/file.c
-@@ -1495,14 +1495,23 @@ static bool ubifs_release_folio(struct folio *folio, gfp_t unused_gfp_flags)
- 	struct inode *inode = folio->mapping->host;
- 	struct ubifs_info *c = inode->i_sb->s_fs_info;
- 
--	/*
--	 * An attempt to release a dirty page without budgeting for it - should
--	 * not happen.
--	 */
- 	if (folio_test_writeback(folio))
- 		return false;
-+
-+	/*
-+	 * Page is private but not dirty, weird? There is one condition
-+	 * making it happened. ubifs_writepage skipped the page because
-+	 * page index beyonds isize (for example. truncated by other
-+	 * process named A), then the page is invalidated by fadvise64
-+	 * syscall before being truncated by process A.
-+	 */
- 	ubifs_assert(c, folio_test_private(folio));
--	ubifs_assert(c, 0);
-+	if (folio_test_checked(folio))
-+		release_new_page_budget(c);
-+	else
-+		release_existing_page_budget(c);
-+
-+	atomic_long_dec(&c->dirty_pg_cnt);
- 	folio_detach_private(folio);
- 	folio_clear_checked(folio);
- 	return true;
--- 
-2.31.1
-
+> 
+>>
+>> Thanks,
+>>
+>>>
+>>>>
+>>>> This flag can satisfying the demand of:
+>>>> 1) avoiding fragment of file's physical block
+>>>> 2) userspace doesn't want to pin file's physical address
+>>>>
+>>>> After commit 5d539245cb18 ("f2fs: export FS_NOCOW_FL flag to user"),
+>>>> Pin_file and NOCoW flags have already been twined closely. e.g.
+>>>> once we set pinfile flag in file, nocow flag will be shown; and after
+>>>> clearing pinfile flag, nocow flag will disappear.
+>>>>
+>>>> So, in order to keep backward compatibility, let use below semantics:
+>>>>
+>>>> f2fs_ioc_set_pin_file/f2fs_fileattr_set logic:
+>>>> 		pinfile			nocow
+>>>> set		set pinfile | nocow	set nocow
+>>>> clear		clear pinfile | nocow	clear nocow
+>>>>
+>>>> File Behaviors:
+>>>> w/ pinfile, w/ nocow:		use pinfile semantics
+>>>> w/ pinfile, w/o nocow:		use pinfile semantics
+>>>> w/o pinfile, w/ nocow:		use nocow semantics
+>>>> w/o pinfile, w/o nocow:		no pinfile or nocow semantics
+>>>>
+>>>> NOCoW can also be set on directory, and it will have no effect on
+>>>> directory, however, new files created in nocow directory will have the
+>>>> flag set.
+>>>>
+>>>> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+>>>> ---
+>>>> v4:
+>>>> - allow IPU only for NoCowed regular inode.
+>>>>    fs/f2fs/data.c |  3 +++
+>>>>    fs/f2fs/f2fs.h | 13 +++++++++++--
+>>>>    fs/f2fs/file.c | 18 +++++++++++++++++-
+>>>>    3 files changed, 31 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>>> index 54a7a8ad994d..42d95ac6b508 100644
+>>>> --- a/fs/f2fs/data.c
+>>>> +++ b/fs/f2fs/data.c
+>>>> @@ -2498,6 +2498,9 @@ bool f2fs_should_update_inplace(struct inode *inode, struct f2fs_io_info *fio)
+>>>>    	if (f2fs_is_pinned_file(inode))
+>>>>    		return true;
+>>>> +	if (S_ISREG(inode->i_mode) && F2FS_I(inode)->i_flags & F2FS_NOCOW_FL)
+>>>> +		return true;
+>>>> +
+>>>>    	/* if this is cold file, we should overwrite to avoid fragmentation */
+>>>>    	if (file_is_cold(inode))
+>>>>    		return true;
+>>>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>>>> index 492af5b96de1..5c67736000a7 100644
+>>>> --- a/fs/f2fs/f2fs.h
+>>>> +++ b/fs/f2fs/f2fs.h
+>>>> @@ -2916,13 +2916,15 @@ static inline void f2fs_change_bit(unsigned int nr, char *addr)
+>>>>    #define F2FS_NOCOMP_FL			0x00000400 /* Don't compress */
+>>>>    #define F2FS_INDEX_FL			0x00001000 /* hash-indexed directory */
+>>>>    #define F2FS_DIRSYNC_FL			0x00010000 /* dirsync behaviour (directories only) */
+>>>> +#define F2FS_NOCOW_FL			0x00800000 /* Do not cow file */
+>>>>    #define F2FS_PROJINHERIT_FL		0x20000000 /* Create with parents projid */
+>>>>    #define F2FS_CASEFOLD_FL		0x40000000 /* Casefolded file */
+>>>>    /* Flags that should be inherited by new inodes from their parent. */
+>>>>    #define F2FS_FL_INHERITED (F2FS_SYNC_FL | F2FS_NODUMP_FL | F2FS_NOATIME_FL | \
+>>>>    			   F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
+>>>> -			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL)
+>>>> +			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL | \
+>>>> +			   F2FS_NOCOW_FL)
+>>>>    /* Flags that are appropriate for regular files (all but dir-specific ones). */
+>>>>    #define F2FS_REG_FLMASK		(~(F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
+>>>> @@ -2954,9 +2956,16 @@ static inline void __mark_inode_dirty_flag(struct inode *inode,
+>>>>    		fallthrough;
+>>>>    	case FI_DATA_EXIST:
+>>>>    	case FI_INLINE_DOTS:
+>>>> -	case FI_PIN_FILE:
+>>>>    	case FI_COMPRESS_RELEASED:
+>>>>    		f2fs_mark_inode_dirty_sync(inode, true);
+>>>> +		break;
+>>>> +	case FI_PIN_FILE:
+>>>> +		if (set)
+>>>> +			F2FS_I(inode)->i_flags |= F2FS_NOCOW_FL;
+>>>> +		else
+>>>> +			F2FS_I(inode)->i_flags &= ~F2FS_NOCOW_FL;
+>>>> +		f2fs_mark_inode_dirty_sync(inode, true);
+>>>> +		break;
+>>>>    	}
+>>>>    }
+>>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+>>>> index 216081ea8c81..9e71ce8601f9 100644
+>>>> --- a/fs/f2fs/file.c
+>>>> +++ b/fs/f2fs/file.c
+>>>> @@ -1851,6 +1851,20 @@ static int f2fs_setflags_common(struct inode *inode, u32 iflags, u32 mask)
+>>>>    	if (IS_NOQUOTA(inode))
+>>>>    		return -EPERM;
+>>>> +	if ((iflags ^ masked_flags) & F2FS_NOCOW_FL) {
+>>>> +		int ret;
+>>>> +
+>>>> +		if (!S_ISREG(inode->i_mode) && !S_ISDIR(inode->i_mode))
+>>>> +			return -EINVAL;
+>>>> +		if (S_ISREG(inode->i_mode)) {
+>>>> +			if (f2fs_should_update_outplace(inode, NULL))
+>>>> +				return -EINVAL;
+>>>> +			ret = f2fs_convert_inline_inode(inode);
+>>>> +			if (ret)
+>>>> +				return ret;
+>>>> +		}
+>>>> +	}
+>>>> +
+>>>>    	if ((iflags ^ masked_flags) & F2FS_CASEFOLD_FL) {
+>>>>    		if (!f2fs_sb_has_casefold(F2FS_I_SB(inode)))
+>>>>    			return -EOPNOTSUPP;
+>>>> @@ -1926,6 +1940,7 @@ static const struct {
+>>>>    	{ F2FS_NOCOMP_FL,	FS_NOCOMP_FL },
+>>>>    	{ F2FS_INDEX_FL,	FS_INDEX_FL },
+>>>>    	{ F2FS_DIRSYNC_FL,	FS_DIRSYNC_FL },
+>>>> +	{ F2FS_NOCOW_FL,	FS_NOCOW_FL },
+>>>>    	{ F2FS_PROJINHERIT_FL,	FS_PROJINHERIT_FL },
+>>>>    	{ F2FS_CASEFOLD_FL,	FS_CASEFOLD_FL },
+>>>>    };
+>>>> @@ -1957,7 +1972,8 @@ static const struct {
+>>>>    		FS_NOCOMP_FL |		\
+>>>>    		FS_DIRSYNC_FL |		\
+>>>>    		FS_PROJINHERIT_FL |	\
+>>>> -		FS_CASEFOLD_FL)
+>>>> +		FS_CASEFOLD_FL |	\
+>>>> +		FS_NOCOW_FL)
+>>>>    /* Convert f2fs on-disk i_flags to FS_IOC_{GET,SET}FLAGS flags */
+>>>>    static inline u32 f2fs_iflags_to_fsflags(u32 iflags)
+>>>> -- 
+>>>> 2.25.1

@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A9153AF93
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 908EA53AEF1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232290AbiFAWCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 18:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
+        id S232299AbiFAWDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 18:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbiFAWCl (ORCPT
+        with ESMTP id S232276AbiFAWDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 18:02:41 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494A2B842;
-        Wed,  1 Jun 2022 15:02:40 -0700 (PDT)
+        Wed, 1 Jun 2022 18:03:40 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE723F33E;
+        Wed,  1 Jun 2022 15:03:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654120960; x=1685656960;
+  t=1654121018; x=1685657018;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TTojbk3zhQLGZQY5ZUmuvOKg1nRm4x/zxYu3AiWIBHA=;
-  b=HD8/O/JXngM1pZQO0wu/NbV9NVYGHPxHRO8TCIUsjbMELpHG0Ln3fqYN
-   WtUnvLwZ/XBsOtSYB+0pwMidYQMM1Z8Tfe90AJg5Ri6umRXzS5iX/JTSF
-   7dw3w0Vr1M3fnxbc+gSzEXaRsEixSrqgbM9K4GDrkeXG1pMQadyT4b5aV
-   Uhz8yfzWc8tCXJcm/4Q4Ye7wxQx4DaqRncbKL/V3EhfxrIee4gnfmDTdW
-   7xbKhmg8JNawJHnFOIbF3YYXW8+UjK2AHlZawGvrsCXcRtPYPFIo1pDzR
-   AIISsdRoCwGkWFGj4WgSFzXzsiM/33ygmo3wxp/ZezJBgurxWC4mMAuaj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="255614614"
+  bh=ZMrcofCoLlZIVTW0pWtzQrRw9+mw2XoCO+V8YRUxJeI=;
+  b=kkLPz8mOMYCb8yuYvvmE+B81xCX03wWaTtt6jsnwMCKXsG9IDMF+XIG/
+   NkGG6DMha13gP23jyjGptKSKzMqtyKH3Kp+mzyT5dTxhsCyQSsy1OdGTh
+   EBF5ubPVHFT1DmEc4lw4yGNLjhist6NvqQGRcSztYXxxgcux/DGKh0Pnq
+   lf5bFZKBlJzPm32LEEbRQ0SHU34FbW/vVkUc+/+B4WUNGCi4ws7+vynWr
+   5qtPJqpYQqZlNUenVHbcUhHtI6jV502xfg3hp47sP/KHyunoku/dd5JxT
+   dXKPZ6meWB7H28TxIH4g6mMDhlR2oCX9L6ccQUkM5IJ4mKeWpLJGKGOSw
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275753916"
 X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="255614614"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 15:02:29 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="275753916"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 15:03:38 -0700
 X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="707266896"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 01 Jun 2022 15:02:24 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwWQ4-0004SU-38;
-        Wed, 01 Jun 2022 22:02:24 +0000
-Date:   Thu, 2 Jun 2022 06:01:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Song Liu <song@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kernel-team@fb.com, rostedt@goodmis.org,
-        jolsa@kernel.org, Song Liu <song@kernel.org>
-Subject: Re: [PATCH bpf-next 3/5] ftrace: introduce
- FTRACE_OPS_FL_SHARE_IPMODIFY
-Message-ID: <202206020533.bBh0IXx6-lkp@intel.com>
-References: <20220601175749.3071572-4-song@kernel.org>
+   d="scan'208";a="577168733"
+Received: from cwmurphy-mobl2.amr.corp.intel.com (HELO localhost) ([10.212.32.23])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 15:03:38 -0700
+Date:   Wed, 1 Jun 2022 15:03:37 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Ben Widawsky <ben@bwidawsk.net>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V9 5/9] cxl/port: Find a DOE mailbox which supports CDAT
+Message-ID: <YpfiOeglKe1w1fJb@iweiny-desk3>
+References: <20220531152632.1397976-1-ira.weiny@intel.com>
+ <20220531152632.1397976-6-ira.weiny@intel.com>
+ <20220531175716.jlkwu7aerxh5ucte@mail.bwidawsk.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220601175749.3071572-4-song@kernel.org>
+In-Reply-To: <20220531175716.jlkwu7aerxh5ucte@mail.bwidawsk.net>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,137 +67,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
+On Tue, May 31, 2022 at 10:57:16AM -0700, Ben Widawsky wrote:
+> On 22-05-31 08:26:28, ira.weiny@intel.com wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > Each CXL device may have multiple DOE mailbox capabilities and each
+> > mailbox may support multiple protocols.  CXL port devices need to query
+> > the CDAT information specifically.
+> > 
+> > Search the DOE mailboxes for one which supports the CDAT protocol.
+> > Cache that mailbox to be used for future queries.
+> > 
+> > Only support memory devices at this time.
+> > 
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > ---
+> > Changes from V8
+> > 	Incorporate feedback from Jonathan
+> > 	Move all this to the cxl_port object
+> > 
+> > Changes from V7
+> > 	Minor code clean ups
+> > 
+> > Changes from V6
+> > 	Adjust for aux devices being a CXL only concept
+> > 	Update commit msg.
+> > 	Ensure devices iterated by auxiliary_find_device() are checked
+> > 		to be DOE devices prior to checking for the CDAT
+> > 		protocol
+> > 	From Ben
+> > 		Ensure reference from auxiliary_find_device() is dropped
+> > ---
+> >  drivers/cxl/core/pci.c  | 28 ++++++++++++++++++++++++++++
+> >  drivers/cxl/core/port.c |  2 ++
+> >  drivers/cxl/cxl.h       |  2 ++
+> >  drivers/cxl/cxlpci.h    |  1 +
+> >  4 files changed, 33 insertions(+)
+> > 
+> > diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
+> > index c4c99ff7b55e..5497a65bdcf3 100644
+> > --- a/drivers/cxl/core/pci.c
+> > +++ b/drivers/cxl/core/pci.c
+> > @@ -4,11 +4,14 @@
+> >  #include <linux/device.h>
+> >  #include <linux/delay.h>
+> >  #include <linux/pci.h>
+> > +#include <linux/pci-doe.h>
+> >  #include <cxlpci.h>
+> >  #include <cxlmem.h>
+> >  #include <cxl.h>
+> >  #include "core.h"
+> >  
+> > +#define CXL_DOE_PROTOCOL_TABLE_ACCESS 2
+> > +
+> >  /**
+> >   * DOC: cxl core pci
+> >   *
+> > @@ -458,3 +461,28 @@ int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm)
+> >  	return 0;
+> >  }
+> >  EXPORT_SYMBOL_NS_GPL(cxl_hdm_decode_init, CXL);
+> > +
+> > +void cxl_find_cdat_mb(struct cxl_port *port)
+> 
+> kdoc would be good for exported symbols IMO.
 
-I love your patch! Yet something to improve:
+Yes.  This was not exported before and I forgot.
 
-[auto build test ERROR on bpf-next/master]
+> Also if you can come up with a
+> better verb than "find" for something that mutates the port's state, I think
+> that would be beneficial.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220602-020112
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: parisc-randconfig-r005-20220531 (https://download.01.org/0day-ci/archive/20220602/202206020533.bBh0IXx6-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a710d92bb10a7a0376af57af15208ea1b4396545
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220602-020112
-        git checkout a710d92bb10a7a0376af57af15208ea1b4396545
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash kernel/trace/
+cxl_cache_cdat_mb()?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Ira
 
-All errors (new ones prefixed by >>):
-
-   kernel/trace/ftrace.c: In function 'prepare_direct_functions_for_ipmodify':
-   kernel/trace/ftrace.c:8005:21: error: 'direct_mutex' undeclared (first use in this function); did you mean 'event_mutex'?
-    8005 |         mutex_lock(&direct_mutex);
-         |                     ^~~~~~~~~~~~
-         |                     event_mutex
-   kernel/trace/ftrace.c:8005:21: note: each undeclared identifier is reported only once for each function it appears in
->> kernel/trace/ftrace.c:8007:19: error: 'struct ftrace_ops' has no member named 'func_hash'
-    8007 |         hash = ops->func_hash->filter_hash;
-         |                   ^~
->> kernel/trace/ftrace.c:8020:37: error: implicit declaration of function 'ops_references_ip' [-Werror=implicit-function-declaration]
-    8020 |                                 if (ops_references_ip(op, ip)) {
-         |                                     ^~~~~~~~~~~~~~~~~
->> kernel/trace/ftrace.c:8028:40: error: 'struct ftrace_ops' has no member named 'ops_func'
-    8028 |                                 if (!op->ops_func) {
-         |                                        ^~
-   kernel/trace/ftrace.c:8032:41: error: 'struct ftrace_ops' has no member named 'ops_func'
-    8032 |                                 ret = op->ops_func(op, FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY);
-         |                                         ^~
-   kernel/trace/ftrace.c: In function 'register_ftrace_function':
-   kernel/trace/ftrace.c:8084:31: error: 'direct_mutex' undeclared (first use in this function); did you mean 'event_mutex'?
-    8084 |                 mutex_unlock(&direct_mutex);
-         |                               ^~~~~~~~~~~~
-         |                               event_mutex
-   cc1: some warnings being treated as errors
-
-
-vim +8007 kernel/trace/ftrace.c
-
-  7974	
-  7975	/*
-  7976	 * When registering ftrace_ops with IPMODIFY (not direct), it is necessary
-  7977	 * to make sure it doesn't conflict with any direct ftrace_ops. If there is
-  7978	 * existing direct ftrace_ops on a kernel function being patched, call
-  7979	 * FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY on it to enable sharing.
-  7980	 *
-  7981	 * @ops:     ftrace_ops being registered.
-  7982	 *
-  7983	 * Returns:
-  7984	 *         0 - @ops does have IPMODIFY or @ops itself is DIRECT, no change
-  7985	 *             needed;
-  7986	 *         1 - @ops has IPMODIFY, hold direct_mutex;
-  7987	 *         -EBUSY - currently registered DIRECT ftrace_ops does not support
-  7988	 *                  SHARE_IPMODIFY, we need to abort the register.
-  7989	 *         -EAGAIN - cannot make changes to currently registered DIRECT
-  7990	 *                   ftrace_ops at the moment, but we can retry later. This
-  7991	 *                   is needed to avoid potential deadlocks.
-  7992	 */
-  7993	static int prepare_direct_functions_for_ipmodify(struct ftrace_ops *ops)
-  7994		__acquires(&direct_mutex)
-  7995	{
-  7996		struct ftrace_func_entry *entry;
-  7997		struct ftrace_hash *hash;
-  7998		struct ftrace_ops *op;
-  7999		int size, i, ret;
-  8000	
-  8001		if (!(ops->flags & FTRACE_OPS_FL_IPMODIFY) ||
-  8002		    (ops->flags & FTRACE_OPS_FL_DIRECT))
-  8003			return 0;
-  8004	
-  8005		mutex_lock(&direct_mutex);
-  8006	
-> 8007		hash = ops->func_hash->filter_hash;
-  8008		size = 1 << hash->size_bits;
-  8009		for (i = 0; i < size; i++) {
-  8010			hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
-  8011				unsigned long ip = entry->ip;
-  8012				bool found_op = false;
-  8013	
-  8014				mutex_lock(&ftrace_lock);
-  8015				do_for_each_ftrace_op(op, ftrace_ops_list) {
-  8016					if (!(op->flags & FTRACE_OPS_FL_DIRECT))
-  8017						continue;
-  8018					if (op->flags & FTRACE_OPS_FL_SHARE_IPMODIFY)
-  8019						break;
-> 8020					if (ops_references_ip(op, ip)) {
-  8021						found_op = true;
-  8022						break;
-  8023					}
-  8024				} while_for_each_ftrace_op(op);
-  8025				mutex_unlock(&ftrace_lock);
-  8026	
-  8027				if (found_op) {
-> 8028					if (!op->ops_func) {
-  8029						ret = -EBUSY;
-  8030						goto err_out;
-  8031					}
-  8032					ret = op->ops_func(op, FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY);
-  8033					if (ret)
-  8034						goto err_out;
-  8035				}
-  8036			}
-  8037		}
-  8038	
-  8039		/*
-  8040		 * Didn't find any overlap with any direct function, or the direct
-  8041		 * function can share with ipmodify. Hold direct_mutex to make sure
-  8042		 * this doesn't change until we are done.
-  8043		 */
-  8044		return 1;
-  8045	
-  8046	err_out:
-  8047		mutex_unlock(&direct_mutex);
-  8048		return ret;
-  8049	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> I'm not sure why this is exported yet, but I suppose I'll see soon :-)
+> 
+> > +{
+> > +	struct device *dev = port->uport;
+> > +	struct cxl_memdev *cxlmd;
+> > +	struct cxl_dev_state *cxlds;
+> > +	int i;
+> > +
+> > +	if (!is_cxl_memdev(dev))
+> > +		return;
+> > +
+> > +	cxlmd = to_cxl_memdev(dev);
+> > +	cxlds = cxlmd->cxlds;
+> > +
+> > +	for (i = 0; i < cxlds->num_mbs; i++) {
+> > +		struct pci_doe_mb *cur = cxlds->doe_mbs[i];
+> > +
+> > +		if (pci_doe_supports_prot(cur, PCI_DVSEC_VENDOR_ID_CXL,
+> > +					  CXL_DOE_PROTOCOL_TABLE_ACCESS)) {
+> > +			port->cdat_mb = cur;
+> > +			return;
+> > +		}
+> > +	}
+> > +}
+> > +EXPORT_SYMBOL_NS_GPL(cxl_find_cdat_mb, CXL);
+> > diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
+> > index ea60abda6500..2e2bd65c1024 100644
+> > --- a/drivers/cxl/core/port.c
+> > +++ b/drivers/cxl/core/port.c
+> > @@ -461,6 +461,8 @@ struct cxl_port *devm_cxl_add_port(struct device *host, struct device *uport,
+> >  	if (IS_ERR(port))
+> >  		return port;
+> >  
+> > +	cxl_find_cdat_mb(port);
+> > +
+> >  	dev = &port->dev;
+> >  	if (is_cxl_memdev(uport))
+> >  		rc = dev_set_name(dev, "endpoint%d", port->id);
+> > diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+> > index 140dc3278cde..0a86be589ffc 100644
+> > --- a/drivers/cxl/cxl.h
+> > +++ b/drivers/cxl/cxl.h
+> > @@ -267,6 +267,7 @@ struct cxl_nvdimm {
+> >   * @component_reg_phys: component register capability base address (optional)
+> >   * @dead: last ep has been removed, force port re-creation
+> >   * @depth: How deep this port is relative to the root. depth 0 is the root.
+> > + * @cdat_mb: Mailbox which supports the CDAT protocol
+> >   */
+> >  struct cxl_port {
+> >  	struct device dev;
+> > @@ -278,6 +279,7 @@ struct cxl_port {
+> >  	resource_size_t component_reg_phys;
+> >  	bool dead;
+> >  	unsigned int depth;
+> > +	struct pci_doe_mb *cdat_mb;
+> >  };
+> >  
+> >  /**
+> > diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
+> > index fce1c11729c2..366b21bd1a01 100644
+> > --- a/drivers/cxl/cxlpci.h
+> > +++ b/drivers/cxl/cxlpci.h
+> > @@ -74,4 +74,5 @@ static inline resource_size_t cxl_regmap_to_base(struct pci_dev *pdev,
+> >  int devm_cxl_port_enumerate_dports(struct cxl_port *port);
+> >  struct cxl_dev_state;
+> >  int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm);
+> > +void cxl_find_cdat_mb(struct cxl_port *port);
+> >  #endif /* __CXL_PCI_H__ */
+> > -- 
+> > 2.35.1
+> > 

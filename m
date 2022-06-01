@@ -2,135 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2CE53A943
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD91B53A944
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353341AbiFAOgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S1353956AbiFAOh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353323AbiFAOgV (ORCPT
+        with ESMTP id S229602AbiFAOhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:36:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 174CB24F2D
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654094180;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ndVFt2OYBW8cSRXpIjiijVDbpZaQ/wTXyFWQt9Vv3wA=;
-        b=NUs4K+sujqm0Hp5wL9cp92l9FzTX7FxnIZTwyoAhtaxDZFNodE6lNQYDQptucIfKqoOGgB
-        d0TKwG5k53Xj9GCylOM4dcZqUy648OXGxeOVSUFO/EgG8Rwr9aM+FRCutSkl2BHKbjyGbW
-        RDTUeK0LwpWQYOtQllJdolxQHb8FZ+k=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-42--b8YmqQVPEGMZEsrePbtHw-1; Wed, 01 Jun 2022 10:36:19 -0400
-X-MC-Unique: -b8YmqQVPEGMZEsrePbtHw-1
-Received: by mail-ed1-f69.google.com with SMTP id y13-20020a056402358d00b0042dfb820070so1152931edc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 07:36:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ndVFt2OYBW8cSRXpIjiijVDbpZaQ/wTXyFWQt9Vv3wA=;
-        b=UCQP+f8n8G8UV81mnwC4NCYeHVDTv9pYanmvr8SStENJ8mp4rO0MqwXB2Ba7BgIByr
-         uv4J1TYCt97zCF90Hvc8s1H/dw+Zk+teyuo2PzCisqsUZZ1rxO/NG+DDhVUly5WbqOlr
-         4XCyx/BNH1CT6Otr3QSCN0fxY0VAjiiUW+lOsOmxUXJgypLXVTWmuMh8Il/39IFmg9Nn
-         qgVOlCA9SHVdA0vrn2rmzMb1ebFTs9dKsNGmTrGCEQpGvoLszNyLoai60SWlPwj+8aoo
-         76X87uMVd1YdWgMlJM7vTyCRvrIjakhCzPRzmcXhKLZj+/5oPaRgXDJXG6krqzx9rdqB
-         1ZUA==
-X-Gm-Message-State: AOAM530vCWohoDQga2f1woIS2j+tdCUBgk0izU3ZSSjCUaDH2bsngNvR
-        7wLqYMFzEcAqNqzoMxB6LSihG1ibuMTMctXPhlmXfaQk5kB8L669TRDo0XBK23jwuHtvzSW/65P
-        H2ak1Fki+xXXCpJdTO1SsW3F9MHyAdgyZyCxHGXsN
-X-Received: by 2002:a05:6402:6cc:b0:42d:bd2d:9f82 with SMTP id n12-20020a05640206cc00b0042dbd2d9f82mr237692edy.59.1654094177794;
-        Wed, 01 Jun 2022 07:36:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyFh8H56y/l8Ke6nyDbJQA0j9RiyCmE3CPbXmuv5QhyDCmnY54KlRZlTjdvlq4rdEAuPxbDDSvggkS7C+zAZow=
-X-Received: by 2002:a05:6402:6cc:b0:42d:bd2d:9f82 with SMTP id
- n12-20020a05640206cc00b0042dbd2d9f82mr237650edy.59.1654094177475; Wed, 01 Jun
- 2022 07:36:17 -0700 (PDT)
+        Wed, 1 Jun 2022 10:37:52 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542F131233
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:37:51 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:39050)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nwPTm-003wch-Kk; Wed, 01 Jun 2022 08:37:46 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:47918 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nwPTk-00ASIR-BF; Wed, 01 Jun 2022 08:37:46 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Ying Huang <ying.huang@intel.com>, <peterx@redhat.com>,
+        <apopple@nvidia.com>, <osalvador@suse.de>,
+        <mike.kravetz@oracle.com>, <songmuchun@bytedance.com>,
+        <hch@lst.de>, <dhowells@redhat.com>, <cl@linux.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
+References: <20220530113016.16663-1-linmiaohe@huawei.com>
+        <20220530113016.16663-2-linmiaohe@huawei.com>
+        <bbc060ca6e967790423e0a3ca940d1e700447554.camel@intel.com>
+        <b2ddcd64-2779-ede9-3615-ad5bc90a3bc1@huawei.com>
+        <87bkvdfzvm.fsf@email.froward.int.ebiederm.org>
+        <e10023d7-3d19-1edf-86af-4cb79071b78f@huawei.com>
+Date:   Wed, 01 Jun 2022 09:37:21 -0500
+In-Reply-To: <e10023d7-3d19-1edf-86af-4cb79071b78f@huawei.com> (Miaohe Lin's
+        message of "Wed, 1 Jun 2022 14:33:02 +0800")
+Message-ID: <87y1yga1r2.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <388098b2c03fbf0a732834fc01b2d875c335bc49.1642170196.git.lucien.xin@gmail.com>
-In-Reply-To: <388098b2c03fbf0a732834fc01b2d875c335bc49.1642170196.git.lucien.xin@gmail.com>
-From:   Maurizio Lombardi <mlombard@redhat.com>
-Date:   Wed, 1 Jun 2022 16:36:06 +0200
-Message-ID: <CAFL455m6BZW-KVNOkJPo3BSeEK39Vq597F-b5XvQJmU3mrPmZA@mail.gmail.com>
-Subject: Re: [PATCH] mm: slub: fix a deadlock warning in kmem_cache_destroy
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Antoine Tenart <atenart@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nwPTk-00ASIR-BF;;;mid=<87y1yga1r2.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19dRjWhftz57Cs5rYGnFs7Ohp6QmfecC1w=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Miaohe Lin <linmiaohe@huawei.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1647 ms - load_scoreonly_sql: 0.10 (0.0%),
+        signal_user_changed: 12 (0.7%), b_tie_ro: 10 (0.6%), parse: 1.61
+        (0.1%), extract_message_metadata: 17 (1.0%), get_uri_detail_list: 3.8
+        (0.2%), tests_pri_-1000: 8 (0.5%), tests_pri_-950: 1.43 (0.1%),
+        tests_pri_-900: 1.08 (0.1%), tests_pri_-90: 71 (4.3%), check_bayes: 70
+        (4.2%), b_tokenize: 11 (0.7%), b_tok_get_all: 12 (0.7%), b_comp_prob:
+        3.8 (0.2%), b_tok_touch_all: 38 (2.3%), b_finish: 1.02 (0.1%),
+        tests_pri_0: 1513 (91.8%), check_dkim_signature: 0.71 (0.0%),
+        check_dkim_adsp: 2.9 (0.2%), poll_dns_idle: 0.94 (0.1%), tests_pri_10:
+        3.4 (0.2%), tests_pri_500: 15 (0.9%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v4 1/4] mm: reduce the rcu lock duration
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-p=C3=A1 14. 1. 2022 v 15:23 odes=C3=ADlatel Xin Long <lucien.xin@gmail.com>=
- napsal:
+Miaohe Lin <linmiaohe@huawei.com> writes:
+
+> On 2022/6/1 0:09, Eric W. Biederman wrote:
+>> Miaohe Lin <linmiaohe@huawei.com> writes:
+> snip
+>>>
+>>> "
+>>> Commit 3268c63eded4 ("mm: fix move/migrate_pages() race on task struct")
+>>> extends the period of the rcu_read_lock until after the permissions checks
+>>> are done because it suspects the permissions checks are not safe unless
+>>> performed under both rcu_read_lock and task_lock to ensure the task<->mm
+>>> association does not change on us while we are working [1]. But extended
+>>> rcu read lock does not add much value. Because after permission checking
+>>> the permission may still be changed. There's no much difference. So it's
+>>> unnecessary to extend the period of the rcu_read_lock. Release the rcu
+>>> lock after task refcount is successfully grabbed to reduce the rcu holding
+>>> time.
+>>>
+>>> [1] https://lore.kernel.org/lkml/87sjhzun47.fsf@xmission.com/
+>>> "
+>> 
+>> It doesn't make sense to me.
+>> 
+>> I don't see any sleeping functions called from find_mm_struct or
+>> kernel_migrate_pages in the area kernel_migrate_pages in the area of the
+>> code protected by get_task_struct.  So at a very basic level I see a
+>> justification for dirtying a cache line twice with get_task_struct and
+>> put_task_struct to reduce rcu_read_lock hold times.
+>> 
+>> I would contend that a reasonable cleanup based up on the current state
+>> of the code would be to extend the rcu_read_lock over get_task_mm so
 >
-> cpus_read_lock() is introduced into kmem_cache_destroy() by
-> commit 5a836bf6b09f ("mm: slub: move flush_cpu_slab() invocations
-> __free_slab() invocations out of IRQ context"), and it could cause
-> a deadlock.
+> If so, security_task_movememory will be called inside rcu lock. It might
+> call sleeping functions, e.g. smack_log(). I think it's not a good
+> idea.
 
-FYI,
+In general the security functions are not allowed to sleep.
+The audit mechanism typically preallocates memory so it does
+not need to sleep.  From a quick skim through the code I don't
+see smack_log sleeping.
 
-I received a bug report from one of our customers, he complains that
-his system (with nvmefc boot from SAN) hangs when rebooting.
-He runs a RHEL-9 kernel based on version 5.14.0.
+Certainly the security hooks are not supposed to be inserted into the
+code that they prevent reasonable implementation decisions.
 
-What is interesting is that, according to him, after reverting commit
-5a836bf6b09f
-("mm: slub: move flush_cpu_slab() invocations __free_slab()
-invocations out of IRQ context")
-the reboot operation doesn't hang anymore.
+Which is to say if there is a good (non-security hook reason) for
+supporting sleeping deal with it.  Otherwise the security hooks has a
+bug and needs to get fixed/removed.
 
-The call trace seems to point to a possible problem due to the fact that
-nvme_delete_ctrl_work is allocated with the WQ_MEM_RECLAIM bit set.
+>> that a reference to task_struct does not need to be taken.  That has
+>> the potential to reduce contention and reduce lock hold times.
+>> 
+>> 
+>> The code is missing a big fat comment with the assertion that it is ok
+>> if the permission checks are racy because the race is small, and the
+>> worst case thing that happens is the page is migrated to another
+>> numa node.
+>> 
+>> 
+>> Given that the get_mm_task takes task_lock the cost of dirtying the
+>> cache line is already being paid.  Perhaps not extending task_lock hold
+>> times a little bit is justified, but I haven't seen that case made.
+>> 
+>> This seems like code that is called little enough it would be better for
+>> it to be correct, and not need big fat comments explaining why it
+>> doesn't matter that they code is deliberately buggy.
+>> 
+>
+> Agree. A big fat comments will make code hard to follow.
 
-[  453.012078] ------------[ cut here ]------------
-[  453.016744] workqueue: WQ_MEM_RECLAIM
-nvme-delete-wq:nvme_delete_ctrl_work [nvme_core] is flushing
-!WQ_MEM_RECLAIM events:flush_cpu_slab
-[  453.016789] WARNING: CPU: 37 PID: 410 at kernel/workqueue.c:2637
-check_flush_dependency+0x10a/0x120
-[...]
-[  453.262125] Call Trace:
-[  453.264582]  __flush_work.isra.0+0xbf/0x220
-[  453.268775]  ? __queue_work+0x1dc/0x420
-[  453.272623]  flush_all_cpus_locked+0xfb/0x120
-[  453.276992]  __kmem_cache_shutdown+0x2b/0x320
-[  453.281361]  kmem_cache_destroy+0x49/0x100
-[  453.285465]  bioset_exit+0x143/0x190
-[  453.289052]  blk_release_queue+0xb9/0x100
-[  453.293075]  kobject_cleanup+0x37/0x130
-[  453.296922]  nvme_fc_ctrl_free+0xc6/0x150 [nvme_fc]
-[  453.302397]  nvme_free_ctrl+0x1ac/0x2b0 [nvme_core]
-[  453.307818]  device_release+0x31/0x90
-[  453.312005]  kobject_cleanup+0x37/0x130
-[  453.316369]  process_one_work+0x1e5/0x3c0
-[  453.320895]  worker_thread+0x50/0x3b0
-[  453.325074]  ? rescuer_thread+0x370/0x370
-[  453.329592]  kthread+0x146/0x170
-[  453.333322]  ? set_kthread_struct+0x40/0x40
-[  453.338027]  ret_from_fork+0x1f/0x30
-[  453.342082] ---[ end trace 8c9cdd85adbbfc4f ]---
+No.
 
-Maurizio Lombardi
+The code is impossible to follow currently.
 
+The code either requires a comment pointing out that it is deliberately
+racy, or the code needs to be fixed.
+
+Clever and subtle code always requires a comment if for no other
+reason then to alert the reader that something a typical is going on.
+
+>> In short it does not make sense to me to justify a patch for performance
+>> reasons when it appears that extending the rcu_read_lock hold time and
+>> not touch the task reference count would stop dirtying a cache line and
+>> likely have more impact.
+>
+> IMHO, incremented task refcount should make code works correctly. And extending
+> the rcu_read_lock over get_task_mm will break the things because sleeping functions
+> might be called while holding rcu lock.
+
+Which sleeping functions?
+
+I can't find any.  In particular smack_task_movememory calls
+smk_curacc_on_task which is the same function called by
+security_task_getpgid.  security_task_getpgid is called
+under rcu_read_lock.  So smack won't sleep.
+
+> Does the patch itself makes sense for you? Should I rephase the commit log further?
+> I'm afraid I didn't get your point correctly.
+
+The patch makes no sense to me because I don't see it doing anything
+worth doing.
+
+get/put_task_struct both dirty a cache line and are expensive especially
+when contended.  Dirtying a cache line that is contended is the pretty
+much the most expensive native cpu operation.  In pathological scenarios
+I have seen it take up to 1s.  Realistically in a cache cold scenario
+(which is not as bad as a contended scenario) you are looking at 100ns
+or more just to execute get_task_struct/put_task_struct.  That is the
+kind of cost it would be nice to avoid all together (even if the
+pathological case never comes up).
+
+So I see two pieces of code where we could use the cheap operation
+rcu_read_lock/rcu_read_unlock to remove the expensive operation
+get_task_struct/put_task_struct.  Instead I see people removing
+rcu_read_lock/rcu_read_unlock.
+
+That makes no sense.  Especially as your implied reason for making this
+change is to make the code have better performance.  Improving
+performance is the reason for making critical sections smaller isn't it?
+
+Eric

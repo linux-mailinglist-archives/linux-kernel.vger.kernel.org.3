@@ -2,98 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A91453AFD1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6890E53B043
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 00:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiFAV2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 17:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
+        id S231557AbiFAV3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 17:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbiFAV2r (ORCPT
+        with ESMTP id S231561AbiFAV3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:28:47 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28B46464;
-        Wed,  1 Jun 2022 14:28:45 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id a10so3165892pju.3;
-        Wed, 01 Jun 2022 14:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XQUrno1u9BV9Hi8T4VSHF83kGe0TWlPtBJS9T7agQLs=;
-        b=TMHlWNZfuujpslCtDUUYYkHjwexELIZXoM27hvWYqwVGP7r+7+3QJic0aHrV85RFxb
-         tV8dJpD3fRLSfqZNqHIhLHW/vHaCZdxoMezRb6P7DxvsFrZZsY1TzA8898q+xCdiUW4E
-         7QZX+Fyyot2d9D50TXYm5UKZ/Nd610xlj6uglmx8VFXyGIn3dw3XZkx70uSMXxIWrWIp
-         DTWy4C7wliyAluKxGQ08T++L7+4XuppeWncfyJZqxOgnWkfIF4RpylCD6D11SmBTV3QN
-         qiNuxGrWpXl3ix2Duf6XNEU8xrDF6udyOeO8niAseUGoQViv4yUXScbTQeA/MAdx+ek5
-         Zgag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=XQUrno1u9BV9Hi8T4VSHF83kGe0TWlPtBJS9T7agQLs=;
-        b=LgLt//0N4TZ5A0FN2nZFx2AITtXg6kOgJIVzhZ02CWRt3UhSCccqX73tSvlirjUoy4
-         X85DIE3MSC4fLsPb/m9algU82l4cWuBeG/9HYvFWRsFSIuT8heWMsl/gq8CyLTtCWdzD
-         11jWPdtKR0S+DlZrmjCqQP718220ml1W9hEYqR5Nu9x9U22xrta2HAOmNnAQYn+Sbcuo
-         YhvmsUXjNFXpIdIyccMkxMJLe5+xjT0m7SrdDK5XlMCdQjLtTrLbJMggK+BXv6Gp0PxK
-         pkihN+XoAEEekmn31F+oH/dDuGP9RaObRFAkApZRkrRuV5mkB2zdYOaURsmU8bUsxZHv
-         f32w==
-X-Gm-Message-State: AOAM532EN3j2v+s8YBv+lHrTXCWjA77HbxZNFxK48ajGATlT8/ngzXym
-        wDr2EKk3snBZafGShEYlBAM3ZPcYbKU=
-X-Google-Smtp-Source: ABdhPJwM5zz2uYne2MAC7ir90ZqtkcM2nG4zHU895tHlRX0Kj6k0imNtWWz7kXaM9VIgrm55e31B4A==
-X-Received: by 2002:a17:902:7b93:b0:162:bc8:935a with SMTP id w19-20020a1709027b9300b001620bc8935amr1429517pll.44.1654118925185;
-        Wed, 01 Jun 2022 14:28:45 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id r16-20020a635150000000b003f65560a1a7sm1773188pgl.53.2022.06.01.14.28.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 14:28:44 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 1 Jun 2022 11:28:43 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ming Lei <ming.lei@redhat.com>
-Subject: Re: [PATCH v2 2/2] blk-cgroup: Optimize blkcg_rstat_flush()
-Message-ID: <YpfaC+wB5Th4tLDY@slm.duckdns.org>
-References: <20220601165324.60892-1-longman@redhat.com>
- <20220601165324.60892-2-longman@redhat.com>
- <YpemVpvaPomwH7mt@slm.duckdns.org>
- <ca091a5c-4ae1-e973-403e-4086d4527102@redhat.com>
- <YpexWFptr/l2Y0rU@slm.duckdns.org>
- <bca31669-7107-ebe4-7fbf-2449940a5cc8@redhat.com>
- <c26f153c-304c-e109-6626-bb8b79a2e2ad@redhat.com>
+        Wed, 1 Jun 2022 17:29:42 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E83025C64
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 14:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654118981; x=1685654981;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XaUvMjPfT2W2aw+g9NxsIl0lvb5oDg2s1Bs/042+9Xo=;
+  b=UcwZw704/hObeAWbnBZltrjTKLQqqkvqPYElzywpiftxmeV/JWDOs/5m
+   /78/GOjyiF5xVlwxN3CtuZbQ45r052FaUVJLVF+xrgEbW1UnAXIBfSccp
+   IR+fm60zLeg++mn7fuJWSHzWMVU7OcbM8Lru4Caal5ksEBDWcSZYAkirz
+   SLToRgDPG47MX9kz3ambNQZLOMZTQZsB530Zv3TcRqbTGXID2fIsoV1Qg
+   ar86HMKWe8ffhyb445Plf8+ECMu90k36H2mpFye9BkpU6rfGNl1OpQspY
+   1Ctuo5nEKDzzBoHVzrkXkpLt46K55nLPa9bDRtYJSXJVxWhdzO9gZHjEs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="338781518"
+X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
+   d="scan'208";a="338781518"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 14:29:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
+   d="scan'208";a="904650091"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Jun 2022 14:29:21 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwVu4-0004QC-Lx;
+        Wed, 01 Jun 2022 21:29:20 +0000
+Date:   Thu, 2 Jun 2022 05:28:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 37/59]
+ fs/netfs/output.c:274:32: warning: unused variable 'cookie'
+Message-ID: <202206020506.JJRuspb2-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c26f153c-304c-e109-6626-bb8b79a2e2ad@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 05:25:53PM -0400, Waiman Long wrote:
-> I think the best way to protect against blkg destruction is to get a percpu
-> reference when put into lockless list and put it back when removed.
-> 
-> BTW, when I ran a test that continuously create and destroy containers, the
-> total number of blkcg's kept on increasing. There are some freeing of
-> blkcg's but no freeing of blkg's at all. Maybe we have a similar dying
-> blkcg's problem here. I will take a further look at that when I have time.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   22ecc2fcdab4616e624408911ec1d54644e82030
+commit: 5c1c3ba2afbf95dfbd1cb36cae7a28e20c4eaace [37/59] netfs: Dispatch write requests to process a writeback slice
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220602/202206020506.JJRuspb2-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/5c1c3ba2afbf95dfbd1cb36cae7a28e20c4eaace
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout 5c1c3ba2afbf95dfbd1cb36cae7a28e20c4eaace
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/netfs/
 
-They get pinned by per-cgroup writebacks which gets pinned by lingering page
-cache and other remaining accounted memory areas, so I think they can hang
-around if there's no memory pressure. But, yeah, it'd be great to verify
-that they actually go away under memory pressure.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks.
+All warnings (new ones prefixed by >>):
+
+   fs/netfs/output.c: In function 'netfs_set_up_write_to_cache':
+>> fs/netfs/output.c:274:32: warning: unused variable 'cookie' [-Wunused-variable]
+     274 |         struct fscache_cookie *cookie = netfs_i_cookie(wreq->inode);
+         |                                ^~~~~~
+
+
+vim +/cookie +274 fs/netfs/output.c
+
+   266	
+   267	/*
+   268	 * Set up a op for writing to the cache.
+   269	 */
+   270	static void netfs_set_up_write_to_cache(struct netfs_io_request *wreq)
+   271	{
+   272		struct netfs_cache_resources *cres;
+   273		struct netfs_io_subrequest *subreq;
+ > 274		struct fscache_cookie *cookie = netfs_i_cookie(wreq->inode);
+   275		loff_t start = wreq->first * PAGE_SIZE;
+   276		size_t len = (wreq->last - wreq->first + 1) * PAGE_SIZE;
+   277		int ret;
+   278	
+   279		if (!fscache_cookie_enabled(cookie)) {
+   280			clear_bit(NETFS_RREQ_WRITE_TO_CACHE, &wreq->flags);
+   281			return;
+   282		}
+   283	
+   284		_debug("write to cache");
+   285		subreq = netfs_create_write_request(wreq, NETFS_WRITE_TO_CACHE, start, len,
+   286						    netfs_write_to_cache_op_worker);
+   287		if (!subreq)
+   288			return;
+   289	
+   290		cres = &wreq->cache_resources;
+   291		ret = -ENOBUFS;
+   292		if (wreq->netfs_ops->begin_cache_operation)
+   293			ret = wreq->netfs_ops->begin_cache_operation(wreq);
+   294		if (ret < 0) {
+   295			netfs_write_subrequest_terminated(subreq, ret, false);
+   296			return;
+   297		}
+   298	
+   299		ret = cres->ops->prepare_write(cres, &start, &len, i_size_read(wreq->inode),
+   300					       true);
+   301		if (ret < 0) {
+   302			netfs_write_subrequest_terminated(subreq, ret, false);
+   303			return;
+   304		}
+   305	
+   306		netfs_queue_write_request(subreq);
+   307	}
+   308	
 
 -- 
-tejun
+0-DAY CI Kernel Test Service
+https://01.org/lkp

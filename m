@@ -2,29 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7841539B98
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2655A539B9C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 05:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349333AbiFADWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 May 2022 23:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
+        id S1349346AbiFADWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 May 2022 23:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345174AbiFADWk (ORCPT
+        with ESMTP id S1345338AbiFADWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 31 May 2022 23:22:40 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BEE1582F
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:22:36 -0700 (PDT)
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999D424BEA
+        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 20:22:39 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1654053754;
+        t=1654053757;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZV6oySeonpvdUIam5jdY49JjFC/NWsii46AE5VUm0Nk=;
-        b=s8uFRMz//xxr2CRQYsqfNipo0LSW1a6uTBb1SMoswMPS37mItP9o9NSC8xc7q6yu0M1G3A
-        +X+g27FmuCq/2rscya0E3+r/lZ72ExGIQwjnPYszZgmBkkoshaBpUHxdHNa84prQeGKWjK
-        1xq3JyT1r6Vl7f9ESrxDub3EvG9dHws=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mw56TqjwP1nlClT0bDMzZb5y1zrFQFqeocrqdRbM8lQ=;
+        b=NRyWKtJEOJRWxQXWgzjF2clbmi92csp9B01aBATNqLPV/HoNy9SPljVymhDL+E67lH3oPM
+        d1DFZXFuEFOtqhfQae/3WabxbXTT8UkLaK1KdE6I0VwBWOwkAAYXo15msxVDuTxflUa+bU
+        qFKJLPUwCfpTwrTmgjSAQTCMFekunTI=
 From:   Roman Gushchin <roman.gushchin@linux.dev>
 To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
 Cc:     Dave Chinner <dchinner@redhat.com>, linux-kernel@vger.kernel.org,
@@ -33,130 +34,114 @@ Cc:     Dave Chinner <dchinner@redhat.com>, linux-kernel@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Muchun Song <songmuchun@bytedance.com>,
         Roman Gushchin <roman.gushchin@linux.dev>
-Subject: [PATCH v5 0/6] mm: introduce shrinker debugfs interface
-Date:   Tue, 31 May 2022 20:22:21 -0700
-Message-Id: <20220601032227.4076670-1-roman.gushchin@linux.dev>
+Subject: [PATCH v5 1/6] mm: memcontrol: introduce mem_cgroup_ino() and mem_cgroup_get_from_ino()
+Date:   Tue, 31 May 2022 20:22:22 -0700
+Message-Id: <20220601032227.4076670-2-roman.gushchin@linux.dev>
+In-Reply-To: <20220601032227.4076670-1-roman.gushchin@linux.dev>
+References: <20220601032227.4076670-1-roman.gushchin@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only existing debugging mechanism is a couple of tracepoints in
-do_shrink_slab(): mm_shrink_slab_start and mm_shrink_slab_end. They aren't
-covering everything though: shrinkers which report 0 objects will never show up,
-there is no support for memcg-aware shrinkers. Shrinkers are identified by their
-scan function, which is not always enough (e.g. hard to guess which super
-block's shrinker it is having only "super_cache_scan").
+Shrinker debugfs requires a way to represent memory cgroups without
+using full paths, both for displaying information and getting input
+from a user.
 
-To provide a better visibility and debug options for memory shrinkers
-this patchset introduces a /sys/kernel/debug/shrinker interface, to some extent
-similar to /sys/kernel/slab.
+Cgroup inode number is a perfect way, already used by bpf.
 
-For each shrinker registered in the system a directory is created.
-As now, the directory will contain only a "scan" file, which allows to get
-the number of managed objects for each memory cgroup (for memcg-aware shrinkers)
-and each numa node (for numa-aware shrinkers on a numa machine). Other
-interfaces might be added in the future.
+This commit adds a couple of helper functions which will be used
+to handle memcg-aware shrinkers.
 
-To make debugging more pleasant, the patchset also names all shrinkers,
-so that debugfs entries can have meaningful names.
+Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+Acked-by: Muchun Song <songmuchun@bytedance.com>
+---
+ include/linux/memcontrol.h | 21 +++++++++++++++++++++
+ mm/memcontrol.c            | 23 +++++++++++++++++++++++
+ 2 files changed, 44 insertions(+)
 
-
-v5:
-  1) universal shrinker naming scheme, by Dave
-  2) docs improvement, by Muchun
-
-v4:
-  1) multiple shrinkers naming enhancements, by Kent and Dave
-  2) multiple minor fixes/optimizations, by Muchun
-
-v3:
-  1) separated the "scan" part into a separate patch, by Dave
-  2) merged *_memcg, *_node and *_memcg_node interfaces, by Dave
-  3) shrinkers naming enhancements, by Christophe and Dave
-  4) added signal_pending() check, by Hillf
-  5) enabled by default, by Dave
-
-v2:
-  1) switched to debugfs, suggested by Mike, Andrew, Greg and others
-  2) switched to seq_file API for output, no PAGE_SIZE limit anymore, by Andrew
-  3) switched to down_read_killable(), suggested by Hillf
-  4) dropped stateful filtering and "freed" returning, by Kent
-  5) added docs, by Andrew
-  6) added memcg_shrinker.py tool
-
-rfc:
-  https://lwn.net/Articles/891542/
-
-
-Roman Gushchin (6):
-  mm: memcontrol: introduce mem_cgroup_ino() and
-    mem_cgroup_get_from_ino()
-  mm: shrinkers: introduce debugfs interface for memory shrinkers
-  mm: shrinkers: provide shrinkers with names
-  mm: docs: document shrinker debugfs
-  tools: add memcg_shrinker.py
-  mm: shrinkers: add scan interface for shrinker debugfs
-
- Documentation/admin-guide/mm/index.rst        |   1 +
- .../admin-guide/mm/shrinker_debugfs.rst       | 135 +++++++++
- arch/x86/kvm/mmu/mmu.c                        |   2 +-
- drivers/android/binder_alloc.c                |   2 +-
- drivers/gpu/drm/i915/gem/i915_gem_shrinker.c  |   3 +-
- drivers/gpu/drm/msm/msm_gem_shrinker.c        |   2 +-
- .../gpu/drm/panfrost/panfrost_gem_shrinker.c  |   2 +-
- drivers/gpu/drm/ttm/ttm_pool.c                |   2 +-
- drivers/md/bcache/btree.c                     |   2 +-
- drivers/md/dm-bufio.c                         |   3 +-
- drivers/md/dm-zoned-metadata.c                |   4 +-
- drivers/md/raid5.c                            |   2 +-
- drivers/misc/vmw_balloon.c                    |   2 +-
- drivers/virtio/virtio_balloon.c               |   2 +-
- drivers/xen/xenbus/xenbus_probe_backend.c     |   2 +-
- fs/btrfs/super.c                              |   2 +
- fs/erofs/utils.c                              |   2 +-
- fs/ext4/extents_status.c                      |   3 +-
- fs/f2fs/super.c                               |   2 +-
- fs/gfs2/glock.c                               |   2 +-
- fs/gfs2/main.c                                |   2 +-
- fs/jbd2/journal.c                             |   3 +-
- fs/mbcache.c                                  |   2 +-
- fs/nfs/nfs42xattr.c                           |   7 +-
- fs/nfs/super.c                                |   2 +-
- fs/nfsd/filecache.c                           |   2 +-
- fs/nfsd/nfscache.c                            |   3 +-
- fs/quota/dquot.c                              |   2 +-
- fs/super.c                                    |   6 +-
- fs/ubifs/super.c                              |   2 +-
- fs/xfs/xfs_buf.c                              |   3 +-
- fs/xfs/xfs_icache.c                           |   2 +-
- fs/xfs/xfs_qm.c                               |   3 +-
- include/linux/memcontrol.h                    |  21 ++
- include/linux/shrinker.h                      |  31 +-
- kernel/rcu/tree.c                             |   2 +-
- lib/Kconfig.debug                             |   9 +
- mm/Makefile                                   |   1 +
- mm/huge_memory.c                              |   4 +-
- mm/memcontrol.c                               |  23 ++
- mm/shrinker_debug.c                           | 285 ++++++++++++++++++
- mm/vmscan.c                                   |  64 +++-
- mm/workingset.c                               |   2 +-
- mm/zsmalloc.c                                 |   3 +-
- net/sunrpc/auth.c                             |   2 +-
- tools/cgroup/memcg_shrinker.py                |  71 +++++
- 46 files changed, 688 insertions(+), 46 deletions(-)
- create mode 100644 Documentation/admin-guide/mm/shrinker_debugfs.rst
- create mode 100644 mm/shrinker_debug.c
- create mode 100755 tools/cgroup/memcg_shrinker.py
-
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 89b14729d59f..66a4f22e8154 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -831,6 +831,15 @@ static inline unsigned short mem_cgroup_id(struct mem_cgroup *memcg)
+ }
+ struct mem_cgroup *mem_cgroup_from_id(unsigned short id);
+ 
++#ifdef CONFIG_SHRINKER_DEBUG
++static inline unsigned long mem_cgroup_ino(struct mem_cgroup *memcg)
++{
++	return memcg ? cgroup_ino(memcg->css.cgroup) : 0;
++}
++
++struct mem_cgroup *mem_cgroup_get_from_ino(unsigned long ino);
++#endif
++
+ static inline struct mem_cgroup *mem_cgroup_from_seq(struct seq_file *m)
+ {
+ 	return mem_cgroup_from_css(seq_css(m));
+@@ -1328,6 +1337,18 @@ static inline struct mem_cgroup *mem_cgroup_from_id(unsigned short id)
+ 	return NULL;
+ }
+ 
++#ifdef CONFIG_SHRINKER_DEBUG
++static inline unsigned long mem_cgroup_ino(struct mem_cgroup *memcg)
++{
++	return 0;
++}
++
++static inline struct mem_cgroup *mem_cgroup_get_from_ino(unsigned long ino)
++{
++	return NULL;
++}
++#endif
++
+ static inline struct mem_cgroup *mem_cgroup_from_seq(struct seq_file *m)
+ {
+ 	return NULL;
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 598fece89e2b..d0f892bde698 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -5027,6 +5027,29 @@ struct mem_cgroup *mem_cgroup_from_id(unsigned short id)
+ 	return idr_find(&mem_cgroup_idr, id);
+ }
+ 
++#ifdef CONFIG_SHRINKER_DEBUG
++struct mem_cgroup *mem_cgroup_get_from_ino(unsigned long ino)
++{
++	struct cgroup *cgrp;
++	struct cgroup_subsys_state *css;
++	struct mem_cgroup *memcg;
++
++	cgrp = cgroup_get_from_id(ino);
++	if (!cgrp)
++		return ERR_PTR(-ENOENT);
++
++	css = cgroup_get_e_css(cgrp, &memory_cgrp_subsys);
++	if (css)
++		memcg = container_of(css, struct mem_cgroup, css);
++	else
++		memcg = ERR_PTR(-ENOENT);
++
++	cgroup_put(cgrp);
++
++	return memcg;
++}
++#endif
++
+ static int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
+ {
+ 	struct mem_cgroup_per_node *pn;
 -- 
 2.35.3
 

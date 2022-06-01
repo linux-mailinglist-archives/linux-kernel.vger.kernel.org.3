@@ -2,99 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296BF539D72
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFA3539D7C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 08:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343718AbiFAGwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 02:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
+        id S1349952AbiFAGya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 02:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244719AbiFAGwK (ORCPT
+        with ESMTP id S1344194AbiFAGy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 02:52:10 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A722A738
-        for <linux-kernel@vger.kernel.org>; Tue, 31 May 2022 23:52:08 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (lmontsouris-659-1-41-236.w92-154.abo.wanadoo.fr [92.154.76.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 35F9D6D1;
-        Wed,  1 Jun 2022 08:52:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1654066326;
-        bh=9U51zIdFo623msxiQzlZ5c7urUVTOlg5NLFUSyleXjA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T9U4nYh3scF7O79G7ri7mNf7EnIC7VTS5q1eVW+AyUiy4ZQok/wAL+N6UiU3ISjX/
-         fSP3Dno+DLsZtIrc5M7Q2X3r/mUsKwtVm2oIhauQSDxh4A4aOWOcNVRTyCD0+1rno3
-         X8LQDEIVHhg/VYlHnFLdfVgkbVTVnfFcyNRaxAJs=
-Date:   Wed, 1 Jun 2022 09:52:00 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        robert.foss@linaro.org, jonas@kwiboo.se, jernej.skrabec@gmail.com,
-        airlied@linux.ie, daniel@ffwll.ch, maxime@cerno.tech,
-        sam@ravnborg.org, alsi@bang-olufsen.dk, jagan@amarulasolutions.com,
-        biju.das.jz@bp.renesas.com, l.stach@pengutronix.de,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm: bridge: adv7511: Add check for
- mipi_dsi_driver_register
-Message-ID: <YpcMkIefWGCwZZJ+@pendragon.ideasonboard.com>
-References: <20220601024822.2804516-1-jiasheng@iscas.ac.cn>
+        Wed, 1 Jun 2022 02:54:27 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C1A49253;
+        Tue, 31 May 2022 23:54:26 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so5282699pju.1;
+        Tue, 31 May 2022 23:54:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vr5c2xUPPCzrWHyA1+m2wz+QOmZ7J+gQxTkYWDKocB4=;
+        b=pia0/JspGKwQoJCV1pBp/WXTXpCKH71LKwf0Q0YWoly2V42dcqvhXrwhsb8NbXtQ9j
+         869+MgNYaMMZu/eerbDusEiEOJp48EAQ2SvafYSOJF3PEOZZCHdgkkylw1lGfcyxxBfX
+         4ztQu2/KjB8hnsT7wLsLwmSSpmR9Vf1RK1v+0uaQc0rdzf8W2ABkQc0/UlWCIkqFahK8
+         X7pfxyoxYxVcYxYJUwnTzGAE1QJIrFzGbPn9U2iLZbxvJFRkp0LT2cKHN1hrdzuIrCf5
+         Pxhaw8iHC/duR3Omiz33jnChruU/hw2WVDdFGsrgR3acsxyNnxK1CNgyz6sHgPwg10eO
+         TJfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vr5c2xUPPCzrWHyA1+m2wz+QOmZ7J+gQxTkYWDKocB4=;
+        b=XXpHqhemXLuZHM6D7mewSzVd7t+RrqzXQQDOL7xegr2J0iZWMK+PJeozURrjAVxgPZ
+         T4ZYixgkSvPjlSYYdnEqr/OtOElsTXlY2b5Rhl4HtFmznVVkneeMkcf1PfyYEK3yP9Kg
+         tnuSQkzoUCNqYDHLbH0ztcrlgb457uwrX+nHhYkG6pKWDSqVv7XCxmdBqUqCE3ZuxiaJ
+         ZwpWY4kv05Mo5RkpLSDmYUzlshzhkZS99SVGSKGMoxATZvLWu0TOSY7Cyl1LvW5kdPtd
+         UG8tsvNdk8oXOCFWFYDo2Oufui5RNlCq+K6l+iRo+i2ADjpRs7z9F2MpyLOYH8g+OukU
+         i2aw==
+X-Gm-Message-State: AOAM530R4aIVDGesAnaTYb7GESpOq41m9FtnUIkpjecSimOpsm0qFpFQ
+        YpD8EIxgAWuzruh+hohtytI=
+X-Google-Smtp-Source: ABdhPJy6Rlb+wvYRaHxSk4DE+e3ykIzInQapeRgnxaEtQB7kWqQBNMzrdigvD6n/9GImBr8Mq1Ffuw==
+X-Received: by 2002:a17:902:e881:b0:161:bfc2:c52 with SMTP id w1-20020a170902e88100b00161bfc20c52mr63401807plg.75.1654066466351;
+        Tue, 31 May 2022 23:54:26 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.27])
+        by smtp.gmail.com with ESMTPSA id b11-20020a170902d50b00b0015e8d4eb276sm671460plg.192.2022.05.31.23.54.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 23:54:25 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org
+Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, nhorman@tuxdriver.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        imagedong@tencent.com, dsahern@kernel.org, talalahmad@google.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH net-next v3 0/3] reorganize the code of the enum skb_drop_reason
+Date:   Wed,  1 Jun 2022 14:52:35 +0800
+Message-Id: <20220601065238.1357624-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220601024822.2804516-1-jiasheng@iscas.ac.cn>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiasheng,
+From: Menglong Dong <imagedong@tencent.com>
 
-Thank you for the patch.
+The code of skb_drop_reason is a little wild, let's reorganize them.
+Three things and three patches:
 
-On Wed, Jun 01, 2022 at 10:48:22AM +0800, Jiasheng Jiang wrote:
-> As mipi_dsi_driver_register could return error if fails,
-> it should be better to check the return value and return error
-> if fails.
-> 
-> Fixes: 1e4d58cd7f88 ("drm/bridge: adv7533: Create a MIPI DSI device")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-> index 5bb9300040dd..795855b41eb2 100644
-> --- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-> +++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-> @@ -1392,8 +1392,13 @@ static struct i2c_driver adv7511_driver = {
->  
->  static int __init adv7511_init(void)
->  {
-> -	if (IS_ENABLED(CONFIG_DRM_MIPI_DSI))
-> -		mipi_dsi_driver_register(&adv7533_dsi_driver);
-> +	int ret;
-> +
-> +	if (IS_ENABLED(CONFIG_DRM_MIPI_DSI)) {
-> +		ret = mipi_dsi_driver_register(&adv7533_dsi_driver);
-> +		if (ret)
-> +			return ret;
-> +	}
->  
->  	return i2c_add_driver(&adv7511_driver);
+1) Move the enum 'skb_drop_reason' and related function to the standalone
+   header 'dropreason.h', as Jakub Kicinski suggested, as the skb drop
+   reasons are getting more and more.
 
-While at it, should this then call mipi_dsi_driver_unregister() on
-failure ?
+2) use auto-generation to generate the source file that convert enum
+   skb_drop_reason to string.
 
->  }
-> -- 
-> 2.25.1
-> 
+3) make the comment of skb drop reasons kernel-doc style.
+
+Changes since v2:
+2/3: - add new line in the end of .gitignore
+     - fix awk warning by make '\;' to ';', as ';' is not need to be
+       escaped
+     - export 'drop_reasons' in skbuff.c
+
+Changes since v1:
+1/3: move dropreason.h from include/linux/ to include/net/ (Jakub Kicinski)
+2/3: generate source file instead of header file for drop reasons string
+     array (Jakub Kicinski)
+3/3: use inline comment (Jakub Kicinski)
+
+Menglong Dong (3):
+  net: skb: move enum skb_drop_reason to standalone header file
+  net: skb: use auto-generation to convert skb drop reason to string
+  net: dropreason: reformat the comment fo skb drop reasons
+
+ include/linux/skbuff.h     | 179 +-------------------------
+ include/net/dropreason.h   | 257 +++++++++++++++++++++++++++++++++++++
+ include/trace/events/skb.h |  89 +------------
+ net/core/.gitignore        |   1 +
+ net/core/Makefile          |  23 +++-
+ net/core/drop_monitor.c    |  13 --
+ net/core/skbuff.c          |   3 +
+ 7 files changed, 285 insertions(+), 280 deletions(-)
+ create mode 100644 include/net/dropreason.h
+ create mode 100644 net/core/.gitignore
 
 -- 
-Regards,
+2.36.1
 
-Laurent Pinchart

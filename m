@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9E153ACC0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 20:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D5653ACC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 20:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356613AbiFASZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 14:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        id S1356618AbiFAS1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 14:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356609AbiFASZD (ORCPT
+        with ESMTP id S229871AbiFAS1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 14:25:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A263A5015;
-        Wed,  1 Jun 2022 11:25:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A917C6136A;
-        Wed,  1 Jun 2022 18:25:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF094C385A5;
-        Wed,  1 Jun 2022 18:24:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654107901;
-        bh=7dmwc1JxqNEK2I53MV/piGLSWyqlDbqSz/Nd/W+NUIU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dB5hoqwz3LSkhmpIp+wjclCAcSFgV1Wcdbfs98/GYhIWhH9VDtEFXJuDbWY35vBJ8
-         4ILCaLzeDc2L/gu8ht+k387/xYhr/lsmoH+8is2Vl0ZjSbcoT/hGwIpSDNesvCaCpa
-         ysptCPynP7wFXBermVj+UHCAX+fViNjoc5I2STgtOu9BRBrWE7bBdfsG60DpFaWRY3
-         pEiVGVP3pm0hJeDMKsjRcLoO+DHmyK/HKF9Sntssnqpb0R2hfUpTcLvCPRiXEtLMLE
-         VG7Etu0VPVNPTKGjPhGdxU562kuDk0FAQE3Rw1FR4zINJEu7w2tx/MQ3F0iUG7XVZQ
-         MCZiK8GFjRnYg==
-Date:   Wed, 1 Jun 2022 20:24:55 +0200
-From:   Alexey Gladkov <legion@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Containers <containers@lists.linux.dev>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Vasily Averin <vvs@virtuozzo.com>
-Subject: Re: [RFC PATCH 2/4] sysctl: ipc: Do not use dynamic memory
-Message-ID: <Ypeu97GDg6mNiKQ8@example.org>
-References: <CAHk-=whi2SzU4XT_FsdTCAuK2qtYmH+-hwi1cbSdG8zu0KXL=g@mail.gmail.com>
- <cover.1654086665.git.legion@kernel.org>
- <857cb160a981b5719d8ed6a3e5e7c456915c64fa.1654086665.git.legion@kernel.org>
- <CAHk-=wjJ2CP0ugbOnwAd-=Cw0i-q_xC1PbJ-_1jrvR-aisiAAA@mail.gmail.com>
+        Wed, 1 Jun 2022 14:27:13 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE863BBC0
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 11:27:12 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id a10so2790899pju.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 11:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=M4hXSPlUroGnMHYrVf/70tLNHjdvP6MK1I6avHgZhC0=;
+        b=W7vZu3UFxL53j0FB0MfiIR5mM0GIPd89gbXFRb8yDNPW/fQgWVQuIVu5XP51a/Hwjh
+         sfzbgq2mMPU4TS2ccncL56TjVCvCF4XYG1zoODsCmsaHGMhrnyPl/kFECBehMq4wRW2W
+         g649mdRNc/hIHEyW8yUA8Szbhjjx9bQgF5w1A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=M4hXSPlUroGnMHYrVf/70tLNHjdvP6MK1I6avHgZhC0=;
+        b=yWjz0LwyMydaixIyP7Hyqy6fIOEdpBkDOBRQpu1JxQuChBM2e5DPmdthHrUvkskir3
+         Y1VEpD9j7VfYk76rDAi1srPUUHOdyPVIplGiahKwfvHGcKiTIvPtMOYYrvq76QEulfQ+
+         gJGu3IjmpQvCqFLIh7d7/oVXdDvSZJgBUwmlzJFNosWC7cdo/0QAF/qaeKEhk7WVup0t
+         laT1pTayZHvNYVEYIRwcJKibj/cVFVrUPLh7lvEkogts7Mz+gVK22Zc7S45zCNv31aei
+         UUj78rHXhZ0gUgwoJhrJEV7N3J0EucMmK4VD/OyywmU2Y3zeMwk4UiopH+ymx6edOZrD
+         9LKQ==
+X-Gm-Message-State: AOAM530gpMSAgFgL5zh8A2u3rmTmlFVrOt90sZN+jRkz+sAc7hX5yMXb
+        4D7tEUWHJwmfwzmQOzvtiks8kw==
+X-Google-Smtp-Source: ABdhPJxBlPyxzlJ3La70at6JLKyGeugb2/5L8npudKltVfhVX5L3LbEZfWg9HRq5uDWI5bGw/L9NNw==
+X-Received: by 2002:a17:902:b215:b0:165:7bdd:a9f1 with SMTP id t21-20020a170902b21500b001657bdda9f1mr733253plr.41.1654108031776;
+        Wed, 01 Jun 2022 11:27:11 -0700 (PDT)
+Received: from linuxpc-ThinkServer-TS140.dhcp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id q17-20020a656851000000b003f5d7f0ad6asm1740739pgt.48.2022.06.01.11.27.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 11:27:10 -0700 (PDT)
+From:   Anand Gore <anand.gore@broadcom.com>
+To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     tomer.yacoby@broadcom.com, florian.fainelli@broadcom.com,
+        samyon.furman@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
+        dan.beygelman@broadcom.com, Anand Gore <anand.gore@broadcom.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, soc@kernel.org
+Subject: [PATCH v3 0/3] arm: bcmbca: add bcm6878 soc support
+Date:   Wed,  1 Jun 2022 11:27:04 -0700
+Message-Id: <20220601182707.3037131-1-anand.gore@broadcom.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjJ2CP0ugbOnwAd-=Cw0i-q_xC1PbJ-_1jrvR-aisiAAA@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000af218a05e06709ae"
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,MIME_NO_TEXT,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,135 +74,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 09:45:15AM -0700, Linus Torvalds wrote:
-> On Wed, Jun 1, 2022 at 6:20 AM Alexey Gladkov <legion@kernel.org> wrote:
-> >
-> > Dynamic memory allocation is needed to modify .data and specify the per
-> > namespace parameter. The new sysctl API is allowed to get rid of the
-> > need for such modification.
-> 
-> Ok, this is looking better. That said, a few comments:
-> 
-> >
-> > diff --git a/ipc/ipc_sysctl.c b/ipc/ipc_sysctl.c
-> > index ef313ecfb53a..833b670c38f3 100644
-> > --- a/ipc/ipc_sysctl.c
-> > +++ b/ipc/ipc_sysctl.c
-> > @@ -68,26 +68,94 @@ static int proc_ipc_sem_dointvec(struct ctl_table *table, int write,
-> >         return ret;
-> >  }
-> >
-> > +static inline void *data_from_ns(struct ctl_context *ctx, struct ctl_table *table);
-> > +
-> > +static int ipc_sys_open(struct ctl_context *ctx, struct inode *inode, struct file *file)
-> > +{
-> > +       struct ipc_namespace *ns = current->nsproxy->ipc_ns;
-> > +
-> > +       // For now, we only allow changes in init_user_ns.
-> > +       if (ns->user_ns != &init_user_ns)
-> > +               return -EPERM;
-> > +
-> > +#ifdef CONFIG_CHECKPOINT_RESTORE
-> > +       int index = (ctx->table - ipc_sysctls);
-> > +
-> > +       switch (index) {
-> > +               case IPC_SYSCTL_SEM_NEXT_ID:
-> > +               case IPC_SYSCTL_MSG_NEXT_ID
+--000000000000af218a05e06709ae
+Content-Transfer-Encoding: 8bit
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/bpf/cgroup.c#n1392:
-> [...]
-> 
-> I don't think you actually even compile-tested this, because you're
-> using these IPC_SYSCTL_SEM_NEXT_ID etc enums before you even declared
-> them later in the same file.
 
-I did it but without CONFIG_CHECKPOINT_RESTORE.
+The initial support includes a bare-bone dts
+for dual core ARM v7  with a pl011 uart.
 
-This is where I'm not sure who can write to ipc sysctls inside
-ipc_namespace.
+Changes in v3:
+- Simplify subject line
 
-> > +static ssize_t ipc_sys_read(struct ctl_context *ctx, struct file *file,
-> > +                    char *buffer, size_t *lenp, loff_t *ppos)
-> > +{
-> > +       struct ctl_table table = *ctx->table;
-> > +       table.data = data_from_ns(ctx, ctx->table);
-> > +       return table.proc_handler(&table, 0, buffer, lenp, ppos);
-> > +}
-> 
-> Can we please fix the names and the types of this new 'ctx' structure?
-> 
-> Yes, yes, I know the old legacy "sysctl table" is horribly named, and
-> uses "ctl_table".
+Changes in v2:
+- Fix psci, GIC dts entries
+- Remove extra empty lines
 
-Sure.
+Anand Gore (3):
+  ARM: dts: add dts files for bcmbca soc 6878
+  dt-bindings: arm: add BCM6878 soc
+  MAINTAINERS: add bcm6878 to bcmbca arch entry
 
-> But let's just write it out. It's not some random control table for
-> anything. It's a very odd and specific thing: "sysctl". Let's use the
-> full name.
-> 
-> Also, Please just make that "ctl_data" member in that "ctl_context"
-> struct not just have a real name, but a real type. Make it literally
-> be
-> 
->     struct ipc_namespace *ipc_ns;
-> 
-> and if we end up with other things wanting other pointers, just add a
-> new one (or make a union if we care about the size of that allocation,
-> which I don't see any reason we'd do when it's literally just like a
-> couple of pointers in size).
-> 
-> There is no reason to have some pseudo-generic "void *ctl_data" that
-> makes it ambiguous and allows for type confusion and isn't
-> self-documenting. I'd rather have a properly typed pointer that is
-> just initialized to NULL and is not always used or needed, but always
-> has a clear case for *what* it would be used for.
-> 
-> Yes, yes, we have f_private etc for things that are really very very
-> generic and have arbitrary users. But 'sysctl' is not that kind of
-> truly generic use.
-
-Yep. I made ctl_data in the same way as f_private. My idea is that if
-someone needs to store more than one pointer, they can put a struct there.
-But it turned out that at least now, apart from ipc_namespace, nothing is
-needed.
-
-> I wish we didn't have that silly "create a temporary ctl_table entry"
-> either, and I wish it was properly named. But it's not worth the
-> pointless churn to fix old bad interfaces. But the new ones should
-> have better names, and try to avoid those bad old decisions.
-
-Currently temporary ctl_table is the main strategy for handling sysctl
-entries.
-
-Perhaps it will be possible to get rid of this if we add another
-get_data() that would return what is currently placed in .data in
-ctl_table. I mean make getting .data dynamic.
-
-> But yeah, I think this all is a step in the right direction. And maybe
-> some of those cases and old 'ctl_table' things can be migrated to just
-> using individual read() functions entirely. The whole 'ctl_table'
-> model was broken, and came from the bad old days with an actual
-> 'sysctl()' system call.
-
-I'm not sure how to get rid of ctl_table since net sysctls are heavily
-dependent on it.
-
-I was wondering if it's possible to get rid of ctl_table but if it's not
-possible to rewrite everything to some kind of new magic API, then keeping
-two of them would be a nightmare.
-
-Another problem is that ctl_table is being used by __cgroup_bpf_run_filter_sysctl.
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/bpf/cgroup.c#n1392
-
-> Because I think it would be lovely if people would move away from the
-> 'sysctl table' approach entirely for cases where that makes sense, and
-> these guys that already need special handling are very much in that
-> situation.
-
-Since you think that these patches are a step in the right direction, then
-I will prepare the first version with your comments in mind.
+ .../bindings/arm/bcm/brcm,bcmbca.yaml         |   7 ++
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/Makefile                    |   3 +-
+ arch/arm/boot/dts/bcm6878.dtsi                | 110 ++++++++++++++++++
+ arch/arm/boot/dts/bcm96878.dts                |  30 +++++
+ 5 files changed, 150 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/bcm6878.dtsi
+ create mode 100644 arch/arm/boot/dts/bcm96878.dts
 
 -- 
-Rgrds, legion
+2.25.1
 
+
+--000000000000af218a05e06709ae
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+dD3eNkKBkknQBWvFfBHcITIVdVccQg5YcIwowkVZhhA3NG0BXGI4l/3o+wjrl2BGO/t969dabQ5x
+/SxGBTK8Vyn6NG7U0Lrjb0VtnrFXgEdxFvJuEQIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
+MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
+dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
+HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
+bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
+Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
+gRdhbmFuZC5nb3JlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
+gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUH4HXhI4xxNPqnv0yfNL6is0cLFYwDQYJ
+KoZIhvcNAQELBQADggEBAAU15tMIqa2yrLdoPoNXMk6scL+6XJK/EVe0Lq0Uyq0SV8wpFV09ujno
+nLmSFYTz1RjmiKr1eu/pwyTImqMUj1JAXZ2zgE0rFS5SvchJsSlB8Nv3WeTaf5Lha5ZmRTaB0U/E
+eo7SFjA240UWLCGqXM69XCc5PHk6mWLNTsyDTgK2kLUKP1RVFswACNsI284fxiwA0qSCu2WnOEKE
+LiytE/NBFgzVtBcryeBtcMnhZgMo0PQYRl4O+58O1O703CD1jiO4/ikP+hUTdxWQiiWAzpE89YCH
+S0Pc2d2yC8RWARAiArr1jXHWA4+snG+TS3A1YVSPRZpboS5AXMutIIQ5YZQxggJtMIICaQIBATBr
+MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
+YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxzcZR0ocq9f8sVOu8wDQYJYIZI
+AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMaimJ25KaGM0LUdabIVCzhTtWWoWw9NTiRpafiJ
+2VefMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDYwMTE4Mjcx
+MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
+AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
+hkiG9w0BAQEFAASCAQCXAKqGr2Xnk9OcWMvOGRTsaIb8KNQ4DnEsrIcBRU8S7xRJBIz0aWKhytU/
+6SJfCikVGXDPQnqe2MrONHOKJpzJ6tF/1bqT90lo4AzoKRhi2rV2z/qstpVOO0cJumoUSYkE9aBC
+78WMejgAA80tIOvIZtC6y+fWsweV65TR135vEJ6XTDqVe9B+Zn7Gc+oJCvbLVCZEscRB/rgfiJ81
++FMXkTe3JBoYJScxJ5a0ymtFHU93XGYlrdyVq1PZDllwkM8lC7MmD8PjxffsP0DstTuwY8af/GZw
+bg5MA8uhXiTCG8UiUZ6kh64LQN7hIfcAj0XydtVwGiGFooiHH6DgTw3j
+--000000000000af218a05e06709ae--

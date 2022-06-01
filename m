@@ -2,76 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E31653AAE0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C530353AAE4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356053AbiFAQUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 12:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
+        id S1356067AbiFAQVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 12:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353912AbiFAQUX (ORCPT
+        with ESMTP id S1345836AbiFAQVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 12:20:23 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE7879387
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 09:20:21 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id v15so2324225pgk.11
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 09:20:21 -0700 (PDT)
+        Wed, 1 Jun 2022 12:21:08 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F42C7938A
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 09:21:04 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ff7b90e635so24294387b3.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 09:21:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=wOuHAe/UCPXCVWmhImfI3HLWugnRgMhk0OKlk9MR+eA=;
-        b=hwLoC+ZH4qO69CJeUjyyFZYaEZNIWjiWJvwQaOkl5pwDV7tTutLzu2aeYcde16dbPS
-         Vfhyewc0BZMyOli1NTsiF9W4tMIUgAkF8w/4ZpWb6/yrvXzwsc4JsCyi0nPL9duLRRWx
-         4BNsITI8xcW5+cSRtP1kHP3E9KJXg5dR8VQGA=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XM2sFuyFihZDnGzhAB4JxCOAcgDlpIBTgTnkAxWbr84=;
+        b=lMek/BkxQa8hv44N1om24qgTIDg1kFiuJlm9BKTspin+LuL4ZcpzeO6ef5+1JqRqzH
+         eTjspKdDLx/ESSKRsDegdO4tZmPBrz98/9xtEft/xG2KW2kHRTTsHTpy2Fc2izCOA1+X
+         B3eyiPdkcF1rnwhdgwUcnzUM3VGKnaTRDSaQ32D1xI5dsdXSrKFnJluFWWLZs1UvPFur
+         bfSx/59hLvwuGGyN1pkKW527TSj4j6efXx9ErI/0LpGQtxHY14S9699iONDheKf1OgMF
+         CAGaFxq9FsQu8kIKP6J9Gd6aDeqVcjTCM7nM5h1cgKZTaAV77V4x/7XwKVw/lGFyX3wY
+         wkyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=wOuHAe/UCPXCVWmhImfI3HLWugnRgMhk0OKlk9MR+eA=;
-        b=olqJCxeAZoDSyufpYauXSVTHvoMiLa/O1VfJDsyCNK2R08uXu7HIVKqd5PYU5xA+sF
-         cSbJNhpCEg+fXqLsKN7ES2LLzeoU+mVLAP7skwqeSIcIwWIryvc+MclWmF2aTPR650TI
-         BQgX7fBXmzoHMkifvegkRuOjd8iMlfod6TVMLmKNOMXB/NzWp2g7GVg9qQB7A7iJF7Ux
-         lrJarH7mu9sCTzS3rqI2tnPYVZ+0ujCy7bhPMlLugv3nrfZ14xaif2Dg7RWiYWSp9xtv
-         z0mtKUdQoAaeaMXt/AO9VNSzYbbkrlwNNWvmmICigDFSmNx4kIELMlfrZVQMQAdB5wsE
-         L9rg==
-X-Gm-Message-State: AOAM5337ni2qJy04A6NaQHHW3miW/Zwguq3ts9eZL4zzs8cIF6sNhGKC
-        LjVAC/UXIYkirnalo4wHpt2UPw==
-X-Google-Smtp-Source: ABdhPJzbmQCXVR+bl5y97gY4EEvUQGzrAzCL2ePNSA1f0s/iJYCNhKMqmgigXiyBqjxHyCX5vCjiig==
-X-Received: by 2002:a05:6a00:1503:b0:518:c689:518d with SMTP id q3-20020a056a00150300b00518c689518dmr412470pfu.37.1654100421072;
-        Wed, 01 Jun 2022 09:20:21 -0700 (PDT)
-Received: from [10.67.99.21] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id dw15-20020a17090b094f00b001e0b971196csm4064003pjb.57.2022.06.01.09.20.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 09:20:19 -0700 (PDT)
-Message-ID: <4a78703b-7c58-913c-3c36-1fec4455b946@broadcom.com>
-Date:   Wed, 1 Jun 2022 09:20:14 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XM2sFuyFihZDnGzhAB4JxCOAcgDlpIBTgTnkAxWbr84=;
+        b=yXS2U+br/O/3qGoKGAjRqoTjlIYiwrDly8zjoLPg81BQ6hzeVuzDoxqos4oRYETNvK
+         k9XY3Of3nM+YzvZCLN8gk7NIPNSg2gO8yKIGK9CCU9QjtrTSYFS7Os+ZeXi1p/S/Mam/
+         dplR0jkXCrZrxkzXz6hO5ovOfTQLf3U5OcAVr5oMWHvxjXT4HN/UatmqbuXPvmFlTWPr
+         lr4vcw9V/eNpTX8a5foSr2TzZXu1VpzoHCPBte80ouoecU+EDYONeCpDjp6sWqI2e5wM
+         FomF1QikiKXMHzu6vroCOFqcIYI9dcKsS3MiWLCLGPqtCn0kjmnqsA4/XFyEV8X4927A
+         9nyA==
+X-Gm-Message-State: AOAM53190wLZ4G15YzMxIAbe5VBZdTDBChoP6cMxjz46Tmt91hXMsaos
+        CBpvir1U6zuU5Vgc2Gpj07bToXMiPqY++3nFI2ngQA==
+X-Google-Smtp-Source: ABdhPJwWahlE3pqn9nKswr8nhVQBzIKT0sCXZaqjvrw9e9E/P3Zu7D+IQwJ8Ep2fzsFpY7MZhj3zfxcLdU0UER1lpF0=
+X-Received: by 2002:a0d:c484:0:b0:302:168f:6c15 with SMTP id
+ g126-20020a0dc484000000b00302168f6c15mr260333ywd.490.1654100463103; Wed, 01
+ Jun 2022 09:21:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 2/3] arm64: dts: add dts files for bcmbca SoC bcm4912
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     dan.beygelman@broadcom.com, philippe.reynes@softathome.com,
-        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        samyon.furman@broadcom.com, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220601004244.27394-1-william.zhang@broadcom.com>
- <20220601004244.27394-3-william.zhang@broadcom.com>
- <0b4abf17-f44d-dec4-56f4-0ae12e49b05b@gmail.com>
-From:   William Zhang <william.zhang@broadcom.com>
-In-Reply-To: <0b4abf17-f44d-dec4-56f4-0ae12e49b05b@gmail.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000000b088905e06544a9"
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-7-kirill.shutemov@linux.intel.com> <YnE4ZzzVrxUnr3Uv@zn.tnic>
+ <20220506153013.e6v4q2qhuhqumfiu@box.shutemov.name> <YnpGnMoviGoK4Ucq@zn.tnic>
+ <CAAH4kHYRxgUNnGRUO473q02q3akLzgiTvbA2qKEP5jq6jFV-uA@mail.gmail.com>
+ <Yn4ed1gupKmNz2jn@zn.tnic> <20220513144515.fx2cvo3rjued3vy5@black.fi.intel.com>
+ <PH0PR11MB5064B561086BE6350CC1DCDCC5CF9@PH0PR11MB5064.namprd11.prod.outlook.com>
+ <CAAH4kHbU4FJ=veYQxncdpYD837M90vq2o2saVaUCJ6=pfuNRpA@mail.gmail.com> <0c545c5f-3540-1441-7a7d-359b6795f43a@amd.com>
+In-Reply-To: <0c545c5f-3540-1441-7a7d-359b6795f43a@amd.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Wed, 1 Jun 2022 09:20:52 -0700
+Message-ID: <CAAH4kHYj9WOKngeXYL=KnNb1fXa-MaFGTBGZcBX726Od858Q3A@mail.gmail.com>
+Subject: Re: [PATCHv5 06/12] x86/boot/compressed: Handle unaccepted memory
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     "Xu, Min M" <min.m.xu@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Gao, Jiaqi" <jiaqi.gao@intel.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rodel, Jorg" <jroedel@suse.de>, Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,153 +103,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000000b088905e06544a9
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+The memory accounting in Linux is probably the issue. Both times I ran
+the test were from a freshly booted VM. The test parses the output of
+$(free -k) to determine the amount of free memory it should allocate
+and write/read from, with a given stride of pages to skip before
+touching the next page.
+
+We grab the third column of numbers from the Mem output that looks like thi=
+s
+
+               total        used        free      shared  buff/cache   avai=
+lable
+Mem:        65856604     4128688    48558952       11208    13168964    609=
+42928
+Swap:        1953788      118124     1835664
+
+So my workstation has 48558952 free bytes. We take that, give it to
+memtouch to allocate that much anonymous memory rounded down to the
+nearest MB with mmap and randomly read/write the buffer.
+
+For an 8GB machine, the UEFI will have the initial 0-0xA000 memory and
+0x10_0000 to 0xC00_0000 (beginning of mmio hole) prevalidated. The
+next 5GB is classified as the UEFI v2.9 memory type
+EFI_RESOURCE_MEMORY_UNACCEPTED, 0x1_4000_000 to 0x2_0000_0000.
+The Linux e820 map should see that range as unaccepted rather than
+EFI_CONVENTIONAL_MEMORY (i.e., EDK2's EFI_RESOURCE_SYSTEM_MEMORY), but
+I think it needs to be accounted as free conventional memory.
+
+So when I see 2044MB free vs 7089MB free in my VMs, the two are
+roughly 5GB different.
+
+On Wed, Jun 1, 2022 at 8:49 AM Gupta, Pankaj <pankaj.gupta@amd.com> wrote:
+>
+>
+> > Hi y'all, I've made minimal changes to OVMF to prevalidate only up to
+> > 4GB and leave the rest unaccepted, as Thomas Lendacky recommended
+> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit=
+hub.com%2FAMDESE%2Fovmf%2Fpull%2F4%23issuecomment-1138606275&amp;data=3D05%=
+7C01%7Cpankaj.gupta%40amd.com%7Cde8fd09ad93f4420bd7408da43568f68%7C3dd8961f=
+e4884e608e11a82d994e183d%7C0%7C0%7C637896336342540814%7CUnknown%7CTWFpbGZsb=
+3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C300=
+0%7C%7C%7C&amp;sdata=3DK93%2F1FrPOo4bIWcssHoisM8vDkOBjWh69bUWosT%2Bt0E%3D&a=
+mp;reserved=3D0 and ran
+> > a memtouch test to see if this change behaves as expected. One thing
+> > that struck me is that an 8GB machine reports 2044MB free with this
+> > change (free -k) whereas without it, I see 7089MB free. I think that
+> > unaccepted memory should be classified as free in meminfo, no? I'm not
+> > familiar enough with that code to say what specific change needs to be
+> > made.
+> >
+>
+> Is it memory accounting issue when accepting all the memory at boot time
+> compared to 4GB:4GB preboot_acceptance:use_time_acceptance split?
+>
+> You said you ran memtouch (don't know how it works, assuming it uses
+> memory)? Doesn't that mean most of the memory used and hence accepted?
+> So, free memory reduced?
+>
+> Just trying to understand the issue.
+>
+> Thanks,
+> Pankaj
+> >
+> >
+> > On Sun, May 15, 2022 at 11:47 PM Xu, Min M <min.m.xu@intel.com> wrote:
+> >>
+> >> On May 13, 2022 10:45 PM, Kirill A. Shutemov wrote:
+> >>> On Fri, May 13, 2022 at 11:01:43AM +0200, Borislav Petkov wrote:
+> >>>> + mroth
+> >>>> - brijesh
+> >>>>
+> >>>> On Thu, May 12, 2022 at 10:34:02PM -0700, Dionna Amalie Glaze wrote:
+> >>>>> Kirill, I've been tracking these changes to see if we can handle th=
+e
+> >>>>> unaccepted memory type for SEV-SNP, but testing has been an issue.
+> >>>>> The proposed patch in Ovmf to introduce unaccepted memory seems to
+> >>>>> have stalled out last September
+> >>>>> (https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%=
+2Fwww.mail-archive.com%2Fdevel%40edk2.groups.io%2Fmsg35842.html&amp;data=3D=
+05%7C01%7Cpankaj.gupta%40amd.com%7Cde8fd09ad93f4420bd7408da43568f68%7C3dd89=
+61fe4884e608e11a82d994e183d%7C0%7C0%7C637896336342540814%7CUnknown%7CTWFpbG=
+Zsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C=
+3000%7C%7C%7C&amp;sdata=3DHku8nQJGOg%2FdQqypHxw2eLFG0e%2FE6HoF5VXSIhMpmx0%3=
+D&amp;reserved=3D0)
+> >>>>> and is particularly difficult to adapt to SEV-SNP since it doesn't
+> >>>>> follow the TDVF way of initializing all memory. Is there a differen=
+t
+> >>>>> development I might have missed so that we might test these cases?
+> >>>>> Without the UEFI introducing EFI_UNACCEPTED_MEMORY type, any
+> >>> kernel
+> >>>>> uses are essentially dead code.
+> >>>
+> >>> + Min, Jiaqi.
+> >>>
+> >>> I don't follow firmware development. Min, Jiaqi, could you comment?
+> >>>
+> >> We have prepared the patch for unaccepted memory and it is now working=
+ in our internal release.
+> >> But there is an obstacle to upstream it to edk2 master branch.
+> >> The patch-set depends on the definition of UEFI_RESOURCE_MEMORY_UNACCE=
+PTED in PI spec. This is proposed in https://nam11.safelinks.protection.out=
+look.com/?url=3Dhttps%3A%2F%2Fgithub.com%2Fmicrosoft%2Fmu_basecore%2Fpull%2=
+F66%2Ffiles%23diff-b20a11152d1ce9249c691be5690b4baf52069efadf2e2546cdd2eb66=
+3d80c9e4R237&amp;data=3D05%7C01%7Cpankaj.gupta%40amd.com%7Cde8fd09ad93f4420=
+bd7408da43568f68%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C6378963363425=
+40814%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6I=
+k1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3Dv7s68GZWXJfaXB7vfvXjAlTD2=
+KLOSghk%2Bj3GXF3FTVg%3D&amp;reserved=3D0, according to UEFI-Code-First. The=
+ proposal was approved in 2021 in UEFI Mantis, and will be added to the new=
+ PI.next specification. (Till now it has not been added in the latest PI sp=
+ec.)
+> >> So UEFI_RESOURCE_MEMORY_UNACCEPTED cannot be added in MdePkg which mak=
+e it difficult to submit the patch to edk2 community for review. See this l=
+ink: https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fed=
+k2.groups.io%2Fg%2Fdevel%2Fmessage%2F87558&amp;data=3D05%7C01%7Cpankaj.gupt=
+a%40amd.com%7Cde8fd09ad93f4420bd7408da43568f68%7C3dd8961fe4884e608e11a82d99=
+4e183d%7C0%7C0%7C637896336342540814%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjA=
+wMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sda=
+ta=3DWVIJ2yRRd2URwIF85Dp0WD4ovibZlsobijIGbN6MWZQ%3D&amp;reserved=3D0
+> >>
+> >> Please be noted: UEFI_RESOURCE_MEMORY_UNACCEPTED (defined in PI spec) =
+is different from EFI_UNACCEPTED_MEMORY (defined in UEFI spec)
+> >>
+> >> I will submit the patch-set once the new definition is added in the ne=
+w PI.next spec.
+> >>
+> >> Thanks
+> >> Min
+> >
+> >
+> >
+>
 
 
-
-On 6/1/22 02:47, Florian Fainelli wrote:
-> 
-> 
-> On 5/31/2022 5:42 PM, William Zhang wrote:
->> Add dts for ARMv8 based broadband SoC BCM4912. bcm4912.dtsi is the
->> SoC description dts header and bcm94912.dts is a simple dts file for
->> Broadcom BCM94912 Reference board that only enable the UART port.
->>
->> Signed-off-by: William Zhang <william.zhang@broadcom.com>
->>
->> ---
-> 
-> [snip]
-> 
->> +
->> +    axi@81000000 {
->> +        compatible = "simple-bus";
->> +        #address-cells = <2>;
->> +        #size-cells = <2>;
-> 
-> See comment below for the ubus node.
-> 
->> +        ranges = <0x0 0x0 0x0 0x81000000 0x0 0x8000>;
->> +
->> +        gic: interrupt-controller@1000 {
->> +            compatible = "arm,gic-400";
->> +            #interrupt-cells = <3>;
->> +            interrupt-controller;
->> +            interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | 
->> IRQ_TYPE_LEVEL_HIGH)>;
->> +            reg = <0x0 0x1000 0x0 0x1000>,
->> +                <0x0 0x2000 0x0 0x2000>,
->> +                <0x0 0x4000 0x0 0x2000>,
->> +                <0x0 0x6000 0x0 0x2000>;
->> +        };
->> +    };
->> +
->> +    bus@ff800000 {
->> +        compatible = "simple-bus";
->> +        #address-cells = <2>;
->> +        #size-cells = <2>;
-> 
-> This does not quite make sense, as I doubt that this part of the bus is 
-> 64-bit capable, rather, I would expect to find both #address-cells and 
-> #size-cells to be set to 1 and ... (see below)
-> 
-Agree.  It can be simplified to use 32 bit address and size.
-
->> +        ranges = <0x0 0x0 0x0 0xff800000 0x0 0x800000>;
->> +
->> +        uart0: serial@12000 {
->> +            compatible = "arm,pl011", "arm,primecell";
->> +            reg = <0x0 0x12000 0x0 0x1000>;
-> 
-> ... have this become simply:
-> 
->              reg = <0x12000 0x1000>:
-> 
-> which also looks awfully big for an UART block, an entire 4KB worth of 
-> register space?
-That is the correct based on the rdb.
-
---0000000000000b088905e06544a9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKcs12Q4kxd6ebatGcxwxvzQSed/
-fOUwyRihn949dpUWMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDYwMTE2MjAyMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBR7BZUApgJEILqS8Ba/cr+vzbWldwkx2Rd6RbXy4QV7AZ1
-yM/C54zlpRptMEhFrPd0scTL98tmITB1PplroBtz7O2l6awlKSNtTCxj2CGI/33pjlZzpw1uyHBL
-GC/5RQWZfsRBb3OW2lV9X6nwjncnrZntkphlhw0jvrTkVOnGlbTZK9PGQkjMKVUcyB+DB82IsbFb
-+Fr0cXUvAt0PtvPFCKVOrFZumja0v2ln908JRNRQ5fyzA7LppQm9/t1gImI7Nr1ibjaXlObUfqPb
-i1R7sIHkZBTKnqIvcasuKK3rp2yjkuX2Ox2JLlRyIsYBFBE3SDQ2JL+INU+NASssUfAp
---0000000000000b088905e06544a9--
+--=20
+-Dionna Glaze, PhD (she/her)

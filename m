@@ -2,95 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F65253AAB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7552553AAB9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 18:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355990AbiFAQId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 12:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
+        id S1356007AbiFAQJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 12:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355979AbiFAQIb (ORCPT
+        with ESMTP id S1355090AbiFAQJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 12:08:31 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C165F59309;
-        Wed,  1 Jun 2022 09:08:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=tTMeQSlVN/jki7gY30nXBiHUEabl86oFmR3MDB8WTos=; b=kyiJeT+HyMH3qWkHr4M/GNDhVQ
-        he0vs1nHlDJumZTaCqAhyI7XGiLhP5COE+01Z7IJa+HwSy366FQWqStsxj1JqUM1nOswZsj7WWVeI
-        4udEx97HSIXoUBnAgUA5MwNAseseUtVRx+w2cAKqZa+5neeh9UoFA37oFcXJs1Wo4h9wKKPB9KJo1
-        t/Fdq7UooJyG1DN1qOm11lM0GpIH1WuWScjUsUQD6R24cKP2YYp0H/jsz0B1tliYLhv2pX0u2dcpG
-        bB5mNALQC3eacnn7udZ6FPO5djIC58FGvpGACjmtP0Qe6JVqooWssI7hS0A8MX+pqK2iEoAbhqdoi
-        VUq+pJaA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwQtS-003pQZ-7K; Wed, 01 Jun 2022 16:08:23 +0000
-Message-ID: <b9c831a3-44ab-0374-34f8-8bd8bc311e5c@infradead.org>
-Date:   Wed, 1 Jun 2022 09:08:16 -0700
+        Wed, 1 Jun 2022 12:09:26 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9A7A502D;
+        Wed,  1 Jun 2022 09:09:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654099765; x=1685635765;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+oZC6UP0stKwFCCsu2gFuJQpdMUHJaXRTUCn92+/3iA=;
+  b=npxa+fbGJTKeo+ZBuLYeCUv1muXIYJ1+c3xLHlJKRVOPI03B1YJr+L4B
+   0an6o/x8bHa/LfhCvYR1a2Y+2xmCbcGCIhRLPTkUaY4Ca3+nM/QemQ4MB
+   2iyuM9AhqW0cnYBe+xzPbq/e7lJ4BPbxGCSsD7h0TTyviKzNKxmINzXLp
+   T4WdhVUeXtVssN5fPsBOAzt0jYxtaIYMWrDNgSEE9ak9CRQIyWE35mGd5
+   ++ZByCS5E73FRvi9iw0/5h3+eYVldDm2j4PaBs7MtUQ4+AHxMgXRhlm2z
+   RwK1oWQvZhxKHvB4eduFwlOHl0Zq5qDvSqnb9VAeDM8ZuDwt4IDGNKTk8
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="257709041"
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="257709041"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 09:09:22 -0700
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="680171311"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 09:09:20 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nwQuL-000Qne-LA;
+        Wed, 01 Jun 2022 19:09:17 +0300
+Date:   Wed, 1 Jun 2022 19:09:17 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v1 1/1] gpio: wcove: make irq_chip immutable
+Message-ID: <YpePLa0jbTLusGU9@smile.fi.intel.com>
+References: <20220601154833.2173-1-andriy.shevchenko@linux.intel.com>
+ <e965160d-08d1-f148-6452-f759053e7e99@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] RISCV: kexec: Fix build error without CONFIG_MODULES
-Content-Language: en-US
-To:     Li Zhengyu <lizhengyu3@huawei.com>, palmer@rivosinc.com
-Cc:     paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        liaochang1@huawei.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, ebiederm@xmission.com,
-        kexec@lists.infradead.org, linux-next@vger.kernel.org
-References: <20220601063924.13037-1-lizhengyu3@huawei.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220601063924.13037-1-lizhengyu3@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e965160d-08d1-f148-6452-f759053e7e99@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
-
-On 5/31/22 23:39, Li Zhengyu wrote:
-> When CONFIG_MODULES is not set/enabled:
+On Wed, Jun 01, 2022 at 08:51:03AM -0700, Sathyanarayanan Kuppuswamy wrote:
+> On 6/1/22 8:48 AM, Andy Shevchenko wrote:
+> > Since recently, the kernel is nagging about mutable irq_chips:
+> > 
+> >     "not an immutable chip, please consider fixing it!"
+> > 
+> > Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
+> > helper functions and call the appropriate gpiolib functions.
+> > 
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> ../arch/riscv/kernel/elf_kexec.c:353:9: error: unknown type name 'Elf_Rela'; did you mean 'Elf64_Rela'?
->   353 |         Elf_Rela *relas;
->       |         ^~~~~~~~
->       |         Elf64_Rela
+> Looks good to me
 > 
-> Replace Elf_Rela by Elf64_Rela to avoid relying on CONFIG_MODULES.
-> 
+> Reviewed-by: Kuppuswamy Sathyanarayanan
+> <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-BTW, does this mean that RISC-V kexec is only available on 64BIT
-and not on 32BIT?
+Thanks!
 
-thanks.
+Please fix your tools so it won't split tag line and `b4` may automatically test it.
 
-> Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
-> ---
->  arch/riscv/kernel/elf_kexec.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
-> index 9cb85095fd45..0cb94992c15b 100644
-> --- a/arch/riscv/kernel/elf_kexec.c
-> +++ b/arch/riscv/kernel/elf_kexec.c
-> @@ -349,7 +349,7 @@ int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
->  {
->  	const char *strtab, *name, *shstrtab;
->  	const Elf_Shdr *sechdrs;
-> -	Elf_Rela *relas;
-> +	Elf64_Rela *relas;
->  	int i, r_type;
->  
->  	/* String & section header string table */
 
 -- 
-~Randy
+With Best Regards,
+Andy Shevchenko
+
+

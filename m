@@ -2,142 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB0853ADF4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5951853ADF2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 22:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiFAUmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 16:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
+        id S229719AbiFAUsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 16:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiFAUmh (ORCPT
+        with ESMTP id S230400AbiFAUrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 16:42:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE321D502C;
-        Wed,  1 Jun 2022 13:23:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A399615DA;
-        Wed,  1 Jun 2022 20:14:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B27E5C385A5;
-        Wed,  1 Jun 2022 20:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654114446;
-        bh=ANEZGcC38fks5Sbmq7hFARmRKNzmPSYj5weqOHWaC7U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DbLxkgWvqnFalgNPxRu92f7qC3o0VDMSTwCtOBSrBwYpHvfO+xmIlTIKOzoBah1/I
-         R6OmGReJRlya0AwJRjpnGNK8+lgax09VuHPcSvcrOr3L9EmiKm9+zcevuK2w8qQhI6
-         vw/B8bBoj0l+8mfK081S8ap4iuH2ZpkhujIEmVshyvcDpb5Hi9FHghkDDXA3Iv0YRb
-         biXGU1Ni9rr4CY7uHL1tF8CSCAzMjGytrxmumik2chknBoiO33bhHSJlgy4gvACcXK
-         +uvbJMNrVsNppsns+N19pU2CVEpzqsM76KaQVg5uv1bGTZfi/SEhKZ46jv3S6WjgOY
-         f7po3Ozi14pnw==
-Received: by mercury (Postfix, from userid 1000)
-        id 28E8B106043A; Wed,  1 Jun 2022 22:14:04 +0200 (CEST)
-Date:   Wed, 1 Jun 2022 22:14:04 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [GIT PULL] power-supply changes for 5.19
-Message-ID: <20220601201404.nc66eejtt4tuvre6@mercury.elektranox.org>
+        Wed, 1 Jun 2022 16:47:45 -0400
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBC1327C24F
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 13:44:51 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id wUjOnikly26JCwUjOn5OWJ; Wed, 01 Jun 2022 22:14:22 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Wed, 01 Jun 2022 22:14:22 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <dd525d8b-3cb3-e843-4a79-64f50c0fe8a7@wanadoo.fr>
+Date:   Wed, 1 Jun 2022 22:14:14 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lpdghi3maawhqvbc"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/5] crypto: aspeed: Add HACE hash driver
+Content-Language: en-US
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Johnny Huang <johnny_huang@aspeedtech.com>
+Cc:     linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220601054204.1522976-1-neal_liu@aspeedtech.com>
+ <20220601054204.1522976-2-neal_liu@aspeedtech.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220601054204.1522976-2-neal_liu@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---lpdghi3maawhqvbc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Le 01/06/2022 à 07:42, Neal Liu a écrit :
+> Hash and Crypto Engine (HACE) is designed to accelerate the
+> throughput of hash data digest, encryption, and decryption.
+> 
+> Basically, HACE can be divided into two independently engines
+> - Hash Engine and Crypto Engine. This patch aims to add HACE
+> hash engine driver for hash accelerator.
+> 
+> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> Signed-off-by: Johnny Huang <johnny_huang@aspeedtech.com>
+> ---
+>   MAINTAINERS                              |    7 +
+>   drivers/crypto/Kconfig                   |    1 +
+>   drivers/crypto/Makefile                  |    1 +
+>   drivers/crypto/aspeed/Kconfig            |   22 +
+>   drivers/crypto/aspeed/Makefile           |    6 +
+>   drivers/crypto/aspeed/aspeed-hace-hash.c | 1335 ++++++++++++++++++++++
+>   drivers/crypto/aspeed/aspeed-hace.c      |  210 ++++
+>   drivers/crypto/aspeed/aspeed-hace.h      |  179 +++
+>   8 files changed, 1761 insertions(+)
+>   create mode 100644 drivers/crypto/aspeed/Kconfig
+>   create mode 100644 drivers/crypto/aspeed/Makefile
+>   create mode 100644 drivers/crypto/aspeed/aspeed-hace-hash.c
+>   create mode 100644 drivers/crypto/aspeed/aspeed-hace.c
+>   create mode 100644 drivers/crypto/aspeed/aspeed-hace.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index e8c52d0192a6..c020e0893eed 100644
 
-Hi Linus,
+[...]
 
-Not much from the power-supply subsystem this time around, since I
-was busy most of the cycle. The pull request also contains some
-fixes, that I originally planned to send for 5.18. Apart from this
-there is nothing noteworthy.
+> +int aspeed_register_hace_hash_algs(struct aspeed_hace_dev *hace_dev)
+> +{
+> +	int rc, i;
+> +
+> +	AHASH_DBG(hace_dev, "\n");
+> +
+> +	for (i = 0; i < ARRAY_SIZE(aspeed_ahash_algs); i++) {
+> +		aspeed_ahash_algs[i].hace_dev = hace_dev;
+> +		rc = crypto_register_ahash(&aspeed_ahash_algs[i].alg.ahash);
+> +		if (rc)
+> +			return rc;
+> +	}
+> +
+> +	if (hace_dev->version != AST2600_VERSION)
+> +		return 0;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(aspeed_ahash_algs_g6); i++) {
+> +		aspeed_ahash_algs_g6[i].hace_dev = hace_dev;
+> +		rc = crypto_register_ahash(&aspeed_ahash_algs_g6[i].alg.ahash);
+> +		if (rc)
+> +			return rc;
+> +	}
+> +
+> +	return 0;
 
-Thanks,
+Should there be some kind of error handling here, in order to undo 
+things already done if an error occures?
 
--- Sebastian
 
-The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
+> +}
+> diff --git a/drivers/crypto/aspeed/aspeed-hace.c b/drivers/crypto/aspeed/aspeed-hace.c
+> new file mode 100644
+> index 000000000000..f25b13d120e8
+> --- /dev/null
+> +++ b/drivers/crypto/aspeed/aspeed-hace.c
 
-  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
+[...]
 
-are available in the Git repository at:
+> +static int aspeed_hace_probe(struct platform_device *pdev)
+> +{
+> +	const struct of_device_id *hace_dev_id;
+> +	struct aspeed_engine_hash *hash_engine;
+> +	struct aspeed_hace_dev *hace_dev;
+> +	struct resource *res;
+> +	int rc;
+> +
+> +	hace_dev = devm_kzalloc(&pdev->dev, sizeof(struct aspeed_hace_dev),
+> +				GFP_KERNEL);
+> +	if (!hace_dev)
+> +		return -ENOMEM;
+> +
+> +	hace_dev_id = of_match_device(aspeed_hace_of_matches, &pdev->dev);
+> +	if (!hace_dev_id) {
+> +		dev_err(&pdev->dev, "Failed to match hace dev id\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	hace_dev->dev = &pdev->dev;
+> +	hace_dev->version = (unsigned long)hace_dev_id->data;
+> +	hash_engine = &hace_dev->hash_engine;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +
+> +	platform_set_drvdata(pdev, hace_dev);
+> +
+> +	spin_lock_init(&hash_engine->lock);
+> +	tasklet_init(&hash_engine->done_task, aspeed_hace_hash_done_task,
+> +		     (unsigned long)hace_dev);
+> +	tasklet_init(&hash_engine->queue_task, aspeed_hace_hash_queue_task,
+> +		     (unsigned long)hace_dev);
+> +	crypto_init_queue(&hash_engine->queue, ASPEED_HASH_QUEUE_LENGTH);
+> +
+> +	hace_dev->regs = devm_ioremap_resource(&pdev->dev, res);
+> +	if (!hace_dev->regs) {
+> +		dev_err(&pdev->dev, "Failed to map resources\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	hace_dev->irq = platform_get_irq(pdev, 0);
+> +	if (!hace_dev->irq) {
+> +		dev_err(&pdev->dev, "Failed to get interrupt\n");
+> +		return -ENXIO;
+> +	}
+> +
+> +	rc = devm_request_irq(&pdev->dev, hace_dev->irq, aspeed_hace_irq, 0,
+> +			      dev_name(&pdev->dev), hace_dev);
+> +	if (rc) {
+> +		dev_err(&pdev->dev, "Failed to request interrupt\n");
+> +		return rc;
+> +	}
+> +
+> +	hace_dev->yclk = devm_clk_get(&pdev->dev, "yclk");
+> +	if (IS_ERR(hace_dev->yclk)) {
+> +		dev_err(&pdev->dev, "Failed to get yclk\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	rc = clk_prepare_enable(hace_dev->yclk);
+> +	if (rc) {
+> +		dev_err(&pdev->dev, "Failed to enable clock 0x%x\n", rc);
+> +		return rc;
 
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.19
+This is not undone, neither if an error occures after it, nor in the 
+.remove function.
 
-for you to fetch changes up to da50aad6d86716aa48a2b8463c85caea77c0355f:
+> +	}
+> +
+> +	hash_engine->ahash_src_addr =
+> +		dma_alloc_coherent(&pdev->dev,
+> +				   ASPEED_HASH_SRC_DMA_BUF_LEN,
+> +				   &hash_engine->ahash_src_dma_addr,
+> +				   GFP_KERNEL);
+> +	if (!hash_engine->ahash_src_addr) {
+> +		dev_err(&pdev->dev, "Failed to allocate dma buffer\n");
+> +		return -ENOMEM;
+> +	}
 
-  Merge power-supply 'fixes' branch (2022-05-22 23:03:29 +0200)
+Same here, this si not undone in the .remove function.
 
-----------------------------------------------------------------
-power supply and reset changes for the v5.19 series
+> +
+> +	rc = aspeed_hace_register(hace_dev);
+> +	if (rc) {
+> +		dev_err(&pdev->dev, "Failed to register hash alg, rc:0x%x\n", rc);
 
-power-supply core:
- - init power_supply_info struct to zero
+Is this really an error if finaly we continue and return 0 (success) at 
+the end?
 
-drivers:
- - bq27xxx: expose data for uncalibrated battery
- - bq24190-charger: use pm_runtime_resume_and_get
- - ab8500_fg: allocate wq in probe
- - axp288_fuel_gauge: drop BIOS version from "T3 MRD" quirk
- - axp288_fuel_gauge: modify "T3 MRD" quirk to also fix "One Mix 1"
+> +		rc = 0;
+> +	}
+> +
+> +	dev_info(&pdev->dev, "ASPEED Crypto Accelerator successfully registered\n");
+> +
+> +	return rc;
+> +}
+> +
+> +static int aspeed_hace_remove(struct platform_device *pdev)
+> +{
+> +	struct aspeed_hace_dev *hace_dev = platform_get_drvdata(pdev);
+> +	struct aspeed_engine_hash *hash_engine = &hace_dev->hash_engine;
+> +
+> +	aspeed_hace_unregister(hace_dev);
 
-----------------------------------------------------------------
-Hans de Goede (2):
-      power: supply: axp288_fuel_gauge: Fix battery reporting on the One Mix 1
-      power: supply: axp288_fuel_gauge: Drop BIOS version check from "T3 MRD" DMI quirk
+Should this be done even if aspeed_hace_register() failed in the probe?
 
-Linus Walleij (2):
-      power: supply: core: Initialize struct to zero
-      power: supply: ab8500_fg: Allocate wq in probe
+Just my 2c,
+CJ
 
-Minghao Chi (1):
-      power: supply: bq24190_charger: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
 
-Sebastian Reichel (1):
-      Merge power-supply 'fixes' branch
+> +
+> +	tasklet_kill(&hash_engine->done_task);
+> +	tasklet_kill(&hash_engine->queue_task);
+> +
+> +	return 0;
+> +}
+> +
 
-Sicelo A. Mhlongo (1):
-      power: supply: bq27xxx: expose battery data when CI=1
-
- drivers/power/supply/ab8500_fg.c         | 19 +++++-----
- drivers/power/supply/axp288_fuel_gauge.c | 41 ++++++++++++++++++---
- drivers/power/supply/bq24190_charger.c   | 63 +++++++++++---------------------
- drivers/power/supply/bq27xxx_battery.c   | 60 ++++++++++++++----------------
- drivers/power/supply/power_supply_core.c |  2 +-
- 5 files changed, 95 insertions(+), 90 deletions(-)
-
---lpdghi3maawhqvbc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKXyIgACgkQ2O7X88g7
-+po7pw/7B6fLcS5QfB5FPJaZ5e83qYO4zDsyJNqM7b3S6NTflIWkczFcMDcDm3ee
-cb6LKD9vLYaZGktAHWDcl2Wr4Br9V8bTuUe/ODfJsDdP8PL0XTnS02cfpgFxgMUx
-YxuYxXPsVWFLg5OfBN0e04Pw+qG1yJAKJN7FMMMOutNWGXcm+3T4dvvUNhTGjXYf
-gomAMAjRec6ZImV3eroa36hNcDAfoPo72JKMMQOuGKAa3Al/lK5iZQchqIpvT0BH
-Aw0oAdV5Evuf8RPq8Lvpg5ngLPcgNThwvBT+Vm9KSv7U1QA7BFN3WaInefKVyvDH
-zXPfOrBoUtFz59MtN8wHHaFOYnwMY118SONbYloUr17n6Yn+olzlYsuzbPwVfQaf
-AfJOHfHIffzyRBA8O6e4SAkT2xLjJ/XbyD9qglj3icHEtJRj3EE7w3QTLD9u0VXN
-kl2/e6/uz4OFkTNn6PXSvogdOuaQ6fkMMElvHU+netVCSJ2sMC65/OIAsdtcNaCg
-JW4ltSC3CQKwlJLv+umaD/UZkduPCkXWbOVfSzoL0JVtt5Qxe0xZzDwAMFEX1biW
-tFsaaOCHGE8TT7mcTcLaVdrmGvertzoqwQZQy8JRyLzZ+kriA3+Jh15tegOSHoQq
-HXS6MFE/K+oSOyku21DCIvT0yodYi/Dm/8R8uaKwpZp4dcTZRIE=
-=0syY
------END PGP SIGNATURE-----
-
---lpdghi3maawhqvbc--
+[...]

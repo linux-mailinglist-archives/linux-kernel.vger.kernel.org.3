@@ -2,188 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1C953A90A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BC253A90E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355423AbiFAOSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
+        id S1355275AbiFAOVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356635AbiFAOQx (ORCPT
+        with ESMTP id S1356210AbiFAOUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:16:53 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59389ABF66;
-        Wed,  1 Jun 2022 07:05:37 -0700 (PDT)
+        Wed, 1 Jun 2022 10:20:44 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A62A1A2
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 07:09:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654092337; x=1685628337;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HyKddHsj7lTqJQFJTK4Q3POUo1M3Pk5TiQZ6U45ektw=;
-  b=n+wayL6SmpBdD+Fflmr0opVqnfku385Fj07EbQ7juSIJe1/VTPAabvJ6
-   44mnGt37V4WNgCEMXezZwcYB18tjCDYveprZ9JdMJ5j0JzzMdNfgDZat6
-   pT/N1YSxJaNDi4QVPm0Q2HxFe3eK37bHf5eJoGlSK0zWoOLzAHkiShaRE
-   u6SRoqkLb9kAmTj40MvO+KLhogXJ0tpZQDVaXIz9TIuQOzBQ9Y4uv0Bxk
-   GhZTIhS39tnu+eYaV1fiEG8DMwiEC+Cey7/q3Dh/HxKWqJrEouTEx5c/d
-   IL9vLzxaU++rYZg4LYmv3bdWCGf0isqNgE2iPQU3DdMb1Y7DHCDkXMPAd
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275608635"
+  t=1654092576; x=1685628576;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OIASPbT4ErywrxAuYrz/ZgaqSnR5UCcNc+ztvYy5GUs=;
+  b=a/sYWc8AnFSaqo9KZTUfBhMThbdr9ycV/vIS9hJU2LYxekvrLGxu7v/r
+   XsmcET8BSbKU8P+HLpep0yGvLctTSN0t7xVgKbxJO8C5kiDe6miyae+Nf
+   2KP6VzJDyJdWNlbPjfvh/F4srQdXLi35ORRxoL3Wf5nxe6oiFTGhVG5r0
+   TlxhG1qIPr77AwtFlyvnNhIzF6kGuMKSCQuxVAKJ0oQaVZ/NTw/104RIk
+   reYdeXRF7ZG1pj9roVRO/w0W8JE1k4xX7IU/j8bqth6Jfs/dv6mopfONR
+   gZD1PRZMDgg/bRBvqPl3QHcqZzCXSnsJIEuK2PusmhTOmYIp7yQNfISI0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="257668795"
 X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="275608635"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 07:05:03 -0700
+   d="scan'208";a="257668795"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 07:09:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="707072486"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga004.jf.intel.com with ESMTP; 01 Jun 2022 07:05:03 -0700
-Received: from [10.252.214.178] (kliang2-MOBL.ccr.corp.intel.com [10.252.214.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id A682E580514;
-        Wed,  1 Jun 2022 07:05:00 -0700 (PDT)
-Message-ID: <e49505ea-5af2-41d3-23dc-8c01e20f91ee@linux.intel.com>
-Date:   Wed, 1 Jun 2022 10:04:59 -0400
+   d="scan'208";a="680113133"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 01 Jun 2022 07:09:04 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwP20-00043U-0h;
+        Wed, 01 Jun 2022 14:09:04 +0000
+Date:   Wed, 1 Jun 2022 22:08:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Haowen Bai <baihaowen@meizu.com>, Jan Harkes <jaharkes@cs.cmu.edu>,
+        coda@cs.cmu.edu
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Haowen Bai <baihaowen@meizu.com>, codalist@coda.cs.cmu.edu,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] coda: remove unused variable
+Message-ID: <202206012159.9WhO0iYq-lkp@intel.com>
+References: <1654070283-7216-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 0/8] perf/amd: Zen4 IBS extensions support (tool
- changes)
-Content-Language: en-US
-To:     Ravi Bangoria <ravi.bangoria@amd.com>, acme@kernel.org
-Cc:     jolsa@kernel.org, irogers@google.com, peterz@infradead.org,
-        rrichter@amd.com, mingo@redhat.com, mark.rutland@arm.com,
-        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        james.clark@arm.com, leo.yan@linaro.org, ak@linux.intel.com,
-        eranian@google.com, like.xu.linux@gmail.com, x86@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com
-References: <20220601032608.1034-1-ravi.bangoria@amd.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220601032608.1034-1-ravi.bangoria@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1654070283-7216-1-git-send-email-baihaowen@meizu.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Haowen,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.18 next-20220601]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Haowen-Bai/coda-remove-unused-variable/20220601-160014
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 700170bf6b4d773e328fa54ebb70ba444007c702
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220601/202206012159.9WhO0iYq-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/627c05172e8d819cb8dca41dfa795baae03ea6f9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Haowen-Bai/coda-remove-unused-variable/20220601-160014
+        git checkout 627c05172e8d819cb8dca41dfa795baae03ea6f9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/coda/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   fs/coda/upcall.c:115:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:164:20: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:238:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:306:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:329:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:383:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:410:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:443:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp; 
+                             ^
+   fs/coda/upcall.c:459:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp; 
+                             ^
+>> fs/coda/upcall.c:483:2: error: use of undeclared identifier 'insize'
+           UPARG(CODA_IOCTL);
+           ^
+   fs/coda/upcall.c:63:44: note: expanded from macro 'UPARG'
+           inp = (union inputArgs *)alloc_upcall(op, insize); \
+                                                     ^
+>> fs/coda/upcall.c:483:2: error: use of undeclared identifier 'insize'
+   fs/coda/upcall.c:66:19: note: expanded from macro 'UPARG'
+           outsize = insize; \
+                     ^
+   fs/coda/upcall.c:576:20: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   10 warnings and 2 errors generated.
 
 
-On 5/31/2022 11:26 PM, Ravi Bangoria wrote:
-> Kernel side of changes have already been applied to linus/master
-> (except amd-ibs.h header). This series contains perf tool changes.
-> 
-> Kan, I don't have any machine with heterogeneou cpus. It would be
-> helpful if you can check HEADER_PMU_CAPS on Intel ADL machine.
->
+vim +/insize +483 fs/coda/upcall.c
 
-I tried the patch 2-5 on a hybrid machine. I didn't see any regression 
-with perf report --header-only option.
+^1da177e4c3f41 Linus Torvalds   2005-04-16  473  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  474  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  475  int venus_pioctl(struct super_block *sb, struct CodaFid *fid,
+^1da177e4c3f41 Linus Torvalds   2005-04-16  476  		 unsigned int cmd, struct PioctlData *data)
+^1da177e4c3f41 Linus Torvalds   2005-04-16  477  {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  478          union inputArgs *inp;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  479          union outputArgs *outp;  
+627c05172e8d81 Haowen Bai       2022-06-01  480  	int outsize, error;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  481  	int iocsize;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  482  
+^1da177e4c3f41 Linus Torvalds   2005-04-16 @483  	UPARG(CODA_IOCTL);
+^1da177e4c3f41 Linus Torvalds   2005-04-16  484  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  485          /* build packet for Venus */
+^1da177e4c3f41 Linus Torvalds   2005-04-16  486          if (data->vi.in_size > VC_MAXDATASIZE) {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  487  		error = -EINVAL;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  488  		goto exit;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  489          }
+^1da177e4c3f41 Linus Torvalds   2005-04-16  490  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  491          if (data->vi.out_size > VC_MAXDATASIZE) {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  492  		error = -EINVAL;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  493  		goto exit;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  494  	}
+^1da177e4c3f41 Linus Torvalds   2005-04-16  495  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  496          inp->coda_ioctl.VFid = *fid;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  497      
+^1da177e4c3f41 Linus Torvalds   2005-04-16  498          /* the cmd field was mutated by increasing its size field to
+^1da177e4c3f41 Linus Torvalds   2005-04-16  499           * reflect the path and follow args. We need to subtract that
+^1da177e4c3f41 Linus Torvalds   2005-04-16  500           * out before sending the command to Venus.  */
+^1da177e4c3f41 Linus Torvalds   2005-04-16  501          inp->coda_ioctl.cmd = (cmd & ~(PIOCPARM_MASK << 16));	
+^1da177e4c3f41 Linus Torvalds   2005-04-16  502          iocsize = ((cmd >> 16) & PIOCPARM_MASK) - sizeof(char *) - sizeof(int);
+^1da177e4c3f41 Linus Torvalds   2005-04-16  503          inp->coda_ioctl.cmd |= (iocsize & PIOCPARM_MASK) <<	16;	
+^1da177e4c3f41 Linus Torvalds   2005-04-16  504      
+^1da177e4c3f41 Linus Torvalds   2005-04-16  505          /* in->coda_ioctl.rwflag = flag; */
+^1da177e4c3f41 Linus Torvalds   2005-04-16  506          inp->coda_ioctl.len = data->vi.in_size;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  507          inp->coda_ioctl.data = (char *)(INSIZE(ioctl));
+^1da177e4c3f41 Linus Torvalds   2005-04-16  508       
+^1da177e4c3f41 Linus Torvalds   2005-04-16  509          /* get the data out of user space */
+^1da177e4c3f41 Linus Torvalds   2005-04-16  510  	if (copy_from_user((char *)inp + (long)inp->coda_ioctl.data,
+^1da177e4c3f41 Linus Torvalds   2005-04-16  511  			   data->vi.in, data->vi.in_size)) {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  512  		error = -EINVAL;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  513  	        goto exit;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  514  	}
+^1da177e4c3f41 Linus Torvalds   2005-04-16  515  
+a1b0aa87647493 Jan Harkes       2007-07-19  516  	error = coda_upcall(coda_vcp(sb), SIZE(ioctl) + data->vi.in_size,
+^1da177e4c3f41 Linus Torvalds   2005-04-16  517  			    &outsize, inp);
+^1da177e4c3f41 Linus Torvalds   2005-04-16  518  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  519          if (error) {
+6d6bd94f4d83d7 Fabian Frederick 2014-06-06  520  		pr_warn("%s: Venus returns: %d for %s\n",
+6d6bd94f4d83d7 Fabian Frederick 2014-06-06  521  			__func__, error, coda_f2s(fid));
+^1da177e4c3f41 Linus Torvalds   2005-04-16  522  		goto exit; 
+^1da177e4c3f41 Linus Torvalds   2005-04-16  523  	}
+^1da177e4c3f41 Linus Torvalds   2005-04-16  524  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  525  	if (outsize < (long)outp->coda_ioctl.data + outp->coda_ioctl.len) {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  526  		error = -EINVAL;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  527  		goto exit;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  528  	}
+^1da177e4c3f41 Linus Torvalds   2005-04-16  529          
+^1da177e4c3f41 Linus Torvalds   2005-04-16  530  	/* Copy out the OUT buffer. */
+^1da177e4c3f41 Linus Torvalds   2005-04-16  531          if (outp->coda_ioctl.len > data->vi.out_size) {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  532  		error = -EINVAL;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  533  		goto exit;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  534          }
+^1da177e4c3f41 Linus Torvalds   2005-04-16  535  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  536  	/* Copy out the OUT buffer. */
+^1da177e4c3f41 Linus Torvalds   2005-04-16  537  	if (copy_to_user(data->vi.out,
+^1da177e4c3f41 Linus Torvalds   2005-04-16  538  			 (char *)outp + (long)outp->coda_ioctl.data,
+^1da177e4c3f41 Linus Torvalds   2005-04-16  539  			 outp->coda_ioctl.len)) {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  540  		error = -EFAULT;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  541  		goto exit;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  542  	}
+^1da177e4c3f41 Linus Torvalds   2005-04-16  543  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  544   exit:
+936dae4525322f Dan Carpenter    2019-07-16  545  	kvfree(inp);
+^1da177e4c3f41 Linus Torvalds   2005-04-16  546  	return error;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  547  }
+^1da177e4c3f41 Linus Torvalds   2005-04-16  548  
 
-Without the patch 2-5,
-# perf report --header-only | grep capabilities
-# cpu_core pmu capabilities: branches=32, max_precise=3, 
-pmu_name=alderlake_hybrid
-# cpu_atom pmu capabilities: branches=32, max_precise=3, 
-pmu_name=alderlake_hybrid
-
-With the patch 2-5,
-# ./perf report --header-only | grep capabilities
-# cpu_core pmu capabilities: branches=32, max_precise=3, 
-pmu_name=alderlake_hybrid
-# cpu_atom pmu capabilities: branches=32, max_precise=3, 
-pmu_name=alderlake_hybrid
-
-
-Thanks,
-Kan
-
-
-> v4: https://lore.kernel.org/lkml/20220523033945.1612-1-ravi.bangoria@amd.com
-> v4->v5:
->   - Replace HEADER_HYBRID_CPU_PMU_CAPS with HEADER_PMU_CAPS instead of
->     adding new header HEADER_PMU_CAPS. Special care is taken by writing
->     hybrid cpu pmu caps first in the header to make sure old perf tool
->     does not break.
->   - Store HEADER_CPU_PMU_CAPS capabilities in an array instead of single
->     string separated by NULL.
->   - Include "cpu" pmu while searching for capabilities in perf_env.
->   - Rebase on acme/perf/core (9dde6cadb92b5)
-> 
-> Original cover letter:
-> 
-> IBS support has been enhanced with two new features in upcoming uarch:
-> 1. DataSrc extension and 2. L3 Miss Filtering capability. Both are
-> indicated by CPUID_Fn8000001B_EAX bit 11.
-> 
-> DataSrc extension provides additional data source details for tagged
-> load/store operations. Add support for these new bits in perf report/
-> script raw-dump.
-> 
-> IBS L3 miss filtering works by tagging an instruction on IBS counter
-> overflow and generating an NMI if the tagged instruction causes an L3
-> miss. Samples without an L3 miss are discarded and counter is reset
-> with random value (between 1-15 for fetch pmu and 1-127 for op pmu).
-> This helps in reducing sampling overhead when user is interested only
-> in such samples. One of the use case of such filtered samples is to
-> feed data to page-migration daemon in tiered memory systems.
-> 
-> Add support for L3 miss filtering in IBS driver via new pmu attribute
-> "l3missonly". Example usage:
-> 
->    # perf record -a -e ibs_op/l3missonly=1/ --raw-samples sleep 5
->    # perf report -D
-> 
-> Some important points to keep in mind while using L3 miss filtering:
-> 1. Hw internally reset sampling period when tagged instruction does
->     not cause L3 miss. But there is no way to reconstruct aggregated
->     sampling period when this happens.
-> 2. L3 miss is not the actual event being counted. Rather, IBS will
->     count fetch, cycles or uOps depending on the configuration. Thus
->     sampling period have no direct connection to L3 misses.
-> 
-> 1st causes sampling period skew. Thus, I've added warning message at
-> perf record:
-> 
->    # perf record -c 10000 -C 0 -e ibs_op/l3missonly=1/
->    WARNING: Hw internally resets sampling period when L3 Miss Filtering is enabled
->    and tagged operation does not cause L3 Miss. This causes sampling period skew.
-> 
-> User can configure smaller sampling period to get more samples while
-> using l3missonly.
-> 
-> 
-> Ravi Bangoria (8):
->    perf record ibs: Warn about sampling period skew
->    perf tool: Parse pmu caps sysfs only once
->    perf headers: Pass "cpu" pmu name while printing caps
->    perf headers: Store pmu caps in an array of strings
->    perf headers: Record non-cpu pmu capabilities
->    perf/x86/ibs: Add new IBS register bits into header
->    perf tool ibs: Sync amd ibs header file
->    perf script ibs: Support new IBS bits in raw trace dump
-> 
->   arch/x86/include/asm/amd-ibs.h                |  16 +-
->   tools/arch/x86/include/asm/amd-ibs.h          |  16 +-
->   .../Documentation/perf.data-file-format.txt   |  10 +-
->   tools/perf/arch/x86/util/evsel.c              |  49 +++++
->   tools/perf/builtin-inject.c                   |   2 +-
->   tools/perf/util/amd-sample-raw.c              |  68 +++++-
->   tools/perf/util/env.c                         |  62 +++++-
->   tools/perf/util/env.h                         |  14 +-
->   tools/perf/util/evsel.c                       |   7 +
->   tools/perf/util/evsel.h                       |   1 +
->   tools/perf/util/header.c                      | 196 ++++++++++--------
->   tools/perf/util/header.h                      |   2 +-
->   tools/perf/util/pmu.c                         |  15 +-
->   tools/perf/util/pmu.h                         |   2 +
->   14 files changed, 333 insertions(+), 127 deletions(-)
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

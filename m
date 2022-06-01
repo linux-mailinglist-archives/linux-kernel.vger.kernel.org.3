@@ -2,174 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE4F53A8CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FDA53A914
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Jun 2022 16:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351802AbiFAONJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 10:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
+        id S1355628AbiFAOXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 10:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355826AbiFAOG1 (ORCPT
+        with ESMTP id S1355312AbiFAOXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:06:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88675BA9A4;
-        Wed,  1 Jun 2022 07:00:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 1 Jun 2022 10:23:09 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7273F506E;
+        Wed,  1 Jun 2022 07:12:39 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 43A4B6A259B;
+        Wed,  1 Jun 2022 14:12:35 +0000 (UTC)
+Received: from pdx1-sub0-mail-a312.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id B903E6A28B2;
+        Wed,  1 Jun 2022 14:12:34 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1654092754; a=rsa-sha256;
+        cv=none;
+        b=zvgdgSUGTwWUAEBXEtSBvYNZ7TtJIAtaRp5H6GYMGomhImSYKfinkKKKe3eVmEP+fSQ8qr
+        F71raoKMNSHN8E3mHNh03tU0eiCrxXrVuueBxIEB8A5/9fo5pZt/CRpAYBEOj8Kemh28ob
+        xV0R889ak7SZs2p8cIsOtRwd70Z4qi99RfbFNxuHnC3ed+luOS+m9BsOu9SmRR5PXMZBfV
+        3mEgESG4GeD40nSA1OaS0SgKLStjCtm27siCV0/nY4DVjJp/SkKFbyfSU5ZIIYYzcGkvAY
+        82cHXR9VgaurNVwLs6ue9TbI9dS2iy6qMbUNizTzZyO48zGkauzHWUk9GyMZrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1654092754;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=yLYJaL9ORR9PYZ13P2JQqpUzPce3UQH19Ih6BN8oryg=;
+        b=0909y5q2CRn5v5TR0y7rq6Jj2CwZJREDe79Es0ZI3qiWyB0Iqv3pTVQ9O7C3bDPzHwnAQh
+        Rv0V9ZVp6ymkChqy0LbzO7tGUIR4mDHV/HIevg16cPMZet1m/V75K6kVxUewxjkQAdVtUH
+        kccRSrBfr5Fkd+yGGph1w8l6CBJlkijkBvZRIczRXrE9i3imEXx0UBXWT9VRw2cKZroKje
+        vxaDPg90vy+u71LylIw0gQXgGNFOQdWx6PSKg3zjyQtacNAWm/qSkX1xN0e488NNT8XCGc
+        6kC5xtjJzS7/FIgj9NPUjG25w76ZJXxUF/KWvNc2tvRPDEUPs0vnS+8tKbLr4Q==
+ARC-Authentication-Results: i=1;
+        rspamd-54ff499d4f-g4gpm;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Celery-Illegal: 52844d101a27ad83_1654092754999_416677461
+X-MC-Loop-Signature: 1654092754999:3585670684
+X-MC-Ingress-Time: 1654092754999
+Received: from pdx1-sub0-mail-a312.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.116.106.119 (trex/6.7.1);
+        Wed, 01 Jun 2022 14:12:34 +0000
+Received: from offworld (unknown [104.36.31.105])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4FDB6162F;
-        Wed,  1 Jun 2022 13:59:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00388C385B8;
-        Wed,  1 Jun 2022 13:59:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654091990;
-        bh=+Sg44/L0M+G9n0ENnHsUVMZlZ9N783aU8Lc2N6fwMW4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uf1VhnmggQ1P1KmyoCECxYZ24jyWEBVyNh6ZsWLsjZQdfXSA1CzBTgO9XlJ1iG+Ji
-         w0qR8zpG8ducBOAOSVliW6VZsJrnaJsclF3vzfnQd0GJw0v81+Xgu84RTDe9XShj1z
-         nYq1g5QacKVL6jExESJRxPOFFg1nX1XRBxFNTA8GFmL7d291C781Okd2qUoZZd6hca
-         XtXdtenLZoO16lH2484qUzDv//bBEiv74J6xo3GPdtg35YEMMq3VS5ynGRtLCEtGyU
-         LsEGrJ78pikl2NCBUfMxB6iFh6rbb5NyZsVlZEfFmnqMOwPoz6kMRF5530pmsBsh2v
-         wn7GtslBJjC3g==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sasha Levin <sashal@kernel.org>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 5.4 20/20] drm: fix EDID struct for old ARM OABI format
-Date:   Wed,  1 Jun 2022 09:59:02 -0400
-Message-Id: <20220601135902.2004823-20-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220601135902.2004823-1-sashal@kernel.org>
-References: <20220601135902.2004823-1-sashal@kernel.org>
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a312.dreamhost.com (Postfix) with ESMTPSA id 4LCrh11Kq1z2q;
+        Wed,  1 Jun 2022 07:12:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1654092754;
+        bh=uKVBDmeDT/2dQS6ktQaex3oOWU37YZa72inB1fxgwGI=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=jDlowyjFNsH2P2j4LwIiL0zuUbCC4TalwZm5TssLk3ms94qNuNDXlfZpJqx0Z0v3p
+         9V+p/9Ql3HLPxI98jmT3nzYESO4fE7LlIvgfVLQqeBfGq82y5otUfxSn3QJYyqrIn+
+         Yjna+xqGq/z+y5N34yK3eXMKIC5pVcM6owL9zWmVB0JRVZ9Ogu7WSV4BurE2JM8Xin
+         1tmSG+b0HChMdOALdXKlFMr2i6ZRQ0CVzdPVcHt/Ab2waTogOMQQje35x3T45F9FnP
+         LOsJqJqM4L/zZJx5t04n/DZupj6uX/TRDdG1FaC36ux+dge50eUZkJDd65eZCbg0MK
+         aotmCpXdBg5tw==
+Date:   Wed, 1 Jun 2022 06:59:09 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <ben@bwidawsk.net>, linux-kernel@vger.kernel.org,
+        linux-cxl@vger.kernel.org, linux-pci@vger.kernel.org,
+        a.manzanares@samsung.com
+Subject: Re: [PATCH v9 3/9] PCI: Create PCI library functions in support of
+ DOE mailboxes.
+Message-ID: <20220601135909.mvnam4vvfmofpsdb@offworld>
+References: <20220531152632.1397976-1-ira.weiny@intel.com>
+ <20220531152632.1397976-4-ira.weiny@intel.com>
+ <20220531172507.5ert5tgwellpe7fx@offworld>
+ <20220531175652.qog7xaqmypy36whu@offworld>
+ <Ypbw3d/vUyMHGcBW@iweiny-desk3>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Ypbw3d/vUyMHGcBW@iweiny-desk3>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+On Tue, 31 May 2022, Ira Weiny wrote:
+>Thinking about it I don't see a benefit to a rwlock.  We don't have multiple
+>readers.
 
-[ Upstream commit 47f15561b69e226bfc034e94ff6dbec51a4662af ]
+... but you have concurrent workqueues reading the value of cur_task.
 
-When building the kernel for arm with the "-mabi=apcs-gnu" option, gcc
-will force alignment of all structures and unions to a word boundary
-(see also STRUCTURE_SIZE_BOUNDARY and the "-mstructure-size-boundary=XX"
-option if you're a gcc person), even when the members of said structures
-do not want or need said alignment.
-
-This completely messes up the structure alignment of 'struct edid' on
-those targets, because even though all the embedded structures are
-marked with "__attribute__((packed))", the unions that contain them are
-not.
-
-This was exposed by commit f1e4c916f97f ("drm/edid: add EDID block count
-and size helpers"), but the bug is pre-existing.  That commit just made
-the structure layout problem cause a build failure due to the addition
-of the
-
-        BUILD_BUG_ON(sizeof(*edid) != EDID_LENGTH);
-
-sanity check in drivers/gpu/drm/drm_edid.c:edid_block_data().
-
-This legacy union alignment should probably not be used in the first
-place, but we can fix the layout by adding the packed attribute to the
-union entries even when each member is already packed and it shouldn't
-matter in a sane build environment.
-
-You can see this issue with a trivial test program:
-
-  union {
-	struct {
-		char c[5];
-	};
-	struct {
-		char d;
-		unsigned e;
-	} __attribute__((packed));
-  } a = { "1234" };
-
-where building this with a normal "gcc -S" will result in the expected
-5-byte size of said union:
-
-	.type	a, @object
-	.size	a, 5
-
-but with an ARM compiler and the old ABI:
-
-    arm-linux-gnu-gcc -mabi=apcs-gnu -mfloat-abi=soft -S t.c
-
-you get
-
-	.type	a, %object
-	.size	a, 8
-
-instead, because even though each member of the union is packed, the
-union itself still gets aligned.
-
-This was reported by Sudip for the spear3xx_defconfig target.
-
-Link: https://lore.kernel.org/lkml/YpCUzStDnSgQLNFN@debian/
-Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/drm/drm_edid.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/include/drm/drm_edid.h b/include/drm/drm_edid.h
-index b9719418c3d2..f40a97417b68 100644
---- a/include/drm/drm_edid.h
-+++ b/include/drm/drm_edid.h
-@@ -116,7 +116,7 @@ struct detailed_data_monitor_range {
- 			u8 supported_scalings;
- 			u8 preferred_refresh;
- 		} __attribute__((packed)) cvt;
--	} formula;
-+	} __attribute__((packed)) formula;
- } __attribute__((packed));
- 
- struct detailed_data_wpindex {
-@@ -149,7 +149,7 @@ struct detailed_non_pixel {
- 		struct detailed_data_wpindex color;
- 		struct std_timing timings[6];
- 		struct cvt_timing cvt[4];
--	} data;
-+	} __attribute__((packed)) data;
- } __attribute__((packed));
- 
- #define EDID_DETAIL_EST_TIMINGS 0xf7
-@@ -167,7 +167,7 @@ struct detailed_timing {
- 	union {
- 		struct detailed_pixel_timing pixel_data;
- 		struct detailed_non_pixel other_data;
--	} data;
-+	} __attribute__((packed)) data;
- } __attribute__((packed));
- 
- #define DRM_EDID_INPUT_SERRATION_VSYNC (1 << 0)
--- 
-2.35.1
-
+Thanks,
+Davidlohr

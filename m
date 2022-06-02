@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4A353BA16
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C51453BA1A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235552AbiFBNs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 09:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
+        id S235562AbiFBNuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 09:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234021AbiFBNsx (ORCPT
+        with ESMTP id S235554AbiFBNuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 09:48:53 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B05F59E;
-        Thu,  2 Jun 2022 06:48:50 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-f2cbceefb8so6761831fac.11;
-        Thu, 02 Jun 2022 06:48:50 -0700 (PDT)
+        Thu, 2 Jun 2022 09:50:21 -0400
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B611D9EB8;
+        Thu,  2 Jun 2022 06:50:17 -0700 (PDT)
+Received: by mail-oo1-f43.google.com with SMTP id f5-20020a4aa685000000b0040e7e819183so916124oom.3;
+        Thu, 02 Jun 2022 06:50:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ZLsZQGwsALXGpwwgGurYj2bunkoe3IvjuaCpAsGQqs4=;
-        b=HTe3YuHHkCtxWIakuZcKtzI+RhTjyni3GnKA3R7AyvjdbxFhYq14eVdAiGO957JvfU
-         X5Rd/esaw91RhYCZsMsCj0ChnppAIumO+aEg8xWMF5ItG+X0+9KDSxutA2uvW0JPKcA5
-         X0tT+fuMaCQU9B+Tj+zkC75eD0HhKz1CM35ON/WJYMYRck1TQwnBJsU64zyd2nKY/o3y
-         eUcIDEJqtHoIlj4HnQP3TqNAaR8v3nBPlWKSjuCzuGO2F7S1EVWS01ZiOyNPLvWW0D4h
-         tAyRb67hKOfxYRNd8FFhXMlquA5qAdZka+PiY7UjxQFcZW+778VDf9KOLBL5hhFaZAV4
-         5cnw==
-X-Gm-Message-State: AOAM533sUOfNwtU3cp/EP5WZC3EDfv1qnnYI9PffEmiRGZPiMH2ItKA9
-        4KQ2DUBEo1HgG/A6H7nQ4g==
-X-Google-Smtp-Source: ABdhPJzhAExoUF+3ohnZR4GGm+CAP7YlqdUPcNsT0zhxsWf8ebeYkbeyF4YzJF+4BWW7gB+1NtJAfA==
-X-Received: by 2002:a05:6870:61cd:b0:e9:8de7:9c51 with SMTP id b13-20020a05687061cd00b000e98de79c51mr2791058oah.50.1654177729893;
-        Thu, 02 Jun 2022 06:48:49 -0700 (PDT)
+        bh=m7Egz3Eq4p4pH7ofqDEwdevk0tSPQ2S3OmzV9Rn7cog=;
+        b=idyLCUZqNwtt41GHHuJA3ehdPbn9+NytnkZgE+mlYnIQvgH0chZOeadDM/9WiShbeU
+         lFSUUwyBHGScRDEjY5N7JU7hDFWKApzERWO1BcwcAxDx9n/Hq2vdRvhuF0W4yvyvhnCx
+         1HINcGhCJf0fKEAJciggjC/tuDxH5g9vhkkl1aBklvl9TUr6vDC0lPkUvFlD6uVPmsSv
+         ltGnfYmDIG4m04eWfL7Qi7AX/LlkXVV06EjhuNpACOEAiHQvCllmiLA7FBfP7qzsz5Wi
+         ciw3myQG6bQyd5UNt11S3i2Q9Abjk/e6Xy9inu5fNwtNSFNWUq2VLhZKYRjoxTm73h+j
+         M58w==
+X-Gm-Message-State: AOAM5312ODdMqUe++aZn5yIlCvlxgeOp+tSojQ6ujkqOAQoftVK9nell
+        cHqF3QYC7R7IUTJYDL7VUg==
+X-Google-Smtp-Source: ABdhPJwJXAd51YLvPJ90VxQRsLC8hBY4/pzwaXaplOTizmH4wxfnS/mGPlNTwMHa0vECJ2olRL5iIQ==
+X-Received: by 2002:a4a:ba81:0:b0:40e:7cd9:afa1 with SMTP id d1-20020a4aba81000000b0040e7cd9afa1mr2078469oop.22.1654177816557;
+        Thu, 02 Jun 2022 06:50:16 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bh35-20020a056808182300b00325cda1ff95sm2566851oib.20.2022.06.02.06.48.49
+        by smtp.gmail.com with ESMTPSA id t12-20020a056830082c00b0060b39282e7esm2182511ots.35.2022.06.02.06.50.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 06:48:49 -0700 (PDT)
-Received: (nullmailer pid 2184180 invoked by uid 1000);
-        Thu, 02 Jun 2022 13:48:48 -0000
-Date:   Thu, 2 Jun 2022 08:48:48 -0500
+        Thu, 02 Jun 2022 06:50:16 -0700 (PDT)
+Received: (nullmailer pid 2186777 invoked by uid 1000);
+        Thu, 02 Jun 2022 13:50:15 -0000
+Date:   Thu, 2 Jun 2022 08:50:15 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alexander Steffen <Alexander.Steffen@infineon.com>
-Cc:     jarkko@kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, devicetree@vger.kernel.org,
-        peterhuewe@gmx.de, jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
-        Johannes Holland <johannes.holland@infineon.com>,
-        Amir Mizinski <amirmizi6@gmail.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: trivial-devices: Add two I2C TPM
- devices
-Message-ID: <20220602134848.GA2178372-robh@kernel.org>
-References: <20220525165849.7789-1-Alexander.Steffen@infineon.com>
- <20220525165849.7789-2-Alexander.Steffen@infineon.com>
- <8c4941a1-e047-1352-32ba-8595cd0143f0@linaro.org>
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Cc:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "stephan@gerhold.net" <stephan@gerhold.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: vendor-prefixes: add MEMSensing
+ Microsystems Co., Ltd.
+Message-ID: <20220602135015.GA2186715-robh@kernel.org>
+References: <20220525181532.6805-1-ddrokosov@sberdevices.ru>
+ <20220525181532.6805-2-ddrokosov@sberdevices.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8c4941a1-e047-1352-32ba-8595cd0143f0@linaro.org>
+In-Reply-To: <20220525181532.6805-2-ddrokosov@sberdevices.ru>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -69,41 +73,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 02:29:56PM +0200, Krzysztof Kozlowski wrote:
-> On 25/05/2022 18:58, Alexander Steffen wrote:
-> > Both are supported by the upcoming tpm_tis_i2c driver.
-> > 
-> > Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
-> > ---
-> >  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> > index 550a2e5c9e05..dc52822331dd 100644
-> > --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> > +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> > @@ -135,6 +135,8 @@ properties:
-> >            - infineon,slb9635tt
-> >              # Infineon SLB9645 I2C TPM (new protocol, max 400khz)
-> >            - infineon,slb9645tt
-> > +            # Infineon SLB9673 I2C TPM 2.0
-> > +          - infineon,slb9673
-> >              # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
-> >            - infineon,tlv493d-a1b6
-> >              # Infineon Multi-phase Digital VR Controller xdpe11280
-> > @@ -323,6 +325,8 @@ properties:
-> >            - st,24c256
-> >              # Ambient Light Sensor with SMBUS/Two Wire Serial Interface
-> >            - taos,tsl2550
-> > +            # TCG TIS-compliant TPM with I2C interface
-> > +          - tcg,tpm_tis-i2c
+On Wed, 25 May 2022 18:15:30 +0000, Dmitry Rokosov wrote:
+> MEMSensing Microsystems (Suzhou, China) Co., Ltd. operates as a micro
+> electromechanical system technology company which produces micro
+> electromechanical system microphones and sensors.
+> MEMSensing Microsystems (Suzhou, China) Co., Ltd. applies its products
+> in consumer electronics, industrial control, medical electronics
+> and automotive, and other fields.
 > 
-> One flavor uses tpm-tis, another tpm_tis... I guess it is too late to
-> make it consistent, but let's stick to the one more reasonable, so:
-> "tpm-tis-i2c".
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-Neither should be used except perhaps as a fallback. Does 'TCG 
-TIS-compliant TPM' encompass every property of a device? Power supplies, 
-resets, interrupts, quirks, etc.?
-
-Rob
+Acked-by: Rob Herring <robh@kernel.org>

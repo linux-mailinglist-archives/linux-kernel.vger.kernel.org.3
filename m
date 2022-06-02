@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D3C53BC90
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29AA853BC95
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237091AbiFBQbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 12:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
+        id S237105AbiFBQcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 12:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234043AbiFBQbf (ORCPT
+        with ESMTP id S237085AbiFBQcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 12:31:35 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3762B12DC;
-        Thu,  2 Jun 2022 09:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=SQwGGc1qc4tP2TEm97x+HMLFr9XNhA6Mh+1eNWVjw4Q=; b=GCN2C7TdI5FtNsMs/mm90IOO8q
-        M4hakPoawHzgfPq7fokh+zr4az63lrFZ5ZSj5D8N8XMCwoCZ0cRP9zY+Q1aVMCsc6UTM/iiNPMbss
-        2wkO2LKsZsn2Nhe/vBcCWI7yhJNhyskghWP7pz2swA5emKO6m+QefsS6SOvxSv8gV7XrdKqA/3n+y
-        yTSJNugrZDo1/SxrQECgiusMDEUg6l7mGD9kL5L3RQkfwBT262PumDrGCB9v2vwmayKWqtnR8L0yZ
-        X5+5By2omiXIUnUVj8mZ5D8a0e1q7Ww45PCyFNmcb19Tu+dqqQVuaJimDRZJS8EJ01vKW46D0zX5C
-        zlCrLpAQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwnjM-0049l3-SR; Thu, 02 Jun 2022 16:31:29 +0000
-Message-ID: <47a68855-4547-49dd-d7eb-8ef83630552c@infradead.org>
-Date:   Thu, 2 Jun 2022 09:31:24 -0700
+        Thu, 2 Jun 2022 12:32:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A036522299;
+        Thu,  2 Jun 2022 09:31:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4507EB82045;
+        Thu,  2 Jun 2022 16:31:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A19E4C385A5;
+        Thu,  2 Jun 2022 16:31:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654187515;
+        bh=o1/UE/2FwTyImP8FROwobph4vczO7LLicB4FbxHXr7A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=UIKsVABSlpXDB38aEPeRquKYp3dPPsOF/LCpsU11H05idiT3aYRnCWYsJ9R2kXDYQ
+         GIGb5zSnPtzMFEzZh67z/LoxnFkh2c6O3zp6OKHdQTo9lesDvCLaS4GsPalSO16ydv
+         7o02kQ8JYdNsVzJFx8/Rrh9akGcttUELkYanUqXV2e6jRfjeFQKTV112XBc8sB7055
+         ZeWBU8QVHDmS9mtJpQrD5yKc+qlyPHxfgYq6mjrVWLg5fSX4KOp/4QK6gcC9b6qt29
+         LhQ4quilGSjD4w8nh5IoOA9Djd79noUc9lNoUf1QypERewVzw0PBeix7p6rc6oYDmg
+         +mDBbvJKjsO8g==
+Date:   Thu, 2 Jun 2022 11:31:52 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Conor.Dooley@microchip.com
+Cc:     palmer@rivosinc.com, gregkh@linuxfoundation.org, arnd@arndb.de,
+        akpm@linux-foundation.org, sboyd@kernel.org,
+        linux-pci@vger.kernel.org, mturquette@baylibre.com,
+        paul.walmsley@sifive.com, kw@linux.com, linux-clk@vger.kernel.org,
+        aou@eecs.berkeley.edu, lorenzo.pieralisi@arm.com,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Daire.McNamara@microchip.com, Lewis.Hanly@microchip.com,
+        Cyril.Jean@microchip.com, robh@kernel.org
+Subject: Re: [PATCH v4 1/1] MAINTAINERS: add polarfire rng, pci and clock
+ drivers
+Message-ID: <20220602163152.GA22276@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5] crc-itu-t: Fix typo in CRC ITU-T polynom comment
-Content-Language: en-US
-To:     Roger Knecht <roger@norberthealth.com>
-Cc:     linux-kernel@vger.kernel.org, Ivo van Doorn <IvDoorn@gmail.com>,
-        kernel-janitors@vger.kernel.org, linux-doc@vger.kernel.org,
-        Kristian Hoegsberg <krh@redhat.com>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        akpm@linux-foundation.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-References: <20220521124745.8747-1-roger@norberthealth.com>
- <a728cf17-4866-1151-0740-56b06257c917@infradead.org>
- <CAO_iFwrHcSWJm17fL-Q83DZ5i1xr+_dkEjh5Yt3Hxso0VtnzZw@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAO_iFwrHcSWJm17fL-Q83DZ5i1xr+_dkEjh5Yt3Hxso0VtnzZw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fffa1761-9636-f6bc-fff3-54b6a60f5c8d@microchip.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,37 +60,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 02, 2022 at 04:39:08AM +0000, Conor.Dooley@microchip.com wrote:
+> On 02/06/2022 02:55, Palmer Dabbelt wrote:
 
-
-On 6/2/22 07:24, Roger Knecht wrote:
-> On Sat, May 21, 2022 at 5:44 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->> I don't know which maintainer will merge this since no one is Cc:ed on it.
->> You will probably need to choose some maintainer to send the patch to.
->>
->> But let's add the people who merged the header file in the first place
->> for their comments/review. (done)
+> > I'm adding a bunch of subsystem maintainers just to check again.  I
+> > don't have any problem with it, just not really a RISC-V thing and don't
+> > wan to make a mess.  I've stashed it over at palmer/pcsoc-maintainers
+> > for now.
+> > 
+> > Sorry if I'm being overly pedantic about this one...
 > 
-> Thanks Randy.
-> 
-> The CRC implementation seems to be unmaintained (no entry in the
-> MAINTAINER file).
-> Any idea which maintainer I can send the patch to?
+> I don't mind. Maybe this should go via Andrew next cycle or w/e?
+> There's obviously no hurry etc
 
-Yes, the 2 people who signed off on its merger are not active AFAICT.
+My turn to be overly pedantic :)  IMHO there's no benefit in delaying
+MAINTAINERS updates.  There's zero risk, and delaying only means
+people will miss out on bug reports and other things they should learn
+about.
 
-> The kernel doc mentions Andrew Morton as last resort (added to CC):
->> You should always copy the appropriate subsystem maintainer(s) on any patch to
->> code that they maintain; look through the MAINTAINERS file and the source code
->> revision history to see who those maintainers are. The script scripts/get_maintainer.pl
->> can be very useful at this step. If you cannot find a maintainer for the subsystem you
->> are working on, Andrew Morton (akpm@linux-foundation.org) serves as a maintainer
->> of last resort.
-> source: https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-
-Yes, Andrew can merge it.
-Or possibly Jason (also Cc-ed).
-
-thanks.
-
--- 
-~Randy
+Bjorn

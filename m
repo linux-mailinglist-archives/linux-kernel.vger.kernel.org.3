@@ -2,167 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1717553B358
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2726C53B35C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiFBGHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 02:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S230348AbiFBGIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 02:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiFBGHS (ORCPT
+        with ESMTP id S230403AbiFBGII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 02:07:18 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423DC115A49;
-        Wed,  1 Jun 2022 23:07:14 -0700 (PDT)
-X-UUID: 64c8e88d33264b52b7a459e9a3d61e39-20220602
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:e0c906d2-7aec-498a-8a7c-523da98f9ed9,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:e8cb910d-3a0d-4bbe-9d72-0e5d26d57423,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 64c8e88d33264b52b7a459e9a3d61e39-20220602
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1097358930; Thu, 02 Jun 2022 14:07:09 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 2 Jun 2022 14:07:07 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 2 Jun 2022 14:07:05 +0800
-Message-ID: <1d07579c0a6b8853ab72e345a0bd0be73549de8c.camel@mediatek.com>
-Subject: Re: [RESEND v12 0/3] mmc: mediatek: add support for SDIO async IRQ
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lucas Stach <dev@lynxeye.de>,
-        Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 2 Jun 2022 14:07:04 +0800
-In-Reply-To: <20220525015140.384-1-axe.yang@mediatek.com>
-References: <20220525015140.384-1-axe.yang@mediatek.com>
+        Thu, 2 Jun 2022 02:08:08 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9C9147828
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 23:08:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654150087; x=1685686087;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FGpXmAX/PMi+Jou3AXg4JhK9EmyKVV1NzWJ2qKBKYJc=;
+  b=OuRXo0ZZrKS1vHDxs/GMxjkCwBCwzFaBHOb7nzFs/fnkuzgyQqRnBKE5
+   vEcCv8n1bC7yXmmOjW/RH8Zi3ITbUObrX6rZS8U1jfLtgU8NspWLkLbVX
+   h+GHLN4SKfCW0rQTO+2AurzsE/ThAl8d8QajeLyPRLRxnoU/YNGMduaZu
+   50/PDhrzzE82enEjhqSf3XS3KFcp9r3beyF9ixJHzR1y3v5VnDcNVKyg2
+   eNION1SxFAHH3pqXTyHJIqnf/Tu4EvoVqj3VEVt+8UQtaVrEAzvWVmSPP
+   pCLc5pFNhPfMFJF0SyAV8FEBOx5c0/mj7SC9XegoQlTnLQvuN7gyj3ytx
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275562310"
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="275562310"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 23:08:06 -0700
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="606670183"
+Received: from yanqingl-mobl1.ccr.corp.intel.com ([10.254.212.10])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 23:08:02 -0700
+Message-ID: <352ae5f408b6d7d4d3d820d68e2f2c6b494e95e1.camel@intel.com>
+Subject: Re: [RFC PATCH v4 1/7] mm/demotion: Add support for explicit memory
+ tiers
+From:   Ying Huang <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Greg Thelen <gthelen@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Thu, 02 Jun 2022 14:07:59 +0800
+In-Reply-To: <20220527122528.129445-2-aneesh.kumar@linux.ibm.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+         <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+         <20220527122528.129445-2-aneesh.kumar@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, 2022-05-27 at 17:55 +0530, Aneesh Kumar K.V wrote:
+> From: Jagdish Gediya <jvgediya@linux.ibm.com>
+> 
+> In the current kernel, memory tiers are defined implicitly via a
+> demotion path relationship between NUMA nodes, which is created
+> during the kernel initialization and updated when a NUMA node is
+> hot-added or hot-removed.  The current implementation puts all
+> nodes with CPU into the top tier, and builds the tier hierarchy
+> tier-by-tier by establishing the per-node demotion targets based
+> on the distances between nodes.
+> 
+> This current memory tier kernel interface needs to be improved for
+> several important use cases,
+> 
+> The current tier initialization code always initializes
+> each memory-only NUMA node into a lower tier.  But a memory-only
+> NUMA node may have a high performance memory device (e.g. a DRAM
+> device attached via CXL.mem or a DRAM-backed memory-only node on
+> a virtual machine) and should be put into a higher tier.
+> 
+> The current tier hierarchy always puts CPU nodes into the top
+> tier. But on a system with HBM or GPU devices, the
+> memory-only NUMA nodes mapping these devices should be in the
+> top tier, and DRAM nodes with CPUs are better to be placed into the
+> next lower tier.
+> 
+> With current kernel higher tier node can only be demoted to selected nodes on the
+> next lower tier as defined by the demotion path, not any other
+> node from any lower tier.  This strict, hard-coded demotion order
+> does not work in all use cases (e.g. some use cases may want to
+> allow cross-socket demotion to another node in the same demotion
+> tier as a fallback when the preferred demotion node is out of
+> space), This demotion order is also inconsistent with the page
+> allocation fallback order when all the nodes in a higher tier are
+> out of space: The page allocation can fall back to any node from
+> any lower tier, whereas the demotion order doesn't allow that.
+> 
+> The current kernel also don't provide any interfaces for the
+> userspace to learn about the memory tier hierarchy in order to
+> optimize its memory allocations.
+> 
+> This patch series address the above by defining memory tiers explicitly.
+> 
+> This patch adds below sysfs interface which is read-only and
+> can be used to read nodes available in specific tier.
+> 
+> /sys/devices/system/memtier/memtierN/nodelist
+> 
+> Tier 0 is the highest tier, while tier MAX_MEMORY_TIERS - 1 is the
+> lowest tier. The absolute value of a tier id number has no specific
+> meaning. what matters is the relative order of the tier id numbers.
+> 
+> All the tiered memory code is guarded by CONFIG_TIERED_MEMORY.
+> Default number of memory tiers are MAX_MEMORY_TIERS(3). All the
+> nodes are by default assigned to DEFAULT_MEMORY_TIER(1).
+> 
+> Default memory tier can be read from,
+> /sys/devices/system/memtier/default_tier
+> 
+> Max memory tier can be read from,
+> /sys/devices/system/memtier/max_tiers
+> 
+> This patch implements the RFC spec sent by Wei Xu <weixugc@google.com> at [1].
+> 
+> [1] https://lore.kernel.org/linux-mm/CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com/
+> 
+> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
 
-Gentle ping for this set.
+IMHO, we should change the kernel internal implementation firstly, then
+implement the kerne/user space interface.  That is, make memory tier
+explicit inside kernel, then expose it to user space.
 
-On Wed, 2022-05-25 at 09:51 +0800, Axe Yang wrote:
-> Changes in v12:
-> - assign NULL to pins_eint directly instead of using kfree()
-> 
-> Changes in v11:
-> - remove '_irq' suffix in interrupts-names property
-> - fix yaml example build error
-> - refactor msdc_enable_sdio_irq(), free pins_eint if async irq is not
-> supported
-> 
-> Changes in v10:
-> - add sample node for SDIO host which support wakeup interrupt in
-> yaml
-> - skip MMC_PM_WAKE_SDIO_IRQ check before enable SDIO async interrupt
-> - add MMC_PM_KEEP_POWER check before SDIO eint pinstate parsing
-> - use dev_pm_set_dedicated_wake_irq_reverse() to correct irq control
-> sequence
-> - set dedicated irq in msdc_enable_sdio_irq() rather than
-> msdc_drv_probe()
-> - remove unnecessary wake irq control, rpm/dpm system shall manage
-> that
-> - move wake irq/msdc irq control back to system suspend phase, use
-> rpm_suspend
->   and rpm_resume to ensure irq control sequence:
->      disable msdc irq -> enable wake irq -> disable wake irq ->
-> enable msdc irq
-> - simplify variables, check pins_eint to know whether wakeup settings
-> are managed
-> 
-> Changes in v9:
-> - remove pinctrl "state_dat1"
-> 
-> Changes in v8:
-> - remove maxItems property under pinctrl-names property
-> 
-> Changes in v7:
-> - add device_init_wakeup() to register SDIO host as wakeup source
-> 
-> Changes in v6:
-> - abandon cap-sdio-async-irq flag, use wakeup-source flag instead
-> - extend interrupts and pinctrls in mediatek mmc host controller DT
-> documents
-> - add mmc_card_enable_async_irq() to access enable_async_irq flag
-> - simplify wakeup irq implementation with dedicate wake up irq
-> related interface
-> 
-> Changes in v5:
-> - resort variables to reversed xmas tree order
-> - restore old copyright year range and add current year back
-> 
-> Changes in v4:
-> - add MMC_CAP2_SDIO_ASYNC_IRQ judge before lookup eint pinctrl
-> - replace spin_lock_irqsave() variant with spin_lock() in eint irq
-> handler
-> 
-> Changes in v3:
-> - correct abbreviations with capital letters in commit message
-> - replace copyright year with 2022 in mtk-sd.c
-> - remove unnessary pointer casting
-> - adjust variable order to reversed xmas tree
-> - remove a redundant blank line
-> - refine if statement, following standard pattern
-> 
-> Changes in v2:
-> - change flag name from 'cap-sdio-async-int' to 'cap-sdio-async-irq'
-> - change corresponding macro names from xxx_INT to xxx_IRQ
-> - resort new member in msdc_host structure
-> - refine function msdc_request_dat1_eint_irq()
-> - rename msdc_{suspend,resume} function names, add suffix '_noirq'
-> - add MMC_CAP2_NO_SDIO judgement before parse eint related pin
-> setting
-> 
-> Axe Yang (3):
->   dt-bindings: mmc: mtk-sd: extend interrupts and pinctrls properties
->   mmc: core: Add support for SDIO wakeup interrupt
->   mmc: mediatek: add support for SDIO eint wakup IRQ
-> 
->  .../devicetree/bindings/mmc/mtk-sd.yaml       | 50 +++++++++++-
->  drivers/mmc/core/sdio.c                       | 14 ++++
->  drivers/mmc/host/mtk-sd.c                     | 80
-> +++++++++++++++++--
->  include/linux/mmc/card.h                      |  8 +-
->  include/linux/mmc/sdio.h                      |  5 ++
->  5 files changed, 149 insertions(+), 8 deletions(-)
-> 
+Best Regards,
+Huang, Ying
+
+
+[snip]
 

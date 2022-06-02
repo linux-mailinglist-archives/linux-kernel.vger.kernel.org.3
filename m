@@ -2,99 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 549A553BD1E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5834253BD1B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237428AbiFBRTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 13:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
+        id S237422AbiFBRSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 13:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231524AbiFBRTS (ORCPT
+        with ESMTP id S231524AbiFBRSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 13:19:18 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18EE208B05
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 10:19:17 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id cv1so3966150qvb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 10:19:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=s4YbZJYHvK3nVAxdvdm+/MuYfvjkcChJJ4+lAokhsws=;
-        b=oY3UkNUXzvT4gdwz2capbciaRVMUwQe4uTXMNLZq5rB+SzgWV5Y9KoY1sDKwk8gWEZ
-         3+Q6uw1zQKFy/Unx4HtSstHVhLVkyZWxIMc80Ov1HAVUKCwD358EREeYDHhZDZ8k2MZs
-         bhOn53kb4QxCMIITNdm+0c1NDnpndPfQjTJuD8TnE5Uv3cFfjqWJqQft0Z4nj9YH3uBX
-         nPBbjR1L9pvnoVrAHHIKs0Q9BrMid/o8PxXfUbP6XGG/0m5N+an4nPqyjM2uURiJ8hW5
-         nebfcv+yWDiGXnYLe+dR4uJdRKeLgQOn7tZfDT3mAn3r317E5qS4d++iGATXbWfBN5kK
-         ZpSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=s4YbZJYHvK3nVAxdvdm+/MuYfvjkcChJJ4+lAokhsws=;
-        b=FALCDH7sHRgisOpXrsEn3w5p9vZAj/1Fnz/QY9RCdak84/rlNxam36ebZdeB23r+Jk
-         sdtlHUpK8LvQPTu5SSWxUc9zgYsKbeDZ+iwDexPvmHa8veEDBftrAK1ykQK/0M2RZX3L
-         4xH+5FP4G1pZicXEKP0FB3vhD4lm5A/91sqfk0HaGDxC0bQo+1PnWVmNtjiNVAVxBLBH
-         7QRm+EXLqhNVCYrwcLsb4Pz7OeNwrXYTvyoUwiJu3wqfKoJEnpU3Ugjv1NTDO9yY4/vT
-         JKrxEx0Cg3mCDUVsK50g9tTJJVTG5YF1GUCFsj40DCR+yd5+uOJDmc3HMzlqVJkv4VAI
-         3HiA==
-X-Gm-Message-State: AOAM531oDAvkVLXV7jkOJPB8/t0cNd0iZ4C+dQFEsHrpiPzLo4iOtHp9
-        Ib/MbRrDPg470hpPXtkxTgtfGA==
-X-Google-Smtp-Source: ABdhPJyTeRjkxp4FkIVBkBdxqYlIi1Ql4U5vaRWOEfB4UJA8nUT6ExwG7uYWv1AjNIltcvnn29cQ7w==
-X-Received: by 2002:ad4:5b81:0:b0:465:ded8:780 with SMTP id 1-20020ad45b81000000b00465ded80780mr6281647qvp.119.1654190356566;
-        Thu, 02 Jun 2022 10:19:16 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id p200-20020a3742d1000000b0069fc13ce1e7sm3510487qka.24.2022.06.02.10.18.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 10:18:55 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nwoSV-00GUM1-QB; Thu, 02 Jun 2022 14:18:07 -0300
-Date:   Thu, 2 Jun 2022 14:18:07 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
+        Thu, 2 Jun 2022 13:18:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CBE207ED9;
+        Thu,  2 Jun 2022 10:18:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CFA3B82053;
+        Thu,  2 Jun 2022 17:18:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ED6FC385A5;
+        Thu,  2 Jun 2022 17:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654190290;
+        bh=yvMCqcIkN04XCQCazhzNm5Hd0sdQb5u+JJpsej1prc4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R8N7Q5zwXYT7j0jH/IObwgf2hA9tapYuG47nLB8X0SrGqBQ1La7VSmhLpDkS32XIq
+         S9H54UFf4Y65c85S3krHVyTxCPz3t3xxr8jq6aIUp837Z3sD3Kc3HfeiLGvYT/kFoX
+         MoJ92ALYZCGrfeshTUca09gEzjD1s7qybmAjZANhO099nDAGRgLRMTw09tZ6EHUdy1
+         R5o1fLRmVKzb0nAX08uhT547ZCYP71LRYg7ehY0Pw+BySOLA3YhRQgyeU2nnExbi/9
+         gxg/EJOlnGijIMRqfAOz01rivpiDU2pvcGYj+ZTgOovnFJ1jFeDP42OXA/PBuLNZ7i
+         OEWlHh+yxkhgA==
+Date:   Thu, 2 Jun 2022 10:18:09 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
         Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jakowski Andrzej <andrzej.jakowski@intel.com>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v6 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
-Message-ID: <20220602171807.GM2960187@ziepe.ca>
-References: <20220407154717.7695-1-logang@deltatee.com>
- <20220407154717.7695-21-logang@deltatee.com>
- <20220527125501.GD2960187@ziepe.ca>
- <a2590e27-41e8-59dc-3576-b5b8d716a198@deltatee.com>
- <20220527190307.GG2960187@ziepe.ca>
- <d336cfe8-2451-04c3-a2ce-0e8e47afd1e3@deltatee.com>
- <20220602000038.GK2960187@ziepe.ca>
- <400baba7-1cd6-09d4-4de9-2a73f08afc79@deltatee.com>
- <20220602163059.GL2960187@ziepe.ca>
- <28824558-4fd5-e054-6c8d-5e045d52f795@deltatee.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Jane Chu <jane.chu@oracle.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.de>,
+        Al Viro <viro@zeniv.linux.org.uk>, linmiaohe@huawei.com
+Subject: Re: [PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink
+Message-ID: <Ypjw0bldEIFp9+YG@magnolia>
+References: <20220511000352.GY27195@magnolia>
+ <20220511014818.GE1098723@dread.disaster.area>
+ <CAPcyv4h0a3aT3XH9qCBW3nbT4K3EwQvBSD_oX5W=55_x24-wFA@mail.gmail.com>
+ <20220510192853.410ea7587f04694038cd01de@linux-foundation.org>
+ <20220511024301.GD27195@magnolia>
+ <20220510222428.0cc8a50bd007474c97b050b2@linux-foundation.org>
+ <20220511151955.GC27212@magnolia>
+ <CAPcyv4gwV5ReuCUbJHZPVPUJjnaGFWibCLLsH-XEgyvbn9RkWA@mail.gmail.com>
+ <32f51223-c671-1dc0-e14a-8887863d9071@fujitsu.com>
+ <1007e895-a0e3-9a82-2524-bb7e8a0b6b8c@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <28824558-4fd5-e054-6c8d-5e045d52f795@deltatee.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1007e895-a0e3-9a82-2524-bb7e8a0b6b8c@fujitsu.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -103,61 +76,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 10:45:55AM -0600, Logan Gunthorpe wrote:
+On Thu, Jun 02, 2022 at 05:42:13PM +0800, Shiyang Ruan wrote:
+> Hi,
+> 
+> Is there any other work I should do with these two patchsets?  I think they
+> are good for now.  So... since the 5.19-rc1 is coming, could the
+> notify_failure() part be merged as your plan?
+
+Hmm.  I don't see any of the patches 1-5,7-13 in current upstream, so
+I'm guessing this means Andrew isn't taking it for 5.19?
+
+--D
+
 > 
 > 
+> --
+> Thanks,
+> Ruan.
 > 
-> On 2022-06-02 10:30, Jason Gunthorpe wrote:
-> > On Thu, Jun 02, 2022 at 10:16:10AM -0600, Logan Gunthorpe wrote:
+> 
+> 在 2022/5/12 20:27, Shiyang Ruan 写道:
 > > 
-> >>> Just stuff the pages into the mmap, and your driver unprobe will
-> >>> automatically block until all the mmaps are closed - no different than
-> >>> having an open file descriptor or something.
-> >>
-> >> Oh is that what we want?
 > > 
-> > Yes, it is the typical case - eg if you have a sysfs file open unbind
-> > hangs indefinitely. Many drivers can't unbind while they have open file
-> > descriptors/etc.
+> > 在 2022/5/11 23:46, Dan Williams 写道:
+> > > On Wed, May 11, 2022 at 8:21 AM Darrick J. Wong <djwong@kernel.org>
+> > > wrote:
+> > > > 
+> > > > Oan Tue, May 10, 2022 at 10:24:28PM -0700, Andrew Morton wrote:
+> > > > > On Tue, 10 May 2022 19:43:01 -0700 "Darrick J. Wong"
+> > > > > <djwong@kernel.org> wrote:
+> > > > > 
+> > > > > > On Tue, May 10, 2022 at 07:28:53PM -0700, Andrew Morton wrote:
+> > > > > > > On Tue, 10 May 2022 18:55:50 -0700 Dan Williams
+> > > > > > > <dan.j.williams@intel.com> wrote:
+> > > > > > > 
+> > > > > > > > > It'll need to be a stable branch somewhere, but I don't think it
+> > > > > > > > > really matters where al long as it's merged into the xfs for-next
+> > > > > > > > > tree so it gets filesystem test coverage...
+> > > > > > > > 
+> > > > > > > > So how about let the notify_failure() bits go
+> > > > > > > > through -mm this cycle,
+> > > > > > > > if Andrew will have it, and then the reflnk work
+> > > > > > > > has a clean v5.19-rc1
+> > > > > > > > baseline to build from?
+> > > > > > > 
+> > > > > > > What are we referring to here?  I think a minimal thing would be the
+> > > > > > > memremap.h and memory-failure.c changes from
+> > > > > > > https://lkml.kernel.org/r/20220508143620.1775214-4-ruansy.fnst@fujitsu.com
+> > > > > > > ?
+> > > > > > > 
+> > > > > > > Sure, I can scoot that into 5.19-rc1 if you think that's best.  It
+> > > > > > > would probably be straining things to slip it into 5.19.
+> > > > > > > 
+> > > > > > > The use of EOPNOTSUPP is a bit suspect, btw.  It *sounds* like the
+> > > > > > > right thing, but it's a networking errno.  I suppose
+> > > > > > > livable with if it
+> > > > > > > never escapes the kernel, but if it can get back to userspace then a
+> > > > > > > user would be justified in wondering how the heck a filesystem
+> > > > > > > operation generated a networking errno?
+> > > > > > 
+> > > > > > <shrug> most filesystems return EOPNOTSUPP rather
+> > > > > > enthusiastically when
+> > > > > > they don't know how to do something...
+> > > > > 
+> > > > > Can it propagate back to userspace?
+> > > > 
+> > > > AFAICT, the new code falls back to the current (mf_generic_kill_procs)
+> > > > failure code if the filesystem doesn't provide a ->memory_failure
+> > > > function or if it returns -EOPNOSUPP.  mf_generic_kill_procs can also
+> > > > return -EOPNOTSUPP, but all the memory_failure() callers (madvise, etc.)
+> > > > convert that to 0 before returning it to userspace.
+> > > > 
+> > > > I suppose the weirder question is going to be what happens when madvise
+> > > > starts returning filesystem errors like EIO or EFSCORRUPTED when pmem
+> > > > loses half its brains and even the fs can't deal with it.
+> > > 
+> > > Even then that notification is not in a system call context so it
+> > > would still result in a SIGBUS notification not a EOPNOTSUPP return
+> > > code. The only potential gap I see are what are the possible error
+> > > codes that MADV_SOFT_OFFLINE might see? The man page is silent on soft
+> > > offline failure codes. Shiyang, that's something to check / update if
+> > > necessary.
 > > 
-> > A couple drivers go out of their way to allow unbinding while a live
-> > userspace exists but this can get complicated. Usually there should be
-> > a good reason.
+> > According to the code around MADV_SOFT_OFFLINE, it will return -EIO when
+> > the backend is NVDIMM.
+> > 
+> > Here is the logic:
+> >   madvise_inject_error() {
+> >       ...
+> >       if (MADV_SOFT_OFFLINE) {
+> >           ret = soft_offline_page() {
+> >               ...
+> >               /* Only online pages can be soft-offlined (esp., not
+> > ZONE_DEVICE). */
+> >               page = pfn_to_online_page(pfn);
+> >               if (!page) {
+> >                   put_ref_page(ref_page);
+> >                   return -EIO;
+> >               }
+> >               ...
+> >           }
+> >       } else {
+> >           ret = memory_failure()
+> >       }
+> >       return ret
+> >   }
+> > 
+> > 
+> > -- 
+> > Thanks,
+> > Ruan.
+> > 
+> > 
 > 
-> This is not my experience. All the drivers I've worked with do not block
-> unbind with open file descriptors (at least for char devices). I know,
-> for example, that having a file descriptor open of /dev/nvmeX does not
-> cause unbinding to block.
-
-So there are lots of bugs in the kernel, and I've seen many drivers
-that think calling cdev_device_del() is all they need to do - and then
-happily allow cdev ioctl's/etc on a de-initialized driver struct.
-
-Drivers that do take care of this usually have to put a lock around
-all their fops to serialize against unbind. RDMA uses SRCU, iirc TPM
-used a rwlock. But this is tricky and hurts fops performance.
-
-I don't know what nvme did to protect against this, I didn't notice
-an obvious lock.
-
-> I figured this was the expectation as the userspace process doing
-> the unbind won't be able to be interrupted seeing there's no way to
-> fail on that path. Though, it certainly would make things a lot
-> easier if the unbind can block indefinitely as it usually requires
-> some complicated locking.
-
-As I said, this is what sysfs does today and I don't see that ever
-changing. If you userspace has a sysfs file open then the driver
-unbind hangs until the file is closed.
-
-So, doing as bad as sysfs seems like a reasonable baseline to me.
-
-> Do you have an example of this? What mechanisms are developers using to
-> block unbind with open file descriptors?
-
-Sysfs maintains a refcount with a bias that is basically a fancied
-rwlock. Most places use some kind of refcount triggering a
-completion. Sleep on the completion until refcount is 0 on unbind kind
-of thing.
-
-Jason
+> 

@@ -2,95 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 195FA53BC9B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2535C53BCA2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237134AbiFBQe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 12:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S237146AbiFBQfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 12:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237124AbiFBQe4 (ORCPT
+        with ESMTP id S237137AbiFBQfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 12:34:56 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1C513CA3E;
-        Thu,  2 Jun 2022 09:34:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=svPrOg1UVwIs7S0rtpWPp9k1K9FF0OCGxIhcYj8TkIQ=; b=VJc18BtxygRpXKEn5jq8wa3gzs
-        Tb1bKMXzyrjOyJ00zBlPnoMmSynEG87rNHrmR26ANwkd45ZpMzYMT77Eyk9xHLNV43/SnSVPy8m8t
-        WaHKGjAIiTNpW5cIUC1VgV5fqi0MP0x3QLSoX0lxFZe+IVCRN+uHx0sgtrykwmAdpQ7yqNVdP1rWy
-        NWUD3gUNmbUVlEGbvFFhib7vh7sTsnqm1QIsccZP+uvYOmQLpYc67lbJwwP/lsWch5c7dy7EhCuVH
-        fMIlJowdLIMGSZ6JYvXBFyq/uWTFMgaPTF/d7xCYVM16NurM2Stgy8B3IS68GuOECVf6Dk+/emBFF
-        BX2GPKkQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwnmM-0049mu-9X; Thu, 02 Jun 2022 16:34:34 +0000
-Message-ID: <e68000bf-a271-d1f2-56a5-a9ddce2bbb7c@infradead.org>
-Date:   Thu, 2 Jun 2022 09:34:27 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V14 01/24] irqchip: Adjust Kconfig for Loongson
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Marc Zyngier <maz@kernel.org>, WANG Xuerui <git@xen0n.name>
-References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
- <20220602115141.3962749-2-chenhuacai@loongson.cn>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220602115141.3962749-2-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 2 Jun 2022 12:35:48 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BF42B12D7;
+        Thu,  2 Jun 2022 09:35:48 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id gd1so5404810pjb.2;
+        Thu, 02 Jun 2022 09:35:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=NPlK307c48MdlGmg7luqnrkmG504nwebNc0iVQuTMyY=;
+        b=R45ge7K/GujP+0NWTnSdk8mJOV4UMKO7d6UUPo6iz8UstLYz3d8u2YLlad32RkzkjU
+         j2mu8e54JF3vFiaSWeLeSKE0h68IkHwmtS8nySJ03CtYeH5XO6ICnj38kr6MLKKPvca+
+         lL4PbU6Viq2oVeGX5PPkuP2iRmWdmGwYApAdKj6GDJbCPLZ6FxCdFFj1CtWjJhkL/oja
+         N6AURuaiOph5XVI9tXu4GbDWKgJvh6z3Gk1p7+BrORp1hBzb5Zf4yj60nhkKYLApv6U7
+         PGvdWAzM2zm0/rNgPd/3iLxHedl9TQnp44ExUZVpRHBVsZzpVqJSIGXVSBm454y6fhxc
+         pAYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=NPlK307c48MdlGmg7luqnrkmG504nwebNc0iVQuTMyY=;
+        b=akceX80+8MAZUc+a28WcMStIDLq4k8+cPWCq/NBlaDTaVzBpWyWIgi29JdGC3nlP8W
+         eibQaz2c0BDCJWxhtNEhhZAfEXXwsPVOndVCK3joABTwHBw5l8W8GRinps7zW4Oggv+q
+         fYl7CgyZY1eYhmWgpE+j395fDLTTPPEDasUrMno18Vv2k7xwqK1AuAv63KX7cVsjmsJp
+         OEWcPDP+guOQKBm5YhAERPbOQHb4S473nwbK9/Z+0++LqnwoQh+4TSkRDTK7xaa8rXPO
+         21j5xz2nW77jrdBMPGw4SKws7+5Nb6fiIUQRBXRAmwBzUWcBzflrn/fxmal1TxU65tZF
+         vsIw==
+X-Gm-Message-State: AOAM53075XvzI+bE1MhK4cnHXjCpCDOXE09BsxkcZGQq2FeUcb8Vrgoy
+        TugETIabgbxsm0qvfqjfUUQ=
+X-Google-Smtp-Source: ABdhPJzviwECzgv7IfyBv3nsLhdM05WbfKVPsoMlqMaPOsr5m9LClLIefzbFpdob8MDyHe3Q0Pti7A==
+X-Received: by 2002:a17:902:c402:b0:163:fa50:b345 with SMTP id k2-20020a170902c40200b00163fa50b345mr5798902plk.94.1654187747663;
+        Thu, 02 Jun 2022 09:35:47 -0700 (PDT)
+Received: from ssy-OptiPlex-7050.mioffice.cn ([43.224.245.236])
+        by smtp.gmail.com with ESMTPSA id k17-20020a170902d59100b0016242b71e9fsm3715190plh.158.2022.06.02.09.35.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 Jun 2022 09:35:47 -0700 (PDT)
+From:   shisiyuan <shisiyuan19870131@gmail.com>
+X-Google-Original-From: shisiyuan <shisiyuan@xiaomi.com>
+To:     tj@kernel.org, hannes@cmpxchg.org, lizefan@huawei.com,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shisiyuan <shisiyuan@xiaomi.com>
+Subject: [PATCH] cgroup: handle cset multiidentity issue when migration
+Date:   Fri,  3 Jun 2022 00:34:48 +0800
+Message-Id: <1654187688-27411-1-git-send-email-shisiyuan@xiaomi.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Bug code flow:
+cset X's initial refcount is 1.
+1. cgroup_attach_task()
+2. [For thread1]
+   cgroup_migrate_add_src()
+   [For thread2]
+   cgroup_migrate_add_src()
+     cset X is thread2's src_cset , ref->2,
+     and its mg_preload_node is added to
+     mgctx->preloaded_src_csets.
+3. cgroup_migrate_prepare_dst()
+   [For thread1]
+   find_css_set()
+     cset X is thread1's dst_cset, ref->3
+   put_css_set()
+     ref->2 because cset X's mg_preload_node is not
+     empty(already in mgctx->preloaded_src_csets).
+   [For thread2]
+   find_css_cset()
+     cset X is also thread2's dst_cset, ref->3
+     then drop src_cset, ref->1
+[cgroup_free] ref->0
+4. cgroup_migrate_execute
+   [For thread1]
+   ref -> 0xc0000000(UAF)
+The issue occurs because cset X's refcount should
+not be substraced by one in this case. So mark a flag
+'multiidentity' to this cset and call put_css_set()
+one more time if 'multiidentity' marked in cleanup
+progress.
 
-On 6/2/22 04:51, Huacai Chen wrote:
-> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-> index 44fb8843e80e..1cb3967fe798 100644
-> --- a/drivers/irqchip/Kconfig
-> +++ b/drivers/irqchip/Kconfig
-> @@ -557,7 +557,7 @@ config LOONGSON_LIOINTC
->  
->  config LOONGSON_HTPIC
->  	bool "Loongson3 HyperTransport PIC Controller"
-> -	depends on MACH_LOONGSON64
-> +	depends on (MACH_LOONGSON64 && MIPS)
+Signed-off-by: shisiyuan <shisiyuan@xiaomi.com>
+---
+ include/linux/cgroup-defs.h |  5 +++++
+ kernel/cgroup/cgroup.c      | 23 +++++++++++++++++++++++
+ 2 files changed, 28 insertions(+)
 
-If you ever have another patch version, please drop the unnecessary left and
-right parentheses above.
-
-	depends on MACH_LOONGSON64 && MIPS
-
->  	default y
->  	select IRQ_DOMAIN
->  	select GENERIC_IRQ_CHIP
-
-thanks.
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index 8c19303..c9f2237 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -280,6 +280,11 @@ struct css_set {
+ 
+ 	/* For RCU-protected deletion */
+ 	struct rcu_head rcu_head;
++
++	/* Indicate if the css_set is the src_cset of one thread and
++	 * the dst_cset of anonther thread during migration process.
++	 */
++	bool multiidentity;
+ };
+ 
+ struct cgroup_base_stat {
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index e914646..cfdd12e 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -2593,6 +2593,10 @@ void cgroup_migrate_finish(struct cgroup_mgctx *mgctx)
+ 		cset->mg_dst_cgrp = NULL;
+ 		cset->mg_dst_cset = NULL;
+ 		list_del_init(&cset->mg_preload_node);
++		if (cset->multiidentity == true) {
++			cset->multiidentity = false;
++			put_css_set_locked(cset);
++		}
+ 		put_css_set_locked(cset);
+ 	}
+ 
+@@ -2648,6 +2652,18 @@ void cgroup_migrate_add_src(struct css_set *src_cset,
+ 	list_add_tail(&src_cset->mg_preload_node, &mgctx->preloaded_src_csets);
+ }
+ 
++static bool list_contains(struct list_head *node, struct list_head *head)
++{
++	struct list_head *tmp;
++
++	list_for_each(tmp, head) {
++		if (tmp == node)
++			return true;
++	}
++
++	return false;
++}
++
+ /**
+  * cgroup_migrate_prepare_dst - prepare destination css_sets for migration
+  * @mgctx: migration context
+@@ -2700,6 +2716,13 @@ int cgroup_migrate_prepare_dst(struct cgroup_mgctx *mgctx)
+ 		if (list_empty(&dst_cset->mg_preload_node))
+ 			list_add_tail(&dst_cset->mg_preload_node,
+ 				      &mgctx->preloaded_dst_csets);
++		/* If dst_cset is already in mgctx->preloaded_src_csets,
++		 * it means the dst_cset has multi identities. Keep it
++		 * in mgctx->preloaded_src_csets, and mark it.
++		 */
++		else if (list_contains(&dst_cset->mg_preload_node,
++					&mgctx->preloaded_src_csets))
++			dst_cset->multiidentity = true;
+ 		else
+ 			put_css_set(dst_cset);
+ 
 -- 
-~Randy
+2.7.4
+

@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7C753B44A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80AEF53B44F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbiFBHZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 03:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
+        id S231723AbiFBH1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 03:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiFBHZT (ORCPT
+        with ESMTP id S231169AbiFBH1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 03:25:19 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B98D2755BF
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 00:25:19 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id r71so4082840pgr.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 00:25:19 -0700 (PDT)
+        Thu, 2 Jun 2022 03:27:51 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBD529FE6C;
+        Thu,  2 Jun 2022 00:27:50 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id g205so4022551pfb.11;
+        Thu, 02 Jun 2022 00:27:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=L8s3LJw5xicbUhVaH0XHYNaSTkuhFS4Q1fnoIihiiOA=;
-        b=PpUcfnTeCjQJpRRld4d2NkaZOQ+giQuHJCn1hzgzAqhdn6283vgJycubVJLHBz7MeO
-         gpk/zLenJxp9+0MjyREOYZrTUaH4ZO3CsgN4B/2kYGrIj6WtCgBd5Vxj0NprmFh3iOOe
-         qqRccxugpbcmvhBLur+sbcAxdL9UkwfInmnoeaMIK2j9IL2G1v/EK4XC0099v5nGhbkY
-         /2oUDiJzag2krbBJswpFIJ3ox1IVAQFwEzgpbd8EIB6GMv/imk1bfRNdh4pLljzCnbL8
-         FDMiOweeEvMn8jEeguFjd4Y2npkd0rr0Xc5o3TwFXpAyvU45XvDEGAVctirlyucvMIvv
-         M6WA==
+        bh=dO8F4huKrg7HK40w6R+II0EDqtahfzCwucyNeG/6yhE=;
+        b=YbmlsAf5cKN+CIdt4ksyeiFsXj0EO16r04pJvRYTBKJYl61jvLfDPpgpGksmXE6pna
+         f0o9KsvP7NHWOUk3Me3mfFvf89XjY/S+STrfm10JmnFCI8kJdybbtZGmP7v0QqyXOvec
+         /b3p05S/iWQNhtPipEU3TFT8HplJgJtc8UaN9lMK4BIhSD6WSw73oa0z82tkxZQEiDtp
+         VmNI88iAEOPDH7L0GG78ABi26dMu5+TROVORxgoYoCMbFyveOI6jW1eBZoNAW0umuoG8
+         7mT7ZOkcL4pfHlESth8wdpUw5eoe2Kkl2Ac/EZ0AaEsqX8SotY9JRn8hmEzfUrRoDf49
+         y/IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=L8s3LJw5xicbUhVaH0XHYNaSTkuhFS4Q1fnoIihiiOA=;
-        b=4l7T6ZTy+lu/Qv23WrMurXOdHOrjnrD5XXJXlq+sFuvN1yiktck0PYbIW6eYYbb0OZ
-         l5hjKrjw5kder40Nw+cyRC79gDKz0ylvhjOUfjHA8nOP61iigDJMf1LdIfUHns7XRbnL
-         Kb2ZfCcF/YttuYHZAbquVoCfz55DBwcAtnsMZ6elbR9zbJQ4CRvG6UI5Cm6QsUyxmY/a
-         5Y1v9qzScV/I38Akv0SThLxU7RnaU7aoJeHwQ74GjiAfkcMNQunXZThLUMW6SGtQmmri
-         cgcrtOXCxAYftP8k+cJ2cNRzuITPwY2WzHiJOoraoCi3u/UgvzS3zH0MfZVaGJTzbJlv
-         94fw==
-X-Gm-Message-State: AOAM530m41Q6/csZM2v8idCMVQHuyvSnu/XLAXSwWTqVOHIsH7hJa3kU
-        xswx0uqgGVO835hlDipUqYQ=
-X-Google-Smtp-Source: ABdhPJzF76sBp7B+RevVSJ6GLP6kQU1DDA5WxDEyBKWr3d793qldOtmxxXG4GU+oPlNcprYzx09L2g==
-X-Received: by 2002:a63:e60e:0:b0:3fc:7753:ed89 with SMTP id g14-20020a63e60e000000b003fc7753ed89mr3032900pgh.70.1654154718717;
-        Thu, 02 Jun 2022 00:25:18 -0700 (PDT)
+        bh=dO8F4huKrg7HK40w6R+II0EDqtahfzCwucyNeG/6yhE=;
+        b=r0WPwzDZENiT5NqF0Z6ctHI+V2ONG6onaTY+BOVBR48lE6aH1z8S2etVFK5E8hDTKX
+         tlR3GCE0fYTij9aqy3lTu9eNBS4j+6pDDs9Kay3XaTEtNCCZwlBhkQ4/Szt39mt6mYYO
+         FCILQ/qOtNuHT66BnIaP7h0KAdYiq/nq4cHnt3t/zs3W8qK8YiF+KM9S9A24Qddgz/B2
+         5Ouul8lGm3i6iO0fBTjYr9cKb7ttTltzVuqZGjEjEP466wq5HavR1KwjimbN+2xlcefg
+         2agwE0kiNwjrt8vj/nGz9jGZjYkDWLLH8rAxZIKh+ZQH2VGB5RQkwOp3W2WyZmXC1nho
+         twng==
+X-Gm-Message-State: AOAM533vsVj+FJ2FcbZYVotUHRnbt7/jq7tIyHWFmF417H7MVCqFsW7w
+        ncJWn5pmKAEUJY8qtiRmdw8=
+X-Google-Smtp-Source: ABdhPJxSXbdQaUbjNS/QdVvu+sLCgGBWTdnUUVvw1xqzChxB+sM8bBLz7d44zgYoS4w2B8l5C/3ElQ==
+X-Received: by 2002:a63:114d:0:b0:3fc:cfa3:52f0 with SMTP id 13-20020a63114d000000b003fccfa352f0mr2978866pgr.243.1654154869625;
+        Thu, 02 Jun 2022 00:27:49 -0700 (PDT)
 Received: from localhost.localdomain ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id h21-20020a170902f7d500b001637997d0d4sm2725018plw.206.2022.06.02.00.25.15
+        by smtp.gmail.com with ESMTPSA id c7-20020aa79527000000b0050dc76281ecsm2705091pfp.198.2022.06.02.00.27.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 00:25:18 -0700 (PDT)
+        Thu, 02 Jun 2022 00:27:48 -0700 (PDT)
 From:   Chao Liu <chaoliu719@gmail.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-f2fs-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
         Wayne Zhang <zhangwen@coolpad.com>,
         Chao Liu <liuchao@coolpad.com>
-Subject: [PATCH] f2fs: refine comments for inline flags
-Date:   Thu,  2 Jun 2022 15:24:49 +0800
-Message-Id: <20220602072449.998303-1-chaoliu719@gmail.com>
+Subject: [PATCH] docs: filesystems: f2fs: fix description about compress ioctl
+Date:   Thu,  2 Jun 2022 15:25:40 +0800
+Message-Id: <20220602072540.998638-1-chaoliu719@gmail.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,54 +73,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chao Liu <liuchao@coolpad.com>
 
-Currently, we use f2fs_has_inline_xattr() to check whether the
-inode can store inline xattr. However, it might be misinterpreted
-as the inode has at least one inline xattr.
+Since commit c61404153eb6 ("f2fs: introduce FI_COMPRESS_RELEASED
+instead of using IMMUTABLE bit"), we no longer use the IMMUTABLE
+bit to prevent writing data for compression. Let's correct the
+corresponding documentation.
 
-The same is true for f2fs_has_inline_data() and
-f2fs_has_inline_dentry(). To be more intuitive and specific,
-refine comments of inline flags.
+BTW, this patch fixes some alignment issues in the compress
+metadata layout.
 
 Signed-off-by: Chao Liu <liuchao@coolpad.com>
 ---
- fs/f2fs/f2fs.h          | 6 +++---
- include/linux/f2fs_fs.h | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ Documentation/filesystems/f2fs.rst | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index e10838879538..e0205d42588d 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -730,9 +730,9 @@ enum {
- 	FI_NO_ALLOC,		/* should not allocate any blocks */
- 	FI_FREE_NID,		/* free allocated nide */
- 	FI_NO_EXTENT,		/* not to use the extent cache */
--	FI_INLINE_XATTR,	/* used for inline xattr */
--	FI_INLINE_DATA,		/* used for inline data*/
--	FI_INLINE_DENTRY,	/* used for inline dentry */
-+	FI_INLINE_XATTR,	/* inode can store inline xattr */
-+	FI_INLINE_DATA,		/* inode can store inline data */
-+	FI_INLINE_DENTRY,	/* inode can store inline dentry */
- 	FI_APPEND_WRITE,	/* inode has appended data */
- 	FI_UPDATE_WRITE,	/* inode has in-place-update data */
- 	FI_NEED_IPU,		/* used for ipu per file */
-diff --git a/include/linux/f2fs_fs.h b/include/linux/f2fs_fs.h
-index d445150c5350..a3c6750a66ae 100644
---- a/include/linux/f2fs_fs.h
-+++ b/include/linux/f2fs_fs.h
-@@ -223,9 +223,9 @@ struct f2fs_extent {
- #define	NODE_IND2_BLOCK		(DEF_ADDRS_PER_INODE + 4)
- #define	NODE_DIND_BLOCK		(DEF_ADDRS_PER_INODE + 5)
+diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
+index ad8dc8c040a2..98dc24f5c6f0 100644
+--- a/Documentation/filesystems/f2fs.rst
++++ b/Documentation/filesystems/f2fs.rst
+@@ -818,10 +818,11 @@ Compression implementation
+   Instead, the main goal is to reduce data writes to flash disk as much as
+   possible, resulting in extending disk life time as well as relaxing IO
+   congestion. Alternatively, we've added ioctl(F2FS_IOC_RELEASE_COMPRESS_BLOCKS)
+-  interface to reclaim compressed space and show it to user after putting the
+-  immutable bit. Immutable bit, after release, it doesn't allow writing/mmaping
+-  on the file, until reserving compressed space via
+-  ioctl(F2FS_IOC_RESERVE_COMPRESS_BLOCKS) or truncating filesize to zero.
++  interface to reclaim compressed space and show it to user after setting a
++  special flag to the inode. Once the compressed space is released, the flag
++  will block writing data to the file until either the compressed space is
++  reserved via ioctl(F2FS_IOC_RESERVE_COMPRESS_BLOCKS) or the file size is
++  truncated to zero.
  
--#define F2FS_INLINE_XATTR	0x01	/* file inline xattr flag */
--#define F2FS_INLINE_DATA	0x02	/* file inline data flag */
--#define F2FS_INLINE_DENTRY	0x04	/* file inline dentry flag */
-+#define F2FS_INLINE_XATTR	0x01	/* file can store inline xattr */
-+#define F2FS_INLINE_DATA	0x02	/* file can store inline data */
-+#define F2FS_INLINE_DENTRY	0x04	/* file can store inline dentry */
- #define F2FS_DATA_EXIST		0x08	/* file inline data exist flag */
- #define F2FS_INLINE_DOTS	0x10	/* file having implicit dot dentries */
- #define F2FS_EXTRA_ATTR		0x20	/* file having extra attribute */
+ Compress metadata layout::
+ 
+@@ -830,12 +831,12 @@ Compress metadata layout::
+ 		| cluster 1 | cluster 2 | ......... | cluster N |
+ 		+-----------------------------------------------+
+ 		.           .                       .           .
+-	.                       .                .                      .
++	  .                      .                .                      .
+     .         Compressed Cluster       .        .        Normal Cluster            .
+     +----------+---------+---------+---------+  +---------+---------+---------+---------+
+     |compr flag| block 1 | block 2 | block 3 |  | block 1 | block 2 | block 3 | block 4 |
+     +----------+---------+---------+---------+  +---------+---------+---------+---------+
+-	    .                             .
++	       .                             .
+ 	    .                                           .
+ 	.                                                           .
+ 	+-------------+-------------+----------+----------------------------+
 -- 
 2.36.1
 

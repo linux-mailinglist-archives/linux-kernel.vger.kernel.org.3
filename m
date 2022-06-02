@@ -2,39 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B0653B695
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5734E53B666
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233399AbiFBKHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
+        id S233250AbiFBJx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 05:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiFBKH3 (ORCPT
+        with ESMTP id S231395AbiFBJxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:07:29 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96391D05B9;
-        Thu,  2 Jun 2022 03:07:26 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 873F92014FE;
-        Thu,  2 Jun 2022 12:07:25 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 266212014FA;
-        Thu,  2 Jun 2022 12:07:25 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id A7531180031F;
-        Thu,  2 Jun 2022 18:07:23 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     vkoul@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, shengjiu.wang@gmail.com,
-        joy.zou@nxp.com, linux-imx@nxp.com, dmaengine@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dma: imx-sdma: Add FIFO offset support for multi FIFO script
-Date:   Thu,  2 Jun 2022 17:53:47 +0800
-Message-Id: <1654163627-30836-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Thu, 2 Jun 2022 05:53:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FF438BFC;
+        Thu,  2 Jun 2022 02:53:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45670614B9;
+        Thu,  2 Jun 2022 09:53:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48252C385A5;
+        Thu,  2 Jun 2022 09:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654163632;
+        bh=I5Mm7R454ghX3y+4lNT7scOk785tAQqHkkGPCAKIiPs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cU0O4BUWTfM7SfMOueIwu+MkdcuOE5k/cSh/FcAu5t51+nKHKNY1U19B7Gw3J+ORR
+         QS7pIK9OFE4kJzd3H7V/dLP632UmSl4YLKZ3xS/Ndjt8Q1wz6UKCHJM/fpKdxajp9x
+         oosP5B+ViSDDSta92zFKwdkYc8kezdsTTsTRXK9igX9v4WIKshwI1cGOcnjuwBemsJ
+         adhta/wWLsDN5GVJjYa0hAyiFzWdT+G4snVuWrf3zh1m7MPqZ7X8sIweL/UjELU7sh
+         vbj72mqE4j9oegex5YKsy3G5QdqU+dDDMoPxXvkBw2GAg4oCMx3tNxyr3GFMz3Cp83
+         7tGiRDl5wB+Yw==
+Received: by pali.im (Postfix)
+        id 21192689; Thu,  2 Jun 2022 11:53:49 +0200 (CEST)
+Date:   Thu, 2 Jun 2022 11:53:49 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Adam Borowski <kilobyte@angband.pl>
+Cc:     Sean Young <sean@mess.org>, Namjae Jeon <linkinjeon@kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Incorrect handling of . and .. files
+Message-ID: <20220602095349.7yttadyibgw5za5y@pali>
+References: <20210927111948.GA16257@gofer.mess.org>
+ <20211211020453.mkuzumgpnignsuri@pali>
+ <YbbskNBJI8Ak1Vl/@angband.pl>
+ <20211213113903.bkspqw2qlpct3uxr@pali>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211213113903.bkspqw2qlpct3uxr@pali>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -43,132 +62,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The peripheral may have several FIFOs, but some case just select
-some FIFOs from them for data transfer, which means FIFO0 and FIFO2
-may be selected. So add FIFO address offset support, 0 means all FIFOs
-are continuous, 1 means 1 word offset between FIFOs. All offset between
-FIFOs should be same.
+On Monday 13 December 2021 12:39:03 Pali Rohár wrote:
+> On Monday 13 December 2021 07:47:44 Adam Borowski wrote:
+> > On Sat, Dec 11, 2021 at 03:04:53AM +0100, Pali Rohár wrote:
+> > > I tried to find some information what is allowed and what not.
+> > > 
+> > > On Monday 27 September 2021 12:19:48 Sean Young wrote:
+> > > > Windows allows files and directories called "." and ".." to be created
+> > > > using UNC paths, i.e. "\\?\D:\..". Now this is totally insane behaviour,
+> > > > but when an exfat filesytem with such a file is mounted on Linux, those
+> > > > files show up as another directory and its contents is inaccessible.
+> > > > 
+> > > > I can replicate this using exfat filesystems, but not ntfs.
+> > > 
+> > > Microsoft exFAT specification explicitly disallow "." and "..", see:
+> > [...]
+> > > On the other hand Microsoft FAT32 specification can be understood that
+> > > file may have long name (vfat) set to "." or ".." but not short name.
+> > [...]
+> > > OSTA UDF 2.60 specification does not disallow "." and ".." entries, but
+> > [...]
+> > > So it means that "." and ".." entries could be stored on disk as valid
+> > > file names.
+> > 
+> > It doesn't matter one whit what the specification says.  Anyone with a disk
+> > editor can craft a filesystem containing filenames such as "." or "..", "/"
+> > "foo/bar" or anything else we would like to ban.
+> 
+> That is truth. But question is what should do fsck tools with such file
+> names on filesystems where "." and ".." are permitted? Fully valid
+> argument is "do not touch them" because there is nothing bad with these
+> names.
+> 
+> > > > So, in Linux cannot read "." or ".." (i.e., I can't see "Hello, World!"). I
+> > > > don't know what the correct handling should be, but having two "." and two
+> > > > ".." files does not seem right at all.
+> > > 
+> > > This is really a bug in Linux kernel. It should not export "." and ".."
+> > > into VFS even when filesystem disk format supports such insane file
+> > > names.
+> > 
+> > This.
+> > 
+> > Otherwise, every filesystem driver would need to contain redundant code for
+> > checking for such bad names.
+> > 
+> > > So either Linux needs to completely hide these insane file names from
+> > > VFS or translate them to something which do not conflict with other
+> > > files in correct directory.
+> > 
+> > Escaping bad names has the problem of the escaped name also possibly
+> > existing -- perhaps even recursively.  Plus, the filesystem might be using
+> > hashed or tree indices which could go wrong if a name is altered.
+> 
+> vfat has already own escaping scheme and it is documented in mount(8)
+> manpage. Invalid characters are translated either to fixed char '?' or
+> to ':'... esc sequence if uni_xlate mount option is used. But it looks
+> like that that kernel vfat driver do not have these two entries "." and
+> ".." in its blacklist.
+> 
+> And, another important thing about vfat is that it has two file names
+> for each file. One short 8.3 and one long vfat. Short 8.3 do not allow
+> "." or "..", so another possibility how to handle this issue for vfat is
+> to show short 8.3 name in VFS when long is invalid.
+> 
+> For UDF case, specification already says how to handle problematic
+> file names, so I think that udf.ko could implement it according to
+> specification.
+> 
+> But for all other filesystems it is needed to do something ideally on
+> VFS layer.
+> 
+> What about generating some deterministic / predicable file names which
+> will not conflict with other file names in current directory for these
+> problematic files?
 
-Another option words_per_fifo means how many audio channel data copied
-to one FIFO one time, 0 means one channel per FIFO, 1 means 2 channels
-per FIFO.
+PING? Any opinion how to handle this issue?
 
-If 'n_fifos_src =  4' and 'words_per_fifo = 1', it means the first two
-words(channels) fetch from FIFO0 and then jump to FIFO1 for next two words,
-and so on after the last FIFO3 fetched, roll back to FIFO0.
+For VFAT this is still open question.
 
-Signed-off-by: Joy Zou <joy.zou@nxp.com>
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
- drivers/dma/imx-sdma.c      | 26 ++++++++++++++++++++++++--
- include/linux/dma/imx-dma.h | 13 +++++++++++++
- 2 files changed, 37 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-index 111beb7138e0..3c95719286bc 100644
---- a/drivers/dma/imx-sdma.c
-+++ b/drivers/dma/imx-sdma.c
-@@ -183,6 +183,8 @@
- 				 BIT(DMA_DEV_TO_DEV))
- 
- #define SDMA_WATERMARK_LEVEL_N_FIFOS	GENMASK(15, 12)
-+#define SDMA_WATERMARK_LEVEL_OFF_FIFOS  GENMASK(19, 16)
-+#define SDMA_WATERMARK_LEVEL_WORDS_PER_FIFO   GENMASK(31, 28)
- #define SDMA_WATERMARK_LEVEL_SW_DONE	BIT(23)
- 
- #define SDMA_DONE0_CONFIG_DONE_SEL	BIT(7)
-@@ -429,6 +431,9 @@ struct sdma_desc {
-  * @n_fifos_src:	number of source device fifos
-  * @n_fifos_dst:	number of destination device fifos
-  * @sw_done:		software done flag
-+ * @off_fifos_src:	offset for source device FIFOs
-+ * @off_fifos_dst:	offset for destination device FIFOs
-+ * @words_per_fifo:	copy number of words one time for one FIFO
-  */
- struct sdma_channel {
- 	struct virt_dma_chan		vc;
-@@ -456,6 +461,9 @@ struct sdma_channel {
- 	bool				is_ram_script;
- 	unsigned int			n_fifos_src;
- 	unsigned int			n_fifos_dst;
-+	unsigned int			off_fifos_src;
-+	unsigned int			off_fifos_dst;
-+	unsigned int			words_per_fifo;
- 	bool				sw_done;
- };
- 
-@@ -1245,17 +1253,28 @@ static void sdma_set_watermarklevel_for_p2p(struct sdma_channel *sdmac)
- static void sdma_set_watermarklevel_for_sais(struct sdma_channel *sdmac)
- {
- 	unsigned int n_fifos;
-+	unsigned int off_fifos;
-+	unsigned int words_per_fifo;
- 
- 	if (sdmac->sw_done)
- 		sdmac->watermark_level |= SDMA_WATERMARK_LEVEL_SW_DONE;
- 
--	if (sdmac->direction == DMA_DEV_TO_MEM)
-+	if (sdmac->direction == DMA_DEV_TO_MEM) {
- 		n_fifos = sdmac->n_fifos_src;
--	else
-+		off_fifos = sdmac->off_fifos_src;
-+	} else {
- 		n_fifos = sdmac->n_fifos_dst;
-+		off_fifos = sdmac->off_fifos_dst;
-+	}
-+
-+	words_per_fifo = sdmac->words_per_fifo;
- 
- 	sdmac->watermark_level |=
- 			FIELD_PREP(SDMA_WATERMARK_LEVEL_N_FIFOS, n_fifos);
-+	sdmac->watermark_level |=
-+			FIELD_PREP(SDMA_WATERMARK_LEVEL_OFF_FIFOS, off_fifos);
-+	sdmac->watermark_level |=
-+			FIELD_PREP(SDMA_WATERMARK_LEVEL_WORDS_PER_FIFO, (words_per_fifo - 1));
- }
- 
- static int sdma_config_channel(struct dma_chan *chan)
-@@ -1769,6 +1788,9 @@ static int sdma_config(struct dma_chan *chan,
- 		}
- 		sdmac->n_fifos_src = sdmacfg->n_fifos_src;
- 		sdmac->n_fifos_dst = sdmacfg->n_fifos_dst;
-+		sdmac->off_fifos_src = sdmacfg->off_fifos_src;
-+		sdmac->off_fifos_dst = sdmacfg->off_fifos_dst;
-+		sdmac->words_per_fifo = sdmacfg->words_per_fifo;
- 		sdmac->sw_done = sdmacfg->sw_done;
- 	}
- 
-diff --git a/include/linux/dma/imx-dma.h b/include/linux/dma/imx-dma.h
-index 8887762360d4..0c739d571956 100644
---- a/include/linux/dma/imx-dma.h
-+++ b/include/linux/dma/imx-dma.h
-@@ -70,6 +70,16 @@ static inline int imx_dma_is_general_purpose(struct dma_chan *chan)
-  * struct sdma_peripheral_config - SDMA config for audio
-  * @n_fifos_src: Number of FIFOs for recording
-  * @n_fifos_dst: Number of FIFOs for playback
-+ * @off_fifos_src: FIFO address offset for recording, 0 means all FIFOs are
-+ *                 continuous, 1 means 1 word offset between FIFOs. All offset
-+ *                 between FIFOs should be same.
-+ * @off_fifos_dst: FIFO address offset for playback
-+ * @words_per_fifo: numbers of words per FIFO fetch/fill, 0 means
-+ *                  one channel per FIFO, 1 means 2 channels per FIFO..
-+ *                  If 'n_fifos_src =  4' and 'words_per_fifo = 1', it
-+ *                  means the first two words(channels) fetch from FIFO0
-+ *                  and then jump to FIFO1 for next two words, and so on
-+ *                  after the last FIFO3 fetched, roll back to FIFO0.
-  * @sw_done: Use software done. Needed for PDM (micfil)
-  *
-  * Some i.MX Audio devices (SAI, micfil) have multiple successive FIFO
-@@ -82,6 +92,9 @@ static inline int imx_dma_is_general_purpose(struct dma_chan *chan)
- struct sdma_peripheral_config {
- 	int n_fifos_src;
- 	int n_fifos_dst;
-+	int off_fifos_src;
-+	int off_fifos_dst;
-+	int words_per_fifo;
- 	bool sw_done;
- };
- 
--- 
-2.17.1
-
+> > But then, I once proposed (and I'm pondering reviving) a ban for characters
+> > \x01..\x1f and possibly others, and if banned, they can still legitimately
+> > occur in old filesystems.
+> > 
+> > > I guess that hiding them for exfat is valid thing as Microsoft
+> > > specification explicitly disallow them. Probably fsck.exfat can be teach
+> > > to rename these files and/or put them to lost+found directory.
+> > 
+> > fsck fixing those is a good thing but we still need to handle them at
+> > runtime.
+> 
+> Namjae Jeon, would you be able to implement fixing of such filenames in
+> fsck.exfat tool?
+> 
+> > 
+> > Meow!
+> > -- 
+> > ⢀⣴⠾⠻⢶⣦⠀
+> > ⣾⠁⢠⠒⠀⣿⡁ in the beginning was the boot and root floppies and they were good.
+> > ⢿⡄⠘⠷⠚⠋⠀                                       -- <willmore> on #linux-sunxi
+> > ⠈⠳⣄⠀⠀⠀⠀

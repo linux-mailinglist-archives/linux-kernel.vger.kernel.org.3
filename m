@@ -2,83 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C235853BEDA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 21:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449F053BEE5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 21:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238641AbiFBTfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 15:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
+        id S238673AbiFBTft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 15:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237287AbiFBTfU (ORCPT
+        with ESMTP id S238647AbiFBTfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 15:35:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5AE01B790
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 12:35:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654198517;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=O9PSBzdnKMT+FM2cj/OdoR4tUXJ2CeB5NwQy7//IHvk=;
-        b=LNxaXs3/8d1BJJx082tten2usrtkAjd7E8INUbVBNTDq64yZhA9RqgBY2wHp3aFv3Hi/3i
-        YnJEFbCpm2LdigjRFVjtcUmbu6X3PhVfix2+DluYG+mKmc6JssKG9x+elhsVcxMasfSQy/
-        vDXvvPmSeM5fQ4IDXppPuvhs3F4CU7o=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-286-OhKZ6_sNMy-Q9kagKlakmg-1; Thu, 02 Jun 2022 15:35:16 -0400
-X-MC-Unique: OhKZ6_sNMy-Q9kagKlakmg-1
-Received: by mail-wm1-f72.google.com with SMTP id o2-20020a05600c510200b0039747b0216fso5633059wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 12:35:16 -0700 (PDT)
+        Thu, 2 Jun 2022 15:35:46 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C83C27CF0
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 12:35:44 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id n10so5760246pjh.5
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 12:35:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cx/w23z3LclUVeD0RGwvqrmhkO0x9NOq8RLmyjTtPOM=;
+        b=lYVfR+YOq3qnx85Svvnsb2n7uiC27e2K2siHC/xyiklXI2m0N0FdTE4teMxk2RBxmm
+         8ifjjL4B7GGGUjzg261ufFGrAeYN06AC7Np+7rv8QsII/6wMLAcdEcIEGvhQIdMewr4M
+         kojvmoOEF9+Nen9ZvBM5a4t7oP6Ly0/7s5G6E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=O9PSBzdnKMT+FM2cj/OdoR4tUXJ2CeB5NwQy7//IHvk=;
-        b=UYmfAJoL4/kcim8YxCsORF4XaI0GRFHCdMiTeVMQSs17V9N9DjwxPh+qaw2MQMPuIj
-         kwIl+pEJ03jlqmuoCM536p/cDhEaK+Y0gIdfu8romZtjkw7RZtcrstPiBShIg3zcJK9H
-         Csx4FnOo6uY9+o4j97SsvwEHIypAynjJqtGbelL6wz1kGU4w7L7NsJBsFWzcapMJRDUJ
-         bMvgDeMptDSlcX2E3P1kZaF0j6JinopflPko2w5Hm49l/T/dKkDNinlK0ullDs+WCboG
-         KFk5YU/YK1mk6GovXSGArOF5WzT6L942jUO/z9Lhig9lN2mBbwXW8ZEqMSGbfFdaXaVp
-         9HYA==
-X-Gm-Message-State: AOAM531PIXgj1t/zkFPc0mhVOxvVK4XNFVHLXS/eXky0oH1kMIYsXymV
-        sjeQaq236+EbITnjeL+szFFxttR9HOw0nr6+uIhrsYB/b4DeIw4NRm11cgK83KqmQskge1HNKUE
-        G1jQcYPmZa1E3eoyNnWpscG4=
-X-Received: by 2002:adf:d1c4:0:b0:210:18e6:7eb8 with SMTP id b4-20020adfd1c4000000b0021018e67eb8mr4929389wrd.462.1654198515598;
-        Thu, 02 Jun 2022 12:35:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzMQXyJVqb+ZOZGnAocek9RLiVloAhoCka71UNYL3cPwFxy1S54RUOGmwqRt/EazubZXzOnCg==
-X-Received: by 2002:adf:d1c4:0:b0:210:18e6:7eb8 with SMTP id b4-20020adfd1c4000000b0021018e67eb8mr4929380wrd.462.1654198515378;
-        Thu, 02 Jun 2022 12:35:15 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id f12-20020a5d4dcc000000b002100316b126sm5378540wru.6.2022.06.02.12.35.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 12:35:14 -0700 (PDT)
-Date:   Thu, 2 Jun 2022 20:35:13 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>, cl@linux.com,
-        mbenes@suse.cz, akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        void@manifault.com, atomlin@atomlin.com, allen.lkml@gmail.com,
-        joe@perches.com, msuchanek@suse.de, oleksandr@natalenko.name,
-        jason.wessel@windriver.com, pmladek@suse.com,
-        daniel.thompson@linaro.org, hch@infradead.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v1] module: Fix prefix for module.sig_enforce module param
-Message-ID: <20220602193513.ppya4als32dkvv4l@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220322140344.556474-2-atomlin@redhat.com>
- <20220602035653.4167316-1-saravanak@google.com>
+        bh=cx/w23z3LclUVeD0RGwvqrmhkO0x9NOq8RLmyjTtPOM=;
+        b=z8iUUox0HcTFsn2C8BTg7A3THW0ZFg6xhJ/bkqt1TCi888RLxCHT+jZKKqW0uDiuY2
+         /IYqXaZ6bJEqDq/qVbKsz2C/EJyj+dcvaUqr7aGPuxjLu9xfnsI/NxHM7BdywamyUt8z
+         kYMK/BJaURzl7BueVm7wMn+UdH2tHfNp/LMZeD9itZ9ARlDHX0pcRqQwfNLsZFXXeqPm
+         D+FSYwu3x1Qnjj/pW/D86WkWbiLiTaWwM2bd/1YP91KsDz+sXG+6mTZ2J6iu+iArDL82
+         LuQVIZ+GzQ265xr5H+01yy9pc48tpcx1wbo2iLpvB23nFaE93ulMtEWv1sSKx70fmApj
+         tbfQ==
+X-Gm-Message-State: AOAM5327ZuoCTOzUhjTN2f95hoGb5QdZA1zzA/DtD/Gy7i5P6aFa+eyb
+        4fE5bcP1rKKPjPXukqnR4HVyhA==
+X-Google-Smtp-Source: ABdhPJxE722AkWZmxdhlAA/lfEu+HZH5UVTLDBfMV3ZCHmXDg3l6lmRd50aXEJM5XF73P7Xl/H8gLA==
+X-Received: by 2002:a17:902:ed53:b0:166:3e43:7522 with SMTP id y19-20020a170902ed5300b001663e437522mr5530822plb.170.1654198543994;
+        Thu, 02 Jun 2022 12:35:43 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:51d0:66d6:2fb5:b395])
+        by smtp.gmail.com with UTF8SMTPSA id m12-20020a170902d18c00b001616e19537esm3809964plb.213.2022.06.02.12.35.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 12:35:43 -0700 (PDT)
+Date:   Thu, 2 Jun 2022 12:35:42 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <YpkRDi2m7cLaKYEf@google.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220602035653.4167316-1-saravanak@google.com>
+In-Reply-To: <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,72 +81,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-06-01 20:56 -0700, Saravana Kannan wrote:
-> Commit cfc1d277891e ("module: Move all into module/") changed the prefix
-> of the module param by moving/renaming files. A later commit also moves
-> the module_param() into a different file, thereby changing the prefix
-> yet again.
+Hi Krishna,
+
+with this version I see xHCI errors on my SC7180 based system, like
+these:
+
+[   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
+
+[  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
+
+After resume a downstream hub isn't enumerated again.
+
+So far I didn't see those with v13, but I aso saw the first error with
+v16.
+
+I can do some more digging next week.
+
+On Thu, Jun 02, 2022 at 01:54:34PM +0530, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 > 
-> This would break kernel cmdline compatibility and also userspace
-> compatibility at /sys/module/module/parameters/sig_enforce.
+> Check wakeup-source property for dwc3 core node to set the
+> wakeup capability. Drop the device_init_wakeup call from
+> runtime suspend and resume.
 > 
-> So, set the prefix back to "module.".
+> If the dwc3 is wakeup capable, don't power down the USB PHY(s).
+> The glue drivers are expected to take care of configuring the
+> additional wakeup settings if needed based on the dwc3 wakeup
+> capability status. In some SOC designs, powering off the PHY is
+> resulting in higher leakage, so this patch save power on such boards.
 > 
-> Cc: Aaron Tomlin <atomlin@redhat.com>
-> Cc: mcgrof@kernel.org
-> Cc: christophe.leroy@csgroup.eu
-> Cc: cl@linux.com
-> Cc: mbenes@suse.cz
-> Cc: akpm@linux-foundation.org
-> Cc: jeyu@kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-modules@vger.kernel.org
-> Cc: void@manifault.com
-> Cc: atomlin@atomlin.com
-> Cc: allen.lkml@gmail.com
-> Cc: joe@perches.com
-> Cc: msuchanek@suse.de
-> Cc: oleksandr@natalenko.name
-> Cc: jason.wessel@windriver.com
-> Cc: pmladek@suse.com
-> Cc: daniel.thompson@linaro.org
-> Cc: hch@infradead.org
-> Fixes: cfc1d277891e ("module: Move all into module/")
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
 > ---
-> Sending this patch in case my analysis in [1] was right.
+>  drivers/usb/dwc3/core.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 > 
-> [1] - https://lore.kernel.org/lkml/20220602034111.4163292-1-saravanak@google.com/
-> 
-> -Saravana
-> 
->  kernel/module/signing.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/kernel/module/signing.c b/kernel/module/signing.c
-> index 85c8999dfecf..6b0672e4417b 100644
-> --- a/kernel/module/signing.c
-> +++ b/kernel/module/signing.c
-> @@ -16,6 +16,11 @@
->  #include <uapi/linux/module.h>
->  #include "internal.h"
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index e027c04..b99d3c2 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1787,6 +1787,7 @@ static int dwc3_probe(struct platform_device *pdev)
 >  
-> +#ifdef MODULE_PARAM_PREFIX
-> +#undef MODULE_PARAM_PREFIX
-> +#endif
-> +#define MODULE_PARAM_PREFIX "module."
-> +
->  static bool sig_enforce = IS_ENABLED(CONFIG_MODULE_SIG_FORCE);
->  module_param(sig_enforce, bool_enable_only, 0644);
+>  	platform_set_drvdata(pdev, dwc);
+>  	dwc3_cache_hwparams(dwc);
+> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
 >  
+>  	spin_lock_init(&dwc->lock);
+>  	mutex_init(&dwc->mutex);
+> @@ -1948,7 +1949,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  		dwc3_core_exit(dwc);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg)) {
+> +		if (!PMSG_IS_AUTO(msg) && !device_can_wakeup(dwc->dev)) {
+>  			dwc3_core_exit(dwc);
+>  			break;
+>  		}
+> @@ -2009,7 +2010,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+>  		spin_unlock_irqrestore(&dwc->lock, flags);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg)) {
+> +		if (!PMSG_IS_AUTO(msg) && !device_can_wakeup(dwc->dev)) {
+>  			ret = dwc3_core_init_for_resume(dwc);
+>  			if (ret)
+>  				return ret;
+> @@ -2086,8 +2087,6 @@ static int dwc3_runtime_suspend(struct device *dev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	device_init_wakeup(dev, true);
+> -
+>  	return 0;
+>  }
+>  
+> @@ -2096,8 +2095,6 @@ static int dwc3_runtime_resume(struct device *dev)
+>  	struct dwc3     *dwc = dev_get_drvdata(dev);
+>  	int		ret;
+>  
+> -	device_init_wakeup(dev, false);
+> -
+>  	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
+>  	if (ret)
+>  		return ret;
 > -- 
-> 2.36.1.255.ge46751e96f-goog
+> 2.7.4
 > 
-
-Oops! Thanks Saravana.
-
-Reviewed-by: Aaron Tomlin <atomlin@redhat.com>
-
--- 
-Aaron Tomlin
-

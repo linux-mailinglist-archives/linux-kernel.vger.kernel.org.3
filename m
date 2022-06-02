@@ -2,56 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353AB53BB1D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972FA53BB1B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235070AbiFBOnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 10:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
+        id S236147AbiFBOnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 10:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbiFBOnG (ORCPT
+        with ESMTP id S235660AbiFBOnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 10:43:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6AD1D314
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 07:43:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C28A6187A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 14:43:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDA50C385A5;
-        Thu,  2 Jun 2022 14:43:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654180983;
-        bh=4kWjTMseHRZBI+DoHWf0Iz0RsrVG0ExhwVphkECDeXw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QkYqJ9SfCLMOEcWgp/w59i9xvAktYsHjQg+lErZVTJ2szgYWIO1xjDikg8088WxZF
-         dckdZBFejMjwPzVBMV+Ky0T/shh5Iy0duUpeEcIznP4GT3jnIT+LzymPfm6yCg1uua
-         j2AublGX7CZa4LcjsysfXXNLHaFYFuBsW1yT4NaMy+01pGgh1enqqW1tGY7TctmKFd
-         JdC0wWoqVFhJDl3ipjGcr0Z/zJ3/9O03UjQZgWoJin0SWX3CM/Lh7VxYMRXTEKgUBg
-         svDa5XvlG3ir7+wuVJC7bl1T0XOFzZJrcsAHL3D4R8DRgzeVqeMNDXW9K9k959FOrz
-         xldkhSt08Rt0w==
-Date:   Thu, 2 Jun 2022 07:43:01 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Changbin Du <changbin.du@huawei.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, changbin.du@gmail.com,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Hui Wang <hw.huiwang@huawei.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: riscv: alternatives: move length validation inside the subsection
-Message-ID: <YpjMdVjLzoIoSGz9@dev-arch.thelio-3990X>
-References: <20220602112734.it2bzlqaismotjof@M910t>
+        Thu, 2 Jun 2022 10:43:14 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B17255A1;
+        Thu,  2 Jun 2022 07:43:13 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id p129so2123701oig.3;
+        Thu, 02 Jun 2022 07:43:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3ARHoM5LHWT9TByTd9RguxGGMAsE/6ISibQgr6i7ICU=;
+        b=3y8kPGjEjOtvm4XrogPqr+InlNByySuOMBafi+Lt6MAjrlE6/nKhOTeN9aPpXMhuCr
+         x3tcq3L6jLeWZFYMDoUpeQwoyEl8oUmwy3sLigPdf91c6Zo8oPhhqBm3jBOoNwZHCr33
+         eXimUm0HnT+oBQ9xz3YmCx+zAhHCA/Xqev489Kjfw3b+8oFid6il9fSB0j81ODIOcUTK
+         QdtWLfdBKaHKLdhgSMfRWkH+dF8IT2092klWccUjcZFcuXd1ysAAQZriQ3wwqfXQnTn2
+         OigUGwdYxaSJsYd5/P6YV9TD3GNFBsr/UZtYPDTmPd2XaRJdzj4mVS8yrR10CSRV/rfe
+         juFw==
+X-Gm-Message-State: AOAM530zJkS2MzHeHX959Xb6mUlFLFzOtfwmJlgMpDzsgwonEiat59P+
+        B56nqFDamFJWZrfArFCndQ==
+X-Google-Smtp-Source: ABdhPJysiNjG99QgKgCjncBPlVVdav9tlJP2F5lRbb9jnwiLuIn1hoWcc91mSkX8MrmN+cktC9jNwg==
+X-Received: by 2002:a05:6808:1686:b0:2f7:2f03:9792 with SMTP id bb6-20020a056808168600b002f72f039792mr17778848oib.278.1654180992727;
+        Thu, 02 Jun 2022 07:43:12 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c16-20020a544e90000000b0032b1b84f4e3sm2348061oiy.22.2022.06.02.07.43.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 07:43:12 -0700 (PDT)
+Received: (nullmailer pid 2283162 invoked by uid 1000);
+        Thu, 02 Jun 2022 14:43:11 -0000
+Date:   Thu, 2 Jun 2022 09:43:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sibi Sankar <quic_sibis@quicinc.com>, bjorn.andersson@linaro.org,
+        agross@kernel.org, djakov@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, p.zabel@pengutronix.de,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: interconnect: Update email address
+Message-ID: <20220602144311.GA2278169-robh@kernel.org>
+References: <1654130923-18722-1-git-send-email-quic_sibis@quicinc.com>
+ <cb8c7e28-dfef-78e2-c97c-11b9dee02fed@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220602112734.it2bzlqaismotjof@M910t>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <cb8c7e28-dfef-78e2-c97c-11b9dee02fed@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,67 +66,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 07:27:34PM +0800, Changbin Du wrote:
-> Apply the same fix from commit 966a0acce2fc ("arm64/alternatives: move
-> length validation inside the subsection") to riscv.  Due to the one-pass
-> design of LLVM's integrated assembler, it can not compute the length of
-> instructions if the .org directive is outside of the subsection that these
-> instructions are in.
+On Thu, Jun 02, 2022 at 01:48:21PM +0200, Krzysztof Kozlowski wrote:
+> On 02/06/2022 02:48, Sibi Sankar wrote:
+> > Update email address to the quicinc.com domain.
+> > 
+> > Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> > ---
+> >  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 2 +-
 > 
-> Here is the build error reported by llvm:
-> 
-> In file included from ./arch/riscv/include/asm/pgtable.h:108:
-> ./arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
->         ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
->         ^
-> ./arch/riscv/include/asm/errata_list.h:41:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
-> asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
->     ^
-> ./arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
->         _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
->         ^
-> ./arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
->         __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
->         ^
-> ./arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
->         ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
->         ^
-> ./arch/riscv/include/asm/alternative-macros.h:98:3: note: expanded from macro 'ALT_NEW_CONTENT'
->         ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
->          ^
-> <inline asm>:25:6: note: instantiated into assembly here
-> .org    . - (887b - 886b) + (889b - 888b)
->         ^
-> 
-> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> Thanks for updating the email addresses. All three patches should be
+> rather squashed to one (and taken by Rob for example), it's quite a
+> churn. Anyway:
 
-Thanks for the patch! I already sent an equivalent change two weeks ago
-as https://lore.kernel.org/20220516214520.3252074-1-nathan@kernel.org/,
-which I think is slightly better because it handles the __ASSEMBLY__
-version of the macro as well.
+I've applied the series and did this.
 
-Cheers,
-Nathan
+Rob
 
-> ---
->  arch/riscv/include/asm/alternative-macros.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
-> index e13b1f6bb400..c7d7f1945768 100644
-> --- a/arch/riscv/include/asm/alternative-macros.h
-> +++ b/arch/riscv/include/asm/alternative-macros.h
-> @@ -94,9 +94,9 @@
->  	new_c "\n"							\
->  	".option pop\n"							\
->  	"889 :\n"							\
-> -	".previous\n"							\
->  	".org	. - (887b - 886b) + (889b - 888b)\n"			\
->  	".org	. - (889b - 888b) + (887b - 886b)\n"			\
-> +	".previous\n"							\
->  	".endif\n"
->  
->  #define __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, enable)	\
-> -- 
-> 2.26.2
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> 
+> Best regards,
+> Krzysztof
 > 

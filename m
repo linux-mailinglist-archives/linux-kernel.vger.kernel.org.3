@@ -2,117 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E0953B95E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA04C53B95C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235165AbiFBNFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 09:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S235194AbiFBNFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 09:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234396AbiFBNFk (ORCPT
+        with ESMTP id S235185AbiFBNFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 09:05:40 -0400
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B906CF5D;
-        Thu,  2 Jun 2022 06:05:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=iSgidqt3314KrT58FqhYk4IWrdEq/fp5zlV6LXz/zvg=; b=O4SXb
-        azmr75iSV27mGL0s/f3ES9lL6mOv0EIxfLeyBjIN+hjQQtpw2c/J9IqNTcTACAgcuz18cSwxGAX6Y
-        wP3UmnjqTSl+q7HTxs84zgSZ9FyF3u3+hQu8Va+KJyvYvCohnu7gkqqk86rhdTaxnrGVuYt7+g2Ra
-        ajPVvwsk0G4HOP6J7/C+5QW3py+g6yy1ng2AJje5Vijb5hmUY2YcKeasS/0pO0FnaSc671zRImr6R
-        mr+wtqP2Q/Y3O2s7CpMZ5KgCc6bCZ+Su+SZhGw016F3lrT3zPWXaMcKecMqvVA+URwDNydD3rEHX0
-        BYgll9qvJlWiLiw0DSlAW/MrvAsvQ==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1nwkVj-0003GP-W6; Thu, 02 Jun 2022 14:05:12 +0100
-Date:   Thu, 2 Jun 2022 14:05:10 +0100
-From:   John Keeping <john@metanate.com>
-To:     Michael Wu <michael@allwinnertech.com>
-Cc:     quic_linyyuan@quicinc.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, axboe@kernel.dk,
-        quic_pkondeti@quicinc.com, wcheng@codeaurora.org,
-        quic_ugoswami@quicinc.com, andrew_gabbasov@mentor.com,
-        plr.vincent@gmail.com, gustavoars@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        allwinner-opensource-support@allwinnertech.com
-Subject: Re: [PATCH] usb: f_fs: Fix crash during gadget function switching
-Message-ID: <Ypi1hksGneVFEM8L@donbot>
-References: <20220510080105.126146-1-michael@allwinnertech.com>
- <YpUJkxWBNuZiW7Xk@donbot>
- <f2e4f523-9d56-9b5d-cc8e-c9d2c3660996@allwinnertech.com>
+        Thu, 2 Jun 2022 09:05:49 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D01914084B;
+        Thu,  2 Jun 2022 06:05:47 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id i66so6406353oia.11;
+        Thu, 02 Jun 2022 06:05:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LNaq7sEztiDWF2FCJpJbFxTE7mAwKmgj75OQYyNv2Lw=;
+        b=7xTVTcc+SQO0vzNkR3GX3ZszqZHU5pxzNJxZ8lk4Tk59OALDEjf0zGVHivLFvVFGaV
+         BEwl4OM2CAxSzKYGmQP2sWhoZ2BPE9xvUn2Av/+xQ/PaZ8ig/sfxHHaLtd/VvDLS4M0l
+         ZGb/kvfUC4NOpnOTlnjk9k0aA1vpdiuX3Uuw/txyLMYU03hG/xQLuysbnV8yPWxObvEp
+         p3/kI046Orzf27xfY4VCBTwhfBKpzD781liCCKwXN+ufk11DRtvffWahQWfoNZXhzAg1
+         ELh7g2K6pQcCkMV5mWk/oM5/YZhtmVbSHeJuk261E1qkG+N0/ZRHqUQtp3eZ1RLd80gG
+         pJpQ==
+X-Gm-Message-State: AOAM532dvS++pHPBTL1xUAdgtIa+m0PK7R8MjQfiilgR84X+uXtsDMol
+        DPgIPbGihi90K/zveHA20g==
+X-Google-Smtp-Source: ABdhPJxs1Y0i7VKbCMntycxl5hizJm7Nq2kWqQ8bHM1Bplx9d/kQA7s8uN6OuQaO4Y0+hxy1mvQMNQ==
+X-Received: by 2002:aca:2408:0:b0:32b:ef3:67c5 with SMTP id n8-20020aca2408000000b0032b0ef367c5mr2539773oic.189.1654175146719;
+        Thu, 02 Jun 2022 06:05:46 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r2-20020a05683002e200b0060603221247sm2159020ote.23.2022.06.02.06.05.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 06:05:46 -0700 (PDT)
+Received: (nullmailer pid 2108487 invoked by uid 1000);
+        Thu, 02 Jun 2022 13:05:45 -0000
+Date:   Thu, 2 Jun 2022 08:05:45 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     matthias.bgg@kernel.org
+Cc:     mturquette@baylibre.com, ikjn@chromium.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        weiyi.lu@mediatek.com, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, miles.chen@mediatek.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, robh+dt@kernel.org,
+        allen-kh.cheng@mediatek.com,
+        angelogioacchino.delregno@collabora.com, sboyd@kernel.org,
+        chun-jie.chen@mediatek.com, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: ARM: Mediatek: Remove msdc binding
+ of MT8192 clock
+Message-ID: <20220602130545.GA2108433-robh@kernel.org>
+References: <20220523102339.21927-1-matthias.bgg@kernel.org>
+ <20220523102339.21927-2-matthias.bgg@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f2e4f523-9d56-9b5d-cc8e-c9d2c3660996@allwinnertech.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220523102339.21927-2-matthias.bgg@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 06:36:47PM +0800, Michael Wu wrote:
-> On 5/31/2022 2:14 AM, John Keeping wrote:
-> > On Tue, May 10, 2022 at 04:01:05PM +0800, Michael Wu wrote:
-> > > On arm64 android12 and possibly other platforms, during the usb gadget
-> > > function switching procedure (e.g. from mtp to midi), a synchronization
-> > > issue could occur, which causes an use-after-free panic as shown below:
-> > 
-> > I assume this is the path through ffs_epfile_io() with !io_data->aio.
-> > It looks like there is no check there for epfile->ep == ep which the
-> > other paths do check.
-> > 
-> > Does the patch below fix the problem without needing to add a new
-> > completion?
-> > 
+On Mon, 23 May 2022 12:23:38 +0200, matthias.bgg@kernel.org wrote:
+> From: Matthias Brugger <matthias.bgg@gmail.com>
 > 
-> Hi John,
-> Thanks for your suggestion. I've tested your patch and it did work -- When
-> my issue occurs, (epfile->ep != ep) is satisfied, and the error is handled.
+> The code controlling msdc clock gate was moved inthe the consumer, the MMC
+> driver. This node did never represent a working implementation of any
+> peripheral. It was just a lonely clock gate that wasn't used. Delete the
+> binding description of this node.
 > 
-> > -- >8 --
-> > --- a/drivers/usb/gadget/function/f_fs.c
-> > +++ b/drivers/usb/gadget/function/f_fs.c
-> > @@ -1084,16 +1084,22 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
-> >                           */
-> >                          usb_ep_dequeue(ep->ep, req);
-> >                          wait_for_completion(&done);
-> > -                       interrupted = ep->status < 0;
-> > +                       interrupted = true;
-> >                  }
-> > -               if (interrupted)
-> > +               spin_lock_irq(&epfile->ffs->eps_lock);
-> > +               if (epfile->ep != ep)
-> > +                       ret = -ESHUTDOWN;
-> > +               else if (interrupted && ep->status < 0)
-> >                          ret = -EINTR;
-> > -               else if (io_data->read && ep->status > 0)
-> > -                       ret = __ffs_epfile_read_data(epfile, data, ep->status,
-> > -                                                    &io_data->data);
-> >                  else
-> >                          ret = ep->status;
-> > +               spin_unlock_irq(&epfile->ffs->eps_lock);
-> > +
-> > +               if (io_data->read && ret > 0)
-> > +                       ret = __ffs_epfile_read_data(epfile, data, ret,
-> > +                                                    &io_data->data);
-> > +
-> >                  goto error_mutex;
-> >          } else if (!(req = usb_ep_alloc_request(ep->ep, GFP_ATOMIC))) {
-> >                  ret = -ENOMEM;
-> Tested-by: Michael Wu <michael@allwinnertech.com>
+> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
 > 
+> ---
 > 
-> I also tested Linyu's patch [1][2]. It also works.
-> Is there a preference on these solutions?
+> Changes in v3:
+> - Update commit message to explain better why we do ABI breakage here
+> 
+> Changes in v2:
+> - Delete compatible in binding descprition as well
+> - Add RvB tags
+> 
+>  .../bindings/arm/mediatek/mediatek,mt8192-clock.yaml      | 8 --------
+>  1 file changed, 8 deletions(-)
+> 
 
-Linyu's patch is more complete and covers some cases that I missed with
-this attempt, so let's drop this thread and focus on that series.
+Acked-by: Rob Herring <robh@kernel.org>

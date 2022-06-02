@@ -2,67 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B69B53C01D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 23:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D8053C022
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 23:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239255AbiFBVAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 17:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
+        id S239301AbiFBVBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 17:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239122AbiFBVAN (ORCPT
+        with ESMTP id S239294AbiFBVBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 17:00:13 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8412F34BB6
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 14:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZMC0JMDJpU3Ea9On6JN2DLeBQ12wi64TMeGJm440bio=; b=LAGghuKhpFoBNIGZFIztX+f9Ct
-        foa5z/E10Sydt2cFotdonoOIEyichjxplkMFoJR4Zh0cVptSTtlnkVnzwpLUvKqyl80ZgMDuNkk8T
-        AHjt6nFNx+MGQi6tfrecRdCs9rjQvqh86Wynas+Dzig2h6MGksLjv8pe6nkDHz42r6tXjI65AMSLw
-        /4O0CMEfCWrhKWGX9MuGpwkjhJiTeus/MBwBIMKobPjnvF0chObg9W/kgsW8OGrFr16e4WzO/o6m/
-        tEwJ0LpQIhHr27Uwss4XxPY0famMei6ZHdDivwiBOlTy3RbVRy4PM3lJftVICipyoPgax2Kn6ce+D
-        Vjxrn2kg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwrvG-007QUZ-FK; Thu, 02 Jun 2022 21:00:02 +0000
-Date:   Thu, 2 Jun 2022 22:00:02 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v2 PATCH 5/7] mm: thp: kill transparent_hugepage_active()
-Message-ID: <Ypkk0pRHwBrI9Cj/@casper.infradead.org>
-References: <20220602182159.248387-1-shy828301@gmail.com>
- <20220602182159.248387-6-shy828301@gmail.com>
+        Thu, 2 Jun 2022 17:01:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A27735253
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 14:01:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654203670;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=r5MolzJKkbnpxmWaLe/FzIP2Xhwby+9gMYBxVEeA6Pk=;
+        b=TRzrReUBEUO/q3FQd2w/neJdn6+mMbZ7cCkB1GjKJsCfRrnHkfbl/3RTNxK9oIRGAaHq+u
+        UZBdrFYkffiIgxZ/IEyDqz0tG6ckS31zpMUhwQ6BmeCQUWYm1mTVUyFrX/mDQSXe1u281L
+        DixxowpiZ74+AbCMzOSy8+NM0Jjzt7o=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-436-3pXaGPQYPyiBfbwExNO2rw-1; Thu, 02 Jun 2022 17:01:06 -0400
+X-MC-Unique: 3pXaGPQYPyiBfbwExNO2rw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C03080029D;
+        Thu,  2 Jun 2022 21:01:06 +0000 (UTC)
+Received: from emerald.redhat.com (unknown [10.22.34.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C4CA7140240A;
+        Thu,  2 Jun 2022 21:01:04 +0000 (UTC)
+From:   Lyude Paul <lyude@redhat.com>
+To:     amd-gfx@freedesktop.org
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Hersen Wu <hersenwu@amd.com>,
+        Roman Li <Roman.Li@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        amd-gfx@lists.freedesktop.org (open list:AMD DISPLAY CORE),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/3] drm/amdgpu/dm/mst: Stop grabbing mst_mgr->lock in compute_mst_dsc_configs_for_state()
+Date:   Thu,  2 Jun 2022 17:00:54 -0400
+Message-Id: <20220602210056.73316-2-lyude@redhat.com>
+In-Reply-To: <20220602210056.73316-1-lyude@redhat.com>
+References: <20220602210056.73316-1-lyude@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220602182159.248387-6-shy828301@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 11:21:57AM -0700, Yang Shi wrote:
-> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> index 79d5919beb83..f315c70d5256 100644
-> --- a/include/linux/huge_mm.h
-> +++ b/include/linux/huge_mm.h
-> @@ -209,7 +209,9 @@ static inline bool file_thp_enabled(struct vm_area_struct *vma)
->  	       !inode_is_open_for_write(inode) && S_ISREG(inode->i_mode);
->  }
->  
-> -bool transparent_hugepage_active(struct vm_area_struct *vma);
-> +extern bool hugepage_vma_check(struct vm_area_struct *vma,
+Noticed this while trying to update amdgpu for the non-atomic MST removal
+changes - for some reason we appear to grab mst_mgr->lock before computing
+mst DSC configs. This is wrong though - mst_mgr->lock is only needed while
+traversing the actual MST topology state - which is not typically something
+that DRM drivers should be doing themselves anyway.
 
-Please remove the 'extern's.  They add no value to function
-declarations.
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+index 9221b6690a4a..cb3b0e08acc4 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+@@ -1056,13 +1056,10 @@ bool compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
+ 		if (!is_dsc_need_re_compute(state, dc_state, stream->link))
+ 			continue;
+ 
+-		mutex_lock(&aconnector->mst_mgr.lock);
+ 		if (!compute_mst_dsc_configs_for_link(state, dc_state, stream->link,
+ 			vars, &link_vars_start_index)) {
+-			mutex_unlock(&aconnector->mst_mgr.lock);
+ 			return false;
+ 		}
+-		mutex_unlock(&aconnector->mst_mgr.lock);
+ 
+ 		for (j = 0; j < dc_state->stream_count; j++) {
+ 			if (dc_state->streams[j]->link == stream->link)
+-- 
+2.35.3
 

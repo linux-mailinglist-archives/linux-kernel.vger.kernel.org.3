@@ -2,114 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8752D53B6A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28B153B6AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbiFBKKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
+        id S233450AbiFBKL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233430AbiFBKJ4 (ORCPT
+        with ESMTP id S233441AbiFBKLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:09:56 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1A12ACB75;
-        Thu,  2 Jun 2022 03:09:56 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y189so4332651pfy.10;
-        Thu, 02 Jun 2022 03:09:56 -0700 (PDT)
+        Thu, 2 Jun 2022 06:11:16 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCD72AD5C2
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:11:16 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id f21so8968987ejh.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 03:11:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=WZ6/Z6SVP3bMPtYdo2xOBExwLeSKhpcPwADfzY2mUgY=;
-        b=P5FCR1zQhkv9INLkzy3lndZ5Ngr++COfVc9slwwvBm25ElcacyrCRCkwPl/yYBgkse
-         QLWQXjONaVbcru2/xA2KFlWSQ1GuaQM/8BDxojoouFNQ5KW2G4ZzIyaPA7UQC8Ut6Zkw
-         vntH39nx/+ERaEmzk4cZou89XShrLblzjUbeVzI7cGMSTaTgbRA38eG/09DJBU4mo3Od
-         G3dYUjP7qSLAbZOYy7NOuS/JO2LIsy9e/GPyu2XrG2TplhukfADg5Lfr1LX9b9TwQuhA
-         OxQBnEC+BUCd8s0xFDBXL2IlPNwhFibkZloypUgR5qrphyWZl7ZY3k4uI3fFYRyVzufq
-         Jm0A==
+        bh=XP2MYhxOsKZps4QmlXxrybN7eWdufRzVMujwQeLYeiQ=;
+        b=Y7onb5K2NewHqCE/PuGP/wM6SCeTA9lIvWKzv8jJhtUkxUOyaEHEvZiw4JImYrjs5s
+         kN6M2jWBn/hQJ/gO0U4qlL+XEEZs8pBtfUQ7IuiVcWEY+wkFthPiLSsrRXsS3fAejXjf
+         kvvCJdXMPDrXcvk9yeZZs+tpjZf5dJArjVjTut02jEijcVhq8rbRluqdP29ZKyXUlZ0F
+         fJkhZe5RKIX9fdItmgPXHqlKhpZXFaipTO/Gruap1SOY4B/9/Ytjd2qjTb2u4T/Z7HIv
+         oAhNBOBsbESgy+TS8gXxGpo9jSv+l6+EKeAQ+jf9dQdnk/13eCdBqS3ieLyeeOzv7xBB
+         liEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=WZ6/Z6SVP3bMPtYdo2xOBExwLeSKhpcPwADfzY2mUgY=;
-        b=sz+0HKuG6iqv+nLpPGvx7Ube8kEfGKNWeB5i4tx91+ANfBy9jZHmIu3rgdCJKQkr71
-         nCHFVZ5mTr/heO5xkXp/E69c7qHhl9Dm2egKlSLxu9El4aICEIcNv+Maq+dk6R3gXvgt
-         7E80andV+FQ4fW7Qkn7xMSe89pXUqQtXZNTHz2G21T2NzpgxETKCCS+qg8O/aRi0r7Ng
-         zwqKk5DhSI/E29NsXg8V23cofwraxggw+g5iYCZYWjjBHL4lfURhM4vWgYe1K2foi6Wn
-         U1OIyIcUn7rkTRr4tfXJXpfKnCWHK1I+038ixyZ1+ui+08bnkia1FIrftwn+qILmMBtc
-         s5Mw==
-X-Gm-Message-State: AOAM532rqA+ETwLslosuFNbUboiaUq/KBMWk7oIeoJo1HkuVHB17cwg1
-        YwdBpdt/sKWXn9HH6F870Oc=
-X-Google-Smtp-Source: ABdhPJzX/B0PymPJ6LOZrim7NUPUOa8ufP/MgHJ+xiejOiQd2HS1yPsjx5eEhnehi4N3IZ3OyEPu1w==
-X-Received: by 2002:a65:6e42:0:b0:3f2:78fd:da9b with SMTP id be2-20020a656e42000000b003f278fdda9bmr3561664pgb.297.1654164595554;
-        Thu, 02 Jun 2022 03:09:55 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id l5-20020a170902d34500b0015ef27092aasm3084364plk.190.2022.06.02.03.09.50
+        bh=XP2MYhxOsKZps4QmlXxrybN7eWdufRzVMujwQeLYeiQ=;
+        b=iy32GNT97LJybfYtuLRscPM6j5wxcDlgDNrI84uSn/Gxz+J0w6rl1Ok3xYK9glaSbj
+         kVQcRJGrT4O8T1wwavBtJFm0+mprxJ22W8tpfTageVpnQO3FmqmdxQOhXd4QgutIhHeF
+         mC1vMS0pIF+JPvNz+7mJL8FE0UeAJ6w/NzOmLXeOxwklJGC3ySnfcuiY4qseOflbsR07
+         prOxuakM1RNGOm5CtwpBY+ydueTzLQ2wJetrbdq+nUBiYEBlYx7RY8f7bBtEofW3hwSi
+         3M8znFIFY9U467D0cws0nJ0SBx9V8vDx+Y2py8COwmDQE4chX66amBGwGjO8so2o37RK
+         MtIg==
+X-Gm-Message-State: AOAM533PK50RHofWjv2Y9FWSNthO6XWRDtkcfDqCdbCBk5h2O/FQA1Sr
+        GyyJPW3pTXld19ablzYtcgA=
+X-Google-Smtp-Source: ABdhPJxDXM6X2WzIbpB2ecG4Bo1W47SYy6zSGtMFLhp5s1cFEX36s9yh+wV046gKroqLIrujwyPa2g==
+X-Received: by 2002:a17:907:3e8a:b0:6fe:fcb6:6d45 with SMTP id hs10-20020a1709073e8a00b006fefcb66d45mr3454512ejc.348.1654164674585;
+        Thu, 02 Jun 2022 03:11:14 -0700 (PDT)
+Received: from orangepi3.mydomain.example ([195.234.74.2])
+        by smtp.gmail.com with ESMTPSA id kx16-20020a170907775000b00706e8ac43b8sm1599621ejc.199.2022.06.02.03.11.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 03:09:55 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [RESEND PATCH] cpuidle: qcom_spm: Fix missing put_device() call in spm_cpuidle_register
-Date:   Thu,  2 Jun 2022 14:09:36 +0400
-Message-Id: <20220602100936.41174-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 02 Jun 2022 03:11:14 -0700 (PDT)
+From:   Roman Stratiienko <r.stratiienko@gmail.com>
+To:     mripard@kernel.org, wens@csie.org, jernej.skrabec@gmail.com,
+        airlied@linux.ie, daniel@ffwll.ch, samuel@sholland.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, megi@xff.cz
+Cc:     Roman Stratiienko <r.stratiienko@gmail.com>
+Subject: [PATCH] drm/sun4i: Enable output signal premultiplication for DE2/DE3
+Date:   Thu,  2 Jun 2022 10:10:57 +0000
+Message-Id: <20220602101057.48170-1-r.stratiienko@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling paths.
+Otherwise alpha value is discarded, resulting incorrect pixel
+apperance on the display.
 
-Fixes: 60f3692 ("cpuidle: qcom_spm: Detach state machine from main SPM handling")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-Link: https://lore.kernel.org/all/20211230114203.13467-1-linmq006@gmail.com
----
- drivers/cpuidle/cpuidle-qcom-spm.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+This also fixes missing transparency for the most bottom layer.
 
-diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
-index beedf22cbe78..c734f914b616 100644
---- a/drivers/cpuidle/cpuidle-qcom-spm.c
-+++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-@@ -107,12 +107,16 @@ static int spm_cpuidle_register(struct device *cpuidle_dev, int cpu)
- 		return -ENODEV;
+Test applications and videos w/ w/o this patch are available at [1].
+
+[1]: https://github.com/GloDroid/glodroid_tests/issues/1
+Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+---
+ drivers/gpu/drm/sun4i/sun8i_mixer.c | 2 ++
+ drivers/gpu/drm/sun4i/sun8i_mixer.h | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+index 6b1711a9a71f..71ab0a00b4de 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
++++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+@@ -320,6 +320,8 @@ static void sun8i_mixer_mode_set(struct sunxi_engine *engine,
+ 	else
+ 		val = 0;
  
- 	data = devm_kzalloc(cpuidle_dev, sizeof(*data), GFP_KERNEL);
--	if (!data)
-+	if (!data) {
-+		put_device(&pdev->dev);
- 		return -ENOMEM;
-+	}
++	val |= SUN8I_MIXER_BLEND_OUTCTL_PREMULTIPLY;
++
+ 	regmap_update_bits(engine->regs, SUN8I_MIXER_BLEND_OUTCTL(bld_base),
+ 			   SUN8I_MIXER_BLEND_OUTCTL_INTERLACED, val);
  
- 	data->spm = dev_get_drvdata(&pdev->dev);
--	if (!data->spm)
-+	if (!data->spm) {
-+		put_device(&pdev->dev);
- 		return -EINVAL;
-+	}
+diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.h b/drivers/gpu/drm/sun4i/sun8i_mixer.h
+index ebfc276b2464..bc12c95af6f3 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_mixer.h
++++ b/drivers/gpu/drm/sun4i/sun8i_mixer.h
+@@ -65,6 +65,7 @@
+ #define SUN8I_MIXER_BLEND_ROUTE_PIPE_MSK(n)	(0xf << ((n) << 2))
+ #define SUN8I_MIXER_BLEND_ROUTE_PIPE_SHIFT(n)	((n) << 2)
  
- 	data->cpuidle_driver = qcom_spm_idle_driver;
- 	data->cpuidle_driver.cpumask = (struct cpumask *)cpumask_of(cpu);
++#define SUN8I_MIXER_BLEND_OUTCTL_PREMULTIPLY	BIT(0)
+ #define SUN8I_MIXER_BLEND_OUTCTL_INTERLACED	BIT(1)
+ 
+ #define SUN50I_MIXER_BLEND_CSC_CTL_EN(ch)	BIT(ch)
 -- 
-2.25.1
+2.30.2
 

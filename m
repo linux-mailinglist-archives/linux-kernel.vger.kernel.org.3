@@ -2,120 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298C953BA7D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34B653BA7F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235736AbiFBOJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 10:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
+        id S235745AbiFBOKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 10:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234646AbiFBOJl (ORCPT
+        with ESMTP id S233544AbiFBOKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 10:09:41 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A0C2A5500;
-        Thu,  2 Jun 2022 07:09:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1654178973; bh=rULKadNuRUmxsRHBTvF37ibbVCBVzs4lGOC6A+8n0R8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LjPfY4RmCaGNed0hYjvZdi9282Fy30mTAzDUxPpJVMoSCO31bTsp7+8miCdPNDiJB
-         0bUpEVgnYT0mxb0I5CVVf3fr++T/jXf9g2VcDw9qH5Mas7gVidwFK1+R8OOUJI2wGv
-         Mai2UTqjMFJg9+s7B/tZWxGpr9i00eSD6sB00zKw=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 4D683600FF;
-        Thu,  2 Jun 2022 22:09:33 +0800 (CST)
-Message-ID: <d88ede74-b7a5-e568-1863-107c6c7f5fe0@xen0n.name>
-Date:   Thu, 2 Jun 2022 22:09:32 +0800
+        Thu, 2 Jun 2022 10:10:48 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8152A6895
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 07:10:46 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id z7so6406671edm.13
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 07:10:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vrull.eu; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GucZHTMrdRbN8D9pH+E1S2Q+0YrgmAdLWLA+reBAIk8=;
+        b=ePPk8jpr2YHwOEc9/GF/xx0h5cp/PMt12MkeozoVu+9FbOIh4RYG60zERne/H4nrnG
+         m4lzUaOxT/YlkCvTtbR85dwuiFewyGyNuxmBhbIP7VtAUM4FpyFJJAFamF6c0lauvLJV
+         Mql+dgIzYSNabLwd1+hW06VcQVoFL9Sx4u38fQhsYYO76g9VXZ6/fdV2ze74WYG/7UZ2
+         iVy8HUrmtFdTYh9NEl3oKGdhSZCajKxt8OW8m39aiv9kxkgQQ8s6TU7Q+Blmzf8xPeE8
+         MStMlG3IBbE6giZ5858RcPeKhWDkOxu1cqFZoYRkWXddEKH9t5EgnI2RP5gnEwEgJaqo
+         ohDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GucZHTMrdRbN8D9pH+E1S2Q+0YrgmAdLWLA+reBAIk8=;
+        b=z80BiA3xF9Z9dA450mM1KKbBu+EGrlXBH/fhMf7ylh/2HRN+wDWvFuVQOgaWpoyjT6
+         v+JQ82ctj9T8+NUVRBYjlP/QVX9Guw7+3jehw4ia72pyCGvXFz5JRaR6bxihD+A0ASbR
+         kc32SL9QyLBsgVwA1HNaQgHx57bgenjVJLKrTpVlnsyby7492nJPoGLx4JOAyuClNfIb
+         k0xyIR+sfyucCaK5TYVikoH6MWnrdR9+xXzSuUx7IlZcXDD4MpBV9V5/GZveRNYKCbs0
+         /SUMIqqdhR0npc4J/bH/HV+FAa67t879flbyq5DaEUL1FIQw7maaQdh1/zQ8lOvMaTim
+         FHMQ==
+X-Gm-Message-State: AOAM532oGPoar74x4Tny0dn5wzFdvmP84q93de3eevjLnAg7Rab4BiWk
+        DUqZ0GgOmDJJbWA20Aui254miw==
+X-Google-Smtp-Source: ABdhPJxdkWhVxjvMafCzxMI3ltxPuwBg6Z+0cZg4vKoaeUGmpFkY4nkx1v8ZFbjxMdsSmFd9awaybw==
+X-Received: by 2002:a05:6402:f17:b0:42d:d3f3:244c with SMTP id i23-20020a0564020f1700b0042dd3f3244cmr5711877eda.52.1654179045292;
+        Thu, 02 Jun 2022 07:10:45 -0700 (PDT)
+Received: from beast.fritz.box (62-178-148-172.cable.dynamic.surfer.at. [62.178.148.172])
+        by smtp.gmail.com with ESMTPSA id e26-20020a170906081a00b006f39ffe23fdsm1852312ejd.0.2022.06.02.07.10.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 07:10:44 -0700 (PDT)
+From:   Christoph Muellner <christoph.muellner@vrull.eu>
+X-Google-Original-From: Christoph Muellner <christoph.muellner@vrull.io>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christoph Muellner <christoph.muellner@vrull.io>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Aaron Durbin <adurbin@rivosinc.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] riscv: Add Zawrs support for spinlocks
+Date:   Thu,  2 Jun 2022 16:10:32 +0200
+Message-Id: <20220602141032.169907-1-christoph.muellner@vrull.io>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101
- Thunderbird/103.0a1
-Subject: Steps forward for the LoongArch UEFI bringup patch? (was: Re: [PATCH
- V14 11/24] LoongArch: Add boot and setup routines)
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-efi@vger.kernel.org, WANG Xuerui <git@xen0n.name>,
-        Yun Liu <liuyun@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
- <20220602115141.3962749-12-chenhuacai@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20220602115141.3962749-12-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard,
+The current RISC-V code uses the generic ticket lock implementation,
+that calls the macros smp_cond_load_relaxed() and smp_cond_load_acquire().
+Currently, RISC-V uses the generic implementation of these macros.
+This patch introduces a RISC-V specific implementation, of these
+macros, that peels off the first loop iteration and modifies the waiting
+loop such, that it is possible to use the WRS instruction of the Zawrs
+ISA extension to stall the CPU.
 
-Sorry for sounding particularly rushed and I really don't like rushing 
-things either, but as explained in the previous reply [1], what we want 
-to do is mainly to get the arch/loongarch into mainline first, 
-stabilizing an ABI surface already under heavy testing for many months; 
-plus Huacai has removed the questioned kernel version string, and the 
-Loongson-specific "boardinfo" sysfs file that doesn't really belong to 
-/sys/firmware/efi.
+The resulting implementation of smp_cond_load_*() will only work for
+32-bit or 64-bit types for RV64 and 32-bit types for RV32.
+This is caused by the restrictions of the LR instruction (RISC-V only
+has LR.W and LR.D). Compiler assertions guard this new restriction.
 
-So, would you please clarify and explain how Huacai and I could best 
-proceed to hopefully get the *rest* of the port readied for a (late) 
-merge window PR? Otherwise much of userspace development would have to 
-shift target once more, and many Linux distros would have to carry and 
-rebase this big patchset for another 2 months which is real churn.
+This patch uses the existing RISC-V ISA extension framework
+to detect the presents of Zawrs at run-time.
+If available a NOP instruction will be replaced by WRS.
+A similar patch could add support for the PAUSE instruction of
+the Zihintpause ISA extension.
 
-If some more background is necessary, let me explain a bit more about 
-the LoongArch boot protocol peculiarities...
+The whole mechanism is gated by Kconfig setting, which defaults to Y.
 
-For one thing, the standard EFI stub boot flow is a recent development, 
-and has not shipped yet; all currently existing LoongArch systems 
-actually implement the previous Loongson-specific boot protocol based on 
-"struct bootparamsinterface", or BPI for short, that was carried over 
-from the MIPS era. Systems with BPI firmware provide full EFI services 
-too, but all pointers in BPI structs are virtual addresses, and the 
-memory maps are not provided in the same way as their new firmware. In 
-addition to that, all BPI systems launch Linux via a special GRUB2 that 
-can only boot ELF files (so cannot chainload an EFI stub), and it's 
-unclear whether directly booting an EFI stub would work, so the EFI stub 
-logic is not invoked at all but SVAM still have to be executed somehow 
-to ensure sanity. All of this means the SVAM oddity will eventually get 
-in, regardless of whether we take it out now or not, if the BPI support 
-is to be mainlined in the future.
+The Zawrs specification can be found here:
+https://github.com/riscv/riscv-zawrs/blob/main/zawrs.adoc
 
-For another thing, it seems Loongson really wanted to support the "PMON" 
-use case that wouldn't provide full EFI services but sharing some logic 
-with UEFI boot. PMON is one of the MIPS firmware varieties that Loongson 
-has supported back in the days, and they seem to have ported it to 
-LoongArch as well.
+Note, that the Zawrs extension is not frozen or ratified yet.
+Therefore this patch is an RFC and not intended to get merged.
 
-For this, I don't know if Huacai should really just leave those 
-modification in the downstream fork to keep the upstream Linux clean of 
-such hacks, because to some degree dealing with such notoriety is life, 
-it seems to me. I think at this point Huacai would cooperate and tweak 
-the patch to get rid of the SVAM and other nonstandard bits as much as 
-possible, and I'll help him where necessary too.
+Signed-off-by: Christoph Muellner <christoph.muellner@vrull.io>
+---
+ arch/riscv/Kconfig                   | 10 +++
+ arch/riscv/include/asm/barrier.h     | 97 ++++++++++++++++++++++++++++
+ arch/riscv/include/asm/errata_list.h | 12 +++-
+ arch/riscv/include/asm/hwcap.h       |  3 +-
+ arch/riscv/kernel/cpu.c              |  1 +
+ arch/riscv/kernel/cpufeature.c       | 13 ++++
+ 6 files changed, 133 insertions(+), 3 deletions(-)
 
-
-[1]: 
-https://lore.kernel.org/all/47b559c0-b1e8-e800-0491-2431e2083dad@xen0n.name/
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 905e550e0fd3..054872317d4a 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -358,6 +358,16 @@ config RISCV_ISA_C
+ 
+ 	   If you don't know what to do here, say Y.
+ 
++config RISCV_ISA_ZAWRS
++	bool "Zawrs extension support"
++	select RISCV_ALTERNATIVE
++	default y
++	help
++	   Adds support to dynamically detect the presence of the Zawrs extension
++	   (wait for reservation set) and enable its usage.
++
++	   If you don't know what to do here, say Y.
++
+ config RISCV_ISA_SVPBMT
+ 	bool "SVPBMT extension support"
+ 	depends on 64BIT && MMU
+diff --git a/arch/riscv/include/asm/barrier.h b/arch/riscv/include/asm/barrier.h
+index d0e24aaa2aa0..69b8f1f4b80c 100644
+--- a/arch/riscv/include/asm/barrier.h
++++ b/arch/riscv/include/asm/barrier.h
+@@ -12,6 +12,8 @@
+ 
+ #ifndef __ASSEMBLY__
+ 
++#include <asm/errata_list.h>
++
+ #define nop()		__asm__ __volatile__ ("nop")
+ 
+ #define RISCV_FENCE(p, s) \
+@@ -42,6 +44,69 @@ do {									\
+ 	___p1;								\
+ })
+ 
++#if __riscv_xlen == 64
++
++#define __riscv_lrsc_word(t)						\
++	(sizeof(t) == sizeof(int) ||					\
++	 sizeof(t) == sizeof(long))
++
++#define __riscv_lr(ptr)							\
++	sizeof(*ptr) == sizeof(int) ? "lr.w" : "lr.d"
++
++#elif __riscv_xlen == 32
++
++#define __riscv_lrsc_word(ptr)						\
++	(sizeof(*ptr) == sizeof(int))
++
++#define __riscv_lr(t) "lr.w"
++
++#else
++#error "Unexpected __riscv_xlen"
++#endif /* __riscv_xlen */
++
++#define compiletime_assert_atomic_lrsc_type(t)				\
++	compiletime_assert(__riscv_lrsc_word(t),			\
++		"Need type compatible with LR/SC instructions.")
++
++#define ___smp_load_reservedN(pfx, ptr)					\
++({									\
++	typeof(*ptr) ___p1;						\
++	__asm__ __volatile__ ("lr." pfx "	%[p], %[c]\n"		\
++			      : [p]"=&r" (___p1), [c]"+A"(*ptr));	\
++	___p1;								\
++})
++
++#define ___smp_load_reserved32(ptr)					\
++	___smp_load_reservedN("w", ptr)
++
++#define ___smp_load_reserved64(ptr)					\
++	___smp_load_reservedN("d", ptr)
++
++#define __smp_load_reserved_relaxed(ptr)				\
++({									\
++	typeof(*ptr) ___p1;						\
++	compiletime_assert_atomic_lrsc_type(*ptr);			\
++	if (sizeof(*ptr) == 32) {					\
++		___p1 = ___smp_load_reserved32(ptr);			\
++	} else {							\
++		___p1 = ___smp_load_reserved64(ptr);			\
++	}								\
++	___p1;								\
++})
++
++#define __smp_load_reserved_acquire(ptr)				\
++({									\
++	typeof(*ptr) ___p1;						\
++	compiletime_assert_atomic_lrsc_type(*ptr);			\
++	if (sizeof(*ptr) == 32) {					\
++		___p1 = ___smp_load_reserved32(ptr);			\
++	} else {							\
++		___p1 = ___smp_load_reserved64(ptr);			\
++	}								\
++	RISCV_FENCE(r,rw);						\
++	___p1;								\
++})
++
+ /*
+  * This is a very specific barrier: it's currently only used in two places in
+  * the kernel, both in the scheduler.  See include/linux/spinlock.h for the two
+@@ -69,6 +134,38 @@ do {									\
+  */
+ #define smp_mb__after_spinlock()	RISCV_FENCE(iorw,iorw)
+ 
++#define smp_cond_load_relaxed(ptr, cond_expr)				\
++({									\
++	typeof(ptr) __PTR = (ptr);					\
++	__unqual_scalar_typeof(*ptr) VAL;				\
++	VAL = READ_ONCE(*__PTR);					\
++	if (!cond_expr) {						\
++		for (;;) {						\
++			VAL = __smp_load_reserved_relaxed(__PTR);	\
++			if (cond_expr)					\
++				break;					\
++			ALT_WRS();					\
++		}							\
++	}								\
++	(typeof(*ptr))VAL;						\
++})
++
++#define smp_cond_load_acquire(ptr, cond_expr)				\
++({									\
++	typeof(ptr) __PTR = (ptr);					\
++	__unqual_scalar_typeof(*ptr) VAL;				\
++	VAL = smp_load_acquire(__PTR);					\
++	if (!cond_expr) {						\
++		for (;;) {						\
++			VAL = __smp_load_reserved_acquire(__PTR);	\
++			if (cond_expr)					\
++				break;					\
++			ALT_WRS();					\
++		}							\
++	}								\
++	(typeof(*ptr))VAL;						\
++})
++
+ #include <asm-generic/barrier.h>
+ 
+ #endif /* __ASSEMBLY__ */
+diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
+index 9e2888dbb5b1..b9aa0b346493 100644
+--- a/arch/riscv/include/asm/errata_list.h
++++ b/arch/riscv/include/asm/errata_list.h
+@@ -19,8 +19,9 @@
+ #define	ERRATA_THEAD_NUMBER 1
+ #endif
+ 
+-#define	CPUFEATURE_SVPBMT 0
+-#define	CPUFEATURE_NUMBER 1
++#define	CPUFEATURE_ZAWRS 0
++#define	CPUFEATURE_SVPBMT 1
++#define	CPUFEATURE_NUMBER 2
+ 
+ #ifdef __ASSEMBLY__
+ 
+@@ -42,6 +43,13 @@ asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,	\
+ 		ERRATA_SIFIVE_CIP_1200, CONFIG_ERRATA_SIFIVE_CIP_1200)	\
+ 		: : "r" (addr) : "memory")
+ 
++#define ZAWRS_WRS	".long 0x1000073"
++#define ALT_WRS()							\
++asm volatile(ALTERNATIVE(						\
++	"nop\n\t",							\
++	ZAWRS_WRS "\n\t",						\
++	0, CPUFEATURE_ZAWRS, CONFIG_RISCV_ISA_ZAWRS))
++
+ /*
+  * _val is marked as "will be overwritten", so need to set it to 0
+  * in the default case.
+diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+index 4e2486881840..c7dd8cc38bec 100644
+--- a/arch/riscv/include/asm/hwcap.h
++++ b/arch/riscv/include/asm/hwcap.h
+@@ -51,7 +51,8 @@ extern unsigned long elf_hwcap;
+  * available logical extension id.
+  */
+ enum riscv_isa_ext_id {
+-	RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
++	RISCV_ISA_EXT_ZAWRS = RISCV_ISA_EXT_BASE,
++	RISCV_ISA_EXT_SSCOFPMF,
+ 	RISCV_ISA_EXT_SVPBMT,
+ 	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
+ };
+diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+index fba9e9f46a8c..6c3a10ff5358 100644
+--- a/arch/riscv/kernel/cpu.c
++++ b/arch/riscv/kernel/cpu.c
+@@ -87,6 +87,7 @@ int riscv_of_parent_hartid(struct device_node *node)
+  *    extensions by an underscore.
+  */
+ static struct riscv_isa_ext_data isa_ext_arr[] = {
++	__RISCV_ISA_EXT_DATA(zawrs, RISCV_ISA_EXT_ZAWRS),
+ 	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+ 	__RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
+ 	__RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index dea3ea19deee..fc2c47a1784b 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -199,6 +199,7 @@ void __init riscv_fill_hwcap(void)
+ 			} else {
+ 				SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
+ 				SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
++				SET_ISA_EXT_MAP("zawrs", RISCV_ISA_EXT_ZAWRS);
+ 			}
+ #undef SET_ISA_EXT_MAP
+ 		}
+@@ -251,6 +252,14 @@ struct cpufeature_info {
+ 	bool (*check_func)(unsigned int stage);
+ };
+ 
++static bool __init_or_module cpufeature_zawrs_check_func(unsigned int stage)
++{
++	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
++		return false;
++
++	return riscv_isa_extension_available(NULL, ZAWRS);
++}
++
+ static bool __init_or_module cpufeature_svpbmt_check_func(unsigned int stage)
+ {
+ #ifdef CONFIG_RISCV_ISA_SVPBMT
+@@ -267,6 +276,10 @@ static bool __init_or_module cpufeature_svpbmt_check_func(unsigned int stage)
+ 
+ static const struct cpufeature_info __initdata_or_module
+ cpufeature_list[CPUFEATURE_NUMBER] = {
++	{
++		.name = "zawrs",
++		.check_func = cpufeature_zawrs_check_func
++	},
+ 	{
+ 		.name = "svpbmt",
+ 		.check_func = cpufeature_svpbmt_check_func
+-- 
+2.35.3
 

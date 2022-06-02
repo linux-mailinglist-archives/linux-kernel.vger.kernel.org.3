@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB0B53B373
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E018553B36B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiFBGTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 02:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
+        id S230321AbiFBGSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 02:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiFBGTQ (ORCPT
+        with ESMTP id S229457AbiFBGSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 02:19:16 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C20138918
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 23:19:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654150754; x=1685686754;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KtSPVOdPn0+cS/TkXKKvL4dDM8chwCM+l+IUKX2FPQc=;
-  b=D0pEdWJ88zIkeCM44hV10T3vOlQd6gdB0rYKYm6GDOc0LIFGjQSgqS27
-   GnBK522BQgdEB/zn/vx9CaAn2IrJZXCEMhXwzShlzxYzSzf/SPxh6oZyC
-   XS/Ra+2aDS06KrTxfDy1w/kC326z6zrMalCbfK7iVPKEjmSGbQxClWpfe
-   UZQybvrOTqOXpghDkVVaktJFeFcvjQ15qZBbuNih7ifrbK1c2cGqCvIPM
-   jGgxrlYtNXsxX6MwGHM1/kLzVyVQrNX5SVqdDToR7opkAQZlc2jB1WzBY
-   aKsaW+y7v8kkzZW58EW8pa5MK6OLe6fMgJrXfwshHYKUMDlNaJWvzudRw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="338884437"
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="338884437"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 23:19:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="552678250"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 01 Jun 2022 23:19:12 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nweAq-0004mz-8X;
-        Thu, 02 Jun 2022 06:19:12 +0000
-Date:   Thu, 02 Jun 2022 14:18:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.05.23a] BUILD SUCCESS
- 81955dcfda2589b64d45e5bb6819b03de2f54f5a
-Message-ID: <62985626.zlbDlApMKNxDmu5E%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 2 Jun 2022 02:18:38 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4250987A3D
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 23:18:36 -0700 (PDT)
+X-UUID: 1eed4d444bfe48c5abd146ff8529dfa1-20220602
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:ed063c35-6848-45de-8eb4-a1723bfda1ba,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:2a19b09,CLOUDID:2050920d-3a0d-4bbe-9d72-0e5d26d57423,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 1eed4d444bfe48c5abd146ff8529dfa1-20220602
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 428153746; Thu, 02 Jun 2022 14:18:31 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 2 Jun 2022 14:18:29 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 2 Jun 2022 14:18:29 +0800
+Message-ID: <e970f47d462b0cca9bc6107843721b6b0aabd73a.camel@mediatek.com>
+Subject: Re: [PATCH 2/3] iommu: mtk_iommu: add support for 6-bit encoded
+ port IDs
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Fabien Parent <fparent@baylibre.com>
+CC:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        <iommu@lists.linux-foundation.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Thu, 2 Jun 2022 14:18:29 +0800
+In-Reply-To: <20220530180328.845692-2-fparent@baylibre.com>
+References: <20220530180328.845692-1-fparent@baylibre.com>
+         <20220530180328.845692-2-fparent@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,104 +64,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.05.23a
-branch HEAD: 81955dcfda2589b64d45e5bb6819b03de2f54f5a  rcu/rcuscale: Fix smp_processor_id()-in-preemptible warnings
+Hi Fabien,
 
-elapsed time: 741m
+Thanks for very much for this patch.
 
-configs tested: 83
-configs skipped: 3
+Retitle to iommu/mediatek: Xxx
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+On Mon, 2022-05-30 at 20:03 +0200, Fabien Parent wrote:
+> Until now the port ID was always encoded as a 5-bit data. On MT8365,
+> the port ID is encoded as a 6-bit data. This requires to rework the
+> macros F_MMU_INT_ID_LARB_ID, and F_MMU_INT_ID_PORT_ID in order
+> to support 5-bit and 6-bit encoded port IDs.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> ---
+>  drivers/iommu/mtk_iommu.c | 17 +++++++++++++----
+>  drivers/iommu/mtk_iommu.h |  1 +
+>  2 files changed, 14 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index 6fd75a60abd6..b692347d8d56 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -103,8 +103,10 @@
+>  #define REG_MMU1_INT_ID				0x154
+>  #define F_MMU_INT_ID_COMM_ID(a)			(((a) >> 9) &
+> 0x7)
+>  #define F_MMU_INT_ID_SUB_COMM_ID(a)		(((a) >> 7) & 0x3)
+> -#define F_MMU_INT_ID_LARB_ID(a)			(((a) >> 7) &
+> 0x7)
+> -#define F_MMU_INT_ID_PORT_ID(a)			(((a) >> 2) &
+> 0x1f)
+> +#define F_MMU_INT_ID_LARB_ID(a, port_width)	\
+> +				((a) >> ((port_width + 2) & 0x7))
+> +#define F_MMU_INT_ID_PORT_ID(a, port_width)	\
+> +				(((a) >> 2) & GENMASK(port_width - 1,
+> 0))
 
-gcc tested configs:
-arm                              allyesconfig
-arm                                 defconfig
-arm64                               defconfig
-arm                              allmodconfig
-arm64                            allyesconfig
-ia64                                defconfig
-ia64                             allmodconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-alpha                               defconfig
-csky                                defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-parisc64                            defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220531
-riscv                randconfig-r042-20220531
-s390                 randconfig-r044-20220531
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                            allmodconfig
-riscv                    nommu_k210_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
+Add () for port_width.
 
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-hexagon              randconfig-r041-20220531
-hexagon              randconfig-r045-20220531
+>  
+>  #define MTK_PROTECT_PA_ALIGN			256
+>  
+> @@ -291,12 +293,13 @@ static irqreturn_t mtk_iommu_isr(int irq, void
+> *dev_id)
+>  		fault_pa |= (u64)pa34_32 << 32;
+>  	}
+>  
+> -	fault_port = F_MMU_INT_ID_PORT_ID(regval);
+> +	fault_port = F_MMU_INT_ID_PORT_ID(regval, data->plat_data-
+> >port_width);
+>  	if (MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_SUB_COMM)) {
+>  		fault_larb = F_MMU_INT_ID_COMM_ID(regval);
+>  		sub_comm = F_MMU_INT_ID_SUB_COMM_ID(regval);
+>  	} else {
+> -		fault_larb = F_MMU_INT_ID_LARB_ID(regval);
+> +		fault_larb = F_MMU_INT_ID_LARB_ID(regval,
+> +						  data->plat_data-
+> >port_width);
+>  	}
+>  	fault_larb = data->plat_data-
+> >larbid_remap[fault_larb][sub_comm];
+>  
+> @@ -1034,6 +1037,7 @@ static const struct mtk_iommu_plat_data
+> mt2712_data = {
+>  	.iova_region  = single_domain,
+>  	.iova_region_nr = ARRAY_SIZE(single_domain),
+>  	.larbid_remap = {{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}},
+> +	.port_width   = 5,
+>  };
+>  
+>  static const struct mtk_iommu_plat_data mt6779_data = {
+> @@ -1043,6 +1047,7 @@ static const struct mtk_iommu_plat_data
+> mt6779_data = {
+>  	.iova_region   = single_domain,
+>  	.iova_region_nr = ARRAY_SIZE(single_domain),
+>  	.larbid_remap  = {{0}, {1}, {2}, {3}, {5}, {7, 8}, {10}, {9}},
+> +	.port_width    = 5,
+>  };
+>  
+>  static const struct mtk_iommu_plat_data mt8167_data = {
+> @@ -1052,6 +1057,7 @@ static const struct mtk_iommu_plat_data
+> mt8167_data = {
+>  	.iova_region  = single_domain,
+>  	.iova_region_nr = ARRAY_SIZE(single_domain),
+>  	.larbid_remap = {{0}, {1}, {2}}, /* Linear mapping. */
+> +	.port_width   = 5,
+>  };
+>  
+>  static const struct mtk_iommu_plat_data mt8173_data = {
+> @@ -1062,6 +1068,7 @@ static const struct mtk_iommu_plat_data
+> mt8173_data = {
+>  	.iova_region  = single_domain,
+>  	.iova_region_nr = ARRAY_SIZE(single_domain),
+>  	.larbid_remap = {{0}, {1}, {2}, {3}, {4}, {5}}, /* Linear
+> mapping. */
+> +	.port_width   = 5,
+>  };
+>  
+>  static const struct mtk_iommu_plat_data mt8183_data = {
+> @@ -1071,6 +1078,7 @@ static const struct mtk_iommu_plat_data
+> mt8183_data = {
+>  	.iova_region  = single_domain,
+>  	.iova_region_nr = ARRAY_SIZE(single_domain),
+>  	.larbid_remap = {{0}, {4}, {5}, {6}, {7}, {2}, {3}, {1}},
+> +	.port_width   = 5,
+>  };
+>  
+>  static const struct mtk_iommu_plat_data mt8192_data = {
+> @@ -1082,6 +1090,7 @@ static const struct mtk_iommu_plat_data
+> mt8192_data = {
+>  	.iova_region_nr = ARRAY_SIZE(mt8192_multi_dom),
+>  	.larbid_remap   = {{0}, {1}, {4, 5}, {7}, {2}, {9, 11, 19, 20},
+>  			   {0, 14, 16}, {0, 13, 18, 17}},
+> +	.port_width     = 5,
+>  };
+>  
+>  static const struct of_device_id mtk_iommu_of_ids[] = {
+> diff --git a/drivers/iommu/mtk_iommu.h b/drivers/iommu/mtk_iommu.h
+> index b742432220c5..84cecaf6d61c 100644
+> --- a/drivers/iommu/mtk_iommu.h
+> +++ b/drivers/iommu/mtk_iommu.h
+> @@ -54,6 +54,7 @@ struct mtk_iommu_plat_data {
+>  	enum mtk_iommu_plat m4u_plat;
+>  	u32                 flags;
+>  	u32                 inv_sel_reg;
+> +	u8                  port_width;
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Please help rename to int_id_port_width for more detailed from the
+register name (REG_MMU0_INT_ID).
+
+>  
+>  	unsigned int				iova_region_nr;
+>  	const struct mtk_iommu_iova_region	*iova_region;
+> -- 
+> 2.36.1
+> 
+

@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F39553B328
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 07:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A6853B32F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 07:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbiFBFwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 01:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
+        id S230211AbiFBF47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 01:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiFBFwk (ORCPT
+        with ESMTP id S230048AbiFBF4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 01:52:40 -0400
-Received: from out199-15.us.a.mail.aliyun.com (out199-15.us.a.mail.aliyun.com [47.90.199.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA982532EC
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 22:52:38 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VF94WQJ_1654149154;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VF94WQJ_1654149154)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 02 Jun 2022 13:52:35 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     richard@nod.at
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] ubifs: Fix some kernel-doc comments
-Date:   Thu,  2 Jun 2022 13:52:33 +0800
-Message-Id: <20220602055233.26161-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 2 Jun 2022 01:56:51 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D15B05;
+        Wed,  1 Jun 2022 22:56:47 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 2525uY8M014913-2525uY8P014913
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Thu, 2 Jun 2022 13:56:38 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fs: nfsd: make destory function more elegant
+Date:   Thu,  2 Jun 2022 13:56:32 +0800
+Message-Id: <20220602055633.849545-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,48 +40,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove warnings found by running scripts/kernel-doc,
-which is caused by using 'make W=1'.
-fs/ubifs/journal.c:1221: warning: Function parameter or member
-'old_inode' not described in 'ubifs_jnl_rename'
-fs/ubifs/journal.c:1221: warning: Function parameter or member 'old_nm'
-not described in 'ubifs_jnl_rename'
-fs/ubifs/journal.c:1221: warning: Function parameter or member
-'new_inode' not described in 'ubifs_jnl_rename'
-fs/ubifs/journal.c:1221: warning: Function parameter or member 'new_nm'
-not described in 'ubifs_jnl_rename'
-fs/ubifs/journal.c:1221: warning: Function parameter or member
-'whiteout' not described in 'ubifs_jnl_rename'
-fs/ubifs/journal.c:1221: warning: Excess function parameter 'old_dentry'
-description in 'ubifs_jnl_rename'
-fs/ubifs/journal.c:1221: warning: Excess function parameter 'new_dentry'
-description in 'ubifs_jnl_rename'
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+In init_nfsd, the undo operation of create_proc_exports_entry is:
+
+        remove_proc_entry("fs/nfs/exports", NULL);
+        remove_proc_entry("fs/nfs", NULL);
+
+This may lead to maintaince issue. Declare the undo function
+destroy_proc_exports_entry based on CONFIG_PROC_FS
+
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 ---
- fs/ubifs/journal.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ fs/nfsd/nfsctl.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/fs/ubifs/journal.c b/fs/ubifs/journal.c
-index 75dab0ae3939..16857d4e9aa8 100644
---- a/fs/ubifs/journal.c
-+++ b/fs/ubifs/journal.c
-@@ -1201,9 +1201,12 @@ int ubifs_jnl_xrename(struct ubifs_info *c, const struct inode *fst_dir,
-  * ubifs_jnl_rename - rename a directory entry.
-  * @c: UBIFS file-system description object
-  * @old_dir: parent inode of directory entry to rename
-- * @old_dentry: directory entry to rename
-+ * @old_inode: parent inode to rename
-+ * @old_nm: name of old inode to rename
-  * @new_dir: parent inode of directory entry to rename
-- * @new_dentry: new directory entry (or directory entry to replace)
-+ * @new_inode: new inode to rename
-+ * @new_nm: name of new inode to rename
-+ * @whiteout: whiteout inode
-  * @sync: non-zero if the write-buffer has to be synchronized
-  *
-  * This function implements the re-name operation which may involve writing up
+diff --git a/fs/nfsd/nfsctl.c b/fs/nfsd/nfsctl.c
+index 0621c2faf242..83b34ccbef5a 100644
+--- a/fs/nfsd/nfsctl.c
++++ b/fs/nfsd/nfsctl.c
+@@ -1450,11 +1450,21 @@ static int create_proc_exports_entry(void)
+ 	}
+ 	return 0;
+ }
++
++static void destroy_proc_exports_entry(void)
++{
++	remove_proc_entry("fs/nfs/exports", NULL);
++	remove_proc_entry("fs/nfs", NULL);
++}
+ #else /* CONFIG_PROC_FS */
+ static int create_proc_exports_entry(void)
+ {
+ 	return 0;
+ }
++
++static void destroy_proc_exports_entry(void)
++{
++}
+ #endif
+ 
+ unsigned int nfsd_net_id;
+@@ -1555,8 +1565,7 @@ static int __init init_nfsd(void)
+ out_free_subsys:
+ 	unregister_pernet_subsys(&nfsd_net_ops);
+ out_free_exports:
+-	remove_proc_entry("fs/nfs/exports", NULL);
+-	remove_proc_entry("fs/nfs", NULL);
++	destroy_proc_exports_entry();
+ out_free_lockd:
+ 	nfsd_lockd_shutdown();
+ 	nfsd_drc_slab_free();
+@@ -1576,8 +1585,7 @@ static void __exit exit_nfsd(void)
+ 	unregister_cld_notifier();
+ 	unregister_pernet_subsys(&nfsd_net_ops);
+ 	nfsd_drc_slab_free();
+-	remove_proc_entry("fs/nfs/exports", NULL);
+-	remove_proc_entry("fs/nfs", NULL);
++	destroy_proc_exports_entry();
+ 	nfsd_stat_shutdown();
+ 	nfsd_lockd_shutdown();
+ 	nfsd4_free_slabs();
 -- 
-2.20.1.7.g153144c
+2.25.1
 

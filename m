@@ -2,97 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAAF53B189
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 04:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8E253B171
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 04:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233172AbiFBBbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 21:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        id S232963AbiFBBqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 21:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233161AbiFBBbt (ORCPT
+        with ESMTP id S232947AbiFBBqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 21:31:49 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D072A141B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 18:31:47 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id o10so4404031edi.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 18:31:47 -0700 (PDT)
+        Wed, 1 Jun 2022 21:46:09 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592C129567A
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 18:46:07 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id a10so3602846pju.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 18:46:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k62nV7Jswjfh4J4CVA+J/+R723CZLyDDE2S4baqnCag=;
-        b=H5FDe3jnuN+KGmzQtMY8FjzxIp5OgCVrg5TLH2gAYextyJrNTj0AvwoN6LuojxpTVR
-         72gGqG52f8sxiemwN6dFAEz/4wR4xwg2kVv6Zf25KN/MGnHvxc86UCA3A5IdMufuJYk+
-         qu7dPwyLLlHdNnFN2Wb9UYnpaxdFjlic3+Lto=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XGDn3nszvVQVYVQM4YLEuXbeHQsUmI4dKP895cZuF+0=;
+        b=aCMEgp07vBU7N8yXUlqLw6AQSp3jhFFjgVSHULzqy4W8B/q9HtNOyNPBfs+QYiXvA4
+         Q4mYkU0I0Uhu5yhUXAhY0IlpdfhskYaimHCkdeVViuAh5Lij/KFZ+oLTZcSyrrZW/SHa
+         xEK1q8BqRQ2+ACgYAsoMRYNLwKAY7xnEO/uEGOxZwLsFFWJ/asJS0yjRNkpor9RtPShu
+         9el3HCpEydc+7S58Ae8oYZsT8464KeW9HQVpMA7Ex+TrveUImT6Ivppu/sNfU9bHAJJV
+         tWmvWbLlmPCaZJxqkRSLgu40XPqXR8kZLf/XLdl3/oAAFGjpqFwbDty7OhJmJ/YzlFW3
+         T2kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k62nV7Jswjfh4J4CVA+J/+R723CZLyDDE2S4baqnCag=;
-        b=hix5M9b3265crO4zuUgXBGBxjo39DYB2FyQwrkmwfv/4ZZfWXBg+Z7pd+HsS+trwKn
-         MJ3dzmztyE56X8MYlaNHXMjPp9TDQ2i4f62w5yIonN0CDOLdcSfNH5/8vGckNqbpkY06
-         3kRz1KCmShWyASKkTzllXZu1pUY1i9ggKFhoDiWaaKlWSDTtVbBcNTxtL5YPsBseLUGw
-         Vv6L+8gKN3KJViQhXuDZ45VO2ZqxkQpC7UBKnNSq06nd7zva7SJmQNgkmqITsDINSaUb
-         RxBKSIh1k0v5zknzD0yFF2yqBV/M+FKwG+7hlAOAkS/cwfXhQ++hJrYiA1qWSZYlyKFG
-         plwg==
-X-Gm-Message-State: AOAM530x3trVkxsTNhcUp4EEGSSUfnFa05FWcyACTsTtry/o0JuDudBe
-        f8G2ZvMdt/cuxz955FKiJL+/wT4/KsmPaXv+
-X-Google-Smtp-Source: ABdhPJz+uWriXmfYCjlcervOghrihDDirMeGU9ef2f/xoD9vmV0jHhtZ0/i+WeFXaTmsCvF+t1kxzg==
-X-Received: by 2002:a05:6402:2788:b0:42b:710e:9bad with SMTP id b8-20020a056402278800b0042b710e9badmr2813900ede.180.1654133505914;
-        Wed, 01 Jun 2022 18:31:45 -0700 (PDT)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id gc19-20020a170906c8d300b007094f98788csm590209ejb.113.2022.06.01.18.31.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 18:31:45 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id t13so4484402wrg.9
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 18:31:44 -0700 (PDT)
-X-Received: by 2002:a05:6000:1b0f:b0:210:313a:ef2a with SMTP id
- f15-20020a0560001b0f00b00210313aef2amr1547932wrz.281.1654133504250; Wed, 01
- Jun 2022 18:31:44 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XGDn3nszvVQVYVQM4YLEuXbeHQsUmI4dKP895cZuF+0=;
+        b=wk5FtnUrMJ4KK+uT9eNcv2efDtTG7c9/UHnlSuc9Tly+nYpB9UXy6NuweKumxqDTAO
+         jr+NLb1zsrSaByYvc0mvXaAK6f9wEmOA91kYSg3fIUraGnbeczl2N4WQwubNWkw960vi
+         5pCBboGTW778w2ixJi9qfRzMtomQNJAlcBGtXgOHi182y4Oodo075DZ9rFe2CQfLHtWf
+         VaCD2OVGSkU+Gcy6mHABQ0HVm6ILvtlwkl5cLlFanMNC3GLx99poTNcCX5cOe+1QqnPG
+         HF/c8dcs+i8s5xNkln2miDLdAb8gR8quHIV6F7qHnfSFiYc1yUfSVo/OgOINwuFLtTQf
+         LKVw==
+X-Gm-Message-State: AOAM532vOGq1XS+9uHuz92EtwMUDJb0cCK8WbbmEgp8G/clfLA8AV7z+
+        8o+5TyLmYQrft27EdNdXFCFTDhb2LMs=
+X-Google-Smtp-Source: ABdhPJwK9al6esJUDFUBc/e+DpE5U7LQ/svvPdYugzs8etwXJ1mRVnI1OmzCNJxk77WBP1T0VMrLcA==
+X-Received: by 2002:a17:90a:a393:b0:1d0:e448:811d with SMTP id x19-20020a17090aa39300b001d0e448811dmr37801695pjp.97.1654134366590;
+        Wed, 01 Jun 2022 18:46:06 -0700 (PDT)
+Received: from Vostro-5471.. ([2001:288:7001:2708:cee8:633a:13db:6557])
+        by smtp.gmail.com with ESMTPSA id s8-20020a17090a5d0800b001e303b3b431sm2013103pji.11.2022.06.01.18.46.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 18:46:06 -0700 (PDT)
+From:   Jui-Tse Huang <juitse.huang@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jui-Tse Huang <juitse.huang@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Bruno Randolf <br1@einfach.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>
+Subject: [PATCH v3] average: Clarify the restrictions
+Date:   Thu,  2 Jun 2022 09:45:57 +0800
+Message-Id: <20220602014557.5657-1-juitse.huang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <165295023086.3361286.8662079860706628540.stgit@warthog.procyon.org.uk>
- <8735go11v0.fsf@stepbren-lnx.us.oracle.com>
-In-Reply-To: <8735go11v0.fsf@stepbren-lnx.us.oracle.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 1 Jun 2022 18:31:28 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjHHg_buCqw=Q2OtRWoFpD67OxsQ0jMzao+6rGM6hRE0A@mail.gmail.com>
-Message-ID: <CAHk-=wjHHg_buCqw=Q2OtRWoFpD67OxsQ0jMzao+6rGM6hRE0A@mail.gmail.com>
-Subject: Re: [PATCH] assoc_array: Fix BUG_ON during garbage collect
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        stable <stable@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        keyrings@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 3:00 PM Stephen Brennan
-<stephen.s.brennan@oracle.com> wrote:
->
-> Just wanted to check on this patch as the 5.19 window closes. David, are
-> you planning on taking this through a particular tree, or is the ask for
-> Linus to pick it directly?
+There is several restrictions in the EWMA helper macro that the
+developers should take care of, but the comment does not mentioned yet,
+thus, this patch clarify the restrictions.
 
-Ok, picked up directly.
+Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
+---
 
-These fall through the cracks partly because it's not obvious what
-they are for. Sometimes I get pull requests from DavidH, and sometimes
-I get random patches, and while the pull requests are fairly
-unambiguous ("please pull") the same is not necessarily true of the
-patches. Are they for discussion, an RFC, or fro applying...
+Notes:
+    v3: fix typo (Randy Dunlap)
+    v2: fix spelling and wording (Bruno Randolf)
 
-So then I pretty much guess.
+ include/linux/average.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-                 Linus
+diff --git a/include/linux/average.h b/include/linux/average.h
+index a1a8f09631ce..9c3c8b5b518e 100644
+--- a/include/linux/average.h
++++ b/include/linux/average.h
+@@ -11,7 +11,10 @@
+  *
+  * This implements a fixed-precision EWMA algorithm, with both the
+  * precision and fall-off coefficient determined at compile-time
+- * and built into the generated helper funtions.
++ * and built into the generated helper functions.
++ *
++ * This implementation supports up to 30 bits of precision, and only
++ * the API for fetching non-fractional part is provided for now.
+  *
+  * The first argument to the macro is the name that will be used
+  * for the struct and helper functions.
+-- 
+2.34.1
+

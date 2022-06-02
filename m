@@ -2,88 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD61E53B470
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1E253B473
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbiFBHjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 03:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        id S231856AbiFBHjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 03:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiFBHjT (ORCPT
+        with ESMTP id S231825AbiFBHjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 03:39:19 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E22B6A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 00:39:16 -0700 (PDT)
-Received: from mail-yb1-f179.google.com ([209.85.219.179]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MGQzj-1o0Dex475B-00GtJs for <linux-kernel@vger.kernel.org>; Thu, 02 Jun
- 2022 09:39:15 +0200
-Received: by mail-yb1-f179.google.com with SMTP id v106so6990922ybi.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 00:39:14 -0700 (PDT)
-X-Gm-Message-State: AOAM532h64DS1y2cu2PYmKKk7cQ8sMdDgBCtndN3EuEj+osufcX063IU
-        KcrqzF8DdA8y1m213r/B5/7Ea3fA2zXgq/zPObY=
-X-Google-Smtp-Source: ABdhPJxVfhxEh2sV1U0/oHXedOW7Ij9SWgaqXnw+k1hmmKvq9A8gu2wmdTH5eNlILVHHm3z97S0Z2Co5/rXDXyJX6t0=
-X-Received: by 2002:a25:1209:0:b0:65d:63f9:e10a with SMTP id
- 9-20020a251209000000b0065d63f9e10amr3777324ybs.480.1654155553742; Thu, 02 Jun
- 2022 00:39:13 -0700 (PDT)
+        Thu, 2 Jun 2022 03:39:24 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B270BCB
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 00:39:20 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id x5-20020a923005000000b002d1a91c4d13so2851872ile.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 00:39:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=ugWO2J8z3ApQ+9nb1qMgkSpwdpensnpPaJmpZB3pJIA=;
+        b=ombx30aiVYO78G+nQXopVO9zlnt6q9aL7fCDttJNIMMoVU15zFG3CEPdyKTj8CbZC4
+         Dg77hPzuISbF43SA1GC8dMVLIrBTvfdt88xdPoFcryUl4bvSIyILl8gZDopB95GogIRx
+         cqbX1vgAuoDHIuHfyZZFakM0PnK7xdVRtBdfOZFIRCtE/n6x9Mh+Mk2SHqbIJM5QIdT6
+         wTiO1b5SZEWc5wECAVeUBfO0Xl4dqsgLVWHICqphnuULb0NcjujlWipfTEPZQZ/hiyL5
+         008L9mp4heyEM/v9FnRXZvw+oBMcVWHI6ciYX0fQvfedmlQGgkb95KLX2RxMOn3WfQOY
+         rIDA==
+X-Gm-Message-State: AOAM5314XFGxhI1lI7z/eRhaPFjBW/0uOwA7DeT5yMs+PcT7+61QUs4E
+        +R1/lrhxFeHs+qc72UMSnaLDnxMGe3LgX+t0mQM+iUnau4+Q
+X-Google-Smtp-Source: ABdhPJw+g0PGsCATc0WV2dGJ800hW6TRf2YceUxcMmNyvcTrq3c335IDeIBs3/zcYpQYXG0JsPjFjB3o9KFZgS5IkB2oXS40xc3g
 MIME-Version: 1.0
-References: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
- <91E67F46-A3C7-4159-9E0C-C6C6306F3669@inria.fr> <CAK8P3a2iAsemAQdbTZ_E7GGGCXAOeWbjSjLgXEsd5sg_buZWhw@mail.gmail.com>
- <CAHk-=wgO0V9OdY+DFm-f0qZYMyFSm0ptReO+_qgSTEpBLtFV7Q@mail.gmail.com>
- <d971a684-ccd9-3839-1e30-c166fd55cf49@inria.fr> <CAHk-=wiViikY0szsJGipSxFmMwdsvxjm7SwDfwNfMHYvQ64kAA@mail.gmail.com>
-In-Reply-To: <CAHk-=wiViikY0szsJGipSxFmMwdsvxjm7SwDfwNfMHYvQ64kAA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 2 Jun 2022 09:38:56 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1m80u+eVnoSJ-APihjNQ1se9=FG+E6tKBb-hRJx5FAVg@mail.gmail.com>
-Message-ID: <CAK8P3a1m80u+eVnoSJ-APihjNQ1se9=FG+E6tKBb-hRJx5FAVg@mail.gmail.com>
-Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
- block count and size helpers")
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Keisuke Nishimura <keisuke.nishimura@inria.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
-        Rohit Maheshwari <rohitm@chelsio.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        SoC Team <soc@kernel.org>
+X-Received: by 2002:a02:c612:0:b0:32e:aa7e:5b59 with SMTP id
+ i18-20020a02c612000000b0032eaa7e5b59mr2252484jan.0.1654155559337; Thu, 02 Jun
+ 2022 00:39:19 -0700 (PDT)
+Date:   Thu, 02 Jun 2022 00:39:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008488e005e0721af2@google.com>
+Subject: [syzbot] linux-next boot error: INFO: task hung in
+ add_early_randomness (2)
+From:   syzbot <syzbot+4bff2788f64e121fefcf@syzkaller.appspotmail.com>
+To:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux@dominikbrodowski.net, mpm@selenic.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:bmGudR30UqgCyxb4uB8IfnXmoAhOVyjKEZu/2RkRLoC5XAZmE0B
- p1vzLOCjrRFlA2K3LC1Yjuu6A21oLly70jZi3Id1rr06hILXUdPoI9hshrpo2eBpzjNL3M+
- 9yvYBo9Qk+v9AQl/7kgxYMWQmnEE2LTl3DOc6UkFYtaBtnIwCV7yquT5C/1pPB2GmJbwSKt
- CG9NE5myCyjT3bR5j+XSQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4iGwRpuhPLk=:2Dm31xDFgrwg97hVht86jI
- vftEpMBZtbwFlXdvAehOw5n+Pkb+tgY6i56F2UKozIVdCrAom3HWgGGkQsAigOl9vjBvdR+vB
- xrWEa8TjiXyyhmZYIsv1s2+1uF+NZuP0e40v1CTpV/mbrU7HHCDzeHGefBGy0Yf2Na5b3/oPz
- io10SGYGQdwv/7BOErNZmx4pQ2p9arzVYZOedPowwnw/kL/lMl9/2zXGPo5/mKPQuK30lSS5x
- 0DVc4QpWNepLbunWQ6oq4Sn2S4zQscszfm2wBrpKA+Ghx40WrtMCo4r28tZIRFKOeUNzAKXkB
- ThvbHUZnpaXzEnDGXN/jmiweY7qiGRU50Xmp7BpgRMlC4AlFewIUz9LEhFn1/kEtWsB6UtVcM
- 2eYJ7dj1KpQkVVAyz6WZ7hDXdo2tgrvtzbbZkTTNtHGfSUIWvKxwVBd77FllcU57Qa0UqW7Sj
- w365HWBngfzCzgwj1nS+nqZdNY6mekGzcAAyg1NSLNEYwvtA/tEajHVfTVpawmUfw6CQohFGU
- Qs8TSA2pERRFRvetxeUtFRznWkZ4UeACsk94gil2ZvXHJOWa3pwC/7EX/HMh/gD18tFK9kywV
- W1iwNyj46QDdkRsqwECm17SoiyEGIwEXduBsziNplDzTpS41LKekWWt6+OsI73nX0veTL7MrS
- MkACQhQkzpm8ta1aZy/C6hZzNZfvJs1P4vLf9E6dQmpORKEbSz+biffsFqNoHHyP/591CmTPT
- hvjhZEtQRSmUbSNfBr0+Wsk4Nk6dgTxEAwtpvTnZ6+V0dphtPOQrLFfI3Qje/1Zau8h3pnG5r
- bUXlB1W4MnK3mtD3efW389iFF7gZ5rdZFS/Jrrh5RDdgbu2R27tX9Kb85az57p8OZbOrdvRPx
- jDZXVrcVN6ZaAWdm2N4A==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,143 +56,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 3:08 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Wed, Jun 1, 2022 at 3:28 PM Keisuke Nishimura
-> <keisuke.nishimura@inria.fr> wrote:
-> >
-> >
-> > I found 13 definitions of packed structure that contains:
-> >  > - spinlock_t
-> >  > - atomic_t
-> >  > - dma_addr_t
-> >  > - phys_addr_t
-> >  > - size_t
-> >  > - struct mutex
-> >  > - struct device
-> >
-> > - raw_spinlock_t
->
-> Ok, so I don't think dma_addr_t/phys_addr_t/size_t are problematic,
-> they are just regular integers.
->
-> And 'struct device' is problematic only as it then contains any of the
-> atomic types (which it does)
-is
-I suggested this list because they are problematic for different reasons:
+Hello,
 
-- any atomics are clearly broken here
+syzbot found the following issue on:
 
-- dma_addr_t/phys_addr_t are sometimes put into hardware data
-  structures in coherent DMA allocations. This is broken because these
-  types are variably-sized depending on the architecture, and annotating
-  structures in uncached memory as __packed is also broken on
-  architectures that have neither coherent DMA nor unaligned access
-  (most 32-bit mips and armv5), where this will result in a series of
-  expensive one-byte uncached load/store instructions.
+HEAD commit:    2e776ccffa84 Add linux-next specific files for 20220602
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=14226a35f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5266d49aa5c20076
+dashboard link: https://syzkaller.appspot.com/bug?extid=4bff2788f64e121fefcf
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-- having any complex kernel data structure embedded in a __packed
-  struct is a red flag, because there should not be a need to mark
-  it packed for compatibility with either hardware or user space.
-  If the structure is actually misaligned, passing a pointer for the
-  embedded struct into an interface that expects an aligned pointer
-  is undefined behavior in C, and gcc may decide to do something
-  bad here even on architectures that can access unaligned
-  pointers.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4bff2788f64e121fefcf@syzkaller.appspotmail.com
 
-> > security/tomoyo/common.h: atomic_t in tomoyo_shared_acl_head
-> > drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls.h: spinlock_t in key_map
-> > arch/s390/include/asm/kvm_host.h: atomic_t in kvm_s390_sie_block
->
-> So these do look problematic.
->
-> I'm not actually clear on why tomoyo_shared_acl_head would be packed.
-> That makes no sense to me.
->
-> Same goes for key_map, it's not clear what the reason for that
-> __packed is, and it's clearly bogus. It might work, almost by mistake,
-> but it's wrong to try to pack that spinlock_t.
->
-> The s390 kvm use actually looks fine: the structure is packed, but
-> it's also aligned, and the spin-lock is at the beginning, so the
-> "packing" part is about the other members, not the first one.
+INFO: task swapper/0:1 blocked for more than 143 seconds.
+      Not tainted 5.18.0-next-20220602-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:swapper/0       state:D stack:23832 pid:    1 ppid:     0 flags:0x00004000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5116 [inline]
+ __schedule+0xa06/0x4b40 kernel/sched/core.c:6428
+ schedule+0xd2/0x1f0 kernel/sched/core.c:6500
+ schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6559
+ __mutex_lock_common kernel/locking/mutex.c:679 [inline]
+ __mutex_lock+0xa70/0x1350 kernel/locking/mutex.c:747
+ add_early_randomness+0x1a/0x170 drivers/char/hw_random/core.c:69
+ hwrng_register+0x399/0x510 drivers/char/hw_random/core.c:599
+ virtrng_scan+0x37/0x90 drivers/char/hw_random/virtio-rng.c:205
+ virtio_dev_probe+0x639/0x910 drivers/virtio/virtio.c:313
+ call_driver_probe drivers/base/dd.c:562 [inline]
+ really_probe+0x23e/0xb90 drivers/base/dd.c:641
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:774
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:804
+ __driver_attach+0x22d/0x550 drivers/base/dd.c:1173
+ bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
+ bus_add_driver+0x422/0x640 drivers/base/bus.c:618
+ bus_add_driver+0x422/0x640 drivers/base/bus.c:618
+ driver_register+0x220/0x3a0 drivers/base/driver.c:240
+ do_one_initcall+0x103/0x660 init/main.c:1300
+ do_initcall_level init/main.c:1375 [inline]
+ do_initcalls init/main.c:1391 [inline]
+ do_basic_setup init/main.c:1410 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1617
+ kernel_init+0x1a/0x1d0 init/main.c:1506
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+ </TASK>
 
-Right, I think the coccinelle script should nor report structures
-that are both packed and aligned.
+Showing all locks held in the system:
+2 locks held by swapper/0/1:
+ #0: ffff88801b377170 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #0: ffff88801b377170 (&dev->mutex){....}-{3:3}, at: __device_driver_lock drivers/base/dd.c:1064 [inline]
+ #0: ffff88801b377170 (&dev->mutex){....}-{3:3}, at: __driver_attach+0x222/0x550 drivers/base/dd.c:1172
+ #1: ffffffff8c841068 (reading_mutex){+.+.}-{3:3}, at: add_early_randomness+0x1a/0x170 drivers/char/hw_random/core.c:69
+2 locks held by kworker/u4:0/8:
+ #0: ffff888010c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888010c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888010c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888010c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888010c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888010c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+ #1: ffffc900000d7da8 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+2 locks held by pr/ttyS0/16:
+1 lock held by khungtaskd/28:
+ #0: ffffffff8bd86aa0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6491
+1 lock held by hwrng/755:
+ #0: ffffffff8c841068 (reading_mutex){+.+.}-{3:3}, at: hwrng_fillfn+0x141/0x370 drivers/char/hw_random/core.c:503
 
-> The two that look wrong look like they will probably work anyway
-> (they'll presumably be effectively word-aligned, and that's sufficient
-> for spinlocks in practice).
->
-> But let's cc the tomoyo and chelsio people.
+=============================================
 
-I think both of them work because the structures are always
-embedded inside of larger structures that have at least word
-alignment. This is the thing I was looking for, and the
-__packed attribute was added in error, most likely copied
-from somewhere else.
 
-Looking at the other ones:
 
-include/linux/ti-emif-sram.h: phys_addr_t in ti_emif_pm_data
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-No misalignment because of the __aligned(8), but this
-might go wrong if the emif firmware relies on the structure
-layout to have a 32-bit phys_addr_t.
-
-drivers/scsi/wd719x.h: dma_addr_t in wd719x_scb
-
-This one is correct, as the structure has 64 bytes of
-hardware data and a few members that are only accessed
-by the kernel. There should still be an __aligned(8)
-for efficiency.
-
-drivers/net/wireless/intel/ipw2x00/ipw2200.h: dma_addr_t in clx2_queue
-
-Al marked the incorrect __packed annotations in 2008,
-see 83f7d57c37e8 ("ipw2200 annotations and fixes").
-Mostly harmless but the __packed should just get removed here.
-
-> drivers/infiniband/hw/irdma/osdep.h: dma_addr_t in irdma_dma_mem
-> drivers/infiniband/core/mad_priv.h: size_t in ib_mad_private
-
-Same here: harmless but __packed should be removed, possibly
-while reordering members by size.
-
-> drivers/crypto/qat/qat_common/qat_asym_algs.c:
-> - dma_addr_t in qat_rsa_ctx
-> - dma_addr_t in qat_dh_ctx
-
-Probably harmless because the structure is __aligned(64), but I'm
-completely puzzled by what the author was actually trying to
-achieve here. There are also 'bool' members in the packed struct,
-which is probably something we want to look for as well.
-
-> drivers/atm/idt77252.h: dma_addr_t in idt77252_skb_prv
-
-This is a bug on architectures with 64-bit dma_addr_t, it should
-be an __le32, and the structure should be __aligned() as a DMA
-descriptor.
-
-> drivers/net/wireless/ath/ath10k/core.h: dma_addr_t in ath10k_skb_cb
-> drivers/net/wireless/ath/ath11k/core.h: dma_addr_t in ath10k_skb_cb
-
-Should almost certainly not be __packed, fixing these will
-likely improve performance on mips32 routers using ath10k
-
-> drivers/crypto/ccp/ccp-dev.h: dma_addr_t in ccp_dma_info
-
-This looks ok, the "__packed __aligned(4)" here can save
-a bit of stack space as intended.
-
-I think that SmPL script worked great, almost every instance is
-something that ought to be changed, as long as it stops reporting
-those structures that are also __aligned(). I would extend it to
-also report structures with 'bool', 'enum', or any pointer, but that
-could give more false-positives. Maybe have a separate script
-for those instances embedding atomics or spinlocks (very broken)
-vs the other members (causes more harm than good or might
-need alignment).
-
-       Arnd
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,132 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01F453B8D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 14:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF9C53B8DD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 14:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234900AbiFBMLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 08:11:40 -0400
+        id S234880AbiFBMSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 08:18:48 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234866AbiFBMLf (ORCPT
+        with ESMTP id S232328AbiFBMSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 08:11:35 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4774B2A46CD
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 05:11:32 -0700 (PDT)
-Received: from mail-yb1-f174.google.com ([209.85.219.174]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MNKuI-1o8MdV1EwU-00OoGc for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022
- 14:11:31 +0200
-Received: by mail-yb1-f174.google.com with SMTP id p13so7958425ybm.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 05:11:31 -0700 (PDT)
-X-Gm-Message-State: AOAM5332DSVrLNjoXGkq92HKjSld1ARP8j/ygbicaRY3c+ryvCNy00gY
-        L9NJqJvph4YmNSU4zlTSEA5um7szVePDCl1DM0M=
-X-Google-Smtp-Source: ABdhPJxdzkEsdk/cr6/xiJljnwPhNiCbf+6LHxcrbl85hSAm1vRzepzJQWXT9pLy21Z0VxV9G2hS1yUr8gN67lDPmso=
-X-Received: by 2002:a25:db8a:0:b0:65c:b04a:f612 with SMTP id
- g132-20020a25db8a000000b0065cb04af612mr4808103ybf.106.1654171890125; Thu, 02
- Jun 2022 05:11:30 -0700 (PDT)
+        Thu, 2 Jun 2022 08:18:43 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2066.outbound.protection.outlook.com [40.107.243.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0108E0C9;
+        Thu,  2 Jun 2022 05:18:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BMGf73d53LLA71tO4hkvmTQMkfAJP7SF5NIJPGDLEzL5dmjQdcuwVrOhaO1wZT2Y8C1U9RjWy1ayBjGt59bXSE/GBg3fk2XYOVrZvC26FJbjRFwUdgDMTvnMcnRvqkpzvNmygCfOgCV+5OEMyylkUdVcceQCkmNo04nhpoHcfCbslaVzAPr+PhYjJgSQ9+uY+d5GbkfGWR+F6x/YUv2hbuM413V/zAVsIVWvHMEauDNVPDbVBVkCgJvyBJ8bHT6yJdc0lL2ew5QiJq0dIA2cq/vB4OdYATyHOqi8hs84+d2k0Jnj03WSFnVoflYbhsMtwG2bSIlQDgNfHT55+qTuuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b9kZhFWd/1xWGauzcAV7xzrvbmjGqdFbwJMrVUn0+o4=;
+ b=E7TqnqB8RwKaAMRfDo1OoXGIfW/dZXxNT+JKIJBH0yBWTig2M+s0xEz6vqt6SF6EOTUnnlkMGP1s1utuTgm1s2+YGLk504ICZGyWuVN/TG1BN0EjMy2qB/46SmbTFCaMJGoNi3tJXMiijeOHQkpNhp+xBdmuBvEZf1SDijkY8JIZf5wioVRkmsHliVFCo0SYX3n4A3sBS62VH3fEnbe2BPy75mo/6K6nHC/TeskMKBD4CRNhew+9+OKCqVmRBmUWkrSfi4o5uY0Kx/gLzz8i0F8O35eKfz7j4nIXec+Cz1vSHAygXZ3cCOUOmx1B4yljujX+fPTI8xSWCBEgckZdnA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b9kZhFWd/1xWGauzcAV7xzrvbmjGqdFbwJMrVUn0+o4=;
+ b=NUQ5HuNKfdRJPyEVUcj8nOgGOLYMZEkpk8/wljJs2PbwmphkuEWC9jsHXt3nz4N4XzDeazOzetkn62IpYkblwDmHv3IKXReEbb+BRalCXml7xtfnfQ76GBatmfsKGByer0mIZHHPFyLx3hhhUheVSVLFnEOyfFQVPupFuUcdRMrQThlNyQdoSSUGp7RtgwDNHz4mzpqcc9M+Sz3EPRYeg52A27uICAn7KmIpfuUZHotxmZb3hUzQppY7ckNtvAPFD7NVGeYo04kk4GvNtJ6KOfQTtJS2DSnl1XPmzHfh1aokwXu46UbWQShY4rbOee1Uyyw9PAIlsKXKTqCPlpFLFA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by BN6PR1201MB0004.namprd12.prod.outlook.com (2603:10b6:404:ac::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12; Thu, 2 Jun
+ 2022 12:18:38 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::99d2:88e0:a9ae:8099]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::99d2:88e0:a9ae:8099%2]) with mapi id 15.20.5314.012; Thu, 2 Jun 2022
+ 12:18:38 +0000
+Date:   Thu, 2 Jun 2022 15:18:31 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     Nikolay Aleksandrov <razor@blackwall.org>,
+        Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+Message-ID: <YpiqlziXDCg/1FJH@shredder>
+References: <86sfov2w8k.fsf@gmail.com>
+ <YpCgxtJf9Qe7fTFd@shredder>
+ <86sfoqgi5e.fsf@gmail.com>
+ <YpYk4EIeH6sdRl+1@shredder>
+ <86y1yfzap3.fsf@gmail.com>
+ <d88b6090-2ac8-0664-0e38-bb2860be7f6e@blackwall.org>
+ <86sfonjroi.fsf@gmail.com>
+ <3d93d46d-c484-da0a-c12c-80e83eba31c9@blackwall.org>
+ <YpiTbOsh0HBMwiTE@shredder>
+ <86mtevjmie.fsf@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86mtevjmie.fsf@gmail.com>
+X-ClientProxiedBy: VI1PR0602CA0024.eurprd06.prod.outlook.com
+ (2603:10a6:800:bc::34) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 MIME-Version: 1.0
-References: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
- <91E67F46-A3C7-4159-9E0C-C6C6306F3669@inria.fr> <CAK8P3a2iAsemAQdbTZ_E7GGGCXAOeWbjSjLgXEsd5sg_buZWhw@mail.gmail.com>
- <CAHk-=wgO0V9OdY+DFm-f0qZYMyFSm0ptReO+_qgSTEpBLtFV7Q@mail.gmail.com>
- <d971a684-ccd9-3839-1e30-c166fd55cf49@inria.fr> <CAHk-=wiViikY0szsJGipSxFmMwdsvxjm7SwDfwNfMHYvQ64kAA@mail.gmail.com>
- <CAK8P3a1m80u+eVnoSJ-APihjNQ1se9=FG+E6tKBb-hRJx5FAVg@mail.gmail.com> <74bed19a-713f-1a25-8142-cf32984beada@I-love.SAKURA.ne.jp>
-In-Reply-To: <74bed19a-713f-1a25-8142-cf32984beada@I-love.SAKURA.ne.jp>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 2 Jun 2022 14:11:13 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a02fpOPkXSEEd2eDoryVN2zZcRvzJ2qRceAQmCqB8ghag@mail.gmail.com>
-Message-ID: <CAK8P3a02fpOPkXSEEd2eDoryVN2zZcRvzJ2qRceAQmCqB8ghag@mail.gmail.com>
-Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
- block count and size helpers")
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Keisuke Nishimura <keisuke.nishimura@inria.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
-        Rohit Maheshwari <rohitm@chelsio.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        SoC Team <soc@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:fIlLPdr/4OZ8rVJ2kwQu6HHZYAbGdFKL3Cb7NA7NYcngY4Tbs+Y
- tqRPESUoFoxViK0GddRpAG7jHjWKaEuMZ7nSHdliRFon0mQnDapxka6hdvrRjYSrTiWJT0/
- dDqPPI1y1TYUf+OrTTWFB9dm4ScwaKhf2XB3pYKs4968AcrXj5wa7q4aZi7v4rNxQ6vU3Gz
- 47ie4gF44pgLP8e+ssabA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:M8M6zndQz70=:sHl0XjMebMBpN+cZpq8Jle
- WnUVcHzvWYUDlhRY4G0daC8Xe/IteKSFJ0YGEkWKSuvTlfEz1TDdSn/3C+ZgVNepG+LxvVNln
- UQDaxYLxrqVZ+VlblnJCdnZ4zAhDRPLijCXgyzdD6gdwU18CSwsSdz9lXtrWn0xCyenwDeA4n
- QPQKRLKTXDoreYAae+DITfZoyRf1b0LMsUjaBikGT4N5/QsMLaIboAlTW6mhQfXMBdDOJv8mQ
- Idc90zhRaaHamiWSygDmGoCQcErb5kOz0M9wMCmZgR9Ig81EvHpyR4uXssai/7jcdyWbnCnrK
- ka1T/JhTzly8lA60T3l/SdBh90iDXwnY1MlV6TpMRWPhEsOe+C7F9euXcgEhPmu/nl0N+JCPR
- tGG92HQP2cQfsCKFLlQMidLAwBM3e+WIKHHUMa82ESH/KjxVsDIPfhwlZzIhKl9mPgOyuSlGV
- 8/ZSHswN6G5zy7cwm4h7zoq508TyINPzT5ia759RCstJAhfGDqQ9TCLO0ydBVDIURlzZ05kaU
- SJJt9nqG9fd8CRT/xaNPbso808zLWbx2KncytLgXcJSBq+H6qv3S3ZPW1SqaDh0aMCuHcAZ4n
- SiCYsM9LFmVuOEVBACGPO6QDcZmefFgCX9Hxh6EGBgjdjXy/wmaQGxClFWxchbJ/F/Ojdbmbl
- yAsaJKkmc2VzPpObj332iO93VUC8IwlRXbbwra1Noh7YRcJkak/fc3N2m4DY6FvqVZ2/VWp0Z
- IEfvTuMkct0a7BKTbhZFPKHVzUZ4knmfaLrBm//W2sLVsSCke9xttVDlB/HV6bYLvJYovlZ3p
- jFKwyeodwJ2UCf0x6tT8Il4nNnGAdy9CdIybw4Eqq227dyfvMPnIJwTAlU6qP/f8OOQ1Zzrtd
- kIyxGwmX9AT3svCrFTZA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 05d96115-8d4e-4b2e-1046-08da449205af
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB0004:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR1201MB0004066CA7D6967249AB935CB2DE9@BN6PR1201MB0004.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: y4PpsbCVsTJ9nvMNTooKDbywNdC0AQgrWJZbTrAPfhIKr2DDl/7u3wZ1vWrJsL0XOnhzIgsQdJEiFrgUIaosTXB++Q0pq81FVO2ozJ2eOiRSnfutqxWUwNyk0igVHi/wA+PdtnwJUMVXMrbX1o/Z48mr82wKpZeREd8FUcKF0xfTGEIU3mXbqhwWuvWyRAVwstfLp60CRZyoyP5BZ1O5pXJKqljmGwfH95Kdj/SvvSXdiCIz36404DpoUtatYfMRnS5JUXTL1hOG0bd7L6LHFbgPyxqmEhrqGvPyea/AINV6TF73QmK649w16OniRRU4/2Ne21I8eqcuR0xl+tcxst003hhJ97R/5X2ZC6+BKX2lY06xM2sbr9YD+e2b7PP/0uUMrxChXYEvNArv3cH/UHUm+iob2cljRLs6O0/EZpnnngkWHVeQ9U9KphIZ6T0ja4oMg4l428G7ZyfL8sgtyjenS1dP/x1Ew4IfH3n5lNksPwcHeZXvzLdXK9SlF34gwU5s+QuOCyRj4iBGwayJ55xq4ulH9FC9Rww9dlfzFK/a23T9rPQw2lBDVXGPe0PPf2h49fpTOkszYkhfpjs47dJgBU4gafNX1DMGOZCMcHXjx74QyS9UbeIEmtOZetZG1dGrVPV4SuwJMx81K06mSg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(6486002)(6916009)(66556008)(54906003)(66476007)(66946007)(316002)(5660300002)(8676002)(186003)(4326008)(8936002)(508600001)(86362001)(33716001)(38100700002)(2906002)(26005)(7416002)(9686003)(6506007)(6666004)(6512007)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VmrPmcTgldS+Za+rSo5I8QMKc1EPHnFAaKorflwwXylmKWP7Wn6WQgiTac76?=
+ =?us-ascii?Q?fxrPwwfVBgiYdG9DjXTYZH1fD6VOhqH44M1peJhknRHbk2D/8eCDITo97w1b?=
+ =?us-ascii?Q?WudqsUBl2Dt+uX3FtVPjL4ijnnqtL29heoFQr66i6txNpSSQY2sMKCMf+grx?=
+ =?us-ascii?Q?ryStrBTI6KR+s8pdora3Ot/bkCYwc3hmRJs9gswE1AeTK9L2uc8f7L2ecMx7?=
+ =?us-ascii?Q?6Z1JORZwE2TUFpqdU0B0yEleiZGRrVdS0UclL7BVptFX8cU6CP3CXRrB7Hbb?=
+ =?us-ascii?Q?UCF5MuDH4xZYivQyhnfbhwBn0R1ilWTnCaGMl5EFwTtrqYdOGMg6oqVI4TWR?=
+ =?us-ascii?Q?R4AxCcQ2Npjg9lP3NP6VU5iFqe2zh1eW9pe1/p+j5RcHPUEPVFNpSVsynTE5?=
+ =?us-ascii?Q?Mtf6LdTgjHQG3J1HwdhMYmX/0q0iJRbBvUq72mcpiCjkl20ZMpbaw4amqHRg?=
+ =?us-ascii?Q?fpcNVFLMEDSx0TMuvcmVKUIGSDlmFZnF08pS/a/rr+Jeg/n2AnARgb+QnYnh?=
+ =?us-ascii?Q?newwhvMn6t1mKyFo41CpjWb35wtB4U8cuMgAw4oUF8I5y06pnYeFb/inXIUN?=
+ =?us-ascii?Q?Z6yU6Yia34U0RfH70CTYG6/QzM0QgBniHUOfGkV7Iry1JEf9SoVCIEXQld6X?=
+ =?us-ascii?Q?oHu4w6odzegN5PRZAm3ePa3XU9AZdPF4yW1c56wDTd+DWl584N1wYJev7x6v?=
+ =?us-ascii?Q?xcQlu5QlqaGuMNk7ceycdLvO/rUTwOC7AIiMb+FSvLG2YEIy19yebI1B1wBS?=
+ =?us-ascii?Q?3lSJVfuvkAVcTubbBynQmlNDmK/Xt5cHKiKbNXZ0mbkFZdn6ukHp4VvD75so?=
+ =?us-ascii?Q?/QqfKeqWXGP8G3qBb9cmVfOhoPvp0RKelpf+Kgwth0I/U/4stDDx61osnCUb?=
+ =?us-ascii?Q?4azYQexyqQ5z9cBzsOhNzeLMVO0Uqi5x9JwBYrZdF+LlvEGYvns2jMVxCTqM?=
+ =?us-ascii?Q?0bsQq4DduQy+GFU3E22Vw0MZkP3bzXXTV2octowLONYWzsUFy8JYJlUEB9At?=
+ =?us-ascii?Q?nBvPp+gYxUteAI1FO5Us7HFBcJZbnelZ1umUDoXdJQdvL/fj0dizOSzCkFiJ?=
+ =?us-ascii?Q?X+t9YBes21H0BdsjS/eetGLsnDV/HzuNF1A0zXA43wMOiUrQIONaz4//sugK?=
+ =?us-ascii?Q?t/Dd9aztbZFp8aSx+YUovnVOA4w1x8yb9Rgq25g1PwNn3q2E2k6iFRIwwXbn?=
+ =?us-ascii?Q?zeQOxBZKvHWO4hKXJKvvdmzrBMiwvVrojxX90SjzU09t36fASIU/l73MOZkL?=
+ =?us-ascii?Q?hHGbLBs1/rI4e7F8FYQIVDJyneaQpfLyAJx2GEwPSZoQjmJL9RrQRoq3OM5h?=
+ =?us-ascii?Q?D8xj+6i9gKcrJxeYLVHaqak088vp8XnXwA8kmbAl9WOfaib/RBexqV3LKWrg?=
+ =?us-ascii?Q?kQTqvKA4qmlvRfk4eQmhuxOL2Esl/3H2BB8rGa2I3370bp+sf5wKwb/4E/Q3?=
+ =?us-ascii?Q?x0zYVGRnCD7gEkG8i04XcjhzmhdxGUdpCg51iVKPMj4tgcmxl6b8syTLPCjQ?=
+ =?us-ascii?Q?msmx4sziV4K1M/2xuHUuTb/LLVuTJfhzdljcdXF9Gjg202LvX5I+1YDRPmnm?=
+ =?us-ascii?Q?qh0Nwz8GiMqSQNCHAFSIk8FNYbr/ReI4bBZTU+0qFXzTzkrGI8mTIPx1ERC0?=
+ =?us-ascii?Q?KNpr/kl3DOsEJIWDqglwO7zvgx65G4VZlDuEy/9QU2H/0gFr8/CnJrhmV2xT?=
+ =?us-ascii?Q?JrtuPJy6fplCrE0QIToQ+KzztjJIhmvTlLXNUhEBqfCpGR2plyfbSvbqBUoE?=
+ =?us-ascii?Q?FuxG2wS9kQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05d96115-8d4e-4b2e-1046-08da449205af
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2022 12:18:38.0119
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YfjCJUNxbIggygLS14c7ZJCwqlvdxmPUnaNmgan6pUi8wG5LVd+XnuhMYw/meN9TsFRqkSg7MZe98jdJ6Cd7WA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0004
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 1:21 PM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
-> On 2022/06/02 16:38, Arnd Bergmann wrote:
-> >> But let's cc the tomoyo and chelsio people.
+On Thu, Jun 02, 2022 at 02:08:41PM +0200, Hans Schultz wrote:
 > >
-> > I think both of them work because the structures are always
-> > embedded inside of larger structures that have at least word
-> > alignment. This is the thing I was looking for, and the
-> > __packed attribute was added in error, most likely copied
-> > from somewhere else.
->
-> The __packed in "struct tomoyo_shared_acl_head" is to embed next
-> naturally-aligned member of a larger struct into the bytes that
-> would have been wasted if __packed is not specified. For example,
->
-> struct tomoyo_shared_acl_head {
->         struct list_head list;
->         atomic_t users;
-> } __packed;
->
-> struct tomoyo_condition {
->         struct tomoyo_shared_acl_head head;
->         u32 size; /* Memory size allocated for this entry. */
->         (...snipped...)
-> };
->
-> saves 4 bytes on 64 bits build.
->
-> If the next naturally-aligned member of a larger struct is larger than
-> the bytes that was saved by __packed, the saved bytes will be unused.
+> > I think Hans is testing with mv88e6xxx which dumps entries directly from
+> > HW via ndo_fdb_dump(). See dsa_slave_port_fdb_do_dump() which sets
+> > NTF_SELF.
+> >
+> > Hans, are you seeing the entry twice? Once with 'master' and once with
+> > 'self'?
+> >
+> 
+> When replacing a locked entry it looks like this:
+> 
+> # bridge fdb show dev eth6 | grep 4c
+> 00:4c:4c:4c:4c:4c vlan 1 master br0 extern_learn offload locked
+> 
+> # bridge fdb replace 00:4c:4c:4c:4c:4c dev eth6 vlan 1 master static ; bridge fdb show dev eth6 | grep 4c
+> 00:4c:4c:4c:4c:4c vlan 1 self static
 
-Ok, got it. I think as gcc should still be able to always figure out the
-alignment when accessing the atomic, without ever falling back
-to byte access on an atomic_get() or atomic_set().
+This output means that the FDB entry was deleted from the bridge driver
+FDB.
 
-To be on the safe side, I would still either move the __packed attribute
-to the 'list' member, or make the structure '__aligned(4)'.
+> 
+> The problem is then that the function
+> br_fdb_find_rcu(br,eth_hdr(skb)->h_source, vid);
+> , where the h_source and vid is the entry above, does not find the entry.
+> My hypothesis was then that this is because of the 'self' flag that I
+> see.
 
-       Arnd
+br_fdb_find_rcu() does a lookup in the bridge driver FDB, but per the
+output above, the entry isn't there for some reason. It's only in HW.
+
+Can it be that you driver is deleting these entries from the bridge
+driver FDB via SWITCHDEV_FDB_DEL_TO_BRIDGE for some reason?
+
+> 
+> I am thinking that the function dsa_slave_port_fdb_do_dump() is only for
+> debug, and thus does not really set any flags in the bridge modules FDB,
+> but then I don't understand why the above find function does not find
+> the entry?

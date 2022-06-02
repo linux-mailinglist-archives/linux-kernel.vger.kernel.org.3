@@ -2,106 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8E253B171
+	by mail.lfdr.de (Postfix) with ESMTP id 456BF53B16F
 	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 04:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbiFBBqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 21:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
+        id S233043AbiFBBv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 21:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232947AbiFBBqJ (ORCPT
+        with ESMTP id S233032AbiFBBv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 21:46:09 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592C129567A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 18:46:07 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id a10so3602846pju.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 18:46:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XGDn3nszvVQVYVQM4YLEuXbeHQsUmI4dKP895cZuF+0=;
-        b=aCMEgp07vBU7N8yXUlqLw6AQSp3jhFFjgVSHULzqy4W8B/q9HtNOyNPBfs+QYiXvA4
-         Q4mYkU0I0Uhu5yhUXAhY0IlpdfhskYaimHCkdeVViuAh5Lij/KFZ+oLTZcSyrrZW/SHa
-         xEK1q8BqRQ2+ACgYAsoMRYNLwKAY7xnEO/uEGOxZwLsFFWJ/asJS0yjRNkpor9RtPShu
-         9el3HCpEydc+7S58Ae8oYZsT8464KeW9HQVpMA7Ex+TrveUImT6Ivppu/sNfU9bHAJJV
-         tWmvWbLlmPCaZJxqkRSLgu40XPqXR8kZLf/XLdl3/oAAFGjpqFwbDty7OhJmJ/YzlFW3
-         T2kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XGDn3nszvVQVYVQM4YLEuXbeHQsUmI4dKP895cZuF+0=;
-        b=wk5FtnUrMJ4KK+uT9eNcv2efDtTG7c9/UHnlSuc9Tly+nYpB9UXy6NuweKumxqDTAO
-         jr+NLb1zsrSaByYvc0mvXaAK6f9wEmOA91kYSg3fIUraGnbeczl2N4WQwubNWkw960vi
-         5pCBboGTW778w2ixJi9qfRzMtomQNJAlcBGtXgOHi182y4Oodo075DZ9rFe2CQfLHtWf
-         VaCD2OVGSkU+Gcy6mHABQ0HVm6ILvtlwkl5cLlFanMNC3GLx99poTNcCX5cOe+1QqnPG
-         HF/c8dcs+i8s5xNkln2miDLdAb8gR8quHIV6F7qHnfSFiYc1yUfSVo/OgOINwuFLtTQf
-         LKVw==
-X-Gm-Message-State: AOAM532vOGq1XS+9uHuz92EtwMUDJb0cCK8WbbmEgp8G/clfLA8AV7z+
-        8o+5TyLmYQrft27EdNdXFCFTDhb2LMs=
-X-Google-Smtp-Source: ABdhPJwK9al6esJUDFUBc/e+DpE5U7LQ/svvPdYugzs8etwXJ1mRVnI1OmzCNJxk77WBP1T0VMrLcA==
-X-Received: by 2002:a17:90a:a393:b0:1d0:e448:811d with SMTP id x19-20020a17090aa39300b001d0e448811dmr37801695pjp.97.1654134366590;
-        Wed, 01 Jun 2022 18:46:06 -0700 (PDT)
-Received: from Vostro-5471.. ([2001:288:7001:2708:cee8:633a:13db:6557])
-        by smtp.gmail.com with ESMTPSA id s8-20020a17090a5d0800b001e303b3b431sm2013103pji.11.2022.06.01.18.46.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 18:46:06 -0700 (PDT)
-From:   Jui-Tse Huang <juitse.huang@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jui-Tse Huang <juitse.huang@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Bruno Randolf <br1@einfach.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>
-Subject: [PATCH v3] average: Clarify the restrictions
-Date:   Thu,  2 Jun 2022 09:45:57 +0800
-Message-Id: <20220602014557.5657-1-juitse.huang@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 1 Jun 2022 21:51:26 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034AC213291
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 18:51:24 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2520sfv1016485
+        for <linux-kernel@vger.kernel.org>; Wed, 1 Jun 2022 18:51:23 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=YacxzmoePktJOycbEBPjZaVPvCcq4FomTaLS1s9S8oI=;
+ b=krFI+/HyTRKxaQ4dQGx8u4vFxjUZ+UBU7TNcuvWAmXkIf8qRv38xQToH9HWDMw80k6rt
+ 0Bo83V10uqrZjEoCLAZNNNBmAvEVNbgR1dJRwGyoJ0JNYyzWz4ueLdZydGRWYcLu8GR7
+ Xmbkx5CtAbnfVkLELdGRePHjweFXwTAHPOs= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gdbt6e1vj-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 18:51:23 -0700
+Received: from twshared6696.05.ash7.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 1 Jun 2022 18:51:21 -0700
+Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
+        id 167D749F3A72; Wed,  1 Jun 2022 18:51:03 -0700 (PDT)
+From:   Keith Busch <kbusch@fb.com>
+To:     <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Keith Busch <kbusch@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH] kbuild: show the install image name and path
+Date:   Wed, 1 Jun 2022 18:50:50 -0700
+Message-ID: <20220602015050.3185028-1-kbusch@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 0AjROqC3uagrGaJl0y0P7MTtm70EI_Jo
+X-Proofpoint-GUID: 0AjROqC3uagrGaJl0y0P7MTtm70EI_Jo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-01_09,2022-06-01_01,2022-02-23_01
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is several restrictions in the EWMA helper macro that the
-developers should take care of, but the comment does not mentioned yet,
-thus, this patch clarify the restrictions.
+From: Keith Busch <kbusch@kernel.org>
 
-Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
+Prior to commit f774f5bb87d13 ("kbuild: factor out the common
+installation code into"), a 'make install' would print out the install
+command like:
+
+  sh ./arch/x86/boot/install.sh 5.18.0-11935-gbffe08031c89 \
+        arch/x86/boot/bzImage System.map "/boot"
+
+This output was very useful for my workflow, so this patch prints it out
+again. I'm not sure if there's a better way to do this than what's
+implemented here, so any feedback is appreciated.
+
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
+ scripts/install.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-Notes:
-    v3: fix typo (Randy Dunlap)
-    v2: fix spelling and wording (Bruno Randolf)
-
- include/linux/average.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/average.h b/include/linux/average.h
-index a1a8f09631ce..9c3c8b5b518e 100644
---- a/include/linux/average.h
-+++ b/include/linux/average.h
-@@ -11,7 +11,10 @@
-  *
-  * This implements a fixed-precision EWMA algorithm, with both the
-  * precision and fall-off coefficient determined at compile-time
-- * and built into the generated helper funtions.
-+ * and built into the generated helper functions.
-+ *
-+ * This implementation supports up to 30 bits of precision, and only
-+ * the API for fetching non-fractional part is provided for now.
-  *
-  * The first argument to the macro is the name that will be used
-  * for the struct and helper functions.
--- 
-2.34.1
+diff --git a/scripts/install.sh b/scripts/install.sh
+index 9bb0fb44f04a..2989d25ef069 100755
+--- a/scripts/install.sh
++++ b/scripts/install.sh
+@@ -33,6 +33,7 @@ do
+ 	# installkernel(8) says the parameters are like follows:
+ 	#
+ 	#   installkernel version zImage System.map [directory]
++	echo "$0 ${KERNELRELEASE} ${KBUILD_IMAGE} ${INSTALL_PATH}"
+ 	exec "${file}" "${KERNELRELEASE}" "${KBUILD_IMAGE}" System.map "${INSTA=
+LL_PATH}"
+ done
+=20
+--=20
+2.30.2
 

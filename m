@@ -2,98 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C9253B39A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFAC353B3A3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbiFBGcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 02:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
+        id S231197AbiFBGdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 02:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiFBGcb (ORCPT
+        with ESMTP id S229737AbiFBGdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 02:32:31 -0400
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CA0DF06
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 23:32:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1654151550; x=1685687550;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=RTvVdtkUpGa346JSx46gZWuxl7DtHHBLcONhUZYtf48=;
-  b=cM/ig+SJOZi8wx67VyoJZUkaDm75r9cEOZObMczr0nMjjXFJ7bTCqMXv
-   65s6uxmJEXkM575/toTXRhKM/fjD5Hkvx9LE8ZUcmYvVUnX5BnbUwL6uQ
-   oUImLc3A761z4YVgF0RetchknvW2Mz/YEkq4pLfiatG+T0ZuuwcWK9/iI
-   aIB/zSnFYmF5VCfavcbhqhLuwcD05W0EUzcyD+XQySfef8osjYmP+LGBk
-   6KlYZzDGsm0GayN8U62mlXUHTFhTTaLeh4dCOMpApWgOHhB4xE7iMw76X
-   VQrTINVwrgYUW4hhT5ZwPYeeTSri6sdZAVcwGp5mNc1eUt/fmsDKxgpyQ
+        Thu, 2 Jun 2022 02:33:19 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EFD188E5D;
+        Wed,  1 Jun 2022 23:33:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654151597; x=1685687597;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bfI6YfacDQFmkZ6odkoNNWz0vnBz6nu6DVsXX5PqRSE=;
+  b=UTYKXKFmHTNPwVjoX6Nxzc8d1VWqUFPG2ZGdqAOqtEKZ7w8nL7LfeDJI
+   oMbVkHCgOXTdLRwmmkfU6QS0HTnGMSOo+ZmV8NT3DpPYdwdDJ8y7d1x0X
+   PQCoVyT9v6FrNeay1mFh/AzwJGu/QZFQNrSTF7vqHRCVAv4ucHRk6/IFm
+   tU9ZuBCAzKFsXDtfvMwD2Ot6YHjRsUQ09JZsO8yNlWUPNkYbmYKtFrYfW
+   3OIQXAgVG5dxcq3gbDpVp9qBkx7Ws0q1BovJvrY7B7wNV9aeehgkP13lr
+   WJCtYJPW7YJOihMJUIEvsEC+QxkTteon9F716tTtGr9dCAyTNMu/5MMdy
    w==;
-X-IronPort-AV: E=Sophos;i="5.91,270,1647273600"; 
-   d="scan'208";a="314101620"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 02 Jun 2022 14:32:28 +0800
-IronPort-SDR: RxE70zajE2xgqmRWPJRRkCb+d8pdBrbY0BIXsZrwTwp54w/muQ/QwT6tDGpXgDmtqIzS3Jn7uv
- THFyzhvtGDorQaDU0B4bThv1hZ/46w9U5E0l1q/dJ9q18JW0HZiqZReXXCMAyz5TXosxkOkGNX
- G4cENLZj3OElXogSn4NgX6AUt+SOAfxRRvYMTgAXVe1XhqVm3LrnQ6bUlNVE76LpJtZhXZddFj
- R3bOyNfAoOr1ayWrH2iJq4i8K7LJIPvF0RHt+OEqCFMsRk+e4LRsntp4Q4KzImEOheZP+8KwUM
- lZ4SCD0S3LxB6wr5gR603fcW
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Jun 2022 22:56:05 -0700
-IronPort-SDR: aMJROiXZYDS/P0QmetGMF91W5iG6bGPDjAj+vWUvOb30XNXtEni+Ebyb9SDcRE6tWSuojx43oa
- OvQPSPNFtHjNdUH0JnfQB66rlfgk54Gueeg1uEKq8mt5Tfh0txRQWZXMn8x/htU8admRLbYwos
- FqnbHfB+fqWnex4Qm+tk17IPZzOS5sI9EyYKb81i+YyaG5gMaIShPy7ZpXHtLWCnlps0rsvqAN
- SbPqw38LKn9BEvafEzF2o0eiWt/Wb1AFq3ISORSPh5y8pBfilIGEH1opZfoqCAf3S5P2UNEQL6
- ZKI=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Jun 2022 23:32:28 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LDGQg63sQz1Rvlx
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 23:32:27 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1654151547; x=1656743548; bh=RTvVdtkUpGa346JSx46gZWuxl7DtHHBLcON
-        hUZYtf48=; b=lwQhoeQ3qsyyYDZi20JnxmUFWoqbLSPiGmXLTlz6fSXa8B6UZTe
-        wi+1X33bEV7eG8AwBvi7q/tTnhDNhVNEl0Y5HaLb7nJkI26op58Mh3Tnll4Yo0SG
-        DN2rgmacrsflzKnyKLG6IFjiZjm3G5n2gRrUOfaRlLS9/t31R1klL06WzXx/iFbf
-        xyhCCp+EaRaa+XKic+Oxn8K6JVKb/JDlfYtV8zwO682m1RsomnKxsj4U6yPE2B+G
-        jhLXg7mVj351rsqYUg9KCf7eE+ExdatPpF6XEW9n7FHuBrCleRb2hxcja/4UzBEf
-        vVPD0J7EIg+pqC8ILAFQigXMtDGPcD0gz/A==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id WCW6D4_X2kwt for <linux-kernel@vger.kernel.org>;
-        Wed,  1 Jun 2022 23:32:27 -0700 (PDT)
-Received: from [10.89.84.115] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.84.115])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LDGQf28fXz1Rvlc;
-        Wed,  1 Jun 2022 23:32:26 -0700 (PDT)
-Message-ID: <87953d70-198d-e146-b67d-b320603d52d3@opensource.wdc.com>
-Date:   Thu, 2 Jun 2022 15:32:24 +0900
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275915795"
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="275915795"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 23:33:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="707418066"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 01 Jun 2022 23:33:13 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nweOO-0004nN-Gq;
+        Thu, 02 Jun 2022 06:33:12 +0000
+Date:   Thu, 2 Jun 2022 14:32:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v3 2/2] blk-cgroup: Optimize blkcg_rstat_flush()
+Message-ID: <202206021418.wpJNbe3g-lkp@intel.com>
+References: <20220601211824.89626-3-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-Subject: Re: [PATCH v2] ata: pata_octeon_cf: Fix refcount leak in
- octeon_cf_probe
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Jeff Garzik <jgarzik@redhat.com>,
-        David Daney <david.daney@cavium.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220601085926.45183-1-linmq006@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220601085926.45183-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601211824.89626-3-longman@redhat.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,56 +67,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/06/01 17:59, Miaoqian Lin wrote:
-> of_find_device_by_node() takes reference, we should use put_device()
-> to release it when not need anymore.
-> Add missing put_device() to avoid refcount leak.
-> 
-> Fixes: 43f01da0f279 ("MIPS/OCTEON/ata: Convert pata_octeon_cf.c to use device tree.")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
-> changes in v2:
-> - Add put_device() at the end of if (dma_dev).
->   we need the null check and do handling only if dma_dev!=NULL.
-> - call put_device before of_node_put() in error path. keep the
->   reverse order of resource allocation.
-> 
-> v1 link:
-> https://lore.kernel.org/all/20220511062723.56652-1-linmq006@gmail.com/
-> ---
->  drivers/ata/pata_octeon_cf.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/ata/pata_octeon_cf.c b/drivers/ata/pata_octeon_cf.c
-> index 6b5ed3046b44..35608a0cf552 100644
-> --- a/drivers/ata/pata_octeon_cf.c
-> +++ b/drivers/ata/pata_octeon_cf.c
-> @@ -856,12 +856,14 @@ static int octeon_cf_probe(struct platform_device *pdev)
->  				int i;
->  				res_dma = platform_get_resource(dma_dev, IORESOURCE_MEM, 0);
->  				if (!res_dma) {
-> +					put_device(&dma_dev->dev);
->  					of_node_put(dma_node);
->  					return -EINVAL;
->  				}
->  				cf_port->dma_base = (u64)devm_ioremap(&pdev->dev, res_dma->start,
->  									 resource_size(res_dma));
->  				if (!cf_port->dma_base) {
-> +					put_device(&dma_dev->dev);
->  					of_node_put(dma_node);
->  					return -EINVAL;
->  				}
-> @@ -871,6 +873,7 @@ static int octeon_cf_probe(struct platform_device *pdev)
->  					irq = i;
->  					irq_handler = octeon_cf_interrupt;
->  				}
-> +				put_device(&dma_dev->dev);
->  			}
->  			of_node_put(dma_node);
->  		}
+Hi Waiman,
 
-Applied to for-5.19-fixes. Thanks !
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on axboe-block/for-next]
+[also build test WARNING on linus/master next-20220601]
+[cannot apply to v5.18]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/blk-cgroup-Optimize-blkcg_rstat_flush/20220602-052441
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220602/202206021418.wpJNbe3g-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3f979cef411e5d5512b725753034b02f3b7baf44
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Waiman-Long/blk-cgroup-Optimize-blkcg_rstat_flush/20220602-052441
+        git checkout 3f979cef411e5d5512b725753034b02f3b7baf44
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> block/blk-cgroup.c:1255:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!blkcg->lhead)
+               ^~~~~~~~~~~~~
+   block/blk-cgroup.c:1306:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   block/blk-cgroup.c:1255:2: note: remove the 'if' if its condition is always false
+           if (!blkcg->lhead)
+           ^~~~~~~~~~~~~~~~~~
+   block/blk-cgroup.c:1239:33: note: initialize the variable 'ret' to silence this warning
+           struct cgroup_subsys_state *ret;
+                                          ^
+                                           = NULL
+   1 warning generated.
+
+
+vim +1255 block/blk-cgroup.c
+
+  1234	
+  1235	static struct cgroup_subsys_state *
+  1236	blkcg_css_alloc(struct cgroup_subsys_state *parent_css)
+  1237	{
+  1238		struct blkcg *blkcg;
+  1239		struct cgroup_subsys_state *ret;
+  1240		int i;
+  1241	
+  1242		mutex_lock(&blkcg_pol_mutex);
+  1243	
+  1244		if (!parent_css) {
+  1245			blkcg = &blkcg_root;
+  1246		} else {
+  1247			blkcg = kzalloc(sizeof(*blkcg), GFP_KERNEL);
+  1248			if (!blkcg) {
+  1249				ret = ERR_PTR(-ENOMEM);
+  1250				goto unlock;
+  1251			}
+  1252		}
+  1253	
+  1254		blkcg->lhead = alloc_percpu_gfp(struct llist_head, GFP_KERNEL);
+> 1255		if (!blkcg->lhead)
+  1256			goto free_blkcg;
+  1257		init_blkcg_llists(blkcg);
+  1258	
+  1259		for (i = 0; i < BLKCG_MAX_POLS ; i++) {
+  1260			struct blkcg_policy *pol = blkcg_policy[i];
+  1261			struct blkcg_policy_data *cpd;
+  1262	
+  1263			/*
+  1264			 * If the policy hasn't been attached yet, wait for it
+  1265			 * to be attached before doing anything else. Otherwise,
+  1266			 * check if the policy requires any specific per-cgroup
+  1267			 * data: if it does, allocate and initialize it.
+  1268			 */
+  1269			if (!pol || !pol->cpd_alloc_fn)
+  1270				continue;
+  1271	
+  1272			cpd = pol->cpd_alloc_fn(GFP_KERNEL);
+  1273			if (!cpd) {
+  1274				ret = ERR_PTR(-ENOMEM);
+  1275				goto free_pd_blkcg;
+  1276			}
+  1277			blkcg->cpd[i] = cpd;
+  1278			cpd->blkcg = blkcg;
+  1279			cpd->plid = i;
+  1280			if (pol->cpd_init_fn)
+  1281				pol->cpd_init_fn(cpd);
+  1282		}
+  1283	
+  1284		spin_lock_init(&blkcg->lock);
+  1285		refcount_set(&blkcg->online_pin, 1);
+  1286		INIT_RADIX_TREE(&blkcg->blkg_tree, GFP_NOWAIT | __GFP_NOWARN);
+  1287		INIT_HLIST_HEAD(&blkcg->blkg_list);
+  1288	#ifdef CONFIG_CGROUP_WRITEBACK
+  1289		INIT_LIST_HEAD(&blkcg->cgwb_list);
+  1290	#endif
+  1291		list_add_tail(&blkcg->all_blkcgs_node, &all_blkcgs);
+  1292	
+  1293		mutex_unlock(&blkcg_pol_mutex);
+  1294		return &blkcg->css;
+  1295	
+  1296	free_pd_blkcg:
+  1297		for (i--; i >= 0; i--)
+  1298			if (blkcg->cpd[i])
+  1299				blkcg_policy[i]->cpd_free_fn(blkcg->cpd[i]);
+  1300		free_percpu(blkcg->lhead);
+  1301	free_blkcg:
+  1302		if (blkcg != &blkcg_root)
+  1303			kfree(blkcg);
+  1304	unlock:
+  1305		mutex_unlock(&blkcg_pol_mutex);
+  1306		return ret;
+  1307	}
+  1308	
 
 -- 
-Damien Le Moal
-Western Digital Research
+0-DAY CI Kernel Test Service
+https://01.org/lkp

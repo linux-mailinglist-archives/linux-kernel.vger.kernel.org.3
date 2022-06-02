@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC1253BBD9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A89C53BBDC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236600AbiFBPuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 11:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
+        id S236634AbiFBPu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 11:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236576AbiFBPuP (ORCPT
+        with ESMTP id S236597AbiFBPuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 11:50:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A6A2E09B;
-        Thu,  2 Jun 2022 08:50:14 -0700 (PDT)
+        Thu, 2 Jun 2022 11:50:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8462FFCA;
+        Thu,  2 Jun 2022 08:50:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAA926124C;
-        Thu,  2 Jun 2022 15:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 14F9CC3411E;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E740B81FBA;
+        Thu,  2 Jun 2022 15:50:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1DE9DC3411F;
         Thu,  2 Jun 2022 15:50:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1654185013;
-        bh=wB/MEXAf/c0kGO3cPyTVqTrfCM+kgdsXTuQGvpftntI=;
+        bh=JoW0sbHj1ciDbRMzhuE6464LB6Lei99zkmzZ1sHNCVU=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Wc9zwc9sIm3iry68zZ2UoKsXulPDc+lwLsSzLtvmUuVn1LgEU7QuT0MDccsntEr+R
-         I+FbuGKanpMebKkSxFy4A2/l9kpGI+jh80EJjCQJBLwmnDzk7M1hc8cxPVynP+LCNJ
-         w26BsnEZYAQ4oG66tsjypzF6kUYDQJJLQAZXI4nYcm8SXoVvr35FWe6FfoBEppvXQ2
-         7WbPvgJ7DmA+LLe7AwBYnli8vH5BKrl4MCAU6eW4nHGIaEoErWI7qgpOnKfqwCWq/H
-         M+cMPO9EXQKyOAvduyqnYx7M2zHjDvp79PJ6lIi27An/ZKEXXkcA3jNDAyk7BGYJaX
-         NC0Eb+RzgwnjQ==
+        b=lZ4Jsdfg/f3JS6GjFMoulBTT0qAKIgUusaCMiWJoN/P6JHUOokZDoWE/4pI8kCP8w
+         5QzW3n2F0swtOyZvYoKd0ki+0TT69aTT0IOD29fqaBLRsBreVCM6WFH7fVGoN7onnQ
+         0yfrP78N5LJzxDeu3/zonQUzFHFUY6jvNKSyYZERaC5wyhuORl8zZazb8bB8tbn5ao
+         2k8Fpq/HsL/3YrqwDRlEjxrrd6lHRJcSJVOQ+T2jL4v90xcRxi/j9uHW24qfpxO2qJ
+         /+u6xA9LQ49SeTzUJl6uFKEY40VPPMKb1mPkozgnir1uwnbDADv+uISQXdGkj1PNdv
+         5WoORCx/DfLEQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EE707F03953;
-        Thu,  2 Jun 2022 15:50:12 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0312BF03952;
+        Thu,  2 Jun 2022 15:50:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] Bluetooth: clear the temporary linkkey in hci_conn_cleanup
+Subject: Re: [PATCH v3] Bluetooth: clear the temporary linkkey in hci_conn_cleanup
 From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <165418501297.10758.2881771584555714145.git-patchwork-notify@kernel.org>
-Date:   Thu, 02 Jun 2022 15:50:12 +0000
-References: <20220602151456.v2.1.I9f2f4ef058af96a5ad610a90c6938ed17a7d103f@changeid>
-In-Reply-To: <20220602151456.v2.1.I9f2f4ef058af96a5ad610a90c6938ed17a7d103f@changeid>
+Message-Id: <165418501300.10758.13864529569247406536.git-patchwork-notify@kernel.org>
+Date:   Thu, 02 Jun 2022 15:50:13 +0000
+References: <20220602152952.v3.1.I9f2f4ef058af96a5ad610a90c6938ed17a7d103f@changeid>
+In-Reply-To: <20220602152952.v3.1.I9f2f4ef058af96a5ad610a90c6938ed17a7d103f@changeid>
 To:     Alain Michaud <alainmichaud@google.com>
 Cc:     linux-bluetooth@vger.kernel.org,
         chromeos-bluetooth-upstreaming@chromium.org, alainm@chromium.org,
@@ -66,7 +66,7 @@ Hello:
 This patch was applied to bluetooth/bluetooth-next.git (master)
 by Marcel Holtmann <marcel@holtmann.org>:
 
-On Thu,  2 Jun 2022 15:15:03 +0000 you wrote:
+On Thu,  2 Jun 2022 15:30:03 +0000 you wrote:
 > From: Alain Michaud <alainm@chromium.org>
 > 
 > If a hardware error occurs and the connections are flushed without a
@@ -79,7 +79,7 @@ On Thu,  2 Jun 2022 15:15:03 +0000 you wrote:
 > [...]
 
 Here is the summary with links:
-  - [v2] Bluetooth: clear the temporary linkkey in hci_conn_cleanup
+  - [v3] Bluetooth: clear the temporary linkkey in hci_conn_cleanup
     https://git.kernel.org/bluetooth/bluetooth-next/c/5a4e1528d840
 
 You are awesome, thank you!

@@ -2,112 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C45C53C02A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 23:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C79A53C037
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 23:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239317AbiFBVC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 17:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
+        id S239342AbiFBVEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 17:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbiFBVCy (ORCPT
+        with ESMTP id S232821AbiFBVEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 17:02:54 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2221CB21
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 14:02:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654203772; x=1685739772;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0UzVWwaOi/8bfFUzsc83WA6PHSfLMI2rHT/Y5hwvIF0=;
-  b=KxlxS9dCH/LwjUU1dOffJ7zRMJB+vYzqakzMigkVKG9vuZwLTBN8n2YL
-   6aicfqKsREnycyvekJcbkQ2aoTIK33I32OWn2azZAv3x3uBYQs6Bi4Vgm
-   pGJwzf5LI9PnVVFzMsCkn0q9gUx8IVMPyjsuMe6SY9488vW0fsvbR6Uv+
-   RZhVLP5BG0SnYRCnlvMN5IR4F/Exszu0U/MM0miHPwgetZpn+sw0+I+gR
-   ZlXZP3OrWjnk2qZXHjUK+jHEqoKhTUAfM/jcGa4XGUOBQK9g/ZDFQYcbM
-   tRwdLqzVIVea7yN/bSPCZJMbtMbVEIqRpHiXb9lXoCN4umRx6OlISYzOr
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="275814813"
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="275814813"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 14:02:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="612991715"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 02 Jun 2022 14:02:50 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwrxx-0005RP-SR;
-        Thu, 02 Jun 2022 21:02:49 +0000
-Date:   Fri, 3 Jun 2022 05:02:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Pirko <jiri@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:jiri_devel_lc_dev 4/5] ld.lld: error: undefined
- symbol: auxiliary_device_init
-Message-ID: <202206030535.Sbiik5tQ-lkp@intel.com>
+        Thu, 2 Jun 2022 17:04:41 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3463A35260
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 14:04:39 -0700 (PDT)
+Received: from terra.. (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 2A3A12E19A6;
+        Thu,  2 Jun 2022 23:04:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1654203874;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=i3NKfn+ix8IPierL01zwu9WC+ziebwcUWLk5MPtmKag=;
+        b=g+5VeeU2K6xjaA1vUybtfN6kd0EZL0Ac6NHq6pYLD8aNT/E0BjlhBfr6R66I18DDTFoTBR
+        DGDtEXcNbVP/Tc042uwce/yQKffrwPu7V5gB7qqBZp90v4l5QpiAZHxMPoiWJLbgLbd/9y
+        9CIT85CckGQGtv6UXW7dJlhRbpQkglsAFsQ6GnUQPRpDxBoDiOZmVRBzmlGimz9lWq41tR
+        8TGIBuFnF4LGrt9ibf0bfIqf3Nl0eXEI7UkScMt7YLaZi1O+H/xSHxqh4vJTnGM/VoL4Jd
+        UEk05GZPTb5uY0AhlvdAUsMhBgXpQk+WWyZx5xEMIIbb/LYREl4x5B16Esj/1g==
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marco Elver <elver@google.com>,
+        Barry Song <song.bao.hua@hisilicon.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sander Vanheule <sander@svanheule.net>
+Subject: [PATCH v1 0/2] cpumask: Fix invalid uniprocessor assumptions
+Date:   Thu,  2 Jun 2022 23:04:18 +0200
+Message-Id: <cover.1654201862.git.sander@svanheule.net>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_lc_dev
-head:   ef34c1c33c0ae43a9ad3c0ed3708eb1880972de0
-commit: 2d0852c5fa89a48c6fa1f860600b5e24e2faab4b [4/5] mlxsw: core_linecards: Introduce per line card auxiliary device
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220603/202206030535.Sbiik5tQ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/2d0852c5fa89a48c6fa1f860600b5e24e2faab4b
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw jiri_devel_lc_dev
-        git checkout 2d0852c5fa89a48c6fa1f860600b5e24e2faab4b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On uniprocessor builds, it is currently assumed that any cpumask will
+contain the single CPU: cpu0. This assumption is used to provide
+optimised implementations.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The current assumption also appears to be wrong, by ignoring the fact
+that users can provide empty cpumask-s. This can result in bugs as
+explained in [1].
 
-All errors (new ones prefixed by >>):
+This series seeks to fix this assumption, allowing for masks that
+contain at most cpu0, i.e. are "1" or "0".
 
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x1e: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: in_entry_stack+0x9: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi+0x8: call to sev_es_nmi_complete() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: default_do_nmi+0x10: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: kvm_read_and_reset_apf_flags+0x1: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: lockdep_hardirqs_on+0xa6: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: lockdep_hardirqs_off+0xa3: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x63: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x32: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> ld.lld: error: undefined symbol: auxiliary_device_init
-   >>> referenced by core_linecard_dev.c
-   >>> net/ethernet/mellanox/mlxsw/core_linecard_dev.o:(mlxsw_linecard_dev_add) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: __auxiliary_device_add
-   >>> referenced by core_linecard_dev.c
-   >>> net/ethernet/mellanox/mlxsw/core_linecard_dev.o:(mlxsw_linecard_dev_add) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: __auxiliary_driver_register
-   >>> referenced by core_linecard_dev.c
-   >>> net/ethernet/mellanox/mlxsw/core_linecard_dev.o:(mlxsw_linecard_driver_register) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: auxiliary_driver_unregister
-   >>> referenced by core_linecard_dev.c
-   >>> net/ethernet/mellanox/mlxsw/core_linecard_dev.o:(mlxsw_linecard_driver_unregister) in archive drivers/built-in.a
+[1] https://lore.kernel.org/all/20220530082552.46113-1-sander@svanheule.net/
+
+Best,
+Sander
+
+---
+To test these changes, I used the following code:
+
+static void cpumask_test(const struct cpumask *mask)
+{
+        int cpu;
+
+        if (cpumask_empty(mask))
+                pr_info("testing empty mask\n");
+        else
+                pr_info("testing non-empty mask\n");
+
+        pr_info("first cpu: %d\n", cpumask_first(mask));
+        pr_info("first zero: %d\n", cpumask_first_zero(mask));
+        pr_info("first and: %d\n", cpumask_first_and(mask, cpu_possible_mask));
+        pr_info("last cpu: %d\n", cpumask_last(mask));
+        pr_info("next cpu at -1: %d\n", cpumask_next(-1, mask));
+        pr_info("next cpu at 0: %d\n", cpumask_next(0, mask));
+        pr_info("next zero at -1: %d\n", cpumask_next_zero(-1, mask));
+        pr_info("next zero at 0: %d\n", cpumask_next_zero(0, mask));
+        pr_info("next and at -1: %d\n", cpumask_next_and(-1, mask, cpu_possible_mask));
+        pr_info("next and at 0: %d\n", cpumask_next_and(0, mask, cpu_possible_mask));
+        pr_info("next wrap at -1,false: %d\n", cpumask_next_wrap(-1, mask, 0, false));
+        pr_info("next wrap at 0,false: %d\n", cpumask_next_wrap(-1, mask, 0, false));
+        pr_info("next wrap at -1,true: %d\n", cpumask_next_wrap(-1, mask, 0, true));
+        pr_info("next wrap at 0,true: %d\n", cpumask_next_wrap(-1, mask, 0, true));
+
+        for_each_cpu(cpu, mask)
+                pr_info("for each: %d\n", cpu);
+
+        for_each_cpu_not(cpu, mask)
+                pr_info("for each not: %d\n", cpu);
+
+        for_each_cpu_wrap(cpu, mask, 0)
+                pr_info("for each wrap: %d\n", cpu);
+
+        for_each_cpu_and(cpu, mask, cpu_possible_mask)
+                pr_info("for each and: %d\n", cpu);
+}
+
+static void run_tests()
+{
+        cpumask_clear(&empty_mask);
+        cpumask_test(&empty_mask);
+        cpumask_test(cpu_possible_mask);
+}
+
+On an unpatched build, with NR_CPUS=1:
+    [...] testing empty mask
+    [...] first cpu: 0
+    [...] first zero: 0
+    [...] first and: 0
+    [...] last cpu: 0
+    [...] next cpu at -1: 0
+    [...] next cpu at 0: 1
+    [...] next zero at -1: 0
+    [...] next zero at 0: 1
+    [...] next and at -1: 0
+    [...] next and at 0: 1
+    [...] next wrap at -1,false: 0
+    [...] next wrap at 0,false: 0
+    [...] next wrap at -1,true: 0
+    [...] next wrap at 0,true: 0
+    [...] for each: 0
+    [...] for each not: 0
+    [...] for each wrap: 0
+    [...] for each and: 0
+    [...] testing non-empty mask
+    [...] first cpu: 0
+    [...] first zero: 0
+    [...] first and: 0
+    [...] last cpu: 0
+    [...] next cpu at -1: 0
+    [...] next cpu at 0: 1
+    [...] next zero at -1: 0
+    [...] next zero at 0: 1
+    [...] next and at -1: 0
+    [...] next and at 0: 1
+    [...] next wrap at -1,false: 0
+    [...] next wrap at 0,false: 0
+    [...] next wrap at -1,true: 0
+    [...] next wrap at 0,true: 0
+    [...] for each: 0
+    [...] for each not: 0
+    [...] for each wrap: 0
+    [...] for each and: 0
+
+On a patched build, with NR_CPUS=1:
+    [...] testing empty mask
+    [...] first cpu: 1
+    [...] first zero: 0
+    [...] first and: 1
+    [...] last cpu: 1
+    [...] next cpu at -1: 1
+    [...] next cpu at 0: 1
+    [...] next zero at -1: 0
+    [...] next zero at 0: 1
+    [...] next and at -1: 1
+    [...] next and at 0: 1
+    [...] next wrap at -1,false: 1
+    [...] next wrap at 0,false: 1
+    [...] next wrap at -1,true: 1
+    [...] next wrap at 0,true: 1
+    [...] for each not: 0
+    [...] testing non-empty mask
+    [...] first cpu: 0
+    [...] first zero: 1
+    [...] first and: 0
+    [...] last cpu: 0
+    [...] next cpu at -1: 0
+    [...] next cpu at 0: 1
+    [...] next zero at -1: 1
+    [...] next zero at 0: 1
+    [...] next and at -1: 0
+    [...] next and at 0: 1
+    [...] next wrap at -1,false: 0
+    [...] next wrap at 0,false: 0
+    [...] next wrap at -1,true: 0
+    [...] next wrap at 0,true: 0
+    [...] for each: 0
+    [...] for each wrap: 0
+
+For reference, the generic implementation with NR_CPUS=2, CONFIG_SMP=y
+    [...] testing empty mask
+    [...] first cpu: 2
+    [...] first zero: 0
+    [...] first and: 2
+    [...] last cpu: 2
+    [...] next cpu at -1: 2
+    [...] next cpu at 0: 2
+    [...] next zero at -1: 0
+    [...] next zero at 0: 1
+    [...] next and at -1: 2
+    [...] next and at 0: 2
+    [...] next wrap at -1,false: 2
+    [...] next wrap at 0,false: 2
+    [...] next wrap at -1,true: 2
+    [...] next wrap at 0,true: 2
+    [...] for each not: 0
+    [...] testing non-empty mask
+    [...] first cpu: 0
+    [...] first zero: 1
+    [...] first and: 0
+    [...] last cpu: 0
+    [...] next cpu at -1: 0
+    [...] next cpu at 0: 2
+    [...] next zero at -1: 1
+    [...] next zero at 0: 1
+    [...] next and at -1: 0
+    [...] next and at 0: 2
+    [...] next wrap at -1,false: 0
+    [...] next wrap at 0,false: 0
+    [...] next wrap at -1,true: 2
+    [...] next wrap at 0,true: 2
+    [...] for each: 0
+    [...] for each wrap: 0
+    [...] for each and: 0
+
+Sander Vanheule (2):
+  cpumask: Fix invalid uniprocessor mask assumption
+  cpumask: Add UP optimised for_each_*_cpu loops
+
+ include/linux/cpumask.h | 42 +++++++++++++++++++++--------------------
+ 1 file changed, 22 insertions(+), 20 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+

@@ -2,109 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6277453B7B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBEA53B7B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234111AbiFBLVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 07:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
+        id S234122AbiFBLYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 07:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbiFBLVU (ORCPT
+        with ESMTP id S231266AbiFBLYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 07:21:20 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A6B2A80FD
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 04:21:17 -0700 (PDT)
-Received: from fsav112.sakura.ne.jp (fsav112.sakura.ne.jp [27.133.134.239])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 252BLGML002960;
-        Thu, 2 Jun 2022 20:21:16 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav112.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp);
- Thu, 02 Jun 2022 20:21:16 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 252BLFww002957
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 2 Jun 2022 20:21:15 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <74bed19a-713f-1a25-8142-cf32984beada@I-love.SAKURA.ne.jp>
-Date:   Thu, 2 Jun 2022 20:21:14 +0900
+        Thu, 2 Jun 2022 07:24:38 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B777E23356B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 04:24:37 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id s68so4495141pgs.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 04:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/UviAPw6MVTun+p1meC75VFrnzsHlfU+tXdnWRM4ero=;
+        b=R0jGR2UNz89lSMNrXmYn+tG9AJzhiCUoStselCRkCR/NOXJfrPJjYaEv+1hjEK7ayj
+         xxi8yhx18W7TUO++IRoOKPH1kv3Wphzv27c/4bnjB/NsPBe/t8Zy3AJZ1zs2YNXeJ/B6
+         iyjVtD/QRJxEpHh2ksIpZYkGt4QOJUT8Ux1j3gNGPTnekRgEXrUCysEl1NNSsKI9Hf/L
+         IRnIfKiEJExZLlfmkgCFTPLvq9uDiLWcETVqHtw/zWRhhMz84BzVY+ZF9khjo856lK9A
+         csc3U0Zf+ZX3Z8594T4AdaeIMyRkoBKN1Ed2H2X4O2UuZsBuMWz9DTwH9At1/lLCXiaA
+         rcNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/UviAPw6MVTun+p1meC75VFrnzsHlfU+tXdnWRM4ero=;
+        b=bJD4HOaATURyquHnQwJSL12Tgod8rWH/ymfjNZqSSVN6e6fEnsAUDqB5GCyAd/PBHr
+         7+3x43uTXbipnD7yo2d9HHgwXcs88owiX7Prh5RSRMMbXfqjKxNOIchoN488UTxNsHXW
+         CQ+oqGiDPmF9SMfUG414wWq4kq8avZIlzohmo6w6/2I8HhCs6UGYqrrmxG4Rr0FxuJwm
+         1eBA/mtr3MYQnJm/WDexkKZDk5r3CBPSl0rFNGDfxLJha2xt/U1Bm+qdWbIpmogYZ9IU
+         u4v3CMbVCB4JK1KUS2OFtykIGpVePv77ydnnOmqwAF2jmfoppkOF28xopcOSVliefwXd
+         1hxQ==
+X-Gm-Message-State: AOAM533D5DZ0CjRnBIsfXm3p7uhVVMu8xgPVJC8pfmoLU8dt216m0jO1
+        PSMred8B2eYJE0xv68cAOX4=
+X-Google-Smtp-Source: ABdhPJzty2L83Yb6F5pcpnNIYPmmPuhhuOwoP/lHnm+WllkboYqVQ5sSbX0lDdTrvwBAURr+82kwTw==
+X-Received: by 2002:a63:d209:0:b0:3fb:b455:deb2 with SMTP id a9-20020a63d209000000b003fbb455deb2mr3870838pgg.323.1654169077266;
+        Thu, 02 Jun 2022 04:24:37 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id t4-20020a170902b20400b001617ffc6d25sm3262140plr.19.2022.06.02.04.24.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 04:24:36 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] bus: vexpress-config: Fix refcount leak in vexpress_syscfg_probe
+Date:   Thu,  2 Jun 2022 15:24:26 +0400
+Message-Id: <20220602112428.3002-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
- block count and size helpers")
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Keisuke Nishimura <keisuke.nishimura@inria.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
-        Rohit Maheshwari <rohitm@chelsio.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        SoC Team <soc@kernel.org>
-References: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
- <91E67F46-A3C7-4159-9E0C-C6C6306F3669@inria.fr>
- <CAK8P3a2iAsemAQdbTZ_E7GGGCXAOeWbjSjLgXEsd5sg_buZWhw@mail.gmail.com>
- <CAHk-=wgO0V9OdY+DFm-f0qZYMyFSm0ptReO+_qgSTEpBLtFV7Q@mail.gmail.com>
- <d971a684-ccd9-3839-1e30-c166fd55cf49@inria.fr>
- <CAHk-=wiViikY0szsJGipSxFmMwdsvxjm7SwDfwNfMHYvQ64kAA@mail.gmail.com>
- <CAK8P3a1m80u+eVnoSJ-APihjNQ1se9=FG+E6tKBb-hRJx5FAVg@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CAK8P3a1m80u+eVnoSJ-APihjNQ1se9=FG+E6tKBb-hRJx5FAVg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/06/02 16:38, Arnd Bergmann wrote:
->> But let's cc the tomoyo and chelsio people.
-> 
-> I think both of them work because the structures are always
-> embedded inside of larger structures that have at least word
-> alignment. This is the thing I was looking for, and the
-> __packed attribute was added in error, most likely copied
-> from somewhere else.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-The __packed in "struct tomoyo_shared_acl_head" is to embed next
-naturally-aligned member of a larger struct into the bytes that
-would have been wasted if __packed is not specified. For example,
+Fixes: a5a38765ac79 ("bus: vexpress-config: simplify config bus probing")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/bus/vexpress-config.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-struct tomoyo_shared_acl_head {
-        struct list_head list;
-        atomic_t users;
-} __packed;
+diff --git a/drivers/bus/vexpress-config.c b/drivers/bus/vexpress-config.c
+index a58ac0c8e282..b368e2f01f8b 100644
+--- a/drivers/bus/vexpress-config.c
++++ b/drivers/bus/vexpress-config.c
+@@ -395,10 +395,13 @@ static int vexpress_syscfg_probe(struct platform_device *pdev)
+ 		struct device_node *bridge_np;
+ 
+ 		bridge_np = of_parse_phandle(node, "arm,vexpress,config-bridge", 0);
+-		if (bridge_np != pdev->dev.parent->of_node)
++		if (bridge_np != pdev->dev.parent->of_node) {
++			of_node_put(bridge_np);
+ 			continue;
++		}
+ 
+ 		of_platform_populate(node, NULL, NULL, &pdev->dev);
++		of_node_put(bridge_np);
+ 	}
+ 
+ 	return 0;
+-- 
+2.25.1
 
-struct tomoyo_condition {
-        struct tomoyo_shared_acl_head head;
-        u32 size; /* Memory size allocated for this entry. */
-	(...snipped...)
-};
-
-saves 4 bytes on 64 bits build.
-
-If the next naturally-aligned member of a larger struct is larger than
-the bytes that was saved by __packed, the saved bytes will be unused.

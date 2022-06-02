@@ -2,296 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC3A53BE17
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 20:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98FC53BF7F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238186AbiFBScF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 14:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
+        id S238688AbiFBUQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 16:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbiFBScC (ORCPT
+        with ESMTP id S237676AbiFBUQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 14:32:02 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F6EDFC7;
-        Thu,  2 Jun 2022 11:32:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654194720; x=1685730720;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1ETS5tNf2PzkSBxLN39gtpJJYz1zHzDHYsSqQM96Y8k=;
-  b=RpJRGknHtgg8SWSVhqyycqwhujnazpV/KkcrUjwjTS5NMg1wvFXfw1qX
-   wAIDtum6AatVg7E/P28bDbsZcrvqLPj8fNO9bVl58HYHTOz2A416JIuaQ
-   /PT73GrQU9/qMmpT4fGv3GR9YjIVrM4unMNSNGcMdWC15DfoxJrHWw82Q
-   OzGJfy8ulolDX9LGMWoSqtJkPHo/RdjnU2ppHxWVtIy5ujxed3NEl7Zc9
-   ztt/3IbayceDgzTqTBBE8jRkiljTYom/OwvGMN1XMtcoYvjEojlruOQfX
-   MLTV6TR4GtM2yFr6YRWxraznm9VKeLHW9c11/OoihR6SO0vJrx1uQjPyt
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="275772753"
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="275772753"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 11:31:58 -0700
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="680781343"
-Received: from liqiong-mobl.amr.corp.intel.com (HELO localhost) ([10.209.7.136])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 11:31:57 -0700
-Date:   Thu, 2 Jun 2022 11:31:56 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <ben@bwidawsk.net>, linux-kernel@vger.kernel.org,
-        linux-cxl@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH V9 6/9] cxl/port: Read CDAT table
-Message-ID: <YpkCHADvGv6i3jVP@iweiny-desk3>
-References: <20220531152632.1397976-1-ira.weiny@intel.com>
- <20220531152632.1397976-7-ira.weiny@intel.com>
- <20220601163540.00006978@Huawei.com>
- <20220601173113.000005a6@Huawei.com>
+        Thu, 2 Jun 2022 16:16:07 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A112BC2E;
+        Thu,  2 Jun 2022 13:16:03 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id b135so5613066pfb.12;
+        Thu, 02 Jun 2022 13:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Kb/EgUnEl+66ubR0OBdnZBhP1OFKsT5B/tkrmGF5yWM=;
+        b=NkE0Ee2nKeVG01X4TGf7Tds/HpDebAAGIAaGwKYQebrpvg7ak4oaNFBWIPs3Xdbx/6
+         /ueM/g2UgL33WPhvSE1L6JXOWT5chkMdkpBYr1/zYN99/wpvyMYpmPhA1oytFSuRvYuV
+         PNVqn/U5agKa+qIWBAIGEorsNvVDKBWugZg900PvAoG9Qmtwztu7xfeAcVkvqkOl0WYL
+         cOZn4F9+0NeUducPaMA2Z6OZ8Mng1gwTUzPg03BP8mG4yWhRQRsi/9O5/gtaqrHqD4Bg
+         4OA13xXtBNtUEnlW2r45PUnCTtuMdwsf1kr3gPJWnFj4wDmdBPTRZoNV0p1ETDx5FzvG
+         2rSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Kb/EgUnEl+66ubR0OBdnZBhP1OFKsT5B/tkrmGF5yWM=;
+        b=IA3B5ANyWQw+rp206KCxp2mt1dg61aeWI7z7dxUsnrqwcrGNiinwbJtlIZ30OU2dFc
+         s83uxfkU8P9iOtzxMhd/TqbA81mVZACImSX7PhJQHjL1RT4BdVmmR1gXcgaYcU/zZ/6R
+         loc74AviYG2FhoM0bNGD9nzb1437FVAqbEVWZ17xIaYZBMIvK5VkVsewxDfWWkZHEGq6
+         Aozq1NKz2BlcOpQmzP1khm/ojNKTnrNwcSE9SgOdOGkLdpRdXxCVpZpJHRrIOP3jJvTo
+         RgXHTiinSYp0EnIkcToU6O4d7BvTWwvGRgPvnNK0rZdzlHg+PL0J3JNbxIZsyDaD5qs6
+         bXew==
+X-Gm-Message-State: AOAM533H9oh3TID4oc2GaTs5tFVkwi+HS+vtN9aaWvDRTlw6RtUAlxWH
+        jm4Q0cE8UrCs/5mWSaRA8XEOPgZnh8NdvKxYfPvyDQxWGiU=
+X-Google-Smtp-Source: ABdhPJys4WOb9urNyLdt4aeuOqGuCZdLw80FNC5PvFsBXte5r8ULYu9Wjjuq4Wzf+sPQ6VLvykCW8T4PAgm77gNu2zY=
+X-Received: by 2002:a05:6e02:4a1:b0:2d3:a778:f0f1 with SMTP id
+ e1-20020a056e0204a100b002d3a778f0f1mr3986818ils.212.1654194896902; Thu, 02
+ Jun 2022 11:34:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220601173113.000005a6@Huawei.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220531104211.17106-1-peterwu.pub@gmail.com> <20220531104211.17106-2-peterwu.pub@gmail.com>
+ <33a797d7-ca60-5153-2ba1-3a909fcc5965@linaro.org>
+In-Reply-To: <33a797d7-ca60-5153-2ba1-3a909fcc5965@linaro.org>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Fri, 3 Jun 2022 02:34:45 +0800
+Message-ID: <CABtFH5+nNRn4azfniKCNc=S2Z2Y0jji_beA_16_UYzAvkak-VA@mail.gmail.com>
+Subject: Re: [PATCH 10/14] dt-bindings: power: supply: Add Mediatek MT6370
+ Charger binding documentation
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     lee.jones@linaro.org, daniel.thompson@linaro.org,
+        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        ChiYuan Huang <cy_huang@richtek.com>, alice_chen@richtek.com,
+        chiaen_wu@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 05:31:13PM +0100, Jonathan Cameron wrote:
-> On Wed, 1 Jun 2022 16:35:40 +0100
-> Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
-> 
-> > On Tue, 31 May 2022 08:26:29 -0700
-> > ira.weiny@intel.com wrote:
-> > 
-> > > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > 
-> > > The OS will need CDAT data from CXL devices to properly set up
-> > > interleave sets.  Currently this is supported through a DOE mailbox
-> > > which supports CDAT.
-> > > 
-> > > Cache the CDAT data for later parsing.  Provide a sysfs binary attribute
-> > > to allow dumping of the CDAT.
-> > > 
-> > > Binary dumping is modeled on /sys/firmware/ACPI/tables/
-> > > 
-> > > The ability to dump this table will be very useful for emulation of real
-> > > devices once they become available as QEMU CXL type 3 device emulation will
-> > > be able to load this file in.
-> > > 
-> > > This does not support table updates at runtime. It will always provide
-> > > whatever was there when first cached. Handling of table updates can be
-> > > implemented later.
-> > > 
-> > > Finally create a complete list of DOE defines within cdat.h for code
-> > > wishing to decode the CDAT table.
-> > > 
-> > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > >   
-> > 
-> > Fun question of ownership inline...
-> 
-> And a follow up due to triggering a bug that predated this series...
-> 
-> I'd send a fix, but I'm off on a long weekend shortly :)
+Hi Krzysztof,
 
-NP I discussed with Dan and the use of dev_groups should allow me to move this
-to port probe where it belongs.  I put it here for the sysfs stuff.
+Thank you for the valuable suggestion.
+Sorry for sending the same email again. I forgot to reply to everyone
+in my last email..
 
-> 
-> > 
-> > ...
-> > 
-> > > +void read_cdat_data(struct cxl_port *port)
-> > > +{
-> > > +	struct device *dev = &port->dev;
-> > > +	size_t cdat_length;
-> > > +	int ret;
-> > > +
-> > > +	if (cxl_cdat_get_length(port, &cdat_length))
-> > > +		return;
-> > > +
-> > > +	port->cdat.table = devm_kzalloc(dev, cdat_length, GFP_KERNEL);  
-> > 
-> > boom. See below for why :)
-> > 
-> > > +	if (!port->cdat.table) {
-> > > +		ret = -ENOMEM;
-> > > +		goto error;
-> > > +	}
-> > > +
-> > > +	port->cdat.length = cdat_length;
-> > > +	ret = cxl_cdat_read_table(port, &port->cdat);
-> > > +	if (ret) {
-> > > +		devm_kfree(dev, port->cdat.table);
-> > > +		port->cdat.table = NULL;
-> > > +		port->cdat.length = 0;
-> > > +		ret = -EIO;
-> > > +		goto error;
-> > > +	}
-> > > +
-> > > +	return;
-> > > +error:
-> > > +	dev_err(dev, "CDAT data read error (%d)\n", ret);
-> > > +}
-> > > +EXPORT_SYMBOL_NS_GPL(read_cdat_data, CXL);
-> > > diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
-> > > index 2e2bd65c1024..aa4229ddc1bc 100644
-> > > --- a/drivers/cxl/core/port.c
-> > > +++ b/drivers/cxl/core/port.c
-> > > @@ -320,7 +320,48 @@ static void cxl_port_release(struct device *dev)
-> > >  	kfree(port);
-> > >  }
-> > >  
-> > > +static ssize_t cdat_read(struct file *filp, struct kobject *kobj,
-> > > +			 struct bin_attribute *bin_attr, char *buf,
-> > > +			 loff_t offset, size_t count)
-> > > +{
-> > > +	struct device *dev = kobj_to_dev(kobj);
-> > > +	struct cxl_port *port = to_cxl_port(dev);
-> > > +
-> > > +	if (!port->cdat.table)
-> > > +		return 0;
-> > > +
-> > > +	return memory_read_from_buffer(buf, count, &offset,
-> > > +				       port->cdat.table,
-> > > +				       port->cdat.length);
-> > > +}
-> > > +
-> > > +static BIN_ATTR_RO(cdat, 0);
-> > > +
-> > > +static umode_t cxl_port_bin_attr_is_visible(struct kobject *kobj,
-> > > +					      struct bin_attribute *attr, int i)
-> > > +{
-> > > +	struct device *dev = kobj_to_dev(kobj);
-> > > +	struct cxl_port *port = to_cxl_port(dev);
-> > > +
-> > > +	if ((attr == &bin_attr_cdat) && port->cdat.table)
-> > > +		return 0400;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static struct bin_attribute *cxl_cdat_bin_attributes[] = {
-> > > +	&bin_attr_cdat,
-> > > +	NULL,
-> > > +};
-> > > +
-> > > +static struct attribute_group cxl_cdat_attribute_group = {
-> > > +	.name = "CDAT",
-> > > +	.bin_attrs = cxl_cdat_bin_attributes,
-> > > +	.is_bin_visible = cxl_port_bin_attr_is_visible,
-> > > +};
-> > > +
-> > >  static const struct attribute_group *cxl_port_attribute_groups[] = {
-> > > +	&cxl_cdat_attribute_group,o
-> > >  	&cxl_base_attribute_group,
-> > >  	NULL,
-> > >  };
-> > > @@ -462,6 +503,8 @@ struct cxl_port *devm_cxl_add_port(struct device *host, struct device *uport,
-> > >  		return port;
-> > >  
-> > >  	cxl_find_cdat_mb(port);
-> > > +	/* Cache the data early to ensure is_visible() works */
-> > > +	read_cdat_data(port);  
-> > 
-> > This uses port as the 'device' for devm_ calls.
-> > Unfortunately if the port driver isn't loaded, it still "successfully" runs.
-> > Then if the port driver is probed, you get both a bunch of errors due to
-> > devm_ allocations on a device before the driver is loaded.
-> > 
-> > For extra fun it tries to probe the ports multiple times without freeing
-> > the index which is 'interesting'. We had this happen a while ago (unrelated
-> > to DOE) but this may be unrelated (or maybe related to the region stuff
-> > I'm carrying on my test tree)
-> 
-> So the extra devices are a result of the obvious initial path of
-> cxl_mem_probe() from module probe and down failing, then bus_rescan_devices
-> coming along from the pmem driver having another go... 
-> 
-> So next question is why don't the first set of endpointX devices get cleaned up
-> if the create_endpoint() in cxl/mem.c fails.
-> 
-> I think this is because the cxl_endpoint_autoremove() call hasn't yet happened
-> when we detect the failure to bind a driver and error out of cxl_mem_probe().
-> 
-> So, fix is probably to do the cxl_endpoint_autoremove() unconditionally
-> by moving it before the check on driver binding.
-> 
-> https://elixir.bootlin.com/linux/latest/source/drivers/cxl/mem.c#L67
-> 
-> Move it up a few lines.
-> 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
+=B46=E6=9C=881=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=884:15=E5=AF=AB=
+=E9=81=93=EF=BC=9A
+>
+> On 31/05/2022 12:42, ChiaEn Wu wrote:
+> > From: ChiaEn Wu <chiaen_wu@richtek.com>
+> >
+>
+> Subject - remove "binding documentation". It's already implied by prefix.
+>
+> > Add Mediatek MT6370 Charger binding documentation.
+> >
+> > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> > ---
+> >  .../power/supply/mediatek,mt6370-charger.yaml | 60 +++++++++++++++++++
+> >  1 file changed, 60 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/power/supply/medi=
+atek,mt6370-charger.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/power/supply/mediatek,mt=
+6370-charger.yaml b/Documentation/devicetree/bindings/power/supply/mediatek=
+,mt6370-charger.yaml
+> > new file mode 100644
+> > index 000000000000..9d5c4487ca9c
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-ch=
+arger.yaml
+> > @@ -0,0 +1,60 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/power/supply/mediatek,mt6370-charge=
+r.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Mediatek MT6370 Battery Charger
+> > +
+> > +maintainers:
+> > +  - ChiaEn Wu <chiaen_wu@richtek.com>
+> > +
+> > +description: |
+> > +  This module is part of the MT6370 MFD device.
+> > +  Provides Battery Charger, Boost for OTG devices and BC1.2 detection.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: mediatek,mt6370-charger
+> > +
+> > +  interrupts:
+> > +    description: |
+> > +      Specify what irqs are needed to be handled by MT6370 Charger dri=
+ver. IRQ
+> > +      "MT6370_IRQ_CHG_MIVR", "MT6370_IRQ_ATTACH" and "MT6370_IRQ_OVPCT=
+RL_UVP_D"
+> > +      are required.
+> > +    items:
+> > +      - description: BC1.2 done irq for mt6370 charger
+> > +      - description: usb plug in irq for mt6370 charger
+> > +      - description: mivr irq for mt6370 charger
+>
+> s/for mt6370 charger//
+> in each item
 
-I think I can make it work by moving into the port probe.
+I got it, this will be refined in the next version. Thanks!
 
-Ira
+>
+> > +
+> > +  interrupt-names:
+> > +    items:
+> > +      - const: attach_i
+> > +      - const: uvp_d_evt
+> > +      - const: mivr
+> > +
+> > +  io-channels:
+> > +    description: |
+> > +      Use ADC channel to read vbus, ibus, ibat, etc., info. Ibus ADC c=
+hannel
+> > +      is required.
+>
+> Constraints (e.g. maxItems) are needed.
 
-> 
-> 
-> > 
-> > As to the question of what the correct fix is...
-> > Maybe move them into the port driver probe but then is_visible
-> > won't work.  Or pass a pointer to the struct device *host down
-> > into read_cdat_data and __read_cdat_data calls to handle the
-> > allocation. (I tried this and it seems superficially fine).
-> > 
-> > Jonathan
-> > 
-> > 
-> > 
-> > >  
-> > >  	dev = &port->dev;
-> > >  	if (is_cxl_memdev(uport))
-> > > diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> > > index 0a86be589ffc..531b77d296c7 100644
-> > > --- a/drivers/cxl/cxl.h
-> > > +++ b/drivers/cxl/cxl.h
-> > > @@ -8,6 +8,7 @@
-> > >  #include <linux/bitfield.h>
-> > >  #include <linux/bitops.h>
-> > >  #include <linux/io.h>
-> > > +#include "cdat.h"
-> > >  
-> > >  /**
-> > >   * DOC: cxl objects
-> > > @@ -268,6 +269,7 @@ struct cxl_nvdimm {
-> > >   * @dead: last ep has been removed, force port re-creation
-> > >   * @depth: How deep this port is relative to the root. depth 0 is the root.
-> > >   * @cdat_mb: Mailbox which supports the CDAT protocol
-> > > + * @cdat: Cached CDAT data
-> > >   */
-> > >  struct cxl_port {
-> > >  	struct device dev;
-> > > @@ -280,6 +282,7 @@ struct cxl_port {
-> > >  	bool dead;
-> > >  	unsigned int depth;
-> > >  	struct pci_doe_mb *cdat_mb;
-> > > +	struct cxl_cdat cdat;
-> > >  };
-> > >  
-> > >  /**
-> > > diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-> > > index 366b21bd1a01..35f0d4892eaa 100644
-> > > --- a/drivers/cxl/cxlpci.h
-> > > +++ b/drivers/cxl/cxlpci.h
-> > > @@ -75,4 +75,5 @@ int devm_cxl_port_enumerate_dports(struct cxl_port *port);
-> > >  struct cxl_dev_state;
-> > >  int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm);
-> > >  void cxl_find_cdat_mb(struct cxl_port *port);
-> > > +void read_cdat_data(struct cxl_port *port);
-> > >  #endif /* __CXL_PCI_H__ */  
-> > 
-> 
+OK, I will add them in the new version!
+
+>
+> > +
+> > +  usb-otg-vbus:
+>
+> Let's keep the same name as in MT6360:
+>
+> usb-otg-vbus-regulator
+
+I'll change the name to correspond with MT6360 in the next patch, thanks!
+
+> > +    type: object
+> > +    description: OTG boost regulator.
+> > +    $ref: /schemas/regulator/regulator.yaml#
+> > +
+> > +    properties:
+> > +      enable-gpio:
+> > +        maxItems: 1
+> > +        description: |
+> > +          Specify a valid 'enable' gpio for the regulator and it's opt=
+ional
+>
+> This description is pointless - does not bring any more information. You
+> repeat the schema. Please, avoid such descriptions.
+
+I got it, I will remove them in the next patch.
+
+>
+> > +
+> > +required:
+> > +  - compatible
+> > +  - interrupts
+> > +  - interrupt-names
+> > +  - io-channels
+> > +
+> > +additionalProperties: false
+>
+>
+> How about example? Or is it going to be in MFD schema?
+
+All of MT6370 binding documentation examples are in the MFD schema! Thanks.
+
+>
+>
+> Best regards,
+> Krzysztof
+
+Best regards,
+ChiaEn Wu

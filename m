@@ -2,122 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9AC53BF51
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B088853BF56
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239126AbiFBUIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 16:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
+        id S237157AbiFBUJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 16:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239094AbiFBUId (ORCPT
+        with ESMTP id S237569AbiFBUJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 16:08:33 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6C337A3D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 13:08:30 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id v25so7646496eda.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 13:08:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qgACnyK4+wOiS5MKuMTnoonRsVlmK8PYmGJQJvcgO6E=;
-        b=gCNQf5treIeOY896E1dwCdHz3vHIg34Tiv2t6JPnU8eRhXoHeu6+4L3Uh/UmmoSB4J
-         frLhr+7HqIhSw29Lu1hlJ8Fl7ddyJgm7PH15YadqhbxolK5DpD9Oozcz3nAx9uaLJYZl
-         w+l3zgS2iBUS4NjgZcWirSTVwqmGjn+NPH/cw=
+        Thu, 2 Jun 2022 16:09:43 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8803021AC;
+        Thu,  2 Jun 2022 13:09:41 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-f3381207a5so8159527fac.4;
+        Thu, 02 Jun 2022 13:09:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qgACnyK4+wOiS5MKuMTnoonRsVlmK8PYmGJQJvcgO6E=;
-        b=aSqRh1LdHuBYh1b3QGbR8rkQ/nRv0FOApiwrqNHQhZ9jGacVcH9kI8oEW5ywNyOAMx
-         6lqtg+/Ljp2jaKwJR+/rd3dYH5M6acYy6fsTgzqKguRJ06w7Py00hMQUicUyLq+Hg7CL
-         bcLxOOM3xetudH0jA0BPZq/+LJ+T6jS5ZBe0h6FZFRSbiV2BX4NtivvpW8ze7ePQBKFy
-         MGyXxV4cbyXiUsQFVFdB+t9Y7y9Rp6ttgW69ONjcHvmTVV1LIY9qsPvOyMFOzd4WMPXv
-         0To5KyMz+mi7GFJYmBVJPUk3JbQRR4ueP4f3HM0jaGSoZCkENGHRRtGYA/rG408cJavv
-         qyoQ==
-X-Gm-Message-State: AOAM531nriQRSe5wB7gsy3UlJ4gMFRkfZwlWvOzXKmvezBuH9SzSevtY
-        WB0BKMdF4JRZqQ61/5eGpC7qWJgBrPOafw==
-X-Google-Smtp-Source: ABdhPJzPFOH/TDeD5O+AxdFlhT0NqCiCG8wMe6TFHcSHRdOXnncIj00z36nSppQj1wvOPffqou0Inw==
-X-Received: by 2002:aa7:d295:0:b0:42d:e371:ded2 with SMTP id w21-20020aa7d295000000b0042de371ded2mr7365651edq.336.1654200508896;
-        Thu, 02 Jun 2022 13:08:28 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id gg1-20020a170906e28100b006f3ef214da9sm2103383ejb.15.2022.06.02.13.08.27
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 13:08:27 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id e2so7826182wrc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 13:08:27 -0700 (PDT)
-X-Received: by 2002:a5d:68d2:0:b0:210:31cc:64a6 with SMTP id
- p18-20020a5d68d2000000b0021031cc64a6mr4886531wrw.679.1654200506938; Thu, 02
- Jun 2022 13:08:26 -0700 (PDT)
+        bh=AcNwfkxQR7d/YlmiTtCr3hnpdL0LWDXQZRLEfx+qgjo=;
+        b=6ZhAdWcQeqvervg5fAxzMOx7lYMKi1n2qvtNE7tm/S7IED5xW1lPaPWHj2kHjfTRDI
+         idYZOWgjj6hcDqI2HWo0sS+HO3sAau4zgV76mHUEl8F2EYqW0npgxDCsc8mMj5r2+sdj
+         I4TftKCi9+2hp3mHwofDDchUGOvEkMsw7qP8Y+WtDLFURjEcatUQY8fhjP/lIWiAnh6m
+         Ydkad2NK9ibzQGWrkngbB1rHyWAcAlUlZQRLv6TAIWCiUDX0CjU5wPWMkNq7q9fICa8A
+         +rbTlBuyEGWb1dKNxUqg6HqXQXTprEUaGmpqs2R4WJu0J00chSbfqgM3YQDAUJmWC5rT
+         Exxg==
+X-Gm-Message-State: AOAM530BDxnGGuISadcjDKaML2j6f2L+U9KanhUOS7B17gRzpZKwgeue
+        Y30aY3twF95O7yL8J3OVypbQMY/xEjnCaAdiy3E=
+X-Google-Smtp-Source: ABdhPJyAncQxPhnFubLXK+rW6BtKMShVaYITN8d1ys7TuwWhX7qbMSrSfeU2DU+OSoxYUdaUjFDjUWzWkD3jzZTysUw=
+X-Received: by 2002:a05:6870:d1cd:b0:e1:e7ee:faa0 with SMTP id
+ b13-20020a056870d1cd00b000e1e7eefaa0mr21146892oac.5.1654200580847; Thu, 02
+ Jun 2022 13:09:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220602190621.1646679-1-swboyd@chromium.org>
-In-Reply-To: <20220602190621.1646679-1-swboyd@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 2 Jun 2022 13:08:14 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=X6702aSaEnpXUhF40b0kZuz1QvOBLNg-xcNDYbVCbsDw@mail.gmail.com>
-Message-ID: <CAD=FV=X6702aSaEnpXUhF40b0kZuz1QvOBLNg-xcNDYbVCbsDw@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: qcom: Remove duplicate sc7180-trogdor
- include on lazor/homestar
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
+References: <20220601065846.456965-1-namhyung@kernel.org> <20220601065846.456965-5-namhyung@kernel.org>
+ <CAP-5=fVniyi3dtvH=-0h9ugmkcanyMa7wdxwrPR4OkFdws=x_w@mail.gmail.com>
+In-Reply-To: <CAP-5=fVniyi3dtvH=-0h9ugmkcanyMa7wdxwrPR4OkFdws=x_w@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 2 Jun 2022 13:09:29 -0700
+Message-ID: <CAM9d7cgzkhCpLHGyFRi51G=qw1ijX28W2zu6G04dFGhP6n8TaA@mail.gmail.com>
+Subject: Re: [PATCH 4/5] perf record: Allow to specify max stack depth of fp callchain
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jun 1, 2022 at 11:30 PM Ian Rogers <irogers@google.com> wrote:
+>
+> On Tue, May 31, 2022 at 11:58 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > Currently it has no interface to specify the max stack depth for perf
+> > record.  Extend the command line parameter to accept a number after
+> > 'fp' to specify the depth like '--call-graph fp,32'.
+>
+> It is valid to have call-graph=fp as a modifier on an event. To
+> support a depth with that we couldn't use ',' as it is already the
+> separator between modifiers. For consistency maybe a different
+> separator should be used here?
 
-On Thu, Jun 2, 2022 at 12:06 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> The sc7180-trogdor-{lazor,homestar}-*.dtsi files all include
-> sc7180-trogdor.dtsi and sc7180-trogdor-lazor.dtsi or
-> sc7180-trogdor-homestar.dtsi, so including it here in the
-> sc7180-trogdor-{lazor,homestar}.dtsi file means we have a duplicate
-> include after commit 19794489fa24 ("arm64: dts: qcom: Only include
-> sc7180.dtsi in sc7180-trogdor.dtsi"). We include the sc7180-trogdor.dtsi
-> file in a board like sc7180-trogdor-lazor-r1.dts so that we can include
-> the display bridge snippet (e.g. sc7180-trogdor-ti-sn65dsi86.dtsi)
-> instead of making ever increasing variants like
-> sc7180-trogdor-lazor-ti-sn65dsi86.dtsi.
->
-> Unfortunately, having the double include like this means the display
-> bridge's i2c bus is left disabled instead of enabled by the bridge
-> snippet. Any boards that use the i2c bus for the display bridge will
-> have the bus disabled when we include sc7180-trogdor.dtsi the second
-> time, which picks up the i2c status="disabled" line from sc7180.dtsi.
-> This leads to the display not turning on and black screens at boot on
-> lazor and homestar devices.
->
-> Fix this by dropping the include and making a note that the
-> sc7180-trogdor-{lazor,homestar}.dtsi file must be included after
-> sc7180-trogdor.dtsi
->
-> Reported-by: Douglas Anderson <dianders@chromium.org>
-> Cc: "Joseph S. Barrera III" <joebar@chromium.org>
-> Cc: Matthias Kaehlcke <mka@chromium.org>
-> Fixes: 19794489fa24 ("arm64: dts: qcom: Only include sc7180.dtsi in sc7180-trogdor.dtsi")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->
-> It would be great to get this into -rc1 if possible to fix broken
-> display.
+But it's already there for dwarf stack dump size like
+'--call-graph dwarf,4096'.  Maybe we can add a new config term
+for the event parser.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-
-I tested and this fixes the "no display" problem on Linus's tree on
-both homestar and lazor.
-
-Tested-by: Douglas Anderson <dianders@chromium.org>
+Thanks,
+Namhyung

@@ -2,107 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D3F53B7C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6619553B7BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234212AbiFBL1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 07:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
+        id S234137AbiFBL0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 07:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234186AbiFBL1X (ORCPT
+        with ESMTP id S231266AbiFBL0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 07:27:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509102ACB46;
-        Thu,  2 Jun 2022 04:27:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 395F8B81EFC;
-        Thu,  2 Jun 2022 11:27:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 999A9C385A5;
-        Thu,  2 Jun 2022 11:27:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654169238;
-        bh=bkkX8lyw+LlhjrWMM9UPH00U1eomprbT2CFStMN6JTw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fec5AsNMHf1/CMW5blwRUqYNKLZZuq8z35ueIPBTc335mfgxSp/pO/sq8yCVBIl+x
-         KRrwEzAO/oqKQJzJSceuE7U0nXAZTa6XhRR74WQkJFt5TQJ1NzA3uFStQ7zFY+L1VE
-         DvjOUTVC1OoKmh8g7OJMhz4fTRiihbaI3QqEpoTkX/z7Khsq673LGR8LUvQ6T+NaS6
-         c9ZT7h0QliTPw7/PoMB2qvrrJ7KWsSk7ZqSxpslIry3PbAyZn/uzMjHxPJvmCmyaYc
-         z4WmbM15tFbfKT6P8Wl7n4PchUaqTgJ0poc9Ho1Rc7t0EBlq7N9klGdYDboBpEmbyW
-         SOsQmx1Gf9/7g==
-Date:   Thu, 2 Jun 2022 14:25:26 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peterhuewe@gmx.de, jgg@ziepe.ca
-Subject: Re: [PATCH] tpm: Add upgrade/reduced mode support for TPM1.2 modules
-Message-ID: <YpieJlx511jZUDmn@iki.fi>
-References: <20220601083810.330809-1-stefan.mahnke-hartmann@infineon.com>
+        Thu, 2 Jun 2022 07:26:10 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D1F26D368;
+        Thu,  2 Jun 2022 04:26:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654169169; x=1685705169;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/wJRKIbC3EFh/krWyBfZNPgJelfCQhMivFD9CA8TVK8=;
+  b=SjxWjmCj51Xvouzun2sMhgwOFB3BAry2QrnmDJYdOkVLc0Cztx8HEaa6
+   HDXVdRCEilWku3W+/TRGMNBNAakPuq0oTZwktc+gL5qZrl7CUQPDjSGpO
+   Zp6sDdNlNxVoF/d0hH4JCLUNr3gb7Ph8nalbPivrenHjuYYH1Pd2peot8
+   m2l3lZ885ftSi1K4CHoeWqjnAh/4VIU6QbzpqTIOJSAMGRZlFpyKYe9e5
+   Wgqxn0ZKtW/mRl2NK5Opqz5gBXSFm9I/OM+rWCOdyV1yfE6XTaCkqhbp6
+   sQtdVK/F29gXjpO2giQnk+r3S666ruxTC37eWOGsfTYbEc3k31/BcyVC0
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="255784724"
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="255784724"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 04:26:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="904944059"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Jun 2022 04:26:06 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 1B202F8; Thu,  2 Jun 2022 14:26:09 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH v2 1/3] gpio: crystalcove: make irq_chip immutable
+Date:   Thu,  2 Jun 2022 14:25:59 +0300
+Message-Id: <20220602112601.12010-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220601083810.330809-1-stefan.mahnke-hartmann@infineon.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 10:38:11AM +0200, Stefan Mahnke-Hartmann wrote:
-> In case a TPM in failure mode is detected, the TPM should be accessible
-> through a transparent communication channel for analysing purposes (e.g.
-> TPM_GetTestResult) or a field upgrade. Since a TPM in failure mode has
-> similar reduced functionality as in field upgrade mode, the flag
-> TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE is also valid.
-> 
-> As described in TCG TPM Main Part1 Design Principles, Revision 116,
-> chapter 9.2.1. the TPM also allows an update function in case a TPM is
-> in failure mode.
-> 
-> If the TPM in failure mode is detected, the function tpm1_auto_startup()
-> sets TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE flag. This patch simply follows
-> the same rationale as TPM2 in field upgrade mode.
+Since recently, the kernel is nagging about mutable irq_chips:
 
-"following the rationale" does not give a clue what it does.
+   "not an immutable chip, please consider fixing it!"
 
-Also minor nit: write in imperative from, and please do not say "this
-patch". It won't be a patch, once it is in git.
+Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
+helper functions and call the appropriate gpiolib functions.
 
-> Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-> ---
-> If you have any better suggestions, please let me know.
-> 
->  drivers/char/tpm/tpm1-cmd.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-> index f7dc986fa4a0..7a42d74c450c 100644
-> --- a/drivers/char/tpm/tpm1-cmd.c
-> +++ b/drivers/char/tpm/tpm1-cmd.c
-> @@ -710,8 +710,10 @@ int tpm1_auto_startup(struct tpm_chip *chip)
->  		goto out;
->  	rc = tpm1_do_selftest(chip);
->  	if (rc) {
-> -		dev_err(&chip->dev, "TPM self test failed\n");
-> -		goto out;
-> +		dev_err(&chip->dev, "TPM self test failed, so the TPM has limited functionality\n");
-> +		/* A TPM in this state possibly allows or needs a firmware upgrade */
-> +		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_UPGRADE;
-> +		rc = 0;
->  	}
->  
->  	return rc;
-> -- 
-> 2.25.1
-> 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: called GPIO helpers only for real GPIOs in IRQ callbacks
+ drivers/gpio/gpio-crystalcove.c | 40 ++++++++++++++++++++-------------
+ 1 file changed, 25 insertions(+), 15 deletions(-)
 
-Why all error codes trigger this action, e.g. all possible TPM2
-errors and -ETIME?
+diff --git a/drivers/gpio/gpio-crystalcove.c b/drivers/gpio/gpio-crystalcove.c
+index b55c74a5e064..cf33041533aa 100644
+--- a/drivers/gpio/gpio-crystalcove.c
++++ b/drivers/gpio/gpio-crystalcove.c
+@@ -15,6 +15,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/seq_file.h>
++#include <linux/types.h>
+ 
+ #define CRYSTALCOVE_GPIO_NUM	16
+ #define CRYSTALCOVE_VGPIO_NUM	95
+@@ -238,34 +239,43 @@ static void crystalcove_bus_sync_unlock(struct irq_data *data)
+ 
+ static void crystalcove_irq_unmask(struct irq_data *data)
+ {
+-	struct crystalcove_gpio *cg =
+-		gpiochip_get_data(irq_data_get_irq_chip_data(data));
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct crystalcove_gpio *cg = gpiochip_get_data(gc);
++	irq_hw_number_t hwirq = irqd_to_hwirq(data);
+ 
+-	if (data->hwirq < CRYSTALCOVE_GPIO_NUM) {
+-		cg->set_irq_mask = false;
+-		cg->update |= UPDATE_IRQ_MASK;
+-	}
++	if (hwirq >= CRYSTALCOVE_GPIO_NUM)
++		return;
++
++	gpiochip_enable_irq(gc, hwirq);
++
++	cg->set_irq_mask = false;
++	cg->update |= UPDATE_IRQ_MASK;
+ }
+ 
+ static void crystalcove_irq_mask(struct irq_data *data)
+ {
+-	struct crystalcove_gpio *cg =
+-		gpiochip_get_data(irq_data_get_irq_chip_data(data));
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct crystalcove_gpio *cg = gpiochip_get_data(gc);
++	irq_hw_number_t hwirq = irqd_to_hwirq(data);
+ 
+-	if (data->hwirq < CRYSTALCOVE_GPIO_NUM) {
+-		cg->set_irq_mask = true;
+-		cg->update |= UPDATE_IRQ_MASK;
+-	}
++	if (hwirq >= CRYSTALCOVE_GPIO_NUM)
++		return;
++
++	cg->set_irq_mask = true;
++	cg->update |= UPDATE_IRQ_MASK;
++
++	gpiochip_disable_irq(gc, hwirq);
+ }
+ 
+-static struct irq_chip crystalcove_irqchip = {
++static const struct irq_chip crystalcove_irqchip = {
+ 	.name			= "Crystal Cove",
+ 	.irq_mask		= crystalcove_irq_mask,
+ 	.irq_unmask		= crystalcove_irq_unmask,
+ 	.irq_set_type		= crystalcove_irq_type,
+ 	.irq_bus_lock		= crystalcove_bus_lock,
+ 	.irq_bus_sync_unlock	= crystalcove_bus_sync_unlock,
+-	.flags			= IRQCHIP_SKIP_SET_WAKE,
++	.flags			= IRQCHIP_SKIP_SET_WAKE | IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+ };
+ 
+ static irqreturn_t crystalcove_gpio_irq_handler(int irq, void *data)
+@@ -353,7 +363,7 @@ static int crystalcove_gpio_probe(struct platform_device *pdev)
+ 	cg->regmap = pmic->regmap;
+ 
+ 	girq = &cg->chip.irq;
+-	girq->chip = &crystalcove_irqchip;
++	gpio_irq_chip_set_chip(girq, &crystalcove_irqchip);
+ 	/* This will let us handle the parent IRQ in the driver */
+ 	girq->parent_handler = NULL;
+ 	girq->num_parents = 0;
+-- 
+2.35.1
 
-BR, Jarkko

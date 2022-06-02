@@ -2,173 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0C053BB98
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892B953BB9A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236448AbiFBPbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 11:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S236465AbiFBPcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 11:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234580AbiFBPbq (ORCPT
+        with ESMTP id S236452AbiFBPb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 11:31:46 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67AC13C1F6;
-        Thu,  2 Jun 2022 08:31:42 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id j10so8340737lfe.12;
-        Thu, 02 Jun 2022 08:31:42 -0700 (PDT)
+        Thu, 2 Jun 2022 11:31:56 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8C7BCA4
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 08:31:52 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2f83983782fso55139777b3.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 08:31:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=esMKub0cfzvqnfMV7lmbB0oZRypBhw/uecaEXqoF+WU=;
-        b=oTu0P2daaKsA1l22EDygSdCtDLs65QG9Z696gkcTXpMo2tPkRWcIDU2SMt0nxxwHQV
-         csoZh3kuDwqEf57wSVlZictjMfan6VYdNqioDeQrZBxICj/Wj03NDcp8oSK1+klzeBcx
-         XcYkpq4lntn5O9wd5dX8J9zJOtEUn1gmdu9TJrmh3E2MtzmmvM5IfgMdo9Ve7xiXelvj
-         N7b0cjXXMinL39F1ZZ+NPFL2o7Z4V4Xpl+l3ZuVhZ7ULijC4XHWkWjKa8NPclYWMZsg5
-         pvaMNdZN8qOCh5oTGXJGE6gyXJktrIDLP+dhxJ65pVF/x3LinZGRwkfCxH6t089Io3Pq
-         EGvQ==
+         :cc;
+        bh=8Knz9JmJqm4EucxNHcnCzTZMEqb1eXMDB2BBmxOvSfo=;
+        b=A5BEurTXTqPI2SJfMM+0Og5mkfT1VMkGbC38WlggmdEdOivuFGZMJrBOEArKLrgmjd
+         ispcV5TBg8MDV6Pw1F93Jo101+POqcpuj3mm1Cx7/NWgjNEQVIrUM26/JOdE6eIM9PNe
+         NK5jB9oLoo+rd+ELGFkAdAstHirBUwRDd0X1CRUyvyl4zf02btaqHCrhk1Mo3f2mp9p1
+         PwcArktmbaggGkq20umNK6JKAtWRVvfsfnKee0/0oA68IQr72FAwhg3zsPurigPZynB4
+         WrPeKRvKMWcdQNpGntCfhvjn3oaDTMSsKRF5TSZ/yGtFOgxPk0tMfTtjbfikgukep6cx
+         7O7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=esMKub0cfzvqnfMV7lmbB0oZRypBhw/uecaEXqoF+WU=;
-        b=d2x4JaHlzZBuG19hgxHk5Up+d/KzA++DJ/hW5HAen8uqHHKgSo7FFa46suOWME2fY5
-         oS2sG4ukzxA56wzeYFWr42k2rB0UP91b1xtnghFs2A3ILADRRmBr54o89CwHj684saG4
-         wPM3Pk35D4rjVZfLKNknFvDqH43waT5606QWZgGclqNVi31POoyuZs8PgleaiKtKjudj
-         vOqpkvn3Kk/pHD9VHsKGg7GimNgDU2lJAfzOprFKeoidktVZte//U/GZaMzUz9qSH+DY
-         j9+FsPTHVwW0d0YJ0VoZEYCQaPTL+jr+hcAiTGyLIVq4WqQoshTchbRxzdMEjSULLGId
-         LHZg==
-X-Gm-Message-State: AOAM533C5FAuDAt/bykFYmScPq5kuI3B/U+2+g7L0aZW+OY4hp0UM4Ky
-        3bBdr1bzMuBfSCUS/XX9c171+8qJhiFbEu5et4V17V7qHbfeYA==
-X-Google-Smtp-Source: ABdhPJwUWTC1dJi2VZe48WvDxa+lO5SkWNx609HcHDHFfZMmdimibD/T9ChrnJh/j6CAvW90E37p6PiD4Z97tjQIh84=
-X-Received: by 2002:a05:6512:3a95:b0:478:da91:ebc8 with SMTP id
- q21-20020a0565123a9500b00478da91ebc8mr4080306lfu.120.1654183900754; Thu, 02
- Jun 2022 08:31:40 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=8Knz9JmJqm4EucxNHcnCzTZMEqb1eXMDB2BBmxOvSfo=;
+        b=6CeU/mLpgXLD6QON6xbooSQ+6RRfc7aUIPtVUwtJGm3YdYS/PUFhTzsaVIwMV3kqq3
+         1uZOacuQ/k4/cmyCuPNN66yj2HAFUkcIKu9ylzKvSeWtl71FuFqlCG3M+nPGVyJSlNaT
+         20M9M0LqD1+rXSUUX5N5u/ahXDSj4k0iMBkErQ2l7Q00ckmN1HoaS6JNcMNAkGTrxvCB
+         +RAnceiy0XvOWLam4xotaNrDL1EB1X+LErZME5DRCnz11eVye1GerwDKidTCUO9Tc301
+         nItPUaw1MAKHZrUpBasZbGyM2F2AD+ul0hV5CfGAq1Pbq0pMzYn99aig4x9tf6qpgG5r
+         c6/g==
+X-Gm-Message-State: AOAM531tNiCZYFcaDjt0DZ9iXDIUkhtFFSK7rV9RVUTL627nHbrwH18i
+        0PLUwJC+dCLa9DmVix2vKbdexHVwZ1MOdSpJBNTiuw==
+X-Google-Smtp-Source: ABdhPJyDgn+XcjAIve032i0v41nPDh9/gB1Ke2pcinTpAdoGGtfFIm2nBM+7mIhCzFsvqob6zbUErmaGn6ssSdJrp54=
+X-Received: by 2002:a0d:ca08:0:b0:30c:b11b:8cfc with SMTP id
+ m8-20020a0dca08000000b0030cb11b8cfcmr6352036ywd.362.1654183911131; Thu, 02
+ Jun 2022 08:31:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <1653534995-30794-1-git-send-email-u0084500@gmail.com>
- <1653534995-30794-2-git-send-email-u0084500@gmail.com> <1c7ab94c-a736-c629-bd8c-8a974803e2b9@linaro.org>
- <CADiBU39jZ6TdYZoH80m4R-X2_fUXZOvDA4yUd_TQdPzBJLE+JA@mail.gmail.com>
- <076d53d3-6062-686f-8e45-14c5f936bbf6@linaro.org> <20220602135604.GA2194286-robh@kernel.org>
- <e3aa9c7e-bf2d-dd55-8b3f-ca51f569771d@linaro.org>
-In-Reply-To: <e3aa9c7e-bf2d-dd55-8b3f-ca51f569771d@linaro.org>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Thu, 2 Jun 2022 23:31:29 +0800
-Message-ID: <CADiBU3-dN0vtQBEqvVLFCUp4-MkhLbQRkOiCet+fO8WfkEW4MQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: backlight: rt4831: Add the new property
- for ocp level selection
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Helge Deller <deller@gmx.de>, cy_huang <cy_huang@richtek.com>,
-        lucas_tsai@richtek.com,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-7-kirill.shutemov@linux.intel.com> <YnE4ZzzVrxUnr3Uv@zn.tnic>
+ <20220506153013.e6v4q2qhuhqumfiu@box.shutemov.name> <YnpGnMoviGoK4Ucq@zn.tnic>
+ <CAAH4kHYRxgUNnGRUO473q02q3akLzgiTvbA2qKEP5jq6jFV-uA@mail.gmail.com>
+ <Yn4ed1gupKmNz2jn@zn.tnic> <20220513144515.fx2cvo3rjued3vy5@black.fi.intel.com>
+ <PH0PR11MB5064B561086BE6350CC1DCDCC5CF9@PH0PR11MB5064.namprd11.prod.outlook.com>
+ <CAAH4kHbU4FJ=veYQxncdpYD837M90vq2o2saVaUCJ6=pfuNRpA@mail.gmail.com>
+ <0c545c5f-3540-1441-7a7d-359b6795f43a@amd.com> <CAAH4kHYj9WOKngeXYL=KnNb1fXa-MaFGTBGZcBX726Od858Q3A@mail.gmail.com>
+ <19ac7bbc-82f1-8350-8638-163303d682b1@amd.com>
+In-Reply-To: <19ac7bbc-82f1-8350-8638-163303d682b1@amd.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Thu, 2 Jun 2022 08:31:40 -0700
+Message-ID: <CAAH4kHbPyCAxwQgqPpgDQ3bEioHZ+WboUMGTHazxC9f9jEEwWg@mail.gmail.com>
+Subject: Re: [PATCHv5 06/12] x86/boot/compressed: Handle unaccepted memory
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     "Xu, Min M" <min.m.xu@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Gao, Jiaqi" <jiaqi.gao@intel.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rodel, Jorg" <jroedel@suse.de>, Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
-=B46=E6=9C=882=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=889:58=E5=AF=AB=
-=E9=81=93=EF=BC=9A
+On Thu, Jun 2, 2022 at 5:51 AM Gupta, Pankaj <pankaj.gupta@amd.com> wrote:
+> AFAIU the unaccepted memory also stays in buddy (first via slow path)
+> and should be accounted automatically in free?
 >
-> On 02/06/2022 15:56, Rob Herring wrote:
-> > On Thu, May 26, 2022 at 12:32:12PM +0200, Krzysztof Kozlowski wrote:
-> >> On 26/05/2022 10:13, ChiYuan Huang wrote:
-> >>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=
-=E5=B9=B45=E6=9C=8826=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=884:06=E5=
-=AF=AB=E9=81=93=EF=BC=9A
-> >>>>
-> >>>> On 26/05/2022 05:16, cy_huang wrote:
-> >>>>> From: ChiYuan Huang <cy_huang@richtek.com>
-> >>>>>
-> >>>>> Add the new property for ocp level selection.
-> >>>>>
-> >>>>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> >>>>> ---
-> >>>>>  .../bindings/leds/backlight/richtek,rt4831-backlight.yaml         =
-| 8 ++++++++
-> >>>>>  include/dt-bindings/leds/rt4831-backlight.h                       =
-| 5 +++++
-> >>>>>  2 files changed, 13 insertions(+)
-> >>>>>
-> >>>>> diff --git a/Documentation/devicetree/bindings/leds/backlight/richt=
-ek,rt4831-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight=
-/richtek,rt4831-backlight.yaml
-> >>>>> index e0ac686..c1c59de 100644
-> >>>>> --- a/Documentation/devicetree/bindings/leds/backlight/richtek,rt48=
-31-backlight.yaml
-> >>>>> +++ b/Documentation/devicetree/bindings/leds/backlight/richtek,rt48=
-31-backlight.yaml
-> >>>>> @@ -47,6 +47,14 @@ properties:
-> >>>>>      minimum: 0
-> >>>>>      maximum: 3
-> >>>>>
-> >>>>> +  richtek,bled-ocp-sel:
-> >>>>
-> >>>> Skip "sel" as it is a shortcut of selection. Name instead:
-> >>>> "richtek,backlight-ocp"
-> >>>>
-> >>> OK, if so, do I need to rename all properties from 'bled' to 'backlig=
-ht' ?
-> >>> If  only this property is naming as 'backlight'. it may conflict with
-> >>> the others like as "richtek,bled-ovp-sel".
-> >>
-> >> Ah, no, no need.
-> >>
-> >>>>
-> >>>>> +    description: |
-> >>>>> +      Backlight OCP level selection, currently support 0.9A/1.2A/1=
-.5A/1.8A
-> >>>>
-> >>>> Could you explain here what is OCP (unfold the acronym)?
-> >>> Yes. And the full name is 'over current protection'.
-> >>
-> >> Thanks and this leads to second thing - you encode register value
-> >> instead of logical value. This must be a logical value in mA, so
-> >> "richtek,bled-ocp-microamp".
+
+No, the last patch adds unaccepted mem as a differently accounted memory type.
+
 > >
-> > We already have common properties for setting current of LEDs. We shoul=
-d
-> > use that here I think.
+> > So when I see 2044MB free vs 7089MB free in my VMs, the two are
+> > roughly 5GB different.
 >
-> It might not be exactly the same. We have "led-max-microamp" which is
-> the maximum allowed current. I guess over-current protection level  is
-> slightly higher (e.g. led-max-microamp + 1). IOW, led-max-microamp is
-> something which still can be set and used by system/hardware. OCP should
-> not.
+> Is it possible all memory got allocated with memblock? Maybe some
+> variable tests to validate with '/proc/meminfo | grep UnacceptedMem'
+> would give you more clue.
 >
-Yap, you're right.
-From the modern backlight IC design, it uses the boost converter architectu=
-re.
-This OCP level is to limit the inductor current when the internal MOS
-switch turn on.
-Details can refer to the below wiki link
-https://en.wikipedia.org/wiki/Boost_converter
 
-And based on it, OVP is used to limit the inductor output voltage.
-Each channel maximum current is based on the IC affordable limit.
-It is more like as what you said 'led-max-microamp'.
+free -k parses /proc/meminfo for MemFree and SwapFree in
+/proc/meminfo, so it sounds like it should also add in UnacceptedMem.
+We'll try that. Thanks.
 
-So boost voltage level may depend on the LED VF.
-The different series of LED may cause different boost voltage.
 
-RT4831's OVP/OCP is not just the protection, more like as the limit.
->
-> Best regards,
-> Krzysztof
+
+
+--
+-Dionna Glaze, PhD (she/her)

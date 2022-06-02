@@ -2,202 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E8A53B7AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA4853B7B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234090AbiFBLR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 07:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
+        id S234099AbiFBLU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 07:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbiFBLR1 (ORCPT
+        with ESMTP id S231266AbiFBLUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 07:17:27 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701966348
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 04:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654168645; x=1685704645;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uevDuI523c4bFiva4JVL4fpLRmlgzY6VTweGr8x1Fe0=;
-  b=Z/dZYTA5kHlp/S6XVuRh9ALr5ZUkM5BGHUWtXEN+eOGolKg8Zbc2etpk
-   sCrU5pPcciPPRvd57VD5hi+uOLn+AOvx0hDYIW1oq8LEIxtWX/gsAmLE4
-   IlAqqTLoJa8Gq/GqNERz9ywD6jbf8+2To5Ji4CVfJuXt7VW4bBfL74EMT
-   DVWofoWQ69ZXgpqFUMRB6CiYc9neN6AxDKfoqPH6oPvogYSd+ZNZ1/sXn
-   +Wbd/JaqsLujg/OeVZz8qaYM4x1UhijuEl9aLz0cz1PktH9aCSD9r+QHE
-   GX5HMsClISou8Ez6VEjhJclgpvkxTmhPkadUPg2DdneUAJEalHyJA34Uz
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="338961989"
-X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="338961989"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 04:17:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="563264494"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 Jun 2022 04:17:23 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwipP-00050f-6l;
-        Thu, 02 Jun 2022 11:17:23 +0000
-Date:   Thu, 2 Jun 2022 19:17:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 23/31]
- arch/mips/include/asm/page.h:257:25: error: implicit declaration of function
- 'virt_to_phys'; did you mean 'virt_to_pfn'?
-Message-ID: <202206021923.wWB7z5Z7-lkp@intel.com>
+        Thu, 2 Jun 2022 07:20:55 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F792A80FE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 04:20:53 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id a64so7705168ybg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 04:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=6r6Vaw+wZvpxvKWw2pORFiU+DbCU4N7wdhOQeTbklfc=;
+        b=m0OEpK597X7Jm59IE3NiU7ra1ljGWT0v9rqyVt5WF+xQOU8MX3XqOxTO6lWuU168Nb
+         KxAHL5oIcH5PH/Gzsck3NoHWIY20v/090PzZzAOHKR/Q7sLMTPk4CAIApvN8p6TFUYEY
+         B6ilnZQslx3vho5a8lpxJP2cT72tTfzsQINEA8OEEkBIravpJHh0rtCsH6mbhoe9bE75
+         vWWTVU5S0rMTNNv1kFizVCJn3Xi5fCuyO+quUQubNBerWcS4Rq7dz4/eZEydDOylA11O
+         t6fiOh8MrUCSJOTqc87gmkjxh0W91Et7HG+v/nZJqCjF3hMiaqITAmaUYZR8VnyCg8gM
+         3Ang==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6r6Vaw+wZvpxvKWw2pORFiU+DbCU4N7wdhOQeTbklfc=;
+        b=J4fKxxQ18rl2BEjp2r2zJisgP16MeMn/0wqIWuIabu9AsAEqilvcXdM3GXzeFLlC+7
+         hmN7ITwAyWcCdCurOJdmmmlvTi58kznZU7BC5g6Rcllvl4ujvc/BgVs80XYFJ9GZUm+D
+         Sh7ReZuv6pc1nJLh/LmqMGT6mbRNJWh67o/tkpTCI8GGKjO2/72r6DtPpcfI0n9YTvE2
+         NpKucElutDRTblr0VN5f1jNxnUXMfMbGOJbuBk3ZKJzXEK+8tYUZHbJgSd/GvXRA+1QO
+         k01Gsq2YzgIib325viOl6VpKHrSVguWThUobldZZkEb/jlvB87RmMhGUw6dQ2D2/zZ1T
+         DHGg==
+X-Gm-Message-State: AOAM532vnpBPVb5wfeQLPF+zCLsQ79HDfquySDo1h0uIK16NTAXBn6dN
+        mw3l7wBqXsi/u28Krp54UoE0jzyKC3cjcUi6f54YOA==
+X-Google-Smtp-Source: ABdhPJxI8RjbLjO2b9SZDaxy2qFIb8juG6DprYWcrXQV0N+mLi1jIj6L/wKi/ae5MVHdUK1h3xajcbA/Z66IiOGwWWo=
+X-Received: by 2002:a5b:4c7:0:b0:65d:313:6270 with SMTP id u7-20020a5b04c7000000b0065d03136270mr4614359ybp.363.1654168852326;
+ Thu, 02 Jun 2022 04:20:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-6-glider@google.com>
+ <CAK8P3a2eDDAAQ8RiQi0B+Jk4KvGeMk+pe78RB+bB9qwTTyhuag@mail.gmail.com>
+In-Reply-To: <CAK8P3a2eDDAAQ8RiQi0B+Jk4KvGeMk+pe78RB+bB9qwTTyhuag@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 2 Jun 2022 13:20:16 +0200
+Message-ID: <CAG_fn=X601D5RtbkOMjZEKL+ZyQZG5Ddw7Uv=MOivbceAxPBAg@mail.gmail.com>
+Subject: Re: [PATCH v3 05/46] x86: asm: instrument usercopy in get_user() and __put_user_size()
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
-head:   9083f89a58302e92fad7f144986e307db2350aad
-commit: 1b6fb48b9bb60a647b00e74c63ffa0e224446e8a [23/31] MIPS: Make virt_to_pfn() a static inline
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220602/202206021923.wWB7z5Z7-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=1b6fb48b9bb60a647b00e74c63ffa0e224446e8a
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
-        git checkout 1b6fb48b9bb60a647b00e74c63ffa0e224446e8a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips prepare
+On Wed, Apr 27, 2022 at 9:15 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Apr 26, 2022 at 6:42 PM Alexander Potapenko <glider@google.com> w=
+rote:
+> > @@ -99,11 +100,13 @@ extern int __get_user_bad(void);
+> >         int __ret_gu;                                                  =
+ \
+> >         register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);           =
+ \
+> >         __chk_user_ptr(ptr);                                           =
+ \
+> > +       instrument_copy_from_user_before((void *)&(x), ptr, sizeof(*(pt=
+r))); \
+> >         asm volatile("call __" #fn "_%P4"                              =
+ \
+> >                      : "=3Da" (__ret_gu), "=3Dr" (__val_gu),           =
+     \
+> >                         ASM_CALL_CONSTRAINT                            =
+ \
+> >                      : "0" (ptr), "i" (sizeof(*(ptr))));               =
+ \
+> >         (x) =3D (__force __typeof__(*(ptr))) __val_gu;                 =
+   \
+> > +       instrument_copy_from_user_after((void *)&(x), ptr, sizeof(*(ptr=
+)), 0); \
+>
+> Isn't "ptr" the original pointer here? I think what happened with the
+> reported warning is that you get one output line for every instance this
+> is used in. There should probably be a
+>
+>       __auto_type __ptr =3D (ptr);
+>
+> at the beginning of the macro to ensure that 'ptr' is only evaluated once=
+.
+>
+> >>> arch/x86/kernel/signal.c:360:9: sparse: sparse: incorrect type in arg=
+ument 1 (different address spaces) @@     expected void [noderef] __user *t=
+o @@     got unsigned long long [usertype] * @@
+>
+> It would also make sense to add the missing __user annotation in this lin=
+e, but
+> I suspect there are others like it in drivers.
+>
+>       Arnd
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I ran sparse locally, and it is actually the missing __user
+annotations in signal.c that cause these reports.
 
-All errors (new ones prefixed by >>):
+The following patch:
 
-   In file included from arch/mips/include/asm/page.h:73,
-                    from arch/mips/include/asm/io.h:29,
-                    from include/linux/io.h:13,
-                    from arch/mips/include/asm/mips-cps.h:11,
-                    from arch/mips/include/asm/smp-ops.h:16,
-                    from arch/mips/include/asm/smp.h:21,
-                    from include/linux/smp.h:113,
-                    from arch/mips/include/asm/cpu-type.h:12,
-                    from arch/mips/include/asm/timex.h:19,
-                    from include/linux/timex.h:65,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from include/linux/compat.h:10,
-                    from arch/mips/kernel/asm-offsets.c:12:
-   arch/mips/include/asm/page.h: In function 'virt_to_pfn':
->> arch/mips/include/asm/page.h:257:25: error: implicit declaration of function 'virt_to_phys'; did you mean 'virt_to_pfn'? [-Werror=implicit-function-declaration]
-     257 |         return PFN_DOWN(virt_to_phys((void *)(kaddr)));
-         |                         ^~~~~~~~~~~~
-   include/linux/pfn.h:20:27: note: in definition of macro 'PFN_DOWN'
-      20 | #define PFN_DOWN(x)     ((x) >> PAGE_SHIFT)
-         |                           ^
-   In file included from include/linux/io.h:13,
-                    from arch/mips/include/asm/mips-cps.h:11,
-                    from arch/mips/include/asm/smp-ops.h:16,
-                    from arch/mips/include/asm/smp.h:21,
-                    from include/linux/smp.h:113,
-                    from arch/mips/include/asm/cpu-type.h:12,
-                    from arch/mips/include/asm/timex.h:19,
-                    from include/linux/timex.h:65,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from include/linux/compat.h:10,
-                    from arch/mips/kernel/asm-offsets.c:12:
-   arch/mips/include/asm/io.h: At top level:
->> arch/mips/include/asm/io.h:114:22: error: conflicting types for 'virt_to_phys'; have 'phys_addr_t(const volatile void *)' {aka 'unsigned int(const volatile void *)'}
-     114 | #define virt_to_phys virt_to_phys
-         |                      ^~~~~~~~~~~~
-   arch/mips/include/asm/io.h:115:27: note: in expansion of macro 'virt_to_phys'
-     115 | static inline phys_addr_t virt_to_phys(const volatile void *x)
-         |                           ^~~~~~~~~~~~
-   In file included from arch/mips/include/asm/page.h:73,
-                    from arch/mips/include/asm/io.h:29,
-                    from include/linux/io.h:13,
-                    from arch/mips/include/asm/mips-cps.h:11,
-                    from arch/mips/include/asm/smp-ops.h:16,
-                    from arch/mips/include/asm/smp.h:21,
-                    from include/linux/smp.h:113,
-                    from arch/mips/include/asm/cpu-type.h:12,
-                    from arch/mips/include/asm/timex.h:19,
-                    from include/linux/timex.h:65,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from include/linux/compat.h:10,
-                    from arch/mips/kernel/asm-offsets.c:12:
-   arch/mips/include/asm/page.h:257:25: note: previous implicit declaration of 'virt_to_phys' with type 'int()'
-     257 |         return PFN_DOWN(virt_to_phys((void *)(kaddr)));
-         |                         ^~~~~~~~~~~~
-   include/linux/pfn.h:20:27: note: in definition of macro 'PFN_DOWN'
-      20 | #define PFN_DOWN(x)     ((x) >> PAGE_SHIFT)
-         |                           ^
-   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
-      26 | void output_ptreg_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
-      78 | void output_task_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
-      92 | void output_thread_info_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
-     108 | void output_thread_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:136:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
-     136 | void output_thread_fpu_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
-     179 | void output_mm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:218:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
-     218 | void output_sc_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:253:6: warning: no previous prototype for 'output_signal_defined' [-Wmissing-prototypes]
-     253 | void output_signal_defined(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:320:6: warning: no previous prototype for 'output_pbe_defines' [-Wmissing-prototypes]
-     320 | void output_pbe_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:332:6: warning: no previous prototype for 'output_pm_defines' [-Wmissing-prototypes]
-     332 | void output_pm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:346:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
-     346 | void output_kvm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:390:6: warning: no previous prototype for 'output_cps_defines' [-Wmissing-prototypes]
-     390 | void output_cps_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-   make[2]: *** [scripts/Makefile.build:120: arch/mips/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+index e439eb14325fa..68537dbffa545 100644
+--- a/arch/x86/kernel/signal.c
++++ b/arch/x86/kernel/signal.c
+@@ -355,7 +355,7 @@ __setup_frame(int sig, struct ksignal *ksig, sigset_t *=
+set,
+         * reasons and because gdb uses it as a signature to notice
+         * signal handler stack frames.
+         */
+-       unsafe_put_user(*((u64 *)&retcode), (u64 *)frame->retcode, Efault);
++       unsafe_put_user(*((u64 *)&retcode), (__user u64
+*)frame->retcode, Efault);
+        user_access_end();
+
+        /* Set up registers for signal handler */
+@@ -415,7 +415,7 @@ static int __setup_rt_frame(int sig, struct ksignal *ks=
+ig,
+         * reasons and because gdb uses it as a signature to notice
+         * signal handler stack frames.
+         */
+-       unsafe_put_user(*((u64 *)&rt_retcode), (u64 *)frame->retcode, Efaul=
+t);
++       unsafe_put_user(*((u64 *)&rt_retcode), (__user u64
+*)frame->retcode, Efault);
+        unsafe_put_sigcontext(&frame->uc.uc_mcontext, fp, regs, set, Efault=
+);
+        unsafe_put_sigmask(set, frame, Efault);
+        user_access_end();
+
+appears to fix sparse warnings.
 
 
-vim +257 arch/mips/include/asm/page.h
 
-   254	
-   255	static inline unsigned long virt_to_pfn(const void *kaddr)
-   256	{
- > 257		return PFN_DOWN(virt_to_phys((void *)(kaddr)));
-   258	}
-   259	#define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
-   260	
+--=20
+Alexander Potapenko
+Software Engineer
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
+
+Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
+erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
+weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
+mich
+bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
+
+
+This e-mail is confidential. If you received this communication by
+mistake, please don't forward it to anyone else, please erase all
+copies and attachments, and please let me know that it has gone to the
+wrong person.

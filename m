@@ -2,66 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1C953B104
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 03:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B7E53B12C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 03:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbiFBBOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 21:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35512 "EHLO
+        id S233112AbiFBBPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 21:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232994AbiFBBOc (ORCPT
+        with ESMTP id S233098AbiFBBPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 21:14:32 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5652528DC2D
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 18:14:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654132471; x=1685668471;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bWFXcQnKXY8a/m8TcSxijScjYvDHTQN+fntbc/HLins=;
-  b=iyOIbIgjCkBmttCel7iA3PP6P222Y0OQoH4/R8GETDEOWcClb4WoYMsR
-   3+rtPSw98v4WImSyxHky2oblfOXqMOFvgkPX2+iKLlVeNaZyWmaCLZESe
-   LJoRCJ9b4JxIe45a5077AWereP+Us371jyXdE7Hv3LDUniX4y6yQl3qbp
-   M=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 01 Jun 2022 18:14:31 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 18:14:31 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 1 Jun 2022 18:14:30 -0700
-Received: from [10.253.74.162] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 1 Jun 2022
- 18:14:28 -0700
-Message-ID: <44ae3cc5-12ea-ada3-aee9-2b572c2343f7@quicinc.com>
-Date:   Thu, 2 Jun 2022 09:14:26 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 3/3] selftests/ftrace: add test case for GRP/ only
- input
-Content-Language: en-US
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-CC:     Steven Rostedt <rostedt@goodmis.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, <linux-kernel@vger.kernel.org>
-References: <1653978552-18637-1-git-send-email-quic_linyyuan@quicinc.com>
- <1653978552-18637-4-git-send-email-quic_linyyuan@quicinc.com>
- <20220601235744.93ba3c80951680c3d6bb6961@kernel.org>
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <20220601235744.93ba3c80951680c3d6bb6961@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        Wed, 1 Jun 2022 21:15:32 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB5028E719;
+        Wed,  1 Jun 2022 18:15:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 98E6FCE1DBA;
+        Thu,  2 Jun 2022 01:15:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F29A7C385A5;
+        Thu,  2 Jun 2022 01:15:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654132529;
+        bh=dIyI0EHO1+u34y11qkC09d6/0IBp5okee0/nHVtoRaY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=F40VZTmu9X86cKRVpETm98IWDDE8DzvvHQ1gXzI0r8JSMvtl/++Xwhw2izxLq2amV
+         i9WSIpVzWHkVOxYj/s4JrYBc826IqnI6CXjClsA4ZaHwIo0UcnwsDupp5utxf1Xkkz
+         kPN/n25xc26zgQ8aJ/2Jhxk3H/dVs/uWNadd4oAye764+fBzvwGcafxAEUiubSBfuW
+         D5QlkJu26YD9Usfz/ypb97xaKi2G/JgHnTrJL930qqVZstSFbkc+r+J7WtHd6D0P4i
+         xoRrNStrzmKyNCXCtHwYofcb0F+AIaG4CqQU0uLye1JU3iDGB6KxI5EpjGQ4uOzl4q
+         ZKhcbzNoDa2Dg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DEDE0EAC081;
+        Thu,  2 Jun 2022 01:15:28 +0000 (UTC)
+Subject: Re: [GIT PULL] xfs: changes for 5.19-rc1 [2nd set]
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220601221431.GG227878@dread.disaster.area>
+References: <20220601221431.GG227878@dread.disaster.area>
+X-PR-Tracked-List-Id: <linux-xfs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220601221431.GG227878@dread.disaster.area>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.19-for-linus-2
+X-PR-Tracked-Commit-Id: 7146bda743e6f543af60584fad2cfbb6ce83d8ac
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0e5ab8dd87c29640a46aee9e38bc3ba7645b1db0
+Message-Id: <165413252890.5973.590261192738155869.pr-tracker-bot@kernel.org>
+Date:   Thu, 02 Jun 2022 01:15:28 +0000
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, djwong@kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,87 +62,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Masami,
+The pull request you sent on Thu, 2 Jun 2022 08:14:31 +1000:
 
-thanks for review, will update your comment in next V4.
+> git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.19-for-linus-2
 
-thanks
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0e5ab8dd87c29640a46aee9e38bc3ba7645b1db0
 
-On 6/1/2022 10:57 PM, Masami Hiramatsu (Google) wrote:
-> Hi Linyu,
->
-> On Tue, 31 May 2022 14:29:12 +0800
-> Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
->
->> add kprobe and eprobe event test for new GRP/ only format.
->>
->> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
->> ---
->> v3: first add in this version
->>
->>   .../testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc  | 7 ++++++-
->>   .../testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc  | 7 ++++++-
->>   2 files changed, 12 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
->> index 60c02b4..97856df 100644
->> --- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
->> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
->> @@ -1,7 +1,7 @@
->>   #!/bin/sh
->>   # SPDX-License-Identifier: GPL-2.0
->>   # description: Generic dynamic event - add/remove eprobe events
->> -# requires: dynamic_events events/syscalls/sys_enter_openat "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
->> +# requires: dynamic_events events/syscalls/sys_enter_openat "e[:[<group>/][<event>]] <attached-group>.<attached-event> [<args>]":README
-> Hmm, this is too restricted. With this change, this entire test only runs after
-> patching this series.
-> Can you change the requires so that skip checking the first half, like
->    "<attached-group>.<attached-event> [<args>]":README
-> and check whether "e[:[<group>/][<event>]]" is in the README for the new
-> test code?
->   
->>   echo 0 > events/enable
->>   
->> @@ -87,4 +87,9 @@ echo "-:eprobes/$EPROBE $SYSTEM/$EVENT $OPTIONS" >> dynamic_events
->>   ! grep -q "$EPROBE" dynamic_events
->>   ! test -d events/eprobes/$EPROBE
->>   
->> +echo "e:mygroup/ $SYSTEM/$EVENT $OPTIONS" >> dynamic_events
->> +test -d events/mygroup
->> +echo "-:mygroup/" >> dynamic_events
->> +! test -d events/mygroup
->> +
->>   clear_trace
->> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc
->> index b4da41d..6b102a7 100644
->> --- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc
->> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc
->> @@ -1,7 +1,7 @@
->>   #!/bin/sh
->>   # SPDX-License-Identifier: GPL-2.0
->>   # description: Generic dynamic event - add/remove kprobe events
->> -# requires: dynamic_events "place: [<module>:]<symbol>":README "place (kretprobe): [<module>:]<symbol>":README
->> +# requires: dynamic_events "p[:[<group>/][<event>]] <place> [<args>]":README
-> Ditto. In this case, don't touch the requires line (because it is not
-> updated) and just add a README check for below new code.
->
-> Thank you,
->
->
->>   
->>   echo 0 > events/enable
->>   echo > dynamic_events
->> @@ -23,4 +23,9 @@ grep -q myevent1 dynamic_events
->>   
->>   echo > dynamic_events
->>   
->> +echo "p:mygroup/ $PLACE" >> dynamic_events
->> +test -d events/mygroup
->> +echo "-:mygroup/" >> dynamic_events
->> +! test -d events/mygroup
->> +
->>   clear_trace
->> -- 
->> 2.7.4
->>
->
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

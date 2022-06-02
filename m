@@ -2,75 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B8A53B65E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079DA53B664
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbiFBJv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 05:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
+        id S233235AbiFBJxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 05:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233014AbiFBJvY (ORCPT
+        with ESMTP id S231555AbiFBJxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 05:51:24 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469212A5D41
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 02:51:23 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id h19so5590785edj.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 02:51:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MjN3QAPXaLu5asd6/V8KFEW3wXF4UjKGCU1d2AqsWJY=;
-        b=tGk9DbU4Vc2+x4lxBEGT4A/vmPlacop3egLMcF/79UBOenFdesqSP1zeyAx3zhqH0q
-         y6cMMD2KP+FspuohWKtEyKbYtfVI5mzwy8cpVp59q31yCD/Vj3fvZxBg4vEhFPhIiQGH
-         4+qAvMDyiJT9xvyhEGzkSeZGfLgZVW6a+E2btw0aZoCchiJmH/MXlaMCUh1491PhiSMM
-         plVc6cnJCnaGm81FAmC14eFfu13jHFM3Aei/7Z9dzpgxQA8zyti/7wamhn8bC7Wyg0WM
-         TjCqvhDNH8/hUZlLOXo+y/xYKphNABNi3f8aLFV8VLIaRm9MrNZr9da2zZj0DsnPlsHb
-         37vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MjN3QAPXaLu5asd6/V8KFEW3wXF4UjKGCU1d2AqsWJY=;
-        b=jNVvs04j2DIX5JhHpz3MB0D/li0Q+TtzLFNkGZYNrJbxoynO/1+cfKV1yKS0GaIyJe
-         wtAUJgs7XshOmJiVkicCiwO7+mhYTE5NFGzKgtyPnvw8ujhQua3eZd0egRFSKd03avD0
-         yeZYirasJxcVo5MHTYF40/geZGyUvZJ/36/+xXwp+OuHqj/HXcU8eaDiPFk7x6r9oGpx
-         bcMmIhXJHSiRZPcq94PMc4C0jlCO68GM95t2KD4YnqEYYzQ6Vnww42PehTUQN6MSshOZ
-         kQ1+iYSWZtSWJfOol8RYLlWOL+yRwcJpdL5gA/ZWtQUL9DuxEbyJkPVjjLox4IWFZ8e7
-         3HFw==
-X-Gm-Message-State: AOAM530O4boBf7qoAbUkvCmiCKYKjHhxmv72fbwgxLiIIlE+Dojyy7/h
-        vDyh1ifPSy2aP7K95PJcBUWVqg==
-X-Google-Smtp-Source: ABdhPJyg0zDfRZBzZGhi4dzXWG591XdASf/OW4eBJ5t4TQxpfa4I1d+/cFejfsHd6Uglaf26Azcsjg==
-X-Received: by 2002:a05:6402:1c91:b0:42d:c9b6:506b with SMTP id cy17-20020a0564021c9100b0042dc9b6506bmr4354589edb.166.1654163481859;
-        Thu, 02 Jun 2022 02:51:21 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id lo27-20020a170906fa1b00b006fe9209a9edsm1546466ejb.128.2022.06.02.02.51.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 02:51:21 -0700 (PDT)
-Message-ID: <5e73e87d-4133-9a1b-27bd-1c4ca25e4b0d@linaro.org>
-Date:   Thu, 2 Jun 2022 11:51:20 +0200
+        Thu, 2 Jun 2022 05:53:19 -0400
+Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F9F33E3E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 02:53:14 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1654163561tf6rfbf6
+Received: from localhost.localdomain ( [117.176.187.31])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 02 Jun 2022 17:52:29 +0800 (CST)
+X-QQ-SSF: 01000000002000B0G000B00A0000000
+X-QQ-FEAT: 7mv2T88v/OpM5Pi91uMmJzPlbWZZoGHBYo5xAVdo5omcyRlQ3IPYsnN7/hb3y
+        afz9HpgUvpKAkW6dH/tnHXXAtGl3tFhMm1maWZzpb8x9xMe/RxTzlrcMkAIVznbtA1qUgyd
+        j8+SzKXP6Zx7lqsdYg2O39K/Jm3ZJgVCqqC48cf6OOA5Th4MpYfkshKv3hlUdtugDdZ5oIE
+        aXQAp4sayWwH97tW+wubJvKPfVs3b5XD+DLB/vKuD6g9Lmo95/aBJs6pxXX6+QyiSGoXSzd
+        MpP1PVbx/HZYpvhwXMsOzyzVwmQRwszASpPmy5HsbtDXG/jZEm7gBliPYWJUnAUyw5cMqId
+        RBHNv/l8jnZDsPRGOo=
+X-QQ-GoodBg: 0
+From:   Xiang wangx <wangxiang@cdjrlc.com>
+To:     linux@armlinux.org.uk
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Xiang wangx <wangxiang@cdjrlc.com>
+Subject: [PATCH] arm: Fix syntax errors in comments
+Date:   Thu,  2 Jun 2022 17:52:28 +0800
+Message-Id: <20220602095228.14791-1-wangxiang@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] arm64: dts: Add support for Stratix 10 Software Virtual
- Platform
-Content-Language: en-US
-To:     wen.ping.teh@intel.com
-Cc:     catalin.marinas@arm.com, devicetree@vger.kernel.org,
-        dinguyen@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, will@kernel.org
-References: <2cf38dea-0754-e63b-4832-a0b2aa966c61@linaro.org>
- <20220602034616.2840946-1-wen.ping.teh@intel.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220602034616.2840946-1-wen.ping.teh@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,22 +48,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/2022 05:46, wen.ping.teh@intel.com wrote:
-> From: wen.ping.teh@intel.com
-> 
-> Hello Krzysztof,
-> 
->>> +	chosen {
->>> +		bootargs = "rdinit=/sbin/init ip=dhcp mem=2048M";
->>
->> Bo bootargs,
-> Could you clarify what does "Bo bootargs," mean?
+Delete the redundant word 'the'.
 
-Ah, there was a typo. Should be: "No bootargs".
+Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+---
+ arch/arm/include/asm/unwind.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please remove such bootargs because this is not a property of a hardware
-and different user system could use different bootargs.
+diff --git a/arch/arm/include/asm/unwind.h b/arch/arm/include/asm/unwind.h
+index b51f85417f58..5fc323586c7a 100644
+--- a/arch/arm/include/asm/unwind.h
++++ b/arch/arm/include/asm/unwind.h
+@@ -10,7 +10,7 @@
+ 
+ #ifndef __ASSEMBLY__
+ 
+-/* Unwind reason code according the the ARM EABI documents */
++/* Unwind reason code according the ARM EABI documents */
+ enum unwind_reason_code {
+ 	URC_OK = 0,			/* operation completed successfully */
+ 	URC_CONTINUE_UNWIND = 8,
+-- 
+2.36.1
 
-
-Best regards,
-Krzysztof

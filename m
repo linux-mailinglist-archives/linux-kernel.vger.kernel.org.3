@@ -2,59 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEE853B23E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A64F153B243
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiFBDqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 23:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        id S229533AbiFBDuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 23:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiFBDqv (ORCPT
+        with ESMTP id S229453AbiFBDuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 23:46:51 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100C03BB;
-        Wed,  1 Jun 2022 20:46:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654141610; x=1685677610;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XfoklTJKbi869hrKJiUKl238OzrlvKnxDX02pm2ToWk=;
-  b=LeUsgTD7u9YRp3uS4ZwE5Fktil0u7QG/QfL1K1sQfUM9ggFe4AZTIZDd
-   lG5IbJboZE5Tz1Vvz/jQ0r620LA7wbpJezimHi0GkoW9Bo0pxS2OJEv6M
-   e2TYcQW/tb22cRX178CVJiOuxJADisbJ32N4We39ibexmxVc9CdBBMSry
-   uXXQ/U1JVP7SKpMuz9symShDuptAOTjRi02e+3zZX7dNu5BNWruUBm9rE
-   xlemkcHBde8bxUZMs4VqmXXJpYESE+OhgEuBslB7ougAN8P/Is8egPd0N
-   9EHKzjG0D9VLGlpse+fSg1JqE0UnpluoN5eWaR2c63c91E4emYJiY1sY1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275884512"
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="275884512"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 20:46:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="530373745"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
-  by orsmga003.jf.intel.com with ESMTP; 01 Jun 2022 20:46:47 -0700
-From:   wen.ping.teh@intel.com
-To:     krzysztof.kozlowski@linaro.org
-Cc:     catalin.marinas@arm.com, devicetree@vger.kernel.org,
-        dinguyen@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, wen.ping.teh@intel.com, will@kernel.org
-Subject: Re: [PATCH] arm64: dts: Add support for Stratix 10 Software Virtual Platform
-Date:   Thu,  2 Jun 2022 11:46:16 +0800
-Message-Id: <20220602034616.2840946-1-wen.ping.teh@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <2cf38dea-0754-e63b-4832-a0b2aa966c61@linaro.org>
-References: <2cf38dea-0754-e63b-4832-a0b2aa966c61@linaro.org>
+        Wed, 1 Jun 2022 23:50:18 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A83B2A3065;
+        Wed,  1 Jun 2022 20:50:12 -0700 (PDT)
+X-UUID: e362700a8d8d4b6ea2f942f28d9e6338-20220602
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:f76b4cdc-e8fa-4f57-9431-097f5be524d7,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:7b998c0d-3a0d-4bbe-9d72-0e5d26d57423,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: e362700a8d8d4b6ea2f942f28d9e6338-20220602
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1420575617; Thu, 02 Jun 2022 11:50:02 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 2 Jun 2022 11:50:00 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 2 Jun 2022 11:50:00 +0800
+Message-ID: <358b183faed73672e8fa4f6eb0d48fb067aec87d.camel@mediatek.com>
+Subject: Re: [PATCH v10 00/21] drm/mediatek: Add mt8195 DisplayPort driver
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        "Kishon Vijay Abraham I" <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <maxime@cerno.tech>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
+Date:   Thu, 2 Jun 2022 11:50:00 +0800
+In-Reply-To: <20220523104758.29531-1-granquet@baylibre.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,15 +77,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wen.ping.teh@intel.com=0D
+On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> this series is built around the DisplayPort driver. The dpi/dpintf
+> driver and the added helper functions are required for the
+> DisplayPort
+> driver to work.
+> 
+> This v10 still has some un-answered comments and TODOs for v11.
+> 
+> This has been tested sucessfully on a 5.18-next based "vendor
+> branch".
+> 
+> There's a missing dependency in the mediatek clock framework to allow
+> a
+> mux clock to change it's parent automatically on rate change.
+> Without this change, the dpi driver won't properly set the clocks on
+> mode change and thus nothing will be displayed on screen.
+> 
+> Changes from v9:
+> - The DP-Phy is back to being a child device of the DP driver (as in
+> v8)
+> - hot plug detection has been added back to Embedded Display Port...
+> as
+>   after discussing with mediatek experts, this is needed eventhough
+> the
+>   Embedded Display port is not un-pluggable
+> - rebased on linux-next
+> - simplified/split train_handler function, as suggested by Rex
+> - added comments on the sleep/delays present in the code
+> - removed previous patch introducing retries when receiving AUX_DEFER
+> as
+>   this is already handled in the dp_aux framework
+> - added max-lane and max-linkrate device tree u8 properties instead
+> of
+>   hardcoded #defines
+> 
+> Things that are in my todolist for v11:
+> - retrieve CK/DE support from panel driver instead of hardcoding it
+> into
+>   the dpi driver
+> - refcount the dp driver "enabled" status for "future proofing"
+> - review the drm_dp_helpers for features/functions that have been
+>   re-implemented in the mediatek dp drivers
+> 
+> Older revisions:
+> RFC - 
+> https://lore.kernel.org/linux-mediatek/20210816192523.1739365-1-msp@baylibre.com/
+> v1  - 
+> https://lore.kernel.org/linux-mediatek/20210906193529.718845-1-msp@baylibre.com/
+> v2  - 
+> https://lore.kernel.org/linux-mediatek/20210920084424.231825-1-msp@baylibre.com/
+> v3  - 
+> https://lore.kernel.org/linux-mediatek/20211001094443.2770169-1-msp@baylibre.com/
+> v4  - 
+> https://lore.kernel.org/linux-mediatek/20211011094624.3416029-1-msp@baylibre.com/
+> v5  - 
+> https://lore.kernel.org/all/20211021092707.3562523-1-msp@baylibre.com/
+> v6  - 
+> https://lore.kernel.org/linux-mediatek/20211110130623.20553-1-granquet@baylibre.com/
+> v7  - 
+> https://lore.kernel.org/linux-mediatek/20211217150854.2081-1-granquet@baylibre.com/
+> v8  - 
+> https://lore.kernel.org/linux-mediatek/20220218145437.18563-1-granquet@baylibre.com/
+> v9  - 
+> https://lore.kernel.org/all/20220327223927.20848-1-granquet@baylibre.com/
+> 
+> Functional dependencies are:
+> - Add Mediatek Soc DRM (vdosys0) support for mt8195
+>   
+> https://lore.kernel.org/linux-mediatek/20220419094143.9561-2-jason-jh.lin@mediatek.com/
+> - Add MediaTek SoC DRM (vdosys1) support for mt8195
+>   
+> https://lore.kernel.org/linux-mediatek/20220512053128.31415-1-nancy.lin@mediatek.com/
+> 
+> 
+> Guillaume Ranquet (15):
+>   drm/edid: Convert cea_sad helper struct to kernelDoc
+>   drm/edid: Add cea_sad helpers for freq/length
+>   drm/mediatek: dpi: move dpi limits to SoC config
+>   drm/mediatek: dpi: implement a CK/DE pol toggle in SoC config
+>   drm/mediatek: dpi: implement a swap_input toggle in SoC config
+>   drm/mediatek: dpi: move dimension mask to SoC config
+>   drm/mediatek: dpi: move hvsize_mask to SoC config
+>   drm/mediatek: dpi: move swap_shift to SoC config
+>   drm/mediatek: dpi: move the yuv422_en_bit to SoC config
+>   drm/mediatek: dpi: move the csc_enable bit to SoC config
+>   drm/mediatek: dpi: Add dpintf support
+>   drm/mediatek: dpi: Only enable dpi after the bridge is enabled
+>   drm/meditek: dpi: Add matrix_sel helper
+>   drm/mediatek: Add mt8195 External DisplayPort support
+>   drm/mediatek: DP audio support for mt8195
+> 
+> Jitao Shi (1):
+>   drm/mediatek: add hpd debounce
+> 
+> Markus Schneider-Pargmann (5):
+>   dt-bindings: mediatek,dpi: Add DPINTF compatible
+>   dt-bindings: mediatek,dp: Add Display Port binding
+>   video/hdmi: Add audio_infoframe packing for DP
+>   phy: phy-mtk-dp: Add driver for DP phy
+>   drm/mediatek: Add mt8195 Embedded DisplayPort driver
+> 
+>  .../display/mediatek/mediatek,dp.yaml         |   99 +
+>  .../display/mediatek/mediatek,dpi.yaml        |   13 +-
+>  MAINTAINERS                                   |    1 +
+>  drivers/gpu/drm/drm_edid.c                    |   74 +
+>  drivers/gpu/drm/mediatek/Kconfig              |    8 +
+>  drivers/gpu/drm/mediatek/Makefile             |    2 +
+>  drivers/gpu/drm/mediatek/mtk_dp.c             | 3419
+> +++++++++++++++++
+>  drivers/gpu/drm/mediatek/mtk_dp_reg.h         |  570 +++
+>  drivers/gpu/drm/mediatek/mtk_dpi.c            |  272 +-
+>  drivers/gpu/drm/mediatek/mtk_dpi_regs.h       |   38 +
+>  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   |    8 +
+>  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |    1 +
+>  drivers/gpu/drm/mediatek/mtk_drm_drv.c        |    8 +-
+>  drivers/gpu/drm/mediatek/mtk_drm_drv.h        |    3 +
+>  drivers/phy/mediatek/Kconfig                  |    8 +
+>  drivers/phy/mediatek/Makefile                 |    1 +
+>  drivers/phy/mediatek/phy-mtk-dp.c             |  200 +
+>  drivers/video/hdmi.c                          |   82 +-
+>  include/drm/dp/drm_dp_helper.h                |    2 +
+>  include/drm/drm_edid.h                        |   26 +-
+>  include/linux/hdmi.h                          |    7 +-
+>  include/linux/soc/mediatek/mtk-mmsys.h        |    4 +-
+>  22 files changed, 4765 insertions(+), 81 deletions(-)
+>  create mode 100644
+> Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+>  create mode 100644 drivers/gpu/drm/mediatek/mtk_dp.c
+>  create mode 100644 drivers/gpu/drm/mediatek/mtk_dp_reg.h
+>  create mode 100644 drivers/phy/mediatek/phy-mtk-dp.c
 
-Hello Krzysztof,=0D
-=0D
->> +	chosen {=0D
->> +		bootargs =3D "rdinit=3D/sbin/init ip=3Ddhcp mem=3D2048M";=0D
->=0D
->Bo bootargs,=0D
-Could you clarify what does "Bo bootargs," mean?=0D
-=0D
-Thanks,=0D
-Wen Ping=
+Hello all,
+
+Due to the resource issue, I will keep upstreaming Guillaume's MT8195
+dp/edp series.
+
+I will check the comments for v8/v9/v10 and have some discussion with
+you.
+
+Thanks for your all comments.
+
+BRs,
+Bo-Chen
+

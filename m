@@ -2,153 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83DE53B1DD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5B653B1FF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233502AbiFBDMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 23:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
+        id S233500AbiFBDOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 23:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233490AbiFBDMr (ORCPT
+        with ESMTP id S233470AbiFBDOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 23:12:47 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D42C2AD9A9;
-        Wed,  1 Jun 2022 20:12:46 -0700 (PDT)
+        Wed, 1 Jun 2022 23:14:11 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB42E2AE9D6;
+        Wed,  1 Jun 2022 20:14:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654139566; x=1685675566;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=gj7SYDoBtZDEnx2ObhP/ClinHJPnWLTIbNluq8OfXK4=;
-  b=ml4MxQaqDH60+WJsCSSMNA3LramMSdyHfiMf2MlKOt+exawWK9nlBjRu
-   dXgBgw05tpBag7axBbbpUqRvys9HvjCHXWfSDHpNH3lJPKh7OoBKwXJ1g
-   OmZM/HlDTzBd8MwcGWsahxyiu8ImD83iuUY3nK5qPkIyKYeTpJ2pKB04e
-   8=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 01 Jun 2022 20:12:46 -0700
+  t=1654139650; x=1685675650;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=vtq2/jv6E7he02OBQkaRLx57XKXT76AR0NCvMqUoMWU=;
+  b=SWlaBu4jNWH3vGfEYLCXWfyKxVr/zTSZtbG8yxOk/1lKV6mVU7fONNY8
+   alO/moXnmBFEVPT1mAr97OSFPXUHSMdxBMaPVMKJlTulWqsYVWqvcMirp
+   l8HLiudslPHW/31OA5P0BpG5yCZ0q3ii78Tq3QVzOsNc3kDX4ADtJt/KH
+   s=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Jun 2022 20:14:09 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 20:12:45 -0700
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 20:14:09 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 1 Jun 2022 20:12:45 -0700
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 1 Jun 2022 20:12:39 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v19 5/5] usb: dwc3: qcom: Keep power domain on to retain controller status
-Date:   Thu, 2 Jun 2022 08:41:55 +0530
-Message-ID: <1654139515-8177-6-git-send-email-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1654139515-8177-1-git-send-email-quic_kriskura@quicinc.com>
-References: <1654139515-8177-1-git-send-email-quic_kriskura@quicinc.com>
+ 15.2.986.22; Wed, 1 Jun 2022 20:14:09 -0700
+Received: from [10.253.36.238] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 1 Jun 2022
+ 20:14:04 -0700
+Message-ID: <db16bdcc-9322-d81b-1afd-3955181ba2f7@quicinc.com>
+Date:   Thu, 2 Jun 2022 11:14:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v7 02/10] Coresight: Add coresight TPDM source driver
+Content-Language: en-US
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20220509133947.20987-1-quic_jinlmao@quicinc.com>
+ <20220509133947.20987-3-quic_jinlmao@quicinc.com>
+ <38bb1ec9-56bc-0cdf-6c46-d448a46ec886@arm.com>
+ <ea720e1a-c0d2-84b0-8dbc-bb5031d32208@quicinc.com>
+ <7d6b2e24-21f4-eef1-a722-23cdcd1d8a88@quicinc.com>
+ <006b7edd-20d2-3165-7c83-352b7fb312e7@arm.com>
+ <2da46bcb-c1e4-dbde-c4ee-1d6983565dc9@quicinc.com>
+In-Reply-To: <2da46bcb-c1e4-dbde-c4ee-1d6983565dc9@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 
-If dwc3 is wakeup capable, keep the power domain always ON so that
-wakeup from system suspend can be supported. Otherwise, keep the
-power domain ON only during runtime suspend to support wakeup from
-runtime suspend.
+On 6/1/2022 5:56 PM, Jinlong Mao wrote:
+>
+> On 6/1/2022 5:30 PM, Suzuki K Poulose wrote:
+>> On 01/06/2022 10:21, Jinlong Mao wrote:
+>>> Hi Suzuki,
+>>>
+>>> On 5/24/2022 3:00 PM, Jinlong Mao wrote:
+>>>> Hi Suzuki,
+>>>>
+>>>> Thank you for the review.
+>>>>
+>>>> On 5/23/2022 4:57 PM, Suzuki K Poulose wrote:
+>>>>> Hi
+>>>>>
+>>>>> On 09/05/2022 14:39, Mao Jinlong wrote:
+>>>>>> Add driver to support Coresight device TPDM (Trace, Profiling and
+>>>>>> Diagnostics Monitor). TPDM is a monitor to collect data from
+>>>>>> different datasets. This change is to add probe/enable/disable
+>>>>>> functions for tpdm source.
+>>>>>>
+>>>>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>>>>>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+>>>>>> ---
+>>>>>>   drivers/hwtracing/coresight/Kconfig          |  13 ++
+>>>>>>   drivers/hwtracing/coresight/Makefile         |   1 +
+>>>>>>   drivers/hwtracing/coresight/coresight-core.c |   5 +-
+>>>>>>   drivers/hwtracing/coresight/coresight-tpdm.c | 146 
+>>>>>> +++++++++++++++++++
+>>>>>>   drivers/hwtracing/coresight/coresight-tpdm.h |  26 ++++
+>>>>>>   include/linux/coresight.h                    |   1 +
+>>>>>>   6 files changed, 191 insertions(+), 1 deletion(-)
+>>>>>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
+>>>>>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
+>>>>>>
+>>>
+>>>>>> +/**
+>>>>>> + * struct tpdm_drvdata - specifics associated to an TPDM component
+>>>>>> + * @base:       memory mapped base address for this component.
+>>>>>> + * @dev:        The device entity associated to this component.
+>>>>>> + * @csdev:      component vitals needed by the framework.
+>>>>>> + * @lock:       lock for the enable value.
+>>>>>> + * @enable:     enable status of the component.
+>>>>>> + */
+>>>>>> +
+>>>>>> +struct tpdm_drvdata {
+>>>>>> +    void __iomem        *base;
+>>>>>> +    struct device        *dev;
+>>>>>> +    struct coresight_device    *csdev;
+>>>>>> +    struct mutex        lock;
+>>>>>
+>>>>> Why mutex lock ? Couldn't this be a spinlock ?
+>>>> 1. There is no irq for TPDM
+>>>> 2. As there are 7 dataset types, there will be some FOR loop to 
+>>>> configure
+>>>> tpdm registers which may cause some time.
+>>
+>> How long does it take to configure ? Is it too long enough to trigger
+>> RCU stalls ? as long as we don't do any sleeping/blocking operations
+>> we should be fine with a spinlock.
+>>
+>> Suzuki
+>
+> Let me check on internal device and get back to you.
+>
+> Thanks
+> Jinlong Mao
 
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
- drivers/usb/dwc3/dwc3-qcom.c | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+The time of configuring the registers doesn't reach RCU stall timeout value.
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 56ecee0..2f5b5ae 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -17,6 +17,7 @@
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/phy/phy.h>
-+#include <linux/pm_domain.h>
- #include <linux/usb/of.h>
- #include <linux/reset.h>
- #include <linux/iopoll.h>
-@@ -756,12 +757,13 @@ dwc3_qcom_create_urs_usb_platdev(struct device *dev)
- 
- static int dwc3_qcom_probe(struct platform_device *pdev)
- {
--	struct device_node	*np = pdev->dev.of_node;
--	struct device		*dev = &pdev->dev;
--	struct dwc3_qcom	*qcom;
--	struct resource		*res, *parent_res = NULL;
--	int			ret, i;
--	bool			ignore_pipe_clk;
-+	struct device_node *np = pdev->dev.of_node;
-+	struct device *dev = &pdev->dev;
-+	struct dwc3_qcom *qcom;
-+	struct resource	*res, *parent_res = NULL;
-+	int ret, i;
-+	bool ignore_pipe_clk;
-+	struct generic_pm_domain *genpd;
- 
- 	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
- 	if (!qcom)
-@@ -770,6 +772,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, qcom);
- 	qcom->dev = &pdev->dev;
- 
-+	genpd = pd_to_genpd(qcom->dev->pm_domain);
-+
- 	if (has_acpi_companion(dev)) {
- 		qcom->acpi_pdata = acpi_device_get_match_data(dev);
- 		if (!qcom->acpi_pdata) {
-@@ -877,7 +881,17 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto interconnect_exit;
- 
--	device_init_wakeup(&pdev->dev, 1);
-+	if (device_can_wakeup(&qcom->dwc3->dev)) {
-+		/*
-+		 * Setting GENPD_FLAG_ALWAYS_ON flag takes care of keeping
-+		 * GEMPD on in both RT suspend and System suspend cases.
-+		 */
-+		genpd->flags |= GENPD_FLAG_ALWAYS_ON;
-+		device_init_wakeup(&pdev->dev, true);
-+	} else {
-+		genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
-+	}
-+
- 	qcom->is_suspended = false;
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
--- 
-2.7.4
+I will use spin_lock for both tpdm and tpda.
 
+Thanks
+Jinlong Mao
+>>
+>>>>
+>>> I think we can use mutex lock here. Do you have any more comments 
+>>> for this ?
+>>
+>>>
+>>> Thanks
+>>> Jinlong Mao
+>>>>>
+>>>>>> +    bool            enable;
+>>>>>> +};
+>>>>>> +
+>>>>>> +#endif  /* _CORESIGHT_CORESIGHT_TPDM_H */
+>>>>>> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+>>>>>> index 247147c11231..a9efac55029d 100644
+>>>>>> --- a/include/linux/coresight.h
+>>>>>> +++ b/include/linux/coresight.h
+>>>>>> @@ -61,6 +61,7 @@ enum coresight_dev_subtype_source {
+>>>>>>       CORESIGHT_DEV_SUBTYPE_SOURCE_PROC,
+>>>>>>       CORESIGHT_DEV_SUBTYPE_SOURCE_BUS,
+>>>>>>       CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE,
+>>>>>> +    CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY,
+>>>>>
+>>>>> super minor nit: I find the choice of name a bit odd.
+>>>>> We could simply make it something like :
+>>>>>
+>>>>>     CORESIGHT_DEV_SUBTYPE_SOURCE_OTHERS:
+>>>>>
+>>>>> Suzuki
+>>>> I will check and update.
+>>>>>
+>>>>>>   };
+>>>>>>     enum coresight_dev_subtype_helper {
+>>>>>
+>>>>> _______________________________________________
+>>>>> CoreSight mailing list -- coresight@lists.linaro.org
+>>>>> To unsubscribe send an email to coresight-leave@lists.linaro.org
+>>>> _______________________________________________
+>>>> CoreSight mailing list -- coresight@lists.linaro.org
+>>>> To unsubscribe send an email to coresight-leave@lists.linaro.org
+>>
+>> _______________________________________________
+>> CoreSight mailing list -- coresight@lists.linaro.org
+>> To unsubscribe send an email to coresight-leave@lists.linaro.org
+> _______________________________________________
+> CoreSight mailing list -- coresight@lists.linaro.org
+> To unsubscribe send an email to coresight-leave@lists.linaro.org

@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A9553C03F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 23:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FD653C049
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 23:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239398AbiFBVHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 17:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S239369AbiFBVIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 17:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239370AbiFBVHJ (ORCPT
+        with ESMTP id S229977AbiFBVIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 17:07:09 -0400
-Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC7C25E2
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 14:07:07 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id ws21nB6svvNzHws21nz3MA; Thu, 02 Jun 2022 23:07:04 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 02 Jun 2022 23:07:04 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <82e9f075-0526-ac34-fa92-14a7402825fd@wanadoo.fr>
-Date:   Thu, 2 Jun 2022 23:07:01 +0200
+        Thu, 2 Jun 2022 17:08:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CBF1109
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 14:08:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F388618B9
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 21:08:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75723C385A5;
+        Thu,  2 Jun 2022 21:08:45 +0000 (UTC)
+Date:   Thu, 2 Jun 2022 22:08:41 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>, Will Deacon <will@kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>, patches@lists.linux.dev
+Subject: Re: [PATCH] arm64: Initialize jump labels before setup_machine_fdt()
+Message-ID: <Ypkm2YLFO5gDlenP@arm.com>
+References: <20220602022109.780348-1-swboyd@chromium.org>
+ <165419885870.2681883.10934677413962491141.b4-ty@arm.com>
+ <CAHmME9qBOwb==N9AWSSb8VhCXANsieWi7JpiiiUMvjU2rdb5XA@mail.gmail.com>
+ <YpkTjv6i+IlO32wM@arm.com>
+ <CAHmME9pU+t_rvQULcOwQmhU74ye3ShWi4Tgz5JdGrzW29XO+Kg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v8 6/6] drivers: remoteproc: Add Xilinx r5 remoteproc
- driver
-Content-Language: fr
-To:     tanmay.shah@xilinx.com
-Cc:     ben.levinsky@xilinx.com, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, krzk+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, mathieu.poirier@linaro.org,
-        michal.simek@xilinx.com,
-        openamp-system-reference@lists.openampproject.org,
-        robh+dt@kernel.org
-References: <20220602203834.3675160-1-tanmay.shah@xilinx.com>
- <20220602203834.3675160-7-tanmay.shah@xilinx.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220602203834.3675160-7-tanmay.shah@xilinx.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9pU+t_rvQULcOwQmhU74ye3ShWi4Tgz5JdGrzW29XO+Kg@mail.gmail.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,109 +53,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-should there be a v9, a nitpick below.
-
-Le 02/06/2022 à 22:38, Tanmay Shah a écrit :
-> This driver enables r5f dual core Real time Processing Unit subsystem
-> available on Xilinx Zynq Ultrascale MPSoC Platform. RPU subsystem
-> (cluster) can be configured in different modes e.g. split mode in which
-> two r5f cores work independent of each other and lock-step mode in which
-> both r5f cores execute same code clock-for-clock and notify if the
-> result is different.
+On Thu, Jun 02, 2022 at 10:18:04PM +0200, Jason A. Donenfeld wrote:
+> On Thu, Jun 2, 2022 at 9:46 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > On Thu, Jun 02, 2022 at 09:42:49PM +0200, Jason A. Donenfeld wrote:
+> > > On Thu, Jun 2, 2022 at 9:41 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > > On Wed, 1 Jun 2022 19:21:09 -0700, Stephen Boyd wrote:
+> > > > > A static key warning splat appears during early boot on arm64 systems
+> > > > > that credit randomness from devicetrees that contain an "rng-seed"
+> > > > > property. This is because setup_machine_fdt() is called before
+> > > > > jump_label_init() during setup_arch(). Let's swap the order of these two
+> > > > > calls so that jump labels are initialized before the devicetree is
+> > > > > unflattened and the rng seed is credited.
+> > > > >
+> > > > > [...]
+> > > >
+> > > > Applied to arm64 (for-next/core), thanks!
+> > > >
+> > > > [1/1] arm64: Initialize jump labels before setup_machine_fdt()
+> > > >       https://git.kernel.org/arm64/c/73e2d827a501
+> > >
+> > > I'm not sure precisely what your for-next tag corresponds to, but just
+> > > FYI, this should probably go into 5.19 asap and be marked for stable@.
+> >
+> > The for-next/core branch should go in 5.19-rc1 (I'll send a pull request
+> > tomorrow). There's no need to cc stable since the fixed commit just went
+> > in (unless you mean something else by "marked for stable").
 > 
-> The Xilinx r5 Remoteproc Driver boots the RPU cores via calls to the Xilinx
-> Platform Management Unit that handles the R5 configuration, memory access
-> and R5 lifecycle management. The interface to this manager is done in this
-> driver via zynqmp_pm_* function calls.
-> 
-> Signed-off-by: Ben Levinsky <ben.levinsky-gjFFaj9aHVfQT0dZR+AlfA@public.gmane.org>
-> Signed-off-by: Tanmay Shah <tanmay.shah-gjFFaj9aHVfQT0dZR+AlfA@public.gmane.org>
-> ---
-> 
+> It is actually in stable, so please do CC. Otherwise I'll just forward manually.
 
-[...]
+Ah, I didn't know this (the fixed commit doesn't have a cc stable
+either). So please forward it manually once Linus pulls it.
 
-> +static void zynqmp_r5_cluster_exit(void *data)
-> +{
-> +	struct platform_device *pdev = (struct platform_device *)data;
-> +	struct zynqmp_r5_cluster *cluster;
-> +	int i;
-> +
-> +	cluster = (struct zynqmp_r5_cluster *)platform_get_drvdata(pdev);
-> +	if (!cluster)
-> +		return;
-> +
-> +	for (i = 0; i < cluster->core_count; i++) {
-> +		zynqmp_r5_core_exit(cluster->r5_cores[i]);
-> +		cluster->r5_cores[i] = NULL;
-> +	}
-> +
-> +	kfree(cluster->r5_cores);
-> +	kfree(cluster);
+Thanks.
 
-why not remove this kfree(cluster) here...
-
-> +	platform_set_drvdata(pdev, NULL);
-> +}
-> +
-> +/*
-> + * zynqmp_r5_remoteproc_probe()
-> + *
-> + * @pdev: domain platform device for R5 cluster
-> + *
-> + * called when driver is probed, for each R5 core specified in DT,
-> + * setup as needed to do remoteproc-related operations
-> + *
-> + * Return: 0 for success, negative value for failure.
-> + */
-> +static int zynqmp_r5_remoteproc_probe(struct platform_device *pdev)
-> +{
-> +	int ret;
-> +	struct zynqmp_r5_cluster *cluster;
-> +	struct device *dev = &pdev->dev;
-> +
-> +	cluster = kzalloc(sizeof(*cluster), GFP_KERNEL);
-
-... devm_kzalloc() here...
-
-> +	if (!cluster)
-> +		return -ENOMEM;
-> +
-> +	cluster->dev = dev;
-> +
-> +	ret = devm_of_platform_populate(dev);
-> +	if (ret) {
-> +		dev_err_probe(dev, ret, "failed to populate platform dev\n");
-> +		kfree(cluster);
-> +		return ret;
-
-and return dev_err_probe() here (without the kfree)?
-Would'nt it be cleaner?
-
-just my 2c
-
-CJ
-
-> +	}
-> +
-> +	/* wire in so each core can be cleaned up at driver remove */
-> +	platform_set_drvdata(pdev, cluster);
-> +
-> +	ret = zynqmp_r5_cluster_init(cluster);
-> +	if (ret) {
-> +		zynqmp_r5_cluster_exit(pdev);
-> +		dev_err_probe(dev, ret, "Invalid r5f subsystem device tree\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_add_action_or_reset(dev, zynqmp_r5_cluster_exit, pdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-
-[...]
+-- 
+Catalin

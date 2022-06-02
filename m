@@ -2,89 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6324353B818
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0723C53B81A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234401AbiFBLtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 07:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
+        id S234390AbiFBLr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 07:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233722AbiFBLs5 (ORCPT
+        with ESMTP id S233488AbiFBLrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 07:48:57 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358212B1D42;
-        Thu,  2 Jun 2022 04:48:54 -0700 (PDT)
-Received: from localhost (91-154-92-55.elisa-laajakaista.fi [91.154.92.55])
+        Thu, 2 Jun 2022 07:47:15 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E552250682;
+        Thu,  2 Jun 2022 04:47:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: sakkinen)
-        by meesny.iki.fi (Postfix) with ESMTPSA id B102C20050;
-        Thu,  2 Jun 2022 14:48:51 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1654170531;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C787B21B6F;
+        Thu,  2 Jun 2022 11:47:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1654170426; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=tl5Jw+UulbKqEMtgUT3K2V354kKV5SSHEf74OZxYd5E=;
-        b=gVIvyyFheZVOW68udFbl3Qpp9M7jjcbWm9FiuKuldUA0wBr/wcvKOh6oKSlm0FoFCrGc0G
-        lsOlYPhv+Htk32XWaDLY8BMfz1Jnnqwv08tgZW6pNc7J1LCWEyUaQoUcrTB+nmUKwkfWEj
-        JxvXIkollSXLISgj1FALNvEyep0VQpE=
-Date:   Thu, 2 Jun 2022 14:47:02 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>, tony.luck@intel.com,
-        npmccallum@redhat.com, brijesh.ksingh@gmail.com
-Subject: Re: [PATCH Part2 RFC v4 04/40] x86/sev: Add the host SEV-SNP
- initialization support
-Message-ID: <YpijNgA9ZJFOwF8k@kernel.org>
-References: <20210707183616.5620-1-brijesh.singh@amd.com>
- <20210707183616.5620-5-brijesh.singh@amd.com>
+        bh=yU2c05v5u7FyIeRoQARLGBGxinXGPSbObbAhOHtlivk=;
+        b=iS7l6vTGZLN97NTh5jQeXGGRyx3mXhgVrXT1uZlWRBfP5ckC33GgQkOvK2jzKixSmNQ/eQ
+        TW9e7UxBek/WCPm7Rrd+FAokOBEQg2hgxLXU30+gB/fe5Ka5Lr5WlARJfeaJax9PlVF2Yj
+        1Z+PbHJR0Yh1xFV8MIz5ychDM22WHTU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9AA36134F3;
+        Thu,  2 Jun 2022 11:47:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SIKzJDqjmGIgCQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Thu, 02 Jun 2022 11:47:06 +0000
+Date:   Thu, 2 Jun 2022 13:47:05 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>
+Cc:     Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Bui Quang Minh <minhquangbui99@gmail.com>
+Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
+Message-ID: <20220602114705.GB21320@blackbody.suse.cz>
+References: <Yo/DtjEU/kYr190u@slm.duckdns.org>
+ <0babd7df-bdef-9edc-3682-1144bc0c2d2b@linaro.org>
+ <Ypf0VnKUMiuRgZqT@slm.duckdns.org>
+ <1fb4d8d7-ccc0-b020-715e-38c2dfd94c23@linaro.org>
+ <Ypf5jpI7dSmpi4W0@slm.duckdns.org>
+ <c3bd8e63-7204-f86d-8efa-254db71185fc@linaro.org>
+ <Ypf/MpwzByOrSp6A@slm.duckdns.org>
+ <416dc60a-f0e5-7d05-1613-3cd0ca415768@linaro.org>
+ <YpgEY/lJbLidLOhc@slm.duckdns.org>
+ <0fd1c3fd-fa86-dbed-f3f0-74c91b1efa11@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210707183616.5620-5-brijesh.singh@amd.com>
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1654170531;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tl5Jw+UulbKqEMtgUT3K2V354kKV5SSHEf74OZxYd5E=;
-        b=ePgDehaSBHMbAUeRp95u13p4p8R22l6vqZ0Y7PeMjozqI0sCl7tMMSg7fa+Rj8EsK12Dq9
-        Q7NAMreqVW2DSqoiku0beXey8bOa/CKisFZf3su1o1Em6zHYFfxJIU+ZuM+wjtgiMaLuei
-        EBgApVVinLsgcmdA6hz+r0XtTmGpcfw=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1654170531; a=rsa-sha256; cv=none;
-        b=LC1JwZgfmfj/q89WJnmLomXZ9I33E8D3pncYsBCxYXrtbfkGKulazshKvHVgPXgYyOeUvZ
-        oWMRAL0kUm5nnedlv5afvZAt1bUMzvZNHXZE7+RfG1jmq5cNNtqWJfwl2OhNbt7c2V12yD
-        aaXkQguiVODIdoopJVtYpj7pyRE7tp8=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+In-Reply-To: <0fd1c3fd-fa86-dbed-f3f0-74c91b1efa11@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,20 +73,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 07, 2021 at 01:35:40PM -0500, Brijesh Singh wrote:
-> The memory integrity guarantees of SEV-SNP are enforced through a new
-> structure called the Reverse Map Table (RMP). The RMP is a single data
-> structure shared across the system that contains one entry for every 4K
-> page of DRAM that may be used by SEV-SNP VMs. The goal of RMP is to
-> track the owner of each page of memory. Pages of memory can be owned by
-> the hypervisor, owned by a specific VM or owned by the AMD-SP. See APM2
-> section 15.36.3 for more detail on RMP.
-> 
-> The RMP table is used to enforce access control to memory. The table itself
-> is not directly writable by the software. New CPU instructions (RMPUPDATE,
-> PVALIDATE, RMPADJUST) are used to manipulate the RMP entries.
+On Wed, Jun 01, 2022 at 05:40:51PM -0700, Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
+> css_killed_ref_fn() will be called regardless of the value of refcnt (via percpu_ref_kill_and_confirm())
+> and it will only enqueue the css_killed_work_fn() to be called later.
+> Then css_put()->css_release() will be called before the css_killed_work_fn() will even
+> get a chance to run, and it will also *only* enqueue css_release_work_fn() to be called later.
+> The problem happens on the second enqueue. So there need to be something in place that
+> will make sure that css_killed_work_fn() is done before css_release() can enqueue
+> the second job.
 
-What's the point of throwing out a set of opcodes, if there's
-no explanation what they do?
+IIUC, here you describe the same scenario I broke down at [1].
 
-BR, Jarkko
+> Does it sound right?
+
+I added a parameter A there (that is sum of base and percpu references
+before kill_css()).
+I thought it fails because A == 1 (i.e. killing the base reference),
+however, that seems an unlikely situation (because cgroup code uses a
+"fuse" reference to pin css for offline_css()).
+
+So the remaining option (at least I find it more likely now) is that
+A == 0 (A < 0 would trigger the warning in
+percpu_ref_switch_to_atomic_rcu()), aka the ref imbalance. I hope we can
+get to the bottom of this with detailed enough tracing of gets/puts.
+
+Splitting the work struct is condradictive to the existing approach with
+the "fuse" reference.
+
+(BTW you also wrote On Wed, Jun 01, 2022 at 05:00:44PM -0700, Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
+> The fact the css_release() is called (via cgroup_kn_unlock()) just after
+> kill_css() causes the css->destroy_work to be enqueued twice on the same WQ
+> (cgroup_destroy_wq), just with different function. This results in the
+> BUG: corrupted list in insert_work issue.
+
+Where do you see a critical css_release called from cgroup_kn_unlock()?
+I always observed the css_release() being called via
+percpu_ref_call_confirm_rcu() (in the original and subsequent syzbot
+logs.))
+
+Thanks,
+Michal
+
+[1] https://lore.kernel.org/r/Yo7KfEOz92kS2z5Y@blackbook/

@@ -2,105 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F9A53B945
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD87953B94B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235128AbiFBNCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 09:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55486 "EHLO
+        id S235129AbiFBNDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 09:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235119AbiFBNC3 (ORCPT
+        with ESMTP id S230463AbiFBNDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 09:02:29 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8A8183
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 06:02:29 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id s12so4522254plp.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 06:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XdxxRvNPqFgVB4QJaeaHAzMjj0lVYGxn3dldB8u/Zr4=;
-        b=pEVgysGf3LJ/rw3xxHkq4t2G/Mh5jq0fS7dPhhVc0eFcSxs7j7DVRCc5NPnOOQE6En
-         ro82zoh9lPKDxsRnKXS8z/pcJPAuoxXpP2yUmqZDj85NFbWo4DjK7K3eZqZF7ckz6XyP
-         wCTrr36K7FKehCH0BPeVg7CBPAHIT1EZ2MVHmBQox45X0AH4nc3yvmUUzTEpMTZGv06k
-         mBWZzLJaqJge+PHqw8x2yLS6XW+7IEPn3L6TOCe5zYZfRYnBSvKP+FXML2d39FPYB8tu
-         brAkXmSOmwRR74eZ8D2ImNTfB78g/g6dtCyEnYwAzK2wYA/R4FZxEaoowjGXXh/sRstQ
-         mWlw==
+        Thu, 2 Jun 2022 09:03:11 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E47183;
+        Thu,  2 Jun 2022 06:03:11 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-f2e0a41009so6631703fac.6;
+        Thu, 02 Jun 2022 06:03:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XdxxRvNPqFgVB4QJaeaHAzMjj0lVYGxn3dldB8u/Zr4=;
-        b=qg9O1ox9G7m6sXybnesIofFMJ6CRCleSEbhlRyRUjuQLxmHCdVLMed610KCK3A2pkL
-         n1von0kS4Y/KNLlC5vkEm5pKUcV8LQBLc64AmepuKXg/ftPBrF1BJpmwa5F7y9BLf8Z2
-         DnNLju+caJuyXX3QYtzAmegjydZ0af1Y7sucK5xpPjWwq+5HKlUQ8/CxOdrvgofOFhLQ
-         LufX/ARiq1AFPDgbovIW9SKXc5HQYYdonf9ik71sB9sa5IrhjyCceRR0a6veEtm1i4do
-         t7fjn/7ep8+H+pLKfFe5Yi2CeFrk06EPihIZwZpRtE4LMJq6HYrtMqUUuxIoaECGrrkE
-         VcFQ==
-X-Gm-Message-State: AOAM533qqrbVjARE8W+dUWDThH4+aTkph7NZ7p+f2lNN4mfoYvqOD/yW
-        dnzWcEOWy8KAm2mbfsTPFvI=
-X-Google-Smtp-Source: ABdhPJzNRjRgYVZM2ebupFUL1SqAFM9zF1iVEify9KqJCZ1syK4D1jMK1M6fBvdZ3QasUHTe/nrQLQ==
-X-Received: by 2002:a17:902:bf4c:b0:15c:3d1b:8a47 with SMTP id u12-20020a170902bf4c00b0015c3d1b8a47mr4955096pls.118.1654174948528;
-        Thu, 02 Jun 2022 06:02:28 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id j23-20020a63ec17000000b003fc37053c82sm3240443pgh.12.2022.06.02.06.02.23
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P1uE//vdrX6s2dLhOkjOsdaFXRjoT93w83zDJuSLa4Y=;
+        b=1bWwr2L+MaeocUh3gIHz+FN5n29+oBl9OqUR83iGV09iBFlY6VWlGo8DSB5mMijtXe
+         EQFgz+Vdwpo+M2B7On1Whng23n1FlYobVbkJWpswMAO6Y8p1CLISyaLj910gxmudZL4Y
+         DYgabIp2MExlS5faNDksQ686DW7rD2zFMiKKkKXCCxCsVqS9yBK+IHaKoisWvI2hLB6x
+         +M9JqSJD3y7IUWL2EWGiDllpYT0ll1BEl1sDyWpY7hwgj2JrdndwzsWdvyMa6bZ/+Q8s
+         pV6nBwA2KCq44Z28/l2EBoDQrjFI4o2SNCs5iZsaU6Hj/wQb0UOH99/kdbgHv9WYvPCv
+         5vSg==
+X-Gm-Message-State: AOAM533aOr5TySBQztTDA8izBqz9BmmDtW0t0oV4UuYI2NQFXnOkSbeC
+        YRlSjdisOcC2mN0ObSH3sg==
+X-Google-Smtp-Source: ABdhPJyIWIOLK9U0zon4nsw0OCR3PsPbtWPI0k2j16u0gJTLEwMmde0nSJsxSsPjniOpBoE501JLHg==
+X-Received: by 2002:a05:6870:339a:b0:f2:d065:be1f with SMTP id w26-20020a056870339a00b000f2d065be1fmr2654071oae.69.1654174990510;
+        Thu, 02 Jun 2022 06:03:10 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b13-20020a056830310d00b0060b2f042b67sm2193889ots.43.2022.06.02.06.03.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 06:02:27 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] ASoC: samsung: Fix error handling in aries_audio_probe
-Date:   Thu,  2 Jun 2022 17:02:17 +0400
-Message-Id: <20220602130218.14901-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 02 Jun 2022 06:03:10 -0700 (PDT)
+Received: (nullmailer pid 2103224 invoked by uid 1000);
+        Thu, 02 Jun 2022 13:03:09 -0000
+Date:   Thu, 2 Jun 2022 08:03:09 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_psodagud@quicinc.com, bjorn.andersson@linaro.org,
+        agross@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        eberman@codeaurora.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [RFC 1/3] dt-bindings: firmware: qcom-scm: Add interconnects
+ property
+Message-ID: <20220602130309.GA2103167-robh@kernel.org>
+References: <1653289258-17699-1-git-send-email-quic_sibis@quicinc.com>
+ <1653289258-17699-2-git-send-email-quic_sibis@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1653289258-17699-2-git-send-email-quic_sibis@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_get_child_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-This function is missing of_node_put(cpu) in the error path.
-Fix this by goto out label. of_node_put() will check NULL pointer.
+On Mon, 23 May 2022 12:30:56 +0530, Sibi Sankar wrote:
+> Add interconnects as an optional property for SM8450 SoCs.
+> 
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+> 
+> Since the interconnect requirements could either be specified in the
+> individual remoteprocs or directly in the scm interface, will perform
+> the yaml conversion in the next re-spin based on the consensus.
+> 
+>  Documentation/devicetree/bindings/firmware/qcom,scm.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Fixes: format:7a3a7671fa6c ("ASoC: samsung: Add driver for Aries boards")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- sound/soc/samsung/aries_wm8994.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/sound/soc/samsung/aries_wm8994.c b/sound/soc/samsung/aries_wm8994.c
-index bb0cf4244e00..edee02d7f100 100644
---- a/sound/soc/samsung/aries_wm8994.c
-+++ b/sound/soc/samsung/aries_wm8994.c
-@@ -628,8 +628,10 @@ static int aries_audio_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 
- 	codec = of_get_child_by_name(dev->of_node, "codec");
--	if (!codec)
--		return -EINVAL;
-+	if (!codec) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
- 
- 	for_each_card_prelinks(card, i, dai_link) {
- 		dai_link->codecs->of_node = of_parse_phandle(codec,
--- 
-2.25.1
-
+Acked-by: Rob Herring <robh@kernel.org>

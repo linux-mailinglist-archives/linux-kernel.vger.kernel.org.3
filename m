@@ -2,272 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7090053B5FF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5BA53B609
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233035AbiFBJ0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 05:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
+        id S233051AbiFBJ1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 05:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232986AbiFBJ0O (ORCPT
+        with ESMTP id S233057AbiFBJ1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 05:26:14 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A497729FE62;
-        Thu,  2 Jun 2022 02:26:12 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0CCE721BE8;
-        Thu,  2 Jun 2022 09:26:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1654161971; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G7ZdC+4kovgYT+Z+cbvIHEBS1Zhto9WfgyaFdC7uEAA=;
-        b=nNomXDbOYCw/N+7Bv/wCBUoTAIDOMzeNfmdtzpx2lbgUAcd0L+zkQYQlfIQYEVAiIqWI5D
-        3P0P6lOHc9KlDdUs/q1gzsaSp/o2SPz5ANxN77WfEQG/fRARzJczumn3QGQysS/0hjn+NC
-        LMVMAivbcrXR6YyhkmSeoYZpw86yENo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1654161971;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G7ZdC+4kovgYT+Z+cbvIHEBS1Zhto9WfgyaFdC7uEAA=;
-        b=nuGjS6xBT6Y028BuyqaGeukxzQHupTzj3Gj2ihc6G4FPxQynnG27LLf5PqrMio24OqyWUG
-        5HxyjIrijSeGHnCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9E036134F3;
-        Thu,  2 Jun 2022 09:26:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id psnUIzKCmGLFQgAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Thu, 02 Jun 2022 09:26:10 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 4dd310f1;
-        Thu, 2 Jun 2022 09:26:50 +0000 (UTC)
-From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Gregory Farnum <gfarnum@redhat.com>,
-        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v3] ceph: prevent a client from exceeding the MDS
- maximum xattr size
-References: <20220601162939.12278-1-lhenriques@suse.de>
-        <b788a7f9-9177-0398-7d21-a19ce7e6c957@redhat.com>
-Date:   Thu, 02 Jun 2022 10:26:50 +0100
-In-Reply-To: <b788a7f9-9177-0398-7d21-a19ce7e6c957@redhat.com> (Xiubo Li's
-        message of "Thu, 2 Jun 2022 10:33:27 +0800")
-Message-ID: <87h7534dr9.fsf@brahms.olymp>
+        Thu, 2 Jun 2022 05:27:04 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69042A46CD;
+        Thu,  2 Jun 2022 02:27:01 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id q203so4280967iod.0;
+        Thu, 02 Jun 2022 02:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C+EMAmeFZRp3TpuWkCRyv9pKB/CTk056YS87itpmWkg=;
+        b=D+SU6LNlQnSn/HNiKiYSBUr4ljM0Q/WxPuIdSALbrS/aSUy5MFA0RQcdgV/76jyqW5
+         CkMAQFqL2Ib2gRHa3G6yfytEFENO+cAnH1ucAtIRyBGKg8/WOOtmBAsZJJfGXBOoT6WR
+         oQPAYCqYm5UEDFMRTKPRr1+E0UTzWpp0MZcLZPMWNaQ0J35dgJgXeO7OK7gA9gP2G2E8
+         EJGvb0cJQAygIMGW8+0WTw7PHNiJdFQHyHMkebCT6OLpNTwkP3FxQHquGChIB9A0XoEC
+         HLIxPiOxBczJj15khy+QfouuTbFrIPZivLu3OPqNgKd3Ns8hgk7HL8O0XjdV2TPON2m2
+         Htaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C+EMAmeFZRp3TpuWkCRyv9pKB/CTk056YS87itpmWkg=;
+        b=iGsmzZvD50F5N36PVkLC3Npq0TUANQ2XOyL3uKIRPbHw9+Q7CmTlN/HYQE9A0ypQkk
+         nPW1VEMqjGkUu8rErWWdZUikqwwEJWLQbr/WesVgAEsZFl6Y8v8k9zddRxmb5vnl6edk
+         VrEZAMSYwhdQ1yrhn2HfY2wMF3xCVVI1DJx26eJF5WstpL9V7ivEzZqr1mN2WMdFhZct
+         wYsKqvYm9XqNtLIKLKDhMzIY5pXP5qBF1/HdKzcDYi14PkX9p/sUsIrlGgMl+Ls+/8kH
+         BZsmmyOmW6VZBu2q7A7OU5RTFCojtrJh+z/8aTiTKI9Su0lCydkKSOslZc6dcCaj0iLS
+         EzDw==
+X-Gm-Message-State: AOAM532z8ecVX5fUyJWozB0ZWKXKHdjG4me3Cf7rf9DZvkN4czsQP+H1
+        U0YzdnjyOrc4HkAiMmBCmI28PTOU91SS9ysGPt0=
+X-Google-Smtp-Source: ABdhPJwlpWpdB/ytI31JwutxbVKBoDGmOXA6+bkbvuq/cwiSYf170f4WOIXhJkFkQDVZTPOv1JFevXIUlVGkIuhangg=
+X-Received: by 2002:a5d:9d8c:0:b0:664:afc8:64df with SMTP id
+ ay12-20020a5d9d8c000000b00664afc864dfmr2090581iob.42.1654162021097; Thu, 02
+ Jun 2022 02:27:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220601100005.2989022-1-chenhuacai@loongson.cn>
+ <20220601100005.2989022-4-chenhuacai@loongson.cn> <Yph/Q+szVkhDPg4a@debian.me>
+In-Reply-To: <Yph/Q+szVkhDPg4a@debian.me>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 2 Jun 2022 17:26:51 +0800
+Message-ID: <CAAhV-H4MeVyT1TVx6gfaYaPU3oNSLUyr4iJpt0-FRCNzPf=jfw@mail.gmail.com>
+Subject: Re: [PATCH V12 03/24] Documentation: LoongArch: Add basic documentations
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        WANG Xuerui <git@xen0n.name>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xiubo Li <xiubli@redhat.com> writes:
+Hi, Bagas,
 
-> On 6/2/22 12:29 AM, Lu=C3=ADs Henriques wrote:
->> The MDS tries to enforce a limit on the total key/values in extended
->> attributes.  However, this limit is enforced only if doing a synchronous
->> operation (MDS_OP_SETXATTR) -- if we're buffering the xattrs, the MDS
->> doesn't have a chance to enforce these limits.
->>
->> This patch adds support for decoding the xattrs maximum size setting tha=
-t is
->> distributed in the mdsmap.  Then, when setting an xattr, the kernel clie=
-nt
->> will revert to do a synchronous operation if that maximum size is exceed=
-ed.
->>
->> While there, fix a dout() that would trigger a printk warning:
->>
->> [   98.718078] ------------[ cut here ]------------
->> [   98.719012] precision 65536 too large
->> [   98.719039] WARNING: CPU: 1 PID: 3755 at lib/vsprintf.c:2703 vsnprint=
-f+0x5e3/0x600
->> ...
->>
->> URL: https://tracker.ceph.com/issues/55725
->> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
->> ---
->>   fs/ceph/mdsmap.c            | 27 +++++++++++++++++++++++----
->>   fs/ceph/xattr.c             | 12 ++++++++----
->>   include/linux/ceph/mdsmap.h |  1 +
->>   3 files changed, 32 insertions(+), 8 deletions(-)
->>
->> * Changes since v2
->>
->> Well, a lot has changed since v2!  Now the xattr max value setting is
->> obtained through the mdsmap, which needs to be decoded, and the feature
->> that was used in the previous revision was dropped.  The drawback is that
->> the MDS isn't unable to know in advance if a client is aware of this xat=
-tr
->> max value.
->>
->> * Changes since v1
->>
->> Added support for new feature bit to get the MDS max_xattr_pairs_size
->> setting.
->>
->> Also note that this patch relies on a patch that hasn't been merged yet
->> ("ceph: use correct index when encoding client supported features"),
->> otherwise the new feature bit won't be correctly encoded.
->>
->> diff --git a/fs/ceph/mdsmap.c b/fs/ceph/mdsmap.c
->> index 30387733765d..36b2bc18ca2a 100644
->> --- a/fs/ceph/mdsmap.c
->> +++ b/fs/ceph/mdsmap.c
->> @@ -13,6 +13,12 @@
->>     #include "super.h"
->>   +/*
->> + * Maximum size of xattrs the MDS can handle per inode by default.  This
->> + * includes the attribute name and 4+4 bytes for the key/value sizes.
->> + */
->> +#define MDS_MAX_XATTR_SIZE (1<<16) /* 64K */
->> +
->>   #define CEPH_MDS_IS_READY(i, ignore_laggy) \
->>   	(m->m_info[i].state > 0 && ignore_laggy ? true : !m->m_info[i].laggy)
->>   @@ -352,12 +358,10 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p,=
- void
->> *end, bool msgr2)
->>   		__decode_and_drop_type(p, end, u8, bad_ext);
->>   	}
->>   	if (mdsmap_ev >=3D 8) {
->> -		u32 name_len;
->>   		/* enabled */
->>   		ceph_decode_8_safe(p, end, m->m_enabled, bad_ext);
->> -		ceph_decode_32_safe(p, end, name_len, bad_ext);
->> -		ceph_decode_need(p, end, name_len, bad_ext);
->> -		*p +=3D name_len;
->> +		/* fs_name */
->> +		ceph_decode_skip_string(p, end, bad_ext);
->>   	}
->>   	/* damaged */
->>   	if (mdsmap_ev >=3D 9) {
->> @@ -370,6 +374,21 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p, vo=
-id *end, bool msgr2)
->>   	} else {
->>   		m->m_damaged =3D false;
->>   	}
->> +	if (mdsmap_ev >=3D 17) {
->> +		/* balancer */
->> +		ceph_decode_skip_string(p, end, bad_ext);
->> +		/* standby_count_wanted */
->> +		ceph_decode_skip_32(p, end, bad_ext);
->> +		/* old_max_mds */
->> +		ceph_decode_skip_32(p, end, bad_ext);
->> +		/* min_compat_client */
->> +		ceph_decode_skip_8(p, end, bad_ext);
+On Thu, Jun 2, 2022 at 5:13 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 >
-> This is incorrect.
+> On Wed, Jun 01, 2022 at 05:59:44PM +0800, Huacai Chen wrote:
 >
-> If mdsmap_ev =3D=3D 15 the min_compat_client will be a feature_bitset_t i=
-nstead of
-> int8_t.
-
-Hmm... can you point me at where that's done in the code?  As usual, I'm
-confused with that code and simply can't see that.
-
-Also, if that happens only when mdsmap_ev =3D=3D 15, then there's no problem
-because that branch is only taken if it's >=3D 17.
-
+> > +Note: The register ``$r21`` is reserved in the ELF psABI, but used by the Linux
+> > +kernel for storing the percpu base address. It normally has no ABI name, but is
+> > +called ``$u0`` in the kernel. You may also see ``$v0`` or ``$v1`` in some old code,
+> > +they are deprecated aliases of ``$a0`` and ``$a1`` respectively.
 >
+> A nitpick: instead of just comma (,), also use "however" conjunction, that
+> is "You may also see ..., however they ... ."
+OK, thanks.
+
+Huacai
 >
->> +		/* required_client_features */
->> +		ceph_decode_skip_set(p, end, 64, bad_ext);
->> +		ceph_decode_64_safe(p, end, m->m_max_xattr_size, bad_ext);
->> +	} else {
->> +		m->m_max_xattr_size =3D MDS_MAX_XATTR_SIZE;
->> +	}
->>   bad_ext:
->>   	dout("mdsmap_decode m_enabled: %d, m_damaged: %d, m_num_laggy: %d\n",
->>   	     !!m->m_enabled, !!m->m_damaged, m->m_num_laggy);
->> diff --git a/fs/ceph/xattr.c b/fs/ceph/xattr.c
->> index 8c2dc2c762a4..67f046dac35c 100644
->> --- a/fs/ceph/xattr.c
->> +++ b/fs/ceph/xattr.c
->> @@ -1086,7 +1086,7 @@ static int ceph_sync_setxattr(struct inode *inode,=
- const char *name,
->>   			flags |=3D CEPH_XATTR_REMOVE;
->>   	}
->>   -	dout("setxattr value=3D%.*s\n", (int)size, value);
->> +	dout("setxattr value size: %ld\n", size);
->>     	/* do request */
->>   	req =3D ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
->> @@ -1184,8 +1184,14 @@ int __ceph_setxattr(struct inode *inode, const ch=
-ar *name,
->>   	spin_lock(&ci->i_ceph_lock);
->>   retry:
->>   	issued =3D __ceph_caps_issued(ci, NULL);
->> -	if (ci->i_xattrs.version =3D=3D 0 || !(issued & CEPH_CAP_XATTR_EXCL))
->> +	required_blob_size =3D __get_required_blob_size(ci, name_len, val_len);
->> +	if ((ci->i_xattrs.version =3D=3D 0) || !(issued & CEPH_CAP_XATTR_EXCL)=
- ||
->> +	    (required_blob_size >=3D mdsc->mdsmap->m_max_xattr_size)) {
+> > +
+> > +Note: You may see ``$fv0`` or ``$fv1`` in some old code, they are deprecated
+> > +aliases of ``$fa0`` and ``$fa1`` respectively.
+> > +
 >
-> Shouldn't it be '>' instead ?
-
-Ok, I'll fix that.
-
-> We'd better always force to do a sync request with old ceph. Just check i=
-f the
-> mdsmap_ev < 17. It's not safe to buffer it because it maybe discarded as =
-your
-> ceph PR does.
-
-Right, that can be done.  So, I can simply set the m_max_xattr_size to '0'
-if mdsmap_ev < 17.  Then, this 'if' condition will always be evaluated to
-true because required_blob_size will be > 0.  Does that sound OK?
-
-Cheers,
---=20
-Lu=C3=ADs
-
-
-> -- Xiubo
+> The nitpick above also applies here, too.
 >
->> +		dout("%s do sync setxattr: version: %llu size: %d max: %llu\n",
->> +		     __func__, ci->i_xattrs.version, required_blob_size,
->> +		     mdsc->mdsmap->m_max_xattr_size);
->>   		goto do_sync;
->> +	}
->>     	if (!lock_snap_rwsem && !ci->i_head_snapc) {
->>   		lock_snap_rwsem =3D true;
->> @@ -1201,8 +1207,6 @@ int __ceph_setxattr(struct inode *inode, const cha=
-r *name,
->>   	     ceph_cap_string(issued));
->>   	__build_xattrs(inode);
->>   -	required_blob_size =3D __get_required_blob_size(ci, name_len, val_le=
-n);
->> -
->>   	if (!ci->i_xattrs.prealloc_blob ||
->>   	    required_blob_size > ci->i_xattrs.prealloc_blob->alloc_len) {
->>   		struct ceph_buffer *blob;
->> diff --git a/include/linux/ceph/mdsmap.h b/include/linux/ceph/mdsmap.h
->> index 523fd0452856..4c3e0648dc27 100644
->> --- a/include/linux/ceph/mdsmap.h
->> +++ b/include/linux/ceph/mdsmap.h
->> @@ -25,6 +25,7 @@ struct ceph_mdsmap {
->>   	u32 m_session_timeout;          /* seconds */
->>   	u32 m_session_autoclose;        /* seconds */
->>   	u64 m_max_file_size;
->> +	u64 m_max_xattr_size;		/* maximum size for xattrs blob */
->>   	u32 m_max_mds;			/* expected up:active mds number */
->>   	u32 m_num_active_mds;		/* actual up:active mds number */
->>   	u32 possible_max_rank;		/* possible max rank index */
->>
+> Otherwise, htmldocs built successfully without any new warnings.
+>
+> Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>
+> --
+> An old man doll... just what I always wanted! - Clara

@@ -2,326 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5230A53B329
+	by mail.lfdr.de (Postfix) with ESMTP id E826453B32B
 	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 07:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiFBF5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 01:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
+        id S230244AbiFBF5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 01:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiFBF5T (ORCPT
+        with ESMTP id S230227AbiFBF50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 01:57:19 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C4655BF
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 22:57:15 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id o6-20020a17090a0a0600b001e2c6566046so8423082pjo.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 22:57:15 -0700 (PDT)
+        Thu, 2 Jun 2022 01:57:26 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2321CB02
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 22:57:24 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id s12so3717799plp.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 22:57:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L4alyKGGrdNQV34N2Gl7pkeFDRbLivBEid0WEcE9O78=;
-        b=eqZJg49fxj8nPvhX72/YSMcEUSTL52HZ7UoPVvCS0KIUtIsc8xlzs+i+YUx2F5j7HF
-         sEOVIH5lFmATtg2Mbx/ABlFuN7Mq9Fz4ZF7+GvC+A5KGxgUfSk4vYyLTpX6YYH26E/Ro
-         +1wyomQslhjWgogWA/kp9yVLNectvcQFVELnA=
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rtSAfXv93YAiiHV0sWw5VQFhHGbge7rpQR/Jq2+le+A=;
+        b=L3dN8bpTjYGHxIQGNCFp5vkGe6DEd129vWFFNvXkztPl9NA0+UQP7DC4bxloOfDaEs
+         SLXTD8ZHKa1i+tq1gBO22B+gtFmwcSC5dbBo6Jnaomdl1vP2Xhsn4xaMXdkRTypkVgTW
+         5DpqbNJQGJF69YXACNKNOY3Skk0wPRPb5z+reiVbRTdSsW+vAlhfOTOlZMqGLOn5/JiG
+         m3ql81nKrnkbCW2HdftG8QtMoGiCRRipXulgSb7VRv5rIIv/0eOrn/772S20pjFBlv8T
+         oyHYOf1gJkOOuGUb4OAEbdudYkLCm1DonOLicWQ5mVflW79+XN8uyCXqqO4CftN8vlDZ
+         NckQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L4alyKGGrdNQV34N2Gl7pkeFDRbLivBEid0WEcE9O78=;
-        b=D/jCn+vlnjVFqzFanhcD8H85SLfmCUN3KRK18uk1nGU+eVtkU0/aDGz6FEe5uiyoJO
-         yn4YPIICsSgYduRIPmel6YSZYDNgKX0Ltynznl4eUcDz9kwTUJiW15EpTa2oUNnckz7k
-         JYCrzwLKe8p1ZsgCkBIrxUiASTXGHItzqCM4O3Q1PlTarr6yOAaO5EYWue/04+tdgorN
-         8/h8ZS0PHXmKL1HAWPhOINt7/G1BzoQF6XHedGpxZRCUL5hNDWXne+PVavtP4J9J9PKq
-         Cmef9XUgzKGZaVApXrXzV/Qn2/FpqyS1Z0BqUtS6uHkNpQinVg4EzYeJWwzHjfen/RGv
-         ugjQ==
-X-Gm-Message-State: AOAM531dHnPXiurWH2hbj7y44TOYmMpRRrS0sxG/CmtYkmxSYR5zhQNc
-        o/jnNj/D5P3keMkvPLf+erwdM6sw05wrh5aEPqniumJOtM9SkQ==
-X-Google-Smtp-Source: ABdhPJz9hTjJ4HkVR/80k20ZBiFeb0vAVIU56Qh7XLa1le+h7wqz/FciUvNYA2LCtmI133Jts/c82c18BpCVAO9K1Zg=
-X-Received: by 2002:a17:90b:224e:b0:1e6:8ae1:8e1a with SMTP id
- hk14-20020a17090b224e00b001e68ae18e1amr933342pjb.59.1654149434681; Wed, 01
- Jun 2022 22:57:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220519075117.1003520-1-tommaso.merciai@amarulasolutions.com>
- <20220519075117.1003520-2-tommaso.merciai@amarulasolutions.com>
- <20220531131409.f54znvogejkwqqkf@uno.localdomain> <20220531154040.GA1331064@tom-ThinkPad-T14s-Gen-2i>
- <CAOf5uwmNoSPifCo8_hLZyr=DzMqL0r2Ftot2jneEVpAT8AyYVg@mail.gmail.com>
- <20220601081129.jlasfmvjyvqr4brd@uno.localdomain> <CAOf5uwmZDbT5mb3awjj1ggnVF7WQhHA3mYnt51nrzZUy1mArRA@mail.gmail.com>
-In-Reply-To: <CAOf5uwmZDbT5mb3awjj1ggnVF7WQhHA3mYnt51nrzZUy1mArRA@mail.gmail.com>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Thu, 2 Jun 2022 07:57:02 +0200
-Message-ID: <CAOf5uwkLfKk5aeFfSX+x40jhAp6omXjw6mWqBYLwBsro+53d0A@mail.gmail.com>
-Subject: Re: [PATCH 1/4] media: i2c: ov5695: use regulator_bulk_enable/regulator_bulk
- disable instead of for loop
-To:     Jacopo Mondi <jacopo@jmondi.org>,
-        Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
-        linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=rtSAfXv93YAiiHV0sWw5VQFhHGbge7rpQR/Jq2+le+A=;
+        b=qoVhjvALnh8FTZogcQNK4liBMoS2G8kONXgOkxnU1ub+Fg7Tjm/i2emsKdNq9QKAtj
+         zvGSZ/mfVxBobvlhlSfIFmrs0oFbL6Wf04w1j0Wh7LvbOyOefxMLsMq4RdPf3cDdgePh
+         ZmMYhhNx0RKSggDxPrh39/7ivY4DFtMBHC8WNxRB/PeOjzzhWEkWLUxpj/Tnlt/geHar
+         +CfzRFDj3Dnzdgfu5rH6EaZ3IGqU4ChNJFfxJfoza5wDU1yGGd+Wi9tH2P4y4Dspft8k
+         XDQypRqhG7hcnEarcsXnsarxdPX4yel1VuPvUVDW7hwoCP0DJGWM/nke/I0w75MwCjh7
+         3bDA==
+X-Gm-Message-State: AOAM5314AfzYNWjanrr7d3fn3jL+NP6nkahurmXyn9HAu5APGgSR+mWx
+        clzdAN7TQAwVwhKR9xi9z7ne+w==
+X-Google-Smtp-Source: ABdhPJwjQZkpLbffvjZwQnZtMS49tNZbp/lMIOvZYRNMfACTTu7YqLJJJxS4yqNvV1+hh8zoEqPg7A==
+X-Received: by 2002:a17:90b:4b0c:b0:1e0:96b:c3fe with SMTP id lx12-20020a17090b4b0c00b001e0096bc3femr38350620pjb.212.1654149443517;
+        Wed, 01 Jun 2022 22:57:23 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id h69-20020a628348000000b0050dc7628138sm2619315pfe.18.2022.06.01.22.57.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 22:57:22 -0700 (PDT)
+Date:   Wed, 01 Jun 2022 22:57:22 -0700 (PDT)
+X-Google-Original-Date: Wed, 01 Jun 2022 22:09:03 PDT (-0700)
+Subject:     Re: [PATCH v3] RISC-V: Mark IORESOURCE_EXCLUSIVE for reserved mem instead of IORESOURCE_BUSY
+In-Reply-To: <CAJF2gTRZCchLk9apNQagNmsNb3Pv+WfPTisrsWDDrQyVncUYeA@mail.gmail.com>
+CC:     mick@ics.forth.gr, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
+        rppt@kernel.org, david@redhat.com, wangborong@cdjrlc.com,
+        twd2.me@gmail.com, seanjc@google.com, alex@ghiti.fr,
+        petr.pavlu@suse.com, Atish Patra <atishp@rivosinc.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jianghuaming.jhm@alibaba-inc.com, heiko@sntech.de,
+        xianting.tian@linux.alibaba.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     guoren@kernel.org
+Message-ID: <mhng-d1f0bf41-82a3-4e76-98a0-c787ebcd0799@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark
+On Sun, 29 May 2022 19:47:51 PDT (-0700), guoren@kernel.org wrote:
+> Hi Palmer,
+>
+> Please have a look at this patch which is a critical fixup. Our
+> current riscv implementation has broken the reserved memory.
 
-Add Dongchun Zhu, for the patch of regulator changes and mark brown to
-clarify the API for bulk regulator.
+Putting "fix" somewhere in the subject is generally the best way to do 
+that, this one just looked like a feature and I stumbled into it when 
+going through stuff for this merge window.
 
-The commit f1a64f56663e9d03e509439016dcbddd0166b2da states that the
-regulator bulk api does not guarantee the order.
-Can you help me with this?
+It's in for-next, which is still aimed at 5.19.
 
-On Wed, Jun 1, 2022 at 10:39 AM Michael Nazzareno Trimarchi
-<michael@amarulasolutions.com> wrote:
->
-> Hi
->
-> On Wed, Jun 1, 2022 at 10:11 AM Jacopo Mondi <jacopo@jmondi.org> wrote:
-> >
-> > Hi Micheal,
-> >
-> > On Tue, May 31, 2022 at 05:50:51PM +0200, Michael Nazzareno Trimarchi wrote:
-> > > Hi
-> > >
-> > > On Tue, May 31, 2022 at 5:40 PM Tommaso Merciai
-> > > <tommaso.merciai@amarulasolutions.com> wrote:
-> > > >
-> > > > Hi Jacopo,
-> > > > On Tue, May 31, 2022 at 03:14:09PM +0200, Jacopo Mondi wrote:
-> > > > > Hi Tommaso,
-> > > > >
-> > > > > On Thu, May 19, 2022 at 09:51:14AM +0200, Tommaso Merciai wrote:
-> > > > > > Enable regulator using regulator_bulk_enable/regulatore_bulk_disable
-> > > > > > function in __ov5695_power_on/__ov5695_power_off function instead of for loop.
-> > > > > > This reduce code size and make things more clear
-> > > > > >
-> > > > > > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > > > > > Co-Developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-> > > > > > ---
-> > > > > >  drivers/media/i2c/ov5695.c | 25 +++++++------------------
-> > > > > >  1 file changed, 7 insertions(+), 18 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
-> > > > > > index 439385938a51..880b586e55fe 100644
-> > > > > > --- a/drivers/media/i2c/ov5695.c
-> > > > > > +++ b/drivers/media/i2c/ov5695.c
-> > > > > > @@ -972,7 +972,7 @@ static int ov5695_s_stream(struct v4l2_subdev *sd, int on)
-> > > > > >
-> > > > > >  static int __ov5695_power_on(struct ov5695 *ov5695)
-> > > > > >  {
-> > > > > > -   int i, ret;
-> > > > > > +   int ret;
-> > > > > >     struct device *dev = &ov5695->client->dev;
-> > > > > >
-> > > > > >     ret = clk_prepare_enable(ov5695->xvclk);
-> > > > > > @@ -987,13 +987,10 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
-> > > > > >      * The hardware requires the regulators to be powered on in order,
-> > > > > >      * so enable them one by one.
-> > > > > >      */
-> > > > >
-> > > > > The comment says that the hardware requires regulators to be enabled
-> > > > > in precise order
-> > > > >
-> > >
-> > > They are enabled on the array order.
-> > >
-> > > > > > -   for (i = 0; i < OV5695_NUM_SUPPLIES; i++) {
-> > > > > > -           ret = regulator_enable(ov5695->supplies[i].consumer);
-> > > > > > -           if (ret) {
-> > > > > > -                   dev_err(dev, "Failed to enable %s: %d\n",
-> > > > > > -                           ov5695->supplies[i].supply, ret);
-> > > > > > -                   goto disable_reg_clk;
-> > > > > > -           }
-> > > > > > +   ret = regulator_bulk_enable(ARRAY_SIZE(ov5695->supplies), ov5695->supplies);
-> > > > >
-> > > > > bulk_enable() uses the async API (async_schedule_domain() in
-> > > > > particular) which by the name makes me think such ordering guarantee
-> > > > > cannot be respected.
-> > >
-> > > I don't think so. Will make no sense because if it fails, revert them.
-> > > Even the bulk disable disable them
-> > > in reverse order
-> > >
-> >
-> > I understand your points, but even the commit message in the patch
-> > linked by Tommaso [1] (which I see in mainline as
-> > f1a64f56663e ("media: i2c: ov5695: Fix power on and off sequences"))
-> > reports:
-> >
-> > "Given the bulk API does not give any guarantee about the order of
-> > regulators, change the driver to use regulator_disable() instead."
-> >
-> > However I would have expected the core regulator API to clearly document
-> > this behaviour.
-> >
->
-> Yes, I agree. I see two points:
-> - patch f1a64f56663e is not fully consistent
-> - a patch is needed to the regulator api documentation
->
-> I think that we need better documentation of the api but:
-> Work-queues are SMP-safe and guarantee serialization of actual work performed.
->
-> Michael
->
->
->
-> >
-> > > > >
-> > > > > However most sensors require some kind of ordering when enabling
-> > > > > regulators, and most of the use the bulk API anyhow. The fact this
-> > > > > driver uses the bulk API to get an release the regulators but not for
-> > > > > enabling them and the above comment, makes me think it has been done
-> > > > > on purpose ? Could you check with the driver author maybe ?
-> > > >
-> > > > Thanks for suggestion, good question.
-> > > > I see also ov5693 driver use bulk_enable/bulk_disable
-> > > > on ov5693_sensor_powerdown and ov5693_sensor_powerup functions, I take
-> > > > this as reference (and I'm wrong)
-> > > >
-> > > > In a functional test on PX30_Mini_evb_v11_20190507, after this series
-> > > > I'm able to see the correct chip id during probe and do some capture.
-> > > >
-> > > > I think you are right Jacopo, we can drop off this [PATCH 1/4]
-> > > > On the following link I found the issue that you describe: [1]
-> > > >
-> > >
-> > > WHy drop?
-> >
-> > As this is a partial revert of [1].
-> >
-> > I think in practice this won't make any actual difference, but if not
-> > 100% sure, better leave it the way it is as the authors of [1] might
-> > have actually been experiencing issues. Even more as this patch is
-> > not a bugfix but a nice-to-have. Up to you :)
-> >
-> >
-> > >
-> > > Michael
-> > >
-> > > > >
-> > > > > > +   if (ret) {
-> > > > > > +           dev_err(dev, "Failed to enable regulators %d\n", ret);
-> > > > > > +           goto disable_reg_clk;
-> > > > > >     }
-> > > > > >
-> > > > > >     gpiod_set_value_cansleep(ov5695->reset_gpio, 0);
-> > > > > > @@ -1003,8 +1000,7 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
-> > > > > >     return 0;
-> > > > > >
-> > > > > >  disable_reg_clk:
-> > > > > > -   for (--i; i >= 0; i--)
-> > > > > > -           regulator_disable(ov5695->supplies[i].consumer);
-> > > > > > +   regulator_bulk_disable(ARRAY_SIZE(ov5695->supplies), ov5695->supplies);
-> > > > >
-> > > > > FYI the bulk API does this for you if enabling any of the regulators fails.
-> > > > > Hence this should not be necessary.
-> > > >
-> > > > Thanks for sharing! This is new to me.
-> > > > I'll update the series on v2 removing this patch.
-> > > >
-> > > > Regards,
-> > > > Tommaso
-> > > >
-> > > > [1]: https://mailweb.openeuler.org/hyperkitty/list/kernel@openeuler.org/message/4X54QYJDRRE4K5BW4FTDZUGRAL4GRQWY/
-> > > >
-> > > > > Thanks
-> > > > >    j
-> > > > >
-> > > > > >     clk_disable_unprepare(ov5695->xvclk);
-> > > > > >
-> > > > > >     return ret;
-> > > > > > @@ -1012,8 +1008,6 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
-> > > > > >
-> > > > > >  static void __ov5695_power_off(struct ov5695 *ov5695)
-> > > > > >  {
-> > > > > > -   struct device *dev = &ov5695->client->dev;
-> > > > > > -   int i, ret;
-> > > > > >
-> > > > > >     clk_disable_unprepare(ov5695->xvclk);
-> > > > > >     gpiod_set_value_cansleep(ov5695->reset_gpio, 1);
-> > > > > > @@ -1022,12 +1016,7 @@ static void __ov5695_power_off(struct ov5695 *ov5695)
-> > > > > >      * The hardware requires the regulators to be powered off in order,
-> > > > > >      * so disable them one by one.
-> > > > > >      */
-> > > > > > -   for (i = OV5695_NUM_SUPPLIES - 1; i >= 0; i--) {
-> > > > > > -           ret = regulator_disable(ov5695->supplies[i].consumer);
-> > > > > > -           if (ret)
-> > > > > > -                   dev_err(dev, "Failed to disable %s: %d\n",
-> > > > > > -                           ov5695->supplies[i].supply, ret);
-> > > > > > -   }
-> > > > > > +   regulator_bulk_disable(ARRAY_SIZE(ov5695->supplies), ov5695->supplies);
-> > > > > >  }
-> > > > > >
-> > > > > >  static int __maybe_unused ov5695_runtime_resume(struct device *dev)
-> > > > > > --
-> > > > > > 2.25.1
-> > > > > >
-> > > >
-> > > > --
-> > > > Tommaso Merciai
-> > > > Embedded Linux Engineer
-> > > > tommaso.merciai@amarulasolutions.com
-> > > > __________________________________
-> > > >
-> > > > Amarula Solutions SRL
-> > > > Via Le Canevare 30, 31100 Treviso, Veneto, IT
-> > > > T. +39 042 243 5310
-> > > > info@amarulasolutions.com
-> > > > www.amarulasolutions.com
-> > >
-> > >
-> > >
-> > > --
-> > > Michael Nazzareno Trimarchi
-> > > Co-Founder & Chief Executive Officer
-> > > M. +39 347 913 2170
-> > > michael@amarulasolutions.com
-> > > __________________________________
-> > >
-> > > Amarula Solutions BV
-> > > Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-> > > T. +31 (0)85 111 9172
-> > > info@amarulasolutions.com
-> > > www.amarulasolutions.com
->
->
->
-> --
-> Michael Nazzareno Trimarchi
-> Co-Founder & Chief Executive Officer
-> M. +39 347 913 2170
-> michael@amarulasolutions.com
-> __________________________________
->
-> Amarula Solutions BV
-> Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-> T. +31 (0)85 111 9172
-> info@amarulasolutions.com
-> www.amarulasolutions.com
+Thanks!
 
-
-
--- 
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
-
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com
+>
+> On Wed, May 18, 2022 at 9:34 AM Xianting Tian
+> <xianting.tian@linux.alibaba.com> wrote:
+>>
+>> Commit 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
+>> marked IORESOURCE_BUSY for reserved memory, which caused resource map
+>> failed in subsequent operations of related driver, so remove the
+>> IORESOURCE_BUSY flag. In order to prohibit userland mapping reserved
+>> memory, mark IORESOURCE_EXCLUSIVE for it.
+>>
+>> The code to reproduce the issue,
+>> dts:
+>>         mem0: memory@a0000000 {
+>>                 reg = <0x0 0xa0000000 0 0x1000000>;
+>>                 no-map;
+>>         };
+>>
+>>         &test {
+>>                 status = "okay";
+>>                 memory-region = <&mem0>;
+>>         };
+>>
+>> code:
+>>         np = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
+>>         ret = of_address_to_resource(np, 0, &r);
+>>         base = devm_ioremap_resource(&pdev->dev, &r);
+>>         // base = -EBUSY
+>>
+>> Fixes: 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
+>> Reported-by: Huaming Jiang <jianghuaming.jhm@alibaba-inc.com>
+>> Reviewed-by: Guo Ren <guoren@kernel.org>
+>> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+>> Tested-by: Heiko Stuebner <heiko@sntech.de>
+>> Co-developed-by: Nick Kossifidis <mick@ics.forth.gr>
+>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>> ---
+>> Changes from v2:
+>> - Fix typo in commit message: casued -> caused
+>> - Remove Reviewed-by of Nick Kossifidis, who didn't give Reviewed-by actually
+>> - Add Co-developed-by of Nick
+>>
+>> Changes from v1:
+>> - Mark reserved memory as IORESOURCE_EXCLUSIVE, suggested by Nick
+>> ---
+>>  arch/riscv/kernel/setup.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+>> index 834eb652a7b9..e0a00739bd13 100644
+>> --- a/arch/riscv/kernel/setup.c
+>> +++ b/arch/riscv/kernel/setup.c
+>> @@ -189,7 +189,7 @@ static void __init init_resources(void)
+>>                 res = &mem_res[res_idx--];
+>>
+>>                 res->name = "Reserved";
+>> -               res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
+>> +               res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
+>>                 res->start = __pfn_to_phys(memblock_region_reserved_base_pfn(region));
+>>                 res->end = __pfn_to_phys(memblock_region_reserved_end_pfn(region)) - 1;
+>>
+>> @@ -214,7 +214,7 @@ static void __init init_resources(void)
+>>
+>>                 if (unlikely(memblock_is_nomap(region))) {
+>>                         res->name = "Reserved";
+>> -                       res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
+>> +                       res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
+>>                 } else {
+>>                         res->name = "System RAM";
+>>                         res->flags = IORESOURCE_SYSTEM_RAM | IORESOURCE_BUSY;
+>> --
+>> 2.17.1
+>>

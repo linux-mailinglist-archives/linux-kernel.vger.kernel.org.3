@@ -2,172 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B8453BBA8
+	by mail.lfdr.de (Postfix) with ESMTP id 3C53853BBA7
 	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236479AbiFBPgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 11:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
+        id S236488AbiFBPgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 11:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234022AbiFBPgX (ORCPT
+        with ESMTP id S236485AbiFBPg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 11:36:23 -0400
+        Thu, 2 Jun 2022 11:36:29 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BD5248538;
-        Thu,  2 Jun 2022 08:36:21 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 252FHebR017216;
-        Thu, 2 Jun 2022 15:35:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=2C0liBoHnuuSbCsUXWTprdZcSLdqkV2yoTA+KTZUwkg=;
- b=wCj6UPMVQJKF9rZYRUx6m68XdKTaLXB7yzuGPOahCOMUIFFUKgNpFciR/VH1EASDlYZP
- ajaa0ssnJVu7cGFj6Pnv/vB1g+sDP39hV7UwewtgeFKZIcgZEuJ36S+gOvwqvS4t2035
- nnk4ViHQMZMeH/JITJzOkZUPUjiLhk75FjTDGWxKw0dJsyG1pD8CHPeo4Bt6GlhyFcOk
- Ji/2+nYCwJ9mf0zCF8qjQl+8fwsC9fx8Oa7JVDtBHQc4LDdBdWnUZoStFgnmDBni5pUR
- D6otPzWm2IBUFVb00neidqR1GXiUjLJxDjoqQn50EKC6QvCpirLdW5uoH8XChtxfPblq vw== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gbc6xare4-1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901162A5D70
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 08:36:27 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 252DvR5d008735;
+        Thu, 2 Jun 2022 15:36:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=dPbOSSpeSHu4PlSVOUJ8ncv8I0iMnAMe2nepZ+X2PpQ=;
+ b=B470PoayjUA1opwb5irx/duF8x824JaVQV/1sKPbAwWgpRdM8V/IEaqLMfF9ZNvE24/x
+ 3bg2txqzh77mbOIjEWdOBfzlhfvm2TeKGX4dSivMr0A+LId9T44jsG8boXiUXdYGitQI
+ 5pCq0++SRTb+SQhNVnyGP58/B91J2IQ+amhAplW3Zp17aGHKGesz46ZxuD4m2Uo3LQTr
+ UEvxU666OaGCBxlxW4g7ZuZzONT1kDdb/5GkPx8aJwjdPhRUywY+1llNuaV9+OO5hKfQ
+ w5XnijIM/fTkVpWQ3PjjpP/4WzzeyJiVcb+OVxHG0ts4AwwUOWTmglVOV7fv0wNhzU/S Bw== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gbc4xtuy5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Jun 2022 15:35:01 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 252FAC3I038493;
-        Thu, 2 Jun 2022 15:35:00 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gc8p502xu-1
+        Thu, 02 Jun 2022 15:36:19 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 252FaIGx020408;
+        Thu, 2 Jun 2022 15:36:18 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2100.outbound.protection.outlook.com [104.47.55.100])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gc8hy9qvc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Jun 2022 15:35:00 +0000
+        Thu, 02 Jun 2022 15:36:18 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wbf5NSZkGmBkSHM3MuYljCwXudj1L8I12OX9bYw+6rirX3v/VIsgfVOOzaiQudgI/UUj1RyM9li3TaKjIQODdhZecsG1qOyxWZ7oVkWzii+xSV1lW62x9zq3IYsZmzHnHm6DfGNJE88fHgZGjemZU1kqEGiwccwMEa71s0KOIGhs9AmX9a5Ub/dCZg/OFjyYkJhQQIjG0cNP9iGE+MpzYJEcgqO9wt9gRLUexPRun6vSD3KG/s/DeZkUeMGNNSxtAx9xNXtMM/03JNtDBaO4jzmzXIprzSUAiawsrhU03pzWXWAxOzhUIs89ROVUcd4C+hmA8dgBxKt5NerBByhZag==
+ b=e+dsIIXBfa4Sww+fY5MJwjsh29ucOKvh4ZejvdKXM5MFKx1huBJbV8Z18CEyUSMEE/pRfrVCB1fF5iHImQqNrLPFd73C5xieVje7kw4VeLOb/puYSQTwW2BxM/G9uNhI1481SQzGaA3wNCYEsz6McLhpUspf5VP73gIFNxHNcKFbC3i5oOkP52CoVnz1fI7tT8NWe+VP8oAHIIGWg1YlpIAn3A+7yuLgul+bc+iE0y8yawNVvUki95exgz/MsJ2zGrmpnL+vVN/pqtQ8XFnxSEFs7fpjnamYAKf6ZaVi6ubNEp1e0xMWf6zs0hHEzX+D3LCMbIfXh0jdssWhkH8d0Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2C0liBoHnuuSbCsUXWTprdZcSLdqkV2yoTA+KTZUwkg=;
- b=WFU75gQ+hLZVK2QDvkFXab9LM5gjeDcYhCYQ8Z2HZLIgPYlFZ9cd74iYe6M8jqHXhTUIB0RTSED3Kb6zatWjZhdj0M4W25adbJHwht+MSpETynf32FCppSUnfK/lE6x84XXO6SK2PkfWy78XkeSE07soUCNeqxobVINGrlZWU/atxcLSGThCf5Ycya4fLfM5+vno46hQwAVG9XjCC60vK/HZTjxU2oZIt+e4BrmeF+n68hwIdcM1WUDH41SsTA29uceiTt7DGHrFWIZ1kWS/B6sDtgrMjWDi5uo9jKBW5cc2H6+v3rW8/9js5mXm54FLfNjM8tYkvSbzLFqTlW12VA==
+ bh=dPbOSSpeSHu4PlSVOUJ8ncv8I0iMnAMe2nepZ+X2PpQ=;
+ b=gptLXN1KH4hvpf9Unp5E8ZVvv0DMAur3yqNSC4Dbm+7Yl5R6yONISj2oge/j5jo5YMIqC92hglwVAsytArqaIPNahrihNr66AKeVV8DUDOvRF/4xblNkHaWqaqP4VZQGUnqBka1m8uwQ1ObrcpS5Zv8+C6Apyt87rI/9DOwQhY/B+TdBPotHicrZrgDRZHZf6Bh/+RK4p9ITLAwmhhT9dfuGWO7wd+uoMjLIrcQxWWwyRfkc/gpuYM6PMNlfWSbuc1aR77ZLzx2qq+32W6GbaqV0461qwnTWlzrPc1H5lbsgDpUR7kGlq06i1AWtLtlnG15e3v8gQbQg98qK/Dukog==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2C0liBoHnuuSbCsUXWTprdZcSLdqkV2yoTA+KTZUwkg=;
- b=FQKd4vKQJsEm8rd0GxcQGQIyy8MtpCXCplIDOLmuHdczGNr3W+VYqd+bMEPvDSO+Yb/kCWY6I5iCZhNk17CLgh9urBpbHmGSIcqyROMCvIvxEUeg9ZYRWf6SSTz5fkeTRWQFCkEq6GswwGHdSr24y8qYC63hQQQUkQf5r2Gf9pI=
-Received: from PH0PR10MB5433.namprd10.prod.outlook.com (2603:10b6:510:e0::9)
- by CY4PR10MB1799.namprd10.prod.outlook.com (2603:10b6:903:120::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.17; Thu, 2 Jun
- 2022 15:34:57 +0000
-Received: from PH0PR10MB5433.namprd10.prod.outlook.com
- ([fe80::47:2730:1cb1:bd51]) by PH0PR10MB5433.namprd10.prod.outlook.com
- ([fe80::47:2730:1cb1:bd51%6]) with mapi id 15.20.5293.019; Thu, 2 Jun 2022
- 15:34:57 +0000
-Message-ID: <42200c3e-fb39-ddab-3d68-5dfb5eb89451@oracle.com>
-Date:   Thu, 2 Jun 2022 17:34:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] Documentation/security-bugs: overhaul
-Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Shah <aams@amazon.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Solar Designer <solar@openwall.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Tyler Hicks <tyhicks@canonical.com>,
-        Will Deacon <will@kernel.org>
-References: <20220531230309.9290-1-vegard.nossum@oracle.com>
- <20220601031254.GB26318@1wt.eu>
-From:   Vegard Nossum <vegard.nossum@oracle.com>
-In-Reply-To: <20220601031254.GB26318@1wt.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PR0P264CA0108.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:100:19::24) To PH0PR10MB5433.namprd10.prod.outlook.com
- (2603:10b6:510:e0::9)
+ bh=dPbOSSpeSHu4PlSVOUJ8ncv8I0iMnAMe2nepZ+X2PpQ=;
+ b=Ynv98hthomVmNqgDUa1I/euuFbLILNHFLjrPvrsaZ9f6RBG8t+fLeGD3XMsG0EbLZ83nMo4qRPyokYubn9RlyTgzm26kp1pdCSAnJQbkpXzTpO4NbLniPb1hPfF+y+TCD7Lt/aXQFJrodZH53iwHcp4VDLd6vxKDuw9MZlyTTZ4=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by BL0PR10MB2963.namprd10.prod.outlook.com
+ (2603:10b6:208:78::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12; Thu, 2 Jun
+ 2022 15:36:14 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::86f:81ba:9951:5a7e]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::86f:81ba:9951:5a7e%2]) with mapi id 15.20.5293.019; Thu, 2 Jun 2022
+ 15:36:14 +0000
+Date:   Thu, 2 Jun 2022 18:35:54 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kbuild@lists.01.org, "Darrick J. Wong" <djwong@kernel.org>
+Cc:     lkp@intel.com, kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: [djwong-xfs:vectorized-scrub 150/401]
+ fs/xfs/scrub/nlinks_repair.c:80 xrep_nlinks_repair_inode() warn: missing
+ error code 'error'
+Message-ID: <202206022146.2RgP2bEQ-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNXP275CA0022.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:19::34)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9a4c92d9-b2b6-472e-bb8f-08da44ad72d4
-X-MS-TrafficTypeDiagnostic: CY4PR10MB1799:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR10MB1799C8E91A27C16320E8A31697DE9@CY4PR10MB1799.namprd10.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 72f3f881-37e0-4e61-51de-08da44ada09a
+X-MS-TrafficTypeDiagnostic: BL0PR10MB2963:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR10MB296313565347EE74CFD727848EDE9@BL0PR10MB2963.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 06cZ4McSDuNNHzwEQC+9qZ/EY3wKwzxTAUJn2U/w412oehAdmU8yOHp/iSEvt683hD1MODTrKmTCTlaEDqwjYzpju25q9vFmr0bDjAtViVis/O7BZnaJbghbSAM7AS5pMf/jKlg0nwS5t5s7H+cG0Hu9M1CjYL64XL4eWBQM0eFKHIxXwVFuxmCXY7xNDGKBeis1KDPkHQVVT61ux7jNcz/BMnBXmuuv1Bz/K9Q28kHYObbCTOAdzFVFH9a3FcFzKzAoEgT1aqLXdPmW+hVng2+aCd8DnzIs0wfJdA5xQgJRxtNr/V3pX1lRQvXc0ba1WAukF6X2XOQhUtgU4iTd8RA+/27oumsIjQPfN38D3CBef0kOUHBteNSm6ilhkmjnypQENnUiDNA6smxWDS1qtvhszfjuvAZ0774L4wM6Wlt6/uQ/Q7/MjbNxNLX0/7qsNzN9CUNOYY8VYNyJmM6DnWo87n0JT/SPTgrxyezg+NtSwY/rZFBCAQD3Hqq6/6Ncu50Q8Ig/t3zISZQbfD8uQXyxCvhBPHV/hPcgRfGooGRO95+VwgGNo4j4c9CVj1g2Duu0e2UEN1+m7nbkechvt4RqfLNH5p1/Wz37ggjWh41WWFEAUbHscza3D6TzXJjEg1s/BnlVn0Ia4tXjSyc/WNj9w1Szod2MPBzMScTp94+bFm5XFjTrxThECKe6xMeYuf/eTfTrHlV9wI+/ejRNuopnpAZOQHTc5euOo8DH6ji3QqftwDZbmbX0Oed8OHvCqr+iL9oUT3FebEpL1AUkCAA4xj+9LOA2xpygbsCaEusPGywKYJvOFM0VgZhjxBlrIJvj0OOSRCJv1LxfZlKWwm9E6Q1K0XQMfwSKK7n86fneFJEtQzm8VlUGnH45+VtG
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5433.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(53546011)(2906002)(38100700002)(2616005)(31686004)(44832011)(5660300002)(6916009)(186003)(26005)(6512007)(36756003)(38350700002)(54906003)(316002)(6506007)(86362001)(31696002)(52116002)(66946007)(66556008)(66476007)(4326008)(8676002)(6666004)(8936002)(83380400001)(15650500001)(966005)(7416002)(508600001)(6486002)(781001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Gg1/Z2mWmOIh3e7lzDH0HAaR0+LJY2g6hzgZXfhEUStQgg/trg6zrKa5iigqlyNrWRnLMfYwQF1vZc9Hxlm7CDhtQCyKX4uvmZboDkiAlzCV2UqP3Ydb0iMYxN4hMq3kj23dBqxBR6l01Oiz+6Zmcxv7e/rlUJ97wL8sqwRMpnNiXzzU4FYKiHq0WX+T3xkDvpcDTO8WPi1hzZwiUKvy3SfPPkKlxWp33EVPMwg3h24qc13W14Yj0lsL2EKU2Tjg+kPsEl4chRel6kkyItomMlDS3iNZS6wRHjIMFWhyXcsifHsr05bSmdIEU7BX0J4YV1WRcIGnIlPol0/sfq8nu0DQ7abht3DhehBy2ANZN0B86KkQAjASIiwmVmad8/3DeoY0B8dWf7uqucmK6WWeUu+N1aR1Zu3IoOH5Iw38XmcRQJBVNya7MSs6wLdPqDm1ejUXw0zYykF/oWvwf4hw/ddeATFO8n7f4mPC3oip5hl/2LKYIlYljOxeIVA/fk2liKyn5gh/0b9Ow+214mnrN8Ayz2SUxgjJuXoetDIUp2S5tYCQ/tcdFwbty1J7gjpp9t+abvPkktg6jw6GMRIVBggKa8Px70yfncdLxxu7unU00a4/7DvgajmXzxhp1c324plFFaOosZj3PW5jsGLJ+Fg04IvwNcpjTXNG5IfjEvxRKDK1fZxdx0+slO8dSsHbVKc4QNq758rYsJcOQ0sebN5JesCVEvNTFkTmzEsy7eDNtmKpeI9++dQad+DqmMCh3JcUhXH2ticVwi3abYndj2wBQNIHQaVUbtjC0uVCcpzZOniAaBo6FI639IJh16trZzgqEeMx7Fpktl6LnPJtJw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(186003)(26005)(52116002)(6486002)(2906002)(83380400001)(1076003)(6916009)(966005)(316002)(9686003)(86362001)(4326008)(66556008)(8676002)(66946007)(6512007)(6666004)(8936002)(44832011)(5660300002)(508600001)(38100700002)(38350700002)(36756003)(6506007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?clB0MEhkK211blcyZGRYRVl6ZThqYWlnV3duREYrNHhmcW1HalAremVlREx3?=
- =?utf-8?B?NmkzdDB5dnVYNkpxTnZkWjhXa1ZuMnBRSzE2R1E0ZE9oK2VEVThibkhSSU9F?=
- =?utf-8?B?Sk9zeFZNZ1NtWEhFenQ3UFZWbWVwd2daYm9PRDdtNDB3TjNvZG84TjNmaWJr?=
- =?utf-8?B?V0lsUTBVcGdYYmp4dFVFY1I0cXdhS2oyUkx3bnYxSy9wMHFCcFFxSGdGK09M?=
- =?utf-8?B?SXhUTGtHajVUSlArQy93L2dZZFFUVldNUVN5bWxZWXZjK2ZTZFNpNC9yRHNv?=
- =?utf-8?B?Ri92dys2bytGSzY4SEFJTjI0dXVNdWhtWE1PNGlLRXpZMHYxUUVTNVlzVWto?=
- =?utf-8?B?MTZkblFCejY5aE5PUkFtT3FlSURPTjRiVERtWTMxMVowTGUwaW51bXE5aFhq?=
- =?utf-8?B?bTRscDJLWUp5cndVTWZJWTFFVHZIVlRscXVhZFp2QkpDOEZIS3J6Y3pPUzM3?=
- =?utf-8?B?V3NMd054dWx3UmtvK2FpdjdTU3hCeVZvMDdVZmlSMllEKzI5dzVGWlpoaFVE?=
- =?utf-8?B?NHhacHlieHhFNHFOaGVGc1IvdVArTE9GcFlnbHZ3YTFaeVNTZU9YbnlWVHlj?=
- =?utf-8?B?K2tOY1QxdnFwZkZicCs5QmtTOHhsTmd4WEwxTjNJNWZGcTZsT25jV2d4cFBC?=
- =?utf-8?B?MEdKTjNiQWlNV2VxcnlTQkZYM1FWQUNTN3FoQWxXUHRrNzFnc0JadlpQdUpv?=
- =?utf-8?B?Q2w1R3JNOEFWVWw2R01MY01FSGx4VWxUZDI1Mk11UTVjVmVlTUNQK1RWUVNY?=
- =?utf-8?B?RVJzbklLRkZjUnM2MExIa0FiWXBBMUFmRGVpQ0VobGpWdmlMM2VPTkdacWJl?=
- =?utf-8?B?QWtBdjNDN09hKzBzaTgwKzlNTjk0cWVaL3NGSnZtbHRhV3hDRTc4OGl4dVBO?=
- =?utf-8?B?WStQb1ViOHpIVzZ2bXlHTjJXeEhKalQxbG5ZY2Y2dTVORTdiYnhldU5zNUUx?=
- =?utf-8?B?Q2d5SVY4WFo2elRxV1NremxDN1NsbkxyZFV1U0J0M0ZkbXhsd1FTWC9yTXp1?=
- =?utf-8?B?WDVOalBoYnNYamUrY2hjbDZDdE1TVkJObUdBdUp0RFhSRmxXaHYyU2pxc00w?=
- =?utf-8?B?a2RRQnFLTmRJZDBQQlNnaHJOYVBGUlNLVW9rRFJXRWtsU3l2UGlqNytkRmlj?=
- =?utf-8?B?cXlwQWRyVkM4ZFBGaTBMT0c1bS9NenpONG0wTENQbmFZTWN2ZDVzb3d5MGJn?=
- =?utf-8?B?Mk1CNGpaeEk4UnZiKy9CSGVhd3NkRnIycnpZVFVtUFRtVk5BZnFrLzNwcVRt?=
- =?utf-8?B?dk5KZkR5ZXMxL1dGTEdTanlneUJiTzdOeWNncjd0WXZta29ReER2K1pUcUFF?=
- =?utf-8?B?OVZBOWxWb2x0d0FwbnFsUFpoeXVueWtPQWZCZk1VTERKSEp0R3BEYWNldUhq?=
- =?utf-8?B?TlhWNmIvc05NS3FLK3hVQm11eW40Y0JmNUlkd0EzWEV2L1ByTzA4MHFTU0Rv?=
- =?utf-8?B?elpoMWlYV2dhWkE1dVZQdG90ZFpGZkRHY3dDQmkxL01jakVoSjYzTDBlbko1?=
- =?utf-8?B?aWxJYmQ4LzFYZ2FjQThpRkNXZjlkdWlNRi9pQmYrOE5aVm1wdFM2b3hwMGJi?=
- =?utf-8?B?NDY5RnROZHZsbldXUzQ3SC9aT2ozNTFxUUlQdXZtTmRBQVJtYjlQdngzdjI3?=
- =?utf-8?B?KzhBV2Radnd5eU55VUptV01uQXZNcDNyamZRUXZZZEhIcnpzMHc0aFh4cWNj?=
- =?utf-8?B?NURwU2NaRTA3ZHFhUUQyUk5lU3hGaG1sWlYyR3dxWk1xSTkwbE93U0ZaZWpH?=
- =?utf-8?B?SUxLam10OCtvWkUwd0tmcitlcExnL3h4R3FZUGRKTjllS09iVjAyckhyNW9F?=
- =?utf-8?B?S0tobmEySXowdHB3NU9DdkZZR2tnOEhwMnBtbkxkOFVTN1Jnc2tiM2pOanBi?=
- =?utf-8?B?YUxpZjVLMGdEaVByNlk3U20vM014aEVVK2tTRTg5REVmUStjY1dZNUFBZG5k?=
- =?utf-8?B?dzFwYitOT2YwZURCcVRib1NjdlNBRE1vc0t0RmZnVU5MOC9sR0FCY0YrQkVM?=
- =?utf-8?B?Tm0zRkVOZ0RUaGdmeXM5Z0dYeUFqajVTWllrSVQ1Nkdia0RBSXBtVTRhVTdl?=
- =?utf-8?B?M1VwTWw0eXByVmlhbm1RQ0ozY0plWTU3MGVhUCtNZW5UVk1YKzJ4dUFYYlFZ?=
- =?utf-8?B?MURyWkhvSGRjZ2pCSy8vOFczWkJLWXQvSkthWW9uUzFlditId3ArR1R2RktF?=
- =?utf-8?B?bHlua3JCazNuR2ptelEyZktmcmxtcVJwQThvcVUyU1lWWXZ5YUxOQ01STFE5?=
- =?utf-8?B?NUY2blJTTlE5c0RWZ3BtTFlZaG1BZzFxYUE3YnA5T0djdnRKSDNpc1hLdEll?=
- =?utf-8?B?NDhLd0NjOVRWYzJrZ25oQ2JNSGpIVjhqb2hDVUhMNlQrL1BiZ1hXNWVRSVJQ?=
- =?utf-8?Q?ILRWR0WfluwX1jas=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rb6tFkb52JP2BZJQawznnj7UtJQzWbimi0G4n8LH8m9f/TXDnKveTljduxfb?=
+ =?us-ascii?Q?f/06/dx5KEfXtevTBYAYKxjbfK2F0S4sf1Y3uxD94pW145+PYcF5JASAof8U?=
+ =?us-ascii?Q?AIKT1g++HgmTu9zEIVI4Fye95dmYdp+28s7Jl5SZg6y4NUbMJr33l+u7Ozc0?=
+ =?us-ascii?Q?GnpmdjptTH0Q0d81W24YLgHmW2rwVCELIneWvMhv26E/jdpjhmdZexZ7caMy?=
+ =?us-ascii?Q?RlbV8tyVfadUhUBOekIZnNkDX+u/LfiHmQA1hcjZAqawx2iDOaUZrUJ3U1kQ?=
+ =?us-ascii?Q?1nI0nd6XVIGGthphmk3IoTRw0MeauAy6rAk/NQbgNh3TpwcuGVwKkxLmnTh1?=
+ =?us-ascii?Q?egfgdQ3QEYpABlW1uf9r2qgdEMbrTv6kYhvQ24hjKxQZNeZKlmrE6PAM8nPy?=
+ =?us-ascii?Q?KeUaF+LZoeIChw4zMFqBMmNAuWuQ07uZ2YqOroOFJ5oH1e0+aaPl8T4fg2kp?=
+ =?us-ascii?Q?eseEm0cUf8kTRVA0JTCW38TeXXyAeM0/88eIGz+XYYpy4qd+WxxuNJGnMbZ5?=
+ =?us-ascii?Q?uyQTIPHvP/6/yHcSfZBwosZqOj88vgB+Y5Jw8ukRwRAekIgoT3ZaN5n8JpOw?=
+ =?us-ascii?Q?YYoDzPNxQ3FO+fw8QhS4M0glx6fHLJvHJEyRccAfnijyn920YiyuqAvuueb+?=
+ =?us-ascii?Q?ZQNdD4HrKcHOGdYp2Jy8Mdn4IRMR6koCSWgjepuJfmvufCL6xdwuUcSZupva?=
+ =?us-ascii?Q?sWVQ3OFbAYBV+syo9WvFE8Lt+I1rohHPdA38vvbTXZcvjrlnz6A0AteJ0g3o?=
+ =?us-ascii?Q?4/+qXpxB8vAodfOzXOxH9sHVEc658YOoEhymZuYG3oRNLZroa7ZLcolH6qdh?=
+ =?us-ascii?Q?JrDL/YNyC1mZrdbpzztHOkw9wWwnk0o0wNUstbGtExOpxjotCL/TIcJiZIx8?=
+ =?us-ascii?Q?MHGTco2+9yIntK/Mon+TNBHwT02ja73CJdi5bJj+5TIC2oCfU1qX63c7yrZ0?=
+ =?us-ascii?Q?hDHUvyueObNu/l8zZDPGHARd64ajsTrapRYarehBhH38uQUQuxHCDgePk8e2?=
+ =?us-ascii?Q?/beK5azqCu1Nyh3iWlY3SXszy6QqJ4fd7NSqGMFLYa7fBy3d7RBO0w1y2nBC?=
+ =?us-ascii?Q?rRdAWkpfoCVDy1Yt2YTgjZeygO7sRwyO945wiD+Urc+mvZedF64iqG5kXWLi?=
+ =?us-ascii?Q?Gqi5/2JgxYswYcZnu6xbSOpfJNWreCPk1uWQbhxPIb35M02d7nFy45Of849W?=
+ =?us-ascii?Q?0Uz69OrZzpILJ9Vh0kBnPRQZmcnW8M366fldaSaPululcSbNvGB+KpxXUZRU?=
+ =?us-ascii?Q?WDu5Y593OMNehV/OPZCfT3wNXynFHf8xqrjBno4rAa+sYJgnl63uN7qNlJec?=
+ =?us-ascii?Q?XpRIPYdaWvAY3QQo5sjoxje60ps9FwzYHCtr67eNrIlnSpRloq3hDR5bvoWF?=
+ =?us-ascii?Q?IGxbYV1DInALZVuQsGb24c+30lJ74PvdIelbzch82tK7otVBbdcbL+E5kDA0?=
+ =?us-ascii?Q?bnVTfuyfsRF3fMpewiayDkpb+HCTm06/WJP+5T77i9TPpNJGOGmJGSjJgAvp?=
+ =?us-ascii?Q?XnjMGugvlH76T1wviohElGShSRn4Pnb10z/3wX/GuHPU41b3AMoeKOxdIyX1?=
+ =?us-ascii?Q?Nztgeg6ReDmi5BivDBJUjng6FgznK8qvKpOmozz/afVNuCKhaLzWvye5SPBk?=
+ =?us-ascii?Q?179InfBwqZ3uROzNvWw4AbTTVruyAdfhVwI4w3sWIjwpitRs7nDs1kOX+WZE?=
+ =?us-ascii?Q?EkA+tERMBSRSdgPq7uJWuoOrSqf1XdgZfDtU45VENJ7GePNMd9D3j1PnQcyF?=
+ =?us-ascii?Q?b3tjUgSV9SDEh+cuzoSuRkqMhN/u/KE=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a4c92d9-b2b6-472e-bb8f-08da44ad72d4
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5433.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72f3f881-37e0-4e61-51de-08da44ada09a
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2022 15:34:57.6202
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2022 15:36:14.2407
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QtSyKvF5bBgRQyix/AtCrKLJFdk3nFbyg5aMMOHz6cUG0UJNSG06vepJ0Z4uAiKXQJI8PTu7nuvRXaRevtUMbSzNQrA/7SfFmkABInVP7WU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1799
+X-MS-Exchange-CrossTenant-UserPrincipalName: x1ND/iabC8HeTqm75t8ihT9suVTV94GBystiM6rbZt1083neBEVUQ+o+JLBYgUR6kbVZjjZ5Ep7rxBHYvQ+alyDktAK5GYpgyURi5ED43nc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR10MB2963
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
  definitions=2022-06-02_04:2022-06-02,2022-06-02 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- phishscore=0 suspectscore=0 malwarescore=0 mlxscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206020065
-X-Proofpoint-GUID: pNl25d-t7nKoDv8OVW4j_caMa1ZtIGPS
-X-Proofpoint-ORIG-GUID: pNl25d-t7nKoDv8OVW4j_caMa1ZtIGPS
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 suspectscore=0
+ mlxlogscore=999 mlxscore=0 spamscore=0 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206020066
+X-Proofpoint-GUID: h-Fc8W1-E_IcG6ZOVbhd7UlhXazZEsYp
+X-Proofpoint-ORIG-GUID: h-Fc8W1-E_IcG6ZOVbhd7UlhXazZEsYp
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -176,173 +146,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
+head:   1fcd9cea011a657d62ee332d161966c1ec92ffd5
+commit: 75be7c3d8d488788289ec6e343e138db5a2b2440 [150/401] xfs: teach repair to fix file nlinks
+config: microblaze-randconfig-m031-20220601 (https://download.01.org/0day-ci/archive/20220602/202206022146.2RgP2bEQ-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.3.0
 
-On 6/1/22 05:12, Willy Tarreau wrote:
-> On Wed, Jun 01, 2022 at 01:03:09AM +0200, Vegard Nossum wrote:
->> The current instructions for reporting security vulnerabilities in the
->> kernel are not clear enough, in particular the process of disclosure
->> and requesting CVEs, and what the roles of the different lists are and
->> how exactly to report to each of them.
->>
->> Let's give this document an overhaul. Goals are stated as a comment at
->> the top of the document itself (these will not appear in the rendered
->> document).
-> 
-> Thanks for working on this, I'm having a few comments below.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Thanks for the comments, I'll send an updated v2 shortly, just wanted to
-address individual comments.
+New smatch warnings:
+fs/xfs/scrub/nlinks_repair.c:80 xrep_nlinks_repair_inode() warn: missing error code 'error'
 
->> +Linux kernel security team at security@kernel.org, henceforth "the
->> +security list". This is a closed list of trusted developers who will
->> +help verify the bug report and develop a patch.
-> 
-> + "in case none was already proposed".
+vim +/error +80 fs/xfs/scrub/nlinks_repair.c
 
-Done.
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   42  STATIC int
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   43  xrep_nlinks_repair_inode(
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   44  	struct xchk_nlink_ctrs	*xnc)
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   45  {
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   46  	struct xchk_nlink	obs;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   47  	struct xfs_scrub	*sc = xnc->sc;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   48  	struct xfs_mount	*mp = sc->mp;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   49  	struct xfs_inode	*ip = sc->ip;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   50  	uint64_t		total_links;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   51  	unsigned int		actual_nlink;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   52  	int			error;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   53  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   54  	xfs_ilock(ip, XFS_IOLOCK_EXCL);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   55  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   56  	error = xfs_trans_alloc(mp, &M_RES(mp)->tr_link, 0, 0, 0, &sc->tp);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   57  	if (error)
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   58  		goto out_iolock;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   59  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   60  	xfs_ilock(ip, XFS_ILOCK_EXCL);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   61  	xfs_trans_ijoin(sc->tp, ip, 0);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   62  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   63  	mutex_lock(&xnc->lock);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   64  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   65  	if (xchk_iscan_aborted(&xnc->collect_iscan)) {
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   66  		error = -ECANCELED;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   67  		goto out_scanlock;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   68  	}
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   69  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   70  	error = xfarray_load_sparse(xnc->nlinks, ip->i_ino, &obs);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   71  	if (error)
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   72  		goto out_scanlock;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   73  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   74  	total_links = xchk_nlink_total(&obs);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   75  	actual_nlink = VFS_I(ip)->i_nlink;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   76  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   77  	/* Cannot set more than the maxiumum possible link count. */
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   78  	if (total_links > U32_MAX) {
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   79  		trace_xrep_nlinks_unfixable_inode(mp, ip, &obs);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  @80  		goto out_scanlock;
 
-> There's indeed recently a tendency on the list to get a lot of first-time
-> reports from individuals showing that some work was done trying to make
-> some code parts fail, but no effort was made to try to figure how these
-> ought to be addressed, and that costs a lot of time, because once the
-> analysis was done, the person who knows best about the problem and how
-> to fix it is the reporter, and we must absolutely encourage that the
-> work is finished and a candidate patch is proposed. Usually, returning
-> reporters propose patches, so I think they understand the value in doing
-> the work properly, which makes me think that we just don't make that
-> obvious enough from the rules. It's also possible that many reporters
-> are not used to working with OSS projects and imagine it's inappropriate
-> of them to propose a fix. But the question that's the most commonly
-> asked on the list is "do you have a patch for this?".
-> 
-> Overall it seems that reporters are willing to do their best but that
-> it's never easy to engage in such a bug disclosure process which may
-> involve short times, and that it can be stressful for the reporters
-> who forget to do a lot of the parts they would do for more regular
-> bugs.
+Needs error code
 
-I think there's also an argument for encouraging reports whether the
-person has a patch or not, presumably it is better to know about an
-issue so it can be prioritized against all other known issues, no?
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   81  	}
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   82  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   83  	/*
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   84  	 * Linked directories should have at least one "child" (the dot entry)
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   85  	 * pointing up to them.
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   86  	 */
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   87  	if (S_ISDIR(VFS_I(ip)->i_mode) && actual_nlink > 0 &&
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   88  					  obs.children == 0) {
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   89  		trace_xrep_nlinks_unfixable_inode(mp, ip, &obs);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   90  		goto out_scanlock;
 
-In any case, I have amended the text like this:
+Here too
 
-+Reporters are encouraged to propose patches, participate in the
-+discussions of a fix, and test patches.
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   91  	}
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   92  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   93  	/* Non-directories cannot have directories pointing up to them. */
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   94  	if (!S_ISDIR(VFS_I(ip)->i_mode) && obs.children != 0) {
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   95  		trace_xrep_nlinks_unfixable_inode(mp, ip, &obs);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   96  		goto out_scanlock;
 
->> +While the security list is closed, the security team may bring in
->> +extra help from the relevant maintainers to understand and fix the
->> +security vulnerability.
->> +
->> +Note that the main interest of the kernel security list is in getting
->> +bugs fixed; CVE assignment, disclosure to distributions, and public
->> +disclosure happens on different lists with different people.
-> 
-> I think it's also important to explain that sometimes some patches may
-> be merged ASAP to plug a hole and let them flow to stable branches,
-> while letting the reporter deal with the full disclosure once they
-> consider that enough time has elapsed. The recent "dirty pipe" fix was
-> one of the best examples of a report that went smoothly and allowed the
-> reporter to work on a nice description of the problem:
-> 
->     https://dirtypipe.cm4all.com/
-> 
-> There's always this gray area between getting a fix merged and disclosing
-> all the details of the bug. A bug indeed becomes public once the fix is
-> merged, but that doesn't mean that all the details are shared, so the
-> reporter still has the opportunity to write their story about it. The
-> reporter must only understand that it's only a matter of time between
-> the merge of a fix and the moment someone will understand how to exploit
-> the bug and publish about it.
+Here
 
-I've changed the bit above to address Jon's comments as well:
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   97  	}
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   98  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06   99  	/*
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  100  	 * We did not find any links to this inode.  If the inode agrees, we
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  101  	 * have nothing further to do.  If not, the inode has a nonzero link
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  102  	 * count and we don't have anywhere to graft the child onto.  Dropping
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  103  	 * a live inode's link count to zero can cause unexpected shutdowns in
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  104  	 * inactivation, so leave it alone.
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  105  	 */
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  106  	if (total_links == 0) {
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  107  		if (actual_nlink != 0)
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  108  			trace_xrep_nlinks_unfixable_inode(mp, ip, &obs);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  109  		goto out_scanlock;
 
-+Note that the main interest of the kernel security list is in getting
-+bugs fixed and getting patches reviewed, tested, and merged; CVE
-+assignment, disclosure to distributions, and public disclosure happen
-+on different lists with different people, as described below.
+These looks like a success path
 
-We could maybe add something like this to the "Disclosure" section of
-"Contacting the security list":
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  110  	}
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  111  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  112  	/* Perfect match means we're done. */
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  113  	if (total_links == actual_nlink)
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  114  		goto out_scanlock;
 
-+Please note that although a fix is public, there may still be value
-+in withholding the details of its security relevance and/or how to exploit
-+it for another while; see below for when and how to properly disclose the
-+security impact of your findings.
+Success path
 
-I'm not totally happy with the wording here, probably because I don't
-really agree that patches should be published ahead of disclosure in the
-first place. Anyway, happy to take other suggestions as long as we can
-keep it short.
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  115  	mutex_unlock(&xnc->lock);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  116  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  117  	/* Commit the new link count. */
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  118  	trace_xrep_nlinks_update_inode(mp, ip, &obs);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  119  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  120  	set_nlink(VFS_I(ip), total_links);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  121  	xfs_trans_log_inode(sc->tp, ip, XFS_ILOG_CORE);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  122  	error = xfs_trans_commit(sc->tp);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  123  	sc->tp = NULL;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  124  	if (error)
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  125  		goto out_ilock;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  126  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  127  	xfs_iunlock(ip, XFS_ILOCK_EXCL);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  128  	xfs_iunlock(ip, XFS_IOLOCK_EXCL);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  129  	return 0;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  130  
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  131  out_scanlock:
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  132  	mutex_unlock(&xnc->lock);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  133  	xchk_trans_cancel(sc);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  134  out_ilock:
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  135  	xfs_iunlock(ip, XFS_ILOCK_EXCL);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  136  out_iolock:
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  137  	xfs_iunlock(ip, XFS_IOLOCK_EXCL);
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  138  	return error;
+75be7c3d8d4887 Darrick J. Wong 2022-01-06  139  }
 
->> +Here is a quick overview of the various lists:
->> +
->> +.. list-table::
-[snip]
-> While this part renders well on your HTML version, I'm afraid it's totally
-> unreadable here in the text version, and this document is supposed to be
-> the one reporters will use. I suggest to try again with an item list
-> instead of a table.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
 
-Jon had a good way to do this that looks good in both text and HTML.
-
->> +**Disclosure.** The security list prefers to merge fixes into the
->> +appropriate public git repository as soon as they become available.
->> +However, you or an affected party may request that the patch be
->> +withheld for up to 7 calendar days from the availability of the patch,
->> +with an exceptional extension to 14 calendar days if it is agreed that
->> +the bug is critical enough to warrant more time. The only valid reason
->> +for deferring the publication of a fix is to accommodate the logistics
->> +of QA and large scale rollouts which require release coordination.
-> 
-> I'm still having an issue here. Originally it was something along "up
-> to 5 days if there's a really compelling reason". Then it was extended
-> to 7 days in order to better match the tuesday-to-thursday range. Then
-> "up to 14 days" for exceptional cases (i.e. hopefully never). But the
-> wording tends to make all reporters think that asking for 7 days is
-> normal. We really need to make it even clearer that:
->   - the default is no embargo
-> 
->   - if there is a *really compelling reason* (that has to be justified
->     by the reporter), it may reach *up to 7 days*
-> 
->   - in exceptional cases (the bug-of-the-year with a risk of massive
->     exploitation requiring coordination) it may be extended to 14 days
-> 
->   - "I already contacted this or that list so you must respect THEIR
->     embargo" is NOT a valid justification to withhold a fix
-> 
->   - dealing with embargoes is a pain, a withheld patch risks to be
->     forgotten or confused with a previous version of the patch that
->     appeared in discussions, it's difficult to synchronize stable
->     and mainline, and the risk that it leaks by accident grows with
->     time and with the number of participants in a discussion.
-
-I've changed this section to:
-
-+**Disclosure.** The security list strongly prefers to have patches posted
-+for review and testing on public mailing lists and and merged into the
-+appropriate public git repository as soon as they become available.
-+However, in exceptional cases, you or an affected party may request that
-+the patch be withheld for some days; as a rule, the maximum is 7 days.
-+Only in truly exceptional cases will the security list consider deferring
-+the publication of a fix beyond this, and the only valid reason for doing
-+so would be to accommodate the logistics of QA and large scale rollouts
-+that require release coordination.
-
-Note that I'm only trying to clarify the existing policy here -- I'm not
-in a position to change it. There is no mention of 5 days in the current
-document, which is why I've kept the wording of "the maximum is 7 days".
-The justification for the current wording was given in commit
-544b03da39e2d7b4961d3163976ed4bfb1fac509. If there's a consensus to
-change it back to 5 days then I can incorporate that, or somebody can do
-an incremental patch.
-
-In any case, I would assume these are also things that can/should be
-discussed on a per-bug basis as long as the overarching rules have been
-given here. What do you think?
-
-Thanks,
-
-
-Vegard

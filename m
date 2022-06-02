@@ -2,124 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0652453BE8E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 21:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4AC53BE90
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 21:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238459AbiFBTSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 15:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S238500AbiFBTTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 15:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238445AbiFBTSQ (ORCPT
+        with ESMTP id S238445AbiFBTTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 15:18:16 -0400
-Received: from hobbes.mraw.org (hobbes.mraw.org [195.154.31.160])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CD33CFDE;
-        Thu,  2 Jun 2022 12:18:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mraw.org;
-        s=mail2022; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=d4XvQZuUNWiiJkWzK1Brb0QRzliyWqwmPdPvqncZkG8=; b=kro9Z27A4pnNzk/523zcxKFZM3
-        uJcVdPbhN+y/epB9sf3fbg2Ztaut4regb6t74HySs9ZT27dNtG+/eyI0Edf6PSuPYv2XojG4VPdf6
-        ROjZtLX0poOcaVbbPAJx59HUpIfuTsqWauLDZO8/l5nyZuD1XmUpmlQ5RwrFOHuHZ6Ca0JXE9YL87
-        7eucgmbEZYtEoKt0hga39vjnNeAoRr7LGJBQmhcLfp5I4m10E5dxtk8Hb7TGh8xiRVuXsEOPcE//3
-        vA6hmxXkkz9Vqi3mDagdt+NOrr5+ou4XwLycJk9y5MGWeQ09hbD5gdnaTsoRGw/87Q1Pm8hl4HOJp
-        qOsOKKTQ==;
-Received: from 82-64-171-251.subs.proxad.net ([82.64.171.251] helo=mraw.org)
-        by hobbes.mraw.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <kibi@debian.org>)
-        id 1nwqKV-008WAr-7i; Thu, 02 Jun 2022 21:17:59 +0200
-Date:   Thu, 2 Jun 2022 21:17:57 +0200
-From:   Cyril Brulebois <kibi@debian.org>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, james.dutton@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] PCI: brcmstb: Fix regression regarding missing
- PCIe linkup
-Message-ID: <20220602191757.pqictbfarmvlf72f@mraw.org>
-Organization: Debian
-References: <20220528224423.7017-1-jim2101024@gmail.com>
- <20220528224423.7017-2-jim2101024@gmail.com>
- <20220529011526.4lzuvkv5zclwntce@mraw.org>
- <d7a5a0d8-5d27-548f-bc94-0e7d116cc3f2@i2se.com>
+        Thu, 2 Jun 2022 15:19:43 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF51FF7
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 12:19:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654197581; x=1685733581;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4gnczcXOvNID4XxHMeyE2k9aZh9fLIqtdd5bKlnKz0w=;
+  b=XoEIlLdRD6LkdlBfeoVUMvBy1Ry+MLVtqQFyuZ3J1K9DtZNXgwyf/M8Y
+   CsltABojxdVapypCPjbA/EZmQeuN8KSCHFekz7VJFjdwhTQ8RCD1o/zBG
+   +JRGqgPLMrwi2qswF+DNcr/MQQ+cvnYJDx+V0iSMsKDYQCgyCQw+4haQV
+   MakXWOHwFDBDjpChnE57jypvmiQbTw2bM0ROM1GuVPXQwFKcFt1s0rKXj
+   O+iEAE2P0PipVajudfapjlTJayRNZgCvnwmcXR1iEnLWrnuwaNFtZV/Cv
+   oZJPpOwPdHiX3fs4dm2k0zoCRiwWGuBInyEUaWPvpRw6M4drSQsWeAcKA
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="258127966"
+X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
+   d="scan'208";a="258127966"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 12:19:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
+   d="scan'208";a="530711624"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 02 Jun 2022 12:19:40 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwqM7-0005NF-Or;
+        Thu, 02 Jun 2022 19:19:39 +0000
+Date:   Fri, 3 Jun 2022 03:19:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Pirko <jiri@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:jiri_devel_lc_dev 4/5] core_linecard_dev.c:undefined
+ reference to `auxiliary_device_init'
+Message-ID: <202206030331.RWwc4l16-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="e6x3pkp6gefd6bwh"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d7a5a0d8-5d27-548f-bc94-0e7d116cc3f2@i2se.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_lc_dev
+head:   ef34c1c33c0ae43a9ad3c0ed3708eb1880972de0
+commit: 2d0852c5fa89a48c6fa1f860600b5e24e2faab4b [4/5] mlxsw: core_linecards: Introduce per line card auxiliary device
+config: i386-randconfig-c001 (https://download.01.org/0day-ci/archive/20220603/202206030331.RWwc4l16-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/jpirko/linux_mlxsw/commit/2d0852c5fa89a48c6fa1f860600b5e24e2faab4b
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_lc_dev
+        git checkout 2d0852c5fa89a48c6fa1f860600b5e24e2faab4b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
---e6x3pkp6gefd6bwh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Hi Stefan,
+All errors (new ones prefixed by >>):
 
-Stefan Wahren <stefan.wahren@i2se.com> (2022-05-30):
-> i think we should better trust the results based on the v5.18 tag. During
-> the merge window, regressions from other subsystems are possible.
+   ld: drivers/net/ethernet/mellanox/mlxsw/core_linecard_dev.o: in function `mlxsw_linecard_dev_add':
+>> core_linecard_dev.c:(.text+0x129): undefined reference to `auxiliary_device_init'
+>> ld: core_linecard_dev.c:(.text+0x14f): undefined reference to `__auxiliary_device_add'
+   ld: drivers/net/ethernet/mellanox/mlxsw/core_linecard_dev.o: in function `mlxsw_linecard_driver_register':
+>> core_linecard_dev.c:(.text+0x1a6): undefined reference to `__auxiliary_driver_register'
+   ld: drivers/net/ethernet/mellanox/mlxsw/core_linecard_dev.o: in function `mlxsw_linecard_driver_unregister':
+>> core_linecard_dev.c:(.text+0x1ba): undefined reference to `auxiliary_driver_unregister'
 
-Alright, that looks like a great plan.
-
-Before getting your answer, I had tried taking the reboot part out of
-the equation, but I found out that even cold boots might fail with the
-mmc storage.
-
-I haven't been able to conduct a systematic testing of the patch on top
-of the v5.18 tag yet (say, 10 or 20 cold boots, and the same with
-reboots) due to strong work constraints these past few days, but that's
-definitely still on my short term todo list (hopefully before the end of
-the week).
-
-Sorry I didn't manage to get that lined up before Bjorn's pull request.
-
-
-Cheers,
---=20
-Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
-D-I release manager -- Release team member -- Freelance Consultant
-
---e6x3pkp6gefd6bwh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmKZDOEACgkQ/5FK8MKz
-VSAxHw//UqQVStG4n6PM9GwjjAexTX9ACfI8AU1/Hz9oPvhlcB95cjd/LnJUm2yP
-y2xSb5A19sNey7lYh3jga7Q2mh6nuu+lw7gqt2NfrHwN4ni/EP+0xrBbleMgEooh
-NW7xVd3aF1E7zTGGsIgl8H0CgfI2Mv+EhY/gXdV32iPw3puLYC6x28NICKsVlImr
-BoMbMVEK8gWjxT0SLxRiTj11doR+Dccbely2DNSrIe+p/aSiH5nTtAsnagz0eYym
-sijizAkR7luWZb+Q8MUpGpD9Ptp0oXITGKsBAPTHPotnrTE2DcF1k9PXLdKm72/L
-hJdWamlj3Biuz9q6uOAMqFGFBLxqEr58p/S0ph89CRXuK1w97xpfhUn9lmyGI50W
-YsrQhg86cKmRIF7gX2Ax/OceS3WabTXuk77zm+8IhF99DUt8wxWML1H8Xbqo8CMG
-09f6Rfa/FOfHVB3avbdqVHJ7LYqb6F9iqW02QLbMwlJmhEKB7VAeSbty1S+dqcHn
-JEWLieJ9PRETIzp66BEs5BRrivJGFv0lGD8joDOKFZf3VH2tzLwH71aaAgK4yXA0
-jRy6HlGyVt0SLWgFXltuI6MCh771PEmPA7kOmb8uDrM4LmN4h/BYk8XjYDNrUHa+
-Hd+XcATSfWkJQSTMuVfNfwFDVFqRVaSwjLy+UwcmTmqCA+wQLC8=
-=JkNy
------END PGP SIGNATURE-----
-
---e6x3pkp6gefd6bwh--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

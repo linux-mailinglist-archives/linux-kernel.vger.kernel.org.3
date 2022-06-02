@@ -2,61 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0034853B31E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 07:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4773E53B320
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 07:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiFBFoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 01:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
+        id S229874AbiFBFtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 01:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbiFBFoQ (ORCPT
+        with ESMTP id S229839AbiFBFs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 01:44:16 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD9722E691
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 22:44:16 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so3946204pjf.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 22:44:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=eMtJVeZI1KQcNXj557Juxr+LA31+JeDU+zp2yc6qXaQ=;
-        b=JRu0GQwj96tRIGf0GuDeb++vELbXRr2LCcmXnc609jXDrHWJYjna7zLYkjxJvwR0LP
-         EpPC5BkOO3vqmGKCcrjc47DZk4/MVwPscg90qAorPE2YblXa4M0kJuB/MTw+ySTZZzp2
-         F0TmVC5PAAGmfPEveezdA/JvEgsDY++MPNwAcTJar/vV4J97M9lzHnorrjqeu3QK5M4r
-         mXMmZWf3H49z80GutNd+hO7MT/lAbVKZ3+9Acd0eeR38akCZDeAJkyJOr2h0vjAXfD8S
-         Ia4/7Nqr4w94vrx1ZDd/98iPfXlRGNUGMEu2gafK0wBjqvcPw9DAV+1LJTVZUAWSdOyw
-         bMDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=eMtJVeZI1KQcNXj557Juxr+LA31+JeDU+zp2yc6qXaQ=;
-        b=6InLFL5mZyBlaIlEnRGFpWml8ajRJd9b20jTHbr4TPdkUqka4cpsiGpCzJpTAcUjRK
-         PuM0E9Xg8iWjyG4O0WJ+hoUGZMuQJaJMxZzYud8xlPx8P5nt6wV/F8bFuAUQZVrZI1Bg
-         Gyg3ljUb3wu2XRs5AliCVLGjuA6Xp3Geff6YRLPQfHQx6OHPeNFUeLfpqQe26VDvaKnm
-         lQ5eSSJdJvYiuWa0ZkycN0RAriL1Q/ySFY5gbIaSuKxAq5J13Qh2POreJlGkCaRbp9SW
-         jSUequMg/I17gMvB0gHoW0m4mDgKLwvXhaXY2T1d7M4Gc5dQumFN7JLWy/SaPTdVaYPn
-         bg0g==
-X-Gm-Message-State: AOAM530U61YSw0AhTWLCAZqnZ3njQjbTknHwholyo6+TTJPHzH5jrv+6
-        inIGTj/0bPK1jsfoW01tFWU=
-X-Google-Smtp-Source: ABdhPJyDaaKOQTiD9f5t5H7dhhDQ7PJ35+v6kLxUVMnDwfF/DH1iVSDcq37LLNdEfP/PfxAlenQIDQ==
-X-Received: by 2002:a17:902:b70c:b0:156:16f0:cbfe with SMTP id d12-20020a170902b70c00b0015616f0cbfemr3178691pls.152.1654148655756;
-        Wed, 01 Jun 2022 22:44:15 -0700 (PDT)
-Received: from localhost.localdomain ([2402:7500:569:e4e7:9594:e92e:b3a9:bf26])
-        by smtp.gmail.com with ESMTPSA id 184-20020a6300c1000000b003db0f2d135esm2359987pga.49.2022.06.01.22.44.10
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Jun 2022 22:44:14 -0700 (PDT)
-From:   cy_huang <u0084500@gmail.com>
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, cy_huang@richtek.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] regulator: rt5190a: check if init_data is NULL, bypass rt5190a_of_parse_cb
-Date:   Thu,  2 Jun 2022 13:44:06 +0800
-Message-Id: <1654148646-12182-1-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Thu, 2 Jun 2022 01:48:57 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02809261468;
+        Wed,  1 Jun 2022 22:48:50 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id A28D95C018C;
+        Thu,  2 Jun 2022 01:48:47 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 02 Jun 2022 01:48:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=irrelevant.dk;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1654148927; x=1654235327; bh=ZkWyiuMGaq
+        hYzjNzOrV/RtlVeW8kwzCl9Ncn1BIGaC8=; b=aa+qR82WJa1/b7eBx0E27Gq0nQ
+        mhW1I88Jx3jHQuA/NgaG3e0+It9i0mNXJnvIYdOBkH1jfsM1ZDGlh0HvYh4Lr/oY
+        y9oFauoMrmB3wOcDKSZYnaMHHZX9hkLvQRRAG9BiqrCx/qwe5wH+CJYyVml6pHgg
+        rqPGhZ7JwYLkh2lEHAsPGxqkVc2ekMqeKQLrR9IZfX3B4JXdRpoHZeaRbAd+Urxp
+        y4dsenCXNg80jMulda4pu7d+MSRhdm1R19BlyZp8WleJoOa6lyb9Mb9ohGbUb6dw
+        V2/zPW9c1DOaB/xrI4uHqiKQ35+4YRAr3T8YIyqxdym0tBOJPFFmlFb5bn8A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1654148927; x=1654235327; bh=ZkWyiuMGaqhYzjNzOrV/RtlVeW8kwzCl9Nc
+        n1BIGaC8=; b=op4rbspCGhxXAGklNZ+NAoUzZ8fJhc0zp7Y17aNbOTnHEuWHDwJ
+        MgMsmR9Zf+biBtHOScoc7X2gvZ+wM1dUnSVZasNJLJZ0V/oYuRSA2uCur596VGnJ
+        LwLXo5xFm/uxioGSi7wB5HW00Bq1H2tasrtWEiV7mSgFL3EgpDy8YaWKiPmnu+tP
+        wfhvZ46FNNzHgwV6eXXg8xS+1vodDhrIZM8eD+jK56ZUe2fG9R75sxkBCDNJoKGe
+        jCE95JGdKb9AVQdtOV67eN6srP0UZSHq1Tm3hwe+l4g9KSxiA4BdxE5ZNBLPY+iX
+        a6PsWyEUHsAFQnSsQIrcYD8NT5SxHnMLtwQ==
+X-ME-Sender: <xms:Pk-YYoEx-IwVmjlXsMOVtprieeO2TuziQUrP5zSiart8wSgeD442jQ>
+    <xme:Pk-YYhUWCctqIECKG1yQBnncHD2RQt6qFug2AYUzfu02QvMLOT611bIyVW6c4796a
+    wB5i10drcT-Bz2bRZU>
+X-ME-Received: <xmr:Pk-YYiKdcSXF3_X14_BUQjy0Y1NYiniN66fUpGSCnYY6SuU9JnEH2g9SyhTespBISx2A91CaMggJoGhKJ-z3>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrledugdelhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefmlhgruhhsucfl
+    vghnshgvnhcuoehithhssehirhhrvghlvghvrghnthdrughkqeenucggtffrrghtthgvrh
+    hnpedtleduhfegleehleeltdejffefjedtleeuvdfgteevffegtedvveekheeiieekteen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehithhsse
+    hirhhrvghlvghvrghnthdrughk
+X-ME-Proxy: <xmx:Pk-YYqHfx6DImBe0zMCShFo1uLiaaGs2mE6j_V1FYwqOVUxIYPN1Rg>
+    <xmx:Pk-YYuWhtAq3v55W-v3Nt-G_SL3v0x-E0hmSoAWuyesSG6VlKK2b6w>
+    <xmx:Pk-YYtNIXy5nCtdYo-KPk2Js84B-eDYSYwjipv0ROkztQdKjGMJpWA>
+    <xmx:P0-YYnN3S-3FgQyPeZPx06hAacFFbzy9naLt4BeLQJ_h2mK_A8bhUA>
+Feedback-ID: idc91472f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 2 Jun 2022 01:48:44 -0400 (EDT)
+From:   Klaus Jensen <its@irrelevant.dk>
+To:     linux-kernel@vger.kernel.org
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Wolfram Sang <wsa@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Klaus Jensen <its@irrelevant.dk>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Klaus Jensen <k.jensen@samsung.com>
+Subject: [PATCH] i2c: aspeed: do not mask SLAVE_MATCH
+Date:   Thu,  2 Jun 2022 07:48:42 +0200
+Message-Id: <20220602054842.122271-1-its@irrelevant.dk>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,33 +89,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+From: Klaus Jensen <k.jensen@samsung.com>
 
-If the node for the match name cannot be found, 'of_regulator_match' will
-returns init_data as NULL for this regulator.
+When commit f9eb91350bb2 ("i2c: aspeed: added slave support for Aspeed
+I2C driver") added slave mode support, the SLAVE_MATCH interrupt bit
+(bit 7) was not added to INTR_ALL and so will never be set by the Aspeed
+I2C controller.
 
-Add the check for the init_data. If it's NULL, make 'rt5190a_of_parse_cb'
-function directly return.
-
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+Fixes: f9eb91350bb2 ("i2c: aspeed: added slave support for Aspeed I2C driver")
+Signed-off-by: Klaus Jensen <k.jensen@samsung.com>
 ---
- drivers/regulator/rt5190a-regulator.c | 3 +++
- 1 file changed, 3 insertions(+)
+I am working on slave mode in QEMU and noticed that the device would not
+generate the SLAVE_ADDR_RX_MATCH interrupt. This patch fixes it, but I
+do not have a spec sheet on the Aspeed, so I am not sure if this is the
+intended behavior?
 
-diff --git a/drivers/regulator/rt5190a-regulator.c b/drivers/regulator/rt5190a-regulator.c
-index 155d4af..4a3397b 100644
---- a/drivers/regulator/rt5190a-regulator.c
-+++ b/drivers/regulator/rt5190a-regulator.c
-@@ -224,6 +224,9 @@ static int rt5190a_of_parse_cb(struct rt5190a_priv *priv, int rid,
- 	bool latchup_enable;
- 	unsigned int mask = RT5190A_RID_BITMASK(rid), val;
- 
-+	if (!init_data)
-+		return 0;
-+
- 	switch (rid) {
- 	case RT5190A_IDX_BUCK1:
- 	case RT5190A_IDX_BUCK4:
+ drivers/i2c/busses/i2c-aspeed.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+index 771e53d3d197..7f432babcd72 100644
+--- a/drivers/i2c/busses/i2c-aspeed.c
++++ b/drivers/i2c/busses/i2c-aspeed.c
+@@ -86,6 +86,7 @@
+ #define ASPEED_I2CD_INTR_ALL						       \
+ 		(ASPEED_I2CD_INTR_SDA_DL_TIMEOUT |			       \
+ 		 ASPEED_I2CD_INTR_BUS_RECOVER_DONE |			       \
++		 ASPEED_I2CD_INTR_SLAVE_MATCH |				       \
+ 		 ASPEED_I2CD_INTR_SCL_TIMEOUT |				       \
+ 		 ASPEED_I2CD_INTR_ABNORMAL |				       \
+ 		 ASPEED_I2CD_INTR_NORMAL_STOP |				       \
 -- 
-2.7.4
+2.36.1
 

@@ -2,132 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B924953B680
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C104353B689
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233293AbiFBKC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        id S233331AbiFBKD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233278AbiFBKCX (ORCPT
+        with ESMTP id S231933AbiFBKDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:02:23 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CA0261B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:02:21 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id a11-20020a6b660b000000b0066577bb520dso2441720ioc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 03:02:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=PlXyMH9yroMr86joJkDazD6M1cZkidX1eo+3QNu0Ks0=;
-        b=BKMUKWD/738lCGoQkCat7mRClIPpQ5cKj8IdKFLL17d9/BGru97rD4q85B3gGpTCMb
-         jaAzZT6CW4JENRBOjIHRuE4NkA5EA2AhZSqM38xBq4M+AATk5qsaLNiwLvTR7BCZD8BT
-         ehJTdhy4d/8ivJGDHXiYDetsjVcCGVPSq7MwLjd+S5rXEwuKJXdBupWMInf7AhmqJEEy
-         M1yeE5TfYVCCLNtbdSppqiAuwsYWtiUkxHJtwKI2iU8Zgn2RJ7JdiXMDXNgz1+bDmhS/
-         Zp7oOkjHgj9LAfE9rWP0VecBne6VcsyEf6cfsFx25nnmzEZ1lK8uYJl+GB8GhTyly9Mf
-         HLOQ==
-X-Gm-Message-State: AOAM532QUdPYJ1G0GkHiBgqbc7QVdqLeGlE3n06SjQ/sIzlVz8E/TVnT
-        44HIDQ4aiDPC0Qs+NN7FlwLjm3O3zzlw4Ts0ZFzLUtHPt4/R
-X-Google-Smtp-Source: ABdhPJzqQ55gAWfuzGONGd07P+o5i1tRB1eL/ZTHM2UomwBl6hJUahKq1mY2x/7hMV7bcfDVutkx1vrRegtJpg7tHboJ8hR+5wdk
+        Thu, 2 Jun 2022 06:03:55 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6625BFD347;
+        Thu,  2 Jun 2022 03:03:52 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 252A3ftt075162;
+        Thu, 2 Jun 2022 05:03:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1654164221;
+        bh=Mhu4wLDnsE/ZNGCAq11U03NXmXeOClrY6ZpD/8qzWTk=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Q1ahS700ccV8cGuhGp+kTVm5CpPKz53cWiyRJygEmTG8F6hMsp+4VmJ47I3lB/N3p
+         VDSK0zTTk7r3AFdvZKAYGLWJZjRpV+swQOxBUZmN9CJsElaOpTASj31tvbQ4+x4vio
+         5pE5RMo5iH4A9I3LFLMR+qk3elmFooh1SjgHlVjI=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 252A3f3X033139
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 2 Jun 2022 05:03:41 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 2
+ Jun 2022 05:03:41 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 2 Jun 2022 05:03:41 -0500
+Received: from [10.24.69.159] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 252A3bLW061739;
+        Thu, 2 Jun 2022 05:03:38 -0500
+Message-ID: <68381314-136b-776d-070a-e825506f2132@ti.com>
+Date:   Thu, 2 Jun 2022 15:33:37 +0530
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d14:b0:2d3:a75e:140b with SMTP id
- i20-20020a056e021d1400b002d3a75e140bmr2599005ila.61.1654164140868; Thu, 02
- Jun 2022 03:02:20 -0700 (PDT)
-Date:   Thu, 02 Jun 2022 03:02:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000044cc505e0741a4b@google.com>
-Subject: [syzbot] riscv/fixes boot error: BUG: soft lockup in corrupted
-From:   syzbot <syzbot+1d1952c211a38ac43f10@syzkaller.appspotmail.com>
-To:     aou@eecs.berkeley.edu, axboe@kernel.dk, justin@coraid.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, syzkaller-bugs@googlegroups.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: soc: ti: pruss: Update bindings for K3
+ AM62x SoCs
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>
+CC:     Santosh Shilimkar <ssantosh@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+References: <20220427072703.4898-1-kishon@ti.com>
+ <20220427072703.4898-2-kishon@ti.com>
+ <53212a3b-d02c-ab5e-6b5c-e19d359c7c2b@linaro.org>
+ <dcce6737-5881-a703-67f0-59c5f55f1cd1@ti.com>
+ <81d94ea8-9d0f-785b-07aa-fe9c9093ad73@linaro.org>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+In-Reply-To: <81d94ea8-9d0f-785b-07aa-fe9c9093ad73@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Krzysztof,
 
-syzbot found the following issue on:
+On 16/05/22 20:48, Krzysztof Kozlowski wrote:
+> On 16/05/2022 14:33, Kishon Vijay Abraham I wrote:
+>> Hi Krzysztof,
+>>
+>> On 28/04/22 11:48, Krzysztof Kozlowski wrote:
+>>> On 27/04/2022 09:27, Kishon Vijay Abraham I wrote:
+>>>> Update the PRUSS bindings for the PRUSSM instance present in
+>>>> AM625 SoC.
+>>>>
+>>>> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+>>>> ---
+>>>>  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml | 1 +
+>>>>  1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml b/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+>>>> index 64461d432004..cf13e5179657 100644
+>>>> --- a/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+>>>> +++ b/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+>>>> @@ -69,6 +69,7 @@ properties:
+>>>>        - ti,am654-icssg   # for K3 AM65x SoC family
+>>>>        - ti,j721e-icssg   # for K3 J721E SoC family
+>>>>        - ti,am642-icssg   # for K3 AM64x SoC family
+>>>> +      - ti,am625-pruss   # for K3 AM62x SoC family
+>>>>  
+>>>
+>>> Looks like out of order (although for some reason before it was also
+>>> misordered...).
+>>
+>> These are really in the chronological order of the introduction of SoCs.
+>> Isn't that okay to have?
+> 
+> You mean order of release on the market of order of adding files here?
+> The first is ok, the latter would mean there is no order at all.
 
-HEAD commit:    c932edeaf6d6 riscv: dts: microchip: fix gpio1 reg property..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
-console output: https://syzkaller.appspot.com/x/log.txt?x=14de11edf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aa6b5702bdf14a17
-dashboard link: https://syzkaller.appspot.com/bug?extid=1d1952c211a38ac43f10
-compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: riscv64
+I meant order of release to market. Anyways, I'll send a patch to change
+the order to alphabetic order.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1d1952c211a38ac43f10@syzkaller.appspotmail.com
-
-watchdog: BUG: soft lockup - CPU#0 stuck for 23s! [swapper/0:1]
-Modules linked in:
-irq event stamp: 410297
-hardirqs last  enabled at (410296): [<ffffffff8000ee74>] __trace_hardirqs_on+0x18/0x20 arch/riscv/kernel/trace_irq.c:19
-hardirqs last disabled at (410297): [<ffffffff8000ee94>] __trace_hardirqs_off+0x18/0x20 arch/riscv/kernel/trace_irq.c:25
-softirqs last  enabled at (405886): [<ffffffff83207a08>] softirq_handle_end kernel/softirq.c:401 [inline]
-softirqs last  enabled at (405886): [<ffffffff83207a08>] __do_softirq+0x618/0x8fc kernel/softirq.c:587
-softirqs last disabled at (405891): [<ffffffff8006164a>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
-softirqs last disabled at (405891): [<ffffffff8006164a>] invoke_softirq kernel/softirq.c:439 [inline]
-softirqs last disabled at (405891): [<ffffffff8006164a>] __irq_exit_rcu+0x142/0x1f8 kernel/softirq.c:637
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc1-syzkaller #0
-Hardware name: riscv-virtio,qemu (DT)
-epc : arch_static_branch arch/riscv/include/asm/jump_label.h:20 [inline]
-epc : kfence_alloc include/linux/kfence.h:120 [inline]
-epc : slab_alloc_node mm/slub.c:3135 [inline]
-epc : kmem_cache_alloc_node+0xa0/0x3c6 mm/slub.c:3267
- ra : slab_pre_alloc_hook mm/slab.h:724 [inline]
- ra : slab_alloc_node mm/slub.c:3131 [inline]
- ra : kmem_cache_alloc_node+0x66/0x3c6 mm/slub.c:3267
-epc : ffffffff8047df56 ra : ffffffff8047df1c sp : ff200000002273b0
- gp : ffffffff85a76440 tp : ff60000007430000 t0 : 0000000000046000
- t1 : ffebffff014d10b7 t2 : ffffffff80668f62 s0 : ff20000000227450
- s1 : ff600000075a93c0 a0 : 0000000000000000 a1 : 0000000000000007
- a2 : 1ffffffff09c876c a3 : ffffffff80bec434 a4 : 0000000000000000
- a5 : 0000000000000000 a6 : 0000000000f00000 a7 : ff6000000a6885bb
- s2 : 0000000000000a20 s3 : 0000000000000000 s4 : 0000000000000a20
- s5 : ffffffffffffffff s6 : ffffffff8271f756 s7 : ffffffff85a9c780
- s8 : 00000000000000e8 s9 : ffffffff85a7c2c0 s10: 00000000000000ff
- s11: ffffffffffffa288 t3 : fffffffff3f3f300 t4 : ffebffff014d10b7
- t5 : ffebffff014d10b8 t6 : ff6000001239fc00
-status: 0000000000000120 badaddr: 0000000000000000 cause: 8000000000000005
-[<ffffffff8271f756>] __alloc_skb+0x234/0x2e4 net/core/skbuff.c:414
-[<ffffffff81a42954>] alloc_skb include/linux/skbuff.h:1300 [inline]
-[<ffffffff81a42954>] new_skb+0x2c/0xcc drivers/block/aoe/aoecmd.c:66
-[<ffffffff81a48ab2>] aoecmd_cfg_pkts drivers/block/aoe/aoecmd.c:425 [inline]
-[<ffffffff81a48ab2>] aoecmd_cfg+0x1f6/0x5c6 drivers/block/aoe/aoecmd.c:1362
-[<ffffffff81a4bdfc>] discover_timer+0x4a/0x54 drivers/block/aoe/aoemain.c:24
-[<ffffffff8016c084>] call_timer_fn+0x164/0x694 kernel/time/timer.c:1421
-[<ffffffff8016ca9a>] expire_timers kernel/time/timer.c:1466 [inline]
-[<ffffffff8016ca9a>] __run_timers.part.0+0x4e6/0x76e kernel/time/timer.c:1734
-[<ffffffff8016cda8>] __run_timers kernel/time/timer.c:1715 [inline]
-[<ffffffff8016cda8>] run_timer_softirq+0x86/0x100 kernel/time/timer.c:1747
-[<ffffffff83207664>] __do_softirq+0x274/0x8fc kernel/softirq.c:558
-[<ffffffff8006164a>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
-[<ffffffff8006164a>] invoke_softirq kernel/softirq.c:439 [inline]
-[<ffffffff8006164a>] __irq_exit_rcu+0x142/0x1f8 kernel/softirq.c:637
-[<ffffffff80061958>] irq_exit+0x10/0x7a kernel/softirq.c:661
-[<ffffffff831f7c8e>] generic_handle_arch_irq+0x48/0x54 kernel/irq/handle.c:240
-[<ffffffff800057b2>] ret_from_exception+0x0/0x10
-[<ffffffff8047df1c>] slab_pre_alloc_hook mm/slab.h:724 [inline]
-[<ffffffff8047df1c>] slab_alloc_node mm/slub.c:3131 [inline]
-[<ffffffff8047df1c>] kmem_cache_alloc_node+0x66/0x3c6 mm/slub.c:3267
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Thanks,
+Kishon

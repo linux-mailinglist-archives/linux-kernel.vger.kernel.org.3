@@ -2,145 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59AA53B632
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9304C53B637
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbiFBJij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 05:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
+        id S233144AbiFBJk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 05:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbiFBJie (ORCPT
+        with ESMTP id S229974AbiFBJk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 05:38:34 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2136.outbound.protection.outlook.com [40.107.243.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F6C1FCDD;
-        Thu,  2 Jun 2022 02:38:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dysr0h4RQopComgOC0mf5NLt8pezQMtDjo39JjG/heZf5toerQ65JIVLcA83xG94PmtaUynqH/HfsAKMm3pi1BH6poTOQTdLMBRv2bTiP4ezMyqU15sK2lhzk0+l3bSwUuNzmP90S2i++XaEpRVL3j17zUjVjH9GsX4kjtqDAk/vz4ApPvvOA3ltHOnH1FHDOApKqDW8HRnQS21PWWDAF94Np/UUN/W2d6eRhgiDB9ygzDaNYdBp6IhlOdJDstVb2/l8nHx1n4w5Kf3zcVmF7DEDo7qaHFr8OfnwXRmGhojG8Rhu0bJxrnymYrSF8k517wPBxHeeohDQjMUlj/TaYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X0SqOpPTtPfGAfAlQkWR6X0KyhTaxRms5p/wcg66Cco=;
- b=IUJVkYK/PG39yrBaNCG5fu8/e6Fk557GXPFobj8gc14yK+PJux3M7MiMPyipiKPbpLPHUhtQSpeox5m5UY0llxBP3SdxFS+XkS8XyvtwCpfzqnnI0OFhyCM99k2IYDmW3WvfSnLOCPLw5bPudpAjQogHZ1eJbI2pzlJpQIXOCPUWffSc+stgO/d1Sv4jyum77pg6aUsmWIFD6DUDkJ9tu0T8CpEO36/yps2nBaPF/amNOsn8I2REsGgJitosKoSVgRLgotBaMMIBkSqGU+X5mZlzGuJD/1tyJMdRboJjozsqeT9+zKu1ZLVZC0iag3WuyKBkwUp2xYfuxvwjzp3d6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X0SqOpPTtPfGAfAlQkWR6X0KyhTaxRms5p/wcg66Cco=;
- b=kOuXWkDNz3W985uG1KLJmCNdTlvZ7jjM7AY8cg3YvzawILOb3RUHwo1WNm69Gmy+X01cqEVZulAudWEv6Q54d8B7evKIrkN9Bjnmp/MjM8epykQwor6AswnlpyJeaL3+sFtH0EgLw6VjjHJUu49kwihkeviNQN/+vgLTBVNeEbQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
- MW4PR01MB6500.prod.exchangelabs.com (2603:10b6:303:72::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5314.12; Thu, 2 Jun 2022 09:38:30 +0000
-Received: from SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::e877:bfc6:92a5:d237]) by SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::e877:bfc6:92a5:d237%7]) with mapi id 15.20.5314.013; Thu, 2 Jun 2022
- 09:38:30 +0000
-Message-ID: <052469a4-1f0b-8615-7b4e-fa16159297a2@os.amperecomputing.com>
-Date:   Thu, 2 Jun 2022 16:38:19 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-Subject: Re: [Openipmi-developer] [PATCH v7 1/3] ipmi: ssif_bmc: Add SSIF BMC
- driver
-Content-Language: en-US
-To:     minyard@acm.org
-Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        openbmc@lists.ozlabs.org,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kernel@vger.kernel.org,
-        Phong Vo <phong@os.amperecomputing.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Open Source Submission <patches@amperecomputing.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220422040803.2524940-1-quan@os.amperecomputing.com>
- <20220422040803.2524940-2-quan@os.amperecomputing.com>
- <20220423015119.GE426325@minyard.net>
- <ec7b86ec-827f-da64-8fd2-eae09f802694@os.amperecomputing.com>
- <20220504120631.GE3767252@minyard.net>
- <ba084735-0781-7ca2-4d04-a70a4115729a@os.amperecomputing.com>
- <20220602003244.GK3767252@minyard.net>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-In-Reply-To: <20220602003244.GK3767252@minyard.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2P153CA0047.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::16)
- To SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24)
+        Thu, 2 Jun 2022 05:40:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7F5EDC826
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 02:40:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654162822;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=52LjxcDCDPkycB4f7TfSZD4ZH4TRdf/5KkEsxrmPS+E=;
+        b=J06owR+A0CISQyNw/9Jx6rM7WLd5H58UuGE8fPS67OV04g+qRFD/qmYk+RygmXZEF7LR6d
+        6xFHs3HnXdqs1Pb0S+VFahuzETADbsHZqKqjrUR0Orwv35IVV7L68ziqQI3bFs77i0+zbp
+        0ThY9AgQTpjg08kc8yWQTtpWcw+w/eA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-83-O3F24AY2NKa2JelR44OExQ-1; Thu, 02 Jun 2022 05:40:21 -0400
+X-MC-Unique: O3F24AY2NKa2JelR44OExQ-1
+Received: by mail-wm1-f69.google.com with SMTP id bg40-20020a05600c3ca800b00394779649b1so4878407wmb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 02:40:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=52LjxcDCDPkycB4f7TfSZD4ZH4TRdf/5KkEsxrmPS+E=;
+        b=wr63kF4l133c0QSLRv4J3fet4gQDaVUXXGdtXCljC8kvzNDbwN0MJVakssSUHOJbxg
+         1KbNwapydB6AUOQFyxkNpIxtXO8g9Ghgv3AqxtZyAIQuAAA7JbiYp731r+9WiHTXV0P9
+         rJpDxmnhGV/CEBdcJPTk6c2apgUfFiMHAxQ0N2gs9oy/DgT0Ewv5jdEHA/6q2MOrWakI
+         pZjjW65gjstRffEGZLDmNabFpr/hbuc59mGioTNWg8i64oqX1P1k70AovWx3h43MQjl3
+         VfcUYBPdATDfusdNTYT2KIZlonIzDPu1BAtuFMz2nZl/r8lriwB5hmywhe6o3CgS6nw5
+         0vHA==
+X-Gm-Message-State: AOAM533AAHtLiqsAqbTlkwgL7+17ZEfG+sJrnwWSuueni8SZtGWAaPfU
+        a0cLiQDybtD2H0ZL587cICNulKeA//bD5S6ABp5CfNYV2oh2PdNFcmMIpn4cRec9a35YC9MyXGx
+        OhQoPdBmIT4DnIqAUNMDDx8OL
+X-Received: by 2002:a05:600c:5126:b0:39a:eede:5bf4 with SMTP id o38-20020a05600c512600b0039aeede5bf4mr3176141wms.81.1654162820604;
+        Thu, 02 Jun 2022 02:40:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxHYaDjNFGZohw0FilN1sHRbTenO2UBUUNE+T3ndq17x5ElP+Hjk2H4wgNC7lGgcxhyEKxNTg==
+X-Received: by 2002:a05:600c:5126:b0:39a:eede:5bf4 with SMTP id o38-20020a05600c512600b0039aeede5bf4mr3176113wms.81.1654162820283;
+        Thu, 02 Jun 2022 02:40:20 -0700 (PDT)
+Received: from [192.168.178.20] (p57a1a7d6.dip0.t-ipconnect.de. [87.161.167.214])
+        by smtp.gmail.com with ESMTPSA id d13-20020adfef8d000000b0020fc40d006bsm3830184wro.17.2022.06.02.02.40.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 02:40:19 -0700 (PDT)
+Message-ID: <8e4ffc3f-62c3-636e-e65b-af4b5bbc6c99@redhat.com>
+Date:   Thu, 2 Jun 2022 11:40:18 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1cbea329-f3dd-4f8e-ee21-08da447ba710
-X-MS-TrafficTypeDiagnostic: MW4PR01MB6500:EE_
-X-Microsoft-Antispam-PRVS: <MW4PR01MB6500BA66DFA975A5BBB7C814F2DE9@MW4PR01MB6500.prod.exchangelabs.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lGFHyzomHBF+YzqpU3JvdXr4+3afFwAhDBIxxs6SbcJ/Og+s3BnHdFE6Gk/HfNBtUJnbbohHvOKS1Ok6MhNnt/Q4WA5Mv05ZjlCzW/+lj42o3K4AC3S3+0vIj6UjNcUnclQzcpf/gkXV16hGZpwckNcC9108p/lle4WO6V5QxnbTmlNU2MGbPY5wCNh7zDTwIOlc/qqlATbclrQpoqNGm7ZMjRZ8zIMKjWLsOP49DERb84LH9V+zFq1vGVBiwYw4whz/4nSh9A6/uQygezYKvHbiNQ48XJ/9dyk/CTO3uN2A/frc1z5qmTdJaXiMUW8w1gYYgmZzbV+Xd8JStr2rbvGdrxFPSZllaH+GtlEtE58jzZ406xWWXVxcJjqCZHZcZ364RMjXjayJsi9xsSx6MYq+ykNw9oT3+xR9xq4MPJnulLuYhGlmgeNRoGD0NoQx/42ri4HLb3iJ2W2TyKVMJMoOUegLlGKlS1jwJ1KBn8o0PxAnoh5yeT6bwDfqJdWT6oZxqjhXxupo/h/jIQwXGaBadj976vSzl4YrtWLnQ7NAVqLITJ96sDlApyh+tPaTsYIZ4xBq78Mi4HwQUmYtmMjm3CvfE9TgueqH1c/4LrXRut7mtuENzYsRbb67caGad0qHPwLp0iaobqqa5W+cm06XRV011bxXivqhGsg2Pjzsc70UE49vibsCCH+hRbKEd/batzYC3pAJCm2/lat7GDj4KNU+LpKlnhqJXbVS4Hu66IEY8LM61ElpWTEL/e2z
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(7416002)(2616005)(66476007)(8936002)(83380400001)(6486002)(5660300002)(508600001)(2906002)(26005)(8676002)(4326008)(6506007)(66556008)(6916009)(66946007)(54906003)(38350700002)(38100700002)(52116002)(31686004)(53546011)(31696002)(86362001)(6666004)(316002)(6512007)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NEJmYS8wak5aYzBWQVcrdHJNYnk2bE40RndPTmF2TnZMa0xjL1kwcTJaUzhO?=
- =?utf-8?B?Q2g3QmQ4N3Fhb0c4bjlKUUpxT1ZPNWI4ZDRxa3daMDdESWE1Y3RqemZQVmZp?=
- =?utf-8?B?R1FFUUhKK3VLR1VXNXVKMkd5c1Y3Vk9zNnh5NS9RbFBnOWNoQXhWWGNHTzVa?=
- =?utf-8?B?dmZJNk9lZkVsM2w5b2V2cExpOGEwaFBHVzhJaFV1SHkxejQraDBKZ3ZNZzJx?=
- =?utf-8?B?ZjlsKytDbVEwenRUUEg5ZTJyckx4MDR1RWlZcGJoOW11Q0x0OFhTVnAyZ2ZJ?=
- =?utf-8?B?RGZYdHNEVkRRR1dkNzZBSUpaS1ZrbkRUVVliaFRCaDUzYlVneE9JNkZUdmdp?=
- =?utf-8?B?SnY3NnNWR3QrWG9ja0RaUGNNZS9PeFdMZFdDODdGS0JZZ2xQVThzMHZRTmFE?=
- =?utf-8?B?SFAvTE5NTWtXRW5PZnRBT1puTVB3UHpqNU5ZRFdFY2hRZjcxOFBCNU1tdjBv?=
- =?utf-8?B?ZHZac05PL0QwVnBHSE4rSXdiUnpaNHZlc2thQXJnbkY3ODJqTy9GVWthelE4?=
- =?utf-8?B?dmtmWjd5N2JrUkxLNC90QithdmM4R2E2WnJGYXM3amFNTHFzOW40Vk82Mi9v?=
- =?utf-8?B?a1FtRzNyekhleDQzRGtYT2d5Mys5aG8yNisyb1dWYVZhbGVMcUlCeE1KNTBs?=
- =?utf-8?B?Smd1V0VRTUlJa0xRZjhSdTVtUDFWbjNMYm54SjVTVW43UFdRd0s0WGR1bUtH?=
- =?utf-8?B?RGJ4TjRDMTJqR1dvaTMzTU1UNjYvaGl2SmdoNVRDTHFUcTRYWGlBbWhaOGwx?=
- =?utf-8?B?UUlTekx0a3FhdGhhbGloUzQ1WDE2Nk5sWGYwTnpndm42WDcrT2NXMGkrUTZq?=
- =?utf-8?B?YlBYQ3VGZDYreFhmMkpPbWU0dkc2US9nTzNlWFpOd21mV2hjeWVpMGxyQUV5?=
- =?utf-8?B?MUVyWFBWWGFGVnJoN0VDSXVqRldQZUZXejFHRFdadDJpcVF5MHl4aitmbmg0?=
- =?utf-8?B?a1JETXdNWWM3R3gxMG9VeHJwM2dsWGN3ZU1NNFNFcGZ4azhDZVYyNzBmeTBv?=
- =?utf-8?B?cnhxL2pJOTFHOG5rTURzNVFPYXd1TG5OZjEya01LVStEaDljVFYwWjE5QnNG?=
- =?utf-8?B?WmVrYTZaeFVSM1kvZHQvWVRLSTBycEp5NmtpRU9qL2wvcW5zTzl4UHM4dXpx?=
- =?utf-8?B?YlRBRkZ5aEZqL2Y1L2Z1SnllUnpCU08wSEdsVE15WWhaMWo4NElqcTBwV0Z1?=
- =?utf-8?B?SjdGTVB0Mzd4YnVteVpMUWhSTzRqUnhMZ0EveHZlcWRvSmVhZ01kVmZEL09N?=
- =?utf-8?B?L2k5VzhzaWtLRWF6c0JvanZtQUlSVWtQSXNOdGVmcEJ2YnBuMEtUeXEycmxB?=
- =?utf-8?B?bCtPZUtOWDA4di83SHk5WENzelY2NUJLVjVvR3lORDdmOHVZcjZkbXF3dllF?=
- =?utf-8?B?NXR1NlJyaHpoT2s5NnBhK2RnUmIwY201VXZ1L3YyVzFXUzB5MEl1V3dkSC9H?=
- =?utf-8?B?SURpaGdZeFNTaGVuNWZsdWMzNG9ZbTFpbjZUalZnYTFBMGJkT3dkYzJYMGJn?=
- =?utf-8?B?eTJsZHFERWJ1Q2R0T2swc05IcFZHSlgyeDJXS0tzTCtMVzF6TThkNjVwaG1m?=
- =?utf-8?B?TmlwRE1aZzlQRjBiOStlWi94bW5NbUVHamVoOEtWRkhhemVBT0FNVEJtSFF5?=
- =?utf-8?B?ZzJEZmRUcTlEYURGOVpXZFdadmRRODBabkhZancwek80Mkw0NitwdlpSWHNw?=
- =?utf-8?B?MW9sZnRUQncrT1FRVnNsTWVvdS95MnpNa0tIZUV6S0pMWHA0UTZJSkVwWVJx?=
- =?utf-8?B?Uy9LZ3EzNTg5eHNLM2M0VldBZjF5QzlBb2pFaXdCNG85TGkxM2YweFIrZy9C?=
- =?utf-8?B?cUJ3M2d2K05NeVJ5R0prRXF1T3lUdVIxK1MvZFpSUnV5Qi9UZTloSC9TcHoz?=
- =?utf-8?B?QUtxODBmT3FaQTJiMTdJM1BVQStGUzRhaUpPVFFVdElXdGpBekJLbGl2Rk11?=
- =?utf-8?B?Z3NZTU1JS0FoY1VpcGZsdC9RU2x5QjNiWnNadGlRbEI0NUFTQUdicmQ2bUFa?=
- =?utf-8?B?RlgySHRpOEtaNFVyTDZ3VjNueDdwQTdjdk95VXZNeGZqSXJmMkJFVnd0L0Fu?=
- =?utf-8?B?WW05ZCt3aHJFUXNxbkhucmxvSVBnMENkM25DcURpYjRFa1g5Q1VCcG1BL1VC?=
- =?utf-8?B?QjJKSDhtSm1UUkE0dmFwTTZOVTJidm9ZNzNKQmcwU2dEZ0pUNHh5RXhBNDRD?=
- =?utf-8?B?bEkxQVd3TFpPYmZFdmlSaHNENTdrekJteU5JV0tXQ1NrQ1pNcldwSG42NGJl?=
- =?utf-8?B?WjRabERpNGdoQ0l4MVFmbUIzcXRaMzM5TU9EeTlDNnZHSWttMXpnRjFCdGFM?=
- =?utf-8?B?UjRCenlRM1lUZzFzOTlhemMxYlducmw2OFNrcGRzVDJnMzNRQjB3endlcjIr?=
- =?utf-8?Q?2BY+LlHjEBgniDnqIg8BPPLGa/hGIf/hPaMxq?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1cbea329-f3dd-4f8e-ee21-08da447ba710
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2022 09:38:30.6854
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4MVnFJAaGUvXzI0DNakhwdhN9dUunj8PmY4MNXkckCZvdbc9p2t0a+2BbNss/01P69NAZ4ccuMGOsA0dJoA/Cna0/EJ2b5aM3U7xGWHYXTc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6500
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 0/3] recover hardware corrupted page by virtio balloon
+Content-Language: en-US
+To:     zhenwei pi <pizhenwei@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+Cc:     Peter Xu <peterx@redhat.com>, Jue Wang <juew@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, jasowang@redhat.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, mst@redhat.com,
+        qemu-devel@nongnu.org, virtualization@lists.linux-foundation.org
+References: <CAPcxDJ5pduUyMA0rf+-aTjK_2eBvig05UTiTptX1nVkWE-_g8w@mail.gmail.com>
+ <Yo/I3oLkd9OU0ice@xz-m1.local>
+ <24a95dea-9ea6-a904-7c0b-197961afa1d1@bytedance.com>
+ <0d266c61-605d-ce0c-4274-b0c7e10f845a@redhat.com>
+ <4b0c3e37-b882-681a-36fc-16cee7e1fff0@bytedance.com>
+ <YpTngZ5Qr0KIvL0H@xz-m1.local>
+ <CAPcxDJ5UMfpys8KyLQVnkV9BPO1vaubxbhc7f4XC_TdNO7jr7g@mail.gmail.com>
+ <5f622a65-8348-8825-a167-414f2a8cd2eb@bytedance.com>
+ <484546da-16cc-8070-2a2c-868717b8a75a@redhat.com>
+ <fc4ade80-a40a-d24d-d44d-16b48232b89f@bytedance.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <fc4ade80-a40a-d24d-d44d-16b48232b89f@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -148,55 +97,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/2022 07:32, Corey Minyard wrote:
-> On Wed, Jun 01, 2022 at 03:23:11PM +0700, Quan Nguyen wrote:
->> On 04/05/2022 19:06, Corey Minyard wrote:
->>> On Wed, May 04, 2022 at 01:45:03PM +0700, Quan Nguyen via Openipmi-developer wrote:
+On 02.06.22 11:28, zhenwei pi wrote:
+> On 6/1/22 15:59, David Hildenbrand wrote:
+>> On 01.06.22 04:17, zhenwei pi wrote:
+>>> On 5/31/22 12:08, Jue Wang wrote:
+>>>> On Mon, May 30, 2022 at 8:49 AM Peter Xu <peterx@redhat.com> wrote:
 >>>>>
->>>>> I seem to remember mentioning this before, but there is no reason to
->>>>> pack the structures below.
+>>>>> On Mon, May 30, 2022 at 07:33:35PM +0800, zhenwei pi wrote:
+>>>>>> A VM uses RAM of 2M huge page. Once a MCE(@HVAy in [HVAx,HVAz)) occurs, the
+>>>>>> 2M([HVAx,HVAz)) of hypervisor becomes unaccessible, but the guest poisons 4K
+>>>>>> (@GPAy in [GPAx, GPAz)) only, it may hit another 511 MCE ([GPAx, GPAz)
+>>>>>> except GPAy). This is the worse case, so I want to add
+>>>>>>    '__le32 corrupted_pages' in struct virtio_balloon_config, it is used in the
+>>>>>> next step: reporting 512 * 4K 'corrupted_pages' to the guest, the guest has
+>>>>>> a chance to isolate the other 511 pages ahead of time. And the guest
+>>>>>> actually loses 2M, fixing 512*4K seems to help significantly.
 >>>>>
->>>>
->>>> The packed structure is because we want to pick the len directly from user
->>>> space without worry about the padding byte.
->>>>
->>>> As we plan not to use the .h file in next version, I still would like to use
->>>> packed structure internally inside ssif_bmc.c file.
->>>
->>> Packed doesn't matter for the userspace API.  If you look at other
->>> structures in the userspace API, they are not packed, either.  The
->>> compiler will do the right thing on both ends.
->>>
->>>>
->>>>> And second, the following is a userspace API structures, so it needs to
->>>>> be in its own file in include/uapi/linux, along with any supporting
->>>>> things that users will need to use.  And your userspace code should be
->>>>> using that file.
+>>>>> It sounds hackish to teach a virtio device to assume one page will always
+>>>>> be poisoned in huge page granule.  That's only a limitation to host kernel
+>>>>> not virtio itself.
 >>>>>
+>>>>> E.g. there're upstream effort ongoing with enabling doublemap on hugetlbfs
+>>>>> pages so hugetlb pages can be mapped in 4k with it.  It provides potential
+>>>>> possibility to do page poisoning with huge pages in 4k too.  When that'll
+>>>>> be ready the assumption can go away, and that does sound like a better
+>>>>> approach towards this problem.
 >>>>
->>>> Meantime, I'd like not to use .h as I see there is no demand for sharing the
->>>> data structure between kernel and user space yet. But we may do it in the
->>>> future.
+>>>> +1.
+>>>>
+>>>> A hypervisor should always strive to minimize the guest memory loss.
+>>>>
+>>>> The HugeTLB double mapping enlightened memory poisoning behavior (only
+>>>> poison 4K out of a 2MB huge page and 4K in guest) is a much better
+>>>> solution here. To be completely transparent, it's not _strictly_
+>>>> required to poison the page (whatever the granularity it is) on the
+>>>> host side, as long as the following are true:
+>>>>
+>>>> 1. A hypervisor can emulate the _minimized_ (e.g., 4K) the poison to the guest.
+>>>> 2. The host page with the UC error is "isolated" (could be PG_HWPOISON
+>>>> or in some other way) and prevented from being reused by other
+>>>> processes.
+>>>>
+>>>> For #2, PG_HWPOISON and HugeTLB double mapping enlightened memory
+>>>> poisoning is a good solution.
+>>>>
+>>>>>
+>>>>>>
+>>>>>>>
+>>>>>>> I assume when talking about "the performance memory drops a lot", you
+>>>>>>> imply that this patch set can mitigate that performance drop?
+>>>>>>>
+>>>>>>> But why do you see a performance drop? Because we might lose some
+>>>>>>> possible THP candidates (in the host or the guest) and you want to plug
+>>>>>>> does holes? I assume you'll see a performance drop simply because
+>>>>>>> poisoning memory is expensive, including migrating pages around on CE.
+>>>>>>>
+>>>>>>> If you have some numbers to share, especially before/after this change,
+>>>>>>> that would be great.
+>>>>>>>
+>>>>>>
+>>>>>> The CE storm leads 2 problems I have even seen:
+>>>>>> 1, the memory bandwidth slows down to 10%~20%, and the cycles per
+>>>>>> instruction of CPU increases a lot.
+>>>>>> 2, the THR (/proc/interrupts) interrupts frequently, the CPU has to use a
+>>>>>> lot time to handle IRQ.
+>>>>>
+>>>>> Totally no good knowledge on CMCI, but if 2) is true then I'm wondering
+>>>>> whether it's necessary to handle the interrupts that frequently.  When I
+>>>>> was reading the Intel CMCI vector handler I stumbled over this comment:
+>>>>>
+>>>>> /*
+>>>>>    * The interrupt handler. This is called on every event.
+>>>>>    * Just call the poller directly to log any events.
+>>>>>    * This could in theory increase the threshold under high load,
+>>>>>    * but doesn't for now.
+>>>>>    */
+>>>>> static void intel_threshold_interrupt(void)
+>>>>>
+>>>>> I think that matches with what I was thinking..  I mean for 2) not sure
+>>>>> whether it can be seen as a CMCI problem and potentially can be optimized
+>>>>> by adjust the cmci threshold dynamically.
+>>>>
+>>>> The CE storm caused performance drop is caused by the extra cycles
+>>>> spent by the ECC steps in memory controller, not in CMCI handling.
+>>>> This is observed in the Google fleet as well. A good solution is to
+>>>> monitor the CE rate closely in user space via /dev/mcelog and migrate
+>>>> all VMs to another host once the CE rate exceeds some threshold.
+>>>>
+>>>> CMCI is a _background_ interrupt that is not handled in the process
+>>>> execution context and its handler is setup to switch to poll (1 / 5
+>>>> min) mode if there are more than ~ a dozen CEs reported via CMCI per
+>>>> second.
+>>>>>
+>>>>> --
+>>>>> Peter Xu
+>>>>>
 >>>
->>> If you have a userspace API, it needs to be in include/uapi/linux.
->>> You may not be the only user of this code.  In fact, you probably won't
->>> be.  You need to have a .h with the structures in it, you don't want the
->>> same structure in two places if you can help it.
+>>> Hi, Andrew, David, Naoya
 >>>
+>>> According to the suggestions, I'd give up the improvement of memory
+>>> failure on huge page in this series.
+>>>
+>>> Is it worth recovering corrupted pages for the guest kernel? I'd follow
+>>> your decision.
 >>
->> Dear Corey,
+>> Well, as I said, I am not sure if we really need/want this for a handful
+>> of 4k poisoned pages in a VM. As I suspected, doing so might primarily
+>> be interesting for some sort of de-fragmentation (allow again a higher
+>> order page to be placed at the affected PFNs), not because of the slight
+>> reduction of available memory. A simple VM reboot would get the job
+>> similarly done.
 >>
->> Is it OK to push the structure definition into the
->> include/uapi/linux/ipmi_bmc.h ?
->>
->> Or should it need to be in separate new header file in uapi/linux ?
 > 
-> I think a different file, like ipmi_ssif_bmc, to match the file and
-> operation.  Unless you need the things in ipmi_bmc.h, which I don't
-> think is the case.
-> 
+> Sure, Let's drop this idea. Thanks to all for the suggestions.
 
-Thanks Corey,
-Will add ipmi_ssif_bmc as you suggested.
+Thanks for the interesting idea + discussions.
 
--- Quan
+Just a note that if you believe that we want/need something like that,
+and there is a reasonable use case, please tell us we're wrong and push
+back :)
+
+-- 
+Thanks,
+
+David / dhildenb
+

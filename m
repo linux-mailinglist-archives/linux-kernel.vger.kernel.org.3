@@ -2,227 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077DB53B7DD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B57E053B7E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234252AbiFBLaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 07:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52212 "EHLO
+        id S234269AbiFBLee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 07:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbiFBLaI (ORCPT
+        with ESMTP id S234258AbiFBLea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 07:30:08 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99C42A90C4;
-        Thu,  2 Jun 2022 04:30:03 -0700 (PDT)
-X-UUID: 03141ef6998e406b9ee57b42c2864a68-20220602
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:833e7725-c1d2-4053-9e1b-9d8a6be6f89d,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:beefe737-9855-4915-a138-f5705f1f3d02,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 03141ef6998e406b9ee57b42c2864a68-20220602
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2087878321; Thu, 02 Jun 2022 19:29:57 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 2 Jun 2022 19:29:57 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 2 Jun 2022 19:29:56 +0800
-Message-ID: <5c614dc0947aba6ce2eb0cdc3055a390da723d08.camel@mediatek.com>
-Subject: Re: [PATCH v1 01/15] dt-binding: remoteproc: mediatek: Support
- dual-core SCP
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
-        Brian Norris <briannorris@chromium.org>
-CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <chrome-platform@lists.linux.dev>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <weishunc@google.com>
-Date:   Thu, 2 Jun 2022 19:29:56 +0800
-In-Reply-To: <45c8050e-16d3-80d6-0799-8b067a38d956@linaro.org>
-References: <20220601112201.15510-1-tinghan.shen@mediatek.com>
-         <20220601112201.15510-2-tinghan.shen@mediatek.com>
-         <dd3ea397-fa21-abe5-85ad-b8a4818dc011@linaro.org>
-         <3c837acfbefa5b7e23e1121678b5b878f08e4ef2.camel@mediatek.com>
-         <476baef8-0255-45ed-85f4-2b9d877c4af1@linaro.org>
-         <287d88a62fd13cd762b20faa3e9df826632fe1eb.camel@mediatek.com>
-         <45c8050e-16d3-80d6-0799-8b067a38d956@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
+        Thu, 2 Jun 2022 07:34:30 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2063.outbound.protection.outlook.com [40.107.236.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EA059BB5;
+        Thu,  2 Jun 2022 04:34:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f37KiRKoYLS8hqQf4+CCreh20PtpOeOWN4mDRmDfJGGr+H371jqsGjm/0z8Sb38bdBB/ztZZwCpJjgAki4/OItRap09bvl07efqYsx06At+W4jREjaZz5lcv7F269cEiGa8dHd7dAfhbMkR3e9kx/PX45xiCDzKTB8UCHTaZqRR8jx6XKnrxoO02ZOC+P2h1+jxPnGx6GaH7KydUqj4f/aGjD23Mow+VG/GTrDD31rPbBWFNtqmww5ORQVY9dqLH7aD3sgo52m1ZCpDiIk6LzifjXHKiL9+9z1XsA8c54IX+c8YHyf7AoYXL6KLgeOR9sO2MMcy4WeHOhQElEul9NQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A4MmQqD0uDI3XZ6uuDAOJVKCK6EhAEcqHKLaJw9fanc=;
+ b=m7oSCYBsAaErO6zJhIrzXRs4o1jI7qGy000AdyhjEL/NOOjWpYHB3EVx0VIQKMgF0EN8u/+6X9/xPSNAa8QT6lIwRSoNYzc3ULPxRECTxn6CDr5EVLOs5qqjJ00uTZYzYqr7anOrE5l0tMTQgb2wPS0wUi+4f9B7DvGjIidWU/etzeZ1VaP9VzGXFjaRPLrVnt/1hMvsi4EF1IrXjNSd8VLPKv8l+NZHhs7l1i3akyrd3vkHjyxaqig2XClXdyefn8KLqgTIkVXyhwaUzYhHVoTVsRrDVz//t7iCCbKiIZTUrf0/ZQWFA+5ueIox9I3RdRxEjCIemucLsTbl6Lh3Yg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A4MmQqD0uDI3XZ6uuDAOJVKCK6EhAEcqHKLaJw9fanc=;
+ b=gosPeY1kEyJw41UfnDfynj6/WMikIY3PBJNyUYuVN8l4ZIlcDqs6RDDxAEav87A+1a+FBr9zGsOf4R5r2dQaH3C2VoWD0nwzVWqvpXh4PxuQmdcCMUMm5wydUoYZRtWZkc9gNFp8sXuiHR0ja3bmZPrNaDk+U71zb8cP6Aq0BUNmsgYAkdUATk5pg82Lp0329Ogv54iu+oSAsZjgeaFbmQj3YZ1MBJamonO/Hc3+yUFIeJdJvT6CoPmaMJGNWZJNPWIuXoi60FufKm7zb8p/Tq9va9xVQQgPY+9nlSo0SLo9SIR6s7USvzdY+Ueve+wrjnLK7z6TIP9RHQiR9oIUhw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com (2603:10b6:408:69::18)
+ by BN8PR12MB3092.namprd12.prod.outlook.com (2603:10b6:408:48::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Thu, 2 Jun
+ 2022 11:34:27 +0000
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::4c17:a358:335:87c5]) by BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::4c17:a358:335:87c5%7]) with mapi id 15.20.5314.013; Thu, 2 Jun 2022
+ 11:34:27 +0000
+Message-ID: <7e1ddcb4-8e89-e7cf-3abf-b6dfba09102c@nvidia.com>
+Date:   Thu, 2 Jun 2022 17:04:13 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] PCI: tegra194: Fix PM error handling in
+ tegra_pcie_config_ep
+Content-Language: en-US
+To:     Miaoqian Lin <linmq006@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Om Prakash Singh <omp@nvidia.com>,
+        Fan Fei <ffclaire1224@gmail.com>, linux-pci@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220602031910.55859-1-linmq006@gmail.com>
+From:   Vidya Sagar <vidyas@nvidia.com>
+In-Reply-To: <20220602031910.55859-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-ClientProxiedBy: MA0PR01CA0096.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:af::12) To BN8PR12MB2900.namprd12.prod.outlook.com
+ (2603:10b6:408:69::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 61f3aff7-28ad-4dea-e307-08da448bd9af
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3092:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB30922A00F22F4C421FF143C3B8DE9@BN8PR12MB3092.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VQBa7rO1a+9/ApPbtou/XZqsXh4oicP5kejamV8gF91zp0jjSfTM2OjPK+2g2YkZvWN0OL8Id1aE06NoeVw3xk6UHaR6FOh2CiJ8GmK2IeuMMBj224jDfhwdQO+4lxWMoLh4p2VUg6kB4bv/FaW6fblPuWeDMldztuVfPZF86bJVizz4f4VTHkWNPfe13JZHlyFYXUK3xin+fbBSiWD+4HEK7vJELHXwT352PBPfXhmLkcf9AZeYtuqvvLty1iXROZPifJB2hcXMo6RwSWjKRvl1KBCYLTlPFhmmWKRkaUcqcKqYJme5rhS6ienheZH51p++t7/Dfv3JhzftAB00oram4UcaSEAbxDwdM7+Xwcnab4hPoYZjyecAd6fokQ/dy7PDmZGTM+EnPNkVO5yDC7FhO/AD2hLaZ2yFmLEaqfmIiY2ncqwmxCnYtyGm0GINCmSbm2r8u9RKTxu6oYAVrisGGQlRIuY7JhXRd8Fv6HoDVLNhOb5UPTjPY7JTFUXerCqFWdV5kURK8AYnkY9OQKTIf7miZU86c+qOm1BB4mpt25jALoLZjotoCohIn391PHn/2pg8Hf8ftbO5vGpTmYl46Lzx+Ao+gp3KL2g/qyMiKfHzL5TG4x9Xzbvr6pZTUGGZLlLUMF2QlCzCedekuiR14/rIcf8QWXpsMy62LEH8GTuWllvK81hMBxw/9bnClSuBw0RHdFPBv+uVdHMRC7lGuRe9z6tYbnD1MulSz7X/LIUHW9u1PlLC5foMTQZM86OXI6A2UbzeQP7dUBWdUQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(6506007)(86362001)(66476007)(8676002)(110136005)(7416002)(8936002)(921005)(6486002)(508600001)(5660300002)(6512007)(31696002)(2906002)(316002)(31686004)(26005)(53546011)(2616005)(36756003)(38100700002)(66946007)(66556008)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eGg3YUZ2aXJYK3lwWXk1TURtVVZZQkFmVXJhL2UrSkhyQ0VQdUxHQXZFNzZa?=
+ =?utf-8?B?MElldXBnTWhYVVFwVW5zdE9pTWJHZ0dUejJUcm5nc1F5WHpFalE0UEhEaklY?=
+ =?utf-8?B?VnovajBVa2czVXdiZDlNN3NUUDJkRGtKRlRlM2RIUEY0SU0yOU5jeEZtcnJx?=
+ =?utf-8?B?akcvampQTUlvMm8vRUJidnVKcG9SeTBEeXM5VHFZL29xS25CWVIrYWpuUG5s?=
+ =?utf-8?B?WXVVMlQxQ0VTVmVILzlJTVBwUVlTblI0VHBMYmk1OEQ3aWo3dDVIT2hpeExB?=
+ =?utf-8?B?c0pkU3lHZ2J4YmZOMmZlWW5Fb1YwVHlmYktKSndKeWFicEZiNkRadE84ZHlH?=
+ =?utf-8?B?bkNWQmxIb0NZeHBhZGNYUG00OXhZeHpHMCs0d2dpOTNlUEFJa3JvcUc1MnpK?=
+ =?utf-8?B?WjNwdTgrNGFaWlE3RTgvbjZ2SEVsR2JVMVpVRGRuamxPdlhDVS9QL2FTT1Jr?=
+ =?utf-8?B?ak13T1YyU0ozcm9uUXlWeEd1eDNnMGZiSEMrSjRQbEIvMjRibDdPSTB0UDFp?=
+ =?utf-8?B?bmg1TW11VjdjVS9lQm9PVy9iQnJwUUxPSU1VYzIzbFQ3dVVrNFZNVnVNeEZx?=
+ =?utf-8?B?SDBsWHdFc09kUldqZWJseU5Bem1iVkt2M0tJVFhvNGQvTHR5VDBRZEM4dmkv?=
+ =?utf-8?B?TzUycjBqYjhPeUdyK1RGaHJ4eDl5eG5oR3BXUTdFMlhPd0pJRFN4dFhPWjh2?=
+ =?utf-8?B?Y1hGSllGWEt0akcxUmROUHREZTZLcERNR1pJV25UdkN3YU5kd09lQVVDalBm?=
+ =?utf-8?B?aWE3dHdJUUwyTXhoVHNqZm9UQXNGV1hWSnpEVTdNN2dXTlorcXpscXhXamk4?=
+ =?utf-8?B?a2N0aUNRUmZOOHRLaFErdDZaeGxnWk1sVkk2eERFeThCZVA4VXIvWXI2TndI?=
+ =?utf-8?B?QWVLNWMzbUNYOTdQZnoxQWVIbnJ3VUovRDBVNGZQa2EyMFdLZ2RnTlRjMFdS?=
+ =?utf-8?B?bXlnblhUU1UzQ2JLd08vakh5QVlKbWJOT2NPTTRYVGVDUVk3RDl1SGJadGo1?=
+ =?utf-8?B?cUxzOTcvWVFNVkxDSy91ckNnQ1FPRjJabWo3b1NrZko5c09pbEVIWTRyTWRj?=
+ =?utf-8?B?OGpHQVhkTzNtKzdRUzRDUVAzdU02dkdHSW1UU1JVTEJxUDBDMU9yVXdGYmI5?=
+ =?utf-8?B?cEJKN01JM1RnWlpabDVMa09HdGNUOUQ4SEZ1MXlpc3VOcDl5c0RxcEczdUlH?=
+ =?utf-8?B?RkF2KzJTR244dit4NzhqSURYalgycW5XU09US3k0YmNIMjhZQm41dFF1WUpa?=
+ =?utf-8?B?TWcwblpVUHdUdHFzT0lrS3NBTC9qcTY5Ly9vMDhLSHVmazNZbk9raGxvanpn?=
+ =?utf-8?B?enl6M2RPZ3NYeGNrbUtZQ1ZPbzAvVTh1OUN0bUtuR2tnZDdkUzI2SHFaUkty?=
+ =?utf-8?B?cGZ0aUFMR2VyeENEdk9nTzZLRjlWWFdVc3o2NElvWlRQVjlqZXV5Vmc0NjB3?=
+ =?utf-8?B?bTdwQUlaazdWc2haQkhNejNMZ3dYUHVYTm1NbFZ1N01xMHhaUHFMTHhLaG9G?=
+ =?utf-8?B?RXVqYXVZNTB3alZ1cXhRVXdNNXhlSHhQa01JODM1c2c2S1kwMXBmSHlESHJ3?=
+ =?utf-8?B?NnRUYWxsZm5YMWIrK2Y4aWw5ZUdwejRrN1pCTzRLa0Rra1RzcTJoSXpPSUZt?=
+ =?utf-8?B?YVNWZHk1SXNrTkxydDdxcFBqTitydVNQVmlsWjZ5bTA5VmF6UC9IV0NENWlJ?=
+ =?utf-8?B?UUZCcXZGWlBhSkgxRmN0UVlPZm5ETnFtZDJBTzFKeCs1eUtGRkszQ1pTd3Jk?=
+ =?utf-8?B?TjJjQUhVd095K3BCZVpKZ2ZUVVFjSFBwZmpKdEZxazZSSGlEVmJRdkdmL1VY?=
+ =?utf-8?B?cVdQZno5Y3M1WDVzVEJLZXp4WTBDcmp1R2lWcFFPcHptcElmYWJiV1VUSzZ6?=
+ =?utf-8?B?NkZTdGJJaEYwUGRHcldYS3VmNWZjREpwUFZvR3ozVE5adUNYTTVUMUVHdGRk?=
+ =?utf-8?B?WDgwUGc2NklKNTdPUlF6VDFldmI2Y2lQSi9kNG1SNWJOZDc3aGp5bEwxUUJv?=
+ =?utf-8?B?WE94NnBIcHBkb1huaGFqUUc2NTZlVDV2ZER4WUhiTVV6UlRKa25YQzUrUUoz?=
+ =?utf-8?B?cXhBNTlGNkwvalFsV2dsSDlPOWQ4VFdzY2RwdDlxcUduTUZWRkpSTEJIN2NF?=
+ =?utf-8?B?cUxRL3lHMUFTNHRDT1JQTy9KU1hwMW9BVHdQcms2QjhTcjc2V0FxeGNDWWQ5?=
+ =?utf-8?B?Y2xHTSsvMzQ5Vy9hSlJvUEd6em05SjVqVGdDaXI1NjhZaUVBNTBhR1g1d2tv?=
+ =?utf-8?B?M3ZUVGdDT1RqMEw2b0J1WUdSSjk5TVZjeHczcExyNlREa0lSckhSUVBoeVRV?=
+ =?utf-8?B?S1lEM1cyTTUwUFAvVytRTHhHSlNjT1c5RzZvN1dpalR0NHZ3SC9vUT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61f3aff7-28ad-4dea-e307-08da448bd9af
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2900.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2022 11:34:27.3890
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ovNK1ZR8CEINQu5z8huoBnb0ZOZbAnU4dePxEw9zjpuG9ieK0aFtL6EuxhZhM40Y4dt+lKF9U/kRUyPL7xM/4g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3092
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Thanks for pushing the change.
 
-On Thu, 2022-06-02 at 12:37 +0200, Krzysztof Kozlowski wrote:
-> On 02/06/2022 10:58, Tinghan Shen wrote:
-> > Hi Krzysztof,
-> > 
-> > On Thu, 2022-06-02 at 08:55 +0200, Krzysztof Kozlowski wrote:
-> > > On 02/06/2022 07:21, Tinghan Shen wrote:
-> > > > Hi Krzysztof,
-> > > > 
-> > > > On Wed, 2022-06-01 at 13:50 +0200, Krzysztof Kozlowski wrote:
-> > > > > On 01/06/2022 13:21, Tinghan Shen wrote:
-> > > > > > The SCP co-processor is a dual-core RISC-V MCU on MT8195.
-> > > > > > 
-> > > > > > Add a new property to identify each core and helps to find drivers
-> > > > > > through device tree API to cooperate with each other, e.g. boot flow and
-> > > > > > watchdog timeout flow.
-> > > > > > 
-> > > > > > Add a new compatile for the driver of SCP 2nd core.
-> > > > > > 
-> > > > > > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> > > > > > ---
-> > > > > >  .../devicetree/bindings/remoteproc/mtk,scp.yaml      | 12 ++++++++++++
-> > > > > >  1 file changed, 12 insertions(+)
-> > > > > > 
-> > > > > > diff --git a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-> > > > > > b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-> > > > > > index eec3b9c4c713..b181786d9575 100644
-> > > > > > --- a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-> > > > > > +++ b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-> > > > > > @@ -20,6 +20,7 @@ properties:
-> > > > > >        - mediatek,mt8186-scp
-> > > > > >        - mediatek,mt8192-scp
-> > > > > >        - mediatek,mt8195-scp
-> > > > > > +      - mediatek,mt8195-scp-dual
-> > > > > >  
-> > > > > >    reg:
-> > > > > >      description:
-> > > > > > @@ -57,6 +58,16 @@ properties:
-> > > > > >    memory-region:
-> > > > > >      maxItems: 1
-> > > > > >  
-> > > > > > +  mediatek,scp-core:
-> > > > > > +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> > > > > > +    description:
-> > > > > > +      The property value is a list with 2 items, a core id and a phandle
-> > > > > 
-> > > > > uint32, not phandle.
-> > > > > 
-> > > > > > +      to the sibling SCP node. 
-> > > > > 
-> > > > > Skip this. First part is obvious from the schema, second part should be
-> > > > > described via items.
-> > > > > 
-> > > > > The core id represents the id of the dts node contains
-> > > > > > +      this property. The valid values of core id are 0 and 1 for dual-core SCP.
-> > > > > > +      The phandle of sibling SCP node is used to find the register settings,
-> > > > > > +      trigger core dependent callback, and invoke rproc API.
-> > > > > 
-> > > > > Entire description did not help me to understand what's this. So far it
-> > > > > looks like it is not a hardware property but some programming help, so
-> > > > > it does not look like properly described in bindings.
-> > > > > 
-> > > > > > +    maxItems: 1
-> > > > > 
-> > > > > In description you said - two items.
-> > > > > 
-> > > > > You need allOf:if:then disallowing this property for other variants.
-> > > > > 
-> > > > > > +
-> > > > > >  required:
-> > > > > >    - compatible
-> > > > > >    - reg
-> > > > > > @@ -115,6 +126,7 @@ examples:
-> > > > > >          reg-names = "sram", "cfg", "l1tcm";
-> > > > > >          clocks = <&infracfg CLK_INFRA_SCPSYS>;
-> > > > > >          clock-names = "main";
-> > > > > > +        mediatek,scp-core = <0 &scp_dual>;
-> > > > > 
-> > > > > This looks like phandle, so wrong type.
-> > > > > >  
-> > > > > >          cros_ec {
-> > > > > >              mediatek,rpmsg-name = "cros-ec-rpmsg";
-> > > > 
-> > > > Thanks for your feedback.
-> > > > After looking for a comparable uses case, I find out a different approach.
-> > > > 
-> > > >   mediatek,scp-core:
-> > > >     $ref: "/schemas/types.yaml#/definitions/phandle-array"
-> > > >     description:
-> > > >       Enable the dual-core support in scp driver.
-> > > 
-> > > You describe desired functional behavior, not the hardware. What is the
-> > > property about? If you just want to indicate this is two-core processor,
-> > > then it could be:
-> > > 	mediatek,cores = <2>; /* number of cores */
-> > > 
-> > > 
-> > > However it seems you want to achieve here something different and as I
-> > > raised last time - it does not look like DT property.
-> > > 
-> > > Or maybe this is for first core and you want to indicate the sibling?
-> > > Something like that was mentioned in previous description.
-> > 
-> > This property is mainly added for scp 1st core driver 
-> > and scp 2nd core driver to find each other via DT API.
-> > 
-> > After reconsidering the use of core id in the scp driver, it 
-> > is not necessary in the control flow. I'll remove the core id 
-> > at next version.
-> > 
-> > How about change the description as following,
-> > 
-> >   This property enables the dual-core support in scp driver.
-> >   By providing the phandle of SCP 2nd core node, the 1st SCP node
-> >   can control the SCP 2nd core as the subdevice of remoteproc framework.
+Reviewed-by: Vidya Sagar <vidyas@nvidia.com>
+
+On 6/2/2022 8:49 AM, Miaoqian Lin wrote:
+> External email: Use caution opening links or attachments
 > 
-> Please, read it again:
 > 
-> > > You describe desired functional behavior, not the hardware.
+> The pm_runtime_enable() will increase power disable depth.
+> if dw_pcie_ep_init() fails, we should use pm_runtime_disable()
+> to balance it pm_runtime_enable().
+> Add missing pm_runtime_disable() for tegra_pcie_config_ep()
 > 
-> Again, you describe Linux implementation (scp driver, remoteproc
-> framework). You need to describe the hardware, not Linux drivers.
+> Fixes: c57247f940e8 ("PCI: tegra: Add support for PCIe endpoint mode in Tegra194")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>   drivers/pci/controller/dwc/pcie-tegra194.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> Maybe the hardware property is that one core has its sibling and you
-> provide here that sibling?
-
-Yes, exactly. I'm sorry for misreading your argument.
-
-How about this one,
-   
-  Reference to the sibling SCP core. This is required when 
-  dual-core SCP support is enabled.
-
-Thanks,
-TingHan
-
-
-
-
-
+> diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
+> index cc2678490162..d992371a36e6 100644
+> --- a/drivers/pci/controller/dwc/pcie-tegra194.c
+> +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
+> @@ -1949,6 +1949,7 @@ static int tegra_pcie_config_ep(struct tegra194_pcie *pcie,
+>          if (ret) {
+>                  dev_err(dev, "Failed to initialize DWC Endpoint subsystem: %d\n",
+>                          ret);
+> +               pm_runtime_disable(dev);
+>                  return ret;
+>          }
+> 
+> --
+> 2.25.1
+> 

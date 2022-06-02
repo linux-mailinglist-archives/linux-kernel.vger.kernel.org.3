@@ -2,123 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4773E53B320
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 07:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA23B53B324
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 07:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiFBFtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 01:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
+        id S230180AbiFBFtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 01:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiFBFs5 (ORCPT
+        with ESMTP id S230130AbiFBFtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 01:48:57 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02809261468;
-        Wed,  1 Jun 2022 22:48:50 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id A28D95C018C;
-        Thu,  2 Jun 2022 01:48:47 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 02 Jun 2022 01:48:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=irrelevant.dk;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1654148927; x=1654235327; bh=ZkWyiuMGaq
-        hYzjNzOrV/RtlVeW8kwzCl9Ncn1BIGaC8=; b=aa+qR82WJa1/b7eBx0E27Gq0nQ
-        mhW1I88Jx3jHQuA/NgaG3e0+It9i0mNXJnvIYdOBkH1jfsM1ZDGlh0HvYh4Lr/oY
-        y9oFauoMrmB3wOcDKSZYnaMHHZX9hkLvQRRAG9BiqrCx/qwe5wH+CJYyVml6pHgg
-        rqPGhZ7JwYLkh2lEHAsPGxqkVc2ekMqeKQLrR9IZfX3B4JXdRpoHZeaRbAd+Urxp
-        y4dsenCXNg80jMulda4pu7d+MSRhdm1R19BlyZp8WleJoOa6lyb9Mb9ohGbUb6dw
-        V2/zPW9c1DOaB/xrI4uHqiKQ35+4YRAr3T8YIyqxdym0tBOJPFFmlFb5bn8A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1654148927; x=1654235327; bh=ZkWyiuMGaqhYzjNzOrV/RtlVeW8kwzCl9Nc
-        n1BIGaC8=; b=op4rbspCGhxXAGklNZ+NAoUzZ8fJhc0zp7Y17aNbOTnHEuWHDwJ
-        MgMsmR9Zf+biBtHOScoc7X2gvZ+wM1dUnSVZasNJLJZ0V/oYuRSA2uCur596VGnJ
-        LwLXo5xFm/uxioGSi7wB5HW00Bq1H2tasrtWEiV7mSgFL3EgpDy8YaWKiPmnu+tP
-        wfhvZ46FNNzHgwV6eXXg8xS+1vodDhrIZM8eD+jK56ZUe2fG9R75sxkBCDNJoKGe
-        jCE95JGdKb9AVQdtOV67eN6srP0UZSHq1Tm3hwe+l4g9KSxiA4BdxE5ZNBLPY+iX
-        a6PsWyEUHsAFQnSsQIrcYD8NT5SxHnMLtwQ==
-X-ME-Sender: <xms:Pk-YYoEx-IwVmjlXsMOVtprieeO2TuziQUrP5zSiart8wSgeD442jQ>
-    <xme:Pk-YYhUWCctqIECKG1yQBnncHD2RQt6qFug2AYUzfu02QvMLOT611bIyVW6c4796a
-    wB5i10drcT-Bz2bRZU>
-X-ME-Received: <xmr:Pk-YYiKdcSXF3_X14_BUQjy0Y1NYiniN66fUpGSCnYY6SuU9JnEH2g9SyhTespBISx2A91CaMggJoGhKJ-z3>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrledugdelhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefmlhgruhhsucfl
-    vghnshgvnhcuoehithhssehirhhrvghlvghvrghnthdrughkqeenucggtffrrghtthgvrh
-    hnpedtleduhfegleehleeltdejffefjedtleeuvdfgteevffegtedvveekheeiieekteen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehithhsse
-    hirhhrvghlvghvrghnthdrughk
-X-ME-Proxy: <xmx:Pk-YYqHfx6DImBe0zMCShFo1uLiaaGs2mE6j_V1FYwqOVUxIYPN1Rg>
-    <xmx:Pk-YYuWhtAq3v55W-v3Nt-G_SL3v0x-E0hmSoAWuyesSG6VlKK2b6w>
-    <xmx:Pk-YYtNIXy5nCtdYo-KPk2Js84B-eDYSYwjipv0ROkztQdKjGMJpWA>
-    <xmx:P0-YYnN3S-3FgQyPeZPx06hAacFFbzy9naLt4BeLQJ_h2mK_A8bhUA>
-Feedback-ID: idc91472f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 2 Jun 2022 01:48:44 -0400 (EDT)
-From:   Klaus Jensen <its@irrelevant.dk>
-To:     linux-kernel@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Wolfram Sang <wsa@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Klaus Jensen <its@irrelevant.dk>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Klaus Jensen <k.jensen@samsung.com>
-Subject: [PATCH] i2c: aspeed: do not mask SLAVE_MATCH
-Date:   Thu,  2 Jun 2022 07:48:42 +0200
-Message-Id: <20220602054842.122271-1-its@irrelevant.dk>
-X-Mailer: git-send-email 2.36.1
+        Thu, 2 Jun 2022 01:49:04 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87544262D42
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 22:48:59 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id wdhSn51g6QKuawdhSnS6n8; Thu, 02 Jun 2022 07:48:57 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Thu, 02 Jun 2022 07:48:57 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <60d33448-1cc9-c662-167b-10c1f9660545@wanadoo.fr>
+Date:   Thu, 2 Jun 2022 07:48:50 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v10 14/21] drm/mediatek: dpi: Add dpintf support
+Content-Language: fr
+To:     granquet@baylibre.com
+Cc:     airlied@linux.ie, chunfeng.yun@mediatek.com,
+        chunkuang.hu@kernel.org, ck.hu@mediatek.com, daniel@ffwll.ch,
+        deller@gmx.de, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, jitao.shi@mediatek.com,
+        kishon@ti.com, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, maarten.lankhorst@linux.intel.com,
+        matthias.bgg@gmail.com, mripard@kernel.org, msp@baylibre.com,
+        p.zabel@pengutronix.de, robh+dt@kernel.org, tzimmermann@suse.de,
+        vkoul@kernel.org
+References: <20220523104758.29531-1-granquet@baylibre.com>
+ <20220523104758.29531-15-granquet@baylibre.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220523104758.29531-15-granquet@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Klaus Jensen <k.jensen@samsung.com>
+Le 23/05/2022 à 12:47, Guillaume Ranquet a écrit :
+> dpintf is the displayport interface hardware unit. This unit is similar
+> to dpi and can reuse most of the code.
+> 
+> This patch adds support for mt8195-dpintf to this dpi driver. Main
+> differences are:
+>   - Some features/functional components are not available for dpintf
+>     which are now excluded from code execution once is_dpintf is set
+>   - dpintf can and needs to choose between different clockdividers based
+>     on the clockspeed. This is done by choosing a different clock parent.
+>   - There are two additional clocks that need to be managed. These are
+>     only set for dpintf and will be set to NULL if not supplied. The
+>     clk_* calls handle these as normal clocks then.
+>   - Some register contents differ slightly between the two components. To
+>     work around this I added register bits/masks with a DPINTF_ prefix
+>     and use them where different.
+> 
+> Based on a separate driver for dpintf created by
+> Jason-JH.Lin <jason-jh.lin-NuS5LvNUpcJWk0Htik3J/w@public.gmane.org>.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp-rdvid1DuHRBWk0Htik3J/w@public.gmane.org>
+> Signed-off-by: Guillaume Ranquet <granquet-rdvid1DuHRBWk0Htik3J/w@public.gmane.org>
+> ---
+>   drivers/gpu/drm/mediatek/mtk_dpi.c          | 126 +++++++++++++++++---
+>   drivers/gpu/drm/mediatek/mtk_dpi_regs.h     |  35 ++++++
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |   8 ++
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |   1 +
+>   drivers/gpu/drm/mediatek/mtk_drm_drv.c      |   5 +-
+>   include/linux/soc/mediatek/mtk-mmsys.h      |   4 +-
+>   6 files changed, 159 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index eb969c5c5c2e..763bfb700135 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -71,6 +71,7 @@ struct mtk_dpi {
+>   	void __iomem *regs;
+>   	struct device *dev;
+>   	struct clk *engine_clk;
+> +	struct clk *dpi_ck_cg;
+>   	struct clk *pixel_clk;
+>   	struct clk *tvd_clk;
+>   	int irq;
+> @@ -126,6 +127,7 @@ struct mtk_dpi_conf {
+>   	const u32 *output_fmts;
+>   	u32 num_output_fmts;
+>   	bool is_ck_de_pol;
+> +	bool is_dpintf;
+>   	bool swap_input_support;
+>   	/* Mask used for HWIDTH, HPORCH, VSYNC_WIDTH and VSYNC_PORCH (no shift) */
+>   	u32 dimension_mask;
+> @@ -438,6 +440,8 @@ static void mtk_dpi_power_off(struct mtk_dpi *dpi)
+>   	mtk_dpi_disable(dpi);
+>   	clk_disable_unprepare(dpi->pixel_clk);
+>   	clk_disable_unprepare(dpi->engine_clk);
+> +	clk_disable_unprepare(dpi->dpi_ck_cg);
+> +	clk_disable_unprepare(dpi->tvd_clk);
+>   }
+>   
+>   static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+> @@ -447,12 +451,24 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+>   	if (++dpi->refcount != 1)
+>   		return 0;
+>   
 
-When commit f9eb91350bb2 ("i2c: aspeed: added slave support for Aspeed
-I2C driver") added slave mode support, the SLAVE_MATCH interrupt bit
-(bit 7) was not added to INTR_ALL and so will never be set by the Aspeed
-I2C controller.
+Hi,
 
-Fixes: f9eb91350bb2 ("i2c: aspeed: added slave support for Aspeed I2C driver")
-Signed-off-by: Klaus Jensen <k.jensen@samsung.com>
----
-I am working on slave mode in QEMU and noticed that the device would not
-generate the SLAVE_ADDR_RX_MATCH interrupt. This patch fixes it, but I
-do not have a spec sheet on the Aspeed, so I am not sure if this is the
-intended behavior?
+belwo the error handling path looks odd. (both where we goto, and the 
+order of the clk_disable_unprepare() in the error handling path.
 
- drivers/i2c/busses/i2c-aspeed.c | 1 +
- 1 file changed, 1 insertion(+)
+just my 2c,
 
-diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-index 771e53d3d197..7f432babcd72 100644
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -86,6 +86,7 @@
- #define ASPEED_I2CD_INTR_ALL						       \
- 		(ASPEED_I2CD_INTR_SDA_DL_TIMEOUT |			       \
- 		 ASPEED_I2CD_INTR_BUS_RECOVER_DONE |			       \
-+		 ASPEED_I2CD_INTR_SLAVE_MATCH |				       \
- 		 ASPEED_I2CD_INTR_SCL_TIMEOUT |				       \
- 		 ASPEED_I2CD_INTR_ABNORMAL |				       \
- 		 ASPEED_I2CD_INTR_NORMAL_STOP |				       \
--- 
-2.36.1
+CJ
 
+> +	ret = clk_prepare_enable(dpi->tvd_clk);
+> +	if (ret) {
+> +		dev_err(dpi->dev, "Failed to enable tvd pll: %d\n", ret);
+> +		goto err_pixel;
+> +	}
+> +
+>   	ret = clk_prepare_enable(dpi->engine_clk);
+>   	if (ret) {
+>   		dev_err(dpi->dev, "Failed to enable engine clock: %d\n", ret);
+>   		goto err_refcount;
+>   	}
+>   
+> +	ret = clk_prepare_enable(dpi->dpi_ck_cg);
+> +	if (ret) {
+> +		dev_err(dpi->dev, "Failed to enable dpi_ck_cg clock: %d\n", ret);
+> +		goto err_ck_cg;
+> +	}
+> +
+>   	ret = clk_prepare_enable(dpi->pixel_clk);
+>   	if (ret) {
+>   		dev_err(dpi->dev, "Failed to enable pixel clock: %d\n", ret);
+> @@ -466,6 +482,8 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+>   	return 0;
+>   
+>   err_pixel:
+> +	clk_disable_unprepare(dpi->dpi_ck_cg);
+> +err_ck_cg:
+>   	clk_disable_unprepare(dpi->engine_clk);
+>   err_refcount:
+>   	dpi->refcount--;
+
+[...]

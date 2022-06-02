@@ -2,142 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03BB053B35A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1717553B358
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbiFBGHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 02:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
+        id S230369AbiFBGHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 02:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiFBGHS (ORCPT
+        with ESMTP id S230346AbiFBGHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Jun 2022 02:07:18 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BA4C8BDB;
-        Wed,  1 Jun 2022 23:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654150028; x=1685686028;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fACQvi/i8TUwWPnJfsD9SOnQn1pBxmzqzJNVcJqEbc4=;
-  b=CDG+3f54QN+9VXH0fuJZnRrZ4TLoypuSXcA6hl4phzNe9bh6qZ5YpgaG
-   3o4I5xE6iRWDLTHb6MvH7R90HfXIKPFTBcIgz5/0Uiq3zZ9o6m6P6VM1F
-   CLOWJfKLndvamCYfGgxz4eSsQ3m+r7cBVheMfi4FMP6HPbatolgpTIj2C
-   I=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Jun 2022 23:07:08 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 23:07:07 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 1 Jun 2022 23:07:07 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 1 Jun 2022 23:07:01 -0700
-Date:   Thu, 2 Jun 2022 11:36:57 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423DC115A49;
+        Wed,  1 Jun 2022 23:07:14 -0700 (PDT)
+X-UUID: 64c8e88d33264b52b7a459e9a3d61e39-20220602
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:e0c906d2-7aec-498a-8a7c-523da98f9ed9,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:e8cb910d-3a0d-4bbe-9d72-0e5d26d57423,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 64c8e88d33264b52b7a459e9a3d61e39-20220602
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <axe.yang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1097358930; Thu, 02 Jun 2022 14:07:09 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 2 Jun 2022 14:07:07 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 2 Jun 2022 14:07:05 +0800
+Message-ID: <1d07579c0a6b8853ab72e345a0bd0be73549de8c.camel@mediatek.com>
+Subject: Re: [RESEND v12 0/3] mmc: mediatek: add support for SDIO async IRQ
+From:   Axe Yang <axe.yang@mediatek.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
         Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: Re: [PATCH v19 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <20220602060657.GD20979@hu-pkondeti-hyd.qualcomm.com>
-References: <1654139515-8177-1-git-send-email-quic_kriskura@quicinc.com>
- <1654139515-8177-3-git-send-email-quic_kriskura@quicinc.com>
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 2 Jun 2022 14:07:04 +0800
+In-Reply-To: <20220525015140.384-1-axe.yang@mediatek.com>
+References: <20220525015140.384-1-axe.yang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1654139515-8177-3-git-send-email-quic_kriskura@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krishna,
+Hi,
 
-On Thu, Jun 02, 2022 at 08:41:52AM +0530, Krishna Kurapati wrote:
-> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> 
-> Check wakeup-source property for dwc3 core node to set the
-> wakeup capability. Drop the device_init_wakeup call from
-> runtime suspend and resume.
-> 
-> If the dwc3 is wakeup capable, don't power down the USB PHY(s).
-> The glue drivers are expected to take care of configuring the
-> additional wakeup settings if needed based on the dwc3 wakeup
-> capability status. In some SOC designs, powering off the PHY is
-> resulting in higher leakage, so this patch save power on such boards.
-> 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-> ---
->  drivers/usb/dwc3/core.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index e027c04..c9d7fe3 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1787,6 +1787,7 @@ static int dwc3_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, dwc);
->  	dwc3_cache_hwparams(dwc);
-> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
->  
->  	spin_lock_init(&dwc->lock);
->  	mutex_init(&dwc->mutex);
-> @@ -1948,7 +1949,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  		dwc3_core_exit(dwc);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> -		if (!PMSG_IS_AUTO(msg)) {
-> +		if (!PMSG_IS_AUTO(msg) && !device_can_wakeup(dwc->dev)) {
->  			dwc3_core_exit(dwc);
->  			break;
->  		}
-> @@ -2009,12 +2010,11 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->  		spin_unlock_irqrestore(&dwc->lock, flags);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> -		if (!PMSG_IS_AUTO(msg)) {
-> +		if (!PMSG_IS_AUTO(msg) && !device_can_wakeup(dwc->dev)) {
->  			ret = dwc3_core_init_for_resume(dwc);
->  			if (ret)
->  				return ret;
->  			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> -			break;
->  		}
+Gentle ping for this set.
 
-We should break here for the case the device does not support wakeup and
-PM transition is system suspend. See the suspend block above where we break
-correctly.
+On Wed, 2022-05-25 at 09:51 +0800, Axe Yang wrote:
+> Changes in v12:
+> - assign NULL to pins_eint directly instead of using kfree()
+> 
+> Changes in v11:
+> - remove '_irq' suffix in interrupts-names property
+> - fix yaml example build error
+> - refactor msdc_enable_sdio_irq(), free pins_eint if async irq is not
+> supported
+> 
+> Changes in v10:
+> - add sample node for SDIO host which support wakeup interrupt in
+> yaml
+> - skip MMC_PM_WAKE_SDIO_IRQ check before enable SDIO async interrupt
+> - add MMC_PM_KEEP_POWER check before SDIO eint pinstate parsing
+> - use dev_pm_set_dedicated_wake_irq_reverse() to correct irq control
+> sequence
+> - set dedicated irq in msdc_enable_sdio_irq() rather than
+> msdc_drv_probe()
+> - remove unnecessary wake irq control, rpm/dpm system shall manage
+> that
+> - move wake irq/msdc irq control back to system suspend phase, use
+> rpm_suspend
+>   and rpm_resume to ensure irq control sequence:
+>      disable msdc irq -> enable wake irq -> disable wake irq ->
+> enable msdc irq
+> - simplify variables, check pins_eint to know whether wakeup settings
+> are managed
+> 
+> Changes in v9:
+> - remove pinctrl "state_dat1"
+> 
+> Changes in v8:
+> - remove maxItems property under pinctrl-names property
+> 
+> Changes in v7:
+> - add device_init_wakeup() to register SDIO host as wakeup source
+> 
+> Changes in v6:
+> - abandon cap-sdio-async-irq flag, use wakeup-source flag instead
+> - extend interrupts and pinctrls in mediatek mmc host controller DT
+> documents
+> - add mmc_card_enable_async_irq() to access enable_async_irq flag
+> - simplify wakeup irq implementation with dedicate wake up irq
+> related interface
+> 
+> Changes in v5:
+> - resort variables to reversed xmas tree order
+> - restore old copyright year range and add current year back
+> 
+> Changes in v4:
+> - add MMC_CAP2_SDIO_ASYNC_IRQ judge before lookup eint pinctrl
+> - replace spin_lock_irqsave() variant with spin_lock() in eint irq
+> handler
+> 
+> Changes in v3:
+> - correct abbreviations with capital letters in commit message
+> - replace copyright year with 2022 in mtk-sd.c
+> - remove unnessary pointer casting
+> - adjust variable order to reversed xmas tree
+> - remove a redundant blank line
+> - refine if statement, following standard pattern
+> 
+> Changes in v2:
+> - change flag name from 'cap-sdio-async-int' to 'cap-sdio-async-irq'
+> - change corresponding macro names from xxx_INT to xxx_IRQ
+> - resort new member in msdc_host structure
+> - refine function msdc_request_dat1_eint_irq()
+> - rename msdc_{suspend,resume} function names, add suffix '_noirq'
+> - add MMC_CAP2_NO_SDIO judgement before parse eint related pin
+> setting
+> 
+> Axe Yang (3):
+>   dt-bindings: mmc: mtk-sd: extend interrupts and pinctrls properties
+>   mmc: core: Add support for SDIO wakeup interrupt
+>   mmc: mediatek: add support for SDIO eint wakup IRQ
+> 
+>  .../devicetree/bindings/mmc/mtk-sd.yaml       | 50 +++++++++++-
+>  drivers/mmc/core/sdio.c                       | 14 ++++
+>  drivers/mmc/host/mtk-sd.c                     | 80
+> +++++++++++++++++--
+>  include/linux/mmc/card.h                      |  8 +-
+>  include/linux/mmc/sdio.h                      |  5 ++
+>  5 files changed, 149 insertions(+), 8 deletions(-)
+> 
 
-Thanks,
-Pavan

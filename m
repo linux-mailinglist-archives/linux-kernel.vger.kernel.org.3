@@ -2,146 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB4153B2CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 06:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7E253B1F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiFBEwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 00:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        id S233389AbiFBDF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 23:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiFBEwl (ORCPT
+        with ESMTP id S230042AbiFBDFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 00:52:41 -0400
-Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCF71159
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 21:52:38 -0700 (PDT)
-X-UUID: a828858c71ec40fdbd2877cbb1e1c59f-20220602
-X-Spam-Fingerprint: 0
-X-GW-Reason: 13103
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
-X-Content-Feature: ica/max.line-size 100
-        audit/email.address 3
-        meta/cnt.alert 1
-X-CPASD-INFO: 83a86b36504749499f45c750e0154d2d@gYObWGOUYWZhUHaDg3x_c1mXZGWTY1V
-        _p2pRZWKUXoSVhH5xTWJsXVKBfG5QZWNdYVN_eGpQYl9gZFB5i3-XblBgXoZgUZB3h3WbWGaQYw==
-X-CLOUD-ID: 83a86b36504749499f45c750e0154d2d
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:186.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:304.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:11,DUF:42066,ACD:302,DCD:404,SL:0,EISP:0,AG:0,CFC:0.812,CFSR:0.029,UAT:
-        0,RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM
-        :0,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: a828858c71ec40fdbd2877cbb1e1c59f-20220602
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: a828858c71ec40fdbd2877cbb1e1c59f-20220602
-X-User: huangbing@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by nksmu.kylinos.cn
-        (envelope-from <huangbing@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1997259765; Thu, 02 Jun 2022 11:04:31 +0800
-From:   Bing Huang <huangbing@kylinos.cn>
-To:     peterz@infradead.org, dietmar.eggemann@arm.com
-Cc:     brauner@kernel.org, bristot@redhat.com, bsegall@google.com,
-        juri.lelli@redhat.com, linux-kernel@vger.kernel.org,
-        mgorman@suse.de, mingo@redhat.com, rostedt@goodmis.org,
-        vincent.guittot@linaro.org
-Subject: [PATCH v3] sched/fair: static cpumasks for load balance
-Date:   Thu,  2 Jun 2022 11:01:35 +0800
-Message-Id: <20220602030135.398697-1-huangbing@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 1 Jun 2022 23:05:54 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B92233E9C
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 20:05:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654139153; x=1685675153;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l5gRczfoKuL7G9zBFQQ2SXtbNbxh9vF8M0U/nuU3QH4=;
+  b=kFsoFf6L6+05DJ2n7HviMZ4LaMEa7lx+zHfvcbo4ZAgz8TZZOHlweQah
+   2XKcamBLnEvD/x9Be1dcZdPxca6CjL4nqFrMxS3pI0Q8+CIeXALXQ1zqF
+   DzUFuJXBAQABJepLxcstrTWm6ZiyWw70O6G5tCvy21nX8gBRF6YiUvkEC
+   Z46dxczBnD0ViefZ6cNrx9Qh9zLNzAtfG4Z40BusV/WPdeIrOWKDVJTYo
+   pc79spzvEyNpRwsveXnsjOzYhk5wsZf2zR1dUjpY7gFMX2Q6PlakMlSeK
+   D+AnlOsV/gMFzP2r0ASJrv/iEKx/tUTM8NCzgU4qz1G+L2bZ3LllSNwq7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275877983"
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="275877983"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 20:05:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="606607359"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 01 Jun 2022 20:05:51 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwb9j-0004gM-7p;
+        Thu, 02 Jun 2022 03:05:51 +0000
+Date:   Thu, 2 Jun 2022 11:04:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: [djwong-xfs:vectorized-scrub 172/401]
+ fs/xfs/libxfs/xfs_btree.c:140:9: error: call to undeclared function
+ 'xfs_daddr_to_xfo'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202206021050.LdxdyOWk-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The both cpu mask load_balance_mask and select_idle_mask just only used
-in fair.c, but allocation in core.c in CONFIG_CPUMASK_OFFSTACK=y case,
-and global via declare per cpu variations. More or less, it looks wired.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
+head:   1fcd9cea011a657d62ee332d161966c1ec92ffd5
+commit: 737a5536fdb7ee845a8a656e14ec1c4554be6dec [172/401] xfs: support in-memory btrees
+config: hexagon-randconfig-r041-20220601 (https://download.01.org/0day-ci/archive/20220602/202206021050.LdxdyOWk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=737a5536fdb7ee845a8a656e14ec1c4554be6dec
+        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
+        git fetch --no-tags djwong-xfs vectorized-scrub
+        git checkout 737a5536fdb7ee845a8a656e14ec1c4554be6dec
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/xfs/
 
-Co-developed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: Bing Huang <huangbing@kylinos.cn>
----
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
- v1->v2:
-   move load_balance_mask and select_idle_mask allocation from 
-   sched_init() to init_sched_fair_class()
- v2->v3: 
-   fixup by Marco Elver <elver@google.com>
+All errors (new ones prefixed by >>):
 
- kernel/sched/core.c | 11 -----------
- kernel/sched/fair.c | 13 +++++++++++--
- 2 files changed, 11 insertions(+), 13 deletions(-)
+>> fs/xfs/libxfs/xfs_btree.c:140:9: error: call to undeclared function 'xfs_daddr_to_xfo'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   fsb = xfs_daddr_to_xfo(xfs_buf_daddr(bp));
+                         ^
+   fs/xfs/libxfs/xfs_btree.c:140:9: note: did you mean 'xfs_daddr_to_agno'?
+   fs/xfs/xfs_mount.h:590:1: note: 'xfs_daddr_to_agno' declared here
+   xfs_daddr_to_agno(struct xfs_mount *mp, xfs_daddr_t d)
+   ^
+   fs/xfs/libxfs/xfs_btree.c:210:11: error: call to undeclared function 'xfs_daddr_to_xfo'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   agbno = xfs_daddr_to_xfo(xfs_buf_daddr(bp));
+                           ^
+   2 errors generated.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 696c6490bd5b..707df2aeebf8 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9503,9 +9503,6 @@ LIST_HEAD(task_groups);
- static struct kmem_cache *task_group_cache __read_mostly;
- #endif
- 
--DECLARE_PER_CPU(cpumask_var_t, load_balance_mask);
--DECLARE_PER_CPU(cpumask_var_t, select_idle_mask);
--
- void __init sched_init(void)
- {
- 	unsigned long ptr = 0;
-@@ -9549,14 +9546,6 @@ void __init sched_init(void)
- 
- #endif /* CONFIG_RT_GROUP_SCHED */
- 	}
--#ifdef CONFIG_CPUMASK_OFFSTACK
--	for_each_possible_cpu(i) {
--		per_cpu(load_balance_mask, i) = (cpumask_var_t)kzalloc_node(
--			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
--		per_cpu(select_idle_mask, i) = (cpumask_var_t)kzalloc_node(
--			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
--	}
--#endif /* CONFIG_CPUMASK_OFFSTACK */
- 
- 	init_rt_bandwidth(&def_rt_bandwidth, global_rt_period(), global_rt_runtime());
- 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 8c5b74f66bd3..310b6f52a7df 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -5843,8 +5843,8 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
- #ifdef CONFIG_SMP
- 
- /* Working cpumask for: load_balance, load_balance_newidle. */
--DEFINE_PER_CPU(cpumask_var_t, load_balance_mask);
--DEFINE_PER_CPU(cpumask_var_t, select_idle_mask);
-+static DEFINE_PER_CPU(cpumask_var_t, load_balance_mask);
-+static DEFINE_PER_CPU(cpumask_var_t, select_idle_mask);
- 
- #ifdef CONFIG_NO_HZ_COMMON
- 
-@@ -11841,6 +11841,15 @@ void show_numa_stats(struct task_struct *p, struct seq_file *m)
- __init void init_sched_fair_class(void)
- {
- #ifdef CONFIG_SMP
-+	int i;
-+
-+	for_each_possible_cpu(i) {
-+		zalloc_cpumask_var_node(&per_cpu(load_balance_mask, i),
-+								GFP_KERNEL, cpu_to_node(i));
-+		zalloc_cpumask_var_node(&per_cpu(select_idle_mask, i),
-+								GFP_KERNEL, cpu_to_node(i));
-+	}
-+
- 	open_softirq(SCHED_SOFTIRQ, run_rebalance_domains);
- 
- #ifdef CONFIG_NO_HZ_COMMON
+
+vim +/xfs_daddr_to_xfo +140 fs/xfs/libxfs/xfs_btree.c
+
+   103	
+   104	/*
+   105	 * Check a long btree block header.  Return the address of the failing check,
+   106	 * or NULL if everything is ok.
+   107	 */
+   108	xfs_failaddr_t
+   109	__xfs_btree_check_lblock(
+   110		struct xfs_btree_cur	*cur,
+   111		struct xfs_btree_block	*block,
+   112		int			level,
+   113		struct xfs_buf		*bp)
+   114	{
+   115		struct xfs_mount	*mp = cur->bc_mp;
+   116		xfs_btnum_t		btnum = cur->bc_btnum;
+   117		int			crc = xfs_has_crc(mp);
+   118		xfs_failaddr_t		fa;
+   119		xfs_fsblock_t		fsb = NULLFSBLOCK;
+   120	
+   121		if (crc) {
+   122			if (!uuid_equal(&block->bb_u.l.bb_uuid, &mp->m_sb.sb_meta_uuid))
+   123				return __this_address;
+   124			if (block->bb_u.l.bb_blkno !=
+   125			    cpu_to_be64(bp ? xfs_buf_daddr(bp) : XFS_BUF_DADDR_NULL))
+   126				return __this_address;
+   127			if (block->bb_u.l.bb_pad != cpu_to_be32(0))
+   128				return __this_address;
+   129		}
+   130	
+   131		if (be32_to_cpu(block->bb_magic) != xfs_btree_magic(crc, btnum))
+   132			return __this_address;
+   133		if (be16_to_cpu(block->bb_level) != level)
+   134			return __this_address;
+   135		if (be16_to_cpu(block->bb_numrecs) >
+   136		    cur->bc_ops->get_maxrecs(cur, level))
+   137			return __this_address;
+   138	
+   139		if ((cur->bc_flags & XFS_BTREE_IN_MEMORY) && bp)
+ > 140			fsb = xfs_daddr_to_xfo(xfs_buf_daddr(bp));
+   141		else if (bp)
+   142			fsb = XFS_DADDR_TO_FSB(mp, xfs_buf_daddr(bp));
+   143	
+   144		fa = xfs_btree_check_lblock_siblings(mp, cur, level, fsb,
+   145				be64_to_cpu(block->bb_u.l.bb_leftsib));
+   146		if (!fa)
+   147			fa = xfs_btree_check_lblock_siblings(mp, cur, level, fsb,
+   148					be64_to_cpu(block->bb_u.l.bb_rightsib));
+   149		return fa;
+   150	}
+   151	
+
 -- 
-2.25.1
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
+0-DAY CI Kernel Test Service
+https://01.org/lkp

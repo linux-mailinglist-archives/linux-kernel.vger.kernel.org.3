@@ -2,138 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B8853B344
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2AC53B34A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiFBGCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 02:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
+        id S230345AbiFBGC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 02:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiFBGCV (ORCPT
+        with ESMTP id S229945AbiFBGC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 02:02:21 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACCB17E3E;
-        Wed,  1 Jun 2022 23:02:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
-        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=h2ZY8VEFgpSaofTKAI8U3Wwg8+8pVIAh16eQkIT60+w=; b=eqmhX3QclN9MlaR/0mwyStXb9K
-        NOfcklljy6MQ77D15aoesLM1/t5jG5lKjBAg+zjdCmOipjYeIwcMAt7c391tje9RzUCmz40ZUr8SD
-        PkwWxPOcLvYoWgEN/5fzukgPf85mr7wPyo0x2Hd2fs0dFBprgWahMRCVfWbbBuFE1y+hVQNpNUhUV
-        AfozbbnIKEaIMOubfcgJZgIwBi4JNMy7O36+tB2XoNgBRJ5q4QiGgIgYzXhWWy4sKEteuV5GeV0Mr
-        fpc6Fuh5n1cq/iKxGb0E6G9KmKJLmmzyM3T6LurMLWWRhvyLFGVouXm3HQ0VY1hmfflcPHWfDCwz3
-        vzc0SN2w==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwduL-001bSd-8A; Thu, 02 Jun 2022 06:02:09 +0000
-Date:   Wed, 1 Jun 2022 23:02:09 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jason Andryuk <jandryuk@gmail.com>
-Cc:     Roger Pau =?iso-8859-1?Q?Monn=E9?= <roger.pau@citrix.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, xen-devel@lists.xenproject.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marek =?iso-8859-1?Q?Marczykowski-G=F3recki?= 
-        <marmarek@invisiblethingslab.com>
-Subject: Re: [PATCH] xen-blkfront: Handle NULL gendisk
-Message-ID: <YphSYfdzy8kekhTZ@infradead.org>
-References: <20220601195341.28581-1-jandryuk@gmail.com>
+        Thu, 2 Jun 2022 02:02:26 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1B0186C5;
+        Wed,  1 Jun 2022 23:02:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654149745; x=1685685745;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ICFGVJRi4y/lzjQVI5mnRqkYj+wXkvqt/889FTz0g2I=;
+  b=xh5S6DJ5HBQWKwfET+qFxLzByupOF9beKcoV5KgpkkjtKl06lM43JPwq
+   hwROnc9iq1zI5pPOfvg7AMqZsiGD8k7vAnL6FwYQm0sqC5bAfHP9HVu7e
+   ZHtu8SnaCNVSTjohS+wekVFShNWPQbg90Prl5pYWndXCrZ4qLG1s8irXS
+   M=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Jun 2022 23:02:24 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 23:02:24 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 1 Jun 2022 23:02:23 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 1 Jun 2022 23:02:17 -0700
+Date:   Thu, 2 Jun 2022 11:32:13 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [PATCH v19 4/5] usb: dwc3: qcom: Configure wakeup interrupts
+ during suspend
+Message-ID: <20220602060213.GC20979@hu-pkondeti-hyd.qualcomm.com>
+References: <1654139515-8177-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654139515-8177-5-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220601195341.28581-1-jandryuk@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1654139515-8177-5-git-send-email-quic_kriskura@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 03:53:41PM -0400, Jason Andryuk wrote:
-> When a VBD is not fully created and then closed, the kernel can have a
-> NULL pointer dereference:
+On Thu, Jun 02, 2022 at 08:41:54AM +0530, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 > 
-> The reproducer is trivial:
+> Configure DP/DM line interrupts based on the USB2 device attached to
+> the root hub port. When HS/FS device is connected, configure the DP line
+> as falling edge to detect both disconnect and remote wakeup scenarios. When
+> LS device is connected, configure DM line as falling edge to detect both
+> disconnect and remote wakeup. When no device is connected, configure both
+> DP and DM lines as rising edge to detect HS/HS/LS device connect scenario.
 > 
-> [user@dom0 ~]$ sudo xl block-attach work backend=sys-usb vdev=xvdi target=/dev/sdz
-> [user@dom0 ~]$ xl block-list work
-> Vdev  BE  handle state evt-ch ring-ref BE-path
-> 51712 0   241    4     -1     -1       /local/domain/0/backend/vbd/241/51712
-> 51728 0   241    4     -1     -1       /local/domain/0/backend/vbd/241/51728
-> 51744 0   241    4     -1     -1       /local/domain/0/backend/vbd/241/51744
-> 51760 0   241    4     -1     -1       /local/domain/0/backend/vbd/241/51760
-> 51840 3   241    3     -1     -1       /local/domain/3/backend/vbd/241/51840
->                  ^ note state, the /dev/sdz doesn't exist in the backend
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 72 ++++++++++++++++++++++++++++++++++++++------
+>  1 file changed, 62 insertions(+), 10 deletions(-)
 > 
-> [user@dom0 ~]$ sudo xl block-detach work xvdi
-> [user@dom0 ~]$ xl block-list work
-> Vdev  BE  handle state evt-ch ring-ref BE-path
-> work is an invalid domain identifier
-> 
-> And its console has:
-> 
-> BUG: kernel NULL pointer dereference, address: 0000000000000050
-> PGD 80000000edebb067 P4D 80000000edebb067 PUD edec2067 PMD 0
-> Oops: 0000 [#1] PREEMPT SMP PTI
-> CPU: 1 PID: 52 Comm: xenwatch Not tainted 5.16.18-2.43.fc32.qubes.x86_64 #1
-> RIP: 0010:blk_mq_stop_hw_queues+0x5/0x40
-> Code: 00 48 83 e0 fd 83 c3 01 48 89 85 a8 00 00 00 41 39 5c 24 50 77 c0 5b 5d 41 5c 41 5d c3 c3 0f 1f 80 00 00 00 00 0f 1f 44 00 00 <8b> 47 50 85 c0 74 32 41 54 49 89 fc 55 53 31 db 49 8b 44 24 48 48
-> RSP: 0018:ffffc90000bcfe98 EFLAGS: 00010293
-> RAX: ffffffffc0008370 RBX: 0000000000000005 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000000
-> RBP: ffff88800775f000 R08: 0000000000000001 R09: ffff888006e620b8
-> R10: ffff888006e620b0 R11: f000000000000000 R12: ffff8880bff39000
-> R13: ffff8880bff39000 R14: 0000000000000000 R15: ffff88800604be00
-> FS:  0000000000000000(0000) GS:ffff8880f3300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000050 CR3: 00000000e932e002 CR4: 00000000003706e0
-> Call Trace:
->  <TASK>
->  blkback_changed+0x95/0x137 [xen_blkfront]
->  ? read_reply+0x160/0x160
->  xenwatch_thread+0xc0/0x1a0
->  ? do_wait_intr_irq+0xa0/0xa0
->  kthread+0x16b/0x190
->  ? set_kthread_struct+0x40/0x40
->  ret_from_fork+0x22/0x30
->  </TASK>
-> Modules linked in: snd_seq_dummy snd_hrtimer snd_seq snd_seq_device snd_timer snd soundcore ipt_REJECT nf_reject_ipv4 xt_state xt_conntrack nft_counter nft_chain_nat xt_MASQUERADE nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 nft_compat nf_tables nfnetlink intel_rapl_msr intel_rapl_common crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel xen_netfront pcspkr xen_scsiback target_core_mod xen_netback xen_privcmd xen_gntdev xen_gntalloc xen_blkback xen_evtchn ipmi_devintf ipmi_msghandler fuse bpf_preload ip_tables overlay xen_blkfront
-> CR2: 0000000000000050
-> ---[ end trace 7bc9597fd06ae89d ]---
-> RIP: 0010:blk_mq_stop_hw_queues+0x5/0x40
-> Code: 00 48 83 e0 fd 83 c3 01 48 89 85 a8 00 00 00 41 39 5c 24 50 77 c0 5b 5d 41 5c 41 5d c3 c3 0f 1f 80 00 00 00 00 0f 1f 44 00 00 <8b> 47 50 85 c0 74 32 41 54 49 89 fc 55 53 31 db 49 8b 44 24 48 48
-> RSP: 0018:ffffc90000bcfe98 EFLAGS: 00010293
-> RAX: ffffffffc0008370 RBX: 0000000000000005 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000000
-> RBP: ffff88800775f000 R08: 0000000000000001 R09: ffff888006e620b8
-> R10: ffff888006e620b0 R11: f000000000000000 R12: ffff8880bff39000
-> R13: ffff8880bff39000 R14: 0000000000000000 R15: ffff88800604be00
-> FS:  0000000000000000(0000) GS:ffff8880f3300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000050 CR3: 00000000e932e002 CR4: 00000000003706e0
-> Kernel panic - not syncing: Fatal exception
-> Kernel Offset: disabled
-> 
-> info->rq and info->gd are only set in blkfront_connect(), which is
-> called for state 4 (XenbusStateConnected).  Guard against using NULL
-> variables in blkfront_closing() to avoid the issue.
-> 
-> The rest of blkfront_closing looks okay.  If info->nr_rings is 0, then
-> for_each_rinfo won't do anything.
-> 
-> blkfront_remove also needs to check for non-NULL pointers before
-> cleaning up the gendisk and request queue.
-> 
-> Fixes: 05d69d950d9d "xen-blkfront: sanitize the removal state machine"
-> Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-> Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 7352124..56ecee0 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -20,7 +20,8 @@
+>  #include <linux/usb/of.h>
+>  #include <linux/reset.h>
+>  #include <linux/iopoll.h>
+> -
+> +#include <linux/usb/hcd.h>
+> +#include <linux/usb.h>
+>  #include "core.h"
+>  
+>  /* USB QSCRATCH Hardware registers */
+> @@ -76,6 +77,7 @@ struct dwc3_qcom {
+>  	int			dp_hs_phy_irq;
+>  	int			dm_hs_phy_irq;
+>  	int			ss_phy_irq;
+> +	enum usb_device_speed	usb2_speed;
+>  
+>  	struct extcon_dev	*edev;
+>  	struct extcon_dev	*host_edev;
+> @@ -296,11 +298,34 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
+>  	icc_put(qcom->icc_path_apps);
+>  }
+>  
+> -static void dwc3_qcom_enable_wakeup_irq(int irq)
+> +enum usb_device_speed dwc3_qcom_update_usb2_speed(struct dwc3_qcom *qcom)
+> +{
+> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> +	struct usb_hcd *hcd = platform_get_drvdata(dwc->xhci);
+> +	struct usb_device *udev;
+> +
+> +	/*
+> +	 * It is possible to query the speed of all children of
+> +	 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
+> +	 * currently supports only 1 port per controller. So
+> +	 * this is sufficient.
+> +	 */
+> +	udev = usb_hub_find_child(hcd->self.root_hub, 1);
+> +
+> +	if (!udev)
+> +		return USB_SPEED_UNKNOWN;
+> +
+> +	return udev->speed;
+> +}
+> +
+> +static void dwc3_qcom_enable_wakeup_irq(int irq, unsigned int polarity)
+>  {
+>  	if (!irq)
+>  		return;
+>  
+> +	if (polarity)
+> +		irq_set_irq_type(irq, polarity);
+> +
+>  	enable_irq(irq);
+>  	enable_irq_wake(irq);
+>  }
+> @@ -318,22 +343,47 @@ static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
+>  {
+>  	dwc3_qcom_disable_wakeup_irq(qcom->hs_phy_irq);
+>  
+> -	dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
+> -
+> -	dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
+> +	if (qcom->usb2_speed == USB_SPEED_LOW) {
+> +		dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
+> +	} else if ((qcom->usb2_speed == USB_SPEED_HIGH) ||
+> +			(qcom->usb2_speed == USB_SPEED_FULL)) {
+> +		dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
+> +	} else {
+> +		dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
+> +		dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
+> +	}
+>  
+>  	dwc3_qcom_disable_wakeup_irq(qcom->ss_phy_irq);
+>  }
+>  
+>  static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
+>  {
+> -	dwc3_qcom_enable_wakeup_irq(qcom->hs_phy_irq);
+> +	dwc3_qcom_enable_wakeup_irq(qcom->hs_phy_irq, 0);
+>  
+> -	dwc3_qcom_enable_wakeup_irq(qcom->dp_hs_phy_irq);
+> +	/*
+> +	 * Configure DP/DM line interrupts based on the USB2 device attached to
+> +	 * the root hub port. When HS/FS device is connected, configure the DP line
+> +	 * as falling edge to detect both disconnect and remote wakeup scenarios. When
+> +	 * LS device is connected, configure DM line as falling edge to detect both
+> +	 * disconnect and remote wakeup. When no device is connected, configure both
+> +	 * DP and DM lines as rising edge to detect HS/HS/LS device connect scenario.
+> +	 */
+>  
+> -	dwc3_qcom_enable_wakeup_irq(qcom->dm_hs_phy_irq);
+> +	if (qcom->usb2_speed == USB_SPEED_LOW) {
+> +		dwc3_qcom_enable_wakeup_irq(qcom->dm_hs_phy_irq,
+> +						IRQ_TYPE_EDGE_FALLING);
+> +	} else if ((qcom->usb2_speed == USB_SPEED_HIGH) ||
+> +			(qcom->usb2_speed == USB_SPEED_FULL)) {
+> +		dwc3_qcom_enable_wakeup_irq(qcom->dp_hs_phy_irq,
+> +						IRQ_TYPE_EDGE_FALLING);
+> +	} else {
+> +		dwc3_qcom_enable_wakeup_irq(qcom->dp_hs_phy_irq,
+> +						IRQ_TYPE_EDGE_RISING);
+> +		dwc3_qcom_enable_wakeup_irq(qcom->dm_hs_phy_irq,
+> +						IRQ_TYPE_EDGE_RISING);
+> +	}
+>  
+> -	dwc3_qcom_enable_wakeup_irq(qcom->ss_phy_irq);
+> +	dwc3_qcom_enable_wakeup_irq(qcom->ss_phy_irq, 0);
+>  }
+>  
+>  static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+> @@ -355,8 +405,10 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+>  	if (ret)
+>  		dev_warn(qcom->dev, "failed to disable interconnect: %d\n", ret);
+>  
+> -	if (device_may_wakeup(qcom->dev))
+> +	if (device_may_wakeup(qcom->dev)) {
+> +		qcom->usb2_speed = dwc3_qcom_update_usb2_speed(qcom);
+>  		dwc3_qcom_enable_interrupts(qcom);
+> +	}
+>  
+>  	qcom->is_suspended = true;
+>  
+The comments provided at [1] are not addressed. Pls take a look
 
-Tis looks ok, but do we have anything that prevents races between
-blkfront_connect, blkfront_closing and blkfront_remove?
+Thanks,
+Pavan
+[1]
+https://lore.kernel.org/linux-usb/20220526024558.GO15121@hu-pkondeti-hyd.qualcomm.com/

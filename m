@@ -2,135 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D54353B223
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71AF853B22D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbiFBD32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 23:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        id S233573AbiFBD3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 23:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbiFBD3X (ORCPT
+        with ESMTP id S233508AbiFBD3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 23:29:23 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574C8267CE2
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 20:29:17 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id u2so3656118pfc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 20:29:17 -0700 (PDT)
+        Wed, 1 Jun 2022 23:29:24 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE52B267CEE
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 20:29:22 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id a64so6161033ybg.11
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 20:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=d7/X5D/XlWDgxC+lr9ny4gEaWSqGcdWBVlXv9V2nJSc=;
-        b=4zgwd/soJ4OlZOpXRWMVKCorWv2P8U3su0NGdknMw1o/lf/a30yo2AcvaHVixK4JcF
-         HEf5qgd8iNm+Iu7TGuu2W1/UAlo7NIcftpk4VWQyeAjUF4m3RkS1x0+QylTvUiPn+dut
-         0gAvKdf3riJQgRXO4pz/G7rmweSBnWdvYJmsAYhq+wR364cs2wiiVzu7zzRMQYV3G109
-         HHJiCxvOCctMT0SRMlJaiGxpSd4U8IgIT8sP9fNkHkuXAPdeo3jrj/I2q0IP+EjNieEG
-         b22fM9Zpj5PBalBM5lVDOBwBkL7xz4P42CIx8Q1qgw1Xd2Kker2XfNkgN2SGUIn+IV3W
-         30rw==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=dNPJWuthskVWT0ufEpXee8XRkWLAHfMmaIAQ/DRtum9IaDT7pYID7fK7hZujWGqcuK
+         InQXq8wiFsetyJlTizS3ot2sBTnD4omUAzVAnO4wHqIR6p38d0pTl/EgdTBbEmoOuHhV
+         Jrv5M39u3+SP7b1GVtwmNCe0xcU+3/bEAQbRIydNVGZEWBhiKNUkEnDfFVy1Y0C7KjYG
+         X9BDxDjBWp9JmzJ3mYUiCyYRxg8UsdM4Wco9VKAY0nBImIAvcaslxRhTSGlmdVcC2nVb
+         HQufkdvlldBEi/CJtH9DFemhn+mfEUfhGJUjK12Y8iM/yWlGlgnCsowVylJnuQ21Xe6y
+         5n5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=d7/X5D/XlWDgxC+lr9ny4gEaWSqGcdWBVlXv9V2nJSc=;
-        b=3snCB2Ctmh+nJ3qcnlsemg9yz/XdwYZtS+1JgXogDPSF1h162b6UuIjQX62U0kY9I2
-         sHyE1q913zP7q7LIGld/H0aXg6w7Zucb3bAlZmNFXp1tya0QHXmhlXX/lQjCZNQ9hTDG
-         bVILamksqux+9Hpa+411t3rsxV7R4GyWiAfrJNc/DVLojJmDrs5mwUjisP4XyzNgviWb
-         x0jDPOqOiKfEYDjoATpYMRY1rbgldy42AEA1GnIY5j23YErFDS7p+RM/KVuL9yawT6Ha
-         2C4GPO4BQdGUAX1l+0EKorYeJY8jiYIYu8bzrOGQsyl3K9Bl3uMZkwiM+mWwDPxaTNPP
-         77DQ==
-X-Gm-Message-State: AOAM531u9FCewlwM7hkBpRQC/4Xq3vA9p/+xhWd/ZrytkRKa8Z7npE8M
-        x1qOmEmvhpNpKkxBDRfQIltKFg==
-X-Google-Smtp-Source: ABdhPJz5XXjx1kduDqvTabORmcqulZrn95ibw4rCM4QDXk4FGV+QJnfefUP2GHpZKCvFFGv71aOTSQ==
-X-Received: by 2002:a05:6a00:889:b0:510:91e6:6463 with SMTP id q9-20020a056a00088900b0051091e66463mr2840480pfj.58.1654140556716;
-        Wed, 01 Jun 2022 20:29:16 -0700 (PDT)
-Received: from [10.71.57.194] ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id v4-20020a1709028d8400b00163cdf1a200sm2239756plo.38.2022.06.01.20.29.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 20:29:16 -0700 (PDT)
-Message-ID: <6181d77a-66ed-76ff-35a4-b24134bc67fb@bytedance.com>
-Date:   Thu, 2 Jun 2022 11:29:09 +0800
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=7im7/qHtTQ4VuzWyDt9SD2blh14UdOXGBBqb2bvYiMxAH1Jes/YMzQwwzEtRsRVyyS
+         iHbsNjji5njX4N2AW8OFUSzyqVY/hWA4RvXOWGn/SCxPGphtSKkEuAgQiM0feKbxDq4t
+         ATz8JaXx023gMvozZsrVCrbpWyeS/LMxEmZEY6SRYM9K7Pj2Vzh9dLoomG/v+gpK6gjI
+         ioj1Z9+dMIXjLBVZoJrcRPi/yazP9FcflIDaekE2WGQyNGnop74FfOlPiW/k+OL1Yyx6
+         Z+JBqkH4Suf0Pb2JVBYriKffmStBZktrejH+Y5mp3SiYj6Se1LoberEk91lsiZbGrtSd
+         WPpA==
+X-Gm-Message-State: AOAM532kvQR6RxGwvb0dBQmrCV7/xZiYd2aC0P7bH+TBxDheAJDftH92
+        B7sgk2Y8MR9KwlDaTj9QrQWKnIzEXzcRD4/eOEw=
+X-Google-Smtp-Source: ABdhPJx4I/aVYDJM6ZFkqx+ARDUfR+FJjHRTOe+WvLYecywbPmAnR6aEzG4qFHSz6X9wb1O/s9MFbg+HFhVay7bLtOs=
+X-Received: by 2002:a5b:6c1:0:b0:633:b5c7:b9b7 with SMTP id
+ r1-20020a5b06c1000000b00633b5c7b9b7mr3254397ybq.67.1654140561574; Wed, 01 Jun
+ 2022 20:29:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: Re: Re: [PATCH v4 2/2] selftest/bpf/benchs: Add bpf_map benchmark
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>
-References: <20220601084149.13097-1-zhoufeng.zf@bytedance.com>
- <20220601084149.13097-3-zhoufeng.zf@bytedance.com>
- <CAADnVQ+qmvYK_Ttsjgo49Ga7paghicFg_O3=1sYZKbdps4877Q@mail.gmail.com>
- <041465f0-0fd3-fd39-0dac-8093a1c98c00@bytedance.com>
- <CAADnVQ+cCoH=DAoyLGtJ5HvdNVgFBgTW=wCHs1wvFQuwyhcWOw@mail.gmail.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <CAADnVQ+cCoH=DAoyLGtJ5HvdNVgFBgTW=wCHs1wvFQuwyhcWOw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7110:56a5:b0:17b:8967:118b with HTTP; Wed, 1 Jun 2022
+ 20:29:20 -0700 (PDT)
+Reply-To: dravasmith894@gmail.com
+From:   Dr Ava Smith <ava741650@gmail.com>
+Date:   Thu, 2 Jun 2022 04:29:20 +0100
+Message-ID: <CAMn9dLCtBkOu+9BcNwrup_OViCi77QA0rYW+WCYaVcp4monsbQ@mail.gmail.com>
+Subject: HI DEAR
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/6/1 下午7:37, Alexei Starovoitov 写道:
-> On Wed, Jun 1, 2022 at 1:17 PM Feng Zhou <zhoufeng.zf@bytedance.com> wrote:
->> 在 2022/6/1 下午5:53, Alexei Starovoitov 写道:
->>> On Wed, Jun 1, 2022 at 10:42 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
->>>> +struct {
->>>> +       __uint(type, BPF_MAP_TYPE_HASH);
->>>> +       __type(key, u32);
->>>> +       __type(value, u64);
->>>> +       __uint(max_entries, MAX_ENTRIES);
->>>> +} hash_map_bench SEC(".maps");
->>>> +
->>>> +u64 __attribute__((__aligned__(256))) percpu_time[256];
->>> aligned 256 ?
->>> What is the point?
->> I didn't think too much about it here, just referenced it from
->> tools/testing/selftests/bpf/progs/bloom_filter_bench.c
->>
->>>> +u64 nr_loops;
->>>> +
->>>> +static int loop_update_callback(__u32 index, u32 *key)
->>>> +{
->>>> +       u64 init_val = 1;
->>>> +
->>>> +       bpf_map_update_elem(&hash_map_bench, key, &init_val, BPF_ANY);
->>>> +       return 0;
->>>> +}
->>>> +
->>>> +SEC("fentry/" SYS_PREFIX "sys_getpgid")
->>>> +int benchmark(void *ctx)
->>>> +{
->>>> +       u32 key = bpf_get_prandom_u32() % MAX_ENTRIES + MAX_ENTRIES;
->>> What is the point of random ?
->>> just key = MAX_ENTRIES would be the same, no?
->>> or key = -1 ?
->> If all threads on different cpu trigger sys_getpgid and lookup the same
->> key, it will cause
->> "ret = htab_lock_bucket(htab, b, hash, &flags);"
->> the lock competition here is fierce, and unnecessary overhead is
->> introduced,
->> and I don't want it to interfere with the test.
-> I see.
-> but using random leaves it to chance.
-> Use cpu+max_entries then?
-
-Ok, will do. Thanks.
-
-
+-- 
+Hello Dear,
+how are you today?hope you are fine
+My name is Dr Ava Smith ,Am an English and French nationalities.
+I will give you pictures and more details about me as soon as i hear from you
+Thanks
+Ava

@@ -2,103 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1349F53B77D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2011453B782
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbiFBKst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S233998AbiFBKuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbiFBKss (ORCPT
+        with ESMTP id S232178AbiFBKuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:48:48 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348EE25C65
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:48:47 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id gd1so4594667pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 03:48:47 -0700 (PDT)
+        Thu, 2 Jun 2022 06:50:14 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B301414020;
+        Thu,  2 Jun 2022 03:50:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mFpX60Bpgj1CZ/r9BaiZqjht5lWPMONlADO9gEwg/QM=;
-        b=SwX3dVy3jXK2i5Z7uMI0MgELLNVc2oWbF7lRdRfsT9EqfOJ3hICdbNbgMYcXkoVooC
-         MlgCxTXNf14Vl4M1M0BwPslA6dKzAvnrC5y8gpZ8KnUTdXkrj4uIpoCzfUwXG4KImXXC
-         NzUsT2IT1TEgI1ZrOK8up2DZ0I7c9OpMbD2tFlQgWa/9mr9adaLsjb4YApgZvWlBZWa1
-         A6XaWRRCvcyCJT3zVWP4dYdYmYDcvN6KarzhSqkqS9tDFBh/KH4E3wEXilxg55OSCP8l
-         cHTB6ytf08StwYuny4TYXUFaKL5qINmBT6/7EIo1wJYpEKwD8VEP0w7/zSs/Q5iCESf/
-         uTTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mFpX60Bpgj1CZ/r9BaiZqjht5lWPMONlADO9gEwg/QM=;
-        b=D+wPIXDc87j564EjWPOE4rgQO4inlADtLBUlYwXvgLd3zvAf+d03af7Sycn8sGAU6d
-         ukr0FzxUpp1VRDO457tc5D1sFQjhBGUiFK07JcY/v0Pj581aPqjKGDRbjw2EdEitxZ0O
-         ajkq8LkEWpB83ELtHltQkvz4/I2edyJUrlTSJLfpuH/btfOdHHTG4Jx5lw8IYBvditjG
-         eByjAKJfDz2uRoRKBb10Etp3ziKbDDWgFlYmZMoUfTaRtNTLGSltrSEXVd9T2wXBaKdr
-         GFSWps4Rh1S/ATF67pedpQmeIaU9fX23352lYRBSrE9lM5aBEClqFxH0Qt1JHhX2rOGZ
-         yetQ==
-X-Gm-Message-State: AOAM530QZdMCx7YIztVi9GQr1QhKHIi3B8/HuQOsNd9c5wLtNeNzY/JS
-        v4smrzatOUGLE7DJSMyGyk0s9Q==
-X-Google-Smtp-Source: ABdhPJwNnEekZvUy1mThm1y0ZTmyfYGaZQG0BXjujVjOVisYjgr6LYgikB1fIrA5FbqrkBSwmK65Xg==
-X-Received: by 2002:a17:90a:ae14:b0:1e0:51fa:5182 with SMTP id t20-20020a17090aae1400b001e051fa5182mr39393084pjq.60.1654166926707;
-        Thu, 02 Jun 2022 03:48:46 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:2468:2a68:7bbe:680c])
-        by smtp.gmail.com with ESMTPSA id b9-20020a1709027e0900b00161d8153d56sm3111583plm.148.2022.06.02.03.48.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 03:48:46 -0700 (PDT)
-Date:   Thu, 2 Jun 2022 18:48:41 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        hannes@cmpxchg.org, mhocko@kernel.org, shakeelb@google.com,
-        akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, longman@redhat.com
-Subject: Re: [PATCH v5 03/11] mm: memcontrol: prepare objcg API for non-kmem
- usage
-Message-ID: <YpiVibVoQizVDzOO@FVFYT0MHHV2J.googleapis.com>
-References: <20220530074919.46352-1-songmuchun@bytedance.com>
- <20220530074919.46352-4-songmuchun@bytedance.com>
- <20220601173434.GB16134@blackbody.suse.cz>
- <YpexCpVBW76GCN2X@carbon>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YpexCpVBW76GCN2X@carbon>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654167014; x=1685703014;
+  h=from:to:cc:subject:date:message-id;
+  bh=ijYj7RlDEKtmAr/NFLRL0Xa0SCVOGON0rxxx2IQa9a0=;
+  b=AAbHiPn/KVC4Z3oNwjmAj5JcSoIZlQ9JnM+SIp+Dwer4kq4PmktI8Foi
+   1uMi4waN5IbhDGyQApyZExHj8V0bc8Vh456u+Bx0SKJ9qcrO3049L81sI
+   4jD8A906wsJ76WUeY2xUBjNO9RPKbBrkcIXmRxsBIIQv7nCO81lpULnUI
+   k=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 02 Jun 2022 03:50:13 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 02 Jun 2022 03:50:12 -0700
+X-QCInternal: smtphost
+Received: from mkrishn-linux.qualcomm.com ([10.204.66.35])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 02 Jun 2022 16:20:00 +0530
+Received: by mkrishn-linux.qualcomm.com (Postfix, from userid 438394)
+        id B94451FA84; Thu,  2 Jun 2022 16:19:59 +0530 (IST)
+From:   Krishna <quic_mkrishn@quicinc.com>
+To:     devicetree@vger.kernel.org
+Cc:     Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        quic_kalyant@quicinc.com, robh+dt@kernel.org
+Subject: [PATCH v1] dt-bindings: msm: update maintainers list with proper id
+Date:   Thu,  2 Jun 2022 16:19:58 +0530
+Message-Id: <1654166998-14907-1-git-send-email-quic_mkrishn@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 11:33:46AM -0700, Roman Gushchin wrote:
-> On Wed, Jun 01, 2022 at 07:34:34PM +0200, Michal Koutny wrote:
-> > Hello.
-> > 
-> > On Mon, May 30, 2022 at 03:49:11PM +0800, Muchun Song <songmuchun@bytedance.com> wrote:
-> > > So we also allocate an object cgroup for the root_mem_cgroup.
-> > 
-> > This change made me wary that this patch also kmem charging in the
-> > root_mem_cgroup. Fortunately, get_obj_cgroup_from_current won't return
-> > this objcg so all is fine.
-> 
-> Yes, I had the same experience here :)
->
+From: Krishna Manikandan <quic_mkrishn@quicinc.com>
 
-Sorry for the confusing.
+Use quic id instead of codeaurora id in maintainers list
+for display devicetree bindings.
+
+Signed-off-by: Krishna Manikandan <quic_mkrishn@quicinc.com>
+---
+ Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml          | 2 +-
+ Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml          | 2 +-
+ Documentation/devicetree/bindings/display/msm/dpu-sdm845.yaml          | 2 +-
+ Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml | 2 +-
+ Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml        | 2 +-
+ Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml        | 2 +-
+ Documentation/devicetree/bindings/display/msm/dsi-phy-20nm.yaml        | 2 +-
+ Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml        | 2 +-
+ Documentation/devicetree/bindings/display/msm/dsi-phy-common.yaml      | 2 +-
+ 9 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml b/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml
+index b41991e..d3c3e4b 100644
+--- a/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm Display DPU dt properties for SC7180 target
  
-> Overall I feel like the handling of the root memcg and objcg are begging
-> for a cleanup, but it's really far from being trivial.
-> 
-> Maybe starting with documenting how it works now is a good idea...
-> 
+ maintainers:
+-  - Krishna Manikandan <mkrishn@codeaurora.org>
++  - Krishna Manikandan <quic_mkrishn@quicinc.com>
+ 
+ description: |
+   Device tree bindings for MSM Mobile Display Subsystem(MDSS) that encapsulates
+diff --git a/Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml b/Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml
+index 6e417d0..f427eec 100644
+--- a/Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm Display DPU dt properties for SC7280
+ 
+ maintainers:
+-  - Krishna Manikandan <mkrishn@codeaurora.org>
++  - Krishna Manikandan <quic_mkrishn@quicinc.com>
+ 
+ description: |
+   Device tree bindings for MSM Mobile Display Subsystem (MDSS) that encapsulates
+diff --git a/Documentation/devicetree/bindings/display/msm/dpu-sdm845.yaml b/Documentation/devicetree/bindings/display/msm/dpu-sdm845.yaml
+index 1a42491..2bb8896 100644
+--- a/Documentation/devicetree/bindings/display/msm/dpu-sdm845.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dpu-sdm845.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm Display DPU dt properties for SDM845 target
+ 
+ maintainers:
+-  - Krishna Manikandan <mkrishn@codeaurora.org>
++  - Krishna Manikandan <quic_mkrishn@quicinc.com>
+ 
+ description: |
+   Device tree bindings for MSM Mobile Display Subsystem(MDSS) that encapsulates
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+index 7095ec3c8..880bfe9 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm Display DSI controller
+ 
+ maintainers:
+-  - Krishna Manikandan <mkrishn@codeaurora.org>
++  - Krishna Manikandan <quic_mkrishn@quicinc.com>
+ 
+ allOf:
+   - $ref: "../dsi-controller.yaml#"
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
+index 2d5a766..716f921 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm Display DSI 10nm PHY
+ 
+ maintainers:
+-  - Krishna Manikandan <mkrishn@codeaurora.org>
++  - Krishna Manikandan <quic_mkrishn@quicinc.com>
+ 
+ allOf:
+   - $ref: dsi-phy-common.yaml#
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
+index 81dbee4..1342d74 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm Display DSI 14nm PHY
+ 
+ maintainers:
+-  - Krishna Manikandan <mkrishn@codeaurora.org>
++  - Krishna Manikandan <quic_mkrishn@quicinc.com>
+ 
+ allOf:
+   - $ref: dsi-phy-common.yaml#
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-20nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-20nm.yaml
+index b8de785..9c1f914 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-phy-20nm.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-20nm.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm Display DSI 20nm PHY
+ 
+ maintainers:
+-  - Krishna Manikandan <mkrishn@codeaurora.org>
++  - Krishna Manikandan <quic_mkrishn@quicinc.com>
+ 
+ allOf:
+   - $ref: dsi-phy-common.yaml#
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml
+index 69eecaa..3d8540a 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm Display DSI 28nm PHY
+ 
+ maintainers:
+-  - Krishna Manikandan <mkrishn@codeaurora.org>
++  - Krishna Manikandan <quic_mkrishn@quicinc.com>
+ 
+ allOf:
+   - $ref: dsi-phy-common.yaml#
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-common.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-common.yaml
+index 502bdda..76d40f7 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-phy-common.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-common.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Description of Qualcomm Display DSI PHY common dt properties
+ 
+ maintainers:
+-  - Krishna Manikandan <mkrishn@codeaurora.org>
++  - Krishna Manikandan <quic_mkrishn@quicinc.com>
+ 
+ description: |
+   This defines the DSI PHY dt properties which are common for all
+-- 
+2.7.4
 
-You mean add more comments into the commit log to explain the
-usage of root memcg and root objcg?
-
-Thanks.

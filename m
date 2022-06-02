@@ -2,131 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0BDB53B3DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA1853B42F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiFBGt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 02:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
+        id S231643AbiFBHNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 03:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiFBGty (ORCPT
+        with ESMTP id S231618AbiFBHNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 02:49:54 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C85229B41;
-        Wed,  1 Jun 2022 23:49:52 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LDGpV4mBKzKmHh;
-        Thu,  2 Jun 2022 14:49:38 +0800 (CST)
-Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 2 Jun 2022 14:49:50 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 2 Jun 2022 14:49:50 +0800
-From:   Ke Liu <liuke94@huawei.com>
-To:     <bhelgaas@google.com>
-CC:     <nirmal.patel@linux.intel.com>, <jonathan.derrick@linux.dev>,
-        <lpieralisi@kernel.org>, <robh@kernel.org>, <kw@linux.com>,
-        <kurt.schwemmer@microsemi.com>, <logang@deltatee.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Ke Liu <liuke94@huawei.com>
-Subject: [PATCH v2] drivers: pci: Directly use ida_alloc()/free()
-Date:   Thu, 2 Jun 2022 07:11:15 +0000
-Message-ID: <20220602071115.3833935-1-liuke94@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Jun 2022 03:13:31 -0400
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047E8B6E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 00:13:28 -0700 (PDT)
+Received: by mail-qk1-f181.google.com with SMTP id 14so3077307qkl.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 00:13:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DTx4+fJmVhIyXMyNirvzWdPuJKhlL8UJzLpiO+xxcus=;
+        b=K7CASautd//QO03597L8pkkVdSX98T6VNqlCZYYpGvlo1kkt7dMksP5/7RiVEMGbou
+         9Hz2M7kU/dndgDfxPcczVt4esMSC4Cc9CSxvzsAEDHqXtGiCPNPOk7XVgcz+hqHtTR1N
+         5xTW7/k2IPksmUXby14WzYOeFw0XoJkdWEK+uoK8L1a8m4+D78c4TkFxxW0LKyh8cqFV
+         bmFbuzlPMQ0RPAQ/3bsJUZ/vh8Ha36DVz0Y3wkSTlPr8LMgvvkFrFx7eUaiG582Vc417
+         tsQJmcKs9mPJZNzIRbtBFpzTLdA9+4xq43hyvfiMb4/PrHRI2AsTWdZed74WvjWtbbhc
+         h0Lw==
+X-Gm-Message-State: AOAM530cZsctXLGh8GdQ4DB004wv9hQkV6Q/SaZaPoWh3O1L90UiMaQG
+        JoUxnLpYd9BAi4w4yBxw1vArsi4Hd5MCdg==
+X-Google-Smtp-Source: ABdhPJxNLzeY4oAAkZMx0aPnA/LvArgLm92qk9g6bv1QxgQ0neAQe19KaemufsxwTfrEX3JrbjzvNw==
+X-Received: by 2002:a05:620a:1a8b:b0:6a6:349e:ee9 with SMTP id bl11-20020a05620a1a8b00b006a6349e0ee9mr2226908qkb.143.1654154006896;
+        Thu, 02 Jun 2022 00:13:26 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id w4-20020ac86b04000000b00304b506eec2sm2320482qts.93.2022.06.02.00.13.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 00:13:26 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id r82so6779462ybc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 00:13:26 -0700 (PDT)
+X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
+ bu5-20020a056902090500b0064a2089f487mr3810398ybb.202.1654154006045; Thu, 02
+ Jun 2022 00:13:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500018.china.huawei.com (7.185.36.111)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220531174514.1586248-1-laurent@vivier.eu>
+In-Reply-To: <20220531174514.1586248-1-laurent@vivier.eu>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 2 Jun 2022 09:13:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUbUZU3YA6nDC_LDAfUYQVmHTuCzrCfxDqwF=ZZyR5fqw@mail.gmail.com>
+Message-ID: <CAMuHMdUbUZU3YA6nDC_LDAfUYQVmHTuCzrCfxDqwF=ZZyR5fqw@mail.gmail.com>
+Subject: Re: [PATCH] m68k: virt: Kconfig minor fixes
+To:     Laurent Vivier <laurent@vivier.eu>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ida_alloc()/ida_free() instead of deprecated
-ida_simple_get()/ida_simple_remove().
+On Tue, May 31, 2022 at 7:45 PM Laurent Vivier <laurent@vivier.eu> wrote:
+> Select VIRTIO_MENU as it is needed by VIRTIO_MMIO.
+>
+> Add an ending period at the end the virt machine help message.
+>
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 
-Signed-off-by: Ke Liu <liuke94@huawei.com>
----
-v2	fix sign-off name suggest by Bjorn Helgaas
----
- drivers/pci/controller/vmd.c   | 6 +++---
- drivers/pci/switch/switchtec.c | 7 +++----
- 2 files changed, 6 insertions(+), 7 deletions(-)
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+i.e. will queue in the m68k for-v5.20 branch.
 
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index 94a14a3d7e55..49c72c2d8fe7 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -894,7 +894,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 		return -ENOMEM;
- 
- 	vmd->dev = dev;
--	vmd->instance = ida_simple_get(&vmd_instance_ida, 0, 0, GFP_KERNEL);
-+	vmd->instance = ida_alloc(&vmd_instance_ida, GFP_KERNEL);
- 	if (vmd->instance < 0)
- 		return vmd->instance;
- 
-@@ -935,7 +935,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	return 0;
- 
-  out_release_instance:
--	ida_simple_remove(&vmd_instance_ida, vmd->instance);
-+	ida_free(&vmd_instance_ida, vmd->instance);
- 	kfree(vmd->name);
- 	return err;
- }
-@@ -958,7 +958,7 @@ static void vmd_remove(struct pci_dev *dev)
- 	vmd_cleanup_srcu(vmd);
- 	vmd_detach_resources(vmd);
- 	vmd_remove_irq_domain(vmd);
--	ida_simple_remove(&vmd_instance_ida, vmd->instance);
-+	ida_free(&vmd_instance_ida, vmd->instance);
- 	kfree(vmd->name);
- }
- 
-diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
-index c36c1238c604..75be4fe22509 100644
---- a/drivers/pci/switch/switchtec.c
-+++ b/drivers/pci/switch/switchtec.c
-@@ -1376,8 +1376,7 @@ static struct switchtec_dev *stdev_create(struct pci_dev *pdev)
- 	dev->groups = switchtec_device_groups;
- 	dev->release = stdev_release;
- 
--	minor = ida_simple_get(&switchtec_minor_ida, 0, 0,
--			       GFP_KERNEL);
-+	minor = ida_alloc(&switchtec_minor_ida, GFP_KERNEL);
- 	if (minor < 0) {
- 		rc = minor;
- 		goto err_put;
-@@ -1692,7 +1691,7 @@ static int switchtec_pci_probe(struct pci_dev *pdev,
- err_devadd:
- 	stdev_kill(stdev);
- err_put:
--	ida_simple_remove(&switchtec_minor_ida, MINOR(stdev->dev.devt));
-+	ida_free(&switchtec_minor_ida, MINOR(stdev->dev.devt));
- 	put_device(&stdev->dev);
- 	return rc;
- }
-@@ -1704,7 +1703,7 @@ static void switchtec_pci_remove(struct pci_dev *pdev)
- 	pci_set_drvdata(pdev, NULL);
- 
- 	cdev_device_del(&stdev->cdev, &stdev->dev);
--	ida_simple_remove(&switchtec_minor_ida, MINOR(stdev->dev.devt));
-+	ida_free(&switchtec_minor_ida, MINOR(stdev->dev.devt));
- 	dev_info(&stdev->dev, "unregistered.\n");
- 	stdev_kill(stdev);
- 	put_device(&stdev->dev);
--- 
-2.25.1
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

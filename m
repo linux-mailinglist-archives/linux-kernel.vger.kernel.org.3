@@ -2,185 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9A753B67A
+	by mail.lfdr.de (Postfix) with ESMTP id D545553B67C
 	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbiFBKAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
+        id S233346AbiFBKAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233310AbiFBJ76 (ORCPT
+        with ESMTP id S233322AbiFBKAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 05:59:58 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68E6DF18;
-        Thu,  2 Jun 2022 02:59:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654163997; x=1685699997;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oEEj+A9pnUduVQQjYXMOUSV+bJSw2QHxm5LpK0OWpF4=;
-  b=U0+MVRABFrmkQqRavbv2D5myiZNr0mugBWWsXDt3hAx201obnhGJtZtc
-   e7H6I1zfwODWJg/ysxcfecQNRahm25HrjmmIvFzvCZj/Q3TG9z7Qm/0YB
-   tyuicJDuhYz/9H+f09d5foKKa6B3evbHhESibM+9yyt7aNYQhE+aayMka
-   c=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 02 Jun 2022 02:59:56 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 02:59:55 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 2 Jun 2022 02:59:55 -0700
-Received: from [10.216.21.110] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 2 Jun 2022
- 02:59:50 -0700
-Message-ID: <47d89a85-5f10-ebf9-1d62-fb886319b2c4@quicinc.com>
-Date:   Thu, 2 Jun 2022 15:29:46 +0530
+        Thu, 2 Jun 2022 06:00:23 -0400
+Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [IPv6:2001:1600:3:17::8fab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B407DF18
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:00:20 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4LDM2S0hckzMqVZ1;
+        Thu,  2 Jun 2022 12:00:16 +0200 (CEST)
+Received: from [10.0.0.141] (unknown [31.10.206.125])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4LDM2R1hVrzljk0H;
+        Thu,  2 Jun 2022 12:00:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
+        s=20220412; t=1654164016;
+        bh=6clftNNkW5b/aLVfOs7w8oDA4IjZgT0jJnfYalkyXtc=;
+        h=Subject:From:Reply-To:To:Cc:Date:In-Reply-To:References:From;
+        b=MpfhxnUiBgc+nT3XyFNggIH4DEYXpuPFvnua6h7NJWilzYTT4MomXlytP5wDq6uDj
+         lP3sLe/hjP4cDifzRVZiBGxdxaZ7YA99O+wL3SUKgDsOPJqSKmqd1p6tvJs6nj47Az
+         BGEAbuMmyRoRhgzAiPemv/lhoB+iIXufekVl5a7M=
+Message-ID: <75b5f888b2e23f52aabce54ff38ddc70d1ad6a34.camel@pschenker.ch>
+Subject: Re: [PATCH] Revert "mt76: mt7921: enable aspm by default"
+From:   Philippe Schenker <dev@pschenker.ch>
+Reply-To: dev@pschenker.ch
+To:     Deren Wu <deren.wu@mediatek.com>, Kalle Valo <kvalo@kernel.org>
+Cc:     linux-wireless@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
+        linux@leemhuis.info, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        YN Chen <YN.Chen@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        regressions@lists.linux.dev
+Date:   Thu, 02 Jun 2022 12:00:14 +0200
+In-Reply-To: <da79fa2a94c435a308ea763efc557fc352d0245c.camel@mediatek.com>
+References: <20220412090415.17541-1-dev@pschenker.ch>
+         <87y20aod5d.fsf@kernel.org>
+         <668f1310cc78b17c24ce7be10f5f907d5578e280.camel@mediatek.com>
+         <e93aef5c9f8a97efe23cfb5892f78f919ce328e7.camel@pschenker.ch>
+         <87mtewoj4e.fsf@kernel.org>
+         <da79fa2a94c435a308ea763efc557fc352d0245c.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v3] PCI/ASPM: Update LTR threshold based upon reported max
- latencies
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-CC:     <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_vbadigan@quicinc.com>, <quic_ramkri@quicinc.com>,
-        <swboyd@chromium.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rajat Jain <rajatja@google.com>, <vidyas@nvidia.com>,
-        <kenny@panix.com>
-References: <1646679549-12494-1-git-send-email-quic_pmaliset@quicinc.com>
- <1654086232-17055-1-git-send-email-quic_krichai@quicinc.com>
- <91b75542-8e4c-5b91-bbfd-38ffc456c12e@quicinc.com>
- <20220602082938.GA4936@thinkpad>
-From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-In-Reply-To: <20220602082938.GA4936@thinkpad>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2022-06-02 at 00:55 +0800, Deren Wu wrote:
+> On Wed, 2022-06-01 at 11:58 +0300, Kalle Valo wrote:
+> > Philippe Schenker <dev@pschenker.ch> writes:
+> >=20
+> > > On Tue, 2022-04-12 at 19:06 +0800, Deren Wu wrote:
+> > > > On Tue, 2022-04-12 at 12:37 +0300, Kalle Valo wrote:
+> > > > > Philippe Schenker <dev@pschenker.ch> writes:
+> > > > >=20
+> > > > > > This reverts commit
+> > > > > > bf3747ae2e25dda6a9e6c464a717c66118c588c8.
+> > > > > >=20
+> > > > > > This commit introduces a regression on some systems where
+> > > > > > the
+> > > > > > kernel is
+> > > > > > crashing in different locations after a reboot was issued.
+> > > > > >=20
+> > > > > > This issue was bisected on a Thinkpad P14s Gen2 (AMD) with
+> > > > > > latest
+> > > > > > firmware.
+> > > > > >=20
+> > > > > > Link:=20
+> > > > > >=20
+> https://urldefense.com/v3/__https://lore.kernel.org/linux-wireless/5077a9=
+53487275837e81bdf1808ded00b9676f9f.camel@pschenker.ch/__;!!CTRNKA9wMg0ARbw!=
+09tjyaQlMci3fVI3yiNiDJKUW_qwNA_CbVhoAraeIX96B99Q14J4iDycWA9cq36Y$
+> > > > > > =C2=A0
+> > > > > > Signed-off-by: Philippe Schenker <dev@pschenker.ch>
+> > > > >=20
+> > > > > Can I take this to wireless tree? Felix, ack?
+> > > > >=20
+> > > > > I'll also add:
+> > > > >=20
+> > > > > Fixes: bf3747ae2e25 ("mt76: mt7921: enable aspm by default")
+> > > > >=20
+> > > >=20
+> > > > Hi Kalle,
+> > > >=20
+> > > > We have a patch for a similar problem. Can you wait for the
+> > > > verification by Philippe?
+> > > > Commit 602cc0c9618a81 ("mt76: mt7921e: fix possible probe
+> > > > failure
+> > > > after
+> > > > reboot")
+> > > > Link:=20
+> > > >=20
+> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/g=
+it/torvalds/linux.git/commit/drivers/net/wireless/mediatek/mt76?id=3D602cc0=
+c9618a819ab00ea3c9400742a0ca318380__;!!CTRNKA9wMg0ARbw!zCYyDcufJ-OLqQV6leCe=
+gA5SkNOOVjAIo-jzTHTk6HUWT9Gjt-bvSz8lr81Zv95u$
+> > > > =C2=A0
+> > > >=20
+> > > > I can reproduce the problem in my v5.16-rc5 desktop. And the
+> > > > issue can
+> > > > be fixed when the patch applied.
+> > > >=20
+> > > >=20
+> > > > Hi Philippe,
+> > > >=20
+> > > > Can you please help to check the patch in your platform?
+> > >=20
+> > > Hi Kalle and Deren,
+> > >=20
+> > > I just noticed on my system and mainline v5.18 reboots do now work
+> > > however Bluetooth is no longer accessible after a reboot.
+> > >=20
+> > > Reverting commit bf3747ae2e25dda6a9e6c464a717c66118c588c8 on top
+> > > of
+> > > v5.18 solves this problem for me.
+> > >=20
+> > > @Deren are you aware of this bug?
+> > > @Kalle Is there a bugtracker somewhere I can submit this?
+> >=20
+> > For regressions the best is to submit it to the regressions list,
+> > CCed
+> > it now.
+> >=20
+> Hi Philippe,
+>=20
+> Tried your test with v5.18.0 on my desktop and both wifi/bt are still
+> avaible after reboot. The only problem is I need to insert btusb
+> module
+> by command "modprobe btusb" to make BT workable.
+>=20
+> I will check the issue on different platforms. If there are any
+> finding, I will let you know.
 
-On 6/2/2022 1:59 PM, Manivannan Sadhasivam wrote:
-> On Wed, Jun 01, 2022 at 05:57:53PM +0530, Krishna Chaitanya Chundru wrote:
->> [+cc kenny, vidya]
->>
->> On 6/1/2022 5:53 PM, Krishna chaitanya chundru wrote:
->>> In ASPM driver, LTR threshold scale and value is updating based on
-> s/is/are
->
-> s/updating/updated
->
->>> tcommon_mode and t_poweron values. In kioxia NVMe L1.2 is failing due to
->>> LTR threshold scale and value is greater values than max snoop/non-snoop
-> s/is/are
->
->>> value.
->>>
->>> Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
->>> reported snoop/no-snoop values is greather than or equal to
->>> LTR_L1.2_THRESHOLD value.
->>>
->>> Suggested-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
->>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> If you are inheriting the patch from Prasad, then you should still give the
-> authorship to him (unless the patch has changed significantly). You can add
-> your S-o-b tag to convey that you are carrying the patch from him.
-Thanks mani for pointing this, I will modify this in next patch.
->>> ---
->>>
->>> I am takking this patch forward as prasad is no more working with our org.
->>>
->>> Changes since v2:
->>> 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
->>> Changes since v1:
->>> 	- Added missing variable declaration in v1 patch
->>> ---
->>>    drivers/pci/pcie/aspm.c | 22 +++++++++++++++++++++-
->>>    1 file changed, 21 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
->>> index a96b742..4a15e50 100644
->>> --- a/drivers/pci/pcie/aspm.c
->>> +++ b/drivers/pci/pcie/aspm.c
->>> @@ -465,10 +465,19 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->>>    	u32 ctl1 = 0, ctl2 = 0;
->>>    	u32 pctl1, pctl2, cctl1, cctl2;
->>>    	u32 pl1_2_enables, cl1_2_enables;
->>> +	int ltr;
-> This could be u16 too.
-Will change in the next patch
->>> +	u16 max_snoop_lat = 0, max_nosnoop_lat = 0;
-> No need to initialize these variables.
-I will update these in next patch.
->>>    	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
->>>    		return;
->>> +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
->>> +	if (!ltr)
->>> +		return;
-> Is this capability implemented always?
+Thanks for your tests, I did test again on my platform. This time with a
+hand-built v5.18 straight from torvalds/linux. And I can confirm my
+findings I even loaded btusb (removed and reloaded) nothing helped. I
+always get the message
 
-Based up on spec 4.1, sec 5.5 Ports that support the L1.2 substate for 
-ASPM L1 must support this.
+No default controller available
 
-And there is already a check in this function  if there is no L1.2 
-support the function is returning.
+In this case I guess it could be rather a BIOS issue. In this testing
+round also some USB ports did not work.
 
->>> +
->>> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
->>> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
->>> +
->>>    	/* Choose the greater of the two Port Common_Mode_Restore_Times */
->>>    	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
->>>    	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
->>> @@ -501,7 +510,18 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->>>    	 */
->>>    	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
->>>    	encode_l12_threshold(l1_2_threshold, &scale, &value);
->>> -	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
->>> +
->>> +	/*
->>> +	 * If the max snoop and no snoop latencies are '0', then avoid updating scale
->>> +	 * and value.
->>> +	 *
-> This looks fine but...
->
->>> +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
->>> +	 * snoop/no-snoop values is greather than or equal to LTR_L1.2_THRESHOLD value.
-> s/is/are
->
-> What about this? What if the snoop/nosnoop latencies are not equal to zero and
-> lower than LTR_L1.2_THRESHOLD?
->
-> Thanks,
-> Mani
+If it helps any my system is a Lenovo P14s Gen2. I believe then the
+driver is good.
 
-Will address this in next patch.
+Regards,
+Philippe
 
-Thanks,
+>=20
+> Regards,
+> Deren
+>=20
 
-Krishna Chaitanya.
-
->>> +	 */
->>> +	if ((max_snoop_lat == 0) && (max_nosnoop_lat == 0))
->>> +		ctl1 |= t_common_mode << 8;
->>> +	else
->>> +		ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
->>>    	/* Some broken devices only support dword access to L1 SS */
->>>    	pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL1, &pctl1);

@@ -2,95 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD4953B7CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6C753B7C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234201AbiFBL10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 07:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234195AbiFBL1W (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234182AbiFBL1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 2 Jun 2022 07:27:22 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721652AB236;
-        Thu,  2 Jun 2022 04:27:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654169238; x=1685705238;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=H9dBjTw0cbAQOjaubAyGRHRBW53k1gZfcUzCESN/OuQ=;
-  b=Prpi0Mu47Si89azPaV0jIhi/rV1VJY72VYQCALfjmbtNJnjMlmcUAVA+
-   ZnBLMDP3ptrQ0p8jB2ucNxxBwQU7Q8u5c8adGY/H/gyzZIjzJQl/9cmVr
-   CiHXj3tH1A+KkDrY7Ab9lakKTEXs3jn4Q1z9ewgvs8IIQMgyJoS/Efqcj
-   I=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 02 Jun 2022 04:27:17 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 04:27:16 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 2 Jun 2022 04:27:16 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 2 Jun 2022 04:27:10 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        <devicetree@vger.kernel.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH 2/2] ASoC: qcom: lpass-sc7280: Update external mclk0 name
-Date:   Thu, 2 Jun 2022 16:56:46 +0530
-Message-ID: <1654169206-12255-3-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1654169206-12255-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1654169206-12255-1-git-send-email-quic_srivasam@quicinc.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234173AbiFBL1P (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Jun 2022 07:27:15 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CB32A80FD
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 04:27:14 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id y12-20020a5e920c000000b006657a63c653so2534061iop.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 04:27:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=tBPqEXkYJWesIAOs0ogsXVDrcaMGjMtECgfa+1Fisr4=;
+        b=t6f0E3ruYlIWkafk8Yl5DQsN3sO9hs/Y+OanPW69A3xHh17afuyxvidFgz5/SBwk0p
+         e0WXTP/jjnmd6cPdL5YTO3epKj3wHaMPfAHX9J1rQepr8Up2rI8i7/gynW6uGrsUpMu/
+         oDQf/yA5i+ctxX1IauutclVZJaLOMF+IT2xurbMbzHKcgR1WpH7+IJljz3c3cur7jgD6
+         FtwN4qUF5yHzfmaSUXTa7CQi6AZ404YVWYfHIhchUbk5XSyL9Ir14eImvFo6OwM6SO7s
+         5lbjAHGt/HbeNDtlRa0RLQmTOu06I1Puwhbl+nZxYmVSG2Hteq6wNk2PScG/xBXa0R3d
+         eYeA==
+X-Gm-Message-State: AOAM5301MKqfGiJCbMSUIEw+AcNmTY9M+fqBmtkZlFdIGRLqurOa6Ask
+        aE2IdF+hEKULyb3DXKVcLTkJ8W+ALZj9DvpKRuZrzj7ui7Q9
+X-Google-Smtp-Source: ABdhPJw1dvUVLCTqxeceapGHayof/e1ERQj6iNoh8gbQd/yfQFHM+WOLHpC7/KP/qF7NPpYCfDLZkI5kgXAgvPkmSnCCDbXHy8/u
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6638:14ce:b0:330:f182:c463 with SMTP id
+ l14-20020a05663814ce00b00330f182c463mr2754415jak.114.1654169233943; Thu, 02
+ Jun 2022 04:27:13 -0700 (PDT)
+Date:   Thu, 02 Jun 2022 04:27:13 -0700
+In-Reply-To: <20220602110759.5027-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000096728005e0754936@google.com>
+Subject: Re: [syzbot] INFO: task hung in hci_power_on
+From:   syzbot <syzbot+8d7b9ced2a99394b0a50@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update "audio_cc_ext_mclk0" name to "core_cc_ext_mclk0",
-as MI2S mclk is being used is from lpass core cc.
+Hello,
 
-Fixes: b62c4e5fba2f ("ASoC: qcom: lpass-sc7280: Add platform driver for lpass audio")
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
----
- sound/soc/qcom/lpass-sc7280.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-diff --git a/sound/soc/qcom/lpass-sc7280.c b/sound/soc/qcom/lpass-sc7280.c
-index 70c4df8..e65bf7e 100644
---- a/sound/soc/qcom/lpass-sc7280.c
-+++ b/sound/soc/qcom/lpass-sc7280.c
-@@ -403,7 +403,7 @@ static struct lpass_variant sc7280_data = {
- 	.dai_driver			= sc7280_lpass_cpu_dai_driver,
- 	.num_dai			= ARRAY_SIZE(sc7280_lpass_cpu_dai_driver),
- 	.dai_osr_clk_names		= (const char *[]) {
--							"audio_cc_ext_mclk0",
-+							"core_cc_ext_mclk0",
- 							"null"
- 							},
- 	.dai_bit_clk_names		= (const char *[]) {
--- 
-2.7.4
+Reported-and-tested-by: syzbot+8d7b9ced2a99394b0a50@syzkaller.appspotmail.com
 
+Tested on:
+
+commit:         9d004b2f Merge tag 'cxl-for-5.19' of git://git.kernel...
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3c367f7c347f1679
+dashboard link: https://syzkaller.appspot.com/bug?extid=8d7b9ced2a99394b0a50
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1645eedbf00000
+
+Note: testing is done by a robot and is best-effort only.

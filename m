@@ -2,102 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD1753B7FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39E1E53B7FF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234326AbiFBLpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 07:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
+        id S234337AbiFBLpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 07:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232261AbiFBLpl (ORCPT
+        with ESMTP id S234331AbiFBLpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 07:45:41 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499B6244081
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 04:45:40 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id p8so4543663pfh.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 04:45:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+d98QRju/iof/J3fqnwUoOBnWzIJ1MsMResY4ThMXQw=;
-        b=BbGlo5bKFJ98FdM1OaSDYxQb5y8x7/n6+RNxsoobAWzJkuaAPlQoberr4i7ui0ZeWo
-         m7mkIIC9PpknwkzVMuoVmmENO61cORNGJDsGXb99v+62IAkAbgJ9jpYYMemMdIrAvv98
-         bqZTqBaYFYt+awEnpfswZXqwXZJsRAMTXoEPeKkBtOOr19C9AgZKkTZCXbgYvYpnbxi8
-         eUfdf6Pb1ZiDwnzDOumHbZRtmQU/TkYa3xLRbIMKapFCTdFj0oLc/l3C5STXB8/E6/xB
-         ojmj3dvE7WfO1EBWXpJ/8og1Ufuze3Zfahry58UBmL498SwhuRHvsklLkrQumYY01LwV
-         fPeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+d98QRju/iof/J3fqnwUoOBnWzIJ1MsMResY4ThMXQw=;
-        b=Mt2SU5weqRpMTNWJbkqf9E/vFcnnK+7utqN95bgZbN2BpM+npc9whaaTJ6McH+40IT
-         pn+ynbyyp9zYfCqTukmdZ9Js1XLMYVhowm7KqVX8TEJvO+F37iAo9+b+WpYvSt3iXG7q
-         VTUrO00JN5pLJL1d1/eWS20JdLKTQ4isTAX3LWU+rduOZbyC9zQt0u+tl982wn52h4vG
-         b5f8trLz+/9fy54S1y0FyE9l3uhqzP8774el30fB57jyPK2y/MProa51VvTm3n3VCX7u
-         ovdfnrSR9qCdqGPH2kH9oC1DuaM1ggvvKyiPeSinEfvbb9+1jVBnrigL5cjiy9PU/hwv
-         BqMw==
-X-Gm-Message-State: AOAM532BE+4tyQRUKyWAWvJcY+zO1K+NDeQPthAoiRPrlIlI+TxFoVbD
-        fksjjfbr8JDeVxkf8oB50EQ=
-X-Google-Smtp-Source: ABdhPJyLq+i7vaKBUknNiqsbWkl+78YNSRhu19ou3RjHDXCtiMckU2vPaHBuflOii75VX75Ob3CuXw==
-X-Received: by 2002:a63:ef41:0:b0:3fb:c201:797d with SMTP id c1-20020a63ef41000000b003fbc201797dmr4090679pgk.104.1654170339825;
-        Thu, 02 Jun 2022 04:45:39 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id s17-20020a170902c65100b0015ee60ef65bsm3221335pls.260.2022.06.02.04.45.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 04:45:39 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Cheng-Yi Chiang <cychiang@chromium.org>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Benson Leung <bleung@chromium.org>,
-        chrome-platform@lists.linux.dev, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] ASoC: cros_ec_codec: Fix refcount leak in cros_ec_codec_platform_probe
-Date:   Thu,  2 Jun 2022 15:45:29 +0400
-Message-Id: <20220602114529.6303-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Jun 2022 07:45:50 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E852462C3;
+        Thu,  2 Jun 2022 04:45:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654170349; x=1685706349;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S+iHHapTCEiHLOQdaIrdeB+XG5BsdsuBHVvjo6BfwPs=;
+  b=jMkUJvRST3bXQSQJxsHgOjGJ3LWc/DzQDSjl9YD0XEMxXvE6cIqMAdgt
+   LnQAftAZVoIWIyTZkHL/BW1yog3khJ52w9MN/e9qNioY8f06GRADDZr41
+   fiaUziQwshBGul9SWBWG4WpYtp/F53BxAFCYyAglNdM3IDVVFJAAGyOpp
+   FgXlNL1rhNa6LERf+DHwj1D7ixhODNYIzNEIjfxHaLb7+/tVCC0MLoeZK
+   YpRyZJXzxVsbQIqLN+81WWro0C9rex/qBtj8GyX+1o0uCSB6FmGamo+Jj
+   C9Jy6WgLH3IbcTHI/SVP0nuyOlRHXvlqdMCIo78kKaLUabXu+lr3S1wwo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275930429"
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="275930429"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 04:45:48 -0700
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="707533261"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 04:45:47 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nwjGq-000Rcf-EC;
+        Thu, 02 Jun 2022 14:45:44 +0300
+Date:   Thu, 2 Jun 2022 14:45:44 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v1 1/1] gpio: sch: make irq_chip immutable
+Message-ID: <Ypii6K0JGkpvejgd@smile.fi.intel.com>
+References: <20220601153656.76454-1-andriy.shevchenko@linux.intel.com>
+ <CAMRc=McgEzFcmgcWMb3L3Drjcyzhs0kb4JfBHMi7AoAU04txLw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=McgEzFcmgcWMb3L3Drjcyzhs0kb4JfBHMi7AoAU04txLw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+On Wed, Jun 01, 2022 at 07:19:22PM +0200, Bartosz Golaszewski wrote:
+> On Wed, Jun 1, 2022 at 5:37 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > Since recently, the kernel is nagging about mutable irq_chips:
+> >
+> >    "not an immutable chip, please consider fixing it!"
+> >
+> > Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
+> > helper functions and call the appropriate gpiolib functions.
 
-Fixes: format:b6bc07d4360d ("ASoC: cros_ec_codec: support WoV")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- sound/soc/codecs/cros_ec_codec.c | 1 +
- 1 file changed, 1 insertion(+)
+> Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
 
-diff --git a/sound/soc/codecs/cros_ec_codec.c b/sound/soc/codecs/cros_ec_codec.c
-index 8b0a9c788a26..11e7b3f6d410 100644
---- a/sound/soc/codecs/cros_ec_codec.c
-+++ b/sound/soc/codecs/cros_ec_codec.c
-@@ -995,6 +995,7 @@ static int cros_ec_codec_platform_probe(struct platform_device *pdev)
- 			dev_dbg(dev, "ap_shm_phys_addr=%#llx len=%#x\n",
- 				priv->ap_shm_phys_addr, priv->ap_shm_len);
- 		}
-+		of_node_put(node);
- 	}
- #endif
- 
+Thanks!
+
+I think I will collect all of these and send a PR after v5.19-rc1
+to be included into v5.19-rc2+. Tell me if you think differently.
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 

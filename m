@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410D053B6DD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED0953B6E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233591AbiFBKTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
+        id S233600AbiFBKTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233556AbiFBKTd (ORCPT
+        with ESMTP id S233560AbiFBKTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:19:33 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3972E297505;
-        Thu,  2 Jun 2022 03:19:30 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 252AJRpl027473;
-        Thu, 2 Jun 2022 05:19:27 -0500
+        Thu, 2 Jun 2022 06:19:34 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB5B29750C;
+        Thu,  2 Jun 2022 03:19:32 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 252AJT3V046212;
+        Thu, 2 Jun 2022 05:19:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654165167;
-        bh=5/Ey9lJRp5c0QL652Lo2nM+Y7evHwsaKSV8m+oiKwAI=;
+        s=ti-com-17Q1; t=1654165169;
+        bh=Mgi01VdWoBHJG539zC3MX7L+PpWL13Bzb5RCK20NZWY=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=WlNZ+m0+3NeiMYeObvj1Onu6c/USaI/faLol9X7LpTYpo1frUSnKU40iztlv+3FCw
-         LSkGKBCX8+C5bXvD6csLitXw7z44Bi5d1QP6Cy+v+O33DGq/GLur+r/fjT2U4QJ4cJ
-         UcvfuGSgoyWHI097FPy81UDQcyBc+wOKsr7TAcGU=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 252AJRmP088414
+        b=Yl6PNveEwjJZkkQ5CXA9yZWGTpSgQB3I7J21V9G95Ke/JNsbWrqMfFwk8tLxiSSOu
+         RBFtNEWl5tfLSI5P727jKh9KyoH8ctOZdP+R5+4UKFY2OCd/dvUzC2KiWEZU9T0De+
+         lseWc6cyUU/w4NJA8Bl9V4WuPY8yE4K+bfrTxj0E=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 252AJTtF022146
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 2 Jun 2022 05:19:27 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 2 Jun 2022 05:19:29 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 2
- Jun 2022 05:19:26 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2022 05:19:29 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 2 Jun 2022 05:19:26 -0500
+ Frontend Transport; Thu, 2 Jun 2022 05:19:29 -0500
 Received: from a0393678ub.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 252AJKGD063560;
-        Thu, 2 Jun 2022 05:19:24 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 252AJKGE063560;
+        Thu, 2 Jun 2022 05:19:27 -0500
 From:   Kishon Vijay Abraham I <kishon@ti.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
@@ -47,9 +47,9 @@ To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 CC:     Suman Anna <s-anna@ti.com>, <linux-remoteproc@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 1/3] dt-bindings: remoteproc: pru: Re-arrange "compatible" in alphabetic order
-Date:   Thu, 2 Jun 2022 15:49:18 +0530
-Message-ID: <20220602101920.12504-2-kishon@ti.com>
+Subject: [PATCH v2 2/3] dt-bindings: remoteproc: pru: Update bindings for K3 AM62x SoCs
+Date:   Thu, 2 Jun 2022 15:49:19 +0530
+Message-ID: <20220602101920.12504-3-kishon@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220602101920.12504-1-kishon@ti.com>
 References: <20220602101920.12504-1-kishon@ti.com>
@@ -66,38 +66,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Re-arrange "compatible" string in alphabetic order to decrease the
-chance of conflicts.
+Update the PRU remoteproc bindings for the PRU cores on AM62x SoCs.
 
 Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
 ---
- .../devicetree/bindings/remoteproc/ti,pru-rproc.yaml          | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
-index d7c3a78e37e6..5b67837b7fce 100644
+index 5b67837b7fce..cd55d80137f7 100644
 --- a/Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
-@@ -36,17 +36,17 @@ properties:
-     enum:
+@@ -37,6 +37,7 @@ properties:
        - ti,am3356-pru   # for AM335x SoC family (AM3356+ SoCs only)
        - ti,am4376-pru   # for AM437x SoC family (AM4376+ SoCs only)
-+      - ti,am5728-pru   # for AM57xx SoC family
+       - ti,am5728-pru   # for AM57xx SoC family
++      - ti,am625-pru    # for PRUs in K3 AM62x SoC family
        - ti,am642-pru    # for PRUs in K3 AM64x SoC family
        - ti,am642-rtu    # for RTUs in K3 AM64x SoC family
        - ti,am642-tx-pru # for Tx_PRUs in K3 AM64x SoC family
--      - ti,am5728-pru   # for AM57xx SoC family
--      - ti,k2g-pru      # for 66AK2G SoC family
-       - ti,am654-pru    # for PRUs in K3 AM65x SoC family
-       - ti,am654-rtu    # for RTUs in K3 AM65x SoC family
-       - ti,am654-tx-pru # for Tx_PRUs in K3 AM65x SR2.0 SoCs
-       - ti,j721e-pru    # for PRUs in K3 J721E SoC family
-       - ti,j721e-rtu    # for RTUs in K3 J721E SoC family
-       - ti,j721e-tx-pru # for Tx_PRUs in K3 J721E SoC family
-+      - ti,k2g-pru      # for 66AK2G SoC family
- 
-   reg:
-     items:
 -- 
 2.17.1
 

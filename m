@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2867853BD08
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2EE53BD0A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237391AbiFBRLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 13:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
+        id S237396AbiFBRNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 13:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234555AbiFBRLf (ORCPT
+        with ESMTP id S230138AbiFBRNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 13:11:35 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649042A80F6;
-        Thu,  2 Jun 2022 10:11:34 -0700 (PDT)
+        Thu, 2 Jun 2022 13:13:15 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC3B170F3B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 10:13:11 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id e29so1521756wra.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 10:13:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1654189895; x=1685725895;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lieI59ITfoRtC4B8Ptaya/6xFBTQt0IMD/X5QvUWlUA=;
-  b=ZF911keks4gBMybxAOM6MwHyDTU3vNKvEMnUlGy7vCU+Bk7te99n1MLK
-   LGrq9iPkAaBN+gM+zHPNAbvGSHDoXjlVgB6ur324YfHWg5J16C7ADd/Kb
-   lUMXy3ADXXLreyexi18tnHc6T4kTm7FbypdjP/6w1GY3LnJiHYAg3SwHr
-   w=;
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 02 Jun 2022 17:11:32 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com (Postfix) with ESMTPS id 13DE340BC6;
-        Thu,  2 Jun 2022 17:11:31 +0000 (UTC)
-Received: from EX13D02UWB001.ant.amazon.com (10.43.161.240) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.36; Thu, 2 Jun 2022 17:11:30 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX13D02UWB001.ant.amazon.com (10.43.161.240) with Microsoft SMTP Server (TLS)
- id 15.0.1497.36; Thu, 2 Jun 2022 17:11:30 +0000
-Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
- (172.19.181.128) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
- Server id 15.0.1497.36 via Frontend Transport; Thu, 2 Jun 2022 17:11:30 +0000
-Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
-        id 507B5213F; Thu,  2 Jun 2022 17:11:29 +0000 (UTC)
-From:   Ali Saidi <alisaidi@amazon.com>
-To:     <leo.yan@linaro.org>
-CC:     <acme@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <hi@alyssa.is>,
-        <irogers@google.com>, <likexu@tencent.com>, <kjain@linux.ibm.com>,
-        <lihuafei1@huawei.com>, <adam.li@amperecomputing.com>,
-        <german.gomez@arm.com>, <james.clark@arm.com>,
-        <alisaidi@amazon.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 00/12] perf c2c: Support display for Arm64
-Date:   Thu, 2 Jun 2022 17:11:20 +0000
-Message-ID: <20220602171120.31166-1-alisaidi@amazon.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220601102505.GA408721@leoy-ThinkPad-X240s>
-References: <20220601102505.GA408721@leoy-ThinkPad-X240s>
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9egMonS4xdxOgQS+ajnqcSmFBqc/f2gRBFWF00OFM2A=;
+        b=VS+hCyb8GERzrt1YCfMxAWT1BrmEOBGdq/wx9c743zw1S3rBLQmESyUGUFuDCOdOSj
+         xbQ6yJ0HGQkXdrXUcxAQu7kN64j8QHzz40+HpIPiO+HXiRWkbyci2VNATlEccSQL4iNs
+         psDfdXjuDFS0rda3Yxx6uMr9HjD3Ms3BKUSwRVVFvS2jveh1gdfOBtrHIvL2ibA9CoGx
+         IJgSqtcpKrARebanmkwEQOb0ItKkAfxRtA7VgeCGw94p3xuBvICJU9NqigNA+LdXqPJe
+         yg3Ufk/MjDnALdn2iugRTXtDVrSImkiRQOiZhWzSh8PG6UcpyxJUH63dSNKPUDqR1MKD
+         aJsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9egMonS4xdxOgQS+ajnqcSmFBqc/f2gRBFWF00OFM2A=;
+        b=vwz4f2XHTVaIsqML7QPP5i4b7QAYxfzZGjatLo+b3gvbqRienxy0bsB5hrq1+DynsU
+         uNEs2VjnhUwB1frSBL8wuaKGdWfBCiDy2qcVgNnQuhnggp/EJKi8VlajCZ5NsLajqo/C
+         xdzFG/fmLjf6zSb4fKdTlTgGxza5ytpLf6LNm7Lo+4V2KNMIfIPEUFqmdOTQsVSr1Nte
+         dsJxnLdPYqQo6W4mMbUe2bjaROlC8+IQYGOHYWeRjdlx6gF7qUwmBj+l+mPgZkOtJgPS
+         KtOlTZfixL4VGLjbX6M5MB6ie7BL+0OyxJ5b6f6GmrXnWSSJAzc5gC0WSsbVdegepfkO
+         fZcg==
+X-Gm-Message-State: AOAM530PUqoCWJsL/s00ZHLQK97b0UHVzTiBgLKorU04C+2R+ydElCB4
+        dx16x1V2R4fyeoWlZdEUllW/S4Up80hhF+VBI+tUVg==
+X-Google-Smtp-Source: ABdhPJyL+zyrsEy15NdGDty2PYwxMW5pJ1fKsxgJdy/31Gjp6X8ESejObvQ7wTcQDse03Voa21IcVYg7Dv+DFKdgyCM=
+X-Received: by 2002:a5d:5342:0:b0:210:c508:956d with SMTP id
+ t2-20020a5d5342000000b00210c508956dmr4584749wrv.205.1654189990220; Thu, 02
+ Jun 2022 10:13:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL
+References: <20220530102017.471865-1-jose.exposito89@gmail.com>
+ <20220530102017.471865-2-jose.exposito89@gmail.com> <20220530131158.kqq2mohxoh52xpeg@penduick>
+ <20220530162903.GA6546@elementary>
+In-Reply-To: <20220530162903.GA6546@elementary>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 2 Jun 2022 10:12:59 -0700
+Message-ID: <CABVgOSn8i=LO5p7830h2XU1Jgg0KrN0qTnxkOMhf1oTgxjaKKw@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/1] drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb332()
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        tzimmermann@suse.de, maarten.lankhorst@linux.intel.com,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,55 +76,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo,
-
-On Wed, 1 Jun 2022 18:25:05 +0800 Leo Yan wrote:
-> Hi Joe,
-> 
-> On Tue, May 31, 2022 at 02:44:07PM -0400, Joe Mario wrote:
-> 
-> [...]
-> 
-> > Hi Leo:
-> > I built a new perf with your patches and ran it on a 2-numa node Neoverse platform.
-> > I then ran my simple test that creates reader and writer threads to tug on the same cacheline.
-> > The c2c output is appended below.
-> >
-> > The output looks good, especially where you've broken out the (average) cycles for local and remote peer loads.  
-> > And I'm glad to see you fixed the "Node" column.  I use that a lot to help detect remote node accesses.  
-> 
-> Thanks a lot for your testing and suggestions, which are really helpful!
-> 
-> > And the "PA cnt" field is working as well,  which is important to see if numa_balance is moving the data around.
-> 
-> Good to know this.  To be honest, before I didn't note for "PA cnt"
-> metric, I checked a bit for the code, this metrics is very useful to
-> understand how it's severe that a cache line is accessed from different
-> addresses, so we can get sense how a cache line is hammered.
-> 
-> [...]
+On Mon, May 30, 2022 at 9:29 AM Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gm=
+ail.com> wrote:
 >
-> > Thanks for doing this.  It looks good.
-> 
-> You are welcome!  And very appreicate your helping to mature the code.
+> Hi Maxime,
+>
+> On Mon, May 30, 2022 at 03:11:58PM +0200, Maxime Ripard wrote:
+> >
+> > Hi,
+> >
+> > On Mon, May 30, 2022 at 12:20:17PM +0200, Jos=C3=A9 Exp=C3=B3sito wrote=
+:
+> > > Test the conversion from XRGB8888 to RGB332.
+> > >
+> > > What is tested?
+> > >
+> > >  - Different values for the X in XRGB8888 to make sure it is ignored
+> > >  - Different clip values: Single pixel and full and partial buffer
+> > >  - Well know colors: White, black, red, green, blue, magenta, yellow
+> > >    and cyan
+> > >  - Other colors: Randomly picked
+> > >  - Destination pitch
+> > >
+> > > Suggested-by: Javier Martinez Canillas <javierm@redhat.com>
+> > > Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+> >
+> > It looks mostly good to me, but I think we should Cc
+> > kunit-dev@googlegroups.com to have their feedback.
+>
+> Thanks a lot for the quick feedback.
+>
+> I just cc'ed kunit-dev@googlegroups.com. For anyone joining the
+> conversation, here is the link to the patch and the cover letter with
+> some questions:
+>
+> https://lore.kernel.org/dri-devel/20220530102017.471865-1-jose.exposito89=
+@gmail.com/T/
+>
+> >
+> > > ---
+> > >  drivers/gpu/drm/Kconfig                  |  12 ++
+> > >  drivers/gpu/drm/Makefile                 |   3 +
+> > >  drivers/gpu/drm/drm_format_helper_test.c | 166 +++++++++++++++++++++=
+++
+> > >  3 files changed, 181 insertions(+)
+> > >  create mode 100644 drivers/gpu/drm/drm_format_helper_test.c
+> > >
+> > > diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+> > > index e88c497fa010..d92be6faef15 100644
+> > > --- a/drivers/gpu/drm/Kconfig
+> > > +++ b/drivers/gpu/drm/Kconfig
+> > > @@ -76,6 +76,18 @@ config DRM_KMS_HELPER
+> > >     help
+> > >       CRTC helpers for KMS drivers.
+> > >
+> > > +config DRM_FORMAR_HELPER_TEST
+> > > +   bool "drm_format_helper tests" if !KUNIT_ALL_TESTS
+> > > +   depends on DRM && KUNIT=3Dy
+> > > +   select DRM_KMS_HELPER
+> > > +   default KUNIT_ALL_TESTS
+> > > +   help
+> > > +     KUnit tests for the drm_format_helper APIs. This option is not
+> > > +     useful for distributions or general kernels, but only for kerne=
+l
+> > > +     developers working on DRM and associated drivers.
+> > > +
+> > > +     If in doubt, say "N".
+> > > +
+> >
+> > AFAIK, kunit test cases are supposed to have a .kunitconfig too to
+> > enable the kunit tests easily.
+> >
+> > Maxime
+>
+> A .kuniconfig example is present in the cover letter. (...)
 
-Seconding that, thanks for progressing this so much Leo. 
+FYI: it's also possible to run these tests under UML with the extra options=
+:
+CONFIG_VIRTIO_UML=3Dy
+CONFIG_UML_PCI_OVER_VIRTIO=3Dy
 
-> 
-> > I'll assume someone else is reviewing your code changes.
-> 
-> Yeah, let's give a bit more time for reviewing.
+I suspect it's probably better not to add those to your .kunitconfig,
+as they're UML-specific and will therefore break other architectures,
+but it does mean the tests can be run with, for example:
 
-I've tested and given each patch a close look. I haven't found anything that
-looks to change other architectures and the output on my Graviton systems looks
-great. I pulled in your patch to add physical addresses to the spe records and
-as expected I saw the Node properly populated and PA cnt is no longer zero.  One
-nit is the documentation still says that "Total HITMs (tot) as default," while
-the code now defaults to "peer" on arm64.  Other than that:
+./tools/testing/kunit/kunit.py run --kunitconfig
+drivers/gpu/drm/.kunitconfig --kconfig_add CONFIG_VIRTIO_UML=3Dy
+--kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=3Dy
 
-Tested-by: Ali Saidi <alisaidi@amazon.com>
-Reviewed-by: Ali Saidi <alisaidi@amazon.com>
+Or, without the .kunitconfig:
+./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_DRM=3Dy
+--kconfig_add CONFIG_DRM_FORMAR_HELPER_TEST=3Dy --kconfig_add
+CONFIG_VIRTIO_UML=3Dy  --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=3Dy
+'drm-*'
 
-Thanks,
-Ali
-
+Cheers,
+-- David

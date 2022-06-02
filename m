@@ -2,214 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA76F53B36E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F47553B377
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbiFBGV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 02:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
+        id S230508AbiFBGWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 02:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiFBGVv (ORCPT
+        with ESMTP id S230497AbiFBGWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 02:21:51 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0DCDED1
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 23:21:49 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id h62-20020a1c2141000000b0039aa4d054e2so4238121wmh.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 23:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LOVgUxA1bDTDyTIwmAcMyzfNGeAcBs7vn2fkT3URToc=;
-        b=avOI5wm80HcfnD5JSHV7pK5BsH2+jVSuFyJ0O3c7HNgCLu8Iq6iYXahvWw0avss3eR
-         OnEGjxGmWICyBVIHkTj92usczbn9/N5FBHaBqO1wp3+Uqkmyul0llhXTdVW9kDmpUYAW
-         veDqiLVP0TXTyVsIk6kp2QSlg57vDs6nj4e/sDOVEFr7KjDkgdqkshtQvMa107DP6z0R
-         L71RMNTEyjhK78/fN80/mjnnY2cNuTZJ2jgjuHtqDhgksnFn/5HojsgBb6Syb6oZH1Ys
-         +b5+kf8wPP4yulJL4bcrJaiSJGja9DLWWySsMTnwb9zp1/JkzhO9uPs4dEkOCfi9NgoN
-         MFaA==
+        Thu, 2 Jun 2022 02:22:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DF7C33372
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 23:22:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654150955;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dftoX5xxTZB/c8O5WA81vrlQezqU2CDPcAxmSZhNEc4=;
+        b=Hxp3PweVceqPY9q0omzQ4eKyLu/maXeie1mURY0XlG/gN9FWUHFdPVV/A6q/lZNwDvzWhQ
+        QpEGRV0FWauwoJCi/T0YG9VfQ/grfR0nwfZrN1yorRRFR3cAfRGW0FoAOThmhdIXVQXSMD
+        Yut10gLONjr3+n/DQjmEQPYkhrxQPBQ=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-582-Ai9lckmTNpWkQVI2j6bT9g-1; Thu, 02 Jun 2022 02:22:32 -0400
+X-MC-Unique: Ai9lckmTNpWkQVI2j6bT9g-1
+Received: by mail-qv1-f69.google.com with SMTP id az18-20020ad45512000000b004645f3d2c36so2926060qvb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 23:22:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LOVgUxA1bDTDyTIwmAcMyzfNGeAcBs7vn2fkT3URToc=;
-        b=ISkUD/XR+MhS6BYzvzQI0dU6r5GEQpsv5LQCjWoQXMp9nTM6nl1fljCyfv43Nc/plR
-         xZsQd8UnnjsAEHWUL5uFoSKuZq4AIvazqzgOVStzwfCBenV14FVM2HSswcBzd3b/fpys
-         9WnvVdbn5Lnc8KilUZQELsKhe+s/LshFzeMqQNzb4F3WOnIfJsPn0ZYkL41vUaUkXlG5
-         49F6wt5TUrQWQKG8cc/sZW1l/l5IJAmHQVYC034yW5vaShm68xh9Y0XHpfrvEQOwnbs6
-         WbuXcCN28e+k7MzgbfyE7LF7zjPsiU5OEOKKNtUrLjeJ/PXPjppWKG81KYFDrkKBa1rk
-         Xuag==
-X-Gm-Message-State: AOAM531M/nGTqg0IKOE1f1W+jU7GwSfCIA+THbqhAv45KOPu/J3/yKzl
-        jEu5WrlE7yu4QnZGtREIPC/j3X1MBeGAGkABD6NDUg==
-X-Google-Smtp-Source: ABdhPJx+Qg9/XPJgAjGUvPxditJJ54bsPjYt9M7fFcFlP4MsNMvGJmvit/KkVxeCCqj60h0rP7xlP0ScE+qOSxcDlPA=
-X-Received: by 2002:a1c:a301:0:b0:392:9bc5:203c with SMTP id
- m1-20020a1ca301000000b003929bc5203cmr2446589wme.67.1654150908114; Wed, 01 Jun
- 2022 23:21:48 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dftoX5xxTZB/c8O5WA81vrlQezqU2CDPcAxmSZhNEc4=;
+        b=S2/6SXSv0NQiNyZBy7/O51wiSv7T/09rC46nZjO+IYoedmhFKW22ilCHe1zC8kkHJB
+         +vaEZsfSqy2vw+Ur0nK0FPowZ3CjGcFH+XLsovFvzP356voRkSRdJeD850dUdfLea9Nj
+         UintCKf2z9//5E105fBz5y04o/kp85N1lUS1CKmwSepvboyjpeurd4vwjLTffCOsy6gl
+         JjIkRANFOz9M3Yjtb1KwXIMFk09c0QsrcN3GTKro46DF6rkYocHaZAVpkZFpXGX+uQBd
+         ZfEyFYRtFzDQzy71pw7sPuzgzPHXiequXCzq3rijK21T6BxluMTcD5142mjatqEOnYQg
+         7ahQ==
+X-Gm-Message-State: AOAM530zb3V5dL7JBcEi4K0K21DWrFoAkPFen7OLRDaB/hwXh+6+8Lcx
+        9899QmwEHTZ0f+dK0VrQlTTGLm7XcjGevkLV8AQ3zZ5Xh/MotuRG1U2qLSEwdmDwjU1xzl4Nsex
+        zxmd1F7IbHaQ1Jzk3lKWEJWJhThfrPxEvS2KkJRrK
+X-Received: by 2002:a0c:e702:0:b0:467:538e:ebba with SMTP id d2-20020a0ce702000000b00467538eebbamr2217003qvn.2.1654150951932;
+        Wed, 01 Jun 2022 23:22:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz0WJo9DePlOEq7IsA8BZdRFxkhg64PwaZaZWcafFZW35XH5PUzPmmmXhlP8oswWj9PLLjDa3nyytbYkOLb1wI=
+X-Received: by 2002:a0c:e702:0:b0:467:538e:ebba with SMTP id
+ d2-20020a0ce702000000b00467538eebbamr2216984qvn.2.1654150951730; Wed, 01 Jun
+ 2022 23:22:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220601065846.456965-1-namhyung@kernel.org> <20220601065846.456965-3-namhyung@kernel.org>
-In-Reply-To: <20220601065846.456965-3-namhyung@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 1 Jun 2022 23:21:34 -0700
-Message-ID: <CAP-5=fWvS=1XrXnE_a+sif8ZKy2oc6pmo6RmZ6+fFrWoa1VM3A@mail.gmail.com>
-Subject: Re: [PATCH 2/5] perf lock: Add lock contention tracepoints record support
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
+References: <20220526124338.36247-1-eperezma@redhat.com> <20220526124338.36247-4-eperezma@redhat.com>
+ <20220601070303-mutt-send-email-mst@kernel.org> <CAJaqyWcK7CwWLr5unxXr=FDbuufeA38X0eAboJy8yKLcsdiPow@mail.gmail.com>
+ <PH0PR12MB54819A5DC204CED360C3BA86DCDF9@PH0PR12MB5481.namprd12.prod.outlook.com>
+In-Reply-To: <PH0PR12MB54819A5DC204CED360C3BA86DCDF9@PH0PR12MB5481.namprd12.prod.outlook.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Thu, 2 Jun 2022 08:21:55 +0200
+Message-ID: <CAJaqyWfJVDj+u0UVXGkJFriRJ5Lo5os6FWq02Q7av+NYG2JB9w@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] vhost-vdpa: uAPI to stop the device
+To:     Parav Pandit <parav@nvidia.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Martin Porter <martinpo@xilinx.com>,
+        Laurent Vivier <lvivier@redhat.com>,
+        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zhang Min <zhang.min9@zte.com.cn>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        Cindy Lu <lulu@redhat.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        "Uminski, Piotr" <Piotr.Uminski@intel.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
+        "Dawar, Gautam" <gautam.dawar@amd.com>,
+        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
+        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>,
+        Dinan Gunawardena <dinang@xilinx.com>,
+        Longpeng <longpeng2@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 11:58 PM Namhyung Kim <namhyung@kernel.org> wrote:
+On Wed, Jun 1, 2022 at 9:13 PM Parav Pandit <parav@nvidia.com> wrote:
 >
-> When LOCKDEP and LOCK_STAT events are not available, it falls back to
-> record the new lock contention tracepoints.
 >
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/builtin-lock.c | 70 +++++++++++++++++++++++++++++++++++----
->  1 file changed, 63 insertions(+), 7 deletions(-)
 >
-> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-> index 23a33ac15e68..3e3320b8cede 100644
-> --- a/tools/perf/builtin-lock.c
-> +++ b/tools/perf/builtin-lock.c
-> @@ -495,6 +495,12 @@ struct trace_lock_handler {
+> > From: Eugenio Perez Martin <eperezma@redhat.com>
+> > Sent: Wednesday, June 1, 2022 7:15 AM
+> >
+> > On Wed, Jun 1, 2022 at 1:03 PM Michael S. Tsirkin <mst@redhat.com> wrot=
+e:
+> > >
+> > > On Thu, May 26, 2022 at 02:43:37PM +0200, Eugenio P=C3=A9rez wrote:
+> > > > The ioctl adds support for stop the device from userspace.
+> > > >
+> > > > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> > > > ---
+> > > >  drivers/vhost/vdpa.c       | 18 ++++++++++++++++++
+> > > >  include/uapi/linux/vhost.h | 14 ++++++++++++++
+> > > >  2 files changed, 32 insertions(+)
+> > > >
+> > > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c index
+> > > > 32713db5831d..d1d19555c4b7 100644
+> > > > --- a/drivers/vhost/vdpa.c
+> > > > +++ b/drivers/vhost/vdpa.c
+> > > > @@ -478,6 +478,21 @@ static long vhost_vdpa_get_vqs_count(struct
+> > vhost_vdpa *v, u32 __user *argp)
+> > > >       return 0;
+> > > >  }
+> > > >
+> > > > +static long vhost_vdpa_stop(struct vhost_vdpa *v, u32 __user *argp=
+)
+> > > > +{
+> > > > +     struct vdpa_device *vdpa =3D v->vdpa;
+> > > > +     const struct vdpa_config_ops *ops =3D vdpa->config;
+> > > > +     int stop;
+> > > > +
+> > > > +     if (!ops->stop)
+> > > > +             return -EOPNOTSUPP;
+> > > > +
+> > > > +     if (copy_from_user(&stop, argp, sizeof(stop)))
+> > > > +             return -EFAULT;
+> > > > +
+> > > > +     return ops->stop(vdpa, stop);
+> > > > +}
+> > > > +
+> > > >  static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned =
+int
+> > cmd,
+> > > >                                  void __user *argp)  { @@ -650,6
+> > > > +665,9 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
+> > > >       case VHOST_VDPA_GET_VQS_COUNT:
+> > > >               r =3D vhost_vdpa_get_vqs_count(v, argp);
+> > > >               break;
+> > > > +     case VHOST_VDPA_STOP:
+> > > > +             r =3D vhost_vdpa_stop(v, argp);
+> > > > +             break;
+> > > >       default:
+> > > >               r =3D vhost_dev_ioctl(&v->vdev, cmd, argp);
+> > > >               if (r =3D=3D -ENOIOCTLCMD) diff --git
+> > > > a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h index
+> > > > cab645d4a645..c7e47b29bf61 100644
+> > > > --- a/include/uapi/linux/vhost.h
+> > > > +++ b/include/uapi/linux/vhost.h
+> > > > @@ -171,4 +171,18 @@
+> > > >  #define VHOST_VDPA_SET_GROUP_ASID    _IOW(VHOST_VIRTIO, 0x7C,
+> > \
+> > > >                                            struct vhost_vring_state=
+)
+> > > >
+> > > > +/* Stop or resume a device so it does not process virtqueue
+> > > > +requests anymore
+> > > > + *
+> > > > + * After the return of ioctl with stop !=3D 0, the device must fin=
+ish
+> > > > +any
+> > > > + * pending operations like in flight requests. It must also
+> > > > +preserve all
+> > > > + * the necessary state (the virtqueue vring base plus the possible
+> > > > +device
+> > > > + * specific states) that is required for restoring in the future.
+> > > > +The
+> > > > + * device must not change its configuration after that point.
+> > > > + *
+> > > > + * After the return of ioctl with stop =3D=3D 0, the device can
+> > > > +continue
+> > > > + * processing buffers as long as typical conditions are met (vq is
+> > > > +enabled,
+> > > > + * DRIVER_OK status bit is enabled, etc).
+> > > > + */
+> > > > +#define VHOST_VDPA_STOP                      _IOW(VHOST_VIRTIO, 0x=
+7D, int)
+> > > > +
+> A better name is VHOST_VDPA_SET_STATE
+> State =3D stop/suspend
+> State =3D start/resume
 >
->         int (*release_event)(struct evsel *evsel,
->                              struct perf_sample *sample);
-> +
-> +       int (*contention_begin_event)(struct evsel *evsel,
-> +                                     struct perf_sample *sample);
-> +
-> +       int (*contention_end_event)(struct evsel *evsel,
-> +                                   struct perf_sample *sample);
+> Suspend/resume seems more logical, as opposed start/stop, because it more=
+ clearly indicates that the resume (start) is from some programmed beginnin=
+g (and not first boot).
+>
 
-Would it make sense to add a comment here about LOCKDEP and LOCK_STAT?
-It could be confusing if the handler isn't called on different
-kernels.
+It's fine to move to that nomenclature in my opinion.
 
-Thanks,
-Ian
+> > > >  #endif
+> > >
+> > > I wonder how does this interact with the admin vq idea.
+> > > I.e. if we stop all VQs then apparently admin vq can't work either ..=
+.
+> > > Thoughts?
+> > >
+> >
+> > Copying here the answer to Parav, feel free to answer to any thread or
+> > highlight if I missed something :). Using the admin vq proposal termino=
+logy of
+> > "device group".
+> >
+> > --
+> > This would stop a device of a device
+> > group, but not the whole virtqueue group. If the admin VQ is offered by=
+ the
+> > PF (since it's not exposed to the guest), it will continue accepting re=
+quests as
+> > normal. If it's exposed in the VF, I think the best bet is to shadow it=
+, since
+> > guest and host requests could conflict.
+> >
+>
+> vhost-vdpa device is exposed for a VF through vp-vdpa driver to user land=
+.
+> Now vp-vdpa driver will have to choose between using config register vs u=
+sing AQ to suspend/resume the device.
+>
 
->  };
+vp_vdpa cannot choose if the virtio device has an admin vq or any
+other feature, it just wraps the virtio device. If that virtio device
+does not expose AQ, vp_vdpa cannot expose it.
+
+> Why not always begin with more superior interface of AQ that address mult=
+iple of these needs for LM case?
 >
->  static struct lock_seq_stat *get_seq(struct thread_stat *ts, u64 addr)
-> @@ -822,6 +828,20 @@ static int evsel__process_lock_release(struct evsel *evsel, struct perf_sample *
->         return 0;
->  }
+
+Because it doesn't address valid use cases like vp_vdpa with no AQ,
+devices that are not VF, or nested virtualization.
+
+VHOST_VDPA_STOP / VHOST_VDPA_SET_STATE does not replace AQ commands:
+It's just the way vhost-vdpa exposes that capability to qemu. vdpa
+backend is free to choose whatever methods it finds better to
+implement it.
+
+> For LM case, more you explore, we realize that either VF relying on PF's =
+AQ for query/config/setup/restore makes more sense or have its own dedicate=
+d AQ.
 >
-> +static int evsel__process_contention_begin(struct evsel *evsel, struct perf_sample *sample)
-> +{
-> +       if (trace_handler->contention_begin_event)
-> +               return trace_handler->contention_begin_event(evsel, sample);
-> +       return 0;
-> +}
-> +
-> +static int evsel__process_contention_end(struct evsel *evsel, struct perf_sample *sample)
-> +{
-> +       if (trace_handler->contention_end_event)
-> +               return trace_handler->contention_end_event(evsel, sample);
-> +       return 0;
-> +}
-> +
->  static void print_bad_events(int bad, int total)
->  {
->         /* Output for debug, this have to be removed */
-> @@ -1023,6 +1043,11 @@ static const struct evsel_str_handler lock_tracepoints[] = {
->         { "lock:lock_release",   evsel__process_lock_release,   }, /* CONFIG_LOCKDEP */
->  };
+
+This ioctl does not mandate that the device cannot implement it
+through AQ, or that the device has to be a VF.
+
+Thanks!
+
+> VM's suspend/resume operation can be handled through the shadow Q.
 >
-> +static const struct evsel_str_handler contention_tracepoints[] = {
-> +       { "lock:contention_begin", evsel__process_contention_begin, },
-> +       { "lock:contention_end",   evsel__process_contention_end,   },
-> +};
-> +
->  static bool force;
+> > Since this is offered through vdpa, the device backend driver can route=
+ it to
+> > whatever method works better for the hardware. For example, to send an
+> > admin vq command to the PF. That's why it's important to keep the featu=
+re
+> > as self-contained and orthogonal to others as possible.
+> > --
+> >
+> > > > --
+> > > > 2.31.1
+> > >
 >
->  static int __cmd_report(bool display_info)
-> @@ -1086,20 +1111,41 @@ static int __cmd_record(int argc, const char **argv)
->                 "record", "-R", "-m", "1024", "-c", "1", "--synth", "task",
->         };
->         unsigned int rec_argc, i, j, ret;
-> +       unsigned int nr_tracepoints;
->         const char **rec_argv;
-> +       bool has_lock_stat = true;
->
->         for (i = 0; i < ARRAY_SIZE(lock_tracepoints); i++) {
->                 if (!is_valid_tracepoint(lock_tracepoints[i].name)) {
-> -                               pr_err("tracepoint %s is not enabled. "
-> -                                      "Are CONFIG_LOCKDEP and CONFIG_LOCK_STAT enabled?\n",
-> -                                      lock_tracepoints[i].name);
-> -                               return 1;
-> +                       pr_debug("tracepoint %s is not enabled. "
-> +                                "Are CONFIG_LOCKDEP and CONFIG_LOCK_STAT enabled?\n",
-> +                                lock_tracepoints[i].name);
-> +                       has_lock_stat = false;
-> +                       break;
-> +               }
-> +       }
-> +
-> +       if (has_lock_stat)
-> +               goto setup_args;
-> +
-> +       for (i = 0; i < ARRAY_SIZE(contention_tracepoints); i++) {
-> +               if (!is_valid_tracepoint(contention_tracepoints[i].name)) {
-> +                       pr_err("tracepoint %s is not enabled.\n",
-> +                              contention_tracepoints[i].name);
-> +                       return 1;
->                 }
->         }
->
-> +setup_args:
->         rec_argc = ARRAY_SIZE(record_args) + argc - 1;
-> +
-> +       if (has_lock_stat)
-> +               nr_tracepoints = ARRAY_SIZE(lock_tracepoints);
-> +       else
-> +               nr_tracepoints = ARRAY_SIZE(contention_tracepoints);
-> +
->         /* factor of 2 is for -e in front of each tracepoint */
-> -       rec_argc += 2 * ARRAY_SIZE(lock_tracepoints);
-> +       rec_argc += 2 * nr_tracepoints;
->
->         rec_argv = calloc(rec_argc + 1, sizeof(char *));
->         if (!rec_argv)
-> @@ -1108,9 +1154,19 @@ static int __cmd_record(int argc, const char **argv)
->         for (i = 0; i < ARRAY_SIZE(record_args); i++)
->                 rec_argv[i] = strdup(record_args[i]);
->
-> -       for (j = 0; j < ARRAY_SIZE(lock_tracepoints); j++) {
-> +       for (j = 0; j < nr_tracepoints; j++) {
-> +               const char *ev_name;
-> +
-> +               if (has_lock_stat)
-> +                       ev_name = strdup(lock_tracepoints[j].name);
-> +               else
-> +                       ev_name = strdup(contention_tracepoints[j].name);
-> +
-> +               if (!ev_name)
-> +                       return -ENOMEM;
-> +
->                 rec_argv[i++] = "-e";
-> -               rec_argv[i++] = strdup(lock_tracepoints[j].name);
-> +               rec_argv[i++] = ev_name;
->         }
->
->         for (j = 1; j < (unsigned int)argc; j++, i++)
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+

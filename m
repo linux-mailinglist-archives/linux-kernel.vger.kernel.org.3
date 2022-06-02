@@ -2,126 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5245353BD82
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB8053BD85
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237655AbiFBRpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 13:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
+        id S237675AbiFBRqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 13:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiFBRph (ORCPT
+        with ESMTP id S237660AbiFBRqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 13:45:37 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CC22AE9FC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 10:45:36 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id c2so7199358edf.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 10:45:36 -0700 (PDT)
+        Thu, 2 Jun 2022 13:46:50 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C71739A;
+        Thu,  2 Jun 2022 10:46:48 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id 187so5336022pfu.9;
+        Thu, 02 Jun 2022 10:46:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O/j8ff/empoIVzIPqKgRJrZ1yf+Uabh8CB6phARQHw8=;
-        b=pjj97zVwrM2CrMZNQ3YkjATsb+hGhtkoV0IpDJjgCaefeTLDdnSoin2KLI9/QKKmxO
-         oA3TdT7FkZz2tbI4HStW8JyPCbfhVf0FHFBe6OppQ77QKTNmsKLy/hQckjF20VRrgdna
-         WwLC6aH/+MnQQ7yWyEgjSOj1N779suPF85G7D73rEpHEoJwWe38490e8Ul2h9EviJOzQ
-         dZsuwxUIzJbucpc5J+ygfZ8y4wx580vg1bv3nY1mJ+Ger3GGq95WzFb6ykyto88yD8av
-         OchcgEkqmZiP0Sys7Ju/I+lMSWVVA4zu+08fZAJUvuParWjBk3U901h2VCPqXupCrG07
-         4+Ew==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=S0kiPQZyWlYVIOJkiV7UkjYaE9b35apJIAe4jrH0pmE=;
+        b=kO2DY3HPvb+3eEPd6LYATCmZzcBFTRNM1TmFlyQ3BCQ39OQfDP/80su+HJub539UCX
+         mAAf/8f5bBYQJFafrQBX7h++LbgnuLdMzl84tr9BbOpVvDrSmosmtasLj+l+LzkUbHe2
+         WugmU0OhU6xm0rEawAcbdFCgSh/LizY4ldHmL0VbAWhHRTJrKQEviTclXHeXRp5GdOa5
+         XyHQpuxVbS51/K59T9mIXRr5jMinKxlt/1bMd7/ZIY/7ayduain8sOvhTGiixu1OnRBF
+         3qgdn49fml1TLsnCDFoipgFQP9QJrxuStRusAYujgTf2nhuOf08B35nG2Bpg1j4HO85p
+         fXuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O/j8ff/empoIVzIPqKgRJrZ1yf+Uabh8CB6phARQHw8=;
-        b=2MFOZHVX0pNAaojAbKlvYccL2EbCUcs7LXt3nAwNCRK+GKyEjzEcg0La8F5d16myNI
-         YpPl1/3J0hLUOLYjJ6n1N6K2pd8Iv4SfbkQ+dlWH7mYJMVkBze/1/m+Cwg7GFLd393Nf
-         8akD7Xvl3opt1RhvR91nss+fQ/RcG6qRUlfFOEYZksSU3DwluDtGzbAuQ/2txTTeFGPf
-         5e+KKnFED4r5iyylo+2PvQZFSoR1qjAKTfSuQfL1TEHFabX6GcnPGOi6dlyzJq5pi9fe
-         yoIgU4WwnHcHtc5jJIPaz2RaCrobnJ4Vwmalo9snvp6d7B0QNT5OCoEyeKO4kv283/xb
-         Gujg==
-X-Gm-Message-State: AOAM530urSnN7ZDL0olcGYCOkcXUmdNjsfJ2QHEg5S+DuMXGANt9Eqe0
-        Y/ItbtHmeBI7ihmzdGLane0lwnIIgwm35FpbIcQZ2Q==
-X-Google-Smtp-Source: ABdhPJzvUvlqNLSSWFHR1VOLU0xd2hgNWjjf5TY1pOrfxuPXl16DBLKRH8bOnbtdyu7oiCDTr/0gmfUg7LVZaOjTtN0=
-X-Received: by 2002:a05:6402:2806:b0:42b:67fc:8565 with SMTP id
- h6-20020a056402280600b0042b67fc8565mr6689418ede.230.1654191934879; Thu, 02
- Jun 2022 10:45:34 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=S0kiPQZyWlYVIOJkiV7UkjYaE9b35apJIAe4jrH0pmE=;
+        b=hjWUpLFY1p2Bb9uKvgQKUenkU618lGQZCWMRZT7BDIfm2axNWGLup7HwPwnr5myacx
+         OOzcht+22lRPhgAam0ulONOFp+SeoJlJrWfXNDEmkJZn0AgANtFaT5A1Leulpw6+PaIH
+         7duXQBKKjq/lvOsgF9CxpbJG0f1wfvODuMM8vq15mZeAyhrQXPFPv5IFkR4c/XLnH+eb
+         KMv79dywHO36pc/a4j+8ZC3Od8PJyDFq5HIuBa1GZ4PZ3wDz6caZI1XtZKB1vn/jdAAa
+         Ca6Vq6E2CLfAjh3IxBvmw79/gcfWE2xD0z6CDAH47jgLrKQvr+Vjc0dQamgjkZ3EGIIM
+         c86w==
+X-Gm-Message-State: AOAM530WGeNqp6V9+O85TF5fgUBcsg0zrfoEfkWV226yVIHm1cw6b1jd
+        UPiM1yS9MtjEvvgPfyqcFP8=
+X-Google-Smtp-Source: ABdhPJz7y32iYDT2F/DMmapftPbyZXOxJDY02/3F1ptZUEjlRkeChivP9vk2/181q5VWGJeZ8Wd3Yg==
+X-Received: by 2002:a62:7b94:0:b0:51b:c723:5724 with SMTP id w142-20020a627b94000000b0051bc7235724mr4685709pfc.8.1654192007390;
+        Thu, 02 Jun 2022 10:46:47 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:49ff])
+        by smtp.gmail.com with ESMTPSA id y17-20020a170903011100b00163ef7be14csm3744464plc.89.2022.06.02.10.46.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 10:46:46 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 2 Jun 2022 07:46:45 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH v5 3/3] blk-cgroup: Optimize blkcg_rstat_flush()
+Message-ID: <Ypj3hcodkAU1MUR7@slm.duckdns.org>
+References: <20220601211824.89626-1-longman@redhat.com>
+ <20220602133543.128088-4-longman@redhat.com>
+ <YpjsTNZx4DG+kot4@slm.duckdns.org>
+ <42da456d-8f6a-3af0-4cd3-d33a07e3b81e@redhat.com>
 MIME-Version: 1.0
-References: <20220530102017.471865-1-jose.exposito89@gmail.com>
- <20220530102017.471865-2-jose.exposito89@gmail.com> <20220530131158.kqq2mohxoh52xpeg@penduick>
- <20220530162903.GA6546@elementary> <CABVgOSn8i=LO5p7830h2XU1Jgg0KrN0qTnxkOMhf1oTgxjaKKw@mail.gmail.com>
- <fea8f80a-939b-2c73-d94b-5179d1e65be9@redhat.com>
-In-Reply-To: <fea8f80a-939b-2c73-d94b-5179d1e65be9@redhat.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 2 Jun 2022 10:45:23 -0700
-Message-ID: <CAGS_qxqpiCim_sy1LDK7PLwVgWf-LKW+uNFTGM=T7ydk-dYcEw@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/1] drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb332()
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     David Gow <davidgow@google.com>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        tzimmermann@suse.de, maarten.lankhorst@linux.intel.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <42da456d-8f6a-3af0-4cd3-d33a07e3b81e@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 10:29 AM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
-> > Or, without the .kunitconfig:
-> > ./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_DRM=y
-> > --kconfig_add CONFIG_DRM_FORMAR_HELPER_TEST=y --kconfig_add
-> > CONFIG_VIRTIO_UML=y  --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=y
-> > 'drm-*'
-> >
->
-> I wonder if would make sense to have for example an arch/um/.kunitconfig
-> with those symbols and maybe others and then the tests could also be run
-> with something like:
->
-> ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/.kunitconfig \
-> --kunitconfig=arch/um/.kunitconfig
+On Thu, Jun 02, 2022 at 01:26:10PM -0400, Waiman Long wrote:
+> 
+> On 6/2/22 12:58, Tejun Heo wrote:
+> > Hello,
+> > 
+> > On Thu, Jun 02, 2022 at 09:35:43AM -0400, Waiman Long wrote:
+> > > @@ -2011,9 +2076,16 @@ void blk_cgroup_bio_start(struct bio *bio)
+> > >   	}
+> > >   	bis->cur.ios[rwd]++;
+> > > +	if (!READ_ONCE(bis->lnode.next)) {
+> > > +		struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
+> > > +
+> > > +		llist_add(&bis->lnode, lhead);
+> > > +		percpu_ref_get(&bis->blkg->refcnt);
+> > Hmm... what guarantees that more than one threads race here? llist assumes
+> > that there's a single writer for a given llist_node and the ref count would
+> > be off too, right?
+> 
+> The llist_add() function is atomic. It calls into llist_add_batch() in
+> lib/llist.c which uses cmpxchg() to make the change. There is a non-atomic
+> version __llist_add() which may be problematic in this case. Note that irq
+> is disabled in the u64_stats_update* critical section, there shouldn't be a
+> racing thread running in the same cpu. Other cpus will modify their own
+> version of lhead. Perhaps the non-atomic version can be used here as well.
 
-Yeah, this came up before.
-It'd be nice to have
-* --kunitconfig be repeatable (it isn't right now)
-* a "uml_pci.config" with the magic needed to set CONFIG_PCI=y on UML
+Ah, right, this is per-cpu, so there can be no second writer trying to add
+the same node at the same time. Can you add a comment explaining the overall
+design / behavior? Other than that, please feel free to add
 
-Another example where this would be useful, coverage on UML
-CONFIG_DEBUG_KERNEL=y
-CONFIG_DEBUG_INFO=y
-CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-CONFIG_GCOV=y
+ Acked-by: Tejun Heo <tj@kernel.org>
 
-I did prototype the changes to support this but never sent anything
-out since I had some concerns, namely:
-1. we'd be blindly appending them, but that won't always work. Would
-users be ok with that?
-2. people are already confused about .kunitconfig. It seems like the
-most confusing part to new people, especially those new to kernel
-development. Would adding this make them even more lost? Perhaps
-making the docs clearer on this would a good pre-req.
-3. What conventions should there be around these partial configs? I
-think the idea should be more generic than just kunit.
-4. --kconfig_add now makes this possible, even if in a noisier way
-than another --kunitconfig
-5. we didn't have a good way of reporting options set to different
-values. https://lore.kernel.org/linux-kselftest/20220520224200.3764027-1-dlatypov@google.com/
-would help by giving us an easier way to give clearer error messages.
+Thanks.
 
-That said, I'm willing to whip up another version based on the patch in #5.
-I think we need a docs rewrite for #2, which I can take a stab at.
-But I think we'll need some bikeshedding about naming (#3).
-
-Daniel
+-- 
+tejun

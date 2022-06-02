@@ -2,89 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2131153B3BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C985B53B3B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiFBGld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 02:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S230117AbiFBGlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 02:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbiFBGl0 (ORCPT
+        with ESMTP id S231439AbiFBGlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 02:41:26 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183F52A1412
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 23:41:25 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id m20so8025201ejj.10
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 23:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Xh40FdUZDHp56lt1mcZYv6mF79rHnUUf6QlRZkakiWo=;
-        b=jjIbor3W9EkaLy33DYrUnVBgkcSocnbd9VJYFqQSnTlQS2pqJbn+n+0Y4LjdKoOac4
-         uTi5swn54aSkW0DcJ3ZD7xRk2qOVay7degnIXit1xEj5VqiLl1216O+qXRGQzwNIrB+i
-         53kRUkaYHKYw8RINS7+qDDTlPtjuaaYVb4OLgB1eIgxo6Vg8hKv8XpdL1x7kavw2YKBS
-         SiJtxUALKQYE2ln82KD3kVQAf0utgcOugzRyHd+o90fs91RlpEgWi1hwgJwpABh+koKd
-         2cQJ5gnPwhoZWZf0pZRuDoZQmO+TP9kVvskZszM831f+sENnkvzDpVqp9Y6yBSb19mUS
-         7Waw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Xh40FdUZDHp56lt1mcZYv6mF79rHnUUf6QlRZkakiWo=;
-        b=QNUin2GiEDT1JzHfB65s731h5oyJzhcRxdm280cS9wN2aT26/QfutjMZPf3xmbGnPb
-         1z9hN6zmQGD0QsfbVf/yBvF3XSGXHBZRB2DOBfvJZW8uRAUQo+93+JBEljrJ+U0KwzEN
-         OXNNu2lYT69xD+VVNBwJ+JpePO46tEjzN5b4AqT/HR1dIQgiCidX7w6X7oAv3PmQmHGb
-         qKvGPfqOV5IrBac0UYs5HXd3BWk6QS200WZMTNnmirAfayQ7niawUsrhqgoCWhPdaydK
-         5n5hkAtFIm516qGIq80aNBKLuQQxUGlLn/GIwQlMVgatVaTrQkeJ0aDLBHomShFZxqS/
-         RxjQ==
-X-Gm-Message-State: AOAM530Oy8XVqFJ3ICu2JCimOMzEdKt0gh0LsSnmsCAK6AzqEjtelDPm
-        ZU3pbemeoq92J5Szk4KAtS1bwA==
-X-Google-Smtp-Source: ABdhPJyaEB7WoRZ4YQcuTAOTfh31tzpYBulRNx0UClyWBZu0z/z0FJib+4lc9BcDTyXlnWjdhsfqNQ==
-X-Received: by 2002:a17:907:6e08:b0:6fe:d99b:8fc with SMTP id sd8-20020a1709076e0800b006fed99b08fcmr2913931ejc.230.1654152083647;
-        Wed, 01 Jun 2022 23:41:23 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p19-20020a056402155300b0042617ba638esm2016394edx.24.2022.06.01.23.41.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 23:41:23 -0700 (PDT)
-Message-ID: <2cc7effd-7956-1b09-9faf-585cf3b75734@linaro.org>
-Date:   Thu, 2 Jun 2022 08:41:22 +0200
+        Thu, 2 Jun 2022 02:41:49 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F522A3A04
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 23:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654152107; x=1685688107;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=hkExu+xypCvEZ2GrPWlhA1VX0WFEoqjTwVjGVoC+Nkk=;
+  b=P5DR1tbGOGWXVWqNjyB5RITAgEzUngeKBfVsVIwpJRAjxUBya+WhvA0I
+   UPnDQXnsIB+w94R3O5wciIox0biEbl8K51NIk9hj48dGbcs/ajZC1Rfpj
+   okAd6YGiYyltQr1UHsoh3QIdlP0x4gPwmnSyrGD4RFVkBq+I43k6ukbz2
+   Xa2mSw7zGHPTg2tpeG8K0dFDpchs/3ESgEujofsX+UUYEW7xkOU00RSL8
+   T12SkzA86P2AbZGffXB7DcEucymHzW3wvlD9GlKbBxFXsy/EJYjOWPYLj
+   YqtmqjFDVa2fqdpIl3XuwHYbiI2X133TC8z+miC9OAQ83IIqxHOfqpwIE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="301206430"
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="301206430"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 23:41:46 -0700
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="552685962"
+Received: from yanqingl-mobl1.ccr.corp.intel.com ([10.254.212.10])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 23:41:41 -0700
+Message-ID: <d8bf8096ef268d8bc4a60c86a7be04e690c69099.camel@intel.com>
+Subject: Re: [RFC PATCH v4 5/7] mm/demotion: Add support to associate rank
+ with memory tier
+From:   Ying Huang <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Greg Thelen <gthelen@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Thu, 02 Jun 2022 14:41:39 +0800
+In-Reply-To: <20220527122528.129445-6-aneesh.kumar@linux.ibm.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+         <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+         <20220527122528.129445-6-aneesh.kumar@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 4/5] ARM: dts: socfpga: Add Google Chameleon v3
- devicetree
-Content-Language: en-US
-To:     =?UTF-8?Q?Pawe=c5=82_Anikiel?= <pan@semihalf.com>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     arnd@arndb.de, olof@lixom.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org,
-        amstan@chromium.org, upstream@semihalf.com
-References: <20220601154647.80071-1-pan@semihalf.com>
- <20220601154647.80071-5-pan@semihalf.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220601154647.80071-5-pan@semihalf.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2022 17:46, Paweł Anikiel wrote:
-> Add devicetree for the Google Chameleon v3 board.
+On Fri, 2022-05-27 at 17:55 +0530, Aneesh Kumar K.V wrote:
+> The rank approach allows us to keep memory tier device IDs stable even if there
+> is a need to change the tier ordering among different memory tiers. e.g. DRAM
+> nodes with CPUs will always be on memtier1, no matter how many tiers are higher
+> or lower than these nodes. A new memory tier can be inserted into the tier
+> hierarchy for a new set of nodes without affecting the node assignment of any
+> existing memtier, provided that there is enough gap in the rank values for the
+> new memtier.
 > 
-> Signed-off-by: Paweł Anikiel <pan@semihalf.com>
+> The absolute value of "rank" of a memtier doesn't necessarily carry any meaning.
+> Its value relative to other memtiers decides the level of this memtier in the tier
+> hierarchy.
+> 
+> For now, This patch supports hardcoded rank values which are 100, 200, & 300 for
+> memory tiers 0,1 & 2 respectively.
+> 
+> Below is the sysfs interface to read the rank values of memory tier,
+> /sys/devices/system/memtier/memtierN/rank
+> 
+> This interface is read only for now, write support can be added when there is
+> a need of flexibility of more number of memory tiers(> 3) with flexibile ordering
+> requirement among them, rank can be utilized there as rank decides now memory
+> tiering ordering and not memory tier device ids.
+> 
+> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> ---
+>  drivers/base/node.c     |   5 +-
+>  drivers/dax/kmem.c      |   2 +-
+>  include/linux/migrate.h |  17 ++--
+>  mm/migrate.c            | 218 ++++++++++++++++++++++++----------------
+>  4 files changed, 144 insertions(+), 98 deletions(-)
+> 
+> diff --git a/drivers/base/node.c b/drivers/base/node.c
+> index cf4a58446d8c..892f7c23c94e 100644
+> --- a/drivers/base/node.c
+> +++ b/drivers/base/node.c
+> @@ -567,8 +567,11 @@ static ssize_t memtier_show(struct device *dev,
+>  			    char *buf)
+>  {
+>  	int node = dev->id;
+> +	int tier_index = node_get_memory_tier_id(node);
+>  
+> 
+> 
+> 
+> -	return sysfs_emit(buf, "%d\n", node_get_memory_tier(node));
+> +	if (tier_index != -1)
+> +		return sysfs_emit(buf, "%d\n", tier_index);
+> +	return 0;
+>  }
+>  
+> 
+> 
+> 
+>  static ssize_t memtier_store(struct device *dev,
+> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+> index 991782aa2448..79953426ddaf 100644
+> --- a/drivers/dax/kmem.c
+> +++ b/drivers/dax/kmem.c
+> @@ -149,7 +149,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>  	dev_set_drvdata(dev, data);
+>  
+> 
+> 
+> 
+>  #ifdef CONFIG_TIERED_MEMORY
+> -	node_set_memory_tier(numa_node, MEMORY_TIER_PMEM);
+> +	node_set_memory_tier_rank(numa_node, MEMORY_RANK_PMEM);
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I think that we can work with memory tier ID inside kernel?
 
-Best regards,
-Krzysztof
+Best Regards,
+Huang, Ying
+
+
+[snip]
+

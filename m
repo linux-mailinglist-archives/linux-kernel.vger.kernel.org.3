@@ -2,58 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B7E53B12C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 03:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8582553B0F6
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 03:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233112AbiFBBPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 21:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40870 "EHLO
+        id S232999AbiFBBNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 21:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233098AbiFBBPc (ORCPT
+        with ESMTP id S232904AbiFBBNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 21:15:32 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB5028E719;
-        Wed,  1 Jun 2022 18:15:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 98E6FCE1DBA;
-        Thu,  2 Jun 2022 01:15:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F29A7C385A5;
-        Thu,  2 Jun 2022 01:15:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654132529;
-        bh=dIyI0EHO1+u34y11qkC09d6/0IBp5okee0/nHVtoRaY=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=F40VZTmu9X86cKRVpETm98IWDDE8DzvvHQ1gXzI0r8JSMvtl/++Xwhw2izxLq2amV
-         i9WSIpVzWHkVOxYj/s4JrYBc826IqnI6CXjClsA4ZaHwIo0UcnwsDupp5utxf1Xkkz
-         kPN/n25xc26zgQ8aJ/2Jhxk3H/dVs/uWNadd4oAye764+fBzvwGcafxAEUiubSBfuW
-         D5QlkJu26YD9Usfz/ypb97xaKi2G/JgHnTrJL930qqVZstSFbkc+r+J7WtHd6D0P4i
-         xoRrNStrzmKyNCXCtHwYofcb0F+AIaG4CqQU0uLye1JU3iDGB6KxI5EpjGQ4uOzl4q
-         ZKhcbzNoDa2Dg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DEDE0EAC081;
-        Thu,  2 Jun 2022 01:15:28 +0000 (UTC)
-Subject: Re: [GIT PULL] xfs: changes for 5.19-rc1 [2nd set]
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220601221431.GG227878@dread.disaster.area>
-References: <20220601221431.GG227878@dread.disaster.area>
-X-PR-Tracked-List-Id: <linux-xfs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220601221431.GG227878@dread.disaster.area>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.19-for-linus-2
-X-PR-Tracked-Commit-Id: 7146bda743e6f543af60584fad2cfbb6ce83d8ac
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0e5ab8dd87c29640a46aee9e38bc3ba7645b1db0
-Message-Id: <165413252890.5973.590261192738155869.pr-tracker-bot@kernel.org>
-Date:   Thu, 02 Jun 2022 01:15:28 +0000
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandeen@sandeen.net, djwong@kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Wed, 1 Jun 2022 21:13:04 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0065227B4A3;
+        Wed,  1 Jun 2022 18:13:01 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LD7K46WVFzjXLQ;
+        Thu,  2 Jun 2022 09:12:08 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 2 Jun
+ 2022 09:12:59 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
+        <kpsingh@kernel.org>, <toke@kernel.org>
+CC:     <weiyongjun1@huawei.com>, <shaozhengchao@huawei.com>,
+        <yuehaibing@huawei.com>
+Subject: [PATCH v5,bpf-next] samples/bpf: check detach prog exist or not in xdp_fwd
+Date:   Thu, 2 Jun 2022 09:19:15 +0800
+Message-ID: <20220602011915.264431-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,15 +50,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 2 Jun 2022 08:14:31 +1000:
+Before detach the prog, we should check detach prog exist or not.
 
-> git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.19-for-linus-2
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+ samples/bpf/xdp_fwd_user.c | 55 +++++++++++++++++++++++++++++++++-----
+ 1 file changed, 49 insertions(+), 6 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0e5ab8dd87c29640a46aee9e38bc3ba7645b1db0
-
-Thank you!
-
+diff --git a/samples/bpf/xdp_fwd_user.c b/samples/bpf/xdp_fwd_user.c
+index 1828487bae9a..d321e6aa9364 100644
+--- a/samples/bpf/xdp_fwd_user.c
++++ b/samples/bpf/xdp_fwd_user.c
+@@ -47,17 +47,60 @@ static int do_attach(int idx, int prog_fd, int map_fd, const char *name)
+ 	return err;
+ }
+ 
+-static int do_detach(int idx, const char *name)
++static int do_detach(int ifindex, const char *ifname, const char *app_name)
+ {
+-	int err;
++	LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
++	struct bpf_prog_info prog_info = {};
++	char prog_name[BPF_OBJ_NAME_LEN];
++	__u32 info_len, curr_prog_id;
++	int prog_fd;
++	int err = 1;
++
++	if (bpf_xdp_query_id(ifindex, xdp_flags, &curr_prog_id)) {
++		printf("ERROR: bpf_xdp_query_id failed (%s)\n",
++		       strerror(errno));
++		return err;
++	}
+ 
+-	err = bpf_xdp_detach(idx, xdp_flags, NULL);
+-	if (err < 0)
+-		printf("ERROR: failed to detach program from %s\n", name);
++	if (!curr_prog_id) {
++		printf("ERROR: flags(0x%x) xdp prog is not attached to %s\n",
++		       xdp_flags, ifname);
++		return err;
++	}
+ 
++	info_len = sizeof(prog_info);
++	prog_fd = bpf_prog_get_fd_by_id(curr_prog_id);
++	if (prog_fd < 0) {
++		printf("ERROR: bpf_prog_get_fd_by_id failed (%s)\n",
++		       strerror(errno));
++		return errno;
++	}
++
++	err = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &info_len);
++	if (err) {
++		printf("ERROR: bpf_obj_get_info_by_fd failed (%s)\n",
++		       strerror(errno));
++		goto close_out;
++	}
++	snprintf(prog_name, sizeof(prog_name), "%s_prog", app_name);
++	prog_name[BPF_OBJ_NAME_LEN - 1] = '\0';
++
++	if (strcmp(prog_info.name, prog_name)) {
++		printf("ERROR: %s isn't attached to %s\n", app_name, ifname);
++		err = 1;
++		goto close_out;
++	}
++
++	opts.old_prog_fd = prog_fd;
++	err = bpf_xdp_detach(ifindex, xdp_flags, &opts);
++	if (err < 0)
++		printf("ERROR: failed to detach program from %s (%s)\n",
++		       ifname, strerror(errno));
+ 	/* TODO: Remember to cleanup map, when adding use of shared map
+ 	 *  bpf_map_delete_elem((map_fd, &idx);
+ 	 */
++close_out:
++	close(prog_fd);
+ 	return err;
+ }
+ 
+@@ -169,7 +212,7 @@ int main(int argc, char **argv)
+ 			return 1;
+ 		}
+ 		if (!attach) {
+-			err = do_detach(idx, argv[i]);
++			err = do_detach(idx, argv[i], prog_name);
+ 			if (err)
+ 				ret = err;
+ 		} else {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.17.1
+

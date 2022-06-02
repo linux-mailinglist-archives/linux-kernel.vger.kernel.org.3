@@ -2,149 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05FB153B9A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D107C53B9A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235314AbiFBN0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 09:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37392 "EHLO
+        id S235318AbiFBN1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 09:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbiFBN0B (ORCPT
+        with ESMTP id S231926AbiFBN1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 09:26:01 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2115.outbound.protection.outlook.com [40.107.93.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC21A28CE84;
-        Thu,  2 Jun 2022 06:25:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PPzyCXlM3BmiaQupQ2UEy7KdQzQKZAJKkYByqx/J6NzXZV9cnbFG+N1MvNhCLU30pSZqvzSMngNthiRBncbYRb9wxWnDuaL9bmx73fBZM1rUdJ4wZq1VkF+njdacegTnyP7NDmaB75sssrW14zOYZhEBXN/5MKjMW5pHd2mA3D6Ci34nKNToiacuyEBB8I3VMki7iS+xhg0s8iew7ST53GT+jb9DbZJIEZeiQkvvGWBCgHSPnZakLp+Sa2qcOhSM4HjKg2u+6ETnKu6Q/k2n0o2YzlTq0lWCMbW8PwBITjBPtIFH/UTxS5qHLyDuEa4VEYTgVs9wZv7jaQr6eahapQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=K0yn7LcnAQenuZbXMMkAlVyheQfRtZkhhxqtiUKf0Bk=;
- b=SsMPNVMIUhOaEC0W4H78lWvaVc78Pt5l26qHKMCJEdXKnTG5REFOFzmUBVUwCFQcL0vpmwlj8hjQqXthR4Lof46VkAWhAdKWAGKUbmq/eyATxrStODvBOKHi6DI5rSRGnNcbKRDPiAkwFsSxUEEMZQ9kzaKfzDO4NplGmUi9ye1lrRmLhzRBP6HOxxB44OIstozY/Yy9v+3JhXTAcSf3VP80eYeM+WpaR1ifcbssJVtYkq8+G7a+w2EZfLF2rvOYhxjWydlxuskeH30A/zzZfr/sOJ4ScDw0mYS5z544YlShJmy4+Zg6R0R+h0vqEoA3ZtYh6eUeXUhv5f9ftr9psQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bayhubtech.com; dmarc=pass action=none
- header.from=bayhubtech.com; dkim=pass header.d=bayhubtech.com; arc=none
+        Thu, 2 Jun 2022 09:27:36 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8142531523;
+        Thu,  2 Jun 2022 06:27:32 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so2773389wms.3;
+        Thu, 02 Jun 2022 06:27:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=towerbridgetechnology.onmicrosoft.com;
- s=selector2-towerbridgetechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=K0yn7LcnAQenuZbXMMkAlVyheQfRtZkhhxqtiUKf0Bk=;
- b=DTD0rPAgvelDDM9bb9sLxvARuA3aVPqhDbtzcQC1JLwyKnC10q+rVdcOuUQkjQOKH0XnPysdCf8uSbtpmH2Y94ReQ4XPeLm0ZYSM88n5YUI2Nx3/POaADaL1J6zqHkU3vdzVAmhniWskB7FOctIwwtdg0qbRYBls03yKnJnhnw4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bayhubtech.com;
-Received: from PH0PR16MB4248.namprd16.prod.outlook.com (2603:10b6:510:4c::16)
- by BLAPR16MB3681.namprd16.prod.outlook.com (2603:10b6:208:27f::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Thu, 2 Jun
- 2022 13:25:56 +0000
-Received: from PH0PR16MB4248.namprd16.prod.outlook.com
- ([fe80::e0e1:6026:e3dc:5425]) by PH0PR16MB4248.namprd16.prod.outlook.com
- ([fe80::e0e1:6026:e3dc:5425%7]) with mapi id 15.20.5314.013; Thu, 2 Jun 2022
- 13:25:56 +0000
-From:   Chevron Li <chevron.li@bayhubtech.com>
-To:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     shaper.liu@bayhubtech.com, chevron.li@bayhubtech.com,
-        xiaoguang.yu@bayhubtech.com, shirley.her@bayhubtech.com,
-        fred.ai@bayhubtech.com
-Subject: [PATCH V1 1/1] mmc:sdhci-pci-o2micro:fix card detect issue because card detect debouncing isn't done
-Date:   Thu,  2 Jun 2022 06:25:43 -0700
-Message-Id: <20220602132543.596-1-chevron.li@bayhubtech.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0201.apcprd02.prod.outlook.com
- (2603:1096:201:20::13) To PH0PR16MB4248.namprd16.prod.outlook.com
- (2603:10b6:510:4c::16)
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l8W+7tcFTmWgcZkmqtvEAURZZKd0U2SDl09JGSg/xJY=;
+        b=EqF2c9DqGwXxEBxvnMScQ+ELXNccLj4Uv/g2mPawAj6APVYuwRlURI25YdBdFtNhb2
+         hm5s4r8nxVxYtjk7B4r8ZAQ4vzbuC2C1ydfNdoH5WwtOfWly2jlVVtP9j8BfvaCSs1zY
+         nqmTz20aaOy0p3CIvz4sk1WFXq5uP46hqsPKSW8g/jpwQ3zA1fVMgwKOmTVsQKYqRUoz
+         R6xSU+xTqa6fVeRBfNS8XUZ1bYaAXHpbc8DlW9jiaEO+GeOPURDfDYYBl0TOUayMWdkn
+         TdY+VKI1tfIWc9GfRq+WeG2qxLiGye2M4PXQ7ChXlB00w0wKbPA2c1U4iANB/s/HIAbj
+         C0+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l8W+7tcFTmWgcZkmqtvEAURZZKd0U2SDl09JGSg/xJY=;
+        b=3hnnY4AokHVbK7B1CC9/gkqa0K+thzVErwJaxaQUVI2hSXk1DtoIRFajQ7x4Mc43P4
+         sfaGT94eM48H5/0sCe6oOXzEon/ScAR4mh6TkDG0wpOnC0fydCUsOuWsxZLaBBMNXmmM
+         HyAAjuEqeJThAAUtgdq6VECB/6DiLz9shftB8CP2OphbiIapdTWh3gzPqgaDmchmZcbd
+         nffC302Pb3csnnQgVTC0xUdHLwG2CU3qPagIG2k7LsODIookV3hFr5MuY98N34Qi8z27
+         qkAH0d9RvFyI8d2cIDtODM3GuEGXr677LHKWPxB0rffR6lfmU2+StrJrOVbrFbgSyWD+
+         eWyQ==
+X-Gm-Message-State: AOAM530rUVqJSHNaMYdePpvPtorPhRgdzXNjk3wjq0dP5xmsDha+8JXM
+        atJApjj5/0aB0oTpumeFn7RVaxcM/Dil5/fsgdQ=
+X-Google-Smtp-Source: ABdhPJwYupf43+H7wFwlwquLKLXu/Ei58WabOVVaZSXOqm1N2/bD1VaLi6h42LIL3W3Xt9RG1iGYtvyot1MCGIgpLGw=
+X-Received: by 2002:a05:600c:3d94:b0:39c:1c04:3191 with SMTP id
+ bi20-20020a05600c3d9400b0039c1c043191mr3899511wmb.171.1654176450981; Thu, 02
+ Jun 2022 06:27:30 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 23cccf78-a567-4dd1-b92e-08da449b6c91
-X-MS-TrafficTypeDiagnostic: BLAPR16MB3681:EE_
-X-Microsoft-Antispam-PRVS: <BLAPR16MB3681A30A5F6AE827556412AFEADE9@BLAPR16MB3681.namprd16.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fBmVCWxqwi/dD6hVDTgEdXJ9RJzIDGL7uaKalZA3Df5aaXXWxuo0Wcpd6uo12Y3mvjkcvn3om/SpkZJiJ/MLdvL7DKyzWP/9pVCAr/7FjGd9EzrD4/FGiGMJJxFZdvFieP/WxNAojwtInOXAK8xCudlkyqiQwCZs2GBmPylPFIYqKOZ8lrDXkGc5K8fbweS8pRT9lF2No/nkaPhEWks2vMLr+6h1nsnfHXvI/+EvTT9tN/DkwLQENHvcEGdirz3EVd7oAsq0wJZJ2DW23IiweTy71VR/y/f5IyKRUiBciRtcDKK1CyDeIYqknS4Nu/GUGCGU8hT/doj9wCT9/SMuO4a6wtlYK3rCqo6/VhyjrkNugwpDJiuYWVDFCNQkJnzIj5FG4PVR/zwvU96D3a6YpUAjIRrIcNPOm/qxueeL1ROh1V5UrZzgPy+wHwxRbNiiGPTPBx1ky2r6Vh8pEDaqtPMwhShU6Tdi4NFDyxx9v/4nSIOKKc1OA+d3Wb0d4gDnoFvGuUiVWFLbhkCfAiotE4hvDeZa+wt92jjpnhD13gtj8S+3TnrbeUUJSVMTSRdATxK4zW3GBn5Hy+aSA5JzchPjo6PpqsmlIYpCBnvX8vSWViRqUPy9YSYBhIvK4+NoOne8NxHdIA2NKoq/fDskCA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR16MB4248.namprd16.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(396003)(136003)(376002)(39830400003)(346002)(366004)(66946007)(66556008)(38100700002)(52116002)(36756003)(4326008)(6506007)(6666004)(8676002)(316002)(86362001)(6512007)(66476007)(8936002)(186003)(41300700001)(1076003)(107886003)(2616005)(508600001)(5660300002)(2906002)(4744005)(44832011)(83380400001)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?r7w3HvXes87AFUlCA9IeZBpEsgkVRH2jO5atFd8LHHXfYxg/lpueXBQhGHtc?=
- =?us-ascii?Q?fGxJNEGPsiRl6pnOVDA1xGDniUZhoE8Wz8xqDFFGaVgwwylyQpz6UD+wnckS?=
- =?us-ascii?Q?hi9tCqwymxwMkVdHfvGztq/4Bq1jgSQo0eDxQdbnkKmMq+aLwHsq9WraeAe4?=
- =?us-ascii?Q?wEB5As/gjfgbIu6aVK3jBVL/9Xqf/hLkjmMa7ThgozUOJmd4ssf7bHuMkI/Y?=
- =?us-ascii?Q?J9JvXZosw/ZWmhzCwopvk4d7T6WbygvAVY9EYjuv0TgIFaxkuqAt+w/gDQ1A?=
- =?us-ascii?Q?O2XSj4vVCBDsVZJYgAISV1vsGxRjirKuocdRdO45o2eGNEKL/m4+p+eZyG50?=
- =?us-ascii?Q?KMhjlIdpM0OcB0OEBRHowRyk4zRI6KP6knSnA3wqKAfbbjxOmpeJ3WRazXi9?=
- =?us-ascii?Q?wlD70N+CeYYlsfAnHSNA5N3r8+thmF3IkixTSgjpG5A+6m5ueYr8xyovHH5w?=
- =?us-ascii?Q?ZDRrpbShiHpZuXas9ynyILzyCyEtLvUaLFiZ/OYzeJaPrunf+QUgoRg/Ly2F?=
- =?us-ascii?Q?bluGmb9HaFbaOh2N7yKoJcibjTYvKFjc3VpeOSlsXMk8UgJJkjuNlWTU5IJ3?=
- =?us-ascii?Q?G1RySArOgj1XKem/Y0I8z6vPcg+ws4H+jJKZw86y0VloCSyCyrGlRGiLA76C?=
- =?us-ascii?Q?BQo02kE7WzK2t4l8Yv6d/0upYeXElJtX2TqKEnXbFIVGWE8cLsFQPGKEgTAP?=
- =?us-ascii?Q?frBrn5+ROuidAFyy6uF8tcy/kZIJBnbsEWtvzcaO2kxFqDpW1WBTVUTaX7Jb?=
- =?us-ascii?Q?iXjxLzwUhHKFAjDysvB8MvKJB37HTcZjbkk4jathSx57z78HfMqcp+XzDncc?=
- =?us-ascii?Q?M7kyMP2t1RuUINtM60M87ZAvrAqm0+2bibjPY6t++NttH7RE8eeT0w+htPHI?=
- =?us-ascii?Q?oh3fQ7DXRgFQ7gG8XiBeZ8EQ26sO4MQneQRwcNvOsQq7gkPcqqCs94hzK2s4?=
- =?us-ascii?Q?QZZKSwaZPi9oUtNPtP8meX8WBRDEHz++9sTATMnC4cDdtl0+LbXELmFuNOI0?=
- =?us-ascii?Q?DiFIqHRA15siWkkx7OhgXkM3hdyTaAPJX4l4HEn6R+3w1XA2e90jho0W+K97?=
- =?us-ascii?Q?DY1ImBu/5j+1MRl5gj8lrfvtgI+zPYwPabMVeiK3etFwfSWIp17K5F8GFUST?=
- =?us-ascii?Q?5/ObEZlMvY6jyziWzWFPz4NMfgl4m/h5jvPJPKecHyD2EHfiKA5bpu/85ji2?=
- =?us-ascii?Q?X+2faya5sPRx47fhuZTHSdYX/dQMRIToswrA3QNdAfbHQwKhsNqOX3sNGDZG?=
- =?us-ascii?Q?/F2RgLucNUY4q5ukxDiSijsZJJsk9nWc9ak6K2sz9BQnPHnW+JU13Az7t7UH?=
- =?us-ascii?Q?VSYv0VGUWUwQMmu+VOS9UHJ1OeGhQWvRmlC+IztnWzFRa2ht3n/psXeh1LKV?=
- =?us-ascii?Q?zHZC3br/l8nYoWWv0v/mg37dPrrMDpDcU1jv0YSS3AyLotRhdenxewuC1NMY?=
- =?us-ascii?Q?4YQgNuBmeowUSQ78+hY1SHI4lNo8ijMn3ZDPJpoPIYD/Xcn/cDOhnjmx+7FU?=
- =?us-ascii?Q?5g+6eQjDxarj/ciWgUUBpDNX+tCPL0cEKXz5smPuiNNeba0j+GZAiFLb8nQi?=
- =?us-ascii?Q?gaAMm4V40aR9Un8WLLKp8NitSqQFerKnysGc3I1kAFepbeB4QeTr1F+zA6qc?=
- =?us-ascii?Q?8k2SpL3pvqqlI+W8FUGH5ZIpr64Xnheme0QUF3aV1sy4zOigzxACSEgBk6dD?=
- =?us-ascii?Q?QbGB/G4D8qGss1EW+zZ/aTeSmjXqQm0Bnki1iOaAXXFkY8fc/ZgUzuTOOUgj?=
- =?us-ascii?Q?EeL0mqZen56sYIJk5s6lUvWGcxlGV/teur2FDxlAxelC50En2HltIWSQEvCC?=
-X-MS-Exchange-AntiSpam-MessageData-1: 8hjg61+eX3tFvwVsbOLTtwt0yvQ9kEmBlVzryayYC7SeOWp6mbhY0kJq
-X-OriginatorOrg: bayhubtech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23cccf78-a567-4dd1-b92e-08da449b6c91
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR16MB4248.namprd16.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2022 13:25:56.1747
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0a7aae2b-8f2e-44df-ba2f-42de7f93c642
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E2trXap54wGcwaeI5pS5lHhy12poU8aIJj+P+rdd/2R7yQO/y81o1t+sjVj2gYCe1ktIHXsky8+1gx2aHSBd8nhJUYG+5v41RzOOXh3W5qg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR16MB3681
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <86sfov2w8k.fsf@gmail.com> <YpCgxtJf9Qe7fTFd@shredder>
+ <86sfoqgi5e.fsf@gmail.com> <YpYk4EIeH6sdRl+1@shredder> <86y1yfzap3.fsf@gmail.com>
+ <d88b6090-2ac8-0664-0e38-bb2860be7f6e@blackwall.org> <86sfonjroi.fsf@gmail.com>
+ <3d93d46d-c484-da0a-c12c-80e83eba31c9@blackwall.org> <YpiTbOsh0HBMwiTE@shredder>
+ <86mtevjmie.fsf@gmail.com> <YpiqlziXDCg/1FJH@shredder>
+In-Reply-To: <YpiqlziXDCg/1FJH@shredder>
+From:   Hans S <schultz.hans@gmail.com>
+Date:   Thu, 2 Jun 2022 15:27:19 +0200
+Message-ID: <CAKUejP5NiPYre8qAJKqJ0SOxQ_DtXHt6q6ze6gr=Xx6VGc8xsA@mail.gmail.com>
+Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Nikolay Aleksandrov <razor@blackwall.org>,
+        Ido Schimmel <idosch@idosch.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-get_cd result is uncorrect during card detect debouncing
-we need to wait card detect stable before return get_cd result
+Yes, that sounds much like the case. So the replace of course just
+modifies the SW fdb entry, and then it just uses port_fdb_add() to
+replace HW entry I assume, which then in my case triggers
+SWITCHDEV_FDB_DEL_TO_BRIDGE as the locked entry is removed.
+So I should not send the SWITCHDEV_FDB_DEL_TO_BRIDGE message when
+removing the locked entry from port_fdb_add() function...
 
-Signed-off-by: Chevron Li<chevron.li@bayhubtech.com>
----
-change in V1:
-add wait card detect stable logical before return card detect result.
----
- drivers/mmc/host/sdhci-pci-o2micro.c | 2 ++
- 1 file changed, 2 insertions(+)
+(note: having problems with smtp.gmail.com...)
 
-diff --git a/drivers/mmc/host/sdhci-pci-o2micro.c b/drivers/mmc/host/sdhci-pci-o2micro.c
-index 92c20cb8074a..0d4d343dbb77 100644
---- a/drivers/mmc/host/sdhci-pci-o2micro.c
-+++ b/drivers/mmc/host/sdhci-pci-o2micro.c
-@@ -152,6 +152,8 @@ static int sdhci_o2_get_cd(struct mmc_host *mmc)
- 
- 	if (!(sdhci_readw(host, O2_PLL_DLL_WDT_CONTROL1) & O2_PLL_LOCK_STATUS))
- 		sdhci_o2_enable_internal_clock(host);
-+	else
-+		sdhci_o2_wait_card_detect_stable(host);
- 
- 	return !!(sdhci_readl(host, SDHCI_PRESENT_STATE) & SDHCI_CARD_PRESENT);
- }
 
-base-commit: d1dc87763f406d4e67caf16dbe438a5647692395
--- 
-2.32.0
-
+On Thu, Jun 2, 2022 at 2:18 PM Ido Schimmel <idosch@nvidia.com> wrote:
+>
+> On Thu, Jun 02, 2022 at 02:08:41PM +0200, Hans Schultz wrote:
+> > >
+> > > I think Hans is testing with mv88e6xxx which dumps entries directly from
+> > > HW via ndo_fdb_dump(). See dsa_slave_port_fdb_do_dump() which sets
+> > > NTF_SELF.
+> > >
+> > > Hans, are you seeing the entry twice? Once with 'master' and once with
+> > > 'self'?
+> > >
+> >
+> > When replacing a locked entry it looks like this:
+> >
+> > # bridge fdb show dev eth6 | grep 4c
+> > 00:4c:4c:4c:4c:4c vlan 1 master br0 extern_learn offload locked
+> >
+> > # bridge fdb replace 00:4c:4c:4c:4c:4c dev eth6 vlan 1 master static ; bridge fdb show dev eth6 | grep 4c
+> > 00:4c:4c:4c:4c:4c vlan 1 self static
+>
+> This output means that the FDB entry was deleted from the bridge driver
+> FDB.
+>
+> >
+> > The problem is then that the function
+> > br_fdb_find_rcu(br,eth_hdr(skb)->h_source, vid);
+> > , where the h_source and vid is the entry above, does not find the entry.
+> > My hypothesis was then that this is because of the 'self' flag that I
+> > see.
+>
+> br_fdb_find_rcu() does a lookup in the bridge driver FDB, but per the
+> output above, the entry isn't there for some reason. It's only in HW.
+>
+> Can it be that you driver is deleting these entries from the bridge
+> driver FDB via SWITCHDEV_FDB_DEL_TO_BRIDGE for some reason?
+>
+> >
+> > I am thinking that the function dsa_slave_port_fdb_do_dump() is only for
+> > debug, and thus does not really set any flags in the bridge modules FDB,
+> > but then I don't understand why the above find function does not find
+> > the entry?

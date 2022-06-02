@@ -2,219 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98FC53BF7F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 993F353BE1C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 20:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238688AbiFBUQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 16:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        id S238222AbiFBShK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 14:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237676AbiFBUQH (ORCPT
+        with ESMTP id S234831AbiFBShG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 16:16:07 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A112BC2E;
-        Thu,  2 Jun 2022 13:16:03 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id b135so5613066pfb.12;
-        Thu, 02 Jun 2022 13:16:03 -0700 (PDT)
+        Thu, 2 Jun 2022 14:37:06 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136F01115C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 11:37:03 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 25so7102876edw.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 11:37:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Kb/EgUnEl+66ubR0OBdnZBhP1OFKsT5B/tkrmGF5yWM=;
-        b=NkE0Ee2nKeVG01X4TGf7Tds/HpDebAAGIAaGwKYQebrpvg7ak4oaNFBWIPs3Xdbx/6
-         /ueM/g2UgL33WPhvSE1L6JXOWT5chkMdkpBYr1/zYN99/wpvyMYpmPhA1oytFSuRvYuV
-         PNVqn/U5agKa+qIWBAIGEorsNvVDKBWugZg900PvAoG9Qmtwztu7xfeAcVkvqkOl0WYL
-         cOZn4F9+0NeUducPaMA2Z6OZ8Mng1gwTUzPg03BP8mG4yWhRQRsi/9O5/gtaqrHqD4Bg
-         4OA13xXtBNtUEnlW2r45PUnCTtuMdwsf1kr3gPJWnFj4wDmdBPTRZoNV0p1ETDx5FzvG
-         2rSA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nxEwqFG0EOGCgU9ZJ7XwRHFl2ED0Wh9INs05c4zZisA=;
+        b=ztxVyGN3ZUE9ZA/CtzrH83LM04e5eMnTENPg23hcobEf9lfqAngke8cwpjj2E66BLb
+         RQMEzDWPzOFiCIaBbtWfe3DWbPfjeNIfVHzNpIt1nDmCJA5W3vp0RpqWqGKH1lYxJjTS
+         wxVVR8qS3i7ImkV5JFz9o3zZHUiuKtnP89gzJA/qsdL0f0Osk5VuXvW0aCAJRxxb4KyZ
+         rvR6VXFLz9FlkI5OQEoltmBUD5xvNT1IQKenMyzw65h14S570BnU87Fe8zHapU49P2z8
+         jLi10vZBlCmZirIkTTVfNNXK4cXup6Z7u3iQlNVSiG+6bv3Wr6I82sp6n9x+8u/iMXMp
+         XE1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Kb/EgUnEl+66ubR0OBdnZBhP1OFKsT5B/tkrmGF5yWM=;
-        b=IA3B5ANyWQw+rp206KCxp2mt1dg61aeWI7z7dxUsnrqwcrGNiinwbJtlIZ30OU2dFc
-         s83uxfkU8P9iOtzxMhd/TqbA81mVZACImSX7PhJQHjL1RT4BdVmmR1gXcgaYcU/zZ/6R
-         loc74AviYG2FhoM0bNGD9nzb1437FVAqbEVWZ17xIaYZBMIvK5VkVsewxDfWWkZHEGq6
-         Aozq1NKz2BlcOpQmzP1khm/ojNKTnrNwcSE9SgOdOGkLdpRdXxCVpZpJHRrIOP3jJvTo
-         RgXHTiinSYp0EnIkcToU6O4d7BvTWwvGRgPvnNK0rZdzlHg+PL0J3JNbxIZsyDaD5qs6
-         bXew==
-X-Gm-Message-State: AOAM533H9oh3TID4oc2GaTs5tFVkwi+HS+vtN9aaWvDRTlw6RtUAlxWH
-        jm4Q0cE8UrCs/5mWSaRA8XEOPgZnh8NdvKxYfPvyDQxWGiU=
-X-Google-Smtp-Source: ABdhPJys4WOb9urNyLdt4aeuOqGuCZdLw80FNC5PvFsBXte5r8ULYu9Wjjuq4Wzf+sPQ6VLvykCW8T4PAgm77gNu2zY=
-X-Received: by 2002:a05:6e02:4a1:b0:2d3:a778:f0f1 with SMTP id
- e1-20020a056e0204a100b002d3a778f0f1mr3986818ils.212.1654194896902; Thu, 02
- Jun 2022 11:34:56 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nxEwqFG0EOGCgU9ZJ7XwRHFl2ED0Wh9INs05c4zZisA=;
+        b=q97m7n5XnHRMXpibAcCbw2TKgLdiVqU0T+dM2rzCM0OFy6DrSctX7TuQ7KIG7LSlwD
+         sa0gpTtpyANxLvzKB5dwzUFt/tivWg0ULFLuaUoEzUycmlZ8RCV/XG2p8atq5yOv/8pn
+         OZizpu0cRZBj8Pi2YyYCwmWqvuZb4pUgHdTR9m1ONmWgAQRvJhBvBcRmtms27OseCndY
+         g1WZ9vgVy4VV+kjmGXz2p/6GBG4NHCPiKbaJqdqFj3LopWaHpiVDx2i8f1bRrUgfc68S
+         Bfz98Es476L2OjHEtpS4svIcMuhH9eGVAvh081TXOpFzpcEMgi4O+3DFPndV2U/lmdZM
+         mRTg==
+X-Gm-Message-State: AOAM5338/zSHfcW8OCaB0tvfljTIbS+FsHEoltcqIrz2i4ZFXe1PFjkN
+        z58LPbqM8519EdJXSIqGmOZWlw==
+X-Google-Smtp-Source: ABdhPJyXuAv9x7LCi4vkAz30UoSFjw+IotiXOHvU+0j7Btu500eY+9krfGA6CYfXdluiFYe8Dngiiw==
+X-Received: by 2002:a05:6402:f1b:b0:42d:e92f:c924 with SMTP id i27-20020a0564020f1b00b0042de92fc924mr6836955eda.389.1654195021643;
+        Thu, 02 Jun 2022 11:37:01 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id my16-20020a1709065a5000b006fecf74395bsm1985821ejc.8.2022.06.02.11.37.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 11:37:01 -0700 (PDT)
+Message-ID: <86ca80e4-b0de-4a83-f69e-5d15dc16584f@linaro.org>
+Date:   Thu, 2 Jun 2022 20:37:00 +0200
 MIME-Version: 1.0
-References: <20220531104211.17106-1-peterwu.pub@gmail.com> <20220531104211.17106-2-peterwu.pub@gmail.com>
- <33a797d7-ca60-5153-2ba1-3a909fcc5965@linaro.org>
-In-Reply-To: <33a797d7-ca60-5153-2ba1-3a909fcc5965@linaro.org>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Fri, 3 Jun 2022 02:34:45 +0800
-Message-ID: <CABtFH5+nNRn4azfniKCNc=S2Z2Y0jji_beA_16_UYzAvkak-VA@mail.gmail.com>
-Subject: Re: [PATCH 10/14] dt-bindings: power: supply: Add Mediatek MT6370
- Charger binding documentation
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     lee.jones@linaro.org, daniel.thompson@linaro.org,
-        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de,
-        ChiYuan Huang <cy_huang@richtek.com>, alice_chen@richtek.com,
-        chiaen_wu@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] arm64: dts: Add support for Stratix 10 Software
+ Virtual Platform
+Content-Language: en-US
+To:     wen.ping.teh@intel.com, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220602141151.3431212-1-wen.ping.teh@intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220602141151.3431212-1-wen.ping.teh@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On 02/06/2022 16:11, wen.ping.teh@intel.com wrote:
+> From: Teh Wen Ping <wen.ping.teh@intel.com>
+> 
+> Add Stratix 10 Software Virtual Platform device tree
+> 
+> Signed-off-by: Teh Wen Ping <wen.ping.teh@intel.com>
+> ---
+> 
+> changes in v2:
+> -remove indentation before GPL
+> -change root compatible to "altr,socfpga-stratix10"
+> -remove bootargs
+> -move clock-frequency to label
+> -remove l2-cache
+> -remove no longer exist authors from commit message
+> 
+>  arch/arm64/Kconfig.platforms                  |   3 +-
+>  arch/arm64/boot/dts/altera/Makefile           |   3 +-
+>  .../dts/altera/socfpga_stratix10_swvp.dts     | 117 ++++++++++++++++++
+>  3 files changed, 121 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/altera/socfpga_stratix10_swvp.dts
+> 
+> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> index de9a18d3026f..48abe5dafaae 100644
+> --- a/arch/arm64/Kconfig.platforms
+> +++ b/arch/arm64/Kconfig.platforms
+> @@ -249,7 +249,8 @@ config ARCH_INTEL_SOCFPGA
+>  	bool "Intel's SoCFPGA ARMv8 Families"
+>  	help
+>  	  This enables support for Intel's SoCFPGA ARMv8 families:
+> -	  Stratix 10 (ex. Altera), Agilex and eASIC N5X.
+> +	  Stratix 10 (ex. Altera), Stratix10 Software Virtual Platform,
+> +	  Agilex and eASIC N5X.
+>  
+>  config ARCH_SYNQUACER
+>  	bool "Socionext SynQuacer SoC Family"
+> diff --git a/arch/arm64/boot/dts/altera/Makefile b/arch/arm64/boot/dts/altera/Makefile
+> index 4db83fbeb115..1bf0c472f6b4 100644
+> --- a/arch/arm64/boot/dts/altera/Makefile
+> +++ b/arch/arm64/boot/dts/altera/Makefile
+> @@ -1,3 +1,4 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) += socfpga_stratix10_socdk.dtb \
+> -				socfpga_stratix10_socdk_nand.dtb
+> +				socfpga_stratix10_socdk_nand.dtb \
+> +				socfpga_stratix10_swvp.dtb
+> diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10_swvp.dts b/arch/arm64/boot/dts/altera/socfpga_stratix10_swvp.dts
+> new file mode 100644
+> index 000000000000..93fa5091a6c3
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/altera/socfpga_stratix10_swvp.dts
+> @@ -0,0 +1,117 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022, Intel Corporation
+> + */
+> +
+> +#include "socfpga_stratix10.dtsi"
+> +
+> +/ {
+> +	model = "SOCFPGA Stratix 10 SWVP";
+> +	compatible = "altr,socfpga-stratix10";
 
-Thank you for the valuable suggestion.
-Sorry for sending the same email again. I forgot to reply to everyone
-in my last email..
+You cannot use someone else's compatible. You need your own and then
+also you need to document it. Check existing sources for examples.
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
-=B46=E6=9C=881=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=884:15=E5=AF=AB=
-=E9=81=93=EF=BC=9A
->
-> On 31/05/2022 12:42, ChiaEn Wu wrote:
-> > From: ChiaEn Wu <chiaen_wu@richtek.com>
-> >
->
-> Subject - remove "binding documentation". It's already implied by prefix.
->
-> > Add Mediatek MT6370 Charger binding documentation.
-> >
-> > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> > ---
-> >  .../power/supply/mediatek,mt6370-charger.yaml | 60 +++++++++++++++++++
-> >  1 file changed, 60 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/power/supply/medi=
-atek,mt6370-charger.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/power/supply/mediatek,mt=
-6370-charger.yaml b/Documentation/devicetree/bindings/power/supply/mediatek=
-,mt6370-charger.yaml
-> > new file mode 100644
-> > index 000000000000..9d5c4487ca9c
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-ch=
-arger.yaml
-> > @@ -0,0 +1,60 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/power/supply/mediatek,mt6370-charge=
-r.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Mediatek MT6370 Battery Charger
-> > +
-> > +maintainers:
-> > +  - ChiaEn Wu <chiaen_wu@richtek.com>
-> > +
-> > +description: |
-> > +  This module is part of the MT6370 MFD device.
-> > +  Provides Battery Charger, Boost for OTG devices and BC1.2 detection.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: mediatek,mt6370-charger
-> > +
-> > +  interrupts:
-> > +    description: |
-> > +      Specify what irqs are needed to be handled by MT6370 Charger dri=
-ver. IRQ
-> > +      "MT6370_IRQ_CHG_MIVR", "MT6370_IRQ_ATTACH" and "MT6370_IRQ_OVPCT=
-RL_UVP_D"
-> > +      are required.
-> > +    items:
-> > +      - description: BC1.2 done irq for mt6370 charger
-> > +      - description: usb plug in irq for mt6370 charger
-> > +      - description: mivr irq for mt6370 charger
->
-> s/for mt6370 charger//
-> in each item
+Documentation/devicetree/bindings/arm/altera.yaml
 
-I got it, this will be refined in the next version. Thanks!
-
->
-> > +
-> > +  interrupt-names:
-> > +    items:
-> > +      - const: attach_i
-> > +      - const: uvp_d_evt
-> > +      - const: mivr
-> > +
-> > +  io-channels:
-> > +    description: |
-> > +      Use ADC channel to read vbus, ibus, ibat, etc., info. Ibus ADC c=
-hannel
-> > +      is required.
->
-> Constraints (e.g. maxItems) are needed.
-
-OK, I will add them in the new version!
-
->
-> > +
-> > +  usb-otg-vbus:
->
-> Let's keep the same name as in MT6360:
->
-> usb-otg-vbus-regulator
-
-I'll change the name to correspond with MT6360 in the next patch, thanks!
-
-> > +    type: object
-> > +    description: OTG boost regulator.
-> > +    $ref: /schemas/regulator/regulator.yaml#
-> > +
-> > +    properties:
-> > +      enable-gpio:
-> > +        maxItems: 1
-> > +        description: |
-> > +          Specify a valid 'enable' gpio for the regulator and it's opt=
-ional
->
-> This description is pointless - does not bring any more information. You
-> repeat the schema. Please, avoid such descriptions.
-
-I got it, I will remove them in the next patch.
-
->
-> > +
-> > +required:
-> > +  - compatible
-> > +  - interrupts
-> > +  - interrupt-names
-> > +  - io-channels
-> > +
-> > +additionalProperties: false
->
->
-> How about example? Or is it going to be in MFD schema?
-
-All of MT6370 binding documentation examples are in the MFD schema! Thanks.
-
->
->
-> Best regards,
-> Krzysztof
+> +
+> +	aliases {
+> +		serial0 = &uart0;
+> +		serial1 = &uart1;
+> +
+> +		timer0 = &timer0;
+> +		timer1 = &timer1;
+> +		timer2 = &timer2;
+> +		timer3 = &timer3;
+> +
+> +		ethernet0 = &gmac0;
+> +		ethernet1 = &gmac1;
+> +		ethernet2 = &gmac2;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial1:115200n8";
+> +		linux,initrd-start = <0x10000000>;
+> +		linux,initrd-end = <0x125c8324>;
 
 Best regards,
-ChiaEn Wu
+Krzysztof

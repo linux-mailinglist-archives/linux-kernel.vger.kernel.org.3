@@ -2,83 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B7353B684
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B924953B680
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233308AbiFBKCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36968 "EHLO
+        id S233293AbiFBKC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbiFBKCX (ORCPT
+        with ESMTP id S233278AbiFBKCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Jun 2022 06:02:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6358010D9;
-        Thu,  2 Jun 2022 03:02:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BED95614FA;
-        Thu,  2 Jun 2022 10:02:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24F94C3411E;
-        Thu,  2 Jun 2022 10:02:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654164140;
-        bh=FbzUCD0Nyys1GvPjap25s98kySjc2A+W4LnGeGiZ0vs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ETMG8MESltoMId/pTxjM5BKdiXqbNoT+K9rtBbmJvfwjr7xkdX1N+xQ4Mj1c7Z3E2
-         JG5Ob+10iGq7/7rgmvMjJo6QHGpyKFTfdUvKlzhfOD8L47VTlKfW3ipFykcjZCYaom
-         x7Vkh+glnePKauzzCRdWDkWnkhe2mlFGX3EqNnaldQAX/JIudeqlWwbky+8QOgYKyC
-         Yd+BQLg2mu5QLtpvz+6gu9iEa1dTF/ujh4FIqxjYCBTQEr7PZ9oLPMjRK0/UQcPhls
-         NRrCrijcIl+29mZuPsfutOZDgiL3KwIJDc1UKpf/ari+G+YIzdX9Pl3WJxgTv45N+E
-         gka9QmCY1iueg==
-Received: by mail-io1-f53.google.com with SMTP id b4so4286659iog.11;
-        Thu, 02 Jun 2022 03:02:20 -0700 (PDT)
-X-Gm-Message-State: AOAM532PjMmTmRPSE4FuYt/XViiHGHsPeQtFDhueiLKm8ZIS9w4W3FH4
-        UYn6ngbQBfGCh4/3xggj0HX0Mfr5+15aS1Bt22c=
-X-Google-Smtp-Source: ABdhPJz+8ZXb25r7ObdDPSo1yCDAM4q4Hg1Q724ZPndy3EVmKfFgOMxE05ZJh5Hma9jrAfFmInrAEilM27IBWk/nms0=
-X-Received: by 2002:a05:6638:1692:b0:32e:e00f:ec2 with SMTP id
- f18-20020a056638169200b0032ee00f0ec2mr2572945jat.270.1654164139147; Thu, 02
- Jun 2022 03:02:19 -0700 (PDT)
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CA0261B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:02:21 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id a11-20020a6b660b000000b0066577bb520dso2441720ioc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 03:02:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=PlXyMH9yroMr86joJkDazD6M1cZkidX1eo+3QNu0Ks0=;
+        b=BKMUKWD/738lCGoQkCat7mRClIPpQ5cKj8IdKFLL17d9/BGru97rD4q85B3gGpTCMb
+         jaAzZT6CW4JENRBOjIHRuE4NkA5EA2AhZSqM38xBq4M+AATk5qsaLNiwLvTR7BCZD8BT
+         ehJTdhy4d/8ivJGDHXiYDetsjVcCGVPSq7MwLjd+S5rXEwuKJXdBupWMInf7AhmqJEEy
+         M1yeE5TfYVCCLNtbdSppqiAuwsYWtiUkxHJtwKI2iU8Zgn2RJ7JdiXMDXNgz1+bDmhS/
+         Zp7oOkjHgj9LAfE9rWP0VecBne6VcsyEf6cfsFx25nnmzEZ1lK8uYJl+GB8GhTyly9Mf
+         HLOQ==
+X-Gm-Message-State: AOAM532QUdPYJ1G0GkHiBgqbc7QVdqLeGlE3n06SjQ/sIzlVz8E/TVnT
+        44HIDQ4aiDPC0Qs+NN7FlwLjm3O3zzlw4Ts0ZFzLUtHPt4/R
+X-Google-Smtp-Source: ABdhPJzqQ55gAWfuzGONGd07P+o5i1tRB1eL/ZTHM2UomwBl6hJUahKq1mY2x/7hMV7bcfDVutkx1vrRegtJpg7tHboJ8hR+5wdk
 MIME-Version: 1.0
-References: <CAK8P3a2_52JPnBWNvTTkFVwLxPAa7=NaQ4whwC1UeH_NYHeUKQ@mail.gmail.com>
- <CAK8P3a0SpU1n+29KQxzKnPRvzmDE=L0V9RUpKxhemv=74kevcQ@mail.gmail.com>
- <df5c406c-eec6-c340-2847-49670b7fe8bf@xen0n.name> <CAK8P3a3awFdB1-G65DC38NBuSTvo6SvFTaS0m9YBxunHjHjQvQ@mail.gmail.com>
- <CAAhV-H6sNr-yo8brBFtzziH6k9Tby0dFp7yehK55SfH5HjZ8hQ@mail.gmail.com>
- <358025d1-28e6-708b-d23d-3f22ae12a800@xen0n.name> <CAK8P3a1ge2bZS13ahm_LdO3jEcbtR4w3do-gLjggKvppqnBDkw@mail.gmail.com>
- <CAAhV-H5NCUpR6aBtR9d7c9vW2KiHpk3iFQxj7BeTSS0boMz8PQ@mail.gmail.com>
- <CAK8P3a2JgrW5a7_udCUWen-gOnJgVeRV2oAd-uq4VSuYkFUqNQ@mail.gmail.com>
- <CAAhV-H6wfmdcV=a4L43dcabsvO+JbOebCX3_6PV+p85NjA9qhQ@mail.gmail.com>
- <CAK8P3a0c_tbHov_b6cz-_Tj6VD3OWLwpGJf_2rj-nitipSKdYQ@mail.gmail.com>
- <CAAhV-H4_qqQtTp2=mJF=OV+qcKzA0j8SPWKRMR-LJgC0zNfatQ@mail.gmail.com>
- <832c3ae8-6c68-db2c-2c7f-0a5cd3071543@xen0n.name> <CAK8P3a1Mg=Mr6aig25Kk9+Qf_E6DPMs0Yd-ozcvmY11kvCU74Q@mail.gmail.com>
- <CAMj1kXFijHBnQVPR=O85u78n6A1Ev_24k=vns4yPQ=d-aiAC8Q@mail.gmail.com> <47b559c0-b1e8-e800-0491-2431e2083dad@xen0n.name>
-In-Reply-To: <47b559c0-b1e8-e800-0491-2431e2083dad@xen0n.name>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 2 Jun 2022 18:02:09 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6BVo8nsCsC11oBGgmZOw0TFQbBwqGQRmqR1bSHsM9mJg@mail.gmail.com>
-Message-ID: <CAAhV-H6BVo8nsCsC11oBGgmZOw0TFQbBwqGQRmqR1bSHsM9mJg@mail.gmail.com>
-Subject: Re: [musl] Re: [GIT PULL] asm-generic changes for 5.19
-To:     WANG Xuerui <kernel@xen0n.name>, Ard Biesheuvel <ardb@kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        GNU C Library <libc-alpha@sourceware.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        musl@lists.openwall.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Huacai Chen <chenhuacai@loongson.cn>
+X-Received: by 2002:a05:6e02:1d14:b0:2d3:a75e:140b with SMTP id
+ i20-20020a056e021d1400b002d3a75e140bmr2599005ila.61.1654164140868; Thu, 02
+ Jun 2022 03:02:20 -0700 (PDT)
+Date:   Thu, 02 Jun 2022 03:02:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000044cc505e0741a4b@google.com>
+Subject: [syzbot] riscv/fixes boot error: BUG: soft lockup in corrupted
+From:   syzbot <syzbot+1d1952c211a38ac43f10@syzkaller.appspotmail.com>
+To:     aou@eecs.berkeley.edu, axboe@kernel.dk, justin@coraid.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,112 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ard,
+Hello,
 
-On Thu, Jun 2, 2022 at 12:44 AM WANG Xuerui <kernel@xen0n.name> wrote:
->
-> Hi Ard,
->
-> On 6/2/22 00:01, Ard Biesheuvel wrote:
-> > On Wed, 1 Jun 2022 at 09:41, Arnd Bergmann <arnd@kernel.org> wrote:
-> >> On Wed, Jun 1, 2022 at 7:52 AM WANG Xuerui <kernel@xen0n.name> wrote:
-> >>> On 6/1/22 00:01, Huacai Chen wrote:
-> >>>> https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/log/?h=loongarch-next
-> >>>> has been updated. Now this branch droped irqchip drivers and pci
-> >>>> drivers. But the existing irqchip drivers need some small adjustment
-> >>>> to avoid build errors [1], and I hope Marc can give an Acked-by.
-> >>>> Thanks.
-> >>>>
-> >>>> This branch can be built with defconfig and allmodconfig (except
-> >>>> drivers/platform/surface/aggregator/controller.c, because it requires
-> >>>> 8bit/16bit cmpxchg, which I was told to remove their support).
-> >>>>
-> >>>> [1] https://lore.kernel.org/lkml/e7cf33a170d0b4e98e53744f60dbf922@kernel.org/T/#t
-> >>> I see the loongarch-next HEAD has been updated and it's now purely arch
-> >>> changes aside from the two trivial irqchip cleanups. Some other changes
-> >>> to the v11 patchset [1] are included, but arguably minor enough to not
-> >>> invalidate previous Reviewed-by tags.
-> >> Very nice! I don't see exactly how the previous build bugs were addressed,
-> >> but I can confirm that this version builds. Regarding the two irqchip patches,
-> >> 621e7015b529 ("irqchip/loongson-liointc: Fix build error for LoongArch") is
-> >> a good way to work around the mips oddity, and I have no problem taking
-> >> that through the asm-generic tree. The other one, f54b4a166023 ("irqchip:
-> >>   Adjust Kconfig for Loongson"), looks mostly unnecessary, and I think only
-> >> the LOONGSON_HTPIC change should be included here, while I would
-> >> leave out the COMPILE_TEST changes and instead have the driver
-> >> changes take care of making it possible to keep building it on x86, possibly
-> >> doing
-> >>
-> >>          depends on MACH_LOONGSON64 || (COMPILE_TEST && ACPI)
-> >>
-> >> in the future, after the loongarch64 ACPI support is merged.
-> >>
-> >>> After some small tweaks:
-> >>>
-> >>> - adding "#include <asm/irqflags.h>" to arch/loongarch/include/asm/ptrace.h,
-> >>> - adding an arch/loongarch/include/uapi/asm/bpf_perf_event.h with the
-> >>> same content as arch/arm64's, and
-> >>> - adding "depends on ARM64 || X86" to
-> >>> drivers/platform/surface/aggregator/Kconfig,
-> >>>
-> >>> the current loongarch-next HEAD (commit
-> >>> 36552a24f70d21b7d63d9ef490561dbdc13798d7) now passes allmodconfig build
-> >>> (with CONFIG_WERROR disabled; my Gentoo-flavored gcc-12 seems to emit
-> >>> warnings on a few drivers).
-> >> The only one of these issues that I see is the surface aggregator one.
-> >> I think we can address all three as follow-up fixes after -rc1 if the port
-> >> gets merged and these are still required.
-> >>
-> >>> The majority of userspace ABI has been stable for a few months already,
-> >>> after the addition of orig_a0 and removal of newfstatat; the necessary
-> >>> changes to switch to statx are already reviewed [2] / merged [3], and
-> >>> have been integrated into the LoongArch port of Gentoo for a while. Eric
-> >>> looked at the v11 and gave comments, and changes were made according to
-> >>> the suggestions, but it'd probably better to get a proper Reviewed-by.
-> >> Right.
-> >>
-> >>> Among the rest of patches, I think maybe the EFI/boot protocol part
-> >>> still need approval/ack from the EFI maintainer. However because the
-> >>> current port isn't going to be able to run on any real hardware, maybe
-> >>> that part could be done later; I'm not sure if the unacknowledged EFI
-> >>> bits should be removed as well.
-> >> Ard, do you have any last comments on this?
-> >>
-> > It would be nice if the questions I raised against the previous
-> > revision (v11) were addressed (or at least answered) first. In
-> > general, I think this is feeling a bit rushed and IMHO we should
-> > probably defer this to the next cycle.
->
-> Actually I think Huacai did reply to your review on v11:
-> https://lore.kernel.org/all/CAAhV-H7KAg8RxN7M=WiOOh0fDhEKTyqrwp6V-SC0cyR0iMrdeg@mail.gmail.com/.
-> It's a bit unfortunate that he probably didn't justify some of the
-> approaches enough, and it's especially unfortunate that some of the
-> points (like maybe the kernel version string in the EFI stub header) are
-> result of their internal discussion, which I presume to be especially
-> hard to change due to their particularly worrying corporate dynamics...
-I'm sorry that you haven't seen my reply, but as Xuerui said, I have
-replied to your review. :)
-Since you didn't reply to my answers again, I supposed that you
-consider "everything is OK". :)
-Now I plan to send V13, with the following changes:
-1, Remove kernel_version string in efistub;
-2, Remove the boardinfo knob in /sys/firmware/efi;
-3, Add a reference in the commit message to explain while we need a
-magic number [1].
-[1] https://lists.gnu.org/archive/html/grub-devel/2021-10/msg00215.html
+syzbot found the following issue on:
 
-Huacai
+HEAD commit:    c932edeaf6d6 riscv: dts: microchip: fix gpio1 reg property..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+console output: https://syzkaller.appspot.com/x/log.txt?x=14de11edf00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=aa6b5702bdf14a17
+dashboard link: https://syzkaller.appspot.com/bug?extid=1d1952c211a38ac43f10
+compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: riscv64
 
->
-> But again, my point is that the userspace ABI in particular is *not*
-> rushed -- it has been brewing since v1 of the port which is already
-> several months ago, and multiple distro-building efforts are already
-> underway. We (LoongArch distro packagers) want to freeze the userspace
-> ABI so that many downstream efforts wouldn't be blocked by the merging
-> of kernel port.
->
-> As the boot protocol is technically not part of the userspace ABI that
-> toolchains care about, and we already know it'll be a rather
-> standards-compliant UEFI implementation even if this part gets dropped
-> for brewing one more cycle, would taking this part out work for you?
->
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1d1952c211a38ac43f10@syzkaller.appspotmail.com
+
+watchdog: BUG: soft lockup - CPU#0 stuck for 23s! [swapper/0:1]
+Modules linked in:
+irq event stamp: 410297
+hardirqs last  enabled at (410296): [<ffffffff8000ee74>] __trace_hardirqs_on+0x18/0x20 arch/riscv/kernel/trace_irq.c:19
+hardirqs last disabled at (410297): [<ffffffff8000ee94>] __trace_hardirqs_off+0x18/0x20 arch/riscv/kernel/trace_irq.c:25
+softirqs last  enabled at (405886): [<ffffffff83207a08>] softirq_handle_end kernel/softirq.c:401 [inline]
+softirqs last  enabled at (405886): [<ffffffff83207a08>] __do_softirq+0x618/0x8fc kernel/softirq.c:587
+softirqs last disabled at (405891): [<ffffffff8006164a>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
+softirqs last disabled at (405891): [<ffffffff8006164a>] invoke_softirq kernel/softirq.c:439 [inline]
+softirqs last disabled at (405891): [<ffffffff8006164a>] __irq_exit_rcu+0x142/0x1f8 kernel/softirq.c:637
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc1-syzkaller #0
+Hardware name: riscv-virtio,qemu (DT)
+epc : arch_static_branch arch/riscv/include/asm/jump_label.h:20 [inline]
+epc : kfence_alloc include/linux/kfence.h:120 [inline]
+epc : slab_alloc_node mm/slub.c:3135 [inline]
+epc : kmem_cache_alloc_node+0xa0/0x3c6 mm/slub.c:3267
+ ra : slab_pre_alloc_hook mm/slab.h:724 [inline]
+ ra : slab_alloc_node mm/slub.c:3131 [inline]
+ ra : kmem_cache_alloc_node+0x66/0x3c6 mm/slub.c:3267
+epc : ffffffff8047df56 ra : ffffffff8047df1c sp : ff200000002273b0
+ gp : ffffffff85a76440 tp : ff60000007430000 t0 : 0000000000046000
+ t1 : ffebffff014d10b7 t2 : ffffffff80668f62 s0 : ff20000000227450
+ s1 : ff600000075a93c0 a0 : 0000000000000000 a1 : 0000000000000007
+ a2 : 1ffffffff09c876c a3 : ffffffff80bec434 a4 : 0000000000000000
+ a5 : 0000000000000000 a6 : 0000000000f00000 a7 : ff6000000a6885bb
+ s2 : 0000000000000a20 s3 : 0000000000000000 s4 : 0000000000000a20
+ s5 : ffffffffffffffff s6 : ffffffff8271f756 s7 : ffffffff85a9c780
+ s8 : 00000000000000e8 s9 : ffffffff85a7c2c0 s10: 00000000000000ff
+ s11: ffffffffffffa288 t3 : fffffffff3f3f300 t4 : ffebffff014d10b7
+ t5 : ffebffff014d10b8 t6 : ff6000001239fc00
+status: 0000000000000120 badaddr: 0000000000000000 cause: 8000000000000005
+[<ffffffff8271f756>] __alloc_skb+0x234/0x2e4 net/core/skbuff.c:414
+[<ffffffff81a42954>] alloc_skb include/linux/skbuff.h:1300 [inline]
+[<ffffffff81a42954>] new_skb+0x2c/0xcc drivers/block/aoe/aoecmd.c:66
+[<ffffffff81a48ab2>] aoecmd_cfg_pkts drivers/block/aoe/aoecmd.c:425 [inline]
+[<ffffffff81a48ab2>] aoecmd_cfg+0x1f6/0x5c6 drivers/block/aoe/aoecmd.c:1362
+[<ffffffff81a4bdfc>] discover_timer+0x4a/0x54 drivers/block/aoe/aoemain.c:24
+[<ffffffff8016c084>] call_timer_fn+0x164/0x694 kernel/time/timer.c:1421
+[<ffffffff8016ca9a>] expire_timers kernel/time/timer.c:1466 [inline]
+[<ffffffff8016ca9a>] __run_timers.part.0+0x4e6/0x76e kernel/time/timer.c:1734
+[<ffffffff8016cda8>] __run_timers kernel/time/timer.c:1715 [inline]
+[<ffffffff8016cda8>] run_timer_softirq+0x86/0x100 kernel/time/timer.c:1747
+[<ffffffff83207664>] __do_softirq+0x274/0x8fc kernel/softirq.c:558
+[<ffffffff8006164a>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
+[<ffffffff8006164a>] invoke_softirq kernel/softirq.c:439 [inline]
+[<ffffffff8006164a>] __irq_exit_rcu+0x142/0x1f8 kernel/softirq.c:637
+[<ffffffff80061958>] irq_exit+0x10/0x7a kernel/softirq.c:661
+[<ffffffff831f7c8e>] generic_handle_arch_irq+0x48/0x54 kernel/irq/handle.c:240
+[<ffffffff800057b2>] ret_from_exception+0x0/0x10
+[<ffffffff8047df1c>] slab_pre_alloc_hook mm/slab.h:724 [inline]
+[<ffffffff8047df1c>] slab_alloc_node mm/slub.c:3131 [inline]
+[<ffffffff8047df1c>] kmem_cache_alloc_node+0x66/0x3c6 mm/slub.c:3267
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

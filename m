@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF2953BD13
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D03153BD17
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237410AbiFBRRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 13:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
+        id S237423AbiFBRR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 13:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiFBRRG (ORCPT
+        with ESMTP id S231524AbiFBRRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 13:17:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CA41EE6D5;
-        Thu,  2 Jun 2022 10:17:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9A3261640;
-        Thu,  2 Jun 2022 17:17:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60D40C385A5;
-        Thu,  2 Jun 2022 17:17:02 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="TzTHRt6w"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654190220;
+        Thu, 2 Jun 2022 13:17:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A76841F5762
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 10:17:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654190240;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ol51kojIDVTX67XNo1r9xkX1Rn7xIiFkir89GDhaQf0=;
-        b=TzTHRt6wzUpoQFJjxjnGku/qMLTCYzOwofINhVujc/zx89yRYeMqS2NwOVmhOY+N6CaPzI
-        dWgoSqBFajVxoTtl+fEpM4VtzJphPDCSlqLybMWoDfIkv9cDeYvwsRA4VpLCUB26B25pNi
-        7TbsKg0OC1jt8KBXlYAbdgrAB1zuVP0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f3434207 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 2 Jun 2022 17:16:59 +0000 (UTC)
-Date:   Thu, 2 Jun 2022 19:16:55 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Roger Knecht <roger@norberthealth.com>,
-        linux-kernel@vger.kernel.org, Ivo van Doorn <IvDoorn@gmail.com>,
-        kernel-janitors@vger.kernel.org, linux-doc@vger.kernel.org,
-        Kristian Hoegsberg <krh@redhat.com>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        akpm@linux-foundation.org
-Subject: Re: [PATCH v5] crc-itu-t: Fix typo in CRC ITU-T polynom comment
-Message-ID: <Ypjwh5f6ByoZl5YE@zx2c4.com>
-References: <20220521124745.8747-1-roger@norberthealth.com>
- <a728cf17-4866-1151-0740-56b06257c917@infradead.org>
- <CAO_iFwrHcSWJm17fL-Q83DZ5i1xr+_dkEjh5Yt3Hxso0VtnzZw@mail.gmail.com>
- <47a68855-4547-49dd-d7eb-8ef83630552c@infradead.org>
+        bh=6YpvaMVW61kZDAQpHfhp/j+cfCfwUKP7vhTQl8WVi3M=;
+        b=XqJtcYmO8+3i0T3lG6mqqWKgCjCJKS8zVQOJ+1NSz4Jw6XIQjFB2UCkuFiPuXRjZYIL8e6
+        spsIPWlW0SpUzMxXifPvnFQaQlDNALPnkSEYaSYxPNYDeL8npMVqgPVgemRGPTk+50tocm
+        8Sjh28ZK5e1oKJKojuC81eRiVnTQxMo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-7NMUobmOOjCrnkppVGVx9A-1; Thu, 02 Jun 2022 13:17:19 -0400
+X-MC-Unique: 7NMUobmOOjCrnkppVGVx9A-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D98C80B70A;
+        Thu,  2 Jun 2022 17:17:19 +0000 (UTC)
+Received: from [10.22.32.147] (unknown [10.22.32.147])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0CEA5492C3B;
+        Thu,  2 Jun 2022 17:17:19 +0000 (UTC)
+Message-ID: <6674e652-b083-2859-3cba-9eca6c721fba@redhat.com>
+Date:   Thu, 2 Jun 2022 13:17:18 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <47a68855-4547-49dd-d7eb-8ef83630552c@infradead.org>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v5 2/3] blk-cgroup: Return -ENOMEM directly in
+ blkcg_css_alloc() error path
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>
+References: <20220601211824.89626-1-longman@redhat.com>
+ <20220602133543.128088-3-longman@redhat.com>
+ <YpjiYPscJst5iuyv@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YpjiYPscJst5iuyv@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,45 +68,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+On 6/2/22 12:16, Tejun Heo wrote:
+> On Thu, Jun 02, 2022 at 09:35:42AM -0400, Waiman Long wrote:
+>> For blkcg_css_alloc(), the only error that will be returned is -ENOMEM.
+>> Simplify error handling code by returning this error directly instead
+>> of setting an intermediate "ret" variable.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+> Acked-by: Tejun Heo <tj@kernel.org>
+>
+> But I don't understand why this would trigger warning. Can you please
+> elaborate why this is needed.
+>
+> Thanks.
 
-On Thu, Jun 02, 2022 at 09:31:24AM -0700, Randy Dunlap wrote:
-> 
-> 
-> On 6/2/22 07:24, Roger Knecht wrote:
-> > On Sat, May 21, 2022 at 5:44 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> >> I don't know which maintainer will merge this since no one is Cc:ed on it.
-> >> You will probably need to choose some maintainer to send the patch to.
-> >>
-> >> But let's add the people who merged the header file in the first place
-> >> for their comments/review. (done)
-> > 
-> > Thanks Randy.
-> > 
-> > The CRC implementation seems to be unmaintained (no entry in the
-> > MAINTAINER file).
-> > Any idea which maintainer I can send the patch to?
-> 
-> Yes, the 2 people who signed off on its merger are not active AFAICT.
-> 
-> > The kernel doc mentions Andrew Morton as last resort (added to CC):
-> >> You should always copy the appropriate subsystem maintainer(s) on any patch to
-> >> code that they maintain; look through the MAINTAINERS file and the source code
-> >> revision history to see who those maintainers are. The script scripts/get_maintainer.pl
-> >> can be very useful at this step. If you cannot find a maintainer for the subsystem you
-> >> are working on, Andrew Morton (akpm@linux-foundation.org) serves as a maintainer
-> >> of last resort.
-> > source: https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-> 
-> Yes, Andrew can merge it.
-> Or possibly Jason (also Cc-ed).
+I forgot to set "ret" in my original patch 2 in case of allocation 
+error. I didn't got a warning in my own build, maybe I didn't explicitly 
+enable more warning. I could have modified the patch to set "ret" on 
+error, but the "ret" setting looks duplicative to me and so I added this 
+patch to get rid of it.
 
-Sure, I can take this.
+Thanks,
+Longman
 
-Jason
-
-> 
-> thanks.
-> 
-> -- 
-> ~Randy

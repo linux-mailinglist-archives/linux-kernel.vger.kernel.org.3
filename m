@@ -2,81 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C797153B33E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2EB53B24F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiFBGAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 02:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46166 "EHLO
+        id S229611AbiFBDx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 23:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiFBGAc (ORCPT
+        with ESMTP id S229495AbiFBDxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 02:00:32 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BE327B992;
-        Wed,  1 Jun 2022 23:00:29 -0700 (PDT)
-X-UUID: fd6aeefafc0c4ef1a5e1a279e58ddff1-20220602
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:2205cb6d-a878-4735-8c2e-533ba1106f50,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:5e70910d-3a0d-4bbe-9d72-0e5d26d57423,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: fd6aeefafc0c4ef1a5e1a279e58ddff1-20220602
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 497944467; Thu, 02 Jun 2022 14:00:23 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
- Thu, 2 Jun 2022 05:58:39 +0000
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 2 Jun 2022 11:53:08 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 2 Jun 2022 11:53:08 +0800
-Message-ID: <e5810ed88646f700b157ac7c8d499a61db105617.camel@mediatek.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: mediatek: add vdosys1 RDMA
- definition for mt8195
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Pavel Machek <pavel@ucw.cz>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        Jason-JH Lin =?UTF-8?Q?=28=E6=9E=97=E7=9D=BF=E7=A5=A5=29?= 
-        <Jason-JH.Lin@mediatek.com>,
-        Nancy Lin =?UTF-8?Q?=28=E6=9E=97=E6=AC=A3=E8=9E=A2=29?= 
-        <Nancy.Lin@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 2 Jun 2022 11:53:08 +0800
-In-Reply-To: <20220530070641.GE1363@bug>
-References: <20220509044302.27878-1-rex-bc.chen@mediatek.com>
-         <20220509044302.27878-2-rex-bc.chen@mediatek.com>
-         <20220530070641.GE1363@bug>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 1 Jun 2022 23:53:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F6F524BC4
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 20:53:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654142033;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3nhZSbN+Ew1mV2HyhEGIhPum4yYB0PCOS8RQvOZHGfg=;
+        b=EbueC4Ek4SCHEGKpbe9TcZm+cERk+MjUTz5qx/k68szCuMilSg+eJiApbVfxBpfvW26F57
+        uonwI+lctnkHvExVgLTJRTExWqPXcuJT7GXnHvX2bDV/dHvNZuEW4NuAN5ZAD8ue/UD1ue
+        SG+KaQeDk50O1G8n3dbJ9uOx2Ji4tMk=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-577-xeHVtaYPM6qg6ypKDgw8rw-1; Wed, 01 Jun 2022 23:53:52 -0400
+X-MC-Unique: xeHVtaYPM6qg6ypKDgw8rw-1
+Received: by mail-lf1-f71.google.com with SMTP id a29-20020a194f5d000000b004790a4ba4bdso869287lfk.11
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 20:53:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3nhZSbN+Ew1mV2HyhEGIhPum4yYB0PCOS8RQvOZHGfg=;
+        b=P1W8wfES/0iU/ap45ryESBwZ3P8PeiTd6B5kFtCVj84dDM8uOvW+mJD3eHk4KnX73I
+         k4cM+DHi0/f+05NWxJJ7aHlwblWw47XjOu2H/BMWqLjxDJW/g1dP+s/HG89Qm/0F16zE
+         hj2F918FKJLaKAzumwiDc4b87nenAXAknWNdtHW1c6o9K/SVS8X3YYv5nY0hVNnV6muK
+         mlX6tijdT7Gns7DA6iiqToH7muI24VzPx9vpY6v2vgOUyfG7NgNS0Qz4QaAQMpjMclvS
+         BHz+6M0z2VtgA5mU7YzLO4ao2R3/KP3yH/S3aEX+TvCc+T/S1eadT9L/mhes0Ewhyp26
+         Xx/w==
+X-Gm-Message-State: AOAM531TZlkIDK+rEyIizLXRGr6XeHcDW07YTg2f7S6I3DGygcE/kAmI
+        34IumFznq5KqJS0ZKBAn3Qxsl3Zm3iC0ZK/SrJs7Zh+0SrUu5ilW2JLwOof5dPexoIvcMbccyrN
+        Gt0lYnIA8Hh8gU7ndjvzrxilN/vgrKU+aMT1Ln3Dl
+X-Received: by 2002:a2e:910e:0:b0:255:4a7e:b42e with SMTP id m14-20020a2e910e000000b002554a7eb42emr13517219ljg.492.1654142030532;
+        Wed, 01 Jun 2022 20:53:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwJM9qe1ZzH7Y7RYWXggUuk3BevCy6i+Cbv2/YzP3wdLzlzwEekNr9HqR9L31QhUD0/KMuoWmCNycyMXglwQmk=
+X-Received: by 2002:a2e:910e:0:b0:255:4a7e:b42e with SMTP id
+ m14-20020a2e910e000000b002554a7eb42emr13517199ljg.492.1654142030349; Wed, 01
+ Jun 2022 20:53:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
+References: <20220526124338.36247-1-eperezma@redhat.com> <PH0PR12MB54819C6C6DAF6572AEADC1AEDCD99@PH0PR12MB5481.namprd12.prod.outlook.com>
+ <20220527065442-mutt-send-email-mst@kernel.org> <CACGkMEubfv_OJOsJ_ROgei41Qx4mPO0Xz8rMVnO8aPFiEqr8rA@mail.gmail.com>
+ <PH0PR12MB5481695930E7548BAAF1B0D9DCDC9@PH0PR12MB5481.namprd12.prod.outlook.com>
+ <CACGkMEsSKF_MyLgFdzVROptS3PCcp1y865znLWgnzq9L7CpFVQ@mail.gmail.com>
+ <PH0PR12MB5481CAA3F57892FF7F05B004DCDF9@PH0PR12MB5481.namprd12.prod.outlook.com>
+ <CACGkMEsJJL34iUYQMxHguOV2cQ7rts+hRG5Gp3XKCGuqNdnNQg@mail.gmail.com> <PH0PR12MB5481D099A324C91DAF01259BDCDE9@PH0PR12MB5481.namprd12.prod.outlook.com>
+In-Reply-To: <PH0PR12MB5481D099A324C91DAF01259BDCDE9@PH0PR12MB5481.namprd12.prod.outlook.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 2 Jun 2022 11:53:39 +0800
+Message-ID: <CACGkMEueG76L8H+F70D=T5kjK_+J68ARNQmQQo51rq3CfcOdRA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Implement vdpasim stop operation
+To:     Parav Pandit <parav@nvidia.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "martinh@xilinx.com" <martinh@xilinx.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "martinpo@xilinx.com" <martinpo@xilinx.com>,
+        "lvivier@redhat.com" <lvivier@redhat.com>,
+        "pabloc@xilinx.com" <pabloc@xilinx.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zhang Min <zhang.min9@zte.com.cn>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        "Piotr.Uminski@intel.com" <Piotr.Uminski@intel.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
+        "gautam.dawar@amd.com" <gautam.dawar@amd.com>,
+        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
+        "tanuj.kamde@amd.com" <tanuj.kamde@amd.com>,
+        "hanand@xilinx.com" <hanand@xilinx.com>,
+        "dinang@xilinx.com" <dinang@xilinx.com>,
+        Longpeng <longpeng2@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,26 +104,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-30 at 15:06 +0800, Pavel Machek wrote:
-> On Mon 2022-05-09 12:43:00, Rex-BC Chen wrote:
-> > From: "Nancy.Lin" <nancy.lin@mediatek.com>
-> > 
-> > Add vdosys1 RDMA definition.
-> > 
-> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> 
-> Your signoff will be needed, too.
-> 
-> Best regards,
-> 								Pavel
+On Thu, Jun 2, 2022 at 10:59 AM Parav Pandit <parav@nvidia.com> wrote:
+>
+>
+> > From: Jason Wang <jasowang@redhat.com>
+> > Sent: Wednesday, June 1, 2022 10:00 PM
+> >
+> > On Thu, Jun 2, 2022 at 2:58 AM Parav Pandit <parav@nvidia.com> wrote:
+> > >
+> > >
+> > > > From: Jason Wang <jasowang@redhat.com>
+> > > > Sent: Tuesday, May 31, 2022 10:42 PM
+> > > >
+> > > > Well, the ability to query the virtqueue state was proposed as
+> > > > another feature (Eugenio, please correct me). This should be
+> > > > sufficient for making virtio-net to be live migrated.
+> > > >
+> > > The device is stopped, it won't answer to this special vq config done here.
+> >
+> > This depends on the definition of the stop. Any query to the device state
+> > should be allowed otherwise it's meaningless for us.
+> >
+> > > Programming all of these using cfg registers doesn't scale for on-chip
+> > memory and for the speed.
+> >
+> > Well, they are orthogonal and what I want to say is, we should first define
+> > the semantics of stop and state of the virtqueue.
+> >
+> > Such a facility could be accessed by either transport specific method or admin
+> > virtqueue, it totally depends on the hardware architecture of the vendor.
+> >
+> I find it hard to believe that a vendor can implement a CVQ but not AQ and chose to expose tens of hundreds of registers.
+> But maybe, it fits some specific hw.
 
-Hello Pavel,
+You can have a look at the ifcvf dpdk driver as an example.
 
-ok, I will add it in next version.
-Thanks.
+But another thing that is unrelated to hardware architecture is the
+nesting support. Having admin virtqueue in a nesting environment looks
+like an overkill. Presenting a register in L1 and map it to L0's admin
+should be good enough.
 
-BRs,
-Bo-Chen
+>
+> I like to learn the advantages of such method other than simplicity.
+>
+> We can clearly that we are shifting away from such PCI registers with SIOV, IMS and other scalable solutions.
+> virtio drifting in reverse direction by introducing more registers as transport.
+> I expect it to an optional transport like AQ.
+
+Actually, I had a proposal of using admin virtqueue as a transport,
+it's designed to be SIOV/IMS capable. And it's not hard to extend it
+with the state/stop support etc.
+
+>
+> > >
+> > > Next would be to program hundreds of statistics of the 64 VQs through a
+> > giant PCI config space register in some busy polling scheme.
+> >
+> > We don't need giant config space, and this method has been implemented
+> > by some vDPA vendors.
+> >
+> There are tens of 64-bit counters per VQs. These needs to programmed on destination side.
+> Programming these via registers requires exposing them on the registers.
+> In one of the proposals, I see them being queried via CVQ from the device.
+
+I didn't see a proposal like this. And I don't think querying general
+virtio state like idx with a device specific CVQ is a good design.
+
+>
+> Programming them via cfg registers requires large cfg space or synchronous programming until receiving ACK from it.
+> This means one entry at a time...
+>
+> Programming them via CVQ needs replicate and align cmd values etc on all device types. All duplicate and hard to maintain.
+>
+>
+> > >
+> > > I can clearly see how all these are inefficient for faster LM.
+> > > We need an efficient AQ to proceed with at minimum.
+> >
+> > I'm fine with admin virtqueue, but the stop and state are orthogonal to that.
+> > And using admin virtqueue for stop/state will be more natural if we use
+> > admin virtqueue as a transport.
+> Ok.
+> We should have defined it bit earlier that all vendors can use. :(
+
+I agree.
+
+Thanks
 

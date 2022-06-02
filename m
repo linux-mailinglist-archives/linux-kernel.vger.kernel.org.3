@@ -2,69 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA04C53B95C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0F653B966
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235194AbiFBNFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 09:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
+        id S235185AbiFBNH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 09:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235185AbiFBNFt (ORCPT
+        with ESMTP id S235175AbiFBNHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 09:05:49 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D01914084B;
-        Thu,  2 Jun 2022 06:05:47 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id i66so6406353oia.11;
-        Thu, 02 Jun 2022 06:05:47 -0700 (PDT)
+        Thu, 2 Jun 2022 09:07:25 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E984E13C1EE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 06:07:22 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2ff7b90e635so50711467b3.5
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 06:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M0KWrs2nsUCJnNPYZ0GE1uKitoBIYJg8ZM0Zfwo7R1U=;
+        b=HLKAzfL9ql/xGCixBfzCZ0vg5zPh0sd31KkqEIHOnAGwV5guBgMI0xiJLlaaY/YGMz
+         3vnOFQJdMZtTLhEe/7qiNhlAcKWJHJzQEiawtF9S6JYSPaowt7nnrosjrbEy4ki6w5yt
+         OSnBS/hFX5bucfV0WClqHpLf3ghOeaJMYJ+2+b1uift9O+YPBI/+bP0/iHZTiFsK4CJY
+         ij+QLUx73CfQ1Tq+Co1fIC0C6N7pIrMbB8uxyE1tTnSQGmVBMlGxLfuq4DU+M4+bgSCc
+         KlIiVGrQs6tRP9RfhvWP/LiDrSl8yRwtlyI4VhCDJvHti6mTuIycwg4TVaZ/Jny/ajbX
+         L2RA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LNaq7sEztiDWF2FCJpJbFxTE7mAwKmgj75OQYyNv2Lw=;
-        b=7xTVTcc+SQO0vzNkR3GX3ZszqZHU5pxzNJxZ8lk4Tk59OALDEjf0zGVHivLFvVFGaV
-         BEwl4OM2CAxSzKYGmQP2sWhoZ2BPE9xvUn2Av/+xQ/PaZ8ig/sfxHHaLtd/VvDLS4M0l
-         ZGb/kvfUC4NOpnOTlnjk9k0aA1vpdiuX3Uuw/txyLMYU03hG/xQLuysbnV8yPWxObvEp
-         p3/kI046Orzf27xfY4VCBTwhfBKpzD781liCCKwXN+ufk11DRtvffWahQWfoNZXhzAg1
-         ELh7g2K6pQcCkMV5mWk/oM5/YZhtmVbSHeJuk261E1qkG+N0/ZRHqUQtp3eZ1RLd80gG
-         pJpQ==
-X-Gm-Message-State: AOAM532dvS++pHPBTL1xUAdgtIa+m0PK7R8MjQfiilgR84X+uXtsDMol
-        DPgIPbGihi90K/zveHA20g==
-X-Google-Smtp-Source: ABdhPJxs1Y0i7VKbCMntycxl5hizJm7Nq2kWqQ8bHM1Bplx9d/kQA7s8uN6OuQaO4Y0+hxy1mvQMNQ==
-X-Received: by 2002:aca:2408:0:b0:32b:ef3:67c5 with SMTP id n8-20020aca2408000000b0032b0ef367c5mr2539773oic.189.1654175146719;
-        Thu, 02 Jun 2022 06:05:46 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r2-20020a05683002e200b0060603221247sm2159020ote.23.2022.06.02.06.05.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 06:05:46 -0700 (PDT)
-Received: (nullmailer pid 2108487 invoked by uid 1000);
-        Thu, 02 Jun 2022 13:05:45 -0000
-Date:   Thu, 2 Jun 2022 08:05:45 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     matthias.bgg@kernel.org
-Cc:     mturquette@baylibre.com, ikjn@chromium.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        weiyi.lu@mediatek.com, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, miles.chen@mediatek.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, robh+dt@kernel.org,
-        allen-kh.cheng@mediatek.com,
-        angelogioacchino.delregno@collabora.com, sboyd@kernel.org,
-        chun-jie.chen@mediatek.com, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: ARM: Mediatek: Remove msdc binding
- of MT8192 clock
-Message-ID: <20220602130545.GA2108433-robh@kernel.org>
-References: <20220523102339.21927-1-matthias.bgg@kernel.org>
- <20220523102339.21927-2-matthias.bgg@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M0KWrs2nsUCJnNPYZ0GE1uKitoBIYJg8ZM0Zfwo7R1U=;
+        b=vDHX/DSyqJIG9t4y+Xvoba1c2UBnXvB7916EbwwR05CYnQNeXwclRJ1tcjuQFa0HYq
+         Fdd60L1fr1U9PxU+UhlAoGJQK1xH94mkSeQAIlhSTz3RhKdB/erI/EfR2I/gGptg16V0
+         CEmOccevZqc4kxpePjINvHMquOytGi3d9D+94Bwnf5M742dVZxvwz8aH0p1MvQMnzM0q
+         6JUI5FeOgBFv6XpTGvXeVfysc6QWyZYXpQfZklHrhVgej8GbiFMA888Lgj/+VA4kFnUr
+         B2JkFb40o2AGzWazJyejlmJXU7cU764/Td1Ai2EqZHDSyumyYaobcT8Sh7hYhTKDjxmM
+         nEIg==
+X-Gm-Message-State: AOAM531R3Yuc3WX342vdZtlW9ZY5uM+e3Th6BVZuhZPMQJ2a1PAtu9ou
+        ZflgVyS6/9FvKerR1nz7xbr+Vz0teUBdmfIfOisiKQ==
+X-Google-Smtp-Source: ABdhPJxBsmOW09QDhNaZzDF2pQpinoQkRt9xg0w7RzfBUu39qAcLifKpmQBWRV9IqPDFMpbNEgKlTO2azbUdRXtlTnc=
+X-Received: by 2002:a0d:fa01:0:b0:2d6:595d:81d4 with SMTP id
+ k1-20020a0dfa01000000b002d6595d81d4mr5442108ywf.86.1654175242124; Thu, 02 Jun
+ 2022 06:07:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220523102339.21927-2-matthias.bgg@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220523155140.2878563-1-vdonnefort@google.com> <20220523155140.2878563-5-vdonnefort@google.com>
+In-Reply-To: <20220523155140.2878563-5-vdonnefort@google.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 2 Jun 2022 15:07:10 +0200
+Message-ID: <CAKfTPtAR2u-mopV=hTL8od+=ht=i0QFEAcqBEeAckXHFHpdhMA@mail.gmail.com>
+Subject: Re: [PATCH v9 4/7] sched/fair: Rename select_idle_mask to select_rq_mask
+To:     Vincent Donnefort <vdonnefort@google.com>
+Cc:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        morten.rasmussen@arm.com, chris.redpath@arm.com,
+        qperret@google.com, tao.zhou@linux.dev, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,29 +68,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 12:23:38 +0200, matthias.bgg@kernel.org wrote:
-> From: Matthias Brugger <matthias.bgg@gmail.com>
-> 
-> The code controlling msdc clock gate was moved inthe the consumer, the MMC
-> driver. This node did never represent a working implementation of any
-> peripheral. It was just a lonely clock gate that wasn't used. Delete the
-> binding description of this node.
-> 
-> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-> 
-> ---
-> 
-> Changes in v3:
-> - Update commit message to explain better why we do ABI breakage here
-> 
-> Changes in v2:
-> - Delete compatible in binding descprition as well
-> - Add RvB tags
-> 
->  .../bindings/arm/mediatek/mediatek,mt8192-clock.yaml      | 8 --------
->  1 file changed, 8 deletions(-)
-> 
+On Mon, 23 May 2022 at 17:52, Vincent Donnefort <vdonnefort@google.com> wrote:
+>
+> From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+>
+> Decouple the name of the per-cpu cpumask select_idle_mask from its usage
+> in select_idle_[cpu/capacity]() of the CFS run-queue selection
+> (select_task_rq_fair()).
+>
+> This is to support the reuse of this cpumask in the Energy Aware
+> Scheduling (EAS) path (find_energy_efficient_cpu()) of the CFS run-queue
+> selection.
+>
+> Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+
+>
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index c531976ee960..68f5eb8a1de7 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -9502,7 +9502,7 @@ static struct kmem_cache *task_group_cache __read_mostly;
+>  #endif
+>
+>  DECLARE_PER_CPU(cpumask_var_t, load_balance_mask);
+> -DECLARE_PER_CPU(cpumask_var_t, select_idle_mask);
+> +DECLARE_PER_CPU(cpumask_var_t, select_rq_mask);
+>
+>  void __init sched_init(void)
+>  {
+> @@ -9551,7 +9551,7 @@ void __init sched_init(void)
+>         for_each_possible_cpu(i) {
+>                 per_cpu(load_balance_mask, i) = (cpumask_var_t)kzalloc_node(
+>                         cpumask_size(), GFP_KERNEL, cpu_to_node(i));
+> -               per_cpu(select_idle_mask, i) = (cpumask_var_t)kzalloc_node(
+> +               per_cpu(select_rq_mask, i) = (cpumask_var_t)kzalloc_node(
+>                         cpumask_size(), GFP_KERNEL, cpu_to_node(i));
+>         }
+>  #endif /* CONFIG_CPUMASK_OFFSTACK */
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 73a9dc522b73..2d7bba2f1da2 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -5897,7 +5897,7 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+>
+>  /* Working cpumask for: load_balance, load_balance_newidle. */
+>  DEFINE_PER_CPU(cpumask_var_t, load_balance_mask);
+> -DEFINE_PER_CPU(cpumask_var_t, select_idle_mask);
+> +DEFINE_PER_CPU(cpumask_var_t, select_rq_mask);
+>
+>  #ifdef CONFIG_NO_HZ_COMMON
+>
+> @@ -6387,7 +6387,7 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
+>   */
+>  static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int target)
+>  {
+> -       struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
+> +       struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_rq_mask);
+>         int i, cpu, idle_cpu = -1, nr = INT_MAX;
+>         struct rq *this_rq = this_rq();
+>         int this = smp_processor_id();
+> @@ -6473,7 +6473,7 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+>         int cpu, best_cpu = -1;
+>         struct cpumask *cpus;
+>
+> -       cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
+> +       cpus = this_cpu_cpumask_var_ptr(select_rq_mask);
+>         cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
+>
+>         task_util = uclamp_task_util(p);
+> --
+> 2.36.1.124.g0e6072fb45-goog
+>

@@ -2,52 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2CB53C084
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 23:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E9153C0A0
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 00:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239519AbiFBVz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 17:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
+        id S239557AbiFBWGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 18:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236743AbiFBVzy (ORCPT
+        with ESMTP id S239545AbiFBWGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 17:55:54 -0400
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B37B7F2
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 14:55:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1654206947; bh=Ki/Rl/4q0399EjnSBqmzWU3sLpJik8WX4vFYR3fDXjg=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=FLcoU608SZaHaFJVRmHeaoFikgDsv6OxWVxeRAWPKeAQKSmUPNsaF9elJXb9Z6ST9
-         axoaxO/BP16uhEv0Im0qYE0VTGmt7sBdQe16Q8AWXWtcNdNVrolG1Z7fgg2u/tV3bL
-         5e34zlYVa/hV/i9VZaDx0KppIU7ukftnHRY6QCLo=
-Date:   Thu, 2 Jun 2022 23:55:47 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Roman Stratiienko <r.stratiienko@gmail.com>
-Cc:     mripard@kernel.org, wens@csie.org, jernej.skrabec@gmail.com,
-        airlied@linux.ie, daniel@ffwll.ch, samuel@sholland.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Thu, 2 Jun 2022 18:06:30 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934D7344D5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 15:06:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654207589; x=1685743589;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=y2o+zYi0pTeFaoAuPAevka/5/r5W32xOKIAc/ItxQpE=;
+  b=jZB/HIDltiXi/gsRTSZflHm1JqB7dCxxntU5QnxXIwcH6z/t4qvvnROX
+   J0Nvw1bRssumXyGVAfZjJ8hpMoyXRiE3aMgfJyxFjyHOpTRTCuQggjfiZ
+   AuAzbFAnup3o+b8CpVJsqDaTLWVaIF0xcMrvfcfk/Y9fv4HWPXt4/Myg4
+   0wk57o708imExN3anHhHCqtJyu31hkCbvHHpgDLHVp+umTPnIEFX+/2Cb
+   TEugETxoNqT+gfvJQZENdsrcEfR4u4b7+dzcspeX3uuDJvlv7nE9TXnCP
+   bNgoqIN6B4WHRZlYAw/s9ger6ai6ED4HjaOKz+WcNHxePMJ46m8etO+/s
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="263737217"
+X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
+   d="scan'208";a="263737217"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 15:05:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
+   d="scan'208";a="646187961"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Jun 2022 15:05:53 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwswy-0005Tu-F1;
+        Thu, 02 Jun 2022 22:05:52 +0000
+Date:   Fri, 3 Jun 2022 06:05:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/sun4i: sun8i: Add the ability to keep scaler enabled
- for VI layer
-Message-ID: <20220602215547.scsabzbeztgduaj3@core>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
-        Roman Stratiienko <r.stratiienko@gmail.com>, mripard@kernel.org,
-        wens@csie.org, jernej.skrabec@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, samuel@sholland.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20220602180118.66170-1-r.stratiienko@gmail.com>
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/dave.2022.06.02a 56/78]
+ kernel/rcu/tasks.h:1239:9: error: aggregate value used where an integer was
+ expected
+Message-ID: <202206030549.YOUkgBlA-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220602180118.66170-1-r.stratiienko@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,87 +64,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roman,
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dave.2022.06.02a
+head:   2efc5c4abe4cc1259378f7c1678a93540559673c
+commit: cda3200416cdef7f25546cd6249fb411c8c32079 [56/78] rcu-tasks: Merge state into .b.need_qs and atomically update
+config: nios2-randconfig-r005-20220602 (https://download.01.org/0day-ci/archive/20220603/202206030549.YOUkgBlA-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/cda3200416cdef7f25546cd6249fb411c8c32079
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dave.2022.06.02a
+        git checkout cda3200416cdef7f25546cd6249fb411c8c32079
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash kernel/
 
-On Thu, Jun 02, 2022 at 06:01:18PM +0000, Roman Stratiienko wrote:
-> According to DE2.0/DE3.0 manual VI scaler enable register is double
-> buffered, but de facto it doesn't, or the hardware has the shadow
-> register latching issues which causes single-frame picture corruption
-> after changing the state of scaler enable register.
-> 
-> Allow the user to keep the scaler always enabled, preventing the UI
-> glitches on the transition from scaled to unscaled state.
-> 
-> NOTE:
-> UI layer scaler has more registers with double-buffering issue and can't
-> be workarounded in the same manner.
-> 
-> You may find a python test and a demo video for this issue at [1]
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Isn't this an issue with kernel driver not waiting for DE2 FINISH IRQ, but
-for VBLANK IRQ from TCON instead, before allowing to write new set of register
-values?
+All errors (new ones prefixed by >>):
 
-https://megous.com/dl/tmp/4fe35b3fc72ee7de.png
+   In file included from kernel/rcu/update.c:606:
+   kernel/rcu/tasks.h: In function 'rcu_trc_cmpxchg_need_qs':
+>> kernel/rcu/tasks.h:1239:9: error: aggregate value used where an integer was expected
+    1239 |         ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
+         |         ^~~
+>> kernel/rcu/tasks.h:1239:9: error: aggregate value used where an integer was expected
+   In file included from ./arch/nios2/include/generated/asm/cmpxchg.h:1,
+                    from include/asm-generic/atomic.h:12,
+                    from ./arch/nios2/include/generated/asm/atomic.h:1,
+                    from include/linux/atomic.h:7,
+                    from include/asm-generic/bitops/lock.h:5,
+                    from include/asm-generic/bitops.h:31,
+                    from ./arch/nios2/include/generated/asm/bitops.h:1,
+                    from include/linux/bitops.h:33,
+                    from include/linux/kernel.h:22,
+                    from kernel/rcu/update.c:21:
+   include/asm-generic/cmpxchg.h:92:10: error: cast to union type from type not present in union
+      92 |         ((__typeof__(*(ptr)))__generic_cmpxchg_local((ptr), (unsigned long)(o), \
+         |          ^
+   include/asm-generic/cmpxchg.h:105:33: note: in expansion of macro 'generic_cmpxchg_local'
+     105 | #define arch_cmpxchg_local      generic_cmpxchg_local
+         |                                 ^~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/cmpxchg.h:112:33: note: in expansion of macro 'arch_cmpxchg_local'
+     112 | #define arch_cmpxchg            arch_cmpxchg_local
+         |                                 ^~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1916:9: note: in expansion of macro 'arch_cmpxchg'
+    1916 |         arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
+         |         ^~~~~~~~~~~~
+   kernel/rcu/tasks.h:1239:15: note: in expansion of macro 'cmpxchg'
+    1239 |         ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
+         |               ^~~~~~~
 
-I haven't checked if FINISH flag is set at time of VBLANK interrupt, so maybe
-this is not the issue.
 
-regards,
-	o.
+vim +1239 kernel/rcu/tasks.h
 
-> [1]: https://github.com/GloDroid/glodroid_tests/issues/4
-> Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
-> ---
->  drivers/gpu/drm/sun4i/sun8i_mixer.c    | 12 ++++++++++++
->  drivers/gpu/drm/sun4i/sun8i_vi_layer.c |  4 +++-
->  2 files changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c b/drivers/gpu/drm/sun4i/sun8i_mixer.c
-> index 71ab0a00b4de..15cad0330f66 100644
-> --- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
-> +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
-> @@ -27,6 +27,18 @@
->  #include "sun8i_vi_layer.h"
->  #include "sunxi_engine.h"
->  
-> +/* According to DE2.0/DE3.0 manual VI scaler enable register is double
-> + * buffered, but de facto it doesn't, or the hardware has the shadow
-> + * register latching issues which causes single-frame picture corruption
-> + * after changing the state of scaler enable register.
-> + * Allow the user to keep the scaler always enabled, preventing the UI
-> + * glitches on the transition from scaled to unscaled state.
-> + */
-> +int sun8i_vi_keep_scaler_enabled;
-> +MODULE_PARM_DESC(keep_vi_scaler_enabled,
-> +		 "Keep VI scaler enabled (1 = enabled, 0 = disabled (default))");
-> +module_param_named(keep_vi_scaler_enabled, sun8i_vi_keep_scaler_enabled, int, 0644);
-> +
->  struct de2_fmt_info {
->  	u32	drm_fmt;
->  	u32	de2_fmt;
-> diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
-> index 662ba1018cc4..f005ab883503 100644
-> --- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
-> +++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
-> @@ -17,6 +17,8 @@
->  #include "sun8i_vi_layer.h"
->  #include "sun8i_vi_scaler.h"
->  
-> +extern int sun8i_vi_keep_scaler_enabled;
-> +
->  static void sun8i_vi_layer_enable(struct sun8i_mixer *mixer, int channel,
->  				  int overlay, bool enable, unsigned int zpos)
->  {
-> @@ -149,7 +151,7 @@ static int sun8i_vi_layer_update_coord(struct sun8i_mixer *mixer, int channel,
->  	 */
->  	subsampled = format->hsub > 1 || format->vsub > 1;
->  
-> -	if (insize != outsize || subsampled || hphase || vphase) {
-> +	if (insize != outsize || subsampled || hphase || vphase || sun8i_vi_keep_scaler_enabled) {
->  		unsigned int scanline, required;
->  		struct drm_display_mode *mode;
->  		u32 hscale, vscale, fps;
-> -- 
-> 2.30.2
-> 
+  1224	
+  1225	/*
+  1226	 * Do a cmpxchg() on ->trc_reader_special.b.need_qs, allowing for
+  1227	 * the four-byte operand-size restriction of some platforms.
+  1228	 * Returns the old value, which is often ignored.
+  1229	 */
+  1230	u8 rcu_trc_cmpxchg_need_qs(struct task_struct *t, u8 old, u8 new)
+  1231	{
+  1232		union rcu_special ret;
+  1233		union rcu_special trs_old = READ_ONCE(t->trc_reader_special);
+  1234		union rcu_special trs_new = trs_old;
+  1235	
+  1236		if (trs_old.b.need_qs != old)
+  1237			return trs_old.b.need_qs;
+  1238		trs_new.b.need_qs = new;
+> 1239		ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
+  1240		return ret.b.need_qs;
+  1241	}
+  1242	EXPORT_SYMBOL_GPL(rcu_trc_cmpxchg_need_qs);
+  1243	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

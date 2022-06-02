@@ -2,123 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E65153B6BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 258E853B6C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233480AbiFBKP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S233492AbiFBKQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233495AbiFBKPX (ORCPT
+        with ESMTP id S230153AbiFBKQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:15:23 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4482A2AD9AC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:15:21 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id j3so3287184qvn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 03:15:21 -0700 (PDT)
+        Thu, 2 Jun 2022 06:16:04 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A526B2AD5C7
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:16:03 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id cv1so3239967qvb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 03:16:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iGK0zPU93j8Ge2AzP1KbQCzIzb8femdDnLBXlrSmAF4=;
-        b=rGExpiOaZ1dgPz/IIE7N5VFS9CKXCNxc1uESwdH+rJIsRxPqcrxLlunbdvz9yDCtDJ
-         voN25Ke98eRyOfhycMhlE6/BhgKy9kGqk0aVat6o8LmN+Dvtjo+t62ITp+NdHdJ8DaZp
-         ZK1f4mTGjjBMuaKsCEJuIAl4s/rcnw8J1EsiMHkl+n5vTmEsXXhs/HU2YbrLab9gd73W
-         iO3SqhvP749pR96qrqOJg0OsiHYyZEd0RhLMp5fjNgjRvmKi2oDsFTp7dnlJPyIfNnhF
-         ozhd2EusWxJT1KgDiXtn64VqP2yLPhmHegWOXpJfg3beGU/wXASf74PTlh8Zrta1jYLL
-         E8ug==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OzxjqF2J+clkv1C/Ss1ttS3MYS0SiTbk/qhbhgsUw3E=;
+        b=EnqmVHM5M/sJSDt/hrrfaMv80nKlqhsYRVBw8H6ANe0C4v20n3Z4Wopt/rnheXM3DE
+         LnerHLiqpZzR3/xHMeFWPEbtVmFfH3w7EkgOcSZkag1R5hLa9LfngXXTt75DKitKNGqH
+         rCWfaMokUawtEB6WHDjg//I1YWTEZPMi+TQcDZBCBk3EuweF0S+CFeDj4DMurnvi9pDY
+         MDdI2Y/rV4BB/eHwUEB7NBkwPv9R96zTExDA63tH2ymulJSWJvRrP9Md9I1+8rrH6bTA
+         a42iG83wmw8oPYtNgc3lztnWQVv5KDGXswIsglJeM9i87297dI0uJSUh3ZxyCuUVRMfp
+         t+eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iGK0zPU93j8Ge2AzP1KbQCzIzb8femdDnLBXlrSmAF4=;
-        b=svr70iid4okRRJbaP1+KeSdOQ2k7e7hckgUarQxDgDTtKjqihBUcJ8kquxfRhnwahg
-         /K/QULXVadlGqK/Wn+dxiDzKBoNEBT9KenVAILf910Ol7eNJOaNsDT3Fm3f5wClYsIFB
-         IcShx+wJa27TIG9HzZrrTprjt4pPz6JFE8p5QLp/RM11+zEabvR3RkEq2VxFDUOy7TdP
-         XI1YOoXGoaf36BGauKhF5e+xHIR2opbtEMBR0URQjt+l0ZWp7UUVctO7A9TZgk6NczmQ
-         aT1DPPNETjLHPBhi1cNNwks2N9hapmpIXrHrGKeRge0NRGLNSU0XWwR0ahdlTFXTNXu3
-         LUgQ==
-X-Gm-Message-State: AOAM533zrGH+BlCYFnp4VeSewNhRBV6KCFsksF5tNACLVDgAZ2mmZIxs
-        9NOozF0Bhjd0U3t/TZaY5HB3H2ATYe6UzJn6gATqBQ==
-X-Google-Smtp-Source: ABdhPJwZVrgPJE/PLNJFp4EqWodbfWB4zXOatz/ZqouAf8UAnlORn21DQ04M5d/rYnMf/jo5weyIf8kqSfgKMKENP48=
-X-Received: by 2002:ad4:5b81:0:b0:465:ded8:780 with SMTP id
- 1-20020ad45b81000000b00465ded80780mr4768269qvp.119.1654164920448; Thu, 02 Jun
- 2022 03:15:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OzxjqF2J+clkv1C/Ss1ttS3MYS0SiTbk/qhbhgsUw3E=;
+        b=gFrrqrbraI6d2w/E0xMfxV+qLXPuO/AavZ5v2Kx7Fn7cjdPuaGtNUSHKGkqPfTaWit
+         VP7ScEc1xee5PSXWITVZHR95L6hH6VEr6rJX/Jkz7AJTCg6eq9OXgEcpoQPCH2CBUfcK
+         kM1IzFxG/vik5meLYoXIKmt6ZjcvxvoD+nsg5N8PbkfcUsmf//KmQ3hF4aYLfj+Gp7+L
+         YTru6BsaPWQZN60w0OAviixDa5xIpB4i3FtXUYVuEFl+583h9NAeqaYIOiY3MEAgIHtF
+         18GEXc5CdDUk0EOw/sR5iVUZ7TjDRPefzege6dbj9Pj2IjJac6B4gwWCE+3/qR6TiECA
+         IBLw==
+X-Gm-Message-State: AOAM532MSg/VLQQSl8tpayfxu3ppvnMRgJ53vnxMTXBu1uJVeDQK+kII
+        GRsQ6B2GYxbkC2kSMGtxawGe3zNLLlIccOWQQ/s=
+X-Google-Smtp-Source: ABdhPJwDqO1m8su8g8FVOSpWKvyUROj+Es3VmdUqD+lrIME9DZnyLX8W3rkDom46jCAPqxIf8liIAQ==
+X-Received: by 2002:a17:903:18b:b0:162:3dfd:adb1 with SMTP id z11-20020a170903018b00b001623dfdadb1mr4121238plg.122.1654164951798;
+        Thu, 02 Jun 2022 03:15:51 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id 36-20020a630b24000000b003c14af505eesm2905430pgl.6.2022.06.02.03.15.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 03:15:51 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Dinh Nguyen <dinguyen@kernel.org>,
+        Richard Gong <richard.gong@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Tull <atull@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH v2] firmware: stratix10-svc: fix NULL vs IS_ERR() checking
+Date:   Thu,  2 Jun 2022 14:15:43 +0400
+Message-Id: <20220602101543.44276-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220601220747.1145095-1-marijn.suijten@somainline.org> <20220601220747.1145095-3-marijn.suijten@somainline.org>
-In-Reply-To: <20220601220747.1145095-3-marijn.suijten@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 2 Jun 2022 13:15:09 +0300
-Message-ID: <CAA8EJpp0Nv=H3Xm-PQyr0__KA_tP1p6LeSkDwGSMBx0X8kpZ8g@mail.gmail.com>
-Subject: Re: [PATCH v2 02/11] clk: mux: Introduce devm_clk_hw_register_mux_parent_hws()
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rajeev Nandan <quic_rajeevny@quicinc.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Marek <jonathan@marek.ca>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Jun 2022 at 01:07, Marijn Suijten
-<marijn.suijten@somainline.org> wrote:
->
-> Add the devres variant of clk_hw_register_mux_hws() for registering a
-> mux clock with clk_hw parent pointers instead of parent names.
->
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+The svc_create_memory_pool function does not return NULL. It
+returns error pointers.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Fixes: 7ca5ce896524 ("firmware: add Intel Stratix10 service layer driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+Changes in v2:
+- add Fixes tag.
+Link: https://lore.kernel.org/r/20211211051320.2206-1-linmq006@gmail.com
+---
+ drivers/firmware/stratix10-svc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> ---
->  include/linux/clk-provider.h | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-> index 4e07621849e6..316c7e082934 100644
-> --- a/include/linux/clk-provider.h
-> +++ b/include/linux/clk-provider.h
-> @@ -980,6 +980,13 @@ struct clk *clk_register_mux_table(struct device *dev, const char *name,
->                               (parent_names), NULL, NULL, (flags), (reg),     \
->                               (shift), BIT((width)) - 1, (clk_mux_flags),     \
->                               NULL, (lock))
-> +#define devm_clk_hw_register_mux_parent_hws(dev, name, parent_hws,           \
-> +                                           num_parents, flags, reg, shift,   \
-> +                                           width, clk_mux_flags, lock)       \
-> +       __devm_clk_hw_register_mux((dev), NULL, (name), (num_parents), NULL,  \
-> +                                  (parent_hws), NULL, (flags), (reg),        \
-> +                                  (shift), BIT((width)) - 1,                 \
-> +                                  (clk_mux_flags), NULL, (lock))
->
->  int clk_mux_val_to_index(struct clk_hw *hw, const u32 *table, unsigned int flags,
->                          unsigned int val);
-> --
-> 2.36.1
->
-
-
+diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
+index 8177a0fae11d..132ea721c9a0 100644
+--- a/drivers/firmware/stratix10-svc.c
++++ b/drivers/firmware/stratix10-svc.c
+@@ -996,8 +996,8 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
+ 		return ret;
+ 
+ 	genpool = svc_create_memory_pool(pdev, sh_memory);
+-	if (!genpool)
+-		return -ENOMEM;
++	if (IS_ERR(genpool))
++		return PTR_ERR(genpool);
+ 
+ 	/* allocate service controller and supporting channel */
+ 	controller = devm_kzalloc(dev, sizeof(*controller), GFP_KERNEL);
 -- 
-With best wishes
-Dmitry
+2.25.1
+

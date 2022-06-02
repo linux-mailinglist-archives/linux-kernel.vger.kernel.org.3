@@ -2,216 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5D053BDAE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD15D53BDAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237780AbiFBR7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 13:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S237775AbiFBR64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 13:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237777AbiFBR7F (ORCPT
+        with ESMTP id S237757AbiFBR6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 13:59:05 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E6D19282
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 10:59:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654192743; x=1685728743;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7cd/T3aKkkDKSmIlJXDylki50o+AeXsDVVeUoS5JTms=;
-  b=EBJGltlyCpW6jB95maZa3r79XfWNvXDtClSxHEHWc6SK20VGrHb1hGgi
-   qngjJjJBMkiZyyYrqg4DG+NQHEi3pl/NVLIEV+w9UFEdbOfCqWR60xTRS
-   yywEdogW8I5904CtKQ1nfK7tpgyV2x7/9HmexNF5k6gJzFKuCkWYT/bHy
-   ZqxyyVJpxEXiiJuFSpYQKidT52aWASfu4y9fiMs8/i12HeSIritlORMXf
-   bavL1HDJ/vEx+qK1Pow4GN7Z2+tIACWF/RM1wbFDJ6wWQOGc9ZjXkIopq
-   RreTOQ2qSVLxP+FKzfgq2uzXdC+IbfO5vNFJif6XhWWZrQwfKugbzeEBo
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="276102726"
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="276102726"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 10:58:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="707671916"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 02 Jun 2022 10:58:39 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwp5i-0005Kn-Bp;
-        Thu, 02 Jun 2022 17:58:38 +0000
-Date:   Fri, 3 Jun 2022 01:58:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 23/31]
- arch/mips/include/asm/page.h:263:33: error: call to undeclared function
- 'virt_to_phys'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202206030149.i9E92Rg0-lkp@intel.com>
+        Thu, 2 Jun 2022 13:58:54 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE01BCA4
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 10:58:53 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 252F2SSS013568;
+        Thu, 2 Jun 2022 17:58:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=xUuCcQqlY4f7d4geq8tgWU8nwAKebEBknQg7K+tn22c=;
+ b=FQy1yTcoDacZpryheHI+ghM6HfpskVJTRPY6C7+i92D8vmeYWjsTahlpR67mXWSgIWm7
+ Iih1q2vA8/3l2d+HL9S3HJulHqOX/cWjustqANsysYwwk+fiaJ64NMEIxNW0UYracPsc
+ 61jYTwNXQ5S7Hm08wkLovQLaGHtkJbBmqDzfdp3Mkch3hIHK89MBkm6xdcnKp1fx2LdM
+ ma8A+KqRvRkvXhZ2/yCa/D6W919JKKzs/5dKYm3zmQEYjSl/ULr7TGLQN7hxsUXJgITf
+ p5SCLAAGZw1SIFuJavvRM6pK2zL08yq2vc1dWWe8oXMvwKk1vGnoE52ftcHOYeOcujJ9 oQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3geyg6u1sg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Jun 2022 17:58:35 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 252HkRl5005700;
+        Thu, 2 Jun 2022 17:58:35 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3geyg6u1s3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Jun 2022 17:58:34 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 252Ho2Df012943;
+        Thu, 2 Jun 2022 17:58:33 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma02wdc.us.ibm.com with ESMTP id 3gbc9343nk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Jun 2022 17:58:33 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 252HwWRR32047428
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Jun 2022 17:58:32 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6438813604F;
+        Thu,  2 Jun 2022 17:58:32 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3E6EF136051;
+        Thu,  2 Jun 2022 17:58:32 +0000 (GMT)
+Received: from localhost (unknown [9.41.178.242])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  2 Jun 2022 17:58:32 +0000 (GMT)
+From:   Nathan Lynch <nathanl@linux.ibm.com>
+To:     Laurent Dufour <ldufour@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        haren@linux.vnet.ibm.com, npiggin@gmail.com
+Subject: Re: [PATCH 0/2] Disabling NMI watchdog during LPM's memory transfer
+In-Reply-To: <20220601155315.35109-1-ldufour@linux.ibm.com>
+References: <20220601155315.35109-1-ldufour@linux.ibm.com>
+Date:   Thu, 02 Jun 2022 12:58:31 -0500
+Message-ID: <87a6av0wxk.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: vBiR_e7qqRwY_Se2lNxko1RNIf57vRhj
+X-Proofpoint-ORIG-GUID: A9afMTaJmbDkyXUnXbHk-183ld65fIWV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-02_05,2022-06-02_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0 clxscore=1011
+ phishscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206020073
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
-head:   8e0ac1b6b44d1c62420ad92b2a1cbc106a00f3de
-commit: e299c342a63c14e1e2a0971b0726c90e298431ff [23/31] MIPS: Make virt_to_pfn() a static inline
-config: mips-randconfig-r022-20220531 (https://download.01.org/0day-ci/archive/20220603/202206030149.i9E92Rg0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=e299c342a63c14e1e2a0971b0726c90e298431ff
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
-        git checkout e299c342a63c14e1e2a0971b0726c90e298431ff
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
+Laurent Dufour <ldufour@linux.ibm.com> writes:
+> When a partition is transferred, once it arrives at the destination node,
+> the partition is active but much of its memory must be transferred from the
+> start node.
+>
+> It depends on the activity in the partition, but the more CPU the partition
+> has, the more memory to be transferred is likely to be. This causes latency
+> when accessing pages that need to be transferred, and often, for large
+> partitions, it triggers the NMI watchdog.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+It also triggers warnings from other watchdogs and subsystems that
+have soft latency requirements  - softlockup, RCU, workqueue. The issue
+is more general than the NMI watchdog.
 
-All errors (new ones prefixed by >>):
+> The NMI watchdog causes the CPU stack to dump where it appears to be
+> stuck. In this case, it does not bring much information since it can happen
+> during any memory access of the kernel.
 
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:5:
-   In file included from include/linux/spinlock.h:64:
-   In file included from arch/mips/include/asm/mmiowb.h:5:
-   In file included from arch/mips/include/asm/io.h:29:
->> arch/mips/include/asm/page.h:263:33: error: call to undeclared function 'virt_to_phys'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
-                                          ^
-   arch/mips/include/asm/page.h:263:33: note: did you mean 'virt_to_pfn'?
-   arch/mips/include/asm/page.h:256:29: note: 'virt_to_pfn' declared here
-   static inline unsigned long virt_to_pfn(const void *kaddr)
-                               ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:5:
-   In file included from include/linux/spinlock.h:64:
-   In file included from arch/mips/include/asm/mmiowb.h:5:
->> arch/mips/include/asm/io.h:115:27: error: static declaration of 'virt_to_phys' follows non-static declaration
-   static inline phys_addr_t virt_to_phys(const volatile void *x)
-                             ^
-   arch/mips/include/asm/io.h:114:22: note: expanded from macro 'virt_to_phys'
-   #define virt_to_phys virt_to_phys
-                        ^
-   arch/mips/include/asm/page.h:263:33: note: previous implicit declaration is here
-           return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
-                                          ^
-   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for function 'output_ptreg_defines' [-Wmissing-prototypes]
-   void output_ptreg_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_ptreg_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for function 'output_task_defines' [-Wmissing-prototypes]
-   void output_task_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:78:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_task_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for function 'output_thread_info_defines' [-Wmissing-prototypes]
-   void output_thread_info_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:92:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_thread_info_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for function 'output_thread_defines' [-Wmissing-prototypes]
-   void output_thread_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_thread_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:136:6: warning: no previous prototype for function 'output_thread_fpu_defines' [-Wmissing-prototypes]
-   void output_thread_fpu_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:136:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_thread_fpu_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for function 'output_mm_defines' [-Wmissing-prototypes]
-   void output_mm_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_mm_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:218:6: warning: no previous prototype for function 'output_sc_defines' [-Wmissing-prototypes]
-   void output_sc_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:218:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_sc_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:253:6: warning: no previous prototype for function 'output_signal_defined' [-Wmissing-prototypes]
-   void output_signal_defined(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:253:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_signal_defined(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:332:6: warning: no previous prototype for function 'output_pm_defines' [-Wmissing-prototypes]
-   void output_pm_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:332:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_pm_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:346:6: warning: no previous prototype for function 'output_kvm_defines' [-Wmissing-prototypes]
-   void output_kvm_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:346:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_kvm_defines(void)
-   ^
-   static 
-   10 warnings and 2 errors generated.
-   make[2]: *** [scripts/Makefile.build:120: arch/mips/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+When the site of a watchdog backtrace shows a thread stuck on a routine
+memory access as opposed to something like a lock acquisition, that is
+actually useful information that shouldn't be discarded. It tells us the
+platform is failing to adequately virtualize partition memory. This
+isn't a benign situation and it's likely to unacceptably affect real
+workloads. The kernel is ideally situated to detect and warn about this.
 
+> In addition, the NMI interrupt mechanism is not secure and can generate a
+> dump system in the event that the interruption is taken while
+> MSR[RI]=0.
 
-vim +/virt_to_phys +263 arch/mips/include/asm/page.h
+This sounds like a general problem with that facility that isn't
+specific to partition migration? Maybe it should be disabled altogether
+until that can be fixed?
 
-   255	
-   256	static inline unsigned long virt_to_pfn(const void *kaddr)
-   257	{
-   258		/*
-   259		 * MIPS virt_to_phys() returns a phys_addr_t which is
-   260		 * an unsigned int on MIPS, but the interface expects
-   261		 * unsigned long.
-   262		 */
- > 263		return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
-   264	}
-   265	#define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
-   266	
+> Given how often hard lockups are detected when transferring large
+> partitions, it seems best to disable the watchdog NMI until the memory
+> transfer from the start node is complete.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+At this time, I'm far from convinced. Disabling the watchdog is going to
+make the underlying problems in the platform and/or network harder to
+understand.

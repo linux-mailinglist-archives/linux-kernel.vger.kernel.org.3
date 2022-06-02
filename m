@@ -2,47 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B125353B5D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D41B53B5D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232875AbiFBJQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 05:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
+        id S232891AbiFBJRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 05:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232836AbiFBJQ3 (ORCPT
+        with ESMTP id S231402AbiFBJRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 05:16:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B18912612;
-        Thu,  2 Jun 2022 02:16:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A39781063;
-        Thu,  2 Jun 2022 02:16:27 -0700 (PDT)
-Received: from [10.57.38.114] (unknown [10.57.38.114])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 309D93F766;
-        Thu,  2 Jun 2022 02:16:26 -0700 (PDT)
-Message-ID: <eada018c-b857-7946-ae4b-2532e6866a45@arm.com>
-Date:   Thu, 2 Jun 2022 10:16:23 +0100
+        Thu, 2 Jun 2022 05:17:20 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE7985EC6;
+        Thu,  2 Jun 2022 02:17:18 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id s6so6813165lfo.13;
+        Thu, 02 Jun 2022 02:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=x/BMPJiscOCJwChDcnTSf5xiDyx/TDj8W0/luATDtZM=;
+        b=dlrHFDqdCh4D5XYD3LFF4bau4fjpwDa9QQeUEQnqjyacR8JSdJyEyqbAAhE5xs/9eo
+         hbpywzBbcbbelctEIH3HvNwRbz+hkSHLTzD+g5ueE+or5NO32R15l2mqvbN/1Dwje5Bz
+         h4w40/5gcmUcg2ST+QtF23Eoogki5rZA50RnWqjQOtkBotDm6XVT8hQCD0qLLbE43ZI7
+         Ald8xd1yQwGSOTPjZvDSrm+lVnipzA/iFPdVyoW8Thz2nbriIH4KocuqC2LJkgOSaNSQ
+         b8q+OTbw3oIKnLnNw+65ewXePQYLl8PZZ4m4E5LLpcbDQTn+C3/HUid64m5sB0DhmMQV
+         KQDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=x/BMPJiscOCJwChDcnTSf5xiDyx/TDj8W0/luATDtZM=;
+        b=1FVitTFRXoSUpabYzHXsRcuB2dQgC1vQH3K1lLGrUkqycY66kS+x1JpNTCrPeK5iKt
+         E2pTf6/rYY+dvJCWIjWiRDtaAgS2+ErtbTCDwQolCYm8CtrDrvM12xfQJ6rKC+llEbQy
+         FqyYkl1/ZygNw3jmnHTRYEJmMFas6kIAnnRRoJoa+jgOomtCpyYW+/5+21kqv8TLnYUB
+         zWFFk5LDT78o0RyHJ5tLj+j0x1xZzAFHIMBh3eV4Xg2NYJH2HQT79JOkzyCosT7bTzwO
+         B2pQPvIAAWKrfPzn14+4cK5gL3fOxsFAB8HunAhfqJP4WubM8Ajh9h6ovLEYdTyweG5E
+         IWyg==
+X-Gm-Message-State: AOAM530IGRtq4e5WZiLIN3QMZFHtWaxTiCPI3JEns6qk8QUTChkvCAn3
+        Cyc4wSmV6z79DOVC5Kg1ED1Ist2XjvGccg==
+X-Google-Smtp-Source: ABdhPJyL8UcdmpF/l5y5K8HPvwVK1AZch6rwxEsr9rb2Vk8D6jkGykjQBWg93hwnagPcENwKtaVSng==
+X-Received: by 2002:a05:6512:32c1:b0:478:6e6c:53a5 with SMTP id f1-20020a05651232c100b004786e6c53a5mr38322355lfg.435.1654161436489;
+        Thu, 02 Jun 2022 02:17:16 -0700 (PDT)
+Received: from wse-c0127 ([208.127.141.28])
+        by smtp.gmail.com with ESMTPSA id w6-20020a05651204c600b0047906bad093sm809482lfq.173.2022.06.02.02.17.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 02:17:16 -0700 (PDT)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Ido Schimmel <idosch@nvidia.com>,
+        Hans Schultz <schultz.hans@gmail.com>
+Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+In-Reply-To: <YpYk4EIeH6sdRl+1@shredder>
+References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
+ <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
+ <Yo+LAj1vnjq0p36q@shredder> <86sfov2w8k.fsf@gmail.com>
+ <YpCgxtJf9Qe7fTFd@shredder> <86sfoqgi5e.fsf@gmail.com>
+ <YpYk4EIeH6sdRl+1@shredder>
+Date:   Thu, 02 Jun 2022 11:17:12 +0200
+Message-ID: <86y1yfzap3.fsf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 3/3] thermal/sysfs: Remove cooling device sysfs statistics
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, quic_manafm@quicinc.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Todd Kjos <tkjos@google.com>
-References: <20220601151441.9128-1-daniel.lezcano@linaro.org>
- <20220601151441.9128-3-daniel.lezcano@linaro.org>
- <be8395e3-98d7-7a8f-7153-c491b22d4463@arm.com>
- <cb35e356-bc90-2a67-6983-1a4c3a0ea62d@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <cb35e356-bc90-2a67-6983-1a4c3a0ea62d@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,71 +89,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On tis, maj 31, 2022 at 17:23, Ido Schimmel <idosch@nvidia.com> wrote:
+> On Tue, May 31, 2022 at 11:34:21AM +0200, Hans Schultz wrote:
+>> > Just to give you another data point about how this works in other
+>> > devices, I can say that at least in Spectrum this works a bit
+>> > differently. Packets that ingress via a locked port and incur an FDB
+>> > miss are trapped to the CPU where they should be injected into the Rx
+>> > path so that the bridge will create the 'locked' FDB entry and notify it
+>> > to user space. The packets are obviously rated limited as the CPU cannot
+>> > handle billions of packets per second, unlike the ASIC. The limit is not
+>> > per bridge port (or even per bridge), but instead global to the entire
+>> > device.
+>> 
+>> Btw, will the bridge not create a SWITCHDEV_FDB_ADD_TO_DEVICE event
+>> towards the switchcore in the scheme you mention and thus add an entry
+>> that opens up for the specified mac address?
+>
+> It will, but the driver needs to ignore FDB entries that are notified
+> with locked flag. I see that you extended 'struct
+> switchdev_notifier_fdb_info' with the locked flag, but it's not
+> initialized in br_switchdev_fdb_populate(). Can you add it in the next
+> version?
 
+An issue with sending the flag to the driver is that port_fdb_add() is
+suddenly getting more and more arguments and getting messy in my
+opinion, but maybe that's just how it is...
 
-On 6/2/22 09:37, Daniel Lezcano wrote:
-> 
-> Hi Lukasz,
-> 
-> [Adding Todd]
-> 
-> On 01/06/2022 17:33, Lukasz Luba wrote:
->> Hi Daniel,
->>
->>
->> On 6/1/22 16:14, Daniel Lezcano wrote:
->>> The statistics are for debugging purpose and belong to debugfs rather
->>> than sysfs. As the previous changes introduced the same statistics in
->>> debugfs, those in sysfs are no longer needed and can be removed.
->>
->> I just want to let you know that in current Android kernels we cannot
->> even compile the kernel with CONFIG_DEBUG_FS.
-> 
-> Right, it makes sense. Precisely, with the sysfs stats they are always 
-> compiled in for the Android kernel and is a problem for low memory 
-> systems. While debugfs can fulfill its purpose in the developement and 
-> will be removed in production systems.
+Another issue is that
+bridge fdb add MAC dev DEV master static
+seems to add the entry with the SELF flag set, which I don't think is
+what we would want it to do or?
+Also the replace command is not really supported properly as it is. I
+have made a fix for that which looks something like this:
 
-True.
+diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
+index 6cbb27e3b976..f43aa204f375 100644
+--- a/net/bridge/br_fdb.c
++++ b/net/bridge/br_fdb.c
+@@ -917,6 +917,9 @@ static int fdb_add_entry(struct net_bridge *br, struct net_bridge_port *source,
+                if (flags & NLM_F_EXCL)
+                        return -EEXIST;
+ 
++               if (flags & NLM_F_REPLACE)
++                       modified = true;
++
+                if (READ_ONCE(fdb->dst) != source) {
+                        WRITE_ONCE(fdb->dst, source);
+                        modified = true;
 
-> 
->> I have this pain with
->> Energy Model there... Some vendors might see useful info via this
->> sysfs interface in bring-up of the SoC.
-> 
-> Well alternatively, information can be extracted from procfs in the 
-> device-tree description.
-> 
-> What prevents to add energy information in sysfs now that the energy 
-> model is per device ?
-
-Probably nothing, but we need strong need. I have proposed this
-a few times internally, but this must have a requirement.
-If a user-space tool would ask for it, then I could send a patch
-exposing the sysfs. So far we have only one user-space tool, which
-suffers the missing debugfs EM dir: LISA (but we are working on a
-workaround for it).
-If you have a tool or plan to have such, which uses EM, please let
-me know. I'm gathering the requirements.
-
-> 
->> I don't know if there are user-space tools tracking this
->> information via sysfs. We probably should check that.
->>
->> I agree that these statistics look more like debug info, rather than
->> something useful for control.
->>
->> Furthermore, we have trace events for the cooling state changes, which
->> should be good enough for bring-up and experiments.
->>
->> I don't have strong preferences here. I tend to agree to remove this
->> interface if there are no user-space tools using it.
-> 
-> I agree userspace can also get information about the transition but the 
-> goal of the debugfs is also add information about thermal internals like 
-> average temperature at mitigation time, min and max, timings, etc ...
-> 
-> 
-
-I see, it makes sense. Let's see if Todd and Android folks don't
-use this thermal sysfs stats, so we could remove them.
+The argument for always sending notifications to the driver in the case
+of replace is that a replace command will refresh the entries timeout if
+the entry is the same. Any thoughts on this?

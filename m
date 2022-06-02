@@ -2,211 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CDFA53C161
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 01:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2328553C163
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 01:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239876AbiFBXwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 19:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
+        id S239885AbiFBX6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 19:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiFBXwG (ORCPT
+        with ESMTP id S230134AbiFBX57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 19:52:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E762616F
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 16:52:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CF9E61935
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 23:52:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD62EC34119;
-        Thu,  2 Jun 2022 23:52:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654213922;
-        bh=ksf5ubmPKHtfc96T9Llyh8RYmVrbiXs3oh9nqY5uDe4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=c6dEZMqWYas+WdmgtCvEhfq3F2OWWb+exUb/JAjMFY//KH2B2q9L9kD/x4F5y1wAl
-         KFMkYRPBBX4i4ET6uN5OP2CffWaCkSDxumU79KE1GIKt4I9aVBlLr7aZgNNn1Yl2y4
-         woPKz2dPBkALSNFSzdfBgjrL2TWl4b7OBKxTAGUIvNbsEE/2Klupf69UNRBdTykKh/
-         npR0JdfniodVYpMT/ZPeufpRctDITe1cwtN+l0gM2iwn9EoiNT8aU6sYKS4zv+hJJ3
-         teoGb7rNo8gGsAl7hxbl/fLTLSn5QgYDBukocbMq2KUm2b6DWbeODQ5u6ue4uOtbEf
-         s3Md42/JbGUww==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6C8D65C05E6; Thu,  2 Jun 2022 16:52:02 -0700 (PDT)
-Date:   Thu, 2 Jun 2022 16:52:02 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     kernel test robot <lkp@intel.com>
+        Thu, 2 Jun 2022 19:57:59 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3386B7CF
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 16:57:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654214277; x=1685750277;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qQ4KXhgTLmYjPUNNwObqJCRTjrPtVSMqApnEkiZmtGE=;
+  b=K4cvetgpagtlxJZS4R5yIZtBa6PWcH/kvjCKC9jMvtpyH80efsPe+EXG
+   SS25XboENjWgY/riErWCl4JgSswBVyuVDVW8rip2w+KDfADSKuMOM/U7l
+   gcOPtVvukzNEcyRdrtNIyOtSkDxhkCLjVO6YmZ6gbmDR2JEt5bghq9/Vv
+   +bdY/Ekc1CN0HTnK7uBsDuz9gWepfwNWehtOojEU25R1drvjKXn0sQNma
+   b9RMFBVe67bfqEru+gqjShhFjqsr+fv25A1Klue2zeO7eLfmqrtM7upkm
+   iavQH5HiaAZCVc9qu0CPTTW8GQJratgSMTq7Soqb4B0WOu7OPR2YpuLvI
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="301487966"
+X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
+   d="scan'208";a="301487966"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 16:57:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
+   d="scan'208";a="824489993"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 02 Jun 2022 16:57:56 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwuhO-0005X9-3z;
+        Thu, 02 Jun 2022 23:57:54 +0000
+Date:   Fri, 3 Jun 2022 07:57:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cong Wang <cong.wang@bytedance.com>
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dinguyen@kernel.org
-Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/dave.2022.06.02a 56/78]
- kernel/rcu/tasks.h:1239:8: error: variable has incomplete type 'typeof (({
-Message-ID: <20220602235202.GR1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202206030613.IxQYmIW8-lkp@intel.com>
+        linux-kernel@vger.kernel.org
+Subject: [congwang:sk_data_ready 6/7] net/smc/af_smc.c:254:25: error:
+ incompatible pointer types passing 'int (**)(struct sock *)' to parameter of
+ type 'void (**)(struct sock *)'
+Message-ID: <202206030727.VT50e3vR-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202206030613.IxQYmIW8-lkp@intel.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 06:15:47AM +0800, kernel test robot wrote:
-> tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dave.2022.06.02a
-> head:   2efc5c4abe4cc1259378f7c1678a93540559673c
-> commit: cda3200416cdef7f25546cd6249fb411c8c32079 [56/78] rcu-tasks: Merge state into .b.need_qs and atomically update
-> config: arm-buildonly-randconfig-r004-20220531 (https://download.01.org/0day-ci/archive/20220603/202206030613.IxQYmIW8-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://github.com/ammarfaizi2/linux-block/commit/cda3200416cdef7f25546cd6249fb411c8c32079
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dave.2022.06.02a
->         git checkout cda3200416cdef7f25546cd6249fb411c8c32079
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
+tree:   https://github.com/congwang/linux.git sk_data_ready
+head:   9c95f9de643d020bc671ae23c5723d811d6f11f7
+commit: 55e436c5d3f795345e5b0d946f98fa64540c496e [6/7] net: make ->sk_data_ready() return int
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220603/202206030727.VT50e3vR-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/congwang/linux/commit/55e436c5d3f795345e5b0d946f98fa64540c496e
+        git remote add congwang https://github.com/congwang/linux.git
+        git fetch --no-tags congwang sk_data_ready
+        git checkout 55e436c5d3f795345e5b0d946f98fa64540c496e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/nvme/host/ net/smc/
 
-OK, I finally get it.  The NIOS2 and ARM CPUs' implementations of
-cmpxchg are not type-generic, are they?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-OK, I will fix this, though the type-checking is rather nice.
+All errors (new ones prefixed by >>):
 
-Adding some NIOS2 and ARM people/lists on CC for their thoughts.
+>> drivers/nvme/host/tcp.c:1610:20: error: incompatible function pointer types assigning to 'void (*)(struct sock *)' from 'int (*)(struct sock *)' [-Werror,-Wincompatible-function-pointer-types]
+           queue->data_ready = queue->sock->sk->sk_data_ready;
+                             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/nvme/host/tcp.c:1612:33: error: incompatible function pointer types assigning to 'int (*)(struct sock *)' from 'void (struct sock *)' [-Werror,-Wincompatible-function-pointer-types]
+           queue->sock->sk->sk_data_ready = nvme_tcp_data_ready;
+                                          ^ ~~~~~~~~~~~~~~~~~~~
+>> drivers/nvme/host/tcp.c:1644:26: error: incompatible function pointer types assigning to 'int (*)(struct sock *)' from 'void (*)(struct sock *)' [-Werror,-Wincompatible-function-pointer-types]
+           sock->sk->sk_data_ready = queue->data_ready;
+                                   ^ ~~~~~~~~~~~~~~~~~
+   3 errors generated.
+--
+>> net/smc/af_smc.c:254:25: error: incompatible pointer types passing 'int (**)(struct sock *)' to parameter of type 'void (**)(struct sock *)' [-Werror,-Wincompatible-pointer-types]
+           smc_clcsock_restore_cb(&clcsk->sk_data_ready, &smc->clcsk_data_ready);
+                                  ^~~~~~~~~~~~~~~~~~~~~
+   net/smc/smc.h:317:51: note: passing argument to parameter 'target_cb' here
+   static inline void smc_clcsock_restore_cb(void (**target_cb)(struct sock *),
+                                                     ^
+   net/smc/af_smc.c:254:48: error: incompatible pointer types passing 'int (**)(struct sock *)' to parameter of type 'void (**)(struct sock *)' [-Werror,-Wincompatible-pointer-types]
+           smc_clcsock_restore_cb(&clcsk->sk_data_ready, &smc->clcsk_data_ready);
+                                                         ^~~~~~~~~~~~~~~~~~~~~~
+   net/smc/smc.h:318:16: note: passing argument to parameter 'saved_cb' here
+                                             void (**saved_cb)(struct sock *))
+                                                     ^
+   net/smc/af_smc.c:828:25: error: incompatible pointer types passing 'int (**)(struct sock *)' to parameter of type 'void (**)(struct sock *)' [-Werror,-Wincompatible-pointer-types]
+           smc_clcsock_replace_cb(&clcsk->sk_data_ready, smc_fback_data_ready,
+                                  ^~~~~~~~~~~~~~~~~~~~~
+   net/smc/smc.h:306:51: note: passing argument to parameter 'target_cb' here
+   static inline void smc_clcsock_replace_cb(void (**target_cb)(struct sock *),
+                                                     ^
+>> net/smc/af_smc.c:828:48: error: incompatible function pointer types passing 'int (struct sock *)' to parameter of type 'void (*)(struct sock *)' [-Werror,-Wincompatible-function-pointer-types]
+           smc_clcsock_replace_cb(&clcsk->sk_data_ready, smc_fback_data_ready,
+                                                         ^~~~~~~~~~~~~~~~~~~~
+   net/smc/smc.h:307:15: note: passing argument to parameter 'new_cb' here
+                                             void (*new_cb)(struct sock *),
+                                                    ^
+   net/smc/af_smc.c:829:11: error: incompatible pointer types passing 'int (**)(struct sock *)' to parameter of type 'void (**)(struct sock *)' [-Werror,-Wincompatible-pointer-types]
+                                  &smc->clcsk_data_ready);
+                                  ^~~~~~~~~~~~~~~~~~~~~~
+   net/smc/smc.h:308:16: note: passing argument to parameter 'saved_cb' here
+                                             void (**saved_cb)(struct sock *))
+                                                     ^
+   net/smc/af_smc.c:2483:25: error: incompatible pointer types passing 'int (**)(struct sock *)' to parameter of type 'void (**)(struct sock *)' [-Werror,-Wincompatible-pointer-types]
+           smc_clcsock_replace_cb(&smc->clcsock->sk->sk_data_ready,
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/smc/smc.h:306:51: note: passing argument to parameter 'target_cb' here
+   static inline void smc_clcsock_replace_cb(void (**target_cb)(struct sock *),
+                                                     ^
+   net/smc/af_smc.c:2484:11: error: incompatible function pointer types passing 'int (struct sock *)' to parameter of type 'void (*)(struct sock *)' [-Werror,-Wincompatible-function-pointer-types]
+                                  smc_clcsock_data_ready, &smc->clcsk_data_ready);
+                                  ^~~~~~~~~~~~~~~~~~~~~~
+   net/smc/smc.h:307:15: note: passing argument to parameter 'new_cb' here
+                                             void (*new_cb)(struct sock *),
+                                                    ^
+   net/smc/af_smc.c:2484:35: error: incompatible pointer types passing 'int (**)(struct sock *)' to parameter of type 'void (**)(struct sock *)' [-Werror,-Wincompatible-pointer-types]
+                                  smc_clcsock_data_ready, &smc->clcsk_data_ready);
+                                                          ^~~~~~~~~~~~~~~~~~~~~~
+   net/smc/smc.h:308:16: note: passing argument to parameter 'saved_cb' here
+                                             void (**saved_cb)(struct sock *))
+                                                     ^
+   net/smc/af_smc.c:2501:26: error: incompatible pointer types passing 'int (**)(struct sock *)' to parameter of type 'void (**)(struct sock *)' [-Werror,-Wincompatible-pointer-types]
+                   smc_clcsock_restore_cb(&smc->clcsock->sk->sk_data_ready,
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/smc/smc.h:317:51: note: passing argument to parameter 'target_cb' here
+   static inline void smc_clcsock_restore_cb(void (**target_cb)(struct sock *),
+                                                     ^
+   net/smc/af_smc.c:2502:12: error: incompatible pointer types passing 'int (**)(struct sock *)' to parameter of type 'void (**)(struct sock *)' [-Werror,-Wincompatible-pointer-types]
+                                          &smc->clcsk_data_ready);
+                                          ^~~~~~~~~~~~~~~~~~~~~~
+   net/smc/smc.h:318:16: note: passing argument to parameter 'saved_cb' here
+                                             void (**saved_cb)(struct sock *))
+                                                     ^
+   10 errors generated.
+--
+>> net/smc/smc_close.c:218:27: error: incompatible pointer types passing 'int (**)(struct sock *)' to parameter of type 'void (**)(struct sock *)' [-Werror,-Wincompatible-pointer-types]
+                           smc_clcsock_restore_cb(&smc->clcsock->sk->sk_data_ready,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/smc/smc.h:317:51: note: passing argument to parameter 'target_cb' here
+   static inline void smc_clcsock_restore_cb(void (**target_cb)(struct sock *),
+                                                     ^
+   net/smc/smc_close.c:219:13: error: incompatible pointer types passing 'int (**)(struct sock *)' to parameter of type 'void (**)(struct sock *)' [-Werror,-Wincompatible-pointer-types]
+                                                  &smc->clcsk_data_ready);
+                                                  ^~~~~~~~~~~~~~~~~~~~~~
+   net/smc/smc.h:318:16: note: passing argument to parameter 'saved_cb' here
+                                             void (**saved_cb)(struct sock *))
+                                                     ^
+   2 errors generated.
 
-							Thanx, Paul
 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from kernel/rcu/update.c:606:
->    kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
->            ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
->                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
->            arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
->            __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/atomic.h:73:9: note: expanded from macro '__atomic_op_fence'
->            typeof(op##_relaxed(args)) __ret;                               \
->                   ^~~~~~~~~~~~~~~~~~
->    <scratch space>:39:1: note: expanded from here
->    arch_cmpxchg_relaxed
->    ^
->    arch/arm/include/asm/cmpxchg.h:212:26: note: expanded from macro 'arch_cmpxchg_relaxed'
->                                          (unsigned long)(o),               \
->                                                         ^~~
->    In file included from kernel/rcu/update.c:606:
->    kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
->            ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
->                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
->            arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
->            __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/atomic.h:73:9: note: expanded from macro '__atomic_op_fence'
->            typeof(op##_relaxed(args)) __ret;                               \
->                   ^~~~~~~~~~~~~~~~~~
->    <scratch space>:39:1: note: expanded from here
->    arch_cmpxchg_relaxed
->    ^
->    arch/arm/include/asm/cmpxchg.h:213:26: note: expanded from macro 'arch_cmpxchg_relaxed'
->                                          (unsigned long)(n),               \
->                                                         ^~~
->    In file included from kernel/rcu/update.c:606:
-> >> kernel/rcu/tasks.h:1239:8: error: variable has incomplete type 'typeof (({
->    }))' (aka 'void')
->    include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
->            arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
->            ^
->    include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
->            __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
->            ^
->    include/linux/atomic.h:73:29: note: expanded from macro '__atomic_op_fence'
->            typeof(op##_relaxed(args)) __ret;                               \
->                                       ^
->    In file included from kernel/rcu/update.c:606:
->    kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
->            ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
->                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
->            arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
->            __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/atomic.h:75:10: note: expanded from macro '__atomic_op_fence'
->            __ret = op##_relaxed(args);                                     \
->                    ^~~~~~~~~~~~~~~~~~
->    <scratch space>:40:1: note: expanded from here
->    arch_cmpxchg_relaxed
->    ^
->    arch/arm/include/asm/cmpxchg.h:212:26: note: expanded from macro 'arch_cmpxchg_relaxed'
->                                          (unsigned long)(o),               \
->                                                         ^~~
->    In file included from kernel/rcu/update.c:606:
->    kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
->            ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
->                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
->            arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
->            __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/atomic.h:75:10: note: expanded from macro '__atomic_op_fence'
->            __ret = op##_relaxed(args);                                     \
->                    ^~~~~~~~~~~~~~~~~~
->    <scratch space>:40:1: note: expanded from here
->    arch_cmpxchg_relaxed
->    ^
->    arch/arm/include/asm/cmpxchg.h:213:26: note: expanded from macro 'arch_cmpxchg_relaxed'
->                                          (unsigned long)(n),               \
->                                                         ^~~
->    5 errors generated.
-> 
-> 
-> vim +1239 kernel/rcu/tasks.h
-> 
->   1224	
->   1225	/*
->   1226	 * Do a cmpxchg() on ->trc_reader_special.b.need_qs, allowing for
->   1227	 * the four-byte operand-size restriction of some platforms.
->   1228	 * Returns the old value, which is often ignored.
->   1229	 */
->   1230	u8 rcu_trc_cmpxchg_need_qs(struct task_struct *t, u8 old, u8 new)
->   1231	{
->   1232		union rcu_special ret;
->   1233		union rcu_special trs_old = READ_ONCE(t->trc_reader_special);
->   1234		union rcu_special trs_new = trs_old;
->   1235	
->   1236		if (trs_old.b.need_qs != old)
->   1237			return trs_old.b.need_qs;
->   1238		trs_new.b.need_qs = new;
-> > 1239		ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
->   1240		return ret.b.need_qs;
->   1241	}
->   1242	EXPORT_SYMBOL_GPL(rcu_trc_cmpxchg_need_qs);
->   1243	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+vim +254 net/smc/af_smc.c
+
+aaa4d33f6da1e1 Karsten Graul 2018-03-16  245  
+0558226cebee25 Wen Gu        2022-04-22  246  static void smc_fback_restore_callbacks(struct smc_sock *smc)
+0558226cebee25 Wen Gu        2022-04-22  247  {
+0558226cebee25 Wen Gu        2022-04-22  248  	struct sock *clcsk = smc->clcsock->sk;
+0558226cebee25 Wen Gu        2022-04-22  249  
+0558226cebee25 Wen Gu        2022-04-22  250  	write_lock_bh(&clcsk->sk_callback_lock);
+0558226cebee25 Wen Gu        2022-04-22  251  	clcsk->sk_user_data = NULL;
+0558226cebee25 Wen Gu        2022-04-22  252  
+0558226cebee25 Wen Gu        2022-04-22  253  	smc_clcsock_restore_cb(&clcsk->sk_state_change, &smc->clcsk_state_change);
+0558226cebee25 Wen Gu        2022-04-22 @254  	smc_clcsock_restore_cb(&clcsk->sk_data_ready, &smc->clcsk_data_ready);
+0558226cebee25 Wen Gu        2022-04-22  255  	smc_clcsock_restore_cb(&clcsk->sk_write_space, &smc->clcsk_write_space);
+0558226cebee25 Wen Gu        2022-04-22  256  	smc_clcsock_restore_cb(&clcsk->sk_error_report, &smc->clcsk_error_report);
+0558226cebee25 Wen Gu        2022-04-22  257  
+0558226cebee25 Wen Gu        2022-04-22  258  	write_unlock_bh(&clcsk->sk_callback_lock);
+0558226cebee25 Wen Gu        2022-04-22  259  }
+0558226cebee25 Wen Gu        2022-04-22  260  
+
+:::::: The code at line 254 was first introduced by commit
+:::::: 0558226cebee256aa3f8ec0cc5a800a10bf120a6 net/smc: Fix slab-out-of-bounds issue in fallback
+
+:::::: TO: Wen Gu <guwen@linux.alibaba.com>
+:::::: CC: Jakub Kicinski <kuba@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

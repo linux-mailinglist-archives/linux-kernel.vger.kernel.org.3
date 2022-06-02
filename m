@@ -2,147 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B1853BFFF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402D353C000
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239220AbiFBUmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 16:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
+        id S239233AbiFBUmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 16:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237619AbiFBUmJ (ORCPT
+        with ESMTP id S235127AbiFBUm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 16:42:09 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D3339B;
-        Thu,  2 Jun 2022 13:42:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654202528; x=1685738528;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Sok3m5diANN7wooonIOw/1EsMvSV7BlM/zWiPdcGKEg=;
-  b=FqDNb9xaRKNP5v8k/PK81gpwvvqck16TYWih0EqXMeFlIU3sJaoFY6Wy
-   frn+8/hdWNk7tdXKse2MhXLGM0mW9qnHFcV4UkTHXXxQk7cn+5S3CLY0I
-   yCHLLFH8VSSs8ipUIo5zO4NFdjxS9ljRh3BYoHqICJkLIqI2ziftBVTWH
-   juxNMg0Pu8RMI/9/VMEjXyaBeURSQFKVE6UHZmlGTtXiyq4fAK9zVdrL/
-   ldtL+uvJ0ojuGuDI2IccZZTAHbh5+Oy1lV6MMlm8YolMgQtATZ/ueIC5h
-   5hg6l8GGcULP/kPZtIslrPHejn15u5Qe4AGgflNSR1rQDcwRdwA/TrHra
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="339122134"
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="339122134"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 13:42:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="607038074"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.163])
-  by orsmga008.jf.intel.com with SMTP; 02 Jun 2022 13:42:03 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Thu, 02 Jun 2022 23:42:02 +0300
-Date:   Thu, 2 Jun 2022 23:42:02 +0300
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Lyude Paul <lyude@redhat.com>
-Cc:     dri-devel@lists.freedesktop.org, stable@vger.kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Wayne Lin <Wayne.Lin@amd.com>,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] drm/display/dp_mst: Fix
- drm_atomic_get_mst_topology_state()
-Message-ID: <YpkgmvBeX6L7Bs5y@intel.com>
-References: <20220602201757.30431-1-lyude@redhat.com>
- <20220602201757.30431-3-lyude@redhat.com>
+        Thu, 2 Jun 2022 16:42:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86372C07;
+        Thu,  2 Jun 2022 13:42:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20F81617DC;
+        Thu,  2 Jun 2022 20:42:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D98DC385A5;
+        Thu,  2 Jun 2022 20:42:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654202547;
+        bh=/lvv3NycmYiHzFYyjK8HRNBzGIkaFOylSY60LE19OHk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mFpUng26AXUoMF75cfNBHzFS7uTHWJ2nVD54VJyVniuIJGYy6nxBkU1jMAmPOC59s
+         rBFUT6AyFyy/IcByb4O2EZUdJ+PzETptBqNLx6gV927xRv0lPVbmMIZ6J1TmuBxc32
+         ln320ZSs0DkjrmZNKP1tcNM42Q1VV9CgP4QV22Akck5UYRVutyenoJhwYA7O5zMvFx
+         +/o1JeZ8YdboJPfl22YIu5kSsvKeduO0x0MM7VMqM8jf27Hdyi8N/GmQ/QmnDe1kNZ
+         AyTiglT1FN5gIoUor8N7dJ5gd8QsLOJv0iElkaG69Ghm9TmajM9DFnTWu59C0viBKr
+         eNevA1k2pKoMw==
+Received: by mail-yb1-f169.google.com with SMTP id l204so10345903ybf.10;
+        Thu, 02 Jun 2022 13:42:27 -0700 (PDT)
+X-Gm-Message-State: AOAM530bR0h+UxOxurRE/pT0e9ienGfC6HlWwWiINZpOW3IayR3vwMV+
+        XRZfjcadKUaJFyjmGQli1m1Sd2A62idEaFaGXlk=
+X-Google-Smtp-Source: ABdhPJz+55oyDMoer2A6nJ9U4zrEhMjGLCwNSL9mFFubVEl3KNODU5hHYDiy/zAZNyg+rDoNjx1NNaft96do/NV7268=
+X-Received: by 2002:a25:bd8b:0:b0:657:8392:55c3 with SMTP id
+ f11-20020a25bd8b000000b00657839255c3mr7406405ybh.452.1654202546535; Thu, 02
+ Jun 2022 13:42:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220602201757.30431-3-lyude@redhat.com>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAK8P3a1mkHEjRJgJPsRy+kuN=48=JEDJAeR2z9n+O71qbJ8hSA@mail.gmail.com>
+ <6caf53e059758234ee12a236f967412f1df1f8a0.camel@linux.intel.com>
+ <CAK8P3a1mHe3TkZa443fzsPnGUP1XT3w-DN3U5KAL6NBhc2nEsw@mail.gmail.com>
+ <079945077b128fcc3cb470e9d52267f7ac763b7a.camel@linux.intel.com>
+ <CAK8P3a3aUtQ6C6kVmEZKzHv2tGL3=3WXK=_agc-Mg5Pq47vbdA@mail.gmail.com> <21b7d5a3de39e9eee4ccda48ad0c66d31b1fe7d1.camel@linux.intel.com>
+In-Reply-To: <21b7d5a3de39e9eee4ccda48ad0c66d31b1fe7d1.camel@linux.intel.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 2 Jun 2022 22:42:09 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2ZhHoA3mKC7fFNubC3i+bADdem1W_o-NVR0KBYg2Z8eg@mail.gmail.com>
+Message-ID: <CAK8P3a2ZhHoA3mKC7fFNubC3i+bADdem1W_o-NVR0KBYg2Z8eg@mail.gmail.com>
+Subject: Re: x86/mce/therm_throt incorrect THERM_STATUS_CLEAR_CORE_MASK?
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Len Brown <len.brown@intel.com>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 04:17:56PM -0400, Lyude Paul wrote:
-> I noticed a rather surprising issue here while working on removing all of
-> the non-atomic MST code: drm_atomic_get_mst_topology_state() doesn't check
-> the return value of drm_atomic_get_private_obj_state() and instead just
-> passes it directly to to_dp_mst_topology_state(). This means that if we
-> hit a deadlock or something else which would return an error code pointer,
-> we'll likely segfault the kernel.
-> 
-> This is definitely another one of those fixes where I'm astonished we
-> somehow managed never to discover this issue until now…
+On Thu, Jun 2, 2022 at 10:10 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+> On Thu, 2022-06-02 at 20:53 +0200, Arnd Bergmann wrote:
+> >
+> > I wonder how common this problem it is. Would it help to add a driver
+> > workaround
+> > like this?
+> This issue affects only certain skews. The others already working as
+> expected. These are important log bits for debug, we don't want to
+> clear in this path. Printing warning for CLX stepping is fine without
+> clearing unrelated bits 13 and 15.
+> Read-modify-update should always work where we only update the bits of
+> interest. Writing 1s to this register should be NOP.
 
-It has been discussed before.
+The patch I suggested doesn't change the behavior unless the initial
+write causes an exception. As long as only buggy microcode rejects the
+write, the second write just serves to clear the state that causes the
+repeated stack dumps.
 
-struct drm_dp_mst_topology_state {
-	struct drm_private_state base;
-	...
-}
+       Arnd
 
-so offsetof(base)==0.
-
-> 
-> Signed-off-by: Lyude Paul <lyude@redhat.com>
-> Fixes: a4370c777406 ("drm/atomic: Make private objs proper objects")
-> Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
-> Cc: <stable@vger.kernel.org> # v4.14+
-> ---
->  drivers/gpu/drm/display/drm_dp_mst_topology.c | 2 +-
->  include/drm/display/drm_dp_mst_helper.h       | 2 ++
->  2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> index d84673b3294b..d6e595b95f07 100644
-> --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> @@ -5468,7 +5468,7 @@ EXPORT_SYMBOL(drm_dp_mst_topology_state_funcs);
->  struct drm_dp_mst_topology_state *drm_atomic_get_mst_topology_state(struct drm_atomic_state *state,
->  								    struct drm_dp_mst_topology_mgr *mgr)
->  {
-> -	return to_dp_mst_topology_state(drm_atomic_get_private_obj_state(state, &mgr->base));
-> +	return to_dp_mst_topology_state_safe(drm_atomic_get_private_obj_state(state, &mgr->base));
->  }
->  EXPORT_SYMBOL(drm_atomic_get_mst_topology_state);
->  
-> diff --git a/include/drm/display/drm_dp_mst_helper.h b/include/drm/display/drm_dp_mst_helper.h
-> index 10adec068b7f..fe7577e7f305 100644
-> --- a/include/drm/display/drm_dp_mst_helper.h
-> +++ b/include/drm/display/drm_dp_mst_helper.h
-> @@ -541,6 +541,8 @@ struct drm_dp_payload {
->  };
->  
->  #define to_dp_mst_topology_state(x) container_of(x, struct drm_dp_mst_topology_state, base)
-> +#define to_dp_mst_topology_state_safe(x) \
-> +	container_of_safe(x, struct drm_dp_mst_topology_state, base)
-
-Wasn't aware of container_of_safe(). I suppose no real harm 
-in using it. Not sure why we'd even keep the non-safe version
-around?
-
-Though the use of container_of_safe() everywhere won't help
-when "casting" the other way (&foo->base, when foo==NULL/errptr).
-In order to make that work for non-zero offsets we'd have to
-introduce a casting macro for that direction as well.
-
->  
->  struct drm_dp_vcpi_allocation {
->  	struct drm_dp_mst_port *port;
-> -- 
-> 2.35.3
-
--- 
-Ville Syrjälä
-Intel
+> > @@ -214,7 +214,13 @@ static void clear_therm_status_log(int level)
+> >
+> >         rdmsrl(msr, msr_val);
+> >         msr_val &= mask;
+> > -       wrmsrl(msr, msr_val & ~THERM_STATUS_PROCHOT_LOG);
+> > +       if (wrmsrl_safe(msr, msr_val & ~THERM_STATUS_PROCHOT_LOG)) {
+> > +               /* work around Cascade Lake SKZ57 erratum */
+> > +               printk_once(KERN_WARNING "Failed to update IA32_THERM_STATUS, "
+> > +                                       "please upgrade microcode\n");
+> > +               wrmsrl(msr, msr_val & ~THERM_STATUS_PROCHOT_LOG &
+> > +                       ~BIT(13) & ~BIT(15));
+> > +       }
+> >  }
+> >

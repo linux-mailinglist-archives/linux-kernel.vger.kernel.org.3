@@ -2,150 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFBAD53BBBA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF8C53BBC5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236538AbiFBPml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 11:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
+        id S236542AbiFBPnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 11:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236515AbiFBPmk (ORCPT
+        with ESMTP id S232621AbiFBPnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 11:42:40 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5989B27623C;
-        Thu,  2 Jun 2022 08:42:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654184559; x=1685720559;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dHXkcn+vdeBtOzMm0MELukXq9yPGsPhdHl1IklX7ohk=;
-  b=Rk+xjUM+v9sVwqmueaT8orb/8VmNQKis4QsFVGypBE9rwAOAf+MHMtxo
-   N3iMiub4U4oB9MDiQ74ReEZIumK0juVpDHA5/DhJRxmPWBJpBf+aIHZuC
-   S7B8FiHXBsjQRP8onmz09D4XK+xYIG0kGY2cNr3B+iK1Pf2joNMJLAnGZ
-   k=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 02 Jun 2022 08:42:38 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 08:42:37 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 2 Jun 2022 08:42:37 -0700
-Received: from [10.216.8.63] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 2 Jun 2022
- 08:42:34 -0700
-Message-ID: <cb802fb1-d0b8-68af-1c04-f73bc1beca77@quicinc.com>
-Date:   Thu, 2 Jun 2022 21:12:31 +0530
+        Thu, 2 Jun 2022 11:43:11 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5332A6880;
+        Thu,  2 Jun 2022 08:43:09 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VFBKBJM_1654184584;
+Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VFBKBJM_1654184584)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 02 Jun 2022 23:43:05 +0800
+From:   Xin Hao <xhao@linux.alibaba.com>
+To:     changbin.du@intel.com
+Cc:     sashal@kernel.org, akpm@linux-foundation.org, adobriyan@gmail.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xhao@linux.alibaba.com
+Subject: [PATCH] proc: export page young and skip_kasan_poison flag via kpageflags
+Date:   Thu,  2 Jun 2022 23:43:02 +0800
+Message-Id: <20220602154302.12634-1-xhao@linux.alibaba.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [V4] serial: core: Do stop_rx in suspend path for console if
- console_suspend is disabled
-Content-Language: en-CA
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_msavaliy@quicinc.com>, <dianders@chromium.org>,
-        <mka@chromium.org>, <swboyd@chromium.org>
-References: <1652692810-31148-1-git-send-email-quic_vnivarth@quicinc.com>
- <bf7eec57-6ad6-2c1a-ea61-0e1d06fc77f5@samsung.com>
- <CGME20220524115408eucas1p1ddda7aae4db0a65a7d67d6f8c59d404b@eucas1p1.samsung.com>
- <3866c083-0064-ac9a-4587-91a83946525d@samsung.com>
- <ff029402-f90c-096a-7366-b58f53555ace@quicinc.com>
- <fb44af37-daf7-974d-95fe-1a6c2cdab676@samsung.com>
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-In-Reply-To: <fb44af37-daf7-974d-95fe-1a6c2cdab676@samsung.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Now the young and skip_kasan_poison flag are supported in
+show_page_flags(), but we can not get them from /proc/kpageflags,
+So there add them.
 
+Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+---
+ fs/proc/page.c                    | 6 ++++++
+ include/linux/kernel-page-flags.h | 2 ++
+ tools/vm/page-types.c             | 4 ++++
+ 3 files changed, 12 insertions(+)
 
-On 6/2/2022 3:55 AM, Marek Szyprowski wrote:
-> Hi,
->
-> On 01.06.2022 13:24, Vijaya Krishna Nivarthi wrote:
->> On 5/24/2022 5:24 PM, Marek Szyprowski wrote:
->>> On 23.05.2022 23:32, Marek Szyprowski wrote:
->>>> Hi,
->>>>
->>>> On 16.05.2022 11:20, Vijaya Krishna Nivarthi wrote:
->>>>> For the case of console_suspend disabled, if back to back
->>>>> suspend/resume
->>>>> test is executed, at the end of test, sometimes console would
->>>>> appear to
->>>>> be frozen not responding to input. This would happen because, during
->>>>> resume, rx transactions can come in before system is ready,
->>>>> malfunction
->>>>> of rx happens in turn resulting in console appearing to be stuck.
->>>>>
->>>>> Do a stop_rx in suspend sequence to prevent this.
->>>>>
->>>>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
->>>>> ---
->>>>> v4: moved the change to serial core to apply for all drivers
->>>>> v3: swapped the order of conditions to be more human readable
->>>>> v2: restricted patch to contain only stop_rx in suspend sequence
->>>>> v1: intial patch contained 2 additional unrelated changes in vicinity
->>>>> ---
->>>> This patch landed recently in linux-next as commit c9d2325cdb92
->>>> ("serial: core: Do stop_rx in suspend path for console if
->>>> console_suspend is disabled").
->>>>
->>>> Unfortunately it breaks console operation on my test systems after
->>>> system suspend/resume cycle if 'no_console_suspend' kernel parameter
->>>> is present. System properly resumes from suspend, the console displays
->>>> all the messages and even command line prompt, but then doesn't react
->>>> on any input. If I remove the 'no_console_suspend' parameter, the
->>>> console is again operational after system suspend/resume cycle. Before
->>>> this patch it worked fine regardless the 'no_console_suspend'
->>>> parameter.
->>>>
->>>> If this matters, the test system is ARM 32bit Samsung Exynos5422-based
->>>> Odroid XU3lite board.
->>> One more information. This issue can be easily reproduced with QEMU. It
->>> happens both on ARM 32bit and ARM 64bit QEMU's 'virt' machines when
->>> 'no_console_suspend' is added to kernel's cmdline.
->>>
->> Ideally, as comments indicate, the set_termios should have done
->> stop_rx at begin and start_rx at end to take care of this issue.
->>
->> This is probably missing in your driver. Can we check if this can be
->> fixed?
-> Sure, just point me what need to be added in amba-pl011.c and
-> samsung_tty.c. I've briefly compared the suspend/resume paths of those
-> drivers with other drivers and I don't see anything missing there.
->
->> OR other option is
->>
->> Add a start_rx in uart_resume_port after call to set_termios to handle
->> this scenario for other drivers.
->>
->> Please let me know if there are any concerns for this options.
-> IMHO this looks like an issue that affects lots of drivers and it should
-> be handled in the core.
+diff --git a/fs/proc/page.c b/fs/proc/page.c
+index 9f1077d94cde..fd28e1d92c5c 100644
+--- a/fs/proc/page.c
++++ b/fs/proc/page.c
+@@ -220,6 +220,12 @@ u64 stable_page_flags(struct page *page)
+ #ifdef CONFIG_64BIT
+ 	u |= kpf_copy_bit(k, KPF_ARCH_2,	PG_arch_2);
+ #endif
++#if defined(CONFIG_PAGE_IDLE_FLAG) && defined(CONFIG_64BIT)
++	u |= kpf_copy_bit(k, KPF_YOUNG, PG_young);
++#endif
++#ifdef CONFIG_KASAN_HW_TAGS
++	u |= kpf_copy_bit(k, KPF_SKIP_KASAN_POSION, PG_skip_kasan_poison);
++#endif
+ 
+ 	return u;
+ };
+diff --git a/include/linux/kernel-page-flags.h b/include/linux/kernel-page-flags.h
+index eee1877a354e..30aaa0ee4ca9 100644
+--- a/include/linux/kernel-page-flags.h
++++ b/include/linux/kernel-page-flags.h
+@@ -18,5 +18,7 @@
+ #define KPF_UNCACHED		39
+ #define KPF_SOFTDIRTY		40
+ #define KPF_ARCH_2		41
++#define KPF_YOUNG		42
++#define KPF_SKIP_KASAN_POSION	43
+ 
+ #endif /* LINUX_KERNEL_PAGE_FLAGS_H */
+diff --git a/tools/vm/page-types.c b/tools/vm/page-types.c
+index b1ed76d9a979..2671b746d11f 100644
+--- a/tools/vm/page-types.c
++++ b/tools/vm/page-types.c
+@@ -79,6 +79,8 @@
+ #define KPF_UNCACHED		39
+ #define KPF_SOFTDIRTY		40
+ #define KPF_ARCH_2		41
++#define KPF_YOUNG		42
++#define KPF_SKIP_KASAN_POSION	43
+ 
+ /* [48-] take some arbitrary free slots for expanding overloaded flags
+  * not part of kernel API
+@@ -137,6 +139,8 @@ static const char * const page_flag_names[] = {
+ 	[KPF_UNCACHED]		= "c:uncached",
+ 	[KPF_SOFTDIRTY]		= "f:softdirty",
+ 	[KPF_ARCH_2]		= "H:arch_2",
++	[KPF_YOUNG]		= "y:young",
++	[KPF_SKIP_KASAN_POSION]	= "K:skip_kasan_posion",
+ 
+ 	[KPF_READAHEAD]		= "I:readahead",
+ 	[KPF_SLOB_FREE]		= "P:slob_free",
+-- 
+2.31.0
 
-Sure, we will look into both aspects and get back as soon as possible.
-
-Thank you.
-
->
->   > ...
->
-> Best regards

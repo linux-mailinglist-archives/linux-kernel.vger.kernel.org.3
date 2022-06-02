@@ -2,109 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDB453B59A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FD553B597
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232688AbiFBI7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 04:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        id S232730AbiFBJAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 05:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbiFBI7g (ORCPT
+        with ESMTP id S232705AbiFBJAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 04:59:36 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9761FE391;
-        Thu,  2 Jun 2022 01:59:35 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2528Q8qb013105;
-        Thu, 2 Jun 2022 10:59:28 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=MXrgzl/V2YRiK3xTeuYKtDlVPXp3ezbyqB7OhN2g5iU=;
- b=wLK/B92XOCyFo41zmwpZ5UtgxdajKrIDCC1zT8csBSe/acwE3LdCgxtSk16adcs5I6oa
- Zx40ryNCH6a4ssR14HLuwi+5Fa5kE3smlDzOcFmJTXxGUOfNHt7vpPJ6oyzyKYzcxYpk
- FuRc6URDUnEbaFTQmw4rywNE1+eQosu9OSOq9LIYgEe2A8DN0GElpv50tB//+anUiLz2
- AV+KTIBeE2iyUhxKoMr2TfTzLEnzswd9aCMf9Dfq3j/aF00GFZISQeHNtcyiYHh7JxQC
- ynOVmaWJW3U9LApT54+NSZu/Pc+KGge9n5xXGLjmWJf8QPwcy4Kcrw02O/hSB7MDFCsm Qg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gespq077t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Jun 2022 10:59:28 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D0F0E100034;
-        Thu,  2 Jun 2022 10:59:27 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CAF16216EF5;
-        Thu,  2 Jun 2022 10:59:27 +0200 (CEST)
-Received: from localhost (10.75.127.49) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Thu, 2 Jun
- 2022 10:59:27 +0200
-From:   <patrice.chotard@foss.st.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
-        <patrice.chotard@foss.st.com>
-Subject: [PATCH 2/2] spi: stm32-qspi: Remove stm32_qspi_wait_cmd() unused parameter
-Date:   Thu, 2 Jun 2022 10:59:18 +0200
-Message-ID: <20220602085918.350613-3-patrice.chotard@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220602085918.350613-1-patrice.chotard@foss.st.com>
-References: <20220602085918.350613-1-patrice.chotard@foss.st.com>
+        Thu, 2 Jun 2022 05:00:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C452004CB;
+        Thu,  2 Jun 2022 02:00:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4950FB81F01;
+        Thu,  2 Jun 2022 09:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 13410C36AE7;
+        Thu,  2 Jun 2022 09:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654160413;
+        bh=6NQyQsEyYucHVOkZbLnJ7urn0m0WnyT2Zt9bDJz9iLk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=R2753QVItjwhML4hrwNDUHP17Wgs1oqlCqs953uQQjJew6LjcgqHcHsWNPIAn2K/q
+         UJ6DnNkLJgj+rcnaVng5AxtMFIEIp39U6aHPmfGnBVG+WvKcR0jxABzIMg07ON3NjM
+         Xwm9isntYdxK9sUHgF4aL/9sNgVZH8LkWDBV9dMyojn1WlopJGGgple9tFvkqsgwK8
+         bAHb7GI1nPq/CgtYDu2ERfEyrICsTOOc4iO9z7bOCLCUPJfHpo6F0yNZ+TX4k9ZGJ2
+         afRBwHO0xma2WtRMrfsOn5XR3UIXy5oOr4Lv20nyp9HXEtit7dY2S5GuPII5eadUkR
+         5UgBC5c+w7dRw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EB61AF03950;
+        Thu,  2 Jun 2022 09:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-02_01,2022-06-01_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net v5] ax25: Fix ax25 session cleanup problems
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165416041295.6334.1196583658510604194.git-patchwork-notify@kernel.org>
+Date:   Thu, 02 Jun 2022 09:00:12 +0000
+References: <20220530152158.108619-1-duoming@zju.edu.cn>
+In-Reply-To: <20220530152158.108619-1-duoming@zju.edu.cn>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-hams@vger.kernel.org, jreuter@yaina.de, ralf@linux-mips.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas@osterried.de
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
+Hello:
 
-struct spi_mem_op *op parameter is no more used, remove it.
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
----
- drivers/spi/spi-stm32-qspi.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+On Mon, 30 May 2022 23:21:58 +0800 you wrote:
+> There are session cleanup problems in ax25_release() and
+> ax25_disconnect(). If we setup a session and then disconnect,
+> the disconnected session is still in "LISTENING" state that
+> is shown below.
+> 
+> Active AX.25 sockets
+> Dest       Source     Device  State        Vr/Vs    Send-Q  Recv-Q
+> DL9SAU-4   DL9SAU-3   ???     LISTENING    000/000  0       0
+> DL9SAU-3   DL9SAU-4   ???     LISTENING    000/000  0       0
+> 
+> [...]
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index 2ad43c2f0526..e5068e694ca5 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -299,8 +299,7 @@ static int stm32_qspi_wait_nobusy(struct stm32_qspi *qspi)
- 						 STM32_BUSY_TIMEOUT_US);
- }
- 
--static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
--			       const struct spi_mem_op *op)
-+static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi)
- {
- 	u32 cr, sr;
- 	int err = 0;
-@@ -420,7 +419,7 @@ static int stm32_qspi_send(struct spi_mem *mem, const struct spi_mem_op *op)
- 		goto abort;
- 
- 	/* wait end of tx in indirect mode */
--	err = stm32_qspi_wait_cmd(qspi, op);
-+	err = stm32_qspi_wait_cmd(qspi);
- 	if (err)
- 		goto abort;
- 
+Here is the summary with links:
+  - [net,v5] ax25: Fix ax25 session cleanup problems
+    https://git.kernel.org/netdev/net/c/7d8a3a477b3e
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

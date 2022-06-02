@@ -2,204 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA4853B7B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6277453B7B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234099AbiFBLU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 07:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
+        id S234111AbiFBLVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 07:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbiFBLUz (ORCPT
+        with ESMTP id S231266AbiFBLVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 07:20:55 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F792A80FE
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 04:20:53 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id a64so7705168ybg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 04:20:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6r6Vaw+wZvpxvKWw2pORFiU+DbCU4N7wdhOQeTbklfc=;
-        b=m0OEpK597X7Jm59IE3NiU7ra1ljGWT0v9rqyVt5WF+xQOU8MX3XqOxTO6lWuU168Nb
-         KxAHL5oIcH5PH/Gzsck3NoHWIY20v/090PzZzAOHKR/Q7sLMTPk4CAIApvN8p6TFUYEY
-         B6ilnZQslx3vho5a8lpxJP2cT72tTfzsQINEA8OEEkBIravpJHh0rtCsH6mbhoe9bE75
-         vWWTVU5S0rMTNNv1kFizVCJn3Xi5fCuyO+quUQubNBerWcS4Rq7dz4/eZEydDOylA11O
-         t6fiOh8MrUCSJOTqc87gmkjxh0W91Et7HG+v/nZJqCjF3hMiaqITAmaUYZR8VnyCg8gM
-         3Ang==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6r6Vaw+wZvpxvKWw2pORFiU+DbCU4N7wdhOQeTbklfc=;
-        b=J4fKxxQ18rl2BEjp2r2zJisgP16MeMn/0wqIWuIabu9AsAEqilvcXdM3GXzeFLlC+7
-         hmN7ITwAyWcCdCurOJdmmmlvTi58kznZU7BC5g6Rcllvl4ujvc/BgVs80XYFJ9GZUm+D
-         Sh7ReZuv6pc1nJLh/LmqMGT6mbRNJWh67o/tkpTCI8GGKjO2/72r6DtPpcfI0n9YTvE2
-         NpKucElutDRTblr0VN5f1jNxnUXMfMbGOJbuBk3ZKJzXEK+8tYUZHbJgSd/GvXRA+1QO
-         k01Gsq2YzgIib325viOl6VpKHrSVguWThUobldZZkEb/jlvB87RmMhGUw6dQ2D2/zZ1T
-         DHGg==
-X-Gm-Message-State: AOAM532vnpBPVb5wfeQLPF+zCLsQ79HDfquySDo1h0uIK16NTAXBn6dN
-        mw3l7wBqXsi/u28Krp54UoE0jzyKC3cjcUi6f54YOA==
-X-Google-Smtp-Source: ABdhPJxI8RjbLjO2b9SZDaxy2qFIb8juG6DprYWcrXQV0N+mLi1jIj6L/wKi/ae5MVHdUK1h3xajcbA/Z66IiOGwWWo=
-X-Received: by 2002:a5b:4c7:0:b0:65d:313:6270 with SMTP id u7-20020a5b04c7000000b0065d03136270mr4614359ybp.363.1654168852326;
- Thu, 02 Jun 2022 04:20:52 -0700 (PDT)
+        Thu, 2 Jun 2022 07:21:20 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A6B2A80FD
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 04:21:17 -0700 (PDT)
+Received: from fsav112.sakura.ne.jp (fsav112.sakura.ne.jp [27.133.134.239])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 252BLGML002960;
+        Thu, 2 Jun 2022 20:21:16 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav112.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp);
+ Thu, 02 Jun 2022 20:21:16 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 252BLFww002957
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 2 Jun 2022 20:21:15 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <74bed19a-713f-1a25-8142-cf32984beada@I-love.SAKURA.ne.jp>
+Date:   Thu, 2 Jun 2022 20:21:14 +0900
 MIME-Version: 1.0
-References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-6-glider@google.com>
- <CAK8P3a2eDDAAQ8RiQi0B+Jk4KvGeMk+pe78RB+bB9qwTTyhuag@mail.gmail.com>
-In-Reply-To: <CAK8P3a2eDDAAQ8RiQi0B+Jk4KvGeMk+pe78RB+bB9qwTTyhuag@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 2 Jun 2022 13:20:16 +0200
-Message-ID: <CAG_fn=X601D5RtbkOMjZEKL+ZyQZG5Ddw7Uv=MOivbceAxPBAg@mail.gmail.com>
-Subject: Re: [PATCH v3 05/46] x86: asm: instrument usercopy in get_user() and __put_user_size()
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
+ block count and size helpers")
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Keisuke Nishimura <keisuke.nishimura@inria.fr>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        SoC Team <soc@kernel.org>
+References: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
+ <91E67F46-A3C7-4159-9E0C-C6C6306F3669@inria.fr>
+ <CAK8P3a2iAsemAQdbTZ_E7GGGCXAOeWbjSjLgXEsd5sg_buZWhw@mail.gmail.com>
+ <CAHk-=wgO0V9OdY+DFm-f0qZYMyFSm0ptReO+_qgSTEpBLtFV7Q@mail.gmail.com>
+ <d971a684-ccd9-3839-1e30-c166fd55cf49@inria.fr>
+ <CAHk-=wiViikY0szsJGipSxFmMwdsvxjm7SwDfwNfMHYvQ64kAA@mail.gmail.com>
+ <CAK8P3a1m80u+eVnoSJ-APihjNQ1se9=FG+E6tKBb-hRJx5FAVg@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CAK8P3a1m80u+eVnoSJ-APihjNQ1se9=FG+E6tKBb-hRJx5FAVg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 9:15 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Apr 26, 2022 at 6:42 PM Alexander Potapenko <glider@google.com> w=
-rote:
-> > @@ -99,11 +100,13 @@ extern int __get_user_bad(void);
-> >         int __ret_gu;                                                  =
- \
-> >         register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);           =
- \
-> >         __chk_user_ptr(ptr);                                           =
- \
-> > +       instrument_copy_from_user_before((void *)&(x), ptr, sizeof(*(pt=
-r))); \
-> >         asm volatile("call __" #fn "_%P4"                              =
- \
-> >                      : "=3Da" (__ret_gu), "=3Dr" (__val_gu),           =
-     \
-> >                         ASM_CALL_CONSTRAINT                            =
- \
-> >                      : "0" (ptr), "i" (sizeof(*(ptr))));               =
- \
-> >         (x) =3D (__force __typeof__(*(ptr))) __val_gu;                 =
-   \
-> > +       instrument_copy_from_user_after((void *)&(x), ptr, sizeof(*(ptr=
-)), 0); \
->
-> Isn't "ptr" the original pointer here? I think what happened with the
-> reported warning is that you get one output line for every instance this
-> is used in. There should probably be a
->
->       __auto_type __ptr =3D (ptr);
->
-> at the beginning of the macro to ensure that 'ptr' is only evaluated once=
-.
->
-> >>> arch/x86/kernel/signal.c:360:9: sparse: sparse: incorrect type in arg=
-ument 1 (different address spaces) @@     expected void [noderef] __user *t=
-o @@     got unsigned long long [usertype] * @@
->
-> It would also make sense to add the missing __user annotation in this lin=
-e, but
-> I suspect there are others like it in drivers.
->
->       Arnd
+On 2022/06/02 16:38, Arnd Bergmann wrote:
+>> But let's cc the tomoyo and chelsio people.
+> 
+> I think both of them work because the structures are always
+> embedded inside of larger structures that have at least word
+> alignment. This is the thing I was looking for, and the
+> __packed attribute was added in error, most likely copied
+> from somewhere else.
 
-I ran sparse locally, and it is actually the missing __user
-annotations in signal.c that cause these reports.
+The __packed in "struct tomoyo_shared_acl_head" is to embed next
+naturally-aligned member of a larger struct into the bytes that
+would have been wasted if __packed is not specified. For example,
 
-The following patch:
+struct tomoyo_shared_acl_head {
+        struct list_head list;
+        atomic_t users;
+} __packed;
 
-diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-index e439eb14325fa..68537dbffa545 100644
---- a/arch/x86/kernel/signal.c
-+++ b/arch/x86/kernel/signal.c
-@@ -355,7 +355,7 @@ __setup_frame(int sig, struct ksignal *ksig, sigset_t *=
-set,
-         * reasons and because gdb uses it as a signature to notice
-         * signal handler stack frames.
-         */
--       unsafe_put_user(*((u64 *)&retcode), (u64 *)frame->retcode, Efault);
-+       unsafe_put_user(*((u64 *)&retcode), (__user u64
-*)frame->retcode, Efault);
-        user_access_end();
+struct tomoyo_condition {
+        struct tomoyo_shared_acl_head head;
+        u32 size; /* Memory size allocated for this entry. */
+	(...snipped...)
+};
 
-        /* Set up registers for signal handler */
-@@ -415,7 +415,7 @@ static int __setup_rt_frame(int sig, struct ksignal *ks=
-ig,
-         * reasons and because gdb uses it as a signature to notice
-         * signal handler stack frames.
-         */
--       unsafe_put_user(*((u64 *)&rt_retcode), (u64 *)frame->retcode, Efaul=
-t);
-+       unsafe_put_user(*((u64 *)&rt_retcode), (__user u64
-*)frame->retcode, Efault);
-        unsafe_put_sigcontext(&frame->uc.uc_mcontext, fp, regs, set, Efault=
-);
-        unsafe_put_sigmask(set, frame, Efault);
-        user_access_end();
+saves 4 bytes on 64 bits build.
 
-appears to fix sparse warnings.
-
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
-
-Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
-erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
-weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
-mich
-bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
-
-
-This e-mail is confidential. If you received this communication by
-mistake, please don't forward it to anyone else, please erase all
-copies and attachments, and please let me know that it has gone to the
-wrong person.
+If the next naturally-aligned member of a larger struct is larger than
+the bytes that was saved by __packed, the saved bytes will be unused.

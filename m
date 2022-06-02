@@ -2,225 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7307353B78C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB51D53B797
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233973AbiFBK5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
+        id S234026AbiFBLFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 07:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbiFBK5n (ORCPT
+        with ESMTP id S232354AbiFBLFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:57:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF0F420A73D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:57:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654167458;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ILOH+9qB4kdX+wuRsiCR0WoKSLzvv92mSp/II4owxY4=;
-        b=bPvd3gblWo/HdjfKW88Rsu9hCPh6P4pL/q/dfj2G3djSCkPVbU3xE06+3JXqZih9tgzHHR
-        2xpvTr2Re6jHs+3LqbTrSV+rKvzYviWI35BnQcSrMrK2Vpraq5hTf2RMjbVv3i5XtovbeA
-        rUSAbe3+5fns/5o20V8uUL7kLNW2Se8=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-261-oui8lFhWP3qBbRabQIniaw-1; Thu, 02 Jun 2022 06:57:37 -0400
-X-MC-Unique: oui8lFhWP3qBbRabQIniaw-1
-Received: by mail-pg1-f198.google.com with SMTP id q195-20020a632acc000000b003fcb9b2b053so1731683pgq.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 03:57:36 -0700 (PDT)
+        Thu, 2 Jun 2022 07:05:40 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B262997A1;
+        Thu,  2 Jun 2022 04:05:39 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id o6-20020a17090a0a0600b001e2c6566046so9069741pjo.0;
+        Thu, 02 Jun 2022 04:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ot7WIeiKTGQtC++IcJ6ZuEJK/3LcqAZnTEywxnlnHF0=;
+        b=e7MuQo9sEQki55DGkvGfnRjLVZOGnr09P9w0X6mdHMZKowCsh1udYr9ng35NdPxP9A
+         hKrHow+xhzjnTdwUQCeKJObDALkuQA4LOZdyIeG6K6Lr6ISW4mGrUZ1RV9gcFZlO/CiC
+         rDdPfIKBpfGO+rwSHL8b8QbC35lLQk+siHWvZZG1UJb2LGgHi/2xbuf1u9YBSV6qqZ6i
+         HwOr+daUpaHMStZZIV4cXl93jupYMI0nChRlQhDMwVosyNBtGOWx4ErNqGpachE01SOd
+         7UTPO2vfAGKE57lccI8flB/UJTAlFSTRZq3gHIZ9T5qoZSCaatvDFxS2yjW8V4jUXfBs
+         s4Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=ILOH+9qB4kdX+wuRsiCR0WoKSLzvv92mSp/II4owxY4=;
-        b=g3MEoabu+0m1ulEdtCm48fQNRi2Q1YDAkhBnQExKsiBH523kAr+OP92ocEY16agzYH
-         zdEIe3X/2yq3YUa9hEX7AFnFK1cXsNsG3sONurUwU7eXxW7j5FLvVQpSnI17DGFrkfiJ
-         7nWcFqDN5UuIXF9jBKveJpbJMyMXYCsAIRCPmYBkOSlOh/8gg2O2hE0AlmYLSOZUdtUx
-         8DGm/9If/ItJlOupdsS+NF1Zbs1BxylThcmuxieoCk7fIZJyPdkG8dJvzu2jrScWL2lo
-         hrl0MucqbNbK5V9Qme2exCzuZ6p4RjiVFS0hEpgzMpzAaoi9G/LbVFG0ZWR2iZerRM4T
-         /VIg==
-X-Gm-Message-State: AOAM530qcDm8GjXjYLR7OGX5/DUDICdpJn+47G4ANRj2dsYfgffUIN5Z
-        mcn0fUQT/+SQRl0UeoXg1OBwkaQ9UTd7eMlLkZ9WTbYWLybJVkWxFFnLUDf5S7zHjoCqOs7kaLB
-        rCNR1mdK4M8P+pLvvJAsqJHkH0vTZEbmJd+u0ucJ9xkhBGVrJHvBum1yGEfD2leD/BgHse+QYAw
-        ==
-X-Received: by 2002:a05:6a00:a8b:b0:4e1:52db:9e5c with SMTP id b11-20020a056a000a8b00b004e152db9e5cmr71021377pfl.38.1654167455325;
-        Thu, 02 Jun 2022 03:57:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwWjC5hh3/8j1LD0iiMwtyQH0XgoH1waiLuwyJfZVxO3GOio+lEf9rK8zpnGSWpieZ9MmIHwA==
-X-Received: by 2002:a05:6a00:a8b:b0:4e1:52db:9e5c with SMTP id b11-20020a056a000a8b00b004e152db9e5cmr71021348pfl.38.1654167454906;
-        Thu, 02 Jun 2022 03:57:34 -0700 (PDT)
-Received: from [10.72.12.107] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id d20-20020a056a00199400b0051878e8cc13sm3498622pfl.116.2022.06.02.03.57.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 03:57:34 -0700 (PDT)
-Subject: Re: [RFC PATCH v3] ceph: prevent a client from exceeding the MDS
- maximum xattr size
-To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Gregory Farnum <gfarnum@redhat.com>,
-        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220601162939.12278-1-lhenriques@suse.de>
- <b788a7f9-9177-0398-7d21-a19ce7e6c957@redhat.com>
- <87h7534dr9.fsf@brahms.olymp>
- <289f5136-d2fc-1474-eb0f-521586f241b2@redhat.com>
- <87a6av4awn.fsf@brahms.olymp>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <d271bdc1-f95a-01e2-7a0f-b6511aee2d58@redhat.com>
-Date:   Thu, 2 Jun 2022 18:57:28 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ot7WIeiKTGQtC++IcJ6ZuEJK/3LcqAZnTEywxnlnHF0=;
+        b=7O2g7wcOKW3mUJPfeqA6Tp5g4M1bQLdg6AvThaEqh1yiUm9S1hmzbWD70kbwqL7xZn
+         uoonS0tb4MpEhxCSVE1X/Qu5IRNFa/1OgoWxYpocJJoqJNlDkUySOztPrAezYfCL5+pU
+         pBEhpYzUYbBDAgTO1ik1c+iBjV2mHC0XVYPvXuGpXSyczP8DZc9Cz3En1BXmlap873ci
+         ZtxNhtAK0hkbuMsbBordfXQReaPrScjXTxjMxjG2ivgwyrCpaxuTdp76wKdAioRE3N1n
+         e95QsPDQHZtVZ4cJ5V4LoXY+LMn8BEjdKyE8HTAaY6hVUriS31EdwKaSKm6BnfGgdr9A
+         dICQ==
+X-Gm-Message-State: AOAM532ECEQK9+VbIgt1ywpmZQKZs1IUxFYVW/3pIhp7dg9B4mf6szNy
+        4HwsptffYB2jzFXLzUDBgXg=
+X-Google-Smtp-Source: ABdhPJzs28+OeblhoOXsNlCb201ilbsPe7iVTa/FahKnwnmuRDm7Ju1TcDKVSBFpJpTtHjQWwDQFMw==
+X-Received: by 2002:a17:902:d2c2:b0:164:1047:5438 with SMTP id n2-20020a170902d2c200b0016410475438mr4375254plc.18.1654167938705;
+        Thu, 02 Jun 2022 04:05:38 -0700 (PDT)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:b:75c6:1ee6:fd1b:7d08])
+        by smtp.gmail.com with ESMTPSA id s4-20020a655844000000b003fc8ce7e30csm3034148pgr.68.2022.06.02.04.05.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 04:05:37 -0700 (PDT)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, michael.h.kelley@microsoft.com
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vkuznets@redhat.com, parri.andrea@gmail.com,
+        thomas.lendacky@amd.com
+Subject: [PATCH V2] x86/Hyper-V: Add SEV negotiate protocol support in Isolation VM
+Date:   Thu,  2 Jun 2022 07:05:07 -0400
+Message-Id: <20220602110507.243083-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <87a6av4awn.fsf@brahms.olymp>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-On 6/2/22 6:28 PM, Luís Henriques wrote:
-> Xiubo Li <xiubli@redhat.com> writes:
->
->> On 6/2/22 5:26 PM, Luís Henriques wrote:
->>> Xiubo Li <xiubli@redhat.com> writes:
->>>
->>>> On 6/2/22 12:29 AM, Luís Henriques wrote:
->>>>> The MDS tries to enforce a limit on the total key/values in extended
->>>>> attributes.  However, this limit is enforced only if doing a synchronous
->>>>> operation (MDS_OP_SETXATTR) -- if we're buffering the xattrs, the MDS
->>>>> doesn't have a chance to enforce these limits.
->>>>>
->>>>> This patch adds support for decoding the xattrs maximum size setting that is
->>>>> distributed in the mdsmap.  Then, when setting an xattr, the kernel client
->>>>> will revert to do a synchronous operation if that maximum size is exceeded.
->>>>>
->>>>> While there, fix a dout() that would trigger a printk warning:
->>>>>
->>>>> [   98.718078] ------------[ cut here ]------------
->>>>> [   98.719012] precision 65536 too large
->>>>> [   98.719039] WARNING: CPU: 1 PID: 3755 at lib/vsprintf.c:2703 vsnprintf+0x5e3/0x600
->>>>> ...
->>>>>
->>>>> URL: https://tracker.ceph.com/issues/55725
->>>>> Signed-off-by: Luís Henriques <lhenriques@suse.de>
->>>>> ---
->>>>>     fs/ceph/mdsmap.c            | 27 +++++++++++++++++++++++----
->>>>>     fs/ceph/xattr.c             | 12 ++++++++----
->>>>>     include/linux/ceph/mdsmap.h |  1 +
->>>>>     3 files changed, 32 insertions(+), 8 deletions(-)
->>>>>
->>>>> * Changes since v2
->>>>>
->>>>> Well, a lot has changed since v2!  Now the xattr max value setting is
->>>>> obtained through the mdsmap, which needs to be decoded, and the feature
->>>>> that was used in the previous revision was dropped.  The drawback is that
->>>>> the MDS isn't unable to know in advance if a client is aware of this xattr
->>>>> max value.
->>>>>
->>>>> * Changes since v1
->>>>>
->>>>> Added support for new feature bit to get the MDS max_xattr_pairs_size
->>>>> setting.
->>>>>
->>>>> Also note that this patch relies on a patch that hasn't been merged yet
->>>>> ("ceph: use correct index when encoding client supported features"),
->>>>> otherwise the new feature bit won't be correctly encoded.
->>>>>
->>>>> diff --git a/fs/ceph/mdsmap.c b/fs/ceph/mdsmap.c
->>>>> index 30387733765d..36b2bc18ca2a 100644
->>>>> --- a/fs/ceph/mdsmap.c
->>>>> +++ b/fs/ceph/mdsmap.c
->>>>> @@ -13,6 +13,12 @@
->>>>>       #include "super.h"
->>>>>     +/*
->>>>> + * Maximum size of xattrs the MDS can handle per inode by default.  This
->>>>> + * includes the attribute name and 4+4 bytes for the key/value sizes.
->>>>> + */
->>>>> +#define MDS_MAX_XATTR_SIZE (1<<16) /* 64K */
->>>>> +
->>>>>     #define CEPH_MDS_IS_READY(i, ignore_laggy) \
->>>>>     	(m->m_info[i].state > 0 && ignore_laggy ? true : !m->m_info[i].laggy)
->>>>>     @@ -352,12 +358,10 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p, void
->>>>> *end, bool msgr2)
->>>>>     		__decode_and_drop_type(p, end, u8, bad_ext);
->>>>>     	}
->>>>>     	if (mdsmap_ev >= 8) {
->>>>> -		u32 name_len;
->>>>>     		/* enabled */
->>>>>     		ceph_decode_8_safe(p, end, m->m_enabled, bad_ext);
->>>>> -		ceph_decode_32_safe(p, end, name_len, bad_ext);
->>>>> -		ceph_decode_need(p, end, name_len, bad_ext);
->>>>> -		*p += name_len;
->>>>> +		/* fs_name */
->>>>> +		ceph_decode_skip_string(p, end, bad_ext);
->>>>>     	}
->>>>>     	/* damaged */
->>>>>     	if (mdsmap_ev >= 9) {
->>>>> @@ -370,6 +374,21 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p, void *end, bool msgr2)
->>>>>     	} else {
->>>>>     		m->m_damaged = false;
->>>>>     	}
->>>>> +	if (mdsmap_ev >= 17) {
->>>>> +		/* balancer */
->>>>> +		ceph_decode_skip_string(p, end, bad_ext);
->>>>> +		/* standby_count_wanted */
->>>>> +		ceph_decode_skip_32(p, end, bad_ext);
->>>>> +		/* old_max_mds */
->>>>> +		ceph_decode_skip_32(p, end, bad_ext);
->>>>> +		/* min_compat_client */
->>>>> +		ceph_decode_skip_8(p, end, bad_ext);
->>>> This is incorrect.
->>>>
->>>> If mdsmap_ev == 15 the min_compat_client will be a feature_bitset_t instead of
->>>> int8_t.
->>> Hmm... can you point me at where that's done in the code?  As usual, I'm
->>> confused with that code and simply can't see that.
->>>
->>> Also, if that happens only when mdsmap_ev == 15, then there's no problem
->>> because that branch is only taken if it's >= 17.
->> Yeah, so you should skip 32 or 32+64 bits instead here, just likes:
->>
->> 3536                 /* version >= 3, feature bits */
->> 3537                 ceph_decode_32_safe(&p, end, len, bad);
->> 3538                 if (len) {
->> 3539                         ceph_decode_64_safe(&p, end, features, bad);
->> 3540                         p += len - sizeof(features);
->> 3541                 }
->>
->> For the ceph code please see:
->>
->> Please see https://github.com/ceph/ceph/blob/main/src/mds/MDSMap.cc#L925.
-> I still don't see what your saying.  From what I understand, with <= 15 we
-> used to have 'min_compat_client', which is of type 'ceph_release_t',
-> defined in src/common/ceph_releases.h:
->
-> enum class ceph_release_t : std::uint8_t {
-> ...
-> }
+Hyper-V Isolation VM current code uses sev_es_ghcb_hv_call()
+to read/write MSR via GHCB page and depends on the sev code.
+This may cause regression when sev code changes interface
+design.
 
-Okay, you are right.
+The latest SEV-ES code requires to negotiate GHCB version before
+reading/writing MSR via GHCB page and sev_es_ghcb_hv_call() doesn't
+work for Hyper-V Isolation VM. Add Hyper-V ghcb related implementation
+to decouple SEV and Hyper-V code. Negotiate GHCB version in the
+hyperv_init_ghcb() and use the version to communicate with Hyper-V
+in the ghcb hv call function.
 
-I miss reading that code.
+Fixes: 2ea29c5abbc2 ("x86/sev: Save the negotiated GHCB version")
+Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+---
+ arch/x86/hyperv/hv_init.c       |  6 +++
+ arch/x86/hyperv/ivm.c           | 88 ++++++++++++++++++++++++++++++---
+ arch/x86/include/asm/mshyperv.h |  4 ++
+ 3 files changed, 92 insertions(+), 6 deletions(-)
 
--- Xiubo
-
-
-> Then, starting with >= 16 the MDS ignores this 'min_compat_client' field
-> (but still encodes/decodes it), and it *adds* 'required_client_features',
-> which is a 'feature_bitset_t' and that is decoded immediately after (see
-> bellow, the ceph_decode_skip_set() call).
->
-> Cheers,
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index 8b392b6b7b93..40b6874accdb 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -29,6 +29,7 @@
+ #include <clocksource/hyperv_timer.h>
+ #include <linux/highmem.h>
+ #include <linux/swiotlb.h>
++#include <asm/sev.h>
+ 
+ int hyperv_init_cpuhp;
+ u64 hv_current_partition_id = ~0ull;
+@@ -70,6 +71,11 @@ static int hyperv_init_ghcb(void)
+ 	ghcb_base = (void **)this_cpu_ptr(hv_ghcb_pg);
+ 	*ghcb_base = ghcb_va;
+ 
++	/* Negotiate GHCB Version. */
++	if (!hv_ghcb_negotiate_protocol())
++		hv_ghcb_terminate(SEV_TERM_SET_GEN,
++				  GHCB_SEV_ES_PROT_UNSUPPORTED);
++
+ 	return 0;
+ }
+ 
+diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
+index 2b994117581e..4b67c4d7c4f5 100644
+--- a/arch/x86/hyperv/ivm.c
++++ b/arch/x86/hyperv/ivm.c
+@@ -53,6 +53,8 @@ union hv_ghcb {
+ 	} hypercall;
+ } __packed __aligned(HV_HYP_PAGE_SIZE);
+ 
++static u16 ghcb_version __ro_after_init;
++
+ u64 hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_size)
+ {
+ 	union hv_ghcb *hv_ghcb;
+@@ -96,12 +98,89 @@ u64 hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_size)
+ 	return status;
+ }
+ 
++static inline u64 rd_ghcb_msr(void)
++{
++	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
++}
++
++static inline void wr_ghcb_msr(u64 val)
++{
++	u32 low, high;
++
++	low  = (u32)(val);
++	high = (u32)(val >> 32);
++
++	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
++}
++
++static enum es_result ghcb_hv_call(struct ghcb *ghcb, u64 exit_code,
++				   u64 exit_info_1, u64 exit_info_2)
++{
++	/* Fill in protocol and format specifiers */
++	ghcb->protocol_version = ghcb_version;
++	ghcb->ghcb_usage       = GHCB_DEFAULT_USAGE;
++
++	ghcb_set_sw_exit_code(ghcb, exit_code);
++	ghcb_set_sw_exit_info_1(ghcb, exit_info_1);
++	ghcb_set_sw_exit_info_2(ghcb, exit_info_2);
++
++	VMGEXIT();
++
++	if (ghcb->save.sw_exit_info_1 & GENMASK_ULL(31, 0))
++		return ES_VMM_ERROR;
++	else
++		return ES_OK;
++}
++
++void hv_ghcb_terminate(unsigned int set, unsigned int reason)
++{
++	u64 val = GHCB_MSR_TERM_REQ;
++
++	/* Tell the hypervisor what went wrong. */
++	val |= GHCB_SEV_TERM_REASON(set, reason);
++
++	/* Request Guest Termination from Hypvervisor */
++	wr_ghcb_msr(val);
++	VMGEXIT();
++
++	while (true)
++		asm volatile("hlt\n" : : : "memory");
++}
++
++bool hv_ghcb_negotiate_protocol(void)
++{
++	u64 ghcb_gpa;
++	u64 val;
++
++	/* Save ghcb page gpa. */
++	ghcb_gpa = rd_ghcb_msr();
++
++	/* Do the GHCB protocol version negotiation */
++	wr_ghcb_msr(GHCB_MSR_SEV_INFO_REQ);
++	VMGEXIT();
++	val = rd_ghcb_msr();
++
++	if (GHCB_MSR_INFO(val) != GHCB_MSR_SEV_INFO_RESP)
++		return false;
++
++	if (GHCB_MSR_PROTO_MAX(val) < GHCB_PROTOCOL_MIN ||
++	    GHCB_MSR_PROTO_MIN(val) > GHCB_PROTOCOL_MAX)
++		return false;
++
++	ghcb_version = min_t(size_t, GHCB_MSR_PROTO_MAX(val), GHCB_PROTOCOL_MAX);
++
++	/* Write ghcb page back after negotiating protocol. */
++	wr_ghcb_msr(ghcb_gpa);
++	VMGEXIT();
++
++	return true;
++}
++
+ void hv_ghcb_msr_write(u64 msr, u64 value)
+ {
+ 	union hv_ghcb *hv_ghcb;
+ 	void **ghcb_base;
+ 	unsigned long flags;
+-	struct es_em_ctxt ctxt;
+ 
+ 	if (!hv_ghcb_pg)
+ 		return;
+@@ -120,8 +199,7 @@ void hv_ghcb_msr_write(u64 msr, u64 value)
+ 	ghcb_set_rax(&hv_ghcb->ghcb, lower_32_bits(value));
+ 	ghcb_set_rdx(&hv_ghcb->ghcb, upper_32_bits(value));
+ 
+-	if (sev_es_ghcb_hv_call(&hv_ghcb->ghcb, false, &ctxt,
+-				SVM_EXIT_MSR, 1, 0))
++	if (ghcb_hv_call(&hv_ghcb->ghcb, SVM_EXIT_MSR, 1, 0))
+ 		pr_warn("Fail to write msr via ghcb %llx.\n", msr);
+ 
+ 	local_irq_restore(flags);
+@@ -133,7 +211,6 @@ void hv_ghcb_msr_read(u64 msr, u64 *value)
+ 	union hv_ghcb *hv_ghcb;
+ 	void **ghcb_base;
+ 	unsigned long flags;
+-	struct es_em_ctxt ctxt;
+ 
+ 	/* Check size of union hv_ghcb here. */
+ 	BUILD_BUG_ON(sizeof(union hv_ghcb) != HV_HYP_PAGE_SIZE);
+@@ -152,8 +229,7 @@ void hv_ghcb_msr_read(u64 msr, u64 *value)
+ 	}
+ 
+ 	ghcb_set_rcx(&hv_ghcb->ghcb, msr);
+-	if (sev_es_ghcb_hv_call(&hv_ghcb->ghcb, false, &ctxt,
+-				SVM_EXIT_MSR, 0, 0))
++	if (ghcb_hv_call(&hv_ghcb->ghcb, SVM_EXIT_MSR, 0, 0))
+ 		pr_warn("Fail to read msr via ghcb %llx.\n", msr);
+ 	else
+ 		*value = (u64)lower_32_bits(hv_ghcb->ghcb.save.rax)
+diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+index a82f603d4312..61f0c206bff0 100644
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -179,9 +179,13 @@ int hv_set_mem_host_visibility(unsigned long addr, int numpages, bool visible);
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ void hv_ghcb_msr_write(u64 msr, u64 value);
+ void hv_ghcb_msr_read(u64 msr, u64 *value);
++bool hv_ghcb_negotiate_protocol(void);
++void hv_ghcb_terminate(unsigned int set, unsigned int reason);
+ #else
+ static inline void hv_ghcb_msr_write(u64 msr, u64 value) {}
+ static inline void hv_ghcb_msr_read(u64 msr, u64 *value) {}
++static inline bool hv_ghcb_negotiate_protocol(void) { return false; }
++static inline void hv_ghcb_terminate(unsigned int set, unsigned int reason) {}
+ #endif
+ 
+ extern bool hv_isolation_type_snp(void);
+-- 
+2.25.1
 

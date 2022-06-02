@@ -2,169 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7733B53BC04
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7AA53BC08
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236698AbiFBP7b convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 2 Jun 2022 11:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
+        id S236706AbiFBQAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 12:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiFBP73 (ORCPT
+        with ESMTP id S234778AbiFBQAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 11:59:29 -0400
-Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47C17D02BB;
-        Thu,  2 Jun 2022 08:59:25 -0700 (PDT)
-Received: from smtpclient.apple (p4ff9fc30.dip0.t-ipconnect.de [79.249.252.48])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 2E1E8CED19;
-        Thu,  2 Jun 2022 17:59:24 +0200 (CEST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH v6 5/5] Bluetooth: let HCI_QUALITY_REPORT persist over
- adapter power cycle
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <20220526112135.2486883-3-josephsih@chromium.org>
-Date:   Thu, 2 Jun 2022 17:59:23 +0200
-Cc:     BlueZ <linux-bluetooth@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        =?utf-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
-        Joseph Hwang <josephsih@google.com>,
-        Archie Pusaka <apusaka@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <0DB8D064-222A-4420-8F9F-2BEEA63DF76A@holtmann.org>
-References: <20220526112135.2486883-1-josephsih@chromium.org>
- <20220526112135.2486883-3-josephsih@chromium.org>
-To:     Joseph Hwang <josephsih@chromium.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 2 Jun 2022 12:00:34 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B64A170F3B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 09:00:33 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id t13so7018591wrg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 09:00:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=1Br/N6WhyVMlujnGsxiPG2oa5QW+rtf7KlXAbdHBbwA=;
+        b=RL80QqfsWjxd4GACQ81eimheeETeS6jtAuOpRZVH4FjSe2z5vUY1uy+GFli5LD8CPe
+         TVwGC4yjnnI9Ylbs/vyjS8aSk00Sw6nQWd6o8APEnrZcL6znY7Wy8Bo1p91f1JCoI7Ot
+         nWVOJ3k2lTSWMxVD9+fzuuYByFa2HeH9lzHBdYZK8sMkrzBE+PkNXHXOYym8Cyk2CIU7
+         jAjyhuYHS6ewBqzpsFZDIw+KTMQ68xwvkVmfwySo7fbsSWKeEaEJQDmOl7zLAItyLAJY
+         tYte6FsfnhX3mtG1nhIY7SEl340iK3b8PbH7aCmkm5go2nBBAMhRKCkY6cS7mw2wzIBG
+         LxfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=1Br/N6WhyVMlujnGsxiPG2oa5QW+rtf7KlXAbdHBbwA=;
+        b=kzPm9dJHOaxQ/l98vB/9asrc07SlNFjnjnhT5fD3Jab3tIWzuKsH0nMNSfeXQffMtC
+         dMYIPZnlznuqMy36Z6IPaWFLBkNA2GtKbiIY49yf0lfeFXx617eEOwLFIqaacJAq51q0
+         AUqoavAaKl9UlPuD5ZFiEnIBPLUmvngitXV/kgINleh/xK5MmiAz2wJ1ryHP47fjDyrZ
+         5XbAdzFC6zHY8REoImZbiMEJ935wHatU5KB6EjHG36eWGd8viSfGum8KnjrMO3jUG6gI
+         0qxjQvXG3A/P4ZIHh7ysXzSPlT2hA3NwKtVbxA2iJOxQUX1vu5xLIq7SZcY4QZY+oAEk
+         9oyg==
+X-Gm-Message-State: AOAM531mkHqSO3E0zvK8sPcxWpybDfwJNaBrj46FeHJunWprcpuMzIGV
+        yBydPiWUo0shnkbpICPA9mUhZEV/CQIY91vRcNU=
+X-Google-Smtp-Source: ABdhPJySI0m7yzGGjna/qzx6Dvat3DaX0nQSdYSyroPOuhWu9UjeD+MZOG7UmLTjjehfzmWTuKSpcfXaB871nz5Nn44=
+X-Received: by 2002:adf:f9ce:0:b0:210:316f:3ab with SMTP id
+ w14-20020adff9ce000000b00210316f03abmr4201937wrr.487.1654185631642; Thu, 02
+ Jun 2022 09:00:31 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a5d:4bc2:0:0:0:0:0 with HTTP; Thu, 2 Jun 2022 09:00:30 -0700 (PDT)
+Reply-To: mrsbillchantallawrence58@gmail.com
+From:   chantal <mrsdansan57@gmail.com>
+Date:   Thu, 2 Jun 2022 09:00:30 -0700
+Message-ID: <CAKP3MPMs31O0FbViRFr8HpxEKDXfcy9B0qu5mkZ9cL8e_WwZsw@mail.gmail.com>
+Subject: dear frinds incase my connession is not good
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:444 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5001]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrsbillchantallawrence58[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrsdansan57[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrsdansan57[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joseph,
+hello....
 
-> The quality report specifications, including AOSP Bluetooth Quality
-> Report and Intel Telemetry Event, do not define what happen when
-> the adapter is turned off and then on. To be consistent among
-> different specifications and vendors, the quality report feature is
-> turned off when the adapter is powered off and is turned on when
-> the adapter is powered on if the feature has been on before power
-> cycle.
-> 
-> Signed-off-by: Joseph Hwang <josephsih@chromium.org>
-> Reviewed-by: Archie Pusaka <apusaka@chromium.org>
-> ---
-> 
-> (no changes since v5)
-> 
-> Changes in v5:
-> - This is a new patch in this series changes version.
-> 
-> include/net/bluetooth/hci_core.h |  1 -
-> net/bluetooth/hci_sync.c         | 35 +++++++++++++++++++++++++++++++-
-> 2 files changed, 34 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
-> index 9e48d606591e..5788350efa68 100644
-> --- a/include/net/bluetooth/hci_core.h
-> +++ b/include/net/bluetooth/hci_core.h
-> @@ -807,7 +807,6 @@ extern struct mutex hci_cb_list_lock;
-> 		hci_dev_clear_flag(hdev, HCI_LE_ADV);		\
-> 		hci_dev_clear_flag(hdev, HCI_LL_RPA_RESOLUTION);\
-> 		hci_dev_clear_flag(hdev, HCI_PERIODIC_INQ);	\
-> -		hci_dev_clear_flag(hdev, HCI_QUALITY_REPORT);	\
-> 	} while (0)
+You have been compensated with the sum of 5.5 million dollars in this
+united nation the payment will be issue into atm visa card and send to
+you from the santander bank we need your address and your  Whatsapp
+this my email.ID (  mrsbillchantallawrence58@gmail.com)  contact  me
 
-this really need to go into your 1/5 patch.
+Thanks my
 
-> 
-> #define hci_dev_le_state_simultaneous(hdev) \
-> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> index a6ada9dcede5..12a18d046bb6 100644
-> --- a/net/bluetooth/hci_sync.c
-> +++ b/net/bluetooth/hci_sync.c
-> @@ -3849,6 +3849,31 @@ static const struct {
-> 			 "advertised, but not supported.")
-> };
-> 
-> +static void suspend_resume_quality_report(struct hci_dev *hdev, bool enable)
-> +{
-> +	int err;
-> +
-> +	/* Suspend and resume quality report only when the feature has
-> +	 * already been enabled. The HCI_QUALITY_REPORT flag, as an indicator
-> +	 * whether to re-enable the feature after resume, is not changed by
-> +	 * suspend/resume.
-> +	 */
-> +	if (!hci_dev_test_flag(hdev, HCI_QUALITY_REPORT))
-> +		return;
-> +
-> +	if (hdev->set_quality_report)
-> +		err = hdev->set_quality_report(hdev, enable);
-> +	else
-> +		err = aosp_set_quality_report(hdev, enable);
-> +
-> +	if (err)
-> +		bt_dev_err(hdev, "%s quality report error %d",
-> +			   enable ? "resume" : "suspend", err);
-> +	else
-> +		bt_dev_info(hdev, "%s quality report",
-> +			    enable ? "resume" : "suspend");
-
-Do you really need this “debug” output?
-
-> +}
-> +
-> int hci_dev_open_sync(struct hci_dev *hdev)
-> {
-> 	int ret = 0;
-> @@ -4013,6 +4038,7 @@ int hci_dev_open_sync(struct hci_dev *hdev)
-> 	if (!hci_dev_test_flag(hdev, HCI_USER_CHANNEL)) {
-> 		msft_do_open(hdev);
-> 		aosp_do_open(hdev);
-> +		suspend_resume_quality_report(hdev, true);
-> 	}
-> 
-> 	clear_bit(HCI_INIT, &hdev->flags);
-> @@ -4095,6 +4121,14 @@ int hci_dev_close_sync(struct hci_dev *hdev)
-> 
-> 	hci_request_cancel_all(hdev);
-> 
-> +	/* Disable quality report and close aosp before shutdown()
-> +	 * is called. Otherwise, some chips may panic.
-> +	 */
-> +	if (!hci_dev_test_flag(hdev, HCI_USER_CHANNEL)) {
-> +		suspend_resume_quality_report(hdev, false);
-> +		aosp_do_close(hdev);
-> +	}
-> +
-
-Why move aosp_do_close here. I prefer to keep it where it was.
-
-> 	if (!hci_dev_test_flag(hdev, HCI_UNREGISTER) &&
-> 	    !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
-> 	    test_bit(HCI_UP, &hdev->flags)) {
-> @@ -4158,7 +4192,6 @@ int hci_dev_close_sync(struct hci_dev *hdev)
-> 	hci_sock_dev_event(hdev, HCI_DEV_DOWN);
-> 
-> 	if (!hci_dev_test_flag(hdev, HCI_USER_CHANNEL)) {
-> -		aosp_do_close(hdev);
-> 		msft_do_close(hdev);
-> 	}
-
-Regards
-
-Marcel
-
+mrs chantal

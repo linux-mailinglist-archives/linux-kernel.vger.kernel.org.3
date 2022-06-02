@@ -2,98 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271AD53BC93
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D3C53BC90
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237086AbiFBQbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 12:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
+        id S237091AbiFBQbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 12:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237057AbiFBQbI (ORCPT
+        with ESMTP id S234043AbiFBQbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 12:31:08 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF812B12C6
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 09:31:01 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id x7so3739870qta.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 09:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=k8kPkxVeNMtdQt55yGN/Nkf+fdNFP4n1eqHNYFzt/EM=;
-        b=RBKGIdGVGyENiynuzvWzxsfKrlShOYG7LDNM6zk7j/0cpFAWM0CNoQ/RikC676Zwip
-         BMHOMh5FSPCGjY61J1z6G+8c1X+4G/XGBmJ3fum6tDtClMi6od+zOdkcyAAKXb0oiOit
-         b12jjL7nGu0mjk8vwPx18er2whDmGOBIM4slv0jp+xyv6iWVZkV8Hkprx2Ft3TnlNr8S
-         F3ZKnuaS0udbsMCk0y55d04otKL6PRXBEyvPN62xIots/ndr10XIEf2q5FJvYZj2hwlD
-         Ppp12ccOTvvIFXm+WxGW6jlLIOBk5xmPC4ktWEJBo/O94h/wW5jv5ZkhHpnGnc8M8pyV
-         u4zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=k8kPkxVeNMtdQt55yGN/Nkf+fdNFP4n1eqHNYFzt/EM=;
-        b=2w4hkTfWEqvtnH7S0gmjkgQBEjQLycvkj8AGxxeibc1kEH0xhOZSlQ4Io8n2xoh6i7
-         NpMAppCN5/Cf1nLwMdQbtmAydjmyilghm238HEOW9HBE5RAHG+x+PB6M79tu9mgGjv5j
-         0tuRIb38fqD0+WMq0k8XXyjkdGgiH7kl1irI9l9GuVykwoSai5C1TxvNIIcwkRWj82wM
-         yarh7LIL50AHJ1NgsU7D/ln/Rcg7C/hEAoCG4diQHpOTlHx6CXS5+flwR91ePoYfePaJ
-         58A97dmgECWiZU7LyiTEIUvzrc01SIEIS8OddKdV6GjtGr6Cdezk4/EdEHP1OZRoyBNm
-         x9FQ==
-X-Gm-Message-State: AOAM530IF+j1UOCaEo/0CHHluvLoTFb616sS1XScTHq/J5A/013Ybppb
-        kJ8rH24c7qz05RHapBcpAU2PZpWJJXuHrw==
-X-Google-Smtp-Source: ABdhPJzLJBnwcPaBtEw6VCmlLIOgqY/pJrxby5kBrBBtbBNr2VGXxQBgSbsEw14Z2kEr0zlwr/+sfg==
-X-Received: by 2002:ac8:5e49:0:b0:304:c7db:6a2f with SMTP id i9-20020ac85e49000000b00304c7db6a2fmr4316676qtx.274.1654187460731;
-        Thu, 02 Jun 2022 09:31:00 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id ci11-20020a05622a260b00b00304bc2acc25sm3261689qtb.6.2022.06.02.09.30.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 09:30:59 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nwnit-00GTLv-7Y; Thu, 02 Jun 2022 13:30:59 -0300
-Date:   Thu, 2 Jun 2022 13:30:59 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jakowski Andrzej <andrzej.jakowski@intel.com>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v6 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
-Message-ID: <20220602163059.GL2960187@ziepe.ca>
-References: <20220407154717.7695-1-logang@deltatee.com>
- <20220407154717.7695-21-logang@deltatee.com>
- <20220527125501.GD2960187@ziepe.ca>
- <a2590e27-41e8-59dc-3576-b5b8d716a198@deltatee.com>
- <20220527190307.GG2960187@ziepe.ca>
- <d336cfe8-2451-04c3-a2ce-0e8e47afd1e3@deltatee.com>
- <20220602000038.GK2960187@ziepe.ca>
- <400baba7-1cd6-09d4-4de9-2a73f08afc79@deltatee.com>
+        Thu, 2 Jun 2022 12:31:35 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3762B12DC;
+        Thu,  2 Jun 2022 09:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=SQwGGc1qc4tP2TEm97x+HMLFr9XNhA6Mh+1eNWVjw4Q=; b=GCN2C7TdI5FtNsMs/mm90IOO8q
+        M4hakPoawHzgfPq7fokh+zr4az63lrFZ5ZSj5D8N8XMCwoCZ0cRP9zY+Q1aVMCsc6UTM/iiNPMbss
+        2wkO2LKsZsn2Nhe/vBcCWI7yhJNhyskghWP7pz2swA5emKO6m+QefsS6SOvxSv8gV7XrdKqA/3n+y
+        yTSJNugrZDo1/SxrQECgiusMDEUg6l7mGD9kL5L3RQkfwBT262PumDrGCB9v2vwmayKWqtnR8L0yZ
+        X5+5By2omiXIUnUVj8mZ5D8a0e1q7Ww45PCyFNmcb19Tu+dqqQVuaJimDRZJS8EJ01vKW46D0zX5C
+        zlCrLpAQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nwnjM-0049l3-SR; Thu, 02 Jun 2022 16:31:29 +0000
+Message-ID: <47a68855-4547-49dd-d7eb-8ef83630552c@infradead.org>
+Date:   Thu, 2 Jun 2022 09:31:24 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <400baba7-1cd6-09d4-4de9-2a73f08afc79@deltatee.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5] crc-itu-t: Fix typo in CRC ITU-T polynom comment
+Content-Language: en-US
+To:     Roger Knecht <roger@norberthealth.com>
+Cc:     linux-kernel@vger.kernel.org, Ivo van Doorn <IvDoorn@gmail.com>,
+        kernel-janitors@vger.kernel.org, linux-doc@vger.kernel.org,
+        Kristian Hoegsberg <krh@redhat.com>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        akpm@linux-foundation.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
+References: <20220521124745.8747-1-roger@norberthealth.com>
+ <a728cf17-4866-1151-0740-56b06257c917@infradead.org>
+ <CAO_iFwrHcSWJm17fL-Q83DZ5i1xr+_dkEjh5Yt3Hxso0VtnzZw@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAO_iFwrHcSWJm17fL-Q83DZ5i1xr+_dkEjh5Yt3Hxso0VtnzZw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,24 +58,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 10:16:10AM -0600, Logan Gunthorpe wrote:
 
-> > Just stuff the pages into the mmap, and your driver unprobe will
-> > automatically block until all the mmaps are closed - no different than
-> > having an open file descriptor or something.
+
+On 6/2/22 07:24, Roger Knecht wrote:
+> On Sat, May 21, 2022 at 5:44 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>> I don't know which maintainer will merge this since no one is Cc:ed on it.
+>> You will probably need to choose some maintainer to send the patch to.
+>>
+>> But let's add the people who merged the header file in the first place
+>> for their comments/review. (done)
 > 
-> Oh is that what we want?
+> Thanks Randy.
+> 
+> The CRC implementation seems to be unmaintained (no entry in the
+> MAINTAINER file).
+> Any idea which maintainer I can send the patch to?
 
-Yes, it is the typical case - eg if you have a sysfs file open unbind
-hangs indefinitely. Many drivers can't unbind while they have open file
-descriptors/etc.
+Yes, the 2 people who signed off on its merger are not active AFAICT.
 
-A couple drivers go out of their way to allow unbinding while a live
-userspace exists but this can get complicated. Usually there should be
-a good reason.
+> The kernel doc mentions Andrew Morton as last resort (added to CC):
+>> You should always copy the appropriate subsystem maintainer(s) on any patch to
+>> code that they maintain; look through the MAINTAINERS file and the source code
+>> revision history to see who those maintainers are. The script scripts/get_maintainer.pl
+>> can be very useful at this step. If you cannot find a maintainer for the subsystem you
+>> are working on, Andrew Morton (akpm@linux-foundation.org) serves as a maintainer
+>> of last resort.
+> source: https://www.kernel.org/doc/html/latest/process/submitting-patches.html
 
-The module will already be refcounted anyhow because the mmap points
-to a char file which holds a module reference - meaning a simple rmmod
-of the driver shouldn't work already..
+Yes, Andrew can merge it.
+Or possibly Jason (also Cc-ed).
 
-Jason
+thanks.
+
+-- 
+~Randy

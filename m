@@ -2,164 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3F253B623
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C261553B62A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbiFBJfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 05:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
+        id S233099AbiFBJgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 05:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiFBJff (ORCPT
+        with ESMTP id S231890AbiFBJgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 05:35:35 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735CF2AA9AA;
-        Thu,  2 Jun 2022 02:35:34 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id a2so790190lfg.5;
-        Thu, 02 Jun 2022 02:35:34 -0700 (PDT)
+        Thu, 2 Jun 2022 05:36:40 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2121.outbound.protection.outlook.com [40.107.243.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F5C2AB235;
+        Thu,  2 Jun 2022 02:36:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F5vHIl2nxDF9jb4vu5bC73kYAFaD9bgdhWwTT2+Js/LllqAXyRJjhIdMJ9tmhWLlcTjNMFPLcKqRV1MlKSVbZUpoU5otyd3RclGr+mk9iKkNzB11bB7OJssptfIQabXFJZ1e9rDn4r1hOcSz9LiNwYUd6CcmVb1Sn+3OfZaZLLlDIoCNSoNrYJE+t7KfwxHWSWztfoX67QWkdeu/8R0o6yhG1wguSmiUa9q24POQv83uKEfieDqMdfLD0AoBsAnEwGIrEImpoW1ATeYXCdwxlzAdvWwbUj3bWfpTOc2geQ5zgfWDJGtDFeOQ3GHhVjY+z2vD3NAru4GpAGioZK7OZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vsuwW5Mi7MWILTc27RLGlxmLVIZ8c/i2SDcmhEPD/5A=;
+ b=kTh0M4qmjGjfhXsS3WjqZz9c9ionO8gzHops1MwIf6b/LjnO9KTfTwR8JguJXvJ8qqFMnuAelUb/zw/Hp/YK8QHHCoY7feAmrmDpCLc4luFEXOmmPCoGWCxo5TYCXqeIRvMTFYVF1FMBbRFMQjYqec5c7Lt3WzzEfidgooy4TdjEKaY4q/hzx+6TuU2Kzf0cAVdN/0v0kZiY65BVxiD0O8sVy3BN/KeTo2I6hYxY2A2K/LG15NG7X0uuf6oCl0XCJobgYK8V2ZlZ1SiaHZr8Z+SKfO3h/69pZNN1qkgfSPK26FgxL72tEr/XUxcMwCv38Ixet3WMaQxJuA3Nu0KWFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=rBGjBOMnZl6to9efJaumbeOWSvKP8/DOct/QBdXnYoE=;
-        b=jvY/M4TcfKUtycVJEjl3vv3zcqK0vVXzP6oHwxbhveiR6Eve6NDt0Von5+VteqUBV0
-         0L333UPalxOSb+vAx5ej9FW4zDL3jiSJBKKI5g/bfbegljG05danKDxYAC1Mawnygsr8
-         NfvqH2NN74NnI5rLy+2zi6GU0sJ4y2QMkIhCQuT0rdAnmGP6i+nYifRZZ1QarEQWaWqU
-         1sFUjgMVvdhRWoctqpRRBSRSxoYCb/XYfFaItHlctIxH4eSOMldKOv1TbUyAo4DKKvuT
-         uI9O7Tb6ZGTcE2JxUT1KvCqoqebUvm2IiT9ek+R0V9Lk4hCNqrOX4e+Amz04wcKyd1yK
-         Jadg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rBGjBOMnZl6to9efJaumbeOWSvKP8/DOct/QBdXnYoE=;
-        b=7GGdRn5q889TtfbhfSX/2lkVjt+toLLjsBzfXA3SoA7EDJY1295dD/4IQGlyzyT10u
-         ASm5bOoUdzJLO4UbyTpT4GlmvTFJNz6cGqppX9xw1HtNGxQyKgFkgcH7cHWBoiwG6qr4
-         CvNAd4+syu4N3ezpmJtAG6xJNzs98AJfLPNiBPe2FKJCeZVGOIuMR65DkekuAPrJbOXt
-         MLdYCzffOKtxAq5TXYS5yaJexiTOssd4SnWVMvUCwt6ZLQ5OnsP2fORI6vBGQehevDMF
-         EoBnYyu/cFxXWEbb1H83Wxh47i4j4YK/9sIw/DEfSXFEywuef75EIwpMsg2Ao3luMagR
-         Kulg==
-X-Gm-Message-State: AOAM530Yy8JAUoW7NBXInmtDnlEZwxcGtiBEIfWN5+4/RfWX2tYfKczl
-        pueBwvIiHZapcBmyi1Jjzg3gByEqrQYYr/lWohM=
-X-Google-Smtp-Source: ABdhPJwGnEM9jHCmHkWGx92/jl3eJw4zP0SFatjlcRCflAAlB9cVfAhhX5EONP3FSiW4lO0wQLnMioV43pqGQELiTHo=
-X-Received: by 2002:a05:6512:2251:b0:478:fc67:b09f with SMTP id
- i17-20020a056512225100b00478fc67b09fmr2833144lfu.196.1654162532575; Thu, 02
- Jun 2022 02:35:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220531102809.11976-1-peterwu.pub@gmail.com> <20220531102809.11976-7-peterwu.pub@gmail.com>
- <CAHp75Vd8taco19vsDmBcCv8euV1SvwSiY5=P9oMkA6zWsjwXxg@mail.gmail.com>
- <20220602062643.GA13824@cyhuang-hp-elitebook-840-g3.rt> <CAHp75Vd-n=oLnhRCK=pR5ybOZbC6BKXrE2jRdwDbH90E4KYFGA@mail.gmail.com>
-In-Reply-To: <CAHp75Vd-n=oLnhRCK=pR5ybOZbC6BKXrE2jRdwDbH90E4KYFGA@mail.gmail.com>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Thu, 2 Jun 2022 17:35:15 +0800
-Message-ID: <CADiBU3-73ktYfwZD=Dgd+5kWHraOuBkz1=bU_-+NNcxP12gcrQ@mail.gmail.com>
-Subject: Re: [PATCH 06/14] leds: mt6370: Add Mediatek MT6370 Indicator support
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vsuwW5Mi7MWILTc27RLGlxmLVIZ8c/i2SDcmhEPD/5A=;
+ b=TnhVXVk2p3Nue67KsKoY8JiDYlGgJL3CUCcrmL8zr+8yBE3eWg6w25wezl86jPuQoPthABSSiLOxa065OplkdXwGLNAOlovmVg52mG/KAQWgZotBnPhrDECEUXM5dtB/l+9dUTvQq76bRQxPGQPf1MQrZXQf79FkDPS9V1HCcMc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ MW4PR01MB6500.prod.exchangelabs.com (2603:10b6:303:72::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5314.12; Thu, 2 Jun 2022 09:36:36 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::e877:bfc6:92a5:d237]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::e877:bfc6:92a5:d237%7]) with mapi id 15.20.5314.013; Thu, 2 Jun 2022
+ 09:36:36 +0000
+Message-ID: <524c6acf-06a8-6e63-c9be-0bbf730fa693@os.amperecomputing.com>
+Date:   Thu, 2 Jun 2022 16:36:22 +0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH v8 3/9] misc: smpro-errmon: Add Ampere's SMpro error
+ monitor driver
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>, cy_huang <cy_huang@richtek.com>,
-        alice_chen@richtek.com, chiaen_wu@richtek.com,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Jonathan Corbet <corbet@lwn.net>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thu Nguyen <thu@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+References: <20220422024653.2199489-1-quan@os.amperecomputing.com>
+ <20220422024653.2199489-4-quan@os.amperecomputing.com>
+ <YmJJIb1DAIq5arCw@kroah.com>
+ <4f5d7746-3747-4a4d-525a-4fb69e706cd0@os.amperecomputing.com>
+ <YpcyaTqqsfDJx7HG@kroah.com>
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+In-Reply-To: <YpcyaTqqsfDJx7HG@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2P153CA0045.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::14)
+ To SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7cffb52e-8892-47ba-9bef-08da447b631d
+X-MS-TrafficTypeDiagnostic: MW4PR01MB6500:EE_
+X-Microsoft-Antispam-PRVS: <MW4PR01MB650055C3194D598CA0CE2B4DF2DE9@MW4PR01MB6500.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jr02FCAZ8MSzCD66WU6TeqYAVKYW6nvZlvJN/on567UvC5XIvThbF+AdgUChP2vP5GRVDktUpCXIz0cRzK1vAD5aeH92DqXCP5N9ZikiD/fuy1wSalccmcdowfE7g5ITrWCoB0diWTJTclLKCJ/ffojQI3QYkgZcgq+oZ+s7fK+v04hpDdA5/gODnlx6kFsqgIzffzZATinFxAQI1SLaLoWK3OoZ1vcdtYJDnj0vgdCzFcodCqVZiFY3GZuCB3VEmz8fyHy5Uhp9AP1xx2IPa6YXjoTC9A+QAOpBl5vJJRkS3gnrfGIyxznTR3K6TZu4ZUo72cZBDLT0pRFGPaykOkZZWLbkQv8vXd+dsSKPpwpfgPHl/iUY0cENaPJ8/eHMKnd1KekMDWpFtMgPKUGZm+KjoHzN9g3UbxWLV5Ov81nWJKYaQivrTkpcJ8IPkTWjwp5w2Eo+KHm1+qmtk3va8uPo7TjQuVl/aQ631YY3EDDdBvFn2LdkS7+kKX2L5Fpj7mYBmT15+R8eQHEpyWpqOrwmzxdOoDrQR5MnzJUdJSqtFwOO4qGWlo80G7FHYJuOpppt3TJSRejlu8bhkqmf7TkH4cevpL7eHkdShdRrxyNzJN7fTLkZ+aNa0rOm3GPyr4GiRw4F+Nzu887sT/DMzxP8Nh53I0el7Q09PhE1D5GICzHRDdyIG4/UwuhsgW+NBqzys3/cryA90kIaPQmNUFHlefqLEMlMxLWuoQqn2d0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(54906003)(38350700002)(66556008)(6916009)(38100700002)(53546011)(52116002)(31686004)(4326008)(26005)(8676002)(6506007)(6666004)(6512007)(316002)(31696002)(86362001)(66476007)(8936002)(186003)(107886003)(2616005)(7416002)(508600001)(5660300002)(2906002)(6486002)(83380400001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YnM1UXdFR1lNODRyeG9uQi9CamhwZ29SVzdtdkJSUjMvTHgrOTNqYjdWM2Mv?=
+ =?utf-8?B?bitXdVlyOGtaTDdoQWNlN2E3Nm1wRHJCWVB1ZnBXMGVRZ29TaWt4SXIvcGNC?=
+ =?utf-8?B?T29BNU9ldnlKMWRuYittakt0Slk2WmxWaHYva0o2QWp1R21vdmh2NGNrK01T?=
+ =?utf-8?B?TFEvdWVEUnRFa1ZueVZYWWF4UEI0MjIrL3d2N1lWNkNSbTBpcXh5NHlQNFVK?=
+ =?utf-8?B?cmFXZDEyaEM1SGNTdEc1SFRLWjNpSVIxc1VES1BXNjZOWWd4Nmp0WlNjckd0?=
+ =?utf-8?B?aHV0Ky9jVldxb0RXeUxpaUl0eWdVWHZzYW44cnVRUUVDWTRZVGFCWmZ2T1B6?=
+ =?utf-8?B?NzltdWVTOGJWS3ZGZFpiWm9EUjVVckxzTjFMRmlwbitkWWJmNFRIUlcwY3J4?=
+ =?utf-8?B?QW51ZUIyczlwSGdlbDlBOG4vQ3dIMHQxV0NPcmZhbDhyY3FMT1E3aEExVnhU?=
+ =?utf-8?B?MWc1WjlRRXJKMEVoZlJnc2p5ZkwzTmtzN1NxWGVRK0NrbVNPV2R3bncwZFEy?=
+ =?utf-8?B?ekFkd1lJWG5XR0RnZ3I4QkRuYk9NSzJTMU5MbVN5MlQyWEpudmhuWlMzZ0Q0?=
+ =?utf-8?B?U25lZnF0VFZlWWgzMkRPMzF5Tm1CSUE1R2JQY0xuZzdackZEaTk1ZmxnVDJ3?=
+ =?utf-8?B?YU9tVWNQY0t1OEZLdEN2NnBoZkR3ZFJDL1dHTlgwUVViVmxRMWRmckdnemxz?=
+ =?utf-8?B?d3pEUkRpb2licG1qRWlOUnNrMG0wcklUQUZpNVFERmRCUUdHRnpEM0NsSjBn?=
+ =?utf-8?B?NS9oc1hkVUZTRXJ4OE1KUk5YWTFPRTFJbnkva1VIUHo1WitYRU5aYzBKZDN3?=
+ =?utf-8?B?MDJFcDlWdmdTdHNsNXZvQVp5b3lyVHNrSEpwU1FoMFVGWEJWazk4U2ZnZ2VP?=
+ =?utf-8?B?blk2N05FeHBXaVF1NktGdldSZUpyVnFGUmNUODFhQ0I4VW9zSGxkeTBSUDBr?=
+ =?utf-8?B?QUNpWCtlZXEzbXRtN0lRNG15MjhaWXNEdmFTZWo4b2g1WkVDZVZtc1dOdnBX?=
+ =?utf-8?B?bW1XQXJLU2tQWTAxUE9PN0hBMXZuQnpkZjNNM1NFcytjM2JIdVd1VUJpeEZK?=
+ =?utf-8?B?K2JhZmxlUlVWWlVUYlMxTENHem9hSEZGOXFOV0oyendLMUllRi9Ma0ZwUU1J?=
+ =?utf-8?B?d3RPeVVrYU1zeHJuaVA0VUhZdHBiZDVSSERWbnlpK3luWi9BckRIMi8xVHVY?=
+ =?utf-8?B?TFFFMTZGZUI2aEMvTkxJU3R0dlB0dWVUZkRYQnIyU3FSZXljSVZrajdmRGVP?=
+ =?utf-8?B?NHAxekVrSmR6SlVLOG1iNXRKOCtyVlEvWFU2UlhoZDdzWVBwS0lqTk5yNStj?=
+ =?utf-8?B?Q0l1NW5YWTBWZW9qMGY2bkx2N1k3aGVFNU5sdEZ5eTYrVnRmcTlMRGttclJu?=
+ =?utf-8?B?ZTg0bVV4bUVjMHRuSG95OEdZN3kvY0RIK1dwRnROMjVYQmVmdTcvRkFNQ2R5?=
+ =?utf-8?B?S2N4cSt0cVJBRXI2MVhVeG5ZUWdrTVlSajZia3lkS3lMcS95TC9yNTE3NVRi?=
+ =?utf-8?B?blYrTUl6NG9vZHRpVERBK3JBU3B2WUtOZm5hZ3QzRGc3c0RteDlVckhzSHBw?=
+ =?utf-8?B?NXFQbi9VS0txeXV6cVpoUXpmTGhUOHIzVDVBYlBXNWlwcjM5UE5YV00vRXV5?=
+ =?utf-8?B?WXJUUzNiSE5lUHIvUWdRL3BlVUxuMjRsVDJWL2ZwZFdNckFIT1dCN2J1MFow?=
+ =?utf-8?B?OVZyUFJOb2tKNEtwSzBkM1lvRjAweHhDa2QxU3ZReEZMRnRYcVV4NGZYZGxY?=
+ =?utf-8?B?NWJSanZ2V3E5WUJXVzhuODAwQlZseW9RTDRCdDQveFYwcTZKT0F6R0JNWUZs?=
+ =?utf-8?B?MG5pZW4wTDFEWmVkWEpBSUF4ZjVVcngrc2hoa0VhRkh5OWExczlEYkZCY3RD?=
+ =?utf-8?B?M3NzbjZNaXV2L2grNmhtM3lUaHpqU3ozTlRoK2JDNlJkZFMrYmRJUVFYQklr?=
+ =?utf-8?B?YnFNeS9vTTBWL2RSN1c5V1JoMStuMlRQL2tJbUtmdHM3cXlia3BGbEZWTDBL?=
+ =?utf-8?B?ejZHalNsZ0RsdzBKSGlldDZMRk5VZlRYeGJPL3pMazhLeGcyWjU3QW1zbDBS?=
+ =?utf-8?B?K0RqbmJmSFFpZzA1Z1o3bTVqdStyTzBBSU5MMXAyM2NHVVJQaEJDOWpjcS9I?=
+ =?utf-8?B?NDNaWlZVTS80a0ZuS2JrdXl4ZGdsQ2N0VGJFd1kxU2tXODVpbXhNRWFCcWhw?=
+ =?utf-8?B?SHhZN3N3WXI5dUt0UlRzRVY3TjJsTHBwUS9jbytRYlpack95LzAvUEg0dHdQ?=
+ =?utf-8?B?VFNhUXd5NVlrczNvcXRNK1JBcnZHTCtPYnl2MVJRUTFiSE1wbk9nejVaZmFT?=
+ =?utf-8?B?d28xSjNma2wraUVzbEwrZDBHVSt1WW52YlRZMWk5bUN3S3JZS1pXdHY0dFR0?=
+ =?utf-8?Q?BpvCVbqvKk9Qxjsf0T7BuwxYYqsYmi8bMruSK?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7cffb52e-8892-47ba-9bef-08da447b631d
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2022 09:36:36.6052
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ggbtl/0QJWgI2zemSGClzIiEEdEwx25fkOGixHcH0uUheOc33oVldHC7Cmpi+/5LNQAeY79jfqGvM0M4fxmP6x5pQ/ThGB8mo8uuzfW9Kwg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6500
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B46=E6=9C=
-=882=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=885:18=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> On Thu, Jun 2, 2022 at 8:27 AM ChiYuan Huang <u0084500@gmail.com> wrote:
-> > On Wed, Jun 01, 2022 at 11:48:58AM +0200, Andy Shevchenko wrote:
-> > > On Tue, May 31, 2022 at 1:16 PM ChiaEn Wu <peterwu.pub@gmail.com> wro=
-te:
->
-> ...
->
-> > > What indicator?
-> > It's RGB curent sink type LED driver (maximum supported current is only=
- 24mA).
->
-> Make your commit messages a slightly more verbose.
->
-OK, will refine the commit message in next.
-> ...
->
-> > > > +#include <linux/of.h>
-> > >
-> > > Are you sure this is the correct header? Seems you need
-> > > mod_devicetable.h instead.
-> > >
-> > It's the correct header and be used for the struct 'of_device_id'.
->
-> Nope. Run the following command
-> $ git grep -n 'struct of_device_id {' -- include/linux/
->
-Got it, thanks.
-> ...
->
-> > > > +struct mt6370_priv {
-> > > > +       struct mutex lock;
-> > >
-> > > Do you use regmap locking?
-> > >
-> > MFD regmap register already the access lock.
-> >
-> > This lock is just to guarantee only one user can access the RGB registe=
-r
-> > part.
-> >
-> > Sorry, from the comment, do you want us to rename or remove this lock?
->
-> My point is, since you have two locks, explain why you need each of them.
->
-OK, will leave a comment line to explain the usage of this lock.
-> > > > +       struct device *dev;
-> > >
-> > > > +       struct regmap *regmap;
-> > >
-> > > > +       struct regmap_field *fields[F_MAX_FIELDS];
-> > > > +       const struct reg_field *reg_fields;
-> > > > +       const struct linear_range *ranges;
-> > > > +       struct reg_cfg *reg_cfgs;
-> > > > +       unsigned int leds_count;
-> > > > +       unsigned int leds_active;
-> > > > +       bool is_mt6372;
-> > > > +       struct mt6370_led leds[];
-> > > > +};
->
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+On 01/06/2022 16:33, Greg Kroah-Hartman wrote:
+> On Wed, Jun 01, 2022 at 03:21:47PM +0700, Quan Nguyen wrote:
+>>>> +	if (err_type & BIT(2)) {
+>>>> +		/* Error with data type */
+>>>> +		ret = regmap_read(errmon->regmap, err_info->err_data_low, &data_lo);
+>>>> +		if (ret)
+>>>> +			goto done;
+>>>> +
+>>>> +		ret = regmap_read(errmon->regmap, err_info->err_data_high, &data_hi);
+>>>> +		if (ret)
+>>>> +			goto done;
+>>>> +
+>>>> +		count = sysfs_emit(buf, "%01x%02x%01x%02x%04x%04x%04x\n",
+>>>> +				   4, (ret_hi & 0xf000) >> 12, (ret_hi & 0x0800) >> 11,
+>>>> +				   ret_hi & 0xff, ret_lo, data_hi, data_lo);
+>>>> +		/* clear the read errors */
+>>>> +		ret = regmap_write(errmon->regmap, err_info->err_type, BIT(2));
+>>>> +
+>>>> +	} else if (err_type & BIT(1)) {
+>>>> +		/* Error type */
+>>>> +		count = sysfs_emit(buf, "%01x%02x%01x%02x%04x%04x%04x\n",
+>>>> +				   2, (ret_hi & 0xf000) >> 12, (ret_hi & 0x0800) >> 11,
+>>>> +				   ret_hi & 0xff, ret_lo, data_hi, data_lo);
+>>>> +		/* clear the read errors */
+>>>> +		ret = regmap_write(errmon->regmap, err_info->err_type, BIT(1));
+>>>> +
+>>>> +	} else if (err_type & BIT(0)) {
+>>>> +		/* Warning type */
+>>>> +		count = sysfs_emit(buf, "%01x%02x%01x%02x%04x%04x%04x\n",
+>>>> +				   1, (ret_hi & 0xf000) >> 12, (ret_hi & 0x0800) >> 11,
+>>>> +				   ret_hi & 0xff, ret_lo, data_hi, data_lo);
+>>
+>> Hi Greg,
+>>
+>> Since the internal representation of the internal error is split into high
+>> low chunks of the info and data values which need to be communicated
+>> atomicly, I'm treating them as "one value" here.
+> 
+> That is a huge "one value", that's not what this really is, it needs to
+> be parsed by userspace, right?
+> 
+Thanks Greg for the review,
+
+User space needs all of this "one value" to know what exactly is the error.
+
+In our latest version, we remove all the if...else and simplify the code 
+as below:
+/*
+  * The internal representation of the internal error is split into high
+  * low chunks of the info and data values. Rather than temporarily
+  * dumping these into an array and printing that, skip the intermediate
+  * step and print them using a concatenation encoding.
+  */
+count = sysfs_emit(buf, "%04x%04x%04x%04x\n", info_h, info_l, data_h, 
+data_l);
+
+/* clear the read error */
+ret = regmap_write(errmon->regmap, err_info->type, err_type);
+return ret ? ret : count;
+
+> And why does this have to be atomic?  What happens if the values change
+> right after you read them?  What is userspace going to do with them?
+> 
+Because the error is bigger than single register can hold so it is split 
+into small chunks to report via multiple separate registers.
+
+Firmware stores each error in a queue. As the error's chunks are stored 
+in separate registers. All of these registers will need to be read out 
+before the error is clear so that the next error in the queue can be 
+reported. That is why we say those chunks must be read out atomically.
+
+User space will need to parse these information themself.
+
+>> I could dump them in a
+>> temporary array and print that, but it seems like additional complexity for
+>> the same result. Can we consider this concatenated encoding as "an array of
+>> the same type" for the purposes of this driver?"
+> 
+> That's really not a good idea as sysfs files should never need to be
+> "parsed" like this.
+> > Again, what are you trying to do here, and why does it have to be
+> atomic?
+> 
+> thanks,
+> 
+> greg k-h
+

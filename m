@@ -2,113 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD0753BB46
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CECD53BB48
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236293AbiFBO6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 10:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
+        id S236321AbiFBPAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 11:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233126AbiFBO6f (ORCPT
+        with ESMTP id S236305AbiFBPAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 10:58:35 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DEE2B7
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 07:58:33 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id 2so5030829iou.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 07:58:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=NCpzoj+0l36fkrjHX3S+lurr6Rzg3xie2enwLhIR/28=;
-        b=RqJnmigpciPdLSSKdzV8NIDkGYcoKapCr1+yDnbfdslNBGswdDQaXCkI6dlZI+EKqY
-         fkOuadfFHAEyuvohbxPt9EpeYmLiMJ9qAad5TFi4gKXkEGBPU+GFnlwk+7I5cPAMSpIf
-         HfBNQYS1ebRogp6QxW2gIlu5AgywtHIqsKK1oUVMJPx8q7Et+6DB2pVvJgpX68rFJh6v
-         wBobL0O42vlXlBm9yrmQj81w4vwJo4nJ7ASx9AAymA9XR+zmPy2kKK1j/TE2bqblr5mz
-         8Z/ZjNnLpdaLWyiGV1ABfFFAr7wf8GQUXo321fIAs9PQ65IAdguR1CpQOQ6L/CmLBd55
-         w/zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=NCpzoj+0l36fkrjHX3S+lurr6Rzg3xie2enwLhIR/28=;
-        b=dT6BOO2ZZRIuMmB1aiADUgznBCKnpw4CcN4DieB2FjJRLR7JuzrVADD9W0GhGMLJxW
-         TcDXRKdRgmUXI+rW0dtvfdTn1qtu+9bTAU7u+bX4w7FwhONnmzcX9IjOWbcPJ2bk3vr0
-         V4Mu3qy4QzcEUdruGI8IdMMbyY7kgN/Kz5M1Fi/0h9UW8++zMAjFNr1nRRFkJ7D72mfJ
-         SqyQ79H5QGSSBxJ2EB9hxwFepE2n7xqoLW3S/9MwBDLg/SU5meWWj4/nzqAq0Fow2+D+
-         3I15ma2ojJmvRwL8w0RWbjoZ7YZVdKtm0+JSv7Y4ye7btewmFtm4gAx1VvsMDLCD4Hwk
-         F82g==
-X-Gm-Message-State: AOAM532P3SfqfYJV3LhlHZbNlzWfOsUI19fLr6q26wlinKnPon6cY+G4
-        1Z3T6v6nGuFpXSLHkKu52PqOvchGQEVqBnPeujA=
-X-Google-Smtp-Source: ABdhPJy/5DIw/+9nm61RcAAlCu73iuZmuyUK5b+i5E0sTIwiRwmqFkVon1TezJj7h1acGp4BgO0A2wfjt6RCsoB8+qc=
-X-Received: by 2002:a05:6638:d4b:b0:330:f5f8:2521 with SMTP id
- d11-20020a0566380d4b00b00330f5f82521mr3290134jak.149.1654181913032; Thu, 02
- Jun 2022 07:58:33 -0700 (PDT)
+        Thu, 2 Jun 2022 11:00:13 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B61635C;
+        Thu,  2 Jun 2022 08:00:12 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 252ElRtr030329;
+        Thu, 2 Jun 2022 15:00:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : reply-to : subject : to : cc : references : from :
+ in-reply-to : content-type : content-transfer-encoding; s=pp1;
+ bh=9ZGzFHtuo+KLmxdJa7LKUjTf9KUlOisU8ToyMKZ8tuQ=;
+ b=G2LZPsEj5VU/3+SkksJB3fZwQDZOE1RmN3pYuHt5Qaze+Fw+pQSKe9I5IG20IHNSxflV
+ 1lsrYTUK2VPeEcHDVEoHeJQxXVm0nk32uNrog5lw0a5Ph9x1SvYAkarWwoFOuIu1TVvr
+ ye6OBK5Hst093wSjZOl/yarWm96o/AG5QjTOiMin1jabNPYbsekQW+ot78P0TSPPkXOd
+ QomIbYeM8wmzDf0qXr9RXBioY0mtN29drhWb/hLbKi5s7bw2bo9eMHSzGx1ERH18LKEz
+ 75kivNKKVLPv7puszvPqYYwDwfvwl/1OCJSeoMpCc03TMHQK12a2BwhdK5i4u2I6ywn9 AQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gey9586w6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Jun 2022 15:00:10 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 252EnWkR033941;
+        Thu, 2 Jun 2022 15:00:09 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gey9586vd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Jun 2022 15:00:09 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 252Eoc14007348;
+        Thu, 2 Jun 2022 15:00:08 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma03dal.us.ibm.com with ESMTP id 3gd3yn0sgu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Jun 2022 15:00:08 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 252F076X8979086
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Jun 2022 15:00:07 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 374B76A057;
+        Thu,  2 Jun 2022 15:00:07 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 501DE6A05A;
+        Thu,  2 Jun 2022 15:00:06 +0000 (GMT)
+Received: from [9.60.75.219] (unknown [9.60.75.219])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  2 Jun 2022 15:00:06 +0000 (GMT)
+Message-ID: <64bd26eb-b3ff-c3be-247b-c81681227e5e@linux.ibm.com>
+Date:   Thu, 2 Jun 2022 11:00:05 -0400
 MIME-Version: 1.0
-Received: by 2002:a05:6638:e96:b0:307:1ade:80f6 with HTTP; Thu, 2 Jun 2022
- 07:58:32 -0700 (PDT)
-Reply-To: alifseibou@gmail.com
-From:   Mrs Judy <mrsjoychichi2@gmail.com>
-Date:   Thu, 2 Jun 2022 07:58:32 -0700
-Message-ID: <CAJyntBwi4XxFmfFMqi6hjOQgz56RnQykV9SsuF_=_RzEoxx1hA@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d34 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrsjoychichi2[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrsjoychichi2[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Reply-To: jjherne@linux.ibm.com
+Subject: Re: [PATCH v19 14/20] s390/vfio-ap: reset queues after adapter/domain
+ unassignment
+Content-Language: en-US
+To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+References: <20220404221039.1272245-1-akrowiak@linux.ibm.com>
+ <20220404221039.1272245-15-akrowiak@linux.ibm.com>
+From:   "Jason J. Herne" <jjherne@linux.ibm.com>
+Organization: IBM
+In-Reply-To: <20220404221039.1272245-15-akrowiak@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: xfBvXxMCbj73eV5sSl7FY7rVBH5QExKY
+X-Proofpoint-ORIG-GUID: 3lJK_ZqDUyWMiA-NfKWzQBKbc93qrgQa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-02_03,2022-06-02_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 impostorscore=0 mlxlogscore=999 spamscore=0
+ clxscore=1015 adultscore=0 bulkscore=0 mlxscore=0 phishscore=0
+ priorityscore=1501 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2204290000 definitions=main-2206020063
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PREMIO GANADOR DE LOTER=C3=8DA.
+On 4/4/22 18:10, Tony Krowiak wrote:
+> When an adapter or domain is unassigned from an mdev attached to a KVM
+> guest, one or more of the guest's queues may get dynamically removed. Since
+> the removed queues could get re-assigned to another mdev, they need to be
+> reset. So, when an adapter or domain is unassigned from the mdev, the
+> queues that are removed from the guest's AP configuration (APCB) will be
+> reset.
+> 
+> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
+> ---
+>   drivers/s390/crypto/vfio_ap_ops.c     | 152 +++++++++++++++++++-------
+>   drivers/s390/crypto/vfio_ap_private.h |   2 +
+>   2 files changed, 114 insertions(+), 40 deletions(-)
 
-Su correo electr=C3=B3nico gan=C3=B3 2.600.000 millones de d=C3=B3lares, co=
-mun=C3=ADquese
-con el abogado Marcel Cremer a trav=C3=A9s de su correo electr=C3=B3nico aq=
-u=C3=AD
-(edahgator@gmail.com) para reclamar su fondo ganador con sus datos de
-la siguiente manera. tu nombre completo, tu pa=C3=ADs. la direcci=C3=B3n de=
- su
-casa y su n=C3=BAmero de tel=C3=A9fono.
 
-Saludos..
-Sr. Malick Samba
+Reviewed-by: Jason J. Herne <jjherne@linux.ibm.com>

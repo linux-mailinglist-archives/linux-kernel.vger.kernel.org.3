@@ -2,101 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F2D53BF49
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9AC53BF51
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239137AbiFBUGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 16:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
+        id S239126AbiFBUIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 16:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238383AbiFBUGt (ORCPT
+        with ESMTP id S239094AbiFBUId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 16:06:49 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96BA236;
-        Thu,  2 Jun 2022 13:06:46 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id y144so2773781oia.7;
-        Thu, 02 Jun 2022 13:06:46 -0700 (PDT)
+        Thu, 2 Jun 2022 16:08:33 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6C337A3D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 13:08:30 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id v25so7646496eda.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 13:08:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qgACnyK4+wOiS5MKuMTnoonRsVlmK8PYmGJQJvcgO6E=;
+        b=gCNQf5treIeOY896E1dwCdHz3vHIg34Tiv2t6JPnU8eRhXoHeu6+4L3Uh/UmmoSB4J
+         frLhr+7HqIhSw29Lu1hlJ8Fl7ddyJgm7PH15YadqhbxolK5DpD9Oozcz3nAx9uaLJYZl
+         w+l3zgS2iBUS4NjgZcWirSTVwqmGjn+NPH/cw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AJx8EzZFfK8sPhpdoIX1JZPKfbXDh5xv5Av3MuXsAYI=;
-        b=glBURCeIaI9wyQ9Lt0jShRRY8CpxrvuG3aAtd4KiFZions1LD0zHzhC6SlWLVJU1O9
-         sSVknPkbp9D3genIFH8l8fg7w0srrIV+YOh03M3TiyijsSLA8lp5+L7l/LdFFvMJbxW4
-         lxeqwRhRuWVE1eZDEqfOqrUGu+ElaSDcV5vlBJVxg7Q5ue3rggMPiAdZKDZ9lJQwqznk
-         QsS3y7Y/JWl6GU7iHfmuckDIIMsjOdimKG7YYaAhgcTwiPayWpWYeptxWnaTMRDFu4T7
-         pMKd0D5EJLhY8RkjX4kiFQKybroH03Mxs9j19b9YEbsOUQbYH7J982bcUpdaxE75Fr9u
-         8ukA==
-X-Gm-Message-State: AOAM531nhdWnMvGotuUCa2cHzZBfQ7S38b6jSB/5sEKNnEULs5+NIlhC
-        16AwjTMFMkJCfuP8LMJGp2spNrzx+fRnRyq6Cyk=
-X-Google-Smtp-Source: ABdhPJxjPC7wm9cBiImBF5sK+Q/d4b72Jf+ZiDnArJjtCpDt5SG1lNVnykldTXmmR91r2AudAqs9F24/vVEdIfOoT34=
-X-Received: by 2002:a05:6808:1a01:b0:32b:1f24:9213 with SMTP id
- bk1-20020a0568081a0100b0032b1f249213mr3469092oib.92.1654200406066; Thu, 02
- Jun 2022 13:06:46 -0700 (PDT)
+        bh=qgACnyK4+wOiS5MKuMTnoonRsVlmK8PYmGJQJvcgO6E=;
+        b=aSqRh1LdHuBYh1b3QGbR8rkQ/nRv0FOApiwrqNHQhZ9jGacVcH9kI8oEW5ywNyOAMx
+         6lqtg+/Ljp2jaKwJR+/rd3dYH5M6acYy6fsTgzqKguRJ06w7Py00hMQUicUyLq+Hg7CL
+         bcLxOOM3xetudH0jA0BPZq/+LJ+T6jS5ZBe0h6FZFRSbiV2BX4NtivvpW8ze7ePQBKFy
+         MGyXxV4cbyXiUsQFVFdB+t9Y7y9Rp6ttgW69ONjcHvmTVV1LIY9qsPvOyMFOzd4WMPXv
+         0To5KyMz+mi7GFJYmBVJPUk3JbQRR4ueP4f3HM0jaGSoZCkENGHRRtGYA/rG408cJavv
+         qyoQ==
+X-Gm-Message-State: AOAM531nriQRSe5wB7gsy3UlJ4gMFRkfZwlWvOzXKmvezBuH9SzSevtY
+        WB0BKMdF4JRZqQ61/5eGpC7qWJgBrPOafw==
+X-Google-Smtp-Source: ABdhPJzPFOH/TDeD5O+AxdFlhT0NqCiCG8wMe6TFHcSHRdOXnncIj00z36nSppQj1wvOPffqou0Inw==
+X-Received: by 2002:aa7:d295:0:b0:42d:e371:ded2 with SMTP id w21-20020aa7d295000000b0042de371ded2mr7365651edq.336.1654200508896;
+        Thu, 02 Jun 2022 13:08:28 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id gg1-20020a170906e28100b006f3ef214da9sm2103383ejb.15.2022.06.02.13.08.27
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 13:08:27 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id e2so7826182wrc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 13:08:27 -0700 (PDT)
+X-Received: by 2002:a5d:68d2:0:b0:210:31cc:64a6 with SMTP id
+ p18-20020a5d68d2000000b0021031cc64a6mr4886531wrw.679.1654200506938; Thu, 02
+ Jun 2022 13:08:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220601065846.456965-1-namhyung@kernel.org> <20220601065846.456965-3-namhyung@kernel.org>
- <CAP-5=fWvS=1XrXnE_a+sif8ZKy2oc6pmo6RmZ6+fFrWoa1VM3A@mail.gmail.com>
-In-Reply-To: <CAP-5=fWvS=1XrXnE_a+sif8ZKy2oc6pmo6RmZ6+fFrWoa1VM3A@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 2 Jun 2022 13:06:34 -0700
-Message-ID: <CAM9d7chthpaF9A_uZCm3uRzLe7Ho4-kuJ6J4D1evJPdMgSV9Ng@mail.gmail.com>
-Subject: Re: [PATCH 2/5] perf lock: Add lock contention tracepoints record support
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
+References: <20220602190621.1646679-1-swboyd@chromium.org>
+In-Reply-To: <20220602190621.1646679-1-swboyd@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 2 Jun 2022 13:08:14 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X6702aSaEnpXUhF40b0kZuz1QvOBLNg-xcNDYbVCbsDw@mail.gmail.com>
+Message-ID: <CAD=FV=X6702aSaEnpXUhF40b0kZuz1QvOBLNg-xcNDYbVCbsDw@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: qcom: Remove duplicate sc7180-trogdor
+ include on lazor/homestar
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+Hi,
 
-On Wed, Jun 1, 2022 at 11:21 PM Ian Rogers <irogers@google.com> wrote:
+On Thu, Jun 2, 2022 at 12:06 PM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> On Tue, May 31, 2022 at 11:58 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > When LOCKDEP and LOCK_STAT events are not available, it falls back to
-> > record the new lock contention tracepoints.
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  tools/perf/builtin-lock.c | 70 +++++++++++++++++++++++++++++++++++----
-> >  1 file changed, 63 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-> > index 23a33ac15e68..3e3320b8cede 100644
-> > --- a/tools/perf/builtin-lock.c
-> > +++ b/tools/perf/builtin-lock.c
-> > @@ -495,6 +495,12 @@ struct trace_lock_handler {
-> >
-> >         int (*release_event)(struct evsel *evsel,
-> >                              struct perf_sample *sample);
-> > +
-> > +       int (*contention_begin_event)(struct evsel *evsel,
-> > +                                     struct perf_sample *sample);
-> > +
-> > +       int (*contention_end_event)(struct evsel *evsel,
-> > +                                   struct perf_sample *sample);
+> The sc7180-trogdor-{lazor,homestar}-*.dtsi files all include
+> sc7180-trogdor.dtsi and sc7180-trogdor-lazor.dtsi or
+> sc7180-trogdor-homestar.dtsi, so including it here in the
+> sc7180-trogdor-{lazor,homestar}.dtsi file means we have a duplicate
+> include after commit 19794489fa24 ("arm64: dts: qcom: Only include
+> sc7180.dtsi in sc7180-trogdor.dtsi"). We include the sc7180-trogdor.dtsi
+> file in a board like sc7180-trogdor-lazor-r1.dts so that we can include
+> the display bridge snippet (e.g. sc7180-trogdor-ti-sn65dsi86.dtsi)
+> instead of making ever increasing variants like
+> sc7180-trogdor-lazor-ti-sn65dsi86.dtsi.
 >
-> Would it make sense to add a comment here about LOCKDEP and LOCK_STAT?
-> It could be confusing if the handler isn't called on different
-> kernels.
+> Unfortunately, having the double include like this means the display
+> bridge's i2c bus is left disabled instead of enabled by the bridge
+> snippet. Any boards that use the i2c bus for the display bridge will
+> have the bus disabled when we include sc7180-trogdor.dtsi the second
+> time, which picks up the i2c status="disabled" line from sc7180.dtsi.
+> This leads to the display not turning on and black screens at boot on
+> lazor and homestar devices.
+>
+> Fix this by dropping the include and making a note that the
+> sc7180-trogdor-{lazor,homestar}.dtsi file must be included after
+> sc7180-trogdor.dtsi
+>
+> Reported-by: Douglas Anderson <dianders@chromium.org>
+> Cc: "Joseph S. Barrera III" <joebar@chromium.org>
+> Cc: Matthias Kaehlcke <mka@chromium.org>
+> Fixes: 19794489fa24 ("arm64: dts: qcom: Only include sc7180.dtsi in sc7180-trogdor.dtsi")
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>
+> It would be great to get this into -rc1 if possible to fix broken
+> display.
 
-Sure, I'll add some comments here.
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-Thanks,
-Namhyung
+I tested and this fixes the "no display" problem on Linus's tree on
+both homestar and lazor.
+
+Tested-by: Douglas Anderson <dianders@chromium.org>

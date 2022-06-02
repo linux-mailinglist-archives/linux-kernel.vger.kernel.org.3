@@ -2,97 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1ABE53BD51
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772FD53BD58
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237560AbiFBR0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 13:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
+        id S237564AbiFBR2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 13:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237543AbiFBR0S (ORCPT
+        with ESMTP id S237126AbiFBR2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 13:26:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B48952941E1
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 10:26:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654190776;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ymlh+gFPOVRynjflxpfzP7WrlZXM93cHsXOM1rPvKYM=;
-        b=aiyhGJqyeI5XbOMC9fimCIuhVuPh+V9ayHWRiGPhYuW4ajkgctd37r7n38DRXVzO6BuhEl
-        X0aVhK1S7vVcZdYfLNJep1WZxAoicfFcEaK7C5NSHKgPx6wzpBXty00t59Eia3Nd9O8h7c
-        MTBQFfqS8wfHDoXWlzPYrAskylWY7F0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-593-sqfP4o74O5WBPwEcvo8nBQ-1; Thu, 02 Jun 2022 13:26:11 -0400
-X-MC-Unique: sqfP4o74O5WBPwEcvo8nBQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4022C858EFF;
-        Thu,  2 Jun 2022 17:26:11 +0000 (UTC)
-Received: from [10.22.32.147] (unknown [10.22.32.147])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F36B0492CA4;
-        Thu,  2 Jun 2022 17:26:10 +0000 (UTC)
-Message-ID: <42da456d-8f6a-3af0-4cd3-d33a07e3b81e@redhat.com>
-Date:   Thu, 2 Jun 2022 13:26:10 -0400
+        Thu, 2 Jun 2022 13:28:15 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0401220CA
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 10:28:13 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id o68so4129239qkf.13
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 10:28:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GuOinXdzP0oJ6BfwGVGRF9opnqUN4LYO3Y/RmknOScs=;
+        b=nERzx0gJZv2PpNEuSU7ZGuwa6QR4KAFkZQcX+7G15YcgRySvW6qb9+1khratoVExRd
+         E2cV1E+y5eNUdrv7iEhYvw6adm9tR0J0w0Y5RG/qlzn3N/ExPpw5VFSVcBiyiAfseShj
+         RtXbQnx/36eWCdWlBGeV1GIY74fg8syx0d0tBb6JCdM+OFqTrueuf3t4tmn+ivjrfwFi
+         G+YqxQ/XoZIxp/zm5ZUgHxZvv3ENrre3J5G2iipdg5D6ioSBpapAVxA8rxNBc3hfH6JN
+         xgR8Rb7bKKjuhDjx6rhbKloVBy4fbfQj9wlUkZziCVhgTTnOfjGMKfLsZNNy+YXFPJkc
+         II8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GuOinXdzP0oJ6BfwGVGRF9opnqUN4LYO3Y/RmknOScs=;
+        b=gQPVEhv+FHb4oesWl3eegSzkH5Ohbr1JWh7GQgrcrNwIsgUIFxJkdABiiTYhmL+Z8/
+         uGtehPSU34A/o2dLri5TMfupcyMpcYoXPtvHR5PjpBU5YWnqxXVfoj+vK8TbIX2l+Taq
+         Q5p21CXkFes9Xg9IjSVmR2j/owpfsEvXKTDpnA5Sb9Pk1dRt3cFD4ijkWkKY6y+7B/yR
+         MNNbuNetNhTWVdrTCAIWDpLPmdhIaXIpl/V8J6D/eYZ4XwUov1nf40VsZ6e0BN/tSPtg
+         cBEm0kbAbrXgnqkn0tFk3pqfxX6B1wT213zLX81exXBCpuM6ZBzN9A9zwU3HCSZW0joD
+         d9nA==
+X-Gm-Message-State: AOAM530rxaXC5SPT/F3a+fhpYPMBXPSqzjDzh7vg4lnyVyWQ8SRuM+0J
+        udknAj52mbOM+9XOAtmpPZ04oQ==
+X-Google-Smtp-Source: ABdhPJxtqXs49dqqYwrrFL2D/sBWEpVH5naaCbeJ3Pryu+awdiRfY3cTorJuf9ghsWhGGy5AkAoh5A==
+X-Received: by 2002:a05:620a:f0d:b0:67e:1c14:bc5e with SMTP id v13-20020a05620a0f0d00b0067e1c14bc5emr3899163qkl.502.1654190892765;
+        Thu, 02 Jun 2022 10:28:12 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id q188-20020ae9dcc5000000b0069fc13ce1f2sm3649937qkf.35.2022.06.02.10.28.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 10:28:12 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nwocF-00GUaJ-Fg; Thu, 02 Jun 2022 14:28:11 -0300
+Date:   Thu, 2 Jun 2022 14:28:11 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
+        Stephen Bates <sbates@raithlin.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jakowski Andrzej <andrzej.jakowski@intel.com>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v6 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
+Message-ID: <20220602172811.GN2960187@ziepe.ca>
+References: <20220407154717.7695-1-logang@deltatee.com>
+ <20220407154717.7695-21-logang@deltatee.com>
+ <20220527125501.GD2960187@ziepe.ca>
+ <a2590e27-41e8-59dc-3576-b5b8d716a198@deltatee.com>
+ <20220527190307.GG2960187@ziepe.ca>
+ <d336cfe8-2451-04c3-a2ce-0e8e47afd1e3@deltatee.com>
+ <20220602000038.GK2960187@ziepe.ca>
+ <400baba7-1cd6-09d4-4de9-2a73f08afc79@deltatee.com>
+ <20220602163059.GL2960187@ziepe.ca>
+ <51cc6645-2504-6d01-5626-238ed6ffff04@deltatee.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v5 3/3] blk-cgroup: Optimize blkcg_rstat_flush()
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ming Lei <ming.lei@redhat.com>
-References: <20220601211824.89626-1-longman@redhat.com>
- <20220602133543.128088-4-longman@redhat.com>
- <YpjsTNZx4DG+kot4@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YpjsTNZx4DG+kot4@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <51cc6645-2504-6d01-5626-238ed6ffff04@deltatee.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 02, 2022 at 10:49:15AM -0600, Logan Gunthorpe wrote:
+> 
+> 
+> On 2022-06-02 10:30, Jason Gunthorpe wrote:
+> > On Thu, Jun 02, 2022 at 10:16:10AM -0600, Logan Gunthorpe wrote:
+> > 
+> >>> Just stuff the pages into the mmap, and your driver unprobe will
+> >>> automatically block until all the mmaps are closed - no different than
+> >>> having an open file descriptor or something.
+> >>
+> >> Oh is that what we want?
+> > 
+> > Yes, it is the typical case - eg if you have a sysfs file open unbind
+> > hangs indefinitely. Many drivers can't unbind while they have open file
+> > descriptors/etc.
+> > 
+> > A couple drivers go out of their way to allow unbinding while a live
+> > userspace exists but this can get complicated. Usually there should be
+> > a good reason.
+> > 
+> > The module will already be refcounted anyhow because the mmap points
+> > to a char file which holds a module reference - meaning a simple rmmod
+> > of the driver shouldn't work already..
+> 
+> Also, I just tried it... If I open a sysfs file for an nvme device (ie.
+> /sys/class/nvme/nvme4/cntlid) and unbind the device, it does not block.
+> A subsequent read on that file descriptor returns ENODEV. Which is what
+> I would have expected.
 
-On 6/2/22 12:58, Tejun Heo wrote:
-> Hello,
->
-> On Thu, Jun 02, 2022 at 09:35:43AM -0400, Waiman Long wrote:
->> @@ -2011,9 +2076,16 @@ void blk_cgroup_bio_start(struct bio *bio)
->>   	}
->>   	bis->cur.ios[rwd]++;
->>   
->> +	if (!READ_ONCE(bis->lnode.next)) {
->> +		struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
->> +
->> +		llist_add(&bis->lnode, lhead);
->> +		percpu_ref_get(&bis->blkg->refcnt);
-> Hmm... what guarantees that more than one threads race here? llist assumes
-> that there's a single writer for a given llist_node and the ref count would
-> be off too, right?
+Oh interesting, this has been changed since years ago when I last
+looked, the kernfs_get_active() is now more narrowed than it once
+was. So manybe sysfs isn't the same concern it used to be!
 
-The llist_add() function is atomic. It calls into llist_add_batch() in 
-lib/llist.c which uses cmpxchg() to make the change. There is a 
-non-atomic version __llist_add() which may be problematic in this case. 
-Note that irq is disabled in the u64_stats_update* critical section, 
-there shouldn't be a racing thread running in the same cpu. Other cpus 
-will modify their own version of lhead. Perhaps the non-atomic version 
-can be used here as well.
-
-Cheers,
-Longman
-
+Thanks,
+Jason

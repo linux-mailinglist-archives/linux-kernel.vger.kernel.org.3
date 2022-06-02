@@ -2,118 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C104353B689
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF0553B68A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbiFBKD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
+        id S233373AbiFBKEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbiFBKDz (ORCPT
+        with ESMTP id S233375AbiFBKEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:03:55 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6625BFD347;
-        Thu,  2 Jun 2022 03:03:52 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 252A3ftt075162;
-        Thu, 2 Jun 2022 05:03:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654164221;
-        bh=Mhu4wLDnsE/ZNGCAq11U03NXmXeOClrY6ZpD/8qzWTk=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Q1ahS700ccV8cGuhGp+kTVm5CpPKz53cWiyRJygEmTG8F6hMsp+4VmJ47I3lB/N3p
-         VDSK0zTTk7r3AFdvZKAYGLWJZjRpV+swQOxBUZmN9CJsElaOpTASj31tvbQ4+x4vio
-         5pE5RMo5iH4A9I3LFLMR+qk3elmFooh1SjgHlVjI=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 252A3f3X033139
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 2 Jun 2022 05:03:41 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 2
- Jun 2022 05:03:41 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 2 Jun 2022 05:03:41 -0500
-Received: from [10.24.69.159] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 252A3bLW061739;
-        Thu, 2 Jun 2022 05:03:38 -0500
-Message-ID: <68381314-136b-776d-070a-e825506f2132@ti.com>
-Date:   Thu, 2 Jun 2022 15:33:37 +0530
+        Thu, 2 Jun 2022 06:04:11 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCE6115A44;
+        Thu,  2 Jun 2022 03:04:08 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25284Kim018004;
+        Thu, 2 Jun 2022 12:03:52 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=m0BCmY6bXRbzWS6fl2Ve4Vs/Ccc1sRTGBDBIBXY+c6I=;
+ b=WuSnLnG4D/Nyv0VWP2j0eZCiGe4+MtuCxmfGBXIjUuT300iA5DMyBu16vgOYMMXyuzVZ
+ /wQJJN9wdjxKbCkgows4BOhXmAhImz6jd1ozt1CVmbruf6v0PEyy0mCAIWf9rOrV8Ys8
+ O8AHt1liciMBHMmpD/YyaGwY/O8Rndmcv1ovlDCsScNq8Cbg73Qcm/mdJNV0oeVqVP3h
+ 8nY9oQRFPcE5npbIjJWu6zG0ifPk9Rw0/CP/B9YGDBnQC1Hl/tRE6jCrO0GyWAb3EDIz
+ hGEouAukzQj+qjQKmiDUd9P4ZAfsdQecyTUlRvPo8wdzsDwCOQlKGQqMC+dqeWcTc6Nu Sw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gbc2vy4kb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Jun 2022 12:03:52 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A7BFB10003A;
+        Thu,  2 Jun 2022 12:03:51 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2432E21A20C;
+        Thu,  2 Jun 2022 12:03:51 +0200 (CEST)
+Received: from [10.211.11.162] (10.75.127.48) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Thu, 2 Jun
+ 2022 12:03:50 +0200
+Message-ID: <63e621b9-78e8-e53c-21dc-b1011ea2a15b@foss.st.com>
+Date:   Thu, 2 Jun 2022 12:03:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: soc: ti: pruss: Update bindings for K3
- AM62x SoCs
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 0/2] spi: stm32-qspi: Remove unused parameters
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>
-CC:     Santosh Shilimkar <ssantosh@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+To:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-References: <20220427072703.4898-1-kishon@ti.com>
- <20220427072703.4898-2-kishon@ti.com>
- <53212a3b-d02c-ab5e-6b5c-e19d359c7c2b@linaro.org>
- <dcce6737-5881-a703-67f0-59c5f55f1cd1@ti.com>
- <81d94ea8-9d0f-785b-07aa-fe9c9093ad73@linaro.org>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-In-Reply-To: <81d94ea8-9d0f-785b-07aa-fe9c9093ad73@linaro.org>
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
+References: <20220602085918.350613-1-patrice.chotard@foss.st.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20220602085918.350613-1-patrice.chotard@foss.st.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-02_01,2022-06-02_01,2022-02-23_01
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+A v2 as been sent, as a patch was missing
 
-On 16/05/22 20:48, Krzysztof Kozlowski wrote:
-> On 16/05/2022 14:33, Kishon Vijay Abraham I wrote:
->> Hi Krzysztof,
->>
->> On 28/04/22 11:48, Krzysztof Kozlowski wrote:
->>> On 27/04/2022 09:27, Kishon Vijay Abraham I wrote:
->>>> Update the PRUSS bindings for the PRUSSM instance present in
->>>> AM625 SoC.
->>>>
->>>> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
->>>> ---
->>>>  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml | 1 +
->>>>  1 file changed, 1 insertion(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml b/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
->>>> index 64461d432004..cf13e5179657 100644
->>>> --- a/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
->>>> +++ b/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
->>>> @@ -69,6 +69,7 @@ properties:
->>>>        - ti,am654-icssg   # for K3 AM65x SoC family
->>>>        - ti,j721e-icssg   # for K3 J721E SoC family
->>>>        - ti,am642-icssg   # for K3 AM64x SoC family
->>>> +      - ti,am625-pruss   # for K3 AM62x SoC family
->>>>  
->>>
->>> Looks like out of order (although for some reason before it was also
->>> misordered...).
->>
->> These are really in the chronological order of the introduction of SoCs.
->> Isn't that okay to have?
+PAtrice
+
+On 6/2/22 10:59, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
 > 
-> You mean order of release on the market of order of adding files here?
-> The first is ok, the latter would mean there is no order at all.
-
-I meant order of release to market. Anyways, I'll send a patch to change
-the order to alphabetic order.
-
-Thanks,
-Kishon
+> This series cleans up spi-stm32-qspi driver by removing unused parameters
+> 
+> Patrice Chotard (2):
+>   spi: stm32-qspi: Remove stm32_qspi_get_mode() unused parameter
+>   spi: stm32-qspi: Remove stm32_qspi_wait_cmd() unused parameter
+> 
+>  drivers/spi/spi-stm32-qspi.c | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
+> 

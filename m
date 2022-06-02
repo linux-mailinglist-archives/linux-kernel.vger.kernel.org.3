@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E34E53BF23
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 21:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A3153BF2B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 21:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238879AbiFBTvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 15:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
+        id S239096AbiFBT5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 15:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239006AbiFBTur (ORCPT
+        with ESMTP id S239021AbiFBT5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 15:50:47 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5225597
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 12:50:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654199445; x=1685735445;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gh4Oc+dW4r861fz5iBXTIDXpyRj9he8A2pABkdQIz8I=;
-  b=joGEB9Esa2Ieo6Ko8gdynBWPcJ4RDZHq+bdRhTrpXStcYWSCQKU4K2hA
-   2jZ6CX7EfpZy+tWBFu5fxmoI68K+frDyFbEnS3gdwfQW91yOUlNqF+mQQ
-   T0Bou3IJW8YILJDJldem97iGR2/y3fmKixK4HMubYXL/VEcCufhCIOX/7
-   vrilJzaJQnWzdT5VJpfYuq2VpkWsiEV5ouEtXEKadyLnTEnyTfb0LNtqO
-   BrQS4zgt26xecJSF+yQiZaDmK24cAqKW5rvNBopyLJXaHv8OQXzJpbvXt
-   GhLHEiSzneJF2qdNhbOYgNh3OFrnXlXtb7A6MJ3ozkYd87DYaaXjarEwI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="255928538"
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="255928538"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 12:50:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="530721601"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 Jun 2022 12:50:43 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwqqB-0005OX-0A;
-        Thu, 02 Jun 2022 19:50:43 +0000
-Date:   Fri, 3 Jun 2022 03:50:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/arm64/kernel/proton-pack.c:302:5: warning: Redundant assignment
- of 'cb' to itself. [selfAssignment]
-Message-ID: <202206030359.rPhMZQTy-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 2 Jun 2022 15:57:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1382D21E;
+        Thu,  2 Jun 2022 12:57:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF514B81F31;
+        Thu,  2 Jun 2022 19:57:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4B421C34114;
+        Thu,  2 Jun 2022 19:57:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654199868;
+        bh=J3nzQJ2G5GUnpqid20W9LzfsX1dhp5znOLrD1Ct0mhc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=gEWHH3m52ImQLjRxQSdag6AAqK//82AI75/smt9dsJiuakDbGxuSizb+S/HjShGgl
+         4ZfnGyuy1vj3h2sRRB/HyQUAm73uGkM198bkkn+SSQ49CEnCP2/QbT3AKMoIOrS0HE
+         FKpPO3h0t8H4yYJ/Et/y1Y6Ykn+++dp7M+H7Ziav6F/w6/xthdmsTfbG5SgQb8mtrw
+         FcIN39iOoBueLzmCbWDOh+J6BeXUanLY+axcqjgyAWepajRS2X7HZKo/r24fwLJN3u
+         YdTCnZ1dpAZHSvYUD3QKRh+3eYyaavesI7r/w6QNBrVgQwsL2jL0Vh673JrTlFLGpX
+         vjpKYlUGS+9VA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 39555F03945;
+        Thu,  2 Jun 2022 19:57:48 +0000 (UTC)
+Subject: Re: [GIT PULL] PCI fixes for v5.19
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220602184913.GA36164@bhelgaas>
+References: <20220602184913.GA36164@bhelgaas>
+X-PR-Tracked-List-Id: <linux-pci.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220602184913.GA36164@bhelgaas>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.19-fixes-1
+X-PR-Tracked-Commit-Id: 833e53a4ffe92e742e99347c68d99dc33986598b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c399c85d60a4295bd911d366399a97df2865fb86
+Message-Id: <165419986822.9476.1311560009781878411.pr-tracker-bot@kernel.org>
+Date:   Thu, 02 Jun 2022 19:57:48 +0000
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        Jim Quinlan <jim2101024@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,76 +65,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   17d8e3d90b6989419806c1926b894d7d7483a25b
-commit: ea8f8c99a28199f6e067581b8626d192b07750f2 arm64: spectre-v2: Favour CPU-specific mitigation at EL2
-date:   1 year, 7 months ago
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (cppcheck warning):
-        # apt-get install cppcheck
-        git checkout ea8f8c99a28199f6e067581b8626d192b07750f2
-        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
+The pull request you sent on Thu, 2 Jun 2022 13:49:13 -0500:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.19-fixes-1
 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c399c85d60a4295bd911d366399a97df2865fb86
 
-cppcheck warnings: (new ones prefixed by >>)
->> arch/arm64/kernel/proton-pack.c:302:5: warning: Redundant assignment of 'cb' to itself. [selfAssignment]
-    cb = spectre_v2_get_sw_mitigation_cb() ?: cb;
-       ^
-
-cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
-
->> arch/arm64/mm/hugetlbpage.c:104:14: warning: Parameter 'ptep' can be declared with const [constParameter]
-         pte_t *ptep, size_t *pgsize)
-                ^
---
->> arch/arm64/mm/mmu.c:558:74: warning: Parameter 'va_end' can be declared with const [constParameter]
-   static void __init map_kernel_segment(pgd_t *pgdp, void *va_start, void *va_end,
-                                                                            ^
->> arch/arm64/mm/mmu.c:1441:41: warning: Parameter 'pgdir' can be declared with const [constParameter]
-   static void __remove_pgd_mapping(pgd_t *pgdir, unsigned long start, u64 size)
-                                           ^
-
-vim +/cb +302 arch/arm64/kernel/proton-pack.c
-
-   272	
-   273	static enum mitigation_state spectre_v2_enable_fw_mitigation(void)
-   274	{
-   275		bp_hardening_cb_t cb;
-   276		enum mitigation_state state;
-   277	
-   278		state = spectre_v2_get_cpu_fw_mitigation_state();
-   279		if (state != SPECTRE_MITIGATED)
-   280			return state;
-   281	
-   282		if (spectre_v2_mitigations_off())
-   283			return SPECTRE_VULNERABLE;
-   284	
-   285		switch (arm_smccc_1_1_get_conduit()) {
-   286		case SMCCC_CONDUIT_HVC:
-   287			cb = call_hvc_arch_workaround_1;
-   288			break;
-   289	
-   290		case SMCCC_CONDUIT_SMC:
-   291			cb = call_smc_arch_workaround_1;
-   292			break;
-   293	
-   294		default:
-   295			return SPECTRE_VULNERABLE;
-   296		}
-   297	
-   298		/*
-   299		 * Prefer a CPU-specific workaround if it exists. Note that we
-   300		 * still rely on firmware for the mitigation at EL2.
-   301		 */
- > 302		cb = spectre_v2_get_sw_mitigation_cb() ?: cb;
-   303		install_bp_hardening_cb(cb);
-   304		return SPECTRE_MITIGATED;
-   305	}
-   306	
+Thank you!
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

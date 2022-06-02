@@ -2,91 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E1E53B7FF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8320853B803
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234337AbiFBLpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 07:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        id S234345AbiFBLqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 07:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234331AbiFBLpu (ORCPT
+        with ESMTP id S234167AbiFBLql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 07:45:50 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E852462C3;
-        Thu,  2 Jun 2022 04:45:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654170349; x=1685706349;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=S+iHHapTCEiHLOQdaIrdeB+XG5BsdsuBHVvjo6BfwPs=;
-  b=jMkUJvRST3bXQSQJxsHgOjGJ3LWc/DzQDSjl9YD0XEMxXvE6cIqMAdgt
-   LnQAftAZVoIWIyTZkHL/BW1yog3khJ52w9MN/e9qNioY8f06GRADDZr41
-   fiaUziQwshBGul9SWBWG4WpYtp/F53BxAFCYyAglNdM3IDVVFJAAGyOpp
-   FgXlNL1rhNa6LERf+DHwj1D7ixhODNYIzNEIjfxHaLb7+/tVCC0MLoeZK
-   YpRyZJXzxVsbQIqLN+81WWro0C9rex/qBtj8GyX+1o0uCSB6FmGamo+Jj
-   C9Jy6WgLH3IbcTHI/SVP0nuyOlRHXvlqdMCIo78kKaLUabXu+lr3S1wwo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275930429"
-X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="275930429"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 04:45:48 -0700
-X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="707533261"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 04:45:47 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nwjGq-000Rcf-EC;
-        Thu, 02 Jun 2022 14:45:44 +0300
-Date:   Thu, 2 Jun 2022 14:45:44 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 1/1] gpio: sch: make irq_chip immutable
-Message-ID: <Ypii6K0JGkpvejgd@smile.fi.intel.com>
-References: <20220601153656.76454-1-andriy.shevchenko@linux.intel.com>
- <CAMRc=McgEzFcmgcWMb3L3Drjcyzhs0kb4JfBHMi7AoAU04txLw@mail.gmail.com>
+        Thu, 2 Jun 2022 07:46:41 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEE82B07E0;
+        Thu,  2 Jun 2022 04:46:39 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 252BkKmm102230;
+        Thu, 2 Jun 2022 06:46:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1654170380;
+        bh=ntPvbCmcohBfciLcjqfZzj02vyGWQbthMaYla29csnk=;
+        h=From:To:CC:Subject:Date;
+        b=i/ES2l7pW2NO9qomNBSkqIMube2yTKlruISkPnIVGhFNFCm84OkD7u8eH0nsA6KxK
+         5GUgH3BPbc6di07efPCrZQoEgV7lydNYVfs9NWGK1sXtyHDO4+C0mSis7cX6vSeFr0
+         Wf3JTozVH43d+sbnlSUFcLfCiA14QHVhDBMnYiE4=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 252BkKpj068873
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 2 Jun 2022 06:46:20 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 2
+ Jun 2022 06:46:20 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 2 Jun 2022 06:46:20 -0500
+Received: from ula0492258.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 252BkDxf035959;
+        Thu, 2 Jun 2022 06:46:14 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
+        <vladimir.oltean@nxp.com>, <grygorii.strashko@ti.com>,
+        <vigneshr@ti.com>, <nsekhar@ti.com>
+CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kishon@ti.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>
+Subject: [PATCH v2 0/3] J7200: CPSW5G: Add support for QSGMII mode to am65-cpsw driver
+Date:   Thu, 2 Jun 2022 17:15:55 +0530
+Message-ID: <20220602114558.6204-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRc=McgEzFcmgcWMb3L3Drjcyzhs0kb4JfBHMi7AoAU04txLw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 07:19:22PM +0200, Bartosz Golaszewski wrote:
-> On Wed, Jun 1, 2022 at 5:37 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > Since recently, the kernel is nagging about mutable irq_chips:
-> >
-> >    "not an immutable chip, please consider fixing it!"
-> >
-> > Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
-> > helper functions and call the appropriate gpiolib functions.
+Add support for QSGMII mode to am65-cpsw driver.
 
-> Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Change log:
+v1 -> v2:
+1. Add new compatible for CPSW5G in ti,k3-am654-cpsw-nuss.yaml and extend
+   properties for new compatible.
+2. Add extra_modes member to struct am65_cpsw_pdata to be used for QSGMII
+   mode by new compatible.
+3. Add check for phylink supported modes to ensure that only one phy mode
+   is advertised as supported.
+4. Check if extra_modes supports QSGMII mode in am65_cpsw_nuss_mac_config()
+   for register write.
+5. Add check for assigning port->sgmii_base only when extra_modes is valid.
 
-Thanks!
+v1: https://lore.kernel.org/r/20220531113058.23708-1-s-vadapalli@ti.com
 
-I think I will collect all of these and send a PR after v5.19-rc1
-to be included into v5.19-rc2+. Tell me if you think differently.
+Siddharth Vadapalli (3):
+  dt-bindings: net: ti: k3-am654-cpsw-nuss: Update bindings for J7200
+    CPSW5G
+  net: ethernet: ti: am65-cpsw: Add support for J7200 CPSW5G
+  net: ethernet: ti: am65-cpsw: Move phy_set_mode_ext() to correct
+    location
+
+ .../bindings/net/ti,k3-am654-cpsw-nuss.yaml   | 140 ++++++++++++------
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c      |  41 ++++-
+ drivers/net/ethernet/ti/am65-cpsw-nuss.h      |   2 +
+ 3 files changed, 134 insertions(+), 49 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.36.1
 

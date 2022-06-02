@@ -2,133 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F85053B6F3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD3653B6F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233639AbiFBKW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S233641AbiFBKW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbiFBKWX (ORCPT
+        with ESMTP id S233652AbiFBKWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:22:23 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE0F2ADF49
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:22:22 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-30fdbe7467cso11267277b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 03:22:22 -0700 (PDT)
+        Thu, 2 Jun 2022 06:22:43 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8910213E7E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:22:38 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id m25so1432652lji.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 03:22:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RUd3SPNTBG11Pw4ONwPRjvgnGE2d3p2dtoAJcfU9H9o=;
-        b=nlFi7M3tVp4pU0E+EsVFl71MIOQgnjG/VIgFEYoBqd5wL5HW85p7qwOMrc7kSxxMSD
-         tKziZmGmQZNze4UEDfqNLwkQAl6+Vpn9cR0R2CPRBmg9OHKSUDbyaKag6NVI/sOg5XRL
-         FmQqV6ZOW1JLooFruZDqNqFZSeLVlcO2KGhyt6h5Iy+sjbY0rEd8cYIK6RaOYM+W5PYJ
-         xmv3UMY/zCWm2gO5ZjXB9ZkuvOCOQJPcZLW8Ya75ElBU9OsmLO5NfeZcoNcXWrtbfIX/
-         hWi6KD2Yf2SivFGS8G2PIKWuEVRjUaoA+VuPStNaEEShkULE92qVBimRO2q7wdRHgcge
-         LHVw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mhke0saUmUh/aB/di9/WbB1JwcFcgftrzK7UikGh97E=;
+        b=bFvw+MLHVt+ArFBhnhxD4VGaWyar1Iw3Ys0oV4R9sP/bLgk9xK9kxzaaTZalR0EZcs
+         DYSWd3KPnS2lKOJh8kuqKmbP0WytCHCLGP6f8aTF+7KR6jaPf/5c6UWfEtDMiLmKuYvu
+         nSRNVsYr30Wy9XsFQjKkTsSelPDRlDAzdaouzM8KqVJC1FgwxXkJQKq2hqYkt76XSiQB
+         zVCYTPHReYyktuzPNOEHoZK7KUZiiTF95MfsA6Lj40AukNe97nQ2ovR44xX/dekLSSVa
+         TxXYFlcJ7uFbdFw6GvMxus+wXABsmy51VnApOpbnLGuauTZdeDtz6FXQ0PgkF3PwHF3w
+         mrAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RUd3SPNTBG11Pw4ONwPRjvgnGE2d3p2dtoAJcfU9H9o=;
-        b=MQu4nsCBrNN0mwUR0PM1ZNFFaa9GKI/z3elQbIPcTasIjFZqWhXabLoWSb5WAZA67Z
-         0OtYtxtOyLYqefdnCNdT3bWkLRUKJnyNNwyh1YT0mj4vaXEAnWVsNSmm44XiPZ52ddM8
-         Td037jAfOI7TIhr6WMyW8sjMEVWhO7zHGPKEGAwbx9eWEv0SMxnTTjn+LA7v8CVWre4p
-         NZHhfrvYwpxwfAZcXnhBL5uBaLBbH84HsNxcXRMfKSP8e/5l4I9UfP17iHun9fy2Zml/
-         8NoqNwD6wYqAyoB76tMr9xPyBqILClXb6IneAwLfc+VlrG5gLirN2LuxykobP81xFV14
-         uxzg==
-X-Gm-Message-State: AOAM531vnIxSVO6cg4OO8k8IscMTs2B76tg7cyMuLBOg3H/h1VsR79Zb
-        QIaIKDUSx5s+F8Wch5NBqBYsoGycXDPmPrr0Hw0=
-X-Google-Smtp-Source: ABdhPJx1PIEvF6A2hj9tWw5qrvzoGZMFb4SzV9gd+N6cpS04kOWoA7HW5LFF2wYgEEM58ydCeW4zASwefd1r7SFbZcc=
-X-Received: by 2002:a0d:f502:0:b0:2ff:3e75:b4ea with SMTP id
- e2-20020a0df502000000b002ff3e75b4eamr4499151ywf.171.1654165341322; Thu, 02
- Jun 2022 03:22:21 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mhke0saUmUh/aB/di9/WbB1JwcFcgftrzK7UikGh97E=;
+        b=iZaEHCTpSuWjNKTwZfgkWWq1r/5yVSZFBTPFpYLFFiKh9kAsNMh0SxjWP7744ccj5V
+         JC3vhpCLt+xruUP6M32NpArAY84PJMgavksl6NNrrQbUuBvtrgyxTGf4Mx/VZ6tSgNOl
+         X07Lma6H/nuaqYgWgmG+5U8ppShaN+iqxRjixRlSKoCDAmelNEhksjcWw5U0wdcq1+0H
+         z3D7HQlOmVNNK0O26RTcjO3JEh4eh+R+x0ddspbPs88tGtlY1HjckgRLwLxr0fcDGxz7
+         lAEBcYXs8luUZ9zk3PllrVOTI2LQTLkA9LztjXUGJiBWagPe/ASz5QQDPT3HUh3/xGrs
+         zBlA==
+X-Gm-Message-State: AOAM533Q4wUoTcp7sduUGJxLcN3ld4UHEamZe5DabpWM/bKVZoxZlLw5
+        i+f6mrLiiYK2kzy6L9/SzEricw==
+X-Google-Smtp-Source: ABdhPJxBmqiSkec8TbeMYs+RFw+Rm4q/emiOOaTWMfi/pJk8O6t7jgcEYLMBlu3LcQem9bMjd/eBbg==
+X-Received: by 2002:a2e:8881:0:b0:255:7790:25e6 with SMTP id k1-20020a2e8881000000b00255779025e6mr964729lji.525.1654165357162;
+        Thu, 02 Jun 2022 03:22:37 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id d16-20020a0565123d1000b0047255d21132sm961705lfv.97.2022.06.02.03.22.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 03:22:36 -0700 (PDT)
+Message-ID: <b157ebf3-9846-1235-c8e7-693abe4569d3@linaro.org>
+Date:   Thu, 2 Jun 2022 13:22:35 +0300
 MIME-Version: 1.0
-References: <20220531150823.1004101-1-patrick.wang.shcn@gmail.com>
- <YpZCWbfNE32EzCnz@arm.com> <99faf6b0-30bf-f87c-2620-1eafb4eac1ac@gmail.com> <YpeQNkk31d7JL9g6@arm.com>
-In-Reply-To: <YpeQNkk31d7JL9g6@arm.com>
-From:   patrick wang <patrick.wang.shcn@gmail.com>
-Date:   Thu, 2 Jun 2022 18:22:10 +0800
-Message-ID: <CAGcnep_brHvOBv=cM6y4zdefc=kdJyRxG2W8_yaYeBOt0vtQ8Q@mail.gmail.com>
-Subject: Re: [PATCH] mm: kmemleak: check boundary of objects allocated with
- physical address when scan
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org, Yee Lee <yee.lee@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 1/4] drm/dp: Add wait_hpd_asserted() callback to struct
+ drm_dp_aux
+Content-Language: en-GB
+To:     Douglas Anderson <dianders@chromium.org>,
+        dri-devel@lists.freedesktop.org
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Maxime Ripard <maxime@cerno.tech>, linux-kernel@vger.kernel.org
+References: <20220418171757.2282651-1-dianders@chromium.org>
+ <20220418101725.v3.1.Icf57bb12233a47727013c6ab69eebf803e22ebc1@changeid>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220418101725.v3.1.Icf57bb12233a47727013c6ab69eebf803e22ebc1@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 12:13 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Wed, Jun 01, 2022 at 06:24:34PM +0800, Patrick Wang wrote:
-> > On 2022/6/1 00:29, Catalin Marinas wrote:
-> > > On Tue, May 31, 2022 at 11:08:23PM +0800, Patrick Wang wrote:
-> > > > + if (kmemleak_enabled && (unsigned long)__va(phys) >= PAGE_OFFSET &&
-> > > > +     !IS_ERR(__va(phys)))
-> > > > +         /* create object with OBJECT_PHYS flag */
-> > > > +         create_object((unsigned long)__va(phys), size, min_count,
-> > > > +                       gfp, true);
-> > >
-> > > Do we still need to check for __va(phys) >= PAGE_OFFSET? Also I don't
-> > > think IS_ERR(__va(phys)) makes sense, we can't store an error in a
-> > > physical address. The kmemleak_alloc_phys() function is only called on
-> > > successful allocation, so shouldn't bother with error codes.
-> >
-> > In this commit:
-> > 972fa3a7c17c(mm: kmemleak: alloc gray object for reserved
-> > region with direct map)
-> >
-> > The kmemleak_alloc_phys() function is called directly by passing
-> > physical address from devicetree. So I'm concerned that could
-> > __va() => __pa() convert always get the phys back? I thought
-> > check for __va(phys) might help, but it probably dosen't work
-> > and using IS_ERR is indeed inappropriate.
-> >
-> > We might have to store phys in object and convert it via __va()
-> > for normal use like:
-> >
-> > #define object_pointer(obj)   \
-> >       (obj->flags & OBJECT_PHYS ? (unsigned long)__va((void *)obj->pointer)   \
-> >                               : obj->pointer)
->
-> In the commit you mentioned, the kmemleak callback is skipped if the
-> memory is marked no-map.
->
-> But you have a point with the va->pa conversion. On 32-bit
-> architectures, the __va() is no longer valid if the pfn is above
-> max_low_pfn. So whatever we add to the rbtree may be entirely bogus,
-> and we can't guarantee that the va->pa conversion back is correct.
->
-> Storing the phys address in object->pointer only solves the conversion
-> but it doesn't solve the rbtree problem (VA and PA values may overlap,
-> we can't just store the physical address either). And we use the rbtree
-> for searching objects on freeing as well.
->
-> Given that all the kmemleak_alloc_phys() calls always pass min_count=0
-> (we should probably get rid of the extra arguments), we don't expect
-> them to leak, so there's no point in adding them to the rbtree. We can
-> instead add a new object_phys_tree_root to store these objects by the
-> physical address for when we need to search (kmemleak_free_part_phys()).
-> This would probably look simpler than recording the callbacks and
-> replaying them.
->
-> Wherever we use object_tree_root we should check for OBJECT_PHYS and use
-> object_phys_tree_root instead. There aren't many places.
+On 18/04/2022 20:17, Douglas Anderson wrote:
+> Sometimes it's useful for users of the DP AUX bus (like panels) to be
+> able to poll HPD. Let's add a callback that allows DP AUX busses
+> drivers to provide this.
+> 
+> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-Considering the usage of objects with OBJECT_PHYS, storing
-the phys address and giving their own rbtree should solve the
-phys problem. I will post a v2 ASAP.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Thanks,
-Patrick
+
+> ---
+> Left Dmitry's Reviewed-by tag off since patch changed enough.
+> 
+> (no changes since v2)
+> 
+> Changes in v2:
+> - Change is_hpd_asserted() to wait_hpd_asserted()
+> 
+>   include/drm/dp/drm_dp_helper.h | 26 ++++++++++++++++++++++++++
+>   1 file changed, 26 insertions(+)
+> 
+> diff --git a/include/drm/dp/drm_dp_helper.h b/include/drm/dp/drm_dp_helper.h
+> index 53d1e722f4de..0940c415db8c 100644
+> --- a/include/drm/dp/drm_dp_helper.h
+> +++ b/include/drm/dp/drm_dp_helper.h
+> @@ -2035,6 +2035,32 @@ struct drm_dp_aux {
+>   	ssize_t (*transfer)(struct drm_dp_aux *aux,
+>   			    struct drm_dp_aux_msg *msg);
+>   
+> +	/**
+> +	 * @wait_hpd_asserted: wait for HPD to be asserted
+> +	 *
+> +	 * This is mainly useful for eDP panels drivers to wait for an eDP
+> +	 * panel to finish powering on. This is an optional function.
+> +	 *
+> +	 * This function will efficiently wait for up to `wait_us` microseconds
+> +	 * for HPD to be asserted and might sleep.
+> +	 *
+> +	 * This function returns 0 if HPD was asserted or -ETIMEDOUT if time
+> +	 * expired and HPD wasn't asserted. This function should not print
+> +	 * timeout errors to the log.
+> +	 *
+> +	 * The semantics of this function are designed to match the
+> +	 * readx_poll_timeout() function. That means a `wait_us` of 0 means
+> +	 * to wait forever. If you want to do a quick poll you could pass 1
+> +	 * for `wait_us`.
+> +	 *
+> +	 * NOTE: this function specifically reports the state of the HPD pin
+> +	 * that's associated with the DP AUX channel. This is different from
+> +	 * the HPD concept in much of the rest of DRM which is more about
+> +	 * physical presence of a display. For eDP, for instance, a display is
+> +	 * assumed always present even if the HPD pin is deasserted.
+> +	 */
+> +	int (*wait_hpd_asserted)(struct drm_dp_aux *aux, unsigned long wait_us);
+> +
+>   	/**
+>   	 * @i2c_nack_count: Counts I2C NACKs, used for DP validation.
+>   	 */
+
+
+-- 
+With best wishes
+Dmitry

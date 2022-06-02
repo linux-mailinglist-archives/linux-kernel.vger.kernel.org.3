@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E81E53B760
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C68353B763
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbiFBKej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
+        id S233795AbiFBKhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233934AbiFBKed (ORCPT
+        with ESMTP id S233665AbiFBKhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:34:33 -0400
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B53E52432FF
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:34:30 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowACnLRoakphiLy+UDA--.37705S2;
-        Thu, 02 Jun 2022 18:34:04 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     laurent.pinchart@ideasonboard.com
-Cc:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        robert.foss@linaro.org, jonas@kwiboo.se, jernej.skrabec@gmail.com,
-        airlied@linux.ie, daniel@ffwll.ch, maxime@cerno.tech,
-        sam@ravnborg.org, alsi@bang-olufsen.dk, jagan@amarulasolutions.com,
-        biju.das.jz@bp.renesas.com, l.stach@pengutronix.de,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] drm: bridge: adv7511: Add check for mipi_dsi_driver_register
-Date:   Thu,  2 Jun 2022 18:34:01 +0800
-Message-Id: <20220602103401.2980938-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Jun 2022 06:37:04 -0400
+Received: from out28-101.mail.aliyun.com (out28-101.mail.aliyun.com [115.124.28.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A5425D5E5;
+        Thu,  2 Jun 2022 03:37:00 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08130035|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0585089-0.000138415-0.941353;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047199;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.NxvzAQ0_1654166207;
+Received: from 192.168.220.136(mailfrom:michael@allwinnertech.com fp:SMTPD_---.NxvzAQ0_1654166207)
+          by smtp.aliyun-inc.com(33.38.168.99);
+          Thu, 02 Jun 2022 18:36:57 +0800
+Message-ID: <f2e4f523-9d56-9b5d-cc8e-c9d2c3660996@allwinnertech.com>
+Date:   Thu, 2 Jun 2022 18:36:47 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACnLRoakphiLy+UDA--.37705S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFyrWw45XFWxAr1kCw4fAFb_yoW8XrWUpa
-        17Zas0yry8XFsF9FZrCF1rZa45Aan7XFy09FZrZw13Zw1kZF1UG398JFy5Jr17JrW8Aw17
-        tws5JFy7uF1UZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv014x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
-        QVy7UUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] usb: f_fs: Fix crash during gadget function switching
+Content-Language: en-US
+To:     John Keeping <john@metanate.com>
+Cc:     quic_linyyuan@quicinc.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, axboe@kernel.dk,
+        quic_pkondeti@quicinc.com, wcheng@codeaurora.org,
+        quic_ugoswami@quicinc.com, andrew_gabbasov@mentor.com,
+        plr.vincent@gmail.com, gustavoars@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        allwinner-opensource-support@allwinnertech.com
+References: <20220510080105.126146-1-michael@allwinnertech.com>
+ <YpUJkxWBNuZiW7Xk@donbot>
+From:   Michael Wu <michael@allwinnertech.com>
+In-Reply-To: <YpUJkxWBNuZiW7Xk@donbot>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As mipi_dsi_driver_register could return error if fails,
-it should be better to check the return value and return error
-if fails.
-Moreover, if i2c_add_driver fails,  mipi_dsi_driver_register
-should be reverted.
+On 5/31/2022 2:14 AM, John Keeping wrote:
+> On Tue, May 10, 2022 at 04:01:05PM +0800, Michael Wu wrote:
+>> On arm64 android12 and possibly other platforms, during the usb gadget
+>> function switching procedure (e.g. from mtp to midi), a synchronization
+>> issue could occur, which causes an use-after-free panic as shown below:
+> 
+> I assume this is the path through ffs_epfile_io() with !io_data->aio.
+> It looks like there is no check there for epfile->ep == ep which the
+> other paths do check.
+> 
+> Does the patch below fix the problem without needing to add a new
+> completion?
+> 
 
-Fixes: 1e4d58cd7f88 ("drm/bridge: adv7533: Create a MIPI DSI device")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+Hi John,
+Thanks for your suggestion. I've tested your patch and it did work -- 
+When my issue occurs, (epfile->ep != ep) is satisfied, and the error is 
+handled.
 
-v1 -> v2
+> -- >8 --
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -1084,16 +1084,22 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+>                           */
+>                          usb_ep_dequeue(ep->ep, req);
+>                          wait_for_completion(&done);
+> -                       interrupted = ep->status < 0;
+> +                       interrupted = true;
+>                  }
+>   
+> -               if (interrupted)
+> +               spin_lock_irq(&epfile->ffs->eps_lock);
+> +               if (epfile->ep != ep)
+> +                       ret = -ESHUTDOWN;
+> +               else if (interrupted && ep->status < 0)
+>                          ret = -EINTR;
+> -               else if (io_data->read && ep->status > 0)
+> -                       ret = __ffs_epfile_read_data(epfile, data, ep->status,
+> -                                                    &io_data->data);
+>                  else
+>                          ret = ep->status;
+> +               spin_unlock_irq(&epfile->ffs->eps_lock);
+> +
+> +               if (io_data->read && ret > 0)
+> +                       ret = __ffs_epfile_read_data(epfile, data, ret,
+> +                                                    &io_data->data);
+> +
+>                  goto error_mutex;
+>          } else if (!(req = usb_ep_alloc_request(ep->ep, GFP_ATOMIC))) {
+>                  ret = -ENOMEM;
+Tested-by: Michael Wu <michael@allwinnertech.com>
 
-*Change 1. Add the mipi_dsi_driver_unregister if i2c_add_driver fails.
----
- drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-index 5bb9300040dd..2275d15d4a8b 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-@@ -1392,10 +1392,21 @@ static struct i2c_driver adv7511_driver = {
- 
- static int __init adv7511_init(void)
- {
--	if (IS_ENABLED(CONFIG_DRM_MIPI_DSI))
--		mipi_dsi_driver_register(&adv7533_dsi_driver);
-+	int ret;
-+
-+	if (IS_ENABLED(CONFIG_DRM_MIPI_DSI)) {
-+		ret = mipi_dsi_driver_register(&adv7533_dsi_driver);
-+		if (ret)
-+			return ret;
-+	}
- 
--	return i2c_add_driver(&adv7511_driver);
-+	ret = i2c_add_driver(&adv7511_driver);
-+	if (ret) {
-+		if (IS_ENABLED(CONFIG_DRM_MIPI_DSI))
-+			mipi_dsi_driver_unregister(&adv7533_dsi_driver);
-+	}
-+
-+	return ret;
- }
- module_init(adv7511_init);
- 
+I also tested Linyu's patch [1][2]. It also works.
+Is there a preference on these solutions?
+
+
+[1] 
+https://lore.kernel.org/linux-usb/1654056916-2062-2-git-send-email-quic_linyyuan@quicinc.com/
+[2] 
+https://lore.kernel.org/linux-usb/1654056916-2062-3-git-send-email-quic_linyyuan@quicinc.com/
+
+
 -- 
-2.25.1
-
+Regards,
+Michael Wu

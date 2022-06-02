@@ -2,92 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA98853B981
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4342053B982
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235273AbiFBNOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 09:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
+        id S235265AbiFBNOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 09:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235269AbiFBNOf (ORCPT
+        with ESMTP id S233534AbiFBNO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 09:14:35 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F09FCE
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 06:14:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654175674; x=1685711674;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rVJywBaPpNw+rAw7ZxAFgh1cOROwJvdlz4npHNBxst8=;
-  b=FhCtCa6NBZ4tzgWmSqqE30f/51gQcZB0WZ4JSgwHtwEJmcz4gUKvlQaQ
-   7iFpMQRjNbwoQhCrVbjemdfGkUOxgeduF5OeqoF8wDVJ1rw5U0z5rXDp2
-   QnqYHRvYJ9j9+j7spChRG1X5Xbm6/uaN9xLeQuaOkI6dC8WGXE5bvEh5D
-   N3er1J2oR7AB6MLzrlKa2OjR/R4aLJxvtXKGcY4uweo7ZDKaPr1D5gkfV
-   7mhmfSO1AFkg1XD8N7VuwiTi/oeXsHVDqzwhXhMcDG4luL/S0yNfg4tU4
-   xCDROR1GYLwtXJhYveX1rfGPddJApiHT5OfTU8c/FY67/hpKdaw6aEjNf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="301308572"
-X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="301308572"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 06:14:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="563303147"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 Jun 2022 06:14:28 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwkeh-00056g-EO;
-        Thu, 02 Jun 2022 13:14:27 +0000
-Date:   Thu, 2 Jun 2022 21:13:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     kbuild-all@lists.01.org, Tzung-Bi Shih <tzungbi@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [tzungbi-chrome-platform:dev 35/40] ERROR: modpost:
- "cros_kunit_ec_cmd_xfer_mock_called"
- [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
-Message-ID: <202206022104.J6wQ08Jb-lkp@intel.com>
+        Thu, 2 Jun 2022 09:14:28 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922CEEB0
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 06:14:27 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id s1so3400963ilj.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 06:14:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sgLg/AKbyDLXa17x68nO4wD5tM3TzhU72GY+ii+nIYw=;
+        b=M/WKw0pgr28e9f4TCf+3US/EEL+xYB2Og+ra97BHVbcKps3ispv/i06yZHWX6HITMn
+         GuWN5ybp07+KSKBAmLnC6ChVpTXiHh5Byp+MDEqkug4+JCokhxTj9VdUwlC7Sejssr/r
+         oVU8EgBtKxR9S8NSlefu1+JRdoiq/KAsrcF4X9DYFot/BZXVqRpPaBrWVm4K2kYPW3us
+         wn0WNHW/9m/V8RsaqEEOeG+Nq/Iq3bYhz4G2uppznh/gUvGD0LnkmF01TuyIm27eoKmm
+         D28KjsVVVqRvOicWvrZqnaak2ws8pPHj1xqA3UbJze1CNvsslGqsoJwls8K5MAf7tDuJ
+         9nyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sgLg/AKbyDLXa17x68nO4wD5tM3TzhU72GY+ii+nIYw=;
+        b=C/LBvg7FZ+GeFz34lY4Grz08TpXOLDiGFJdDzEG4+7sjc8CP5yV61Ygxyy16GFoAvO
+         9vmC6nTjcGyUnb9WWpUc/ZifDi0KCB0OdvdjgyS6YHJu37cF00dz3MHEdyFBYjFwZFqj
+         wxMAbGvmlgv7tW2ok6rMLv9nn30T1ePZUXTvdQquvzC8SteCTpMs6cO8Izhp6ZaEa1nX
+         ljW7FRWuuzBU2VqxK7ydXu7CLaF0ywfyeyN0Ln8LGE+rHIyNFKhVyv32w5CKsNrvXf8j
+         rxRFfCtnrhNVZbp8SA+03OQ6a8nJ3g5AUsBkWzZrsIw5e1CH3jgg4nBR1IU0nE8h3nJK
+         wf0g==
+X-Gm-Message-State: AOAM531H0Bddu8gPiF4feQrw0n5WIXZgoMGeLhtXM5D2Cl47nrD5Fidd
+        AH5IFd3TVOeMjzluVFdHXuKNHwBt9w/IvtnrYUDfexh54c2koIsf
+X-Google-Smtp-Source: ABdhPJy0FI+rxQz9nAWhZwndcFs2t7KOXbUPQnWiUtcloIPqI9PXi/qlrq50anIaDsEEDd86Bz/RA1Qm+q3pFTEO6cA=
+X-Received: by 2002:a92:d7ce:0:b0:2cf:d004:10e2 with SMTP id
+ g14-20020a92d7ce000000b002cfd00410e2mr3137913ilq.193.1654175666981; Thu, 02
+ Jun 2022 06:14:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220531115942.1686812-1-chenhuacai@loongson.cn>
+ <e7cf33a170d0b4e98e53744f60dbf922@kernel.org> <CAAhV-H6ZoqSty=yaAUPMg1QTamfwuYODB_mxf_o=HCJ1boawQg@mail.gmail.com>
+ <11542d9318062155ae5dfaafc7b14bb6@kernel.org>
+In-Reply-To: <11542d9318062155ae5dfaafc7b14bb6@kernel.org>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 2 Jun 2022 21:14:15 +0800
+Message-ID: <CAAhV-H6vdw2FoPBHLjTFv2iNHnbeJ8ccE2oxCqZL71fNnY6AqA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] irqchip: Adjust Kconfig for Loongson
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git dev
-head:   09a34602eeb230a0bbf339457c1b339220f817d3
-commit: 9a1aa601ff843e92990a29ffd8510aa12ccf7cf4 [35/40] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_cmd_xfer()
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220602/202206022104.J6wQ08Jb-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git/commit/?id=9a1aa601ff843e92990a29ffd8510aa12ccf7cf4
-        git remote add tzungbi-chrome-platform https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git
-        git fetch --no-tags tzungbi-chrome-platform dev
-        git checkout 9a1aa601ff843e92990a29ffd8510aa12ccf7cf4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+Hi, Marc,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Thu, Jun 2, 2022 at 7:35 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On 2022-05-31 16:53, Huacai Chen wrote:
+> > Hi, Marc,
+> >
+> > On Tue, May 31, 2022 at 8:52 PM Marc Zyngier <maz@kernel.org> wrote:
+> >>
+> >> On 2022-05-31 12:59, Huacai Chen wrote:
+> >> > We are preparing to add new Loongson (based on LoongArch, not
+> >> > compatible
+> >> > with old MIPS-based Loongson) support.
+> >>
+> >> Please drop this blurb from all your patches. It adds zero
+> >> information.
+> > OK, will be removed.
+> >
+> >>
+> >> > HTVEC will be shared by both old
+> >> > and new Loongson processors, so we adjust its description. HTPIC is
+> >> > only
+> >> > used by MIPS-based Loongson, so we add a MIPS dependency. PCH_PIC and
+> >> > PCH_MSI will have some arch-specific code, so we remove the
+> >> > COMPILE_TEST
+> >> > dependency to avoid build warnings.
+> >> >
+> >> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> >>
+> >> No cover letter, no indication of what this applies on, no mention
+> >> of how this relates to the ongoing irqchip review.
+> >>
+> >> What do you want me to do with this?
+> > Sorry about the confusion; as suggested by you and Arnd, these two
+> > patches
+> > are the minimal changes required on irqchip's side to make the port
+> > build,
+> > without introducing any non-reviewed pieces of code. I originally
+> > wanted to
+> > send the patches then quickly reply you in the asm-generic thread, but
+> > unfortunately I lost Internet connectivity at my site until you have
+> > replied.
+> >
+> > You are knowledgeable, and have taught me much; I owe you many thanks.
+> > However, as my native language is not English, I realize I may sound
+> > impolite
+> > or inappropriate from time to time, making some of you unhappy.
+> > (Actually I
+> > had to ask Xuerui to translate this reply for me, in case I get
+> > something
+> > wrong again.) I'll try to improve in the future and I hope you'll
+> > understand.
+>
+> No worries. English isn't my native language either, and I somehow
+> developed
+> a thick skin when it comes to perceived attitude. So please don't
+> apologise,
+> and keep working with us.
+Thanks for your understanding.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Sorry for bothering you again, but I've stripped down the irqchip
+patches originally
+posted at [1] even more, as can be seen in the latest submission (v14) that I've
+CC-ed you; I'd like to get Acked-by from you for the 2 patches, to hopefully get
+the port PR sent shortly.
 
->> ERROR: modpost: "cros_kunit_ec_cmd_xfer_mock_called" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
->> ERROR: modpost: "cros_kunit_ec_pkt_xfer_mock_called" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
->> ERROR: modpost: "cros_kunit_ec_xfer_mock_default_ret" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+In addition, as the timing is rather tight by now, if you don't want to give out
+the Acked-by for any reason, would you please explain a little bit in a quick
+reply? So that I can arrange for things inside Loongson in advance if the port
+isn't going to appear in v5.19.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+[1]: https://lore.kernel.org/lkml/20220531163236.2109556-1-chenhuacai@loongson.cn/
+
+Thanks again,
+
+Huacai
+
+>
+> Thanks,
+>
+>          M.
+> --
+> Jazz is not dead. It just smells funny...

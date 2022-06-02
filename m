@@ -2,400 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD2653BDD2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 20:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D5453BDF1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 20:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237906AbiFBSQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 14:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S237936AbiFBSS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 14:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234302AbiFBSQg (ORCPT
+        with ESMTP id S237919AbiFBSSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 14:16:36 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6313B13F94;
-        Thu,  2 Jun 2022 11:16:32 -0700 (PDT)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 252FFNCT015597;
-        Thu, 2 Jun 2022 18:16:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : reply-to : subject : to : cc : references : from :
- in-reply-to : content-type : content-transfer-encoding; s=pp1;
- bh=x4CHhe4oknN8i7Mz6K5UbGv8XshiwFwMdSGvV+3mR2A=;
- b=fqqiDmLad1YC2D5CTsT8CoQBCSRl05jvwXEMyTgilUb3lqTiZPAq0gyfmkyhkYuqQvQk
- 31Am0mgqeWAlyqBsfh20tRBhOpKRfmcziZtKmbqEPXEPNv1/MbE0/nCfywVshYiWBZgi
- TVt9nINyM46crWEydeNK369xyBAswxIur5ygNGixHPFh49VgErfVLy3rQlDMR4jp64Eo
- WqGLFh1mInhYcza38rRP9HnZbjnDSa1E/eiahcPA3DthUYQMcm64Nn2ffGPLNh8lHto/
- junnR8owlXoT5mWeyBWJra0pQpgOhxeMkTJEUJgEhpzK4U7p7Nqk8CobEPHPSLRR9/AF Ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3geyphb5cp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Jun 2022 18:16:30 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 252I3BXI002706;
-        Thu, 2 Jun 2022 18:16:29 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3geyphb5cg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Jun 2022 18:16:29 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 252I648A028737;
-        Thu, 2 Jun 2022 18:16:28 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma01dal.us.ibm.com with ESMTP id 3gcxt5v94m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Jun 2022 18:16:27 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 252IGQCH38011148
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Jun 2022 18:16:26 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 784BB6A054;
-        Thu,  2 Jun 2022 18:16:26 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A03496A04D;
-        Thu,  2 Jun 2022 18:16:25 +0000 (GMT)
-Received: from [9.60.75.219] (unknown [9.60.75.219])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Jun 2022 18:16:25 +0000 (GMT)
-Message-ID: <6a574d7e-c390-3764-a57c-23c7653f2f69@linux.ibm.com>
-Date:   Thu, 2 Jun 2022 14:16:25 -0400
+        Thu, 2 Jun 2022 14:18:23 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC704D26B;
+        Thu,  2 Jun 2022 11:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:MIME-Version:Message-Id:Date:Cc:To:From
+        :references:content-disposition:in-reply-to;
+        bh=157u6PWKooSuu4KOF7rMgNHIpCSulick1bTC+P/d8hM=; b=P9xP28hD4TKNdYGjPol8Nm765i
+        kaaXtDFXkJxC1t/dqOF3m5nfCevjfXT1CJgBAPFLiVsJrxMyF09Vq7ho6dVAGXT9f1E0Pun6jfXe1
+        /cqkV1EOrd9NSa2NXK2Dn5ONp+ufqxsV6O4dvcc6yaCxPgo/aV7sjubNEHbNmwVH1aJrd7bOFIXHH
+        VcCdfJ+ON92LpCFIO2LgyzCVDrEvp8oWEVfw1nvXVC2qF9c/PwvaVtbJM+W9kov1J2FU+3cJcTFXg
+        +CqIEVjnh6ChZ5YXO02EspfW6oz4b6ZS0NfvN+t2BEE7GMBxD0zjRtW9kIos2BzIMETQ0loAAmI5Y
+        WomT/fxA==;
+Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
+        by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1nwpOm-00EPmV-Pu; Thu, 02 Jun 2022 12:18:21 -0600
+Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1nwpOl-000DDB-AR; Thu, 02 Jun 2022 12:18:19 -0600
+From:   Logan Gunthorpe <logang@deltatee.com>
+To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Donald Buczek <buczek@molgen.mpg.de>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Xiao Ni <xni@redhat.com>, Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>,
+        Logan Gunthorpe <logang@deltatee.com>
+Date:   Thu,  2 Jun 2022 12:18:06 -0600
+Message-Id: <20220602181818.50729-1-logang@deltatee.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Reply-To: jjherne@linux.ibm.com
-Subject: Re: [PATCH v19 15/20] s390/vfio-ap: implement in-use callback for
- vfio_ap driver
-Content-Language: en-US
-To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20220404221039.1272245-1-akrowiak@linux.ibm.com>
- <20220404221039.1272245-16-akrowiak@linux.ibm.com>
-From:   "Jason J. Herne" <jjherne@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <20220404221039.1272245-16-akrowiak@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: KKF915Jc-mH4WGPiW8P4dg_MHFTB1_1o
-X-Proofpoint-GUID: 59rMyBdY21xqROeL0Xj8XtLtWERSAoQ-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-02_05,2022-06-02_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- impostorscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0 bulkscore=0
- adultscore=0 priorityscore=1501 mlxlogscore=999 mlxscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206020076
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 172.16.1.31
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, hch@infradead.org, buczek@molgen.mpg.de, guoqing.jiang@linux.dev, xni@redhat.com, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com, logang@deltatee.com
+X-SA-Exim-Mail-From: gunthorp@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v3 00/11] Bug fixes for mdadm tests
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/22 18:10, Tony Krowiak wrote:
-> Let's implement the callback to indicate when an APQN
-> is in use by the vfio_ap device driver. The callback is
-> invoked whenever a change to the apmask or aqmask would
-> result in one or more queue devices being removed from the driver. The
-> vfio_ap device driver will indicate a resource is in use
-> if the APQN of any of the queue devices to be removed are assigned to
-> any of the matrix mdevs under the driver's control.
-> 
-> There is potential for a deadlock condition between the
-> matrix_dev->guests_lock used to lock the guest during assignment of
-> adapters and domains and the ap_perms_mutex locked by the AP bus when
-> changes are made to the sysfs apmask/aqmask attributes.
-> 
-> The AP Perms lock controls access to the objects that store the adapter
-> numbers (ap_perms) and domain numbers (aq_perms) for the sysfs
-> /sys/bus/ap/apmask and /sys/bus/ap/aqmask attributes. These attributes
-> identify which queues are reserved for the zcrypt default device drivers.
-> Before allowing a bit to be removed from either mask, the AP bus must check
-> with the vfio_ap device driver to verify that none of the queues are
-> assigned to any of its mediated devices.
-> 
-> The apmask/aqmask attributes can be written or read at any time from
-> userspace, so care must be taken to prevent a deadlock with asynchronous
-> operations that might be taking place in the vfio_ap device driver. For
-> example, consider the following:
-> 
-> 1. A system administrator assigns an adapter to a mediated device under the
->     control of the vfio_ap device driver. The driver will need to first take
->     the matrix_dev->guests_lock to potentially hot plug the adapter into
->     the KVM guest.
-> 2. At the same time, a system administrator sets a bit in the sysfs
->     /sys/bus/ap/ap_mask attribute. To complete the operation, the AP bus
->     must:
->     a. Take the ap_perms_mutex lock to update the object storing the values
->        for the /sys/bus/ap/ap_mask attribute.
->     b. Call the vfio_ap device driver's in-use callback to verify that the
->        queues now being reserved for the default zcrypt drivers are not
->        assigned to a mediated device owned by the vfio_ap device driver. To
->        do the verification, the in-use callback function takes the
->        matrix_dev->guests_lock, but has to wait because it is already held
->        by the operation in 1 above.
-> 3. The vfio_ap device driver calls an AP bus function to verify that the
->     new queues resulting from the assignment of the adapter in step 1 are
->     not reserved for the default zcrypt device driver. This AP bus function
->     tries to take the ap_perms_mutex lock but gets stuck waiting for the
->     waiting for the lock due to step 2a above.
-> 
-> Consequently, we have the following deadlock situation:
-> 
-> matrix_dev->guests_lock locked (1)
-> ap_perms_mutex lock locked (2a)
-> Waiting for matrix_dev->gusts_lock (2b) which is currently held (1)
-> Waiting for ap_perms_mutex lock (3) which is currently held (2a)
-> 
-> To prevent this deadlock scenario, the function called in step 3 will no
-> longer take the ap_perms_mutex lock and require the caller to take the
-> lock. The lock will be the first taken by the adapter/domain assignment
-> functions in the vfio_ap device driver to maintain the proper locking
-> order.
-> 
-> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
-> ---
->   drivers/s390/crypto/ap_bus.c          | 31 ++++++++----
->   drivers/s390/crypto/vfio_ap_drv.c     |  1 +
->   drivers/s390/crypto/vfio_ap_ops.c     | 68 +++++++++++++++++++++++++++
->   drivers/s390/crypto/vfio_ap_private.h |  2 +
->   4 files changed, 94 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/s390/crypto/ap_bus.c b/drivers/s390/crypto/ap_bus.c
-> index fdf16cb70881..f48552e900a2 100644
-> --- a/drivers/s390/crypto/ap_bus.c
-> +++ b/drivers/s390/crypto/ap_bus.c
-> @@ -817,6 +817,17 @@ static void ap_bus_revise_bindings(void)
->   	bus_for_each_dev(&ap_bus_type, NULL, NULL, __ap_revise_reserved);
->   }
->   
-> +/**
-> + * ap_apqn_in_matrix_owned_by_def_drv: indicates whether an APQN c is reserved
-> + *				       for the host drivers or not.
-> + * @card: the APID of the adapter card to check
-> + * @queue: the APQI of the queue to check
-> + *
-> + * Note: the ap_perms_mutex must be locked by the caller of this function.
-> + *
-> + * Return: an int specifying whether the APQN is reserved for the host (1) or
-> + *	   not (0)
-> + */
+Hi,
 
-Comment's function name does not match real function name. Also APQN "c", from
-description does not appear to exist.
+This is the updated series with the feedback received in v2[1].
+
+This series includes fixes to fix all the kernel panics in the mdadm
+tests and some, related, sparse issues, plus some cleanup.
+
+The first two patches are cleanup from the original series that aren't
+related now but I thought are worth including.
+
+Patches 3 through 6 fix bugs with conf->log and remove the single,
+unecessary, RCU access. This cleans up some sparse errors.
+
+Patch 7 cleans up some sparse warnings with pslot usage.
+
+Patch 8 is a cleanup which adds an enum so that patch 9 can
+fix an mdadm hang. Patch 10 also fixes an mdadm hang.
+
+I've also included Patch 11 in this series which fixes a recent
+mistake in raid5-ppl that was reported by 0day which I don't think
+has been fixed yet.
+
+This series will be followed by another series for mdadm which fixes
+the segfaults and annotates some failing tests to make mdadm tests
+runnable fairly reliably, but I'll wait for a stable hash for this
+series to note the kernel version tested against. Following that,
+v3 of my lock contention series will be sent with more confidence
+of its correctness.
+
+This series is based on the current md/md-next branch as of yesterday
+(42b805af10). A git branch is available here:
+
+  https://github.com/sbates130272/linux-p2pmem md-bug_v3
+
+Thanks,
+
+Logan
+
+--
+
+Changes since v2:
+  * Rework the RCU changes to remove the RCU usage instead of using
+    it every. This makes more sense seeing most accesses do not need
+    RCU due to them being on the IO path, or with mddev_lock() held
+    and the remaining ones are on the slow path and may use
+    mddev_lock(). (Per Christoph)
+  * Collect a couple more Reviewed-by tags from Christoph
+
+Changes since v1:
+  * Add a patch to move the struct r5l_log to raid5-log.h in order
+    to fix a compiler error with rcu_access_pointer() in versions
+    prior to gcc-10
+  * Rework r5c_is_writeback() changes to make less churn (per Christoph)
+  * Change some 1s to trues in rcu_dereference_protected calls (per
+    Christoph)
+  * Fix an odd hunk mistake in the RCU protection patch (per Christoph)
+  * Fix an inverted conditional (noticed by Donald)
+  * Add a patch to add an enum for the overloaded values used by
+    mddev->curr_resync to make the status_resync() fixes clearer
+    (per Christoph)
+
+--
+
+[1] https://lore.kernel.org/all/20220526163604.32736-1-logang@deltatee.com
+
+Logan Gunthorpe (11):
+  md/raid5-log: Drop extern decorators for function prototypes
+  md/raid5-ppl: Drop unused argument from ppl_handle_flush_request()
+  md/raid5: Ensure array is suspended for calls to log_exit()
+  md/raid5-cache: Take mddev_lock in r5c_journal_mode_show()
+  md/raid5-cache: Drop RCU usage of conf->log
+  md/raid5-cache: Clear conf->log after finishing work
+  md/raid5-cache: Annotate pslot with __rcu notation
+  md: Use enum for overloaded magic numbers used by mddev->curr_resync
+  md: Ensure resync is reported after it starts
+  md: Notify sysfs sync_completed in md_reap_sync_thread()
+  md/raid5-ppl: Fix argument order in bio_alloc_bioset()
+
+ drivers/md/md.c          | 55 +++++++++++++++-------------
+ drivers/md/md.h          | 15 ++++++++
+ drivers/md/raid5-cache.c | 34 +++++++++---------
+ drivers/md/raid5-log.h   | 77 +++++++++++++++++++---------------------
+ drivers/md/raid5-ppl.c   |  6 ++--
+ drivers/md/raid5.c       | 18 ++++------
+ 6 files changed, 109 insertions(+), 96 deletions(-)
 
 
->   int ap_owned_by_def_drv(int card, int queue)
->   {
->   	int rc = 0;
-> @@ -824,25 +835,31 @@ int ap_owned_by_def_drv(int card, int queue)
->   	if (card < 0 || card >= AP_DEVICES || queue < 0 || queue >= AP_DOMAINS)
->   		return -EINVAL;
->   
-> -	mutex_lock(&ap_perms_mutex);
-> -
->   	if (test_bit_inv(card, ap_perms.apm)
->   	    && test_bit_inv(queue, ap_perms.aqm))
->   		rc = 1;
->   
-> -	mutex_unlock(&ap_perms_mutex);
-> -
->   	return rc;
->   }
->   EXPORT_SYMBOL(ap_owned_by_def_drv);
->   
-> +/**
-> + * ap_apqn_in_matrix_owned_by_def_drv: indicates whether every APQN contained in
-> + *				       a set is reserved for the host drivers
-> + *				       or not.
-> + * @apm: a bitmap specifying a set of APIDs comprising the APQNs to check
-> + * @aqm: a bitmap specifying a set of APQIs comprising the APQNs to check
-> + *
-> + * Note: the ap_perms_mutex must be locked by the caller of this function.
-> + *
-> + * Return: an int specifying whether each APQN is reserved for the host (1) or
-> + *	   not (0)
-> + */
->   int ap_apqn_in_matrix_owned_by_def_drv(unsigned long *apm,
->   				       unsigned long *aqm)
->   {
->   	int card, queue, rc = 0;
->   
-> -	mutex_lock(&ap_perms_mutex);
-> -
->   	for (card = 0; !rc && card < AP_DEVICES; card++)
->   		if (test_bit_inv(card, apm) &&
->   		    test_bit_inv(card, ap_perms.apm))
-> @@ -851,8 +868,6 @@ int ap_apqn_in_matrix_owned_by_def_drv(unsigned long *apm,
->   				    test_bit_inv(queue, ap_perms.aqm))
->   					rc = 1;
->   
-> -	mutex_unlock(&ap_perms_mutex);
-> -
->   	return rc;
->   }
->   EXPORT_SYMBOL(ap_apqn_in_matrix_owned_by_def_drv);
-> diff --git a/drivers/s390/crypto/vfio_ap_drv.c b/drivers/s390/crypto/vfio_ap_drv.c
-> index c258e5f7fdfc..2c3084589347 100644
-> --- a/drivers/s390/crypto/vfio_ap_drv.c
-> +++ b/drivers/s390/crypto/vfio_ap_drv.c
-> @@ -107,6 +107,7 @@ static const struct attribute_group vfio_queue_attr_group = {
->   static struct ap_driver vfio_ap_drv = {
->   	.probe = vfio_ap_mdev_probe_queue,
->   	.remove = vfio_ap_mdev_remove_queue,
-> +	.in_use = vfio_ap_mdev_resource_in_use,
->   	.ids = ap_queue_ids,
->   };
->   
-> diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
-> index 49ed54dc9e05..3ece2cd9f1e7 100644
-> --- a/drivers/s390/crypto/vfio_ap_ops.c
-> +++ b/drivers/s390/crypto/vfio_ap_ops.c
-> @@ -902,6 +902,21 @@ static int vfio_ap_mdev_verify_no_sharing(unsigned long *mdev_apm,
->   	return 0;
->   }
->   
-> +/**
-> + * vfio_ap_mdev_validate_masks - verify that the APQNs assigned to the mdev are
-> + *				 not reserved for the default zcrypt driver and
-> + *				 are not assigned to another mdev.
-> + *
-> + * @matrix_mdev: the mdev to which the APQNs being validated are assigned.
-> + *
-> + * Return: One of the following values:
-> + * o the error returned from the ap_apqn_in_matrix_owned_by_def_drv() function,
-> + *   most likely -EBUSY indicating the ap_perms_mutex lock is already held.
-> + * o EADDRNOTAVAIL if an APQN assigned to @matrix_mdev is reserved for the
-> + *		   zcrypt default driver.
-> + * o EADDRINUSE if an APQN assigned to @matrix_mdev is assigned to another mdev
-> + * o A zero indicating validation succeeded.
-> + */
->   static int vfio_ap_mdev_validate_masks(struct ap_matrix_mdev *matrix_mdev)
->   {
->   	if (ap_apqn_in_matrix_owned_by_def_drv(matrix_mdev->matrix.apm,
-> @@ -951,6 +966,10 @@ static void vfio_ap_mdev_link_adapter(struct ap_matrix_mdev *matrix_mdev,
->    *	   An APQN derived from the cross product of the APID being assigned
->    *	   and the APQIs previously assigned is being used by another mediated
->    *	   matrix device
-> + *
-> + *	5. -EAGAIN
-> + *	   A lock required to validate the mdev's AP configuration could not
-> + *	   be obtained.
->    */
->   static ssize_t assign_adapter_store(struct device *dev,
->   				    struct device_attribute *attr,
-> @@ -961,6 +980,7 @@ static ssize_t assign_adapter_store(struct device *dev,
->   	DECLARE_BITMAP(apm_delta, AP_DEVICES);
->   	struct ap_matrix_mdev *matrix_mdev = dev_get_drvdata(dev);
->   
-> +	mutex_lock(&ap_perms_mutex);
->   	get_update_locks_for_mdev(matrix_mdev);
->   
->   	ret = kstrtoul(buf, 0, &apid);
-> @@ -991,6 +1011,7 @@ static ssize_t assign_adapter_store(struct device *dev,
->   	ret = count;
->   done:
->   	release_update_locks_for_mdev(matrix_mdev);
-> +	mutex_unlock(&ap_perms_mutex);
->   
->   	return ret;
->   }
-> @@ -1144,6 +1165,10 @@ static void vfio_ap_mdev_link_domain(struct ap_matrix_mdev *matrix_mdev,
->    *	   An APQN derived from the cross product of the APQI being assigned
->    *	   and the APIDs previously assigned is being used by another mediated
->    *	   matrix device
-> + *
-> + *	5. -EAGAIN
-> + *	   The lock required to validate the mdev's AP configuration could not
-> + *	   be obtained.
->    */
->   static ssize_t assign_domain_store(struct device *dev,
->   				   struct device_attribute *attr,
-> @@ -1154,6 +1179,7 @@ static ssize_t assign_domain_store(struct device *dev,
->   	DECLARE_BITMAP(aqm_delta, AP_DOMAINS);
->   	struct ap_matrix_mdev *matrix_mdev = dev_get_drvdata(dev);
->   
-> +	mutex_lock(&ap_perms_mutex);
->   	get_update_locks_for_mdev(matrix_mdev);
->   
->   	ret = kstrtoul(buf, 0, &apqi);
-> @@ -1184,6 +1210,7 @@ static ssize_t assign_domain_store(struct device *dev,
->   	ret = count;
->   done:
->   	release_update_locks_for_mdev(matrix_mdev);
-> +	mutex_unlock(&ap_perms_mutex);
->   
->   	return ret;
->   }
-> @@ -1868,3 +1895,44 @@ void vfio_ap_mdev_remove_queue(struct ap_device *apdev)
->   	kfree(q);
->   	release_update_locks_for_mdev(matrix_mdev);
->   }
-> +
-> +/**
-> + * vfio_ap_mdev_resource_in_use: check whether any of a set of APQNs is
-> + *				 assigned to a mediated device under the control
-> + *				 of the vfio_ap device driver.
-> + *
-> + * @apm: a bitmap specifying a set of APIDs comprising the APQNs to check.
-> + * @aqm: a bitmap specifying a set of APQIs comprising the APQNs to check.
-> + *
-> + * This function is invoked by the AP bus when changes to the apmask/aqmask
-> + * attributes will result in giving control of the queue devices specified via
-> + * @apm and @aqm to the default zcrypt device driver. Prior to calling this
-> + * function, the AP bus locks the ap_perms_mutex. If this function is called
-> + * while an adapter or domain is being assigned to a mediated device, the
-> + * assignment operations will take the matrix_dev->guests_lock and
-> + * matrix_dev->mdevs_lock then call the ap_apqn_in_matrix_owned_by_def_drv
-> + * function, which also locks the ap_perms_mutex. This could result in a
-> + * deadlock.
-> + *
-> + * To avoid a deadlock, this function will verify that the
-> + * matrix_dev->guests_lock and matrix_dev->mdevs_lock are not currently held and
-> + * will return -EBUSY if the locks can not be obtained.
-
-This part of the comment does not seem to match reality. Unless I'm missing
-something? Did you mean to call mutex_trylock? Or is the comment stale?
-
-> + * Return:
-> + *	* -EBUSY if the locks required by this function are already locked.
-> + *	* -EADDRINUSE if one or more of the APQNs specified via @apm/@aqm are
-> + *	  assigned to a mediated device under the control of the vfio_ap
-> + *	  device driver.
-> + */
-> +int vfio_ap_mdev_resource_in_use(unsigned long *apm, unsigned long *aqm)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&matrix_dev->guests_lock);
-> +	mutex_lock(&matrix_dev->mdevs_lock);
-> +	ret = vfio_ap_mdev_verify_no_sharing(apm, aqm);
-> +	mutex_unlock(&matrix_dev->mdevs_lock);
-> +	mutex_unlock(&matrix_dev->guests_lock);
-> +
-> +	return ret;
-> +}
-> diff --git a/drivers/s390/crypto/vfio_ap_private.h b/drivers/s390/crypto/vfio_ap_private.h
-> index 6d4ca39f783b..cbffa0bd01da 100644
-> --- a/drivers/s390/crypto/vfio_ap_private.h
-> +++ b/drivers/s390/crypto/vfio_ap_private.h
-> @@ -147,4 +147,6 @@ void vfio_ap_mdev_unregister(void);
->   int vfio_ap_mdev_probe_queue(struct ap_device *queue);
->   void vfio_ap_mdev_remove_queue(struct ap_device *queue);
->   
-> +int vfio_ap_mdev_resource_in_use(unsigned long *apm, unsigned long *aqm);
-> +
->   #endif /* _VFIO_AP_PRIVATE_H_ */
-
-
--- 
--- Jason J. Herne (jjherne@linux.ibm.com)
+base-commit: 42b805af102471f53e3c7867b8c2b502ea4eef7e
+--
+2.30.2

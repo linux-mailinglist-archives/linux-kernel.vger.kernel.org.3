@@ -2,234 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA8053BA83
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 696D453BA9F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235756AbiFBOMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 10:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        id S235811AbiFBOXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 10:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbiFBOM3 (ORCPT
+        with ESMTP id S235808AbiFBOXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 10:12:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD60A28720;
-        Thu,  2 Jun 2022 07:12:27 -0700 (PDT)
+        Thu, 2 Jun 2022 10:23:09 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31262666
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 07:23:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654179147; x=1685715147;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KbrPrIvCS+mi/COhLEjYkOuQ96crZbeQdqbKiwSPa2c=;
-  b=SWK1qHLUtK1mJ2JHon0BPr87RIS6NMv6ZX2ybH9ItGjF3KH9p02XXUtQ
-   idiZREBE5a2mFi6Jrq50EsFdCxiTE3/3rnz0rWtBK3IcIMWB+jVs7TjyF
-   AB+I0c1+adqL6IG4qr5sKPzxBUEYF2t3bhTiKewBffof0GM9MDtQsBGCc
-   kwCNHhYpGr7400llzDxSWGiXwixp1DLonHYPs76G+tGnfxpEsDAHPQahO
-   BeH6Kpcqqg+wH6XKjC8StzZxjrGAlbCr7c3t+OOzq9/kELTvVTMnIJilZ
-   JoiV/ijmmHZjUm6oM2CzStq6wlgYNw4YfqKUuzVURa0BV2XMkqvypyUDs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="276034496"
+  t=1654179787; x=1685715787;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=10tdVqNXMtoaGj37cG5xipixchrN/gTHN1SNied7ehI=;
+  b=nqUi7sNLARle8JQiHod0u9HKqIhr+MWouXsoYbd8wYmMm1uMT8LLA4JT
+   cBJPKVU3V5Jp6FyF6r6A28/tLlaOzVP6vCcSzBJIj2B0o+En9IR4UeXtv
+   92CQaauw6bCsLVop/70TJ45qs1GX1i1YWN+lMIxbdEpPkQxy/z1MRE+PQ
+   IZBVIuQeDTKgoDWkX71HsdZTzar2WWRKuq3bxnytW+/khupfSqf4/OiRj
+   ukZivsXyf0nqiuynnz/oFbNW0Tad3jvkLuppfWuGxAM6blrEf3Zdr3n60
+   Xr0B98R0RDcjsxK+60rcaDCQENPp2ELuD9gXVJRTnBb18Falni/P/SrLC
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="258034932"
 X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="276034496"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 07:12:26 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="258034932"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 07:23:07 -0700
 X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="707580844"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
-  by orsmga004.jf.intel.com with ESMTP; 02 Jun 2022 07:12:23 -0700
-From:   wen.ping.teh@intel.com
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Teh Wen Ping <wen.ping.teh@intel.com>
-Subject: [PATCH v2] arm64: dts: Add support for Stratix 10 Software Virtual Platform
-Date:   Thu,  2 Jun 2022 22:11:51 +0800
-Message-Id: <20220602141151.3431212-1-wen.ping.teh@intel.com>
-X-Mailer: git-send-email 2.25.1
+   d="scan'208";a="905008802"
+Received: from dvnguye2-mobl.amr.corp.intel.com (HELO [10.251.7.96]) ([10.251.7.96])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 07:23:05 -0700
+Message-ID: <53e13af2-d279-372c-0b5b-fdf3277e0231@linux.intel.com>
+Date:   Thu, 2 Jun 2022 09:13:52 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH v2] ASoC: Intel: cirrus-common: fix incorrect channel
+ mapping
+Content-Language: en-US
+To:     Brent Lu <brent.lu@intel.com>, alsa-devel@alsa-project.org
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, xliu <xiang.liu@cirrus.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+References: <20220602051922.1232457-1-brent.lu@intel.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220602051922.1232457-1-brent.lu@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Teh Wen Ping <wen.ping.teh@intel.com>
 
-Add Stratix 10 Software Virtual Platform device tree
 
-Signed-off-by: Teh Wen Ping <wen.ping.teh@intel.com>
----
+On 6/2/22 00:19, Brent Lu wrote:
+> From: xliu <xiang.liu@cirrus.com>
+> 
+> The default mapping of ASPRX1 (DAC source) is slot 0. Change the slot
+> mapping of right amplifiers (WR and TR) to slot 1 to receive right
+> channel data. Also update the ACPI instance ID mapping according to HW
+> configuration.
+> 
+> Signed-off-by: xliu <xiang.liu@cirrus.com>
+> Signed-off-by: Brent Lu <brent.lu@intel.com>
 
-changes in v2:
--remove indentation before GPL
--change root compatible to "altr,socfpga-stratix10"
--remove bootargs
--move clock-frequency to label
--remove l2-cache
--remove no longer exist authors from commit message
+This v2 looks much better and self-explanatory. Thanks!
 
- arch/arm64/Kconfig.platforms                  |   3 +-
- arch/arm64/boot/dts/altera/Makefile           |   3 +-
- .../dts/altera/socfpga_stratix10_swvp.dts     | 117 ++++++++++++++++++
- 3 files changed, 121 insertions(+), 2 deletions(-)
- create mode 100644 arch/arm64/boot/dts/altera/socfpga_stratix10_swvp.dts
+Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index de9a18d3026f..48abe5dafaae 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -249,7 +249,8 @@ config ARCH_INTEL_SOCFPGA
- 	bool "Intel's SoCFPGA ARMv8 Families"
- 	help
- 	  This enables support for Intel's SoCFPGA ARMv8 families:
--	  Stratix 10 (ex. Altera), Agilex and eASIC N5X.
-+	  Stratix 10 (ex. Altera), Stratix10 Software Virtual Platform,
-+	  Agilex and eASIC N5X.
- 
- config ARCH_SYNQUACER
- 	bool "Socionext SynQuacer SoC Family"
-diff --git a/arch/arm64/boot/dts/altera/Makefile b/arch/arm64/boot/dts/altera/Makefile
-index 4db83fbeb115..1bf0c472f6b4 100644
---- a/arch/arm64/boot/dts/altera/Makefile
-+++ b/arch/arm64/boot/dts/altera/Makefile
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) += socfpga_stratix10_socdk.dtb \
--				socfpga_stratix10_socdk_nand.dtb
-+				socfpga_stratix10_socdk_nand.dtb \
-+				socfpga_stratix10_swvp.dtb
-diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10_swvp.dts b/arch/arm64/boot/dts/altera/socfpga_stratix10_swvp.dts
-new file mode 100644
-index 000000000000..93fa5091a6c3
---- /dev/null
-+++ b/arch/arm64/boot/dts/altera/socfpga_stratix10_swvp.dts
-@@ -0,0 +1,117 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022, Intel Corporation
-+ */
-+
-+#include "socfpga_stratix10.dtsi"
-+
-+/ {
-+	model = "SOCFPGA Stratix 10 SWVP";
-+	compatible = "altr,socfpga-stratix10";
-+
-+	aliases {
-+		serial0 = &uart0;
-+		serial1 = &uart1;
-+
-+		timer0 = &timer0;
-+		timer1 = &timer1;
-+		timer2 = &timer2;
-+		timer3 = &timer3;
-+
-+		ethernet0 = &gmac0;
-+		ethernet1 = &gmac1;
-+		ethernet2 = &gmac2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial1:115200n8";
-+		linux,initrd-start = <0x10000000>;
-+		linux,initrd-end = <0x125c8324>;
-+	};
-+
-+	memory {
-+		device_type = "memory";
-+		reg = <0x0 0x0 0x0 0x80000000>;
-+	};
-+};
-+
-+&cpu0 {
-+	enable-method = "spin-table";
-+	cpu-release-addr = <0x0 0x0000fff8>;
-+};
-+
-+&cpu1 {
-+	enable-method = "spin-table";
-+	cpu-release-addr = <0x0 0x0000fff8>;
-+};
-+
-+&cpu2 {
-+	enable-method = "spin-table";
-+	cpu-release-addr = <0x0 0x0000fff8>;
-+};
-+
-+&cpu3 {
-+	enable-method = "spin-table";
-+	cpu-release-addr = <0x0 0x0000fff8>;
-+};
-+
-+&osc1 {
-+	clock-frequency = <25000000>;
-+};
-+
-+&gmac0 {
-+	status = "okay";
-+	phy-mode = "rgmii";
-+	phy-addr = <0xffffffff>;
-+	snps,max-mtu = <0x0>;
-+};
-+
-+&gmac1 {
-+	status = "okay";
-+	phy-mode = "rgmii";
-+	phy-addr = <0xffffffff>;
-+};
-+
-+&gmac2 {
-+	status = "okay";
-+	phy-mode = "rgmii";
-+	phy-addr = <0xffffffff>;
-+};
-+
-+&mmc {
-+	status = "okay";
-+	altr,dw-mshc-ciu-div = <0x3>;
-+	altr,dw-mshc-sdr-timing = <0x0 0x3>;
-+	cap-sd-highspeed;
-+	cap-mmc-highspeed;
-+	broken-cd;
-+	bus-width = <4>;
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&usb0 {
-+	clocks = <&clkmgr STRATIX10_L4_MP_CLK>;
-+	status = "okay";
-+};
-+
-+&usb1 {
-+	clocks = <&clkmgr STRATIX10_L4_MP_CLK>;
-+	status = "okay";
-+};
-+
-+&rst {
-+	altr,modrst-offset = <0x20>;
-+};
-+
-+&sysmgr {
-+	reg = <0xffd12000 0x1000>;
-+	interrupts = <0x0 0x10 0x4>;
-+	cpu1-start-addr = <0xffd06230>;
-+};
--- 
-2.25.1
-
+> ---
+>  sound/soc/intel/boards/sof_cirrus_common.c | 40 +++++++++++++++++++---
+>  1 file changed, 36 insertions(+), 4 deletions(-)
+> 
+> diff --git a/sound/soc/intel/boards/sof_cirrus_common.c b/sound/soc/intel/boards/sof_cirrus_common.c
+> index e71d74ec1b0b..f4192df962d6 100644
+> --- a/sound/soc/intel/boards/sof_cirrus_common.c
+> +++ b/sound/soc/intel/boards/sof_cirrus_common.c
+> @@ -54,22 +54,29 @@ static struct snd_soc_dai_link_component cs35l41_components[] = {
+>  	},
+>  };
+>  
+> +/*
+> + * Mapping between ACPI instance id and speaker position.
+> + *
+> + * Four speakers:
+> + *         0: Tweeter left, 1: Woofer left
+> + *         2: Tweeter right, 3: Woofer right
+> + */
+>  static struct snd_soc_codec_conf cs35l41_codec_conf[] = {
+>  	{
+>  		.dlc = COMP_CODEC_CONF(CS35L41_DEV0_NAME),
+> -		.name_prefix = "WL",
+> +		.name_prefix = "TL",
+>  	},
+>  	{
+>  		.dlc = COMP_CODEC_CONF(CS35L41_DEV1_NAME),
+> -		.name_prefix = "WR",
+> +		.name_prefix = "WL",
+>  	},
+>  	{
+>  		.dlc = COMP_CODEC_CONF(CS35L41_DEV2_NAME),
+> -		.name_prefix = "TL",
+> +		.name_prefix = "TR",
+>  	},
+>  	{
+>  		.dlc = COMP_CODEC_CONF(CS35L41_DEV3_NAME),
+> -		.name_prefix = "TR",
+> +		.name_prefix = "WR",
+>  	},
+>  };
+>  
+> @@ -101,6 +108,21 @@ static int cs35l41_init(struct snd_soc_pcm_runtime *rtd)
+>  	return ret;
+>  }
+>  
+> +/*
+> + * Channel map:
+> + *
+> + * TL/WL: ASPRX1 on slot 0, ASPRX2 on slot 1 (default)
+> + * TR/WR: ASPRX1 on slot 1, ASPRX2 on slot 0
+> + */
+> +static const struct {
+> +	unsigned int rx[2];
+> +} cs35l41_channel_map[] = {
+> +	{.rx = {0, 1}}, /* TL */
+> +	{.rx = {0, 1}}, /* WL */
+> +	{.rx = {1, 0}}, /* TR */
+> +	{.rx = {1, 0}}, /* WR */
+> +};
+> +
+>  static int cs35l41_hw_params(struct snd_pcm_substream *substream,
+>  			     struct snd_pcm_hw_params *params)
+>  {
+> @@ -134,6 +156,16 @@ static int cs35l41_hw_params(struct snd_pcm_substream *substream,
+>  				ret);
+>  			return ret;
+>  		}
+> +
+> +		/* setup channel map */
+> +		ret = snd_soc_dai_set_channel_map(codec_dai, 0, NULL,
+> +						  ARRAY_SIZE(cs35l41_channel_map[i].rx),
+> +						  (unsigned int *)cs35l41_channel_map[i].rx);
+> +		if (ret < 0) {
+> +			dev_err(codec_dai->dev, "fail to set channel map, ret %d\n",
+> +				ret);
+> +			return ret;
+> +		}
+>  	}
+>  
+>  	return 0;

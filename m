@@ -2,186 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE4153BB6A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE12853BB70
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236405AbiFBPMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 11:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45726 "EHLO
+        id S236414AbiFBPOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 11:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232613AbiFBPMP (ORCPT
+        with ESMTP id S230114AbiFBPON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 11:12:15 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8097C3B3EC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 08:12:13 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id t25so8282414lfg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 08:12:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=M/dYHmnkSGV1dzutNBubTQIn3L/JOh4kpdNfkA1ozno=;
-        b=o6x7JoZst/euEHN/7b7RpYwl7U9npG8+UKi8f0qw2s5r5nzGIf3zIFc4dYxLjBril6
-         ZZ2PHdneaQk9tsJwpn0RpWf8rRQEkK66rXkz0/aqRtpleMMdJ8+b4tGTwiU6Uk9Dd2tL
-         lSY8Y7s5xa7l6hJ3oVe1HPXpO2b4SSJdXUAe5F/MYudRmtSX360eFzWvX533x/lIJN7i
-         L7G9pWnNECErvDHtFwsGDIBMC8Tos5FNNwt190izOWANCPBmDrTvFOYYlyntyTajQ/Iz
-         fqGkDu7BBKm6nevCEeR6uvLZQU5YV/DeqfAk+ywEuZ7QqU+zgHqqV8bpHJLQo6SgkjEB
-         33mg==
+        Thu, 2 Jun 2022 11:14:13 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3DD9D4CC;
+        Thu,  2 Jun 2022 08:14:11 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-f2cbceefb8so7074172fac.11;
+        Thu, 02 Jun 2022 08:14:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=M/dYHmnkSGV1dzutNBubTQIn3L/JOh4kpdNfkA1ozno=;
-        b=dAOLuz0ZyYoqkISKCAN/LlptNwhqNC4hzuYnfIULTbiGM87r7k4rm7guYW8o+dEzLY
-         rYypsE8lMcpVWGE5YR5A6FLsbJQx8jqIwQnFnCrvYv88vjxPuM5AZtcN72KOczIs2BBo
-         h71u7vOq/jxUGzANT7Bg4jd+FMV+nsAo20rCa5JgreBBNdUXa8dV0MgVs/OH7Y7epZz7
-         bZtxD9xxheESrOdyH++vzpRu92b/sySPlAzJXHz544Cu6UBKXX3DYWsoVzL2ypiEXKWg
-         bBSa8SpXagb2l7YW7TjM1cJWUTfNUkU9D0k6Nn+lz745x3nZq5hGqqC+zmY4WCJc0xFL
-         pPnw==
-X-Gm-Message-State: AOAM531vw7Ic2M+c4FdS+U2FwlhiENNZInwm151GgWyd+XfAZhxE7EgB
-        XIWFLWvlUuADnPFgRh7SWdmTsw==
-X-Google-Smtp-Source: ABdhPJzNQG2JweGywHctHB6i1b+OwfsJ+fKsEK7fPzNN9ID/Rbu8LbjUFE2FmuGsrsKRJz4Cig4dOQ==
-X-Received: by 2002:a05:6512:15a4:b0:477:cc23:6252 with SMTP id bp36-20020a05651215a400b00477cc236252mr49298222lfb.389.1654182731748;
-        Thu, 02 Jun 2022 08:12:11 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id e8-20020ac25ca8000000b00478f0799dd0sm1083250lfq.21.2022.06.02.08.12.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 08:12:11 -0700 (PDT)
-Message-ID: <eb66c55c-cecb-0af0-8800-0a9e59d67a9b@linaro.org>
-Date:   Thu, 2 Jun 2022 18:12:10 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8ZadL1zw6i8KMO5fh9Q5arKi4oyBgssFPCtUsRXeJWQ=;
+        b=74Xls42noV6dGVcgYIu8X9xYwxmbYLGOqzzFjW9r0irpBqOHNa/4RElXKXQAy5wYbf
+         Zfe/fBOzyIoY937OyWBClGQ8YhWC/p7HrTMbb+/Qe4AP/QynfSLCFCnxoKtfHycaTYHu
+         TM77sT0teh7gxtm0OGhUtT+kBVytCf1Q5SXvkP/XAhDvNu0W8Er345aNCY1FRyNmtEu4
+         k97498Jprrg+nRZ0uirCv1TP+SIYmSJtogB1APlmksqLujK+M60inKWf/XwfLgOmdMcV
+         1zp61AQRKEVTM7L2mwXTHQBtj86av5sdaM8v9MYyd/ENsHaTjv2pzNntQeex7ULKxu7s
+         vSVw==
+X-Gm-Message-State: AOAM532eVkIK+oLoT8wjheFl8+ZPWTJVScRXjhnwYHd6ltdChk1IP3wt
+        pm64ZIfGUJsnAyHDvVkP0HsI0d71tNB6
+X-Google-Smtp-Source: ABdhPJzAwCQkxG7V7ktiZLgQzY3iiWykAD/DDTVfLswQC6nHYlfO/vO82ui1Cc1rqBIYY5AbTW/+Kw==
+X-Received: by 2002:a05:6870:348c:b0:e2:6df1:b1db with SMTP id n12-20020a056870348c00b000e26df1b1dbmr20482904oah.33.1654182850598;
+        Thu, 02 Jun 2022 08:14:10 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b36-20020a056870392400b000f349108868sm2179826oap.44.2022.06.02.08.14.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 08:14:10 -0700 (PDT)
+Received: (nullmailer pid 2339298 invoked by uid 1000);
+        Thu, 02 Jun 2022 15:14:09 -0000
+Date:   Thu, 2 Jun 2022 10:14:09 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Tanmay Shah <tanmay.shah@xilinx.com>
+Cc:     openamp-system-reference@lists.openampproject.org,
+        bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
+        krzk+dt@kernel.org, michal.simek@xilinx.com,
+        ben.levinsky@xilinx.com, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 1/6] dt-bindings: remoteproc: Add Xilinx RPU subsystem
+ bindings
+Message-ID: <20220602151409.GA2333778-robh@kernel.org>
+References: <20220531234308.3317795-1-tanmay.shah@xilinx.com>
+ <20220531234308.3317795-2-tanmay.shah@xilinx.com>
+ <20220601184240.GA188558-robh@kernel.org>
+ <d7854ce0-3553-3286-809c-651780fb91e5@xilinx.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 2/4] drm/panel-edp: Take advantage of
- wait_hpd_asserted() in struct drm_dp_aux
-Content-Language: en-GB
-To:     Douglas Anderson <dianders@chromium.org>,
-        dri-devel@lists.freedesktop.org
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Philip Chen <philipchen@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220418171757.2282651-1-dianders@chromium.org>
- <20220418101725.v3.2.Icea616f57331fbaa3d48c529f300c9a8ebd37fb5@changeid>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220418101725.v3.2.Icea616f57331fbaa3d48c529f300c9a8ebd37fb5@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d7854ce0-3553-3286-809c-651780fb91e5@xilinx.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/2022 20:17, Douglas Anderson wrote:
-> Let's add support for being able to read the HPD pin even if it's
-> hooked directly to the controller. This will allow us to get more
-> accurate delays also lets us take away the waiting in the AUX transfer
-> functions of the eDP controller drivers.
+On Wed, Jun 01, 2022 at 12:05:09PM -0700, Tanmay Shah wrote:
+> Hi Rob,
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-> ---
+> Thanks for reviews. Please find my comments below:
 > 
-> (no changes since v2)
+> On 6/1/22 11:42 AM, Rob Herring wrote:
+> > On Tue, May 31, 2022 at 04:43:05PM -0700, Tanmay Shah wrote:
+> > > Xilinx ZynqMP platform has dual-core ARM Cortex R5 Realtime Processing
+> > > Unit(RPU) subsystem. This patch adds dt-bindings for RPU subsystem
+> > > (cluster).
+> > > 
+> > > Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
+> > > ---
+> > > 
+> > > Changes in v6:
+> > >    - Add maxItems to sram and memory-region property
+> > > 
+> > > Changes in v5:
+> > > - Add constraints of the possible values of xlnx,cluster-mode property
+> > > - fix description of power-domains property for r5 core
+> > > - Remove reg, address-cells and size-cells properties as it is not required
+> > > - Fix description of mboxes property
+> > > - Add description of each memory-region and remove old .txt binding link
+> > >    reference in the description
+> > > 
+> > > Changes in v4:
+> > >    - Add memory-region, mboxes and mbox-names properties in example
+> > > 
+> > > Changes in v3:
+> > >    - None
+> > > 
+> > > 
+> > >   .../bindings/remoteproc/xlnx,r5f-rproc.yaml   | 129 ++++++++++++++++++
+> > >   include/dt-bindings/power/xlnx-zynqmp-power.h |   6 +
+> > >   2 files changed, 135 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
+> > > new file mode 100644
+> > > index 000000000000..cbff1c201a89
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
+> > > @@ -0,0 +1,129 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/remoteproc/xlnx,r5f-rproc.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Xilinx R5F processor subsystem
+> > > +
+> > > +maintainers:
+> > > +  - Ben Levinsky <ben.levinsky@xilinx.com>
+> > > +  - Tanmay Shah <tanmay.shah@xilinx.com>
+> > > +
+> > > +description: |
+> > > +  The Xilinx platforms include a pair of Cortex-R5F processors (RPU) for
+> > > +  real-time processing based on the Cortex-R5F processor core from ARM.
+> > > +  The Cortex-R5F processor implements the Arm v7-R architecture and includes a
+> > > +  floating-point unit that implements the Arm VFPv3 instruction set.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: xlnx,zynqmp-r5fss
+> > > +
+> > > +  xlnx,cluster-mode:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    enum: [0, 1, 2]
+> > > +    description: |
+> > > +      The RPU MPCore can operate in split mode(Dual-processor performance), Safety
+> > > +      lock-step mode(Both RPU cores execute the same code in lock-step,
+> > > +      clock-for-clock) or Single CPU mode (RPU core 0 can be held in reset while
+> > > +      core 1 runs normally). The processor does not support dynamic configuration.
+> > > +      Switching between modes is only permitted immediately after a processor reset.
+> > > +      If set to  1 then lockstep mode and if 0 then split mode.
+> > > +      If set to  2 then single CPU mode. When not defined, default will be lockstep mode.
+> > > +
+> > > +patternProperties:
+> > > +  "^r5f-[a-f0-9]+$":
+> > > +    type: object
+> > > +    description: |
+> > > +      The RPU is located in the Low Power Domain of the Processor Subsystem.
+> > > +      Each processor includes separate L1 instruction and data caches and
+> > > +      tightly coupled memories (TCM). System memory is cacheable, but the TCM
+> > > +      memory space is non-cacheable.
+> > > +
+> > > +      Each RPU contains one 64KB memory and two 32KB memories that
+> > > +      are accessed via the TCM A and B port interfaces, for a total of 128KB
+> > > +      per processor. In lock-step mode, the processor has access to 256KB of
+> > > +      TCM memory.
+> > > +
+> > > +    properties:
+> > > +      compatible:
+> > > +        const: xlnx,zynqmp-r5f
+> > > +
+> > > +      power-domains:
+> > > +        description: RPU core PM domain specifier
+> > > +        maxItems: 1
+> > > +
+> > > +      mboxes:
+> > > +        minItems: 1
+> > > +        items:
+> > > +          - description: mailbox channel to send data to RPU
+> > > +          - description: mailbox channel to receive data from RPU
+> > > +
+> > > +      mbox-names:
+> > > +        minItems: 1
+> > > +        items:
+> > > +          - const: tx
+> > > +          - const: rx
+> > > +
+> > > +      sram:
+> > > +        $ref: /schemas/types.yaml#/definitions/phandle-array
+> > > +        maxItems: 8
+> > minItems: 1
+> > maxItems: 8
+> > items:
+> >    maxItems: 1
 > 
-> Changes in v2:
-> - Change is_hpd_asserted() to wait_hpd_asserted()
+> I have posted v7 which adds "minItems: 1".
 > 
->   drivers/gpu/drm/panel/panel-edp.c | 33 +++++++++++++++++++++----------
->   1 file changed, 23 insertions(+), 10 deletions(-)
+> However, I didn't get items: part. Is it required to have items: now?
+
+Yes.
 > 
-> diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-> index 1732b4f56e38..086e0bf52fb9 100644
-> --- a/drivers/gpu/drm/panel/panel-edp.c
-> +++ b/drivers/gpu/drm/panel/panel-edp.c
-> @@ -417,6 +417,11 @@ static int panel_edp_get_hpd_gpio(struct device *dev, struct panel_edp *p)
->   	return 0;
->   }
->   
-> +static bool panel_edp_can_read_hpd(struct panel_edp *p)
-> +{
-> +	return !p->no_hpd && (p->hpd_gpio || (p->aux && p->aux->wait_hpd_asserted));
-> +}
-> +
->   static int panel_edp_prepare_once(struct panel_edp *p)
->   {
->   	struct device *dev = p->base.dev;
-> @@ -441,17 +446,21 @@ static int panel_edp_prepare_once(struct panel_edp *p)
->   	if (delay)
->   		msleep(delay);
->   
-> -	if (p->hpd_gpio) {
-> +	if (panel_edp_can_read_hpd(p)) {
->   		if (p->desc->delay.hpd_absent)
->   			hpd_wait_us = p->desc->delay.hpd_absent * 1000UL;
->   		else
->   			hpd_wait_us = 2000000;
->   
-> -		err = readx_poll_timeout(gpiod_get_value_cansleep, p->hpd_gpio,
-> -					 hpd_asserted, hpd_asserted,
-> -					 1000, hpd_wait_us);
-> -		if (hpd_asserted < 0)
-> -			err = hpd_asserted;
-> +		if (p->hpd_gpio) {
-> +			err = readx_poll_timeout(gpiod_get_value_cansleep,
-> +						 p->hpd_gpio, hpd_asserted,
-> +						 hpd_asserted, 1000, hpd_wait_us);
-> +			if (hpd_asserted < 0)
-> +				err = hpd_asserted;
-> +		} else {
-> +			err = p->aux->wait_hpd_asserted(p->aux, hpd_wait_us);
-> +		}
+> Can I add items: part once TCM bindings are posted?
 
-I'm close to thinking that this construct deserves a separate helper.
+No.
 
->   
->   		if (err) {
->   			if (err != -ETIMEDOUT)
-> @@ -532,18 +541,22 @@ static int panel_edp_enable(struct drm_panel *panel)
->   	/*
->   	 * If there is a "prepare_to_enable" delay then that's supposed to be
->   	 * the delay from HPD going high until we can turn the backlight on.
-> -	 * However, we can only count this if HPD is handled by the panel
-> -	 * driver, not if it goes to a dedicated pin on the controller.
-> +	 * However, we can only count this if HPD is readable by the panel
-> +	 * driver.
-> +	 *
->   	 * If we aren't handling the HPD pin ourselves then the best we
->   	 * can do is assume that HPD went high immediately before we were
-> -	 * called (and link training took zero time).
-> +	 * called (and link training took zero time). Note that "no-hpd"
-> +	 * actually counts as handling HPD ourselves since we're doing the
-> +	 * worst case delay (in prepare) ourselves.
->   	 *
->   	 * NOTE: if we ever end up in this "if" statement then we're
->   	 * guaranteed that the panel_edp_wait() call below will do no delay.
->   	 * It already handles that case, though, so we don't need any special
->   	 * code for it.
->   	 */
-> -	if (p->desc->delay.prepare_to_enable && !p->hpd_gpio && !p->no_hpd)
-> +	if (p->desc->delay.prepare_to_enable &&
-> +	    !panel_edp_can_read_hpd(p) && !p->no_hpd)
->   		delay = max(delay, p->desc->delay.prepare_to_enable);
->   
->   	if (delay)
+> I understand that minItems and maxItems under sram property decides how many
+> phandles sram can have.
+> 
+> However, maxItems: 1 under items: field what it describes?
 
+'phandle-array' is really a matrix type because we can have phandles 
+plus argument cells. So you have to define each of the 1-8 entries is a 
+single phandle cell (and no arg cells).
 
--- 
-With best wishes
-Dmitry
+Rob

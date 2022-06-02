@@ -2,105 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D1653BCD2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC1A53BCE3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237208AbiFBQvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 12:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
+        id S237317AbiFBQxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 12:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235749AbiFBQvS (ORCPT
+        with ESMTP id S237369AbiFBQxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 12:51:18 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748CB2B1977
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 09:51:17 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id o6-20020a17090a0a0600b001e2c6566046so9980567pjo.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 09:51:17 -0700 (PDT)
+        Thu, 2 Jun 2022 12:53:31 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211302B2EAA
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 09:53:24 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id m20so11070268ejj.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 09:53:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=TDQ+cU4491SkrItFnZHpClm+jYuYcgPGIy7tcDzQFG8=;
-        b=uOpcLIN9c4RrfisvBugPN3DU8GT5x7q/U3iglMCQS2iPkf6OGDg/RlBsS4TbrfuHa+
-         SF2uHL5r1DR1bUycKKwv4eHSrkxecyed8V89R24tG7kaZYXUpnYYnEB7FKXFMtiUNpcu
-         bD9YZs8MzgjVhzapu9xBK6NoVnvzgb9QwHMa/Nus9D2QIE167N2oav9Pst/sYQEhyW9P
-         eAu56AoaRhl33j/JSVbAUNYigMBLVC68FVIdZUrWi8MgzWb0atPoAZ/CukdYwy/HNS8N
-         Ot9ZWFGiAxMu2HaXyL4lzIaXLnSRACVX6pSCyvdAwZp56RWl8IxS4/ex0JjuzQd/jVHf
-         q58g==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JZ8UPU6ugki+PkwkthIYbz7oUO9hdXo6b9SQ7nkdwtM=;
+        b=L/0QynMd8+v88ZZU+c9xvsS2+4IBAk0qnvPWUUmgZAkop0TG4KZxd99dk7jRpG2xjP
+         KUc2tplVKuDgLdfIaBZhtckFNJvUhIHInGndmo36fHngmE8m6jBeiLD0zmlU+8/OdXH8
+         9Mhv3pV/nWVpkGYnhijstSeCiN20370swxDcIslOPlNz0qlzwWzr80kwtbP2UAzr+X5t
+         bT2vvDe3PqbnmNaxHJbmazQRDsxxA4Yh8PekOBHYmvau5bphFYS+zjlSYH/aafxUQ8Vo
+         hECS/upWIjnqQOS5ZSqLfaFOUr/hiOcHh2H6Rf5rblMMuM7gC2MEZPcSyYtpMgzVgJI9
+         7g8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=TDQ+cU4491SkrItFnZHpClm+jYuYcgPGIy7tcDzQFG8=;
-        b=cCx/likyYhPsAYMvE56kYp1mdzOBcXR8h2W321JKIBGBOc1HfHe4ardDjTjzjYyotu
-         eS4Ss3P4X8lfeHrfDz9ZshdR3LtJYUScbDCiMoiOzLbOb5Qe8zzuHOrmC1gWxy4k41Dn
-         Lqko9q0GIOuQgUGrXyB5jBHtgvMRE/DY7JNiORgKUauonBiURAlEtuBK5F1FtnLK5jiT
-         DDc4zcLnYAP5k2v5Muws29jFVifSHMilffzTleZcLwVLxmqvD+oc8UxoFHo2/d8vCsc8
-         /hriy/J+XR7qORyYtXB4FgD5jr86jgFGESbaq2LFlKqIImDtv5UfnGKAay2eYV6B+hUJ
-         OWAg==
-X-Gm-Message-State: AOAM532KASWLGtOtGr1LGHsUaqds+6y+Sju3YJdacjpWXL6yiUacLt/r
-        RvnefF7dWV/8GfqH4B2CmaVvLA==
-X-Google-Smtp-Source: ABdhPJxMosGB+Mky+SRCGAt1T9DAyMnXHNfnYdje10jH0ruMadl41RhUn/Hf0PTErE9vR4unxYUxWQ==
-X-Received: by 2002:a17:90a:fa5:b0:1e2:ee1b:8f85 with SMTP id 34-20020a17090a0fa500b001e2ee1b8f85mr6235190pjz.216.1654188676791;
-        Thu, 02 Jun 2022 09:51:16 -0700 (PDT)
-Received: from [192.168.254.36] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id u11-20020a63d34b000000b003c14af505f6sm3609472pgi.14.2022.06.02.09.51.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 09:51:16 -0700 (PDT)
-Message-ID: <902f1d2b-9e71-753c-566b-62a7d245c3a3@linaro.org>
-Date:   Thu, 2 Jun 2022 09:51:15 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JZ8UPU6ugki+PkwkthIYbz7oUO9hdXo6b9SQ7nkdwtM=;
+        b=a1RwKaNZHHNQHajq+owJJ3N4cL10bzCW3vFQT+Jc+zvo+QCyqUC48GJLGPLib7+zA5
+         6O3bBwMfOnDD6ztw2MnEZVt3IX/dEzX6X41OpMPe5KSozakK57I6y0RNmpsYjUfx/TSh
+         fijC//PBfan85ZXyQDyZqUujbhidRhJLgyXioBW30rdg6cf/CV+JDAPAR8GyWm9OwG/Y
+         yd3PsJZIsadsTWs0V3A4774utsfbTBCzr9frMzzGl9pshUOZGxlvnMqrFZaMiwGYvGK7
+         bFsa8a5gNVc2JvyyMoOS5D9ggpDkRi1C1kZ93+Fdghy5q8Wb1km4bIdv2qSwaMEvDl2e
+         SMug==
+X-Gm-Message-State: AOAM533GyGFEK7nb5bPCLEVOOY2JxcieovcGpcxpqb9jkpYZzpbFwIi0
+        qj3zy/vAxRp4tQ2zYJtGNvjlro/xA0XRRgrG8v+NvQ==
+X-Google-Smtp-Source: ABdhPJye4s8o1On+/9V61ouTi9MALoHFgmdsjmdC8JHeouR+fU7woYtXknF+evLqmso/PBYsaCxmbQR4cCcPLIhgO8M=
+X-Received: by 2002:a17:906:308f:b0:709:af33:9fa7 with SMTP id
+ 15-20020a170906308f00b00709af339fa7mr4961024ejv.369.1654188802902; Thu, 02
+ Jun 2022 09:53:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4] bpf: Fix KASAN use-after-free Read in
- compute_effective_progs
-Content-Language: en-US
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux- stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com
-References: <CAEf4BzY-p13huoqo6N7LJRVVj8rcjPeP3Cp=KDX4N2x9BkC9Zw@mail.gmail.com>
- <20220517180420.87954-1-tadeusz.struk@linaro.org>
- <7949d722-86e8-8122-e607-4b09944b76ae@linaro.org>
- <CAEf4BzaD1Z6uOZwbquPYWB0_Z0+CkEKiXQ6zS2imiSHpTgX3pg@mail.gmail.com>
- <41265f4d-45b4-a3a6-e0c0-5460d2a06377@linaro.org>
- <CAEf4Bza-fp-9j+dzwdJQagxVNseNofxY2aJV0E6eHw+eQyyeaQ@mail.gmail.com>
- <21780d7b-2fe0-e6b8-6b4c-7053ec7b99ef@linaro.org>
-In-Reply-To: <21780d7b-2fe0-e6b8-6b4c-7053ec7b99ef@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220530102017.471865-1-jose.exposito89@gmail.com>
+ <20220530102017.471865-2-jose.exposito89@gmail.com> <e26de140-afb7-7b1b-4826-6ac4f3a4fe02@redhat.com>
+In-Reply-To: <e26de140-afb7-7b1b-4826-6ac4f3a4fe02@redhat.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 2 Jun 2022 09:53:10 -0700
+Message-ID: <CAGS_qxpFO4ixW=08ZcdcD9J1kU=B3mwoBJkPW8AKu0sKs8aKfA@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/1] drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb332()
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        tzimmermann@suse.de, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, airlied@linux.ie, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/22 09:25, Tadeusz Struk wrote:
-> On 6/2/22 09:11, Andrii Nakryiko wrote:
->>> Did you get a chance to look at this yet?
->>>
->> Hm.. I've applied it two days ago, but for some reason there was no
->> notification from the bot. It's now c89c79fda9b6 ("bpf: Fix KASAN
->> use-after-free Read in compute_effective_progs").
+On Thu, Jun 2, 2022 at 9:27 AM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> > +CFLAGS_drm_format_helper_test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+> >
+>
+> A comment on why this is needed would useful.
 
-FYI. Just requested a test on bpf-next and it passed fine.
-https://groups.google.com/g/syzkaller-android-bugs/c/nr6mD4vhRA4
+Ah, I think that should not be necessary anymore.
+We added this to some tests to mitigate against compilers that didn't
+optimize away stack-local structs used internally in KUNIT_EXPECT*.
+Functions with ~30 or so EXPECTs could get flagged for excessively
+large stack frames.
 
--- 
-Thanks,
-Tadeusz
+But in 5.18, I had some patches to reduce the naive stack usage from
+[48..88] => [8..32] bytes per EXPECT.
+I also have some RFC patches out to get it down to [0, 24] bytes.
+
+So going forward, this should only be necessary if you have something
+like 100s of EXPECTs in a single function (in which case you should
+also consider splitting that function up).
+
+Daniel

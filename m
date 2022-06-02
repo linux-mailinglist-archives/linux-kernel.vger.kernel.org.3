@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E6053B4F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 10:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92BDE53B4F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 10:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232260AbiFBIZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 04:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
+        id S232301AbiFBIZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 04:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbiFBIZT (ORCPT
+        with ESMTP id S232259AbiFBIZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 04:25:19 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E4616581;
-        Thu,  2 Jun 2022 01:25:17 -0700 (PDT)
+        Thu, 2 Jun 2022 04:25:24 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DED1F60B;
+        Thu,  2 Jun 2022 01:25:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654158317; x=1685694317;
+  t=1654158323; x=1685694323;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=Uclr9TNqmmdXvvT/NbtqpYkZ+jeCIKQ2HEPc798ulwA=;
-  b=kdVmN3EnlNaz9Bujc8DHYRdvf7iInL3KSuk8AILjQam1TvDe7Jty9509
-   b+ITb9v1mwsoq9uCWmogX+wlZ1u0cm6WYMf+9o7ro0xJ65/SVhx3kw7Zw
-   eCc2AcU3yV9qJJgTHkoKtF388XrGw/He8kch3tlMRNnFTNeXbTRskgusD
-   k=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 02 Jun 2022 01:25:17 -0700
+  bh=WYW4d7D+CS129HBo6dQLjfN0OMcgEmaQaskPaNJ48pg=;
+  b=R5ZbxkD0cRZ3b28hDMGcyCACJMw7wyyqe4QY1uY6YhWKmwo3WhrMZsj0
+   sgTBxw8rJ9ZnG3frxEren2CsYxdEPkClny5xeItl87vSodpRWs7P1kNxu
+   ng/nXcc/Q/s9amirApBfB+7KWoapIbXY/c0RcrrOHM0Y6dWY4DQNm6DfY
+   g=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 02 Jun 2022 01:25:22 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 01:25:16 -0700
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 01:25:22 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 2 Jun 2022 01:25:16 -0700
+ 15.2.986.22; Thu, 2 Jun 2022 01:25:22 -0700
 Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 2 Jun 2022 01:25:09 -0700
+ 15.2.986.22; Thu, 2 Jun 2022 01:25:15 -0700
 From:   Krishna Kurapati <quic_kriskura@quicinc.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -55,9 +55,9 @@ CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
         Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
         Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from system suspend
-Date:   Thu, 2 Jun 2022 13:54:34 +0530
-Message-ID: <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+Subject: [PATCH v20 3/5] usb: dwc3: qcom: Add helper functions to enable,disable wake irqs
+Date:   Thu, 2 Jun 2022 13:54:35 +0530
+Message-ID: <1654158277-12921-4-git-send-email-quic_kriskura@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
 References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
@@ -78,71 +78,98 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 
-Check wakeup-source property for dwc3 core node to set the
-wakeup capability. Drop the device_init_wakeup call from
-runtime suspend and resume.
-
-If the dwc3 is wakeup capable, don't power down the USB PHY(s).
-The glue drivers are expected to take care of configuring the
-additional wakeup settings if needed based on the dwc3 wakeup
-capability status. In some SOC designs, powering off the PHY is
-resulting in higher leakage, so this patch save power on such boards.
+Adding helper functions to enable,disable wake irqs to make
+the code simple and readable.
 
 Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
 ---
- drivers/usb/dwc3/core.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/usb/dwc3/dwc3-qcom.c | 58 ++++++++++++++++++++------------------------
+ 1 file changed, 26 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index e027c04..b99d3c2 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1787,6 +1787,7 @@ static int dwc3_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, dwc);
- 	dwc3_cache_hwparams(dwc);
-+	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
- 
- 	spin_lock_init(&dwc->lock);
- 	mutex_init(&dwc->mutex);
-@@ -1948,7 +1949,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
- 		dwc3_core_exit(dwc);
- 		break;
- 	case DWC3_GCTL_PRTCAP_HOST:
--		if (!PMSG_IS_AUTO(msg)) {
-+		if (!PMSG_IS_AUTO(msg) && !device_can_wakeup(dwc->dev)) {
- 			dwc3_core_exit(dwc);
- 			break;
- 		}
-@@ -2009,7 +2010,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
- 		spin_unlock_irqrestore(&dwc->lock, flags);
- 		break;
- 	case DWC3_GCTL_PRTCAP_HOST:
--		if (!PMSG_IS_AUTO(msg)) {
-+		if (!PMSG_IS_AUTO(msg) && !device_can_wakeup(dwc->dev)) {
- 			ret = dwc3_core_init_for_resume(dwc);
- 			if (ret)
- 				return ret;
-@@ -2086,8 +2087,6 @@ static int dwc3_runtime_suspend(struct device *dev)
- 	if (ret)
- 		return ret;
- 
--	device_init_wakeup(dev, true);
--
- 	return 0;
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 6cba990..7352124 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -296,50 +296,44 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
+ 	icc_put(qcom->icc_path_apps);
  }
  
-@@ -2096,8 +2095,6 @@ static int dwc3_runtime_resume(struct device *dev)
- 	struct dwc3     *dwc = dev_get_drvdata(dev);
- 	int		ret;
++static void dwc3_qcom_enable_wakeup_irq(int irq)
++{
++	if (!irq)
++		return;
++
++	enable_irq(irq);
++	enable_irq_wake(irq);
++}
++
++static void dwc3_qcom_disable_wakeup_irq(int irq)
++{
++	if (!irq)
++		return;
++
++	disable_irq_wake(irq);
++	disable_irq_nosync(irq);
++}
++
+ static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
+ {
+-	if (qcom->hs_phy_irq) {
+-		disable_irq_wake(qcom->hs_phy_irq);
+-		disable_irq_nosync(qcom->hs_phy_irq);
+-	}
++	dwc3_qcom_disable_wakeup_irq(qcom->hs_phy_irq);
  
--	device_init_wakeup(dev, false);
--
- 	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
- 	if (ret)
- 		return ret;
+-	if (qcom->dp_hs_phy_irq) {
+-		disable_irq_wake(qcom->dp_hs_phy_irq);
+-		disable_irq_nosync(qcom->dp_hs_phy_irq);
+-	}
++	dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
+ 
+-	if (qcom->dm_hs_phy_irq) {
+-		disable_irq_wake(qcom->dm_hs_phy_irq);
+-		disable_irq_nosync(qcom->dm_hs_phy_irq);
+-	}
++	dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
+ 
+-	if (qcom->ss_phy_irq) {
+-		disable_irq_wake(qcom->ss_phy_irq);
+-		disable_irq_nosync(qcom->ss_phy_irq);
+-	}
++	dwc3_qcom_disable_wakeup_irq(qcom->ss_phy_irq);
+ }
+ 
+ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
+ {
+-	if (qcom->hs_phy_irq) {
+-		enable_irq(qcom->hs_phy_irq);
+-		enable_irq_wake(qcom->hs_phy_irq);
+-	}
++	dwc3_qcom_enable_wakeup_irq(qcom->hs_phy_irq);
+ 
+-	if (qcom->dp_hs_phy_irq) {
+-		enable_irq(qcom->dp_hs_phy_irq);
+-		enable_irq_wake(qcom->dp_hs_phy_irq);
+-	}
++	dwc3_qcom_enable_wakeup_irq(qcom->dp_hs_phy_irq);
+ 
+-	if (qcom->dm_hs_phy_irq) {
+-		enable_irq(qcom->dm_hs_phy_irq);
+-		enable_irq_wake(qcom->dm_hs_phy_irq);
+-	}
++	dwc3_qcom_enable_wakeup_irq(qcom->dm_hs_phy_irq);
+ 
+-	if (qcom->ss_phy_irq) {
+-		enable_irq(qcom->ss_phy_irq);
+-		enable_irq_wake(qcom->ss_phy_irq);
+-	}
++	dwc3_qcom_enable_wakeup_irq(qcom->ss_phy_irq);
+ }
+ 
+ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
 -- 
 2.7.4
 

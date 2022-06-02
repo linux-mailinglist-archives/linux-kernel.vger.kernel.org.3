@@ -2,100 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8824653B462
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7F953B466
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbiFBHfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 03:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
+        id S231811AbiFBHfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 03:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiFBHf2 (ORCPT
+        with ESMTP id S230105AbiFBHfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 03:35:28 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4418B38DA1;
-        Thu,  2 Jun 2022 00:35:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654155327; x=1685691327;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=guW2S9dJLzjEzn/tbSdMDgpb8Z56ie57XqS2+J+2Pe0=;
-  b=Kfe75JAQUym80SFUmkfz10vlF2w8CPYNk2ZrmGEazHs4ys9Zz7K2dhii
-   4AL5Qh+UhvdUDi6J/UanqpJM5p8JDMteVqX7nQ1phnW0FHNWJawChMflK
-   eQCvhTdjZRGfoCpbO4BVaCf68SAFYgQOPCpEdygpYQ2WGTr3Ym4PEgWEn
-   22rFtaISo1+H1t8QQV9vGskNYLnZnVCFdGzT8Zv9mwHfzy67HDl5pPGr+
-   PMBw7z+X9B/p8XkTyq11Hz4H76gu0ivr0x23j7sHbFQbT5tVDvgsUKueS
-   wxDhuGoX90dwyrOwU2dPwU0EFZpr2ilNrB2poS4X/thGFsUBST6Xb3NXP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="263495536"
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="263495536"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 00:35:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="606706523"
-Received: from mike-ilbpg1.png.intel.com ([10.88.227.76])
-  by orsmga008.jf.intel.com with ESMTP; 02 Jun 2022 00:35:21 -0700
-From:   Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Tan Tee Min <tee.min.tan@intel.com>
-Subject: [net-next 1/1] stmmac: intel: Add RPL-P PCI ID
-Date:   Thu,  2 Jun 2022 15:35:07 +0800
-Message-Id: <20220602073507.3955721-1-michael.wei.hong.sit@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Jun 2022 03:35:31 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85F638DA1
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 00:35:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VF9ffSI_1654155321;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VF9ffSI_1654155321)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 02 Jun 2022 15:35:27 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     zhenyuw@linux.intel.com
+Cc:     zhi.a.wang@intel.com, jani.nikula@linux.intel.com,
+        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+        tvrtko.ursulin@linux.intel.com, airlied@linux.ie, daniel@ffwll.ch,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] drm/i915/gvt: Fix kernel-doc
+Date:   Thu,  2 Jun 2022 15:35:19 +0800
+Message-Id: <20220602073519.22363-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add PCI ID for Ethernet TSN Controller on RPL-P.
+Fix the following W=1 kernel warnings:
 
-Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
+drivers/gpu/drm/i915/gvt/aperture_gm.c:308: warning: expecting prototype
+for inte_gvt_free_vgpu_resource(). Prototype was for
+intel_vgpu_free_resource() instead.
+
+drivers/gpu/drm/i915/gvt/aperture_gm.c:344: warning: expecting prototype
+for intel_alloc_vgpu_resource(). Prototype was for
+intel_vgpu_alloc_resource() instead.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/i915/gvt/aperture_gm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-index 0b0be0898ac5..f9f80933e0c9 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -1161,6 +1161,7 @@ static SIMPLE_DEV_PM_OPS(intel_eth_pm_ops, intel_eth_pci_suspend,
- #define PCI_DEVICE_ID_INTEL_ADLS_SGMII1G_0	0x7aac
- #define PCI_DEVICE_ID_INTEL_ADLS_SGMII1G_1	0x7aad
- #define PCI_DEVICE_ID_INTEL_ADLN_SGMII1G	0x54ac
-+#define PCI_DEVICE_ID_INTEL_RPLP_SGMII1G	0x51ac
+diff --git a/drivers/gpu/drm/i915/gvt/aperture_gm.c b/drivers/gpu/drm/i915/gvt/aperture_gm.c
+index 557f3314291a..3b81a6d35a7b 100644
+--- a/drivers/gpu/drm/i915/gvt/aperture_gm.c
++++ b/drivers/gpu/drm/i915/gvt/aperture_gm.c
+@@ -298,7 +298,7 @@ static int alloc_resource(struct intel_vgpu *vgpu,
+ }
  
- static const struct pci_device_id intel_eth_pci_id_table[] = {
- 	{ PCI_DEVICE_DATA(INTEL, QUARK, &quark_info) },
-@@ -1179,6 +1180,7 @@ static const struct pci_device_id intel_eth_pci_id_table[] = {
- 	{ PCI_DEVICE_DATA(INTEL, ADLS_SGMII1G_0, &adls_sgmii1g_phy0_info) },
- 	{ PCI_DEVICE_DATA(INTEL, ADLS_SGMII1G_1, &adls_sgmii1g_phy1_info) },
- 	{ PCI_DEVICE_DATA(INTEL, ADLN_SGMII1G, &tgl_sgmii1g_phy0_info) },
-+	{ PCI_DEVICE_DATA(INTEL, RPLP_SGMII1G, &tgl_sgmii1g_phy0_info) },
- 	{}
- };
- MODULE_DEVICE_TABLE(pci, intel_eth_pci_id_table);
+ /**
+- * inte_gvt_free_vgpu_resource - free HW resource owned by a vGPU
++ * intel_vgpu_free_resource() - free HW resource owned by a vGPU
+  * @vgpu: a vGPU
+  *
+  * This function is used to free the HW resource owned by a vGPU.
+@@ -328,7 +328,7 @@ void intel_vgpu_reset_resource(struct intel_vgpu *vgpu)
+ }
+ 
+ /**
+- * intel_alloc_vgpu_resource - allocate HW resource for a vGPU
++ * intel_vgpu_alloc_resource() - allocate HW resource for a vGPU
+  * @vgpu: vGPU
+  * @param: vGPU creation params
+  *
 -- 
-2.25.1
+2.20.1.7.g153144c
 

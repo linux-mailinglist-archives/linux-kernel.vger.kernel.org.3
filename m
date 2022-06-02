@@ -2,211 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D489553C011
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CDAC53C015
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239030AbiFBU4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 16:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
+        id S239273AbiFBU43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 16:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiFBU4G (ORCPT
+        with ESMTP id S239212AbiFBU4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 16:56:06 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A1833EB4;
-        Thu,  2 Jun 2022 13:56:04 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id cx11so5938980pjb.1;
-        Thu, 02 Jun 2022 13:56:04 -0700 (PDT)
+        Thu, 2 Jun 2022 16:56:16 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B06A34B85
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 13:56:14 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-30ec2aa3b6cso63849237b3.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 13:56:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dw6l8zIZ5qVjCuzEpteWubruDjlOh5Cx0mWoCv3VXRs=;
-        b=DitXn94UgChiQHx73iW+wOBCS3ZRS2C8sTau6bp8IOuFeYK3QqLmHmk64o4S25D2yK
-         2iqfThFqVg5nDlvLjxEScm4MaGpJSOljYolinO3E0rqlcPu2HdN12Ljxpt7Wk3Zi0I+f
-         jRfseuMfZC7CV9PJpxzEbWXiVKXitbwpSlOiJmKcsjITWMkTM4KgbIRDv+KY9vMQKU9r
-         DEeelPRFYT9hMsks/pZdh5V4PN4XCjMnAUM7BspHxrA7njoAL8bwaxQznnXyi4bfXPJy
-         dzZMn3/BJXKStS1gQFEx0Aq2D3Inu7stCg3LtK26oQzCzFK1y8zzhDSwaWWfiwSRCHYN
-         URnw==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=d+MLllrTnVLTVuNtzK3RkWrOuNSSWMmwIaiBnbLtjnI=;
+        b=bP2Bg9kPaoZeUOZTwDrCf0TcA+yFfRTyMPXiyBc1hgaOcOhU/7J6HXpUJAtG0vGXe2
+         HdiVuKHQ73+Sw6+AW2z0L7B1Zsq49m0EOs8HolvzyvIAHihXph0OX/EBNR9r+H2kwGg5
+         t0Tv6/pTSym6LNcptuCtK0UtS6rHSK3/p0HDzjbM35P+QVVx1b9hFaP01w4lpi2w19ri
+         CpgzaJ6JCIMU59184vXDSaP/UrOHUA/1xCZF0mJMj12N/l7Bbr0PLi7jJ04MvIc6tYCG
+         tcjfS5PI7JJFlAWRY4yMBNBphwLp9KqnO6CQ1HYhKtGa7S81lqwsIX6SVwOghQ5lGL5L
+         qKlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dw6l8zIZ5qVjCuzEpteWubruDjlOh5Cx0mWoCv3VXRs=;
-        b=5pLg+c5LbgMmHwk9DxhmSpYkUx9FZ7f8+Wq12w7tKqjdWcTs5z7jFogpYAJjXVdHH9
-         JTbGwrOnSPDclgVWlG7ZKrfM9tQ+arWhX6m4pUkkAHSksfKlQIE7Yw/K8Np8zrwYqfx3
-         f0UMhje5s5hKJGAUAVPYpXeXul24aL3gOR1xvvBK+Yk7OwGAiO+IocSLsRRxQXleRRN8
-         MbeczWaNLQFOfT1vdREWgWiz1NDmnM26xKn3Vv+KCFBZ6h5v1cIqz2Z5k5zKr210P62y
-         mw3pCEF7NgPFWQBXh6C6IcSYc3cQWxiiAr3I+S20A4amyYvWdONV1DIM9HyLcfnp89xN
-         3/YQ==
-X-Gm-Message-State: AOAM5336skOUsqAweEk9wRJ10wu+zCjKyBIfgtR0mC9r2MqUbg1Tn2yt
-        inl9MqF1J9bXffSHuHatvrNOEMRfHXDDntr+Tq0=
-X-Google-Smtp-Source: ABdhPJwXTEG4AY9RTeveA2AmonaIPfEMCfEchsXw+7hhOaD4a05RE9O8akifcB6h9IqG5fhRxvTFiLHVSLh3GVxbXcE=
-X-Received: by 2002:a17:90a:4803:b0:1dc:b4c9:1958 with SMTP id
- a3-20020a17090a480300b001dcb4c91958mr41970103pjh.61.1654203363967; Thu, 02
- Jun 2022 13:56:03 -0700 (PDT)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=d+MLllrTnVLTVuNtzK3RkWrOuNSSWMmwIaiBnbLtjnI=;
+        b=uFngIiA+W5m0IRTUKMZ02lJOodrZ4Lzk8KlBnRPoHwDbvfXd4oyAmQnsXBM8Vkruzv
+         8n2xEx0preHv2rr36eVv044aLb7ErUjL+i1ynRfnOJZmRjL0wTU3F5hMaG7oNik4UPgb
+         gHCYj5laS/YZeVwXLmTfIvS7KLvKuwYvYx0Mr9ya6/f3htzK02dHLWOPHOlJC3ruVpIx
+         3XbUQAl6hU1lhtl0l5Q8+QiYJptgCtO/WHJboyJgVcAbLzYATYCpj1FdxIc8NUVmyCsA
+         d46FRwcCCoDteLr7KjvWQmydZkgVSsCJfjbDE9xOwkjUge+7HGtRo2e5Cl6nt6yxvkk8
+         wztA==
+X-Gm-Message-State: AOAM533nBEwICD7b59Kcw4X0DR7x4Mqwzv6nnKiq0rS36lHqs2WqcN7f
+        1l+vwBeLVB/oLZ9O4xVpQ3gkkj7EqvdeXYpR330=
+X-Google-Smtp-Source: ABdhPJzz4CIFTzLwRd4bDwRghcuq8KmAMJuf1ZQNKj3c2Lo/OmAL2dCZKUleJ315pEcSs8xxcj3S1aQ8FnTEFw1HYHw=
+X-Received: by 2002:a81:1358:0:b0:30c:2e28:4050 with SMTP id
+ 85-20020a811358000000b0030c2e284050mr7698599ywt.206.1654203372355; Thu, 02
+ Jun 2022 13:56:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220602191949.31311-1-schspa@gmail.com>
-In-Reply-To: <20220602191949.31311-1-schspa@gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Thu, 2 Jun 2022 13:55:52 -0700
-Message-ID: <CABBYNZJw=bY8T_HkWF2cTbFNg=973Deu0sHPUa2R5k7T13-WKA@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: When HCI work queue is drained, only queue
- chained work
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        syzbot+63bed493aebbf6872647@syzkaller.appspotmail.com
+Sender: bbchitex6@gmail.com
+Received: by 2002:a81:d447:0:0:0:0:0 with HTTP; Thu, 2 Jun 2022 13:56:11 -0700 (PDT)
+From:   "Mr.Patrick Joseph" <patrickjos09@gmail.com>
+Date:   Thu, 2 Jun 2022 13:56:11 -0700
+X-Google-Sender-Auth: 2x_0MgxYCCazRZg9th9WovhcOhY
+Message-ID: <CADX4xg+gCaCydEs1Tz5F-66oRNkS3vNJUkBVhip+COD_if2nGA@mail.gmail.com>
+Subject: I expect your urgent reply
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_80,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1132 listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8533]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [patrickjos09[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [bbchitex6[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.6 URG_BIZ Contains urgent matter
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  0.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Schspa,
+Hello Friend,
 
-On Thu, Jun 2, 2022 at 12:20 PM Schspa Shi <schspa@gmail.com> wrote:
->
-> The HCI command, event, and data packet processing workqueue is drained
-> to avoid deadlock in commit
-> 76727c02c1e1 ("Bluetooth: Call drain_workqueue() before resetting state").
->
-> There is another delayed work, which will queue command to this drained
-> workqueue. Which results in the following error report:
->
-> Bluetooth: hci2: command 0x040f tx timeout
-> WARNING: CPU: 1 PID: 18374 at kernel/workqueue.c:1438 __queue_work+0xdad/0x1140
-> Workqueue: events hci_cmd_timeout
-> RIP: 0010:__queue_work+0xdad/0x1140
-> RSP: 0000:ffffc90002cffc60 EFLAGS: 00010093
-> RAX: 0000000000000000 RBX: ffff8880b9d3ec00 RCX: 0000000000000000
-> RDX: ffff888024ba0000 RSI: ffffffff814e048d RDI: ffff8880b9d3ec08
-> RBP: 0000000000000008 R08: 0000000000000000 R09: 00000000b9d39700
-> R10: ffffffff814f73c6 R11: 0000000000000000 R12: ffff88807cce4c60
-> R13: 0000000000000000 R14: ffff8880796d8800 R15: ffff8880796d8800
-> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000000c0174b4000 CR3: 000000007cae9000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  ? queue_work_on+0xcb/0x110
->  ? lockdep_hardirqs_off+0x90/0xd0
->  queue_work_on+0xee/0x110
->  process_one_work+0x996/0x1610
->  ? pwq_dec_nr_in_flight+0x2a0/0x2a0
->  ? rwlock_bug.part.0+0x90/0x90
->  ? _raw_spin_lock_irq+0x41/0x50
->  worker_thread+0x665/0x1080
->  ? process_one_work+0x1610/0x1610
->  kthread+0x2e9/0x3a0
->  ? kthread_complete_and_exit+0x40/0x40
->  ret_from_fork+0x1f/0x30
->  </TASK>
->
-> To fix this, we can add a new HCI_DRAIN_WQ flag, and don't queue the
-> timeout workqueue while command workqueue is draining.
->
-> Fixes: 76727c02c1e1 ("Bluetooth: Call drain_workqueue() before resetting state")
-> Reported-by: syzbot+63bed493aebbf6872647@syzkaller.appspotmail.com
-> Signed-off-by: Schspa Shi <schspa@gmail.com>
->
-> Changelog:
-> v1 -> v2:
->         - Move the workqueue drain flag to controller flags, and use hci_dev_*_flag.
->         - Add missing ncmd_timer cancel.
->         - Clear DRAIN_WORKQUEUE flag after device command flushed.
-> ---
->  include/net/bluetooth/hci.h |  1 +
->  net/bluetooth/hci_core.c    | 10 +++++++++-
->  net/bluetooth/hci_event.c   |  5 +++--
->  3 files changed, 13 insertions(+), 3 deletions(-)
->
-> diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
-> index fe7935be7dc4..4a45c48eb0d2 100644
-> --- a/include/net/bluetooth/hci.h
-> +++ b/include/net/bluetooth/hci.h
-> @@ -361,6 +361,7 @@ enum {
->         HCI_QUALITY_REPORT,
->         HCI_OFFLOAD_CODECS_ENABLED,
->         HCI_LE_SIMULTANEOUS_ROLES,
-> +       HCI_CMD_DRAIN_WORKQUEUE,
->
->         __HCI_NUM_FLAGS,
->  };
-> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> index 5abb2ca5b129..e908fdc4625c 100644
-> --- a/net/bluetooth/hci_core.c
-> +++ b/net/bluetooth/hci_core.c
-> @@ -593,6 +593,11 @@ static int hci_dev_do_reset(struct hci_dev *hdev)
->         skb_queue_purge(&hdev->rx_q);
->         skb_queue_purge(&hdev->cmd_q);
->
-> +       /* Cancel these not cahined pending work */
-> +       hci_dev_set_flag(hdev, HCI_CMD_DRAIN_WORKQUEUE);
+I apologize for contacting you this way, I am writing you this mail to
+solicit for your cooperation in a very confidential business
+transaction of $16.5 million. However, it is not authorized by the
+rules guiding our bank for a citizen of Burkina Faso to make the claim
+of the fund unless you are a foreigner, I ask you can we work
+together, I will be pleased to work with you I propose a 40% of the
+total amount to you after receiving the funds successfully, and I
+assure you that this transaction is 100% risks free. Reply me as soon
+as possible so that I will let you know the next steps and procedures
+to follow in order to finalize this transaction immediately.
 
-There seems to be a typo on the comment line 'cahined', also perhaps
-you test it before setting it so we don't risk flushing multiple
-times?
+I expect your urgent reply
 
-> +       cancel_delayed_work(&hdev->cmd_timer);
-> +       cancel_delayed_work(&hdev->ncmd_timer);
-> +
->         /* Avoid potential lockdep warnings from the *_flush() calls by
->          * ensuring the workqueue is empty up front.
->          */
-> @@ -606,6 +611,8 @@ static int hci_dev_do_reset(struct hci_dev *hdev)
->         if (hdev->flush)
->                 hdev->flush(hdev);
->
-> +       hci_dev_clear_flag(hdev, HCI_CMD_DRAIN_WORKQUEUE);
-> +
->         atomic_set(&hdev->cmd_cnt, 1);
->         hdev->acl_cnt = 0; hdev->sco_cnt = 0; hdev->le_cnt = 0;
->
-> @@ -3861,7 +3868,8 @@ static void hci_cmd_work(struct work_struct *work)
->                         if (res < 0)
->                                 __hci_cmd_sync_cancel(hdev, -res);
->
-> -                       if (test_bit(HCI_RESET, &hdev->flags))
-> +                       if (test_bit(HCI_RESET, &hdev->flags) ||
-> +                           hci_dev_test_flag(hdev, HCI_CMD_DRAIN_WORKQUEUE))
->                                 cancel_delayed_work(&hdev->cmd_timer);
->                         else
->                                 schedule_delayed_work(&hdev->cmd_timer,
-> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-> index af17dfb20e01..7cb956d3abb2 100644
-> --- a/net/bluetooth/hci_event.c
-> +++ b/net/bluetooth/hci_event.c
-> @@ -3768,8 +3768,9 @@ static inline void handle_cmd_cnt_and_timer(struct hci_dev *hdev, u8 ncmd)
->                         cancel_delayed_work(&hdev->ncmd_timer);
->                         atomic_set(&hdev->cmd_cnt, 1);
->                 } else {
-> -                       schedule_delayed_work(&hdev->ncmd_timer,
-> -                                             HCI_NCMD_TIMEOUT);
-> +                       if (!hci_dev_test_flag(hdev, HCI_CMD_DRAIN_WORKQUEUE))
-> +                               schedule_delayed_work(&hdev->ncmd_timer,
-> +                                                     HCI_NCMD_TIMEOUT);
->                 }
->         }
->  }
-> --
-> 2.24.3 (Apple Git-128)
->
-
-
--- 
-Luiz Augusto von Dentz
+Regards.
+Mr. Patrick Joseph.

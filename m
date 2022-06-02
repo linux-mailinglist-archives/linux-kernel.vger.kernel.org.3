@@ -2,113 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4AF53C0FD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 00:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D31C53C11B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 00:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239813AbiFBWsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 18:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
+        id S239820AbiFBWue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 18:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232319AbiFBWr6 (ORCPT
+        with ESMTP id S239696AbiFBWuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 18:47:58 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2215BCA5
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 15:47:56 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id h1so5598697plf.11
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 15:47:56 -0700 (PDT)
+        Thu, 2 Jun 2022 18:50:32 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8923237A87
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 15:50:31 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id e11-20020a9d6e0b000000b0060afcbafa80so4417265otr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 15:50:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qhaR4e3vQjTLHvjrXQ9re1JFbmDeoxPoZ7W193bvUbU=;
-        b=IA3E5PQIq4uDRkPun/Z2gHm34/GwwSEiI+6cTnHaVjb6Jg02RdGH0gZUqxZPUuY8Eq
-         +IwTCUfLIKeX+QJfuh13pJurnBjkJFDC21FezD/V+f6FmtnesJ5KTFr4CHsJGJSPYTS9
-         MorbPEf8eYpnb6TyefejlvRm+wevB7izJaDF/N7kBAD9xuKBlG0Rc+A0l8EJLeLc0PXd
-         jb0GazTVJTj7BDjzIUFAv5SnZoS5UU/fQNXn28MRmGEG6kqbYpPc+7Wbu+P90lPzF+Le
-         7tKC6cNZnRMbBHLkx6jtRk9kCfziB0f3NWyUKali6387OvpEPt4DsFLzwo7UOHpVwhIb
-         R1cQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EvwnZSWxH+4SifzKqxHbq0ZX5vJRMwq56kMlLvV2OGo=;
+        b=kryx6LW9tji/L4CwgvZextEC/IsovFlRWxQlQITpabh0P+jCDq6Xmi5zv1hhV3qc69
+         1dGMqSYH7Ea+oBBqN/SbV3ToPfYmpZqUw6MdcKBYzoPatckhtYXlCZJAoa3uoTSf5cOv
+         i9sIgwPm9H+xL+g1bABZXEVD9AbfFRUsI6zBnx/FPRaLH2Fd7TjZEUC5ZYflToRxObRb
+         PPTl2O2zRJnxpUkOaVMwEZxcgagLkSlKQi9OTG3KqNaNvjj40Nv8ir3G1gtdbLil2+ju
+         02lezCvR0iQUX3Y1MyQsDyBPdAv0c8uNS4w+Q6mHKG4EMqFaZU9pcO1YRPmBDiKoYk71
+         EwMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=qhaR4e3vQjTLHvjrXQ9re1JFbmDeoxPoZ7W193bvUbU=;
-        b=rD9F/HMw6/azSrHrPWkeAOrJDKN7n3PA/7X3olueROEgG76sgYAEBh6qUXItl04+on
-         tOPNohqBAyM2GiOJk9sHB8762AcFWcACaDcXUoptnEF5Xb7xyZPYblNJkMrwzosgGmcQ
-         wnUH7+AlP3947+ougFvgB0uh8r2b8kn26iGCFtjcdAdjlxQE9kOAqUI6BWgxGpd8GAo5
-         +HhvPGVJZ/K8wN0R9HimuF9blpz8ehyBc4cqu+Wuuh/x5iTw2gMyYUjMsPdplFml6P76
-         q+J1FmSqNWS3QL8Rmgl/Rq6ElKS3nsZ+8mvHsObHBtD96IabgtIiy/TVsnd2fQc9RkNL
-         VEDg==
-X-Gm-Message-State: AOAM532oQzvJl4BeUaMyeDfKIdcPQZqfsfvQnsUAQs0h4WymQshwMka+
-        kZqeyatx5kZHqcQ3gQG/nNI=
-X-Google-Smtp-Source: ABdhPJzvamBhV69v7cfaRL7jQWcjsTv95DqdPHYhCvPEBjgRtSKS7SC2UlK6KcDuUXVUBh4JsAe2jw==
-X-Received: by 2002:a17:902:d491:b0:167:49df:6e00 with SMTP id c17-20020a170902d49100b0016749df6e00mr160292plg.148.1654210076137;
-        Thu, 02 Jun 2022 15:47:56 -0700 (PDT)
-Received: from balhae.corp.google.com ([2620:15c:2c1:200:84f2:5eb8:b22d:654d])
-        by smtp.gmail.com with ESMTPSA id e3-20020a170902cf4300b0015e8d4eb29csm3975062plg.230.2022.06.02.15.47.55
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EvwnZSWxH+4SifzKqxHbq0ZX5vJRMwq56kMlLvV2OGo=;
+        b=57FeuuJBeTNjUGPbVuzdWfPiIMxfv1jLkFvpXtYVgOw3dpwMG2uJ8GkaBA0guDyIpb
+         idvSnCehVldWB08DxWwN9gket/s633ZBTYN7yLG9EFdterOGOMxH59U13G/wDnK2z0TU
+         r8D0oixr8Mw7aZ+DVQX82wNwmhYNIMP+JXbY0cx7gVTOC87AO2+VncMp+oNcGg3EQKoq
+         NWwTq8PSnPJQpz8SQbSXpFkGm+ng+cZj6h7kNh0MgZFNyEB05eipk92vf81KufSS5bQF
+         yA6cSkClt5COMqqMAS8AujkhCoMiMe9ZDv3wueE57CvzvFcGUIgjYFK1AYaGzKK+Ibua
+         jErg==
+X-Gm-Message-State: AOAM533wtYO6/cON6OJXGSJ4G5wOw1HexYzb/m6MRBr1vkmEkLQb+kt9
+        KaCm+bU1zk19MkA8pTkje/o=
+X-Google-Smtp-Source: ABdhPJxxadeFiTJMRE7rvaCtmz+LSvWQU0W5TWQujivIEO+FxWbA8OobF1MRkD3DYWtLdc0caUj3fw==
+X-Received: by 2002:a9d:71d5:0:b0:60b:74e:dbb5 with SMTP id z21-20020a9d71d5000000b0060b074edbb5mr3027610otj.119.1654210230699;
+        Thu, 02 Jun 2022 15:50:30 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id ga9-20020a056870ee0900b000f5ccbb7d75sm2616398oab.1.2022.06.02.15.50.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 15:47:55 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        James Morris <jmorris@namei.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH] perf/core: Call LSM hook after copying perf_event_attr
-Date:   Thu,  2 Jun 2022 15:47:54 -0700
-Message-Id: <20220602224754.602074-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+        Thu, 02 Jun 2022 15:50:30 -0700 (PDT)
+Date:   Thu, 2 Jun 2022 15:48:16 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marco Elver <elver@google.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/2] cpumask: Fix invalid uniprocessor mask assumption
+Message-ID: <Ypk+MKSSaSCBnITY@yury-laptop>
+References: <cover.1654201862.git.sander@svanheule.net>
+ <017b97698ba58d33bf45d30317d5a73c5b93d2a0.1654201862.git.sander@svanheule.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <017b97698ba58d33bf45d30317d5a73c5b93d2a0.1654201862.git.sander@svanheule.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It passes the attr struct to the security_perf_event_open() but it's
-not initialized yet.
-
-Fixes: da97e18458fb ("perf_event: Add support for LSM and SELinux checks")
-Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- kernel/events/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 7858bafffa9d..e035545f624f 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -12033,12 +12033,12 @@ SYSCALL_DEFINE5(perf_event_open,
- 	if (flags & ~PERF_FLAG_ALL)
- 		return -EINVAL;
+On Thu, Jun 02, 2022 at 11:04:19PM +0200, Sander Vanheule wrote:
+> On uniprocessor builds, any CPU mask is assumed to contain exactly one
+> CPU (cpu0). This ignores the existence of empty masks, resulting in
+> incorrect behaviour for most of the implemented optimisations.
+> 
+> Replace the uniprocessor optimisations with implementations that also
+> take into account empty masks. Also drop the incorrectly optimised
+> for_each_cpu implementations and use the generic implementations in all
+> cases.
+> 
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> ---
+>  include/linux/cpumask.h | 35 +++++++++++++++--------------------
+>  1 file changed, 15 insertions(+), 20 deletions(-)
+> 
+> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+> index fe29ac7cc469..ce8c7b27f6c9 100644
+> --- a/include/linux/cpumask.h
+> +++ b/include/linux/cpumask.h
+> @@ -117,51 +117,54 @@ static __always_inline unsigned int cpumask_check(unsigned int cpu)
+>  }
+>  
+>  #if NR_CPUS == 1
+> -/* Uniprocessor.  Assume all masks are "1". */
+> +/* Uniprocessor. Assume all valid masks are "1" or empty. */
+>  static inline unsigned int cpumask_first(const struct cpumask *srcp)
+>  {
+> -	return 0;
+> +	return !(*cpumask_bits(srcp) & 1);
+>  }
  
--	/* Do we allow access to perf_event_open(2) ? */
--	err = security_perf_event_open(&attr, PERF_SECURITY_OPEN);
-+	err = perf_copy_attr(attr_uptr, &attr);
- 	if (err)
- 		return err;
- 
--	err = perf_copy_attr(attr_uptr, &attr);
-+	/* Do we allow access to perf_event_open(2) ? */
-+	err = security_perf_event_open(&attr, PERF_SECURITY_OPEN);
- 	if (err)
- 		return err;
- 
--- 
-2.36.1.255.ge46751e96f-goog
+I think, you can just drop this '#if NR_CPUS == 1' part and rely on SMP
+versions. find_first_bit() is optimized for short bitmaps, so I expect
+no overhead comparing to this.
+  
+>  static inline unsigned int cpumask_first_zero(const struct cpumask *srcp)
+>  {
+> -	return 0;
+> +	return *cpumask_bits(srcp) & 1;
+>  }
+>  
+>  static inline unsigned int cpumask_first_and(const struct cpumask *srcp1,
+>  					     const struct cpumask *srcp2)
+>  {
+> -	return 0;
+> +	return !(*cpumask_bits(srcp1) & *cpumask_bits(srcp2) & 1);
+>  }
+>  
+>  static inline unsigned int cpumask_last(const struct cpumask *srcp)
+>  {
+> -	return 0;
+> +	return cpumask_first(srcp);
+>  }
+>  
+>  /* Valid inputs for n are -1 and 0. */
+>  static inline unsigned int cpumask_next(int n, const struct cpumask *srcp)
+>  {
+> -	return n+1;
+> +	return !!(n + 1 + cpumask_first(srcp));
+>  }
+>  
+>  static inline unsigned int cpumask_next_zero(int n, const struct cpumask *srcp)
+>  {
+> -	return n+1;
+> +	return !!(n + 1 + cpumask_first_zero(srcp));
+>  }
+>  
+>  static inline unsigned int cpumask_next_and(int n,
+>  					    const struct cpumask *srcp,
+>  					    const struct cpumask *andp)
+>  {
+> -	return n+1;
+> +	return !!(n + 1 + cpumask_first_and(srcp, andp));
+>  }
+>  
+>  static inline unsigned int cpumask_next_wrap(int n, const struct cpumask *mask,
+>  					     int start, bool wrap)
+>  {
+> -	/* cpu0 unless stop condition, wrap and at cpu0, then nr_cpumask_bits */
+> -	return (wrap && n == 0);
+> +	/*
+> +	 * nr_cpumask_bits at stop condition, wrap and at cpu0, or empty mask
+> +	 * otherwise cpu0
+> +	 */
+> +	return (wrap && n == 0) || cpumask_first(mask);
+>  }
+>  
+>  /* cpu must be a valid cpu, ie 0, so there's no other choice. */
+> @@ -186,14 +189,6 @@ static inline int cpumask_any_distribute(const struct cpumask *srcp)
+>  	return cpumask_first(srcp);
+>  }
+>  
+> -#define for_each_cpu(cpu, mask)			\
+> -	for ((cpu) = 0; (cpu) < 1; (cpu)++, (void)mask)
+> -#define for_each_cpu_not(cpu, mask)		\
+> -	for ((cpu) = 0; (cpu) < 1; (cpu)++, (void)mask)
+> -#define for_each_cpu_wrap(cpu, mask, start)	\
+> -	for ((cpu) = 0; (cpu) < 1; (cpu)++, (void)mask, (void)(start))
+> -#define for_each_cpu_and(cpu, mask1, mask2)	\
+> -	for ((cpu) = 0; (cpu) < 1; (cpu)++, (void)mask1, (void)mask2)
+>  #else
+>  /**
+>   * cpumask_first - get the first cpu in a cpumask
+> @@ -259,11 +254,13 @@ static inline unsigned int cpumask_next_zero(int n, const struct cpumask *srcp)
+>  }
+>  
+>  int __pure cpumask_next_and(int n, const struct cpumask *, const struct cpumask *);
+> +extern int cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool wrap);
 
+is this extern needed?
+
+Thanks,
+Yury
+
+>  int __pure cpumask_any_but(const struct cpumask *mask, unsigned int cpu);
+>  unsigned int cpumask_local_spread(unsigned int i, int node);
+>  int cpumask_any_and_distribute(const struct cpumask *src1p,
+>  			       const struct cpumask *src2p);
+>  int cpumask_any_distribute(const struct cpumask *srcp);
+> +#endif /* SMP */
+>  
+>  /**
+>   * for_each_cpu - iterate over every cpu in a mask
+> @@ -289,7 +286,6 @@ int cpumask_any_distribute(const struct cpumask *srcp);
+>  		(cpu) = cpumask_next_zero((cpu), (mask)),	\
+>  		(cpu) < nr_cpu_ids;)
+>  
+> -extern int cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool wrap);
+>  
+>  /**
+>   * for_each_cpu_wrap - iterate over every cpu in a mask, starting at a specified location
+> @@ -324,7 +320,6 @@ extern int cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool
+>  	for ((cpu) = -1;						\
+>  		(cpu) = cpumask_next_and((cpu), (mask1), (mask2)),	\
+>  		(cpu) < nr_cpu_ids;)
+> -#endif /* SMP */
+>  
+>  #define CPU_BITS_NONE						\
+>  {								\
+> -- 
+> 2.36.1

@@ -2,130 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A96153B07A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DDAF53B0D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232718AbiFBA0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 20:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        id S232728AbiFBA2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 20:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232709AbiFBA0h (ORCPT
+        with ESMTP id S232713AbiFBA2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 20:26:37 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B34F23511B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 17:26:36 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id e11so3362425pfj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 17:26:36 -0700 (PDT)
+        Wed, 1 Jun 2022 20:28:19 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CD22194EB
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 17:28:18 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id fd25so4286533edb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 17:28:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=y/gUgyMqWVcRsb+qEaGqa2cDEAVvpf+gfqD2gAKhZeo=;
-        b=ItJwGzxeN7XJZuLKJ256vI76Qq2frqb9PjiPVfBOpWWW17LMKIqeeRXz/25pC8lXlQ
-         GitrNQa5fCz82T6DMO0vkedLn7U6JEuYtbxflHVlzTWKVG+6DfJoQxGqYsnZ/+xP9M0k
-         Y7vZ5P/Z+2irYU+pexBhC5bauIguFdJ0qJBwDxzCT1wlq/P3ppsnYXpBuS95KARPlcjP
-         FlI6j+lIHVhfn+dpit9oxJno2DbgUK5gInvdPa2lFd/bs0Tl81/oY4zMhiGoGmRhLkd7
-         mYXwcPEN+ZjzzMbHQxFOX8qgBNv3rbCp12Yn+M6Pc2+80NKRZ26j2Va+6/pXWTomYiPn
-         DoSg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=McFyTOgd+XHEmlkAqfwIX5SEOFFO1RwY03NA0CSFDzw=;
+        b=HKw6+eSMIDccKUrsJReWXBKrh8bC35YUs4ZEaguSquzXiGljGkmcQ6prQaUt7L8r3Z
+         JdWdxvUMKB/ZligyUGaIIRb5X2iVF7dHQYxrjUyAIuZJw0Rf+Bfo/QrCGZZjWh/lkDq4
+         M94ohT8t9S3lWWtwPGtw3g7ACsCvYY0J+n9L0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=y/gUgyMqWVcRsb+qEaGqa2cDEAVvpf+gfqD2gAKhZeo=;
-        b=Y4livYD7qAk8dO3zDGZvgL0V9s8Tt5y1kZeNM6ZIgqjyFXsPkFbuSSfqEM3U8pycYq
-         ukOhUPbPkwCxXf9RvzGLiMb4EBYMxzxh+jgIjLmZpo1d4dbfCpzKTxKWUplAeDZR2qnd
-         73/UY6/8rxQbOM09iIfNfQUTLY4BsDCGF4M796ulvUuFvyt2eqsE2YXy+AEY1CqDBril
-         gUp+jvgw6g4m/WYlw+XvGU03R9pX2XpSQmajiLRY5rQ1tE8nhBzNsABes8xuLIZ5oJID
-         NZA1aBYNhLqw/uG0csHvdMpoTVRnj3bLDoX2ZqiUr9BWRvfOC9XBjzbWOFuljBpT0Wyf
-         RG9w==
-X-Gm-Message-State: AOAM5311L1H7bhJi/9g6vS0/7BoZnW0bsvMvUeZdJheGSU95rH6Ifcum
-        QzwhoT2ngPj90hKroYQRd+wT7w==
-X-Google-Smtp-Source: ABdhPJyTDDferfqWzYFmGWnh7TdKImUbTnUOH9ymZWwxuTNL5eA0Ob24tCeayY4jYGH43fuUCbkSVg==
-X-Received: by 2002:a05:6a00:8c5:b0:510:6eae:6fa1 with SMTP id s5-20020a056a0008c500b005106eae6fa1mr2145386pfu.12.1654129595907;
-        Wed, 01 Jun 2022 17:26:35 -0700 (PDT)
-Received: from [192.168.254.36] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id y27-20020aa793db000000b0050dc762818asm2013338pff.100.2022.06.01.17.26.35
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=McFyTOgd+XHEmlkAqfwIX5SEOFFO1RwY03NA0CSFDzw=;
+        b=sRZhiWXwbheWAllwlIbjZEeIfumYECJPPCjr6lWOc7ilbg1GbxMNrzzmHMr/464XJK
+         R147ddO10aB6RvDVkI7eC7WiKxae+0QxmiFImEPArMoRSm2HXeQ4ApYo1cXDwroiuy03
+         dfyoiRJvduLXE9mCsRjgPAucxReyE2sTz5wnUAqTPoNipIwBNq5xP7oEZ+OAc3Loew5I
+         lHYouicemmApLwCCivNhm72AjLzeMyCQFs5eZIkis4WJWv6QMhaRgdLEXtX2VTDuNyMh
+         4GInD4jYtvsH/0hSGj7SbPTFm30bBhIRejr+ON/qEwplpheRng64lrdqVcxLQ33kd5tj
+         PIxg==
+X-Gm-Message-State: AOAM532htIjyMsW7dJMVyz/JgnJc0Qls8NF3hOfMeV6xiKKFheUrpcsq
+        9xWkn2ei5cnWEUXPwIYLRHVw0fiEu9o+McQQ
+X-Google-Smtp-Source: ABdhPJywQvvghtPWZEOBbmhcdI7wKi7D3c1sciQ2t727TXnXZVBPScOb6AixNJoMqDCyn1dzndVw5A==
+X-Received: by 2002:a05:6402:528a:b0:42d:e116:fab8 with SMTP id en10-20020a056402528a00b0042de116fab8mr2577346edb.134.1654129696306;
+        Wed, 01 Jun 2022 17:28:16 -0700 (PDT)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
+        by smtp.gmail.com with ESMTPSA id w7-20020a056402070700b0042aa153e73esm1675582edx.12.2022.06.01.17.28.15
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 17:26:35 -0700 (PDT)
-Message-ID: <416dc60a-f0e5-7d05-1613-3cd0ca415768@linaro.org>
-Date:   Wed, 1 Jun 2022 17:26:34 -0700
+        Wed, 01 Jun 2022 17:28:15 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id c5-20020a1c3505000000b0038e37907b5bso3959549wma.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 17:28:15 -0700 (PDT)
+X-Received: by 2002:a7b:c4ca:0:b0:397:3bac:9b2a with SMTP id
+ g10-20020a7bc4ca000000b003973bac9b2amr30505369wmk.154.1654129695207; Wed, 01
+ Jun 2022 17:28:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Bui Quang Minh <minhquangbui99@gmail.com>
-References: <20220525151517.8430-1-mkoutny@suse.com>
- <20220525151517.8430-3-mkoutny@suse.com>
- <20220525161455.GA16134@blackbody.suse.cz> <Yo7KfEOz92kS2z5Y@blackbook>
- <Yo/DtjEU/kYr190u@slm.duckdns.org>
- <0babd7df-bdef-9edc-3682-1144bc0c2d2b@linaro.org>
- <Ypf0VnKUMiuRgZqT@slm.duckdns.org>
- <1fb4d8d7-ccc0-b020-715e-38c2dfd94c23@linaro.org>
- <Ypf5jpI7dSmpi4W0@slm.duckdns.org>
- <c3bd8e63-7204-f86d-8efa-254db71185fc@linaro.org>
- <Ypf/MpwzByOrSp6A@slm.duckdns.org>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
-In-Reply-To: <Ypf/MpwzByOrSp6A@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220601221431.GG227878@dread.disaster.area>
+In-Reply-To: <20220601221431.GG227878@dread.disaster.area>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 1 Jun 2022 17:27:59 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgoUOpeZwTrVzgtKBjR4SLA-rqV4_KDAHEdQ_4JhEQtYw@mail.gmail.com>
+Message-ID: <CAHk-=wgoUOpeZwTrVzgtKBjR4SLA-rqV4_KDAHEdQ_4JhEQtYw@mail.gmail.com>
+Subject: Re: [GIT PULL] xfs: changes for 5.19-rc1 [2nd set]
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Eric Sandeen <sandeen@sandeen.net>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/22 17:07, Tejun Heo wrote:
-> Hello,
-> 
-> On Wed, Jun 01, 2022 at 05:00:44PM -0700, Tadeusz Struk wrote:
->> What I'm trying to say is that it's not really a ref imbalance problem.
->> I think once the kill_css() has been called on a css, and it is enqueued to be
->> killed, we shouldn't call css_put(css) on it anymore outside of the "killed call
->> flow path". It will all be handled by the css_killed_ref_fn() function.
->>
->> The fact the css_release() is called (via cgroup_kn_unlock()) just after
->> kill_css() causes the css->destroy_work to be enqueued twice on the same WQ
->> (cgroup_destroy_wq), just with different function. This results in the
->> BUG: corrupted list in insert_work issue.
-> 
-> I have a hard time following here. The kill / release paths relationship
-> isn't that complicated. The kill path is invoked when the percpu_ref's base
-> ref is killed and holds an extra ref so that it's guaranteed that release
-> can't happen before the kill path is done with the css. When the final put
-> happens - whether that's from the kill path or someone else, which often is
-> the case - the release path triggers. If we have release getting scheduled
-> while the kill path isn't finished, it is a reference counting problem,
-> right?
-> 
-> Can you elaborate the exact scenario that you think is happening? Please
-> feel free to omit the function calls and all that. Just lay out who's doing
-> what.
+On Wed, Jun 1, 2022 at 3:14 PM Dave Chinner <david@fromorbit.com> wrote:
+>
+> Some of the code in the tree predates that pull request, so there is
+> still a couple of empty merge commit messages.
 
-Ok the problem is that
+Thanks, this all looks good.
 
-1. kill_css() triggers css_killed_ref_fn(), which enqueues &css->destroy_work on cgroup_destroy_wq
-2. Last put_css() calls css_release(), which enqueues &css->destroy_work on cgroup_destroy_wq
+Even the last time I brought up the commit messages for merges your
+tree was by no means the worst offender when it comes to merge
+messages, and it was more of a nudge to perhaps improve things.
 
-We have two instances of the same work struct enqueued on the same WQ (cgroup_destroy_wq),
-which causes "BUG: corrupted list in insert_work"
+But I appreciate the further improvement.
 
-So I think the easiest way to solve this would be to have two separate work_structs,
-one for the killed_ref path and css_release path as in:
-
-https://lore.kernel.org/all/20220523212724.233314-1-tadeusz.struk@linaro.org/
-
--- 
-Thanks,
-Tadeusz
+              Linus

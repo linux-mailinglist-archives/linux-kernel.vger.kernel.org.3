@@ -2,152 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D8753B089
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8967853B0B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbiFBAJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 20:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S232694AbiFBATB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 20:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232655AbiFBAJA (ORCPT
+        with ESMTP id S232619AbiFBAS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 20:09:00 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F99BF7482;
-        Wed,  1 Jun 2022 17:08:58 -0700 (PDT)
+        Wed, 1 Jun 2022 20:18:58 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA192296303
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 17:18:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654128538; x=1685664538;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pOhEllTCFsx3tYsEcACYZ8dSbWca5EgyiyBT1jzYJuc=;
-  b=TE3aH480RCT9zwYauh17ddLNKLNV7yTGmw67pma846Qa9K4q+DZ4fCl3
-   cEqzoqAy7twiN0VAVokrKw3tMJvwpBPgKl+t61xe090lFn4Mc6odFl9AW
-   gZbmeXRQYzG0sKyku8XPdguAFSK+XYVFuraRmnv8in1qqP/rxWPQ+YCZu
-   pkypU1gwPDCxTzidPbCpEYwbYr1801j6lTkHYfC8SFpbR435TP7vOS2Mt
-   +fyr8e9VzfGZ3d/s66OmbMRwThFrxDEDZSquzcqNrm3ipSLQIwgwlfA+w
-   X6Jx9IDv67M7p0FdRYtjkZ5B3f/vmHEB70LIQsineRlM1NtzD2En8xZFR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="255639270"
+  t=1654129137; x=1685665137;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9RbFovD48hyxruRDdIoOpiROhUh41L0yn94NAxXemzM=;
+  b=IhaKvJIZf1C58gyeBWLfMxXECeKbcw+8JQHJhExWfh1PjsTxivc2wvSN
+   kKZhCzDRhBorgjlkZi5Pgar0ucGuq3snrneVkZI/i3hpcbb6vWVNebJ3o
+   dmZOUBKd7DTscLLUo6FVoffZEhU88RcrpV089cdK/JCYjZdY5HwCVNKo1
+   GPMLHDWpe/LuEY9a/KvrBz0C1ngwQRGwAvO8IMnpQpG69mO6HaOrWiPUt
+   oUQEQ4ft3uHp4x9SaROYJAxHdE1A3KMLHP34LaHomF2MD+LlYqihB4fw7
+   HzHIJBCmvbbq1oUVJ+G+Shi34OyssvA3dezOL7ZRn498DHuW1aCU7GRDN
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="336426361"
 X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="255639270"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 17:08:58 -0700
+   d="scan'208";a="336426361"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 17:18:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="667692493"
+   d="scan'208";a="530317885"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Jun 2022 17:08:55 -0700
+  by orsmga003.jf.intel.com with ESMTP; 01 Jun 2022 17:18:55 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nwYOU-0004Ys-V1;
-        Thu, 02 Jun 2022 00:08:54 +0000
-Date:   Thu, 2 Jun 2022 08:08:17 +0800
+        id 1nwYYB-0004Z8-8F;
+        Thu, 02 Jun 2022 00:18:55 +0000
+Date:   Thu, 2 Jun 2022 08:18:33 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Song Liu <song@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kernel-team@fb.com, rostedt@goodmis.org,
-        jolsa@kernel.org, Song Liu <song@kernel.org>
-Subject: Re: [PATCH bpf-next 5/5] bpf: trampoline: support
- FTRACE_OPS_FL_SHARE_IPMODIFY
-Message-ID: <202206020707.jsHlBldB-lkp@intel.com>
-References: <20220601175749.3071572-6-song@kernel.org>
+To:     Julien Grall <julien.grall@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+Subject: arch/arm64/kvm/vmid.c:62 flush_context() warn: inconsistent indenting
+Message-ID: <202206020819.HlyEM8rW-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220601175749.3071572-6-song@kernel.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
+Hi Julien,
 
-I love your patch! Perhaps something to improve:
+First bad commit (maybe != root cause):
 
-[auto build test WARNING on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220602-020112
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220602/202206020707.jsHlBldB-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/7edcf1c49617641579f2bc36b86c7d59bea20aef
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220602-020112
-        git checkout 7edcf1c49617641579f2bc36b86c7d59bea20aef
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/bpf/
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8171acb8bc9b33f3ed827f0615b24f7a06495cd0
+commit: 3248136b3637e1671e4fa46e32e2122f9ec4bc3d KVM: arm64: Align the VMID allocation with the arm64 ASID
+date:   4 months ago
+config: arm64-randconfig-m031-20220530 (https://download.01.org/0day-ci/archive/20220602/202206020819.HlyEM8rW-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+smatch warnings:
+arch/arm64/kvm/vmid.c:62 flush_context() warn: inconsistent indenting
 
->> kernel/bpf/trampoline.c:30:66: warning: 'enum ftrace_ops_cmd' declared inside parameter list will not be visible outside of this definition or declaration
-      30 | static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *op, enum ftrace_ops_cmd cmd);
-         |                                                                  ^~~~~~~~~~~~~~
-   kernel/bpf/trampoline.c: In function 'bpf_trampoline_lookup':
-   kernel/bpf/trampoline.c:92:35: error: invalid application of 'sizeof' to incomplete type 'struct ftrace_ops'
-      92 |         tr->fops = kzalloc(sizeof(struct ftrace_ops), GFP_KERNEL);
-         |                                   ^~~~~~
-   kernel/bpf/trampoline.c:100:17: error: invalid use of undefined type 'struct ftrace_ops'
-     100 |         tr->fops->private = tr;
-         |                 ^~
-   kernel/bpf/trampoline.c:101:17: error: invalid use of undefined type 'struct ftrace_ops'
-     101 |         tr->fops->ops_func = bpf_tramp_ftrace_ops_func;
-         |                 ^~
-   kernel/bpf/trampoline.c: In function 'bpf_trampoline_update':
-   kernel/bpf/trampoline.c:397:25: error: invalid use of undefined type 'struct ftrace_ops'
-     397 |                 tr->fops->flags |= FTRACE_OPS_FL_SHARE_IPMODIFY;
-         |                         ^~
-   kernel/bpf/trampoline.c:397:36: error: 'FTRACE_OPS_FL_SHARE_IPMODIFY' undeclared (first use in this function)
-     397 |                 tr->fops->flags |= FTRACE_OPS_FL_SHARE_IPMODIFY;
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/trampoline.c:397:36: note: each undeclared identifier is reported only once for each function it appears in
-   kernel/bpf/trampoline.c:415:25: error: invalid use of undefined type 'struct ftrace_ops'
-     415 |                 tr->fops->func = NULL;
-         |                         ^~
-   kernel/bpf/trampoline.c:416:25: error: invalid use of undefined type 'struct ftrace_ops'
-     416 |                 tr->fops->trampoline = 0;
-         |                         ^~
-   kernel/bpf/trampoline.c: At top level:
-   kernel/bpf/trampoline.c:431:67: warning: 'enum ftrace_ops_cmd' declared inside parameter list will not be visible outside of this definition or declaration
-     431 | static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
-         |                                                                   ^~~~~~~~~~~~~~
-   kernel/bpf/trampoline.c:431:82: error: parameter 2 ('cmd') has incomplete type
-     431 | static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
-         |                                                              ~~~~~~~~~~~~~~~~~~~~^~~
-   kernel/bpf/trampoline.c: In function 'bpf_tramp_ftrace_ops_func':
-   kernel/bpf/trampoline.c:433:40: error: invalid use of undefined type 'struct ftrace_ops'
-     433 |         struct bpf_trampoline *tr = ops->private;
-         |                                        ^~
-   kernel/bpf/trampoline.c:448:14: error: 'FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY' undeclared (first use in this function)
-     448 |         case FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY:
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/trampoline.c:452:14: error: 'FTRACE_OPS_CMD_DISABLE_SHARE_IPMODIFY' undeclared (first use in this function)
-     452 |         case FTRACE_OPS_CMD_DISABLE_SHARE_IPMODIFY:
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/trampoline.c:454:25: error: invalid use of undefined type 'struct ftrace_ops'
-     454 |                 tr->fops->flags &= ~FTRACE_OPS_FL_SHARE_IPMODIFY;
-         |                         ^~
-   kernel/bpf/trampoline.c:454:37: error: 'FTRACE_OPS_FL_SHARE_IPMODIFY' undeclared (first use in this function)
-     454 |                 tr->fops->flags &= ~FTRACE_OPS_FL_SHARE_IPMODIFY;
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+vim +62 arch/arm64/kvm/vmid.c
 
+417838392f2e657 Shameer Kolothum 2021-11-22  34  
+417838392f2e657 Shameer Kolothum 2021-11-22  35  #define vmid_gen_match(vmid) \
+417838392f2e657 Shameer Kolothum 2021-11-22  36  	(!(((vmid) ^ atomic64_read(&vmid_generation)) >> kvm_arm_vmid_bits))
+417838392f2e657 Shameer Kolothum 2021-11-22  37  
+417838392f2e657 Shameer Kolothum 2021-11-22  38  static void flush_context(void)
+417838392f2e657 Shameer Kolothum 2021-11-22  39  {
+417838392f2e657 Shameer Kolothum 2021-11-22  40  	int cpu;
+417838392f2e657 Shameer Kolothum 2021-11-22  41  	u64 vmid;
+417838392f2e657 Shameer Kolothum 2021-11-22  42  
+417838392f2e657 Shameer Kolothum 2021-11-22  43  	bitmap_clear(vmid_map, 0, NUM_USER_VMIDS);
+417838392f2e657 Shameer Kolothum 2021-11-22  44  
+417838392f2e657 Shameer Kolothum 2021-11-22  45  	for_each_possible_cpu(cpu) {
+417838392f2e657 Shameer Kolothum 2021-11-22  46  		vmid = atomic64_xchg_relaxed(&per_cpu(active_vmids, cpu), 0);
+417838392f2e657 Shameer Kolothum 2021-11-22  47  
+417838392f2e657 Shameer Kolothum 2021-11-22  48  		/* Preserve reserved VMID */
+417838392f2e657 Shameer Kolothum 2021-11-22  49  		if (vmid == 0)
+417838392f2e657 Shameer Kolothum 2021-11-22  50  			vmid = per_cpu(reserved_vmids, cpu);
+417838392f2e657 Shameer Kolothum 2021-11-22  51  		__set_bit(vmid2idx(vmid), vmid_map);
+417838392f2e657 Shameer Kolothum 2021-11-22  52  		per_cpu(reserved_vmids, cpu) = vmid;
+417838392f2e657 Shameer Kolothum 2021-11-22  53  	}
+417838392f2e657 Shameer Kolothum 2021-11-22  54  
+417838392f2e657 Shameer Kolothum 2021-11-22  55  	/*
+417838392f2e657 Shameer Kolothum 2021-11-22  56  	 * Unlike ASID allocator, we expect less frequent rollover in
+417838392f2e657 Shameer Kolothum 2021-11-22  57  	 * case of VMIDs. Hence, instead of marking the CPU as
+417838392f2e657 Shameer Kolothum 2021-11-22  58  	 * flush_pending and issuing a local context invalidation on
+417838392f2e657 Shameer Kolothum 2021-11-22  59  	 * the next context-switch, we broadcast TLB flush + I-cache
+417838392f2e657 Shameer Kolothum 2021-11-22  60  	 * invalidation over the inner shareable domain on rollover.
+417838392f2e657 Shameer Kolothum 2021-11-22  61  	 */
+417838392f2e657 Shameer Kolothum 2021-11-22 @62  	 kvm_call_hyp(__kvm_flush_vm_context);
+417838392f2e657 Shameer Kolothum 2021-11-22  63  }
+417838392f2e657 Shameer Kolothum 2021-11-22  64  
 
-vim +30 kernel/bpf/trampoline.c
+:::::: The code at line 62 was first introduced by commit
+:::::: 417838392f2e657ee25cc30e373ff4c35a0faa90 KVM: arm64: Introduce a new VMID allocator for KVM
 
-    29	
-  > 30	static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *op, enum ftrace_ops_cmd cmd);
-    31	
+:::::: TO: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+:::::: CC: Marc Zyngier <maz@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service

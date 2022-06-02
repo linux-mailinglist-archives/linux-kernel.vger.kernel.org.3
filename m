@@ -2,148 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1772353BCFA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02C553BCFB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237364AbiFBRFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 13:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
+        id S237369AbiFBRHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 13:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232410AbiFBRFP (ORCPT
+        with ESMTP id S232410AbiFBRHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 13:05:15 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6FC91584;
-        Thu,  2 Jun 2022 10:05:11 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 252GrsRr014288;
-        Thu, 2 Jun 2022 17:05:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : in-reply-to : references : date : message-id : content-type :
- mime-version; s=corp-2021-07-09;
- bh=kCHCxu5woqrCuD/xxKFqbyVrK19bTo3Zyz9/R37oBPg=;
- b=POXUbB6C0jsAUAfXzSXHB83/AQqzvAHKtV2fG192n3i/Ow/P1+V+QoIEpfiOlnp+35mw
- SNJy5X9s7Vo2FWELZK3NP1Mhqt82lrzzgrNDcpyqdKUjtepW/s1zEQRNqOUeUqdV2qbc
- ypIfmao0SKCpO2oou4hYAE5uZ3DqCgZy0XKJS1Y6eqHyPXPTYdus55usvTCqhcxBmu3U
- 0Dmuo63iwBUnRA1bb0gkp1KHj5pRm/B25uEvY1wdJsYZxjiSj58PcYGD17i7z/XwEi0U
- 9Dt+ZfCwzlu2T8NNnAiB75h+3ljHKVSd16FvTqlG2v3P7mYXQHIudTNbB01VM1QFMxRQ 1Q== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gbc4xu2j1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Jun 2022 17:05:05 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 252H0sth014189;
-        Thu, 2 Jun 2022 17:05:05 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2171.outbound.protection.outlook.com [104.47.55.171])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gc8kmu3by-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Jun 2022 17:05:05 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BmcN0Z3U+7qCoNdZ8GGnz/5L4iUefQ+ULZ5bZ9A5Mda8jcfRhFN/ZaXp+80w9H+SqVoP00YCDdnwcLvzByVNSs7+1aXSMz+W+4nUTOA/oyxTyg4nAmxIyCbBbi3nLmbw6/1AtAXzRavnIFt20293Xiw2mfxfcOqJ5+VtRWYZBq6u9SWSDtaqXtuokfo/D4tAyVxcTJz8mKbKaPVlFkQPuveeP7uXXGDbNnumKYfziIb/SzatpZ4BQO3bf/KGVl60uS7Bj+/4RKf3shJdOPHDqRAz8iE9/46YPeXhi1b1VI4SWceK6pRumreozvnaT98HJZ3ZJOCG5A6AK4QCOB2nvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kCHCxu5woqrCuD/xxKFqbyVrK19bTo3Zyz9/R37oBPg=;
- b=gSXFj3+KTOBL+UegfTJ3sGYqLEUzjr6FWG5KxxRiCdqU8/097DQjIt/H2S7PGhrzZ+Vg4AWlDPnta7XerQh4+6Cd4mmT337g1EJAMuebP70iZyErkAGz7rmTW4rt4Xo81IwHkHacACFDudouTByqSEFs4XkRr+Sgkh0Shpadd05WhgRUV4kHAmCMZPFOmDAUl9Fovc2NZaN6I5BlBOspeVla6l2tXsyKQDHgYn0h9CySDMUY/GdE2vQ+1npFjOPweonWywDVfi5JVazp+PpaJ5KGhb6BqjiM9UcOMvD3+YqFSZ5qhcCaczUse6Yn8WQkdMHcVa5iWpEjCat+DOd33A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kCHCxu5woqrCuD/xxKFqbyVrK19bTo3Zyz9/R37oBPg=;
- b=KB8cW2+Whr4RWY4QhxPbRZwa/HghwBOT+12jsEr681nm6ODjXPnPgoeZjCibuK5HxlH8vf1PprpgXyb3hiOvI3W9hzIAUxqij4amW2ZLrs8GPwT+uC55abXF8Dk0r+IrLywXNQ/1b6PUqd1l8b8Q3pAGZ0ftI7NUxJTcWY+BaLg=
-Received: from CH2PR10MB4166.namprd10.prod.outlook.com (2603:10b6:610:78::20)
- by MWHPR10MB1359.namprd10.prod.outlook.com (2603:10b6:300:1f::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Thu, 2 Jun
- 2022 17:05:02 +0000
-Received: from CH2PR10MB4166.namprd10.prod.outlook.com
- ([fe80::4421:897e:e867:679c]) by CH2PR10MB4166.namprd10.prod.outlook.com
- ([fe80::4421:897e:e867:679c%9]) with mapi id 15.20.5314.015; Thu, 2 Jun 2022
- 17:05:02 +0000
-From:   Stephen Brennan <stephen.s.brennan@oracle.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        stable <stable@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        keyrings@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] assoc_array: Fix BUG_ON during garbage collect
-In-Reply-To: <CAHk-=wjHHg_buCqw=Q2OtRWoFpD67OxsQ0jMzao+6rGM6hRE0A@mail.gmail.com>
-References: <165295023086.3361286.8662079860706628540.stgit@warthog.procyon.org.uk>
- <8735go11v0.fsf@stepbren-lnx.us.oracle.com>
- <CAHk-=wjHHg_buCqw=Q2OtRWoFpD67OxsQ0jMzao+6rGM6hRE0A@mail.gmail.com>
-Date:   Thu, 02 Jun 2022 10:05:00 -0700
-Message-ID: <87r147yp1f.fsf@stepbren-lnx.us.oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR05CA0059.namprd05.prod.outlook.com
- (2603:10b6:a03:74::36) To CH2PR10MB4166.namprd10.prod.outlook.com
- (2603:10b6:610:78::20)
+        Thu, 2 Jun 2022 13:07:44 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F274C79E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 10:07:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654189660; x=1685725660;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JnnYQuhNTFUNhKwtcjn7hSFDvopVcTzrb1jUqm2cKjQ=;
+  b=ERReoZP9j/Zh/JUnpB481EyOFmuNx9+UY07JowUaxkJ/AtIQX7HXiEoj
+   ZyX9r4aP3YTb2WEz0BrtprdrTE+uKiHzQdpuCKmEEnRmleTlmn9Hx5bxX
+   s8WdcWIs3cLPltU5f0aHgOdRpmTO9U5cujySKaySTAsP9oLqhsYdwyP/i
+   /NPSwH7P9paLevasI02j4xYEs2/Uroio7TycdoE4g9zJ72zlcn7IRmF2J
+   IlF2UEv5pT3kuZRPXtny9npYp5BDWT1EGNZ8erYFnzij7Rd6uJDxP5Kzg
+   8sOM+TbIIjFNcxRGZgCP01jexPMwypDk05WUamBN+55ONfOvutz+bh9KO
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="256491170"
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="256491170"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 10:07:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="552930006"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 02 Jun 2022 10:07:37 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwoIL-0005Ir-6X;
+        Thu, 02 Jun 2022 17:07:37 +0000
+Date:   Fri, 3 Jun 2022 01:07:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 26/31]
+ arch/riscv/include/asm/pgtable-64.h:56:26: error: 'PAGE_SIZE' undeclared;
+ did you mean 'P4D_SIZE'?
+Message-ID: <202206030040.Q0KUBAnr-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 583763ca-aa4f-401e-5a1b-08da44ba088b
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1359:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR10MB135921A3CD6A3B51430B7712DBDE9@MWHPR10MB1359.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nsf365t1g5yA3jne8Hy2H5wu5zRyu/+Pr/Y4f6PCOAiDNixZveQdWDeqNHsvgqwcHtQuLDF+Wk38WrEqKzW3KZJc8CQH3pA4bJLDXtczyjixS48+RLOknf6MzhmiNqqkIQsRAIiTu+rGELDDB5a7wDd72lM1LsD3c9oBasNShHNcL1YHZfg7+nVeI2NzjmTqiw0ZHobw4Lq/dDddoTQnQ6AJ0+JpOlYbrMoEtlCc9z+hgw75T06YWTRVI4Sjt998e6wPdKjtMQfVvV1ryNSlkdWbHgqdnI/ejULHkv+dl5llsizwQs6CusTYYA+zqrPKA7dv1ujbREWXznB+FVqxwLpRnxTM85CfraEJDWhD1FME2/O065Waz8Vnz1eVJOViPRiz14Bskei8uFsKv3GT+BT1HHyPXOmVWEYQOkFtubQaSenGpQE7mcfprLBq3DWBKqzEPLkH+SQVo+7RgWkurRBpkNFjZ38Qn6/9iFTeu1PEDEwm1x+e62DIwDhJp1XPDucTA070gPtHU4rE5AT7w9DJrOU7N3+xih2nxMsOP1sDvhSIZuchQk3OKDdx/lcQB8CyUs+Gb2o4B5hoFVje7LnYz1bXROpQXRVGXSiezkQLTIDy4UoueajQSLCdgwP4mTFxobbG8y6/sMlGON4dfpQ/6Qk6REq+ehOj2LGBqpKwZ0jrwT2ZWN0H8QPwXflgYRqoOp74n2g6QOeTzPJDhw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4166.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8676002)(4326008)(66946007)(66556008)(66476007)(86362001)(5660300002)(38100700002)(6916009)(38350700002)(508600001)(54906003)(316002)(6486002)(186003)(53546011)(52116002)(26005)(6506007)(2906002)(6512007)(4744005)(8936002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aGxnzp0zKIsA+CuGPkBjQHPE18L27HcXciPQpmoVqcKcPoCO2ti04aR3Ij5n?=
- =?us-ascii?Q?9iVBOY1VGKIxMsbB091QRu1hZk1uMkjX+qD0g8gu79QVz7FN0PR5N5SIPO8M?=
- =?us-ascii?Q?37gMWasZOUEmxi+aUGcBsKSzDXoI+CYbPUofaedzuWqrWhoLsOUFhFX0mya5?=
- =?us-ascii?Q?kqxOXdFgv6opMnZ5oOA/3fb+7mZvxoZ+/L6+wuQftNdmeCpQIKeKyUPaLFT0?=
- =?us-ascii?Q?elSJnmV0w30JOkkSZvFNQ2MB6W3byxcpVZlO9OFFvxCSLgGEO47KIWNPtDmb?=
- =?us-ascii?Q?GNm3AtFmTZYqmCpj7csUfDBBVg3zX/YioCEcy2qzdus7yiwzkJ0aIJRx3ZVw?=
- =?us-ascii?Q?ZiV4yX3jqSHuE6nTIFQHkdDy6o/9MhRzGYRaHRFISiHY7Y0JV9jpxOMC2Lug?=
- =?us-ascii?Q?R8hxJ5MKXPHa+GtDuQ80TlUmNF+uj3hxjWW3TeaOV/izwL2TNezLQP2ReDsW?=
- =?us-ascii?Q?hTF+KaautqJj3pDvLGcEC3E7MHZq8uTZyL9B6/8OBcwjjerjGYVNPplwXR+Q?=
- =?us-ascii?Q?upB8SnXvODLr2yYKXRAOowrnlejyCws4UgV73bLTXR+3pNHKJQ4nxzjsUn/m?=
- =?us-ascii?Q?5e43CGzUl6jUHaJojRmcEGQzfNoLw234DkZ6vLMYZFI2r6YrwPTfXweMo68a?=
- =?us-ascii?Q?VN+ZhfJaQCV0JRRJLrW0kIluUf5tFGd4i2diixZOVp9Es2t0n2gEg96Vm7OG?=
- =?us-ascii?Q?aQb2XyhuEXSUDyQ+D5xFIks/0M07Y068MOy/qGv2QDfUGvthH5XN9fRfYtJA?=
- =?us-ascii?Q?yQMVAE4EUAhcp1qwMCHSivGmL5v4oWV/E2h4dKXYr/vZb8ThqOk/FAXQISh1?=
- =?us-ascii?Q?59oMc9HA8aRxp3OgXOXBPlKMTdAjM/wTPxO0Lwx0+swT950msl4/Qazcxkyb?=
- =?us-ascii?Q?8xD7U3QXSLQVqwixgo4oeNou7ANXv94L7gbs5W4tnAB7C5Ss2DhRk+rSU7zM?=
- =?us-ascii?Q?i8iATpGaSJk39fm3P5DfTfUQtj2haJR5J6IB2u8fq/3PQe4DjSO8/6wSm9H9?=
- =?us-ascii?Q?2EXravMNqF4cnP1tOeUEaoRH/L29oOr9EnAJVRmF8sknVGjirLdQBgWD7JOk?=
- =?us-ascii?Q?UVT4NoeUhe175bonGhvlAM+jrrIEmSkVVkD5whZGGV3kk1EQKLBhk7I3SbOi?=
- =?us-ascii?Q?NCpSvtT8dqk06+/eOttc2Dke/ynPeX7M7c8Z1ivgNDxKWJlG1yMJnEtbODDT?=
- =?us-ascii?Q?0lxZA+AdJ5jvlWffL16y1oyfHVZW3kSx7U9Z7icieL6lmPsZqcHwFb2NYiLL?=
- =?us-ascii?Q?55dP9+q9n6VLJHrC4XM3K3SKRchE8Pb1QSRBQrEMCYJqBFGne2ofK4Wq7v94?=
- =?us-ascii?Q?CY1pyjHX7fRoXK42Y6DU93GIck06sETD3kZQNEECgf6/nrRIpUo///7m1feE?=
- =?us-ascii?Q?Tj1xwuoH1Za+Q9rlr45u7SKnCQPJTyjL09plvcLUxsvcPx98lwEieC8vuMt5?=
- =?us-ascii?Q?ly8nsxnRfFS8lMc4t07ElKtRy/Z8c8zavK0bVwN3dBn1P9q+NNHuSlCmujvx?=
- =?us-ascii?Q?bBEF3h/f2zr/4Ut3sG+fi5zWUkAefvqtuzKsr3SYiaD9yH1svaDjQR1ZvQjB?=
- =?us-ascii?Q?PzyuENUFYrtEfkNr9eObQymIh2cyZUquL7ulfWO1J5WF4X/GY1252QrogJJI?=
- =?us-ascii?Q?2jX5VgwJY4/qiSXmkNX2gxjWnjTAlDbbMkF41Sy1yhDCjTKQ7goR7nBbhtwt?=
- =?us-ascii?Q?6mX1BYuXpq5+JlRbC+8ytHXn3MVraK2NKjj1UwBHivMx8y4dPNelCKjOmH1l?=
- =?us-ascii?Q?XydhaUVgPdCYuvUBhEHDjlzZek9U9Jc=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 583763ca-aa4f-401e-5a1b-08da44ba088b
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4166.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2022 17:05:02.7270
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DSNz20z5ydcE656q2ab9C+KME79F75/yJuBcUxWT9vCdpyJUqdzmJPXOWevG12qRvPLOVnMZpHTvVfL8Ubv6JgKE0ZJsDg0G/cjPG2jvj6A=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1359
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
- definitions=2022-06-02_05:2022-06-02,2022-06-02 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
- malwarescore=0 mlxscore=0 mlxlogscore=999 adultscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206020071
-X-Proofpoint-GUID: 4CMFpXUNnEMmRmxsALerkvrQyV0fKXFp
-X-Proofpoint-ORIG-GUID: 4CMFpXUNnEMmRmxsALerkvrQyV0fKXFp
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -151,28 +62,762 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> writes:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
+head:   8e0ac1b6b44d1c62420ad92b2a1cbc106a00f3de
+commit: 969a734e01b9cf090fce853d9d706455e5a9cdf1 [26/31] riscv: Make virt_to_pfn() a static inline
+config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20220603/202206030040.Q0KUBAnr-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=969a734e01b9cf090fce853d9d706455e5a9cdf1
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
+        git checkout 969a734e01b9cf090fce853d9d706455e5a9cdf1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv prepare
 
-> On Wed, Jun 1, 2022 at 3:00 PM Stephen Brennan
-> <stephen.s.brennan@oracle.com> wrote:
->>
->> Just wanted to check on this patch as the 5.19 window closes. David, are
->> you planning on taking this through a particular tree, or is the ask for
->> Linus to pick it directly?
->
-> Ok, picked up directly.
->
-> These fall through the cracks partly because it's not obvious what
-> they are for. Sometimes I get pull requests from DavidH, and sometimes
-> I get random patches, and while the pull requests are fairly
-> unambiguous ("please pull") the same is not necessarily true of the
-> patches. Are they for discussion, an RFC, or fro applying...
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I understand the confusion, thanks for taking this up!
+All error/warnings (new ones prefixed by >>):
 
-Stephen
+   In file included from include/linux/rcupdate.h:28,
+                    from include/linux/rbtree.h:24,
+                    from include/linux/mm_types.h:11,
+                    from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/bottom_half.h: In function '__local_bh_disable_ip':
+>> include/linux/bottom_half.h:13:9: error: implicit declaration of function 'preempt_count_add'; did you mean 'refcount_add'? [-Werror=implicit-function-declaration]
+      13 |         preempt_count_add(cnt);
+         |         ^~~~~~~~~~~~~~~~~
+         |         refcount_add
+   In file included from include/linux/rbtree.h:24,
+                    from include/linux/mm_types.h:11,
+                    from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/rcupdate.h: In function '__rcu_read_lock':
+   include/linux/rcupdate.h:68:9: error: implicit declaration of function 'preempt_disable' [-Werror=implicit-function-declaration]
+      68 |         preempt_disable();
+         |         ^~~~~~~~~~~~~~~
+   include/linux/rcupdate.h: In function '__rcu_read_unlock':
+   include/linux/rcupdate.h:73:9: error: implicit declaration of function 'preempt_enable' [-Werror=implicit-function-declaration]
+      73 |         preempt_enable();
+         |         ^~~~~~~~~~~~~~
+   In file included from include/linux/rbtree.h:24,
+                    from include/linux/mm_types.h:11,
+                    from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/rcupdate.h: In function 'rcu_read_lock_sched_held':
+>> include/linux/rcupdate.h:299:17: error: implicit declaration of function 'preemptible' [-Werror=implicit-function-declaration]
+     299 |         return !preemptible();
+         |                 ^~~~~~~~~~~
+   include/linux/rcupdate.h: In function 'rcu_read_lock_sched_notrace':
+   include/linux/rcupdate.h:794:9: error: implicit declaration of function 'preempt_disable_notrace' [-Werror=implicit-function-declaration]
+     794 |         preempt_disable_notrace();
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h: In function 'rcu_read_unlock_sched_notrace':
+   include/linux/rcupdate.h:816:9: error: implicit declaration of function 'preempt_enable_notrace' [-Werror=implicit-function-declaration]
+     816 |         preempt_enable_notrace();
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/mm_types.h:19,
+                    from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/seqlock.h: In function 'write_seqlock':
+   include/linux/seqlock.h:890:9: error: implicit declaration of function 'spin_lock' [-Werror=implicit-function-declaration]
+     890 |         spin_lock(&sl->lock);
+         |         ^~~~~~~~~
+   include/linux/seqlock.h: In function 'write_sequnlock':
+   include/linux/seqlock.h:904:9: error: implicit declaration of function 'spin_unlock' [-Werror=implicit-function-declaration]
+     904 |         spin_unlock(&sl->lock);
+         |         ^~~~~~~~~~~
+   include/linux/seqlock.h: In function 'write_seqlock_bh':
+   include/linux/seqlock.h:916:9: error: implicit declaration of function 'spin_lock_bh' [-Werror=implicit-function-declaration]
+     916 |         spin_lock_bh(&sl->lock);
+         |         ^~~~~~~~~~~~
+   include/linux/seqlock.h: In function 'write_sequnlock_bh':
+   include/linux/seqlock.h:931:9: error: implicit declaration of function 'spin_unlock_bh' [-Werror=implicit-function-declaration]
+     931 |         spin_unlock_bh(&sl->lock);
+         |         ^~~~~~~~~~~~~~
+   include/linux/seqlock.h: In function 'write_seqlock_irq':
+   include/linux/seqlock.h:943:9: error: implicit declaration of function 'spin_lock_irq' [-Werror=implicit-function-declaration]
+     943 |         spin_lock_irq(&sl->lock);
+         |         ^~~~~~~~~~~~~
+   include/linux/seqlock.h: In function 'write_sequnlock_irq':
+>> include/linux/seqlock.h:957:9: error: implicit declaration of function 'spin_unlock_irq'; did you mean 'write_sequnlock_irq'? [-Werror=implicit-function-declaration]
+     957 |         spin_unlock_irq(&sl->lock);
+         |         ^~~~~~~~~~~~~~~
+         |         write_sequnlock_irq
+   include/linux/seqlock.h: In function '__write_seqlock_irqsave':
+>> include/linux/seqlock.h:964:9: error: implicit declaration of function 'spin_lock_irqsave'; did you mean 'arch_local_irq_save'? [-Werror=implicit-function-declaration]
+     964 |         spin_lock_irqsave(&sl->lock, flags);
+         |         ^~~~~~~~~~~~~~~~~
+         |         arch_local_irq_save
+   include/linux/seqlock.h: In function 'write_sequnlock_irqrestore':
+>> include/linux/seqlock.h:995:9: error: implicit declaration of function 'spin_unlock_irqrestore'; did you mean 'write_sequnlock_irqrestore'? [-Werror=implicit-function-declaration]
+     995 |         spin_unlock_irqrestore(&sl->lock, flags);
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+         |         write_sequnlock_irqrestore
+   In file included from include/linux/mm_types.h:21,
+                    from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   arch/riscv/include/asm/mmu.h: At top level:
+>> arch/riscv/include/asm/mmu.h:25:32: error: unknown type name 'pgd_t'; did you mean 'pid_t'?
+      25 | void __init create_pgd_mapping(pgd_t *pgdp, uintptr_t va, phys_addr_t pa,
+         |                                ^~~~~
+         |                                pid_t
+   arch/riscv/include/asm/mmu.h:26:48: error: unknown type name 'pgprot_t'
+      26 |                                phys_addr_t sz, pgprot_t prot);
+         |                                                ^~~~~~~~
+   In file included from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/mm_types.h:151:25: error: unknown type name 'pgtable_t'
+     151 |                         pgtable_t pmd_huge_pte; /* protected by page->ptl */
+         |                         ^~~~~~~~~
+   include/linux/mm_types.h:337:6: warning: "PAGE_SIZE" is not defined, evaluates to 0 [-Wundef]
+     337 | #if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
+         |      ^~~~~~~~~
+   In file included from include/vdso/const.h:5,
+                    from include/linux/const.h:4,
+                    from arch/riscv/include/asm/bug.h:10,
+                    from include/linux/bug.h:5,
+                    from include/linux/mmdebug.h:5,
+                    from include/linux/mm.h:6,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/mm_types.h:314:62: warning: "PAGE_MASK" is not defined, evaluates to 0 [-Wundef]
+     314 | #define PAGE_FRAG_CACHE_MAX_SIZE        __ALIGN_MASK(32768, ~PAGE_MASK)
+         |                                                              ^~~~~~~~~
+   include/uapi/linux/const.h:32:50: note: in definition of macro '__ALIGN_KERNEL_MASK'
+      32 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
+         |                                                  ^~~~
+   include/linux/mm_types.h:314:41: note: in expansion of macro '__ALIGN_MASK'
+     314 | #define PAGE_FRAG_CACHE_MAX_SIZE        __ALIGN_MASK(32768, ~PAGE_MASK)
+         |                                         ^~~~~~~~~~~~
+   include/linux/mm_types.h:337:18: note: in expansion of macro 'PAGE_FRAG_CACHE_MAX_SIZE'
+     337 | #if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm_types.h:314:62: warning: "PAGE_MASK" is not defined, evaluates to 0 [-Wundef]
+     314 | #define PAGE_FRAG_CACHE_MAX_SIZE        __ALIGN_MASK(32768, ~PAGE_MASK)
+         |                                                              ^~~~~~~~~
+   include/uapi/linux/const.h:32:61: note: in definition of macro '__ALIGN_KERNEL_MASK'
+      32 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
+         |                                                             ^~~~
+   include/linux/mm_types.h:314:41: note: in expansion of macro '__ALIGN_MASK'
+     314 | #define PAGE_FRAG_CACHE_MAX_SIZE        __ALIGN_MASK(32768, ~PAGE_MASK)
+         |                                         ^~~~~~~~~~~~
+   include/linux/mm_types.h:337:18: note: in expansion of macro 'PAGE_FRAG_CACHE_MAX_SIZE'
+     337 | #if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/mm_types.h:421:9: error: unknown type name 'pgprot_t'
+     421 |         pgprot_t vm_page_prot;
+         |         ^~~~~~~~
+   include/linux/mm_types.h:495:17: error: unknown type name 'pgd_t'
+     495 |                 pgd_t * pgd;
+         |                 ^~~~~
+   In file included from arch/riscv/include/asm/pgtable.h:112,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   arch/riscv/include/asm/pgtable-64.h:99:48: error: unknown type name 'pgprot_t'
+      99 | static inline pud_t pfn_pud(unsigned long pfn, pgprot_t prot)
+         |                                                ^~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h: In function 'pud_pgtable':
+   arch/riscv/include/asm/pgtable-64.h:111:25: error: implicit declaration of function 'pfn_to_virt' [-Werror=implicit-function-declaration]
+     111 |         return (pmd_t *)pfn_to_virt(pud_val(pud) >> _PAGE_PFN_SHIFT);
+         |                         ^~~~~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h:111:16: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     111 |         return (pmd_t *)pfn_to_virt(pud_val(pud) >> _PAGE_PFN_SHIFT);
+         |                ^
+   arch/riscv/include/asm/pgtable-64.h: In function 'pud_page':
+   arch/riscv/include/asm/pgtable-64.h:116:16: error: implicit declaration of function 'pfn_to_page' [-Werror=implicit-function-declaration]
+     116 |         return pfn_to_page(pud_val(pud) >> _PAGE_PFN_SHIFT);
+         |                ^~~~~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h:116:16: warning: returning 'int' from a function with return type 'struct page *' makes pointer from integer without a cast [-Wint-conversion]
+     116 |         return pfn_to_page(pud_val(pud) >> _PAGE_PFN_SHIFT);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h: At top level:
+   arch/riscv/include/asm/pgtable-64.h:139:48: error: unknown type name 'pgprot_t'
+     139 | static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
+         |                                                ^~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h:198:48: error: unknown type name 'pgprot_t'
+     198 | static inline p4d_t pfn_p4d(unsigned long pfn, pgprot_t prot)
+         |                                                ^~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h: In function 'p4d_pgtable':
+   arch/riscv/include/asm/pgtable-64.h:211:24: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     211 |                 return (pud_t *)pfn_to_virt(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
+         |                        ^
+   arch/riscv/include/asm/pgtable-64.h: In function 'p4d_page':
+   arch/riscv/include/asm/pgtable-64.h:219:16: warning: returning 'int' from a function with return type 'struct page *' makes pointer from integer without a cast [-Wint-conversion]
+     219 |         return pfn_to_page(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h: In function 'pud_offset':
+>> arch/riscv/include/asm/pgtable-64.h:56:26: error: 'PAGE_SIZE' undeclared (first use in this function); did you mean 'P4D_SIZE'?
+      56 | #define PTRS_PER_PUD    (PAGE_SIZE / sizeof(pud_t))
+         |                          ^~~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h:222:51: note: in expansion of macro 'PTRS_PER_PUD'
+     222 | #define pud_index(addr) (((addr) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
+         |                                                   ^~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h:228:44: note: in expansion of macro 'pud_index'
+     228 |                 return p4d_pgtable(*p4d) + pud_index(address);
+         |                                            ^~~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h:56:26: note: each undeclared identifier is reported only once for each function it appears in
+      56 | #define PTRS_PER_PUD    (PAGE_SIZE / sizeof(pud_t))
+         |                          ^~~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h:222:51: note: in expansion of macro 'PTRS_PER_PUD'
+     222 | #define pud_index(addr) (((addr) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
+         |                                                   ^~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h:228:44: note: in expansion of macro 'pud_index'
+     228 |                 return p4d_pgtable(*p4d) + pud_index(address);
+         |                                            ^~~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h: At top level:
+>> arch/riscv/include/asm/pgtable-64.h:233:28: error: unknown type name 'pgd_t'; did you mean 'pmd_t'?
+     233 | static inline void set_pgd(pgd_t *pgdp, pgd_t pgd)
+         |                            ^~~~~
+         |                            pmd_t
+   arch/riscv/include/asm/pgtable-64.h:233:41: error: unknown type name 'pgd_t'; did you mean 'pmd_t'?
+     233 | static inline void set_pgd(pgd_t *pgdp, pgd_t pgd)
+         |                                         ^~~~~
+         |                                         pmd_t
+   arch/riscv/include/asm/pgtable-64.h:241:28: error: unknown type name 'pgd_t'; did you mean 'pmd_t'?
+     241 | static inline int pgd_none(pgd_t pgd)
+         |                            ^~~~~
+         |                            pmd_t
+   arch/riscv/include/asm/pgtable-64.h:249:31: error: unknown type name 'pgd_t'; did you mean 'pmd_t'?
+     249 | static inline int pgd_present(pgd_t pgd)
+         |                               ^~~~~
+         |                               pmd_t
+   arch/riscv/include/asm/pgtable-64.h:257:27: error: unknown type name 'pgd_t'; did you mean 'pmd_t'?
+     257 | static inline int pgd_bad(pgd_t pgd)
+         |                           ^~~~~
+         |                           pmd_t
+   arch/riscv/include/asm/pgtable-64.h:265:30: error: unknown type name 'pgd_t'; did you mean 'pmd_t'?
+     265 | static inline void pgd_clear(pgd_t *pgd)
+         |                              ^~~~~
+         |                              pmd_t
+   arch/riscv/include/asm/pgtable-64.h:271:34: error: unknown type name 'pgd_t'; did you mean 'pmd_t'?
+     271 | static inline p4d_t *pgd_pgtable(pgd_t pgd)
+         |                                  ^~~~~
+         |                                  pmd_t
+   arch/riscv/include/asm/pgtable-64.h:280:37: error: unknown type name 'pgd_t'; did you mean 'pmd_t'?
+     280 | static inline struct page *pgd_page(pgd_t pgd)
+         |                                     ^~~~~
+         |                                     pmd_t
+   arch/riscv/include/asm/pgtable-64.h:289:33: error: unknown type name 'pgd_t'; did you mean 'pmd_t'?
+     289 | static inline p4d_t *p4d_offset(pgd_t *pgd, unsigned long address)
+         |                                 ^~~~~
+         |                                 pmd_t
+   In file included from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   arch/riscv/include/asm/pgtable.h:130:9: error: unknown type name 'pte_t'
+     130 |         pte_t *(*get_pte_virt)(phys_addr_t pa);
+         |         ^~~~~
+>> arch/riscv/include/asm/pgtable.h:750:38: error: 'PAGE_SIZE' undeclared here (not in a function); did you mean 'P4D_SIZE'?
+     750 | extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
+         |                                      ^~~~~~~~~
+         |                                      P4D_SIZE
+   In file included from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+>> include/linux/spinlock.h:347:29: warning: conflicting types for 'spin_lock'; have 'void(spinlock_t *)' {aka 'void(struct spinlock *)'}
+     347 | static __always_inline void spin_lock(spinlock_t *lock)
+         |                             ^~~~~~~~~
+   include/linux/spinlock.h:347:29: error: static declaration of 'spin_lock' follows non-static declaration
+   In file included from include/linux/mm_types.h:19,
+                    from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/seqlock.h:890:9: note: previous implicit declaration of 'spin_lock' with type 'void(spinlock_t *)' {aka 'void(struct spinlock *)'}
+     890 |         spin_lock(&sl->lock);
+         |         ^~~~~~~~~
+   In file included from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+>> include/linux/spinlock.h:352:29: warning: conflicting types for 'spin_lock_bh'; have 'void(spinlock_t *)' {aka 'void(struct spinlock *)'}
+     352 | static __always_inline void spin_lock_bh(spinlock_t *lock)
+         |                             ^~~~~~~~~~~~
+   include/linux/spinlock.h:352:29: error: static declaration of 'spin_lock_bh' follows non-static declaration
+   In file included from include/linux/mm_types.h:19,
+                    from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/seqlock.h:916:9: note: previous implicit declaration of 'spin_lock_bh' with type 'void(spinlock_t *)' {aka 'void(struct spinlock *)'}
+     916 |         spin_lock_bh(&sl->lock);
+         |         ^~~~~~~~~~~~
+   In file included from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+>> include/linux/spinlock.h:372:29: warning: conflicting types for 'spin_lock_irq'; have 'void(spinlock_t *)' {aka 'void(struct spinlock *)'}
+     372 | static __always_inline void spin_lock_irq(spinlock_t *lock)
+         |                             ^~~~~~~~~~~~~
+   include/linux/spinlock.h:372:29: error: static declaration of 'spin_lock_irq' follows non-static declaration
+   In file included from include/linux/mm_types.h:19,
+                    from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/seqlock.h:943:9: note: previous implicit declaration of 'spin_lock_irq' with type 'void(spinlock_t *)' {aka 'void(struct spinlock *)'}
+     943 |         spin_lock_irq(&sl->lock);
+         |         ^~~~~~~~~~~~~
+   In file included from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+>> include/linux/spinlock.h:387:29: warning: conflicting types for 'spin_unlock'; have 'void(spinlock_t *)' {aka 'void(struct spinlock *)'}
+     387 | static __always_inline void spin_unlock(spinlock_t *lock)
+         |                             ^~~~~~~~~~~
+   include/linux/spinlock.h:387:29: error: static declaration of 'spin_unlock' follows non-static declaration
+   In file included from include/linux/mm_types.h:19,
+                    from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/seqlock.h:904:9: note: previous implicit declaration of 'spin_unlock' with type 'void(spinlock_t *)' {aka 'void(struct spinlock *)'}
+     904 |         spin_unlock(&sl->lock);
+         |         ^~~~~~~~~~~
+   In file included from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+>> include/linux/spinlock.h:392:29: warning: conflicting types for 'spin_unlock_bh'; have 'void(spinlock_t *)' {aka 'void(struct spinlock *)'}
+     392 | static __always_inline void spin_unlock_bh(spinlock_t *lock)
+         |                             ^~~~~~~~~~~~~~
+   include/linux/spinlock.h:392:29: error: static declaration of 'spin_unlock_bh' follows non-static declaration
+   In file included from include/linux/mm_types.h:19,
+                    from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/seqlock.h:931:9: note: previous implicit declaration of 'spin_unlock_bh' with type 'void(spinlock_t *)' {aka 'void(struct spinlock *)'}
+     931 |         spin_unlock_bh(&sl->lock);
+         |         ^~~~~~~~~~~~~~
+   In file included from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+>> include/linux/spinlock.h:397:29: warning: conflicting types for 'spin_unlock_irq'; have 'void(spinlock_t *)' {aka 'void(struct spinlock *)'}
+     397 | static __always_inline void spin_unlock_irq(spinlock_t *lock)
+         |                             ^~~~~~~~~~~~~~~
+   include/linux/spinlock.h:397:29: error: static declaration of 'spin_unlock_irq' follows non-static declaration
+   In file included from include/linux/mm_types.h:19,
+                    from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/seqlock.h:957:9: note: previous implicit declaration of 'spin_unlock_irq' with type 'void(spinlock_t *)' {aka 'void(struct spinlock *)'}
+     957 |         spin_unlock_irq(&sl->lock);
+         |         ^~~~~~~~~~~~~~~
+   In file included from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/spinlock.h:402:29: warning: conflicting types for 'spin_unlock_irqrestore'; have 'void(spinlock_t *, long unsigned int)' {aka 'void(struct spinlock *, long unsigned int)'}
+     402 | static __always_inline void spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags)
+         |                             ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:402:29: error: static declaration of 'spin_unlock_irqrestore' follows non-static declaration
+   In file included from include/linux/mm_types.h:19,
+                    from arch/riscv/include/asm/tlbflush.h:10,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/page.h:14,
+                    from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/seqlock.h:995:9: note: previous implicit declaration of 'spin_unlock_irqrestore' with type 'void(spinlock_t *, long unsigned int)' {aka 'void(struct spinlock *, long unsigned int)'}
+     995 |         spin_unlock_irqrestore(&sl->lock, flags);
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/mm.h:700,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/huge_mm.h: In function 'vmf_insert_pfn_pmd':
+   include/linux/huge_mm.h:58:58: error: incompatible type for argument 3 of 'vmf_insert_pfn_pmd_prot'
+      58 |         return vmf_insert_pfn_pmd_prot(vmf, pfn, vmf->vma->vm_page_prot, write);
+         |                                                  ~~~~~~~~^~~~~~~~~~~~~~
+         |                                                          |
+         |                                                          int
+   include/linux/huge_mm.h:42:45: note: expected 'pgprot_t' but argument is of type 'int'
+      42 |                                    pgprot_t pgprot, bool write);
+         |                                    ~~~~~~~~~^~~~~~
+   include/linux/huge_mm.h: In function 'vmf_insert_pfn_pud':
+   include/linux/huge_mm.h:77:58: error: incompatible type for argument 3 of 'vmf_insert_pfn_pud_prot'
+      77 |         return vmf_insert_pfn_pud_prot(vmf, pfn, vmf->vma->vm_page_prot, write);
+         |                                                  ~~~~~~~~^~~~~~~~~~~~~~
+         |                                                          |
+         |                                                          int
+   include/linux/huge_mm.h:61:45: note: expected 'pgprot_t' but argument is of type 'int'
+      61 |                                    pgprot_t pgprot, bool write);
+         |                                    ~~~~~~~~~^~~~~~
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   include/linux/mm.h: In function 'vma_set_page_prot':
+   include/linux/mm.h:2853:29: error: incompatible types when assigning to type 'int' from type 'pgprot_t'
+    2853 |         vma->vm_page_prot = vm_get_page_prot(vma->vm_flags);
+         |                             ^~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+   make[2]: *** [scripts/Makefile.build:120: arch/riscv/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1194: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
->
-> So then I pretty much guess.
->
->                  Linus
+
+vim +56 arch/riscv/include/asm/pgtable-64.h
+
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06   53  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06   54  #define pud_val(x)      ((x).pud)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06   55  #define __pud(x)        ((pud_t) { (x) })
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  @56  #define PTRS_PER_PUD    (PAGE_SIZE / sizeof(pud_t))
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06   57  
+07037db5d479f9 Palmer Dabbelt   2017-07-10   58  /* Page Middle Directory entry */
+07037db5d479f9 Palmer Dabbelt   2017-07-10   59  typedef struct {
+07037db5d479f9 Palmer Dabbelt   2017-07-10   60  	unsigned long pmd;
+07037db5d479f9 Palmer Dabbelt   2017-07-10   61  } pmd_t;
+07037db5d479f9 Palmer Dabbelt   2017-07-10   62  
+07037db5d479f9 Palmer Dabbelt   2017-07-10   63  #define pmd_val(x)      ((x).pmd)
+07037db5d479f9 Palmer Dabbelt   2017-07-10   64  #define __pmd(x)        ((pmd_t) { (x) })
+07037db5d479f9 Palmer Dabbelt   2017-07-10   65  
+07037db5d479f9 Palmer Dabbelt   2017-07-10   66  #define PTRS_PER_PMD    (PAGE_SIZE / sizeof(pmd_t))
+07037db5d479f9 Palmer Dabbelt   2017-07-10   67  
+07037db5d479f9 Palmer Dabbelt   2017-07-10   68  static inline int pud_present(pud_t pud)
+07037db5d479f9 Palmer Dabbelt   2017-07-10   69  {
+07037db5d479f9 Palmer Dabbelt   2017-07-10   70  	return (pud_val(pud) & _PAGE_PRESENT);
+07037db5d479f9 Palmer Dabbelt   2017-07-10   71  }
+07037db5d479f9 Palmer Dabbelt   2017-07-10   72  
+07037db5d479f9 Palmer Dabbelt   2017-07-10   73  static inline int pud_none(pud_t pud)
+07037db5d479f9 Palmer Dabbelt   2017-07-10   74  {
+07037db5d479f9 Palmer Dabbelt   2017-07-10   75  	return (pud_val(pud) == 0);
+07037db5d479f9 Palmer Dabbelt   2017-07-10   76  }
+07037db5d479f9 Palmer Dabbelt   2017-07-10   77  
+07037db5d479f9 Palmer Dabbelt   2017-07-10   78  static inline int pud_bad(pud_t pud)
+07037db5d479f9 Palmer Dabbelt   2017-07-10   79  {
+07037db5d479f9 Palmer Dabbelt   2017-07-10   80  	return !pud_present(pud);
+07037db5d479f9 Palmer Dabbelt   2017-07-10   81  }
+07037db5d479f9 Palmer Dabbelt   2017-07-10   82  
+af6513ead0462c Steven Price     2020-02-03   83  #define pud_leaf	pud_leaf
+af6513ead0462c Steven Price     2020-02-03   84  static inline int pud_leaf(pud_t pud)
+af6513ead0462c Steven Price     2020-02-03   85  {
+f5397c3ee0a3e2 Nanyong Sun      2021-04-30   86  	return pud_present(pud) && (pud_val(pud) & _PAGE_LEAF);
+af6513ead0462c Steven Price     2020-02-03   87  }
+af6513ead0462c Steven Price     2020-02-03   88  
+07037db5d479f9 Palmer Dabbelt   2017-07-10   89  static inline void set_pud(pud_t *pudp, pud_t pud)
+07037db5d479f9 Palmer Dabbelt   2017-07-10   90  {
+07037db5d479f9 Palmer Dabbelt   2017-07-10   91  	*pudp = pud;
+07037db5d479f9 Palmer Dabbelt   2017-07-10   92  }
+07037db5d479f9 Palmer Dabbelt   2017-07-10   93  
+07037db5d479f9 Palmer Dabbelt   2017-07-10   94  static inline void pud_clear(pud_t *pudp)
+07037db5d479f9 Palmer Dabbelt   2017-07-10   95  {
+07037db5d479f9 Palmer Dabbelt   2017-07-10   96  	set_pud(pudp, __pud(0));
+07037db5d479f9 Palmer Dabbelt   2017-07-10   97  }
+07037db5d479f9 Palmer Dabbelt   2017-07-10   98  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06   99  static inline pud_t pfn_pud(unsigned long pfn, pgprot_t prot)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  100  {
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  101  	return __pud((pfn << _PAGE_PFN_SHIFT) | pgprot_val(prot));
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  102  }
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  103  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  104  static inline unsigned long _pud_pfn(pud_t pud)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  105  {
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  106  	return pud_val(pud) >> _PAGE_PFN_SHIFT;
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  107  }
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  108  
+9cf6fa24584431 Aneesh Kumar K.V 2021-07-07  109  static inline pmd_t *pud_pgtable(pud_t pud)
+07037db5d479f9 Palmer Dabbelt   2017-07-10  110  {
+9cf6fa24584431 Aneesh Kumar K.V 2021-07-07  111  	return (pmd_t *)pfn_to_virt(pud_val(pud) >> _PAGE_PFN_SHIFT);
+07037db5d479f9 Palmer Dabbelt   2017-07-10  112  }
+07037db5d479f9 Palmer Dabbelt   2017-07-10  113  
+8ad8b72721d0f0 Nick Hu          2020-01-06  114  static inline struct page *pud_page(pud_t pud)
+8ad8b72721d0f0 Nick Hu          2020-01-06  115  {
+8ad8b72721d0f0 Nick Hu          2020-01-06  116  	return pfn_to_page(pud_val(pud) >> _PAGE_PFN_SHIFT);
+8ad8b72721d0f0 Nick Hu          2020-01-06  117  }
+8ad8b72721d0f0 Nick Hu          2020-01-06  118  
+d10efa21a93748 Qinglin Pan      2022-01-27  119  #define mm_p4d_folded  mm_p4d_folded
+d10efa21a93748 Qinglin Pan      2022-01-27  120  static inline bool mm_p4d_folded(struct mm_struct *mm)
+d10efa21a93748 Qinglin Pan      2022-01-27  121  {
+d10efa21a93748 Qinglin Pan      2022-01-27  122  	if (pgtable_l5_enabled)
+d10efa21a93748 Qinglin Pan      2022-01-27  123  		return false;
+d10efa21a93748 Qinglin Pan      2022-01-27  124  
+d10efa21a93748 Qinglin Pan      2022-01-27  125  	return true;
+d10efa21a93748 Qinglin Pan      2022-01-27  126  }
+d10efa21a93748 Qinglin Pan      2022-01-27  127  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  128  #define mm_pud_folded  mm_pud_folded
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  129  static inline bool mm_pud_folded(struct mm_struct *mm)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  130  {
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  131  	if (pgtable_l4_enabled)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  132  		return false;
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  133  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  134  	return true;
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  135  }
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  136  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  137  #define pmd_index(addr) (((addr) >> PMD_SHIFT) & (PTRS_PER_PMD - 1))
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  138  
+07037db5d479f9 Palmer Dabbelt   2017-07-10  139  static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
+07037db5d479f9 Palmer Dabbelt   2017-07-10  140  {
+07037db5d479f9 Palmer Dabbelt   2017-07-10  141  	return __pmd((pfn << _PAGE_PFN_SHIFT) | pgprot_val(prot));
+07037db5d479f9 Palmer Dabbelt   2017-07-10  142  }
+07037db5d479f9 Palmer Dabbelt   2017-07-10  143  
+671f9a3e2e24cd Anup Patel       2019-06-28  144  static inline unsigned long _pmd_pfn(pmd_t pmd)
+671f9a3e2e24cd Anup Patel       2019-06-28  145  {
+671f9a3e2e24cd Anup Patel       2019-06-28  146  	return pmd_val(pmd) >> _PAGE_PFN_SHIFT;
+671f9a3e2e24cd Anup Patel       2019-06-28  147  }
+671f9a3e2e24cd Anup Patel       2019-06-28  148  
+9eb4fcff220790 Nanyong Sun      2021-06-17  149  #define mk_pmd(page, prot)    pfn_pmd(page_to_pfn(page), prot)
+9eb4fcff220790 Nanyong Sun      2021-06-17  150  
+07037db5d479f9 Palmer Dabbelt   2017-07-10  151  #define pmd_ERROR(e) \
+07037db5d479f9 Palmer Dabbelt   2017-07-10  152  	pr_err("%s:%d: bad pmd %016lx.\n", __FILE__, __LINE__, pmd_val(e))
+07037db5d479f9 Palmer Dabbelt   2017-07-10  153  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  154  #define pud_ERROR(e)   \
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  155  	pr_err("%s:%d: bad pud %016lx.\n", __FILE__, __LINE__, pud_val(e))
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  156  
+d10efa21a93748 Qinglin Pan      2022-01-27  157  #define p4d_ERROR(e)   \
+d10efa21a93748 Qinglin Pan      2022-01-27  158  	pr_err("%s:%d: bad p4d %016lx.\n", __FILE__, __LINE__, p4d_val(e))
+d10efa21a93748 Qinglin Pan      2022-01-27  159  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  160  static inline void set_p4d(p4d_t *p4dp, p4d_t p4d)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  161  {
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  162  	if (pgtable_l4_enabled)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  163  		*p4dp = p4d;
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  164  	else
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  165  		set_pud((pud_t *)p4dp, (pud_t){ p4d_val(p4d) });
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  166  }
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  167  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  168  static inline int p4d_none(p4d_t p4d)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  169  {
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  170  	if (pgtable_l4_enabled)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  171  		return (p4d_val(p4d) == 0);
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  172  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  173  	return 0;
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  174  }
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  175  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  176  static inline int p4d_present(p4d_t p4d)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  177  {
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  178  	if (pgtable_l4_enabled)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  179  		return (p4d_val(p4d) & _PAGE_PRESENT);
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  180  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  181  	return 1;
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  182  }
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  183  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  184  static inline int p4d_bad(p4d_t p4d)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  185  {
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  186  	if (pgtable_l4_enabled)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  187  		return !p4d_present(p4d);
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  188  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  189  	return 0;
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  190  }
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  191  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  192  static inline void p4d_clear(p4d_t *p4d)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  193  {
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  194  	if (pgtable_l4_enabled)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  195  		set_p4d(p4d, __p4d(0));
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  196  }
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  197  
+d10efa21a93748 Qinglin Pan      2022-01-27  198  static inline p4d_t pfn_p4d(unsigned long pfn, pgprot_t prot)
+d10efa21a93748 Qinglin Pan      2022-01-27  199  {
+d10efa21a93748 Qinglin Pan      2022-01-27  200  	return __p4d((pfn << _PAGE_PFN_SHIFT) | pgprot_val(prot));
+d10efa21a93748 Qinglin Pan      2022-01-27  201  }
+d10efa21a93748 Qinglin Pan      2022-01-27  202  
+d10efa21a93748 Qinglin Pan      2022-01-27  203  static inline unsigned long _p4d_pfn(p4d_t p4d)
+d10efa21a93748 Qinglin Pan      2022-01-27  204  {
+d10efa21a93748 Qinglin Pan      2022-01-27  205  	return p4d_val(p4d) >> _PAGE_PFN_SHIFT;
+d10efa21a93748 Qinglin Pan      2022-01-27  206  }
+d10efa21a93748 Qinglin Pan      2022-01-27  207  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  208  static inline pud_t *p4d_pgtable(p4d_t p4d)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  209  {
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  210  	if (pgtable_l4_enabled)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  211  		return (pud_t *)pfn_to_virt(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  212  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  213  	return (pud_t *)pud_pgtable((pud_t) { p4d_val(p4d) });
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  214  }
+d10efa21a93748 Qinglin Pan      2022-01-27  215  #define p4d_page_vaddr(p4d)	((unsigned long)p4d_pgtable(p4d))
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  216  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  217  static inline struct page *p4d_page(p4d_t p4d)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  218  {
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  219  	return pfn_to_page(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  220  }
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  221  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  222  #define pud_index(addr) (((addr) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  223  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  224  #define pud_offset pud_offset
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  225  static inline pud_t *pud_offset(p4d_t *p4d, unsigned long address)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  226  {
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  227  	if (pgtable_l4_enabled)
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  228  		return p4d_pgtable(*p4d) + pud_index(address);
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  229  
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  230  	return (pud_t *)p4d;
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  231  }
+e8a62cc26ddf53 Alexandre Ghiti  2021-12-06  232  
+d10efa21a93748 Qinglin Pan      2022-01-27 @233  static inline void set_pgd(pgd_t *pgdp, pgd_t pgd)
+d10efa21a93748 Qinglin Pan      2022-01-27  234  {
+d10efa21a93748 Qinglin Pan      2022-01-27  235  	if (pgtable_l5_enabled)
+d10efa21a93748 Qinglin Pan      2022-01-27  236  		*pgdp = pgd;
+d10efa21a93748 Qinglin Pan      2022-01-27  237  	else
+d10efa21a93748 Qinglin Pan      2022-01-27  238  		set_p4d((p4d_t *)pgdp, (p4d_t){ pgd_val(pgd) });
+d10efa21a93748 Qinglin Pan      2022-01-27  239  }
+d10efa21a93748 Qinglin Pan      2022-01-27  240  
+
+:::::: The code at line 56 was first introduced by commit
+:::::: e8a62cc26ddf53a3c6ba2a8d33036cf7b84f3923 riscv: Implement sv48 support
+
+:::::: TO: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+:::::: CC: Palmer Dabbelt <palmer@rivosinc.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

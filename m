@@ -2,141 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66D253B446
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7C753B44A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiFBHYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 03:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
+        id S231713AbiFBHZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 03:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiFBHYL (ORCPT
+        with ESMTP id S231639AbiFBHZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 03:24:11 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6E21F89B5
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 00:24:10 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id b11so3063125qvv.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 00:24:10 -0700 (PDT)
+        Thu, 2 Jun 2022 03:25:19 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B98D2755BF
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 00:25:19 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id r71so4082840pgr.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 00:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L8s3LJw5xicbUhVaH0XHYNaSTkuhFS4Q1fnoIihiiOA=;
+        b=PpUcfnTeCjQJpRRld4d2NkaZOQ+giQuHJCn1hzgzAqhdn6283vgJycubVJLHBz7MeO
+         gpk/zLenJxp9+0MjyREOYZrTUaH4ZO3CsgN4B/2kYGrIj6WtCgBd5Vxj0NprmFh3iOOe
+         qqRccxugpbcmvhBLur+sbcAxdL9UkwfInmnoeaMIK2j9IL2G1v/EK4XC0099v5nGhbkY
+         /2oUDiJzag2krbBJswpFIJ3ox1IVAQFwEzgpbd8EIB6GMv/imk1bfRNdh4pLljzCnbL8
+         FDMiOweeEvMn8jEeguFjd4Y2npkd0rr0Xc5o3TwFXpAyvU45XvDEGAVctirlyucvMIvv
+         M6WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4ttVAIF+wGdlpO6DJPONxYdz8jQOa/xA/mWMkzgLc+k=;
-        b=i1JVUX3cz/n2GsXywle01OODLA+GfjUzq6BDzd4AQT3wzGfyOiNnsxsnOg4yABuTLo
-         KROdI/fd8jitYEtuKwfJU1lSyda+QQs4ROEvFW367Il6MnsIf+1ZEE3k6lwyi2edRjfe
-         ZO9hWGzCdzYuEPeRNBaoswHpt/PmtscCAw2244Hr280ibRNWCX06JC7vBumF93BzjlJZ
-         vDhcvDVXMIyDp0aeMfXEBR1GTVD73GVkB6t70yXPtXL2/c2jToxvJSCufj3zMVjrp8/7
-         9BZTDNvolPwixcUPuBVWQRSsZsYuSTPryYsQLKAnpLTzvKVy+0hwJSBH4srWlQJqVIT1
-         1BGA==
-X-Gm-Message-State: AOAM533DRwymzSf0nTD+G5n4eaWocTsFK3E8W7DKZuQR7fxPEHRpG8aI
-        OmWx3xHnAs3Y/lxOGEsP5RSmv37d5JTYQg==
-X-Google-Smtp-Source: ABdhPJytipfFLDy2h19EIonsUpbH8SIyWKo/rM+ICPk/kL+ymMfZxih8YaTtrif/PRdHFJR6I+didA==
-X-Received: by 2002:a05:6214:242d:b0:462:65b0:d129 with SMTP id gy13-20020a056214242d00b0046265b0d129mr33434050qvb.8.1654154649370;
-        Thu, 02 Jun 2022 00:24:09 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id 2-20020a05620a040200b0069fd12a957bsm2688325qkp.17.2022.06.02.00.24.09
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 00:24:09 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id e184so6852798ybf.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 00:24:09 -0700 (PDT)
-X-Received: by 2002:a25:cc53:0:b0:65c:b19c:fac1 with SMTP id
- l80-20020a25cc53000000b0065cb19cfac1mr3588936ybf.89.1654154648804; Thu, 02
- Jun 2022 00:24:08 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L8s3LJw5xicbUhVaH0XHYNaSTkuhFS4Q1fnoIihiiOA=;
+        b=4l7T6ZTy+lu/Qv23WrMurXOdHOrjnrD5XXJXlq+sFuvN1yiktck0PYbIW6eYYbb0OZ
+         l5hjKrjw5kder40Nw+cyRC79gDKz0ylvhjOUfjHA8nOP61iigDJMf1LdIfUHns7XRbnL
+         Kb2ZfCcF/YttuYHZAbquVoCfz55DBwcAtnsMZ6elbR9zbJQ4CRvG6UI5Cm6QsUyxmY/a
+         5Y1v9qzScV/I38Akv0SThLxU7RnaU7aoJeHwQ74GjiAfkcMNQunXZThLUMW6SGtQmmri
+         cgcrtOXCxAYftP8k+cJ2cNRzuITPwY2WzHiJOoraoCi3u/UgvzS3zH0MfZVaGJTzbJlv
+         94fw==
+X-Gm-Message-State: AOAM530m41Q6/csZM2v8idCMVQHuyvSnu/XLAXSwWTqVOHIsH7hJa3kU
+        xswx0uqgGVO835hlDipUqYQ=
+X-Google-Smtp-Source: ABdhPJzF76sBp7B+RevVSJ6GLP6kQU1DDA5WxDEyBKWr3d793qldOtmxxXG4GU+oPlNcprYzx09L2g==
+X-Received: by 2002:a63:e60e:0:b0:3fc:7753:ed89 with SMTP id g14-20020a63e60e000000b003fc7753ed89mr3032900pgh.70.1654154718717;
+        Thu, 02 Jun 2022 00:25:18 -0700 (PDT)
+Received: from localhost.localdomain ([103.220.76.197])
+        by smtp.gmail.com with ESMTPSA id h21-20020a170902f7d500b001637997d0d4sm2725018plw.206.2022.06.02.00.25.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 00:25:18 -0700 (PDT)
+From:   Chao Liu <chaoliu719@gmail.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
+        Wayne Zhang <zhangwen@coolpad.com>,
+        Chao Liu <liuchao@coolpad.com>
+Subject: [PATCH] f2fs: refine comments for inline flags
+Date:   Thu,  2 Jun 2022 15:24:49 +0800
+Message-Id: <20220602072449.998303-1-chaoliu719@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <202205310707.ppwnnzce-lkp@intel.com>
-In-Reply-To: <202205310707.ppwnnzce-lkp@intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 2 Jun 2022 09:23:57 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWvE=TtqHLOgcdpKGzYgg4JeBcB7YGRBq0qubFxYepULg@mail.gmail.com>
-Message-ID: <CAMuHMdWvE=TtqHLOgcdpKGzYgg4JeBcB7YGRBq0qubFxYepULg@mail.gmail.com>
-Subject: Re: arch/m68k/68000/ints.c:82:30: error: 'ISR' undeclared
-To:     kernel test robot <lkp@intel.com>
-Cc:     Greg Ungerer <gerg@linux-m68k.org>, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 5:44 PM kernel test robot <lkp@intel.com> wrote:
-> First bad commit (maybe != root cause):
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   8ab2afa23bd197df47819a87f0265c0ac95c5b6a
-> commit: 6b8be804ff376f6657ccdf6b29974e7c793d88c4 m68knommu: fix 68000 CPU link with no platform selected
-> date:   6 days ago
-> config: m68k-buildonly-randconfig-r004-20220530 (https://download.01.org/0day-ci/archive/20220531/202205310707.ppwnnzce-lkp@intel.com/config)
-> compiler: m68k-linux-gcc (GCC) 11.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6b8be804ff376f6657ccdf6b29974e7c793d88c4
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 6b8be804ff376f6657ccdf6b29974e7c793d88c4
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/68000/
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->    arch/m68k/68000/ints.c:77:6: warning: no previous prototype for 'process_int' [-Wmissing-prototypes]
->       77 | void process_int(int vec, struct pt_regs *fp)
->          |      ^~~~~~~~~~~
->    arch/m68k/68000/ints.c: In function 'process_int':
-> >> arch/m68k/68000/ints.c:82:30: error: 'ISR' undeclared (first use in this function)
->       82 |         unsigned long pend = ISR;
->          |                              ^~~
->    arch/m68k/68000/ints.c:82:30: note: each undeclared identifier is reported only once for each function it appears in
->    arch/m68k/68000/ints.c: In function 'intc_irq_unmask':
-> >> arch/m68k/68000/ints.c:135:9: error: 'IMR' undeclared (first use in this function)
->      135 |         IMR &= ~(1 << d->irq);
->          |         ^~~
->    arch/m68k/68000/ints.c: In function 'intc_irq_mask':
->    arch/m68k/68000/ints.c:140:9: error: 'IMR' undeclared (first use in this function)
->      140 |         IMR |= (1 << d->irq);
->          |         ^~~
->    arch/m68k/68000/ints.c: At top level:
->    arch/m68k/68000/ints.c:153:13: warning: no previous prototype for 'trap_init' [-Wmissing-prototypes]
->      153 | void __init trap_init(void)
->          |             ^~~~~~~~~
->    arch/m68k/68000/ints.c:172:13: warning: no previous prototype for 'init_IRQ' [-Wmissing-prototypes]
->      172 | void __init init_IRQ(void)
->          |             ^~~~~~~~
->    arch/m68k/68000/ints.c: In function 'init_IRQ':
-> >> arch/m68k/68000/ints.c:176:9: error: 'IVR' undeclared (first use in this function)
->      176 |         IVR = 0x40; /* Set DragonBall IVR (interrupt base) to 64 */
->          |         ^~~
->    arch/m68k/68000/ints.c:179:9: error: 'IMR' undeclared (first use in this function)
->      179 |         IMR = ~0;
->          |         ^~~
+From: Chao Liu <liuchao@coolpad.com>
 
-If M68000=y, but none of M68{,EZ,VZ}328 are enabled, ISR and IMR are
-not defined. Most of the code in arch/m68k/68000/ints.c is specific
-to the '328 series, and does not apply to plain 68000, but we can't
-just not compile ints.c, as we do need definitions of trap_init()
-and init_IRQ().
-Factor out the '328 parts in dragonball.o, and keep a __weak dummy
-init_IRQ() in ints.c?
+Currently, we use f2fs_has_inline_xattr() to check whether the
+inode can store inline xattr. However, it might be misinterpreted
+as the inode has at least one inline xattr.
 
-Gr{oetje,eeting}s,
+The same is true for f2fs_has_inline_data() and
+f2fs_has_inline_dentry(). To be more intuitive and specific,
+refine comments of inline flags.
 
-                        Geert
+Signed-off-by: Chao Liu <liuchao@coolpad.com>
+---
+ fs/f2fs/f2fs.h          | 6 +++---
+ include/linux/f2fs_fs.h | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index e10838879538..e0205d42588d 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -730,9 +730,9 @@ enum {
+ 	FI_NO_ALLOC,		/* should not allocate any blocks */
+ 	FI_FREE_NID,		/* free allocated nide */
+ 	FI_NO_EXTENT,		/* not to use the extent cache */
+-	FI_INLINE_XATTR,	/* used for inline xattr */
+-	FI_INLINE_DATA,		/* used for inline data*/
+-	FI_INLINE_DENTRY,	/* used for inline dentry */
++	FI_INLINE_XATTR,	/* inode can store inline xattr */
++	FI_INLINE_DATA,		/* inode can store inline data */
++	FI_INLINE_DENTRY,	/* inode can store inline dentry */
+ 	FI_APPEND_WRITE,	/* inode has appended data */
+ 	FI_UPDATE_WRITE,	/* inode has in-place-update data */
+ 	FI_NEED_IPU,		/* used for ipu per file */
+diff --git a/include/linux/f2fs_fs.h b/include/linux/f2fs_fs.h
+index d445150c5350..a3c6750a66ae 100644
+--- a/include/linux/f2fs_fs.h
++++ b/include/linux/f2fs_fs.h
+@@ -223,9 +223,9 @@ struct f2fs_extent {
+ #define	NODE_IND2_BLOCK		(DEF_ADDRS_PER_INODE + 4)
+ #define	NODE_DIND_BLOCK		(DEF_ADDRS_PER_INODE + 5)
+ 
+-#define F2FS_INLINE_XATTR	0x01	/* file inline xattr flag */
+-#define F2FS_INLINE_DATA	0x02	/* file inline data flag */
+-#define F2FS_INLINE_DENTRY	0x04	/* file inline dentry flag */
++#define F2FS_INLINE_XATTR	0x01	/* file can store inline xattr */
++#define F2FS_INLINE_DATA	0x02	/* file can store inline data */
++#define F2FS_INLINE_DENTRY	0x04	/* file can store inline dentry */
+ #define F2FS_DATA_EXIST		0x08	/* file inline data exist flag */
+ #define F2FS_INLINE_DOTS	0x10	/* file having implicit dot dentries */
+ #define F2FS_EXTRA_ATTR		0x20	/* file having extra attribute */
+-- 
+2.36.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

@@ -2,116 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187AA53B784
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6689F53B78E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234004AbiFBKuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
+        id S234025AbiFBK5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234003AbiFBKum (ORCPT
+        with ESMTP id S234003AbiFBK5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:50:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 900C83ED29
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:50:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654167040;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DrhV5vnxv6SRuKZJ5gBXpRv/4ZhVI+1PkR2Fak5zt3E=;
-        b=PqE6hC/lUcz630ZnZyFPtwZE+lEPTGuWWTQQUmI5UIOO/At38K8Ou4UnnC3nYU2HSqChFL
-        Ui7pUtU4So4zfsTJReO3UBkJMfxwS/pRoLc5sY+YxBEa/PxxkdDRS/SsqY6oWyS8iIX0N6
-        vRiOSseDAjSdDkqWB6cjx98S0X4wq/8=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-490-CX_6wEC9Ow-VAiDipp8GPQ-1; Thu, 02 Jun 2022 06:50:39 -0400
-X-MC-Unique: CX_6wEC9Ow-VAiDipp8GPQ-1
-Received: by mail-ej1-f70.google.com with SMTP id au8-20020a170907092800b00707784fd7e0so2187485ejc.22
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 03:50:39 -0700 (PDT)
+        Thu, 2 Jun 2022 06:57:44 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEB020B14C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:57:40 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id l30so7214778lfj.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 03:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x+CytCKlX79rhtBNDGo+eN/Csfz4tGbSW706glfcV3s=;
+        b=IrBYH2atiRJTij4OLkL2McNzaoMR3RqF5IQNxPWSS4MKmKEZwVfo766LNbSjF5dRWW
+         cXFMBvyydlUCOY5FUNClP3TU0KNiwEN3SZzoW/65g1Pm+DmVX3C8nvtlRiP3KA7teXx6
+         ThGTHny9ze7dy+BMT4LA6doHWH7JqDtK33XtP2NkYcyLx0NC/nEI5L89L4ZSs0/CXrct
+         CcTH8POG8oZpMV8ORMcHbE/H7LriMVrPMKQ4M+UJjJABi9RQ8a3bHWLowlT+KQqHYC4z
+         EyW1W7L5bVRmR5ijb7kU/SlZMCNH572BPtAKMyOEGJd6xN6Wz/gBnbVK5UrRQSwpE1mk
+         KnLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DrhV5vnxv6SRuKZJ5gBXpRv/4ZhVI+1PkR2Fak5zt3E=;
-        b=WiWLh5BSmtK9OhTUOLzkggJr14Qh8f8yr9K9JzJmvvXWQXAI0s6cGrvSU340Fnej6p
-         NdA/lBLlK3B/jtQj1GlA/9gRKE2RVlws/Pdqp4NsDtCnlD4u6jHsi+ah5SIjCjnHlRk4
-         YNESY7HsfdZ9v8iYBMbQXi0KlwGhuPZi4rvCOQ9cqBjSuq0vcOwK0a6DWims8nBXM7+F
-         PEG/kRt0edrcQhb50M5Z+myWwLgoThihVhYBjWmBqPLrlkrqSlzP63Geg2Id28R3t853
-         CCJC+EkLZUHAhm3eExHE5HI9nS8mB6xawx1fv16ZPvkFn3WVBDy+Fyak6x8/FEfy+qsI
-         ZY5g==
-X-Gm-Message-State: AOAM531cttMct+/vxlpxJoAPyUtFR+2mUj8g5vcCI+J4BHxKdaSjv9tP
-        jHSV15tpj4GI2019EB2DFEa/TGyOhuaCiK6BVhOebAIH4NFGRMdciSN9A3uzZ/I1/KyyFzJCELh
-        aP5ktiAQcR87h475QT7X1Xzfm
-X-Received: by 2002:aa7:c852:0:b0:42d:70d8:2864 with SMTP id g18-20020aa7c852000000b0042d70d82864mr4622041edt.379.1654167038352;
-        Thu, 02 Jun 2022 03:50:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxagkCoICyD4tyHlyBtfQJTn2p3Yp2BOSbtulSpElsl0xzECJsO+qskjhWefExGoeHv99aQBQ==
-X-Received: by 2002:aa7:c852:0:b0:42d:70d8:2864 with SMTP id g18-20020aa7c852000000b0042d70d82864mr4622024edt.379.1654167038205;
-        Thu, 02 Jun 2022 03:50:38 -0700 (PDT)
-Received: from [192.168.42.54] ([109.38.144.46])
-        by smtp.gmail.com with ESMTPSA id e1-20020a170906374100b006f3ef214da8sm1651719ejc.14.2022.06.02.03.50.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 03:50:37 -0700 (PDT)
-Message-ID: <84aa3225-d514-4c08-f6d3-ed8f0423e513@redhat.com>
-Date:   Thu, 2 Jun 2022 12:50:36 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x+CytCKlX79rhtBNDGo+eN/Csfz4tGbSW706glfcV3s=;
+        b=VgdK/GxZdSo3YVNeKxurFa3fBOzyOwinFSPuo4DOGFMSCfNWxTFPEmQtm1dJFJ+Kmk
+         F0hJghdJ4C4T/64OH6Ng84szt/wlClitLWgXGICCkP0cslc2wKCPvHK7ZuUQmo1XNqto
+         Qt3995JkE8tInlUvzvo/FmjwD9OvyJuDj0I60jdYOriOploanjzR0LQyr7GPho9jZiso
+         YHMQM2xQJ/xwRti6OUn1Gket61Uw4C8tP6IynjeIoHdjMS9tkFbNQVoVoeOqQUAv9TRk
+         cis5PxCvfQw/C4y4FHXge5z4+NoTz7hF6EuAt2m0Z6/7prw+M9/+1y+hkrzTCX9lIztE
+         adbQ==
+X-Gm-Message-State: AOAM532feXVYBtT/0Fy4PkA1I4cAfE73w17ug5H+TlpJCynVsMggigKH
+        DBYLQ1GvnAtDNP0Yz4JK1PmCnpLldsNdYO/JGvBDzw==
+X-Google-Smtp-Source: ABdhPJyRW4SMizmg/2yd0bFF1lI+Tau+09O/qHPkI3ruuPazvFnilXmy/61Dibd6p0qtuaD+W+P4LBZ7Y/pFJQAK4jA=
+X-Received: by 2002:a05:6512:1156:b0:478:79b1:583c with SMTP id
+ m22-20020a056512115600b0047879b1583cmr3211435lfg.206.1654167458543; Thu, 02
+ Jun 2022 03:57:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] fbdev: simplefb: Check before clk_put() not needed
-Content-Language: en-US
-To:     Yihao Han <hanyihao@vivo.com>, Helge Deller <deller@gmx.de>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220602094219.13024-1-hanyihao@vivo.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220602094219.13024-1-hanyihao@vivo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000044cc505e0741a4b@google.com>
+In-Reply-To: <000000000000044cc505e0741a4b@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 2 Jun 2022 12:57:27 +0200
+Message-ID: <CACT4Y+ay0SQiiu2MwanpYEGmybHZc-nuqOxWOz1hC0PgLRRhuQ@mail.gmail.com>
+Subject: Re: [syzbot] riscv/fixes boot error: BUG: soft lockup in corrupted
+To:     syzbot <syzbot+1d1952c211a38ac43f10@syzkaller.appspotmail.com>
+Cc:     aou@eecs.berkeley.edu, axboe@kernel.dk, justin@coraid.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 2 Jun 2022 at 12:02, syzbot
+<syzbot+1d1952c211a38ac43f10@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    c932edeaf6d6 riscv: dts: microchip: fix gpio1 reg property..
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14de11edf00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=aa6b5702bdf14a17
+> dashboard link: https://syzkaller.appspot.com/bug?extid=1d1952c211a38ac43f10
+> compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: riscv64
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+1d1952c211a38ac43f10@syzkaller.appspotmail.com
 
-On 6/2/22 11:42, Yihao Han wrote:
-> clk_put() already checks the clk ptr using !clk and IS_ERR()
-> so there is no need to check it again before calling it.
-> 
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
+
+This is the issue with riscv command line length we discussed in the
+other thread:
+https://lore.kernel.org/all/CACT4Y+bP+U2Co67SJG4qri=qHqCk38cq_JwGmo7m0s-8hCF8ww@mail.gmail.com/
+
+
+> watchdog: BUG: soft lockup - CPU#0 stuck for 23s! [swapper/0:1]
+> Modules linked in:
+> irq event stamp: 410297
+> hardirqs last  enabled at (410296): [<ffffffff8000ee74>] __trace_hardirqs_on+0x18/0x20 arch/riscv/kernel/trace_irq.c:19
+> hardirqs last disabled at (410297): [<ffffffff8000ee94>] __trace_hardirqs_off+0x18/0x20 arch/riscv/kernel/trace_irq.c:25
+> softirqs last  enabled at (405886): [<ffffffff83207a08>] softirq_handle_end kernel/softirq.c:401 [inline]
+> softirqs last  enabled at (405886): [<ffffffff83207a08>] __do_softirq+0x618/0x8fc kernel/softirq.c:587
+> softirqs last disabled at (405891): [<ffffffff8006164a>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
+> softirqs last disabled at (405891): [<ffffffff8006164a>] invoke_softirq kernel/softirq.c:439 [inline]
+> softirqs last disabled at (405891): [<ffffffff8006164a>] __irq_exit_rcu+0x142/0x1f8 kernel/softirq.c:637
+> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc1-syzkaller #0
+> Hardware name: riscv-virtio,qemu (DT)
+> epc : arch_static_branch arch/riscv/include/asm/jump_label.h:20 [inline]
+> epc : kfence_alloc include/linux/kfence.h:120 [inline]
+> epc : slab_alloc_node mm/slub.c:3135 [inline]
+> epc : kmem_cache_alloc_node+0xa0/0x3c6 mm/slub.c:3267
+>  ra : slab_pre_alloc_hook mm/slab.h:724 [inline]
+>  ra : slab_alloc_node mm/slub.c:3131 [inline]
+>  ra : kmem_cache_alloc_node+0x66/0x3c6 mm/slub.c:3267
+> epc : ffffffff8047df56 ra : ffffffff8047df1c sp : ff200000002273b0
+>  gp : ffffffff85a76440 tp : ff60000007430000 t0 : 0000000000046000
+>  t1 : ffebffff014d10b7 t2 : ffffffff80668f62 s0 : ff20000000227450
+>  s1 : ff600000075a93c0 a0 : 0000000000000000 a1 : 0000000000000007
+>  a2 : 1ffffffff09c876c a3 : ffffffff80bec434 a4 : 0000000000000000
+>  a5 : 0000000000000000 a6 : 0000000000f00000 a7 : ff6000000a6885bb
+>  s2 : 0000000000000a20 s3 : 0000000000000000 s4 : 0000000000000a20
+>  s5 : ffffffffffffffff s6 : ffffffff8271f756 s7 : ffffffff85a9c780
+>  s8 : 00000000000000e8 s9 : ffffffff85a7c2c0 s10: 00000000000000ff
+>  s11: ffffffffffffa288 t3 : fffffffff3f3f300 t4 : ffebffff014d10b7
+>  t5 : ffebffff014d10b8 t6 : ff6000001239fc00
+> status: 0000000000000120 badaddr: 0000000000000000 cause: 8000000000000005
+> [<ffffffff8271f756>] __alloc_skb+0x234/0x2e4 net/core/skbuff.c:414
+> [<ffffffff81a42954>] alloc_skb include/linux/skbuff.h:1300 [inline]
+> [<ffffffff81a42954>] new_skb+0x2c/0xcc drivers/block/aoe/aoecmd.c:66
+> [<ffffffff81a48ab2>] aoecmd_cfg_pkts drivers/block/aoe/aoecmd.c:425 [inline]
+> [<ffffffff81a48ab2>] aoecmd_cfg+0x1f6/0x5c6 drivers/block/aoe/aoecmd.c:1362
+> [<ffffffff81a4bdfc>] discover_timer+0x4a/0x54 drivers/block/aoe/aoemain.c:24
+> [<ffffffff8016c084>] call_timer_fn+0x164/0x694 kernel/time/timer.c:1421
+> [<ffffffff8016ca9a>] expire_timers kernel/time/timer.c:1466 [inline]
+> [<ffffffff8016ca9a>] __run_timers.part.0+0x4e6/0x76e kernel/time/timer.c:1734
+> [<ffffffff8016cda8>] __run_timers kernel/time/timer.c:1715 [inline]
+> [<ffffffff8016cda8>] run_timer_softirq+0x86/0x100 kernel/time/timer.c:1747
+> [<ffffffff83207664>] __do_softirq+0x274/0x8fc kernel/softirq.c:558
+> [<ffffffff8006164a>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
+> [<ffffffff8006164a>] invoke_softirq kernel/softirq.c:439 [inline]
+> [<ffffffff8006164a>] __irq_exit_rcu+0x142/0x1f8 kernel/softirq.c:637
+> [<ffffffff80061958>] irq_exit+0x10/0x7a kernel/softirq.c:661
+> [<ffffffff831f7c8e>] generic_handle_arch_irq+0x48/0x54 kernel/irq/handle.c:240
+> [<ffffffff800057b2>] ret_from_exception+0x0/0x10
+> [<ffffffff8047df1c>] slab_pre_alloc_hook mm/slab.h:724 [inline]
+> [<ffffffff8047df1c>] slab_alloc_node mm/slub.c:3131 [inline]
+> [<ffffffff8047df1c>] kmem_cache_alloc_node+0x66/0x3c6 mm/slub.c:3267
+>
+>
 > ---
->  drivers/video/fbdev/simplefb.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/video/fbdev/simplefb.c b/drivers/video/fbdev/simplefb.c
-> index 2c198561c338..f96ce8801be4 100644
-> --- a/drivers/video/fbdev/simplefb.c
-> +++ b/drivers/video/fbdev/simplefb.c
-> @@ -237,8 +237,7 @@ static int simplefb_clocks_get(struct simplefb_par *par,
->  		if (IS_ERR(clock)) {
->  			if (PTR_ERR(clock) == -EPROBE_DEFER) {
->  				while (--i >= 0) {
-> -					if (par->clks[i])
-> -						clk_put(par->clks[i]);
-> +					clk_put(par->clks[i]);
->  				}
->  				kfree(par->clks);
->  				return -EPROBE_DEFER;
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000044cc505e0741a4b%40google.com.

@@ -2,130 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E43C53C027
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 23:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E2753C020
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 23:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239311AbiFBVBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 17:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50326 "EHLO
+        id S239293AbiFBVBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 17:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239291AbiFBVBN (ORCPT
+        with ESMTP id S239122AbiFBVBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 17:01:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EDDF34BB6
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 14:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654203671;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=krZbVlK3Z1/IgWXud2lUTsTQaV8i8IJv68G2uGF/JVY=;
-        b=Nk/xoewyXr2BLsx2HlTov3XvRYkqe3fSUtJN8pj5UNVkG7i8/tP49hweeX/gBM7QnAlZOR
-        aP6zASGqbkGrr+e8T5UFFPYboaO+wrJpsj3tZMMJq3MdWezHkwN8owh6z4nexh/mhzqJsL
-        i5eswOb1lF5UyOBXIAbE21o9wS5dKd0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-55-dLxcq075PHG6Mmz-Sz_acg-1; Thu, 02 Jun 2022 17:01:09 -0400
-X-MC-Unique: dLxcq075PHG6Mmz-Sz_acg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B739F3C10142;
-        Thu,  2 Jun 2022 21:01:08 +0000 (UTC)
-Received: from emerald.redhat.com (unknown [10.22.34.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1E6821410F36;
-        Thu,  2 Jun 2022 21:01:08 +0000 (UTC)
-From:   Lyude Paul <lyude@redhat.com>
-To:     amd-gfx@freedesktop.org
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Hersen Wu <hersenwu@amd.com>,
-        Roman Li <Roman.Li@amd.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        amd-gfx@lists.freedesktop.org (open list:AMD DISPLAY CORE),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/3] drm/amdgpu/dm: Drop != NULL check in dm_mst_get_pbn_divider()
-Date:   Thu,  2 Jun 2022 17:00:56 -0400
-Message-Id: <20220602210056.73316-4-lyude@redhat.com>
-In-Reply-To: <20220602210056.73316-1-lyude@redhat.com>
-References: <20220602210056.73316-1-lyude@redhat.com>
+        Thu, 2 Jun 2022 17:01:10 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A80D35253;
+        Thu,  2 Jun 2022 14:01:09 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id d2so1524624vkg.5;
+        Thu, 02 Jun 2022 14:01:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9i8J+1TRfUHTT6n1+iy4Jf0ZEo68Ab/3VZwzDrsx+KE=;
+        b=gxkuprEx3BTkTbTPCppLwPDdhTjCBxj9T4g0tOX2AWuhyPugDfGKA/U6mcKQhYyiHm
+         z/NuXz3Prh/ae2nDI4hzLrs7pnSLujtSmGFX64qeQkVUaorSExBe9NFbFJy3ouqS2+RX
+         GZyj+rGA6Mv/6ZC/tTZuYr/USyKosF3DMHLYQeId6mtPS9LDzET+ApZ7UrUP0tStTOnh
+         H/AZIDRPMtQFhav0eIGreJHSm9Hg7VMDCJd1S0I9RrjIPT/3p2Vtww5WuaC836tHIzmD
+         GUGhGbWmbvUHxyQ5RTRssLRFNsf0MG9IqZE2VqdFtg1DZEVgTfFFn9Dl0f+z3JP+zbZw
+         odOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9i8J+1TRfUHTT6n1+iy4Jf0ZEo68Ab/3VZwzDrsx+KE=;
+        b=JR28r0aZ6xhBtxQiB0DQFFi+II2dNYOSRuioaKgzWvc0p7ainYqtGiZcRydWtNyTWg
+         CiqdjFwnq5zNC5w6KVVelbIPqvPYmdoVPcH2h5area+t1ViblDjXPgS5uX9zLM6ByjSx
+         2ywvmJKBboG+TTQD0i2RFdoHDSmDwCCMMMeHuYXNPXCF7U709JHbrvYV3FmdHWaBQ+mS
+         an+gfrf9P2SmIEVGersz7U2aVBf68J01ft6dRoQEn4f1r6Z8GDxDJxaqb24DPoX8Bk11
+         u6M1Bkwp5IiYKd1/Ourp2+5Kx2AZ/aVaK2mLUnJDO44ORH5VIrNFWnNB8D5BDQmwwjR3
+         Hfbw==
+X-Gm-Message-State: AOAM530UUkUPFXFm5t7JaMwEUAHXEuk1jy9RroP58Gwj6ZglqI4Lc330
+        M3iQce6Ab34pCzSq/VFi6IpClS0wNcHPk/mTcGA=
+X-Google-Smtp-Source: ABdhPJxh25EHE5pKS0sdBj8nqoTs6+xG5QKiYEncfV5Hy57QsH9ZmJju5ZQ8eajkYJ+e4UmbnwdykzjVJHPYkpdGqmM=
+X-Received: by 2002:a1f:3806:0:b0:357:34f9:bfe0 with SMTP id
+ f6-20020a1f3806000000b0035734f9bfe0mr2929307vka.21.1654203668382; Thu, 02 Jun
+ 2022 14:01:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220529182036.10226-1-jose.exposito89@gmail.com>
+ <20220530083752.1973a905@ultrarare.space> <20220530061812.GA10391@elementary>
+ <20220531221102.7bd7da7d@ultrarare.space> <20220531223330.3d63e2fe@ultrarare.space>
+ <20220531172053.GA10651@elementary> <CAPnXWxG8gbe1arQK9kBtwM1Xcta+wreTN742kgtBBr1v0ewKug@mail.gmail.com>
+ <7f67ac07b8bd37d5817cd151674cc6b0@ultrarare.space> <20220601072651.242ce08a@ultrarare.space>
+ <20220601121737.1226ffea@ultrarare.space> <20220601174956.GA10418@elementary> <20220602161219.152be32d@ultrarare.space>
+In-Reply-To: <20220602161219.152be32d@ultrarare.space>
+From:   Bryan Cain <bryancain3@gmail.com>
+Date:   Thu, 2 Jun 2022 15:00:57 -0600
+Message-ID: <CAPnXWxFU1RfVJ1LRMxevPSH5Y0tggx-t7ZuwdXkrba9mmOLojw@mail.gmail.com>
+Subject: Re: [PATCH v5] HID: apple: Properly handle function keys on non-Apple keyboard
+To:     Hilton Chain <hako@ultrarare.space>
+Cc:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A lot of code in amdgpu seems to sprinkle in
+This version looks good, and works without issue on my Keychron C1.
+Thanks for implementing it!
 
-  if (foo != NULL)
-    …
+Reviewed-by: Bryan Cain <bryancain3@gmail.com>
+Tested-by: Bryan Cain <bryancain3@gmail.com>
 
-Checks pretty much all over the place, many times in locations where it's
-clear foo (whatever foo may be) should never be NULL unless we've run into
-a programming error. This is definitely one of those places, as
-dm_mst_get_pbn_divider() should never be getting called with a NULL dc_link
-pointer.
+Regards,
+Bryan
 
-The problem with this code pattern is that many times the places I've seen
-it used in amdgpu have no real error handling. This is actually quite bad,
-if we try to avoid the NULL pointer and instead simply skip any code that
-was expecting a valid pointer - we're already in undefined territory.
-Subsequent code we execute may have expected sideaffects from the code we
-skipped that are no longer present, which leads to even more unpredictable
-behavior then a simple segfault. This could be silent errors or even just
-another segfault somewhere else.
-
-If we simply segfault though, that's not good either. But unlike the former
-solution, no subsequent code in the kernel thread will execute - and we
-will likely even get a clear backtrace from the invalid memory access. Of
-course, the preferred approach is to simply handle the possibility of both
-NULL and non-NULL pointers with nice error handling code. However, that's
-not always desirable or even possible, and in those cases it's likely just
-better to fail predictably rather than unpredictably.
-
-This code is a nice example of that - if link is NULL, you'll return a PBN
-divisor of 0. And thus, you've simply traded in your potential segfault for
-a potential divide by 0 error. This was something I actually managed to hit
-while working on the legacy MST removal work.
-
-Signed-off-by: Lyude Paul <lyude@redhat.com>
----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-index 1259f2f7a8f9..35c7def8f2bd 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-@@ -537,9 +537,6 @@ void amdgpu_dm_initialize_dp_connector(struct amdgpu_display_manager *dm,
- 
- int dm_mst_get_pbn_divider(struct dc_link *link)
- {
--	if (!link)
--		return 0;
--
- 	return dc_link_bandwidth_kbps(link,
- 			dc_link_get_link_cap(link)) / (8 * 1000 * 54);
- }
--- 
-2.35.3
-
+On Thu, Jun 2, 2022 at 2:12 AM Hilton Chain <hako@ultrarare.space> wrote:
+>
+> This commit extends fa33382c7f74 ("HID: apple: Properly handle function
+> keys on Keychron keyboards") by adding an array of known non-Apple
+> keyboards' device names, and the function apple_is_non_apple_keyboard()
+> to identify and create exception for them.
+>
+> Signed-off-by: Hilton Chain <hako@ultrarare.space>
+> ---
+>
+> V4 -> V5: Add Varmilo keyboards' name "AONE" to the exception list
+> V3 -> V4: Remove unnecessary strlen()
+>
+>  drivers/hid/hid-apple.c | 34 +++++++++++++++++++++++++++++-----
+>  1 file changed, 29 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+> index 42a568902f49..7fbde58e1219 100644
+> --- a/drivers/hid/hid-apple.c
+> +++ b/drivers/hid/hid-apple.c
+> @@ -36,7 +36,7 @@
+>  #define APPLE_NUMLOCK_EMULATION        BIT(8)
+>  #define APPLE_RDESC_BATTERY    BIT(9)
+>  #define APPLE_BACKLIGHT_CTL    BIT(10)
+> -#define APPLE_IS_KEYCHRON      BIT(11)
+> +#define APPLE_IS_NON_APPLE     BIT(11)
+>
+>  #define APPLE_FLAG_FKEY                0x01
+>
+> @@ -65,6 +65,10 @@ MODULE_PARM_DESC(swap_fn_leftctrl, "Swap the Fn and left Control keys. "
+>                 "(For people who want to keep PC keyboard muscle memory. "
+>                 "[0] = as-is, Mac layout, 1 = swapped, PC layout)");
+>
+> +struct apple_non_apple_keyboard {
+> +       char *name;
+> +};
+> +
+>  struct apple_sc_backlight {
+>         struct led_classdev cdev;
+>         struct hid_device *hdev;
+> @@ -313,6 +317,26 @@ static const struct apple_key_translation swapped_fn_leftctrl_keys[] = {
+>         { }
+>  };
+>
+> +static const struct apple_non_apple_keyboard non_apple_keyboards[] = {
+> +       { "SONiX USB DEVICE" },
+> +       { "Keychron" },
+> +       { "AONE" }
+> +};
+> +
+> +static bool apple_is_non_apple_keyboard(struct hid_device *hdev)
+> +{
+> +       int i;
+> +
+> +       for (i = 0; i < ARRAY_SIZE(non_apple_keyboards); i++) {
+> +               char *non_apple = non_apple_keyboards[i].name;
+> +
+> +               if (strncmp(hdev->name, non_apple, strlen(non_apple)) == 0)
+> +                       return true;
+> +       }
+> +
+> +       return false;
+> +}
+> +
+>  static inline void apple_setup_key_translation(struct input_dev *input,
+>                 const struct apple_key_translation *table)
+>  {
+> @@ -363,7 +387,7 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
+>         }
+>
+>         if (fnmode == 3) {
+> -               real_fnmode = (asc->quirks & APPLE_IS_KEYCHRON) ? 2 : 1;
+> +               real_fnmode = (asc->quirks & APPLE_IS_NON_APPLE) ? 2 : 1;
+>         } else {
+>                 real_fnmode = fnmode;
+>         }
+> @@ -669,9 +693,9 @@ static int apple_input_configured(struct hid_device *hdev,
+>                 asc->quirks &= ~APPLE_HAS_FN;
+>         }
+>
+> -       if (strncmp(hdev->name, "Keychron", 8) == 0) {
+> -               hid_info(hdev, "Keychron keyboard detected; function keys will default to fnmode=2 behavior\n");
+> -               asc->quirks |= APPLE_IS_KEYCHRON;
+> +       if (apple_is_non_apple_keyboard(hdev)) {
+> +               hid_info(hdev, "Non-apple keyboard detected; function keys will default to fnmode=2 behavior\n");
+> +               asc->quirks |= APPLE_IS_NON_APPLE;
+>         }
+>
+>         return 0;
+>
+> base-commit: d1dc87763f406d4e67caf16dbe438a5647692395
+> --
+> 2.36.1
+>

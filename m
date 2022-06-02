@@ -2,138 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F3353BC47
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E0153BC4C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236914AbiFBQQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 12:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
+        id S236906AbiFBQQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 12:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbiFBQQY (ORCPT
+        with ESMTP id S236929AbiFBQQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 12:16:24 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB408AE4C;
-        Thu,  2 Jun 2022 09:16:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=W4T5PIIcGVVrvnJ3j+rtildRWdfS99SqV9DDMh3z6VA=; b=mFcvfvBdKsB2BJNNUrV2R2TggK
-        1Px0GYS7XkvGiTWTnZL/2iur+Kwoi7+M1jX7ntdXKfQJgxbmlrV2IKqir+oid4k4eEGTQLkoy4Ej6
-        5ZG9+5TOIBSiRlulo/Z8oASkCGdc8NEe+OT+P7LSZ2mv/eVC6P+tVixruEzq8ynubixg6CxcQoxPy
-        F8HWcOevW1q3ZFYm1r8abYAOFD8Od08vH+hmLVbSXTbE3X0tUfar47n3TwHAH5FaK7Pdl9jU28pUr
-        /4DQK3TDmrdpP1fNME8UkG4a7Pk0pi6CcP00XrNuudfB9AScd2GS+ujbPOIupoHRYNc++RS2G7b5x
-        +U5oZZ4A==;
-Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1nwnUh-00ENsn-U9; Thu, 02 Jun 2022 10:16:20 -0600
-Message-ID: <400baba7-1cd6-09d4-4de9-2a73f08afc79@deltatee.com>
-Date:   Thu, 2 Jun 2022 10:16:10 -0600
+        Thu, 2 Jun 2022 12:16:38 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48AA2B07CB;
+        Thu,  2 Jun 2022 09:16:34 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so6694744pjm.2;
+        Thu, 02 Jun 2022 09:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uGG9vxabvHTNIKzZz4iCB8IKnMzQr1VCGtUnhFb1+UY=;
+        b=RCEMSbNiZBiU/AiNlb77dfvjT/7kyqYVv2/vI278NdBW4V5QnJkaMZOOSnD0B82vh7
+         RBtEmAQrWCym5AO3j+nOEPyxoI487W4vGEIC+qUbl5IX3Los948Cskn1r93l52PPl9tC
+         LajBg3fsnB01Fw8f1nsVonEumyh6ZNngCUphOzXcf7z0uzABuA+Hab2If8PPLGrMGog7
+         +h3fzv84WGstiX+3v9E2xyaDrSuQjkUOHb7O4vA4PB1A2ex+3S9IKDUDb5Gfx/9jgzP8
+         5bmLeLFeUN5LYOb39BohI1QwFmn6iJiGDo5MLVDe0Zx/N6d2edYybL1a/jT7taLcqoMg
+         wY4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=uGG9vxabvHTNIKzZz4iCB8IKnMzQr1VCGtUnhFb1+UY=;
+        b=OeTgnHWpi3pcy8mfpbAOateMuXmKRxxzY/YgwphFajf6/B0iiZ9GeyrkNmY5XPDrKC
+         5VUbpvRLi9PJsoaiUCaNrxDqMH2D71UZHs+x3trT9n02QytU8aofIPEY2uLG52cmc2cE
+         gteKOxthlomvZn1EUQM4MazJmweqJvUV1ouRZlUkvVAsE7LSt0By1/05pxlHr1wIwk5t
+         I1jVuC7T4DHVDrB/91OClSZ80FwbdkD+lo+hdI0AcAfBJCKjeG9neRnBW2oGiGK5Sbkx
+         yaxKX2MY9JSLGU3r4F9xoxmlHTsddZzARS4WgeTw85R3fyFaRhL55X/SrMPYye6PcAsN
+         qvAQ==
+X-Gm-Message-State: AOAM533oxR3sjy9nW3qdua60Y+KR5jUAz2CqSUU4OMxqEwAoF5LML0bd
+        e+TOC+K0I2rVT16K4tZJQMtBWs3WleQ=
+X-Google-Smtp-Source: ABdhPJwe+BAMVekPCGH9YxD/TUes8RrDiWdKSp9Pkxa+1/0Cvx2O+bqqvPGnnsO6Vng+/N0Xc1To3Q==
+X-Received: by 2002:a17:902:a507:b0:162:2a77:7363 with SMTP id s7-20020a170902a50700b001622a777363mr5753307plq.115.1654186594215;
+        Thu, 02 Jun 2022 09:16:34 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id k1-20020a17090a590100b001e33e264fd6sm3473781pji.40.2022.06.02.09.16.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 09:16:33 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 2 Jun 2022 06:16:32 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH v5 2/3] blk-cgroup: Return -ENOMEM directly in
+ blkcg_css_alloc() error path
+Message-ID: <YpjiYPscJst5iuyv@slm.duckdns.org>
+References: <20220601211824.89626-1-longman@redhat.com>
+ <20220602133543.128088-3-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-CA
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jakowski Andrzej <andrzej.jakowski@intel.com>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20220407154717.7695-1-logang@deltatee.com>
- <20220407154717.7695-21-logang@deltatee.com>
- <20220527125501.GD2960187@ziepe.ca>
- <a2590e27-41e8-59dc-3576-b5b8d716a198@deltatee.com>
- <20220527190307.GG2960187@ziepe.ca>
- <d336cfe8-2451-04c3-a2ce-0e8e47afd1e3@deltatee.com>
- <20220602000038.GK2960187@ziepe.ca>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20220602000038.GK2960187@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.144.200
-X-SA-Exim-Rcpt-To: jgg@ziepe.ca, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, iommu@lists.linux-foundation.org, sbates@raithlin.com, hch@lst.de, dan.j.williams@intel.com, christian.koenig@amd.com, jhubbard@nvidia.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, andrzej.jakowski@intel.com, dave.b.minturn@intel.com, jason@jlekstrand.net, dave.hansen@linux.intel.com, jianxin.xiong@intel.com, helgaas@kernel.org, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, rcampbell@nvidia.com, bhelgaas@google.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220602133543.128088-3-longman@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH v6 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 02, 2022 at 09:35:42AM -0400, Waiman Long wrote:
+> For blkcg_css_alloc(), the only error that will be returned is -ENOMEM.
+> Simplify error handling code by returning this error directly instead
+> of setting an intermediate "ret" variable.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
+Acked-by: Tejun Heo <tj@kernel.org>
 
-On 2022-06-01 18:00, Jason Gunthorpe wrote:
-> On Fri, May 27, 2022 at 04:41:08PM -0600, Logan Gunthorpe wrote:
->>>
->>> IIRC this is the last part:
->>>
->>> https://lore.kernel.org/linux-mm/20220524190632.3304-1-alex.sierra@amd.com/
->>>
->>> And the earlier bit with Christoph's pieces looks like it might get
->>> merged to v5.19..
->>>
->>> The general idea is once pte_devmap is not set then all the
->>> refcounting works the way it should. This is what all new ZONE_DEVICE
->>> users should do..
->>
->> Ok, I don't actually follow how those patches relate to this.
->>
->> Based on your description I guess I don't need to set PFN_DEV and
-> 
-> Yes
-> 
->> perhaps not use vmf_insert_mixed()? And then just use vm_normal_page()?
-> 
-> I'm not sure ATM the best function to use, but yes, a function that
-> doesn't set PFN_DEV is needed here.
->  
->> But the refcounting of the pages seemed like it was already sane to me,
->> unless you mean that the code no longer has to synchronize_rcu() before
->> returning the pages... 
-> 
-> Right. It also doesn't need to call unmap range or keep track of the
-> inode, or do any of that stuff unless it really needs mmap revokation
-> semantics (which I doubt this use case does)
-> 
-> unmap range was only necessary because the refcounting is wrong -
-> since the pte's don't hold a ref on the page in PFN_DEV mode it is
-> necessary to wipe all the PTE explicitly before going ahead to
-> decrement the refcount on this path.
-> 
-> Just stuff the pages into the mmap, and your driver unprobe will
-> automatically block until all the mmaps are closed - no different than
-> having an open file descriptor or something.
+But I don't understand why this would trigger warning. Can you please
+elaborate why this is needed.
 
-Oh is that what we want? With the current method the mmaps are unmapped
-on unbind so that it doesn't block indefinitely. It seems more typical
-for resources to be dropped quickly on unbind and processes that are
-using them will get an error on next use.
+Thanks.
 
-Logan
+-- 
+tejun

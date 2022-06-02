@@ -2,116 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0723C53B81A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EAF53B80F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234390AbiFBLr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 07:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
+        id S234316AbiFBLsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 07:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233488AbiFBLrP (ORCPT
+        with ESMTP id S233488AbiFBLs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 07:47:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E552250682;
-        Thu,  2 Jun 2022 04:47:08 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C787B21B6F;
-        Thu,  2 Jun 2022 11:47:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654170426; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yU2c05v5u7FyIeRoQARLGBGxinXGPSbObbAhOHtlivk=;
-        b=iS7l6vTGZLN97NTh5jQeXGGRyx3mXhgVrXT1uZlWRBfP5ckC33GgQkOvK2jzKixSmNQ/eQ
-        TW9e7UxBek/WCPm7Rrd+FAokOBEQg2hgxLXU30+gB/fe5Ka5Lr5WlARJfeaJax9PlVF2Yj
-        1Z+PbHJR0Yh1xFV8MIz5ychDM22WHTU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9AA36134F3;
-        Thu,  2 Jun 2022 11:47:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id SIKzJDqjmGIgCQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 02 Jun 2022 11:47:06 +0000
-Date:   Thu, 2 Jun 2022 13:47:05 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Bui Quang Minh <minhquangbui99@gmail.com>
-Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
-Message-ID: <20220602114705.GB21320@blackbody.suse.cz>
-References: <Yo/DtjEU/kYr190u@slm.duckdns.org>
- <0babd7df-bdef-9edc-3682-1144bc0c2d2b@linaro.org>
- <Ypf0VnKUMiuRgZqT@slm.duckdns.org>
- <1fb4d8d7-ccc0-b020-715e-38c2dfd94c23@linaro.org>
- <Ypf5jpI7dSmpi4W0@slm.duckdns.org>
- <c3bd8e63-7204-f86d-8efa-254db71185fc@linaro.org>
- <Ypf/MpwzByOrSp6A@slm.duckdns.org>
- <416dc60a-f0e5-7d05-1613-3cd0ca415768@linaro.org>
- <YpgEY/lJbLidLOhc@slm.duckdns.org>
- <0fd1c3fd-fa86-dbed-f3f0-74c91b1efa11@linaro.org>
+        Thu, 2 Jun 2022 07:48:27 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AC7299791
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 04:48:24 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id fu3so7972658ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 04:48:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=shtQh66+bKE1caS4jMSRSwf+vIlH6pzW/iS7K92y5Eg=;
+        b=dc99xUHQThcX6ryKAYXNpafER9Kk4IqWJ4hIN06w5R5rjWA84E5p4P72DZDYGBswsI
+         kl3C21BvdXefH2LnJlT8rU/+JezOsqjRAd7tVk97vXLFhMeDIOIeP+/Hp1s8R6ceOle7
+         uJyWHNIybbL9JlE7dlJkzTO14TjU88UJAYcAbnV1SoMbJUDCi4gpZvk1mcW9ONfryXbq
+         ORVmAj8kEwf7k8Tdd5l7Rqpt5iQBFZoY0eQzfumt+hDyJ4nLrjHN3GpDX20gJiG5a5se
+         RMEgmqvFaNz8hsnSvQNIVgD2JYnNez5HZ+pn120+o00MrgoJA0GpTygS1KP0PIywXThn
+         JVpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=shtQh66+bKE1caS4jMSRSwf+vIlH6pzW/iS7K92y5Eg=;
+        b=GqmwsCza0Zdw6p4uFvughnUwr+NWLrjnJL+rcQB0yl7MSoepSQLYIzy3QT5bkp3tGV
+         ZOiW1qVexerlZ6rzAIitP1W12DyWNnLZKPSaM22klTNykj1A8IAd2udQ1Ioweg7lWfRI
+         kf7rbWJkirX8oKYnBWC7N6CPYLmqecgWCut2BAIHPlIuxTfE7Gp4U2CP7O79Z5eu7+dh
+         ZYZSU77PtRhm2Le+1fpzPbhl9fzLwuqfmYclLH7bqXRwVep/blH0nKqUPf8ku/nla6zs
+         OAOd7Se+f184pGBlm9SriOg+uOFZ7GVnbwhEJ6KQuEvIp10OLmCQ6SORphpkpLZ33lYM
+         lfTw==
+X-Gm-Message-State: AOAM531yXvH+mJJdvE70l7q9uA84t/W1hii6ifixmkOHzi7Ivbr6Owtk
+        JQddQzQeZCHxT4wKSG+v0fQN9i4MiAL7JLKJ
+X-Google-Smtp-Source: ABdhPJxtzQcCHEhLjniV51EOj16IsDhDJgdLjg8JxuGS0HDjPnelZO6FqkSKvw60weMLoHwb6tlJqQ==
+X-Received: by 2002:a17:906:12d3:b0:6f5:18a2:176d with SMTP id l19-20020a17090612d300b006f518a2176dmr3728521ejb.474.1654170502863;
+        Thu, 02 Jun 2022 04:48:22 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id c18-20020a056402101200b0042dc6e250e3sm2329738edu.81.2022.06.02.04.48.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 04:48:22 -0700 (PDT)
+Message-ID: <cb8c7e28-dfef-78e2-c97c-11b9dee02fed@linaro.org>
+Date:   Thu, 2 Jun 2022 13:48:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0fd1c3fd-fa86-dbed-f3f0-74c91b1efa11@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/3] dt-bindings: interconnect: Update email address
+Content-Language: en-US
+To:     Sibi Sankar <quic_sibis@quicinc.com>, bjorn.andersson@linaro.org
+Cc:     agross@kernel.org, djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, p.zabel@pengutronix.de,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+References: <1654130923-18722-1-git-send-email-quic_sibis@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1654130923-18722-1-git-send-email-quic_sibis@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 05:40:51PM -0700, Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
-> css_killed_ref_fn() will be called regardless of the value of refcnt (via percpu_ref_kill_and_confirm())
-> and it will only enqueue the css_killed_work_fn() to be called later.
-> Then css_put()->css_release() will be called before the css_killed_work_fn() will even
-> get a chance to run, and it will also *only* enqueue css_release_work_fn() to be called later.
-> The problem happens on the second enqueue. So there need to be something in place that
-> will make sure that css_killed_work_fn() is done before css_release() can enqueue
-> the second job.
+On 02/06/2022 02:48, Sibi Sankar wrote:
+> Update email address to the quicinc.com domain.
+> 
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 2 +-
 
-IIUC, here you describe the same scenario I broke down at [1].
+Thanks for updating the email addresses. All three patches should be
+rather squashed to one (and taken by Rob for example), it's quite a
+churn. Anyway:
 
-> Does it sound right?
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I added a parameter A there (that is sum of base and percpu references
-before kill_css()).
-I thought it fails because A == 1 (i.e. killing the base reference),
-however, that seems an unlikely situation (because cgroup code uses a
-"fuse" reference to pin css for offline_css()).
 
-So the remaining option (at least I find it more likely now) is that
-A == 0 (A < 0 would trigger the warning in
-percpu_ref_switch_to_atomic_rcu()), aka the ref imbalance. I hope we can
-get to the bottom of this with detailed enough tracing of gets/puts.
-
-Splitting the work struct is condradictive to the existing approach with
-the "fuse" reference.
-
-(BTW you also wrote On Wed, Jun 01, 2022 at 05:00:44PM -0700, Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
-> The fact the css_release() is called (via cgroup_kn_unlock()) just after
-> kill_css() causes the css->destroy_work to be enqueued twice on the same WQ
-> (cgroup_destroy_wq), just with different function. This results in the
-> BUG: corrupted list in insert_work issue.
-
-Where do you see a critical css_release called from cgroup_kn_unlock()?
-I always observed the css_release() being called via
-percpu_ref_call_confirm_rcu() (in the original and subsequent syzbot
-logs.))
-
-Thanks,
-Michal
-
-[1] https://lore.kernel.org/r/Yo7KfEOz92kS2z5Y@blackbook/
+Best regards,
+Krzysztof

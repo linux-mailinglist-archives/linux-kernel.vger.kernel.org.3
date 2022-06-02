@@ -2,171 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A91553B553
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 10:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872F953B5BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232518AbiFBIoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 04:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
+        id S232818AbiFBJI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 05:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbiFBIoT (ORCPT
+        with ESMTP id S231569AbiFBJIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 04:44:19 -0400
-X-Greylist: delayed 86830 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Jun 2022 01:44:17 PDT
-Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [45.157.188.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29702994D8
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 01:44:17 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4LDKLl046yzMprjq;
-        Thu,  2 Jun 2022 10:44:15 +0200 (CEST)
-Received: from [10.0.0.141] (unknown [31.10.206.125])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4LDKLk1DMszlk1FD;
-        Thu,  2 Jun 2022 10:44:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
-        s=20220412; t=1654159454;
-        bh=mV7mkCUjOl6hMSevGR59+xlFQCqBQ4WwdymyF0opzUY=;
-        h=Subject:From:Reply-To:To:Cc:Date:In-Reply-To:References:From;
-        b=TVJFhJK9EsLdiqX+KhfpvkfTgssVCX73VGWmPkbBNWLdNRINdU7AzH0KLslewDaPE
-         0/OcSegpEggQ+NuLItKAQexi9dmhEjTtYaqWsf2yWmCCCWHigsxq3jh0KmXREU+xJC
-         BCkuo08R2hje4EXErOkpDVna9rJTAIVc9SsHLJrw=
-Message-ID: <2c5a6bb34c67c9c15c393346e89bdb14ae6f3c44.camel@pschenker.ch>
-Subject: Re: [PATCH] Revert "mt76: mt7921: enable aspm by default"
-From:   Philippe Schenker <dev@pschenker.ch>
-Reply-To: dev@pschenker.ch
-To:     sean.wang@mediatek.com
-Cc:     deren.wu@mediatek.com, kvalo@kernel.org,
-        linux-wireless@vger.kernel.org, nbd@nbd.name, linux@leemhuis.info,
-        davem@davemloft.net, kuba@kernel.org, lorenzo.bianconi83@gmail.com,
-        matthias.bgg@gmail.com, pabeni@redhat.com, ryder.lee@mediatek.com,
-        shayne.chen@mediatek.com, yn.chen@mediatek.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org
-Date:   Thu, 02 Jun 2022 10:44:13 +0200
-In-Reply-To: <1654122203-26090-1-git-send-email-sean.wang@mediatek.com>
-References: <e93aef5c9f8a97efe23cfb5892f78f919ce328e7.camel@pschenker.ch--annotate>
-         <1654122203-26090-1-git-send-email-sean.wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 
+        Thu, 2 Jun 2022 05:08:42 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A882010DA;
+        Thu,  2 Jun 2022 02:08:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=GQmIjedgQb9DY7Mgnqkz3jdM5XV3TNvTH/CR49OuWb0=;
+        b=gHsWm1EXamIrs35nDXgIwXT+l+zmQlSIKRzjwQbohbvy8q0tc5piCTisYUAHWfzwSHfFZB2rOVzWY
+         HF9+De3bDQNPnVbjxEtZqJKb6lUkrwaXFYKLXdg8EZkzYUuYtF+RbUMObSkCWfkPaq9uIjXCxvEYk0
+         UieIKmq7qAN7Gs0fR3Av4fcHMUqIzoiIRk8giRVS9aUFj8Rqh/NprMGFezGCQIFhj9qAWz//IsKbs2
+         Yaj4IPTWHNx3iiBlnTPCXZJ0ZIrHJlhJ31EZrTeqBiTsMX2jsghXWmDgLAE8SMCx1fNankKMpbMMsd
+         /C6sWiBj/Q3WyQ6wjHerrnyAJvHgadg==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000010,0.016292)], BW: [Enabled, t: (0.000014,0.000001)], RTDA: [Enabled, t: (0.083076), Hit: No, Details: v2.39.0; Id: 15.52kcej.1g4hqofpo.mdnu; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from localhost.localdomain ([178.70.36.174])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Thu, 2 Jun 2022 12:08:17 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        Conor.Dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru
+Subject: [PATCH v15 0/3] Microchip Polarfire FPGA manager
+Date:   Thu,  2 Jun 2022 11:45:47 +0300
+Message-Id: <20220602084550.4380-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-02 at 06:23 +0800, sean.wang@mediatek.com wrote:
-> From: Sean Wang <sean.wang@mediatek.com>
->=20
-> > On Tue, 2022-04-12 at 19:06 +0800, Deren Wu wrote:
-> > > On Tue, 2022-04-12 at 12:37 +0300, Kalle Valo wrote:
-> > > > Philippe Schenker <dev@pschenker.ch> writes:
-> > > >=20
-> > > > > This reverts commit bf3747ae2e25dda6a9e6c464a717c66118c588c8.
-> > > > >=20
-> > > > > This commit introduces a regression on some systems where the
-> > > > > kernel is crashing in different locations after a reboot was
-> > > > > issued.
-> > > > >=20
-> > > > > This issue was bisected on a Thinkpad P14s Gen2 (AMD) with
-> > > > > latest
-> > > > > firmware.
-> > > > >=20
-> > > > > Link:
-> > > > > https://urldefense.com/v3/__https://lore.kernel.org/linux-wireles=
-s
-> > > > > /5077a953487275837e81bdf1808ded00b9676f9f.camel@pschenker.ch/_
-> > > > > _;!!
-> > > > > CTRNKA9wMg0ARbw!09tjyaQlMci3fVI3yiNiDJKUW_qwNA_CbVhoAraeIX96B9
-> > > > > 9Q14
-> > > > > J4iDycWA9cq36Y$
-> > > > >=20
-> > > > > Signed-off-by: Philippe Schenker <dev@pschenker.ch>
-> > > >=20
-> > > > Can I take this to wireless tree? Felix, ack?
-> > > >=20
-> > > > I'll also add:
-> > > >=20
-> > > > Fixes: bf3747ae2e25 ("mt76: mt7921: enable aspm by default")
-> > > >=20
-> > >=20
-> > > Hi Kalle,
-> > >=20
-> > > We have a patch for a similar problem. Can you wait for the
-> > > verification by Philippe?
-> > > Commit 602cc0c9618a81 ("mt76: mt7921e: fix possible probe failure
-> > > after
-> > > reboot")
-> > > Link:
-> > > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kern=
-e
-> > > l/git/torvalds/linux.git/commit/drivers/net/wireless/mediatek/mt76
-> > > ?id=3D
-> > > 602cc0c9618a819ab00ea3c9400742a0ca318380__;!!CTRNKA9wMg0ARbw!3N9I3
-> > > iKwS
-> > > 3XCNAb4LuhbFqt_el1yiOaJzSdUjaJsTaxRCHiWhXnEgbk3bOqYTy6T$
-> > >=20
-> > > I can reproduce the problem in my v5.16-rc5 desktop. And the issue
-> > > can
-> > > be fixed when the patch applied.
-> > >=20
-> > >=20
-> > > Hi Philippe,
-> > >=20
-> > > Can you please help to check the patch in your platform?
-> >=20
-> > Hi Kalle and Deren,
-> >=20
-> > I just noticed on my system and mainline v5.18 reboots do now work
-> > however Bluetooth is no longer accessible after a reboot.
-> >=20
-> > Reverting commit bf3747ae2e25dda6a9e6c464a717c66118c588c8 on top of
-> > v5.18 solves this problem for me.
-> >=20
-> > @Deren are you aware of this bug?
-> > @Kalle Is there a bugtracker somewhere I can submit this?
->=20
-> Hi Philippe,
->=20
-> Could you try the latest firmware to see if it can help with the issue
-> you reported here ?
->=20
-> Please check out
-> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.g=
-it/tree/mediatek
-> and replace the following three files in /lib/firmware/mediatek on
-> your target and reboot
-> 1) BT_RAM_CODE_MT7961_1_2_hdr.bin
-> 2) WIFI_MT7961_patch_mcu_1_2_hdr.bin
-> 3) WIFI_RAM_CODE_MT7961_1.bin
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Sean
+Add support to the FPGA manager for programming Microchip Polarfire
+FPGAs over slave SPI interface with .dat formatted bitsream image.
 
-Hi Sean,
+Changelog:
+  v1 -> v2: fix printk formating
+  v2 -> v3:
+   * replace "microsemi" with "microchip"
+   * replace prefix "microsemi_fpga_" with "mpf_"
+   * more sensible .compatible and .name strings
+   * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
+  v3 -> v4: fix unused variable warning
+    Put 'mpf_of_ids' definition under conditional compilation, so it
+    would not hang unused if CONFIG_OF is not enabled.
+  v4 -> v5:
+   * prefix defines with MPF_
+   * mdelay() -> usleep_range()
+   * formatting fixes
+   * add DT bindings doc
+   * rework fpga_manager_ops.write() to fpga_manager_ops.write_sg()
+     We can't parse image header in write_init() because image header
+     size is not known beforehand. Thus parsing need to be done in
+     fpga_manager_ops.write() callback, but fpga_manager_ops.write()
+     also need to be reenterable. On the other hand,
+     fpga_manager_ops.write_sg() is called once. Thus, rework usage of
+     write() callback to write_sg().
+  v5 -> v6: fix patch applying
+     I forgot to clean up unrelated local changes which lead to error on
+     patch 0001-fpga-microchip-spi-add-Microchip-MPF-FPGA-manager.patch
+     applying on vanilla kernel.
+  v6 -> v7: fix binding doc to pass dt_binding_check
+  v7 -> v8: another fix for dt_binding_check warning
+  v8 -> v9:
+   * add another patch to support bitstream offset in FPGA image buffer
+   * rework fpga_manager_ops.write_sg() back to fpga_manager_ops.write()
+   * move image header parsing from write() to write_init()
+  v9 -> v10:
+   * add parse_header() callback to fpga_manager_ops
+   * adjust fpga_mgr_write_init[_buf|_sg]() for parse_header() usage
+   * implement parse_header() in microchip-spi driver
+  v10 -> v11: include missing unaligned.h to microchip-spi
+     fix error: implicit declaration of function 'get_unaligned_le[16|32]'
+  v11 -> v12:
+   * microchip-spi: double read hw status, ignore first read, because it
+     can be unreliable.
+   * microchip-spi: remove sleep between status readings in
+     poll_status_not_busy() to save a few seconds. Status is polled on
+     every 16 byte writes - that is quite often, therefore
+     usleep_range() accumulate to a considerable number of seconds.
+  v12 -> v13:
+   * fpga-mgr: separate fpga_mgr_parse_header_buf() from
+     fpga_mgr_write_init_buf()
+   * fpga-mgr: introduce FPGA_MGR_STATE_PARSE_HEADER and
+     FPGA_MGR_STATE_PARSE_HEADER_ERR fpga_mgr_states
+   * fpga-mgr: rename fpga_mgr_write_init_sg() to fpga_mgr_prepare_sg()
+     and rework with respect to a new fpga_mgr_parse_header_buf()
+   * fpga-mgr: rework write accounting in fpga_mgr_buf_load_sg() for
+     better clarity
+   * microchip-spi: rename MPF_STATUS_POLL_TIMEOUT to
+     MPF_STATUS_POLL_RETRIES
+   * microchip-spi: add comment about status reading quirk to
+     mpf_read_status()
+   * microchip-spi: rename poll_status_not_busy() to mpf_poll_status()
+     and add comment.
+   * microchip-spi: make if statement in mpf_poll_status() easier to
+     read.
+  v13 -> v14:
+   * fpga-mgr: improvements from Xu Yilun in
+      - fpga_mgr_parse_header_buf()
+      - fpga_mgr_write_init_buf()
+      - fpga_mgr_prepare_sg()
+      - fpga_mgr_buf_load_sg()
+   * fpga-mgr: add check for -EAGAIN from fpga_mgr_parse_header_buf()
+     when called from fpga_mgr_buf_load_mapped()
+   * microchip-spi: remove excessive cs_change from second spi_transfer
+     in mpf_read_status()
+   * microchip-spi: change type of components_size_start,
+     bitstream_start, i from size_t to u32 in mpf_ops_parse_header()
+  v14 -> v15: eliminate memcpy() in mpf_ops_write()
+    Eliminate excessive memcpy() in mpf_ops_write() by using
+    spi_sync_transfer() instead of spi_write().
 
-Thanks for your suggestion. I downloaded the firmwares from the link you
-indicated and downloaded the three firmwares from main branch. I checked
-and the sha256sums of the most recent firmwares match with the one
-installed by my distribution. So I already had latest versions on my
-tests.
+Ivan Bornyakov (3):
+  fpga: fpga-mgr: support bitstream offset in image buffer
+  fpga: microchip-spi: add Microchip MPF FPGA manager
+  dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
 
-Philippe
+ .../fpga/microchip,mpf-spi-fpga-mgr.yaml      |  44 ++
+ drivers/fpga/Kconfig                          |   9 +
+ drivers/fpga/Makefile                         |   1 +
+ drivers/fpga/fpga-mgr.c                       | 176 ++++++--
+ drivers/fpga/microchip-spi.c                  | 391 ++++++++++++++++++
+ include/linux/fpga/fpga-mgr.h                 |  17 +-
+ 6 files changed, 610 insertions(+), 28 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+ create mode 100644 drivers/fpga/microchip-spi.c
 
->=20
-> >=20
-> > Thanks,
-> > Philippe
-> >=20
-> > >=20
-> > >=20
-> > > Regards,
-> > > Deren
-> > >=20
-> >=20
-> >=20
-> >=20
+-- 
+2.35.1
+
 

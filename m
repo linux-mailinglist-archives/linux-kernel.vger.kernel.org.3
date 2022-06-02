@@ -2,204 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4AB53C0B4
+	by mail.lfdr.de (Postfix) with ESMTP id 21ED053C0B2
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 00:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239571AbiFBWP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 18:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
+        id S239588AbiFBWRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 18:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235072AbiFBWP5 (ORCPT
+        with ESMTP id S239574AbiFBWQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 18:15:57 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B2434652
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 15:15:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654208155; x=1685744155;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BS3rLjdPqfSKzK3DmZXapPlrQnsi0Ki0Gpxo+UJQimA=;
-  b=i0kKdJ35btCjkWP/DMR42mM7EV+QweJzcX4OY6EU7I74bX/n7Lh6dEdp
-   bllw+3GQqTWWNdBBow5ff+jykgueHC/14uVf09RjhYk1iDoEID2j41fv0
-   NM0nzTcPaMkaYBkRgH+mPXUMzA3VktRspANJoI2PilAZG5Hq2VIBwH4FE
-   fhKSWUJRwRe4KACKXApWtlrpjufnAiSOk/OyXEAPZrojRILq5aejpZqbS
-   LQUV8xx9+DPC+AklEDS5zECwDXZ73cWEOzxO0GO8sLi/BcJBPb/SCNGOo
-   IFhKY80wE1DEtVeKx0eWr5UIRJiVD8Y5zkcHm2VL1uXD++K8GTBQjYREl
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="362469731"
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="362469731"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 15:15:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="530766227"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 Jun 2022 15:15:53 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwt6e-0005UL-KN;
-        Thu, 02 Jun 2022 22:15:52 +0000
-Date:   Fri, 3 Jun 2022 06:15:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/dave.2022.06.02a 56/78]
- kernel/rcu/tasks.h:1239:8: error: variable has incomplete type 'typeof (({
-Message-ID: <202206030613.IxQYmIW8-lkp@intel.com>
+        Thu, 2 Jun 2022 18:16:54 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF2FDF67
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 15:16:52 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id a10so6049487pju.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 15:16:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=K/cZTPi0hndnheR9PuhbAVhhr4tOnxzl2VUjF/W+KUo=;
+        b=NYo7HUDDq3lFl3X4b7n9xyabwm5lCzMfPuMb7Co7COdi7IcexINbkiJ39oIDv3q6Ri
+         HVRRv9sZvFeHqcJPaYLoE+MHsqkQsN8u2rcYrINBgLXvz0S9Yd1aNUmcdDMqigPvS0Rm
+         yGgogblOmasBKYRD5YiTFhi5MVXkqbr0aKzXo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=K/cZTPi0hndnheR9PuhbAVhhr4tOnxzl2VUjF/W+KUo=;
+        b=VPoUYdEofzmfJzEwvRFW7MrN8x4rtqYGnDTGy8TxnFoBcqmLSo5L6qNjgxOTeLRVcb
+         79vhbbn7f/HbcplrJuF6qACCM4AXCS5VolKaX982aKTDZWSqszNiXW8F9sFF9Koq70n+
+         zk5fDsCzDvxIZdsy2iGx4KlMUoKUketgL3d6KsRwN+pZtTmp//zv0rcVCpLo6ZiHdt2O
+         NQhS4MmlzaGmy+1oTk3kNA44M7TjbDylSCuYLdT9PjoT1V4oSSR7KJxmAptq9rFMaI6k
+         RThYysbTQFWFyfTaVNJF9Pq4Ba7wLa5E4YF4HjkMyueQEtgs34F4j4gxcIEPy94IRXvg
+         gb9g==
+X-Gm-Message-State: AOAM532lAfrNN6MCRXBhltrxi1CYV+6QsIxH8GjFIW6M38rRjP+pGki1
+        NsuiJD/5OaAlUEyAf6iHhoQLjQ==
+X-Google-Smtp-Source: ABdhPJxNzSPV5AgI16h4jptg5dZ1YQXkPQm8Dx0ImGp/9UOFpFOPoES2DpYY9NsQfrm27DDfDBNaVA==
+X-Received: by 2002:a17:903:249:b0:163:6dc0:b8b3 with SMTP id j9-20020a170903024900b001636dc0b8b3mr7003658plh.24.1654208211700;
+        Thu, 02 Jun 2022 15:16:51 -0700 (PDT)
+Received: from linuxpc-ThinkServer-TS140.dhcp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id z10-20020a056a001d8a00b00518d0707b52sm3903369pfw.208.2022.06.02.15.16.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 15:16:49 -0700 (PDT)
+From:   Anand Gore <anand.gore@broadcom.com>
+To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     kursad.oney@broadcom.com, florian.fainelli@broadcom.com,
+        tomer.yacoby@broadcom.com, samyon.furman@broadcom.com,
+        dan.beygelman@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        joel.peshkin@broadcom.com, Anand Gore <anand.gore@broadcom.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, soc@kernel.org
+Subject: [PATCH v4 0/3] arm: bcmbca: add bcm6878 soc support
+Date:   Thu,  2 Jun 2022 15:16:43 -0700
+Message-Id: <20220602221646.3127512-1-anand.gore@broadcom.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000ddb27c05e07e5c41"
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dave.2022.06.02a
-head:   2efc5c4abe4cc1259378f7c1678a93540559673c
-commit: cda3200416cdef7f25546cd6249fb411c8c32079 [56/78] rcu-tasks: Merge state into .b.need_qs and atomically update
-config: arm-buildonly-randconfig-r004-20220531 (https://download.01.org/0day-ci/archive/20220603/202206030613.IxQYmIW8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/cda3200416cdef7f25546cd6249fb411c8c32079
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dave.2022.06.02a
-        git checkout cda3200416cdef7f25546cd6249fb411c8c32079
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/rcu/update.c:606:
-   kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
-           ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
-           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
-           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic.h:73:9: note: expanded from macro '__atomic_op_fence'
-           typeof(op##_relaxed(args)) __ret;                               \
-                  ^~~~~~~~~~~~~~~~~~
-   <scratch space>:39:1: note: expanded from here
-   arch_cmpxchg_relaxed
-   ^
-   arch/arm/include/asm/cmpxchg.h:212:26: note: expanded from macro 'arch_cmpxchg_relaxed'
-                                         (unsigned long)(o),               \
-                                                        ^~~
-   In file included from kernel/rcu/update.c:606:
-   kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
-           ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
-           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
-           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic.h:73:9: note: expanded from macro '__atomic_op_fence'
-           typeof(op##_relaxed(args)) __ret;                               \
-                  ^~~~~~~~~~~~~~~~~~
-   <scratch space>:39:1: note: expanded from here
-   arch_cmpxchg_relaxed
-   ^
-   arch/arm/include/asm/cmpxchg.h:213:26: note: expanded from macro 'arch_cmpxchg_relaxed'
-                                         (unsigned long)(n),               \
-                                                        ^~~
-   In file included from kernel/rcu/update.c:606:
->> kernel/rcu/tasks.h:1239:8: error: variable has incomplete type 'typeof (({
-   }))' (aka 'void')
-   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
-           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-           ^
-   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
-           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
-           ^
-   include/linux/atomic.h:73:29: note: expanded from macro '__atomic_op_fence'
-           typeof(op##_relaxed(args)) __ret;                               \
-                                      ^
-   In file included from kernel/rcu/update.c:606:
-   kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
-           ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
-           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
-           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic.h:75:10: note: expanded from macro '__atomic_op_fence'
-           __ret = op##_relaxed(args);                                     \
-                   ^~~~~~~~~~~~~~~~~~
-   <scratch space>:40:1: note: expanded from here
-   arch_cmpxchg_relaxed
-   ^
-   arch/arm/include/asm/cmpxchg.h:212:26: note: expanded from macro 'arch_cmpxchg_relaxed'
-                                         (unsigned long)(o),               \
-                                                        ^~~
-   In file included from kernel/rcu/update.c:606:
-   kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
-           ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
-           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
-           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic.h:75:10: note: expanded from macro '__atomic_op_fence'
-           __ret = op##_relaxed(args);                                     \
-                   ^~~~~~~~~~~~~~~~~~
-   <scratch space>:40:1: note: expanded from here
-   arch_cmpxchg_relaxed
-   ^
-   arch/arm/include/asm/cmpxchg.h:213:26: note: expanded from macro 'arch_cmpxchg_relaxed'
-                                         (unsigned long)(n),               \
-                                                        ^~~
-   5 errors generated.
+--000000000000ddb27c05e07e5c41
+Content-Transfer-Encoding: 8bit
 
 
-vim +1239 kernel/rcu/tasks.h
+The initial support includes a bare-bone dts
+for dual core ARM v7  with a pl011 uart.
 
-  1224	
-  1225	/*
-  1226	 * Do a cmpxchg() on ->trc_reader_special.b.need_qs, allowing for
-  1227	 * the four-byte operand-size restriction of some platforms.
-  1228	 * Returns the old value, which is often ignored.
-  1229	 */
-  1230	u8 rcu_trc_cmpxchg_need_qs(struct task_struct *t, u8 old, u8 new)
-  1231	{
-  1232		union rcu_special ret;
-  1233		union rcu_special trs_old = READ_ONCE(t->trc_reader_special);
-  1234		union rcu_special trs_new = trs_old;
-  1235	
-  1236		if (trs_old.b.need_qs != old)
-  1237			return trs_old.b.need_qs;
-  1238		trs_new.b.need_qs = new;
-> 1239		ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
-  1240		return ret.b.need_qs;
-  1241	}
-  1242	EXPORT_SYMBOL_GPL(rcu_trc_cmpxchg_need_qs);
-  1243	
+Changes in v4:
+- Fixed subject line
+
+Changes in v3:
+- Simplify subject line
+
+Changes in v2:
+- Fix psci, GIC dts entries
+- Remove extra empty lines
+
+Anand Gore (3):
+  ARM: dts: add dts files for bcmbca soc 6878
+  dt-bindings: arm: add BCM6878 soc
+  MAINTAINERS: add bcm6878 to bcmbca arch entry
+
+ .../bindings/arm/bcm/brcm,bcmbca.yaml         |   7 ++
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/Makefile                    |   3 +-
+ arch/arm/boot/dts/bcm6878.dtsi                | 110 ++++++++++++++++++
+ arch/arm/boot/dts/bcm96878.dts                |  30 +++++
+ 5 files changed, 150 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/bcm6878.dtsi
+ create mode 100644 arch/arm/boot/dts/bcm96878.dts
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
+
+--000000000000ddb27c05e07e5c41
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIQZwYJKoZIhvcNAQcCoIIQWDCCEFQCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg2+MIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
+MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
+rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
+aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
+e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
+cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
+MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
+KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
+/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
+TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
+YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
+b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
+CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
+BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
+jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
+9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
+/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
+jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
+AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
+dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
+MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
+IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
+SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
+XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
+J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
+nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBUYwggQuoAMCAQICDHNxlHShyr1/yxU67zANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMTAyMjIwODA1MjdaFw0yMjA5MDUwODEwMjNaMIGK
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xEzARBgNVBAMTCkFuYW5kIEdvcmUxJjAkBgkqhkiG9w0BCQEW
+F2FuYW5kLmdvcmVAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+ndzykUhgQxkZsXfE3NMuhXrc96M9A6Bs4efEix3G/zVx1fQCMK7N9aAY7EbLe0JFInC/jSCRn5hs
+KgoQKSF9Cyuf0HGgYR9mSPvPnQr6NxsssWH3vUEtZ3tI6ebaviiWzuzDtEQ93NbSpK+u2ly8Lifn
+R9NgV4osV4obyP+gwwiEAnVjUQUEAHrn62ABQpHV8P0eMbpFKeNC53UFC5d06tcQHhCggGCkaSoi
+dD3eNkKBkknQBWvFfBHcITIVdVccQg5YcIwowkVZhhA3NG0BXGI4l/3o+wjrl2BGO/t969dabQ5x
+/SxGBTK8Vyn6NG7U0Lrjb0VtnrFXgEdxFvJuEQIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
+MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
+dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
+HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
+bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
+Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
+gRdhbmFuZC5nb3JlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
+gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUH4HXhI4xxNPqnv0yfNL6is0cLFYwDQYJ
+KoZIhvcNAQELBQADggEBAAU15tMIqa2yrLdoPoNXMk6scL+6XJK/EVe0Lq0Uyq0SV8wpFV09ujno
+nLmSFYTz1RjmiKr1eu/pwyTImqMUj1JAXZ2zgE0rFS5SvchJsSlB8Nv3WeTaf5Lha5ZmRTaB0U/E
+eo7SFjA240UWLCGqXM69XCc5PHk6mWLNTsyDTgK2kLUKP1RVFswACNsI284fxiwA0qSCu2WnOEKE
+LiytE/NBFgzVtBcryeBtcMnhZgMo0PQYRl4O+58O1O703CD1jiO4/ikP+hUTdxWQiiWAzpE89YCH
+S0Pc2d2yC8RWARAiArr1jXHWA4+snG+TS3A1YVSPRZpboS5AXMutIIQ5YZQxggJtMIICaQIBATBr
+MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
+YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxzcZR0ocq9f8sVOu8wDQYJYIZI
+AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIZ0aEzdTiltX9LOCd5HUmoggO6G5MjLKfHXmEBA
+DtnRMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDYwMjIyMTY1
+MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
+AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
+hkiG9w0BAQEFAASCAQCVbCl42AeHgi3G6/JSCYh4xapIQkMCjSrB3E8jLwbTudbW+EohJ7PUYqTa
+JHCdTN2jZWEZ/qYepLq4b97IJlQ+9mG1aSXXANP6ssgiurVg4TfLTucJeiDKXnXF6oSf3xpwcfSP
+rt3OJ89fbbRjmlsyVgB8/MZOzH+Y5QTtrk+5KiZcNwqQSNftwyOP9nLmeBxPIfp6oY+wXFKJnImW
+Fh92VIV+2ycA/za+1O1Jpdg5OTOY0uPSbROaXdOps1pv8hvsjnRejKAyovHxt9GHxgbD790vQCRF
+gayvjQi1kJERWFRKA6o4vDpm0uU96EDkYcrOHfQjZol7QIZLjFCs9NRs
+--000000000000ddb27c05e07e5c41--

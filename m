@@ -2,110 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2E753BDD8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 20:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B7E53BDDA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 20:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237910AbiFBSSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 14:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S238028AbiFBSTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 14:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234209AbiFBSSU (ORCPT
+        with ESMTP id S237938AbiFBSSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 14:18:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C56C4CD4E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 11:18:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654193898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8cILwmtkvSQjYb8QuEETKqwmhc+FPzA1S+q/o/FgcNc=;
-        b=bo+AQDk7U0j+EkdfW8iNZyrXS0HBDrLudcS22oxAHzEHBYTu8qFx0nvP5fKnW94UDFYaX4
-        iV76PTF6o4MJr5wBEKcuEqCtL8ij0vlzs8jNyvdA2+nBAsBAF5L41HjbpaESmMJFn87Hw/
-        HpktZLEPYp3qbd/jQDlPfxbdmJmIi/g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-148-paQpCGJ5NQWI91QC9NROAg-1; Thu, 02 Jun 2022 14:18:15 -0400
-X-MC-Unique: paQpCGJ5NQWI91QC9NROAg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0548C801228;
-        Thu,  2 Jun 2022 18:18:15 +0000 (UTC)
-Received: from [10.22.32.147] (unknown [10.22.32.147])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B090D1731B;
-        Thu,  2 Jun 2022 18:18:14 +0000 (UTC)
-Message-ID: <c7893920-e88d-8721-320d-b57d86e6b778@redhat.com>
-Date:   Thu, 2 Jun 2022 14:18:14 -0400
+        Thu, 2 Jun 2022 14:18:36 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85E34DF5A;
+        Thu,  2 Jun 2022 11:18:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Cc:To:From:content-disposition;
+        bh=4HZdqKMF+RVPLecPNzFt8vq7FIk/BeFDZDkMqv2fIuk=; b=WpHztTjV904UN5TzwMe+CGIGDF
+        onG6iHNHMPtLCD45sgrNo/WMLSkcM0N4ZVCc19tS98eIBGFXPtmV/U4f4beljYVA0yMtnp/RN3xmk
+        5xDEq6BrKoxSBGXSkmEWxteYrHWsO+pkLXOANSSc3coXFNhBmV4gWXqlMlcEFtDjgdd5aS412kqNz
+        bC6quTE1ZxFsxnP3E3zc/7aw6Z4dpqZDyW+We940hqouOQJitYZsuv79j3YZ2U3W1gYxE72t9bQjx
+        vzFNEGr6ZOA5lWSvVxd7Oo245LHtSydTVv9weAE1g3yEz++UYWGtenuzuCTq9CUO925yhxAladGXj
+        2ZUESg4Q==;
+Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
+        by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1nwpOn-00EPmV-Lq; Thu, 02 Jun 2022 12:18:22 -0600
+Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1nwpOm-000DDZ-JH; Thu, 02 Jun 2022 12:18:20 -0600
+From:   Logan Gunthorpe <logang@deltatee.com>
+To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Donald Buczek <buczek@molgen.mpg.de>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Xiao Ni <xni@redhat.com>, Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Christoph Hellwig <hch@lst.de>
+Date:   Thu,  2 Jun 2022 12:18:14 -0600
+Message-Id: <20220602181818.50729-9-logang@deltatee.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220602181818.50729-1-logang@deltatee.com>
+References: <20220602181818.50729-1-logang@deltatee.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v5 3/3] blk-cgroup: Optimize blkcg_rstat_flush()
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ming Lei <ming.lei@redhat.com>
-References: <20220601211824.89626-1-longman@redhat.com>
- <20220602133543.128088-4-longman@redhat.com>
- <YpjsTNZx4DG+kot4@slm.duckdns.org>
- <42da456d-8f6a-3af0-4cd3-d33a07e3b81e@redhat.com>
- <Ypj3hcodkAU1MUR7@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Ypj3hcodkAU1MUR7@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 172.16.1.31
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, hch@infradead.org, buczek@molgen.mpg.de, guoqing.jiang@linux.dev, xni@redhat.com, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com, logang@deltatee.com, hch@lst.de
+X-SA-Exim-Mail-From: gunthorp@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v3 08/11] md: Use enum for overloaded magic numbers used by mddev->curr_resync
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/22 13:46, Tejun Heo wrote:
-> On Thu, Jun 02, 2022 at 01:26:10PM -0400, Waiman Long wrote:
->> On 6/2/22 12:58, Tejun Heo wrote:
->>> Hello,
->>>
->>> On Thu, Jun 02, 2022 at 09:35:43AM -0400, Waiman Long wrote:
->>>> @@ -2011,9 +2076,16 @@ void blk_cgroup_bio_start(struct bio *bio)
->>>>    	}
->>>>    	bis->cur.ios[rwd]++;
->>>> +	if (!READ_ONCE(bis->lnode.next)) {
->>>> +		struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
->>>> +
->>>> +		llist_add(&bis->lnode, lhead);
->>>> +		percpu_ref_get(&bis->blkg->refcnt);
->>> Hmm... what guarantees that more than one threads race here? llist assumes
->>> that there's a single writer for a given llist_node and the ref count would
->>> be off too, right?
->> The llist_add() function is atomic. It calls into llist_add_batch() in
->> lib/llist.c which uses cmpxchg() to make the change. There is a non-atomic
->> version __llist_add() which may be problematic in this case. Note that irq
->> is disabled in the u64_stats_update* critical section, there shouldn't be a
->> racing thread running in the same cpu. Other cpus will modify their own
->> version of lhead. Perhaps the non-atomic version can be used here as well.
-> Ah, right, this is per-cpu, so there can be no second writer trying to add
-> the same node at the same time. Can you add a comment explaining the overall
-> design / behavior? Other than that, please feel free to add
->
->   Acked-by: Tejun Heo <tj@kernel.org>
->
-> Thanks.
+Comments in the code document special values used for
+mddev->curr_resync. Make this clearer by using an enum to label these
+values.
 
-OK, I will send another patch to document the design in 
-block/blk-cgroup.c. I don't want to touch this patch unless I need to 
-correct some code here.
+The only functional change is a couple places use the wrong comparison
+operator that implied 3 is another special value. They are all
+fixed to imply that 3 or greater is an active resync.
 
-Thanks,
-Longman
+Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/md/md.c | 40 ++++++++++++++++++----------------------
+ drivers/md/md.h | 15 +++++++++++++++
+ 2 files changed, 33 insertions(+), 22 deletions(-)
 
->
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index 8273ac5eef06..0893029865eb 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -5001,7 +5001,7 @@ static ssize_t
+ sync_speed_show(struct mddev *mddev, char *page)
+ {
+ 	unsigned long resync, dt, db;
+-	if (mddev->curr_resync == 0)
++	if (mddev->curr_resync == MD_RESYNC_NONE)
+ 		return sprintf(page, "none\n");
+ 	resync = mddev->curr_mark_cnt - atomic_read(&mddev->recovery_active);
+ 	dt = (jiffies - mddev->resync_mark) / HZ;
+@@ -5020,8 +5020,8 @@ sync_completed_show(struct mddev *mddev, char *page)
+ 	if (!test_bit(MD_RECOVERY_RUNNING, &mddev->recovery))
+ 		return sprintf(page, "none\n");
+ 
+-	if (mddev->curr_resync == 1 ||
+-	    mddev->curr_resync == 2)
++	if (mddev->curr_resync == MD_RESYNC_YIELDED ||
++	    mddev->curr_resync == MD_RESYNC_DELAYED)
+ 		return sprintf(page, "delayed\n");
+ 
+ 	if (test_bit(MD_RECOVERY_SYNC, &mddev->recovery) ||
+@@ -8018,7 +8018,7 @@ static int status_resync(struct seq_file *seq, struct mddev *mddev)
+ 		max_sectors = mddev->dev_sectors;
+ 
+ 	resync = mddev->curr_resync;
+-	if (resync <= 3) {
++	if (resync < MD_RESYNC_ACTIVE) {
+ 		if (test_bit(MD_RECOVERY_DONE, &mddev->recovery))
+ 			/* Still cleaning up */
+ 			resync = max_sectors;
+@@ -8027,7 +8027,7 @@ static int status_resync(struct seq_file *seq, struct mddev *mddev)
+ 	else
+ 		resync -= atomic_read(&mddev->recovery_active);
+ 
+-	if (resync == 0) {
++	if (resync == MD_RESYNC_NONE) {
+ 		if (test_bit(MD_RESYNCING_REMOTE, &mddev->recovery)) {
+ 			struct md_rdev *rdev;
+ 
+@@ -8051,7 +8051,7 @@ static int status_resync(struct seq_file *seq, struct mddev *mddev)
+ 		}
+ 		return 0;
+ 	}
+-	if (resync < 3) {
++	if (resync < MD_RESYNC_ACTIVE) {
+ 		seq_printf(seq, "\tresync=DELAYED");
+ 		return 1;
+ 	}
+@@ -8729,13 +8729,7 @@ void md_do_sync(struct md_thread *thread)
+ 
+ 	mddev->last_sync_action = action ?: desc;
+ 
+-	/* we overload curr_resync somewhat here.
+-	 * 0 == not engaged in resync at all
+-	 * 2 == checking that there is no conflict with another sync
+-	 * 1 == like 2, but have yielded to allow conflicting resync to
+-	 *		commence
+-	 * other == active in resync - this many blocks
+-	 *
++	/*
+ 	 * Before starting a resync we must have set curr_resync to
+ 	 * 2, and then checked that every "conflicting" array has curr_resync
+ 	 * less than ours.  When we find one that is the same or higher
+@@ -8747,7 +8741,7 @@ void md_do_sync(struct md_thread *thread)
+ 
+ 	do {
+ 		int mddev2_minor = -1;
+-		mddev->curr_resync = 2;
++		mddev->curr_resync = MD_RESYNC_DELAYED;
+ 
+ 	try_again:
+ 		if (test_bit(MD_RECOVERY_INTR, &mddev->recovery))
+@@ -8759,12 +8753,14 @@ void md_do_sync(struct md_thread *thread)
+ 			&&  mddev2->curr_resync
+ 			&&  match_mddev_units(mddev, mddev2)) {
+ 				DEFINE_WAIT(wq);
+-				if (mddev < mddev2 && mddev->curr_resync == 2) {
++				if (mddev < mddev2 &&
++				    mddev->curr_resync == MD_RESYNC_DELAYED) {
+ 					/* arbitrarily yield */
+-					mddev->curr_resync = 1;
++					mddev->curr_resync = MD_RESYNC_YIELDED;
+ 					wake_up(&resync_wait);
+ 				}
+-				if (mddev > mddev2 && mddev->curr_resync == 1)
++				if (mddev > mddev2 &&
++				    mddev->curr_resync == MD_RESYNC_YIELDED)
+ 					/* no need to wait here, we can wait the next
+ 					 * time 'round when curr_resync == 2
+ 					 */
+@@ -8792,7 +8788,7 @@ void md_do_sync(struct md_thread *thread)
+ 				finish_wait(&resync_wait, &wq);
+ 			}
+ 		}
+-	} while (mddev->curr_resync < 2);
++	} while (mddev->curr_resync < MD_RESYNC_DELAYED);
+ 
+ 	j = 0;
+ 	if (test_bit(MD_RECOVERY_SYNC, &mddev->recovery)) {
+@@ -8876,7 +8872,7 @@ void md_do_sync(struct md_thread *thread)
+ 			 desc, mdname(mddev));
+ 		mddev->curr_resync = j;
+ 	} else
+-		mddev->curr_resync = 3; /* no longer delayed */
++		mddev->curr_resync = MD_RESYNC_ACTIVE; /* no longer delayed */
+ 	mddev->curr_resync_completed = j;
+ 	sysfs_notify_dirent_safe(mddev->sysfs_completed);
+ 	md_new_event();
+@@ -9011,14 +9007,14 @@ void md_do_sync(struct md_thread *thread)
+ 
+ 	if (!test_bit(MD_RECOVERY_RESHAPE, &mddev->recovery) &&
+ 	    !test_bit(MD_RECOVERY_INTR, &mddev->recovery) &&
+-	    mddev->curr_resync > 3) {
++	    mddev->curr_resync >= MD_RESYNC_ACTIVE) {
+ 		mddev->curr_resync_completed = mddev->curr_resync;
+ 		sysfs_notify_dirent_safe(mddev->sysfs_completed);
+ 	}
+ 	mddev->pers->sync_request(mddev, max_sectors, &skipped);
+ 
+ 	if (!test_bit(MD_RECOVERY_CHECK, &mddev->recovery) &&
+-	    mddev->curr_resync > 3) {
++	    mddev->curr_resync >= MD_RESYNC_ACTIVE) {
+ 		if (test_bit(MD_RECOVERY_SYNC, &mddev->recovery)) {
+ 			if (test_bit(MD_RECOVERY_INTR, &mddev->recovery)) {
+ 				if (mddev->curr_resync >= mddev->recovery_cp) {
+@@ -9082,7 +9078,7 @@ void md_do_sync(struct md_thread *thread)
+ 	} else if (test_bit(MD_RECOVERY_REQUESTED, &mddev->recovery))
+ 		mddev->resync_min = mddev->curr_resync_completed;
+ 	set_bit(MD_RECOVERY_DONE, &mddev->recovery);
+-	mddev->curr_resync = 0;
++	mddev->curr_resync = MD_RESYNC_NONE;
+ 	spin_unlock(&mddev->lock);
+ 
+ 	wake_up(&resync_wait);
+diff --git a/drivers/md/md.h b/drivers/md/md.h
+index 5f62c46ac2d3..2d06003a4c3f 100644
+--- a/drivers/md/md.h
++++ b/drivers/md/md.h
+@@ -288,6 +288,21 @@ struct serial_info {
+ 	sector_t _subtree_last; /* highest sector in subtree of rb node */
+ };
+ 
++/*
++ * mddev->curr_resync stores the current sector of the resync but
++ * also has some overloaded values.
++ */
++enum {
++	/* No resync in progress */
++	MD_RESYNC_NONE = 0,
++	/* Yielded to allow another conflicting resync to commence */
++	MD_RESYNC_YIELDED = 1,
++	/* Delayed to check that there is no conflict with another sync */
++	MD_RESYNC_DELAYED = 2,
++	/* Any value greater than or equal to this is in an active resync */
++	MD_RESYNC_ACTIVE = 3,
++};
++
+ struct mddev {
+ 	void				*private;
+ 	struct md_personality		*pers;
+-- 
+2.30.2
 

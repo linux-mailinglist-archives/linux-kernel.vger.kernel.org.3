@@ -2,235 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9542853BDBF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 20:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9248653BDC2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 20:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237843AbiFBSIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 14:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        id S237858AbiFBSId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 14:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237103AbiFBSIT (ORCPT
+        with ESMTP id S237837AbiFBSIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 14:08:19 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7FF26ADD;
-        Thu,  2 Jun 2022 11:08:18 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 252H59Lf000971;
-        Thu, 2 Jun 2022 18:07:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=07IS+Ue1DZu8UUgpAQL1++aymIiMdieShQwu8QDu6l0=;
- b=aBKDyTmMvOkD6ecwQRiesNIhLLxlyRiydyWOYBYmOE/RptBN+b8CuuAXTPYZUPUatTI0
- xO/AiXAx/FMZzOoQFRWJ8JCQ59A1k6nKNxvpPIcK6lAgrfT1arL6PXMNhQZl7ebaiJzQ
- 8oxrL3egyDwhd9RvmT9EY1QfMZxFm5TcRxU80JrL9LGJH8/amqliO7nNs1SujTxp364M
- 2x/i4Wu1qoYHaKJz+5pdAy0dbk9NogBveq/W0nCQa8I1AiCVQOb93qHadntdZpApTrFh
- RvgetF7kCNoa/6aHS+QeO+f4pULvZua1lg0MvztS2PkG9/3xGF3TEP88B+VyehbAwvVF sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3geusrra0t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Jun 2022 18:07:45 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 252Hwaui015157;
-        Thu, 2 Jun 2022 18:07:45 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3geusrra0b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Jun 2022 18:07:44 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 252I4tU3001456;
-        Thu, 2 Jun 2022 18:07:44 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma02dal.us.ibm.com with ESMTP id 3gd1adb22h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Jun 2022 18:07:43 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 252I7f9723265626
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Jun 2022 18:07:41 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B78946E054;
-        Thu,  2 Jun 2022 18:07:41 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4636E6E052;
-        Thu,  2 Jun 2022 18:07:37 +0000 (GMT)
-Received: from [9.160.56.145] (unknown [9.160.56.145])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Jun 2022 18:07:36 +0000 (GMT)
-Message-ID: <eaa1ba60-2e2c-bcc0-5207-41392eada9c7@linux.ibm.com>
-Date:   Thu, 2 Jun 2022 11:07:36 -0700
+        Thu, 2 Jun 2022 14:08:23 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F6327CF2
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 11:08:22 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id e29so1692665wra.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 11:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9HxLJgZtlHlK+K1gWFxW+a6tTn7Jn/932cs76W+wS5Q=;
+        b=gXafYBazVGRnUdC1FD29atbaAVADiZ30i2Q/SVfn9cd8GZ7W0bWCWgy9yYb4jP8Oyu
+         4hZmNacxn7qtAKDYOAQww+NmI4Hw7kk2P3klC22Jp8JrNyrVrHt6EtB7O+B0nWFZXw2t
+         5fIy3zrAmE30DcEWfjsDrytlixzdc+lEhAJnTO/Pgu6lScO38ihATUwxB5utWsKxmcX8
+         jkyCudn18LKGqzX9vJCyCtySxJo8QZeoebRRyDfu0FOin/VmtfLJWRjQtw4RUkHWf1rN
+         TYZtwE+lCZ7vqpVYB7IDg4TLGvhdp0SsFsbGAfyqqC5/sg0GZpc5WFCD1Nh5jaF+2eO4
+         QKUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9HxLJgZtlHlK+K1gWFxW+a6tTn7Jn/932cs76W+wS5Q=;
+        b=6UkjCflVIIQWpYyCDgprhuDY1W7r7LyUDER6KhmTVdXXd4wPW8938FoU975uQx7MqR
+         kz1ZXOoIe4pvLCnW45dyM7Fjpm2YUWDbiEz9iLAlUnxzNLbFNIGpBfSIlf+3sPeS8o5w
+         V4pkX1VEHjwIGAVAJl4gIIFqx4gF+VSWuvSQtaDJZOqU7gc1rQnaZOdCsnuC3inuZPy9
+         scF25jgbWzc1gU9Vp0TcvxPpE75o17Yn8zVlqevwdLQ5L+FxMhLzqnm+KmDEtaAyuRUv
+         OAhRZGI3fkgoxmNUCI0/izEHa4L96MeCSE+xOMAp8d51ph+dyZhQhm2H3ZtrcHBur3u8
+         gf4g==
+X-Gm-Message-State: AOAM5319obbWtRUz0FaU6oZYfdaaf0C+vpEkZWhEQU0vpgV7y1SwGORb
+        cHylG1AUbDlRnVVXxeai9u66YKyQ2N3Nv3qM9BnY4w==
+X-Google-Smtp-Source: ABdhPJx5VCLYk+0/TVaEONygVnf++20yjQxm00tLoQZlGTbIZHx/1Gzbn0dkLv78dOY0suJYq+GgxsJlg8zECz0C21E=
+X-Received: by 2002:adf:f5c4:0:b0:210:2ac2:6aa0 with SMTP id
+ k4-20020adff5c4000000b002102ac26aa0mr4671812wrp.300.1654193300494; Thu, 02
+ Jun 2022 11:08:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/3] of: dynamic: add of_property_alloc() and
- of_property_free()
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        devicetree@vger.kernel.org, Ohhoon Kwon <ohoono.kwon@samsung.com>,
-        David Hildenbrand <david@redhat.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Daniel Henrique Barboza <danielhb413@gmail.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        David Gibson <david@gibson.dropbear.id.au>
-References: <20220504154033.750511-1-clement.leger@bootlin.com>
- <20220504154033.750511-2-clement.leger@bootlin.com>
- <YnQnayouXw9/jp/E@robh.at.kernel.org>
- <42d9e1af-5576-ed8a-be3a-9dfea6ce1041@linux.ibm.com>
- <CAL_JsqJ5MN9VGMFiDQx-1dod_=n=6HP4pvizpZ6qbcz89+hyXQ@mail.gmail.com>
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-In-Reply-To: <CAL_JsqJ5MN9VGMFiDQx-1dod_=n=6HP4pvizpZ6qbcz89+hyXQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: PET37afaEK9l44XPbLVjYo5IR_r_Q2Fo
-X-Proofpoint-GUID: b1VYbZAWTfivozu5KPIqRBRPnCUsSsr1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-02_05,2022-06-02_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- mlxlogscore=999 priorityscore=1501 suspectscore=0 malwarescore=0
- phishscore=0 impostorscore=0 clxscore=1015 adultscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206020076
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220525154114.718321-1-james.clark@arm.com> <20220525154114.718321-2-james.clark@arm.com>
+ <b6cf9d34-313e-6b7d-3781-a8a5af203cd6@arm.com>
+In-Reply-To: <b6cf9d34-313e-6b7d-3781-a8a5af203cd6@arm.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 2 Jun 2022 11:08:07 -0700
+Message-ID: <CAP-5=fX6r31X7HeB-H4MjqwXMcdMSkzMzTk8Nr9F2=daQYhH3g@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] perf tools: arm64: Use perf's copy of kernel headers
+To:     German Gomez <german.gomez@arm.com>
+Cc:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org,
+        broonie@kernel.org, leo.yan@linaro.org, mathieu.poirier@linaro.org,
+        john.garry@huawei.com, Will Deacon <will@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/22 07:06, Rob Herring wrote:
-> On Wed, Jun 1, 2022 at 5:31 PM Tyrel Datwyler <tyreld@linux.ibm.com> wrote:
->>
->> On 5/5/22 12:37, Rob Herring wrote:
->>> On Wed, May 04, 2022 at 05:40:31PM +0200, Clément Léger wrote:
->>>> Add function which allows to dynamically allocate and free properties.
->>>> Use this function internally for all code that used the same logic
->>>> (mainly __of_prop_dup()).
->>>>
->>>> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
->>>> ---
->>>>  drivers/of/dynamic.c | 101 ++++++++++++++++++++++++++++++-------------
->>>>  include/linux/of.h   |  16 +++++++
->>>>  2 files changed, 88 insertions(+), 29 deletions(-)
->>>>
->>>> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
->>>> index cd3821a6444f..e8700e509d2e 100644
->>>> --- a/drivers/of/dynamic.c
->>>> +++ b/drivers/of/dynamic.c
->>>> @@ -313,9 +313,7 @@ static void property_list_free(struct property *prop_list)
->>>>
->>>>      for (prop = prop_list; prop != NULL; prop = next) {
->>>>              next = prop->next;
->>>> -            kfree(prop->name);
->>>> -            kfree(prop->value);
->>>> -            kfree(prop);
->>>> +            of_property_free(prop);
->>>>      }
->>>>  }
->>>>
->>>> @@ -367,48 +365,95 @@ void of_node_release(struct kobject *kobj)
->>>>  }
->>>>
->>>>  /**
->>>> - * __of_prop_dup - Copy a property dynamically.
->>>> - * @prop:   Property to copy
->>>> + * of_property_free - Free a property allocated dynamically.
->>>> + * @prop:   Property to be freed
->>>> + */
->>>> +void of_property_free(const struct property *prop)
->>>> +{
->>>> +    kfree(prop->value);
->>>> +    kfree(prop->name);
->>>> +    kfree(prop);
->>>> +}
->>>> +EXPORT_SYMBOL(of_property_free);
->>>> +
->>>> +/**
->>>> + * of_property_alloc - Allocate a property dynamically.
->>>> + * @name:   Name of the new property
->>>> + * @value:  Value that will be copied into the new property value
->>>> + * @value_len:      length of @value to be copied into the new property value
->>>> + * @len:    Length of new property value, must be greater than @value_len
->>>
->>> What's the usecase for the lengths being different? That doesn't seem
->>> like a common case, so perhaps handle it with a NULL value and
->>> non-zero length. Then the caller has to deal with populating
->>> prop->value.
->>>
->>>>   * @allocflags:     Allocation flags (typically pass GFP_KERNEL)
->>>>   *
->>>> - * Copy a property by dynamically allocating the memory of both the
->>>> + * Create a property by dynamically allocating the memory of both the
->>>>   * property structure and the property name & contents. The property's
->>>>   * flags have the OF_DYNAMIC bit set so that we can differentiate between
->>>>   * dynamically allocated properties and not.
->>>>   *
->>>>   * Return: The newly allocated property or NULL on out of memory error.
->>>>   */
->>>> -struct property *__of_prop_dup(const struct property *prop, gfp_t allocflags)
->>>> +struct property *of_property_alloc(const char *name, const void *value,
->>>> +                               int value_len, int len, gfp_t allocflags)
->>>>  {
->>>> -    struct property *new;
->>>> +    int alloc_len = len;
->>>> +    struct property *prop;
->>>> +
->>>> +    if (len < value_len)
->>>> +            return NULL;
->>>>
->>>> -    new = kzalloc(sizeof(*new), allocflags);
->>>> -    if (!new)
->>>> +    prop = kzalloc(sizeof(*prop), allocflags);
->>>> +    if (!prop)
->>>>              return NULL;
->>>>
->>>> +    prop->name = kstrdup(name, allocflags);
->>>> +    if (!prop->name)
->>>> +            goto out_err;
->>>> +
->>>>      /*
->>>> -     * NOTE: There is no check for zero length value.
->>>> -     * In case of a boolean property, this will allocate a value
->>>> -     * of zero bytes. We do this to work around the use
->>>> -     * of of_get_property() calls on boolean values.
->>>> +     * Even if the property has no value, it must be set to a
->>>> +     * non-null value since of_get_property() is used to check
->>>> +     * some values that might or not have a values (ranges for
->>>> +     * instance). Moreover, when the node is released, prop->value
->>>> +     * is kfreed so the memory must come from kmalloc.
->>>
->>> Allowing for NULL value didn't turn out well...
->>>
->>> We know that we can do the kfree because OF_DYNAMIC is set IIRC...
->>>
->>> If we do 1 allocation for prop and value, then we can test
->>> for "prop->value == prop + 1" to determine if we need to free or not.
->>
->> If its a single allocation do we even need a test? Doesn't kfree(prop) take care
->> of the property and the trailing memory allocated for the value?
-> 
-> Yes, it does when it's a single alloc, but it's testing for when
-> prop->value is not a single allocation because we could have either.
-> 
+On Wed, May 25, 2022 at 8:59 AM German Gomez <german.gomez@arm.com> wrote:
+>
+>
+> On 25/05/2022 16:41, James Clark wrote:
+> > Fix this include path to use perf's copy of the kernel header
+> > rather than the one from the root of the repo.
+> >
+> > This fixes build errors when only applying the perf tools
+> > part of a patchset rather than both sides.
+> >
+> > Reported-by: German Gomez <german.gomez@arm.com>
+> > Signed-off-by: James Clark <james.clark@arm.com>
+>
+> Without this change "make -C tools/perf" was failing if kernel-side changes weren't applied
+>
+> Tested-by: German Gomez <german.gomez@arm.com>
+>
+> Thanks,
+> German
 
-Ok, that is the part I was missing. Thanks for the clarification.
+Acked-by: Ian Rogers <irogers@google.com>
 
--Tyrel
+Thanks,
+Ian
 
+> > ---
+> >  tools/perf/util/libunwind/arm64.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/perf/util/libunwind/arm64.c b/tools/perf/util/libunwind/arm64.c
+> > index 15f60fd09424..014d82159656 100644
+> > --- a/tools/perf/util/libunwind/arm64.c
+> > +++ b/tools/perf/util/libunwind/arm64.c
+> > @@ -24,7 +24,7 @@
+> >  #include "unwind.h"
+> >  #include "libunwind-aarch64.h"
+> >  #define perf_event_arm_regs perf_event_arm64_regs
+> > -#include <../../../../arch/arm64/include/uapi/asm/perf_regs.h>
+> > +#include <../../../arch/arm64/include/uapi/asm/perf_regs.h>
+> >  #undef perf_event_arm_regs
+> >  #include "../../arch/arm64/util/unwind-libunwind.c"
+> >

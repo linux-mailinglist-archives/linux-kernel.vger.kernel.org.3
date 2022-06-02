@@ -2,47 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CEA53B7C8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A5253B7D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234193AbiFBL1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 07:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
+        id S234213AbiFBL31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 07:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiFBL1q (ORCPT
+        with ESMTP id S233471AbiFBL3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 07:27:46 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4BD1AF12
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 04:27:44 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LDNxz0M3PzjXBp;
-        Thu,  2 Jun 2022 19:26:31 +0800 (CST)
-Received: from M910t (10.110.54.157) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 2 Jun
- 2022 19:27:41 +0800
-Date:   Thu, 2 Jun 2022 19:27:34 +0800
-From:   Changbin Du <changbin.du@huawei.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     <changbin.du@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Hui Wang <hw.huiwang@huawei.com>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-Subject: riscv: alternatives: move length validation inside the subsection
-Message-ID: <20220602112734.it2bzlqaismotjof@M910t>
+        Thu, 2 Jun 2022 07:29:24 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF302A7AB4
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 04:29:23 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id m20so9334392ejj.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 04:29:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BR4CJA+/4AAtUQYZXsslsKLQ/9UqeN150vqbG7TsZAE=;
+        b=wJJEWs450yRmmlWyMiCPywLvuCW8+IXzJhM+LA2I8ScJu5TR/fbMUDJTXi8kuDW9aZ
+         BVRtyOcV5ZuNTHgncbX9+80r5nIi8AfnfmPHhIvRNIf5CeUIk2NU0e77XvhqNZ7fqeCR
+         Of3DQuXS1iJRQNWcEu+YUFU0lAPDLNzaWOkHyWXrkYAH3+VEVPZbLBWreWtVfP5Q8xrI
+         d7Mz70OD7Evc6QVRci1QWyFydaVERv1l5o9cBHY8rHKEvNEGLYaDlqvYWEm04jhEMfa8
+         mKEMtGKMF9+9AUj20KwG6M9qH9HHILKlD+K9zRTOHCynoSov7AinUMIRFec3ZoveBVzl
+         Je8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BR4CJA+/4AAtUQYZXsslsKLQ/9UqeN150vqbG7TsZAE=;
+        b=dBMtZMrmLeS/iIU/UXqBe521f1X6nklfKlTVVQIVRe1xQ3vI8aIpheqAWfoILCPzkq
+         hnrrnnCADsqmNuO+04jV6UmOWF6NA1zNP/+OBNukBAc+LYhdlXKLrFuzNQdqwzPYWWGA
+         asThHHoySgj7IaFvoHzFjSGGDzHpsicQlFHyliali+E0zJMg7oV/1mJfLgYbxpeDm+TH
+         GTMn0CAYq8FeNIKdpQNtpR/mGgt7c2ZNPD3J9wEeIIbMzZ2f/UJDCNblNa590TvWVNye
+         Ts/G821z59GV0P/OTWqbNR1iAS3OvWHOvY2O3IqANItsSAaYRNccD3Zbqb3Uh0uEyHQB
+         Zygw==
+X-Gm-Message-State: AOAM5311MdUXfxnD22uhD1YGWNpbS2F6YXCZ7nsDpBVBvh0nKTgbeTsV
+        v3n20oYjIcTKF1GJx43qczoaGg==
+X-Google-Smtp-Source: ABdhPJy8Q3jBJVRW3cwgdUL2t2k+yqIhReFZqw6ckj0Lni3KQ5dhNrhjlvYwc7oD+tp6BK2EMfu0ig==
+X-Received: by 2002:a17:907:720f:b0:6f8:5e72:d8d8 with SMTP id dr15-20020a170907720f00b006f85e72d8d8mr3524715ejc.541.1654169361804;
+        Thu, 02 Jun 2022 04:29:21 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id kx18-20020a170907775200b006feec47dadfsm1612789ejc.156.2022.06.02.04.29.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 04:29:21 -0700 (PDT)
+Message-ID: <2f495a30-04ad-5507-8d08-1f6afa732f89@linaro.org>
+Date:   Thu, 2 Jun 2022 13:29:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-X-Originating-IP: [10.110.54.157]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: remoteproc: pru: Re-arrange
+ "compatible" in alphabetic order
+Content-Language: en-US
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Suman Anna <s-anna@ti.com>, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220602101920.12504-1-kishon@ti.com>
+ <20220602101920.12504-2-kishon@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220602101920.12504-2-kishon@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,57 +80,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apply the same fix from commit 966a0acce2fc ("arm64/alternatives: move
-length validation inside the subsection") to riscv.  Due to the one-pass
-design of LLVM's integrated assembler, it can not compute the length of
-instructions if the .org directive is outside of the subsection that these
-instructions are in.
+On 02/06/2022 12:19, Kishon Vijay Abraham I wrote:
+> Re-arrange "compatible" string in alphabetic order to decrease the
+> chance of conflicts.
+> 
+> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
 
-Here is the build error reported by llvm:
 
-In file included from ./arch/riscv/include/asm/pgtable.h:108:
-./arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
-        ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
-        ^
-./arch/riscv/include/asm/errata_list.h:41:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
-asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
-    ^
-./arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
-        _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-        ^
-./arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
-        __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-        ^
-./arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
-        ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-        ^
-./arch/riscv/include/asm/alternative-macros.h:98:3: note: expanded from macro 'ALT_NEW_CONTENT'
-        ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
-         ^
-<inline asm>:25:6: note: instantiated into assembly here
-.org    . - (887b - 886b) + (889b - 888b)
-        ^
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Changbin Du <changbin.du@gmail.com>
----
- arch/riscv/include/asm/alternative-macros.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
-index e13b1f6bb400..c7d7f1945768 100644
---- a/arch/riscv/include/asm/alternative-macros.h
-+++ b/arch/riscv/include/asm/alternative-macros.h
-@@ -94,9 +94,9 @@
- 	new_c "\n"							\
- 	".option pop\n"							\
- 	"889 :\n"							\
--	".previous\n"							\
- 	".org	. - (887b - 886b) + (889b - 888b)\n"			\
- 	".org	. - (889b - 888b) + (887b - 886b)\n"			\
-+	".previous\n"							\
- 	".endif\n"
- 
- #define __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, enable)	\
--- 
-2.26.2
-
+Best regards,
+Krzysztof

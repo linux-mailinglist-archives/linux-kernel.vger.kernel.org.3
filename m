@@ -2,147 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764D153B6AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8752D53B6A2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbiFBKLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
+        id S233410AbiFBKKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbiFBKLN (ORCPT
+        with ESMTP id S233430AbiFBKJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:11:13 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED7D2AD5C2;
-        Thu,  2 Jun 2022 03:11:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654164672; x=1685700672;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=da86tUUULUVat8HuHmdIwGDy5StYU/aEj+aL1ESVKiM=;
-  b=fHDYKqgFDHVQviH6ChjxYfgt1oORIuPN7lRKfUdcYRYt40abOD/amhhf
-   C5eF6K4qDsSlNQIHbJ87jbtAbaEDOf3T0ifprAkgruf8hhUI7tOT2H6Rt
-   nwk9Pm6SEFSQnfsSEFX/2Q9i1O3ZtiB5TmYPM3fPmpCQdHP03GLUMYO+z
-   SYdKNyzIVd22JepgAltlTJ8wS5cBW3NUVY5kBQoAEgpQfdqvEql9Rqau/
-   Yyn7PIgh9sOTldkumprPtotX0p6oeKVLQZiBQVDG/2qSdYYhBnp2zMRAC
-   WGFg9t80LwiWeCvx91frsgzmYOHucZqd6ZeU2s+jrIhoAIYa0R+b0oaYm
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="336560321"
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="336560321"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 03:11:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="721237238"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Jun 2022 03:10:58 -0700
-Date:   Thu, 2 Jun 2022 18:07:33 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Cc:     Vishal Annapurve <vannapurve@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jun Nakajima <jun.nakajima@intel.com>, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
-Subject: Re: [PATCH v6 3/8] mm/memfd: Introduce MFD_INACCESSIBLE flag
-Message-ID: <20220602100733.GA1296997@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <20220519153713.819591-4-chao.p.peng@linux.intel.com>
- <CAGtprH8EMsPMMoOEzjRu0SMVKT0RqmkLk=n+6uXkBA6-wiRtUA@mail.gmail.com>
- <20220601101747.GA1255243@chaop.bj.intel.com>
- <1f1b17e8-a16d-c029-88e0-01f522cc077a@amd.com>
+        Thu, 2 Jun 2022 06:09:56 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1A12ACB75;
+        Thu,  2 Jun 2022 03:09:56 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id y189so4332651pfy.10;
+        Thu, 02 Jun 2022 03:09:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WZ6/Z6SVP3bMPtYdo2xOBExwLeSKhpcPwADfzY2mUgY=;
+        b=P5FCR1zQhkv9INLkzy3lndZ5Ngr++COfVc9slwwvBm25ElcacyrCRCkwPl/yYBgkse
+         QLWQXjONaVbcru2/xA2KFlWSQ1GuaQM/8BDxojoouFNQ5KW2G4ZzIyaPA7UQC8Ut6Zkw
+         vntH39nx/+ERaEmzk4cZou89XShrLblzjUbeVzI7cGMSTaTgbRA38eG/09DJBU4mo3Od
+         G3dYUjP7qSLAbZOYy7NOuS/JO2LIsy9e/GPyu2XrG2TplhukfADg5Lfr1LX9b9TwQuhA
+         OxQBnEC+BUCd8s0xFDBXL2IlPNwhFibkZloypUgR5qrphyWZl7ZY3k4uI3fFYRyVzufq
+         Jm0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WZ6/Z6SVP3bMPtYdo2xOBExwLeSKhpcPwADfzY2mUgY=;
+        b=sz+0HKuG6iqv+nLpPGvx7Ube8kEfGKNWeB5i4tx91+ANfBy9jZHmIu3rgdCJKQkr71
+         nCHFVZ5mTr/heO5xkXp/E69c7qHhl9Dm2egKlSLxu9El4aICEIcNv+Maq+dk6R3gXvgt
+         7E80andV+FQ4fW7Qkn7xMSe89pXUqQtXZNTHz2G21T2NzpgxETKCCS+qg8O/aRi0r7Ng
+         zwqKk5DhSI/E29NsXg8V23cofwraxggw+g5iYCZYWjjBHL4lfURhM4vWgYe1K2foi6Wn
+         U1OIyIcUn7rkTRr4tfXJXpfKnCWHK1I+038ixyZ1+ui+08bnkia1FIrftwn+qILmMBtc
+         s5Mw==
+X-Gm-Message-State: AOAM532rqA+ETwLslosuFNbUboiaUq/KBMWk7oIeoJo1HkuVHB17cwg1
+        YwdBpdt/sKWXn9HH6F870Oc=
+X-Google-Smtp-Source: ABdhPJzX/B0PymPJ6LOZrim7NUPUOa8ufP/MgHJ+xiejOiQd2HS1yPsjx5eEhnehi4N3IZ3OyEPu1w==
+X-Received: by 2002:a65:6e42:0:b0:3f2:78fd:da9b with SMTP id be2-20020a656e42000000b003f278fdda9bmr3561664pgb.297.1654164595554;
+        Thu, 02 Jun 2022 03:09:55 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id l5-20020a170902d34500b0015ef27092aasm3084364plk.190.2022.06.02.03.09.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 03:09:55 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [RESEND PATCH] cpuidle: qcom_spm: Fix missing put_device() call in spm_cpuidle_register
+Date:   Thu,  2 Jun 2022 14:09:36 +0400
+Message-Id: <20220602100936.41174-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1f1b17e8-a16d-c029-88e0-01f522cc077a@amd.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 02:11:42PM +0200, Gupta, Pankaj wrote:
-> 
-> > > > Introduce a new memfd_create() flag indicating the content of the
-> > > > created memfd is inaccessible from userspace through ordinary MMU
-> > > > access (e.g., read/write/mmap). However, the file content can be
-> > > > accessed via a different mechanism (e.g. KVM MMU) indirectly.
-> > > > 
-> > > 
-> > > SEV, TDX, pkvm and software-only VMs seem to have usecases to set up
-> > > initial guest boot memory with the needed blobs.
-> > > TDX already supports a KVM IOCTL to transfer contents to private
-> > > memory using the TDX module but rest of the implementations will need
-> > > to invent
-> > > a way to do this.
-> > 
-> > There are some discussions in https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2022%2F5%2F9%2F1292&amp;data=05%7C01%7Cpankaj.gupta%40amd.com%7Cb81ef334e2dd44c6143308da43b87d17%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637896756895977587%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=oQbM2Hj7GlhJTwnTM%2FPnwsfJlmTL7JR9ULBysAqm6V8%3D&amp;reserved=0
-> > already. I somehow agree with Sean. TDX is using an dedicated ioctl to
-> > copy guest boot memory to private fd so the rest can do that similarly.
-> > The concern is the performance (extra memcpy) but it's trivial since the
-> > initial guest payload is usually optimized in size.
-> > 
-> > > 
-> > > Is there a plan to support a common implementation for either allowing
-> > > initial write access from userspace to private fd or adding a KVM
-> > > IOCTL to transfer contents to such a file,
-> > > as part of this series through future revisions?
-> > 
-> > Indeed, adding pre-boot private memory populating on current design
-> > isn't impossible, but there are still some opens, e.g. how to expose
-> > private fd to userspace for access, pKVM and CC usages may have
-> > different requirements. Before that's well-studied I would tend to not
-> > add that and instead use an ioctl to copy. Whether we need a generic
-> > ioctl or feature-specific ioctl, I don't have strong opinion here.
-> > Current TDX uses a feature-specific ioctl so it's not covered in this
-> > series.
-> 
-> Common function or ioctl to populate preboot private memory actually makes
-> sense.
-> 
-> Sorry, did not follow much of TDX code yet, Is it possible to filter out
-> the current TDX specific ioctl to common function so that it can be used by
-> other technologies?
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore.
+Add the corresponding 'put_device()' in the error handling paths.
 
-TDX code is here:
-https://patchwork.kernel.org/project/kvm/patch/70ed041fd47c1f7571aa259450b3f9244edda48d.1651774250.git.isaku.yamahata@intel.com/
+Fixes: 60f3692 ("cpuidle: qcom_spm: Detach state machine from main SPM handling")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+Link: https://lore.kernel.org/all/20211230114203.13467-1-linmq006@gmail.com
+---
+ drivers/cpuidle/cpuidle-qcom-spm.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-AFAICS It might be possible to filter that out to a common function. But
-would like to hear from Paolo/Sean for their opinion.
+diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
+index beedf22cbe78..c734f914b616 100644
+--- a/drivers/cpuidle/cpuidle-qcom-spm.c
++++ b/drivers/cpuidle/cpuidle-qcom-spm.c
+@@ -107,12 +107,16 @@ static int spm_cpuidle_register(struct device *cpuidle_dev, int cpu)
+ 		return -ENODEV;
+ 
+ 	data = devm_kzalloc(cpuidle_dev, sizeof(*data), GFP_KERNEL);
+-	if (!data)
++	if (!data) {
++		put_device(&pdev->dev);
+ 		return -ENOMEM;
++	}
+ 
+ 	data->spm = dev_get_drvdata(&pdev->dev);
+-	if (!data->spm)
++	if (!data->spm) {
++		put_device(&pdev->dev);
+ 		return -EINVAL;
++	}
+ 
+ 	data->cpuidle_driver = qcom_spm_idle_driver;
+ 	data->cpuidle_driver.cpumask = (struct cpumask *)cpumask_of(cpu);
+-- 
+2.25.1
 
-Chao
-> 
-> Thanks,
-> Pankaj

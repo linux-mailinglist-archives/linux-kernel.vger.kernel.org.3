@@ -2,143 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC9353B3DD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5633153B3E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbiFBGu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 02:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
+        id S231326AbiFBGwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 02:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbiFBGu1 (ORCPT
+        with ESMTP id S231551AbiFBGwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 02:50:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948C729B2E3
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 23:50:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7A7461771
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 06:50:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B63C3411D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 06:50:22 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="aNj5wDRx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654152620;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c2P89j5+o3Rp89iJMGKJmsuc6ZelmP8cli4ajK4rWJs=;
-        b=aNj5wDRx4r3EeOZO1vVsnbGgwEjmUae/Ypy+3lN16iy4rz9mg9Pld8AbQAzoRS4xK0b5c6
-        MzuHFnmBtUw9L11IRyoL1oo4J54t+zKQOcQFMv3KuTTAj6vTMqqqO+uVxP+95p42zbFQQw
-        4cc6KwjmaYCT8MwAX4JyX4xRJPYrxQc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0441acf7 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Thu, 2 Jun 2022 06:50:20 +0000 (UTC)
-Received: by mail-yb1-f179.google.com with SMTP id r82so6701631ybc.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 23:50:19 -0700 (PDT)
-X-Gm-Message-State: AOAM532OwiirrQK+Pv4F2cfcvftIofVoMfLKTfcAWpU41fEq0k5k/ntH
-        CRn8tGgGg7OwGLWYLsjwZCnjl+x+7Bf7Jv69uSk=
-X-Google-Smtp-Source: ABdhPJzxWw5WFqv2Oajsg3PeJKxJk6CaYFbBvzfjTNZwPWBgHdTM/gEtYZRyZNDpjitahKGGQx3Q4mFqNaV2TBtdO9E=
-X-Received: by 2002:a25:7901:0:b0:64a:a1d9:43dd with SMTP id
- u1-20020a257901000000b0064aa1d943ddmr3616900ybc.271.1654152618491; Wed, 01
- Jun 2022 23:50:18 -0700 (PDT)
+        Thu, 2 Jun 2022 02:52:11 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F084C212552
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 23:52:08 -0700 (PDT)
+Received: from mail-yb1-f178.google.com ([209.85.219.178]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MsHwC-1ndSua1MAE-00to7z for <linux-kernel@vger.kernel.org>; Thu, 02 Jun
+ 2022 08:52:06 +0200
+Received: by mail-yb1-f178.google.com with SMTP id p13so6774325ybm.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 23:52:06 -0700 (PDT)
+X-Gm-Message-State: AOAM533+oefX9606DAHuIN5aNiFjQTxbe3IU6U3euPM/wYDmrnCgXd7s
+        boSP8DAMkbQn6tb0N3Dw+dVg5HFUZUSKJ+q9dlo=
+X-Google-Smtp-Source: ABdhPJzDNETBbskTFEfKk8IpKv2OrM4G1jtncn3kO7XmzWMj4qYZvUerA1LHtACXqYEygNZdRXVf6lTmGjXQaEZfgNo=
+X-Received: by 2002:a25:db8a:0:b0:65c:b04a:f612 with SMTP id
+ g132-20020a25db8a000000b0065cb04af612mr3648878ybf.106.1654152725143; Wed, 01
+ Jun 2022 23:52:05 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7110:6403:b0:17b:2ce3:1329 with HTTP; Wed, 1 Jun 2022
- 23:50:17 -0700 (PDT)
-In-Reply-To: <20220602022109.780348-1-swboyd@chromium.org>
-References: <20220602022109.780348-1-swboyd@chromium.org>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 2 Jun 2022 08:50:17 +0200
-X-Gmail-Original-Message-ID: <CAHmME9rRb1x2ke7diS+ghdqhJBQgB2fOjNeaBsNaT9GcAq7DAg@mail.gmail.com>
-Message-ID: <CAHmME9rRb1x2ke7diS+ghdqhJBQgB2fOjNeaBsNaT9GcAq7DAg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: Initialize jump labels before setup_machine_fdt()
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
+References: <20220506191339.78617-1-nick.hawkins@hpe.com> <20220530070626.GD1363@bug>
+ <DM4PR84MB19274FE59381E204CBCFE55888DF9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+ <20220601205723.GA10927@duo.ucw.cz>
+In-Reply-To: <20220601205723.GA10927@duo.ucw.cz>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 2 Jun 2022 08:51:47 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3J_JoM_QGD2wpXXs=PPNwrhJQiS9aA5gTRacsYRQ_iGw@mail.gmail.com>
+Message-ID: <CAK8P3a3J_JoM_QGD2wpXXs=PPNwrhJQiS9aA5gTRacsYRQ_iGw@mail.gmail.com>
+Subject: Re: [PATCH v7 1/8] ARM: hpe: Introduce the HPE GXP architecture
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "joel@jms.id.au" <joel@jms.id.au>, "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:zwgWsyRakFdCvFEHrMSXBLeXMDL+n/Z0rxcKJdZSbBVBXJNb7c9
+ bYAZq9zFmmwJX6clq00pOqKTC8clNSclmkcSoW3qe/ifXhERMBLkhNCxT8AcU3ccGs8H9ID
+ AAXhZxq+uIIYZ8qeAT1v/73+k1Pivd7hfl9CNkjEGGAhLCNt+HFRRpf9b0vF8Cray6qHdMU
+ CgeVJ0qggX/sabsSKDQ/w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wHWPCVJ7QOk=:tjLhCqo9VgP6ZhwfYNYHXh
+ bJb0LVAE1hPiA8gCJbw0j75vICYorAOai5TKUqcr5oGWfsDjQynVSJtQ3JG8t3DBG78jjszf8
+ +Q4rQKxEd97z6O7QD5UykXgDprwsAY5fe89E9JtVUVctr8JCgdoonS3g8jGtXjw+WSaGupK5J
+ aPZtyxVhbGcTC6xc4FiV8Yl9LSYnVOTMPeSrQ0Fst1T4Ime0zccvpOMUNgTyihAoAoUFFXcTa
+ 6nQOAzzzt2Hq+fjJ9JAm2lYrHt2rgwFvwl583l11AZ99OYEx1yNO8luaD+Sb9wuNpr+AGXDjF
+ 0CFKAjJaVxZV9JZtdlmHLyNDa3b4ZsYGgGyamGwVCSG3uUinX55U67JDocyc5w7kQkoh3pUog
+ ItxJBl4x4YNMo12Ri2cGaSL5PTk/wP1Qzi0VQbtUkrnhfcJLBj1x2NBLaNsxy8FAagJIK3pOT
+ GRY3b1QzgKXMzWHs/NLycXGXp/gPxcULK38sAj8vxNgGzGsKducnBfBw3NpDQrOY4W0YHdwZ1
+ oYCxSRLMAic5pKbxRMpkMRxDbiQwO2d5v6CmYTUZ5iVrynItYuPBf79TNQM1btMyBnAjlQ9zq
+ xVCMRODZHrj1gJp7W+QKzWohdJybkVXIDsdr/sMQ95tfGeY+j9pX/54j8zbyFvpIu/7DtGz1Y
+ /mKrBXRtGJjDRivTgovSnjr3nUxv12ZEONe2oQbEviztyQrkKoIRAj6idNRansvpsrS3xyCce
+ OFCfQe6U8IRpFNIPbIhkmAayb7o6MTbmvO0B5Q==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
-
-On 6/2/22, Stephen Boyd <swboyd@chromium.org> wrote:
-> A static key warning splat appears during early boot on arm64 systems
-> that credit randomness from devicetrees that contain an "rng-seed"
-> property. This is because setup_machine_fdt() is called before
-> jump_label_init() during setup_arch(). Let's swap the order of these two
-> calls so that jump labels are initialized before the devicetree is
-> unflattened and the rng seed is credited.
+On Wed, Jun 1, 2022 at 10:57 PM Pavel Machek <pavel@ucw.cz> wrote:
+> On Wed 2022-06-01 14:14:33, Hawkins, Nick wrote:
+> > > > From: Nick Hawkins <nick.hawkins@hpe.com>
+> > > >
+> > > > The GXP is the HPE BMC SoC that is used in the majority of current
+> > > > generation HPE servers. Traditionally the asic will last multiple
+> > > > generations of server before being replaced.
+> > > >
+> > > > Info about SoC:
+> >
+> > > Normally, 1/7 goes into the same thread as 0/7 mail.
+> >
+> > Hello Pavel,
+> >
+> > Thank you for the feedback. I believe the code is already in the process of being merged upstream in version v8. For future reference can you elaborate on what you mean?
+> >
 >
->  static_key_enable_cpuslocked(): static key '0xffffffe51c6fcfc0' used before
-> call to jump_label_init()
->  WARNING: CPU: 0 PID: 0 at kernel/jump_label.c:166
-> static_key_enable_cpuslocked+0xb0/0xb8
->  Modules linked in:
->  CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0+ #224
-> 44b43e377bfc84bc99bb5ab885ff694984ee09ff
->  pstate: 600001c9 (nZCv dAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->  pc : static_key_enable_cpuslocked+0xb0/0xb8
->  lr : static_key_enable_cpuslocked+0xb0/0xb8
->  sp : ffffffe51c393cf0
->  x29: ffffffe51c393cf0 x28: 000000008185054c x27: 00000000f1042f10
->  x26: 0000000000000000 x25: 00000000f10302b2 x24: 0000002513200000
->  x23: 0000002513200000 x22: ffffffe51c1c9000 x21: fffffffdfdc00000
->  x20: ffffffe51c2f0831 x19: ffffffe51c6fcfc0 x18: 00000000ffff1020
->  x17: 00000000e1e2ac90 x16: 00000000000000e0 x15: ffffffe51b710708
->  x14: 0000000000000066 x13: 0000000000000018 x12: 0000000000000000
->  x11: 0000000000000000 x10: 00000000ffffffff x9 : 0000000000000000
->  x8 : 0000000000000000 x7 : 61632065726f6665 x6 : 6220646573752027
->  x5 : ffffffe51c641d25 x4 : ffffffe51c13142c x3 : ffff0a00ffffff05
->  x2 : 40000000ffffe003 x1 : 00000000000001c0 x0 : 0000000000000065
->  Call trace:
->   static_key_enable_cpuslocked+0xb0/0xb8
->   static_key_enable+0x2c/0x40
->   crng_set_ready+0x24/0x30
->   execute_in_process_context+0x80/0x90
->   _credit_init_bits+0x100/0x154
->   add_bootloader_randomness+0x64/0x78
->   early_init_dt_scan_chosen+0x140/0x184
->   early_init_dt_scan_nodes+0x28/0x4c
->   early_init_dt_scan+0x40/0x44
->   setup_machine_fdt+0x7c/0x120
->   setup_arch+0x74/0x1d8
->   start_kernel+0x84/0x44c
->   __primary_switched+0xc0/0xc8
->  ---[ end trace 0000000000000000 ]---
->  random: crng init done
->  Machine model: Google Lazor (rev1 - 2) with LTE
+> You used separate email threads for 0/7 and the rest of the
+> patches. Normally, they should go to single email thread.
 >
-> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Fixes: f5bda35fba61 ("random: use static branch for crng_ready()")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
-Thanks for fixing this.
+To clarify: the way this is normally done is to prepare the series using
+'git format-patch --cover-letter ...' and then send it using 'git send-email
+--thread --no-chain-reply', which makes all patches a reply to the
+cover letter.
 
-    Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-
-In looking at the matter more in depth, it looks like riscv does
-things in the right order, but arm32 still does not. AFAICT, it uses
-the logic in init/main.c, in which jump_label_init() is called before
-setup_arch()->setup_machine_fdt(). Want to submit a patch for arm32?
-
-Jason
+       Arnd

@@ -2,82 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5B653B1FF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F0453B203
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233500AbiFBDOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 23:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51928 "EHLO
+        id S233535AbiFBDQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 23:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233470AbiFBDOL (ORCPT
+        with ESMTP id S233483AbiFBDQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 23:14:11 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB42E2AE9D6;
-        Wed,  1 Jun 2022 20:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654139650; x=1685675650;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=vtq2/jv6E7he02OBQkaRLx57XKXT76AR0NCvMqUoMWU=;
-  b=SWlaBu4jNWH3vGfEYLCXWfyKxVr/zTSZtbG8yxOk/1lKV6mVU7fONNY8
-   alO/moXnmBFEVPT1mAr97OSFPXUHSMdxBMaPVMKJlTulWqsYVWqvcMirp
-   l8HLiudslPHW/31OA5P0BpG5yCZ0q3ii78Tq3QVzOsNc3kDX4ADtJt/KH
-   s=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Jun 2022 20:14:09 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 20:14:09 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 1 Jun 2022 20:14:09 -0700
-Received: from [10.253.36.238] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 1 Jun 2022
- 20:14:04 -0700
-Message-ID: <db16bdcc-9322-d81b-1afd-3955181ba2f7@quicinc.com>
-Date:   Thu, 2 Jun 2022 11:14:02 +0800
+        Wed, 1 Jun 2022 23:16:39 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81BF72ACB68
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 20:16:38 -0700 (PDT)
+Received: from [192.168.10.143] (unknown [123.117.60.26])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Cxb+aPK5hieh0NAA--.52840S3;
+        Thu, 02 Jun 2022 11:16:31 +0800 (CST)
+Subject: Re: [PATCH RFC V2 02/10] irqchip: Add LoongArch CPU interrupt
+ controller support
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+References: <1653649335-11998-1-git-send-email-lvjianmin@loongson.cn>
+ <1653649335-11998-3-git-send-email-lvjianmin@loongson.cn>
+ <87bkvf56wg.wl-maz@kernel.org>
+ <64990891.8322.18119c6d212.Coremail.lvjianmin@loongson.cn>
+ <87a6ax6c0n.wl-maz@kernel.org>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <1c7b1ee5-3f1e-c090-fb2e-65741de76a9f@loongson.cn>
+Date:   Thu, 2 Jun 2022 11:16:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v7 02/10] Coresight: Add coresight TPDM source driver
-Content-Language: en-US
-From:   Jinlong Mao <quic_jinlmao@quicinc.com>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220509133947.20987-1-quic_jinlmao@quicinc.com>
- <20220509133947.20987-3-quic_jinlmao@quicinc.com>
- <38bb1ec9-56bc-0cdf-6c46-d448a46ec886@arm.com>
- <ea720e1a-c0d2-84b0-8dbc-bb5031d32208@quicinc.com>
- <7d6b2e24-21f4-eef1-a722-23cdcd1d8a88@quicinc.com>
- <006b7edd-20d2-3165-7c83-352b7fb312e7@arm.com>
- <2da46bcb-c1e4-dbde-c4ee-1d6983565dc9@quicinc.com>
-In-Reply-To: <2da46bcb-c1e4-dbde-c4ee-1d6983565dc9@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <87a6ax6c0n.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Language: en-US
+X-CM-TRANSID: AQAAf9Cxb+aPK5hieh0NAA--.52840S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxKr1DGF4DJr1UXr4kAFWrKrg_yoW7Ar43pr
+        yrGF1UXrWUJr10qr10gw18Xr9xtr18Ja1UXw15JasrJr1DCF12qr15ur1j9r1kAr48Jr4U
+        Zr1UJFW5ury3JFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        W0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
+        67vIY487MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjfUnQ6pDUUUU
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,124 +68,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 6/1/2022 5:56 PM, Jinlong Mao wrote:
->
-> On 6/1/2022 5:30 PM, Suzuki K Poulose wrote:
->> On 01/06/2022 10:21, Jinlong Mao wrote:
->>> Hi Suzuki,
+>>>> +
+>>>> +int acpi_gsi_to_irq(u32 gsi, unsigned int *irqp)
+>>>> +{
+>>>> +	if (irqp != NULL)
+>>>> +		*irqp = acpi_register_gsi(NULL, gsi, -1, -1);
+>>>> +	return (*irqp >= 0) ? 0 : -EINVAL;
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(acpi_gsi_to_irq);
+>>>> +
+>>>> +int acpi_isa_irq_to_gsi(unsigned int isa_irq, u32 *gsi)
+>>>> +{
+>>>> +	if (gsi)
+>>>> +		*gsi = isa_irq;
+>>>> +	return 0;
+>>>> +}
+>>>> +
+>>>> +/*
+>>>> + * success: return IRQ number (>=0)
+>>>> + * failure: return &lt; 0
+>>>> + */
+>>>> +int acpi_register_gsi(struct device *dev, u32 gsi, int trigger, int polarity)
+>>>> +{
+>>>> +	int id;
+>>>> +	struct irq_fwspec fwspec;
+>>>> +
+>>>> +	switch (gsi) {
+>>>> +	case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
+>>>> +		fwspec.fwnode = liointc_domain->fwnode;
+>>>> +		fwspec.param[0] = gsi - GSI_MIN_CPU_IRQ;
+>>>> +		fwspec.param_count = 1;
+>>>> +
+>>>> +		return irq_create_fwspec_mapping(&amp;fwspec);
+>>>> +
+>>>> +	case GSI_MIN_LPC_IRQ ... GSI_MAX_LPC_IRQ:
+>>>> +		if (!pch_lpc_domain)
+>>>> +			return -EINVAL;
+>>>> +
+>>>> +		fwspec.fwnode = pch_lpc_domain->fwnode;
+>>>> +		fwspec.param[0] = gsi - GSI_MIN_LPC_IRQ;
+>>>> +		fwspec.param[1] = acpi_dev_get_irq_type(trigger, polarity);
+>>>> +		fwspec.param_count = 2;
+>>>> +
+>>>> +		return irq_create_fwspec_mapping(&amp;fwspec);
+>>>> +
+>>>> +	case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
+>>>> +		id = find_pch_pic(gsi);
+>>>> +		if (id &lt; 0)
+>>>> +			return -EINVAL;
+>>>> +
+>>>> +		fwspec.fwnode = pch_pic_domain[id]->fwnode;
+>>>> +		fwspec.param[0] = gsi - acpi_pchpic[id]->gsi_base;
+>>>> +		fwspec.param[1] = IRQ_TYPE_LEVEL_HIGH;
+>>>> +		fwspec.param_count = 2;
+>>>> +
+>>>> +		return irq_create_fwspec_mapping(&amp;fwspec);
+>>>> +	}
+>>> So all the complexity here seems to stem from the fact that you deal
+>>> with three ranges of interrupts, managed by three different pieces of
+>>> code?
 >>>
->>> On 5/24/2022 3:00 PM, Jinlong Mao wrote:
->>>> Hi Suzuki,
->>>>
->>>> Thank you for the review.
->>>>
->>>> On 5/23/2022 4:57 PM, Suzuki K Poulose wrote:
->>>>> Hi
->>>>>
->>>>> On 09/05/2022 14:39, Mao Jinlong wrote:
->>>>>> Add driver to support Coresight device TPDM (Trace, Profiling and
->>>>>> Diagnostics Monitor). TPDM is a monitor to collect data from
->>>>>> different datasets. This change is to add probe/enable/disable
->>>>>> functions for tpdm source.
->>>>>>
->>>>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->>>>>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
->>>>>> ---
->>>>>>   drivers/hwtracing/coresight/Kconfig          |  13 ++
->>>>>>   drivers/hwtracing/coresight/Makefile         |   1 +
->>>>>>   drivers/hwtracing/coresight/coresight-core.c |   5 +-
->>>>>>   drivers/hwtracing/coresight/coresight-tpdm.c | 146 
->>>>>> +++++++++++++++++++
->>>>>>   drivers/hwtracing/coresight/coresight-tpdm.h |  26 ++++
->>>>>>   include/linux/coresight.h                    |   1 +
->>>>>>   6 files changed, 191 insertions(+), 1 deletion(-)
->>>>>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
->>>>>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
->>>>>>
+>> Yes.
+>>
+>>> Other architectures have similar requirements, and don't require to
+>>> re-implement a private version of the ACPI API. Instead, they expose a
+>>> single irqdomain, and deal with the various ranges internally.
 >>>
->>>>>> +/**
->>>>>> + * struct tpdm_drvdata - specifics associated to an TPDM component
->>>>>> + * @base:       memory mapped base address for this component.
->>>>>> + * @dev:        The device entity associated to this component.
->>>>>> + * @csdev:      component vitals needed by the framework.
->>>>>> + * @lock:       lock for the enable value.
->>>>>> + * @enable:     enable status of the component.
->>>>>> + */
->>>>>> +
->>>>>> +struct tpdm_drvdata {
->>>>>> +    void __iomem        *base;
->>>>>> +    struct device        *dev;
->>>>>> +    struct coresight_device    *csdev;
->>>>>> +    struct mutex        lock;
->>>>>
->>>>> Why mutex lock ? Couldn't this be a spinlock ?
->>>> 1. There is no irq for TPDM
->>>> 2. As there are 7 dataset types, there will be some FOR loop to 
->>>> configure
->>>> tpdm registers which may cause some time.
->>
->> How long does it take to configure ? Is it too long enough to trigger
->> RCU stalls ? as long as we don't do any sleeping/blocking operations
->> we should be fine with a spinlock.
->>
->> Suzuki
->
-> Let me check on internal device and get back to you.
->
-> Thanks
-> Jinlong Mao
-
-The time of configuring the registers doesn't reach RCU stall timeout value.
-
-I will use spin_lock for both tpdm and tpda.
-
-Thanks
-Jinlong Mao
->>
->>>>
->>> I think we can use mutex lock here. Do you have any more comments 
->>> for this ?
->>
+>>> Clearly, not being able to reuse drivers/acpi/irq.c *is* an issue.
 >>>
->>> Thanks
->>> Jinlong Mao
->>>>>
->>>>>> +    bool            enable;
->>>>>> +};
->>>>>> +
->>>>>> +#endif  /* _CORESIGHT_CORESIGHT_TPDM_H */
->>>>>> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
->>>>>> index 247147c11231..a9efac55029d 100644
->>>>>> --- a/include/linux/coresight.h
->>>>>> +++ b/include/linux/coresight.h
->>>>>> @@ -61,6 +61,7 @@ enum coresight_dev_subtype_source {
->>>>>>       CORESIGHT_DEV_SUBTYPE_SOURCE_PROC,
->>>>>>       CORESIGHT_DEV_SUBTYPE_SOURCE_BUS,
->>>>>>       CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE,
->>>>>> +    CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY,
->>>>>
->>>>> super minor nit: I find the choice of name a bit odd.
->>>>> We could simply make it something like :
->>>>>
->>>>>     CORESIGHT_DEV_SUBTYPE_SOURCE_OTHERS:
->>>>>
->>>>> Suzuki
->>>> I will check and update.
->>>>>
->>>>>>   };
->>>>>>     enum coresight_dev_subtype_helper {
->>>>>
->>>>> _______________________________________________
->>>>> CoreSight mailing list -- coresight@lists.linaro.org
->>>>> To unsubscribe send an email to coresight-leave@lists.linaro.org
->>>> _______________________________________________
->>>> CoreSight mailing list -- coresight@lists.linaro.org
->>>> To unsubscribe send an email to coresight-leave@lists.linaro.org
+>> Thanks, I agree, that sounds a good and reasonable suggestion, and
+>> I'll reserach it further and reuse code from drivers/acpi/irq.c as
+>> can as possible.
 >>
->> _______________________________________________
->> CoreSight mailing list -- coresight@lists.linaro.org
->> To unsubscribe send an email to coresight-leave@lists.linaro.org
-> _______________________________________________
-> CoreSight mailing list -- coresight@lists.linaro.org
-> To unsubscribe send an email to coresight-leave@lists.linaro.org
+Hi, Marc, according to your suggestion, I carefully looked into gic 
+driver of ARM, and I found one possible gsi mapping path as following:
+
+acpi_register_gsi /* whatever the gsi is, gic domain for ARM is only 
+single domain to use.*/
+  ->irq_create_fwspec_mapping
+    ->irq_find_mapping /* return irq in the mapping of irqdomain with 
+fwnode_handle of acpi_gsi_domain_id if configured. */
+    ->irq_domain_alloc_irqs /* if not configured and hierarchy domain */
+      ->irq_domain_alloc_irqs_hierarchy
+        ->domain->ops->alloc /* call gic_irq_domain_alloc */
+          ->gic_irq_domain_map /* handle different GSI range as 
+following code: */
+
+
+         switch (__get_intid_range(hw)) {
+         case SGI_RANGE:
+         case PPI_RANGE:
+         case EPPI_RANGE:
+                 irq_set_percpu_devid(irq);
+                 irq_domain_set_info(d, irq, hw, chip, d->host_data,
+                                     handle_percpu_devid_irq, NULL, NULL);
+                 break;
+
+         case SPI_RANGE:
+         case ESPI_RANGE:
+                 irq_domain_set_info(d, irq, hw, chip, d->host_data,
+                                     handle_fasteoi_irq, NULL, NULL);
+                 irq_set_probe(irq);
+                 irqd_set_single_target(irqd);
+                 break;
+
+         case LPI_RANGE:
+                 if (!gic_dist_supports_lpis())
+                         return -EPERM;
+                 irq_domain_set_info(d, irq, hw, chip, d->host_data,
+                                     handle_fasteoi_irq, NULL, NULL);
+                 break;
+
+Yes, it's well for ARM by this way, and I found that only one 
+domain(specified by acpi_gsi_domain_id)is used.
+
+But for LoongArch, different GSI range have to be handled in different 
+domain(e.g. GSI for LIOINTC irqchip can be only mapped in LIOINTC 
+domain.). The hwirq->irq mapping of different GSI range is stored in 
+related separate domain. The reason leading to this is that an interrupt 
+source is hardcodingly to connected to an interrupt vector for these 
+irqchip(LIOINTC,LPC-PIC and PCH-PIC), and the interrupt source of them 
+need to be configured with GSI in DSDT or FADT(e.g. SCI).
+
+If only exposing one domain for LoongArch, when calling irq_find_mapping 
+in acpi_register_gsi flow, the irq is returned only from the domain 
+specfied by acpi_gsi_domain_id, so I'm afraid it's unsuitable to expose 
+a single domain for acpi_register_gsi.
+
+I'm so sorry, I really don't find a way to reuse driver/acpi/irq.c after 
+my humble work.
+

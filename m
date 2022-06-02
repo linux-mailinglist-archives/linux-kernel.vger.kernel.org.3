@@ -2,260 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC01D53BF5E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D72853BF66
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237764AbiFBULi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 16:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41716 "EHLO
+        id S238076AbiFBUMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 16:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237476AbiFBULg (ORCPT
+        with ESMTP id S237940AbiFBULw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 16:11:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFD7EB87E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 13:11:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654200692;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=BYY7dcXsY44fX5UAyrBEQpdxF2tKWWA11PscTbyg+9s=;
-        b=UKdb2aF0dVlujJ9iknSFOGo5TJkxT0G3VdVM7yNmb41UVzwunpyJbUFFQtG6pT2GW/SKbM
-        IAPqA4AjY9UwAHjMwb9NhWoFrONXQK4pvfobLJwHal8IJIv6bNsqabznryLm5r1d/D9lCZ
-        XUlbFQoYzftuWPy2XIsZOoImqdMJzfo=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-127-I37pg8RONn21XMp9f6Wavw-1; Thu, 02 Jun 2022 16:11:31 -0400
-X-MC-Unique: I37pg8RONn21XMp9f6Wavw-1
-Received: by mail-wm1-f70.google.com with SMTP id i1-20020a05600c354100b003976fc71579so3321398wmq.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 13:11:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=BYY7dcXsY44fX5UAyrBEQpdxF2tKWWA11PscTbyg+9s=;
-        b=P4NoLW8IQtn4MTisqivZVn4lrXWwvzDPxfiQxCYyNW3ZuxVihuTWJHl4pQ7BVHvWu+
-         DXo1WhCGabRZ4VcnhAjLPuXI9rxCPA2Fipj6VJCb5iy/91JmTAKz0dRTeMgp8pzrQNRf
-         iyFDhHMEGrp20SmXcRqZ/gCP/bvqsqfPFV4vMFKkN9n2PekrwuxBFEIln1aOaZecvtQT
-         1LINelSKVDRqUxV8OVdrE3SrnvgGTMK1Q1AXUzrF76S8IwGHZ83mpwrAqQYS85Zs1/2g
-         2QESXYSf85x35VQ82UqIrjDQNXPNqoFxK0CKj9RsFwdmlFPSm5/fh+nBIFLEMJWYOhww
-         DWPQ==
-X-Gm-Message-State: AOAM532BDFzbqvXFhCkGEKE3qbZ2e1Aye4CHYqOjtnAxfN8Grt5ul2MF
-        glMloON+YCD3Clt9RwWQKTye4khSdokf51eHy8QuXbfOVLePPEgSvINj81bHOhLBiya+lcsViUi
-        1AUCE5bleGcmZENEoE6ZFqUnT
-X-Received: by 2002:adf:e10d:0:b0:20c:dc8f:e5a5 with SMTP id t13-20020adfe10d000000b0020cdc8fe5a5mr5038009wrz.265.1654200690442;
-        Thu, 02 Jun 2022 13:11:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzneIx0zMilxr+W1BaJYsoq6s6IQhmzotnKWEdtoLNMkaqVhZmbNrt2KDMUSeYLfo6yVFEAAg==
-X-Received: by 2002:adf:e10d:0:b0:20c:dc8f:e5a5 with SMTP id t13-20020adfe10d000000b0020cdc8fe5a5mr5037980wrz.265.1654200690187;
-        Thu, 02 Jun 2022 13:11:30 -0700 (PDT)
-Received: from redhat.com ([2.55.40.171])
-        by smtp.gmail.com with ESMTPSA id n4-20020a1c7204000000b003949dbc3790sm7063981wmc.18.2022.06.02.13.11.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 13:11:29 -0700 (PDT)
-Date:   Thu, 2 Jun 2022 16:11:24 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arbn@yandex-team.com, arei.gonglei@huawei.com,
-        christophe.jaillet@wanadoo.fr, cohuck@redhat.com,
-        dan.carpenter@oracle.com, dinechin@redhat.com, elic@nvidia.com,
-        eperezma@redhat.com, gautam.dawar@xilinx.com, gdawar@xilinx.com,
-        helei.sig11@bytedance.com, jasowang@redhat.com,
-        lingshan.zhu@intel.com, linux-s390@vger.kernel.org,
-        liuke94@huawei.com, lkp@intel.com, lulu@redhat.com, maz@kernel.org,
-        michael.christie@oracle.com, mst@redhat.com, muriloo@linux.ibm.com,
-        oberpar@linux.ibm.com, pasic@linux.ibm.com, paulmck@kernel.org,
-        peterz@infradead.org, pizhenwei@bytedance.com, sgarzare@redhat.com,
-        solomonbstoner@protonmail.ch, stable@vger.kernel.org,
-        suwan.kim027@gmail.com, tglx@linutronix.de, vneethv@linux.ibm.com,
-        xianting.tian@linux.alibaba.com, zheyuma97@gmail.com
-Subject: [GIT PULL] vhost,virtio,vdpa: features, fixes, cleanups
-Message-ID: <20220602161124-mutt-send-email-mst@kernel.org>
+        Thu, 2 Jun 2022 16:11:52 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2049.outbound.protection.outlook.com [40.107.237.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98618101F;
+        Thu,  2 Jun 2022 13:11:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kxiL1q/YzRGXNV2tU01EuFJjhPDNLHaDAATdpbKfJxu2PcCicHdGdICZ0AHuz67jKEGHLK6M77PJAekVnACDVruWhgFyFJGe9m5eY5G6zQ3lkQ9YxuaLyzyYiBR09/kaVyDHhvlMpmX8hX60HpRLlyl3nNr7+Yk+rUrFzaX9zgAwZGl5M1GO4U+8tWtDogzR55gXQhFmMjg9uFcwRUSbO6PVlClfUpkgMxj7QozYH8N6LJCXBE92HCm2ll1sxiDi3HeXSBxMBa4qlDXrOejZTW6eMYB4W6eLSfG1EYpsECfd9Pru1vNwJLkxENJXQoeQr5tttrizo8a/eiw+vKYBRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9ey6OZeVHXpD5mdtbms/CWNTFneWrXwgY2HCfNz0chc=;
+ b=bTnfH6Up6xXL4w/cJM8wL0SdVytj4kOJdD0jR7ByRVaySIyP5CpI+rHLn1kVBlWa8rEGvuOH1rxaQfNtp9dR2uIai6bfDjF2znpAZjR+jH1ir7SSdeUORquvgKQwBHxVAhET+NXPDq3GiofjlH8SHkEo7DP0Gjo2BSwY48+bE6MEd1jQbX5Xh1+jdnKTOw/PWWx9sPCpvtzkOTGQ/HSNytIemOSlo5bGMTtl8YOvCY5IV12oLT92yA7JA/1Qq0i5iCI/fhs+c/OSZV21oMDqs8zd8QWOzR+J/ynMzezGf1BroFaAwBAPGSUL9a215GaiQzfX3KlEaAFOwKMVaxZOcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=ladisch.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9ey6OZeVHXpD5mdtbms/CWNTFneWrXwgY2HCfNz0chc=;
+ b=cpsu5jhPwD5F9ysTJv1GCiW0fv2GCIo6A3afZrs69+WveLSPTlEwuBKuYONwMNpJAW+9WnWhnqZMCTpdSTM5lh0lgaw8untbK4bKzy9RSMHEqay+8HcUK62HwXqinrIA5cQ/FejRh6u+11lTk5VXgq+tKYLltBQyhi3CCtnoffs=
+Received: from DM5PR18CA0058.namprd18.prod.outlook.com (2603:10b6:3:22::20) by
+ BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12; Thu, 2 Jun
+ 2022 20:11:44 +0000
+Received: from DM6NAM11FT048.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:22:cafe::c9) by DM5PR18CA0058.outlook.office365.com
+ (2603:10b6:3:22::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13 via Frontend
+ Transport; Thu, 2 Jun 2022 20:11:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT048.mail.protection.outlook.com (10.13.173.114) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5314.12 via Frontend Transport; Thu, 2 Jun 2022 20:11:43 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 2 Jun
+ 2022 15:11:39 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Clemens Ladisch <clemens@ladisch.de>
+CC:     <linux-hwmon@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+        <babu.moger@amd.com>, <yazen.ghannam@amd.com>,
+        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v2 0/6] Add support for upcoming chips to k10temp and amd_nb
+Date:   Thu, 2 Jun 2022 15:11:31 -0500
+Message-ID: <20220602201137.1415-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Mutt-Fcc: =sent
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 29295ea3-b129-4191-ba3e-08da44d41d18
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB4130D8936C43FF5BD2C4B04DE2DE9@BY5PR12MB4130.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oOgdDzNandrlHLShgqjo5Cny7pbLtPgUzJqoekvaa+uFXfcKxmKe9OUZ7BS4xbmuIrpVepOwQBUks72QditJ+qXN0cO8PqpLFv4BWlGEGic9/aYv0LlpiWJ5PSsM/TgMrzBEAz3OHZFRiTclSC1l9BsKylPuUFEOFtp0hqpxdVS0WWlVivj1I3wD4JTmmFqywsmth1/K84Z4K4oIVnqk+d7MScrXfuQWmf0qLGnlwc755I8YYDrEuDNhawIU4utLaAsiue/O1HJ0rxg6Swc9AdTBnVqrV99LM3EFW/dndpAhP359bBKAlWCvaLFgmPrcOQGdsAtdddEQO2CzHNCvH4ZfsQ+mVDHGD3xuSQICBU9xOe7AROINemsyBBa8U/+pvw7fbg6/h99i7uaxfN6wLXO3HhYuDmFs+yf3udjYbTeiDbdmoxPqb9iB5IGfvdnjpgRlYFtulibChzD6AhZaaoZYbFRxVRJPL1FPqgvH97SmadTnampHgHReNdlKgESkMQotTxgEM5WHqVj3RZ9gntTfDGny2etE6l+toku/BC80gw81jL/k9zPtNgGxBtjXZLgF0j+o0LRSDfN+aTmdRgtEWXiydBBTxM9unDTT1h/Q+Q8bhTK3c8n+711wxw1ALdpVyuONYOBuriSYyvmHx85uxPwptGDZWvlxtoluaqkDMZcEr9KiZhROI77x4Jvx7ZBmPgeW5uvW6X2G1pacIw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(356005)(186003)(47076005)(426003)(16526019)(336012)(2906002)(7696005)(316002)(6666004)(54906003)(1076003)(6916009)(40460700003)(36756003)(86362001)(2616005)(83380400001)(8936002)(82310400005)(508600001)(26005)(36860700001)(44832011)(4744005)(81166007)(70586007)(70206006)(4326008)(5660300002)(8676002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2022 20:11:43.6543
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29295ea3-b129-4191-ba3e-08da44d41d18
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT048.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4130
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 8ab2afa23bd197df47819a87f0265c0ac95c5b6a:
+This series started as what looked like a correction to previous
+commits, but I missed that the previous commits were for a different
+family with the same chip models.  So while fixing up the series I also
+noticed that a few upcoming chips have new PCIe IDs and CCD offsets not
+yet supported, so add them to amd_nb/k10temp.
 
-  Merge tag 'for-5.19/fbdev-1' of git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev (2022-05-30 12:46:49 -0700)
+v1->v2:
+ * Correct commit messages
+ * Add more missing chips and offsets
+ * since so much changed, do not include Bjorn's Ack.
+Mario Limonciello (6):
+  x86/amd_nb: Add AMD Family 17h A0-AF IDs
+  x86/amd_nb: Add Family 19h model 70h-7Fh IDs
+  x86/amd_nb: Add Family 19h model 60h-6Fh IDs
+  hwmon: (k10temp): Add support for family 17h models A0h-AFh
+  hwmon: (k10temp): Add support for family 19h models 70h-7Fh
+  hwmon: (k10temp): Add support for family 19h models 60h-6Fh
 
-are available in the Git repository at:
+ arch/x86/kernel/amd_nb.c | 13 +++++++++++++
+ drivers/hwmon/k10temp.c  | 12 ++++++++++++
+ include/linux/pci_ids.h  |  3 +++
+ 3 files changed, 28 insertions(+)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-
-for you to fetch changes up to bd8bb9aed56b1814784a975e2dfea12a9adcee92:
-
-  vdpa: ifcvf: set pci driver data in probe (2022-06-01 02:16:38 -0400)
-
-----------------------------------------------------------------
-vhost,virtio,vdpa: features, fixes, cleanups
-
-mac vlan filter and stats support in mlx5 vdpa
-irq hardening in virtio
-performance improvements in virtio crypto
-polling i/o support in virtio blk
-ASID support in vhost
-fixes, cleanups all over the place
-
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-
-----------------------------------------------------------------
-Andrey Ryabinin (4):
-      vhost: get rid of vhost_poll_flush() wrapper
-      vhost_net: get rid of vhost_net_flush_vq() and extra flush calls
-      vhost_test: remove vhost_test_flush_vq()
-      vhost_vsock: simplify vhost_vsock_flush()
-
-Christophe JAILLET (1):
-      virtio: pci: Fix an error handling path in vp_modern_probe()
-
-Cindy Lu (1):
-      vdpa/vp_vdpa : add vdpa tool support in vp_vdpa
-
-Dan Carpenter (2):
-      vdpasim: Off by one in vdpasim_set_group_asid()
-      vhost-vdpa: return -EFAULT on copy_to_user() failure
-
-Eli Cohen (8):
-      vdpa: Fix error logic in vdpa_nl_cmd_dev_get_doit
-      vdpa: Add support for querying vendor statistics
-      net/vdpa: Use readers/writers semaphore instead of vdpa_dev_mutex
-      net/vdpa: Use readers/writers semaphore instead of cf_mutex
-      vdpa/mlx5: Add support for reading descriptor statistics
-      vdpa/mlx5: Use readers/writers semaphore instead of mutex
-      vdpa/mlx5: Remove flow counter from steering
-      vdpa/mlx5: Add RX MAC VLAN filter support
-
-Eugenio Pérez (1):
-      vdpasim: allow to enable a vq repeatedly
-
-Gautam Dawar (19):
-      vhost: move the backend feature bits to vhost_types.h
-      virtio-vdpa: don't set callback if virtio doesn't need it
-      vhost-vdpa: passing iotlb to IOMMU mapping helpers
-      vhost-vdpa: switch to use vhost-vdpa specific IOTLB
-      vdpa: introduce virtqueue groups
-      vdpa: multiple address spaces support
-      vdpa: introduce config operations for associating ASID to a virtqueue group
-      vhost_iotlb: split out IOTLB initialization
-      vhost: support ASID in IOTLB API
-      vhost-vdpa: introduce asid based IOTLB
-      vhost-vdpa: introduce uAPI to get the number of virtqueue groups
-      vhost-vdpa: introduce uAPI to get the number of address spaces
-      vhost-vdpa: uAPI to get virtqueue group id
-      vhost-vdpa: introduce uAPI to set group ASID
-      vhost-vdpa: support ASID based IOTLB API
-      vdpa_sim: advertise VIRTIO_NET_F_MTU
-      vdpa_sim: factor out buffer completion logic
-      vdpa_sim: filter destination mac address
-      vdpasim: control virtqueue support
-
-Jason Wang (9):
-      virtio: use virtio_reset_device() when possible
-      virtio: introduce config op to synchronize vring callbacks
-      virtio-pci: implement synchronize_cbs()
-      virtio-mmio: implement synchronize_cbs()
-      virtio-ccw: implement synchronize_cbs()
-      virtio: allow to unbreak virtqueue
-      virtio: harden vring IRQ
-      virtio: use WARN_ON() to warning illegal status value
-      vdpa: ifcvf: set pci driver data in probe
-
-Mike Christie (4):
-      vhost: flush dev once during vhost_dev_stop
-      vhost-scsi: drop flush after vhost_dev_cleanup
-      vhost-test: drop flush after vhost_dev_cleanup
-      vhost: rename vhost_work_dev_flush
-
-Murilo Opsfelder Araujo (1):
-      virtio-pci: Remove wrong address verification in vp_del_vqs()
-
-Solomon Tan (2):
-      virtio: Replace unsigned with unsigned int
-      virtio: Replace long long int with long long
-
-Stefano Garzarella (1):
-      virtio: use virtio_device_ready() in virtio_device_restore()
-
-Suwan Kim (2):
-      virtio-blk: support polling I/O
-      virtio-blk: support mq_ops->queue_rqs()
-
-Xianting Tian (2):
-      virtio_ring: remove unnecessary to_vvq call in vring hot path
-      virtio_ring: add unlikely annotation for free descs check
-
-Zhu Lingshan (1):
-      vDPA/ifcvf: fix uninitialized config_vector warning
-
-keliu (1):
-      virtio: Directly use ida_alloc()/free()
-
-lei he (2):
-      virtio-crypto: adjust dst_len at ops callback
-      virtio-crypto: enable retry for virtio-crypto-dev
-
-zhenwei pi (3):
-      virtio-crypto: change code style
-      virtio-crypto: use private buffer for control request
-      virtio-crypto: wait ctrl queue instead of busy polling
-
- drivers/block/virtio_blk.c                         | 224 +++++++++-
- .../crypto/virtio/virtio_crypto_akcipher_algs.c    |  95 ++--
- drivers/crypto/virtio/virtio_crypto_common.h       |  21 +-
- drivers/crypto/virtio/virtio_crypto_core.c         |  55 ++-
- .../crypto/virtio/virtio_crypto_skcipher_algs.c    | 138 +++---
- drivers/s390/virtio/virtio_ccw.c                   |  34 ++
- drivers/vdpa/alibaba/eni_vdpa.c                    |   2 +-
- drivers/vdpa/ifcvf/ifcvf_main.c                    |  23 +-
- drivers/vdpa/mlx5/core/mlx5_vdpa.h                 |   2 +
- drivers/vdpa/mlx5/net/mlx5_vnet.c                  | 491 +++++++++++++++++----
- drivers/vdpa/vdpa.c                                | 257 +++++++++--
- drivers/vdpa/vdpa_sim/vdpa_sim.c                   | 107 ++++-
- drivers/vdpa/vdpa_sim/vdpa_sim.h                   |   3 +
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c               | 169 +++++--
- drivers/vdpa/vdpa_user/vduse_dev.c                 |   3 +-
- drivers/vdpa/virtio_pci/vp_vdpa.c                  | 161 +++++--
- drivers/vhost/iotlb.c                              |  23 +-
- drivers/vhost/net.c                                |  11 +-
- drivers/vhost/scsi.c                               |   4 +-
- drivers/vhost/test.c                               |  14 +-
- drivers/vhost/vdpa.c                               | 271 +++++++++---
- drivers/vhost/vhost.c                              |  45 +-
- drivers/vhost/vhost.h                              |   7 +-
- drivers/vhost/vsock.c                              |   7 +-
- drivers/virtio/virtio.c                            |  32 +-
- drivers/virtio/virtio_balloon.c                    |  12 +-
- drivers/virtio/virtio_mmio.c                       |  27 +-
- drivers/virtio/virtio_pci_common.c                 |  15 +-
- drivers/virtio/virtio_pci_common.h                 |  10 +-
- drivers/virtio/virtio_pci_legacy.c                 |  11 +-
- drivers/virtio/virtio_pci_modern.c                 |  14 +-
- drivers/virtio/virtio_pci_modern_dev.c             |   6 +
- drivers/virtio/virtio_ring.c                       |  55 ++-
- drivers/virtio/virtio_vdpa.c                       |  12 +-
- include/linux/mlx5/mlx5_ifc.h                      |   1 +
- include/linux/mlx5/mlx5_ifc_vdpa.h                 |  39 ++
- include/linux/vdpa.h                               |  61 ++-
- include/linux/vhost_iotlb.h                        |   2 +
- include/linux/virtio.h                             |   1 +
- include/linux/virtio_config.h                      |  47 +-
- include/uapi/linux/vdpa.h                          |   6 +
- include/uapi/linux/vhost.h                         |  26 +-
- include/uapi/linux/vhost_types.h                   |  11 +-
- 43 files changed, 1964 insertions(+), 591 deletions(-)
+-- 
+2.34.1
 

@@ -2,89 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F42253C130
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 00:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E90653C131
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 01:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239851AbiFBW73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 18:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
+        id S239864AbiFBXB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 19:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiFBW71 (ORCPT
+        with ESMTP id S229921AbiFBXBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 18:59:27 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D6F1DA77;
-        Thu,  2 Jun 2022 15:59:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=myZAuCtS59zOB4ceDtZuHs2CQEeRbLXKVl+Lui0wcjw=; b=ef/BwSpwHb8VH9+oHumHZAXIEw
-        qO5Q6ss080yRYumaDKapV2V+s80qJkaW0/A7Pvh6CB2/TdAuCPAIq41fM1JEcXJGTrG1Z6b7UbYdW
-        ciY2erkAfemqDy8TWtn2OnlZcas3i4dOxYyGDDDBCh+ViXhoGE0B+Ao5pTrZGtNaqrYuC9thy9cKD
-        nyVJzK5wflo54w2WaChghCxfPve0dd0xjAGelBt6/UyCscBeg41YDpZXstnFMtHIPyjlJyX0MXYkV
-        uzls3F9KxygJfkMipzlOsv6tSxXViun9K6v6dmIgOYzVk4kbO5HgZFiQkOASEWCBWIU0dlY2iIPFg
-        tA3dMl1A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwtme-0054Wf-K2; Thu, 02 Jun 2022 22:59:16 +0000
-Date:   Thu, 2 Jun 2022 15:59:16 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules@vger.kernel.org, void@manifault.com,
-        atomlin@atomlin.com, Allen Pais <allen.lkml@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Android Kernel Team <kernel-team@android.com>
-Subject: Re: [PATCH v1] module: Fix prefix for module.sig_enforce module param
-Message-ID: <YplAxCvRiNnthK6d@bombadil.infradead.org>
-References: <20220322140344.556474-2-atomlin@redhat.com>
- <20220602035653.4167316-1-saravanak@google.com>
- <YpkMelZC+E5hKTw6@bombadil.infradead.org>
- <CAHk-=wit6ttmzdFsbH+YLkMeLucTspYADHnENn4fBXNrit0BUQ@mail.gmail.com>
- <CAGETcx9f5BiojqU6wr29eUrYr9s8k+CGj_t-7RvrTSmDm6WwJw@mail.gmail.com>
+        Thu, 2 Jun 2022 19:01:21 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2372872E;
+        Thu,  2 Jun 2022 16:01:20 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id q1so6759358ljb.5;
+        Thu, 02 Jun 2022 16:01:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UrSyfjfeqVZrZfHKJrmVADtzpO1c1GhQspOF8ytnTY4=;
+        b=jCII96mhcASnjxlAKJgImX/8mKQeIsGCBCzykznSe2UfsOz1SzzHQ74GA1CDd1tppr
+         /qF3jwdKYrrSpx/g9rUTEH2Y35B3Oypto/Uuu3hthBV1tb4Sf9A/so3ZfTmaKspJ0gkg
+         mkHjP3v28HTfIriisu3ZJhDdGJxRFCH1jfMOM4dHLxG4bJhUJtQHJ+UyvPljL147JoFL
+         fXdNTMmxt8YjZ9kXCPYCkMcqVPySUq/88vMl9BV9z65NbZzfNlCE+Jx7SqG+oltuvigg
+         fM3TLh82F9i7q3btI9jDd0RR1qiwDt53RaqGetVRQN5ES8ZLxzypqGTry4nz19pZ0wKx
+         glCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UrSyfjfeqVZrZfHKJrmVADtzpO1c1GhQspOF8ytnTY4=;
+        b=FjSIQhRoGDkQQAFp+dtzBbLM0QV2/2vYKKzbIM6qVWOkGrDpMppBneBKHZ1qGbrdNL
+         GYrAgHlW0vray07I91kyHiP8blrJtVaMRnxx4AJvXmQaMGarK/L5m1TgQyvTLHi1S0WO
+         KLxPbz0XlJkUprRFGmLiyfHsKHZcGVD5iu5c1Sj2rtos55hTDDa2QHjFfDV3wJo1+iji
+         svu3qF1UnBIQaxWJOuJQXeNSfG1K/6K2ZgZNhjTO0qKQ0/IFmJ1IyXj+97qnUZbnTWr0
+         F8Nb722cY0349iOqpAwf2NURq8Q2vVA+/jcfBSyudbFWNQDPSEMLDPZ8itu+8+ajTqbs
+         fyTw==
+X-Gm-Message-State: AOAM530V8lD3UJki4EMctxjmJnFnSNQyyBzOxQ2DMmlk1MoadgueWb98
+        A7V0GVBpmybmansLFg9sqKTE8NUUyPHOa6CvvcA=
+X-Google-Smtp-Source: ABdhPJwbDS4kjdp7Wh9KbE1D8cH+KtyjYAZFXoRKE4oCXa6/L+CQvw/L9zG6TbmgU/F97v5Tbjy+CrsKtVvlZlG9WI0=
+X-Received: by 2002:a2e:9bc1:0:b0:253:e20a:7a79 with SMTP id
+ w1-20020a2e9bc1000000b00253e20a7a79mr36466327ljj.445.1654210878588; Thu, 02
+ Jun 2022 16:01:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGETcx9f5BiojqU6wr29eUrYr9s8k+CGj_t-7RvrTSmDm6WwJw@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220527205611.655282-1-jolsa@kernel.org> <20220527205611.655282-4-jolsa@kernel.org>
+In-Reply-To: <20220527205611.655282-4-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 2 Jun 2022 16:01:07 -0700
+Message-ID: <CAEf4BzbY19qe6Ftzev884R_xuS4H5OD_fRLOfeekbPWjd5jkiA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] bpf: Force cookies array to follow symbols sorting
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 02:47:04PM -0700, Saravana Kannan wrote:
-> On Thu, Jun 2, 2022 at 12:41 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Thu, Jun 2, 2022 at 12:16 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > >
-> > > Linus want to take this in or should I just queue these up?
-> >
-> > I'll take it, and remove the unnecessary #ifdef/#endif. The #undef
-> > might as well be unconditional - simpler and doesn't hurt.
-> 
-> Sounds good. I just copy-pasted how it was done elsewhere. Luis was
-> mentioning adding a wrapper to go this cleanly and I needed it in
-> another instance too. So I'll look into doing that in a future patch.
+On Fri, May 27, 2022 at 1:57 PM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> When user specifies symbols and cookies for kprobe_multi link
+> interface it's very likely the cookies will be misplaced and
+> returned to wrong functions (via get_attach_cookie helper).
+>
+> The reason is that to resolve the provided functions we sort
+> them before passing them to ftrace_lookup_symbols, but we do
+> not do the same sort on the cookie values.
+>
+> Fixing this by using sort_r function with custom swap callback
+> that swaps cookie values as well.
+>
+> Fixes: 0236fec57a15 ("bpf: Resolve symbols with ftrace_lookup_symbols for kprobe multi link")
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  kernel/trace/bpf_trace.c | 65 ++++++++++++++++++++++++++++++----------
+>  1 file changed, 50 insertions(+), 15 deletions(-)
+>
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 10b157a6d73e..e5c423b835ab 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -2423,7 +2423,12 @@ kprobe_multi_link_handler(struct fprobe *fp, unsigned long entry_ip,
+>         kprobe_multi_link_prog_run(link, entry_ip, regs);
+>  }
+>
+> -static int symbols_cmp(const void *a, const void *b)
+> +struct multi_symbols_sort {
+> +       const char **funcs;
+> +       u64 *cookies;
+> +};
+> +
+> +static int symbols_cmp_r(const void *a, const void *b, const void *priv)
+>  {
+>         const char **str_a = (const char **) a;
+>         const char **str_b = (const char **) b;
+> @@ -2431,6 +2436,25 @@ static int symbols_cmp(const void *a, const void *b)
+>         return strcmp(*str_a, *str_b);
+>  }
+>
+> +static void symbols_swap_r(void *a, void *b, int size, const void *priv)
+> +{
+> +       const struct multi_symbols_sort *data = priv;
+> +       const char **name_a = a, **name_b = b;
+> +       u64 *cookie_a, *cookie_b;
+> +
+> +       cookie_a = data->cookies + (name_a - data->funcs);
+> +       cookie_b = data->cookies + (name_b - data->funcs);
+> +
+> +       /* swap name_a/name_b and cookie_a/cookie_b values */
+> +       swap(*name_a, *name_b);
+> +       swap(*cookie_a, *cookie_b);
+> +}
+> +
+> +static int symbols_cmp(const void *a, const void *b)
+> +{
+> +       return symbols_cmp_r(a, b, NULL);
+> +}
+> +
+>  int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+>  {
+>         struct bpf_kprobe_multi_link *link = NULL;
+> @@ -2468,6 +2492,19 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+>         if (!addrs)
+>                 return -ENOMEM;
+>
+> +       ucookies = u64_to_user_ptr(attr->link_create.kprobe_multi.cookies);
+> +       if (ucookies) {
+> +               cookies = kvmalloc(size, GFP_KERNEL);
+> +               if (!cookies) {
+> +                       err = -ENOMEM;
+> +                       goto error;
+> +               }
+> +               if (copy_from_user(cookies, ucookies, size)) {
+> +                       err = -EFAULT;
+> +                       goto error;
+> +               }
+> +       }
+> +
+>         if (uaddrs) {
+>                 if (copy_from_user(addrs, uaddrs, size)) {
+>                         err = -EFAULT;
+> @@ -2480,26 +2517,24 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+>                 if (err)
+>                         goto error;
+>
+> -               sort(us.syms, cnt, sizeof(*us.syms), symbols_cmp, NULL);
+> +               if (cookies) {
+> +                       struct multi_symbols_sort data = {
+> +                               .cookies = cookies,
+> +                               .funcs = us.syms,
+> +                       };
+> +
+> +                       sort_r(us.syms, cnt, sizeof(*us.syms), symbols_cmp_r,
+> +                              symbols_swap_r, &data);
+> +               } else {
+> +                       sort(us.syms, cnt, sizeof(*us.syms), symbols_cmp, NULL);
+> +               }
 
-Virtual hug, or something hippie like that.
+maybe just always do sort_r, swap callback can just check if cookie
+array is NULL and if not, additionally swap cookies? why have all
+these different callbacks and complicate the code unnecessarily?
 
-  Luis
+> +
+>                 err = ftrace_lookup_symbols(us.syms, cnt, addrs);
+>                 free_user_syms(&us);
+>                 if (err)
+>                         goto error;
+>         }
+>
+> -       ucookies = u64_to_user_ptr(attr->link_create.kprobe_multi.cookies);
+> -       if (ucookies) {
+> -               cookies = kvmalloc(size, GFP_KERNEL);
+> -               if (!cookies) {
+> -                       err = -ENOMEM;
+> -                       goto error;
+> -               }
+> -               if (copy_from_user(cookies, ucookies, size)) {
+> -                       err = -EFAULT;
+> -                       goto error;
+> -               }
+> -       }
+> -
+>         link = kzalloc(sizeof(*link), GFP_KERNEL);
+>         if (!link) {
+>                 err = -ENOMEM;
+> --
+> 2.35.3
+>

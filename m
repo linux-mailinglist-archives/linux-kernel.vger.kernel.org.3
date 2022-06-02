@@ -2,92 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7335E53B3B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812C953B3BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 08:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbiFBGkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 02:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        id S231433AbiFBGkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 02:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbiFBGjy (ORCPT
+        with ESMTP id S230483AbiFBGkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 02:39:54 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1514A2A3045
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 23:39:52 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id s12so831469ejx.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 23:39:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=U8bY1VsTwSvJLtTCVpYS8zjnyhHWXCpb6DcsheBwwuU=;
-        b=aFsFTJkzXTh8mdS1vzPOzd4HVSbWgDQCiIEcbUCBYDdU64ksferzdLYR+a7iYQnvAM
-         vV7xw+pQ8Rk4FH8R1DPyR0B98gXnzxacpNXiguYr2ZMM2eis8EOiEHT4aIaFds8XVwbn
-         XhCG5DB/W88+dedWZmL+nF1J5j0mRaGey6l1ulJkPNQqB2mokRn2A2F/E8LAcQsj0v/O
-         J/RNZSRfJBOrl2TdQTvSAqG8i9nKE/RWBsg1tWvPl4aH+DKkB4wdXdbemST2f/Erlq3w
-         pr4kn4K8XmYdTsp4kvzzXYGAPX5FlmPm5Tf4MOmd3SZW6GdQSlCMvYTHYxQqdD/uEB9N
-         PNew==
+        Thu, 2 Jun 2022 02:40:08 -0400
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883DF2A1412;
+        Wed,  1 Jun 2022 23:40:06 -0700 (PDT)
+Received: by mail-pl1-f193.google.com with SMTP id d22so3733761plr.9;
+        Wed, 01 Jun 2022 23:40:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=U8bY1VsTwSvJLtTCVpYS8zjnyhHWXCpb6DcsheBwwuU=;
-        b=5bNdjGdCLmNT65otI2LKZeuLpFS7pu5QFDzx9+bjqw+3GQsND4GiU186BurlYkHWGm
-         QrEx/AzRs6kxjoao8QNbMAA4JzdKivxIP7oT9kGRls2Oq7yAJs6yy37KvUp5iF5BekOx
-         MliCd5xEnEEtAuWZuUTH4Sk0gzJP+t0gYDipWiWxa+qkjF4EVzU3dER78Rx6zSsHaEBm
-         Dm5htvGIvht8/pu9KsfVJeRPmkSBhjzFAHSJdzD5MzPCCZV3QIKChLqNusYmQOPBPbIB
-         4yE9GUAQBSqXidswOaas1gAeNnCJdaM4RzypZU9hosG8YHnYPf7WJeE0oZLOKAUaCB9p
-         yksg==
-X-Gm-Message-State: AOAM533seisREyh5V3vCgSZI9WEnyKhIpx3EznpnJGFdljKtPzaL0sSq
-        VsCMhUq/FdUK/Che9IYg09LAPg==
-X-Google-Smtp-Source: ABdhPJya2ipZqZVcNatkJIMO5YNBK1s99TBjluK9v6qBTZq6ehBFSCW6Nro/f9f3XMT87AzNmhygLQ==
-X-Received: by 2002:a17:906:dc8a:b0:6f9:13e9:4c87 with SMTP id cs10-20020a170906dc8a00b006f913e94c87mr2713777ejc.729.1654151991533;
-        Wed, 01 Jun 2022 23:39:51 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id dc15-20020a170906c7cf00b006ff045d7c9bsm1428746ejb.173.2022.06.01.23.39.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 23:39:51 -0700 (PDT)
-Message-ID: <5b0666fb-cd98-7128-95df-bd8b779aab14@linaro.org>
-Date:   Thu, 2 Jun 2022 08:39:50 +0200
+        bh=zLPxQsb3PCndRUmUZRmCzH68VaNogXUV5kan2s/llbY=;
+        b=007eLhPR9LEgBpwFCcadv0reVcbBw/lkhtBfTFJT6zsjE2I0G+WfFQXMtoJCxwOxwY
+         mM4Z0XsG3BRnx448UVXjHrBV5n8/4DRwDUQPJRo3VX9oyXbGe/UxwU3GQsK2WDuOz9dM
+         Iue/TF5MwJianCYOVCKrQw7cs4cT1II/07iF/p97dWystVtRWTVMP4ESdTq7jm03NbzW
+         WpmD/0Qgj7pe7PIAiNJg7JY4YqdQvbj8Q8T+FjgixE9oiUe6EszPP8e0MAAOtLI7R6xL
+         rdZHQYnGa0wYip2kVWG9uUZUJhMcO4zxux1jspmKplijrUH+tfa6Z/nI02dB8LD075OI
+         C9JQ==
+X-Gm-Message-State: AOAM530H3d9gmHF7DGzNOEaJzVBsxykewA0u4LhG9l9ylS9Tj4vCjoTv
+        OznE9/8eru0EiQC8rx5yRA==
+X-Google-Smtp-Source: ABdhPJxBkU9NJC7MTGevv0kjPBA0Cad/4iSKEaZVuaJmMBYtriHhArgxGxx/fbNol5aDBsWR/3m9MQ==
+X-Received: by 2002:a17:903:240f:b0:158:b871:33ac with SMTP id e15-20020a170903240f00b00158b87133acmr3220825plo.135.1654152005988;
+        Wed, 01 Jun 2022 23:40:05 -0700 (PDT)
+Received: from localhost.localdomain (ns1003916.ip-51-81-154.us. [51.81.154.37])
+        by smtp.gmail.com with ESMTPSA id e15-20020a056a001a8f00b0050dc762818dsm2625119pfv.103.2022.06.01.23.40.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 23:40:05 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     djwong@kernel.org
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sunliming@kylinos.cn, kelulanainsley@gmail.com,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] xfs: Fix build error for implicit function declaration
+Date:   Thu,  2 Jun 2022 14:39:58 +0800
+Message-Id: <20220602063958.527493-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 2/5] ARM: dts: socfpga: Move sdmmc-ecc node to Arria 10
- dts
-Content-Language: en-US
-To:     =?UTF-8?Q?Pawe=c5=82_Anikiel?= <pan@semihalf.com>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     arnd@arndb.de, olof@lixom.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org,
-        amstan@chromium.org, upstream@semihalf.com
-References: <20220601154647.80071-1-pan@semihalf.com>
- <20220601154647.80071-3-pan@semihalf.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220601154647.80071-3-pan@semihalf.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2022 17:46, Paweł Anikiel wrote:
-> The ecc manager is a part of the Arria 10 SoC, move it to the correct
-> dts.
-> 
-> Signed-off-by: Paweł Anikiel <pan@semihalf.com>
+   fs/xfs/libxfs/xfs_btree.c: In function '__xfs_btree_check_lblock':
+>> fs/xfs/libxfs/xfs_btree.c:140:23: error: implicit declaration of function 'xfs_daddr_to_xfo'; did you mean 'xfs_daddr_to_agno'? [-Werror=implicit-function-declaration]
+     140 |                 fsb = xfs_daddr_to_xfo(xfs_buf_daddr(bp));
+         |                       ^~~~~~~~~~~~~~~~
+         |                       xfs_daddr_to_agno
+   cc1: some warnings being treated as errors
 
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: sunliming <sunliming@kylinos.cn>
+---
+ fs/xfs/scrub/xfile.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/fs/xfs/scrub/xfile.h b/fs/xfs/scrub/xfile.h
+index 973b0641b88a..a7ae99d32b5d 100644
+--- a/fs/xfs/scrub/xfile.h
++++ b/fs/xfs/scrub/xfile.h
+@@ -122,6 +122,13 @@ static inline loff_t xfile_size(struct xfile *xf)
+ {
+ 	return 0;
+ }
++
++static inline loff_t xfo_to_b(xfileoff_t xfoff) {}
++static inline xfileoff_t b_to_xfo(loff_t pos) {}
++static inline xfileoff_t b_to_xfot(loff_t pos) {}
++static inline xfs_daddr_t xfo_to_daddr(xfileoff_t xfoff) {}
++static inline xfileoff_t xfs_daddr_to_xfo(xfs_daddr_t bb) {}
++static inline xfileoff_t xfs_daddr_to_xfot(xfs_daddr_t bb) {}
+ #endif /* CONFIG_XFS_IN_MEMORY_FILE */
+ 
+ #endif /* __XFS_SCRUB_XFILE_H__ */
+-- 
+2.25.1
 
-
-Best regards,
-Krzysztof

@@ -2,55 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CE053B8F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 14:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE8E53B8E8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 14:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234940AbiFBMWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 08:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
+        id S234918AbiFBMUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 08:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiFBMWG (ORCPT
+        with ESMTP id S233364AbiFBMUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 08:22:06 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE56010A7
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 05:22:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654172525; x=1685708525;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=K0RnMTtm6/0xuSTlPAD0Tp2bmCGrrymvRxF7juGErjQ=;
-  b=exbGzCUxM3yYbbkCAPKN7YqkPkcTu0aHlUH+E1EcPS5GlEM7z4gCMQSk
-   YB/8ecN5tNdgDwpEWd0H+ur72MnIZ0R7yNQUgW3+47l+ctlfs908j3Ji5
-   tQzqBPSRJkfKFyOtQvCDD0v0RbIY0hQj9dFtS5iTyjV9+mRABLQuwZ6hG
-   Yz75lhmKZikthFYZRRH1C8LfF9hy/PDZWRt+JawCqL106wztWqJwE7x9r
-   DeSKFRdodyWEONTyizxn8d1w4yYLr1dEZsMe0UzbdFJe0miGsNZUHwVlP
-   8kyBqSopTkI+LVC5qu370MWLJ589SDYF70acDZVeaYC+vPOz9M2opR/kj
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275939420"
-X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="275939420"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 05:22:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="612798886"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.117])
-  by orsmga001.jf.intel.com with ESMTP; 02 Jun 2022 05:22:03 -0700
-From:   kah.jing.lee@intel.com
-To:     arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, dinguyen@kernel.org,
-        tien.sung.ang@intel.com, Kah Jing Lee <kah.jing.lee@intel.com>
-Subject: [PATCH 0/2] New driver for Intel(Altera) FPGA System ID softIP 
-Date:   Thu,  2 Jun 2022 20:20:09 +0800
-Message-Id: <20220602122008.3021030-1-kah.jing.lee@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Jun 2022 08:20:44 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B583FE0D0
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 05:20:42 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id f9so9720779ejc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 05:20:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=w3NU5Pd6RdYjWBDHbyo9ZXR/sDqD7HVPsWUeAk61S/E=;
+        b=LdiGj4MEYQyU5F+TIewCPHHuLUyUl2bLsqrCCSyBPVE4EOVfgtgZ79OzaiHVKidJiG
+         /RZLQP7l033/vrqYbv9WFHj57x9Z7x/MU66hCf+yoqYKOQADFxvth17LXDNhlr+fBZu6
+         lmXgfOG6Q+vp8QEDgWyYdOgZhuDkglvHpKPwKsQvRqjBwrAUkgIBXqVwSIhvzhJk4Nny
+         ft5eDNs6nRaqYUiM7UaK/4pNO3Ty5U9kLdLShFM20rw3Q9TmZPoyjBwnyTdNrqll5tPh
+         CkHW+HAvuWApxihuH7sA2EdYnWdiyNz2OQjyDixRF6uLuz9UAVqzcOHGbzh5CF3k/Usx
+         jwzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=w3NU5Pd6RdYjWBDHbyo9ZXR/sDqD7HVPsWUeAk61S/E=;
+        b=65A3b96hDbRJ6p5fmLo/4AxFRqGDuwpMQirT8CvzGoPsF3aLAR6d2Hl4sVPmScHIRH
+         Ds8GMaMNRO9OaxvRH0WZIjQh0ou6I+6qOU3B/YCi2FL5qDrqWhAcddoocp0fPSgsIdzM
+         suhOWdmp9ALSeODifHieWzBt3520pnDM0fdX7mgdMjrZquzGZXwRYtOYR9noE9HMwCZ/
+         TK6g9RloMMqn/8OKpLTg9xM81BTUHXOQes+Exdx9Gci9jpIsSFrCMfn5X2PLpv67TXmI
+         kYh1fmC6dZtgH6enUIrLAHW13Ivylqwe9rItVHCzRbspxyLe/DIVTVRpoDVVbZzKX61u
+         kbXw==
+X-Gm-Message-State: AOAM531zrw/nyRctfUDxzlXDS88GckpSq//ybrcjQGMvddeHxrf2POGd
+        7z8UK1JnQXYTJjFH0odFFagftA==
+X-Google-Smtp-Source: ABdhPJzqHGlDHD4WYxGAe/oW+BJi9G97Ku+puxcqkm6xUmICZTlEK4Dg6DMTJvIrdr6f3f4LkNAIwg==
+X-Received: by 2002:a17:906:9753:b0:6fe:dece:982a with SMTP id o19-20020a170906975300b006fedece982amr4124274ejy.560.1654172441357;
+        Thu, 02 Jun 2022 05:20:41 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id kz10-20020a17090777ca00b0070beb9401d9sm315486ejc.171.2022.06.02.05.20.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 05:20:40 -0700 (PDT)
+Message-ID: <c25d90a6-7f6b-8c0c-a227-94fc4f53e4a2@linaro.org>
+Date:   Thu, 2 Jun 2022 14:20:40 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: soc: ti: pruss: Re-arrange
+ "compatible" in alphabetic order
+Content-Language: en-US
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220602120613.2175-1-kishon@ti.com>
+ <20220602120613.2175-2-kishon@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220602120613.2175-2-kishon@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,32 +80,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kah Jing Lee <kah.jing.lee@intel.com>
+On 02/06/2022 14:06, Kishon Vijay Abraham I wrote:
+> Re-arrange "compatible" string in alphabetic order to decrease the
+> chance of conflicts.
+> 
+> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
 
-Hi,
-Patches have been internally reviewed by colleagues at Intel.
 
-New sysid driver for Altera(Intel) Sysid component is generally part of an
-FPGA design. The component can be hotplugged when the FPGA is reconfigured.
-This patch fixes the driver to support the component being hotplugged.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks,
-KJ
 
-Kah Jing Lee (2):
-  drivers: misc: intel_sysid: Add sysid from arch to drivers
-  dt-bindings: misc: Add the system id binding for Altera(Intel) FPGA
-    platform
-
- .../misc/intel,socfpga-sysid-1.0.yaml         |  39 +++++
- drivers/misc/Kconfig                          |   9 ++
- drivers/misc/Makefile                         |   1 +
- drivers/misc/intel_sysid.c                    | 142 ++++++++++++++++++
- 4 files changed, 191 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/misc/
-intel,socfpga-sysid-1.0.yaml
- create mode 100644 drivers/misc/intel_sysid.c
-
--- 
-2.25.1
-
+Best regards,
+Krzysztof

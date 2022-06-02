@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CEBA53BDE4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 20:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC34353BDE8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 20:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238006AbiFBSSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 14:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43580 "EHLO
+        id S237966AbiFBSSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 14:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237921AbiFBSSY (ORCPT
+        with ESMTP id S234209AbiFBSSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Jun 2022 14:18:24 -0400
 Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121C54D9FF;
-        Thu,  2 Jun 2022 11:18:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A7F4D253;
+        Thu,  2 Jun 2022 11:18:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Cc:To:From:content-disposition;
-        bh=96gVyAPchfhwwZw5Cb/qi6tBAvjJY8REpnEBoiyArWE=; b=mw4vLU8g4U7xEwsr4S402L+7dM
-        dRUXrSpOtPqTLZEUzWnICbENArFHYsbgfUxRwluxq7skykyk9I/vQ1GcIbFeZPJlK6VWGfMHEsB6v
-        wc6Il+k5eQNMYzTL6rolCHSleV8RKss9baGGnauY/gzrPVtLd3SrMV4tIuQe7qpT6w8HT0JKR6ysL
-        HKsWSFHZNU2qwU0QCur811QseGxNVj9lerJwUOGpt9MfNfdZWdNqcJLvUACpCdrsHsviTs9yevSd/
-        jqm588gA6gC4lMvlfRXYwFYDlzyrQE/sC54PpkkL3FkNdPxXFax7bpLst3e34ryIYeVAlujhsZin2
-        yZQd0KOA==;
+        bh=RvulF/aPuXxyCuEJPCKiOovtKEBhHz6qdq0wafSQodo=; b=kcDBAN8L4di3KxazFd36A5jm1H
+        yDFf8Q6RmPwlEKPjwz/DzZzHf4uiwoqV4GC9yKVzQmUyo6zNSxpbmAqKPoDDnbUJEvzw00pHAbKJh
+        exSFBTqWc55bGxwKB7FXmZgY0gFUvPub/o53CJofhl4CJbKHb5Ev0boIS9ACuiXwB8QZVik01+5Rs
+        sx1bOSGC+42DOc0ko+dRHBbFzxFP/Jp1pBtvqt6mu0HYBfNu1DxPImYT/gZFzOVc+hV/3zUlS4xcj
+        BMm7DND0rJHuP7SE6N0XhNfkRF0HmiGCPt2zp7TzOx9x19PrrA7XOoivNyEXPkSTKguJqg/FMpKez
+        oomb8zFA==;
 Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
         by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1nwpOm-00EPmX-Pz; Thu, 02 Jun 2022 12:18:22 -0600
+        id 1nwpOm-00EPmY-Pz; Thu, 02 Jun 2022 12:18:21 -0600
 Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1nwpOl-000DDG-LO; Thu, 02 Jun 2022 12:18:19 -0600
+        id 1nwpOl-000DDJ-Py; Thu, 02 Jun 2022 12:18:19 -0600
 From:   Logan Gunthorpe <logang@deltatee.com>
 To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
         Song Liu <song@kernel.org>
@@ -43,8 +43,8 @@ Cc:     Christoph Hellwig <hch@infradead.org>,
         David Sloan <David.Sloan@eideticom.com>,
         Logan Gunthorpe <logang@deltatee.com>,
         Christoph Hellwig <hch@lst.de>
-Date:   Thu,  2 Jun 2022 12:18:08 -0600
-Message-Id: <20220602181818.50729-3-logang@deltatee.com>
+Date:   Thu,  2 Jun 2022 12:18:09 -0600
+Message-Id: <20220602181818.50729-4-logang@deltatee.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220602181818.50729-1-logang@deltatee.com>
 References: <20220602181818.50729-1-logang@deltatee.com>
@@ -59,62 +59,73 @@ X-Spam-Level:
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v3 02/11] md/raid5-ppl: Drop unused argument from ppl_handle_flush_request()
+Subject: [PATCH v3 03/11] md/raid5: Ensure array is suspended for calls to log_exit()
 X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
 X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ppl_handle_flush_request() takes an struct r5log argument but doesn't
-use it. It has no buisiness taking this argument as it is only used
-by raid5-cache and has no way to derference it anyway. Remove
-the argument.
+The raid5-cache code relies on there being no IO in flight when
+log_exit() is called. There are two places where this is not
+guaranteed so add mddev_suspend() and mddev_resume() calls to these
+sites.
 
-No functional changes intended.
+The site in raid5_remove_disk() has a comment saying that it is
+called in raid5d and thus cannot wait for pending writes; however that
+does not appear to be correct anymore (if it ever was) as
+raid5_remove_disk() is called from hot_remove_disk() which only
+appears to be called in the md_ioctl(). Thus, the comment is removed,
+as well as the racy check and replaced with calls to suspend/resume.
+
+The site in raid5_change_consistency_policy() is in the error path,
+and another similar call site already has suspend/resume calls just
+below it; so it should be equally safe to make that change here.
 
 Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/md/raid5-log.h | 4 ++--
- drivers/md/raid5-ppl.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/md/raid5.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/md/raid5-log.h b/drivers/md/raid5-log.h
-index 270ced4f770f..c8332502669e 100644
---- a/drivers/md/raid5-log.h
-+++ b/drivers/md/raid5-log.h
-@@ -41,7 +41,7 @@ void ppl_write_stripe_run(struct r5conf *conf);
- void ppl_stripe_write_finished(struct stripe_head *sh);
- int ppl_modify_log(struct r5conf *conf, struct md_rdev *rdev, bool add);
- void ppl_quiesce(struct r5conf *conf, int quiesce);
--int ppl_handle_flush_request(struct r5l_log *log, struct bio *bio);
-+int ppl_handle_flush_request(struct bio *bio);
- extern struct md_sysfs_entry ppl_write_hint;
+diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+index 5d09256d7f81..3ad37dd4c5cd 100644
+--- a/drivers/md/raid5.c
++++ b/drivers/md/raid5.c
+@@ -7938,18 +7938,9 @@ static int raid5_remove_disk(struct mddev *mddev, struct md_rdev *rdev)
  
- static inline bool raid5_has_log(struct r5conf *conf)
-@@ -108,7 +108,7 @@ static inline int log_handle_flush_request(struct r5conf *conf, struct bio *bio)
- 	if (conf->log)
- 		ret = r5l_handle_flush_request(conf->log, bio);
- 	else if (raid5_has_ppl(conf))
--		ret = ppl_handle_flush_request(conf->log, bio);
-+		ret = ppl_handle_flush_request(bio);
- 
- 	return ret;
- }
-diff --git a/drivers/md/raid5-ppl.c b/drivers/md/raid5-ppl.c
-index 973e2e06f19c..4f5bdb4cad2b 100644
---- a/drivers/md/raid5-ppl.c
-+++ b/drivers/md/raid5-ppl.c
-@@ -679,7 +679,7 @@ void ppl_quiesce(struct r5conf *conf, int quiesce)
+ 	print_raid5_conf(conf);
+ 	if (test_bit(Journal, &rdev->flags) && conf->log) {
+-		/*
+-		 * we can't wait pending write here, as this is called in
+-		 * raid5d, wait will deadlock.
+-		 * neilb: there is no locking about new writes here,
+-		 * so this cannot be safe.
+-		 */
+-		if (atomic_read(&conf->active_stripes) ||
+-		    atomic_read(&conf->r5c_cached_full_stripes) ||
+-		    atomic_read(&conf->r5c_cached_partial_stripes)) {
+-			return -EBUSY;
+-		}
++		mddev_suspend(mddev);
+ 		log_exit(conf);
++		mddev_resume(mddev);
+ 		return 0;
  	}
- }
- 
--int ppl_handle_flush_request(struct r5l_log *log, struct bio *bio)
-+int ppl_handle_flush_request(struct bio *bio)
- {
- 	if (bio->bi_iter.bi_size == 0) {
- 		bio_endio(bio);
+ 	if (rdev == rcu_access_pointer(p->rdev))
+@@ -8697,8 +8688,11 @@ static int raid5_change_consistency_policy(struct mddev *mddev, const char *buf)
+ 			err = log_init(conf, NULL, true);
+ 			if (!err) {
+ 				err = resize_stripes(conf, conf->pool_size);
+-				if (err)
++				if (err) {
++					mddev_suspend(mddev);
+ 					log_exit(conf);
++					mddev_resume(mddev);
++				}
+ 			}
+ 		} else
+ 			err = -EINVAL;
 -- 
 2.30.2
 

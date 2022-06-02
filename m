@@ -2,97 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6CC53C106
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 00:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0D553C10A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 00:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239770AbiFBWrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 18:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
+        id S239779AbiFBWrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 18:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239757AbiFBWq5 (ORCPT
+        with ESMTP id S239757AbiFBWrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 18:46:57 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0107B100D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 15:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654210016; x=1685746016;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wkFKYh6+GBYmBdn4qaLmrZ1H0OBEJHJbuMMiS5EkQf0=;
-  b=DxVlLKvmhq3b9eg68SJd4pAfeClngwA788hgialy76uXZC/nxb/JcgvN
-   LxCn5UOfXHb7lNbA/3+Mct40lksiLNfsPI+HTMM/hidYlKJkgAebirnqz
-   K6k8vNggLXnJ0kUbctzJIU38fApnVALgrRnQlAGT269gOPQQbN1N5tT9d
-   /xTM/JWS6E7XecsugLaO2pwtWDEtVydjQarJsiaHPkKPry1trDbzFIRqB
-   8h2uGSw2QKgc7HkPtbWBlinLexkLpYKIWfElCjxdpfBzUc7C9kpxlioIA
-   VA01nqtg2HRZUybqzVnbpv0marQdcrya0Rxe5R88fLAdy4EXv1zDToqEn
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="276117505"
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="276117505"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 15:46:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="563531152"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 Jun 2022 15:46:53 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwtaf-0005V1-0F;
-        Thu, 02 Jun 2022 22:46:53 +0000
-Date:   Fri, 3 Jun 2022 06:46:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: {standard input}:79: Error: unrecognized opcode: `tlbsx'
-Message-ID: <202206030632.5VjvEzEw-lkp@intel.com>
+        Thu, 2 Jun 2022 18:47:15 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43FBD11E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 15:47:13 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id y19so12693268ejq.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 15:47:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/pu75bWmrBbYHAw0OFfUcO0avMr1ot5HtxjbiP+g2b0=;
+        b=bQTQJT0Q14fCxBGXzBNMiNwAgJmsUptbojmJ5kDmOcKl44mnQAWrNnh97RUMzzYDkv
+         FH39yoZizrisDYwdKloMDZZaVw598diyW5L5GCQK5XSzdzEEBCHagagbbCtgHfuf/uj3
+         Ksu/fE/XQabHkViVTOIEvEMuo/VXEZjpR2SoOvLi+dxorRQNX9j6ncG2PsuGnJO++0vA
+         XSOWuB+WJGkqFMP319FD1E/XbIFjsxg9kBPDe4OK7Qb5WJ41M7HwfW0IzaXa/UIHYv00
+         b6RpautIHtBd4XQCGKt9UCoMWzZAnCEDcshtoLhZpdHDPdmh9Mu1NXmqrXYq8H+u8dJi
+         xWIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/pu75bWmrBbYHAw0OFfUcO0avMr1ot5HtxjbiP+g2b0=;
+        b=BGbhbAO5cbmTgRdP4LAItCjNr1fkdfb34EstSPOAnBZE0Oa2V2QBaC2jWhLY/wrW2P
+         xsATirSZmIrsqQKLrPcdbofB/cC7pOfvpxfSnmRfC3z9MohbAESt8Et/T6tTdA1Orp6z
+         kKeFfyUCvec8qZixze0PaPbxzwxkkY1v1wWv4Z+i/KyFxlnYBuU3KokgaucOOpv9KUBm
+         qh8vDLk8W5FtRTgl5Cw2Z8V1IghJl62V05Ml6ARqvpmmM6sM4Qd8xEAW+B6sAKNxGr13
+         8fu1s8EY6InyMa0BsYshp5ymCHqPBpXbWeFUtucFqJWEwst7xjg5YSxEv97bvzCsYjTu
+         KU1Q==
+X-Gm-Message-State: AOAM532fn2yOPnkUcLIwPUTXgSJMwNfyOYb3pBKIF3Zy/NRQz0gqEVJ2
+        Atuv6q8+nnsLlds8JcSNfbbZaHGGxRVer6G7UnIkAA==
+X-Google-Smtp-Source: ABdhPJyDBimCwFU8GwUejJSnaLwopZ8mdmlNAnudYa0MFtBeTfetuVO2kGArO4IQ552v3S3vxozxlofhswmJmORlHLI=
+X-Received: by 2002:a17:907:7ba9:b0:6fe:5636:1636 with SMTP id
+ ne41-20020a1709077ba900b006fe56361636mr6433385ejc.463.1654210031999; Thu, 02
+ Jun 2022 15:47:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220525223316.388490-1-willmcvicker@google.com>
+In-Reply-To: <20220525223316.388490-1-willmcvicker@google.com>
+From:   Will McVicker <willmcvicker@google.com>
+Date:   Thu, 2 Jun 2022 15:46:56 -0700
+Message-ID: <CABYd82YK9M6ZP8znpCxCA2RXUrjPiWen6_+Y+41V3DtBpEkK4A@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] PCI: dwc: Fix MSI msi_msg dma mapping
+To:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     "Cc: Android Kernel" <kernel-team@android.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+On Wed, May 25, 2022 at 3:33 PM Will McVicker <willmcvicker@google.com> wrote:
+>
+> As of commit 07940c369a6b ("PCI: dwc: Fix MSI page leakage in
+> suspend/resume"), the PCIe designware host driver has been using the
+> driver data allocation for the msi_msg dma mapping which can result in
+> a DMA_MAPPING_ERROR due to the DMA overflow check in
+> dma_direct_map_page() when the address is greater than 32-bits (reported
+> in [1]). The commit was trying to address a memory leak on
+> suspend/resume by moving the MSI mapping to dw_pcie_host_init(), but
+> subsequently dropped the page allocation thinking it wasn't needed.
+>
+> To fix the DMA mapping issue as well as make msi_msg DMA'able, let's
+> switch back to allocating a 32-bit page for the msi_msg. To avoid the
+> suspend/resume leak, we can allocate the page in dw_pcie_host_init()
+> since that function shouldn't be called during suspend/resume.
+>
+> [1] https://lore.kernel.org/all/Yo0soniFborDl7+C@google.com/
+>
+> Signed-off-by: Will McVicker <willmcvicker@google.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-designware-host.c | 14 ++++++++------
+>  drivers/pci/controller/dwc/pcie-designware.h      |  2 +-
+>  2 files changed, 9 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> index 2fa86f32d964..3655c6f88bf1 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> @@ -267,8 +267,9 @@ static void dw_pcie_free_msi(struct pcie_port *pp)
+>                 struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+>                 struct device *dev = pci->dev;
+>
+> -               dma_unmap_single_attrs(dev, pp->msi_data, sizeof(pp->msi_msg),
+> -                                      DMA_FROM_DEVICE, DMA_ATTR_SKIP_CPU_SYNC);
+> +               dma_unmap_page(dev, pp->msi_data, PAGE_SIZE, DMA_FROM_DEVICE);
+> +               if (pp->msi_page)
+> +                       __free_page(pp->msi_page);
+>         }
+>  }
+>
+> @@ -392,12 +393,13 @@ int dw_pcie_host_init(struct pcie_port *pp)
+>                         if (ret)
+>                                 dev_warn(pci->dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
+>
+> -                       pp->msi_data = dma_map_single_attrs(pci->dev, &pp->msi_msg,
+> -                                                     sizeof(pp->msi_msg),
+> -                                                     DMA_FROM_DEVICE,
+> -                                                     DMA_ATTR_SKIP_CPU_SYNC);
+> +                       pp->msi_page = alloc_page(GFP_DMA32);
+> +                       pp->msi_data = dma_map_page(pci->dev, pp->msi_page, 0, PAGE_SIZE,
+> +                                                   DMA_FROM_DEVICE);
+>                         if (dma_mapping_error(pci->dev, pp->msi_data)) {
+>                                 dev_err(pci->dev, "Failed to map MSI data\n");
+> +                               __free_page(pp->msi_page);
+> +                               pp->msi_page = NULL;
+>                                 pp->msi_data = 0;
+>                                 goto err_free_msi;
+>                         }
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+> index 7d6e9b7576be..b5f528536358 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.h
+> +++ b/drivers/pci/controller/dwc/pcie-designware.h
+> @@ -190,8 +190,8 @@ struct pcie_port {
+>         int                     msi_irq;
+>         struct irq_domain       *irq_domain;
+>         struct irq_domain       *msi_domain;
+> -       u16                     msi_msg;
+>         dma_addr_t              msi_data;
+> +       struct page             *msi_page;
+>         struct irq_chip         *msi_irq_chip;
+>         u32                     num_vectors;
+>         u32                     irq_mask[MAX_MSI_CTRLS];
+> --
+> 2.36.1.124.g0e6072fb45-goog
+>
 
-FYI, the error/warning still remains.
+Friendly ping for review.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d1dc87763f406d4e67caf16dbe438a5647692395
-commit: 1a76e520ee1831a81dabf8a9a58c6453f700026e powerpc/64e: Tie PPC_BOOK3E_64 to PPC_FSL_BOOK3E
-date:   3 months ago
-config: powerpc64-randconfig-r025-20220531 (https://download.01.org/0day-ci/archive/20220603/202206030632.5VjvEzEw-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1a76e520ee1831a81dabf8a9a58c6453f700026e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 1a76e520ee1831a81dabf8a9a58c6453f700026e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   {standard input}: Assembler messages:
-   {standard input}:62: Error: unrecognized opcode: `lbarx'
-   {standard input}:62: Error: unrecognized opcode: `stbcx.'
->> {standard input}:79: Error: unrecognized opcode: `tlbsx'
-   {standard input}:145: Error: unrecognized opcode: `tlbwe'
->> {standard input}:185: Error: unrecognized opcode: `tlbsx.'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Will

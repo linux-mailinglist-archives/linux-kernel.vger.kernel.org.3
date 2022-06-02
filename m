@@ -2,123 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8967853B0B7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A96153B07A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232694AbiFBATB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 20:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
+        id S232718AbiFBA0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 20:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbiFBAS6 (ORCPT
+        with ESMTP id S232709AbiFBA0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 20:18:58 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA192296303
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 17:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654129137; x=1685665137;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9RbFovD48hyxruRDdIoOpiROhUh41L0yn94NAxXemzM=;
-  b=IhaKvJIZf1C58gyeBWLfMxXECeKbcw+8JQHJhExWfh1PjsTxivc2wvSN
-   kKZhCzDRhBorgjlkZi5Pgar0ucGuq3snrneVkZI/i3hpcbb6vWVNebJ3o
-   dmZOUBKd7DTscLLUo6FVoffZEhU88RcrpV089cdK/JCYjZdY5HwCVNKo1
-   GPMLHDWpe/LuEY9a/KvrBz0C1ngwQRGwAvO8IMnpQpG69mO6HaOrWiPUt
-   oUQEQ4ft3uHp4x9SaROYJAxHdE1A3KMLHP34LaHomF2MD+LlYqihB4fw7
-   HzHIJBCmvbbq1oUVJ+G+Shi34OyssvA3dezOL7ZRn498DHuW1aCU7GRDN
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="336426361"
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="336426361"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 17:18:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="530317885"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 01 Jun 2022 17:18:55 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwYYB-0004Z8-8F;
-        Thu, 02 Jun 2022 00:18:55 +0000
-Date:   Thu, 2 Jun 2022 08:18:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Julien Grall <julien.grall@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-Subject: arch/arm64/kvm/vmid.c:62 flush_context() warn: inconsistent indenting
-Message-ID: <202206020819.HlyEM8rW-lkp@intel.com>
+        Wed, 1 Jun 2022 20:26:37 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B34F23511B
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 17:26:36 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id e11so3362425pfj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 17:26:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=y/gUgyMqWVcRsb+qEaGqa2cDEAVvpf+gfqD2gAKhZeo=;
+        b=ItJwGzxeN7XJZuLKJ256vI76Qq2frqb9PjiPVfBOpWWW17LMKIqeeRXz/25pC8lXlQ
+         GitrNQa5fCz82T6DMO0vkedLn7U6JEuYtbxflHVlzTWKVG+6DfJoQxGqYsnZ/+xP9M0k
+         Y7vZ5P/Z+2irYU+pexBhC5bauIguFdJ0qJBwDxzCT1wlq/P3ppsnYXpBuS95KARPlcjP
+         FlI6j+lIHVhfn+dpit9oxJno2DbgUK5gInvdPa2lFd/bs0Tl81/oY4zMhiGoGmRhLkd7
+         mYXwcPEN+ZjzzMbHQxFOX8qgBNv3rbCp12Yn+M6Pc2+80NKRZ26j2Va+6/pXWTomYiPn
+         DoSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=y/gUgyMqWVcRsb+qEaGqa2cDEAVvpf+gfqD2gAKhZeo=;
+        b=Y4livYD7qAk8dO3zDGZvgL0V9s8Tt5y1kZeNM6ZIgqjyFXsPkFbuSSfqEM3U8pycYq
+         ukOhUPbPkwCxXf9RvzGLiMb4EBYMxzxh+jgIjLmZpo1d4dbfCpzKTxKWUplAeDZR2qnd
+         73/UY6/8rxQbOM09iIfNfQUTLY4BsDCGF4M796ulvUuFvyt2eqsE2YXy+AEY1CqDBril
+         gUp+jvgw6g4m/WYlw+XvGU03R9pX2XpSQmajiLRY5rQ1tE8nhBzNsABes8xuLIZ5oJID
+         NZA1aBYNhLqw/uG0csHvdMpoTVRnj3bLDoX2ZqiUr9BWRvfOC9XBjzbWOFuljBpT0Wyf
+         RG9w==
+X-Gm-Message-State: AOAM5311L1H7bhJi/9g6vS0/7BoZnW0bsvMvUeZdJheGSU95rH6Ifcum
+        QzwhoT2ngPj90hKroYQRd+wT7w==
+X-Google-Smtp-Source: ABdhPJyTDDferfqWzYFmGWnh7TdKImUbTnUOH9ymZWwxuTNL5eA0Ob24tCeayY4jYGH43fuUCbkSVg==
+X-Received: by 2002:a05:6a00:8c5:b0:510:6eae:6fa1 with SMTP id s5-20020a056a0008c500b005106eae6fa1mr2145386pfu.12.1654129595907;
+        Wed, 01 Jun 2022 17:26:35 -0700 (PDT)
+Received: from [192.168.254.36] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id y27-20020aa793db000000b0050dc762818asm2013338pff.100.2022.06.01.17.26.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 17:26:35 -0700 (PDT)
+Message-ID: <416dc60a-f0e5-7d05-1613-3cd0ca415768@linaro.org>
+Date:   Wed, 1 Jun 2022 17:26:34 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Bui Quang Minh <minhquangbui99@gmail.com>
+References: <20220525151517.8430-1-mkoutny@suse.com>
+ <20220525151517.8430-3-mkoutny@suse.com>
+ <20220525161455.GA16134@blackbody.suse.cz> <Yo7KfEOz92kS2z5Y@blackbook>
+ <Yo/DtjEU/kYr190u@slm.duckdns.org>
+ <0babd7df-bdef-9edc-3682-1144bc0c2d2b@linaro.org>
+ <Ypf0VnKUMiuRgZqT@slm.duckdns.org>
+ <1fb4d8d7-ccc0-b020-715e-38c2dfd94c23@linaro.org>
+ <Ypf5jpI7dSmpi4W0@slm.duckdns.org>
+ <c3bd8e63-7204-f86d-8efa-254db71185fc@linaro.org>
+ <Ypf/MpwzByOrSp6A@slm.duckdns.org>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
+In-Reply-To: <Ypf/MpwzByOrSp6A@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Julien,
+On 6/1/22 17:07, Tejun Heo wrote:
+> Hello,
+> 
+> On Wed, Jun 01, 2022 at 05:00:44PM -0700, Tadeusz Struk wrote:
+>> What I'm trying to say is that it's not really a ref imbalance problem.
+>> I think once the kill_css() has been called on a css, and it is enqueued to be
+>> killed, we shouldn't call css_put(css) on it anymore outside of the "killed call
+>> flow path". It will all be handled by the css_killed_ref_fn() function.
+>>
+>> The fact the css_release() is called (via cgroup_kn_unlock()) just after
+>> kill_css() causes the css->destroy_work to be enqueued twice on the same WQ
+>> (cgroup_destroy_wq), just with different function. This results in the
+>> BUG: corrupted list in insert_work issue.
+> 
+> I have a hard time following here. The kill / release paths relationship
+> isn't that complicated. The kill path is invoked when the percpu_ref's base
+> ref is killed and holds an extra ref so that it's guaranteed that release
+> can't happen before the kill path is done with the css. When the final put
+> happens - whether that's from the kill path or someone else, which often is
+> the case - the release path triggers. If we have release getting scheduled
+> while the kill path isn't finished, it is a reference counting problem,
+> right?
+> 
+> Can you elaborate the exact scenario that you think is happening? Please
+> feel free to omit the function calls and all that. Just lay out who's doing
+> what.
 
-First bad commit (maybe != root cause):
+Ok the problem is that
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8171acb8bc9b33f3ed827f0615b24f7a06495cd0
-commit: 3248136b3637e1671e4fa46e32e2122f9ec4bc3d KVM: arm64: Align the VMID allocation with the arm64 ASID
-date:   4 months ago
-config: arm64-randconfig-m031-20220530 (https://download.01.org/0day-ci/archive/20220602/202206020819.HlyEM8rW-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
+1. kill_css() triggers css_killed_ref_fn(), which enqueues &css->destroy_work on cgroup_destroy_wq
+2. Last put_css() calls css_release(), which enqueues &css->destroy_work on cgroup_destroy_wq
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+We have two instances of the same work struct enqueued on the same WQ (cgroup_destroy_wq),
+which causes "BUG: corrupted list in insert_work"
 
-smatch warnings:
-arch/arm64/kvm/vmid.c:62 flush_context() warn: inconsistent indenting
+So I think the easiest way to solve this would be to have two separate work_structs,
+one for the killed_ref path and css_release path as in:
 
-vim +62 arch/arm64/kvm/vmid.c
-
-417838392f2e657 Shameer Kolothum 2021-11-22  34  
-417838392f2e657 Shameer Kolothum 2021-11-22  35  #define vmid_gen_match(vmid) \
-417838392f2e657 Shameer Kolothum 2021-11-22  36  	(!(((vmid) ^ atomic64_read(&vmid_generation)) >> kvm_arm_vmid_bits))
-417838392f2e657 Shameer Kolothum 2021-11-22  37  
-417838392f2e657 Shameer Kolothum 2021-11-22  38  static void flush_context(void)
-417838392f2e657 Shameer Kolothum 2021-11-22  39  {
-417838392f2e657 Shameer Kolothum 2021-11-22  40  	int cpu;
-417838392f2e657 Shameer Kolothum 2021-11-22  41  	u64 vmid;
-417838392f2e657 Shameer Kolothum 2021-11-22  42  
-417838392f2e657 Shameer Kolothum 2021-11-22  43  	bitmap_clear(vmid_map, 0, NUM_USER_VMIDS);
-417838392f2e657 Shameer Kolothum 2021-11-22  44  
-417838392f2e657 Shameer Kolothum 2021-11-22  45  	for_each_possible_cpu(cpu) {
-417838392f2e657 Shameer Kolothum 2021-11-22  46  		vmid = atomic64_xchg_relaxed(&per_cpu(active_vmids, cpu), 0);
-417838392f2e657 Shameer Kolothum 2021-11-22  47  
-417838392f2e657 Shameer Kolothum 2021-11-22  48  		/* Preserve reserved VMID */
-417838392f2e657 Shameer Kolothum 2021-11-22  49  		if (vmid == 0)
-417838392f2e657 Shameer Kolothum 2021-11-22  50  			vmid = per_cpu(reserved_vmids, cpu);
-417838392f2e657 Shameer Kolothum 2021-11-22  51  		__set_bit(vmid2idx(vmid), vmid_map);
-417838392f2e657 Shameer Kolothum 2021-11-22  52  		per_cpu(reserved_vmids, cpu) = vmid;
-417838392f2e657 Shameer Kolothum 2021-11-22  53  	}
-417838392f2e657 Shameer Kolothum 2021-11-22  54  
-417838392f2e657 Shameer Kolothum 2021-11-22  55  	/*
-417838392f2e657 Shameer Kolothum 2021-11-22  56  	 * Unlike ASID allocator, we expect less frequent rollover in
-417838392f2e657 Shameer Kolothum 2021-11-22  57  	 * case of VMIDs. Hence, instead of marking the CPU as
-417838392f2e657 Shameer Kolothum 2021-11-22  58  	 * flush_pending and issuing a local context invalidation on
-417838392f2e657 Shameer Kolothum 2021-11-22  59  	 * the next context-switch, we broadcast TLB flush + I-cache
-417838392f2e657 Shameer Kolothum 2021-11-22  60  	 * invalidation over the inner shareable domain on rollover.
-417838392f2e657 Shameer Kolothum 2021-11-22  61  	 */
-417838392f2e657 Shameer Kolothum 2021-11-22 @62  	 kvm_call_hyp(__kvm_flush_vm_context);
-417838392f2e657 Shameer Kolothum 2021-11-22  63  }
-417838392f2e657 Shameer Kolothum 2021-11-22  64  
-
-:::::: The code at line 62 was first introduced by commit
-:::::: 417838392f2e657ee25cc30e373ff4c35a0faa90 KVM: arm64: Introduce a new VMID allocator for KVM
-
-:::::: TO: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-:::::: CC: Marc Zyngier <maz@kernel.org>
+https://lore.kernel.org/all/20220523212724.233314-1-tadeusz.struk@linaro.org/
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Tadeusz

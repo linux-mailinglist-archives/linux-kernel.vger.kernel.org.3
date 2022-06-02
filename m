@@ -2,83 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBF153BB61
+	by mail.lfdr.de (Postfix) with ESMTP id D529953BB62
 	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236383AbiFBPIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 11:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S236396AbiFBPIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 11:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236374AbiFBPIf (ORCPT
+        with ESMTP id S236386AbiFBPIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 11:08:35 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F607694AF;
-        Thu,  2 Jun 2022 08:08:35 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-f2a4c51c45so7066469fac.9;
-        Thu, 02 Jun 2022 08:08:35 -0700 (PDT)
+        Thu, 2 Jun 2022 11:08:52 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30706B7D6;
+        Thu,  2 Jun 2022 08:08:51 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id m82so6824384oif.13;
+        Thu, 02 Jun 2022 08:08:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=OUwSxoOwcEaIjyrHRa2+WezhILR4wTzd8pNvmgqO9d8=;
-        b=ex8jgV23fFKfvXw35xtHOWpWmzoDlKQQsvRffXtuIUSu+IMOj9ksO1OVCPZ9JBBv0U
-         Gw/IayJZwcpUALQgd2GuWueVEtwqpMQhnQOlrjG2uZpdRVJfFdWgxD2w/8+ra9MIJ7Gf
-         6ZlxYUtymW6IA+pwXpwkgDdJaOCJQ3wxYqFDqFvCzqXcmms4N2uvAWxdeVYDOFS+/sem
-         w1iD2UysEmn8qZLjh4fU8Naj3vwpNkZp6eszImWrxVbLAIs2I0bLQcbqKS4+iRX4+wxj
-         QYHSwEw5s77jIZwM0ttySfU/bo71PV3xr1ozTMMUvblN7rgFHw/3NFTMWJeEFq2XlFxR
-         gjiQ==
-X-Gm-Message-State: AOAM533zUKYz9FNxlrKKyAlJuPckzLCFQ9GpyO7zmCQ/tJLm05XnJP6R
-        dqAeRB4+MUezf669olBArQ==
-X-Google-Smtp-Source: ABdhPJwTdgjdDnA+5v6Y9CtE8w0PKrFsdD9tVYp5ME1xfF2mCS5P8rTTHo6sGULXKENTH0KKZpx/Ew==
-X-Received: by 2002:a05:6870:b609:b0:f2:74e7:9bf1 with SMTP id cm9-20020a056870b60900b000f274e79bf1mr20018480oab.141.1654182514305;
-        Thu, 02 Jun 2022 08:08:34 -0700 (PDT)
+        bh=pHVMppeew5tvngB9V7RVRiVw3/EcQO9cXfk5fahNvLU=;
+        b=fBxcKX6i+esqGFur/dZk6XvOGTQNB4GYwtI9V+JmIS9Yw7q1pFS0UETlEPSepPLrpB
+         SRDu417ZJxiTn1YPUu/Na0cAuKnegfbp7wXvhLtOZ8DvLPDCa4GVt9vDZ5/HxwHHr/WP
+         AM6mMeI1RTgBdRBznhlieHvlX7tcAaJ4a0EINyx956F84s8nQOx4w8+MQKb3Aw6SxXse
+         znmmAxnJ/d3RH/52PFjKykvo0PaeoqTLy9nYozTYe7l6CQZzMNAkRM5xdtYzKB3EExAI
+         P3O3UMhUTYHvZflT3fBh8nENCKUfyFYh1/xGbGp0QrSAD8ieDFseBB0OVsMz1xtgV9fs
+         XwkQ==
+X-Gm-Message-State: AOAM530rPQRLldzk8qBa4AU27AfkyXbsDCdjMxa9TvZ/Y6XxYup1Oscm
+        Q6TKx93n+PUrtlAFZXaxfA==
+X-Google-Smtp-Source: ABdhPJwI6NXiIW3dX0C54wwELhLgM1CsiWXpZ2l+oWAZfXgMWDCL7fHj3aUVKFwUwLojjrteAyY0kA==
+X-Received: by 2002:a05:6808:13d4:b0:32e:3651:bbb1 with SMTP id d20-20020a05680813d400b0032e3651bbb1mr1707443oiw.86.1654182530993;
+        Thu, 02 Jun 2022 08:08:50 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n25-20020a056870241900b000f309d52933sm2146679oap.47.2022.06.02.08.08.33
+        by smtp.gmail.com with ESMTPSA id s11-20020a4adb8b000000b0035eb4e5a6d2sm2326257oou.40.2022.06.02.08.08.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 08:08:33 -0700 (PDT)
-Received: (nullmailer pid 2329687 invoked by uid 1000);
-        Thu, 02 Jun 2022 15:08:33 -0000
-Date:   Thu, 2 Jun 2022 10:08:33 -0500
+        Thu, 02 Jun 2022 08:08:50 -0700 (PDT)
+Received: (nullmailer pid 2330349 invoked by uid 1000);
+        Thu, 02 Jun 2022 15:08:50 -0000
+Date:   Thu, 2 Jun 2022 10:08:50 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pwm@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: pwm: add MT8365 SoC binding
-Message-ID: <20220602150833.GA2329628-robh@kernel.org>
-References: <20220530205038.917431-1-fparent@baylibre.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        devicetree@vger.kernel.org, Mark Kettenis <kettenis@openbsd.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: PCI: apple: Add missing 'power-domains'
+ property
+Message-ID: <20220602150850.GA2330255-robh@kernel.org>
+References: <20220531215815.2408477-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220530205038.917431-1-fparent@baylibre.com>
+In-Reply-To: <20220531215815.2408477-1-robh@kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 May 2022 22:50:37 +0200, Fabien Parent wrote:
-> Add binding documentation for the MT8365 SoC.
+On Tue, 31 May 2022 16:58:14 -0500, Rob Herring wrote:
+> The 'unevaluatedProperties' schema checks is not fully working and doesn't
+> catch some cases where there's a $ref to another schema. A fix is pending,
+> but results in new warnings in examples.
 > 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> The Apple PCIe host schema is missing 'power-domains' in the schema.
+> The example has 3 power domains. However, this is wrong too as actual
+> dts files have a single power domain and Sven confirmed 1 is correct.
+> 
+> Cc: Sven Peter <sven@svenpeter.dev>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
-> v2: fix clock description (five -> three)
-> 
->  Documentation/devicetree/bindings/pwm/pwm-mediatek.txt | 2 ++
->  1 file changed, 2 insertions(+)
+> v2:
+>  - Correct the power-domains to be 1 and update the example
+> ---
+>  Documentation/devicetree/bindings/pci/apple,pcie.yaml | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Applied, thanks!

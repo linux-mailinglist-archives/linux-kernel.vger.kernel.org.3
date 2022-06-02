@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A07253C043
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 23:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BE953C03D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 23:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239380AbiFBVG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 17:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
+        id S239392AbiFBVGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 17:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239384AbiFBVGZ (ORCPT
+        with ESMTP id S239387AbiFBVGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 17:06:25 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB58D3584C;
-        Thu,  2 Jun 2022 14:06:23 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id l9-20020a056830268900b006054381dd35so4267653otu.4;
-        Thu, 02 Jun 2022 14:06:23 -0700 (PDT)
+        Thu, 2 Jun 2022 17:06:45 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B86295;
+        Thu,  2 Jun 2022 14:06:43 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id h188so8100389oia.2;
+        Thu, 02 Jun 2022 14:06:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=MGuSqu6seXN6RsXK/fWX9IxHcQR3+Z8ig3BDZJebiyU=;
-        b=evoID5PF1JGxYU9OOqo11ztxP9d07KAfwaXqe39ekKtdRDrtZuora/PV0WQsa5/ePI
-         TEo7jilEM5BVfxh1j0AKVhMjtHpFWFT0TTe2/d6zY9dmX/JzWjHMGwBgRqVi6J/HEzkK
-         0WOlUkZieLQWGh9QIyz3x+gd9W/EvK+MaZX523yKBkwpT1tZpXRpUtKP2v3xkuxIeL0/
-         9AuLLvA7zbfROwaefL41bBVvNSEaI7LqkjVv+bNmoBVp3acUuHMqLcWU0lPH/G7a3rZx
-         3OIYdGJ9CuagTWHUq7RByEAA5FY53KSR7yq/AInsm3Prdzi96oV9EPJbodIGZosXtmXh
-         pTIw==
+        bh=OGSS4G6T8b5UIlfhMWIfGXfCz9uQ6RG4EIQoIbsWDas=;
+        b=UhFI4nFoVExnfnlE6PsDSJEZcUSIRuTuQojKDzy9FRSa55pir8otx0BYW5ceKFCN/D
+         X4inbeUHIguOsJkaF/xWqO+4dZc4VTIoq/GPfypz5bAbhlV6jNedAlVcQqXWfPU0SSrd
+         LhhOCFm16PSsZPPhlKKfSvzNV8ATZv1kVU4jrjOYnrBxLohEd33yaQyfgB7+we8xXXxG
+         l4jfLCSu0FGy99/alUOUqpRXMGyPiHy1+xmC/uykaUCsld0ddXU8+WcwHO8y3F0T2gnP
+         XBP3Ezr5JtnaPE9/jhZyalS2ohW/L4narLxknyaSc9ZNDkPtfaXoAOeZHQxhN9SG7odC
+         6a7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=MGuSqu6seXN6RsXK/fWX9IxHcQR3+Z8ig3BDZJebiyU=;
-        b=kbnIagO62DH3Q/Blb6SzFjsxqBn2MQHPpDbync12Tqy9TD7r9TUfE33AdPRtxqxGBr
-         BMiJioZ+LUbPRDDS+4Rr3TMsqwexQCnhMAeWtIEw88DAy48USTY3Ugy+SRJX+zmFP3HQ
-         guJIeoG15/4GSq9vQVHYK/HRxGoR51W3QPmZELzTVyvFKBenDskaAAdUFTmgR/eRcga+
-         jDTs1x40vKFQFJqGt7tuiRsmgsLkWt9lACfwIC5POCrHxN37SHQABV/Mvax8lUsxdWw0
-         UJ2LGrMzogUb8jUdVcp/PI4kqLWxyckr8t6Kp+LZFZeSKk60/mB9RKB5WFOJnDO3cZhp
-         USFg==
-X-Gm-Message-State: AOAM531dJ5/iyEwsrxZe2bguoTYUPVMGwxNszDcnJcXorOX773D4xJFa
-        /1Np1IqX3AJzWKRQEBWxRzk=
-X-Google-Smtp-Source: ABdhPJzkImWBTEIT59fwxuP0YNBBq42/pR2Fark6R5+IBq7270mASL+IpokFPC1qiAGC2cDb2zWTXQ==
-X-Received: by 2002:a9d:4b10:0:b0:60b:cc1a:3ef9 with SMTP id q16-20020a9d4b10000000b0060bcc1a3ef9mr834817otf.286.1654203983193;
-        Thu, 02 Jun 2022 14:06:23 -0700 (PDT)
+        bh=OGSS4G6T8b5UIlfhMWIfGXfCz9uQ6RG4EIQoIbsWDas=;
+        b=ZtKckneLTt7B4yWpVTwqmwY5mei2wGmZfZ8GwLVDVoNarmAJ887wk7IaJmv8uHe2Q4
+         kvOdx4E5+djUfrECcqXAjnZqjSxInMVryKrM52DSQjxRqAEF2XBWhUJLV29sG6bF8SxF
+         GgZswHoWgG/uTo7qea/Bgg6tbxxLICC0vji6uftwwlT2KLbTkgxf1znOiHRF06fTRHBc
+         Y4Pfm4PIpF62jHxQLZcrau4TMsf5yk1/aA7v8qDezXkusgI+9ZOyDVpzhWhvptl0NKCZ
+         RBW1UQ43KSoyYCb1lFjwTR8I14t6140+BUS/g3QDV88Wpfxw3fgak2rbec/yQx4U4Oi1
+         qQEw==
+X-Gm-Message-State: AOAM533nsItp1LiSFL6Dz+PR8TY1lpLjkQbf+Fp9rw8y5+z6Qs+jmwa2
+        BUcCy1oSt+jT+QT/pzMX5tO5FpGXQFw=
+X-Google-Smtp-Source: ABdhPJwjiWYzs5Hb9OuYBV6T8eEGDuk6TSJfy6h0kHYIi1YrDt3W+wx56tdtap7ICLgRgEU/gLLDcw==
+X-Received: by 2002:a05:6808:e8b:b0:322:4c21:6ba3 with SMTP id k11-20020a0568080e8b00b003224c216ba3mr18634531oil.204.1654204002946;
+        Thu, 02 Jun 2022 14:06:42 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o7-20020a056871078700b000f32fb9d2bfsm2942441oap.5.2022.06.02.14.06.21
+        by smtp.gmail.com with ESMTPSA id pu7-20020a0568709e8700b000f5e33aaa66sm2521656oab.0.2022.06.02.14.06.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 14:06:22 -0700 (PDT)
+        Thu, 02 Jun 2022 14:06:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b4f156c2-f78f-3948-e1d9-7adcf9f11d4a@roeck-us.net>
-Date:   Thu, 2 Jun 2022 14:06:21 -0700
+Message-ID: <2195b07f-9f1b-c59f-c4c1-7d12c64fe0a0@roeck-us.net>
+Date:   Thu, 2 Jun 2022 14:06:40 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v2 5/6] hwmon: (k10temp): Add support for family 19h
- models 70h-7Fh
+Subject: Re: [PATCH v2 6/6] hwmon: (k10temp): Add support for family 19h
+ models 60h-6Fh
 Content-Language: en-US
 To:     Mario Limonciello <mario.limonciello@amd.com>,
         Clemens Ladisch <clemens@ladisch.de>,
@@ -67,9 +67,9 @@ To:     Mario Limonciello <mario.limonciello@amd.com>,
         open list <linux-kernel@vger.kernel.org>
 Cc:     babu.moger@amd.com, yazen.ghannam@amd.com, x86@kernel.org
 References: <20220602201137.1415-1-mario.limonciello@amd.com>
- <20220602201137.1415-6-mario.limonciello@amd.com>
+ <20220602201137.1415-7-mario.limonciello@amd.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220602201137.1415-6-mario.limonciello@amd.com>
+In-Reply-To: <20220602201137.1415-7-mario.limonciello@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,37 +84,34 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 6/2/22 13:11, Mario Limonciello wrote:
-> Add the support for CCD offsets used on family 19h models 70h-7Fh.
+> Add the support for CCD offsets used on family 19h models 60h-6Fh.
 > 
 > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->   drivers/hwmon/k10temp.c | 5 +++++
->   1 file changed, 5 insertions(+)
+>   drivers/hwmon/k10temp.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
 > diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 5f831e74bc51..5f37e2e7833e 100644
+> index 5f37e2e7833e..5a9d47a229e4 100644
 > --- a/drivers/hwmon/k10temp.c
 > +++ b/drivers/hwmon/k10temp.c
-> @@ -449,6 +449,10 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> @@ -449,6 +449,7 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 >   			data->ccd_offset = 0x300;
 >   			k10temp_get_ccd_support(pdev, data, 8);
 >   			break;
-> +		case 0x70 ... 0x7f:
-> +			data->ccd_offset = 0x308;
-> +			k10temp_get_ccd_support(pdev, data, 8);
-> +			break;
->   		case 0x10 ... 0x1f:
->   		case 0xa0 ... 0xaf:
->   			data->ccd_offset = 0x300;
-> @@ -498,6 +502,7 @@ static const struct pci_device_id k10temp_id_table[] = {
+> +		case 0x60 ... 0x6f:
+>   		case 0x70 ... 0x7f:
+>   			data->ccd_offset = 0x308;
+>   			k10temp_get_ccd_support(pdev, data, 8);
+> @@ -502,6 +503,7 @@ static const struct pci_device_id k10temp_id_table[] = {
 >   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M10H_DF_F3) },
 >   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F3) },
 >   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F3) },
-> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M70H_DF_F3) },
+> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M60H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M70H_DF_F3) },
 >   	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
 >   	{}
->   };
 

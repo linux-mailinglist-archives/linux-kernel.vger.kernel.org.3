@@ -2,142 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC4053B548
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 10:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A91553B553
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 10:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232506AbiFBImh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 04:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
+        id S232518AbiFBIoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 04:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231335AbiFBImd (ORCPT
+        with ESMTP id S231962AbiFBIoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 04:42:33 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C887F38D85;
-        Thu,  2 Jun 2022 01:42:31 -0700 (PDT)
-X-UUID: 660864278db546d39d1af92858f96de0-20220602
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:bff07ae6-c046-4059-9d2d-ef2339e0fb32,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:2db4e137-9855-4915-a138-f5705f1f3d02,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 660864278db546d39d1af92858f96de0-20220602
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1887507329; Thu, 02 Jun 2022 16:42:26 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 2 Jun 2022 16:42:24 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 2 Jun 2022 16:42:24 +0800
-Subject: Re: [PATCH 1/3] dt-bindings: iommu: mediatek: add binding
- documentation for MT8365 SoC
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Yong Wu <yong.wu@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>
-CC:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <iommu@lists.linux-foundation.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Bear Wang <bear.wang@mediatek.com>,
-        Macross Chen <macross.chen@mediatek.com>,
-        Kidd-KW Chen <Kidd-KW.Chen@mediatek.com>,
-        Andy Hsieh <Andy.Hsieh@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>
-References: <20220530180328.845692-1-fparent@baylibre.com>
- <8ac7a6766c635412b408cb5295ddb3da37541140.camel@mediatek.com>
- <59cedd50-4141-e589-11ae-b8d1a017eb46@mediatek.com>
-Message-ID: <6b6c4cfc-6f20-0eda-4a0d-31d993341ae8@mediatek.com>
-Date:   Thu, 2 Jun 2022 16:42:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 2 Jun 2022 04:44:19 -0400
+X-Greylist: delayed 86830 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Jun 2022 01:44:17 PDT
+Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [45.157.188.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29702994D8
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 01:44:17 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4LDKLl046yzMprjq;
+        Thu,  2 Jun 2022 10:44:15 +0200 (CEST)
+Received: from [10.0.0.141] (unknown [31.10.206.125])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4LDKLk1DMszlk1FD;
+        Thu,  2 Jun 2022 10:44:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
+        s=20220412; t=1654159454;
+        bh=mV7mkCUjOl6hMSevGR59+xlFQCqBQ4WwdymyF0opzUY=;
+        h=Subject:From:Reply-To:To:Cc:Date:In-Reply-To:References:From;
+        b=TVJFhJK9EsLdiqX+KhfpvkfTgssVCX73VGWmPkbBNWLdNRINdU7AzH0KLslewDaPE
+         0/OcSegpEggQ+NuLItKAQexi9dmhEjTtYaqWsf2yWmCCCWHigsxq3jh0KmXREU+xJC
+         BCkuo08R2hje4EXErOkpDVna9rJTAIVc9SsHLJrw=
+Message-ID: <2c5a6bb34c67c9c15c393346e89bdb14ae6f3c44.camel@pschenker.ch>
+Subject: Re: [PATCH] Revert "mt76: mt7921: enable aspm by default"
+From:   Philippe Schenker <dev@pschenker.ch>
+Reply-To: dev@pschenker.ch
+To:     sean.wang@mediatek.com
+Cc:     deren.wu@mediatek.com, kvalo@kernel.org,
+        linux-wireless@vger.kernel.org, nbd@nbd.name, linux@leemhuis.info,
+        davem@davemloft.net, kuba@kernel.org, lorenzo.bianconi83@gmail.com,
+        matthias.bgg@gmail.com, pabeni@redhat.com, ryder.lee@mediatek.com,
+        shayne.chen@mediatek.com, yn.chen@mediatek.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org
+Date:   Thu, 02 Jun 2022 10:44:13 +0200
+In-Reply-To: <1654122203-26090-1-git-send-email-sean.wang@mediatek.com>
+References: <e93aef5c9f8a97efe23cfb5892f78f919ce328e7.camel@pschenker.ch--annotate>
+         <1654122203-26090-1-git-send-email-sean.wang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 
 MIME-Version: 1.0
-In-Reply-To: <59cedd50-4141-e589-11ae-b8d1a017eb46@mediatek.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/22 4:27 PM, Macpaul Lin wrote:
-> On 6/2/22 2:18 PM, Yong Wu wrote:
->> On Mon, 2022-05-30 at 20:03 +0200, Fabien Parent wrote:
->>> Add IOMMU binding documentation for the MT8365 SoC.
->>>
->>> Signed-off-by: Fabien Parent <fparent@baylibre.com>
->>> ---
->>>   .../bindings/iommu/mediatek,iommu.yaml        |  2 +
->>>   include/dt-bindings/memory/mt8365-larb-port.h | 96
->>> +++++++++++++++++++
->>>   2 files changed, 98 insertions(+)
->>>   create mode 100644 include/dt-bindings/memory/mt8365-larb-port.h
->>
->> [snip...]
->>
->>> +#ifndef _DT_BINDINGS_MEMORY_MT8365_LARB_PORT_H_
->>> +#define _DT_BINDINGS_MEMORY_MT8365_LARB_PORT_H_
->>> +
->>> +#include <dt-bindings/memory/mtk-memory-port.h>
->>> +
->>> +#define M4U_LARB0_ID            0
->>> +#define M4U_LARB1_ID            1
->>> +#define M4U_LARB2_ID            2
->>> +#define M4U_LARB3_ID            3
->>> +#define M4U_LARB4_ID            4
->>> +#define M4U_LARB5_ID            5
->>> +#define M4U_LARB6_ID            6
->>> +#define M4U_LARB7_ID            7
->>
->> Remove these. they are no used, right?
-> 
-> AIOT and customers are using the modules and their related IOMMU modules.
-> DISP0, VENC, VDEC, ISP (CAMSYS), and APU (as far as I know, which should 
-> be VP6?) were all supported.
+On Thu, 2022-06-02 at 06:23 +0800, sean.wang@mediatek.com wrote:
+> From: Sean Wang <sean.wang@mediatek.com>
+>=20
+> > On Tue, 2022-04-12 at 19:06 +0800, Deren Wu wrote:
+> > > On Tue, 2022-04-12 at 12:37 +0300, Kalle Valo wrote:
+> > > > Philippe Schenker <dev@pschenker.ch> writes:
+> > > >=20
+> > > > > This reverts commit bf3747ae2e25dda6a9e6c464a717c66118c588c8.
+> > > > >=20
+> > > > > This commit introduces a regression on some systems where the
+> > > > > kernel is crashing in different locations after a reboot was
+> > > > > issued.
+> > > > >=20
+> > > > > This issue was bisected on a Thinkpad P14s Gen2 (AMD) with
+> > > > > latest
+> > > > > firmware.
+> > > > >=20
+> > > > > Link:
+> > > > > https://urldefense.com/v3/__https://lore.kernel.org/linux-wireles=
+s
+> > > > > /5077a953487275837e81bdf1808ded00b9676f9f.camel@pschenker.ch/_
+> > > > > _;!!
+> > > > > CTRNKA9wMg0ARbw!09tjyaQlMci3fVI3yiNiDJKUW_qwNA_CbVhoAraeIX96B9
+> > > > > 9Q14
+> > > > > J4iDycWA9cq36Y$
+> > > > >=20
+> > > > > Signed-off-by: Philippe Schenker <dev@pschenker.ch>
+> > > >=20
+> > > > Can I take this to wireless tree? Felix, ack?
+> > > >=20
+> > > > I'll also add:
+> > > >=20
+> > > > Fixes: bf3747ae2e25 ("mt76: mt7921: enable aspm by default")
+> > > >=20
+> > >=20
+> > > Hi Kalle,
+> > >=20
+> > > We have a patch for a similar problem. Can you wait for the
+> > > verification by Philippe?
+> > > Commit 602cc0c9618a81 ("mt76: mt7921e: fix possible probe failure
+> > > after
+> > > reboot")
+> > > Link:
+> > > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kern=
+e
+> > > l/git/torvalds/linux.git/commit/drivers/net/wireless/mediatek/mt76
+> > > ?id=3D
+> > > 602cc0c9618a819ab00ea3c9400742a0ca318380__;!!CTRNKA9wMg0ARbw!3N9I3
+> > > iKwS
+> > > 3XCNAb4LuhbFqt_el1yiOaJzSdUjaJsTaxRCHiWhXnEgbk3bOqYTy6T$
+> > >=20
+> > > I can reproduce the problem in my v5.16-rc5 desktop. And the issue
+> > > can
+> > > be fixed when the patch applied.
+> > >=20
+> > >=20
+> > > Hi Philippe,
+> > >=20
+> > > Can you please help to check the patch in your platform?
+> >=20
+> > Hi Kalle and Deren,
+> >=20
+> > I just noticed on my system and mainline v5.18 reboots do now work
+> > however Bluetooth is no longer accessible after a reboot.
+> >=20
+> > Reverting commit bf3747ae2e25dda6a9e6c464a717c66118c588c8 on top of
+> > v5.18 solves this problem for me.
+> >=20
+> > @Deren are you aware of this bug?
+> > @Kalle Is there a bugtracker somewhere I can submit this?
+>=20
+> Hi Philippe,
+>=20
+> Could you try the latest firmware to see if it can help with the issue
+> you reported here ?
+>=20
+> Please check out
+> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.g=
+it/tree/mediatek
+> and replace the following three files in /lib/firmware/mediatek on
+> your target and reboot
+> 1) BT_RAM_CODE_MT7961_1_2_hdr.bin
+> 2) WIFI_MT7961_patch_mcu_1_2_hdr.bin
+> 3) WIFI_RAM_CODE_MT7961_1.bin
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Sean
 
-Dear Yong,
-How about to replace the following definitions?
+Hi Sean,
 
-For example, replace
-#define M4U_PORT_DISP_OVL0		MTK_M4U_ID(0, 0)
-to
-#define M4U_PORT_DISP_OVL0              MTK_M4U_ID(M4U_LARB0_ID , 0)
+Thanks for your suggestion. I downloaded the firmwares from the link you
+indicated and downloaded the three firmwares from main branch. I checked
+and the sha256sums of the most recent firmwares match with the one
+installed by my distribution. So I already had latest versions on my
+tests.
 
->>
->>> +
->>> +/* larb0 */
->>> +#define M4U_PORT_DISP_OVL0        MTK_M4U_ID(0, 0)
->>> +#define M4U_PORT_DISP_OVL0_2L    MTK_M4U_ID(0, 1)
->>
->> [...]
->>
->>>
->>> +/* larb4 */
->>> +#define M4U_PORT_APU_READ        MTK_M4U_ID(0, 0)
->>> +#define M4U_PORT_APU_WRITE        MTK_M4U_ID(0, 1)
->>
->> Please remove these two APU definitions. currently these are not
->> supported.
-> 
-> Kidd, please help to check if APU use these definitions with Yong.
-> However, I think these are all available to the customers.
-> 
-> Thanks
-> Macpaul Lin
+Philippe
 
-Thanks
-Macpaul Lin
+>=20
+> >=20
+> > Thanks,
+> > Philippe
+> >=20
+> > >=20
+> > >=20
+> > > Regards,
+> > > Deren
+> > >=20
+> >=20
+> >=20
+> >=20
+

@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 643AB53B5EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C917D53B5FB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbiFBJWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 05:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
+        id S232944AbiFBJ0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 05:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232944AbiFBJWe (ORCPT
+        with ESMTP id S231956AbiFBJ0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 05:22:34 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652A3A1B7;
-        Thu,  2 Jun 2022 02:22:32 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 129so4283785pgc.2;
-        Thu, 02 Jun 2022 02:22:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KeRV9VlhwIAyg6EUqX0Fszd3cElW50+A7dVuut11Ql8=;
-        b=T+n7HgqhezIBE0FWmfDqATn2184KpAXP/iUBPS/aT4g74LaP8h6NlWCDFhbPl8mpRJ
-         R2yGxiwiyV8JqcpCwXj7EqCXJCPx22zf0k73jDaeWTk7K10kUeLuKEuLyuBLeBwxELq1
-         j/aQGP/heKZ3lRsUTybuy+Q7zwjfB7TVvuXxZBNZVq15Q62NuqXrA2RriidzxWRpzvIZ
-         Wyj2i2HlHc7IwTbPUdXr+RtwmfJo8gSmsrpknYgo0TQNyK1eCEug1LynaOtwjUYzc/YR
-         wguayKEzzLIrTNXMPjiVKAUDzMXLboQZn52dz3F3z3KdETWWarbsMWMd7FXWvzIGUBFT
-         2TtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KeRV9VlhwIAyg6EUqX0Fszd3cElW50+A7dVuut11Ql8=;
-        b=P12mx1FeyMGq1KKmYTvxtCWe46oryaVt1dH6j4PYVwCNTBYW9juraZgq7aaDHBIs7n
-         6NgFsn71Mf7hdeRGGs/Kf9CeUaDrAbVgrlGaOHgt/z7LS/bmMEsTAAJ4Raz4ZqxDj0ln
-         C/UhioIB9BBEX1jCJ/o62wRknTsfMEchhJfQNWpKTIv2ieL/mnb/dRQfsGV1qx5YV5Xq
-         0ffBT4dG8yh4Y1AMi7MNkgFUZAbfqcNetsyf56En5k8lpFq/pb+aXrnhuYJSBpxu1aT7
-         679kAF545AQQIjcGCdfYS90yW9dPcoG7CYu0kerDLkAAX5ppxrAIyCYgqW/gB2JKV5bP
-         7oUg==
-X-Gm-Message-State: AOAM5302kGoaonuJ6uryBDSNBJyxPrH9OhauiHzMjQQlC6+7+V2050Vh
-        JARgoWVaK43UxyLb9TJpRUs=
-X-Google-Smtp-Source: ABdhPJxElJXyhXOh8nC4t31hIdIX4SCbS/dv8nLykVgt//DQhqD96RDYfw60Gxl+zsBbBK6OuVKtcg==
-X-Received: by 2002:a63:65c7:0:b0:3fc:85b5:30c0 with SMTP id z190-20020a6365c7000000b003fc85b530c0mr3497048pgb.165.1654161751927;
-        Thu, 02 Jun 2022 02:22:31 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-24.three.co.id. [180.214.232.24])
-        by smtp.gmail.com with ESMTPSA id 129-20020a621787000000b005180c127200sm2946985pfx.24.2022.06.02.02.22.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 02:22:30 -0700 (PDT)
-Message-ID: <7f1c7301-e622-f177-70ac-d64046347613@gmail.com>
-Date:   Thu, 2 Jun 2022 16:22:25 +0700
+        Thu, 2 Jun 2022 05:26:06 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F89629FE65;
+        Thu,  2 Jun 2022 02:26:05 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2528Q8w4013105;
+        Thu, 2 Jun 2022 11:25:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=SHt88M2ggL5jZjwoPYSJOzNExBvaXWICvOEXZ6jH6ng=;
+ b=CcDnqQHZBqTyQ/6VlCym2ipLOCiQc9QM8Vzdt3XeHeeVeJNL7YGzTU6mXqPmw29Mljbj
+ pp2jn3JXc3XQBtNLI16qoegGM9sb3STpMWwsY+Cpq899Rsx7pHij6kfrZQmZLQpLxkNq
+ KvFQpnxQY6t/617uiZ67ZsGfjixDhLRzeTNSUcG8pImO8Ja6HLWcSXrPPc0jh7lSU32P
+ xVeyzpKyOeeFoMF5CvLciFIKyAVeIMQbTLuHd7lkzuqFDLyw2WuWiAiszTxEvZRqf/Bk
+ v1PW8Rf67jXJ6CBiWELDUgVw6k72WstGTvJP4tNTDi/68MaQ38CPl1uA6gdVxGvAxBYj Cw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gespq0dp5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Jun 2022 11:25:56 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E05DF10002A;
+        Thu,  2 Jun 2022 11:25:54 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D71D6217B6C;
+        Thu,  2 Jun 2022 11:25:54 +0200 (CEST)
+Received: from localhost (10.75.127.44) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Thu, 2 Jun
+ 2022 11:25:54 +0200
+From:   <patrice.chotard@foss.st.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
+        <patrice.chotard@foss.st.com>
+Subject: [PATCH v2 0/3]  spi: stm32-qspi: Remove unused parameters
+Date:   Thu, 2 Jun 2022 11:25:37 +0200
+Message-ID: <20220602092540.369604-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3] HID: uclogic: properly format kernel-doc comment for
- hid_dbg() wrappers
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-doc@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Nikolai Kondrashov <spbnick@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        llvm@lists.linux.dev, stable@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220602082321.313143-1-bagasdotme@gmail.com>
- <Yph09N8w4g7+d9ER@kroah.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <Yph09N8w4g7+d9ER@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-02_01,2022-06-01_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,21 +71,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/22 15:29, Greg KH wrote:
-> None of this is needed for stable kernels releases as no code is being
-> modified.
-> 
-> thanks,
-> 
-> greg k-h
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Hi Greg,
+This series cleans up spi-stm32-qspi driver by removing unused parameters
 
-That's right, however because I don't see any kernel-doc warnings for
-hid-uclogic-params.c on linux-5.18.y. These warnings appear only on
-mainline.
+Changes since v1: 
+  _ add missing patch which removes unused param for stm32_qspi_wait_poll_status()
 
-Thanks for reminding me.
+Patrice Chotard (3):
+  spi: stm32-qspi: Remove stm32_qspi_get_mode() unused parameter
+  spi: stm32-qspi: Remove stm32_qspi_wait_cmd() unused parameter
+  spi: stm32-qspi: Remove stm32_qspi_wait_poll_status() unused parameter
+
+ drivers/spi/spi-stm32-qspi.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.25.1
+

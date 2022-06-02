@@ -2,144 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A2A53BAB5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF7F53BABF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235903AbiFBO1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 10:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        id S235857AbiFBO2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 10:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233749AbiFBO1p (ORCPT
+        with ESMTP id S235905AbiFBO2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 10:27:45 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D0012C97A;
-        Thu,  2 Jun 2022 07:27:43 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id k16so6699003wrg.7;
-        Thu, 02 Jun 2022 07:27:43 -0700 (PDT)
+        Thu, 2 Jun 2022 10:28:19 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E488140846
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 07:28:18 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso5017015pjg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 07:28:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PU8lc3rqUKJ9fwYFMxTWZiWtxbKl/aHmbF7KgXVxdw8=;
-        b=nTCCpeSYwfMZY+4KPdvMlazL72pUA9cf31ff5VpnywSiVU9k5w5t458nw6elFguljg
-         OyVTJ6tj4p5kxFAUAVicDk6q903TOeCzEEX7UqisGtUPG8ui4J274meFJKWGwWzRorv5
-         h5Y/xMsiRDKaMFfBWbUE9FlqYBqmZC0lnC6o170UwiLmvD1F4cIwmf7q6WKP+ypzmGfO
-         fpHzIbIvQPob9eBzeY3t0iu0sV9vuWV98dAV+9s35Y3YBfLr2FiMHs3dQHaWnTqKjxYZ
-         HtUvhV7aVJm+ZxGEJfifkYjdHnZJFL+muk90bFTjaLFdQ1KGsobxK1HtczYZDzorbLox
-         rnCw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=L4Gxk4Bv5TfkgMZFmRZVdKI/nfnxSbVJuJD+KEhCTwA=;
+        b=vznR9E/huPyrIZXpXnkqdLBfuApJkQscKlKcZknXDqfZ/UzpBujU19WWiJ4F6oTRe2
+         lR7uP5EHAzxXwKjHa6B5RqiR9qnOaBkPs/hQSA9fnvdrxoQ3mFlfPq0VrvKG3gS6OE8R
+         plY2qTLcDyWkxvE1BNieB15nFdOsnxMIE+Z3bRp/rMWZr/XzOq6qPJcP4JcL5r7v8+Rb
+         AuEZVAjpLmZiBKWgqlash0NfkGGjUBMR+u0O48hccdnAFA9NmfkAD3b9WxtR17/cgOAz
+         DCZGvSeh7xnKG8Wnji3N5tPQM53K3hXQH89J3bXgB0U78Q5roB6xZZQCZ+Ql/XFJLHXu
+         pSWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=PU8lc3rqUKJ9fwYFMxTWZiWtxbKl/aHmbF7KgXVxdw8=;
-        b=H+O+oW4rJdWcycYvIPSzOPvFbKm1WD7kLeHu/uTp5no0wDNTrWDeHmiRDlCkUIrPL0
-         eCXnFxFkFjbUELMJ+rGKoYjbWTLRGVaL5OaQJOzULZZIfEpIkj8b8FsxJtOsM6oXaRAu
-         OVDXky2cufMAmctA+4ZqFPWsjhyJvjXZu4rZdR0EGUjwXC7ixmK0muOLpM09ELpPo9t/
-         yme/2Bcb1trgEcwqmbplt16QipdX0GBYikS//HN1ivf1iYEcKu1Zz/ftADYRM79babZ0
-         hygVH4UHFKDQb28GOZ/Du/bwtcgmgcQCcbWmA4vIO9+ZFLl6daATloUIfOugiJHyYpBO
-         QS1w==
-X-Gm-Message-State: AOAM532DjcPVuSpKWpRUKBPoubouq0lyeEVxuSmL0nv7geI8zahfa62p
-        pXyqbWFNc+cvYh4ql2fLvmo6h9bM+Z6SPA==
-X-Google-Smtp-Source: ABdhPJwjC4sOY/AU32uEMgLGNEAI19FhBPDUP9arLJ7oiFGKBMRXEJZ7V09GeOEGnuHwTIckNIWbKQ==
-X-Received: by 2002:a5d:5885:0:b0:20f:f390:c47e with SMTP id n5-20020a5d5885000000b0020ff390c47emr3997562wrf.133.1654180061203;
-        Thu, 02 Jun 2022 07:27:41 -0700 (PDT)
-Received: from [10.40.36.42] ([193.52.24.5])
-        by smtp.gmail.com with ESMTPSA id ay1-20020a5d6f01000000b0020fee88d0f2sm5954781wrb.0.2022.06.02.07.27.37
+        bh=L4Gxk4Bv5TfkgMZFmRZVdKI/nfnxSbVJuJD+KEhCTwA=;
+        b=KKy6MFM2qiuEONNwMe9pSyihl+YN7/+s9zE4Zg73LLH+/PbqIXHjfk7zpBitqdZ7g7
+         GR5CxF1wfPzhoIBUWnBOse5Gb+dVFkbW2FDU3OMeqWsTdLz72uAPqWewLKy3evWlJrTZ
+         LcZgALUJyN3w9xQdhInhQlzftFsHm2VSXa9l+1/0UnxNGXeG4udkvPWWIwdIzoxMZ8kk
+         +qi8uHDjyZY/dH3WQUYB/YsplU1e5nU2RLxhH/CODJ3Hqrxss0wEg5o9VbTRhHrsBXAF
+         WSrDLJyUbvZG+HNURqkYJjQxzf9dojEqW541vm0d4kat/fXWF003cCMZfsPYHExxHfrX
+         tSdQ==
+X-Gm-Message-State: AOAM532YBD9Fn3Id5JigZxFuA4oa5raBDxjuXX5K0MWfKH3hlGqKW2Z2
+        NuTNzcPxJ9ACPXnb2zNu5pChLg==
+X-Google-Smtp-Source: ABdhPJznhWKPETXcZJrKMM+bn5m7VYTIN0w3D9vJ7qTBPI6tQ12pVtLVSqQrS4E7he1I2F8wZslmWQ==
+X-Received: by 2002:a17:902:8f81:b0:161:f4a7:f2fc with SMTP id z1-20020a1709028f8100b00161f4a7f2fcmr5196569plo.117.1654180097855;
+        Thu, 02 Jun 2022 07:28:17 -0700 (PDT)
+Received: from [192.168.254.36] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id d13-20020a170903230d00b0015ed003552fsm3564512plh.293.2022.06.02.07.28.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 07:27:38 -0700 (PDT)
-Message-ID: <c5022150-a2b4-07b9-d8ec-789147134d85@gmail.com>
-Date:   Thu, 2 Jun 2022 16:27:37 +0200
+        Thu, 02 Jun 2022 07:28:17 -0700 (PDT)
+Message-ID: <1e4fe5c8-4bac-087b-ae32-6fa2fa5b44f6@linaro.org>
+Date:   Thu, 2 Jun 2022 07:28:11 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 0/3] Support MediaTek devapc for MT8186
+ Thunderbird/91.9.1
 Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        runyang.chen@mediatek.com, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220504115501.3490-1-rex-bc.chen@mediatek.com>
- <CAGXv+5E9s3c0j501fHZxhwsHSeK0vG+GEqLMhtZMvtvC=+etjQ@mail.gmail.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <CAGXv+5E9s3c0j501fHZxhwsHSeK0vG+GEqLMhtZMvtvC=+etjQ@mail.gmail.com>
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Bui Quang Minh <minhquangbui99@gmail.com>
+References: <Yo/DtjEU/kYr190u@slm.duckdns.org>
+ <0babd7df-bdef-9edc-3682-1144bc0c2d2b@linaro.org>
+ <Ypf0VnKUMiuRgZqT@slm.duckdns.org>
+ <1fb4d8d7-ccc0-b020-715e-38c2dfd94c23@linaro.org>
+ <Ypf5jpI7dSmpi4W0@slm.duckdns.org>
+ <c3bd8e63-7204-f86d-8efa-254db71185fc@linaro.org>
+ <Ypf/MpwzByOrSp6A@slm.duckdns.org>
+ <416dc60a-f0e5-7d05-1613-3cd0ca415768@linaro.org>
+ <YpgEY/lJbLidLOhc@slm.duckdns.org>
+ <0fd1c3fd-fa86-dbed-f3f0-74c91b1efa11@linaro.org>
+ <20220602114705.GB21320@blackbody.suse.cz>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
+In-Reply-To: <20220602114705.GB21320@blackbody.suse.cz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/2/22 04:47, Michal Koutný wrote:
+> On Wed, Jun 01, 2022 at 05:40:51PM -0700, Tadeusz Struk<tadeusz.struk@linaro.org>  wrote:
+>> css_killed_ref_fn() will be called regardless of the value of refcnt (via percpu_ref_kill_and_confirm())
+>> and it will only enqueue the css_killed_work_fn() to be called later.
+>> Then css_put()->css_release() will be called before the css_killed_work_fn() will even
+>> get a chance to run, and it will also*only*  enqueue css_release_work_fn() to be called later.
+>> The problem happens on the second enqueue. So there need to be something in place that
+>> will make sure that css_killed_work_fn() is done before css_release() can enqueue
+>> the second job.
+> IIUC, here you describe the same scenario I broke down at [1].
 
+Right, except the last css_put(), which I think is called from cgroup_kn_unlock()
+See below.
 
-On 02/06/2022 09:48, Chen-Yu Tsai wrote:
-> On Wed, May 4, 2022 at 7:55 PM Rex-BC Chen <rex-bc.chen@mediatek.com> wrote:
->>
->> This series is for supporting devapc implementation in MT8186.
->>
->> V2:
->> - Add a patch to separate register offsets from mtk_devapc_data.
->>
->> V1:
->> - Add dt-binding and add devapc data for MT8186.
->>
->> Rex-BC Chen (3):
->>    dt-bindings: soc: mediatek: devapc: Add bindings for MT8186
->>    soc: mediatek: devapc: Separate register offsets from mtk_devapc_data
->>    soc: mediatek: devapc: Add support for MT8186
+>> Does it sound right?
+> I added a parameter A there (that is sum of base and percpu references
+> before kill_css()).
+> I thought it fails because A == 1 (i.e. killing the base reference),
+> however, that seems an unlikely situation (because cgroup code uses a
+> "fuse" reference to pin css for offline_css()).
 > 
-> Applied this on next-20220602 (with a few fixes for other section mismatch
-> errors), booted and got:
+> So the remaining option (at least I find it more likely now) is that
+> A == 0 (A < 0 would trigger the warning in
+> percpu_ref_switch_to_atomic_rcu()), aka the ref imbalance. I hope we can
+> get to the bottom of this with detailed enough tracing of gets/puts.
 > 
-> [    1.948483] mtk-devapc 10207000.devapc: Read Violation
-> [    1.948488] mtk-devapc 10207000.devapc: Bus ID:0x100, Dom ID:0x0,
-> Vio Addr:0x13000000
-> [    1.948520] mtk-devapc 10207000.devapc: Read Violation
-> [    1.948523] mtk-devapc 10207000.devapc: Bus ID:0x200, Dom ID:0x0,
-> Vio Addr:0x140001a0
-> [    1.948537] mtk-devapc 10207000.devapc: Read Violation
-> [    1.948540] mtk-devapc 10207000.devapc: Bus ID:0x200, Dom ID:0x0,
-> Vio Addr:0x140001a0
-> [    1.948555] mtk-devapc 10207000.devapc: Read Violation
-> [    1.948558] mtk-devapc 10207000.devapc: Bus ID:0x200, Dom ID:0x0,
-> Vio Addr:0x14000100
-> [    1.948573] mtk-devapc 10207000.devapc: Read Violation
-> [    1.948576] mtk-devapc 10207000.devapc: Bus ID:0x200, Dom ID:0x0,
-> Vio Addr:0x14000100
-> [    1.948590] mtk-devapc 10207000.devapc: Read Violation
-> [    1.948593] mtk-devapc 10207000.devapc: Bus ID:0x200, Dom ID:0x0,
-> Vio Addr:0x14000100
-> [    1.948607] mtk-devapc 10207000.devapc: Read Violation
-> [    1.948610] mtk-devapc 10207000.devapc: Bus ID:0x200, Dom ID:0x0,
-> Vio Addr:0x14000100
-> [    1.948624] mtk-devapc 10207000.devapc: Read Violation
-> [    1.948627] mtk-devapc 10207000.devapc: Bus ID:0x200, Dom ID:0x0,
-> Vio Addr:0x14000100
+> Splitting the work struct is condradictive to the existing approach with
+> the "fuse" reference.
 > 
-> during the boot process. So I think this works well. Manually reading a
-> known secure address also triggers it:
-> 
-> root@hayato:~# busybox devmem 0x1000e000
-> 0x00000000
-> [  135.069121] mtk-devapc 10207000.devapc: Read Violation
-> [  135.069132] mtk-devapc 10207000.devapc: Bus ID:0x482, Dom ID:0x0,
-> Vio Addr:0x1000e000
-> 
-> So,
-> 
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> 
+> (BTW you also wrote On Wed, Jun 01, 2022 at 05:00:44PM -0700, Tadeusz Struk<tadeusz.struk@linaro.org>  wrote:
+>> The fact the css_release() is called (via cgroup_kn_unlock()) just after
+>> kill_css() causes the css->destroy_work to be enqueued twice on the same WQ
+>> (cgroup_destroy_wq), just with different function. This results in the
+>> BUG: corrupted list in insert_work issue.
+> Where do you see a critical css_release called from cgroup_kn_unlock()?
+> I always observed the css_release() being called via
+> percpu_ref_call_confirm_rcu() (in the original and subsequent syzbot
 
-Whole series applied to v5.19-next/soc
+it goes like this:
+cgroup_kn_unlock(kn)->cgroup_put(cgrp)->css_put(&cgrp->self), which
+brings the refcnt to zero and triggers css_release().
+I think what's missing is something that will serialize the kill
+and release paths. I will try to put something together today.
 
-> BTW, looks like MT8186 support in mainline is shaping up real good.
-> SCP firmware is still missing, so video codec stuff won't work.
+-- 
+Thanks,
+Tadeusz

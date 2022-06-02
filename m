@@ -2,198 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6053E53B692
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764D153B6AB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbiFBKGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
+        id S233434AbiFBKLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiFBKGa (ORCPT
+        with ESMTP id S230406AbiFBKLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:06:30 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF08C2ACB65;
-        Thu,  2 Jun 2022 03:06:28 -0700 (PDT)
+        Thu, 2 Jun 2022 06:11:13 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED7D2AD5C2;
+        Thu,  2 Jun 2022 03:11:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654164389; x=1685700389;
-  h=date:from:to:cc:subject:message-id:references:
+  t=1654164672; x=1685700672;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
    mime-version:in-reply-to;
-  bh=Tpy1h6rxcXVO9xLL8s23Z2+kWlBjSZ7Dkplh6lZNrSI=;
-  b=jxeztFlVDxqMPufxkg830hVNjbUK6n2pu2bCVpTW+4ZjnwTMGtuncTNf
-   GhFhKdapMrTPcaykZbhqoPtFy6ifQaNxjAimvSscRk2IU2zHb/5LXNs8R
-   KXGQUqjnEPPfwSAwSTzTruG0eWjGMWq7L/VDmlRPpYetsUJSi31N08r8t
-   TCQhoM0SnwtF5Qn5EDXWZ2LPqjyL9VpPQzdpacTjypZru2W6NX/ko+F1R
-   y4QutXyEscNSl0guHKcHPJIGj8RhBO+RMDaFdKXn8r+NmvEPkoIKwgxbL
-   PDufiz0VANk7uuXTK2wSqzeLVLtEoV3ID+R/OZmbDc+XyXdCjm8W2fwDf
+  bh=da86tUUULUVat8HuHmdIwGDy5StYU/aEj+aL1ESVKiM=;
+  b=fHDYKqgFDHVQviH6ChjxYfgt1oORIuPN7lRKfUdcYRYt40abOD/amhhf
+   C5eF6K4qDsSlNQIHbJ87jbtAbaEDOf3T0ifprAkgruf8hhUI7tOT2H6Rt
+   nwk9Pm6SEFSQnfsSEFX/2Q9i1O3ZtiB5TmYPM3fPmpCQdHP03GLUMYO+z
+   SYdKNyzIVd22JepgAltlTJ8wS5cBW3NUVY5kBQoAEgpQfdqvEql9Rqau/
+   Yyn7PIgh9sOTldkumprPtotX0p6oeKVLQZiBQVDG/2qSdYYhBnp2zMRAC
+   WGFg9t80LwiWeCvx91frsgzmYOHucZqd6ZeU2s+jrIhoAIYa0R+b0oaYm
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="338946096"
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="336560321"
 X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="338946096"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 03:06:27 -0700
+   d="scan'208";a="336560321"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 03:11:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="582020563"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 02 Jun 2022 03:06:21 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwhie-0004xf-QH;
-        Thu, 02 Jun 2022 10:06:20 +0000
-Date:   Thu, 2 Jun 2022 18:05:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de
-Cc:     kbuild-all@lists.01.org, cy_huang@richtek.com,
-        alice_chen@richtek.com, chiaen_wu@richtek.com,
-        peterwu.pub@gmail.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Subject: Re: [RESEND 13/14] leds: flashlight: mt6370: Add Mediatek MT6370
- flashlight support
-Message-ID: <202206021739.LZjU7zjg-lkp@intel.com>
-References: <20220531111900.19422-14-peterwu.pub@gmail.com>
+   d="scan'208";a="721237238"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga001.fm.intel.com with ESMTP; 02 Jun 2022 03:10:58 -0700
+Date:   Thu, 2 Jun 2022 18:07:33 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     Vishal Annapurve <vannapurve@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jun Nakajima <jun.nakajima@intel.com>, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
+Subject: Re: [PATCH v6 3/8] mm/memfd: Introduce MFD_INACCESSIBLE flag
+Message-ID: <20220602100733.GA1296997@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <20220519153713.819591-4-chao.p.peng@linux.intel.com>
+ <CAGtprH8EMsPMMoOEzjRu0SMVKT0RqmkLk=n+6uXkBA6-wiRtUA@mail.gmail.com>
+ <20220601101747.GA1255243@chaop.bj.intel.com>
+ <1f1b17e8-a16d-c029-88e0-01f522cc077a@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220531111900.19422-14-peterwu.pub@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1f1b17e8-a16d-c029-88e0-01f522cc077a@amd.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi ChiaEn,
+On Wed, Jun 01, 2022 at 02:11:42PM +0200, Gupta, Pankaj wrote:
+> 
+> > > > Introduce a new memfd_create() flag indicating the content of the
+> > > > created memfd is inaccessible from userspace through ordinary MMU
+> > > > access (e.g., read/write/mmap). However, the file content can be
+> > > > accessed via a different mechanism (e.g. KVM MMU) indirectly.
+> > > > 
+> > > 
+> > > SEV, TDX, pkvm and software-only VMs seem to have usecases to set up
+> > > initial guest boot memory with the needed blobs.
+> > > TDX already supports a KVM IOCTL to transfer contents to private
+> > > memory using the TDX module but rest of the implementations will need
+> > > to invent
+> > > a way to do this.
+> > 
+> > There are some discussions in https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2022%2F5%2F9%2F1292&amp;data=05%7C01%7Cpankaj.gupta%40amd.com%7Cb81ef334e2dd44c6143308da43b87d17%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637896756895977587%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=oQbM2Hj7GlhJTwnTM%2FPnwsfJlmTL7JR9ULBysAqm6V8%3D&amp;reserved=0
+> > already. I somehow agree with Sean. TDX is using an dedicated ioctl to
+> > copy guest boot memory to private fd so the rest can do that similarly.
+> > The concern is the performance (extra memcpy) but it's trivial since the
+> > initial guest payload is usually optimized in size.
+> > 
+> > > 
+> > > Is there a plan to support a common implementation for either allowing
+> > > initial write access from userspace to private fd or adding a KVM
+> > > IOCTL to transfer contents to such a file,
+> > > as part of this series through future revisions?
+> > 
+> > Indeed, adding pre-boot private memory populating on current design
+> > isn't impossible, but there are still some opens, e.g. how to expose
+> > private fd to userspace for access, pKVM and CC usages may have
+> > different requirements. Before that's well-studied I would tend to not
+> > add that and instead use an ioctl to copy. Whether we need a generic
+> > ioctl or feature-specific ioctl, I don't have strong opinion here.
+> > Current TDX uses a feature-specific ioctl so it's not covered in this
+> > series.
+> 
+> Common function or ioctl to populate preboot private memory actually makes
+> sense.
+> 
+> Sorry, did not follow much of TDX code yet, Is it possible to filter out
+> the current TDX specific ioctl to common function so that it can be used by
+> other technologies?
 
-Thank you for the patch! Perhaps something to improve:
+TDX code is here:
+https://patchwork.kernel.org/project/kvm/patch/70ed041fd47c1f7571aa259450b3f9244edda48d.1651774250.git.isaku.yamahata@intel.com/
 
-[auto build test WARNING on pavel-leds/for-next]
-[also build test WARNING on lee-mfd/for-mfd-next lee-backlight/for-backlight-next v5.18 next-20220602]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+AFAICS It might be possible to filter that out to a common function. But
+would like to hear from Paolo/Sean for their opinion.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ChiaEn-Wu/Add-Mediatek-MT6370-PMIC-support/20220531-211432
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: nios2-allyesconfig (https://download.01.org/0day-ci/archive/20220602/202206021739.LZjU7zjg-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/805a8af17c769562ec4b85e9b7d2669d004fe3a6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review ChiaEn-Wu/Add-Mediatek-MT6370-PMIC-support/20220531-211432
-        git checkout 805a8af17c769562ec4b85e9b7d2669d004fe3a6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/gpu/drm/v3d/ drivers/leds/ sound/core/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/device.h:15,
-                    from include/linux/leds.h:12,
-                    from include/linux/led-class-flash.h:11,
-                    from drivers/leds/flash/leds-mt6370-flash.c:8:
-   drivers/leds/flash/leds-mt6370-flash.c: In function 'mt6370_led_probe':
->> drivers/leds/flash/leds-mt6370-flash.c:591:17: warning: format '%lu' expects argument of type 'long unsigned int', but argument 3 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-     591 |                 "No child node or node count over max led number %lu\n", count);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/leds/flash/leds-mt6370-flash.c:590:17: note: in expansion of macro 'dev_err'
-     590 |                 dev_err(&pdev->dev,
-         |                 ^~~~~~~
-   drivers/leds/flash/leds-mt6370-flash.c:591:68: note: format string is defined here
-     591 |                 "No child node or node count over max led number %lu\n", count);
-         |                                                                  ~~^
-         |                                                                    |
-         |                                                                    long unsigned int
-         |                                                                  %u
-
-
-vim +591 drivers/leds/flash/leds-mt6370-flash.c
-
-   580	
-   581	static int mt6370_led_probe(struct platform_device *pdev)
-   582	{
-   583		struct mt6370_priv *priv;
-   584		struct fwnode_handle *child;
-   585		size_t count;
-   586		int i = 0, ret;
-   587	
-   588		count = device_get_child_node_count(&pdev->dev);
-   589		if (!count || count > MT6370_MAX_LEDS) {
-   590			dev_err(&pdev->dev,
- > 591			"No child node or node count over max led number %lu\n", count);
-   592			return -EINVAL;
-   593		}
-   594	
-   595		priv = devm_kzalloc(&pdev->dev, struct_size(priv, leds, count),
-   596				    GFP_KERNEL);
-   597		if (!priv)
-   598			return -ENOMEM;
-   599	
-   600		priv->leds_count = count;
-   601		priv->dev = &pdev->dev;
-   602		mutex_init(&priv->lock);
-   603	
-   604		priv->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-   605		if (!priv->regmap) {
-   606			dev_err(&pdev->dev, "Failed to get parent regmap\n");
-   607			return -ENODEV;
-   608		}
-   609	
-   610		device_for_each_child_node(&pdev->dev, child) {
-   611			struct mt6370_led *led = priv->leds + i;
-   612			struct led_init_data init_data = { .fwnode = child, };
-   613	
-   614			led->priv = priv;
-   615			ret = mt6370_init_common_properties(led, &init_data);
-   616			if (ret)
-   617				goto out_flash_release;
-   618	
-   619			ret = mt6370_init_flash_properties(led, &init_data);
-   620	
-   621			if (ret)
-   622				goto out_flash_release;
-   623	
-   624			ret = mt6370_led_register(&pdev->dev, led, &init_data);
-   625			if (ret)
-   626				goto out_flash_release;
-   627	
-   628			i++;
-   629		}
-   630	
-   631		platform_set_drvdata(pdev, priv);
-   632		return 0;
-   633	
-   634	out_flash_release:
-   635		mt6370_v4l2_flash_release(priv);
-   636		return ret;
-   637	}
-   638	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Chao
+> 
+> Thanks,
+> Pankaj

@@ -2,95 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2622853B12B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 03:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F95253B19A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 04:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233088AbiFBBUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 21:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
+        id S233176AbiFBB2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 21:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232837AbiFBBUP (ORCPT
+        with ESMTP id S233172AbiFBB23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 21:20:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA12D13C1C3;
-        Wed,  1 Jun 2022 18:20:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A68061618;
-        Thu,  2 Jun 2022 01:20:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 90729C385A5;
-        Thu,  2 Jun 2022 01:20:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654132813;
-        bh=FRtoPmqtpuxAOYkV1Jjz5r5gJ4V+Izk5bHDOjEi63VU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Axr3XH9b3BTn8b0AcnN1k7xEIYpsSvtW2Zfe1lervE9iLE7kW4MrskFNqWa1vE9FR
-         fjCoMLo7qg6sr4nATcvsJauhiUxyaF/WI3S0Al9rMJKdq6oH6kbZIxPL0nbHXPgAPL
-         ADsPPiH7QbCnsUD4DAyLTYAFCYxly5nx9spzyriFYo6HuSDol0sCmy3L2tmnZ/8lI5
-         J+WKvt9ZXUKRzAmclFjfGdN8WtFtxabpI+WCvqxeAKrwSpVmiMQkTrLYGTsK13pF0m
-         GP3RspFmeaUA/eLffwcwWLFUxL0pU+39u/Dj/nKIH96NOXo3YyJKPI1I6KwpuOz1VL
-         f56WVd0AueXTg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 701BFEAC081;
-        Thu,  2 Jun 2022 01:20:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 1 Jun 2022 21:28:29 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC74127183
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 18:28:27 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id gd1so3592804pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 18:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
+         :from:to;
+        bh=Pq/vYHE3cXk7rG+RVhj4D3DwFPV+hL1T6Kovr4vupaE=;
+        b=ExwHaaZeB+DCLCHQ7ox2PTU2gawCae8ez1r5t/wmDxOouP4pn1j6KX4m0O7p2Mq8nU
+         tvC1nNEPciqGWO7AFOpdWyvsmLWTttUY3SXHuVk/AFRzlTaKEUd9AfQ2XjrJGaGI+ZJX
+         KAU04uZaMiZnIr031lApCZ1Z/NtVYHRzn337m3PsLylZUp2mHWrvlqnoGBkW85ppvK4F
+         X689/svTbF/Gd+sZdLgWI3LtRp5Dw2zFDto4XXBfADfijXMFxGhFWsUzUNlC+CjJZNqZ
+         F9mujWAvV21R9XpP7Bp3Y8WtPaygvSAIQUijzLgkH/Tupl5BmN7TT2gxXxAZ1CprXvd0
+         xEGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:date:message-id:mime-version
+         :content-transfer-encoding:cc:from:to;
+        bh=Pq/vYHE3cXk7rG+RVhj4D3DwFPV+hL1T6Kovr4vupaE=;
+        b=tlLeE5wRtPXOXVlUajwuTPfT3h2XPfnwSp/Va8YLg7sN6eSzg0j0oJ9b4ll3gh/skY
+         27dkuxoSppI1ZoElayosCFWWzTjSqG9m7CWRyLiMcD6J2b82pZQD9PFmE69dJM6cNl41
+         cBS3dpaOc4x1ZYv+n0aaVl/O5fr1j+/Dk/nj68HHRBkMphFTxw/kGH0/CMduFnHRotUb
+         WuDr5dkcAamsfDqjTXcf/p/UAiLqmVHcAqS5mWpHQohLTkuLHsFS8Ntg61Y6IVJFQkI6
+         SDO2ERrnJBbGs0jEVkS8w+pyCRX1PzpGxv3CU8MPKZ4fN07OLEGLeN322YuyYOHb+3VU
+         tzFQ==
+X-Gm-Message-State: AOAM532DKbWvAI5DDy6zpAXrhlUz9Nq3exlgX7GGl+TOqsje9vS+MG6e
+        1FE5RFhtF+LQNBBSgPAFgb/e5Q==
+X-Google-Smtp-Source: ABdhPJzlndyk5hGK0dkUOhK/W+1F1+MjrAE3nvOnwhuedR0Fnyzgx/OORkHADuo5qaR+X3lJbjvtyA==
+X-Received: by 2002:a17:902:e808:b0:161:946c:d2a5 with SMTP id u8-20020a170902e80800b00161946cd2a5mr2244981plg.93.1654133307089;
+        Wed, 01 Jun 2022 18:28:27 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id bf7-20020a170902b90700b00163c6ac211fsm2148116plb.111.2022.06.01.18.28.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 18:28:26 -0700 (PDT)
+Subject: [PATCH] dt-bindings: net: adin: Escape a trailing ":"
+Date:   Wed,  1 Jun 2022 18:28:09 -0700
+Message-Id: <20220602012809.8384-1-palmer@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: usb: qmi_wwan: Add support for Cinterion MV31 with new
- baseline
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165413281345.8511.6891110071999430771.git-patchwork-notify@kernel.org>
-Date:   Thu, 02 Jun 2022 01:20:13 +0000
-References: <20220601040531.6016-1-slark_xiao@163.com>
-In-Reply-To: <20220601040531.6016-1-slark_xiao@163.com>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     bjorn@mork.no, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     michael.hennerich@analog.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, alexandru.ardelean@analog.com,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@rivosinc.com,
+        Palmer Dabbelt <palmer@rivosinc.com>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     kuba@kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: Palmer Dabbelt <palmer@rivosinc.com>
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+1f77204e11f8 ("dt-bindings: net: adin: document phy clock output
+properties") added a line with a ":" at the end, which is tripping up my
+attempts to run the DT schema checks due to this being invalid YAML
+syntax.  I get a schema check failure with the following error
 
-On Wed,  1 Jun 2022 12:05:31 +0800 you wrote:
-> Adding support for Cinterion device MV31 with Qualcomm
-> new baseline. Use different PIDs to separate it from
-> previous base line products.
-> All interfaces settings keep same as previous.
-> 
-> T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  7 Spd=480 MxCh= 0
-> D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=1e2d ProdID=00b9 Rev=04.14
-> S:  Manufacturer=Cinterion
-> S:  Product=Cinterion PID 0x00B9 USB Mobile Broadband
-> S:  SerialNumber=90418e79
-> C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
-> I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-> I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-> I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> 
-> [...]
+    ruamel.yaml.scanner.ScannerError: mapping values are not allowed in this context
 
-Here is the summary with links:
-  - net: usb: qmi_wwan: Add support for Cinterion MV31 with new baseline
-    https://git.kernel.org/netdev/net/c/9f4fc18bf285
+This just escapes the line in question, so it can parse.
 
-You are awesome, thank you!
+Fixes: 1f77204e11f8 ("dt-bindings: net: adin: document phy clock output properties")
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+---
+ Documentation/devicetree/bindings/net/adi,adin.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/net/adi,adin.yaml b/Documentation/devicetree/bindings/net/adi,adin.yaml
+index 77750df0c2c4..88611720545d 100644
+--- a/Documentation/devicetree/bindings/net/adi,adin.yaml
++++ b/Documentation/devicetree/bindings/net/adi,adin.yaml
+@@ -37,7 +37,8 @@ properties:
+     default: 8
+ 
+   adi,phy-output-clock:
+-    description: Select clock output on GP_CLK pin. Two clocks are available:
++    description: |
++      Select clock output on GP_CLK pin. Two clocks are available:
+       A 25MHz reference and a free-running 125MHz.
+       The phy can alternatively automatically switch between the reference and
+       the 125MHz clocks based on its internal state.
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
